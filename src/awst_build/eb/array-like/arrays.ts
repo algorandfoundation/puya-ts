@@ -1,11 +1,11 @@
-import { intrinsicFactory } from '../../awst/intrinsic-factory'
-import { nodeFactory } from '../../awst/node-factory'
-import type { Expression } from '../../awst/nodes'
-import type { SourceLocation } from '../../awst/source-location'
-import { wtypes } from '../../awst/wtypes'
-import { CodeError } from '../../errors'
-import { codeInvariant, invariant } from '../../util'
-import type { PType, PTypeOrClass } from '../ptypes'
+import { intrinsicFactory } from '../../../awst/intrinsic-factory'
+import { nodeFactory } from '../../../awst/node-factory'
+import type { Expression } from '../../../awst/nodes'
+import type { SourceLocation } from '../../../awst/source-location'
+import { wtypes } from '../../../awst/wtypes'
+import { CodeError } from '../../../errors'
+import { codeInvariant, invariant } from '../../../util'
+import type { PType, PTypeOrClass } from '../../ptypes'
 import {
   ArrayGeneric,
   ArrayPType,
@@ -15,21 +15,21 @@ import {
   ReadonlyArrayPType,
   ReadonlyTuplePType,
   uint64PType,
-} from '../ptypes'
-import { ARC4ArrayType, ARC4EncodedType } from '../ptypes/arc4-types'
-import { instanceEb } from '../type-registry'
-import { StaticArrayExpressionBuilder } from './arc4/arrays'
-import type { InstanceBuilder, NodeBuilder } from './index'
-import { ClassBuilder, FunctionBuilder, InstanceExpressionBuilder } from './index'
-import { OptionalExpressionBuilder } from './optional-expression-builder'
-import { AtFunctionBuilder } from './shared/at-function-builder'
-import { SliceFunctionBuilder } from './shared/slice-function-builder'
-import { requireExpressionOfType } from './util'
-import { parseFunctionArgs } from './util/arg-parsing'
-import { concatArrays } from './util/array/concat'
-import { indexAccess } from './util/array/index-access'
-import { arrayLength } from './util/array/length'
-import { translateNegativeIndex } from './util/translate-negative-index'
+} from '../../ptypes'
+import { ARC4ArrayType, ARC4EncodedType } from '../../ptypes/arc4-types'
+import { instanceEb } from '../../type-registry'
+import { StaticArrayExpressionBuilder } from '../arc4/arrays'
+import type { InstanceBuilder, NodeBuilder } from '../index'
+import { ClassBuilder, FunctionBuilder, InstanceExpressionBuilder } from '../index'
+import { OptionalExpressionBuilder } from '../optional-expression-builder'
+import { AtFunctionBuilder } from '../shared/at-function-builder'
+import { SliceFunctionBuilder } from '../shared/slice-function-builder'
+import { requireExpressionOfType } from '../util'
+import { parseFunctionArgs } from '../util/arg-parsing'
+import { concatArrays } from '../util/array/concat'
+import { indexAccess } from '../util/array/index-access'
+import { arrayLength } from '../util/array/length'
+import { translateNegativeIndex } from '../util/translate-negative-index'
 
 export type NativeArrayLike = FixedArrayPType | ReadonlyArrayPType | ArrayPType
 
@@ -63,7 +63,7 @@ export class NativeArrayLikeExpressionBuilder<T extends NativeArrayLike = Native
     return this.resolve()
   }
 
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
     return indexAccess(this, index, sourceLocation)
   }
 
@@ -109,7 +109,7 @@ export class NativeArrayExpressionBuilder extends NativeArrayLikeExpressionBuild
     return this.resolve()
   }
 
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
     return indexAccess(this, index, sourceLocation)
   }
 
@@ -215,7 +215,6 @@ class PushFunctionBuilder extends FunctionBuilder {
           arrayLength(target, sourceLocation).resolve(),
         ],
         sourceLocation,
-        wtype: uint64PType.wtype,
       }),
       uint64PType,
     )

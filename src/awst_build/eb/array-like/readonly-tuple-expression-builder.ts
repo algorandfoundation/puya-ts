@@ -1,15 +1,15 @@
-import { nodeFactory } from '../../awst/node-factory'
-import type { Expression } from '../../awst/nodes'
-import type { SourceLocation } from '../../awst/source-location'
-import { codeInvariant, invariant } from '../../util'
-import type { PType, PTypeOrClass } from '../ptypes'
-import { ArrayPType, ReadonlyTuplePType, uint64PType } from '../ptypes'
-import { instanceEb } from '../type-registry'
-import type { InstanceBuilder, NodeBuilder } from './index'
-import { InstanceExpressionBuilder } from './index'
-import type { StaticallyIterable } from './traits/static-iterator'
-import { StaticIterator } from './traits/static-iterator'
-import { requireIntegerConstant } from './util'
+import { nodeFactory } from '../../../awst/node-factory'
+import type { Expression } from '../../../awst/nodes'
+import type { SourceLocation } from '../../../awst/source-location'
+import { codeInvariant, invariant } from '../../../util'
+import type { PType, PTypeOrClass } from '../../ptypes'
+import { ArrayPType, ReadonlyTuplePType, uint64PType } from '../../ptypes'
+import { instanceEb } from '../../type-registry'
+import type { InstanceBuilder, NodeBuilder } from '../index'
+import { InstanceExpressionBuilder } from '../index'
+import type { StaticallyIterable } from '../traits/static-iterator'
+import { StaticIterator } from '../traits/static-iterator'
+import { requireIntegerConstant } from '../util'
 
 export class ReadonlyTupleExpressionBuilder extends InstanceExpressionBuilder<ReadonlyTuplePType> implements StaticallyIterable {
   constructor(expression: Expression, ptype: PType) {
@@ -29,6 +29,7 @@ export class ReadonlyTupleExpressionBuilder extends InstanceExpressionBuilder<Re
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
+    // TODO readonly tuple should only be assignable to readonly array
     if (ptype instanceof ArrayPType && this.ptype.items.every((i) => i.equals(ptype.elementType))) {
       return instanceEb(
         nodeFactory.newArray({
@@ -56,8 +57,8 @@ export class ReadonlyTupleExpressionBuilder extends InstanceExpressionBuilder<Re
     return super.memberAccess(name, sourceLocation)
   }
 
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
-    const indexNum = requireIntegerConstant(index).value
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
+    const indexNum = typeof index === 'bigint' ? index : requireIntegerConstant(index).value
     const itemType = this.ptype.items[Number(indexNum)]
     codeInvariant(
       indexNum < this.ptype.items.length && indexNum >= 0,

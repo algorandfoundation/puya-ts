@@ -23,6 +23,7 @@ import type {
   GenericPType,
   GlobalStateType,
   GroupTransactionPType,
+  ImmutableObjectPType,
   InnerTransactionPType,
   InstanceType,
   InternalType,
@@ -38,27 +39,27 @@ import type {
   LibObjType,
   LocalStateType,
   LogicSigPType,
+  MutableObjectPType,
   MutableTuplePType,
   NamespacePType,
-  ObjectPType,
+  ObjectLiteralPType,
   ReadonlyArrayPType,
   ReadonlyTuplePType,
   ReferenceArrayType,
   SuperPrototypeSelector,
+  TemporaryObjectPType,
   TransientType,
   TypeParameterType,
   Uint64EnumMemberType,
   Uint64EnumType,
   UnsupportedType,
 } from './index'
-import type { MutableObjectClass, MutableObjectType } from './mutable-object'
 
 export interface PTypeVisitor<T> {
   visitGeneric(ptype: GenericPType): T
 
-  visitMutableObjectType(ptype: MutableObjectType): T
-
-  visitMutableObjectClass(ptype: MutableObjectClass): T
+  visitMutableObjectPType(ptype: MutableObjectPType): T
+  visitTemporaryObjectPType(ptype: TemporaryObjectPType): T
 
   visitIntrinsicEnumType(ptype: IntrinsicEnumType): T
 
@@ -77,7 +78,7 @@ export interface PTypeVisitor<T> {
   visitDynamicArrayType(ptype: DynamicArrayType): T
   visitStaticArrayType(ptype: StaticArrayType): T
   visitContractProxyType(ptype: ContractProxyType): T
-  visitObjectPType(ptype: ObjectPType): T
+  visitImmutableObjectPType(ptype: ImmutableObjectPType): T
   visitLogicSigPType(ptype: LogicSigPType): T
   visitItxnParamsPType(ptype: ItxnParamsPType): T
   visitInnerTransactionPType(ptype: InnerTransactionPType): T
@@ -118,4 +119,6 @@ export interface PTypeVisitor<T> {
   visitAnyPType(ptype: AnyPType): T
 
   visitIterableIterator(ptype: IterableIteratorType): T
+
+  visitObjectLiteralPType(ptype: ObjectLiteralPType): T
 }

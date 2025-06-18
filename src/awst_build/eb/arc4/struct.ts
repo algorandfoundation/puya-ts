@@ -3,7 +3,7 @@ import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { invariant } from '../../../util'
 import type { PType, PTypeOrClass } from '../../ptypes'
-import { ObjectPType } from '../../ptypes'
+import { ImmutableObjectPType } from '../../ptypes'
 import { ARC4StructClass, ARC4StructType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
@@ -30,7 +30,7 @@ export class StructClassBuilder extends ClassBuilder {
       genericTypeArgs: 1,
       callLocation: sourceLocation,
       funcName: this.typeDescription,
-      argSpec: (a) => [a.required(this.ptype.instanceType.nativeType)],
+      argSpec: (a) => [a.required(new ImmutableObjectPType({ properties: this.ptype.instanceType.fields }))],
     })
     const initialSingle = initialValues.singleEvaluation()
 
@@ -77,7 +77,7 @@ export class StructExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<AR
   resolvableToPType(ptype: PTypeOrClass): boolean {
     if (ptype.equals(this.ptype)) return true
 
-    if (ptype instanceof ObjectPType) {
+    if (ptype instanceof ImmutableObjectPType) {
       return ptype
         .orderedProperties()
         .every(
@@ -93,7 +93,7 @@ export class StructExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<AR
       return this
     }
 
-    if (ptype instanceof ObjectPType) {
+    if (ptype instanceof ImmutableObjectPType) {
       const single = this.singleEvaluation()
       return instanceEb(
         nodeFactory.tupleExpression({

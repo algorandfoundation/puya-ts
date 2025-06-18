@@ -3,11 +3,11 @@ import type { Expression, StringConstant } from '../../../awst/nodes'
 import { SourceLocation } from '../../../awst/source-location'
 import { CodeError, InternalError } from '../../../errors'
 import { logger } from '../../../logger'
-import { codeInvariant } from '../../../util'
+import { codeInvariant, instanceOfAny, invariant } from '../../../util'
 import { Arc4ParseError, parseArc4Type } from '../../../util/arc4-signature-parser'
 import { ptypeToArc4EncodedType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
-import { arc28EmitFunction, ArrayLiteralPType, ObjectPType, stringPType, voidPType } from '../../ptypes'
+import { arc28EmitFunction, ArrayLiteralPType, ImmutableObjectPType, MutableObjectPType, stringPType, voidPType } from '../../ptypes'
 import { ARC4EncodedType, ARC4StructType, ARC4TupleType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
@@ -112,7 +112,7 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
     const eventType = eventBuilder.ptype
     if (eventType instanceof ARC4StructType) {
       return emitStruct(eventType, nameOrObj.resolve(), sourceLocation)
-    } else if (eventType instanceof ObjectPType) {
+    } else if (instanceOfAny(eventType, ImmutableObjectPType, MutableObjectPType)) {
       if (!eventType.alias) {
         logger.error(
           eventBuilder.sourceLocation,
@@ -120,12 +120,13 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
         )
       }
       const arc4Equivalent = ptypeToArc4EncodedType(eventType, sourceLocation)
+      invariant(arc4Equivalent instanceof ARC4StructType, 'Equivalent type for object should be arc4 struct')
       return emitStruct(
         arc4Equivalent,
         nodeFactory.aRC4Encode({
           wtype: arc4Equivalent.wtype,
-          sourceLocation: nameOrObj.sourceLocation,
-          value: nameOrObj.resolve(),
+          sourceLocation: eventBuilder.sourceLocation,
+          value: eventBuilder.resolve(),
         }),
         sourceLocation,
       )

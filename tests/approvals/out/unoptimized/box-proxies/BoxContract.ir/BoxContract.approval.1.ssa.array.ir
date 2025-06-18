@@ -50,8 +50,8 @@ subroutine tests/approvals/box-proxies.algo.ts::testBox(box: bytes, value: strin
         (assert reinterpret_bool%0#0)
         let tmp%3#0: bool = (box_del box#0)
         (assert tmp%3#0) // delete failed
-        let tmp%4#0: bool = (box_del "A")
-        let isBoxADeleted#0: bool = tmp%4#0
+        let awst_tmp%0#0: bool = (box_del "A")
+        let isBoxADeleted#0: bool = awst_tmp%0#0
         (assert isBoxADeleted#0) // delete failed
         let (_%2#0: uint64, maybe_exists%2#0: bool) = (box_len box#0)
         goto maybe_exists%2#0 ? block@7 : block@5
@@ -71,12 +71,12 @@ subroutine tests/approvals/box-proxies.algo.ts::testBox(box: bytes, value: strin
         let state_get%0#0: bytes = (select "O" maybe_value%0#0 maybe_exists%4#0)
         let (maybe_value%1#0: bytes, maybe_exists%5#0: bool) = (box_get box#0)
         let state_get%1#0: bytes = (select "O" maybe_value%1#0 maybe_exists%5#0)
-        let tmp%5#0: bool = (== state_get%0#0 state_get%1#0)
-        (assert tmp%5#0)
+        let tmp%4#0: bool = (== state_get%0#0 state_get%1#0)
+        (assert tmp%4#0)
         let (maybe_value%2#0: uint64, maybe_exists%6#0: bool) = (box_len box#0)
         let e#0: bool = maybe_exists%6#0
-        let tmp%6#0: bool = (! e#0)
-        (assert tmp%6#0)
+        let tmp%5#0: bool = (! e#0)
+        (assert tmp%5#0)
         (box_del box#0)
         (box_put box#0 value#0)
         let (maybe_value%3#0: uint64, maybe_exists%7#0: bool) = (box_len box#0)
@@ -119,21 +119,21 @@ subroutine tests/approvals/box-proxies.algo.ts::testBoxMap(box: bytes, key: stri
         let tmp%2#0: bool = (== storage_value%0#0 storage_value%1#0)
         (assert tmp%2#0)
         let box_prefixed_key%7#0: bytes = (concat box#0 key#0)
-        let tmp%3#0: bool = (box_del box_prefixed_key%7#0)
-        let isBoxDeleted#0: bool = tmp%3#0
+        let awst_tmp%0#0: bool = (box_del box_prefixed_key%7#0)
+        let isBoxDeleted#0: bool = awst_tmp%0#0
         (assert isBoxDeleted#0) // delete failed
-        let tmp%4#0: bytes = (concat "" key#0)
-        let materialized_values%0#0: bytes = (concat tmp%4#0 "x")
+        let tmp%3#0: bytes = (concat "" key#0)
+        let materialized_values%0#0: bytes = (concat tmp%3#0 "x")
         let box_prefixed_key%8#0: bytes = (concat box#0 materialized_values%0#0)
         let (maybe_value%1#0: bytes, maybe_exists%2#0: bool) = (box_get box_prefixed_key%8#0)
         let state_get%0#0: bytes = (select "b" maybe_value%1#0 maybe_exists%2#0)
-        let tmp%5#0: bytes = (concat "" key#0)
-        let materialized_values%1#0: bytes = (concat tmp%5#0 "x")
+        let tmp%4#0: bytes = (concat "" key#0)
+        let materialized_values%1#0: bytes = (concat tmp%4#0 "x")
         let box_prefixed_key%9#0: bytes = (concat "" materialized_values%1#0)
         let (maybe_value%2#0: bytes, maybe_exists%3#0: bool) = (box_get box_prefixed_key%9#0)
         let state_get%1#0: bytes = (select "b" maybe_value%2#0 maybe_exists%3#0)
-        let tmp%6#0: bool = (== state_get%0#0 state_get%1#0)
-        (assert tmp%6#0)
+        let tmp%5#0: bool = (== state_get%0#0 state_get%1#0)
+        (assert tmp%5#0)
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::testBoxRef(box: bytes, length: uint64) -> void:
@@ -186,10 +186,10 @@ subroutine tests/approvals/box-proxies.algo.ts::testBoxRef(box: bytes, length: u
         let storage_value%1#0: bytes = aggregate%box_get%2#1
         let tmp%5#0: bool = (== storage_value%1#0 0xff00ffff)
         (assert tmp%5#0)
-        let tmp%6#0: bool = (box_del box#0)
-        let x#0: bool = tmp%6#0
+        let awst_tmp%0#0: bool = (box_del box#0)
+        let x#0: bool = awst_tmp%0#0
         (assert x#0) // delete failed
         let (_%2#0: uint64, maybe_exists%4#0: bool) = (box_len box#0)
-        let tmp%7#0: bool = (! maybe_exists%4#0)
-        (assert tmp%7#0)
+        let tmp%6#0: bool = (! maybe_exists%4#0)
+        (assert tmp%6#0)
         return 

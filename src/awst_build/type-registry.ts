@@ -48,6 +48,11 @@ export class TypeRegistry {
       this.instanceEbs.set(ptype, instanceEb)
     }
   }
+  registerGenericTypeOnly({ generic }: { generic: GenericPType }) {
+    if (this.genericTypes.has(generic)) throw new InternalError(`${generic} has already been registered`)
+    this.genericTypes.add(generic)
+  }
+
   registerGeneric<T extends PType>({
     generic,
     ptype,

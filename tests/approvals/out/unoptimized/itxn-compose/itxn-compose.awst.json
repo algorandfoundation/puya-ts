@@ -462,7 +462,7 @@
                 "name": "share"
               },
               "value": {
-                "_type": "UInt64BinaryOperation",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/itxn-compose.algo.ts",
                   "line": 24,
@@ -475,52 +475,13 @@
                   "name": "uint64",
                   "immutable": true
                 },
-                "left": {
-                  "_type": "IntrinsicCall",
+                "source": {
+                  "_type": "UInt64BinaryOperation",
                   "source_location": {
                     "file": "tests/approvals/itxn-compose.algo.ts",
                     "line": 24,
                     "end_line": 24,
-                    "column": 32,
-                    "end_column": 38
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "op_code": "gtxns",
-                  "immediates": [
-                    "Amount"
-                  ],
-                  "stack_args": [
-                    {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/itxn-compose.algo.ts",
-                        "line": 24,
-                        "end_line": 24,
-                        "column": 26,
-                        "end_column": 31
-                      },
-                      "wtype": {
-                        "_type": "WGroupTransaction",
-                        "name": "group_transaction_pay",
-                        "immutable": true,
-                        "transaction_type": 1
-                      },
-                      "name": "funds"
-                    }
-                  ]
-                },
-                "op": "//",
-                "right": {
-                  "_type": "ArrayLength",
-                  "source_location": {
-                    "file": "tests/approvals/itxn-compose.algo.ts",
-                    "line": 24,
-                    "end_line": 24,
-                    "column": 51,
+                    "column": 26,
                     "end_column": 57
                   },
                   "wtype": {
@@ -528,253 +489,95 @@
                     "name": "uint64",
                     "immutable": true
                   },
-                  "array": {
-                    "_type": "VarExpression",
+                  "left": {
+                    "_type": "IntrinsicCall",
                     "source_location": {
                       "file": "tests/approvals/itxn-compose.algo.ts",
                       "line": 24,
                       "end_line": 24,
-                      "column": 41,
-                      "end_column": 50
-                    },
-                    "wtype": {
-                      "_type": "ARC4DynamicArray",
-                      "name": "arc4.dynamic_array<arc4.static_array<arc4.byte>>",
-                      "immutable": false,
-                      "arc4_alias": null,
-                      "element_type": {
-                        "_type": "ARC4StaticArray",
-                        "name": "arc4.static_array<arc4.byte>",
-                        "immutable": true,
-                        "arc4_alias": "address",
-                        "element_type": {
-                          "_type": "ARC4UIntN",
-                          "name": "arc4.byte",
-                          "immutable": true,
-                          "arc4_alias": "byte",
-                          "n": 8
-                        },
-                        "source_location": null,
-                        "array_size": 32
-                      },
-                      "source_location": null
-                    },
-                    "name": "addresses"
-                  }
-                }
-              }
-            },
-            {
-              "_type": "AssignmentStatement",
-              "source_location": {
-                "file": "tests/approvals/itxn-compose.algo.ts",
-                "line": 26,
-                "end_line": 30,
-                "column": 10,
-                "end_column": 36
-              },
-              "target": {
-                "_type": "VarExpression",
-                "source_location": {
-                  "file": "tests/approvals/itxn-compose.algo.ts",
-                  "line": 26,
-                  "end_line": 26,
-                  "column": 10,
-                  "end_column": 19
-                },
-                "wtype": {
-                  "_type": "WTuple",
-                  "name": "lib.d.ts::object",
-                  "immutable": true,
-                  "types": [
-                    {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    {
-                      "_type": "BytesWType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "length": null
-                    }
-                  ],
-                  "names": [
-                    "type",
-                    "amount",
-                    "receiver"
-                  ]
-                },
-                "name": "payFields"
-              },
-              "value": {
-                "_type": "TupleExpression",
-                "source_location": {
-                  "file": "tests/approvals/itxn-compose.algo.ts",
-                  "line": 26,
-                  "end_line": 30,
-                  "column": 22,
-                  "end_column": 5
-                },
-                "wtype": {
-                  "_type": "WTuple",
-                  "name": "lib.d.ts::object",
-                  "immutable": true,
-                  "types": [
-                    {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    {
-                      "_type": "BytesWType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "length": null
-                    }
-                  ],
-                  "names": [
-                    "type",
-                    "amount",
-                    "receiver"
-                  ]
-                },
-                "items": [
-                  {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/itxn-compose.algo.ts",
-                      "line": 27,
-                      "end_line": 27,
-                      "column": 28,
-                      "end_column": 35
+                      "column": 32,
+                      "end_column": 38
                     },
                     "wtype": {
                       "_type": "WType",
                       "name": "uint64",
                       "immutable": true
                     },
-                    "value": 1,
-                    "teal_alias": null
-                  },
-                  {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/itxn-compose.algo.ts",
-                      "line": 28,
-                      "end_line": 28,
-                      "column": 14,
-                      "end_column": 19
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "name": "share"
-                  },
-                  {
-                    "_type": "ReinterpretCast",
-                    "source_location": {
-                      "file": "tests/approvals/itxn-compose.algo.ts",
-                      "line": 29,
-                      "end_line": 29,
-                      "column": 29,
-                      "end_column": 34
-                    },
-                    "wtype": {
-                      "_type": "BytesWType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "length": null
-                    },
-                    "expr": {
-                      "_type": "IndexExpression",
-                      "source_location": {
-                        "file": "tests/approvals/itxn-compose.algo.ts",
-                        "line": 29,
-                        "end_line": 29,
-                        "column": 16,
-                        "end_column": 28
-                      },
-                      "wtype": {
-                        "_type": "ARC4StaticArray",
-                        "name": "arc4.static_array<arc4.byte>",
-                        "immutable": true,
-                        "arc4_alias": "address",
-                        "element_type": {
-                          "_type": "ARC4UIntN",
-                          "name": "arc4.byte",
-                          "immutable": true,
-                          "arc4_alias": "byte",
-                          "n": 8
-                        },
-                        "source_location": null,
-                        "array_size": 32
-                      },
-                      "base": {
+                    "op_code": "gtxns",
+                    "immediates": [
+                      "Amount"
+                    ],
+                    "stack_args": [
+                      {
                         "_type": "VarExpression",
                         "source_location": {
                           "file": "tests/approvals/itxn-compose.algo.ts",
-                          "line": 29,
-                          "end_line": 29,
-                          "column": 16,
-                          "end_column": 25
-                        },
-                        "wtype": {
-                          "_type": "ARC4DynamicArray",
-                          "name": "arc4.dynamic_array<arc4.static_array<arc4.byte>>",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "element_type": {
-                            "_type": "ARC4StaticArray",
-                            "name": "arc4.static_array<arc4.byte>",
-                            "immutable": true,
-                            "arc4_alias": "address",
-                            "element_type": {
-                              "_type": "ARC4UIntN",
-                              "name": "arc4.byte",
-                              "immutable": true,
-                              "arc4_alias": "byte",
-                              "n": 8
-                            },
-                            "source_location": null,
-                            "array_size": 32
-                          },
-                          "source_location": null
-                        },
-                        "name": "addresses"
-                      },
-                      "index": {
-                        "_type": "IntegerConstant",
-                        "source_location": {
-                          "file": "tests/approvals/itxn-compose.algo.ts",
-                          "line": 29,
-                          "end_line": 29,
+                          "line": 24,
+                          "end_line": 24,
                           "column": 26,
-                          "end_column": 27
+                          "end_column": 31
                         },
                         "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
+                          "_type": "WGroupTransaction",
+                          "name": "group_transaction_pay",
+                          "immutable": true,
+                          "transaction_type": 1
                         },
-                        "value": 0,
-                        "teal_alias": null
+                        "name": "funds"
                       }
+                    ]
+                  },
+                  "op": "//",
+                  "right": {
+                    "_type": "ArrayLength",
+                    "source_location": {
+                      "file": "tests/approvals/itxn-compose.algo.ts",
+                      "line": 24,
+                      "end_line": 24,
+                      "column": 51,
+                      "end_column": 57
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "array": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/itxn-compose.algo.ts",
+                        "line": 24,
+                        "end_line": 24,
+                        "column": 41,
+                        "end_column": 50
+                      },
+                      "wtype": {
+                        "_type": "ARC4DynamicArray",
+                        "name": "arc4.dynamic_array<arc4.static_array<arc4.byte>>",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "element_type": {
+                          "_type": "ARC4StaticArray",
+                          "name": "arc4.static_array<arc4.byte>",
+                          "immutable": true,
+                          "arc4_alias": "address",
+                          "element_type": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.byte",
+                            "immutable": true,
+                            "arc4_alias": "byte",
+                            "n": 8
+                          },
+                          "source_location": null,
+                          "array_size": 32
+                        },
+                        "source_location": null
+                      },
+                      "name": "addresses"
                     }
                   }
-                ]
+                },
+                "_id": "0"
               }
             },
             {
@@ -858,32 +661,31 @@
                             "end_column": 31
                           },
                           "wtype": {
-                            "_type": "WTuple",
-                            "name": "lib.d.ts::object",
-                            "immutable": true,
-                            "types": [
-                              {
+                            "_type": "ARC4Struct",
+                            "name": "{type:TransactionType,amount:uint64,receiver:bytes}",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "type": {
                                 "_type": "WType",
                                 "name": "uint64",
                                 "immutable": true
                               },
-                              {
+                              "amount": {
                                 "_type": "WType",
                                 "name": "uint64",
                                 "immutable": true
                               },
-                              {
+                              "receiver": {
                                 "_type": "BytesWType",
                                 "name": "bytes",
                                 "immutable": true,
                                 "length": null
                               }
-                            ],
-                            "names": [
-                              "type",
-                              "amount",
-                              "receiver"
-                            ]
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
                           },
                           "name": "payFields"
                         },
@@ -913,32 +715,31 @@
                             "end_column": 31
                           },
                           "wtype": {
-                            "_type": "WTuple",
-                            "name": "lib.d.ts::object",
-                            "immutable": true,
-                            "types": [
-                              {
+                            "_type": "ARC4Struct",
+                            "name": "{type:TransactionType,amount:uint64,receiver:bytes}",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "type": {
                                 "_type": "WType",
                                 "name": "uint64",
                                 "immutable": true
                               },
-                              {
+                              "amount": {
                                 "_type": "WType",
                                 "name": "uint64",
                                 "immutable": true
                               },
-                              {
+                              "receiver": {
                                 "_type": "BytesWType",
                                 "name": "bytes",
                                 "immutable": true,
                                 "length": null
                               }
-                            ],
-                            "names": [
-                              "type",
-                              "amount",
-                              "receiver"
-                            ]
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
                           },
                           "name": "payFields"
                         },
@@ -983,32 +784,31 @@
                               "end_column": 31
                             },
                             "wtype": {
-                              "_type": "WTuple",
-                              "name": "lib.d.ts::object",
-                              "immutable": true,
-                              "types": [
-                                {
+                              "_type": "ARC4Struct",
+                              "name": "{type:TransactionType,amount:uint64,receiver:bytes}",
+                              "immutable": false,
+                              "arc4_alias": null,
+                              "fields": {
+                                "type": {
                                   "_type": "WType",
                                   "name": "uint64",
                                   "immutable": true
                                 },
-                                {
+                                "amount": {
                                   "_type": "WType",
                                   "name": "uint64",
                                   "immutable": true
                                 },
-                                {
+                                "receiver": {
                                   "_type": "BytesWType",
                                   "name": "bytes",
                                   "immutable": true,
                                   "length": null
                                 }
-                              ],
-                              "names": [
-                                "type",
-                                "amount",
-                                "receiver"
-                              ]
+                              },
+                              "source_location": null,
+                              "frozen": false,
+                              "desc": null
                             },
                             "name": "payFields"
                           },
@@ -1251,7 +1051,7 @@
                               "name": "addr"
                             },
                             "value": {
-                              "_type": "IndexExpression",
+                              "_type": "SingleEvaluation",
                               "source_location": {
                                 "file": "tests/approvals/itxn-compose.algo.ts",
                                 "line": 33,
@@ -1274,55 +1074,81 @@
                                 "source_location": null,
                                 "array_size": 32
                               },
-                              "base": {
-                                "_type": "VarExpression",
+                              "source": {
+                                "_type": "IndexExpression",
                                 "source_location": {
                                   "file": "tests/approvals/itxn-compose.algo.ts",
                                   "line": 33,
                                   "end_line": 33,
                                   "column": 19,
-                                  "end_column": 28
+                                  "end_column": 31
                                 },
                                 "wtype": {
-                                  "_type": "ARC4DynamicArray",
-                                  "name": "arc4.dynamic_array<arc4.static_array<arc4.byte>>",
-                                  "immutable": false,
-                                  "arc4_alias": null,
+                                  "_type": "ARC4StaticArray",
+                                  "name": "arc4.static_array<arc4.byte>",
+                                  "immutable": true,
+                                  "arc4_alias": "address",
                                   "element_type": {
-                                    "_type": "ARC4StaticArray",
-                                    "name": "arc4.static_array<arc4.byte>",
+                                    "_type": "ARC4UIntN",
+                                    "name": "arc4.byte",
                                     "immutable": true,
-                                    "arc4_alias": "address",
-                                    "element_type": {
-                                      "_type": "ARC4UIntN",
-                                      "name": "arc4.byte",
-                                      "immutable": true,
-                                      "arc4_alias": "byte",
-                                      "n": 8
-                                    },
-                                    "source_location": null,
-                                    "array_size": 32
+                                    "arc4_alias": "byte",
+                                    "n": 8
                                   },
-                                  "source_location": null
+                                  "source_location": null,
+                                  "array_size": 32
                                 },
-                                "name": "addresses"
+                                "base": {
+                                  "_type": "VarExpression",
+                                  "source_location": {
+                                    "file": "tests/approvals/itxn-compose.algo.ts",
+                                    "line": 33,
+                                    "end_line": 33,
+                                    "column": 19,
+                                    "end_column": 28
+                                  },
+                                  "wtype": {
+                                    "_type": "ARC4DynamicArray",
+                                    "name": "arc4.dynamic_array<arc4.static_array<arc4.byte>>",
+                                    "immutable": false,
+                                    "arc4_alias": null,
+                                    "element_type": {
+                                      "_type": "ARC4StaticArray",
+                                      "name": "arc4.static_array<arc4.byte>",
+                                      "immutable": true,
+                                      "arc4_alias": "address",
+                                      "element_type": {
+                                        "_type": "ARC4UIntN",
+                                        "name": "arc4.byte",
+                                        "immutable": true,
+                                        "arc4_alias": "byte",
+                                        "n": 8
+                                      },
+                                      "source_location": null,
+                                      "array_size": 32
+                                    },
+                                    "source_location": null
+                                  },
+                                  "name": "addresses"
+                                },
+                                "index": {
+                                  "_type": "VarExpression",
+                                  "source_location": {
+                                    "file": "tests/approvals/itxn-compose.algo.ts",
+                                    "line": 33,
+                                    "end_line": 33,
+                                    "column": 29,
+                                    "end_column": 30
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "name": "i"
+                                }
                               },
-                              "index": {
-                                "_type": "VarExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                  "line": 33,
-                                  "end_line": 33,
-                                  "column": 29,
-                                  "end_column": 30
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "uint64",
-                                  "immutable": true
-                                },
-                                "name": "i"
-                              }
+                              "_id": "1"
                             }
                           },
                           {
@@ -1382,6 +1208,114 @@
                                       "value": 0,
                                       "teal_alias": null
                                     },
+                                    "TypeEnum": {
+                                      "_type": "FieldExpression",
+                                      "source_location": {
+                                        "file": "tests/approvals/itxn-compose.algo.ts",
+                                        "line": 34,
+                                        "end_line": 38,
+                                        "column": 23,
+                                        "end_column": 7
+                                      },
+                                      "wtype": {
+                                        "_type": "WType",
+                                        "name": "uint64",
+                                        "immutable": true
+                                      },
+                                      "base": {
+                                        "_type": "VarExpression",
+                                        "source_location": {
+                                          "file": "tests/approvals/itxn-compose.algo.ts",
+                                          "line": 35,
+                                          "end_line": 35,
+                                          "column": 11,
+                                          "end_column": 20
+                                        },
+                                        "wtype": {
+                                          "_type": "ARC4Struct",
+                                          "name": "{type:TransactionType,amount:uint64,receiver:bytes}",
+                                          "immutable": false,
+                                          "arc4_alias": null,
+                                          "fields": {
+                                            "type": {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            "amount": {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            "receiver": {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          },
+                                          "source_location": null,
+                                          "frozen": false,
+                                          "desc": null
+                                        },
+                                        "name": "payFields"
+                                      },
+                                      "name": "type"
+                                    },
+                                    "Amount": {
+                                      "_type": "FieldExpression",
+                                      "source_location": {
+                                        "file": "tests/approvals/itxn-compose.algo.ts",
+                                        "line": 34,
+                                        "end_line": 38,
+                                        "column": 23,
+                                        "end_column": 7
+                                      },
+                                      "wtype": {
+                                        "_type": "WType",
+                                        "name": "uint64",
+                                        "immutable": true
+                                      },
+                                      "base": {
+                                        "_type": "VarExpression",
+                                        "source_location": {
+                                          "file": "tests/approvals/itxn-compose.algo.ts",
+                                          "line": 35,
+                                          "end_line": 35,
+                                          "column": 11,
+                                          "end_column": 20
+                                        },
+                                        "wtype": {
+                                          "_type": "ARC4Struct",
+                                          "name": "{type:TransactionType,amount:uint64,receiver:bytes}",
+                                          "immutable": false,
+                                          "arc4_alias": null,
+                                          "fields": {
+                                            "type": {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            "amount": {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            "receiver": {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          },
+                                          "source_location": null,
+                                          "frozen": false,
+                                          "desc": null
+                                        },
+                                        "name": "payFields"
+                                      },
+                                      "name": "amount"
+                                    },
                                     "Receiver": {
                                       "_type": "ReinterpretCast",
                                       "source_location": {
@@ -1438,116 +1372,6 @@
                                           "name": "addr"
                                         }
                                       }
-                                    },
-                                    "TypeEnum": {
-                                      "_type": "FieldExpression",
-                                      "source_location": {
-                                        "file": "tests/approvals/itxn-compose.algo.ts",
-                                        "line": 34,
-                                        "end_line": 38,
-                                        "column": 6,
-                                        "end_column": 8
-                                      },
-                                      "wtype": {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      "base": {
-                                        "_type": "VarExpression",
-                                        "source_location": {
-                                          "file": "tests/approvals/itxn-compose.algo.ts",
-                                          "line": 35,
-                                          "end_line": 35,
-                                          "column": 11,
-                                          "end_column": 20
-                                        },
-                                        "wtype": {
-                                          "_type": "WTuple",
-                                          "name": "lib.d.ts::object",
-                                          "immutable": true,
-                                          "types": [
-                                            {
-                                              "_type": "WType",
-                                              "name": "uint64",
-                                              "immutable": true
-                                            },
-                                            {
-                                              "_type": "WType",
-                                              "name": "uint64",
-                                              "immutable": true
-                                            },
-                                            {
-                                              "_type": "BytesWType",
-                                              "name": "bytes",
-                                              "immutable": true,
-                                              "length": null
-                                            }
-                                          ],
-                                          "names": [
-                                            "type",
-                                            "amount",
-                                            "receiver"
-                                          ]
-                                        },
-                                        "name": "payFields"
-                                      },
-                                      "name": "type"
-                                    },
-                                    "Amount": {
-                                      "_type": "FieldExpression",
-                                      "source_location": {
-                                        "file": "tests/approvals/itxn-compose.algo.ts",
-                                        "line": 34,
-                                        "end_line": 38,
-                                        "column": 6,
-                                        "end_column": 8
-                                      },
-                                      "wtype": {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      "base": {
-                                        "_type": "VarExpression",
-                                        "source_location": {
-                                          "file": "tests/approvals/itxn-compose.algo.ts",
-                                          "line": 35,
-                                          "end_line": 35,
-                                          "column": 11,
-                                          "end_column": 20
-                                        },
-                                        "wtype": {
-                                          "_type": "WTuple",
-                                          "name": "lib.d.ts::object",
-                                          "immutable": true,
-                                          "types": [
-                                            {
-                                              "_type": "WType",
-                                              "name": "uint64",
-                                              "immutable": true
-                                            },
-                                            {
-                                              "_type": "WType",
-                                              "name": "uint64",
-                                              "immutable": true
-                                            },
-                                            {
-                                              "_type": "BytesWType",
-                                              "name": "bytes",
-                                              "immutable": true,
-                                              "length": null
-                                            }
-                                          ],
-                                          "names": [
-                                            "type",
-                                            "amount",
-                                            "receiver"
-                                          ]
-                                        },
-                                        "name": "payFields"
-                                      },
-                                      "name": "amount"
                                     }
                                   }
                                 }
@@ -2005,7 +1829,7 @@
                 "name": "hello"
               },
               "value": {
-                "_type": "CompiledContract",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/itxn-compose.algo.ts",
                   "line": 54,
@@ -2092,10 +1916,100 @@
                     "localBytes"
                   ]
                 },
-                "contract": "tests/approvals/precompiled-apps.algo.ts::Hello",
-                "allocation_overrides": {},
-                "prefix": null,
-                "template_variables": {}
+                "source": {
+                  "_type": "CompiledContract",
+                  "source_location": {
+                    "file": "tests/approvals/itxn-compose.algo.ts",
+                    "line": 54,
+                    "end_line": 54,
+                    "column": 18,
+                    "end_column": 36
+                  },
+                  "wtype": {
+                    "_type": "WTuple",
+                    "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
+                    "immutable": true,
+                    "types": [
+                      {
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "BytesWType",
+                            "name": "bytes",
+                            "immutable": true,
+                            "length": null
+                          },
+                          {
+                            "_type": "BytesWType",
+                            "name": "bytes",
+                            "immutable": true,
+                            "length": null
+                          }
+                        ]
+                      },
+                      {
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "BytesWType",
+                            "name": "bytes",
+                            "immutable": true,
+                            "length": null
+                          },
+                          {
+                            "_type": "BytesWType",
+                            "name": "bytes",
+                            "immutable": true,
+                            "length": null
+                          }
+                        ]
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      }
+                    ],
+                    "names": [
+                      "approvalProgram",
+                      "clearStateProgram",
+                      "extraProgramPages",
+                      "globalUints",
+                      "globalBytes",
+                      "localUints",
+                      "localBytes"
+                    ]
+                  },
+                  "contract": "tests/approvals/precompiled-apps.algo.ts::Hello",
+                  "allocation_overrides": {},
+                  "prefix": null,
+                  "template_variables": {}
+                },
+                "_id": "2"
               }
             },
             {
@@ -2124,7 +2038,7 @@
                 "name": "appId"
               },
               "value": {
-                "_type": "InnerTransactionField",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/itxn-compose.algo.ts",
                   "line": 55,
@@ -2137,979 +2051,970 @@
                   "name": "application",
                   "immutable": true
                 },
-                "itxn": {
-                  "_type": "FieldExpression",
+                "source": {
+                  "_type": "InnerTransactionField",
                   "source_location": {
                     "file": "tests/approvals/itxn-compose.algo.ts",
                     "line": 55,
                     "end_line": 55,
-                    "column": 54,
-                    "end_column": 58
+                    "column": 59,
+                    "end_column": 69
                   },
                   "wtype": {
-                    "_type": "WInnerTransaction",
-                    "name": "inner_transaction_appl",
-                    "immutable": true,
-                    "transaction_type": 6
+                    "_type": "WType",
+                    "name": "application",
+                    "immutable": true
                   },
-                  "base": {
-                    "_type": "TupleExpression",
+                  "itxn": {
+                    "_type": "FieldExpression",
                     "source_location": {
                       "file": "tests/approvals/itxn-compose.algo.ts",
                       "line": 55,
                       "end_line": 55,
-                      "column": 18,
-                      "end_column": 53
+                      "column": 54,
+                      "end_column": 58
                     },
                     "wtype": {
-                      "_type": "WTuple",
-                      "name": "@algorandfoundation/algorand-typescript/arc4/c2c.d.ts::TypedApplicationCallResponseType<void>",
+                      "_type": "WInnerTransaction",
+                      "name": "inner_transaction_appl",
                       "immutable": true,
-                      "types": [
-                        {
-                          "_type": "WInnerTransaction",
-                          "name": "inner_transaction_appl",
-                          "immutable": true,
-                          "transaction_type": 6
-                        }
-                      ],
-                      "names": [
-                        "itxn"
-                      ]
+                      "transaction_type": 6
                     },
-                    "items": [
-                      {
-                        "_type": "SubmitInnerTransaction",
-                        "source_location": {
-                          "file": "tests/approvals/itxn-compose.algo.ts",
-                          "line": 55,
-                          "end_line": 55,
-                          "column": 18,
-                          "end_column": 53
-                        },
-                        "wtype": {
-                          "_type": "WInnerTransaction",
-                          "name": "inner_transaction_appl",
-                          "immutable": true,
-                          "transaction_type": 6
-                        },
-                        "itxns": [
+                    "base": {
+                      "_type": "TupleExpression",
+                      "source_location": {
+                        "file": "tests/approvals/itxn-compose.algo.ts",
+                        "line": 55,
+                        "end_line": 55,
+                        "column": 18,
+                        "end_column": 53
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "{readonly itxn:ApplicationCallInnerTxn}",
+                        "immutable": true,
+                        "types": [
                           {
-                            "_type": "CreateInnerTransaction",
-                            "source_location": {
-                              "file": "tests/approvals/itxn-compose.algo.ts",
-                              "line": 55,
-                              "end_line": 55,
-                              "column": 18,
-                              "end_column": 53
-                            },
-                            "wtype": {
-                              "_type": "WInnerTransactionFields",
-                              "name": "inner_transaction_fields_appl",
-                              "immutable": true,
-                              "transaction_type": 6
-                            },
-                            "fields": {
-                              "Fee": {
-                                "_type": "IntegerConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                  "line": 55,
-                                  "end_line": 55,
-                                  "column": 18,
-                                  "end_column": 53
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "uint64",
-                                  "immutable": true
-                                },
-                                "value": 0,
-                                "teal_alias": null
+                            "_type": "WInnerTransaction",
+                            "name": "inner_transaction_appl",
+                            "immutable": true,
+                            "transaction_type": 6
+                          }
+                        ],
+                        "names": [
+                          "itxn"
+                        ]
+                      },
+                      "items": [
+                        {
+                          "_type": "SubmitInnerTransaction",
+                          "source_location": {
+                            "file": "tests/approvals/itxn-compose.algo.ts",
+                            "line": 55,
+                            "end_line": 55,
+                            "column": 18,
+                            "end_column": 53
+                          },
+                          "wtype": {
+                            "_type": "WInnerTransaction",
+                            "name": "inner_transaction_appl",
+                            "immutable": true,
+                            "transaction_type": 6
+                          },
+                          "itxns": [
+                            {
+                              "_type": "CreateInnerTransaction",
+                              "source_location": {
+                                "file": "tests/approvals/itxn-compose.algo.ts",
+                                "line": 55,
+                                "end_line": 55,
+                                "column": 18,
+                                "end_column": 53
                               },
-                              "TypeEnum": {
-                                "_type": "IntegerConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                  "line": 55,
-                                  "end_line": 55,
-                                  "column": 18,
-                                  "end_column": 53
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "uint64",
-                                  "immutable": true
-                                },
-                                "value": 6,
-                                "teal_alias": "appl"
+                              "wtype": {
+                                "_type": "WInnerTransactionFields",
+                                "name": "inner_transaction_fields_appl",
+                                "immutable": true,
+                                "transaction_type": 6
                               },
-                              "OnCompletion": {
-                                "_type": "IntegerConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                  "line": 55,
-                                  "end_line": 55,
-                                  "column": 18,
-                                  "end_column": 53
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "uint64",
-                                  "immutable": true
-                                },
-                                "value": 0,
-                                "teal_alias": null
-                              },
-                              "ApprovalProgramPages": {
-                                "_type": "FieldExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                  "line": 55,
-                                  "end_line": 55,
-                                  "column": 18,
-                                  "end_column": 53
-                                },
-                                "wtype": {
-                                  "_type": "WTuple",
-                                  "name": "tuple",
-                                  "immutable": true,
-                                  "types": [
-                                    {
-                                      "_type": "BytesWType",
-                                      "name": "bytes",
-                                      "immutable": true,
-                                      "length": null
-                                    },
-                                    {
-                                      "_type": "BytesWType",
-                                      "name": "bytes",
-                                      "immutable": true,
-                                      "length": null
-                                    }
-                                  ]
-                                },
-                                "base": {
-                                  "_type": "VarExpression",
+                              "fields": {
+                                "Fee": {
+                                  "_type": "IntegerConstant",
                                   "source_location": {
                                     "file": "tests/approvals/itxn-compose.algo.ts",
                                     "line": 55,
                                     "end_line": 55,
                                     "column": 18,
-                                    "end_column": 23
+                                    "end_column": 53
                                   },
                                   "wtype": {
-                                    "_type": "WTuple",
-                                    "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
-                                    "immutable": true,
-                                    "types": [
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "tuple",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          },
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "tuple",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          },
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      }
-                                    ],
-                                    "names": [
-                                      "approvalProgram",
-                                      "clearStateProgram",
-                                      "extraProgramPages",
-                                      "globalUints",
-                                      "globalBytes",
-                                      "localUints",
-                                      "localBytes"
-                                    ]
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
                                   },
-                                  "name": "hello"
+                                  "value": 0,
+                                  "teal_alias": null
                                 },
-                                "name": "approvalProgram"
-                              },
-                              "ClearStateProgramPages": {
-                                "_type": "FieldExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                  "line": 55,
-                                  "end_line": 55,
-                                  "column": 18,
-                                  "end_column": 53
-                                },
-                                "wtype": {
-                                  "_type": "WTuple",
-                                  "name": "tuple",
-                                  "immutable": true,
-                                  "types": [
-                                    {
-                                      "_type": "BytesWType",
-                                      "name": "bytes",
-                                      "immutable": true,
-                                      "length": null
-                                    },
-                                    {
-                                      "_type": "BytesWType",
-                                      "name": "bytes",
-                                      "immutable": true,
-                                      "length": null
-                                    }
-                                  ]
-                                },
-                                "base": {
-                                  "_type": "VarExpression",
+                                "TypeEnum": {
+                                  "_type": "IntegerConstant",
                                   "source_location": {
                                     "file": "tests/approvals/itxn-compose.algo.ts",
                                     "line": 55,
                                     "end_line": 55,
                                     "column": 18,
-                                    "end_column": 23
+                                    "end_column": 53
                                   },
                                   "wtype": {
-                                    "_type": "WTuple",
-                                    "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
-                                    "immutable": true,
-                                    "types": [
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "tuple",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          },
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "tuple",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          },
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      }
-                                    ],
-                                    "names": [
-                                      "approvalProgram",
-                                      "clearStateProgram",
-                                      "extraProgramPages",
-                                      "globalUints",
-                                      "globalBytes",
-                                      "localUints",
-                                      "localBytes"
-                                    ]
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
                                   },
-                                  "name": "hello"
+                                  "value": 6,
+                                  "teal_alias": "appl"
                                 },
-                                "name": "clearStateProgram"
-                              },
-                              "GlobalNumUint": {
-                                "_type": "FieldExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                  "line": 55,
-                                  "end_line": 55,
-                                  "column": 18,
-                                  "end_column": 53
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "uint64",
-                                  "immutable": true
-                                },
-                                "base": {
-                                  "_type": "VarExpression",
+                                "OnCompletion": {
+                                  "_type": "IntegerConstant",
                                   "source_location": {
                                     "file": "tests/approvals/itxn-compose.algo.ts",
                                     "line": 55,
                                     "end_line": 55,
                                     "column": 18,
-                                    "end_column": 23
+                                    "end_column": 53
                                   },
                                   "wtype": {
-                                    "_type": "WTuple",
-                                    "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
-                                    "immutable": true,
-                                    "types": [
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "tuple",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          },
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "tuple",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          },
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      }
-                                    ],
-                                    "names": [
-                                      "approvalProgram",
-                                      "clearStateProgram",
-                                      "extraProgramPages",
-                                      "globalUints",
-                                      "globalBytes",
-                                      "localUints",
-                                      "localBytes"
-                                    ]
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
                                   },
-                                  "name": "hello"
+                                  "value": 0,
+                                  "teal_alias": null
                                 },
-                                "name": "globalUints"
-                              },
-                              "GlobalNumByteSlice": {
-                                "_type": "FieldExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                  "line": 55,
-                                  "end_line": 55,
-                                  "column": 18,
-                                  "end_column": 53
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "uint64",
-                                  "immutable": true
-                                },
-                                "base": {
-                                  "_type": "VarExpression",
+                                "ApprovalProgramPages": {
+                                  "_type": "FieldExpression",
                                   "source_location": {
                                     "file": "tests/approvals/itxn-compose.algo.ts",
                                     "line": 55,
                                     "end_line": 55,
                                     "column": 18,
-                                    "end_column": 23
+                                    "end_column": 53
                                   },
                                   "wtype": {
                                     "_type": "WTuple",
-                                    "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
+                                    "name": "tuple",
                                     "immutable": true,
                                     "types": [
                                       {
-                                        "_type": "WTuple",
-                                        "name": "tuple",
+                                        "_type": "BytesWType",
+                                        "name": "bytes",
                                         "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          },
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          }
-                                        ]
+                                        "length": null
                                       },
                                       {
-                                        "_type": "WTuple",
-                                        "name": "tuple",
+                                        "_type": "BytesWType",
+                                        "name": "bytes",
                                         "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          },
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
+                                        "length": null
                                       }
-                                    ],
-                                    "names": [
-                                      "approvalProgram",
-                                      "clearStateProgram",
-                                      "extraProgramPages",
-                                      "globalUints",
-                                      "globalBytes",
-                                      "localUints",
-                                      "localBytes"
                                     ]
                                   },
-                                  "name": "hello"
-                                },
-                                "name": "globalBytes"
-                              },
-                              "LocalNumByteSlice": {
-                                "_type": "FieldExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                  "line": 55,
-                                  "end_line": 55,
-                                  "column": 18,
-                                  "end_column": 53
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "uint64",
-                                  "immutable": true
-                                },
-                                "base": {
-                                  "_type": "VarExpression",
-                                  "source_location": {
-                                    "file": "tests/approvals/itxn-compose.algo.ts",
-                                    "line": 55,
-                                    "end_line": 55,
-                                    "column": 18,
-                                    "end_column": 23
-                                  },
-                                  "wtype": {
-                                    "_type": "WTuple",
-                                    "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
-                                    "immutable": true,
-                                    "types": [
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "tuple",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          },
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "tuple",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          },
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      }
-                                    ],
-                                    "names": [
-                                      "approvalProgram",
-                                      "clearStateProgram",
-                                      "extraProgramPages",
-                                      "globalUints",
-                                      "globalBytes",
-                                      "localUints",
-                                      "localBytes"
-                                    ]
-                                  },
-                                  "name": "hello"
-                                },
-                                "name": "localBytes"
-                              },
-                              "LocalNumUint": {
-                                "_type": "FieldExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                  "line": 55,
-                                  "end_line": 55,
-                                  "column": 18,
-                                  "end_column": 53
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "uint64",
-                                  "immutable": true
-                                },
-                                "base": {
-                                  "_type": "VarExpression",
-                                  "source_location": {
-                                    "file": "tests/approvals/itxn-compose.algo.ts",
-                                    "line": 55,
-                                    "end_line": 55,
-                                    "column": 18,
-                                    "end_column": 23
-                                  },
-                                  "wtype": {
-                                    "_type": "WTuple",
-                                    "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
-                                    "immutable": true,
-                                    "types": [
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "tuple",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          },
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "tuple",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          },
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      }
-                                    ],
-                                    "names": [
-                                      "approvalProgram",
-                                      "clearStateProgram",
-                                      "extraProgramPages",
-                                      "globalUints",
-                                      "globalBytes",
-                                      "localUints",
-                                      "localBytes"
-                                    ]
-                                  },
-                                  "name": "hello"
-                                },
-                                "name": "localUints"
-                              },
-                              "ExtraProgramPages": {
-                                "_type": "FieldExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                  "line": 55,
-                                  "end_line": 55,
-                                  "column": 18,
-                                  "end_column": 53
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "uint64",
-                                  "immutable": true
-                                },
-                                "base": {
-                                  "_type": "VarExpression",
-                                  "source_location": {
-                                    "file": "tests/approvals/itxn-compose.algo.ts",
-                                    "line": 55,
-                                    "end_line": 55,
-                                    "column": 18,
-                                    "end_column": 23
-                                  },
-                                  "wtype": {
-                                    "_type": "WTuple",
-                                    "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
-                                    "immutable": true,
-                                    "types": [
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "tuple",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          },
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "tuple",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          },
-                                          {
-                                            "_type": "BytesWType",
-                                            "name": "bytes",
-                                            "immutable": true,
-                                            "length": null
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      }
-                                    ],
-                                    "names": [
-                                      "approvalProgram",
-                                      "clearStateProgram",
-                                      "extraProgramPages",
-                                      "globalUints",
-                                      "globalBytes",
-                                      "localUints",
-                                      "localBytes"
-                                    ]
-                                  },
-                                  "name": "hello"
-                                },
-                                "name": "extraProgramPages"
-                              },
-                              "ApplicationArgs": {
-                                "_type": "TupleExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                  "line": 55,
-                                  "end_line": 55,
-                                  "column": 18,
-                                  "end_column": 53
-                                },
-                                "wtype": {
-                                  "_type": "WTuple",
-                                  "name": "tuple",
-                                  "immutable": true,
-                                  "types": [
-                                    {
-                                      "_type": "BytesWType",
-                                      "name": "bytes[4]",
-                                      "immutable": true,
-                                      "length": 4
-                                    },
-                                    {
-                                      "_type": "ARC4DynamicArray",
-                                      "name": "arc4.dynamic_array<arc4.byte>",
-                                      "immutable": true,
-                                      "arc4_alias": "string",
-                                      "element_type": {
-                                        "_type": "ARC4UIntN",
-                                        "name": "arc4.byte",
-                                        "immutable": true,
-                                        "arc4_alias": "byte",
-                                        "n": 8
-                                      },
-                                      "source_location": null
-                                    }
-                                  ]
-                                },
-                                "items": [
-                                  {
-                                    "_type": "MethodConstant",
+                                  "base": {
+                                    "_type": "VarExpression",
                                     "source_location": {
                                       "file": "tests/approvals/itxn-compose.algo.ts",
                                       "line": 55,
                                       "end_line": 55,
                                       "column": 18,
-                                      "end_column": 53
+                                      "end_column": 23
                                     },
                                     "wtype": {
-                                      "_type": "BytesWType",
-                                      "name": "bytes[4]",
+                                      "_type": "WTuple",
+                                      "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
                                       "immutable": true,
-                                      "length": 4
+                                      "types": [
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            },
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            },
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ],
+                                      "names": [
+                                        "approvalProgram",
+                                        "clearStateProgram",
+                                        "extraProgramPages",
+                                        "globalUints",
+                                        "globalBytes",
+                                        "localUints",
+                                        "localBytes"
+                                      ]
                                     },
-                                    "value": "helloCreate(string)void"
+                                    "name": "hello"
                                   },
-                                  {
-                                    "_type": "ARC4Encode",
+                                  "name": "approvalProgram"
+                                },
+                                "ClearStateProgramPages": {
+                                  "_type": "FieldExpression",
+                                  "source_location": {
+                                    "file": "tests/approvals/itxn-compose.algo.ts",
+                                    "line": 55,
+                                    "end_line": 55,
+                                    "column": 18,
+                                    "end_column": 53
+                                  },
+                                  "wtype": {
+                                    "_type": "WTuple",
+                                    "name": "tuple",
+                                    "immutable": true,
+                                    "types": [
+                                      {
+                                        "_type": "BytesWType",
+                                        "name": "bytes",
+                                        "immutable": true,
+                                        "length": null
+                                      },
+                                      {
+                                        "_type": "BytesWType",
+                                        "name": "bytes",
+                                        "immutable": true,
+                                        "length": null
+                                      }
+                                    ]
+                                  },
+                                  "base": {
+                                    "_type": "VarExpression",
                                     "source_location": {
                                       "file": "tests/approvals/itxn-compose.algo.ts",
                                       "line": 55,
                                       "end_line": 55,
-                                      "column": 45,
-                                      "end_column": 49
+                                      "column": 18,
+                                      "end_column": 23
                                     },
                                     "wtype": {
-                                      "_type": "ARC4DynamicArray",
-                                      "name": "arc4.dynamic_array<arc4.byte>",
+                                      "_type": "WTuple",
+                                      "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
                                       "immutable": true,
-                                      "arc4_alias": "string",
-                                      "element_type": {
-                                        "_type": "ARC4UIntN",
-                                        "name": "arc4.byte",
-                                        "immutable": true,
-                                        "arc4_alias": "byte",
-                                        "n": 8
-                                      },
-                                      "source_location": null
+                                      "types": [
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            },
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            },
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ],
+                                      "names": [
+                                        "approvalProgram",
+                                        "clearStateProgram",
+                                        "extraProgramPages",
+                                        "globalUints",
+                                        "globalBytes",
+                                        "localUints",
+                                        "localBytes"
+                                      ]
                                     },
-                                    "value": {
-                                      "_type": "StringConstant",
+                                    "name": "hello"
+                                  },
+                                  "name": "clearStateProgram"
+                                },
+                                "GlobalNumUint": {
+                                  "_type": "FieldExpression",
+                                  "source_location": {
+                                    "file": "tests/approvals/itxn-compose.algo.ts",
+                                    "line": 55,
+                                    "end_line": 55,
+                                    "column": 18,
+                                    "end_column": 53
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "base": {
+                                    "_type": "VarExpression",
+                                    "source_location": {
+                                      "file": "tests/approvals/itxn-compose.algo.ts",
+                                      "line": 55,
+                                      "end_line": 55,
+                                      "column": 18,
+                                      "end_column": 23
+                                    },
+                                    "wtype": {
+                                      "_type": "WTuple",
+                                      "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            },
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            },
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ],
+                                      "names": [
+                                        "approvalProgram",
+                                        "clearStateProgram",
+                                        "extraProgramPages",
+                                        "globalUints",
+                                        "globalBytes",
+                                        "localUints",
+                                        "localBytes"
+                                      ]
+                                    },
+                                    "name": "hello"
+                                  },
+                                  "name": "globalUints"
+                                },
+                                "GlobalNumByteSlice": {
+                                  "_type": "FieldExpression",
+                                  "source_location": {
+                                    "file": "tests/approvals/itxn-compose.algo.ts",
+                                    "line": 55,
+                                    "end_line": 55,
+                                    "column": 18,
+                                    "end_column": 53
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "base": {
+                                    "_type": "VarExpression",
+                                    "source_location": {
+                                      "file": "tests/approvals/itxn-compose.algo.ts",
+                                      "line": 55,
+                                      "end_line": 55,
+                                      "column": 18,
+                                      "end_column": 23
+                                    },
+                                    "wtype": {
+                                      "_type": "WTuple",
+                                      "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            },
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            },
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ],
+                                      "names": [
+                                        "approvalProgram",
+                                        "clearStateProgram",
+                                        "extraProgramPages",
+                                        "globalUints",
+                                        "globalBytes",
+                                        "localUints",
+                                        "localBytes"
+                                      ]
+                                    },
+                                    "name": "hello"
+                                  },
+                                  "name": "globalBytes"
+                                },
+                                "LocalNumByteSlice": {
+                                  "_type": "FieldExpression",
+                                  "source_location": {
+                                    "file": "tests/approvals/itxn-compose.algo.ts",
+                                    "line": 55,
+                                    "end_line": 55,
+                                    "column": 18,
+                                    "end_column": 53
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "base": {
+                                    "_type": "VarExpression",
+                                    "source_location": {
+                                      "file": "tests/approvals/itxn-compose.algo.ts",
+                                      "line": 55,
+                                      "end_line": 55,
+                                      "column": 18,
+                                      "end_column": 23
+                                    },
+                                    "wtype": {
+                                      "_type": "WTuple",
+                                      "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            },
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            },
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ],
+                                      "names": [
+                                        "approvalProgram",
+                                        "clearStateProgram",
+                                        "extraProgramPages",
+                                        "globalUints",
+                                        "globalBytes",
+                                        "localUints",
+                                        "localBytes"
+                                      ]
+                                    },
+                                    "name": "hello"
+                                  },
+                                  "name": "localBytes"
+                                },
+                                "LocalNumUint": {
+                                  "_type": "FieldExpression",
+                                  "source_location": {
+                                    "file": "tests/approvals/itxn-compose.algo.ts",
+                                    "line": 55,
+                                    "end_line": 55,
+                                    "column": 18,
+                                    "end_column": 53
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "base": {
+                                    "_type": "VarExpression",
+                                    "source_location": {
+                                      "file": "tests/approvals/itxn-compose.algo.ts",
+                                      "line": 55,
+                                      "end_line": 55,
+                                      "column": 18,
+                                      "end_column": 23
+                                    },
+                                    "wtype": {
+                                      "_type": "WTuple",
+                                      "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            },
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            },
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ],
+                                      "names": [
+                                        "approvalProgram",
+                                        "clearStateProgram",
+                                        "extraProgramPages",
+                                        "globalUints",
+                                        "globalBytes",
+                                        "localUints",
+                                        "localBytes"
+                                      ]
+                                    },
+                                    "name": "hello"
+                                  },
+                                  "name": "localUints"
+                                },
+                                "ExtraProgramPages": {
+                                  "_type": "FieldExpression",
+                                  "source_location": {
+                                    "file": "tests/approvals/itxn-compose.algo.ts",
+                                    "line": 55,
+                                    "end_line": 55,
+                                    "column": 18,
+                                    "end_column": 53
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "base": {
+                                    "_type": "VarExpression",
+                                    "source_location": {
+                                      "file": "tests/approvals/itxn-compose.algo.ts",
+                                      "line": 55,
+                                      "end_line": 55,
+                                      "column": 18,
+                                      "end_column": 23
+                                    },
+                                    "wtype": {
+                                      "_type": "WTuple",
+                                      "name": "@algorandfoundation/algorand-typescript/compiled.d.ts::CompiledContract",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            },
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            },
+                                            {
+                                              "_type": "BytesWType",
+                                              "name": "bytes",
+                                              "immutable": true,
+                                              "length": null
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ],
+                                      "names": [
+                                        "approvalProgram",
+                                        "clearStateProgram",
+                                        "extraProgramPages",
+                                        "globalUints",
+                                        "globalBytes",
+                                        "localUints",
+                                        "localBytes"
+                                      ]
+                                    },
+                                    "name": "hello"
+                                  },
+                                  "name": "extraProgramPages"
+                                },
+                                "ApplicationArgs": {
+                                  "_type": "TupleExpression",
+                                  "source_location": {
+                                    "file": "tests/approvals/itxn-compose.algo.ts",
+                                    "line": 55,
+                                    "end_line": 55,
+                                    "column": 18,
+                                    "end_column": 53
+                                  },
+                                  "wtype": {
+                                    "_type": "WTuple",
+                                    "name": "tuple",
+                                    "immutable": true,
+                                    "types": [
+                                      {
+                                        "_type": "BytesWType",
+                                        "name": "bytes[4]",
+                                        "immutable": true,
+                                        "length": 4
+                                      },
+                                      {
+                                        "_type": "ARC4DynamicArray",
+                                        "name": "arc4.dynamic_array<arc4.byte>",
+                                        "immutable": true,
+                                        "arc4_alias": "string",
+                                        "element_type": {
+                                          "_type": "ARC4UIntN",
+                                          "name": "arc4.byte",
+                                          "immutable": true,
+                                          "arc4_alias": "byte",
+                                          "n": 8
+                                        },
+                                        "source_location": null
+                                      }
+                                    ]
+                                  },
+                                  "items": [
+                                    {
+                                      "_type": "MethodConstant",
+                                      "source_location": {
+                                        "file": "tests/approvals/itxn-compose.algo.ts",
+                                        "line": 55,
+                                        "end_line": 55,
+                                        "column": 18,
+                                        "end_column": 53
+                                      },
+                                      "wtype": {
+                                        "_type": "BytesWType",
+                                        "name": "bytes[4]",
+                                        "immutable": true,
+                                        "length": 4
+                                      },
+                                      "value": "helloCreate(string)void"
+                                    },
+                                    {
+                                      "_type": "ARC4Encode",
                                       "source_location": {
                                         "file": "tests/approvals/itxn-compose.algo.ts",
                                         "line": 55,
@@ -3118,25 +3023,50 @@
                                         "end_column": 49
                                       },
                                       "wtype": {
-                                        "_type": "WType",
-                                        "name": "string",
-                                        "immutable": true
+                                        "_type": "ARC4DynamicArray",
+                                        "name": "arc4.dynamic_array<arc4.byte>",
+                                        "immutable": true,
+                                        "arc4_alias": "string",
+                                        "element_type": {
+                                          "_type": "ARC4UIntN",
+                                          "name": "arc4.byte",
+                                          "immutable": true,
+                                          "arc4_alias": "byte",
+                                          "n": 8
+                                        },
+                                        "source_location": null
                                       },
-                                      "value": "Hi"
+                                      "value": {
+                                        "_type": "StringConstant",
+                                        "source_location": {
+                                          "file": "tests/approvals/itxn-compose.algo.ts",
+                                          "line": 55,
+                                          "end_line": 55,
+                                          "column": 45,
+                                          "end_column": 49
+                                        },
+                                        "wtype": {
+                                          "_type": "WType",
+                                          "name": "string",
+                                          "immutable": true
+                                        },
+                                        "value": "Hi"
+                                      }
                                     }
-                                  }
-                                ]
+                                  ]
+                                }
                               }
                             }
-                          }
-                        ]
-                      }
-                    ]
+                          ]
+                        }
+                      ]
+                    },
+                    "name": "itxn"
                   },
-                  "name": "itxn"
+                  "field": "CreatedApplicationID",
+                  "array_index": null
                 },
-                "field": "CreatedApplicationID",
-                "array_index": null
+                "_id": "3"
               }
             },
             {
@@ -4268,7 +4198,7 @@
                           "name": "txn"
                         },
                         "value": {
-                          "_type": "GroupTransactionReference",
+                          "_type": "SingleEvaluation",
                           "source_location": {
                             "file": "tests/approvals/itxn-compose.algo.ts",
                             "line": 71,
@@ -4282,22 +4212,39 @@
                             "immutable": true,
                             "transaction_type": null
                           },
-                          "index": {
-                            "_type": "VarExpression",
+                          "source": {
+                            "_type": "GroupTransactionReference",
                             "source_location": {
                               "file": "tests/approvals/itxn-compose.algo.ts",
                               "line": 71,
                               "end_line": 71,
-                              "column": 35,
-                              "end_column": 36
+                              "column": 18,
+                              "end_column": 37
                             },
                             "wtype": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
+                              "_type": "WGroupTransaction",
+                              "name": "group_transaction",
+                              "immutable": true,
+                              "transaction_type": null
                             },
-                            "name": "i"
-                          }
+                            "index": {
+                              "_type": "VarExpression",
+                              "source_location": {
+                                "file": "tests/approvals/itxn-compose.algo.ts",
+                                "line": 71,
+                                "end_line": 71,
+                                "column": 35,
+                                "end_column": 36
+                              },
+                              "wtype": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "name": "i"
+                            }
+                          },
+                          "_id": "4"
                         }
                       },
                       {

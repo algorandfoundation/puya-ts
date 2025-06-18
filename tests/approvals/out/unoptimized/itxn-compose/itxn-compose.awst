@@ -14,29 +14,28 @@ contract ItxnComposeAlgo
   {
     assert(gtxns<Receiver>(funds) == global<CurrentApplicationAddress>(), comment=assert target is match for conditions)
     assert(Boolean(addresses.length), comment=must provide some accounts)
-    share: uint64 = gtxns<Amount>(funds) // addresses.length
-    payFields: object{ type: uint64, amount: uint64, receiver: bytes } = { type: 1, amount: share, receiver: reinterpret_cast<bytes>(addresses[0]) }
+    share: uint64 = ($0 = gtxns<Amount>(funds) // addresses.length)
     begin_txn(create_inner_transaction(Fee=0, TypeEnum=payFields.type, Amount=payFields.amount, Receiver=reinterpret_cast<account>(payFields.receiver)))
     for (temp in urange(1, addresses.length, 1)) {
       i: uint64 = temp
-      addr: arc4.static_array<arc4.byte> = addresses[i]
-      next_txn(create_inner_transaction(Fee=0, Receiver=reinterpret_cast<account>(reinterpret_cast<bytes>(addr)), TypeEnum=payFields.type, Amount=payFields.amount))
+      addr: arc4.static_array<arc4.byte> = ($1 = addresses[i])
+      next_txn(create_inner_transaction(Fee=0, TypeEnum=payFields.type, Amount=payFields.amount, Receiver=reinterpret_cast<account>(reinterpret_cast<bytes>(addr))))
     }
-    next_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=verifier, ApplicationArgs=<tuple>[Method("verify()void")]))
+    next_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=verifier, ApplicationArgs=#[Method("verify()void")]))
     next_txn(create_inner_transaction(Fee=0, TypeEnum=3, ConfigAssetName="abc"))
     itxn_submit()
   }
   
   conditionalBegin(count: uint64): void
   {
-    hello: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::Hello
-    appId: application = { itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=hello.approvalProgram, ClearStateProgramPages=hello.clearStateProgram, GlobalNumUint=hello.globalUints, GlobalNumByteSlice=hello.globalBytes, LocalNumByteSlice=hello.localBytes, LocalNumUint=hello.localUints, ExtraProgramPages=hello.extraProgramPages, ApplicationArgs=<tuple>[Method("helloCreate(string)void"), ARC4_ENCODE("Hi", wtype=arc4.dynamic_array<arc4.byte>)])) }.itxn.CreatedApplicationID
+    hello: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = ($2 = compile(tests/approvals/precompiled-apps.algo.ts::Hello)
+    appId: application = ($3 = #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=hello.approvalProgram, ClearStateProgramPages=hello.clearStateProgram, GlobalNumUint=hello.globalUints, GlobalNumByteSlice=hello.globalBytes, LocalNumByteSlice=hello.localBytes, LocalNumUint=hello.localUints, ExtraProgramPages=hello.extraProgramPages, ApplicationArgs=#[Method("helloCreate(string)void"), ARC4_ENCODE("Hi", wtype=arc4.dynamic_array<arc4.byte>)])) }.itxn.CreatedApplicationID)
     for (temp in urange(0, count, 1)) {
       i: uint64 = temp
       if (i == 0) {
-        begin_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, ApplicationArgs=<tuple>[Method("greet(string)string"), ARC4_ENCODE("ho", wtype=arc4.dynamic_array<arc4.byte>)]))
+        begin_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, ApplicationArgs=#[Method("greet(string)string"), ARC4_ENCODE("ho", wtype=arc4.dynamic_array<arc4.byte>)]))
       } else {
-        next_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, ApplicationArgs=<tuple>[Method("greet(string)string"), ARC4_ENCODE("ho", wtype=arc4.dynamic_array<arc4.byte>)]))
+        next_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, ApplicationArgs=#[Method("greet(string)string"), ARC4_ENCODE("ho", wtype=arc4.dynamic_array<arc4.byte>)]))
       }
     }
     itxn_submit()
@@ -63,7 +62,7 @@ contract VerifierContract
   {
     i: uint64 = 0
     while (i < txn<GroupIndex>()) {
-      txn: group_transaction = group_transaction(index=i, type=group_transaction)
+      txn: group_transaction = ($4 = group_transaction(index=i, type=group_transaction))
       assert(gtxns<TypeEnum>(txn) == reinterpret_cast<uint64>(1), comment=Txn must be pay)
       i++
     }

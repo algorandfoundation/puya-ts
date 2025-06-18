@@ -1,9 +1,9 @@
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { abimethod, arc4, clone, Contract, LocalState, MutableObject, Txn } from '@algorandfoundation/algorand-typescript'
+import { abimethod, arc4, clone, Contract, LocalState, Txn } from '@algorandfoundation/algorand-typescript'
 import type { StaticArray, UintN } from '@algorandfoundation/algorand-typescript/arc4'
 
 type SampleArray = StaticArray<UintN<64>, 10>
-class Data extends MutableObject<{ a: uint64; b: bytes; c: boolean; d: arc4.Str }> {}
+type Data = { a: uint64; b: bytes; c: boolean; d: arc4.Str }
 
 export class LocalStateDemo extends Contract {
   localUint = LocalState<uint64>({ key: 'l1' })
@@ -12,7 +12,7 @@ export class LocalStateDemo extends Contract {
   localBytes2 = LocalState<bytes>()
   localEncoded = LocalState<SampleArray>()
   localTuple = LocalState<readonly [uint64, bytes]>()
-  localObject = LocalState<{ a: uint64; b: bytes }>()
+  localObject = LocalState<Readonly<{ a: uint64; b: bytes }>>()
   localMutableObject = LocalState<Data>()
 
   @abimethod({ allowActions: 'OptIn' })
@@ -26,7 +26,7 @@ export class LocalStateDemo extends Contract {
     this.localEncoded(Txn.sender).value = clone(c)
     this.localTuple(Txn.sender).value = [a, b]
     this.localObject(Txn.sender).value = { a, b }
-    this.localMutableObject(Txn.sender).value = new Data({ a, b, c: true, d: new arc4.Str('hello') })
+    this.localMutableObject(Txn.sender).value = { a, b, c: true, d: new arc4.Str('hello') }
   }
 
   public getState() {

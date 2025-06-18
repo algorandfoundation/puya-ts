@@ -6,13 +6,14 @@ import type {
   ArrayLiteralPType,
   ArrayPType,
   FixedArrayPType,
+  ImmutableObjectPType,
+  MutableObjectPType,
   MutableTuplePType,
-  ObjectPType,
+  ObjectLiteralPType,
   ReadonlyArrayPType,
   ReadonlyTuplePType,
   ReferenceArrayType,
 } from '../index'
-import type { MutableObjectType } from '../mutable-object'
 import { DefaultVisitor } from './default-visitor'
 
 export function hasProperty(ptype: PType, property: string, sourceLocation: SourceLocation) {
@@ -64,18 +65,25 @@ export class IndexTypeVisitor extends DefaultVisitor<PType | undefined> {
     return super.visitARC4StructType(ptype)
   }
 
-  visitObjectPType(ptype: ObjectPType): PType | undefined {
+  visitImmutableObjectPType(ptype: ImmutableObjectPType): PType | undefined {
     if (typeof this.index === 'string') {
       return ptype.properties[this.index]
     }
-    return super.visitObjectPType(ptype)
+    return super.visitImmutableObjectPType(ptype)
   }
 
-  visitMutableObjectType(ptype: MutableObjectType): PType | undefined {
+  visitMutableObjectPType(ptype: MutableObjectPType): PType | undefined {
     if (typeof this.index === 'string') {
-      return ptype.fields[this.index]
+      return ptype.properties[this.index]
     }
-    return super.visitMutableObjectType(ptype)
+    return super.visitMutableObjectPType(ptype)
+  }
+
+  visitObjectLiteralPType(ptype: ObjectLiteralPType): PType | undefined {
+    if (typeof this.index === 'string') {
+      return ptype.properties[this.index]
+    }
+    return super.visitObjectLiteralPType(ptype)
   }
 
   visitReferenceArrayType(ptype: ReferenceArrayType): PType | undefined {

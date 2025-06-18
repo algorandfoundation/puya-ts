@@ -11,11 +11,12 @@ import type { InstanceBuilder } from '../../index'
 import { type NodeBuilder } from '../../index'
 import { requireExpressionOfType } from '../index'
 
-export function indexAccess(target: InstanceBuilder, index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
-  const indexExpr = requireExpressionOfType(index, uint64PType)
+export function indexAccess(target: InstanceBuilder, index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
+  const indexExpr =
+    typeof index === 'bigint' ? nodeFactory.uInt64Constant({ value: index, sourceLocation }) : requireExpressionOfType(index, uint64PType)
 
   if (indexExpr instanceof IntegerConstant && target.ptype instanceof StaticArrayType && indexExpr.value >= target.ptype.arraySize) {
-    logger.error(index.sourceLocation, 'Index access out of bounds')
+    logger.error(indexExpr.sourceLocation, 'Index access out of bounds')
   }
 
   const elementType = getIndexType(target.ptype, 0n, sourceLocation)

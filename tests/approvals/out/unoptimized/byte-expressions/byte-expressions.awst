@@ -1,7 +1,7 @@
 subroutine test(a: uint64, b: biguint, c: string): void
 {
   assert(len(0x) == 0, comment=Empty bytes has length of 0)
-  assert(checked_maybe(<tuple>[reinterpret_cast<bytes[8]>((#0 = itob(a))), len(#0) == 8], comment=Length must be 8) == itob(a), comment=Bytes(uint64) is equivalent to itob)
+  assert(checked_maybe(#[reinterpret_cast<bytes[8]>(($0 = itob(a))), len($0) == 8], comment=Length must be 8) == itob(a), comment=Bytes(uint64) is equivalent to itob)
   assert(0x0000000000000001 == 0x0000000000000001, comment=Bytes(uint64) returns an 8 byte encoding)
   assert(reinterpret_cast<bytes>(256) == 0x0100)
   assert(reinterpret_cast<biguint>(reinterpret_cast<bytes>(b)) == b, comment=Round trip of biguint to bytes and back results in the same value)

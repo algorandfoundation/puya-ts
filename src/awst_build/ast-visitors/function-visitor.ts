@@ -17,8 +17,7 @@ import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expre
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
-import type { PType } from '../ptypes'
-import { FunctionPType, ObjectPType } from '../ptypes'
+import { FunctionPType } from '../ptypes'
 import { IteratorTypeVisitor } from '../ptypes/visitors/iterator-type-visitor'
 import { instanceEb, typeRegistry } from '../type-registry'
 import { handleAssignmentStatement } from './assignments'
@@ -82,8 +81,7 @@ export abstract class FunctionVisitor
 
           props.push([propertyName, this.visitBindingName(element.name, sourceLocation)])
         }
-        const ptype = ObjectPType.anonymous(props.map(([name, builder]): [string, PType] => [name, builder.ptype]))
-        return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, [{ type: 'properties', properties: Object.fromEntries(props) }])
+        return ObjectLiteralExpressionBuilder.fromParts(sourceLocation, [{ type: 'properties', properties: Object.fromEntries(props) }])
       }
       case ts.SyntaxKind.ArrayBindingPattern: {
         const items: InstanceBuilder[] = []
@@ -126,9 +124,7 @@ export abstract class FunctionVisitor
           paramPType,
         )
 
-        assignments.push(
-          handleAssignmentStatement(this.context, this.visitBindingName(p.name, sourceLocation), paramBuilder, sourceLocation),
-        )
+        assignments.push(handleAssignmentStatement(this.visitBindingName(p.name, sourceLocation), paramBuilder, sourceLocation))
       }
     }
 
@@ -189,7 +185,7 @@ export abstract class FunctionVisitor
         return []
       }
 
-      return handleAssignmentStatement(this.context, this.visitBindingName(d.name, sourceLocation), source, sourceLocation)
+      return handleAssignmentStatement(this.visitBindingName(d.name, sourceLocation), source, sourceLocation)
     })
   }
 
@@ -269,7 +265,7 @@ export abstract class FunctionVisitor
         items: itemVar.resolveLValue(),
         loopBody: nodeFactory.block(
           { sourceLocation },
-          handleAssignmentStatement(this.context, items, itemVar, initializerLocation),
+          handleAssignmentStatement(items, itemVar, initializerLocation),
           this.accept(node.statement),
           ...maybeNodes(ctx.hasContinues, ctx.continueTarget),
         ),

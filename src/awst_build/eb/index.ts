@@ -1,13 +1,13 @@
-import { awst, isConstantOrTemplateVar } from '../../awst'
+import { awst, isConstant, isConstantOrTemplateVar } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
 import { TupleItemExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, NotSupported } from '../../errors'
+import { instanceOfAny } from '../../util'
 import type { DecoratorData } from '../models/decorator-data'
 import type { GenericPType, LibClassType, PType, PTypeOrClass } from '../ptypes'
 import { uint64PType } from '../ptypes'
 import type { ARC4StructClass } from '../ptypes/arc4-types'
-import type { MutableObjectClass } from '../ptypes/mutable-object'
 import { instanceEb } from '../type-registry'
 
 export enum BuilderComparisonOp {
@@ -95,7 +95,7 @@ export abstract class NodeBuilder {
     })
   }
 
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
     throw new NotSupported(`Indexing ${this.typeDescription}`, {
       sourceLocation,
     })
@@ -138,7 +138,7 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
 
   singleEvaluation(): InstanceBuilder {
     const expr = this.resolve()
-    if (expr instanceof awst.VarExpression) {
+    if (instanceOfAny(expr, awst.VarExpression, awst.SingleEvaluation) || isConstant(expr)) {
       return this
     }
     return instanceEb(
@@ -229,12 +229,12 @@ export abstract class WrappingInstanceBuilder<TPType extends PType = PType> exte
   ): InstanceBuilder
   abstract hasProperty(_name: string): boolean
   abstract memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder
-  abstract indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder
+  abstract indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder
   abstract boolEval(sourceLocation: SourceLocation, negate: boolean): awst.Expression
 }
 
 export abstract class ClassBuilder extends NodeBuilder {
-  abstract readonly ptype: LibClassType | GenericPType | ARC4StructClass | MutableObjectClass
+  abstract readonly ptype: LibClassType | GenericPType | ARC4StructClass
 
   abstract newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder
 

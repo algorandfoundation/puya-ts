@@ -11,6 +11,7 @@ import type {
   FunctionPType,
   GlobalStateType,
   GroupTransactionPType,
+  ImmutableObjectPType,
   InnerTransactionPType,
   InstanceType,
   InternalType,
@@ -25,9 +26,10 @@ import type {
   LibObjType,
   LocalStateType,
   LogicSigPType,
+  MutableObjectPType,
   MutableTuplePType,
   NamespacePType,
-  ObjectPType,
+  ObjectLiteralPType,
   ReadonlyArrayPType,
   ReadonlyTuplePType,
   ReferenceArrayType,
@@ -51,7 +53,7 @@ import type {
 } from '../arc4-types'
 import type { GenericPType, PType } from '../base'
 import type { IntrinsicEnumType } from '../intrinsic-enum-type'
-import type { MutableObjectClass, MutableObjectType } from '../mutable-object'
+
 import type { PTypeVisitor } from '../visitor'
 
 export abstract class DefaultVisitor<T> implements PTypeVisitor<T> {
@@ -63,12 +65,14 @@ export abstract class DefaultVisitor<T> implements PTypeVisitor<T> {
   visitGeneric(ptype: GenericPType): T {
     return this.defaultReturn(ptype)
   }
-  visitMutableObjectType(ptype: MutableObjectType): T {
+  visitMutableObjectPType(ptype: MutableObjectPType): T {
     return this.defaultReturn(ptype)
   }
-  visitMutableObjectClass(ptype: MutableObjectClass): T {
+
+  visitObjectLiteralPType(ptype: ObjectLiteralPType): T {
     return this.defaultReturn(ptype)
   }
+
   visitIntrinsicEnumType(ptype: IntrinsicEnumType): T {
     return this.defaultReturn(ptype)
   }
@@ -108,7 +112,7 @@ export abstract class DefaultVisitor<T> implements PTypeVisitor<T> {
   visitContractProxyType(ptype: ContractProxyType): T {
     return this.defaultReturn(ptype)
   }
-  visitObjectPType(ptype: ObjectPType): T {
+  visitImmutableObjectPType(ptype: ImmutableObjectPType): T {
     return this.defaultReturn(ptype)
   }
   visitLogicSigPType(ptype: LogicSigPType): T {

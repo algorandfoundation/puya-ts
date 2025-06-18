@@ -4,42 +4,41 @@ import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import { invariant } from '../../../util'
 import type { PTypeOrClass } from '../../ptypes'
-import { ObjectPType, type PType } from '../../ptypes'
+import { ImmutableObjectPType, type PType } from '../../ptypes'
 import { getPropertyType, hasPropertyOfType } from '../../ptypes/visitors/index-type-visitor'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder } from '../index'
 import { InstanceExpressionBuilder, type NodeBuilder } from '../index'
 import { requireExpressionOfType } from '../util'
 
-export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPType> {
+export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ImmutableObjectPType> {
   constructor(expr: Expression, ptype: PType) {
-    invariant(ptype instanceof ObjectPType, `ObjectExpressionBuilder must be instantiated with ptype of ObjectPType`)
+    invariant(ptype instanceof ImmutableObjectPType, `ObjectExpressionBuilder must be instantiated with ptype of ImmutableObjectPType`)
     super(expr, ptype)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    const propertyIndex = this.ptype.orderedProperties().findIndex(([prop]) => prop === name)
-    if (propertyIndex === -1) {
-      return super.memberAccess(name, sourceLocation)
+    if (name in this.ptype.properties) {
+      const propertyPtype = getPropertyType(this.ptype, name, sourceLocation)
+      return instanceEb(
+        nodeFactory.fieldExpression({
+          name,
+          sourceLocation,
+          base: this._expr,
+          wtype: propertyPtype.wtypeOrThrow,
+        }),
+        propertyPtype,
+      )
     }
-    const propertyPtype = getPropertyType(this.ptype, name, sourceLocation)
-    return instanceEb(
-      nodeFactory.fieldExpression({
-        name,
-        sourceLocation,
-        base: this._expr,
-        wtype: propertyPtype.wtypeOrThrow,
-      }),
-      propertyPtype,
-    )
+    return super.memberAccess(name, sourceLocation)
   }
 
   hasProperty(name: string): boolean {
-    return this.ptype.orderedProperties().some(([prop]) => prop === name)
+    return name in this.ptype.properties
   }
 
-  resolvableToPType(ptype: PTypeOrClass): ptype is ObjectPType {
-    if (ptype instanceof ObjectPType) {
+  resolvableToPType(ptype: PTypeOrClass): ptype is ImmutableObjectPType {
+    if (ptype instanceof ImmutableObjectPType) {
       return ptype.orderedProperties().every(([prop, propType]) => hasPropertyOfType(this.ptype, prop, propType, this.sourceLocation))
     }
     return false

@@ -18,6 +18,7 @@ import {
   BytesConstant,
   BytesEncoding,
   CheckedMaybe,
+  CommaExpression,
   concreteNodes,
   Copy,
   ExpressionStatement,
@@ -168,6 +169,7 @@ const explicitNodeFactory = {
   },
   expressionStatement({ expr }: { expr: Expression }) {
     if (expr instanceof AssignmentExpression) {
+      // Replace ExpressionStatement(AssignmentExpression) with AssignmentStatement
       return new AssignmentStatement({
         ...expr,
       })
@@ -330,6 +332,17 @@ const explicitNodeFactory = {
       itxns,
       sourceLocation,
       wtype: itxnWTypes.length === 1 ? itxnWTypes[0] : new WTuple({ types: itxnWTypes }),
+    })
+  },
+  commaExpression({ expressions, sourceLocation }: Omit<Props<CommaExpression>, 'wtype'>) {
+    const wtype = expressions.at(-1)?.wtype
+
+    invariant(wtype, 'Must have at least 1 expression')
+
+    return new CommaExpression({
+      expressions,
+      sourceLocation,
+      wtype,
     })
   },
 } satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => DeliberateAny }

@@ -50,7 +50,7 @@ export class ReferenceArrayExpressionBuilder extends InstanceExpressionBuilder<R
     return this.resolve()
   }
 
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
     return indexAccess(this, index, sourceLocation)
   }
 

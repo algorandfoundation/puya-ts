@@ -1,195 +1,137 @@
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression, LValue, Statement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { CodeError } from '../../errors'
-import { codeInvariant, instanceOfAny, sortBy } from '../../util'
-import type { AwstBuildContext } from '../context/awst-build-context'
+import { instanceOfAny } from '../../util'
 import type { InstanceBuilder } from '../eb'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { StaticIterator } from '../eb/traits/static-iterator'
-import { requireBuilderOfType, requireInstanceBuilder } from '../eb/util'
+import { requireInstanceBuilder } from '../eb/util'
 import type { PType } from '../ptypes'
 import {
   ArrayLiteralPType,
-  ArrayPType,
   BigIntLiteralPType,
   bigIntPType,
   biguintPType,
   MutableTuplePType,
   numberPType,
   NumericLiteralPType,
-  ObjectPType,
-  ReadonlyArrayPType,
+  ObjectLiteralPType,
   ReadonlyTuplePType,
   uint64PType,
   UnionPType,
 } from '../ptypes'
-import { ARC4StructType } from '../ptypes/arc4-types'
-import { MutableObjectType } from '../ptypes/mutable-object'
-import { getIndexType, getPropertyType } from '../ptypes/visitors/index-type-visitor'
+import { getIndexType } from '../ptypes/visitors/index-type-visitor'
 import { instanceEb } from '../type-registry'
 
-export function handleAssignmentStatement(
-  context: AwstBuildContext,
-  target: InstanceBuilder,
-  source: InstanceBuilder,
-  sourceLocation: SourceLocation,
-): Statement {
-  return nodeFactory.expressionStatement({ expr: handleAssignment(context, target, source, sourceLocation).resolve() })
+export function handleAssignmentStatement(target: InstanceBuilder, source: InstanceBuilder, sourceLocation: SourceLocation): Statement {
+  return nodeFactory.expressionStatement({ expr: handleAssignment(target, source, sourceLocation, true).resolve() })
 }
 
 export function handleAssignment(
-  context: AwstBuildContext,
   target: InstanceBuilder,
   source: InstanceBuilder,
   sourceLocation: SourceLocation,
+  isStatement: boolean = false,
 ): InstanceBuilder {
-  const assignmentType = buildAssignmentExpressionType(target.ptype, source.ptype, sourceLocation)
+  const narrowedSourceType = narrowSourceType(target.ptype, source.ptype, sourceLocation)
 
-  return buildAssignmentExpression(context, target, source.resolveToPType(assignmentType), assignmentType, sourceLocation)
+  return buildAssignmentExpression(target, source.resolveToPType(narrowedSourceType), sourceLocation, isStatement)
+}
+
+/**
+ * Return the 'type' of the entire assignment expression. This is almost always the source type, with the
+ * exception of array literals which are influenced by the assignment target.
+ * @param target
+ * @param source
+ */
+function getAssignmentExpressionType(target: PType, source: PType): PType {
+  if (source instanceof ArrayLiteralPType) {
+    if (instanceOfAny(target, ArrayLiteralPType, MutableTuplePType, ReadonlyTuplePType)) {
+      return source.getMutableTupleType()
+    } else {
+      return source.getArrayType()
+    }
+  }
+  if (source instanceof ObjectLiteralPType) {
+    return source.getMutable()
+  }
+  return source
+}
+
+function buildAssignmentValues(
+  target: InstanceBuilder,
+  source: InstanceBuilder,
+  sourceLocation: SourceLocation,
+): { target: LValue; source: Expression } {
+  if (target instanceof ArrayLiteralExpressionBuilder) {
+    // Destructured array
+    const targets: LValue[] = []
+    const sources: Expression[] = []
+
+    for (const [index, item] of target[StaticIterator]().entries()) {
+      if (item instanceof OmittedExpressionBuilder) continue
+      const values = buildAssignmentValues(item, requireInstanceBuilder(source.indexAccess(BigInt(index), sourceLocation)), sourceLocation)
+      targets.push(values.target)
+      sources.push(values.source)
+    }
+
+    return {
+      target: nodeFactory.tupleExpression({ items: targets, sourceLocation: target.sourceLocation }),
+      source: nodeFactory.tupleExpression({ items: sources, sourceLocation: source.sourceLocation }),
+    }
+  } else if (target instanceof ObjectLiteralExpressionBuilder) {
+    // // Destructured object
+    const targets: LValue[] = []
+    const sources: Expression[] = []
+    for (const [propName] of target.ptype.orderedProperties()) {
+      const values = buildAssignmentValues(
+        requireInstanceBuilder(target.memberAccess(propName, sourceLocation)),
+        requireInstanceBuilder(source.memberAccess(propName, sourceLocation)),
+        sourceLocation,
+      )
+      targets.push(values.target)
+      sources.push(values.source)
+    }
+    return {
+      target: nodeFactory.tupleExpression({ items: targets, sourceLocation: target.sourceLocation }),
+      source: nodeFactory.tupleExpression({ items: sources, sourceLocation: source.sourceLocation }),
+    }
+  } else {
+    return {
+      target: target.resolveLValue(),
+      source: source.resolveToPType(target.ptype).resolve(),
+    }
+  }
 }
 
 function buildAssignmentExpression(
-  context: AwstBuildContext,
   target: InstanceBuilder,
   source: InstanceBuilder,
-  assignmentType: PType,
   sourceLocation: SourceLocation,
+  isStatement: boolean,
 ): InstanceBuilder {
-  if (target instanceof ArrayLiteralExpressionBuilder && !(assignmentType instanceof ReadonlyTuplePType)) {
-    // Destructured array
-    const sourceSingle = source.singleEvaluation()
-    const assignments: Expression[] = []
-    for (const [index, item] of target[StaticIterator]().entries()) {
-      if (item instanceof OmittedExpressionBuilder) continue
-      const itemType = getIndexType(assignmentType, BigInt(index), sourceLocation)
-      codeInvariant(itemType, `Cannot resolve type of item at index ${index}`, sourceLocation)
-      assignments.push(
-        buildAssignmentExpression(
-          context,
-          item,
-          requireBuilderOfType(
-            sourceSingle.indexAccess(
-              instanceEb(nodeFactory.uInt64Constant({ value: BigInt(index), sourceLocation }), uint64PType),
-              sourceLocation,
-            ),
-            itemType,
-          ),
-          itemType,
-          sourceLocation,
-        ).resolve(),
-      )
-    }
+  const expressionType = getAssignmentExpressionType(target.ptype, source.ptype)
+  const sourceSingle = source.singleEvaluation()
+  const assignmentValues = buildAssignmentValues(target, sourceSingle, sourceLocation)
+  const assignment = nodeFactory.assignmentExpression({
+    target: assignmentValues.target,
+    value: assignmentValues.source,
+    sourceLocation,
+  })
+
+  if (target.ptype.equals(expressionType) || isStatement) {
+    return instanceEb(assignment, expressionType)
+  } else {
     return instanceEb(
       nodeFactory.commaExpression({
-        expressions: [...assignments, sourceSingle.resolve()],
+        expressions: [assignment, sourceSingle.resolveToPType(expressionType).resolve()],
         sourceLocation,
-        wtype: assignmentType.wtypeOrThrow,
       }),
-      assignmentType,
-    )
-  } else if (target instanceof ObjectLiteralExpressionBuilder && isObjectWhichCantBeDestructuredAsTuple(assignmentType)) {
-    // Destructured object
-    const sourceSingle = source.singleEvaluation()
-    const assignments: Expression[] = []
-
-    for (const [propName] of target.ptype.orderedProperties()) {
-      const sourceProperty = requireInstanceBuilder(sourceSingle.memberAccess(propName, sourceLocation))
-      const propertyAssignmentType = getIndexType(assignmentType, propName, sourceLocation)
-      codeInvariant(propertyAssignmentType, `${propName} does not exist on ${assignmentType}`, sourceLocation)
-      assignments.push(
-        buildAssignmentExpression(
-          context,
-          requireInstanceBuilder(target.memberAccess(propName, sourceLocation)),
-          requireBuilderOfType(sourceProperty, propertyAssignmentType),
-          propertyAssignmentType,
-          sourceLocation,
-        ).resolve(),
-      )
-    }
-    return instanceEb(
-      nodeFactory.commaExpression({
-        expressions: [...assignments, sourceSingle.resolve()],
-        sourceLocation,
-        wtype: assignmentType.wtypeOrThrow,
-      }),
-      assignmentType,
+      expressionType,
     )
   }
-  return instanceEb(
-    nodeFactory.assignmentExpression({
-      target: buildLValue(context, target, assignmentType, sourceLocation),
-      sourceLocation,
-      value: source.resolve(),
-    }),
-    assignmentType,
-  )
-}
-
-function buildLValue(context: AwstBuildContext, target: InstanceBuilder, assignmentType: PType, sourceLocation: SourceLocation): LValue {
-  if (target instanceof ArrayLiteralExpressionBuilder) {
-    if (assignmentType instanceof ReadonlyTuplePType || assignmentType instanceof MutableTuplePType) {
-      const targetItems = target[StaticIterator]()
-
-      const targets: LValue[] = []
-      for (const [index, sourceItemType] of assignmentType.items.entries()) {
-        const targetItem = targetItems[index]
-        if (targetItem && !(targetItem instanceof OmittedExpressionBuilder)) {
-          targets.push(buildLValue(context, targetItem, sourceItemType, sourceLocation))
-        } else {
-          targets.push(
-            nodeFactory.varExpression({
-              name: context.generateVarName('discard'),
-              sourceLocation,
-              wtype: sourceItemType.wtypeOrThrow,
-            }),
-          )
-        }
-      }
-      return nodeFactory.tupleExpression({ items: targets, sourceLocation })
-    }
-  }
-  if (target instanceof ObjectLiteralExpressionBuilder) {
-    if (assignmentType instanceof ObjectPType) {
-      const targets: LValue[] = []
-      for (const [propName, propType] of assignmentType.orderedProperties()) {
-        if (target.hasProperty(propName)) {
-          targets.push(
-            buildLValue(context, requireInstanceBuilder(target.memberAccess(propName, sourceLocation)), propType, sourceLocation),
-          )
-        } else {
-          targets.push(
-            nodeFactory.varExpression({
-              name: context.generateVarName('discard'),
-              sourceLocation,
-              wtype: propType.wtypeOrThrow,
-            }),
-          )
-        }
-      }
-      return nodeFactory.tupleExpression({ items: targets, sourceLocation, wtype: assignmentType.wtype })
-    }
-  }
-  if (target.ptype.equals(assignmentType)) {
-    return target.resolveLValue()
-  }
-  throw new CodeError(
-    `The target of an assignment must have the same type as the source. Target: ${target.ptype}, Source: ${assignmentType}`,
-    {
-      sourceLocation,
-    },
-  )
-}
-
-function isObjectWhichCantBeDestructuredAsTuple(ptype: PType): boolean {
-  if (instanceOfAny(ptype, ARC4StructType, MutableObjectType)) {
-    return true
-  }
-  if (ptype instanceof ObjectPType)
-    return ptype.orderedProperties().some(([_, propType]) => isObjectWhichCantBeDestructuredAsTuple(propType))
-  return false
 }
 
 /**
@@ -204,37 +146,16 @@ function isObjectWhichCantBeDestructuredAsTuple(ptype: PType): boolean {
  * @param sourceLocation
  * @private
  */
-function buildAssignmentExpressionType(targetType: PType, sourceType: PType, sourceLocation: SourceLocation): PType {
-  if (sourceType.equals(targetType) && !(sourceType instanceof ArrayLiteralPType)) {
+function narrowSourceType(targetType: PType | undefined, sourceType: PType, sourceLocation: SourceLocation): PType {
+  if (!targetType) return sourceType
+  if (sourceType.equals(targetType) && !instanceOfAny(targetType, ArrayLiteralPType, ObjectLiteralPType)) {
     return targetType
-  }
-  const errorMessage = `Value of type ${sourceType.name} cannot be assigned to target of type ${targetType.name}`
-
-  if (sourceType instanceof ArrayLiteralPType) {
-    if (instanceOfAny(targetType, ArrayPType, ReadonlyArrayPType)) {
-      return targetType
-    }
-    if (targetType instanceof ReadonlyTuplePType) {
-      return new ReadonlyTuplePType({
-        items: sourceType.items.map((item, index) => buildAssignmentExpressionType(targetType.items[index] ?? item, item, sourceLocation)),
-      })
-    }
-    if (targetType instanceof MutableTuplePType) {
-      return new MutableTuplePType({
-        items: sourceType.items.map((item, index) => buildAssignmentExpressionType(targetType.items[index] ?? item, item, sourceLocation)),
-      })
-    }
-    if (targetType instanceof ArrayLiteralPType) {
-      return new MutableTuplePType({
-        items: sourceType.items.map((item, index) => buildAssignmentExpressionType(targetType.items[index] ?? item, item, sourceLocation)),
-      })
-    }
   }
   if (
     sourceType instanceof NumericLiteralPType ||
     sourceType.equals(numberPType) ||
     (sourceType instanceof UnionPType &&
-      sourceType.types.every((t) => t.equals(uint64PType) || t instanceof NumericLiteralPType || sourceType.equals(numberPType)))
+      sourceType.types.every((t) => t.equals(uint64PType) || t instanceof NumericLiteralPType || t.equals(numberPType)))
   ) {
     // Narrow `uint64 | number` or `number` to target type
     return targetType
@@ -249,31 +170,23 @@ function buildAssignmentExpressionType(targetType: PType, sourceType: PType, sou
     return targetType
   }
 
-  if (sourceType instanceof ObjectPType) {
-    // Recursively narrow object properties
-    codeInvariant(targetType instanceof ObjectPType, errorMessage)
-    const targetPropertyOrder = targetType
-      .orderedProperties()
-      .reduce((acc, [prop], index) => acc.set(prop, index), new Map<string, number>())
-    return new ObjectPType({
-      alias: targetType.alias,
-      description: targetType.description,
+  if (sourceType instanceof ArrayLiteralPType) {
+    return new ArrayLiteralPType({
+      items: sourceType.items.map((itemType, itemIndex) =>
+        narrowSourceType(getIndexType(targetType, BigInt(itemIndex), sourceLocation), itemType, sourceLocation),
+      ),
+    })
+  }
+  if (sourceType instanceof ObjectLiteralPType) {
+    return new ObjectLiteralPType({
       properties: Object.fromEntries(
         sourceType
           .orderedProperties()
           .map(([prop, propType]): [string, PType] => [
             prop,
-            prop in targetType.properties
-              ? buildAssignmentExpressionType(getPropertyType(targetType, prop, sourceLocation), propType, sourceLocation)
-              : propType,
-          ])
-          .toSorted(sortBy(([prop]) => targetPropertyOrder.get(prop) ?? Number.MAX_SAFE_INTEGER)),
+            narrowSourceType(getIndexType(targetType, prop, sourceLocation), propType, sourceLocation),
+          ]),
       ),
-    })
-  }
-  if (sourceType instanceof ArrayPType && targetType instanceof ReadonlyArrayPType) {
-    return new ReadonlyArrayPType({
-      elementType: buildAssignmentExpressionType(targetType.elementType, sourceType.elementType, sourceLocation),
     })
   }
   return sourceType

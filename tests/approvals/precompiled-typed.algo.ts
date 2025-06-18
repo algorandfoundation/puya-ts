@@ -1,7 +1,6 @@
 import { arc4, assert, Contract, Global, itxn, Txn } from '@algorandfoundation/algorand-typescript'
 import { abiCall, compileArc4, methodSelector } from '@algorandfoundation/algorand-typescript/arc4'
 import {
-  Greeting,
   Hello,
   HelloStubbed,
   HelloTemplate,
@@ -40,7 +39,7 @@ class HelloFactory extends Contract {
 
     const result4 = abiCall(Hello.prototype.sendGreetings, {
       appId: app,
-      args: [new Greeting({ name: 'world', termination: new arc4.Str('!') })],
+      args: [{ name: 'world', termination: new arc4.Str('!') }],
     }).returnValue
 
     assert(result4 === 'hello world!')
@@ -62,7 +61,7 @@ class HelloFactory extends Contract {
 
     assert(txn1.returnValue === 'hey world')
 
-    const greeting = new Greeting({ name: 'world', termination: new arc4.Str('!') })
+    const greeting = { name: 'world', termination: new arc4.Str('!') }
     const txn2 = compiled.call.sendGreetings({
       args: [greeting],
       appId: helloApp,

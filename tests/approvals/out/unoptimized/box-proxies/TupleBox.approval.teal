@@ -258,13 +258,8 @@ testBox_block@0:
     pushint 32 // 32
     getbit
     assert
-    // tests/approvals/box-proxies.algo.ts:161
-    // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec 5 // "t2"
     // tests/approvals/box-proxies.algo.ts:179
     // this.box2.value = { a: 'hello', b: Bytes('world'), c: true }
-    box_del
-    pop
     bytec_1 // "hello"
     len
     itob
@@ -306,6 +301,13 @@ testBox_block@0:
     concat
     swap
     concat
+    // tests/approvals/box-proxies.algo.ts:161
+    // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
+    bytec 5 // "t2"
+    // tests/approvals/box-proxies.algo.ts:179
+    // this.box2.value = { a: 'hello', b: Bytes('world'), c: true }
+    box_del
+    pop
     // tests/approvals/box-proxies.algo.ts:161
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
     bytec 5 // "t2"
@@ -494,20 +496,8 @@ testBoxMap_block@0:
     pop
     swap
     box_put
-    // tests/approvals/box-proxies.algo.ts:163
-    // boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
-    bytec 7 // "tm2"
     // tests/approvals/box-proxies.algo.ts:196
     // this.boxMap2('a').value = { a: 'hello', b: Bytes('world'), c: true }
-    bytec_0 // "a"
-    // tests/approvals/box-proxies.algo.ts:163
-    // boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
-    concat
-    // tests/approvals/box-proxies.algo.ts:196
-    // this.boxMap2('a').value = { a: 'hello', b: Bytes('world'), c: true }
-    dup
-    box_del
-    pop
     bytec_1 // "hello"
     len
     itob
@@ -549,6 +539,21 @@ testBoxMap_block@0:
     concat
     swap
     concat
+    // tests/approvals/box-proxies.algo.ts:163
+    // boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
+    bytec 7 // "tm2"
+    // tests/approvals/box-proxies.algo.ts:196
+    // this.boxMap2('a').value = { a: 'hello', b: Bytes('world'), c: true }
+    bytec_0 // "a"
+    // tests/approvals/box-proxies.algo.ts:163
+    // boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
+    concat
+    // tests/approvals/box-proxies.algo.ts:196
+    // this.boxMap2('a').value = { a: 'hello', b: Bytes('world'), c: true }
+    dup
+    box_del
+    pop
+    swap
     box_put
     // tests/approvals/box-proxies.algo.ts:162
     // boxMap1 = BoxMap<string, [string, bytes, boolean]>({ keyPrefix: 'tm1' })
@@ -793,20 +798,8 @@ testBoxMap_block@0:
     box_len
     bury 1
     assert
-    // tests/approvals/box-proxies.algo.ts:163
-    // boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
-    bytec 7 // "tm2"
     // tests/approvals/box-proxies.algo.ts:211
     // this.boxMap2('b').value = { a: 'abc', b: Bytes('def'), c: false }
-    bytec 11 // "b"
-    // tests/approvals/box-proxies.algo.ts:163
-    // boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
-    concat
-    // tests/approvals/box-proxies.algo.ts:211
-    // this.boxMap2('b').value = { a: 'abc', b: Bytes('def'), c: false }
-    dup
-    box_del
-    pop
     bytec 9 // "abc"
     len
     itob
@@ -848,6 +841,21 @@ testBoxMap_block@0:
     concat
     swap
     concat
+    // tests/approvals/box-proxies.algo.ts:163
+    // boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
+    bytec 7 // "tm2"
+    // tests/approvals/box-proxies.algo.ts:211
+    // this.boxMap2('b').value = { a: 'abc', b: Bytes('def'), c: false }
+    bytec 11 // "b"
+    // tests/approvals/box-proxies.algo.ts:163
+    // boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
+    concat
+    // tests/approvals/box-proxies.algo.ts:211
+    // this.boxMap2('b').value = { a: 'abc', b: Bytes('def'), c: false }
+    dup
+    box_del
+    pop
+    swap
     box_put
     // tests/approvals/box-proxies.algo.ts:163
     // boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })

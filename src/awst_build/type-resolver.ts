@@ -27,17 +27,18 @@ import {
   FunctionPType,
   GlobalStateType,
   gtxnUnion,
+  ImmutableObjectPType,
   IntersectionPType,
   LocalStateType,
   logicSigBaseType,
   LogicSigPType,
+  MutableObjectPType,
   MutableTuplePType,
   NamespacePType,
   neverPType,
   nullPType,
   numberPType,
   NumericLiteralPType,
-  ObjectPType,
   ReadonlyTuplePType,
   stringPType,
   SuperPrototypeSelector,
@@ -49,7 +50,6 @@ import {
   voidPType,
 } from './ptypes'
 import { ARC4EncodedType, arc4StructBaseType, ARC4StructClass, ARC4StructType, UintNType } from './ptypes/arc4-types'
-import { mutableObjectBaseType, MutableObjectClass, MutableObjectType } from './ptypes/mutable-object'
 import { SymbolName } from './symbol-name'
 import { typeRegistry } from './type-registry'
 
@@ -145,8 +145,6 @@ export class TypeResolver {
       const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
       if (parts.some((p) => p.equals(arc4StructBaseType))) {
         return arc4StructBaseType
-      } else if (parts.some((p) => p.equals(mutableObjectBaseType))) {
-        return mutableObjectBaseType
       } else {
         return IntersectionPType.fromTypes(parts)
       }
@@ -218,19 +216,6 @@ export class TypeResolver {
       return this.resolve(tsType.node.expression, sourceLocation)
     }
 
-    // if (this.checker.isArrayType(tsType)) {
-    //   const itemType = tsType.getNumberIndexType()
-    //   if (!itemType) {
-    //     throw new CodeError('Cannot determine array item type', { sourceLocation })
-    //   } else {
-    //     const itemPType = this.resolveType(itemType, sourceLocation)
-    //     return new ArrayPType({
-    //       elementType: itemPType,
-    //       immutable: false,
-    //     })
-    //   }
-    // }
-
     invariant(typeName, 'Non builtin type must have a name', sourceLocation)
 
     if (typeName.name === '__type' && typeName.module.startsWith(Constants.algoTsPackage)) {
@@ -245,8 +230,6 @@ export class TypeResolver {
     switch (typeName.fullName) {
       case arc4StructBaseType.fullName:
         return arc4StructBaseType
-      case mutableObjectBaseType.fullName:
-        return mutableObjectBaseType
       case ClusteredPrototype.fullName:
         return this.resolveClusteredPrototype(tsType, sourceLocation)
     }
@@ -260,7 +243,9 @@ export class TypeResolver {
       if (it) return it
     }
 
-    if (typeName.module.startsWith('typescript/lib')) throw new CodeError(`${typeName.name} is not supported`, { sourceLocation })
+    if (typeName.module.startsWith('typescript/lib')) {
+      throw new CodeError(`${typeName.name} is not supported`, { sourceLocation })
+    }
 
     if (tsType.getConstructSignatures().length) {
       return this.reflectConstructorType(tsType, sourceLocation)
@@ -283,9 +268,6 @@ export class TypeResolver {
       }
       if (baseType instanceof ARC4StructType) {
         return this.reflectStructType(typeName, tsType, baseType, sourceLocation)
-      }
-      if (baseType instanceof MutableObjectType) {
-        return this.reflectMutableObjectType(typeName, tsType, baseType, sourceLocation)
       }
       if (baseType instanceof LogicSigPType) {
         return new LogicSigPType({
@@ -355,9 +337,11 @@ export class TypeResolver {
     }
   }
 
-  private reflectObjectType(tsType: ts.Type, sourceLocation: SourceLocation): ObjectPType {
+  private reflectObjectType(tsType: ts.Type, sourceLocation: SourceLocation): ImmutableObjectPType | MutableObjectPType {
     const typeAlias = tsType.aliasSymbol ? this.getSymbolFullName(tsType.aliasSymbol, sourceLocation) : undefined
     const properties: Record<string, PType> = {}
+
+    let expectReadonly: boolean | undefined = undefined
     for (const prop of tsType.getProperties()) {
       if (prop.name.startsWith('__@')) {
         // Symbol property - ignore
@@ -366,6 +350,14 @@ export class TypeResolver {
       }
       const type = this.checker.getTypeOfSymbol(prop)
       const propLocation = this.getLocationOfSymbol(prop) ?? sourceLocation
+      const readonly = isReadonlyPropertySymbol(prop)
+      if (expectReadonly === undefined) expectReadonly = readonly
+      if (expectReadonly !== readonly) {
+        const correction = expectReadonly
+          ? 'Add a readonly modifier to this property, or remove it from all others'
+          : 'Remove the readonly modifier from this property, or add it all others'
+        logger.error(propLocation, `All properties of a type must share the same readonly annotation. ${correction}`)
+      }
       const ptype = this.resolveType(type, propLocation)
       if (ptype instanceof FunctionPType) {
         logger.error(propLocation, `Invalid object property type. Functions are not supported`)
@@ -375,10 +367,11 @@ export class TypeResolver {
         properties[prop.name] = ptype
       }
     }
-    if (typeAlias) {
-      return new ObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType) })
+    if (expectReadonly) {
+      return new ImmutableObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType) })
+    } else {
+      return new MutableObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType) })
     }
-    return ObjectPType.anonymous(properties)
   }
 
   private reflectConstructorType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
@@ -389,8 +382,6 @@ export class TypeResolver {
       const ptype = this.resolve(typeDeclaration, sourceLocation)
       if (ptype instanceof ARC4StructType) {
         return ARC4StructClass.fromStructType(ptype)
-      } else if (ptype instanceof MutableObjectType) {
-        return MutableObjectClass.fromObjectType(ptype)
       } else if (ptype instanceof ContractClassPType || ptype instanceof LogicSigPType) {
         return ptype
       }
@@ -442,30 +433,6 @@ export class TypeResolver {
       }
     }
     return new ARC4StructType({
-      ...typeName,
-      fields: fields,
-      sourceLocation: sourceLocation,
-      description: tryGetTypeDescription(tsType),
-      frozen: baseType.frozen,
-    })
-  }
-
-  private reflectMutableObjectType(
-    typeName: SymbolName,
-    tsType: ts.Type,
-    baseType: MutableObjectType,
-    sourceLocation: SourceLocation,
-  ): MutableObjectType {
-    const ignoredProps = ['bytes', 'copy', Constants.symbolNames.constructorMethodName]
-    const fields: Record<string, PType> = {}
-    for (const prop of tsType.getProperties()) {
-      if (isIn(prop.name, ignoredProps)) continue
-      const type = this.checker.getTypeOfSymbol(prop)
-      const propLocation = this.getLocationOfSymbol(prop) ?? sourceLocation
-      const ptype = this.resolveType(type, propLocation)
-      fields[prop.name] = ptype
-    }
-    return new MutableObjectType({
       ...typeName,
       fields: fields,
       sourceLocation: sourceLocation,
@@ -527,8 +494,12 @@ export class TypeResolver {
     const typeName = type.symbol ? this.getSymbolFullName(type.symbol, sourceLocation) : undefined
     const aliasName = type.aliasSymbol ? this.getSymbolFullName(type.aliasSymbol, sourceLocation) : undefined
 
-    // If the alias was defined in algo-ts or polytype, respect the alias
-    if (aliasName?.module.startsWith(Constants.algoTsPackage) || aliasName?.module === Constants.moduleNames.polytype) {
+    // If the alias was defined in algo-ts, polytype, or typescript, respect the alias
+    if (
+      aliasName?.module.startsWith(Constants.algoTsPackage) ||
+      aliasName?.module === Constants.moduleNames.polytype ||
+      aliasName?.module.startsWith(Constants.moduleNames.typescript.es5)
+    ) {
       return aliasName
     }
     // If the type refers to a type literal in algo-ts or polytype, attempt to resolve the alias
@@ -609,6 +580,23 @@ function isIntersectionType(tsType: ts.Type): tsType is ts.IntersectionType {
 
 function isInstantiationExpression(tsType: ts.Type): tsType is ts.Type & { node: ts.ExpressionWithTypeArguments } {
   return isObjectType(tsType) && hasFlags(tsType.objectFlags, ObjectFlags.InstantiationExpressionType)
+}
+
+function isTransientPropertySymbol(prop: ts.Symbol): prop is ts.Symbol & { links: { checkFlags: number } } {
+  return hasFlags(prop.flags, ts.SymbolFlags.Transient)
+}
+
+function isReadonlyPropertySymbol(prop: ts.Symbol): boolean {
+  /*
+   * Here be dragons!! We're poking into the internal API here to check if the transient property symbol (ie a symbol created during type checking)
+   * has been marked with the check flag of readonly (8). CheckFlags is not exported so we have no way to confirm CheckFlags. Readonly is still 8
+   */
+  if (isTransientPropertySymbol(prop) && hasFlags(prop.links.checkFlags, 8)) {
+    return true
+  }
+  return (
+    prop.declarations?.some((d) => ts.isPropertySignature(d) && d.modifiers?.some((m) => m.kind === ts.SyntaxKind.ReadonlyKeyword)) ?? false
+  )
 }
 
 function tryGetTypeDescription(tsType: ts.Type): string | undefined {
