@@ -1,0 +1,16 @@
+subroutine receiveMaybe(mm: MaybeImmutable{ a: uint64, b: uint64 }): void
+{
+}
+subroutine receiveImmutable(i: Mutable{ a: uint64 }): void
+{
+}
+subroutine receiveMutable(m: Mutable): void
+{
+  m.a: uint64 = 123
+}
+subroutine test(m: Mutable, i: Mutable{ a: uint64 }): void
+{
+  tests/approvals/readonly-objects.algo.ts::receiveImmutable(i)
+  tests/approvals/readonly-objects.algo.ts::receiveImmutable({ a: m.a })
+  tests/approvals/readonly-objects.algo.ts::receiveMutable(m)
+}

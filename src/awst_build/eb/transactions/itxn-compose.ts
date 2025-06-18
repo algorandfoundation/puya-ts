@@ -7,7 +7,14 @@ import { codeInvariant, enumFromValue, invariant } from '../../../util'
 import { buildArc4MethodConstant } from '../../arc4-util'
 import { AwstBuildContext } from '../../context/awst-build-context'
 import type { PType } from '../../ptypes'
-import { anyItxnParamsType, itxnComposePType, ItxnParamsPType, ObjectPType, Uint64EnumMemberLiteralType, voidPType } from '../../ptypes'
+import {
+  anyItxnParamsType,
+  ImmutableObjectPType,
+  itxnComposePType,
+  ItxnParamsPType,
+  Uint64EnumMemberLiteralType,
+  voidPType,
+} from '../../ptypes'
 import { getPropertyType } from '../../ptypes/visitors/index-type-visitor'
 import { instanceEb } from '../../type-registry'
 import { buildApplicationCallTxnFields } from '../arc4/c2c'
@@ -72,7 +79,7 @@ class ItxnComposeBeginOrNextFunctionBuilder extends FunctionBuilder {
         mapTransactionFields(mappedFields, itxnOrFields, undefined, sourceLocation)
 
         codeInvariant(
-          itxnOrFields.ptype instanceof ObjectPType,
+          itxnOrFields.ptype instanceof ImmutableObjectPType,
           `Arg 0 of ${this.typeDescription} must be an itxn params instance or an object containing itxn fields`,
           itxnOrFields.sourceLocation,
         )

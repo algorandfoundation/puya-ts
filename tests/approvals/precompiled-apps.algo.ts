@@ -7,13 +7,12 @@ import {
   GlobalState,
   log,
   LogicSig,
-  MutableObject,
   op,
   TemplateVar,
   TransactionType,
 } from '@algorandfoundation/algorand-typescript'
 
-export class Greeting extends MutableObject<{ name: string; termination: arc4.Str }> {}
+export type Greeting = { name: string; termination: arc4.Str }
 
 abstract class HelloBase extends Contract {
   greeting = GlobalState({ initialValue: '' })

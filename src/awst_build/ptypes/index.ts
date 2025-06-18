@@ -690,8 +690,8 @@ export class FunctionPType extends PType {
     this.name = props.name
     this.module = props.module
     this.sourceLocation = props.sourceLocation
-    if (props.returnType instanceof ObjectPType && !props.returnType.alias) {
-      this.returnType = new ObjectPType({
+    if (props.returnType instanceof ImmutableObjectPType && !props.returnType.alias) {
+      this.returnType = new ImmutableObjectPType({
         alias: new SymbolName({ name: `${props.name}Result`, module: this.module }),
         properties: props.returnType.properties,
         description: props.returnType.description,
@@ -718,7 +718,7 @@ export class ArrayLiteralPType extends PType {
 
   readonly singleton = false
   readonly name: string
-  readonly module = Constants.moduleNames.typescript.array
+  readonly module = Constants.moduleNames.typescript.es5
   readonly items: PType[]
   constructor(props: { items: PType[] }) {
     super()
@@ -805,7 +805,7 @@ export class ReadonlyTuplePType extends PType {
 }
 export const ArrayGeneric = new GenericPType({
   name: 'Array',
-  module: Constants.moduleNames.typescript.array,
+  module: Constants.moduleNames.typescript.es5,
   parameterise(typeArgs) {
     codeInvariant(typeArgs.length === 1, 'Array expects exactly 1 type argument')
     return new ArrayPType({ elementType: typeArgs[0] })
@@ -817,7 +817,7 @@ export class ArrayPType extends PType {
   readonly immutable = false
   readonly singleton = false
   readonly name: string
-  readonly module: string = Constants.moduleNames.typescript.array
+  readonly module: string = Constants.moduleNames.typescript.es5
   get fullName() {
     return `${this.module}::Array<${this.elementType.fullName}>`
   }
@@ -840,7 +840,7 @@ export class ArrayPType extends PType {
 }
 export const ReadonlyArrayGeneric = new GenericPType({
   name: 'ReadonlyArray',
-  module: Constants.moduleNames.typescript.readonlyArray,
+  module: Constants.moduleNames.typescript.es5,
   parameterise(typeArgs) {
     codeInvariant(typeArgs.length === 1, 'ReadonlyArray expects exactly 1 type argument')
     return new ReadonlyArrayPType({ elementType: typeArgs[0] })
@@ -852,7 +852,7 @@ export class ReadonlyArrayPType extends PType {
   readonly singleton = false
   readonly immutable = true
   readonly name: string
-  readonly module: string = Constants.moduleNames.typescript.readonlyArray
+  readonly module: string = Constants.moduleNames.typescript.es5
   get fullName() {
     return `${this.module}::ReadonlyArray<${this.elementType.fullName}>`
   }
@@ -920,26 +920,84 @@ export class FixedArrayPType extends PType {
     return visitor.visitFixedArrayPType(this)
   }
 }
-export class ObjectPType extends PType {
-  readonly [PType.IdSymbol] = 'ObjectPType'
-  readonly name: string = 'object'
+export const ReadonlyGeneric = new GenericPType({
+  name: 'Readonly',
+  module: Constants.moduleNames.typescript.es5,
+  parameterise([obj, ...rest]) {
+    codeInvariant(obj instanceof MutableObjectPType && !rest.length, 'Readonly expects exactly 1 generic type arg that is an object type')
+
+    return obj.toImmutable()
+  },
+})
+
+abstract class ObjectPType extends PType {
+  readonly name: string
   readonly module: string = 'lib.d.ts'
   readonly alias: SymbolName | null
   readonly description: string | undefined
   readonly properties: Record<string, PType>
   readonly singleton = false
+  readonly immutable: boolean
 
-  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string }) {
+  constructor(props: {
+    alias?: SymbolName | null
+    properties: Record<string, PType>
+    description?: string
+    name: string
+    immutable: boolean
+  }) {
     super()
+    this.name = props.name
     this.properties = props.properties
     this.description = props.description
     this.alias = props.alias ?? null
+    this.immutable = props.immutable
   }
 
-  static anonymous(props: Record<string, PType> | Array<[string, PType]>) {
-    const properties = Array.isArray(props) ? Object.fromEntries(props) : props
-    return new ObjectPType({
-      properties,
+  orderedProperties() {
+    return Object.entries(this.properties)
+  }
+
+  toString(): string {
+    return `{${this.orderedProperties()
+      .map((p) => `${this.immutable ? 'readonly ' : ''}${p[0]}:${p[1].name}`)
+      .join(',')}}`
+  }
+}
+
+export class ObjectLiteralPType extends ObjectPType {
+  readonly [PType.IdSymbol] = 'ObjectLiteralPType'
+  wtype = undefined
+
+  constructor(props: { properties: Record<string, PType> }) {
+    super({
+      ...props,
+      name: `{...}`,
+      immutable: true,
+    })
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitObjectLiteralPType(this)
+  }
+
+  toImmutable(): ImmutableObjectPType {
+    return new ImmutableObjectPType({
+      alias: this.alias,
+      properties: this.properties,
+      description: this.description,
+    })
+  }
+}
+
+export class ImmutableObjectPType extends ObjectPType {
+  readonly [PType.IdSymbol] = 'ImmutableObjectPType'
+
+  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string }) {
+    super({
+      ...props,
+      name: `Readonly<object>`,
+      immutable: true,
     })
   }
 
@@ -960,19 +1018,47 @@ export class ObjectPType extends PType {
     })
   }
 
-  orderedProperties() {
-    return Object.entries(this.properties)
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitImmutableObjectPType(this)
+  }
+}
+
+export class MutableObjectPType extends ObjectPType {
+  readonly [PType.IdSymbol] = 'MutableObjectPType'
+
+  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string }) {
+    super({
+      ...props,
+      name: `object`,
+      immutable: false,
+    })
   }
 
-  toString(): string {
-    return `{${this.orderedProperties()
-      .map((p) => `${p[0]}:${p[1].name}`)
-      .join(',')}}`
+  get wtype(): wtypes.ARC4Struct {
+    return new wtypes.ARC4Struct({
+      name: this.alias?.name ?? this.name,
+      fields: Object.fromEntries(Object.entries(this.properties).map(([f, t]) => [f, t.wtypeOrThrow])),
+      //sourceLocation: this.sourceLocation,
+      desc: this.description ?? null,
+      frozen: false,
+    })
+  }
+
+  toImmutable(): ImmutableObjectPType {
+    return new ImmutableObjectPType({
+      alias: this.alias,
+      properties: this.properties,
+      description: this.description,
+    })
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
-    return visitor.visitObjectPType(this)
+    return visitor.visitMutableObjectPType(this)
   }
+}
+
+export function isObjectType(ptype: PType): ptype is MutableObjectPType | ImmutableObjectPType | ObjectLiteralPType {
+  return instanceOfAny(ptype, MutableObjectPType, ImmutableObjectPType, ObjectLiteralPType)
 }
 
 export const voidPType = new ABICompatibleInstanceType({
@@ -1728,7 +1814,7 @@ export const compileFunctionType = new LibFunctionType({
   module: Constants.moduleNames.algoTs.compiled,
 })
 
-export const compiledContractType = new ObjectPType({
+export const compiledContractType = new ImmutableObjectPType({
   alias: new SymbolName({
     name: 'CompiledContract',
     module: Constants.moduleNames.algoTs.compiled,
@@ -1744,7 +1830,7 @@ export const compiledContractType = new ObjectPType({
     localBytes: uint64PType,
   },
 })
-export const compiledLogicSigType = new ObjectPType({
+export const compiledLogicSigType = new ImmutableObjectPType({
   alias: new SymbolName({
     name: 'CompiledLogicSig',
     module: Constants.moduleNames.algoTs.compiled,

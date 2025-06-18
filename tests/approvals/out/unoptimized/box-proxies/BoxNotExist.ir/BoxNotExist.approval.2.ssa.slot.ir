@@ -10,10 +10,9 @@ main tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram:
     block@2: // if_body_L115
         goto block@3
     block@3: // L115
-        let (aggregate%box_get%0#1: bytes, aggregate%box_get%1#1: bool) = (box_get "abc")
-        (assert aggregate%box_get%1#1) // Box must have value
-        let storage_value%0#0: bytes = aggregate%box_get%0#1
-        let maybe_value_converted%0#0: uint64 = (btoi storage_value%0#0)
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get "abc")
+        (assert maybe_exists%0#0) // Box must have value
+        let maybe_value_converted%0#0: uint64 = (btoi maybe_value%0#0)
         return maybe_value_converted%0#0
     block@4: // after_if_else_L115
         let tmp%3#0: bool = (== reinterpret_string%0#0 "boxmap")
@@ -22,10 +21,9 @@ main tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram:
         goto block@6
     block@6: // L117
         let box_prefixed_key%0#0: bytes = (concat "a" "bc")
-        let (aggregate%box_get%2#1: bytes, aggregate%box_get%3#1: bool) = (box_get box_prefixed_key%0#0)
-        (assert aggregate%box_get%3#1) // Box must have value
-        let storage_value%1#0: bytes = aggregate%box_get%2#1
-        let maybe_value_converted%1#0: uint64 = (btoi storage_value%1#0)
+        let (maybe_value%1#0: bytes, maybe_exists%1#0: bool) = (box_get box_prefixed_key%0#0)
+        (assert maybe_exists%1#0) // Box must have value
+        let maybe_value_converted%1#0: uint64 = (btoi maybe_value%1#0)
         return maybe_value_converted%1#0
     block@7: // after_if_else_L117
         let tmp%4#0: bool = (== reinterpret_string%0#0 "createbox")

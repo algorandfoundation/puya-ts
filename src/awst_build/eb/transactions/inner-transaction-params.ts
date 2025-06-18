@@ -7,8 +7,8 @@ import { logger } from '../../../logger'
 import { codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import {
+  isObjectType,
   ItxnParamsPType,
-  ObjectPType,
   ReadonlyTuplePType,
   stringPType,
   submitGroupItxnFunction,
@@ -70,7 +70,7 @@ export function mapTransactionFields(
   sourceLocation: SourceLocation,
   ignoreProps?: Set<string>,
 ) {
-  codeInvariant(fields.ptype instanceof ObjectPType, 'fields argument must be an object type')
+  codeInvariant(isObjectType(fields.ptype), 'fields argument must be an object type')
   for (const [prop] of fields.ptype.orderedProperties()) {
     if (ignoreProps?.has(prop)) continue
 

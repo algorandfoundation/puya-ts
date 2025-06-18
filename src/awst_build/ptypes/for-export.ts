@@ -2,4 +2,3 @@
 export { ptypeToArc4EncodedType } from '../arc4-util'
 export * from './arc4-types'
 export * from './index'
-export * from './mutable-object'

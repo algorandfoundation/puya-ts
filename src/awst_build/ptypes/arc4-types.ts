@@ -12,11 +12,12 @@ import {
   bytesPType,
   compiledContractType,
   ContractClassPType,
+  ImmutableObjectPType,
   LibClassType,
   LibFunctionType,
+  MutableObjectPType,
   MutableTuplePType,
   NumericLiteralPType,
-  ObjectPType,
   ReadonlyArrayPType,
   ReadonlyTuplePType,
   stringPType,
@@ -242,8 +243,8 @@ export class ARC4StructType extends ARC4EncodedType {
     this.abiTypeSignature = ARC4EncodedType.buildAbiTupleSignature(Object.values(fields))
   }
 
-  get nativeType(): ObjectPType {
-    return ObjectPType.anonymous(this.fields)
+  get nativeType(): MutableObjectPType {
+    return new MutableObjectPType({ properties: this.fields })
   }
 
   get wtype(): wtypes.ARC4Struct {
@@ -677,7 +678,7 @@ export const TypedApplicationCallResponseGeneric = new GenericPType({
   },
 })
 
-export class TypedApplicationCallResponseType extends ObjectPType {
+export class TypedApplicationCallResponseType extends ImmutableObjectPType {
   readonly name: string
   readonly module = Constants.moduleNames.algoTs.arc4.c2c
   readonly singleton = false

@@ -1,66 +1,28 @@
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { invariant } from '../../util'
-import { ObjectPType, type PType, type PTypeOrClass } from '../ptypes'
-import { MutableObjectClass, MutableObjectType } from '../ptypes/mutable-object'
+import { instanceOfAny, invariant } from '../../util'
+import { ImmutableObjectPType, MutableObjectPType, type PType, type PTypeOrClass } from '../ptypes'
+
 import { instanceEb } from '../type-registry'
 import type { InstanceBuilder } from './'
-import { ClassBuilder } from './'
-import { Arc4EncodedBaseExpressionBuilder } from './arc4/base'
+import { InstanceExpressionBuilder } from './'
 import type { NodeBuilder } from './index'
 import { requestInstanceBuilder, requireExpressionOfType } from './util'
-import { parseFunctionArgs } from './util/arg-parsing'
 
-export class MutableObjectClassBuilder extends ClassBuilder {
-  readonly ptype: MutableObjectClass
-
-  constructor(sourceLocation: SourceLocation, ptype: PType) {
-    super(sourceLocation)
-    invariant(ptype instanceof MutableObjectClass, 'ptype must be MutableObjectClass')
-    this.ptype = ptype
-  }
-
-  newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    const {
-      args: [initialValues],
-    } = parseFunctionArgs({
-      args,
-      typeArgs,
-      genericTypeArgs: 1,
-      callLocation: sourceLocation,
-      funcName: this.typeDescription,
-      argSpec: (a) => [a.required(this.ptype.instanceType.nativeType)],
-    })
-    const initialSingle = initialValues.singleEvaluation()
-
-    const structFields = Object.entries(this.ptype.instanceType.fields).map(
-      ([p, t]) => [p, requireExpressionOfType(initialSingle.memberAccess(p, sourceLocation), t)] as const,
-    )
-    return new MutableObjectExpressionBuilder(
-      nodeFactory.newStruct({
-        wtype: this.ptype.instanceType.wtype,
-        values: new Map(structFields),
-        sourceLocation,
-      }),
-      this.ptype.instanceType,
-    )
-  }
-}
-
-export class MutableObjectExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<MutableObjectType> {
+export class MutableObjectExpressionBuilder extends InstanceExpressionBuilder<MutableObjectPType> {
   constructor(expr: Expression, ptype: PType) {
-    invariant(ptype instanceof MutableObjectType, 'ptype must be MutableObjectType')
+    invariant(ptype instanceof MutableObjectPType, 'ptype must be MutableObjectPType')
     super(expr, ptype)
   }
 
   hasProperty(name: string): boolean {
-    return name in this.ptype.fields || super.hasProperty(name)
+    return name in this.ptype.properties || super.hasProperty(name)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    if (name in this.ptype.fields) {
-      const fieldType = this.ptype.fields[name]
+    if (name in this.ptype.properties) {
+      const fieldType = this.ptype.properties[name]
       return instanceEb(
         nodeFactory.fieldExpression({
           name,
@@ -77,7 +39,7 @@ export class MutableObjectExpressionBuilder extends Arc4EncodedBaseExpressionBui
   resolvableToPType(ptype: PTypeOrClass): boolean {
     if (ptype.equals(this.ptype)) return true
 
-    if (ptype instanceof ObjectPType) {
+    if (instanceOfAny(ptype, ImmutableObjectPType, MutableObjectPType)) {
       return ptype
         .orderedProperties()
         .every(
@@ -92,8 +54,23 @@ export class MutableObjectExpressionBuilder extends Arc4EncodedBaseExpressionBui
     if (ptype.equals(this.ptype)) {
       return this
     }
+    if (ptype instanceof MutableObjectPType) {
+      const single = this.singleEvaluation()
+      return instanceEb(
+        nodeFactory.newStruct({
+          values: new Map(
+            ptype
+              .orderedProperties()
+              .map(([prop, propType]) => [prop, requireExpressionOfType(single.memberAccess(prop, this.sourceLocation), propType)]),
+          ),
+          sourceLocation: this.sourceLocation,
+          wtype: ptype.wtype,
+        }),
+        ptype,
+      )
+    }
 
-    if (ptype instanceof ObjectPType) {
+    if (ptype instanceof ImmutableObjectPType) {
       const single = this.singleEvaluation()
       return instanceEb(
         nodeFactory.tupleExpression({

@@ -4,8 +4,7 @@ export const Constants = {
   algoTsPackage,
   moduleNames: {
     typescript: {
-      array: 'typescript/lib/lib.es5.d.ts',
-      readonlyArray: 'typescript/lib/lib.es5.d.ts',
+      es5: 'typescript/lib/lib.es5.d.ts',
     },
     polytype: 'polytype/lib/polytype-module.d.ts',
     algoTs: {

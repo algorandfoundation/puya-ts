@@ -3,9 +3,19 @@ import type { Expression } from '../../awst/nodes'
 import { BinaryBooleanOperator } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
-import { codeInvariant } from '../../util'
+import { codeInvariant, instanceOfAny } from '../../util'
 import type { PType } from '../ptypes'
-import { ArrayPType, boolPType, matchFunction, MutableTuplePType, ObjectPType, ReadonlyTuplePType, uint64PType } from '../ptypes'
+import {
+  ArrayPType,
+  boolPType,
+  ImmutableObjectPType,
+  matchFunction,
+  MutableObjectPType,
+  MutableTuplePType,
+  ObjectLiteralPType,
+  ReadonlyTuplePType,
+  uint64PType,
+} from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { InstanceBuilder } from './index'
 import { BuilderComparisonOp, NodeBuilder } from './index'
@@ -34,7 +44,7 @@ export class MatchFunctionBuilder extends NodeBuilder {
 }
 
 export function buildComparisons(subject: NodeBuilder, tests: InstanceBuilder, functionName: string, sourceLocation: SourceLocation) {
-  if (tests.ptype instanceof ObjectPType) {
+  if (instanceOfAny(tests.ptype, ImmutableObjectPType, MutableObjectPType, ObjectLiteralPType)) {
     const condition = tests.ptype
       .orderedProperties()
       .reduce((acc: Expression | undefined, [propName, propType]): Expression | undefined => {
@@ -81,7 +91,8 @@ function buildComparison(
   const subjectType = subjectProperty.ptype
   // Recurse comparisons for nested objects
   if (
-    subjectProperty.ptype instanceof ObjectPType ||
+    subjectProperty.ptype instanceof ImmutableObjectPType ||
+    subjectProperty.ptype instanceof MutableObjectPType ||
     subjectProperty.ptype instanceof ReadonlyTuplePType ||
     subjectProperty.ptype instanceof MutableTuplePType ||
     subjectProperty.ptype instanceof ArrayPType

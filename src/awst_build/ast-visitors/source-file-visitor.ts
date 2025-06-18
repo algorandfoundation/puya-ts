@@ -9,11 +9,9 @@ import { accept } from '../../visitor/visitor'
 import { requireInstanceBuilder } from '../eb/util'
 import { ContractClassPType, LogicSigPType } from '../ptypes'
 import { ARC4StructType } from '../ptypes/arc4-types'
-import { MutableObjectType } from '../ptypes/mutable-object'
 import { BaseVisitor } from './base-visitor'
 import { ContractVisitor } from './contract-visitor'
 import { LogicSigVisitor } from './logic-sig-visitor'
-import { MutableObjectVisitor } from './mutable-object-visitor'
 import { StructVisitor } from './struct-visitor'
 import { SubroutineVisitor } from './subroutine-visitor'
 
@@ -116,8 +114,6 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
       return patchErrorLocation(ContractVisitor.buildContract(node, ptype), sourceLocation)
     } else if (ptype instanceof ARC4StructType) {
       return patchErrorLocation(() => StructVisitor.buildStructDef(node, ptype), sourceLocation)()
-    } else if (ptype instanceof MutableObjectType) {
-      return patchErrorLocation(() => MutableObjectVisitor.buildObjectDef(node, ptype), sourceLocation)()
     } else if (ptype instanceof LogicSigPType) {
       return patchErrorLocation(LogicSigVisitor.buildLogicSig(node, ptype), sourceLocation)
     } else {

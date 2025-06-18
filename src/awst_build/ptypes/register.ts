@@ -50,8 +50,8 @@ import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder
 import { LogFunctionBuilder } from '../eb/log-function-builder'
 import { LogicSigClassBuilder, LogicSigOptionsDecoratorBuilder } from '../eb/logic-sig-builder'
 import { MatchFunctionBuilder } from '../eb/match-function-builder'
+import { MutableObjectExpressionBuilder } from '../eb/mutable-object'
 import { MutableTupleExpressionBuilder } from '../eb/mutable-tuple-expression-builder'
-import { MutableObjectClassBuilder, MutableObjectExpressionBuilder } from '../eb/mutable-object'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { NeverExpressionBuilder } from '../eb/never-expression-builder'
 import { ObjectWithOptionalFieldsExpressionBuilder } from '../eb/object-with-optional-fields'
@@ -192,6 +192,7 @@ import {
   GeneratorType,
   GlobalStateGeneric,
   GlobalStateType,
+  ImmutableObjectPType,
   inputOnlyObjects,
   IntrinsicFunctionGroupType,
   IntrinsicFunctionGroupTypeType,
@@ -211,10 +212,10 @@ import {
   logicSigOptionsDecorator,
   LogicSigPType,
   matchFunction,
+  MutableObjectPType,
   MutableTuplePType,
   NamespacePType,
   neverPType,
-  ObjectPType,
   onCompleteActionType,
   opUpFeeSourceType,
   paymentGtxnType,
@@ -227,6 +228,7 @@ import {
   PromiseType,
   ReadonlyArrayGeneric,
   ReadonlyArrayPType,
+  ReadonlyGeneric,
   ReadonlyTuplePType,
   ReferenceArrayGeneric,
   ReferenceArrayType,
@@ -244,7 +246,6 @@ import {
   urangeFunction,
   voidPType,
 } from './index'
-import { MutableObjectClass, MutableObjectType } from './mutable-object'
 import { ALL_OP_ENUMS } from './op-ptypes'
 
 export function registerPTypes(typeRegistry: TypeRegistry) {
@@ -276,7 +277,10 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.registerGeneric({ generic: ReadonlyArrayGeneric, ptype: ReadonlyArrayPType, instanceEb: ReadonlyArrayExpressionBuilder })
   typeRegistry.register({ ptype: ReadonlyTuplePType, instanceEb: ReadonlyTupleExpressionBuilder })
   typeRegistry.register({ ptype: MutableTuplePType, instanceEb: MutableTupleExpressionBuilder })
-  typeRegistry.register({ ptype: ObjectPType, instanceEb: ObjectExpressionBuilder })
+  typeRegistry.registerGenericTypeOnly({ generic: ReadonlyGeneric })
+  typeRegistry.register({ ptype: ImmutableObjectPType, instanceEb: ObjectExpressionBuilder })
+  typeRegistry.register({ ptype: MutableObjectPType, instanceEb: MutableObjectExpressionBuilder })
+
   typeRegistry.registerGeneric({
     generic: FixedArrayGeneric,
     ptype: FixedArrayPType,
@@ -461,8 +465,6 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   })
   typeRegistry.register({ ptype: ARC4StructType, instanceEb: StructExpressionBuilder })
   typeRegistry.register({ ptype: ARC4StructClass, singletonEb: StructClassBuilder })
-  typeRegistry.register({ ptype: MutableObjectType, instanceEb: MutableObjectExpressionBuilder })
-  typeRegistry.register({ ptype: MutableObjectClass, singletonEb: MutableObjectClassBuilder })
 
   // ARC4 lib
   typeRegistry.register({ ptype: interpretAsArc4Function, singletonEb: InterpretAsArc4FunctionBuilder })

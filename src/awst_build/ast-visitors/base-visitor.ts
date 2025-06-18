@@ -37,7 +37,7 @@ import { StringExpressionBuilder, stringFromTemplate } from '../eb/string-expres
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
 import { concatArrays } from '../eb/util/array/concat'
 import type { PType } from '../ptypes'
-import { BigIntLiteralPType, boolPType, NumericLiteralPType, ObjectPType, TransientType } from '../ptypes'
+import { BigIntLiteralPType, boolPType, NumericLiteralPType, TransientType } from '../ptypes'
 import { containsMutableType, isMutableType } from '../ptypes/visitors/contains-mutable-visitor'
 import { typeRegistry } from '../type-registry'
 import { handleAssignment } from './assignments'
@@ -181,9 +181,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           return []
       }
     })
-    const ptype = this.context.getPTypeForNode(node)
-    invariant(ptype instanceof ObjectPType, 'Object literal ptype should resolve to ObjectPType')
-    return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, parts)
+    return new ObjectLiteralExpressionBuilder(sourceLocation, parts)
   }
 
   visitArrayLiteralExpression(node: ts.ArrayLiteralExpression): NodeBuilder {

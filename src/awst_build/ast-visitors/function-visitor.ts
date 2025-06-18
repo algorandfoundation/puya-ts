@@ -17,8 +17,7 @@ import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expre
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
-import type { PType } from '../ptypes'
-import { FunctionPType, ObjectPType } from '../ptypes'
+import { FunctionPType } from '../ptypes'
 import { IteratorTypeVisitor } from '../ptypes/visitors/iterator-type-visitor'
 import { instanceEb, typeRegistry } from '../type-registry'
 import { handleAssignmentStatement } from './assignments'
@@ -82,8 +81,7 @@ export abstract class FunctionVisitor
 
           props.push([propertyName, this.visitBindingName(element.name, sourceLocation)])
         }
-        const ptype = ObjectPType.anonymous(props.map(([name, builder]): [string, PType] => [name, builder.ptype]))
-        return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, [{ type: 'properties', properties: Object.fromEntries(props) }])
+        return new ObjectLiteralExpressionBuilder(sourceLocation, [{ type: 'properties', properties: Object.fromEntries(props) }])
       }
       case ts.SyntaxKind.ArrayBindingPattern: {
         const items: InstanceBuilder[] = []

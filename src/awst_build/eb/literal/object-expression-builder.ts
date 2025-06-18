@@ -4,16 +4,16 @@ import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import { invariant } from '../../../util'
 import type { PTypeOrClass } from '../../ptypes'
-import { ObjectPType, type PType } from '../../ptypes'
+import { ImmutableObjectPType, type PType } from '../../ptypes'
 import { getPropertyType, hasPropertyOfType } from '../../ptypes/visitors/index-type-visitor'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder } from '../index'
 import { InstanceExpressionBuilder, type NodeBuilder } from '../index'
 import { requireExpressionOfType } from '../util'
 
-export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPType> {
+export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ImmutableObjectPType> {
   constructor(expr: Expression, ptype: PType) {
-    invariant(ptype instanceof ObjectPType, `ObjectExpressionBuilder must be instantiated with ptype of ObjectPType`)
+    invariant(ptype instanceof ImmutableObjectPType, `ObjectExpressionBuilder must be instantiated with ptype of ObjectPType`)
     super(expr, ptype)
   }
 
@@ -38,8 +38,8 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ObjectPTy
     return this.ptype.orderedProperties().some(([prop]) => prop === name)
   }
 
-  resolvableToPType(ptype: PTypeOrClass): ptype is ObjectPType {
-    if (ptype instanceof ObjectPType) {
+  resolvableToPType(ptype: PTypeOrClass): ptype is ImmutableObjectPType {
+    if (ptype instanceof ImmutableObjectPType) {
       return ptype.orderedProperties().every(([prop, propType]) => hasPropertyOfType(this.ptype, prop, propType, this.sourceLocation))
     }
     return false

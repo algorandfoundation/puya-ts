@@ -4,13 +4,13 @@ import type {
   ArrayLiteralPType,
   ArrayPType,
   FixedArrayPType,
+  ImmutableObjectPType,
+  MutableObjectPType,
   MutableTuplePType,
-  ObjectPType,
   ReadonlyArrayPType,
   ReadonlyTuplePType,
   ReferenceArrayType,
 } from '../index'
-import type { MutableObjectType } from '../mutable-object'
 import { DefaultVisitor } from './default-visitor'
 
 export function isMutableType(ptype: PType) {
@@ -45,12 +45,12 @@ class ContainsMutableVisitor extends DefaultVisitor<boolean> {
     return Object.values(ptype.fields).some((t) => t.accept(this) || t.accept(this.isMutableVisitor))
   }
 
-  visitObjectPType(ptype: ObjectPType): boolean {
+  visitImmutableObjectPType(ptype: ImmutableObjectPType): boolean {
     return Object.values(ptype.properties).some((t) => t.accept(this) || t.accept(this.isMutableVisitor))
   }
 
-  visitMutableObjectType(ptype: MutableObjectType): boolean {
-    return Object.values(ptype.fields).some((t) => t.accept(this) || t.accept(this.isMutableVisitor))
+  visitMutableObjectPType(ptype: MutableObjectPType): boolean {
+    return Object.values(ptype.properties).some((t) => t.accept(this) || t.accept(this.isMutableVisitor))
   }
 
   visitReferenceArrayType(ptype: ReferenceArrayType): boolean {
@@ -108,7 +108,7 @@ class IsMutableVisitor extends DefaultVisitor<boolean> {
     return true
   }
 
-  visitMutableObjectType(ptype: MutableObjectType): boolean {
+  visitMutableObjectPType(ptype: MutableObjectPType): boolean {
     return true
   }
 

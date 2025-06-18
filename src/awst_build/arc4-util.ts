@@ -16,8 +16,9 @@ import {
   BytesPType,
   FixedArrayPType,
   GroupTransactionPType,
+  ImmutableObjectPType,
+  MutableObjectPType,
   MutableTuplePType,
-  ObjectPType,
   ReadonlyArrayPType,
   ReadonlyTuplePType,
   stringPType,
@@ -104,7 +105,8 @@ export function isArc4EncodableType(ptype: PType): boolean {
   if (ptype.equals(stringPType)) return true
   if (ptype instanceof ReadonlyTuplePType) return ptype.items.every((i) => isArc4EncodableType(i))
   if (ptype instanceof MutableTuplePType) return ptype.items.every((i) => isArc4EncodableType(i))
-  if (ptype instanceof ObjectPType) return ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
+  if (ptype instanceof ImmutableObjectPType) return ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
+  if (ptype instanceof MutableObjectPType) return ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
   if (ptype instanceof ArrayPType || ptype instanceof FixedArrayPType || ptype instanceof ReadonlyArrayPType)
     return isArc4EncodableType(ptype.elementType)
   return false
@@ -117,7 +119,7 @@ export function isArc4EncodableType(ptype: PType): boolean {
  */
 export function ptypeToArc4EncodedType(ptype: ReadonlyTuplePType, sourceLocation: SourceLocation): ARC4TupleType
 export function ptypeToArc4EncodedType(ptype: MutableTuplePType, sourceLocation: SourceLocation): ARC4TupleType
-export function ptypeToArc4EncodedType(ptype: ObjectPType, sourceLocation: SourceLocation): ARC4StructType
+export function ptypeToArc4EncodedType(ptype: ImmutableObjectPType, sourceLocation: SourceLocation): ARC4StructType
 export function ptypeToArc4EncodedType(ptype: ArrayPType, sourceLocation: SourceLocation): DynamicArrayType
 export function ptypeToArc4EncodedType(ptype: ReadonlyArrayPType, sourceLocation: SourceLocation): DynamicArrayType
 export function ptypeToArc4EncodedType(ptype: FixedArrayPType, sourceLocation: SourceLocation): StaticArrayType
@@ -155,13 +157,21 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
   if (ptype instanceof MutableTuplePType)
     return new ARC4TupleType({ types: ptype.items.map((i) => ptypeToArc4EncodedType(i, sourceLocation)) })
 
-  if (ptype instanceof ObjectPType)
+  if (ptype instanceof ImmutableObjectPType)
     return new ARC4StructType({
       name: ptype.alias?.name ?? ptype.name,
       module: ptype.module,
       description: ptype.description,
       fields: Object.fromEntries(ptype.orderedProperties().map(([p, pt]) => [p, ptypeToArc4EncodedType(pt, sourceLocation)])),
       frozen: true,
+    })
+  if (ptype instanceof MutableObjectPType)
+    return new ARC4StructType({
+      name: ptype.alias?.name ?? ptype.name,
+      module: ptype.module,
+      description: ptype.description,
+      fields: Object.fromEntries(ptype.orderedProperties().map(([p, pt]) => [p, ptypeToArc4EncodedType(pt, sourceLocation)])),
+      frozen: false,
     })
 
   throw new CodeError(`${ptype} cannot be encoded to an ARC4 type`, { sourceLocation })

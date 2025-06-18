@@ -7,7 +7,6 @@ import type { DecoratorData } from '../models/decorator-data'
 import type { GenericPType, LibClassType, PType, PTypeOrClass } from '../ptypes'
 import { uint64PType } from '../ptypes'
 import type { ARC4StructClass } from '../ptypes/arc4-types'
-import type { MutableObjectClass } from '../ptypes/mutable-object'
 import { instanceEb } from '../type-registry'
 
 export enum BuilderComparisonOp {
@@ -234,7 +233,7 @@ export abstract class WrappingInstanceBuilder<TPType extends PType = PType> exte
 }
 
 export abstract class ClassBuilder extends NodeBuilder {
-  abstract readonly ptype: LibClassType | GenericPType | ARC4StructClass | MutableObjectClass
+  abstract readonly ptype: LibClassType | GenericPType | ARC4StructClass
 
   abstract newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder
 

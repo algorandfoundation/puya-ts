@@ -1,8 +1,8 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, assertMatch, Bytes, clone, Contract, MutableObject } from '@algorandfoundation/algorand-typescript'
+import { assert, assertMatch, Bytes, clone, Contract } from '@algorandfoundation/algorand-typescript'
 
-class Coordinate extends MutableObject<{ x: uint64; y: uint64 }> {}
-class Vector extends MutableObject<{ c1: Coordinate; c2: Coordinate }> {}
+type Coordinate = { x: uint64; y: uint64 }
+type Vector = { c1: Coordinate; c2: Coordinate }
 
 function testPartialDestructure(arg: { x: uint64; y: uint64; z: biguint }) {
   const { x } = arg
@@ -58,7 +58,7 @@ function produceItems(): { a: uint64; b: bytes; c: boolean; d: biguint } {
 }
 
 function produceVector(): Vector {
-  return new Vector({ c1: new Coordinate({ x: 1, y: 2 }), c2: new Coordinate({ x: 4, y: 1 }) })
+  return { c1: { x: 1, y: 2 }, c2: { x: 4, y: 1 } }
 }
 
 function receivePartial(x: { a: uint64; d: biguint }) {}
@@ -98,9 +98,7 @@ class ObjectDestructuringAlgo extends Contract {
     const res = testPartialDestructure({ x: 1, y: 4, z: 123n })
     assertMatch(res, [1, 4])
 
-    const res2 = testPartialDestructureMutableObject(
-      new Vector({ c1: new Coordinate({ x: 10, y: 20 }), c2: new Coordinate({ x: 20, y: 30 }) }),
-    )
+    const res2 = testPartialDestructureMutableObject({ c1: { x: 10, y: 20 }, c2: { x: 20, y: 30 } })
     assertMatch(res2, [10, 20])
 
     testNumericResolution()

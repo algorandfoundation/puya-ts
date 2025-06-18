@@ -7,7 +7,6 @@ import {
   contract,
   Contract,
   GlobalState,
-  MutableObject,
   op,
   Txn,
   Uint64,
@@ -55,7 +54,7 @@ export class TestArc4 extends Contract {
   }
 }
 
-class Data extends MutableObject<{ a: string; b: uint64; c: boolean; d: arc4.Str }> {}
+type Data = { a: string; b: uint64; c: boolean; d: arc4.Str }
 
 export class TestTuple extends Contract {
   t1 = GlobalState<[string, uint64, boolean]>()
@@ -89,7 +88,7 @@ export class TestTuple extends Contract {
     assert(this.t4.value[1].b === 456n, 'Tuple value should be set')
     assert(this.t4.value[1].c === true, 'Tuple value should be set')
 
-    this.t5.value = new Data({ a: 'hello', b: 123, c: true, d: new arc4.Str('World') })
+    this.t5.value = { a: 'hello', b: 123, c: true, d: new arc4.Str('World') }
     assert(this.t5.value.a === 'hello', 'Mutable object value should be set')
     assert(this.t5.value.b === 123, 'Mutable object value should be set')
     assert(this.t5.value.c === true, 'Mutable object value should be set')
