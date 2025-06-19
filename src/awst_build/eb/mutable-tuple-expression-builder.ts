@@ -69,8 +69,8 @@ export class MutableTupleExpressionBuilder extends InstanceExpressionBuilder<Mut
     return super.memberAccess(name, sourceLocation)
   }
 
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
-    const indexNum = requireIntegerConstant(index).value
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
+    const indexNum = typeof index === 'bigint' ? index : requireIntegerConstant(index).value
     const itemType = this.ptype.items[Number(indexNum)]
     codeInvariant(
       indexNum < this.ptype.items.length && indexNum >= 0,

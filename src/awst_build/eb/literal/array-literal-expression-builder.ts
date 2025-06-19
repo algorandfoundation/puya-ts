@@ -1,8 +1,7 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression, LValue } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { CodeError, InternalError } from '../../../errors'
-import { logger } from '../../../logger'
+import { CodeError } from '../../../errors'
 import { codeInvariant, instanceOfAny } from '../../../util'
 import type { PTypeOrClass } from '../../ptypes'
 import { ArrayLiteralPType, ArrayPType, MutableTuplePType, ReadonlyArrayPType, ReadonlyTuplePType } from '../../ptypes'
@@ -50,6 +49,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
 
   singleEvaluation(): InstanceBuilder {
     if (this.isSingleEval) return this
+    if (this.items.length === 0) return this
     const tuple = nodeFactory.singleEvaluation({
       source: nodeFactory.tupleExpression({
         items: this.items.map((i) => i.resolve()),
@@ -72,18 +72,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
     )
   }
 
-  private requireSingleEval(methodName: string, sourceLocation: SourceLocation) {
-    if (!this.isSingleEval) {
-      logger.error(
-        new InternalError(`${methodName} should not be called without first calling .singleEvaluation() on this builder`, {
-          sourceLocation: sourceLocation,
-        }),
-      )
-    }
-  }
-
   indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
-    this.requireSingleEval('indexAccess', sourceLocation)
     const indexNum = Number(typeof index === 'bigint' ? index : requireIntegerConstant(index).value)
     codeInvariant(indexNum < this.items.length, `Index ${indexNum} out of bounds of array`, sourceLocation)
     return this.items[indexNum]

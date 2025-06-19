@@ -93,7 +93,7 @@ export class OptionalExpressionBuilder extends WrappingInstanceBuilder {
   ): InstanceBuilder {
     this.#throwRequiresBang()
   }
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
     this.#throwRequiresBang()
   }
 }

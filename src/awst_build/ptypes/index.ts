@@ -4,9 +4,9 @@ import { wtypes } from '../../awst/wtypes'
 
 import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported, throwError } from '../../errors'
-import { codeInvariant, distinctByEquality, instanceOfAny, invariant, sortBy } from '../../util'
+import { codeInvariant, distinctByEquality, instanceOfAny, invariant, sortBy, zipStrict } from '../../util'
 import { SymbolName } from '../symbol-name'
-import type { ABIType } from './base'
+import type { ABIType, PTypeOrClass } from './base'
 import { GenericPType, PType } from './base'
 
 import { transientTypeErrors } from './transient-type-errors'
@@ -968,6 +968,12 @@ abstract class ObjectPType extends PType {
       .map((p) => `${this.immutable ? 'readonly ' : ''}${p[0]}:${p[1].name}`)
       .join(',')}}`
   }
+
+  hasSameStructure(other: ObjectPType): boolean {
+    return zipStrict(this.orderedProperties(), other.orderedProperties()).every(
+      ([[leftProp, leftType], [rightProp, rightType]]) => leftProp === rightProp && leftType.equals(rightType),
+    )
+  }
 }
 
 export class ObjectLiteralPType extends ObjectPType {
@@ -986,8 +992,15 @@ export class ObjectLiteralPType extends ObjectPType {
     return visitor.visitObjectLiteralPType(this)
   }
 
-  toImmutable(): ImmutableObjectPType {
+  getImmutable(): ImmutableObjectPType {
     return new ImmutableObjectPType({
+      alias: this.alias,
+      properties: this.properties,
+      description: this.description,
+    })
+  }
+  getMutable(): MutableObjectPType {
+    return new MutableObjectPType({
       alias: this.alias,
       properties: this.properties,
       description: this.description,
@@ -1062,7 +1075,7 @@ export class MutableObjectPType extends ObjectPType {
   }
 }
 
-export function isObjectType(ptype: PType): ptype is MutableObjectPType | ImmutableObjectPType | ObjectLiteralPType {
+export function isObjectType(ptype: PTypeOrClass): ptype is MutableObjectPType | ImmutableObjectPType | ObjectLiteralPType {
   return instanceOfAny(ptype, MutableObjectPType, ImmutableObjectPType, ObjectLiteralPType)
 }
 

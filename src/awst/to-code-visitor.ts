@@ -179,10 +179,10 @@ export class ToCodeVisitor
   visitTupleExpression(expression: nodes.TupleExpression): string {
     const names = expression.wtype.names
     if (names) {
-      return `{ ${expression.items.map((item, i) => `${names[i]}: ${item.accept(this)}`).join(', ')} }`
+      return `#{ ${expression.items.map((item, i) => `${names[i]}: ${item.accept(this)}`).join(', ')} }`
     }
 
-    return `<tuple>[${expression.items.map((i) => i.accept(this)).join(', ')}]`
+    return `#[${expression.items.map((i) => i.accept(this)).join(', ')}]`
   }
   visitTupleItemExpression(expression: nodes.TupleItemExpression): string {
     return `${expression.base.accept(this)}.${expression.index}`
@@ -222,9 +222,9 @@ export class ToCodeVisitor
   visitSingleEvaluation(expression: nodes.SingleEvaluation): string {
     const [id, isNew] = this.#singleEval.forSymbol(expression.id)
     if (!isNew) {
-      return `#${id}`
+      return `$${id}`
     }
-    return `(#${id} = ${expression.source.accept(this)})`
+    return `($${id} = ${expression.source.accept(this)})`
   }
   visitReinterpretCast(expression: nodes.ReinterpretCast): string {
     const target = expression.expr.accept(this)

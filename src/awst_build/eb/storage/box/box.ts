@@ -4,7 +4,7 @@ import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { boolPType, BoxPType, BoxRefPType, bytesPType, ReadonlyTuplePType, stringPType, uint64PType } from '../../../ptypes'
+import { boolPType, BoxPType, boxRefType, bytesPType, ReadonlyTuplePType, stringPType, uint64PType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
@@ -61,7 +61,7 @@ export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
       case 'maybe':
         return new BoxMaybeFunctionBuilder(boxValueExpr, this.ptype.contentType, sourceLocation)
       case 'ref':
-        return new BoxRefExpressionBuilder(this._expr, new BoxRefPType())
+        return new BoxRefExpressionBuilder(this._expr, boxRefType)
     }
     return super.memberAccess(name, sourceLocation)
   }

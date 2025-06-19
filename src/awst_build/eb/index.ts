@@ -1,4 +1,4 @@
-import { awst, isConstantOrTemplateVar } from '../../awst'
+import { awst, isConstant, isConstantOrTemplateVar } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
 import { TupleItemExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
@@ -137,7 +137,7 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
 
   singleEvaluation(): InstanceBuilder {
     const expr = this.resolve()
-    if (expr instanceof awst.VarExpression) {
+    if (expr instanceof awst.VarExpression || isConstant(expr)) {
       return this
     }
     return instanceEb(

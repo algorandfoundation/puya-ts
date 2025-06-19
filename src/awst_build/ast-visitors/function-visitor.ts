@@ -81,7 +81,7 @@ export abstract class FunctionVisitor
 
           props.push([propertyName, this.visitBindingName(element.name, sourceLocation)])
         }
-        return new ObjectLiteralExpressionBuilder(sourceLocation, [{ type: 'properties', properties: Object.fromEntries(props) }])
+        return ObjectLiteralExpressionBuilder.fromParts(sourceLocation, [{ type: 'properties', properties: Object.fromEntries(props) }])
       }
       case ts.SyntaxKind.ArrayBindingPattern: {
         const items: InstanceBuilder[] = []
@@ -124,9 +124,7 @@ export abstract class FunctionVisitor
           paramPType,
         )
 
-        assignments.push(
-          handleAssignmentStatement(this.context, this.visitBindingName(p.name, sourceLocation), paramBuilder, sourceLocation),
-        )
+        assignments.push(handleAssignmentStatement(this.visitBindingName(p.name, sourceLocation), paramBuilder, sourceLocation))
       }
     }
 
@@ -187,7 +185,7 @@ export abstract class FunctionVisitor
         return []
       }
 
-      return handleAssignmentStatement(this.context, this.visitBindingName(d.name, sourceLocation), source, sourceLocation)
+      return handleAssignmentStatement(this.visitBindingName(d.name, sourceLocation), source, sourceLocation)
     })
   }
 
@@ -267,7 +265,7 @@ export abstract class FunctionVisitor
         items: itemVar.resolveLValue(),
         loopBody: nodeFactory.block(
           { sourceLocation },
-          handleAssignmentStatement(this.context, items, itemVar, initializerLocation),
+          handleAssignmentStatement(items, itemVar, initializerLocation),
           this.accept(node.statement),
           ...maybeNodes(ctx.hasContinues, ctx.continueTarget),
         ),

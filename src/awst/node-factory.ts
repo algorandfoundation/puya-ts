@@ -169,6 +169,7 @@ const explicitNodeFactory = {
   },
   expressionStatement({ expr }: { expr: Expression }) {
     if (expr instanceof AssignmentExpression) {
+      // Replace ExpressionStatement(AssignmentExpression) with AssignmentStatement
       return new AssignmentStatement({
         ...expr,
       })

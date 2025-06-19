@@ -4,7 +4,7 @@ import { assert, assertMatch, Bytes, clone, Contract } from '@algorandfoundation
 type Coordinate = { x: uint64; y: uint64 }
 type Vector = { c1: Coordinate; c2: Coordinate }
 
-function testPartialDestructure(arg: { x: uint64; y: uint64; z: biguint }) {
+function testPartialDestructure(arg: Readonly<{ x: uint64; y: uint64; z: biguint }>) {
   const { x } = arg
   const {
     nested: { y },
@@ -81,7 +81,7 @@ function testNumericResolution() {
   assertMatch([x.a, y.a], [434, 434])
 }
 
-function test2(args: { x: boolean; y: boolean; z: readonly [string, string] }) {
+function test2(args: Readonly<{ x: boolean; y: boolean; z: readonly [string, string] }>) {
   const {
     a,
     b,

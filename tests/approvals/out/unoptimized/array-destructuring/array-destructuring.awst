@@ -12,16 +12,16 @@ contract ArrayDestructuringAlgo
   
   testNested(arg: readonly [uint64, readonly [biguint, biguint]]): readonly [uint64, readonly [biguint, biguint], uint64, biguint]
   {
-    (<tuple>[a, b] = arg), arg
-    (<tuple>[c, <tuple>[d, _]] = arg), arg
-    return <tuple>[a, b, c, d]
+    #[a, b]: readonly [uint64, readonly [biguint, biguint]] = #[arg.0, arg.1]
+    #[c, #[d]]: readonly [uint64, readonly [biguint]] = #[arg.0, #[arg.1.0]]
+    return #[a, b, c, d]
   }
   
   test(): void
   {
-    (<tuple>[a, b, c, d] = (#0 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems())), #0
-    (<tuple>[_, _₁, e, _₂] = (#1 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems())), #1
-    f: readonly [uint64, bytes, bool, biguint] = (<tuple>[g, _₃, _₄, i] = (#2 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems())), #2
+    (#[a, b, c, d] = #[($0 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()).0, $0.1, $0.2, $0.3]), $0
+    (#[e] = #[($1 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()).2]), $1
+    f: readonly [uint64, bytes, bool, biguint] = ($2 = (#[g, i] = #[($3 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()).0, $3.3]), $3)
     assert(a == 5)
     assert(b == 0x)
     assert(!c)
@@ -30,19 +30,19 @@ contract ArrayDestructuringAlgo
     assert(g == 5)
     assert(i == 6)
     assert(4 == 4 and f.0 == 5 and f.1 == 0x and f.2 == False and f.3 == 6, comment=assert target is match for conditions)
-    (x = (#3 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceFixed())[0]), (y = #3[1]), (z = #3[2]), #3
+    (#[x, y, z] = #[($4 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceFixed())[0], $4[1], $4[2]]), $4
   }
   
   produceItems(): readonly [uint64, bytes, bool, biguint]
   {
-    return <tuple>[5, 0x, False, 6]
+    return #[5, 0x, False, 6]
   }
   
   testLiteralDestructuring(): void
   {
-    a: uint64 = 1
-    b: uint64 = 2
-    (x = (#4 = (b = (#5 = ARC4_ENCODE(<tuple>[a, b], wtype=arc4.tuple<uint64,uint64>)).0), (a = #5.1), #5).0), (y = #4.1), #4
+    a: uint64 = ($5 = 1)
+    b: uint64 = ($6 = 2)
+    (#[x, y] = #[($7 = (#[b, a] = #[($8 = #[a, b]).0, $8.1]), ARC4_ENCODE(#[$8.0, $8.1], wtype=arc4.tuple<uint64,uint64>)).0, $7.1]), $7
     assert(x == b)
     assert(y == a)
   }

@@ -8,28 +8,28 @@ subroutine testBox(box: box_key, value: string): void
   assert(STATE_EXISTS(Box[box].value) and STATE_EXISTS(Box["A"].value))
   assert(Boolean(checked_maybe(box_len(box), comment=Box must have value)))
   assert(STATE_DELETE(Box[box].value), comment=delete failed)
-  isBoxADeleted: bool = STATE_DELETE(Box["A"].value)
+  isBoxADeleted: bool = ($0 = STATE_DELETE(Box["A"].value))
   assert(isBoxADeleted, comment=delete failed)
   assert(!STATE_EXISTS(Box[box].value) and !STATE_EXISTS(Box["A"].value))
   assert(STATE_GET(Box["A"].value, default="O") == STATE_GET(Box[box].value, default="O"))
-  <tuple>[_, e]: readonly [string, bool] = STATE_GET_EX(Box[box].value)
+  (#[e] = #[($1 = STATE_GET_EX(Box[box].value)).1]), $1
   assert(!e)
   Box[box].value: string = value
-  <tuple>[_₁, e]: readonly [string, bool] = STATE_GET_EX(Box[box].value)
+  (#[e] = #[($2 = STATE_GET_EX(Box[box].value)).1]), $2
   assert(e)
 }
 subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 {
   Box[BoxMapKey(prefix=box, key=key)].value: bytes = value
   Box[BoxMapKey(prefix="", key=key)].value: bytes = value
-  boxMapItem: box_key = BoxMapKey(prefix="", key=key)
+  boxMapItem: box_key = ($3 = BoxMapKey(prefix="", key=key))
   assert(STATE_EXISTS(Box[boxMapItem].value))
   assert(reinterpret_cast<bytes>(box) == "two")
   assert("" == "")
   assert(Boolean(checked_maybe(box_len(BoxMapKey(prefix=box, key=key)), comment=Box must have value)))
   assert(STATE_GET_EX(Box[BoxMapKey(prefix=box, key=key)].value).1)
   assert(Box[BoxMapKey(prefix=box, key=key)].value == Box[BoxMapKey(prefix="", key=key)].value)
-  isBoxDeleted: bool = STATE_DELETE(Box[BoxMapKey(prefix=box, key=key)].value)
+  isBoxDeleted: bool = ($4 = STATE_DELETE(Box[BoxMapKey(prefix=box, key=key)].value))
   assert(isBoxDeleted, comment=delete failed)
   assert(STATE_GET(Box[BoxMapKey(prefix=box, key="" + key + "x")].value, default="b") == STATE_GET(Box[BoxMapKey(prefix="", key="" + key + "x")].value, default="b"))
 }
@@ -51,12 +51,12 @@ subroutine testBoxRef(box: box_key, length: uint64): void
   }
   box_put(box, 0xffffffff)
   assert(STATE_GET(Box[box].value, default=0x) == 0xffffffff)
-  maybeBox: readonly [bytes, bool] = STATE_GET_EX(Box[box].value)
+  maybeBox: readonly [bytes, bool] = ($5 = STATE_GET_EX(Box[box].value))
   assert(maybeBox.1)
   assert(Box[box].value == 0xffffffff)
   box_splice(box, 1, 1, 0x00)
   assert(Box[box].value == 0xff00ffff)
-  x: bool = STATE_DELETE(Box[box].value)
+  x: bool = ($6 = STATE_DELETE(Box[box].value))
   assert(x, comment=delete failed)
   assert(!STATE_EXISTS(Box[box].value))
 }
@@ -88,17 +88,17 @@ contract BoxNotExist
   approvalProgram(): bool
   {
     if (reinterpret_cast<uint64>(txn<ApplicationID>()) != 0) {
-      if ((#0 = reinterpret_cast<string>(txnas<ApplicationArgs>(0))) == "box") {
+      if (($7 = reinterpret_cast<string>(txnas<ApplicationArgs>(0))) == "box") {
         #switch₁ᶜ₀:
         return Box["abc"].value
       }
-      if (#0 == "boxmap") {
+      if ($7 == "boxmap") {
         #switch₁ᶜ₁:
         return Box[BoxMapKey(prefix="a", key="bc")].value
       }
-      if (#0 == "createbox") {
+      if ($7 == "createbox") {
         #switch₁ᶜ₂:
-        Box["abc"].value: bool = True
+        Box["abc"].value: bool = ($8 = True)
         return True
       }
     }
@@ -201,11 +201,11 @@ contract TupleBox
     assert(checked_maybe(box_len("t2"), comment=Box must have value) == 20)
     assert(STATE_EXISTS(Box["t1"].value))
     assert(STATE_EXISTS(Box["t2"].value))
-    Box["t1"].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(<tuple>["hello", "world", True], wtype=arc4.tuple<string,bytes,bool>)
+    Box["t1"].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(#[($9 = #["hello", "world", True]).0, $9.1, $9.2], wtype=arc4.tuple<string,bytes,bool>)
     assert(Box["t1"].value.0 == "hello")
     assert(Box["t1"].value.1 == "world")
     assert(Box["t1"].value.2)
-    Box["t2"].value: object = new object(a=(#1 = { a: "hello", b: "world", c: True }).a, b=#1.b, c=#1.c)
+    Box["t2"].value: object = new object(a=($10 = #{ a: ($11 = #["hello", "world", True]).0, b: $11.1, c: $11.2 }).a, b=$10.b, c=$10.c)
     assert(Box["t2"].value.a == "hello")
     assert(Box["t2"].value.b == "world")
     assert(Box["t2"].value.c)
@@ -219,8 +219,8 @@ contract TupleBox
   {
     assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
     assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="a")].value))
-    Box[BoxMapKey(prefix="tm1", key="a")].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(<tuple>["hello", "world", True], wtype=arc4.tuple<string,bytes,bool>)
-    Box[BoxMapKey(prefix="tm2", key="a")].value: object = new object(a=(#2 = { a: "hello", b: "world", c: True }).a, b=#2.b, c=#2.c)
+    Box[BoxMapKey(prefix="tm1", key="a")].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(#[($12 = #["hello", "world", True]).0, $12.1, $12.2], wtype=arc4.tuple<string,bytes,bool>)
+    Box[BoxMapKey(prefix="tm2", key="a")].value: object = new object(a=($13 = #{ a: ($14 = #["hello", "world", True]).0, b: $14.1, c: $14.2 }).a, b=$13.b, c=$13.c)
     assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
     assert(Box[BoxMapKey(prefix="tm1", key="a")].value.0 == "hello")
     assert(Box[BoxMapKey(prefix="tm1", key="a")].value.1 == "world")
@@ -229,9 +229,9 @@ contract TupleBox
     assert(Box[BoxMapKey(prefix="tm2", key="a")].value.a == "hello")
     assert(Box[BoxMapKey(prefix="tm2", key="a")].value.b == "world")
     assert(Box[BoxMapKey(prefix="tm2", key="a")].value.c)
-    Box[BoxMapKey(prefix="tm1", key="b")].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(<tuple>["abc", "def", False], wtype=arc4.tuple<string,bytes,bool>)
+    Box[BoxMapKey(prefix="tm1", key="b")].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(#[($15 = #["abc", "def", False]).0, $15.1, $15.2], wtype=arc4.tuple<string,bytes,bool>)
     assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="b")].value))
-    Box[BoxMapKey(prefix="tm2", key="b")].value: object = new object(a=(#3 = { a: "abc", b: "def", c: False }).a, b=#3.b, c=#3.c)
+    Box[BoxMapKey(prefix="tm2", key="b")].value: object = new object(a=($16 = #{ a: ($17 = #["abc", "def", False]).0, b: $17.1, c: $17.2 }).a, b=$16.b, c=$16.c)
     assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="b")].value))
     STATE_DELETE(Box[BoxMapKey(prefix="tm1", key="a")].value)
     assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
@@ -261,7 +261,7 @@ contract BoxToRefTest
   
   test(): void
   {
-    boxForCaller: box_key = BoxMapKey(prefix="", key=txn<Sender>())
+    boxForCaller: box_key = ($18 = BoxMapKey(prefix="", key=txn<Sender>()))
     box_create(boxForCaller, size_of(arc4.static_array<arc4.uint8>))
     boxRef: box_key = boxForCaller
     box_replace(boxRef, 0, reinterpret_cast<bytes>(123))

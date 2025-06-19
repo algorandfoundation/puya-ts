@@ -2,9 +2,8 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression, LValue } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
-import { instanceOfAny } from '../../../util'
-import type { PTypeOrClass } from '../../ptypes'
-import { ImmutableObjectPType, MutableObjectPType, ObjectLiteralPType } from '../../ptypes'
+import type { PType, PTypeOrClass } from '../../ptypes'
+import { ImmutableObjectPType, isObjectType, MutableObjectPType, ObjectLiteralPType } from '../../ptypes'
 import { getPropertyType } from '../../ptypes/visitors/index-type-visitor'
 import { spreadableProperties } from '../../ptypes/visitors/spreadable-properties'
 import { instanceEb } from '../../type-registry'
@@ -26,28 +25,82 @@ export type ObjectLiteralParts =
 export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
   readonly isConstant = false
 
-  readonly ptype: ObjectLiteralPType
+  static fromParts(sourceLocation: SourceLocation, parts: ObjectLiteralParts[]): ObjectLiteralExpressionBuilder {
+    const types: Record<string, PType> = {}
+    const propertyToItemMap: Record<string, number> = {}
+    const items: InstanceBuilder[] = []
+    for (const part of parts) {
+      if (part.type === 'properties') {
+        for (const [prop, propBuilder] of Object.entries(part.properties)) {
+          types[prop] = propBuilder.ptype
+          propertyToItemMap[prop] = items.length
+          items.push(propBuilder)
+        }
+      } else {
+        const obj = part.obj.singleEvaluation()
+        for (const [prop, propType] of spreadableProperties(part.obj.ptype, part.obj.sourceLocation)) {
+          types[prop] = propType
+          propertyToItemMap[prop] = items.length
+          items.push(requireInstanceBuilder(obj.memberAccess(prop, sourceLocation)))
+        }
+      }
+    }
+    return new ObjectLiteralExpressionBuilder(sourceLocation, new ObjectLiteralPType({ properties: types }), propertyToItemMap, items)
+  }
 
-  constructor(
+  private constructor(
     sourceLocation: SourceLocation,
-
-    private readonly parts: ObjectLiteralParts[],
+    public readonly ptype: ObjectLiteralPType,
+    private readonly propertyToItemMap: Record<string, number>,
+    private readonly items: InstanceBuilder[],
+    private readonly isSingleEval = false,
   ) {
     super(sourceLocation)
-    this.ptype = new ObjectLiteralPType({
-      properties: Object.fromEntries(
-        this.parts.flatMap((p) =>
-          p.type === 'properties'
-            ? Object.entries(p.properties).map(([k, v]) => [k, v.ptype])
-            : spreadableProperties(p.obj.ptype, p.obj.sourceLocation),
+
+    // this.ptype = new ObjectLiteralPType({
+    //   properties: Object.fromEntries(
+    //     this.parts.flatMap((p) =>
+    //       p.type === 'properties'
+    //         ? Object.entries(p.properties).map(([k, v]) => [k, v.ptype])
+    //         : spreadableProperties(p.obj.ptype, p.obj.sourceLocation),
+    //     ),
+    //   ),
+    // })
+    // this.items = {}
+    // for(const )
+  }
+
+  singleEvaluation(): InstanceBuilder {
+    if (this.isSingleEval) return this
+    const tuple = nodeFactory.singleEvaluation({
+      source: nodeFactory.tupleExpression({
+        items: this.items.map((item) => item.resolve()),
+        sourceLocation: this.sourceLocation,
+        wtype: this.ptype.wtype,
+      }),
+    })
+
+    return new ObjectLiteralExpressionBuilder(
+      this.sourceLocation,
+      this.ptype,
+      this.propertyToItemMap,
+      this.items.map((item, index) =>
+        instanceEb(
+          nodeFactory.tupleItemExpression({
+            base: tuple,
+            index: BigInt(index),
+            sourceLocation: item.sourceLocation,
+          }),
+          item.ptype,
         ),
       ),
-    })
+      true,
+    )
   }
 
   resolve(): Expression {
     // Resolve object to a tuple using its own inferred types
-    return this.toObjectType(this.ptype.toImmutable())
+    return this.toObjectType(this.ptype.getImmutable())
   }
   resolveLValue(): LValue {
     return nodeFactory.tupleExpression({
@@ -55,31 +108,23 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
         .orderedProperties()
         .map(([p, propPType]) => requireInstanceBuilder(this.memberAccess(p, this.sourceLocation)).resolveLValue()),
       sourceLocation: this.sourceLocation,
-      wtype: this.ptype.toImmutable().wtype,
+      wtype: this.ptype.getImmutable().wtype,
     })
   }
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    for (const part of this.parts.toReversed()) {
-      if (part.type === 'properties') {
-        if (Object.hasOwn(part.properties, name)) {
-          return part.properties[name]
-        }
-      } else {
-        if (part.obj.hasProperty(name)) {
-          return part.obj.memberAccess(name, sourceLocation)
-        }
-      }
+    if (name in this.propertyToItemMap) {
+      return this.items[this.propertyToItemMap[name]]
     }
     throw new CodeError(`${name} does not exist on ${this.typeDescription}`, { sourceLocation })
   }
 
   hasProperty(name: string): boolean {
-    return this.parts.some((part) => (part.type === 'properties' ? Object.hasOwn(part.properties, name) : part.obj.hasProperty(name)))
+    return name in this.propertyToItemMap
   }
 
   private toObjectType(ptype: ImmutableObjectPType | MutableObjectPType): Expression {
     let base: InstanceBuilder
-    if (this.ptype.equals(ptype)) {
+    if (this.ptype.hasSameStructure(ptype) || this.isSingleEval) {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       base = this
     } else {
@@ -124,10 +169,10 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     }
   }
 
-  resolvableToPType(ptype: PTypeOrClass): ptype is ImmutableObjectPType | MutableObjectPType {
+  resolvableToPType(ptype: PTypeOrClass): ptype is ImmutableObjectPType | MutableObjectPType | ObjectLiteralPType {
     if (ptype.equals(this.ptype)) return true
 
-    if (!instanceOfAny(ptype, ImmutableObjectPType, MutableObjectPType)) return false
+    if (!isObjectType(ptype)) return false
     for (const [prop, propPType] of ptype.orderedProperties()) {
       if (!this.hasProperty(prop)) return false
       const propValue = requestExpressionOfType(this.memberAccess(prop, this.sourceLocation), propPType)
@@ -141,6 +186,9 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
 
     if (!this.resolvableToPType(ptype))
       throw new CodeError(`${this.typeDescription} cannot be resolved to ${ptype}`, { sourceLocation: this.sourceLocation })
+    if (ptype instanceof ObjectLiteralPType) {
+      throw new Error('TODO"')
+    }
     return instanceEb(this.toObjectType(ptype), ptype)
   }
 }
