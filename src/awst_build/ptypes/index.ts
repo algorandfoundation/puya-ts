@@ -746,6 +746,11 @@ export class ArrayLiteralPType extends PType {
       items: this.items,
     })
   }
+  getMutableTupleType(): MutableTuplePType {
+    return new MutableTuplePType({
+      items: this.items,
+    })
+  }
 }
 
 export class MutableTuplePType extends PType {

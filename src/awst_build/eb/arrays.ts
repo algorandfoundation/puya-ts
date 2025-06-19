@@ -63,7 +63,7 @@ export class NativeArrayLikeExpressionBuilder<T extends NativeArrayLike = Native
     return this.resolve()
   }
 
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
     return indexAccess(this, index, sourceLocation)
   }
 
@@ -109,7 +109,7 @@ export class NativeArrayExpressionBuilder extends NativeArrayLikeExpressionBuild
     return this.resolve()
   }
 
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
     return indexAccess(this, index, sourceLocation)
   }
 
@@ -215,7 +215,6 @@ class PushFunctionBuilder extends FunctionBuilder {
           arrayLength(target, sourceLocation).resolve(),
         ],
         sourceLocation,
-        wtype: uint64PType.wtype,
       }),
       uint64PType,
     )

@@ -94,7 +94,7 @@ export abstract class NodeBuilder {
     })
   }
 
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
     throw new NotSupported(`Indexing ${this.typeDescription}`, {
       sourceLocation,
     })
@@ -228,7 +228,7 @@ export abstract class WrappingInstanceBuilder<TPType extends PType = PType> exte
   ): InstanceBuilder
   abstract hasProperty(_name: string): boolean
   abstract memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder
-  abstract indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder
+  abstract indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder
   abstract boolEval(sourceLocation: SourceLocation, negate: boolean): awst.Expression
 }
 

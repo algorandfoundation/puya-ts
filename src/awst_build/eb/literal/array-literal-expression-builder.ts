@@ -1,8 +1,9 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression, LValue } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { CodeError } from '../../../errors'
-import { codeInvariant } from '../../../util'
+import { CodeError, InternalError } from '../../../errors'
+import { logger } from '../../../logger'
+import { codeInvariant, instanceOfAny } from '../../../util'
 import type { PTypeOrClass } from '../../ptypes'
 import { ArrayLiteralPType, ArrayPType, MutableTuplePType, ReadonlyArrayPType, ReadonlyTuplePType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
@@ -10,24 +11,31 @@ import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import type { StaticallyIterable } from '../traits/static-iterator'
 import { StaticIterator } from '../traits/static-iterator'
-import { requireIntegerConstant } from '../util'
+import { requireExpressionOfType, requireIntegerConstant } from '../util'
 import { arrayLength } from '../util/array/length'
 
 export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements StaticallyIterable {
   readonly isConstant = false
 
-  readonly ptype: ArrayLiteralPType | ArrayPType | ReadonlyArrayPType
+  readonly ptype: ArrayLiteralPType
+
+  /**
+   *
+   * @param sourceLocation
+   * @param items
+   * @param isSingleEval Is this builder the result of calling `.singleEvaluation()` and thus further calls should just return this builder
+   */
   constructor(
     sourceLocation: SourceLocation,
     private readonly items: InstanceBuilder[],
-    ptype?: ArrayPType | ArrayLiteralPType | ReadonlyArrayPType,
+    private readonly isSingleEval = false,
   ) {
     super(sourceLocation)
-    this.ptype = ptype ?? new ArrayLiteralPType({ items: items.map((i) => i.ptype) })
+    this.ptype = new ArrayLiteralPType({ items: items.map((i) => i.ptype) })
   }
 
   resolve(): Expression {
-    const arrayType = this.ptype instanceof ArrayLiteralPType ? this.ptype.getArrayType() : this.ptype
+    const arrayType = this.ptype.getArrayType()
 
     return nodeFactory.newArray({
       sourceLocation: this.sourceLocation,
@@ -41,14 +49,42 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
   }
 
   singleEvaluation(): InstanceBuilder {
+    if (this.isSingleEval) return this
+    const tuple = nodeFactory.singleEvaluation({
+      source: nodeFactory.tupleExpression({
+        items: this.items.map((i) => i.resolve()),
+        sourceLocation: this.sourceLocation,
+      }),
+    })
     return new ArrayLiteralExpressionBuilder(
       this.sourceLocation,
-      this.items.map((i) => i.singleEvaluation()),
+      this.ptype.items.map((itemType, index) =>
+        instanceEb(
+          nodeFactory.tupleItemExpression({
+            base: tuple,
+            index: BigInt(index),
+            sourceLocation: this.items[index].sourceLocation,
+          }),
+          itemType,
+        ),
+      ),
+      true,
     )
   }
 
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
-    const indexNum = Number(requireIntegerConstant(index).value)
+  private requireSingleEval(methodName: string, sourceLocation: SourceLocation) {
+    if (!this.isSingleEval) {
+      logger.error(
+        new InternalError(`${methodName} should not be called without first calling .singleEvaluation() on this builder`, {
+          sourceLocation: sourceLocation,
+        }),
+      )
+    }
+  }
+
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
+    this.requireSingleEval('indexAccess', sourceLocation)
+    const indexNum = Number(typeof index === 'bigint' ? index : requireIntegerConstant(index).value)
     codeInvariant(indexNum < this.items.length, `Index ${indexNum} out of bounds of array`, sourceLocation)
     return this.items[indexNum]
   }
@@ -62,32 +98,37 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
-    if (ptype instanceof ReadonlyTuplePType) {
+    if (instanceOfAny(ptype, ReadonlyTuplePType, MutableTuplePType)) {
       codeInvariant(
         ptype.items.length <= this.items.length,
         `Value of length ${this.items.length} cannot be resolved to type of length ${ptype.items.length}`,
       )
+      const source = ptype.items.length === this.items.length ? this : this.singleEvaluation()
       const tupleExpr = nodeFactory.tupleExpression({
-        items: ptype.items.map((itemType, index) => this.items[index].resolveToPType(itemType).resolve()),
+        items: ptype.items.map((itemType, index) =>
+          requireExpressionOfType(source.indexAccess(BigInt(index), this.sourceLocation), itemType),
+        ),
         sourceLocation: this.sourceLocation,
       })
-      return instanceEb(tupleExpr, ptype)
+      if (ptype instanceof ReadonlyTuplePType) {
+        return instanceEb(tupleExpr, ptype)
+      } else {
+        return instanceEb(nodeFactory.aRC4Encode({ value: tupleExpr, wtype: ptype.wtype, sourceLocation: this.sourceLocation }), ptype)
+      }
     }
-    if (ptype instanceof MutableTuplePType) {
-      codeInvariant(
-        ptype.items.length <= this.items.length,
-        `Value of length ${this.items.length} cannot be resolved to type of length ${ptype.items.length}`,
-      )
-      const tupleExpr = nodeFactory.tupleExpression({
-        items: ptype.items.map((itemType, index) => this.items[index].resolveToPType(itemType).resolve()),
-        sourceLocation: this.sourceLocation,
-      })
-      return instanceEb(nodeFactory.aRC4Encode({ value: tupleExpr, wtype: ptype.wtype, sourceLocation: this.sourceLocation }), ptype)
-    }
-    if (ptype instanceof ArrayPType || ptype instanceof ReadonlyArrayPType) {
+    if (ptype instanceof ArrayLiteralPType && ptype.items.length === this.items.length) {
       return new ArrayLiteralExpressionBuilder(
         this.sourceLocation,
-        this.items.map((i) => i.resolveToPType(ptype.elementType)),
+        this.items.map((item, index) => item.resolveToPType(ptype.items[index])),
+      )
+    }
+    if (ptype instanceof ArrayPType || ptype instanceof ReadonlyArrayPType) {
+      return instanceEb(
+        nodeFactory.newArray({
+          values: this.items.map((i) => requireExpressionOfType(i, ptype.elementType)),
+          wtype: ptype.wtype,
+          sourceLocation: this.sourceLocation,
+        }),
         ptype,
       )
     }
@@ -98,6 +139,9 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
     if (ptype.equals(this.ptype)) return true
     if (ptype instanceof ReadonlyTuplePType || ptype instanceof MutableTuplePType) {
       return ptype.items.every((itemType, index) => this.items[index].resolvableToPType(itemType))
+    }
+    if (ptype instanceof ArrayLiteralPType && ptype.items.length === this.items.length) {
+      return this.items.every((item, index) => item.resolvableToPType(ptype.items[index]))
     }
     if (ptype instanceof ArrayPType || ptype instanceof ReadonlyArrayPType) {
       return this.items.every((i) => i.resolveToPType(ptype.elementType))

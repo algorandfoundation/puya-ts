@@ -1,0 +1,49 @@
+contract AssignmentsAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testPrimitives(u: uint64): void
+  {
+    p1: uint64 = u
+  }
+  
+  testArrayDestructure(i_a: arc4.dynamic_array<uint64>, u: uint64, m_a: arc4.dynamic_array<uint64>): void
+  {
+    (<tuple>[a1] = <tuple>[i_a[1]]), i_a
+    a5: arc4.tuple<uint64,uint64,uint64> = (<tuple>[a2, a3] = <tuple>[(#0 = <tuple>[tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u)]).0, #0.1]), ARC4_ENCODE(<tuple>[#0.0, #0.1, #0.2], wtype=arc4.tuple<uint64,uint64,uint64>)
+    assert(3 == 3, comment=a5 length should be 3)
+    (<tuple>[a4] = <tuple>[(#1 = <tuple>[1]).0]), ARC4_ENCODE(<tuple>[#1.0], wtype=arc4.tuple<uint64>)
+    (<tuple>[c, d] = <tuple>[(#2 = <tuple>[tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u)]).0, #2.1]), ARC4_ENCODE(<tuple>[#2.0, #2.1, #2.2], wtype=arc4.tuple<uint64,uint64,uint64>)
+    (<tuple>[a6, a7] = <tuple>[m_a[0], m_a[1]]), m_a
+  }
+  
+  testArrayNarrowing(m_a: arc4.dynamic_array<uint64>, u: uint64): void
+  {
+    direct: arc4.dynamic_array<uint64> = copy(m_a)
+    (narrowed = convert_array((#3 = copy(m_a)), wtype=arc4.dynamic_array<uint64>)), #3
+    result: arc4.dynamic_array<uint64> = (fromLit = new arc4.dynamic_array<uint64>((#4 = <tuple>[u, u, u]).0, #4.1, #4.2)), new arc4.dynamic_array<uint64>(#4.0, #4.1, #4.2)
+    (fromLit2 = new arc4.dynamic_array<uint64>((#5 = <tuple>[u, u, u]).0, #5.1, #5.2)), new arc4.dynamic_array<uint64>(#5.0, #5.1, #5.2)
+  }
+  
+  testItxn(): void
+  {
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+subroutine logAndReturn(u: uint64): uint64
+{
+  log(itob(u))
+  return u
+}
