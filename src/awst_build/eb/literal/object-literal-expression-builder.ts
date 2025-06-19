@@ -187,7 +187,13 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     if (!this.resolvableToPType(ptype))
       throw new CodeError(`${this.typeDescription} cannot be resolved to ${ptype}`, { sourceLocation: this.sourceLocation })
     if (ptype instanceof ObjectLiteralPType) {
-      throw new Error('TODO"')
+      const indexToType = Object.fromEntries(Object.entries(this.propertyToItemMap).map(([prop, index]) => [index, ptype.properties[prop]]))
+      return new ObjectLiteralExpressionBuilder(
+        this.sourceLocation,
+        ptype,
+        this.propertyToItemMap,
+        this.items.map((item, index) => (index in indexToType ? item.resolveToPType(indexToType[index]) : item)),
+      )
     }
     return instanceEb(this.toObjectType(ptype), ptype)
   }

@@ -44,8 +44,8 @@ export class AssignmentsAlgo extends Contract {
     const mObj: MutableObj = { a, b }
     const imObj: ImmutableObj = { a, b }
 
-    // const mObj2: MutableObj = { a: 123 }
-    // const imObj2: ImmutableObj = { a: 456 }
+    const mObj2: MutableObj = { a: 123, b: 456 }
+    const imObj2: ImmutableObj = { a: 456, b }
 
     // TODO: Verify getVal only called once
     const mObj3: MutableObj = { ...getVal() }
