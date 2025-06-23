@@ -18,6 +18,7 @@ export function newArray(ptype: ArrayPType | ReadonlyArrayPType, valueProvider: 
 export function newTuple(ptype: MutableTuplePType | ReadonlyTuplePType | ArrayLiteralPType, valueProvider: InstanceBuilder) {
   invariant(isStaticallyIterable(valueProvider), 'Tuple value provider must be statically iterable')
 
+  if (ptype.items.length === 0) return nodeFactory.voidConstant({ sourceLocation: valueProvider.sourceLocation })
   const tupleExpr = nodeFactory.tupleExpression({
     items: ptype.items.map((itemType, index) =>
       requireExpressionOfType(valueProvider.indexAccess(BigInt(index), valueProvider.sourceLocation), itemType),

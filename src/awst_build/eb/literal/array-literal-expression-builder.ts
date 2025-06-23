@@ -2,15 +2,24 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression, LValue } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
-import { codeInvariant, instanceOfAny } from '../../../util'
+import { codeInvariant } from '../../../util'
 import type { PTypeOrClass } from '../../ptypes'
-import { ArrayLiteralPType, ArrayPType, MutableTuplePType, ReadonlyArrayPType, ReadonlyTuplePType } from '../../ptypes'
+import {
+  ArrayLiteralPType,
+  ArrayPType,
+  isArrayType,
+  isTupleLike,
+  MutableTuplePType,
+  ReadonlyArrayPType,
+  ReadonlyTuplePType,
+} from '../../ptypes'
 import { instanceEb } from '../../type-registry'
+import { newArray, newTuple } from '../array-like/util'
 import type { NodeBuilder } from '../index'
 import { InstanceBuilder } from '../index'
 import type { StaticallyIterable } from '../traits/static-iterator'
 import { StaticIterator } from '../traits/static-iterator'
-import { requireExpressionOfType, requireIntegerConstant } from '../util'
+import { requireIntegerConstant } from '../util'
 import { arrayLength } from '../util/array/length'
 
 export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements StaticallyIterable {
@@ -87,33 +96,11 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
-    if (instanceOfAny(ptype, ReadonlyTuplePType, MutableTuplePType, ArrayLiteralPType)) {
-      codeInvariant(
-        ptype.items.length <= this.items.length,
-        `Value of length ${this.items.length} cannot be resolved to type of length ${ptype.items.length}`,
-      )
-      const source = ptype.items.length === this.items.length ? this : this.singleEvaluation()
-      const tupleExpr = nodeFactory.tupleExpression({
-        items: ptype.items.map((itemType, index) =>
-          requireExpressionOfType(source.indexAccess(BigInt(index), this.sourceLocation), itemType),
-        ),
-        sourceLocation: this.sourceLocation,
-      })
-      if (ptype instanceof MutableTuplePType) {
-        return instanceEb(nodeFactory.aRC4Encode({ value: tupleExpr, wtype: ptype.wtype, sourceLocation: this.sourceLocation }), ptype)
-      } else {
-        return instanceEb(tupleExpr, ptype)
-      }
+    if (isArrayType(ptype)) {
+      return instanceEb(newArray(ptype, this), ptype)
     }
-    if (ptype instanceof ArrayPType || ptype instanceof ReadonlyArrayPType) {
-      return instanceEb(
-        nodeFactory.newArray({
-          values: this.items.map((i) => requireExpressionOfType(i, ptype.elementType)),
-          wtype: ptype.wtype,
-          sourceLocation: this.sourceLocation,
-        }),
-        ptype,
-      )
+    if (isTupleLike(ptype)) {
+      return instanceEb(newTuple(ptype, this), ptype)
     }
     return super.resolveToPType(ptype)
   }

@@ -591,8 +591,8 @@ function isReadonlyPropertySymbol(prop: ts.Symbol): boolean {
    * Here be dragons!! We're poking into the internal API here to check if the transient property symbol (ie a symbol created during type checking)
    * has been marked with the check flag of readonly (8). CheckFlags is not exported so we have no way to confirm CheckFlags. Readonly is still 8
    */
-  if (isTransientPropertySymbol(prop)) {
-    return hasFlags(prop.links.checkFlags, 8)
+  if (isTransientPropertySymbol(prop) && hasFlags(prop.links.checkFlags, 8)) {
+    return true
   }
   return (
     prop.declarations?.some((d) => ts.isPropertySignature(d) && d.modifiers?.some((m) => m.kind === ts.SyntaxKind.ReadonlyKeyword)) ?? false
