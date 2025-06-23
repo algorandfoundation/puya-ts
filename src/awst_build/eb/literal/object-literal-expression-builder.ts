@@ -1,7 +1,7 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression, LValue } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { CodeError } from '../../../errors'
+import { CodeError, InternalError } from '../../../errors'
 import type { ImmutableObjectPType, MutableObjectPType, PType, PTypeOrClass } from '../../ptypes'
 import { isObjectType, ObjectLiteralPType } from '../../ptypes'
 import { getIndexType } from '../../ptypes/visitors/index-type-visitor'
@@ -88,7 +88,7 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
 
   resolve(): Expression {
-    throw new Error('Cannot resolve object literal')
+    throw new InternalError('Cannot resolve object literal', { sourceLocation: this.sourceLocation })
     // Resolve object to a tuple using its own inferred types
     //    return this.toObjectType(this.ptype.getImmutable())
   }

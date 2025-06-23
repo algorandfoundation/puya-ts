@@ -28,6 +28,7 @@ import {
 } from '../../util'
 import type { PType, PTypeOrClass } from '../ptypes'
 import {
+  ArrayLiteralPType,
   bigIntPType,
   biguintPType,
   boolPType,
@@ -37,7 +38,6 @@ import {
   bytesPType,
   numberPType,
   NumericLiteralPType,
-  ReadonlyArrayPType,
   stringPType,
   TransientType,
   uint64PType,
@@ -110,17 +110,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 1,
       callLocation: sourceLocation,
       funcName: 'Bytes',
-      argSpec: (a) => [
-        a.optional(
-          numberPType,
-          bigIntPType,
-          uint64PType,
-          biguintPType,
-          stringPType,
-          bytesPType,
-          new ReadonlyArrayPType({ elementType: uint64PType }),
-        ),
-      ],
+      argSpec: (a) => [a.optional(numberPType, bigIntPType, uint64PType, biguintPType, stringPType, bytesPType, ArrayLiteralPType)],
     })
     const exprType = BytesGeneric.parameterise([len])
     const empty = new BytesExpressionBuilder(
@@ -151,7 +141,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       if (isStaticallyIterable(initialValue)) {
         const bytes: number[] = []
         for (const item of initialValue[StaticIterator]()) {
-          const byte = item.resolve()
+          const byte = item.resolveToPType(uint64PType).resolve()
           if (byte instanceof IntegerConstant && byte.value < 256n) {
             bytes.push(Number(byte.value))
           } else {

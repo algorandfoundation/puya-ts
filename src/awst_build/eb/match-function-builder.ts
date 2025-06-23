@@ -103,9 +103,8 @@ function buildComparison(
   if (testProperty.resolvableToPType(subjectType)) {
     return subjectProperty.compare(testProperty, BuilderComparisonOp.eq, sourceLocation)
   } else if (testProperty.hasProperty('between')) {
-    const range = requireInstanceBuilder(testProperty.memberAccess('between', sourceLocation)).singleEvaluation()
     const rangePType = new ReadonlyTuplePType({ items: [subjectType, subjectType] })
-    codeInvariant(range.resolvableToPType(rangePType), 'Between range must be of type $')
+    const range = requireInstanceBuilder(testProperty.memberAccess('between', sourceLocation)).resolveToPType(rangePType).singleEvaluation()
     const zeroIndex = instanceEb(nodeFactory.uInt64Constant({ value: 0n, sourceLocation }), uint64PType)
     const gte = subjectProperty
       .compare(requireBuilderOfType(range.indexAccess(zeroIndex, sourceLocation), subjectType), BuilderComparisonOp.gte, sourceLocation)

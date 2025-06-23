@@ -1,7 +1,6 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression, StringConstant } from '../../../awst/nodes'
 import { SourceLocation } from '../../../awst/source-location'
-import { wtypes } from '../../../awst/wtypes'
 import { CodeError, InternalError } from '../../../errors'
 import { logger } from '../../../logger'
 import { codeInvariant, instanceOfAny, invariant } from '../../../util'
@@ -126,8 +125,8 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
         arc4Equivalent,
         nodeFactory.aRC4Encode({
           wtype: arc4Equivalent.wtype,
-          sourceLocation: nameOrObj.sourceLocation,
-          value: nameOrObj.resolve(),
+          sourceLocation: eventBuilder.sourceLocation,
+          value: eventBuilder.resolve(),
         }),
         sourceLocation,
       )
