@@ -155,7 +155,7 @@ function narrowSourceType(targetType: PType | undefined, sourceType: PType, sour
     sourceType instanceof NumericLiteralPType ||
     sourceType.equals(numberPType) ||
     (sourceType instanceof UnionPType &&
-      sourceType.types.every((t) => t.equals(uint64PType) || t instanceof NumericLiteralPType || sourceType.equals(numberPType)))
+      sourceType.types.every((t) => t.equals(uint64PType) || t instanceof NumericLiteralPType || t.equals(numberPType)))
   ) {
     // Narrow `uint64 | number` or `number` to target type
     return targetType
