@@ -32,7 +32,10 @@ import {
   NativeArrayClassBuilder,
   NativeArrayExpressionBuilder,
   ReadonlyArrayExpressionBuilder,
-} from '../eb/arrays'
+} from '../eb/array-like/arrays'
+import { MutableTupleExpressionBuilder } from '../eb/array-like/mutable-tuple-expression-builder'
+import { ReadonlyTupleExpressionBuilder } from '../eb/array-like/readonly-tuple-expression-builder'
+import { ResolvedArrayLiteralExpressionBuilder } from '../eb/array-like/resolved-array-literal-expression-builder'
 import { AssertFunctionBuilder, ErrFunctionBuilder } from '../eb/assert-function-builder'
 import { AssertMatchFunctionBuilder } from '../eb/assert-match-function-builder'
 import { BigUintExpressionBuilder, BigUintFunctionBuilder } from '../eb/biguint-expression-builder'
@@ -46,17 +49,16 @@ import { EnsureBudgetFunctionBuilder } from '../eb/ensure-budget'
 import { FreeSubroutineExpressionBuilder } from '../eb/free-subroutine-expression-builder'
 import { IntrinsicEnumBuilder } from '../eb/intrinsic-enum-builder'
 import { IterableIteratorExpressionBuilder } from '../eb/iterable-iterator-expression-builder'
-import { ObjectExpressionBuilder } from '../eb/literal/object-expression-builder'
 import { LogFunctionBuilder } from '../eb/log-function-builder'
 import { LogicSigClassBuilder, LogicSigOptionsDecoratorBuilder } from '../eb/logic-sig-builder'
 import { MatchFunctionBuilder } from '../eb/match-function-builder'
-import { MutableObjectExpressionBuilder } from '../eb/mutable-object'
-import { MutableTupleExpressionBuilder } from '../eb/mutable-tuple-expression-builder'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { NeverExpressionBuilder } from '../eb/never-expression-builder'
 import { ObjectWithOptionalFieldsExpressionBuilder } from '../eb/object-with-optional-fields'
+import { MutableObjectExpressionBuilder } from '../eb/objects/mutable-object'
+import { ObjectExpressionBuilder } from '../eb/objects/object-expression-builder'
+import { ResolvedObjectLiteralExpressionBuilder } from '../eb/objects/resolved-object-literal-expression-builder'
 import { FreeIntrinsicOpBuilder, IntrinsicOpGroupBuilder, IntrinsicOpGroupOrFunctionTypeBuilder } from '../eb/op-module-builder'
-import { ReadonlyTupleExpressionBuilder } from '../eb/readonly-tuple-expression-builder'
 import { ReferenceArrayClassBuilder, ReferenceArrayExpressionBuilder } from '../eb/reference-arrays'
 import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/reference/account'
 import { ApplicationExpressionBuilder, ApplicationFunctionBuilder } from '../eb/reference/application'
@@ -144,6 +146,7 @@ import {
   arc4AbiMethodDecorator,
   arc4BareMethodDecorator,
   ArrayGeneric,
+  ArrayLiteralPType,
   ArrayPType,
   assertFunction,
   assertMatchFunction,
@@ -216,6 +219,7 @@ import {
   MutableTuplePType,
   NamespacePType,
   neverPType,
+  ObjectLiteralPType,
   onCompleteActionType,
   opUpFeeSourceType,
   paymentGtxnType,
@@ -278,8 +282,10 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: ReadonlyTuplePType, instanceEb: ReadonlyTupleExpressionBuilder })
   typeRegistry.register({ ptype: MutableTuplePType, instanceEb: MutableTupleExpressionBuilder })
   typeRegistry.registerGenericTypeOnly({ generic: ReadonlyGeneric })
+  typeRegistry.register({ ptype: ArrayLiteralPType, instanceEb: ResolvedArrayLiteralExpressionBuilder })
   typeRegistry.register({ ptype: ImmutableObjectPType, instanceEb: ObjectExpressionBuilder })
   typeRegistry.register({ ptype: MutableObjectPType, instanceEb: MutableObjectExpressionBuilder })
+  typeRegistry.register({ ptype: ObjectLiteralPType, instanceEb: ResolvedObjectLiteralExpressionBuilder })
 
   typeRegistry.registerGeneric({
     generic: FixedArrayGeneric,

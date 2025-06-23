@@ -4,11 +4,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/assignments.algo.ts::getVal() -> <uint64, uint64>:
-    block@0: // L65
+    block@0: // L66
         return 1u 2u
 
 subroutine tests/approvals/assignments.algo.ts::logAndReturn(u: uint64) -> uint64:
-    block@0: // L73
+    block@0: // L74
         let tmp%0#0: bytes[8] = (itob u#0)
         (log tmp%0#0)
         return u#0
@@ -202,7 +202,6 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNa
         let (awst_tmp%0#0: uint64, awst_tmp%1#0: uint64) = tests/approvals/assignments.algo.ts::getVal()
         let tmp%2#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(awst_tmp%0#0, awst_tmp%1#0)
         let mObj3#0: Encoded(uint64,uint64) = tmp%2#0
-        let (awst_tmp%2#0: uint64, awst_tmp%3#0: uint64) = tests/approvals/assignments.algo.ts::getVal()
         let tmp%3#0: Encoded(uint64,uint64) = encode<(uint64,uint64)>(a#0, b#0)
         let mObj4#0: Encoded(uint64,uint64) = tmp%3#0
         return 
@@ -214,6 +213,11 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testMixed(m: Enc
         let tuple_item%1#0: Encoded(uint64) = agg_read_index(tuple_item%0#0, 0)
         let values%0#0: uint64 = decode<uint64>(tuple_item%1#0)
         let a1#0: uint64 = values%0#0
+        let tmp%0#0: Encoded(uint64) = encode<(uint64)>(213u)
+        let tmp%1#0: Encoded((uint64)) = encode<((uint64))>(tmp%0#0)
+        let encoded_array%0#0: Encoded(len+((uint64))[]) = encode<(len+((uint64))[])>(tmp%1#0)
+        let m#1: Encoded(len+((uint64))[]) = encoded_array%0#0
+        let encoded_array%1#0: Encoded(len+((uint64))[]) = encode<(len+((uint64))[])>(213u)
         return 
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.__algots__.defaultCreate() -> void:

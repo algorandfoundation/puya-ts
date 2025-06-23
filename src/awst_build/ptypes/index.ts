@@ -728,7 +728,7 @@ export class ArrayLiteralPType extends PType {
   }
 
   get wtype() {
-    return this.getArrayType().wtype
+    return this.getReadonlyTupleType().wtype
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
@@ -978,13 +978,12 @@ abstract class ObjectPType extends PType {
 
 export class ObjectLiteralPType extends ObjectPType {
   readonly [PType.IdSymbol] = 'ObjectLiteralPType'
-  wtype = undefined
 
   constructor(props: { properties: Record<string, PType> }) {
     super({
       ...props,
       name: `{...}`,
-      immutable: true,
+      immutable: false,
     })
   }
 
@@ -1004,6 +1003,23 @@ export class ObjectLiteralPType extends ObjectPType {
       alias: this.alias,
       properties: this.properties,
       description: this.description,
+    })
+  }
+
+  get wtype(): wtypes.WTuple {
+    const tupleTypes: wtypes.WType[] = []
+    const tupleNames: string[] = []
+    for (const [propName, propType] of this.orderedProperties()) {
+      if (propType instanceof TransientType) {
+        throw new CodeError(`Property '${propName}' of ${this.name} has an unsupported type: ${propType.typeMessage}`)
+      }
+      tupleTypes.push(propType.wtypeOrThrow)
+      tupleNames.push(propName)
+    }
+    return new wtypes.WTuple({
+      name: this.alias?.fullName ?? this.toString(),
+      names: tupleNames,
+      types: tupleTypes,
     })
   }
 }
@@ -1030,7 +1046,7 @@ export class ImmutableObjectPType extends ObjectPType {
       tupleNames.push(propName)
     }
     return new wtypes.WTuple({
-      name: this.alias?.fullName ?? this.fullName,
+      name: this.alias?.fullName ?? this.toString(),
       names: tupleNames,
       types: tupleTypes,
     })
@@ -1054,9 +1070,8 @@ export class MutableObjectPType extends ObjectPType {
 
   get wtype(): wtypes.ARC4Struct {
     return new wtypes.ARC4Struct({
-      name: this.alias?.name ?? this.name,
+      name: this.alias?.name ?? this.toString(),
       fields: Object.fromEntries(Object.entries(this.properties).map(([f, t]) => [f, t.wtypeOrThrow])),
-      //sourceLocation: this.sourceLocation,
       desc: this.description ?? null,
       frozen: false,
     })
@@ -1077,6 +1092,14 @@ export class MutableObjectPType extends ObjectPType {
 
 export function isObjectType(ptype: PTypeOrClass): ptype is MutableObjectPType | ImmutableObjectPType | ObjectLiteralPType {
   return instanceOfAny(ptype, MutableObjectPType, ImmutableObjectPType, ObjectLiteralPType)
+}
+
+export function isArrayType(ptype: PTypeOrClass): ptype is ArrayPType | ReadonlyArrayPType {
+  return instanceOfAny(ptype, ArrayPType, ReadonlyArrayPType)
+}
+
+export function isTupleLike(ptype: PTypeOrClass): ptype is MutableTuplePType | ReadonlyTuplePType | ArrayLiteralPType {
+  return instanceOfAny(ptype, ReadonlyTuplePType, MutableTuplePType, ArrayLiteralPType)
 }
 
 export const voidPType = new ABICompatibleInstanceType({

@@ -13,29 +13,28 @@ import { requireExpressionOfType } from '../util'
 
 export class ObjectExpressionBuilder extends InstanceExpressionBuilder<ImmutableObjectPType> {
   constructor(expr: Expression, ptype: PType) {
-    invariant(ptype instanceof ImmutableObjectPType, `ObjectExpressionBuilder must be instantiated with ptype of ObjectPType`)
+    invariant(ptype instanceof ImmutableObjectPType, `ObjectExpressionBuilder must be instantiated with ptype of ImmutableObjectPType`)
     super(expr, ptype)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    const propertyIndex = this.ptype.orderedProperties().findIndex(([prop]) => prop === name)
-    if (propertyIndex === -1) {
-      return super.memberAccess(name, sourceLocation)
+    if (name in this.ptype.properties) {
+      const propertyPtype = getPropertyType(this.ptype, name, sourceLocation)
+      return instanceEb(
+        nodeFactory.fieldExpression({
+          name,
+          sourceLocation,
+          base: this._expr,
+          wtype: propertyPtype.wtypeOrThrow,
+        }),
+        propertyPtype,
+      )
     }
-    const propertyPtype = getPropertyType(this.ptype, name, sourceLocation)
-    return instanceEb(
-      nodeFactory.fieldExpression({
-        name,
-        sourceLocation,
-        base: this._expr,
-        wtype: propertyPtype.wtypeOrThrow,
-      }),
-      propertyPtype,
-    )
+    return super.memberAccess(name, sourceLocation)
   }
 
   hasProperty(name: string): boolean {
-    return this.ptype.orderedProperties().some(([prop]) => prop === name)
+    return name in this.ptype.properties
   }
 
   resolvableToPType(ptype: PTypeOrClass): ptype is ImmutableObjectPType {

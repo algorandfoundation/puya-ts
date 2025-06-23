@@ -1,14 +1,13 @@
-import { nodeFactory } from '../../awst/node-factory'
-import type { Expression } from '../../awst/nodes'
-import type { SourceLocation } from '../../awst/source-location'
-import { instanceOfAny, invariant } from '../../util'
-import { ImmutableObjectPType, MutableObjectPType, type PType, type PTypeOrClass } from '../ptypes'
+import { nodeFactory } from '../../../awst/node-factory'
+import type { Expression } from '../../../awst/nodes'
+import type { SourceLocation } from '../../../awst/source-location'
+import { instanceOfAny, invariant } from '../../../util'
+import { ImmutableObjectPType, MutableObjectPType, type PType, type PTypeOrClass } from '../../ptypes'
 
-import { instanceEb } from '../type-registry'
-import type { InstanceBuilder } from './'
-import { InstanceExpressionBuilder } from './'
-import type { NodeBuilder } from './index'
-import { requestInstanceBuilder, requireExpressionOfType } from './util'
+import { instanceEb } from '../../type-registry'
+import type { InstanceBuilder, NodeBuilder } from '../index'
+import { InstanceExpressionBuilder } from '../index'
+import { requestInstanceBuilder, requireExpressionOfType } from '../util'
 
 export class MutableObjectExpressionBuilder extends InstanceExpressionBuilder<MutableObjectPType> {
   constructor(expr: Expression, ptype: PType) {

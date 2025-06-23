@@ -59,6 +59,7 @@ export class AssignmentsAlgo extends Contract {
         a: [a1],
       },
     ] = m
+    m = [{ a: [213] }]
   }
 }
 

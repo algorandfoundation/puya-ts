@@ -243,13 +243,13 @@ main___algots__.defaultCreate@13:
 getVal:
 
 getVal_block@0:
-    // tests/approvals/assignments.algo.ts:68
+    // tests/approvals/assignments.algo.ts:69
     // a: 1,
     intc_1 // 1
-    // tests/approvals/assignments.algo.ts:69
+    // tests/approvals/assignments.algo.ts:70
     // b: 2,
     pushint 2 // 2
-    // tests/approvals/assignments.algo.ts:67-70
+    // tests/approvals/assignments.algo.ts:68-71
     // return {
     //   a: 1,
     //   b: 2,
@@ -259,17 +259,17 @@ getVal_block@0:
 
 // tests/approvals/assignments.algo.ts::logAndReturn(u: uint64) -> uint64:
 logAndReturn:
-    // tests/approvals/assignments.algo.ts:73
+    // tests/approvals/assignments.algo.ts:74
     // function logAndReturn(u: uint64): uint64 {
     proto 1 1
 
 logAndReturn_block@0:
-    // tests/approvals/assignments.algo.ts:74
+    // tests/approvals/assignments.algo.ts:75
     // log(u)
     frame_dig -1
     itob
     log
-    // tests/approvals/assignments.algo.ts:75
+    // tests/approvals/assignments.algo.ts:76
     // return u
     frame_dig -1
     retsub
@@ -370,10 +370,6 @@ testObjLiteralNarrowing:
 testObjLiteralNarrowing_block@0:
     // tests/approvals/assignments.algo.ts:51
     // const mObj3: MutableObj = { ...getVal() }
-    callsub getVal
-    popn 2
-    // tests/approvals/assignments.algo.ts:53
-    // const mObj4: MutableObj = { ...getVal(), a, b }
     callsub getVal
     popn 2
     retsub

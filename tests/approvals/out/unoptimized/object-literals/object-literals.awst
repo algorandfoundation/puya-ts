@@ -1,0 +1,25 @@
+contract ObjectLiteralsAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(): void
+  {
+    i: uint64 = 0
+    o1: Readonly<object>{ k: uint64, j: uint64, i: uint64 } = #{ k: ($0 = ($1 = #{ i: i, j: (i = i + 2), k: i })).k, j: $0.j, i: $0.i }
+    o2: object = new object(a=($2 = ($3 = #{ a: o1, b: #{ x: 1 } })).a, b=new object(x=($4 = $2.b).x))
+    o3: object = new object(b=new object(x=($5 = ($6 = ($7 = #{ b: ($8 = #{ b: #{ x: ($9 = #{ x: 1 }).x } }).b })).b).x))
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

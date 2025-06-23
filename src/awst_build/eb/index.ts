@@ -3,6 +3,7 @@ import { nodeFactory } from '../../awst/node-factory'
 import { TupleItemExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, NotSupported } from '../../errors'
+import { instanceOfAny } from '../../util'
 import type { DecoratorData } from '../models/decorator-data'
 import type { GenericPType, LibClassType, PType, PTypeOrClass } from '../ptypes'
 import { uint64PType } from '../ptypes'
@@ -137,7 +138,7 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
 
   singleEvaluation(): InstanceBuilder {
     const expr = this.resolve()
-    if (expr instanceof awst.VarExpression || isConstant(expr)) {
+    if (instanceOfAny(expr, awst.VarExpression, awst.SingleEvaluation) || isConstant(expr)) {
       return this
     }
     return instanceEb(

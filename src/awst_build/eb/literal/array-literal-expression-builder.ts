@@ -87,7 +87,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
-    if (instanceOfAny(ptype, ReadonlyTuplePType, MutableTuplePType)) {
+    if (instanceOfAny(ptype, ReadonlyTuplePType, MutableTuplePType, ArrayLiteralPType)) {
       codeInvariant(
         ptype.items.length <= this.items.length,
         `Value of length ${this.items.length} cannot be resolved to type of length ${ptype.items.length}`,
@@ -99,17 +99,11 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
         ),
         sourceLocation: this.sourceLocation,
       })
-      if (ptype instanceof ReadonlyTuplePType) {
-        return instanceEb(tupleExpr, ptype)
-      } else {
+      if (ptype instanceof MutableTuplePType) {
         return instanceEb(nodeFactory.aRC4Encode({ value: tupleExpr, wtype: ptype.wtype, sourceLocation: this.sourceLocation }), ptype)
+      } else {
+        return instanceEb(tupleExpr, ptype)
       }
-    }
-    if (ptype instanceof ArrayLiteralPType && ptype.items.length === this.items.length) {
-      return new ArrayLiteralExpressionBuilder(
-        this.sourceLocation,
-        this.items.map((item, index) => item.resolveToPType(ptype.items[index])),
-      )
     }
     if (ptype instanceof ArrayPType || ptype instanceof ReadonlyArrayPType) {
       return instanceEb(
