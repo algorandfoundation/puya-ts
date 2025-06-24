@@ -19,6 +19,8 @@ import {
   NumericLiteralPType,
   ObjectLiteralPType,
   ReadonlyTuplePType,
+  Uint64EnumMemberLiteralType,
+  Uint64EnumMemberType,
   uint64PType,
   UnionPType,
 } from '../ptypes'
@@ -167,6 +169,13 @@ function narrowSourceType(targetType: PType | undefined, sourceType: PType, sour
       sourceType.types.every((t) => t.equals(biguintPType) || t instanceof BigIntLiteralPType || t.equals(bigIntPType)))
   ) {
     // Narrow `biguint | bigint` or `bigint` to target type
+    return targetType
+  }
+  if (
+    targetType instanceof Uint64EnumMemberLiteralType &&
+    sourceType instanceof Uint64EnumMemberType &&
+    sourceType.enumType.equals(targetType.enumType)
+  ) {
     return targetType
   }
 
