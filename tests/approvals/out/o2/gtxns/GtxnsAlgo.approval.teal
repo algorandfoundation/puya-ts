@@ -97,8 +97,23 @@ main_reflectAllPay_route@7:
     // closeRemainderTo: pay.closeRemainderTo.bytes,
     uncover 13
     gtxns CloseRemainderTo
-    // tests/approvals/gtxns.algo.ts:60
-    // reflectAllPay(pay: gtxn.PaymentTxn) {
+    // tests/approvals/gtxns.algo.ts:61-76
+    // return {
+    //   sender: pay.sender.bytes,
+    //   fee: pay.fee,
+    //   firstValid: pay.firstValid,
+    //   firstValidTime: pay.firstValidTime,
+    //   lastValid: pay.lastValid,
+    //   note: pay.note,
+    //   lease: pay.lease,
+    //   typeBytes: pay.typeBytes,
+    //   groupIndex: pay.groupIndex,
+    //   txnId: pay.txnId,
+    //   rekeyTo: pay.rekeyTo.bytes,
+    //   receiver: pay.receiver.bytes,
+    //   amount: pay.amount,
+    //   closeRemainderTo: pay.closeRemainderTo.bytes,
+    // }
     uncover 12
     itob
     uncover 13
@@ -159,6 +174,8 @@ main_reflectAllPay_route@7:
     concat
     swap
     concat
+    // tests/approvals/gtxns.algo.ts:60
+    // reflectAllPay(pay: gtxn.PaymentTxn) {
     pushbytes 0x151f7c75
     swap
     concat

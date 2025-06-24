@@ -237,7 +237,7 @@
                 "name": "needClone"
               },
               "value": {
-                "_type": "Copy",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/arc4-clone.algo.ts",
                   "line": 18,
@@ -257,14 +257,14 @@
                   },
                   "source_location": null
                 },
-                "value": {
-                  "_type": "VarExpression",
+                "source": {
+                  "_type": "Copy",
                   "source_location": {
                     "file": "tests/approvals/arc4-clone.algo.ts",
                     "line": 18,
                     "end_line": 18,
-                    "column": 28,
-                    "end_column": 35
+                    "column": 22,
+                    "end_column": 36
                   },
                   "wtype": {
                     "_type": "ARC4DynamicArray",
@@ -278,8 +278,31 @@
                     },
                     "source_location": null
                   },
-                  "name": "mutable"
-                }
+                  "value": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-clone.algo.ts",
+                      "line": 18,
+                      "end_line": 18,
+                      "column": 28,
+                      "end_column": 35
+                    },
+                    "wtype": {
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<uint64>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "element_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "source_location": null
+                    },
+                    "name": "mutable"
+                  }
+                },
+                "_id": "0"
               }
             },
             {
@@ -336,7 +359,7 @@
                   "source_location": null
                 },
                 "expr": {
-                  "_type": "Copy",
+                  "_type": "SingleEvaluation",
                   "source_location": {
                     "file": "tests/approvals/arc4-clone.algo.ts",
                     "line": 20,
@@ -356,14 +379,14 @@
                     },
                     "source_location": null
                   },
-                  "value": {
-                    "_type": "VarExpression",
+                  "source": {
+                    "_type": "Copy",
                     "source_location": {
                       "file": "tests/approvals/arc4-clone.algo.ts",
                       "line": 20,
                       "end_line": 20,
-                      "column": 48,
-                      "end_column": 55
+                      "column": 42,
+                      "end_column": 56
                     },
                     "wtype": {
                       "_type": "ARC4DynamicArray",
@@ -377,8 +400,31 @@
                       },
                       "source_location": null
                     },
-                    "name": "mutable"
-                  }
+                    "value": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/arc4-clone.algo.ts",
+                        "line": 20,
+                        "end_line": 20,
+                        "column": 48,
+                        "end_column": 55
+                      },
+                      "wtype": {
+                        "_type": "ARC4DynamicArray",
+                        "name": "arc4.dynamic_array<uint64>",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "element_type": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "source_location": null
+                      },
+                      "name": "mutable"
+                    }
+                  },
+                  "_id": "1"
                 }
               }
             },
@@ -461,13 +507,13 @@
                 },
                 "items": [
                   {
-                    "_type": "Copy",
+                    "_type": "TupleItemExpression",
                     "source_location": {
                       "file": "tests/approvals/arc4-clone.algo.ts",
                       "line": 22,
                       "end_line": 22,
-                      "column": 57,
-                      "end_column": 71
+                      "column": 56,
+                      "end_column": 75
                     },
                     "wtype": {
                       "_type": "ARC4DynamicArray",
@@ -481,46 +527,289 @@
                       },
                       "source_location": null
                     },
-                    "value": {
-                      "_type": "VarExpression",
+                    "base": {
+                      "_type": "SingleEvaluation",
                       "source_location": {
                         "file": "tests/approvals/arc4-clone.algo.ts",
                         "line": 22,
                         "end_line": 22,
-                        "column": 63,
-                        "end_column": 70
+                        "column": 56,
+                        "end_column": 75
                       },
                       "wtype": {
-                        "_type": "ARC4DynamicArray",
-                        "name": "arc4.dynamic_array<uint64>",
-                        "immutable": false,
-                        "arc4_alias": null,
-                        "element_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "source_location": null
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "ARC4DynamicArray",
+                            "name": "arc4.dynamic_array<uint64>",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "element_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "source_location": null
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          }
+                        ]
                       },
-                      "name": "mutable"
-                    }
+                      "source": {
+                        "_type": "TupleExpression",
+                        "source_location": {
+                          "file": "tests/approvals/arc4-clone.algo.ts",
+                          "line": 22,
+                          "end_line": 22,
+                          "column": 56,
+                          "end_column": 75
+                        },
+                        "wtype": {
+                          "_type": "WTuple",
+                          "name": "tuple",
+                          "immutable": true,
+                          "types": [
+                            {
+                              "_type": "ARC4DynamicArray",
+                              "name": "arc4.dynamic_array<uint64>",
+                              "immutable": false,
+                              "arc4_alias": null,
+                              "element_type": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "source_location": null
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            }
+                          ]
+                        },
+                        "items": [
+                          {
+                            "_type": "Copy",
+                            "source_location": {
+                              "file": "tests/approvals/arc4-clone.algo.ts",
+                              "line": 22,
+                              "end_line": 22,
+                              "column": 57,
+                              "end_column": 71
+                            },
+                            "wtype": {
+                              "_type": "ARC4DynamicArray",
+                              "name": "arc4.dynamic_array<uint64>",
+                              "immutable": false,
+                              "arc4_alias": null,
+                              "element_type": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "source_location": null
+                            },
+                            "value": {
+                              "_type": "VarExpression",
+                              "source_location": {
+                                "file": "tests/approvals/arc4-clone.algo.ts",
+                                "line": 22,
+                                "end_line": 22,
+                                "column": 63,
+                                "end_column": 70
+                              },
+                              "wtype": {
+                                "_type": "ARC4DynamicArray",
+                                "name": "arc4.dynamic_array<uint64>",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "element_type": {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                "source_location": null
+                              },
+                              "name": "mutable"
+                            }
+                          },
+                          {
+                            "_type": "IntegerConstant",
+                            "source_location": {
+                              "file": "tests/approvals/arc4-clone.algo.ts",
+                              "line": 22,
+                              "end_line": 22,
+                              "column": 73,
+                              "end_column": 74
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "value": 1,
+                            "teal_alias": null
+                          }
+                        ]
+                      },
+                      "_id": "2"
+                    },
+                    "index": 0
                   },
                   {
-                    "_type": "IntegerConstant",
+                    "_type": "TupleItemExpression",
                     "source_location": {
                       "file": "tests/approvals/arc4-clone.algo.ts",
                       "line": 22,
                       "end_line": 22,
-                      "column": 73,
-                      "end_column": 74
+                      "column": 56,
+                      "end_column": 75
                     },
                     "wtype": {
                       "_type": "WType",
                       "name": "uint64",
                       "immutable": true
                     },
-                    "value": 1,
-                    "teal_alias": null
+                    "base": {
+                      "_type": "SingleEvaluation",
+                      "source_location": {
+                        "file": "tests/approvals/arc4-clone.algo.ts",
+                        "line": 22,
+                        "end_line": 22,
+                        "column": 56,
+                        "end_column": 75
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "ARC4DynamicArray",
+                            "name": "arc4.dynamic_array<uint64>",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "element_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "source_location": null
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          }
+                        ]
+                      },
+                      "source": {
+                        "_type": "TupleExpression",
+                        "source_location": {
+                          "file": "tests/approvals/arc4-clone.algo.ts",
+                          "line": 22,
+                          "end_line": 22,
+                          "column": 56,
+                          "end_column": 75
+                        },
+                        "wtype": {
+                          "_type": "WTuple",
+                          "name": "tuple",
+                          "immutable": true,
+                          "types": [
+                            {
+                              "_type": "ARC4DynamicArray",
+                              "name": "arc4.dynamic_array<uint64>",
+                              "immutable": false,
+                              "arc4_alias": null,
+                              "element_type": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "source_location": null
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            }
+                          ]
+                        },
+                        "items": [
+                          {
+                            "_type": "Copy",
+                            "source_location": {
+                              "file": "tests/approvals/arc4-clone.algo.ts",
+                              "line": 22,
+                              "end_line": 22,
+                              "column": 57,
+                              "end_column": 71
+                            },
+                            "wtype": {
+                              "_type": "ARC4DynamicArray",
+                              "name": "arc4.dynamic_array<uint64>",
+                              "immutable": false,
+                              "arc4_alias": null,
+                              "element_type": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "source_location": null
+                            },
+                            "value": {
+                              "_type": "VarExpression",
+                              "source_location": {
+                                "file": "tests/approvals/arc4-clone.algo.ts",
+                                "line": 22,
+                                "end_line": 22,
+                                "column": 63,
+                                "end_column": 70
+                              },
+                              "wtype": {
+                                "_type": "ARC4DynamicArray",
+                                "name": "arc4.dynamic_array<uint64>",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "element_type": {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                "source_location": null
+                              },
+                              "name": "mutable"
+                            }
+                          },
+                          {
+                            "_type": "IntegerConstant",
+                            "source_location": {
+                              "file": "tests/approvals/arc4-clone.algo.ts",
+                              "line": 22,
+                              "end_line": 22,
+                              "column": 73,
+                              "end_column": 74
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "value": 1,
+                            "teal_alias": null
+                          }
+                        ]
+                      },
+                      "_id": "2"
+                    },
+                    "index": 1
                   }
                 ]
               }
@@ -559,11 +848,6 @@
                         "immutable": true
                       },
                       "source_location": null
-                    },
-                    {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
                     }
                   ]
                 },
@@ -590,27 +874,11 @@
                       "source_location": null
                     },
                     "name": "x"
-                  },
-                  {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-clone.algo.ts",
-                      "line": 24,
-                      "end_line": 24,
-                      "column": 10,
-                      "end_column": 37
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "name": "_"
                   }
                 ]
               },
               "value": {
-                "_type": "Copy",
+                "_type": "TupleExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-clone.algo.ts",
                   "line": 24,
@@ -634,49 +902,138 @@
                         "immutable": true
                       },
                       "source_location": null
-                    },
-                    {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
                     }
                   ]
                 },
-                "value": {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-clone.algo.ts",
-                    "line": 24,
-                    "end_line": 24,
-                    "column": 22,
-                    "end_column": 36
-                  },
-                  "wtype": {
-                    "_type": "WTuple",
-                    "name": "tuple",
-                    "immutable": true,
-                    "types": [
-                      {
-                        "_type": "ARC4DynamicArray",
-                        "name": "arc4.dynamic_array<uint64>",
-                        "immutable": false,
-                        "arc4_alias": null,
-                        "element_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "source_location": null
-                      },
-                      {
+                "items": [
+                  {
+                    "_type": "TupleItemExpression",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-clone.algo.ts",
+                      "line": 24,
+                      "end_line": 24,
+                      "column": 10,
+                      "end_column": 37
+                    },
+                    "wtype": {
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<uint64>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "element_type": {
                         "_type": "WType",
                         "name": "uint64",
                         "immutable": true
-                      }
-                    ]
-                  },
-                  "name": "tupleOfMutable"
-                }
+                      },
+                      "source_location": null
+                    },
+                    "base": {
+                      "_type": "SingleEvaluation",
+                      "source_location": {
+                        "file": "tests/approvals/arc4-clone.algo.ts",
+                        "line": 24,
+                        "end_line": 24,
+                        "column": 16,
+                        "end_column": 37
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "ARC4DynamicArray",
+                            "name": "arc4.dynamic_array<uint64>",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "element_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "source_location": null
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          }
+                        ]
+                      },
+                      "source": {
+                        "_type": "Copy",
+                        "source_location": {
+                          "file": "tests/approvals/arc4-clone.algo.ts",
+                          "line": 24,
+                          "end_line": 24,
+                          "column": 16,
+                          "end_column": 37
+                        },
+                        "wtype": {
+                          "_type": "WTuple",
+                          "name": "tuple",
+                          "immutable": true,
+                          "types": [
+                            {
+                              "_type": "ARC4DynamicArray",
+                              "name": "arc4.dynamic_array<uint64>",
+                              "immutable": false,
+                              "arc4_alias": null,
+                              "element_type": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "source_location": null
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            }
+                          ]
+                        },
+                        "value": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/arc4-clone.algo.ts",
+                            "line": 24,
+                            "end_line": 24,
+                            "column": 22,
+                            "end_column": 36
+                          },
+                          "wtype": {
+                            "_type": "WTuple",
+                            "name": "tuple",
+                            "immutable": true,
+                            "types": [
+                              {
+                                "_type": "ARC4DynamicArray",
+                                "name": "arc4.dynamic_array<uint64>",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "element_type": {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                "source_location": null
+                              },
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            ]
+                          },
+                          "name": "tupleOfMutable"
+                        }
+                      },
+                      "_id": "3"
+                    },
+                    "index": 0
+                  }
+                ]
               }
             },
             {
@@ -785,8 +1142,8 @@
                         "file": "tests/approvals/arc4-clone.algo.ts",
                         "line": 26,
                         "end_line": 26,
-                        "column": 47,
-                        "end_column": 56
+                        "column": 46,
+                        "end_column": 57
                       },
                       "wtype": {
                         "_type": "ARC4DynamicArray",
@@ -802,55 +1159,748 @@
                       },
                       "values": [
                         {
-                          "_type": "IntegerConstant",
+                          "_type": "TupleItemExpression",
                           "source_location": {
                             "file": "tests/approvals/arc4-clone.algo.ts",
                             "line": 26,
                             "end_line": 26,
-                            "column": 48,
-                            "end_column": 49
+                            "column": 46,
+                            "end_column": 57
                           },
                           "wtype": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           },
-                          "value": 1,
-                          "teal_alias": null
+                          "base": {
+                            "_type": "SingleEvaluation",
+                            "source_location": {
+                              "file": "tests/approvals/arc4-clone.algo.ts",
+                              "line": 26,
+                              "end_line": 26,
+                              "column": 46,
+                              "end_column": 57
+                            },
+                            "wtype": {
+                              "_type": "WTuple",
+                              "name": "tuple",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                }
+                              ]
+                            },
+                            "source": {
+                              "_type": "TupleItemExpression",
+                              "source_location": {
+                                "file": "tests/approvals/arc4-clone.algo.ts",
+                                "line": 26,
+                                "end_line": 26,
+                                "column": 46,
+                                "end_column": 57
+                              },
+                              "wtype": {
+                                "_type": "WTuple",
+                                "name": "tuple",
+                                "immutable": true,
+                                "types": [
+                                  {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  }
+                                ]
+                              },
+                              "base": {
+                                "_type": "SingleEvaluation",
+                                "source_location": {
+                                  "file": "tests/approvals/arc4-clone.algo.ts",
+                                  "line": 26,
+                                  "end_line": 26,
+                                  "column": 46,
+                                  "end_column": 57
+                                },
+                                "wtype": {
+                                  "_type": "WTuple",
+                                  "name": "tuple",
+                                  "immutable": true,
+                                  "types": [
+                                    {
+                                      "_type": "WTuple",
+                                      "name": "tuple",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "source": {
+                                  "_type": "TupleExpression",
+                                  "source_location": {
+                                    "file": "tests/approvals/arc4-clone.algo.ts",
+                                    "line": 26,
+                                    "end_line": 26,
+                                    "column": 46,
+                                    "end_column": 57
+                                  },
+                                  "wtype": {
+                                    "_type": "WTuple",
+                                    "name": "tuple",
+                                    "immutable": true,
+                                    "types": [
+                                      {
+                                        "_type": "WTuple",
+                                        "name": "tuple",
+                                        "immutable": true,
+                                        "types": [
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  "items": [
+                                    {
+                                      "_type": "TupleExpression",
+                                      "source_location": {
+                                        "file": "tests/approvals/arc4-clone.algo.ts",
+                                        "line": 26,
+                                        "end_line": 26,
+                                        "column": 47,
+                                        "end_column": 56
+                                      },
+                                      "wtype": {
+                                        "_type": "WTuple",
+                                        "name": "tuple",
+                                        "immutable": true,
+                                        "types": [
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          }
+                                        ]
+                                      },
+                                      "items": [
+                                        {
+                                          "_type": "IntegerConstant",
+                                          "source_location": {
+                                            "file": "tests/approvals/arc4-clone.algo.ts",
+                                            "line": 26,
+                                            "end_line": 26,
+                                            "column": 48,
+                                            "end_column": 49
+                                          },
+                                          "wtype": {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          "value": 1,
+                                          "teal_alias": null
+                                        },
+                                        {
+                                          "_type": "IntegerConstant",
+                                          "source_location": {
+                                            "file": "tests/approvals/arc4-clone.algo.ts",
+                                            "line": 26,
+                                            "end_line": 26,
+                                            "column": 51,
+                                            "end_column": 52
+                                          },
+                                          "wtype": {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          "value": 2,
+                                          "teal_alias": null
+                                        },
+                                        {
+                                          "_type": "IntegerConstant",
+                                          "source_location": {
+                                            "file": "tests/approvals/arc4-clone.algo.ts",
+                                            "line": 26,
+                                            "end_line": 26,
+                                            "column": 54,
+                                            "end_column": 55
+                                          },
+                                          "wtype": {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          "value": 3,
+                                          "teal_alias": null
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "_id": "5"
+                              },
+                              "index": 0
+                            },
+                            "_id": "4"
+                          },
+                          "index": 0
                         },
                         {
-                          "_type": "IntegerConstant",
+                          "_type": "TupleItemExpression",
                           "source_location": {
                             "file": "tests/approvals/arc4-clone.algo.ts",
                             "line": 26,
                             "end_line": 26,
-                            "column": 51,
-                            "end_column": 52
+                            "column": 46,
+                            "end_column": 57
                           },
                           "wtype": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           },
-                          "value": 2,
-                          "teal_alias": null
+                          "base": {
+                            "_type": "SingleEvaluation",
+                            "source_location": {
+                              "file": "tests/approvals/arc4-clone.algo.ts",
+                              "line": 26,
+                              "end_line": 26,
+                              "column": 46,
+                              "end_column": 57
+                            },
+                            "wtype": {
+                              "_type": "WTuple",
+                              "name": "tuple",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                }
+                              ]
+                            },
+                            "source": {
+                              "_type": "TupleItemExpression",
+                              "source_location": {
+                                "file": "tests/approvals/arc4-clone.algo.ts",
+                                "line": 26,
+                                "end_line": 26,
+                                "column": 46,
+                                "end_column": 57
+                              },
+                              "wtype": {
+                                "_type": "WTuple",
+                                "name": "tuple",
+                                "immutable": true,
+                                "types": [
+                                  {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  }
+                                ]
+                              },
+                              "base": {
+                                "_type": "SingleEvaluation",
+                                "source_location": {
+                                  "file": "tests/approvals/arc4-clone.algo.ts",
+                                  "line": 26,
+                                  "end_line": 26,
+                                  "column": 46,
+                                  "end_column": 57
+                                },
+                                "wtype": {
+                                  "_type": "WTuple",
+                                  "name": "tuple",
+                                  "immutable": true,
+                                  "types": [
+                                    {
+                                      "_type": "WTuple",
+                                      "name": "tuple",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "source": {
+                                  "_type": "TupleExpression",
+                                  "source_location": {
+                                    "file": "tests/approvals/arc4-clone.algo.ts",
+                                    "line": 26,
+                                    "end_line": 26,
+                                    "column": 46,
+                                    "end_column": 57
+                                  },
+                                  "wtype": {
+                                    "_type": "WTuple",
+                                    "name": "tuple",
+                                    "immutable": true,
+                                    "types": [
+                                      {
+                                        "_type": "WTuple",
+                                        "name": "tuple",
+                                        "immutable": true,
+                                        "types": [
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  "items": [
+                                    {
+                                      "_type": "TupleExpression",
+                                      "source_location": {
+                                        "file": "tests/approvals/arc4-clone.algo.ts",
+                                        "line": 26,
+                                        "end_line": 26,
+                                        "column": 47,
+                                        "end_column": 56
+                                      },
+                                      "wtype": {
+                                        "_type": "WTuple",
+                                        "name": "tuple",
+                                        "immutable": true,
+                                        "types": [
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          }
+                                        ]
+                                      },
+                                      "items": [
+                                        {
+                                          "_type": "IntegerConstant",
+                                          "source_location": {
+                                            "file": "tests/approvals/arc4-clone.algo.ts",
+                                            "line": 26,
+                                            "end_line": 26,
+                                            "column": 48,
+                                            "end_column": 49
+                                          },
+                                          "wtype": {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          "value": 1,
+                                          "teal_alias": null
+                                        },
+                                        {
+                                          "_type": "IntegerConstant",
+                                          "source_location": {
+                                            "file": "tests/approvals/arc4-clone.algo.ts",
+                                            "line": 26,
+                                            "end_line": 26,
+                                            "column": 51,
+                                            "end_column": 52
+                                          },
+                                          "wtype": {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          "value": 2,
+                                          "teal_alias": null
+                                        },
+                                        {
+                                          "_type": "IntegerConstant",
+                                          "source_location": {
+                                            "file": "tests/approvals/arc4-clone.algo.ts",
+                                            "line": 26,
+                                            "end_line": 26,
+                                            "column": 54,
+                                            "end_column": 55
+                                          },
+                                          "wtype": {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          "value": 3,
+                                          "teal_alias": null
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "_id": "5"
+                              },
+                              "index": 0
+                            },
+                            "_id": "4"
+                          },
+                          "index": 1
                         },
                         {
-                          "_type": "IntegerConstant",
+                          "_type": "TupleItemExpression",
                           "source_location": {
                             "file": "tests/approvals/arc4-clone.algo.ts",
                             "line": 26,
                             "end_line": 26,
-                            "column": 54,
-                            "end_column": 55
+                            "column": 46,
+                            "end_column": 57
                           },
                           "wtype": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           },
-                          "value": 3,
-                          "teal_alias": null
+                          "base": {
+                            "_type": "SingleEvaluation",
+                            "source_location": {
+                              "file": "tests/approvals/arc4-clone.algo.ts",
+                              "line": 26,
+                              "end_line": 26,
+                              "column": 46,
+                              "end_column": 57
+                            },
+                            "wtype": {
+                              "_type": "WTuple",
+                              "name": "tuple",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                }
+                              ]
+                            },
+                            "source": {
+                              "_type": "TupleItemExpression",
+                              "source_location": {
+                                "file": "tests/approvals/arc4-clone.algo.ts",
+                                "line": 26,
+                                "end_line": 26,
+                                "column": 46,
+                                "end_column": 57
+                              },
+                              "wtype": {
+                                "_type": "WTuple",
+                                "name": "tuple",
+                                "immutable": true,
+                                "types": [
+                                  {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  }
+                                ]
+                              },
+                              "base": {
+                                "_type": "SingleEvaluation",
+                                "source_location": {
+                                  "file": "tests/approvals/arc4-clone.algo.ts",
+                                  "line": 26,
+                                  "end_line": 26,
+                                  "column": 46,
+                                  "end_column": 57
+                                },
+                                "wtype": {
+                                  "_type": "WTuple",
+                                  "name": "tuple",
+                                  "immutable": true,
+                                  "types": [
+                                    {
+                                      "_type": "WTuple",
+                                      "name": "tuple",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "source": {
+                                  "_type": "TupleExpression",
+                                  "source_location": {
+                                    "file": "tests/approvals/arc4-clone.algo.ts",
+                                    "line": 26,
+                                    "end_line": 26,
+                                    "column": 46,
+                                    "end_column": 57
+                                  },
+                                  "wtype": {
+                                    "_type": "WTuple",
+                                    "name": "tuple",
+                                    "immutable": true,
+                                    "types": [
+                                      {
+                                        "_type": "WTuple",
+                                        "name": "tuple",
+                                        "immutable": true,
+                                        "types": [
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  "items": [
+                                    {
+                                      "_type": "TupleExpression",
+                                      "source_location": {
+                                        "file": "tests/approvals/arc4-clone.algo.ts",
+                                        "line": 26,
+                                        "end_line": 26,
+                                        "column": 47,
+                                        "end_column": 56
+                                      },
+                                      "wtype": {
+                                        "_type": "WTuple",
+                                        "name": "tuple",
+                                        "immutable": true,
+                                        "types": [
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          }
+                                        ]
+                                      },
+                                      "items": [
+                                        {
+                                          "_type": "IntegerConstant",
+                                          "source_location": {
+                                            "file": "tests/approvals/arc4-clone.algo.ts",
+                                            "line": 26,
+                                            "end_line": 26,
+                                            "column": 48,
+                                            "end_column": 49
+                                          },
+                                          "wtype": {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          "value": 1,
+                                          "teal_alias": null
+                                        },
+                                        {
+                                          "_type": "IntegerConstant",
+                                          "source_location": {
+                                            "file": "tests/approvals/arc4-clone.algo.ts",
+                                            "line": 26,
+                                            "end_line": 26,
+                                            "column": 51,
+                                            "end_column": 52
+                                          },
+                                          "wtype": {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          "value": 2,
+                                          "teal_alias": null
+                                        },
+                                        {
+                                          "_type": "IntegerConstant",
+                                          "source_location": {
+                                            "file": "tests/approvals/arc4-clone.algo.ts",
+                                            "line": 26,
+                                            "end_line": 26,
+                                            "column": 54,
+                                            "end_column": 55
+                                          },
+                                          "wtype": {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          "value": 3,
+                                          "teal_alias": null
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "_id": "5"
+                              },
+                              "index": 0
+                            },
+                            "_id": "4"
+                          },
+                          "index": 2
                         }
                       ]
                     }
@@ -859,7 +1909,7 @@
               }
             },
             {
-              "_type": "ExpressionStatement",
+              "_type": "AssignmentStatement",
               "source_location": {
                 "file": "tests/approvals/arc4-clone.algo.ts",
                 "line": 30,
@@ -867,8 +1917,8 @@
                 "column": 10,
                 "end_column": 44
               },
-              "expr": {
-                "_type": "CommaExpression",
+              "target": {
+                "_type": "TupleExpression",
                 "source_location": {
                   "file": "tests/approvals/arc4-clone.algo.ts",
                   "line": 30,
@@ -877,10 +1927,9 @@
                   "end_column": 44
                 },
                 "wtype": {
-                  "_type": "ARC4Tuple",
-                  "name": "arc4.tuple<arc4.dynamic_array<uint64>>",
-                  "immutable": false,
-                  "arc4_alias": null,
+                  "_type": "WTuple",
+                  "name": "tuple",
+                  "immutable": true,
                   "types": [
                     {
                       "_type": "ARC4DynamicArray",
@@ -894,12 +1943,65 @@
                       },
                       "source_location": null
                     }
-                  ],
-                  "source_location": null
+                  ]
                 },
-                "expressions": [
+                "items": [
                   {
-                    "_type": "AssignmentExpression",
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-clone.algo.ts",
+                      "line": 30,
+                      "end_line": 30,
+                      "column": 11,
+                      "end_column": 12
+                    },
+                    "wtype": {
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<uint64>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "element_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "source_location": null
+                    },
+                    "name": "y"
+                  }
+                ]
+              },
+              "value": {
+                "_type": "TupleExpression",
+                "source_location": {
+                  "file": "tests/approvals/arc4-clone.algo.ts",
+                  "line": 30,
+                  "end_line": 30,
+                  "column": 16,
+                  "end_column": 44
+                },
+                "wtype": {
+                  "_type": "WTuple",
+                  "name": "tuple",
+                  "immutable": true,
+                  "types": [
+                    {
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<uint64>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "element_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "source_location": null
+                    }
+                  ]
+                },
+                "items": [
+                  {
+                    "_type": "TupleItemExpression",
                     "source_location": {
                       "file": "tests/approvals/arc4-clone.algo.ts",
                       "line": 30,
@@ -919,180 +2021,8 @@
                       },
                       "source_location": null
                     },
-                    "target": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/arc4-clone.algo.ts",
-                        "line": 30,
-                        "end_line": 30,
-                        "column": 11,
-                        "end_column": 12
-                      },
-                      "wtype": {
-                        "_type": "ARC4DynamicArray",
-                        "name": "arc4.dynamic_array<uint64>",
-                        "immutable": false,
-                        "arc4_alias": null,
-                        "element_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "source_location": null
-                      },
-                      "name": "y"
-                    },
-                    "value": {
-                      "_type": "TupleItemExpression",
-                      "source_location": {
-                        "file": "tests/approvals/arc4-clone.algo.ts",
-                        "line": 30,
-                        "end_line": 30,
-                        "column": 10,
-                        "end_column": 44
-                      },
-                      "wtype": {
-                        "_type": "ARC4DynamicArray",
-                        "name": "arc4.dynamic_array<uint64>",
-                        "immutable": false,
-                        "arc4_alias": null,
-                        "element_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "source_location": null
-                      },
-                      "base": {
-                        "_type": "SingleEvaluation",
-                        "source_location": {
-                          "file": "tests/approvals/arc4-clone.algo.ts",
-                          "line": 30,
-                          "end_line": 30,
-                          "column": 16,
-                          "end_column": 44
-                        },
-                        "wtype": {
-                          "_type": "ARC4Tuple",
-                          "name": "arc4.tuple<arc4.dynamic_array<uint64>>",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "types": [
-                            {
-                              "_type": "ARC4DynamicArray",
-                              "name": "arc4.dynamic_array<uint64>",
-                              "immutable": false,
-                              "arc4_alias": null,
-                              "element_type": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              "source_location": null
-                            }
-                          ],
-                          "source_location": null
-                        },
-                        "source": {
-                          "_type": "Copy",
-                          "source_location": {
-                            "file": "tests/approvals/arc4-clone.algo.ts",
-                            "line": 30,
-                            "end_line": 30,
-                            "column": 16,
-                            "end_column": 44
-                          },
-                          "wtype": {
-                            "_type": "ARC4Tuple",
-                            "name": "arc4.tuple<arc4.dynamic_array<uint64>>",
-                            "immutable": false,
-                            "arc4_alias": null,
-                            "types": [
-                              {
-                                "_type": "ARC4DynamicArray",
-                                "name": "arc4.dynamic_array<uint64>",
-                                "immutable": false,
-                                "arc4_alias": null,
-                                "element_type": {
-                                  "_type": "WType",
-                                  "name": "uint64",
-                                  "immutable": true
-                                },
-                                "source_location": null
-                              }
-                            ],
-                            "source_location": null
-                          },
-                          "value": {
-                            "_type": "VarExpression",
-                            "source_location": {
-                              "file": "tests/approvals/arc4-clone.algo.ts",
-                              "line": 30,
-                              "end_line": 30,
-                              "column": 22,
-                              "end_column": 43
-                            },
-                            "wtype": {
-                              "_type": "ARC4Tuple",
-                              "name": "arc4.tuple<arc4.dynamic_array<uint64>>",
-                              "immutable": false,
-                              "arc4_alias": null,
-                              "types": [
-                                {
-                                  "_type": "ARC4DynamicArray",
-                                  "name": "arc4.dynamic_array<uint64>",
-                                  "immutable": false,
-                                  "arc4_alias": null,
-                                  "element_type": {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  "source_location": null
-                                }
-                              ],
-                              "source_location": null
-                            },
-                            "name": "mutableTupleOfMutable"
-                          }
-                        },
-                        "_id": "0"
-                      },
-                      "index": 0
-                    }
-                  },
-                  {
-                    "_type": "SingleEvaluation",
-                    "source_location": {
-                      "file": "tests/approvals/arc4-clone.algo.ts",
-                      "line": 30,
-                      "end_line": 30,
-                      "column": 16,
-                      "end_column": 44
-                    },
-                    "wtype": {
-                      "_type": "ARC4Tuple",
-                      "name": "arc4.tuple<arc4.dynamic_array<uint64>>",
-                      "immutable": false,
-                      "arc4_alias": null,
-                      "types": [
-                        {
-                          "_type": "ARC4DynamicArray",
-                          "name": "arc4.dynamic_array<uint64>",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "element_type": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true
-                          },
-                          "source_location": null
-                        }
-                      ],
-                      "source_location": null
-                    },
-                    "source": {
-                      "_type": "Copy",
+                    "base": {
+                      "_type": "SingleEvaluation",
                       "source_location": {
                         "file": "tests/approvals/arc4-clone.algo.ts",
                         "line": 30,
@@ -1121,14 +2051,14 @@
                         ],
                         "source_location": null
                       },
-                      "value": {
-                        "_type": "VarExpression",
+                      "source": {
+                        "_type": "Copy",
                         "source_location": {
                           "file": "tests/approvals/arc4-clone.algo.ts",
                           "line": 30,
                           "end_line": 30,
-                          "column": 22,
-                          "end_column": 43
+                          "column": 16,
+                          "end_column": 44
                         },
                         "wtype": {
                           "_type": "ARC4Tuple",
@@ -1151,10 +2081,42 @@
                           ],
                           "source_location": null
                         },
-                        "name": "mutableTupleOfMutable"
-                      }
+                        "value": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/arc4-clone.algo.ts",
+                            "line": 30,
+                            "end_line": 30,
+                            "column": 22,
+                            "end_column": 43
+                          },
+                          "wtype": {
+                            "_type": "ARC4Tuple",
+                            "name": "arc4.tuple<arc4.dynamic_array<uint64>>",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "types": [
+                              {
+                                "_type": "ARC4DynamicArray",
+                                "name": "arc4.dynamic_array<uint64>",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "element_type": {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                "source_location": null
+                              }
+                            ],
+                            "source_location": null
+                          },
+                          "name": "mutableTupleOfMutable"
+                        }
+                      },
+                      "_id": "6"
                     },
-                    "_id": "0"
+                    "index": 0
                   }
                 ]
               }
@@ -1236,7 +2198,7 @@
                         "name": "z"
                       },
                       "value": {
-                        "_type": "Copy",
+                        "_type": "SingleEvaluation",
                         "source_location": {
                           "file": "tests/approvals/arc4-clone.algo.ts",
                           "line": 32,
@@ -1256,14 +2218,14 @@
                           },
                           "source_location": null
                         },
-                        "value": {
-                          "_type": "VarExpression",
+                        "source": {
+                          "_type": "Copy",
                           "source_location": {
                             "file": "tests/approvals/arc4-clone.algo.ts",
                             "line": 32,
                             "end_line": 32,
-                            "column": 28,
-                            "end_column": 35
+                            "column": 22,
+                            "end_column": 36
                           },
                           "wtype": {
                             "_type": "ARC4DynamicArray",
@@ -1277,8 +2239,31 @@
                             },
                             "source_location": null
                           },
-                          "name": "mutable"
-                        }
+                          "value": {
+                            "_type": "VarExpression",
+                            "source_location": {
+                              "file": "tests/approvals/arc4-clone.algo.ts",
+                              "line": 32,
+                              "end_line": 32,
+                              "column": 28,
+                              "end_column": 35
+                            },
+                            "wtype": {
+                              "_type": "ARC4DynamicArray",
+                              "name": "arc4.dynamic_array<uint64>",
+                              "immutable": false,
+                              "arc4_alias": null,
+                              "element_type": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "source_location": null
+                            },
+                            "name": "mutable"
+                          }
+                        },
+                        "_id": "7"
                       }
                     }
                   }
@@ -1399,7 +2384,7 @@
                 "name": "m2"
               },
               "value": {
-                "_type": "Copy",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/arc4-clone.algo.ts",
                   "line": 37,
@@ -1419,14 +2404,14 @@
                   },
                   "source_location": null
                 },
-                "value": {
-                  "_type": "VarExpression",
+                "source": {
+                  "_type": "Copy",
                   "source_location": {
                     "file": "tests/approvals/arc4-clone.algo.ts",
                     "line": 37,
                     "end_line": 37,
-                    "column": 19,
-                    "end_column": 26
+                    "column": 15,
+                    "end_column": 27
                   },
                   "wtype": {
                     "_type": "ARC4DynamicArray",
@@ -1440,8 +2425,31 @@
                     },
                     "source_location": null
                   },
-                  "name": "mutable"
-                }
+                  "value": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-clone.algo.ts",
+                      "line": 37,
+                      "end_line": 37,
+                      "column": 19,
+                      "end_column": 26
+                    },
+                    "wtype": {
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<uint64>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "element_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "source_location": null
+                    },
+                    "name": "mutable"
+                  }
+                },
+                "_id": "8"
               }
             },
             {
@@ -1518,8 +2526,8 @@
                       "file": "tests/approvals/arc4-clone.algo.ts",
                       "line": 39,
                       "end_line": 39,
-                      "column": 28,
-                      "end_column": 39
+                      "column": 27,
+                      "end_column": 40
                     },
                     "wtype": {
                       "_type": "ARC4DynamicArray",
@@ -1535,21 +2543,168 @@
                     },
                     "values": [
                       {
-                        "_type": "IntegerConstant",
+                        "_type": "TupleItemExpression",
                         "source_location": {
                           "file": "tests/approvals/arc4-clone.algo.ts",
                           "line": 39,
                           "end_line": 39,
-                          "column": 36,
-                          "end_column": 37
+                          "column": 27,
+                          "end_column": 40
                         },
                         "wtype": {
                           "_type": "WType",
                           "name": "uint64",
                           "immutable": true
                         },
-                        "value": 1,
-                        "teal_alias": null
+                        "base": {
+                          "_type": "SingleEvaluation",
+                          "source_location": {
+                            "file": "tests/approvals/arc4-clone.algo.ts",
+                            "line": 39,
+                            "end_line": 39,
+                            "column": 27,
+                            "end_column": 40
+                          },
+                          "wtype": {
+                            "_type": "WTuple",
+                            "name": "tuple",
+                            "immutable": true,
+                            "types": [
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            ]
+                          },
+                          "source": {
+                            "_type": "TupleItemExpression",
+                            "source_location": {
+                              "file": "tests/approvals/arc4-clone.algo.ts",
+                              "line": 39,
+                              "end_line": 39,
+                              "column": 27,
+                              "end_column": 40
+                            },
+                            "wtype": {
+                              "_type": "WTuple",
+                              "name": "tuple",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                }
+                              ]
+                            },
+                            "base": {
+                              "_type": "SingleEvaluation",
+                              "source_location": {
+                                "file": "tests/approvals/arc4-clone.algo.ts",
+                                "line": 39,
+                                "end_line": 39,
+                                "column": 27,
+                                "end_column": 40
+                              },
+                              "wtype": {
+                                "_type": "WTuple",
+                                "name": "tuple",
+                                "immutable": true,
+                                "types": [
+                                  {
+                                    "_type": "WTuple",
+                                    "name": "tuple",
+                                    "immutable": true,
+                                    "types": [
+                                      {
+                                        "_type": "WType",
+                                        "name": "uint64",
+                                        "immutable": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              "source": {
+                                "_type": "TupleExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/arc4-clone.algo.ts",
+                                  "line": 39,
+                                  "end_line": 39,
+                                  "column": 27,
+                                  "end_column": 40
+                                },
+                                "wtype": {
+                                  "_type": "WTuple",
+                                  "name": "tuple",
+                                  "immutable": true,
+                                  "types": [
+                                    {
+                                      "_type": "WTuple",
+                                      "name": "tuple",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "items": [
+                                  {
+                                    "_type": "TupleExpression",
+                                    "source_location": {
+                                      "file": "tests/approvals/arc4-clone.algo.ts",
+                                      "line": 39,
+                                      "end_line": 39,
+                                      "column": 28,
+                                      "end_column": 39
+                                    },
+                                    "wtype": {
+                                      "_type": "WTuple",
+                                      "name": "tuple",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ]
+                                    },
+                                    "items": [
+                                      {
+                                        "_type": "IntegerConstant",
+                                        "source_location": {
+                                          "file": "tests/approvals/arc4-clone.algo.ts",
+                                          "line": 39,
+                                          "end_line": 39,
+                                          "column": 36,
+                                          "end_column": 37
+                                        },
+                                        "wtype": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "value": 1,
+                                        "teal_alias": null
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              "_id": "10"
+                            },
+                            "index": 0
+                          },
+                          "_id": "9"
+                        },
+                        "index": 0
                       }
                     ]
                   }
@@ -1625,13 +2780,13 @@
                 },
                 "values": [
                   {
-                    "_type": "Copy",
+                    "_type": "TupleItemExpression",
                     "source_location": {
                       "file": "tests/approvals/arc4-clone.algo.ts",
                       "line": 41,
                       "end_line": 41,
-                      "column": 29,
-                      "end_column": 43
+                      "column": 28,
+                      "end_column": 57
                     },
                     "wtype": {
                       "_type": "ARC4DynamicArray",
@@ -1645,29 +2800,178 @@
                       },
                       "source_location": null
                     },
-                    "value": {
-                      "_type": "VarExpression",
+                    "base": {
+                      "_type": "SingleEvaluation",
                       "source_location": {
                         "file": "tests/approvals/arc4-clone.algo.ts",
                         "line": 41,
                         "end_line": 41,
-                        "column": 35,
-                        "end_column": 42
+                        "column": 28,
+                        "end_column": 57
                       },
                       "wtype": {
-                        "_type": "ARC4DynamicArray",
-                        "name": "arc4.dynamic_array<uint64>",
-                        "immutable": false,
-                        "arc4_alias": null,
-                        "element_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "source_location": null
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "ARC4DynamicArray",
+                            "name": "arc4.dynamic_array<uint64>",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "element_type": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "source_location": null
+                          },
+                          {
+                            "_type": "WTuple",
+                            "name": "tuple",
+                            "immutable": true,
+                            "types": [
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            ]
+                          }
+                        ]
                       },
-                      "name": "mutable"
-                    }
+                      "source": {
+                        "_type": "TupleExpression",
+                        "source_location": {
+                          "file": "tests/approvals/arc4-clone.algo.ts",
+                          "line": 41,
+                          "end_line": 41,
+                          "column": 28,
+                          "end_column": 57
+                        },
+                        "wtype": {
+                          "_type": "WTuple",
+                          "name": "tuple",
+                          "immutable": true,
+                          "types": [
+                            {
+                              "_type": "ARC4DynamicArray",
+                              "name": "arc4.dynamic_array<uint64>",
+                              "immutable": false,
+                              "arc4_alias": null,
+                              "element_type": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "source_location": null
+                            },
+                            {
+                              "_type": "WTuple",
+                              "name": "tuple",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "items": [
+                          {
+                            "_type": "Copy",
+                            "source_location": {
+                              "file": "tests/approvals/arc4-clone.algo.ts",
+                              "line": 41,
+                              "end_line": 41,
+                              "column": 29,
+                              "end_column": 43
+                            },
+                            "wtype": {
+                              "_type": "ARC4DynamicArray",
+                              "name": "arc4.dynamic_array<uint64>",
+                              "immutable": false,
+                              "arc4_alias": null,
+                              "element_type": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "source_location": null
+                            },
+                            "value": {
+                              "_type": "VarExpression",
+                              "source_location": {
+                                "file": "tests/approvals/arc4-clone.algo.ts",
+                                "line": 41,
+                                "end_line": 41,
+                                "column": 35,
+                                "end_column": 42
+                              },
+                              "wtype": {
+                                "_type": "ARC4DynamicArray",
+                                "name": "arc4.dynamic_array<uint64>",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "element_type": {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                "source_location": null
+                              },
+                              "name": "mutable"
+                            }
+                          },
+                          {
+                            "_type": "TupleExpression",
+                            "source_location": {
+                              "file": "tests/approvals/arc4-clone.algo.ts",
+                              "line": 41,
+                              "end_line": 41,
+                              "column": 45,
+                              "end_column": 56
+                            },
+                            "wtype": {
+                              "_type": "WTuple",
+                              "name": "tuple",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                }
+                              ]
+                            },
+                            "items": [
+                              {
+                                "_type": "IntegerConstant",
+                                "source_location": {
+                                  "file": "tests/approvals/arc4-clone.algo.ts",
+                                  "line": 41,
+                                  "end_line": 41,
+                                  "column": 53,
+                                  "end_column": 54
+                                },
+                                "wtype": {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                "value": 2,
+                                "teal_alias": null
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "_id": "11"
+                    },
+                    "index": 0
                   },
                   {
                     "_type": "NewArray",
@@ -1675,8 +2979,8 @@
                       "file": "tests/approvals/arc4-clone.algo.ts",
                       "line": 41,
                       "end_line": 41,
-                      "column": 45,
-                      "end_column": 56
+                      "column": 28,
+                      "end_column": 57
                     },
                     "wtype": {
                       "_type": "ARC4DynamicArray",
@@ -1692,21 +2996,237 @@
                     },
                     "values": [
                       {
-                        "_type": "IntegerConstant",
+                        "_type": "TupleItemExpression",
                         "source_location": {
                           "file": "tests/approvals/arc4-clone.algo.ts",
                           "line": 41,
                           "end_line": 41,
-                          "column": 53,
-                          "end_column": 54
+                          "column": 28,
+                          "end_column": 57
                         },
                         "wtype": {
                           "_type": "WType",
                           "name": "uint64",
                           "immutable": true
                         },
-                        "value": 2,
-                        "teal_alias": null
+                        "base": {
+                          "_type": "SingleEvaluation",
+                          "source_location": {
+                            "file": "tests/approvals/arc4-clone.algo.ts",
+                            "line": 41,
+                            "end_line": 41,
+                            "column": 28,
+                            "end_column": 57
+                          },
+                          "wtype": {
+                            "_type": "WTuple",
+                            "name": "tuple",
+                            "immutable": true,
+                            "types": [
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            ]
+                          },
+                          "source": {
+                            "_type": "TupleItemExpression",
+                            "source_location": {
+                              "file": "tests/approvals/arc4-clone.algo.ts",
+                              "line": 41,
+                              "end_line": 41,
+                              "column": 28,
+                              "end_column": 57
+                            },
+                            "wtype": {
+                              "_type": "WTuple",
+                              "name": "tuple",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                }
+                              ]
+                            },
+                            "base": {
+                              "_type": "SingleEvaluation",
+                              "source_location": {
+                                "file": "tests/approvals/arc4-clone.algo.ts",
+                                "line": 41,
+                                "end_line": 41,
+                                "column": 28,
+                                "end_column": 57
+                              },
+                              "wtype": {
+                                "_type": "WTuple",
+                                "name": "tuple",
+                                "immutable": true,
+                                "types": [
+                                  {
+                                    "_type": "ARC4DynamicArray",
+                                    "name": "arc4.dynamic_array<uint64>",
+                                    "immutable": false,
+                                    "arc4_alias": null,
+                                    "element_type": {
+                                      "_type": "WType",
+                                      "name": "uint64",
+                                      "immutable": true
+                                    },
+                                    "source_location": null
+                                  },
+                                  {
+                                    "_type": "WTuple",
+                                    "name": "tuple",
+                                    "immutable": true,
+                                    "types": [
+                                      {
+                                        "_type": "WType",
+                                        "name": "uint64",
+                                        "immutable": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              "source": {
+                                "_type": "TupleExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/arc4-clone.algo.ts",
+                                  "line": 41,
+                                  "end_line": 41,
+                                  "column": 28,
+                                  "end_column": 57
+                                },
+                                "wtype": {
+                                  "_type": "WTuple",
+                                  "name": "tuple",
+                                  "immutable": true,
+                                  "types": [
+                                    {
+                                      "_type": "ARC4DynamicArray",
+                                      "name": "arc4.dynamic_array<uint64>",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "element_type": {
+                                        "_type": "WType",
+                                        "name": "uint64",
+                                        "immutable": true
+                                      },
+                                      "source_location": null
+                                    },
+                                    {
+                                      "_type": "WTuple",
+                                      "name": "tuple",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "items": [
+                                  {
+                                    "_type": "Copy",
+                                    "source_location": {
+                                      "file": "tests/approvals/arc4-clone.algo.ts",
+                                      "line": 41,
+                                      "end_line": 41,
+                                      "column": 29,
+                                      "end_column": 43
+                                    },
+                                    "wtype": {
+                                      "_type": "ARC4DynamicArray",
+                                      "name": "arc4.dynamic_array<uint64>",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "element_type": {
+                                        "_type": "WType",
+                                        "name": "uint64",
+                                        "immutable": true
+                                      },
+                                      "source_location": null
+                                    },
+                                    "value": {
+                                      "_type": "VarExpression",
+                                      "source_location": {
+                                        "file": "tests/approvals/arc4-clone.algo.ts",
+                                        "line": 41,
+                                        "end_line": 41,
+                                        "column": 35,
+                                        "end_column": 42
+                                      },
+                                      "wtype": {
+                                        "_type": "ARC4DynamicArray",
+                                        "name": "arc4.dynamic_array<uint64>",
+                                        "immutable": false,
+                                        "arc4_alias": null,
+                                        "element_type": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "source_location": null
+                                      },
+                                      "name": "mutable"
+                                    }
+                                  },
+                                  {
+                                    "_type": "TupleExpression",
+                                    "source_location": {
+                                      "file": "tests/approvals/arc4-clone.algo.ts",
+                                      "line": 41,
+                                      "end_line": 41,
+                                      "column": 45,
+                                      "end_column": 56
+                                    },
+                                    "wtype": {
+                                      "_type": "WTuple",
+                                      "name": "tuple",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ]
+                                    },
+                                    "items": [
+                                      {
+                                        "_type": "IntegerConstant",
+                                        "source_location": {
+                                          "file": "tests/approvals/arc4-clone.algo.ts",
+                                          "line": 41,
+                                          "end_line": 41,
+                                          "column": 53,
+                                          "end_column": 54
+                                        },
+                                        "wtype": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "value": 2,
+                                        "teal_alias": null
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              "_id": "11"
+                            },
+                            "index": 1
+                          },
+                          "_id": "12"
+                        },
+                        "index": 0
                       }
                     ]
                   }
@@ -1753,7 +3273,7 @@
                 "name": "m3"
               },
               "value": {
-                "_type": "Copy",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/arc4-clone.algo.ts",
                   "line": 43,
@@ -1780,14 +3300,14 @@
                   },
                   "source_location": null
                 },
-                "value": {
-                  "_type": "VarExpression",
+                "source": {
+                  "_type": "Copy",
                   "source_location": {
                     "file": "tests/approvals/arc4-clone.algo.ts",
                     "line": 43,
                     "end_line": 43,
-                    "column": 25,
-                    "end_column": 39
+                    "column": 19,
+                    "end_column": 40
                   },
                   "wtype": {
                     "_type": "ARC4DynamicArray",
@@ -1808,8 +3328,38 @@
                     },
                     "source_location": null
                   },
-                  "name": "nestedMutables"
-                }
+                  "value": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-clone.algo.ts",
+                      "line": 43,
+                      "end_line": 43,
+                      "column": 25,
+                      "end_column": 39
+                    },
+                    "wtype": {
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<arc4.dynamic_array<uint64>>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "element_type": {
+                        "_type": "ARC4DynamicArray",
+                        "name": "arc4.dynamic_array<uint64>",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "element_type": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "source_location": null
+                      },
+                      "source_location": null
+                    },
+                    "name": "nestedMutables"
+                  }
+                },
+                "_id": "13"
               }
             },
             {
@@ -1852,7 +3402,7 @@
                 "name": "m4"
               },
               "value": {
-                "_type": "ArrayConcat",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/arc4-clone.algo.ts",
                   "line": 45,
@@ -1879,14 +3429,14 @@
                   },
                   "source_location": null
                 },
-                "left": {
-                  "_type": "Copy",
+                "source": {
+                  "_type": "ArrayConcat",
                   "source_location": {
                     "file": "tests/approvals/arc4-clone.algo.ts",
                     "line": 45,
                     "end_line": 45,
                     "column": 15,
-                    "end_column": 36
+                    "end_column": 58
                   },
                   "wtype": {
                     "_type": "ARC4DynamicArray",
@@ -1907,14 +3457,14 @@
                     },
                     "source_location": null
                   },
-                  "value": {
-                    "_type": "VarExpression",
+                  "left": {
+                    "_type": "Copy",
                     "source_location": {
                       "file": "tests/approvals/arc4-clone.algo.ts",
                       "line": 45,
                       "end_line": 45,
-                      "column": 21,
-                      "end_column": 35
+                      "column": 15,
+                      "end_column": 36
                     },
                     "wtype": {
                       "_type": "ARC4DynamicArray",
@@ -1935,81 +3485,111 @@
                       },
                       "source_location": null
                     },
-                    "name": "nestedMutables"
-                  }
-                },
-                "right": {
-                  "_type": "TupleExpression",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-clone.algo.ts",
-                    "line": 45,
-                    "end_line": 45,
-                    "column": 44,
-                    "end_column": 57
-                  },
-                  "wtype": {
-                    "_type": "WTuple",
-                    "name": "tuple",
-                    "immutable": true,
-                    "types": [
-                      {
-                        "_type": "ARC4DynamicArray",
-                        "name": "arc4.dynamic_array<uint64>",
-                        "immutable": false,
-                        "arc4_alias": null,
-                        "element_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "source_location": null
-                      }
-                    ]
-                  },
-                  "items": [
-                    {
-                      "_type": "NewArray",
+                    "value": {
+                      "_type": "VarExpression",
                       "source_location": {
                         "file": "tests/approvals/arc4-clone.algo.ts",
                         "line": 45,
                         "end_line": 45,
-                        "column": 44,
-                        "end_column": 57
+                        "column": 21,
+                        "end_column": 35
                       },
                       "wtype": {
                         "_type": "ARC4DynamicArray",
-                        "name": "arc4.dynamic_array<uint64>",
+                        "name": "arc4.dynamic_array<arc4.dynamic_array<uint64>>",
                         "immutable": false,
                         "arc4_alias": null,
                         "element_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "source_location": null
-                      },
-                      "values": [
-                        {
-                          "_type": "IntegerConstant",
-                          "source_location": {
-                            "file": "tests/approvals/arc4-clone.algo.ts",
-                            "line": 45,
-                            "end_line": 45,
-                            "column": 52,
-                            "end_column": 55
-                          },
-                          "wtype": {
+                          "_type": "ARC4DynamicArray",
+                          "name": "arc4.dynamic_array<uint64>",
+                          "immutable": false,
+                          "arc4_alias": null,
+                          "element_type": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           },
-                          "value": 123,
-                          "teal_alias": null
+                          "source_location": null
+                        },
+                        "source_location": null
+                      },
+                      "name": "nestedMutables"
+                    }
+                  },
+                  "right": {
+                    "_type": "TupleExpression",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-clone.algo.ts",
+                      "line": 45,
+                      "end_line": 45,
+                      "column": 44,
+                      "end_column": 57
+                    },
+                    "wtype": {
+                      "_type": "WTuple",
+                      "name": "tuple",
+                      "immutable": true,
+                      "types": [
+                        {
+                          "_type": "ARC4DynamicArray",
+                          "name": "arc4.dynamic_array<uint64>",
+                          "immutable": false,
+                          "arc4_alias": null,
+                          "element_type": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "source_location": null
                         }
                       ]
-                    }
-                  ]
-                }
+                    },
+                    "items": [
+                      {
+                        "_type": "NewArray",
+                        "source_location": {
+                          "file": "tests/approvals/arc4-clone.algo.ts",
+                          "line": 45,
+                          "end_line": 45,
+                          "column": 44,
+                          "end_column": 57
+                        },
+                        "wtype": {
+                          "_type": "ARC4DynamicArray",
+                          "name": "arc4.dynamic_array<uint64>",
+                          "immutable": false,
+                          "arc4_alias": null,
+                          "element_type": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "source_location": null
+                        },
+                        "values": [
+                          {
+                            "_type": "IntegerConstant",
+                            "source_location": {
+                              "file": "tests/approvals/arc4-clone.algo.ts",
+                              "line": 45,
+                              "end_line": 45,
+                              "column": 52,
+                              "end_column": 55
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "value": 123,
+                            "teal_alias": null
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "_id": "14"
               }
             },
             {
@@ -2045,7 +3625,7 @@
                 "name": "m5"
               },
               "value": {
-                "_type": "ArrayConcat",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/arc4-clone.algo.ts",
                   "line": 48,
@@ -2065,14 +3645,14 @@
                   },
                   "source_location": null
                 },
-                "left": {
-                  "_type": "VarExpression",
+                "source": {
+                  "_type": "ArrayConcat",
                   "source_location": {
                     "file": "tests/approvals/arc4-clone.algo.ts",
                     "line": 48,
                     "end_line": 48,
                     "column": 15,
-                    "end_column": 22
+                    "end_column": 38
                   },
                   "wtype": {
                     "_type": "ARC4DynamicArray",
@@ -2086,31 +3666,54 @@
                     },
                     "source_location": null
                   },
-                  "name": "mutable"
+                  "left": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-clone.algo.ts",
+                      "line": 48,
+                      "end_line": 48,
+                      "column": 15,
+                      "end_column": 22
+                    },
+                    "wtype": {
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<uint64>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "element_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "source_location": null
+                    },
+                    "name": "mutable"
+                  },
+                  "right": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/arc4-clone.algo.ts",
+                      "line": 48,
+                      "end_line": 48,
+                      "column": 30,
+                      "end_column": 37
+                    },
+                    "wtype": {
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<uint64>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "element_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "source_location": null
+                    },
+                    "name": "mutable"
+                  }
                 },
-                "right": {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/arc4-clone.algo.ts",
-                    "line": 48,
-                    "end_line": 48,
-                    "column": 30,
-                    "end_column": 37
-                  },
-                  "wtype": {
-                    "_type": "ARC4DynamicArray",
-                    "name": "arc4.dynamic_array<uint64>",
-                    "immutable": false,
-                    "arc4_alias": null,
-                    "element_type": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "source_location": null
-                  },
-                  "name": "mutable"
-                }
+                "_id": "15"
               }
             }
           ],

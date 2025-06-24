@@ -1,0 +1,18 @@
+main tests/approvals/casting.algo.ts::CastingAlgo.approvalProgram:
+    block@0: // L5
+        let awst_tmp%0#0: Encoded(uint64,uint64,uint64) = bytes_encode<(uint64,uint64,uint64)>(1u, 2u, 3u)
+        let y#0: Encoded(uint64,uint64,uint64) = awst_tmp%0#0
+        let (z.0#0: uint64, z.1#0: uint64, z.2#0: uint64) = (1u, 2u, 3u)
+        let tuple_item%0#0: Encoded(uint64) = extract_value(y#0, 0)
+        let values%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let tuple_item%1#0: Encoded(uint64) = extract_value(y#0, 1)
+        let values%1#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
+        let tmp%0#0: uint64 = (* values%0#0 values%1#0)
+        let tuple_item%2#0: Encoded(uint64) = extract_value(y#0, 2)
+        let values%2#0: uint64 = decode_bytes<uint64>(tuple_item%2#0)
+        let tmp%1#0: uint64 = (* tmp%0#0 values%2#0)
+        let tmp%2#0: uint64 = (* tmp%1#0 z.0#0)
+        let tmp%3#0: uint64 = (* tmp%2#0 z.1#0)
+        let tmp%4#0: uint64 = (* tmp%3#0 z.2#0)
+        let tmp%5#0: bool = (> 123u tmp%4#0)
+        return tmp%5#0

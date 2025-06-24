@@ -85,7 +85,7 @@ main_clearState_route@6:
     // this.localObject(Txn.sender).delete()
     txn Sender
     // tests/approvals/local-state.algo.ts:15
-    // localObject = LocalState<{ a: uint64; b: bytes }>()
+    // localObject = LocalState<Readonly<{ a: uint64; b: bytes }>>()
     bytec 6 // "localObject"
     // tests/approvals/local-state.algo.ts:52
     // this.localObject(Txn.sender).delete()
@@ -195,7 +195,7 @@ main_getState_route@5:
     txn Sender
     intc_0 // 0
     // tests/approvals/local-state.algo.ts:15
-    // localObject = LocalState<{ a: uint64; b: bytes }>()
+    // localObject = LocalState<Readonly<{ a: uint64; b: bytes }>>()
     bytec 6 // "localObject"
     // tests/approvals/local-state.algo.ts:40
     // localObject: this.localObject(Txn.sender).value,
@@ -224,8 +224,17 @@ main_getState_route@5:
     // localMutableObject: clone(this.localMutableObject(Txn.sender).value),
     app_local_get_ex
     assert // check LocalState exists
-    // tests/approvals/local-state.algo.ts:32
-    // public getState() {
+    // tests/approvals/local-state.algo.ts:33-42
+    // return {
+    //   localUint: this.localUint(Txn.sender).value,
+    //   localUint2: this.localUint2(Txn.sender).value,
+    //   localBytes: this.localBytes(Txn.sender).value,
+    //   localBytes2: this.localBytes2(Txn.sender).value,
+    //   localEncoded: clone(this.localEncoded(Txn.sender).value),
+    //   localTuple: this.localTuple(Txn.sender).value,
+    //   localObject: this.localObject(Txn.sender).value,
+    //   localMutableObject: clone(this.localMutableObject(Txn.sender).value),
+    // }
     uncover 9
     itob
     uncover 9
@@ -328,6 +337,8 @@ main_getState_route@5:
     concat
     swap
     concat
+    // tests/approvals/local-state.algo.ts:32
+    // public getState() {
     pushbytes 0x151f7c75
     swap
     concat
@@ -346,19 +357,21 @@ main_setState_route@4:
     // tests/approvals/local-state.algo.ts:8
     // export class LocalStateDemo extends Contract {
     txna ApplicationArgs 1
-    dup
+    txna ApplicationArgs 2
+    // tests/approvals/local-state.algo.ts:21
+    // public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
+    dig 1
     intc_0 // 0
     extract_uint64
-    dig 1
+    dig 2
     intc_2 // 8
     extract_uint16
-    dig 2
+    dig 3
     len
-    uncover 3
+    uncover 4
     cover 2
     substring3
     extract 2 0
-    txna ApplicationArgs 2
     // tests/approvals/local-state.algo.ts:22
     // this.localUint(Txn.sender).value = a
     txn Sender
@@ -367,7 +380,7 @@ main_setState_route@4:
     bytec_0 // "l1"
     // tests/approvals/local-state.algo.ts:22
     // this.localUint(Txn.sender).value = a
-    dig 4
+    dig 3
     app_local_put
     // tests/approvals/local-state.algo.ts:23
     // this.localUint2(Txn.sender).value = a
@@ -377,7 +390,7 @@ main_setState_route@4:
     bytec_1 // "localUint2"
     // tests/approvals/local-state.algo.ts:23
     // this.localUint2(Txn.sender).value = a
-    dig 4
+    dig 3
     app_local_put
     // tests/approvals/local-state.algo.ts:24
     // this.localBytes(Txn.sender).value = b
@@ -387,7 +400,7 @@ main_setState_route@4:
     bytec_2 // "b1"
     // tests/approvals/local-state.algo.ts:24
     // this.localBytes(Txn.sender).value = b
-    dig 3
+    dig 2
     app_local_put
     // tests/approvals/local-state.algo.ts:25
     // this.localBytes2(Txn.sender).value = b
@@ -397,7 +410,7 @@ main_setState_route@4:
     bytec_3 // "localBytes2"
     // tests/approvals/local-state.algo.ts:25
     // this.localBytes2(Txn.sender).value = b
-    dig 3
+    dig 2
     app_local_put
     // tests/approvals/local-state.algo.ts:26
     // this.localEncoded(Txn.sender).value = clone(c)
@@ -407,7 +420,7 @@ main_setState_route@4:
     bytec 4 // "localEncoded"
     // tests/approvals/local-state.algo.ts:26
     // this.localEncoded(Txn.sender).value = clone(c)
-    uncover 2
+    uncover 4
     app_local_put
     // tests/approvals/local-state.algo.ts:27
     // this.localTuple(Txn.sender).value = [a, b]
@@ -437,14 +450,14 @@ main_setState_route@4:
     // this.localObject(Txn.sender).value = { a, b }
     txn Sender
     // tests/approvals/local-state.algo.ts:15
-    // localObject = LocalState<{ a: uint64; b: bytes }>()
+    // localObject = LocalState<Readonly<{ a: uint64; b: bytes }>>()
     bytec 6 // "localObject"
     // tests/approvals/local-state.algo.ts:28
     // this.localObject(Txn.sender).value = { a, b }
     uncover 2
     app_local_put
     // tests/approvals/local-state.algo.ts:29
-    // this.localMutableObject(Txn.sender).value = new Data({ a, b, c: true, d: new arc4.Str('hello') })
+    // this.localMutableObject(Txn.sender).value = { a, b, c: true, d: new arc4.Str('hello') }
     dup
     len
     pushint 13 // 13
@@ -470,7 +483,7 @@ main_setState_route@4:
     // localMutableObject = LocalState<Data>()
     bytec 7 // "localMutableObject"
     // tests/approvals/local-state.algo.ts:29
-    // this.localMutableObject(Txn.sender).value = new Data({ a, b, c: true, d: new arc4.Str('hello') })
+    // this.localMutableObject(Txn.sender).value = { a, b, c: true, d: new arc4.Str('hello') }
     uncover 2
     app_local_put
     // tests/approvals/local-state.algo.ts:21

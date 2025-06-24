@@ -3,8 +3,8 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 32 6
-    bytecblock "ho" 0x "Hi" 0xd0a28200
+    intcblock 0 1 32 8
+    bytecblock 0x "ho" "Hi" 0xd0a28200
 
 main_block@0:
 
@@ -162,31 +162,70 @@ distribute_block@0:
     *
     intc_2 // 32
     extract3 // on error: index access is out of bounds
+    // tests/approvals/itxn-compose.algo.ts:27
+    // type: TransactionType.Payment,
+    intc_1 // 1
     // tests/approvals/itxn-compose.algo.ts:26-30
     // const payFields = {
     //   type: TransactionType.Payment,
     //   amount: share,
     //   receiver: addresses[0].bytes,
     // } satisfies PaymentComposeFields
+    itob
+    bytec_0 // 0x
+    swap
+    concat
+    uncover 2
+    itob
+    concat
     swap
     dup
-    cover 2
-    cover 2
+    len
+    itob
+    extract 6 2
     swap
+    concat
+    bytec_0 // 0x
+    swap
+    concat
+    pushint 18 // 18
+    itob
+    extract 6 2
+    uncover 2
+    swap
+    concat
+    swap
+    concat
+    dup
     // tests/approvals/itxn-compose.algo.ts:31
     // itxnCompose.begin(payFields)
     itxn_begin
-    // tests/approvals/itxn-compose.algo.ts:26
-    // const payFields = {
+    dup
+    intc_0 // 0
+    intc_3 // 8
+    extract3
+    btoi
     swap
+    dup
+    intc_3 // 8
+    dup
+    extract3
+    btoi
+    swap
+    dup
+    pushint 16 // 16
+    extract_uint16
+    swap
+    dup
+    len
+    swap
+    uncover 2
+    uncover 2
+    substring3
+    extract 2 0
     itxn_field Receiver
     itxn_field Amount
-    // tests/approvals/itxn-compose.algo.ts:27
-    // type: TransactionType.Payment,
-    intc_1 // 1
     itxn_field TypeEnum
-    // tests/approvals/itxn-compose.algo.ts:31
-    // itxnCompose.begin(payFields)
     intc_0 // 0
     itxn_field Fee
     // tests/approvals/itxn-compose.algo.ts:32
@@ -227,12 +266,22 @@ distribute_for_body@2:
     // })
     itxn_next
     frame_dig 0
-    itxn_field Amount
-    // tests/approvals/itxn-compose.algo.ts:27
-    // type: TransactionType.Payment,
-    intc_1 // 1
-    itxn_field TypeEnum
+    dup
+    intc_0 // 0
+    intc_3 // 8
+    extract3
+    btoi
+    swap
+    intc_3 // 8
+    dup
+    extract3
+    btoi
+    // tests/approvals/itxn-compose.algo.ts:37
+    // receiver: addr.bytes,
+    uncover 2
     itxn_field Receiver
+    itxn_field Amount
+    itxn_field TypeEnum
     // tests/approvals/itxn-compose.algo.ts:34-38
     // itxnCompose.next({
     //   ...payFields,
@@ -267,7 +316,7 @@ distribute_after_for@4:
     pushbytes 0x65a9aecc // method "verify()void"
     itxn_field ApplicationArgs
     itxn_field ApplicationID
-    intc_3 // appl
+    pushint 6 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -301,7 +350,7 @@ conditionalBegin:
     // tests/approvals/itxn-compose.algo.ts:53
     // conditionalBegin(count: uint64) {
     proto 1 0
-    bytec_1 // ""
+    bytec_0 // ""
     dup
 
 conditionalBegin_block@0:
@@ -331,17 +380,17 @@ conditionalBegin_block@0:
     itxn_field GlobalNumUint
     pushbytes base64(CoEBQw==)
     itxn_field ClearStateProgramPages
-    bytec_1 // 0x
+    bytec_0 // 0x
     itxn_field ClearStateProgramPages
     pushbytes base64(CiADAAECJgQIZ3JlZXRpbmcABBUffHUBIDEYQAADiAEFMRsiE0EArzYaAIAEAJIlroAEJDeNPIAEoOgYcoAE0KKCAIAEUYC6IE8FjgUAaQBXAEUAIgACIkMxGSISRDEYIhNENhoBiACLSRUWVwYCTFAqTFCwI0L/3zEZIhJEMRgiE0Q2GgFXAgCIAFhJFRZXBgJMUCpMULAjQv+8MRmBBBJEMRgiE0SIADkjQv+qMRmBBRJEMRgiE0SIACYjQv+YMRkiEkQxGCISRDYaAVcCAIgAByNC/4FC/32KAQAoi/9niYmJigEBIihlRClMUCtQi/9QiYoBASIoZUQpTFArUIv/IlmL/yRZi/9PAk8CUlcCAFCL/yRZi/8Vi/9PAk8CUlcCAFCJKClniQ==)
     itxn_field ApprovalProgramPages
-    bytec_1 // 0x
+    bytec_0 // 0x
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn-compose.algo.ts:55
     // const appId = hello.call.create({ args: ['Hi'] }).itxn.createdApp
     intc_0 // 0
     itxn_field OnCompletion
-    intc_3 // appl
+    pushint 6 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -382,17 +431,17 @@ conditionalBegin_if_body@4:
     // itxnCompose.begin(Hello.prototype.greet, { appId, args: ['ho'] })
     itxn_begin
     frame_dig 0
-    bytec_0 // "ho"
+    bytec_1 // "ho"
     len
     itob
     extract 6 2
-    bytec_0 // "ho"
+    bytec_1 // "ho"
     concat
     bytec_3 // method "greet(string)string"
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
     itxn_field ApplicationID
-    intc_3 // appl
+    pushint 6 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -413,17 +462,17 @@ conditionalBegin_else_body@5:
     // itxnCompose.next(Hello.prototype.greet, { appId, args: ['ho'] })
     itxn_next
     frame_dig 0
-    bytec_0 // "ho"
+    bytec_1 // "ho"
     len
     itob
     extract 6 2
-    bytec_0 // "ho"
+    bytec_1 // "ho"
     concat
     bytec_3 // method "greet(string)string"
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
     itxn_field ApplicationID
-    intc_3 // appl
+    pushint 6 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee

@@ -1,7 +1,8 @@
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression, LValue, Statement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { instanceOfAny } from '../../util'
+import { codeInvariant, instanceOfAny, invariant } from '../../util'
+import type { AwstBuildContext } from '../context/awst-build-context'
 import type { InstanceBuilder } from '../eb'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
@@ -14,6 +15,9 @@ import {
   BigIntLiteralPType,
   bigIntPType,
   biguintPType,
+  InnerTransactionPType,
+  isTupleLike,
+  ItxnParamsPType,
   MutableTuplePType,
   numberPType,
   NumericLiteralPType,
@@ -27,18 +31,27 @@ import {
 import { getIndexType } from '../ptypes/visitors/index-type-visitor'
 import { instanceEb } from '../type-registry'
 
-export function handleAssignmentStatement(target: InstanceBuilder, source: InstanceBuilder, sourceLocation: SourceLocation): Statement {
-  return nodeFactory.expressionStatement({ expr: handleAssignment(target, source, sourceLocation, true).resolve() })
-}
-
-export function handleAssignment(
+export function handleAssignmentStatement(
+  context: AwstBuildContext,
   target: InstanceBuilder,
   source: InstanceBuilder,
   sourceLocation: SourceLocation,
-  isStatement: boolean = false,
-): InstanceBuilder {
-  const narrowedSourceType = narrowSourceType(target.ptype, source.ptype, sourceLocation)
+): Statement {
+  return nodeFactory.expressionStatement({ expr: handleAssignment(context, target, source, sourceLocation, true).resolve() })
+}
 
+export function handleAssignment(
+  context: AwstBuildContext,
+  target: InstanceBuilder,
+  source: InstanceBuilder,
+  sourceLocation: SourceLocation,
+  isStatement: boolean,
+): InstanceBuilder {
+  if (isSpecialItxnType(source)) {
+    codeInvariant(isStatement, 'inner transaction results can not be used in assignment expressions')
+    return handleItxnAssignment(context, target, source, sourceLocation)
+  }
+  const narrowedSourceType = narrowSourceType(target.ptype, source.ptype, sourceLocation)
   return buildAssignmentExpression(target, source.resolveToPType(narrowedSourceType), sourceLocation, isStatement)
 }
 
@@ -199,4 +212,53 @@ function narrowSourceType(targetType: PType | undefined, sourceType: PType, sour
     })
   }
   return sourceType
+}
+
+function isSpecialItxnType(source: InstanceBuilder) {
+  const checkType = (t: PType) => instanceOfAny(t, InnerTransactionPType, ItxnParamsPType)
+
+  return checkType(source.ptype) || (isTupleLike(source.ptype) && source.ptype.items.some(checkType))
+}
+
+function handleItxnAssignment(
+  context: AwstBuildContext,
+  target: InstanceBuilder,
+  source: InstanceBuilder,
+  sourceLocation: SourceLocation,
+): InstanceBuilder {
+  let targetExpression: LValue
+  if (target instanceof ArrayLiteralExpressionBuilder) {
+    // Destructured array
+    const targets: LValue[] = []
+
+    for (const [index, item] of target[StaticIterator]().entries()) {
+      if (item instanceof OmittedExpressionBuilder) {
+        const sourceType = getIndexType(source.ptype, BigInt(index), item.sourceLocation)
+        invariant(sourceType, 'RHS must have a type', item.sourceLocation)
+        targets.push(
+          nodeFactory.varExpression({
+            name: context.generateVarName('discard'),
+            wtype: sourceType.wtypeOrThrow,
+            sourceLocation: target.sourceLocation,
+            // TODO: This should be item.sourceLocation but it actually represents a zero length sequence which fails puya validation
+            //sourceLocation: item.sourceLocation,
+          }),
+        )
+      } else {
+        targets.push(item.resolveLValue())
+      }
+    }
+    targetExpression = nodeFactory.tupleExpression({ items: targets, sourceLocation: target.sourceLocation })
+  } else {
+    targetExpression = target.resolveLValue()
+  }
+
+  return instanceEb(
+    nodeFactory.assignmentExpression({
+      target: targetExpression,
+      value: source.resolve(),
+      sourceLocation,
+    }),
+    source.ptype,
+  )
 }

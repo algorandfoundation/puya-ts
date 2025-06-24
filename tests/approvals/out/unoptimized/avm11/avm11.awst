@@ -18,9 +18,9 @@ contract AVM11Contract
   {
     assert(Boolean(len(mimc<BLS12_381Mp111>(0x00000000000000000000000000000000000000000000000000000000499602d2))))
     assert(Boolean(online_stake()))
-    <tuple>[a, b]: readonly [bool, bool] = acct_params_get<AcctIncentiveEligible>(txn<Sender>())
-    <tuple>[c, d]: readonly [uint64, bool] = acct_params_get<AcctLastProposed>(txn<Sender>())
-    <tuple>[e, f]: readonly [uint64, bool] = acct_params_get<AcctLastProposed>(txn<Sender>())
+    #[a, b]: readonly [bool, bool] = #[($0 = acct_params_get<AcctIncentiveEligible>(txn<Sender>())).0, $0.1]
+    #[c, d]: readonly [uint64, bool] = #[($1 = acct_params_get<AcctLastProposed>(txn<Sender>())).0, $1.1]
+    #[e, f]: readonly [uint64, bool] = #[($2 = acct_params_get<AcctLastProposed>(txn<Sender>())).0, $2.1]
     assert(block<BlkProposer>(0) != global<ZeroAddress>(), comment=proposer)
     assert(Boolean(block<BlkFeesCollected>(0)), comment=fees collected)
     assert(Boolean(block<BlkBonus>(0)), comment=bonus)
@@ -34,8 +34,8 @@ contract AVM11Contract
     assert(Boolean(global<PayoutsPercent>()), comment=payouts_percent)
     assert(Boolean(global<PayoutsMinBalance>()), comment=payouts_min_balance)
     assert(Boolean(global<PayoutsMaxBalance>()), comment=payouts_max_balance)
-    <tuple>[g, h]: readonly [uint64, bool] = voter_params_get<VoterBalance>(0)
-    <tuple>[i, j]: readonly [bool, bool] = voter_params_get<VoterIncentiveEligible>(0)
+    #[g, h]: readonly [uint64, bool] = #[($3 = voter_params_get<VoterBalance>(0)).0, $3.1]
+    #[i, j]: readonly [bool, bool] = #[($4 = voter_params_get<VoterIncentiveEligible>(0)).0, $4.1]
   }
   
   __algots__.defaultCreate(): void

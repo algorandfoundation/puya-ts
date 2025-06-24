@@ -10,22 +10,22 @@ contract DestructuredParamsAlgo
     return True
   }
   
-  test(p: object{ a: uint64, b: bytes, c: bool }): void
+  test(p: {a:uint64,b:bytes,c:boolean}): void
   {
-    { a: a, b: b, c: c }: object{ a: uint64, b: bytes, c: bool } = p
+    #[a, b, c]: readonly [uint64, bytes, bool] = #[p.a, p.b, p.c]
     log(concat(concat(itob(a), b), itob(c)))
   }
   
   testMutable(p: Arc4): void
   {
-    (a = p.a), (b = p.b), (c = p.c), p
+    #[a, b, c]: readonly [arc4.uint64, arc4.dynamic_array<arc4.byte>, arc4.bool] = #[p.a, p.b, p.c]
     log(concat(concat(reinterpret_cast<bytes>(a), reinterpret_cast<bytes>(b)), reinterpret_cast<bytes>(c)))
   }
   
   init(): void
   {
-    tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test({ a: (#0 = { a: 456, b: "", c: False }).a, b: #0.b, c: #0.c })
-    temp: object{ a: uint64, b: bytes, c: bool } = { a: 2, b: "Hello", c: True }
+    tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test(new {a:uint64,b:bytes,c:boolean}(a=($0 = #{ a: 456, b: "", c: False }).a, b=$0.b, c=$0.c))
+    temp: {a:uint64,b:bytes,c:boolean} = new {a:uint64,b:bytes,c:boolean}(a=($1 = #{ a: 2, b: "Hello", c: True }).a, b=$1.b, c=$1.c)
     tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test(temp)
   }
   

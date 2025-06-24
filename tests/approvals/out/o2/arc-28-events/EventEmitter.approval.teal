@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0
+    intcblock 1
     bytecblock 0x0003
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
@@ -16,7 +16,7 @@ main:
 main_after_if_else@12:
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
-    intc_1 // 0
+    pushint 0 // 0
     return
 
 main_emitDynamicBytes_route@5:
@@ -30,22 +30,14 @@ main_emitDynamicBytes_route@5:
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
     txna ApplicationArgs 1
-    extract 2 0
     txna ApplicationArgs 2
     // tests/approvals/arc-28-events.algo.ts:42
     // emit('DB(byte[],byte[])', x, y)
     dig 1
     len
-    itob
-    extract 6 2
-    uncover 2
-    concat
-    dup
-    len
     pushint 4 // 4
     +
-    swap
-    uncover 2
+    cover 2
     concat
     swap
     itob
@@ -75,24 +67,14 @@ main_emitCustom_route@4:
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
     txna ApplicationArgs 1
-    extract 2 0
-    txna ApplicationArgs 2
-    intc_1 // 0
-    getbit
     // tests/approvals/arc-28-events.algo.ts:36
     // emit('Custom', arg0, arg1)
-    dig 1
-    len
-    itob
-    extract 6 2
-    uncover 2
-    concat
-    pushbytes 0x00
-    intc_1 // 0
-    uncover 3
-    setbit
     bytec_0 // 0x0003
-    swap
+    // tests/approvals/arc-28-events.algo.ts:13
+    // class EventEmitter extends Contract {
+    txna ApplicationArgs 2
+    // tests/approvals/arc-28-events.algo.ts:36
+    // emit('Custom', arg0, arg1)
     concat
     swap
     concat

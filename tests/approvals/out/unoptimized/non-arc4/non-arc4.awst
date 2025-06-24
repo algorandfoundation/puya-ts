@@ -2,7 +2,7 @@ contract HelloWorldContract
 {
   approvalProgram(): bool
   {
-    name: string = reinterpret_cast<string>(txnas<ApplicationArgs>(0))
+    name: string = ($0 = reinterpret_cast<string>(txnas<ApplicationArgs>(0)))
     log(reinterpret_cast<bytes>("Hello, " + name))
     return True
   }

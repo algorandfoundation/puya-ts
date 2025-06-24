@@ -356,6 +356,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   visitBinaryExpression(node: ts.BinaryExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
     const binaryOpKind = this.getBinaryOpKind(node.operatorToken)
+    const isStatement = ts.isExpressionStatement(node.parent)
 
     if (isKeyOf(binaryOpKind, BinaryOpSyntaxes)) {
       const left = requireInstanceBuilder(this.baseAccept(node.left))
@@ -372,7 +373,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
       const left = requireInstanceBuilder(this.baseAccept(node.left))
       const right = requireInstanceBuilder(this.baseAccept(node.right))
-      return handleAssignment(left, right, sourceLocation)
+      return handleAssignment(this.context, left, right, sourceLocation, isStatement)
     } else if (isKeyOf(binaryOpKind, ComparisonOpSyntaxes)) {
       const left = requireInstanceBuilder(this.baseAccept(node.left))
       const right = requireInstanceBuilder(this.baseAccept(node.right))
@@ -427,7 +428,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           op: AugmentedAssignmentLogicalOpSyntaxes[binaryOpKind],
         }),
       )
-      return handleAssignment(left, expr, sourceLocation)
+      return handleAssignment(this.context, left, expr, sourceLocation, isStatement)
     }
     throw new NotSupported(`Binary expression with op ${getSyntaxName(binaryOpKind)}`)
   }

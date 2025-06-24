@@ -12,7 +12,7 @@ subroutine test_uint64(x: uint64, y: uint64): bool
   x: uint64 = x + y++
   assert(x == 10)
   assert(y == 5)
-  inverted: uint64 = ~y
+  inverted: uint64 = ($0 = ~y)
   assert(inverted == 18446744073709551615 - y)
   assert(Boolean(y))
   assert(!!Boolean(y))
@@ -39,7 +39,7 @@ subroutine test_biguint(x: biguint, y: biguint): bool
 subroutine test_bytes(x: bytes): void
 {
   assert(x == bzero(4), comment=x must be 4 unset bytes)
-  y: bytes = ~x
+  y: bytes = ($1 = ~x)
   assert(y == 0xffffffff)
 }
 contract DemoContract

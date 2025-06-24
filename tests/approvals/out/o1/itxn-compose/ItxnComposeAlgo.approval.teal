@@ -110,7 +110,6 @@ distribute:
     gtxns Amount
     swap
     /
-    dup
     // tests/approvals/itxn-compose.algo.ts:29
     // receiver: addresses[0].bytes,
     frame_dig -3
@@ -118,17 +117,54 @@ distribute:
     swap
     frame_dig -3
     extract 2 32
-    // tests/approvals/itxn-compose.algo.ts:31
-    // itxnCompose.begin(payFields)
-    itxn_begin
-    itxn_field Receiver
-    itxn_field Amount
     // tests/approvals/itxn-compose.algo.ts:27
     // type: TransactionType.Payment,
     intc_1 // 1
-    itxn_field TypeEnum
+    // tests/approvals/itxn-compose.algo.ts:26-30
+    // const payFields = {
+    //   type: TransactionType.Payment,
+    //   amount: share,
+    //   receiver: addresses[0].bytes,
+    // } satisfies PaymentComposeFields
+    itob
+    uncover 2
+    itob
+    concat
+    dig 1
+    len
+    itob
+    extract 6 2
+    uncover 2
+    concat
+    swap
+    pushbytes 0x0012
+    concat
+    swap
+    concat
     // tests/approvals/itxn-compose.algo.ts:31
     // itxnCompose.begin(payFields)
+    itxn_begin
+    dup
+    intc_0 // 0
+    extract_uint64
+    dup
+    uncover 2
+    dup
+    pushint 8 // 8
+    extract_uint64
+    dup
+    cover 2
+    cover 3
+    dup
+    pushint 16 // 16
+    extract_uint16
+    dig 1
+    len
+    substring3
+    extract 2 0
+    itxn_field Receiver
+    itxn_field Amount
+    itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
     // tests/approvals/itxn-compose.algo.ts:32
@@ -138,17 +174,17 @@ distribute:
 distribute_for_header@1:
     // tests/approvals/itxn-compose.algo.ts:32
     // for (const i of urange(1, addresses.length)) {
-    frame_dig 3
+    frame_dig 4
     frame_dig 0
     <
     bz distribute_after_for@4
     // tests/approvals/itxn-compose.algo.ts:33
     // const addr = addresses[i]
-    frame_dig 3
+    frame_dig 4
     dup
     intc_3 // 32
     *
-    frame_dig 2
+    frame_dig 1
     swap
     intc_3 // 32
     extract3 // on error: index access is out of bounds
@@ -159,26 +195,18 @@ distribute_for_header@1:
     //   receiver: addr.bytes,
     // })
     itxn_next
-    frame_dig 1
-    itxn_field Amount
-    // tests/approvals/itxn-compose.algo.ts:27
-    // type: TransactionType.Payment,
-    intc_1 // 1
-    itxn_field TypeEnum
     itxn_field Receiver
-    // tests/approvals/itxn-compose.algo.ts:34-38
-    // itxnCompose.next({
-    //   ...payFields,
-    // 
-    //   receiver: addr.bytes,
-    // })
+    frame_dig 3
+    itxn_field Amount
+    frame_dig 2
+    itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
     // tests/approvals/itxn-compose.algo.ts:32
     // for (const i of urange(1, addresses.length)) {
     intc_1 // 1
     +
-    frame_bury 3
+    frame_bury 4
     b distribute_for_header@1
 
 distribute_after_for@4:

@@ -4,19 +4,19 @@ contract AssignmentsAlgo
   {
     return arc4Router()
   }
-
+  
   clearProgram(): bool
   {
     return True
   }
-
+  
   testPrimitives(u: uint64): void
   {
     p1: uint64 = u
     p2: uint64 = 2
     p2: uint64 = p2 + 1
   }
-
+  
   testArrayDestructure(i_a: arc4.dynamic_array<uint64>, u: uint64, m_a: arc4.dynamic_array<uint64>): void
   {
     #[a1]: readonly [uint64] = #[i_a[1]]
@@ -26,7 +26,7 @@ contract AssignmentsAlgo
     #[c, d]: readonly [uint64, uint64] = #[($3 = #[tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u)]).0, $3.1]
     #[a6, a7]: readonly [uint64, uint64] = #[m_a[0], m_a[1]]
   }
-
+  
   testArrayNarrowing(m_a: arc4.dynamic_array<uint64>, u: uint64): void
   {
     direct: arc4.dynamic_array<uint64> = ($4 = copy(m_a))
@@ -34,18 +34,18 @@ contract AssignmentsAlgo
     result: arc4.dynamic_array<uint64> = ($6 = (fromLit = new arc4.dynamic_array<uint64>(($7 = #[u, u, u]).0, $7.1, $7.2)), new arc4.dynamic_array<uint64>($7.0, $7.1, $7.2))
     fromLit2: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(($8 = #[u, u, u]).0, $8.1, $8.2)
   }
-
+  
   testNested(i_a: arc4.dynamic_array<arc4.dynamic_array<uint64>>): void
   {
     #[#[a]]: readonly [readonly [uint64]] = #[#[i_a[0][0]]]
   }
-
+  
   testDestructureObj(m: {a:uint64,b:string}, i: {readonly a:uint64,readonly b:string}{ a: uint64, b: string }): void
   {
     #[a1, b1]: readonly [uint64, string] = #[m.a, m.b]
     #[a2, b2]: readonly [uint64, string] = #[i.a, i.b]
   }
-
+  
   testObjLiteralNarrowing(a: uint64, b: uint64): void
   {
     mObj: MutableObj = new MutableObj(a=($9 = #{ a: a, b: b }).a, b=$9.b)
@@ -55,30 +55,17 @@ contract AssignmentsAlgo
     mObj3: MutableObj = new MutableObj(a=($15 = #{ a: ($16 = tests/approvals/assignments.algo.ts::getVal()).a, b: $16.b }).a, b=$15.b)
     mObj4: MutableObj = new MutableObj(a=($17 = #{ a: a, b: b }).a, b=$17.b)
   }
-
+  
   testMixed(m: arc4.dynamic_array<{a:[uint64]}>): void
   {
     #[#[#[a1]]]: readonly [readonly [readonly [uint64]]] = #[#[#[m[0].a.0]]]
-    (m = new arc4.dynamic_array<{a:[uint64]}>(new {a:[uint64]}(a=ARC4_ENCODE(
-    #[($18 =
-      ($19 =
-        #[
-          #{ a:
-            #[
-              ($20 =
-                #{ a:
-                  #[213]
-                  }).a.0] }]).0).a.0],
-
-
-
-     wtype=arc4.tuple<uint64>)))), new arc4.dynamic_array<{a:[uint64]}>($19.0)
+    m: arc4.dynamic_array<{a:[uint64]}> = new arc4.dynamic_array<{a:[uint64]}>(new {a:[uint64]}(a=ARC4_ENCODE(#[($18 = ($19 = #[#{ a: #[($20 = #{ a: #[213] }).a.0] }]).0).a.0], wtype=arc4.tuple<uint64>)))
   }
-
+  
   __algots__.defaultCreate(): void
   {
   }
-
+  
 }
 subroutine getVal(): ImmutableObj{ a: uint64, b: uint64 }
 {

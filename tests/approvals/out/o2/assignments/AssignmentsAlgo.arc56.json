@@ -1,0 +1,294 @@
+{
+    "name": "AssignmentsAlgo",
+    "structs": {
+        "": [
+            {
+                "name": "a",
+                "type": "uint64"
+            },
+            {
+                "name": "b",
+                "type": "string"
+            }
+        ],
+        "{readonly a:uint64,readonly b:string}": [
+            {
+                "name": "a",
+                "type": "uint64"
+            },
+            {
+                "name": "b",
+                "type": "string"
+            }
+        ]
+    },
+    "methods": [
+        {
+            "name": "testPrimitives",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "u"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "testArrayDestructure",
+            "args": [
+                {
+                    "type": "uint64[]",
+                    "name": "i_a"
+                },
+                {
+                    "type": "uint64",
+                    "name": "u"
+                },
+                {
+                    "type": "uint64[]",
+                    "name": "m_a"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "testArrayNarrowing",
+            "args": [
+                {
+                    "type": "uint64[]",
+                    "name": "m_a"
+                },
+                {
+                    "type": "uint64",
+                    "name": "u"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "testNested",
+            "args": [
+                {
+                    "type": "uint64[][]",
+                    "name": "i_a"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "testDestructureObj",
+            "args": [
+                {
+                    "type": "(uint64,string)",
+                    "struct": "",
+                    "name": "m"
+                },
+                {
+                    "type": "(uint64,string)",
+                    "struct": "{readonly a:uint64,readonly b:string}",
+                    "name": "i"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "testObjLiteralNarrowing",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "a"
+                },
+                {
+                    "type": "uint64",
+                    "name": "b"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "testMixed",
+            "args": [
+                {
+                    "type": "((uint64))[]",
+                    "name": "m"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        }
+    ],
+    "arcs": [
+        22,
+        28
+    ],
+    "networks": {},
+    "state": {
+        "schema": {
+            "global": {
+                "ints": 0,
+                "bytes": 0
+            },
+            "local": {
+                "ints": 0,
+                "bytes": 0
+            }
+        },
+        "keys": {
+            "global": {},
+            "local": {},
+            "box": {}
+        },
+        "maps": {
+            "global": {},
+            "local": {},
+            "box": {}
+        }
+    },
+    "bareActions": {
+        "create": [
+            "NoOp"
+        ],
+        "call": []
+    },
+    "sourceInfo": {
+        "approval": {
+            "sourceInfo": [
+                {
+                    "pc": [
+                        71,
+                        80,
+                        89,
+                        98,
+                        113,
+                        122,
+                        147
+                    ],
+                    "errorMessage": "OnCompletion is not NoOp"
+                },
+                {
+                    "pc": [
+                        161
+                    ],
+                    "errorMessage": "can only call when creating"
+                },
+                {
+                    "pc": [
+                        74,
+                        83,
+                        92,
+                        101,
+                        116,
+                        125,
+                        150
+                    ],
+                    "errorMessage": "can only call when not creating"
+                },
+                {
+                    "pc": [
+                        107
+                    ],
+                    "errorMessage": "index access is out of bounds"
+                }
+            ],
+            "pcOffsetMethod": "none"
+        },
+        "clear": {
+            "sourceInfo": [],
+            "pcOffsetMethod": "none"
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYXJjNC9pbmRleC5kLnRzOjpDb250cmFjdC5hcHByb3ZhbFByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBpbnRjYmxvY2sgMSAwCiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvYXNzaWdubWVudHMuYWxnby50czo3CiAgICAvLyBleHBvcnQgY2xhc3MgQXNzaWdubWVudHNBbGdvIGV4dGVuZHMgQ29udHJhY3QgewogICAgdHhuIE51bUFwcEFyZ3MKICAgIGJ6IG1haW5fYmFyZV9yb3V0aW5nQDEyCiAgICBwdXNoYnl0ZXNzIDB4NzAyZWExMDggMHg1YjJmNzcxMyAweDkwY2NjYjNkIDB4NWEzZmVjNWEgMHgyN2E0ZjM2NyAweGQ2YzlmNDg2IDB4NmUwM2FkMGMgLy8gbWV0aG9kICJ0ZXN0UHJpbWl0aXZlcyh1aW50NjQpdm9pZCIsIG1ldGhvZCAidGVzdEFycmF5RGVzdHJ1Y3R1cmUodWludDY0W10sdWludDY0LHVpbnQ2NFtdKXZvaWQiLCBtZXRob2QgInRlc3RBcnJheU5hcnJvd2luZyh1aW50NjRbXSx1aW50NjQpdm9pZCIsIG1ldGhvZCAidGVzdE5lc3RlZCh1aW50NjRbXVtdKXZvaWQiLCBtZXRob2QgInRlc3REZXN0cnVjdHVyZU9iaigodWludDY0LHN0cmluZyksKHVpbnQ2NCxzdHJpbmcpKXZvaWQiLCBtZXRob2QgInRlc3RPYmpMaXRlcmFsTmFycm93aW5nKHVpbnQ2NCx1aW50NjQpdm9pZCIsIG1ldGhvZCAidGVzdE1peGVkKCgodWludDY0KSlbXSl2b2lkIgogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAogICAgbWF0Y2ggbWFpbl90ZXN0UHJpbWl0aXZlc19yb3V0ZUAzIG1haW5fdGVzdEFycmF5RGVzdHJ1Y3R1cmVfcm91dGVANCBtYWluX3Rlc3RBcnJheU5hcnJvd2luZ19yb3V0ZUA1IG1haW5fdGVzdE5lc3RlZF9yb3V0ZUA2IG1haW5fdGVzdERlc3RydWN0dXJlT2JqX3JvdXRlQDcgbWFpbl90ZXN0T2JqTGl0ZXJhbE5hcnJvd2luZ19yb3V0ZUA4IG1haW5fdGVzdE1peGVkX3JvdXRlQDkKCm1haW5fYWZ0ZXJfaWZfZWxzZUAxNjoKICAgIC8vIHRlc3RzL2FwcHJvdmFscy9hc3NpZ25tZW50cy5hbGdvLnRzOjcKICAgIC8vIGV4cG9ydCBjbGFzcyBBc3NpZ25tZW50c0FsZ28gZXh0ZW5kcyBDb250cmFjdCB7CiAgICBpbnRjXzEgLy8gMAogICAgcmV0dXJuCgptYWluX3Rlc3RNaXhlZF9yb3V0ZUA5OgogICAgLy8gdGVzdHMvYXBwcm92YWxzL2Fzc2lnbm1lbnRzLmFsZ28udHM6NTYKICAgIC8vIHRlc3RNaXhlZChtOiBBcnJheTx7IGE6IFt1aW50NjRdIH0+KSB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIG5vdCBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBub3QgY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fdGVzdE9iakxpdGVyYWxOYXJyb3dpbmdfcm91dGVAODoKICAgIC8vIHRlc3RzL2FwcHJvdmFscy9hc3NpZ25tZW50cy5hbGdvLnRzOjQzCiAgICAvLyB0ZXN0T2JqTGl0ZXJhbE5hcnJvd2luZyhhOiB1aW50NjQsIGI6IHVpbnQ2NCkgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX3Rlc3REZXN0cnVjdHVyZU9ial9yb3V0ZUA3OgogICAgLy8gdGVzdHMvYXBwcm92YWxzL2Fzc2lnbm1lbnRzLmFsZ28udHM6MzgKICAgIC8vIHRlc3REZXN0cnVjdHVyZU9iaihtOiB7IGE6IHVpbnQ2NDsgYjogc3RyaW5nIH0sIGk6IFJlYWRvbmx5PHsgYTogdWludDY0OyBiOiBzdHJpbmcgfT4pIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl90ZXN0TmVzdGVkX3JvdXRlQDY6CiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvYXNzaWdubWVudHMuYWxnby50czozNAogICAgLy8gdGVzdE5lc3RlZChpX2E6IFJlYWRvbmx5QXJyYXk8UmVhZG9ubHlBcnJheTx1aW50NjQ+PikgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvYXNzaWdubWVudHMuYWxnby50czo3CiAgICAvLyBleHBvcnQgY2xhc3MgQXNzaWdubWVudHNBbGdvIGV4dGVuZHMgQ29udHJhY3QgewogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQogICAgLy8gdGVzdHMvYXBwcm92YWxzL2Fzc2lnbm1lbnRzLmFsZ28udHM6MzUKICAgIC8vIGNvbnN0IFtbYV1dID0gaV9hCiAgICBpbnRjXzEgLy8gMAogICAgZXh0cmFjdF91aW50MTYKICAgIGFzc2VydCAvLyBpbmRleCBhY2Nlc3MgaXMgb3V0IG9mIGJvdW5kcwogICAgLy8gdGVzdHMvYXBwcm92YWxzL2Fzc2lnbm1lbnRzLmFsZ28udHM6MzQKICAgIC8vIHRlc3ROZXN0ZWQoaV9hOiBSZWFkb25seUFycmF5PFJlYWRvbmx5QXJyYXk8dWludDY0Pj4pIHsKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fdGVzdEFycmF5TmFycm93aW5nX3JvdXRlQDU6CiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvYXNzaWdubWVudHMuYWxnby50czoyNAogICAgLy8gdGVzdEFycmF5TmFycm93aW5nKG1fYTogdWludDY0W10sIHU6IHVpbnQ2NCkgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX3Rlc3RBcnJheURlc3RydWN0dXJlX3JvdXRlQDQ6CiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvYXNzaWdubWVudHMuYWxnby50czoxNAogICAgLy8gdGVzdEFycmF5RGVzdHJ1Y3R1cmUoaV9hOiBSZWFkb25seUFycmF5PHVpbnQ2ND4sIHU6IHVpbnQ2NCwgbV9hOiB1aW50NjRbXSkgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvYXNzaWdubWVudHMuYWxnby50czo3CiAgICAvLyBleHBvcnQgY2xhc3MgQXNzaWdubWVudHNBbGdvIGV4dGVuZHMgQ29udHJhY3QgewogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgogICAgYnRvaQogICAgLy8gdGVzdHMvYXBwcm92YWxzL2Fzc2lnbm1lbnRzLmFsZ28udHM6NzUKICAgIC8vIGxvZyh1KQogICAgaXRvYgogICAgZHVwCiAgICBsb2cKICAgIGR1cAogICAgbG9nCiAgICBkdXAKICAgIGxvZwogICAgZHVwCiAgICBsb2cKICAgIGR1cAogICAgbG9nCiAgICBsb2cKICAgIC8vIHRlc3RzL2FwcHJvdmFscy9hc3NpZ25tZW50cy5hbGdvLnRzOjE0CiAgICAvLyB0ZXN0QXJyYXlEZXN0cnVjdHVyZShpX2E6IFJlYWRvbmx5QXJyYXk8dWludDY0PiwgdTogdWludDY0LCBtX2E6IHVpbnQ2NFtdKSB7CiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX3Rlc3RQcmltaXRpdmVzX3JvdXRlQDM6CiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvYXNzaWdubWVudHMuYWxnby50czo4CiAgICAvLyB0ZXN0UHJpbWl0aXZlcyh1OiB1aW50NjQpIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9iYXJlX3JvdXRpbmdAMTI6CiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvYXNzaWdubWVudHMuYWxnby50czo3CiAgICAvLyBleHBvcnQgY2xhc3MgQXNzaWdubWVudHNBbGdvIGV4dGVuZHMgQ29udHJhY3QgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgYm56IG1haW5fYWZ0ZXJfaWZfZWxzZUAxNgogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgICEKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4K",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDEwCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYmFzZS1jb250cmFjdC5kLnRzOjpCYXNlQ29udHJhY3QuY2xlYXJTdGF0ZVByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBwdXNoaW50IDEgLy8gMQogICAgcmV0dXJuCg=="
+    },
+    "byteCode": {
+        "approval": "CiACAQAxG0EAj4IHBHAuoQgEWy93EwSQzMs9BFo/7FoEJ6TzZwTWyfSGBG4DrQw2GgCOBwBOADUALAAdABQACwACI0MxGRREMRhEIkMxGRREMRhEIkMxGRREMRhEIkMxGRREMRhENhoBI1lEIkMxGRREMRhEIkMxGRREMRhENhoCFxZJsEmwSbBJsEmwsCJDMRkURDEYRCJDMRlA/6QxGBREIkM=",
+        "clear": "CoEBQw=="
+    },
+    "compilerInfo": {
+        "compiler": "puya",
+        "compilerVersion": {
+            "major": 4,
+            "minor": 9,
+            "patch": 0
+        }
+    },
+    "events": [],
+    "templateVariables": {}
+}

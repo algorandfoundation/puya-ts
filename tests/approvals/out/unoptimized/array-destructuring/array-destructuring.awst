@@ -19,8 +19,8 @@ contract ArrayDestructuringAlgo
   
   test(): void
   {
-    (#[a, b, c, d] = #[($0 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()).0, $0.1, $0.2, $0.3]), $0
-    (#[e] = #[($1 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()).2]), $1
+    #[a, b, c, d]: readonly [uint64, bytes, bool, biguint] = #[($0 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()).0, $0.1, $0.2, $0.3]
+    #[e]: readonly [bool] = #[($1 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()).2]
     f: readonly [uint64, bytes, bool, biguint] = ($2 = (#[g, i] = #[($3 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()).0, $3.3]), $3)
     assert(a == 5)
     assert(b == 0x)
@@ -30,7 +30,7 @@ contract ArrayDestructuringAlgo
     assert(g == 5)
     assert(i == 6)
     assert(4 == 4 and f.0 == 5 and f.1 == 0x and f.2 == False and f.3 == 6, comment=assert target is match for conditions)
-    (#[x, y, z] = #[($4 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceFixed())[0], $4[1], $4[2]]), $4
+    #[x, y, z]: readonly [uint64, uint64, uint64] = #[($4 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceFixed())[0], $4[1], $4[2]]
   }
   
   produceItems(): readonly [uint64, bytes, bool, biguint]
@@ -40,9 +40,9 @@ contract ArrayDestructuringAlgo
   
   testLiteralDestructuring(): void
   {
-    a: uint64 = ($5 = 1)
-    b: uint64 = ($6 = 2)
-    (#[x, y] = #[($7 = (#[b, a] = #[($8 = #[a, b]).0, $8.1]), ARC4_ENCODE(#[$8.0, $8.1], wtype=arc4.tuple<uint64,uint64>)).0, $7.1]), $7
+    a: uint64 = 1
+    b: uint64 = 2
+    #[x, y]: readonly [uint64, uint64] = #[($5 = (#[b, a] = #[($6 = #[a, b]).0, $6.1]), ARC4_ENCODE(#[$6.0, $6.1], wtype=arc4.tuple<uint64,uint64>)).0, $5.1]
     assert(x == b)
     assert(y == a)
   }

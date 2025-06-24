@@ -1,0 +1,67 @@
+main tests/approvals/property-ordering.algo.ts::Demo.approvalProgram:
+    block@0: // L28
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 8u)
+        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
+        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%val_as_bytes%1#1: bytes[8] = (itob 8u)
+        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
+        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
+        let aggregate%encoded%2#1: Encoded(uint64,uint64) = (concat aggregate%encoded%1#1 0x)
+        let obj#0: Encoded(uint64,uint64) = aggregate%encoded%2#1
+        let aggregate%extract%0#1: bytes = (extract3 obj#0 8u 8u)
+        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
+        let values%0#0: uint64 = (btoi tuple_item%0#0)
+        let tmp%2#0: bool = (== values%0#0 8u)
+        goto tmp%2#0 ? block@2 : block@4
+    block@2: // and_contd_L21
+        let aggregate%extract%1#1: bytes = (extract3 obj#0 0u 8u)
+        let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#1
+        let values%1#0: uint64 = (btoi tuple_item%1#0)
+        let tmp%4#0: bool = (== values%1#0 8u)
+        goto tmp%4#0 ? block@3 : block@4
+    block@3: // bool_true_L21
+        let and_result%0#0: bool = 1u
+        goto block@5
+    block@4: // bool_false_L21
+        let and_result%0#1: bool = 0u
+        goto block@5
+    block@5: // bool_merge_L21
+        let and_result%0#2: bool = φ(and_result%0#0 <- block@3, and_result%0#1 <- block@4)
+        (assert and_result%0#2) // assert target is match for conditions
+        let aggregate%val_as_bytes%2#1: bytes[8] = (itob 3u)
+        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
+        let aggregate%encoded%3#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%2#1)
+        let aggregate%val_as_bytes%3#1: bytes[8] = (itob 4u)
+        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
+        let aggregate%encoded%4#1: Encoded(uint64,uint64) = (concat aggregate%encoded%3#1 aggregate%as_Encoded(uint64)%3#1)
+        let aggregate%encoded%5#1: Encoded(uint64,uint64) = (concat aggregate%encoded%4#1 0x)
+        let x#1: Encoded(uint64,uint64) = aggregate%encoded%5#1
+        let aggregate%extract%2#1: bytes = (extract3 x#1 0u 8u)
+        let tuple_item%0#1: Encoded(uint64) = aggregate%extract%2#1
+        let values%0#1: uint64 = (btoi tuple_item%0#1)
+        let aggregate%extract%3#1: bytes = (extract3 x#1 8u 8u)
+        let tuple_item%1#1: Encoded(uint64) = aggregate%extract%3#1
+        let values%1#1: uint64 = (btoi tuple_item%1#1)
+        let tmp%0#2: bool = (!= values%0#1 values%1#1)
+        (assert tmp%0#2) // For the purpose of this test, a should not equal b
+        let aggregate%val_as_bytes%4#1: bytes[8] = (itob values%1#1)
+        let aggregate%as_Encoded(uint64)%4#1: Encoded(uint64) = aggregate%val_as_bytes%4#1
+        let aggregate%encoded%6#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%4#1)
+        let aggregate%val_as_bytes%5#1: bytes[8] = (itob values%0#1)
+        let aggregate%as_Encoded(uint64)%5#1: Encoded(uint64) = aggregate%val_as_bytes%5#1
+        let aggregate%encoded%7#1: Encoded(uint64,uint64) = (concat aggregate%encoded%6#1 aggregate%as_Encoded(uint64)%5#1)
+        let aggregate%encoded%8#1: Encoded(uint64,uint64) = (concat aggregate%encoded%7#1 0x)
+        let obj#1: Encoded(uint64,uint64) = aggregate%encoded%8#1
+        let xEncoded#0: bytes = x#1
+        let objEncoded#0: bytes = obj#1
+        let length%0#0: uint64 = (len objEncoded#0)
+        let is_out_of_bounds%0#0: bool = (>= 8u length%0#0)
+        let bounded_index%0#0: uint64 = (select 8u length%0#0 is_out_of_bounds%0#0)
+        let tmp%2#1: bytes = (substring3 objEncoded#0 bounded_index%0#0 length%0#0)
+        let is_out_of_bounds%1#0: bool = (>= 0u length%0#0)
+        let bounded_index%1#0: uint64 = (select 0u length%0#0 is_out_of_bounds%1#0)
+        let tmp%3#1: bytes = (substring3 objEncoded#0 bounded_index%1#0 bounded_index%0#0)
+        let tmp%4#1: bytes = (concat tmp%2#1 tmp%3#1)
+        let tmp%5#0: bool = (== xEncoded#0 tmp%4#1)
+        (assert tmp%5#0) // Encoded order should be swapped
+        return 1u
