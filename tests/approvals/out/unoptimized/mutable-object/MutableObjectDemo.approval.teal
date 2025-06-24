@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 8 1 16
-    bytecblock 0x 0x151f7c75 0x02458807 0xba27a9ba 0x95d82d6f "plugins" 0x0000000000000000
+    bytecblock 0x 0x151f7c75 0x0000000000000001 0x02458807 0xba27a9ba 0x3814f92a "plugins" 0xa78000de 0x0000000000000000
 
 main_block@0:
 
@@ -22,14 +22,14 @@ main_abi_routing@2:
     txna ApplicationArgs 0
     pushbytes 0x89388ddd // method "testVectorCreationAndEquality()void"
     pushbytes 0xef322d6d // method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)"
-    bytec_2 // method "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)"
+    bytec_3 // method "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)"
     pushbytes 0xcb81deb8 // method "implicitCastingAndSpreading((uint64,uint64))void"
-    bytec_3 // method "testNestedObjects(((uint64,uint64),(uint64,uint64)))void"
+    bytec 4 // method "testNestedObjects(((uint64,uint64),(uint64,uint64)))void"
     pushbytes 0x2f670a55 // method "testMethodSelector()void"
     pushbytes 0xd4c81f5b // method "testAssertMatch(uint64)void"
     pushbytes 0xf4835c23 // method "testArc4Encoding((uint64,uint64))void"
-    bytec 4 // method "getPlugin(string)(uint64,uint64,uint64,bool)"
-    pushbytes 0x86bb6481 // method "getMain()(uint64,uint64,uint64,bool)"
+    bytec 5 // method "getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])"
+    pushbytes 0x007a4cb0 // method "getMain()(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])"
     pushbytes 0xa9bc61f1 // method "setPlugin(string)void"
     uncover 11
     match main_testVectorCreationAndEquality_route@3 main_addVectors_route@4 main_mutateVector_route@5 main_implicitCastingAndSpreading_route@6 main_testNestedObjects_route@7 main_testMethodSelector_route@8 main_testAssertMatch_route@9 main_testArc4Encoding_route@10 main_getPlugin_route@11 main_getMain_route@12 main_setPlugin_route@13
@@ -240,7 +240,7 @@ main_mutateVector_route@5:
 
 main_addVectors_route@4:
     // tests/approvals/mutable-object.algo.ts:21
-    // public addVectors(v1: Vector, v2: Vector) {
+    // public addVectors(v1: Vector, v2: Vector): Vector {
     txn OnCompletion
     intc_0 // NoOp
     ==
@@ -254,7 +254,7 @@ main_addVectors_route@4:
     txna ApplicationArgs 1
     txna ApplicationArgs 2
     // tests/approvals/mutable-object.algo.ts:21
-    // public addVectors(v1: Vector, v2: Vector) {
+    // public addVectors(v1: Vector, v2: Vector): Vector {
     callsub addVectors
     bytec_1 // 0x151f7c75
     swap
@@ -305,10 +305,13 @@ main___algots__.defaultCreate@17:
 
 // tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testVectorCreationAndEquality() -> void:
 testVectorCreationAndEquality:
+    // tests/approvals/mutable-object.algo.ts:13
+    // public testVectorCreationAndEquality() {
+    proto 0 0
 
 testVectorCreationAndEquality_block@0:
     // tests/approvals/mutable-object.algo.ts:14
-    // const v1 = new Vector({ x: 0, y: 1 })
+    // const v1: Vector = { y: 1, x: 0 }
     intc_0 // 0
     itob
     bytec_0 // 0x
@@ -319,9 +322,9 @@ testVectorCreationAndEquality_block@0:
     concat
     bytec_0 // 0x
     concat
+    dupn 2
     // tests/approvals/mutable-object.algo.ts:15
     // log(v1.x)
-    dup
     intc_0 // 0
     intc_1 // 8
     extract3
@@ -338,7 +341,7 @@ testVectorCreationAndEquality_block@0:
     itob
     log
     // tests/approvals/mutable-object.algo.ts:17
-    // const v2 = new Vector({ y: 1, x: 0 })
+    // const v2: Vector = { y: 1, x: 0 }
     intc_0 // 0
     itob
     bytec_0 // 0x
@@ -349,17 +352,57 @@ testVectorCreationAndEquality_block@0:
     concat
     bytec_0 // 0x
     concat
+    dup
+    cover 2
     // tests/approvals/mutable-object.algo.ts:18
-    // assert(v1 === v2)
+    // assertMatch(v1, v2)
+    swap
+    intc_0 // 0
+    intc_1 // 8
+    extract3
+    btoi
+    swap
+    intc_0 // 0
+    intc_1 // 8
+    extract3
+    btoi
     ==
-    assert
+    bz testVectorCreationAndEquality_bool_false@3
+
+testVectorCreationAndEquality_and_contd@1:
+    // tests/approvals/mutable-object.algo.ts:18
+    // assertMatch(v1, v2)
+    frame_dig 0
+    intc_1 // 8
+    dup
+    extract3
+    btoi
+    frame_dig 1
+    intc_1 // 8
+    dup
+    extract3
+    btoi
+    ==
+    bz testVectorCreationAndEquality_bool_false@3
+
+testVectorCreationAndEquality_bool_true@2:
+    intc_2 // 1
+
+testVectorCreationAndEquality_bool_merge@4:
+    // tests/approvals/mutable-object.algo.ts:18
+    // assertMatch(v1, v2)
+    assert // assert target is match for conditions
     retsub
+
+testVectorCreationAndEquality_bool_false@3:
+    intc_0 // 0
+    b testVectorCreationAndEquality_bool_merge@4
 
 
 // tests/approvals/mutable-object.algo.ts::MutableObjectDemo.addVectors(v1: bytes, v2: bytes) -> bytes:
 addVectors:
     // tests/approvals/mutable-object.algo.ts:21
-    // public addVectors(v1: Vector, v2: Vector) {
+    // public addVectors(v1: Vector, v2: Vector): Vector {
     proto 2 1
 
 addVectors_block@0:
@@ -390,10 +433,10 @@ addVectors_block@0:
     btoi
     +
     // tests/approvals/mutable-object.algo.ts:22-25
-    // return new Vector({
+    // return {
     //   x: v1.x + v2.x,
     //   y: v1.y + v2.y,
-    // })
+    // }
     swap
     itob
     bytec_0 // 0x
@@ -446,30 +489,11 @@ implicitCastingAndSpreading:
 
 implicitCastingAndSpreading_block@0:
     // tests/approvals/mutable-object.algo.ts:35
-    // const v2 = new Vector(v1)
+    // const v2 = clone(v1)
     frame_dig -1
-    intc_0 // 0
-    intc_1 // 8
-    extract3
-    btoi
-    frame_dig -1
-    intc_1 // 8
-    dup
-    extract3
-    btoi
-    swap
-    itob
-    bytec_0 // 0x
-    swap
-    concat
-    swap
-    itob
-    concat
-    bytec_0 // 0x
-    concat
+    dupn 2
     // tests/approvals/mutable-object.algo.ts:36
-    // const v3 = new Vector({ ...v2 })
-    dup
+    // const v3 = { ...v2 }
     intc_0 // 0
     intc_1 // 8
     extract3
@@ -520,12 +544,46 @@ implicitCastingAndSpreading_block@0:
     ==
     assert
     // tests/approvals/mutable-object.algo.ts:39
-    // assert(v1 === v2)
+    // assertMatch(v1, v2)
     frame_dig -1
+    intc_0 // 0
+    intc_1 // 8
+    extract3
+    btoi
+    swap
+    intc_0 // 0
+    intc_1 // 8
+    extract3
+    btoi
     ==
-    assert
+    bz implicitCastingAndSpreading_bool_false@3
+
+implicitCastingAndSpreading_and_contd@1:
+    // tests/approvals/mutable-object.algo.ts:39
+    // assertMatch(v1, v2)
+    frame_dig -1
+    intc_1 // 8
+    dup
+    extract3
+    btoi
+    frame_dig 0
+    intc_1 // 8
+    dup
+    extract3
+    btoi
+    ==
+    bz implicitCastingAndSpreading_bool_false@3
+
+implicitCastingAndSpreading_bool_true@2:
+    intc_2 // 1
+
+implicitCastingAndSpreading_bool_merge@4:
+    // tests/approvals/mutable-object.algo.ts:39
+    // assertMatch(v1, v2)
+    assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:40
     // assert(v3.x === v1.x)
+    frame_dig 1
     dup
     intc_0 // 0
     intc_1 // 8
@@ -553,13 +611,45 @@ implicitCastingAndSpreading_block@0:
     ==
     assert
     // tests/approvals/mutable-object.algo.ts:42
-    // assert(v3 === v1)
-    dup
+    // assertMatch(v3, v1)
+    intc_0 // 0
+    intc_1 // 8
+    extract3
+    btoi
     frame_dig -1
+    intc_0 // 0
+    intc_1 // 8
+    extract3
+    btoi
     ==
-    assert
+    bz implicitCastingAndSpreading_bool_false@7
+
+implicitCastingAndSpreading_and_contd@5:
+    // tests/approvals/mutable-object.algo.ts:42
+    // assertMatch(v3, v1)
+    frame_dig 1
+    intc_1 // 8
+    dup
+    extract3
+    btoi
+    frame_dig -1
+    intc_1 // 8
+    dup
+    extract3
+    btoi
+    ==
+    bz implicitCastingAndSpreading_bool_false@7
+
+implicitCastingAndSpreading_bool_true@6:
+    intc_2 // 1
+
+implicitCastingAndSpreading_bool_merge@8:
+    // tests/approvals/mutable-object.algo.ts:42
+    // assertMatch(v3, v1)
+    assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:44
     // const { x, y } = v3
+    frame_dig 1
     dup
     intc_0 // 0
     intc_1 // 8
@@ -571,15 +661,16 @@ implicitCastingAndSpreading_block@0:
     dup
     extract3
     btoi
+    uncover 2
+    swap
     cover 2
     // tests/approvals/mutable-object.algo.ts:45
     // assert(x === v3.x)
-    dup
+    dig 1
     intc_0 // 0
     intc_1 // 8
     extract3
     btoi
-    uncover 2
     ==
     assert
     // tests/approvals/mutable-object.algo.ts:46
@@ -592,6 +683,14 @@ implicitCastingAndSpreading_block@0:
     assert
     retsub
 
+implicitCastingAndSpreading_bool_false@7:
+    intc_0 // 0
+    b implicitCastingAndSpreading_bool_merge@8
+
+implicitCastingAndSpreading_bool_false@3:
+    intc_0 // 0
+    b implicitCastingAndSpreading_bool_merge@4
+
 
 // tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedObjects(vp: bytes) -> void:
 testNestedObjects:
@@ -601,7 +700,7 @@ testNestedObjects:
 
 testNestedObjects_block@0:
     // tests/approvals/mutable-object.algo.ts:50
-    // const v1 = new Vector({ x: vp.v.x, y: vp.v.y })
+    // const v1 = { x: vp.v.x, y: vp.v.y }
     frame_dig -1
     intc_0 // 0
     intc_3 // 16
@@ -629,7 +728,7 @@ testNestedObjects_block@0:
     bytec_0 // 0x
     concat
     // tests/approvals/mutable-object.algo.ts:51
-    // const p1 = new Point({ x: vp.p.x, y: vp.p.y })
+    // const p1 = { x: vp.p.x, y: vp.p.y }
     frame_dig -1
     intc_3 // 16
     dup
@@ -646,6 +745,7 @@ testNestedObjects_block@0:
     intc_1 // 8
     extract3
     btoi
+    swap
     itob
     bytec_0 // 0x
     swap
@@ -656,7 +756,7 @@ testNestedObjects_block@0:
     bytec_0 // 0x
     concat
     // tests/approvals/mutable-object.algo.ts:52
-    // const vp1 = new VectorPoint({ v: clone(v1), p: clone(p1) })
+    // const vp1 = { v: clone(v1), p: clone(p1) }
     bytec_0 // 0x
     uncover 2
     concat
@@ -664,9 +764,9 @@ testNestedObjects_block@0:
     concat
     bytec_0 // 0x
     concat
+    dupn 2
     // tests/approvals/mutable-object.algo.ts:53
     // log(vp1.v.x)
-    dup
     intc_0 // 0
     intc_3 // 16
     extract3
@@ -694,8 +794,8 @@ testNestedObjects_block@0:
     intc_3 // 16
     dup
     extract3
+    intc_0 // 0
     intc_1 // 8
-    dup
     extract3
     btoi
     itob
@@ -706,18 +806,110 @@ testNestedObjects_block@0:
     intc_3 // 16
     dup
     extract3
-    intc_0 // 0
     intc_1 // 8
+    dup
     extract3
     btoi
     itob
     log
     // tests/approvals/mutable-object.algo.ts:57
-    // assert(vp1 === vp)
+    // assertMatch(vp1, vp)
+    intc_0 // 0
+    intc_3 // 16
+    extract3
+    intc_0 // 0
+    intc_1 // 8
+    extract3
+    btoi
     frame_dig -1
+    intc_0 // 0
+    intc_3 // 16
+    extract3
+    intc_0 // 0
+    intc_1 // 8
+    extract3
+    btoi
     ==
-    assert
+    bz testNestedObjects_bool_false@5
+
+testNestedObjects_and_contd@1:
+    // tests/approvals/mutable-object.algo.ts:57
+    // assertMatch(vp1, vp)
+    frame_dig 0
+    intc_0 // 0
+    intc_3 // 16
+    extract3
+    intc_1 // 8
+    dup
+    extract3
+    btoi
+    frame_dig -1
+    intc_0 // 0
+    intc_3 // 16
+    extract3
+    intc_1 // 8
+    dup
+    extract3
+    btoi
+    ==
+    bz testNestedObjects_bool_false@5
+
+testNestedObjects_and_contd@2:
+    // tests/approvals/mutable-object.algo.ts:57
+    // assertMatch(vp1, vp)
+    frame_dig 0
+    intc_3 // 16
+    dup
+    extract3
+    intc_1 // 8
+    dup
+    extract3
+    btoi
+    frame_dig -1
+    intc_3 // 16
+    dup
+    extract3
+    intc_0 // 0
+    intc_1 // 8
+    extract3
+    btoi
+    ==
+    bz testNestedObjects_bool_false@5
+
+testNestedObjects_and_contd@3:
+    // tests/approvals/mutable-object.algo.ts:57
+    // assertMatch(vp1, vp)
+    frame_dig 0
+    intc_3 // 16
+    dup
+    extract3
+    intc_0 // 0
+    intc_1 // 8
+    extract3
+    btoi
+    frame_dig -1
+    intc_3 // 16
+    dup
+    extract3
+    intc_1 // 8
+    dup
+    extract3
+    btoi
+    ==
+    bz testNestedObjects_bool_false@5
+
+testNestedObjects_bool_true@4:
+    intc_2 // 1
+
+testNestedObjects_bool_merge@6:
+    // tests/approvals/mutable-object.algo.ts:57
+    // assertMatch(vp1, vp)
+    assert // assert target is match for conditions
     retsub
+
+testNestedObjects_bool_false@5:
+    intc_0 // 0
+    b testNestedObjects_bool_merge@6
 
 
 // tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testMethodSelector() -> void:
@@ -726,7 +918,7 @@ testMethodSelector:
 testMethodSelector_block@0:
     // tests/approvals/mutable-object.algo.ts:62
     // methodSelector(MutableObjectDemo.prototype.mutateVector) ===
-    bytec_2 // method "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)"
+    bytec_3 // method "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)"
     // tests/approvals/mutable-object.algo.ts:63
     // methodSelector('mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)'),
     dup
@@ -742,13 +934,13 @@ testMethodSelector_block@0:
     assert
     // tests/approvals/mutable-object.algo.ts:65
     // assert(methodSelector(MutableObjectDemo.prototype.getPlugin) === methodSelector('getPlugin(string)(uint64,uint64,uint64,bool)'))
-    bytec 4 // method "getPlugin(string)(uint64,uint64,uint64,bool)"
-    dup
+    bytec 5 // method "getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])"
+    pushbytes 0x95d82d6f // method "getPlugin(string)(uint64,uint64,uint64,bool)"
     ==
     assert
     // tests/approvals/mutable-object.algo.ts:67
     // methodSelector(MutableObjectDemo.prototype.testNestedObjects) ===
-    bytec_3 // method "testNestedObjects(((uint64,uint64),(uint64,uint64)))void"
+    bytec 4 // method "testNestedObjects(((uint64,uint64),(uint64,uint64)))void"
     // tests/approvals/mutable-object.algo.ts:68
     // methodSelector('testNestedObjects(((uint64,uint64),(uint64,uint64)))void'),
     dup
@@ -779,10 +971,10 @@ testAssertMatch_block@0:
     pushint 2 // 2
     *
     // tests/approvals/mutable-object.algo.ts:74-77
-    // const obj: Vector = new Vector({
+    // const obj: Vector = {
     //   y: (b = x * 2),
     //   x: b,
-    // })
+    // }
     dup
     itob
     bytec_0 // 0x
@@ -851,7 +1043,7 @@ testAssertMatch_bool_merge@4:
     // })
     assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:82
-    // const v = new Point({ y: obj.y, x: obj.x })
+    // const v = { y: obj.y, x: obj.x }
     frame_dig 1
     dup
     intc_1 // 8
@@ -981,10 +1173,10 @@ testArc4Encoding_block@0:
     extract3
     btoi
     // tests/approvals/mutable-object.algo.ts:91-94
-    // const obj: Vector = new Vector({
+    // const obj: Vector = {
     //   x: p.x,
     //   y: p.y,
-    // })
+    // }
     swap
     itob
     bytec_0 // 0x
@@ -1051,7 +1243,7 @@ getPlugin:
 getPlugin_block@0:
     // tests/approvals/mutable-object.algo.ts:100
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
-    bytec 5 // "plugins"
+    bytec 6 // "plugins"
     frame_dig -1
     concat
     // tests/approvals/mutable-object.algo.ts:105
@@ -1112,98 +1304,183 @@ setPlugin_block@0:
     intc_0 // 0
     dup
     setbit
+    // tests/approvals/mutable-object.algo.ts:128
+    // selector: new arc4.StaticBytes(methodSelector('test()void')),
+    bytec 7 // method "test()void"
+    len
+    pushint 4 // 4
+    ==
+    assert // invalid size
     // tests/approvals/mutable-object.algo.ts:121-133
-    // this.plugins(key).value = new PluginInfo({
+    // this.plugins(key).value = {
     //   lastValidRound: new arc4.UintN64(1),
     //   cooldown: new arc4.UintN64(),
     //   lastCalled: new arc4.UintN64(),
     //   adminPrivileges: new arc4.Bool(false),
-    //   // methods: new MutableArray(
-    //   //   new MethodInfo({
-    //   //     selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //   //     cooldown: new arc4.UintN64(1),
-    //   //     lastCalled: new arc4.UintN64(1),
-    //   //   }),
-    //   // ),
-    // })
+    //   methods: [
+    //     {
+    //       selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //       cooldown: new arc4.UintN64(1),
+    //       lastCalled: new arc4.UintN64(1),
+    //     },
+    //   ],
+    // }
     bytec_0 // 0x
-    // tests/approvals/mutable-object.algo.ts:122
-    // lastValidRound: new arc4.UintN64(1),
-    pushbytes 0x0000000000000001
+    // tests/approvals/mutable-object.algo.ts:128
+    // selector: new arc4.StaticBytes(methodSelector('test()void')),
+    bytec 7 // method "test()void"
     // tests/approvals/mutable-object.algo.ts:121-133
-    // this.plugins(key).value = new PluginInfo({
+    // this.plugins(key).value = {
     //   lastValidRound: new arc4.UintN64(1),
     //   cooldown: new arc4.UintN64(),
     //   lastCalled: new arc4.UintN64(),
     //   adminPrivileges: new arc4.Bool(false),
-    //   // methods: new MutableArray(
-    //   //   new MethodInfo({
-    //   //     selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //   //     cooldown: new arc4.UintN64(1),
-    //   //     lastCalled: new arc4.UintN64(1),
-    //   //   }),
-    //   // ),
-    // })
+    //   methods: [
+    //     {
+    //       selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //       cooldown: new arc4.UintN64(1),
+    //       lastCalled: new arc4.UintN64(1),
+    //     },
+    //   ],
+    // }
     concat
-    // tests/approvals/mutable-object.algo.ts:123
-    // cooldown: new arc4.UintN64(),
-    bytec 6 // 0x0000000000000000
+    // tests/approvals/mutable-object.algo.ts:129
+    // cooldown: new arc4.UintN64(1),
+    bytec_2 // 0x0000000000000001
     // tests/approvals/mutable-object.algo.ts:121-133
-    // this.plugins(key).value = new PluginInfo({
+    // this.plugins(key).value = {
     //   lastValidRound: new arc4.UintN64(1),
     //   cooldown: new arc4.UintN64(),
     //   lastCalled: new arc4.UintN64(),
     //   adminPrivileges: new arc4.Bool(false),
-    //   // methods: new MutableArray(
-    //   //   new MethodInfo({
-    //   //     selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //   //     cooldown: new arc4.UintN64(1),
-    //   //     lastCalled: new arc4.UintN64(1),
-    //   //   }),
-    //   // ),
-    // })
+    //   methods: [
+    //     {
+    //       selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //       cooldown: new arc4.UintN64(1),
+    //       lastCalled: new arc4.UintN64(1),
+    //     },
+    //   ],
+    // }
     concat
-    // tests/approvals/mutable-object.algo.ts:124
-    // lastCalled: new arc4.UintN64(),
-    bytec 6 // 0x0000000000000000
+    // tests/approvals/mutable-object.algo.ts:130
+    // lastCalled: new arc4.UintN64(1),
+    bytec_2 // 0x0000000000000001
     // tests/approvals/mutable-object.algo.ts:121-133
-    // this.plugins(key).value = new PluginInfo({
+    // this.plugins(key).value = {
     //   lastValidRound: new arc4.UintN64(1),
     //   cooldown: new arc4.UintN64(),
     //   lastCalled: new arc4.UintN64(),
     //   adminPrivileges: new arc4.Bool(false),
-    //   // methods: new MutableArray(
-    //   //   new MethodInfo({
-    //   //     selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //   //     cooldown: new arc4.UintN64(1),
-    //   //     lastCalled: new arc4.UintN64(1),
-    //   //   }),
-    //   // ),
-    // })
+    //   methods: [
+    //     {
+    //       selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //       cooldown: new arc4.UintN64(1),
+    //       lastCalled: new arc4.UintN64(1),
+    //     },
+    //   ],
+    // }
     concat
+    bytec_0 // 0x
+    concat
+    bytec_0 // 0x
+    swap
+    concat
+    intc_2 // 1
+    itob
+    extract 6 2
     swap
     concat
     bytec_0 // 0x
     concat
-    // tests/approvals/mutable-object.algo.ts:100
-    // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
-    bytec 5 // "plugins"
-    frame_dig -1
-    concat
+    bytec_0 // 0x
+    // tests/approvals/mutable-object.algo.ts:122
+    // lastValidRound: new arc4.UintN64(1),
+    bytec_2 // 0x0000000000000001
     // tests/approvals/mutable-object.algo.ts:121-133
-    // this.plugins(key).value = new PluginInfo({
+    // this.plugins(key).value = {
     //   lastValidRound: new arc4.UintN64(1),
     //   cooldown: new arc4.UintN64(),
     //   lastCalled: new arc4.UintN64(),
     //   adminPrivileges: new arc4.Bool(false),
-    //   // methods: new MutableArray(
-    //   //   new MethodInfo({
-    //   //     selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //   //     cooldown: new arc4.UintN64(1),
-    //   //     lastCalled: new arc4.UintN64(1),
-    //   //   }),
-    //   // ),
-    // })
+    //   methods: [
+    //     {
+    //       selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //       cooldown: new arc4.UintN64(1),
+    //       lastCalled: new arc4.UintN64(1),
+    //     },
+    //   ],
+    // }
+    concat
+    // tests/approvals/mutable-object.algo.ts:123
+    // cooldown: new arc4.UintN64(),
+    bytec 8 // 0x0000000000000000
+    // tests/approvals/mutable-object.algo.ts:121-133
+    // this.plugins(key).value = {
+    //   lastValidRound: new arc4.UintN64(1),
+    //   cooldown: new arc4.UintN64(),
+    //   lastCalled: new arc4.UintN64(),
+    //   adminPrivileges: new arc4.Bool(false),
+    //   methods: [
+    //     {
+    //       selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //       cooldown: new arc4.UintN64(1),
+    //       lastCalled: new arc4.UintN64(1),
+    //     },
+    //   ],
+    // }
+    concat
+    // tests/approvals/mutable-object.algo.ts:124
+    // lastCalled: new arc4.UintN64(),
+    bytec 8 // 0x0000000000000000
+    // tests/approvals/mutable-object.algo.ts:121-133
+    // this.plugins(key).value = {
+    //   lastValidRound: new arc4.UintN64(1),
+    //   cooldown: new arc4.UintN64(),
+    //   lastCalled: new arc4.UintN64(),
+    //   adminPrivileges: new arc4.Bool(false),
+    //   methods: [
+    //     {
+    //       selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //       cooldown: new arc4.UintN64(1),
+    //       lastCalled: new arc4.UintN64(1),
+    //     },
+    //   ],
+    // }
+    concat
+    uncover 2
+    concat
+    bytec_0 // 0x
+    uncover 2
+    concat
+    swap
+    pushint 27 // 27
+    itob
+    extract 6 2
+    concat
+    swap
+    concat
+    // tests/approvals/mutable-object.algo.ts:100
+    // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
+    bytec 6 // "plugins"
+    frame_dig -1
+    concat
+    // tests/approvals/mutable-object.algo.ts:121-133
+    // this.plugins(key).value = {
+    //   lastValidRound: new arc4.UintN64(1),
+    //   cooldown: new arc4.UintN64(),
+    //   lastCalled: new arc4.UintN64(),
+    //   adminPrivileges: new arc4.Bool(false),
+    //   methods: [
+    //     {
+    //       selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //       cooldown: new arc4.UintN64(1),
+    //       lastCalled: new arc4.UintN64(1),
+    //     },
+    //   ],
+    // }
+    dup
+    box_del
+    pop
     swap
     box_put
     retsub

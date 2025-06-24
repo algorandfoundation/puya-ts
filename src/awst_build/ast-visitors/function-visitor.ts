@@ -2,7 +2,7 @@ import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import type * as awst from '../../awst/nodes'
 import type { Block } from '../../awst/nodes'
-import { AssignmentExpression, Goto, ReturnStatement } from '../../awst/nodes'
+import { Goto, ReturnStatement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
@@ -124,7 +124,9 @@ export abstract class FunctionVisitor
           paramPType,
         )
 
-        assignments.push(handleAssignmentStatement(this.visitBindingName(p.name, sourceLocation), paramBuilder, sourceLocation))
+        assignments.push(
+          handleAssignmentStatement(this.context, this.visitBindingName(p.name, sourceLocation), paramBuilder, sourceLocation),
+        )
       }
     }
 
@@ -185,7 +187,7 @@ export abstract class FunctionVisitor
         return []
       }
 
-      return handleAssignmentStatement(this.visitBindingName(d.name, sourceLocation), source, sourceLocation)
+      return handleAssignmentStatement(this.context, this.visitBindingName(d.name, sourceLocation), source, sourceLocation)
     })
   }
 
@@ -265,7 +267,7 @@ export abstract class FunctionVisitor
         items: itemVar.resolveLValue(),
         loopBody: nodeFactory.block(
           { sourceLocation },
-          handleAssignmentStatement(items, itemVar, initializerLocation),
+          handleAssignmentStatement(this.context, items, itemVar, initializerLocation),
           this.accept(node.statement),
           ...maybeNodes(ctx.hasContinues, ctx.continueTarget),
         ),
@@ -288,11 +290,6 @@ export abstract class FunctionVisitor
   }
   visitExpressionStatement(node: ts.ExpressionStatement): awst.Statement | awst.Statement[] {
     const expr = requireInstanceBuilder(this.accept(node.expression)).resolve()
-    if (expr instanceof AssignmentExpression) {
-      return nodeFactory.assignmentStatement({
-        ...expr,
-      })
-    }
     return nodeFactory.expressionStatement({
       expr,
     })

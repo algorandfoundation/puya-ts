@@ -16,7 +16,7 @@ main_if_body@1:
 main_after_if_else@2:
 
 main_block@3:
-    // tests/approvals/precompiled-apps.algo.ts:36
+    // tests/approvals/precompiled-apps.algo.ts:35
     // export class Hello extends HelloBase {
     txn NumAppArgs
     intc_0 // 0
@@ -24,7 +24,7 @@ main_block@3:
     bz main_bare_routing@12
 
 main_abi_routing@4:
-    // tests/approvals/precompiled-apps.algo.ts:36
+    // tests/approvals/precompiled-apps.algo.ts:35
     // export class Hello extends HelloBase {
     txna ApplicationArgs 0
     pushbytes 0x009225ae // method "helloCreate(string)void"
@@ -40,7 +40,7 @@ main_switch_case_default@10:
 main_switch_case_next@11:
 
 main_after_if_else@13:
-    // tests/approvals/precompiled-apps.algo.ts:36
+    // tests/approvals/precompiled-apps.algo.ts:35
     // export class Hello extends HelloBase {
     intc_0 // 0
 
@@ -48,7 +48,7 @@ main_after_inlined_tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_r
     return
 
 main_sendGreetings_route@9:
-    // tests/approvals/precompiled-apps.algo.ts:31
+    // tests/approvals/precompiled-apps.algo.ts:30
     // sendGreetings(a: Greeting): string {
     txn OnCompletion
     intc_0 // NoOp
@@ -58,10 +58,10 @@ main_sendGreetings_route@9:
     intc_0 // 0
     !=
     assert // can only call when not creating
-    // tests/approvals/precompiled-apps.algo.ts:36
+    // tests/approvals/precompiled-apps.algo.ts:35
     // export class Hello extends HelloBase {
     txna ApplicationArgs 1
-    // tests/approvals/precompiled-apps.algo.ts:31
+    // tests/approvals/precompiled-apps.algo.ts:30
     // sendGreetings(a: Greeting): string {
     callsub sendGreetings
     dup
@@ -78,7 +78,7 @@ main_sendGreetings_route@9:
     b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_router__@14
 
 main_greet_route@8:
-    // tests/approvals/precompiled-apps.algo.ts:27
+    // tests/approvals/precompiled-apps.algo.ts:26
     // greet(name: string): string {
     txn OnCompletion
     intc_0 // NoOp
@@ -88,11 +88,11 @@ main_greet_route@8:
     intc_0 // 0
     !=
     assert // can only call when not creating
-    // tests/approvals/precompiled-apps.algo.ts:36
+    // tests/approvals/precompiled-apps.algo.ts:35
     // export class Hello extends HelloBase {
     txna ApplicationArgs 1
     extract 2 0
-    // tests/approvals/precompiled-apps.algo.ts:27
+    // tests/approvals/precompiled-apps.algo.ts:26
     // greet(name: string): string {
     callsub greet
     dup
@@ -109,7 +109,7 @@ main_greet_route@8:
     b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_router__@14
 
 main_update_route@7:
-    // tests/approvals/precompiled-apps.algo.ts:24
+    // tests/approvals/precompiled-apps.algo.ts:23
     // @abimethod({ allowActions: 'UpdateApplication' })
     txn OnCompletion
     pushint 4 // UpdateApplication
@@ -124,7 +124,7 @@ main_update_route@7:
     b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_router__@14
 
 main_delete_route@6:
-    // tests/approvals/precompiled-apps.algo.ts:21
+    // tests/approvals/precompiled-apps.algo.ts:20
     // @abimethod({ allowActions: 'DeleteApplication' })
     txn OnCompletion
     pushint 5 // DeleteApplication
@@ -139,7 +139,7 @@ main_delete_route@6:
     b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_router__@14
 
 main_helloCreate_route@5:
-    // tests/approvals/precompiled-apps.algo.ts:37
+    // tests/approvals/precompiled-apps.algo.ts:36
     // @abimethod({ name: 'helloCreate', onCreate: 'require' })
     txn OnCompletion
     intc_0 // NoOp
@@ -149,11 +149,11 @@ main_helloCreate_route@5:
     intc_0 // 0
     ==
     assert // can only call when creating
-    // tests/approvals/precompiled-apps.algo.ts:36
+    // tests/approvals/precompiled-apps.algo.ts:35
     // export class Hello extends HelloBase {
     txna ApplicationArgs 1
     extract 2 0
-    // tests/approvals/precompiled-apps.algo.ts:37
+    // tests/approvals/precompiled-apps.algo.ts:36
     // @abimethod({ name: 'helloCreate', onCreate: 'require' })
     callsub create
     intc_1 // 1
@@ -165,16 +165,16 @@ main_bare_routing@12:
 
 // tests/approvals/precompiled-apps.algo.ts::Hello.create(greeting: bytes) -> void:
 create:
-    // tests/approvals/precompiled-apps.algo.ts:37-38
+    // tests/approvals/precompiled-apps.algo.ts:36-37
     // @abimethod({ name: 'helloCreate', onCreate: 'require' })
     // create(greeting: string) {
     proto 1 0
 
 create_block@0:
-    // tests/approvals/precompiled-apps.algo.ts:19
+    // tests/approvals/precompiled-apps.algo.ts:18
     // greeting = GlobalState({ initialValue: '' })
     bytec_0 // "greeting"
-    // tests/approvals/precompiled-apps.algo.ts:39
+    // tests/approvals/precompiled-apps.algo.ts:38
     // this.greeting.value = greeting
     frame_dig -1
     app_global_put
@@ -197,18 +197,18 @@ update_block@0:
 
 // tests/approvals/precompiled-apps.algo.ts::HelloBase.greet(name: bytes) -> bytes:
 greet:
-    // tests/approvals/precompiled-apps.algo.ts:27
+    // tests/approvals/precompiled-apps.algo.ts:26
     // greet(name: string): string {
     proto 1 1
 
 greet_block@0:
-    // tests/approvals/precompiled-apps.algo.ts:19
+    // tests/approvals/precompiled-apps.algo.ts:18
     // greeting = GlobalState({ initialValue: '' })
     intc_0 // 0
     bytec_0 // "greeting"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/precompiled-apps.algo.ts:28
+    // tests/approvals/precompiled-apps.algo.ts:27
     // return `${this.greeting.value} ${name}`
     bytec_1 // ""
     swap
@@ -222,18 +222,18 @@ greet_block@0:
 
 // tests/approvals/precompiled-apps.algo.ts::HelloBase.sendGreetings(a: bytes) -> bytes:
 sendGreetings:
-    // tests/approvals/precompiled-apps.algo.ts:31
+    // tests/approvals/precompiled-apps.algo.ts:30
     // sendGreetings(a: Greeting): string {
     proto 1 1
 
 sendGreetings_block@0:
-    // tests/approvals/precompiled-apps.algo.ts:19
+    // tests/approvals/precompiled-apps.algo.ts:18
     // greeting = GlobalState({ initialValue: '' })
     intc_0 // 0
     bytec_0 // "greeting"
     app_global_get_ex
     assert // check GlobalState exists
-    // tests/approvals/precompiled-apps.algo.ts:32
+    // tests/approvals/precompiled-apps.algo.ts:31
     // return `${this.greeting.value} ${a.name}${a.termination.native}`
     bytec_1 // ""
     swap
@@ -274,7 +274,7 @@ constructor_block@0:
 constructor_block@1:
 
 constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
-    // tests/approvals/precompiled-apps.algo.ts:19
+    // tests/approvals/precompiled-apps.algo.ts:18
     // greeting = GlobalState({ initialValue: '' })
     bytec_0 // "greeting"
     bytec_1 // ""

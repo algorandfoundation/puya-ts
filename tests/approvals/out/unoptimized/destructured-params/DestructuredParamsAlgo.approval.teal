@@ -4,6 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1 8 80
+    bytecblock 0x 0x00 "Hello"
 
 main_block@0:
 
@@ -86,37 +87,10 @@ main_test_route@3:
     // tests/approvals/destructured-params.algo.ts:8
     // export class DestructuredParamsAlgo extends Contract {
     txna ApplicationArgs 1
-    dup
-    intc_0 // 0
-    intc_2 // 8
-    extract3
-    btoi
-    swap
-    dup
-    intc_2 // 8
-    extract_uint16
-    swap
-    dup
-    len
-    swap
-    dup
-    uncover 3
-    uncover 3
-    substring3
-    extract 2 0
-    swap
-    intc_3 // 80
-    getbit
-    uncover 2
-    swap
-    uncover 2
-    swap
     // tests/approvals/destructured-params.algo.ts:9
     // test({ a, b, c }: { a: uint64; b: bytes; c: boolean }): void {
-    uncover 2
-    uncover 2
-    uncover 2
     callsub test
+    pop
     intc_1 // 1
     b main_after_inlined_tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.__puya_arc4_router__@13
 
@@ -145,19 +119,36 @@ main___algots__.defaultCreate@9:
     b main_after_inlined_tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.__puya_arc4_router__@13
 
 
-// tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test(p.a: uint64, p.b: bytes, p.c: uint64) -> void:
+// tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test(p: bytes) -> bytes:
 test:
     // tests/approvals/destructured-params.algo.ts:9
     // test({ a, b, c }: { a: uint64; b: bytes; c: boolean }): void {
-    proto 3 0
+    proto 1 1
 
 test_block@0:
+    frame_dig -1
     // tests/approvals/destructured-params.algo.ts:9
     // test({ a, b, c }: { a: uint64; b: bytes; c: boolean }): void {
-    frame_dig -3
-    frame_dig -2
-    swap
+    dup
+    intc_0 // 0
+    intc_2 // 8
+    extract3
+    btoi
     frame_dig -1
+    intc_2 // 8
+    extract_uint16
+    frame_dig -1
+    len
+    frame_dig -1
+    uncover 2
+    uncover 2
+    substring3
+    extract 2 0
+    frame_dig -1
+    intc_3 // 80
+    getbit
+    uncover 2
+    swap
     cover 2
     // tests/approvals/destructured-params.algo.ts:10
     // log(a, b, c)
@@ -196,14 +187,17 @@ testMutable_block@0:
     frame_dig -1
     intc_3 // 80
     getbit
-    pushbytes 0x00
+    bytec_1 // 0x00
     intc_0 // 0
     uncover 2
     setbit
+    uncover 2
+    swap
+    uncover 2
+    swap
+    cover 2
     // tests/approvals/destructured-params.algo.ts:14
     // log(a, b, c)
-    uncover 2
-    uncover 2
     concat
     swap
     concat
@@ -218,17 +212,67 @@ init_block@0:
     // tests/approvals/destructured-params.algo.ts:18
     // this.test({ a: 456, b: Bytes(''), c: false })
     pushint 456 // 456
-    pushbytes ""
+    itob
+    bytec_0 // 0x
+    swap
+    concat
+    bytec_0 // ""
+    len
+    itob
+    extract 6 2
+    bytec_0 // ""
+    concat
+    bytec_0 // 0x
+    swap
+    concat
+    pushint 11 // 11
+    itob
+    extract 6 2
+    uncover 2
+    swap
+    concat
+    bytec_1 // 0x00
     intc_0 // 0
+    dup
+    setbit
+    concat
+    swap
+    concat
     callsub test
+    pop
     // tests/approvals/destructured-params.algo.ts:19
     // const temp = { a: Uint64(2), b: Bytes('Hello'), c: true }
     pushint 2 // 2
-    pushbytes "Hello"
+    itob
+    bytec_0 // 0x
+    swap
+    concat
+    bytec_2 // "Hello"
+    len
+    itob
+    extract 6 2
+    bytec_2 // "Hello"
+    concat
+    bytec_0 // 0x
+    swap
+    concat
+    pushint 11 // 11
+    itob
+    extract 6 2
+    uncover 2
+    swap
+    concat
+    bytec_1 // 0x00
+    intc_0 // 0
     intc_1 // 1
+    setbit
+    concat
+    swap
+    concat
     // tests/approvals/destructured-params.algo.ts:20
     // this.test(temp)
     callsub test
+    pop
     retsub
 
 

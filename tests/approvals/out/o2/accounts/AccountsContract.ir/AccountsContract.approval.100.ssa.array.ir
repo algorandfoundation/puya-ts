@@ -1,0 +1,136 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        goto tmp%0#1 ? block@2 : block@7
+    block@2: // abi_routing_L8
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "getAccountInfo(account,asset)(byte[32],uint64,uint64,byte[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)" => block@3, method "otherAccount()void" => block@4, * => block@11}
+    block@3: // getAccountInfo_route_L9
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (! tmp%3#0)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        (assert tmp%5#0) // can only call when not creating
+        let reinterpret_Encoded(uint8)%0#0: Encoded(uint8) = (txna ApplicationArgs 1)
+        let tmp%7#0: uint64 = (btoi reinterpret_Encoded(uint8)%0#0)
+        let account#0: account = ((txnas Accounts) tmp%7#0)
+        let reinterpret_Encoded(uint8)%1#0: Encoded(uint8) = (txna ApplicationArgs 2)
+        let tmp%9#0: uint64 = (btoi reinterpret_Encoded(uint8)%1#0)
+        let asset#0: uint64 = ((txnas Assets) tmp%9#0)
+        goto block@18
+    block@18: // while_top_L20
+        let tmp%1#2: uint64 = (global OpcodeBudget)
+        let tmp%2#2: bool = (> 1410u tmp%1#2)
+        goto tmp%2#2 ? block@19 : block@21
+    block@19: // while_body_L21
+        itxn_begin
+        ((itxn_field TypeEnum) appl)
+        ((itxn_field OnCompletion) DeleteApplication)
+        ((itxn_field ApprovalProgram) 0x068101)
+        ((itxn_field ClearStateProgram) 0x068101)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        goto block@18
+    block@21: // after_while_L20
+        let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
+        (assert check%0#0) // account funded
+        let (value%1#0: uint64, check%1#0: bool) = ((acct_params_get AcctMinBalance) account#0)
+        (assert check%1#0) // account funded
+        let (value%2#0: account, check%2#0: bool) = ((acct_params_get AcctAuthAddr) account#0)
+        (assert check%2#0) // account funded
+        let (value%3#0: uint64, check%3#0: bool) = ((acct_params_get AcctTotalNumUint) account#0)
+        (assert check%3#0) // account funded
+        let (value%4#0: uint64, check%4#0: bool) = ((acct_params_get AcctTotalNumByteSlice) account#0)
+        (assert check%4#0) // account funded
+        let (value%5#0: uint64, check%5#0: bool) = ((acct_params_get AcctTotalExtraAppPages) account#0)
+        (assert check%5#0) // account funded
+        let (value%6#0: uint64, check%6#0: bool) = ((acct_params_get AcctTotalAppsCreated) account#0)
+        (assert check%6#0) // account funded
+        let (value%7#0: uint64, check%7#0: bool) = ((acct_params_get AcctTotalAppsOptedIn) account#0)
+        (assert check%7#0) // account funded
+        let (value%8#0: uint64, check%8#0: bool) = ((acct_params_get AcctTotalAssetsCreated) account#0)
+        (assert check%8#0) // account funded
+        let (value%9#0: uint64, check%9#0: bool) = ((acct_params_get AcctTotalAssets) account#0)
+        (assert check%9#0) // account funded
+        let (value%10#0: uint64, check%10#0: bool) = ((acct_params_get AcctTotalBoxes) account#0)
+        (assert check%10#0) // account funded
+        let (value%11#0: uint64, check%11#0: bool) = ((acct_params_get AcctTotalBoxBytes) account#0)
+        (assert check%11#0) // account funded
+        let tmp%0#2: uint64 = (global CurrentApplicationID)
+        let tmp%1#1: bool = (app_opted_in account#0 tmp%0#2)
+        let (tmp%2#1: uint64, tmp%3#1: bool) = ((asset_holding_get AssetBalance) account#0 asset#0)
+        let aggregate%length%0#1: uint64 = (len account#0)
+        let aggregate%lengths_equal%0#1: bool = (== aggregate%length%0#1 32u)
+        (assert aggregate%lengths_equal%0#1) // invalid size
+        let aggregate%as_Encoded(uint8[32])%0#1: Encoded(uint8[32]) = account#0
+        let aggregate%encoded%0#1: Encoded(uint8[32]) = (concat 0x aggregate%as_Encoded(uint8[32])%0#1)
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob value%0#0)
+        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
+        let aggregate%encoded%1#1: Encoded(uint8[32],uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%val_as_bytes%1#1: bytes[8] = (itob value%1#0)
+        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
+        let aggregate%encoded%2#1: Encoded(uint8[32],uint64,uint64) = (concat aggregate%encoded%1#1 aggregate%as_Encoded(uint64)%1#1)
+        let aggregate%length%1#1: uint64 = (len value%2#0)
+        let aggregate%lengths_equal%1#1: bool = (== aggregate%length%1#1 32u)
+        (assert aggregate%lengths_equal%1#1) // invalid size
+        let aggregate%as_Encoded(uint8[32])%1#1: Encoded(uint8[32]) = value%2#0
+        let aggregate%encoded%3#1: Encoded(uint8[32],uint64,uint64,uint8[32]) = (concat aggregate%encoded%2#1 aggregate%as_Encoded(uint8[32])%1#1)
+        let aggregate%val_as_bytes%2#1: bytes[8] = (itob value%3#0)
+        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
+        let aggregate%encoded%4#1: Encoded(uint8[32],uint64,uint64,uint8[32],uint64) = (concat aggregate%encoded%3#1 aggregate%as_Encoded(uint64)%2#1)
+        let aggregate%val_as_bytes%3#1: bytes[8] = (itob value%4#0)
+        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
+        let aggregate%encoded%5#1: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64) = (concat aggregate%encoded%4#1 aggregate%as_Encoded(uint64)%3#1)
+        let aggregate%val_as_bytes%4#1: bytes[8] = (itob value%5#0)
+        let aggregate%as_Encoded(uint64)%4#1: Encoded(uint64) = aggregate%val_as_bytes%4#1
+        let aggregate%encoded%6#1: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64) = (concat aggregate%encoded%5#1 aggregate%as_Encoded(uint64)%4#1)
+        let aggregate%val_as_bytes%5#1: bytes[8] = (itob value%6#0)
+        let aggregate%as_Encoded(uint64)%5#1: Encoded(uint64) = aggregate%val_as_bytes%5#1
+        let aggregate%encoded%7#1: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64) = (concat aggregate%encoded%6#1 aggregate%as_Encoded(uint64)%5#1)
+        let aggregate%val_as_bytes%6#1: bytes[8] = (itob value%7#0)
+        let aggregate%as_Encoded(uint64)%6#1: Encoded(uint64) = aggregate%val_as_bytes%6#1
+        let aggregate%encoded%8#1: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64) = (concat aggregate%encoded%7#1 aggregate%as_Encoded(uint64)%6#1)
+        let aggregate%val_as_bytes%7#1: bytes[8] = (itob value%8#0)
+        let aggregate%as_Encoded(uint64)%7#1: Encoded(uint64) = aggregate%val_as_bytes%7#1
+        let aggregate%encoded%9#1: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64) = (concat aggregate%encoded%8#1 aggregate%as_Encoded(uint64)%7#1)
+        let aggregate%val_as_bytes%8#1: bytes[8] = (itob value%9#0)
+        let aggregate%as_Encoded(uint64)%8#1: Encoded(uint64) = aggregate%val_as_bytes%8#1
+        let aggregate%encoded%10#1: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat aggregate%encoded%9#1 aggregate%as_Encoded(uint64)%8#1)
+        let aggregate%val_as_bytes%9#1: bytes[8] = (itob value%10#0)
+        let aggregate%as_Encoded(uint64)%9#1: Encoded(uint64) = aggregate%val_as_bytes%9#1
+        let aggregate%encoded%11#1: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat aggregate%encoded%10#1 aggregate%as_Encoded(uint64)%9#1)
+        let aggregate%val_as_bytes%10#1: bytes[8] = (itob value%11#0)
+        let aggregate%as_Encoded(uint64)%10#1: Encoded(uint64) = aggregate%val_as_bytes%10#1
+        let aggregate%encoded%12#1: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64) = (concat aggregate%encoded%11#1 aggregate%as_Encoded(uint64)%10#1)
+        let aggregate%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u tmp%1#1)
+        let aggregate%encoded%13#1: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1) = (concat aggregate%encoded%12#1 aggregate%encoded_bool%0#1)
+        let aggregate%set_bit%0#1: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1) = (setbit aggregate%encoded%13#1 1217u tmp%3#1)
+        let aggregate%encoded%14#1: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1,bool1) = (concat aggregate%set_bit%0#1 0x)
+        let tmp%4#1: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1,bool1) = aggregate%encoded%14#1
+        let tmp%12#0: bytes = (concat 0x151f7c75 tmp%4#1)
+        (log tmp%12#0)
+        let tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#0: bool = 1u
+        goto block@12
+    block@4: // otherAccount_route_L30
+        let tmp%13#0: uint64 = (txn OnCompletion)
+        let tmp%14#0: bool = (! tmp%13#0)
+        (assert tmp%14#0) // OnCompletion is not NoOp
+        let tmp%15#0: uint64 = (txn ApplicationID)
+        (assert tmp%15#0) // can only call when not creating
+        let tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#1: bool = 1u
+        goto block@12
+    block@7: // bare_routing_L8
+        let tmp%17#0: uint64 = (txn OnCompletion)
+        goto tmp%17#0 ? block@11 : block@8
+    block@8: // __algots__.defaultCreate_L8
+        let tmp%18#0: uint64 = (txn ApplicationID)
+        let tmp%19#0: bool = (! tmp%18#0)
+        (assert tmp%19#0) // can only call when creating
+        let tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#2: bool = 1u
+        goto block@12
+    block@11: // after_if_else_L8
+        let tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#3: bool = 0u
+        goto block@12
+    block@12: // after_inlined_tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#0 <- block@21, tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#1 <- block@4, tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#2 <- block@8, tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#3 <- block@11)
+        return tmp%0#0

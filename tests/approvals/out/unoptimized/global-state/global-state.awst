@@ -14,7 +14,7 @@ contract TestContract
     }
     assert(STATE_EXISTS(GlobalState["testState"]), comment=State should have value)
     assert(GlobalState["testState"] == 2, comment=Value should equal 2)
-    GlobalState["testState"]: uint64 = btoi(txnas<ApplicationArgs>(0))
+    GlobalState["testState"]: uint64 = ($0 = btoi(txnas<ApplicationArgs>(0)))
     GlobalState["noInitial"]: bytes = "abc"
     return True
   }
@@ -30,7 +30,7 @@ contract TestContract
     GlobalState["testState"]: uint64 = 2
     GlobalState["TESTSTATE"]: uint64 = 5
     assert(GlobalState["baseTestState"] == "testing 123", comment=Base class state should be initialized after super call)
-    GlobalState["noInitialInt"]: uint64 = 72057594037927936 * GlobalState["testState"]
+    GlobalState["noInitialInt"]: uint64 = ($1 = 72057594037927936 * GlobalState["testState"])
   }
   
   BaseTestContract::constructor(): void
@@ -58,7 +58,7 @@ contract TestArc4
   
   setState(key: string, value: uint64): void
   {
-    proxy: state_key = reinterpret_cast<state_key>(reinterpret_cast<bytes>(key))
+    proxy: state_key = ($2 = reinterpret_cast<state_key>(reinterpret_cast<bytes>(key)))
     GlobalState[proxy]: uint64 = value
   }
   
@@ -77,8 +77,8 @@ contract TestTuple
   globals {
     ["t1"]: arc4.tuple<string,uint64,bool>
     ["t2"]: arc4.tuple<string,arc4.tuple<string,biguint,bool>>
-    ["t3"]: object{ a: string, b: uint64, c: bool }
-    ["t4"]: arc4.tuple<string,lib.d.ts::object>
+    ["t3"]: {a:string,b:uint64,c:boolean}
+    ["t4"]: arc4.tuple<string,{a:string,b:biguint,c:boolean}>
     ["t5"]: Data
   }
   approvalProgram(): bool
@@ -93,25 +93,25 @@ contract TestTuple
   
   testTuple(): void
   {
-    GlobalState["t1"]: arc4.tuple<string,uint64,bool> = ARC4_ENCODE(<tuple>["hello", 123, True], wtype=arc4.tuple<string,uint64,bool>)
+    GlobalState["t1"]: arc4.tuple<string,uint64,bool> = ARC4_ENCODE(#[($3 = #["hello", 123, True]).0, $3.1, $3.2], wtype=arc4.tuple<string,uint64,bool>)
     assert(GlobalState["t1"].0 == "hello", comment=Tuple value should be set)
     assert(GlobalState["t1"].1 == 123, comment=Tuple value should be set)
     assert(GlobalState["t1"].2 == True, comment=Tuple value should be set)
-    GlobalState["t2"]: arc4.tuple<string,arc4.tuple<string,biguint,bool>> = ARC4_ENCODE(<tuple>["a", ARC4_ENCODE(<tuple>["b", 456, True], wtype=arc4.tuple<string,biguint,bool>)], wtype=arc4.tuple<string,arc4.tuple<string,biguint,bool>>)
+    GlobalState["t2"]: arc4.tuple<string,arc4.tuple<string,biguint,bool>> = ARC4_ENCODE(#[($4 = #["a", #["b", 456, True]]).0, ARC4_ENCODE(#[$4.1.0, $4.1.1, $4.1.2], wtype=arc4.tuple<string,biguint,bool>)], wtype=arc4.tuple<string,arc4.tuple<string,biguint,bool>>)
     assert(GlobalState["t2"].0 == "a", comment=Tuple value should be set)
     assert(GlobalState["t2"].1.0 == "b", comment=Tuple value should be set)
     assert(GlobalState["t2"].1.1 == 456, comment=Tuple value should be set)
     assert(GlobalState["t2"].1.2 == True, comment=Tuple value should be set)
-    GlobalState["t3"]: object{ a: string, b: uint64, c: bool } = { a: (#0 = { a: "hello", b: 123, c: True }).a, b: #0.b, c: #0.c }
+    GlobalState["t3"]: {a:string,b:uint64,c:boolean} = new {a:string,b:uint64,c:boolean}(a=($5 = #{ a: ($6 = #{ a: "hello", b: 123, c: True }).a, b: $6.b, c: $6.c }).a, b=$5.b, c=$5.c)
     assert(GlobalState["t3"].a == "hello", comment=Object value should be set)
     assert(GlobalState["t3"].b == 123, comment=Object value should be set)
     assert(GlobalState["t3"].c == True, comment=Object value should be set)
-    GlobalState["t4"]: arc4.tuple<string,lib.d.ts::object> = ARC4_ENCODE(<tuple>["a", { a: (#1 = { a: "b", b: 456, c: True }).a, b: #1.b, c: #1.c }], wtype=arc4.tuple<string,lib.d.ts::object>)
+    GlobalState["t4"]: arc4.tuple<string,{a:string,b:biguint,c:boolean}> = ARC4_ENCODE(#[($7 = #["a", #{ a: ($8 = #{ a: "b", b: 456, c: True }).a, b: $8.b, c: $8.c }]).0, new {a:string,b:biguint,c:boolean}(a=($9 = $7.1).a, b=$9.b, c=$9.c)], wtype=arc4.tuple<string,{a:string,b:biguint,c:boolean}>)
     assert(GlobalState["t4"].0 == "a", comment=Tuple value should be set)
     assert(GlobalState["t4"].1.a == "b", comment=Tuple value should be set)
     assert(GlobalState["t4"].1.b == 456, comment=Tuple value should be set)
     assert(GlobalState["t4"].1.c == True, comment=Tuple value should be set)
-    GlobalState["t5"]: Data = new Data(a=(#2 = { a: (#3 = { a: "hello", b: 123, c: True, d: "World" }).a, b: #3.b, c: #3.c, d: #3.d }).a, b=#2.b, c=#2.c, d=#2.d)
+    GlobalState["t5"]: Data = new Data(a=($10 = #{ a: ($11 = #{ a: "hello", b: 123, c: True, d: "World" }).a, b: $11.b, c: $11.c, d: $11.d }).a, b=$10.b, c=$10.c, d=$10.d)
     assert(GlobalState["t5"].a == "hello", comment=Mutable object value should be set)
     assert(GlobalState["t5"].b == 123, comment=Mutable object value should be set)
     assert(GlobalState["t5"].c == True, comment=Mutable object value should be set)

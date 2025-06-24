@@ -995,7 +995,7 @@
             "name": "inverted"
           },
           "value": {
-            "_type": "UInt64UnaryOperation",
+            "_type": "SingleEvaluation",
             "source_location": {
               "file": "tests/approvals/prefix-postfix-operators.algo.ts",
               "line": 18,
@@ -1008,14 +1008,13 @@
               "name": "uint64",
               "immutable": true
             },
-            "op": "~",
-            "expr": {
-              "_type": "VarExpression",
+            "source": {
+              "_type": "UInt64UnaryOperation",
               "source_location": {
                 "file": "tests/approvals/prefix-postfix-operators.algo.ts",
                 "line": 18,
                 "end_line": 18,
-                "column": 28,
+                "column": 27,
                 "end_column": 29
               },
               "wtype": {
@@ -1023,8 +1022,25 @@
                 "name": "uint64",
                 "immutable": true
               },
-              "name": "y"
-            }
+              "op": "~",
+              "expr": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/prefix-postfix-operators.algo.ts",
+                  "line": 18,
+                  "end_line": 18,
+                  "column": 28,
+                  "end_column": 29
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true
+                },
+                "name": "y"
+              }
+            },
+            "_id": "0"
           }
         },
         {
@@ -2755,7 +2771,7 @@
             "name": "y"
           },
           "value": {
-            "_type": "BytesUnaryOperation",
+            "_type": "SingleEvaluation",
             "source_location": {
               "file": "tests/approvals/prefix-postfix-operators.algo.ts",
               "line": 52,
@@ -2769,15 +2785,14 @@
               "immutable": true,
               "length": null
             },
-            "op": "~",
-            "expr": {
-              "_type": "VarExpression",
+            "source": {
+              "_type": "BytesUnaryOperation",
               "source_location": {
                 "file": "tests/approvals/prefix-postfix-operators.algo.ts",
                 "line": 52,
                 "end_line": 52,
                 "column": 12,
-                "end_column": 13
+                "end_column": 29
               },
               "wtype": {
                 "_type": "BytesWType",
@@ -2785,8 +2800,26 @@
                 "immutable": true,
                 "length": null
               },
-              "name": "x"
-            }
+              "op": "~",
+              "expr": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/prefix-postfix-operators.algo.ts",
+                  "line": 52,
+                  "end_line": 52,
+                  "column": 12,
+                  "end_column": 13
+                },
+                "wtype": {
+                  "_type": "BytesWType",
+                  "name": "bytes",
+                  "immutable": true,
+                  "length": null
+                },
+                "name": "x"
+              }
+            },
+            "_id": "1"
           }
         },
         {

@@ -1,0 +1,137 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__() -> bool:
+    block@0: // L14
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@9
+    block@1: // abi_routing_L14
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "getXY()(uint64,uint64)" => block@2, method "getYX()(uint64,uint64)" => block@3, method "getAnon()(uint64,uint64)" => block@4, method "test((uint64,uint64),(uint64,uint64))void" => block@5, method "testing()((uint64,uint64),(uint64,uint64),(uint64,uint64))" => block@6, * => block@7}
+    block@2: // getXY_route_L15
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 NoOp)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (!= tmp%5#0 0u)
+        (assert tmp%6#0) // can only call when not creating
+        let (tmp%7#0: uint64, tmp%8#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getXY()
+        let tmp%9#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(tmp%7#0, tmp%8#0)
+        let tmp%10#0: bytes = (concat 0x151f7c75 tmp%9#0)
+        (log tmp%10#0)
+        return 1u
+    block@3: // getYX_route_L22
+        let tmp%11#0: uint64 = (txn OnCompletion)
+        let tmp%12#0: bool = (== tmp%11#0 NoOp)
+        (assert tmp%12#0) // OnCompletion is not NoOp
+        let tmp%13#0: uint64 = (txn ApplicationID)
+        let tmp%14#0: bool = (!= tmp%13#0 0u)
+        (assert tmp%14#0) // can only call when not creating
+        let (tmp%15#0: uint64, tmp%16#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getYX()
+        let tmp%17#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(tmp%15#0, tmp%16#0)
+        let tmp%18#0: bytes = (concat 0x151f7c75 tmp%17#0)
+        (log tmp%18#0)
+        return 1u
+    block@4: // getAnon_route_L29
+        let tmp%19#0: uint64 = (txn OnCompletion)
+        let tmp%20#0: bool = (== tmp%19#0 NoOp)
+        (assert tmp%20#0) // OnCompletion is not NoOp
+        let tmp%21#0: uint64 = (txn ApplicationID)
+        let tmp%22#0: bool = (!= tmp%21#0 0u)
+        (assert tmp%22#0) // can only call when not creating
+        let (tmp%23#0: uint64, tmp%24#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getAnon()
+        let tmp%25#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(tmp%23#0, tmp%24#0)
+        let tmp%26#0: bytes = (concat 0x151f7c75 tmp%25#0)
+        (log tmp%26#0)
+        return 1u
+    block@5: // test_route_L36
+        let tmp%27#0: uint64 = (txn OnCompletion)
+        let tmp%28#0: bool = (== tmp%27#0 NoOp)
+        (assert tmp%28#0) // OnCompletion is not NoOp
+        let tmp%29#0: uint64 = (txn ApplicationID)
+        let tmp%30#0: bool = (!= tmp%29#0 0u)
+        (assert tmp%30#0) // can only call when not creating
+        let reinterpret_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let (tmp%31#0: uint64, tmp%32#0: uint64) = decode_bytes<(uint64,uint64,)>(reinterpret_Encoded(uint64,uint64)%0#0)
+        let reinterpret_Encoded(uint64,uint64)%1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 2)
+        let (tmp%33#0: uint64, tmp%34#0: uint64) = decode_bytes<(uint64,uint64,)>(reinterpret_Encoded(uint64,uint64)%1#0)
+        tests/approvals/named-types.algo.ts::MyContract.test(tmp%31#0, tmp%32#0, tmp%33#0, tmp%34#0)
+        return 1u
+    block@6: // testing_route_L40
+        let tmp%35#0: uint64 = (txn OnCompletion)
+        let tmp%36#0: bool = (== tmp%35#0 NoOp)
+        (assert tmp%36#0) // OnCompletion is not NoOp
+        let tmp%37#0: uint64 = (txn ApplicationID)
+        let tmp%38#0: bool = (!= tmp%37#0 0u)
+        (assert tmp%38#0) // can only call when not creating
+        let (tmp%39#0: uint64, tmp%40#0: uint64, tmp%41#0: uint64, tmp%42#0: uint64, tmp%43#0: uint64, tmp%44#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.testing()
+        let tmp%45#0: Encoded((uint64,uint64),(uint64,uint64),(uint64,uint64)) = bytes_encode<((uint64,uint64),(uint64,uint64),(uint64,uint64))>(tmp%39#0, tmp%40#0, tmp%41#0, tmp%42#0, tmp%43#0, tmp%44#0)
+        let tmp%46#0: bytes = (concat 0x151f7c75 tmp%45#0)
+        (log tmp%46#0)
+        return 1u
+    block@7: // switch_case_default_L14
+        goto block@8
+    block@8: // switch_case_next_L14
+        goto block@13
+    block@9: // bare_routing_L14
+        let tmp%47#0: uint64 = (txn OnCompletion)
+        switch tmp%47#0 {0u => block@10, * => block@11}
+    block@10: // __algots__.defaultCreate_L14
+        let tmp%48#0: uint64 = (txn ApplicationID)
+        let tmp%49#0: bool = (== tmp%48#0 0u)
+        (assert tmp%49#0) // can only call when creating
+        tests/approvals/named-types.algo.ts::MyContract.__algots__.defaultCreate()
+        return 1u
+    block@11: // switch_case_default_L14
+        goto block@12
+    block@12: // switch_case_next_L14
+        goto block@13
+    block@13: // after_if_else_L14
+        return 0u
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.getXY() -> <uint64, uint64>:
+    block@0: // L15
+        return 1u 2u
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.getYX() -> <uint64, uint64>:
+    block@0: // L22
+        return 111u 222u
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.getAnon() -> <uint64, uint64>:
+    block@0: // L29
+        return 3u 4u
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.test(x.x: uint64, x.y: uint64, y.y: uint64, y.x: uint64) -> void:
+    block@0: // L36
+        let tmp%0#0: bool = (== x.y#0 y.y#0)
+        goto tmp%0#0 ? block@1 : block@3
+    block@1: // and_contd_L37
+        let tmp%1#0: bool = (== x.x#0 y.x#0)
+        goto tmp%1#0 ? block@2 : block@3
+    block@2: // bool_true_L37
+        let and_result%0#0: bool = 1u
+        goto block@4
+    block@3: // bool_false_L37
+        let and_result%0#1: bool = 0u
+        goto block@4
+    block@4: // bool_merge_L37
+        let and_result%0#2: bool = φ(and_result%0#0 <- block@2, and_result%0#1 <- block@3)
+        (assert and_result%0#2) // assert target is match for conditions
+        return 
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.testing() -> <uint64, uint64, uint64, uint64, uint64, uint64>:
+    block@0: // L40
+        let (awst_tmp%0#0: uint64, awst_tmp%1#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getXY()
+        let (a.x#0: uint64, a.y#0: uint64) = (awst_tmp%0#0, awst_tmp%1#0)
+        let (awst_tmp%2#0: uint64, awst_tmp%3#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getYX()
+        let (b.y#0: uint64, b.x#0: uint64) = (awst_tmp%2#0, awst_tmp%3#0)
+        let (awst_tmp%4#0: uint64, awst_tmp%5#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getAnon()
+        let (c.x#0: uint64, c.y#0: uint64) = (awst_tmp%4#0, awst_tmp%5#0)
+        return a.x#0 a.y#0 b.y#0 b.x#0 c.x#0 c.y#0
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.__algots__.defaultCreate() -> void:
+    block@0: // L14
+        return 

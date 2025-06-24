@@ -1,14 +1,14 @@
-subroutine test_assign_from_var(x: object{ a: uint64, b: uint64 }): void
+subroutine test_assign_from_var(x: {a:uint64,b:uint64}): void
 {
   assert(x.a != x.b, comment=For the purpose of this test, a should not equal b)
-  obj: BthenA{ b: uint64, a: uint64 } = { b: x.b, a: x.a }
-  xEncoded: bytes = reinterpret_cast<bytes>(ARC4_ENCODE(x, wtype=object))
-  objEncoded: bytes = reinterpret_cast<bytes>(ARC4_ENCODE(obj, wtype=BthenA))
+  obj: BthenA = new BthenA(b=x.b, a=x.a)
+  xEncoded: bytes = ($0 = reinterpret_cast<bytes>(ARC4_ENCODE(x, wtype=object)))
+  objEncoded: bytes = ($1 = reinterpret_cast<bytes>(ARC4_ENCODE(obj, wtype=BthenA)))
   assert(xEncoded == concat(objEncoded.slice(8), objEncoded.slice(0, 8)), comment=Encoded order should be swapped)
 }
 subroutine test_assign_from_literal(x: uint64): void
 {
-  obj: object{ a: uint64, z: uint64 } = { a: (#0 = { z: (b = x * 2), a: b }).a, z: #0.z }
+  obj: {a:uint64,z:uint64} = new {a:uint64,z:uint64}(a=($2 = #{ z: (b = ($3 = x * 2)), a: b }).a, z=$2.z)
   assert(obj.z == x * 2 and obj.a == x * 2, comment=assert target is match for conditions)
 }
 contract Demo
@@ -16,7 +16,7 @@ contract Demo
   approvalProgram(): bool
   {
     tests/approvals/property-ordering.algo.ts::test_assign_from_literal(4)
-    tests/approvals/property-ordering.algo.ts::test_assign_from_var({ a: (#1 = { a: 3, b: 4 }).a, b: #1.b })
+    tests/approvals/property-ordering.algo.ts::test_assign_from_var(new {a:uint64,b:uint64}(a=($4 = #{ a: 3, b: 4 }).a, b=$4.b))
     return True
   }
   

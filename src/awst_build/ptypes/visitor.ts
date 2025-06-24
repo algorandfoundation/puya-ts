@@ -47,7 +47,6 @@ import type {
   ReadonlyTuplePType,
   ReferenceArrayType,
   SuperPrototypeSelector,
-  TemporaryObjectPType,
   TransientType,
   TypeParameterType,
   Uint64EnumMemberType,
@@ -59,7 +58,6 @@ export interface PTypeVisitor<T> {
   visitGeneric(ptype: GenericPType): T
 
   visitMutableObjectPType(ptype: MutableObjectPType): T
-  visitTemporaryObjectPType(ptype: TemporaryObjectPType): T
 
   visitIntrinsicEnumType(ptype: IntrinsicEnumType): T
 

@@ -243,7 +243,7 @@
                 },
                 "wtype": {
                   "_type": "WTuple",
-                  "name": "lib.d.ts::Readonly<object>",
+                  "name": "{readonly k:uint64,readonly j:uint64,readonly i:uint64}",
                   "immutable": true,
                   "types": [
                     {
@@ -281,7 +281,7 @@
                 },
                 "wtype": {
                   "_type": "WTuple",
-                  "name": "lib.d.ts::Readonly<object>",
+                  "name": "{readonly k:uint64,readonly j:uint64,readonly i:uint64}",
                   "immutable": true,
                   "types": [
                     {
@@ -332,7 +332,7 @@
                       },
                       "wtype": {
                         "_type": "WTuple",
-                        "name": "lib.d.ts::{...}",
+                        "name": "{i:uint64,j:uint64,k:uint64}",
                         "immutable": true,
                         "types": [
                           {
@@ -358,7 +358,7 @@
                         ]
                       },
                       "source": {
-                        "_type": "SingleEvaluation",
+                        "_type": "TupleExpression",
                         "source_location": {
                           "file": "tests/approvals/object-literals.algo.ts",
                           "line": 12,
@@ -368,7 +368,7 @@
                         },
                         "wtype": {
                           "_type": "WTuple",
-                          "name": "lib.d.ts::{...}",
+                          "name": "{i:uint64,j:uint64,k:uint64}",
                           "immutable": true,
                           "types": [
                             {
@@ -393,51 +393,45 @@
                             "k"
                           ]
                         },
-                        "source": {
-                          "_type": "TupleExpression",
-                          "source_location": {
-                            "file": "tests/approvals/object-literals.algo.ts",
-                            "line": 12,
-                            "end_line": 16,
-                            "column": 8,
-                            "end_column": 5
+                        "items": [
+                          {
+                            "_type": "VarExpression",
+                            "source_location": {
+                              "file": "tests/approvals/object-literals.algo.ts",
+                              "line": 13,
+                              "end_line": 13,
+                              "column": 6,
+                              "end_column": 7
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "name": "i"
                           },
-                          "wtype": {
-                            "_type": "WTuple",
-                            "name": "lib.d.ts::{...}",
-                            "immutable": true,
-                            "types": [
-                              {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              }
-                            ],
-                            "names": [
-                              "i",
-                              "j",
-                              "k"
-                            ]
-                          },
-                          "items": [
-                            {
+                          {
+                            "_type": "AssignmentExpression",
+                            "source_location": {
+                              "file": "tests/approvals/object-literals.algo.ts",
+                              "line": 14,
+                              "end_line": 14,
+                              "column": 10,
+                              "end_column": 16
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "target": {
                               "_type": "VarExpression",
                               "source_location": {
                                 "file": "tests/approvals/object-literals.algo.ts",
-                                "line": 13,
-                                "end_line": 13,
-                                "column": 6,
-                                "end_column": 7
+                                "line": 14,
+                                "end_line": 14,
+                                "column": 10,
+                                "end_column": 11
                               },
                               "wtype": {
                                 "_type": "WType",
@@ -446,8 +440,8 @@
                               },
                               "name": "i"
                             },
-                            {
-                              "_type": "AssignmentExpression",
+                            "value": {
+                              "_type": "UInt64BinaryOperation",
                               "source_location": {
                                 "file": "tests/approvals/object-literals.algo.ts",
                                 "line": 14,
@@ -460,7 +454,7 @@
                                 "name": "uint64",
                                 "immutable": true
                               },
-                              "target": {
+                              "left": {
                                 "_type": "VarExpression",
                                 "source_location": {
                                   "file": "tests/approvals/object-literals.algo.ts",
@@ -476,13 +470,14 @@
                                 },
                                 "name": "i"
                               },
-                              "value": {
-                                "_type": "UInt64BinaryOperation",
+                              "op": "+",
+                              "right": {
+                                "_type": "IntegerConstant",
                                 "source_location": {
                                   "file": "tests/approvals/object-literals.algo.ts",
                                   "line": 14,
                                   "end_line": 14,
-                                  "column": 10,
+                                  "column": 15,
                                   "end_column": 16
                                 },
                                 "wtype": {
@@ -490,61 +485,28 @@
                                   "name": "uint64",
                                   "immutable": true
                                 },
-                                "left": {
-                                  "_type": "VarExpression",
-                                  "source_location": {
-                                    "file": "tests/approvals/object-literals.algo.ts",
-                                    "line": 14,
-                                    "end_line": 14,
-                                    "column": 10,
-                                    "end_column": 11
-                                  },
-                                  "wtype": {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  "name": "i"
-                                },
-                                "op": "+",
-                                "right": {
-                                  "_type": "IntegerConstant",
-                                  "source_location": {
-                                    "file": "tests/approvals/object-literals.algo.ts",
-                                    "line": 14,
-                                    "end_line": 14,
-                                    "column": 15,
-                                    "end_column": 16
-                                  },
-                                  "wtype": {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  "value": 2,
-                                  "teal_alias": null
-                                }
+                                "value": 2,
+                                "teal_alias": null
                               }
-                            },
-                            {
-                              "_type": "VarExpression",
-                              "source_location": {
-                                "file": "tests/approvals/object-literals.algo.ts",
-                                "line": 15,
-                                "end_line": 15,
-                                "column": 9,
-                                "end_column": 10
-                              },
-                              "wtype": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              "name": "i"
                             }
-                          ]
-                        },
-                        "_id": "1"
+                          },
+                          {
+                            "_type": "VarExpression",
+                            "source_location": {
+                              "file": "tests/approvals/object-literals.algo.ts",
+                              "line": 15,
+                              "end_line": 15,
+                              "column": 9,
+                              "end_column": 10
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "name": "i"
+                          }
+                        ]
                       },
                       "_id": "0"
                     },
@@ -575,7 +537,7 @@
                       },
                       "wtype": {
                         "_type": "WTuple",
-                        "name": "lib.d.ts::{...}",
+                        "name": "{i:uint64,j:uint64,k:uint64}",
                         "immutable": true,
                         "types": [
                           {
@@ -601,7 +563,7 @@
                         ]
                       },
                       "source": {
-                        "_type": "SingleEvaluation",
+                        "_type": "TupleExpression",
                         "source_location": {
                           "file": "tests/approvals/object-literals.algo.ts",
                           "line": 12,
@@ -611,7 +573,7 @@
                         },
                         "wtype": {
                           "_type": "WTuple",
-                          "name": "lib.d.ts::{...}",
+                          "name": "{i:uint64,j:uint64,k:uint64}",
                           "immutable": true,
                           "types": [
                             {
@@ -636,51 +598,45 @@
                             "k"
                           ]
                         },
-                        "source": {
-                          "_type": "TupleExpression",
-                          "source_location": {
-                            "file": "tests/approvals/object-literals.algo.ts",
-                            "line": 12,
-                            "end_line": 16,
-                            "column": 8,
-                            "end_column": 5
+                        "items": [
+                          {
+                            "_type": "VarExpression",
+                            "source_location": {
+                              "file": "tests/approvals/object-literals.algo.ts",
+                              "line": 13,
+                              "end_line": 13,
+                              "column": 6,
+                              "end_column": 7
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "name": "i"
                           },
-                          "wtype": {
-                            "_type": "WTuple",
-                            "name": "lib.d.ts::{...}",
-                            "immutable": true,
-                            "types": [
-                              {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              }
-                            ],
-                            "names": [
-                              "i",
-                              "j",
-                              "k"
-                            ]
-                          },
-                          "items": [
-                            {
+                          {
+                            "_type": "AssignmentExpression",
+                            "source_location": {
+                              "file": "tests/approvals/object-literals.algo.ts",
+                              "line": 14,
+                              "end_line": 14,
+                              "column": 10,
+                              "end_column": 16
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "target": {
                               "_type": "VarExpression",
                               "source_location": {
                                 "file": "tests/approvals/object-literals.algo.ts",
-                                "line": 13,
-                                "end_line": 13,
-                                "column": 6,
-                                "end_column": 7
+                                "line": 14,
+                                "end_line": 14,
+                                "column": 10,
+                                "end_column": 11
                               },
                               "wtype": {
                                 "_type": "WType",
@@ -689,8 +645,8 @@
                               },
                               "name": "i"
                             },
-                            {
-                              "_type": "AssignmentExpression",
+                            "value": {
+                              "_type": "UInt64BinaryOperation",
                               "source_location": {
                                 "file": "tests/approvals/object-literals.algo.ts",
                                 "line": 14,
@@ -703,7 +659,7 @@
                                 "name": "uint64",
                                 "immutable": true
                               },
-                              "target": {
+                              "left": {
                                 "_type": "VarExpression",
                                 "source_location": {
                                   "file": "tests/approvals/object-literals.algo.ts",
@@ -719,13 +675,14 @@
                                 },
                                 "name": "i"
                               },
-                              "value": {
-                                "_type": "UInt64BinaryOperation",
+                              "op": "+",
+                              "right": {
+                                "_type": "IntegerConstant",
                                 "source_location": {
                                   "file": "tests/approvals/object-literals.algo.ts",
                                   "line": 14,
                                   "end_line": 14,
-                                  "column": 10,
+                                  "column": 15,
                                   "end_column": 16
                                 },
                                 "wtype": {
@@ -733,61 +690,28 @@
                                   "name": "uint64",
                                   "immutable": true
                                 },
-                                "left": {
-                                  "_type": "VarExpression",
-                                  "source_location": {
-                                    "file": "tests/approvals/object-literals.algo.ts",
-                                    "line": 14,
-                                    "end_line": 14,
-                                    "column": 10,
-                                    "end_column": 11
-                                  },
-                                  "wtype": {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  "name": "i"
-                                },
-                                "op": "+",
-                                "right": {
-                                  "_type": "IntegerConstant",
-                                  "source_location": {
-                                    "file": "tests/approvals/object-literals.algo.ts",
-                                    "line": 14,
-                                    "end_line": 14,
-                                    "column": 15,
-                                    "end_column": 16
-                                  },
-                                  "wtype": {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  "value": 2,
-                                  "teal_alias": null
-                                }
+                                "value": 2,
+                                "teal_alias": null
                               }
-                            },
-                            {
-                              "_type": "VarExpression",
-                              "source_location": {
-                                "file": "tests/approvals/object-literals.algo.ts",
-                                "line": 15,
-                                "end_line": 15,
-                                "column": 9,
-                                "end_column": 10
-                              },
-                              "wtype": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              "name": "i"
                             }
-                          ]
-                        },
-                        "_id": "1"
+                          },
+                          {
+                            "_type": "VarExpression",
+                            "source_location": {
+                              "file": "tests/approvals/object-literals.algo.ts",
+                              "line": 15,
+                              "end_line": 15,
+                              "column": 9,
+                              "end_column": 10
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "name": "i"
+                          }
+                        ]
                       },
                       "_id": "0"
                     },
@@ -818,7 +742,7 @@
                       },
                       "wtype": {
                         "_type": "WTuple",
-                        "name": "lib.d.ts::{...}",
+                        "name": "{i:uint64,j:uint64,k:uint64}",
                         "immutable": true,
                         "types": [
                           {
@@ -844,7 +768,7 @@
                         ]
                       },
                       "source": {
-                        "_type": "SingleEvaluation",
+                        "_type": "TupleExpression",
                         "source_location": {
                           "file": "tests/approvals/object-literals.algo.ts",
                           "line": 12,
@@ -854,7 +778,7 @@
                         },
                         "wtype": {
                           "_type": "WTuple",
-                          "name": "lib.d.ts::{...}",
+                          "name": "{i:uint64,j:uint64,k:uint64}",
                           "immutable": true,
                           "types": [
                             {
@@ -879,51 +803,45 @@
                             "k"
                           ]
                         },
-                        "source": {
-                          "_type": "TupleExpression",
-                          "source_location": {
-                            "file": "tests/approvals/object-literals.algo.ts",
-                            "line": 12,
-                            "end_line": 16,
-                            "column": 8,
-                            "end_column": 5
+                        "items": [
+                          {
+                            "_type": "VarExpression",
+                            "source_location": {
+                              "file": "tests/approvals/object-literals.algo.ts",
+                              "line": 13,
+                              "end_line": 13,
+                              "column": 6,
+                              "end_column": 7
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "name": "i"
                           },
-                          "wtype": {
-                            "_type": "WTuple",
-                            "name": "lib.d.ts::{...}",
-                            "immutable": true,
-                            "types": [
-                              {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              }
-                            ],
-                            "names": [
-                              "i",
-                              "j",
-                              "k"
-                            ]
-                          },
-                          "items": [
-                            {
+                          {
+                            "_type": "AssignmentExpression",
+                            "source_location": {
+                              "file": "tests/approvals/object-literals.algo.ts",
+                              "line": 14,
+                              "end_line": 14,
+                              "column": 10,
+                              "end_column": 16
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "target": {
                               "_type": "VarExpression",
                               "source_location": {
                                 "file": "tests/approvals/object-literals.algo.ts",
-                                "line": 13,
-                                "end_line": 13,
-                                "column": 6,
-                                "end_column": 7
+                                "line": 14,
+                                "end_line": 14,
+                                "column": 10,
+                                "end_column": 11
                               },
                               "wtype": {
                                 "_type": "WType",
@@ -932,8 +850,8 @@
                               },
                               "name": "i"
                             },
-                            {
-                              "_type": "AssignmentExpression",
+                            "value": {
+                              "_type": "UInt64BinaryOperation",
                               "source_location": {
                                 "file": "tests/approvals/object-literals.algo.ts",
                                 "line": 14,
@@ -946,7 +864,7 @@
                                 "name": "uint64",
                                 "immutable": true
                               },
-                              "target": {
+                              "left": {
                                 "_type": "VarExpression",
                                 "source_location": {
                                   "file": "tests/approvals/object-literals.algo.ts",
@@ -962,13 +880,14 @@
                                 },
                                 "name": "i"
                               },
-                              "value": {
-                                "_type": "UInt64BinaryOperation",
+                              "op": "+",
+                              "right": {
+                                "_type": "IntegerConstant",
                                 "source_location": {
                                   "file": "tests/approvals/object-literals.algo.ts",
                                   "line": 14,
                                   "end_line": 14,
-                                  "column": 10,
+                                  "column": 15,
                                   "end_column": 16
                                 },
                                 "wtype": {
@@ -976,61 +895,28 @@
                                   "name": "uint64",
                                   "immutable": true
                                 },
-                                "left": {
-                                  "_type": "VarExpression",
-                                  "source_location": {
-                                    "file": "tests/approvals/object-literals.algo.ts",
-                                    "line": 14,
-                                    "end_line": 14,
-                                    "column": 10,
-                                    "end_column": 11
-                                  },
-                                  "wtype": {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  "name": "i"
-                                },
-                                "op": "+",
-                                "right": {
-                                  "_type": "IntegerConstant",
-                                  "source_location": {
-                                    "file": "tests/approvals/object-literals.algo.ts",
-                                    "line": 14,
-                                    "end_line": 14,
-                                    "column": 15,
-                                    "end_column": 16
-                                  },
-                                  "wtype": {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  "value": 2,
-                                  "teal_alias": null
-                                }
+                                "value": 2,
+                                "teal_alias": null
                               }
-                            },
-                            {
-                              "_type": "VarExpression",
-                              "source_location": {
-                                "file": "tests/approvals/object-literals.algo.ts",
-                                "line": 15,
-                                "end_line": 15,
-                                "column": 9,
-                                "end_column": 10
-                              },
-                              "wtype": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              "name": "i"
                             }
-                          ]
-                        },
-                        "_id": "1"
+                          },
+                          {
+                            "_type": "VarExpression",
+                            "source_location": {
+                              "file": "tests/approvals/object-literals.algo.ts",
+                              "line": 15,
+                              "end_line": 15,
+                              "column": 9,
+                              "end_column": 10
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "name": "i"
+                          }
+                        ]
                       },
                       "_id": "0"
                     },
@@ -1059,13 +945,13 @@
                 },
                 "wtype": {
                   "_type": "ARC4Struct",
-                  "name": "object",
+                  "name": "{a:Readonly<object>,b:object}",
                   "immutable": false,
                   "arc4_alias": null,
                   "fields": {
                     "a": {
                       "_type": "WTuple",
-                      "name": "lib.d.ts::Readonly<object>",
+                      "name": "{readonly k:uint64,readonly j:uint64,readonly i:uint64}",
                       "immutable": true,
                       "types": [
                         {
@@ -1092,7 +978,7 @@
                     },
                     "b": {
                       "_type": "ARC4Struct",
-                      "name": "object",
+                      "name": "{x:uint64}",
                       "immutable": false,
                       "arc4_alias": null,
                       "fields": {
@@ -1124,13 +1010,13 @@
                 },
                 "wtype": {
                   "_type": "ARC4Struct",
-                  "name": "object",
+                  "name": "{a:Readonly<object>,b:object}",
                   "immutable": false,
                   "arc4_alias": null,
                   "fields": {
                     "a": {
                       "_type": "WTuple",
-                      "name": "lib.d.ts::Readonly<object>",
+                      "name": "{readonly k:uint64,readonly j:uint64,readonly i:uint64}",
                       "immutable": true,
                       "types": [
                         {
@@ -1157,7 +1043,7 @@
                     },
                     "b": {
                       "_type": "ARC4Struct",
-                      "name": "object",
+                      "name": "{x:uint64}",
                       "immutable": false,
                       "arc4_alias": null,
                       "fields": {
@@ -1188,7 +1074,7 @@
                     },
                     "wtype": {
                       "_type": "WTuple",
-                      "name": "lib.d.ts::Readonly<object>",
+                      "name": "{readonly k:uint64,readonly j:uint64,readonly i:uint64}",
                       "immutable": true,
                       "types": [
                         {
@@ -1224,12 +1110,12 @@
                       },
                       "wtype": {
                         "_type": "WTuple",
-                        "name": "lib.d.ts::{...}",
+                        "name": "{a:Readonly<object>,b:{...}}",
                         "immutable": true,
                         "types": [
                           {
                             "_type": "WTuple",
-                            "name": "lib.d.ts::Readonly<object>",
+                            "name": "{readonly k:uint64,readonly j:uint64,readonly i:uint64}",
                             "immutable": true,
                             "types": [
                               {
@@ -1256,7 +1142,7 @@
                           },
                           {
                             "_type": "WTuple",
-                            "name": "lib.d.ts::{...}",
+                            "name": "{x:uint64}",
                             "immutable": true,
                             "types": [
                               {
@@ -1276,7 +1162,7 @@
                         ]
                       },
                       "source": {
-                        "_type": "SingleEvaluation",
+                        "_type": "TupleExpression",
                         "source_location": {
                           "file": "tests/approvals/object-literals.algo.ts",
                           "line": 18,
@@ -1286,12 +1172,12 @@
                         },
                         "wtype": {
                           "_type": "WTuple",
-                          "name": "lib.d.ts::{...}",
+                          "name": "{a:Readonly<object>,b:{...}}",
                           "immutable": true,
                           "types": [
                             {
                               "_type": "WTuple",
-                              "name": "lib.d.ts::Readonly<object>",
+                              "name": "{readonly k:uint64,readonly j:uint64,readonly i:uint64}",
                               "immutable": true,
                               "types": [
                                 {
@@ -1318,7 +1204,7 @@
                             },
                             {
                               "_type": "WTuple",
-                              "name": "lib.d.ts::{...}",
+                              "name": "{x:uint64}",
                               "immutable": true,
                               "types": [
                                 {
@@ -1337,156 +1223,92 @@
                             "b"
                           ]
                         },
-                        "source": {
-                          "_type": "TupleExpression",
-                          "source_location": {
-                            "file": "tests/approvals/object-literals.algo.ts",
-                            "line": 18,
-                            "end_line": 23,
-                            "column": 15,
-                            "end_column": 5
-                          },
-                          "wtype": {
-                            "_type": "WTuple",
-                            "name": "lib.d.ts::{...}",
-                            "immutable": true,
-                            "types": [
-                              {
-                                "_type": "WTuple",
-                                "name": "lib.d.ts::Readonly<object>",
-                                "immutable": true,
-                                "types": [
-                                  {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  }
-                                ],
-                                "names": [
-                                  "k",
-                                  "j",
-                                  "i"
-                                ]
-                              },
-                              {
-                                "_type": "WTuple",
-                                "name": "lib.d.ts::{...}",
-                                "immutable": true,
-                                "types": [
-                                  {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  }
-                                ],
-                                "names": [
-                                  "x"
-                                ]
-                              }
-                            ],
-                            "names": [
-                              "a",
-                              "b"
-                            ]
-                          },
-                          "items": [
-                            {
-                              "_type": "VarExpression",
-                              "source_location": {
-                                "file": "tests/approvals/object-literals.algo.ts",
-                                "line": 19,
-                                "end_line": 19,
-                                "column": 9,
-                                "end_column": 11
-                              },
-                              "wtype": {
-                                "_type": "WTuple",
-                                "name": "lib.d.ts::Readonly<object>",
-                                "immutable": true,
-                                "types": [
-                                  {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  }
-                                ],
-                                "names": [
-                                  "k",
-                                  "j",
-                                  "i"
-                                ]
-                              },
-                              "name": "o1"
+                        "items": [
+                          {
+                            "_type": "VarExpression",
+                            "source_location": {
+                              "file": "tests/approvals/object-literals.algo.ts",
+                              "line": 19,
+                              "end_line": 19,
+                              "column": 9,
+                              "end_column": 11
                             },
-                            {
-                              "_type": "TupleExpression",
-                              "source_location": {
-                                "file": "tests/approvals/object-literals.algo.ts",
-                                "line": 20,
-                                "end_line": 22,
-                                "column": 9,
-                                "end_column": 7
-                              },
-                              "wtype": {
-                                "_type": "WTuple",
-                                "name": "lib.d.ts::{...}",
-                                "immutable": true,
-                                "types": [
-                                  {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  }
-                                ],
-                                "names": [
-                                  "x"
-                                ]
-                              },
-                              "items": [
+                            "wtype": {
+                              "_type": "WTuple",
+                              "name": "{readonly k:uint64,readonly j:uint64,readonly i:uint64}",
+                              "immutable": true,
+                              "types": [
                                 {
-                                  "_type": "IntegerConstant",
-                                  "source_location": {
-                                    "file": "tests/approvals/object-literals.algo.ts",
-                                    "line": 21,
-                                    "end_line": 21,
-                                    "column": 18,
-                                    "end_column": 19
-                                  },
-                                  "wtype": {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  "value": 1,
-                                  "teal_alias": null
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
                                 }
+                              ],
+                              "names": [
+                                "k",
+                                "j",
+                                "i"
                               ]
-                            }
-                          ]
-                        },
-                        "_id": "3"
+                            },
+                            "name": "o1"
+                          },
+                          {
+                            "_type": "TupleExpression",
+                            "source_location": {
+                              "file": "tests/approvals/object-literals.algo.ts",
+                              "line": 20,
+                              "end_line": 22,
+                              "column": 9,
+                              "end_column": 7
+                            },
+                            "wtype": {
+                              "_type": "WTuple",
+                              "name": "{x:uint64}",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                }
+                              ],
+                              "names": [
+                                "x"
+                              ]
+                            },
+                            "items": [
+                              {
+                                "_type": "IntegerConstant",
+                                "source_location": {
+                                  "file": "tests/approvals/object-literals.algo.ts",
+                                  "line": 21,
+                                  "end_line": 21,
+                                  "column": 18,
+                                  "end_column": 19
+                                },
+                                "wtype": {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                "value": 1,
+                                "teal_alias": null
+                              }
+                            ]
+                          }
+                        ]
                       },
-                      "_id": "2"
+                      "_id": "1"
                     },
                     "name": "a"
                   },
@@ -1501,7 +1323,7 @@
                     },
                     "wtype": {
                       "_type": "ARC4Struct",
-                      "name": "object",
+                      "name": "{x:uint64}",
                       "immutable": false,
                       "arc4_alias": null,
                       "fields": {
@@ -1541,7 +1363,7 @@
                           },
                           "wtype": {
                             "_type": "WTuple",
-                            "name": "lib.d.ts::{...}",
+                            "name": "{x:uint64}",
                             "immutable": true,
                             "types": [
                               {
@@ -1565,7 +1387,7 @@
                             },
                             "wtype": {
                               "_type": "WTuple",
-                              "name": "lib.d.ts::{...}",
+                              "name": "{x:uint64}",
                               "immutable": true,
                               "types": [
                                 {
@@ -1589,12 +1411,12 @@
                               },
                               "wtype": {
                                 "_type": "WTuple",
-                                "name": "lib.d.ts::{...}",
+                                "name": "{a:Readonly<object>,b:{...}}",
                                 "immutable": true,
                                 "types": [
                                   {
                                     "_type": "WTuple",
-                                    "name": "lib.d.ts::Readonly<object>",
+                                    "name": "{readonly k:uint64,readonly j:uint64,readonly i:uint64}",
                                     "immutable": true,
                                     "types": [
                                       {
@@ -1621,7 +1443,7 @@
                                   },
                                   {
                                     "_type": "WTuple",
-                                    "name": "lib.d.ts::{...}",
+                                    "name": "{x:uint64}",
                                     "immutable": true,
                                     "types": [
                                       {
@@ -1641,7 +1463,7 @@
                                 ]
                               },
                               "source": {
-                                "_type": "SingleEvaluation",
+                                "_type": "TupleExpression",
                                 "source_location": {
                                   "file": "tests/approvals/object-literals.algo.ts",
                                   "line": 18,
@@ -1651,12 +1473,12 @@
                                 },
                                 "wtype": {
                                   "_type": "WTuple",
-                                  "name": "lib.d.ts::{...}",
+                                  "name": "{a:Readonly<object>,b:{...}}",
                                   "immutable": true,
                                   "types": [
                                     {
                                       "_type": "WTuple",
-                                      "name": "lib.d.ts::Readonly<object>",
+                                      "name": "{readonly k:uint64,readonly j:uint64,readonly i:uint64}",
                                       "immutable": true,
                                       "types": [
                                         {
@@ -1683,7 +1505,7 @@
                                     },
                                     {
                                       "_type": "WTuple",
-                                      "name": "lib.d.ts::{...}",
+                                      "name": "{x:uint64}",
                                       "immutable": true,
                                       "types": [
                                         {
@@ -1702,160 +1524,96 @@
                                     "b"
                                   ]
                                 },
-                                "source": {
-                                  "_type": "TupleExpression",
-                                  "source_location": {
-                                    "file": "tests/approvals/object-literals.algo.ts",
-                                    "line": 18,
-                                    "end_line": 23,
-                                    "column": 15,
-                                    "end_column": 5
-                                  },
-                                  "wtype": {
-                                    "_type": "WTuple",
-                                    "name": "lib.d.ts::{...}",
-                                    "immutable": true,
-                                    "types": [
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "lib.d.ts::Readonly<object>",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "WType",
-                                            "name": "uint64",
-                                            "immutable": true
-                                          },
-                                          {
-                                            "_type": "WType",
-                                            "name": "uint64",
-                                            "immutable": true
-                                          },
-                                          {
-                                            "_type": "WType",
-                                            "name": "uint64",
-                                            "immutable": true
-                                          }
-                                        ],
-                                        "names": [
-                                          "k",
-                                          "j",
-                                          "i"
-                                        ]
-                                      },
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "lib.d.ts::{...}",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "WType",
-                                            "name": "uint64",
-                                            "immutable": true
-                                          }
-                                        ],
-                                        "names": [
-                                          "x"
-                                        ]
-                                      }
-                                    ],
-                                    "names": [
-                                      "a",
-                                      "b"
-                                    ]
-                                  },
-                                  "items": [
-                                    {
-                                      "_type": "VarExpression",
-                                      "source_location": {
-                                        "file": "tests/approvals/object-literals.algo.ts",
-                                        "line": 19,
-                                        "end_line": 19,
-                                        "column": 9,
-                                        "end_column": 11
-                                      },
-                                      "wtype": {
-                                        "_type": "WTuple",
-                                        "name": "lib.d.ts::Readonly<object>",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "WType",
-                                            "name": "uint64",
-                                            "immutable": true
-                                          },
-                                          {
-                                            "_type": "WType",
-                                            "name": "uint64",
-                                            "immutable": true
-                                          },
-                                          {
-                                            "_type": "WType",
-                                            "name": "uint64",
-                                            "immutable": true
-                                          }
-                                        ],
-                                        "names": [
-                                          "k",
-                                          "j",
-                                          "i"
-                                        ]
-                                      },
-                                      "name": "o1"
+                                "items": [
+                                  {
+                                    "_type": "VarExpression",
+                                    "source_location": {
+                                      "file": "tests/approvals/object-literals.algo.ts",
+                                      "line": 19,
+                                      "end_line": 19,
+                                      "column": 9,
+                                      "end_column": 11
                                     },
-                                    {
-                                      "_type": "TupleExpression",
-                                      "source_location": {
-                                        "file": "tests/approvals/object-literals.algo.ts",
-                                        "line": 20,
-                                        "end_line": 22,
-                                        "column": 9,
-                                        "end_column": 7
-                                      },
-                                      "wtype": {
-                                        "_type": "WTuple",
-                                        "name": "lib.d.ts::{...}",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "WType",
-                                            "name": "uint64",
-                                            "immutable": true
-                                          }
-                                        ],
-                                        "names": [
-                                          "x"
-                                        ]
-                                      },
-                                      "items": [
+                                    "wtype": {
+                                      "_type": "WTuple",
+                                      "name": "{readonly k:uint64,readonly j:uint64,readonly i:uint64}",
+                                      "immutable": true,
+                                      "types": [
                                         {
-                                          "_type": "IntegerConstant",
-                                          "source_location": {
-                                            "file": "tests/approvals/object-literals.algo.ts",
-                                            "line": 21,
-                                            "end_line": 21,
-                                            "column": 18,
-                                            "end_column": 19
-                                          },
-                                          "wtype": {
-                                            "_type": "WType",
-                                            "name": "uint64",
-                                            "immutable": true
-                                          },
-                                          "value": 1,
-                                          "teal_alias": null
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
                                         }
+                                      ],
+                                      "names": [
+                                        "k",
+                                        "j",
+                                        "i"
                                       ]
-                                    }
-                                  ]
-                                },
-                                "_id": "3"
+                                    },
+                                    "name": "o1"
+                                  },
+                                  {
+                                    "_type": "TupleExpression",
+                                    "source_location": {
+                                      "file": "tests/approvals/object-literals.algo.ts",
+                                      "line": 20,
+                                      "end_line": 22,
+                                      "column": 9,
+                                      "end_column": 7
+                                    },
+                                    "wtype": {
+                                      "_type": "WTuple",
+                                      "name": "{x:uint64}",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ],
+                                      "names": [
+                                        "x"
+                                      ]
+                                    },
+                                    "items": [
+                                      {
+                                        "_type": "IntegerConstant",
+                                        "source_location": {
+                                          "file": "tests/approvals/object-literals.algo.ts",
+                                          "line": 21,
+                                          "end_line": 21,
+                                          "column": 18,
+                                          "end_column": 19
+                                        },
+                                        "wtype": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "value": 1,
+                                        "teal_alias": null
+                                      }
+                                    ]
+                                  }
+                                ]
                               },
-                              "_id": "2"
+                              "_id": "1"
                             },
                             "name": "b"
                           },
-                          "_id": "4"
+                          "_id": "2"
                         },
                         "name": "x"
                       }
@@ -1884,13 +1642,13 @@
                 },
                 "wtype": {
                   "_type": "ARC4Struct",
-                  "name": "object",
+                  "name": "{b:object}",
                   "immutable": false,
                   "arc4_alias": null,
                   "fields": {
                     "b": {
                       "_type": "ARC4Struct",
-                      "name": "object",
+                      "name": "{x:uint64}",
                       "immutable": false,
                       "arc4_alias": null,
                       "fields": {
@@ -1922,13 +1680,13 @@
                 },
                 "wtype": {
                   "_type": "ARC4Struct",
-                  "name": "object",
+                  "name": "{b:object}",
                   "immutable": false,
                   "arc4_alias": null,
                   "fields": {
                     "b": {
                       "_type": "ARC4Struct",
-                      "name": "object",
+                      "name": "{x:uint64}",
                       "immutable": false,
                       "arc4_alias": null,
                       "fields": {
@@ -1959,7 +1717,7 @@
                     },
                     "wtype": {
                       "_type": "ARC4Struct",
-                      "name": "object",
+                      "name": "{x:uint64}",
                       "immutable": false,
                       "arc4_alias": null,
                       "fields": {
@@ -1999,7 +1757,7 @@
                           },
                           "wtype": {
                             "_type": "WTuple",
-                            "name": "lib.d.ts::{...}",
+                            "name": "{x:uint64}",
                             "immutable": true,
                             "types": [
                               {
@@ -2023,7 +1781,7 @@
                             },
                             "wtype": {
                               "_type": "WTuple",
-                              "name": "lib.d.ts::{...}",
+                              "name": "{x:uint64}",
                               "immutable": true,
                               "types": [
                                 {
@@ -2047,12 +1805,12 @@
                               },
                               "wtype": {
                                 "_type": "WTuple",
-                                "name": "lib.d.ts::{...}",
+                                "name": "{b:{...}}",
                                 "immutable": true,
                                 "types": [
                                   {
                                     "_type": "WTuple",
-                                    "name": "lib.d.ts::{...}",
+                                    "name": "{x:uint64}",
                                     "immutable": true,
                                     "types": [
                                       {
@@ -2071,7 +1829,7 @@
                                 ]
                               },
                               "source": {
-                                "_type": "SingleEvaluation",
+                                "_type": "TupleExpression",
                                 "source_location": {
                                   "file": "tests/approvals/object-literals.algo.ts",
                                   "line": 25,
@@ -2081,12 +1839,12 @@
                                 },
                                 "wtype": {
                                   "_type": "WTuple",
-                                  "name": "lib.d.ts::{...}",
+                                  "name": "{b:{...}}",
                                   "immutable": true,
                                   "types": [
                                     {
                                       "_type": "WTuple",
-                                      "name": "lib.d.ts::{...}",
+                                      "name": "{x:uint64}",
                                       "immutable": true,
                                       "types": [
                                         {
@@ -2104,43 +1862,33 @@
                                     "b"
                                   ]
                                 },
-                                "source": {
-                                  "_type": "TupleExpression",
-                                  "source_location": {
-                                    "file": "tests/approvals/object-literals.algo.ts",
-                                    "line": 25,
-                                    "end_line": 29,
-                                    "column": 37,
-                                    "end_column": 5
-                                  },
-                                  "wtype": {
-                                    "_type": "WTuple",
-                                    "name": "lib.d.ts::{...}",
-                                    "immutable": true,
-                                    "types": [
-                                      {
-                                        "_type": "WTuple",
-                                        "name": "lib.d.ts::{...}",
-                                        "immutable": true,
-                                        "types": [
-                                          {
-                                            "_type": "WType",
-                                            "name": "uint64",
-                                            "immutable": true
-                                          }
-                                        ],
-                                        "names": [
-                                          "x"
-                                        ]
-                                      }
-                                    ],
-                                    "names": [
-                                      "b"
-                                    ]
-                                  },
-                                  "items": [
-                                    {
-                                      "_type": "FieldExpression",
+                                "items": [
+                                  {
+                                    "_type": "FieldExpression",
+                                    "source_location": {
+                                      "file": "tests/approvals/object-literals.algo.ts",
+                                      "line": 25,
+                                      "end_line": 29,
+                                      "column": 37,
+                                      "end_column": 5
+                                    },
+                                    "wtype": {
+                                      "_type": "WTuple",
+                                      "name": "{x:uint64}",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ],
+                                      "names": [
+                                        "x"
+                                      ]
+                                    },
+                                    "base": {
+                                      "_type": "SingleEvaluation",
                                       "source_location": {
                                         "file": "tests/approvals/object-literals.algo.ts",
                                         "line": 25,
@@ -2150,21 +1898,31 @@
                                       },
                                       "wtype": {
                                         "_type": "WTuple",
-                                        "name": "lib.d.ts::{...}",
+                                        "name": "{b:{...}}",
                                         "immutable": true,
                                         "types": [
                                           {
-                                            "_type": "WType",
-                                            "name": "uint64",
-                                            "immutable": true
+                                            "_type": "WTuple",
+                                            "name": "{x:uint64}",
+                                            "immutable": true,
+                                            "types": [
+                                              {
+                                                "_type": "WType",
+                                                "name": "uint64",
+                                                "immutable": true
+                                              }
+                                            ],
+                                            "names": [
+                                              "x"
+                                            ]
                                           }
                                         ],
                                         "names": [
-                                          "x"
+                                          "b"
                                         ]
                                       },
-                                      "base": {
-                                        "_type": "SingleEvaluation",
+                                      "source": {
+                                        "_type": "TupleExpression",
                                         "source_location": {
                                           "file": "tests/approvals/object-literals.algo.ts",
                                           "line": 25,
@@ -2174,12 +1932,12 @@
                                         },
                                         "wtype": {
                                           "_type": "WTuple",
-                                          "name": "lib.d.ts::{...}",
+                                          "name": "{b:{...}}",
                                           "immutable": true,
                                           "types": [
                                             {
                                               "_type": "WTuple",
-                                              "name": "lib.d.ts::{...}",
+                                              "name": "{x:uint64}",
                                               "immutable": true,
                                               "types": [
                                                 {
@@ -2197,68 +1955,48 @@
                                             "b"
                                           ]
                                         },
-                                        "source": {
-                                          "_type": "TupleExpression",
-                                          "source_location": {
-                                            "file": "tests/approvals/object-literals.algo.ts",
-                                            "line": 25,
-                                            "end_line": 29,
-                                            "column": 37,
-                                            "end_column": 5
-                                          },
-                                          "wtype": {
-                                            "_type": "WTuple",
-                                            "name": "lib.d.ts::{...}",
-                                            "immutable": true,
-                                            "types": [
-                                              {
-                                                "_type": "WTuple",
-                                                "name": "lib.d.ts::{...}",
-                                                "immutable": true,
-                                                "types": [
-                                                  {
-                                                    "_type": "WType",
-                                                    "name": "uint64",
-                                                    "immutable": true
-                                                  }
-                                                ],
-                                                "names": [
-                                                  "x"
-                                                ]
-                                              }
-                                            ],
-                                            "names": [
-                                              "b"
-                                            ]
-                                          },
-                                          "items": [
-                                            {
-                                              "_type": "TupleExpression",
-                                              "source_location": {
-                                                "file": "tests/approvals/object-literals.algo.ts",
-                                                "line": 26,
-                                                "end_line": 28,
-                                                "column": 9,
-                                                "end_column": 7
-                                              },
-                                              "wtype": {
-                                                "_type": "WTuple",
-                                                "name": "lib.d.ts::{...}",
-                                                "immutable": true,
-                                                "types": [
-                                                  {
-                                                    "_type": "WType",
-                                                    "name": "uint64",
-                                                    "immutable": true
-                                                  }
-                                                ],
-                                                "names": [
-                                                  "x"
-                                                ]
-                                              },
-                                              "items": [
+                                        "items": [
+                                          {
+                                            "_type": "TupleExpression",
+                                            "source_location": {
+                                              "file": "tests/approvals/object-literals.algo.ts",
+                                              "line": 26,
+                                              "end_line": 28,
+                                              "column": 9,
+                                              "end_column": 7
+                                            },
+                                            "wtype": {
+                                              "_type": "WTuple",
+                                              "name": "{x:uint64}",
+                                              "immutable": true,
+                                              "types": [
                                                 {
-                                                  "_type": "FieldExpression",
+                                                  "_type": "WType",
+                                                  "name": "uint64",
+                                                  "immutable": true
+                                                }
+                                              ],
+                                              "names": [
+                                                "x"
+                                              ]
+                                            },
+                                            "items": [
+                                              {
+                                                "_type": "FieldExpression",
+                                                "source_location": {
+                                                  "file": "tests/approvals/object-literals.algo.ts",
+                                                  "line": 26,
+                                                  "end_line": 28,
+                                                  "column": 9,
+                                                  "end_column": 7
+                                                },
+                                                "wtype": {
+                                                  "_type": "WType",
+                                                  "name": "uint64",
+                                                  "immutable": true
+                                                },
+                                                "base": {
+                                                  "_type": "SingleEvaluation",
                                                   "source_location": {
                                                     "file": "tests/approvals/object-literals.algo.ts",
                                                     "line": 26,
@@ -2267,12 +2005,22 @@
                                                     "end_column": 7
                                                   },
                                                   "wtype": {
-                                                    "_type": "WType",
-                                                    "name": "uint64",
-                                                    "immutable": true
+                                                    "_type": "WTuple",
+                                                    "name": "{x:uint64}",
+                                                    "immutable": true,
+                                                    "types": [
+                                                      {
+                                                        "_type": "WType",
+                                                        "name": "uint64",
+                                                        "immutable": true
+                                                      }
+                                                    ],
+                                                    "names": [
+                                                      "x"
+                                                    ]
                                                   },
-                                                  "base": {
-                                                    "_type": "SingleEvaluation",
+                                                  "source": {
+                                                    "_type": "TupleExpression",
                                                     "source_location": {
                                                       "file": "tests/approvals/object-literals.algo.ts",
                                                       "line": 26,
@@ -2282,7 +2030,7 @@
                                                     },
                                                     "wtype": {
                                                       "_type": "WTuple",
-                                                      "name": "lib.d.ts::{...}",
+                                                      "name": "{x:uint64}",
                                                       "immutable": true,
                                                       "types": [
                                                         {
@@ -2295,71 +2043,45 @@
                                                         "x"
                                                       ]
                                                     },
-                                                    "source": {
-                                                      "_type": "TupleExpression",
-                                                      "source_location": {
-                                                        "file": "tests/approvals/object-literals.algo.ts",
-                                                        "line": 26,
-                                                        "end_line": 28,
-                                                        "column": 9,
-                                                        "end_column": 7
-                                                      },
-                                                      "wtype": {
-                                                        "_type": "WTuple",
-                                                        "name": "lib.d.ts::{...}",
-                                                        "immutable": true,
-                                                        "types": [
-                                                          {
-                                                            "_type": "WType",
-                                                            "name": "uint64",
-                                                            "immutable": true
-                                                          }
-                                                        ],
-                                                        "names": [
-                                                          "x"
-                                                        ]
-                                                      },
-                                                      "items": [
-                                                        {
-                                                          "_type": "IntegerConstant",
-                                                          "source_location": {
-                                                            "file": "tests/approvals/object-literals.algo.ts",
-                                                            "line": 27,
-                                                            "end_line": 27,
-                                                            "column": 11,
-                                                            "end_column": 12
-                                                          },
-                                                          "wtype": {
-                                                            "_type": "WType",
-                                                            "name": "uint64",
-                                                            "immutable": true
-                                                          },
-                                                          "value": 1,
-                                                          "teal_alias": null
-                                                        }
-                                                      ]
-                                                    },
-                                                    "_id": "9"
+                                                    "items": [
+                                                      {
+                                                        "_type": "IntegerConstant",
+                                                        "source_location": {
+                                                          "file": "tests/approvals/object-literals.algo.ts",
+                                                          "line": 27,
+                                                          "end_line": 27,
+                                                          "column": 11,
+                                                          "end_column": 12
+                                                        },
+                                                        "wtype": {
+                                                          "_type": "WType",
+                                                          "name": "uint64",
+                                                          "immutable": true
+                                                        },
+                                                        "value": 1,
+                                                        "teal_alias": null
+                                                      }
+                                                    ]
                                                   },
-                                                  "name": "x"
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        },
-                                        "_id": "8"
+                                                  "_id": "6"
+                                                },
+                                                "name": "x"
+                                              }
+                                            ]
+                                          }
+                                        ]
                                       },
-                                      "name": "b"
-                                    }
-                                  ]
-                                },
-                                "_id": "7"
+                                      "_id": "5"
+                                    },
+                                    "name": "b"
+                                  }
+                                ]
                               },
-                              "_id": "6"
+                              "_id": "4"
                             },
                             "name": "b"
                           },
-                          "_id": "5"
+                          "_id": "3"
                         },
                         "name": "x"
                       }

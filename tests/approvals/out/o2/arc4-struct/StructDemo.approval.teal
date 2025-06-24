@@ -75,10 +75,6 @@ main_setLastCalled_route@11:
     txna ApplicationArgs 2
     btoi
     txna ApplicationArgs 3
-    btoi
-    // tests/approvals/arc4-struct.algo.ts:65
-    // this.plugins(key).value.methods[index].lastCalled = new arc4.UintN64(lastCalled)
-    itob
     // tests/approvals/arc4-struct.algo.ts:48
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
     bytec_1 // "plugins"
@@ -203,20 +199,12 @@ main_toNative_route@8:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
+    bytec_0 // 0x151f7c75
     // tests/approvals/arc4-struct.algo.ts:10
     // class StructDemo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/arc4-struct.algo.ts:45
-    // return v1.native
-    dup
-    extract 0 8
-    swap
-    extract 8 8
     // tests/approvals/arc4-struct.algo.ts:44
     // public toNative(v1: Vector) {
-    concat
-    bytec_0 // 0x151f7c75
-    swap
     concat
     log
     intc_0 // 1

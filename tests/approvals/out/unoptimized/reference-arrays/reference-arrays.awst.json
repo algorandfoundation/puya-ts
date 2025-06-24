@@ -299,7 +299,7 @@
                 "name": "ma"
               },
               "value": {
-                "_type": "NewArray",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/reference-arrays.algo.ts",
                   "line": 7,
@@ -318,7 +318,29 @@
                   },
                   "source_location": null
                 },
-                "values": []
+                "source": {
+                  "_type": "NewArray",
+                  "source_location": {
+                    "file": "tests/approvals/reference-arrays.algo.ts",
+                    "line": 7,
+                    "end_line": 7,
+                    "column": 15,
+                    "end_column": 43
+                  },
+                  "wtype": {
+                    "_type": "ReferenceArray",
+                    "name": "ref_array<uint64>",
+                    "immutable": false,
+                    "element_type": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "source_location": null
+                  },
+                  "values": []
+                },
+                "_id": "0"
               }
             },
             {
@@ -757,7 +779,7 @@
                 "name": "popped"
               },
               "value": {
-                "_type": "ArrayPop",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/reference-arrays.algo.ts",
                   "line": 14,
@@ -770,28 +792,44 @@
                   "name": "uint64",
                   "immutable": true
                 },
-                "base": {
-                  "_type": "VarExpression",
+                "source": {
+                  "_type": "ArrayPop",
                   "source_location": {
                     "file": "tests/approvals/reference-arrays.algo.ts",
                     "line": 14,
                     "end_line": 14,
                     "column": 19,
-                    "end_column": 21
+                    "end_column": 27
                   },
                   "wtype": {
-                    "_type": "ReferenceArray",
-                    "name": "ref_array<uint64>",
-                    "immutable": false,
-                    "element_type": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "source_location": null
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true
                   },
-                  "name": "ma"
-                }
+                  "base": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/reference-arrays.algo.ts",
+                      "line": 14,
+                      "end_line": 14,
+                      "column": 19,
+                      "end_column": 21
+                    },
+                    "wtype": {
+                      "_type": "ReferenceArray",
+                      "name": "ref_array<uint64>",
+                      "immutable": false,
+                      "element_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "source_location": null
+                    },
+                    "name": "ma"
+                  }
+                },
+                "_id": "1"
               }
             },
             {

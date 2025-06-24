@@ -3,7 +3,6 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1
     // tests/approvals/box-proxies.algo.ts:238
     // class CompositeKeyTest extends Contract {
     txn NumAppArgs
@@ -15,7 +14,7 @@ main:
 main_after_if_else@10:
     // tests/approvals/box-proxies.algo.ts:238
     // class CompositeKeyTest extends Contract {
-    intc_0 // 0
+    pushint 0 // 0
     return
 
 main_test_route@3:
@@ -29,18 +28,12 @@ main_test_route@3:
     // tests/approvals/box-proxies.algo.ts:238
     // class CompositeKeyTest extends Contract {
     txna ApplicationArgs 1
-    dup
-    intc_0 // 0
-    extract_uint64
-    swap
-    pushint 8 // 8
-    extract_uint64
     txna ApplicationArgs 2
     extract 2 0
     // tests/approvals/box-proxies.algo.ts:241
     // test(key: { a: uint64; b: uint64 }, val: string) {
     callsub test
-    intc_1 // 1
+    pushint 1 // 1
     return
 
 main_bare_routing@6:
@@ -51,25 +44,21 @@ main_bare_routing@6:
     txn ApplicationID
     !
     assert // can only call when creating
-    intc_1 // 1
+    pushint 1 // 1
     return
 
 
-// tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test(key.a: uint64, key.b: uint64, val: bytes) -> void:
+// tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test(key: bytes, val: bytes) -> void:
 test:
     // tests/approvals/box-proxies.algo.ts:241
     // test(key: { a: uint64; b: uint64 }, val: string) {
-    proto 3 0
+    proto 2 0
     // tests/approvals/box-proxies.algo.ts:242
     // this.boxMap(key).value = val
-    frame_dig -3
-    itob
     frame_dig -2
-    itob
-    concat
-    dup
     box_del
     pop
+    frame_dig -2
     frame_dig -1
     box_put
     retsub

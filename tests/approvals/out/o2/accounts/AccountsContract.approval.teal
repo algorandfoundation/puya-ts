@@ -144,8 +144,24 @@ main_after_while@21:
     asset_holding_get AssetBalance
     cover 15
     pop
-    // tests/approvals/accounts.algo.ts:9
-    // public getAccountInfo(account: Account, asset: Asset) {
+    // tests/approvals/accounts.algo.ts:11-27
+    // return {
+    //   bytes: account.bytes,
+    //   balance: account.balance,
+    //   minBalance: account.minBalance,
+    //   authAddress: account.authAddress.bytes,
+    //   totalNumUint: account.totalNumUint,
+    //   totalNumByteSlice: account.totalNumByteSlice,
+    //   totalExtraAppPages: account.totalExtraAppPages,
+    //   totalAppsCreated: account.totalAppsCreated,
+    //   totalAppsOptedIn: account.totalAppsOptedIn,
+    //   totalAssetsCreated: account.totalAssetsCreated,
+    //   totalAssets: account.totalAssets,
+    //   totalBoxes: account.totalBoxes,
+    //   totalBoxBytes: account.totalBoxBytes,
+    //   isOptInApp: account.isOptedIn(Global.currentApplicationId),
+    //   isOptInAsset: account.isOptedIn(asset),
+    // }
     uncover 12
     itob
     uncover 13
@@ -196,6 +212,8 @@ main_after_while@21:
     pushint 1217 // 1217
     uncover 2
     setbit
+    // tests/approvals/accounts.algo.ts:9
+    // public getAccountInfo(account: Account, asset: Asset) {
     pushbytes 0x151f7c75
     swap
     concat

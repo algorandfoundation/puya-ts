@@ -13,9 +13,9 @@ contract ObjectLiteralsAlgo
   test(): void
   {
     i: uint64 = 0
-    o1: Readonly<object>{ k: uint64, j: uint64, i: uint64 } = #{ k: ($0 = ($1 = #{ i: i, j: (i = i + 2), k: i })).k, j: $0.j, i: $0.i }
-    o2: object = new object(a=($2 = ($3 = #{ a: o1, b: #{ x: 1 } })).a, b=new object(x=($4 = $2.b).x))
-    o3: object = new object(b=new object(x=($5 = ($6 = ($7 = #{ b: ($8 = #{ b: #{ x: ($9 = #{ x: 1 }).x } }).b })).b).x))
+    o1: {readonly k:uint64,readonly j:uint64,readonly i:uint64}{ k: uint64, j: uint64, i: uint64 } = #{ k: ($0 = #{ i: i, j: (i = i + 2), k: i }).k, j: $0.j, i: $0.i }
+    o2: {a:Readonly<object>,b:object} = new {a:Readonly<object>,b:object}(a=($1 = #{ a: o1, b: #{ x: 1 } }).a, b=new {x:uint64}(x=($2 = $1.b).x))
+    o3: {b:object} = new {b:object}(b=new {x:uint64}(x=($3 = ($4 = #{ b: ($5 = #{ b: #{ x: ($6 = #{ x: 1 }).x } }).b }).b).x))
   }
   
   __algots__.defaultCreate(): void

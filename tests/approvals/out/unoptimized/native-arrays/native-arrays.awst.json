@@ -691,7 +691,7 @@
                 "name": "arr"
               },
               "value": {
-                "_type": "SubroutineCallExpression",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/native-arrays.algo.ts",
                   "line": 20,
@@ -711,12 +711,35 @@
                   },
                   "source_location": null
                 },
-                "target": {
-                  "_type": "ContractMethodTarget",
-                  "cref": "tests/approvals/native-arrays.algo.ts::NativeArraysAlgo",
-                  "member_name": "buildArray"
+                "source": {
+                  "_type": "SubroutineCallExpression",
+                  "source_location": {
+                    "file": "tests/approvals/native-arrays.algo.ts",
+                    "line": 20,
+                    "end_line": 20,
+                    "column": 14,
+                    "end_column": 31
+                  },
+                  "wtype": {
+                    "_type": "ARC4DynamicArray",
+                    "name": "arc4.dynamic_array<uint64>",
+                    "immutable": false,
+                    "arc4_alias": null,
+                    "element_type": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "source_location": null
+                  },
+                  "target": {
+                    "_type": "ContractMethodTarget",
+                    "cref": "tests/approvals/native-arrays.algo.ts::NativeArraysAlgo",
+                    "member_name": "buildArray"
+                  },
+                  "args": []
                 },
-                "args": []
+                "_id": "0"
               }
             },
             {
@@ -2301,7 +2324,7 @@
                 "name": "top"
               },
               "value": {
-                "_type": "ArrayPop",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/native-arrays.algo.ts",
                   "line": 34,
@@ -2314,29 +2337,45 @@
                   "name": "uint64",
                   "immutable": true
                 },
-                "base": {
-                  "_type": "VarExpression",
+                "source": {
+                  "_type": "ArrayPop",
                   "source_location": {
                     "file": "tests/approvals/native-arrays.algo.ts",
                     "line": 34,
                     "end_line": 34,
                     "column": 16,
-                    "end_column": 19
+                    "end_column": 25
                   },
                   "wtype": {
-                    "_type": "ARC4DynamicArray",
-                    "name": "arc4.dynamic_array<uint64>",
-                    "immutable": false,
-                    "arc4_alias": null,
-                    "element_type": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "source_location": null
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true
                   },
-                  "name": "arr"
-                }
+                  "base": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/native-arrays.algo.ts",
+                      "line": 34,
+                      "end_line": 34,
+                      "column": 16,
+                      "end_column": 19
+                    },
+                    "wtype": {
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<uint64>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "element_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "source_location": null
+                    },
+                    "name": "arr"
+                  }
+                },
+                "_id": "1"
               }
             },
             {
@@ -3042,7 +3081,7 @@
                 "name": "arr2"
               },
               "value": {
-                "_type": "ArrayReplace",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/native-arrays.algo.ts",
                   "line": 42,
@@ -3062,14 +3101,14 @@
                   },
                   "source_location": null
                 },
-                "base": {
-                  "_type": "VarExpression",
+                "source": {
+                  "_type": "ArrayReplace",
                   "source_location": {
                     "file": "tests/approvals/native-arrays.algo.ts",
                     "line": 42,
                     "end_line": 42,
                     "column": 17,
-                    "end_column": 20
+                    "end_column": 31
                   },
                   "wtype": {
                     "_type": "ARC4DynamicArray",
@@ -3083,42 +3122,65 @@
                     },
                     "source_location": null
                   },
-                  "name": "arr"
+                  "base": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/native-arrays.algo.ts",
+                      "line": 42,
+                      "end_line": 42,
+                      "column": 17,
+                      "end_column": 20
+                    },
+                    "wtype": {
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<uint64>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "element_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "source_location": null
+                    },
+                    "name": "arr"
+                  },
+                  "index": {
+                    "_type": "IntegerConstant",
+                    "source_location": {
+                      "file": "tests/approvals/native-arrays.algo.ts",
+                      "line": 42,
+                      "end_line": 42,
+                      "column": 26,
+                      "end_column": 27
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "value": 1,
+                    "teal_alias": null
+                  },
+                  "value": {
+                    "_type": "IntegerConstant",
+                    "source_location": {
+                      "file": "tests/approvals/native-arrays.algo.ts",
+                      "line": 42,
+                      "end_line": 42,
+                      "column": 29,
+                      "end_column": 30
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "value": 5,
+                    "teal_alias": null
+                  }
                 },
-                "index": {
-                  "_type": "IntegerConstant",
-                  "source_location": {
-                    "file": "tests/approvals/native-arrays.algo.ts",
-                    "line": 42,
-                    "end_line": 42,
-                    "column": 26,
-                    "end_column": 27
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "value": 1,
-                  "teal_alias": null
-                },
-                "value": {
-                  "_type": "IntegerConstant",
-                  "source_location": {
-                    "file": "tests/approvals/native-arrays.algo.ts",
-                    "line": 42,
-                    "end_line": 42,
-                    "column": 29,
-                    "end_column": 30
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "value": 5,
-                  "teal_alias": null
-                }
+                "_id": "2"
               }
             },
             {
@@ -4242,38 +4304,218 @@
                   },
                   "items": [
                     {
-                      "_type": "IntegerConstant",
+                      "_type": "TupleItemExpression",
                       "source_location": {
                         "file": "tests/approvals/native-arrays.algo.ts",
                         "line": 48,
                         "end_line": 48,
-                        "column": 34,
-                        "end_column": 36
+                        "column": 33,
+                        "end_column": 41
                       },
                       "wtype": {
                         "_type": "WType",
                         "name": "uint64",
                         "immutable": true
                       },
-                      "value": 12,
-                      "teal_alias": null
+                      "base": {
+                        "_type": "SingleEvaluation",
+                        "source_location": {
+                          "file": "tests/approvals/native-arrays.algo.ts",
+                          "line": 48,
+                          "end_line": 48,
+                          "column": 33,
+                          "end_column": 41
+                        },
+                        "wtype": {
+                          "_type": "WTuple",
+                          "name": "tuple",
+                          "immutable": true,
+                          "types": [
+                            {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            }
+                          ]
+                        },
+                        "source": {
+                          "_type": "TupleExpression",
+                          "source_location": {
+                            "file": "tests/approvals/native-arrays.algo.ts",
+                            "line": 48,
+                            "end_line": 48,
+                            "column": 33,
+                            "end_column": 41
+                          },
+                          "wtype": {
+                            "_type": "WTuple",
+                            "name": "tuple",
+                            "immutable": true,
+                            "types": [
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            ]
+                          },
+                          "items": [
+                            {
+                              "_type": "IntegerConstant",
+                              "source_location": {
+                                "file": "tests/approvals/native-arrays.algo.ts",
+                                "line": 48,
+                                "end_line": 48,
+                                "column": 34,
+                                "end_column": 36
+                              },
+                              "wtype": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "value": 12,
+                              "teal_alias": null
+                            },
+                            {
+                              "_type": "IntegerConstant",
+                              "source_location": {
+                                "file": "tests/approvals/native-arrays.algo.ts",
+                                "line": 48,
+                                "end_line": 48,
+                                "column": 38,
+                                "end_column": 40
+                              },
+                              "wtype": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "value": 13,
+                              "teal_alias": null
+                            }
+                          ]
+                        },
+                        "_id": "3"
+                      },
+                      "index": 0
                     },
                     {
-                      "_type": "IntegerConstant",
+                      "_type": "TupleItemExpression",
                       "source_location": {
                         "file": "tests/approvals/native-arrays.algo.ts",
                         "line": 48,
                         "end_line": 48,
-                        "column": 38,
-                        "end_column": 40
+                        "column": 33,
+                        "end_column": 41
                       },
                       "wtype": {
                         "_type": "WType",
                         "name": "uint64",
                         "immutable": true
                       },
-                      "value": 13,
-                      "teal_alias": null
+                      "base": {
+                        "_type": "SingleEvaluation",
+                        "source_location": {
+                          "file": "tests/approvals/native-arrays.algo.ts",
+                          "line": 48,
+                          "end_line": 48,
+                          "column": 33,
+                          "end_column": 41
+                        },
+                        "wtype": {
+                          "_type": "WTuple",
+                          "name": "tuple",
+                          "immutable": true,
+                          "types": [
+                            {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            }
+                          ]
+                        },
+                        "source": {
+                          "_type": "TupleExpression",
+                          "source_location": {
+                            "file": "tests/approvals/native-arrays.algo.ts",
+                            "line": 48,
+                            "end_line": 48,
+                            "column": 33,
+                            "end_column": 41
+                          },
+                          "wtype": {
+                            "_type": "WTuple",
+                            "name": "tuple",
+                            "immutable": true,
+                            "types": [
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            ]
+                          },
+                          "items": [
+                            {
+                              "_type": "IntegerConstant",
+                              "source_location": {
+                                "file": "tests/approvals/native-arrays.algo.ts",
+                                "line": 48,
+                                "end_line": 48,
+                                "column": 34,
+                                "end_column": 36
+                              },
+                              "wtype": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "value": 12,
+                              "teal_alias": null
+                            },
+                            {
+                              "_type": "IntegerConstant",
+                              "source_location": {
+                                "file": "tests/approvals/native-arrays.algo.ts",
+                                "line": 48,
+                                "end_line": 48,
+                                "column": 38,
+                                "end_column": 40
+                              },
+                              "wtype": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "value": 13,
+                              "teal_alias": null
+                            }
+                          ]
+                        },
+                        "_id": "3"
+                      },
+                      "index": 1
                     }
                   ]
                 }
@@ -4312,7 +4554,7 @@
                 "name": "arr"
               },
               "value": {
-                "_type": "ArrayConcat",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/native-arrays.algo.ts",
                   "line": 49,
@@ -4332,14 +4574,14 @@
                   },
                   "source_location": null
                 },
-                "left": {
+                "source": {
                   "_type": "ArrayConcat",
                   "source_location": {
                     "file": "tests/approvals/native-arrays.algo.ts",
                     "line": 49,
                     "end_line": 49,
                     "column": 10,
-                    "end_column": 36
+                    "end_column": 47
                   },
                   "wtype": {
                     "_type": "ARC4DynamicArray",
@@ -4360,7 +4602,7 @@
                       "line": 49,
                       "end_line": 49,
                       "column": 10,
-                      "end_column": 25
+                      "end_column": 36
                     },
                     "wtype": {
                       "_type": "ARC4DynamicArray",
@@ -4375,13 +4617,13 @@
                       "source_location": null
                     },
                     "left": {
-                      "_type": "VarExpression",
+                      "_type": "ArrayConcat",
                       "source_location": {
                         "file": "tests/approvals/native-arrays.algo.ts",
                         "line": 49,
                         "end_line": 49,
                         "column": 10,
-                        "end_column": 13
+                        "end_column": 25
                       },
                       "wtype": {
                         "_type": "ARC4DynamicArray",
@@ -4395,190 +4637,213 @@
                         },
                         "source_location": null
                       },
-                      "name": "arr"
+                      "left": {
+                        "_type": "VarExpression",
+                        "source_location": {
+                          "file": "tests/approvals/native-arrays.algo.ts",
+                          "line": 49,
+                          "end_line": 49,
+                          "column": 10,
+                          "end_column": 13
+                        },
+                        "wtype": {
+                          "_type": "ARC4DynamicArray",
+                          "name": "arc4.dynamic_array<uint64>",
+                          "immutable": false,
+                          "arc4_alias": null,
+                          "element_type": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "source_location": null
+                        },
+                        "name": "arr"
+                      },
+                      "right": {
+                        "_type": "VarExpression",
+                        "source_location": {
+                          "file": "tests/approvals/native-arrays.algo.ts",
+                          "line": 49,
+                          "end_line": 49,
+                          "column": 21,
+                          "end_column": 24
+                        },
+                        "wtype": {
+                          "_type": "ARC4DynamicArray",
+                          "name": "arc4.dynamic_array<uint64>",
+                          "immutable": false,
+                          "arc4_alias": null,
+                          "element_type": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "source_location": null
+                        },
+                        "name": "arr"
+                      }
                     },
                     "right": {
-                      "_type": "VarExpression",
+                      "_type": "TupleExpression",
                       "source_location": {
                         "file": "tests/approvals/native-arrays.algo.ts",
                         "line": 49,
                         "end_line": 49,
-                        "column": 21,
-                        "end_column": 24
+                        "column": 33,
+                        "end_column": 35
                       },
                       "wtype": {
-                        "_type": "ARC4DynamicArray",
-                        "name": "arc4.dynamic_array<uint64>",
-                        "immutable": false,
-                        "arc4_alias": null,
-                        "element_type": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "source_location": null
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          }
+                        ]
                       },
-                      "name": "arr"
+                      "items": [
+                        {
+                          "_type": "IntegerConstant",
+                          "source_location": {
+                            "file": "tests/approvals/native-arrays.algo.ts",
+                            "line": 49,
+                            "end_line": 49,
+                            "column": 33,
+                            "end_column": 35
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "value": 11,
+                          "teal_alias": null
+                        }
+                      ]
                     }
                   },
                   "right": {
-                    "_type": "TupleExpression",
+                    "_type": "NewArray",
                     "source_location": {
                       "file": "tests/approvals/native-arrays.algo.ts",
                       "line": 49,
                       "end_line": 49,
-                      "column": 33,
-                      "end_column": 35
+                      "column": 44,
+                      "end_column": 46
                     },
                     "wtype": {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
-                      "types": [
-                        {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        }
-                      ]
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<uint64>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "element_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "source_location": null
                     },
-                    "items": [
+                    "values": [
                       {
-                        "_type": "IntegerConstant",
+                        "_type": "TupleItemExpression",
                         "source_location": {
                           "file": "tests/approvals/native-arrays.algo.ts",
                           "line": 49,
                           "end_line": 49,
-                          "column": 33,
-                          "end_column": 35
+                          "column": 44,
+                          "end_column": 46
                         },
                         "wtype": {
                           "_type": "WType",
                           "name": "uint64",
                           "immutable": true
                         },
-                        "value": 11,
-                        "teal_alias": null
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/native-arrays.algo.ts",
+                            "line": 49,
+                            "end_line": 49,
+                            "column": 44,
+                            "end_column": 46
+                          },
+                          "wtype": {
+                            "_type": "ARC4Tuple",
+                            "name": "arc4.tuple<uint64,uint64>",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "types": [
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            ],
+                            "source_location": null
+                          },
+                          "name": "t1"
+                        },
+                        "index": 0
+                      },
+                      {
+                        "_type": "TupleItemExpression",
+                        "source_location": {
+                          "file": "tests/approvals/native-arrays.algo.ts",
+                          "line": 49,
+                          "end_line": 49,
+                          "column": 44,
+                          "end_column": 46
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/native-arrays.algo.ts",
+                            "line": 49,
+                            "end_line": 49,
+                            "column": 44,
+                            "end_column": 46
+                          },
+                          "wtype": {
+                            "_type": "ARC4Tuple",
+                            "name": "arc4.tuple<uint64,uint64>",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "types": [
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            ],
+                            "source_location": null
+                          },
+                          "name": "t1"
+                        },
+                        "index": 1
                       }
                     ]
                   }
                 },
-                "right": {
-                  "_type": "NewArray",
-                  "source_location": {
-                    "file": "tests/approvals/native-arrays.algo.ts",
-                    "line": 49,
-                    "end_line": 49,
-                    "column": 44,
-                    "end_column": 46
-                  },
-                  "wtype": {
-                    "_type": "ARC4DynamicArray",
-                    "name": "arc4.dynamic_array<uint64>",
-                    "immutable": false,
-                    "arc4_alias": null,
-                    "element_type": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "source_location": null
-                  },
-                  "values": [
-                    {
-                      "_type": "TupleItemExpression",
-                      "source_location": {
-                        "file": "tests/approvals/native-arrays.algo.ts",
-                        "line": 49,
-                        "end_line": 49,
-                        "column": 44,
-                        "end_column": 46
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "base": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/native-arrays.algo.ts",
-                          "line": 49,
-                          "end_line": 49,
-                          "column": 44,
-                          "end_column": 46
-                        },
-                        "wtype": {
-                          "_type": "ARC4Tuple",
-                          "name": "arc4.tuple<uint64,uint64>",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "types": [
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          ],
-                          "source_location": null
-                        },
-                        "name": "t1"
-                      },
-                      "index": 0
-                    },
-                    {
-                      "_type": "TupleItemExpression",
-                      "source_location": {
-                        "file": "tests/approvals/native-arrays.algo.ts",
-                        "line": 49,
-                        "end_line": 49,
-                        "column": 44,
-                        "end_column": 46
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "base": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/native-arrays.algo.ts",
-                          "line": 49,
-                          "end_line": 49,
-                          "column": 44,
-                          "end_column": 46
-                        },
-                        "wtype": {
-                          "_type": "ARC4Tuple",
-                          "name": "arc4.tuple<uint64,uint64>",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "types": [
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          ],
-                          "source_location": null
-                        },
-                        "name": "t1"
-                      },
-                      "index": 1
-                    }
-                  ]
-                }
+                "_id": "4"
               }
             },
             {
@@ -5937,7 +6202,7 @@
                 "name": "x"
               },
               "value": {
-                "_type": "NewArray",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/native-arrays.algo.ts",
                   "line": 55,
@@ -5958,76 +6223,100 @@
                   "source_location": null,
                   "array_size": 4
                 },
-                "values": [
-                  {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/native-arrays.algo.ts",
-                      "line": 55,
-                      "end_line": 55,
-                      "column": 40,
-                      "end_column": 41
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "value": 1,
-                    "teal_alias": null
+                "source": {
+                  "_type": "NewArray",
+                  "source_location": {
+                    "file": "tests/approvals/native-arrays.algo.ts",
+                    "line": 55,
+                    "end_line": 55,
+                    "column": 14,
+                    "end_column": 51
                   },
-                  {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/native-arrays.algo.ts",
-                      "line": 55,
-                      "end_line": 55,
-                      "column": 43,
-                      "end_column": 44
-                    },
-                    "wtype": {
+                  "wtype": {
+                    "_type": "ARC4StaticArray",
+                    "name": "arc4.static_array<uint64>",
+                    "immutable": false,
+                    "arc4_alias": null,
+                    "element_type": {
                       "_type": "WType",
                       "name": "uint64",
                       "immutable": true
                     },
-                    "value": 2,
-                    "teal_alias": null
+                    "source_location": null,
+                    "array_size": 4
                   },
-                  {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/native-arrays.algo.ts",
-                      "line": 55,
-                      "end_line": 55,
-                      "column": 46,
-                      "end_column": 47
+                  "values": [
+                    {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/native-arrays.algo.ts",
+                        "line": 55,
+                        "end_line": 55,
+                        "column": 40,
+                        "end_column": 41
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "value": 1,
+                      "teal_alias": null
                     },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
+                    {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/native-arrays.algo.ts",
+                        "line": 55,
+                        "end_line": 55,
+                        "column": 43,
+                        "end_column": 44
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "value": 2,
+                      "teal_alias": null
                     },
-                    "value": 3,
-                    "teal_alias": null
-                  },
-                  {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/native-arrays.algo.ts",
-                      "line": 55,
-                      "end_line": 55,
-                      "column": 49,
-                      "end_column": 50
+                    {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/native-arrays.algo.ts",
+                        "line": 55,
+                        "end_line": 55,
+                        "column": 46,
+                        "end_column": 47
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "value": 3,
+                      "teal_alias": null
                     },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "value": 4,
-                    "teal_alias": null
-                  }
-                ]
+                    {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/native-arrays.algo.ts",
+                        "line": 55,
+                        "end_line": 55,
+                        "column": 49,
+                        "end_column": 50
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "value": 4,
+                      "teal_alias": null
+                    }
+                  ]
+                },
+                "_id": "5"
               }
             },
             {
@@ -6991,7 +7280,7 @@
                 "name": "da1"
               },
               "value": {
-                "_type": "NewArray",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/native-arrays.algo.ts",
                   "line": 65,
@@ -7013,46 +7302,71 @@
                   },
                   "source_location": null
                 },
-                "values": [
-                  {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/native-arrays.algo.ts",
-                      "line": 65,
-                      "end_line": 65,
-                      "column": 33,
-                      "end_column": 35
-                    },
-                    "wtype": {
-                      "_type": "ARC4UIntN",
-                      "name": "arc4.uint32",
-                      "immutable": true,
-                      "arc4_alias": null,
-                      "n": 32
-                    },
-                    "value": 123,
-                    "teal_alias": null
+                "source": {
+                  "_type": "NewArray",
+                  "source_location": {
+                    "file": "tests/approvals/native-arrays.algo.ts",
+                    "line": 65,
+                    "end_line": 65,
+                    "column": 16,
+                    "end_column": 40
                   },
-                  {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/native-arrays.algo.ts",
-                      "line": 65,
-                      "end_line": 65,
-                      "column": 37,
-                      "end_column": 39
-                    },
-                    "wtype": {
+                  "wtype": {
+                    "_type": "ARC4DynamicArray",
+                    "name": "arc4.dynamic_array<arc4.uint32>",
+                    "immutable": false,
+                    "arc4_alias": null,
+                    "element_type": {
                       "_type": "ARC4UIntN",
                       "name": "arc4.uint32",
                       "immutable": true,
                       "arc4_alias": null,
                       "n": 32
                     },
-                    "value": 123,
-                    "teal_alias": null
-                  }
-                ]
+                    "source_location": null
+                  },
+                  "values": [
+                    {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/native-arrays.algo.ts",
+                        "line": 65,
+                        "end_line": 65,
+                        "column": 33,
+                        "end_column": 35
+                      },
+                      "wtype": {
+                        "_type": "ARC4UIntN",
+                        "name": "arc4.uint32",
+                        "immutable": true,
+                        "arc4_alias": null,
+                        "n": 32
+                      },
+                      "value": 123,
+                      "teal_alias": null
+                    },
+                    {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/native-arrays.algo.ts",
+                        "line": 65,
+                        "end_line": 65,
+                        "column": 37,
+                        "end_column": 39
+                      },
+                      "wtype": {
+                        "_type": "ARC4UIntN",
+                        "name": "arc4.uint32",
+                        "immutable": true,
+                        "arc4_alias": null,
+                        "n": 32
+                      },
+                      "value": 123,
+                      "teal_alias": null
+                    }
+                  ]
+                },
+                "_id": "6"
               }
             },
             {
@@ -7091,7 +7405,7 @@
                 "name": "sa1"
               },
               "value": {
-                "_type": "NewArray",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/native-arrays.algo.ts",
                   "line": 66,
@@ -7114,46 +7428,72 @@
                   "source_location": null,
                   "array_size": 2
                 },
-                "values": [
-                  {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/native-arrays.algo.ts",
-                      "line": 66,
-                      "end_line": 66,
-                      "column": 32,
-                      "end_column": 34
-                    },
-                    "wtype": {
-                      "_type": "ARC4UIntN",
-                      "name": "arc4.uint32",
-                      "immutable": true,
-                      "arc4_alias": null,
-                      "n": 32
-                    },
-                    "value": 123,
-                    "teal_alias": null
+                "source": {
+                  "_type": "NewArray",
+                  "source_location": {
+                    "file": "tests/approvals/native-arrays.algo.ts",
+                    "line": 66,
+                    "end_line": 66,
+                    "column": 16,
+                    "end_column": 39
                   },
-                  {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/native-arrays.algo.ts",
-                      "line": 66,
-                      "end_line": 66,
-                      "column": 36,
-                      "end_column": 38
-                    },
-                    "wtype": {
+                  "wtype": {
+                    "_type": "ARC4StaticArray",
+                    "name": "arc4.static_array<arc4.uint32>",
+                    "immutable": false,
+                    "arc4_alias": null,
+                    "element_type": {
                       "_type": "ARC4UIntN",
                       "name": "arc4.uint32",
                       "immutable": true,
                       "arc4_alias": null,
                       "n": 32
                     },
-                    "value": 123,
-                    "teal_alias": null
-                  }
-                ]
+                    "source_location": null,
+                    "array_size": 2
+                  },
+                  "values": [
+                    {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/native-arrays.algo.ts",
+                        "line": 66,
+                        "end_line": 66,
+                        "column": 32,
+                        "end_column": 34
+                      },
+                      "wtype": {
+                        "_type": "ARC4UIntN",
+                        "name": "arc4.uint32",
+                        "immutable": true,
+                        "arc4_alias": null,
+                        "n": 32
+                      },
+                      "value": 123,
+                      "teal_alias": null
+                    },
+                    {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/native-arrays.algo.ts",
+                        "line": 66,
+                        "end_line": 66,
+                        "column": 36,
+                        "end_column": 38
+                      },
+                      "wtype": {
+                        "_type": "ARC4UIntN",
+                        "name": "arc4.uint32",
+                        "immutable": true,
+                        "arc4_alias": null,
+                        "n": 32
+                      },
+                      "value": 123,
+                      "teal_alias": null
+                    }
+                  ]
+                },
+                "_id": "7"
               }
             },
             {
@@ -7215,13 +7555,13 @@
                 },
                 "values": [
                   {
-                    "_type": "IntegerConstant",
+                    "_type": "TupleItemExpression",
                     "source_location": {
                       "file": "tests/approvals/native-arrays.algo.ts",
                       "line": 68,
                       "end_line": 68,
-                      "column": 14,
-                      "end_column": 16
+                      "column": 13,
+                      "end_column": 21
                     },
                     "wtype": {
                       "_type": "ARC4UIntN",
@@ -7230,17 +7570,119 @@
                       "arc4_alias": null,
                       "n": 32
                     },
-                    "value": 123,
-                    "teal_alias": null
+                    "base": {
+                      "_type": "SingleEvaluation",
+                      "source_location": {
+                        "file": "tests/approvals/native-arrays.algo.ts",
+                        "line": 68,
+                        "end_line": 68,
+                        "column": 13,
+                        "end_column": 21
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint32",
+                            "immutable": true,
+                            "arc4_alias": null,
+                            "n": 32
+                          },
+                          {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint32",
+                            "immutable": true,
+                            "arc4_alias": null,
+                            "n": 32
+                          }
+                        ]
+                      },
+                      "source": {
+                        "_type": "TupleExpression",
+                        "source_location": {
+                          "file": "tests/approvals/native-arrays.algo.ts",
+                          "line": 68,
+                          "end_line": 68,
+                          "column": 13,
+                          "end_column": 21
+                        },
+                        "wtype": {
+                          "_type": "WTuple",
+                          "name": "tuple",
+                          "immutable": true,
+                          "types": [
+                            {
+                              "_type": "ARC4UIntN",
+                              "name": "arc4.uint32",
+                              "immutable": true,
+                              "arc4_alias": null,
+                              "n": 32
+                            },
+                            {
+                              "_type": "ARC4UIntN",
+                              "name": "arc4.uint32",
+                              "immutable": true,
+                              "arc4_alias": null,
+                              "n": 32
+                            }
+                          ]
+                        },
+                        "items": [
+                          {
+                            "_type": "IntegerConstant",
+                            "source_location": {
+                              "file": "tests/approvals/native-arrays.algo.ts",
+                              "line": 68,
+                              "end_line": 68,
+                              "column": 14,
+                              "end_column": 16
+                            },
+                            "wtype": {
+                              "_type": "ARC4UIntN",
+                              "name": "arc4.uint32",
+                              "immutable": true,
+                              "arc4_alias": null,
+                              "n": 32
+                            },
+                            "value": 123,
+                            "teal_alias": null
+                          },
+                          {
+                            "_type": "IntegerConstant",
+                            "source_location": {
+                              "file": "tests/approvals/native-arrays.algo.ts",
+                              "line": 68,
+                              "end_line": 68,
+                              "column": 18,
+                              "end_column": 20
+                            },
+                            "wtype": {
+                              "_type": "ARC4UIntN",
+                              "name": "arc4.uint32",
+                              "immutable": true,
+                              "arc4_alias": null,
+                              "n": 32
+                            },
+                            "value": 123,
+                            "teal_alias": null
+                          }
+                        ]
+                      },
+                      "_id": "8"
+                    },
+                    "index": 0
                   },
                   {
-                    "_type": "IntegerConstant",
+                    "_type": "TupleItemExpression",
                     "source_location": {
                       "file": "tests/approvals/native-arrays.algo.ts",
                       "line": 68,
                       "end_line": 68,
-                      "column": 18,
-                      "end_column": 20
+                      "column": 13,
+                      "end_column": 21
                     },
                     "wtype": {
                       "_type": "ARC4UIntN",
@@ -7249,8 +7691,110 @@
                       "arc4_alias": null,
                       "n": 32
                     },
-                    "value": 123,
-                    "teal_alias": null
+                    "base": {
+                      "_type": "SingleEvaluation",
+                      "source_location": {
+                        "file": "tests/approvals/native-arrays.algo.ts",
+                        "line": 68,
+                        "end_line": 68,
+                        "column": 13,
+                        "end_column": 21
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint32",
+                            "immutable": true,
+                            "arc4_alias": null,
+                            "n": 32
+                          },
+                          {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint32",
+                            "immutable": true,
+                            "arc4_alias": null,
+                            "n": 32
+                          }
+                        ]
+                      },
+                      "source": {
+                        "_type": "TupleExpression",
+                        "source_location": {
+                          "file": "tests/approvals/native-arrays.algo.ts",
+                          "line": 68,
+                          "end_line": 68,
+                          "column": 13,
+                          "end_column": 21
+                        },
+                        "wtype": {
+                          "_type": "WTuple",
+                          "name": "tuple",
+                          "immutable": true,
+                          "types": [
+                            {
+                              "_type": "ARC4UIntN",
+                              "name": "arc4.uint32",
+                              "immutable": true,
+                              "arc4_alias": null,
+                              "n": 32
+                            },
+                            {
+                              "_type": "ARC4UIntN",
+                              "name": "arc4.uint32",
+                              "immutable": true,
+                              "arc4_alias": null,
+                              "n": 32
+                            }
+                          ]
+                        },
+                        "items": [
+                          {
+                            "_type": "IntegerConstant",
+                            "source_location": {
+                              "file": "tests/approvals/native-arrays.algo.ts",
+                              "line": 68,
+                              "end_line": 68,
+                              "column": 14,
+                              "end_column": 16
+                            },
+                            "wtype": {
+                              "_type": "ARC4UIntN",
+                              "name": "arc4.uint32",
+                              "immutable": true,
+                              "arc4_alias": null,
+                              "n": 32
+                            },
+                            "value": 123,
+                            "teal_alias": null
+                          },
+                          {
+                            "_type": "IntegerConstant",
+                            "source_location": {
+                              "file": "tests/approvals/native-arrays.algo.ts",
+                              "line": 68,
+                              "end_line": 68,
+                              "column": 18,
+                              "end_column": 20
+                            },
+                            "wtype": {
+                              "_type": "ARC4UIntN",
+                              "name": "arc4.uint32",
+                              "immutable": true,
+                              "arc4_alias": null,
+                              "n": 32
+                            },
+                            "value": 123,
+                            "teal_alias": null
+                          }
+                        ]
+                      },
+                      "_id": "8"
+                    },
+                    "index": 1
                   }
                 ]
               }
@@ -7290,7 +7834,7 @@
                 "name": "a1"
               },
               "value": {
-                "_type": "ArrayConcat",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/native-arrays.algo.ts",
                   "line": 70,
@@ -7312,7 +7856,7 @@
                   },
                   "source_location": null
                 },
-                "left": {
+                "source": {
                   "_type": "ArrayConcat",
                   "source_location": {
                     "file": "tests/approvals/native-arrays.algo.ts",
@@ -7336,7 +7880,7 @@
                     "source_location": null
                   },
                   "left": {
-                    "_type": "Copy",
+                    "_type": "ArrayConcat",
                     "source_location": {
                       "file": "tests/approvals/native-arrays.algo.ts",
                       "line": 70,
@@ -7358,14 +7902,14 @@
                       },
                       "source_location": null
                     },
-                    "value": {
-                      "_type": "VarExpression",
+                    "left": {
+                      "_type": "Copy",
                       "source_location": {
                         "file": "tests/approvals/native-arrays.algo.ts",
                         "line": 70,
                         "end_line": 70,
-                        "column": 13,
-                        "end_column": 15
+                        "column": 9,
+                        "end_column": 32
                       },
                       "wtype": {
                         "_type": "ARC4DynamicArray",
@@ -7381,7 +7925,80 @@
                         },
                         "source_location": null
                       },
-                      "name": "a1"
+                      "value": {
+                        "_type": "VarExpression",
+                        "source_location": {
+                          "file": "tests/approvals/native-arrays.algo.ts",
+                          "line": 70,
+                          "end_line": 70,
+                          "column": 13,
+                          "end_column": 15
+                        },
+                        "wtype": {
+                          "_type": "ARC4DynamicArray",
+                          "name": "arc4.dynamic_array<arc4.uint32>",
+                          "immutable": false,
+                          "arc4_alias": null,
+                          "element_type": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint32",
+                            "immutable": true,
+                            "arc4_alias": null,
+                            "n": 32
+                          },
+                          "source_location": null
+                        },
+                        "name": "a1"
+                      }
+                    },
+                    "right": {
+                      "_type": "Copy",
+                      "source_location": {
+                        "file": "tests/approvals/native-arrays.algo.ts",
+                        "line": 70,
+                        "end_line": 70,
+                        "column": 9,
+                        "end_column": 32
+                      },
+                      "wtype": {
+                        "_type": "ARC4DynamicArray",
+                        "name": "arc4.dynamic_array<arc4.uint32>",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "element_type": {
+                          "_type": "ARC4UIntN",
+                          "name": "arc4.uint32",
+                          "immutable": true,
+                          "arc4_alias": null,
+                          "n": 32
+                        },
+                        "source_location": null
+                      },
+                      "value": {
+                        "_type": "VarExpression",
+                        "source_location": {
+                          "file": "tests/approvals/native-arrays.algo.ts",
+                          "line": 70,
+                          "end_line": 70,
+                          "column": 20,
+                          "end_column": 23
+                        },
+                        "wtype": {
+                          "_type": "ARC4DynamicArray",
+                          "name": "arc4.dynamic_array<arc4.uint32>",
+                          "immutable": false,
+                          "arc4_alias": null,
+                          "element_type": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint32",
+                            "immutable": true,
+                            "arc4_alias": null,
+                            "n": 32
+                          },
+                          "source_location": null
+                        },
+                        "name": "da1"
+                      }
                     }
                   },
                   "right": {
@@ -7392,80 +8009,6 @@
                       "end_line": 70,
                       "column": 9,
                       "end_column": 32
-                    },
-                    "wtype": {
-                      "_type": "ARC4DynamicArray",
-                      "name": "arc4.dynamic_array<arc4.uint32>",
-                      "immutable": false,
-                      "arc4_alias": null,
-                      "element_type": {
-                        "_type": "ARC4UIntN",
-                        "name": "arc4.uint32",
-                        "immutable": true,
-                        "arc4_alias": null,
-                        "n": 32
-                      },
-                      "source_location": null
-                    },
-                    "value": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/native-arrays.algo.ts",
-                        "line": 70,
-                        "end_line": 70,
-                        "column": 20,
-                        "end_column": 23
-                      },
-                      "wtype": {
-                        "_type": "ARC4DynamicArray",
-                        "name": "arc4.dynamic_array<arc4.uint32>",
-                        "immutable": false,
-                        "arc4_alias": null,
-                        "element_type": {
-                          "_type": "ARC4UIntN",
-                          "name": "arc4.uint32",
-                          "immutable": true,
-                          "arc4_alias": null,
-                          "n": 32
-                        },
-                        "source_location": null
-                      },
-                      "name": "da1"
-                    }
-                  }
-                },
-                "right": {
-                  "_type": "Copy",
-                  "source_location": {
-                    "file": "tests/approvals/native-arrays.algo.ts",
-                    "line": 70,
-                    "end_line": 70,
-                    "column": 9,
-                    "end_column": 32
-                  },
-                  "wtype": {
-                    "_type": "ARC4StaticArray",
-                    "name": "arc4.static_array<arc4.uint32>",
-                    "immutable": false,
-                    "arc4_alias": null,
-                    "element_type": {
-                      "_type": "ARC4UIntN",
-                      "name": "arc4.uint32",
-                      "immutable": true,
-                      "arc4_alias": null,
-                      "n": 32
-                    },
-                    "source_location": null,
-                    "array_size": 2
-                  },
-                  "value": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/native-arrays.algo.ts",
-                      "line": 70,
-                      "end_line": 70,
-                      "column": 28,
-                      "end_column": 31
                     },
                     "wtype": {
                       "_type": "ARC4StaticArray",
@@ -7482,9 +8025,35 @@
                       "source_location": null,
                       "array_size": 2
                     },
-                    "name": "sa1"
+                    "value": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/native-arrays.algo.ts",
+                        "line": 70,
+                        "end_line": 70,
+                        "column": 28,
+                        "end_column": 31
+                      },
+                      "wtype": {
+                        "_type": "ARC4StaticArray",
+                        "name": "arc4.static_array<arc4.uint32>",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "element_type": {
+                          "_type": "ARC4UIntN",
+                          "name": "arc4.uint32",
+                          "immutable": true,
+                          "arc4_alias": null,
+                          "n": 32
+                        },
+                        "source_location": null,
+                        "array_size": 2
+                      },
+                      "name": "sa1"
+                    }
                   }
-                }
+                },
+                "_id": "9"
               }
             },
             {
@@ -8490,53 +9059,53 @@
               "end_column": 26
             },
             "wtype": {
-              "_type": "WTuple",
-              "name": "tests/approvals/native-arrays.algo.ts::Vector",
-              "immutable": true,
-              "types": [
-                {
+              "_type": "ARC4Struct",
+              "name": "Vector",
+              "immutable": false,
+              "arc4_alias": null,
+              "fields": {
+                "x": {
                   "_type": "WType",
                   "name": "uint64",
                   "immutable": true
                 },
-                {
+                "y": {
                   "_type": "WType",
                   "name": "uint64",
                   "immutable": true
                 }
-              ],
-              "names": [
-                "x",
-                "y"
-              ]
+              },
+              "source_location": null,
+              "frozen": false,
+              "desc": null
             }
           }
         ],
         "return_type": {
           "_type": "ARC4DynamicArray",
-          "name": "arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>",
+          "name": "arc4.dynamic_array<Vector>",
           "immutable": false,
           "arc4_alias": null,
           "element_type": {
-            "_type": "WTuple",
-            "name": "tests/approvals/native-arrays.algo.ts::Vector",
-            "immutable": true,
-            "types": [
-              {
+            "_type": "ARC4Struct",
+            "name": "Vector",
+            "immutable": false,
+            "arc4_alias": null,
+            "fields": {
+              "x": {
                 "_type": "WType",
                 "name": "uint64",
                 "immutable": true
               },
-              {
+              "y": {
                 "_type": "WType",
                 "name": "uint64",
                 "immutable": true
               }
-            ],
-            "names": [
-              "x",
-              "y"
-            ]
+            },
+            "source_location": null,
+            "frozen": false,
+            "desc": null
           },
           "source_location": null
         },
@@ -8580,7 +9149,7 @@
                     },
                     "wtype": {
                       "_type": "WTuple",
-                      "name": "lib.d.ts::object",
+                      "name": "tuple",
                       "immutable": true,
                       "types": [
                         {
@@ -8593,10 +9162,6 @@
                           "name": "uint64",
                           "immutable": true
                         }
-                      ],
-                      "names": [
-                        "x",
-                        "y"
                       ]
                     },
                     "items": [
@@ -8645,7 +9210,7 @@
                     },
                     "wtype": {
                       "_type": "WTuple",
-                      "name": "lib.d.ts::object",
+                      "name": "tuple",
                       "immutable": true,
                       "types": [
                         {
@@ -8658,10 +9223,6 @@
                           "name": "uint64",
                           "immutable": true
                         }
-                      ],
-                      "names": [
-                        "x",
-                        "y"
                       ]
                     },
                     "items": [
@@ -8689,25 +9250,25 @@
                             "end_column": 26
                           },
                           "wtype": {
-                            "_type": "WTuple",
-                            "name": "tests/approvals/native-arrays.algo.ts::Vector",
-                            "immutable": true,
-                            "types": [
-                              {
+                            "_type": "ARC4Struct",
+                            "name": "Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
                                 "_type": "WType",
                                 "name": "uint64",
                                 "immutable": true
                               },
-                              {
+                              "y": {
                                 "_type": "WType",
                                 "name": "uint64",
                                 "immutable": true
                               }
-                            ],
-                            "names": [
-                              "x",
-                              "y"
-                            ]
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
                           },
                           "name": "p"
                         },
@@ -8737,25 +9298,25 @@
                             "end_column": 26
                           },
                           "wtype": {
-                            "_type": "WTuple",
-                            "name": "tests/approvals/native-arrays.algo.ts::Vector",
-                            "immutable": true,
-                            "types": [
-                              {
+                            "_type": "ARC4Struct",
+                            "name": "Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
                                 "_type": "WType",
                                 "name": "uint64",
                                 "immutable": true
                               },
-                              {
+                              "y": {
                                 "_type": "WType",
                                 "name": "uint64",
                                 "immutable": true
                               }
-                            ],
-                            "names": [
-                              "x",
-                              "y"
-                            ]
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
                           },
                           "name": "p"
                         },
@@ -8798,29 +9359,29 @@
                     },
                     "wtype": {
                       "_type": "ARC4DynamicArray",
-                      "name": "arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>",
+                      "name": "arc4.dynamic_array<Vector>",
                       "immutable": false,
                       "arc4_alias": null,
                       "element_type": {
-                        "_type": "WTuple",
-                        "name": "tests/approvals/native-arrays.algo.ts::Vector",
-                        "immutable": true,
-                        "types": [
-                          {
+                        "_type": "ARC4Struct",
+                        "name": "Vector",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "fields": {
+                          "x": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           },
-                          {
+                          "y": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           }
-                        ],
-                        "names": [
-                          "x",
-                          "y"
-                        ]
+                        },
+                        "source_location": null,
+                        "frozen": false,
+                        "desc": null
                       },
                       "source_location": null
                     },
@@ -8837,29 +9398,29 @@
                     },
                     "wtype": {
                       "_type": "ARC4DynamicArray",
-                      "name": "arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>",
+                      "name": "arc4.dynamic_array<Vector>",
                       "immutable": false,
                       "arc4_alias": null,
                       "element_type": {
-                        "_type": "WTuple",
-                        "name": "tests/approvals/native-arrays.algo.ts::Vector",
-                        "immutable": true,
-                        "types": [
-                          {
+                        "_type": "ARC4Struct",
+                        "name": "Vector",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "fields": {
+                          "x": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           },
-                          {
+                          "y": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           }
-                        ],
-                        "names": [
-                          "x",
-                          "y"
-                        ]
+                        },
+                        "source_location": null,
+                        "frozen": false,
+                        "desc": null
                       },
                       "source_location": null
                     },
@@ -8886,29 +9447,29 @@
                     },
                     "wtype": {
                       "_type": "ARC4DynamicArray",
-                      "name": "arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>",
+                      "name": "arc4.dynamic_array<Vector>",
                       "immutable": false,
                       "arc4_alias": null,
                       "element_type": {
-                        "_type": "WTuple",
-                        "name": "tests/approvals/native-arrays.algo.ts::Vector",
-                        "immutable": true,
-                        "types": [
-                          {
+                        "_type": "ARC4Struct",
+                        "name": "Vector",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "fields": {
+                          "x": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           },
-                          {
+                          "y": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           }
-                        ],
-                        "names": [
-                          "x",
-                          "y"
-                        ]
+                        },
+                        "source_location": null,
+                        "frozen": false,
+                        "desc": null
                       },
                       "source_location": null
                     },
@@ -8925,72 +9486,72 @@
                     },
                     "wtype": {
                       "_type": "ARC4DynamicArray",
-                      "name": "arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>",
+                      "name": "arc4.dynamic_array<Vector>",
                       "immutable": false,
                       "arc4_alias": null,
                       "element_type": {
-                        "_type": "WTuple",
-                        "name": "tests/approvals/native-arrays.algo.ts::Vector",
-                        "immutable": true,
-                        "types": [
-                          {
+                        "_type": "ARC4Struct",
+                        "name": "Vector",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "fields": {
+                          "x": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           },
-                          {
+                          "y": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           }
-                        ],
-                        "names": [
-                          "x",
-                          "y"
-                        ]
+                        },
+                        "source_location": null,
+                        "frozen": false,
+                        "desc": null
                       },
                       "source_location": null
                     },
                     "values": [
                       {
-                        "_type": "TupleExpression",
+                        "_type": "NewStruct",
                         "source_location": {
                           "file": "tests/approvals/native-arrays.algo.ts",
                           "line": 78,
                           "end_line": 78,
-                          "column": 17,
-                          "end_column": 25
+                          "column": 16,
+                          "end_column": 26
                         },
                         "wtype": {
-                          "_type": "WTuple",
-                          "name": "tests/approvals/native-arrays.algo.ts::Vector",
-                          "immutable": true,
-                          "types": [
-                            {
+                          "_type": "ARC4Struct",
+                          "name": "Vector",
+                          "immutable": false,
+                          "arc4_alias": null,
+                          "fields": {
+                            "x": {
                               "_type": "WType",
                               "name": "uint64",
                               "immutable": true
                             },
-                            {
+                            "y": {
                               "_type": "WType",
                               "name": "uint64",
                               "immutable": true
                             }
-                          ],
-                          "names": [
-                            "x",
-                            "y"
-                          ]
+                          },
+                          "source_location": null,
+                          "frozen": false,
+                          "desc": null
                         },
-                        "items": [
-                          {
+                        "values": {
+                          "x": {
                             "_type": "FieldExpression",
                             "source_location": {
                               "file": "tests/approvals/native-arrays.algo.ts",
                               "line": 78,
                               "end_line": 78,
-                              "column": 17,
-                              "end_column": 25
+                              "column": 16,
+                              "end_column": 26
                             },
                             "wtype": {
                               "_type": "WType",
@@ -9003,12 +9564,12 @@
                                 "file": "tests/approvals/native-arrays.algo.ts",
                                 "line": 78,
                                 "end_line": 78,
-                                "column": 17,
-                                "end_column": 25
+                                "column": 16,
+                                "end_column": 26
                               },
                               "wtype": {
                                 "_type": "WTuple",
-                                "name": "lib.d.ts::object",
+                                "name": "{x:uint64,y:uint64}",
                                 "immutable": true,
                                 "types": [
                                   {
@@ -9028,17 +9589,17 @@
                                 ]
                               },
                               "source": {
-                                "_type": "TupleExpression",
+                                "_type": "TupleItemExpression",
                                 "source_location": {
                                   "file": "tests/approvals/native-arrays.algo.ts",
                                   "line": 78,
                                   "end_line": 78,
-                                  "column": 17,
-                                  "end_column": 25
+                                  "column": 16,
+                                  "end_column": 26
                                 },
                                 "wtype": {
                                   "_type": "WTuple",
-                                  "name": "lib.d.ts::object",
+                                  "name": "{x:uint64,y:uint64}",
                                   "immutable": true,
                                   "types": [
                                     {
@@ -9057,53 +9618,164 @@
                                     "y"
                                   ]
                                 },
-                                "items": [
-                                  {
-                                    "_type": "VarExpression",
-                                    "source_location": {
-                                      "file": "tests/approvals/native-arrays.algo.ts",
-                                      "line": 78,
-                                      "end_line": 78,
-                                      "column": 19,
-                                      "end_column": 20
-                                    },
-                                    "wtype": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    },
-                                    "name": "x"
+                                "base": {
+                                  "_type": "SingleEvaluation",
+                                  "source_location": {
+                                    "file": "tests/approvals/native-arrays.algo.ts",
+                                    "line": 78,
+                                    "end_line": 78,
+                                    "column": 16,
+                                    "end_column": 26
                                   },
-                                  {
-                                    "_type": "VarExpression",
+                                  "wtype": {
+                                    "_type": "WTuple",
+                                    "name": "tuple",
+                                    "immutable": true,
+                                    "types": [
+                                      {
+                                        "_type": "WTuple",
+                                        "name": "{x:uint64,y:uint64}",
+                                        "immutable": true,
+                                        "types": [
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          }
+                                        ],
+                                        "names": [
+                                          "x",
+                                          "y"
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  "source": {
+                                    "_type": "TupleExpression",
                                     "source_location": {
                                       "file": "tests/approvals/native-arrays.algo.ts",
                                       "line": 78,
                                       "end_line": 78,
-                                      "column": 22,
-                                      "end_column": 23
+                                      "column": 16,
+                                      "end_column": 26
                                     },
                                     "wtype": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                      "_type": "WTuple",
+                                      "name": "tuple",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "{x:uint64,y:uint64}",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            }
+                                          ],
+                                          "names": [
+                                            "x",
+                                            "y"
+                                          ]
+                                        }
+                                      ]
                                     },
-                                    "name": "y"
-                                  }
-                                ]
+                                    "items": [
+                                      {
+                                        "_type": "TupleExpression",
+                                        "source_location": {
+                                          "file": "tests/approvals/native-arrays.algo.ts",
+                                          "line": 78,
+                                          "end_line": 78,
+                                          "column": 17,
+                                          "end_column": 25
+                                        },
+                                        "wtype": {
+                                          "_type": "WTuple",
+                                          "name": "{x:uint64,y:uint64}",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            }
+                                          ],
+                                          "names": [
+                                            "x",
+                                            "y"
+                                          ]
+                                        },
+                                        "items": [
+                                          {
+                                            "_type": "VarExpression",
+                                            "source_location": {
+                                              "file": "tests/approvals/native-arrays.algo.ts",
+                                              "line": 78,
+                                              "end_line": 78,
+                                              "column": 19,
+                                              "end_column": 20
+                                            },
+                                            "wtype": {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            "name": "x"
+                                          },
+                                          {
+                                            "_type": "VarExpression",
+                                            "source_location": {
+                                              "file": "tests/approvals/native-arrays.algo.ts",
+                                              "line": 78,
+                                              "end_line": 78,
+                                              "column": 22,
+                                              "end_column": 23
+                                            },
+                                            "wtype": {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            "name": "y"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  "_id": "11"
+                                },
+                                "index": 0
                               },
-                              "_id": "0"
+                              "_id": "10"
                             },
                             "name": "x"
                           },
-                          {
+                          "y": {
                             "_type": "FieldExpression",
                             "source_location": {
                               "file": "tests/approvals/native-arrays.algo.ts",
                               "line": 78,
                               "end_line": 78,
-                              "column": 17,
-                              "end_column": 25
+                              "column": 16,
+                              "end_column": 26
                             },
                             "wtype": {
                               "_type": "WType",
@@ -9116,12 +9788,12 @@
                                 "file": "tests/approvals/native-arrays.algo.ts",
                                 "line": 78,
                                 "end_line": 78,
-                                "column": 17,
-                                "end_column": 25
+                                "column": 16,
+                                "end_column": 26
                               },
                               "wtype": {
                                 "_type": "WTuple",
-                                "name": "lib.d.ts::object",
+                                "name": "{x:uint64,y:uint64}",
                                 "immutable": true,
                                 "types": [
                                   {
@@ -9141,17 +9813,17 @@
                                 ]
                               },
                               "source": {
-                                "_type": "TupleExpression",
+                                "_type": "TupleItemExpression",
                                 "source_location": {
                                   "file": "tests/approvals/native-arrays.algo.ts",
                                   "line": 78,
                                   "end_line": 78,
-                                  "column": 17,
-                                  "end_column": 25
+                                  "column": 16,
+                                  "end_column": 26
                                 },
                                 "wtype": {
                                   "_type": "WTuple",
-                                  "name": "lib.d.ts::object",
+                                  "name": "{x:uint64,y:uint64}",
                                   "immutable": true,
                                   "types": [
                                     {
@@ -9170,46 +9842,157 @@
                                     "y"
                                   ]
                                 },
-                                "items": [
-                                  {
-                                    "_type": "VarExpression",
-                                    "source_location": {
-                                      "file": "tests/approvals/native-arrays.algo.ts",
-                                      "line": 78,
-                                      "end_line": 78,
-                                      "column": 19,
-                                      "end_column": 20
-                                    },
-                                    "wtype": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    },
-                                    "name": "x"
+                                "base": {
+                                  "_type": "SingleEvaluation",
+                                  "source_location": {
+                                    "file": "tests/approvals/native-arrays.algo.ts",
+                                    "line": 78,
+                                    "end_line": 78,
+                                    "column": 16,
+                                    "end_column": 26
                                   },
-                                  {
-                                    "_type": "VarExpression",
+                                  "wtype": {
+                                    "_type": "WTuple",
+                                    "name": "tuple",
+                                    "immutable": true,
+                                    "types": [
+                                      {
+                                        "_type": "WTuple",
+                                        "name": "{x:uint64,y:uint64}",
+                                        "immutable": true,
+                                        "types": [
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          },
+                                          {
+                                            "_type": "WType",
+                                            "name": "uint64",
+                                            "immutable": true
+                                          }
+                                        ],
+                                        "names": [
+                                          "x",
+                                          "y"
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  "source": {
+                                    "_type": "TupleExpression",
                                     "source_location": {
                                       "file": "tests/approvals/native-arrays.algo.ts",
                                       "line": 78,
                                       "end_line": 78,
-                                      "column": 22,
-                                      "end_column": 23
+                                      "column": 16,
+                                      "end_column": 26
                                     },
                                     "wtype": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                      "_type": "WTuple",
+                                      "name": "tuple",
+                                      "immutable": true,
+                                      "types": [
+                                        {
+                                          "_type": "WTuple",
+                                          "name": "{x:uint64,y:uint64}",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            }
+                                          ],
+                                          "names": [
+                                            "x",
+                                            "y"
+                                          ]
+                                        }
+                                      ]
                                     },
-                                    "name": "y"
-                                  }
-                                ]
+                                    "items": [
+                                      {
+                                        "_type": "TupleExpression",
+                                        "source_location": {
+                                          "file": "tests/approvals/native-arrays.algo.ts",
+                                          "line": 78,
+                                          "end_line": 78,
+                                          "column": 17,
+                                          "end_column": 25
+                                        },
+                                        "wtype": {
+                                          "_type": "WTuple",
+                                          "name": "{x:uint64,y:uint64}",
+                                          "immutable": true,
+                                          "types": [
+                                            {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            }
+                                          ],
+                                          "names": [
+                                            "x",
+                                            "y"
+                                          ]
+                                        },
+                                        "items": [
+                                          {
+                                            "_type": "VarExpression",
+                                            "source_location": {
+                                              "file": "tests/approvals/native-arrays.algo.ts",
+                                              "line": 78,
+                                              "end_line": 78,
+                                              "column": 19,
+                                              "end_column": 20
+                                            },
+                                            "wtype": {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            "name": "x"
+                                          },
+                                          {
+                                            "_type": "VarExpression",
+                                            "source_location": {
+                                              "file": "tests/approvals/native-arrays.algo.ts",
+                                              "line": 78,
+                                              "end_line": 78,
+                                              "column": 22,
+                                              "end_column": 23
+                                            },
+                                            "wtype": {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            "name": "y"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  "_id": "11"
+                                },
+                                "index": 0
                               },
-                              "_id": "0"
+                              "_id": "10"
                             },
                             "name": "y"
                           }
-                        ]
+                        }
                       }
                     ]
                   }
@@ -9290,29 +10073,29 @@
                             },
                             "wtype": {
                               "_type": "ARC4DynamicArray",
-                              "name": "arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>",
+                              "name": "arc4.dynamic_array<Vector>",
                               "immutable": false,
                               "arc4_alias": null,
                               "element_type": {
-                                "_type": "WTuple",
-                                "name": "tests/approvals/native-arrays.algo.ts::Vector",
-                                "immutable": true,
-                                "types": [
-                                  {
+                                "_type": "ARC4Struct",
+                                "name": "Vector",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "fields": {
+                                  "x": {
                                     "_type": "WType",
                                     "name": "uint64",
                                     "immutable": true
                                   },
-                                  {
+                                  "y": {
                                     "_type": "WType",
                                     "name": "uint64",
                                     "immutable": true
                                   }
-                                ],
-                                "names": [
-                                  "x",
-                                  "y"
-                                ]
+                                },
+                                "source_location": null,
+                                "frozen": false,
+                                "desc": null
                               },
                               "source_location": null
                             },
@@ -9391,25 +10174,25 @@
                                 "end_column": 38
                               },
                               "wtype": {
-                                "_type": "WTuple",
-                                "name": "tests/approvals/native-arrays.algo.ts::Vector",
-                                "immutable": true,
-                                "types": [
-                                  {
+                                "_type": "ARC4Struct",
+                                "name": "Vector",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "fields": {
+                                  "x": {
                                     "_type": "WType",
                                     "name": "uint64",
                                     "immutable": true
                                   },
-                                  {
+                                  "y": {
                                     "_type": "WType",
                                     "name": "uint64",
                                     "immutable": true
                                   }
-                                ],
-                                "names": [
-                                  "x",
-                                  "y"
-                                ]
+                                },
+                                "source_location": null,
+                                "frozen": false,
+                                "desc": null
                               },
                               "base": {
                                 "_type": "VarExpression",
@@ -9422,29 +10205,29 @@
                                 },
                                 "wtype": {
                                   "_type": "ARC4DynamicArray",
-                                  "name": "arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>",
+                                  "name": "arc4.dynamic_array<Vector>",
                                   "immutable": false,
                                   "arc4_alias": null,
                                   "element_type": {
-                                    "_type": "WTuple",
-                                    "name": "tests/approvals/native-arrays.algo.ts::Vector",
-                                    "immutable": true,
-                                    "types": [
-                                      {
+                                    "_type": "ARC4Struct",
+                                    "name": "Vector",
+                                    "immutable": false,
+                                    "arc4_alias": null,
+                                    "fields": {
+                                      "x": {
                                         "_type": "WType",
                                         "name": "uint64",
                                         "immutable": true
                                       },
-                                      {
+                                      "y": {
                                         "_type": "WType",
                                         "name": "uint64",
                                         "immutable": true
                                       }
-                                    ],
-                                    "names": [
-                                      "x",
-                                      "y"
-                                    ]
+                                    },
+                                    "source_location": null,
+                                    "frozen": false,
+                                    "desc": null
                                   },
                                   "source_location": null
                                 },
@@ -9527,25 +10310,25 @@
                                 "end_column": 38
                               },
                               "wtype": {
-                                "_type": "WTuple",
-                                "name": "tests/approvals/native-arrays.algo.ts::Vector",
-                                "immutable": true,
-                                "types": [
-                                  {
+                                "_type": "ARC4Struct",
+                                "name": "Vector",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "fields": {
+                                  "x": {
                                     "_type": "WType",
                                     "name": "uint64",
                                     "immutable": true
                                   },
-                                  {
+                                  "y": {
                                     "_type": "WType",
                                     "name": "uint64",
                                     "immutable": true
                                   }
-                                ],
-                                "names": [
-                                  "x",
-                                  "y"
-                                ]
+                                },
+                                "source_location": null,
+                                "frozen": false,
+                                "desc": null
                               },
                               "base": {
                                 "_type": "VarExpression",
@@ -9558,29 +10341,29 @@
                                 },
                                 "wtype": {
                                   "_type": "ARC4DynamicArray",
-                                  "name": "arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>",
+                                  "name": "arc4.dynamic_array<Vector>",
                                   "immutable": false,
                                   "arc4_alias": null,
                                   "element_type": {
-                                    "_type": "WTuple",
-                                    "name": "tests/approvals/native-arrays.algo.ts::Vector",
-                                    "immutable": true,
-                                    "types": [
-                                      {
+                                    "_type": "ARC4Struct",
+                                    "name": "Vector",
+                                    "immutable": false,
+                                    "arc4_alias": null,
+                                    "fields": {
+                                      "x": {
                                         "_type": "WType",
                                         "name": "uint64",
                                         "immutable": true
                                       },
-                                      {
+                                      "y": {
                                         "_type": "WType",
                                         "name": "uint64",
                                         "immutable": true
                                       }
-                                    ],
-                                    "names": [
-                                      "x",
-                                      "y"
-                                    ]
+                                    },
+                                    "source_location": null,
+                                    "frozen": false,
+                                    "desc": null
                                   },
                                   "source_location": null
                                 },
@@ -9649,29 +10432,29 @@
                     },
                     "wtype": {
                       "_type": "ARC4DynamicArray",
-                      "name": "arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>",
+                      "name": "arc4.dynamic_array<Vector>",
                       "immutable": false,
                       "arc4_alias": null,
                       "element_type": {
-                        "_type": "WTuple",
-                        "name": "tests/approvals/native-arrays.algo.ts::Vector",
-                        "immutable": true,
-                        "types": [
-                          {
+                        "_type": "ARC4Struct",
+                        "name": "Vector",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "fields": {
+                          "x": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           },
-                          {
+                          "y": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           }
-                        ],
-                        "names": [
-                          "x",
-                          "y"
-                        ]
+                        },
+                        "source_location": null,
+                        "frozen": false,
+                        "desc": null
                       },
                       "source_location": null
                     },
@@ -10452,7 +11235,7 @@
                 "name": "needClone"
               },
               "value": {
-                "_type": "Copy",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/native-arrays.algo.ts",
                   "line": 102,
@@ -10472,14 +11255,14 @@
                   },
                   "source_location": null
                 },
-                "value": {
-                  "_type": "VarExpression",
+                "source": {
+                  "_type": "Copy",
                   "source_location": {
                     "file": "tests/approvals/native-arrays.algo.ts",
                     "line": 102,
                     "end_line": 102,
-                    "column": 28,
-                    "end_column": 35
+                    "column": 22,
+                    "end_column": 36
                   },
                   "wtype": {
                     "_type": "ARC4DynamicArray",
@@ -10493,8 +11276,31 @@
                     },
                     "source_location": null
                   },
-                  "name": "mutable"
-                }
+                  "value": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/native-arrays.algo.ts",
+                      "line": 102,
+                      "end_line": 102,
+                      "column": 28,
+                      "end_column": 35
+                    },
+                    "wtype": {
+                      "_type": "ARC4DynamicArray",
+                      "name": "arc4.dynamic_array<uint64>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "element_type": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "source_location": null
+                    },
+                    "name": "mutable"
+                  }
+                },
+                "_id": "12"
               }
             },
             {
@@ -10689,7 +11495,7 @@
                   "source_location": null
                 },
                 "expr": {
-                  "_type": "Copy",
+                  "_type": "SingleEvaluation",
                   "source_location": {
                     "file": "tests/approvals/native-arrays.algo.ts",
                     "line": 109,
@@ -10709,14 +11515,14 @@
                     },
                     "source_location": null
                   },
-                  "value": {
-                    "_type": "VarExpression",
+                  "source": {
+                    "_type": "Copy",
                     "source_location": {
                       "file": "tests/approvals/native-arrays.algo.ts",
                       "line": 109,
                       "end_line": 109,
-                      "column": 48,
-                      "end_column": 55
+                      "column": 42,
+                      "end_column": 56
                     },
                     "wtype": {
                       "_type": "ARC4DynamicArray",
@@ -10730,8 +11536,31 @@
                       },
                       "source_location": null
                     },
-                    "name": "mutable"
-                  }
+                    "value": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/native-arrays.algo.ts",
+                        "line": 109,
+                        "end_line": 109,
+                        "column": 48,
+                        "end_column": 55
+                      },
+                      "wtype": {
+                        "_type": "ARC4DynamicArray",
+                        "name": "arc4.dynamic_array<uint64>",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "element_type": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "source_location": null
+                      },
+                      "name": "mutable"
+                    }
+                  },
+                  "_id": "13"
                 }
               }
             },

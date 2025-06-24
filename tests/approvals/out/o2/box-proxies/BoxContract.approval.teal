@@ -4,7 +4,7 @@
 // tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram() -> uint64:
 main:
     intcblock 1 4 99 0
-    bytecblock "one" "three" "A" "twowhat?" "aaaaaargh" "abc" "what?"
+    bytecblock "one" "three" "A" 0x74776f776861743f "aaaaaargh" "abc" "what?"
     // tests/approvals/box-proxies.algo.ts:100
     // if (Txn.applicationId.id !== 0) {
     txn ApplicationID
@@ -160,10 +160,10 @@ main_bool_merge@11:
     itob
     // tests/approvals/box-proxies.algo.ts:39
     // box(key).value = value
-    bytec_3 // "twowhat?"
+    bytec_3 // 0x74776f776861743f
     box_del
     pop
-    bytec_3 // "twowhat?"
+    bytec_3 // 0x74776f776861743f
     dig 1
     box_put
     // tests/approvals/box-proxies.algo.ts:103
@@ -182,32 +182,32 @@ main_bool_merge@11:
     box_put
     // tests/approvals/box-proxies.algo.ts:49
     // assert(box(key).length)
-    bytec_3 // "twowhat?"
+    bytec_3 // 0x74776f776861743f
     box_len
     assert // Box must have value
     assert
     // tests/approvals/box-proxies.algo.ts:53
     // assert(box(key).value === boxMap(key).value)
-    bytec_3 // "twowhat?"
+    bytec_3 // 0x74776f776861743f
     box_get
     pop
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:55
     // const isBoxDeleted = box(key).delete()
-    bytec_3 // "twowhat?"
+    bytec_3 // 0x74776f776861743f
     box_del
     // tests/approvals/box-proxies.algo.ts:56
     // assert(isBoxDeleted, 'delete failed')
     assert // delete failed
     // tests/approvals/box-proxies.algo.ts:58
     // assert(box(`${key}x`).get({ default: Bytes('b') }) === boxMap(`${key}x`).get({ default: Bytes('b') }))
-    pushbytes "twowhat?x"
+    pushbytes 0x74776f776861743f78
     box_get
     pushbytes "b"
     cover 2
     select
-    pushbytes "what?x"
+    pushbytes 0x776861743f78
     box_get
     pushbytes "b"
     cover 2

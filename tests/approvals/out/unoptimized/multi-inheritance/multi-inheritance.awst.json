@@ -4942,7 +4942,7 @@
                 },
                 "wtype": {
                   "_type": "WTuple",
-                  "name": "@algorandfoundation/algorand-typescript/arc4/c2c.d.ts::TypedApplicationCallResponseType<string>",
+                  "name": "{readonly itxn:ApplicationCallInnerTxn,readonly returnValue:string}",
                   "immutable": true,
                   "types": [
                     {
@@ -5663,7 +5663,7 @@
                 "name": "result"
               },
               "value": {
-                "_type": "FieldExpression",
+                "_type": "SingleEvaluation",
                 "source_location": {
                   "file": "tests/approvals/multi-inheritance.algo.ts",
                   "line": 74,
@@ -5676,55 +5676,54 @@
                   "name": "uint64",
                   "immutable": true
                 },
-                "base": {
-                  "_type": "TupleExpression",
+                "source": {
+                  "_type": "FieldExpression",
                   "source_location": {
                     "file": "tests/approvals/multi-inheritance.algo.ts",
-                    "line": 72,
+                    "line": 74,
                     "end_line": 74,
-                    "column": 19,
-                    "end_column": 6
+                    "column": 7,
+                    "end_column": 18
                   },
                   "wtype": {
-                    "_type": "WTuple",
-                    "name": "@algorandfoundation/algorand-typescript/arc4/c2c.d.ts::TypedApplicationCallResponseType<uint64>",
-                    "immutable": true,
-                    "types": [
-                      {
-                        "_type": "WInnerTransaction",
-                        "name": "inner_transaction_appl",
-                        "immutable": true,
-                        "transaction_type": 6
-                      },
-                      {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      }
-                    ],
-                    "names": [
-                      "itxn",
-                      "returnValue"
-                    ]
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true
                   },
-                  "items": [
-                    {
-                      "_type": "SingleEvaluation",
-                      "source_location": {
-                        "file": "tests/approvals/multi-inheritance.algo.ts",
-                        "line": 72,
-                        "end_line": 74,
-                        "column": 19,
-                        "end_column": 6
-                      },
-                      "wtype": {
-                        "_type": "WInnerTransaction",
-                        "name": "inner_transaction_appl",
-                        "immutable": true,
-                        "transaction_type": 6
-                      },
-                      "source": {
-                        "_type": "SubmitInnerTransaction",
+                  "base": {
+                    "_type": "TupleExpression",
+                    "source_location": {
+                      "file": "tests/approvals/multi-inheritance.algo.ts",
+                      "line": 72,
+                      "end_line": 74,
+                      "column": 19,
+                      "end_column": 6
+                    },
+                    "wtype": {
+                      "_type": "WTuple",
+                      "name": "{readonly itxn:ApplicationCallInnerTxn,readonly returnValue:uint64}",
+                      "immutable": true,
+                      "types": [
+                        {
+                          "_type": "WInnerTransaction",
+                          "name": "inner_transaction_appl",
+                          "immutable": true,
+                          "transaction_type": 6
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        }
+                      ],
+                      "names": [
+                        "itxn",
+                        "returnValue"
+                      ]
+                    },
+                    "items": [
+                      {
+                        "_type": "SingleEvaluation",
                         "source_location": {
                           "file": "tests/approvals/multi-inheritance.algo.ts",
                           "line": 72,
@@ -5738,219 +5737,8 @@
                           "immutable": true,
                           "transaction_type": 6
                         },
-                        "itxns": [
-                          {
-                            "_type": "CreateInnerTransaction",
-                            "source_location": {
-                              "file": "tests/approvals/multi-inheritance.algo.ts",
-                              "line": 72,
-                              "end_line": 74,
-                              "column": 19,
-                              "end_column": 6
-                            },
-                            "wtype": {
-                              "_type": "WInnerTransactionFields",
-                              "name": "inner_transaction_fields_appl",
-                              "immutable": true,
-                              "transaction_type": 6
-                            },
-                            "fields": {
-                              "Fee": {
-                                "_type": "IntegerConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/multi-inheritance.algo.ts",
-                                  "line": 72,
-                                  "end_line": 74,
-                                  "column": 19,
-                                  "end_column": 6
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "uint64",
-                                  "immutable": true
-                                },
-                                "value": 0,
-                                "teal_alias": null
-                              },
-                              "TypeEnum": {
-                                "_type": "IntegerConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/multi-inheritance.algo.ts",
-                                  "line": 72,
-                                  "end_line": 74,
-                                  "column": 19,
-                                  "end_column": 6
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "uint64",
-                                  "immutable": true
-                                },
-                                "value": 6,
-                                "teal_alias": "appl"
-                              },
-                              "ApplicationArgs": {
-                                "_type": "TupleExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/multi-inheritance.algo.ts",
-                                  "line": 72,
-                                  "end_line": 74,
-                                  "column": 19,
-                                  "end_column": 6
-                                },
-                                "wtype": {
-                                  "_type": "WTuple",
-                                  "name": "tuple",
-                                  "immutable": true,
-                                  "types": [
-                                    {
-                                      "_type": "BytesWType",
-                                      "name": "bytes[4]",
-                                      "immutable": true,
-                                      "length": 4
-                                    },
-                                    {
-                                      "_type": "ARC4UIntN",
-                                      "name": "arc4.uint64",
-                                      "immutable": true,
-                                      "arc4_alias": null,
-                                      "n": 64
-                                    },
-                                    {
-                                      "_type": "ARC4UIntN",
-                                      "name": "arc4.uint64",
-                                      "immutable": true,
-                                      "arc4_alias": null,
-                                      "n": 64
-                                    }
-                                  ]
-                                },
-                                "items": [
-                                  {
-                                    "_type": "MethodConstant",
-                                    "source_location": {
-                                      "file": "tests/approvals/multi-inheritance.algo.ts",
-                                      "line": 72,
-                                      "end_line": 74,
-                                      "column": 19,
-                                      "end_column": 6
-                                    },
-                                    "wtype": {
-                                      "_type": "BytesWType",
-                                      "name": "bytes[4]",
-                                      "immutable": true,
-                                      "length": 4
-                                    },
-                                    "value": "add(uint64,uint64)uint64"
-                                  },
-                                  {
-                                    "_type": "ARC4Encode",
-                                    "source_location": {
-                                      "file": "tests/approvals/multi-inheritance.algo.ts",
-                                      "line": 73,
-                                      "end_line": 73,
-                                      "column": 13,
-                                      "end_column": 14
-                                    },
-                                    "wtype": {
-                                      "_type": "ARC4UIntN",
-                                      "name": "arc4.uint64",
-                                      "immutable": true,
-                                      "arc4_alias": null,
-                                      "n": 64
-                                    },
-                                    "value": {
-                                      "_type": "IntegerConstant",
-                                      "source_location": {
-                                        "file": "tests/approvals/multi-inheritance.algo.ts",
-                                        "line": 73,
-                                        "end_line": 73,
-                                        "column": 13,
-                                        "end_column": 14
-                                      },
-                                      "wtype": {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      "value": 1,
-                                      "teal_alias": null
-                                    }
-                                  },
-                                  {
-                                    "_type": "ARC4Encode",
-                                    "source_location": {
-                                      "file": "tests/approvals/multi-inheritance.algo.ts",
-                                      "line": 73,
-                                      "end_line": 73,
-                                      "column": 16,
-                                      "end_column": 17
-                                    },
-                                    "wtype": {
-                                      "_type": "ARC4UIntN",
-                                      "name": "arc4.uint64",
-                                      "immutable": true,
-                                      "arc4_alias": null,
-                                      "n": 64
-                                    },
-                                    "value": {
-                                      "_type": "IntegerConstant",
-                                      "source_location": {
-                                        "file": "tests/approvals/multi-inheritance.algo.ts",
-                                        "line": 73,
-                                        "end_line": 73,
-                                        "column": 16,
-                                        "end_column": 17
-                                      },
-                                      "wtype": {
-                                        "_type": "WType",
-                                        "name": "uint64",
-                                        "immutable": true
-                                      },
-                                      "value": 2,
-                                      "teal_alias": null
-                                    }
-                                  }
-                                ]
-                              }
-                            }
-                          }
-                        ]
-                      },
-                      "_id": "2"
-                    },
-                    {
-                      "_type": "ARC4Decode",
-                      "source_location": {
-                        "file": "tests/approvals/multi-inheritance.algo.ts",
-                        "line": 72,
-                        "end_line": 74,
-                        "column": 19,
-                        "end_column": 6
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "value": {
-                        "_type": "ReinterpretCast",
-                        "source_location": {
-                          "file": "tests/approvals/multi-inheritance.algo.ts",
-                          "line": 72,
-                          "end_line": 74,
-                          "column": 19,
-                          "end_column": 6
-                        },
-                        "wtype": {
-                          "_type": "ARC4UIntN",
-                          "name": "arc4.uint64",
-                          "immutable": true,
-                          "arc4_alias": null,
-                          "n": 64
-                        },
-                        "expr": {
-                          "_type": "CheckedMaybe",
+                        "source": {
+                          "_type": "SubmitInnerTransaction",
                           "source_location": {
                             "file": "tests/approvals/multi-inheritance.algo.ts",
                             "line": 72,
@@ -5959,77 +5747,101 @@
                             "end_column": 6
                           },
                           "wtype": {
-                            "_type": "BytesWType",
-                            "name": "bytes",
+                            "_type": "WInnerTransaction",
+                            "name": "inner_transaction_appl",
                             "immutable": true,
-                            "length": null
+                            "transaction_type": 6
                           },
-                          "expr": {
-                            "_type": "TupleExpression",
-                            "source_location": {
-                              "file": "tests/approvals/multi-inheritance.algo.ts",
-                              "line": 72,
-                              "end_line": 74,
-                              "column": 19,
-                              "end_column": 6
-                            },
-                            "wtype": {
-                              "_type": "WTuple",
-                              "name": "tuple",
-                              "immutable": true,
-                              "types": [
-                                {
-                                  "_type": "BytesWType",
-                                  "name": "bytes",
-                                  "immutable": true,
-                                  "length": null
+                          "itxns": [
+                            {
+                              "_type": "CreateInnerTransaction",
+                              "source_location": {
+                                "file": "tests/approvals/multi-inheritance.algo.ts",
+                                "line": 72,
+                                "end_line": 74,
+                                "column": 19,
+                                "end_column": 6
+                              },
+                              "wtype": {
+                                "_type": "WInnerTransactionFields",
+                                "name": "inner_transaction_fields_appl",
+                                "immutable": true,
+                                "transaction_type": 6
+                              },
+                              "fields": {
+                                "Fee": {
+                                  "_type": "IntegerConstant",
+                                  "source_location": {
+                                    "file": "tests/approvals/multi-inheritance.algo.ts",
+                                    "line": 72,
+                                    "end_line": 74,
+                                    "column": 19,
+                                    "end_column": 6
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "value": 0,
+                                  "teal_alias": null
                                 },
-                                {
-                                  "_type": "WType",
-                                  "name": "bool",
-                                  "immutable": true
-                                }
-                              ]
-                            },
-                            "items": [
-                              {
-                                "_type": "IntrinsicCall",
-                                "source_location": {
-                                  "file": "tests/approvals/multi-inheritance.algo.ts",
-                                  "line": 72,
-                                  "end_line": 74,
-                                  "column": 19,
-                                  "end_column": 6
+                                "TypeEnum": {
+                                  "_type": "IntegerConstant",
+                                  "source_location": {
+                                    "file": "tests/approvals/multi-inheritance.algo.ts",
+                                    "line": 72,
+                                    "end_line": 74,
+                                    "column": 19,
+                                    "end_column": 6
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "value": 6,
+                                  "teal_alias": "appl"
                                 },
-                                "wtype": {
-                                  "_type": "BytesWType",
-                                  "name": "bytes",
-                                  "immutable": true,
-                                  "length": null
-                                },
-                                "op_code": "extract",
-                                "immediates": [
-                                  4,
-                                  0
-                                ],
-                                "stack_args": [
-                                  {
-                                    "_type": "SingleEvaluation",
-                                    "source_location": {
-                                      "file": "tests/approvals/multi-inheritance.algo.ts",
-                                      "line": 72,
-                                      "end_line": 74,
-                                      "column": 19,
-                                      "end_column": 6
-                                    },
-                                    "wtype": {
-                                      "_type": "BytesWType",
-                                      "name": "bytes",
-                                      "immutable": true,
-                                      "length": null
-                                    },
-                                    "source": {
-                                      "_type": "InnerTransactionField",
+                                "ApplicationArgs": {
+                                  "_type": "TupleExpression",
+                                  "source_location": {
+                                    "file": "tests/approvals/multi-inheritance.algo.ts",
+                                    "line": 72,
+                                    "end_line": 74,
+                                    "column": 19,
+                                    "end_column": 6
+                                  },
+                                  "wtype": {
+                                    "_type": "WTuple",
+                                    "name": "tuple",
+                                    "immutable": true,
+                                    "types": [
+                                      {
+                                        "_type": "BytesWType",
+                                        "name": "bytes[4]",
+                                        "immutable": true,
+                                        "length": 4
+                                      },
+                                      {
+                                        "_type": "ARC4UIntN",
+                                        "name": "arc4.uint64",
+                                        "immutable": true,
+                                        "arc4_alias": null,
+                                        "n": 64
+                                      },
+                                      {
+                                        "_type": "ARC4UIntN",
+                                        "name": "arc4.uint64",
+                                        "immutable": true,
+                                        "arc4_alias": null,
+                                        "n": 64
+                                      }
+                                    ]
+                                  },
+                                  "items": [
+                                    {
+                                      "_type": "MethodConstant",
                                       "source_location": {
                                         "file": "tests/approvals/multi-inheritance.algo.ts",
                                         "line": 72,
@@ -6039,243 +5851,162 @@
                                       },
                                       "wtype": {
                                         "_type": "BytesWType",
-                                        "name": "bytes",
+                                        "name": "bytes[4]",
                                         "immutable": true,
-                                        "length": null
+                                        "length": 4
                                       },
-                                      "itxn": {
-                                        "_type": "SingleEvaluation",
+                                      "value": "add(uint64,uint64)uint64"
+                                    },
+                                    {
+                                      "_type": "ARC4Encode",
+                                      "source_location": {
+                                        "file": "tests/approvals/multi-inheritance.algo.ts",
+                                        "line": 73,
+                                        "end_line": 73,
+                                        "column": 13,
+                                        "end_column": 14
+                                      },
+                                      "wtype": {
+                                        "_type": "ARC4UIntN",
+                                        "name": "arc4.uint64",
+                                        "immutable": true,
+                                        "arc4_alias": null,
+                                        "n": 64
+                                      },
+                                      "value": {
+                                        "_type": "IntegerConstant",
                                         "source_location": {
                                           "file": "tests/approvals/multi-inheritance.algo.ts",
-                                          "line": 72,
-                                          "end_line": 74,
-                                          "column": 19,
-                                          "end_column": 6
+                                          "line": 73,
+                                          "end_line": 73,
+                                          "column": 13,
+                                          "end_column": 14
                                         },
                                         "wtype": {
-                                          "_type": "WInnerTransaction",
-                                          "name": "inner_transaction_appl",
-                                          "immutable": true,
-                                          "transaction_type": 6
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
                                         },
-                                        "source": {
-                                          "_type": "SubmitInnerTransaction",
-                                          "source_location": {
-                                            "file": "tests/approvals/multi-inheritance.algo.ts",
-                                            "line": 72,
-                                            "end_line": 74,
-                                            "column": 19,
-                                            "end_column": 6
-                                          },
-                                          "wtype": {
-                                            "_type": "WInnerTransaction",
-                                            "name": "inner_transaction_appl",
-                                            "immutable": true,
-                                            "transaction_type": 6
-                                          },
-                                          "itxns": [
-                                            {
-                                              "_type": "CreateInnerTransaction",
-                                              "source_location": {
-                                                "file": "tests/approvals/multi-inheritance.algo.ts",
-                                                "line": 72,
-                                                "end_line": 74,
-                                                "column": 19,
-                                                "end_column": 6
-                                              },
-                                              "wtype": {
-                                                "_type": "WInnerTransactionFields",
-                                                "name": "inner_transaction_fields_appl",
-                                                "immutable": true,
-                                                "transaction_type": 6
-                                              },
-                                              "fields": {
-                                                "Fee": {
-                                                  "_type": "IntegerConstant",
-                                                  "source_location": {
-                                                    "file": "tests/approvals/multi-inheritance.algo.ts",
-                                                    "line": 72,
-                                                    "end_line": 74,
-                                                    "column": 19,
-                                                    "end_column": 6
-                                                  },
-                                                  "wtype": {
-                                                    "_type": "WType",
-                                                    "name": "uint64",
-                                                    "immutable": true
-                                                  },
-                                                  "value": 0,
-                                                  "teal_alias": null
-                                                },
-                                                "TypeEnum": {
-                                                  "_type": "IntegerConstant",
-                                                  "source_location": {
-                                                    "file": "tests/approvals/multi-inheritance.algo.ts",
-                                                    "line": 72,
-                                                    "end_line": 74,
-                                                    "column": 19,
-                                                    "end_column": 6
-                                                  },
-                                                  "wtype": {
-                                                    "_type": "WType",
-                                                    "name": "uint64",
-                                                    "immutable": true
-                                                  },
-                                                  "value": 6,
-                                                  "teal_alias": "appl"
-                                                },
-                                                "ApplicationArgs": {
-                                                  "_type": "TupleExpression",
-                                                  "source_location": {
-                                                    "file": "tests/approvals/multi-inheritance.algo.ts",
-                                                    "line": 72,
-                                                    "end_line": 74,
-                                                    "column": 19,
-                                                    "end_column": 6
-                                                  },
-                                                  "wtype": {
-                                                    "_type": "WTuple",
-                                                    "name": "tuple",
-                                                    "immutable": true,
-                                                    "types": [
-                                                      {
-                                                        "_type": "BytesWType",
-                                                        "name": "bytes[4]",
-                                                        "immutable": true,
-                                                        "length": 4
-                                                      },
-                                                      {
-                                                        "_type": "ARC4UIntN",
-                                                        "name": "arc4.uint64",
-                                                        "immutable": true,
-                                                        "arc4_alias": null,
-                                                        "n": 64
-                                                      },
-                                                      {
-                                                        "_type": "ARC4UIntN",
-                                                        "name": "arc4.uint64",
-                                                        "immutable": true,
-                                                        "arc4_alias": null,
-                                                        "n": 64
-                                                      }
-                                                    ]
-                                                  },
-                                                  "items": [
-                                                    {
-                                                      "_type": "MethodConstant",
-                                                      "source_location": {
-                                                        "file": "tests/approvals/multi-inheritance.algo.ts",
-                                                        "line": 72,
-                                                        "end_line": 74,
-                                                        "column": 19,
-                                                        "end_column": 6
-                                                      },
-                                                      "wtype": {
-                                                        "_type": "BytesWType",
-                                                        "name": "bytes[4]",
-                                                        "immutable": true,
-                                                        "length": 4
-                                                      },
-                                                      "value": "add(uint64,uint64)uint64"
-                                                    },
-                                                    {
-                                                      "_type": "ARC4Encode",
-                                                      "source_location": {
-                                                        "file": "tests/approvals/multi-inheritance.algo.ts",
-                                                        "line": 73,
-                                                        "end_line": 73,
-                                                        "column": 13,
-                                                        "end_column": 14
-                                                      },
-                                                      "wtype": {
-                                                        "_type": "ARC4UIntN",
-                                                        "name": "arc4.uint64",
-                                                        "immutable": true,
-                                                        "arc4_alias": null,
-                                                        "n": 64
-                                                      },
-                                                      "value": {
-                                                        "_type": "IntegerConstant",
-                                                        "source_location": {
-                                                          "file": "tests/approvals/multi-inheritance.algo.ts",
-                                                          "line": 73,
-                                                          "end_line": 73,
-                                                          "column": 13,
-                                                          "end_column": 14
-                                                        },
-                                                        "wtype": {
-                                                          "_type": "WType",
-                                                          "name": "uint64",
-                                                          "immutable": true
-                                                        },
-                                                        "value": 1,
-                                                        "teal_alias": null
-                                                      }
-                                                    },
-                                                    {
-                                                      "_type": "ARC4Encode",
-                                                      "source_location": {
-                                                        "file": "tests/approvals/multi-inheritance.algo.ts",
-                                                        "line": 73,
-                                                        "end_line": 73,
-                                                        "column": 16,
-                                                        "end_column": 17
-                                                      },
-                                                      "wtype": {
-                                                        "_type": "ARC4UIntN",
-                                                        "name": "arc4.uint64",
-                                                        "immutable": true,
-                                                        "arc4_alias": null,
-                                                        "n": 64
-                                                      },
-                                                      "value": {
-                                                        "_type": "IntegerConstant",
-                                                        "source_location": {
-                                                          "file": "tests/approvals/multi-inheritance.algo.ts",
-                                                          "line": 73,
-                                                          "end_line": 73,
-                                                          "column": 16,
-                                                          "end_column": 17
-                                                        },
-                                                        "wtype": {
-                                                          "_type": "WType",
-                                                          "name": "uint64",
-                                                          "immutable": true
-                                                        },
-                                                        "value": 2,
-                                                        "teal_alias": null
-                                                      }
-                                                    }
-                                                  ]
-                                                }
-                                              }
-                                            }
-                                          ]
-                                        },
-                                        "_id": "2"
-                                      },
-                                      "field": "LastLog",
-                                      "array_index": null
+                                        "value": 1,
+                                        "teal_alias": null
+                                      }
                                     },
-                                    "_id": "3"
+                                    {
+                                      "_type": "ARC4Encode",
+                                      "source_location": {
+                                        "file": "tests/approvals/multi-inheritance.algo.ts",
+                                        "line": 73,
+                                        "end_line": 73,
+                                        "column": 16,
+                                        "end_column": 17
+                                      },
+                                      "wtype": {
+                                        "_type": "ARC4UIntN",
+                                        "name": "arc4.uint64",
+                                        "immutable": true,
+                                        "arc4_alias": null,
+                                        "n": 64
+                                      },
+                                      "value": {
+                                        "_type": "IntegerConstant",
+                                        "source_location": {
+                                          "file": "tests/approvals/multi-inheritance.algo.ts",
+                                          "line": 73,
+                                          "end_line": 73,
+                                          "column": 16,
+                                          "end_column": 17
+                                        },
+                                        "wtype": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "value": 2,
+                                        "teal_alias": null
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "_id": "3"
+                      },
+                      {
+                        "_type": "ARC4Decode",
+                        "source_location": {
+                          "file": "tests/approvals/multi-inheritance.algo.ts",
+                          "line": 72,
+                          "end_line": 74,
+                          "column": 19,
+                          "end_column": 6
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "value": {
+                          "_type": "ReinterpretCast",
+                          "source_location": {
+                            "file": "tests/approvals/multi-inheritance.algo.ts",
+                            "line": 72,
+                            "end_line": 74,
+                            "column": 19,
+                            "end_column": 6
+                          },
+                          "wtype": {
+                            "_type": "ARC4UIntN",
+                            "name": "arc4.uint64",
+                            "immutable": true,
+                            "arc4_alias": null,
+                            "n": 64
+                          },
+                          "expr": {
+                            "_type": "CheckedMaybe",
+                            "source_location": {
+                              "file": "tests/approvals/multi-inheritance.algo.ts",
+                              "line": 72,
+                              "end_line": 74,
+                              "column": 19,
+                              "end_column": 6
+                            },
+                            "wtype": {
+                              "_type": "BytesWType",
+                              "name": "bytes",
+                              "immutable": true,
+                              "length": null
+                            },
+                            "expr": {
+                              "_type": "TupleExpression",
+                              "source_location": {
+                                "file": "tests/approvals/multi-inheritance.algo.ts",
+                                "line": 72,
+                                "end_line": 74,
+                                "column": 19,
+                                "end_column": 6
+                              },
+                              "wtype": {
+                                "_type": "WTuple",
+                                "name": "tuple",
+                                "immutable": true,
+                                "types": [
+                                  {
+                                    "_type": "BytesWType",
+                                    "name": "bytes",
+                                    "immutable": true,
+                                    "length": null
+                                  },
+                                  {
+                                    "_type": "WType",
+                                    "name": "bool",
+                                    "immutable": true
                                   }
                                 ]
                               },
-                              {
-                                "_type": "BytesComparisonExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/multi-inheritance.algo.ts",
-                                  "line": 72,
-                                  "end_line": 74,
-                                  "column": 19,
-                                  "end_column": 6
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "bool",
-                                  "immutable": true
-                                },
-                                "lhs": {
+                              "items": [
+                                {
                                   "_type": "IntrinsicCall",
                                   "source_location": {
                                     "file": "tests/approvals/multi-inheritance.algo.ts",
@@ -6292,8 +6023,8 @@
                                   },
                                   "op_code": "extract",
                                   "immediates": [
-                                    0,
-                                    4
+                                    4,
+                                    0
                                   ],
                                   "stack_args": [
                                     {
@@ -6535,18 +6266,17 @@
                                               }
                                             ]
                                           },
-                                          "_id": "2"
+                                          "_id": "3"
                                         },
                                         "field": "LastLog",
                                         "array_index": null
                                       },
-                                      "_id": "3"
+                                      "_id": "4"
                                     }
                                   ]
                                 },
-                                "operator": "==",
-                                "rhs": {
-                                  "_type": "BytesConstant",
+                                {
+                                  "_type": "BytesComparisonExpression",
                                   "source_location": {
                                     "file": "tests/approvals/multi-inheritance.algo.ts",
                                     "line": 72,
@@ -6555,24 +6285,310 @@
                                     "end_column": 6
                                   },
                                   "wtype": {
-                                    "_type": "BytesWType",
-                                    "name": "bytes",
-                                    "immutable": true,
-                                    "length": null
+                                    "_type": "WType",
+                                    "name": "bool",
+                                    "immutable": true
                                   },
-                                  "value": "6(4+c",
-                                  "encoding": "unknown"
+                                  "lhs": {
+                                    "_type": "IntrinsicCall",
+                                    "source_location": {
+                                      "file": "tests/approvals/multi-inheritance.algo.ts",
+                                      "line": 72,
+                                      "end_line": 74,
+                                      "column": 19,
+                                      "end_column": 6
+                                    },
+                                    "wtype": {
+                                      "_type": "BytesWType",
+                                      "name": "bytes",
+                                      "immutable": true,
+                                      "length": null
+                                    },
+                                    "op_code": "extract",
+                                    "immediates": [
+                                      0,
+                                      4
+                                    ],
+                                    "stack_args": [
+                                      {
+                                        "_type": "SingleEvaluation",
+                                        "source_location": {
+                                          "file": "tests/approvals/multi-inheritance.algo.ts",
+                                          "line": 72,
+                                          "end_line": 74,
+                                          "column": 19,
+                                          "end_column": 6
+                                        },
+                                        "wtype": {
+                                          "_type": "BytesWType",
+                                          "name": "bytes",
+                                          "immutable": true,
+                                          "length": null
+                                        },
+                                        "source": {
+                                          "_type": "InnerTransactionField",
+                                          "source_location": {
+                                            "file": "tests/approvals/multi-inheritance.algo.ts",
+                                            "line": 72,
+                                            "end_line": 74,
+                                            "column": 19,
+                                            "end_column": 6
+                                          },
+                                          "wtype": {
+                                            "_type": "BytesWType",
+                                            "name": "bytes",
+                                            "immutable": true,
+                                            "length": null
+                                          },
+                                          "itxn": {
+                                            "_type": "SingleEvaluation",
+                                            "source_location": {
+                                              "file": "tests/approvals/multi-inheritance.algo.ts",
+                                              "line": 72,
+                                              "end_line": 74,
+                                              "column": 19,
+                                              "end_column": 6
+                                            },
+                                            "wtype": {
+                                              "_type": "WInnerTransaction",
+                                              "name": "inner_transaction_appl",
+                                              "immutable": true,
+                                              "transaction_type": 6
+                                            },
+                                            "source": {
+                                              "_type": "SubmitInnerTransaction",
+                                              "source_location": {
+                                                "file": "tests/approvals/multi-inheritance.algo.ts",
+                                                "line": 72,
+                                                "end_line": 74,
+                                                "column": 19,
+                                                "end_column": 6
+                                              },
+                                              "wtype": {
+                                                "_type": "WInnerTransaction",
+                                                "name": "inner_transaction_appl",
+                                                "immutable": true,
+                                                "transaction_type": 6
+                                              },
+                                              "itxns": [
+                                                {
+                                                  "_type": "CreateInnerTransaction",
+                                                  "source_location": {
+                                                    "file": "tests/approvals/multi-inheritance.algo.ts",
+                                                    "line": 72,
+                                                    "end_line": 74,
+                                                    "column": 19,
+                                                    "end_column": 6
+                                                  },
+                                                  "wtype": {
+                                                    "_type": "WInnerTransactionFields",
+                                                    "name": "inner_transaction_fields_appl",
+                                                    "immutable": true,
+                                                    "transaction_type": 6
+                                                  },
+                                                  "fields": {
+                                                    "Fee": {
+                                                      "_type": "IntegerConstant",
+                                                      "source_location": {
+                                                        "file": "tests/approvals/multi-inheritance.algo.ts",
+                                                        "line": 72,
+                                                        "end_line": 74,
+                                                        "column": 19,
+                                                        "end_column": 6
+                                                      },
+                                                      "wtype": {
+                                                        "_type": "WType",
+                                                        "name": "uint64",
+                                                        "immutable": true
+                                                      },
+                                                      "value": 0,
+                                                      "teal_alias": null
+                                                    },
+                                                    "TypeEnum": {
+                                                      "_type": "IntegerConstant",
+                                                      "source_location": {
+                                                        "file": "tests/approvals/multi-inheritance.algo.ts",
+                                                        "line": 72,
+                                                        "end_line": 74,
+                                                        "column": 19,
+                                                        "end_column": 6
+                                                      },
+                                                      "wtype": {
+                                                        "_type": "WType",
+                                                        "name": "uint64",
+                                                        "immutable": true
+                                                      },
+                                                      "value": 6,
+                                                      "teal_alias": "appl"
+                                                    },
+                                                    "ApplicationArgs": {
+                                                      "_type": "TupleExpression",
+                                                      "source_location": {
+                                                        "file": "tests/approvals/multi-inheritance.algo.ts",
+                                                        "line": 72,
+                                                        "end_line": 74,
+                                                        "column": 19,
+                                                        "end_column": 6
+                                                      },
+                                                      "wtype": {
+                                                        "_type": "WTuple",
+                                                        "name": "tuple",
+                                                        "immutable": true,
+                                                        "types": [
+                                                          {
+                                                            "_type": "BytesWType",
+                                                            "name": "bytes[4]",
+                                                            "immutable": true,
+                                                            "length": 4
+                                                          },
+                                                          {
+                                                            "_type": "ARC4UIntN",
+                                                            "name": "arc4.uint64",
+                                                            "immutable": true,
+                                                            "arc4_alias": null,
+                                                            "n": 64
+                                                          },
+                                                          {
+                                                            "_type": "ARC4UIntN",
+                                                            "name": "arc4.uint64",
+                                                            "immutable": true,
+                                                            "arc4_alias": null,
+                                                            "n": 64
+                                                          }
+                                                        ]
+                                                      },
+                                                      "items": [
+                                                        {
+                                                          "_type": "MethodConstant",
+                                                          "source_location": {
+                                                            "file": "tests/approvals/multi-inheritance.algo.ts",
+                                                            "line": 72,
+                                                            "end_line": 74,
+                                                            "column": 19,
+                                                            "end_column": 6
+                                                          },
+                                                          "wtype": {
+                                                            "_type": "BytesWType",
+                                                            "name": "bytes[4]",
+                                                            "immutable": true,
+                                                            "length": 4
+                                                          },
+                                                          "value": "add(uint64,uint64)uint64"
+                                                        },
+                                                        {
+                                                          "_type": "ARC4Encode",
+                                                          "source_location": {
+                                                            "file": "tests/approvals/multi-inheritance.algo.ts",
+                                                            "line": 73,
+                                                            "end_line": 73,
+                                                            "column": 13,
+                                                            "end_column": 14
+                                                          },
+                                                          "wtype": {
+                                                            "_type": "ARC4UIntN",
+                                                            "name": "arc4.uint64",
+                                                            "immutable": true,
+                                                            "arc4_alias": null,
+                                                            "n": 64
+                                                          },
+                                                          "value": {
+                                                            "_type": "IntegerConstant",
+                                                            "source_location": {
+                                                              "file": "tests/approvals/multi-inheritance.algo.ts",
+                                                              "line": 73,
+                                                              "end_line": 73,
+                                                              "column": 13,
+                                                              "end_column": 14
+                                                            },
+                                                            "wtype": {
+                                                              "_type": "WType",
+                                                              "name": "uint64",
+                                                              "immutable": true
+                                                            },
+                                                            "value": 1,
+                                                            "teal_alias": null
+                                                          }
+                                                        },
+                                                        {
+                                                          "_type": "ARC4Encode",
+                                                          "source_location": {
+                                                            "file": "tests/approvals/multi-inheritance.algo.ts",
+                                                            "line": 73,
+                                                            "end_line": 73,
+                                                            "column": 16,
+                                                            "end_column": 17
+                                                          },
+                                                          "wtype": {
+                                                            "_type": "ARC4UIntN",
+                                                            "name": "arc4.uint64",
+                                                            "immutable": true,
+                                                            "arc4_alias": null,
+                                                            "n": 64
+                                                          },
+                                                          "value": {
+                                                            "_type": "IntegerConstant",
+                                                            "source_location": {
+                                                              "file": "tests/approvals/multi-inheritance.algo.ts",
+                                                              "line": 73,
+                                                              "end_line": 73,
+                                                              "column": 16,
+                                                              "end_column": 17
+                                                            },
+                                                            "wtype": {
+                                                              "_type": "WType",
+                                                              "name": "uint64",
+                                                              "immutable": true
+                                                            },
+                                                            "value": 2,
+                                                            "teal_alias": null
+                                                          }
+                                                        }
+                                                      ]
+                                                    }
+                                                  }
+                                                }
+                                              ]
+                                            },
+                                            "_id": "3"
+                                          },
+                                          "field": "LastLog",
+                                          "array_index": null
+                                        },
+                                        "_id": "4"
+                                      }
+                                    ]
+                                  },
+                                  "operator": "==",
+                                  "rhs": {
+                                    "_type": "BytesConstant",
+                                    "source_location": {
+                                      "file": "tests/approvals/multi-inheritance.algo.ts",
+                                      "line": 72,
+                                      "end_line": 74,
+                                      "column": 19,
+                                      "end_column": 6
+                                    },
+                                    "wtype": {
+                                      "_type": "BytesWType",
+                                      "name": "bytes",
+                                      "immutable": true,
+                                      "length": null
+                                    },
+                                    "value": "6(4+c",
+                                    "encoding": "unknown"
+                                  }
                                 }
-                              }
-                            ]
-                          },
-                          "comment": "Bytes has valid prefix"
+                              ]
+                            },
+                            "comment": "Bytes has valid prefix"
+                          }
                         }
                       }
-                    }
-                  ]
+                    ]
+                  },
+                  "name": "returnValue"
                 },
-                "name": "returnValue"
+                "_id": "2"
               }
             },
             {
