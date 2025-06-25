@@ -507,7 +507,7 @@
                 "name": "result"
               },
               "value": {
-                "_type": "SingleEvaluation",
+                "_type": "ConditionalExpression",
                 "source_location": {
                   "file": "tests/approvals/single-eval.algo.ts",
                   "line": 18,
@@ -520,22 +520,22 @@
                   "name": "string",
                   "immutable": true
                 },
-                "source": {
-                  "_type": "ConditionalExpression",
+                "condition": {
+                  "_type": "ReinterpretCast",
                   "source_location": {
                     "file": "tests/approvals/single-eval.algo.ts",
                     "line": 18,
                     "end_line": 18,
                     "column": 19,
-                    "end_column": 39
+                    "end_column": 27
                   },
                   "wtype": {
                     "_type": "WType",
-                    "name": "string",
+                    "name": "bool",
                     "immutable": true
                   },
-                  "condition": {
-                    "_type": "ReinterpretCast",
+                  "expr": {
+                    "_type": "IntrinsicCall",
                     "source_location": {
                       "file": "tests/approvals/single-eval.algo.ts",
                       "line": 18,
@@ -545,28 +545,28 @@
                     },
                     "wtype": {
                       "_type": "WType",
-                      "name": "bool",
+                      "name": "uint64",
                       "immutable": true
                     },
-                    "expr": {
-                      "_type": "IntrinsicCall",
-                      "source_location": {
-                        "file": "tests/approvals/single-eval.algo.ts",
-                        "line": 18,
-                        "end_line": 18,
-                        "column": 19,
-                        "end_column": 27
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "op_code": "len",
-                      "immediates": [],
-                      "stack_args": [
-                        {
-                          "_type": "SingleEvaluation",
+                    "op_code": "len",
+                    "immediates": [],
+                    "stack_args": [
+                      {
+                        "_type": "SingleEvaluation",
+                        "source_location": {
+                          "file": "tests/approvals/single-eval.algo.ts",
+                          "line": 18,
+                          "end_line": 18,
+                          "column": 19,
+                          "end_column": 27
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "string",
+                          "immutable": true
+                        },
+                        "source": {
+                          "_type": "SubroutineCallExpression",
                           "source_location": {
                             "file": "tests/approvals/single-eval.algo.ts",
                             "line": 18,
@@ -579,34 +579,34 @@
                             "name": "string",
                             "immutable": true
                           },
-                          "source": {
-                            "_type": "SubroutineCallExpression",
-                            "source_location": {
-                              "file": "tests/approvals/single-eval.algo.ts",
-                              "line": 18,
-                              "end_line": 18,
-                              "column": 19,
-                              "end_column": 27
-                            },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "string",
-                              "immutable": true
-                            },
-                            "target": {
-                              "_type": "ContractMethodTarget",
-                              "cref": "tests/approvals/single-eval.algo.ts::SingleEvalAlgo",
-                              "member_name": "a"
-                            },
-                            "args": []
+                          "target": {
+                            "_type": "ContractMethodTarget",
+                            "cref": "tests/approvals/single-eval.algo.ts::SingleEvalAlgo",
+                            "member_name": "a"
                           },
-                          "_id": "1"
-                        }
-                      ]
-                    }
+                          "args": []
+                        },
+                        "_id": "0"
+                      }
+                    ]
+                  }
+                },
+                "true_expr": {
+                  "_type": "SingleEvaluation",
+                  "source_location": {
+                    "file": "tests/approvals/single-eval.algo.ts",
+                    "line": 18,
+                    "end_line": 18,
+                    "column": 19,
+                    "end_column": 27
                   },
-                  "true_expr": {
-                    "_type": "SingleEvaluation",
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "string",
+                    "immutable": true
+                  },
+                  "source": {
+                    "_type": "SubroutineCallExpression",
                     "source_location": {
                       "file": "tests/approvals/single-eval.algo.ts",
                       "line": 18,
@@ -619,52 +619,36 @@
                       "name": "string",
                       "immutable": true
                     },
-                    "source": {
-                      "_type": "SubroutineCallExpression",
-                      "source_location": {
-                        "file": "tests/approvals/single-eval.algo.ts",
-                        "line": 18,
-                        "end_line": 18,
-                        "column": 19,
-                        "end_column": 27
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "string",
-                        "immutable": true
-                      },
-                      "target": {
-                        "_type": "ContractMethodTarget",
-                        "cref": "tests/approvals/single-eval.algo.ts::SingleEvalAlgo",
-                        "member_name": "a"
-                      },
-                      "args": []
-                    },
-                    "_id": "1"
-                  },
-                  "false_expr": {
-                    "_type": "SubroutineCallExpression",
-                    "source_location": {
-                      "file": "tests/approvals/single-eval.algo.ts",
-                      "line": 18,
-                      "end_line": 18,
-                      "column": 31,
-                      "end_column": 39
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "string",
-                      "immutable": true
-                    },
                     "target": {
                       "_type": "ContractMethodTarget",
                       "cref": "tests/approvals/single-eval.algo.ts::SingleEvalAlgo",
-                      "member_name": "b"
+                      "member_name": "a"
                     },
                     "args": []
-                  }
+                  },
+                  "_id": "0"
                 },
-                "_id": "0"
+                "false_expr": {
+                  "_type": "SubroutineCallExpression",
+                  "source_location": {
+                    "file": "tests/approvals/single-eval.algo.ts",
+                    "line": 18,
+                    "end_line": 18,
+                    "column": 31,
+                    "end_column": 39
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "string",
+                    "immutable": true
+                  },
+                  "target": {
+                    "_type": "ContractMethodTarget",
+                    "cref": "tests/approvals/single-eval.algo.ts::SingleEvalAlgo",
+                    "member_name": "b"
+                  },
+                  "args": []
+                }
               }
             },
             {

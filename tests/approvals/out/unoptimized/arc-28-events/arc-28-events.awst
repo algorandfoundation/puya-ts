@@ -15,7 +15,7 @@ contract EventEmitter
     emit("Swapped(uint8,uint8)", ARC4_ENCODE(new tests/approvals/arc-28-events.algo.ts::Swapped(a=b, b=a), wtype=Swapped))
     x: tests/approvals/arc-28-events.algo.ts::Swapped = new tests/approvals/arc-28-events.algo.ts::Swapped(a=($0 = #{ a: b, b: a }).a, b=$0.b)
     emit("Swapped(uint8,uint8)", ARC4_ENCODE(x, wtype=Swapped))
-    y: SwappedArc4 = ($1 = new SwappedArc4(a=($2 = #{ a: b, b: a }).a, b=$2.b))
+    y: SwappedArc4 = new SwappedArc4(a=($1 = #{ a: b, b: a }).a, b=$1.b)
     emit("SwappedArc4(uint8,uint8)", y)
     emit("Swapped(uint8,uint8)", new Swapped(0=b, 1=a))
     emit("Swapped(uint8,uint8)", new Swapped(0=b, 1=a))

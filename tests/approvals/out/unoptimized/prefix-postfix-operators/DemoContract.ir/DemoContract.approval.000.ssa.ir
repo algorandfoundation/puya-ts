@@ -33,20 +33,20 @@ subroutine tests/approvals/prefix-postfix-operators.algo.ts::test_uint64(x: uint
         (assert tmp%12#0)
         let tmp%13#0: bool = (== y#2 5u)
         (assert tmp%13#0)
-        let awst_tmp%0#0: uint64 = (~ y#2)
-        let inverted#0: uint64 = awst_tmp%0#0
-        let tmp%14#0: uint64 = (- 18446744073709551615u y#2)
-        let tmp%15#0: bool = (== inverted#0 tmp%14#0)
-        (assert tmp%15#0)
+        let tmp%14#0: uint64 = (~ y#2)
+        let inverted#0: uint64 = tmp%14#0
+        let tmp%15#0: uint64 = (- 18446744073709551615u y#2)
+        let tmp%16#0: bool = (== inverted#0 tmp%15#0)
+        (assert tmp%16#0)
         let reinterpret_bool%0#0: bool = y#2
         (assert reinterpret_bool%0#0)
         let reinterpret_bool%1#0: bool = y#2
-        let tmp%16#0: bool = (! reinterpret_bool%1#0)
-        let tmp%17#0: bool = (! tmp%16#0)
-        (assert tmp%17#0)
+        let tmp%17#0: bool = (! reinterpret_bool%1#0)
+        let tmp%18#0: bool = (! tmp%17#0)
+        (assert tmp%18#0)
         let reinterpret_bool%2#0: bool = y#2
-        let tmp%18#0: bool = (! reinterpret_bool%2#0)
-        return tmp%18#0
+        let tmp%19#0: bool = (! reinterpret_bool%2#0)
+        return tmp%19#0
 
 subroutine tests/approvals/prefix-postfix-operators.algo.ts::test_biguint(x: biguint, y: biguint) -> bool:
     block@0: // L30
@@ -93,10 +93,10 @@ subroutine tests/approvals/prefix-postfix-operators.algo.ts::test_bytes(x: bytes
         let tmp%0#0: bytes = (bzero 4u)
         let tmp%1#0: bool = (== x#0 tmp%0#0)
         (assert tmp%1#0) // x must be 4 unset bytes
-        let awst_tmp%0#0: bytes = (b~ x#0)
-        let y#0: bytes = awst_tmp%0#0
-        let tmp%2#0: bool = (== y#0 0xffffffff)
-        (assert tmp%2#0)
+        let tmp%2#0: bytes = (b~ x#0)
+        let y#0: bytes = tmp%2#0
+        let tmp%3#0: bool = (== y#0 0xffffffff)
+        (assert tmp%3#0)
         return 
 
 subroutine tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.__puya_arc4_router__() -> bool:

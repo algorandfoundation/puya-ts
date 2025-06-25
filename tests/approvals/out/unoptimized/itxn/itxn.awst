@@ -41,7 +41,7 @@ contract ItxnDemoContract
   test2(): void
   {
     if (Boolean(txn<NumAppArgs>())) {
-      args: readonly [bytes, bytes] = ($0 = #["1", "2"])
+      args: readonly [bytes, bytes] = #["1", "2"]
       createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=#[0x098101], ClearStateProgramPages=#[0x098101], ApplicationArgs=#[args.0, args.1], OnCompletion=0, Note="with args param set")
     } else {
       createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=#[0x098101], ClearStateProgramPages=#[0x098101], ApplicationArgs=#["3", reinterpret_cast<bytes>("4"), "5"], Note="no args param set")
@@ -110,8 +110,8 @@ contract ItxnDemoContract
   
   test4(): void
   {
-    lotsOfBytes: bytes = ($1 = bzero(2044))
-    approval2: bytes = ($2 = concat(concat(0x80fc0f, lotsOfBytes), 0x48))
+    lotsOfBytes: bytes = bzero(2044)
+    approval2: bytes = concat(concat(0x80fc0f, lotsOfBytes), 0x48)
     appTxn1: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=#[0x098101, approval2, approval2, approval2], ClearStateProgramPages=#[0x098101], OnCompletion=5, ApplicationArgs=#["1"], ExtraProgramPages=3)
     app1: inner_transaction_appl = submit_txn(appTxn1)
     assert(app1.ExtraProgramPages == 3, comment=extra pages = 3)
@@ -127,7 +127,7 @@ contract ItxnDemoContract
     pay: inner_transaction_fields_pay = create_inner_transaction(Fee=0, TypeEnum=1, Receiver=checked_maybe(app_params_get<AppAddress>(appId), comment=application exists), Amount=1000)
     app: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApplicationID=appId, ApplicationArgs=#[Method("receivePay(uint64,pay,string)(uint64,uint64,string)"), 0x0000000000000001, reinterpret_cast<bytes>("hello")])
     #[_, appRes]: readonly [inner_transaction_pay, inner_transaction_appl] = submit_txn(pay, app)
-    returnValue: arc4.tuple<uint64,uint64,string> = ($3 = ARC4_DECODE(reinterpret_cast<arc4.tuple<arc4.uint64,arc4.uint64,arc4.dynamic_array<arc4.byte>>>(checked_maybe(#[extract<4, 0>(($4 = appRes.LastLog)), extract<0, 4>($4) == 0x151f7c75], comment=Bytes has valid prefix))))
+    returnValue: arc4.tuple<uint64,uint64,string> = ARC4_DECODE(reinterpret_cast<arc4.tuple<arc4.uint64,arc4.uint64,arc4.dynamic_array<arc4.byte>>>(checked_maybe(#[extract<4, 0>(($0 = appRes.LastLog)), extract<0, 4>($0) == 0x151f7c75], comment=Bytes has valid prefix)))
     assert(3 == 3 and returnValue.0 == 1 and returnValue.1 == 1000 and returnValue.2 == "hello", comment=assert target is match for conditions)
   }
   

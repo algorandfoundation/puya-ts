@@ -12,20 +12,20 @@ contract Arc4CloneAlgo
   
   aliasing(mutable: arc4.dynamic_array<uint64>): void
   {
-    needClone: arc4.dynamic_array<uint64> = ($0 = copy(mutable))
-    needClone2: arc4.dynamic_array<uint64> = convert_array(($1 = copy(mutable)), wtype=arc4.dynamic_array<uint64>)
-    tupleOfMutable: readonly [arc4.dynamic_array<uint64>, uint64] = #[($2 = #[copy(mutable), 1]).0, $2.1]
-    #[x]: readonly [arc4.dynamic_array<uint64>] = #[($3 = copy(tupleOfMutable)).0]
-    mutableTupleOfMutable: arc4.tuple<arc4.dynamic_array<uint64>> = ARC4_ENCODE(#[new arc4.dynamic_array<uint64>(($4 = ($5 = #[#[1, 2, 3]]).0).0, $4.1, $4.2)], wtype=arc4.tuple<arc4.dynamic_array<uint64>>)
-    #[y]: readonly [arc4.dynamic_array<uint64>] = #[($6 = copy(mutableTupleOfMutable)).0]
-    tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receive((z = ($7 = copy(mutable))))
+    needClone: arc4.dynamic_array<uint64> = copy(mutable)
+    needClone2: arc4.dynamic_array<uint64> = convert_array(copy(mutable), wtype=arc4.dynamic_array<uint64>)
+    tupleOfMutable: readonly [arc4.dynamic_array<uint64>, uint64] = #[#[copy(mutable), 1].0, #[copy(mutable), 1].1]
+    #[x]: readonly [arc4.dynamic_array<uint64>] = #[($0 = copy(tupleOfMutable)).0]
+    mutableTupleOfMutable: arc4.tuple<arc4.dynamic_array<uint64>> = ARC4_ENCODE(#[new arc4.dynamic_array<uint64>(($1 = #[#[1, 2, 3]].0).0, $1.1, $1.2)], wtype=arc4.tuple<arc4.dynamic_array<uint64>>)
+    #[y]: readonly [arc4.dynamic_array<uint64>] = #[($2 = copy(mutableTupleOfMutable)).0]
+    tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receive((z = copy(mutable)))
     tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receiveReadonly(convert_array(mutable, wtype=arc4.dynamic_array<uint64>))
-    m2: arc4.dynamic_array<uint64> = ($8 = copy(mutable))
-    nestedMutables: arc4.dynamic_array<arc4.dynamic_array<uint64>> = new arc4.dynamic_array<arc4.dynamic_array<uint64>>(new arc4.dynamic_array<uint64>(($9 = ($10 = #[#[1]]).0).0))
-    nestedMutables2: arc4.dynamic_array<arc4.dynamic_array<uint64>> = new arc4.dynamic_array<arc4.dynamic_array<uint64>>(($11 = #[copy(mutable), #[2]]).0, new arc4.dynamic_array<uint64>(($12 = $11.1).0))
-    m3: arc4.dynamic_array<arc4.dynamic_array<uint64>> = ($13 = copy(nestedMutables))
-    m4: arc4.dynamic_array<arc4.dynamic_array<uint64>> = ($14 = copy(nestedMutables).concat(#[new arc4.dynamic_array<uint64>(123)]))
-    m5: arc4.dynamic_array<uint64> = ($15 = mutable.concat(mutable))
+    m2: arc4.dynamic_array<uint64> = copy(mutable)
+    nestedMutables: arc4.dynamic_array<arc4.dynamic_array<uint64>> = new arc4.dynamic_array<arc4.dynamic_array<uint64>>(new arc4.dynamic_array<uint64>(($3 = ($4 = #[#[1]]).0).0))
+    nestedMutables2: arc4.dynamic_array<arc4.dynamic_array<uint64>> = new arc4.dynamic_array<arc4.dynamic_array<uint64>>(($5 = #[copy(mutable), #[2]]).0, new arc4.dynamic_array<uint64>(($6 = $5.1).0))
+    m3: arc4.dynamic_array<arc4.dynamic_array<uint64>> = copy(nestedMutables)
+    m4: arc4.dynamic_array<arc4.dynamic_array<uint64>> = copy(nestedMutables).concat(#[new arc4.dynamic_array<uint64>(123)])
+    m5: arc4.dynamic_array<uint64> = mutable.concat(mutable)
   }
   
   receive(mutable: arc4.dynamic_array<uint64>): void

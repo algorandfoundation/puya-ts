@@ -36,11 +36,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#7: uint64 = (btoi tuple_item%0#3)
         let aggregate%extract%3#1: bytes = (extract3 v2#1 0u 8u)
         let tuple_item%1#1: Encoded(uint64) = aggregate%extract%3#1
-        let tmp%1#5: uint64 = (btoi tuple_item%1#1)
-        let tmp%2#2: uint64 = (+ tmp%0#7 tmp%1#5)
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob tmp%2#2)
+        let tmp%1#4: uint64 = (btoi tuple_item%1#1)
+        let tmp%2#3: uint64 = (+ tmp%0#7 tmp%1#4)
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob tmp%2#3)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let tmp%3#1: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#1
+        let tmp%3#3: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#1
         let aggregate%extract%4#1: bytes = (extract3 v1#6 8u 8u)
         let tuple_item%2#1: Encoded(uint64) = aggregate%extract%4#1
         let tmp%4#1: uint64 = (btoi tuple_item%2#1)
@@ -51,7 +51,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%val_as_bytes%1#1: bytes[8] = (itob tmp%6#1)
         let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
         let tmp%7#1: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#1
-        let aggregate%encoded%3#1: Encoded(uint64) = (concat 0x tmp%3#1)
+        let aggregate%encoded%3#1: Encoded(uint64) = (concat 0x tmp%3#3)
         let aggregate%encoded%4#1: Encoded(uint64,uint64) = (concat aggregate%encoded%3#1 tmp%7#1)
         let aggregate%encoded%5#1: Encoded(uint64,uint64) = (concat aggregate%encoded%4#1 0x)
         let tmp%8#1: Encoded(uint64,uint64) = aggregate%encoded%5#1
@@ -101,10 +101,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%encoded%10#1: Encoded(uint64,uint64) = (concat aggregate%encoded%9#1 tuple_item%3#0)
         let aggregate%encoded%11#1: Encoded(uint64,uint64) = (concat aggregate%encoded%10#1 0x)
         let v3#0: Encoded(uint64,uint64) = aggregate%encoded%11#1
-        let tmp%0#6: bool = (== v1#2 v2#0)
-        (assert tmp%0#6)
-        let tmp%1#4: bool = (== v3#0 v1#2)
-        (assert tmp%1#4)
+        let tmp%2#2: bool = (== v1#2 v2#0)
+        (assert tmp%2#2)
+        let tmp%3#2: bool = (== v3#0 v1#2)
+        (assert tmp%3#2)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#3: bool = 1u
         goto block@20
     block@7: // toAndFromBytes_route_L39
@@ -125,8 +125,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%31#0: uint64 = (txn ApplicationID)
         (assert tmp%31#0) // can only call when not creating
         let v1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
-        let tmp%0#5: Encoded(uint64,uint64) = v1#0
-        let tmp%34#0: bytes = (concat 0x151f7c75 tmp%0#5)
+        let tmp%0#6: Encoded(uint64,uint64) = v1#0
+        let tmp%34#0: bytes = (concat 0x151f7c75 tmp%0#6)
         (log tmp%34#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#5: bool = 1u
         goto block@20
@@ -144,8 +144,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let value#1: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = aggregate%box_get%0#1
         let aggregate%extract%12#1: bytes = (extract3 value#1 16u 8u)
         let tuple_item%0#1: Encoded(uint64) = aggregate%extract%12#1
-        let tmp%0#4: uint64 = (btoi tuple_item%0#1)
-        (assert tmp%0#4) // Last called not zero
+        let tmp%0#5: uint64 = (btoi tuple_item%0#1)
+        (assert tmp%0#5) // Last called not zero
         let tmp%41#0: bytes = (concat 0x151f7c75 value#1)
         (log tmp%41#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#6: bool = 1u
@@ -161,8 +161,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = aggregate%box_get%2#1
         let aggregate%extract%13#1: bytes = (extract3 value#0 16u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%13#1
-        let tmp%0#3: uint64 = (btoi tuple_item%0#0)
-        (assert tmp%0#3) // Last called not zero
+        let tmp%0#4: uint64 = (btoi tuple_item%0#0)
+        (assert tmp%0#4) // Last called not zero
         let tmp%47#0: bytes = (concat 0x151f7c75 value#0)
         (log tmp%47#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#7: bool = 1u
@@ -240,10 +240,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%offset_as_uint16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%1#1)
         let aggregate%encoded%23#1: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = (concat aggregate%encoded%22#1 aggregate%offset_as_uint16%0#1)
         let aggregate%encoded%24#1: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = (concat aggregate%encoded%23#1 aggregate%tail%0#1)
-        let awst_tmp%0#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = aggregate%encoded%24#1
+        let tmp%3#1: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = aggregate%encoded%24#1
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         (box_del box_prefixed_key%0#0)
-        (box_put box_prefixed_key%0#0 awst_tmp%0#0)
+        (box_put box_prefixed_key%0#0 tmp%3#1)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#9: bool = 1u
         goto block@20
     block@15: // bare_routing_L10

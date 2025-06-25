@@ -18,7 +18,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
         let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
         let aggregate%encoded%2#1: Encoded(uint64,uint64) = (concat aggregate%encoded%1#1 0x)
-        let tmp%3#1: Encoded(uint64,uint64) = aggregate%encoded%2#1
+        let tmp%5#1: Encoded(uint64,uint64) = aggregate%encoded%2#1
         let aggregate%val_as_bytes%2#1: bytes[8] = (itob 20u)
         let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
         let aggregate%encoded%3#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%2#1)
@@ -26,9 +26,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
         let aggregate%encoded%4#1: Encoded(uint64,uint64) = (concat aggregate%encoded%3#1 aggregate%as_Encoded(uint64)%3#1)
         let aggregate%encoded%5#1: Encoded(uint64,uint64) = (concat aggregate%encoded%4#1 0x)
-        let tmp%4#1: Encoded(uint64,uint64) = aggregate%encoded%5#1
-        let aggregate%encoded%6#1: Encoded((uint64,uint64)) = (concat 0x tmp%3#1)
-        let aggregate%encoded%7#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat aggregate%encoded%6#1 tmp%4#1)
+        let tmp%6#1: Encoded(uint64,uint64) = aggregate%encoded%5#1
+        let aggregate%encoded%6#1: Encoded((uint64,uint64)) = (concat 0x tmp%5#1)
+        let aggregate%encoded%7#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat aggregate%encoded%6#1 tmp%6#1)
         let aggregate%encoded%8#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat aggregate%encoded%7#1 0x)
         let arg#0: Encoded((uint64,uint64),(uint64,uint64)) = aggregate%encoded%8#1
         let aggregate%extract%0#1: bytes = (extract3 arg#0 0u 16u)
@@ -39,11 +39,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%extract%3#1: bytes = (extract3 aggregate%extract%2#1 8u 8u)
         let tuple_item%3#2: Encoded(uint64) = aggregate%extract%3#1
         let y#2: uint64 = (btoi tuple_item%3#2)
-        let tmp%7#1: bool = (== x#2 10u)
-        goto tmp%7#1 ? block@16 : block@18
+        let tmp%9#1: bool = (== x#2 10u)
+        goto tmp%9#1 ? block@16 : block@18
     block@16: // and_contd_L102
-        let tmp%8#1: bool = (== y#2 20u)
-        goto tmp%8#1 ? block@17 : block@18
+        let tmp%10#0: bool = (== y#2 20u)
+        goto tmp%10#0 ? block@17 : block@18
     block@17: // bool_true_L102
         let and_result%1#0: bool = 1u
         goto block@19
@@ -81,11 +81,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%as_Encoded(uint64)%6#1: Encoded(uint64) = aggregate%val_as_bytes%6#1
         let aggregate%encoded%12#1: Encoded(uint64,uint64) = (concat aggregate%encoded%11#1 aggregate%as_Encoded(uint64)%6#1)
         let aggregate%encoded%13#1: Encoded(uint64,uint64) = (concat aggregate%encoded%12#1 0x)
-        let awst_tmp%0#1: Encoded(uint64,uint64) = aggregate%encoded%13#1
-        let aggregate%extract%5#1: bytes = (extract3 awst_tmp%0#1 8u 8u)
+        let awst_tmp%0#0: Encoded(uint64,uint64) = aggregate%encoded%13#1
+        let aggregate%extract%5#1: bytes = (extract3 awst_tmp%0#0 8u 8u)
         let tuple_item%0#3: Encoded(uint64) = aggregate%extract%5#1
         let f#2: uint64 = (btoi tuple_item%0#3)
-        let aggregate%extract%6#1: bytes = (extract3 awst_tmp%0#1 0u 8u)
+        let aggregate%extract%6#1: bytes = (extract3 awst_tmp%0#0 0u 8u)
         let tuple_item%1#2: Encoded(uint64) = aggregate%extract%6#1
         let e#0: uint64 = (btoi tuple_item%1#2)
         let aggregate%val_as_bytes%7#1: bytes[8] = (itob e#0)
@@ -106,40 +106,40 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%encoded%19#1: Encoded(len+uint64[]) = (concat aggregate%encoded%18#1 0x)
         let res3#0: Encoded(len+uint64[]) = aggregate%encoded%19#1
         let array_length%0#0: uint64 = (extract_uint16 res3#0 0u)
-        let tmp%9#1: bool = (== array_length%0#0 4u)
-        goto tmp%9#1 ? block@24 : block@29
+        let tmp%12#0: bool = (== array_length%0#0 4u)
+        goto tmp%12#0 ? block@24 : block@29
     block@24: // and_contd_L107
         let aggregate%array_trimmed%0#1: bytes = ((extract 2 0) res3#0)
         let aggregate%bytes_offset%0#1: uint64 = (* 0u 8u)
         let aggregate%encoded_element%0#1: bytes = (extract3 aggregate%array_trimmed%0#1 aggregate%bytes_offset%0#1 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#1
         let values%0#0: uint64 = (btoi array_item%0#0)
-        let tmp%10#0: bool = (== values%0#0 4u)
-        goto tmp%10#0 ? block@25 : block@29
+        let tmp%13#0: bool = (== values%0#0 4u)
+        goto tmp%13#0 ? block@25 : block@29
     block@25: // and_contd_L107
         let aggregate%array_trimmed%1#1: bytes = ((extract 2 0) res3#0)
         let aggregate%bytes_offset%1#1: uint64 = (* 1u 8u)
         let aggregate%encoded_element%1#1: bytes = (extract3 aggregate%array_trimmed%1#1 aggregate%bytes_offset%1#1 8u) // on error: index access is out of bounds
         let array_item%1#0: Encoded(uint64) = aggregate%encoded_element%1#1
         let values%1#0: uint64 = (btoi array_item%1#0)
-        let tmp%11#0: bool = (== values%1#0 1u)
-        goto tmp%11#0 ? block@26 : block@29
+        let tmp%14#0: bool = (== values%1#0 1u)
+        goto tmp%14#0 ? block@26 : block@29
     block@26: // and_contd_L107
         let aggregate%array_trimmed%2#1: bytes = ((extract 2 0) res3#0)
         let aggregate%bytes_offset%2#1: uint64 = (* 2u 8u)
         let aggregate%encoded_element%2#1: bytes = (extract3 aggregate%array_trimmed%2#1 aggregate%bytes_offset%2#1 8u) // on error: index access is out of bounds
         let array_item%2#0: Encoded(uint64) = aggregate%encoded_element%2#1
         let values%2#0: uint64 = (btoi array_item%2#0)
-        let tmp%12#0: bool = (== values%2#0 4u)
-        goto tmp%12#0 ? block@27 : block@29
+        let tmp%15#0: bool = (== values%2#0 4u)
+        goto tmp%15#0 ? block@27 : block@29
     block@27: // and_contd_L107
         let aggregate%array_trimmed%3#1: bytes = ((extract 2 0) res3#0)
         let aggregate%bytes_offset%3#1: uint64 = (* 3u 8u)
         let aggregate%encoded_element%3#1: bytes = (extract3 aggregate%array_trimmed%3#1 aggregate%bytes_offset%3#1 8u) // on error: index access is out of bounds
         let array_item%3#0: Encoded(uint64) = aggregate%encoded_element%3#1
         let values%3#0: uint64 = (btoi array_item%3#0)
-        let tmp%13#0: bool = (== values%3#0 1u)
-        goto tmp%13#0 ? block@28 : block@29
+        let tmp%16#0: bool = (== values%3#0 1u)
+        goto tmp%16#0 ? block@28 : block@29
     block@28: // bool_true_L107
         let and_result%2#0: bool = 1u
         goto block@30
@@ -206,7 +206,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%encoded%30#1: Encoded(uint64,uint64) = (concat aggregate%encoded%29#1 0x)
         let tmp%0#4: Encoded(uint64,uint64) = aggregate%encoded%30#1
         let aggregate%encoded%31#1: Encoded((uint64,uint64)) = (concat 0x tmp%0#4)
-        let aggregate%encoded%32#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat aggregate%encoded%31#1 awst_tmp%0#1)
+        let aggregate%encoded%32#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat aggregate%encoded%31#1 awst_tmp%0#0)
         let aggregate%encoded%33#1: Encoded((uint64,uint64),(uint64,uint64)) = (concat aggregate%encoded%32#1 0x)
         let f#1: Encoded((uint64,uint64),(uint64,uint64)) = aggregate%encoded%33#1
         let aggregate%extract%9#1: bytes = (extract3 f#1 0u 16u)

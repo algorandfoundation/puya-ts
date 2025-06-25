@@ -170,11 +170,11 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray() -> 
         let slot_contents%1#0: Encoded(uint8[32][]) = load(b#0)
         let array_item%0#0: Encoded(uint8[32]) = extract_value(slot_contents%1#0, 0u)
         let values%0#0: bytes[32] = decode_bytes<bytes[32]>(array_item%0#0)
-        let awst_tmp%0#0: bytes = (b& a.0#0 values%0#0)
-        let bitAnd#0: bytes[32] = awst_tmp%0#0
+        let tmp%1#0: bytes = (b& a.0#0 values%0#0)
+        let bitAnd#0: bytes[32] = tmp%1#0
         let reinterpret_bytes[32]%3#0: bytes[32] = (txn Sender)
-        let tmp%1#0: bool = (== bitAnd#0 reinterpret_bytes[32]%3#0)
-        (assert tmp%1#0)
+        let tmp%2#0: bool = (== bitAnd#0 reinterpret_bytes[32]%3#0)
+        (assert tmp%2#0)
         return 
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__algots__.defaultCreate() -> void:

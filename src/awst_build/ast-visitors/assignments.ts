@@ -128,7 +128,8 @@ function buildAssignmentExpression(
   isStatement: boolean,
 ): InstanceBuilder {
   const expressionType = getAssignmentExpressionType(target.ptype, source.ptype)
-  const sourceSingle = source.singleEvaluation()
+  //  Skip single eval for non-destructuring assignments
+  const sourceSingle = isDestructuringAssignment(target) ? source.singleEvaluation() : source
   const assignmentValues = buildAssignmentValues(target, sourceSingle, sourceLocation)
   const assignment = nodeFactory.assignmentExpression({
     target: assignmentValues.target,
@@ -212,6 +213,10 @@ function narrowSourceType(targetType: PType | undefined, sourceType: PType, sour
     })
   }
   return sourceType
+}
+
+function isDestructuringAssignment(target: InstanceBuilder) {
+  return target instanceof ArrayLiteralExpressionBuilder || target instanceof ObjectLiteralExpressionBuilder
 }
 
 function isSpecialItxnType(source: InstanceBuilder) {

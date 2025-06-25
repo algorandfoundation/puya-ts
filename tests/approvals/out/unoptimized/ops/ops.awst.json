@@ -207,7 +207,7 @@
                 "name": "a"
               },
               "value": {
-                "_type": "SingleEvaluation",
+                "_type": "BytesUnaryOperation",
                 "source_location": {
                   "file": "tests/approvals/ops.algo.ts",
                   "line": 8,
@@ -221,14 +221,15 @@
                   "immutable": true,
                   "length": null
                 },
-                "source": {
-                  "_type": "BytesUnaryOperation",
+                "op": "~",
+                "expr": {
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/ops.algo.ts",
                     "line": 8,
                     "end_line": 8,
                     "column": 14,
-                    "end_column": 38
+                    "end_column": 22
                   },
                   "wtype": {
                     "_type": "BytesWType",
@@ -236,46 +237,28 @@
                     "immutable": true,
                     "length": null
                   },
-                  "op": "~",
-                  "expr": {
-                    "_type": "IntrinsicCall",
-                    "source_location": {
-                      "file": "tests/approvals/ops.algo.ts",
-                      "line": 8,
-                      "end_line": 8,
-                      "column": 14,
-                      "end_column": 22
-                    },
-                    "wtype": {
-                      "_type": "BytesWType",
-                      "name": "bytes",
-                      "immutable": true,
-                      "length": null
-                    },
-                    "op_code": "bzero",
-                    "immediates": [],
-                    "stack_args": [
-                      {
-                        "_type": "IntegerConstant",
-                        "source_location": {
-                          "file": "tests/approvals/ops.algo.ts",
-                          "line": 8,
-                          "end_line": 8,
-                          "column": 20,
-                          "end_column": 21
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "value": 8,
-                        "teal_alias": null
-                      }
-                    ]
-                  }
-                },
-                "_id": "0"
+                  "op_code": "bzero",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/ops.algo.ts",
+                        "line": 8,
+                        "end_line": 8,
+                        "column": 20,
+                        "end_column": 21
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "value": 8,
+                      "teal_alias": null
+                    }
+                  ]
+                }
               }
             },
             {
@@ -304,7 +287,7 @@
                 "name": "b"
               },
               "value": {
-                "_type": "SingleEvaluation",
+                "_type": "IntrinsicCall",
                 "source_location": {
                   "file": "tests/approvals/ops.algo.ts",
                   "line": 9,
@@ -317,43 +300,27 @@
                   "name": "uint64",
                   "immutable": true
                 },
-                "source": {
-                  "_type": "IntrinsicCall",
-                  "source_location": {
-                    "file": "tests/approvals/ops.algo.ts",
-                    "line": 9,
-                    "end_line": 9,
-                    "column": 14,
-                    "end_column": 25
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "op_code": "btoi",
-                  "immediates": [],
-                  "stack_args": [
-                    {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/ops.algo.ts",
-                        "line": 9,
-                        "end_line": 9,
-                        "column": 23,
-                        "end_column": 24
-                      },
-                      "wtype": {
-                        "_type": "BytesWType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "length": null
-                      },
-                      "name": "a"
-                    }
-                  ]
-                },
-                "_id": "1"
+                "op_code": "btoi",
+                "immediates": [],
+                "stack_args": [
+                  {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/ops.algo.ts",
+                      "line": 9,
+                      "end_line": 9,
+                      "column": 23,
+                      "end_column": 24
+                    },
+                    "wtype": {
+                      "_type": "BytesWType",
+                      "name": "bytes",
+                      "immutable": true,
+                      "length": null
+                    },
+                    "name": "a"
+                  }
+                ]
               }
             },
             {
@@ -457,7 +424,7 @@
                 "name": "c"
               },
               "value": {
-                "_type": "SingleEvaluation",
+                "_type": "IntrinsicCall",
                 "source_location": {
                   "file": "tests/approvals/ops.algo.ts",
                   "line": 12,
@@ -470,59 +437,43 @@
                   "name": "uint64",
                   "immutable": true
                 },
-                "source": {
-                  "_type": "IntrinsicCall",
-                  "source_location": {
-                    "file": "tests/approvals/ops.algo.ts",
-                    "line": 12,
-                    "end_line": 12,
-                    "column": 14,
-                    "end_column": 27
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "op_code": "shr",
-                  "immediates": [],
-                  "stack_args": [
-                    {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/ops.algo.ts",
-                        "line": 12,
-                        "end_line": 12,
-                        "column": 21,
-                        "end_column": 22
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "name": "b"
+                "op_code": "shr",
+                "immediates": [],
+                "stack_args": [
+                  {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/ops.algo.ts",
+                      "line": 12,
+                      "end_line": 12,
+                      "column": 21,
+                      "end_column": 22
                     },
-                    {
-                      "_type": "IntegerConstant",
-                      "source_location": {
-                        "file": "tests/approvals/ops.algo.ts",
-                        "line": 12,
-                        "end_line": 12,
-                        "column": 24,
-                        "end_column": 26
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "value": 32,
-                      "teal_alias": null
-                    }
-                  ]
-                },
-                "_id": "2"
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "name": "b"
+                  },
+                  {
+                    "_type": "IntegerConstant",
+                    "source_location": {
+                      "file": "tests/approvals/ops.algo.ts",
+                      "line": 12,
+                      "end_line": 12,
+                      "column": 24,
+                      "end_column": 26
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "value": 32,
+                    "teal_alias": null
+                  }
+                ]
               }
             },
             {

@@ -12,9 +12,9 @@ contract TuplesAlgo
   
   test(a: arc4.uint64, b: arc4.uint64, c: arc4.uint64): void
   {
-    readonlyTuple: readonly [arc4.uint64, arc4.uint64, arc4.uint64] = ($0 = #[a, b, c])
-    mutableTuple: arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64> = ARC4_ENCODE(#[($1 = #[a, b, c]).0, $1.1, $1.2], wtype=arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64>)
-    arc4Tuple: arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64> = ($2 = ARC4_ENCODE(#[a, b, c], wtype=arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64>))
+    readonlyTuple: readonly [arc4.uint64, arc4.uint64, arc4.uint64] = #[a, b, c]
+    mutableTuple: arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64> = ARC4_ENCODE(#[#[a, b, c].0, #[a, b, c].1, #[a, b, c].2], wtype=arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64>)
+    arc4Tuple: arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64> = ARC4_ENCODE(#[a, b, c], wtype=arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64>)
     tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(readonlyTuple)
     tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(#[mutableTuple.0, mutableTuple.1, mutableTuple.2])
     tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(ARC4_DECODE(arc4Tuple))

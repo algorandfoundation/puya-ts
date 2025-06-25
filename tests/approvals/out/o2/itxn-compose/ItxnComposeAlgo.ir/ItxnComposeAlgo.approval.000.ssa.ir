@@ -71,11 +71,11 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.distribute(addr
         (assert reinterpret_bool%0#0) // must provide some accounts
         let tmp%3#0: uint64 = ((gtxns Amount) funds#0)
         let array_length%1#0: uint64 = (extract_uint16 addresses#0 0u)
-        let awst_tmp%0#0: uint64 = (/ tmp%3#0 array_length%1#0)
-        let share#0: uint64 = awst_tmp%0#0
+        let tmp%4#0: uint64 = (/ tmp%3#0 array_length%1#0)
+        let share#0: uint64 = tmp%4#0
         let array_item%0#0: Encoded(uint8[32]) = extract_value(addresses#0, 0u)
-        let tmp%4#0: Encoded(uint64,uint64,(len+uint8[])) = bytes_encode<(uint64,uint64,(len+uint8[]))>(1u, share#0, array_item%0#0)
-        let payFields#0: Encoded(uint64,uint64,(len+uint8[])) = tmp%4#0
+        let tmp%5#0: Encoded(uint64,uint64,(len+uint8[])) = bytes_encode<(uint64,uint64,(len+uint8[]))>(1u, share#0, array_item%0#0)
+        let payFields#0: Encoded(uint64,uint64,(len+uint8[])) = tmp%5#0
         itxn_begin
         let inner_txn_params%0#0: itxn_field_set = itxn_field_set(0)
         let inner_txn_params%0%%param_Fee_idx_0#0: uint64 = 0u
@@ -438,8 +438,8 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegi
         goto block@1
     block@1: // next_txn_L55
         itxn_submit
-        let awst_tmp%0#0: uint64 = itxn[itxn_group_idx(0)].CreatedApplicationID
-        let appId#0: uint64 = awst_tmp%0#0
+        let tmp%1#0: uint64 = itxn[itxn_group_idx(0)].CreatedApplicationID
+        let appId#0: uint64 = tmp%1#0
         (assert 1u) // Step cannot be zero
         let temp#0: uint64 = 0u
         goto block@2
@@ -449,8 +449,8 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegi
         goto continue_looping%0#0 ? block@3 : block@8
     block@3: // for_body_L57
         let i#0: uint64 = temp#1
-        let tmp%1#0: bool = (== i#0 0u)
-        goto tmp%1#0 ? block@4 : block@5
+        let tmp%2#0: bool = (== i#0 0u)
+        goto tmp%2#0 ? block@4 : block@5
     block@4: // if_body_L58
         itxn_begin
         let inner_txn_params%1#0: itxn_field_set = itxn_field_set(1)
@@ -460,9 +460,9 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegi
         let inner_txn_params%1%%TypeEnum_length#0: uint64 = 1u
         let inner_txn_params%1%%param_ApplicationID_idx_0#0: uint64 = appId#0
         let inner_txn_params%1%%ApplicationID_length#0: uint64 = 1u
-        let tmp%2#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>("ho")
+        let tmp%3#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>("ho")
         let inner_txn_params%1%%param_ApplicationArgs_idx_0#0: bytes[4] = method "greet(string)string"
-        let inner_txn_params%1%%param_ApplicationArgs_idx_1#0: Encoded(len+utf8[]) = tmp%2#0
+        let inner_txn_params%1%%param_ApplicationArgs_idx_1#0: Encoded(len+utf8[]) = tmp%3#0
         let inner_txn_params%1%%ApplicationArgs_length#0: uint64 = 2u
         let inner_txn_params%1%%Sender_length#0: uint64 = 0u
         let inner_txn_params%1%%Note_length#0: uint64 = 0u
@@ -526,9 +526,9 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegi
         let inner_txn_params%2%%TypeEnum_length#0: uint64 = 1u
         let inner_txn_params%2%%param_ApplicationID_idx_0#0: uint64 = appId#0
         let inner_txn_params%2%%ApplicationID_length#0: uint64 = 1u
-        let tmp%3#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>("ho")
+        let tmp%4#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>("ho")
         let inner_txn_params%2%%param_ApplicationArgs_idx_0#0: bytes[4] = method "greet(string)string"
-        let inner_txn_params%2%%param_ApplicationArgs_idx_1#0: Encoded(len+utf8[]) = tmp%3#0
+        let inner_txn_params%2%%param_ApplicationArgs_idx_1#0: Encoded(len+utf8[]) = tmp%4#0
         let inner_txn_params%2%%ApplicationArgs_length#0: uint64 = 2u
         let inner_txn_params%2%%Sender_length#0: uint64 = 0u
         let inner_txn_params%2%%Note_length#0: uint64 = 0u

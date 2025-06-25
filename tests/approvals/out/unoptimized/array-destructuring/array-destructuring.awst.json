@@ -1784,7 +1784,7 @@
                 "name": "f"
               },
               "value": {
-                "_type": "SingleEvaluation",
+                "_type": "CommaExpression",
                 "source_location": {
                   "file": "tests/approvals/array-destructuring.algo.ts",
                   "line": 16,
@@ -1820,51 +1820,101 @@
                     }
                   ]
                 },
-                "source": {
-                  "_type": "CommaExpression",
-                  "source_location": {
-                    "file": "tests/approvals/array-destructuring.algo.ts",
-                    "line": 16,
-                    "end_line": 16,
-                    "column": 15,
-                    "end_column": 47
-                  },
-                  "wtype": {
-                    "_type": "WTuple",
-                    "name": "tuple",
-                    "immutable": true,
-                    "types": [
-                      {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      {
-                        "_type": "BytesWType",
-                        "name": "bytes",
-                        "immutable": true,
-                        "length": null
-                      },
-                      {
-                        "_type": "WType",
-                        "name": "bool",
-                        "immutable": true
-                      },
-                      {
-                        "_type": "WType",
-                        "name": "biguint",
-                        "immutable": true
-                      }
-                    ]
-                  },
-                  "expressions": [
-                    {
-                      "_type": "AssignmentExpression",
+                "expressions": [
+                  {
+                    "_type": "AssignmentExpression",
+                    "source_location": {
+                      "file": "tests/approvals/array-destructuring.algo.ts",
+                      "line": 16,
+                      "end_line": 16,
+                      "column": 15,
+                      "end_column": 47
+                    },
+                    "wtype": {
+                      "_type": "WTuple",
+                      "name": "tuple",
+                      "immutable": true,
+                      "types": [
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "biguint",
+                          "immutable": true
+                        }
+                      ]
+                    },
+                    "target": {
+                      "_type": "TupleExpression",
                       "source_location": {
                         "file": "tests/approvals/array-destructuring.algo.ts",
                         "line": 16,
                         "end_line": 16,
                         "column": 15,
+                        "end_column": 25
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "biguint",
+                            "immutable": true
+                          }
+                        ]
+                      },
+                      "items": [
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/array-destructuring.algo.ts",
+                            "line": 16,
+                            "end_line": 16,
+                            "column": 16,
+                            "end_column": 17
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "g"
+                        },
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/array-destructuring.algo.ts",
+                            "line": 16,
+                            "end_line": 16,
+                            "column": 23,
+                            "end_column": 24
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "biguint",
+                            "immutable": true
+                          },
+                          "name": "i"
+                        }
+                      ]
+                    },
+                    "value": {
+                      "_type": "TupleExpression",
+                      "source_location": {
+                        "file": "tests/approvals/array-destructuring.algo.ts",
+                        "line": 16,
+                        "end_line": 16,
+                        "column": 28,
                         "end_column": 47
                       },
                       "wtype": {
@@ -1884,110 +1934,60 @@
                           }
                         ]
                       },
-                      "target": {
-                        "_type": "TupleExpression",
-                        "source_location": {
-                          "file": "tests/approvals/array-destructuring.algo.ts",
-                          "line": 16,
-                          "end_line": 16,
-                          "column": 15,
-                          "end_column": 25
-                        },
-                        "wtype": {
-                          "_type": "WTuple",
-                          "name": "tuple",
-                          "immutable": true,
-                          "types": [
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            {
-                              "_type": "WType",
-                              "name": "biguint",
-                              "immutable": true
-                            }
-                          ]
-                        },
-                        "items": [
-                          {
-                            "_type": "VarExpression",
-                            "source_location": {
-                              "file": "tests/approvals/array-destructuring.algo.ts",
-                              "line": 16,
-                              "end_line": 16,
-                              "column": 16,
-                              "end_column": 17
-                            },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "name": "g"
+                      "items": [
+                        {
+                          "_type": "TupleItemExpression",
+                          "source_location": {
+                            "file": "tests/approvals/array-destructuring.algo.ts",
+                            "line": 16,
+                            "end_line": 16,
+                            "column": 15,
+                            "end_column": 47
                           },
-                          {
-                            "_type": "VarExpression",
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "base": {
+                            "_type": "SingleEvaluation",
                             "source_location": {
                               "file": "tests/approvals/array-destructuring.algo.ts",
                               "line": 16,
                               "end_line": 16,
-                              "column": 23,
-                              "end_column": 24
-                            },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "biguint",
-                              "immutable": true
-                            },
-                            "name": "i"
-                          }
-                        ]
-                      },
-                      "value": {
-                        "_type": "TupleExpression",
-                        "source_location": {
-                          "file": "tests/approvals/array-destructuring.algo.ts",
-                          "line": 16,
-                          "end_line": 16,
-                          "column": 28,
-                          "end_column": 47
-                        },
-                        "wtype": {
-                          "_type": "WTuple",
-                          "name": "tuple",
-                          "immutable": true,
-                          "types": [
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            {
-                              "_type": "WType",
-                              "name": "biguint",
-                              "immutable": true
-                            }
-                          ]
-                        },
-                        "items": [
-                          {
-                            "_type": "TupleItemExpression",
-                            "source_location": {
-                              "file": "tests/approvals/array-destructuring.algo.ts",
-                              "line": 16,
-                              "end_line": 16,
-                              "column": 15,
+                              "column": 28,
                               "end_column": 47
                             },
                             "wtype": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
+                              "_type": "WTuple",
+                              "name": "tuple",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "BytesWType",
+                                  "name": "bytes",
+                                  "immutable": true,
+                                  "length": null
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "bool",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "biguint",
+                                  "immutable": true
+                                }
+                              ]
                             },
-                            "base": {
-                              "_type": "SingleEvaluation",
+                            "source": {
+                              "_type": "SubroutineCallExpression",
                               "source_location": {
                                 "file": "tests/approvals/array-destructuring.algo.ts",
                                 "line": 16,
@@ -2023,70 +2023,70 @@
                                   }
                                 ]
                               },
-                              "source": {
-                                "_type": "SubroutineCallExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/array-destructuring.algo.ts",
-                                  "line": 16,
-                                  "end_line": 16,
-                                  "column": 28,
-                                  "end_column": 47
-                                },
-                                "wtype": {
-                                  "_type": "WTuple",
-                                  "name": "tuple",
-                                  "immutable": true,
-                                  "types": [
-                                    {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    },
-                                    {
-                                      "_type": "BytesWType",
-                                      "name": "bytes",
-                                      "immutable": true,
-                                      "length": null
-                                    },
-                                    {
-                                      "_type": "WType",
-                                      "name": "bool",
-                                      "immutable": true
-                                    },
-                                    {
-                                      "_type": "WType",
-                                      "name": "biguint",
-                                      "immutable": true
-                                    }
-                                  ]
-                                },
-                                "target": {
-                                  "_type": "ContractMethodTarget",
-                                  "cref": "tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo",
-                                  "member_name": "produceItems"
-                                },
-                                "args": []
+                              "target": {
+                                "_type": "ContractMethodTarget",
+                                "cref": "tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo",
+                                "member_name": "produceItems"
                               },
-                              "_id": "3"
+                              "args": []
                             },
-                            "index": 0
+                            "_id": "2"
                           },
-                          {
-                            "_type": "TupleItemExpression",
+                          "index": 0
+                        },
+                        {
+                          "_type": "TupleItemExpression",
+                          "source_location": {
+                            "file": "tests/approvals/array-destructuring.algo.ts",
+                            "line": 16,
+                            "end_line": 16,
+                            "column": 15,
+                            "end_column": 47
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "biguint",
+                            "immutable": true
+                          },
+                          "base": {
+                            "_type": "SingleEvaluation",
                             "source_location": {
                               "file": "tests/approvals/array-destructuring.algo.ts",
                               "line": 16,
                               "end_line": 16,
-                              "column": 15,
+                              "column": 28,
                               "end_column": 47
                             },
                             "wtype": {
-                              "_type": "WType",
-                              "name": "biguint",
-                              "immutable": true
+                              "_type": "WTuple",
+                              "name": "tuple",
+                              "immutable": true,
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "BytesWType",
+                                  "name": "bytes",
+                                  "immutable": true,
+                                  "length": null
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "bool",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "biguint",
+                                  "immutable": true
+                                }
+                              ]
                             },
-                            "base": {
-                              "_type": "SingleEvaluation",
+                            "source": {
+                              "_type": "SubroutineCallExpression",
                               "source_location": {
                                 "file": "tests/approvals/array-destructuring.algo.ts",
                                 "line": 16,
@@ -2122,59 +2122,59 @@
                                   }
                                 ]
                               },
-                              "source": {
-                                "_type": "SubroutineCallExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/array-destructuring.algo.ts",
-                                  "line": 16,
-                                  "end_line": 16,
-                                  "column": 28,
-                                  "end_column": 47
-                                },
-                                "wtype": {
-                                  "_type": "WTuple",
-                                  "name": "tuple",
-                                  "immutable": true,
-                                  "types": [
-                                    {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    },
-                                    {
-                                      "_type": "BytesWType",
-                                      "name": "bytes",
-                                      "immutable": true,
-                                      "length": null
-                                    },
-                                    {
-                                      "_type": "WType",
-                                      "name": "bool",
-                                      "immutable": true
-                                    },
-                                    {
-                                      "_type": "WType",
-                                      "name": "biguint",
-                                      "immutable": true
-                                    }
-                                  ]
-                                },
-                                "target": {
-                                  "_type": "ContractMethodTarget",
-                                  "cref": "tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo",
-                                  "member_name": "produceItems"
-                                },
-                                "args": []
+                              "target": {
+                                "_type": "ContractMethodTarget",
+                                "cref": "tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo",
+                                "member_name": "produceItems"
                               },
-                              "_id": "3"
+                              "args": []
                             },
-                            "index": 3
-                          }
-                        ]
-                      }
+                            "_id": "2"
+                          },
+                          "index": 3
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "_type": "SingleEvaluation",
+                    "source_location": {
+                      "file": "tests/approvals/array-destructuring.algo.ts",
+                      "line": 16,
+                      "end_line": 16,
+                      "column": 28,
+                      "end_column": 47
                     },
-                    {
-                      "_type": "SingleEvaluation",
+                    "wtype": {
+                      "_type": "WTuple",
+                      "name": "tuple",
+                      "immutable": true,
+                      "types": [
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        {
+                          "_type": "BytesWType",
+                          "name": "bytes",
+                          "immutable": true,
+                          "length": null
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "bool",
+                          "immutable": true
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "biguint",
+                          "immutable": true
+                        }
+                      ]
+                    },
+                    "source": {
+                      "_type": "SubroutineCallExpression",
                       "source_location": {
                         "file": "tests/approvals/array-destructuring.algo.ts",
                         "line": 16,
@@ -2210,55 +2210,16 @@
                           }
                         ]
                       },
-                      "source": {
-                        "_type": "SubroutineCallExpression",
-                        "source_location": {
-                          "file": "tests/approvals/array-destructuring.algo.ts",
-                          "line": 16,
-                          "end_line": 16,
-                          "column": 28,
-                          "end_column": 47
-                        },
-                        "wtype": {
-                          "_type": "WTuple",
-                          "name": "tuple",
-                          "immutable": true,
-                          "types": [
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            {
-                              "_type": "BytesWType",
-                              "name": "bytes",
-                              "immutable": true,
-                              "length": null
-                            },
-                            {
-                              "_type": "WType",
-                              "name": "bool",
-                              "immutable": true
-                            },
-                            {
-                              "_type": "WType",
-                              "name": "biguint",
-                              "immutable": true
-                            }
-                          ]
-                        },
-                        "target": {
-                          "_type": "ContractMethodTarget",
-                          "cref": "tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo",
-                          "member_name": "produceItems"
-                        },
-                        "args": []
+                      "target": {
+                        "_type": "ContractMethodTarget",
+                        "cref": "tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo",
+                        "member_name": "produceItems"
                       },
-                      "_id": "3"
-                    }
-                  ]
-                },
-                "_id": "2"
+                      "args": []
+                    },
+                    "_id": "2"
+                  }
+                ]
               }
             },
             {
@@ -3433,7 +3394,7 @@
                         },
                         "args": []
                       },
-                      "_id": "4"
+                      "_id": "3"
                     },
                     "index": {
                       "_type": "IntegerConstant",
@@ -3518,7 +3479,7 @@
                         },
                         "args": []
                       },
-                      "_id": "4"
+                      "_id": "3"
                     },
                     "index": {
                       "_type": "IntegerConstant",
@@ -3603,7 +3564,7 @@
                         },
                         "args": []
                       },
-                      "_id": "4"
+                      "_id": "3"
                     },
                     "index": {
                       "_type": "IntegerConstant",
@@ -4332,7 +4293,7 @@
                                         }
                                       ]
                                     },
-                                    "_id": "6"
+                                    "_id": "5"
                                   },
                                   "index": 0
                                 },
@@ -4437,7 +4398,7 @@
                                         }
                                       ]
                                     },
-                                    "_id": "6"
+                                    "_id": "5"
                                   },
                                   "index": 1
                                 }
@@ -4600,7 +4561,7 @@
                                         }
                                       ]
                                     },
-                                    "_id": "6"
+                                    "_id": "5"
                                   },
                                   "index": 0
                                 },
@@ -4705,7 +4666,7 @@
                                         }
                                       ]
                                     },
-                                    "_id": "6"
+                                    "_id": "5"
                                   },
                                   "index": 1
                                 }
@@ -4714,7 +4675,7 @@
                           }
                         ]
                       },
-                      "_id": "5"
+                      "_id": "4"
                     },
                     "index": 0
                   },
@@ -5004,7 +4965,7 @@
                                         }
                                       ]
                                     },
-                                    "_id": "6"
+                                    "_id": "5"
                                   },
                                   "index": 0
                                 },
@@ -5109,7 +5070,7 @@
                                         }
                                       ]
                                     },
-                                    "_id": "6"
+                                    "_id": "5"
                                   },
                                   "index": 1
                                 }
@@ -5272,7 +5233,7 @@
                                         }
                                       ]
                                     },
-                                    "_id": "6"
+                                    "_id": "5"
                                   },
                                   "index": 0
                                 },
@@ -5377,7 +5338,7 @@
                                         }
                                       ]
                                     },
-                                    "_id": "6"
+                                    "_id": "5"
                                   },
                                   "index": 1
                                 }
@@ -5386,7 +5347,7 @@
                           }
                         ]
                       },
-                      "_id": "5"
+                      "_id": "4"
                     },
                     "index": 1
                   }

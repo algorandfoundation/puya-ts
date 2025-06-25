@@ -7,15 +7,15 @@ subroutine testUintN(n: uint64, b: biguint, c: arc4.uint256): void
   assert(len(reinterpret_cast<bytes>(4)) == 1)
   assert(reinterpret_cast<bytes>(255) == 0xff)
   assert(len(reinterpret_cast<bytes>(0)) == 2)
-  z: arc4.uint8 = ($0 = ARC4_ENCODE(n, wtype=arc4.uint8))
-  z_native: uint64 = ($1 = ARC4_DECODE(z))
+  z: arc4.uint8 = ARC4_ENCODE(n, wtype=arc4.uint8)
+  z_native: uint64 = ARC4_DECODE(z)
   assert(z_native == n)
-  a: arc4.uint128 = ($2 = ARC4_ENCODE(b, wtype=arc4.uint128))
-  a_native: biguint = ($3 = ARC4_DECODE(a))
+  a: arc4.uint128 = ARC4_ENCODE(b, wtype=arc4.uint128)
+  a_native: biguint = ARC4_DECODE(a)
   assert(a_native == b)
   assert(len(reinterpret_cast<bytes>(c)) == 32)
-  a_bytes: bytes = ($4 = reinterpret_cast<bytes>(a))
-  a_from_bytes: arc4.uint128 = ($5 = reinterpret_cast<arc4.uint128>(a_bytes))
+  a_bytes: bytes = reinterpret_cast<bytes>(a)
+  a_from_bytes: arc4.uint128 = reinterpret_cast<arc4.uint128>(a_bytes)
   assert(reinterpret_cast<bytes>(a_from_bytes) == reinterpret_cast<bytes>(a))
   assert(ARC4_DECODE(12) == 12)
   assert(reinterpret_cast<biguint>(reinterpret_cast<bytes>(50545)) == 50545)
@@ -25,37 +25,37 @@ subroutine testStr(): void
 {
   assert(reinterpret_cast<bytes>("") == reinterpret_cast<bytes>(0), comment=Empty string should equal the uint16 length prefix)
   assert(ARC4_DECODE("Hello") == "Hello")
-  s2_bytes: bytes = ($6 = reinterpret_cast<bytes>("Hello"))
-  s2_from_bytes: arc4.dynamic_array<arc4.byte> = ($7 = reinterpret_cast<arc4.dynamic_array<arc4.byte>>(s2_bytes))
+  s2_bytes: bytes = reinterpret_cast<bytes>("Hello")
+  s2_from_bytes: arc4.dynamic_array<arc4.byte> = reinterpret_cast<arc4.dynamic_array<arc4.byte>>(s2_bytes)
   assert(reinterpret_cast<bytes>("Hello") == reinterpret_cast<bytes>(s2_from_bytes))
 }
 subroutine testDynamicBytes(someBytes: bytes): void
 {
   assert(ARC4_DECODE(0x0000) == 0x, comment=No args should give empty bytes)
   assert(0x0000 == reinterpret_cast<bytes>(0), comment=bytes prop should return length header (of 0))
-  db2: arc4.dynamic_array<arc4.byte> = ($8 = ARC4_ENCODE(someBytes, wtype=arc4.dynamic_array<arc4.byte>))
+  db2: arc4.dynamic_array<arc4.byte> = ARC4_ENCODE(someBytes, wtype=arc4.dynamic_array<arc4.byte>)
   assert(ARC4_DECODE(db2) == someBytes)
   assert(ARC4_DECODE(0x000568656c6c6f) == "hello")
-  db4: arc4.dynamic_array<arc4.byte> = ($9 = 0x000568656c6c6f.concat(0x000620776f726c64))
+  db4: arc4.dynamic_array<arc4.byte> = 0x000568656c6c6f.concat(0x000620776f726c64)
   assert(ARC4_DECODE(db4) == "hello world")
 }
 subroutine testStaticBytes(): void
 {
-  s5: arc4.static_array<arc4.static_array<arc4.byte>> = ($10 = new arc4.static_array<arc4.static_array<arc4.byte>>(0xaabbccddee))
+  s5: arc4.static_array<arc4.static_array<arc4.byte>> = new arc4.static_array<arc4.static_array<arc4.byte>>(0xaabbccddee)
   assert(ARC4_DECODE(s5[0]) == 0xaabbccddee)
-  s4: arc4.dynamic_array<arc4.byte> = ($11 = 0x000400000000.concat(0xaabbccddee))
+  s4: arc4.dynamic_array<arc4.byte> = 0x000400000000.concat(0xaabbccddee)
   assert(ARC4_DECODE(s4) == 0x00000000aabbccddee)
 }
 subroutine testArrays(n: arc4.uint64): void
 {
-  myArray: arc4.dynamic_array<arc4.uint64> = ($12 = new arc4.dynamic_array<arc4.uint64>(n, n, n))
+  myArray: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>(n, n, n)
   myArray.push(...#[n])
-  doubleArray: arc4.dynamic_array<arc4.uint64> = ($13 = myArray.concat(myArray))
+  doubleArray: arc4.dynamic_array<arc4.uint64> = myArray.concat(myArray)
   assert(reinterpret_cast<bytes>(doubleArray) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.uint64>(n, n, n, n, n, n, n, n)))
-  myStatic: arc4.static_array<arc4.uint64> = ($14 = new arc4.static_array<arc4.uint64>(n, n))
+  myStatic: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n)
   assert(reinterpret_cast<bytes>(myStatic[0]) == reinterpret_cast<bytes>(myArray.pop()))
   myStatic[1]: arc4.uint64 = 50
-  myStatic2: arc4.static_array<arc4.uint64> = ($15 = new arc4.static_array<arc4.uint64>(n, n, n))
+  myStatic2: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n, n)
   assert(myStatic2.length == 3 and reinterpret_cast<bytes>(myStatic2[0]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(myStatic2[1]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(myStatic2[2]) == reinterpret_cast<bytes>(n), comment=assert target is match for conditions)
   assert(doubleArray.length == 8 and reinterpret_cast<bytes>(doubleArray[0]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(doubleArray[1]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(doubleArray[2]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(doubleArray[3]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(doubleArray[4]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(doubleArray[5]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(doubleArray[6]) == reinterpret_cast<bytes>(n) and reinterpret_cast<bytes>(doubleArray[7]) == reinterpret_cast<bytes>(n), comment=assert target is match for conditions)
 }
@@ -65,7 +65,7 @@ subroutine testByte(): void
 }
 subroutine testAddress(): void
 {
-  b: arc4.static_array<arc4.byte> = ($16 = reinterpret_cast<arc4.static_array<arc4.byte>>(txn<Sender>()))
+  b: arc4.static_array<arc4.byte> = reinterpret_cast<arc4.static_array<arc4.byte>>(txn<Sender>())
   assert(ARC4_DECODE(b) == txn<Sender>())
   assert(reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")) != reinterpret_cast<bytes>(b), comment=Zero address should not match sender)
   assert(reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")) == reinterpret_cast<bytes>(Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")), comment=Two zero addresses should match)
@@ -73,11 +73,11 @@ subroutine testAddress(): void
 }
 subroutine testTuple(): void
 {
-  t: arc4.tuple<arc4.uint64> = ($17 = ARC4_ENCODE(#[34], wtype=arc4.tuple<arc4.uint64>))
-  firstItem: arc4.uint64 = ($18 = t.0)
-  firstItemIndexer: arc4.uint64 = ($19 = ARC4_DECODE(t).0)
+  t: arc4.tuple<arc4.uint64> = ARC4_ENCODE(#[34], wtype=arc4.tuple<arc4.uint64>)
+  firstItem: arc4.uint64 = t.0
+  firstItemIndexer: arc4.uint64 = ARC4_DECODE(t).0
   assert(reinterpret_cast<bytes>(firstItem) == reinterpret_cast<bytes>(firstItemIndexer))
-  t1: arc4.tuple<arc4.static_array<arc4.byte>,arc4.byte> = ($20 = ARC4_ENCODE(#[Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ"), 0], wtype=arc4.tuple<arc4.static_array<arc4.byte>,arc4.byte>))
+  t1: arc4.tuple<arc4.static_array<arc4.byte>,arc4.byte> = ARC4_ENCODE(#[Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ"), 0], wtype=arc4.tuple<arc4.static_array<arc4.byte>,arc4.byte>)
   assert(2 == 2)
 }
 contract Arc4TypesTestContract
@@ -96,7 +96,7 @@ contract Arc4TypesTestContract
     tests/approvals/arc4-types.algo.ts::testDynamicBytes("hmmmmmmmmm")
     tests/approvals/arc4-types.algo.ts::testStaticBytes()
     tests/approvals/arc4-types.algo.ts::testZeroValues()
-    result: arc4.dynamic_array<arc4.uint64> = ($21 = new arc4.dynamic_array<arc4.uint64>())
+    result: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>()
     assert(result.length == 0)
     return True
   }

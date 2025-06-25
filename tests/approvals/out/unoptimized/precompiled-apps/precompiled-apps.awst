@@ -93,7 +93,7 @@ contract HelloTemplate
   constructor(): void
   {
     super.constructor()
-    GlobalState["greeting"]: string = ($0 = TemplateVar[string](TMPL_GREETING))
+    GlobalState["greeting"]: string = TemplateVar[string](TMPL_GREETING)
   }
   
   HelloBase::constructor(): void
@@ -150,7 +150,7 @@ contract HelloTemplateCustomPrefix
   constructor(): void
   {
     super.constructor()
-    GlobalState["greeting"]: string = ($1 = TemplateVar[string](PRFX_GREETING))
+    GlobalState["greeting"]: string = TemplateVar[string](PRFX_GREETING)
   }
   
   HelloBase::constructor(): void
@@ -217,13 +217,13 @@ contract ReceivesTxns
   
   receivesAnyTxn(txn: group_transaction): uint64
   {
-    if (($2 = gtxns<TypeEnum>(txn)) == reinterpret_cast<uint64>(3)) {
+    if (($0 = gtxns<TypeEnum>(txn)) == reinterpret_cast<uint64>(3)) {
       #switch₁ᶜ₀:
-      return (Boolean(($3 = reinterpret_cast<uint64>(gtxns<CreatedAssetID>(txn)))) ? $3 : reinterpret_cast<uint64>(gtxns<ConfigAsset>(txn)))
+      return (Boolean(($1 = reinterpret_cast<uint64>(gtxns<CreatedAssetID>(txn)))) ? $1 : reinterpret_cast<uint64>(gtxns<ConfigAsset>(txn)))
     }
-    if ($2 == reinterpret_cast<uint64>(6)) {
+    if ($0 == reinterpret_cast<uint64>(6)) {
       #switch₁ᶜ₁:
-      return (Boolean(($4 = reinterpret_cast<uint64>(gtxns<CreatedApplicationID>(txn)))) ? $4 : reinterpret_cast<uint64>(gtxns<ApplicationID>(txn)))
+      return (Boolean(($2 = reinterpret_cast<uint64>(gtxns<CreatedApplicationID>(txn)))) ? $2 : reinterpret_cast<uint64>(gtxns<ApplicationID>(txn)))
     }
     #switch₁ᶜ₂:
     return 0

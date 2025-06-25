@@ -29,12 +29,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%encoded%3#1: Encoded(uint8) = (concat 0x b#0)
         let aggregate%encoded%4#1: Encoded(uint8,uint8) = (concat aggregate%encoded%3#1 b#0)
         let aggregate%encoded%5#1: Encoded(uint8,uint8) = (concat aggregate%encoded%4#1 0x)
-        let tmp%6#1: Encoded(uint8,uint8) = aggregate%encoded%5#1
-        let aggregate%encoded%6#1: Encoded((uint8,uint8)) = (concat 0x tmp%6#1)
+        let tmp%7#1: Encoded(uint8,uint8) = aggregate%encoded%5#1
+        let aggregate%encoded%6#1: Encoded((uint8,uint8)) = (concat 0x tmp%7#1)
         let aggregate%encoded%7#1: Encoded((uint8,uint8),uint8) = (concat aggregate%encoded%6#1 a#0)
         let aggregate%encoded%8#1: Encoded((uint8,uint8),uint8) = (concat aggregate%encoded%7#1 0x)
-        let tmp%7#1: Encoded((uint8,uint8),uint8) = aggregate%encoded%8#1
-        let event%5#0: bytes = (concat method "Swapped((uint8,uint8),uint8)" tmp%7#1)
+        let tmp%8#1: Encoded((uint8,uint8),uint8) = aggregate%encoded%8#1
+        let event%5#0: bytes = (concat method "Swapped((uint8,uint8),uint8)" tmp%8#1)
         (log event%5#0)
         (log event%5#0)
         let aggregate%encoded%9#1: Encoded(uint8) = (concat 0x b#0)
@@ -43,17 +43,17 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
         let aggregate%encoded%11#1: bytes = (concat aggregate%len_u16%0#1 aggregate%encoded%10#1)
         let aggregate%encoded%12#1: Encoded(len+uint8[]) = (concat aggregate%encoded%11#1 0x)
-        let tmp%10#1: Encoded(len+uint8[]) = aggregate%encoded%12#1
-        let aggregate%tail%0#1: bytes = (concat 0x tmp%10#1)
-        let aggregate%data_length%0#1: uint64 = (len tmp%10#1)
+        let tmp%11#1: Encoded(len+uint8[]) = aggregate%encoded%12#1
+        let aggregate%tail%0#1: bytes = (concat 0x tmp%11#1)
+        let aggregate%data_length%0#1: uint64 = (len tmp%11#1)
         let aggregate%current_tail_offset%0#1: uint64 = (+ 3u aggregate%data_length%0#1)
         let aggregate%as_bytes%1#1: bytes[8] = (itob 3u)
         let aggregate%offset_as_uint16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%1#1)
         let aggregate%encoded%13#1: Encoded((len+uint8[])) = (concat 0x aggregate%offset_as_uint16%0#1)
         let aggregate%encoded%14#1: Encoded((len+uint8[]),uint8) = (concat aggregate%encoded%13#1 a#0)
         let aggregate%encoded%15#1: Encoded((len+uint8[]),uint8) = (concat aggregate%encoded%14#1 aggregate%tail%0#1)
-        let tmp%11#1: Encoded((len+uint8[]),uint8) = aggregate%encoded%15#1
-        let event%7#0: bytes = (concat method "Swapped(uint8[],uint8)" tmp%11#1)
+        let tmp%12#1: Encoded((len+uint8[]),uint8) = aggregate%encoded%15#1
+        let event%7#0: bytes = (concat method "Swapped(uint8[],uint8)" tmp%12#1)
         (log event%7#0)
         let tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__%0#0: bool = 1u
         goto block@13

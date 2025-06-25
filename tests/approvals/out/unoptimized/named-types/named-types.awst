@@ -32,9 +32,9 @@ contract MyContract
   
   testing(): readonly [XY{ x: uint64, y: uint64 }, YX{ y: uint64, x: uint64 }, Readonly<object>{ x: uint64, y: uint64 }]
   {
-    a: XY{ x: uint64, y: uint64 } = ($3 = tests/approvals/named-types.algo.ts::MyContract.getXY())
-    b: YX{ y: uint64, x: uint64 } = ($4 = tests/approvals/named-types.algo.ts::MyContract.getYX())
-    c: Readonly<object>{ x: uint64, y: uint64 } = #{ x: ($5 = tests/approvals/named-types.algo.ts::MyContract.getAnon()).x, y: $5.y }
+    a: XY{ x: uint64, y: uint64 } = tests/approvals/named-types.algo.ts::MyContract.getXY()
+    b: YX{ y: uint64, x: uint64 } = tests/approvals/named-types.algo.ts::MyContract.getYX()
+    c: Readonly<object>{ x: uint64, y: uint64 } = #{ x: ($3 = tests/approvals/named-types.algo.ts::MyContract.getAnon()).x, y: $3.y }
     return #[a, b, c]
   }
   
