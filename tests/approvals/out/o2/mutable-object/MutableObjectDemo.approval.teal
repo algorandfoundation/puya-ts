@@ -24,7 +24,7 @@ main_after_if_else@20:
     return
 
 main_setPlugin_route@13:
-    // tests/approvals/mutable-object.algo.ts:120
+    // tests/approvals/mutable-object.algo.ts:123
     // public setPlugin(key: string) {
     txn OnCompletion
     !
@@ -35,12 +35,12 @@ main_setPlugin_route@13:
     // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 1
     extract 2 0
-    // tests/approvals/mutable-object.algo.ts:100
+    // tests/approvals/mutable-object.algo.ts:103
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
     bytec_1 // "plugins"
     swap
     concat
-    // tests/approvals/mutable-object.algo.ts:121-133
+    // tests/approvals/mutable-object.algo.ts:124-136
     // this.plugins(key).value = {
     //   lastValidRound: new arc4.UintN64(1),
     //   cooldown: new arc4.UintN64(),
@@ -59,33 +59,33 @@ main_setPlugin_route@13:
     pop
     pushbytes 0x00000000000000010000000000000000000000000000000000001b0001a78000de00000000000000010000000000000001
     box_put
-    // tests/approvals/mutable-object.algo.ts:120
+    // tests/approvals/mutable-object.algo.ts:123
     // public setPlugin(key: string) {
     intc_1 // 1
     return
 
 main_getMain_route@12:
-    // tests/approvals/mutable-object.algo.ts:110
+    // tests/approvals/mutable-object.algo.ts:113
     // public getMain() {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/mutable-object.algo.ts:102
+    // tests/approvals/mutable-object.algo.ts:105
     // plugin = Box<PluginInfo>({ key: 'main' })
     pushbytes "main"
-    // tests/approvals/mutable-object.algo.ts:111
+    // tests/approvals/mutable-object.algo.ts:114
     // const value = clone(this.plugin.value)
     box_get
     assert // Box must have value
-    // tests/approvals/mutable-object.algo.ts:112
+    // tests/approvals/mutable-object.algo.ts:115
     // assert(value.lastCalled.native > 0, 'Last called not zero')
     dup
     intc_3 // 16
     extract_uint64
     assert // Last called not zero
-    // tests/approvals/mutable-object.algo.ts:110
+    // tests/approvals/mutable-object.algo.ts:113
     // public getMain() {
     bytec_0 // 0x151f7c75
     swap
@@ -95,7 +95,7 @@ main_getMain_route@12:
     return
 
 main_getPlugin_route@11:
-    // tests/approvals/mutable-object.algo.ts:104
+    // tests/approvals/mutable-object.algo.ts:107
     // public getPlugin(key: string): PluginInfo {
     txn OnCompletion
     !
@@ -106,22 +106,22 @@ main_getPlugin_route@11:
     // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 1
     extract 2 0
-    // tests/approvals/mutable-object.algo.ts:100
+    // tests/approvals/mutable-object.algo.ts:103
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
     bytec_1 // "plugins"
     swap
     concat
-    // tests/approvals/mutable-object.algo.ts:105
+    // tests/approvals/mutable-object.algo.ts:108
     // const value = clone(this.plugins(key).value)
     box_get
     assert // Box must have value
-    // tests/approvals/mutable-object.algo.ts:106
+    // tests/approvals/mutable-object.algo.ts:109
     // assert(value.lastCalled.native > 0, 'Last called not zero')
     dup
     intc_3 // 16
     extract_uint64
     assert // Last called not zero
-    // tests/approvals/mutable-object.algo.ts:104
+    // tests/approvals/mutable-object.algo.ts:107
     // public getPlugin(key: string): PluginInfo {
     bytec_0 // 0x151f7c75
     swap
@@ -131,7 +131,7 @@ main_getPlugin_route@11:
     return
 
 main_testArc4Encoding_route@10:
-    // tests/approvals/mutable-object.algo.ts:89
+    // tests/approvals/mutable-object.algo.ts:92
     // testArc4Encoding(p: Point) {
     txn OnCompletion
     !
@@ -141,7 +141,7 @@ main_testArc4Encoding_route@10:
     // tests/approvals/mutable-object.algo.ts:12
     // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/mutable-object.algo.ts:90
+    // tests/approvals/mutable-object.algo.ts:93
     // assert(p.x !== p.y, 'For the purpose of this test, a should not equal b')
     dup
     intc_2 // 8
@@ -152,7 +152,7 @@ main_testArc4Encoding_route@10:
     dup2
     !=
     assert // For the purpose of this test, a should not equal b
-    // tests/approvals/mutable-object.algo.ts:91-94
+    // tests/approvals/mutable-object.algo.ts:94-97
     // const obj: Vector = {
     //   x: p.x,
     //   y: p.y,
@@ -162,7 +162,7 @@ main_testArc4Encoding_route@10:
     swap
     itob
     concat
-    // tests/approvals/mutable-object.algo.ts:97
+    // tests/approvals/mutable-object.algo.ts:100
     // assert(pEncoded === objEncoded.slice(8).concat(objEncoded.slice(0, 8)), 'Encoded order should be swapped')
     dup
     len
@@ -190,13 +190,13 @@ main_testArc4Encoding_route@10:
     concat
     ==
     assert // Encoded order should be swapped
-    // tests/approvals/mutable-object.algo.ts:89
+    // tests/approvals/mutable-object.algo.ts:92
     // testArc4Encoding(p: Point) {
     intc_1 // 1
     return
 
 main_testAssertMatch_route@9:
-    // tests/approvals/mutable-object.algo.ts:72
+    // tests/approvals/mutable-object.algo.ts:75
     // testAssertMatch(x: uint64) {
     txn OnCompletion
     !
@@ -209,13 +209,13 @@ main_testAssertMatch_route@9:
     btoi
     dup
     bury 2
-    // tests/approvals/mutable-object.algo.ts:75
+    // tests/approvals/mutable-object.algo.ts:78
     // y: (b = x * 2),
     pushint 2 // 2
     *
     dup
     bury 11
-    // tests/approvals/mutable-object.algo.ts:74-77
+    // tests/approvals/mutable-object.algo.ts:77-80
     // const obj: Vector = {
     //   y: (b = x * 2),
     //   x: b,
@@ -226,7 +226,7 @@ main_testAssertMatch_route@9:
     concat
     dup
     bury 14
-    // tests/approvals/mutable-object.algo.ts:78-81
+    // tests/approvals/mutable-object.algo.ts:81-84
     // assertMatch(obj, {
     //   y: x * 2,
     //   x: x * 2,
@@ -246,13 +246,13 @@ main_testAssertMatch_route@9:
     intc_1 // 1
 
 main_bool_merge@36:
-    // tests/approvals/mutable-object.algo.ts:78-81
+    // tests/approvals/mutable-object.algo.ts:81-84
     // assertMatch(obj, {
     //   y: x * 2,
     //   x: x * 2,
     // })
     assert // assert target is match for conditions
-    // tests/approvals/mutable-object.algo.ts:82
+    // tests/approvals/mutable-object.algo.ts:85
     // const v = { y: obj.y, x: obj.x }
     dig 11
     intc_0 // 0
@@ -266,7 +266,7 @@ main_bool_merge@36:
     concat
     dup
     bury 13
-    // tests/approvals/mutable-object.algo.ts:84
+    // tests/approvals/mutable-object.algo.ts:87
     // assertMatch(obj, { x: v.x, y: v.y })
     intc_2 // 8
     extract_uint64
@@ -281,10 +281,10 @@ main_bool_merge@36:
     intc_1 // 1
 
 main_bool_merge@40:
-    // tests/approvals/mutable-object.algo.ts:84
+    // tests/approvals/mutable-object.algo.ts:87
     // assertMatch(obj, { x: v.x, y: v.y })
     assert // assert target is match for conditions
-    // tests/approvals/mutable-object.algo.ts:85
+    // tests/approvals/mutable-object.algo.ts:88
     // assertMatch(obj, { y: { greaterThan: x } })
     dig 7
     dig 1
@@ -292,12 +292,12 @@ main_bool_merge@40:
     cover 2
     >
     assert // assert target is match for conditions
-    // tests/approvals/mutable-object.algo.ts:86
+    // tests/approvals/mutable-object.algo.ts:89
     // assertMatch(obj, { x: { greaterThan: x } })
     dig 5
     <
     assert // assert target is match for conditions
-    // tests/approvals/mutable-object.algo.ts:72
+    // tests/approvals/mutable-object.algo.ts:75
     // testAssertMatch(x: uint64) {
     intc_1 // 1
     return
@@ -318,12 +318,6 @@ main_testMethodSelector_route@8:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/mutable-object.algo.ts:65
-    // assert(methodSelector(MutableObjectDemo.prototype.getPlugin) === methodSelector('getPlugin(string)(uint64,uint64,uint64,bool)'))
-    intc_0 // 0
-    assert
-    // tests/approvals/mutable-object.algo.ts:60
-    // public testMethodSelector() {
     intc_1 // 1
     return
 

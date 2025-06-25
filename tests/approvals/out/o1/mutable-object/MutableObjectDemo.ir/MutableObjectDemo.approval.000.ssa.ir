@@ -212,7 +212,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4
         (assert tmp%32#0) // can only call when not creating
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testMethodSelector()
         return 1u
-    block@8: // testAssertMatch_route_L72
+    block@8: // testAssertMatch_route_L75
         let tmp%33#0: uint64 = (txn OnCompletion)
         let tmp%34#0: bool = (== tmp%33#0 NoOp)
         (assert tmp%34#0) // OnCompletion is not NoOp
@@ -223,7 +223,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4
         let tmp%37#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%2#0)
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertMatch(tmp%37#0)
         return 1u
-    block@9: // testArc4Encoding_route_L89
+    block@9: // testArc4Encoding_route_L92
         let tmp%38#0: uint64 = (txn OnCompletion)
         let tmp%39#0: bool = (== tmp%38#0 NoOp)
         (assert tmp%39#0) // OnCompletion is not NoOp
@@ -233,7 +233,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4
         let reinterpret_Encoded(uint64,uint64)%4#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Encoding(reinterpret_Encoded(uint64,uint64)%4#0)
         return 1u
-    block@10: // getPlugin_route_L104
+    block@10: // getPlugin_route_L107
         let tmp%42#0: uint64 = (txn OnCompletion)
         let tmp%43#0: bool = (== tmp%42#0 NoOp)
         (assert tmp%43#0) // OnCompletion is not NoOp
@@ -246,7 +246,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4
         let tmp%48#0: bytes = (concat 0x151f7c75 tmp%47#0)
         (log tmp%48#0)
         return 1u
-    block@11: // getMain_route_L110
+    block@11: // getMain_route_L113
         let tmp%49#0: uint64 = (txn OnCompletion)
         let tmp%50#0: bool = (== tmp%49#0 NoOp)
         (assert tmp%50#0) // OnCompletion is not NoOp
@@ -257,7 +257,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4
         let tmp%54#0: bytes = (concat 0x151f7c75 tmp%53#0)
         (log tmp%54#0)
         return 1u
-    block@12: // setPlugin_route_L120
+    block@12: // setPlugin_route_L123
         let tmp%55#0: uint64 = (txn OnCompletion)
         let tmp%56#0: bool = (== tmp%55#0 NoOp)
         (assert tmp%56#0) // OnCompletion is not NoOp
@@ -534,14 +534,14 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testMethodS
     block@0: // L60
         let tmp%0#0: bool = (== method "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)" method "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)")
         (assert tmp%0#0)
-        let tmp%1#0: bool = (== method "getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])" method "getPlugin(string)(uint64,uint64,uint64,bool)")
+        let tmp%1#0: bool = (== method "getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])" method "getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])")
         (assert tmp%1#0)
         let tmp%2#0: bool = (== method "testNestedObjects(((uint64,uint64),(uint64,uint64)))void" method "testNestedObjects(((uint64,uint64),(uint64,uint64)))void")
         (assert tmp%2#0)
         return 
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertMatch(x: uint64) -> void:
-    block@0: // L72
+    block@0: // L75
         let tmp%0#0: uint64 = (* x#0 2u)
         let b#0: uint64 = tmp%0#0
         let tmp%1#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(b#0, b#0)
@@ -551,19 +551,19 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
         let tmp%2#0: uint64 = (* x#0 2u)
         let tmp%3#0: bool = (== values%0#0 tmp%2#0)
         goto tmp%3#0 ? block@1 : block@3
-    block@1: // and_contd_L78
+    block@1: // and_contd_L81
         let tuple_item%1#0: Encoded(uint64) = extract_value(obj#0, 0)
         let values%1#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
         let tmp%4#0: uint64 = (* x#0 2u)
         let tmp%5#0: bool = (== values%1#0 tmp%4#0)
         goto tmp%5#0 ? block@2 : block@3
-    block@2: // bool_true_L78
+    block@2: // bool_true_L81
         let and_result%0#0: bool = 1u
         goto block@4
-    block@3: // bool_false_L78
+    block@3: // bool_false_L81
         let and_result%0#1: bool = 0u
         goto block@4
-    block@4: // bool_merge_L78
+    block@4: // bool_merge_L81
         let and_result%0#2: bool = φ(and_result%0#0 <- block@2, and_result%0#1 <- block@3)
         (assert and_result%0#2) // assert target is match for conditions
         let tuple_item%2#0: Encoded(uint64) = extract_value(obj#0, 1)
@@ -578,20 +578,20 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
         let values%5#0: uint64 = decode_bytes<uint64>(tuple_item%5#0)
         let tmp%7#0: bool = (== values%4#0 values%5#0)
         goto tmp%7#0 ? block@5 : block@7
-    block@5: // and_contd_L84
+    block@5: // and_contd_L87
         let tuple_item%6#0: Encoded(uint64) = extract_value(obj#0, 1)
         let values%6#0: uint64 = decode_bytes<uint64>(tuple_item%6#0)
         let tuple_item%7#0: Encoded(uint64) = extract_value(v#0, 0)
         let values%7#0: uint64 = decode_bytes<uint64>(tuple_item%7#0)
         let tmp%8#0: bool = (== values%6#0 values%7#0)
         goto tmp%8#0 ? block@6 : block@7
-    block@6: // bool_true_L84
+    block@6: // bool_true_L87
         let and_result%1#0: bool = 1u
         goto block@8
-    block@7: // bool_false_L84
+    block@7: // bool_false_L87
         let and_result%1#1: bool = 0u
         goto block@8
-    block@8: // bool_merge_L84
+    block@8: // bool_merge_L87
         let and_result%1#2: bool = φ(and_result%1#0 <- block@6, and_result%1#1 <- block@7)
         (assert and_result%1#2) // assert target is match for conditions
         let tuple_item%8#0: Encoded(uint64) = extract_value(obj#0, 1)
@@ -605,7 +605,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
         return 
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Encoding(p: Encoded(uint64,uint64)) -> void:
-    block@0: // L89
+    block@0: // L92
         let tuple_item%0#0: Encoded(uint64) = extract_value(p#0, 1)
         let values%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
         let tuple_item%1#0: Encoded(uint64) = extract_value(p#0, 0)
@@ -638,7 +638,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Enc
         return 
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin(key: string) -> Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])):
-    block@0: // L104
+    block@0: // L107
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         let storage_value%0#0: bytes = box_read(box_prefixed_key%0#0)
         let value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = storage_value%0#0
@@ -649,7 +649,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin(k
         return value#0
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getMain() -> Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])):
-    block@0: // L110
+    block@0: // L113
         let storage_value%0#0: bytes = box_read("main")
         let value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = storage_value%0#0
         let tuple_item%0#0: Encoded(uint64) = extract_value(value#0, 2)
@@ -659,7 +659,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getMain() -
         return value#0
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setPlugin(key: string) -> void:
-    block@0: // L120
+    block@0: // L123
         let tmp%0#0: Encoded(bool8) = bytes_encode<bool8>(0u)
         let tmp%1#0: Encoded(uint8[4]) = bytes_encode<uint8[4]>(method "test()void")
         let tmp%2#0: Encoded(uint8[4],uint64,uint64) = bytes_encode<(uint8[4],uint64,uint64)>(tmp%1#0, 0x0000000000000001, 0x0000000000000001)

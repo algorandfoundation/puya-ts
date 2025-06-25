@@ -244,9 +244,7 @@ function handleItxnAssignment(
           nodeFactory.varExpression({
             name: context.generateVarName('discard'),
             wtype: sourceType.wtypeOrThrow,
-            sourceLocation: target.sourceLocation,
-            // TODO: This should be item.sourceLocation but it actually represents a zero length sequence which fails puya validation
-            //sourceLocation: item.sourceLocation,
+            sourceLocation: item.sourceLocation,
           }),
         )
       } else {

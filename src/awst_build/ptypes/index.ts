@@ -10,6 +10,7 @@ import type { ABIType, PTypeOrClass } from './base'
 import { GenericPType, PType } from './base'
 
 import { transientTypeErrors } from './transient-type-errors'
+import { generateObjectHash } from './util'
 import type { PTypeVisitor } from './visitor'
 
 export * from './base'
@@ -690,15 +691,7 @@ export class FunctionPType extends PType {
     this.name = props.name
     this.module = props.module
     this.sourceLocation = props.sourceLocation
-    if (props.returnType instanceof ImmutableObjectPType && !props.returnType.alias) {
-      this.returnType = new ImmutableObjectPType({
-        alias: new SymbolName({ name: `${props.name}Result`, module: this.module }),
-        properties: props.returnType.properties,
-        description: props.returnType.description,
-      })
-    } else {
-      this.returnType = props.returnType
-    }
+    this.returnType = props.returnType
     this.parameters = props.parameters
   }
 
@@ -948,11 +941,11 @@ abstract class ObjectPType extends PType {
     alias?: SymbolName | null
     properties: Record<string, PType>
     description?: string
-    name: string
+    namePrefix: string
     immutable: boolean
   }) {
     super()
-    this.name = props.name
+    this.name = `${props.namePrefix}${generateObjectHash(props.properties)}`
     this.properties = props.properties
     this.description = props.description
     this.alias = props.alias ?? null
@@ -982,7 +975,7 @@ export class ObjectLiteralPType extends ObjectPType {
   constructor(props: { properties: Record<string, PType> }) {
     super({
       ...props,
-      name: `object-literal`,
+      namePrefix: `ObjectLiteral`,
       immutable: false,
     })
   }
@@ -1030,7 +1023,7 @@ export class ImmutableObjectPType extends ObjectPType {
   constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string }) {
     super({
       ...props,
-      name: `Readonly<object>`,
+      namePrefix: `ReadonlyObject`,
       immutable: true,
     })
   }
@@ -1063,7 +1056,7 @@ export class MutableObjectPType extends ObjectPType {
   constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string }) {
     super({
       ...props,
-      name: `object`,
+      namePrefix: `Object`,
       immutable: false,
     })
   }

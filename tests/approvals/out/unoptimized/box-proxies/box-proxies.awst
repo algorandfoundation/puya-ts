@@ -179,7 +179,7 @@ contract TupleBox
 {
   boxes {
     ["t1"]: arc4.tuple<string,bytes,bool>
-    ["t2"]: object
+    ["t2"]: ObjectB8AC7445
     ["tm1"]: string => arc4.tuple<string,bytes,bool>
     ["tm2"]: string => tests/approvals/box-proxies.algo.ts::BoxMap2
   }
@@ -205,7 +205,7 @@ contract TupleBox
     assert(Box["t1"].value.0 == "hello")
     assert(Box["t1"].value.1 == "world")
     assert(Box["t1"].value.2)
-    Box["t2"].value: object = new object(a=($3 = #{ a: "hello", b: "world", c: True }).a, b=$3.b, c=$3.c)
+    Box["t2"].value: ObjectB8AC7445 = new ObjectB8AC7445(a=($3 = #{ a: "hello", b: "world", c: True }).a, b=$3.b, c=$3.c)
     assert(Box["t2"].value.a == "hello")
     assert(Box["t2"].value.b == "world")
     assert(Box["t2"].value.c)
@@ -276,7 +276,7 @@ contract BoxToRefTest
 contract CompositeKeyTest
 {
   boxes {
-    [""]: object => string
+    [""]: ObjectACED9E72 => string
   }
   approvalProgram(): bool
   {
@@ -288,7 +288,7 @@ contract CompositeKeyTest
     return True
   }
   
-  test(key: object, val: string): void
+  test(key: ObjectACED9E72, val: string): void
   {
     Box[BoxMapKey(prefix="", key=key)].value: string = val
   }

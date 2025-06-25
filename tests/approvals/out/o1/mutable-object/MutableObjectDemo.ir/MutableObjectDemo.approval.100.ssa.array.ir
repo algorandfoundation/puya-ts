@@ -69,10 +69,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%30#0) // OnCompletion is not NoOp
         let tmp%31#0: uint64 = (txn ApplicationID)
         (assert tmp%31#0) // can only call when not creating
-        tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testMethodSelector()
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#5: bool = 1u
         goto block@21
-    block@9: // testAssertMatch_route_L72
+    block@9: // testAssertMatch_route_L75
         let tmp%33#0: uint64 = (txn OnCompletion)
         let tmp%34#0: bool = (! tmp%33#0)
         (assert tmp%34#0) // OnCompletion is not NoOp
@@ -83,7 +82,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertMatch(tmp%37#0)
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#6: bool = 1u
         goto block@21
-    block@10: // testArc4Encoding_route_L89
+    block@10: // testArc4Encoding_route_L92
         let tmp%38#0: uint64 = (txn OnCompletion)
         let tmp%39#0: bool = (! tmp%38#0)
         (assert tmp%39#0) // OnCompletion is not NoOp
@@ -93,7 +92,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Encoding(reinterpret_Encoded(uint64,uint64)%4#0)
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#7: bool = 1u
         goto block@21
-    block@11: // getPlugin_route_L104
+    block@11: // getPlugin_route_L107
         let tmp%42#0: uint64 = (txn OnCompletion)
         let tmp%43#0: bool = (! tmp%42#0)
         (assert tmp%43#0) // OnCompletion is not NoOp
@@ -106,7 +105,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%48#0)
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#8: bool = 1u
         goto block@21
-    block@12: // getMain_route_L110
+    block@12: // getMain_route_L113
         let tmp%49#0: uint64 = (txn OnCompletion)
         let tmp%50#0: bool = (! tmp%49#0)
         (assert tmp%50#0) // OnCompletion is not NoOp
@@ -117,7 +116,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%54#0)
         let tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__puya_arc4_router__%0#9: bool = 1u
         goto block@21
-    block@13: // setPlugin_route_L120
+    block@13: // setPlugin_route_L123
         let tmp%55#0: uint64 = (txn OnCompletion)
         let tmp%56#0: bool = (! tmp%55#0)
         (assert tmp%56#0) // OnCompletion is not NoOp
@@ -509,13 +508,8 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedO
         (assert and_result%0#2) // assert target is match for conditions
         return 
 
-subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testMethodSelector() -> void:
-    block@0: // L60
-        (assert 0u)
-        return 
-
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertMatch(x: uint64) -> void:
-    block@0: // L72
+    block@0: // L75
         let b#0: uint64 = (* x#0 2u)
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob b#0)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
@@ -530,19 +524,19 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
         let values%0#0: uint64 = (btoi tuple_item%0#0)
         let tmp%3#0: bool = (== values%0#0 b#0)
         goto tmp%3#0 ? block@1 : block@3
-    block@1: // and_contd_L78
+    block@1: // and_contd_L81
         let aggregate%extract%1#1: bytes = (extract3 obj#0 0u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#1
         let values%1#0: uint64 = (btoi tuple_item%1#0)
         let tmp%5#0: bool = (== values%1#0 b#0)
         goto tmp%5#0 ? block@2 : block@3
-    block@2: // bool_true_L78
+    block@2: // bool_true_L81
         let and_result%0#0: bool = 1u
         goto block@4
-    block@3: // bool_false_L78
+    block@3: // bool_false_L81
         let and_result%0#1: bool = 0u
         goto block@4
-    block@4: // bool_merge_L78
+    block@4: // bool_merge_L81
         let and_result%0#2: bool = φ(and_result%0#0 <- block@2, and_result%0#1 <- block@3)
         (assert and_result%0#2) // assert target is match for conditions
         let aggregate%extract%2#1: bytes = (extract3 obj#0 0u 8u)
@@ -561,19 +555,19 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
         let values%5#0: uint64 = (btoi tuple_item%5#0)
         let tmp%7#0: bool = (== values%3#0 values%5#0)
         goto tmp%7#0 ? block@5 : block@7
-    block@5: // and_contd_L84
+    block@5: // and_contd_L87
         let aggregate%extract%4#1: bytes = (extract3 v#0 0u 8u)
         let tuple_item%7#0: Encoded(uint64) = aggregate%extract%4#1
         let values%7#0: uint64 = (btoi tuple_item%7#0)
         let tmp%8#0: bool = (== values%0#0 values%7#0)
         goto tmp%8#0 ? block@6 : block@7
-    block@6: // bool_true_L84
+    block@6: // bool_true_L87
         let and_result%1#0: bool = 1u
         goto block@8
-    block@7: // bool_false_L84
+    block@7: // bool_false_L87
         let and_result%1#1: bool = 0u
         goto block@8
-    block@8: // bool_merge_L84
+    block@8: // bool_merge_L87
         let and_result%1#2: bool = φ(and_result%1#0 <- block@6, and_result%1#1 <- block@7)
         (assert and_result%1#2) // assert target is match for conditions
         let tmp%9#0: bool = (> values%0#0 x#0)
@@ -583,7 +577,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
         return 
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Encoding(p: Encoded(uint64,uint64)) -> void:
-    block@0: // L89
+    block@0: // L92
         let aggregate%extract%0#1: bytes = (extract3 p#0 8u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
         let values%0#0: uint64 = (btoi tuple_item%0#0)
@@ -615,7 +609,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Enc
         return 
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin(key: string) -> Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])):
-    block@0: // L104
+    block@0: // L107
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         let (aggregate%box_get%0#1: bytes, aggregate%box_get%1#1: bool) = (box_get box_prefixed_key%0#0)
         (assert aggregate%box_get%1#1) // Box must have value
@@ -627,7 +621,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin(k
         return value#0
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getMain() -> Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])):
-    block@0: // L110
+    block@0: // L113
         let (aggregate%box_get%0#1: bytes, aggregate%box_get%1#1: bool) = (box_get "main")
         (assert aggregate%box_get%1#1) // Box must have value
         let value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = aggregate%box_get%0#1
@@ -638,7 +632,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getMain() -
         return value#0
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setPlugin(key: string) -> void:
-    block@0: // L120
+    block@0: // L123
         let aggregate%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u 0u)
         let aggregate%as_Encoded(bool8)%0#1: Encoded(bool8) = aggregate%encoded_bool%0#1
         let tmp%0#0: Encoded(bool8) = aggregate%as_Encoded(bool8)%0#1
