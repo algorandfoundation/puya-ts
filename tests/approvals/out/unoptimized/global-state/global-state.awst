@@ -77,8 +77,8 @@ contract TestTuple
   globals {
     ["t1"]: arc4.tuple<string,uint64,bool>
     ["t2"]: arc4.tuple<string,arc4.tuple<string,biguint,bool>>
-    ["t3"]: object
-    ["t4"]: arc4.tuple<string,object>
+    ["t3"]: Object3DB88FFD
+    ["t4"]: arc4.tuple<string,ObjectD0844D31>
     ["t5"]: tests/approvals/global-state.algo.ts::Data
   }
   approvalProgram(): bool
@@ -102,11 +102,11 @@ contract TestTuple
     assert(GlobalState["t2"].1.0 == "b", comment=Tuple value should be set)
     assert(GlobalState["t2"].1.1 == 456, comment=Tuple value should be set)
     assert(GlobalState["t2"].1.2 == True, comment=Tuple value should be set)
-    GlobalState["t3"]: object = new object(a=($0 = #{ a: ($1 = #{ a: "hello", b: 123, c: True }).a, b: $1.b, c: $1.c }).a, b=$0.b, c=$0.c)
+    GlobalState["t3"]: Object3DB88FFD = new Object3DB88FFD(a=($0 = #{ a: ($1 = #{ a: "hello", b: 123, c: True }).a, b: $1.b, c: $1.c }).a, b=$0.b, c=$0.c)
     assert(GlobalState["t3"].a == "hello", comment=Object value should be set)
     assert(GlobalState["t3"].b == 123, comment=Object value should be set)
     assert(GlobalState["t3"].c == True, comment=Object value should be set)
-    GlobalState["t4"]: arc4.tuple<string,object> = ARC4_ENCODE(#[#["a", #{ a: ($2 = #{ a: "b", b: 456, c: True }).a, b: $2.b, c: $2.c }].0, new object(a=($3 = #["a", #{ a: $2.a, b: $2.b, c: $2.c }].1).a, b=$3.b, c=$3.c)], wtype=arc4.tuple<string,object>)
+    GlobalState["t4"]: arc4.tuple<string,ObjectD0844D31> = ARC4_ENCODE(#[#["a", #{ a: ($2 = #{ a: "b", b: 456, c: True }).a, b: $2.b, c: $2.c }].0, new ObjectD0844D31(a=($3 = #["a", #{ a: $2.a, b: $2.b, c: $2.c }].1).a, b=$3.b, c=$3.c)], wtype=arc4.tuple<string,ObjectD0844D31>)
     assert(GlobalState["t4"].0 == "a", comment=Tuple value should be set)
     assert(GlobalState["t4"].1.a == "b", comment=Tuple value should be set)
     assert(GlobalState["t4"].1.b == 456, comment=Tuple value should be set)

@@ -15,7 +15,7 @@ contract ItxnComposeAlgo
     assert(gtxns<Receiver>(funds) == global<CurrentApplicationAddress>(), comment=assert target is match for conditions)
     assert(Boolean(addresses.length), comment=must provide some accounts)
     share: uint64 = gtxns<Amount>(funds) // addresses.length
-    payFields: object = new object(type=($0 = #{ type: ($1 = #{ type: 1, amount: share, receiver: reinterpret_cast<bytes>(addresses[0]) }).type, amount: $1.amount, receiver: $1.receiver }).type, amount=$0.amount, receiver=$0.receiver)
+    payFields: Object3BB2638B = new Object3BB2638B(type=($0 = #{ type: ($1 = #{ type: 1, amount: share, receiver: reinterpret_cast<bytes>(addresses[0]) }).type, amount: $1.amount, receiver: $1.receiver }).type, amount=$0.amount, receiver=$0.receiver)
     begin_txn(create_inner_transaction(Fee=0, TypeEnum=payFields.type, Amount=payFields.amount, Receiver=reinterpret_cast<account>(payFields.receiver)))
     for (temp in urange(1, addresses.length, 1)) {
       i: uint64 = temp

@@ -26,7 +26,7 @@ describe('template var', () => {
     const resultString = await appClientMyContract.send.call({ method: 'getString' })
     expect(resultString.return).toBe(templateVars.A_STRING)
     const resultBytes = await appClientMyContract.send.call({ method: 'getBytes' })
-    expect(resultBytes.return).toStrictEqual(Array.from(templateVars.SOME_BYTES))
+    expect(resultBytes.return).toStrictEqual(templateVars.SOME_BYTES)
     const resultAddress = await appClientMyContract.send.call({ method: 'getAddress' })
     expect(resultAddress.return).toStrictEqual(address.toString())
   })

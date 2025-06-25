@@ -62,7 +62,10 @@ export class MutableObjectDemo extends Contract {
       methodSelector(MutableObjectDemo.prototype.mutateVector) ===
         methodSelector('mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)'),
     )
-    assert(methodSelector(MutableObjectDemo.prototype.getPlugin) === methodSelector('getPlugin(string)(uint64,uint64,uint64,bool)'))
+    assert(
+      methodSelector(MutableObjectDemo.prototype.getPlugin) ===
+        methodSelector('getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])'),
+    )
     assert(
       methodSelector(MutableObjectDemo.prototype.testNestedObjects) ===
         methodSelector('testNestedObjects(((uint64,uint64),(uint64,uint64)))void'),
