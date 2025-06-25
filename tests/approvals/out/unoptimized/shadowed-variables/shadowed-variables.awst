@@ -8,7 +8,7 @@ contract ShadowedVariablesAlgo
     assert(a == 123, comment=a should be local const (uint))
     a₁: bool = f
     assert(!a₁, comment=a should be local let (bool))
-    a₁: bool = ($1 = !a₁)
+    a₁: bool = !a₁
     assert(a₁, comment=a should be modified local let (bool))
     assert(a₁, comment=a should still be modified local let (bool))
     assert(a == 123, comment=a should be local const (uint))

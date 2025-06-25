@@ -48,15 +48,15 @@ subroutine tests/approvals/tuples.algo.ts::TuplesAlgo.test(a: Encoded(uint64), b
         let (readonlyTuple.0#0: Encoded(uint64), readonlyTuple.1#0: Encoded(uint64), readonlyTuple.2#0: Encoded(uint64)) = (a#0, b#0, c#0)
         let tmp%0#0: Encoded(uint64,uint64,uint64) = bytes_encode<(uint64,uint64,uint64)>(a#0, b#0, c#0)
         let mutableTuple#0: Encoded(uint64,uint64,uint64) = tmp%0#0
-        let awst_tmp%0#0: Encoded(uint64,uint64,uint64) = bytes_encode<(uint64,uint64,uint64)>(a#0, b#0, c#0)
-        let arc4Tuple#0: Encoded(uint64,uint64,uint64) = awst_tmp%0#0
+        let tmp%1#0: Encoded(uint64,uint64,uint64) = bytes_encode<(uint64,uint64,uint64)>(a#0, b#0, c#0)
+        let arc4Tuple#0: Encoded(uint64,uint64,uint64) = tmp%1#0
         tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(readonlyTuple.0#0, readonlyTuple.1#0, readonlyTuple.2#0)
         let tuple_item%0#0: Encoded(uint64) = extract_value(mutableTuple#0, 0)
         let tuple_item%1#0: Encoded(uint64) = extract_value(mutableTuple#0, 1)
         let tuple_item%2#0: Encoded(uint64) = extract_value(mutableTuple#0, 2)
         tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(tuple_item%0#0, tuple_item%1#0, tuple_item%2#0)
-        let (tmp%1#0: Encoded(uint64), tmp%2#0: Encoded(uint64), tmp%3#0: Encoded(uint64)) = decode_bytes<(Encoded(uint64),Encoded(uint64),Encoded(uint64),)>(arc4Tuple#0)
-        tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(tmp%1#0, tmp%2#0, tmp%3#0)
+        let (tmp%2#0: Encoded(uint64), tmp%3#0: Encoded(uint64), tmp%4#0: Encoded(uint64)) = decode_bytes<(Encoded(uint64),Encoded(uint64),Encoded(uint64),)>(arc4Tuple#0)
+        tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(tmp%2#0, tmp%3#0, tmp%4#0)
         tests/approvals/tuples.algo.ts::TuplesAlgo.receiveMutable(mutableTuple#0)
         let x#0: Encoded(uint64) = readonlyTuple.0#0
         let y#0: Encoded(uint64) = readonlyTuple.1#0

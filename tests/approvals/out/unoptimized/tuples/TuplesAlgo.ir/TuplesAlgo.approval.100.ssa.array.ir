@@ -61,8 +61,8 @@ subroutine tests/approvals/tuples.algo.ts::TuplesAlgo.test(a: Encoded(uint64), b
         let aggregate%encoded%5#1: Encoded(uint64,uint64) = (concat aggregate%encoded%4#1 b#0)
         let aggregate%encoded%6#1: Encoded(uint64,uint64,uint64) = (concat aggregate%encoded%5#1 c#0)
         let aggregate%encoded%7#1: Encoded(uint64,uint64,uint64) = (concat aggregate%encoded%6#1 0x)
-        let awst_tmp%0#0: Encoded(uint64,uint64,uint64) = aggregate%encoded%7#1
-        let arc4Tuple#0: Encoded(uint64,uint64,uint64) = awst_tmp%0#0
+        let tmp%1#0: Encoded(uint64,uint64,uint64) = aggregate%encoded%7#1
+        let arc4Tuple#0: Encoded(uint64,uint64,uint64) = tmp%1#0
         tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(readonlyTuple.0#0, readonlyTuple.1#0, readonlyTuple.2#0)
         let aggregate%extract%0#1: bytes = (extract3 mutableTuple#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
@@ -74,8 +74,8 @@ subroutine tests/approvals/tuples.algo.ts::TuplesAlgo.test(a: Encoded(uint64), b
         let aggregate%extract%3#1: bytes = (extract3 arc4Tuple#0 0u 8u)
         let aggregate%extract%4#1: bytes = (extract3 arc4Tuple#0 8u 8u)
         let aggregate%extract%5#1: bytes = (extract3 arc4Tuple#0 16u 8u)
-        let (tmp%1#0: Encoded(uint64), tmp%2#0: Encoded(uint64), tmp%3#0: Encoded(uint64)) = (aggregate%extract%3#1, aggregate%extract%4#1, aggregate%extract%5#1)
-        tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(tmp%1#0, tmp%2#0, tmp%3#0)
+        let (tmp%2#0: Encoded(uint64), tmp%3#0: Encoded(uint64), tmp%4#0: Encoded(uint64)) = (aggregate%extract%3#1, aggregate%extract%4#1, aggregate%extract%5#1)
+        tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(tmp%2#0, tmp%3#0, tmp%4#0)
         tests/approvals/tuples.algo.ts::TuplesAlgo.receiveMutable(mutableTuple#0)
         return 
 

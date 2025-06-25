@@ -40,16 +40,16 @@ contract StaticBytesAlgo
     tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(reinterpret_cast<bytes[32]>(txn<Sender>()))
     tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes(reinterpret_cast<bytes>(reinterpret_cast<bytes[32]>(txn<Sender>())), 32)
     tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32("abcdefghabcdefghabcdefghabcdefgh")
-    joined: bytes[55] = ($1 = checked_maybe(#[reinterpret_cast<bytes[55]>(($2 = "" + "abc" + 0xaaff + b32<AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ> + b64<SGVsbG8gQWxnb3JhbmQ=>)), len($2) == 55], comment=Length must be 55))
+    joined: bytes[55] = checked_maybe(#[reinterpret_cast<bytes[55]>(($1 = "" + "abc" + 0xaaff + b32<AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ> + b64<SGVsbG8gQWxnb3JhbmQ=>)), len($1) == 55], comment=Length must be 55)
     assert(len(joined) == 55)
   }
   
   testArray(): void
   {
-    a: readonly [bytes[32], bytes[32]] = ($3 = #[reinterpret_cast<bytes[32]>(txn<Sender>()), reinterpret_cast<bytes[32]>(txn<Sender>())])
-    b: ref_array<bytes[32]> = ($4 = new ref_array<bytes[32]>(reinterpret_cast<bytes[32]>(txn<Sender>())))
+    a: readonly [bytes[32], bytes[32]] = #[reinterpret_cast<bytes[32]>(txn<Sender>()), reinterpret_cast<bytes[32]>(txn<Sender>())]
+    b: ref_array<bytes[32]> = new ref_array<bytes[32]>(reinterpret_cast<bytes[32]>(txn<Sender>()))
     b.push(...#[a.0, a.1])
-    bitAnd: bytes[32] = ($5 = a.0 & b[0])
+    bitAnd: bytes[32] = a.0 & b[0]
     assert(bitAnd == reinterpret_cast<bytes[32]>(txn<Sender>()))
   }
   

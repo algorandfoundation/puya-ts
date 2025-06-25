@@ -83,7 +83,7 @@
             "name": "a"
           },
           "value": {
-            "_type": "SingleEvaluation",
+            "_type": "UInt64BinaryOperation",
             "source_location": {
               "file": "tests/approvals/conditional-expression.algo.ts",
               "line": 5,
@@ -96,91 +96,42 @@
               "name": "uint64",
               "immutable": true
             },
-            "source": {
-              "_type": "UInt64BinaryOperation",
+            "left": {
+              "_type": "ConditionalExpression",
               "source_location": {
                 "file": "tests/approvals/conditional-expression.algo.ts",
                 "line": 5,
                 "end_line": 5,
-                "column": 20,
-                "end_column": 39
+                "column": 21,
+                "end_column": 34
               },
               "wtype": {
                 "_type": "WType",
                 "name": "uint64",
                 "immutable": true
               },
-              "left": {
-                "_type": "ConditionalExpression",
+              "condition": {
+                "_type": "NumericComparisonExpression",
                 "source_location": {
                   "file": "tests/approvals/conditional-expression.algo.ts",
                   "line": 5,
                   "end_line": 5,
                   "column": 21,
-                  "end_column": 34
+                  "end_column": 26
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "uint64",
+                  "name": "bool",
                   "immutable": true
                 },
-                "condition": {
-                  "_type": "NumericComparisonExpression",
-                  "source_location": {
-                    "file": "tests/approvals/conditional-expression.algo.ts",
-                    "line": 5,
-                    "end_line": 5,
-                    "column": 21,
-                    "end_column": 26
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true
-                  },
-                  "lhs": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/conditional-expression.algo.ts",
-                      "line": 5,
-                      "end_line": 5,
-                      "column": 21,
-                      "end_column": 22
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "name": "x"
-                  },
-                  "operator": "<",
-                  "rhs": {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/conditional-expression.algo.ts",
-                      "line": 5,
-                      "end_line": 5,
-                      "column": 25,
-                      "end_column": 26
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "value": 4,
-                    "teal_alias": null
-                  }
-                },
-                "true_expr": {
+                "lhs": {
                   "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/conditional-expression.algo.ts",
                     "line": 5,
                     "end_line": 5,
-                    "column": 29,
-                    "end_column": 30
+                    "column": 21,
+                    "end_column": 22
                   },
                   "wtype": {
                     "_type": "WType",
@@ -189,32 +140,33 @@
                   },
                   "name": "x"
                 },
-                "false_expr": {
-                  "_type": "VarExpression",
+                "operator": "<",
+                "rhs": {
+                  "_type": "IntegerConstant",
                   "source_location": {
                     "file": "tests/approvals/conditional-expression.algo.ts",
                     "line": 5,
                     "end_line": 5,
-                    "column": 33,
-                    "end_column": 34
+                    "column": 25,
+                    "end_column": 26
                   },
                   "wtype": {
                     "_type": "WType",
                     "name": "uint64",
                     "immutable": true
                   },
-                  "name": "y"
+                  "value": 4,
+                  "teal_alias": null
                 }
               },
-              "op": "+",
-              "right": {
+              "true_expr": {
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/conditional-expression.algo.ts",
                   "line": 5,
                   "end_line": 5,
-                  "column": 38,
-                  "end_column": 39
+                  "column": 29,
+                  "end_column": 30
                 },
                 "wtype": {
                   "_type": "WType",
@@ -222,9 +174,41 @@
                   "immutable": true
                 },
                 "name": "x"
+              },
+              "false_expr": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/conditional-expression.algo.ts",
+                  "line": 5,
+                  "end_line": 5,
+                  "column": 33,
+                  "end_column": 34
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true
+                },
+                "name": "y"
               }
             },
-            "_id": "0"
+            "op": "+",
+            "right": {
+              "_type": "VarExpression",
+              "source_location": {
+                "file": "tests/approvals/conditional-expression.algo.ts",
+                "line": 5,
+                "end_line": 5,
+                "column": 38,
+                "end_column": 39
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "uint64",
+                "immutable": true
+              },
+              "name": "x"
+            }
           }
         },
         {
@@ -253,7 +237,7 @@
             "name": "b"
           },
           "value": {
-            "_type": "SingleEvaluation",
+            "_type": "ConditionalExpression",
             "source_location": {
               "file": "tests/approvals/conditional-expression.algo.ts",
               "line": 6,
@@ -266,22 +250,22 @@
               "name": "uint64",
               "immutable": true
             },
-            "source": {
-              "_type": "ConditionalExpression",
+            "condition": {
+              "_type": "ReinterpretCast",
               "source_location": {
                 "file": "tests/approvals/conditional-expression.algo.ts",
                 "line": 6,
                 "end_line": 6,
                 "column": 20,
-                "end_column": 33
+                "end_column": 25
               },
               "wtype": {
                 "_type": "WType",
-                "name": "uint64",
+                "name": "bool",
                 "immutable": true
               },
-              "condition": {
-                "_type": "ReinterpretCast",
+              "expr": {
+                "_type": "UInt64BinaryOperation",
                 "source_location": {
                   "file": "tests/approvals/conditional-expression.algo.ts",
                   "line": 6,
@@ -291,16 +275,33 @@
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "bool",
+                  "name": "uint64",
                   "immutable": true
                 },
-                "expr": {
-                  "_type": "UInt64BinaryOperation",
+                "left": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/conditional-expression.algo.ts",
                     "line": 6,
                     "end_line": 6,
                     "column": 20,
+                    "end_column": 21
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true
+                  },
+                  "name": "y"
+                },
+                "op": "%",
+                "right": {
+                  "_type": "IntegerConstant",
+                  "source_location": {
+                    "file": "tests/approvals/conditional-expression.algo.ts",
+                    "line": 6,
+                    "end_line": 6,
+                    "column": 24,
                     "end_column": 25
                   },
                   "wtype": {
@@ -308,78 +309,45 @@
                     "name": "uint64",
                     "immutable": true
                   },
-                  "left": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/conditional-expression.algo.ts",
-                      "line": 6,
-                      "end_line": 6,
-                      "column": 20,
-                      "end_column": 21
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "name": "y"
-                  },
-                  "op": "%",
-                  "right": {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/conditional-expression.algo.ts",
-                      "line": 6,
-                      "end_line": 6,
-                      "column": 24,
-                      "end_column": 25
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "value": 2,
-                    "teal_alias": null
-                  }
+                  "value": 2,
+                  "teal_alias": null
                 }
-              },
-              "true_expr": {
-                "_type": "IntegerConstant",
-                "source_location": {
-                  "file": "tests/approvals/conditional-expression.algo.ts",
-                  "line": 6,
-                  "end_line": 6,
-                  "column": 28,
-                  "end_column": 29
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true
-                },
-                "value": 2,
-                "teal_alias": null
-              },
-              "false_expr": {
-                "_type": "IntegerConstant",
-                "source_location": {
-                  "file": "tests/approvals/conditional-expression.algo.ts",
-                  "line": 6,
-                  "end_line": 6,
-                  "column": 32,
-                  "end_column": 33
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true
-                },
-                "value": 1,
-                "teal_alias": null
               }
             },
-            "_id": "1"
+            "true_expr": {
+              "_type": "IntegerConstant",
+              "source_location": {
+                "file": "tests/approvals/conditional-expression.algo.ts",
+                "line": 6,
+                "end_line": 6,
+                "column": 28,
+                "end_column": 29
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "uint64",
+                "immutable": true
+              },
+              "value": 2,
+              "teal_alias": null
+            },
+            "false_expr": {
+              "_type": "IntegerConstant",
+              "source_location": {
+                "file": "tests/approvals/conditional-expression.algo.ts",
+                "line": 6,
+                "end_line": 6,
+                "column": 32,
+                "end_column": 33
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "uint64",
+                "immutable": true
+              },
+              "value": 1,
+              "teal_alias": null
+            }
           }
         },
         {
@@ -408,7 +376,7 @@
             "name": "c"
           },
           "value": {
-            "_type": "SingleEvaluation",
+            "_type": "ConditionalExpression",
             "source_location": {
               "file": "tests/approvals/conditional-expression.algo.ts",
               "line": 7,
@@ -421,14 +389,62 @@
               "name": "uint64",
               "immutable": true
             },
-            "source": {
-              "_type": "ConditionalExpression",
+            "condition": {
+              "_type": "NumericComparisonExpression",
               "source_location": {
                 "file": "tests/approvals/conditional-expression.algo.ts",
                 "line": 7,
                 "end_line": 7,
                 "column": 20,
-                "end_column": 48
+                "end_column": 25
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true
+              },
+              "lhs": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/conditional-expression.algo.ts",
+                  "line": 7,
+                  "end_line": 7,
+                  "column": 20,
+                  "end_column": 21
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true
+                },
+                "name": "x"
+              },
+              "operator": ">",
+              "rhs": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/conditional-expression.algo.ts",
+                  "line": 7,
+                  "end_line": 7,
+                  "column": 24,
+                  "end_column": 25
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true
+                },
+                "name": "y"
+              }
+            },
+            "true_expr": {
+              "_type": "ConditionalExpression",
+              "source_location": {
+                "file": "tests/approvals/conditional-expression.algo.ts",
+                "line": 7,
+                "end_line": 7,
+                "column": 29,
+                "end_column": 43
               },
               "wtype": {
                 "_type": "WType",
@@ -441,8 +457,8 @@
                   "file": "tests/approvals/conditional-expression.algo.ts",
                   "line": 7,
                   "end_line": 7,
-                  "column": 20,
-                  "end_column": 25
+                  "column": 29,
+                  "end_column": 35
                 },
                 "wtype": {
                   "_type": "WType",
@@ -455,25 +471,8 @@
                     "file": "tests/approvals/conditional-expression.algo.ts",
                     "line": 7,
                     "end_line": 7,
-                    "column": 20,
-                    "end_column": 21
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "name": "x"
-                },
-                "operator": ">",
-                "rhs": {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/conditional-expression.algo.ts",
-                    "line": 7,
-                    "end_line": 7,
-                    "column": 24,
-                    "end_column": 25
+                    "column": 29,
+                    "end_column": 30
                   },
                   "wtype": {
                     "_type": "WType",
@@ -481,104 +480,42 @@
                     "immutable": true
                   },
                   "name": "y"
+                },
+                "operator": ">",
+                "rhs": {
+                  "_type": "IntegerConstant",
+                  "source_location": {
+                    "file": "tests/approvals/conditional-expression.algo.ts",
+                    "line": 7,
+                    "end_line": 7,
+                    "column": 33,
+                    "end_column": 35
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true
+                  },
+                  "value": 10,
+                  "teal_alias": null
                 }
               },
               "true_expr": {
-                "_type": "ConditionalExpression",
+                "_type": "IntegerConstant",
                 "source_location": {
                   "file": "tests/approvals/conditional-expression.algo.ts",
                   "line": 7,
                   "end_line": 7,
-                  "column": 29,
-                  "end_column": 43
+                  "column": 38,
+                  "end_column": 39
                 },
                 "wtype": {
                   "_type": "WType",
                   "name": "uint64",
                   "immutable": true
                 },
-                "condition": {
-                  "_type": "NumericComparisonExpression",
-                  "source_location": {
-                    "file": "tests/approvals/conditional-expression.algo.ts",
-                    "line": 7,
-                    "end_line": 7,
-                    "column": 29,
-                    "end_column": 35
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true
-                  },
-                  "lhs": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/conditional-expression.algo.ts",
-                      "line": 7,
-                      "end_line": 7,
-                      "column": 29,
-                      "end_column": 30
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "name": "y"
-                  },
-                  "operator": ">",
-                  "rhs": {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/conditional-expression.algo.ts",
-                      "line": 7,
-                      "end_line": 7,
-                      "column": 33,
-                      "end_column": 35
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "value": 10,
-                    "teal_alias": null
-                  }
-                },
-                "true_expr": {
-                  "_type": "IntegerConstant",
-                  "source_location": {
-                    "file": "tests/approvals/conditional-expression.algo.ts",
-                    "line": 7,
-                    "end_line": 7,
-                    "column": 38,
-                    "end_column": 39
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "value": 3,
-                  "teal_alias": null
-                },
-                "false_expr": {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/conditional-expression.algo.ts",
-                    "line": 7,
-                    "end_line": 7,
-                    "column": 42,
-                    "end_column": 43
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "name": "y"
-                }
+                "value": 3,
+                "teal_alias": null
               },
               "false_expr": {
                 "_type": "VarExpression",
@@ -586,18 +523,33 @@
                   "file": "tests/approvals/conditional-expression.algo.ts",
                   "line": 7,
                   "end_line": 7,
-                  "column": 47,
-                  "end_column": 48
+                  "column": 42,
+                  "end_column": 43
                 },
                 "wtype": {
                   "_type": "WType",
                   "name": "uint64",
                   "immutable": true
                 },
-                "name": "x"
+                "name": "y"
               }
             },
-            "_id": "2"
+            "false_expr": {
+              "_type": "VarExpression",
+              "source_location": {
+                "file": "tests/approvals/conditional-expression.algo.ts",
+                "line": 7,
+                "end_line": 7,
+                "column": 47,
+                "end_column": 48
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "uint64",
+                "immutable": true
+              },
+              "name": "x"
+            }
           }
         },
         {
@@ -626,7 +578,7 @@
             "name": "d"
           },
           "value": {
-            "_type": "SingleEvaluation",
+            "_type": "UInt64BinaryOperation",
             "source_location": {
               "file": "tests/approvals/conditional-expression.algo.ts",
               "line": 8,
@@ -639,36 +591,36 @@
               "name": "uint64",
               "immutable": true
             },
-            "source": {
-              "_type": "UInt64BinaryOperation",
+            "left": {
+              "_type": "ConditionalExpression",
               "source_location": {
                 "file": "tests/approvals/conditional-expression.algo.ts",
                 "line": 8,
                 "end_line": 8,
-                "column": 20,
-                "end_column": 59
+                "column": 27,
+                "end_column": 40
               },
               "wtype": {
                 "_type": "WType",
                 "name": "uint64",
                 "immutable": true
               },
-              "left": {
-                "_type": "ConditionalExpression",
+              "condition": {
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/conditional-expression.algo.ts",
                   "line": 8,
                   "end_line": 8,
                   "column": 27,
-                  "end_column": 40
+                  "end_column": 32
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "uint64",
+                  "name": "bool",
                   "immutable": true
                 },
-                "condition": {
-                  "_type": "ReinterpretCast",
+                "expr": {
+                  "_type": "UInt64BinaryOperation",
                   "source_location": {
                     "file": "tests/approvals/conditional-expression.algo.ts",
                     "line": 8,
@@ -678,16 +630,33 @@
                   },
                   "wtype": {
                     "_type": "WType",
-                    "name": "bool",
+                    "name": "uint64",
                     "immutable": true
                   },
-                  "expr": {
-                    "_type": "UInt64BinaryOperation",
+                  "left": {
+                    "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/conditional-expression.algo.ts",
                       "line": 8,
                       "end_line": 8,
                       "column": 27,
+                      "end_column": 28
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "name": "y"
+                  },
+                  "op": "%",
+                  "right": {
+                    "_type": "IntegerConstant",
+                    "source_location": {
+                      "file": "tests/approvals/conditional-expression.algo.ts",
+                      "line": 8,
+                      "end_line": 8,
+                      "column": 31,
                       "end_column": 32
                     },
                     "wtype": {
@@ -695,149 +664,83 @@
                       "name": "uint64",
                       "immutable": true
                     },
-                    "left": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/conditional-expression.algo.ts",
-                        "line": 8,
-                        "end_line": 8,
-                        "column": 27,
-                        "end_column": 28
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "name": "y"
-                    },
-                    "op": "%",
-                    "right": {
-                      "_type": "IntegerConstant",
-                      "source_location": {
-                        "file": "tests/approvals/conditional-expression.algo.ts",
-                        "line": 8,
-                        "end_line": 8,
-                        "column": 31,
-                        "end_column": 32
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "value": 2,
-                      "teal_alias": null
-                    }
+                    "value": 2,
+                    "teal_alias": null
                   }
-                },
-                "true_expr": {
-                  "_type": "IntegerConstant",
-                  "source_location": {
-                    "file": "tests/approvals/conditional-expression.algo.ts",
-                    "line": 8,
-                    "end_line": 8,
-                    "column": 35,
-                    "end_column": 36
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "value": 2,
-                  "teal_alias": null
-                },
-                "false_expr": {
-                  "_type": "IntegerConstant",
-                  "source_location": {
-                    "file": "tests/approvals/conditional-expression.algo.ts",
-                    "line": 8,
-                    "end_line": 8,
-                    "column": 39,
-                    "end_column": 40
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "value": 1,
-                  "teal_alias": null
                 }
               },
-              "op": "+",
-              "right": {
-                "_type": "ConditionalExpression",
+              "true_expr": {
+                "_type": "IntegerConstant",
                 "source_location": {
                   "file": "tests/approvals/conditional-expression.algo.ts",
                   "line": 8,
                   "end_line": 8,
-                  "column": 45,
-                  "end_column": 58
+                  "column": 35,
+                  "end_column": 36
                 },
                 "wtype": {
                   "_type": "WType",
                   "name": "uint64",
                   "immutable": true
                 },
-                "condition": {
-                  "_type": "NumericComparisonExpression",
-                  "source_location": {
-                    "file": "tests/approvals/conditional-expression.algo.ts",
-                    "line": 8,
-                    "end_line": 8,
-                    "column": 45,
-                    "end_column": 50
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true
-                  },
-                  "lhs": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/conditional-expression.algo.ts",
-                      "line": 8,
-                      "end_line": 8,
-                      "column": 45,
-                      "end_column": 46
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "name": "x"
-                  },
-                  "operator": "<",
-                  "rhs": {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/conditional-expression.algo.ts",
-                      "line": 8,
-                      "end_line": 8,
-                      "column": 49,
-                      "end_column": 50
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "value": 4,
-                    "teal_alias": null
-                  }
+                "value": 2,
+                "teal_alias": null
+              },
+              "false_expr": {
+                "_type": "IntegerConstant",
+                "source_location": {
+                  "file": "tests/approvals/conditional-expression.algo.ts",
+                  "line": 8,
+                  "end_line": 8,
+                  "column": 39,
+                  "end_column": 40
                 },
-                "true_expr": {
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true
+                },
+                "value": 1,
+                "teal_alias": null
+              }
+            },
+            "op": "+",
+            "right": {
+              "_type": "ConditionalExpression",
+              "source_location": {
+                "file": "tests/approvals/conditional-expression.algo.ts",
+                "line": 8,
+                "end_line": 8,
+                "column": 45,
+                "end_column": 58
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "uint64",
+                "immutable": true
+              },
+              "condition": {
+                "_type": "NumericComparisonExpression",
+                "source_location": {
+                  "file": "tests/approvals/conditional-expression.algo.ts",
+                  "line": 8,
+                  "end_line": 8,
+                  "column": 45,
+                  "end_column": 50
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true
+                },
+                "lhs": {
                   "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/conditional-expression.algo.ts",
                     "line": 8,
                     "end_line": 8,
-                    "column": 53,
-                    "end_column": 54
+                    "column": 45,
+                    "end_column": 46
                   },
                   "wtype": {
                     "_type": "WType",
@@ -846,25 +749,58 @@
                   },
                   "name": "x"
                 },
-                "false_expr": {
-                  "_type": "VarExpression",
+                "operator": "<",
+                "rhs": {
+                  "_type": "IntegerConstant",
                   "source_location": {
                     "file": "tests/approvals/conditional-expression.algo.ts",
                     "line": 8,
                     "end_line": 8,
-                    "column": 57,
-                    "end_column": 58
+                    "column": 49,
+                    "end_column": 50
                   },
                   "wtype": {
                     "_type": "WType",
                     "name": "uint64",
                     "immutable": true
                   },
-                  "name": "y"
+                  "value": 4,
+                  "teal_alias": null
                 }
+              },
+              "true_expr": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/conditional-expression.algo.ts",
+                  "line": 8,
+                  "end_line": 8,
+                  "column": 53,
+                  "end_column": 54
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true
+                },
+                "name": "x"
+              },
+              "false_expr": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/conditional-expression.algo.ts",
+                  "line": 8,
+                  "end_line": 8,
+                  "column": 57,
+                  "end_column": 58
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true
+                },
+                "name": "y"
               }
-            },
-            "_id": "3"
+            }
           }
         },
         {
@@ -893,7 +829,7 @@
             "name": "e"
           },
           "value": {
-            "_type": "SingleEvaluation",
+            "_type": "ConditionalExpression",
             "source_location": {
               "file": "tests/approvals/conditional-expression.algo.ts",
               "line": 9,
@@ -906,52 +842,21 @@
               "name": "uint64",
               "immutable": true
             },
-            "source": {
-              "_type": "ConditionalExpression",
+            "condition": {
+              "_type": "ReinterpretCast",
               "source_location": {
                 "file": "tests/approvals/conditional-expression.algo.ts",
                 "line": 9,
                 "end_line": 9,
                 "column": 20,
-                "end_column": 26
+                "end_column": 21
               },
               "wtype": {
                 "_type": "WType",
-                "name": "uint64",
+                "name": "bool",
                 "immutable": true
               },
-              "condition": {
-                "_type": "ReinterpretCast",
-                "source_location": {
-                  "file": "tests/approvals/conditional-expression.algo.ts",
-                  "line": 9,
-                  "end_line": 9,
-                  "column": 20,
-                  "end_column": 21
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
-                  "immutable": true
-                },
-                "expr": {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/conditional-expression.algo.ts",
-                    "line": 9,
-                    "end_line": 9,
-                    "column": 20,
-                    "end_column": 21
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "name": "x"
-                }
-              },
-              "true_expr": {
+              "expr": {
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/conditional-expression.algo.ts",
@@ -966,26 +871,41 @@
                   "immutable": true
                 },
                 "name": "x"
-              },
-              "false_expr": {
-                "_type": "IntegerConstant",
-                "source_location": {
-                  "file": "tests/approvals/conditional-expression.algo.ts",
-                  "line": 9,
-                  "end_line": 9,
-                  "column": 25,
-                  "end_column": 26
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true
-                },
-                "value": 4,
-                "teal_alias": null
               }
             },
-            "_id": "4"
+            "true_expr": {
+              "_type": "VarExpression",
+              "source_location": {
+                "file": "tests/approvals/conditional-expression.algo.ts",
+                "line": 9,
+                "end_line": 9,
+                "column": 20,
+                "end_column": 21
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "uint64",
+                "immutable": true
+              },
+              "name": "x"
+            },
+            "false_expr": {
+              "_type": "IntegerConstant",
+              "source_location": {
+                "file": "tests/approvals/conditional-expression.algo.ts",
+                "line": 9,
+                "end_line": 9,
+                "column": 25,
+                "end_column": 26
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "uint64",
+                "immutable": true
+              },
+              "value": 4,
+              "teal_alias": null
+            }
           }
         },
         {
@@ -1014,7 +934,7 @@
             "name": "f"
           },
           "value": {
-            "_type": "SingleEvaluation",
+            "_type": "NumericComparisonExpression",
             "source_location": {
               "file": "tests/approvals/conditional-expression.algo.ts",
               "line": 10,
@@ -1027,36 +947,36 @@
               "name": "bool",
               "immutable": true
             },
-            "source": {
-              "_type": "NumericComparisonExpression",
+            "lhs": {
+              "_type": "ConditionalExpression",
               "source_location": {
                 "file": "tests/approvals/conditional-expression.algo.ts",
                 "line": 10,
                 "end_line": 10,
-                "column": 21,
-                "end_column": 62
+                "column": 28,
+                "end_column": 41
               },
               "wtype": {
                 "_type": "WType",
-                "name": "bool",
+                "name": "uint64",
                 "immutable": true
               },
-              "lhs": {
-                "_type": "ConditionalExpression",
+              "condition": {
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/conditional-expression.algo.ts",
                   "line": 10,
                   "end_line": 10,
                   "column": 28,
-                  "end_column": 41
+                  "end_column": 33
                 },
                 "wtype": {
                   "_type": "WType",
-                  "name": "uint64",
+                  "name": "bool",
                   "immutable": true
                 },
-                "condition": {
-                  "_type": "ReinterpretCast",
+                "expr": {
+                  "_type": "UInt64BinaryOperation",
                   "source_location": {
                     "file": "tests/approvals/conditional-expression.algo.ts",
                     "line": 10,
@@ -1066,16 +986,33 @@
                   },
                   "wtype": {
                     "_type": "WType",
-                    "name": "bool",
+                    "name": "uint64",
                     "immutable": true
                   },
-                  "expr": {
-                    "_type": "UInt64BinaryOperation",
+                  "left": {
+                    "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/conditional-expression.algo.ts",
                       "line": 10,
                       "end_line": 10,
                       "column": 28,
+                      "end_column": 29
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "name": "y"
+                  },
+                  "op": "%",
+                  "right": {
+                    "_type": "IntegerConstant",
+                    "source_location": {
+                      "file": "tests/approvals/conditional-expression.algo.ts",
+                      "line": 10,
+                      "end_line": 10,
+                      "column": 32,
                       "end_column": 33
                     },
                     "wtype": {
@@ -1083,149 +1020,83 @@
                       "name": "uint64",
                       "immutable": true
                     },
-                    "left": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/conditional-expression.algo.ts",
-                        "line": 10,
-                        "end_line": 10,
-                        "column": 28,
-                        "end_column": 29
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "name": "y"
-                    },
-                    "op": "%",
-                    "right": {
-                      "_type": "IntegerConstant",
-                      "source_location": {
-                        "file": "tests/approvals/conditional-expression.algo.ts",
-                        "line": 10,
-                        "end_line": 10,
-                        "column": 32,
-                        "end_column": 33
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "value": 2,
-                      "teal_alias": null
-                    }
+                    "value": 2,
+                    "teal_alias": null
                   }
-                },
-                "true_expr": {
-                  "_type": "IntegerConstant",
-                  "source_location": {
-                    "file": "tests/approvals/conditional-expression.algo.ts",
-                    "line": 10,
-                    "end_line": 10,
-                    "column": 36,
-                    "end_column": 37
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "value": 2,
-                  "teal_alias": null
-                },
-                "false_expr": {
-                  "_type": "IntegerConstant",
-                  "source_location": {
-                    "file": "tests/approvals/conditional-expression.algo.ts",
-                    "line": 10,
-                    "end_line": 10,
-                    "column": 40,
-                    "end_column": 41
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "value": 1,
-                  "teal_alias": null
                 }
               },
-              "operator": "==",
-              "rhs": {
-                "_type": "ConditionalExpression",
+              "true_expr": {
+                "_type": "IntegerConstant",
                 "source_location": {
                   "file": "tests/approvals/conditional-expression.algo.ts",
                   "line": 10,
                   "end_line": 10,
-                  "column": 48,
-                  "end_column": 61
+                  "column": 36,
+                  "end_column": 37
                 },
                 "wtype": {
                   "_type": "WType",
                   "name": "uint64",
                   "immutable": true
                 },
-                "condition": {
-                  "_type": "NumericComparisonExpression",
-                  "source_location": {
-                    "file": "tests/approvals/conditional-expression.algo.ts",
-                    "line": 10,
-                    "end_line": 10,
-                    "column": 48,
-                    "end_column": 53
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true
-                  },
-                  "lhs": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/conditional-expression.algo.ts",
-                      "line": 10,
-                      "end_line": 10,
-                      "column": 48,
-                      "end_column": 49
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "name": "x"
-                  },
-                  "operator": "<",
-                  "rhs": {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/conditional-expression.algo.ts",
-                      "line": 10,
-                      "end_line": 10,
-                      "column": 52,
-                      "end_column": 53
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "value": 4,
-                    "teal_alias": null
-                  }
+                "value": 2,
+                "teal_alias": null
+              },
+              "false_expr": {
+                "_type": "IntegerConstant",
+                "source_location": {
+                  "file": "tests/approvals/conditional-expression.algo.ts",
+                  "line": 10,
+                  "end_line": 10,
+                  "column": 40,
+                  "end_column": 41
                 },
-                "true_expr": {
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true
+                },
+                "value": 1,
+                "teal_alias": null
+              }
+            },
+            "operator": "==",
+            "rhs": {
+              "_type": "ConditionalExpression",
+              "source_location": {
+                "file": "tests/approvals/conditional-expression.algo.ts",
+                "line": 10,
+                "end_line": 10,
+                "column": 48,
+                "end_column": 61
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "uint64",
+                "immutable": true
+              },
+              "condition": {
+                "_type": "NumericComparisonExpression",
+                "source_location": {
+                  "file": "tests/approvals/conditional-expression.algo.ts",
+                  "line": 10,
+                  "end_line": 10,
+                  "column": 48,
+                  "end_column": 53
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true
+                },
+                "lhs": {
                   "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/conditional-expression.algo.ts",
                     "line": 10,
                     "end_line": 10,
-                    "column": 56,
-                    "end_column": 57
+                    "column": 48,
+                    "end_column": 49
                   },
                   "wtype": {
                     "_type": "WType",
@@ -1234,25 +1105,58 @@
                   },
                   "name": "x"
                 },
-                "false_expr": {
-                  "_type": "VarExpression",
+                "operator": "<",
+                "rhs": {
+                  "_type": "IntegerConstant",
                   "source_location": {
                     "file": "tests/approvals/conditional-expression.algo.ts",
                     "line": 10,
                     "end_line": 10,
-                    "column": 60,
-                    "end_column": 61
+                    "column": 52,
+                    "end_column": 53
                   },
                   "wtype": {
                     "_type": "WType",
                     "name": "uint64",
                     "immutable": true
                   },
-                  "name": "y"
+                  "value": 4,
+                  "teal_alias": null
                 }
+              },
+              "true_expr": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/conditional-expression.algo.ts",
+                  "line": 10,
+                  "end_line": 10,
+                  "column": 56,
+                  "end_column": 57
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true
+                },
+                "name": "x"
+              },
+              "false_expr": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/conditional-expression.algo.ts",
+                  "line": 10,
+                  "end_line": 10,
+                  "column": 60,
+                  "end_column": 61
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "uint64",
+                  "immutable": true
+                },
+                "name": "y"
               }
-            },
-            "_id": "5"
+            }
           }
         },
         {

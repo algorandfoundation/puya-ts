@@ -287,16 +287,16 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__(
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality() -> void:
     block@0: // L11
-        let awst_tmp%0#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(0x0000000000000000, 0x0000000000000000)
-        let v1#0: Encoded(uint64,uint64) = awst_tmp%0#0
+        let tmp%0#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(0x0000000000000000, 0x0000000000000000)
+        let v1#0: Encoded(uint64,uint64) = tmp%0#0
         let tuple_item%0#0: Encoded(uint64) = extract_value(v1#0, 0)
         (log tuple_item%0#0)
         let tuple_item%1#0: Encoded(uint64) = extract_value(v1#0, 1)
         (log tuple_item%1#0)
-        let awst_tmp%1#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(0x0000000000000000, 0x0000000000000000)
-        let v2#0: Encoded(uint64,uint64) = awst_tmp%1#0
-        let tmp%0#0: bool = (== v1#0 v2#0)
-        (assert tmp%0#0)
+        let tmp%1#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(0x0000000000000000, 0x0000000000000000)
+        let v2#0: Encoded(uint64,uint64) = tmp%1#0
+        let tmp%2#0: bool = (== v1#0 v2#0)
+        (assert tmp%2#0)
         return 
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors(v1: Encoded(uint64,uint64), v2: Encoded(uint64,uint64)) -> Encoded(uint64,uint64):
@@ -328,16 +328,16 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpr
     block@0: // L32
         let tuple_item%0#0: Encoded(uint64) = extract_value(v1#0, 0)
         let tuple_item%1#0: Encoded(uint64) = extract_value(v1#0, 1)
-        let awst_tmp%0#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(tuple_item%0#0, tuple_item%1#0)
-        let v2#0: Encoded(uint64,uint64) = awst_tmp%0#0
+        let tmp%0#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(tuple_item%0#0, tuple_item%1#0)
+        let v2#0: Encoded(uint64,uint64) = tmp%0#0
         let tuple_item%2#0: Encoded(uint64) = extract_value(v2#0, 0)
         let tuple_item%3#0: Encoded(uint64) = extract_value(v2#0, 1)
-        let awst_tmp%1#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(tuple_item%2#0, tuple_item%3#0)
-        let v3#0: Encoded(uint64,uint64) = awst_tmp%1#0
-        let tmp%0#0: bool = (== v1#0 v2#0)
-        (assert tmp%0#0)
-        let tmp%1#0: bool = (== v3#0 v1#0)
-        (assert tmp%1#0)
+        let tmp%1#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(tuple_item%2#0, tuple_item%3#0)
+        let v3#0: Encoded(uint64,uint64) = tmp%1#0
+        let tmp%2#0: bool = (== v1#0 v2#0)
+        (assert tmp%2#0)
+        let tmp%3#0: bool = (== v3#0 v1#0)
+        (assert tmp%3#0)
         return 
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes(v1: Encoded(uint64,uint64)) -> Encoded(uint64,uint64):
@@ -374,10 +374,10 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getMain() -> Encoded(
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled(key: string, index: uint64, lastCalled: uint64) -> void:
     block@0: // L64
-        let awst_tmp%0#0: Encoded(uint64) = bytes_encode<uint64>(lastCalled#0)
+        let tmp%0#0: Encoded(uint64) = bytes_encode<uint64>(lastCalled#0)
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         let storage_value%0#0: bytes = box_read(box_prefixed_key%0#0)
-        let updated_tuple%0#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = replace_value(storage_value%0#0, 4, index#0, 2, awst_tmp%0#0)
+        let updated_tuple%0#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = replace_value(storage_value%0#0, 4, index#0, 2, tmp%0#0)
         (box_del box_prefixed_key%0#0)
         box_write(box_prefixed_key%0#0, updated_tuple%0#0)
         return 
@@ -388,10 +388,10 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin(key: string
         let tmp%1#0: Encoded(uint8[4]) = bytes_encode<uint8[4]>(method "test()void")
         let tmp%2#0: Encoded(uint8[4],uint64,uint64) = bytes_encode<(uint8[4],uint64,uint64)>(tmp%1#0, 0x0000000000000001, 0x0000000000000001)
         let encoded_array%0#0: Encoded(len+(uint8[4],uint64,uint64)[]) = bytes_encode<(len+(uint8[4],uint64,uint64)[])>(tmp%2#0)
-        let awst_tmp%0#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = bytes_encode<(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[]))>(0x0000000000000001, 0x0000000000000000, 0x0000000000000000, tmp%0#0, encoded_array%0#0)
+        let tmp%3#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = bytes_encode<(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[]))>(0x0000000000000001, 0x0000000000000000, 0x0000000000000000, tmp%0#0, encoded_array%0#0)
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         (box_del box_prefixed_key%0#0)
-        box_write(box_prefixed_key%0#0, awst_tmp%0#0)
+        box_write(box_prefixed_key%0#0, tmp%3#0)
         return 
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.__algots__.defaultCreate() -> void:

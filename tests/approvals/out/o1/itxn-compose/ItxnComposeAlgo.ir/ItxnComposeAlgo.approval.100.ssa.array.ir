@@ -164,9 +164,9 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegi
         let aggregate%length_uint16%1#1: bytes = ((extract 6 2) aggregate%as_bytes%1#1)
         let aggregate%encoded_value%1#1: bytes = (concat aggregate%length_uint16%1#1 "ho")
         let aggregate%as_Encoded(len+utf8[])%1#1: Encoded(len+utf8[]) = aggregate%encoded_value%1#1
-        let tmp%2#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%1#1
+        let tmp%3#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%1#1
         ((itxn_field ApplicationArgs) method "greet(string)string")
-        ((itxn_field ApplicationArgs) tmp%2#0)
+        ((itxn_field ApplicationArgs) tmp%3#0)
         ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
@@ -178,9 +178,9 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegi
         let aggregate%length_uint16%2#1: bytes = ((extract 6 2) aggregate%as_bytes%2#1)
         let aggregate%encoded_value%2#1: bytes = (concat aggregate%length_uint16%2#1 "ho")
         let aggregate%as_Encoded(len+utf8[])%2#1: Encoded(len+utf8[]) = aggregate%encoded_value%2#1
-        let tmp%3#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%2#1
+        let tmp%4#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%2#1
         ((itxn_field ApplicationArgs) method "greet(string)string")
-        ((itxn_field ApplicationArgs) tmp%3#0)
+        ((itxn_field ApplicationArgs) tmp%4#0)
         ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)

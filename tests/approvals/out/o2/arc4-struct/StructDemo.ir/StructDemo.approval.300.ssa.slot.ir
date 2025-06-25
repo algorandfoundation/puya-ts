@@ -24,9 +24,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let v1#6: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
         let v2#1: Encoded(uint64,uint64) = (txna ApplicationArgs 2)
         let tmp%0#7: uint64 = (extract_uint64 v1#6 0u)
-        let tmp%1#5: uint64 = (extract_uint64 v2#1 0u)
-        let tmp%2#2: uint64 = (+ tmp%0#7 tmp%1#5)
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob tmp%2#2)
+        let tmp%1#4: uint64 = (extract_uint64 v2#1 0u)
+        let tmp%2#3: uint64 = (+ tmp%0#7 tmp%1#4)
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob tmp%2#3)
         let tmp%4#1: uint64 = (extract_uint64 v1#6 8u)
         let tmp%5#1: uint64 = (extract_uint64 v2#1 8u)
         let tmp%6#1: uint64 = (+ tmp%4#1 tmp%5#1)
@@ -64,10 +64,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%extract%10#1: bytes = ((extract 0 8) v2#0)
         let aggregate%extract%11#1: bytes = ((extract 8 8) v2#0)
         let v3#0: Encoded(uint64,uint64) = (concat aggregate%extract%10#1 aggregate%extract%11#1)
-        let tmp%0#6: bool = (== v1#2 v2#0)
-        (assert tmp%0#6)
-        let tmp%1#4: bool = (== v3#0 v1#2)
-        (assert tmp%1#4)
+        let tmp%2#2: bool = (== v1#2 v2#0)
+        (assert tmp%2#2)
+        let tmp%3#2: bool = (== v3#0 v1#2)
+        (assert tmp%3#2)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#3: bool = 1u
         goto block@20
     block@7: // toAndFromBytes_route_L39
@@ -103,8 +103,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let box_prefixed_key%0#2: bytes = (concat "plugins" key#2)
         let (value#1: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])), aggregate%box_get%1#1: bool) = (box_get box_prefixed_key%0#2)
         (assert aggregate%box_get%1#1) // Box must have value
-        let tmp%0#4: uint64 = (extract_uint64 value#1 16u)
-        (assert tmp%0#4) // Last called not zero
+        let tmp%0#5: uint64 = (extract_uint64 value#1 16u)
+        (assert tmp%0#5) // Last called not zero
         let tmp%41#0: bytes = (concat 0x151f7c75 value#1)
         (log tmp%41#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#6: bool = 1u
@@ -117,8 +117,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%44#0) // can only call when not creating
         let (value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])), aggregate%box_get%3#1: bool) = (box_get "main")
         (assert aggregate%box_get%3#1) // Box must have value
-        let tmp%0#3: uint64 = (extract_uint64 value#0 16u)
-        (assert tmp%0#3) // Last called not zero
+        let tmp%0#4: uint64 = (extract_uint64 value#0 16u)
+        (assert tmp%0#4) // Last called not zero
         let tmp%47#0: bytes = (concat 0x151f7c75 value#0)
         (log tmp%47#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#7: bool = 1u

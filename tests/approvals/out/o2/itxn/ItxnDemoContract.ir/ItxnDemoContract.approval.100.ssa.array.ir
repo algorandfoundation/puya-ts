@@ -44,18 +44,18 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_submit
         let asset2_txn.ConfigAssetName#0: bytes = (itxn ConfigAssetName)
         let asset2_txn.CreatedAssetID#0: uint64 = (itxn CreatedAssetID)
-        let tmp%0#6: bool = (== asset1_txn.ConfigAssetName#0 "AST1")
-        (assert tmp%0#6) // asset1_txn is correct
+        let tmp%0#5: bool = (== asset1_txn.ConfigAssetName#0 "AST1")
+        (assert tmp%0#5) // asset1_txn is correct
         let tmp%1#5: bool = (== asset2_txn.ConfigAssetName#0 "AST2")
         (assert tmp%1#5) // asset2_txn is correct
         let (value%0#1: bytes, check%0#1: bool) = ((asset_params_get AssetName) asset1_txn.CreatedAssetID#0)
         (assert check%0#1) // asset exists
-        let tmp%2#5: bool = (== value%0#1 "AST1")
-        (assert tmp%2#5) // created asset 1 is correct
+        let tmp%2#4: bool = (== value%0#1 "AST1")
+        (assert tmp%2#4) // created asset 1 is correct
         let (value%1#0: bytes, check%1#0: bool) = ((asset_params_get AssetName) asset2_txn.CreatedAssetID#0)
         (assert check%1#0) // asset exists
-        let tmp%3#5: bool = (== value%1#0 "AST2")
-        (assert tmp%3#5) // created asset 2 is correct
+        let tmp%3#4: bool = (== value%1#0 "AST2")
+        (assert tmp%3#4) // created asset 2 is correct
         itxn_begin
         ((itxn_field ClearStateProgramPages) 0x098101)
         ((itxn_field ApprovalProgramPages) 0x098101)
@@ -155,12 +155,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         itxn_submit
         let createAppTxn.Note#0: bytes = (itxn Note)
-        let tmp%0#5: bytes = (itxna ApplicationArgs 0)
-        let tmp%1#4: bool = (== tmp%0#5 "1")
+        let tmp%0#4: bytes = (itxna ApplicationArgs 0)
+        let tmp%1#4: bool = (== tmp%0#4 "1")
         (assert tmp%1#4) // correct args used 1
-        let tmp%2#4: bytes = (itxna ApplicationArgs 1)
-        let tmp%3#4: bool = (== tmp%2#4 "2")
-        (assert tmp%3#4) // correct args used 2
+        let tmp%2#3: bytes = (itxna ApplicationArgs 1)
+        let tmp%3#3: bool = (== tmp%2#3 "2")
+        (assert tmp%3#3) // correct args used 2
         let tmp%4#4: uint64 = (txn NumAppArgs)
         let tmp%5#4: bool = (> tmp%4#4 1u)
         goto tmp%5#4 ? block@39 : block@40
@@ -174,8 +174,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         itxn_submit
         let tmp%6#4: bytes = (itxna ApplicationArgs 0)
-        let tmp%7#3: bool = (== tmp%6#4 "42")
-        (assert tmp%7#3) // correct args used 2
+        let tmp%7#4: bool = (== tmp%6#4 "42")
+        (assert tmp%7#4) // correct args used 2
         let tmp%8#3: bool = (== createAppTxn.Note#0 "with args param set")
         (assert tmp%8#3)
         goto block@40
@@ -301,18 +301,18 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field TypeEnum) 6u)
         ((itxn_field Fee) 0u)
         itxn_submit
-        let tmp%0#4: bytes = (gitxna 0 Logs 0)
-        let tmp%1#3: bool = (== tmp%0#4 "1")
+        let tmp%0#3: bytes = (gitxna 0 Logs 0)
+        let tmp%1#3: bool = (== tmp%0#3 "1")
         (assert tmp%1#3)
-        let tmp%2#3: bytes = (gitxna 1 Logs 0)
-        let tmp%3#3: bool = (== tmp%2#3 "2")
-        (assert tmp%3#3)
+        let tmp%2#2: bytes = (gitxna 1 Logs 0)
+        let tmp%3#2: bool = (== tmp%2#2 "2")
+        (assert tmp%3#2)
         let tmp%4#3: bytes = (gitxna 2 Logs 0)
         let tmp%5#3: bool = (== tmp%4#3 "3")
         (assert tmp%5#3)
         let tmp%6#3: bytes = (gitxna 3 Logs 0)
-        let tmp%7#2: bool = (== tmp%6#3 "4")
-        (assert tmp%7#2)
+        let tmp%7#3: bool = (== tmp%6#3 "4")
+        (assert tmp%7#3)
         let tmp%8#2: bytes = (gitxna 4 Logs 0)
         let tmp%9#2: bool = (== tmp%8#2 "5")
         (assert tmp%9#2)
@@ -323,10 +323,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%13#2: bool = (== tmp%12#2 "7")
         (assert tmp%13#2)
         let tmp%14#2: bytes = (gitxna 7 Logs 0)
-        let tmp%15#1: bool = (== tmp%14#2 "8")
-        (assert tmp%15#1)
-        let tmp%16#1: bytes = (gitxna 8 Logs 0)
-        let tmp%17#1: bool = (== tmp%16#1 "9")
+        let tmp%15#2: bool = (== tmp%14#2 "8")
+        (assert tmp%15#2)
+        let tmp%16#2: bytes = (gitxna 8 Logs 0)
+        let tmp%17#1: bool = (== tmp%16#2 "9")
         (assert tmp%17#1)
         let tmp%18#1: bytes = (gitxna 9 Logs 0)
         let tmp%19#1: bool = (== tmp%18#1 "10")
@@ -358,8 +358,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%17#0: uint64 = (txn ApplicationID)
         (assert tmp%17#0) // can only call when not creating
         let lotsOfBytes#0: bytes = (bzero 2044u)
-        let tmp%0#3: bytes = (concat 0x80fc0f lotsOfBytes#0)
-        let approval2#0: bytes = (concat tmp%0#3 0x48)
+        let tmp%1#2: bytes = (concat 0x80fc0f lotsOfBytes#0)
+        let approval2#0: bytes = (concat tmp%1#2 0x48)
         itxn_begin
         ((itxn_field ExtraProgramPages) 3u)
         ((itxn_field ApplicationArgs) "1")
@@ -375,12 +375,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let app1.ExtraProgramPages#0: uint64 = (itxn ExtraProgramPages)
         let app1.NumApprovalProgramPages#0: uint64 = (itxn NumApprovalProgramPages)
         let app1.NumClearStateProgramPages#0: uint64 = (itxn NumClearStateProgramPages)
-        let tmp%1#2: bool = (== app1.ExtraProgramPages#0 3u)
-        (assert tmp%1#2) // extra pages = 3
-        let tmp%2#2: bool = (== app1.NumApprovalProgramPages#0 2u)
-        (assert tmp%2#2) // approval pages = 2
-        let tmp%3#2: bytes = (itxna ApprovalProgramPages 0)
-        let tmp%4#2: bytes = (concat 0x098101 approval2#0)
+        let tmp%3#1: bool = (== app1.ExtraProgramPages#0 3u)
+        (assert tmp%3#1) // extra pages = 3
+        let tmp%4#2: bool = (== app1.NumApprovalProgramPages#0 2u)
+        (assert tmp%4#2) // approval pages = 2
+        let tmp%5#2: bytes = (itxna ApprovalProgramPages 0)
+        let tmp%6#2: bytes = (concat 0x098101 approval2#0)
         let length%0#0: uint64 = (len approval2#0)
         let is_out_of_bounds%0#0: bool = (>= 0u length%0#0)
         let bounded_index%0#0: uint64 = (select 0u length%0#0 is_out_of_bounds%0#0)
@@ -389,20 +389,20 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let bounded_index%1#0: uint64 = (- length%0#0 bounded_offset%0#0)
         let end_before_start%0#0: bool = (< bounded_index%1#0 bounded_index%0#0)
         let end%0#0: uint64 = (select bounded_index%1#0 bounded_index%0#0 end_before_start%0#0)
-        let tmp%5#2: bytes = (substring3 approval2#0 bounded_index%0#0 end%0#0)
-        let tmp%6#2: bytes = (concat tmp%4#2 tmp%5#2)
-        let tmp%7#1: bool = (== tmp%3#2 tmp%6#2)
-        (assert tmp%7#1) // expected approval page 0
-        let tmp%8#1: bytes = (itxna ApprovalProgramPages 1)
-        let tmp%9#1: bytes = (substring3 approval2#0 bounded_index%1#0 length%0#0)
-        let tmp%10#1: bytes = (concat tmp%9#1 approval2#0)
-        let tmp%11#1: bool = (== tmp%8#1 tmp%10#1)
-        (assert tmp%11#1) // expected approval page 1
-        let tmp%12#1: bool = (== app1.NumClearStateProgramPages#0 1u)
-        (assert tmp%12#1) // clear state pages = 1
-        let tmp%13#1: bytes = (itxna ClearStateProgramPages 0)
-        let tmp%14#1: bool = (== tmp%13#1 0x098101)
-        (assert tmp%14#1) // expected clear state page
+        let tmp%7#2: bytes = (substring3 approval2#0 bounded_index%0#0 end%0#0)
+        let tmp%8#1: bytes = (concat tmp%6#2 tmp%7#2)
+        let tmp%9#1: bool = (== tmp%5#2 tmp%8#1)
+        (assert tmp%9#1) // expected approval page 0
+        let tmp%10#1: bytes = (itxna ApprovalProgramPages 1)
+        let tmp%11#1: bytes = (substring3 approval2#0 bounded_index%1#0 length%0#0)
+        let tmp%12#1: bytes = (concat tmp%11#1 approval2#0)
+        let tmp%13#1: bool = (== tmp%10#1 tmp%12#1)
+        (assert tmp%13#1) // expected approval page 1
+        let tmp%14#1: bool = (== app1.NumClearStateProgramPages#0 1u)
+        (assert tmp%14#1) // clear state pages = 1
+        let tmp%15#1: bytes = (itxna ClearStateProgramPages 0)
+        let tmp%16#1: bool = (== tmp%15#1 0x098101)
+        (assert tmp%16#1) // expected clear state page
         let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#3: bool = 1u
         goto block@17
     block@9: // test5_route_L208
@@ -444,22 +444,22 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%extract%0#1: bytes = (extract3 returnValue#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
         let values%0#0: uint64 = (btoi tuple_item%0#0)
-        let tmp%4#1: bool = (== values%0#0 1u)
-        goto tmp%4#1 ? block@21 : block@24
+        let tmp%5#1: bool = (== values%0#0 1u)
+        goto tmp%5#1 ? block@21 : block@24
     block@21: // and_contd_L223
         let aggregate%extract%1#1: bytes = (extract3 returnValue#0 8u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#1
         let values%1#0: uint64 = (btoi tuple_item%1#0)
-        let tmp%5#1: bool = (== values%1#0 1000u)
-        goto tmp%5#1 ? block@22 : block@24
+        let tmp%6#1: bool = (== values%1#0 1000u)
+        goto tmp%6#1 ? block@22 : block@24
     block@22: // and_contd_L223
         let aggregate%extract_uint16%0#1: uint64 = (extract_uint16 returnValue#0 16u)
         let aggregate%len%0#1: uint64 = (len returnValue#0)
         let aggregate%substring3%0#1: bytes = (substring3 returnValue#0 aggregate%extract_uint16%0#1 aggregate%len%0#1)
         let tuple_item%2#0: Encoded(len+utf8[]) = aggregate%substring3%0#1
         let values%2#0: string = ((extract 2 0) tuple_item%2#0)
-        let tmp%6#1: bool = (== values%2#0 "hello")
-        goto tmp%6#1 ? block@23 : block@24
+        let tmp%7#1: bool = (== values%2#0 "hello")
+        goto tmp%7#1 ? block@23 : block@24
     block@23: // bool_true_L223
         let and_result%0#0: bool = 1u
         goto block@25

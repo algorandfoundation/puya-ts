@@ -20,19 +20,19 @@ contract AssignmentsAlgo
   testArrayDestructure(i_a: arc4.dynamic_array<uint64>, u: uint64, m_a: arc4.dynamic_array<uint64>): void
   {
     #[a1]: readonly [uint64] = #[i_a[1]]
-    a5: arc4.tuple<uint64,uint64,uint64> = ($0 = (#[a2, a3] = #[($1 = #[tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u)]).0, $1.1]), ARC4_ENCODE(#[$1.0, $1.1, $1.2], wtype=arc4.tuple<uint64,uint64,uint64>))
+    a5: arc4.tuple<uint64,uint64,uint64> = (#[a2, a3] = #[($0 = #[tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u)]).0, $0.1]), ARC4_ENCODE(#[$0.0, $0.1, $0.2], wtype=arc4.tuple<uint64,uint64,uint64>)
     assert(3 == 3, comment=a5 length should be 3)
-    #[a4]: readonly [uint64] = #[($2 = #[1]).0]
-    #[c, d]: readonly [uint64, uint64] = #[($3 = #[tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u)]).0, $3.1]
+    #[a4]: readonly [uint64] = #[($1 = #[1]).0]
+    #[c, d]: readonly [uint64, uint64] = #[($2 = #[tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u)]).0, $2.1]
     #[a6, a7]: readonly [uint64, uint64] = #[m_a[0], m_a[1]]
   }
   
   testArrayNarrowing(m_a: arc4.dynamic_array<uint64>, u: uint64): void
   {
-    direct: arc4.dynamic_array<uint64> = ($4 = copy(m_a))
-    narrowed: arc4.dynamic_array<uint64> = convert_array(($5 = copy(m_a)), wtype=arc4.dynamic_array<uint64>)
-    result: arc4.dynamic_array<uint64> = ($6 = (fromLit = new arc4.dynamic_array<uint64>(($7 = #[u, u, u]).0, $7.1, $7.2)), new arc4.dynamic_array<uint64>($7.0, $7.1, $7.2))
-    fromLit2: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(($8 = #[u, u, u]).0, $8.1, $8.2)
+    direct: arc4.dynamic_array<uint64> = copy(m_a)
+    narrowed: arc4.dynamic_array<uint64> = convert_array(copy(m_a), wtype=arc4.dynamic_array<uint64>)
+    result: arc4.dynamic_array<uint64> = (fromLit = new arc4.dynamic_array<uint64>(($3 = #[u, u, u]).0, $3.1, $3.2)), new arc4.dynamic_array<uint64>(($4 = #[u, u, u]).0, $4.1, $4.2)
+    fromLit2: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(($5 = #[u, u, u]).0, $5.1, $5.2)
   }
   
   testNested(i_a: arc4.dynamic_array<arc4.dynamic_array<uint64>>): void
@@ -48,18 +48,18 @@ contract AssignmentsAlgo
   
   testObjLiteralNarrowing(a: uint64, b: uint64): void
   {
-    mObj: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($9 = #{ a: a, b: b }).a, b=$9.b)
-    imObj: ImmutableObj{ a: uint64, b: uint64 } = #{ a: ($10 = #{ a: a, b: b }).a, b: $10.b }
-    mObj2: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($11 = #{ a: ($12 = #{ a: 123, b: 456 }).a, b: $12.b }).a, b=$11.b)
-    imObj2: ImmutableObj{ a: uint64, b: uint64 } = #{ a: ($13 = #{ a: ($14 = #{ a: 456, b: b }).a, b: $14.b }).a, b: $13.b }
-    mObj3: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($15 = #{ a: ($16 = tests/approvals/assignments.algo.ts::getVal()).a, b: $16.b }).a, b=$15.b)
-    mObj4: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($17 = #{ a: a, b: b }).a, b=$17.b)
+    mObj: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($6 = #{ a: a, b: b }).a, b=$6.b)
+    imObj: ImmutableObj{ a: uint64, b: uint64 } = #{ a: ($7 = #{ a: a, b: b }).a, b: $7.b }
+    mObj2: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($8 = #{ a: ($9 = #{ a: 123, b: 456 }).a, b: $9.b }).a, b=$8.b)
+    imObj2: ImmutableObj{ a: uint64, b: uint64 } = #{ a: ($10 = #{ a: ($11 = #{ a: 456, b: b }).a, b: $11.b }).a, b: $10.b }
+    mObj3: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($12 = #{ a: ($13 = tests/approvals/assignments.algo.ts::getVal()).a, b: $13.b }).a, b=$12.b)
+    mObj4: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($14 = #{ a: a, b: b }).a, b=$14.b)
   }
   
   testMixed(m: arc4.dynamic_array<object>): void
   {
     #[#[#[a1]]]: readonly [readonly [readonly [uint64]]] = #[#[#[m[0].a.0]]]
-    m: arc4.dynamic_array<object> = new arc4.dynamic_array<object>(new object(a=ARC4_ENCODE(#[($18 = ($19 = #[#{ a: #[($20 = #{ a: #[213] }).a.0] }]).0).a.0], wtype=arc4.tuple<uint64>)))
+    m: arc4.dynamic_array<object> = new arc4.dynamic_array<object>(new object(a=ARC4_ENCODE(#[($15 = ($16 = #[#{ a: #[($17 = #{ a: #[213] }).a.0] }]).0).a.0], wtype=arc4.tuple<uint64>)))
   }
   
   __algots__.defaultCreate(): void
@@ -69,7 +69,7 @@ contract AssignmentsAlgo
 }
 subroutine getVal(): ImmutableObj{ a: uint64, b: uint64 }
 {
-  return #{ a: ($21 = #{ a: 1, b: 2 }).a, b: $21.b }
+  return #{ a: ($18 = #{ a: 1, b: 2 }).a, b: $18.b }
 }
 subroutine logAndReturn(u: uint64): uint64
 {

@@ -21,8 +21,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%8#0: uint64 = (btoi reinterpret_Encoded(uint8)%0#0)
         let verifier#0: uint64 = ((txnas Applications) tmp%8#0)
         let tmp%0#3: account = ((gtxns Receiver) funds#0)
-        let tmp%1#2: account = (global CurrentApplicationAddress)
-        let tmp%2#2: bool = (== tmp%0#3 tmp%1#2)
+        let tmp%1#1: account = (global CurrentApplicationAddress)
+        let tmp%2#2: bool = (== tmp%0#3 tmp%1#1)
         (assert tmp%2#2) // assert target is match for conditions
         let array_length%0#0: uint64 = (extract_uint16 addresses#0 0u)
         (assert array_length%0#0) // must provide some accounts
@@ -138,9 +138,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%length_uint16%2#1: bytes = ((extract 6 2) aggregate%as_bytes%3#1)
         let aggregate%encoded_value%2#1: bytes = (concat aggregate%length_uint16%2#1 "ho")
         let aggregate%as_Encoded(len+utf8[])%1#1: Encoded(len+utf8[]) = aggregate%encoded_value%2#1
-        let tmp%2#1: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%1#1
+        let tmp%3#1: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%1#1
         ((itxn_field ApplicationArgs) method "greet(string)string")
-        ((itxn_field ApplicationArgs) tmp%2#1)
+        ((itxn_field ApplicationArgs) tmp%3#1)
         ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
@@ -152,9 +152,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%length_uint16%3#1: bytes = ((extract 6 2) aggregate%as_bytes%4#1)
         let aggregate%encoded_value%3#1: bytes = (concat aggregate%length_uint16%3#1 "ho")
         let aggregate%as_Encoded(len+utf8[])%2#1: Encoded(len+utf8[]) = aggregate%encoded_value%3#1
-        let tmp%3#1: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%2#1
+        let tmp%4#1: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%2#1
         ((itxn_field ApplicationArgs) method "greet(string)string")
-        ((itxn_field ApplicationArgs) tmp%3#1)
+        ((itxn_field ApplicationArgs) tmp%4#1)
         ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)

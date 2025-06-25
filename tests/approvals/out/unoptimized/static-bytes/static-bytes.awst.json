@@ -1580,7 +1580,7 @@
                 "name": "joined"
               },
               "value": {
-                "_type": "SingleEvaluation",
+                "_type": "CheckedMaybe",
                 "source_location": {
                   "file": "tests/approvals/static-bytes.algo.ts",
                   "line": 37,
@@ -1594,8 +1594,8 @@
                   "immutable": true,
                   "length": 55
                 },
-                "source": {
-                  "_type": "CheckedMaybe",
+                "expr": {
+                  "_type": "TupleExpression",
                   "source_location": {
                     "file": "tests/approvals/static-bytes.algo.ts",
                     "line": 37,
@@ -1604,41 +1604,41 @@
                     "end_column": 77
                   },
                   "wtype": {
-                    "_type": "BytesWType",
-                    "name": "bytes[55]",
+                    "_type": "WTuple",
+                    "name": "tuple",
                     "immutable": true,
-                    "length": 55
-                  },
-                  "expr": {
-                    "_type": "TupleExpression",
-                    "source_location": {
-                      "file": "tests/approvals/static-bytes.algo.ts",
-                      "line": 37,
-                      "end_line": 37,
-                      "column": 19,
-                      "end_column": 77
-                    },
-                    "wtype": {
-                      "_type": "WTuple",
-                      "name": "tuple",
-                      "immutable": true,
-                      "types": [
-                        {
-                          "_type": "BytesWType",
-                          "name": "bytes[55]",
-                          "immutable": true,
-                          "length": 55
-                        },
-                        {
-                          "_type": "WType",
-                          "name": "bool",
-                          "immutable": true
-                        }
-                      ]
-                    },
-                    "items": [
+                    "types": [
                       {
-                        "_type": "ReinterpretCast",
+                        "_type": "BytesWType",
+                        "name": "bytes[55]",
+                        "immutable": true,
+                        "length": 55
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true
+                      }
+                    ]
+                  },
+                  "items": [
+                    {
+                      "_type": "ReinterpretCast",
+                      "source_location": {
+                        "file": "tests/approvals/static-bytes.algo.ts",
+                        "line": 37,
+                        "end_line": 37,
+                        "column": 19,
+                        "end_column": 77
+                      },
+                      "wtype": {
+                        "_type": "BytesWType",
+                        "name": "bytes[55]",
+                        "immutable": true,
+                        "length": 55
+                      },
+                      "expr": {
+                        "_type": "SingleEvaluation",
                         "source_location": {
                           "file": "tests/approvals/static-bytes.algo.ts",
                           "line": 37,
@@ -1648,12 +1648,12 @@
                         },
                         "wtype": {
                           "_type": "BytesWType",
-                          "name": "bytes[55]",
+                          "name": "bytes",
                           "immutable": true,
-                          "length": 55
+                          "length": null
                         },
-                        "expr": {
-                          "_type": "SingleEvaluation",
+                        "source": {
+                          "_type": "BytesBinaryOperation",
                           "source_location": {
                             "file": "tests/approvals/static-bytes.algo.ts",
                             "line": 37,
@@ -1667,7 +1667,7 @@
                             "immutable": true,
                             "length": null
                           },
-                          "source": {
+                          "left": {
                             "_type": "BytesBinaryOperation",
                             "source_location": {
                               "file": "tests/approvals/static-bytes.algo.ts",
@@ -1713,7 +1713,7 @@
                                   "length": null
                                 },
                                 "left": {
-                                  "_type": "BytesBinaryOperation",
+                                  "_type": "BytesConstant",
                                   "source_location": {
                                     "file": "tests/approvals/static-bytes.algo.ts",
                                     "line": 37,
@@ -1727,43 +1727,8 @@
                                     "immutable": true,
                                     "length": null
                                   },
-                                  "left": {
-                                    "_type": "BytesConstant",
-                                    "source_location": {
-                                      "file": "tests/approvals/static-bytes.algo.ts",
-                                      "line": 37,
-                                      "end_line": 37,
-                                      "column": 19,
-                                      "end_column": 77
-                                    },
-                                    "wtype": {
-                                      "_type": "BytesWType",
-                                      "name": "bytes",
-                                      "immutable": true,
-                                      "length": null
-                                    },
-                                    "value": "",
-                                    "encoding": "utf8"
-                                  },
-                                  "op": "+",
-                                  "right": {
-                                    "_type": "BytesConstant",
-                                    "source_location": {
-                                      "file": "tests/approvals/static-bytes.algo.ts",
-                                      "line": 37,
-                                      "end_line": 37,
-                                      "column": 31,
-                                      "end_column": 39
-                                    },
-                                    "wtype": {
-                                      "_type": "BytesWType",
-                                      "name": "bytes[3]",
-                                      "immutable": true,
-                                      "length": 3
-                                    },
-                                    "value": "VPaz",
-                                    "encoding": "utf8"
-                                  }
+                                  "value": "",
+                                  "encoding": "utf8"
                                 },
                                 "op": "+",
                                 "right": {
@@ -1772,17 +1737,17 @@
                                     "file": "tests/approvals/static-bytes.algo.ts",
                                     "line": 37,
                                     "end_line": 37,
-                                    "column": 42,
-                                    "end_column": 49
+                                    "column": 31,
+                                    "end_column": 39
                                   },
                                   "wtype": {
                                     "_type": "BytesWType",
-                                    "name": "bytes[2]",
+                                    "name": "bytes[3]",
                                     "immutable": true,
-                                    "length": 2
+                                    "length": 3
                                   },
-                                  "value": "s{a",
-                                  "encoding": "base16"
+                                  "value": "VPaz",
+                                  "encoding": "utf8"
                                 }
                               },
                               "op": "+",
@@ -1792,17 +1757,17 @@
                                   "file": "tests/approvals/static-bytes.algo.ts",
                                   "line": 37,
                                   "end_line": 37,
-                                  "column": 52,
-                                  "end_column": 62
+                                  "column": 42,
+                                  "end_column": 49
                                 },
                                 "wtype": {
                                   "_type": "BytesWType",
-                                  "name": "bytes[36]",
+                                  "name": "bytes[2]",
                                   "immutable": true,
-                                  "length": 36
+                                  "length": 2
                                 },
-                                "value": "000000000000000000000000000000000000000040PpG",
-                                "encoding": "base32"
+                                "value": "s{a",
+                                "encoding": "base16"
                               }
                             },
                             "op": "+",
@@ -1812,24 +1777,58 @@
                                 "file": "tests/approvals/static-bytes.algo.ts",
                                 "line": 37,
                                 "end_line": 37,
-                                "column": 65,
-                                "end_column": 75
+                                "column": 52,
+                                "end_column": 62
                               },
                               "wtype": {
                                 "_type": "BytesWType",
-                                "name": "bytes[14]",
+                                "name": "bytes[36]",
                                 "immutable": true,
-                                "length": 14
+                                "length": 36
                               },
-                              "value": "NM&qnZy-TzXK!+0Ze#",
-                              "encoding": "base64"
+                              "value": "000000000000000000000000000000000000000040PpG",
+                              "encoding": "base32"
                             }
                           },
-                          "_id": "2"
-                        }
+                          "op": "+",
+                          "right": {
+                            "_type": "BytesConstant",
+                            "source_location": {
+                              "file": "tests/approvals/static-bytes.algo.ts",
+                              "line": 37,
+                              "end_line": 37,
+                              "column": 65,
+                              "end_column": 75
+                            },
+                            "wtype": {
+                              "_type": "BytesWType",
+                              "name": "bytes[14]",
+                              "immutable": true,
+                              "length": 14
+                            },
+                            "value": "NM&qnZy-TzXK!+0Ze#",
+                            "encoding": "base64"
+                          }
+                        },
+                        "_id": "1"
+                      }
+                    },
+                    {
+                      "_type": "NumericComparisonExpression",
+                      "source_location": {
+                        "file": "tests/approvals/static-bytes.algo.ts",
+                        "line": 37,
+                        "end_line": 37,
+                        "column": 19,
+                        "end_column": 77
                       },
-                      {
-                        "_type": "NumericComparisonExpression",
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "bool",
+                        "immutable": true
+                      },
+                      "lhs": {
+                        "_type": "IntrinsicCall",
                         "source_location": {
                           "file": "tests/approvals/static-bytes.algo.ts",
                           "line": 37,
@@ -1839,28 +1838,29 @@
                         },
                         "wtype": {
                           "_type": "WType",
-                          "name": "bool",
+                          "name": "uint64",
                           "immutable": true
                         },
-                        "lhs": {
-                          "_type": "IntrinsicCall",
-                          "source_location": {
-                            "file": "tests/approvals/static-bytes.algo.ts",
-                            "line": 37,
-                            "end_line": 37,
-                            "column": 19,
-                            "end_column": 77
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true
-                          },
-                          "op_code": "len",
-                          "immediates": [],
-                          "stack_args": [
-                            {
-                              "_type": "SingleEvaluation",
+                        "op_code": "len",
+                        "immediates": [],
+                        "stack_args": [
+                          {
+                            "_type": "SingleEvaluation",
+                            "source_location": {
+                              "file": "tests/approvals/static-bytes.algo.ts",
+                              "line": 37,
+                              "end_line": 37,
+                              "column": 19,
+                              "end_column": 77
+                            },
+                            "wtype": {
+                              "_type": "BytesWType",
+                              "name": "bytes",
+                              "immutable": true,
+                              "length": null
+                            },
+                            "source": {
+                              "_type": "BytesBinaryOperation",
                               "source_location": {
                                 "file": "tests/approvals/static-bytes.algo.ts",
                                 "line": 37,
@@ -1874,7 +1874,7 @@
                                 "immutable": true,
                                 "length": null
                               },
-                              "source": {
+                              "left": {
                                 "_type": "BytesBinaryOperation",
                                 "source_location": {
                                   "file": "tests/approvals/static-bytes.algo.ts",
@@ -1920,7 +1920,7 @@
                                       "length": null
                                     },
                                     "left": {
-                                      "_type": "BytesBinaryOperation",
+                                      "_type": "BytesConstant",
                                       "source_location": {
                                         "file": "tests/approvals/static-bytes.algo.ts",
                                         "line": 37,
@@ -1934,43 +1934,8 @@
                                         "immutable": true,
                                         "length": null
                                       },
-                                      "left": {
-                                        "_type": "BytesConstant",
-                                        "source_location": {
-                                          "file": "tests/approvals/static-bytes.algo.ts",
-                                          "line": 37,
-                                          "end_line": 37,
-                                          "column": 19,
-                                          "end_column": 77
-                                        },
-                                        "wtype": {
-                                          "_type": "BytesWType",
-                                          "name": "bytes",
-                                          "immutable": true,
-                                          "length": null
-                                        },
-                                        "value": "",
-                                        "encoding": "utf8"
-                                      },
-                                      "op": "+",
-                                      "right": {
-                                        "_type": "BytesConstant",
-                                        "source_location": {
-                                          "file": "tests/approvals/static-bytes.algo.ts",
-                                          "line": 37,
-                                          "end_line": 37,
-                                          "column": 31,
-                                          "end_column": 39
-                                        },
-                                        "wtype": {
-                                          "_type": "BytesWType",
-                                          "name": "bytes[3]",
-                                          "immutable": true,
-                                          "length": 3
-                                        },
-                                        "value": "VPaz",
-                                        "encoding": "utf8"
-                                      }
+                                      "value": "",
+                                      "encoding": "utf8"
                                     },
                                     "op": "+",
                                     "right": {
@@ -1979,17 +1944,17 @@
                                         "file": "tests/approvals/static-bytes.algo.ts",
                                         "line": 37,
                                         "end_line": 37,
-                                        "column": 42,
-                                        "end_column": 49
+                                        "column": 31,
+                                        "end_column": 39
                                       },
                                       "wtype": {
                                         "_type": "BytesWType",
-                                        "name": "bytes[2]",
+                                        "name": "bytes[3]",
                                         "immutable": true,
-                                        "length": 2
+                                        "length": 3
                                       },
-                                      "value": "s{a",
-                                      "encoding": "base16"
+                                      "value": "VPaz",
+                                      "encoding": "utf8"
                                     }
                                   },
                                   "op": "+",
@@ -1999,17 +1964,17 @@
                                       "file": "tests/approvals/static-bytes.algo.ts",
                                       "line": 37,
                                       "end_line": 37,
-                                      "column": 52,
-                                      "end_column": 62
+                                      "column": 42,
+                                      "end_column": 49
                                     },
                                     "wtype": {
                                       "_type": "BytesWType",
-                                      "name": "bytes[36]",
+                                      "name": "bytes[2]",
                                       "immutable": true,
-                                      "length": 36
+                                      "length": 2
                                     },
-                                    "value": "000000000000000000000000000000000000000040PpG",
-                                    "encoding": "base32"
+                                    "value": "s{a",
+                                    "encoding": "base16"
                                   }
                                 },
                                 "op": "+",
@@ -2019,47 +1984,65 @@
                                     "file": "tests/approvals/static-bytes.algo.ts",
                                     "line": 37,
                                     "end_line": 37,
-                                    "column": 65,
-                                    "end_column": 75
+                                    "column": 52,
+                                    "end_column": 62
                                   },
                                   "wtype": {
                                     "_type": "BytesWType",
-                                    "name": "bytes[14]",
+                                    "name": "bytes[36]",
                                     "immutable": true,
-                                    "length": 14
+                                    "length": 36
                                   },
-                                  "value": "NM&qnZy-TzXK!+0Ze#",
-                                  "encoding": "base64"
+                                  "value": "000000000000000000000000000000000000000040PpG",
+                                  "encoding": "base32"
                                 }
                               },
-                              "_id": "2"
-                            }
-                          ]
+                              "op": "+",
+                              "right": {
+                                "_type": "BytesConstant",
+                                "source_location": {
+                                  "file": "tests/approvals/static-bytes.algo.ts",
+                                  "line": 37,
+                                  "end_line": 37,
+                                  "column": 65,
+                                  "end_column": 75
+                                },
+                                "wtype": {
+                                  "_type": "BytesWType",
+                                  "name": "bytes[14]",
+                                  "immutable": true,
+                                  "length": 14
+                                },
+                                "value": "NM&qnZy-TzXK!+0Ze#",
+                                "encoding": "base64"
+                              }
+                            },
+                            "_id": "1"
+                          }
+                        ]
+                      },
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "IntegerConstant",
+                        "source_location": {
+                          "file": "tests/approvals/static-bytes.algo.ts",
+                          "line": 37,
+                          "end_line": 37,
+                          "column": 19,
+                          "end_column": 77
                         },
-                        "operator": "==",
-                        "rhs": {
-                          "_type": "IntegerConstant",
-                          "source_location": {
-                            "file": "tests/approvals/static-bytes.algo.ts",
-                            "line": 37,
-                            "end_line": 37,
-                            "column": 19,
-                            "end_column": 77
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true
-                          },
-                          "value": 55,
-                          "teal_alias": null
-                        }
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "value": 55,
+                        "teal_alias": null
                       }
-                    ]
-                  },
-                  "comment": "Length must be 55"
+                    }
+                  ]
                 },
-                "_id": "1"
+                "comment": "Length must be 55"
               }
             },
             {
@@ -2253,7 +2236,7 @@
                 "name": "a"
               },
               "value": {
-                "_type": "SingleEvaluation",
+                "_type": "TupleExpression",
                 "source_location": {
                   "file": "tests/approvals/static-bytes.algo.ts",
                   "line": 42,
@@ -2280,110 +2263,80 @@
                     }
                   ]
                 },
-                "source": {
-                  "_type": "TupleExpression",
-                  "source_location": {
-                    "file": "tests/approvals/static-bytes.algo.ts",
-                    "line": 42,
-                    "end_line": 42,
-                    "column": 14,
-                    "end_column": 50
-                  },
-                  "wtype": {
-                    "_type": "WTuple",
-                    "name": "tuple",
-                    "immutable": true,
-                    "types": [
-                      {
-                        "_type": "BytesWType",
-                        "name": "bytes[32]",
-                        "immutable": true,
-                        "length": 32
-                      },
-                      {
-                        "_type": "BytesWType",
-                        "name": "bytes[32]",
-                        "immutable": true,
-                        "length": 32
-                      }
-                    ]
-                  },
-                  "items": [
-                    {
-                      "_type": "ReinterpretCast",
-                      "source_location": {
-                        "file": "tests/approvals/static-bytes.algo.ts",
-                        "line": 42,
-                        "end_line": 42,
-                        "column": 26,
-                        "end_column": 31
-                      },
-                      "wtype": {
-                        "_type": "BytesWType",
-                        "name": "bytes[32]",
-                        "immutable": true,
-                        "length": 32
-                      },
-                      "expr": {
-                        "_type": "IntrinsicCall",
-                        "source_location": {
-                          "file": "tests/approvals/static-bytes.algo.ts",
-                          "line": 42,
-                          "end_line": 42,
-                          "column": 19,
-                          "end_column": 25
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "account",
-                          "immutable": true
-                        },
-                        "op_code": "txn",
-                        "immediates": [
-                          "Sender"
-                        ],
-                        "stack_args": []
-                      }
+                "items": [
+                  {
+                    "_type": "ReinterpretCast",
+                    "source_location": {
+                      "file": "tests/approvals/static-bytes.algo.ts",
+                      "line": 42,
+                      "end_line": 42,
+                      "column": 26,
+                      "end_column": 31
                     },
-                    {
-                      "_type": "ReinterpretCast",
+                    "wtype": {
+                      "_type": "BytesWType",
+                      "name": "bytes[32]",
+                      "immutable": true,
+                      "length": 32
+                    },
+                    "expr": {
+                      "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/static-bytes.algo.ts",
                         "line": 42,
                         "end_line": 42,
-                        "column": 44,
-                        "end_column": 49
+                        "column": 19,
+                        "end_column": 25
                       },
                       "wtype": {
-                        "_type": "BytesWType",
-                        "name": "bytes[32]",
-                        "immutable": true,
-                        "length": 32
+                        "_type": "WType",
+                        "name": "account",
+                        "immutable": true
                       },
-                      "expr": {
-                        "_type": "IntrinsicCall",
-                        "source_location": {
-                          "file": "tests/approvals/static-bytes.algo.ts",
-                          "line": 42,
-                          "end_line": 42,
-                          "column": 37,
-                          "end_column": 43
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "account",
-                          "immutable": true
-                        },
-                        "op_code": "txn",
-                        "immediates": [
-                          "Sender"
-                        ],
-                        "stack_args": []
-                      }
+                      "op_code": "txn",
+                      "immediates": [
+                        "Sender"
+                      ],
+                      "stack_args": []
                     }
-                  ]
-                },
-                "_id": "3"
+                  },
+                  {
+                    "_type": "ReinterpretCast",
+                    "source_location": {
+                      "file": "tests/approvals/static-bytes.algo.ts",
+                      "line": 42,
+                      "end_line": 42,
+                      "column": 44,
+                      "end_column": 49
+                    },
+                    "wtype": {
+                      "_type": "BytesWType",
+                      "name": "bytes[32]",
+                      "immutable": true,
+                      "length": 32
+                    },
+                    "expr": {
+                      "_type": "IntrinsicCall",
+                      "source_location": {
+                        "file": "tests/approvals/static-bytes.algo.ts",
+                        "line": 42,
+                        "end_line": 42,
+                        "column": 37,
+                        "end_column": 43
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "account",
+                        "immutable": true
+                      },
+                      "op_code": "txn",
+                      "immediates": [
+                        "Sender"
+                      ],
+                      "stack_args": []
+                    }
+                  }
+                ]
               }
             },
             {
@@ -2419,7 +2372,7 @@
                 "name": "b"
               },
               "value": {
-                "_type": "SingleEvaluation",
+                "_type": "NewArray",
                 "source_location": {
                   "file": "tests/approvals/static-bytes.algo.ts",
                   "line": 43,
@@ -2439,67 +2392,44 @@
                   },
                   "source_location": null
                 },
-                "source": {
-                  "_type": "NewArray",
-                  "source_location": {
-                    "file": "tests/approvals/static-bytes.algo.ts",
-                    "line": 43,
-                    "end_line": 43,
-                    "column": 14,
-                    "end_column": 61
-                  },
-                  "wtype": {
-                    "_type": "ReferenceArray",
-                    "name": "ref_array<bytes[32]>",
-                    "immutable": false,
-                    "element_type": {
+                "values": [
+                  {
+                    "_type": "ReinterpretCast",
+                    "source_location": {
+                      "file": "tests/approvals/static-bytes.algo.ts",
+                      "line": 43,
+                      "end_line": 43,
+                      "column": 55,
+                      "end_column": 60
+                    },
+                    "wtype": {
                       "_type": "BytesWType",
                       "name": "bytes[32]",
                       "immutable": true,
                       "length": 32
                     },
-                    "source_location": null
-                  },
-                  "values": [
-                    {
-                      "_type": "ReinterpretCast",
+                    "expr": {
+                      "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/static-bytes.algo.ts",
                         "line": 43,
                         "end_line": 43,
-                        "column": 55,
-                        "end_column": 60
+                        "column": 48,
+                        "end_column": 54
                       },
                       "wtype": {
-                        "_type": "BytesWType",
-                        "name": "bytes[32]",
-                        "immutable": true,
-                        "length": 32
+                        "_type": "WType",
+                        "name": "account",
+                        "immutable": true
                       },
-                      "expr": {
-                        "_type": "IntrinsicCall",
-                        "source_location": {
-                          "file": "tests/approvals/static-bytes.algo.ts",
-                          "line": 43,
-                          "end_line": 43,
-                          "column": 48,
-                          "end_column": 54
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "account",
-                          "immutable": true
-                        },
-                        "op_code": "txn",
-                        "immediates": [
-                          "Sender"
-                        ],
-                        "stack_args": []
-                      }
+                      "op_code": "txn",
+                      "immediates": [
+                        "Sender"
+                      ],
+                      "stack_args": []
                     }
-                  ]
-                },
-                "_id": "4"
+                  }
+                ]
               }
             },
             {
@@ -2702,7 +2632,7 @@
                 "name": "bitAnd"
               },
               "value": {
-                "_type": "SingleEvaluation",
+                "_type": "BytesBinaryOperation",
                 "source_location": {
                   "file": "tests/approvals/static-bytes.algo.ts",
                   "line": 46,
@@ -2716,14 +2646,14 @@
                   "immutable": true,
                   "length": 32
                 },
-                "source": {
-                  "_type": "BytesBinaryOperation",
+                "left": {
+                  "_type": "TupleItemExpression",
                   "source_location": {
                     "file": "tests/approvals/static-bytes.algo.ts",
                     "line": 46,
                     "end_line": 46,
                     "column": 19,
-                    "end_column": 40
+                    "end_column": 23
                   },
                   "wtype": {
                     "_type": "BytesWType",
@@ -2731,112 +2661,95 @@
                     "immutable": true,
                     "length": 32
                   },
-                  "left": {
-                    "_type": "TupleItemExpression",
+                  "base": {
+                    "_type": "VarExpression",
                     "source_location": {
                       "file": "tests/approvals/static-bytes.algo.ts",
                       "line": 46,
                       "end_line": 46,
                       "column": 19,
-                      "end_column": 23
+                      "end_column": 20
                     },
                     "wtype": {
-                      "_type": "BytesWType",
-                      "name": "bytes[32]",
+                      "_type": "WTuple",
+                      "name": "tuple",
                       "immutable": true,
-                      "length": 32
-                    },
-                    "base": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/static-bytes.algo.ts",
-                        "line": 46,
-                        "end_line": 46,
-                        "column": 19,
-                        "end_column": 20
-                      },
-                      "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
-                        "types": [
-                          {
-                            "_type": "BytesWType",
-                            "name": "bytes[32]",
-                            "immutable": true,
-                            "length": 32
-                          },
-                          {
-                            "_type": "BytesWType",
-                            "name": "bytes[32]",
-                            "immutable": true,
-                            "length": 32
-                          }
-                        ]
-                      },
-                      "name": "a"
-                    },
-                    "index": 0
-                  },
-                  "op": "&",
-                  "right": {
-                    "_type": "IndexExpression",
-                    "source_location": {
-                      "file": "tests/approvals/static-bytes.algo.ts",
-                      "line": 46,
-                      "end_line": 46,
-                      "column": 35,
-                      "end_column": 39
-                    },
-                    "wtype": {
-                      "_type": "BytesWType",
-                      "name": "bytes[32]",
-                      "immutable": true,
-                      "length": 32
-                    },
-                    "base": {
-                      "_type": "VarExpression",
-                      "source_location": {
-                        "file": "tests/approvals/static-bytes.algo.ts",
-                        "line": 46,
-                        "end_line": 46,
-                        "column": 35,
-                        "end_column": 36
-                      },
-                      "wtype": {
-                        "_type": "ReferenceArray",
-                        "name": "ref_array<bytes[32]>",
-                        "immutable": false,
-                        "element_type": {
+                      "types": [
+                        {
                           "_type": "BytesWType",
                           "name": "bytes[32]",
                           "immutable": true,
                           "length": 32
                         },
-                        "source_location": null
-                      },
-                      "name": "b"
+                        {
+                          "_type": "BytesWType",
+                          "name": "bytes[32]",
+                          "immutable": true,
+                          "length": 32
+                        }
+                      ]
                     },
-                    "index": {
-                      "_type": "IntegerConstant",
-                      "source_location": {
-                        "file": "tests/approvals/static-bytes.algo.ts",
-                        "line": 46,
-                        "end_line": 46,
-                        "column": 37,
-                        "end_column": 38
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "value": 0,
-                      "teal_alias": null
-                    }
-                  }
+                    "name": "a"
+                  },
+                  "index": 0
                 },
-                "_id": "5"
+                "op": "&",
+                "right": {
+                  "_type": "IndexExpression",
+                  "source_location": {
+                    "file": "tests/approvals/static-bytes.algo.ts",
+                    "line": 46,
+                    "end_line": 46,
+                    "column": 35,
+                    "end_column": 39
+                  },
+                  "wtype": {
+                    "_type": "BytesWType",
+                    "name": "bytes[32]",
+                    "immutable": true,
+                    "length": 32
+                  },
+                  "base": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/static-bytes.algo.ts",
+                      "line": 46,
+                      "end_line": 46,
+                      "column": 35,
+                      "end_column": 36
+                    },
+                    "wtype": {
+                      "_type": "ReferenceArray",
+                      "name": "ref_array<bytes[32]>",
+                      "immutable": false,
+                      "element_type": {
+                        "_type": "BytesWType",
+                        "name": "bytes[32]",
+                        "immutable": true,
+                        "length": 32
+                      },
+                      "source_location": null
+                    },
+                    "name": "b"
+                  },
+                  "index": {
+                    "_type": "IntegerConstant",
+                    "source_location": {
+                      "file": "tests/approvals/static-bytes.algo.ts",
+                      "line": 46,
+                      "end_line": 46,
+                      "column": 37,
+                      "end_column": 38
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "value": 0,
+                    "teal_alias": null
+                  }
+                }
               }
             },
             {
