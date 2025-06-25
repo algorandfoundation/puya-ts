@@ -179,9 +179,9 @@ contract TupleBox
 {
   boxes {
     ["t1"]: arc4.tuple<string,bytes,bool>
-    ["t2"]: {a:string,b:bytes,c:boolean}
+    ["t2"]: object
     ["tm1"]: string => arc4.tuple<string,bytes,bool>
-    ["tm2"]: string => {a:string,b:bytes,c:boolean}
+    ["tm2"]: string => tests/approvals/box-proxies.algo.ts::BoxMap2
   }
   approvalProgram(): bool
   {
@@ -205,7 +205,7 @@ contract TupleBox
     assert(Box["t1"].value.0 == "hello")
     assert(Box["t1"].value.1 == "world")
     assert(Box["t1"].value.2)
-    Box["t2"].value: {a:string,b:bytes,c:boolean} = new {a:string,b:bytes,c:boolean}(a=($9 = #{ a: "hello", b: "world", c: True }).a, b=$9.b, c=$9.c)
+    Box["t2"].value: object = new object(a=($9 = #{ a: "hello", b: "world", c: True }).a, b=$9.b, c=$9.c)
     assert(Box["t2"].value.a == "hello")
     assert(Box["t2"].value.b == "world")
     assert(Box["t2"].value.c)
@@ -220,7 +220,7 @@ contract TupleBox
     assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
     assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="a")].value))
     Box[BoxMapKey(prefix="tm1", key="a")].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(#[($10 = #["hello", "world", True]).0, $10.1, $10.2], wtype=arc4.tuple<string,bytes,bool>)
-    Box[BoxMapKey(prefix="tm2", key="a")].value: {a:string,b:bytes,c:boolean} = new {a:string,b:bytes,c:boolean}(a=($11 = #{ a: "hello", b: "world", c: True }).a, b=$11.b, c=$11.c)
+    Box[BoxMapKey(prefix="tm2", key="a")].value: tests/approvals/box-proxies.algo.ts::BoxMap2 = new tests/approvals/box-proxies.algo.ts::BoxMap2(a=($11 = #{ a: "hello", b: "world", c: True }).a, b=$11.b, c=$11.c)
     assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
     assert(Box[BoxMapKey(prefix="tm1", key="a")].value.0 == "hello")
     assert(Box[BoxMapKey(prefix="tm1", key="a")].value.1 == "world")
@@ -231,7 +231,7 @@ contract TupleBox
     assert(Box[BoxMapKey(prefix="tm2", key="a")].value.c)
     Box[BoxMapKey(prefix="tm1", key="b")].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(#[($12 = #["abc", "def", False]).0, $12.1, $12.2], wtype=arc4.tuple<string,bytes,bool>)
     assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="b")].value))
-    Box[BoxMapKey(prefix="tm2", key="b")].value: {a:string,b:bytes,c:boolean} = new {a:string,b:bytes,c:boolean}(a=($13 = #{ a: "abc", b: "def", c: False }).a, b=$13.b, c=$13.c)
+    Box[BoxMapKey(prefix="tm2", key="b")].value: tests/approvals/box-proxies.algo.ts::BoxMap2 = new tests/approvals/box-proxies.algo.ts::BoxMap2(a=($13 = #{ a: "abc", b: "def", c: False }).a, b=$13.b, c=$13.c)
     assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="b")].value))
     STATE_DELETE(Box[BoxMapKey(prefix="tm1", key="a")].value)
     assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
@@ -276,7 +276,7 @@ contract BoxToRefTest
 contract CompositeKeyTest
 {
   boxes {
-    [""]: {a:uint64,b:uint64} => string
+    [""]: object => string
   }
   approvalProgram(): bool
   {
@@ -288,7 +288,7 @@ contract CompositeKeyTest
     return True
   }
   
-  test(key: {a:uint64,b:uint64}, val: string): void
+  test(key: object, val: string): void
   {
     Box[BoxMapKey(prefix="", key=key)].value: string = val
   }

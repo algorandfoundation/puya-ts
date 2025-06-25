@@ -982,7 +982,7 @@ export class ObjectLiteralPType extends ObjectPType {
   constructor(props: { properties: Record<string, PType> }) {
     super({
       ...props,
-      name: `{...}`,
+      name: `object-literal`,
       immutable: false,
     })
   }
@@ -1046,7 +1046,7 @@ export class ImmutableObjectPType extends ObjectPType {
       tupleNames.push(propName)
     }
     return new wtypes.WTuple({
-      name: this.alias?.fullName ?? this.toString(),
+      name: this.alias?.fullName ?? this.name,
       names: tupleNames,
       types: tupleTypes,
     })
@@ -1070,7 +1070,7 @@ export class MutableObjectPType extends ObjectPType {
 
   get wtype(): wtypes.ARC4Struct {
     return new wtypes.ARC4Struct({
-      name: this.alias?.name ?? this.toString(),
+      name: this.alias?.fullName ?? this.name,
       fields: Object.fromEntries(Object.entries(this.properties).map(([f, t]) => [f, t.wtypeOrThrow])),
       desc: this.description ?? null,
       frozen: false,

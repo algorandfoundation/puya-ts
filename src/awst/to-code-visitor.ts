@@ -220,7 +220,7 @@ export class ToCodeVisitor
     return `LocalState[${expression.account.accept(this)}][${expression.key.accept(this)}]`
   }
   visitSingleEvaluation(expression: nodes.SingleEvaluation): string {
-    const [id, isNew] = this.#singleEval.forSymbol(expression.id)
+    const { id, isNew } = this.#singleEval.forSymbol(expression.id)
     if (!isNew) {
       return `$${id}`
     }

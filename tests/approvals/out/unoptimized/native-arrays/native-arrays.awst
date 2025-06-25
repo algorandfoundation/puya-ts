@@ -63,11 +63,11 @@ contract NativeArraysAlgo
     assert(a1.length == 6 and reinterpret_cast<bytes>(a1[0]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[1]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[2]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[3]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[4]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[5]) == reinterpret_cast<bytes>(123), comment=assert target is match for conditions)
   }
   
-  structs(p: Vector): arc4.dynamic_array<Vector>
+  structs(p: tests/approvals/native-arrays.algo.ts::Vector): arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>
   {
     #[x, y]: readonly [uint64, uint64] = #[p.x, p.y]
-    myVectors: arc4.dynamic_array<Vector> = new arc4.dynamic_array<Vector>()
-    myVectors: arc4.dynamic_array<Vector> = new arc4.dynamic_array<Vector>(new Vector(x=($10 = ($11 = #[#{ x: x, y: y }]).0).x, y=$10.y))
+    myVectors: arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>()
+    myVectors: arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>(new tests/approvals/native-arrays.algo.ts::Vector(x=($10 = ($11 = #[#{ x: x, y: y }]).0).x, y=$10.y))
     assert(myVectors.length == 1 and myVectors[0].x == x and myVectors[0].y == y, comment=assert target is match for conditions)
     return myVectors
   }

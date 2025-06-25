@@ -29,13 +29,13 @@ export function isConstantOrTemplateVar(expr: Expression): expr is Constant | Te
 export class SymbolToNumber {
   #symbols = new Map<symbol, number>()
 
-  forSymbol(sym: symbol): [number, boolean] {
+  forSymbol(sym: symbol): { id: number; isNew: boolean } {
     let val = this.#symbols.get(sym)
     if (val !== undefined) {
-      return [val, false]
+      return { id: val, isNew: false }
     }
     val = this.#symbols.size
     this.#symbols.set(sym, val)
-    return [val, true]
+    return { id: val, isNew: true }
   }
 }
