@@ -40,7 +40,7 @@ contract AssignmentsAlgo
     #[#[a]]: readonly [readonly [uint64]] = #[#[i_a[0][0]]]
   }
   
-  testDestructureObj(m: {a:uint64,b:string}, i: {readonly a:uint64,readonly b:string}{ a: uint64, b: string }): void
+  testDestructureObj(m: object, i: Readonly<object>{ a: uint64, b: string }): void
   {
     #[a1, b1]: readonly [uint64, string] = #[m.a, m.b]
     #[a2, b2]: readonly [uint64, string] = #[i.a, i.b]
@@ -48,18 +48,18 @@ contract AssignmentsAlgo
   
   testObjLiteralNarrowing(a: uint64, b: uint64): void
   {
-    mObj: MutableObj = new MutableObj(a=($9 = #{ a: a, b: b }).a, b=$9.b)
+    mObj: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($9 = #{ a: a, b: b }).a, b=$9.b)
     imObj: ImmutableObj{ a: uint64, b: uint64 } = #{ a: ($10 = #{ a: a, b: b }).a, b: $10.b }
-    mObj2: MutableObj = new MutableObj(a=($11 = #{ a: ($12 = #{ a: 123, b: 456 }).a, b: $12.b }).a, b=$11.b)
+    mObj2: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($11 = #{ a: ($12 = #{ a: 123, b: 456 }).a, b: $12.b }).a, b=$11.b)
     imObj2: ImmutableObj{ a: uint64, b: uint64 } = #{ a: ($13 = #{ a: ($14 = #{ a: 456, b: b }).a, b: $14.b }).a, b: $13.b }
-    mObj3: MutableObj = new MutableObj(a=($15 = #{ a: ($16 = tests/approvals/assignments.algo.ts::getVal()).a, b: $16.b }).a, b=$15.b)
-    mObj4: MutableObj = new MutableObj(a=($17 = #{ a: a, b: b }).a, b=$17.b)
+    mObj3: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($15 = #{ a: ($16 = tests/approvals/assignments.algo.ts::getVal()).a, b: $16.b }).a, b=$15.b)
+    mObj4: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($17 = #{ a: a, b: b }).a, b=$17.b)
   }
   
-  testMixed(m: arc4.dynamic_array<{a:[uint64]}>): void
+  testMixed(m: arc4.dynamic_array<object>): void
   {
     #[#[#[a1]]]: readonly [readonly [readonly [uint64]]] = #[#[#[m[0].a.0]]]
-    m: arc4.dynamic_array<{a:[uint64]}> = new arc4.dynamic_array<{a:[uint64]}>(new {a:[uint64]}(a=ARC4_ENCODE(#[($18 = ($19 = #[#{ a: #[($20 = #{ a: #[213] }).a.0] }]).0).a.0], wtype=arc4.tuple<uint64>)))
+    m: arc4.dynamic_array<object> = new arc4.dynamic_array<object>(new object(a=ARC4_ENCODE(#[($18 = ($19 = #[#{ a: #[($20 = #{ a: #[213] }).a.0] }]).0).a.0], wtype=arc4.tuple<uint64>)))
   }
   
   __algots__.defaultCreate(): void

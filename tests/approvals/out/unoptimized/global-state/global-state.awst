@@ -77,9 +77,9 @@ contract TestTuple
   globals {
     ["t1"]: arc4.tuple<string,uint64,bool>
     ["t2"]: arc4.tuple<string,arc4.tuple<string,biguint,bool>>
-    ["t3"]: {a:string,b:uint64,c:boolean}
-    ["t4"]: arc4.tuple<string,{a:string,b:biguint,c:boolean}>
-    ["t5"]: Data
+    ["t3"]: object
+    ["t4"]: arc4.tuple<string,object>
+    ["t5"]: tests/approvals/global-state.algo.ts::Data
   }
   approvalProgram(): bool
   {
@@ -102,16 +102,16 @@ contract TestTuple
     assert(GlobalState["t2"].1.0 == "b", comment=Tuple value should be set)
     assert(GlobalState["t2"].1.1 == 456, comment=Tuple value should be set)
     assert(GlobalState["t2"].1.2 == True, comment=Tuple value should be set)
-    GlobalState["t3"]: {a:string,b:uint64,c:boolean} = new {a:string,b:uint64,c:boolean}(a=($5 = #{ a: ($6 = #{ a: "hello", b: 123, c: True }).a, b: $6.b, c: $6.c }).a, b=$5.b, c=$5.c)
+    GlobalState["t3"]: object = new object(a=($5 = #{ a: ($6 = #{ a: "hello", b: 123, c: True }).a, b: $6.b, c: $6.c }).a, b=$5.b, c=$5.c)
     assert(GlobalState["t3"].a == "hello", comment=Object value should be set)
     assert(GlobalState["t3"].b == 123, comment=Object value should be set)
     assert(GlobalState["t3"].c == True, comment=Object value should be set)
-    GlobalState["t4"]: arc4.tuple<string,{a:string,b:biguint,c:boolean}> = ARC4_ENCODE(#[($7 = #["a", #{ a: ($8 = #{ a: "b", b: 456, c: True }).a, b: $8.b, c: $8.c }]).0, new {a:string,b:biguint,c:boolean}(a=($9 = $7.1).a, b=$9.b, c=$9.c)], wtype=arc4.tuple<string,{a:string,b:biguint,c:boolean}>)
+    GlobalState["t4"]: arc4.tuple<string,object> = ARC4_ENCODE(#[($7 = #["a", #{ a: ($8 = #{ a: "b", b: 456, c: True }).a, b: $8.b, c: $8.c }]).0, new object(a=($9 = $7.1).a, b=$9.b, c=$9.c)], wtype=arc4.tuple<string,object>)
     assert(GlobalState["t4"].0 == "a", comment=Tuple value should be set)
     assert(GlobalState["t4"].1.a == "b", comment=Tuple value should be set)
     assert(GlobalState["t4"].1.b == 456, comment=Tuple value should be set)
     assert(GlobalState["t4"].1.c == True, comment=Tuple value should be set)
-    GlobalState["t5"]: Data = new Data(a=($10 = #{ a: ($11 = #{ a: "hello", b: 123, c: True, d: "World" }).a, b: $11.b, c: $11.c, d: $11.d }).a, b=$10.b, c=$10.c, d=$10.d)
+    GlobalState["t5"]: tests/approvals/global-state.algo.ts::Data = new tests/approvals/global-state.algo.ts::Data(a=($10 = #{ a: ($11 = #{ a: "hello", b: 123, c: True, d: "World" }).a, b: $11.b, c: $11.c, d: $11.d }).a, b=$10.b, c=$10.c, d=$10.d)
     assert(GlobalState["t5"].a == "hello", comment=Mutable object value should be set)
     assert(GlobalState["t5"].b == 123, comment=Mutable object value should be set)
     assert(GlobalState["t5"].c == True, comment=Mutable object value should be set)

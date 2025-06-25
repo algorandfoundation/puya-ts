@@ -1,24 +1,6 @@
 {
     "name": "LocalStateDemo",
     "structs": {
-        "Data": [
-            {
-                "name": "a",
-                "type": "uint64"
-            },
-            {
-                "name": "b",
-                "type": "byte[]"
-            },
-            {
-                "name": "c",
-                "type": "bool"
-            },
-            {
-                "name": "d",
-                "type": "string"
-            }
-        ],
         "": [
             {
                 "name": "a",
@@ -29,7 +11,7 @@
                 "type": "byte[]"
             }
         ],
-        "{localUint:uint64,localUint2:uint64,localBytes:bytes,localBytes2:bytes,localEncoded:StaticArray<UintN<64>, 10>,localTuple:readonly [uint64, bytes],localObject:Readonly<object>,localMutableObject:object}": [
+        "object": [
             {
                 "name": "localUint",
                 "type": "uint64"
@@ -56,14 +38,14 @@
             },
             {
                 "name": "localObject",
-                "type": "{readonly a:uint64,readonly b:bytes}"
+                "type": "(uint64,byte[])"
             },
             {
                 "name": "localMutableObject",
                 "type": "Data"
             }
         ],
-        "{readonly a:uint64,readonly b:bytes}": [
+        "Data": [
             {
                 "name": "a",
                 "type": "uint64"
@@ -71,6 +53,14 @@
             {
                 "name": "b",
                 "type": "byte[]"
+            },
+            {
+                "name": "c",
+                "type": "bool"
+            },
+            {
+                "name": "d",
+                "type": "string"
             }
         ]
     },
@@ -96,7 +86,7 @@
             "args": [
                 {
                     "type": "(uint64,byte[])",
-                    "struct": "",
+                    "struct": "object",
                     "name": "p"
                 },
                 {
@@ -122,7 +112,7 @@
             "args": [],
             "returns": {
                 "type": "(uint64,uint64,byte[],byte[],uint64[10],(uint64,byte[]),(uint64,byte[]),(uint64,byte[],bool,string))",
-                "struct": "{localUint:uint64,localUint2:uint64,localBytes:bytes,localBytes2:bytes,localEncoded:StaticArray<UintN<64>, 10>,localTuple:readonly [uint64, bytes],localObject:Readonly<object>,localMutableObject:object}"
+                "struct": "object"
             },
             "actions": {
                 "create": [],
@@ -202,7 +192,7 @@
                 },
                 "localObject": {
                     "keyType": "AVMString",
-                    "valueType": "{readonly a:uint64,readonly b:bytes}",
+                    "valueType": "",
                     "key": "bG9jYWxPYmplY3Q="
                 },
                 "localMutableObject": {

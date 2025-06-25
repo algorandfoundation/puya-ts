@@ -1,6 +1,6 @@
 subroutine test_immutable(): void
 {
-  items: readonly [{readonly a:uint64,readonly b:uint64}{ a: uint64, b: uint64 }, {readonly a:uint64,readonly b:uint64}{ a: uint64, b: uint64 }, {readonly a:uint64,readonly b:uint64}{ a: uint64, b: uint64 }] = ($0 = #[#{ a: 1, b: 2 }, #{ a: 2, b: 2 }, #{ a: 3, b: 2 }])
+  items: readonly [Readonly<object>{ a: uint64, b: uint64 }, Readonly<object>{ a: uint64, b: uint64 }, Readonly<object>{ a: uint64, b: uint64 }] = ($0 = #[#{ a: 1, b: 2 }, #{ a: 2, b: 2 }, #{ a: 3, b: 2 }])
   total: uint64 = 0
   for (temp in items) {
     #[a]: readonly [uint64] = #[temp.a]
