@@ -39,10 +39,10 @@ export class ResolvedArrayLiteralExpressionBuilder extends InstanceExpressionBui
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
     if (isArrayType(ptype)) {
-      return instanceEb(newArray(ptype, this), ptype)
+      return instanceEb(newArray(ptype, this.singleEvaluation()), ptype)
     }
     if (isTupleLike(ptype)) {
-      return instanceEb(newTuple(ptype, this), ptype)
+      return instanceEb(newTuple(ptype, this.singleEvaluation()), ptype)
     }
     return super.resolveToPType(ptype)
   }
