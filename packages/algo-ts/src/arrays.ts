@@ -80,7 +80,7 @@ export class FixedArray<TItem, TLength extends number> implements ConcatArray<TI
   /**
    * Returns an iterator for a tuple of the indexes and items in this array
    */
-  entries(): ArrayIterator<[uint64, TItem]> {
+  entries(): ArrayIterator<readonly [uint64, TItem]> {
     throw new NoImplementation()
   }
 

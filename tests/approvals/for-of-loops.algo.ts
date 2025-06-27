@@ -1,4 +1,4 @@
-import type { uint64 } from '@algorandfoundation/algorand-typescript'
+import type { FixedArray, uint64 } from '@algorandfoundation/algorand-typescript'
 import { Contract, ReferenceArray } from '@algorandfoundation/algorand-typescript'
 import type { DynamicArray, StaticArray, UintN64 } from '@algorandfoundation/algorand-typescript/arc4'
 
@@ -68,5 +68,28 @@ export class ForOfLoopsAlgo extends Contract {
       if (item === stopNumber) break
     }
     return total
+  }
+
+  test_iterable_props(static_array: StaticArray<UintN64, 3>, fixed_array: FixedArray<uint64, 3>, dyn_array: DynamicArray<UintN64>) {
+    let i: uint64 = 0
+    for (const a of static_array.keys()) {
+      i++
+    }
+    for (const a of static_array.entries()) {
+      i++
+    }
+    for (const a of fixed_array.keys()) {
+      i++
+    }
+    for (const a of fixed_array.entries()) {
+      i++
+    }
+    for (const a of dyn_array.keys()) {
+      i++
+    }
+    for (const a of dyn_array.entries()) {
+      i++
+    }
+    return i
   }
 }

@@ -27,6 +27,7 @@ import { SliceFunctionBuilder } from '../shared/slice-function-builder'
 import { requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { concatArrays } from '../util/array/concat'
+import { EntriesFunctionBuilder, KeysFunctionBuilder } from '../util/array/entries'
 import { indexAccess } from '../util/array/index-access'
 import { arrayLength } from '../util/array/length'
 import { translateNegativeIndex } from '../util/translate-negative-index'
@@ -356,6 +357,16 @@ export class FixedArrayExpressionBuilder extends NativeArrayLikeExpressionBuilde
   constructor(expr: Expression, ptype: PType) {
     invariant(ptype instanceof FixedArrayPType, 'ptype must be FixedArrayPType', expr.sourceLocation)
     super(expr, ptype)
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'entries':
+        return new EntriesFunctionBuilder(this)
+      case 'keys':
+        return new KeysFunctionBuilder(this)
+    }
+    return super.memberAccess(name, sourceLocation)
   }
 }
 
