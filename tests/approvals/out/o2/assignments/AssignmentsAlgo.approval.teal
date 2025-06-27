@@ -3,8 +3,12 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0
-    // tests/approvals/assignments.algo.ts:7
+    intcblock 1 0 2
+    intc_1 // 0
+    pushbytes ""
+    dup
+    // tests/approvals/assignments.algo.ts:19-20
+    // @contract({ scratchSlots: [countSlot] })
     // export class AssignmentsAlgo extends Contract {
     txn NumAppArgs
     bz main_bare_routing@12
@@ -13,13 +17,14 @@ main:
     match main_testPrimitives_route@3 main_testArrayDestructure_route@4 main_testArrayNarrowing_route@5 main_testNested_route@6 main_testDestructureObj_route@7 main_testObjLiteralNarrowing_route@8 main_testMixed_route@9
 
 main_after_if_else@16:
-    // tests/approvals/assignments.algo.ts:7
+    // tests/approvals/assignments.algo.ts:19-20
+    // @contract({ scratchSlots: [countSlot] })
     // export class AssignmentsAlgo extends Contract {
     intc_1 // 0
     return
 
 main_testMixed_route@9:
-    // tests/approvals/assignments.algo.ts:56
+    // tests/approvals/assignments.algo.ts:86
     // testMixed(m: Array<{ a: [uint64] }>) {
     txn OnCompletion
     !
@@ -30,7 +35,7 @@ main_testMixed_route@9:
     return
 
 main_testObjLiteralNarrowing_route@8:
-    // tests/approvals/assignments.algo.ts:43
+    // tests/approvals/assignments.algo.ts:73
     // testObjLiteralNarrowing(a: uint64, b: uint64) {
     txn OnCompletion
     !
@@ -41,7 +46,7 @@ main_testObjLiteralNarrowing_route@8:
     return
 
 main_testDestructureObj_route@7:
-    // tests/approvals/assignments.algo.ts:38
+    // tests/approvals/assignments.algo.ts:68
     // testDestructureObj(m: { a: uint64; b: string }, i: Readonly<{ a: uint64; b: string }>) {
     txn OnCompletion
     !
@@ -52,70 +57,194 @@ main_testDestructureObj_route@7:
     return
 
 main_testNested_route@6:
-    // tests/approvals/assignments.algo.ts:34
+    // tests/approvals/assignments.algo.ts:63
     // testNested(i_a: ReadonlyArray<ReadonlyArray<uint64>>) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/assignments.algo.ts:7
+    // tests/approvals/assignments.algo.ts:19-20
+    // @contract({ scratchSlots: [countSlot] })
     // export class AssignmentsAlgo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/assignments.algo.ts:35
+    // tests/approvals/assignments.algo.ts:64
     // const [[a]] = i_a
     intc_1 // 0
     extract_uint16
     assert // index access is out of bounds
-    // tests/approvals/assignments.algo.ts:34
+    // tests/approvals/assignments.algo.ts:63
     // testNested(i_a: ReadonlyArray<ReadonlyArray<uint64>>) {
     intc_0 // 1
     return
 
 main_testArrayNarrowing_route@5:
-    // tests/approvals/assignments.algo.ts:24
+    // tests/approvals/assignments.algo.ts:49
     // testArrayNarrowing(m_a: uint64[], u: uint64) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
+    // tests/approvals/assignments.algo.ts:19-20
+    // @contract({ scratchSlots: [countSlot] })
+    // export class AssignmentsAlgo extends Contract {
+    txna ApplicationArgs 1
+    // tests/approvals/assignments.algo.ts:51
+    // m_a[0] += 1
+    dup
+    intc_2 // 2
+    extract_uint64
+    dup
+    intc_0 // 1
+    +
+    itob
+    dig 2
+    swap
+    replace2 2
+    // tests/approvals/assignments.algo.ts:52
+    // direct[0] += 2
+    swap
+    intc_2 // 2
+    +
+    itob
+    uncover 2
+    swap
+    replace2 2
+    // tests/approvals/assignments.algo.ts:53
+    // assert(m_a[0] !== direct[0])
+    swap
+    intc_2 // 2
+    extract_uint64
+    swap
+    intc_2 // 2
+    extract_uint64
+    !=
+    assert
+    // tests/approvals/assignments.algo.ts:49
+    // testArrayNarrowing(m_a: uint64[], u: uint64) {
     intc_0 // 1
     return
 
 main_testArrayDestructure_route@4:
-    // tests/approvals/assignments.algo.ts:14
+    // tests/approvals/assignments.algo.ts:29
     // testArrayDestructure(i_a: ReadonlyArray<uint64>, u: uint64, m_a: uint64[]) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/assignments.algo.ts:7
+    // tests/approvals/assignments.algo.ts:19-20
+    // @contract({ scratchSlots: [countSlot] })
     // export class AssignmentsAlgo extends Contract {
     txna ApplicationArgs 2
     btoi
-    // tests/approvals/assignments.algo.ts:75
-    // log(u)
+    dup
+    bury 2
+    // tests/approvals/assignments.algo.ts:9
+    // op.Scratch.store(countSlot, 0)
+    intc_1 // 0
+    store 0
+    // tests/approvals/assignments.algo.ts:34
+    // const a5 = ([a2, a3] = [logAndReturn(u), logAndReturn(u), logAndReturn(u)])
+    dup
+    callsub logAndReturn
+    dig 1
+    callsub logAndReturn
+    dig 2
+    callsub logAndReturn
+    dig 2
     itob
+    dig 2
+    itob
+    concat
+    swap
+    itob
+    concat
     dup
-    log
-    dup
-    log
-    dup
-    log
-    dup
-    log
-    dup
-    log
-    log
-    // tests/approvals/assignments.algo.ts:14
+    bury 7
+    // tests/approvals/assignments.algo.ts:12
+    // return op.Scratch.loadUint64(countSlot)
+    load 0
+    // tests/approvals/assignments.algo.ts:35
+    // assert(getCount() === 3, 'logAndReturn called 3 times')
+    pushint 3 // 3
+    ==
+    assert // logAndReturn called 3 times
+    // tests/approvals/assignments.algo.ts:36
+    // assert(a2 === u)
+    uncover 2
+    dig 3
+    ==
+    assert
+    // tests/approvals/assignments.algo.ts:37
+    // assert(a3 === u)
+    swap
+    dig 2
+    ==
+    assert
+    // tests/approvals/assignments.algo.ts:38
+    // assertMatch(a5, [u, u, u])
+    intc_1 // 0
+    extract_uint64
+    ==
+    bz main_bool_false@34
+    dig 2
+    pushint 8 // 8
+    extract_uint64
+    dig 1
+    ==
+    bz main_bool_false@34
+    dig 2
+    pushint 16 // 16
+    extract_uint64
+    dig 1
+    ==
+    bz main_bool_false@34
+    intc_0 // 1
+
+main_bool_merge@35:
+    // tests/approvals/assignments.algo.ts:38
+    // assertMatch(a5, [u, u, u])
+    assert // assert target is match for conditions
+    // tests/approvals/assignments.algo.ts:42
+    // const [c, d] = [logAndReturn(u), logAndReturn(u), logAndReturn(u)]
+    dupn 2
+    callsub logAndReturn
+    dig 1
+    callsub logAndReturn
+    bury 4
+    dig 1
+    callsub logAndReturn
+    pop
+    // tests/approvals/assignments.algo.ts:43
+    // assertMatch([c, d], [u, u])
+    ==
+    bz main_bool_false@38
+    dup2
+    ==
+    bz main_bool_false@38
+    intc_0 // 1
+
+main_bool_merge@39:
+    // tests/approvals/assignments.algo.ts:43
+    // assertMatch([c, d], [u, u])
+    assert // assert target is match for conditions
+    // tests/approvals/assignments.algo.ts:29
     // testArrayDestructure(i_a: ReadonlyArray<uint64>, u: uint64, m_a: uint64[]) {
     intc_0 // 1
     return
 
+main_bool_false@38:
+    intc_1 // 0
+    b main_bool_merge@39
+
+main_bool_false@34:
+    intc_1 // 0
+    b main_bool_merge@35
+
 main_testPrimitives_route@3:
-    // tests/approvals/assignments.algo.ts:8
+    // tests/approvals/assignments.algo.ts:21
     // testPrimitives(u: uint64) {
     txn OnCompletion
     !
@@ -126,7 +255,8 @@ main_testPrimitives_route@3:
     return
 
 main_bare_routing@12:
-    // tests/approvals/assignments.algo.ts:7
+    // tests/approvals/assignments.algo.ts:19-20
+    // @contract({ scratchSlots: [countSlot] })
     // export class AssignmentsAlgo extends Contract {
     txn OnCompletion
     bnz main_after_if_else@16
@@ -135,3 +265,25 @@ main_bare_routing@12:
     assert // can only call when creating
     intc_0 // 1
     return
+
+
+// tests/approvals/assignments.algo.ts::logAndReturn(u: uint64) -> uint64:
+logAndReturn:
+    // tests/approvals/assignments.algo.ts:104
+    // function logAndReturn(u: uint64): uint64 {
+    proto 1 1
+    // tests/approvals/assignments.algo.ts:16
+    // op.Scratch.store(countSlot, op.Scratch.loadUint64(countSlot) + 1)
+    load 0
+    intc_0 // 1
+    +
+    store 0
+    // tests/approvals/assignments.algo.ts:106
+    // log(u)
+    frame_dig -1
+    itob
+    log
+    // tests/approvals/assignments.algo.ts:107
+    // return u
+    frame_dig -1
+    retsub

@@ -46,7 +46,7 @@ export type CompiledLogicSig = {
   /**
    * Address of a logic sig program, after template variables have been replaced and compiled to AVM bytecode
    */
-  account: Account
+  readonly account: Account
 }
 
 /**

@@ -3,25 +3,177 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#0: bool = tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__()
         return tmp%0#0
 
+subroutine _puya_lib.arc4.dynamic_array_replace_byte_length_head(array: bytes, new_item: bytes, index: uint64) -> bytes:
+    block@0: // L221
+        let tmp%0#0: bytes = ((substring 0 2) array#0)
+        let size_b#0: bytes = tmp%0#0
+        let tmp%1#0: uint64 = (btoi size_b#0)
+        let array_length#0: uint64 = tmp%1#0
+        let tmp%2#0: bytes = ((extract 2 0) array#0)
+        let tmp%3#0: bytes = _puya_lib.arc4.static_array_replace_byte_length_head(tmp%2#0, new_item#0, index#0, array_length#0)
+        let tmp%4#0: bytes = (concat size_b#0 tmp%3#0)
+        return tmp%4#0
+
+subroutine _puya_lib.arc4.dynamic_array_replace_dynamic_element(source: bytes, new_item: bytes, index: uint64) -> bytes:
+    block@0: // L244
+        let tmp%0#0: bytes = ((substring 0 2) source#0)
+        let size_b#0: bytes = tmp%0#0
+        let tmp%1#0: uint64 = (btoi size_b#0)
+        let array_length#0: uint64 = tmp%1#0
+        let tmp%2#0: bytes = ((extract 2 0) source#0)
+        let tmp%3#0: bytes = _puya_lib.arc4.static_array_replace_dynamic_element(tmp%2#0, new_item#0, index#0, array_length#0)
+        let tmp%4#0: bytes = (concat size_b#0 tmp%3#0)
+        return tmp%4#0
+
+subroutine _puya_lib.arc4.static_array_replace_dynamic_element(array_head_and_tail: bytes, new_item: bytes, index: uint64, array_length: uint64) -> bytes:
+    block@0: // L256
+        let tmp%0#0: uint64 = (* index#0 2u)
+        let tmp%1#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%0#0)
+        let original_offset#0: uint64 = tmp%1#0
+        let tmp%2#0: uint64 = (+ index#0 1u)
+        let tmp%3#0: uint64 = (* tmp%2#0 2u)
+        let tmp%4#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%3#0)
+        let next_item_offset#0: uint64 = tmp%4#0
+        let tmp%5#0: uint64 = (len array_head_and_tail#0)
+        let end_of_tail#0: uint64 = tmp%5#0
+        let tmp%6#0: uint64 = (- array_length#0 index#0)
+        let tmp%7#0: uint64 = (- tmp%6#0 1u)
+        let is_before_end#0: uint64 = tmp%7#0
+        let tmp%8#0: uint64 = (select end_of_tail#0 next_item_offset#0 is_before_end#0)
+        let end_offset#0: uint64 = tmp%8#0
+        let tmp%9#0: uint64 = (- end_offset#0 original_offset#0)
+        let original_item_length#0: uint64 = tmp%9#0
+        let tmp%10#0: uint64 = (len new_item#0)
+        let new_item_length#0: uint64 = tmp%10#0
+        let tmp%11#0: bytes = (substring3 array_head_and_tail#0 0u original_offset#0)
+        let tmp%12#0: bytes = (concat tmp%11#0 new_item#0)
+        let tmp%13#0: bytes = (substring3 array_head_and_tail#0 end_offset#0 end_of_tail#0)
+        let tmp%14#0: bytes = (concat tmp%12#0 tmp%13#0)
+        let new_head_and_tail#0: bytes = tmp%14#0
+        let tmp%15#0: uint64 = (* array_length#0 2u)
+        let tmp%16#0: uint64 = (+ index#0 1u)
+        let tmp%17#0: uint64 = (* tmp%16#0 2u)
+        (assert 2u) // Step cannot be zero
+        let head_offset#0: uint64 = tmp%17#0
+        goto block@1
+    block@1: // for_header_L273
+        let head_offset#1: uint64 = φ(head_offset#0 <- block@0, head_offset#2 <- block@3)
+        let new_head_and_tail#1: bytes = φ(new_head_and_tail#0 <- block@0, new_head_and_tail#2 <- block@3)
+        let continue_looping%0#0: bool = (< head_offset#1 tmp%15#0)
+        goto continue_looping%0#0 ? block@2 : block@4
+    block@2: // for_body_L274
+        let tmp%18#0: uint64 = (extract_uint16 new_head_and_tail#1 head_offset#1)
+        let tail_offset#0: uint64 = tmp%18#0
+        let tmp%19#0: uint64 = (+ tail_offset#0 new_item_length#0)
+        let tail_offset#1: uint64 = tmp%19#0
+        let tmp%20#0: uint64 = (- tail_offset#1 original_item_length#0)
+        let tail_offset#2: uint64 = tmp%20#0
+        let tmp%21#0: bytes = (itob tail_offset#2)
+        let tmp%22#0: bytes = ((extract 6 2) tmp%21#0)
+        let tail_offset_bytes#0: bytes = tmp%22#0
+        let tmp%23#0: bytes = (replace3 new_head_and_tail#1 head_offset#1 tail_offset_bytes#0)
+        let new_head_and_tail#2: bytes = tmp%23#0
+        goto block@3
+    block@3: // for_footer_L273
+        let head_offset#2: uint64 = (+ head_offset#1 2u)
+        goto block@1
+    block@4: // after_for_L273
+        return new_head_and_tail#1
+
+subroutine _puya_lib.arc4.static_array_replace_byte_length_head(array_head_and_tail: bytes, new_item: bytes, index: uint64, array_length: uint64) -> bytes:
+    block@0: // L282
+        let tmp%0#0: bool = (< index#0 array_length#0)
+        (assert tmp%0#0) // Index out of bounds
+        let tmp%1#0: uint64 = (* index#0 2u)
+        let tmp%2#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%1#0)
+        let offset_for_index#0: uint64 = tmp%2#0
+        let tmp%3#0: uint64 = (extract_uint16 array_head_and_tail#0 offset_for_index#0)
+        let old_item_length#0: uint64 = tmp%3#0
+        let tmp%4#0: uint64 = (+ offset_for_index#0 old_item_length#0)
+        let tmp%5#0: uint64 = (+ tmp%4#0 2u)
+        let old_item_end#0: uint64 = tmp%5#0
+        let tmp%6#0: bytes = (substring3 array_head_and_tail#0 0u offset_for_index#0)
+        let tmp%7#0: bytes = (concat tmp%6#0 new_item#0)
+        let tmp%8#0: uint64 = (len array_head_and_tail#0)
+        let tmp%9#0: bytes = (substring3 array_head_and_tail#0 old_item_end#0 tmp%8#0)
+        let tmp%10#0: bytes = (concat tmp%7#0 tmp%9#0)
+        let tmp%11#0: bytes = _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(tmp%10#0, array_length#0, index#0)
+        return tmp%11#0
+
+subroutine _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(array_head_and_tail: bytes, length: uint64, start_at_index: uint64) -> bytes:
+    block@0: // L310
+        let tmp%0#0: uint64 = (* length#0 2u)
+        let tmp%1#0: uint64 = (* start_at_index#0 2u)
+        let tmp%2#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%1#0)
+        let tmp%3#0: uint64 = (select tmp%0#0 tmp%2#0 start_at_index#0)
+        let tail_offset#0: uint64 = tmp%3#0
+        let tmp%4#0: uint64 = (* length#0 2u)
+        let tmp%5#0: uint64 = (* start_at_index#0 2u)
+        (assert 2u) // Step cannot be zero
+        let head_offset#0: uint64 = tmp%5#0
+        goto block@1
+    block@1: // for_header_L331
+        let head_offset#1: uint64 = φ(head_offset#0 <- block@0, head_offset#3 <- block@3)
+        let tail_offset#1: uint64 = φ(tail_offset#0 <- block@0, tail_offset#2 <- block@3)
+        let array_head_and_tail#1: bytes = φ(array_head_and_tail#0 <- block@0, array_head_and_tail#2 <- block@3)
+        let continue_looping%0#0: bool = (< head_offset#1 tmp%4#0)
+        goto continue_looping%0#0 ? block@2 : block@4
+    block@2: // for_body_L332
+        let tmp%6#0: bytes = (itob tail_offset#1)
+        let tmp%7#0: bytes = ((extract 6 2) tmp%6#0)
+        let tail_offset_bytes#0: bytes = tmp%7#0
+        let tmp%8#0: bytes = (replace3 array_head_and_tail#1 head_offset#1 tail_offset_bytes#0)
+        let array_head_and_tail#2: bytes = tmp%8#0
+        let tmp%9#0: uint64 = (extract_uint16 array_head_and_tail#2 tail_offset#1)
+        let tmp%10#0: uint64 = (+ tmp%9#0 2u)
+        let tmp%11#0: uint64 = (+ tail_offset#1 tmp%10#0)
+        let tail_offset#2: uint64 = tmp%11#0
+        let tmp%12#0: uint64 = (+ head_offset#1 2u)
+        let head_offset#2: uint64 = tmp%12#0
+        goto block@3
+    block@3: // for_footer_L331
+        let head_offset#3: uint64 = (+ head_offset#1 2u)
+        goto block@1
+    block@4: // after_for_L331
+        return array_head_and_tail#1
+
+subroutine tests/approvals/assignments.algo.ts::resetCount() -> void:
+    block@0: // L8
+        (stores 0u 0u)
+        return 
+
+subroutine tests/approvals/assignments.algo.ts::getCount() -> uint64:
+    block@0: // L11
+        let tmp%0#0: uint64 = (loads 0u)
+        return tmp%0#0
+
+subroutine tests/approvals/assignments.algo.ts::incCount() -> void:
+    block@0: // L15
+        let tmp%0#0: uint64 = (loads 0u)
+        let tmp%1#0: uint64 = (+ tmp%0#0 1u)
+        (stores 0u tmp%1#0)
+        return 
+
 subroutine tests/approvals/assignments.algo.ts::getVal() -> <uint64, uint64>:
-    block@0: // L66
+    block@0: // L96
         return 1u 2u
 
 subroutine tests/approvals/assignments.algo.ts::logAndReturn(u: uint64) -> uint64:
-    block@0: // L74
+    block@0: // L104
+        tests/approvals/assignments.algo.ts::incCount()
         let tmp%0#0: bytes[8] = (itob u#0)
         (log tmp%0#0)
         return u#0
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__() -> bool:
-    block@0: // L7
+    block@0: // L19
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@11
-    block@1: // abi_routing_L7
+    block@1: // abi_routing_L19
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "testPrimitives(uint64)void" => block@2, method "testArrayDestructure(uint64[],uint64,uint64[])void" => block@3, method "testArrayNarrowing(uint64[],uint64)void" => block@4, method "testNested(uint64[][])void" => block@5, method "testDestructureObj((uint64,string),(uint64,string))void" => block@6, method "testObjLiteralNarrowing(uint64,uint64)void" => block@7, method "testMixed(((uint64))[])void" => block@8, * => block@9}
-    block@2: // testPrimitives_route_L8
+    block@2: // testPrimitives_route_L21
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -32,7 +184,7 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_rout
         let tmp%7#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%0#0)
         tests/approvals/assignments.algo.ts::AssignmentsAlgo.testPrimitives(tmp%7#0)
         return 1u
-    block@3: // testArrayDestructure_route_L14
+    block@3: // testArrayDestructure_route_L29
         let tmp%8#0: uint64 = (txn OnCompletion)
         let tmp%9#0: bool = (== tmp%8#0 NoOp)
         (assert tmp%9#0) // OnCompletion is not NoOp
@@ -45,7 +197,7 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_rout
         let reinterpret_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = (txna ApplicationArgs 3)
         tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayDestructure(reinterpret_Encoded(len+uint64[])%0#0, tmp%12#0, reinterpret_Encoded(len+uint64[])%1#0)
         return 1u
-    block@4: // testArrayNarrowing_route_L24
+    block@4: // testArrayNarrowing_route_L49
         let tmp%13#0: uint64 = (txn OnCompletion)
         let tmp%14#0: bool = (== tmp%13#0 NoOp)
         (assert tmp%14#0) // OnCompletion is not NoOp
@@ -57,7 +209,7 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_rout
         let tmp%17#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%2#0)
         tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayNarrowing(reinterpret_Encoded(len+uint64[])%2#0, tmp%17#0)
         return 1u
-    block@5: // testNested_route_L34
+    block@5: // testNested_route_L63
         let tmp%18#0: uint64 = (txn OnCompletion)
         let tmp%19#0: bool = (== tmp%18#0 NoOp)
         (assert tmp%19#0) // OnCompletion is not NoOp
@@ -67,7 +219,7 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_rout
         let reinterpret_Encoded(len+(len+uint64[])[])%0#0: Encoded(len+(len+uint64[])[]) = (txna ApplicationArgs 1)
         tests/approvals/assignments.algo.ts::AssignmentsAlgo.testNested(reinterpret_Encoded(len+(len+uint64[])[])%0#0)
         return 1u
-    block@6: // testDestructureObj_route_L38
+    block@6: // testDestructureObj_route_L68
         let tmp%22#0: uint64 = (txn OnCompletion)
         let tmp%23#0: bool = (== tmp%22#0 NoOp)
         (assert tmp%23#0) // OnCompletion is not NoOp
@@ -79,7 +231,7 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_rout
         let (tmp%26#0: uint64, tmp%27#0: string) = decode_bytes<(uint64,string,)>(reinterpret_Encoded(uint64,(len+utf8[]))%1#0)
         tests/approvals/assignments.algo.ts::AssignmentsAlgo.testDestructureObj(reinterpret_Encoded(uint64,(len+utf8[]))%0#0, tmp%26#0, tmp%27#0)
         return 1u
-    block@7: // testObjLiteralNarrowing_route_L43
+    block@7: // testObjLiteralNarrowing_route_L73
         let tmp%28#0: uint64 = (txn OnCompletion)
         let tmp%29#0: bool = (== tmp%28#0 NoOp)
         (assert tmp%29#0) // OnCompletion is not NoOp
@@ -92,7 +244,7 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_rout
         let tmp%33#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%4#0)
         tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNarrowing(tmp%32#0, tmp%33#0)
         return 1u
-    block@8: // testMixed_route_L56
+    block@8: // testMixed_route_L86
         let tmp%34#0: uint64 = (txn OnCompletion)
         let tmp%35#0: bool = (== tmp%34#0 NoOp)
         (assert tmp%35#0) // OnCompletion is not NoOp
@@ -102,67 +254,155 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_rout
         let reinterpret_Encoded(len+((uint64))[])%0#0: Encoded(len+((uint64))[]) = (txna ApplicationArgs 1)
         tests/approvals/assignments.algo.ts::AssignmentsAlgo.testMixed(reinterpret_Encoded(len+((uint64))[])%0#0)
         return 1u
-    block@9: // switch_case_default_L7
+    block@9: // switch_case_default_L19
         goto block@10
-    block@10: // switch_case_next_L7
+    block@10: // switch_case_next_L19
         goto block@15
-    block@11: // bare_routing_L7
+    block@11: // bare_routing_L19
         let tmp%38#0: uint64 = (txn OnCompletion)
         switch tmp%38#0 {0u => block@12, * => block@13}
-    block@12: // __algots__.defaultCreate_L7
+    block@12: // __algots__.defaultCreate_L19
         let tmp%39#0: uint64 = (txn ApplicationID)
         let tmp%40#0: bool = (== tmp%39#0 0u)
         (assert tmp%40#0) // can only call when creating
         tests/approvals/assignments.algo.ts::AssignmentsAlgo.__algots__.defaultCreate()
         return 1u
-    block@13: // switch_case_default_L7
+    block@13: // switch_case_default_L19
         goto block@14
-    block@14: // switch_case_next_L7
+    block@14: // switch_case_next_L19
         goto block@15
-    block@15: // after_if_else_L7
+    block@15: // after_if_else_L19
         return 0u
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testPrimitives(u: uint64) -> void:
-    block@0: // L8
+    block@0: // L21
         let p1#0: uint64 = u#0
         let p2#0: uint64 = 2u
         let tmp%0#0: uint64 = (+ p2#0 1u)
         let p2#1: uint64 = tmp%0#0
+        let tmp%1#0: bool = (== p2#1 3u)
+        (assert tmp%1#0)
+        let tmp%2#0: bool = (== p1#0 u#0)
+        (assert tmp%2#0)
         return 
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayDestructure(i_a: Encoded(len+uint64[]), u: uint64, m_a: Encoded(len+uint64[])) -> void:
-    block@0: // L14
+    block@0: // L29
         let array_item%0#0: Encoded(uint64) = extract_value(i_a#0, 1u)
         let values%0#0: uint64 = decode_bytes<uint64>(array_item%0#0)
         let a1#0: uint64 = values%0#0
-        let tmp%0#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
+        let array_item%1#0: Encoded(uint64) = extract_value(i_a#0, 1u)
+        let values%1#0: uint64 = decode_bytes<uint64>(array_item%1#0)
+        let tmp%0#0: bool = (== a1#0 values%1#0)
+        (assert tmp%0#0)
+        tests/approvals/assignments.algo.ts::resetCount()
         let tmp%1#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
         let tmp%2#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
-        let a2#0: uint64 = tmp%0#0
-        let a3#0: uint64 = tmp%1#0
-        let tmp%3#0: Encoded(uint64,uint64,uint64) = bytes_encode<(uint64,uint64,uint64)>(tmp%0#0, tmp%1#0, tmp%2#0)
-        let a5#0: Encoded(uint64,uint64,uint64) = tmp%3#0
-        let tmp%4#0: bool = (== 3u 3u)
-        (assert tmp%4#0) // a5 length should be 3
+        let tmp%3#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
+        let a2#0: uint64 = tmp%1#0
+        let a3#0: uint64 = tmp%2#0
+        let tmp%4#0: Encoded(uint64,uint64,uint64) = bytes_encode<(uint64,uint64,uint64)>(tmp%1#0, tmp%2#0, tmp%3#0)
+        let a5#0: Encoded(uint64,uint64,uint64) = tmp%4#0
+        let tmp%5#0: uint64 = tests/approvals/assignments.algo.ts::getCount()
+        let tmp%6#0: bool = (== tmp%5#0 3u)
+        (assert tmp%6#0) // logAndReturn called 3 times
+        let tmp%7#0: bool = (== a2#0 u#0)
+        (assert tmp%7#0)
+        let tmp%8#0: bool = (== a3#0 u#0)
+        (assert tmp%8#0)
+        let tmp%9#0: bool = (== 3u 3u)
+        goto tmp%9#0 ? block@1 : block@5
+    block@1: // and_contd_L38
+        let tuple_item%0#0: Encoded(uint64) = extract_value(a5#0, 0)
+        let values%2#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let tmp%10#0: bool = (== values%2#0 u#0)
+        goto tmp%10#0 ? block@2 : block@5
+    block@2: // and_contd_L38
+        let tuple_item%1#0: Encoded(uint64) = extract_value(a5#0, 1)
+        let values%3#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
+        let tmp%11#0: bool = (== values%3#0 u#0)
+        goto tmp%11#0 ? block@3 : block@5
+    block@3: // and_contd_L38
+        let tuple_item%2#0: Encoded(uint64) = extract_value(a5#0, 2)
+        let values%4#0: uint64 = decode_bytes<uint64>(tuple_item%2#0)
+        let tmp%12#0: bool = (== values%4#0 u#0)
+        goto tmp%12#0 ? block@4 : block@5
+    block@4: // bool_true_L38
+        let and_result%0#0: bool = 1u
+        goto block@6
+    block@5: // bool_false_L38
+        let and_result%0#1: bool = 0u
+        goto block@6
+    block@6: // bool_merge_L38
+        let and_result%0#2: bool = φ(and_result%0#0 <- block@4, and_result%0#1 <- block@5)
+        (assert and_result%0#2) // assert target is match for conditions
+        let tmp%13#0: bool = (== 3u 3u)
+        (assert tmp%13#0) // a5 length should be 3
         let a4#0: uint64 = 1u
-        let tmp%5#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
-        let tmp%6#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
-        let tmp%7#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
-        let c#0: uint64 = tmp%5#0
-        let d#0: uint64 = tmp%6#0
-        let array_item%1#0: Encoded(uint64) = extract_value(m_a#0, 0u)
-        let values%1#0: uint64 = decode_bytes<uint64>(array_item%1#0)
-        let array_item%2#0: Encoded(uint64) = extract_value(m_a#0, 1u)
-        let values%2#0: uint64 = decode_bytes<uint64>(array_item%2#0)
-        let a6#0: uint64 = values%1#0
-        let a7#0: uint64 = values%2#0
+        let tmp%14#0: bool = (== a4#0 1u)
+        (assert tmp%14#0)
+        let tmp%15#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
+        let tmp%16#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
+        let tmp%17#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
+        let c#0: uint64 = tmp%15#0
+        let d#0: uint64 = tmp%16#0
+        let tmp%18#0: bool = (== 2u 2u)
+        goto tmp%18#0 ? block@7 : block@10
+    block@7: // and_contd_L43
+        let tmp%19#0: bool = (== c#0 u#0)
+        goto tmp%19#0 ? block@8 : block@10
+    block@8: // and_contd_L43
+        let tmp%20#0: bool = (== d#0 u#0)
+        goto tmp%20#0 ? block@9 : block@10
+    block@9: // bool_true_L43
+        let and_result%1#0: bool = 1u
+        goto block@11
+    block@10: // bool_false_L43
+        let and_result%1#1: bool = 0u
+        goto block@11
+    block@11: // bool_merge_L43
+        let and_result%1#2: bool = φ(and_result%1#0 <- block@9, and_result%1#1 <- block@10)
+        (assert and_result%1#2) // assert target is match for conditions
+        let array_item%2#0: Encoded(uint64) = extract_value(m_a#0, 0u)
+        let values%5#0: uint64 = decode_bytes<uint64>(array_item%2#0)
+        let array_item%3#0: Encoded(uint64) = extract_value(m_a#0, 1u)
+        let values%6#0: uint64 = decode_bytes<uint64>(array_item%3#0)
+        let a6#0: uint64 = values%5#0
+        let a7#0: uint64 = values%6#0
+        let array_item%4#0: Encoded(uint64) = extract_value(m_a#0, 0u)
+        let values%7#0: uint64 = decode_bytes<uint64>(array_item%4#0)
+        let tmp%21#0: bool = (== a6#0 values%7#0)
+        (assert tmp%21#0)
+        let array_item%5#0: Encoded(uint64) = extract_value(m_a#0, 1u)
+        let values%8#0: uint64 = decode_bytes<uint64>(array_item%5#0)
+        let tmp%22#0: bool = (== a7#0 values%8#0)
+        (assert tmp%22#0)
         return 
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayNarrowing(m_a: Encoded(len+uint64[]), u: uint64) -> void:
-    block@0: // L24
+    block@0: // L49
         let direct#0: Encoded(len+uint64[]) = m_a#0
-        let array_length%0#0: uint64 = (extract_uint16 m_a#0 0u)
-        let narrowed#0: Encoded(len+uint64[]) = m_a#0
+        let array_item%0#0: Encoded(uint64) = extract_value(m_a#0, 0u)
+        let values%0#0: uint64 = decode_bytes<uint64>(array_item%0#0)
+        let tmp%0#0: uint64 = (+ values%0#0 1u)
+        let encoded_value%0#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
+        let updated_array%0#0: Encoded(len+uint64[]) = replace_value(m_a#0, 0u, encoded_value%0#0)
+        let m_a#1: Encoded(len+uint64[]) = updated_array%0#0
+        let array_item%1#0: Encoded(uint64) = extract_value(direct#0, 0u)
+        let values%1#0: uint64 = decode_bytes<uint64>(array_item%1#0)
+        let tmp%1#0: uint64 = (+ values%1#0 2u)
+        let encoded_value%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%1#0)
+        let updated_array%1#0: Encoded(len+uint64[]) = replace_value(direct#0, 0u, encoded_value%1#0)
+        let direct#1: Encoded(len+uint64[]) = updated_array%1#0
+        let array_item%2#0: Encoded(uint64) = extract_value(m_a#1, 0u)
+        let values%2#0: uint64 = decode_bytes<uint64>(array_item%2#0)
+        let array_item%3#0: Encoded(uint64) = extract_value(direct#1, 0u)
+        let values%3#0: uint64 = decode_bytes<uint64>(array_item%3#0)
+        let tmp%2#0: bool = (!= values%2#0 values%3#0)
+        (assert tmp%2#0)
+        let array_length%0#0: uint64 = (extract_uint16 m_a#1 0u)
+        let narrowed#0: Encoded(len+uint64[]) = m_a#1
+        let narrowed2#0: Encoded(len+uint64[]) = narrowed#0
         let encoded_array%0#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(u#0, u#0, u#0)
         let fromLit#0: Encoded(len+uint64[]) = encoded_array%0#0
         let encoded_array%1#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(u#0, u#0, u#0)
@@ -172,15 +412,20 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayNarrowi
         return 
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testNested(i_a: Encoded(len+(len+uint64[])[])) -> void:
-    block@0: // L34
+    block@0: // L63
         let array_item%0#0: Encoded(len+uint64[]) = extract_value(i_a#0, 0u)
         let array_item%1#0: Encoded(uint64) = extract_value(array_item%0#0, 0u)
         let values%0#0: uint64 = decode_bytes<uint64>(array_item%1#0)
         let a#0: uint64 = values%0#0
+        let array_item%2#0: Encoded(len+uint64[]) = extract_value(i_a#0, 0u)
+        let array_item%3#0: Encoded(uint64) = extract_value(array_item%2#0, 0u)
+        let values%1#0: uint64 = decode_bytes<uint64>(array_item%3#0)
+        let tmp%0#0: bool = (== a#0 values%1#0)
+        (assert tmp%0#0)
         return 
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testDestructureObj(m: Encoded(uint64,(len+utf8[])), i.a: uint64, i.b: string) -> void:
-    block@0: // L38
+    block@0: // L68
         let tuple_item%0#0: Encoded(uint64) = extract_value(m#0, 0)
         let values%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
         let tuple_item%1#0: Encoded(len+utf8[]) = extract_value(m#0, 1)
@@ -192,7 +437,7 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testDestructureO
         return 
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNarrowing(a: uint64, b: uint64) -> void:
-    block@0: // L43
+    block@0: // L73
         let tmp%0#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(a#0, b#0)
         let mObj#0: Encoded(uint64,uint64) = tmp%0#0
         let (imObj.a#0: uint64, imObj.b#0: uint64) = (a#0, b#0)
@@ -207,7 +452,7 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNa
         return 
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testMixed(m: Encoded(len+((uint64))[])) -> void:
-    block@0: // L56
+    block@0: // L86
         let array_item%0#0: Encoded((uint64)) = extract_value(m#0, 0u)
         let tuple_item%0#0: Encoded(uint64) = extract_value(array_item%0#0, 0)
         let tuple_item%1#0: Encoded(uint64) = extract_value(tuple_item%0#0, 0)
@@ -220,5 +465,5 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testMixed(m: Enc
         return 
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.__algots__.defaultCreate() -> void:
-    block@0: // L7
+    block@0: // L19
         return 
