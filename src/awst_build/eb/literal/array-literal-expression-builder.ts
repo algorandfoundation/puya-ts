@@ -1,7 +1,7 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression, LValue } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { CodeError } from '../../../errors'
+import { CodeError, InternalError } from '../../../errors'
 import { codeInvariant } from '../../../util'
 import type { PTypeOrClass } from '../../ptypes'
 import {
@@ -27,16 +27,9 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
 
   readonly ptype: ArrayLiteralPType
 
-  /**
-   *
-   * @param sourceLocation
-   * @param items
-   * @param isSingleEval Is this builder the result of calling `.singleEvaluation()` and thus further calls should just return this builder
-   */
   constructor(
     sourceLocation: SourceLocation,
     private readonly items: InstanceBuilder[],
-    private readonly isSingleEval = false,
   ) {
     super(sourceLocation)
     this.ptype = new ArrayLiteralPType({ items: items.map((i) => i.ptype) })
@@ -57,28 +50,7 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
   }
 
   singleEvaluation(): InstanceBuilder {
-    if (this.isSingleEval) return this
-    if (this.items.length === 0) return this
-    const tuple = nodeFactory.singleEvaluation({
-      source: nodeFactory.tupleExpression({
-        items: this.items.map((i) => i.resolve()),
-        sourceLocation: this.sourceLocation,
-      }),
-    })
-    return new ArrayLiteralExpressionBuilder(
-      this.sourceLocation,
-      this.ptype.items.map((itemType, index) =>
-        instanceEb(
-          nodeFactory.tupleItemExpression({
-            base: tuple,
-            index: BigInt(index),
-            sourceLocation: this.items[index].sourceLocation,
-          }),
-          itemType,
-        ),
-      ),
-      true,
-    )
+    throw new InternalError('Array literal cannot be single evaluated', { sourceLocation: this.sourceLocation })
   }
 
   indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
