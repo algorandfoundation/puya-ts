@@ -3,6 +3,7 @@ import { Contract, ReferenceArray } from '@algorandfoundation/algorand-typescrip
 import type { DynamicArray, StaticArray, UintN64 } from '@algorandfoundation/algorand-typescript/arc4'
 
 const stopNumber: uint64 = 42
+type Point = { x: uint64; y: uint64 }
 
 export class ForOfLoopsAlgo extends Contract {
   test_for_of_loop_tuple(items: readonly [uint64, uint64, uint64]) {
@@ -10,6 +11,24 @@ export class ForOfLoopsAlgo extends Contract {
     for (const item of items) {
       total += item
       if (item === stopNumber) break
+    }
+    return total
+  }
+
+  test_for_of_loop_destructured_tuple(items: DynamicArray<UintN64>) {
+    let total: uint64 = 0
+    for (const [index, v] of items.entries()) {
+      total += v.native
+      if (total >= stopNumber) break
+    }
+    return total
+  }
+
+  test_for_of_loop_destructured_object(items: Point[]) {
+    let total: uint64 = 0
+    for (const { x, y } of items) {
+      total += x + y
+      if (total >= stopNumber) break
     }
     return total
   }

@@ -32,9 +32,9 @@ contract LocalStateDemo
     LocalState[txn<Sender>()]["b1"]: bytes = b
     LocalState[txn<Sender>()]["localBytes2"]: bytes = b
     LocalState[txn<Sender>()]["localEncoded"]: arc4.static_array<arc4.uint64> = copy(c)
-    LocalState[txn<Sender>()]["localTuple"]: readonly [uint64, bytes] = #[#[a, b].0, #[a, b].1]
-    LocalState[txn<Sender>()]["localObject"]: ReadonlyObjectEFF43F36{ a: uint64, b: bytes } = #{ a: ($0 = #{ a: a, b: b }).a, b: $0.b }
-    LocalState[txn<Sender>()]["localMutableObject"]: tests/approvals/local-state.algo.ts::Data = new tests/approvals/local-state.algo.ts::Data(a=($1 = #{ a: a, b: b, c: True, d: "hello" }).a, b=$1.b, c=$1.c, d=$1.d)
+    LocalState[txn<Sender>()]["localTuple"]: readonly [uint64, bytes] = #[($0 = #[a, b]).0, $0.1]
+    LocalState[txn<Sender>()]["localObject"]: ReadonlyObjectEFF43F36{ a: uint64, b: bytes } = #{ a: ($1 = #{ a: a, b: b }).a, b: $1.b }
+    LocalState[txn<Sender>()]["localMutableObject"]: tests/approvals/local-state.algo.ts::Data = new tests/approvals/local-state.algo.ts::Data(a=($2 = #{ a: a, b: b, c: True, d: "hello" }).a, b=$2.b, c=$2.c, d=$2.d)
   }
   
   getState(): Object98E334B2

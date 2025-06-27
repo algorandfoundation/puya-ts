@@ -17,6 +17,7 @@ import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expre
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
+import { tryConvertToReadonly } from '../eb/util/readonly'
 import { FunctionPType } from '../ptypes'
 import { IteratorTypeVisitor } from '../ptypes/visitors/iterator-type-visitor'
 import { instanceEb, typeRegistry } from '../type-registry'
@@ -250,13 +251,16 @@ export abstract class FunctionVisitor
       const [declaration] = node.initializer.declarations
       items = this.visitBindingName(declaration.name, initializerLocation)
     }
+    const isDestructuringArray = items instanceof ArrayLiteralExpressionBuilder
+    const targetType = isDestructuringArray ? tryConvertToReadonly(itemType) : itemType
+
     const itemVar = instanceEb(
       nodeFactory.varExpression({
         name: this.context.generateVarName('temp'),
-        wtype: itemType.wtypeOrThrow,
+        wtype: targetType.wtypeOrThrow,
         sourceLocation: initializerLocation,
       }),
-      itemType,
+      targetType,
     )
     using ctx = this.context.switchLoopCtx.enterLoop(node, sourceLocation)
     return nodeFactory.block(
