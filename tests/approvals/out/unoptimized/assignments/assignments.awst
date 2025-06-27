@@ -1,5 +1,18 @@
+subroutine resetCount(): void
+{
+  stores(0, 0)
+}
+subroutine getCount(): uint64
+{
+  return loads(0)
+}
+subroutine incCount(): void
+{
+  stores(0, loads(0) + 1)
+}
 contract AssignmentsAlgo
 {
+  reservedScratchSpace: [0]
   approvalProgram(): bool
   {
     return arc4Router()
@@ -15,22 +28,38 @@ contract AssignmentsAlgo
     p1: uint64 = u
     p2: uint64 = 2
     p2: uint64 = p2 + 1
+    assert(p2 == 3)
+    assert(p1 == u)
   }
   
   testArrayDestructure(i_a: arc4.dynamic_array<uint64>, u: uint64, m_a: arc4.dynamic_array<uint64>): void
   {
     #[a1]: readonly [uint64] = #[i_a[1]]
+    assert(a1 == i_a[1])
+    tests/approvals/assignments.algo.ts::resetCount()
     a5: arc4.tuple<uint64,uint64,uint64> = (#[a2, a3] = #[($0 = #[tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u)]).0, $0.1]), ARC4_ENCODE(#[$0.0, $0.1, $0.2], wtype=arc4.tuple<uint64,uint64,uint64>)
+    assert(tests/approvals/assignments.algo.ts::getCount() == 3, comment=logAndReturn called 3 times)
+    assert(a2 == u)
+    assert(a3 == u)
+    assert(3 == 3 and a5.0 == u and a5.1 == u and a5.2 == u, comment=assert target is match for conditions)
     assert(3 == 3, comment=a5 length should be 3)
     #[a4]: readonly [uint64] = #[($1 = #[1]).0]
+    assert(a4 == 1)
     #[c, d]: readonly [uint64, uint64] = #[($2 = #[tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u)]).0, $2.1]
+    assert(2 == 2 and c == u and d == u, comment=assert target is match for conditions)
     #[a6, a7]: readonly [uint64, uint64] = #[m_a[0], m_a[1]]
+    assert(a6 == m_a[0])
+    assert(a7 == m_a[1])
   }
   
   testArrayNarrowing(m_a: arc4.dynamic_array<uint64>, u: uint64): void
   {
     direct: arc4.dynamic_array<uint64> = copy(m_a)
+    m_a[0]: uint64 = m_a[0] + 1
+    direct[0]: uint64 = direct[0] + 2
+    assert(m_a[0] != direct[0])
     narrowed: arc4.dynamic_array<uint64> = convert_array(copy(m_a), wtype=arc4.dynamic_array<uint64>)
+    narrowed2: arc4.dynamic_array<uint64> = narrowed
     result: arc4.dynamic_array<uint64> = (fromLit = new arc4.dynamic_array<uint64>(($3 = #[u, u, u]).0, $3.1, $3.2)), new arc4.dynamic_array<uint64>(($4 = #[u, u, u]).0, $4.1, $4.2)
     fromLit2: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(($5 = #[u, u, u]).0, $5.1, $5.2)
   }
@@ -38,6 +67,7 @@ contract AssignmentsAlgo
   testNested(i_a: arc4.dynamic_array<arc4.dynamic_array<uint64>>): void
   {
     #[#[a]]: readonly [readonly [uint64]] = #[#[i_a[0][0]]]
+    assert(a == i_a[0][0])
   }
   
   testDestructureObj(m: Object3EB715E7, i: ReadonlyObject3EB715E7{ a: uint64, b: string }): void
@@ -59,7 +89,7 @@ contract AssignmentsAlgo
   testMixed(m: arc4.dynamic_array<Object7CFAF5D6>): void
   {
     #[#[#[a1]]]: readonly [readonly [readonly [uint64]]] = #[#[#[m[0].a.0]]]
-    m: arc4.dynamic_array<Object7CFAF5D6> = new arc4.dynamic_array<Object7CFAF5D6>(new Object7CFAF5D6(a=ARC4_ENCODE(#[($15 = ($16 = #[#{ a: #[($17 = #{ a: #[213] }).a.0] }]).0).a.0], wtype=arc4.tuple<uint64>)))
+    m: arc4.dynamic_array<Object7CFAF5D6> = new arc4.dynamic_array<Object7CFAF5D6>(new Object7CFAF5D6(a=ARC4_ENCODE(#[($15 = ($16 = ($17 = #[#{ a: #[($18 = ($19 = #{ a: #[213] }).a).0] }]).0).a).0], wtype=arc4.tuple<uint64>)))
   }
   
   __algots__.defaultCreate(): void
@@ -69,10 +99,11 @@ contract AssignmentsAlgo
 }
 subroutine getVal(): ImmutableObj{ a: uint64, b: uint64 }
 {
-  return #{ a: ($18 = #{ a: 1, b: 2 }).a, b: $18.b }
+  return #{ a: ($20 = #{ a: 1, b: 2 }).a, b: $20.b }
 }
 subroutine logAndReturn(u: uint64): uint64
 {
+  tests/approvals/assignments.algo.ts::incCount()
   log(itob(u))
   return u
 }

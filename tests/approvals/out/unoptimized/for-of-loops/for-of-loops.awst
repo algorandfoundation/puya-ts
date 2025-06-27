@@ -24,6 +24,34 @@ contract ForOfLoopsAlgo
     return total
   }
   
+  test_for_of_loop_destructured_tuple(items: arc4.dynamic_array<arc4.uint64>): uint64
+  {
+    total: uint64 = 0
+    for (temp in enumerate(items)) {
+      #[index, v]: readonly [uint64, arc4.uint64] = #[temp.0, temp.1]
+      total: uint64 = total + ARC4_DECODE(v)
+      if (total >= 42) {
+        goto #loop₁ᵇ
+      }
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
+  test_for_of_loop_destructured_object(items: arc4.dynamic_array<tests/approvals/for-of-loops.algo.ts::Point>): uint64
+  {
+    total: uint64 = 0
+    for (temp in items) {
+      #[x, y]: readonly [uint64, uint64] = #[temp.x, temp.y]
+      total: uint64 = total + x + y
+      if (total >= 42) {
+        goto #loop₁ᵇ
+      }
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
   test_for_of_loop_arc4_dynamic_array(items: arc4.dynamic_array<arc4.uint64>): uint64
   {
     total: uint64 = 0
