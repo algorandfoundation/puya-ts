@@ -9,15 +9,7 @@ import { logger } from '../../../logger'
 
 import { base32ToUint8Array, bigIntToUint8Array, codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
-import {
-  accountPType,
-  bytesPType,
-  IterableIteratorGeneric,
-  MutableTuplePType,
-  NumericLiteralPType,
-  stringPType,
-  uint64PType,
-} from '../../ptypes'
+import { accountPType, bytesPType, NumericLiteralPType, stringPType } from '../../ptypes'
 import {
   AddressClass,
   arc4AddressAlias,
@@ -30,9 +22,9 @@ import {
   StaticBytesGeneric,
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
+import { EntriesFunctionBuilder } from '../array-like/common'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder, FunctionBuilder } from '../index'
-import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
 import { ArrayPopFunctionBuilder } from '../shared/pop-function-builder'
 import { ArrayPushFunctionBuilder } from '../shared/push-function-builder'
@@ -335,26 +327,6 @@ class ConcatFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
     })
     return concatArrays(this.arrayBuilder, other, sourceLocation)
-  }
-}
-class EntriesFunctionBuilder extends FunctionBuilder {
-  constructor(private arrayBuilder: ArrayExpressionBuilder<DynamicArrayType | StaticArrayType>) {
-    super(arrayBuilder.sourceLocation)
-  }
-
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    parseFunctionArgs({ args, typeArgs, callLocation: sourceLocation, argSpec: (_) => [], genericTypeArgs: 0, funcName: 'entries' })
-    const iteratorType = IterableIteratorGeneric.parameterise([
-      new MutableTuplePType({ items: [uint64PType, this.arrayBuilder.ptype.elementType] }),
-    ])
-    return new IterableIteratorExpressionBuilder(
-      nodeFactory.enumeration({
-        expr: this.arrayBuilder.iterate(),
-        sourceLocation,
-        wtype: iteratorType.wtype,
-      }),
-      iteratorType,
-    )
   }
 }
 
