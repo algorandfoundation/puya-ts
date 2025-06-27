@@ -22,7 +22,6 @@ import {
   StaticBytesGeneric,
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
-import { EntriesFunctionBuilder } from '../array-like/common'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder, FunctionBuilder } from '../index'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
@@ -33,6 +32,7 @@ import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
 import { requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { concatArrays } from '../util/array/concat'
+import { EntriesFunctionBuilder, KeysFunctionBuilder } from '../util/array/entries'
 import { indexAccess } from '../util/array/index-access'
 import { arrayLength } from '../util/array/length'
 import { resolveCompatExpression } from '../util/resolve-compat-builder'
@@ -289,6 +289,8 @@ export abstract class ArrayExpressionBuilder<
         )
       case 'entries':
         return new EntriesFunctionBuilder(this)
+      case 'keys':
+        return new KeysFunctionBuilder(this)
       case 'concat':
         return new ConcatFunctionBuilder(this)
       case 'slice': {

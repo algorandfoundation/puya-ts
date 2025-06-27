@@ -4,10 +4,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@1: // L8
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
-        goto tmp%1#0 ? block@2 : block@12
+        goto tmp%1#0 ? block@2 : block@13
     block@2: // abi_routing_L8
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "test_for_of_loop_tuple((uint64,uint64,uint64))uint64" => block@3, method "test_for_of_loop_destructured_tuple(uint64[])uint64" => block@4, method "test_for_of_loop_destructured_object((uint64,uint64)[])uint64" => block@5, method "test_for_of_loop_arc4_dynamic_array(uint64[])uint64" => block@6, method "test_for_of_loop_arc4_static_array(uint64[5])uint64" => block@7, method "test_for_of_loop_native_immutable_array(uint64[])uint64" => block@8, method "test_for_of_loop_native_mutable_array((uint64,uint64,uint64))uint64" => block@9, * => block@10}
+        switch tmp%2#0 {method "test_for_of_loop_tuple((uint64,uint64,uint64))uint64" => block@3, method "test_for_of_loop_destructured_tuple(uint64[])uint64" => block@4, method "test_for_of_loop_destructured_object((uint64,uint64)[])uint64" => block@5, method "test_for_of_loop_arc4_dynamic_array(uint64[])uint64" => block@6, method "test_for_of_loop_arc4_static_array(uint64[5])uint64" => block@7, method "test_for_of_loop_native_immutable_array(uint64[])uint64" => block@8, method "test_for_of_loop_native_mutable_array((uint64,uint64,uint64))uint64" => block@9, method "test_iterable_props(uint64[3],uint64[3],uint64[])void" => block@10, * => block@11}
     block@3: // test_for_of_loop_tuple_route_L9
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
@@ -30,7 +30,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%12#0: bytes = (concat 0x151f7c75 tmp%11#0)
         (log tmp%12#0)
         let tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#0: bool = 1u
-        goto block@17
+        goto block@18
     block@4: // test_for_of_loop_destructured_tuple_route_L18
         let tmp%13#0: uint64 = (txn OnCompletion)
         let tmp%14#0: bool = (== tmp%13#0 NoOp)
@@ -46,7 +46,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%19#0: bytes = (concat 0x151f7c75 tmp%18#0)
         (log tmp%19#0)
         let tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#1: bool = 1u
-        goto block@17
+        goto block@18
     block@5: // test_for_of_loop_destructured_object_route_L27
         let tmp%20#0: uint64 = (txn OnCompletion)
         let tmp%21#0: bool = (== tmp%20#0 NoOp)
@@ -62,7 +62,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%26#0: bytes = (concat 0x151f7c75 tmp%25#0)
         (log tmp%26#0)
         let tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#2: bool = 1u
-        goto block@17
+        goto block@18
     block@6: // test_for_of_loop_arc4_dynamic_array_route_L36
         let tmp%27#0: uint64 = (txn OnCompletion)
         let tmp%28#0: bool = (== tmp%27#0 NoOp)
@@ -78,7 +78,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%33#0: bytes = (concat 0x151f7c75 tmp%32#0)
         (log tmp%33#0)
         let tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#3: bool = 1u
-        goto block@17
+        goto block@18
     block@7: // test_for_of_loop_arc4_static_array_route_L45
         let tmp%34#0: uint64 = (txn OnCompletion)
         let tmp%35#0: bool = (== tmp%34#0 NoOp)
@@ -94,7 +94,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%40#0: bytes = (concat 0x151f7c75 tmp%39#0)
         (log tmp%40#0)
         let tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#4: bool = 1u
-        goto block@17
+        goto block@18
     block@8: // test_for_of_loop_native_immutable_array_route_L54
         let tmp%41#0: uint64 = (txn OnCompletion)
         let tmp%42#0: bool = (== tmp%41#0 NoOp)
@@ -110,7 +110,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%47#0: bytes = (concat 0x151f7c75 tmp%46#0)
         (log tmp%47#0)
         let tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#5: bool = 1u
-        goto block@17
+        goto block@18
     block@9: // test_for_of_loop_native_mutable_array_route_L63
         let tmp%48#0: uint64 = (txn OnCompletion)
         let tmp%49#0: bool = (== tmp%48#0 NoOp)
@@ -126,30 +126,43 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%54#0: bytes = (concat 0x151f7c75 tmp%53#0)
         (log tmp%54#0)
         let tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#6: bool = 1u
-        goto block@17
-    block@10: // switch_case_default_L8
-        goto block@11
-    block@11: // switch_case_next_L8
-        goto block@16
-    block@12: // bare_routing_L8
+        goto block@18
+    block@10: // test_iterable_props_route_L73
         let tmp%55#0: uint64 = (txn OnCompletion)
-        switch tmp%55#0 {0u => block@13, * => block@14}
-    block@13: // __algots__.defaultCreate_L8
-        let tmp%56#0: uint64 = (txn ApplicationID)
-        let tmp%57#0: bool = (== tmp%56#0 0u)
-        (assert tmp%57#0) // can only call when creating
-        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__algots__.defaultCreate()
+        let tmp%56#0: bool = (== tmp%55#0 NoOp)
+        (assert tmp%56#0) // OnCompletion is not NoOp
+        let tmp%57#0: uint64 = (txn ApplicationID)
+        let tmp%58#0: bool = (!= tmp%57#0 0u)
+        (assert tmp%58#0) // can only call when not creating
+        let reinterpret_Encoded(uint64[3])%0#0: Encoded(uint64[3]) = (txna ApplicationArgs 1)
+        let reinterpret_Encoded(uint64[3])%1#0: Encoded(uint64[3]) = (txna ApplicationArgs 2)
+        let reinterpret_Encoded(len+uint64[])%3#0: Encoded(len+uint64[]) = (txna ApplicationArgs 3)
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props(reinterpret_Encoded(uint64[3])%0#0, reinterpret_Encoded(uint64[3])%1#0, reinterpret_Encoded(len+uint64[])%3#0)
         let tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#7: bool = 1u
+        goto block@18
+    block@11: // switch_case_default_L8
+        goto block@12
+    block@12: // switch_case_next_L8
         goto block@17
-    block@14: // switch_case_default_L8
-        goto block@15
-    block@15: // switch_case_next_L8
+    block@13: // bare_routing_L8
+        let tmp%59#0: uint64 = (txn OnCompletion)
+        switch tmp%59#0 {0u => block@14, * => block@15}
+    block@14: // __algots__.defaultCreate_L8
+        let tmp%60#0: uint64 = (txn ApplicationID)
+        let tmp%61#0: bool = (== tmp%60#0 0u)
+        (assert tmp%61#0) // can only call when creating
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__algots__.defaultCreate()
+        let tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#8: bool = 1u
+        goto block@18
+    block@15: // switch_case_default_L8
         goto block@16
-    block@16: // after_if_else_L8
-        let tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#8: bool = 0u
+    block@16: // switch_case_next_L8
         goto block@17
-    block@17: // after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#6 <- block@9, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#7 <- block@13, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#8 <- block@16)
+    block@17: // after_if_else_L8
+        let tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#9: bool = 0u
+        goto block@18
+    block@18: // after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#6 <- block@9, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#7 <- block@10, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#8 <- block@14, tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__%0#9 <- block@17)
         return tmp%0#0
 
 subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple(items.0: uint64, items.1: uint64, items.2: uint64) -> uint64:
@@ -433,6 +446,110 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
     block@7: // L66
         let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
         return total#3
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props(static_array: Encoded(uint64[3]), fixed_array: Encoded(uint64[3]), dyn_array: Encoded(len+uint64[])) -> void:
+    block@0: // L73
+        let i#0: uint64 = 0u
+        (assert 1u) // Step cannot be zero
+        let temp#0: uint64 = 0u
+        goto block@1
+    block@1: // for_header_L75
+        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@3)
+        let i#1: uint64 = φ(i#0 <- block@0, i#2 <- block@3)
+        let continue_looping%0#0: bool = (< temp#1 3u)
+        goto continue_looping%0#0 ? block@2 : block@4
+    block@2: // for_body_L75
+        let tmp%0#0: uint64 = (+ i#1 1u)
+        let i#2: uint64 = tmp%0#0
+        goto block@3
+    block@3: // for_footer_L75
+        let temp#2: uint64 = (+ temp#1 1u)
+        goto block@1
+    block@4: // after_for_L75
+        let item_index_internal%0#0: uint64 = 0u
+        goto block@5
+    block@5: // for_header_L78
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@4, item_index_internal%0#2 <- block@7)
+        let i#3: uint64 = φ(i#1 <- block@4, i#4 <- block@7)
+        let continue_looping%1#0: bool = (< item_index_internal%0#1 3u)
+        goto continue_looping%1#0 ? block@6 : block@8
+    block@6: // for_body_L78
+        let tmp%1#0: uint64 = (+ i#3 1u)
+        let i#4: uint64 = tmp%1#0
+        goto block@7
+    block@7: // for_footer_L78
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@5
+    block@8: // after_for_L78
+        (assert 1u) // Step cannot be zero
+        let temp₂#0: uint64 = 0u
+        goto block@9
+    block@9: // for_header_L81
+        let temp₂#1: uint64 = φ(temp₂#0 <- block@8, temp₂#2 <- block@11)
+        let i#5: uint64 = φ(i#3 <- block@8, i#6 <- block@11)
+        let continue_looping%2#0: bool = (< temp₂#1 3u)
+        goto continue_looping%2#0 ? block@10 : block@12
+    block@10: // for_body_L81
+        let tmp%2#0: uint64 = (+ i#5 1u)
+        let i#6: uint64 = tmp%2#0
+        goto block@11
+    block@11: // for_footer_L81
+        let temp₂#2: uint64 = (+ temp₂#1 1u)
+        goto block@9
+    block@12: // after_for_L81
+        let item_index_internal%1#0: uint64 = 0u
+        goto block@13
+    block@13: // for_header_L84
+        let item_index_internal%1#1: uint64 = φ(item_index_internal%1#0 <- block@12, item_index_internal%1#2 <- block@15)
+        let i#7: uint64 = φ(i#5 <- block@12, i#8 <- block@15)
+        let continue_looping%3#0: bool = (< item_index_internal%1#1 3u)
+        goto continue_looping%3#0 ? block@14 : block@16
+    block@14: // for_body_L84
+        let aggregate%bytes_offset%0#1: uint64 = (* item_index_internal%1#1 8u)
+        let aggregate%encoded_element%0#1: bytes = (extract3 fixed_array#0 aggregate%bytes_offset%0#1 8u) // on error: index access is out of bounds
+        let array_item%1#0: Encoded(uint64) = aggregate%encoded_element%0#1
+        let values%0#0: uint64 = (btoi array_item%1#0)
+        let tmp%3#0: uint64 = (+ i#7 1u)
+        let i#8: uint64 = tmp%3#0
+        goto block@15
+    block@15: // for_footer_L84
+        let item_index_internal%1#2: uint64 = (+ item_index_internal%1#1 1u)
+        goto block@13
+    block@16: // after_for_L84
+        let array_length%0#0: uint64 = (extract_uint16 dyn_array#0 0u)
+        (assert 1u) // Step cannot be zero
+        let temp₄#0: uint64 = 0u
+        goto block@17
+    block@17: // for_header_L87
+        let temp₄#1: uint64 = φ(temp₄#0 <- block@16, temp₄#2 <- block@19)
+        let i#9: uint64 = φ(i#7 <- block@16, i#10 <- block@19)
+        let continue_looping%4#0: bool = (< temp₄#1 array_length%0#0)
+        goto continue_looping%4#0 ? block@18 : block@20
+    block@18: // for_body_L87
+        let tmp%4#0: uint64 = (+ i#9 1u)
+        let i#10: uint64 = tmp%4#0
+        goto block@19
+    block@19: // for_footer_L87
+        let temp₄#2: uint64 = (+ temp₄#1 1u)
+        goto block@17
+    block@20: // after_for_L87
+        let array_length%1#0: uint64 = (extract_uint16 dyn_array#0 0u)
+        let item_index_internal%2#0: uint64 = 0u
+        goto block@21
+    block@21: // for_header_L90
+        let item_index_internal%2#1: uint64 = φ(item_index_internal%2#0 <- block@20, item_index_internal%2#2 <- block@23)
+        let i#11: uint64 = φ(i#9 <- block@20, i#12 <- block@23)
+        let continue_looping%5#0: bool = (< item_index_internal%2#1 array_length%1#0)
+        goto continue_looping%5#0 ? block@22 : block@24
+    block@22: // for_body_L90
+        let tmp%5#0: uint64 = (+ i#11 1u)
+        let i#12: uint64 = tmp%5#0
+        goto block@23
+    block@23: // for_footer_L90
+        let item_index_internal%2#2: uint64 = (+ item_index_internal%2#1 1u)
+        goto block@21
+    block@24: // after_for_L90
+        return 
 
 subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__algots__.defaultCreate() -> void:
     block@0: // L8
