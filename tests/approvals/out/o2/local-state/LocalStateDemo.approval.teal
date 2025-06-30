@@ -246,34 +246,55 @@ main_getState_route@5:
     extract 6 2
     uncover 9
     concat
-    dup
+    swap
+    pushbytes 0x006a
+    concat
+    dig 1
     len
     pushint 106 // 106
     +
-    uncover 2
-    pushbytes 0x006a
-    concat
     dig 9
     len
     itob
     extract 6 2
     uncover 10
     concat
-    uncover 3
     dig 1
-    concat
-    swap
-    len
-    dig 3
-    +
-    uncover 3
     itob
     extract 6 2
     uncover 3
     swap
     concat
-    uncover 8
+    dig 1
+    len
+    uncover 3
+    +
+    swap
+    uncover 9
     concat
+    uncover 8
+    itob
+    dig 8
+    len
+    itob
+    extract 6 2
+    uncover 9
+    concat
+    swap
+    bytec 8 // 0x000a
+    concat
+    swap
+    concat
+    dig 2
+    itob
+    extract 6 2
+    uncover 2
+    swap
+    concat
+    dig 1
+    len
+    uncover 3
+    +
     uncover 7
     itob
     dig 7
@@ -287,52 +308,25 @@ main_getState_route@5:
     concat
     swap
     concat
-    uncover 3
     dig 1
-    concat
-    swap
-    len
-    dig 3
-    +
-    uncover 3
     itob
     extract 6 2
     uncover 3
     swap
     concat
-    uncover 5
-    itob
-    dig 5
-    len
-    itob
-    extract 6 2
-    uncover 6
-    concat
-    swap
-    bytec 8 // 0x000a
-    concat
-    swap
-    concat
-    uncover 3
     dig 1
-    concat
-    swap
     len
-    dig 3
+    uncover 3
     +
-    uncover 3
     itob
     extract 6 2
+    concat
+    uncover 4
+    concat
     uncover 3
-    swap
     concat
     uncover 2
-    uncover 3
     concat
-    uncover 2
-    itob
-    extract 6 2
-    uncover 2
     swap
     concat
     swap
@@ -463,20 +457,15 @@ main_setState_route@4:
     pushint 13 // 13
     +
     uncover 2
-    pushbytes 0x000d
+    pushbytes 0x000d80
     concat
-    pushbytes 0x80
-    concat
-    uncover 2
-    pushbytes 0x000568656c6c6f
-    concat
-    uncover 2
+    swap
     itob
     extract 6 2
-    uncover 2
-    swap
     concat
     swap
+    concat
+    pushbytes 0x000568656c6c6f
     concat
     txn Sender
     // tests/approvals/local-state.algo.ts:16

@@ -28,8 +28,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_submit
         goto block@15
     block@18: // after_while_L20
-        let aggregate%encoded%0#1: Encoded(uint64[]) = (concat 0x 0x)
-        let encoded_array%0#0: Encoded(uint64[]) = aggregate%encoded%0#1
+        let aggregate%as_Encoded(uint64[])%0#1: Encoded(uint64[]) = 0x
+        let encoded_array%0#0: Encoded(uint64[]) = aggregate%as_Encoded(uint64[])%0#1
         let ma#0: Encoded(uint64[])* = new()
         store(ma#0, encoded_array%0#0)
         let i#0: uint64 = 0u
@@ -42,9 +42,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let slot_contents%0#0: Encoded(uint64[]) = load(ma#0)
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob i#1)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%1#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%encoded%2#1: Encoded(uint64[]) = (concat aggregate%encoded%1#1 0x)
-        let tmp%1#1: Encoded(uint64[]) = aggregate%encoded%2#1
+        let aggregate%head%0#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%as_Encoded(uint64[])%1#1: Encoded(uint64[]) = aggregate%head%0#1
+        let tmp%1#1: Encoded(uint64[]) = aggregate%as_Encoded(uint64[])%1#1
         let concat%0#0: Encoded(uint64[]) = (concat slot_contents%0#0 tmp%1#1) // on error: max array length exceeded
         store(ma#0, concat%0#0)
         let i#2: uint64 = (+ i#1 1u)

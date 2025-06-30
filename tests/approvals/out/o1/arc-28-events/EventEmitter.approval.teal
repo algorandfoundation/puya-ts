@@ -126,7 +126,6 @@ emitSwapped:
     frame_dig -1
     dup
     concat
-    dup
     frame_dig -2
     concat
     pushbytes 0x388cc12d // method "Swapped((uint8,uint8),uint8)"
@@ -140,7 +139,9 @@ emitSwapped:
     // tests/approvals/arc-28-events.algo.ts:32
     // emit('Swapped(uint8[],uint8)', [b, b], a)
     pushbytes 0x0002
-    swap
+    frame_dig -1
+    concat
+    frame_dig -1
     concat
     bytec_0 // 0x0003
     frame_dig -2
@@ -204,16 +205,14 @@ emitDynamicBytes:
     len
     pushint 4 // 4
     +
-    swap
-    frame_dig -1
-    concat
-    swap
     itob
     extract 6 2
     pushbytes 0x0004
     swap
     concat
     swap
+    concat
+    frame_dig -1
     concat
     pushbytes 0x4524e1dd // method "DB(byte[],byte[])"
     swap

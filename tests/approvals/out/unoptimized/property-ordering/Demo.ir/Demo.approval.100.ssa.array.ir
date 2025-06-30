@@ -3,12 +3,12 @@ main tests/approvals/property-ordering.algo.ts::Demo.approvalProgram:
         tests/approvals/property-ordering.algo.ts::test_assign_from_literal(4u)
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob 3u)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%head%0#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#1)
         let aggregate%val_as_bytes%1#1: bytes[8] = (itob 4u)
         let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%encoded%2#1: Encoded(uint64,uint64) = (concat aggregate%encoded%1#1 0x)
-        let tmp%0#0: Encoded(uint64,uint64) = aggregate%encoded%2#1
+        let aggregate%head%1#1: bytes = (concat aggregate%head%0#1 aggregate%as_Encoded(uint64)%1#1)
+        let aggregate%as_Encoded(uint64,uint64)%0#1: Encoded(uint64,uint64) = aggregate%head%1#1
+        let tmp%0#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%0#1
         let test_assign_from_var%0#0: Encoded(uint64,uint64) = tests/approvals/property-ordering.algo.ts::test_assign_from_var(tmp%0#0)
         return 1u
 
@@ -31,12 +31,12 @@ subroutine tests/approvals/property-ordering.algo.ts::test_assign_from_var(x: En
         let values%3#0: uint64 = (btoi tuple_item%3#0)
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob values%2#0)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%head%0#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#1)
         let aggregate%val_as_bytes%1#1: bytes[8] = (itob values%3#0)
         let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%encoded%2#1: Encoded(uint64,uint64) = (concat aggregate%encoded%1#1 0x)
-        let tmp%1#0: Encoded(uint64,uint64) = aggregate%encoded%2#1
+        let aggregate%head%1#1: bytes = (concat aggregate%head%0#1 aggregate%as_Encoded(uint64)%1#1)
+        let aggregate%as_Encoded(uint64,uint64)%0#1: Encoded(uint64,uint64) = aggregate%head%1#1
+        let tmp%1#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%0#1
         let obj#0: Encoded(uint64,uint64) = tmp%1#0
         let tmp%2#0: Encoded(uint64,uint64) = x#0
         let xEncoded#0: bytes = tmp%2#0
@@ -63,12 +63,12 @@ subroutine tests/approvals/property-ordering.algo.ts::test_assign_from_literal(x
         let b#0: uint64 = tmp%0#0
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob b#0)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%head%0#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#1)
         let aggregate%val_as_bytes%1#1: bytes[8] = (itob b#0)
         let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%encoded%2#1: Encoded(uint64,uint64) = (concat aggregate%encoded%1#1 0x)
-        let tmp%1#0: Encoded(uint64,uint64) = aggregate%encoded%2#1
+        let aggregate%head%1#1: bytes = (concat aggregate%head%0#1 aggregate%as_Encoded(uint64)%1#1)
+        let aggregate%as_Encoded(uint64,uint64)%0#1: Encoded(uint64,uint64) = aggregate%head%1#1
+        let tmp%1#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%0#1
         let obj#0: Encoded(uint64,uint64) = tmp%1#0
         let aggregate%extract%0#1: bytes = (extract3 obj#0 8u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1

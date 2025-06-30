@@ -13,26 +13,26 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%5#0) // can only call when not creating
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob 1u)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%encoded%1#1: Encoded(uint64) = (concat aggregate%encoded%0#1 0x)
-        let tmp%1#1: Encoded(uint64) = aggregate%encoded%1#1
+        let aggregate%head%0#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%head%0#1
+        let tmp%1#1: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#1
         let aggregate%val_as_bytes%1#1: bytes[8] = (itob 2u)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%2#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%1#1)
+        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
+        let aggregate%head%1#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%2#1)
         let aggregate%val_as_bytes%2#1: bytes[8] = (itob 2u)
-        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
-        let aggregate%encoded%3#1: Encoded(uint64,uint64) = (concat aggregate%encoded%2#1 aggregate%as_Encoded(uint64)%2#1)
+        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
+        let aggregate%head%2#1: bytes = (concat aggregate%head%1#1 aggregate%as_Encoded(uint64)%3#1)
         let aggregate%val_as_bytes%3#1: bytes[8] = (itob 0u)
-        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
-        let aggregate%encoded%4#1: Encoded(uint64,uint64,uint64) = (concat aggregate%encoded%3#1 aggregate%as_Encoded(uint64)%3#1)
-        let aggregate%encoded%5#1: Encoded(uint64,uint64,uint64) = (concat aggregate%encoded%4#1 0x)
-        let aggregate%encoded%6#1: Encoded((uint64,uint64,uint64)) = (concat 0x aggregate%encoded%5#1)
-        let aggregate%encoded%7#1: Encoded((uint64,uint64,uint64),(uint64)) = (concat aggregate%encoded%6#1 tmp%1#1)
-        let aggregate%encoded%8#1: Encoded((uint64,uint64,uint64),(uint64)) = (concat aggregate%encoded%7#1 0x)
-        let o2#0: Encoded((uint64,uint64,uint64),(uint64)) = aggregate%encoded%8#1
-        let aggregate%encoded%9#1: Encoded((uint64)) = (concat 0x tmp%1#1)
-        let aggregate%encoded%10#1: Encoded((uint64)) = (concat aggregate%encoded%9#1 0x)
-        let o3#0: Encoded((uint64)) = aggregate%encoded%10#1
+        let aggregate%as_Encoded(uint64)%4#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
+        let aggregate%head%3#1: bytes = (concat aggregate%head%2#1 aggregate%as_Encoded(uint64)%4#1)
+        let aggregate%as_Encoded(uint64,uint64,uint64)%0#1: Encoded(uint64,uint64,uint64) = aggregate%head%3#1
+        let aggregate%head%4#1: bytes = (concat 0x aggregate%as_Encoded(uint64,uint64,uint64)%0#1)
+        let aggregate%head%5#1: bytes = (concat aggregate%head%4#1 tmp%1#1)
+        let aggregate%as_Encoded((uint64,uint64,uint64),(uint64))%0#1: Encoded((uint64,uint64,uint64),(uint64)) = aggregate%head%5#1
+        let o2#0: Encoded((uint64,uint64,uint64),(uint64)) = aggregate%as_Encoded((uint64,uint64,uint64),(uint64))%0#1
+        let aggregate%head%6#1: bytes = (concat 0x tmp%1#1)
+        let aggregate%as_Encoded((uint64))%0#1: Encoded((uint64)) = aggregate%head%6#1
+        let o3#0: Encoded((uint64)) = aggregate%as_Encoded((uint64))%0#1
         let tests/approvals/object-literals.algo.ts::ObjectLiteralsAlgo.__puya_arc4_router__%0#0: bool = 1u
         goto block@11
     block@6: // bare_routing_L4

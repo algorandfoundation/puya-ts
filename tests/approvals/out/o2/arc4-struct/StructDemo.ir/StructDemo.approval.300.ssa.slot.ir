@@ -31,8 +31,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%5#1: uint64 = (extract_uint64 v2#1 8u)
         let tmp%6#1: uint64 = (+ tmp%4#1 tmp%5#1)
         let aggregate%val_as_bytes%1#1: bytes[8] = (itob tmp%6#1)
-        let aggregate%encoded%4#1: Encoded(uint64,uint64) = (concat aggregate%val_as_bytes%0#1 aggregate%val_as_bytes%1#1)
-        let tmp%12#0: bytes = (concat 0x151f7c75 aggregate%encoded%4#1)
+        let aggregate%head%3#1: bytes = (concat aggregate%val_as_bytes%0#1 aggregate%val_as_bytes%1#1)
+        let tmp%12#0: bytes = (concat 0x151f7c75 aggregate%head%3#1)
         (log tmp%12#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#1: bool = 1u
         goto block@20

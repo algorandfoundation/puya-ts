@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1
-    bytecblock 0x 0x151f7c75
+    bytecblock 0x151f7c75 0x
 
 main_block@0:
 
@@ -55,7 +55,7 @@ main_test2_route@4:
     // tests/approvals/jsdoc.algo.ts:39
     // test2(a: bytes): DemoType {
     callsub test2
-    bytec_1 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -82,7 +82,7 @@ main_test_route@3:
     // tests/approvals/jsdoc.algo.ts:30
     // test(a: uint64, b: bytes): DemoStruct {
     callsub test
-    bytec_1 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -125,10 +125,8 @@ test_block@0:
     // return new DemoStruct({ a: new UintN<64>(a) })
     frame_dig -2
     itob
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
-    concat
-    bytec_0 // 0x
     concat
     retsub
 
@@ -150,13 +148,10 @@ test2_block@0:
     extract 6 2
     frame_dig -1
     concat
-    bytec_0 // 0x
-    swap
-    concat
     pushint 2 // 2
     itob
     extract 6 2
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
     concat
     swap

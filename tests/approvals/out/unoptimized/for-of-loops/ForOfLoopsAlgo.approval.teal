@@ -29,7 +29,7 @@ main_abi_routing@2:
     pushbytes 0xb2c753bf // method "test_for_of_loop_arc4_static_array(uint64[5])uint64"
     pushbytes 0xd1b5beee // method "test_for_of_loop_native_immutable_array(uint64[])uint64"
     pushbytes 0xa1cc0d94 // method "test_for_of_loop_native_mutable_array((uint64,uint64,uint64))uint64"
-    pushbytes 0x716631aa // method "test_iterable_props(uint64[3],uint64[3],uint64[])void"
+    pushbytes 0x961846c6 // method "test_iterable_props(uint64[3],uint64[3],uint64[])uint64"
     uncover 8
     match main_test_for_of_loop_tuple_route@3 main_test_for_of_loop_destructured_tuple_route@4 main_test_for_of_loop_destructured_object_route@5 main_test_for_of_loop_arc4_dynamic_array_route@6 main_test_for_of_loop_arc4_static_array_route@7 main_test_for_of_loop_native_immutable_array_route@8 main_test_for_of_loop_native_mutable_array_route@9 main_test_iterable_props_route@10
 
@@ -67,6 +67,11 @@ main_test_iterable_props_route@10:
     uncover 2
     uncover 2
     callsub test_iterable_props
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
     intc_1 // 1
     b main_after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__@18
 
@@ -738,8 +743,6 @@ test_for_of_loop_native_mutable_array_block@0:
     swap
     itob
     concat
-    bytec_1 // 0x
-    concat
     callsub _puya_lib.mem.new_slot
     dup
     uncover 2
@@ -810,11 +813,11 @@ test_for_of_loop_native_mutable_array_after_for@6:
     b test_for_of_loop_native_mutable_array_block@7
 
 
-// tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props(static_array: bytes, fixed_array: bytes, dyn_array: bytes) -> void:
+// tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props(static_array: bytes, fixed_array: bytes, dyn_array: bytes) -> uint64:
 test_iterable_props:
     // tests/approvals/for-of-loops.algo.ts:73
     // test_iterable_props(static_array: StaticArray<UintN64, 3>, fixed_array: FixedArray<uint64, 3>, dyn_array: DynamicArray<UintN64>) {
-    proto 3 0
+    proto 3 1
     bytec_1 // ""
     dupn 6
 
@@ -1011,6 +1014,10 @@ test_iterable_props_for_footer@23:
     b test_iterable_props_for_header@21
 
 test_iterable_props_after_for@24:
+    // tests/approvals/for-of-loops.algo.ts:93
+    // return i
+    frame_dig 7
+    frame_bury 0
     retsub
 
 

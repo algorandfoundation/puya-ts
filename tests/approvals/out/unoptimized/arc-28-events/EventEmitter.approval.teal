@@ -144,8 +144,6 @@ emitSwapped_block@0:
     concat
     frame_dig -2
     concat
-    bytec_0 // 0x
-    concat
     bytec_1 // method "Swapped(uint8,uint8)"
     swap
     concat
@@ -156,8 +154,6 @@ emitSwapped_block@0:
     frame_dig -1
     concat
     frame_dig -2
-    concat
-    bytec_0 // 0x
     concat
     // tests/approvals/arc-28-events.algo.ts:18
     // emit(x)
@@ -175,8 +171,6 @@ emitSwapped_block@0:
     concat
     frame_dig -2
     concat
-    bytec_0 // 0x
-    concat
     // tests/approvals/arc-28-events.algo.ts:24
     // emit(y)
     pushbytes 0x441e2cd8 // method "SwappedArc4(uint8,uint8)"
@@ -190,8 +184,6 @@ emitSwapped_block@0:
     concat
     frame_dig -2
     concat
-    bytec_0 // 0x
-    concat
     bytec_1 // method "Swapped(uint8,uint8)"
     swap
     concat
@@ -202,8 +194,6 @@ emitSwapped_block@0:
     frame_dig -1
     concat
     frame_dig -2
-    concat
-    bytec_0 // 0x
     concat
     bytec_1 // method "Swapped(uint8,uint8)"
     swap
@@ -217,13 +207,9 @@ emitSwapped_block@0:
     frame_dig -1
     concat
     bytec_0 // 0x
-    concat
-    bytec_0 // 0x
     swap
     concat
     frame_dig -2
-    concat
-    bytec_0 // 0x
     concat
     bytec_2 // method "Swapped((uint8,uint8),uint8)"
     swap
@@ -237,13 +223,9 @@ emitSwapped_block@0:
     frame_dig -1
     concat
     bytec_0 // 0x
-    concat
-    bytec_0 // 0x
     swap
     concat
     frame_dig -2
-    concat
-    bytec_0 // 0x
     concat
     bytec_2 // method "Swapped((uint8,uint8),uint8)"
     swap
@@ -251,20 +233,12 @@ emitSwapped_block@0:
     log
     // tests/approvals/arc-28-events.algo.ts:32
     // emit('Swapped(uint8[],uint8)', [b, b], a)
-    bytec_0 // 0x
-    frame_dig -1
-    concat
-    frame_dig -1
-    concat
     pushint 2 // 2
     itob
     extract 6 2
-    swap
+    frame_dig -1
     concat
-    bytec_0 // 0x
-    concat
-    bytec_0 // 0x
-    swap
+    frame_dig -1
     concat
     intc_2 // 3
     itob
@@ -302,11 +276,6 @@ emitCustom_block@0:
     intc_0 // 0
     frame_dig -1
     setbit
-    swap
-    bytec_0 // 0x
-    swap
-    concat
-    swap
     intc_2 // 3
     itob
     extract 6 2
@@ -333,11 +302,6 @@ emitCustom_block@0:
     intc_0 // 0
     frame_dig -1
     setbit
-    swap
-    bytec_0 // 0x
-    swap
-    concat
-    swap
     intc_2 // 3
     itob
     extract 6 2
@@ -370,28 +334,25 @@ emitDynamicBytes_block@0:
     extract 6 2
     frame_dig -2
     concat
+    intc_3 // 4
+    itob
+    extract 6 2
     bytec_0 // 0x
-    dig 1
+    swap
     concat
     swap
+    dup
     len
     intc_3 // 4
     +
-    intc_3 // 4
     itob
     extract 6 2
-    bytec_0 // 0x
+    uncover 2
     swap
     concat
-    uncover 2
+    swap
+    concat
     frame_dig -1
-    concat
-    swap
-    uncover 2
-    itob
-    extract 6 2
-    concat
-    swap
     concat
     pushbytes 0x4524e1dd // method "DB(byte[],byte[])"
     swap

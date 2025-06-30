@@ -1,5 +1,5 @@
-import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { Asset, Contract, emit } from '@algorandfoundation/algorand-typescript'
+import type { uint64 } from '@algorandfoundation/algorand-typescript';
+import { Asset, Contract, emit } from '@algorandfoundation/algorand-typescript';
 
 type Named = { a: uint64; b: Asset }
 
@@ -20,7 +20,7 @@ class EventEmitter extends Contract {
     // @expect-error Expected type UintN<16> does not match actual type UintN<64>
     emit('Swapped(uint16,uint64)', b, a)
 
-    // @expect-error Expected type DynamicArray<UintN<64>> does not match actual type Tuple<UintN<64>,UintN<64>
+    // @expect-error Expected type DynamicArray<UintN<64>> does not match actual type Tuple<UintN<64>,UintN<64>>
     emit('Swapped(uint64[],uint64)', [b, b] as const, a)
   }
 

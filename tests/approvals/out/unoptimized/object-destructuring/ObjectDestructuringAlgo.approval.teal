@@ -178,8 +178,6 @@ test_block@0:
     bzero
     b|
     concat
-    bytec_0 // 0x
-    concat
     callsub receivePartial
     pop
     retsub
@@ -226,11 +224,7 @@ testMutableObject_block@0:
     itob
     concat
     bytec_0 // 0x
-    concat
-    bytec_0 // 0x
     swap
-    concat
-    bytec_0 // 0x
     concat
     callsub receivePartialMutableObject
     pop
@@ -278,9 +272,6 @@ produceItems_block@0:
     //   c: false,
     //   d: 999n,
     // }
-    concat
-    bytec_0 // 0x
-    swap
     concat
     swap
     pushint 75 // 75
@@ -348,8 +339,6 @@ produceVector_block@0:
     pushint 2 // 2
     itob
     concat
-    bytec_0 // 0x
-    concat
     intc_3 // 4
     itob
     bytec_0 // 0x
@@ -359,13 +348,9 @@ produceVector_block@0:
     itob
     concat
     bytec_0 // 0x
-    concat
-    bytec_0 // 0x
     uncover 2
     concat
     swap
-    concat
-    bytec_0 // 0x
     concat
     retsub
 
@@ -406,8 +391,6 @@ testLiteralToLiteral_block@0:
     intc_2 // 1
     itob
     concat
-    bytec_0 // 0x
-    concat
     dup
     intc_1 // 8
     dup
@@ -420,9 +403,11 @@ testLiteralToLiteral_block@0:
     btoi
     // tests/approvals/object-destructuring.algo.ts:75
     // return [e, f, c, d]
+    intc_3 // 4
     itob
-    bytec_0 // 0x
+    extract 6 2
     swap
+    itob
     concat
     swap
     itob
@@ -441,13 +426,6 @@ testLiteralToLiteral_block@0:
     // return [e, f, c, d]
     itob
     concat
-    intc_3 // 4
-    itob
-    extract 6 2
-    swap
-    concat
-    bytec_0 // 0x
-    concat
     retsub
 
 
@@ -464,8 +442,6 @@ testNumericResolution_block@0:
     itob
     bytec_0 // 0x
     swap
-    concat
-    bytec_0 // 0x
     concat
     dup
     // tests/approvals/object-destructuring.algo.ts:81
@@ -569,8 +545,6 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_
     pushint 20 // 20
     itob
     concat
-    bytec_0 // 0x
-    concat
     pushint 20 // 20
     itob
     bytec_0 // 0x
@@ -580,13 +554,9 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_
     itob
     concat
     bytec_0 // 0x
-    concat
-    bytec_0 // 0x
     uncover 2
     concat
     swap
-    concat
-    bytec_0 // 0x
     concat
     callsub testPartialDestructureMutableObject
     pop

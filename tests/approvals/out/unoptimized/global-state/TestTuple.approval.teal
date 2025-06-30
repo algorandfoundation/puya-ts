@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 2 1 123
-    bytecblock 0x "hello" "b" 0x01c8 "a" 0x00 "t2" "t4" "t5" "t1" "t3" 0x576f726c64
+    bytecblock "hello" 0x "b" 0x01c8 "a" 0x00 "t2" "t4" "t5" "t1" "t3" 0x576f726c64
 
 main_block@0:
 
@@ -82,19 +82,16 @@ testTuple:
 testTuple_block@0:
     // tests/approvals/global-state.algo.ts:69
     // this.t1.value = ['hello', 123, true]
-    bytec_1 // "hello"
+    bytec_0 // "hello"
     len
     itob
     extract 6 2
-    bytec_1 // "hello"
-    concat
-    bytec_0 // 0x
-    swap
+    bytec_0 // "hello"
     concat
     pushint 11 // 11
     itob
     extract 6 2
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
     concat
     intc_3 // 123
@@ -133,7 +130,7 @@ testTuple_block@0:
     uncover 2
     substring3
     extract 2 0
-    bytec_1 // "hello"
+    bytec_0 // "hello"
     ==
     assert // Tuple value should be set
     // tests/approvals/global-state.algo.ts:60
@@ -172,13 +169,10 @@ testTuple_block@0:
     extract 6 2
     bytec_2 // "b"
     concat
-    bytec_0 // 0x
-    swap
-    concat
     pushint 67 // 67
     itob
     extract 6 2
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
     concat
     bytec_3 // 0x01c8
@@ -204,26 +198,23 @@ testTuple_block@0:
     extract 6 2
     bytec 4 // "a"
     concat
-    bytec_0 // 0x
-    dig 1
+    pushint 4 // 4
+    itob
+    extract 6 2
+    bytec_1 // 0x
+    swap
     concat
     swap
+    dup
     len
     pushint 4 // 4
     +
-    pushint 4 // 4
     itob
     extract 6 2
-    bytec_0 // 0x
+    uncover 2
     swap
     concat
-    uncover 2
-    uncover 3
-    concat
     swap
-    uncover 2
-    itob
-    extract 6 2
     concat
     swap
     concat
@@ -338,19 +329,16 @@ testTuple_block@0:
     assert // Tuple value should be set
     // tests/approvals/global-state.algo.ts:80
     // this.t3.value = { a: 'hello', b: 123, c: true }
-    bytec_1 // "hello"
+    bytec_0 // "hello"
     len
     itob
     extract 6 2
-    bytec_1 // "hello"
-    concat
-    bytec_0 // 0x
-    swap
+    bytec_0 // "hello"
     concat
     pushint 11 // 11
     itob
     extract 6 2
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
     concat
     intc_3 // 123
@@ -389,7 +377,7 @@ testTuple_block@0:
     uncover 2
     substring3
     extract 2 0
-    bytec_1 // "hello"
+    bytec_0 // "hello"
     ==
     assert // Object value should be set
     // tests/approvals/global-state.algo.ts:63
@@ -428,13 +416,10 @@ testTuple_block@0:
     extract 6 2
     bytec_2 // "b"
     concat
-    bytec_0 // 0x
-    swap
-    concat
     pushint 67 // 67
     itob
     extract 6 2
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
     concat
     bytec_3 // 0x01c8
@@ -460,26 +445,23 @@ testTuple_block@0:
     extract 6 2
     bytec 4 // "a"
     concat
-    bytec_0 // 0x
-    dig 1
+    pushint 4 // 4
+    itob
+    extract 6 2
+    bytec_1 // 0x
+    swap
     concat
     swap
+    dup
     len
     pushint 4 // 4
     +
-    pushint 4 // 4
     itob
     extract 6 2
-    bytec_0 // 0x
+    uncover 2
     swap
     concat
-    uncover 2
-    uncover 3
-    concat
     swap
-    uncover 2
-    itob
-    extract 6 2
     concat
     swap
     concat
@@ -600,27 +582,28 @@ testTuple_block@0:
     extract 6 2
     bytec 11 // 0x576f726c64
     concat
-    bytec_1 // "hello"
+    bytec_0 // "hello"
     len
     itob
     extract 6 2
-    bytec_1 // "hello"
+    bytec_0 // "hello"
     concat
-    bytec_0 // 0x
-    dig 1
+    pushint 13 // 13
+    itob
+    extract 6 2
+    bytec_1 // 0x
+    swap
     concat
     swap
+    dup
     len
     pushint 13 // 13
     +
-    pushint 13 // 13
-    itob
-    extract 6 2
-    bytec_0 // 0x
     swap
-    concat
     intc_3 // 123
     itob
+    uncover 3
+    swap
     concat
     bytec 5 // 0x00
     intc_0 // 0
@@ -628,12 +611,10 @@ testTuple_block@0:
     setbit
     concat
     uncover 2
-    uncover 3
-    concat
-    swap
-    uncover 2
     itob
     extract 6 2
+    concat
+    swap
     concat
     swap
     concat
@@ -664,7 +645,7 @@ testTuple_block@0:
     uncover 2
     substring3
     extract 2 0
-    bytec_1 // "hello"
+    bytec_0 // "hello"
     ==
     assert // Mutable object value should be set
     // tests/approvals/global-state.algo.ts:66

@@ -96,11 +96,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%47#0: uint64 = (txn ApplicationID)
         (assert tmp%47#0) // can only call when not creating
         let aggregate%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u 1u)
-        let aggregate%encoded%0#1: Encoded(bool1) = (concat 0x aggregate%encoded_bool%0#1)
-        let aggregate%set_bit%0#1: Encoded(bool1) = (setbit aggregate%encoded%0#1 1u 0u)
-        let aggregate%set_bit%1#1: Encoded(bool1) = (setbit aggregate%set_bit%0#1 2u 1u)
-        let aggregate%encoded%1#1: Encoded(bool1,bool1,bool1) = (concat aggregate%set_bit%1#1 0x)
-        let tmp%52#0: Encoded(bool1,bool1,bool1) = aggregate%encoded%1#1
+        let aggregate%set_bit%0#1: bytes[1] = (setbit aggregate%encoded_bool%0#1 1u 0u)
+        let aggregate%set_bit%1#1: bytes[1] = (setbit aggregate%set_bit%0#1 2u 1u)
+        let aggregate%head%0#1: bytes = (concat 0x aggregate%set_bit%1#1)
+        let aggregate%as_Encoded(bool1,bool1,bool1)%0#1: Encoded(bool1,bool1,bool1) = aggregate%head%0#1
+        let tmp%52#0: Encoded(bool1,bool1,bool1) = aggregate%as_Encoded(bool1,bool1,bool1)%0#1
         let tmp%53#0: bytes = (concat 0x151f7c75 tmp%52#0)
         (log tmp%53#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#8: bool = 1u
@@ -123,13 +123,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%62#0: uint64 = (txn ApplicationID)
         (assert tmp%62#0) // can only call when not creating
         let (tmp%64#0: Encoded(bool8), tmp%65#0: Encoded(bool8), tmp%66#0: Encoded(bool8)) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansStatic()
-        let aggregate%encoded%2#1: Encoded(bool1) = (concat 0x tmp%64#0)
         let aggregate%get_bit%0#1: uint64 = (getbit tmp%65#0 0u)
-        let aggregate%set_bit%2#1: Encoded(bool1) = (setbit aggregate%encoded%2#1 1u aggregate%get_bit%0#1)
+        let aggregate%set_bit%2#1: Encoded(bool8) = (setbit tmp%64#0 1u aggregate%get_bit%0#1)
         let aggregate%get_bit%1#1: uint64 = (getbit tmp%66#0 0u)
-        let aggregate%set_bit%3#1: Encoded(bool1) = (setbit aggregate%set_bit%2#1 2u aggregate%get_bit%1#1)
-        let aggregate%encoded%3#1: Encoded(bool1,bool1,bool1) = (concat aggregate%set_bit%3#1 0x)
-        let tmp%67#0: Encoded(bool1,bool1,bool1) = aggregate%encoded%3#1
+        let aggregate%set_bit%3#1: Encoded(bool8) = (setbit aggregate%set_bit%2#1 2u aggregate%get_bit%1#1)
+        let aggregate%head%1#1: bytes = (concat 0x aggregate%set_bit%3#1)
+        let aggregate%as_Encoded(bool1,bool1,bool1)%1#1: Encoded(bool1,bool1,bool1) = aggregate%head%1#1
+        let tmp%67#0: Encoded(bool1,bool1,bool1) = aggregate%as_Encoded(bool1,bool1,bool1)%1#1
         let tmp%68#0: bytes = (concat 0x151f7c75 tmp%67#0)
         (log tmp%68#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#10: bool = 1u
@@ -358,62 +358,59 @@ subroutine _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(ar
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildArray() -> Encoded(len+uint64[]):
     block@0: // L7
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 1u)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob 2u)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%val_as_bytes%2#1: bytes[8] = (itob 3u)
-        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
-        let aggregate%encoded%2#1: Encoded(uint64,uint64,uint64) = (concat aggregate%encoded%1#1 aggregate%as_Encoded(uint64)%2#1)
-        let aggregate%val_as_bytes%3#1: bytes[8] = (itob 4u)
-        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
-        let aggregate%encoded%3#1: Encoded(uint64,uint64,uint64,uint64) = (concat aggregate%encoded%2#1 aggregate%as_Encoded(uint64)%3#1)
         let aggregate%as_bytes%0#1: bytes[8] = (itob 4u)
         let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
-        let aggregate%encoded%4#1: bytes = (concat aggregate%len_u16%0#1 aggregate%encoded%3#1)
-        let aggregate%encoded%5#1: Encoded(len+uint64[]) = (concat aggregate%encoded%4#1 0x)
-        let encoded_array%0#0: Encoded(len+uint64[]) = aggregate%encoded%5#1
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 1u)
+        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
+        let aggregate%head%0#1: bytes = (concat aggregate%len_u16%0#1 aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%val_as_bytes%1#1: bytes[8] = (itob 2u)
+        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
+        let aggregate%head%1#1: bytes = (concat aggregate%head%0#1 aggregate%as_Encoded(uint64)%1#1)
+        let aggregate%val_as_bytes%2#1: bytes[8] = (itob 3u)
+        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
+        let aggregate%head%2#1: bytes = (concat aggregate%head%1#1 aggregate%as_Encoded(uint64)%2#1)
+        let aggregate%val_as_bytes%3#1: bytes[8] = (itob 4u)
+        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
+        let aggregate%head%3#1: bytes = (concat aggregate%head%2#1 aggregate%as_Encoded(uint64)%3#1)
+        let aggregate%as_Encoded(len+uint64[])%0#1: Encoded(len+uint64[]) = aggregate%head%3#1
+        let encoded_array%0#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#1
         return encoded_array%0#0
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayFromCtor() -> Encoded(len+uint64[]):
     block@0: // L11
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 1u)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob 2u)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%val_as_bytes%2#1: bytes[8] = (itob 3u)
-        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
-        let aggregate%encoded%2#1: Encoded(uint64,uint64,uint64) = (concat aggregate%encoded%1#1 aggregate%as_Encoded(uint64)%2#1)
         let aggregate%as_bytes%0#1: bytes[8] = (itob 3u)
         let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
-        let aggregate%encoded%3#1: bytes = (concat aggregate%len_u16%0#1 aggregate%encoded%2#1)
-        let aggregate%encoded%4#1: Encoded(len+uint64[]) = (concat aggregate%encoded%3#1 0x)
-        let encoded_array%0#0: Encoded(len+uint64[]) = aggregate%encoded%4#1
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 1u)
+        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
+        let aggregate%head%0#1: bytes = (concat aggregate%len_u16%0#1 aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%val_as_bytes%1#1: bytes[8] = (itob 2u)
+        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
+        let aggregate%head%1#1: bytes = (concat aggregate%head%0#1 aggregate%as_Encoded(uint64)%1#1)
+        let aggregate%val_as_bytes%2#1: bytes[8] = (itob 3u)
+        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
+        let aggregate%head%2#1: bytes = (concat aggregate%head%1#1 aggregate%as_Encoded(uint64)%2#1)
+        let aggregate%as_Encoded(len+uint64[])%0#1: Encoded(len+uint64[]) = aggregate%head%2#1
+        let encoded_array%0#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#1
         return encoded_array%0#0
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildReadonly() -> Encoded(len+uint64[]):
     block@0: // L15
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 1u)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob 2u)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%val_as_bytes%2#1: bytes[8] = (itob 3u)
-        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
-        let aggregate%encoded%2#1: Encoded(uint64,uint64,uint64) = (concat aggregate%encoded%1#1 aggregate%as_Encoded(uint64)%2#1)
-        let aggregate%val_as_bytes%3#1: bytes[8] = (itob 4u)
-        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
-        let aggregate%encoded%3#1: Encoded(uint64,uint64,uint64,uint64) = (concat aggregate%encoded%2#1 aggregate%as_Encoded(uint64)%3#1)
         let aggregate%as_bytes%0#1: bytes[8] = (itob 4u)
         let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
-        let aggregate%encoded%4#1: bytes = (concat aggregate%len_u16%0#1 aggregate%encoded%3#1)
-        let aggregate%encoded%5#1: Encoded(len+uint64[]) = (concat aggregate%encoded%4#1 0x)
-        let encoded_array%0#0: Encoded(len+uint64[]) = aggregate%encoded%5#1
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 1u)
+        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
+        let aggregate%head%0#1: bytes = (concat aggregate%len_u16%0#1 aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%val_as_bytes%1#1: bytes[8] = (itob 2u)
+        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
+        let aggregate%head%1#1: bytes = (concat aggregate%head%0#1 aggregate%as_Encoded(uint64)%1#1)
+        let aggregate%val_as_bytes%2#1: bytes[8] = (itob 3u)
+        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
+        let aggregate%head%2#1: bytes = (concat aggregate%head%1#1 aggregate%as_Encoded(uint64)%2#1)
+        let aggregate%val_as_bytes%3#1: bytes[8] = (itob 4u)
+        let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
+        let aggregate%head%3#1: bytes = (concat aggregate%head%2#1 aggregate%as_Encoded(uint64)%3#1)
+        let aggregate%as_Encoded(len+uint64[])%0#1: Encoded(len+uint64[]) = aggregate%head%3#1
+        let encoded_array%0#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#1
         return encoded_array%0#0
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() -> void:
@@ -480,9 +477,9 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         (assert tmp%8#0)
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob 5u)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%encoded%1#1: Encoded(uint64[]) = (concat aggregate%encoded%0#1 0x)
-        let tmp%9#0: Encoded(uint64[]) = aggregate%encoded%1#1
+        let aggregate%head%0#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%as_Encoded(uint64[])%0#1: Encoded(uint64[]) = aggregate%head%0#1
+        let tmp%9#0: Encoded(uint64[]) = aggregate%as_Encoded(uint64[])%0#1
         let concat%0#0: Encoded(len+uint64[]) = (concat arr#0 tmp%9#0) // on error: max array length exceeded
         let add%0#0: uint64 = (+ array_length%0#0 1u)
         let as_bytes%0#0: bytes[8] = (itob add%0#0)
@@ -705,12 +702,12 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         (assert and_result%4#2) // assert target is match for conditions
         let aggregate%val_as_bytes%3#1: bytes[8] = (itob 12u)
         let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
-        let aggregate%encoded%2#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%3#1)
+        let aggregate%head%1#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%3#1)
         let aggregate%val_as_bytes%4#1: bytes[8] = (itob 13u)
         let aggregate%as_Encoded(uint64)%4#1: Encoded(uint64) = aggregate%val_as_bytes%4#1
-        let aggregate%encoded%3#1: Encoded(uint64,uint64) = (concat aggregate%encoded%2#1 aggregate%as_Encoded(uint64)%4#1)
-        let aggregate%encoded%4#1: Encoded(uint64,uint64) = (concat aggregate%encoded%3#1 0x)
-        let t1#0: Encoded(uint64,uint64) = aggregate%encoded%4#1
+        let aggregate%head%2#1: bytes = (concat aggregate%head%1#1 aggregate%as_Encoded(uint64)%4#1)
+        let aggregate%as_Encoded(uint64,uint64)%0#1: Encoded(uint64,uint64) = aggregate%head%2#1
+        let t1#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%0#1
         let extract_to_end%0#0: bytes = ((extract 2 0) arr#9)
         let concat%1#0: Encoded(len+uint64[]) = (concat arr#9 extract_to_end%0#0) // on error: max array length exceeded
         let extract_to_end%1#0: bytes = ((extract 2 0) concat%1#0)
@@ -721,9 +718,9 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let replace%1#0: bytes = ((replace2 0) concat%1#0 as_u16_bytes%1#0)
         let aggregate%val_as_bytes%5#1: bytes[8] = (itob 11u)
         let aggregate%as_Encoded(uint64)%5#1: Encoded(uint64) = aggregate%val_as_bytes%5#1
-        let aggregate%encoded%5#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%5#1)
-        let aggregate%encoded%6#1: Encoded(uint64[]) = (concat aggregate%encoded%5#1 0x)
-        let tmp%36#0: Encoded(uint64[]) = aggregate%encoded%6#1
+        let aggregate%head%3#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%5#1)
+        let aggregate%as_Encoded(uint64[])%1#1: Encoded(uint64[]) = aggregate%head%3#1
+        let tmp%36#0: Encoded(uint64[]) = aggregate%as_Encoded(uint64[])%1#1
         let concat%2#0: Encoded(len+uint64[]) = (concat replace%1#0 tmp%36#0) // on error: max array length exceeded
         let extract_uint16%1#0: uint64 = (extract_uint16 replace%1#0 0u)
         let add%1#0: uint64 = (+ extract_uint16%1#0 1u)
@@ -736,17 +733,16 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let aggregate%extract%1#1: bytes = (extract3 t1#0 8u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#1
         let values%24#0: uint64 = (btoi tuple_item%1#0)
-        let aggregate%val_as_bytes%6#1: bytes[8] = (itob values%23#0)
-        let aggregate%as_Encoded(uint64)%6#1: Encoded(uint64) = aggregate%val_as_bytes%6#1
-        let aggregate%encoded%7#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%6#1)
-        let aggregate%val_as_bytes%7#1: bytes[8] = (itob values%24#0)
-        let aggregate%as_Encoded(uint64)%7#1: Encoded(uint64) = aggregate%val_as_bytes%7#1
-        let aggregate%encoded%8#1: Encoded(uint64,uint64) = (concat aggregate%encoded%7#1 aggregate%as_Encoded(uint64)%7#1)
         let aggregate%as_bytes%0#1: bytes[8] = (itob 2u)
         let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
-        let aggregate%encoded%9#1: bytes = (concat aggregate%len_u16%0#1 aggregate%encoded%8#1)
-        let aggregate%encoded%10#1: Encoded(len+uint64[]) = (concat aggregate%encoded%9#1 0x)
-        let encoded_array%0#0: Encoded(len+uint64[]) = aggregate%encoded%10#1
+        let aggregate%val_as_bytes%6#1: bytes[8] = (itob values%23#0)
+        let aggregate%as_Encoded(uint64)%6#1: Encoded(uint64) = aggregate%val_as_bytes%6#1
+        let aggregate%head%4#1: bytes = (concat aggregate%len_u16%0#1 aggregate%as_Encoded(uint64)%6#1)
+        let aggregate%val_as_bytes%7#1: bytes[8] = (itob values%24#0)
+        let aggregate%as_Encoded(uint64)%7#1: Encoded(uint64) = aggregate%val_as_bytes%7#1
+        let aggregate%head%5#1: bytes = (concat aggregate%head%4#1 aggregate%as_Encoded(uint64)%7#1)
+        let aggregate%as_Encoded(len+uint64[])%0#1: Encoded(len+uint64[]) = aggregate%head%5#1
+        let encoded_array%0#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#1
         let extract_to_end%2#0: bytes = ((extract 2 0) encoded_array%0#0)
         let concat%3#0: Encoded(len+uint64[]) = (concat replace%2#0 extract_to_end%2#0) // on error: max array length exceeded
         let extract_to_end%3#0: bytes = ((extract 2 0) concat%3#0)
@@ -861,18 +857,18 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
     block@0: // L54
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob 1u)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%0#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%head%0#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#1)
         let aggregate%val_as_bytes%1#1: bytes[8] = (itob 2u)
         let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat aggregate%encoded%0#1 aggregate%as_Encoded(uint64)%1#1)
+        let aggregate%head%1#1: bytes = (concat aggregate%head%0#1 aggregate%as_Encoded(uint64)%1#1)
         let aggregate%val_as_bytes%2#1: bytes[8] = (itob 3u)
         let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
-        let aggregate%encoded%2#1: Encoded(uint64,uint64,uint64) = (concat aggregate%encoded%1#1 aggregate%as_Encoded(uint64)%2#1)
+        let aggregate%head%2#1: bytes = (concat aggregate%head%1#1 aggregate%as_Encoded(uint64)%2#1)
         let aggregate%val_as_bytes%3#1: bytes[8] = (itob 4u)
         let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
-        let aggregate%encoded%3#1: Encoded(uint64,uint64,uint64,uint64) = (concat aggregate%encoded%2#1 aggregate%as_Encoded(uint64)%3#1)
-        let aggregate%encoded%4#1: Encoded(uint64[4]) = (concat aggregate%encoded%3#1 0x)
-        let x#0: Encoded(uint64[4]) = aggregate%encoded%4#1
+        let aggregate%head%3#1: bytes = (concat aggregate%head%2#1 aggregate%as_Encoded(uint64)%3#1)
+        let aggregate%as_Encoded(uint64[4])%0#1: Encoded(uint64[4]) = aggregate%head%3#1
+        let x#0: Encoded(uint64[4]) = aggregate%as_Encoded(uint64[4])%0#1
         let aggregate%val_as_bytes%4#1: bytes[8] = (itob 0u)
         let aggregate%as_Encoded(uint64)%4#1: Encoded(uint64) = aggregate%val_as_bytes%4#1
         let encoded_value%0#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%4#1
@@ -931,17 +927,16 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop() -> void:
     block@0: // L62
-        let aggregate%encoded%0#1: Encoded(uint32) = (concat 0x 0x0000007b)
-        let aggregate%encoded%1#1: Encoded(uint32,uint32) = (concat aggregate%encoded%0#1 0x0000007b)
         let aggregate%as_bytes%0#1: bytes[8] = (itob 2u)
         let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
-        let aggregate%encoded%2#1: bytes = (concat aggregate%len_u16%0#1 aggregate%encoded%1#1)
-        let aggregate%encoded%3#1: Encoded(len+uint32[]) = (concat aggregate%encoded%2#1 0x)
-        let da1#0: Encoded(len+uint32[]) = aggregate%encoded%3#1
-        let aggregate%encoded%4#1: Encoded(uint32) = (concat 0x 0x0000007b)
-        let aggregate%encoded%5#1: Encoded(uint32,uint32) = (concat aggregate%encoded%4#1 0x0000007b)
-        let aggregate%encoded%6#1: Encoded(uint32[2]) = (concat aggregate%encoded%5#1 0x)
-        let sa1#0: Encoded(uint32[2]) = aggregate%encoded%6#1
+        let aggregate%head%0#1: bytes = (concat aggregate%len_u16%0#1 0x0000007b)
+        let aggregate%head%1#1: bytes = (concat aggregate%head%0#1 0x0000007b)
+        let aggregate%as_Encoded(len+uint32[])%0#1: Encoded(len+uint32[]) = aggregate%head%1#1
+        let da1#0: Encoded(len+uint32[]) = aggregate%as_Encoded(len+uint32[])%0#1
+        let aggregate%head%2#1: bytes = (concat 0x 0x0000007b)
+        let aggregate%head%3#1: bytes = (concat aggregate%head%2#1 0x0000007b)
+        let aggregate%as_Encoded(uint32[2])%0#1: Encoded(uint32[2]) = aggregate%head%3#1
+        let sa1#0: Encoded(uint32[2]) = aggregate%as_Encoded(uint32[2])%0#1
         let extract_to_end%0#0: bytes = ((extract 2 0) da1#0)
         let concat%0#0: Encoded(len+uint32[]) = (concat da1#0 extract_to_end%0#0) // on error: max array length exceeded
         let extract_to_end%1#0: bytes = ((extract 2 0) concat%0#0)
@@ -1023,23 +1018,21 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p: En
         let y#0: uint64 = (btoi tuple_item%1#0)
         let aggregate%as_bytes%0#1: bytes[8] = (itob 0u)
         let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
-        let aggregate%encoded%0#1: bytes = (concat aggregate%len_u16%0#1 0x)
-        let aggregate%encoded%1#1: Encoded(len+(uint64,uint64)[]) = (concat aggregate%encoded%0#1 0x)
-        let myVectors#0: Encoded(len+(uint64,uint64)[]) = aggregate%encoded%1#1
+        let aggregate%as_Encoded(len+(uint64,uint64)[])%0#1: Encoded(len+(uint64,uint64)[]) = aggregate%len_u16%0#1
+        let myVectors#0: Encoded(len+(uint64,uint64)[]) = aggregate%as_Encoded(len+(uint64,uint64)[])%0#1
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob x#0)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%2#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%head%0#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#1)
         let aggregate%val_as_bytes%1#1: bytes[8] = (itob y#0)
         let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%encoded%3#1: Encoded(uint64,uint64) = (concat aggregate%encoded%2#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%encoded%4#1: Encoded(uint64,uint64) = (concat aggregate%encoded%3#1 0x)
-        let tmp%0#0: Encoded(uint64,uint64) = aggregate%encoded%4#1
-        let aggregate%encoded%5#1: Encoded((uint64,uint64)) = (concat 0x tmp%0#0)
+        let aggregate%head%1#1: bytes = (concat aggregate%head%0#1 aggregate%as_Encoded(uint64)%1#1)
+        let aggregate%as_Encoded(uint64,uint64)%0#1: Encoded(uint64,uint64) = aggregate%head%1#1
+        let tmp%0#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%0#1
         let aggregate%as_bytes%1#1: bytes[8] = (itob 1u)
         let aggregate%len_u16%1#1: bytes = ((extract 6 2) aggregate%as_bytes%1#1)
-        let aggregate%encoded%6#1: bytes = (concat aggregate%len_u16%1#1 aggregate%encoded%5#1)
-        let aggregate%encoded%7#1: Encoded(len+(uint64,uint64)[]) = (concat aggregate%encoded%6#1 0x)
-        let myVectors#1: Encoded(len+(uint64,uint64)[]) = aggregate%encoded%7#1
+        let aggregate%head%2#1: bytes = (concat aggregate%len_u16%1#1 tmp%0#0)
+        let aggregate%as_Encoded(len+(uint64,uint64)[])%1#1: Encoded(len+(uint64,uint64)[]) = aggregate%head%2#1
+        let myVectors#1: Encoded(len+(uint64,uint64)[]) = aggregate%as_Encoded(len+(uint64,uint64)[])%1#1
         let array_length%0#0: uint64 = (extract_uint16 myVectors#1 0u)
         let tmp%1#0: bool = (== array_length%0#0 1u)
         goto tmp%1#0 ? block@1 : block@4
@@ -1074,15 +1067,14 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p: En
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans() -> Encoded(len+bool1[]):
     block@0: // L84
-        let aggregate%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u 1u)
-        let aggregate%encoded%0#1: Encoded(bool1) = (concat 0x aggregate%encoded_bool%0#1)
-        let aggregate%set_bit%0#1: Encoded(bool1) = (setbit aggregate%encoded%0#1 1u 0u)
-        let aggregate%set_bit%1#1: Encoded(bool1) = (setbit aggregate%set_bit%0#1 2u 1u)
         let aggregate%as_bytes%0#1: bytes[8] = (itob 3u)
         let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
-        let aggregate%encoded%1#1: bytes = (concat aggregate%len_u16%0#1 aggregate%set_bit%1#1)
-        let aggregate%encoded%2#1: Encoded(len+bool1[]) = (concat aggregate%encoded%1#1 0x)
-        let encoded_array%0#0: Encoded(len+bool1[]) = aggregate%encoded%2#1
+        let aggregate%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u 1u)
+        let aggregate%set_bit%0#1: bytes[1] = (setbit aggregate%encoded_bool%0#1 1u 0u)
+        let aggregate%set_bit%1#1: bytes[1] = (setbit aggregate%set_bit%0#1 2u 1u)
+        let aggregate%head%0#1: bytes = (concat aggregate%len_u16%0#1 aggregate%set_bit%1#1)
+        let aggregate%as_Encoded(len+bool1[])%0#1: Encoded(len+bool1[]) = aggregate%head%0#1
+        let encoded_array%0#0: Encoded(len+bool1[]) = aggregate%as_Encoded(len+bool1[])%0#1
         return encoded_array%0#0
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans() -> Encoded(len+bool1[]):
@@ -1093,16 +1085,15 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans(
         let aggregate%encoded_bool%1#1: bytes[1] = (setbit 0x00 0u 0u)
         let aggregate%as_Encoded(bool8)%1#1: Encoded(bool8) = aggregate%encoded_bool%1#1
         let tmp%1#0: Encoded(bool8) = aggregate%as_Encoded(bool8)%1#1
-        let aggregate%encoded%0#1: Encoded(bool1) = (concat 0x tmp%0#0)
-        let aggregate%get_bit%0#1: uint64 = (getbit tmp%1#0 0u)
-        let aggregate%set_bit%0#1: Encoded(bool1) = (setbit aggregate%encoded%0#1 1u aggregate%get_bit%0#1)
-        let aggregate%get_bit%1#1: uint64 = (getbit tmp%0#0 0u)
-        let aggregate%set_bit%1#1: Encoded(bool1) = (setbit aggregate%set_bit%0#1 2u aggregate%get_bit%1#1)
         let aggregate%as_bytes%0#1: bytes[8] = (itob 3u)
         let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
-        let aggregate%encoded%1#1: bytes = (concat aggregate%len_u16%0#1 aggregate%set_bit%1#1)
-        let aggregate%encoded%2#1: Encoded(len+bool1[]) = (concat aggregate%encoded%1#1 0x)
-        let encoded_array%0#0: Encoded(len+bool1[]) = aggregate%encoded%2#1
+        let aggregate%get_bit%0#1: uint64 = (getbit tmp%1#0 0u)
+        let aggregate%set_bit%0#1: Encoded(bool8) = (setbit tmp%0#0 1u aggregate%get_bit%0#1)
+        let aggregate%get_bit%1#1: uint64 = (getbit tmp%0#0 0u)
+        let aggregate%set_bit%1#1: Encoded(bool8) = (setbit aggregate%set_bit%0#1 2u aggregate%get_bit%1#1)
+        let aggregate%head%0#1: bytes = (concat aggregate%len_u16%0#1 aggregate%set_bit%1#1)
+        let aggregate%as_Encoded(len+bool1[])%0#1: Encoded(len+bool1[]) = aggregate%head%0#1
+        let encoded_array%0#0: Encoded(len+bool1[]) = aggregate%as_Encoded(len+bool1[])%0#1
         return encoded_array%0#0
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansStatic() -> <Encoded(bool8), Encoded(bool8), Encoded(bool8)>:
