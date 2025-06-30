@@ -4,7 +4,6 @@
 // tests/approvals/property-ordering.algo.ts::Demo.approvalProgram() -> uint64:
 main:
     intcblock 8 0 2 4
-    bytecblock 0x
 
 main_block@0:
     // tests/approvals/property-ordering.algo.ts:29
@@ -15,13 +14,11 @@ main_block@0:
     // test_assign_from_var({ a: 3, b: 4 })
     pushint 3 // 3
     itob
-    bytec_0 // 0x
+    pushbytes 0x
     swap
     concat
     intc_3 // 4
     itob
-    concat
-    bytec_0 // 0x
     concat
     callsub test_assign_from_var
     pop
@@ -67,13 +64,11 @@ test_assign_from_var_block@0:
     btoi
     swap
     itob
-    bytec_0 // 0x
+    pushbytes 0x
     swap
     concat
     swap
     itob
-    concat
-    bytec_0 // 0x
     concat
     // tests/approvals/property-ordering.algo.ts:10
     // const xEncoded = encodeArc4(x)
@@ -141,13 +136,11 @@ test_assign_from_literal_block@0:
     // }
     dup
     itob
-    bytec_0 // 0x
+    pushbytes 0x
     swap
     concat
     swap
     itob
-    concat
-    bytec_0 // 0x
     concat
     dup
     // tests/approvals/property-ordering.algo.ts:21-24

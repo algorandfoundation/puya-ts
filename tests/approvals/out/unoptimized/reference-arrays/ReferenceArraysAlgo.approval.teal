@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1 8
-    bytecblock 0x 0x068101
+    bytecblock 0x068101 0x
     pushbytes 0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     store 0
 
@@ -105,9 +105,9 @@ ensure_budget_while_body@2:
     itxn_field TypeEnum
     pushint 5 // DeleteApplication
     itxn_field OnCompletion
-    bytec_1 // 0x068101
+    bytec_0 // 0x068101
     itxn_field ApprovalProgram
-    bytec_1 // 0x068101
+    bytec_0 // 0x068101
     itxn_field ClearStateProgram
     intc_0 // 0
     intc_1 // 1
@@ -148,12 +148,9 @@ test_block@0:
     callsub ensure_budget
     // tests/approvals/reference-arrays.algo.ts:7
     // const ma = new ReferenceArray<uint64>()
-    bytec_0 // 0x
-    dup
-    concat
     callsub _puya_lib.mem.new_slot
     dup
-    uncover 2
+    bytec_1 // 0x
     stores
     // tests/approvals/reference-arrays.algo.ts:8
     // for (let i: uint64 = 0; i < length; i++) {
@@ -177,10 +174,8 @@ test_while_body@2:
     dup
     cover 3
     itob
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
-    concat
-    bytec_0 // 0x
     concat
     concat // on error: max array length exceeded
     stores

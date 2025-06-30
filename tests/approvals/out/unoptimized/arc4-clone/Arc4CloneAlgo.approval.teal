@@ -4,7 +4,6 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 2 1 10
-    bytecblock 0x
 
 main_block@0:
 
@@ -152,10 +151,10 @@ main___algots__.defaultCreate@10:
 // _puya_lib.arc4.dynamic_array_concat_dynamic_element(array_items_count: uint64, array_head_and_tail: bytes, new_items_count: uint64, new_head_and_tail: bytes) -> bytes:
 dynamic_array_concat_dynamic_element:
     proto 4 1
-    bytec_0 // ""
+    pushbytes ""
 
 dynamic_array_concat_dynamic_element_block@0:
-    bytec_0 // 0x
+    pushbytes 0x
     frame_dig -2
     intc_1 // 2
     *
@@ -297,45 +296,26 @@ aliasing_block@0:
     // const nestedMutables = [[Uint64(1)]]
     intc_2 // 1
     itob
-    bytec_0 // 0x
-    swap
+    extract 6 2
+    intc_2 // 1
+    itob
     concat
     intc_2 // 1
     itob
     extract 6 2
-    swap
-    concat
-    bytec_0 // 0x
-    concat
-    bytec_0 // 0x
-    swap
-    concat
     intc_1 // 2
     itob
     extract 6 2
-    bytec_0 // 0x
-    swap
-    concat
-    intc_2 // 1
-    itob
-    extract 6 2
-    swap
     concat
     swap
     concat
     // tests/approvals/arc4-clone.algo.ts:45
     // const m4 = clone(nestedMutables).concat([Uint64(123)])
-    pushint 123 // 123
-    itob
-    bytec_0 // 0x
-    swap
-    concat
     intc_2 // 1
     itob
     extract 6 2
-    swap
-    concat
-    bytec_0 // 0x
+    pushint 123 // 123
+    itob
     concat
     dig 1
     intc_0 // 0
@@ -344,13 +324,10 @@ aliasing_block@0:
     swap
     extract 2 0
     swap
-    bytec_0 // 0x
-    swap
-    concat
     intc_1 // 2
     itob
     extract 6 2
-    bytec_0 // 0x
+    pushbytes 0x
     swap
     concat
     swap

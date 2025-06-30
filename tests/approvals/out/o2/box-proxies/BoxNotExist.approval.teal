@@ -4,7 +4,7 @@
 // tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram() -> uint64:
 main:
     intcblock 1 0
-    bytecblock 0x616263
+    bytecblock "abc"
     intc_1 // 0
     // tests/approvals/box-proxies.algo.ts:113
     // if (Txn.applicationId.id !== 0) {
@@ -44,7 +44,7 @@ main_after_if_else@4:
     bz main_after_if_else@7
     // tests/approvals/box-proxies.algo.ts:118
     // return BoxMap<string, boolean>({ keyPrefix: 'a' })('bc').value
-    bytec_0 // 0x616263
+    bytec_0 // "abc"
     box_get
     assert // Box must have value
     btoi

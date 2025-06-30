@@ -109,7 +109,7 @@ contract ForOfLoopsAlgo
     return total
   }
   
-  test_iterable_props(static_array: arc4.static_array<arc4.uint64>, fixed_array: arc4.static_array<uint64>, dyn_array: arc4.dynamic_array<arc4.uint64>): void
+  test_iterable_props(static_array: arc4.static_array<arc4.uint64>, fixed_array: arc4.static_array<uint64>, dyn_array: arc4.dynamic_array<arc4.uint64>): uint64
   {
     i: uint64 = 0
     for (temp in urange(0, static_array.length, 1)) {
@@ -136,6 +136,7 @@ contract ForOfLoopsAlgo
       a₅: readonly [uint64, arc4.uint64] = temp₅
       i++
     }
+    return i
   }
   
   __algots__.defaultCreate(): void

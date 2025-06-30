@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 8 0 1 4
-    bytecblock 0x 0x0000007b 0x151f7c75 0x00
+    bytecblock 0x0000007b 0x 0x151f7c75 0x00
 
 main_block@0:
 
@@ -124,11 +124,6 @@ main_arc4BooleansStatic_route@13:
     assert // can only call when not creating
     callsub arc4BooleansStatic
     cover 2
-    swap
-    bytec_0 // 0x
-    swap
-    concat
-    swap
     intc_1 // 0
     getbit
     swap
@@ -142,7 +137,8 @@ main_arc4BooleansStatic_route@13:
     pushint 2 // 2
     uncover 2
     setbit
-    bytec_0 // 0x
+    bytec_1 // 0x
+    swap
     concat
     bytec_2 // 0x151f7c75
     swap
@@ -188,16 +184,14 @@ main_booleansStatic_route@11:
     intc_1 // 0
     uncover 2
     setbit
-    bytec_0 // 0x
-    swap
-    concat
     intc_2 // 1
     uncover 2
     setbit
     pushint 2 // 2
     uncover 2
     setbit
-    bytec_0 // 0x
+    bytec_1 // 0x
+    swap
     concat
     bytec_2 // 0x151f7c75
     swap
@@ -417,10 +411,11 @@ buildArray:
 buildArray_block@0:
     // tests/approvals/native-arrays.algo.ts:8
     // return [1, 2, 3, 4]
+    intc_3 // 4
+    itob
+    extract 6 2
     intc_2 // 1
     itob
-    bytec_0 // 0x
-    swap
     concat
     pushint 2 // 2
     itob
@@ -430,13 +425,6 @@ buildArray_block@0:
     concat
     intc_3 // 4
     itob
-    concat
-    intc_3 // 4
-    itob
-    extract 6 2
-    swap
-    concat
-    bytec_0 // 0x
     concat
     retsub
 
@@ -447,23 +435,17 @@ arrayFromCtor:
 arrayFromCtor_block@0:
     // tests/approvals/native-arrays.algo.ts:12
     // return new Array<uint64>(1, 2, 3)
+    pushint 3 // 3
+    itob
+    extract 6 2
     intc_2 // 1
     itob
-    bytec_0 // 0x
-    swap
     concat
     pushint 2 // 2
     itob
     concat
     pushint 3 // 3
     itob
-    concat
-    pushint 3 // 3
-    itob
-    extract 6 2
-    swap
-    concat
-    bytec_0 // 0x
     concat
     retsub
 
@@ -474,10 +456,11 @@ buildReadonly:
 buildReadonly_block@0:
     // tests/approvals/native-arrays.algo.ts:16
     // return [1, 2, 3, 4]
+    intc_3 // 4
+    itob
+    extract 6 2
     intc_2 // 1
     itob
-    bytec_0 // 0x
-    swap
     concat
     pushint 2 // 2
     itob
@@ -487,13 +470,6 @@ buildReadonly_block@0:
     concat
     intc_3 // 4
     itob
-    concat
-    intc_3 // 4
-    itob
-    extract 6 2
-    swap
-    concat
-    bytec_0 // 0x
     concat
     retsub
 
@@ -621,10 +597,8 @@ doThings_bool_merge@7:
     // arr.push(Uint64(5))
     pushint 5 // 5
     itob
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
-    concat
-    bytec_0 // 0x
     concat
     dig 1
     swap
@@ -1007,13 +981,11 @@ doThings_bool_merge@36:
     // const t1: [uint64, uint64] = [12, 13]
     pushint 12 // 12
     itob
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
     concat
     pushint 13 // 13
     itob
-    concat
-    bytec_0 // 0x
     concat
     // tests/approvals/native-arrays.algo.ts:49
     // arr = arr.concat(arr).concat(11).concat(t1)
@@ -1034,10 +1006,8 @@ doThings_bool_merge@36:
     replace3
     pushint 11 // 11
     itob
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
-    concat
-    bytec_0 // 0x
     concat
     dig 1
     swap
@@ -1064,20 +1034,14 @@ doThings_bool_merge@36:
     dup
     extract3
     btoi
-    uncover 2
-    itob
-    bytec_0 // 0x
-    swap
-    concat
-    swap
-    itob
-    concat
     pushint 2 // 2
     itob
     extract 6 2
-    swap
+    uncover 3
+    itob
     concat
-    bytec_0 // 0x
+    swap
+    itob
     concat
     extract 2 0
     concat // on error: max array length exceeded
@@ -1312,7 +1276,7 @@ fixedArray_block@0:
     // const x = new FixedArray<uint64, 4>(1, 2, 3, 4)
     intc_2 // 1
     itob
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
     concat
     pushint 2 // 2
@@ -1323,8 +1287,6 @@ fixedArray_block@0:
     concat
     intc_3 // 4
     itob
-    concat
-    bytec_0 // 0x
     concat
     // tests/approvals/native-arrays.algo.ts:56
     // x[0] = 0
@@ -1459,41 +1421,29 @@ arc4Interop:
 arc4Interop_block@0:
     // tests/approvals/native-arrays.algo.ts:65
     // const da1 = new DynamicArray(u1, u1)
-    bytec_0 // 0x
-    bytec_1 // 0x0000007b
-    concat
-    bytec_1 // 0x0000007b
-    concat
     pushint 2 // 2
     itob
     extract 6 2
-    swap
+    bytec_0 // 0x0000007b
     concat
-    bytec_0 // 0x
+    bytec_0 // 0x0000007b
     concat
     // tests/approvals/native-arrays.algo.ts:66
     // const sa1 = new StaticArray(u1, u1)
-    bytec_0 // 0x
-    bytec_1 // 0x0000007b
+    bytec_1 // 0x
+    bytec_0 // 0x0000007b
     concat
-    bytec_1 // 0x0000007b
-    concat
-    bytec_0 // 0x
+    bytec_0 // 0x0000007b
     concat
     swap
     // tests/approvals/native-arrays.algo.ts:68
     // let a1 = [u1, u1]
-    bytec_0 // 0x
-    bytec_1 // 0x0000007b
-    concat
-    bytec_1 // 0x0000007b
-    concat
     pushint 2 // 2
     itob
     extract 6 2
-    swap
+    bytec_0 // 0x0000007b
     concat
-    bytec_0 // 0x
+    bytec_0 // 0x0000007b
     concat
     // tests/approvals/native-arrays.algo.ts:70
     // a1 = [...a1, ...da1, ...sa1]
@@ -1543,7 +1493,7 @@ arc4Interop_and_contd@1:
     *
     intc_3 // 4
     extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
+    bytec_0 // 0x0000007b
     ==
     bz arc4Interop_bool_false@8
 
@@ -1557,7 +1507,7 @@ arc4Interop_and_contd@2:
     *
     intc_3 // 4
     extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
+    bytec_0 // 0x0000007b
     ==
     bz arc4Interop_bool_false@8
 
@@ -1571,7 +1521,7 @@ arc4Interop_and_contd@3:
     *
     intc_3 // 4
     extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
+    bytec_0 // 0x0000007b
     ==
     bz arc4Interop_bool_false@8
 
@@ -1585,7 +1535,7 @@ arc4Interop_and_contd@4:
     *
     intc_3 // 4
     extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
+    bytec_0 // 0x0000007b
     ==
     bz arc4Interop_bool_false@8
 
@@ -1599,7 +1549,7 @@ arc4Interop_and_contd@5:
     *
     intc_3 // 4
     extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
+    bytec_0 // 0x0000007b
     ==
     bz arc4Interop_bool_false@8
 
@@ -1613,7 +1563,7 @@ arc4Interop_and_contd@6:
     *
     intc_3 // 4
     extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
+    bytec_0 // 0x0000007b
     ==
     bz arc4Interop_bool_false@8
 
@@ -1660,23 +1610,16 @@ structs_block@0:
     // tests/approvals/native-arrays.algo.ts:78
     // myVectors = [{ x, y }]
     itob
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
     concat
     swap
     itob
-    concat
-    bytec_0 // 0x
-    concat
-    bytec_0 // 0x
-    swap
     concat
     intc_2 // 1
     itob
     extract 6 2
     swap
-    concat
-    bytec_0 // 0x
     concat
     dup
     // tests/approvals/native-arrays.algo.ts:80
@@ -1747,25 +1690,19 @@ booleans:
 booleans_block@0:
     // tests/approvals/native-arrays.algo.ts:85
     // return [true, false, true]
+    pushint 3 // 3
+    itob
+    extract 6 2
     bytec_3 // 0x00
     intc_1 // 0
     intc_2 // 1
     setbit
-    bytec_0 // 0x
-    swap
-    concat
     intc_2 // 1
     intc_1 // 0
     setbit
     pushint 2 // 2
     intc_2 // 1
     setbit
-    pushint 3 // 3
-    itob
-    extract 6 2
-    swap
-    concat
-    bytec_0 // 0x
     concat
     retsub
 
@@ -1801,13 +1738,13 @@ arc4Booleans_block@0:
     intc_2 // 1
     setbit
     swap
-    bytec_0 // 0x
-    uncover 3
-    concat
-    swap
+    pushint 3 // 3
+    itob
+    extract 6 2
+    cover 2
     intc_1 // 0
     getbit
-    swap
+    uncover 3
     intc_2 // 1
     uncover 2
     setbit
@@ -1818,12 +1755,6 @@ arc4Booleans_block@0:
     pushint 2 // 2
     uncover 2
     setbit
-    pushint 3 // 3
-    itob
-    extract 6 2
-    swap
-    concat
-    bytec_0 // 0x
     concat
     retsub
 

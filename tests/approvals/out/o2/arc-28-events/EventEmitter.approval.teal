@@ -37,13 +37,12 @@ main_emitDynamicBytes_route@5:
     len
     pushint 4 // 4
     +
-    cover 2
-    concat
-    swap
     itob
     extract 6 2
     pushbytes 0x0004
     swap
+    concat
+    uncover 2
     concat
     swap
     concat
@@ -133,8 +132,8 @@ main_emitSwapped_route@3:
     // tests/approvals/arc-28-events.algo.ts:29
     // emit('Swapped((uint8,uint8),uint8)', [b, b] as const, a)
     dup
+    dig 1
     concat
-    dup
     dig 2
     concat
     pushbytes 0x388cc12d // method "Swapped((uint8,uint8),uint8)"
@@ -148,6 +147,8 @@ main_emitSwapped_route@3:
     // tests/approvals/arc-28-events.algo.ts:32
     // emit('Swapped(uint8[],uint8)', [b, b], a)
     pushbytes 0x0002
+    dig 1
+    concat
     swap
     concat
     bytec_0 // 0x0003

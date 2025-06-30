@@ -4,7 +4,6 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 1 3 0
-    bytecblock 0x151f7c75
     pushbytes ""
     dupn 3
     // tests/approvals/precompiled-apps.algo.ts:85
@@ -86,10 +85,7 @@ main_receivesAssetConfig_route@5:
     gtxns TxID
     // tests/approvals/precompiled-apps.algo.ts:101
     // receivesAssetConfig(assetCfg: gtxn.AssetConfigTxn): bytes {
-    pushbytes 0x0020
-    swap
-    concat
-    bytec_0 // 0x151f7c75
+    pushbytes 0x151f7c750020
     swap
     concat
     log
@@ -137,7 +133,7 @@ main_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receiv
     // tests/approvals/precompiled-apps.algo.ts:90
     // receivesAnyTxn(txn: gtxn.Transaction): uint64 {
     itob
-    bytec_0 // 0x151f7c75
+    pushbytes 0x151f7c75
     swap
     concat
     log

@@ -303,7 +303,7 @@ export class ARC4TupleType extends ARC4EncodedType {
   constructor({ types, sourceLocation }: { types: ARC4EncodedType[]; sourceLocation?: SourceLocation }) {
     super()
     this.items = types
-    this.name = `Tuple<${this.items.map((i) => i.name).join(',')}`
+    this.name = `Tuple<${this.items.map((i) => i.name).join(',')}>`
     this.sourceLocation = sourceLocation
     this.nativeType = new ReadonlyTuplePType({ items: this.items })
     this.fixedBitSize = ARC4EncodedType.calculateFixedBitSize(types)

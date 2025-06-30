@@ -164,8 +164,8 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p: En
         let y#0: uint64 = (extract_uint64 p#0 8u)
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob x#0)
         let aggregate%val_as_bytes%1#1: bytes[8] = (itob y#0)
-        let aggregate%encoded%3#1: Encoded(uint64,uint64) = (concat aggregate%val_as_bytes%0#1 aggregate%val_as_bytes%1#1)
-        let myVectors#1: Encoded(len+(uint64,uint64)[]) = (concat 0x0001 aggregate%encoded%3#1)
+        let aggregate%head%1#1: bytes = (concat aggregate%val_as_bytes%0#1 aggregate%val_as_bytes%1#1)
+        let myVectors#1: Encoded(len+(uint64,uint64)[]) = (concat 0x0001 aggregate%head%1#1)
         let array_length%0#0: uint64 = (extract_uint16 myVectors#1 0u)
         let tmp%1#0: bool = (== array_length%0#0 1u)
         goto tmp%1#0 ? block@1 : block@4

@@ -232,9 +232,6 @@ setState_block@0:
     extract 6 2
     dig 3
     concat
-    bytec_0 // 0x
-    swap
-    concat
     intc_3 // 10
     itob
     extract 6 2
@@ -266,9 +263,6 @@ setState_block@0:
     extract 6 2
     dig 4
     concat
-    bytec_0 // 0x
-    swap
-    concat
     intc_3 // 10
     itob
     extract 6 2
@@ -293,42 +287,40 @@ setState_block@0:
     extract 6 2
     bytec 9 // 0x68656c6c6f
     concat
-    swap
+    cover 2
     itob
     bytec_0 // 0x
     swap
     concat
-    dig 2
+    dig 1
     len
     itob
     extract 6 2
-    uncover 3
+    uncover 2
     concat
-    bytec_0 // 0x
-    dig 1
+    pushint 13 // 13
+    itob
+    extract 6 2
+    uncover 2
+    swap
     concat
     swap
+    dup
     len
     pushint 13 // 13
     +
-    pushint 13 // 13
-    itob
-    extract 6 2
-    uncover 3
-    swap
-    concat
     pushbytes 0x00
     intc_0 // 0
     intc_1 // 1
     setbit
-    concat
-    uncover 2
     uncover 3
+    swap
     concat
     swap
-    uncover 2
     itob
     extract 6 2
+    concat
+    swap
     concat
     swap
     concat
@@ -436,7 +428,7 @@ getState_block@0:
     extract 2 0
     swap
     cover 4
-    cover 5
+    cover 4
     // tests/approvals/local-state.algo.ts:40
     // localObject: this.localObject(Txn.sender).value,
     txn Sender
@@ -506,52 +498,78 @@ getState_block@0:
     extract 6 2
     uncover 2
     concat
-    bytec_0 // 0x
-    dig 1
-    concat
-    cover 2
-    len
-    pushint 106 // 106
-    +
-    cover 2
     pushint 106 // 106
     itob
     extract 6 2
-    concat
-    cover 2
-    dig 4
-    len
-    itob
-    extract 6 2
-    uncover 5
+    uncover 2
+    swap
     concat
     swap
-    dig 1
-    concat
-    cover 3
+    dup
     len
-    dig 1
+    pushint 106 // 106
     +
-    cover 3
+    dig 5
+    len
     itob
     extract 6 2
+    uncover 6
     concat
+    dig 1
+    itob
+    extract 6 2
+    uncover 4
+    swap
+    concat
+    dig 1
+    len
+    uncover 3
+    +
+    swap
+    uncover 8
+    concat
+    swap
+    uncover 4
+    itob
+    bytec_0 // 0x
+    swap
+    concat
+    dig 5
+    len
+    itob
+    extract 6 2
+    uncover 6
+    concat
+    intc_3 // 10
+    itob
+    extract 6 2
+    uncover 2
+    swap
+    concat
+    swap
+    concat
+    dig 1
+    itob
+    extract 6 2
+    uncover 3
+    swap
+    concat
+    cover 2
+    dup
+    len
+    uncover 2
+    +
+    uncover 5
+    itob
+    bytec_0 // 0x
+    swap
+    concat
+    dig 6
+    len
+    itob
+    extract 6 2
     uncover 7
     concat
-    uncover 3
-    itob
-    bytec_0 // 0x
-    swap
-    concat
-    dig 4
-    len
-    itob
-    extract 6 2
-    uncover 5
-    concat
-    bytec_0 // 0x
-    swap
-    concat
     intc_3 // 10
     itob
     extract 6 2
@@ -560,62 +578,29 @@ getState_block@0:
     concat
     swap
     concat
-    uncover 2
     dig 1
+    itob
+    extract 6 2
+    uncover 4
+    swap
     concat
     cover 2
+    dup
     len
-    dig 3
+    uncover 2
     +
-    cover 3
-    uncover 2
-    itob
-    extract 6 2
-    concat
-    cover 2
-    uncover 3
-    itob
-    bytec_0 // 0x
-    swap
-    concat
-    dig 4
-    len
-    itob
-    extract 6 2
-    uncover 5
-    concat
-    bytec_0 // 0x
-    swap
-    concat
-    intc_3 // 10
     itob
     extract 6 2
     uncover 2
     swap
     concat
-    swap
+    uncover 4
     concat
-    swap
-    dig 1
-    concat
-    swap
-    len
-    dig 2
-    +
-    swap
-    uncover 2
-    itob
-    extract 6 2
-    uncover 3
-    swap
-    concat
-    swap
     uncover 3
     concat
-    swap
     uncover 2
-    itob
-    extract 6 2
+    concat
+    swap
     concat
     swap
     concat

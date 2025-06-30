@@ -71,8 +71,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let y#0: uint64 = (extract_uint64 p#0 8u)
         let aggregate%val_as_bytes%28#1: bytes[8] = (itob x#0)
         let aggregate%val_as_bytes%29#1: bytes[8] = (itob y#0)
-        let aggregate%encoded%49#1: Encoded(uint64,uint64) = (concat aggregate%val_as_bytes%28#1 aggregate%val_as_bytes%29#1)
-        let myVectors#1: Encoded(len+(uint64,uint64)[]) = (concat 0x0001 aggregate%encoded%49#1)
+        let aggregate%head%30#1: bytes = (concat aggregate%val_as_bytes%28#1 aggregate%val_as_bytes%29#1)
+        let myVectors#1: Encoded(len+(uint64,uint64)[]) = (concat 0x0001 aggregate%head%30#1)
         let array_length%0#0: uint64 = (extract_uint16 myVectors#1 0u)
         let tmp%1#4: bool = (== array_length%0#0 1u)
         goto tmp%1#4 ? block@40 : block@43

@@ -26,11 +26,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%len_ok%1#1: bool = (<= aggregate%value_len%1#1 64u)
         (assert aggregate%len_ok%1#1) // overflow
         let aggregate%arc4_encoded%1#1: bytes[64] = (b| arg.1.1#0 aggregate%bzero%0#1)
-        let aggregate%encoded%2#1: Encoded(uint512,uint512) = (concat aggregate%arc4_encoded%0#1 aggregate%arc4_encoded%1#1)
-        let aggregate%encoded%4#1: Encoded(uint64,(uint512,uint512)) = (concat aggregate%val_as_bytes%0#1 aggregate%encoded%2#1)
-        let aggregate%encoded%5#1: Encoded(uint64,(uint512,uint512),uint64) = (concat aggregate%encoded%4#1 aggregate%val_as_bytes%0#1)
-        let aggregate%encoded%6#1: Encoded(uint64,(uint512,uint512),uint64,uint512) = (concat aggregate%encoded%5#1 aggregate%arc4_encoded%0#1)
-        let tmp%16#0: bytes = (concat 0x151f7c75 aggregate%encoded%6#1)
+        let aggregate%head%2#1: bytes = (concat aggregate%arc4_encoded%0#1 aggregate%arc4_encoded%1#1)
+        let aggregate%head%3#1: bytes = (concat aggregate%val_as_bytes%0#1 aggregate%head%2#1)
+        let aggregate%head%4#1: bytes = (concat aggregate%head%3#1 aggregate%val_as_bytes%0#1)
+        let aggregate%head%5#1: bytes = (concat aggregate%head%4#1 aggregate%arc4_encoded%0#1)
+        let tmp%16#0: bytes = (concat 0x151f7c75 aggregate%head%5#1)
         (log tmp%16#0)
         let tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#0: bool = 1u
         goto block@14

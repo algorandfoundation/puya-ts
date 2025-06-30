@@ -98,22 +98,22 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%lengths_equal%2#1: bool = (== aggregate%length%2#1 32u)
         (assert aggregate%lengths_equal%2#1) // invalid size
         let aggregate%as_Encoded(uint8[32])%2#1: Encoded(uint8[32]) = reinterpret_bytes[32]%2#0
-        let aggregate%encoded%0#1: Encoded(uint8[32]) = (concat 0x aggregate%as_Encoded(uint8[32])%2#1)
-        let aggregate%encoded%1#1: Encoded(uint8[32][]) = (concat aggregate%encoded%0#1 0x)
-        let encoded_array%0#0: Encoded(uint8[32][]) = aggregate%encoded%1#1
+        let aggregate%head%0#1: bytes = (concat 0x aggregate%as_Encoded(uint8[32])%2#1)
+        let aggregate%as_Encoded(uint8[32][])%0#1: Encoded(uint8[32][]) = aggregate%head%0#1
+        let encoded_array%0#0: Encoded(uint8[32][]) = aggregate%as_Encoded(uint8[32][])%0#1
         let b#0: Encoded(uint8[32][])* = new()
         let aggregate%length%3#1: uint64 = (len a.0#0)
         let aggregate%lengths_equal%3#1: bool = (== aggregate%length%3#1 32u)
         (assert aggregate%lengths_equal%3#1) // invalid size
         let aggregate%as_Encoded(uint8[32])%3#1: Encoded(uint8[32]) = a.0#0
-        let aggregate%encoded%2#1: Encoded(uint8[32]) = (concat 0x aggregate%as_Encoded(uint8[32])%3#1)
+        let aggregate%head%1#1: bytes = (concat 0x aggregate%as_Encoded(uint8[32])%3#1)
         let aggregate%length%4#1: uint64 = (len a.1#0)
         let aggregate%lengths_equal%4#1: bool = (== aggregate%length%4#1 32u)
         (assert aggregate%lengths_equal%4#1) // invalid size
         let aggregate%as_Encoded(uint8[32])%4#1: Encoded(uint8[32]) = a.1#0
-        let aggregate%encoded%3#1: Encoded(uint8[32],uint8[32]) = (concat aggregate%encoded%2#1 aggregate%as_Encoded(uint8[32])%4#1)
-        let aggregate%encoded%4#1: Encoded(uint8[32][]) = (concat aggregate%encoded%3#1 0x)
-        let tmp%0#2: Encoded(uint8[32][]) = aggregate%encoded%4#1
+        let aggregate%head%2#1: bytes = (concat aggregate%head%1#1 aggregate%as_Encoded(uint8[32])%4#1)
+        let aggregate%as_Encoded(uint8[32][])%1#1: Encoded(uint8[32][]) = aggregate%head%2#1
+        let tmp%0#2: Encoded(uint8[32][]) = aggregate%as_Encoded(uint8[32][])%1#1
         let concat%0#0: Encoded(uint8[32][]) = (concat encoded_array%0#0 tmp%0#2) // on error: max array length exceeded
         store(b#0, concat%0#0)
         let aggregate%bytes_offset%0#1: uint64 = (* 0u 32u)

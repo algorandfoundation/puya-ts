@@ -16,7 +16,7 @@ main tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram:
         let tmp%3#0: bool = (== reinterpret_string%0#0 "boxmap")
         goto tmp%3#0 ? block@5 : block@7
     block@5: // if_body_L117
-        let (aggregate%box_get%2#1: bytes, aggregate%box_get%3#1: bool) = (box_get 0x616263)
+        let (aggregate%box_get%2#1: bytes, aggregate%box_get%3#1: bool) = (box_get "abc")
         (assert aggregate%box_get%3#1) // Box must have value
         let storage_value%1#0: bytes = aggregate%box_get%2#1
         let maybe_value_converted%1#0: uint64 = (btoi storage_value%1#0)

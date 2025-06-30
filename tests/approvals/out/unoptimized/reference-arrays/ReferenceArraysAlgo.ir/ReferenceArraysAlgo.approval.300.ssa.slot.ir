@@ -80,10 +80,8 @@ subroutine _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uin
 subroutine tests/approvals/reference-arrays.algo.ts::ReferenceArraysAlgo.test(length: uint64) -> void:
     block@0: // L5
         _puya_lib.util.ensure_budget(2000u, 0u)
-        let aggregate%encoded%0#1: Encoded(uint64[]) = (concat 0x 0x)
-        let encoded_array%0#0: Encoded(uint64[]) = aggregate%encoded%0#1
         let slot%0#0: Encoded(uint64[])* = new()
-        store(slot%0#0, encoded_array%0#0)
+        store(slot%0#0, 0x)
         let ma#0: Encoded(uint64[])* = slot%0#0
         let i#0: uint64 = 0u
         goto block@1
@@ -95,9 +93,9 @@ subroutine tests/approvals/reference-arrays.algo.ts::ReferenceArraysAlgo.test(le
         let slot_contents%0#0: Encoded(uint64[]) = load(ma#0)
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob i#1)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%encoded%1#1: Encoded(uint64) = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%encoded%2#1: Encoded(uint64[]) = (concat aggregate%encoded%1#1 0x)
-        let tmp%1#0: Encoded(uint64[]) = aggregate%encoded%2#1
+        let aggregate%head%0#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#1)
+        let aggregate%as_Encoded(uint64[])%1#1: Encoded(uint64[]) = aggregate%head%0#1
+        let tmp%1#0: Encoded(uint64[]) = aggregate%as_Encoded(uint64[])%1#1
         let concat%0#0: Encoded(uint64[]) = (concat slot_contents%0#0 tmp%1#0) // on error: max array length exceeded
         store(ma#0, concat%0#0)
         let tmp%2#0: uint64 = (+ i#1 1u)

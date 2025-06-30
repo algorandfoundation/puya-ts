@@ -35,8 +35,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%6#1: bytes[8] = (itob maybe_value_converted%1#0)
         let tmp%7#1: bool = (== tmp%4#1 tmp%6#1)
         (assert tmp%7#1)
-        let aggregate%encoded%1#1: Encoded(uint64,uint64) = (concat tmp%2#1 tmp%6#1)
-        let tmp%12#0: bytes = (concat 0x151f7c75 aggregate%encoded%1#1)
+        let aggregate%head%1#1: bytes = (concat tmp%2#1 tmp%6#1)
+        let tmp%12#0: bytes = (concat 0x151f7c75 aggregate%head%1#1)
         (log tmp%12#0)
         let tests/approvals/box-enum-contract.algo.ts::BoxContract.__puya_arc4_router__%0#1: bool = 1u
         goto block@12

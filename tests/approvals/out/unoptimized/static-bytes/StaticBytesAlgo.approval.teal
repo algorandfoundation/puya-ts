@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 32 1 55
-    bytecblock 0x 0x151f7c75
+    bytecblock 0x151f7c75 0x
     pushbytes 0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     store 0
 
@@ -91,7 +91,7 @@ main_returnLength_route@6:
     // returnLength(b: bytes<32>): uint64 {
     callsub returnLength
     itob
-    bytec_1 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -143,7 +143,7 @@ main_receiveB32_route@4:
     intc_1 // 32
     ==
     assert // invalid size
-    bytec_1 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -173,7 +173,7 @@ main_hashAddresses_route@3:
     intc_1 // 32
     ==
     assert // invalid size
-    bytec_1 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -294,7 +294,7 @@ test_block@0:
     pop
     // tests/approvals/static-bytes.algo.ts:37
     // const joined = Bytes<55>`${fromUtf8}${fromHex}${fromBase32}${fromBase64}`
-    bytec_0 // ""
+    bytec_1 // ""
     pushbytes "abc"
     concat
     pushbytes 0xaaff
@@ -334,10 +334,8 @@ testArray_block@0:
     intc_1 // 32
     ==
     assert // invalid size
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
-    concat
-    bytec_0 // 0x
     concat
     callsub _puya_lib.mem.new_slot
     dup
@@ -354,7 +352,7 @@ testArray_block@0:
     ==
     assert // invalid size
     dig 2
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
     concat
     dig 4
@@ -363,8 +361,6 @@ testArray_block@0:
     ==
     assert // invalid size
     uncover 4
-    concat
-    bytec_0 // 0x
     concat
     uncover 2
     swap

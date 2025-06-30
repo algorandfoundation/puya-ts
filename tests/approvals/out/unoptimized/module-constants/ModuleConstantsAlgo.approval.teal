@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 64 0 1 2
-    bytecblock 0x 0x151f7c75 0x08 "ab"
+    bytecblock 0x151f7c75 0x 0x08 "ab"
 
 main_block@0:
 
@@ -51,7 +51,7 @@ main_getStringConstants_route@6:
     !=
     assert // can only call when not creating
     callsub getStringConstants
-    bytec_1 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -85,7 +85,7 @@ main_getBigUintConstants_route@5:
     intc_0 // 64
     bzero
     b|
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
     concat
     dig 1
@@ -158,9 +158,7 @@ main_getBigUintConstants_route@5:
     uncover 2
     b|
     concat
-    bytec_0 // 0x
-    concat
-    bytec_1 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -190,7 +188,7 @@ main_getUintConstants_route@4:
     cover 2
     swap
     itob
-    bytec_0 // 0x
+    bytec_1 // 0x
     swap
     concat
     swap
@@ -223,9 +221,7 @@ main_getUintConstants_route@4:
     swap
     itob
     concat
-    bytec_0 // 0x
-    concat
-    bytec_1 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -249,15 +245,13 @@ main_getBoolConstants_route@3:
     intc_1 // 0
     uncover 2
     setbit
-    bytec_0 // 0x
-    swap
-    concat
     intc_2 // 1
     uncover 2
     setbit
-    bytec_0 // 0x
+    bytec_1 // 0x
+    swap
     concat
-    bytec_1 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -330,7 +324,7 @@ getBigUintConstants_block@0:
     bytec_2 // 0x08
     pushbytes 0x14
     pushbytes 0x05
-    bytec_0 // 0x
+    bytec_1 // 0x
     pushbytes 0x0a
     bytec_2 // 0x08
     pushbytes 0x02
@@ -343,24 +337,19 @@ getStringConstants:
 getStringConstants_block@0:
     // tests/approvals/module-constants.algo.ts:53
     // return [s_add]
+    intc_2 // 1
+    itob
+    extract 6 2
     bytec_3 // "ab"
     len
     itob
     extract 6 2
     bytec_3 // "ab"
     concat
-    bytec_0 // 0x
-    swap
-    concat
     intc_3 // 2
     itob
     extract 6 2
-    bytec_0 // 0x
-    swap
-    concat
-    intc_2 // 1
-    itob
-    extract 6 2
+    uncover 2
     swap
     concat
     swap

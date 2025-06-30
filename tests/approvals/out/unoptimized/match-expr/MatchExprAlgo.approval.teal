@@ -4,7 +4,6 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 8 1 5
-    bytecblock 0x
 
 main_block@0:
 
@@ -93,10 +92,8 @@ testMatches_block@0:
     // const xObj = { x }
     frame_dig -1
     itob
-    bytec_0 // 0x
+    pushbytes 0x
     swap
-    concat
-    bytec_0 // 0x
     concat
     // tests/approvals/match-expr.algo.ts:7
     // assertMatch(xObj, { x: 5 }, 'x should be 5')
@@ -165,17 +162,11 @@ testMatches_block@0:
     assert
     // tests/approvals/match-expr.algo.ts:15
     // const xArray = [x]
-    frame_dig -1
-    itob
-    bytec_0 // 0x
-    swap
-    concat
     intc_2 // 1
     itob
     extract 6 2
-    swap
-    concat
-    bytec_0 // 0x
+    frame_dig -1
+    itob
     concat
     dup
     // tests/approvals/match-expr.algo.ts:17
