@@ -156,11 +156,13 @@ class BoxMapTest extends Contract {
   bmap = BoxMap<Account, string>({ keyPrefix: '' })
 }
 
+type BoxMap2 = { a: string; b: bytes; c: boolean }
+
 class TupleBox extends Contract {
   box1 = Box<[string, bytes, boolean]>({ key: 't1' })
   box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
   boxMap1 = BoxMap<string, [string, bytes, boolean]>({ keyPrefix: 'tm1' })
-  boxMap2 = BoxMap<string, { a: string; b: bytes; c: boolean }>({ keyPrefix: 'tm2' })
+  boxMap2 = BoxMap<string, BoxMap2>({ keyPrefix: 'tm2' })
 
   testBox() {
     this.box1.create({ size: 10 })

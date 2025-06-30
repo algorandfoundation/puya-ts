@@ -32,8 +32,14 @@ main_testMatches_route@3:
     // class MatchExprAlgo extends Contract {
     txna ApplicationArgs 1
     btoi
+    // tests/approvals/match-expr.algo.ts:6
+    // const xObj = { x }
+    itob
     // tests/approvals/match-expr.algo.ts:7
     // assertMatch(xObj, { x: 5 }, 'x should be 5')
+    dup
+    intc_0 // 0
+    extract_uint64
     dup
     intc_2 // 5
     ==
@@ -70,13 +76,11 @@ main_testMatches_route@3:
     assert
     // tests/approvals/match-expr.algo.ts:13
     // assert(match(xObj, { x: { lessThanEq: 5 } }))
-    dup
     intc_2 // 5
     <=
     assert
     // tests/approvals/match-expr.algo.ts:15
     // const xArray = [x]
-    itob
     pushbytes 0x0001
     swap
     concat

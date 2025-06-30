@@ -18,7 +18,7 @@ export function createTsProgram(options: Pick<CompileOptions, 'filePaths'>): Cre
     allowJs: false,
     strict: true,
     // Lib names need to be the full file name from the typescript package 'lib' folder.
-    lib: ['lib.es2023.d.ts'],
+    lib: ['lib.es2023.full.d.ts'],
     libReplacement: false,
     target: ts.ScriptTarget.ES2023,
     module: ts.ModuleKind.ESNext,

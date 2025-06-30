@@ -1,5 +1,5 @@
 import { camelCase } from 'change-case'
-import { distinct, enumerate } from '../src/util'
+import { distinct } from '../src/util'
 import type { AlgoTsType, OpArg, OpModule, OpOverloadedFunction } from './build-op-module'
 import { ENUMS_TO_EXPOSE, UnionAlgoTsType } from './build-op-module'
 
@@ -158,7 +158,7 @@ import { TransactionType } from "./transactions";
           yield 'get '
         }
         yield `${ol.name}(`
-        for (const [index, arg] of enumerate(ol.immediateArgs)) {
+        for (const [index, arg] of ol.immediateArgs.entries()) {
           if (index === ol.enumArg?.pos) continue
 
           yield* emitArg(arg)

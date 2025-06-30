@@ -1,4 +1,4 @@
-import type { Account, Application, Asset, bytes, gtxn, uint64 } from '@algorandfoundation/algorand-typescript'
+import type { Account, Application, arc4, Asset, bytes, gtxn, uint64 } from '@algorandfoundation/algorand-typescript'
 import {
   abimethod,
   assert,
@@ -12,6 +12,8 @@ import {
   TransactionType,
 } from '@algorandfoundation/algorand-typescript'
 
+export type Greeting = { name: string; termination: arc4.Str }
+
 abstract class HelloBase extends Contract {
   greeting = GlobalState({ initialValue: '' })
 
@@ -23,6 +25,10 @@ abstract class HelloBase extends Contract {
 
   greet(name: string): string {
     return `${this.greeting.value} ${name}`
+  }
+
+  sendGreetings(a: Greeting): string {
+    return `${this.greeting.value} ${a.name}${a.termination.native}`
   }
 }
 

@@ -61,7 +61,7 @@ type NumericComparison<T> =
       /**
        * Is the subject between the specified values (inclusive)
        */
-      between: [T, T]
+      between: readonly [T, T]
     }
   | {
       /**
@@ -92,9 +92,14 @@ type ComparisonFor<T> = T extends uint64 | biguint ? NumericComparison<T> : NonN
  * A set of tests to apply to the match subject
  * @typeParam T The type of the test subject
  */
-type MatchTest<T> = {
-  [key in keyof T]?: ComparisonFor<T[key]>
-}
+type MatchTest<T> =
+  T extends ConcatArray<infer TItem>
+    ? { [index: number]: ComparisonFor<TItem> } & {
+        length?: ComparisonFor<uint64>
+      }
+    : {
+        [key in keyof T]?: ComparisonFor<T[key]>
+      }
 
 /**
  * Applies all tests in `test` against `subject` and returns a boolean indicating if they all pass
@@ -175,3 +180,11 @@ export function urange(a: Uint64Compat, b?: Uint64Compat, c?: Uint64Compat): Ite
  * Defines a numeric range including all numbers between from and to
  */
 export type NumberRange = { from: number; to: number }
+
+/**
+ * Creates a deep copy of the specified value
+ * @param value The value to clone
+ */
+export function clone<T>(value: T): T {
+  throw new NoImplementation()
+}

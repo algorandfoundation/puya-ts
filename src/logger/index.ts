@@ -1,6 +1,7 @@
 import { AsyncLocalStorage } from 'node:async_hooks'
 import { SourceLocation } from '../awst/source-location'
-import { PuyaError, UserError } from '../errors'
+import { PuyaError } from '../errors'
+import { invariant } from '../util'
 import type { LogSink } from './sinks'
 
 type NodeOrSourceLocation = SourceLocation | { sourceLocation: SourceLocation }
@@ -32,6 +33,7 @@ export type LogEvent = {
   level: LogLevel
   message: string
   sourceLocation: SourceLocation | undefined
+  stack?: string
 }
 
 class PuyaLogger {
@@ -40,30 +42,38 @@ class PuyaLogger {
     this.logSinks = sinks
   }
 
-  addLog(level: LogEvent['level'], source: NodeOrSourceLocation | undefined, message: string) {
+  addLog(level: LogEvent['level'], source: NodeOrSourceLocation | undefined, message: string, stack?: string) {
     const logEvent: LogEvent = {
       sourceLocation: source ? (source instanceof SourceLocation ? source : source.sourceLocation) : undefined,
       message,
       level,
+      stack,
     }
     LoggingContext.current.logEvents.push(logEvent)
     for (const sink of this.logSinks) {
-      if (isMinLevel(logEvent.level, sink.minLogLevel)) sink.add(logEvent)
+      if (isMinLevel(logEvent.level, sink.minLogLevel)) {
+        sink.add(logEvent)
+      }
     }
   }
 
   error(error: Error): void
   error(source: NodeOrSourceLocation | undefined, message: string): void
-  error(source: NodeOrSourceLocation | undefined | Error, message?: string): void {
-    if (source instanceof Error) {
+  error(sourceOrError: NodeOrSourceLocation | undefined | Error, message?: string): void {
+    if (sourceOrError instanceof Error) {
       // Don't include the stack for user errors as the message and source location is what's relevant
-      const stack = source instanceof UserError ? '' : `\n ${source.stack}`
-      this.addLog(LogLevel.Error, tryGetSourceLocationFromError(source), `${source.message}${stack}`)
-      if (source.cause) {
-        this.addLog(LogLevel.Debug, tryGetSourceLocationFromError(source.cause), `Caused by: ${source.cause}`)
+      this.addLog(LogLevel.Error, tryGetSourceLocationFromError(sourceOrError), `${sourceOrError.message}`, sourceOrError.stack)
+      if (sourceOrError.cause) {
+        this.addLog(
+          LogLevel.Debug,
+          tryGetSourceLocationFromError(sourceOrError.cause),
+          `Caused by: ${sourceOrError.cause}`,
+          (sourceOrError.cause as Error).stack,
+        )
       }
     } else {
-      this.addLog(LogLevel.Error, source, message ?? '')
+      invariant(message, 'Log should include either a message or an error')
+      this.addLog(LogLevel.Error, sourceOrError, message, new Error().stack)
     }
   }
   info(source: NodeOrSourceLocation | undefined, message: string): void {

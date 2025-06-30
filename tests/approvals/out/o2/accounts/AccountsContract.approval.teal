@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1
-    bytecblock 0x068101 0x00
+    bytecblock 0x068101
     intc_0 // 0
     pushbytes ""
     // tests/approvals/accounts.algo.ts:8
@@ -142,78 +142,78 @@ main_after_while@21:
     dig 13
     dig 15
     asset_holding_get AssetBalance
-    cover 2
+    cover 15
     pop
-    // tests/approvals/accounts.algo.ts:9
-    // public getAccountInfo(account: Account, asset: Asset) {
-    uncover 13
+    // tests/approvals/accounts.algo.ts:11-27
+    // return {
+    //   bytes: account.bytes,
+    //   balance: account.balance,
+    //   minBalance: account.minBalance,
+    //   authAddress: account.authAddress.bytes,
+    //   totalNumUint: account.totalNumUint,
+    //   totalNumByteSlice: account.totalNumByteSlice,
+    //   totalExtraAppPages: account.totalExtraAppPages,
+    //   totalAppsCreated: account.totalAppsCreated,
+    //   totalAppsOptedIn: account.totalAppsOptedIn,
+    //   totalAssetsCreated: account.totalAssetsCreated,
+    //   totalAssets: account.totalAssets,
+    //   totalBoxes: account.totalBoxes,
+    //   totalBoxBytes: account.totalBoxBytes,
+    //   isOptInApp: account.isOptedIn(Global.currentApplicationId),
+    //   isOptInAsset: account.isOptedIn(asset),
+    // }
+    uncover 12
     itob
     uncover 13
+    swap
+    concat
+    uncover 12
     itob
-    dig 13
+    concat
+    dig 11
     len
     pushint 32 // 32
     ==
     assert // invalid size
-    uncover 12
-    itob
-    uncover 12
-    itob
-    uncover 12
-    itob
-    uncover 12
-    itob
-    uncover 12
-    itob
-    uncover 12
-    itob
-    uncover 12
-    itob
-    uncover 12
-    itob
-    uncover 12
-    itob
-    bytec_1 // 0x00
-    intc_0 // 0
-    uncover 13
-    setbit
-    bytec_1 // 0x00
-    intc_0 // 0
-    uncover 14
-    setbit
-    uncover 14
-    uncover 13
-    concat
-    uncover 12
-    concat
-    uncover 12
-    concat
     uncover 11
     concat
     uncover 10
+    itob
     concat
     uncover 9
+    itob
     concat
     uncover 8
+    itob
     concat
     uncover 7
+    itob
     concat
     uncover 6
+    itob
     concat
     uncover 5
+    itob
     concat
     uncover 4
+    itob
     concat
     uncover 3
+    itob
     concat
     uncover 2
+    itob
     concat
-    swap
+    pushbytes 0x00
     intc_0 // 0
-    getbit
-    pushint 1217 // 1217
-    swap
+    uncover 3
     setbit
+    intc_1 // 1
+    uncover 3
+    setbit
+    concat
+    // tests/approvals/accounts.algo.ts:9
+    // public getAccountInfo(account: Account, asset: Asset) {
     pushbytes 0x151f7c75
     swap
     concat

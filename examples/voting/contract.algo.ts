@@ -7,6 +7,7 @@ import {
   BoxMap,
   BoxRef,
   Bytes,
+  clone,
   ensureBudget,
   Global,
   GlobalState,
@@ -206,7 +207,7 @@ export class VotingRoundApp extends arc4.Contract {
       assert(answerOptionIndex < optionsCount, 'Answer option index invalid')
       this.incrementVoteInBox(cumulativeOffset + answerOptionIndex)
       cumulativeOffset += optionsCount
-      this.votesByAccount(Txn.sender).value = answerIds.copy()
+      this.votesByAccount(Txn.sender).value = clone(answerIds)
       this.voterCount.value += 1
     }
   }
@@ -227,7 +228,7 @@ export class VotingRoundApp extends arc4.Contract {
     for (const item of optionCounts) {
       totalOptions += item.native
     }
-    this.optionCounts.value = optionCounts.copy()
+    this.optionCounts.value = clone(optionCounts)
     this.totalOptions.value = totalOptions
   }
 

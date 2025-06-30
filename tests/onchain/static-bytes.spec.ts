@@ -8,7 +8,7 @@ describe('static bytes', () => {
   })
   test('it works as abi parameter and return type', async ({ appClientStaticBytesAlgo, testAccount }) => {
     const result = await appClientStaticBytesAlgo.send.call({ method: 'receiveB32', args: [testAccount.addr.publicKey] })
-    invariant(result.return instanceof Array, 'Return type should be byte array')
+    invariant(result.return instanceof Uint8Array, 'Return type should be byte array')
     expect(result.return.length).toBe(32)
   })
   test('works with internal calls', async ({ appClientStaticBytesAlgo }) => {

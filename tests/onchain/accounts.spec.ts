@@ -32,7 +32,7 @@ describe('accounts', () => {
       isOptInAsset: boolean
     }
 
-    expect(returnValue.authAddress).toStrictEqual(new Array(32).fill(0))
+    expect(returnValue.authAddress).toStrictEqual(new Uint8Array(32))
     expect(returnValue.totalAppsCreated).toBeGreaterThan(0n)
   })
 })

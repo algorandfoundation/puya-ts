@@ -55,6 +55,7 @@ describe('Approvals', async () => {
     })
 
     const stats = gatherOutputStats('tests/approvals')
+    fs.mkdirSync('tests/approvals/out', { recursive: true })
     fs.writeFileSync('tests/approvals/out/stats.txt', stats, 'utf8')
   })
 

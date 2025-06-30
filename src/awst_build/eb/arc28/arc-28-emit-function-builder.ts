@@ -3,11 +3,11 @@ import type { Expression, StringConstant } from '../../../awst/nodes'
 import { SourceLocation } from '../../../awst/source-location'
 import { CodeError, InternalError } from '../../../errors'
 import { logger } from '../../../logger'
-import { codeInvariant } from '../../../util'
+import { codeInvariant, instanceOfAny, invariant } from '../../../util'
 import { Arc4ParseError, parseArc4Type } from '../../../util/arc4-signature-parser'
 import { ptypeToArc4EncodedType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
-import { arc28EmitFunction, ObjectPType, stringPType, voidPType } from '../../ptypes'
+import { arc28EmitFunction, ArrayLiteralPType, ImmutableObjectPType, MutableObjectPType, stringPType, voidPType } from '../../ptypes'
 import { ARC4EncodedType, ARC4StructType, ARC4TupleType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
@@ -17,6 +17,44 @@ import { parseFunctionArgs } from '../util/arg-parsing'
 
 export class Arc28EmitFunctionBuilder extends FunctionBuilder {
   readonly ptype = arc28EmitFunction
+
+  private encode(builder: InstanceBuilder, encodedType: ARC4EncodedType) {
+    return nodeFactory.aRC4Encode({
+      value: builder.resolve(),
+      sourceLocation: builder.sourceLocation,
+      wtype: encodedType.wtype,
+    })
+  }
+
+  private resolvePropertyValue(builder: InstanceBuilder, expectedType?: ARC4EncodedType): [Expression, ARC4EncodedType] {
+    if (builder.ptype instanceof ARC4EncodedType) {
+      if (expectedType) {
+        codeInvariant(
+          expectedType.wtype.equals(builder.ptype.wtype),
+          `Expected type ${expectedType} does not match actual type ${builder.ptype}`,
+          builder.sourceLocation,
+        )
+      }
+
+      return [builder.resolve(), builder.ptype]
+    }
+
+    if (builder.ptype instanceof ArrayLiteralPType) {
+      if (!expectedType) {
+        expectedType = ptypeToArc4EncodedType(builder.ptype.getArrayType(), builder.sourceLocation)
+      }
+      return [this.encode(builder.resolveToPType(builder.ptype.getReadonlyTupleType()), expectedType), expectedType]
+    }
+    const inferredEncodedType = ptypeToArc4EncodedType(builder.ptype, builder.sourceLocation)
+    if (expectedType) {
+      codeInvariant(
+        expectedType.wtype.equals(inferredEncodedType.wtype),
+        `Expected type ${expectedType} does not match actual type ${inferredEncodedType}`,
+        builder.sourceLocation,
+      )
+    }
+    return [this.encode(builder, inferredEncodedType), inferredEncodedType]
+  }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
@@ -40,28 +78,10 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
       const { name, propTypes } = parseEventName(nameOrObj)
 
       for (const [index, prop] of props.entries()) {
-        const arc4Type = ptypeToArc4EncodedType(prop.ptype, prop.sourceLocation)
+        const [encodedExpr, exprType] = this.resolvePropertyValue(prop, propTypes?.[index])
 
-        const expectedType = propTypes?.[index]
-        if (expectedType) {
-          codeInvariant(
-            expectedType.wtype.equals(arc4Type.wtype),
-            `Expected type ${expectedType} does not match actual type ${arc4Type}`,
-            prop.sourceLocation,
-          )
-        }
-
-        fields[index] = arc4Type
-        values.set(
-          index.toString(),
-          prop.ptype instanceof ARC4EncodedType
-            ? prop.resolve()
-            : nodeFactory.aRC4Encode({
-                value: prop.resolve(),
-                wtype: arc4Type.wtype,
-                sourceLocation: prop.sourceLocation,
-              }),
-        )
+        fields[index] = exprType
+        values.set(index.toString(), encodedExpr)
       }
       if (propTypes && propTypes.length !== values.size) {
         throw new CodeError(`Event signature length (${propTypes.length}) does not match number of provided values (${values.size}).`, {
@@ -92,7 +112,7 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
     const eventType = eventBuilder.ptype
     if (eventType instanceof ARC4StructType) {
       return emitStruct(eventType, nameOrObj.resolve(), sourceLocation)
-    } else if (eventType instanceof ObjectPType) {
+    } else if (instanceOfAny(eventType, ImmutableObjectPType, MutableObjectPType)) {
       if (!eventType.alias) {
         logger.error(
           eventBuilder.sourceLocation,
@@ -100,12 +120,13 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
         )
       }
       const arc4Equivalent = ptypeToArc4EncodedType(eventType, sourceLocation)
+      invariant(arc4Equivalent instanceof ARC4StructType, 'Equivalent type for object should be arc4 struct')
       return emitStruct(
         arc4Equivalent,
         nodeFactory.aRC4Encode({
           wtype: arc4Equivalent.wtype,
-          sourceLocation: nameOrObj.sourceLocation,
-          value: nameOrObj.resolve(),
+          sourceLocation: eventBuilder.sourceLocation,
+          value: eventBuilder.resolve(),
         }),
         sourceLocation,
       )
@@ -117,7 +138,7 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
 function emitStruct(ptype: ARC4StructType, expression: Expression, sourceLocation: SourceLocation) {
   return instanceEb(
     nodeFactory.emit({
-      signature: ptype.signature,
+      signature: ptype.name + ptype.abiTypeSignature,
       value: expression,
       wtype: voidPType.wtype,
       sourceLocation,

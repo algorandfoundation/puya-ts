@@ -5,21 +5,22 @@ import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
-import type { ClassElements } from '../../visitor/syntax-names'
-import type { Visitor } from '../../visitor/visitor'
-import { accept } from '../../visitor/visitor'
 import type { LogicSigOptionsDecoratorData } from '../models/decorator-data'
 import { LogicSigClassModel } from '../models/logic-sig-class-model'
 import type { LogicSigPType } from '../ptypes'
 import { boolPType, FunctionPType, uint64PType } from '../ptypes'
 import { ptypeIn } from '../ptypes/util'
-import { BaseVisitor } from './base-visitor'
+import { ClassDefinitionVisitor } from './class-definition-visitor'
 import { DecoratorVisitor } from './decorator-visitor'
 import { LogicSigProgramVisitor } from './logic-sig-program-visitor'
 import { visitInChildContext } from './util'
 
-export class LogicSigVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
-  public accept = <TNode extends ts.Node>(node: TNode) => accept<LogicSigVisitor, TNode>(this, node)
+export class LogicSigVisitor extends ClassDefinitionVisitor {
+  throwNotSupported(node: ts.Node, desc: string): never {
+    throw new CodeError(`${desc} are not supported in logic signature definitions`, {
+      sourceLocation: this.sourceLocation(node),
+    })
+  }
 
   static buildLogicSig(classDec: ts.ClassDeclaration, ptype: LogicSigPType) {
     return visitInChildContext(this, classDec, ptype)
@@ -75,24 +76,6 @@ export class LogicSigVisitor extends BaseVisitor implements Visitor<ClassElement
     return logicSig.buildLogicSignature()
   }
 
-  private throwLogicSigNotSupported(node: ts.Node, desc: string): never {
-    throw new CodeError(`${desc} are not supported in logic signature definitions`, {
-      sourceLocation: this.sourceLocation(node),
-    })
-  }
-
-  visitClassStaticBlockDeclaration(node: ts.ClassStaticBlockDeclaration) {
-    this.throwLogicSigNotSupported(node, 'Class static block declarations')
-  }
-  visitConstructor(node: ts.ConstructorDeclaration) {
-    this.throwLogicSigNotSupported(node, 'Constructor declarations')
-  }
-  visitGetAccessor(node: ts.GetAccessorDeclaration) {
-    this.throwLogicSigNotSupported(node, 'Property declarations')
-  }
-  visitIndexSignature(node: ts.IndexSignatureDeclaration) {
-    this.throwLogicSigNotSupported(node, 'Index signature declarations')
-  }
   visitMethodDeclaration(node: ts.MethodDeclaration) {
     const sourceLocation = this.sourceLocation(node)
     const methodType = this.context.getPTypeForNode(node)
@@ -112,14 +95,5 @@ export class LogicSigVisitor extends BaseVisitor implements Visitor<ClassElement
       return
     }
     this.program = LogicSigProgramVisitor.buildLogicSigProgram(node)
-  }
-  visitPropertyDeclaration(node: ts.PropertyDeclaration) {
-    this.throwLogicSigNotSupported(node, 'Property declarations')
-  }
-  visitSemicolonClassElement(node: ts.SemicolonClassElement) {
-    // Ignore
-  }
-  visitSetAccessor(node: ts.SetAccessorDeclaration) {
-    this.throwLogicSigNotSupported(node, 'Property declarations')
   }
 }

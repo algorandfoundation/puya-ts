@@ -7,7 +7,7 @@ import type { ModuleStatements } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
 import { requireInstanceBuilder } from '../eb/util'
-import { ContractClassPType, LibClassType, LogicSigPType } from '../ptypes'
+import { ContractClassPType, LogicSigPType } from '../ptypes'
 import { ARC4StructType } from '../ptypes/arc4-types'
 import { BaseVisitor } from './base-visitor'
 import { ContractVisitor } from './contract-visitor'
@@ -89,7 +89,8 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
 
       const initializerBuilder = this.accept(dec.initializer)
 
-      if (ptype instanceof LibClassType) {
+      if (ptype.singleton) {
+        // Likely aliasing of an algo-ts type - eg const MyArray = FixedArray<uint64>
         invariant(initializerBuilder.ptype?.equals(ptype), 'Initializer type must match target type')
         return []
       }

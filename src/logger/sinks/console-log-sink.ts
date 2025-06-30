@@ -29,6 +29,9 @@ export class ConsoleLogSink implements LogSink {
       const sourceSummary = isMinLevel(logEvent.level, LogLevel.Warning) ? this.getSourceSummary(logEvent.sourceLocation, indentSize) : ''
       logText = `${sourceLocationText} ${logText}${sourceSummary}`
     }
+    if (isMinLevel(LogLevel.Debug, this.minLogLevel) && logEvent.stack) {
+      logText += `\n ${logEvent.stack}`
+    }
     config.writeFn(logText)
   }
 

@@ -16,6 +16,19 @@ describe('destructed params', () => {
     const c = bigIntToUint8Array(1n, 8)
     expect(log).toStrictEqual(joinUint8Arrays(a, b, c))
   })
+  test('Works with encoded types', async ({ appClientDestructuredParamsAlgo }) => {
+    const result = await appClientDestructuredParamsAlgo.send.call({
+      method: 'testMutable',
+      args: [{ a: 1, b: hexToUint8Array('FF'), c: true }],
+    })
+
+    const [log] = result.confirmation.logs ?? []
+
+    const a = bigIntToUint8Array(1n, 8)
+    const b = hexToUint8Array('0001FF')
+    const c = bigIntToUint8Array(128n, 1)
+    expect(log).toStrictEqual(joinUint8Arrays(a, b, c))
+  })
 
   test('Works internally', async ({ appClientDestructuredParamsAlgo }) => {
     const result = await appClientDestructuredParamsAlgo.send.call({ method: 'init', args: [] })

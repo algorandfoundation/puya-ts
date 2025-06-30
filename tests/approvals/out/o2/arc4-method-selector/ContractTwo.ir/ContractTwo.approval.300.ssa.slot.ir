@@ -1,0 +1,57 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        goto tmp%0#1 ? block@2 : block@8
+    block@2: // abi_routing_L20
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "renamedSomeMethod()void" => block@3, method "test()bool" => block@4, method "referenceTypes(pay,asset,account,application,appl)void" => block@5, * => block@12}
+    block@3: // renamedSomeMethod_route_L21
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (! tmp%3#0)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        (assert tmp%5#0) // can only call when not creating
+        let tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__%0#0: bool = 1u
+        goto block@13
+    block@4: // test_route_L24
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        (assert tmp%8#0) // OnCompletion is not NoOp
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        (assert tmp%9#0) // can only call when not creating
+        (log 0x151f7c7580)
+        let tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__%0#1: bool = 1u
+        goto block@13
+    block@5: // referenceTypes_route_L28
+        let tmp%14#0: uint64 = (txn OnCompletion)
+        let tmp%15#0: bool = (! tmp%14#0)
+        (assert tmp%15#0) // OnCompletion is not NoOp
+        let tmp%16#0: uint64 = (txn ApplicationID)
+        (assert tmp%16#0) // can only call when not creating
+        let tmp%18#0: uint64 = (txn GroupIndex)
+        let pay#0: uint64 = (- tmp%18#0 2u)
+        let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) pay#0)
+        let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 pay)
+        (assert gtxn_type_matches%0#0) // transaction type is pay
+        let tmp%25#0: uint64 = (txn GroupIndex)
+        let appTxn#0: uint64 = (- tmp%25#0 1u)
+        let gtxn_type%1#0: uint64 = ((gtxns TypeEnum) appTxn#0)
+        let gtxn_type_matches%1#0: bool = (== gtxn_type%1#0 appl)
+        (assert gtxn_type_matches%1#0) // transaction type is appl
+        let tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__%0#2: bool = 1u
+        goto block@13
+    block@8: // bare_routing_L20
+        let tmp%26#0: uint64 = (txn OnCompletion)
+        goto tmp%26#0 ? block@12 : block@9
+    block@9: // __algots__.defaultCreate_L20
+        let tmp%27#0: uint64 = (txn ApplicationID)
+        let tmp%28#0: bool = (! tmp%27#0)
+        (assert tmp%28#0) // can only call when creating
+        let tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__%0#3: bool = 1u
+        goto block@13
+    block@12: // after_if_else_L20
+        let tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__%0#4: bool = 0u
+        goto block@13
+    block@13: // after_inlined_tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__%0#3 <- block@9, tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__%0#4 <- block@12)
+        return tmp%0#0

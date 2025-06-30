@@ -6,7 +6,14 @@ import { TxnField } from '../../../awst/txn-fields'
 import { logger } from '../../../logger'
 import { codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
-import { ItxnParamsPType, ObjectPType, stringPType, submitGroupItxnFunction, TransactionFunctionType, TuplePType } from '../../ptypes'
+import {
+  isObjectType,
+  ItxnParamsPType,
+  ReadonlyTuplePType,
+  stringPType,
+  submitGroupItxnFunction,
+  TransactionFunctionType,
+} from '../../ptypes'
 import { getTxnFieldMetaData } from '../../txn-fields'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
@@ -63,7 +70,7 @@ export function mapTransactionFields(
   sourceLocation: SourceLocation,
   ignoreProps?: Set<string>,
 ) {
-  codeInvariant(fields.ptype instanceof ObjectPType, 'fields argument must be an object type')
+  codeInvariant(isObjectType(fields.ptype), 'fields argument must be an object type')
   for (const [prop] of fields.ptype.orderedProperties()) {
     if (ignoreProps?.has(prop)) continue
 
@@ -167,7 +174,7 @@ export class SubmitItxnGroupFunctionBuilder extends FunctionBuilder {
       funcName: this.typeDescription,
       argSpec: (a) => [a.required(ItxnParamsPType), ...args.slice(1).map((_) => a.required(ItxnParamsPType))],
     })
-    const resultType = new TuplePType({
+    const resultType = new ReadonlyTuplePType({
       items: itxnParams.map((p, i) => {
         codeInvariant(p.ptype instanceof ItxnParamsPType, `Argument ${i} must be an itxn params type`, p.sourceLocation)
         invariant(p.ptype.kind !== undefined, 'Cannot have untyped itxn params type', sourceLocation)

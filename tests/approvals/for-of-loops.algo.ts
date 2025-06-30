@@ -1,8 +1,9 @@
-import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { Contract, MutableArray } from '@algorandfoundation/algorand-typescript'
+import type { FixedArray, uint64 } from '@algorandfoundation/algorand-typescript'
+import { Contract, ReferenceArray } from '@algorandfoundation/algorand-typescript'
 import type { DynamicArray, StaticArray, UintN64 } from '@algorandfoundation/algorand-typescript/arc4'
 
 const stopNumber: uint64 = 42
+type Point = { x: uint64; y: uint64 }
 
 export class ForOfLoopsAlgo extends Contract {
   test_for_of_loop_tuple(items: readonly [uint64, uint64, uint64]) {
@@ -10,6 +11,24 @@ export class ForOfLoopsAlgo extends Contract {
     for (const item of items) {
       total += item
       if (item === stopNumber) break
+    }
+    return total
+  }
+
+  test_for_of_loop_destructured_tuple(items: DynamicArray<UintN64>) {
+    let total: uint64 = 0
+    for (const [index, v] of items.entries()) {
+      total += v.native
+      if (total >= stopNumber) break
+    }
+    return total
+  }
+
+  test_for_of_loop_destructured_object(items: Point[]) {
+    let total: uint64 = 0
+    for (const { x, y } of items) {
+      total += x + y
+      if (total >= stopNumber) break
     }
     return total
   }
@@ -42,12 +61,35 @@ export class ForOfLoopsAlgo extends Contract {
   }
 
   test_for_of_loop_native_mutable_array(items: [uint64, uint64, uint64]) {
-    const mutable = new MutableArray(...items)
+    const mutable = new ReferenceArray(...items)
     let total: uint64 = 0
     for (const item of mutable) {
       total += item
       if (item === stopNumber) break
     }
     return total
+  }
+
+  test_iterable_props(static_array: StaticArray<UintN64, 3>, fixed_array: FixedArray<uint64, 3>, dyn_array: DynamicArray<UintN64>) {
+    let i: uint64 = 0
+    for (const a of static_array.keys()) {
+      i++
+    }
+    for (const a of static_array.entries()) {
+      i++
+    }
+    for (const a of fixed_array.keys()) {
+      i++
+    }
+    for (const a of fixed_array.entries()) {
+      i++
+    }
+    for (const a of dyn_array.keys()) {
+      i++
+    }
+    for (const a of dyn_array.entries()) {
+      i++
+    }
+    return i
   }
 }
