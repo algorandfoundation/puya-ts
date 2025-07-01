@@ -13,7 +13,7 @@ main:
     // export class NativeArraysAlgo extends Contract {
     txn NumAppArgs
     bz main_bare_routing@19
-    pushbytess 0x0f4c11ca 0xaaa29f70 0xe2d5e035 0x13a588c8 0xad33a87b 0x787b50b2 0xeb87a064 0xbc61d6b8 0x8f544473 0x43e7ee45 0xcbe3a4f8 0x143f223b 0xd9895442 0xe213f5b6 // method "buildArray()uint64[]", method "arrayFromCtor()uint64[]", method "buildReadonly()uint64[]", method "doThings()void", method "fixedArray(uint64[1024])void", method "arc4Interop()void", method "structs((uint64,uint64))(uint64,uint64)[]", method "booleans()bool[]", method "booleansStatic()(bool,bool,bool)", method "arc4Booleans()bool[]", method "arc4BooleansStatic()(bool,bool,bool)", method "aliasing(uint64[],uint64[])void", method "receiveMutable(uint64[])void", method "receiveReadonly(uint64[])void"
+    pushbytess 0x0f4c11ca 0xaaa29f70 0xe2d5e035 0x13a588c8 0xd6ecc1e6 0x787b50b2 0xeb87a064 0xbc61d6b8 0x8f544473 0x43e7ee45 0xcbe3a4f8 0x143f223b 0xd9895442 0xe213f5b6 // method "buildArray()uint64[]", method "arrayFromCtor()uint64[]", method "buildReadonly()uint64[]", method "doThings()void", method "fixedArray(uint64[50])void", method "arc4Interop()void", method "structs((uint64,uint64))(uint64,uint64)[]", method "booleans()bool[]", method "booleansStatic()(bool,bool,bool)", method "arc4Booleans()bool[]", method "arc4BooleansStatic()(bool,bool,bool)", method "aliasing(uint64[],uint64[])void", method "receiveMutable(uint64[])void", method "receiveReadonly(uint64[])void"
     txna ApplicationArgs 0
     match main_buildArray_route@3 main_arrayFromCtor_route@4 main_buildReadonly_route@5 main_doThings_route@6 main_fixedArray_route@7 main_arc4Interop_route@8 main_structs_route@9 main_booleans_route@10 main_booleansStatic_route@11 main_arc4Booleans_route@12 main_arc4BooleansStatic_route@13 main_aliasing_route@14 main_receiveMutable_route@15 main_receiveReadonly_route@16
 
@@ -24,8 +24,8 @@ main_after_if_else@23:
     return
 
 main_receiveReadonly_route@16:
-    // tests/approvals/native-arrays.algo.ts:130
-    // receiveReadonly(a: readonly uint64[]) {}
+    // tests/approvals/native-arrays.algo.ts:139
+    // receiveReadonly(a: readonly uint64[]) { }
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
@@ -35,7 +35,7 @@ main_receiveReadonly_route@16:
     return
 
 main_receiveMutable_route@15:
-    // tests/approvals/native-arrays.algo.ts:126
+    // tests/approvals/native-arrays.algo.ts:135
     // receiveMutable(a: uint64[]) {
     txn OnCompletion
     !
@@ -46,7 +46,7 @@ main_receiveMutable_route@15:
     return
 
 main_aliasing_route@14:
-    // tests/approvals/native-arrays.algo.ts:100
+    // tests/approvals/native-arrays.algo.ts:109
     // aliasing(mutable: uint64[], readOnly: readonly uint64[]) {
     txn OnCompletion
     !
@@ -56,7 +56,7 @@ main_aliasing_route@14:
     // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/native-arrays.algo.ts:111
+    // tests/approvals/native-arrays.algo.ts:120
     // mutable[1] += 2
     dup
     intc_2 // 10
@@ -69,18 +69,18 @@ main_aliasing_route@14:
     swap
     replace2 10
     intc_2 // 10
-    // tests/approvals/native-arrays.algo.ts:113
+    // tests/approvals/native-arrays.algo.ts:122
     // assert(mutable[1] !== needClone2[1], 'These should not match')
     extract_uint64
     !=
     assert // These should not match
-    // tests/approvals/native-arrays.algo.ts:100
+    // tests/approvals/native-arrays.algo.ts:109
     // aliasing(mutable: uint64[], readOnly: readonly uint64[]) {
     intc_0 // 1
     return
 
 main_arc4BooleansStatic_route@13:
-    // tests/approvals/native-arrays.algo.ts:96
+    // tests/approvals/native-arrays.algo.ts:105
     // arc4BooleansStatic() {
     txn OnCompletion
     !
@@ -93,7 +93,7 @@ main_arc4BooleansStatic_route@13:
     return
 
 main_arc4Booleans_route@12:
-    // tests/approvals/native-arrays.algo.ts:92
+    // tests/approvals/native-arrays.algo.ts:101
     // arc4Booleans() {
     txn OnCompletion
     !
@@ -106,7 +106,7 @@ main_arc4Booleans_route@12:
     return
 
 main_booleansStatic_route@11:
-    // tests/approvals/native-arrays.algo.ts:88
+    // tests/approvals/native-arrays.algo.ts:97
     // booleansStatic() {
     txn OnCompletion
     !
@@ -119,7 +119,7 @@ main_booleansStatic_route@11:
     return
 
 main_booleans_route@10:
-    // tests/approvals/native-arrays.algo.ts:84
+    // tests/approvals/native-arrays.algo.ts:93
     // booleans() {
     txn OnCompletion
     !
@@ -132,7 +132,7 @@ main_booleans_route@10:
     return
 
 main_structs_route@9:
-    // tests/approvals/native-arrays.algo.ts:75
+    // tests/approvals/native-arrays.algo.ts:84
     // structs({ x, y }: Vector) {
     txn OnCompletion
     !
@@ -142,7 +142,7 @@ main_structs_route@9:
     // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/native-arrays.algo.ts:75
+    // tests/approvals/native-arrays.algo.ts:84
     // structs({ x, y }: Vector) {
     dup
     intc_1 // 0
@@ -154,7 +154,7 @@ main_structs_route@9:
     extract_uint64
     dup
     bury 3
-    // tests/approvals/native-arrays.algo.ts:78
+    // tests/approvals/native-arrays.algo.ts:87
     // myVectors = [{ x, y }]
     swap
     itob
@@ -166,7 +166,7 @@ main_structs_route@9:
     concat
     dup
     bury 4
-    // tests/approvals/native-arrays.algo.ts:80
+    // tests/approvals/native-arrays.algo.ts:89
     // assertMatch(myVectors, [{ x, y }])
     intc_1 // 0
     extract_uint16
@@ -191,10 +191,10 @@ main_structs_route@9:
     intc_0 // 1
 
 main_bool_merge@44:
-    // tests/approvals/native-arrays.algo.ts:80
+    // tests/approvals/native-arrays.algo.ts:89
     // assertMatch(myVectors, [{ x, y }])
     assert // assert target is match for conditions
-    // tests/approvals/native-arrays.algo.ts:75
+    // tests/approvals/native-arrays.algo.ts:84
     // structs({ x, y }: Vector) {
     pushbytes 0x151f7c75
     dig 3
@@ -208,7 +208,7 @@ main_bool_false@43:
     b main_bool_merge@44
 
 main_arc4Interop_route@8:
-    // tests/approvals/native-arrays.algo.ts:62
+    // tests/approvals/native-arrays.algo.ts:71
     // arc4Interop() {
     txn OnCompletion
     !
@@ -220,7 +220,7 @@ main_arc4Interop_route@8:
 
 main_fixedArray_route@7:
     // tests/approvals/native-arrays.algo.ts:54
-    // fixedArray(y: FixedArray<uint64, 1024>) {
+    // fixedArray(y: FixedArray<uint64, 50>) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
@@ -229,14 +229,14 @@ main_fixedArray_route@7:
     // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/native-arrays.algo.ts:57
+    // tests/approvals/native-arrays.algo.ts:66
     // assert(x[0] === y[0])
     intc_1 // 0
     extract_uint64
     !
     assert
     // tests/approvals/native-arrays.algo.ts:54
-    // fixedArray(y: FixedArray<uint64, 1024>) {
+    // fixedArray(y: FixedArray<uint64, 50>) {
     intc_0 // 1
     return
 

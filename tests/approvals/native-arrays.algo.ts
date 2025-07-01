@@ -51,12 +51,21 @@ export class NativeArraysAlgo extends Contract {
     assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
   }
 
-  fixedArray(y: FixedArray<uint64, 1024>) {
+  fixedArray(y: FixedArray<uint64, 50>) {
     const x = new FixedArray<uint64, 4>(1, 2, 3, 4)
     x[0] = 0
+
+    const z = new FixedArray<uint64, 4>()
+    assert(z.length === 4)
+    z[0] = 1
+    z[1] = 2
+    z[2] = 3
+    z[3] = 4
+    assertMatch(z, [{ lessThanEq: 1 }, 2, 3, 4])
+
     assert(x[0] === y[0])
     assertMatch(x, [{ lessThan: 1 }, 2, 3, 4])
-    assertMatch(y, { 1024: { greaterThanEq: 0 } })
+    assertMatch(y, { 49: { greaterThanEq: 0 } })
   }
 
   arc4Interop() {

@@ -7,7 +7,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto tmp%1#0 ? block@2 : block@19
     block@2: // abi_routing_L6
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "buildArray()uint64[]" => block@3, method "arrayFromCtor()uint64[]" => block@4, method "buildReadonly()uint64[]" => block@5, method "doThings()void" => block@6, method "fixedArray(uint64[1024])void" => block@7, method "arc4Interop()void" => block@8, method "structs((uint64,uint64))(uint64,uint64)[]" => block@9, method "booleans()bool[]" => block@10, method "booleansStatic()(bool,bool,bool)" => block@11, method "arc4Booleans()bool[]" => block@12, method "arc4BooleansStatic()(bool,bool,bool)" => block@13, method "aliasing(uint64[],uint64[])void" => block@14, method "receiveMutable(uint64[])void" => block@15, method "receiveReadonly(uint64[])void" => block@16, * => block@17}
+        switch tmp%2#0 {method "buildArray()uint64[]" => block@3, method "arrayFromCtor()uint64[]" => block@4, method "buildReadonly()uint64[]" => block@5, method "doThings()void" => block@6, method "fixedArray(uint64[50])void" => block@7, method "arc4Interop()void" => block@8, method "structs((uint64,uint64))(uint64,uint64)[]" => block@9, method "booleans()bool[]" => block@10, method "booleansStatic()(bool,bool,bool)" => block@11, method "arc4Booleans()bool[]" => block@12, method "arc4BooleansStatic()(bool,bool,bool)" => block@13, method "aliasing(uint64[],uint64[])void" => block@14, method "receiveMutable(uint64[])void" => block@15, method "receiveReadonly(uint64[])void" => block@16, * => block@17}
     block@3: // buildArray_route_L7
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
@@ -61,11 +61,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%27#0: uint64 = (txn ApplicationID)
         let tmp%28#0: bool = (!= tmp%27#0 0u)
         (assert tmp%28#0) // can only call when not creating
-        let reinterpret_Encoded(uint64[1024])%0#0: Encoded(uint64[1024]) = (txna ApplicationArgs 1)
-        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(reinterpret_Encoded(uint64[1024])%0#0)
+        let reinterpret_Encoded(uint64[50])%0#0: Encoded(uint64[50]) = (txna ApplicationArgs 1)
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(reinterpret_Encoded(uint64[50])%0#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#4: bool = 1u
         goto block@24
-    block@8: // arc4Interop_route_L62
+    block@8: // arc4Interop_route_L71
         let tmp%29#0: uint64 = (txn OnCompletion)
         let tmp%30#0: bool = (== tmp%29#0 NoOp)
         (assert tmp%30#0) // OnCompletion is not NoOp
@@ -75,7 +75,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop()
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#5: bool = 1u
         goto block@24
-    block@9: // structs_route_L75
+    block@9: // structs_route_L84
         let tmp%33#0: uint64 = (txn OnCompletion)
         let tmp%34#0: bool = (== tmp%33#0 NoOp)
         (assert tmp%34#0) // OnCompletion is not NoOp
@@ -88,7 +88,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%38#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#6: bool = 1u
         goto block@24
-    block@10: // booleans_route_L84
+    block@10: // booleans_route_L93
         let tmp%39#0: uint64 = (txn OnCompletion)
         let tmp%40#0: bool = (== tmp%39#0 NoOp)
         (assert tmp%40#0) // OnCompletion is not NoOp
@@ -100,7 +100,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%44#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#7: bool = 1u
         goto block@24
-    block@11: // booleansStatic_route_L88
+    block@11: // booleansStatic_route_L97
         let tmp%45#0: uint64 = (txn OnCompletion)
         let tmp%46#0: bool = (== tmp%45#0 NoOp)
         (assert tmp%46#0) // OnCompletion is not NoOp
@@ -118,7 +118,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%53#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#8: bool = 1u
         goto block@24
-    block@12: // arc4Booleans_route_L92
+    block@12: // arc4Booleans_route_L101
         let tmp%54#0: uint64 = (txn OnCompletion)
         let tmp%55#0: bool = (== tmp%54#0 NoOp)
         (assert tmp%55#0) // OnCompletion is not NoOp
@@ -130,7 +130,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%59#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#9: bool = 1u
         goto block@24
-    block@13: // arc4BooleansStatic_route_L96
+    block@13: // arc4BooleansStatic_route_L105
         let tmp%60#0: uint64 = (txn OnCompletion)
         let tmp%61#0: bool = (== tmp%60#0 NoOp)
         (assert tmp%61#0) // OnCompletion is not NoOp
@@ -149,7 +149,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%68#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#10: bool = 1u
         goto block@24
-    block@14: // aliasing_route_L100
+    block@14: // aliasing_route_L109
         let tmp%69#0: uint64 = (txn OnCompletion)
         let tmp%70#0: bool = (== tmp%69#0 NoOp)
         (assert tmp%70#0) // OnCompletion is not NoOp
@@ -161,7 +161,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(reinterpret_Encoded(len+uint64[])%0#0, reinterpret_Encoded(len+uint64[])%1#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#11: bool = 1u
         goto block@24
-    block@15: // receiveMutable_route_L126
+    block@15: // receiveMutable_route_L135
         let tmp%73#0: uint64 = (txn OnCompletion)
         let tmp%74#0: bool = (== tmp%73#0 NoOp)
         (assert tmp%74#0) // OnCompletion is not NoOp
@@ -172,7 +172,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let receiveMutable%0#0: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(reinterpret_Encoded(len+uint64[])%2#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#12: bool = 1u
         goto block@24
-    block@16: // receiveReadonly_route_L130
+    block@16: // receiveReadonly_route_L139
         let tmp%77#0: uint64 = (txn OnCompletion)
         let tmp%78#0: bool = (== tmp%77#0 NoOp)
         (assert tmp%78#0) // OnCompletion is not NoOp
@@ -863,7 +863,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         (assert and_result%5#2) // assert target is match for conditions
         return 
 
-subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y: Encoded(uint64[1024])) -> void:
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y: Encoded(uint64[50])) -> void:
     block@0: // L54
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob 1u)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
@@ -889,65 +889,144 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
         let aggregate%updated_array%0#1: bytes = (replace3 x#0 aggregate%write_offset%0#1 encoded_value%0#0)
         let updated_array%0#0: Encoded(uint64[4]) = aggregate%updated_array%0#1
         let x#1: Encoded(uint64[4]) = updated_array%0#0
-        let aggregate%bytes_offset%1#1: uint64 = (* 0u 8u)
-        let aggregate%encoded_element%1#1: bytes = (extract3 x#1 aggregate%bytes_offset%1#1 8u) // on error: index access is out of bounds
-        let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%1#1
-        let values%0#0: uint64 = (btoi array_item%0#0)
-        let aggregate%bytes_offset%2#1: uint64 = (* 0u 8u)
-        let aggregate%encoded_element%2#1: bytes = (extract3 y#0 aggregate%bytes_offset%2#1 8u) // on error: index access is out of bounds
-        let array_item%1#0: Encoded(uint64) = aggregate%encoded_element%2#1
-        let values%1#0: uint64 = (btoi array_item%1#0)
-        let tmp%0#0: bool = (== values%0#0 values%1#0)
-        (assert tmp%0#0)
+        let tmp%0#0: Encoded(uint64[4]) = (bzero 32u)
+        let z#0: Encoded(uint64[4]) = tmp%0#0
         let tmp%1#0: bool = (== 4u 4u)
-        goto tmp%1#0 ? block@1 : block@6
-    block@1: // and_contd_L58
-        let aggregate%bytes_offset%3#1: uint64 = (* 0u 8u)
-        let aggregate%encoded_element%3#1: bytes = (extract3 x#1 aggregate%bytes_offset%3#1 8u) // on error: index access is out of bounds
-        let array_item%2#0: Encoded(uint64) = aggregate%encoded_element%3#1
+        (assert tmp%1#0)
+        let aggregate%val_as_bytes%5#1: bytes[8] = (itob 1u)
+        let aggregate%as_Encoded(uint64)%5#1: Encoded(uint64) = aggregate%val_as_bytes%5#1
+        let encoded_value%1#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%5#1
+        let aggregate%bytes_offset%1#1: uint64 = (* 0u 8u)
+        let aggregate%encoded_element%1#1: bytes = (extract3 z#0 aggregate%bytes_offset%1#1 8u) // on error: index access is out of bounds
+        let aggregate%write_offset%1#1: uint64 = (* 0u 8u)
+        let aggregate%updated_array%1#1: bytes = (replace3 z#0 aggregate%write_offset%1#1 encoded_value%1#0)
+        let updated_array%1#0: Encoded(uint64[4]) = aggregate%updated_array%1#1
+        let z#1: Encoded(uint64[4]) = updated_array%1#0
+        let aggregate%val_as_bytes%6#1: bytes[8] = (itob 2u)
+        let aggregate%as_Encoded(uint64)%6#1: Encoded(uint64) = aggregate%val_as_bytes%6#1
+        let encoded_value%2#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%6#1
+        let aggregate%bytes_offset%2#1: uint64 = (* 1u 8u)
+        let aggregate%encoded_element%2#1: bytes = (extract3 z#1 aggregate%bytes_offset%2#1 8u) // on error: index access is out of bounds
+        let aggregate%write_offset%2#1: uint64 = (* 1u 8u)
+        let aggregate%updated_array%2#1: bytes = (replace3 z#1 aggregate%write_offset%2#1 encoded_value%2#0)
+        let updated_array%2#0: Encoded(uint64[4]) = aggregate%updated_array%2#1
+        let z#2: Encoded(uint64[4]) = updated_array%2#0
+        let aggregate%val_as_bytes%7#1: bytes[8] = (itob 3u)
+        let aggregate%as_Encoded(uint64)%7#1: Encoded(uint64) = aggregate%val_as_bytes%7#1
+        let encoded_value%3#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%7#1
+        let aggregate%bytes_offset%3#1: uint64 = (* 2u 8u)
+        let aggregate%encoded_element%3#1: bytes = (extract3 z#2 aggregate%bytes_offset%3#1 8u) // on error: index access is out of bounds
+        let aggregate%write_offset%3#1: uint64 = (* 2u 8u)
+        let aggregate%updated_array%3#1: bytes = (replace3 z#2 aggregate%write_offset%3#1 encoded_value%3#0)
+        let updated_array%3#0: Encoded(uint64[4]) = aggregate%updated_array%3#1
+        let z#3: Encoded(uint64[4]) = updated_array%3#0
+        let aggregate%val_as_bytes%8#1: bytes[8] = (itob 4u)
+        let aggregate%as_Encoded(uint64)%8#1: Encoded(uint64) = aggregate%val_as_bytes%8#1
+        let encoded_value%4#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%8#1
+        let aggregate%bytes_offset%4#1: uint64 = (* 3u 8u)
+        let aggregate%encoded_element%4#1: bytes = (extract3 z#3 aggregate%bytes_offset%4#1 8u) // on error: index access is out of bounds
+        let aggregate%write_offset%4#1: uint64 = (* 3u 8u)
+        let aggregate%updated_array%4#1: bytes = (replace3 z#3 aggregate%write_offset%4#1 encoded_value%4#0)
+        let updated_array%4#0: Encoded(uint64[4]) = aggregate%updated_array%4#1
+        let z#4: Encoded(uint64[4]) = updated_array%4#0
+        let tmp%2#0: bool = (== 4u 4u)
+        goto tmp%2#0 ? block@1 : block@6
+    block@1: // and_contd_L64
+        let aggregate%bytes_offset%5#1: uint64 = (* 0u 8u)
+        let aggregate%encoded_element%5#1: bytes = (extract3 z#4 aggregate%bytes_offset%5#1 8u) // on error: index access is out of bounds
+        let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%5#1
+        let values%0#0: uint64 = (btoi array_item%0#0)
+        let tmp%3#0: bool = (<= values%0#0 1u)
+        goto tmp%3#0 ? block@2 : block@6
+    block@2: // and_contd_L64
+        let aggregate%bytes_offset%6#1: uint64 = (* 1u 8u)
+        let aggregate%encoded_element%6#1: bytes = (extract3 z#4 aggregate%bytes_offset%6#1 8u) // on error: index access is out of bounds
+        let array_item%1#0: Encoded(uint64) = aggregate%encoded_element%6#1
+        let values%1#0: uint64 = (btoi array_item%1#0)
+        let tmp%4#0: bool = (== values%1#0 2u)
+        goto tmp%4#0 ? block@3 : block@6
+    block@3: // and_contd_L64
+        let aggregate%bytes_offset%7#1: uint64 = (* 2u 8u)
+        let aggregate%encoded_element%7#1: bytes = (extract3 z#4 aggregate%bytes_offset%7#1 8u) // on error: index access is out of bounds
+        let array_item%2#0: Encoded(uint64) = aggregate%encoded_element%7#1
         let values%2#0: uint64 = (btoi array_item%2#0)
-        let tmp%2#0: bool = (< values%2#0 1u)
-        goto tmp%2#0 ? block@2 : block@6
-    block@2: // and_contd_L58
-        let aggregate%bytes_offset%4#1: uint64 = (* 1u 8u)
-        let aggregate%encoded_element%4#1: bytes = (extract3 x#1 aggregate%bytes_offset%4#1 8u) // on error: index access is out of bounds
-        let array_item%3#0: Encoded(uint64) = aggregate%encoded_element%4#1
+        let tmp%5#0: bool = (== values%2#0 3u)
+        goto tmp%5#0 ? block@4 : block@6
+    block@4: // and_contd_L64
+        let aggregate%bytes_offset%8#1: uint64 = (* 3u 8u)
+        let aggregate%encoded_element%8#1: bytes = (extract3 z#4 aggregate%bytes_offset%8#1 8u) // on error: index access is out of bounds
+        let array_item%3#0: Encoded(uint64) = aggregate%encoded_element%8#1
         let values%3#0: uint64 = (btoi array_item%3#0)
-        let tmp%3#0: bool = (== values%3#0 2u)
-        goto tmp%3#0 ? block@3 : block@6
-    block@3: // and_contd_L58
-        let aggregate%bytes_offset%5#1: uint64 = (* 2u 8u)
-        let aggregate%encoded_element%5#1: bytes = (extract3 x#1 aggregate%bytes_offset%5#1 8u) // on error: index access is out of bounds
-        let array_item%4#0: Encoded(uint64) = aggregate%encoded_element%5#1
-        let values%4#0: uint64 = (btoi array_item%4#0)
-        let tmp%4#0: bool = (== values%4#0 3u)
-        goto tmp%4#0 ? block@4 : block@6
-    block@4: // and_contd_L58
-        let aggregate%bytes_offset%6#1: uint64 = (* 3u 8u)
-        let aggregate%encoded_element%6#1: bytes = (extract3 x#1 aggregate%bytes_offset%6#1 8u) // on error: index access is out of bounds
-        let array_item%5#0: Encoded(uint64) = aggregate%encoded_element%6#1
-        let values%5#0: uint64 = (btoi array_item%5#0)
-        let tmp%5#0: bool = (== values%5#0 4u)
-        goto tmp%5#0 ? block@5 : block@6
-    block@5: // bool_true_L58
+        let tmp%6#0: bool = (== values%3#0 4u)
+        goto tmp%6#0 ? block@5 : block@6
+    block@5: // bool_true_L64
         let and_result%0#0: bool = 1u
         goto block@7
-    block@6: // bool_false_L58
+    block@6: // bool_false_L64
         let and_result%0#1: bool = 0u
         goto block@7
-    block@7: // bool_merge_L58
+    block@7: // bool_merge_L64
         let and_result%0#2: bool = φ(and_result%0#0 <- block@5, and_result%0#1 <- block@6)
         (assert and_result%0#2) // assert target is match for conditions
-        let aggregate%bytes_offset%7#1: uint64 = (* 1024u 8u)
-        let aggregate%encoded_element%7#1: bytes = (extract3 y#0 aggregate%bytes_offset%7#1 8u) // on error: index access is out of bounds
-        let array_item%6#0: Encoded(uint64) = aggregate%encoded_element%7#1
+        let aggregate%bytes_offset%9#1: uint64 = (* 0u 8u)
+        let aggregate%encoded_element%9#1: bytes = (extract3 x#1 aggregate%bytes_offset%9#1 8u) // on error: index access is out of bounds
+        let array_item%4#0: Encoded(uint64) = aggregate%encoded_element%9#1
+        let values%4#0: uint64 = (btoi array_item%4#0)
+        let aggregate%bytes_offset%10#1: uint64 = (* 0u 8u)
+        let aggregate%encoded_element%10#1: bytes = (extract3 y#0 aggregate%bytes_offset%10#1 8u) // on error: index access is out of bounds
+        let array_item%5#0: Encoded(uint64) = aggregate%encoded_element%10#1
+        let values%5#0: uint64 = (btoi array_item%5#0)
+        let tmp%7#0: bool = (== values%4#0 values%5#0)
+        (assert tmp%7#0)
+        let tmp%8#0: bool = (== 4u 4u)
+        goto tmp%8#0 ? block@8 : block@13
+    block@8: // and_contd_L67
+        let aggregate%bytes_offset%11#1: uint64 = (* 0u 8u)
+        let aggregate%encoded_element%11#1: bytes = (extract3 x#1 aggregate%bytes_offset%11#1 8u) // on error: index access is out of bounds
+        let array_item%6#0: Encoded(uint64) = aggregate%encoded_element%11#1
         let values%6#0: uint64 = (btoi array_item%6#0)
-        let tmp%6#0: bool = (>= values%6#0 0u)
-        (assert tmp%6#0) // assert target is match for conditions
+        let tmp%9#0: bool = (< values%6#0 1u)
+        goto tmp%9#0 ? block@9 : block@13
+    block@9: // and_contd_L67
+        let aggregate%bytes_offset%12#1: uint64 = (* 1u 8u)
+        let aggregate%encoded_element%12#1: bytes = (extract3 x#1 aggregate%bytes_offset%12#1 8u) // on error: index access is out of bounds
+        let array_item%7#0: Encoded(uint64) = aggregate%encoded_element%12#1
+        let values%7#0: uint64 = (btoi array_item%7#0)
+        let tmp%10#0: bool = (== values%7#0 2u)
+        goto tmp%10#0 ? block@10 : block@13
+    block@10: // and_contd_L67
+        let aggregate%bytes_offset%13#1: uint64 = (* 2u 8u)
+        let aggregate%encoded_element%13#1: bytes = (extract3 x#1 aggregate%bytes_offset%13#1 8u) // on error: index access is out of bounds
+        let array_item%8#0: Encoded(uint64) = aggregate%encoded_element%13#1
+        let values%8#0: uint64 = (btoi array_item%8#0)
+        let tmp%11#0: bool = (== values%8#0 3u)
+        goto tmp%11#0 ? block@11 : block@13
+    block@11: // and_contd_L67
+        let aggregate%bytes_offset%14#1: uint64 = (* 3u 8u)
+        let aggregate%encoded_element%14#1: bytes = (extract3 x#1 aggregate%bytes_offset%14#1 8u) // on error: index access is out of bounds
+        let array_item%9#0: Encoded(uint64) = aggregate%encoded_element%14#1
+        let values%9#0: uint64 = (btoi array_item%9#0)
+        let tmp%12#0: bool = (== values%9#0 4u)
+        goto tmp%12#0 ? block@12 : block@13
+    block@12: // bool_true_L67
+        let and_result%1#0: bool = 1u
+        goto block@14
+    block@13: // bool_false_L67
+        let and_result%1#1: bool = 0u
+        goto block@14
+    block@14: // bool_merge_L67
+        let and_result%1#2: bool = φ(and_result%1#0 <- block@12, and_result%1#1 <- block@13)
+        (assert and_result%1#2) // assert target is match for conditions
+        let aggregate%bytes_offset%15#1: uint64 = (* 49u 8u)
+        let aggregate%encoded_element%15#1: bytes = (extract3 y#0 aggregate%bytes_offset%15#1 8u) // on error: index access is out of bounds
+        let array_item%10#0: Encoded(uint64) = aggregate%encoded_element%15#1
+        let values%10#0: uint64 = (btoi array_item%10#0)
+        let tmp%13#0: bool = (>= values%10#0 0u)
+        (assert tmp%13#0) // assert target is match for conditions
         return 
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop() -> void:
-    block@0: // L62
+    block@0: // L71
         let aggregate%as_bytes%0#1: bytes[8] = (itob 2u)
         let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
         let aggregate%head%0#1: bytes = (concat aggregate%len_u16%0#1 0x0000007b)
@@ -988,61 +1067,61 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop()
         let array_length%1#0: uint64 = (extract_uint16 a1#1 0u)
         let tmp%0#0: bool = (== array_length%1#0 6u)
         goto tmp%0#0 ? block@1 : block@8
-    block@1: // and_contd_L72
+    block@1: // and_contd_L81
         let aggregate%array_trimmed%0#1: bytes = ((extract 2 0) a1#1)
         let aggregate%bytes_offset%0#1: uint64 = (* 0u 4u)
         let aggregate%encoded_element%0#1: bytes = (extract3 aggregate%array_trimmed%0#1 aggregate%bytes_offset%0#1 4u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint32) = aggregate%encoded_element%0#1
         let tmp%1#0: bool = (== array_item%0#0 0x0000007b)
         goto tmp%1#0 ? block@2 : block@8
-    block@2: // and_contd_L72
+    block@2: // and_contd_L81
         let aggregate%array_trimmed%1#1: bytes = ((extract 2 0) a1#1)
         let aggregate%bytes_offset%1#1: uint64 = (* 1u 4u)
         let aggregate%encoded_element%1#1: bytes = (extract3 aggregate%array_trimmed%1#1 aggregate%bytes_offset%1#1 4u) // on error: index access is out of bounds
         let array_item%1#0: Encoded(uint32) = aggregate%encoded_element%1#1
         let tmp%2#0: bool = (== array_item%1#0 0x0000007b)
         goto tmp%2#0 ? block@3 : block@8
-    block@3: // and_contd_L72
+    block@3: // and_contd_L81
         let aggregate%array_trimmed%2#1: bytes = ((extract 2 0) a1#1)
         let aggregate%bytes_offset%2#1: uint64 = (* 2u 4u)
         let aggregate%encoded_element%2#1: bytes = (extract3 aggregate%array_trimmed%2#1 aggregate%bytes_offset%2#1 4u) // on error: index access is out of bounds
         let array_item%2#0: Encoded(uint32) = aggregate%encoded_element%2#1
         let tmp%3#0: bool = (== array_item%2#0 0x0000007b)
         goto tmp%3#0 ? block@4 : block@8
-    block@4: // and_contd_L72
+    block@4: // and_contd_L81
         let aggregate%array_trimmed%3#1: bytes = ((extract 2 0) a1#1)
         let aggregate%bytes_offset%3#1: uint64 = (* 3u 4u)
         let aggregate%encoded_element%3#1: bytes = (extract3 aggregate%array_trimmed%3#1 aggregate%bytes_offset%3#1 4u) // on error: index access is out of bounds
         let array_item%3#0: Encoded(uint32) = aggregate%encoded_element%3#1
         let tmp%4#0: bool = (== array_item%3#0 0x0000007b)
         goto tmp%4#0 ? block@5 : block@8
-    block@5: // and_contd_L72
+    block@5: // and_contd_L81
         let aggregate%array_trimmed%4#1: bytes = ((extract 2 0) a1#1)
         let aggregate%bytes_offset%4#1: uint64 = (* 4u 4u)
         let aggregate%encoded_element%4#1: bytes = (extract3 aggregate%array_trimmed%4#1 aggregate%bytes_offset%4#1 4u) // on error: index access is out of bounds
         let array_item%4#0: Encoded(uint32) = aggregate%encoded_element%4#1
         let tmp%5#0: bool = (== array_item%4#0 0x0000007b)
         goto tmp%5#0 ? block@6 : block@8
-    block@6: // and_contd_L72
+    block@6: // and_contd_L81
         let aggregate%array_trimmed%5#1: bytes = ((extract 2 0) a1#1)
         let aggregate%bytes_offset%5#1: uint64 = (* 5u 4u)
         let aggregate%encoded_element%5#1: bytes = (extract3 aggregate%array_trimmed%5#1 aggregate%bytes_offset%5#1 4u) // on error: index access is out of bounds
         let array_item%5#0: Encoded(uint32) = aggregate%encoded_element%5#1
         let tmp%6#0: bool = (== array_item%5#0 0x0000007b)
         goto tmp%6#0 ? block@7 : block@8
-    block@7: // bool_true_L72
+    block@7: // bool_true_L81
         let and_result%0#0: bool = 1u
         goto block@9
-    block@8: // bool_false_L72
+    block@8: // bool_false_L81
         let and_result%0#1: bool = 0u
         goto block@9
-    block@9: // bool_merge_L72
+    block@9: // bool_merge_L81
         let and_result%0#2: bool = φ(and_result%0#0 <- block@7, and_result%0#1 <- block@8)
         (assert and_result%0#2) // assert target is match for conditions
         return 
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p: Encoded(uint64,uint64)) -> Encoded(len+(uint64,uint64)[]):
-    block@0: // L75
+    block@0: // L84
         let aggregate%extract%0#1: bytes = (extract3 p#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
         let values%0#0: uint64 = (btoi tuple_item%0#0)
@@ -1072,7 +1151,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p: En
         let array_length%0#0: uint64 = (extract_uint16 myVectors#1 0u)
         let tmp%1#0: bool = (== array_length%0#0 1u)
         goto tmp%1#0 ? block@1 : block@4
-    block@1: // and_contd_L80
+    block@1: // and_contd_L89
         let aggregate%array_trimmed%0#1: bytes = ((extract 2 0) myVectors#1)
         let aggregate%bytes_offset%0#1: uint64 = (* 0u 16u)
         let aggregate%encoded_element%0#1: bytes = (extract3 aggregate%array_trimmed%0#1 aggregate%bytes_offset%0#1 16u) // on error: index access is out of bounds
@@ -1082,7 +1161,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p: En
         let values%2#0: uint64 = (btoi tuple_item%2#0)
         let tmp%2#0: bool = (== values%2#0 x#0)
         goto tmp%2#0 ? block@2 : block@4
-    block@2: // and_contd_L80
+    block@2: // and_contd_L89
         let aggregate%array_trimmed%1#1: bytes = ((extract 2 0) myVectors#1)
         let aggregate%bytes_offset%1#1: uint64 = (* 0u 16u)
         let aggregate%encoded_element%1#1: bytes = (extract3 aggregate%array_trimmed%1#1 aggregate%bytes_offset%1#1 16u) // on error: index access is out of bounds
@@ -1092,19 +1171,19 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p: En
         let values%3#0: uint64 = (btoi tuple_item%3#0)
         let tmp%3#0: bool = (== values%3#0 y#0)
         goto tmp%3#0 ? block@3 : block@4
-    block@3: // bool_true_L80
+    block@3: // bool_true_L89
         let and_result%0#0: bool = 1u
         goto block@5
-    block@4: // bool_false_L80
+    block@4: // bool_false_L89
         let and_result%0#1: bool = 0u
         goto block@5
-    block@5: // bool_merge_L80
+    block@5: // bool_merge_L89
         let and_result%0#2: bool = φ(and_result%0#0 <- block@3, and_result%0#1 <- block@4)
         (assert and_result%0#2) // assert target is match for conditions
         return myVectors#1
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans() -> Encoded(len+bool1[]):
-    block@0: // L84
+    block@0: // L93
         let aggregate%as_bytes%0#1: bytes[8] = (itob 3u)
         let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
         let aggregate%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u 1u)
@@ -1116,11 +1195,11 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans() ->
         return encoded_array%0#0
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleansStatic() -> <bool, bool, bool>:
-    block@0: // L88
+    block@0: // L97
         return 1u 0u 1u
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans() -> Encoded(len+bool1[]):
-    block@0: // L92
+    block@0: // L101
         let aggregate%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u 1u)
         let aggregate%as_Encoded(bool8)%0#1: Encoded(bool8) = aggregate%encoded_bool%0#1
         let tmp%0#0: Encoded(bool8) = aggregate%as_Encoded(bool8)%0#1
@@ -1142,7 +1221,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans(
         return encoded_array%0#0
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansStatic() -> <Encoded(bool8), Encoded(bool8), Encoded(bool8)>:
-    block@0: // L96
+    block@0: // L105
         let aggregate%encoded_bool%0#1: bytes[1] = (setbit 0x00 0u 1u)
         let aggregate%as_Encoded(bool8)%0#1: Encoded(bool8) = aggregate%encoded_bool%0#1
         let tmp%0#0: Encoded(bool8) = aggregate%as_Encoded(bool8)%0#1
@@ -1155,7 +1234,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansS
         return tmp%0#0 tmp%1#0 tmp%2#0
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(mutable: Encoded(len+uint64[]), readOnly: Encoded(len+uint64[])) -> void:
-    block@0: // L100
+    block@0: // L109
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob 5u)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
         let encoded_value%0#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#1
@@ -1196,7 +1275,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(muta
         return 
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(a: Encoded(len+uint64[])) -> Encoded(len+uint64[]):
-    block@0: // L126
+    block@0: // L135
         let a%out#0: Encoded(len+uint64[]) = a#0
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob 1u)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
@@ -1218,7 +1297,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutabl
         return a%out#2
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(a: Encoded(len+uint64[])) -> void:
-    block@0: // L130
+    block@0: // L139
         return 
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__algots__.defaultCreate() -> void:
