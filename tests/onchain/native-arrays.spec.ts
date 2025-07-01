@@ -15,6 +15,9 @@ describe('native arrays', () => {
     const result = await appClientNativeArraysAlgo.send.call({ method: 'structs', args: [{ x: 5, y: 3 }] })
     expect(result.return).toStrictEqual([[5n, 3n]])
   })
+  test('works with fixed arrays', async ({ appClientNativeArraysAlgo }) => {
+    await appClientNativeArraysAlgo.send.call({ method: 'fixedArray', args: [Array(50).fill(0)] })
+  })
   test('works with booleans', async ({ appClientNativeArraysAlgo }) => {
     expect((await appClientNativeArraysAlgo.send.call({ method: 'booleans' })).return).toStrictEqual([true, false, true])
     expect((await appClientNativeArraysAlgo.send.call({ method: 'booleansStatic' })).return).toStrictEqual([true, false, true])

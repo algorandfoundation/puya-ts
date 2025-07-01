@@ -49,9 +49,16 @@ contract NativeArraysAlgo
   {
     x: arc4.static_array<uint64> = new arc4.static_array<uint64>(1, 2, 3, 4)
     x[0]: uint64 = 0
+    z: arc4.static_array<uint64> = bzero(size_of(arc4.static_array<uint64>))
+    assert(z.length == 4)
+    z[0]: uint64 = 1
+    z[1]: uint64 = 2
+    z[2]: uint64 = 3
+    z[3]: uint64 = 4
+    assert(z.length == 4 and z[0] <= 1 and z[1] == 2 and z[2] == 3 and z[3] == 4, comment=assert target is match for conditions)
     assert(x[0] == y[0])
     assert(x.length == 4 and x[0] < 1 and x[1] == 2 and x[2] == 3 and x[3] == 4, comment=assert target is match for conditions)
-    assert(y[1024] >= 0, comment=assert target is match for conditions)
+    assert(y[49] >= 0, comment=assert target is match for conditions)
   }
   
   arc4Interop(): void

@@ -12,14 +12,14 @@ export class Arc4CloneAlgo extends Contract {
     // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being passed to a tuple expression
     const tupleOfMutable: readonly [uint64[], uint64] = [mutable, 1]
 
-    // @expect-error tuples containing a reference to a mutable stack type cannot be destructured, use index access with clone(...) instead
+    // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being passed to a tuple expression
     const [x] = tupleOfMutable
 
     const mutableTupleOfMutable: [uint64[]] = [[1, 2, 3]]
 
     // Ideally this would be the same error as above, but because we translate mutable destructuring into comma expressions it's impossible to reliably
     // detect that the original expression was a destructuring one, from the AWST alone.
-    // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being assigned to another variable
+    // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being passed to a tuple expression
     const [y] = mutableTupleOfMutable
     let z: uint64[]
     // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being assigned to another variable
@@ -30,7 +30,7 @@ export class Arc4CloneAlgo extends Contract {
 
     const nestedMutables = [[Uint64(1)]]
 
-    // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being passed to an array constructor
+    // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being passed to a tuple expression
     const nestedMutables2 = [mutable, [Uint64(2)]]
 
     // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being assigned to another variable

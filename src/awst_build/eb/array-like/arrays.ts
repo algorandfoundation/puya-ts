@@ -18,7 +18,6 @@ import {
 } from '../../ptypes'
 import { ARC4ArrayType, ARC4EncodedType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
-import { StaticArrayExpressionBuilder } from '../arc4/arrays'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder, FunctionBuilder, InstanceExpressionBuilder } from '../index'
 import { OptionalExpressionBuilder } from '../optional-expression-builder'
@@ -326,7 +325,7 @@ export class FixedArrayClassBuilder extends ClassBuilder {
     })
 
     if (initialItems.length === 0) {
-      return new StaticArrayExpressionBuilder(
+      return new FixedArrayExpressionBuilder(
         intrinsicFactory.bzero({
           size: nodeFactory.sizeOf({ sizeWtype: ptype.wtype, sourceLocation, wtype: wtypes.uint64WType }),
           wtype: ptype.wtype,

@@ -1,5 +1,5 @@
-import type { uint64 } from '@algorandfoundation/algorand-typescript';
-import { Asset, Contract, emit } from '@algorandfoundation/algorand-typescript';
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
+import { Asset, Contract, emit } from '@algorandfoundation/algorand-typescript'
 
 type Named = { a: uint64; b: Asset }
 
