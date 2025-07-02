@@ -16,14 +16,7 @@ export class FixedArray<TItem, TLength extends number> implements ConcatArray<TI
    * @param items The initial items for the array
    */
   constructor(...items: TItem[] & { length: TLength })
-  constructor(...items: TItem[] & { length: TLength }) {}
-
-  /**
-   * Returns a copy of this array
-   */
-  copy(): FixedArray<TItem, TLength> {
-    throw new NoImplementation()
-  }
+  constructor(...items: TItem[] & { length: TLength }) { }
 
   /**
    * Returns a new array containing all items from _this_ array, and _other_ array
