@@ -70,4 +70,8 @@ export class ConditionalExpressionBuilder extends LiteralExpressionBuilder {
       falseBuilder.ptype,
     )
   }
+
+  checkForUnclonedMutables(scenario: string): boolean {
+    return this.whenTrue.checkForUnclonedMutables(scenario) || this.whenFalse.checkForUnclonedMutables(scenario)
+  }
 }

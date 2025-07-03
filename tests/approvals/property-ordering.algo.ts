@@ -2,9 +2,9 @@ import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, assertMatch, BaseContract } from '@algorandfoundation/algorand-typescript'
 import { encodeArc4 } from '@algorandfoundation/algorand-typescript/arc4'
 
-type BthenA = { b: uint64; a: uint64 }
+type BthenA = Readonly<{ b: uint64; a: uint64 }>
 
-function test_assign_from_var(x: { a: uint64; b: uint64 }) {
+function test_assign_from_var(x: Readonly<{ a: uint64; b: uint64 }>) {
   assert(x.a !== x.b, 'For the purpose of this test, a should not equal b')
   const obj: BthenA = x
   const xEncoded = encodeArc4(x)

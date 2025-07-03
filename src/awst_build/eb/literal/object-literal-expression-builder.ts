@@ -21,6 +21,7 @@ export type ObjectLiteralParts =
   | {
       type: 'spread-object'
       obj: InstanceBuilder
+      spreadLocation: SourceLocation
     }
 
 export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
@@ -39,10 +40,10 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
         }
       } else {
         const obj = part.obj.singleEvaluation()
-        for (const [prop, propType] of spreadableProperties(part.obj.ptype, part.obj.sourceLocation)) {
+        for (const [prop, propType] of spreadableProperties(part.obj.ptype, part.spreadLocation)) {
           types[prop] = propType
           propertyToItemMap[prop] = items.length
-          items.push(requireInstanceBuilder(obj.memberAccess(prop, sourceLocation)))
+          items.push(requireInstanceBuilder(obj.memberAccess(prop, part.spreadLocation)))
         }
       }
     }
@@ -155,15 +156,17 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
     if (!this.resolvableToPType(ptype))
       throw new CodeError(`${this.typeDescription} cannot be resolved to ${ptype}`, { sourceLocation: this.sourceLocation })
-    // if (ptype instanceof ObjectLiteralPType) {
-    //   const indexToType = Object.fromEntries(Object.entries(this.propertyToItemMap).map(([prop, index]) => [index, ptype.properties[prop]]))
-    //   return new ObjectLiteralExpressionBuilder(
-    //     this.sourceLocation,
-    //     ptype,
-    //     this.propertyToItemMap,
-    //     this.items.map((item, index) => (index in indexToType ? item.resolveToPType(indexToType[index]) : item)),
-    //   )
-    // }
+
     return instanceEb(this.toObjectType(ptype), ptype)
+  }
+
+  checkForUnclonedMutables(scenario: string): boolean {
+    const usedIndexes = new Set(Object.values(this.propertyToItemMap))
+    let contains = false
+    for (const [idx, item] of this.items.entries()) {
+      if (!usedIndexes.has(idx)) continue
+      contains ||= item.checkForUnclonedMutables('being used in an object literal')
+    }
+    return contains
   }
 }

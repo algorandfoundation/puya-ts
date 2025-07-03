@@ -2,12 +2,14 @@ import { awst, isConstant, isConstantOrTemplateVar } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
 import { TupleItemExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { CodeError, NotSupported } from '../../errors'
+import { CodeError, InternalError, NotSupported } from '../../errors'
+import { logger } from '../../logger'
 import { instanceOfAny } from '../../util'
 import type { DecoratorData } from '../models/decorator-data'
 import type { GenericPType, LibClassType, PType, PTypeOrClass } from '../ptypes'
 import { uint64PType } from '../ptypes'
 import type { ARC4StructClass } from '../ptypes/arc4-types'
+import { isOrContainsMutableType } from '../ptypes/visitors/contains-mutable-visitor'
 import { instanceEb } from '../type-registry'
 
 export enum BuilderComparisonOp {
@@ -196,6 +198,10 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
       sourceLocation,
     })
   }
+
+  checkForUnclonedMutables(scenario: string): boolean {
+    throw new InternalError(`Method not implemented on ${this.constructor.name}`, { sourceLocation: this.sourceLocation })
+  }
 }
 
 /**
@@ -279,6 +285,38 @@ export abstract class InstanceExpressionBuilder<TPType extends PType> extends In
   resolveLValue() {
     return requireLValue(this.resolve())
   }
+
+  checkForUnclonedMutables(scenario: string) {
+    if (isReferableExpression(this._expr)) {
+      if (isOrContainsMutableType(this.ptype)) {
+        logger.error(
+          this.sourceLocation,
+          `cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when ${scenario}`,
+        )
+        return true
+      }
+    }
+    return false
+  }
+}
+
+export function isReferableExpression(expr: awst.Expression): boolean {
+  if (
+    instanceOfAny(
+      expr,
+      awst.VarExpression,
+      awst.AppStateExpression,
+      awst.AppAccountStateExpression,
+      awst.StateGet,
+      awst.StateGetEx,
+      awst.BoxValueExpression,
+    )
+  ) {
+    return true
+  } else if (instanceOfAny(expr, awst.IndexExpression, awst.TupleItemExpression, awst.FieldExpression)) {
+    return isReferableExpression(expr.base)
+  }
+  return false
 }
 
 export function requireLValue(expr: awst.Expression): awst.LValue {

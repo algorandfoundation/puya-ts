@@ -94,4 +94,12 @@ export class ArrayLiteralExpressionBuilder extends InstanceBuilder implements St
   [StaticIterator](): InstanceBuilder[] {
     return this.items
   }
+
+  checkForUnclonedMutables(scenario: string) {
+    let contains = false
+    for (const item of this.items) {
+      contains ||= item.checkForUnclonedMutables('being used in an array literal')
+    }
+    return contains
+  }
 }

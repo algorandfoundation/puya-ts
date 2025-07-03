@@ -174,6 +174,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
             {
               type: 'spread-object',
               obj: requireInstanceBuilder(this.baseAccept(p.expression)),
+              spreadLocation: this.sourceLocation(p),
             },
           ]
         default:
@@ -205,9 +206,14 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         clone for the user since a spread is the same as a shallow clone.
          */
         if (isMutableType(spreadExpr.ptype) && !containsMutableType(spreadExpr.ptype)) {
-          toConcat.push(CloneFunctionBuilder.clone(spreadExpr, this.sourceLocation(node)))
+          toConcat.push(CloneFunctionBuilder.clone(spreadExpr, this.sourceLocation(element)))
         } else {
-          toConcat.push(spreadExpr)
+          if (spreadExpr.checkForUnclonedMutables('being spread into an array literal')) {
+            // Add a clone if one is required so we don't get cascading errors
+            toConcat.push(CloneFunctionBuilder.clone(spreadExpr, this.sourceLocation(element)))
+          } else {
+            toConcat.push(spreadExpr)
+          }
         }
       } else {
         itemBuffer.push(requireInstanceBuilder(this.baseAccept(element)))

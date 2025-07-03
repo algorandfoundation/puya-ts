@@ -1,4 +1,4 @@
-import type { ARC4StructType, DynamicArrayType, StaticArrayType } from '../arc4-types'
+import type { ARC4StructType, ARC4TupleType, DynamicArrayType, StaticArrayType } from '../arc4-types'
 import type { PType } from '../base'
 import type {
   ArrayLiteralPType,
@@ -19,6 +19,10 @@ export function isMutableType(ptype: PType) {
 
 export function containsMutableType(ptype: PType) {
   return ptype.accept(new ContainsMutableVisitor())
+}
+
+export function isOrContainsMutableType(ptype: PType) {
+  return isMutableType(ptype) || containsMutableType(ptype)
 }
 
 class ContainsMutableVisitor extends DefaultVisitor<boolean> {
@@ -43,6 +47,10 @@ class ContainsMutableVisitor extends DefaultVisitor<boolean> {
 
   visitARC4StructType(ptype: ARC4StructType): boolean {
     return Object.values(ptype.fields).some((t) => t.accept(this) || t.accept(this.isMutableVisitor))
+  }
+
+  visitARC4TupleType(ptype: ARC4TupleType): boolean {
+    return ptype.items.some((t) => t.accept(this) || t.accept(this.isMutableVisitor))
   }
 
   visitImmutableObjectPType(ptype: ImmutableObjectPType): boolean {
@@ -105,6 +113,10 @@ class IsMutableVisitor extends DefaultVisitor<boolean> {
   }
 
   visitARC4StructType(ptype: ARC4StructType): boolean {
+    return !ptype.frozen
+  }
+
+  visitARC4TupleType(ptype: ARC4TupleType): boolean {
     return true
   }
 
@@ -117,11 +129,11 @@ class IsMutableVisitor extends DefaultVisitor<boolean> {
   }
 
   visitDynamicArrayType(ptype: DynamicArrayType): boolean {
-    return true
+    return !ptype.immutable
   }
 
   visitStaticArrayType(ptype: StaticArrayType): boolean {
-    return true
+    return !ptype.immutable
   }
 
   visitFixedArrayPType(ptype: FixedArrayPType): boolean {

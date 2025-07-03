@@ -13,56 +13,45 @@ main_block@0:
     // tests/approvals/property-ordering.algo.ts:31
     // test_assign_from_var({ a: 3, b: 4 })
     pushint 3 // 3
-    itob
-    pushbytes 0x
-    swap
-    concat
     intc_3 // 4
-    itob
-    concat
     callsub test_assign_from_var
-    pop
     // tests/approvals/property-ordering.algo.ts:33
     // return true
     pushint 1 // 1
     return
 
 
-// tests/approvals/property-ordering.algo.ts::test_assign_from_var(x: bytes) -> bytes:
+// tests/approvals/property-ordering.algo.ts::test_assign_from_var(x.a: uint64, x.b: uint64) -> void:
 test_assign_from_var:
     // tests/approvals/property-ordering.algo.ts:7
-    // function test_assign_from_var(x: { a: uint64; b: uint64 }) {
-    proto 1 1
+    // function test_assign_from_var(x: Readonly<{ a: uint64; b: uint64 }>) {
+    proto 2 0
 
 test_assign_from_var_block@0:
-    frame_dig -1
     // tests/approvals/property-ordering.algo.ts:8
     // assert(x.a !== x.b, 'For the purpose of this test, a should not equal b')
-    dup
-    intc_1 // 0
-    intc_0 // 8
-    extract3
-    btoi
+    frame_dig -2
     frame_dig -1
-    intc_0 // 8
-    dup
-    extract3
-    btoi
     !=
     assert // For the purpose of this test, a should not equal b
     // tests/approvals/property-ordering.algo.ts:9
     // const obj: BthenA = x
     frame_dig -1
-    intc_0 // 8
-    dup
-    extract3
-    btoi
-    frame_dig -1
-    intc_1 // 0
-    intc_0 // 8
-    extract3
-    btoi
+    frame_dig -2
     swap
+    // tests/approvals/property-ordering.algo.ts:10
+    // const xEncoded = encodeArc4(x)
+    frame_dig -2
+    itob
+    pushbytes 0x
+    swap
+    concat
+    frame_dig -1
+    itob
+    concat
+    cover 2
+    // tests/approvals/property-ordering.algo.ts:11
+    // const objEncoded = encodeArc4(obj)
     itob
     pushbytes 0x
     swap
@@ -70,10 +59,6 @@ test_assign_from_var_block@0:
     swap
     itob
     concat
-    // tests/approvals/property-ordering.algo.ts:10
-    // const xEncoded = encodeArc4(x)
-    frame_dig -1
-    swap
     // tests/approvals/property-ordering.algo.ts:12
     // assert(xEncoded === objEncoded.slice(8).concat(objEncoded.slice(0, 8)), 'Encoded order should be swapped')
     dup

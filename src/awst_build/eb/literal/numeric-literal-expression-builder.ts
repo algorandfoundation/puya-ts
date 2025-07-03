@@ -85,4 +85,9 @@ export class NumericLiteralExpressionBuilder extends LiteralExpressionBuilder {
   private getUpdatedPType(value: bigint) {
     return new NumericLiteralPType({ literalValue: value })
   }
+
+  checkForUnclonedMutables(scenario: string) {
+    // Nothing to see here
+    return false
+  }
 }

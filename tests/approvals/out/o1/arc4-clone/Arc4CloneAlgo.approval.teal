@@ -19,7 +19,7 @@ main_after_if_else@13:
     return
 
 main_structReturn_route@6:
-    // tests/approvals/arc4-clone.algo.ts:55
+    // tests/approvals/arc4-clone.algo.ts:53
     // structReturn(arg: TopLevelStruct): SharedStruct {
     txn OnCompletion
     !
@@ -29,7 +29,7 @@ main_structReturn_route@6:
     // tests/approvals/arc4-clone.algo.ts:16
     // export class Arc4CloneAlgo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/arc4-clone.algo.ts:55
+    // tests/approvals/arc4-clone.algo.ts:53
     // structReturn(arg: TopLevelStruct): SharedStruct {
     callsub structReturn
     pushbytes 0x151f7c75
@@ -40,7 +40,7 @@ main_structReturn_route@6:
     return
 
 main_receiveReadonly_route@5:
-    // tests/approvals/arc4-clone.algo.ts:53
+    // tests/approvals/arc4-clone.algo.ts:51
     // receiveReadonly(a: readonly uint64[]) {}
     txn OnCompletion
     !
@@ -51,7 +51,7 @@ main_receiveReadonly_route@5:
     return
 
 main_receive_route@4:
-    // tests/approvals/arc4-clone.algo.ts:51
+    // tests/approvals/arc4-clone.algo.ts:49
     // receive(mutable: uint64[]) {}
     txn OnCompletion
     !
@@ -103,7 +103,7 @@ aliasing_for_header@4:
     intc_1 // 2
     <
     bz aliasing_after_for@6
-    // tests/approvals/arc4-clone.algo.ts:45
+    // tests/approvals/arc4-clone.algo.ts:43
     // const m4 = clone(nestedMutables).concat([Uint64(123)])
     pushbytes 0x000200010000000000000001
     frame_dig 1
@@ -132,7 +132,7 @@ aliasing_for_header@7:
     intc_1 // 2
     <
     bz aliasing_after_for@9
-    // tests/approvals/arc4-clone.algo.ts:45
+    // tests/approvals/arc4-clone.algo.ts:43
     // const m4 = clone(nestedMutables).concat([Uint64(123)])
     pushbytes 0x00020001000000000000007b
     frame_dig 1
@@ -158,10 +158,10 @@ aliasing_after_for@9:
 
 // tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn(arg: bytes) -> bytes:
 structReturn:
-    // tests/approvals/arc4-clone.algo.ts:55
+    // tests/approvals/arc4-clone.algo.ts:53
     // structReturn(arg: TopLevelStruct): SharedStruct {
     proto 1 1
-    // tests/approvals/arc4-clone.algo.ts:57
+    // tests/approvals/arc4-clone.algo.ts:55
     // assert(arg.shared === echo(arg.shared), "this won't error")
     frame_dig -1
     pushint 10 // 10
@@ -171,6 +171,6 @@ structReturn:
     frame_dig -1
     cover 2
     substring3
-    // tests/approvals/arc4-clone.algo.ts:58
+    // tests/approvals/arc4-clone.algo.ts:56
     // return arg.shared
     retsub

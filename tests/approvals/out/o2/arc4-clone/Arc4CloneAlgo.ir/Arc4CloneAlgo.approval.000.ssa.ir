@@ -69,7 +69,7 @@ subroutine _puya_lib.arc4.dynamic_array_concat_dynamic_element(array_items_count
         return tmp%25#0
 
 subroutine tests/approvals/arc4-clone.algo.ts::echo(s: Encoded((len+uint8[]),uint8)) -> <Encoded((len+uint8[]),uint8), Encoded((len+uint8[]),uint8)>:
-    block@0: // L62
+    block@0: // L60
         let s%is_original#0: bool = 1u
         let s%out#0: Encoded((len+uint8[]),uint8) = s#0
         return s#0 s#0
@@ -92,7 +92,7 @@ subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.__puya_arc4_router_
         let reinterpret_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
         tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.aliasing(reinterpret_Encoded(len+uint64[])%0#0)
         return 1u
-    block@3: // receive_route_L51
+    block@3: // receive_route_L49
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (== tmp%7#0 NoOp)
         (assert tmp%8#0) // OnCompletion is not NoOp
@@ -102,7 +102,7 @@ subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.__puya_arc4_router_
         let reinterpret_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
         let receive%0#0: Encoded(len+uint64[]) = tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receive(reinterpret_Encoded(len+uint64[])%1#0)
         return 1u
-    block@4: // receiveReadonly_route_L53
+    block@4: // receiveReadonly_route_L51
         let tmp%11#0: uint64 = (txn OnCompletion)
         let tmp%12#0: bool = (== tmp%11#0 NoOp)
         (assert tmp%12#0) // OnCompletion is not NoOp
@@ -112,7 +112,7 @@ subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.__puya_arc4_router_
         let reinterpret_Encoded(len+uint64[])%2#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
         tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receiveReadonly(reinterpret_Encoded(len+uint64[])%2#0)
         return 1u
-    block@5: // structReturn_route_L55
+    block@5: // structReturn_route_L53
         let tmp%15#0: uint64 = (txn OnCompletion)
         let tmp%16#0: bool = (== tmp%15#0 NoOp)
         (assert tmp%16#0) // OnCompletion is not NoOp
@@ -188,17 +188,17 @@ subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.aliasing(mutable: E
         return 
 
 subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receive(mutable: Encoded(len+uint64[])) -> Encoded(len+uint64[]):
-    block@0: // L51
+    block@0: // L49
         let mutable%is_original#0: bool = 1u
         let mutable%out#0: Encoded(len+uint64[]) = mutable#0
         return mutable%out#0
 
 subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receiveReadonly(a: Encoded(len+uint64[])) -> void:
-    block@0: // L53
+    block@0: // L51
         return 
 
 subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn(arg: Encoded(uint64,(len+utf8[]),((len+uint8[]),uint8))) -> Encoded((len+uint8[]),uint8):
-    block@0: // L55
+    block@0: // L53
         let tuple_item%0#0: Encoded((len+uint8[]),uint8) = extract_value(arg#0, 2)
         let tuple_item%1#0: Encoded((len+uint8[]),uint8) = extract_value(arg#0, 2)
         let (echo%0#0: Encoded((len+uint8[]),uint8), echo%1#0: Encoded((len+uint8[]),uint8)) = tests/approvals/arc4-clone.algo.ts::echo(tuple_item%1#0)

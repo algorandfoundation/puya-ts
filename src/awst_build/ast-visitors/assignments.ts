@@ -87,7 +87,11 @@ function buildAssignmentValues(
 
     for (const [index, item] of target[StaticIterator]().entries()) {
       if (item instanceof OmittedExpressionBuilder) continue
-      const values = buildAssignmentValues(item, requireInstanceBuilder(source.indexAccess(BigInt(index), sourceLocation)), sourceLocation)
+      const values = buildAssignmentValues(
+        item,
+        requireInstanceBuilder(source.indexAccess(BigInt(index), source.sourceLocation)),
+        sourceLocation,
+      )
       targets.push(values.target)
       sources.push(values.source)
     }
@@ -103,7 +107,7 @@ function buildAssignmentValues(
     for (const [propName] of target.ptype.orderedProperties()) {
       const values = buildAssignmentValues(
         requireInstanceBuilder(target.memberAccess(propName, sourceLocation)),
-        requireInstanceBuilder(source.memberAccess(propName, sourceLocation)),
+        requireInstanceBuilder(source.memberAccess(propName, source.sourceLocation)),
         sourceLocation,
       )
       targets.push(values.target)
@@ -114,6 +118,7 @@ function buildAssignmentValues(
       source: nodeFactory.tupleExpression({ items: sources, sourceLocation: source.sourceLocation }),
     }
   } else {
+    source.checkForUnclonedMutables('being assigned to another variable')
     return {
       target: target.resolveLValue(),
       source: source.resolveToPType(target.ptype).resolve(),

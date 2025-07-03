@@ -25,8 +25,6 @@ export class Arc4CloneAlgo extends Contract {
 
     const mutableTupleOfMutable: [uint64[]] = [[1, 2, 3]]
 
-    // Ideally this would be the same error as above, but because we translate mutable destructuring into comma expressions it's impossible to reliably
-    // detect that the original expression was a destructuring one, from the AWST alone.
     const [y] = clone(mutableTupleOfMutable)
     let z: uint64[]
     this.receive((z = clone(mutable)))

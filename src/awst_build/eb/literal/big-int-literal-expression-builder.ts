@@ -87,4 +87,8 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   private getUpdatedPType(value: bigint) {
     return new BigIntLiteralPType({ literalValue: value })
   }
+
+  checkForUnclonedMutables(scenario: string): boolean {
+    return false
+  }
 }
