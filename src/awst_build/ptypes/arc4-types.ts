@@ -57,45 +57,10 @@ export const UintN256Class = new LibClassType({
 export abstract class ARC4EncodedType extends PType {
   abstract readonly wtype: wtypes.ARC4Type
   abstract readonly nativeType: PType | undefined
-  abstract readonly fixedBitSize: bigint | null
   abstract readonly abiTypeSignature: string
-
-  get fixedByteSize(): bigint | null {
-    return this.fixedBitSize === null ? null : ARC4EncodedType.bitsToBytes(this.fixedBitSize)
-  }
-
-  /**
-   * Calculate fixed the number of bits required to store a sequence of ARC4 types using ARC4's bit-packing technique for consecutive booleans.
-   *
-   * Returns `null` if the sequence contains a dynamically sized type
-   * @param types The sequence of types being encoded
-   */
-  protected static calculateFixedBitSize(types: ARC4EncodedType[]): bigint | null {
-    return types.reduce((acc: bigint | null, cur) => {
-      if (acc === null || cur.fixedBitSize === null) return null
-
-      if (cur.fixedBitSize === 1n) {
-        return acc + cur.fixedBitSize
-      } else {
-        return this.roundBitsUpToNearestByte(acc) + this.roundBitsUpToNearestByte(cur.fixedBitSize)
-      }
-    }, 0n)
-  }
 
   protected static buildAbiTupleSignature(types: ARC4EncodedType[]): string {
     return `(${types.map((t) => t.abiTypeSignature).join(',')})`
-  }
-
-  /**
-   * Get the number of bytes required to represent n bits
-   * @param n The number of bits which need representing
-   */
-  protected static bitsToBytes(n: bigint): bigint {
-    return (n + 7n) / 8n
-  }
-
-  protected static roundBitsUpToNearestByte(bits: bigint): bigint {
-    return this.bitsToBytes(bits) * 8n
   }
 }
 
@@ -239,7 +204,7 @@ export class ARC4StructType extends ARC4EncodedType {
     this.fields = fields
     this.description = description
     this.sourceLocation = sourceLocation
-    this.fixedBitSize = ARC4EncodedType.calculateFixedBitSize(Object.values(fields))
+    this.fixedBitSize = PType.calculateFixedBitSize(Object.values(fields))
     this.abiTypeSignature = ARC4EncodedType.buildAbiTupleSignature(Object.values(fields))
   }
 
@@ -306,7 +271,7 @@ export class ARC4TupleType extends ARC4EncodedType {
     this.name = `Tuple<${this.items.map((i) => i.name).join(',')}>`
     this.sourceLocation = sourceLocation
     this.nativeType = new ReadonlyTuplePType({ items: this.items })
-    this.fixedBitSize = ARC4EncodedType.calculateFixedBitSize(types)
+    this.fixedBitSize = PType.calculateFixedBitSize(types)
     this.abiTypeSignature = ARC4EncodedType.buildAbiTupleSignature(types)
   }
 
@@ -344,10 +309,7 @@ export class UintNType extends ARC4EncodedType {
   readonly singleton = false
   readonly wtype: wtypes.ARC4UIntN
   readonly abiTypeSignature: string
-
-  get fixedBitSize() {
-    return this.n
-  }
+  readonly fixedBitSize: bigint
 
   get nativeType() {
     return this.n <= 64n ? uint64PType : biguintPType
@@ -357,6 +319,7 @@ export class UintNType extends ARC4EncodedType {
     super()
     codeInvariant(n >= 8n && n <= 512n && n % 8n === 0n, 'n must be between 8 and 512, and a multiple of 8')
     this.n = n
+    this.fixedBitSize = this.n
     this.name = name ?? `UintN<${n}>`
     this.wtype = wtype ?? new wtypes.ARC4UIntN({ n: this.n })
     this.abiTypeSignature = wtype?.arc4Alias ?? `uint${n}`
@@ -395,10 +358,7 @@ export class UFixedNxMType extends ARC4EncodedType {
   readonly singleton = false
   readonly wtype: wtypes.ARC4UFixedNxM
   readonly abiTypeSignature: string
-
-  get fixedBitSize() {
-    return this.n
-  }
+  readonly fixedBitSize: bigint
 
   get nativeType() {
     return this.n <= 64n ? uint64PType : biguintPType
@@ -410,6 +370,7 @@ export class UFixedNxMType extends ARC4EncodedType {
     codeInvariant(m >= 1n && m <= 160n, 'm must be between 1 and 160')
     this.n = n
     this.m = m
+    this.fixedBitSize = this.n
     this.name = `${UFixedNxMGeneric.name}<${n}, ${m}>`
     this.wtype = new wtypes.ARC4UFixedNxM({ n: this.n, m: this.m })
     this.abiTypeSignature = `ufixed${n}x${m}`
@@ -543,7 +504,7 @@ export class StaticArrayType extends ARC4ArrayType {
         arraySize: this.arraySize,
         immutable: this.immutable,
       })
-    this.fixedBitSize = ARC4EncodedType.calculateFixedBitSize(new Array(Number(arraySize)).fill(elementType))
+    this.fixedBitSize = PType.calculateFixedBitSize(new Array(Number(arraySize)).fill(elementType))
     this.abiTypeSignature = `${this.elementType.abiTypeSignature}[${this.arraySize}]`
   }
 

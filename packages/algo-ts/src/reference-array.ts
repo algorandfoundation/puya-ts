@@ -92,11 +92,4 @@ export class ReferenceArray<TItem> {
   pop(): TItem {
     throw new NoImplementation()
   }
-
-  /**
-   * Create a copy of this array
-   */
-  copy(): ReferenceArray<TItem> {
-    throw new NoImplementation()
-  }
 }

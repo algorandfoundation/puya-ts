@@ -49,23 +49,38 @@ contract NativeArraysAlgo
   {
     x: arc4.static_array<uint64> = new arc4.static_array<uint64>(1, 2, 3, 4)
     x[0]: uint64 = 0
-    z: arc4.static_array<uint64> = bzero(size_of(arc4.static_array<uint64>))
-    assert(z.length == 4)
-    z[0]: uint64 = 1
-    z[1]: uint64 = 2
-    z[2]: uint64 = 3
-    z[3]: uint64 = 4
-    assert(z.length == 4 and z[0] <= 1 and z[1] == 2 and z[2] == 3 and z[3] == 4, comment=assert target is match for conditions)
     assert(x[0] == y[0])
     assert(x.length == 4 and x[0] < 1 and x[1] == 2 and x[2] == 3 and x[3] == 4, comment=assert target is match for conditions)
     assert(y[49] >= 0, comment=assert target is match for conditions)
+    myVectors: arc4.static_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.static_array<tests/approvals/native-arrays.algo.ts::Vector>(new tests/approvals/native-arrays.algo.ts::Vector(x=($1 = #{ x: 1, y: 2 }).x, y=$1.y), new tests/approvals/native-arrays.algo.ts::Vector(x=($2 = #{ x: 3, y: 4 }).x, y=$2.y))
+    assert(myVectors.length == 2 and myVectors[0].x == 1 and myVectors[0].y == 2 and myVectors[1].x == 3 and myVectors[1].y == 4, comment=assert target is match for conditions)
+    myObject: ObjectA721194C = new ObjectA721194C(a=($3 = #{ a: new arc4.static_array<tests/approvals/native-arrays.algo.ts::Vector>(new tests/approvals/native-arrays.algo.ts::Vector(x=($4 = #{ x: 5, y: 6 }).x, y=$4.y)) }).a)
+    assert(myObject.a.length == 1 and myObject.a[0].x == 5 and myObject.a[0].y == 6, comment=assert target is match for conditions)
+    z1: arc4.static_array<uint64> = bzero(size_of(arc4.static_array<uint64>))
+    assert(z1.length == 4)
+    assert(z1.length == 4 and z1[0] == 0 and z1[1] == 0 and z1[2] == 0 and z1[3] == 0, comment=assert target is match for conditions)
+    z1[0]: uint64 = 1
+    z1[1]: uint64 = 2
+    z1[2]: uint64 = 3
+    z1[3]: uint64 = 4
+    assert(z1.length == 4 and z1[0] <= 1 and z1[1] == 2 and z1[2] == 3 and z1[3] == 4, comment=assert target is match for conditions)
+    z2: arc4.static_array<bool> = bzero(size_of(arc4.static_array<bool>))
+    assert(z2[0] == False)
+    z3: arc4.static_array<arc4.static_array<uint64>> = bzero(size_of(arc4.static_array<arc4.static_array<uint64>>))
+    assert(z3.length == 4)
+    z4: arc4.static_array<tests/approvals/native-arrays.algo.ts::Vector> = bzero(size_of(arc4.static_array<tests/approvals/native-arrays.algo.ts::Vector>))
+    assert(z4.length == 4)
+    z5: arc4.static_array<arc4.uint64> = bzero(size_of(arc4.static_array<arc4.uint64>))
+    assert(z5.length == 4)
+    z6: arc4.static_array<arc4.tuple<uint64,bool>> = bzero(size_of(arc4.static_array<arc4.tuple<uint64,bool>>))
+    assert(z6.length == 4)
   }
   
   arc4Interop(): void
   {
     da1: arc4.dynamic_array<arc4.uint32> = new arc4.dynamic_array<arc4.uint32>(123, 123)
     sa1: arc4.static_array<arc4.uint32> = new arc4.static_array<arc4.uint32>(123, 123)
-    a1: arc4.dynamic_array<arc4.uint32> = new arc4.dynamic_array<arc4.uint32>(($1 = #[123, 123]).0, $1.1)
+    a1: arc4.dynamic_array<arc4.uint32> = new arc4.dynamic_array<arc4.uint32>(($5 = #[123, 123]).0, $5.1)
     a1: arc4.dynamic_array<arc4.uint32> = copy(a1).concat(copy(da1)).concat(copy(sa1))
     assert(a1.length == 6 and reinterpret_cast<bytes>(a1[0]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[1]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[2]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[3]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[4]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[5]) == reinterpret_cast<bytes>(123), comment=assert target is match for conditions)
   }
@@ -74,7 +89,7 @@ contract NativeArraysAlgo
   {
     #[x, y]: readonly [uint64, uint64] = #[p.x, p.y]
     myVectors: arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>()
-    myVectors: arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>(new tests/approvals/native-arrays.algo.ts::Vector(x=($2 = ($3 = #[#{ x: x, y: y }]).0).x, y=$2.y))
+    myVectors: arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>(new tests/approvals/native-arrays.algo.ts::Vector(x=($6 = ($7 = #[#{ x: x, y: y }]).0).x, y=$6.y))
     assert(myVectors.length == 1 and myVectors[0].x == x and myVectors[0].y == y, comment=assert target is match for conditions)
     return myVectors
   }

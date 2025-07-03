@@ -47,12 +47,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%27#0: uint64 = (txn ApplicationID)
         (assert tmp%27#0) // can only call when not creating
         let y#1: Encoded(uint64[50]) = (txna ApplicationArgs 1)
-        let values%5#0: uint64 = (extract_uint64 y#1 0u)
-        let tmp%7#1: bool = (! values%5#0)
-        (assert tmp%7#1)
+        let values%1#1: uint64 = (extract_uint64 y#1 0u)
+        let tmp%0#7: bool = (! values%1#1)
+        (assert tmp%0#7)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#4: bool = 1u
         goto block@24
-    block@8: // arc4Interop_route_L71
+    block@8: // arc4Interop_route_L96
         let tmp%29#0: uint64 = (txn OnCompletion)
         let tmp%30#0: bool = (! tmp%29#0)
         (assert tmp%30#0) // OnCompletion is not NoOp
@@ -60,7 +60,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%31#0) // can only call when not creating
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#5: bool = 1u
         goto block@24
-    block@9: // structs_route_L84
+    block@9: // structs_route_L109
         let tmp%33#0: uint64 = (txn OnCompletion)
         let tmp%34#0: bool = (! tmp%33#0)
         (assert tmp%34#0) // OnCompletion is not NoOp
@@ -69,36 +69,36 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let p#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
         let x#0: uint64 = (extract_uint64 p#0 0u)
         let y#0: uint64 = (extract_uint64 p#0 8u)
-        let aggregate%val_as_bytes%32#1: bytes[8] = (itob x#0)
-        let aggregate%val_as_bytes%33#1: bytes[8] = (itob y#0)
-        let aggregate%head%30#1: bytes = (concat aggregate%val_as_bytes%32#1 aggregate%val_as_bytes%33#1)
-        let myVectors#1: Encoded(len+(uint64,uint64)[]) = (concat 0x0001 aggregate%head%30#1)
+        let aggregate%val_as_bytes%38#1: bytes[8] = (itob x#0)
+        let aggregate%val_as_bytes%39#1: bytes[8] = (itob y#0)
+        let aggregate%head%40#1: bytes = (concat aggregate%val_as_bytes%38#1 aggregate%val_as_bytes%39#1)
+        let myVectors#1: Encoded(len+(uint64,uint64)[]) = (concat 0x0001 aggregate%head%40#1)
         let array_length%0#0: uint64 = (extract_uint16 myVectors#1 0u)
         let tmp%1#4: bool = (== array_length%0#0 1u)
         goto tmp%1#4 ? block@40 : block@43
-    block@40: // and_contd_L89
-        let aggregate%encoded_element%57#1: bytes = ((extract 2 16) myVectors#1)
-        let values%2#0: uint64 = (extract_uint64 aggregate%encoded_element%57#1 0u)
+    block@40: // and_contd_L114
+        let aggregate%encoded_element%67#1: bytes = ((extract 2 16) myVectors#1)
+        let values%2#0: uint64 = (extract_uint64 aggregate%encoded_element%67#1 0u)
         let tmp%2#1: bool = (== values%2#0 x#0)
         goto tmp%2#1 ? block@41 : block@43
-    block@41: // and_contd_L89
-        let values%3#0: uint64 = (extract_uint64 aggregate%encoded_element%57#1 8u)
+    block@41: // and_contd_L114
+        let values%3#0: uint64 = (extract_uint64 aggregate%encoded_element%67#1 8u)
         let tmp%3#1: bool = (== values%3#0 y#0)
         goto tmp%3#1 ? block@42 : block@43
-    block@42: // bool_true_L89
+    block@42: // bool_true_L114
         let and_result%0#0: bool = 1u
         goto block@44
-    block@43: // bool_false_L89
+    block@43: // bool_false_L114
         let and_result%0#1: bool = 0u
         goto block@44
-    block@44: // bool_merge_L89
+    block@44: // bool_merge_L114
         let and_result%0#2: bool = φ(and_result%0#0 <- block@42, and_result%0#1 <- block@43)
         (assert and_result%0#2) // assert target is match for conditions
         let tmp%38#0: bytes = (concat 0x151f7c75 myVectors#1)
         (log tmp%38#0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#6: bool = 1u
         goto block@24
-    block@10: // booleans_route_L93
+    block@10: // booleans_route_L118
         let tmp%39#0: uint64 = (txn OnCompletion)
         let tmp%40#0: bool = (! tmp%39#0)
         (assert tmp%40#0) // OnCompletion is not NoOp
@@ -107,7 +107,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log 0x151f7c750003a0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#7: bool = 1u
         goto block@24
-    block@11: // booleansStatic_route_L97
+    block@11: // booleansStatic_route_L122
         let tmp%45#0: uint64 = (txn OnCompletion)
         let tmp%46#0: bool = (! tmp%45#0)
         (assert tmp%46#0) // OnCompletion is not NoOp
@@ -116,7 +116,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log 0x151f7c75a0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#8: bool = 1u
         goto block@24
-    block@12: // arc4Booleans_route_L101
+    block@12: // arc4Booleans_route_L126
         let tmp%54#0: uint64 = (txn OnCompletion)
         let tmp%55#0: bool = (! tmp%54#0)
         (assert tmp%55#0) // OnCompletion is not NoOp
@@ -125,7 +125,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log 0x151f7c750003a0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#9: bool = 1u
         goto block@24
-    block@13: // arc4BooleansStatic_route_L105
+    block@13: // arc4BooleansStatic_route_L130
         let tmp%60#0: uint64 = (txn OnCompletion)
         let tmp%61#0: bool = (! tmp%60#0)
         (assert tmp%61#0) // OnCompletion is not NoOp
@@ -134,7 +134,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log 0x151f7c75a0)
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#10: bool = 1u
         goto block@24
-    block@14: // aliasing_route_L109
+    block@14: // aliasing_route_L134
         let tmp%69#0: uint64 = (txn OnCompletion)
         let tmp%70#0: bool = (! tmp%69#0)
         (assert tmp%70#0) // OnCompletion is not NoOp
@@ -143,14 +143,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let mutable#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
         let values%0#0: uint64 = (extract_uint64 mutable#0 10u)
         let tmp%0#2: uint64 = (+ values%0#0 2u)
-        let aggregate%val_as_bytes%35#1: bytes[8] = (itob tmp%0#2)
-        let mutable#1: Encoded(len+uint64[]) = ((replace2 10) mutable#0 aggregate%val_as_bytes%35#1)
+        let aggregate%val_as_bytes%41#1: bytes[8] = (itob tmp%0#2)
+        let mutable#1: Encoded(len+uint64[]) = ((replace2 10) mutable#0 aggregate%val_as_bytes%41#1)
         let values%1#0: uint64 = (extract_uint64 mutable#1 10u)
         let tmp%1#1: bool = (!= values%1#0 values%0#0)
         (assert tmp%1#1) // These should not match
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#11: bool = 1u
         goto block@24
-    block@15: // receiveMutable_route_L135
+    block@15: // receiveMutable_route_L160
         let tmp%73#0: uint64 = (txn OnCompletion)
         let tmp%74#0: bool = (! tmp%73#0)
         (assert tmp%74#0) // OnCompletion is not NoOp
@@ -158,7 +158,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%75#0) // can only call when not creating
         let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#12: bool = 1u
         goto block@24
-    block@16: // receiveReadonly_route_L139
+    block@16: // receiveReadonly_route_L164
         let tmp%77#0: uint64 = (txn OnCompletion)
         let tmp%78#0: bool = (! tmp%77#0)
         (assert tmp%78#0) // OnCompletion is not NoOp

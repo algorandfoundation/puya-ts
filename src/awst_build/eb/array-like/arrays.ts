@@ -325,6 +325,7 @@ export class FixedArrayClassBuilder extends ClassBuilder {
     })
 
     if (initialItems.length === 0) {
+      codeInvariant(ptype.fixedByteSize !== null, 'Zero arg constructor can only be used for fixed arrays with a fixed size encoding.')
       return new FixedArrayExpressionBuilder(
         intrinsicFactory.bzero({
           size: nodeFactory.sizeOf({ sizeWtype: ptype.wtype, sourceLocation, wtype: wtypes.uint64WType }),

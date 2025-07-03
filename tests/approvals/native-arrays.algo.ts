@@ -1,4 +1,4 @@
-import type { uint64 } from '@algorandfoundation/algorand-typescript'
+import type { arc4, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, assertMatch, clone, Contract, FixedArray, Uint64 } from '@algorandfoundation/algorand-typescript'
 import { Bool, DynamicArray, StaticArray, UintN32 } from '@algorandfoundation/algorand-typescript/arc4'
 
@@ -55,17 +55,42 @@ export class NativeArraysAlgo extends Contract {
     const x = new FixedArray<uint64, 4>(1, 2, 3, 4)
     x[0] = 0
 
-    const z = new FixedArray<uint64, 4>()
-    assert(z.length === 4)
-    z[0] = 1
-    z[1] = 2
-    z[2] = 3
-    z[3] = 4
-    assertMatch(z, [{ lessThanEq: 1 }, 2, 3, 4])
-
     assert(x[0] === y[0])
     assertMatch(x, [{ lessThan: 1 }, 2, 3, 4])
     assertMatch(y, { 49: { greaterThanEq: 0 } })
+
+    const myVectors: FixedArray<Vector, 2> = new FixedArray<Vector, 2>({ x: 1, y: 2 }, { x: 3, y: 4 })
+    assertMatch(myVectors, [
+      { x: 1, y: 2 },
+      { x: 3, y: 4 },
+    ])
+
+    const myObject: { a: FixedArray<Vector, 1> } = { a: new FixedArray<Vector, 1>({ x: 5, y: 6 }) }
+    assertMatch(myObject.a, [{ x: 5, y: 6 }])
+
+    const z1 = new FixedArray<uint64, 4>()
+    assert(z1.length === 4)
+    assertMatch(z1, [0, 0, 0, 0])
+    z1[0] = 1
+    z1[1] = 2
+    z1[2] = 3
+    z1[3] = 4
+    assertMatch(z1, [{ lessThanEq: 1 }, 2, 3, 4])
+
+    const z2 = new FixedArray<boolean, 3>()
+    assert(z2[0] === false)
+
+    const z3 = new FixedArray<FixedArray<uint64, 2>, 4>()
+    assert(z3.length === 4)
+
+    const z4 = new FixedArray<Vector, 4>()
+    assert(z4.length === 4)
+
+    const z5 = new FixedArray<arc4.UintN<64>, 4>()
+    assert(z5.length === 4)
+
+    const z6 = new FixedArray<[uint64, boolean], 4>()
+    assert(z6.length === 4)
   }
 
   arc4Interop() {
