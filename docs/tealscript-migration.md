@@ -36,7 +36,44 @@ TODO: describe different types of arrays and when you need to use them over nati
 
 ### Emitting Events
 
-TODO
+##### TEALScript
+
+```ts
+class Swapper
+  swap = new EventLogger<{
+    assetA: AssetID;
+    assetB: AssetID;
+  }>();
+
+  doSwap(a: AssetID, b: AssetID) {
+    this.swap.log({assetA: a, assetB: b})
+  }
+}
+```
+
+##### Algorand TypeScript
+
+```ts
+type Swap = {assetA: uint64, assetB: uint64}
+
+class Swapper
+  doSwap(a: uint64, b: uint64) {
+    emit('swap', {assetA: a, assetB: b} as Swap)
+  }
+}
+```
+
+The event name can also be inferred from the name of a defined type
+
+```ts
+type swap = {assetA: uint64, assetB: uint64}
+
+class Swapper
+  doSwap(a: uint64, b: uint64) {
+    emit<swap>({assetA: a, assetB: b})
+  }
+}
+```
 
 ### Box Creation
 
