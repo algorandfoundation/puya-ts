@@ -48,7 +48,162 @@ TODO: is this supported?
 
 ### Inner Transactions
 
-TODO
+The interfaces for forming, sending, and inspecting inner transactions have significantly improved with Algorand TypeScript, but the
+interfaces are quite different. They all revolve around the `itxn` namespace.
+
+#### Sending a transaction
+
+##### TEALScript
+
+```ts
+sendAssetConfig({
+  total: 1000,
+  assetName: 'AST1',
+  unitName: 'unit'
+  decimals: 3,
+  manager: this.app.address,
+  reserve: this.app.address
+})
+```
+
+##### Algorand TypeScript
+
+```ts
+import { itxn, Global, log } from '@algorandfoundation/algorand-typescript'
+
+const assetParams = itxn.assetConfig({
+  total: 1000,
+  assetName: 'AST1',
+  unitName: 'unit',
+  decimals: 3,
+  manager: Global.currentApplicationAddress,
+  reserve: Global.currentApplicationAddress,
+})
+
+const asset1_txn = assetParams.submit()
+log(asset1_txn.createdAsset.id)
+```
+
+#### Sending a Transaction Group
+
+##### TEALScript
+
+```ts
+    this.pendingGroup.addAssetCreation({
+      configAssetTotal: 1000,
+      configAssetName: this.name.value,
+      configAssetUnitName: 'unit',
+      configAssetDecimals: 3,
+      configAssetManager: this.app.address,
+      configAssetReserve: this.app.address,
+    });
+
+    this.pendingGroup.addAppCall({
+      approvalProgram: APPROVE,
+      clearStateProgram: APPROVE,
+      fee: 0,
+    });
+
+    const appCreateTxn = this.lastInnerGroup[0];
+    const asset3_txn = this.lastInnerGroup[1];
+
+    assert(appCreateTxn.createdApplicationID, 'app is created');
+    assert(asset3_txn.createdAssetID === 'AST3', 'asset3_txn is correct');
+```
+
+##### Algorand TypeScript
+
+```ts
+    const assetParams = itxn.assetConfig({
+      total: 1000,
+      assetName: this.name.value,
+      unitName: 'unit',
+      decimals: 3,
+      manager: Global.currentApplicationAddress,
+      reserve: Global.currentApplicationAddress,
+    })
+
+    const appCreateParams = itxn.applicationCall({
+      approvalProgram: APPROVE,
+      clearStateProgram: APPROVE,
+      fee: 0,
+    })
+
+    const [appCreateTxn, asset3_txn] = itxn.submitGroup(appCreateParams, assetParams)
+
+    assert(appCreateTxn.createdApp, 'app is created')
+    assert(asset3_txn.assetName === Bytes('AST3'), 'asset3_txn is correct')
+```
+
+#### Typed Method Calls
+
+In Algorand TypeScript, there is a specific `abiCall` method for typed contract-to-contract calls instead of a generic like in TEALScript.
+
+These examples are for calling a contract method with the signature `greet(name: string): string` in a contract `Hello` that returns `"hello " + name`
+
+##### TEALScript
+
+```ts
+const result = sendMethodCall<typeof Hello.prototype.greet>({
+  applicationID: app,
+  methodArgs: ['algo dev'],
+});
+
+assert(result === 'hello algo dev')
+```
+
+##### Algorand TypeScript
+
+```ts
+const result = abiCall(Hello.prototype.greet, {
+  appId: app,
+  args: ['algo dev'],
+}).returnValue
+assert(result === 'hello algo dev')
+```
+
+#### App Creation
+
+In Algorand TypeScript, you must first explicitly compile a contract before creating it or access the programs/schema
+
+##### TEALScript
+
+```ts
+sendMethodCall<typeof Greeter.prototype.createApplication>({
+  clearStateProgram: Greeter.clearProgram(),
+  approvalProgram: Greeter.approvalProgram(),
+  globalNumUint: Greeter.schema.global.numUint,
+  methodArgs: ['hello'],
+});
+
+const app = this.itxn.createdApplicationId;
+
+const result = sendMethodCall<typeof Greeter.prototype.greet>({
+  applicationID: app,
+  methodArgs: ['world'],
+});
+
+assert(result == 'hello world')
+```
+
+##### Algorand TypeScript
+
+```ts
+// First explicitly compile the app
+const compiled = compileArc4(Greeter)
+
+const app = compiled.call.createApplication({
+  args: ['hello'],
+  globalNumUint: compiled.globalUints
+}).itxn.createdApp
+
+const result = compiled.call.greet({
+  args: ['world'],
+  appId: app,
+}).returnValue
+
+assert(result === 'hello world')
+```
 
 ### Reference Types
 
