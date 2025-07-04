@@ -6,7 +6,7 @@ import { uint64, Uint64Compat } from './primitives'
  */
 export class ReferenceArray<TItem> {
   /**
-   * Create a new MutableArray with the specified items
+   * Create a new ReferenceArray with the specified items
    * @param items The initial items for the array
    */
   constructor(...items: TItem[]) {}
@@ -28,17 +28,20 @@ export class ReferenceArray<TItem> {
   }
 
   /**
-   * Create a new Dynamic array with all items from this array
+   * @deprecated Array slicing is not yet supported in Algorand TypeScript
+   * Create a new ReferenceArray with all items from this array
    */
   slice(): ReferenceArray<TItem>
   /**
-   * Create a new MutableArray with all items up till `end`.
+   * @deprecated Array slicing is not yet supported in Algorand TypeScript
+   * Create a new ReferenceArray with all items up till `end`.
    * Negative indexes are taken from the end.
    * @param end An index in which to stop copying items.
    */
   slice(end: Uint64Compat): ReferenceArray<TItem>
   /**
-   * Create a new MutableArray with items from `start`, up until `end`
+   * @deprecated Array slicing is not yet supported in Algorand TypeScript
+   * Create a new ReferenceArray with items from `start`, up until `end`
    * Negative indexes are taken from the end.
    * @param start An index in which to start copying items.
    * @param end An index in which to stop copying items
