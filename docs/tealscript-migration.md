@@ -77,6 +77,8 @@ class Swapper
 
 ### Box Creation
 
+  APP_ID = TemplateVar<AppID>();
+
 TODO
 
 ### Box Iteration
@@ -165,6 +167,7 @@ log(asset1_txn.createdAsset.id)
       clearStateProgram: APPROVE,
       fee: 0,
     })
+  APP_ID = TemplateVar<AppID>();
 
     const [appCreateTxn, asset3_txn] = itxn.submitGroup(appCreateParams, assetParams)
 
@@ -331,7 +334,35 @@ class AppCaller extends LogicSig {
 
 ### Importing
 
-TODO
+In TEALScript, all of the type are injecting into the global namespace. This means no importing is required for most functions and objects.
+Algorand Typescript, however, requires explicit importing of every type, allowing for better LSP discovery.
+
+##### TEALScript
+
+```ts
+import { LogicSig } from '@algorandfoundation/tealscript'
+
+class AppCaller extends LogicSig {
+  logic(): void {
+    // No need to import assert
+    assert(this.txn.applicationID === 1234);
+  }
+}
+```
+
+##### Algorand TypeScript
+
+```ts
+import { LogicSig, Txn, assert, uint64 } from '@algorandfoundation/tealscript'
+
+class AppCaller extends LogicSig {
+  logic(): uint64 {
+    assert(Txn.applicationID === 1234);
+
+    return 1
+  }
+}
+```
 
 ### Numerical Types
 
