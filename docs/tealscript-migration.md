@@ -278,7 +278,30 @@ const app = compiled.call.createApplication({
 
 ### Logic Sigs
 
-TODO
+In TEALScript, logic sigs must implement the `logic` method which may take one or more arguments which map to the lsig arguments when
+forming the transaction. All lsigs are approved unless an error occurs. Algorand TypeScript also requires implementation of the `program` method but it may not take an arguments and must return a `boolean` or `uint64` indicating whether the transaction is approved or not.
+
+##### TEALScript
+
+```ts
+class DangerousPaymentLsig extends LogicSig {
+  logic(amt: uint64) {
+    assert(this.txn.amount === amt)
+  }
+}
+```
+
+##### Algorand TypeScript
+
+TODO: How do you get args?
+
+```ts
+class DangerousPaymentLsig extends LogicSig {
+  program() {
+    return this.txn.amount === amt
+  }
+}
+```
 
 ### Template Variables
 
