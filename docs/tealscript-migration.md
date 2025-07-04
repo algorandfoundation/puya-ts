@@ -246,9 +246,35 @@ assert(result === 'hello world')
 
 TODO
 
-### Static Contract Methods
+### Compiled Contract Information
 
-TODO
+TEALScript contracts have static methods for getting the contract programs and schema. In Algorand TypeScript, you must first explicitly
+compile the contract and then use the resulting object to access program information.
+
+##### TEALScript
+
+```ts
+// Access program information directly via static methods
+sendMethodCall<typeof Greeter.prototype.createApplication>({
+  clearStateProgram: Greeter.clearProgram(),
+  approvalProgram: Greeter.approvalProgram(),
+  globalNumUint: Greeter.schema.global.numUint,
+  methodArgs: ['hello'],
+});
+```
+
+##### Algorand TypeScript
+
+```ts
+// First explicitly compile the app
+const compiled = compileArc4(Greeter)
+
+// Then access program information on the compiled object
+const app = compiled.call.createApplication({
+  args: ['hello'],
+  globalNumUint: compiled.globalUints
+}).itxn.createdApp
+```
 
 ### Logic Sigs
 
