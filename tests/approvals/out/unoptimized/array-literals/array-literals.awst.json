@@ -52,7 +52,7 @@
       "source_location": {
         "file": "tests/approvals/array-literals.algo.ts",
         "line": 3,
-        "end_line": 14,
+        "end_line": 13,
         "column": 36,
         "end_column": 1
       },
@@ -175,9 +175,10 @@
               "end_column": 21
             },
             "wtype": {
-              "_type": "WTuple",
-              "name": "tuple",
-              "immutable": true,
+              "_type": "ARC4Tuple",
+              "name": "arc4.tuple<uint64,uint64>",
+              "immutable": false,
+              "arc4_alias": null,
               "types": [
                 {
                   "_type": "WType",
@@ -189,12 +190,13 @@
                   "name": "uint64",
                   "immutable": true
                 }
-              ]
+              ],
+              "source_location": null
             },
             "name": "explicitTuple"
           },
           "value": {
-            "_type": "TupleExpression",
+            "_type": "ARC4Encode",
             "source_location": {
               "file": "tests/approvals/array-literals.algo.ts",
               "line": 5,
@@ -203,9 +205,10 @@
               "end_column": 48
             },
             "wtype": {
-              "_type": "WTuple",
-              "name": "tuple",
-              "immutable": true,
+              "_type": "ARC4Tuple",
+              "name": "arc4.tuple<uint64,uint64>",
+              "immutable": false,
+              "arc4_alias": null,
               "types": [
                 {
                   "_type": "WType",
@@ -217,42 +220,248 @@
                   "name": "uint64",
                   "immutable": true
                 }
-              ]
+              ],
+              "source_location": null
             },
-            "items": [
-              {
-                "_type": "VarExpression",
-                "source_location": {
-                  "file": "tests/approvals/array-literals.algo.ts",
-                  "line": 5,
-                  "end_line": 5,
-                  "column": 43,
-                  "end_column": 44
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true
-                },
-                "name": "a"
+            "value": {
+              "_type": "TupleExpression",
+              "source_location": {
+                "file": "tests/approvals/array-literals.algo.ts",
+                "line": 5,
+                "end_line": 5,
+                "column": 42,
+                "end_column": 48
               },
-              {
-                "_type": "VarExpression",
-                "source_location": {
-                  "file": "tests/approvals/array-literals.algo.ts",
-                  "line": 5,
-                  "end_line": 5,
-                  "column": 46,
-                  "end_column": 47
+              "wtype": {
+                "_type": "WTuple",
+                "name": "tuple",
+                "immutable": true,
+                "types": [
+                  {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true
+                  },
+                  {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true
+                  }
+                ]
+              },
+              "items": [
+                {
+                  "_type": "TupleItemExpression",
+                  "source_location": {
+                    "file": "tests/approvals/array-literals.algo.ts",
+                    "line": 5,
+                    "end_line": 5,
+                    "column": 42,
+                    "end_column": 48
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true
+                  },
+                  "base": {
+                    "_type": "SingleEvaluation",
+                    "source_location": {
+                      "file": "tests/approvals/array-literals.algo.ts",
+                      "line": 5,
+                      "end_line": 5,
+                      "column": 42,
+                      "end_column": 48
+                    },
+                    "wtype": {
+                      "_type": "WTuple",
+                      "name": "tuple",
+                      "immutable": true,
+                      "types": [
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        }
+                      ]
+                    },
+                    "source": {
+                      "_type": "TupleExpression",
+                      "source_location": {
+                        "file": "tests/approvals/array-literals.algo.ts",
+                        "line": 5,
+                        "end_line": 5,
+                        "column": 42,
+                        "end_column": 48
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          }
+                        ]
+                      },
+                      "items": [
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/array-literals.algo.ts",
+                            "line": 5,
+                            "end_line": 5,
+                            "column": 43,
+                            "end_column": 44
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "a"
+                        },
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/array-literals.algo.ts",
+                            "line": 5,
+                            "end_line": 5,
+                            "column": 46,
+                            "end_column": 47
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "b"
+                        }
+                      ]
+                    },
+                    "_id": "0"
+                  },
+                  "index": 0
                 },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true
-                },
-                "name": "b"
-              }
-            ]
+                {
+                  "_type": "TupleItemExpression",
+                  "source_location": {
+                    "file": "tests/approvals/array-literals.algo.ts",
+                    "line": 5,
+                    "end_line": 5,
+                    "column": 42,
+                    "end_column": 48
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true
+                  },
+                  "base": {
+                    "_type": "SingleEvaluation",
+                    "source_location": {
+                      "file": "tests/approvals/array-literals.algo.ts",
+                      "line": 5,
+                      "end_line": 5,
+                      "column": 42,
+                      "end_column": 48
+                    },
+                    "wtype": {
+                      "_type": "WTuple",
+                      "name": "tuple",
+                      "immutable": true,
+                      "types": [
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        }
+                      ]
+                    },
+                    "source": {
+                      "_type": "TupleExpression",
+                      "source_location": {
+                        "file": "tests/approvals/array-literals.algo.ts",
+                        "line": 5,
+                        "end_line": 5,
+                        "column": 42,
+                        "end_column": 48
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          }
+                        ]
+                      },
+                      "items": [
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/array-literals.algo.ts",
+                            "line": 5,
+                            "end_line": 5,
+                            "column": 43,
+                            "end_column": 44
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "a"
+                        },
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/array-literals.algo.ts",
+                            "line": 5,
+                            "end_line": 5,
+                            "column": 46,
+                            "end_column": 47
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "b"
+                        }
+                      ]
+                    },
+                    "_id": "0"
+                  },
+                  "index": 1
+                }
+              ]
+            }
           }
         },
         {
@@ -274,9 +483,10 @@
               "end_column": 32
             },
             "wtype": {
-              "_type": "WTuple",
-              "name": "tuple",
-              "immutable": true,
+              "_type": "ARC4Tuple",
+              "name": "arc4.tuple<uint64,uint64>",
+              "immutable": false,
+              "arc4_alias": null,
               "types": [
                 {
                   "_type": "WType",
@@ -288,7 +498,8 @@
                   "name": "uint64",
                   "immutable": true
                 }
-              ]
+              ],
+              "source_location": null
             },
             "name": "conditionalExplicitTuple"
           },
@@ -302,9 +513,10 @@
               "end_column": 76
             },
             "wtype": {
-              "_type": "WTuple",
-              "name": "tuple",
-              "immutable": true,
+              "_type": "ARC4Tuple",
+              "name": "arc4.tuple<uint64,uint64>",
+              "immutable": false,
+              "arc4_alias": null,
               "types": [
                 {
                   "_type": "WType",
@@ -316,7 +528,8 @@
                   "name": "uint64",
                   "immutable": true
                 }
-              ]
+              ],
+              "source_location": null
             },
             "condition": {
               "_type": "NumericComparisonExpression",
@@ -367,7 +580,7 @@
               }
             },
             "true_expr": {
-              "_type": "TupleExpression",
+              "_type": "ARC4Encode",
               "source_location": {
                 "file": "tests/approvals/array-literals.algo.ts",
                 "line": 7,
@@ -376,9 +589,10 @@
                 "end_column": 67
               },
               "wtype": {
-                "_type": "WTuple",
-                "name": "tuple",
-                "immutable": true,
+                "_type": "ARC4Tuple",
+                "name": "arc4.tuple<uint64,uint64>",
+                "immutable": false,
+                "arc4_alias": null,
                 "types": [
                   {
                     "_type": "WType",
@@ -390,45 +604,73 @@
                     "name": "uint64",
                     "immutable": true
                   }
-                ]
+                ],
+                "source_location": null
               },
-              "items": [
-                {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/array-literals.algo.ts",
-                    "line": 7,
-                    "end_line": 7,
-                    "column": 62,
-                    "end_column": 63
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "name": "a"
+              "value": {
+                "_type": "TupleExpression",
+                "source_location": {
+                  "file": "tests/approvals/array-literals.algo.ts",
+                  "line": 7,
+                  "end_line": 7,
+                  "column": 61,
+                  "end_column": 67
                 },
-                {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/array-literals.algo.ts",
-                    "line": 7,
-                    "end_line": 7,
-                    "column": 65,
-                    "end_column": 66
+                "wtype": {
+                  "_type": "WTuple",
+                  "name": "tuple",
+                  "immutable": true,
+                  "types": [
+                    {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    }
+                  ]
+                },
+                "items": [
+                  {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/array-literals.algo.ts",
+                      "line": 7,
+                      "end_line": 7,
+                      "column": 62,
+                      "end_column": 63
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "name": "a"
                   },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "name": "b"
-                }
-              ]
+                  {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/array-literals.algo.ts",
+                      "line": 7,
+                      "end_line": 7,
+                      "column": 65,
+                      "end_column": 66
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "name": "b"
+                  }
+                ]
+              }
             },
             "false_expr": {
-              "_type": "TupleExpression",
+              "_type": "ARC4Encode",
               "source_location": {
                 "file": "tests/approvals/array-literals.algo.ts",
                 "line": 7,
@@ -437,9 +679,10 @@
                 "end_column": 76
               },
               "wtype": {
-                "_type": "WTuple",
-                "name": "tuple",
-                "immutable": true,
+                "_type": "ARC4Tuple",
+                "name": "arc4.tuple<uint64,uint64>",
+                "immutable": false,
+                "arc4_alias": null,
                 "types": [
                   {
                     "_type": "WType",
@@ -451,42 +694,70 @@
                     "name": "uint64",
                     "immutable": true
                   }
-                ]
+                ],
+                "source_location": null
               },
-              "items": [
-                {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/array-literals.algo.ts",
-                    "line": 7,
-                    "end_line": 7,
-                    "column": 71,
-                    "end_column": 72
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "name": "b"
+              "value": {
+                "_type": "TupleExpression",
+                "source_location": {
+                  "file": "tests/approvals/array-literals.algo.ts",
+                  "line": 7,
+                  "end_line": 7,
+                  "column": 70,
+                  "end_column": 76
                 },
-                {
-                  "_type": "VarExpression",
-                  "source_location": {
-                    "file": "tests/approvals/array-literals.algo.ts",
-                    "line": 7,
-                    "end_line": 7,
-                    "column": 74,
-                    "end_column": 75
+                "wtype": {
+                  "_type": "WTuple",
+                  "name": "tuple",
+                  "immutable": true,
+                  "types": [
+                    {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    }
+                  ]
+                },
+                "items": [
+                  {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/array-literals.algo.ts",
+                      "line": 7,
+                      "end_line": 7,
+                      "column": 71,
+                      "end_column": 72
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "name": "b"
                   },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "name": "a"
-                }
-              ]
+                  {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/array-literals.algo.ts",
+                      "line": 7,
+                      "end_line": 7,
+                      "column": 74,
+                      "end_column": 75
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "name": "a"
+                  }
+                ]
+              }
             }
           }
         },
@@ -588,36 +859,214 @@
             },
             "items": [
               {
-                "_type": "VarExpression",
+                "_type": "TupleItemExpression",
                 "source_location": {
                   "file": "tests/approvals/array-literals.algo.ts",
                   "line": 9,
                   "end_line": 9,
-                  "column": 18,
-                  "end_column": 19
+                  "column": 17,
+                  "end_column": 23
                 },
                 "wtype": {
                   "_type": "WType",
                   "name": "uint64",
                   "immutable": true
                 },
-                "name": "a"
+                "base": {
+                  "_type": "SingleEvaluation",
+                  "source_location": {
+                    "file": "tests/approvals/array-literals.algo.ts",
+                    "line": 9,
+                    "end_line": 9,
+                    "column": 17,
+                    "end_column": 23
+                  },
+                  "wtype": {
+                    "_type": "WTuple",
+                    "name": "tuple",
+                    "immutable": true,
+                    "types": [
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      }
+                    ]
+                  },
+                  "source": {
+                    "_type": "TupleExpression",
+                    "source_location": {
+                      "file": "tests/approvals/array-literals.algo.ts",
+                      "line": 9,
+                      "end_line": 9,
+                      "column": 17,
+                      "end_column": 23
+                    },
+                    "wtype": {
+                      "_type": "WTuple",
+                      "name": "tuple",
+                      "immutable": true,
+                      "types": [
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        }
+                      ]
+                    },
+                    "items": [
+                      {
+                        "_type": "VarExpression",
+                        "source_location": {
+                          "file": "tests/approvals/array-literals.algo.ts",
+                          "line": 9,
+                          "end_line": 9,
+                          "column": 18,
+                          "end_column": 19
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "name": "a"
+                      },
+                      {
+                        "_type": "VarExpression",
+                        "source_location": {
+                          "file": "tests/approvals/array-literals.algo.ts",
+                          "line": 9,
+                          "end_line": 9,
+                          "column": 21,
+                          "end_column": 22
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "name": "b"
+                      }
+                    ]
+                  },
+                  "_id": "1"
+                },
+                "index": 0
               },
               {
-                "_type": "VarExpression",
+                "_type": "TupleItemExpression",
                 "source_location": {
                   "file": "tests/approvals/array-literals.algo.ts",
                   "line": 9,
                   "end_line": 9,
-                  "column": 21,
-                  "end_column": 22
+                  "column": 17,
+                  "end_column": 23
                 },
                 "wtype": {
                   "_type": "WType",
                   "name": "uint64",
                   "immutable": true
                 },
-                "name": "b"
+                "base": {
+                  "_type": "SingleEvaluation",
+                  "source_location": {
+                    "file": "tests/approvals/array-literals.algo.ts",
+                    "line": 9,
+                    "end_line": 9,
+                    "column": 17,
+                    "end_column": 23
+                  },
+                  "wtype": {
+                    "_type": "WTuple",
+                    "name": "tuple",
+                    "immutable": true,
+                    "types": [
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      }
+                    ]
+                  },
+                  "source": {
+                    "_type": "TupleExpression",
+                    "source_location": {
+                      "file": "tests/approvals/array-literals.algo.ts",
+                      "line": 9,
+                      "end_line": 9,
+                      "column": 17,
+                      "end_column": 23
+                    },
+                    "wtype": {
+                      "_type": "WTuple",
+                      "name": "tuple",
+                      "immutable": true,
+                      "types": [
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        }
+                      ]
+                    },
+                    "items": [
+                      {
+                        "_type": "VarExpression",
+                        "source_location": {
+                          "file": "tests/approvals/array-literals.algo.ts",
+                          "line": 9,
+                          "end_line": 9,
+                          "column": 18,
+                          "end_column": 19
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "name": "a"
+                      },
+                      {
+                        "_type": "VarExpression",
+                        "source_location": {
+                          "file": "tests/approvals/array-literals.algo.ts",
+                          "line": 9,
+                          "end_line": 9,
+                          "column": 21,
+                          "end_column": 22
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "name": "b"
+                      }
+                    ]
+                  },
+                  "_id": "1"
+                },
+                "index": 1
               }
             ]
           }
@@ -626,8 +1075,8 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/array-literals.algo.ts",
-            "line": 12,
-            "end_line": 12,
+            "line": 11,
+            "end_line": 11,
             "column": 8,
             "end_column": 31
           },
@@ -635,8 +1084,8 @@
             "_type": "TupleExpression",
             "source_location": {
               "file": "tests/approvals/array-literals.algo.ts",
-              "line": 12,
-              "end_line": 12,
+              "line": 11,
+              "end_line": 11,
               "column": 8,
               "end_column": 31
             },
@@ -649,11 +1098,6 @@
                   "_type": "WType",
                   "name": "uint64",
                   "immutable": true
-                },
-                {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true
                 }
               ]
             },
@@ -662,24 +1106,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/array-literals.algo.ts",
-                  "line": 12,
-                  "end_line": 12,
-                  "column": 8,
-                  "end_column": 31
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true
-                },
-                "name": "_"
-              },
-              {
-                "_type": "VarExpression",
-                "source_location": {
-                  "file": "tests/approvals/array-literals.algo.ts",
-                  "line": 12,
-                  "end_line": 12,
+                  "line": 11,
+                  "end_line": 11,
                   "column": 11,
                   "end_column": 12
                 },
@@ -696,8 +1124,8 @@
             "_type": "TupleExpression",
             "source_location": {
               "file": "tests/approvals/array-literals.algo.ts",
-              "line": 12,
-              "end_line": 12,
+              "line": 11,
+              "end_line": 11,
               "column": 16,
               "end_column": 22
             },
@@ -710,46 +1138,145 @@
                   "_type": "WType",
                   "name": "uint64",
                   "immutable": true
-                },
-                {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true
                 }
               ]
             },
             "items": [
               {
-                "_type": "VarExpression",
+                "_type": "TupleItemExpression",
                 "source_location": {
                   "file": "tests/approvals/array-literals.algo.ts",
-                  "line": 12,
-                  "end_line": 12,
-                  "column": 17,
-                  "end_column": 18
+                  "line": 11,
+                  "end_line": 11,
+                  "column": 16,
+                  "end_column": 22
                 },
                 "wtype": {
                   "_type": "WType",
                   "name": "uint64",
                   "immutable": true
                 },
-                "name": "a"
-              },
-              {
-                "_type": "VarExpression",
-                "source_location": {
-                  "file": "tests/approvals/array-literals.algo.ts",
-                  "line": 12,
-                  "end_line": 12,
-                  "column": 20,
-                  "end_column": 21
+                "base": {
+                  "_type": "SingleEvaluation",
+                  "source_location": {
+                    "file": "tests/approvals/array-literals.algo.ts",
+                    "line": 11,
+                    "end_line": 11,
+                    "column": 16,
+                    "end_column": 22
+                  },
+                  "wtype": {
+                    "_type": "ARC4Tuple",
+                    "name": "arc4.tuple<uint64,uint64>",
+                    "immutable": false,
+                    "arc4_alias": null,
+                    "types": [
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      }
+                    ],
+                    "source_location": null
+                  },
+                  "source": {
+                    "_type": "ARC4Encode",
+                    "source_location": {
+                      "file": "tests/approvals/array-literals.algo.ts",
+                      "line": 11,
+                      "end_line": 11,
+                      "column": 16,
+                      "end_column": 22
+                    },
+                    "wtype": {
+                      "_type": "ARC4Tuple",
+                      "name": "arc4.tuple<uint64,uint64>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "types": [
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        }
+                      ],
+                      "source_location": null
+                    },
+                    "value": {
+                      "_type": "TupleExpression",
+                      "source_location": {
+                        "file": "tests/approvals/array-literals.algo.ts",
+                        "line": 11,
+                        "end_line": 11,
+                        "column": 16,
+                        "end_column": 22
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          }
+                        ]
+                      },
+                      "items": [
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/array-literals.algo.ts",
+                            "line": 11,
+                            "end_line": 11,
+                            "column": 17,
+                            "end_column": 18
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "a"
+                        },
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/array-literals.algo.ts",
+                            "line": 11,
+                            "end_line": 11,
+                            "column": 20,
+                            "end_column": 21
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "b"
+                        }
+                      ]
+                    }
+                  },
+                  "_id": "2"
                 },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true
-                },
-                "name": "b"
+                "index": 1
               }
             ]
           }
@@ -758,8 +1285,8 @@
           "_type": "AssignmentStatement",
           "source_location": {
             "file": "tests/approvals/array-literals.algo.ts",
-            "line": 13,
-            "end_line": 13,
+            "line": 12,
+            "end_line": 12,
             "column": 8,
             "end_column": 29
           },
@@ -767,8 +1294,8 @@
             "_type": "TupleExpression",
             "source_location": {
               "file": "tests/approvals/array-literals.algo.ts",
-              "line": 13,
-              "end_line": 13,
+              "line": 12,
+              "end_line": 12,
               "column": 8,
               "end_column": 29
             },
@@ -781,11 +1308,6 @@
                   "_type": "WType",
                   "name": "uint64",
                   "immutable": true
-                },
-                {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true
                 }
               ]
             },
@@ -794,8 +1316,8 @@
                 "_type": "VarExpression",
                 "source_location": {
                   "file": "tests/approvals/array-literals.algo.ts",
-                  "line": 13,
-                  "end_line": 13,
+                  "line": 12,
+                  "end_line": 12,
                   "column": 9,
                   "end_column": 10
                 },
@@ -805,22 +1327,6 @@
                   "immutable": true
                 },
                 "name": "h"
-              },
-              {
-                "_type": "VarExpression",
-                "source_location": {
-                  "file": "tests/approvals/array-literals.algo.ts",
-                  "line": 13,
-                  "end_line": 13,
-                  "column": 8,
-                  "end_column": 29
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true
-                },
-                "name": "_₁"
               }
             ]
           },
@@ -828,8 +1334,8 @@
             "_type": "TupleExpression",
             "source_location": {
               "file": "tests/approvals/array-literals.algo.ts",
-              "line": 13,
-              "end_line": 13,
+              "line": 12,
+              "end_line": 12,
               "column": 14,
               "end_column": 20
             },
@@ -842,46 +1348,145 @@
                   "_type": "WType",
                   "name": "uint64",
                   "immutable": true
-                },
-                {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true
                 }
               ]
             },
             "items": [
               {
-                "_type": "VarExpression",
+                "_type": "TupleItemExpression",
                 "source_location": {
                   "file": "tests/approvals/array-literals.algo.ts",
-                  "line": 13,
-                  "end_line": 13,
-                  "column": 15,
-                  "end_column": 16
+                  "line": 12,
+                  "end_line": 12,
+                  "column": 14,
+                  "end_column": 20
                 },
                 "wtype": {
                   "_type": "WType",
                   "name": "uint64",
                   "immutable": true
                 },
-                "name": "a"
-              },
-              {
-                "_type": "VarExpression",
-                "source_location": {
-                  "file": "tests/approvals/array-literals.algo.ts",
-                  "line": 13,
-                  "end_line": 13,
-                  "column": 18,
-                  "end_column": 19
+                "base": {
+                  "_type": "SingleEvaluation",
+                  "source_location": {
+                    "file": "tests/approvals/array-literals.algo.ts",
+                    "line": 12,
+                    "end_line": 12,
+                    "column": 14,
+                    "end_column": 20
+                  },
+                  "wtype": {
+                    "_type": "ARC4Tuple",
+                    "name": "arc4.tuple<uint64,uint64>",
+                    "immutable": false,
+                    "arc4_alias": null,
+                    "types": [
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      }
+                    ],
+                    "source_location": null
+                  },
+                  "source": {
+                    "_type": "ARC4Encode",
+                    "source_location": {
+                      "file": "tests/approvals/array-literals.algo.ts",
+                      "line": 12,
+                      "end_line": 12,
+                      "column": 14,
+                      "end_column": 20
+                    },
+                    "wtype": {
+                      "_type": "ARC4Tuple",
+                      "name": "arc4.tuple<uint64,uint64>",
+                      "immutable": false,
+                      "arc4_alias": null,
+                      "types": [
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        }
+                      ],
+                      "source_location": null
+                    },
+                    "value": {
+                      "_type": "TupleExpression",
+                      "source_location": {
+                        "file": "tests/approvals/array-literals.algo.ts",
+                        "line": 12,
+                        "end_line": 12,
+                        "column": 14,
+                        "end_column": 20
+                      },
+                      "wtype": {
+                        "_type": "WTuple",
+                        "name": "tuple",
+                        "immutable": true,
+                        "types": [
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          }
+                        ]
+                      },
+                      "items": [
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/array-literals.algo.ts",
+                            "line": 12,
+                            "end_line": 12,
+                            "column": 15,
+                            "end_column": 16
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "a"
+                        },
+                        {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/array-literals.algo.ts",
+                            "line": 12,
+                            "end_line": 12,
+                            "column": 18,
+                            "end_column": 19
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "b"
+                        }
+                      ]
+                    }
+                  },
+                  "_id": "3"
                 },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "uint64",
-                  "immutable": true
-                },
-                "name": "b"
+                "index": 0
               }
             ]
           }

@@ -6,7 +6,7 @@ import { wtypes } from '../../../../awst/wtypes'
 import { CodeError } from '../../../../errors'
 import { bigIntToUint8Array, codeInvariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { ArrayLiteralPType, ArrayPType, TuplePType } from '../../../ptypes'
+import { ArrayLiteralPType, ArrayPType, MutableTuplePType, ReadonlyTuplePType } from '../../../ptypes'
 import { ARC4ArrayType, DynamicArrayType, DynamicBytesType, StaticArrayType, StaticBytesType } from '../../../ptypes/arc4-types'
 import { instanceEb } from '../../../type-registry'
 import type { InstanceBuilder } from '../../index'
@@ -51,7 +51,7 @@ function getArrayConcatType(left: PType, right: PType, sourceLocation: SourceLoc
         elementType: left.elementType,
       })
     }
-    if (right instanceof TuplePType) {
+    if (right instanceof ReadonlyTuplePType || right instanceof MutableTuplePType) {
       right.items.forEach((i) => sameElementType(left.elementType, i, sourceLocation))
       return new ArrayPType({
         elementType: left.elementType,

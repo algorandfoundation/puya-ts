@@ -33,7 +33,7 @@ export abstract class ValueProxy<TPType extends PType> extends InstanceExpressio
   iterate(sourceLocation: SourceLocation): Expression {
     return this.proxied.iterate(sourceLocation)
   }
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
     return this.proxied.indexAccess(index, sourceLocation)
   }
   boolEval(sourceLocation: SourceLocation, negate: boolean = false): Expression {

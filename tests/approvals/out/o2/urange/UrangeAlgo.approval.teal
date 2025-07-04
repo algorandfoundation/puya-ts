@@ -47,25 +47,23 @@ main_for_header@17:
     bz main_after_for@19
     // tests/approvals/urange.algo.ts:22
     // results = [...results, i]
-    dig 1
-    extract 2 0
-    dig 1
-    dup
-    cover 2
+    dupn 2
     itob
     bytec_1 // 0x0001
     swap
     concat
     extract 2 0
-    concat
+    dig 3
+    swap
+    concat // on error: max array length exceeded
     dup
+    extract 2 0
     len
     intc_2 // 8
     /
     itob
     extract 6 2
-    swap
-    concat
+    replace2 0
     bury 3
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {
@@ -110,25 +108,23 @@ main_for_header@22:
     bz main_after_for@24
     // tests/approvals/urange.algo.ts:15
     // results = [...results, i]
-    dig 1
-    extract 2 0
-    dig 1
-    dup
-    cover 2
+    dupn 2
     itob
     bytec_1 // 0x0001
     swap
     concat
     extract 2 0
-    concat
+    dig 3
+    swap
+    concat // on error: max array length exceeded
     dup
+    extract 2 0
     len
     intc_2 // 8
     /
     itob
     extract 6 2
-    swap
-    concat
+    replace2 0
     bury 3
     // tests/approvals/urange.algo.ts:14
     // for (const i of urange(2, 5)) {
@@ -173,25 +169,23 @@ main_for_header@27:
     bz main_after_for@29
     // tests/approvals/urange.algo.ts:8
     // results = [...results, i]
-    dig 1
-    extract 2 0
-    dig 1
-    dup
-    cover 2
+    dupn 2
     itob
     bytec_1 // 0x0001
     swap
     concat
     extract 2 0
-    concat
+    dig 3
+    swap
+    concat // on error: max array length exceeded
     dup
+    extract 2 0
     len
     intc_2 // 8
     /
     itob
     extract 6 2
-    swap
-    concat
+    replace2 0
     bury 3
     // tests/approvals/urange.algo.ts:7
     // for (const i of urange(5)) {

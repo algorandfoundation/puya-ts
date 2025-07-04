@@ -47,7 +47,7 @@ export type TypedApplicationArg<TArg> = TArg extends gtxn.Transaction ? GtxnToIt
 export type TypedApplicationArgs<TArgs> = TArgs extends []
   ? []
   : TArgs extends [infer TArg, ...infer TRest]
-    ? [TypedApplicationArg<TArg>, ...TypedApplicationArgs<TRest>]
+    ? readonly [TypedApplicationArg<TArg>, ...TypedApplicationArgs<TRest>]
     : never
 
 /**
@@ -55,14 +55,14 @@ export type TypedApplicationArgs<TArgs> = TArgs extends []
  * given application call.
  */
 export type TypedApplicationCallFields<TArgs> = Omit<ApplicationCallFields, 'appArgs'> &
-  (TArgs extends [] ? { args?: TypedApplicationArgs<TArgs> } : { args: TypedApplicationArgs<TArgs> })
+  (TArgs extends [] ? { readonly args?: TypedApplicationArgs<TArgs> } : { readonly args: TypedApplicationArgs<TArgs> })
 
 /**
  * The response type of a typed application call. Includes the raw itxn result object and the parsed ABI return value if applicable.
  */
 export type TypedApplicationCallResponse<TReturn> = TReturn extends void
-  ? { itxn: ApplicationCallInnerTxn }
-  : { itxn: ApplicationCallInnerTxn; returnValue: TReturn }
+  ? { readonly itxn: ApplicationCallInnerTxn }
+  : { readonly itxn: ApplicationCallInnerTxn; readonly returnValue: TReturn }
 
 /**
  * Conditional type which maps an ABI method to a factory method for constructing an application call transaction to call that method.

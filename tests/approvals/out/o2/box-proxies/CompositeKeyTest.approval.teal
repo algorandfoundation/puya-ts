@@ -3,8 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1
-    // tests/approvals/box-proxies.algo.ts:238
+    // tests/approvals/box-proxies.algo.ts:240
     // class CompositeKeyTest extends Contract {
     txn NumAppArgs
     bz main_bare_routing@6
@@ -13,56 +12,42 @@ main:
     match main_test_route@3
 
 main_after_if_else@10:
-    // tests/approvals/box-proxies.algo.ts:238
+    // tests/approvals/box-proxies.algo.ts:240
     // class CompositeKeyTest extends Contract {
-    intc_0 // 0
+    pushint 0 // 0
     return
 
 main_test_route@3:
-    // tests/approvals/box-proxies.algo.ts:241
+    // tests/approvals/box-proxies.algo.ts:243
     // test(key: { a: uint64; b: uint64 }, val: string) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/box-proxies.algo.ts:238
+    // tests/approvals/box-proxies.algo.ts:240
     // class CompositeKeyTest extends Contract {
     txna ApplicationArgs 1
-    dup
-    intc_0 // 0
-    extract_uint64
-    swap
-    pushint 8 // 8
-    extract_uint64
     txna ApplicationArgs 2
     extract 2 0
-    // tests/approvals/box-proxies.algo.ts:241
-    // test(key: { a: uint64; b: uint64 }, val: string) {
-    uncover 2
-    itob
-    uncover 2
-    itob
-    // tests/approvals/box-proxies.algo.ts:242
+    // tests/approvals/box-proxies.algo.ts:244
     // this.boxMap(key).value = val
-    concat
-    dup
+    dig 1
     box_del
     pop
-    swap
     box_put
-    // tests/approvals/box-proxies.algo.ts:241
+    // tests/approvals/box-proxies.algo.ts:243
     // test(key: { a: uint64; b: uint64 }, val: string) {
-    intc_1 // 1
+    pushint 1 // 1
     return
 
 main_bare_routing@6:
-    // tests/approvals/box-proxies.algo.ts:238
+    // tests/approvals/box-proxies.algo.ts:240
     // class CompositeKeyTest extends Contract {
     txn OnCompletion
     bnz main_after_if_else@10
     txn ApplicationID
     !
     assert // can only call when creating
-    intc_1 // 1
+    pushint 1 // 1
     return

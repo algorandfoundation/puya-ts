@@ -6,11 +6,9 @@ import type { ContractMethod } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
+import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
-import type { ClassElements } from '../../visitor/syntax-names'
-import type { Visitor } from '../../visitor/visitor'
-import { accept } from '../../visitor/visitor'
 import { ContractSuperBuilder } from '../eb/contract-builder'
 import { BoxProxyExpressionBuilder } from '../eb/storage/box'
 import { GlobalStateFunctionResultBuilder } from '../eb/storage/global-state'
@@ -19,18 +17,23 @@ import { requireInstanceBuilder } from '../eb/util'
 import { ContractClassModel } from '../models/contract-class-model'
 import type { ContractOptionsDecoratorData } from '../models/decorator-data'
 import type { ContractClassPType } from '../ptypes'
-import { BaseVisitor } from './base-visitor'
+import { ClassDefinitionVisitor } from './class-definition-visitor'
 import { ConstructorVisitor } from './constructor-visitor'
 import { ContractMethodVisitor } from './contract-method-visitor'
 import { DecoratorVisitor } from './decorator-visitor'
 import { visitInChildContext } from './util'
 
-export class ContractVisitor extends BaseVisitor implements Visitor<ClassElements, void> {
+export class ContractVisitor extends ClassDefinitionVisitor {
   private _ctor?: () => ContractMethod
   private _methods: Array<() => ContractMethod> = []
   private readonly _contractPType: ContractClassPType
   private readonly _propertyInitialization: awst.Statement[] = []
-  public accept = <TNode extends ts.Node>(node: TNode) => accept<ContractVisitor, TNode>(this, node)
+
+  throwNotSupported(node: ts.Node, desc: string): never {
+    throw new CodeError(`${desc} are not supported in contract definitions`, {
+      sourceLocation: this.sourceLocation(node),
+    })
+  }
 
   private readonly metaData: {
     isAbstract: boolean
@@ -148,20 +151,11 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
     })
   }
 
-  visitClassStaticBlockDeclaration(node: ts.ClassStaticBlockDeclaration): void {
-    this.throwNotSupported(node, 'class static blocks')
-  }
   visitConstructor(node: ts.ConstructorDeclaration): void {
     this._ctor = ConstructorVisitor.buildConstructor(node, this._contractPType, {
       cref: ContractReference.fromPType(this._contractPType),
       propertyInitializerStatements: this._propertyInitialization,
     })
-  }
-  visitGetAccessor(node: ts.GetAccessorDeclaration): void {
-    this.throwNotSupported(node, 'get accessors')
-  }
-  visitIndexSignature(node: ts.IndexSignatureDeclaration): void {
-    this.throwNotSupported(node, 'index signatures')
   }
 
   visitMethodDeclaration(node: ts.MethodDeclaration): void {
@@ -217,12 +211,6 @@ export class ContractVisitor extends BaseVisitor implements Visitor<ClassElement
         `Unsupported property type ${initializer.typeDescription}. Only GlobalState, LocalState, and Box proxies can be stored on a contract.`,
       )
     }
-  }
-  visitSemicolonClassElement(node: ts.SemicolonClassElement): void {
-    // Ignore
-  }
-  visitSetAccessor(node: ts.SetAccessorDeclaration): void {
-    this.throwNotSupported(node, 'set accessors')
   }
 
   public static buildContract(classDec: ts.ClassDeclaration, ptype: ContractClassPType) {

@@ -36,4 +36,16 @@ describe('for loops', () => {
     const r2 = await appClientForOfLoopsAlgo.send.call({ method: 'test_for_of_loop_native_mutable_array', args: [[4, 8, 42]] })
     expect(r2.return).toBe(4n + 8n + 42n)
   })
+
+  test('test_iterable_props', async ({ appClientForOfLoopsAlgo }) => {
+    const result = await appClientForOfLoopsAlgo.send.call({
+      method: 'test_iterable_props',
+      args: [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+      ],
+    })
+    expect(result.return).toBe(3n * 6n)
+  })
 })

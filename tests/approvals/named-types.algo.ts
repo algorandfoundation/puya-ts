@@ -2,13 +2,13 @@ import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { assertMatch, Contract, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 type XY = {
-  x: uint64
-  y: uint64
+  readonly x: uint64
+  readonly y: uint64
 }
 
 type YX = {
-  y: uint64
-  x: uint64
+  readonly y: uint64
+  readonly x: uint64
 }
 
 export class MyContract extends Contract {
@@ -30,7 +30,7 @@ export class MyContract extends Contract {
     return {
       x: Uint64(3),
       y: Uint64(4),
-    }
+    } as const
   }
 
   public test(x: XY, y: YX) {

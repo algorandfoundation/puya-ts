@@ -4,19 +4,19 @@ import { AppStorageKind, BytesEncoding } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
 import { invariant, utf8ToUint8Array } from '../../util'
-import type { ContractClassPType, StorageProxyPType } from '../ptypes'
+import type { AppStorageType, ContractClassPType } from '../ptypes'
 import { BoxMapPType, BoxPType, BoxRefPType, GlobalStateType, LocalStateType, TransientType, UnsupportedType } from '../ptypes'
 
 export class AppStorageDeclaration {
   readonly memberName: string
-  readonly ptype: GlobalStateType | LocalStateType | BoxMapPType | BoxPType | BoxRefPType
+  readonly ptype: AppStorageType
   readonly keyOverride: BytesConstant | null
   readonly sourceLocation: SourceLocation
   readonly definedIn: ContractClassPType
   readonly description: string | null
   constructor(props: {
     memberName: string
-    ptype: StorageProxyPType
+    ptype: AppStorageType
     keyOverride: BytesConstant | null
     sourceLocation: SourceLocation
     definedIn: ContractClassPType

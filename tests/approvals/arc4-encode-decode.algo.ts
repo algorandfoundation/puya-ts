@@ -18,6 +18,8 @@ import {
 import { itob } from '@algorandfoundation/algorand-typescript/op'
 
 class TestStruct extends Struct<{ a: UintN64; b: DynamicBytes }> {}
+type DynamicMutableObject = { a: uint64; b: DynamicBytes }
+type StaticMutableObject = { a: uint64; b: StaticBytes<12> }
 type TestObj = { a: UintN64; b: DynamicBytes }
 export class Arc4EncodeDecode extends Contract {
   testEncoding(a: uint64, b: boolean, c: biguint, d: bytes, e: string, f: Address, g: bytes<12>) {
@@ -28,6 +30,8 @@ export class Arc4EncodeDecode extends Contract {
     assert(encodeArc4(d) === new DynamicBytes(d).bytes)
     assert(encodeArc4(e) === new Str(e).bytes)
     assert(encodeArc4({ a, b: d }) === new TestStruct({ a: new UintN64(a), b: new DynamicBytes(d) }).bytes)
+    assert(encodeArc4({ a, b: d }) === encodeArc4({ a, b: new DynamicBytes(d) }))
+    assert(encodeArc4({ a, b: g }) === encodeArc4({ a, b: new StaticBytes<12>(g) }))
     assert(encodeArc4(f) === f.bytes)
     assert(encodeArc4(g) === new StaticBytes(g).bytes)
 
@@ -59,6 +63,7 @@ export class Arc4EncodeDecode extends Contract {
       >() === 3,
     )
     assert(arc4EncodedLength<typeof g>() === 12)
+    assert(arc4EncodedLength<StaticMutableObject>() === 20)
   }
 
   testDecoding(

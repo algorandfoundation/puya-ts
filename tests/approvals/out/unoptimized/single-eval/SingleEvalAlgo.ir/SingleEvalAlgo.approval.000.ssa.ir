@@ -1,0 +1,80 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__puya_arc4_router__() -> bool:
+    block@0: // L4
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@5
+    block@1: // abi_routing_L4
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "test()void" => block@2, * => block@3}
+    block@2: // test_route_L16
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 NoOp)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (!= tmp%5#0 0u)
+        (assert tmp%6#0) // can only call when not creating
+        tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test()
+        return 1u
+    block@3: // switch_case_default_L4
+        goto block@4
+    block@4: // switch_case_next_L4
+        goto block@9
+    block@5: // bare_routing_L4
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        switch tmp%7#0 {0u => block@6, * => block@7}
+    block@6: // __algots__.defaultCreate_L4
+        let tmp%8#0: uint64 = (txn ApplicationID)
+        let tmp%9#0: bool = (== tmp%8#0 0u)
+        (assert tmp%9#0) // can only call when creating
+        tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__algots__.defaultCreate()
+        return 1u
+    block@7: // switch_case_default_L4
+        goto block@8
+    block@8: // switch_case_next_L4
+        goto block@9
+    block@9: // after_if_else_L4
+        return 0u
+
+subroutine tests/approvals/single-eval.algo.ts::SingleEvalAlgo.a() -> string:
+    block@0: // L7
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "myState")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let tmp%0#0: uint64 = (+ maybe_value%0#0 1u)
+        (app_global_put "myState" tmp%0#0)
+        return "a"
+
+subroutine tests/approvals/single-eval.algo.ts::SingleEvalAlgo.b() -> string:
+    block@0: // L12
+        return "b"
+
+subroutine tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test() -> void:
+    block@0: // L16
+        (app_global_put "myState" 0u)
+        let awst_tmp%0#0: string = tests/approvals/single-eval.algo.ts::SingleEvalAlgo.a()
+        let reinterpret_bool%0#0: bool = (len awst_tmp%0#0)
+        goto reinterpret_bool%0#0 ? block@1 : block@2
+    block@1: // ternary_true_L18
+        let ternary_result%0#0: string = awst_tmp%0#0
+        goto block@3
+    block@2: // ternary_false_L18
+        let ternary_result%0#1: string = tests/approvals/single-eval.algo.ts::SingleEvalAlgo.b()
+        goto block@3
+    block@3: // ternary_merge_L18
+        let ternary_result%0#2: string = φ(ternary_result%0#0 <- block@1, ternary_result%0#1 <- block@2)
+        let result#0: string = ternary_result%0#2
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "myState")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let tmp%0#0: bool = (== maybe_value%0#0 1u)
+        (assert tmp%0#0) // a() should only be called once
+        let tmp%1#0: bool = (== result#0 "a")
+        (assert tmp%1#0) // Result should be "a"
+        return 
+
+subroutine tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__algots__.defaultCreate() -> void:
+    block@0: // L4
+        return 

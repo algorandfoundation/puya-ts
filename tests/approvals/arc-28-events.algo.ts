@@ -27,6 +27,9 @@ class EventEmitter extends Contract {
 
     emit('Swapped(uint8,uint8)', b, a)
     emit('Swapped((uint8,uint8),uint8)', [b, b] as const, a)
+
+    emit('Swapped((uint8,uint8),uint8)', [b, b], a)
+    emit('Swapped(uint8[],uint8)', [b, b], a)
   }
 
   emitCustom(arg0: string, arg1: boolean) {
@@ -35,6 +38,7 @@ class EventEmitter extends Contract {
   }
 
   emitDynamicBytes(x: bytes, y: DynamicBytes) {
+    // this throws an error in python and requires `_HasAssignmentVisitor.check(emit)` in arc4 copy validator
     emit('DB(byte[],byte[])', x, y)
   }
 }

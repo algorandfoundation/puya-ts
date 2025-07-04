@@ -234,10 +234,12 @@ test1:
     // tests/approvals/itxn.algo.ts:58
     // const [appCreateTxn, asset3_txn] = itxn.submitGroup(appCreateParams, assetParams)
     itxn_begin
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:50
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
+    // tests/approvals/itxn.algo.ts:49
+    // approvalProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:48-52
@@ -308,10 +310,12 @@ test1:
     // note: '3rd',
     bytec 11 // "3rd"
     itxn_field Note
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:50
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
+    // tests/approvals/itxn.algo.ts:49
+    // approvalProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:48-52
@@ -430,10 +434,12 @@ test2_next_field@5:
     itxn_field ApplicationArgs
 
 test2_next_field@7:
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:78
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
+    // tests/approvals/itxn.algo.ts:77
+    // approvalProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:76-82
@@ -489,10 +495,12 @@ test2_next_field@7:
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:99
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
+    // tests/approvals/itxn.algo.ts:98
+    // approvalProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:96-102
@@ -536,10 +544,9 @@ test2_after_if_else@11:
 test2_else_body@2:
     // tests/approvals/itxn.algo.ts:87
     // appArgs: [Bytes('3'), new Str('4'), Bytes('5')],
+    pushbytes 0x000134
     bytec 8 // "3"
     frame_bury 0
-    pushbytes 0x000134
-    frame_bury 1
     bytec 9 // "5"
     frame_bury 5
     intc_3 // 3
@@ -547,10 +554,12 @@ test2_else_body@2:
     // tests/approvals/itxn.algo.ts:88
     // note: 'no args param set',
     pushbytes "no args param set"
+    swap
     // tests/approvals/itxn.algo.ts:84
     // createAppParams = itxn.applicationCall({
     intc_0 // 0
     frame_bury 4
+    frame_bury 1
     b test2_after_if_else@3
 
 
@@ -584,12 +593,12 @@ test3:
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:110-115
@@ -606,12 +615,12 @@ test3:
     // tests/approvals/itxn.algo.ts:150
     // appTxn2,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:118
@@ -636,12 +645,12 @@ test3:
     // tests/approvals/itxn.algo.ts:151
     // appTxn3,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:120
@@ -666,12 +675,12 @@ test3:
     // tests/approvals/itxn.algo.ts:152
     // appTxn4,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:122
@@ -696,12 +705,12 @@ test3:
     // tests/approvals/itxn.algo.ts:153
     // appTxn5,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:124
@@ -726,12 +735,12 @@ test3:
     // tests/approvals/itxn.algo.ts:154
     // appTxn6,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:126
@@ -756,12 +765,12 @@ test3:
     // tests/approvals/itxn.algo.ts:155
     // appTxn7,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:128
@@ -786,12 +795,12 @@ test3:
     // tests/approvals/itxn.algo.ts:156
     // appTxn8,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:130
@@ -816,12 +825,12 @@ test3:
     // tests/approvals/itxn.algo.ts:157
     // appTxn9,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:132
@@ -846,12 +855,12 @@ test3:
     // tests/approvals/itxn.algo.ts:158
     // appTxn10,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:134
@@ -876,12 +885,12 @@ test3:
     // tests/approvals/itxn.algo.ts:159
     // appTxn11,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:136
@@ -906,12 +915,12 @@ test3:
     // tests/approvals/itxn.algo.ts:160
     // appTxn12,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:138
@@ -936,12 +945,12 @@ test3:
     // tests/approvals/itxn.algo.ts:161
     // appTxn13,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:140
@@ -966,12 +975,12 @@ test3:
     // tests/approvals/itxn.algo.ts:162
     // appTxn14,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:142
@@ -996,12 +1005,12 @@ test3:
     // tests/approvals/itxn.algo.ts:163
     // appTxn15,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:144
@@ -1026,12 +1035,12 @@ test3:
     // tests/approvals/itxn.algo.ts:164
     // appTxn16,
     itxn_next
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:112
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
-    // tests/approvals/itxn.algo.ts:18
-    // const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
+    // tests/approvals/itxn.algo.ts:111
+    // approvalProgram: LOG_1ST_ARG_AND_APPROVE,
     bytec_1 // 0x09361a00b08101
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:146
@@ -1209,10 +1218,12 @@ test4:
     // onCompletion: OnCompleteAction.DeleteApplication,
     intc_2 // 5
     itxn_field OnCompletion
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
+    // tests/approvals/itxn.algo.ts:194
+    // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
     itxn_field ClearStateProgramPages
+    // tests/approvals/itxn.algo.ts:193
+    // approvalProgram: [approval1, approval2, approval2, approval2],
     bytec_0 // 0x098101
     itxn_field ApprovalProgramPages
     dup
@@ -1253,11 +1264,7 @@ test4:
     // tests/approvals/itxn.algo.ts:202
     // assert(app1.approvalProgramPages(0) === approval1.concat(approval2).concat(approval2.slice(0, -3)), 'expected approval page 0')
     itxna ApprovalProgramPages 0
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
-    // tests/approvals/itxn.algo.ts:202
-    // assert(app1.approvalProgramPages(0) === approval1.concat(approval2).concat(approval2.slice(0, -3)), 'expected approval page 0')
     dig 3
     concat
     dig 3
@@ -1315,11 +1322,7 @@ test4:
     // tests/approvals/itxn.algo.ts:205
     // assert(app1.clearStateProgramPages(0) === APPROVE, 'expected clear state page')
     itxna ClearStateProgramPages 0
-    // tests/approvals/itxn.algo.ts:19
-    // const APPROVE = Bytes.fromHex('098101')
     bytec_0 // 0x098101
-    // tests/approvals/itxn.algo.ts:205
-    // assert(app1.clearStateProgramPages(0) === APPROVE, 'expected clear state page')
     ==
     assert // expected clear state page
     retsub
@@ -1380,40 +1383,35 @@ test5:
     itxn LastLog
     // tests/approvals/itxn.algo.ts:221
     // const returnValue = decodeArc4<[uint64, uint64, string]>(appRes.lastLog, 'log')
-    dup
+    dupn 2
     extract 4 0
-    dig 1
+    swap
+    dup
     extract 0 4
     pushbytes 0x151f7c75
     ==
     assert // Bytes has valid prefix
-    dig 1
     pushint 4 // 4
-    extract_uint64
-    uncover 2
-    pushint 12 // 12
-    extract_uint64
-    cover 2
-    dig 1
-    pushint 16 // 16
-    extract_uint16
-    dig 2
-    len
-    uncover 3
-    cover 2
-    substring3
-    extract 2 0
-    swap
     // tests/approvals/itxn.algo.ts:223
     // assertMatch(returnValue, [1, 1000, 'hello'])
+    extract_uint64
     pushint 1 // 1
     ==
     bz test5_bool_false@7
     frame_dig 0
+    pushint 12 // 12
+    extract_uint64
     intc 4 // 1000
     ==
     bz test5_bool_false@7
     frame_dig 1
+    dup
+    pushint 16 // 16
+    extract_uint16
+    dig 1
+    len
+    substring3
+    extract 2 0
     pushbytes "hello"
     ==
     bz test5_bool_false@7

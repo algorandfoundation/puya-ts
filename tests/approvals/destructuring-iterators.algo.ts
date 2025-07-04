@@ -1,7 +1,7 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, Contract, Uint64 } from '@algorandfoundation/algorand-typescript'
 
-function test() {
+function test_immutable() {
   const items = [
     { a: Uint64(1), b: Uint64(2) },
     { a: Uint64(2), b: Uint64(2) },
@@ -12,4 +12,10 @@ function test() {
     total += a
   }
   assert(total === 6)
+}
+
+class DestructuringIterators extends Contract {
+  test() {
+    test_immutable()
+  }
 }

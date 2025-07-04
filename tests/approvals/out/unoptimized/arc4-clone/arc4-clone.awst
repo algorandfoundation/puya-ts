@@ -1,0 +1,53 @@
+contract Arc4CloneAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  aliasing(mutable: arc4.dynamic_array<uint64>): void
+  {
+    needClone: arc4.dynamic_array<uint64> = copy(mutable)
+    needClone2: arc4.dynamic_array<uint64> = convert_array(copy(mutable), wtype=arc4.dynamic_array<uint64>)
+    tupleOfMutable: readonly [arc4.dynamic_array<uint64>, uint64] = #[($0 = #[copy(mutable), 1]).0, $0.1]
+    #[x]: readonly [arc4.dynamic_array<uint64>] = #[($1 = copy(tupleOfMutable)).0]
+    mutableTupleOfMutable: arc4.tuple<arc4.dynamic_array<uint64>> = ARC4_ENCODE(#[new arc4.dynamic_array<uint64>(($2 = ($3 = #[#[1, 2, 3]]).0).0, $2.1, $2.2)], wtype=arc4.tuple<arc4.dynamic_array<uint64>>)
+    #[y]: readonly [arc4.dynamic_array<uint64>] = #[($4 = copy(mutableTupleOfMutable)).0]
+    tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receive((z = copy(mutable)))
+    tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receiveReadonly(convert_array(mutable, wtype=arc4.dynamic_array<uint64>))
+    m2: arc4.dynamic_array<uint64> = copy(mutable)
+    nestedMutables: arc4.dynamic_array<arc4.dynamic_array<uint64>> = new arc4.dynamic_array<arc4.dynamic_array<uint64>>(new arc4.dynamic_array<uint64>(($5 = ($6 = #[#[1]]).0).0))
+    nestedMutables2: arc4.dynamic_array<arc4.dynamic_array<uint64>> = new arc4.dynamic_array<arc4.dynamic_array<uint64>>(($7 = #[copy(mutable), #[2]]).0, new arc4.dynamic_array<uint64>(($8 = $7.1).0))
+    m3: arc4.dynamic_array<arc4.dynamic_array<uint64>> = copy(nestedMutables)
+    m4: arc4.dynamic_array<arc4.dynamic_array<uint64>> = copy(nestedMutables).concat(#[new arc4.dynamic_array<uint64>(123)])
+    m5: arc4.dynamic_array<uint64> = mutable.concat(mutable)
+  }
+  
+  receive(mutable: arc4.dynamic_array<uint64>): void
+  {
+  }
+  
+  receiveReadonly(a: arc4.dynamic_array<uint64>): void
+  {
+  }
+  
+  structReturn(arg: TopLevelStruct): SharedStruct
+  {
+    assert(reinterpret_cast<bytes>(arg.shared) == reinterpret_cast<bytes>(tests/approvals/arc4-clone.algo.ts::echo(arg.shared)), comment=this won't error)
+    return arg.shared
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+subroutine echo(s: SharedStruct): SharedStruct
+{
+  return s
+}

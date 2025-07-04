@@ -1,5 +1,5 @@
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, Bytes, Contract, MutableArray, Txn } from '@algorandfoundation/algorand-typescript'
+import { assert, Bytes, Contract, ReferenceArray, Txn } from '@algorandfoundation/algorand-typescript'
 import { bzero, sha512_256 } from '@algorandfoundation/algorand-typescript/op'
 
 const fromUtf8 = Bytes<3>('abc')
@@ -40,7 +40,7 @@ class StaticBytesAlgo extends Contract {
 
   testArray() {
     const a = [Txn.sender.bytes, Txn.sender.bytes] as const
-    const b = new MutableArray<bytes<32>>(Txn.sender.bytes)
+    const b = new ReferenceArray<bytes<32>>(Txn.sender.bytes)
     b.push(...a)
 
     const bitAnd = a[0].bitwiseAnd(b[0])

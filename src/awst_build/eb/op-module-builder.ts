@@ -3,7 +3,7 @@ import { nodeFactory } from '../../awst/node-factory'
 import { Expression, IntegerConstant, StringConstant, UInt64BinaryOperator } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError } from '../../errors'
-import { codeInvariant, enumerate, invariant } from '../../util'
+import { codeInvariant, invariant } from '../../util'
 import type { IntrinsicOpGrouping, IntrinsicOpMapping } from '../op-metadata'
 import { OP_METADATA } from '../op-metadata'
 import type { PType } from '../ptypes'
@@ -158,7 +158,7 @@ abstract class IntrinsicOpBuilderBase extends FunctionBuilder {
     if (this.opMapping.op === 'extract3') {
       return this.handleExtract(args, typeArgs, sourceLocation)
     }
-    signatureLoop: for (const [index, sig] of enumerate(this.opMapping.signatures)) {
+    signatureLoop: for (const [index, sig] of this.opMapping.signatures.entries()) {
       const isLastSig = index + 1 >= this.opMapping.signatures.length
       if (args.length !== sig.argNames.length) {
         if (isLastSig)

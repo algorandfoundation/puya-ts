@@ -63,7 +63,7 @@ class AssetHoldingExpressionBuilder extends FunctionBuilder {
       opCode: 'asset_holding_get',
       immediates: [immediate],
       stackArgs: [holder.resolve(), this.asset],
-      wtype: new wtypes.WTuple({ types: [resultType.wtypeOrThrow, wtypes.boolWType], immutable: true }),
+      wtype: new wtypes.WTuple({ types: [resultType.wtypeOrThrow, wtypes.boolWType] }),
       sourceLocation,
     })
     return instanceEb(nodeFactory.checkedMaybe({ expr: op, comment: `account opted into asset` }), resultType)
