@@ -85,7 +85,7 @@ In both, the size will automatically be determined for fixed-length types, thus 
 
 ### Box Iteration
 
-TODO: is this supported?
+TODO: This is supported. But waiting for clarity on the types it's supported for
 
 ### Inner Transactions
 
@@ -249,7 +249,7 @@ assert(result === 'hello world')
 
 ### Reference Types
 
-TODO
+TODO: For 1.0 we will probably have similar types to TEALScript (i.e. `AppID` that is an ABI `uint64`) but exact API is TBD
 
 ### Compiled Contract Information
 
@@ -452,7 +452,24 @@ addToNumber(n: UintN8) {
 
 ### Casting
 
-TODO
+In TEALScript, the `as` keyword is used to cast values as different types. Much like regular typescript, the `as` keyword in Algorand
+TypeScript cannot change runtime behavior. This means constructors must be used instead of `as`
+
+##### TEALScript
+
+```ts
+convertNumber(n: uint64): uint8 {
+  return n as uint8
+}
+```
+
+##### Algorand TypeScript
+
+```ts
+convertNumber(n: uint64): Uint8N {
+  return UintN8(n)
+}
+```
 
 ### Array & Object References
 
