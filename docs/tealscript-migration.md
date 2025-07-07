@@ -24,6 +24,7 @@ This document is up-to-date as of TEALScript v0.107.0 and Algorand TypeScript v1
 | `this.txn` | [`Txn`](TOOD: link to Txn docs) ||
 | `verify...Txn` | `assertMatch` | `assertMatch` can be used on any txn type or any object |
 | `globals` | [`Global`](TODO: link to Global docs) ||
+| `StaticArray` | `FixedArray` | May not cover all cases. See the array section for more details |
 
 ## Migrations
 
