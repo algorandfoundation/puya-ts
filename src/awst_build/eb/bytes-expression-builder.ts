@@ -351,12 +351,18 @@ export class ConcatFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
       funcName: 'concat',
       genericTypeArgs: 0,
-      argSpec: (a) => [a.required(bytesPType)],
+      argSpec: (a) => [a.required(bytesPType, stringPType)],
     })
+    let right: Expression
+    if (other.ptype.equals(stringPType)) {
+      right = other.toBytes(other.sourceLocation).resolve()
+    } else {
+      right = requireExpressionOfType(other, bytesPType)
+    }
     return new BytesExpressionBuilder(
       intrinsicFactory.bytesConcat({
         left: requireExpressionOfType(this.builder, bytesPType),
-        right: requireExpressionOfType(other, bytesPType),
+        right,
         sourceLocation: sourceLocation,
       }),
       bytesPType,
