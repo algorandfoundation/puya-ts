@@ -22,7 +22,8 @@ This document is up-to-date as of TEALScript v0.107.0 and Algorand TypeScript v1
 | `LocalStateMap` | Not yet supported ||
 | `isOptedInToApp` and `isOptedInToAsset` | [`isOptedIn`](TODO: link to isOptedInDocs) ||
 | `this.txn` | [`Txn`](TOOD: link to Txn docs) ||
-| `verify...Txn` | `assertMatch` | `assertMatch` can be used on any txn type or any object ||
+| `verify...Txn` | `assertMatch` | `assertMatch` can be used on any txn type or any object |
+| `globals` | [`Global`](TODO: link to Global docs) ||
 
 ## Migrations
 
