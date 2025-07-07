@@ -69,70 +69,80 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%11#3: bool = (== tmp%10#3 0x151f7c75)
         (assert tmp%11#3) // Bytes has valid prefix
         let result2#0: string = ((extract 2 0) tmp%9#4)
+        let greetItxn.LastLog#0: bytes = (itxn LastLog)
         let tmp%13#2: bool = (== result2#0 "hello abi")
         (assert tmp%13#2)
-        itxn_begin
-        let aggregate%length%3#1: uint64 = (len "stubbed")
+        let aggregate%length%3#1: uint64 = (len 0x68656c6c6f20616269)
         let aggregate%as_bytes%3#1: bytes[8] = (itob aggregate%length%3#1)
         let aggregate%length_uint16%3#1: bytes = ((extract 6 2) aggregate%as_bytes%3#1)
-        let aggregate%encoded_value%3#1: bytes = (concat aggregate%length_uint16%3#1 "stubbed")
+        let aggregate%encoded_value%3#1: bytes = (concat aggregate%length_uint16%3#1 0x68656c6c6f20616269)
         let aggregate%as_Encoded(len+utf8[])%3#1: Encoded(len+utf8[]) = aggregate%encoded_value%3#1
-        let tmp%14#2: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%3#1
+        let encoded%0#1: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%3#1
+        let tmp%14#2: bytes = (concat 0x151f7c75 encoded%0#1)
+        let tmp%15#1: bool = (== greetItxn.LastLog#0 tmp%14#2)
+        (assert tmp%15#1)
+        itxn_begin
+        let aggregate%length%4#1: uint64 = (len "stubbed")
+        let aggregate%as_bytes%4#1: bytes[8] = (itob aggregate%length%4#1)
+        let aggregate%length_uint16%4#1: bytes = ((extract 6 2) aggregate%as_bytes%4#1)
+        let aggregate%encoded_value%4#1: bytes = (concat aggregate%length_uint16%4#1 "stubbed")
+        let aggregate%as_Encoded(len+utf8[])%4#1: Encoded(len+utf8[]) = aggregate%encoded_value%4#1
+        let tmp%16#1: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%4#1
         ((itxn_field ApplicationArgs) method "greet(string)string")
-        ((itxn_field ApplicationArgs) tmp%14#2)
+        ((itxn_field ApplicationArgs) tmp%16#1)
         ((itxn_field ApplicationID) app#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
         let awst_tmp%2#1: bytes = (itxn LastLog)
-        let tmp%15#1: bytes = ((extract 4 0) awst_tmp%2#1)
-        let tmp%16#1: bytes = ((extract 0 4) awst_tmp%2#1)
-        let tmp%17#1: bool = (== tmp%16#1 0x151f7c75)
-        (assert tmp%17#1) // Bytes has valid prefix
-        let result3#0: string = ((extract 2 0) tmp%15#1)
-        let tmp%19#1: bool = (== result3#0 "hello stubbed")
-        (assert tmp%19#1)
+        let tmp%17#1: bytes = ((extract 4 0) awst_tmp%2#1)
+        let tmp%18#1: bytes = ((extract 0 4) awst_tmp%2#1)
+        let tmp%19#1: bool = (== tmp%18#1 0x151f7c75)
+        (assert tmp%19#1) // Bytes has valid prefix
+        let result3#0: string = ((extract 2 0) tmp%17#1)
+        let tmp%21#1: bool = (== result3#0 "hello stubbed")
+        (assert tmp%21#1)
         itxn_begin
-        let aggregate%length%4#1: uint64 = (len 0x21)
-        let aggregate%as_bytes%4#1: bytes[8] = (itob aggregate%length%4#1)
-        let aggregate%length_uint16%4#1: bytes = ((extract 6 2) aggregate%as_bytes%4#1)
-        let aggregate%encoded_value%4#1: bytes = (concat aggregate%length_uint16%4#1 0x21)
-        let aggregate%as_Encoded(len+utf8[])%4#1: Encoded(len+utf8[]) = aggregate%encoded_value%4#1
-        let encoded%0#1: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%4#1
-        let aggregate%length%5#1: uint64 = (len "world")
+        let aggregate%length%5#1: uint64 = (len 0x21)
         let aggregate%as_bytes%5#1: bytes[8] = (itob aggregate%length%5#1)
         let aggregate%length_uint16%5#1: bytes = ((extract 6 2) aggregate%as_bytes%5#1)
-        let aggregate%encoded_value%5#1: bytes = (concat aggregate%length_uint16%5#1 "world")
+        let aggregate%encoded_value%5#1: bytes = (concat aggregate%length_uint16%5#1 0x21)
         let aggregate%as_Encoded(len+utf8[])%5#1: Encoded(len+utf8[]) = aggregate%encoded_value%5#1
-        let aggregate%as_bytes%6#1: bytes[8] = (itob 4u)
-        let aggregate%offset_as_uint16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%6#1)
+        let encoded%1#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%5#1
+        let aggregate%length%6#1: uint64 = (len "world")
+        let aggregate%as_bytes%6#1: bytes[8] = (itob aggregate%length%6#1)
+        let aggregate%length_uint16%6#1: bytes = ((extract 6 2) aggregate%as_bytes%6#1)
+        let aggregate%encoded_value%6#1: bytes = (concat aggregate%length_uint16%6#1 "world")
+        let aggregate%as_Encoded(len+utf8[])%6#1: Encoded(len+utf8[]) = aggregate%encoded_value%6#1
+        let aggregate%as_bytes%7#1: bytes[8] = (itob 4u)
+        let aggregate%offset_as_uint16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%7#1)
         let aggregate%head%0#1: bytes = (concat 0x aggregate%offset_as_uint16%0#1)
-        let aggregate%data_length%0#1: uint64 = (len aggregate%as_Encoded(len+utf8[])%5#1)
+        let aggregate%data_length%0#1: uint64 = (len aggregate%as_Encoded(len+utf8[])%6#1)
         let aggregate%current_tail_offset%0#1: uint64 = (+ 4u aggregate%data_length%0#1)
-        let aggregate%as_bytes%7#1: bytes[8] = (itob aggregate%current_tail_offset%0#1)
-        let aggregate%offset_as_uint16%1#1: bytes = ((extract 6 2) aggregate%as_bytes%7#1)
+        let aggregate%as_bytes%8#1: bytes[8] = (itob aggregate%current_tail_offset%0#1)
+        let aggregate%offset_as_uint16%1#1: bytes = ((extract 6 2) aggregate%as_bytes%8#1)
         let aggregate%head%1#1: bytes = (concat aggregate%head%0#1 aggregate%offset_as_uint16%1#1)
-        let aggregate%data_length%1#1: uint64 = (len encoded%0#1)
+        let aggregate%data_length%1#1: uint64 = (len encoded%1#0)
         let aggregate%current_tail_offset%1#1: uint64 = (+ aggregate%current_tail_offset%0#1 aggregate%data_length%1#1)
-        let aggregate%concat%0#1: bytes = (concat aggregate%head%1#1 aggregate%as_Encoded(len+utf8[])%5#1)
-        let aggregate%concat%1#1: bytes = (concat aggregate%concat%0#1 encoded%0#1)
+        let aggregate%concat%0#1: bytes = (concat aggregate%head%1#1 aggregate%as_Encoded(len+utf8[])%6#1)
+        let aggregate%concat%1#1: bytes = (concat aggregate%concat%0#1 encoded%1#0)
         let aggregate%as_Encoded((len+utf8[]),(len+utf8[]))%0#1: Encoded((len+utf8[]),(len+utf8[])) = aggregate%concat%1#1
-        let tmp%20#1: Encoded((len+utf8[]),(len+utf8[])) = aggregate%as_Encoded((len+utf8[]),(len+utf8[]))%0#1
-        let tmp%21#1: Encoded((len+utf8[]),(len+utf8[])) = tmp%20#1
+        let tmp%22#1: Encoded((len+utf8[]),(len+utf8[])) = aggregate%as_Encoded((len+utf8[]),(len+utf8[]))%0#1
+        let tmp%23#1: Encoded((len+utf8[]),(len+utf8[])) = tmp%22#1
         ((itxn_field ApplicationArgs) method "sendGreetings((string,string))string")
-        ((itxn_field ApplicationArgs) tmp%21#1)
+        ((itxn_field ApplicationArgs) tmp%23#1)
         ((itxn_field ApplicationID) app#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
         let awst_tmp%3#0: bytes = (itxn LastLog)
-        let tmp%22#1: bytes = ((extract 4 0) awst_tmp%3#0)
-        let tmp%23#1: bytes = ((extract 0 4) awst_tmp%3#0)
-        let tmp%24#1: bool = (== tmp%23#1 0x151f7c75)
-        (assert tmp%24#1) // Bytes has valid prefix
-        let result4#0: string = ((extract 2 0) tmp%22#1)
-        let tmp%26#1: bool = (== result4#0 "hello world!")
-        (assert tmp%26#1)
+        let tmp%24#1: bytes = ((extract 4 0) awst_tmp%3#0)
+        let tmp%25#1: bytes = ((extract 0 4) awst_tmp%3#0)
+        let tmp%26#1: bool = (== tmp%25#1 0x151f7c75)
+        (assert tmp%26#1) // Bytes has valid prefix
+        let result4#0: string = ((extract 2 0) tmp%24#1)
+        let tmp%28#1: bool = (== result4#0 "hello world!")
+        (assert tmp%28#1)
         itxn_begin
         ((itxn_field ApplicationArgs) method "delete()void")
         ((itxn_field OnCompletion) 5u)
@@ -142,7 +152,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_submit
         let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#0: bool = 1u
         goto block@16
-    block@4: // test_compile_contract_with_template_route_L52
+    block@4: // test_compile_contract_with_template_route_L53
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (! tmp%7#0)
         (assert tmp%8#0) // OnCompletion is not NoOp
@@ -159,12 +169,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_submit
         let helloApp#1: uint64 = (gitxn 0 CreatedApplicationID)
         itxn_begin
-        let aggregate%length%6#1: uint64 = (len "world")
-        let aggregate%as_bytes%8#1: bytes[8] = (itob aggregate%length%6#1)
-        let aggregate%length_uint16%6#1: bytes = ((extract 6 2) aggregate%as_bytes%8#1)
-        let aggregate%encoded_value%6#1: bytes = (concat aggregate%length_uint16%6#1 "world")
-        let aggregate%as_Encoded(len+utf8[])%6#1: Encoded(len+utf8[]) = aggregate%encoded_value%6#1
-        let tmp%1#4: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%6#1
+        let aggregate%length%7#1: uint64 = (len "world")
+        let aggregate%as_bytes%9#1: bytes[8] = (itob aggregate%length%7#1)
+        let aggregate%length_uint16%7#1: bytes = ((extract 6 2) aggregate%as_bytes%9#1)
+        let aggregate%encoded_value%7#1: bytes = (concat aggregate%length_uint16%7#1 "world")
+        let aggregate%as_Encoded(len+utf8[])%7#1: Encoded(len+utf8[]) = aggregate%encoded_value%7#1
+        let tmp%1#4: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%7#1
         ((itxn_field ApplicationArgs) method "greet(string)string")
         ((itxn_field ApplicationArgs) tmp%1#4)
         ((itxn_field OnCompletion) 0u)
@@ -180,28 +190,28 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let txn1.returnValue#0: string = ((extract 2 0) tmp%2#5)
         let tmp%6#4: bool = (== txn1.returnValue#0 "hey world")
         (assert tmp%6#4)
-        let aggregate%length%7#1: uint64 = (len 0x21)
-        let aggregate%as_bytes%9#1: bytes[8] = (itob aggregate%length%7#1)
-        let aggregate%length_uint16%7#1: bytes = ((extract 6 2) aggregate%as_bytes%9#1)
-        let aggregate%encoded_value%7#1: bytes = (concat aggregate%length_uint16%7#1 0x21)
-        let aggregate%as_Encoded(len+utf8[])%7#1: Encoded(len+utf8[]) = aggregate%encoded_value%7#1
-        let encoded%0#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%7#1
-        let aggregate%length%8#1: uint64 = (len "world")
+        let aggregate%length%8#1: uint64 = (len 0x21)
         let aggregate%as_bytes%10#1: bytes[8] = (itob aggregate%length%8#1)
         let aggregate%length_uint16%8#1: bytes = ((extract 6 2) aggregate%as_bytes%10#1)
-        let aggregate%encoded_value%8#1: bytes = (concat aggregate%length_uint16%8#1 "world")
+        let aggregate%encoded_value%8#1: bytes = (concat aggregate%length_uint16%8#1 0x21)
         let aggregate%as_Encoded(len+utf8[])%8#1: Encoded(len+utf8[]) = aggregate%encoded_value%8#1
-        let aggregate%as_bytes%11#1: bytes[8] = (itob 4u)
-        let aggregate%offset_as_uint16%2#1: bytes = ((extract 6 2) aggregate%as_bytes%11#1)
+        let encoded%0#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%8#1
+        let aggregate%length%9#1: uint64 = (len "world")
+        let aggregate%as_bytes%11#1: bytes[8] = (itob aggregate%length%9#1)
+        let aggregate%length_uint16%9#1: bytes = ((extract 6 2) aggregate%as_bytes%11#1)
+        let aggregate%encoded_value%9#1: bytes = (concat aggregate%length_uint16%9#1 "world")
+        let aggregate%as_Encoded(len+utf8[])%9#1: Encoded(len+utf8[]) = aggregate%encoded_value%9#1
+        let aggregate%as_bytes%12#1: bytes[8] = (itob 4u)
+        let aggregate%offset_as_uint16%2#1: bytes = ((extract 6 2) aggregate%as_bytes%12#1)
         let aggregate%head%2#1: bytes = (concat 0x aggregate%offset_as_uint16%2#1)
-        let aggregate%data_length%2#1: uint64 = (len aggregate%as_Encoded(len+utf8[])%8#1)
+        let aggregate%data_length%2#1: uint64 = (len aggregate%as_Encoded(len+utf8[])%9#1)
         let aggregate%current_tail_offset%2#1: uint64 = (+ 4u aggregate%data_length%2#1)
-        let aggregate%as_bytes%12#1: bytes[8] = (itob aggregate%current_tail_offset%2#1)
-        let aggregate%offset_as_uint16%3#1: bytes = ((extract 6 2) aggregate%as_bytes%12#1)
+        let aggregate%as_bytes%13#1: bytes[8] = (itob aggregate%current_tail_offset%2#1)
+        let aggregate%offset_as_uint16%3#1: bytes = ((extract 6 2) aggregate%as_bytes%13#1)
         let aggregate%head%3#1: bytes = (concat aggregate%head%2#1 aggregate%offset_as_uint16%3#1)
         let aggregate%data_length%3#1: uint64 = (len encoded%0#0)
         let aggregate%current_tail_offset%3#1: uint64 = (+ aggregate%current_tail_offset%2#1 aggregate%data_length%3#1)
-        let aggregate%concat%2#1: bytes = (concat aggregate%head%3#1 aggregate%as_Encoded(len+utf8[])%8#1)
+        let aggregate%concat%2#1: bytes = (concat aggregate%head%3#1 aggregate%as_Encoded(len+utf8[])%9#1)
         let aggregate%concat%3#1: bytes = (concat aggregate%concat%2#1 encoded%0#0)
         let aggregate%as_Encoded((len+utf8[]),(len+utf8[]))%1#1: Encoded((len+utf8[]),(len+utf8[])) = aggregate%concat%3#1
         let greeting#0: Encoded((len+utf8[]),(len+utf8[])) = aggregate%as_Encoded((len+utf8[]),(len+utf8[]))%1#1
@@ -215,22 +225,22 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%len%0#1: uint64 = (len greeting#0)
         let aggregate%substring3%1#1: bytes = (substring3 greeting#0 aggregate%extract_uint16%2#1 aggregate%len%0#1)
         let tuple_item%1#0: Encoded(len+utf8[]) = aggregate%substring3%1#1
-        let aggregate%length%9#1: uint64 = (len values%0#0)
-        let aggregate%as_bytes%13#1: bytes[8] = (itob aggregate%length%9#1)
-        let aggregate%length_uint16%9#1: bytes = ((extract 6 2) aggregate%as_bytes%13#1)
-        let aggregate%encoded_value%9#1: bytes = (concat aggregate%length_uint16%9#1 values%0#0)
-        let aggregate%as_Encoded(len+utf8[])%9#1: Encoded(len+utf8[]) = aggregate%encoded_value%9#1
-        let aggregate%as_bytes%14#1: bytes[8] = (itob 4u)
-        let aggregate%offset_as_uint16%4#1: bytes = ((extract 6 2) aggregate%as_bytes%14#1)
+        let aggregate%length%10#1: uint64 = (len values%0#0)
+        let aggregate%as_bytes%14#1: bytes[8] = (itob aggregate%length%10#1)
+        let aggregate%length_uint16%10#1: bytes = ((extract 6 2) aggregate%as_bytes%14#1)
+        let aggregate%encoded_value%10#1: bytes = (concat aggregate%length_uint16%10#1 values%0#0)
+        let aggregate%as_Encoded(len+utf8[])%10#1: Encoded(len+utf8[]) = aggregate%encoded_value%10#1
+        let aggregate%as_bytes%15#1: bytes[8] = (itob 4u)
+        let aggregate%offset_as_uint16%4#1: bytes = ((extract 6 2) aggregate%as_bytes%15#1)
         let aggregate%head%4#1: bytes = (concat 0x aggregate%offset_as_uint16%4#1)
-        let aggregate%data_length%4#1: uint64 = (len aggregate%as_Encoded(len+utf8[])%9#1)
+        let aggregate%data_length%4#1: uint64 = (len aggregate%as_Encoded(len+utf8[])%10#1)
         let aggregate%current_tail_offset%4#1: uint64 = (+ 4u aggregate%data_length%4#1)
-        let aggregate%as_bytes%15#1: bytes[8] = (itob aggregate%current_tail_offset%4#1)
-        let aggregate%offset_as_uint16%5#1: bytes = ((extract 6 2) aggregate%as_bytes%15#1)
+        let aggregate%as_bytes%16#1: bytes[8] = (itob aggregate%current_tail_offset%4#1)
+        let aggregate%offset_as_uint16%5#1: bytes = ((extract 6 2) aggregate%as_bytes%16#1)
         let aggregate%head%5#1: bytes = (concat aggregate%head%4#1 aggregate%offset_as_uint16%5#1)
         let aggregate%data_length%5#1: uint64 = (len tuple_item%1#0)
         let aggregate%current_tail_offset%5#1: uint64 = (+ aggregate%current_tail_offset%4#1 aggregate%data_length%5#1)
-        let aggregate%concat%4#1: bytes = (concat aggregate%head%5#1 aggregate%as_Encoded(len+utf8[])%9#1)
+        let aggregate%concat%4#1: bytes = (concat aggregate%head%5#1 aggregate%as_Encoded(len+utf8[])%10#1)
         let aggregate%concat%5#1: bytes = (concat aggregate%concat%4#1 tuple_item%1#0)
         let aggregate%as_Encoded((len+utf8[]),(len+utf8[]))%2#1: Encoded((len+utf8[]),(len+utf8[])) = aggregate%concat%5#1
         let tmp%8#3: Encoded((len+utf8[]),(len+utf8[])) = aggregate%as_Encoded((len+utf8[]),(len+utf8[]))%2#1
@@ -259,7 +269,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_submit
         let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#1: bool = 1u
         goto block@16
-    block@5: // test_compile_contract_with_template_and_custom_prefix_route_L77
+    block@5: // test_compile_contract_with_template_and_custom_prefix_route_L78
         let tmp%11#0: uint64 = (txn OnCompletion)
         let tmp%12#0: bool = (! tmp%11#0)
         (assert tmp%12#0) // OnCompletion is not NoOp
@@ -276,12 +286,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_submit
         let helloApp#0: uint64 = (gitxn 0 CreatedApplicationID)
         itxn_begin
-        let aggregate%length%10#1: uint64 = (len "world")
-        let aggregate%as_bytes%16#1: bytes[8] = (itob aggregate%length%10#1)
-        let aggregate%length_uint16%10#1: bytes = ((extract 6 2) aggregate%as_bytes%16#1)
-        let aggregate%encoded_value%10#1: bytes = (concat aggregate%length_uint16%10#1 "world")
-        let aggregate%as_Encoded(len+utf8[])%10#1: Encoded(len+utf8[]) = aggregate%encoded_value%10#1
-        let tmp%1#3: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%10#1
+        let aggregate%length%11#1: uint64 = (len "world")
+        let aggregate%as_bytes%17#1: bytes[8] = (itob aggregate%length%11#1)
+        let aggregate%length_uint16%11#1: bytes = ((extract 6 2) aggregate%as_bytes%17#1)
+        let aggregate%encoded_value%11#1: bytes = (concat aggregate%length_uint16%11#1 "world")
+        let aggregate%as_Encoded(len+utf8[])%11#1: Encoded(len+utf8[]) = aggregate%encoded_value%11#1
+        let tmp%1#3: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%11#1
         ((itxn_field ApplicationArgs) method "greet(string)string")
         ((itxn_field ApplicationArgs) tmp%1#3)
         ((itxn_field OnCompletion) 0u)
@@ -306,7 +316,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_submit
         let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#2: bool = 1u
         goto block@16
-    block@6: // test_compile_contract_large_route_L94
+    block@6: // test_compile_contract_large_route_L95
         let tmp%15#0: uint64 = (txn OnCompletion)
         let tmp%16#0: bool = (! tmp%15#0)
         (assert tmp%16#0) // OnCompletion is not NoOp
@@ -344,7 +354,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_submit
         let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#3: bool = 1u
         goto block@16
-    block@7: // test_call_contract_with_transactions_route_L110
+    block@7: // test_call_contract_with_transactions_route_L111
         let tmp%19#0: uint64 = (txn OnCompletion)
         let tmp%20#0: bool = (! tmp%19#0)
         (assert tmp%20#0) // OnCompletion is not NoOp
@@ -440,7 +450,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_submit
         let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#4: bool = 1u
         goto block@16
-    block@8: // test_call_contract_with_reference_types_route_L153
+    block@8: // test_call_contract_with_reference_types_route_L154
         let tmp%23#0: uint64 = (txn OnCompletion)
         let tmp%24#0: bool = (! tmp%23#0)
         (assert tmp%24#0) // OnCompletion is not NoOp

@@ -64,6 +64,16 @@ contract AssignmentsAlgo
     fromLit2: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(($5 = #[u, u, u]).0, $5.1, $5.2)
   }
   
+  testTupleToArray(m_t: arc4.tuple<uint64,uint64>, i_t: readonly [uint64, uint64]): void
+  {
+    m_a: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(copy(m_t).0, copy(m_t).1)
+    assert(m_a.length == 2 and m_a[0] == m_t.0 and m_a[1] == m_t.1, comment=assert target is match for conditions)
+    i_a: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(copy(m_t).0, copy(m_t).1)
+    assert(i_a.length == 2 and i_a[0] == m_t.0 and i_a[1] == m_t.1, comment=assert target is match for conditions)
+    i_a2: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(i_t.0, i_t.1)
+    assert(i_a2.length == 2 and i_a2[0] == i_t.0 and i_a2[1] == i_t.1, comment=assert target is match for conditions)
+  }
+  
   testNested(i_a: arc4.dynamic_array<arc4.dynamic_array<uint64>>): void
   {
     #[#[a]]: readonly [readonly [uint64]] = #[#[i_a[0][0]]]

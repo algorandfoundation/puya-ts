@@ -5,7 +5,7 @@
 main:
     intcblock 1 0
     pushbytes ""
-    // tests/approvals/itxn-compose.algo.ts:68
+    // tests/approvals/itxn-compose.algo.ts:67
     // class VerifierContract extends Contract {
     txn NumAppArgs
     bz main_bare_routing@6
@@ -14,39 +14,39 @@ main:
     match main_verify_route@3
 
 main_after_if_else@10:
-    // tests/approvals/itxn-compose.algo.ts:68
+    // tests/approvals/itxn-compose.algo.ts:67
     // class VerifierContract extends Contract {
     intc_1 // 0
     return
 
 main_verify_route@3:
-    // tests/approvals/itxn-compose.algo.ts:69
+    // tests/approvals/itxn-compose.algo.ts:68
     // verify() {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/itxn-compose.algo.ts:70
+    // tests/approvals/itxn-compose.algo.ts:69
     // for (let i: uint64 = 0; i < Txn.groupIndex; i++) {
     intc_1 // 0
     bury 1
 
 main_while_top@15:
-    // tests/approvals/itxn-compose.algo.ts:70
+    // tests/approvals/itxn-compose.algo.ts:69
     // for (let i: uint64 = 0; i < Txn.groupIndex; i++) {
     dup
     txn GroupIndex
     <
     bz main_after_while@17
-    // tests/approvals/itxn-compose.algo.ts:72
+    // tests/approvals/itxn-compose.algo.ts:71
     // assert(txn.type === TransactionType.Payment, 'Txn must be pay')
     dupn 2
     gtxns TypeEnum
     intc_0 // 1
     ==
     assert // Txn must be pay
-    // tests/approvals/itxn-compose.algo.ts:70
+    // tests/approvals/itxn-compose.algo.ts:69
     // for (let i: uint64 = 0; i < Txn.groupIndex; i++) {
     intc_0 // 1
     +
@@ -54,13 +54,13 @@ main_while_top@15:
     b main_while_top@15
 
 main_after_while@17:
-    // tests/approvals/itxn-compose.algo.ts:69
+    // tests/approvals/itxn-compose.algo.ts:68
     // verify() {
     intc_0 // 1
     return
 
 main_bare_routing@6:
-    // tests/approvals/itxn-compose.algo.ts:68
+    // tests/approvals/itxn-compose.algo.ts:67
     // class VerifierContract extends Contract {
     txn OnCompletion
     bnz main_after_if_else@10

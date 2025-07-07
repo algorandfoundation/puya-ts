@@ -3,25 +3,26 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 2
+    intcblock 1 0 2 8
+    bytecblock 0x0002
     // tests/approvals/assignments.algo.ts:19-20
     // @contract({ scratchSlots: [countSlot] })
     // export class AssignmentsAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@12
-    pushbytess 0x702ea108 0x5b2f7713 0x90cccb3d 0x5a3fec5a 0x27a4f367 0xd6c9f486 0x6e03ad0c // method "testPrimitives(uint64)void", method "testArrayDestructure(uint64[],uint64,uint64[])void", method "testArrayNarrowing(uint64[],uint64)void", method "testNested(uint64[][])void", method "testDestructureObj((uint64,string),(uint64,string))void", method "testObjLiteralNarrowing(uint64,uint64)void", method "testMixed(((uint64))[])void"
+    bz main_bare_routing@13
+    pushbytess 0x702ea108 0x5b2f7713 0x90cccb3d 0xd8be93bf 0x5a3fec5a 0x27a4f367 0xd6c9f486 0x6e03ad0c // method "testPrimitives(uint64)void", method "testArrayDestructure(uint64[],uint64,uint64[])void", method "testArrayNarrowing(uint64[],uint64)void", method "testTupleToArray((uint64,uint64),(uint64,uint64))void", method "testNested(uint64[][])void", method "testDestructureObj((uint64,string),(uint64,string))void", method "testObjLiteralNarrowing(uint64,uint64)void", method "testMixed(((uint64))[])void"
     txna ApplicationArgs 0
-    match main_testPrimitives_route@3 main_testArrayDestructure_route@4 main_testArrayNarrowing_route@5 main_testNested_route@6 main_testDestructureObj_route@7 main_testObjLiteralNarrowing_route@8 main_testMixed_route@9
+    match main_testPrimitives_route@3 main_testArrayDestructure_route@4 main_testArrayNarrowing_route@5 main_testTupleToArray_route@6 main_testNested_route@7 main_testDestructureObj_route@8 main_testObjLiteralNarrowing_route@9 main_testMixed_route@10
 
-main_after_if_else@16:
+main_after_if_else@17:
     // tests/approvals/assignments.algo.ts:19-20
     // @contract({ scratchSlots: [countSlot] })
     // export class AssignmentsAlgo extends Contract {
     intc_1 // 0
     return
 
-main_testMixed_route@9:
-    // tests/approvals/assignments.algo.ts:86
+main_testMixed_route@10:
+    // tests/approvals/assignments.algo.ts:96
     // testMixed(m: Array<{ a: [uint64] }>) {
     txn OnCompletion
     !
@@ -31,8 +32,8 @@ main_testMixed_route@9:
     intc_0 // 1
     return
 
-main_testObjLiteralNarrowing_route@8:
-    // tests/approvals/assignments.algo.ts:73
+main_testObjLiteralNarrowing_route@9:
+    // tests/approvals/assignments.algo.ts:83
     // testObjLiteralNarrowing(a: uint64, b: uint64) {
     txn OnCompletion
     !
@@ -42,8 +43,8 @@ main_testObjLiteralNarrowing_route@8:
     intc_0 // 1
     return
 
-main_testDestructureObj_route@7:
-    // tests/approvals/assignments.algo.ts:68
+main_testDestructureObj_route@8:
+    // tests/approvals/assignments.algo.ts:78
     // testDestructureObj(m: { a: uint64; b: string }, i: Readonly<{ a: uint64; b: string }>) {
     txn OnCompletion
     !
@@ -53,8 +54,8 @@ main_testDestructureObj_route@7:
     intc_0 // 1
     return
 
-main_testNested_route@6:
-    // tests/approvals/assignments.algo.ts:63
+main_testNested_route@7:
+    // tests/approvals/assignments.algo.ts:73
     // testNested(i_a: ReadonlyArray<ReadonlyArray<uint64>>) {
     txn OnCompletion
     !
@@ -65,9 +66,34 @@ main_testNested_route@6:
     // @contract({ scratchSlots: [countSlot] })
     // export class AssignmentsAlgo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/assignments.algo.ts:63
+    // tests/approvals/assignments.algo.ts:73
     // testNested(i_a: ReadonlyArray<ReadonlyArray<uint64>>) {
     callsub testNested
+    intc_0 // 1
+    return
+
+main_testTupleToArray_route@6:
+    // tests/approvals/assignments.algo.ts:63
+    // testTupleToArray(m_t: [uint64, uint64], i_t: readonly [uint64, uint64]) {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/assignments.algo.ts:19-20
+    // @contract({ scratchSlots: [countSlot] })
+    // export class AssignmentsAlgo extends Contract {
+    txna ApplicationArgs 1
+    txna ApplicationArgs 2
+    dup
+    intc_1 // 0
+    extract_uint64
+    swap
+    intc_3 // 8
+    extract_uint64
+    // tests/approvals/assignments.algo.ts:63
+    // testTupleToArray(m_t: [uint64, uint64], i_t: readonly [uint64, uint64]) {
+    callsub testTupleToArray
     intc_0 // 1
     return
 
@@ -123,12 +149,12 @@ main_testPrimitives_route@3:
     intc_0 // 1
     return
 
-main_bare_routing@12:
+main_bare_routing@13:
     // tests/approvals/assignments.algo.ts:19-20
     // @contract({ scratchSlots: [countSlot] })
     // export class AssignmentsAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@16
+    bnz main_after_if_else@17
     txn ApplicationID
     !
     assert // can only call when creating
@@ -138,7 +164,7 @@ main_bare_routing@12:
 
 // tests/approvals/assignments.algo.ts::logAndReturn(u: uint64) -> uint64:
 logAndReturn:
-    // tests/approvals/assignments.algo.ts:104
+    // tests/approvals/assignments.algo.ts:114
     // function logAndReturn(u: uint64): uint64 {
     proto 1 1
     // tests/approvals/assignments.algo.ts:16
@@ -147,12 +173,12 @@ logAndReturn:
     intc_0 // 1
     +
     store 0
-    // tests/approvals/assignments.algo.ts:106
+    // tests/approvals/assignments.algo.ts:116
     // log(u)
     frame_dig -1
     itob
     log
-    // tests/approvals/assignments.algo.ts:107
+    // tests/approvals/assignments.algo.ts:117
     // return u
     frame_dig -1
     retsub
@@ -214,7 +240,7 @@ testArrayDestructure:
     ==
     bz testArrayDestructure_bool_false@5
     frame_dig 1
-    pushint 8 // 8
+    intc_3 // 8
     extract_uint64
     frame_dig -2
     ==
@@ -306,12 +332,137 @@ testArrayNarrowing:
     retsub
 
 
+// tests/approvals/assignments.algo.ts::AssignmentsAlgo.testTupleToArray(m_t: bytes, i_t.0: uint64, i_t.1: uint64) -> void:
+testTupleToArray:
+    // tests/approvals/assignments.algo.ts:63
+    // testTupleToArray(m_t: [uint64, uint64], i_t: readonly [uint64, uint64]) {
+    proto 3 0
+    intc_1 // 0
+    // tests/approvals/assignments.algo.ts:64
+    // const m_a: uint64[] = clone(m_t)
+    frame_dig -3
+    intc_1 // 0
+    extract_uint64
+    dup
+    frame_dig -3
+    intc_3 // 8
+    extract_uint64
+    dup
+    uncover 2
+    itob
+    bytec_0 // 0x0002
+    swap
+    concat
+    swap
+    itob
+    concat
+    dup
+    // tests/approvals/assignments.algo.ts:65
+    // assertMatch(m_a, m_t)
+    intc_1 // 0
+    extract_uint16
+    intc_2 // 2
+    ==
+    dup
+    bz testTupleToArray_bool_false@4
+    frame_dig 3
+    intc_2 // 2
+    extract_uint64
+    frame_dig 1
+    ==
+    bz testTupleToArray_bool_false@4
+    frame_dig 3
+    pushint 10 // 10
+    extract_uint64
+    frame_dig 2
+    ==
+    bz testTupleToArray_bool_false@4
+    intc_0 // 1
+
+testTupleToArray_bool_merge@5:
+    // tests/approvals/assignments.algo.ts:65
+    // assertMatch(m_a, m_t)
+    assert // assert target is match for conditions
+    // tests/approvals/assignments.algo.ts:67
+    // assertMatch(i_a, m_t)
+    frame_dig 4
+    bz testTupleToArray_bool_false@9
+    frame_dig 3
+    intc_2 // 2
+    extract_uint64
+    frame_dig 1
+    ==
+    bz testTupleToArray_bool_false@9
+    frame_dig 3
+    pushint 10 // 10
+    extract_uint64
+    frame_dig 2
+    ==
+    bz testTupleToArray_bool_false@9
+    intc_0 // 1
+
+testTupleToArray_bool_merge@10:
+    // tests/approvals/assignments.algo.ts:67
+    // assertMatch(i_a, m_t)
+    assert // assert target is match for conditions
+    // tests/approvals/assignments.algo.ts:69
+    // const i_a2: readonly uint64[] = i_t
+    frame_dig -2
+    itob
+    bytec_0 // 0x0002
+    swap
+    concat
+    frame_dig -1
+    itob
+    concat
+    dup
+    frame_bury 0
+    // tests/approvals/assignments.algo.ts:70
+    // assertMatch(i_a2, i_t)
+    intc_1 // 0
+    extract_uint16
+    intc_2 // 2
+    ==
+    bz testTupleToArray_bool_false@14
+    frame_dig 0
+    intc_2 // 2
+    extract_uint64
+    frame_dig -2
+    ==
+    bz testTupleToArray_bool_false@14
+    frame_dig 0
+    pushint 10 // 10
+    extract_uint64
+    frame_dig -1
+    ==
+    bz testTupleToArray_bool_false@14
+    intc_0 // 1
+
+testTupleToArray_bool_merge@15:
+    // tests/approvals/assignments.algo.ts:70
+    // assertMatch(i_a2, i_t)
+    assert // assert target is match for conditions
+    retsub
+
+testTupleToArray_bool_false@14:
+    intc_1 // 0
+    b testTupleToArray_bool_merge@15
+
+testTupleToArray_bool_false@9:
+    intc_1 // 0
+    b testTupleToArray_bool_merge@10
+
+testTupleToArray_bool_false@4:
+    intc_1 // 0
+    b testTupleToArray_bool_merge@5
+
+
 // tests/approvals/assignments.algo.ts::AssignmentsAlgo.testNested(i_a: bytes) -> void:
 testNested:
-    // tests/approvals/assignments.algo.ts:63
+    // tests/approvals/assignments.algo.ts:73
     // testNested(i_a: ReadonlyArray<ReadonlyArray<uint64>>) {
     proto 1 0
-    // tests/approvals/assignments.algo.ts:64
+    // tests/approvals/assignments.algo.ts:74
     // const [[a]] = i_a
     frame_dig -1
     intc_1 // 0
