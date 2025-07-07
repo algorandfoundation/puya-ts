@@ -77,7 +77,11 @@ class Swapper
 
 ### Box Creation
 
-TODO
+In TEALScript boxes are created via the create method: `create(size?: uint64)`.
+
+In Algorand TypeScript the create method uses an object with a size parameter: `create(options?: { size?: uint64 })`
+
+In both, the size will automatically be determined for fixed-length types, thus the size parameter is optional
 
 ### Box Iteration
 
