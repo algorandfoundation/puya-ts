@@ -14,6 +14,15 @@ describe('assignments', () => {
   test('testArrayNarrowing', async ({ appClientAssignmentsAlgo }) => {
     await appClientAssignmentsAlgo.send.call({ method: 'testArrayNarrowing', args: [[1, 2, 3], 4] })
   })
+  test('testTupleToArray', async ({ appClientAssignmentsAlgo }) => {
+    await appClientAssignmentsAlgo.send.call({
+      method: 'testTupleToArray',
+      args: [
+        [1, 2],
+        [3, 4],
+      ],
+    })
+  })
   test('testNested', async ({ appClientAssignmentsAlgo }) => {
     await appClientAssignmentsAlgo.send.call({
       method: 'testNested',

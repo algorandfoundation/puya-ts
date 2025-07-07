@@ -60,6 +60,16 @@ export class AssignmentsAlgo extends Contract {
     const fromLit2: readonly uint64[] = [u, u, u]
   }
 
+  testTupleToArray(m_t: [uint64, uint64], i_t: readonly [uint64, uint64]) {
+    const m_a: uint64[] = clone(m_t)
+    assertMatch(m_a, m_t)
+    const i_a: readonly uint64[] = clone(m_t)
+    assertMatch(i_a, m_t)
+
+    const i_a2: readonly uint64[] = i_t
+    assertMatch(i_a2, i_t)
+  }
+
   testNested(i_a: ReadonlyArray<ReadonlyArray<uint64>>) {
     const [[a]] = i_a
     assert(a === i_a[0][0])

@@ -3,7 +3,7 @@ import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { codeInvariant, invariant } from '../../../util'
 import type { PType, PTypeOrClass } from '../../ptypes'
-import { ArrayPType, ReadonlyTuplePType, uint64PType } from '../../ptypes'
+import { ReadonlyArrayPType, ReadonlyTuplePType, uint64PType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { InstanceExpressionBuilder } from '../index'
@@ -22,15 +22,14 @@ export class ReadonlyTupleExpressionBuilder extends InstanceExpressionBuilder<Re
   }
 
   resolvableToPType(ptype: PTypeOrClass): boolean {
-    if (ptype instanceof ArrayPType) {
+    if (ptype instanceof ReadonlyArrayPType) {
       return this[StaticIterator]().every((item) => item.resolvableToPType(ptype.elementType))
     }
     return super.resolvableToPType(ptype)
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
-    // TODO readonly tuple should only be assignable to readonly array
-    if (ptype instanceof ArrayPType && this.ptype.items.every((i) => i.equals(ptype.elementType))) {
+    if (ptype instanceof ReadonlyArrayPType && this.ptype.items.every((i) => i.equals(ptype.elementType))) {
       return instanceEb(
         nodeFactory.newArray({
           values: this[StaticIterator]().map((i) => i.resolve()),

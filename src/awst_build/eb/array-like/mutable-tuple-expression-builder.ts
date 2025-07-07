@@ -1,9 +1,9 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
-import { codeInvariant, invariant, zipStrict } from '../../../util'
+import { codeInvariant, instanceOfAny, invariant, zipStrict } from '../../../util'
 import type { PType, PTypeOrClass } from '../../ptypes'
-import { ArrayPType, MutableTuplePType, ReadonlyTuplePType, uint64PType } from '../../ptypes'
+import { ArrayPType, MutableTuplePType, ReadonlyArrayPType, ReadonlyTuplePType, uint64PType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { InstanceExpressionBuilder } from '../index'
@@ -22,7 +22,7 @@ export class MutableTupleExpressionBuilder extends InstanceExpressionBuilder<Mut
   }
 
   resolvableToPType(ptype: PTypeOrClass): boolean {
-    if (ptype instanceof ArrayPType) {
+    if (instanceOfAny(ptype, ArrayPType, ReadonlyArrayPType)) {
       return this[StaticIterator]().every((item) => item.resolvableToPType(ptype.elementType))
     }
     if (ptype instanceof ReadonlyTuplePType) {
@@ -32,7 +32,7 @@ export class MutableTupleExpressionBuilder extends InstanceExpressionBuilder<Mut
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
-    if (ptype instanceof ArrayPType && this.ptype.items.every((i) => i.equals(ptype.elementType))) {
+    if (instanceOfAny(ptype, ArrayPType, ReadonlyArrayPType) && this.ptype.items.every((i) => i.equals(ptype.elementType))) {
       return instanceEb(
         nodeFactory.newArray({
           values: this[StaticIterator]().map((i) => i.resolve()),
