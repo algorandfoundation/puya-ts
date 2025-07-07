@@ -1,5 +1,5 @@
-import { arc4, assert, Contract, Global, itxn, Txn } from '@algorandfoundation/algorand-typescript'
-import { abiCall, compileArc4, methodSelector } from '@algorandfoundation/algorand-typescript/arc4'
+import { arc4, assert, Bytes, Contract, Global, itxn, Txn } from '@algorandfoundation/algorand-typescript'
+import { abiCall, compileArc4, methodSelector, Str } from '@algorandfoundation/algorand-typescript/arc4'
 import {
   Hello,
   HelloStubbed,
@@ -18,18 +18,19 @@ class HelloFactory extends Contract {
       args: ['hello'],
     }).itxn.createdApp
 
-    const result = compiled.call.greet({
+    const { returnValue: result } = compiled.call.greet({
       args: ['world'],
       appId: app,
-    }).returnValue
+    })
     assert(result === 'hello world')
 
-    const result2 = abiCall(Hello.prototype.greet, {
+    const { returnValue: result2, itxn: greetItxn } = abiCall(Hello.prototype.greet, {
       appId: app,
       args: ['abi'],
-    }).returnValue
+    })
 
     assert(result2 === 'hello abi')
+    assert(greetItxn.lastLog === Bytes.fromHex('151f7c75').concat(new Str('hello abi').bytes))
 
     const result3 = abiCall(HelloStubbed.prototype.greet, {
       appId: app,
