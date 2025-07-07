@@ -77,8 +77,6 @@ class Swapper
 
 ### Box Creation
 
-  APP_ID = TemplateVar<AppID>();
-
 TODO
 
 ### Box Iteration
@@ -366,11 +364,87 @@ class AppCaller extends LogicSig {
 
 ### Numerical Types
 
-TODO
+#### `number` Type
 
-### Math and Overflows
+Both TEALScript and Algorand TypeScript have a `uint64` type, but Algorand TypeScript disallows any types to be resolved as `number`. This
+means all arithmetic values must be explicitly typed as `uint64`, otherwise they will have the `number` type which is not allowed.
 
-TODO
+##### TEALScript
+
+```ts
+add(a: uint64, b: uint64): uint64 {
+  // Type not needed for sum
+  const sum = a + b;
+  return sum;
+}
+```
+
+##### Algorand TypeScript
+
+```ts
+add(a: uint64, b: uint64): uint64 {
+  // The type is required for sum
+  const sum: uint64 = a + b;
+  return sum;
+}
+```
+
+#### UintN types
+
+TEALScript supports typed numeric literals for most common uint types, such as `uint8`, `uint16`, `uint256`, etc. In Algorand TypeScript,
+the UintN constructors must be used.
+
+##### TEALScript
+
+```ts
+addOne(n: uint256): uint256 {
+  const one: uint256 = 1;
+  const sum = n + one;
+  return sum;
+}
+```
+
+##### Algorand TypeScript
+
+```ts
+addOne(n: UintN256): UintN256 {
+  // Need to explicitly use UintN256 constructor to get uint256 and use BigUint to perform arithmetic
+  const one = new BigUint(1);
+  const sum = new UintN256(BigUint(n.bytes) + one + one);
+  return sum;
+}
+```
+
+#### Math and Overflows
+
+In TEALScript, overflow checks do not occur until the value is encoded (returned, logged, put into an array/object). In Algorand TypeScript,
+overflow checking occurs whenever the `UintN` constructor is used. Since overflow checking is fairly expensive, it is recommended to not use
+the `UintN` type until it needs to be encoded.
+
+##### TEALScript
+
+```ts
+addToNumber(n: uint8) {
+  assert(n != 0)
+  const x: uint8 = 255
+  const sum = n + x // Intermediate value of overflows the max uint8, but not checked here
+
+  // final returned value is within max value of uint8, so no error
+  return sum - x
+}
+```
+
+##### Algorand TypeScript
+
+```ts
+addToNumber(n: UintN8) {
+  // Use biguint for intermediate values which can go up to u512
+  const x: biguint = 255
+  const sum: biguint = BigUint(n.bytes) + x
+
+  return UintN8(sum - x)
+}
+```
 
 ### Casting
 
