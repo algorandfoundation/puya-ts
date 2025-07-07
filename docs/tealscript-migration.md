@@ -28,9 +28,16 @@ This document is up-to-date as of TEALScript v0.107.0 and Algorand TypeScript v1
 
 ### Objects
 
+If all the property types in your object are fixed-length then no migration is necessary outside of other migrations mentioned in this document. More complex objects might need to use a different class shown below, but
+it is strongly recommended to use fixed-length types whenever possible.
+
 TODO: describe different types of objects and when you need to use them over POJOs
 
 ### Arrays
+
+If there are no nested dynamic types (i.e fixed length types or a single dynamic array of a fixed-length type) then no migration is
+necessary outside of other migrations mentioned in this document. More complex arrays might need to use a different class shown below, but
+it is strongly recommended to use fixed-length types whenever possible.
 
 TODO: describe different types of arrays and when you need to use them over native arrays
 
