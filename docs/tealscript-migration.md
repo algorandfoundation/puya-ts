@@ -473,4 +473,27 @@ convertNumber(n: uint64): Uint8N {
 
 ### Array & Object References
 
-TODO
+TEALScript allows developers to create mutable references to arrays and objects, even when nested. Algorand TypeScript, however, does not
+allow this. Any new variables must copy the array or object.
+
+##### TEALScript
+
+```ts
+const a: uint64[] = [1, 2, 3]
+const b = a
+b.push(4)
+
+assert(a === b) // a and b are referencing the same array
+```
+
+##### Algorand TypeScript
+
+TODO: How to copy POJOs and Arrays?
+
+```ts
+const a: uint64[] = [1, 2, 3]
+const b = copy(a)
+b.push(4)
+
+assert(a != b) // b has 4 but a does not
+```
