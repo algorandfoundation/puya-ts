@@ -22,7 +22,7 @@ main_after_if_else@17:
     return
 
 main_testMixed_route@10:
-    // tests/approvals/assignments.algo.ts:96
+    // tests/approvals/assignments.algo.ts:98
     // testMixed(m: Array<{ a: [uint64] }>) {
     txn OnCompletion
     !
@@ -40,6 +40,16 @@ main_testObjLiteralNarrowing_route@9:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
+    // tests/approvals/assignments.algo.ts:19-20
+    // @contract({ scratchSlots: [countSlot] })
+    // export class AssignmentsAlgo extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    // tests/approvals/assignments.algo.ts:83
+    // testObjLiteralNarrowing(a: uint64, b: uint64) {
+    callsub testObjLiteralNarrowing
     intc_0 // 1
     return
 
@@ -162,56 +172,55 @@ main_bare_routing@13:
     return
 
 
-// tests/approvals/assignments.algo.ts::logAndReturn(u: uint64) -> uint64:
-logAndReturn:
-    // tests/approvals/assignments.algo.ts:114
-    // function logAndReturn(u: uint64): uint64 {
-    proto 1 1
+// tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayDestructure(i_a: bytes, u: uint64, m_a: bytes) -> void:
+testArrayDestructure:
+    // tests/approvals/assignments.algo.ts:29
+    // testArrayDestructure(i_a: ReadonlyArray<uint64>, u: uint64, m_a: uint64[]) {
+    proto 3 0
+    // tests/approvals/assignments.algo.ts:9
+    // op.Scratch.store(countSlot, 0)
+    intc_1 // 0
+    store 0
     // tests/approvals/assignments.algo.ts:16
     // op.Scratch.store(countSlot, op.Scratch.loadUint64(countSlot) + 1)
     load 0
     intc_0 // 1
     +
     store 0
-    // tests/approvals/assignments.algo.ts:116
+    // tests/approvals/assignments.algo.ts:119
     // log(u)
-    frame_dig -1
+    frame_dig -2
     itob
+    dupn 2
     log
-    // tests/approvals/assignments.algo.ts:117
-    // return u
-    frame_dig -1
-    retsub
-
-
-// tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayDestructure(i_a: bytes, u: uint64, m_a: bytes) -> void:
-testArrayDestructure:
-    // tests/approvals/assignments.algo.ts:29
-    // testArrayDestructure(i_a: ReadonlyArray<uint64>, u: uint64, m_a: uint64[]) {
-    proto 3 0
-    pushbytes ""
-    // tests/approvals/assignments.algo.ts:9
-    // op.Scratch.store(countSlot, 0)
-    intc_1 // 0
+    // tests/approvals/assignments.algo.ts:16
+    // op.Scratch.store(countSlot, op.Scratch.loadUint64(countSlot) + 1)
+    load 0
+    intc_0 // 1
+    +
     store 0
+    // tests/approvals/assignments.algo.ts:119
+    // log(u)
+    dup
+    log
+    // tests/approvals/assignments.algo.ts:16
+    // op.Scratch.store(countSlot, op.Scratch.loadUint64(countSlot) + 1)
+    load 0
+    intc_0 // 1
+    +
+    store 0
+    // tests/approvals/assignments.algo.ts:119
+    // log(u)
+    dup
+    log
     // tests/approvals/assignments.algo.ts:34
     // const a5 = ([a2, a3] = [logAndReturn(u), logAndReturn(u), logAndReturn(u)])
-    frame_dig -2
-    callsub logAndReturn
-    frame_dig -2
-    callsub logAndReturn
-    frame_dig -2
-    callsub logAndReturn
-    dig 2
-    itob
-    dig 2
-    itob
+    dup
+    dig 1
     concat
     swap
-    itob
     concat
     dup
-    cover 3
     // tests/approvals/assignments.algo.ts:12
     // return op.Scratch.loadUint64(countSlot)
     load 0
@@ -220,18 +229,6 @@ testArrayDestructure:
     pushint 3 // 3
     ==
     assert // logAndReturn called 3 times
-    // tests/approvals/assignments.algo.ts:36
-    // assert(a2 === u)
-    uncover 2
-    frame_dig -2
-    ==
-    assert
-    // tests/approvals/assignments.algo.ts:37
-    // assert(a3 === u)
-    swap
-    frame_dig -2
-    ==
-    assert
     // tests/approvals/assignments.algo.ts:38
     // assertMatch(a5, [u, u, u])
     intc_1 // 0
@@ -257,36 +254,37 @@ testArrayDestructure_bool_merge@6:
     // tests/approvals/assignments.algo.ts:38
     // assertMatch(a5, [u, u, u])
     assert // assert target is match for conditions
-    // tests/approvals/assignments.algo.ts:42
-    // const [c, d] = [logAndReturn(u), logAndReturn(u), logAndReturn(u)]
-    frame_dig -2
-    callsub logAndReturn
-    frame_dig -2
-    callsub logAndReturn
-    frame_bury 0
-    frame_dig -2
-    callsub logAndReturn
-    pop
-    // tests/approvals/assignments.algo.ts:43
-    // assertMatch([c, d], [u, u])
-    frame_dig -2
-    ==
-    bz testArrayDestructure_bool_false@10
-    frame_dig 0
-    frame_dig -2
-    ==
-    bz testArrayDestructure_bool_false@10
+    // tests/approvals/assignments.algo.ts:16
+    // op.Scratch.store(countSlot, op.Scratch.loadUint64(countSlot) + 1)
+    load 0
     intc_0 // 1
-
-testArrayDestructure_bool_merge@11:
-    // tests/approvals/assignments.algo.ts:43
-    // assertMatch([c, d], [u, u])
-    assert // assert target is match for conditions
+    +
+    store 0
+    // tests/approvals/assignments.algo.ts:119
+    // log(u)
+    frame_dig 0
+    dup
+    log
+    // tests/approvals/assignments.algo.ts:16
+    // op.Scratch.store(countSlot, op.Scratch.loadUint64(countSlot) + 1)
+    load 0
+    intc_0 // 1
+    +
+    store 0
+    // tests/approvals/assignments.algo.ts:119
+    // log(u)
+    dup
+    log
+    // tests/approvals/assignments.algo.ts:16
+    // op.Scratch.store(countSlot, op.Scratch.loadUint64(countSlot) + 1)
+    load 0
+    intc_0 // 1
+    +
+    store 0
+    // tests/approvals/assignments.algo.ts:119
+    // log(u)
+    log
     retsub
-
-testArrayDestructure_bool_false@10:
-    intc_1 // 0
-    b testArrayDestructure_bool_merge@11
 
 testArrayDestructure_bool_false@5:
     intc_1 // 0
@@ -468,4 +466,44 @@ testNested:
     intc_1 // 0
     extract_uint16
     assert // index access is out of bounds
+    retsub
+
+
+// tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNarrowing(a: uint64, b: uint64) -> void:
+testObjLiteralNarrowing:
+    // tests/approvals/assignments.algo.ts:83
+    // testObjLiteralNarrowing(a: uint64, b: uint64) {
+    proto 2 0
+    // tests/approvals/assignments.algo.ts:9
+    // op.Scratch.store(countSlot, 0)
+    intc_1 // 0
+    store 0
+    // tests/approvals/assignments.algo.ts:16
+    // op.Scratch.store(countSlot, op.Scratch.loadUint64(countSlot) + 1)
+    load 0
+    intc_0 // 1
+    +
+    store 0
+    // tests/approvals/assignments.algo.ts:12
+    // return op.Scratch.loadUint64(countSlot)
+    load 0
+    // tests/approvals/assignments.algo.ts:92
+    // assert(getCount() === 1, 'getVal should only be called once')
+    intc_0 // 1
+    ==
+    assert // getVal should only be called once
+    // tests/approvals/assignments.algo.ts:16
+    // op.Scratch.store(countSlot, op.Scratch.loadUint64(countSlot) + 1)
+    load 0
+    intc_0 // 1
+    +
+    store 0
+    // tests/approvals/assignments.algo.ts:12
+    // return op.Scratch.loadUint64(countSlot)
+    load 0
+    // tests/approvals/assignments.algo.ts:95
+    // assert(getCount() === 2, 'getVal should still be called once even though its result is not used')
+    intc_2 // 2
+    ==
+    assert // getVal should still be called once even though its result is not used
     retsub

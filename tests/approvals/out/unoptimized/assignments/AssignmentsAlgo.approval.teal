@@ -46,7 +46,7 @@ main_after_inlined_tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_a
     return
 
 main_testMixed_route@10:
-    // tests/approvals/assignments.algo.ts:96
+    // tests/approvals/assignments.algo.ts:98
     // testMixed(m: Array<{ a: [uint64] }>) {
     txn OnCompletion
     intc_0 // NoOp
@@ -60,7 +60,7 @@ main_testMixed_route@10:
     // @contract({ scratchSlots: [countSlot] })
     // export class AssignmentsAlgo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/assignments.algo.ts:96
+    // tests/approvals/assignments.algo.ts:98
     // testMixed(m: Array<{ a: [uint64] }>) {
     callsub testMixed
     intc_2 // 1
@@ -331,12 +331,15 @@ getVal:
 
 getVal_block@0:
     // tests/approvals/assignments.algo.ts:109
+    // incCount()
+    callsub incCount
+    // tests/approvals/assignments.algo.ts:112
     // a: 1,
     intc_2 // 1
-    // tests/approvals/assignments.algo.ts:110
+    // tests/approvals/assignments.algo.ts:113
     // b: 2,
     intc_3 // 2
-    // tests/approvals/assignments.algo.ts:108-111
+    // tests/approvals/assignments.algo.ts:111-114
     // return {
     //   a: 1,
     //   b: 2,
@@ -346,20 +349,20 @@ getVal_block@0:
 
 // tests/approvals/assignments.algo.ts::logAndReturn(u: uint64) -> uint64:
 logAndReturn:
-    // tests/approvals/assignments.algo.ts:114
+    // tests/approvals/assignments.algo.ts:117
     // function logAndReturn(u: uint64): uint64 {
     proto 1 1
 
 logAndReturn_block@0:
-    // tests/approvals/assignments.algo.ts:115
+    // tests/approvals/assignments.algo.ts:118
     // incCount()
     callsub incCount
-    // tests/approvals/assignments.algo.ts:116
+    // tests/approvals/assignments.algo.ts:119
     // log(u)
     frame_dig -1
     itob
     log
-    // tests/approvals/assignments.algo.ts:117
+    // tests/approvals/assignments.algo.ts:120
     // return u
     frame_dig -1
     retsub
@@ -1036,16 +1039,35 @@ testObjLiteralNarrowing:
     proto 2 0
 
 testObjLiteralNarrowing_block@0:
+    // tests/approvals/assignments.algo.ts:90
+    // resetCount()
+    callsub resetCount
     // tests/approvals/assignments.algo.ts:91
     // const mObj3: MutableObj = { ...getVal() }
     callsub getVal
     popn 2
+    // tests/approvals/assignments.algo.ts:92
+    // assert(getCount() === 1, 'getVal should only be called once')
+    callsub getCount
+    intc_2 // 1
+    ==
+    assert // getVal should only be called once
+    // tests/approvals/assignments.algo.ts:94
+    // const mObj4: MutableObj = { ...getVal(), a, b }
+    callsub getVal
+    popn 2
+    // tests/approvals/assignments.algo.ts:95
+    // assert(getCount() === 2, 'getVal should still be called once even though its result is not used')
+    callsub getCount
+    intc_3 // 2
+    ==
+    assert // getVal should still be called once even though its result is not used
     retsub
 
 
 // tests/approvals/assignments.algo.ts::AssignmentsAlgo.testMixed(m: bytes) -> void:
 testMixed:
-    // tests/approvals/assignments.algo.ts:96
+    // tests/approvals/assignments.algo.ts:98
     // testMixed(m: Array<{ a: [uint64] }>) {
     proto 1 0
 

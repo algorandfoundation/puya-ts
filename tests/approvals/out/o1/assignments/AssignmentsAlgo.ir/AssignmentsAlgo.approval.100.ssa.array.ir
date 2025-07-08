@@ -97,7 +97,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNarrowing(tmp%38#0, tmp%39#0)
         let tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#6: bool = 1u
         goto block@18
-    block@10: // testMixed_route_L96
+    block@10: // testMixed_route_L98
         let tmp%40#0: uint64 = (txn OnCompletion)
         let tmp%41#0: bool = (! tmp%40#0)
         (assert tmp%41#0) // OnCompletion is not NoOp
@@ -300,15 +300,6 @@ subroutine _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(ar
     block@4: // after_for_L331
         return array_head_and_tail#1
 
-subroutine tests/approvals/assignments.algo.ts::logAndReturn(u: uint64) -> uint64:
-    block@0: // L114
-        let tmp%0#1: uint64 = (load 0)
-        let tmp%1#0: uint64 = (+ tmp%0#1 1u)
-        ((store 0) tmp%1#0)
-        let tmp%0#0: bytes[8] = (itob u#0)
-        (log tmp%0#0)
-        return u#0
-
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayDestructure(i_a: Encoded(len+uint64[]), u: uint64, m_a: Encoded(len+uint64[])) -> void:
     block@0: // L29
         let aggregate%array_trimmed%0#1: bytes = ((extract 2 0) i_a#0)
@@ -317,27 +308,33 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayDestruc
         let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#1
         let a1#0: uint64 = (btoi array_item%0#0)
         ((store 0) 0u)
-        let a2#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
-        let a3#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
-        let tmp%3#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob a2#0)
+        let tmp%0#7: uint64 = (load 0)
+        let tmp%1#3: uint64 = (+ tmp%0#7 1u)
+        ((store 0) tmp%1#3)
+        let tmp%0#6: bytes[8] = (itob u#0)
+        (log tmp%0#6)
+        let tmp%0#9: uint64 = (load 0)
+        let tmp%1#4: uint64 = (+ tmp%0#9 1u)
+        ((store 0) tmp%1#4)
+        (log tmp%0#6)
+        let tmp%0#11: uint64 = (load 0)
+        let tmp%1#5: uint64 = (+ tmp%0#11 1u)
+        ((store 0) tmp%1#5)
+        (log tmp%0#6)
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob u#0)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
         let aggregate%head%0#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob a3#0)
+        let aggregate%val_as_bytes%1#1: bytes[8] = (itob u#0)
         let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
         let aggregate%head%1#1: bytes = (concat aggregate%head%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%val_as_bytes%2#1: bytes[8] = (itob tmp%3#0)
+        let aggregate%val_as_bytes%2#1: bytes[8] = (itob u#0)
         let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
         let aggregate%head%2#1: bytes = (concat aggregate%head%1#1 aggregate%as_Encoded(uint64)%2#1)
         let aggregate%as_Encoded(uint64,uint64,uint64)%0#1: Encoded(uint64,uint64,uint64) = aggregate%head%2#1
         let a5#0: Encoded(uint64,uint64,uint64) = aggregate%as_Encoded(uint64,uint64,uint64)%0#1
-        let tmp%0#1: uint64 = (load 0)
-        let tmp%6#0: bool = (== tmp%0#1 3u)
+        let tmp%0#12: uint64 = (load 0)
+        let tmp%6#0: bool = (== tmp%0#12 3u)
         (assert tmp%6#0) // logAndReturn called 3 times
-        let tmp%7#0: bool = (== a2#0 u#0)
-        (assert tmp%7#0)
-        let tmp%8#0: bool = (== a3#0 u#0)
-        (assert tmp%8#0)
         let aggregate%extract%0#1: bytes = (extract3 a5#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
         let values%2#0: uint64 = (btoi tuple_item%0#0)
@@ -364,23 +361,18 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayDestruc
     block@6: // bool_merge_L38
         let and_result%0#2: bool = φ(and_result%0#0 <- block@4, and_result%0#1 <- block@5)
         (assert and_result%0#2) // assert target is match for conditions
-        let c#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
-        let d#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
-        let tmp%17#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#0)
-        let tmp%19#0: bool = (== c#0 u#0)
-        goto tmp%19#0 ? block@8 : block@10
-    block@8: // and_contd_L43
-        let tmp%20#0: bool = (== d#0 u#0)
-        goto tmp%20#0 ? block@9 : block@10
-    block@9: // bool_true_L43
-        let and_result%1#0: bool = 1u
-        goto block@11
-    block@10: // bool_false_L43
-        let and_result%1#1: bool = 0u
-        goto block@11
-    block@11: // bool_merge_L43
-        let and_result%1#2: bool = φ(and_result%1#0 <- block@9, and_result%1#1 <- block@10)
-        (assert and_result%1#2) // assert target is match for conditions
+        let tmp%0#1: uint64 = (load 0)
+        let tmp%1#0: uint64 = (+ tmp%0#1 1u)
+        ((store 0) tmp%1#0)
+        (log tmp%0#6)
+        let tmp%0#3: uint64 = (load 0)
+        let tmp%1#1: uint64 = (+ tmp%0#3 1u)
+        ((store 0) tmp%1#1)
+        (log tmp%0#6)
+        let tmp%0#5: uint64 = (load 0)
+        let tmp%1#2: uint64 = (+ tmp%0#5 1u)
+        ((store 0) tmp%1#2)
+        (log tmp%0#6)
         let aggregate%array_trimmed%1#1: bytes = ((extract 2 0) m_a#0)
         let aggregate%bytes_offset%1#1: uint64 = (* 0u 8u)
         let aggregate%encoded_element%1#1: bytes = (extract3 aggregate%array_trimmed%1#1 aggregate%bytes_offset%1#1 8u) // on error: index access is out of bounds
@@ -610,6 +602,10 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNa
         let aggregate%head%3#1: bytes = (concat aggregate%head%2#1 aggregate%as_Encoded(uint64)%3#1)
         let aggregate%as_Encoded(uint64,uint64)%1#1: Encoded(uint64,uint64) = aggregate%head%3#1
         let mObj2#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%1#1
+        ((store 0) 0u)
+        let tmp%0#0: uint64 = (load 0)
+        let tmp%1#0: uint64 = (+ tmp%0#0 1u)
+        ((store 0) tmp%1#0)
         let aggregate%val_as_bytes%4#1: bytes[8] = (itob 1u)
         let aggregate%as_Encoded(uint64)%4#1: Encoded(uint64) = aggregate%val_as_bytes%4#1
         let aggregate%head%4#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%4#1)
@@ -618,10 +614,19 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNa
         let aggregate%head%5#1: bytes = (concat aggregate%head%4#1 aggregate%as_Encoded(uint64)%5#1)
         let aggregate%as_Encoded(uint64,uint64)%2#1: Encoded(uint64,uint64) = aggregate%head%5#1
         let mObj3#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%2#1
+        let tmp%0#1: uint64 = (load 0)
+        let tmp%4#0: bool = (== tmp%0#1 1u)
+        (assert tmp%4#0) // getVal should only be called once
+        let tmp%0#2: uint64 = (load 0)
+        let tmp%1#1: uint64 = (+ tmp%0#2 1u)
+        ((store 0) tmp%1#1)
+        let tmp%0#3: uint64 = (load 0)
+        let tmp%7#0: bool = (== tmp%0#3 2u)
+        (assert tmp%7#0) // getVal should still be called once even though its result is not used
         return 
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testMixed(m: Encoded(len+((uint64))[])) -> void:
-    block@0: // L96
+    block@0: // L98
         let aggregate%array_trimmed%0#1: bytes = ((extract 2 0) m#0)
         let aggregate%bytes_offset%0#1: uint64 = (* 0u 8u)
         let aggregate%encoded_element%0#1: bytes = (extract3 aggregate%array_trimmed%0#1 aggregate%bytes_offset%0#1 8u) // on error: index access is out of bounds

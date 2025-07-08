@@ -22,21 +22,24 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
         let u#1: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
         ((store 0) 0u)
-        let a2#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#1)
-        let a3#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#1)
-        let tmp%3#1: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#1)
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob a2#0)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob a3#0)
-        let aggregate%head%1#1: bytes = (concat aggregate%val_as_bytes%0#1 aggregate%val_as_bytes%1#1)
-        let aggregate%val_as_bytes%2#1: bytes[8] = (itob tmp%3#1)
-        let a5#0: Encoded(uint64,uint64,uint64) = (concat aggregate%head%1#1 aggregate%val_as_bytes%2#1)
-        let tmp%0#7: uint64 = (load 0)
-        let tmp%6#2: bool = (== tmp%0#7 3u)
-        (assert tmp%6#2) // logAndReturn called 3 times
-        let tmp%7#2: bool = (== a2#0 u#1)
-        (assert tmp%7#2)
-        let tmp%8#2: bool = (== a3#0 u#1)
-        (assert tmp%8#2)
+        let tmp%0#21: uint64 = (load 0)
+        let tmp%1#9: uint64 = (+ tmp%0#21 1u)
+        ((store 0) tmp%1#9)
+        let tmp%0#12: bytes[8] = (itob u#1)
+        (log tmp%0#12)
+        let tmp%0#22: uint64 = (load 0)
+        let tmp%1#10: uint64 = (+ tmp%0#22 1u)
+        ((store 0) tmp%1#10)
+        (log tmp%0#12)
+        let tmp%0#23: uint64 = (load 0)
+        let tmp%1#11: uint64 = (+ tmp%0#23 1u)
+        ((store 0) tmp%1#11)
+        (log tmp%0#12)
+        let aggregate%head%1#1: bytes = (concat tmp%0#12 tmp%0#12)
+        let a5#0: Encoded(uint64,uint64,uint64) = (concat aggregate%head%1#1 tmp%0#12)
+        let tmp%0#15: uint64 = (load 0)
+        let tmp%6#3: bool = (== tmp%0#15 3u)
+        (assert tmp%6#3) // logAndReturn called 3 times
         let values%2#2: uint64 = (extract_uint64 a5#0 0u)
         let tmp%10#1: bool = (== values%2#2 u#1)
         goto tmp%10#1 ? block@49 : block@52
@@ -57,23 +60,18 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@53: // bool_merge_L38
         let and_result%0#5: bool = φ(and_result%0#3 <- block@51, and_result%0#4 <- block@52)
         (assert and_result%0#5) // assert target is match for conditions
-        let c#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#1)
-        let d#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#1)
-        let tmp%17#1: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#1)
-        let tmp%19#1: bool = (== c#0 u#1)
-        goto tmp%19#1 ? block@54 : block@56
-    block@54: // and_contd_L43
-        let tmp%20#1: bool = (== d#0 u#1)
-        goto tmp%20#1 ? block@55 : block@56
-    block@55: // bool_true_L43
-        let and_result%1#3: bool = 1u
-        goto block@57
-    block@56: // bool_false_L43
-        let and_result%1#4: bool = 0u
-        goto block@57
-    block@57: // bool_merge_L43
-        let and_result%1#5: bool = φ(and_result%1#3 <- block@55, and_result%1#4 <- block@56)
-        (assert and_result%1#5) // assert target is match for conditions
+        let tmp%0#18: uint64 = (load 0)
+        let tmp%1#6: uint64 = (+ tmp%0#18 1u)
+        ((store 0) tmp%1#6)
+        (log tmp%0#12)
+        let tmp%0#19: uint64 = (load 0)
+        let tmp%1#7: uint64 = (+ tmp%0#19 1u)
+        ((store 0) tmp%1#7)
+        (log tmp%0#12)
+        let tmp%0#20: uint64 = (load 0)
+        let tmp%1#8: uint64 = (+ tmp%0#20 1u)
+        ((store 0) tmp%1#8)
+        (log tmp%0#12)
         let tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#1: bool = 1u
         goto block@18
     block@5: // testArrayNarrowing_route_L49
@@ -135,8 +133,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto tmp%0#4 ? block@35 : block@38
     block@35: // and_contd_L67
         let values%8#0: uint64 = (extract_uint64 m_a#0 2u)
-        let tmp%4#1: bool = (== values%8#0 values%0#0)
-        goto tmp%4#1 ? block@36 : block@38
+        let tmp%4#2: bool = (== values%8#0 values%0#0)
+        goto tmp%4#2 ? block@36 : block@38
     block@36: // and_contd_L67
         let values%10#0: uint64 = (extract_uint64 m_a#0 10u)
         let tmp%5#1: bool = (== values%10#0 values%1#0)
@@ -155,12 +153,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%val_as_bytes%11#1: bytes[8] = (itob i_t.1#0)
         let i_a2#0: Encoded(len+uint64[]) = (concat aggregate%head%8#1 aggregate%val_as_bytes%11#1)
         let array_length%2#0: uint64 = (extract_uint16 i_a2#0 0u)
-        let tmp%6#1: bool = (== array_length%2#0 2u)
-        goto tmp%6#1 ? block@40 : block@43
+        let tmp%6#2: bool = (== array_length%2#0 2u)
+        goto tmp%6#2 ? block@40 : block@43
     block@40: // and_contd_L70
         let values%12#0: uint64 = (extract_uint64 i_a2#0 2u)
-        let tmp%7#1: bool = (== values%12#0 i_t.0#0)
-        goto tmp%7#1 ? block@41 : block@43
+        let tmp%7#2: bool = (== values%12#0 i_t.0#0)
+        goto tmp%7#2 ? block@41 : block@43
     block@41: // and_contd_L70
         let values%13#0: uint64 = (extract_uint64 i_a2#0 10u)
         let tmp%8#1: bool = (== values%13#0 i_t.1#0)
@@ -201,9 +199,22 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%35#0) // OnCompletion is not NoOp
         let tmp%36#0: uint64 = (txn ApplicationID)
         (assert tmp%36#0) // can only call when not creating
+        ((store 0) 0u)
+        let tmp%0#16: uint64 = (load 0)
+        let tmp%1#4: uint64 = (+ tmp%0#16 1u)
+        ((store 0) tmp%1#4)
+        let tmp%0#7: uint64 = (load 0)
+        let tmp%4#1: bool = (== tmp%0#7 1u)
+        (assert tmp%4#1) // getVal should only be called once
+        let tmp%0#17: uint64 = (load 0)
+        let tmp%1#5: uint64 = (+ tmp%0#17 1u)
+        ((store 0) tmp%1#5)
+        let tmp%0#8: uint64 = (load 0)
+        let tmp%7#1: bool = (== tmp%0#8 2u)
+        (assert tmp%7#1) // getVal should still be called once even though its result is not used
         let tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#6: bool = 1u
         goto block@18
-    block@10: // testMixed_route_L96
+    block@10: // testMixed_route_L98
         let tmp%40#0: uint64 = (txn OnCompletion)
         let tmp%41#0: bool = (! tmp%40#0)
         (assert tmp%41#0) // OnCompletion is not NoOp
@@ -224,14 +235,5 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#9: bool = 0u
         goto block@18
     block@18: // after_inlined_tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#1 <- block@57, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#3 <- block@44, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#6 <- block@9, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#7 <- block@10, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#8 <- block@14, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#9 <- block@17)
+        let tmp%0#0: bool = φ(tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#1 <- block@53, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#3 <- block@44, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#6 <- block@9, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#7 <- block@10, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#8 <- block@14, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#9 <- block@17)
         return tmp%0#0
-
-subroutine tests/approvals/assignments.algo.ts::logAndReturn(u: uint64) -> uint64:
-    block@0: // L114
-        let tmp%0#1: uint64 = (load 0)
-        let tmp%1#0: uint64 = (+ tmp%0#1 1u)
-        ((store 0) tmp%1#0)
-        let tmp%0#0: bytes[8] = (itob u#0)
-        (log tmp%0#0)
-        return u#0

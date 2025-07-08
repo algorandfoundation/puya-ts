@@ -115,23 +115,33 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
 
   private toObjectType(ptype: ImmutableObjectPType | MutableObjectPType | ObjectLiteralPType): Expression {
     let base: InstanceBuilder
-    if (this.ptype.hasSameStructure(ptype) || this.isSingleEval) {
+    if (this.isSingleEval || (this.ptype.hasSameStructure(ptype) && this.items.length === Object.keys(ptype.properties).length)) {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       base = this
     } else {
-      // Resolve this object to a tuple using declared order but using the target property types.
+      // Resolve all items to a tuple but using the target ptype
       // This will resolve numeric literals to algo-ts types if available
+
+      const itemToPropertyType = Object.fromEntries(
+        Object.entries(this.propertyToItemMap).map(([propName, index]) => [index, getIndexType(ptype, propName, this.sourceLocation)]),
+      )
+
+      const tuple = nodeFactory.singleEvaluation({
+        source: nodeFactory.tupleExpression({
+          items: this.items.map((item, index) => requireExpressionOfType(item, itemToPropertyType[index] ?? item.ptype)),
+          sourceLocation: this.sourceLocation,
+        }),
+      })
       const tempType = new ObjectLiteralPType({
-        properties: Object.fromEntries(
-          this.ptype.orderedProperties().map(([p, t]) => [p, getIndexType(ptype, p, this.sourceLocation) ?? t] as const),
-        ),
+        properties: ptype.properties,
       })
 
       base = new ResolvedObjectLiteralExpressionBuilder(
         nodeFactory.tupleExpression({
-          items: tempType
-            .orderedProperties()
-            .map(([p, propType]) => requireExpressionOfType(this.memberAccess(p, this.sourceLocation), propType)),
+          items: ptype.orderedProperties().map(([p]) => {
+            const index = this.propertyToItemMap[p]
+            return nodeFactory.tupleItemExpression({ base: tuple, index: BigInt(index), sourceLocation: this.items[index].sourceLocation })
+          }),
           sourceLocation: this.sourceLocation,
           wtype: tempType.wtype,
         }),

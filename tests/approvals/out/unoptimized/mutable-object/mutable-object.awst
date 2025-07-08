@@ -16,10 +16,10 @@ contract MutableObjectDemo
   
   testVectorCreationAndEquality(): void
   {
-    v1: tests/approvals/mutable-object.algo.ts::Vector = new tests/approvals/mutable-object.algo.ts::Vector(x=($0 = #{ y: ($1 = #{ y: 1, x: 0 }).y, x: $1.x }).x, y=$0.y)
+    v1: tests/approvals/mutable-object.algo.ts::Vector = new tests/approvals/mutable-object.algo.ts::Vector(x=($0 = #{ y: ($1 = #{ y: ($2 = #[1, 0]).0, x: $2.1 }).y, x: $1.x }).x, y=$0.y)
     log(itob(v1.x))
     log(itob(v1.y))
-    v2: tests/approvals/mutable-object.algo.ts::Vector = new tests/approvals/mutable-object.algo.ts::Vector(x=($2 = #{ y: ($3 = #{ y: 1, x: 0 }).y, x: $3.x }).x, y=$2.y)
+    v2: tests/approvals/mutable-object.algo.ts::Vector = new tests/approvals/mutable-object.algo.ts::Vector(x=($3 = #{ y: ($4 = #{ y: ($5 = #[1, 0]).0, x: $5.1 }).y, x: $4.x }).x, y=$3.y)
     assert(v1.x == v2.x and v1.y == v2.y, comment=assert target is match for conditions)
   }
   
@@ -38,7 +38,7 @@ contract MutableObjectDemo
   implicitCastingAndSpreading(v1: tests/approvals/mutable-object.algo.ts::Vector): void
   {
     v2: tests/approvals/mutable-object.algo.ts::Vector = copy(v1)
-    v3: ObjectDC5110F2 = new ObjectDC5110F2(x=($4 = #{ x: v2.x, y: v2.y }).x, y=$4.y)
+    v3: ObjectDC5110F2 = new ObjectDC5110F2(x=($6 = #{ x: v2.x, y: v2.y }).x, y=$6.y)
     assert(v1.x == v2.x)
     assert(v1.y == v2.y)
     assert(v1.x == v2.x and v1.y == v2.y, comment=assert target is match for conditions)
@@ -52,9 +52,9 @@ contract MutableObjectDemo
   
   testNestedObjects(vp: tests/approvals/mutable-object.algo.ts::VectorPoint): void
   {
-    v1: ObjectDC5110F2 = new ObjectDC5110F2(x=($5 = #{ x: vp.v.x, y: vp.v.y }).x, y=$5.y)
-    p1: ObjectDC5110F2 = new ObjectDC5110F2(x=($6 = #{ x: vp.p.x, y: vp.p.y }).x, y=$6.y)
-    vp1: Object94959925 = new Object94959925(v=($7 = #{ v: copy(v1), p: copy(p1) }).v, p=$7.p)
+    v1: ObjectDC5110F2 = new ObjectDC5110F2(x=($7 = #{ x: vp.v.x, y: vp.v.y }).x, y=$7.y)
+    p1: ObjectDC5110F2 = new ObjectDC5110F2(x=($8 = #{ x: vp.p.x, y: vp.p.y }).x, y=$8.y)
+    vp1: Object94959925 = new Object94959925(v=($9 = #{ v: copy(v1), p: copy(p1) }).v, p=$9.p)
     log(itob(vp1.v.x))
     log(itob(vp1.v.y))
     log(itob(vp1.p.x))
@@ -71,9 +71,9 @@ contract MutableObjectDemo
   
   testAssertMatch(x: uint64): void
   {
-    obj: tests/approvals/mutable-object.algo.ts::Vector = new tests/approvals/mutable-object.algo.ts::Vector(x=($8 = #{ y: (b = x * 2), x: b }).x, y=$8.y)
+    obj: tests/approvals/mutable-object.algo.ts::Vector = new tests/approvals/mutable-object.algo.ts::Vector(x=($10 = #{ y: (b = x * 2), x: b }).x, y=$10.y)
     assert(obj.y == x * 2 and obj.x == x * 2, comment=assert target is match for conditions)
-    v: Object5255DE76 = new Object5255DE76(y=($9 = #{ y: obj.y, x: obj.x }).y, x=$9.x)
+    v: Object5255DE76 = new Object5255DE76(y=($11 = #{ y: obj.y, x: obj.x }).y, x=$11.x)
     assert(obj.x == v.x and obj.y == v.y, comment=assert target is match for conditions)
     assert(obj.y > x, comment=assert target is match for conditions)
     assert(obj.x > x, comment=assert target is match for conditions)
@@ -82,7 +82,7 @@ contract MutableObjectDemo
   testArc4Encoding(p: tests/approvals/mutable-object.algo.ts::Point): void
   {
     assert(p.x != p.y, comment=For the purpose of this test, a should not equal b)
-    obj: tests/approvals/mutable-object.algo.ts::Vector = new tests/approvals/mutable-object.algo.ts::Vector(x=($10 = #{ x: p.x, y: p.y }).x, y=$10.y)
+    obj: tests/approvals/mutable-object.algo.ts::Vector = new tests/approvals/mutable-object.algo.ts::Vector(x=($12 = #{ x: p.x, y: p.y }).x, y=$12.y)
     pEncoded: bytes = reinterpret_cast<bytes>(ARC4_ENCODE(p, wtype=Point))
     objEncoded: bytes = reinterpret_cast<bytes>(ARC4_ENCODE(obj, wtype=Vector))
     assert(pEncoded == concat(objEncoded.slice(8), objEncoded.slice(0, 8)), comment=Encoded order should be swapped)
@@ -104,7 +104,7 @@ contract MutableObjectDemo
   
   setPlugin(key: string): void
   {
-    Box[BoxMapKey(prefix="plugins", key=key)].value: tests/approvals/mutable-object.algo.ts::PluginInfo = new tests/approvals/mutable-object.algo.ts::PluginInfo(lastValidRound=($11 = #{ lastValidRound: 1, cooldown: 0, lastCalled: 0, adminPrivileges: False, methods: #[#{ selector: ARC4_ENCODE(reinterpret_cast<bytes>(Method("test()void")), wtype=arc4.static_array<arc4.byte>), cooldown: 1, lastCalled: 1 }] }).lastValidRound, cooldown=$11.cooldown, lastCalled=$11.lastCalled, adminPrivileges=$11.adminPrivileges, methods=new arc4.dynamic_array<tests/approvals/mutable-object.algo.ts::MethodInfo>(new tests/approvals/mutable-object.algo.ts::MethodInfo(selector=($12 = ($13 = $11.methods).0).selector, cooldown=$12.cooldown, lastCalled=$12.lastCalled)))
+    Box[BoxMapKey(prefix="plugins", key=key)].value: tests/approvals/mutable-object.algo.ts::PluginInfo = new tests/approvals/mutable-object.algo.ts::PluginInfo(lastValidRound=($13 = #{ lastValidRound: 1, cooldown: 0, lastCalled: 0, adminPrivileges: False, methods: #[#{ selector: ARC4_ENCODE(reinterpret_cast<bytes>(Method("test()void")), wtype=arc4.static_array<arc4.byte>), cooldown: 1, lastCalled: 1 }] }).lastValidRound, cooldown=$13.cooldown, lastCalled=$13.lastCalled, adminPrivileges=$13.adminPrivileges, methods=new arc4.dynamic_array<tests/approvals/mutable-object.algo.ts::MethodInfo>(new tests/approvals/mutable-object.algo.ts::MethodInfo(selector=($14 = ($15 = $13.methods).0).selector, cooldown=$14.cooldown, lastCalled=$14.lastCalled)))
   }
   
   __algots__.defaultCreate(): void

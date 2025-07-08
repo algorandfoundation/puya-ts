@@ -31,27 +31,33 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let array_item%0#4: Encoded(uint64) = aggregate%encoded_element%0#1
         let a1#2: uint64 = (btoi array_item%0#4)
         ((store 0) 0u)
-        let a2#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#1)
-        let a3#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#1)
-        let tmp%3#1: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#1)
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob a2#0)
+        let tmp%0#21: uint64 = (load 0)
+        let tmp%1#9: uint64 = (+ tmp%0#21 1u)
+        ((store 0) tmp%1#9)
+        let tmp%0#12: bytes[8] = (itob u#1)
+        (log tmp%0#12)
+        let tmp%0#22: uint64 = (load 0)
+        let tmp%1#10: uint64 = (+ tmp%0#22 1u)
+        ((store 0) tmp%1#10)
+        (log tmp%0#12)
+        let tmp%0#23: uint64 = (load 0)
+        let tmp%1#11: uint64 = (+ tmp%0#23 1u)
+        ((store 0) tmp%1#11)
+        (log tmp%0#12)
+        let aggregate%val_as_bytes%0#1: bytes[8] = (itob u#1)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
         let aggregate%head%0#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob a3#0)
+        let aggregate%val_as_bytes%1#1: bytes[8] = (itob u#1)
         let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
         let aggregate%head%1#1: bytes = (concat aggregate%head%0#1 aggregate%as_Encoded(uint64)%1#1)
-        let aggregate%val_as_bytes%2#1: bytes[8] = (itob tmp%3#1)
+        let aggregate%val_as_bytes%2#1: bytes[8] = (itob u#1)
         let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
         let aggregate%head%2#1: bytes = (concat aggregate%head%1#1 aggregate%as_Encoded(uint64)%2#1)
         let aggregate%as_Encoded(uint64,uint64,uint64)%0#1: Encoded(uint64,uint64,uint64) = aggregate%head%2#1
         let a5#0: Encoded(uint64,uint64,uint64) = aggregate%as_Encoded(uint64,uint64,uint64)%0#1
-        let tmp%0#7: uint64 = (load 0)
-        let tmp%6#2: bool = (== tmp%0#7 3u)
-        (assert tmp%6#2) // logAndReturn called 3 times
-        let tmp%7#2: bool = (== a2#0 u#1)
-        (assert tmp%7#2)
-        let tmp%8#2: bool = (== a3#0 u#1)
-        (assert tmp%8#2)
+        let tmp%0#15: uint64 = (load 0)
+        let tmp%6#3: bool = (== tmp%0#15 3u)
+        (assert tmp%6#3) // logAndReturn called 3 times
         let aggregate%extract%0#1: bytes = (extract3 a5#0 0u 8u)
         let tuple_item%0#3: Encoded(uint64) = aggregate%extract%0#1
         let values%2#2: uint64 = (btoi tuple_item%0#3)
@@ -78,23 +84,18 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@53: // bool_merge_L38
         let and_result%0#5: bool = φ(and_result%0#3 <- block@51, and_result%0#4 <- block@52)
         (assert and_result%0#5) // assert target is match for conditions
-        let c#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#1)
-        let d#0: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#1)
-        let tmp%17#1: uint64 = tests/approvals/assignments.algo.ts::logAndReturn(u#1)
-        let tmp%19#1: bool = (== c#0 u#1)
-        goto tmp%19#1 ? block@54 : block@56
-    block@54: // and_contd_L43
-        let tmp%20#1: bool = (== d#0 u#1)
-        goto tmp%20#1 ? block@55 : block@56
-    block@55: // bool_true_L43
-        let and_result%1#3: bool = 1u
-        goto block@57
-    block@56: // bool_false_L43
-        let and_result%1#4: bool = 0u
-        goto block@57
-    block@57: // bool_merge_L43
-        let and_result%1#5: bool = φ(and_result%1#3 <- block@55, and_result%1#4 <- block@56)
-        (assert and_result%1#5) // assert target is match for conditions
+        let tmp%0#18: uint64 = (load 0)
+        let tmp%1#6: uint64 = (+ tmp%0#18 1u)
+        ((store 0) tmp%1#6)
+        (log tmp%0#12)
+        let tmp%0#19: uint64 = (load 0)
+        let tmp%1#7: uint64 = (+ tmp%0#19 1u)
+        ((store 0) tmp%1#7)
+        (log tmp%0#12)
+        let tmp%0#20: uint64 = (load 0)
+        let tmp%1#8: uint64 = (+ tmp%0#20 1u)
+        ((store 0) tmp%1#8)
+        (log tmp%0#12)
         let aggregate%array_trimmed%1#1: bytes = ((extract 2 0) m_a#3)
         let aggregate%bytes_offset%1#1: uint64 = (* 0u 8u)
         let aggregate%encoded_element%1#1: bytes = (extract3 aggregate%array_trimmed%1#1 aggregate%bytes_offset%1#1 8u) // on error: index access is out of bounds
@@ -234,8 +235,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%encoded_element%10#1: bytes = (extract3 aggregate%array_trimmed%10#1 aggregate%bytes_offset%10#1 8u) // on error: index access is out of bounds
         let array_item%2#0: Encoded(uint64) = aggregate%encoded_element%10#1
         let values%8#0: uint64 = (btoi array_item%2#0)
-        let tmp%4#1: bool = (== values%8#0 values%0#0)
-        goto tmp%4#1 ? block@36 : block@38
+        let tmp%4#2: bool = (== values%8#0 values%0#0)
+        goto tmp%4#2 ? block@36 : block@38
     block@36: // and_contd_L67
         let aggregate%array_trimmed%11#1: bytes = ((extract 2 0) m_a#0)
         let aggregate%bytes_offset%11#1: uint64 = (* 1u 8u)
@@ -264,16 +265,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%as_Encoded(len+uint64[])%2#1: Encoded(len+uint64[]) = aggregate%head%9#1
         let i_a2#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%2#1
         let array_length%2#0: uint64 = (extract_uint16 i_a2#0 0u)
-        let tmp%6#1: bool = (== array_length%2#0 2u)
-        goto tmp%6#1 ? block@40 : block@43
+        let tmp%6#2: bool = (== array_length%2#0 2u)
+        goto tmp%6#2 ? block@40 : block@43
     block@40: // and_contd_L70
         let aggregate%array_trimmed%12#1: bytes = ((extract 2 0) i_a2#0)
         let aggregate%bytes_offset%12#1: uint64 = (* 0u 8u)
         let aggregate%encoded_element%12#1: bytes = (extract3 aggregate%array_trimmed%12#1 aggregate%bytes_offset%12#1 8u) // on error: index access is out of bounds
         let array_item%4#0: Encoded(uint64) = aggregate%encoded_element%12#1
         let values%12#0: uint64 = (btoi array_item%4#0)
-        let tmp%7#1: bool = (== values%12#0 i_t.0#0)
-        goto tmp%7#1 ? block@41 : block@43
+        let tmp%7#2: bool = (== values%12#0 i_t.0#0)
+        goto tmp%7#2 ? block@41 : block@43
     block@41: // and_contd_L70
         let aggregate%array_trimmed%13#1: bytes = ((extract 2 0) i_a2#0)
         let aggregate%bytes_offset%13#1: uint64 = (* 1u 8u)
@@ -368,6 +369,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%head%13#1: bytes = (concat aggregate%head%12#1 aggregate%as_Encoded(uint64)%15#1)
         let aggregate%as_Encoded(uint64,uint64)%1#1: Encoded(uint64,uint64) = aggregate%head%13#1
         let mObj2#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%1#1
+        ((store 0) 0u)
+        let tmp%0#16: uint64 = (load 0)
+        let tmp%1#4: uint64 = (+ tmp%0#16 1u)
+        ((store 0) tmp%1#4)
         let aggregate%val_as_bytes%16#1: bytes[8] = (itob 1u)
         let aggregate%as_Encoded(uint64)%16#1: Encoded(uint64) = aggregate%val_as_bytes%16#1
         let aggregate%head%14#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%16#1)
@@ -376,9 +381,18 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%head%15#1: bytes = (concat aggregate%head%14#1 aggregate%as_Encoded(uint64)%17#1)
         let aggregate%as_Encoded(uint64,uint64)%2#1: Encoded(uint64,uint64) = aggregate%head%15#1
         let mObj3#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%2#1
+        let tmp%0#7: uint64 = (load 0)
+        let tmp%4#1: bool = (== tmp%0#7 1u)
+        (assert tmp%4#1) // getVal should only be called once
+        let tmp%0#17: uint64 = (load 0)
+        let tmp%1#5: uint64 = (+ tmp%0#17 1u)
+        ((store 0) tmp%1#5)
+        let tmp%0#8: uint64 = (load 0)
+        let tmp%7#1: bool = (== tmp%0#8 2u)
+        (assert tmp%7#1) // getVal should still be called once even though its result is not used
         let tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#6: bool = 1u
         goto block@18
-    block@10: // testMixed_route_L96
+    block@10: // testMixed_route_L98
         let tmp%40#0: uint64 = (txn OnCompletion)
         let tmp%41#0: bool = (! tmp%40#0)
         (assert tmp%41#0) // OnCompletion is not NoOp
@@ -420,7 +434,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#9: bool = 0u
         goto block@18
     block@18: // after_inlined_tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#1 <- block@57, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#3 <- block@44, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#6 <- block@9, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#7 <- block@10, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#8 <- block@14, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#9 <- block@17)
+        let tmp%0#0: bool = φ(tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#1 <- block@53, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#3 <- block@44, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#6 <- block@9, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#7 <- block@10, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#8 <- block@14, tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#9 <- block@17)
         return tmp%0#0
 
 subroutine _puya_lib.arc4.dynamic_array_replace_byte_length_head(array: bytes, new_item: bytes, index: uint64) -> bytes:
@@ -599,12 +613,3 @@ subroutine _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(ar
         goto block@1
     block@4: // after_for_L331
         return array_head_and_tail#1
-
-subroutine tests/approvals/assignments.algo.ts::logAndReturn(u: uint64) -> uint64:
-    block@0: // L114
-        let tmp%0#1: uint64 = (load 0)
-        let tmp%1#0: uint64 = (+ tmp%0#1 1u)
-        ((store 0) tmp%1#0)
-        let tmp%0#0: bytes[8] = (itob u#0)
-        (log tmp%0#0)
-        return u#0

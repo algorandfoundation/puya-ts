@@ -87,10 +87,12 @@ export class AssignmentsAlgo extends Contract {
     const mObj2: MutableObj = { a: 123, b: 456 }
     const imObj2: ImmutableObj = { a: 456, b }
 
-    // TODO: Verify getVal only called once
+    resetCount()
     const mObj3: MutableObj = { ...getVal() }
-    // TODO: Verify getVal called once (even though its values aren't used)
+    assert(getCount() === 1, 'getVal should only be called once')
+
     const mObj4: MutableObj = { ...getVal(), a, b }
+    assert(getCount() === 2, 'getVal should still be called once even though its result is not used')
   }
 
   testMixed(m: Array<{ a: [uint64] }>) {
@@ -104,6 +106,7 @@ export class AssignmentsAlgo extends Contract {
 }
 
 function getVal(): ImmutableObj {
+  incCount()
   // Maybe side effects
   return {
     a: 1,

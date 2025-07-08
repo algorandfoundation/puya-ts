@@ -90,16 +90,19 @@ contract AssignmentsAlgo
   {
     mObj: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($6 = #{ a: a, b: b }).a, b=$6.b)
     imObj: ImmutableObj{ a: uint64, b: uint64 } = #{ a: ($7 = #{ a: a, b: b }).a, b: $7.b }
-    mObj2: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($8 = #{ a: ($9 = #{ a: 123, b: 456 }).a, b: $9.b }).a, b=$8.b)
-    imObj2: ImmutableObj{ a: uint64, b: uint64 } = #{ a: ($10 = #{ a: ($11 = #{ a: 456, b: b }).a, b: $11.b }).a, b: $10.b }
-    mObj3: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($12 = #{ a: ($13 = tests/approvals/assignments.algo.ts::getVal()).a, b: $13.b }).a, b=$12.b)
-    mObj4: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($14 = #{ a: a, b: b }).a, b=$14.b)
+    mObj2: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($8 = #{ a: ($9 = #{ a: ($10 = #[123, 456]).0, b: $10.1 }).a, b: $9.b }).a, b=$8.b)
+    imObj2: ImmutableObj{ a: uint64, b: uint64 } = #{ a: ($11 = #{ a: ($12 = #{ a: ($13 = #[456, b]).0, b: $13.1 }).a, b: $12.b }).a, b: $11.b }
+    tests/approvals/assignments.algo.ts::resetCount()
+    mObj3: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($14 = #{ a: ($15 = tests/approvals/assignments.algo.ts::getVal()).a, b: $15.b }).a, b=$14.b)
+    assert(tests/approvals/assignments.algo.ts::getCount() == 1, comment=getVal should only be called once)
+    mObj4: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($16 = #{ a: ($17 = #{ a: ($18 = #[($19 = tests/approvals/assignments.algo.ts::getVal()).a, $19.b, a, b]).2, b: $18.3 }).a, b: $17.b }).a, b=$16.b)
+    assert(tests/approvals/assignments.algo.ts::getCount() == 2, comment=getVal should still be called once even though its result is not used)
   }
   
   testMixed(m: arc4.dynamic_array<Object7CFAF5D6>): void
   {
     #[#[#[a1]]]: readonly [readonly [readonly [uint64]]] = #[#[#[m[0].a.0]]]
-    m: arc4.dynamic_array<Object7CFAF5D6> = new arc4.dynamic_array<Object7CFAF5D6>(new Object7CFAF5D6(a=ARC4_ENCODE(#[($15 = ($16 = ($17 = #[#{ a: #[($18 = ($19 = #{ a: #[213] }).a).0] }]).0).a).0], wtype=arc4.tuple<uint64>)))
+    m: arc4.dynamic_array<Object7CFAF5D6> = new arc4.dynamic_array<Object7CFAF5D6>(new Object7CFAF5D6(a=ARC4_ENCODE(#[($20 = ($21 = ($22 = #[#{ a: #[($23 = ($24 = #{ a: ($25 = #[#[213]]).0 }).a).0] }]).0).a).0], wtype=arc4.tuple<uint64>)))
   }
   
   __algots__.defaultCreate(): void
@@ -109,7 +112,8 @@ contract AssignmentsAlgo
 }
 subroutine getVal(): ImmutableObj{ a: uint64, b: uint64 }
 {
-  return #{ a: ($20 = #{ a: 1, b: 2 }).a, b: $20.b }
+  tests/approvals/assignments.algo.ts::incCount()
+  return #{ a: ($26 = #{ a: ($27 = #[1, 2]).0, b: $27.1 }).a, b: $26.b }
 }
 subroutine logAndReturn(u: uint64): uint64
 {
