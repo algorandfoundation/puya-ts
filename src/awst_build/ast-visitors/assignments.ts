@@ -47,6 +47,8 @@ export function handleAssignment(
   sourceLocation: SourceLocation,
   isStatement: boolean,
 ): InstanceBuilder {
+  checkForUnclonedMutables(target, source, sourceLocation)
+
   if (isSpecialItxnType(source)) {
     codeInvariant(isStatement, 'inner transaction results can not be used in assignment expressions')
     return handleItxnAssignment(context, target, source, sourceLocation)
@@ -118,7 +120,6 @@ function buildAssignmentValues(
       source: nodeFactory.tupleExpression({ items: sources, sourceLocation: source.sourceLocation }),
     }
   } else {
-    source.checkForUnclonedMutables('being assigned to another variable')
     return {
       target: target.resolveLValue(),
       source: source.resolveToPType(target.ptype).resolve(),
@@ -269,4 +270,22 @@ function handleItxnAssignment(
     }),
     source.ptype,
   )
+}
+
+function checkForUnclonedMutables(target: InstanceBuilder, source: InstanceBuilder, sourceLocation: SourceLocation) {
+  if (target instanceof ArrayLiteralExpressionBuilder) {
+    for (const [index, item] of target[StaticIterator]().entries()) {
+      checkForUnclonedMutables(item, requireInstanceBuilder(source.indexAccess(BigInt(index), source.sourceLocation)), sourceLocation)
+    }
+  } else if (target instanceof ObjectLiteralExpressionBuilder) {
+    for (const [propName] of target.ptype.orderedProperties()) {
+      checkForUnclonedMutables(
+        requireInstanceBuilder(target.memberAccess(propName, sourceLocation)),
+        requireInstanceBuilder(source.memberAccess(propName, source.sourceLocation)),
+        sourceLocation,
+      )
+    }
+  } else {
+    source.checkForUnclonedMutables('being assigned to another variable')
+  }
 }

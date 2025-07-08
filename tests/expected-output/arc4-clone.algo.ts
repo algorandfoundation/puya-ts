@@ -1,8 +1,9 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { Contract, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { Contract, FixedArray, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { DynamicArray, StaticArray, UintN8 } from '@algorandfoundation/algorand-typescript/arc4'
 
 export class Arc4CloneAlgo extends Contract {
-  aliasing(mutable: uint64[], mutObj: { a: uint64 }) {
+  aliasing(mutable: uint64[], mutObj: { a: uint64 }, immutableArr: readonly uint64[], immutableObj: { readonly a: uint64 }) {
     // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being assigned to another variable
     const needClone = mutable
 
@@ -37,7 +38,7 @@ export class Arc4CloneAlgo extends Contract {
     // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being spread into an array literal
     const m3 = [...nestedMutables]
 
-    // @expect-error expression containing a reference to value with nested mutable types must be cloned when being concatenated
+    // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when when being concatenated
     const m4 = nestedMutables.concat([Uint64(123)])
 
     // This is fine because there are no nested mutables
@@ -54,6 +55,20 @@ export class Arc4CloneAlgo extends Contract {
 
     // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being used in an object literal
     const o4 = { ...o3 }
+
+    const m6 = new DynamicArray(new UintN8(1))
+
+    // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being passed to a DynamicArray constructor
+    const m7 = new DynamicArray(m6)
+
+    // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being passed to a FixedArray constructor
+    const m8 = new FixedArray(mutObj)
+
+    // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being passed to a StaticArray constructor
+    const m10 = new StaticArray(m6)
+
+    // This is fine, nested object is immutable
+    const m9 = new FixedArray(immutableObj)
   }
 
   receive(mutable: uint64[]) {}

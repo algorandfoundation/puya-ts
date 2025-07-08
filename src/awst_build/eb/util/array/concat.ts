@@ -8,6 +8,7 @@ import { bigIntToUint8Array, codeInvariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
 import { ArrayLiteralPType, ArrayPType, MutableTuplePType, ReadonlyTuplePType } from '../../../ptypes'
 import { ARC4ArrayType, DynamicArrayType, DynamicBytesType, StaticArrayType, StaticBytesType } from '../../../ptypes/arc4-types'
+import { containsMutableType } from '../../../ptypes/visitors/contains-mutable-visitor'
 import { instanceEb } from '../../../type-registry'
 import type { InstanceBuilder } from '../../index'
 
@@ -19,6 +20,12 @@ export function concatArrays(left: InstanceBuilder, right: InstanceBuilder, sour
      */
     const dynamicType = left.ptype instanceof StaticBytesType ? DynamicBytesType : new DynamicArrayType({ ...left.ptype })
     return concatArrays(toArc4Dynamic(left.ptype.arraySize, left.resolve(), dynamicType), right, sourceLocation)
+  }
+  if (containsMutableType(left.ptype)) {
+    left.checkForUnclonedMutables('when being concatenated')
+  }
+  if (containsMutableType(right.ptype)) {
+    right.checkForUnclonedMutables('when being concatenated')
   }
 
   const returnType = getArrayConcatType(left.ptype, right.ptype, sourceLocation)

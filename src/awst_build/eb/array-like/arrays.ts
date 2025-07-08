@@ -344,7 +344,10 @@ export class FixedArrayClassBuilder extends ClassBuilder {
 
     return new FixedArrayExpressionBuilder(
       nodeFactory.newArray({
-        values: initialItems.map((i) => requireExpressionOfType(i, ptype.elementType)),
+        values: initialItems.map((i) => {
+          i.checkForUnclonedMutables(`being passed to a ${this.typeDescription} constructor`)
+          return requireExpressionOfType(i, ptype.elementType)
+        }),
         wtype: ptype.wtype,
         sourceLocation,
       }),

@@ -51,10 +51,12 @@ export class DynamicArrayClassBuilder extends ClassBuilder {
       genericTypeArgs: 1,
       argSpec: (a) => args.map((_) => a.required(ptype.elementType)),
     })
-    const initialItemExprs = initialItems.map((i) => requireExpressionOfType(i, ptype.elementType))
     return new DynamicArrayExpressionBuilder(
       nodeFactory.newArray({
-        values: initialItemExprs,
+        values: initialItems.map((i) => {
+          i.checkForUnclonedMutables(`being passed to a ${this.typeDescription} constructor`)
+          return requireExpressionOfType(i, ptype.elementType)
+        }),
         wtype: ptype.wtype,
         sourceLocation,
       }),
@@ -93,7 +95,10 @@ export class StaticArrayClassBuilder extends ClassBuilder {
 
     return new StaticArrayExpressionBuilder(
       nodeFactory.newArray({
-        values: initialItems.map((i) => requireExpressionOfType(i, ptype.elementType)),
+        values: initialItems.map((i) => {
+          i.checkForUnclonedMutables(`being passed to a ${this.typeDescription} constructor`)
+          return requireExpressionOfType(i, ptype.elementType)
+        }),
         wtype: ptype.wtype,
         sourceLocation,
       }),
