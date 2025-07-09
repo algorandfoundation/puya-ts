@@ -71,7 +71,7 @@ person = {
 ##### Algorand TypeScript (`as const`)
 
 ```ts
-const person = {
+let person = {
   name: 'Alice',
   favoriteNumbers: [1337],
 } as const
@@ -85,10 +85,48 @@ person = {
 ### Arrays
 
 If there are no nested dynamic types (i.e fixed length types or a single dynamic array of a fixed-length type) then no migration is
-necessary outside of other migrations mentioned in this document. More complex arrays might need to use a different class shown below, but
+necessary outside of other migrations mentioned in this document. More complex arrays might need to be `readonly` or use a different class shown below, but
 it is strongly recommended to use fixed-length types whenever possible.
 
-TODO: describe different types of arrays and when you need to use them over native arrays
+#### Nested Dynamic Types
+
+If your array contains nested dynamic types (dynamic arrays, string, or bytes) then you must make the array immutable via `Readonly` or use
+the `ReferenceArray` class.
+
+A `readonly` array will be slightly cumbersome to work with as you will need to create a new array every time you want to modify it which also means it's fairly expensive to work with. The `ReferenceArray` class is a mutable array that allows you to modify the array in place, but it uses scratch slots under the hood thus as a high encode/decode cost. It is recommended to use `ReferenceArray` for arrays that will be modified frequently and `readonly` for arrays that will not be modified often and stored in state.
+
+###### TEALScript
+
+```ts
+const arr: uint64[][] = [
+  [1, 2, 3],
+  [4, 5, 6],
+]
+
+arr[0].push(4)
+```
+
+###### Algorand TypeScript (`readonly`)
+
+```ts
+let arr: readonly uint64[][] = [
+  [1, 2, 3],
+  [4, 5, 6],
+]
+
+arr = [arr[0], [...arr[1], 4]]
+```
+
+###### Algorand TypeScript (`ReferenceArray`)
+
+```ts
+const arr = new ReferenceArray<ReferenceArray<uint64>>([
+    new ReferenceArray([1, 2, 3]),
+    new ReferenceArray([4, 5, 6])
+)
+
+arr[0].push(4)
+```
 
 ### Emitting Events
 
