@@ -33,6 +33,55 @@ This document is up-to-date as of TEALScript v0.107.0 and Algorand TypeScript v1
 If all the property types in your object are fixed-length then no migration is necessary outside of other migrations mentioned in this document. More complex objects might need to use a different class shown below, but
 it is strongly recommended to use fixed-length types whenever possible.
 
+#### Dynamic Types In Objects
+
+If your object contains dynamic types (dynamic arrays, string, or bytes) then you must make the object immutable via `Readonly` or `as const`
+
+Immutable objects are
+
+##### TEALScript
+
+```ts
+type Person = { name: string, favoriteNumber: uint64 }
+
+const person: Person = {
+  name: 'Alice',
+  favoriteNumbers: [1337],
+}
+
+person.favoriteNumbers.push(42)
+```
+
+##### Algorand TypeScript (`Readonly`)
+
+```ts
+type Person = Readonly<{ name: string, favoriteNumber: uint64 }>
+
+let person: Person = {
+  name: 'Alice',
+  favoriteNumbers: [1337],
+}
+
+person = {
+  ...person,
+  favoriteNumbers: [...person.favoriteNumbers, 42],
+}
+```
+
+##### Algorand TypeScript (`as const`)
+
+```ts
+const person = {
+  name: 'Alice',
+  favoriteNumbers: [1337],
+} as const
+
+person = {
+  ...person,
+  favoriteNumbers: [...person.favoriteNumbers, 42],
+}
+```
+
 ### Arrays
 
 If there are no nested dynamic types (i.e fixed length types or a single dynamic array of a fixed-length type) then no migration is
