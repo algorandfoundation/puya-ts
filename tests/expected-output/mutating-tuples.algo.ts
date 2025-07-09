@@ -19,4 +19,9 @@ function test(a: uint64) {
   t2.a = a
 
   t2 = { ...t2, a }
+
+  const t3: [uint64, uint64] = [a, a]
+
+  // @expect-error Mutating tuple items is not currently supported - use an object if mutability is required
+  t3[0] += 1
 }
