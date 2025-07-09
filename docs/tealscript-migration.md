@@ -33,8 +33,6 @@ This document is up-to-date as of TEALScript v0.107.0 and Algorand TypeScript v1
 If all the property types in your object are fixed-length then no migration is necessary outside of other migrations mentioned in this document. More complex objects might need to use a different class shown below, but
 it is strongly recommended to use fixed-length types whenever possible.
 
-TODO: describe different types of objects and when you need to use them over POJOs
-
 ### Arrays
 
 If there are no nested dynamic types (i.e fixed length types or a single dynamic array of a fixed-length type) then no migration is
@@ -91,10 +89,6 @@ In TEALScript boxes are created via the create method: `create(size?: uint64)`.
 In Algorand TypeScript the create method uses an object with a size parameter: `create(options?: { size?: uint64 })`
 
 In both, the size will automatically be determined for fixed-length types, thus the size parameter is optional
-
-### Box Iteration
-
-TODO: This is supported. But waiting for clarity on the types it's supported for
 
 ### Inner Transactions
 
@@ -497,11 +491,9 @@ assert(a === b) // a and b are referencing the same array
 
 ##### Algorand TypeScript
 
-TODO: How to copy POJOs and Arrays?
-
 ```ts
 const a: uint64[] = [1, 2, 3]
-const b = copy(a)
+const b = clone(a)
 b.push(4)
 
 assert(a != b) // b has 4 but a does not
