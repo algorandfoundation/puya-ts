@@ -48,7 +48,7 @@ export function* emitGTxnTypes() {
   yield `import { NoImplementation } from "./internal/errors";`
   yield '\n\n'
   yield `const isGtxn = Symbol('isGtxn');`
-  yield ''
+  yield 'export namespace gtxn { '
   for (const [txnType, fields] of Object.entries(txnTypes)) {
     yield* emitComment(`A group transaction of type '${txnTypeName(txnType)}'`)
     yield `export interface ${txnType}Txn {`
@@ -79,6 +79,7 @@ export function* emitGTxnTypes() {
     yield 'throw new NoImplementation()'
     yield '}'
   }
+  yield '}'
 }
 
 export function* emitITxnTypes() {
@@ -90,7 +91,7 @@ export function* emitITxnTypes() {
   yield `import { TransactionType } from './transactions';`
   yield '\n\n'
   yield `const isItxn = Symbol('isItxn');`
-  yield '\n'
+  yield '\n export namespace itxn {'
 
   for (const [txnType, fields] of Object.entries(txnTypes)) {
     yield* emitComment(`An inner transaction of type '${txnTypeName(txnType)}'`)
@@ -142,6 +143,7 @@ export function* emitITxnTypes() {
     yield `export function ${camelCase(txnType)}(fields: ${txnType}Fields): ${txnType}ItxnParams ;`
     yield* emitNoImplementation()
   }
+  yield '}'
 }
 
 function* emitNoImplementation() {

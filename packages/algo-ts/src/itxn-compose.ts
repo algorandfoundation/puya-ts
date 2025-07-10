@@ -1,7 +1,7 @@
 import { Contract, TypedApplicationCallFields } from './arc4'
 import { NoImplementation } from './internal/errors'
 import { DeliberateAny, InstanceMethod } from './internal/typescript-helpers'
-import * as itxn from './itxn'
+import { itxn } from './itxn'
 import { TransactionType } from './transactions'
 
 export interface PaymentComposeFields extends itxn.PaymentFields {

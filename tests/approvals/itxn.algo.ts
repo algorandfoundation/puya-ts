@@ -13,7 +13,6 @@ import {
   Uint64,
 } from '@algorandfoundation/algorand-typescript'
 import { decodeArc4, methodSelector, Str } from '@algorandfoundation/algorand-typescript/arc4'
-import { submitGroup } from '@algorandfoundation/algorand-typescript/itxn'
 
 const LOG_1ST_ARG_AND_APPROVE = Bytes.fromHex('09361A00B08101')
 const APPROVE = Bytes.fromHex('098101')
@@ -216,7 +215,7 @@ export class ItxnDemoContract extends Contract {
       appArgs: [methodSelector(ItxnReceiver.prototype.receivePay), Uint64(1), new Str('hello')],
     })
 
-    const [, appRes] = submitGroup(pay, app)
+    const [, appRes] = itxn.submitGroup(pay, app)
 
     const returnValue = decodeArc4<[uint64, uint64, string]>(appRes.lastLog, 'log')
 

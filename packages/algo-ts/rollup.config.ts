@@ -9,8 +9,6 @@ const config: RollupOptions = {
     index: 'src/index.ts',
     'arc4/index': 'src/arc4/index.ts',
     op: 'src/op.ts',
-    itxn: 'src/itxn.ts',
-    gtxn: 'src/gtxn.ts',
   },
   output: [
     {
