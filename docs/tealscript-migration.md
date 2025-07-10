@@ -55,7 +55,7 @@ person.favoriteNumbers.push(42)
 ##### Algorand TypeScript (`Readonly`)
 
 ```ts
-type Person = Readonly<{ name: string, favoriteNumber: uint64 }>
+type Person = Readonly<{ name: string, favoriteNumbers: uint64[] }>
 
 let person: Person = {
   name: 'Alice',
@@ -222,7 +222,7 @@ log(asset1_txn.createdAsset.id)
 ```ts
     this.pendingGroup.addAssetCreation({
       configAssetTotal: 1000,
-      configAssetName: this.name.value,
+      configAssetName: 'AST3',
       configAssetUnitName: 'unit',
       configAssetDecimals: 3,
       configAssetManager: this.app.address,
@@ -247,7 +247,7 @@ log(asset1_txn.createdAsset.id)
 ```ts
     const assetParams = itxn.assetConfig({
       total: 1000,
-      assetName: this.name.value,
+      assetName: 'AST3',
       unitName: 'unit',
       decimals: 3,
       manager: Global.currentApplicationAddress,
@@ -259,7 +259,6 @@ log(asset1_txn.createdAsset.id)
       clearStateProgram: APPROVE,
       fee: 0,
     })
-  APP_ID = TemplateVar<AppID>();
 
     const [appCreateTxn, asset3_txn] = itxn.submitGroup(appCreateParams, assetParams)
 
@@ -503,9 +502,9 @@ addOne(n: uint256): uint256 {
 
 ```ts
 addOne(n: UintN256): UintN256 {
-  // Need to explicitly use UintN256 constructor to get uint256 and use BigUint to perform arithmetic
-  const one = new BigUint(1);
-  const sum = new UintN256(BigUint(n.bytes) + one + one);
+  // Need to explicitly use UintN256 constructor to get uint256 and use bigint to perform arithmetic
+  const one = 1n;
+  const sum = new UintN256(n.native + one + one);
   return sum;
 }
 ```
@@ -537,7 +536,7 @@ addToNumber(n: UintN8) {
   const x: biguint = 255
   const sum: biguint = BigUint(n.bytes) + x
 
-  return UintN8(sum - x)
+  return new UintN8(sum - x)
 }
 ```
 
@@ -557,8 +556,8 @@ convertNumber(n: uint64): uint8 {
 ##### Algorand TypeScript
 
 ```ts
-convertNumber(n: uint64): Uint8N {
-  return UintN8(n)
+convertNumber(n: uint64): UintN8 {
+  return new UintN8(n)
 }
 ```
 
@@ -584,5 +583,6 @@ const a: uint64[] = [1, 2, 3]
 const b = clone(a)
 b.push(4)
 
-assert(a != b) // b has 4 but a does not
+assertMatch(a, [1, 2, 3])
+assertMatch(b, [1, 2, 3, 4]) // a and b are different arrays
 ```
