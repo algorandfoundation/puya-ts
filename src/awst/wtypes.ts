@@ -120,6 +120,7 @@ export namespace wtypes {
       return `${this.immutable ? 'readonly ' : ''}[${this.types.join(', ')}]`
     }
   }
+
   export abstract class NativeArray extends WType {
     readonly elementType: WType
     readonly sourceLocation: SourceLocation | null
@@ -132,16 +133,6 @@ export namespace wtypes {
     }
   }
 
-  export class StackArray extends NativeArray {
-    readonly immutable: boolean
-    constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
-      super({
-        name: `stack_array<${props.itemType.name}>`,
-        ...props,
-      })
-      this.immutable = props.immutable
-    }
-  }
   export class ReferenceArray extends NativeArray {
     readonly immutable = false
     constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
