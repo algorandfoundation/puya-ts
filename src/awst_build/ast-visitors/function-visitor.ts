@@ -13,11 +13,13 @@ import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
 import type { InstanceBuilder } from '../eb'
 import { BuilderComparisonOp } from '../eb'
+import { CloneFunctionBuilder } from '../eb/clone-function-builder'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
 import { FunctionPType } from '../ptypes'
+import { containsMutableType } from '../ptypes/visitors/contains-mutable-visitor'
 import { IteratorTypeVisitor } from '../ptypes/visitors/iterator-type-visitor'
 import { instanceEb, typeRegistry } from '../type-registry'
 import { handleAssignmentStatement } from './assignments'
@@ -240,6 +242,10 @@ export abstract class FunctionVisitor
     const sourceLocation = this.sourceLocation(node)
     const initializerLocation = this.sourceLocation(node.initializer)
     const sequence = requireInstanceBuilder(this.accept(node.expression))
+    if (containsMutableType(sequence.ptype)) {
+      sequence.checkForUnclonedMutables('when being iterated')
+    }
+
     const itemType = IteratorTypeVisitor.accept(sequence.ptype)
     codeInvariant(itemType, `${sequence.ptype} is not iterable`, this.sourceLocation(node.expression))
     let items: InstanceBuilder
@@ -268,7 +274,7 @@ export abstract class FunctionVisitor
         items: itemVar.resolveLValue(),
         loopBody: nodeFactory.block(
           { sourceLocation },
-          handleAssignmentStatement(this.context, items, itemVar, initializerLocation),
+          handleAssignmentStatement(this.context, items, CloneFunctionBuilder.clone(itemVar, itemVar.sourceLocation), initializerLocation),
           this.accept(node.statement),
           ...maybeNodes(ctx.hasContinues, ctx.continueTarget),
         ),

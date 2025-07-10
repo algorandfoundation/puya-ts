@@ -30,7 +30,7 @@ export class Arc4CloneAlgo extends Contract {
     const nestedMutables = [[Uint64(1)]]
 
     // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being assigned to another variable
-    const alaisOfNested = nestedMutables[0]
+    const aliasOfNested = nestedMutables[0]
 
     // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being used in an array literal
     const nestedMutables2 = [mutable, [Uint64(2)]]
@@ -69,7 +69,20 @@ export class Arc4CloneAlgo extends Contract {
 
     // This is fine, nested object is immutable
     const m9 = new FixedArray(immutableObj)
+
+    // This is fine, no nested mutable objects
+    for (const x of m6) {
+      noop()
+    }
+
+    // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when when being iterated
+    for (const temp of nestedMutables) {
+      const [x] = temp
+      noop()
+    }
   }
 
   receive(mutable: uint64[]) {}
 }
+
+function noop() {}
