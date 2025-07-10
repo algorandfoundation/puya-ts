@@ -388,12 +388,13 @@ class DangerousPaymentLsig extends LogicSig {
 
 ##### Algorand TypeScript
 
-TODO: How do you get args?
-
 ```ts
+import { op, LogicSig, Txn } from '@algorandfoundation/algorand-typescript'
+
 class DangerousPaymentLsig extends LogicSig {
   program() {
-    return this.txn.amount === amt
+    const amt = op.btoi(op.arg(0))
+    return Txn.amount ===
   }
 }
 ```
