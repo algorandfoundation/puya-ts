@@ -138,14 +138,14 @@ subroutine _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(ar
         return array_head_and_tail#1
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__() -> bool:
-    block@0: // L22
+    block@0: // L14
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@8
-    block@1: // abi_routing_L22
+    block@1: // abi_routing_L14
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "getMbr()uint64" => block@2, method "bootstrap(pay)void" => block@3, method "increaseXCount(uint64,uint64)void" => block@4, method "getCounts(uint64)(uint64,uint8)" => block@5, * => block@6}
-    block@2: // getMbr_route_L25
+    block@2: // getMbr_route_L17
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -157,7 +157,7 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
         let tmp%9#0: bytes = (concat 0x151f7c75 tmp%8#0)
         (log tmp%9#0)
         return 1u
-    block@3: // bootstrap_route_L29
+    block@3: // bootstrap_route_L21
         let tmp%10#0: uint64 = (txn OnCompletion)
         let tmp%11#0: bool = (== tmp%10#0 NoOp)
         (assert tmp%11#0) // OnCompletion is not NoOp
@@ -171,7 +171,7 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
         (assert gtxn_type_matches%0#0) // transaction type is pay
         tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstrap(gtxn_idx%0#0)
         return 1u
-    block@4: // increaseXCount_route_L37
+    block@4: // increaseXCount_route_L29
         let tmp%15#0: uint64 = (txn OnCompletion)
         let tmp%16#0: bool = (== tmp%15#0 NoOp)
         (assert tmp%16#0) // OnCompletion is not NoOp
@@ -184,7 +184,7 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
         let tmp%20#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%1#0)
         tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount(tmp%19#0, tmp%20#0)
         return 1u
-    block@5: // getCounts_route_L41
+    block@5: // getCounts_route_L33
         let tmp%21#0: uint64 = (txn OnCompletion)
         let tmp%22#0: bool = (== tmp%21#0 NoOp)
         (assert tmp%22#0) // OnCompletion is not NoOp
@@ -197,54 +197,54 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
         let tmp%27#0: bytes = (concat 0x151f7c75 tmp%26#0)
         (log tmp%27#0)
         return 1u
-    block@6: // switch_case_default_L22
+    block@6: // switch_case_default_L14
         goto block@7
-    block@7: // switch_case_next_L22
+    block@7: // switch_case_next_L14
         goto block@12
-    block@8: // bare_routing_L22
+    block@8: // bare_routing_L14
         let tmp%28#0: uint64 = (txn OnCompletion)
         switch tmp%28#0 {0u => block@9, * => block@10}
-    block@9: // __algots__.defaultCreate_L22
+    block@9: // __algots__.defaultCreate_L14
         let tmp%29#0: uint64 = (txn ApplicationID)
         let tmp%30#0: bool = (== tmp%29#0 0u)
         (assert tmp%30#0) // can only call when creating
         tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__algots__.defaultCreate()
         return 1u
-    block@10: // switch_case_default_L22
+    block@10: // switch_case_default_L14
         goto block@11
-    block@11: // switch_case_next_L22
+    block@11: // switch_case_next_L14
         goto block@12
-    block@12: // after_if_else_L22
+    block@12: // after_if_else_L14
         return 0u
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getMbr() -> uint64:
-    block@0: // L25
-        return 462900u
+    block@0: // L17
+        return 2982900u
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstrap(pay: uint64) -> void:
-    block@0: // L29
+    block@0: // L21
         let tmp%0#0: uint64 = ((gtxns Amount) pay#0)
-        let tmp%1#0: bool = (== tmp%0#0 462900u)
+        let tmp%1#0: bool = (== tmp%0#0 2982900u)
         goto tmp%1#0 ? block@1 : block@3
-    block@1: // and_contd_L30
+    block@1: // and_contd_L22
         let tmp%2#0: account = ((gtxns Receiver) pay#0)
         let tmp%3#0: account = (global CurrentApplicationAddress)
         let tmp%4#0: bool = (== tmp%2#0 tmp%3#0)
         goto tmp%4#0 ? block@2 : block@3
-    block@2: // bool_true_L30
+    block@2: // bool_true_L22
         let and_result%0#0: bool = 1u
         goto block@4
-    block@3: // bool_false_L30
+    block@3: // bool_false_L22
         let and_result%0#1: bool = 0u
         goto block@4
-    block@4: // bool_merge_L30
+    block@4: // bool_merge_L22
         let and_result%0#2: bool = φ(and_result%0#0 <- block@2, and_result%0#1 <- block@3)
         (assert and_result%0#2) // assert target is match for conditions
-        (box_create "x" 900u)
+        (box_create "x" 7200u)
         return 
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount(index: uint64, xCount: uint64) -> void:
-    block@0: // L37
+    block@0: // L29
         let storage_value%0#0: bytes = box_read("x")
         let array_item%0#0: Encoded(uint64,uint8) = extract_value(storage_value%0#0, index#0)
         let tuple_item%0#0: Encoded(uint64) = extract_value(array_item%0#0, 0)
@@ -252,16 +252,16 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
         let tmp%0#0: uint64 = (+ values%0#0 xCount#0)
         let storage_value%1#0: bytes = box_read("x")
         let encoded_value%0#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
-        let updated_array%0#0: Encoded((uint64,uint8)[100]) = replace_value(storage_value%1#0, index#0, 0, encoded_value%0#0)
+        let updated_array%0#0: Encoded((uint64,uint8)[800]) = replace_value(storage_value%1#0, index#0, 0, encoded_value%0#0)
         box_write("x", updated_array%0#0)
         return 
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts(index: uint64) -> Encoded(uint64,uint8):
-    block@0: // L41
+    block@0: // L33
         let storage_value%0#0: bytes = box_read("x")
         let array_item%0#0: Encoded(uint64,uint8) = extract_value(storage_value%0#0, index#0)
         return array_item%0#0
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__algots__.defaultCreate() -> void:
-    block@0: // L22
+    block@0: // L14
         return 

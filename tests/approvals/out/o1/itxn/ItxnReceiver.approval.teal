@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 1
-    // tests/approvals/itxn.algo.ts:227
+    // tests/approvals/itxn.algo.ts:226
     // class ItxnReceiver extends Contract {
     txn NumAppArgs
     bz main_bare_routing@6
@@ -13,20 +13,20 @@ main:
     match main_receivePay_route@3
 
 main_after_if_else@10:
-    // tests/approvals/itxn.algo.ts:227
+    // tests/approvals/itxn.algo.ts:226
     // class ItxnReceiver extends Contract {
     pushint 0 // 0
     return
 
 main_receivePay_route@3:
-    // tests/approvals/itxn.algo.ts:228
+    // tests/approvals/itxn.algo.ts:227
     // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/itxn.algo.ts:227
+    // tests/approvals/itxn.algo.ts:226
     // class ItxnReceiver extends Contract {
     txna ApplicationArgs 1
     btoi
@@ -40,7 +40,7 @@ main_receivePay_route@3:
     assert // transaction type is pay
     txna ApplicationArgs 2
     extract 2 0
-    // tests/approvals/itxn.algo.ts:228
+    // tests/approvals/itxn.algo.ts:227
     // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
     callsub receivePay
     pushbytes 0x151f7c75
@@ -51,7 +51,7 @@ main_receivePay_route@3:
     return
 
 main_bare_routing@6:
-    // tests/approvals/itxn.algo.ts:227
+    // tests/approvals/itxn.algo.ts:226
     // class ItxnReceiver extends Contract {
     txn OnCompletion
     bnz main_after_if_else@10
@@ -64,10 +64,10 @@ main_bare_routing@6:
 
 // tests/approvals/itxn.algo.ts::ItxnReceiver.receivePay(a: uint64, b: uint64, c: bytes) -> bytes:
 receivePay:
-    // tests/approvals/itxn.algo.ts:228
+    // tests/approvals/itxn.algo.ts:227
     // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
     proto 3 1
-    // tests/approvals/itxn.algo.ts:229
+    // tests/approvals/itxn.algo.ts:228
     // return [a, b.amount, c]
     frame_dig -2
     gtxns Amount

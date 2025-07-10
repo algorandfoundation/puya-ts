@@ -1,5 +1,5 @@
 import type { FixedArray, uint64 } from '@algorandfoundation/algorand-typescript'
-import { Contract, ReferenceArray } from '@algorandfoundation/algorand-typescript'
+import { clone, Contract, ReferenceArray } from '@algorandfoundation/algorand-typescript'
 import type { DynamicArray, StaticArray, UintN64 } from '@algorandfoundation/algorand-typescript/arc4'
 
 const stopNumber: uint64 = 42
@@ -26,7 +26,7 @@ export class ForOfLoopsAlgo extends Contract {
 
   test_for_of_loop_destructured_object(items: Point[]) {
     let total: uint64 = 0
-    for (const { x, y } of items) {
+    for (const { x, y } of clone(items)) {
       total += x + y
       if (total >= stopNumber) break
     }

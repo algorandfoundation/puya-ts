@@ -4,6 +4,16 @@ import { Bool, DynamicArray, StaticArray, UintN32 } from '@algorandfoundation/al
 
 type Vector = { x: uint64; y: uint64 }
 export class NativeArraysAlgo extends Contract {
+  arrayInObject() {
+    type Person = Readonly<{ name: string; favouriteNumbers: uint64[] }>
+    const person: Person = {
+      name: 'Alice',
+      favouriteNumbers: [1337],
+    }
+    const length: uint64 = person.favouriteNumbers.push(42)
+    assert(length === 2)
+  }
+
   buildArray(): Array<uint64> {
     return [1, 2, 3, 4]
   }
@@ -19,6 +29,8 @@ export class NativeArraysAlgo extends Contract {
   doThings() {
     let arr = this.buildArray()
 
+    arr.push(5)
+    assert(arr.pop()! === 5)
     assertMatch(arr, [1, 2, 3, 4])
 
     // read

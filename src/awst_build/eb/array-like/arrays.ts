@@ -113,19 +113,6 @@ export class NativeArrayExpressionBuilder extends NativeArrayLikeExpressionBuild
     return indexAccess(this, index, sourceLocation)
   }
 
-  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    switch (name) {
-      case 'pop':
-        this.requireMutable(name, sourceLocation)
-        return new PopFunctionBuilder(this, sourceLocation)
-      case 'push':
-        this.requireMutable(name, sourceLocation)
-        return new PushFunctionBuilder(this, sourceLocation)
-    }
-
-    return super.memberAccess(name, sourceLocation)
-  }
-
   resolvableToPType(ptype: PTypeOrClass): boolean {
     if (ptype.equals(this.ptype)) return true
     if (ptype instanceof ReadonlyArrayPType) {
@@ -198,7 +185,7 @@ class PushFunctionBuilder extends FunctionBuilder {
       funcName: 'Array.push',
     })
 
-    const target = this.arrayBuilder.singleEvaluation()
+    const target = this.arrayBuilder
 
     return instanceEb(
       nodeFactory.commaExpression({

@@ -1,14 +1,14 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         goto block@1
-    block@1: // L22
+    block@1: // L14
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
         goto tmp%1#0 ? block@2 : block@9
-    block@2: // abi_routing_L22
+    block@2: // abi_routing_L14
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "getMbr()uint64" => block@3, method "bootstrap(pay)void" => block@4, method "increaseXCount(uint64,uint64)void" => block@5, method "getCounts(uint64)(uint64,uint8)" => block@6, * => block@7}
-    block@3: // getMbr_route_L25
+    block@3: // getMbr_route_L17
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -23,7 +23,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%9#0)
         let tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#0: bool = 1u
         goto block@14
-    block@4: // bootstrap_route_L29
+    block@4: // bootstrap_route_L21
         let tmp%10#0: uint64 = (txn OnCompletion)
         let tmp%11#0: bool = (== tmp%10#0 NoOp)
         (assert tmp%11#0) // OnCompletion is not NoOp
@@ -38,7 +38,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstrap(gtxn_idx%0#0)
         let tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#1: bool = 1u
         goto block@14
-    block@5: // increaseXCount_route_L37
+    block@5: // increaseXCount_route_L29
         let tmp%15#0: uint64 = (txn OnCompletion)
         let tmp%16#0: bool = (== tmp%15#0 NoOp)
         (assert tmp%16#0) // OnCompletion is not NoOp
@@ -52,7 +52,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount(tmp%19#0, tmp%20#0)
         let tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#2: bool = 1u
         goto block@14
-    block@6: // getCounts_route_L41
+    block@6: // getCounts_route_L33
         let tmp%21#0: uint64 = (txn OnCompletion)
         let tmp%22#0: bool = (== tmp%21#0 NoOp)
         (assert tmp%22#0) // OnCompletion is not NoOp
@@ -66,25 +66,25 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%27#0)
         let tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#3: bool = 1u
         goto block@14
-    block@7: // switch_case_default_L22
+    block@7: // switch_case_default_L14
         goto block@8
-    block@8: // switch_case_next_L22
+    block@8: // switch_case_next_L14
         goto block@13
-    block@9: // bare_routing_L22
+    block@9: // bare_routing_L14
         let tmp%28#0: uint64 = (txn OnCompletion)
         switch tmp%28#0 {0u => block@10, * => block@11}
-    block@10: // __algots__.defaultCreate_L22
+    block@10: // __algots__.defaultCreate_L14
         let tmp%29#0: uint64 = (txn ApplicationID)
         let tmp%30#0: bool = (== tmp%29#0 0u)
         (assert tmp%30#0) // can only call when creating
         tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__algots__.defaultCreate()
         let tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#4: bool = 1u
         goto block@14
-    block@11: // switch_case_default_L22
+    block@11: // switch_case_default_L14
         goto block@12
-    block@12: // switch_case_next_L22
+    block@12: // switch_case_next_L14
         goto block@13
-    block@13: // after_if_else_L22
+    block@13: // after_if_else_L14
         let tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#5: bool = 0u
         goto block@14
     block@14: // after_inlined_tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router___L1
@@ -224,33 +224,33 @@ subroutine _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(ar
         return array_head_and_tail#1
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getMbr() -> uint64:
-    block@0: // L25
-        return 462900u
+    block@0: // L17
+        return 2982900u
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstrap(pay: uint64) -> void:
-    block@0: // L29
+    block@0: // L21
         let tmp%0#0: uint64 = ((gtxns Amount) pay#0)
-        let tmp%1#0: bool = (== tmp%0#0 462900u)
+        let tmp%1#0: bool = (== tmp%0#0 2982900u)
         goto tmp%1#0 ? block@1 : block@3
-    block@1: // and_contd_L30
+    block@1: // and_contd_L22
         let tmp%2#0: account = ((gtxns Receiver) pay#0)
         let tmp%3#0: account = (global CurrentApplicationAddress)
         let tmp%4#0: bool = (== tmp%2#0 tmp%3#0)
         goto tmp%4#0 ? block@2 : block@3
-    block@2: // bool_true_L30
+    block@2: // bool_true_L22
         let and_result%0#0: bool = 1u
         goto block@4
-    block@3: // bool_false_L30
+    block@3: // bool_false_L22
         let and_result%0#1: bool = 0u
         goto block@4
-    block@4: // bool_merge_L30
+    block@4: // bool_merge_L22
         let and_result%0#2: bool = φ(and_result%0#0 <- block@2, and_result%0#1 <- block@3)
         (assert and_result%0#2) // assert target is match for conditions
-        (box_create "x" 900u)
+        (box_create "x" 7200u)
         return 
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount(index: uint64, xCount: uint64) -> void:
-    block@0: // L37
+    block@0: // L29
         let (aggregate%box_get%0#1: bytes, aggregate%box_get%1#1: bool) = (box_get "x")
         (assert aggregate%box_get%1#1) // Box must have value
         let storage_value%0#0: bytes = aggregate%box_get%0#1
@@ -273,12 +273,12 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
         let aggregate%updated_data%0#1: bytes = (replace3 aggregate%encoded_element%1#1 0u encoded_value%0#0)
         let aggregate%write_offset%0#1: uint64 = (* index#0 9u)
         let aggregate%updated_array%0#1: bytes = (replace3 storage_value%1#0 aggregate%write_offset%0#1 aggregate%updated_data%0#1)
-        let updated_array%0#0: Encoded((uint64,uint8)[100]) = aggregate%updated_array%0#1
+        let updated_array%0#0: Encoded((uint64,uint8)[800]) = aggregate%updated_array%0#1
         (box_put "x" updated_array%0#0)
         return 
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts(index: uint64) -> Encoded(uint64,uint8):
-    block@0: // L41
+    block@0: // L33
         let (aggregate%box_get%0#1: bytes, aggregate%box_get%1#1: bool) = (box_get "x")
         (assert aggregate%box_get%1#1) // Box must have value
         let storage_value%0#0: bytes = aggregate%box_get%0#1
@@ -288,5 +288,5 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
         return array_item%0#0
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__algots__.defaultCreate() -> void:
-    block@0: // L22
+    block@0: // L14
         return 

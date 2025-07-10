@@ -10,14 +10,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__() -> bool:
-    block@0: // L21
+    block@0: // L20
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@9
-    block@1: // abi_routing_L21
+    block@1: // abi_routing_L20
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "test1()void" => block@2, method "test2()void" => block@3, method "test3()void" => block@4, method "test4()void" => block@5, method "test5(application)void" => block@6, * => block@7}
-    block@2: // test1_route_L24
+    block@2: // test1_route_L23
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -26,7 +26,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__()
         (assert tmp%6#0) // can only call when not creating
         tests/approvals/itxn.algo.ts::ItxnDemoContract.test1()
         return 1u
-    block@3: // test2_route_L72
+    block@3: // test2_route_L71
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (== tmp%7#0 NoOp)
         (assert tmp%8#0) // OnCompletion is not NoOp
@@ -35,7 +35,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__()
         (assert tmp%10#0) // can only call when not creating
         tests/approvals/itxn.algo.ts::ItxnDemoContract.test2()
         return 1u
-    block@4: // test3_route_L109
+    block@4: // test3_route_L108
         let tmp%11#0: uint64 = (txn OnCompletion)
         let tmp%12#0: bool = (== tmp%11#0 NoOp)
         (assert tmp%12#0) // OnCompletion is not NoOp
@@ -44,7 +44,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__()
         (assert tmp%14#0) // can only call when not creating
         tests/approvals/itxn.algo.ts::ItxnDemoContract.test3()
         return 1u
-    block@5: // test4_route_L185
+    block@5: // test4_route_L184
         let tmp%15#0: uint64 = (txn OnCompletion)
         let tmp%16#0: bool = (== tmp%15#0 NoOp)
         (assert tmp%16#0) // OnCompletion is not NoOp
@@ -53,7 +53,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__()
         (assert tmp%18#0) // can only call when not creating
         tests/approvals/itxn.algo.ts::ItxnDemoContract.test4()
         return 1u
-    block@6: // test5_route_L208
+    block@6: // test5_route_L207
         let tmp%19#0: uint64 = (txn OnCompletion)
         let tmp%20#0: bool = (== tmp%19#0 NoOp)
         (assert tmp%20#0) // OnCompletion is not NoOp
@@ -65,28 +65,28 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__()
         let tmp%24#0: uint64 = ((txnas Applications) tmp%23#0)
         tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(tmp%24#0)
         return 1u
-    block@7: // switch_case_default_L21
+    block@7: // switch_case_default_L20
         goto block@8
-    block@8: // switch_case_next_L21
+    block@8: // switch_case_next_L20
         goto block@13
-    block@9: // bare_routing_L21
+    block@9: // bare_routing_L20
         let tmp%25#0: uint64 = (txn OnCompletion)
         switch tmp%25#0 {0u => block@10, * => block@11}
-    block@10: // __algots__.defaultCreate_L21
+    block@10: // __algots__.defaultCreate_L20
         let tmp%26#0: uint64 = (txn ApplicationID)
         let tmp%27#0: bool = (== tmp%26#0 0u)
         (assert tmp%27#0) // can only call when creating
         tests/approvals/itxn.algo.ts::ItxnDemoContract.__algots__.defaultCreate()
         return 1u
-    block@11: // switch_case_default_L21
+    block@11: // switch_case_default_L20
         goto block@12
-    block@12: // switch_case_next_L21
+    block@12: // switch_case_next_L20
         goto block@13
-    block@13: // after_if_else_L21
+    block@13: // after_if_else_L20
         return 0u
 
 subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
-    block@0: // L24
+    block@0: // L23
         (app_global_put "name" "AST1")
         let assetParams#0: itxn_field_set = itxn_field_set(0)
         let assetParams%%param_Fee_idx_0#0: uint64 = 0u
@@ -161,7 +161,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
         ((itxn_field TypeEnum) assetParams%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) assetParams%%param_Fee_idx_0#0)
         goto block@1
-    block@1: // next_txn_L37
+    block@1: // next_txn_L36
         itxn_submit
         let asset1_txn#0: itxn_group_idx = itxn_group_idx(0)
         let asset1_txn._is_last#0: bool = 1u
@@ -241,7 +241,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
         ((itxn_field TypeEnum) assetParams%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) assetParams%%param_Fee_idx_0#0)
         goto block@2
-    block@2: // next_txn_L41
+    block@2: // next_txn_L40
         itxn_submit
         let asset2_txn#0: itxn_group_idx = itxn_group_idx(0)
         let asset2_txn._is_last#0: bool = 1u
@@ -383,7 +383,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
         ((itxn_field TypeEnum) appCreateParams%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appCreateParams%%param_Fee_idx_0#0)
         goto block@3
-    block@3: // next_txn_L58
+    block@3: // next_txn_L57
         itxn_next
         ((itxn_field ConfigAssetReserve) assetParams%%param_ConfigAssetReserve_idx_0#0)
         ((itxn_field ConfigAssetManager) assetParams%%param_ConfigAssetManager_idx_0#0)
@@ -394,7 +394,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
         ((itxn_field TypeEnum) assetParams%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) assetParams%%param_Fee_idx_0#0)
         goto block@4
-    block@4: // next_txn_L58
+    block@4: // next_txn_L57
         itxn_submit
         let appCreateTxn#0: itxn_group_idx = itxn_group_idx(0)
         let asset3_txn#0: itxn_group_idx = itxn_group_idx(1)
@@ -535,23 +535,23 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
         itxn_begin
         let is_Note_count_gte_1%0#0: bool = (>= appCreateParams%%Note_length#1 1u)
         goto is_Note_count_gte_1%0#0 ? block@5 : block@6
-    block@5: // set_Note_0_to_0_L69
+    block@5: // set_Note_0_to_0_L68
         ((itxn_field Note) appCreateParams%%param_Note_idx_0#0)
         goto block@6
-    block@6: // next_field_L69
+    block@6: // next_field_L68
         ((itxn_field ClearStateProgramPages) appCreateParams%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appCreateParams%%param_ApprovalProgramPages_idx_0#0)
         ((itxn_field TypeEnum) appCreateParams%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appCreateParams%%param_Fee_idx_0#0)
         goto block@7
-    block@7: // next_txn_L69
+    block@7: // next_txn_L68
         itxn_next
         let is_Note_count_gte_1%1#0: bool = (>= assetParams%%Note_length#1 1u)
         goto is_Note_count_gte_1%1#0 ? block@8 : block@9
-    block@8: // set_Note_0_to_0_L69
+    block@8: // set_Note_0_to_0_L68
         ((itxn_field Note) assetParams%%param_Note_idx_0#0)
         goto block@9
-    block@9: // next_field_L69
+    block@9: // next_field_L68
         ((itxn_field ConfigAssetReserve) assetParams%%param_ConfigAssetReserve_idx_0#0)
         ((itxn_field ConfigAssetManager) assetParams%%param_ConfigAssetManager_idx_0#0)
         ((itxn_field ConfigAssetDecimals) assetParams%%param_ConfigAssetDecimals_idx_0#0)
@@ -561,17 +561,17 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
         ((itxn_field TypeEnum) assetParams%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) assetParams%%param_Fee_idx_0#0)
         goto block@10
-    block@10: // next_txn_L69
+    block@10: // next_txn_L68
         itxn_submit
         return 
 
 subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
-    block@0: // L72
+    block@0: // L71
         let createAppParams%%param_OnCompletion_idx_0#2: uint64 = undefined
         let createAppParams%%param_ApplicationArgs_idx_2#3: bytes = undefined
         let reinterpret_bool%0#0: bool = (txn NumAppArgs)
         goto reinterpret_bool%0#0 ? block@1 : block@2
-    block@1: // if_body_L74
+    block@1: // if_body_L73
         let (args.0#0: bytes, args.1#0: bytes) = ("1", "2")
         let createAppParams#0: itxn_field_set = itxn_field_set(0)
         let createAppParams%%param_Fee_idx_0#0: uint64 = 0u
@@ -634,7 +634,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
         let createAppParams%%Assets_length#0: uint64 = 0u
         let createAppParams%%Applications_length#0: uint64 = 0u
         goto block@3
-    block@2: // else_body_L83
+    block@2: // else_body_L82
         let createAppParams#1: itxn_field_set = itxn_field_set(1)
         let createAppParams%%param_Fee_idx_0#1: uint64 = 0u
         let createAppParams%%Fee_length#1: uint64 = 1u
@@ -697,7 +697,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
         let createAppParams%%Assets_length#1: uint64 = 0u
         let createAppParams%%Applications_length#1: uint64 = 0u
         goto block@3
-    block@3: // after_if_else_L74
+    block@3: // after_if_else_L73
         let createAppParams%%param_Note_idx_0#2: bytes = φ(createAppParams%%param_Note_idx_0#0 <- block@1, createAppParams%%param_Note_idx_0#1 <- block@2)
         let createAppParams%%OnCompletion_length#2: uint64 = φ(createAppParams%%OnCompletion_length#0 <- block@1, createAppParams%%OnCompletion_length#1 <- block@2)
         let createAppParams%%param_OnCompletion_idx_0#1: uint64 = φ(createAppParams%%param_OnCompletion_idx_0#0 <- block@1, createAppParams%%param_OnCompletion_idx_0#2 <- block@2)
@@ -713,24 +713,24 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
         ((itxn_field Note) createAppParams%%param_Note_idx_0#2)
         let is_OnCompletion_count_gte_1%0#0: bool = (>= createAppParams%%OnCompletion_length#2 1u)
         goto is_OnCompletion_count_gte_1%0#0 ? block@4 : block@5
-    block@4: // set_OnCompletion_0_to_0_L91
+    block@4: // set_OnCompletion_0_to_0_L90
         ((itxn_field OnCompletion) createAppParams%%param_OnCompletion_idx_0#1)
         goto block@5
-    block@5: // next_field_L91
+    block@5: // next_field_L90
         ((itxn_field ApplicationArgs) createAppParams%%param_ApplicationArgs_idx_0#3)
         ((itxn_field ApplicationArgs) createAppParams%%param_ApplicationArgs_idx_1#3)
         let is_ApplicationArgs_count_gte_3%0#0: bool = (>= createAppParams%%ApplicationArgs_length#3 3u)
         goto is_ApplicationArgs_count_gte_3%0#0 ? block@6 : block@7
-    block@6: // set_ApplicationArgs_2_to_2_L91
+    block@6: // set_ApplicationArgs_2_to_2_L90
         ((itxn_field ApplicationArgs) createAppParams%%param_ApplicationArgs_idx_2#2)
         goto block@7
-    block@7: // next_field_L91
+    block@7: // next_field_L90
         ((itxn_field ClearStateProgramPages) createAppParams%%param_ClearStateProgramPages_idx_0#4)
         ((itxn_field ApprovalProgramPages) createAppParams%%param_ApprovalProgramPages_idx_0#4)
         ((itxn_field TypeEnum) createAppParams%%param_TypeEnum_idx_0#4)
         ((itxn_field Fee) createAppParams%%param_Fee_idx_0#4)
         goto block@8
-    block@8: // next_txn_L91
+    block@8: // next_txn_L90
         itxn_submit
         let createAppTxn#0: itxn_group_idx = itxn_group_idx(0)
         let createAppTxn._is_last#0: bool = 1u
@@ -804,7 +804,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
         let tmp%4#0: uint64 = (txn NumAppArgs)
         let tmp%5#0: bool = (> tmp%4#0 1u)
         goto tmp%5#0 ? block@9 : block@11
-    block@9: // if_body_L95
+    block@9: // if_body_L94
         itxn_begin
         let inner_txn_params%0#0: itxn_field_set = itxn_field_set(2)
         let inner_txn_params%0%%param_Fee_idx_0#0: uint64 = 0u
@@ -871,7 +871,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
         ((itxn_field TypeEnum) inner_txn_params%0%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) inner_txn_params%0%%param_Fee_idx_0#0)
         goto block@10
-    block@10: // next_txn_L96
+    block@10: // next_txn_L95
         itxn_submit
         let createAppTxn2#0: itxn_group_idx = itxn_group_idx(0)
         let createAppTxn2._is_last#0: bool = 1u
@@ -942,11 +942,11 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
         let tmp%8#0: bool = (== createAppTxn.Note#0 "with args param set")
         (assert tmp%8#0)
         goto block@11
-    block@11: // after_if_else_L95
+    block@11: // after_if_else_L94
         return 
 
 subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
-    block@0: // L109
+    block@0: // L108
         let appTxn1#0: itxn_field_set = itxn_field_set(0)
         let appTxn1%%param_Fee_idx_0#0: uint64 = 0u
         let appTxn1%%Fee_length#0: uint64 = 1u
@@ -1913,7 +1913,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn1%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn1%%param_Fee_idx_0#0)
         goto block@1
-    block@1: // next_txn_L149
+    block@1: // next_txn_L148
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn2%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn2%%param_ApprovalProgramPages_idx_0#0)
@@ -1922,7 +1922,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn2%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn2%%param_Fee_idx_0#0)
         goto block@2
-    block@2: // next_txn_L150
+    block@2: // next_txn_L149
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn3%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn3%%param_ApprovalProgramPages_idx_0#0)
@@ -1931,7 +1931,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn3%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn3%%param_Fee_idx_0#0)
         goto block@3
-    block@3: // next_txn_L151
+    block@3: // next_txn_L150
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn4%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn4%%param_ApprovalProgramPages_idx_0#0)
@@ -1940,7 +1940,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn4%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn4%%param_Fee_idx_0#0)
         goto block@4
-    block@4: // next_txn_L152
+    block@4: // next_txn_L151
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn5%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn5%%param_ApprovalProgramPages_idx_0#0)
@@ -1949,7 +1949,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn5%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn5%%param_Fee_idx_0#0)
         goto block@5
-    block@5: // next_txn_L153
+    block@5: // next_txn_L152
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn6%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn6%%param_ApprovalProgramPages_idx_0#0)
@@ -1958,7 +1958,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn6%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn6%%param_Fee_idx_0#0)
         goto block@6
-    block@6: // next_txn_L154
+    block@6: // next_txn_L153
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn7%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn7%%param_ApprovalProgramPages_idx_0#0)
@@ -1967,7 +1967,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn7%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn7%%param_Fee_idx_0#0)
         goto block@7
-    block@7: // next_txn_L155
+    block@7: // next_txn_L154
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn8%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn8%%param_ApprovalProgramPages_idx_0#0)
@@ -1976,7 +1976,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn8%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn8%%param_Fee_idx_0#0)
         goto block@8
-    block@8: // next_txn_L156
+    block@8: // next_txn_L155
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn9%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn9%%param_ApprovalProgramPages_idx_0#0)
@@ -1985,7 +1985,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn9%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn9%%param_Fee_idx_0#0)
         goto block@9
-    block@9: // next_txn_L157
+    block@9: // next_txn_L156
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn10%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn10%%param_ApprovalProgramPages_idx_0#0)
@@ -1994,7 +1994,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn10%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn10%%param_Fee_idx_0#0)
         goto block@10
-    block@10: // next_txn_L158
+    block@10: // next_txn_L157
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn11%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn11%%param_ApprovalProgramPages_idx_0#0)
@@ -2003,7 +2003,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn11%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn11%%param_Fee_idx_0#0)
         goto block@11
-    block@11: // next_txn_L159
+    block@11: // next_txn_L158
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn12%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn12%%param_ApprovalProgramPages_idx_0#0)
@@ -2012,7 +2012,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn12%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn12%%param_Fee_idx_0#0)
         goto block@12
-    block@12: // next_txn_L160
+    block@12: // next_txn_L159
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn13%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn13%%param_ApprovalProgramPages_idx_0#0)
@@ -2021,7 +2021,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn13%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn13%%param_Fee_idx_0#0)
         goto block@13
-    block@13: // next_txn_L161
+    block@13: // next_txn_L160
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn14%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn14%%param_ApprovalProgramPages_idx_0#0)
@@ -2030,7 +2030,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn14%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn14%%param_Fee_idx_0#0)
         goto block@14
-    block@14: // next_txn_L162
+    block@14: // next_txn_L161
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn15%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn15%%param_ApprovalProgramPages_idx_0#0)
@@ -2039,7 +2039,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn15%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn15%%param_Fee_idx_0#0)
         goto block@15
-    block@15: // next_txn_L163
+    block@15: // next_txn_L162
         itxn_next
         ((itxn_field ClearStateProgramPages) appTxn16%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) appTxn16%%param_ApprovalProgramPages_idx_0#0)
@@ -2048,7 +2048,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         ((itxn_field TypeEnum) appTxn16%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn16%%param_Fee_idx_0#0)
         goto block@16
-    block@16: // next_txn_L164
+    block@16: // next_txn_L163
         itxn_submit
         let app1#0: itxn_group_idx = itxn_group_idx(0)
         let app2#0: itxn_group_idx = itxn_group_idx(1)
@@ -3109,7 +3109,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         return 
 
 subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test4() -> void:
-    block@0: // L185
+    block@0: // L184
         let tmp%0#0: bytes = (bzero 2044u)
         let lotsOfBytes#0: bytes = tmp%0#0
         let tmp%1#0: bytes = (concat 0x80fc0f lotsOfBytes#0)
@@ -3189,7 +3189,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test4() -> void:
         ((itxn_field TypeEnum) appTxn1%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) appTxn1%%param_Fee_idx_0#0)
         goto block@1
-    block@1: // next_txn_L199
+    block@1: // next_txn_L198
         itxn_submit
         let app1#0: itxn_group_idx = itxn_group_idx(0)
         let app1._is_last#0: bool = 1u
@@ -3289,7 +3289,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test4() -> void:
         return 
 
 subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -> void:
-    block@0: // L208
+    block@0: // L207
         let pay#0: itxn_field_set = itxn_field_set(0)
         let pay%%param_Fee_idx_0#0: uint64 = 0u
         let pay%%Fee_length#0: uint64 = 1u
@@ -3413,7 +3413,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -
         ((itxn_field TypeEnum) pay%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) pay%%param_Fee_idx_0#0)
         goto block@1
-    block@1: // next_txn_L219
+    block@1: // next_txn_L218
         itxn_next
         ((itxn_field ApplicationArgs) app%%param_ApplicationArgs_idx_0#0)
         ((itxn_field ApplicationArgs) app%%param_ApplicationArgs_idx_1#0)
@@ -3422,7 +3422,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -
         ((itxn_field TypeEnum) app%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) app%%param_Fee_idx_0#0)
         goto block@2
-    block@2: // next_txn_L219
+    block@2: // next_txn_L218
         itxn_submit
         let _#0: itxn_group_idx = itxn_group_idx(0)
         let appRes#0: itxn_group_idx = itxn_group_idx(1)
@@ -3559,38 +3559,38 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -
         let returnValue#0: Encoded(uint64,uint64,(len+utf8[])) = tmp%3#0
         let tmp%4#0: bool = (== 3u 3u)
         goto tmp%4#0 ? block@3 : block@7
-    block@3: // and_contd_L223
+    block@3: // and_contd_L222
         let tuple_item%0#0: Encoded(uint64) = extract_value(returnValue#0, 0)
         let values%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
         let tmp%5#0: bool = (== values%0#0 1u)
         goto tmp%5#0 ? block@4 : block@7
-    block@4: // and_contd_L223
+    block@4: // and_contd_L222
         let tuple_item%1#0: Encoded(uint64) = extract_value(returnValue#0, 1)
         let values%1#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
         let tmp%6#0: bool = (== values%1#0 1000u)
         goto tmp%6#0 ? block@5 : block@7
-    block@5: // and_contd_L223
+    block@5: // and_contd_L222
         let tuple_item%2#0: Encoded(len+utf8[]) = extract_value(returnValue#0, 2)
         let values%2#0: string = decode_bytes<string>(tuple_item%2#0)
         let tmp%7#0: bool = (== values%2#0 "hello")
         goto tmp%7#0 ? block@6 : block@7
-    block@6: // bool_true_L223
+    block@6: // bool_true_L222
         let and_result%0#0: bool = 1u
         goto block@8
-    block@7: // bool_false_L223
+    block@7: // bool_false_L222
         let and_result%0#1: bool = 0u
         goto block@8
-    block@8: // bool_merge_L223
+    block@8: // bool_merge_L222
         let and_result%0#2: bool = φ(and_result%0#0 <- block@6, and_result%0#1 <- block@7)
         (assert and_result%0#2) // assert target is match for conditions
         return 
 
 subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.__algots__.defaultCreate() -> void:
-    block@0: // L21
+    block@0: // L20
         return 
 
 subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.constructor() -> void:
-    block@0: // L21
+    block@0: // L20
         @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
         (app_global_put "name" 0x)
         return 
