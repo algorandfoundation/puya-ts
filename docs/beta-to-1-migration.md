@@ -16,11 +16,20 @@ const p1: Point = { x: 1, y: 2 }
 const p2 = { x: Uint64(1), y: Uint64(2) }
 
 /**** After (puya-ts 1.0) ****/
-// Types and variables need to be explicitly marked as readonly
+// Types and variables need to be explicitly marked as `readonly` or `as const`
 type Point = Readonly<{ y: uint64; x: uint64 }>
 const p1: Point = { x: 1, y: 2 }
 // or via `as const`
 const p2 = { x: Uint64(1), y: Uint64(2) } as const
+
+// Types and variables not marked as `readonly` or `as const` are mutable
+type MutablePoint = { y: uint64; x: uint64 }
+const m_p1: MutablePoint = { x: 1, y: 2 }
+// or via `as const`
+const m_p2 = { x: Uint64(1), y: Uint64(2) }
+
+m_p1.x = 3
+m_p2.x = 3
 ```
 
 ### Native arrays are mutable by default
@@ -33,10 +42,21 @@ Add `readonly` or `as const` to keep them immutable
 const t1: uint64[] = [1, 2, 3]
 
 /**** After (puya-ts 1.0) ****/
+// Arrays need to be explicitly marked as `readonly` or `as const`
 // via `readonly`
 const t1: readonly uint64[] = [1, 2, 3]
 // or via `as const`
 const t2 = [Uint64(1), Uint64(2), Uint64(3)] as const
+
+// Arrays not marked as `readonly` or `as const` are mutable
+const m_t1: uint64[] = [1, 2, 3]
+const m_t2 = [Uint64(1), Uint64(2), Uint64(3)]
+
+m_t1[0] = 3
+m_t1.push(4)
+
+m_t2[0] = 3
+m_t2.push(4)
 ```
 
 ### `MutableArray` has been renamed to `ReferenceArray`
