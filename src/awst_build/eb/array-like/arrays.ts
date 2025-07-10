@@ -19,7 +19,7 @@ import {
 import { ARC4ArrayType, ARC4EncodedType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
-import { ClassBuilder, FunctionBuilder, InstanceExpressionBuilder } from '../index'
+import { ClassBuilder, FunctionBuilder, InstanceExpressionBuilder, isReferableExpression } from '../index'
 import { OptionalExpressionBuilder } from '../optional-expression-builder'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
 import { SliceFunctionBuilder } from '../shared/slice-function-builder'
@@ -185,21 +185,23 @@ class PushFunctionBuilder extends FunctionBuilder {
       funcName: 'Array.push',
     })
 
-    const target = this.arrayBuilder
+    const target = this.arrayBuilder.resolve()
+
+    codeInvariant(isReferableExpression(target), 'target of Array.push method must be a variable or state expression')
 
     return instanceEb(
       nodeFactory.commaExpression({
         expressions: [
           nodeFactory.arrayExtend({
             sourceLocation,
-            base: target.resolve(),
+            base: target,
             other: nodeFactory.tupleExpression({
               items: items.map((i) => i.resolve()),
               sourceLocation,
             }),
             wtype: wtypes.voidWType,
           }),
-          arrayLength(target, sourceLocation).resolve(),
+          arrayLength(this.arrayBuilder, sourceLocation).resolve(),
         ],
         sourceLocation,
       }),
