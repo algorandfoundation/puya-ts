@@ -22,7 +22,6 @@ export class UniqueNameResolver {
    * @param symbol
    */
   resolveUniqueName(rawName: string, symbol: ts.Symbol | undefined): string {
-    // TODO: prevent rawName from containing subscript characters
     const name = symbol && this.symbolToName.get(symbol)
     if (name) {
       return name
