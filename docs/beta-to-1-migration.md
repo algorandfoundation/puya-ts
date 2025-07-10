@@ -4,59 +4,56 @@
 
 ### Object literals are mutable by default
 
-Add `readonly` or `as const` modifiers to keep them immutable.
+Object literals are now mutable by default which can be leveraged without any changes.
+If you'd like to keep the same execution semantics as before, then apply a `readonly` or `as const` modifier to make them immutable.
 
 ```typescript
 /**** Before (puya-ts beta) ****/
-// Point is an immutable type
+// These types and objects are immutable
 type Point = { y: uint64; x: uint64 }
-// p1 is an immutable object
 const p1: Point = { x: 1, y: 2 }
-// p2 is an immutable object
 const p2 = { x: Uint64(1), y: Uint64(2) }
 
 /**** After (puya-ts 1.0) ****/
-// Types and variables need to be explicitly marked as `readonly` or `as const`
+// These types and objects are mutable
+type Point = { y: uint64; x: uint64 }
+const p1: Point = { x: 1, y: 2 }
+const p2 = { x: Uint64(1), y: Uint64(2) }
+p1.x = 3
+p2.x = 3
+
+// or if you want to maintain the previous execution semantics
+// explicitly mark as `readonly` or `as const`
 type Point = Readonly<{ y: uint64; x: uint64 }>
 const p1: Point = { x: 1, y: 2 }
-// or via `as const`
 const p2 = { x: Uint64(1), y: Uint64(2) } as const
-
-// Types and variables not marked as `readonly` or `as const` are mutable
-type MutablePoint = { y: uint64; x: uint64 }
-const m_p1: MutablePoint = { x: 1, y: 2 }
-// or via `as const`
-const m_p2 = { x: Uint64(1), y: Uint64(2) }
-
-m_p1.x = 3
-m_p2.x = 3
 ```
 
 ### Native arrays are mutable by default
 
-Add `readonly` or `as const` to keep them immutable
+Native arrays are now mutable by default which can be leveraged without any changes.
+If you'd like to keep the same execution semantics as before, then apply a `readonly` or `as const` modifier to make them immutable.
 
 ```typescript
 /**** Before (puya-ts beta) ****/
-// t1 is immutable
+// The arrays are immutable
 const t1: uint64[] = [1, 2, 3]
+const t2 = [Uint64(1), Uint64(2), Uint64(3)]
 
 /**** After (puya-ts 1.0) ****/
-// Arrays need to be explicitly marked as `readonly` or `as const`
-// via `readonly`
+// The arrays are mutable
+const t1: uint64[] = [1, 2, 3]
+const t2 = [Uint64(1), Uint64(2), Uint64(3)]
+
+t1[0] = 3
+t1.push(4)
+t2[0] = 3
+t2.push(4)
+
+// or if you want to maintain the previous execution semantics
+// explicitly mark as `readonly` or `as const`
 const t1: readonly uint64[] = [1, 2, 3]
-// or via `as const`
 const t2 = [Uint64(1), Uint64(2), Uint64(3)] as const
-
-// Arrays not marked as `readonly` or `as const` are mutable
-const m_t1: uint64[] = [1, 2, 3]
-const m_t2 = [Uint64(1), Uint64(2), Uint64(3)]
-
-m_t1[0] = 3
-m_t1.push(4)
-
-m_t2[0] = 3
-m_t2.push(4)
 ```
 
 ### `MutableArray` has been renamed to `ReferenceArray`
