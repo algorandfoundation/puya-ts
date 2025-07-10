@@ -13,17 +13,29 @@ describe('large-objects-in-state', () => {
 
     invariant(typeof mbr === 'bigint', 'mbr must be bigint')
 
-    const fund = algorand.createTransaction.payment({
+    const fund = await algorand.createTransaction.payment({
       receiver: appClient.appAddress,
       amount: microAlgos(mbr),
       sender: testAccount,
     })
 
-    await appClient.send.call({ method: 'bootstrap', args: [fund], boxReferences: ['x', 'x', 'x', 'x'] })
+    await appClient.send.call({
+      method: 'bootstrap',
+      args: [fund],
+      boxReferences: ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
+    })
 
-    await appClient.send.call({ method: 'increaseXCount', args: [0, 1] })
-    const { return: item0 } = await appClient.send.call({ method: 'getCounts', args: [0] })
-    const { return: item50 } = await appClient.send.call({ method: 'getCounts', args: [50] })
+    await appClient.send.call({ method: 'increaseXCount', args: [0, 1], boxReferences: ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'] })
+    const { return: item0 } = await appClient.send.call({
+      method: 'getCounts',
+      args: [0],
+      boxReferences: ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
+    })
+    const { return: item50 } = await appClient.send.call({
+      method: 'getCounts',
+      args: [50],
+      boxReferences: ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
+    })
 
     expect(item0).toEqual({ x: 1n, y: 0 })
     expect(item50).toEqual({ x: 0n, y: 0 })

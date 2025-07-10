@@ -2,15 +2,7 @@ import type { FixedArray, gtxn, uint64 } from '@algorandfoundation/algorand-type
 import { assertMatch, Box, Contract, Global } from '@algorandfoundation/algorand-typescript'
 import type { UintN8 } from '@algorandfoundation/algorand-typescript/arc4'
 
-/*
- The purpose of this test is to confirm support for storage values in box storage larger than what is supported
- by a single stack value on the AVM (currently 4096) versus box storage which can hold up to 16KB.
-
- At the time of writing, this is not currently possible but ideally MAX_ITEMS could be increased so the box data
- is greater than 4096 bytes and the expression `this.storage.value[index]` would make use of box_extract rather than
- box_get
- */
-const MAX_ITEMS = 100
+const MAX_ITEMS = 800
 
 const ACCOUNT_BASE_MBR = 100_000
 const BOX_BASE_MBR = 2500
