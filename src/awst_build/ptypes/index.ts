@@ -1394,7 +1394,10 @@ export const arc4BaseContractType = new BaseContractClassType({
   isArc4: true,
   sourceLocation: SourceLocation.None,
 })
-
+export const itoaMethod = new LibFunctionType({
+  module: 'puya-ts',
+  name: 'itoa',
+})
 export const arc4BareMethodDecorator = new LibFunctionType({
   module: Constants.moduleNames.algoTs.arc4.index,
   name: 'baremethod',

@@ -15,8 +15,7 @@ type BuildAwstOptions = Pick<CompileOptions, 'filePaths' | 'outputAwst' | 'outpu
 
 export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: BuildAwstOptions): [AWST[], CompilationSet] {
   return AwstBuildContext.run(program, () => {
-    buildLibAwst()
-    const moduleAwst: AWST[] = []
+    const moduleAwst: AWST[] = buildLibAwst()
     for (const [sourcePath, sourceFile] of Object.entries(sourceFiles)) {
       try {
         AwstBuildContext.current.runInChildContext(() => {
