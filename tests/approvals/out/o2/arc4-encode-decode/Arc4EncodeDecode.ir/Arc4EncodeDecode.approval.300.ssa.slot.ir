@@ -177,8 +177,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto tmp%21#1 ? block@24 : block@26
     block@24: // and_contd_L94
         (assert array_length%1#0) // index access is out of bounds
-        let aggregate%array_trimmed%1#1: bytes = ((extract 2 0) reinterpret_Encoded(len+bool1[])%0#0)
-        let aggregate%get_bit%3#1: uint64 = (getbit aggregate%array_trimmed%1#1 0u)
+        let aggregate%get_bit%3#1: uint64 = (getbit reinterpret_Encoded(len+bool1[])%0#0 16u)
         let tmp%23#1: bool = (== aggregate%get_bit%3#1 b#0)
         goto tmp%23#1 ? block@25 : block@26
     block@25: // bool_true_L94

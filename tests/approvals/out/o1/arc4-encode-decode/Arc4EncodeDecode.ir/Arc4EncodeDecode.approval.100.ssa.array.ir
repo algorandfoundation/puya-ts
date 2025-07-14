@@ -493,8 +493,8 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         let aggregate%array_length%0#1: uint64 = (extract_uint16 tmp%20#0 0u)
         let aggregate%lt%0#1: bool = (< 0u aggregate%array_length%0#1)
         (assert aggregate%lt%0#1) // index access is out of bounds
-        let aggregate%array_trimmed%1#1: bytes = ((extract 2 0) tmp%20#0)
-        let aggregate%get_bit%1#1: uint64 = (getbit aggregate%array_trimmed%1#1 0u)
+        let aggregate%add%0#1: uint64 = (+ 0u 16u)
+        let aggregate%get_bit%1#1: uint64 = (getbit tmp%20#0 aggregate%add%0#1)
         let array_item%1#0: bool = aggregate%get_bit%1#1
         let tmp%23#0: bool = (== array_item%1#0 b#0)
         goto tmp%23#0 ? block@10 : block@11
@@ -514,9 +514,9 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         let tmp%26#0: bool = (== array_length%2#0 1u)
         goto tmp%26#0 ? block@13 : block@15
     block@13: // and_contd_L96
-        let aggregate%array_trimmed%2#1: bytes = ((extract 2 0) tmp%25#0)
+        let aggregate%array_trimmed%1#1: bytes = ((extract 2 0) tmp%25#0)
         let aggregate%bytes_offset%1#1: uint64 = (* 0u 64u)
-        let aggregate%encoded_element%1#1: bytes = (extract3 aggregate%array_trimmed%2#1 aggregate%bytes_offset%1#1 64u) // on error: index access is out of bounds
+        let aggregate%encoded_element%1#1: bytes = (extract3 aggregate%array_trimmed%1#1 aggregate%bytes_offset%1#1 64u) // on error: index access is out of bounds
         let array_item%2#0: Encoded(uint512) = aggregate%encoded_element%1#1
         let values%1#0: biguint = array_item%2#0
         let tmp%28#0: bool = (b== values%1#0 c#0)
@@ -617,9 +617,9 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         let tmp%51#0: bool = (== array_length%5#0 1u)
         goto tmp%51#0 ? block@26 : block@28
     block@26: // and_contd_L100
-        let aggregate%array_trimmed%3#1: bytes = ((extract 2 0) tmp%50#0)
+        let aggregate%array_trimmed%2#1: bytes = ((extract 2 0) tmp%50#0)
         let aggregate%bytes_offset%2#1: uint64 = (* 0u 32u)
-        let aggregate%encoded_element%2#1: bytes = (extract3 aggregate%array_trimmed%3#1 aggregate%bytes_offset%2#1 32u) // on error: index access is out of bounds
+        let aggregate%encoded_element%2#1: bytes = (extract3 aggregate%array_trimmed%2#1 aggregate%bytes_offset%2#1 32u) // on error: index access is out of bounds
         let array_item%6#0: Encoded(uint8[32]) = aggregate%encoded_element%2#1
         let tmp%54#0: bool = (== array_item%6#0 f#0)
         goto tmp%54#0 ? block@27 : block@28

@@ -1,9 +1,22 @@
 import type { arc4, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, assertMatch, clone, Contract, FixedArray, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, assertMatch, clone, Contract, ensureBudget, FixedArray, Uint64 } from '@algorandfoundation/algorand-typescript'
 import { Bool, DynamicArray, StaticArray, UintN32 } from '@algorandfoundation/algorand-typescript/arc4'
 
 type Vector = { x: uint64; y: uint64 }
 export class NativeArraysAlgo extends Contract {
+  readonlyArray() {
+    let myArray: readonly uint64[] = [1, 2, 3]
+
+    myArray = myArray.concat(Uint64(5))
+
+    myArray = [...myArray, Uint64(4)]
+
+    // Instead of index assignment
+    myArray = myArray.with(2, 3)
+
+    assertMatch(myArray, [1, 2, 3, 5, 4])
+  }
+
   arrayInObject() {
     type Person = Readonly<{ name: string; favouriteNumbers: uint64[] }>
     const person: Person = {
@@ -27,6 +40,7 @@ export class NativeArraysAlgo extends Contract {
   }
 
   doThings() {
+    ensureBudget(1400)
     let arr = this.buildArray()
 
     arr.push(5)
@@ -59,8 +73,37 @@ export class NativeArraysAlgo extends Contract {
     // concat
     const t1: [uint64, uint64] = [12, 13]
     arr = arr.concat(arr).concat(11).concat(t1)
-
     assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
+
+    let rArr1: readonly uint64[] = [1, 2, 3]
+    rArr1 = rArr1.concat(Uint64(4))
+    rArr1 = [...rArr1, Uint64(5)]
+    assertMatch(rArr1, [1, 2, 3, 4, 5])
+
+    const fArr1 = new FixedArray<uint64, 4>()
+    const fArr2 = fArr1.concat(fArr1)
+    assertMatch(fArr1, [0, 0, 0, 0])
+    assertMatch(fArr2, [0, 0, 0, 0, 0, 0, 0, 0])
+
+    const arr3 = rArr1.concat(fArr2)
+    assertMatch(arr3, [1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0])
+
+    const arr4 = rArr1.concat(arr)
+    assertMatch(arr4, [1, 2, 3, 4, 5, 1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
+
+    const arr5 = fArr1.concat(rArr1)
+    assertMatch(arr5, [0, 0, 0, 0, 1, 2, 3, 4, 5])
+
+    const arr6 = fArr1.concat(arr)
+    assertMatch(arr6, [0, 0, 0, 0, 1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
+
+    const arr7 = arr.concat(rArr1)
+    assert(arr7.length === 16)
+    assertMatch(arr7, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13, 1, 2, 3, 4, 5])
+
+    const arr8 = arr.concat(fArr1)
+    assert(arr8.length === 15)
+    assertMatch(arr8, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13, 0, 0, 0, 0])
   }
 
   fixedArray(y: FixedArray<uint64, 50>) {

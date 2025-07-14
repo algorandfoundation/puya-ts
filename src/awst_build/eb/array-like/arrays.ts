@@ -3,7 +3,6 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
-import { CodeError } from '../../../errors'
 import { codeInvariant, invariant } from '../../../util'
 import type { PType, PTypeOrClass } from '../../ptypes'
 import {
@@ -16,7 +15,6 @@ import {
   ReadonlyTuplePType,
   uint64PType,
 } from '../../ptypes'
-import { ARC4ArrayType, ARC4EncodedType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder, FunctionBuilder, InstanceExpressionBuilder, isReferableExpression } from '../index'
@@ -231,39 +229,22 @@ class ConcatFunctionBuilder extends FunctionBuilder {
     })
     const elementType = this.arrayBuilder.ptype.elementType
 
-    return new NativeArrayExpressionBuilder(
-      items
-        .reduce((acc, cur) => {
-          if (cur.resolvableToPType(elementType)) {
-            return concatArrays(
-              acc,
-              instanceEb(
-                nodeFactory.tupleExpression({
-                  items: [cur.resolveToPType(elementType).resolve()],
-                  sourceLocation: cur.sourceLocation,
-                }),
-                new ReadonlyTuplePType({ items: [elementType] }),
-              ),
-              sourceLocation,
-            )
-          } else if (cur.resolvableToPType(this.arrayBuilder.ptype)) {
-            if (cur.ptype instanceof ReadonlyTuplePType) {
-              // Tuple can stay as a tuple, as long as it _is_ resolvable to an array
-              return concatArrays(acc, cur, sourceLocation)
-            }
-            return concatArrays(acc, cur.resolveToPType(this.arrayBuilder.ptype), sourceLocation)
-          }
-          if (!(elementType instanceof ARC4EncodedType)) {
-            throw new CodeError(`${cur.typeDescription} cannot be concatenated to ${this.typeDescription}`, { sourceLocation })
-          }
-          if (cur.ptype instanceof ARC4ArrayType && cur.ptype.elementType.equals(elementType)) {
-            return concatArrays(acc, cur, sourceLocation)
-          }
-          throw new Error('TODO')
-        }, this.arrayBuilder)
-        .resolve(),
-      this.arrayBuilder.ptype,
-    )
+    return items.reduce((acc, cur) => {
+      if (cur.resolvableToPType(elementType)) {
+        return concatArrays(
+          acc,
+          instanceEb(
+            nodeFactory.tupleExpression({
+              items: [cur.resolveToPType(elementType).resolve()],
+              sourceLocation: cur.sourceLocation,
+            }),
+            new ReadonlyTuplePType({ items: [elementType] }),
+          ),
+          sourceLocation,
+        )
+      }
+      return concatArrays(acc, cur, sourceLocation)
+    }, this.arrayBuilder)
   }
 }
 

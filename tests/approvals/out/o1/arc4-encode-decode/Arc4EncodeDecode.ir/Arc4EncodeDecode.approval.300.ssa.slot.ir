@@ -155,8 +155,7 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         goto tmp%21#0 ? block@9 : block@11
     block@9: // and_contd_L94
         (assert array_length%1#0) // index access is out of bounds
-        let aggregate%array_trimmed%1#1: bytes = ((extract 2 0) reinterpret_Encoded(len+bool1[])%0#0)
-        let aggregate%get_bit%1#1: uint64 = (getbit aggregate%array_trimmed%1#1 0u)
+        let aggregate%get_bit%1#1: uint64 = (getbit reinterpret_Encoded(len+bool1[])%0#0 16u)
         let tmp%23#0: bool = (== aggregate%get_bit%1#1 b#0)
         goto tmp%23#0 ? block@10 : block@11
     block@10: // bool_true_L94

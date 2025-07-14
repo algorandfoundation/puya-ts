@@ -6,13 +6,19 @@ import { wtypes } from '../../../../awst/wtypes'
 import { CodeError } from '../../../../errors'
 import { bigIntToUint8Array, codeInvariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { ArrayLiteralPType, ArrayPType, MutableTuplePType, ReadonlyTuplePType } from '../../../ptypes'
+import { ArrayLiteralPType, ArrayPType, FixedArrayPType, MutableTuplePType, ReadonlyArrayPType, ReadonlyTuplePType } from '../../../ptypes'
 import { ARC4ArrayType, DynamicArrayType, DynamicBytesType, StaticArrayType, StaticBytesType } from '../../../ptypes/arc4-types'
 import { containsMutableType } from '../../../ptypes/visitors/contains-mutable-visitor'
 import { instanceEb } from '../../../type-registry'
 import type { InstanceBuilder } from '../../index'
 
 export function concatArrays(left: InstanceBuilder, right: InstanceBuilder, sourceLocation: SourceLocation): InstanceBuilder {
+  if (containsMutableType(left.ptype)) {
+    left.checkForUnclonedMutables('when being concatenated')
+  }
+  if (containsMutableType(right.ptype)) {
+    right.checkForUnclonedMutables('when being concatenated')
+  }
   if (left.ptype instanceof StaticBytesType || left.ptype instanceof StaticArrayType) {
     /*
       TODO: This is only required because puya doesn't support staticarray + other => dynamic array
@@ -20,12 +26,21 @@ export function concatArrays(left: InstanceBuilder, right: InstanceBuilder, sour
      */
     const dynamicType = left.ptype instanceof StaticBytesType ? DynamicBytesType : new DynamicArrayType({ ...left.ptype })
     return concatArrays(toArc4Dynamic(left.ptype.arraySize, left.resolve(), dynamicType), right, sourceLocation)
-  }
-  if (containsMutableType(left.ptype)) {
-    left.checkForUnclonedMutables('when being concatenated')
-  }
-  if (containsMutableType(right.ptype)) {
-    right.checkForUnclonedMutables('when being concatenated')
+  } else if (left.ptype instanceof FixedArrayPType || left.ptype instanceof ReadonlyArrayPType) {
+    /*
+      TODO: This is only required because puya doesn't support FixedArray + other => array
+      To work around this, we convert fixed array to array
+     */
+    const arrayType = new ArrayPType({ elementType: left.ptype.elementType })
+    const updatedLeft = instanceEb(
+      nodeFactory.convertArray({
+        expr: left.resolve(),
+        wtype: arrayType.wtype,
+        sourceLocation: left.sourceLocation,
+      }),
+      arrayType,
+    )
+    return concatArrays(updatedLeft, right, sourceLocation)
   }
 
   const returnType = getArrayConcatType(left.ptype, right.ptype, sourceLocation)
@@ -52,7 +67,13 @@ function getArrayConcatType(left: PType, right: PType, sourceLocation: SourceLoc
       })
     }
   } else if (left instanceof ArrayPType || left instanceof ArrayLiteralPType) {
-    if (right instanceof ArrayPType || right instanceof ArrayLiteralPType || right instanceof ARC4ArrayType) {
+    if (
+      right instanceof ArrayPType ||
+      right instanceof ArrayLiteralPType ||
+      right instanceof ReadonlyArrayPType ||
+      right instanceof ARC4ArrayType ||
+      right instanceof FixedArrayPType
+    ) {
       sameElementType(left.elementType, right.elementType, sourceLocation)
       return new ArrayPType({
         elementType: left.elementType,
