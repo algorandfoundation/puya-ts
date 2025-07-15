@@ -8,6 +8,7 @@ export class SourceLocation {
   column: number
   endColumn: number
   scope: 'file' | 'range'
+  node: ts.Node | undefined
 
   constructor(props: {
     file?: string | null
@@ -16,6 +17,7 @@ export class SourceLocation {
     column: number
     endColumn: number
     scope: SourceLocation['scope']
+    node?: ts.Node
   }) {
     invariant(props.line <= props.endLine, 'Start line must be before end line')
     if (props.line === props.endLine) invariant(props.column <= props.endColumn, 'Start column must be before end column')
@@ -25,9 +27,13 @@ export class SourceLocation {
     this.column = props.column
     this.endColumn = props.endColumn
     this.scope = props.scope
+    this.node = props.node
 
     // Exclude scope from enumerable properties so it doesn't end up being serialized
     Object.defineProperty(this, 'scope', {
+      enumerable: false,
+    })
+    Object.defineProperty(this, 'node', {
       enumerable: false,
     })
   }
@@ -67,6 +73,7 @@ export class SourceLocation {
       column: startLoc.character,
       endColumn: endLoc.character,
       scope: 'range',
+      node,
     })
   }
 

@@ -6,6 +6,7 @@ import type { CreateProgramResult } from '../parser'
 import { ArtifactKind, writeArtifact } from '../write-artifact'
 import { SourceFileVisitor } from './ast-visitors/source-file-visitor'
 import { AwstBuildContext } from './context/awst-build-context'
+import type { SourceFileDiagnostics } from './context/diagnostics-context'
 import { buildLibAwst } from './lib'
 import type { CompilationSet } from './models/contract-class-model'
 
@@ -14,7 +15,15 @@ type DeferredModule = () => {
   algoFile: AlgoFile | undefined
 }
 
-export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: CompileOptions): [AWST[], CompilationSet] {
+type BuildAwstOptions = Pick<CompileOptions, 'filePaths' | 'outputAwst' | 'outputAwstJson'>
+
+type AwstBuildResult = {
+  moduleAwst: AWST[]
+  compilationSet: CompilationSet
+  diagnostics: SourceFileDiagnostics
+}
+
+export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: BuildAwstOptions): AwstBuildResult {
   return AwstBuildContext.run(program, () => {
     const moduleAwst: AWST[] = buildLibAwst()
     const deferredModules: DeferredModule[] = []
@@ -55,7 +64,10 @@ export function buildAwst({ program, sourceFiles }: CreateProgramResult, options
         })
       }
     }
-
-    return [moduleAwst, AwstBuildContext.current.compilationSet]
+    return {
+      moduleAwst,
+      compilationSet: AwstBuildContext.current.compilationSet,
+      diagnostics: AwstBuildContext.current.diagnosticsCtx.export(),
+    }
   })
 }
