@@ -5,10 +5,6 @@
 main:
     intcblock 0 1 8 16
     bytecblock 0x151f7c75 "plugins"
-    intc_0 // 0
-    dup
-    pushbytes ""
-    dupn 9
     // tests/approvals/mutable-object.algo.ts:12
     // export class MutableObjectDemo extends Contract {
     txn NumAppArgs
@@ -207,14 +203,11 @@ main_testAssertMatch_route@9:
     // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 1
     btoi
-    dup
-    bury 2
     // tests/approvals/mutable-object.algo.ts:78
     // y: (b = x * 2),
+    dup
     pushint 2 // 2
     *
-    dup
-    bury 11
     // tests/approvals/mutable-object.algo.ts:77-80
     // const obj: Vector = {
     //   y: (b = x * 2),
@@ -224,91 +217,61 @@ main_testAssertMatch_route@9:
     itob
     dup
     concat
-    dup
-    bury 14
     // tests/approvals/mutable-object.algo.ts:81-84
     // assertMatch(obj, {
     //   y: x * 2,
     //   x: x * 2,
     // })
+    dup
     intc_2 // 8
     extract_uint64
     dup
-    bury 10
+    dig 3
     ==
-    bz main_bool_false@35
-    dig 11
-    intc_0 // 0
-    extract_uint64
-    dig 10
-    ==
-    bz main_bool_false@35
-    intc_1 // 1
-
-main_bool_merge@36:
-    // tests/approvals/mutable-object.algo.ts:81-84
-    // assertMatch(obj, {
-    //   y: x * 2,
-    //   x: x * 2,
-    // })
-    assert // assert target is match for conditions
-    // tests/approvals/mutable-object.algo.ts:85
-    // const v = { y: obj.y, x: obj.x }
-    dig 11
+    uncover 2
     intc_0 // 0
     extract_uint64
     dup
-    bury 6
-    dig 8
+    uncover 4
+    ==
+    uncover 2
+    &&
+    assert // assert target is match for conditions
+    // tests/approvals/mutable-object.algo.ts:85
+    // const v = { y: obj.y, x: obj.x }
+    dig 1
     itob
     dig 1
     itob
     concat
-    dup
-    bury 13
     // tests/approvals/mutable-object.algo.ts:87
     // assertMatch(obj, { x: v.x, y: v.y })
+    dup
     intc_2 // 8
     extract_uint64
+    dig 2
     ==
-    bz main_bool_false@39
-    dig 10
+    swap
     intc_0 // 0
     extract_uint64
-    dig 8
+    dig 3
     ==
-    bz main_bool_false@39
-    intc_1 // 1
-
-main_bool_merge@40:
-    // tests/approvals/mutable-object.algo.ts:87
-    // assertMatch(obj, { x: v.x, y: v.y })
+    &&
     assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:88
     // assertMatch(obj, { y: { greaterThan: x } })
-    dig 7
-    dig 1
-    dup
-    cover 2
+    swap
+    dig 2
     >
     assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:89
     // assertMatch(obj, { x: { greaterThan: x } })
-    dig 5
     <
     assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:75
     // testAssertMatch(x: uint64) {
     intc_1 // 1
     return
-
-main_bool_false@39:
-    intc_0 // 0
-    b main_bool_merge@40
-
-main_bool_false@35:
-    intc_0 // 0
-    b main_bool_merge@36
 
 main_testMethodSelector_route@8:
     // tests/approvals/mutable-object.algo.ts:60
@@ -342,34 +305,30 @@ main_testNestedObjects_route@7:
     swap
     intc_2 // 8
     extract_uint64
-    dup
-    bury 10
     dig 1
     itob
-    swap
+    dig 1
     itob
     concat
     // tests/approvals/mutable-object.algo.ts:51
     // const p1 = { x: vp.p.x, y: vp.p.y }
-    uncover 2
+    uncover 3
     extract 16 16
     dup
     intc_2 // 8
     extract_uint64
-    dup
-    cover 2
-    bury 10
+    swap
     intc_0 // 0
     extract_uint64
-    dup
-    bury 9
-    swap
+    dig 1
     itob
-    swap
+    dig 1
     itob
     concat
     // tests/approvals/mutable-object.algo.ts:52
     // const vp1 = { v: clone(v1), p: clone(p1) }
+    uncover 3
+    swap
     concat
     // tests/approvals/mutable-object.algo.ts:53
     // log(vp1.v.x)
@@ -392,20 +351,21 @@ main_testNestedObjects_route@7:
     // log(vp1.v.y)
     extract_uint64
     dup
-    bury 8
     itob
     log
     // tests/approvals/mutable-object.algo.ts:55
     // log(vp1.p.x)
-    swap
+    uncover 2
     extract 16 16
     dup
     intc_0 // 0
     extract_uint64
     dup
-    bury 7
     itob
     log
+    // tests/approvals/mutable-object.algo.ts:56
+    // log(vp1.p.y)
+    swap
     // tests/approvals/mutable-object.algo.ts:55-56
     // log(vp1.p.x)
     // log(vp1.p.y)
@@ -414,39 +374,30 @@ main_testNestedObjects_route@7:
     // log(vp1.p.y)
     extract_uint64
     dup
-    bury 5
     itob
     log
     // tests/approvals/mutable-object.algo.ts:57
     // assertMatch(vp1, vp)
+    uncover 3
+    uncover 7
     ==
-    bz main_bool_false@49
-    dig 3
-    dig 7
+    uncover 3
+    uncover 6
     ==
-    bz main_bool_false@49
-    dig 1
-    dig 5
+    &&
+    swap
+    uncover 3
     ==
-    bz main_bool_false@49
-    dig 2
-    dig 6
+    uncover 2
+    uncover 3
     ==
-    bz main_bool_false@49
-    intc_1 // 1
-
-main_bool_merge@50:
-    // tests/approvals/mutable-object.algo.ts:57
-    // assertMatch(vp1, vp)
+    &&
+    &&
     assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:49
     // public testNestedObjects(vp: VectorPoint) {
     intc_1 // 1
     return
-
-main_bool_false@49:
-    intc_0 // 0
-    b main_bool_merge@50
 
 main_implicitCastingAndSpreading_route@6:
     // tests/approvals/mutable-object.algo.ts:34
@@ -489,27 +440,15 @@ main_implicitCastingAndSpreading_route@6:
     uncover 2
     ==
     dup
-    bury 11
     assert
     // tests/approvals/mutable-object.algo.ts:42
     // assertMatch(v3, v1)
-    bz main_bool_false@59
-    dig 8
-    bz main_bool_false@59
-    intc_1 // 1
-
-main_bool_merge@60:
-    // tests/approvals/mutable-object.algo.ts:42
-    // assertMatch(v3, v1)
+    &&
     assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:34
     // public implicitCastingAndSpreading(v1: Vector) {
     intc_1 // 1
     return
-
-main_bool_false@59:
-    intc_0 // 0
-    b main_bool_merge@60
 
 main_mutateVector_route@5:
     // tests/approvals/mutable-object.algo.ts:28

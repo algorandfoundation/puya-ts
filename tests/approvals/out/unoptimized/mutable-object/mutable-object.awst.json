@@ -3232,7 +3232,7 @@
                   "immutable": true
                 },
                 "condition": {
-                  "_type": "BooleanBinaryOperation",
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/mutable-object.algo.ts",
                     "line": 18,
@@ -3245,22 +3245,11 @@
                     "name": "bool",
                     "immutable": true
                   },
-                  "left": {
-                    "_type": "NumericComparisonExpression",
-                    "source_location": {
-                      "file": "tests/approvals/mutable-object.algo.ts",
-                      "line": 18,
-                      "end_line": 18,
-                      "column": 4,
-                      "end_column": 23
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "lhs": {
-                      "_type": "FieldExpression",
+                  "op_code": "&&",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "NumericComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/mutable-object.algo.ts",
                         "line": 18,
@@ -3270,46 +3259,109 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "uint64",
+                        "name": "bool",
                         "immutable": true
                       },
-                      "base": {
-                        "_type": "VarExpression",
+                      "lhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/mutable-object.algo.ts",
                           "line": 18,
                           "end_line": 18,
-                          "column": 16,
-                          "end_column": 18
+                          "column": 4,
+                          "end_column": 23
                         },
                         "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
                         },
-                        "name": "v1"
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 18,
+                            "end_line": 18,
+                            "column": 16,
+                            "end_column": 18
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "v1"
+                        },
+                        "name": "x"
                       },
-                      "name": "x"
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "FieldExpression",
+                        "source_location": {
+                          "file": "tests/approvals/mutable-object.algo.ts",
+                          "line": 18,
+                          "end_line": 18,
+                          "column": 4,
+                          "end_column": 23
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 18,
+                            "end_line": 18,
+                            "column": 20,
+                            "end_column": 22
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "v2"
+                        },
+                        "name": "x"
+                      }
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "FieldExpression",
+                    {
+                      "_type": "NumericComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/mutable-object.algo.ts",
                         "line": 18,
@@ -3319,157 +3371,108 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "uint64",
+                        "name": "bool",
                         "immutable": true
                       },
-                      "base": {
-                        "_type": "VarExpression",
+                      "lhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/mutable-object.algo.ts",
                           "line": 18,
                           "end_line": 18,
-                          "column": 20,
-                          "end_column": 22
+                          "column": 4,
+                          "end_column": 23
                         },
                         "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
                         },
-                        "name": "v2"
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 18,
+                            "end_line": 18,
+                            "column": 16,
+                            "end_column": 18
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "v1"
+                        },
+                        "name": "y"
                       },
-                      "name": "x"
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "FieldExpression",
+                        "source_location": {
+                          "file": "tests/approvals/mutable-object.algo.ts",
+                          "line": 18,
+                          "end_line": 18,
+                          "column": 4,
+                          "end_column": 23
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 18,
+                            "end_line": 18,
+                            "column": 20,
+                            "end_column": 22
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "v2"
+                        },
+                        "name": "y"
+                      }
                     }
-                  },
-                  "op": "and",
-                  "right": {
-                    "_type": "NumericComparisonExpression",
-                    "source_location": {
-                      "file": "tests/approvals/mutable-object.algo.ts",
-                      "line": 18,
-                      "end_line": 18,
-                      "column": 4,
-                      "end_column": 23
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "lhs": {
-                      "_type": "FieldExpression",
-                      "source_location": {
-                        "file": "tests/approvals/mutable-object.algo.ts",
-                        "line": 18,
-                        "end_line": 18,
-                        "column": 4,
-                        "end_column": 23
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "base": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 18,
-                          "end_line": 18,
-                          "column": 16,
-                          "end_column": 18
-                        },
-                        "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
-                        },
-                        "name": "v1"
-                      },
-                      "name": "y"
-                    },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "FieldExpression",
-                      "source_location": {
-                        "file": "tests/approvals/mutable-object.algo.ts",
-                        "line": 18,
-                        "end_line": 18,
-                        "column": 4,
-                        "end_column": 23
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "base": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 18,
-                          "end_line": 18,
-                          "column": 20,
-                          "end_column": 22
-                        },
-                        "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
-                        },
-                        "name": "v2"
-                      },
-                      "name": "y"
-                    }
-                  }
+                  ]
                 },
                 "error_message": "assert target is match for conditions"
               }
@@ -5128,7 +5131,7 @@
                   "immutable": true
                 },
                 "condition": {
-                  "_type": "BooleanBinaryOperation",
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/mutable-object.algo.ts",
                     "line": 39,
@@ -5141,22 +5144,11 @@
                     "name": "bool",
                     "immutable": true
                   },
-                  "left": {
-                    "_type": "NumericComparisonExpression",
-                    "source_location": {
-                      "file": "tests/approvals/mutable-object.algo.ts",
-                      "line": 39,
-                      "end_line": 39,
-                      "column": 4,
-                      "end_column": 23
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "lhs": {
-                      "_type": "FieldExpression",
+                  "op_code": "&&",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "NumericComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/mutable-object.algo.ts",
                         "line": 39,
@@ -5166,46 +5158,109 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "uint64",
+                        "name": "bool",
                         "immutable": true
                       },
-                      "base": {
-                        "_type": "VarExpression",
+                      "lhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/mutable-object.algo.ts",
                           "line": 39,
                           "end_line": 39,
-                          "column": 16,
-                          "end_column": 18
+                          "column": 4,
+                          "end_column": 23
                         },
                         "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
                         },
-                        "name": "v1"
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 39,
+                            "end_line": 39,
+                            "column": 16,
+                            "end_column": 18
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "v1"
+                        },
+                        "name": "x"
                       },
-                      "name": "x"
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "FieldExpression",
+                        "source_location": {
+                          "file": "tests/approvals/mutable-object.algo.ts",
+                          "line": 39,
+                          "end_line": 39,
+                          "column": 4,
+                          "end_column": 23
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 39,
+                            "end_line": 39,
+                            "column": 20,
+                            "end_column": 22
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "v2"
+                        },
+                        "name": "x"
+                      }
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "FieldExpression",
+                    {
+                      "_type": "NumericComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/mutable-object.algo.ts",
                         "line": 39,
@@ -5215,157 +5270,108 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "uint64",
+                        "name": "bool",
                         "immutable": true
                       },
-                      "base": {
-                        "_type": "VarExpression",
+                      "lhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/mutable-object.algo.ts",
                           "line": 39,
                           "end_line": 39,
-                          "column": 20,
-                          "end_column": 22
+                          "column": 4,
+                          "end_column": 23
                         },
                         "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
                         },
-                        "name": "v2"
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 39,
+                            "end_line": 39,
+                            "column": 16,
+                            "end_column": 18
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "v1"
+                        },
+                        "name": "y"
                       },
-                      "name": "x"
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "FieldExpression",
+                        "source_location": {
+                          "file": "tests/approvals/mutable-object.algo.ts",
+                          "line": 39,
+                          "end_line": 39,
+                          "column": 4,
+                          "end_column": 23
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 39,
+                            "end_line": 39,
+                            "column": 20,
+                            "end_column": 22
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "v2"
+                        },
+                        "name": "y"
+                      }
                     }
-                  },
-                  "op": "and",
-                  "right": {
-                    "_type": "NumericComparisonExpression",
-                    "source_location": {
-                      "file": "tests/approvals/mutable-object.algo.ts",
-                      "line": 39,
-                      "end_line": 39,
-                      "column": 4,
-                      "end_column": 23
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "lhs": {
-                      "_type": "FieldExpression",
-                      "source_location": {
-                        "file": "tests/approvals/mutable-object.algo.ts",
-                        "line": 39,
-                        "end_line": 39,
-                        "column": 4,
-                        "end_column": 23
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "base": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 39,
-                          "end_line": 39,
-                          "column": 16,
-                          "end_column": 18
-                        },
-                        "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
-                        },
-                        "name": "v1"
-                      },
-                      "name": "y"
-                    },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "FieldExpression",
-                      "source_location": {
-                        "file": "tests/approvals/mutable-object.algo.ts",
-                        "line": 39,
-                        "end_line": 39,
-                        "column": 4,
-                        "end_column": 23
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "base": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 39,
-                          "end_line": 39,
-                          "column": 20,
-                          "end_column": 22
-                        },
-                        "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
-                        },
-                        "name": "v2"
-                      },
-                      "name": "y"
-                    }
-                  }
+                  ]
                 },
                 "error_message": "assert target is match for conditions"
               }
@@ -5670,7 +5676,7 @@
                   "immutable": true
                 },
                 "condition": {
-                  "_type": "BooleanBinaryOperation",
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/mutable-object.algo.ts",
                     "line": 42,
@@ -5683,22 +5689,11 @@
                     "name": "bool",
                     "immutable": true
                   },
-                  "left": {
-                    "_type": "NumericComparisonExpression",
-                    "source_location": {
-                      "file": "tests/approvals/mutable-object.algo.ts",
-                      "line": 42,
-                      "end_line": 42,
-                      "column": 4,
-                      "end_column": 23
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "lhs": {
-                      "_type": "FieldExpression",
+                  "op_code": "&&",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "NumericComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/mutable-object.algo.ts",
                         "line": 42,
@@ -5708,46 +5703,109 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "uint64",
+                        "name": "bool",
                         "immutable": true
                       },
-                      "base": {
-                        "_type": "VarExpression",
+                      "lhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/mutable-object.algo.ts",
                           "line": 42,
                           "end_line": 42,
-                          "column": 16,
-                          "end_column": 18
+                          "column": 4,
+                          "end_column": 23
                         },
                         "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "ObjectDC5110F2",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
                         },
-                        "name": "v3"
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 42,
+                            "end_line": 42,
+                            "column": 16,
+                            "end_column": 18
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "ObjectDC5110F2",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "v3"
+                        },
+                        "name": "x"
                       },
-                      "name": "x"
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "FieldExpression",
+                        "source_location": {
+                          "file": "tests/approvals/mutable-object.algo.ts",
+                          "line": 42,
+                          "end_line": 42,
+                          "column": 4,
+                          "end_column": 23
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 42,
+                            "end_line": 42,
+                            "column": 20,
+                            "end_column": 22
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "v1"
+                        },
+                        "name": "x"
+                      }
                     },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "FieldExpression",
+                    {
+                      "_type": "NumericComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/mutable-object.algo.ts",
                         "line": 42,
@@ -5757,157 +5815,108 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "uint64",
+                        "name": "bool",
                         "immutable": true
                       },
-                      "base": {
-                        "_type": "VarExpression",
+                      "lhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/mutable-object.algo.ts",
                           "line": 42,
                           "end_line": 42,
-                          "column": 20,
-                          "end_column": 22
+                          "column": 4,
+                          "end_column": 23
                         },
                         "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
                         },
-                        "name": "v1"
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 42,
+                            "end_line": 42,
+                            "column": 16,
+                            "end_column": 18
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "ObjectDC5110F2",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "v3"
+                        },
+                        "name": "y"
                       },
-                      "name": "x"
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "FieldExpression",
+                        "source_location": {
+                          "file": "tests/approvals/mutable-object.algo.ts",
+                          "line": 42,
+                          "end_line": 42,
+                          "column": 4,
+                          "end_column": 23
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 42,
+                            "end_line": 42,
+                            "column": 20,
+                            "end_column": 22
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "v1"
+                        },
+                        "name": "y"
+                      }
                     }
-                  },
-                  "op": "and",
-                  "right": {
-                    "_type": "NumericComparisonExpression",
-                    "source_location": {
-                      "file": "tests/approvals/mutable-object.algo.ts",
-                      "line": 42,
-                      "end_line": 42,
-                      "column": 4,
-                      "end_column": 23
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "lhs": {
-                      "_type": "FieldExpression",
-                      "source_location": {
-                        "file": "tests/approvals/mutable-object.algo.ts",
-                        "line": 42,
-                        "end_line": 42,
-                        "column": 4,
-                        "end_column": 23
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "base": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 42,
-                          "end_line": 42,
-                          "column": 16,
-                          "end_column": 18
-                        },
-                        "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "ObjectDC5110F2",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
-                        },
-                        "name": "v3"
-                      },
-                      "name": "y"
-                    },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "FieldExpression",
-                      "source_location": {
-                        "file": "tests/approvals/mutable-object.algo.ts",
-                        "line": 42,
-                        "end_line": 42,
-                        "column": 4,
-                        "end_column": 23
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "base": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 42,
-                          "end_line": 42,
-                          "column": 20,
-                          "end_column": 22
-                        },
-                        "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
-                        },
-                        "name": "v1"
-                      },
-                      "name": "y"
-                    }
-                  }
+                  ]
                 },
                 "error_message": "assert target is match for conditions"
               }
@@ -9192,7 +9201,7 @@
                   "immutable": true
                 },
                 "condition": {
-                  "_type": "BooleanBinaryOperation",
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/mutable-object.algo.ts",
                     "line": 57,
@@ -9205,22 +9214,11 @@
                     "name": "bool",
                     "immutable": true
                   },
-                  "left": {
-                    "_type": "BooleanBinaryOperation",
-                    "source_location": {
-                      "file": "tests/approvals/mutable-object.algo.ts",
-                      "line": 57,
-                      "end_line": 57,
-                      "column": 4,
-                      "end_column": 24
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "left": {
-                      "_type": "NumericComparisonExpression",
+                  "op_code": "&&",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/mutable-object.algo.ts",
                         "line": 57,
@@ -9233,22 +9231,11 @@
                         "name": "bool",
                         "immutable": true
                       },
-                      "lhs": {
-                        "_type": "FieldExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 57,
-                          "end_line": 57,
-                          "column": 4,
-                          "end_column": 24
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "base": {
-                          "_type": "FieldExpression",
+                      "op_code": "&&",
+                      "immediates": [],
+                      "stack_args": [
+                        {
+                          "_type": "NumericComparisonExpression",
                           "source_location": {
                             "file": "tests/approvals/mutable-object.algo.ts",
                             "line": 57,
@@ -9257,111 +9244,238 @@
                             "end_column": 24
                           },
                           "wtype": {
-                            "_type": "ARC4Struct",
-                            "name": "ObjectDC5110F2",
-                            "immutable": false,
-                            "arc4_alias": null,
-                            "fields": {
-                              "x": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              "y": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              }
-                            },
-                            "source_location": null,
-                            "frozen": false,
-                            "desc": null
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true
                           },
-                          "base": {
-                            "_type": "VarExpression",
+                          "lhs": {
+                            "_type": "FieldExpression",
                             "source_location": {
                               "file": "tests/approvals/mutable-object.algo.ts",
                               "line": 57,
                               "end_line": 57,
-                              "column": 16,
-                              "end_column": 19
+                              "column": 4,
+                              "end_column": 24
                             },
                             "wtype": {
-                              "_type": "ARC4Struct",
-                              "name": "Object94959925",
-                              "immutable": false,
-                              "arc4_alias": null,
-                              "fields": {
-                                "v": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "base": {
+                              "_type": "FieldExpression",
+                              "source_location": {
+                                "file": "tests/approvals/mutable-object.algo.ts",
+                                "line": 57,
+                                "end_line": 57,
+                                "column": 4,
+                                "end_column": 24
+                              },
+                              "wtype": {
+                                "_type": "ARC4Struct",
+                                "name": "ObjectDC5110F2",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "fields": {
+                                  "x": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "y": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  }
+                                },
+                                "source_location": null,
+                                "frozen": false,
+                                "desc": null
+                              },
+                              "base": {
+                                "_type": "VarExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/mutable-object.algo.ts",
+                                  "line": 57,
+                                  "end_line": 57,
+                                  "column": 16,
+                                  "end_column": 19
+                                },
+                                "wtype": {
                                   "_type": "ARC4Struct",
-                                  "name": "ObjectDC5110F2",
+                                  "name": "Object94959925",
                                   "immutable": false,
                                   "arc4_alias": null,
                                   "fields": {
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "v": {
+                                      "_type": "ARC4Struct",
+                                      "name": "ObjectDC5110F2",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     },
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "p": {
+                                      "_type": "ARC4Struct",
+                                      "name": "ObjectDC5110F2",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     }
                                   },
                                   "source_location": null,
                                   "frozen": false,
                                   "desc": null
                                 },
-                                "p": {
+                                "name": "vp1"
+                              },
+                              "name": "v"
+                            },
+                            "name": "x"
+                          },
+                          "operator": "==",
+                          "rhs": {
+                            "_type": "FieldExpression",
+                            "source_location": {
+                              "file": "tests/approvals/mutable-object.algo.ts",
+                              "line": 57,
+                              "end_line": 57,
+                              "column": 4,
+                              "end_column": 24
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "base": {
+                              "_type": "FieldExpression",
+                              "source_location": {
+                                "file": "tests/approvals/mutable-object.algo.ts",
+                                "line": 57,
+                                "end_line": 57,
+                                "column": 4,
+                                "end_column": 24
+                              },
+                              "wtype": {
+                                "_type": "ARC4Struct",
+                                "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "fields": {
+                                  "x": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "y": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  }
+                                },
+                                "source_location": null,
+                                "frozen": false,
+                                "desc": null
+                              },
+                              "base": {
+                                "_type": "VarExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/mutable-object.algo.ts",
+                                  "line": 57,
+                                  "end_line": 57,
+                                  "column": 21,
+                                  "end_column": 23
+                                },
+                                "wtype": {
                                   "_type": "ARC4Struct",
-                                  "name": "ObjectDC5110F2",
+                                  "name": "tests/approvals/mutable-object.algo.ts::VectorPoint",
                                   "immutable": false,
                                   "arc4_alias": null,
                                   "fields": {
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "v": {
+                                      "_type": "ARC4Struct",
+                                      "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     },
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "p": {
+                                      "_type": "ARC4Struct",
+                                      "name": "tests/approvals/mutable-object.algo.ts::Point",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     }
                                   },
                                   "source_location": null,
                                   "frozen": false,
                                   "desc": null
-                                }
+                                },
+                                "name": "vp"
                               },
-                              "source_location": null,
-                              "frozen": false,
-                              "desc": null
+                              "name": "v"
                             },
-                            "name": "vp1"
-                          },
-                          "name": "v"
+                            "name": "x"
+                          }
                         },
-                        "name": "x"
-                      },
-                      "operator": "==",
-                      "rhs": {
-                        "_type": "FieldExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 57,
-                          "end_line": 57,
-                          "column": 4,
-                          "end_column": 24
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "base": {
-                          "_type": "FieldExpression",
+                        {
+                          "_type": "NumericComparisonExpression",
                           "source_location": {
                             "file": "tests/approvals/mutable-object.algo.ts",
                             "line": 57,
@@ -9370,98 +9484,240 @@
                             "end_column": 24
                           },
                           "wtype": {
-                            "_type": "ARC4Struct",
-                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                            "immutable": false,
-                            "arc4_alias": null,
-                            "fields": {
-                              "x": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              "y": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              }
-                            },
-                            "source_location": null,
-                            "frozen": false,
-                            "desc": null
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true
                           },
-                          "base": {
-                            "_type": "VarExpression",
+                          "lhs": {
+                            "_type": "FieldExpression",
                             "source_location": {
                               "file": "tests/approvals/mutable-object.algo.ts",
                               "line": 57,
                               "end_line": 57,
-                              "column": 21,
-                              "end_column": 23
+                              "column": 4,
+                              "end_column": 24
                             },
                             "wtype": {
-                              "_type": "ARC4Struct",
-                              "name": "tests/approvals/mutable-object.algo.ts::VectorPoint",
-                              "immutable": false,
-                              "arc4_alias": null,
-                              "fields": {
-                                "v": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "base": {
+                              "_type": "FieldExpression",
+                              "source_location": {
+                                "file": "tests/approvals/mutable-object.algo.ts",
+                                "line": 57,
+                                "end_line": 57,
+                                "column": 4,
+                                "end_column": 24
+                              },
+                              "wtype": {
+                                "_type": "ARC4Struct",
+                                "name": "ObjectDC5110F2",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "fields": {
+                                  "x": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "y": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  }
+                                },
+                                "source_location": null,
+                                "frozen": false,
+                                "desc": null
+                              },
+                              "base": {
+                                "_type": "VarExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/mutable-object.algo.ts",
+                                  "line": 57,
+                                  "end_line": 57,
+                                  "column": 16,
+                                  "end_column": 19
+                                },
+                                "wtype": {
                                   "_type": "ARC4Struct",
-                                  "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                                  "name": "Object94959925",
                                   "immutable": false,
                                   "arc4_alias": null,
                                   "fields": {
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "v": {
+                                      "_type": "ARC4Struct",
+                                      "name": "ObjectDC5110F2",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     },
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "p": {
+                                      "_type": "ARC4Struct",
+                                      "name": "ObjectDC5110F2",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     }
                                   },
                                   "source_location": null,
                                   "frozen": false,
                                   "desc": null
                                 },
-                                "p": {
+                                "name": "vp1"
+                              },
+                              "name": "v"
+                            },
+                            "name": "y"
+                          },
+                          "operator": "==",
+                          "rhs": {
+                            "_type": "FieldExpression",
+                            "source_location": {
+                              "file": "tests/approvals/mutable-object.algo.ts",
+                              "line": 57,
+                              "end_line": 57,
+                              "column": 4,
+                              "end_column": 24
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "base": {
+                              "_type": "FieldExpression",
+                              "source_location": {
+                                "file": "tests/approvals/mutable-object.algo.ts",
+                                "line": 57,
+                                "end_line": 57,
+                                "column": 4,
+                                "end_column": 24
+                              },
+                              "wtype": {
+                                "_type": "ARC4Struct",
+                                "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "fields": {
+                                  "x": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "y": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  }
+                                },
+                                "source_location": null,
+                                "frozen": false,
+                                "desc": null
+                              },
+                              "base": {
+                                "_type": "VarExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/mutable-object.algo.ts",
+                                  "line": 57,
+                                  "end_line": 57,
+                                  "column": 21,
+                                  "end_column": 23
+                                },
+                                "wtype": {
                                   "_type": "ARC4Struct",
-                                  "name": "tests/approvals/mutable-object.algo.ts::Point",
+                                  "name": "tests/approvals/mutable-object.algo.ts::VectorPoint",
                                   "immutable": false,
                                   "arc4_alias": null,
                                   "fields": {
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "v": {
+                                      "_type": "ARC4Struct",
+                                      "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     },
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "p": {
+                                      "_type": "ARC4Struct",
+                                      "name": "tests/approvals/mutable-object.algo.ts::Point",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     }
                                   },
                                   "source_location": null,
                                   "frozen": false,
                                   "desc": null
-                                }
+                                },
+                                "name": "vp"
                               },
-                              "source_location": null,
-                              "frozen": false,
-                              "desc": null
+                              "name": "v"
                             },
-                            "name": "vp"
-                          },
-                          "name": "v"
-                        },
-                        "name": "x"
-                      }
+                            "name": "y"
+                          }
+                        }
+                      ]
                     },
-                    "op": "and",
-                    "right": {
-                      "_type": "NumericComparisonExpression",
+                    {
+                      "_type": "IntrinsicCall",
                       "source_location": {
                         "file": "tests/approvals/mutable-object.algo.ts",
                         "line": 57,
@@ -9474,22 +9730,11 @@
                         "name": "bool",
                         "immutable": true
                       },
-                      "lhs": {
-                        "_type": "FieldExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 57,
-                          "end_line": 57,
-                          "column": 4,
-                          "end_column": 24
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "base": {
-                          "_type": "FieldExpression",
+                      "op_code": "&&",
+                      "immediates": [],
+                      "stack_args": [
+                        {
+                          "_type": "NumericComparisonExpression",
                           "source_location": {
                             "file": "tests/approvals/mutable-object.algo.ts",
                             "line": 57,
@@ -9498,111 +9743,238 @@
                             "end_column": 24
                           },
                           "wtype": {
-                            "_type": "ARC4Struct",
-                            "name": "ObjectDC5110F2",
-                            "immutable": false,
-                            "arc4_alias": null,
-                            "fields": {
-                              "x": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              "y": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              }
-                            },
-                            "source_location": null,
-                            "frozen": false,
-                            "desc": null
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true
                           },
-                          "base": {
-                            "_type": "VarExpression",
+                          "lhs": {
+                            "_type": "FieldExpression",
                             "source_location": {
                               "file": "tests/approvals/mutable-object.algo.ts",
                               "line": 57,
                               "end_line": 57,
-                              "column": 16,
-                              "end_column": 19
+                              "column": 4,
+                              "end_column": 24
                             },
                             "wtype": {
-                              "_type": "ARC4Struct",
-                              "name": "Object94959925",
-                              "immutable": false,
-                              "arc4_alias": null,
-                              "fields": {
-                                "v": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "base": {
+                              "_type": "FieldExpression",
+                              "source_location": {
+                                "file": "tests/approvals/mutable-object.algo.ts",
+                                "line": 57,
+                                "end_line": 57,
+                                "column": 4,
+                                "end_column": 24
+                              },
+                              "wtype": {
+                                "_type": "ARC4Struct",
+                                "name": "ObjectDC5110F2",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "fields": {
+                                  "x": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "y": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  }
+                                },
+                                "source_location": null,
+                                "frozen": false,
+                                "desc": null
+                              },
+                              "base": {
+                                "_type": "VarExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/mutable-object.algo.ts",
+                                  "line": 57,
+                                  "end_line": 57,
+                                  "column": 16,
+                                  "end_column": 19
+                                },
+                                "wtype": {
                                   "_type": "ARC4Struct",
-                                  "name": "ObjectDC5110F2",
+                                  "name": "Object94959925",
                                   "immutable": false,
                                   "arc4_alias": null,
                                   "fields": {
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "v": {
+                                      "_type": "ARC4Struct",
+                                      "name": "ObjectDC5110F2",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     },
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "p": {
+                                      "_type": "ARC4Struct",
+                                      "name": "ObjectDC5110F2",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     }
                                   },
                                   "source_location": null,
                                   "frozen": false,
                                   "desc": null
                                 },
-                                "p": {
+                                "name": "vp1"
+                              },
+                              "name": "p"
+                            },
+                            "name": "y"
+                          },
+                          "operator": "==",
+                          "rhs": {
+                            "_type": "FieldExpression",
+                            "source_location": {
+                              "file": "tests/approvals/mutable-object.algo.ts",
+                              "line": 57,
+                              "end_line": 57,
+                              "column": 4,
+                              "end_column": 24
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "base": {
+                              "_type": "FieldExpression",
+                              "source_location": {
+                                "file": "tests/approvals/mutable-object.algo.ts",
+                                "line": 57,
+                                "end_line": 57,
+                                "column": 4,
+                                "end_column": 24
+                              },
+                              "wtype": {
+                                "_type": "ARC4Struct",
+                                "name": "tests/approvals/mutable-object.algo.ts::Point",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "fields": {
+                                  "y": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "x": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  }
+                                },
+                                "source_location": null,
+                                "frozen": false,
+                                "desc": null
+                              },
+                              "base": {
+                                "_type": "VarExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/mutable-object.algo.ts",
+                                  "line": 57,
+                                  "end_line": 57,
+                                  "column": 21,
+                                  "end_column": 23
+                                },
+                                "wtype": {
                                   "_type": "ARC4Struct",
-                                  "name": "ObjectDC5110F2",
+                                  "name": "tests/approvals/mutable-object.algo.ts::VectorPoint",
                                   "immutable": false,
                                   "arc4_alias": null,
                                   "fields": {
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "v": {
+                                      "_type": "ARC4Struct",
+                                      "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     },
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "p": {
+                                      "_type": "ARC4Struct",
+                                      "name": "tests/approvals/mutable-object.algo.ts::Point",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     }
                                   },
                                   "source_location": null,
                                   "frozen": false,
                                   "desc": null
-                                }
+                                },
+                                "name": "vp"
                               },
-                              "source_location": null,
-                              "frozen": false,
-                              "desc": null
+                              "name": "p"
                             },
-                            "name": "vp1"
-                          },
-                          "name": "v"
+                            "name": "y"
+                          }
                         },
-                        "name": "y"
-                      },
-                      "operator": "==",
-                      "rhs": {
-                        "_type": "FieldExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 57,
-                          "end_line": 57,
-                          "column": 4,
-                          "end_column": 24
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "base": {
-                          "_type": "FieldExpression",
+                        {
+                          "_type": "NumericComparisonExpression",
                           "source_location": {
                             "file": "tests/approvals/mutable-object.algo.ts",
                             "line": 57,
@@ -9611,593 +9983,239 @@
                             "end_column": 24
                           },
                           "wtype": {
-                            "_type": "ARC4Struct",
-                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                            "immutable": false,
-                            "arc4_alias": null,
-                            "fields": {
-                              "x": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              "y": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              }
-                            },
-                            "source_location": null,
-                            "frozen": false,
-                            "desc": null
+                            "_type": "WType",
+                            "name": "bool",
+                            "immutable": true
                           },
-                          "base": {
-                            "_type": "VarExpression",
+                          "lhs": {
+                            "_type": "FieldExpression",
                             "source_location": {
                               "file": "tests/approvals/mutable-object.algo.ts",
                               "line": 57,
                               "end_line": 57,
-                              "column": 21,
-                              "end_column": 23
+                              "column": 4,
+                              "end_column": 24
                             },
                             "wtype": {
-                              "_type": "ARC4Struct",
-                              "name": "tests/approvals/mutable-object.algo.ts::VectorPoint",
-                              "immutable": false,
-                              "arc4_alias": null,
-                              "fields": {
-                                "v": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "base": {
+                              "_type": "FieldExpression",
+                              "source_location": {
+                                "file": "tests/approvals/mutable-object.algo.ts",
+                                "line": 57,
+                                "end_line": 57,
+                                "column": 4,
+                                "end_column": 24
+                              },
+                              "wtype": {
+                                "_type": "ARC4Struct",
+                                "name": "ObjectDC5110F2",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "fields": {
+                                  "x": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "y": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  }
+                                },
+                                "source_location": null,
+                                "frozen": false,
+                                "desc": null
+                              },
+                              "base": {
+                                "_type": "VarExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/mutable-object.algo.ts",
+                                  "line": 57,
+                                  "end_line": 57,
+                                  "column": 16,
+                                  "end_column": 19
+                                },
+                                "wtype": {
                                   "_type": "ARC4Struct",
-                                  "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                                  "name": "Object94959925",
                                   "immutable": false,
                                   "arc4_alias": null,
                                   "fields": {
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "v": {
+                                      "_type": "ARC4Struct",
+                                      "name": "ObjectDC5110F2",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     },
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "p": {
+                                      "_type": "ARC4Struct",
+                                      "name": "ObjectDC5110F2",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     }
                                   },
                                   "source_location": null,
                                   "frozen": false,
                                   "desc": null
                                 },
-                                "p": {
+                                "name": "vp1"
+                              },
+                              "name": "p"
+                            },
+                            "name": "x"
+                          },
+                          "operator": "==",
+                          "rhs": {
+                            "_type": "FieldExpression",
+                            "source_location": {
+                              "file": "tests/approvals/mutable-object.algo.ts",
+                              "line": 57,
+                              "end_line": 57,
+                              "column": 4,
+                              "end_column": 24
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "base": {
+                              "_type": "FieldExpression",
+                              "source_location": {
+                                "file": "tests/approvals/mutable-object.algo.ts",
+                                "line": 57,
+                                "end_line": 57,
+                                "column": 4,
+                                "end_column": 24
+                              },
+                              "wtype": {
+                                "_type": "ARC4Struct",
+                                "name": "tests/approvals/mutable-object.algo.ts::Point",
+                                "immutable": false,
+                                "arc4_alias": null,
+                                "fields": {
+                                  "y": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "x": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  }
+                                },
+                                "source_location": null,
+                                "frozen": false,
+                                "desc": null
+                              },
+                              "base": {
+                                "_type": "VarExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/mutable-object.algo.ts",
+                                  "line": 57,
+                                  "end_line": 57,
+                                  "column": 21,
+                                  "end_column": 23
+                                },
+                                "wtype": {
                                   "_type": "ARC4Struct",
-                                  "name": "tests/approvals/mutable-object.algo.ts::Point",
+                                  "name": "tests/approvals/mutable-object.algo.ts::VectorPoint",
                                   "immutable": false,
                                   "arc4_alias": null,
                                   "fields": {
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "v": {
+                                      "_type": "ARC4Struct",
+                                      "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     },
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
+                                    "p": {
+                                      "_type": "ARC4Struct",
+                                      "name": "tests/approvals/mutable-object.algo.ts::Point",
+                                      "immutable": false,
+                                      "arc4_alias": null,
+                                      "fields": {
+                                        "y": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        "x": {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      },
+                                      "source_location": null,
+                                      "frozen": false,
+                                      "desc": null
                                     }
                                   },
                                   "source_location": null,
                                   "frozen": false,
                                   "desc": null
-                                }
+                                },
+                                "name": "vp"
                               },
-                              "source_location": null,
-                              "frozen": false,
-                              "desc": null
+                              "name": "p"
                             },
-                            "name": "vp"
-                          },
-                          "name": "v"
-                        },
-                        "name": "y"
-                      }
+                            "name": "x"
+                          }
+                        }
+                      ]
                     }
-                  },
-                  "op": "and",
-                  "right": {
-                    "_type": "BooleanBinaryOperation",
-                    "source_location": {
-                      "file": "tests/approvals/mutable-object.algo.ts",
-                      "line": 57,
-                      "end_line": 57,
-                      "column": 4,
-                      "end_column": 24
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "left": {
-                      "_type": "NumericComparisonExpression",
-                      "source_location": {
-                        "file": "tests/approvals/mutable-object.algo.ts",
-                        "line": 57,
-                        "end_line": 57,
-                        "column": 4,
-                        "end_column": 24
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bool",
-                        "immutable": true
-                      },
-                      "lhs": {
-                        "_type": "FieldExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 57,
-                          "end_line": 57,
-                          "column": 4,
-                          "end_column": 24
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "base": {
-                          "_type": "FieldExpression",
-                          "source_location": {
-                            "file": "tests/approvals/mutable-object.algo.ts",
-                            "line": 57,
-                            "end_line": 57,
-                            "column": 4,
-                            "end_column": 24
-                          },
-                          "wtype": {
-                            "_type": "ARC4Struct",
-                            "name": "ObjectDC5110F2",
-                            "immutable": false,
-                            "arc4_alias": null,
-                            "fields": {
-                              "x": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              "y": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              }
-                            },
-                            "source_location": null,
-                            "frozen": false,
-                            "desc": null
-                          },
-                          "base": {
-                            "_type": "VarExpression",
-                            "source_location": {
-                              "file": "tests/approvals/mutable-object.algo.ts",
-                              "line": 57,
-                              "end_line": 57,
-                              "column": 16,
-                              "end_column": 19
-                            },
-                            "wtype": {
-                              "_type": "ARC4Struct",
-                              "name": "Object94959925",
-                              "immutable": false,
-                              "arc4_alias": null,
-                              "fields": {
-                                "v": {
-                                  "_type": "ARC4Struct",
-                                  "name": "ObjectDC5110F2",
-                                  "immutable": false,
-                                  "arc4_alias": null,
-                                  "fields": {
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    },
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    }
-                                  },
-                                  "source_location": null,
-                                  "frozen": false,
-                                  "desc": null
-                                },
-                                "p": {
-                                  "_type": "ARC4Struct",
-                                  "name": "ObjectDC5110F2",
-                                  "immutable": false,
-                                  "arc4_alias": null,
-                                  "fields": {
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    },
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    }
-                                  },
-                                  "source_location": null,
-                                  "frozen": false,
-                                  "desc": null
-                                }
-                              },
-                              "source_location": null,
-                              "frozen": false,
-                              "desc": null
-                            },
-                            "name": "vp1"
-                          },
-                          "name": "p"
-                        },
-                        "name": "y"
-                      },
-                      "operator": "==",
-                      "rhs": {
-                        "_type": "FieldExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 57,
-                          "end_line": 57,
-                          "column": 4,
-                          "end_column": 24
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "base": {
-                          "_type": "FieldExpression",
-                          "source_location": {
-                            "file": "tests/approvals/mutable-object.algo.ts",
-                            "line": 57,
-                            "end_line": 57,
-                            "column": 4,
-                            "end_column": 24
-                          },
-                          "wtype": {
-                            "_type": "ARC4Struct",
-                            "name": "tests/approvals/mutable-object.algo.ts::Point",
-                            "immutable": false,
-                            "arc4_alias": null,
-                            "fields": {
-                              "y": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              "x": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              }
-                            },
-                            "source_location": null,
-                            "frozen": false,
-                            "desc": null
-                          },
-                          "base": {
-                            "_type": "VarExpression",
-                            "source_location": {
-                              "file": "tests/approvals/mutable-object.algo.ts",
-                              "line": 57,
-                              "end_line": 57,
-                              "column": 21,
-                              "end_column": 23
-                            },
-                            "wtype": {
-                              "_type": "ARC4Struct",
-                              "name": "tests/approvals/mutable-object.algo.ts::VectorPoint",
-                              "immutable": false,
-                              "arc4_alias": null,
-                              "fields": {
-                                "v": {
-                                  "_type": "ARC4Struct",
-                                  "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                                  "immutable": false,
-                                  "arc4_alias": null,
-                                  "fields": {
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    },
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    }
-                                  },
-                                  "source_location": null,
-                                  "frozen": false,
-                                  "desc": null
-                                },
-                                "p": {
-                                  "_type": "ARC4Struct",
-                                  "name": "tests/approvals/mutable-object.algo.ts::Point",
-                                  "immutable": false,
-                                  "arc4_alias": null,
-                                  "fields": {
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    },
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    }
-                                  },
-                                  "source_location": null,
-                                  "frozen": false,
-                                  "desc": null
-                                }
-                              },
-                              "source_location": null,
-                              "frozen": false,
-                              "desc": null
-                            },
-                            "name": "vp"
-                          },
-                          "name": "p"
-                        },
-                        "name": "y"
-                      }
-                    },
-                    "op": "and",
-                    "right": {
-                      "_type": "NumericComparisonExpression",
-                      "source_location": {
-                        "file": "tests/approvals/mutable-object.algo.ts",
-                        "line": 57,
-                        "end_line": 57,
-                        "column": 4,
-                        "end_column": 24
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bool",
-                        "immutable": true
-                      },
-                      "lhs": {
-                        "_type": "FieldExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 57,
-                          "end_line": 57,
-                          "column": 4,
-                          "end_column": 24
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "base": {
-                          "_type": "FieldExpression",
-                          "source_location": {
-                            "file": "tests/approvals/mutable-object.algo.ts",
-                            "line": 57,
-                            "end_line": 57,
-                            "column": 4,
-                            "end_column": 24
-                          },
-                          "wtype": {
-                            "_type": "ARC4Struct",
-                            "name": "ObjectDC5110F2",
-                            "immutable": false,
-                            "arc4_alias": null,
-                            "fields": {
-                              "x": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              "y": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              }
-                            },
-                            "source_location": null,
-                            "frozen": false,
-                            "desc": null
-                          },
-                          "base": {
-                            "_type": "VarExpression",
-                            "source_location": {
-                              "file": "tests/approvals/mutable-object.algo.ts",
-                              "line": 57,
-                              "end_line": 57,
-                              "column": 16,
-                              "end_column": 19
-                            },
-                            "wtype": {
-                              "_type": "ARC4Struct",
-                              "name": "Object94959925",
-                              "immutable": false,
-                              "arc4_alias": null,
-                              "fields": {
-                                "v": {
-                                  "_type": "ARC4Struct",
-                                  "name": "ObjectDC5110F2",
-                                  "immutable": false,
-                                  "arc4_alias": null,
-                                  "fields": {
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    },
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    }
-                                  },
-                                  "source_location": null,
-                                  "frozen": false,
-                                  "desc": null
-                                },
-                                "p": {
-                                  "_type": "ARC4Struct",
-                                  "name": "ObjectDC5110F2",
-                                  "immutable": false,
-                                  "arc4_alias": null,
-                                  "fields": {
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    },
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    }
-                                  },
-                                  "source_location": null,
-                                  "frozen": false,
-                                  "desc": null
-                                }
-                              },
-                              "source_location": null,
-                              "frozen": false,
-                              "desc": null
-                            },
-                            "name": "vp1"
-                          },
-                          "name": "p"
-                        },
-                        "name": "x"
-                      },
-                      "operator": "==",
-                      "rhs": {
-                        "_type": "FieldExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 57,
-                          "end_line": 57,
-                          "column": 4,
-                          "end_column": 24
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "base": {
-                          "_type": "FieldExpression",
-                          "source_location": {
-                            "file": "tests/approvals/mutable-object.algo.ts",
-                            "line": 57,
-                            "end_line": 57,
-                            "column": 4,
-                            "end_column": 24
-                          },
-                          "wtype": {
-                            "_type": "ARC4Struct",
-                            "name": "tests/approvals/mutable-object.algo.ts::Point",
-                            "immutable": false,
-                            "arc4_alias": null,
-                            "fields": {
-                              "y": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              "x": {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              }
-                            },
-                            "source_location": null,
-                            "frozen": false,
-                            "desc": null
-                          },
-                          "base": {
-                            "_type": "VarExpression",
-                            "source_location": {
-                              "file": "tests/approvals/mutable-object.algo.ts",
-                              "line": 57,
-                              "end_line": 57,
-                              "column": 21,
-                              "end_column": 23
-                            },
-                            "wtype": {
-                              "_type": "ARC4Struct",
-                              "name": "tests/approvals/mutable-object.algo.ts::VectorPoint",
-                              "immutable": false,
-                              "arc4_alias": null,
-                              "fields": {
-                                "v": {
-                                  "_type": "ARC4Struct",
-                                  "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                                  "immutable": false,
-                                  "arc4_alias": null,
-                                  "fields": {
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    },
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    }
-                                  },
-                                  "source_location": null,
-                                  "frozen": false,
-                                  "desc": null
-                                },
-                                "p": {
-                                  "_type": "ARC4Struct",
-                                  "name": "tests/approvals/mutable-object.algo.ts::Point",
-                                  "immutable": false,
-                                  "arc4_alias": null,
-                                  "fields": {
-                                    "y": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    },
-                                    "x": {
-                                      "_type": "WType",
-                                      "name": "uint64",
-                                      "immutable": true
-                                    }
-                                  },
-                                  "source_location": null,
-                                  "frozen": false,
-                                  "desc": null
-                                }
-                              },
-                              "source_location": null,
-                              "frozen": false,
-                              "desc": null
-                            },
-                            "name": "vp"
-                          },
-                          "name": "p"
-                        },
-                        "name": "x"
-                      }
-                    }
-                  }
+                  ]
                 },
                 "error_message": "assert target is match for conditions"
               }
@@ -11012,7 +11030,7 @@
                   "immutable": true
                 },
                 "condition": {
-                  "_type": "BooleanBinaryOperation",
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/mutable-object.algo.ts",
                     "line": 81,
@@ -11025,22 +11043,11 @@
                     "name": "bool",
                     "immutable": true
                   },
-                  "left": {
-                    "_type": "NumericComparisonExpression",
-                    "source_location": {
-                      "file": "tests/approvals/mutable-object.algo.ts",
-                      "line": 81,
-                      "end_line": 84,
-                      "column": 4,
-                      "end_column": 6
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "lhs": {
-                      "_type": "FieldExpression",
+                  "op_code": "&&",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "NumericComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/mutable-object.algo.ts",
                         "line": 81,
@@ -11050,82 +11057,65 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "uint64",
+                        "name": "bool",
                         "immutable": true
                       },
-                      "base": {
-                        "_type": "VarExpression",
+                      "lhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/mutable-object.algo.ts",
                           "line": 81,
-                          "end_line": 81,
-                          "column": 16,
-                          "end_column": 19
-                        },
-                        "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
-                        },
-                        "name": "obj"
-                      },
-                      "name": "y"
-                    },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "UInt64BinaryOperation",
-                      "source_location": {
-                        "file": "tests/approvals/mutable-object.algo.ts",
-                        "line": 82,
-                        "end_line": 82,
-                        "column": 9,
-                        "end_column": 14
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "left": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 82,
-                          "end_line": 82,
-                          "column": 9,
-                          "end_column": 10
+                          "end_line": 84,
+                          "column": 4,
+                          "end_column": 6
                         },
                         "wtype": {
                           "_type": "WType",
                           "name": "uint64",
                           "immutable": true
                         },
-                        "name": "x"
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 81,
+                            "end_line": 81,
+                            "column": 16,
+                            "end_column": 19
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "obj"
+                        },
+                        "name": "y"
                       },
-                      "op": "*",
-                      "right": {
-                        "_type": "IntegerConstant",
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "UInt64BinaryOperation",
                         "source_location": {
                           "file": "tests/approvals/mutable-object.algo.ts",
                           "line": 82,
                           "end_line": 82,
-                          "column": 13,
+                          "column": 9,
                           "end_column": 14
                         },
                         "wtype": {
@@ -11133,28 +11123,44 @@
                           "name": "uint64",
                           "immutable": true
                         },
-                        "value": 2,
-                        "teal_alias": null
+                        "left": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 82,
+                            "end_line": 82,
+                            "column": 9,
+                            "end_column": 10
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "x"
+                        },
+                        "op": "*",
+                        "right": {
+                          "_type": "IntegerConstant",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 82,
+                            "end_line": 82,
+                            "column": 13,
+                            "end_column": 14
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "value": 2,
+                          "teal_alias": null
+                        }
                       }
-                    }
-                  },
-                  "op": "and",
-                  "right": {
-                    "_type": "NumericComparisonExpression",
-                    "source_location": {
-                      "file": "tests/approvals/mutable-object.algo.ts",
-                      "line": 81,
-                      "end_line": 84,
-                      "column": 4,
-                      "end_column": 6
                     },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "lhs": {
-                      "_type": "FieldExpression",
+                    {
+                      "_type": "NumericComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/mutable-object.algo.ts",
                         "line": 81,
@@ -11164,82 +11170,65 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "uint64",
+                        "name": "bool",
                         "immutable": true
                       },
-                      "base": {
-                        "_type": "VarExpression",
+                      "lhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/mutable-object.algo.ts",
                           "line": 81,
-                          "end_line": 81,
-                          "column": 16,
-                          "end_column": 19
-                        },
-                        "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
-                        },
-                        "name": "obj"
-                      },
-                      "name": "x"
-                    },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "UInt64BinaryOperation",
-                      "source_location": {
-                        "file": "tests/approvals/mutable-object.algo.ts",
-                        "line": 83,
-                        "end_line": 83,
-                        "column": 9,
-                        "end_column": 14
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "left": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/mutable-object.algo.ts",
-                          "line": 83,
-                          "end_line": 83,
-                          "column": 9,
-                          "end_column": 10
+                          "end_line": 84,
+                          "column": 4,
+                          "end_column": 6
                         },
                         "wtype": {
                           "_type": "WType",
                           "name": "uint64",
                           "immutable": true
                         },
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 81,
+                            "end_line": 81,
+                            "column": 16,
+                            "end_column": 19
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "obj"
+                        },
                         "name": "x"
                       },
-                      "op": "*",
-                      "right": {
-                        "_type": "IntegerConstant",
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "UInt64BinaryOperation",
                         "source_location": {
                           "file": "tests/approvals/mutable-object.algo.ts",
                           "line": 83,
                           "end_line": 83,
-                          "column": 13,
+                          "column": 9,
                           "end_column": 14
                         },
                         "wtype": {
@@ -11247,11 +11236,43 @@
                           "name": "uint64",
                           "immutable": true
                         },
-                        "value": 2,
-                        "teal_alias": null
+                        "left": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 83,
+                            "end_line": 83,
+                            "column": 9,
+                            "end_column": 10
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "name": "x"
+                        },
+                        "op": "*",
+                        "right": {
+                          "_type": "IntegerConstant",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 83,
+                            "end_line": 83,
+                            "column": 13,
+                            "end_column": 14
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "value": 2,
+                          "teal_alias": null
+                        }
                       }
                     }
-                  }
+                  ]
                 },
                 "error_message": "assert target is match for conditions"
               }
@@ -11709,7 +11730,7 @@
                   "immutable": true
                 },
                 "condition": {
-                  "_type": "BooleanBinaryOperation",
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/mutable-object.algo.ts",
                     "line": 87,
@@ -11722,22 +11743,11 @@
                     "name": "bool",
                     "immutable": true
                   },
-                  "left": {
-                    "_type": "NumericComparisonExpression",
-                    "source_location": {
-                      "file": "tests/approvals/mutable-object.algo.ts",
-                      "line": 87,
-                      "end_line": 87,
-                      "column": 4,
-                      "end_column": 40
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "lhs": {
-                      "_type": "FieldExpression",
+                  "op_code": "&&",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "NumericComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/mutable-object.algo.ts",
                         "line": 87,
@@ -11747,110 +11757,109 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "uint64",
+                        "name": "bool",
                         "immutable": true
                       },
-                      "base": {
-                        "_type": "VarExpression",
+                      "lhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/mutable-object.algo.ts",
                           "line": 87,
                           "end_line": 87,
-                          "column": 16,
-                          "end_column": 19
+                          "column": 4,
+                          "end_column": 40
                         },
                         "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
                         },
-                        "name": "obj"
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 87,
+                            "end_line": 87,
+                            "column": 16,
+                            "end_column": 19
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "obj"
+                        },
+                        "name": "x"
                       },
-                      "name": "x"
-                    },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "FieldExpression",
-                      "source_location": {
-                        "file": "tests/approvals/mutable-object.algo.ts",
-                        "line": 87,
-                        "end_line": 87,
-                        "column": 28,
-                        "end_column": 29
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "base": {
-                        "_type": "VarExpression",
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/mutable-object.algo.ts",
                           "line": 87,
                           "end_line": 87,
-                          "column": 26,
-                          "end_column": 27
+                          "column": 28,
+                          "end_column": 29
                         },
                         "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "Object5255DE76",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
                         },
-                        "name": "v"
-                      },
-                      "name": "x"
-                    }
-                  },
-                  "op": "and",
-                  "right": {
-                    "_type": "NumericComparisonExpression",
-                    "source_location": {
-                      "file": "tests/approvals/mutable-object.algo.ts",
-                      "line": 87,
-                      "end_line": 87,
-                      "column": 4,
-                      "end_column": 40
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 87,
+                            "end_line": 87,
+                            "column": 26,
+                            "end_column": 27
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "Object5255DE76",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "v"
+                        },
+                        "name": "x"
+                      }
                     },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "lhs": {
-                      "_type": "FieldExpression",
+                    {
+                      "_type": "NumericComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/mutable-object.algo.ts",
                         "line": 87,
@@ -11860,93 +11869,108 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "uint64",
+                        "name": "bool",
                         "immutable": true
                       },
-                      "base": {
-                        "_type": "VarExpression",
+                      "lhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/mutable-object.algo.ts",
                           "line": 87,
                           "end_line": 87,
-                          "column": 16,
-                          "end_column": 19
+                          "column": 4,
+                          "end_column": 40
                         },
                         "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
                         },
-                        "name": "obj"
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 87,
+                            "end_line": 87,
+                            "column": 16,
+                            "end_column": 19
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "obj"
+                        },
+                        "name": "y"
                       },
-                      "name": "y"
-                    },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "FieldExpression",
-                      "source_location": {
-                        "file": "tests/approvals/mutable-object.algo.ts",
-                        "line": 87,
-                        "end_line": 87,
-                        "column": 36,
-                        "end_column": 37
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "base": {
-                        "_type": "VarExpression",
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/mutable-object.algo.ts",
                           "line": 87,
                           "end_line": 87,
-                          "column": 34,
-                          "end_column": 35
+                          "column": 36,
+                          "end_column": 37
                         },
                         "wtype": {
-                          "_type": "ARC4Struct",
-                          "name": "Object5255DE76",
-                          "immutable": false,
-                          "arc4_alias": null,
-                          "fields": {
-                            "y": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "x": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          },
-                          "source_location": null,
-                          "frozen": false,
-                          "desc": null
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
                         },
-                        "name": "v"
-                      },
-                      "name": "y"
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/mutable-object.algo.ts",
+                            "line": 87,
+                            "end_line": 87,
+                            "column": 34,
+                            "end_column": 35
+                          },
+                          "wtype": {
+                            "_type": "ARC4Struct",
+                            "name": "Object5255DE76",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "fields": {
+                              "y": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              "x": {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            },
+                            "source_location": null,
+                            "frozen": false,
+                            "desc": null
+                          },
+                          "name": "v"
+                        },
+                        "name": "y"
+                      }
                     }
-                  }
+                  ]
                 },
                 "error_message": "assert target is match for conditions"
               }

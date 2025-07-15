@@ -127,12 +127,12 @@ test_assign_from_literal_block@0:
     swap
     itob
     concat
-    dup
     // tests/approvals/property-ordering.algo.ts:21-24
     // assertMatch(obj, {
     //   z: x * 2,
     //   a: x * 2,
     // })
+    dup
     intc_0 // 8
     dup
     extract3
@@ -148,15 +148,7 @@ test_assign_from_literal_block@0:
     //   a: x * 2,
     // })
     ==
-    bz test_assign_from_literal_bool_false@3
-
-test_assign_from_literal_and_contd@1:
-    // tests/approvals/property-ordering.algo.ts:21-24
-    // assertMatch(obj, {
-    //   z: x * 2,
-    //   a: x * 2,
-    // })
-    frame_dig 0
+    swap
     intc_1 // 0
     intc_0 // 8
     extract3
@@ -172,20 +164,6 @@ test_assign_from_literal_and_contd@1:
     //   a: x * 2,
     // })
     ==
-    bz test_assign_from_literal_bool_false@3
-
-test_assign_from_literal_bool_true@2:
-    pushint 1 // 1
-
-test_assign_from_literal_bool_merge@4:
-    // tests/approvals/property-ordering.algo.ts:21-24
-    // assertMatch(obj, {
-    //   z: x * 2,
-    //   a: x * 2,
-    // })
+    &&
     assert // assert target is match for conditions
     retsub
-
-test_assign_from_literal_bool_false@3:
-    intc_1 // 0
-    b test_assign_from_literal_bool_merge@4

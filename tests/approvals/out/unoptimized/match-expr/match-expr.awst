@@ -21,11 +21,11 @@ contract MatchExprAlgo
     assert(xObj.x >= 5)
     assert(xObj.x <= 5)
     xArray: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(($1 = #[x]).0)
-    assert(xArray.length == 1 and xArray[0] == 5)
-    assert(xArray.length == 1 and xArray[0] > 4)
-    assert(xArray.length == 1 and xArray[0] < 6)
-    assert(xArray.length == 1 and xArray[0] >= 5)
-    assert(xArray.length == 1 and xArray[0] <= 5)
+    assert(&&(xArray.length == 1, xArray[0] == 5))
+    assert(&&(xArray.length == 1, xArray[0] > 4))
+    assert(&&(xArray.length == 1, xArray[0] < 6))
+    assert(&&(xArray.length == 1, xArray[0] >= 5))
+    assert(&&(xArray.length == 1, xArray[0] <= 5))
   }
   
   __algots__.defaultCreate(): void

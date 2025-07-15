@@ -233,9 +233,6 @@ testNested_block@0:
 
 // tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.test() -> void:
 test:
-    // tests/approvals/array-destructuring.algo.ts:11
-    // test() {
-    proto 0 0
 
 test_block@0:
     // tests/approvals/array-destructuring.algo.ts:12
@@ -267,10 +264,10 @@ test_block@0:
     cover 10
     cover 10
     swap
-    cover 9
+    cover 10
     swap
-    cover 8
-    cover 7
+    cover 10
+    cover 10
     // tests/approvals/array-destructuring.algo.ts:18
     // assert(a === 5)
     pushint 5 // 5
@@ -311,56 +308,28 @@ test_block@0:
     pushint 4 // 4
     dup
     ==
-    bz test_bool_false@6
-
-test_and_contd@1:
-    // tests/approvals/array-destructuring.algo.ts:25
-    // assertMatch(f, [5, Bytes(), false, 6n])
-    frame_dig 0
+    swap
     pushint 5 // 5
     ==
-    bz test_bool_false@6
-
-test_and_contd@2:
-    // tests/approvals/array-destructuring.algo.ts:25
-    // assertMatch(f, [5, Bytes(), false, 6n])
-    frame_dig 1
+    &&
+    swap
     bytec_0 // 0x
     ==
-    bz test_bool_false@6
-
-test_and_contd@3:
-    // tests/approvals/array-destructuring.algo.ts:25
-    // assertMatch(f, [5, Bytes(), false, 6n])
-    frame_dig 2
+    &&
+    swap
     intc_0 // 0
     ==
-    bz test_bool_false@6
-
-test_and_contd@4:
-    // tests/approvals/array-destructuring.algo.ts:25
-    // assertMatch(f, [5, Bytes(), false, 6n])
-    frame_dig 3
+    &&
+    swap
     bytec_1 // 0x06
     b==
-    bz test_bool_false@6
-
-test_bool_true@5:
-    intc_1 // 1
-
-test_bool_merge@7:
-    // tests/approvals/array-destructuring.algo.ts:25
-    // assertMatch(f, [5, Bytes(), false, 6n])
+    &&
     assert // assert target is match for conditions
     // tests/approvals/array-destructuring.algo.ts:27
     // const [x, y, z] = this.produceFixed()
     callsub produceFixed
     pop
     retsub
-
-test_bool_false@6:
-    intc_0 // 0
-    b test_bool_merge@7
 
 
 // tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems() -> uint64, bytes, uint64, bytes:

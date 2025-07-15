@@ -1383,46 +1383,39 @@ test5:
     itxn LastLog
     // tests/approvals/itxn.algo.ts:220
     // const returnValue = decodeArc4<[uint64, uint64, string]>(appRes.lastLog, 'log')
-    dupn 2
-    extract 4 0
-    swap
     dup
+    extract 4 0
+    dig 1
     extract 0 4
     pushbytes 0x151f7c75
     ==
     assert // Bytes has valid prefix
-    pushint 4 // 4
     // tests/approvals/itxn.algo.ts:222
     // assertMatch(returnValue, [1, 1000, 'hello'])
+    dig 1
+    pushint 4 // 4
     extract_uint64
     pushint 1 // 1
     ==
-    bz test5_bool_false@7
-    frame_dig 0
+    pushint 1 // 1
+    &&
+    uncover 2
     pushint 12 // 12
     extract_uint64
     intc 4 // 1000
     ==
-    bz test5_bool_false@7
-    frame_dig 1
-    dup
+    &&
+    dig 1
     pushint 16 // 16
     extract_uint16
-    dig 1
+    dig 2
     len
+    uncover 3
+    cover 2
     substring3
     extract 2 0
     pushbytes "hello"
     ==
-    bz test5_bool_false@7
-    pushint 1 // 1
-
-test5_bool_merge@8:
-    // tests/approvals/itxn.algo.ts:222
-    // assertMatch(returnValue, [1, 1000, 'hello'])
+    &&
     assert // assert target is match for conditions
     retsub
-
-test5_bool_false@7:
-    intc_0 // 0
-    b test5_bool_merge@8

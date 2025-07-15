@@ -78,21 +78,11 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
     block@0: // L21
         let tmp%0#0: uint64 = ((gtxns Amount) pay#0)
         let tmp%1#0: bool = (== tmp%0#0 2982900u)
-        goto tmp%1#0 ? block@1 : block@3
-    block@1: // and_contd_L22
         let tmp%2#0: account = ((gtxns Receiver) pay#0)
         let tmp%3#0: account = (global CurrentApplicationAddress)
         let tmp%4#0: bool = (== tmp%2#0 tmp%3#0)
-        goto tmp%4#0 ? block@2 : block@3
-    block@2: // bool_true_L22
-        let and_result%0#0: bool = 1u
-        goto block@4
-    block@3: // bool_false_L22
-        let and_result%0#1: bool = 0u
-        goto block@4
-    block@4: // bool_merge_L22
-        let and_result%0#2: bool = φ(and_result%0#0 <- block@2, and_result%0#1 <- block@3)
-        (assert and_result%0#2) // assert target is match for conditions
+        let tmp%5#0: bool = (&& tmp%1#0 tmp%4#0)
+        (assert tmp%5#0) // assert target is match for conditions
         (box_create "x" 7200u)
         return 
 

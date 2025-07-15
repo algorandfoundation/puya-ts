@@ -1828,7 +1828,7 @@
                   "immutable": true
                 },
                 "condition": {
-                  "_type": "BooleanBinaryOperation",
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/named-types.algo.ts",
                     "line": 37,
@@ -1841,22 +1841,11 @@
                     "name": "bool",
                     "immutable": true
                   },
-                  "left": {
-                    "_type": "NumericComparisonExpression",
-                    "source_location": {
-                      "file": "tests/approvals/named-types.algo.ts",
-                      "line": 37,
-                      "end_line": 37,
-                      "column": 4,
-                      "end_column": 28
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "lhs": {
-                      "_type": "FieldExpression",
+                  "op_code": "&&",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "NumericComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/named-types.algo.ts",
                         "line": 37,
@@ -1866,110 +1855,109 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "uint64",
+                        "name": "bool",
                         "immutable": true
                       },
-                      "base": {
-                        "_type": "VarExpression",
+                      "lhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/named-types.algo.ts",
                           "line": 37,
                           "end_line": 37,
-                          "column": 16,
-                          "end_column": 17
+                          "column": 4,
+                          "end_column": 28
                         },
                         "wtype": {
-                          "_type": "WTuple",
-                          "name": "tests/approvals/named-types.algo.ts::XY",
-                          "immutable": true,
-                          "types": [
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          ],
-                          "names": [
-                            "x",
-                            "y"
-                          ]
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
                         },
-                        "name": "x"
-                      },
-                      "name": "y"
-                    },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "FieldExpression",
-                      "source_location": {
-                        "file": "tests/approvals/named-types.algo.ts",
-                        "line": 37,
-                        "end_line": 37,
-                        "column": 21,
-                        "end_column": 25
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "base": {
-                        "_type": "VarExpression",
-                        "source_location": {
-                          "file": "tests/approvals/named-types.algo.ts",
-                          "line": 37,
-                          "end_line": 37,
-                          "column": 24,
-                          "end_column": 25
-                        },
-                        "wtype": {
-                          "_type": "WTuple",
-                          "name": "tests/approvals/named-types.algo.ts::YX",
-                          "immutable": true,
-                          "types": [
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          ],
-                          "names": [
-                            "y",
-                            "x"
-                          ]
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/named-types.algo.ts",
+                            "line": 37,
+                            "end_line": 37,
+                            "column": 16,
+                            "end_column": 17
+                          },
+                          "wtype": {
+                            "_type": "WTuple",
+                            "name": "tests/approvals/named-types.algo.ts::XY",
+                            "immutable": true,
+                            "types": [
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            ],
+                            "names": [
+                              "x",
+                              "y"
+                            ]
+                          },
+                          "name": "x"
                         },
                         "name": "y"
                       },
-                      "name": "y"
-                    }
-                  },
-                  "op": "and",
-                  "right": {
-                    "_type": "NumericComparisonExpression",
-                    "source_location": {
-                      "file": "tests/approvals/named-types.algo.ts",
-                      "line": 37,
-                      "end_line": 37,
-                      "column": 4,
-                      "end_column": 28
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "FieldExpression",
+                        "source_location": {
+                          "file": "tests/approvals/named-types.algo.ts",
+                          "line": 37,
+                          "end_line": 37,
+                          "column": 21,
+                          "end_column": 25
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/named-types.algo.ts",
+                            "line": 37,
+                            "end_line": 37,
+                            "column": 24,
+                            "end_column": 25
+                          },
+                          "wtype": {
+                            "_type": "WTuple",
+                            "name": "tests/approvals/named-types.algo.ts::YX",
+                            "immutable": true,
+                            "types": [
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            ],
+                            "names": [
+                              "y",
+                              "x"
+                            ]
+                          },
+                          "name": "y"
+                        },
+                        "name": "y"
+                      }
                     },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "lhs": {
-                      "_type": "FieldExpression",
+                    {
+                      "_type": "NumericComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/named-types.algo.ts",
                         "line": 37,
@@ -1979,93 +1967,108 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "uint64",
+                        "name": "bool",
                         "immutable": true
                       },
-                      "base": {
-                        "_type": "VarExpression",
+                      "lhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/named-types.algo.ts",
                           "line": 37,
                           "end_line": 37,
-                          "column": 16,
-                          "end_column": 17
+                          "column": 4,
+                          "end_column": 28
                         },
                         "wtype": {
-                          "_type": "WTuple",
-                          "name": "tests/approvals/named-types.algo.ts::XY",
-                          "immutable": true,
-                          "types": [
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          ],
-                          "names": [
-                            "x",
-                            "y"
-                          ]
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/named-types.algo.ts",
+                            "line": 37,
+                            "end_line": 37,
+                            "column": 16,
+                            "end_column": 17
+                          },
+                          "wtype": {
+                            "_type": "WTuple",
+                            "name": "tests/approvals/named-types.algo.ts::XY",
+                            "immutable": true,
+                            "types": [
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            ],
+                            "names": [
+                              "x",
+                              "y"
+                            ]
+                          },
+                          "name": "x"
                         },
                         "name": "x"
                       },
-                      "name": "x"
-                    },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "FieldExpression",
-                      "source_location": {
-                        "file": "tests/approvals/named-types.algo.ts",
-                        "line": 37,
-                        "end_line": 37,
-                        "column": 21,
-                        "end_column": 25
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "base": {
-                        "_type": "VarExpression",
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "FieldExpression",
                         "source_location": {
                           "file": "tests/approvals/named-types.algo.ts",
                           "line": 37,
                           "end_line": 37,
-                          "column": 24,
+                          "column": 21,
                           "end_column": 25
                         },
                         "wtype": {
-                          "_type": "WTuple",
-                          "name": "tests/approvals/named-types.algo.ts::YX",
-                          "immutable": true,
-                          "types": [
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            }
-                          ],
-                          "names": [
-                            "y",
-                            "x"
-                          ]
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
                         },
-                        "name": "y"
-                      },
-                      "name": "x"
+                        "base": {
+                          "_type": "VarExpression",
+                          "source_location": {
+                            "file": "tests/approvals/named-types.algo.ts",
+                            "line": 37,
+                            "end_line": 37,
+                            "column": 24,
+                            "end_column": 25
+                          },
+                          "wtype": {
+                            "_type": "WTuple",
+                            "name": "tests/approvals/named-types.algo.ts::YX",
+                            "immutable": true,
+                            "types": [
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              },
+                              {
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
+                              }
+                            ],
+                            "names": [
+                              "y",
+                              "x"
+                            ]
+                          },
+                          "name": "y"
+                        },
+                        "name": "x"
+                      }
                     }
-                  }
+                  ]
                 },
                 "error_message": "assert target is match for conditions"
               }

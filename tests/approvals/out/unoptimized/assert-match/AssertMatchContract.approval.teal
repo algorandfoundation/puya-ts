@@ -140,18 +140,6 @@ testPay_block@0:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     <=
-    bz testPay_bool_false@8
-
-testPay_and_contd@1:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
     frame_dig -1
     gtxns Amount
     // tests/approvals/assert-match.algo.ts:11
@@ -167,18 +155,7 @@ testPay_and_contd@1:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     >=
-    bz testPay_bool_false@8
-
-testPay_and_contd@2:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
+    &&
     frame_dig -1
     gtxns Sender
     // tests/approvals/assert-match.algo.ts:12
@@ -194,18 +171,7 @@ testPay_and_contd@2:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     ==
-    bz testPay_bool_false@8
-
-testPay_and_contd@3:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
+    &&
     frame_dig -1
     gtxns Receiver
     // tests/approvals/assert-match.algo.ts:13
@@ -221,18 +187,7 @@ testPay_and_contd@3:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     ==
-    bz testPay_bool_false@8
-
-testPay_and_contd@4:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
+    &&
     frame_dig -1
     gtxns CloseRemainderTo
     // tests/approvals/assert-match.algo.ts:14
@@ -248,18 +203,7 @@ testPay_and_contd@4:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     ==
-    bz testPay_bool_false@8
-
-testPay_and_contd@5:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
+    &&
     frame_dig -1
     gtxns FirstValid
     // tests/approvals/assert-match.algo.ts:15
@@ -275,18 +219,7 @@ testPay_and_contd@5:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     >
-    bz testPay_bool_false@8
-
-testPay_and_contd@6:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
+    &&
     frame_dig -1
     gtxns LastValid
     // tests/approvals/assert-match.algo.ts:16
@@ -302,30 +235,12 @@ testPay_and_contd@6:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     <
-    bz testPay_bool_false@8
-
-testPay_bool_true@7:
-    intc_1 // 1
-
-testPay_bool_merge@9:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
+    &&
     assert // assert target is match for conditions
     // tests/approvals/assert-match.algo.ts:18
     // return true
     intc_1 // 1
     retsub
-
-testPay_bool_false@8:
-    intc_0 // 0
-    b testPay_bool_merge@9
 
 
 // tests/approvals/assert-match.algo.ts::AssertMatchContract.__algots__.defaultCreate() -> void:

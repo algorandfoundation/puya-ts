@@ -342,24 +342,12 @@ implicitCastingAndSpreading:
     uncover 2
     ==
     dup
-    cover 2
     assert
     // tests/approvals/mutable-object.algo.ts:42
     // assertMatch(v3, v1)
-    bz implicitCastingAndSpreading_bool_false@7
-    frame_dig 0
-    bz implicitCastingAndSpreading_bool_false@7
-    intc_1 // 1
-
-implicitCastingAndSpreading_bool_merge@8:
-    // tests/approvals/mutable-object.algo.ts:42
-    // assertMatch(v3, v1)
+    &&
     assert // assert target is match for conditions
     retsub
-
-implicitCastingAndSpreading_bool_false@7:
-    intc_0 // 0
-    b implicitCastingAndSpreading_bool_merge@8
 
 
 // tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedObjects(vp: bytes) -> void:
@@ -377,11 +365,9 @@ testNestedObjects:
     swap
     intc_2 // 8
     extract_uint64
-    dup
-    cover 2
     dig 1
     itob
-    swap
+    dig 1
     itob
     concat
     // tests/approvals/mutable-object.algo.ts:51
@@ -391,20 +377,18 @@ testNestedObjects:
     dup
     intc_2 // 8
     extract_uint64
-    dup
-    cover 2
-    cover 4
+    swap
     intc_0 // 0
     extract_uint64
-    dup
-    cover 4
-    swap
+    dig 1
     itob
-    swap
+    dig 1
     itob
     concat
     // tests/approvals/mutable-object.algo.ts:52
     // const vp1 = { v: clone(v1), p: clone(p1) }
+    uncover 3
+    swap
     concat
     // tests/approvals/mutable-object.algo.ts:53
     // log(vp1.v.x)
@@ -427,20 +411,21 @@ testNestedObjects:
     // log(vp1.v.y)
     extract_uint64
     dup
-    cover 4
     itob
     log
     // tests/approvals/mutable-object.algo.ts:55
     // log(vp1.p.x)
-    swap
+    uncover 2
     extract 16 16
     dup
     intc_0 // 0
     extract_uint64
     dup
-    cover 4
     itob
     log
+    // tests/approvals/mutable-object.algo.ts:56
+    // log(vp1.p.y)
+    swap
     // tests/approvals/mutable-object.algo.ts:55-56
     // log(vp1.p.x)
     // log(vp1.p.y)
@@ -449,36 +434,27 @@ testNestedObjects:
     // log(vp1.p.y)
     extract_uint64
     dup
-    cover 3
     itob
     log
     // tests/approvals/mutable-object.algo.ts:57
     // assertMatch(vp1, vp)
+    uncover 3
+    uncover 7
     ==
-    bz testNestedObjects_bool_false@5
-    frame_dig 3
-    frame_dig 0
+    uncover 3
+    uncover 6
     ==
-    bz testNestedObjects_bool_false@5
-    frame_dig 5
-    frame_dig 2
+    &&
+    swap
+    uncover 3
     ==
-    bz testNestedObjects_bool_false@5
-    frame_dig 4
-    frame_dig 1
+    uncover 2
+    uncover 3
     ==
-    bz testNestedObjects_bool_false@5
-    intc_1 // 1
-
-testNestedObjects_bool_merge@6:
-    // tests/approvals/mutable-object.algo.ts:57
-    // assertMatch(vp1, vp)
+    &&
+    &&
     assert // assert target is match for conditions
     retsub
-
-testNestedObjects_bool_false@5:
-    intc_0 // 0
-    b testNestedObjects_bool_merge@6
 
 
 // tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertMatch(x: uint64) -> void:
@@ -486,103 +462,73 @@ testAssertMatch:
     // tests/approvals/mutable-object.algo.ts:75
     // testAssertMatch(x: uint64) {
     proto 1 0
-    intc_0 // 0
-    pushbytes ""
     // tests/approvals/mutable-object.algo.ts:78
     // y: (b = x * 2),
     frame_dig -1
     pushint 2 // 2
     *
-    dupn 2
     // tests/approvals/mutable-object.algo.ts:77-80
     // const obj: Vector = {
     //   y: (b = x * 2),
     //   x: b,
     // }
+    dup
     itob
     dup
     concat
-    dup
-    cover 2
     // tests/approvals/mutable-object.algo.ts:81-84
     // assertMatch(obj, {
     //   y: x * 2,
     //   x: x * 2,
     // })
+    dup
     intc_2 // 8
     extract_uint64
     dup
+    dig 3
+    ==
     uncover 2
-    ==
-    bz testAssertMatch_bool_false@3
-    frame_dig 3
-    intc_0 // 0
-    extract_uint64
-    frame_dig 2
-    ==
-    bz testAssertMatch_bool_false@3
-    intc_1 // 1
-
-testAssertMatch_bool_merge@4:
-    // tests/approvals/mutable-object.algo.ts:81-84
-    // assertMatch(obj, {
-    //   y: x * 2,
-    //   x: x * 2,
-    // })
-    assert // assert target is match for conditions
-    // tests/approvals/mutable-object.algo.ts:85
-    // const v = { y: obj.y, x: obj.x }
-    frame_dig 3
     intc_0 // 0
     extract_uint64
     dup
-    frame_bury 1
-    frame_dig 4
+    uncover 4
+    ==
+    uncover 2
+    &&
+    assert // assert target is match for conditions
+    // tests/approvals/mutable-object.algo.ts:85
+    // const v = { y: obj.y, x: obj.x }
+    dig 1
     itob
     dig 1
     itob
     concat
-    dup
-    frame_bury 0
     // tests/approvals/mutable-object.algo.ts:87
     // assertMatch(obj, { x: v.x, y: v.y })
+    dup
     intc_2 // 8
     extract_uint64
+    dig 2
     ==
-    bz testAssertMatch_bool_false@7
-    frame_dig 0
+    swap
     intc_0 // 0
     extract_uint64
-    frame_dig 4
+    dig 3
     ==
-    bz testAssertMatch_bool_false@7
-    intc_1 // 1
-
-testAssertMatch_bool_merge@8:
-    // tests/approvals/mutable-object.algo.ts:87
-    // assertMatch(obj, { x: v.x, y: v.y })
+    &&
     assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:88
     // assertMatch(obj, { y: { greaterThan: x } })
-    frame_dig 4
+    swap
     frame_dig -1
     >
     assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:89
     // assertMatch(obj, { x: { greaterThan: x } })
-    frame_dig 1
     frame_dig -1
     >
     assert // assert target is match for conditions
     retsub
-
-testAssertMatch_bool_false@7:
-    intc_0 // 0
-    b testAssertMatch_bool_merge@8
-
-testAssertMatch_bool_false@3:
-    intc_0 // 0
-    b testAssertMatch_bool_merge@4
 
 
 // tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Encoding(p: bytes) -> void:

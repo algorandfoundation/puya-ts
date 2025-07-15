@@ -27,21 +27,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert gtxn_type_matches%0#0) // transaction type is pay
         let tmp%0#3: uint64 = ((gtxns Amount) pay#0)
         let tmp%1#1: bool = (== tmp%0#3 2982900u)
-        goto tmp%1#1 ? block@22 : block@24
-    block@22: // and_contd_L22
         let tmp%2#1: account = ((gtxns Receiver) pay#0)
         let tmp%3#1: account = (global CurrentApplicationAddress)
         let tmp%4#1: bool = (== tmp%2#1 tmp%3#1)
-        goto tmp%4#1 ? block@23 : block@24
-    block@23: // bool_true_L22
-        let and_result%0#0: bool = 1u
-        goto block@25
-    block@24: // bool_false_L22
-        let and_result%0#1: bool = 0u
-        goto block@25
-    block@25: // bool_merge_L22
-        let and_result%0#2: bool = φ(and_result%0#0 <- block@23, and_result%0#1 <- block@24)
-        (assert and_result%0#2) // assert target is match for conditions
+        let tmp%5#1: bool = (&& tmp%1#1 tmp%4#1)
+        (assert tmp%5#1) // assert target is match for conditions
         (box_create "x" 7200u)
         let tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#1: bool = 1u
         goto block@14
@@ -90,5 +80,5 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#5: bool = 0u
         goto block@14
     block@14: // after_inlined_tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#1 <- block@25, tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#4 <- block@10, tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#5 <- block@13)
+        let tmp%0#0: bool = φ(tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#4 <- block@10, tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#5 <- block@13)
         return tmp%0#0

@@ -22,6 +22,7 @@ import { BuilderComparisonOp, NodeBuilder } from './index'
 import { isStaticallyIterable, StaticIterator } from './traits/static-iterator'
 import { requireBuilderOfType, requireInstanceBuilder } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
+import { wtypes } from '../../awst/wtypes'
 
 export class MatchFunctionBuilder extends NodeBuilder {
   readonly ptype = matchFunction
@@ -142,11 +143,12 @@ function getComparisonOpAndOperand(testProperty: InstanceBuilder, targetType: PT
 
 function combineConditions(left: Expression | undefined, right: Expression, sourceLocation: SourceLocation): Expression {
   if (left) {
-    return nodeFactory.booleanBinaryOperation({
-      left: left,
-      right: right,
-      op: BinaryBooleanOperator.and,
+    return nodeFactory.intrinsicCall({
+      opCode: '&&',
+      stackArgs: [left, right],
+      immediates: [],
       sourceLocation,
+      wtype: wtypes.boolWType,
     })
   }
   return right

@@ -46,7 +46,7 @@ subroutine testLiteralToLiteral(): arc4.dynamic_array<uint64>
 subroutine testNumericResolution(): void
 {
   x: ObjectA59DA9E9 = (y = new ObjectA59DA9E9(a=($21 = #{ a: ($22 = #{ a: ($23 = #[434]).0 }).a }).a))
-  assert(2 == 2 and x.a == 434 and y.a == 434, comment=assert target is match for conditions)
+  assert(&&(&&(2 == 2, x.a == 434), y.a == 434), comment=assert target is match for conditions)
 }
 subroutine test2(args: ReadonlyObjectC90AF4BD{ x: bool, y: bool, z: readonly [string, string] }): void
 {
@@ -70,12 +70,12 @@ contract ObjectDestructuringAlgo
   test(): void
   {
     res: readonly [uint64, uint64] = tests/approvals/object-destructuring.algo.ts::testPartialDestructure(#{ x: ($28 = #{ x: ($29 = #[1, 4, 123]).0, y: $29.1, z: $29.2 }).x, y: $28.y, z: $28.z })
-    assert(2 == 2 and res.0 == 1 and res.1 == 4, comment=assert target is match for conditions)
+    assert(&&(&&(2 == 2, res.0 == 1), res.1 == 4), comment=assert target is match for conditions)
     res2: readonly [uint64, uint64] = tests/approvals/object-destructuring.algo.ts::testPartialDestructureMutableObject(new tests/approvals/object-destructuring.algo.ts::Vector(c1=($30 = #{ c1: ($31 = #[new tests/approvals/object-destructuring.algo.ts::Coordinate(x=($32 = #{ x: ($33 = #[10, 20]).0, y: $33.1 }).x, y=$32.y), new tests/approvals/object-destructuring.algo.ts::Coordinate(x=($34 = #{ x: ($35 = #[20, 30]).0, y: $35.1 }).x, y=$34.y)]).0, c2: $31.1 }).c1, c2=$30.c2))
-    assert(2 == 2 and res2.0 == 10 and res2.1 == 20, comment=assert target is match for conditions)
+    assert(&&(&&(2 == 2, res2.0 == 10), res2.1 == 20), comment=assert target is match for conditions)
     tests/approvals/object-destructuring.algo.ts::testNumericResolution()
     res3: arc4.dynamic_array<uint64> = tests/approvals/object-destructuring.algo.ts::testLiteralToLiteral()
-    assert(res3.length == 4 and res3[0] == 4 and res3[1] == 1 and res3[2] == 4 and res3[3] == 1, comment=assert target is match for conditions)
+    assert(&&(&&(&&(&&(res3.length == 4, res3[0] == 4), res3[1] == 1), res3[2] == 4), res3[3] == 1), comment=assert target is match for conditions)
     tests/approvals/object-destructuring.algo.ts::test()
     tests/approvals/object-destructuring.algo.ts::testMutableObject()
   }

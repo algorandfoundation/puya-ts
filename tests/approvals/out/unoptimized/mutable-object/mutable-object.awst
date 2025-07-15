@@ -20,7 +20,7 @@ contract MutableObjectDemo
     log(itob(v1.x))
     log(itob(v1.y))
     v2: tests/approvals/mutable-object.algo.ts::Vector = new tests/approvals/mutable-object.algo.ts::Vector(x=($3 = #{ y: ($4 = #{ y: ($5 = #[1, 0]).0, x: $5.1 }).y, x: $4.x }).x, y=$3.y)
-    assert(v1.x == v2.x and v1.y == v2.y, comment=assert target is match for conditions)
+    assert(&&(v1.x == v2.x, v1.y == v2.y), comment=assert target is match for conditions)
   }
   
   addVectors(v1: tests/approvals/mutable-object.algo.ts::Vector, v2: tests/approvals/mutable-object.algo.ts::Vector): tests/approvals/mutable-object.algo.ts::Vector
@@ -41,10 +41,10 @@ contract MutableObjectDemo
     v3: ObjectDC5110F2 = new ObjectDC5110F2(x=($6 = #{ x: v2.x, y: v2.y }).x, y=$6.y)
     assert(v1.x == v2.x)
     assert(v1.y == v2.y)
-    assert(v1.x == v2.x and v1.y == v2.y, comment=assert target is match for conditions)
+    assert(&&(v1.x == v2.x, v1.y == v2.y), comment=assert target is match for conditions)
     assert(v3.x == v1.x)
     assert(v3.y == v1.y)
-    assert(v3.x == v1.x and v3.y == v1.y, comment=assert target is match for conditions)
+    assert(&&(v3.x == v1.x, v3.y == v1.y), comment=assert target is match for conditions)
     #[x, y]: readonly [uint64, uint64] = #[v3.x, v3.y]
     assert(x == v3.x)
     assert(y == v3.y)
@@ -59,7 +59,7 @@ contract MutableObjectDemo
     log(itob(vp1.v.y))
     log(itob(vp1.p.x))
     log(itob(vp1.p.y))
-    assert(vp1.v.x == vp.v.x and vp1.v.y == vp.v.y and vp1.p.y == vp.p.y and vp1.p.x == vp.p.x, comment=assert target is match for conditions)
+    assert(&&(&&(vp1.v.x == vp.v.x, vp1.v.y == vp.v.y), &&(vp1.p.y == vp.p.y, vp1.p.x == vp.p.x)), comment=assert target is match for conditions)
   }
   
   testMethodSelector(): void
@@ -72,9 +72,9 @@ contract MutableObjectDemo
   testAssertMatch(x: uint64): void
   {
     obj: tests/approvals/mutable-object.algo.ts::Vector = new tests/approvals/mutable-object.algo.ts::Vector(x=($10 = #{ y: (b = x * 2), x: b }).x, y=$10.y)
-    assert(obj.y == x * 2 and obj.x == x * 2, comment=assert target is match for conditions)
+    assert(&&(obj.y == x * 2, obj.x == x * 2), comment=assert target is match for conditions)
     v: Object5255DE76 = new Object5255DE76(y=($11 = #{ y: obj.y, x: obj.x }).y, x=$11.x)
-    assert(obj.x == v.x and obj.y == v.y, comment=assert target is match for conditions)
+    assert(&&(obj.x == v.x, obj.y == v.y), comment=assert target is match for conditions)
     assert(obj.y > x, comment=assert target is match for conditions)
     assert(obj.x > x, comment=assert target is match for conditions)
   }

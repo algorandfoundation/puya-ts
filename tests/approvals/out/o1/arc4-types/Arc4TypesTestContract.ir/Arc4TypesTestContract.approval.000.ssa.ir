@@ -360,72 +360,43 @@ subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: Encoded(uint64)) ->
         let encoded_array%3#0: Encoded(uint64[3]) = bytes_encode<uint64[3]>(n#0, n#0, n#0)
         let myStatic2#0: Encoded(uint64[3]) = encoded_array%3#0
         let tmp%5#0: bool = (== 3u 3u)
-        goto tmp%5#0 ? block@1 : block@5
-    block@1: // and_contd_L125
         let array_item%1#0: Encoded(uint64) = extract_value(myStatic2#0, 0u)
         let tmp%6#0: bool = (== array_item%1#0 n#0)
-        goto tmp%6#0 ? block@2 : block@5
-    block@2: // and_contd_L125
+        let tmp%7#0: bool = (&& tmp%5#0 tmp%6#0)
         let array_item%2#0: Encoded(uint64) = extract_value(myStatic2#0, 1u)
-        let tmp%7#0: bool = (== array_item%2#0 n#0)
-        goto tmp%7#0 ? block@3 : block@5
-    block@3: // and_contd_L125
+        let tmp%8#0: bool = (== array_item%2#0 n#0)
+        let tmp%9#0: bool = (&& tmp%7#0 tmp%8#0)
         let array_item%3#0: Encoded(uint64) = extract_value(myStatic2#0, 2u)
-        let tmp%8#0: bool = (== array_item%3#0 n#0)
-        goto tmp%8#0 ? block@4 : block@5
-    block@4: // bool_true_L125
-        let and_result%0#0: bool = 1u
-        goto block@6
-    block@5: // bool_false_L125
-        let and_result%0#1: bool = 0u
-        goto block@6
-    block@6: // bool_merge_L125
-        let and_result%0#2: bool = φ(and_result%0#0 <- block@4, and_result%0#1 <- block@5)
-        (assert and_result%0#2) // assert target is match for conditions
+        let tmp%10#0: bool = (== array_item%3#0 n#0)
+        let tmp%11#0: bool = (&& tmp%9#0 tmp%10#0)
+        (assert tmp%11#0) // assert target is match for conditions
         let array_length%1#0: uint64 = (extract_uint16 doubleArray#0 0u)
-        let tmp%9#0: bool = (== array_length%1#0 8u)
-        goto tmp%9#0 ? block@7 : block@16
-    block@7: // and_contd_L127
+        let tmp%12#0: bool = (== array_length%1#0 8u)
         let array_item%4#0: Encoded(uint64) = extract_value(doubleArray#0, 0u)
-        let tmp%10#0: bool = (== array_item%4#0 n#0)
-        goto tmp%10#0 ? block@8 : block@16
-    block@8: // and_contd_L127
+        let tmp%13#0: bool = (== array_item%4#0 n#0)
+        let tmp%14#0: bool = (&& tmp%12#0 tmp%13#0)
         let array_item%5#0: Encoded(uint64) = extract_value(doubleArray#0, 1u)
-        let tmp%11#0: bool = (== array_item%5#0 n#0)
-        goto tmp%11#0 ? block@9 : block@16
-    block@9: // and_contd_L127
+        let tmp%15#0: bool = (== array_item%5#0 n#0)
+        let tmp%16#0: bool = (&& tmp%14#0 tmp%15#0)
         let array_item%6#0: Encoded(uint64) = extract_value(doubleArray#0, 2u)
-        let tmp%12#0: bool = (== array_item%6#0 n#0)
-        goto tmp%12#0 ? block@10 : block@16
-    block@10: // and_contd_L127
+        let tmp%17#0: bool = (== array_item%6#0 n#0)
+        let tmp%18#0: bool = (&& tmp%16#0 tmp%17#0)
         let array_item%7#0: Encoded(uint64) = extract_value(doubleArray#0, 3u)
-        let tmp%13#0: bool = (== array_item%7#0 n#0)
-        goto tmp%13#0 ? block@11 : block@16
-    block@11: // and_contd_L127
+        let tmp%19#0: bool = (== array_item%7#0 n#0)
+        let tmp%20#0: bool = (&& tmp%18#0 tmp%19#0)
         let array_item%8#0: Encoded(uint64) = extract_value(doubleArray#0, 4u)
-        let tmp%14#0: bool = (== array_item%8#0 n#0)
-        goto tmp%14#0 ? block@12 : block@16
-    block@12: // and_contd_L127
+        let tmp%21#0: bool = (== array_item%8#0 n#0)
+        let tmp%22#0: bool = (&& tmp%20#0 tmp%21#0)
         let array_item%9#0: Encoded(uint64) = extract_value(doubleArray#0, 5u)
-        let tmp%15#0: bool = (== array_item%9#0 n#0)
-        goto tmp%15#0 ? block@13 : block@16
-    block@13: // and_contd_L127
+        let tmp%23#0: bool = (== array_item%9#0 n#0)
+        let tmp%24#0: bool = (&& tmp%22#0 tmp%23#0)
         let array_item%10#0: Encoded(uint64) = extract_value(doubleArray#0, 6u)
-        let tmp%16#0: bool = (== array_item%10#0 n#0)
-        goto tmp%16#0 ? block@14 : block@16
-    block@14: // and_contd_L127
+        let tmp%25#0: bool = (== array_item%10#0 n#0)
+        let tmp%26#0: bool = (&& tmp%24#0 tmp%25#0)
         let array_item%11#0: Encoded(uint64) = extract_value(doubleArray#0, 7u)
-        let tmp%17#0: bool = (== array_item%11#0 n#0)
-        goto tmp%17#0 ? block@15 : block@16
-    block@15: // bool_true_L127
-        let and_result%1#0: bool = 1u
-        goto block@17
-    block@16: // bool_false_L127
-        let and_result%1#1: bool = 0u
-        goto block@17
-    block@17: // bool_merge_L127
-        let and_result%1#2: bool = φ(and_result%1#0 <- block@15, and_result%1#1 <- block@16)
-        (assert and_result%1#2) // assert target is match for conditions
+        let tmp%27#0: bool = (== array_item%11#0 n#0)
+        let tmp%28#0: bool = (&& tmp%26#0 tmp%27#0)
+        (assert tmp%28#0) // assert target is match for conditions
         return 
 
 subroutine tests/approvals/arc4-types.algo.ts::testByte() -> void:

@@ -168,19 +168,15 @@ testMatches_block@0:
     frame_dig -1
     itob
     concat
-    dup
     // tests/approvals/match-expr.algo.ts:17
     // assert(match(xArray, [5]))
+    dup
     intc_0 // 0
     extract_uint16
     intc_2 // 1
     ==
-    bz testMatches_bool_false@3
-
-testMatches_and_contd@1:
-    // tests/approvals/match-expr.algo.ts:17
-    // assert(match(xArray, [5]))
-    frame_dig 0
+    swap
+    dup
     extract 2 0
     intc_0 // 0
     intc_1 // 8
@@ -190,28 +186,18 @@ testMatches_and_contd@1:
     btoi
     intc_3 // 5
     ==
-    bz testMatches_bool_false@3
-
-testMatches_bool_true@2:
-    intc_2 // 1
-
-testMatches_bool_merge@4:
-    // tests/approvals/match-expr.algo.ts:17
-    // assert(match(xArray, [5]))
+    uncover 2
+    &&
     assert
     // tests/approvals/match-expr.algo.ts:18
     // assert(match(xArray, [{ greaterThan: 4 }]))
-    frame_dig 0
+    dup
     intc_0 // 0
     extract_uint16
     intc_2 // 1
     ==
-    bz testMatches_bool_false@7
-
-testMatches_and_contd@5:
-    // tests/approvals/match-expr.algo.ts:18
-    // assert(match(xArray, [{ greaterThan: 4 }]))
-    frame_dig 0
+    swap
+    dup
     extract 2 0
     intc_0 // 0
     intc_1 // 8
@@ -221,28 +207,18 @@ testMatches_and_contd@5:
     btoi
     pushint 4 // 4
     >
-    bz testMatches_bool_false@7
-
-testMatches_bool_true@6:
-    intc_2 // 1
-
-testMatches_bool_merge@8:
-    // tests/approvals/match-expr.algo.ts:18
-    // assert(match(xArray, [{ greaterThan: 4 }]))
+    uncover 2
+    &&
     assert
     // tests/approvals/match-expr.algo.ts:19
     // assert(match(xArray, [{ lessThan: 6 }]))
-    frame_dig 0
+    dup
     intc_0 // 0
     extract_uint16
     intc_2 // 1
     ==
-    bz testMatches_bool_false@11
-
-testMatches_and_contd@9:
-    // tests/approvals/match-expr.algo.ts:19
-    // assert(match(xArray, [{ lessThan: 6 }]))
-    frame_dig 0
+    swap
+    dup
     extract 2 0
     intc_0 // 0
     intc_1 // 8
@@ -252,28 +228,18 @@ testMatches_and_contd@9:
     btoi
     pushint 6 // 6
     <
-    bz testMatches_bool_false@11
-
-testMatches_bool_true@10:
-    intc_2 // 1
-
-testMatches_bool_merge@12:
-    // tests/approvals/match-expr.algo.ts:19
-    // assert(match(xArray, [{ lessThan: 6 }]))
+    uncover 2
+    &&
     assert
     // tests/approvals/match-expr.algo.ts:20
     // assert(match(xArray, [{ greaterThanEq: 5 }]))
-    frame_dig 0
+    dup
     intc_0 // 0
     extract_uint16
     intc_2 // 1
     ==
-    bz testMatches_bool_false@15
-
-testMatches_and_contd@13:
-    // tests/approvals/match-expr.algo.ts:20
-    // assert(match(xArray, [{ greaterThanEq: 5 }]))
-    frame_dig 0
+    swap
+    dup
     extract 2 0
     intc_0 // 0
     intc_1 // 8
@@ -283,28 +249,17 @@ testMatches_and_contd@13:
     btoi
     intc_3 // 5
     >=
-    bz testMatches_bool_false@15
-
-testMatches_bool_true@14:
-    intc_2 // 1
-
-testMatches_bool_merge@16:
-    // tests/approvals/match-expr.algo.ts:20
-    // assert(match(xArray, [{ greaterThanEq: 5 }]))
+    uncover 2
+    &&
     assert
     // tests/approvals/match-expr.algo.ts:21
     // assert(match(xArray, [{ lessThanEq: 5 }]))
-    frame_dig 0
+    dup
     intc_0 // 0
     extract_uint16
     intc_2 // 1
     ==
-    bz testMatches_bool_false@19
-
-testMatches_and_contd@17:
-    // tests/approvals/match-expr.algo.ts:21
-    // assert(match(xArray, [{ lessThanEq: 5 }]))
-    frame_dig 0
+    swap
     extract 2 0
     intc_0 // 0
     intc_1 // 8
@@ -314,36 +269,9 @@ testMatches_and_contd@17:
     btoi
     intc_3 // 5
     <=
-    bz testMatches_bool_false@19
-
-testMatches_bool_true@18:
-    intc_2 // 1
-
-testMatches_bool_merge@20:
-    // tests/approvals/match-expr.algo.ts:21
-    // assert(match(xArray, [{ lessThanEq: 5 }]))
+    &&
     assert
     retsub
-
-testMatches_bool_false@19:
-    intc_0 // 0
-    b testMatches_bool_merge@20
-
-testMatches_bool_false@15:
-    intc_0 // 0
-    b testMatches_bool_merge@16
-
-testMatches_bool_false@11:
-    intc_0 // 0
-    b testMatches_bool_merge@12
-
-testMatches_bool_false@7:
-    intc_0 // 0
-    b testMatches_bool_merge@8
-
-testMatches_bool_false@3:
-    intc_0 // 0
-    b testMatches_bool_merge@4
 
 
 // tests/approvals/match-expr.algo.ts::MatchExprAlgo.__algots__.defaultCreate() -> void:

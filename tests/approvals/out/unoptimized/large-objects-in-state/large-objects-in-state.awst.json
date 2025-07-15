@@ -305,7 +305,7 @@
                   "immutable": true
                 },
                 "condition": {
-                  "_type": "BooleanBinaryOperation",
+                  "_type": "IntrinsicCall",
                   "source_location": {
                     "file": "tests/approvals/large-objects-in-state.algo.ts",
                     "line": 22,
@@ -318,22 +318,11 @@
                     "name": "bool",
                     "immutable": true
                   },
-                  "left": {
-                    "_type": "NumericComparisonExpression",
-                    "source_location": {
-                      "file": "tests/approvals/large-objects-in-state.algo.ts",
-                      "line": 22,
-                      "end_line": 25,
-                      "column": 4,
-                      "end_column": 6
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "lhs": {
-                      "_type": "IntrinsicCall",
+                  "op_code": "&&",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "NumericComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/large-objects-in-state.algo.ts",
                         "line": 22,
@@ -343,69 +332,68 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "uint64",
+                        "name": "bool",
                         "immutable": true
                       },
-                      "op_code": "gtxns",
-                      "immediates": [
-                        "Amount"
-                      ],
-                      "stack_args": [
-                        {
-                          "_type": "VarExpression",
-                          "source_location": {
-                            "file": "tests/approvals/large-objects-in-state.algo.ts",
-                            "line": 22,
-                            "end_line": 22,
-                            "column": 16,
-                            "end_column": 19
-                          },
-                          "wtype": {
-                            "_type": "WGroupTransaction",
-                            "name": "group_transaction_pay",
-                            "immutable": true,
-                            "transaction_type": 1
-                          },
-                          "name": "pay"
-                        }
-                      ]
-                    },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "IntegerConstant",
-                      "source_location": {
-                        "file": "tests/approvals/large-objects-in-state.algo.ts",
-                        "line": 23,
-                        "end_line": 23,
-                        "column": 14,
-                        "end_column": 40
+                      "lhs": {
+                        "_type": "IntrinsicCall",
+                        "source_location": {
+                          "file": "tests/approvals/large-objects-in-state.algo.ts",
+                          "line": 22,
+                          "end_line": 25,
+                          "column": 4,
+                          "end_column": 6
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "op_code": "gtxns",
+                        "immediates": [
+                          "Amount"
+                        ],
+                        "stack_args": [
+                          {
+                            "_type": "VarExpression",
+                            "source_location": {
+                              "file": "tests/approvals/large-objects-in-state.algo.ts",
+                              "line": 22,
+                              "end_line": 22,
+                              "column": 16,
+                              "end_column": 19
+                            },
+                            "wtype": {
+                              "_type": "WGroupTransaction",
+                              "name": "group_transaction_pay",
+                              "immutable": true,
+                              "transaction_type": 1
+                            },
+                            "name": "pay"
+                          }
+                        ]
                       },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "value": 2982900,
-                      "teal_alias": null
-                    }
-                  },
-                  "op": "and",
-                  "right": {
-                    "_type": "BytesComparisonExpression",
-                    "source_location": {
-                      "file": "tests/approvals/large-objects-in-state.algo.ts",
-                      "line": 22,
-                      "end_line": 25,
-                      "column": 4,
-                      "end_column": 6
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "IntegerConstant",
+                        "source_location": {
+                          "file": "tests/approvals/large-objects-in-state.algo.ts",
+                          "line": 23,
+                          "end_line": 23,
+                          "column": 14,
+                          "end_column": 40
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        "value": 2982900,
+                        "teal_alias": null
+                      }
                     },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
-                    },
-                    "lhs": {
-                      "_type": "IntrinsicCall",
+                    {
+                      "_type": "BytesComparisonExpression",
                       "source_location": {
                         "file": "tests/approvals/large-objects-in-state.algo.ts",
                         "line": 22,
@@ -415,55 +403,70 @@
                       },
                       "wtype": {
                         "_type": "WType",
-                        "name": "account",
+                        "name": "bool",
                         "immutable": true
                       },
-                      "op_code": "gtxns",
-                      "immediates": [
-                        "Receiver"
-                      ],
-                      "stack_args": [
-                        {
-                          "_type": "VarExpression",
-                          "source_location": {
-                            "file": "tests/approvals/large-objects-in-state.algo.ts",
-                            "line": 22,
-                            "end_line": 22,
-                            "column": 16,
-                            "end_column": 19
-                          },
-                          "wtype": {
-                            "_type": "WGroupTransaction",
-                            "name": "group_transaction_pay",
-                            "immutable": true,
-                            "transaction_type": 1
-                          },
-                          "name": "pay"
-                        }
-                      ]
-                    },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "IntrinsicCall",
-                      "source_location": {
-                        "file": "tests/approvals/large-objects-in-state.algo.ts",
-                        "line": 24,
-                        "end_line": 24,
-                        "column": 23,
-                        "end_column": 48
+                      "lhs": {
+                        "_type": "IntrinsicCall",
+                        "source_location": {
+                          "file": "tests/approvals/large-objects-in-state.algo.ts",
+                          "line": 22,
+                          "end_line": 25,
+                          "column": 4,
+                          "end_column": 6
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "account",
+                          "immutable": true
+                        },
+                        "op_code": "gtxns",
+                        "immediates": [
+                          "Receiver"
+                        ],
+                        "stack_args": [
+                          {
+                            "_type": "VarExpression",
+                            "source_location": {
+                              "file": "tests/approvals/large-objects-in-state.algo.ts",
+                              "line": 22,
+                              "end_line": 22,
+                              "column": 16,
+                              "end_column": 19
+                            },
+                            "wtype": {
+                              "_type": "WGroupTransaction",
+                              "name": "group_transaction_pay",
+                              "immutable": true,
+                              "transaction_type": 1
+                            },
+                            "name": "pay"
+                          }
+                        ]
                       },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "account",
-                        "immutable": true
-                      },
-                      "op_code": "global",
-                      "immediates": [
-                        "CurrentApplicationAddress"
-                      ],
-                      "stack_args": []
+                      "operator": "==",
+                      "rhs": {
+                        "_type": "IntrinsicCall",
+                        "source_location": {
+                          "file": "tests/approvals/large-objects-in-state.algo.ts",
+                          "line": 24,
+                          "end_line": 24,
+                          "column": 23,
+                          "end_column": 48
+                        },
+                        "wtype": {
+                          "_type": "WType",
+                          "name": "account",
+                          "immutable": true
+                        },
+                        "op_code": "global",
+                        "immediates": [
+                          "CurrentApplicationAddress"
+                        ],
+                        "stack_args": []
+                      }
                     }
-                  }
+                  ]
                 },
                 "error_message": "assert target is match for conditions"
               }

@@ -131,7 +131,6 @@ bootstrap:
     //   receiver: Global.currentApplicationAddress,
     // })
     ==
-    bz bootstrap_bool_false@3
     frame_dig -1
     gtxns Receiver
     // tests/approvals/large-objects-in-state.algo.ts:24
@@ -143,15 +142,7 @@ bootstrap:
     //   receiver: Global.currentApplicationAddress,
     // })
     ==
-    bz bootstrap_bool_false@3
-    intc_0 // 1
-
-bootstrap_bool_merge@4:
-    // tests/approvals/large-objects-in-state.algo.ts:22-25
-    // assertMatch(pay, {
-    //   amount: BOX_MBR + ACCOUNT_BASE_MBR,
-    //   receiver: Global.currentApplicationAddress,
-    // })
+    &&
     assert // assert target is match for conditions
     // tests/approvals/large-objects-in-state.algo.ts:15
     // storage = Box<FixedArray<Counts, typeof MAX_ITEMS>>({ key: 'x' })
@@ -162,10 +153,6 @@ bootstrap_bool_merge@4:
     box_create
     pop
     retsub
-
-bootstrap_bool_false@3:
-    intc_2 // 0
-    b bootstrap_bool_merge@4
 
 
 // tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount(index: uint64, xCount: uint64) -> void:

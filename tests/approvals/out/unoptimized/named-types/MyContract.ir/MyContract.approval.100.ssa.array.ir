@@ -168,19 +168,9 @@ subroutine tests/approvals/named-types.algo.ts::MyContract.getAnon() -> <uint64,
 subroutine tests/approvals/named-types.algo.ts::MyContract.test(x.x: uint64, x.y: uint64, y.y: uint64, y.x: uint64) -> void:
     block@0: // L36
         let tmp%0#0: bool = (== x.y#0 y.y#0)
-        goto tmp%0#0 ? block@1 : block@3
-    block@1: // and_contd_L37
         let tmp%1#0: bool = (== x.x#0 y.x#0)
-        goto tmp%1#0 ? block@2 : block@3
-    block@2: // bool_true_L37
-        let and_result%0#0: bool = 1u
-        goto block@4
-    block@3: // bool_false_L37
-        let and_result%0#1: bool = 0u
-        goto block@4
-    block@4: // bool_merge_L37
-        let and_result%0#2: bool = φ(and_result%0#0 <- block@2, and_result%0#1 <- block@3)
-        (assert and_result%0#2) // assert target is match for conditions
+        let tmp%2#0: bool = (&& tmp%0#0 tmp%1#0)
+        (assert tmp%2#0) // assert target is match for conditions
         return 
 
 subroutine tests/approvals/named-types.algo.ts::MyContract.testing() -> <uint64, uint64, uint64, uint64, uint64, uint64>:

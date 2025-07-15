@@ -1292,7 +1292,7 @@
               "immutable": true
             },
             "condition": {
-              "_type": "BooleanBinaryOperation",
+              "_type": "IntrinsicCall",
               "source_location": {
                 "file": "tests/approvals/property-ordering.algo.ts",
                 "line": 21,
@@ -1305,22 +1305,11 @@
                 "name": "bool",
                 "immutable": true
               },
-              "left": {
-                "_type": "NumericComparisonExpression",
-                "source_location": {
-                  "file": "tests/approvals/property-ordering.algo.ts",
-                  "line": 21,
-                  "end_line": 24,
-                  "column": 2,
-                  "end_column": 4
-                },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
-                  "immutable": true
-                },
-                "lhs": {
-                  "_type": "FieldExpression",
+              "op_code": "&&",
+              "immediates": [],
+              "stack_args": [
+                {
+                  "_type": "NumericComparisonExpression",
                   "source_location": {
                     "file": "tests/approvals/property-ordering.algo.ts",
                     "line": 21,
@@ -1330,82 +1319,65 @@
                   },
                   "wtype": {
                     "_type": "WType",
-                    "name": "uint64",
+                    "name": "bool",
                     "immutable": true
                   },
-                  "base": {
-                    "_type": "VarExpression",
+                  "lhs": {
+                    "_type": "FieldExpression",
                     "source_location": {
                       "file": "tests/approvals/property-ordering.algo.ts",
                       "line": 21,
-                      "end_line": 21,
-                      "column": 14,
-                      "end_column": 17
-                    },
-                    "wtype": {
-                      "_type": "ARC4Struct",
-                      "name": "Object62C92B83",
-                      "immutable": false,
-                      "arc4_alias": null,
-                      "fields": {
-                        "a": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "z": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        }
-                      },
-                      "source_location": null,
-                      "frozen": false,
-                      "desc": null
-                    },
-                    "name": "obj"
-                  },
-                  "name": "z"
-                },
-                "operator": "==",
-                "rhs": {
-                  "_type": "UInt64BinaryOperation",
-                  "source_location": {
-                    "file": "tests/approvals/property-ordering.algo.ts",
-                    "line": 22,
-                    "end_line": 22,
-                    "column": 7,
-                    "end_column": 12
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "left": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/property-ordering.algo.ts",
-                      "line": 22,
-                      "end_line": 22,
-                      "column": 7,
-                      "end_column": 8
+                      "end_line": 24,
+                      "column": 2,
+                      "end_column": 4
                     },
                     "wtype": {
                       "_type": "WType",
                       "name": "uint64",
                       "immutable": true
                     },
-                    "name": "x"
+                    "base": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/property-ordering.algo.ts",
+                        "line": 21,
+                        "end_line": 21,
+                        "column": 14,
+                        "end_column": 17
+                      },
+                      "wtype": {
+                        "_type": "ARC4Struct",
+                        "name": "Object62C92B83",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "fields": {
+                          "a": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "z": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          }
+                        },
+                        "source_location": null,
+                        "frozen": false,
+                        "desc": null
+                      },
+                      "name": "obj"
+                    },
+                    "name": "z"
                   },
-                  "op": "*",
-                  "right": {
-                    "_type": "IntegerConstant",
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "UInt64BinaryOperation",
                     "source_location": {
                       "file": "tests/approvals/property-ordering.algo.ts",
                       "line": 22,
                       "end_line": 22,
-                      "column": 11,
+                      "column": 7,
                       "end_column": 12
                     },
                     "wtype": {
@@ -1413,28 +1385,44 @@
                       "name": "uint64",
                       "immutable": true
                     },
-                    "value": 2,
-                    "teal_alias": null
+                    "left": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/property-ordering.algo.ts",
+                        "line": 22,
+                        "end_line": 22,
+                        "column": 7,
+                        "end_column": 8
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "name": "x"
+                    },
+                    "op": "*",
+                    "right": {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/property-ordering.algo.ts",
+                        "line": 22,
+                        "end_line": 22,
+                        "column": 11,
+                        "end_column": 12
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "value": 2,
+                      "teal_alias": null
+                    }
                   }
-                }
-              },
-              "op": "and",
-              "right": {
-                "_type": "NumericComparisonExpression",
-                "source_location": {
-                  "file": "tests/approvals/property-ordering.algo.ts",
-                  "line": 21,
-                  "end_line": 24,
-                  "column": 2,
-                  "end_column": 4
                 },
-                "wtype": {
-                  "_type": "WType",
-                  "name": "bool",
-                  "immutable": true
-                },
-                "lhs": {
-                  "_type": "FieldExpression",
+                {
+                  "_type": "NumericComparisonExpression",
                   "source_location": {
                     "file": "tests/approvals/property-ordering.algo.ts",
                     "line": 21,
@@ -1444,82 +1432,65 @@
                   },
                   "wtype": {
                     "_type": "WType",
-                    "name": "uint64",
+                    "name": "bool",
                     "immutable": true
                   },
-                  "base": {
-                    "_type": "VarExpression",
+                  "lhs": {
+                    "_type": "FieldExpression",
                     "source_location": {
                       "file": "tests/approvals/property-ordering.algo.ts",
                       "line": 21,
-                      "end_line": 21,
-                      "column": 14,
-                      "end_column": 17
-                    },
-                    "wtype": {
-                      "_type": "ARC4Struct",
-                      "name": "Object62C92B83",
-                      "immutable": false,
-                      "arc4_alias": null,
-                      "fields": {
-                        "a": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "z": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        }
-                      },
-                      "source_location": null,
-                      "frozen": false,
-                      "desc": null
-                    },
-                    "name": "obj"
-                  },
-                  "name": "a"
-                },
-                "operator": "==",
-                "rhs": {
-                  "_type": "UInt64BinaryOperation",
-                  "source_location": {
-                    "file": "tests/approvals/property-ordering.algo.ts",
-                    "line": 23,
-                    "end_line": 23,
-                    "column": 7,
-                    "end_column": 12
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "uint64",
-                    "immutable": true
-                  },
-                  "left": {
-                    "_type": "VarExpression",
-                    "source_location": {
-                      "file": "tests/approvals/property-ordering.algo.ts",
-                      "line": 23,
-                      "end_line": 23,
-                      "column": 7,
-                      "end_column": 8
+                      "end_line": 24,
+                      "column": 2,
+                      "end_column": 4
                     },
                     "wtype": {
                       "_type": "WType",
                       "name": "uint64",
                       "immutable": true
                     },
-                    "name": "x"
+                    "base": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/property-ordering.algo.ts",
+                        "line": 21,
+                        "end_line": 21,
+                        "column": 14,
+                        "end_column": 17
+                      },
+                      "wtype": {
+                        "_type": "ARC4Struct",
+                        "name": "Object62C92B83",
+                        "immutable": false,
+                        "arc4_alias": null,
+                        "fields": {
+                          "a": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "z": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          }
+                        },
+                        "source_location": null,
+                        "frozen": false,
+                        "desc": null
+                      },
+                      "name": "obj"
+                    },
+                    "name": "a"
                   },
-                  "op": "*",
-                  "right": {
-                    "_type": "IntegerConstant",
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "UInt64BinaryOperation",
                     "source_location": {
                       "file": "tests/approvals/property-ordering.algo.ts",
                       "line": 23,
                       "end_line": 23,
-                      "column": 11,
+                      "column": 7,
                       "end_column": 12
                     },
                     "wtype": {
@@ -1527,11 +1498,43 @@
                       "name": "uint64",
                       "immutable": true
                     },
-                    "value": 2,
-                    "teal_alias": null
+                    "left": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/property-ordering.algo.ts",
+                        "line": 23,
+                        "end_line": 23,
+                        "column": 7,
+                        "end_column": 8
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "name": "x"
+                    },
+                    "op": "*",
+                    "right": {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/property-ordering.algo.ts",
+                        "line": 23,
+                        "end_line": 23,
+                        "column": 11,
+                        "end_column": 12
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "value": 2,
+                      "teal_alias": null
+                    }
                   }
                 }
-              }
+              ]
             },
             "error_message": "assert target is match for conditions"
           }

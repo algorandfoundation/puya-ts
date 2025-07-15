@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 6 5 1 1000
+    intcblock 0 6 5 3 1000
     bytecblock 0x098101 0x09361a00b08101 "name" "1" "unit" "2" 0x34 "AST1" "AST2" "AST3" "3" "5" 0x68656c6c6f "3rd" "with args param set" "42" "10" "11" "12" "13" "14" "15" "16"
 
 main_block@0:
@@ -66,7 +66,7 @@ main_test5_route@9:
     // tests/approvals/itxn.algo.ts:207
     // public test5(appId: Application) {
     callsub test5
-    intc_3 // 1
+    pushint 1 // 1
     b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
 
 main_test4_route@8:
@@ -81,7 +81,7 @@ main_test4_route@8:
     !=
     assert // can only call when not creating
     callsub test4
-    intc_3 // 1
+    pushint 1 // 1
     b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
 
 main_test3_route@7:
@@ -96,7 +96,7 @@ main_test3_route@7:
     !=
     assert // can only call when not creating
     callsub test3
-    intc_3 // 1
+    pushint 1 // 1
     b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
 
 main_test2_route@6:
@@ -111,7 +111,7 @@ main_test2_route@6:
     !=
     assert // can only call when not creating
     callsub test2
-    intc_3 // 1
+    pushint 1 // 1
     b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
 
 main_test1_route@5:
@@ -126,7 +126,7 @@ main_test1_route@5:
     !=
     assert // can only call when not creating
     callsub test1
-    intc_3 // 1
+    pushint 1 // 1
     b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
 
 main_bare_routing@12:
@@ -150,7 +150,7 @@ main___algots__.defaultCreate@13:
     ==
     assert // can only call when creating
     callsub __algots__.defaultCreate
-    intc_3 // 1
+    pushint 1 // 1
     b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
 
 
@@ -199,7 +199,7 @@ test1_block@0:
     itxn_field ConfigAssetManager
     // tests/approvals/itxn.algo.ts:30
     // decimals: 3,
-    pushint 3 // 3
+    intc_3 // 3
     itxn_field ConfigAssetDecimals
     // tests/approvals/itxn.algo.ts:29
     // unitName: 'unit',
@@ -219,7 +219,7 @@ test1_block@0:
     //   manager: Global.currentApplicationAddress,
     //   reserve: Global.currentApplicationAddress,
     // })
-    pushint 3 // 3
+    intc_3 // 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -246,7 +246,7 @@ test1_next_txn@1:
     itxn_field ConfigAssetManager
     // tests/approvals/itxn.algo.ts:30
     // decimals: 3,
-    pushint 3 // 3
+    intc_3 // 3
     itxn_field ConfigAssetDecimals
     // tests/approvals/itxn.algo.ts:29
     // unitName: 'unit',
@@ -266,7 +266,7 @@ test1_next_txn@1:
     //   manager: Global.currentApplicationAddress,
     //   reserve: Global.currentApplicationAddress,
     // })
-    pushint 3 // 3
+    intc_3 // 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -338,7 +338,7 @@ test1_next_txn@3:
     itxn_field ConfigAssetManager
     // tests/approvals/itxn.algo.ts:30
     // decimals: 3,
-    pushint 3 // 3
+    intc_3 // 3
     itxn_field ConfigAssetDecimals
     // tests/approvals/itxn.algo.ts:29
     // unitName: 'unit',
@@ -361,7 +361,7 @@ test1_next_txn@3:
     //   manager: Global.currentApplicationAddress,
     //   reserve: Global.currentApplicationAddress,
     // })
-    pushint 3 // 3
+    intc_3 // 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -386,7 +386,7 @@ test1_next_txn@4:
     itxn_begin
     // tests/approvals/itxn.algo.ts:63
     // note: '3rd',
-    intc_3 // 1
+    pushint 1 // 1
     dup
     >=
     // tests/approvals/itxn.algo.ts:68
@@ -427,7 +427,7 @@ test1_next_txn@7:
     itxn_next
     // tests/approvals/itxn.algo.ts:66
     // note: '3rd',
-    intc_3 // 1
+    pushint 1 // 1
     dup
     >=
     // tests/approvals/itxn.algo.ts:68
@@ -447,7 +447,7 @@ test1_next_field@9:
     itxn_field ConfigAssetManager
     // tests/approvals/itxn.algo.ts:30
     // decimals: 3,
-    pushint 3 // 3
+    intc_3 // 3
     itxn_field ConfigAssetDecimals
     // tests/approvals/itxn.algo.ts:29
     // unitName: 'unit',
@@ -470,7 +470,7 @@ test1_next_field@9:
     //   manager: Global.currentApplicationAddress,
     //   reserve: Global.currentApplicationAddress,
     // })
-    pushint 3 // 3
+    intc_3 // 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -515,7 +515,7 @@ test2_if_body@1:
     // onCompletion: OnCompleteAction.NoOp,
     intc_0 // 0
     frame_bury 6
-    intc_3 // 1
+    pushint 1 // 1
     frame_bury 4
     // tests/approvals/itxn.algo.ts:80
     // note: 'with args param set',
@@ -527,7 +527,7 @@ test2_after_if_else@3:
     itxn_begin
     itxn_field Note
     frame_dig 4
-    intc_3 // 1
+    pushint 1 // 1
     >=
     bz test2_next_field@5
 
@@ -541,7 +541,7 @@ test2_next_field@5:
     frame_dig 1
     itxn_field ApplicationArgs
     frame_dig 3
-    pushint 3 // 3
+    intc_3 // 3
     >=
     // tests/approvals/itxn.algo.ts:90
     // const createAppTxn = createAppParams.submit()
@@ -588,7 +588,7 @@ test2_next_txn@8:
     assert // correct args used 1
     // tests/approvals/itxn.algo.ts:92
     // assert(createAppTxn.appArgs(1) === Bytes('2'), 'correct args used 2')
-    intc_3 // 1
+    pushint 1 // 1
     itxnas ApplicationArgs
     bytec 5 // "2"
     ==
@@ -596,7 +596,7 @@ test2_next_txn@8:
     // tests/approvals/itxn.algo.ts:94
     // if (Txn.numAppArgs > 1) {
     txn NumAppArgs
-    intc_3 // 1
+    pushint 1 // 1
     >
     bz test2_after_if_else@11
 
@@ -682,7 +682,7 @@ test2_else_body@2:
     frame_bury 1
     bytec 11 // "5"
     frame_bury 5
-    pushint 3 // 3
+    intc_3 // 3
     frame_bury 3
     // tests/approvals/itxn.algo.ts:87
     // note: 'no args param set',
@@ -1396,7 +1396,7 @@ test4_block@0:
     itxn_begin
     // tests/approvals/itxn.algo.ts:196
     // extraProgramPages: 3,
-    pushint 3 // 3
+    intc_3 // 3
     itxn_field ExtraProgramPages
     // tests/approvals/itxn.algo.ts:195
     // appArgs: [Bytes('1')],
@@ -1441,7 +1441,7 @@ test4_next_txn@1:
     cover 2
     // tests/approvals/itxn.algo.ts:199
     // assert(app1.extraProgramPages === 3, 'extra pages = 3')
-    pushint 3 // 3
+    intc_3 // 3
     ==
     assert // extra pages = 3
     // tests/approvals/itxn.algo.ts:200
@@ -1469,10 +1469,10 @@ test4_next_txn@1:
     uncover 2
     select
     swap
-    pushint 3 // 3
+    intc_3 // 3
     dig 1
     >=
-    pushint 3 // 3
+    intc_3 // 3
     dig 2
     uncover 2
     select
@@ -1496,15 +1496,15 @@ test4_next_txn@1:
     assert // expected approval page 0
     // tests/approvals/itxn.algo.ts:202
     // assert(app1.approvalProgramPages(1) === approval2.slice(-3).concat(approval2), 'expected approval page 1')
-    intc_3 // 1
+    pushint 1 // 1
     itxnas ApprovalProgramPages
     swap
     dup
     len
-    pushint 3 // 3
+    intc_3 // 3
     dig 1
     >=
-    pushint 3 // 3
+    intc_3 // 3
     dig 2
     uncover 2
     select
@@ -1521,7 +1521,7 @@ test4_next_txn@1:
     assert // expected approval page 1
     // tests/approvals/itxn.algo.ts:203
     // assert(app1.numClearStateProgramPages === 1, 'clear state pages = 1')
-    intc_3 // 1
+    pushint 1 // 1
     ==
     assert // clear state pages = 1
     // tests/approvals/itxn.algo.ts:204
@@ -1539,7 +1539,6 @@ test5:
     // tests/approvals/itxn.algo.ts:207
     // public test5(appId: Application) {
     proto 1 0
-    intc_0 // 0
 
 test5_block@0:
     // tests/approvals/itxn.algo.ts:209
@@ -1573,7 +1572,7 @@ test5_block@0:
     //   receiver: appId.address,
     //   amount: 1000,
     // })
-    intc_3 // 1
+    pushint 1 // 1
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -1615,42 +1614,30 @@ test5_next_txn@2:
     pushbytes 0x151f7c75
     ==
     assert // Bytes has valid prefix
-    frame_bury 0
     // tests/approvals/itxn.algo.ts:222
     // assertMatch(returnValue, [1, 1000, 'hello'])
-    pushint 3 // 3
+    intc_3 // 3
     dup
     ==
-    bz test5_bool_false@7
-
-test5_and_contd@3:
-    // tests/approvals/itxn.algo.ts:222
-    // assertMatch(returnValue, [1, 1000, 'hello'])
-    frame_dig 0
+    swap
+    dup
     intc_0 // 0
     pushint 8 // 8
     extract3
     btoi
-    intc_3 // 1
+    pushint 1 // 1
     ==
-    bz test5_bool_false@7
-
-test5_and_contd@4:
-    // tests/approvals/itxn.algo.ts:222
-    // assertMatch(returnValue, [1, 1000, 'hello'])
-    frame_dig 0
+    uncover 2
+    &&
+    dig 1
     pushint 8 // 8
     dup
     extract3
     btoi
     intc 4 // 1000
     ==
-    bz test5_bool_false@7
-
-test5_and_contd@5:
-    // tests/approvals/itxn.algo.ts:222
-    // assertMatch(returnValue, [1, 1000, 'hello'])
-    frame_dig 0
+    &&
+    swap
     dup
     pushint 16 // 16
     extract_uint16
@@ -1664,20 +1651,9 @@ test5_and_contd@5:
     extract 2 0
     bytec 12 // "hello"
     ==
-    bz test5_bool_false@7
-
-test5_bool_true@6:
-    intc_3 // 1
-
-test5_bool_merge@8:
-    // tests/approvals/itxn.algo.ts:222
-    // assertMatch(returnValue, [1, 1000, 'hello'])
+    &&
     assert // assert target is match for conditions
     retsub
-
-test5_bool_false@7:
-    intc_0 // 0
-    b test5_bool_merge@8
 
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.__algots__.defaultCreate() -> void:

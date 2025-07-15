@@ -128,7 +128,7 @@ contract ItxnDemoContract
     app: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApplicationID=appId, ApplicationArgs=#[Method("receivePay(uint64,pay,string)(uint64,uint64,string)"), 0x0000000000000001, reinterpret_cast<bytes>("hello")])
     #[_, appRes]: readonly [inner_transaction_pay, inner_transaction_appl] = submit_txn(pay, app)
     returnValue: arc4.tuple<uint64,uint64,string> = ARC4_DECODE(reinterpret_cast<arc4.tuple<arc4.uint64,arc4.uint64,arc4.dynamic_array<arc4.byte>>>(checked_maybe(#[extract<4, 0>(($0 = appRes.LastLog)), extract<0, 4>($0) == 0x151f7c75], comment=Bytes has valid prefix)))
-    assert(3 == 3 and returnValue.0 == 1 and returnValue.1 == 1000 and returnValue.2 == "hello", comment=assert target is match for conditions)
+    assert(&&(&&(&&(3 == 3, returnValue.0 == 1), returnValue.1 == 1000), returnValue.2 == "hello"), comment=assert target is match for conditions)
   }
   
   __algots__.defaultCreate(): void

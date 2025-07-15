@@ -269,28 +269,17 @@ subroutine tests/approvals/object-destructuring.algo.ts::testNumericResolution()
         let y#0: Encoded(uint64) = tmp%0#0
         let x#0: Encoded(uint64) = y#0
         let tmp%1#0: bool = (== 2u 2u)
-        goto tmp%1#0 ? block@1 : block@4
-    block@1: // and_contd_L81
         let aggregate%extract%0#1: bytes = (extract3 x#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
         let values%0#0: uint64 = (btoi tuple_item%0#0)
         let tmp%2#0: bool = (== values%0#0 434u)
-        goto tmp%2#0 ? block@2 : block@4
-    block@2: // and_contd_L81
+        let tmp%3#0: bool = (&& tmp%1#0 tmp%2#0)
         let aggregate%extract%1#1: bytes = (extract3 y#0 0u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#1
         let values%1#0: uint64 = (btoi tuple_item%1#0)
-        let tmp%3#0: bool = (== values%1#0 434u)
-        goto tmp%3#0 ? block@3 : block@4
-    block@3: // bool_true_L81
-        let and_result%0#0: bool = 1u
-        goto block@5
-    block@4: // bool_false_L81
-        let and_result%0#1: bool = 0u
-        goto block@5
-    block@5: // bool_merge_L81
-        let and_result%0#2: bool = φ(and_result%0#0 <- block@3, and_result%0#1 <- block@4)
-        (assert and_result%0#2) // assert target is match for conditions
+        let tmp%4#0: bool = (== values%1#0 434u)
+        let tmp%5#0: bool = (&& tmp%3#0 tmp%4#0)
+        (assert tmp%5#0) // assert target is match for conditions
         return 
 
 subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test() -> void:
@@ -299,22 +288,11 @@ subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo
         let res.0#0: uint64 = tmp%0#0
         let res.1#0: uint64 = tmp%1#0
         let tmp%2#0: bool = (== 2u 2u)
-        goto tmp%2#0 ? block@1 : block@4
-    block@1: // and_contd_L99
         let tmp%3#0: bool = (== res.0#0 1u)
-        goto tmp%3#0 ? block@2 : block@4
-    block@2: // and_contd_L99
-        let tmp%4#0: bool = (== res.1#0 4u)
-        goto tmp%4#0 ? block@3 : block@4
-    block@3: // bool_true_L99
-        let and_result%0#0: bool = 1u
-        goto block@5
-    block@4: // bool_false_L99
-        let and_result%0#1: bool = 0u
-        goto block@5
-    block@5: // bool_merge_L99
-        let and_result%0#2: bool = φ(and_result%0#0 <- block@3, and_result%0#1 <- block@4)
-        (assert and_result%0#2) // assert target is match for conditions
+        let tmp%4#0: bool = (&& tmp%2#0 tmp%3#0)
+        let tmp%5#0: bool = (== res.1#0 4u)
+        let tmp%6#0: bool = (&& tmp%4#0 tmp%5#0)
+        (assert tmp%6#0) // assert target is match for conditions
         let aggregate%val_as_bytes%0#1: bytes[8] = (itob 10u)
         let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
         let aggregate%head%0#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#1)
@@ -322,7 +300,7 @@ subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo
         let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
         let aggregate%head%1#1: bytes = (concat aggregate%head%0#1 aggregate%as_Encoded(uint64)%1#1)
         let aggregate%as_Encoded(uint64,uint64)%0#1: Encoded(uint64,uint64) = aggregate%head%1#1
-        let tmp%5#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%0#1
+        let tmp%7#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%0#1
         let aggregate%val_as_bytes%2#1: bytes[8] = (itob 20u)
         let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%2#1
         let aggregate%head%2#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%2#1)
@@ -330,78 +308,54 @@ subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo
         let aggregate%as_Encoded(uint64)%3#1: Encoded(uint64) = aggregate%val_as_bytes%3#1
         let aggregate%head%3#1: bytes = (concat aggregate%head%2#1 aggregate%as_Encoded(uint64)%3#1)
         let aggregate%as_Encoded(uint64,uint64)%1#1: Encoded(uint64,uint64) = aggregate%head%3#1
-        let tmp%6#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%1#1
-        let aggregate%head%4#1: bytes = (concat 0x tmp%5#0)
-        let aggregate%head%5#1: bytes = (concat aggregate%head%4#1 tmp%6#0)
+        let tmp%8#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%1#1
+        let aggregate%head%4#1: bytes = (concat 0x tmp%7#0)
+        let aggregate%head%5#1: bytes = (concat aggregate%head%4#1 tmp%8#0)
         let aggregate%as_Encoded((uint64,uint64),(uint64,uint64))%0#1: Encoded((uint64,uint64),(uint64,uint64)) = aggregate%head%5#1
-        let tmp%7#0: Encoded((uint64,uint64),(uint64,uint64)) = aggregate%as_Encoded((uint64,uint64),(uint64,uint64))%0#1
-        let (testPartialDestructureMutableObject%0#0: uint64, testPartialDestructureMutableObject%1#0: uint64, testPartialDestructureMutableObject%2#0: Encoded((uint64,uint64),(uint64,uint64))) = tests/approvals/object-destructuring.algo.ts::testPartialDestructureMutableObject(tmp%7#0)
+        let tmp%9#0: Encoded((uint64,uint64),(uint64,uint64)) = aggregate%as_Encoded((uint64,uint64),(uint64,uint64))%0#1
+        let (testPartialDestructureMutableObject%0#0: uint64, testPartialDestructureMutableObject%1#0: uint64, testPartialDestructureMutableObject%2#0: Encoded((uint64,uint64),(uint64,uint64))) = tests/approvals/object-destructuring.algo.ts::testPartialDestructureMutableObject(tmp%9#0)
         let res2.0#0: uint64 = testPartialDestructureMutableObject%0#0
         let res2.1#0: uint64 = testPartialDestructureMutableObject%1#0
-        let tmp%8#0: bool = (== 2u 2u)
-        goto tmp%8#0 ? block@6 : block@9
-    block@6: // and_contd_L102
-        let tmp%9#0: bool = (== res2.0#0 10u)
-        goto tmp%9#0 ? block@7 : block@9
-    block@7: // and_contd_L102
-        let tmp%10#0: bool = (== res2.1#0 20u)
-        goto tmp%10#0 ? block@8 : block@9
-    block@8: // bool_true_L102
-        let and_result%1#0: bool = 1u
-        goto block@10
-    block@9: // bool_false_L102
-        let and_result%1#1: bool = 0u
-        goto block@10
-    block@10: // bool_merge_L102
-        let and_result%1#2: bool = φ(and_result%1#0 <- block@8, and_result%1#1 <- block@9)
-        (assert and_result%1#2) // assert target is match for conditions
+        let tmp%10#0: bool = (== 2u 2u)
+        let tmp%11#0: bool = (== res2.0#0 10u)
+        let tmp%12#0: bool = (&& tmp%10#0 tmp%11#0)
+        let tmp%13#0: bool = (== res2.1#0 20u)
+        let tmp%14#0: bool = (&& tmp%12#0 tmp%13#0)
+        (assert tmp%14#0) // assert target is match for conditions
         tests/approvals/object-destructuring.algo.ts::testNumericResolution()
-        let tmp%11#0: Encoded(len+uint64[]) = tests/approvals/object-destructuring.algo.ts::testLiteralToLiteral()
-        let res3#0: Encoded(len+uint64[]) = tmp%11#0
+        let tmp%15#0: Encoded(len+uint64[]) = tests/approvals/object-destructuring.algo.ts::testLiteralToLiteral()
+        let res3#0: Encoded(len+uint64[]) = tmp%15#0
         let array_length%0#0: uint64 = (extract_uint16 res3#0 0u)
-        let tmp%12#0: bool = (== array_length%0#0 4u)
-        goto tmp%12#0 ? block@11 : block@16
-    block@11: // and_contd_L107
+        let tmp%16#0: bool = (== array_length%0#0 4u)
         let aggregate%array_trimmed%0#1: bytes = ((extract 2 0) res3#0)
         let aggregate%bytes_offset%0#1: uint64 = (* 0u 8u)
         let aggregate%encoded_element%0#1: bytes = (extract3 aggregate%array_trimmed%0#1 aggregate%bytes_offset%0#1 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#1
         let values%0#0: uint64 = (btoi array_item%0#0)
-        let tmp%13#0: bool = (== values%0#0 4u)
-        goto tmp%13#0 ? block@12 : block@16
-    block@12: // and_contd_L107
+        let tmp%17#0: bool = (== values%0#0 4u)
+        let tmp%18#0: bool = (&& tmp%16#0 tmp%17#0)
         let aggregate%array_trimmed%1#1: bytes = ((extract 2 0) res3#0)
         let aggregate%bytes_offset%1#1: uint64 = (* 1u 8u)
         let aggregate%encoded_element%1#1: bytes = (extract3 aggregate%array_trimmed%1#1 aggregate%bytes_offset%1#1 8u) // on error: index access is out of bounds
         let array_item%1#0: Encoded(uint64) = aggregate%encoded_element%1#1
         let values%1#0: uint64 = (btoi array_item%1#0)
-        let tmp%14#0: bool = (== values%1#0 1u)
-        goto tmp%14#0 ? block@13 : block@16
-    block@13: // and_contd_L107
+        let tmp%19#0: bool = (== values%1#0 1u)
+        let tmp%20#0: bool = (&& tmp%18#0 tmp%19#0)
         let aggregate%array_trimmed%2#1: bytes = ((extract 2 0) res3#0)
         let aggregate%bytes_offset%2#1: uint64 = (* 2u 8u)
         let aggregate%encoded_element%2#1: bytes = (extract3 aggregate%array_trimmed%2#1 aggregate%bytes_offset%2#1 8u) // on error: index access is out of bounds
         let array_item%2#0: Encoded(uint64) = aggregate%encoded_element%2#1
         let values%2#0: uint64 = (btoi array_item%2#0)
-        let tmp%15#0: bool = (== values%2#0 4u)
-        goto tmp%15#0 ? block@14 : block@16
-    block@14: // and_contd_L107
+        let tmp%21#0: bool = (== values%2#0 4u)
+        let tmp%22#0: bool = (&& tmp%20#0 tmp%21#0)
         let aggregate%array_trimmed%3#1: bytes = ((extract 2 0) res3#0)
         let aggregate%bytes_offset%3#1: uint64 = (* 3u 8u)
         let aggregate%encoded_element%3#1: bytes = (extract3 aggregate%array_trimmed%3#1 aggregate%bytes_offset%3#1 8u) // on error: index access is out of bounds
         let array_item%3#0: Encoded(uint64) = aggregate%encoded_element%3#1
         let values%3#0: uint64 = (btoi array_item%3#0)
-        let tmp%16#0: bool = (== values%3#0 1u)
-        goto tmp%16#0 ? block@15 : block@16
-    block@15: // bool_true_L107
-        let and_result%2#0: bool = 1u
-        goto block@17
-    block@16: // bool_false_L107
-        let and_result%2#1: bool = 0u
-        goto block@17
-    block@17: // bool_merge_L107
-        let and_result%2#2: bool = φ(and_result%2#0 <- block@15, and_result%2#1 <- block@16)
-        (assert and_result%2#2) // assert target is match for conditions
+        let tmp%23#0: bool = (== values%3#0 1u)
+        let tmp%24#0: bool = (&& tmp%22#0 tmp%23#0)
+        (assert tmp%24#0) // assert target is match for conditions
         tests/approvals/object-destructuring.algo.ts::test()
         tests/approvals/object-destructuring.algo.ts::testMutableObject()
         return 

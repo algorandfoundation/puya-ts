@@ -20,42 +20,27 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%0#2) // assert target is match for conditions
         let tmp%2#1: uint64 = ((gtxns Amount) pay#0)
         let tmp%3#1: bool = (<= tmp%2#1 105000u)
-        goto tmp%3#1 ? block@15 : block@22
-    block@15: // and_contd_L10
         let tmp%5#1: bool = (>= tmp%2#1 100000u)
-        goto tmp%5#1 ? block@16 : block@22
-    block@16: // and_contd_L10
-        let tmp%6#1: account = ((gtxns Sender) pay#0)
-        let tmp%7#1: account = (txn Sender)
-        let tmp%8#1: bool = (== tmp%6#1 tmp%7#1)
-        goto tmp%8#1 ? block@17 : block@22
-    block@17: // and_contd_L10
-        let tmp%9#1: account = ((gtxns Receiver) pay#0)
-        let tmp%10#1: account = (global CurrentApplicationAddress)
-        let tmp%11#1: bool = (== tmp%9#1 tmp%10#1)
-        goto tmp%11#1 ? block@18 : block@22
-    block@18: // and_contd_L10
-        let tmp%12#1: account = ((gtxns CloseRemainderTo) pay#0)
-        let tmp%13#1: account = (global ZeroAddress)
-        let tmp%14#0: bool = (== tmp%12#1 tmp%13#1)
-        goto tmp%14#0 ? block@19 : block@22
-    block@19: // and_contd_L10
-        let tmp%15#0: uint64 = ((gtxns FirstValid) pay#0)
-        let tmp%16#0: bool = (> tmp%15#0 1u)
-        goto tmp%16#0 ? block@20 : block@22
-    block@20: // and_contd_L10
-        let tmp%17#0: uint64 = ((gtxns LastValid) pay#0)
-        let tmp%18#0: bool = (< tmp%17#0 1099511627776u)
-        goto tmp%18#0 ? block@21 : block@22
-    block@21: // bool_true_L10
-        let and_result%0#0: bool = 1u
-        goto block@23
-    block@22: // bool_false_L10
-        let and_result%0#1: bool = 0u
-        goto block@23
-    block@23: // bool_merge_L10
-        let and_result%0#2: bool = φ(and_result%0#0 <- block@21, and_result%0#1 <- block@22)
-        (assert and_result%0#2) // assert target is match for conditions
+        let tmp%6#1: bool = (&& tmp%3#1 tmp%5#1)
+        let tmp%7#1: account = ((gtxns Sender) pay#0)
+        let tmp%8#1: account = (txn Sender)
+        let tmp%9#1: bool = (== tmp%7#1 tmp%8#1)
+        let tmp%10#1: bool = (&& tmp%6#1 tmp%9#1)
+        let tmp%11#1: account = ((gtxns Receiver) pay#0)
+        let tmp%12#1: account = (global CurrentApplicationAddress)
+        let tmp%13#1: bool = (== tmp%11#1 tmp%12#1)
+        let tmp%14#0: bool = (&& tmp%10#1 tmp%13#1)
+        let tmp%15#0: account = ((gtxns CloseRemainderTo) pay#0)
+        let tmp%16#0: account = (global ZeroAddress)
+        let tmp%17#0: bool = (== tmp%15#0 tmp%16#0)
+        let tmp%18#0: bool = (&& tmp%14#0 tmp%17#0)
+        let tmp%19#0: uint64 = ((gtxns FirstValid) pay#0)
+        let tmp%20#0: bool = (> tmp%19#0 1u)
+        let tmp%21#0: bool = (&& tmp%18#0 tmp%20#0)
+        let tmp%22#0: uint64 = ((gtxns LastValid) pay#0)
+        let tmp%23#0: bool = (< tmp%22#0 1099511627776u)
+        let tmp%24#0: bool = (&& tmp%21#0 tmp%23#0)
+        (assert tmp%24#0) // assert target is match for conditions
         (log 0x151f7c7580)
         let tests/approvals/assert-match.algo.ts::AssertMatchContract.__puya_arc4_router__%0#0: bool = 1u
         goto block@11
@@ -72,5 +57,5 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tests/approvals/assert-match.algo.ts::AssertMatchContract.__puya_arc4_router__%0#2: bool = 0u
         goto block@11
     block@11: // after_inlined_tests/approvals/assert-match.algo.ts::AssertMatchContract.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/assert-match.algo.ts::AssertMatchContract.__puya_arc4_router__%0#0 <- block@23, tests/approvals/assert-match.algo.ts::AssertMatchContract.__puya_arc4_router__%0#1 <- block@7, tests/approvals/assert-match.algo.ts::AssertMatchContract.__puya_arc4_router__%0#2 <- block@10)
+        let tmp%0#0: bool = φ(tests/approvals/assert-match.algo.ts::AssertMatchContract.__puya_arc4_router__%0#0 <- block@3, tests/approvals/assert-match.algo.ts::AssertMatchContract.__puya_arc4_router__%0#1 <- block@7, tests/approvals/assert-match.algo.ts::AssertMatchContract.__puya_arc4_router__%0#2 <- block@10)
         return tmp%0#0

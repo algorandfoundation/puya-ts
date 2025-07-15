@@ -5,7 +5,6 @@
 main:
     intcblock 1 9 0
     bytecblock "x"
-    pushbytes ""
     // tests/approvals/large-objects-in-state.algo.ts:14
     // class LargeObjectsInStateAlgo extends Contract {
     txn NumAppArgs
@@ -111,8 +110,6 @@ main_bootstrap_route@4:
     intc_0 // 1
     -
     dup
-    bury 2
-    dup
     gtxns TypeEnum
     intc_0 // pay
     ==
@@ -122,6 +119,7 @@ main_bootstrap_route@4:
     //   amount: BOX_MBR + ACCOUNT_BASE_MBR,
     //   receiver: Global.currentApplicationAddress,
     // })
+    dup
     gtxns Amount
     // tests/approvals/large-objects-in-state.algo.ts:23
     // amount: BOX_MBR + ACCOUNT_BASE_MBR,
@@ -132,8 +130,7 @@ main_bootstrap_route@4:
     //   receiver: Global.currentApplicationAddress,
     // })
     ==
-    bz main_bool_false@24
-    dup
+    swap
     gtxns Receiver
     // tests/approvals/large-objects-in-state.algo.ts:24
     // receiver: Global.currentApplicationAddress,
@@ -144,15 +141,7 @@ main_bootstrap_route@4:
     //   receiver: Global.currentApplicationAddress,
     // })
     ==
-    bz main_bool_false@24
-    intc_0 // 1
-
-main_bool_merge@25:
-    // tests/approvals/large-objects-in-state.algo.ts:22-25
-    // assertMatch(pay, {
-    //   amount: BOX_MBR + ACCOUNT_BASE_MBR,
-    //   receiver: Global.currentApplicationAddress,
-    // })
+    &&
     assert // assert target is match for conditions
     // tests/approvals/large-objects-in-state.algo.ts:15
     // storage = Box<FixedArray<Counts, typeof MAX_ITEMS>>({ key: 'x' })
@@ -166,10 +155,6 @@ main_bool_merge@25:
     // bootstrap(pay: gtxn.PaymentTxn) {
     intc_0 // 1
     return
-
-main_bool_false@24:
-    intc_2 // 0
-    b main_bool_merge@25
 
 main_getMbr_route@3:
     // tests/approvals/large-objects-in-state.algo.ts:17

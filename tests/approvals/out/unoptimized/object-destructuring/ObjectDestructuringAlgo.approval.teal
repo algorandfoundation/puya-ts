@@ -425,9 +425,6 @@ testLiteralToLiteral_block@0:
 
 // tests/approvals/object-destructuring.algo.ts::testNumericResolution() -> void:
 testNumericResolution:
-    // tests/approvals/object-destructuring.algo.ts:78
-    // function testNumericResolution() {
-    proto 0 0
 
 testNumericResolution_block@0:
     // tests/approvals/object-destructuring.algo.ts:80
@@ -443,54 +440,28 @@ testNumericResolution_block@0:
     pushint 2 // 2
     dup
     ==
-    bz testNumericResolution_bool_false@4
-
-testNumericResolution_and_contd@1:
-    // tests/approvals/object-destructuring.algo.ts:81
-    // assertMatch([x.a, y.a], [434, 434])
-    frame_dig 1
+    swap
     intc_0 // 0
     intc_1 // 8
     extract3
     btoi
     intc 4 // 434
     ==
-    bz testNumericResolution_bool_false@4
-
-testNumericResolution_and_contd@2:
-    // tests/approvals/object-destructuring.algo.ts:81
-    // assertMatch([x.a, y.a], [434, 434])
-    frame_dig 0
+    &&
+    swap
     intc_0 // 0
     intc_1 // 8
     extract3
     btoi
     intc 4 // 434
     ==
-    bz testNumericResolution_bool_false@4
-
-testNumericResolution_bool_true@3:
-    intc_2 // 1
-
-testNumericResolution_bool_merge@5:
-    // tests/approvals/object-destructuring.algo.ts:81
-    // assertMatch([x.a, y.a], [434, 434])
+    &&
     assert // assert target is match for conditions
     retsub
-
-testNumericResolution_bool_false@4:
-    intc_0 // 0
-    b testNumericResolution_bool_merge@5
 
 
 // tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test() -> void:
 tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test:
-    // tests/approvals/object-destructuring.algo.ts:97
-    // test() {
-    proto 0 0
-    intc_0 // 0
-    bytec_0 // ""
-    dup
 
 tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_block@0:
     // tests/approvals/object-destructuring.algo.ts:98
@@ -499,35 +470,20 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_block
     intc_3 // 4
     pushbytes 0x7b
     callsub testPartialDestructure
+    swap
     // tests/approvals/object-destructuring.algo.ts:99
     // assertMatch(res, [1, 4])
     pushint 2 // 2
     dup
     ==
-    bz tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_false@4
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_and_contd@1:
-    // tests/approvals/object-destructuring.algo.ts:99
-    // assertMatch(res, [1, 4])
-    frame_dig 3
+    swap
     intc_2 // 1
     ==
-    bz tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_false@4
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_and_contd@2:
-    // tests/approvals/object-destructuring.algo.ts:99
-    // assertMatch(res, [1, 4])
-    frame_dig 4
+    &&
+    swap
     intc_3 // 4
     ==
-    bz tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_false@4
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_true@3:
-    intc_2 // 1
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_merge@5:
-    // tests/approvals/object-destructuring.algo.ts:99
-    // assertMatch(res, [1, 4])
+    &&
     assert // assert target is match for conditions
     // tests/approvals/object-destructuring.algo.ts:101
     // const res2 = testPartialDestructureMutableObject({ c1: { x: 10, y: 20 }, c2: { x: 20, y: 30 } })
@@ -555,37 +511,19 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_
     callsub testPartialDestructureMutableObject
     pop
     swap
-    frame_bury 1
-    frame_bury 2
     // tests/approvals/object-destructuring.algo.ts:102
     // assertMatch(res2, [10, 20])
     pushint 2 // 2
     dup
     ==
-    bz tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_false@9
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_and_contd@6:
-    // tests/approvals/object-destructuring.algo.ts:102
-    // assertMatch(res2, [10, 20])
-    frame_dig 1
+    swap
     pushint 10 // 10
     ==
-    bz tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_false@9
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_and_contd@7:
-    // tests/approvals/object-destructuring.algo.ts:102
-    // assertMatch(res2, [10, 20])
-    frame_dig 2
+    &&
+    swap
     pushint 20 // 20
     ==
-    bz tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_false@9
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_true@8:
-    intc_2 // 1
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_merge@10:
-    // tests/approvals/object-destructuring.algo.ts:102
-    // assertMatch(res2, [10, 20])
+    &&
     assert // assert target is match for conditions
     // tests/approvals/object-destructuring.algo.ts:104
     // testNumericResolution()
@@ -593,20 +531,15 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_
     // tests/approvals/object-destructuring.algo.ts:106
     // const res3 = testLiteralToLiteral()
     callsub testLiteralToLiteral
-    dup
-    frame_bury 0
     // tests/approvals/object-destructuring.algo.ts:107
     // assertMatch(res3, [4, 1, 4, 1])
+    dup
     intc_0 // 0
     extract_uint16
     intc_3 // 4
     ==
-    bz tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_false@16
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_and_contd@11:
-    // tests/approvals/object-destructuring.algo.ts:107
-    // assertMatch(res3, [4, 1, 4, 1])
-    frame_dig 0
+    swap
+    dup
     extract 2 0
     intc_0 // 0
     intc_1 // 8
@@ -616,12 +549,9 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_and_c
     btoi
     intc_3 // 4
     ==
-    bz tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_false@16
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_and_contd@12:
-    // tests/approvals/object-destructuring.algo.ts:107
-    // assertMatch(res3, [4, 1, 4, 1])
-    frame_dig 0
+    uncover 2
+    &&
+    dig 1
     extract 2 0
     intc_2 // 1
     intc_1 // 8
@@ -631,12 +561,8 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_and_c
     btoi
     intc_2 // 1
     ==
-    bz tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_false@16
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_and_contd@13:
-    // tests/approvals/object-destructuring.algo.ts:107
-    // assertMatch(res3, [4, 1, 4, 1])
-    frame_dig 0
+    &&
+    dig 1
     extract 2 0
     pushint 2 // 2
     intc_1 // 8
@@ -646,12 +572,8 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_and_c
     btoi
     intc_3 // 4
     ==
-    bz tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_false@16
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_and_contd@14:
-    // tests/approvals/object-destructuring.algo.ts:107
-    // assertMatch(res3, [4, 1, 4, 1])
-    frame_dig 0
+    &&
+    swap
     extract 2 0
     pushint 3 // 3
     intc_1 // 8
@@ -661,14 +583,7 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_and_c
     btoi
     intc_2 // 1
     ==
-    bz tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_false@16
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_true@15:
-    intc_2 // 1
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_merge@17:
-    // tests/approvals/object-destructuring.algo.ts:107
-    // assertMatch(res3, [4, 1, 4, 1])
+    &&
     assert // assert target is match for conditions
     // tests/approvals/object-destructuring.algo.ts:109
     // test()
@@ -677,18 +592,6 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_
     // testMutableObject()
     callsub testMutableObject
     retsub
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_false@16:
-    intc_0 // 0
-    b tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_merge@17
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_false@9:
-    intc_0 // 0
-    b tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_merge@10
-
-tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_false@4:
-    intc_0 // 0
-    b tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_bool_merge@5
 
 
 // tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.__algots__.defaultCreate() -> void:
