@@ -25,6 +25,7 @@ export default [
       'packages-temp/**',
       'docs/_html/',
       '**/.puya',
+      'tests/quick-fix/fixed/**',
     ],
   },
   ...compat.extends('@makerx/eslint-config'),

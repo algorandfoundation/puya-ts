@@ -208,6 +208,8 @@ export function normalisePath(filePath: string, workingDirectory: string): strin
   return moduleName.replaceAll('\\', '/')
 }
 
+type SortFn<T> = (a: T, b: T) => number
+
 type SortDir = 'asc' | 'desc'
 export const sortBy =
   <T, TKey>(keySelector: (item: T) => TKey, dir: SortDir = 'asc') =>
@@ -216,6 +218,34 @@ export const sortBy =
     const keyB = keySelector(b)
     return (dir === 'desc' ? -1 : 1) * (keyA < keyB ? -1 : keyA > keyB ? 1 : 0)
   }
+
+/**
+ * Combine multiple sort functions to construct a more advanced sort by _this_ then by _that_ function.
+ * @param sortFunctions one or more sort functions (the return type of sortBy, and sortByIgnoreCase)
+ *
+ * Usage:
+ * ```
+ * const users = allUsers.slice().sort(
+ *   combineSortFn(
+ *     sortByIgnoreCase(x => x.familyName),
+ *     sortByIgnoreCase(x => x.givenName),
+ *     sortBy(x => x.dateOfBirth)
+ *   )
+ * )
+ * ```
+ */
+export const combineSortFn =
+  <T>(...sortFunctions: SortFn<T>[]): SortFn<T> =>
+  (a, b) => {
+    for (const fn of sortFunctions) {
+      const res = fn(a, b)
+      if (res !== 0) {
+        return res
+      }
+    }
+    return 0
+  }
+
 /**
  * Can be used to filter a collection to a set of distinct items as determined by a specified key.
  * @param keySelector A lambda which when given an item, returns the items unique identifier
