@@ -1,7 +1,7 @@
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
-import { BinaryBooleanOperator } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
+import { wtypes } from '../../awst/wtypes'
 import { CodeError } from '../../errors'
 import { codeInvariant, instanceOfAny } from '../../util'
 import type { PType } from '../ptypes'
@@ -22,7 +22,6 @@ import { BuilderComparisonOp, NodeBuilder } from './index'
 import { isStaticallyIterable, StaticIterator } from './traits/static-iterator'
 import { requireBuilderOfType, requireInstanceBuilder } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
-import { wtypes } from '../../awst/wtypes'
 
 export class MatchFunctionBuilder extends NodeBuilder {
   readonly ptype = matchFunction

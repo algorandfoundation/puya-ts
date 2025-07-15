@@ -120,7 +120,7 @@ export function match<T>(subject: T, test: MatchTest<T>): boolean {
  * @param message An optional message to show if the assertion fails
  * @typeParam T The type of the subject
  */
-export function assertMatch<T>(subject: T, test: MatchTest<T>, message?: string): boolean {
+export function assertMatch<T>(subject: T, test: MatchTest<T>, message?: string): void {
   throw new NoImplementation()
 }
 
