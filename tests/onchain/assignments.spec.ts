@@ -1,4 +1,5 @@
-import { describe } from 'vitest'
+import { algos } from '@algorandfoundation/algokit-utils'
+import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('assignments', () => {
@@ -6,6 +7,12 @@ describe('assignments', () => {
 
   test('testPrimitives', async ({ appClientAssignmentsAlgo }) => {
     await appClientAssignmentsAlgo.send.call({ method: 'testPrimitives', args: [123] })
+  })
+
+  test('testAccountDestructure', async ({ appClientAssignmentsAlgo }) => {
+    await appClientAssignmentsAlgo.fundAppAccount({ amount: algos(1) })
+    const result = await appClientAssignmentsAlgo.send.call({ method: 'testAccountDestructure', args: [] })
+    expect(result.return).toEqual({ balance: 1000000n, minBalance: 100000n })
   })
 
   test('testArrayDestructure', async ({ appClientAssignmentsAlgo }) => {

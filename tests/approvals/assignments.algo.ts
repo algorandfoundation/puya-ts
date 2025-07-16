@@ -1,5 +1,5 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, assertMatch, clone, contract, Contract, log, op } from '@algorandfoundation/algorand-typescript'
+import { assert, assertMatch, clone, contract, Contract, Global, log, op } from '@algorandfoundation/algorand-typescript'
 
 type MutableObj = { a: uint64; b: uint64 }
 type ImmutableObj = { readonly a: uint64; readonly b: uint64 }
@@ -24,6 +24,11 @@ export class AssignmentsAlgo extends Contract {
     p2 += 1
     assert(p2 === 3)
     assert(p1 === u)
+  }
+
+  testAccountDestructure() {
+    const { balance, minBalance } = Global.currentApplicationAddress
+    return { balance, minBalance }
   }
 
   testArrayDestructure(i_a: ReadonlyArray<uint64>, u: uint64, m_a: uint64[]) {
