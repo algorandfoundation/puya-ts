@@ -18,6 +18,7 @@ import { arc4BaseContractType, baseContractType, ClusteredContractClassType } fr
 import { typeRegistry } from '../type-registry'
 import { TypeResolver } from '../type-resolver'
 import { EvaluationContext } from './evaluation-context'
+import { ImportContext } from './import-context'
 import { SwitchLoopContext } from './switch-loop-context'
 import { UniqueNameResolver } from './unique-name-resolver'
 
@@ -86,6 +87,8 @@ export abstract class AwstBuildContext {
    */
   abstract get switchLoopCtx(): SwitchLoopContext
 
+  abstract get importCtx(): ImportContext
+
   abstract addStorageDeclaration(declaration: AppStorageDeclaration): void
   abstract addArc4Config(methodData: {
     contractReference: ContractReference
@@ -147,6 +150,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
     private readonly storageDeclarations: DefaultMap<string, Map<string, AppStorageDeclaration>>,
     private readonly arc4MethodConfig: DefaultMap<string, Map<string, ARC4MethodConfig>>,
     compilationSet: CompilationSet,
+    public readonly importCtx: ImportContext,
   ) {
     super()
     this.typeChecker = program.getTypeChecker()
@@ -211,6 +215,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
       new DefaultMap(),
       new DefaultMap(),
       new CompilationSet(),
+      new ImportContext(),
     )
   }
 
@@ -226,6 +231,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
       this.storageDeclarations,
       this.arc4MethodConfig,
       this.#compilationSet,
+      this.importCtx,
     )
   }
 

@@ -5,7 +5,7 @@ class QuickFixContext {
   #quickFixes: QuickFix[] = []
 
   get quickFixes(): ReadonlyArray<QuickFix> {
-    return this.quickFixes
+    return this.#quickFixes
   }
 
   registerQuickFix(quickFix: QuickFix) {
