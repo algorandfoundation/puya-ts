@@ -8,7 +8,7 @@ import { codeInvariant, expandMaybeArray, invariant } from '../../util'
 import type { ModuleStatements } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import type { ImportedSymbol, SourceFileImports } from '../context/import-context'
+import type { ImportedSymbol, SourceFileImports } from '../context/diagnostics-context'
 import { requireInstanceBuilder } from '../eb/util'
 import { ContractClassPType, LogicSigPType } from '../ptypes'
 import { ARC4StructType } from '../ptypes/arc4-types'
@@ -27,7 +27,7 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
 
   constructor(sourceFile: ts.SourceFile) {
     super()
-    this._imports = this.context.importCtx.forSourceFile(sourceFile.fileName)
+    this._imports = this.context.diagnosticsCtx.importsForSourceFile(sourceFile.fileName)
     for (const statement of sourceFile.statements) {
       try {
         this._moduleStatements.push(this.accept(statement))

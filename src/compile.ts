@@ -2,6 +2,7 @@ import type ts from 'typescript'
 import type { AWST } from './awst/nodes'
 import { validateAwst } from './awst/validation'
 import { buildAwst } from './awst_build'
+import type { SourceFileDiagnostics } from './awst_build/context/diagnostics-context'
 import type { CompilationSet } from './awst_build/models/contract-class-model'
 import { registerPTypes } from './awst_build/ptypes/register'
 import { typeRegistry } from './awst_build/type-registry'
@@ -15,6 +16,7 @@ export type CompileResult = {
   awst?: AWST[]
   ast?: Record<string, ts.SourceFile>
   compilationSet?: CompilationSet
+  diagnostics?: SourceFileDiagnostics
 }
 
 export async function compile(options: CompileOptions): Promise<CompileResult> {
@@ -28,7 +30,7 @@ export async function compile(options: CompileOptions): Promise<CompileResult> {
       ast: programResult.sourceFiles,
     }
   }
-  const [moduleAwst, compilationSet] = buildAwst(programResult, options)
+  const { moduleAwst, compilationSet, diagnostics } = buildAwst(programResult, options)
   validateAwst(moduleAwst)
 
   if (loggerCtx.hasErrors()) {
@@ -38,6 +40,7 @@ export async function compile(options: CompileOptions): Promise<CompileResult> {
       awst: moduleAwst,
       ast: programResult.sourceFiles,
       compilationSet,
+      diagnostics,
     }
   }
   if (!options.dryRun) {
@@ -55,5 +58,6 @@ export async function compile(options: CompileOptions): Promise<CompileResult> {
     awst: moduleAwst,
     ast: programResult.sourceFiles,
     compilationSet,
+    diagnostics,
   }
 }

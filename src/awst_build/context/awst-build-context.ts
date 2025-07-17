@@ -17,8 +17,8 @@ import type { ContractClassPType, PType } from '../ptypes'
 import { arc4BaseContractType, baseContractType, ClusteredContractClassType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
 import { TypeResolver } from '../type-resolver'
+import { DiagnosticsContext } from './diagnostics-context'
 import { EvaluationContext } from './evaluation-context'
-import { ImportContext } from './import-context'
 import { SwitchLoopContext } from './switch-loop-context'
 import { UniqueNameResolver } from './unique-name-resolver'
 
@@ -87,7 +87,7 @@ export abstract class AwstBuildContext {
    */
   abstract get switchLoopCtx(): SwitchLoopContext
 
-  abstract get importCtx(): ImportContext
+  abstract get diagnosticsCtx(): DiagnosticsContext
 
   abstract addStorageDeclaration(declaration: AppStorageDeclaration): void
   abstract addArc4Config(methodData: {
@@ -150,7 +150,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
     private readonly storageDeclarations: DefaultMap<string, Map<string, AppStorageDeclaration>>,
     private readonly arc4MethodConfig: DefaultMap<string, Map<string, ARC4MethodConfig>>,
     compilationSet: CompilationSet,
-    public readonly importCtx: ImportContext,
+    public readonly diagnosticsCtx: DiagnosticsContext,
   ) {
     super()
     this.typeChecker = program.getTypeChecker()
@@ -215,7 +215,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
       new DefaultMap(),
       new DefaultMap(),
       new CompilationSet(),
-      new ImportContext(),
+      new DiagnosticsContext(),
     )
   }
 
@@ -231,7 +231,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
       this.storageDeclarations,
       this.arc4MethodConfig,
       this.#compilationSet,
-      this.importCtx,
+      this.diagnosticsCtx,
     )
   }
 

@@ -8,12 +8,19 @@ import { invariant } from '../util'
 import { ArtifactKind, writeArtifact } from '../write-artifact'
 import { SourceFileVisitor } from './ast-visitors/source-file-visitor'
 import { AwstBuildContext } from './context/awst-build-context'
+import type { SourceFileDiagnostics } from './context/diagnostics-context'
 import { buildLibAwst } from './lib'
 import type { CompilationSet } from './models/contract-class-model'
 
 type BuildAwstOptions = Pick<CompileOptions, 'filePaths' | 'outputAwst' | 'outputAwstJson'>
 
-export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: BuildAwstOptions): [AWST[], CompilationSet] {
+type AwstBuildResult = {
+  moduleAwst: AWST[]
+  compilationSet: CompilationSet
+  diagnostics: SourceFileDiagnostics
+}
+
+export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: BuildAwstOptions): AwstBuildResult {
   return AwstBuildContext.run(program, () => {
     const moduleAwst: AWST[] = buildLibAwst()
     for (const [sourcePath, sourceFile] of Object.entries(sourceFiles)) {
@@ -54,6 +61,10 @@ export function buildAwst({ program, sourceFiles }: CreateProgramResult, options
         logger.error(e)
       }
     }
-    return [moduleAwst, AwstBuildContext.current.compilationSet]
+    return {
+      moduleAwst,
+      compilationSet: AwstBuildContext.current.compilationSet,
+      diagnostics: AwstBuildContext.current.diagnosticsCtx.export(),
+    }
   })
 }
