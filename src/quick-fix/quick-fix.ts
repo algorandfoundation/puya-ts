@@ -1,14 +1,19 @@
 import type { SourceLocation } from '../awst/source-location'
-import type { PType } from '../awst_build/ptypes'
 import type { LogLevel } from '../logger'
 import type { TextEdit } from '../text-edit'
+
+export type RequiredSymbol = {
+  name: string
+  module: string
+  typeOnly?: boolean
+}
 
 export abstract class QuickFix {
   readonly logLevel: LogLevel
   readonly message: string
   readonly sourceLocation: SourceLocation
   readonly edits: readonly TextEdit[]
-  readonly requiredSymbols: readonly PType[]
+  readonly requiredSymbols: readonly RequiredSymbol[]
 
   protected constructor({
     logLevel,
@@ -21,7 +26,7 @@ export abstract class QuickFix {
     sourceLocation: SourceLocation
     message: string
     edits: TextEdit[]
-    requiredSymbols: PType[]
+    requiredSymbols: RequiredSymbol[]
   }) {
     this.logLevel = logLevel
     this.message = message

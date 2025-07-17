@@ -1,8 +1,9 @@
 import ts from 'typescript'
 import type { SourceLocation } from '../awst/source-location'
-import { uint64PType } from '../awst_build/ptypes'
+import { Constants } from '../constants'
 import { LogLevel } from '../logger'
 import type { TextEdit } from '../text-edit'
+import { getNodeRange } from '../text-edit'
 import { QuickFix } from './quick-fix'
 
 export class GlobalStateNumber extends QuickFix {
@@ -12,7 +13,13 @@ export class GlobalStateNumber extends QuickFix {
       message: 'Global state number bad!',
       logLevel: LogLevel.Error,
       edits: GlobalStateNumber.buildEdits(sourceLocation.node),
-      requiredSymbols: [uint64PType],
+      requiredSymbols: [
+        {
+          name: 'uint64',
+          module: Constants.algoTsPackage,
+          typeOnly: true,
+        },
+      ],
     })
   }
 
@@ -20,23 +27,20 @@ export class GlobalStateNumber extends QuickFix {
     if (!node || !ts.isCallExpression(node)) return []
 
     if (node.typeArguments?.length) {
-      return []
+      return [
+        {
+          range: getNodeRange(node.typeArguments[0]),
+          newText: 'uint64',
+        },
+      ]
     } else {
-      const sourceFile = node.getSourceFile()
-
-      const afterExpression = sourceFile.getLineAndCharacterOfPosition(node.expression.getEnd())
+      const afterExpression = getNodeRange(node.expression).end
 
       return [
         {
           range: {
-            start: {
-              line: afterExpression.line,
-              col: afterExpression.character,
-            },
-            end: {
-              line: afterExpression.line,
-              col: afterExpression.character,
-            },
+            start: afterExpression,
+            end: afterExpression,
           },
           newText: '<uint64>',
         },

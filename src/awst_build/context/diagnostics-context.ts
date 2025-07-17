@@ -1,8 +1,7 @@
 import { logger } from '../../logger'
-import type { QuickFix } from '../../quick-fix/quick-fix'
+import type { QuickFix, RequiredSymbol } from '../../quick-fix/quick-fix'
 import type { Position, TextEdit } from '../../text-edit'
-import { invariant } from '../../util'
-import type { PType } from '../ptypes'
+import { distinct, invariant, sortBy } from '../../util'
 
 export type SourceFileDiagnostics = {
   [sourceFile: string]: {
@@ -31,7 +30,25 @@ export class DiagnosticsContext {
   }
 
   export(): SourceFileDiagnostics {
-    return {}
+    const result: SourceFileDiagnostics = {}
+
+    for (const [file, imports] of Object.entries(this.sourceFiles)) {
+      result[file] = {
+        imports,
+        quickFixes: [],
+      }
+    }
+    for (const [file, fixes] of Object.entries(this.quickFixes)) {
+      if (!(file in result)) {
+        result[file] = {
+          imports: new SourceFileImports(),
+          quickFixes: fixes,
+        }
+      } else {
+        result[file].quickFixes = fixes
+      }
+    }
+    return result
   }
 }
 
@@ -42,18 +59,21 @@ export class SourceFileImports {
     this.statements.push(statement)
   }
 
-  generateEdits(ptypes: PType[]): TextEdit[] {
-    const textEdits: TextEdit[] = []
+  generateEdits(requiredSymbols: RequiredSymbol[]): TextEdit[] {
+    // Filter to distinct symbols
+    // Prioritise keeping !typeOnly imports
+    requiredSymbols = requiredSymbols.toSorted(sortBy((x) => Number(x.typeOnly))).filter(distinct((x) => `${x.module}::${x.name}`))
 
+    const textEdits: TextEdit[] = []
     const newImports: Record<string, string[]> = {}
 
-    ptypeLoop: for (const ptype of ptypes) {
+    ptypeLoop: for (const requiredSymbol of requiredSymbols) {
       for (const statement of this.statements) {
         if (!statement.insertLocation) continue
-        if (ptype.module !== statement.modulePath) continue
-        if (ptype.singleton && statement.typeOnly) continue
+        if (requiredSymbol.module !== statement.modulePath) continue
+        if (!requiredSymbol.typeOnly && statement.typeOnly) continue
         textEdits.push({
-          newText: `${ptype.name} ,`,
+          newText: `${requiredSymbol.name}, `,
           range: {
             start: statement.insertLocation,
             end: statement.insertLocation,
@@ -61,15 +81,15 @@ export class SourceFileImports {
         })
         continue ptypeLoop
       }
-      if (ptype.module in newImports) {
-        newImports[ptype.module].push(ptype.name)
+      if (requiredSymbol.module in newImports) {
+        newImports[requiredSymbol.module].push(requiredSymbol.name)
       } else {
-        newImports[ptype.module] = [ptype.name]
+        newImports[requiredSymbol.module] = [requiredSymbol.name]
       }
     }
     for (const [module, names] of Object.entries(newImports)) {
       textEdits.push({
-        newText: `import { ${names.join(', ')} } from '${module}'`,
+        newText: `import { ${names.join(', ')} } from '${module}'\n`,
         range: {
           start: { line: 0, col: 0 },
           end: { line: 0, col: 0 },
