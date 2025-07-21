@@ -1,8 +1,8 @@
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { abimethod, arc4, clone, Contract, LocalState, Txn } from '@algorandfoundation/algorand-typescript'
-import type { StaticArray, UintN } from '@algorandfoundation/algorand-typescript/arc4'
+import type { StaticArray, Uint } from '@algorandfoundation/algorand-typescript/arc4'
 
-type SampleArray = StaticArray<UintN<64>, 10>
+type SampleArray = StaticArray<Uint<64>, 10>
 type Data = { a: uint64; b: bytes; c: boolean; d: arc4.Str }
 
 export class LocalStateDemo extends Contract {

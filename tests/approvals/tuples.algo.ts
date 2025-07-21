@@ -1,13 +1,13 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { Contract } from '@algorandfoundation/algorand-typescript'
-import type { UintN64 } from '@algorandfoundation/algorand-typescript/arc4'
+import type { Uint64 } from '@algorandfoundation/algorand-typescript/arc4'
 import { Tuple } from '@algorandfoundation/algorand-typescript/arc4'
 
 class TuplesAlgo extends Contract {
-  test(a: UintN64, b: UintN64, c: UintN64) {
+  test(a: Uint64, b: Uint64, c: Uint64) {
     const readonlyTuple = [a, b, c] as const
 
-    const mutableTuple: [UintN64, UintN64, UintN64] = [a, b, c]
+    const mutableTuple: [Uint64, Uint64, Uint64] = [a, b, c]
 
     const arc4Tuple = new Tuple(a, b, c)
 
@@ -25,12 +25,12 @@ class TuplesAlgo extends Contract {
     const [h] = mutableTuple
   }
 
-  private receiveReadonly(arg: readonly [UintN64, UintN64, UintN64]): uint64 {
+  private receiveReadonly(arg: readonly [Uint64, Uint64, Uint64]): uint64 {
     return arg.length
   }
 
-  private receiveMutable(arg: [UintN64, UintN64, UintN64]): uint64 {
-    //arg[0] = new UintN64(4)
+  private receiveMutable(arg: [Uint64, Uint64, Uint64]): uint64 {
+    //arg[0] = new Uint64(4)
     return arg.length
   }
 }

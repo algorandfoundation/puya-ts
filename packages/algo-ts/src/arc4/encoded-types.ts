@@ -67,7 +67,7 @@ type BigUintBitSize =
   | 504
   | 512
 /**
- * Defines supported bit sizes for the UintN and UFixedNxM types
+ * Defines supported bit sizes for the UintN and UFixed types
  */
 export type BitSize = UintBitSize | BigUintBitSize
 /**
@@ -133,9 +133,9 @@ export class Str extends ARC4Encoded {
 /**
  * A fixed bit size unsigned int
  */
-export class UintN<N extends BitSize> extends ARC4Encoded {
+export class Uint<N extends BitSize> extends ARC4Encoded {
   /** @hidden */
-  [TypeProperty]?: `arc4.UintN<${N}>`
+  [TypeProperty]?: `arc4.Uint<${N}>`
 
   /**
    * Create a new UintN instance
@@ -154,49 +154,49 @@ export class UintN<N extends BitSize> extends ARC4Encoded {
 }
 
 /**
- * An alias for UintN<8>
+ * An alias for Uint<8>
  */
-export class Byte extends UintN<8> {}
+export class Byte extends Uint<8> {}
 
 /**
- * An alias for UintN<8>
+ * An alias for Uint<8>
  */
-export class UintN8 extends UintN<8> {}
+export class Uint8 extends Uint<8> {}
 
 /**
- * An alias for UintN<16>
+ * An alias for Uint<16>
  */
-export class UintN16 extends UintN<16> {}
+export class Uint16 extends Uint<16> {}
 
 /**
- * An alias for UintN<32>
+ * An alias for Uint<32>
  */
-export class UintN32 extends UintN<32> {}
+export class Uint32 extends Uint<32> {}
 
 /**
- * An alias for UintN<64>
+ * An alias for Uint<64>
  */
-export class UintN64 extends UintN<64> {}
+export class Uint64 extends Uint<64> {}
 
 /**
- * An alias for UintN<128>
+ * An alias for Uint<128>
  */
-export class UintN128 extends UintN<128> {}
+export class Uint128 extends Uint<128> {}
 
 /**
- * An alias for UintN<256>
+ * An alias for Uint<256>
  */
-export class UintN256 extends UintN<256> {}
+export class Uint256 extends Uint<256> {}
 
 /**
  * A fixed bit size, fixed decimal unsigned value
  */
-export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded {
+export class UFixed<N extends BitSize, M extends number> extends ARC4Encoded {
   /** @hidden */
-  [TypeProperty]?: `arc4.UFixedNxM<${N}x${M}>`
+  [TypeProperty]?: `arc4.UFixed<${N}x${M}>`
 
   /**
-   * Create a new UFixedNxM value
+   * Create a new UFixed value
    * @param v A string representing the integer and fractional portion of the number
    */
   constructor(v?: `${number}.${number}`) {
@@ -489,7 +489,7 @@ type StructConstructor = {
  *
  * Usage:
  * ```
- * class MyStruct extends Struct<{ x: UintN8, y: Str, z: DynamicBytes }> { }
+ * class MyStruct extends Struct<{ x: Uint8, y: Str, z: DynamicBytes }> { }
  * ```
  */
 export const Struct = StructBase as unknown as StructConstructor

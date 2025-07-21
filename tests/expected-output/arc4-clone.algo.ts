@@ -1,6 +1,6 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { Contract, FixedArray, Uint64 } from '@algorandfoundation/algorand-typescript'
-import { DynamicArray, StaticArray, UintN8 } from '@algorandfoundation/algorand-typescript/arc4'
+import { DynamicArray, StaticArray, Uint8 } from '@algorandfoundation/algorand-typescript/arc4'
 
 export class Arc4CloneAlgo extends Contract {
   aliasing(mutable: uint64[], mutObj: { a: uint64 }, immutableArr: readonly uint64[], immutableObj: { readonly a: uint64 }) {
@@ -56,7 +56,7 @@ export class Arc4CloneAlgo extends Contract {
     // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being used in an object literal
     const o4 = { ...o3 }
 
-    const m6 = new DynamicArray(new UintN8(1))
+    const m6 = new DynamicArray(new Uint8(1))
 
     // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being passed to a DynamicArray constructor
     const m7 = new DynamicArray(m6)

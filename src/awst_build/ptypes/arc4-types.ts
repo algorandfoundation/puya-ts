@@ -31,27 +31,27 @@ export const ByteClass = new LibClassType({
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const UintN8Class = new LibClassType({
-  name: 'UintN8',
+  name: 'Uint8',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const UintN16Class = new LibClassType({
-  name: 'UintN16',
+  name: 'Uint16',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const UintN32Class = new LibClassType({
-  name: 'UintN32',
+  name: 'Uint32',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const UintN64Class = new LibClassType({
-  name: 'UintN64',
+  name: 'Uint64',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const UintN128Class = new LibClassType({
-  name: 'UintN128',
+  name: 'Uint128',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const UintN256Class = new LibClassType({
-  name: 'UintN256',
+  name: 'Uint256',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export abstract class ARC4EncodedType extends PType {
@@ -288,7 +288,7 @@ export class ARC4TupleType extends ARC4EncodedType {
   }
 }
 export const UintNGeneric = new GenericPType({
-  name: 'UintN',
+  name: 'Uint',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
   parameterise(typeArgs: readonly PType[]): UintNType {
     codeInvariant(typeArgs.length === 1, 'UintNType type expects exactly one type parameter')
@@ -320,7 +320,7 @@ export class UintNType extends ARC4EncodedType {
     codeInvariant(n >= 8n && n <= 512n && n % 8n === 0n, 'n must be between 8 and 512, and a multiple of 8')
     this.n = n
     this.fixedBitSize = this.n
-    this.name = name ?? `UintN<${n}>`
+    this.name = name ?? `Uint<${n}>`
     this.wtype = wtype ?? new wtypes.ARC4UIntN({ n: this.n })
     this.abiTypeSignature = wtype?.arc4Alias ?? `uint${n}`
   }
@@ -330,7 +330,7 @@ export class UintNType extends ARC4EncodedType {
   }
 }
 export const UFixedNxMGeneric = new GenericPType({
-  name: 'UFixedNxM',
+  name: 'UFixed',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
   parameterise(typeArgs: readonly PType[]) {
     codeInvariant(typeArgs.length === 2, `${this.name} expects exactly 2 generic type parameters`)

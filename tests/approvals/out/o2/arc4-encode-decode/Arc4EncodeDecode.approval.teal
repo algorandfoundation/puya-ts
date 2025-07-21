@@ -368,14 +368,14 @@ main_while_top@18:
 
 main_after_while@21:
     // tests/approvals/arc4-encode-decode.algo.ts:29
-    // assert(encodeArc4(c) === new UintN<512>(c).bytes)
+    // assert(encodeArc4(c) === new Uint<512>(c).bytes)
     dig 9
     len
     pushint 64 // 64
     <=
     assert // overflow
     // tests/approvals/arc4-encode-decode.algo.ts:32
-    // assert(encodeArc4({ a, b: d }) === new TestStruct({ a: new UintN64(a), b: new DynamicBytes(d) }).bytes)
+    // assert(encodeArc4({ a, b: d }) === new TestStruct({ a: new Uint64(a), b: new DynamicBytes(d) }).bytes)
     dig 1
     itob
     dig 9
@@ -418,7 +418,7 @@ main_after_while@21:
     ==
     assert // invalid size
     // tests/approvals/arc4-encode-decode.algo.ts:38
-    // assert(encodeArc4([a]) === new StaticArray(new UintN64(a)).bytes)
+    // assert(encodeArc4([a]) === new StaticArray(new Uint64(a)).bytes)
     dig 3
     dig 2
     ==
@@ -465,7 +465,7 @@ main_after_while@21:
     ==
     assert
     // tests/approvals/arc4-encode-decode.algo.ts:46
-    // assert(encodeArc4<uint64[]>([a]) === new DynamicArray(new UintN64(a)).bytes)
+    // assert(encodeArc4<uint64[]>([a]) === new DynamicArray(new Uint64(a)).bytes)
     bytec_0 // 0x0001
     uncover 7
     concat

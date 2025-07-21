@@ -1,7 +1,7 @@
 import type { Account, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, BaseContract, Box, BoxMap, BoxRef, Bytes, Contract, Txn } from '@algorandfoundation/algorand-typescript'
-import type { Bool, DynamicArray, StaticArray, Tuple, UintN32 } from '@algorandfoundation/algorand-typescript/arc4'
-import { UintN8 } from '@algorandfoundation/algorand-typescript/arc4'
+import type { Bool, DynamicArray, StaticArray, Tuple, Uint32 } from '@algorandfoundation/algorand-typescript/arc4'
+import { Uint8 } from '@algorandfoundation/algorand-typescript/arc4'
 import { itob } from '@algorandfoundation/algorand-typescript/op'
 
 const boxA = Box<string>({ key: Bytes('A') })
@@ -130,9 +130,9 @@ class BoxCreate extends Contract {
   boxArc4Bool = Box<Bool>({ key: 'arc4b' })
   boxStr = Box<string>({ key: 'a' })
   boxUint = Box<uint64>({ key: 'b' })
-  boxStaticArray = Box<StaticArray<UintN32, 10>>({ key: 'c' })
-  boxDynamicArray = Box<DynamicArray<UintN8>>({ key: 'd' })
-  boxTuple = Box<Tuple<[UintN8, UintN8, Bool, Bool]>>({ key: 'e' })
+  boxStaticArray = Box<StaticArray<Uint32, 10>>({ key: 'c' })
+  boxDynamicArray = Box<DynamicArray<Uint8>>({ key: 'd' })
+  boxTuple = Box<Tuple<[Uint8, Uint8, Bool, Bool]>>({ key: 'e' })
 
   createBoxes() {
     this.boxStr.create({ size: 10 })
@@ -222,7 +222,7 @@ class TupleBox extends Contract {
 }
 
 class BoxToRefTest extends Contract {
-  boxMap = BoxMap<Account, StaticArray<UintN8, 4>>({ keyPrefix: '' })
+  boxMap = BoxMap<Account, StaticArray<Uint8, 4>>({ keyPrefix: '' })
 
   test() {
     const boxForCaller = this.boxMap(Txn.sender)
@@ -231,7 +231,7 @@ class BoxToRefTest extends Contract {
 
     const boxRef = boxForCaller.ref
 
-    boxRef.replace(0, new UintN8(123).bytes)
+    boxRef.replace(0, new Uint8(123).bytes)
 
     assert(boxForCaller.value[0].native === 123, 'First array item in box should be 123')
   }

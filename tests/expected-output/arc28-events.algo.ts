@@ -17,10 +17,10 @@ class EventEmitter extends Contract {
     // @expect-error Invalid signature: Tuple has not been closed
     emit('Swapped(uint64', b)
 
-    // @expect-error Expected type UintN<16> does not match actual type UintN<64>
+    // @expect-error Expected type Uint<16> does not match actual type Uint<64>
     emit('Swapped(uint16,uint64)', b, a)
 
-    // @expect-error Expected type DynamicArray<UintN<64>> does not match actual type Tuple<UintN<64>,UintN<64>>
+    // @expect-error Expected type DynamicArray<Uint<64>> does not match actual type Tuple<Uint<64>,Uint<64>>
     emit('Swapped(uint64[],uint64)', [b, b] as const, a)
   }
 

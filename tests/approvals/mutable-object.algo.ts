@@ -1,9 +1,9 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { arc4, assert, assertMatch, Box, BoxMap, clone, Contract, log } from '@algorandfoundation/algorand-typescript'
-import { encodeArc4, methodSelector, UintN } from '@algorandfoundation/algorand-typescript/arc4'
+import { encodeArc4, methodSelector, Uint } from '@algorandfoundation/algorand-typescript/arc4'
 
-type ARC4Uint64 = UintN<64>
-const ARC4Uint64 = UintN<64>
+type ARC4Uint64 = Uint<64>
+const ARC4Uint64 = Uint<64>
 
 type Vector = { x: uint64; y: uint64 }
 type Point = { y: uint64; x: uint64 }
@@ -117,20 +117,20 @@ export class MutableObjectDemo extends Contract {
   }
 
   // public setLastCalled(key: string, index: uint64, lastCalled: uint64) {
-  //   this.plugins(key).value.methods[index].lastCalled = new arc4.UintN64(lastCalled)
+  //   this.plugins(key).value.methods[index].lastCalled = new arc4.Uint64(lastCalled)
   // }
 
   public setPlugin(key: string) {
     this.plugins(key).value = {
-      lastValidRound: new arc4.UintN64(1),
-      cooldown: new arc4.UintN64(),
-      lastCalled: new arc4.UintN64(),
+      lastValidRound: new arc4.Uint64(1),
+      cooldown: new arc4.Uint64(),
+      lastCalled: new arc4.Uint64(),
       adminPrivileges: new arc4.Bool(false),
       methods: [
         {
           selector: new arc4.StaticBytes(methodSelector('test()void')),
-          cooldown: new arc4.UintN64(1),
-          lastCalled: new arc4.UintN64(1),
+          cooldown: new arc4.Uint64(1),
+          lastCalled: new arc4.Uint64(1),
         },
       ],
     }
@@ -139,11 +139,11 @@ export class MutableObjectDemo extends Contract {
 
 type PluginInfo = {
   /** The last round at which this plugin can be called */
-  lastValidRound: arc4.UintN64
+  lastValidRound: arc4.Uint64
   /** The number of rounds that must pass before the plugin can be called again */
   cooldown: ARC4Uint64
   /** The last round the plugin was called */
-  lastCalled: arc4.UintN64
+  lastCalled: arc4.Uint64
   /** Whether the plugin has permissions to change the admin account */
   adminPrivileges: arc4.Bool
   /** The methods that are allowed to be called for the plugin by the address */
@@ -156,5 +156,5 @@ type MethodInfo = {
   /** The number of rounds that must pass before the method can be called again */
   cooldown: ARC4Uint64
   /** The last round the method was called */
-  lastCalled: arc4.UintN64
+  lastCalled: arc4.Uint64
 }

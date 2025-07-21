@@ -16,7 +16,7 @@ main_block@0:
     // testStr()
     callsub testStr
     // tests/approvals/arc4-types.algo.ts:165
-    // testUintN(1, 2n, new UintN<256>(4))
+    // testUintN(1, 2n, new Uint<256>(4))
     intc_2 // 1
     pushbytes 0x02
     pushbytes 0x0000000000000000000000000000000000000000000000000000000000000004
@@ -28,7 +28,7 @@ main_block@0:
     // testByte()
     callsub testByte
     // tests/approvals/arc4-types.algo.ts:168
-    // testArrays(new UintN<64>(65))
+    // testArrays(new Uint<64>(65))
     pushbytes 0x0000000000000041
     callsub testArrays
     // tests/approvals/arc4-types.algo.ts:169
@@ -51,7 +51,7 @@ main_block@0:
     // testZeroValues()
     callsub testZeroValues
     // tests/approvals/arc4-types.algo.ts:175
-    // const result = new arc4.DynamicArray<arc4.UintN<64>>()
+    // const result = new arc4.DynamicArray<arc4.Uint<64>>()
     intc_0 // 0
     itob
     extract 6 2
@@ -164,7 +164,7 @@ testUFixed_block@0:
 // tests/approvals/arc4-types.algo.ts::testUintN(n: uint64, b: bytes, c: bytes) -> void:
 testUintN:
     // tests/approvals/arc4-types.algo.ts:31
-    // function testUintN(n: uint64, b: biguint, c: UintN<256>) {
+    // function testUintN(n: uint64, b: biguint, c: Uint<256>) {
     proto 3 0
 
 testUintN_block@0:
@@ -189,7 +189,7 @@ testUintN_block@0:
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:39
-    // const z = new UintN<8>(n)
+    // const z = new Uint<8>(n)
     frame_dig -3
     itob
     dup
@@ -209,7 +209,7 @@ testUintN_block@0:
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:44
-    // const a = new UintN<128>(b)
+    // const a = new Uint<128>(b)
     frame_dig -2
     len
     pushint 16 // 16
@@ -269,7 +269,7 @@ testStr:
 
 testStr_block@0:
     // tests/approvals/arc4-types.algo.ts:68
-    // assert(s1.bytes === new UintN<16>(0).bytes, 'Empty string should equal the uint16 length prefix')
+    // assert(s1.bytes === new Uint<16>(0).bytes, 'Empty string should equal the uint16 length prefix')
     bytec_1 // ""
     len
     itob
@@ -327,7 +327,7 @@ testDynamicBytes_block@0:
     ==
     assert // No args should give empty bytes
     // tests/approvals/arc4-types.algo.ts:82
-    // assert(db1.bytes === new UintN<16>(0).bytes, 'bytes prop should return length header (of 0)')
+    // assert(db1.bytes === new Uint<16>(0).bytes, 'bytes prop should return length header (of 0)')
     bytec_3 // 0x0000
     dup
     ==
@@ -754,7 +754,7 @@ testZeroValues:
 
 testZeroValues_block@0:
     // tests/approvals/arc4-types.algo.ts:182
-    // assert(new StaticArray<UintN8, 4>().bytes === new StaticArray(new UintN8(0), new UintN8(0), new UintN8(0), new UintN8(0)).bytes)
+    // assert(new StaticArray<Uint8, 4>().bytes === new StaticArray(new Uint8(0), new Uint8(0), new Uint8(0), new Uint8(0)).bytes)
     pushint 4 // 4
     bzero
     bytec_1 // 0x
@@ -976,7 +976,7 @@ testZeroValues_block@0:
     // )
     assert
     // tests/approvals/arc4-types.algo.ts:198
-    // assert(new DynamicArray<UintN8>().bytes === bzero(2))
+    // assert(new DynamicArray<Uint8>().bytes === bzero(2))
     intc_0 // 0
     itob
     extract 6 2
@@ -1067,7 +1067,7 @@ testZeroValues_block@0:
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:207
-    // assert(new UFixedNxM<32, 4>().bytes === bzero(32 / 8))
+    // assert(new UFixed<32, 4>().bytes === bzero(32 / 8))
     pushint 4 // 4
     bzero
     bytec 8 // 0x00000000
@@ -1084,7 +1084,7 @@ testZeroValues_block@0:
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:209
-    // assert(new UintN32().bytes === bzero(32 / 8))
+    // assert(new Uint32().bytes === bzero(32 / 8))
     pushint 4 // 4
     bzero
     bytec 8 // 0x00000000

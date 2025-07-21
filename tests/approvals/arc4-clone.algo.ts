@@ -4,11 +4,11 @@ import { arc4, assert, clone, Contract, Uint64 } from '@algorandfoundation/algor
 // This struct is shared
 class SharedStruct extends arc4.Struct<{
   foo: arc4.DynamicBytes
-  bar: arc4.UintN8
+  bar: arc4.Uint8
 }> {}
 
 class TopLevelStruct extends arc4.Struct<{
-  a: arc4.UintN64
+  a: arc4.Uint64
   b: arc4.Str
   shared: SharedStruct
 }> {}

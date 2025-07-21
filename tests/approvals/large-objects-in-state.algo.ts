@@ -1,6 +1,6 @@
 import type { FixedArray, gtxn, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assertMatch, Box, Contract, Global } from '@algorandfoundation/algorand-typescript'
-import type { UintN8 } from '@algorandfoundation/algorand-typescript/arc4'
+import type { Uint8 } from '@algorandfoundation/algorand-typescript/arc4'
 
 const MAX_ITEMS = 800
 
@@ -9,7 +9,7 @@ const BOX_BASE_MBR = 2500
 const BOX_MBR_PER_BYTE = 400
 const BOX_MBR = BOX_BASE_MBR + BOX_MBR_PER_BYTE * (MAX_ITEMS * (8 + 1) + 1)
 
-type Counts = { x: uint64; y: UintN8 }
+type Counts = { x: uint64; y: Uint8 }
 
 class LargeObjectsInStateAlgo extends Contract {
   storage = Box<FixedArray<Counts, typeof MAX_ITEMS>>({ key: 'x' })

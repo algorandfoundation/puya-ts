@@ -1,6 +1,6 @@
 import type { arc4, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, assertMatch, clone, Contract, ensureBudget, FixedArray, Uint64 } from '@algorandfoundation/algorand-typescript'
-import { Bool, DynamicArray, StaticArray, UintN32 } from '@algorandfoundation/algorand-typescript/arc4'
+import { Bool, DynamicArray, StaticArray, Uint32 } from '@algorandfoundation/algorand-typescript/arc4'
 
 type Vector = { x: uint64; y: uint64 }
 export class NativeArraysAlgo extends Contract {
@@ -141,7 +141,7 @@ export class NativeArraysAlgo extends Contract {
     const z4 = new FixedArray<Vector, 4>()
     assert(z4.length === 4)
 
-    const z5 = new FixedArray<arc4.UintN<64>, 4>()
+    const z5 = new FixedArray<arc4.Uint<64>, 4>()
     assert(z5.length === 4)
 
     const z6 = new FixedArray<[uint64, boolean], 4>()
@@ -149,7 +149,7 @@ export class NativeArraysAlgo extends Contract {
   }
 
   arc4Interop() {
-    const u1 = new UintN32(123)
+    const u1 = new Uint32(123)
 
     const da1 = new DynamicArray(u1, u1)
     const sa1 = new StaticArray(u1, u1)

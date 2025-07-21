@@ -20,7 +20,7 @@ import {
   urange,
 } from '@algorandfoundation/algorand-typescript'
 
-type VoteIndexArray = arc4.DynamicArray<arc4.UintN<8>>
+type VoteIndexArray = arc4.DynamicArray<arc4.Uint<8>>
 
 const VOTE_INDEX_BYTES: uint64 = 1
 const VOTE_COUNT_BYTES: uint64 = 8
