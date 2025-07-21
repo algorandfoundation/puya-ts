@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 6 5 3 1000
-    bytecblock 0x098101 0x09361a00b08101 "name" "1" "unit" "2" 0x34 "AST1" "AST2" "AST3" "3" "5" 0x68656c6c6f "3rd" "with args param set" "42" "10" "11" "12" "13" "14" "15" "16"
+    bytecblock 0x098101 0x09361a00b08101 "name" "1" "unit" "2" "4" "AST1" "AST2" "AST3" "3" "5" "hello" "3rd" "with args param set" "42" "10" "11" "12" "13" "14" "15" "16"
 
 main_block@0:
     txn ApplicationID
@@ -671,11 +671,11 @@ test2_after_if_else@11:
 test2_else_body@2:
     // tests/approvals/itxn.algo.ts:86
     // appArgs: [Bytes('3'), new Str('4'), Bytes('5')],
-    bytec 6 // 0x34
+    bytec 6 // "4"
     len
     itob
     extract 6 2
-    bytec 6 // 0x34
+    bytec 6 // "4"
     concat
     bytec 10 // "3"
     frame_bury 0
@@ -1552,11 +1552,11 @@ test5_block@0:
     swap
     // tests/approvals/itxn.algo.ts:215
     // appArgs: [methodSelector(ItxnReceiver.prototype.receivePay), Uint64(1), new Str('hello')],
-    bytec 12 // 0x68656c6c6f
+    bytec 12 // "hello"
     len
     itob
     extract 6 2
-    bytec 12 // 0x68656c6c6f
+    bytec 12 // "hello"
     concat
     cover 2
     // tests/approvals/itxn.algo.ts:218

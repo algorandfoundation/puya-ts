@@ -35,8 +35,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%5#4: bool = (== tmp%4#5 0x151f7c75)
         (assert tmp%5#4) // Bytes has valid prefix
         let result#2: string = ((extract 6 0) awst_tmp%0#4)
-        let tmp%7#3: bool = (== result#2 "hello world")
-        (assert tmp%7#3)
+        let tmp%7#4: bool = (== result#2 "hello world")
+        (assert tmp%7#4)
         itxn_begin
         ((itxn_field ApplicationArgs) method "greet(string)string")
         ((itxn_field ApplicationArgs) 0x0003616269)
@@ -50,10 +50,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%11#3) // Bytes has valid prefix
         let result2#0: string = ((extract 6 0) awst_tmp%1#2)
         let greetItxn.LastLog#0: bytes = (itxn LastLog)
-        let tmp%13#2: bool = (== result2#0 "hello abi")
-        (assert tmp%13#2)
-        let tmp%15#1: bool = (== greetItxn.LastLog#0 0x151f7c75000968656c6c6f20616269)
-        (assert tmp%15#1)
+        let tmp%13#3: bool = (== result2#0 "hello abi")
+        (assert tmp%13#3)
+        let tmp%16#1: bool = (== greetItxn.LastLog#0 0x151f7c75000968656c6c6f20616269)
+        (assert tmp%16#1)
         itxn_begin
         ((itxn_field ApplicationArgs) method "greet(string)string")
         ((itxn_field ApplicationArgs) 0x000773747562626564)
@@ -62,12 +62,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         itxn_submit
         let awst_tmp%2#1: bytes = (itxn LastLog)
-        let tmp%18#1: bytes = ((extract 0 4) awst_tmp%2#1)
-        let tmp%19#1: bool = (== tmp%18#1 0x151f7c75)
-        (assert tmp%19#1) // Bytes has valid prefix
+        let tmp%19#1: bytes = ((extract 0 4) awst_tmp%2#1)
+        let tmp%20#1: bool = (== tmp%19#1 0x151f7c75)
+        (assert tmp%20#1) // Bytes has valid prefix
         let result3#0: string = ((extract 6 0) awst_tmp%2#1)
-        let tmp%21#1: bool = (== result3#0 "hello stubbed")
-        (assert tmp%21#1)
+        let tmp%22#1: bool = (== result3#0 "hello stubbed")
+        (assert tmp%22#1)
         itxn_begin
         ((itxn_field ApplicationArgs) method "sendGreetings((string,string))string")
         ((itxn_field ApplicationArgs) 0x0004000b0005776f726c64000121)
@@ -76,12 +76,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         itxn_submit
         let awst_tmp%3#0: bytes = (itxn LastLog)
-        let tmp%25#1: bytes = ((extract 0 4) awst_tmp%3#0)
-        let tmp%26#1: bool = (== tmp%25#1 0x151f7c75)
-        (assert tmp%26#1) // Bytes has valid prefix
+        let tmp%27#1: bytes = ((extract 0 4) awst_tmp%3#0)
+        let tmp%28#1: bool = (== tmp%27#1 0x151f7c75)
+        (assert tmp%28#1) // Bytes has valid prefix
         let result4#0: string = ((extract 6 0) awst_tmp%3#0)
-        let tmp%28#1: bool = (== result4#0 "hello world!")
-        (assert tmp%28#1)
+        let tmp%30#0: bool = (== result4#0 "hello world!")
+        (assert tmp%30#0)
         itxn_begin
         ((itxn_field ApplicationArgs) method "delete()void")
         ((itxn_field OnCompletion) 5u)
@@ -131,12 +131,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         itxn_submit
         let awst_tmp%1#1: bytes = (itxn LastLog)
-        let tmp%11#2: bytes = ((extract 0 4) awst_tmp%1#1)
-        let tmp%12#2: bool = (== tmp%11#2 0x151f7c75)
-        (assert tmp%12#2) // Bytes has valid prefix
+        let tmp%12#2: bytes = ((extract 0 4) awst_tmp%1#1)
+        let tmp%13#2: bool = (== tmp%12#2 0x151f7c75)
+        (assert tmp%13#2) // Bytes has valid prefix
         let txn2.returnValue#0: string = ((extract 6 0) awst_tmp%1#1)
-        let tmp%14#1: bool = (== txn2.returnValue#0 "hey world!")
-        (assert tmp%14#1)
+        let tmp%15#1: bool = (== txn2.returnValue#0 "hey world!")
+        (assert tmp%15#1)
         itxn_begin
         ((itxn_field ApplicationArgs) method "delete()void")
         ((itxn_field OnCompletion) 5u)

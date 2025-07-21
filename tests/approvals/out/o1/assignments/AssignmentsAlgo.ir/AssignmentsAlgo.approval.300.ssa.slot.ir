@@ -57,9 +57,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%26#0) // can only call when not creating
         let reinterpret_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
         let reinterpret_Encoded(uint64,uint64)%1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 2)
-        let aggregate%item0%0#1: uint64 = (extract_uint64 reinterpret_Encoded(uint64,uint64)%1#0 0u)
-        let aggregate%item1%0#1: uint64 = (extract_uint64 reinterpret_Encoded(uint64,uint64)%1#0 8u)
-        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testTupleToArray(reinterpret_Encoded(uint64,uint64)%0#0, aggregate%item0%0#1, aggregate%item1%0#1)
+        let aggregate%item0%0#0: uint64 = (extract_uint64 reinterpret_Encoded(uint64,uint64)%1#0 0u)
+        let aggregate%item1%0#0: uint64 = (extract_uint64 reinterpret_Encoded(uint64,uint64)%1#0 8u)
+        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testTupleToArray(reinterpret_Encoded(uint64,uint64)%0#0, aggregate%item0%0#0, aggregate%item1%0#0)
         let tests/approvals/assignments.algo.ts::AssignmentsAlgo.__puya_arc4_router__%0#4: bool = 1u
         goto block@19
     block@8: // testNested_route_L78
@@ -124,10 +124,10 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testAccountDestr
         (assert check%0#0) // account funded
         let (minBalance#0: uint64, check%1#0: bool) = ((acct_params_get AcctMinBalance) awst_tmp%0#0)
         (assert check%1#0) // account funded
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob balance#0)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob minBalance#0)
-        let aggregate%head%1#1: bytes = (concat aggregate%val_as_bytes%0#1 aggregate%val_as_bytes%1#1)
-        return aggregate%head%1#1
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob balance#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob minBalance#0)
+        let aggregate%head%1#0: bytes = (concat aggregate%val_as_bytes%0#0 aggregate%val_as_bytes%1#0)
+        return aggregate%head%1#0
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayDestructure(i_a: Encoded(len+uint64[]), u: uint64, m_a: Encoded(len+uint64[])) -> void:
     block@0: // L34
@@ -145,8 +145,8 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayDestruc
         let tmp%1#2: uint64 = (+ tmp%0#5 1u)
         ((store 0) tmp%1#2)
         (log tmp%0#0)
-        let aggregate%head%1#1: bytes = (concat tmp%0#0 tmp%0#0)
-        let a5#0: Encoded(uint64,uint64,uint64) = (concat aggregate%head%1#1 tmp%0#0)
+        let aggregate%head%1#0: bytes = (concat tmp%0#0 tmp%0#0)
+        let a5#0: Encoded(uint64,uint64,uint64) = (concat aggregate%head%1#0 tmp%0#0)
         let tmp%0#6: uint64 = (load 0)
         let tmp%6#0: bool = (== tmp%0#6 3u)
         (assert tmp%6#0) // logAndReturn called 3 times
@@ -178,11 +178,11 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayNarrowi
     block@0: // L54
         let values%0#0: uint64 = (extract_uint64 m_a#0 2u)
         let tmp%0#0: uint64 = (+ values%0#0 1u)
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob tmp%0#0)
-        let m_a#1: Encoded(len+uint64[]) = ((replace2 2) m_a#0 aggregate%val_as_bytes%0#1)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#0)
+        let m_a#1: Encoded(len+uint64[]) = ((replace2 2) m_a#0 aggregate%val_as_bytes%0#0)
         let tmp%1#0: uint64 = (+ values%0#0 2u)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob tmp%1#0)
-        let direct#1: Encoded(len+uint64[]) = ((replace2 2) m_a#0 aggregate%val_as_bytes%1#1)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%1#0)
+        let direct#1: Encoded(len+uint64[]) = ((replace2 2) m_a#0 aggregate%val_as_bytes%1#0)
         let values%2#0: uint64 = (extract_uint64 m_a#1 2u)
         let values%3#0: uint64 = (extract_uint64 direct#1 2u)
         let tmp%2#0: bool = (!= values%2#0 values%3#0)
@@ -193,10 +193,10 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testTupleToArray
     block@0: // L68
         let values%0#0: uint64 = (extract_uint64 m_t#0 0u)
         let values%1#0: uint64 = (extract_uint64 m_t#0 8u)
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob values%0#0)
-        let aggregate%head%0#1: bytes = (concat 0x0002 aggregate%val_as_bytes%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob values%1#0)
-        let m_a#0: Encoded(len+uint64[]) = (concat aggregate%head%0#1 aggregate%val_as_bytes%1#1)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob values%0#0)
+        let aggregate%head%0#0: bytes = (concat 0x0002 aggregate%val_as_bytes%0#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob values%1#0)
+        let m_a#0: Encoded(len+uint64[]) = (concat aggregate%head%0#0 aggregate%val_as_bytes%1#0)
         let array_length%0#0: uint64 = (extract_uint16 m_a#0 0u)
         let tmp%0#0: bool = (== array_length%0#0 2u)
         let values%2#0: uint64 = (extract_uint64 m_a#0 2u)
@@ -206,10 +206,10 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testTupleToArray
         let tmp%3#0: bool = (== values%4#0 values%1#0)
         let tmp%4#0: bool = (&& tmp%2#0 tmp%3#0)
         (assert tmp%4#0) // assert target is match for conditions
-        let aggregate%val_as_bytes%2#1: bytes[8] = (itob i_t.0#0)
-        let aggregate%head%2#1: bytes = (concat 0x0002 aggregate%val_as_bytes%2#1)
-        let aggregate%val_as_bytes%3#1: bytes[8] = (itob i_t.1#0)
-        let i_a2#0: Encoded(len+uint64[]) = (concat aggregate%head%2#1 aggregate%val_as_bytes%3#1)
+        let aggregate%val_as_bytes%2#0: bytes[8] = (itob i_t.0#0)
+        let aggregate%head%2#0: bytes = (concat 0x0002 aggregate%val_as_bytes%2#0)
+        let aggregate%val_as_bytes%3#0: bytes[8] = (itob i_t.1#0)
+        let i_a2#0: Encoded(len+uint64[]) = (concat aggregate%head%2#0 aggregate%val_as_bytes%3#0)
         let array_length%2#0: uint64 = (extract_uint16 i_a2#0 0u)
         let tmp%10#0: bool = (== array_length%2#0 2u)
         let values%12#0: uint64 = (extract_uint64 i_a2#0 2u)
@@ -223,8 +223,8 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testTupleToArray
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testNested(i_a: Encoded(len+(len+uint64[])[])) -> void:
     block@0: // L78
-        let aggregate%array_length%0#1: uint64 = (extract_uint16 i_a#0 0u)
-        (assert aggregate%array_length%0#1) // index access is out of bounds
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 i_a#0 0u)
+        (assert aggregate%array_length%0#0) // index access is out of bounds
         return 
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNarrowing(a: uint64, b: uint64) -> void:

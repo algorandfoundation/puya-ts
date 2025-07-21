@@ -4,7 +4,7 @@
 // tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram() -> uint64:
 main:
     intcblock 0 8 1 2
-    bytecblock 0x00 0x 0x48656c6c6f 0x0000 base32(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) 0xaabbccddee 0x068101 0x000568656c6c6f 0x00000000
+    bytecblock 0x00 0x "Hello" 0x0000 base32(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) 0xaabbccddee 0x068101 0x000568656c6c6f 0x00000000
 
 main_block@0:
     // tests/approvals/arc4-types.algo.ts:162
@@ -270,22 +270,22 @@ testStr:
 testStr_block@0:
     // tests/approvals/arc4-types.algo.ts:68
     // assert(s1.bytes === new UintN<16>(0).bytes, 'Empty string should equal the uint16 length prefix')
-    bytec_1 // 0x
+    bytec_1 // ""
     len
     itob
     extract 6 2
-    bytec_1 // 0x
+    bytec_1 // ""
     concat
     bytec_3 // 0x0000
     ==
     assert // Empty string should equal the uint16 length prefix
     // tests/approvals/arc4-types.algo.ts:70
     // assert(s2.native === 'Hello')
-    bytec_2 // 0x48656c6c6f
+    bytec_2 // "Hello"
     len
     itob
     extract 6 2
-    bytec_2 // 0x48656c6c6f
+    bytec_2 // "Hello"
     concat
     extract 2 0
     bytec_2 // "Hello"
@@ -293,19 +293,19 @@ testStr_block@0:
     assert
     // tests/approvals/arc4-types.algo.ts:72
     // const s2_bytes = s2.bytes
-    bytec_2 // 0x48656c6c6f
+    bytec_2 // "Hello"
     len
     itob
     extract 6 2
-    bytec_2 // 0x48656c6c6f
+    bytec_2 // "Hello"
     concat
     // tests/approvals/arc4-types.algo.ts:76
     // assert(s2 === s2_from_bytes)
-    bytec_2 // 0x48656c6c6f
+    bytec_2 // "Hello"
     len
     itob
     extract 6 2
-    bytec_2 // 0x48656c6c6f
+    bytec_2 // "Hello"
     concat
     ==
     assert
@@ -730,9 +730,9 @@ testTuple_block@0:
     intc_0 // 0
     intc_1 // 8
     extract3
-    swap
     // tests/approvals/arc4-types.algo.ts:150
     // const firstItemIndexer = t.native[0]
+    swap
     intc_0 // 0
     intc_1 // 8
     extract3
@@ -1035,11 +1035,11 @@ testZeroValues_block@0:
     assert
     // tests/approvals/arc4-types.algo.ts:203
     // assert(new Str().bytes === bzero(2))
-    bytec_1 // 0x
+    bytec_1 // ""
     len
     itob
     extract 6 2
-    bytec_1 // 0x
+    bytec_1 // ""
     concat
     intc_3 // 2
     bzero

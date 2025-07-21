@@ -186,7 +186,8 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         goto continue_looping%0#0 ? block@2 : block@6
     block@2: // for_body_L20
         let array_item%0#0: Encoded(uint64) = extract_value(items#0, item_index_internal%0#1)
-        let temp.1#0: Encoded(uint64) = array_item%0#0
+        let values%0#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(array_item%0#0)
+        let temp.1#0: Encoded(uint64) = values%0#0
         let temp.0#0: uint64 = item_index_internal%0#1
         let index#0: uint64 = temp.0#0
         let v#0: Encoded(uint64) = temp.1#0
@@ -222,13 +223,14 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         goto continue_looping%0#0 ? block@2 : block@6
     block@2: // for_body_L29
         let array_item%0#0: Encoded(uint64,uint64) = extract_value(items#0, item_index_internal%0#1)
-        let temp#0: Encoded(uint64,uint64) = array_item%0#0
+        let values%0#0: Encoded(uint64,uint64) = decode_bytes<Encoded(uint64,uint64)>(array_item%0#0)
+        let temp#0: Encoded(uint64,uint64) = values%0#0
         let tuple_item%0#0: Encoded(uint64) = extract_value(temp#0, 0)
-        let values%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let values%1#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
         let tuple_item%1#0: Encoded(uint64) = extract_value(temp#0, 1)
-        let values%1#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
-        let x#0: uint64 = values%0#0
-        let y#0: uint64 = values%1#0
+        let values%2#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
+        let x#0: uint64 = values%1#0
+        let y#0: uint64 = values%2#0
         let tmp%0#0: uint64 = (+ x#0 y#0)
         let tmp%1#0: uint64 = (+ total#1 tmp%0#0)
         let total#2: uint64 = tmp%1#0
@@ -261,7 +263,8 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         goto continue_looping%0#0 ? block@2 : block@6
     block@2: // for_body_L38
         let array_item%0#0: Encoded(uint64) = extract_value(items#0, item_index_internal%0#1)
-        let temp#0: Encoded(uint64) = array_item%0#0
+        let values%0#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(array_item%0#0)
+        let temp#0: Encoded(uint64) = values%0#0
         let item#0: Encoded(uint64) = temp#0
         let tmp%0#0: uint64 = decode_bytes<uint64>(item#0)
         let tmp%1#0: uint64 = (+ total#1 tmp%0#0)
@@ -295,7 +298,8 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         goto continue_looping%0#0 ? block@2 : block@6
     block@2: // for_body_L47
         let array_item%0#0: Encoded(uint64) = extract_value(items#0, item_index_internal%0#1)
-        let temp#0: Encoded(uint64) = array_item%0#0
+        let values%0#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(array_item%0#0)
+        let temp#0: Encoded(uint64) = values%0#0
         let item#0: Encoded(uint64) = temp#0
         let tmp%0#0: uint64 = decode_bytes<uint64>(item#0)
         let tmp%1#0: uint64 = (+ total#1 tmp%0#0)
@@ -427,7 +431,8 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_pr
         goto continue_looping%1#0 ? block@6 : block@8
     block@6: // for_body_L78
         let array_item%0#0: Encoded(uint64) = extract_value(static_array#0, item_index_internal%0#1)
-        let temp₁.1#0: Encoded(uint64) = array_item%0#0
+        let values%0#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(array_item%0#0)
+        let temp₁.1#0: Encoded(uint64) = values%0#0
         let temp₁.0#0: uint64 = item_index_internal%0#1
         let (a₁.0#0: uint64, a₁.1#0: Encoded(uint64)) = (temp₁.0#0, temp₁.1#0)
         let tmp%1#0: uint64 = (+ i#3 1u)
@@ -464,8 +469,8 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_pr
         goto continue_looping%3#0 ? block@14 : block@16
     block@14: // for_body_L84
         let array_item%1#0: Encoded(uint64) = extract_value(fixed_array#0, item_index_internal%1#1)
-        let values%0#0: uint64 = decode_bytes<uint64>(array_item%1#0)
-        let temp₃.1#0: uint64 = values%0#0
+        let values%1#0: uint64 = decode_bytes<uint64>(array_item%1#0)
+        let temp₃.1#0: uint64 = values%1#0
         let temp₃.0#0: uint64 = item_index_internal%1#1
         let (a₃.0#0: uint64, a₃.1#0: uint64) = (temp₃.0#0, temp₃.1#0)
         let tmp%3#0: uint64 = (+ i#7 1u)
@@ -504,7 +509,8 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_pr
         goto continue_looping%5#0 ? block@22 : block@24
     block@22: // for_body_L90
         let array_item%2#0: Encoded(uint64) = extract_value(dyn_array#0, item_index_internal%2#1)
-        let temp₅.1#0: Encoded(uint64) = array_item%2#0
+        let values%2#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(array_item%2#0)
+        let temp₅.1#0: Encoded(uint64) = values%2#0
         let temp₅.0#0: uint64 = item_index_internal%2#1
         let (a₅.0#0: uint64, a₅.1#0: Encoded(uint64)) = (temp₅.0#0, temp₅.1#0)
         let tmp%5#0: uint64 = (+ i#11 1u)

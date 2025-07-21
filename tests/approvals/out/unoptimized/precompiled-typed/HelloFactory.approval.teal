@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 6 1 4
-    bytecblock 0x 0x151f7c75 "world" base64(CoEBQw==) 0xd0a28200 0x21 0x24378d3c "TEST" "T" 0x68656c6c6f20616269 "hello" "abi" "stubbed" 0x5180ba20 0x4c5c61ba 0x9cd87de3
+    bytecblock 0x 0x151f7c75 "world" base64(CoEBQw==) 0xd0a28200 "!" 0x24378d3c "TEST" "T" "hello abi" "hello" "abi" "stubbed" 0x5180ba20 0x4c5c61ba 0x9cd87de3
 
 main_block@0:
 
@@ -337,11 +337,11 @@ test_compile_contract_next_txn@3:
     assert
     // tests/approvals/precompiled-typed.algo.ts:33
     // assert(greetItxn.lastLog === Bytes.fromHex('151f7c75').concat(new Str('hello abi').bytes))
-    bytec 9 // 0x68656c6c6f20616269
+    bytec 9 // "hello abi"
     len
     itob
     extract 6 2
-    bytec 9 // 0x68656c6c6f20616269
+    bytec 9 // "hello abi"
     concat
     bytec_1 // 0x151f7c75
     swap
@@ -411,11 +411,11 @@ test_compile_contract_next_txn@4:
     frame_dig 0
     // tests/approvals/precompiled-typed.algo.ts:43
     // args: [{ name: 'world', termination: new arc4.Str('!') }],
-    bytec 5 // 0x21
+    bytec 5 // "!"
     len
     itob
     extract 6 2
-    bytec 5 // 0x21
+    bytec 5 // "!"
     concat
     bytec_2 // "world"
     len
@@ -611,11 +611,11 @@ test_compile_contract_with_template_next_txn@2:
     assert
     // tests/approvals/precompiled-typed.algo.ts:65
     // const greeting = { name: 'world', termination: new arc4.Str('!') }
-    bytec 5 // 0x21
+    bytec 5 // "!"
     len
     itob
     extract 6 2
-    bytec 5 // 0x21
+    bytec 5 // "!"
     concat
     bytec_2 // "world"
     len

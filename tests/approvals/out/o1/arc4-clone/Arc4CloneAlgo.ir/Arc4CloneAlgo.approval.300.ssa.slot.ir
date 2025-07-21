@@ -98,7 +98,7 @@ subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.aliasing(mutable: E
 
 subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn(arg: Encoded(uint64,(len+utf8[]),((len+uint8[]),uint8))) -> Encoded((len+uint8[]),uint8):
     block@0: // L53
-        let aggregate%extract_uint16%0#1: uint64 = (extract_uint16 arg#0 10u)
-        let aggregate%len%0#1: uint64 = (len arg#0)
-        let s#0: Encoded((len+uint8[]),uint8) = (substring3 arg#0 aggregate%extract_uint16%0#1 aggregate%len%0#1)
+        let aggregate%extract_uint16%0#0: uint64 = (extract_uint16 arg#0 10u)
+        let aggregate%len%0#0: uint64 = (len arg#0)
+        let s#0: Encoded((len+uint8[]),uint8) = (substring3 arg#0 aggregate%extract_uint16%0#0 aggregate%len%0#0)
         return s#0

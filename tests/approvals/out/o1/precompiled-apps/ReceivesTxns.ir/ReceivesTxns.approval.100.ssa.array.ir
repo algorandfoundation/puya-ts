@@ -11,9 +11,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%4#0) // OnCompletion is not NoOp
         let tmp%5#0: uint64 = (txn ApplicationID)
         (assert tmp%5#0) // can only call when not creating
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 1u)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let tmp%8#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#1
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob 1u)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%8#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
         let tmp%9#0: bytes = (concat 0x151f7c75 tmp%8#0)
         (log tmp%9#0)
         let tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__puya_arc4_router__%0#0: bool = 1u
@@ -27,9 +27,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%14#0: uint64 = (txn GroupIndex)
         let gtxn_idx%0#0: uint64 = (- tmp%14#0 1u)
         let tmp%15#0: uint64 = tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn(gtxn_idx%0#0)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob tmp%15#0)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let tmp%16#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#1
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%15#0)
+        let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
+        let tmp%16#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
         let tmp%17#0: bytes = (concat 0x151f7c75 tmp%16#0)
         (log tmp%17#0)
         let tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__puya_arc4_router__%0#1: bool = 1u
@@ -46,12 +46,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 acfg)
         (assert gtxn_type_matches%0#0) // transaction type is acfg
         let tmp%23#0: bytes = tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAssetConfig(gtxn_idx%1#0)
-        let aggregate%length%0#1: uint64 = (len tmp%23#0)
-        let aggregate%as_bytes%0#1: bytes[8] = (itob aggregate%length%0#1)
-        let aggregate%length_uint16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
-        let aggregate%encoded_value%0#1: bytes = (concat aggregate%length_uint16%0#1 tmp%23#0)
-        let aggregate%as_Encoded(len+uint8[])%0#1: Encoded(len+uint8[]) = aggregate%encoded_value%0#1
-        let tmp%24#0: Encoded(len+uint8[]) = aggregate%as_Encoded(len+uint8[])%0#1
+        let aggregate%length%0#0: uint64 = (len tmp%23#0)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%23#0)
+        let aggregate%as_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = aggregate%encoded_value%0#0
+        let tmp%24#0: Encoded(len+uint8[]) = aggregate%as_Encoded(len+uint8[])%0#0
         let tmp%25#0: bytes = (concat 0x151f7c75 tmp%24#0)
         (log tmp%25#0)
         let tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__puya_arc4_router__%0#2: bool = 1u

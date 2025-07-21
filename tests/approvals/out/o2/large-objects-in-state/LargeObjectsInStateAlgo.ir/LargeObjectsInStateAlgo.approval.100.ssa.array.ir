@@ -11,9 +11,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%4#0) // OnCompletion is not NoOp
         let tmp%5#0: uint64 = (txn ApplicationID)
         (assert tmp%5#0) // can only call when not creating
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob 2982900u)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let tmp%8#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#1
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob 2982900u)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%8#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
         let tmp%9#0: bytes = (concat 0x151f7c75 tmp%8#0)
         (log tmp%9#0)
         let tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#0: bool = 1u
@@ -49,16 +49,17 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let index#1: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
         let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
         let xCount#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
-        let box%element_offset%1#1: uint64 = (* index#1 9u)
-        let box%box_extract%1#1: Encoded(uint64,uint8) = (box_extract "x" box%element_offset%1#1 9u)
-        let aggregate%extract%0#1: bytes = (extract3 box%box_extract%1#1 0u 8u)
-        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
-        let values%0#0: uint64 = (btoi tuple_item%0#0)
-        let tmp%0#2: uint64 = (+ values%0#0 xCount#0)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob tmp%0#2)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let encoded_value%0#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#1
-        (box_replace "x" box%element_offset%1#1 encoded_value%0#0)
+        let box%element_offset%0#1: uint64 = (* index#1 9u)
+        let box%box_extract%0#1: Encoded(uint64,uint8) = (box_extract "x" box%element_offset%0#1 9u)
+        let values%0#1: Encoded(uint64,uint8) = box%box_extract%0#1
+        let aggregate%extract%0#0: bytes = (extract3 values%0#1 0u 8u)
+        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
+        let values%1#0: uint64 = (btoi tuple_item%0#0)
+        let tmp%0#2: uint64 = (+ values%1#0 xCount#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%0#2)
+        let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
+        let encoded_value%0#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
+        (box_replace "x" box%element_offset%0#1 encoded_value%0#0)
         let tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#2: bool = 1u
         goto block@14
     block@6: // getCounts_route_L33
@@ -69,9 +70,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%23#0) // can only call when not creating
         let reinterpret_Encoded(uint64)%2#0: Encoded(uint64) = (txna ApplicationArgs 1)
         let index#0: uint64 = (btoi reinterpret_Encoded(uint64)%2#0)
-        let box%element_offset%0#1: uint64 = (* index#0 9u)
-        let box%box_extract%0#1: Encoded(uint64,uint8) = (box_extract "x" box%element_offset%0#1 9u)
-        let tmp%27#0: bytes = (concat 0x151f7c75 box%box_extract%0#1)
+        let box%element_offset%0#0: uint64 = (* index#0 9u)
+        let box%box_extract%0#0: Encoded(uint64,uint8) = (box_extract "x" box%element_offset%0#0 9u)
+        let values%0#0: Encoded(uint64,uint8) = box%box_extract%0#0
+        let tmp%27#0: bytes = (concat 0x151f7c75 values%0#0)
         (log tmp%27#0)
         let tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__%0#3: bool = 1u
         goto block@14

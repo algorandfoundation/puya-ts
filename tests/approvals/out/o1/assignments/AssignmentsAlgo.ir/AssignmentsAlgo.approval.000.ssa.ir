@@ -486,13 +486,15 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testTupleToArray
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testNested(i_a: Encoded(len+(len+uint64[])[])) -> void:
     block@0: // L78
         let array_item%0#0: Encoded(len+uint64[]) = extract_value(i_a#0, 0u)
-        let array_item%1#0: Encoded(uint64) = extract_value(array_item%0#0, 0u)
-        let values%0#0: uint64 = decode_bytes<uint64>(array_item%1#0)
-        let a#0: uint64 = values%0#0
+        let values%0#0: Encoded(len+uint64[]) = decode_bytes<Encoded(len+uint64[])>(array_item%0#0)
+        let array_item%1#0: Encoded(uint64) = extract_value(values%0#0, 0u)
+        let values%1#0: uint64 = decode_bytes<uint64>(array_item%1#0)
+        let a#0: uint64 = values%1#0
         let array_item%2#0: Encoded(len+uint64[]) = extract_value(i_a#0, 0u)
-        let array_item%3#0: Encoded(uint64) = extract_value(array_item%2#0, 0u)
-        let values%1#0: uint64 = decode_bytes<uint64>(array_item%3#0)
-        let tmp%0#0: bool = (== a#0 values%1#0)
+        let values%2#0: Encoded(len+uint64[]) = decode_bytes<Encoded(len+uint64[])>(array_item%2#0)
+        let array_item%3#0: Encoded(uint64) = extract_value(values%2#0, 0u)
+        let values%3#0: uint64 = decode_bytes<uint64>(array_item%3#0)
+        let tmp%0#0: bool = (== a#0 values%3#0)
         (assert tmp%0#0)
         return 
 
@@ -534,10 +536,12 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNa
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testMixed(m: Encoded(len+((uint64))[])) -> void:
     block@0: // L103
         let array_item%0#0: Encoded((uint64)) = extract_value(m#0, 0u)
-        let tuple_item%0#0: Encoded(uint64) = extract_value(array_item%0#0, 0)
-        let tuple_item%1#0: Encoded(uint64) = extract_value(tuple_item%0#0, 0)
-        let values%0#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
-        let a1#0: uint64 = values%0#0
+        let values%0#0: Encoded((uint64)) = decode_bytes<Encoded((uint64))>(array_item%0#0)
+        let tuple_item%0#0: Encoded(uint64) = extract_value(values%0#0, 0)
+        let values%1#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(tuple_item%0#0)
+        let tuple_item%1#0: Encoded(uint64) = extract_value(values%1#0, 0)
+        let values%2#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
+        let a1#0: uint64 = values%2#0
         let tmp%0#0: Encoded(uint64) = bytes_encode<(uint64)>(213u)
         let tmp%1#0: Encoded((uint64)) = bytes_encode<((uint64))>(tmp%0#0)
         let encoded_array%0#0: Encoded(len+((uint64))[]) = bytes_encode<(len+((uint64))[])>(tmp%1#0)

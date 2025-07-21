@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1 8 10
-    bytecblock 0x "l1" "localUint2" "b1" "localBytes2" "localEncoded" "localTuple" "localObject" "localMutableObject" 0x68656c6c6f
+    bytecblock 0x "l1" "localUint2" "b1" "localBytes2" "localEncoded" "localTuple" "localObject" "localMutableObject" "hello"
 
 main_block@0:
 
@@ -281,11 +281,11 @@ setState_block@0:
     app_local_put
     // tests/approvals/local-state.algo.ts:29
     // this.localMutableObject(Txn.sender).value = { a, b, c: true, d: new arc4.Str('hello') }
-    bytec 9 // 0x68656c6c6f
+    bytec 9 // "hello"
     len
     itob
     extract 6 2
-    bytec 9 // 0x68656c6c6f
+    bytec 9 // "hello"
     concat
     cover 2
     itob

@@ -13,13 +13,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%5#0) // can only call when not creating
         let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
         let x#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let aggregate%val_as_bytes%0#1: bytes[8] = (itob x#0)
-        let aggregate%as_Encoded(uint64)%0#1: Encoded(uint64) = aggregate%val_as_bytes%0#1
-        let aggregate%head%0#1: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#1)
-        let aggregate%as_Encoded(uint64)%1#1: Encoded(uint64) = aggregate%head%0#1
-        let xObj#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#1
-        let aggregate%extract%0#1: bytes = (extract3 xObj#0 0u 8u)
-        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#1
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob x#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let aggregate%head%0#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#0)
+        let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%head%0#0
+        let xObj#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
+        let aggregate%extract%0#0: bytes = (extract3 xObj#0 0u 8u)
+        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
         let values%0#0: uint64 = (btoi tuple_item%0#0)
         let tmp%1#1: bool = (== values%0#0 5u)
         (assert tmp%1#1) // x should be 5
@@ -37,19 +37,19 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%8#1)
         let tmp%9#1: bool = (<= values%0#0 5u)
         (assert tmp%9#1)
-        let aggregate%as_bytes%0#1: bytes[8] = (itob 1u)
-        let aggregate%len_u16%0#1: bytes = ((extract 6 2) aggregate%as_bytes%0#1)
-        let aggregate%val_as_bytes%1#1: bytes[8] = (itob x#0)
-        let aggregate%as_Encoded(uint64)%2#1: Encoded(uint64) = aggregate%val_as_bytes%1#1
-        let aggregate%head%1#1: bytes = (concat aggregate%len_u16%0#1 aggregate%as_Encoded(uint64)%2#1)
-        let aggregate%as_Encoded(len+uint64[])%0#1: Encoded(len+uint64[]) = aggregate%head%1#1
-        let xArray#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#1
+        let aggregate%as_bytes%0#0: bytes[8] = (itob 1u)
+        let aggregate%len_u16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob x#0)
+        let aggregate%as_Encoded(uint64)%2#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
+        let aggregate%head%1#0: bytes = (concat aggregate%len_u16%0#0 aggregate%as_Encoded(uint64)%2#0)
+        let aggregate%as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = aggregate%head%1#0
+        let xArray#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#0
         let array_length%0#0: uint64 = (extract_uint16 xArray#0 0u)
         let tmp%10#1: bool = (== array_length%0#0 1u)
-        let aggregate%array_trimmed%0#1: bytes = ((extract 2 0) xArray#0)
-        let aggregate%bytes_offset%0#1: uint64 = (* 0u 8u)
-        let aggregate%encoded_element%0#1: bytes = (extract3 aggregate%array_trimmed%0#1 aggregate%bytes_offset%0#1 8u) // on error: index access is out of bounds
-        let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#1
+        let aggregate%array_trimmed%0#0: bytes = ((extract 2 0) xArray#0)
+        let aggregate%bytes_offset%0#0: uint64 = (* 0u 8u)
+        let aggregate%encoded_element%0#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
+        let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#0
         let values%6#0: uint64 = (btoi array_item%0#0)
         let tmp%11#0: bool = (== values%6#0 5u)
         let tmp%12#0: bool = (&& tmp%10#1 tmp%11#0)

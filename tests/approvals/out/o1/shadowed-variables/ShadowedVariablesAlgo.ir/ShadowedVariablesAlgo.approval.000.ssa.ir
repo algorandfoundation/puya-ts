@@ -6,9 +6,10 @@ main tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.approvalP
         let tuple_item%1#0: Encoded(uint64) = extract_value(awst_tmp%0#0, 1)
         let values%1#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
         let tuple_item%2#0: bool = extract_value(awst_tmp%0#0, 2)
+        let values%2#0: bool = decode_bytes<bool>(tuple_item%2#0)
         let b#0: bytes = values%0#0
         let u#0: uint64 = values%1#0
-        let f#0: bool = tuple_item%2#0
+        let f#0: bool = values%2#0
         let tmp%0#0: bool = (== "123" b#0)
         (assert tmp%0#0) // a should be module const (bytes)
         let a#0: uint64 = u#0

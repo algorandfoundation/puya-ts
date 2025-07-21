@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 2 1 123
-    bytecblock "hello" 0x "b" 0x01c8 "a" 0x00 "t2" "t4" "t5" "t1" "t3" 0x576f726c64
+    bytecblock "hello" 0x "b" 0x01c8 "a" 0x00 "t2" "t4" "t5" "t1" "t3" "World"
 
 main_block@0:
 
@@ -576,11 +576,11 @@ testTuple_block@0:
     assert // Tuple value should be set
     // tests/approvals/global-state.algo.ts:91
     // this.t5.value = { a: 'hello', b: 123, c: true, d: new arc4.Str('World') }
-    bytec 11 // 0x576f726c64
+    bytec 11 // "World"
     len
     itob
     extract 6 2
-    bytec 11 // 0x576f726c64
+    bytec 11 // "World"
     concat
     bytec_0 // "hello"
     len

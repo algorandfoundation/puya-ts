@@ -7,9 +7,9 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
         (box_put "one" "aaaaaargh")
         (box_del "A")
         (box_put "A" "aaaaaargh")
-        let (aggregate%box_get%0#1: bytes, aggregate%box_get%1#1: bool) = (box_get "one")
-        (assert aggregate%box_get%1#1) // Box must have value
-        let tmp%2#1: bool = (== aggregate%box_get%0#1 "aaaaaargh")
+        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get "one")
+        (assert aggregate%box_get%1#0) // Box must have value
+        let tmp%2#1: bool = (== aggregate%box_get%0#0 "aaaaaargh")
         (assert tmp%2#1)
         let (_%0#0: uint64, maybe_exists%0#0: bool) = (box_len "one")
         goto maybe_exists%0#0 ? block@4 : block@6
@@ -65,8 +65,8 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
         let (value%0#1: uint64, check%0#1: bool) = (box_len "twowhat?")
         (assert check%0#1) // Box must have value
         (assert value%0#1)
-        let (aggregate%box_get%4#1: bytes, aggregate%box_get%5#1: bool) = (box_get "twowhat?")
-        let tmp%2#2: bool = (== aggregate%box_get%4#1 value#1)
+        let (aggregate%box_get%4#0: bytes, aggregate%box_get%5#0: bool) = (box_get "twowhat?")
+        let tmp%2#2: bool = (== aggregate%box_get%4#0 value#1)
         (assert tmp%2#2)
         let isBoxDeleted#0: bool = (box_del "twowhat?")
         (assert isBoxDeleted#0) // delete failed
@@ -101,8 +101,8 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
     block@23: // after_if_else_L72
         (box_put "three" 0xffffffff)
         (box_splice "three" 1u 1u 0x00)
-        let (aggregate%box_get%10#1: bytes, aggregate%box_get%11#1: bool) = (box_get "three")
-        let tmp%5#2: bool = (== aggregate%box_get%10#1 0xff00ffff)
+        let (aggregate%box_get%10#0: bytes, aggregate%box_get%11#0: bool) = (box_get "three")
+        let tmp%5#2: bool = (== aggregate%box_get%10#0 0xff00ffff)
         (assert tmp%5#2)
         let x#0: bool = (box_del "three")
         (assert x#0) // delete failed

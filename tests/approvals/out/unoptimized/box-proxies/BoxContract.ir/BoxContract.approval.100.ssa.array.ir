@@ -22,12 +22,12 @@ subroutine tests/approvals/box-proxies.algo.ts::testBox(box: bytes, value: strin
         (assert tmp%0#0)
         let tmp%1#0: bool = (== "A" "A")
         (assert tmp%1#0)
-        let (aggregate%box_get%0#1: bytes, aggregate%box_get%1#1: bool) = (box_get box#0)
-        (assert aggregate%box_get%1#1) // Box must have value
-        let storage_value%0#0: bytes = aggregate%box_get%0#1
-        let (aggregate%box_get%2#1: bytes, aggregate%box_get%3#1: bool) = (box_get "A")
-        (assert aggregate%box_get%3#1) // Box must have value
-        let storage_value%1#0: bytes = aggregate%box_get%2#1
+        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get box#0)
+        (assert aggregate%box_get%1#0) // Box must have value
+        let storage_value%0#0: bytes = aggregate%box_get%0#0
+        let (aggregate%box_get%2#0: bytes, aggregate%box_get%3#0: bool) = (box_get "A")
+        (assert aggregate%box_get%3#0) // Box must have value
+        let storage_value%1#0: bytes = aggregate%box_get%2#0
         let tmp%2#0: bool = (== storage_value%0#0 storage_value%1#0)
         (assert tmp%2#0)
         let (_%0#0: uint64, maybe_exists%0#0: bool) = (box_len box#0)
@@ -109,13 +109,13 @@ subroutine tests/approvals/box-proxies.algo.ts::testBoxMap(box: bytes, key: stri
         let (maybe_value%0#0: bytes, maybe_exists%1#0: bool) = (box_get box_prefixed_key%4#0)
         (assert maybe_exists%1#0)
         let box_prefixed_key%5#0: bytes = (concat box#0 key#0)
-        let (aggregate%box_get%0#1: bytes, aggregate%box_get%1#1: bool) = (box_get box_prefixed_key%5#0)
-        (assert aggregate%box_get%1#1) // Box must have value
-        let storage_value%0#0: bytes = aggregate%box_get%0#1
+        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get box_prefixed_key%5#0)
+        (assert aggregate%box_get%1#0) // Box must have value
+        let storage_value%0#0: bytes = aggregate%box_get%0#0
         let box_prefixed_key%6#0: bytes = (concat "" key#0)
-        let (aggregate%box_get%2#1: bytes, aggregate%box_get%3#1: bool) = (box_get box_prefixed_key%6#0)
-        (assert aggregate%box_get%3#1) // Box must have value
-        let storage_value%1#0: bytes = aggregate%box_get%2#1
+        let (aggregate%box_get%2#0: bytes, aggregate%box_get%3#0: bool) = (box_get box_prefixed_key%6#0)
+        (assert aggregate%box_get%3#0) // Box must have value
+        let storage_value%1#0: bytes = aggregate%box_get%2#0
         let tmp%2#0: bool = (== storage_value%0#0 storage_value%1#0)
         (assert tmp%2#0)
         let box_prefixed_key%7#0: bytes = (concat box#0 key#0)
@@ -175,15 +175,15 @@ subroutine tests/approvals/box-proxies.algo.ts::testBoxRef(box: bytes, length: u
         let (maybe_value%1#0: bytes, maybe_exists%3#0: bool) = (box_get box#0)
         let maybeBox.1#0: bool = maybe_exists%3#0
         (assert maybeBox.1#0)
-        let (aggregate%box_get%0#1: bytes, aggregate%box_get%1#1: bool) = (box_get box#0)
-        (assert aggregate%box_get%1#1) // Box must have value
-        let storage_value%0#0: bytes = aggregate%box_get%0#1
+        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get box#0)
+        (assert aggregate%box_get%1#0) // Box must have value
+        let storage_value%0#0: bytes = aggregate%box_get%0#0
         let tmp%4#0: bool = (== storage_value%0#0 0xffffffff)
         (assert tmp%4#0)
         (box_splice box#0 1u 1u 0x00)
-        let (aggregate%box_get%2#1: bytes, aggregate%box_get%3#1: bool) = (box_get box#0)
-        (assert aggregate%box_get%3#1) // Box must have value
-        let storage_value%1#0: bytes = aggregate%box_get%2#1
+        let (aggregate%box_get%2#0: bytes, aggregate%box_get%3#0: bool) = (box_get box#0)
+        (assert aggregate%box_get%3#0) // Box must have value
+        let storage_value%1#0: bytes = aggregate%box_get%2#0
         let tmp%5#0: bool = (== storage_value%1#0 0xff00ffff)
         (assert tmp%5#0)
         let tmp%6#0: bool = (box_del box#0)
