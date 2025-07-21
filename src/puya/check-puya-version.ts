@@ -65,7 +65,7 @@ class VersionParser {
   #ver: SemVer | undefined
 
   receiveLine(line: string): void {
-    const matched = /^puya ((\d+)\.(\d+)\.(\d+))$/.exec(line)
+    const matched = /^puya ((\d+)\.(\d+)\.(\d+)(-.*)?)$/.exec(line)
     if (!matched) {
       logger.debug(undefined, `'puya --version' command returned unexpected output: "${line}"`)
     } else {
@@ -74,6 +74,7 @@ class VersionParser {
         major: Number(matched[2]),
         minor: Number(matched[3]),
         rev: Number(matched[4]),
+        suffix: matched[5] ?? '',
       }
     }
   }
