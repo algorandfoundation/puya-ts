@@ -13,7 +13,17 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['*.cjs', '**/node_modules/', '**/dist/', '**/build/', '**/coverage/', '**/.idea', '**/.vscode', 'packages/**'],
+    ignores: [
+      '*.cjs',
+      '**/node_modules/',
+      '**/dist/',
+      '**/build/',
+      '**/coverage/',
+      '**/.idea',
+      '**/.vscode',
+      'packages/**',
+      'tests/quick-fix/fixed/**',
+    ],
   },
   ...compat.extends('@makerx/eslint-config'),
   {
