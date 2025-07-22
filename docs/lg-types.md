@@ -331,7 +331,7 @@ Where supported, the native equivalent of an ARC4 type can be obtained via the `
 
 ### Unsigned ints
 
-**Types:** `@algorandfoundation/algorand-typescript/arc4::UIntN`<br>
+**Types:** `@algorandfoundation/algorand-typescript/arc4::UInt`<br>
 **Encoding:** A big endian byte array of N bits<br>
 **Native equivalent:** `uint64` or `biguint`
 
@@ -339,7 +339,7 @@ Common bit sizes have also been aliased under `@algorandfoundation/algorand-type
 
 ### Unsigned fixed point decimals
 
-**Types:** `@algorandfoundation/algorand-typescript/arc4::UFixedNxM`<br>
+**Types:** `@algorandfoundation/algorand-typescript/arc4::UFixed`<br>
 **Encoding:** A big endian byte array of N bits where `encoded_value = value / (10^M)`<br>
 **Native equivalent:** _none_
 
