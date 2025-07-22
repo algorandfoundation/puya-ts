@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1 8 5
-    bytecblock 0x 0x0000 0x151f7c75
+    bytecblock 0x151f7c75
 
 main_block@0:
 
@@ -50,7 +50,7 @@ main_testThreeArg_route@5:
     !=
     assert // can only call when not creating
     callsub testThreeArg
-    bytec_2 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -69,7 +69,7 @@ main_testTwoArg_route@4:
     !=
     assert // can only call when not creating
     callsub testTwoArg
-    bytec_2 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -88,7 +88,7 @@ main_testSingleArg_route@3:
     !=
     assert // can only call when not creating
     callsub testSingleArg
-    bytec_2 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     swap
     concat
     log
@@ -129,9 +129,9 @@ testSingleArg:
 testSingleArg_block@0:
     // tests/approvals/urange.algo.ts:6
     // let results: uint64[] = []
-    bytec_1 // 0x0000
-    bytec_0 // 0x
-    concat
+    intc_0 // 0
+    itob
+    extract 6 2
     // tests/approvals/urange.algo.ts:7
     // for (const i of urange(5)) {
     intc_1 // 1
@@ -147,41 +147,32 @@ testSingleArg_for_header@1:
     bz testSingleArg_after_for@4
 
 testSingleArg_for_body@2:
+    // tests/approvals/urange.algo.ts:7
+    // for (const i of urange(5)) {
+    frame_dig 1
     // tests/approvals/urange.algo.ts:8
     // results = [...results, i]
+    intc_1 // 1
+    itob
+    extract 6 2
+    swap
+    itob
+    concat
+    extract 2 0
     frame_dig 0
-    extract 2 0
-    bytec_1 // 0x0000
-    bytec_0 // 0x
-    concat
-    extract 2 0
-    frame_dig 1
-    itob
-    bytec_0 // 0x
     swap
-    concat
-    bytec_0 // 0x
-    swap
-    concat
-    concat
+    concat // on error: max array length exceeded
     dup
+    extract 2 0
     len
     intc_2 // 8
     /
     itob
     extract 6 2
     swap
-    concat
-    extract 2 0
-    concat
-    dup
-    len
-    intc_2 // 8
-    /
-    itob
-    extract 6 2
-    swap
-    concat
+    intc_0 // 0
+    uncover 2
+    replace3
     frame_bury 0
 
 testSingleArg_for_footer@3:
@@ -208,9 +199,9 @@ testTwoArg:
 testTwoArg_block@0:
     // tests/approvals/urange.algo.ts:13
     // let results: uint64[] = []
-    bytec_1 // 0x0000
-    bytec_0 // 0x
-    concat
+    intc_0 // 0
+    itob
+    extract 6 2
     // tests/approvals/urange.algo.ts:14
     // for (const i of urange(2, 5)) {
     intc_1 // 1
@@ -226,41 +217,32 @@ testTwoArg_for_header@1:
     bz testTwoArg_after_for@4
 
 testTwoArg_for_body@2:
+    // tests/approvals/urange.algo.ts:14
+    // for (const i of urange(2, 5)) {
+    frame_dig 1
     // tests/approvals/urange.algo.ts:15
     // results = [...results, i]
+    intc_1 // 1
+    itob
+    extract 6 2
+    swap
+    itob
+    concat
+    extract 2 0
     frame_dig 0
-    extract 2 0
-    bytec_1 // 0x0000
-    bytec_0 // 0x
-    concat
-    extract 2 0
-    frame_dig 1
-    itob
-    bytec_0 // 0x
     swap
-    concat
-    bytec_0 // 0x
-    swap
-    concat
-    concat
+    concat // on error: max array length exceeded
     dup
+    extract 2 0
     len
     intc_2 // 8
     /
     itob
     extract 6 2
     swap
-    concat
-    extract 2 0
-    concat
-    dup
-    len
-    intc_2 // 8
-    /
-    itob
-    extract 6 2
-    swap
-    concat
+    intc_0 // 0
+    uncover 2
+    replace3
     frame_bury 0
 
 testTwoArg_for_footer@3:
@@ -287,9 +269,9 @@ testThreeArg:
 testThreeArg_block@0:
     // tests/approvals/urange.algo.ts:20
     // let results: uint64[] = []
-    bytec_1 // 0x0000
-    bytec_0 // 0x
-    concat
+    intc_0 // 0
+    itob
+    extract 6 2
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {
     pushint 3 // 3
@@ -305,41 +287,32 @@ testThreeArg_for_header@1:
     bz testThreeArg_after_for@4
 
 testThreeArg_for_body@2:
+    // tests/approvals/urange.algo.ts:21
+    // for (const i of urange(2, 10, 3)) {
+    frame_dig 1
     // tests/approvals/urange.algo.ts:22
     // results = [...results, i]
+    intc_1 // 1
+    itob
+    extract 6 2
+    swap
+    itob
+    concat
+    extract 2 0
     frame_dig 0
-    extract 2 0
-    bytec_1 // 0x0000
-    bytec_0 // 0x
-    concat
-    extract 2 0
-    frame_dig 1
-    itob
-    bytec_0 // 0x
     swap
-    concat
-    bytec_0 // 0x
-    swap
-    concat
-    concat
+    concat // on error: max array length exceeded
     dup
+    extract 2 0
     len
     intc_2 // 8
     /
     itob
     extract 6 2
     swap
-    concat
-    extract 2 0
-    concat
-    dup
-    len
-    intc_2 // 8
-    /
-    itob
-    extract 6 2
-    swap
-    concat
+    intc_0 // 0
+    uncover 2
+    replace3
     frame_bury 0
 
 testThreeArg_for_footer@3:

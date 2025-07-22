@@ -252,7 +252,7 @@ async function compilePath(
         outputArc32: false,
         outputTeal: false,
         outputSourceMap: true,
-        optimizationLevel: 0,
+        optimizationLevel: 1,
         ...options,
       }),
     )

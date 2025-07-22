@@ -10,18 +10,18 @@ contract ArrayDestructuringAlgo
     return True
   }
   
-  testNested(arg: readonlytuple[uint64, readonlytuple[biguint, biguint]]): readonlytuple[uint64, readonlytuple[biguint, biguint], uint64, biguint]
+  testNested(arg: readonly [uint64, readonly [biguint, biguint]]): readonly [uint64, readonly [biguint, biguint], uint64, biguint]
   {
-    <tuple>[a, b]: readonlytuple[uint64, readonlytuple[biguint, biguint]] = arg
-    <tuple>[c, <tuple>[d, _]]: readonlytuple[uint64, readonlytuple[biguint, biguint]] = arg
-    return <tuple>[a, b, c, d]
+    #[a, b]: readonly [uint64, readonly [biguint, biguint]] = #[arg.0, arg.1]
+    #[c, #[d]]: readonly [uint64, readonly [biguint]] = #[arg.0, #[arg.1.0]]
+    return #[a, b, c, d]
   }
   
   test(): void
   {
-    <tuple>[a, b, c, d]: readonlytuple[uint64, bytes, bool, biguint] = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()
-    <tuple>[_, _₁, e, _₂]: readonlytuple[uint64, bytes, bool, biguint] = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()
-    f: readonlytuple[uint64, bytes, bool, biguint] = (<tuple>[g, _₃, _₄, i] = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems())
+    #[a, b, c, d]: readonly [uint64, bytes, bool, biguint] = #[($0 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()).0, $0.1, $0.2, $0.3]
+    #[e]: readonly [bool] = #[($1 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()).2]
+    f: readonly [uint64, bytes, bool, biguint] = (#[g, i] = #[($2 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems()).0, $2.3]), $2
     assert(a == 5)
     assert(b == 0x)
     assert(!c)
@@ -29,21 +29,27 @@ contract ArrayDestructuringAlgo
     assert(!e)
     assert(g == 5)
     assert(i == 6)
-    assert(4 == 4 and f.0 == 5 and f.1 == 0x and f.2 == False and f.3 == 6, comment=assert target is match for conditions)
+    assert(&&(&&(&&(&&(4 == 4, f.0 == 5), f.1 == 0x), f.2 == False), f.3 == 6), comment=assert target is match for conditions)
+    #[x, y, z]: readonly [uint64, uint64, uint64] = #[($3 = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceFixed())[0], $3[1], $3[2]]
   }
   
-  produceItems(): readonlytuple[uint64, bytes, bool, biguint]
+  produceItems(): readonly [uint64, bytes, bool, biguint]
   {
-    return <tuple>[5, 0x, False, 6]
+    return #[5, 0x, False, 6]
   }
   
   testLiteralDestructuring(): void
   {
     a: uint64 = 1
     b: uint64 = 2
-    <tuple>[x, y]: readonlytuple[uint64, uint64] = (<tuple>[b, a] = <tuple>[a, b])
+    #[x, y]: readonly [uint64, uint64] = #[($4 = (#[b, a] = #[($5 = #[a, b]).0, $5.1]), ARC4_ENCODE(#[$5.0, $5.1], wtype=arc4.tuple<uint64,uint64>)).0, $4.1]
     assert(x == b)
     assert(y == a)
+  }
+  
+  produceFixed(): arc4.static_array<uint64>
+  {
+    return new arc4.static_array<uint64>(1, 2, 3)
   }
   
   __algots__.defaultCreate(): void

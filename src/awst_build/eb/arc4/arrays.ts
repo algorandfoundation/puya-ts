@@ -9,25 +9,21 @@ import { logger } from '../../../logger'
 
 import { base32ToUint8Array, bigIntToUint8Array, codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
-import { accountPType, bytesPType, IterableIteratorGeneric, NumericLiteralPType, stringPType, TuplePType, uint64PType } from '../../ptypes'
+import { accountPType, bytesPType, NumericLiteralPType, stringPType } from '../../ptypes'
 import {
   AddressClass,
   arc4AddressAlias,
-  ARC4EncodedType,
-  DynamicArrayConstructor,
+  DynamicArrayGeneric,
   DynamicArrayType,
   DynamicBytesConstructor,
   DynamicBytesType,
-  StaticArrayConstructor,
+  StaticArrayGeneric,
   StaticArrayType,
-  StaticBytesConstructor,
   StaticBytesGeneric,
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder, FunctionBuilder } from '../index'
-import { IterableIteratorExpressionBuilder } from '../iterable-iterator-expression-builder'
-import { Arc4CopyFunctionBuilder } from '../shared/arc4-copy-function-builder'
 import { AtFunctionBuilder } from '../shared/at-function-builder'
 import { ArrayPopFunctionBuilder } from '../shared/pop-function-builder'
 import { ArrayPushFunctionBuilder } from '../shared/push-function-builder'
@@ -36,32 +32,31 @@ import { UInt64ExpressionBuilder } from '../uint64-expression-builder'
 import { requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { concatArrays } from '../util/array/concat'
+import { EntriesFunctionBuilder, KeysFunctionBuilder } from '../util/array/entries'
 import { indexAccess } from '../util/array/index-access'
 import { arrayLength } from '../util/array/length'
 import { resolveCompatExpression } from '../util/resolve-compat-builder'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
 export class DynamicArrayClassBuilder extends ClassBuilder {
-  readonly ptype = DynamicArrayConstructor
+  readonly ptype = DynamicArrayGeneric
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    const {
-      args: [...initialItems],
-      ptypes: [elementType],
-    } = parseFunctionArgs({
+    const ptype = this.ptype.parameterise(typeArgs)
+    const { args: initialItems } = parseFunctionArgs({
       args,
       typeArgs,
       callLocation: sourceLocation,
       funcName: 'DynamicArray constructor',
       genericTypeArgs: 1,
-      argSpec: (a) => args.map((_) => a.required()),
+      argSpec: (a) => args.map((_) => a.required(ptype.elementType)),
     })
-    codeInvariant(elementType instanceof ARC4EncodedType, 'Element type must be an ARC4 encoded type', sourceLocation)
-    const initialItemExprs = initialItems.map((i) => requireExpressionOfType(i, elementType))
-    const ptype = new DynamicArrayType({ elementType, sourceLocation })
     return new DynamicArrayExpressionBuilder(
       nodeFactory.newArray({
-        values: initialItemExprs,
+        values: initialItems.map((i) => {
+          i.checkForUnclonedMutables(`being passed to a ${this.typeDescription} constructor`)
+          return requireExpressionOfType(i, ptype.elementType)
+        }),
         wtype: ptype.wtype,
         sourceLocation,
       }),
@@ -70,27 +65,20 @@ export class DynamicArrayClassBuilder extends ClassBuilder {
   }
 }
 export class StaticArrayClassBuilder extends ClassBuilder {
-  readonly ptype = StaticArrayConstructor
+  readonly ptype = StaticArrayGeneric
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+    const ptype = this.ptype.parameterise(typeArgs)
     const {
       args: [...initialItems],
-      ptypes: [elementType, arraySize],
     } = parseFunctionArgs({
       args,
       typeArgs,
       callLocation: sourceLocation,
       funcName: 'StaticArray constructor',
       genericTypeArgs: 2,
-      argSpec: (a) => args.map((_) => a.required()),
+      argSpec: (a) => args.map((_) => a.required(ptype.elementType)),
     })
-    codeInvariant(elementType instanceof ARC4EncodedType, 'Element type must be an ARC4 encoded type', sourceLocation)
-    codeInvariant(
-      arraySize instanceof NumericLiteralPType,
-      `Array size type parameter of ${this.typeDescription} must be a literal number. Inferred type is ${arraySize.name}`,
-      sourceLocation,
-    )
-    const ptype = new StaticArrayType({ elementType, arraySize: arraySize.literalValue, sourceLocation })
     if (initialItems.length === 0) {
       codeInvariant(ptype.fixedByteSize !== null, 'Zero arg constructor can only be used for static arrays with a fixed size encoding.')
       return new StaticArrayExpressionBuilder(
@@ -100,14 +88,17 @@ export class StaticArrayClassBuilder extends ClassBuilder {
     }
 
     codeInvariant(
-      BigInt(initialItems.length) === arraySize.literalValue,
-      `Static array of size ${arraySize.literalValue} must be initialized with ${arraySize.literalValue} values`,
+      BigInt(initialItems.length) === ptype.arraySize,
+      `Static array of size ${ptype.arraySize} must be initialized with ${ptype.arraySize} values`,
       sourceLocation,
     )
 
     return new StaticArrayExpressionBuilder(
       nodeFactory.newArray({
-        values: initialItems.map((i) => requireExpressionOfType(i, elementType)),
+        values: initialItems.map((i) => {
+          i.checkForUnclonedMutables(`being passed to a ${this.typeDescription} constructor`)
+          return requireExpressionOfType(i, ptype.elementType)
+        }),
         wtype: ptype.wtype,
         sourceLocation,
       }),
@@ -178,7 +169,7 @@ export class AddressClassBuilder extends ClassBuilder {
   }
 }
 export class StaticBytesClassBuilder extends ClassBuilder {
-  readonly ptype = StaticBytesConstructor
+  readonly ptype = StaticBytesGeneric
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
@@ -192,7 +183,7 @@ export class StaticBytesClassBuilder extends ClassBuilder {
       genericTypeArgs: 1,
       argSpec: (a) => [a.optional(bytesPType, stringPType)],
     })
-    const resultPType = StaticBytesGeneric.parameterise([length])
+    const resultPType = this.ptype.parameterise([length])
 
     codeInvariant(length instanceof NumericLiteralPType, 'length must be numeric literal', sourceLocation)
     const byteLength = Number(length.literalValue)
@@ -286,7 +277,7 @@ export abstract class ArrayExpressionBuilder<
     return this.resolve()
   }
 
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
     return indexAccess(this, index, sourceLocation)
   }
 
@@ -298,14 +289,13 @@ export abstract class ArrayExpressionBuilder<
         return new AtFunctionBuilder(
           this.resolve(),
           this.ptype.elementType,
-          this.ptype instanceof StaticArrayType
-            ? this.ptype.arraySize
-            : requireExpressionOfType(this.memberAccess('length', sourceLocation), uint64PType),
+          this.ptype instanceof StaticArrayType ? this.ptype.arraySize : arrayLength(this, sourceLocation).resolve(),
+          sourceLocation,
         )
       case 'entries':
         return new EntriesFunctionBuilder(this)
-      case 'copy':
-        return new Arc4CopyFunctionBuilder(this)
+      case 'keys':
+        return new KeysFunctionBuilder(this)
       case 'concat':
         return new ConcatFunctionBuilder(this)
       case 'slice': {
@@ -344,26 +334,6 @@ class ConcatFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
     })
     return concatArrays(this.arrayBuilder, other, sourceLocation)
-  }
-}
-class EntriesFunctionBuilder extends FunctionBuilder {
-  constructor(private arrayBuilder: ArrayExpressionBuilder<DynamicArrayType | StaticArrayType>) {
-    super(arrayBuilder.sourceLocation)
-  }
-
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    parseFunctionArgs({ args, typeArgs, callLocation: sourceLocation, argSpec: (_) => [], genericTypeArgs: 0, funcName: 'entries' })
-    const iteratorType = IterableIteratorGeneric.parameterise([
-      new TuplePType({ items: [uint64PType, this.arrayBuilder.ptype.elementType] }),
-    ])
-    return new IterableIteratorExpressionBuilder(
-      nodeFactory.enumeration({
-        expr: this.arrayBuilder.iterate(),
-        sourceLocation,
-        wtype: iteratorType.wtype,
-      }),
-      iteratorType,
-    )
   }
 }
 

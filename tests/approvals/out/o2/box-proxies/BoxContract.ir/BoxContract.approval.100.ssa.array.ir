@@ -1,0 +1,134 @@
+main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
+    block@0: // L99
+        let tmp%0#0: uint64 = (txn ApplicationID)
+        goto tmp%0#0 ? block@1 : block@2
+    block@1: // if_body_L100
+        (box_del "one")
+        (box_put "one" "aaaaaargh")
+        (box_del "A")
+        (box_put "A" "aaaaaargh")
+        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get "one")
+        (assert aggregate%box_get%1#0) // Box must have value
+        let storage_value%0#0: bytes = aggregate%box_get%0#0
+        let (aggregate%box_get%2#0: bytes, aggregate%box_get%3#0: bool) = (box_get "A")
+        (assert aggregate%box_get%3#0) // Box must have value
+        let storage_value%1#0: bytes = aggregate%box_get%2#0
+        let tmp%2#1: bool = (== storage_value%0#0 storage_value%1#0)
+        (assert tmp%2#1)
+        let (_%0#0: uint64, maybe_exists%0#0: bool) = (box_len "one")
+        goto maybe_exists%0#0 ? block@4 : block@6
+    block@4: // and_contd_L17
+        let (_%1#0: uint64, maybe_exists%1#0: bool) = (box_len "A")
+        goto maybe_exists%1#0 ? block@5 : block@6
+    block@5: // bool_true_L17
+        let and_result%0#0: bool = 1u
+        goto block@7
+    block@6: // bool_false_L17
+        let and_result%0#1: bool = 0u
+        goto block@7
+    block@7: // bool_merge_L17
+        let and_result%0#2: bool = φ(and_result%0#0 <- block@5, and_result%0#1 <- block@6)
+        (assert and_result%0#2)
+        let (value%0#0: uint64, check%0#0: bool) = (box_len "one")
+        (assert check%0#0) // Box must have value
+        (assert value%0#0)
+        let tmp%3#0: bool = (box_del "one")
+        (assert tmp%3#0) // delete failed
+        let isBoxADeleted#0: bool = (box_del "A")
+        (assert isBoxADeleted#0) // delete failed
+        let (_%2#0: uint64, maybe_exists%2#0: bool) = (box_len "one")
+        goto maybe_exists%2#0 ? block@10 : block@8
+    block@8: // and_contd_L24
+        let (_%3#0: uint64, maybe_exists%3#0: bool) = (box_len "A")
+        goto maybe_exists%3#0 ? block@10 : block@9
+    block@9: // bool_true_L24
+        let and_result%1#0: bool = 1u
+        goto block@11
+    block@10: // bool_false_L24
+        let and_result%1#1: bool = 0u
+        goto block@11
+    block@11: // bool_merge_L24
+        let and_result%1#2: bool = φ(and_result%1#0 <- block@9, and_result%1#1 <- block@10)
+        (assert and_result%1#2)
+        let (maybe_value%0#0: bytes, maybe_exists%4#0: bool) = (box_get "A")
+        let state_get%0#0: bytes = (select "O" maybe_value%0#0 maybe_exists%4#0)
+        let (maybe_value%1#0: bytes, maybe_exists%5#0: bool) = (box_get "one")
+        let state_get%1#0: bytes = (select "O" maybe_value%1#0 maybe_exists%5#0)
+        let tmp%5#0: bool = (== state_get%0#0 state_get%1#0)
+        (assert tmp%5#0)
+        let (maybe_value%2#0: uint64, e#0: bool) = (box_len "one")
+        let tmp%6#0: bool = (! e#0)
+        (assert tmp%6#0)
+        (box_del "one")
+        (box_put "one" "aaaaaargh")
+        let (maybe_value%3#0: uint64, e#1: bool) = (box_len "one")
+        (assert e#1)
+        let value#1: bytes = (itob 256456u)
+        (box_del "twowhat?")
+        (box_put "twowhat?" value#1)
+        (box_del "what?")
+        (box_put "what?" value#1)
+        let (_%0#1: uint64, maybe_exists%0#1: bool) = (box_len "what?")
+        (assert maybe_exists%0#1)
+        let (value%0#1: uint64, check%0#1: bool) = (box_len "twowhat?")
+        (assert check%0#1) // Box must have value
+        (assert value%0#1)
+        let (aggregate%box_get%4#0: bytes, aggregate%box_get%5#0: bool) = (box_get "twowhat?")
+        (assert aggregate%box_get%5#0) // Box must have value
+        let storage_value%0#1: bytes = aggregate%box_get%4#0
+        let (aggregate%box_get%6#0: bytes, aggregate%box_get%7#0: bool) = (box_get "what?")
+        (assert aggregate%box_get%7#0) // Box must have value
+        let storage_value%1#1: bytes = aggregate%box_get%6#0
+        let tmp%2#2: bool = (== storage_value%0#1 storage_value%1#1)
+        (assert tmp%2#2)
+        let isBoxDeleted#0: bool = (box_del "twowhat?")
+        (assert isBoxDeleted#0) // delete failed
+        let (maybe_value%1#1: bytes, maybe_exists%2#1: bool) = (box_get "twowhat?x")
+        let state_get%0#1: bytes = (select "b" maybe_value%1#1 maybe_exists%2#1)
+        let (maybe_value%2#1: bytes, maybe_exists%3#1: bool) = (box_get "what?x")
+        let state_get%1#1: bytes = (select "b" maybe_value%2#1 maybe_exists%3#1)
+        let tmp%6#1: bool = (== state_get%0#1 state_get%1#1)
+        (assert tmp%6#1)
+        let (_%0#2: uint64, maybe_exists%0#2: bool) = (box_len "abc")
+        goto maybe_exists%0#2 ? block@17 : block@16
+    block@16: // if_body_L67
+        (box_create "abc" 1000u)
+        goto block@20
+    block@17: // else_body_L69
+        let (value%0#2: uint64, check%0#2: bool) = (box_len "abc")
+        (assert check%0#2) // Box must have value
+        let tmp%2#3: bool = (!= value%0#2 99u)
+        goto tmp%2#3 ? block@18 : block@20
+    block@18: // if_body_L69
+        (box_resize "abc" 99u)
+        goto block@20
+    block@20: // after_if_else_L67
+        let (_%1#1: uint64, maybe_exists%1#2: bool) = (box_len "three")
+        goto maybe_exists%1#2 ? block@21 : block@22
+    block@21: // if_body_L72
+        (box_resize "three" 4u)
+        goto block@23
+    block@22: // else_body_L74
+        (box_create "three" 4u)
+        goto block@23
+    block@23: // after_if_else_L72
+        (box_put "three" 0xffffffff)
+        let (aggregate%box_get%8#0: bytes, aggregate%box_get%9#0: bool) = (box_get "three")
+        (assert aggregate%box_get%9#0) // Box must have value
+        let storage_value%0#2: bytes = aggregate%box_get%8#0
+        let tmp%4#2: bool = (== storage_value%0#2 0xffffffff)
+        (assert tmp%4#2)
+        (box_splice "three" 1u 1u 0x00)
+        let (aggregate%box_get%10#0: bytes, aggregate%box_get%11#0: bool) = (box_get "three")
+        (assert aggregate%box_get%11#0) // Box must have value
+        let storage_value%1#2: bytes = aggregate%box_get%10#0
+        let tmp%5#2: bool = (== storage_value%1#2 0xff00ffff)
+        (assert tmp%5#2)
+        let x#0: bool = (box_del "three")
+        (assert x#0) // delete failed
+        let (_%2#1: uint64, maybe_exists%4#1: bool) = (box_len "three")
+        let tmp%7#0: bool = (! maybe_exists%4#1)
+        (assert tmp%7#0)
+        goto block@2
+    block@2: // after_if_else_L100
+        return 1u

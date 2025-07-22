@@ -1,5 +1,16 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, BaseContract, Bytes, contract, Contract, GlobalState, op, Txn, Uint64 } from '@algorandfoundation/algorand-typescript'
+import {
+  arc4,
+  assert,
+  BaseContract,
+  Bytes,
+  contract,
+  Contract,
+  GlobalState,
+  op,
+  Txn,
+  Uint64,
+} from '@algorandfoundation/algorand-typescript'
 
 export abstract class BaseTestContract extends BaseContract {
   baseTestState = GlobalState({ initialValue: 'testing 123' })
@@ -43,12 +54,16 @@ export class TestArc4 extends Contract {
   }
 }
 
+type Data = { a: string; b: uint64; c: boolean; d: arc4.Str }
+
 export class TestTuple extends Contract {
   t1 = GlobalState<[string, uint64, boolean]>()
   t2 = GlobalState<[string, [string, biguint, boolean]]>()
 
   t3 = GlobalState<{ a: string; b: uint64; c: boolean }>()
   t4 = GlobalState<[string, { a: string; b: biguint; c: boolean }]>()
+
+  t5 = GlobalState<Data>()
 
   testTuple() {
     this.t1.value = ['hello', 123, true]
@@ -63,14 +78,20 @@ export class TestTuple extends Contract {
     assert(this.t2.value[1][2] === true, 'Tuple value should be set')
 
     this.t3.value = { a: 'hello', b: 123, c: true }
-    assert(this.t3.value.a === 'hello', 'Tuple value should be set')
-    assert(this.t3.value.b === 123, 'Tuple value should be set')
-    assert(this.t3.value.c === true, 'Tuple value should be set')
+    assert(this.t3.value.a === 'hello', 'Object value should be set')
+    assert(this.t3.value.b === 123, 'Object value should be set')
+    assert(this.t3.value.c === true, 'Object value should be set')
 
     this.t4.value = ['a', { a: 'b', b: 456n, c: true }]
     assert(this.t4.value[0] === 'a', 'Tuple value should be set')
     assert(this.t4.value[1].a === 'b', 'Tuple value should be set')
     assert(this.t4.value[1].b === 456n, 'Tuple value should be set')
     assert(this.t4.value[1].c === true, 'Tuple value should be set')
+
+    this.t5.value = { a: 'hello', b: 123, c: true, d: new arc4.Str('World') }
+    assert(this.t5.value.a === 'hello', 'Mutable object value should be set')
+    assert(this.t5.value.b === 123, 'Mutable object value should be set')
+    assert(this.t5.value.c === true, 'Mutable object value should be set')
+    assert(this.t5.value.d.native === 'World', 'Mutable object value should be set')
   }
 }

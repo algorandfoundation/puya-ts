@@ -4,8 +4,6 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 1 0 8
-    pushbytes ""
-    dup
     // tests/approvals/named-types.algo.ts:14
     // export class MyContract extends Contract {
     txn NumAppArgs
@@ -47,7 +45,7 @@ main_test_route@6:
     dup
     intc_1 // 0
     extract_uint64
-    bury 3
+    swap
     intc_2 // 8
     extract_uint64
     txna ApplicationArgs 2
@@ -57,28 +55,18 @@ main_test_route@6:
     swap
     intc_2 // 8
     extract_uint64
-    bury 3
     // tests/approvals/named-types.algo.ts:37
     // assertMatch(x, { ...y })
+    cover 2
     ==
-    bz main_bool_false@23
-    dup2
+    cover 2
     ==
-    bz main_bool_false@23
-    intc_0 // 1
-
-main_bool_merge@24:
-    // tests/approvals/named-types.algo.ts:37
-    // assertMatch(x, { ...y })
+    &&
     assert // assert target is match for conditions
     // tests/approvals/named-types.algo.ts:36
     // public test(x: XY, y: YX) {
     intc_0 // 1
     return
-
-main_bool_false@23:
-    intc_1 // 0
-    b main_bool_merge@24
 
 main_getAnon_route@5:
     // tests/approvals/named-types.algo.ts:29

@@ -1,0 +1,152 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine tests/approvals/prefix-postfix-operators.algo.ts::test_uint64(x: uint64, y: uint64) -> bool:
+    block@0: // L5
+        let tmp%0#0: bool = (== x#0 10u)
+        (assert tmp%0#0) // x input must be 10
+        let tmp%1#0: bool = (== y#0 5u)
+        (assert tmp%1#0) // y input must be 5
+        let tmp%2#0: uint64 = (+ x#0 1u)
+        let x#1: uint64 = tmp%2#0
+        let tmp%3#0: bool = (== x#1 11u)
+        (assert tmp%3#0)
+        let tmp%4#0: uint64 = (- x#1 1u)
+        let x#2: uint64 = tmp%4#0
+        let tmp%5#0: bool = (== x#2 10u)
+        (assert tmp%5#0)
+        let tmp%6#0: uint64 = (- y#0 1u)
+        let y#1: uint64 = tmp%6#0
+        let tmp%7#0: uint64 = (- x#2 y#1)
+        let x#3: uint64 = tmp%7#0
+        let tmp%8#0: bool = (== x#3 6u)
+        (assert tmp%8#0)
+        let tmp%9#0: bool = (== y#1 4u)
+        (assert tmp%9#0)
+        let tmp%10#0: uint64 = (+ y#1 1u)
+        let y#2: uint64 = tmp%10#0
+        let tmp%11#0: uint64 = (+ x#3 y#1)
+        let x#4: uint64 = tmp%11#0
+        let tmp%12#0: bool = (== x#4 10u)
+        (assert tmp%12#0)
+        let tmp%13#0: bool = (== y#2 5u)
+        (assert tmp%13#0)
+        let tmp%14#0: uint64 = (~ y#2)
+        let inverted#0: uint64 = tmp%14#0
+        let tmp%15#0: uint64 = (- 18446744073709551615u y#2)
+        let tmp%16#0: bool = (== inverted#0 tmp%15#0)
+        (assert tmp%16#0)
+        let reinterpret_bool%0#0: bool = y#2
+        (assert reinterpret_bool%0#0)
+        let reinterpret_bool%1#0: bool = y#2
+        let tmp%17#0: bool = (! reinterpret_bool%1#0)
+        let tmp%18#0: bool = (! tmp%17#0)
+        (assert tmp%18#0)
+        let reinterpret_bool%2#0: bool = y#2
+        let tmp%19#0: bool = (! reinterpret_bool%2#0)
+        return tmp%19#0
+
+subroutine tests/approvals/prefix-postfix-operators.algo.ts::test_biguint(x: biguint, y: biguint) -> bool:
+    block@0: // L30
+        let tmp%0#0: bool = (b== x#0 10b)
+        (assert tmp%0#0) // x input must be 10
+        let tmp%1#0: bool = (b== y#0 5b)
+        (assert tmp%1#0) // y input must be 5
+        let tmp%2#0: biguint = (b+ x#0 1b)
+        let x#1: biguint = tmp%2#0
+        let tmp%3#0: bool = (b== x#1 11b)
+        (assert tmp%3#0)
+        let tmp%4#0: biguint = (b- x#1 1b)
+        let x#2: biguint = tmp%4#0
+        let tmp%5#0: bool = (b== x#2 10b)
+        (assert tmp%5#0)
+        let tmp%6#0: biguint = (b- y#0 1b)
+        let y#1: biguint = tmp%6#0
+        let tmp%7#0: biguint = (b- x#2 y#1)
+        let x#3: biguint = tmp%7#0
+        let tmp%8#0: bool = (b== y#1 4b)
+        (assert tmp%8#0)
+        let tmp%9#0: bool = (b== x#3 6b)
+        (assert tmp%9#0)
+        let tmp%10#0: biguint = (b+ y#1 1b)
+        let y#2: biguint = tmp%10#0
+        let tmp%11#0: biguint = (b+ x#3 y#1)
+        let x#4: biguint = tmp%11#0
+        let tmp%12#0: bool = (b== y#2 5b)
+        (assert tmp%12#0)
+        let tmp%13#0: bool = (b== x#4 10b)
+        (assert tmp%13#0)
+        let reinterpret_bool%0#0: bool = (bitlen y#2)
+        (assert reinterpret_bool%0#0)
+        let reinterpret_bool%1#0: bool = (bitlen y#2)
+        let tmp%14#0: bool = (! reinterpret_bool%1#0)
+        let tmp%15#0: bool = (! tmp%14#0)
+        (assert tmp%15#0)
+        let reinterpret_bool%2#0: bool = (bitlen y#2)
+        let tmp%16#0: bool = (! reinterpret_bool%2#0)
+        return tmp%16#0
+
+subroutine tests/approvals/prefix-postfix-operators.algo.ts::test_bytes(x: bytes) -> void:
+    block@0: // L50
+        let tmp%0#0: bytes = (bzero 4u)
+        let tmp%1#0: bool = (== x#0 tmp%0#0)
+        (assert tmp%1#0) // x must be 4 unset bytes
+        let tmp%2#0: bytes = (b~ x#0)
+        let y#0: bytes = tmp%2#0
+        let tmp%3#0: bool = (== y#0 0xffffffff)
+        (assert tmp%3#0)
+        return 
+
+subroutine tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.__puya_arc4_router__() -> bool:
+    block@0: // L57
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@5
+    block@1: // abi_routing_L57
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "test()bool" => block@2, * => block@3}
+    block@2: // test_route_L58
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 NoOp)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (!= tmp%5#0 0u)
+        (assert tmp%6#0) // can only call when not creating
+        let tmp%7#0: bool = tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.test()
+        let tmp%8#0: Encoded(bool8) = bytes_encode<bool8>(tmp%7#0)
+        let tmp%9#0: bytes = (concat 0x151f7c75 tmp%8#0)
+        (log tmp%9#0)
+        return 1u
+    block@3: // switch_case_default_L57
+        goto block@4
+    block@4: // switch_case_next_L57
+        goto block@9
+    block@5: // bare_routing_L57
+        let tmp%10#0: uint64 = (txn OnCompletion)
+        switch tmp%10#0 {0u => block@6, * => block@7}
+    block@6: // __algots__.defaultCreate_L57
+        let tmp%11#0: uint64 = (txn ApplicationID)
+        let tmp%12#0: bool = (== tmp%11#0 0u)
+        (assert tmp%12#0) // can only call when creating
+        tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.__algots__.defaultCreate()
+        return 1u
+    block@7: // switch_case_default_L57
+        goto block@8
+    block@8: // switch_case_next_L57
+        goto block@9
+    block@9: // after_if_else_L57
+        return 0u
+
+subroutine tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.test() -> bool:
+    block@0: // L58
+        tests/approvals/prefix-postfix-operators.algo.ts::test_uint64(10u, 5u)
+        tests/approvals/prefix-postfix-operators.algo.ts::test_biguint(10b, 5b)
+        let tmp%0#0: bytes = (bzero 4u)
+        tests/approvals/prefix-postfix-operators.algo.ts::test_bytes(tmp%0#0)
+        return 1u
+
+subroutine tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.__algots__.defaultCreate() -> void:
+    block@0: // L57
+        return 

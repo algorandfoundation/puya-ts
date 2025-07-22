@@ -3,44 +3,61 @@
 
 // tests/approvals/casting.algo.ts::CastingAlgo.approvalProgram() -> uint64:
 main:
-    intcblock 1 2 3
+    intcblock 8 1 2 3
 
 main_block@0:
     // tests/approvals/casting.algo.ts:8
     // const y = [1, 2, 3] as [uint64, uint64, uint64]
-    intc_0 // 1
-    intc_1 // 2
+    intc_1 // 1
+    itob
+    pushbytes 0x
+    swap
+    concat
+    intc_2 // 2
+    itob
+    concat
+    intc_3 // 3
+    itob
+    concat
     // tests/approvals/casting.algo.ts:12
     // return x > y[0] * y[1] * y[2] * z[0] * z[1] * z[2]
+    dup
+    pushint 0 // 0
+    intc_0 // 8
+    extract3
+    btoi
+    swap
+    dup
+    intc_0 // 8
+    dup
+    extract3
+    btoi
+    uncover 2
     *
-    // tests/approvals/casting.algo.ts:8
-    // const y = [1, 2, 3] as [uint64, uint64, uint64]
-    intc_2 // 3
+    swap
+    pushint 16 // 16
+    intc_0 // 8
+    extract3
+    btoi
+    *
+    // tests/approvals/casting.algo.ts:10
+    // const z = [1 as uint64, 2 as uint64, 3 as uint64] as const
+    intc_1 // 1
     // tests/approvals/casting.algo.ts:12
     // return x > y[0] * y[1] * y[2] * z[0] * z[1] * z[2]
     *
     // tests/approvals/casting.algo.ts:10
     // const z = [1 as uint64, 2 as uint64, 3 as uint64] as const
-    intc_0 // 1
+    intc_2 // 2
     // tests/approvals/casting.algo.ts:12
     // return x > y[0] * y[1] * y[2] * z[0] * z[1] * z[2]
     *
     // tests/approvals/casting.algo.ts:10
     // const z = [1 as uint64, 2 as uint64, 3 as uint64] as const
-    intc_1 // 2
+    intc_3 // 3
     // tests/approvals/casting.algo.ts:12
     // return x > y[0] * y[1] * y[2] * z[0] * z[1] * z[2]
     *
-    // tests/approvals/casting.algo.ts:10
-    // const z = [1 as uint64, 2 as uint64, 3 as uint64] as const
-    intc_2 // 3
-    // tests/approvals/casting.algo.ts:12
-    // return x > y[0] * y[1] * y[2] * z[0] * z[1] * z[2]
-    *
-    // tests/approvals/casting.algo.ts:6
-    // const x = 123 as uint64
     pushint 123 // 123
-    // tests/approvals/casting.algo.ts:12
-    // return x > y[0] * y[1] * y[2] * z[0] * z[1] * z[2]
     <
     return

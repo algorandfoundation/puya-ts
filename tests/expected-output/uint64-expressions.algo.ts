@@ -3,9 +3,9 @@ import { Uint64 } from '@algorandfoundation/algorand-typescript'
 /* eslint-disable no-loss-of-precision */
 
 function test() {
-  // @expect-error Arg 0 of Uint64 has an incorrect type of -1. Expected uint64 | boolean | string
+  // @expect-error uint64 overflow or underflow: -1
   Uint64(-1)
-  // @expect-error Arg 0 of Uint64 has an incorrect type of -1n. Expected uint64 | boolean | string
+  // @expect-error uint64 overflow or underflow: -1
   Uint64(-1n)
   // @expect-error Cannot convert abc to an integer
   Uint64('abc')

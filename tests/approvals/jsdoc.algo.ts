@@ -1,11 +1,11 @@
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { Contract, GlobalState, LocalState } from '@algorandfoundation/algorand-typescript'
-import { Struct, UintN } from '@algorandfoundation/algorand-typescript/arc4'
+import { Struct, Uint } from '@algorandfoundation/algorand-typescript/arc4'
 
 /**
  * This is the description for demo struct
  */
-class DemoStruct extends Struct<{ a: UintN<64> }> {}
+class DemoStruct extends Struct<{ a: Uint<64> }> {}
 
 /**
  * This is the description for demo type
@@ -28,7 +28,7 @@ export class JSDocDemo extends Contract {
    * @returns This is the description of the return value
    */
   test(a: uint64, b: bytes): DemoStruct {
-    return new DemoStruct({ a: new UintN<64>(a) })
+    return new DemoStruct({ a: new Uint<64>(a) })
   }
 
   /**

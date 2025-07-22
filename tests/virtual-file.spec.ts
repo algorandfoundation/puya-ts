@@ -31,8 +31,8 @@ class TestContract extends Contract {
       }),
     )
     expect(logging.hasErrors()).toBeFalsy()
-    expect(result.awst?.length).toBe(1)
-    const [contract] = result.awst!
+    expect(result.awst?.length).toBe(2)
+    const [, contract] = result.awst!
     invariant(contract instanceof Contract, 'AWST should be a contract node')
 
     expect(contract.name).toBe('TestContract')

@@ -9,8 +9,8 @@ import { DeliberateAny } from './internal/typescript-helpers'
  * @param event An ARC4Struct instance, or a plain object with a named type
  *
  * @example
- * class Demo extends Struct<{ a: UintN64 }> {}
- * emit(new Demo({ a: new UintN64(123) }))
+ * class Demo extends Struct<{ a: Uint64 }> {}
+ * emit(new Demo({ a: new Uint64(123) }))
  *
  * @example
  * type Demo = { a: uint64 }
@@ -27,7 +27,7 @@ export function emit<TEvent extends Record<string, DeliberateAny>>(event: TEvent
  * @param eventProps A set of event properties (order is significant)
  *
  * @example
- * emit("Demo", new UintN64(123))
+ * emit("Demo", new Uint64(123))
  *
  * @example
  * const a: uint64 = 123

@@ -8,7 +8,7 @@ import { logger } from '../../logger'
 import { codeInvariant } from '../../util'
 import type { Arc4AbiDecoratorData } from '../models/decorator-data'
 import type { PType } from '../ptypes'
-import { arc4AbiMethodDecorator, arc4BareMethodDecorator, ArrayPType, boolPType, stringPType } from '../ptypes'
+import { arc4AbiMethodDecorator, arc4BareMethodDecorator, boolPType, ReadonlyArrayPType, stringPType } from '../ptypes'
 import type { InstanceBuilder } from './index'
 import { DecoratorDataBuilder, NodeBuilder } from './index'
 import { ObjectLiteralExpressionBuilder } from './literal/object-literal-expression-builder'
@@ -46,7 +46,7 @@ export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
       funcName: 'arc4.baremethod',
       argSpec: (a) => [
         a.obj({
-          allowActions: a.optional(stringPType, new ArrayPType({ elementType: stringPType })),
+          allowActions: a.optional(stringPType, new ReadonlyArrayPType({ elementType: stringPType })),
           onCreate: a.optional(stringPType),
         }),
       ],
@@ -78,7 +78,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
       funcName: 'arc4.abimethod',
       argSpec: (a) => [
         a.obj({
-          allowActions: a.optional(stringPType, new ArrayPType({ elementType: stringPType })),
+          allowActions: a.optional(stringPType, new ReadonlyArrayPType({ elementType: stringPType })),
           onCreate: a.optional(stringPType),
           readonly: a.optional(boolPType),
           name: a.optional(stringPType),

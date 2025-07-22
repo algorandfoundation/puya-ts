@@ -1,0 +1,32 @@
+main tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram:
+    block@0: // L112
+        let tmp%0#0: uint64 = (txn ApplicationID)
+        goto tmp%0#0 ? block@1 : block@11
+    block@1: // if_body_L113
+        let reinterpret_string%0#0: string = ((txnas ApplicationArgs) 0u)
+        let tmp%2#0: bool = (== reinterpret_string%0#0 "box")
+        goto tmp%2#0 ? block@2 : block@4
+    block@2: // if_body_L115
+        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get "abc")
+        (assert aggregate%box_get%1#0) // Box must have value
+        let storage_value%0#0: bytes = aggregate%box_get%0#0
+        let maybe_value_converted%0#0: uint64 = (btoi storage_value%0#0)
+        return maybe_value_converted%0#0
+    block@4: // after_if_else_L115
+        let tmp%3#0: bool = (== reinterpret_string%0#0 "boxmap")
+        goto tmp%3#0 ? block@5 : block@7
+    block@5: // if_body_L117
+        let (aggregate%box_get%2#0: bytes, aggregate%box_get%3#0: bool) = (box_get "abc")
+        (assert aggregate%box_get%3#0) // Box must have value
+        let storage_value%1#0: bytes = aggregate%box_get%2#0
+        let maybe_value_converted%1#0: uint64 = (btoi storage_value%1#0)
+        return maybe_value_converted%1#0
+    block@7: // after_if_else_L117
+        let tmp%4#0: bool = (== reinterpret_string%0#0 "createbox")
+        goto tmp%4#0 ? block@8 : block@11
+    block@8: // if_body_L119
+        let encoded_value%0#0: bytes[8] = (itob 1u)
+        (box_put "abc" encoded_value%0#0)
+        return 1u
+    block@11: // after_if_else_L113
+        return 1u

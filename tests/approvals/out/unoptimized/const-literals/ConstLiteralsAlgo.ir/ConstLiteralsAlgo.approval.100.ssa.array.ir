@@ -1,0 +1,162 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        goto block@1
+    block@1: // L15
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#1 0u)
+        goto tmp%1#0 ? block@2 : block@11
+    block@2: // abi_routing_L15
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "test()uint64" => block@3, method "test2()uint64" => block@4, method "test3()uint64" => block@5, method "test4()uint64" => block@6, method "test5()uint512" => block@7, method "test6()uint512" => block@8, * => block@9}
+    block@3: // test_route_L16
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 NoOp)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (!= tmp%5#0 0u)
+        (assert tmp%6#0) // can only call when not creating
+        let tmp%7#0: uint64 = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test()
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%7#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%8#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%9#0: bytes = (concat 0x151f7c75 tmp%8#0)
+        (log tmp%9#0)
+        let tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#0: bool = 1u
+        goto block@16
+    block@4: // test2_route_L20
+        let tmp%10#0: uint64 = (txn OnCompletion)
+        let tmp%11#0: bool = (== tmp%10#0 NoOp)
+        (assert tmp%11#0) // OnCompletion is not NoOp
+        let tmp%12#0: uint64 = (txn ApplicationID)
+        let tmp%13#0: bool = (!= tmp%12#0 0u)
+        (assert tmp%13#0) // can only call when not creating
+        let tmp%14#0: uint64 = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test2()
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%14#0)
+        let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
+        let tmp%15#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
+        let tmp%16#0: bytes = (concat 0x151f7c75 tmp%15#0)
+        (log tmp%16#0)
+        let tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#1: bool = 1u
+        goto block@16
+    block@5: // test3_route_L25
+        let tmp%17#0: uint64 = (txn OnCompletion)
+        let tmp%18#0: bool = (== tmp%17#0 NoOp)
+        (assert tmp%18#0) // OnCompletion is not NoOp
+        let tmp%19#0: uint64 = (txn ApplicationID)
+        let tmp%20#0: bool = (!= tmp%19#0 0u)
+        (assert tmp%20#0) // can only call when not creating
+        let tmp%21#0: uint64 = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test3()
+        let aggregate%val_as_bytes%2#0: bytes[8] = (itob tmp%21#0)
+        let aggregate%as_Encoded(uint64)%2#0: Encoded(uint64) = aggregate%val_as_bytes%2#0
+        let tmp%22#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%2#0
+        let tmp%23#0: bytes = (concat 0x151f7c75 tmp%22#0)
+        (log tmp%23#0)
+        let tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#2: bool = 1u
+        goto block@16
+    block@6: // test4_route_L32
+        let tmp%24#0: uint64 = (txn OnCompletion)
+        let tmp%25#0: bool = (== tmp%24#0 NoOp)
+        (assert tmp%25#0) // OnCompletion is not NoOp
+        let tmp%26#0: uint64 = (txn ApplicationID)
+        let tmp%27#0: bool = (!= tmp%26#0 0u)
+        (assert tmp%27#0) // can only call when not creating
+        let tmp%28#0: uint64 = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test4()
+        let aggregate%val_as_bytes%3#0: bytes[8] = (itob tmp%28#0)
+        let aggregate%as_Encoded(uint64)%3#0: Encoded(uint64) = aggregate%val_as_bytes%3#0
+        let tmp%29#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%3#0
+        let tmp%30#0: bytes = (concat 0x151f7c75 tmp%29#0)
+        (log tmp%30#0)
+        let tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#3: bool = 1u
+        goto block@16
+    block@7: // test5_route_L37
+        let tmp%31#0: uint64 = (txn OnCompletion)
+        let tmp%32#0: bool = (== tmp%31#0 NoOp)
+        (assert tmp%32#0) // OnCompletion is not NoOp
+        let tmp%33#0: uint64 = (txn ApplicationID)
+        let tmp%34#0: bool = (!= tmp%33#0 0u)
+        (assert tmp%34#0) // can only call when not creating
+        let tmp%35#0: biguint = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test5()
+        let aggregate%value_len%0#0: uint64 = (len tmp%35#0)
+        let aggregate%len_ok%0#0: bool = (<= aggregate%value_len%0#0 64u)
+        (assert aggregate%len_ok%0#0) // overflow
+        let aggregate%bzero%0#0: bytes = (bzero 64u)
+        let aggregate%arc4_encoded%0#0: bytes[64] = (b| tmp%35#0 aggregate%bzero%0#0)
+        let aggregate%as_Encoded(uint512)%0#0: Encoded(uint512) = aggregate%arc4_encoded%0#0
+        let tmp%36#0: Encoded(uint512) = aggregate%as_Encoded(uint512)%0#0
+        let tmp%37#0: bytes = (concat 0x151f7c75 tmp%36#0)
+        (log tmp%37#0)
+        let tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#4: bool = 1u
+        goto block@16
+    block@8: // test6_route_L41
+        let tmp%38#0: uint64 = (txn OnCompletion)
+        let tmp%39#0: bool = (== tmp%38#0 NoOp)
+        (assert tmp%39#0) // OnCompletion is not NoOp
+        let tmp%40#0: uint64 = (txn ApplicationID)
+        let tmp%41#0: bool = (!= tmp%40#0 0u)
+        (assert tmp%41#0) // can only call when not creating
+        let tmp%42#0: biguint = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test6()
+        let aggregate%value_len%1#0: uint64 = (len tmp%42#0)
+        let aggregate%len_ok%1#0: bool = (<= aggregate%value_len%1#0 64u)
+        (assert aggregate%len_ok%1#0) // overflow
+        let aggregate%bzero%1#0: bytes = (bzero 64u)
+        let aggregate%arc4_encoded%1#0: bytes[64] = (b| tmp%42#0 aggregate%bzero%1#0)
+        let aggregate%as_Encoded(uint512)%1#0: Encoded(uint512) = aggregate%arc4_encoded%1#0
+        let tmp%43#0: Encoded(uint512) = aggregate%as_Encoded(uint512)%1#0
+        let tmp%44#0: bytes = (concat 0x151f7c75 tmp%43#0)
+        (log tmp%44#0)
+        let tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#5: bool = 1u
+        goto block@16
+    block@9: // switch_case_default_L15
+        goto block@10
+    block@10: // switch_case_next_L15
+        goto block@15
+    block@11: // bare_routing_L15
+        let tmp%45#0: uint64 = (txn OnCompletion)
+        switch tmp%45#0 {0u => block@12, * => block@13}
+    block@12: // __algots__.defaultCreate_L15
+        let tmp%46#0: uint64 = (txn ApplicationID)
+        let tmp%47#0: bool = (== tmp%46#0 0u)
+        (assert tmp%47#0) // can only call when creating
+        tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__algots__.defaultCreate()
+        let tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#6: bool = 1u
+        goto block@16
+    block@13: // switch_case_default_L15
+        goto block@14
+    block@14: // switch_case_next_L15
+        goto block@15
+    block@15: // after_if_else_L15
+        let tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#7: bool = 0u
+        goto block@16
+    block@16: // after_inlined_tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#6 <- block@12, tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4_router__%0#7 <- block@15)
+        return tmp%0#0
+
+subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test() -> uint64:
+    block@0: // L16
+        return 123u
+
+subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test2() -> uint64:
+    block@0: // L20
+        return 4u
+
+subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test3() -> uint64:
+    block@0: // L25
+        return 12u
+
+subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test4() -> uint64:
+    block@0: // L32
+        let reinterpret_bool%0#0: bool = (getbit 9223372036854775808u 63u)
+        (assert reinterpret_bool%0#0)
+        return 9223372036854775808u
+
+subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test5() -> biguint:
+    block@0: // L37
+        return 340282366920938463463374607431768211456b
+
+subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test6() -> biguint:
+    block@0: // L41
+        return 115792089237316195423570985008687907853269984665640564039457584007913129639936b
+
+subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__algots__.defaultCreate() -> void:
+    block@0: // L15
+        return 

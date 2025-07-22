@@ -33,7 +33,6 @@ class ItxnComposeAlgo extends Contract {
       const addr = addresses[i]
       itxnCompose.next({
         ...payFields,
-
         receiver: addr.bytes,
       })
     }

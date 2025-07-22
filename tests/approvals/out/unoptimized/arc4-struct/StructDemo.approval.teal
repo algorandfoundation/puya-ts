@@ -155,12 +155,6 @@ main_toNative_route@8:
     // tests/approvals/arc4-struct.algo.ts:44
     // public toNative(v1: Vector) {
     callsub toNative
-    swap
-    bytec_0 // 0x
-    swap
-    concat
-    swap
-    concat
     bytec_1 // 0x151f7c75
     swap
     concat
@@ -322,14 +316,14 @@ testVectorCreationAndEquality_block@0:
     dup
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     log
     // tests/approvals/arc4-struct.algo.ts:14
     // log(v1.y)
     dup
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     log
     // tests/approvals/arc4-struct.algo.ts:15
     // const v2 = new Vector({ y: new ARC4Uint64(0), x: new ARC4Uint64(0) })
@@ -357,12 +351,12 @@ addVectors_block@0:
     frame_dig -2
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     frame_dig -1
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     +
     itob
@@ -371,12 +365,12 @@ addVectors_block@0:
     frame_dig -2
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     frame_dig -1
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     +
     itob
@@ -434,11 +428,11 @@ implicitCastingAndSpreading_block@0:
     frame_dig -1
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     frame_dig -1
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     bytec_0 // 0x
     uncover 2
     concat
@@ -449,12 +443,12 @@ implicitCastingAndSpreading_block@0:
     dup
     intc_0 // 0
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     swap
     dup
     intc_1 // 8
     dup
-    extract3 // on error: Index access is out of bounds
+    extract3
     bytec_0 // 0x
     uncover 3
     concat
@@ -489,23 +483,16 @@ toAndFromBytes_block@0:
     retsub
 
 
-// tests/approvals/arc4-struct.algo.ts::StructDemo.toNative(v1: bytes) -> bytes, bytes:
+// tests/approvals/arc4-struct.algo.ts::StructDemo.toNative(v1: bytes) -> bytes:
 toNative:
     // tests/approvals/arc4-struct.algo.ts:44
     // public toNative(v1: Vector) {
-    proto 1 2
+    proto 1 1
 
 toNative_block@0:
     // tests/approvals/arc4-struct.algo.ts:45
     // return v1.native
     frame_dig -1
-    intc_0 // 0
-    intc_1 // 8
-    extract3 // on error: Index access is out of bounds
-    frame_dig -1
-    intc_1 // 8
-    dup
-    extract3 // on error: Index access is out of bounds
     retsub
 
 
@@ -522,7 +509,7 @@ getPlugin_block@0:
     frame_dig -1
     concat
     // tests/approvals/arc4-struct.algo.ts:53
-    // const value = this.plugins(key).value.copy()
+    // const value = clone(this.plugins(key).value)
     box_get
     assert // Box must have value
     // tests/approvals/arc4-struct.algo.ts:54
@@ -530,7 +517,7 @@ getPlugin_block@0:
     dup
     pushint 16 // 16
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     intc_0 // 0
     >
@@ -548,7 +535,7 @@ getMain_block@0:
     // plugin = Box<PluginInfo>({ key: 'main' })
     pushbytes "main"
     // tests/approvals/arc4-struct.algo.ts:59
-    // const value = this.plugin.value.copy()
+    // const value = clone(this.plugin.value)
     box_get
     assert // Box must have value
     // tests/approvals/arc4-struct.algo.ts:60
@@ -556,7 +543,7 @@ getMain_block@0:
     dup
     pushint 16 // 16
     intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    extract3
     btoi
     intc_0 // 0
     >
@@ -574,7 +561,7 @@ setLastCalled:
 
 setLastCalled_block@0:
     // tests/approvals/arc4-struct.algo.ts:65
-    // this.plugins(key).value.methods[index].lastCalled = new arc4.UintN64(lastCalled)
+    // this.plugins(key).value.methods[index].lastCalled = new arc4.Uint64(lastCalled)
     frame_dig -1
     itob
     // tests/approvals/arc4-struct.algo.ts:48
@@ -583,10 +570,12 @@ setLastCalled_block@0:
     frame_dig -3
     concat
     // tests/approvals/arc4-struct.algo.ts:65
-    // this.plugins(key).value.methods[index].lastCalled = new arc4.UintN64(lastCalled)
+    // this.plugins(key).value.methods[index].lastCalled = new arc4.Uint64(lastCalled)
     dup
     box_get
     assert // Box must have value
+    uncover 2
+    swap
     dup
     pushint 25 // 25
     extract_uint16
@@ -604,24 +593,17 @@ setLastCalled_block@0:
     intc_3 // 20
     *
     intc_3 // 20
-    extract3 // on error: Index access is out of bounds
-    uncover 4
-    swap
+    extract3 // on error: index access is out of bounds
     pushint 12 // 12
-    uncover 2
+    uncover 4
     replace3
-    swap
-    dup
-    intc_0 // 0
-    extract_uint16
-    frame_dig -2
-    >
-    assert // Index access is out of bounds
     frame_dig -2
     intc_3 // 20
     *
     pushint 2 // 2
     +
+    uncover 2
+    swap
     uncover 2
     replace3
     dig 1
@@ -647,6 +629,12 @@ setPlugin:
     proto 1 0
 
 setPlugin_block@0:
+    // tests/approvals/arc4-struct.algo.ts:73
+    // adminPrivileges: new arc4.Bool(false),
+    pushbytes 0x00
+    intc_0 // 0
+    dup
+    setbit
     // tests/approvals/arc4-struct.algo.ts:76
     // selector: new arc4.StaticBytes(methodSelector('test()void')),
     bytec 5 // method "test()void"
@@ -657,8 +645,8 @@ setPlugin_block@0:
     // tests/approvals/arc4-struct.algo.ts:75-79
     // new MethodInfo({
     //   selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //   cooldown: new arc4.UintN64(1),
-    //   lastCalled: new arc4.UintN64(1),
+    //   cooldown: new arc4.Uint64(1),
+    //   lastCalled: new arc4.Uint64(1),
     // }),
     bytec_0 // 0x
     // tests/approvals/arc4-struct.algo.ts:76
@@ -667,130 +655,113 @@ setPlugin_block@0:
     // tests/approvals/arc4-struct.algo.ts:75-79
     // new MethodInfo({
     //   selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //   cooldown: new arc4.UintN64(1),
-    //   lastCalled: new arc4.UintN64(1),
+    //   cooldown: new arc4.Uint64(1),
+    //   lastCalled: new arc4.Uint64(1),
     // }),
     concat
     // tests/approvals/arc4-struct.algo.ts:77
-    // cooldown: new arc4.UintN64(1),
+    // cooldown: new arc4.Uint64(1),
     bytec 4 // 0x0000000000000001
     // tests/approvals/arc4-struct.algo.ts:75-79
     // new MethodInfo({
     //   selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //   cooldown: new arc4.UintN64(1),
-    //   lastCalled: new arc4.UintN64(1),
+    //   cooldown: new arc4.Uint64(1),
+    //   lastCalled: new arc4.Uint64(1),
     // }),
     concat
     // tests/approvals/arc4-struct.algo.ts:78
-    // lastCalled: new arc4.UintN64(1),
+    // lastCalled: new arc4.Uint64(1),
     bytec 4 // 0x0000000000000001
     // tests/approvals/arc4-struct.algo.ts:75-79
     // new MethodInfo({
     //   selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //   cooldown: new arc4.UintN64(1),
-    //   lastCalled: new arc4.UintN64(1),
+    //   cooldown: new arc4.Uint64(1),
+    //   lastCalled: new arc4.Uint64(1),
     // }),
     concat
     // tests/approvals/arc4-struct.algo.ts:74-80
     // methods: new arc4.DynamicArray(
     //   new MethodInfo({
     //     selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //     cooldown: new arc4.UintN64(1),
-    //     lastCalled: new arc4.UintN64(1),
+    //     cooldown: new arc4.Uint64(1),
+    //     lastCalled: new arc4.Uint64(1),
     //   }),
     // ),
-    bytec_0 // 0x
-    swap
-    concat
-    pushbytes 0x0001
+    intc_2 // 1
+    itob
+    extract 6 2
     swap
     concat
     // tests/approvals/arc4-struct.algo.ts:69-81
     // this.plugins(key).value = new PluginInfo({
-    //   lastValidRound: new arc4.UintN64(1),
-    //   cooldown: new arc4.UintN64(),
-    //   lastCalled: new arc4.UintN64(),
+    //   lastValidRound: new arc4.Uint64(1),
+    //   cooldown: new arc4.Uint64(),
+    //   lastCalled: new arc4.Uint64(),
     //   adminPrivileges: new arc4.Bool(false),
     //   methods: new arc4.DynamicArray(
     //     new MethodInfo({
     //       selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //       cooldown: new arc4.UintN64(1),
-    //       lastCalled: new arc4.UintN64(1),
+    //       cooldown: new arc4.Uint64(1),
+    //       lastCalled: new arc4.Uint64(1),
     //     }),
     //   ),
     // })
     bytec_0 // 0x
     // tests/approvals/arc4-struct.algo.ts:70
-    // lastValidRound: new arc4.UintN64(1),
+    // lastValidRound: new arc4.Uint64(1),
     bytec 4 // 0x0000000000000001
     // tests/approvals/arc4-struct.algo.ts:69-81
     // this.plugins(key).value = new PluginInfo({
-    //   lastValidRound: new arc4.UintN64(1),
-    //   cooldown: new arc4.UintN64(),
-    //   lastCalled: new arc4.UintN64(),
+    //   lastValidRound: new arc4.Uint64(1),
+    //   cooldown: new arc4.Uint64(),
+    //   lastCalled: new arc4.Uint64(),
     //   adminPrivileges: new arc4.Bool(false),
     //   methods: new arc4.DynamicArray(
     //     new MethodInfo({
     //       selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //       cooldown: new arc4.UintN64(1),
-    //       lastCalled: new arc4.UintN64(1),
+    //       cooldown: new arc4.Uint64(1),
+    //       lastCalled: new arc4.Uint64(1),
     //     }),
     //   ),
     // })
     concat
     // tests/approvals/arc4-struct.algo.ts:71
-    // cooldown: new arc4.UintN64(),
+    // cooldown: new arc4.Uint64(),
     bytec_2 // 0x0000000000000000
     // tests/approvals/arc4-struct.algo.ts:69-81
     // this.plugins(key).value = new PluginInfo({
-    //   lastValidRound: new arc4.UintN64(1),
-    //   cooldown: new arc4.UintN64(),
-    //   lastCalled: new arc4.UintN64(),
+    //   lastValidRound: new arc4.Uint64(1),
+    //   cooldown: new arc4.Uint64(),
+    //   lastCalled: new arc4.Uint64(),
     //   adminPrivileges: new arc4.Bool(false),
     //   methods: new arc4.DynamicArray(
     //     new MethodInfo({
     //       selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //       cooldown: new arc4.UintN64(1),
-    //       lastCalled: new arc4.UintN64(1),
+    //       cooldown: new arc4.Uint64(1),
+    //       lastCalled: new arc4.Uint64(1),
     //     }),
     //   ),
     // })
     concat
     // tests/approvals/arc4-struct.algo.ts:72
-    // lastCalled: new arc4.UintN64(),
+    // lastCalled: new arc4.Uint64(),
     bytec_2 // 0x0000000000000000
     // tests/approvals/arc4-struct.algo.ts:69-81
     // this.plugins(key).value = new PluginInfo({
-    //   lastValidRound: new arc4.UintN64(1),
-    //   cooldown: new arc4.UintN64(),
-    //   lastCalled: new arc4.UintN64(),
+    //   lastValidRound: new arc4.Uint64(1),
+    //   cooldown: new arc4.Uint64(),
+    //   lastCalled: new arc4.Uint64(),
     //   adminPrivileges: new arc4.Bool(false),
     //   methods: new arc4.DynamicArray(
     //     new MethodInfo({
     //       selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //       cooldown: new arc4.UintN64(1),
-    //       lastCalled: new arc4.UintN64(1),
+    //       cooldown: new arc4.Uint64(1),
+    //       lastCalled: new arc4.Uint64(1),
     //     }),
     //   ),
     // })
     concat
-    // tests/approvals/arc4-struct.algo.ts:73
-    // adminPrivileges: new arc4.Bool(false),
-    pushbytes 0x00
-    // tests/approvals/arc4-struct.algo.ts:69-81
-    // this.plugins(key).value = new PluginInfo({
-    //   lastValidRound: new arc4.UintN64(1),
-    //   cooldown: new arc4.UintN64(),
-    //   lastCalled: new arc4.UintN64(),
-    //   adminPrivileges: new arc4.Bool(false),
-    //   methods: new arc4.DynamicArray(
-    //     new MethodInfo({
-    //       selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //       cooldown: new arc4.UintN64(1),
-    //       lastCalled: new arc4.UintN64(1),
-    //     }),
-    //   ),
-    // })
+    uncover 2
     concat
     pushint 27 // 27
     itob
@@ -805,15 +776,15 @@ setPlugin_block@0:
     concat
     // tests/approvals/arc4-struct.algo.ts:69-81
     // this.plugins(key).value = new PluginInfo({
-    //   lastValidRound: new arc4.UintN64(1),
-    //   cooldown: new arc4.UintN64(),
-    //   lastCalled: new arc4.UintN64(),
+    //   lastValidRound: new arc4.Uint64(1),
+    //   cooldown: new arc4.Uint64(),
+    //   lastCalled: new arc4.Uint64(),
     //   adminPrivileges: new arc4.Bool(false),
     //   methods: new arc4.DynamicArray(
     //     new MethodInfo({
     //       selector: new arc4.StaticBytes(methodSelector('test()void')),
-    //       cooldown: new arc4.UintN64(1),
-    //       lastCalled: new arc4.UintN64(1),
+    //       cooldown: new arc4.Uint64(1),
+    //       lastCalled: new arc4.Uint64(1),
     //     }),
     //   ),
     // })

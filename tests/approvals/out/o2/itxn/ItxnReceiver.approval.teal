@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 1
-    // tests/approvals/itxn.algo.ts:227
+    // tests/approvals/itxn.algo.ts:226
     // class ItxnReceiver extends Contract {
     txn NumAppArgs
     bz main_bare_routing@6
@@ -13,20 +13,20 @@ main:
     match main_receivePay_route@3
 
 main_after_if_else@10:
-    // tests/approvals/itxn.algo.ts:227
+    // tests/approvals/itxn.algo.ts:226
     // class ItxnReceiver extends Contract {
     pushint 0 // 0
     return
 
 main_receivePay_route@3:
-    // tests/approvals/itxn.algo.ts:228
+    // tests/approvals/itxn.algo.ts:227
     // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/itxn.algo.ts:227
+    // tests/approvals/itxn.algo.ts:226
     // class ItxnReceiver extends Contract {
     txna ApplicationArgs 1
     btoi
@@ -40,28 +40,28 @@ main_receivePay_route@3:
     assert // transaction type is pay
     txna ApplicationArgs 2
     extract 2 0
-    // tests/approvals/itxn.algo.ts:229
+    // tests/approvals/itxn.algo.ts:228
     // return [a, b.amount, c]
     swap
     gtxns Amount
-    // tests/approvals/itxn.algo.ts:228
-    // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
     uncover 2
     itob
     swap
     itob
-    dig 2
+    concat
+    dig 1
     len
     itob
     extract 6 2
-    uncover 3
+    uncover 2
     concat
-    cover 2
-    concat
+    swap
     pushbytes 0x0012
     concat
     swap
     concat
+    // tests/approvals/itxn.algo.ts:227
+    // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
     pushbytes 0x151f7c75
     swap
     concat
@@ -70,7 +70,7 @@ main_receivePay_route@3:
     return
 
 main_bare_routing@6:
-    // tests/approvals/itxn.algo.ts:227
+    // tests/approvals/itxn.algo.ts:226
     // class ItxnReceiver extends Contract {
     txn OnCompletion
     bnz main_after_if_else@10

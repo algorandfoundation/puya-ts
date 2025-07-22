@@ -1,0 +1,161 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__() -> bool:
+    block@0: // L8
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@8
+    block@1: // abi_routing_L8
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "optIn()void" => block@2, method "setState((uint64,byte[]),uint64[10])void" => block@3, method "getState()(uint64,uint64,byte[],byte[],uint64[10],(uint64,byte[]),(uint64,byte[]),(uint64,byte[],bool,string))" => block@4, method "clearState()void" => block@5, * => block@6}
+    block@2: // optIn_route_L18
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 OptIn)
+        (assert tmp%4#0) // OnCompletion is not OptIn
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (!= tmp%5#0 0u)
+        (assert tmp%6#0) // can only call when not creating
+        tests/approvals/local-state.algo.ts::LocalStateDemo.optIn()
+        return 1u
+    block@3: // setState_route_L21
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        (assert tmp%8#0) // OnCompletion is not NoOp
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (!= tmp%9#0 0u)
+        (assert tmp%10#0) // can only call when not creating
+        let reinterpret_Encoded(uint64,(len+uint8[]))%0#0: Encoded(uint64,(len+uint8[])) = (txna ApplicationArgs 1)
+        let reinterpret_Encoded(uint64[10])%0#0: Encoded(uint64[10]) = (txna ApplicationArgs 2)
+        tests/approvals/local-state.algo.ts::LocalStateDemo.setState(reinterpret_Encoded(uint64,(len+uint8[]))%0#0, reinterpret_Encoded(uint64[10])%0#0)
+        return 1u
+    block@4: // getState_route_L32
+        let tmp%11#0: uint64 = (txn OnCompletion)
+        let tmp%12#0: bool = (== tmp%11#0 NoOp)
+        (assert tmp%12#0) // OnCompletion is not NoOp
+        let tmp%13#0: uint64 = (txn ApplicationID)
+        let tmp%14#0: bool = (!= tmp%13#0 0u)
+        (assert tmp%14#0) // can only call when not creating
+        let tmp%15#0: Encoded(uint64,uint64,(len+uint8[]),(len+uint8[]),uint64[10],(uint64,(len+uint8[])),(uint64,(len+uint8[])),(uint64,(len+uint8[]),bool1,(len+utf8[]))) = tests/approvals/local-state.algo.ts::LocalStateDemo.getState()
+        let tmp%16#0: bytes = (concat 0x151f7c75 tmp%15#0)
+        (log tmp%16#0)
+        return 1u
+    block@5: // clearState_route_L45
+        let tmp%17#0: uint64 = (txn OnCompletion)
+        let tmp%18#0: bool = (== tmp%17#0 NoOp)
+        (assert tmp%18#0) // OnCompletion is not NoOp
+        let tmp%19#0: uint64 = (txn ApplicationID)
+        let tmp%20#0: bool = (!= tmp%19#0 0u)
+        (assert tmp%20#0) // can only call when not creating
+        tests/approvals/local-state.algo.ts::LocalStateDemo.clearState()
+        return 1u
+    block@6: // switch_case_default_L8
+        goto block@7
+    block@7: // switch_case_next_L8
+        goto block@12
+    block@8: // bare_routing_L8
+        let tmp%21#0: uint64 = (txn OnCompletion)
+        switch tmp%21#0 {0u => block@9, * => block@10}
+    block@9: // __algots__.defaultCreate_L8
+        let tmp%22#0: uint64 = (txn ApplicationID)
+        let tmp%23#0: bool = (== tmp%22#0 0u)
+        (assert tmp%23#0) // can only call when creating
+        tests/approvals/local-state.algo.ts::LocalStateDemo.__algots__.defaultCreate()
+        return 1u
+    block@10: // switch_case_default_L8
+        goto block@11
+    block@11: // switch_case_next_L8
+        goto block@12
+    block@12: // after_if_else_L8
+        return 0u
+
+subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.optIn() -> void:
+    block@0: // L18
+        return 
+
+subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.setState(p: Encoded(uint64,(len+uint8[])), c: Encoded(uint64[10])) -> void:
+    block@0: // L21
+        let tuple_item%0#0: Encoded(uint64) = extract_value(p#0, 0)
+        let values%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let tuple_item%1#0: Encoded(len+uint8[]) = extract_value(p#0, 1)
+        let values%1#0: bytes = decode_bytes<bytes>(tuple_item%1#0)
+        let a#0: uint64 = values%0#0
+        let b#0: bytes = values%1#0
+        let tmp%0#0: account = (txn Sender)
+        (app_local_put tmp%0#0 "l1" a#0)
+        let tmp%1#0: account = (txn Sender)
+        (app_local_put tmp%1#0 "localUint2" a#0)
+        let tmp%2#0: account = (txn Sender)
+        (app_local_put tmp%2#0 "b1" b#0)
+        let tmp%3#0: account = (txn Sender)
+        (app_local_put tmp%3#0 "localBytes2" b#0)
+        let tmp%4#0: account = (txn Sender)
+        (app_local_put tmp%4#0 "localEncoded" c#0)
+        let tmp%5#0: account = (txn Sender)
+        let encoded_for_storage%0#0: Encoded(uint64,(len+uint8[])) = bytes_encode<(uint64,(len+uint8[]))>(a#0, b#0)
+        (app_local_put tmp%5#0 "localTuple" encoded_for_storage%0#0)
+        let tmp%6#0: account = (txn Sender)
+        let encoded_for_storage%1#0: Encoded(uint64,(len+uint8[])) = bytes_encode<(uint64,(len+uint8[]))>(a#0, b#0)
+        (app_local_put tmp%6#0 "localObject" encoded_for_storage%1#0)
+        let tmp%7#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>("hello")
+        let tmp%8#0: Encoded(uint64,(len+uint8[]),bool1,(len+utf8[])) = bytes_encode<(uint64,(len+uint8[]),bool1,(len+utf8[]))>(a#0, b#0, 1u, tmp%7#0)
+        let tmp%9#0: account = (txn Sender)
+        (app_local_put tmp%9#0 "localMutableObject" tmp%8#0)
+        return 
+
+subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> Encoded(uint64,uint64,(len+uint8[]),(len+uint8[]),uint64[10],(uint64,(len+uint8[])),(uint64,(len+uint8[])),(uint64,(len+uint8[]),bool1,(len+utf8[]))):
+    block@0: // L32
+        let tmp%0#0: account = (txn Sender)
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_local_get_ex tmp%0#0 0u "l1")
+        (assert maybe_exists%0#0) // check LocalState exists
+        let tmp%1#0: account = (txn Sender)
+        let (maybe_value%1#0: uint64, maybe_exists%1#0: bool) = (app_local_get_ex tmp%1#0 0u "localUint2")
+        (assert maybe_exists%1#0) // check LocalState exists
+        let tmp%2#0: account = (txn Sender)
+        let (maybe_value%2#0: bytes, maybe_exists%2#0: bool) = (app_local_get_ex tmp%2#0 0u "b1")
+        (assert maybe_exists%2#0) // check LocalState exists
+        let tmp%3#0: account = (txn Sender)
+        let (maybe_value%3#0: bytes, maybe_exists%3#0: bool) = (app_local_get_ex tmp%3#0 0u "localBytes2")
+        (assert maybe_exists%3#0) // check LocalState exists
+        let tmp%4#0: account = (txn Sender)
+        let (maybe_value%4#0: bytes, maybe_exists%4#0: bool) = (app_local_get_ex tmp%4#0 0u "localEncoded")
+        (assert maybe_exists%4#0) // check LocalState exists
+        let tmp%5#0: account = (txn Sender)
+        let (maybe_value%5#0: bytes, maybe_exists%5#0: bool) = (app_local_get_ex tmp%5#0 0u "localTuple")
+        (assert maybe_exists%5#0) // check LocalState exists
+        let (tmp%6#0: uint64, tmp%7#0: bytes) = decode_bytes<(uint64,bytes,)>(maybe_value%5#0)
+        let tmp%8#0: account = (txn Sender)
+        let (maybe_value%6#0: bytes, maybe_exists%6#0: bool) = (app_local_get_ex tmp%8#0 0u "localObject")
+        (assert maybe_exists%6#0) // check LocalState exists
+        let (tmp%9#0: uint64, tmp%10#0: bytes) = decode_bytes<(uint64,bytes,)>(maybe_value%6#0)
+        let tmp%11#0: account = (txn Sender)
+        let (maybe_value%7#0: bytes, maybe_exists%7#0: bool) = (app_local_get_ex tmp%11#0 0u "localMutableObject")
+        (assert maybe_exists%7#0) // check LocalState exists
+        let tmp%12#0: Encoded(uint64,uint64,(len+uint8[]),(len+uint8[]),uint64[10],(uint64,(len+uint8[])),(uint64,(len+uint8[])),(uint64,(len+uint8[]),bool1,(len+utf8[]))) = bytes_encode<(uint64,uint64,(len+uint8[]),(len+uint8[]),uint64[10],(uint64,(len+uint8[])),(uint64,(len+uint8[])),(uint64,(len+uint8[]),bool1,(len+utf8[])))>(maybe_value%0#0, maybe_value%1#0, maybe_value%2#0, maybe_value%3#0, maybe_value%4#0, tmp%6#0, tmp%7#0, tmp%9#0, tmp%10#0, maybe_value%7#0)
+        return tmp%12#0
+
+subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.clearState() -> void:
+    block@0: // L45
+        let tmp%0#0: account = (txn Sender)
+        (app_local_del tmp%0#0 "l1")
+        let tmp%1#0: account = (txn Sender)
+        (app_local_del tmp%1#0 "localUint2")
+        let tmp%2#0: account = (txn Sender)
+        (app_local_del tmp%2#0 "b1")
+        let tmp%3#0: account = (txn Sender)
+        (app_local_del tmp%3#0 "localBytes2")
+        let tmp%4#0: account = (txn Sender)
+        (app_local_del tmp%4#0 "localEncoded")
+        let tmp%5#0: account = (txn Sender)
+        (app_local_del tmp%5#0 "localTuple")
+        let tmp%6#0: account = (txn Sender)
+        (app_local_del tmp%6#0 "localObject")
+        let tmp%7#0: account = (txn Sender)
+        (app_local_del tmp%7#0 "localMutableObject")
+        return 
+
+subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.__algots__.defaultCreate() -> void:
+    block@0: // L8
+        return 

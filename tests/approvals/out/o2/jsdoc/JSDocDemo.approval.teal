@@ -3,7 +3,6 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    bytecblock 0x151f7c75
     // tests/approvals/jsdoc.algo.ts:20
     // export class JSDocDemo extends Contract {
     txn NumAppArgs
@@ -30,20 +29,33 @@ main_test2_route@4:
     // export class JSDocDemo extends Contract {
     txna ApplicationArgs 1
     extract 2 0
-    // tests/approvals/jsdoc.algo.ts:39
-    // test2(a: bytes): DemoType {
+    // tests/approvals/jsdoc.algo.ts:40-42
+    // return {
+    //   a,
+    // }
     dup
     len
     itob
     extract 6 2
     swap
     concat
-    pushbytes 0x0002
+    // tests/approvals/jsdoc.algo.ts:39-42
+    // test2(a: bytes): DemoType {
+    //   return {
+    //     a,
+    //   }
+    pushbytes 0x151f7c750002
+    // tests/approvals/jsdoc.algo.ts:39
+    // test2(a: bytes): DemoType {
     swap
+    // tests/approvals/jsdoc.algo.ts:39-42
+    // test2(a: bytes): DemoType {
+    //   return {
+    //     a,
+    //   }
     concat
-    bytec_0 // 0x151f7c75
-    swap
-    concat
+    // tests/approvals/jsdoc.algo.ts:39
+    // test2(a: bytes): DemoType {
     log
     pushint 1 // 1
     return
@@ -56,17 +68,12 @@ main_test_route@3:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
+    pushbytes 0x151f7c75
     // tests/approvals/jsdoc.algo.ts:20
     // export class JSDocDemo extends Contract {
     txna ApplicationArgs 1
-    btoi
-    // tests/approvals/jsdoc.algo.ts:31
-    // return new DemoStruct({ a: new UintN<64>(a) })
-    itob
     // tests/approvals/jsdoc.algo.ts:30
     // test(a: uint64, b: bytes): DemoStruct {
-    bytec_0 // 0x151f7c75
-    swap
     concat
     log
     pushint 1 // 1

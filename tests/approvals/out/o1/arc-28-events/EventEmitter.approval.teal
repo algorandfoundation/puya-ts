@@ -4,6 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 1 0
+    bytecblock 0x0003
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
     txn NumAppArgs
@@ -19,7 +20,7 @@ main_after_if_else@12:
     return
 
 main_emitDynamicBytes_route@5:
-    // tests/approvals/arc-28-events.algo.ts:37
+    // tests/approvals/arc-28-events.algo.ts:40
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     txn OnCompletion
     !
@@ -31,14 +32,14 @@ main_emitDynamicBytes_route@5:
     txna ApplicationArgs 1
     extract 2 0
     txna ApplicationArgs 2
-    // tests/approvals/arc-28-events.algo.ts:37
+    // tests/approvals/arc-28-events.algo.ts:40
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     callsub emitDynamicBytes
     intc_0 // 1
     return
 
 main_emitCustom_route@4:
-    // tests/approvals/arc-28-events.algo.ts:32
+    // tests/approvals/arc-28-events.algo.ts:35
     // emitCustom(arg0: string, arg1: boolean) {
     txn OnCompletion
     !
@@ -52,7 +53,7 @@ main_emitCustom_route@4:
     txna ApplicationArgs 2
     intc_1 // 0
     getbit
-    // tests/approvals/arc-28-events.algo.ts:32
+    // tests/approvals/arc-28-events.algo.ts:35
     // emitCustom(arg0: string, arg1: boolean) {
     callsub emitCustom
     intc_0 // 1
@@ -60,7 +61,7 @@ main_emitCustom_route@4:
 
 main_emitSwapped_route@3:
     // tests/approvals/arc-28-events.algo.ts:14
-    // emitSwapped(a: UintN8, b: UintN8) {
+    // emitSwapped(a: Uint8, b: Uint8) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
@@ -71,7 +72,7 @@ main_emitSwapped_route@3:
     txna ApplicationArgs 1
     txna ApplicationArgs 2
     // tests/approvals/arc-28-events.algo.ts:14
-    // emitSwapped(a: UintN8, b: UintN8) {
+    // emitSwapped(a: Uint8, b: Uint8) {
     callsub emitSwapped
     intc_0 // 1
     return
@@ -91,7 +92,7 @@ main_bare_routing@8:
 // tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped(a: bytes, b: bytes) -> void:
 emitSwapped:
     // tests/approvals/arc-28-events.algo.ts:14
-    // emitSwapped(a: UintN8, b: UintN8) {
+    // emitSwapped(a: Uint8, b: Uint8) {
     proto 2 0
     // tests/approvals/arc-28-events.algo.ts:15
     // emit<Swapped>({ a: b, b: a })
@@ -130,16 +131,36 @@ emitSwapped:
     pushbytes 0x388cc12d // method "Swapped((uint8,uint8),uint8)"
     swap
     concat
+    dup
+    log
+    // tests/approvals/arc-28-events.algo.ts:31
+    // emit('Swapped((uint8,uint8),uint8)', [b, b], a)
+    log
+    // tests/approvals/arc-28-events.algo.ts:32
+    // emit('Swapped(uint8[],uint8)', [b, b], a)
+    pushbytes 0x0002
+    frame_dig -1
+    concat
+    frame_dig -1
+    concat
+    bytec_0 // 0x0003
+    frame_dig -2
+    concat
+    swap
+    concat
+    pushbytes 0x08754e0c // method "Swapped(uint8[],uint8)"
+    swap
+    concat
     log
     retsub
 
 
 // tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(arg0: bytes, arg1: uint64) -> void:
 emitCustom:
-    // tests/approvals/arc-28-events.algo.ts:32
+    // tests/approvals/arc-28-events.algo.ts:35
     // emitCustom(arg0: string, arg1: boolean) {
     proto 2 0
-    // tests/approvals/arc-28-events.algo.ts:33
+    // tests/approvals/arc-28-events.algo.ts:36
     // emit('Custom', arg0, arg1)
     frame_dig -2
     len
@@ -151,7 +172,7 @@ emitCustom:
     intc_1 // 0
     frame_dig -1
     setbit
-    pushbytes 0x0003
+    bytec_0 // 0x0003
     swap
     concat
     swap
@@ -161,7 +182,7 @@ emitCustom:
     concat
     dup
     log
-    // tests/approvals/arc-28-events.algo.ts:34
+    // tests/approvals/arc-28-events.algo.ts:37
     // emit('Custom(string,bool)', arg0, arg1)
     log
     retsub
@@ -169,10 +190,10 @@ emitCustom:
 
 // tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes(x: bytes, y: bytes) -> void:
 emitDynamicBytes:
-    // tests/approvals/arc-28-events.algo.ts:37
+    // tests/approvals/arc-28-events.algo.ts:40
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     proto 2 0
-    // tests/approvals/arc-28-events.algo.ts:38
+    // tests/approvals/arc-28-events.algo.ts:42
     // emit('DB(byte[],byte[])', x, y)
     frame_dig -2
     len

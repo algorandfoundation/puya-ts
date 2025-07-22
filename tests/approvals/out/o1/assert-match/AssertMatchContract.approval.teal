@@ -98,8 +98,7 @@ testPay:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     <=
-    bz testPay_bool_false@8
-    frame_dig 0
+    swap
     // tests/approvals/assert-match.algo.ts:11
     // amount: { between: [100_000, 105_000] },
     pushint 100000 // 100000
@@ -113,7 +112,7 @@ testPay:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     >=
-    bz testPay_bool_false@8
+    &&
     frame_dig -1
     gtxns Sender
     // tests/approvals/assert-match.algo.ts:12
@@ -129,7 +128,7 @@ testPay:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     ==
-    bz testPay_bool_false@8
+    &&
     frame_dig -1
     gtxns Receiver
     // tests/approvals/assert-match.algo.ts:13
@@ -145,7 +144,7 @@ testPay:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     ==
-    bz testPay_bool_false@8
+    &&
     frame_dig -1
     gtxns CloseRemainderTo
     // tests/approvals/assert-match.algo.ts:14
@@ -161,7 +160,7 @@ testPay:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     ==
-    bz testPay_bool_false@8
+    &&
     frame_dig -1
     gtxns FirstValid
     // tests/approvals/assert-match.algo.ts:15
@@ -177,7 +176,7 @@ testPay:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     >
-    bz testPay_bool_false@8
+    &&
     frame_dig -1
     gtxns LastValid
     // tests/approvals/assert-match.algo.ts:16
@@ -193,26 +192,9 @@ testPay:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     <
-    bz testPay_bool_false@8
-    intc_0 // 1
-
-testPay_bool_merge@9:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
+    &&
     assert // assert target is match for conditions
     // tests/approvals/assert-match.algo.ts:18
     // return true
     intc_0 // 1
-    swap
     retsub
-
-testPay_bool_false@8:
-    intc_1 // 0
-    b testPay_bool_merge@9

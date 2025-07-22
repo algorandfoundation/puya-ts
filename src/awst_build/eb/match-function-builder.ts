@@ -1,11 +1,21 @@
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
-import { BinaryBooleanOperator } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
+import { wtypes } from '../../awst/wtypes'
 import { CodeError } from '../../errors'
-import { codeInvariant } from '../../util'
+import { codeInvariant, instanceOfAny } from '../../util'
 import type { PType } from '../ptypes'
-import { ArrayPType, boolPType, matchFunction, ObjectPType, TuplePType, uint64PType } from '../ptypes'
+import {
+  ArrayPType,
+  boolPType,
+  ImmutableObjectPType,
+  matchFunction,
+  MutableObjectPType,
+  MutableTuplePType,
+  ObjectLiteralPType,
+  ReadonlyTuplePType,
+  uint64PType,
+} from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { InstanceBuilder } from './index'
 import { BuilderComparisonOp, NodeBuilder } from './index'
@@ -34,7 +44,7 @@ export class MatchFunctionBuilder extends NodeBuilder {
 }
 
 export function buildComparisons(subject: NodeBuilder, tests: InstanceBuilder, functionName: string, sourceLocation: SourceLocation) {
-  if (tests.ptype instanceof ObjectPType) {
+  if (instanceOfAny(tests.ptype, ImmutableObjectPType, MutableObjectPType, ObjectLiteralPType)) {
     const condition = tests.ptype
       .orderedProperties()
       .reduce((acc: Expression | undefined, [propName, propType]): Expression | undefined => {
@@ -81,8 +91,10 @@ function buildComparison(
   const subjectType = subjectProperty.ptype
   // Recurse comparisons for nested objects
   if (
-    subjectProperty.ptype instanceof ObjectPType ||
-    subjectProperty.ptype instanceof TuplePType ||
+    subjectProperty.ptype instanceof ImmutableObjectPType ||
+    subjectProperty.ptype instanceof MutableObjectPType ||
+    subjectProperty.ptype instanceof ReadonlyTuplePType ||
+    subjectProperty.ptype instanceof MutableTuplePType ||
     subjectProperty.ptype instanceof ArrayPType
   ) {
     return buildComparisons(subjectProperty, testProperty, functionName, sourceLocation)
@@ -91,9 +103,8 @@ function buildComparison(
   if (testProperty.resolvableToPType(subjectType)) {
     return subjectProperty.compare(testProperty, BuilderComparisonOp.eq, sourceLocation)
   } else if (testProperty.hasProperty('between')) {
-    const range = requireInstanceBuilder(testProperty.memberAccess('between', sourceLocation)).singleEvaluation()
-    const rangePType = new TuplePType({ items: [subjectType, subjectType] })
-    codeInvariant(range.resolvableToPType(rangePType), 'Between range must be of type $')
+    const rangePType = new ReadonlyTuplePType({ items: [subjectType, subjectType] })
+    const range = requireInstanceBuilder(testProperty.memberAccess('between', sourceLocation)).resolveToPType(rangePType).singleEvaluation()
     const zeroIndex = instanceEb(nodeFactory.uInt64Constant({ value: 0n, sourceLocation }), uint64PType)
     const gte = subjectProperty
       .compare(requireBuilderOfType(range.indexAccess(zeroIndex, sourceLocation), subjectType), BuilderComparisonOp.gte, sourceLocation)
@@ -131,11 +142,12 @@ function getComparisonOpAndOperand(testProperty: InstanceBuilder, targetType: PT
 
 function combineConditions(left: Expression | undefined, right: Expression, sourceLocation: SourceLocation): Expression {
   if (left) {
-    return nodeFactory.booleanBinaryOperation({
-      left: left,
-      right: right,
-      op: BinaryBooleanOperator.and,
+    return nodeFactory.intrinsicCall({
+      opCode: '&&',
+      stackArgs: [left, right],
+      immediates: [],
       sourceLocation,
+      wtype: wtypes.boolWType,
     })
   }
   return right

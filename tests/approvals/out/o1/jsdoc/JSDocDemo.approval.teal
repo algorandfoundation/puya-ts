@@ -32,15 +32,7 @@ main_test2_route@4:
     extract 2 0
     // tests/approvals/jsdoc.algo.ts:39
     // test2(a: bytes): DemoType {
-    dup
-    len
-    itob
-    extract 6 2
-    swap
-    concat
-    pushbytes 0x0002
-    swap
-    concat
+    callsub test2
     bytec_0 // 0x151f7c75
     swap
     concat
@@ -90,7 +82,28 @@ test:
     // test(a: uint64, b: bytes): DemoStruct {
     proto 2 1
     // tests/approvals/jsdoc.algo.ts:31
-    // return new DemoStruct({ a: new UintN<64>(a) })
+    // return new DemoStruct({ a: new Uint<64>(a) })
     frame_dig -2
     itob
+    retsub
+
+
+// tests/approvals/jsdoc.algo.ts::JSDocDemo.test2(a: bytes) -> bytes:
+test2:
+    // tests/approvals/jsdoc.algo.ts:39
+    // test2(a: bytes): DemoType {
+    proto 1 1
+    // tests/approvals/jsdoc.algo.ts:40-42
+    // return {
+    //   a,
+    // }
+    frame_dig -1
+    len
+    itob
+    extract 6 2
+    frame_dig -1
+    concat
+    pushbytes 0x0002
+    swap
+    concat
     retsub

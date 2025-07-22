@@ -4,10 +4,14 @@ import { wtypes } from '../../awst/wtypes'
 
 import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported, throwError } from '../../errors'
-import { codeInvariant, distinctByEquality, invariant, sortBy } from '../../util'
+import { codeInvariant, distinctByEquality, instanceOfAny, invariant, sortBy, zipStrict } from '../../util'
 import { SymbolName } from '../symbol-name'
+import type { ABIType, PTypeOrClass } from './base'
 import { GenericPType, PType } from './base'
+
 import { transientTypeErrors } from './transient-type-errors'
+import { generateObjectHash } from './util'
+import type { PTypeVisitor } from './visitor'
 
 export * from './base'
 export * from './intrinsic-enum-type'
@@ -51,9 +55,14 @@ export abstract class TransientType extends PType {
   get wtypeOrThrow(): wtypes.WType {
     throw new CodeError(this.typeMessage)
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitTransientType(this)
+  }
 }
 
 export class UnsupportedType extends PType {
+  readonly [PType.IdSymbol] = 'UnsupportedType'
   readonly wtype: undefined = undefined
   readonly name: string
   readonly module: string
@@ -74,9 +83,14 @@ export class UnsupportedType extends PType {
   get wtypeOrThrow(): wtypes.WType {
     throw new NotSupported(`The type ${this.fullName} is not supported`)
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitUnsupportedType(this)
+  }
 }
 
 export class ObjectWithOptionalFieldsType extends TransientType {
+  readonly [PType.IdSymbol] = 'ObjectWithOptionalFieldsType'
   constructor({ name, module }: { name: string; module: string }) {
     const errors = transientTypeErrors.optionalFields(name)
     super({
@@ -90,6 +104,7 @@ export class ObjectWithOptionalFieldsType extends TransientType {
 }
 
 export class LogicSigPType extends PType {
+  readonly [PType.IdSymbol] = 'LogicSigPType'
   readonly wtype = undefined
   readonly name: string
   readonly module: string
@@ -103,6 +118,10 @@ export class LogicSigPType extends PType {
     this.baseType = props.baseType
     this.sourceLocation = props.sourceLocation
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitLogicSigPType(this)
+  }
 }
 
 export const logicSigBaseType = new LogicSigPType({
@@ -112,10 +131,11 @@ export const logicSigBaseType = new LogicSigPType({
 })
 
 export class ContractClassPType extends PType {
+  readonly [PType.IdSymbol] = 'ContractClassPType'
   readonly wtype = undefined
   readonly name: string
   readonly module: string
-  readonly properties: Record<string, PType>
+  readonly properties: Record<string, AppStorageType>
   readonly methods: Record<string, FunctionPType>
   readonly singleton = true
   readonly baseTypes: ContractClassPType[]
@@ -147,6 +167,10 @@ export class ContractClassPType extends PType {
       yield b
       yield* b.allBases()
     }
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitContractClassPType(this)
   }
 }
 
@@ -186,6 +210,7 @@ export class BaseContractClassType extends ContractClassPType {
 }
 
 export class IntersectionPType extends TransientType {
+  readonly [PType.IdSymbol] = 'IntersectionPType'
   get fullName() {
     return this.types.map((t) => t).join(' & ')
   }
@@ -219,6 +244,7 @@ export class IntersectionPType extends TransientType {
 }
 
 export class UnionPType extends TransientType {
+  readonly [PType.IdSymbol] = 'UnionPType'
   get fullName() {
     return this.types.map((t) => t).join(' | ')
   }
@@ -231,7 +257,7 @@ export class UnionPType extends TransientType {
     const name = types.map((t) => t).join(' | ')
     const transientType = types.find((t) => t instanceof TransientType)
     if (transientType) {
-      if (transientType instanceof NativeNumericType) {
+      if (instanceOfAny(transientType, BigIntLiteralPType, NumericLiteralPType, BigIntPType, NumberPType)) {
         typeMessage = transientTypeErrors.nativeNumeric(name).usedAsType
         expressionMessage = transientTypeErrors.nativeNumeric(name).usedInExpression
       } else {
@@ -266,7 +292,7 @@ export class UnionPType extends TransientType {
   }
 }
 
-export abstract class StorageProxyPType extends PType {
+abstract class StorageProxyPType extends PType {
   readonly wtype: wtypes.WType
   readonly contentType: PType
   readonly singleton = false
@@ -288,6 +314,7 @@ export const GlobalStateGeneric = new GenericPType({
   },
 })
 export class GlobalStateType extends StorageProxyPType {
+  readonly [PType.IdSymbol] = 'GlobalStateType'
   static readonly baseName = 'GlobalState'
   static readonly baseFullName = `${Constants.moduleNames.algoTs.state}::${GlobalStateType.baseName}`
   readonly module: string = Constants.moduleNames.algoTs.state
@@ -299,6 +326,10 @@ export class GlobalStateType extends StorageProxyPType {
   }
   constructor(props: { content: PType }) {
     super({ ...props, keyWType: wtypes.stateKeyWType })
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitGlobalStateType(this)
   }
 }
 export const LocalStateGeneric = new GenericPType({
@@ -312,6 +343,7 @@ export const LocalStateGeneric = new GenericPType({
   },
 })
 export class LocalStateType extends StorageProxyPType {
+  readonly [PType.IdSymbol] = 'LocalStateType'
   static readonly baseName = 'LocalState'
   static readonly baseFullName = `${Constants.moduleNames.algoTs.state}::${LocalStateType.baseName}`
   readonly module: string = Constants.moduleNames.algoTs.state
@@ -330,6 +362,10 @@ export class LocalStateType extends StorageProxyPType {
       content: typeArgs[0],
     })
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitLocalStateType(this)
+  }
 }
 export const BoxGeneric = new GenericPType({
   name: 'Box',
@@ -342,6 +378,7 @@ export const BoxGeneric = new GenericPType({
   },
 })
 export class BoxPType extends StorageProxyPType {
+  readonly [PType.IdSymbol] = 'BoxPType'
   readonly module: string = Constants.moduleNames.algoTs.box
   get name() {
     return `Box<${this.contentType.name}>`
@@ -351,6 +388,10 @@ export class BoxPType extends StorageProxyPType {
   }
   constructor(props: { content: PType }) {
     super({ ...props, keyWType: wtypes.boxKeyWType })
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitBoxPType(this)
   }
 }
 export const BoxMapGeneric = new GenericPType({
@@ -365,6 +406,7 @@ export const BoxMapGeneric = new GenericPType({
   },
 })
 export class BoxMapPType extends StorageProxyPType {
+  readonly [PType.IdSymbol] = 'BoxMapPType'
   readonly module: string = Constants.moduleNames.algoTs.box
   get name() {
     return `BoxMap<${this.keyType.name}, ${this.contentType.name}>`
@@ -377,8 +419,13 @@ export class BoxMapPType extends StorageProxyPType {
     super({ ...props, keyWType: wtypes.boxKeyWType })
     this.keyType = props.keyType
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitBoxMapPType(this)
+  }
 }
 export class BoxRefPType extends StorageProxyPType {
+  readonly [PType.IdSymbol] = 'BoxRefPType'
   readonly module = Constants.moduleNames.algoTs.box
   get name() {
     return 'BoxRef'
@@ -386,13 +433,18 @@ export class BoxRefPType extends StorageProxyPType {
   constructor() {
     super({ keyWType: wtypes.boxKeyWType, content: bytesPType })
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitBoxRefPType(this)
+  }
 }
-export type AppStorageType = GlobalStateType | LocalStateType
+export type AppStorageType = GlobalStateType | LocalStateType | BoxPType | BoxRefPType | BoxMapPType
 
 /**
  * An open generic type parameter
  */
 export class TypeParameterType extends PType {
+  readonly [PType.IdSymbol] = 'TypeParameterType'
   readonly name: string
   readonly module: string
   readonly singleton = false
@@ -401,6 +453,10 @@ export class TypeParameterType extends PType {
     super()
     this.name = name
     this.module = module
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitTypeParameterType(this)
   }
 }
 
@@ -409,6 +465,7 @@ export class TypeParameterType extends PType {
  * but is not relevant to the output of the compiler
  */
 export class InternalType extends PType {
+  readonly [PType.IdSymbol] = 'InternalType'
   readonly name: string
   readonly module: string
   readonly singleton = false
@@ -418,6 +475,10 @@ export class InternalType extends PType {
     this.name = name
     this.module = module
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitInternalType(this)
+  }
 }
 export const ClassMethodDecoratorContext = new InternalType({
   module: 'typescript/lib/lib.decorators.d.ts',
@@ -425,29 +486,49 @@ export const ClassMethodDecoratorContext = new InternalType({
 })
 
 export class AnyPType extends PType {
+  readonly [PType.IdSymbol] = 'AnyPType'
   get wtype(): never {
     throw new CodeError('`any` is not valid as a variable, parameter, return, or property type.')
   }
   readonly name = 'any'
   readonly module = 'lib.d.ts'
   readonly singleton = false
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitAnyPType(this)
+  }
 }
 
 export class InstanceType extends PType {
+  readonly [PType.IdSymbol] = 'InstanceType'
   readonly wtype: wtypes.WType
   readonly name: string
   readonly module: string
   readonly singleton = false
-
-  constructor({ name, module, wtype }: { name: string; module: string; wtype: wtypes.WType }) {
+  readonly fixedBitSize: bigint | null
+  constructor({ name, module, wtype, fixedBitSize }: { name: string; module: string; wtype: wtypes.WType; fixedBitSize?: bigint | null }) {
     super()
     this.name = name
     this.wtype = wtype
     this.module = module
+    this.fixedBitSize = fixedBitSize ?? null
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitInstanceType(this)
+  }
+}
+
+export class ABICompatibleInstanceType extends InstanceType implements ABIType {
+  readonly abiTypeSignature: string
+  constructor({ abiTypeSignature, ...props }: { name: string; module: string; wtype: wtypes.WType; abiTypeSignature: string }) {
+    super(props)
+    this.abiTypeSignature = abiTypeSignature
   }
 }
 
 export class LibFunctionType extends PType {
+  readonly [PType.IdSymbol] = 'LibFunctionType'
   readonly wtype: undefined
   readonly name: string
   readonly module: string
@@ -457,9 +538,14 @@ export class LibFunctionType extends PType {
     super()
     this.name = name
     this.module = module
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitLibFunctionType(this)
   }
 }
 export class LibClassType extends PType {
+  readonly [PType.IdSymbol] = 'LibClassType'
   readonly wtype: undefined
   readonly name: string
   readonly module: string
@@ -470,8 +556,13 @@ export class LibClassType extends PType {
     this.name = name
     this.module = module
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitLibClassType(this)
+  }
 }
 export class LibObjType extends PType {
+  readonly [PType.IdSymbol] = 'LibObjType'
   readonly wtype: undefined
   readonly name: string
   readonly module: string
@@ -481,10 +572,15 @@ export class LibObjType extends PType {
     super()
     this.name = name
     this.module = module
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitLibObjType(this)
   }
 }
 
 export class IntrinsicFunctionGroupType extends PType {
+  readonly [PType.IdSymbol] = 'IntrinsicFunctionGroupType'
   readonly wtype: undefined
   readonly name: string
   readonly module: string = Constants.moduleNames.algoTs.op
@@ -493,9 +589,14 @@ export class IntrinsicFunctionGroupType extends PType {
   constructor({ name }: { name: string }) {
     super()
     this.name = name
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitIntrinsicFunctionGroupType(this)
   }
 }
 export class IntrinsicFunctionGroupTypeType extends PType {
+  readonly [PType.IdSymbol] = 'IntrinsicFunctionGroupTypeType'
   readonly wtype: undefined
   readonly name: string
   readonly module: string = Constants.moduleNames.algoTs.op
@@ -505,8 +606,13 @@ export class IntrinsicFunctionGroupTypeType extends PType {
     super()
     this.name = name
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitIntrinsicFunctionGroupTypeType(this)
+  }
 }
 export class IntrinsicFunctionType extends PType {
+  readonly [PType.IdSymbol] = 'IntrinsicFunctionType'
   readonly wtype: undefined
   readonly name: string
   readonly module: string = Constants.moduleNames.algoTs.op
@@ -516,8 +622,13 @@ export class IntrinsicFunctionType extends PType {
     super()
     this.name = name
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitIntrinsicFunctionType(this)
+  }
 }
 export class IntrinsicFunctionTypeType extends PType {
+  readonly [PType.IdSymbol] = 'IntrinsicFunctionTypeType'
   readonly wtype: undefined
   readonly name: string
   readonly module: string = Constants.moduleNames.algoTs.op
@@ -526,10 +637,15 @@ export class IntrinsicFunctionTypeType extends PType {
   constructor({ name }: { name: string }) {
     super()
     this.name = name
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitIntrinsicFunctionTypeType(this)
   }
 }
 
 export class NamespacePType extends PType {
+  readonly [PType.IdSymbol] = 'NamespacePType'
   readonly wtype: undefined
   readonly name: string
   readonly factory: undefined
@@ -549,9 +665,14 @@ export class NamespacePType extends PType {
   toString(): string {
     return this.module
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitNamespacePType(this)
+  }
 }
 
 export class FunctionPType extends PType {
+  readonly [PType.IdSymbol] = 'FunctionPType'
   readonly wtype: undefined
   readonly name: string
   readonly module: string
@@ -571,19 +692,18 @@ export class FunctionPType extends PType {
     this.name = props.name
     this.module = props.module
     this.sourceLocation = props.sourceLocation
-    if (props.returnType instanceof ObjectPType && !props.returnType.alias) {
-      this.returnType = new ObjectPType({
-        alias: new SymbolName({ name: `${props.name}Result`, module: this.module }),
-        properties: props.returnType.properties,
-        description: props.returnType.description,
-      })
-    } else {
-      this.returnType = props.returnType
-    }
+    this.returnType = props.returnType
     this.parameters = props.parameters
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitFunctionPType(this)
+  }
 }
-export class ArrayLiteralPType extends TransientType {
+export class ArrayLiteralPType extends PType {
+  readonly [PType.IdSymbol] = 'ArrayLiteralPType'
+  readonly fixedBitSize: bigint | null
+
   get fullName() {
     return `${this.module}::[${this.items.map((i) => i).join(', ')}]`
   }
@@ -592,18 +712,24 @@ export class ArrayLiteralPType extends TransientType {
     return this.items.length ? UnionPType.fromTypes(this.items) : neverPType
   }
 
+  readonly singleton = false
+  readonly name: string
+  readonly module = Constants.moduleNames.typescript.es5
   readonly items: PType[]
-  readonly immutable = true
   constructor(props: { items: PType[] }) {
-    const name = `[${props.items.map((i) => i.name).join(', ')}]`
-    super({
-      module: 'lib.d.ts',
-      name,
-      typeMessage: transientTypeErrors.arrays(name).usedAsType,
-      expressionMessage: transientTypeErrors.arrays(name).usedInExpression,
-      singleton: false,
-    })
+    super()
+    this.name = `[${props.items.map((i) => i.name).join(', ')}]`
+
     this.items = props.items
+    this.fixedBitSize = PType.calculateFixedBitSize(this.items)
+  }
+
+  get wtype() {
+    return this.getReadonlyTupleType().wtype
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitArrayLiteralPType(this)
   }
 
   getArrayType(): ArrayPType {
@@ -612,44 +738,94 @@ export class ArrayLiteralPType extends TransientType {
     })
   }
 
-  getTupleType(): TuplePType {
-    return new TuplePType({
+  getReadonlyTupleType(): ReadonlyTuplePType {
+    return new ReadonlyTuplePType({
+      items: this.items,
+    })
+  }
+  getMutableTupleType(): MutableTuplePType {
+    return new MutableTuplePType({
       items: this.items,
     })
   }
 }
 
-export class TuplePType extends PType {
+export class MutableTuplePType extends PType {
+  readonly [PType.IdSymbol] = 'MutableTuplePType'
   readonly module: string = 'lib.d.ts'
+  readonly fixedBitSize: bigint | null
+
   get name() {
-    return `Tuple<${this.items.map((i) => i.name).join(', ')}>`
+    return `[${this.items.map((i) => i.name).join(', ')}]`
   }
   get fullName() {
-    return `${this.module}::Tuple<${this.items.map((i) => i.fullName).join(', ')}>`
+    return `${this.module}::[${this.items.map((i) => i.fullName).join(', ')}]`
   }
 
   readonly items: PType[]
   readonly singleton = false
-  readonly immutable: boolean
   constructor(props: { items: PType[] }) {
     super()
     this.items = props.items
-    this.immutable = true
+    this.fixedBitSize = PType.calculateFixedBitSize(this.items)
+  }
+
+  get wtype(): wtypes.ARC4Tuple {
+    return new wtypes.ARC4Tuple({
+      types: this.items.map((i) => i.wtypeOrThrow),
+      immutable: false,
+    })
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitMutableTuplePType(this)
+  }
+}
+export class ReadonlyTuplePType extends PType {
+  readonly [PType.IdSymbol] = 'ReadonlyTuplePType'
+  readonly module: string = 'lib.d.ts'
+  readonly fixedBitSize: bigint | null
+
+  get name() {
+    return `readonly [${this.items.map((i) => i.name).join(', ')}]`
+  }
+  get fullName() {
+    return `${this.module}::readonly [${this.items.map((i) => i.fullName).join(', ')}]`
+  }
+
+  readonly items: PType[]
+  readonly singleton = false
+  constructor(props: { items: PType[] }) {
+    super()
+    this.items = props.items
+    this.fixedBitSize = PType.calculateFixedBitSize(this.items)
   }
 
   get wtype(): wtypes.WTuple {
     return new wtypes.WTuple({
       types: this.items.map((i) => i.wtypeOrThrow),
-      immutable: this.immutable,
     })
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitReadonlyTuplePType(this)
+  }
 }
+export const ArrayGeneric = new GenericPType({
+  name: 'Array',
+  module: Constants.moduleNames.typescript.es5,
+  parameterise(typeArgs) {
+    codeInvariant(typeArgs.length === 1, 'Array expects exactly 1 type argument')
+    return new ArrayPType({ elementType: typeArgs[0] })
+  },
+})
 export class ArrayPType extends PType {
+  readonly [PType.IdSymbol] = 'ArrayPType'
   readonly elementType: PType
-  readonly immutable = true
+  readonly immutable = false
   readonly singleton = false
   readonly name: string
-  readonly module: string = 'lib.d.ts'
+  readonly module: string = Constants.moduleNames.typescript.es5
   get fullName() {
     return `${this.module}::Array<${this.elementType.fullName}>`
   }
@@ -660,32 +836,180 @@ export class ArrayPType extends PType {
   }
 
   get wtype() {
-    return new wtypes.StackArray({
-      itemType: this.elementType.wtypeOrThrow,
+    return new wtypes.ARC4DynamicArray({
+      elementType: this.elementType.wtypeOrThrow,
       immutable: this.immutable,
     })
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitArrayPType(this)
+  }
+}
+export const ReadonlyArrayGeneric = new GenericPType({
+  name: 'ReadonlyArray',
+  module: Constants.moduleNames.typescript.es5,
+  parameterise(typeArgs) {
+    codeInvariant(typeArgs.length === 1, 'ReadonlyArray expects exactly 1 type argument')
+    return new ReadonlyArrayPType({ elementType: typeArgs[0] })
+  },
+})
+export class ReadonlyArrayPType extends PType {
+  readonly [PType.IdSymbol] = 'ReadonlyArrayPType'
+  readonly elementType: PType
+  readonly singleton = false
+  readonly immutable = true
+  readonly name: string
+  readonly module: string = Constants.moduleNames.typescript.es5
+  get fullName() {
+    return `${this.module}::ReadonlyArray<${this.elementType.fullName}>`
+  }
+  constructor(props: { elementType: PType }) {
+    super()
+    this.elementType = props.elementType
+    this.name = `ReadonlyArray<${props.elementType.name}>`
+  }
+
+  get wtype() {
+    return new wtypes.ARC4DynamicArray({
+      elementType: this.elementType.wtypeOrThrow,
+      immutable: this.immutable,
+    })
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitReadonlyArrayPType(this)
+  }
 }
 
-export class ObjectPType extends PType {
-  readonly name: string = 'object'
+export const FixedArrayGeneric = new GenericPType({
+  name: 'FixedArray',
+  module: Constants.moduleNames.algoTs.arrays,
+  parameterise(typeArgs) {
+    codeInvariant(typeArgs.length === 2, 'FixedArray type expects exactly one type parameters')
+    const [elementType, arraySize] = typeArgs
+    codeInvariant(
+      arraySize instanceof NumericLiteralPType,
+      `Array size generic type param for FixedArray must be a literal number. Inferred type is ${arraySize.name}`,
+    )
+    if (elementType instanceof TransientType) {
+      throw new CodeError(elementType.typeMessage)
+    }
+    return new FixedArrayPType({ elementType, arraySize: arraySize.literalValue })
+  },
+})
+
+export class FixedArrayPType extends PType {
+  readonly [PType.IdSymbol] = 'FixedArrayPType'
+  readonly elementType: PType
+  readonly immutable: boolean = false
+  readonly singleton = false
+  readonly name: string
+  readonly module: string = Constants.moduleNames.algoTs.arrays
+  readonly arraySize: bigint
+  readonly fixedBitSize: bigint | null = null
+  get fullName() {
+    return `${this.module}::FixedArray<${this.elementType.fullName}>`
+  }
+  constructor(props: { elementType: PType; arraySize: bigint }) {
+    super()
+    this.elementType = props.elementType
+    this.name = `FixedArray<${props.elementType.name}, ${props.arraySize}>`
+    this.arraySize = props.arraySize
+    this.fixedBitSize = PType.calculateFixedBitSize(new Array(Number(this.arraySize)).fill(this.elementType))
+  }
+  get wtype() {
+    return new wtypes.ARC4StaticArray({
+      elementType: this.elementType.wtypeOrThrow,
+      arraySize: this.arraySize,
+      immutable: false,
+    })
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitFixedArrayPType(this)
+  }
+}
+export const ReadonlyGeneric = new GenericPType({
+  name: 'Readonly',
+  module: Constants.moduleNames.typescript.es5,
+  parameterise([obj, ...rest]) {
+    codeInvariant(obj instanceof MutableObjectPType && !rest.length, 'Readonly expects exactly 1 generic type arg that is an object type')
+
+    return obj.toImmutable()
+  },
+})
+
+abstract class ObjectPType extends PType {
+  readonly name: string
   readonly module: string = 'lib.d.ts'
   readonly alias: SymbolName | null
   readonly description: string | undefined
   readonly properties: Record<string, PType>
   readonly singleton = false
+  readonly immutable: boolean
+  readonly fixedBitSize: bigint | null = null
 
-  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string }) {
+  constructor(props: {
+    alias?: SymbolName | null
+    properties: Record<string, PType>
+    description?: string
+    namePrefix: string
+    immutable: boolean
+  }) {
     super()
+    this.name = `${props.namePrefix}${generateObjectHash(props.properties)}`
     this.properties = props.properties
     this.description = props.description
     this.alias = props.alias ?? null
+    this.immutable = props.immutable
+    this.fixedBitSize = PType.calculateFixedBitSize(Object.values(this.properties))
   }
 
-  static anonymous(props: Record<string, PType> | Array<[string, PType]>) {
-    const properties = Array.isArray(props) ? Object.fromEntries(props) : props
-    return new ObjectPType({
-      properties,
+  orderedProperties() {
+    return Object.entries(this.properties)
+  }
+
+  toString(): string {
+    return `{${this.orderedProperties()
+      .map((p) => `${this.immutable ? 'readonly ' : ''}${p[0]}:${p[1].name}`)
+      .join(',')}}`
+  }
+
+  hasSameStructure(other: ObjectPType): boolean {
+    return zipStrict(this.orderedProperties(), other.orderedProperties()).every(
+      ([[leftProp, leftType], [rightProp, rightType]]) => leftProp === rightProp && leftType.equals(rightType),
+    )
+  }
+}
+
+export class ObjectLiteralPType extends ObjectPType {
+  readonly [PType.IdSymbol] = 'ObjectLiteralPType'
+
+  constructor(props: { properties: Record<string, PType> }) {
+    super({
+      ...props,
+      namePrefix: `ObjectLiteral`,
+      immutable: false,
+    })
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitObjectLiteralPType(this)
+  }
+
+  getImmutable(): ImmutableObjectPType {
+    return new ImmutableObjectPType({
+      alias: this.alias,
+      properties: this.properties,
+      description: this.description,
+    })
+  }
+  getMutable(): MutableObjectPType {
+    return new MutableObjectPType({
+      alias: this.alias,
+      properties: this.properties,
+      description: this.description,
     })
   }
 
@@ -700,43 +1024,96 @@ export class ObjectPType extends PType {
       tupleNames.push(propName)
     }
     return new wtypes.WTuple({
-      name: this.alias?.fullName ?? this.fullName,
+      name: this.alias?.fullName ?? this.toString(),
       names: tupleNames,
       types: tupleTypes,
+    })
+  }
+}
+
+export class ImmutableObjectPType extends ObjectPType {
+  readonly [PType.IdSymbol] = 'ImmutableObjectPType'
+
+  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string }) {
+    super({
+      ...props,
+      namePrefix: `ReadonlyObject`,
       immutable: true,
     })
   }
 
-  orderedProperties() {
-    return Object.entries(this.properties)
-  }
-
-  getPropertyType(name: string): PType {
-    if (Object.hasOwn(this.properties, name)) {
-      return this.properties[name]
+  get wtype(): wtypes.WTuple {
+    const tupleTypes: wtypes.WType[] = []
+    const tupleNames: string[] = []
+    for (const [propName, propType] of this.orderedProperties()) {
+      if (propType instanceof TransientType) {
+        throw new CodeError(`Property '${propName}' of ${this.name} has an unsupported type: ${propType.typeMessage}`)
+      }
+      tupleTypes.push(propType.wtypeOrThrow)
+      tupleNames.push(propName)
     }
-    throw new CodeError(`${this} does not have property ${name}`)
+    return new wtypes.WTuple({
+      name: this.alias?.fullName ?? this.name,
+      names: tupleNames,
+      types: tupleTypes,
+    })
   }
 
-  hasProperty(name: string): boolean {
-    return Object.hasOwn(this.properties, name)
-  }
-
-  hasPropertyOfType(name: string, type: PType) {
-    return this.hasProperty(name) && this.properties[name].equals(type)
-  }
-
-  toString(): string {
-    return `{${this.orderedProperties()
-      .map((p) => `${p[0]}:${p[1].name}`)
-      .join(',')}}`
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitImmutableObjectPType(this)
   }
 }
 
-export const voidPType = new InstanceType({
+export class MutableObjectPType extends ObjectPType {
+  readonly [PType.IdSymbol] = 'MutableObjectPType'
+
+  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string }) {
+    super({
+      ...props,
+      namePrefix: `Object`,
+      immutable: false,
+    })
+  }
+
+  get wtype(): wtypes.ARC4Struct {
+    return new wtypes.ARC4Struct({
+      name: this.alias?.fullName ?? this.name,
+      fields: Object.fromEntries(Object.entries(this.properties).map(([f, t]) => [f, t.wtypeOrThrow])),
+      desc: this.description ?? null,
+      frozen: false,
+    })
+  }
+
+  toImmutable(): ImmutableObjectPType {
+    return new ImmutableObjectPType({
+      alias: this.alias,
+      properties: this.properties,
+      description: this.description,
+    })
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitMutableObjectPType(this)
+  }
+}
+
+export function isObjectType(ptype: PTypeOrClass): ptype is MutableObjectPType | ImmutableObjectPType | ObjectLiteralPType {
+  return instanceOfAny(ptype, MutableObjectPType, ImmutableObjectPType, ObjectLiteralPType)
+}
+
+export function isArrayType(ptype: PTypeOrClass): ptype is ArrayPType | ReadonlyArrayPType {
+  return instanceOfAny(ptype, ArrayPType, ReadonlyArrayPType)
+}
+
+export function isTupleLike(ptype: PTypeOrClass): ptype is MutableTuplePType | ReadonlyTuplePType | ArrayLiteralPType {
+  return instanceOfAny(ptype, ReadonlyTuplePType, MutableTuplePType, ArrayLiteralPType)
+}
+
+export const voidPType = new ABICompatibleInstanceType({
   name: 'void',
   module: 'lib.d.ts',
   wtype: wtypes.voidWType,
+  abiTypeSignature: 'void',
 })
 export const neverPType = new InstanceType({
   name: 'never',
@@ -789,6 +1166,7 @@ export const boolPType = new InstanceType({
   name: 'boolean',
   module: 'lib.d.ts',
   wtype: wtypes.boolWType,
+  fixedBitSize: 64n,
 })
 
 export const BooleanFunction = new LibFunctionType({
@@ -796,9 +1174,15 @@ export const BooleanFunction = new LibFunctionType({
   module: 'typescript/lib/lib.es5.d.ts',
 })
 
-export class NativeNumericType extends TransientType {}
+export class BigIntPType extends TransientType {
+  readonly [PType.IdSymbol] = 'BigIntPType'
+}
 
-export const bigIntPType = new NativeNumericType({
+export class NumberPType extends TransientType {
+  readonly [PType.IdSymbol] = 'NumberPType'
+}
+
+export const bigIntPType = new BigIntPType({
   name: 'bigint',
   module: 'lib.d.ts',
   singleton: false,
@@ -820,13 +1204,15 @@ export const uint64PType = new InstanceType({
   name: 'uint64',
   module: Constants.moduleNames.algoTs.primitives,
   wtype: wtypes.uint64WType,
+  fixedBitSize: 64n,
 })
 export const biguintPType = new InstanceType({
   name: 'biguint',
   module: Constants.moduleNames.algoTs.primitives,
   wtype: wtypes.biguintWType,
 })
-export class NumericLiteralPType extends NativeNumericType {
+export class NumericLiteralPType extends TransientType {
+  readonly [PType.IdSymbol] = 'NumericLiteralPType'
   readonly literalValue: bigint
   constructor({ literalValue }: { literalValue: bigint }) {
     super({
@@ -841,7 +1227,8 @@ export class NumericLiteralPType extends NativeNumericType {
 
   static typeDescription = 'numeric literal'
 }
-export class BigIntLiteralPType extends NativeNumericType {
+export class BigIntLiteralPType extends TransientType {
+  readonly [PType.IdSymbol] = 'BigIntLiteralPType'
   readonly literalValue: bigint
   constructor({ literalValue }: { literalValue: bigint }) {
     super({
@@ -856,7 +1243,7 @@ export class BigIntLiteralPType extends NativeNumericType {
 
   static typeDescription = 'bigint literal'
 }
-export const numberPType = new NativeNumericType({
+export const numberPType = new NumberPType({
   name: 'number',
   module: 'lib.d.ts',
   singleton: false,
@@ -873,6 +1260,7 @@ export const BigUintFunction = new LibFunctionType({
   module: Constants.moduleNames.algoTs.primitives,
 })
 export class BytesPType extends PType {
+  readonly [PType.IdSymbol] = 'BytesPType'
   readonly wtype: wtypes.WType
   readonly name: string
   readonly module: string
@@ -885,6 +1273,10 @@ export class BytesPType extends PType {
     this.name = length === null ? 'bytes' : `bytes<${length}>`
     this.wtype = new wtypes.BytesWType({ length })
     this.module = Constants.moduleNames.algoTs.primitives
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitBytesPType(this)
   }
 }
 export const BytesGeneric = new GenericPType({
@@ -927,48 +1319,35 @@ export const errFunction = new LibFunctionType({
   module: Constants.moduleNames.algoTs.util,
 })
 
-export const assetPType = new InstanceType({
+export const assetPType = new ABICompatibleInstanceType({
   name: 'Asset',
   wtype: wtypes.assetWType,
   module: Constants.moduleNames.algoTs.reference,
+  abiTypeSignature: 'asset',
 })
 export const AssetFunction = new LibFunctionType({
   name: 'Asset',
   module: Constants.moduleNames.algoTs.reference,
 })
-export const accountPType = new InstanceType({
+export const accountPType = new ABICompatibleInstanceType({
   name: 'Account',
   wtype: wtypes.accountWType,
   module: Constants.moduleNames.algoTs.reference,
+  abiTypeSignature: 'account',
 })
 export const AccountFunction = new LibFunctionType({
   name: 'Account',
   module: Constants.moduleNames.algoTs.reference,
 })
-export const applicationPType = new InstanceType({
+export const applicationPType = new ABICompatibleInstanceType({
   name: 'Application',
   wtype: wtypes.applicationWType,
   module: Constants.moduleNames.algoTs.reference,
+  abiTypeSignature: 'application',
 })
 export const ApplicationFunctionType = new LibFunctionType({
   name: 'Application',
   module: Constants.moduleNames.algoTs.reference,
-})
-export const GlobalStateFunction = new LibFunctionType({
-  name: 'GlobalState',
-  module: Constants.moduleNames.algoTs.state,
-})
-export const LocalStateFunction = new LibFunctionType({
-  name: 'LocalState',
-  module: Constants.moduleNames.algoTs.state,
-})
-export const BoxFunction = new LibFunctionType({
-  name: BoxGeneric.name,
-  module: Constants.moduleNames.algoTs.box,
-})
-export const BoxMapFunction = new LibFunctionType({
-  name: BoxMapGeneric.name,
-  module: Constants.moduleNames.algoTs.box,
 })
 export const BoxRefFunction = new LibFunctionType({
   name: 'BoxRef',
@@ -1015,7 +1394,10 @@ export const arc4BaseContractType = new BaseContractClassType({
   isArc4: true,
   sourceLocation: SourceLocation.None,
 })
-
+export const itoaMethod = new LibFunctionType({
+  module: 'puya-ts',
+  name: 'itoa',
+})
 export const arc4BareMethodDecorator = new LibFunctionType({
   module: Constants.moduleNames.algoTs.arc4.index,
   name: 'baremethod',
@@ -1035,7 +1417,8 @@ export const logicSigOptionsDecorator = new LibFunctionType({
   name: 'logicsig',
 })
 
-export class GroupTransactionPType extends PType {
+export class GroupTransactionPType extends PType implements ABIType {
+  readonly [PType.IdSymbol] = 'GroupTransactionPType'
   get wtype() {
     return new wtypes.WGroupTransaction({
       transactionType: this.kind,
@@ -1045,11 +1428,17 @@ export class GroupTransactionPType extends PType {
   readonly kind: TransactionKind | undefined
   readonly module = Constants.moduleNames.algoTs.gtxn
   readonly singleton = false
+  readonly abiTypeSignature: string
 
   constructor({ kind, name }: { kind?: TransactionKind; name: string }) {
     super()
     this.name = name
     this.kind = kind
+    this.abiTypeSignature = kind !== undefined ? TransactionKind[kind] : 'txn'
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitGroupTransactionPType(this)
   }
 }
 
@@ -1144,6 +1533,7 @@ export const matchFunction = new LibFunctionType({
 })
 
 export class Uint64EnumMemberType extends PType {
+  readonly [PType.IdSymbol] = 'Uint64EnumMemberType'
   readonly wtype = wtypes.uint64WType
   readonly name: string
   readonly module: string
@@ -1155,6 +1545,10 @@ export class Uint64EnumMemberType extends PType {
     this.name = enumType.name
     this.module = enumType.module
     this.enumType = enumType
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitUint64EnumMemberType(this)
   }
 }
 
@@ -1178,6 +1572,7 @@ export class Uint64EnumMemberLiteralType extends Uint64EnumMemberType {
 }
 
 export class Uint64EnumType extends PType {
+  readonly [PType.IdSymbol] = 'Uint64EnumType'
   readonly memberType: Uint64EnumMemberType
   readonly wtype = wtypes.uint64WType
   readonly name: string
@@ -1199,6 +1594,10 @@ export class Uint64EnumType extends PType {
 
   hasMember(member: string | bigint) {
     return Object.entries(this.members).some((m) => m[0] === member || m[1] === member)
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitUint64EnumType(this)
   }
 }
 
@@ -1257,6 +1656,7 @@ export const IterableIteratorGeneric = new GenericPType({
   },
 })
 export class IterableIteratorType extends TransientType {
+  readonly [PType.IdSymbol] = 'IterableIteratorType'
   readonly itemType: PType
   constructor({ itemType }: { itemType: PType }) {
     super({
@@ -1271,6 +1671,10 @@ export class IterableIteratorType extends TransientType {
 
   get wtype(): wtypes.WEnumeration {
     return new wtypes.WEnumeration({ sequenceType: this.itemType.wtypeOrThrow })
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitIterableIterator(this)
   }
 }
 
@@ -1336,6 +1740,7 @@ export const applicationCallItxnFn = new TransactionFunctionType({
 })
 
 export class InnerTransactionPType extends PType {
+  readonly [PType.IdSymbol] = 'InnerTransactionPType'
   get wtype() {
     return new wtypes.WInnerTransaction({
       transactionType: this.kind,
@@ -1351,8 +1756,13 @@ export class InnerTransactionPType extends PType {
     this.name = name
     this.kind = kind
   }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitInnerTransactionPType(this)
+  }
 }
 export class ItxnParamsPType extends PType {
+  readonly [PType.IdSymbol] = 'ItxnParamsPType'
   get wtype() {
     return new wtypes.WInnerTransactionFields({
       transactionType: this.kind,
@@ -1367,6 +1777,10 @@ export class ItxnParamsPType extends PType {
     super()
     this.name = name
     this.kind = kind
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitItxnParamsPType(this)
   }
 }
 export const paymentItxnParamsType = new ItxnParamsPType({
@@ -1453,15 +1867,15 @@ export const compileFunctionType = new LibFunctionType({
   module: Constants.moduleNames.algoTs.compiled,
 })
 
-export const compiledContractType = new ObjectPType({
+export const compiledContractType = new ImmutableObjectPType({
   alias: new SymbolName({
     name: 'CompiledContract',
     module: Constants.moduleNames.algoTs.compiled,
   }),
   description: 'Provides compiled programs and state allocation values for a Contract. Created by calling `compile(ExampleContractType)`',
   properties: {
-    approvalProgram: new TuplePType({ items: [bytesPType, bytesPType] }),
-    clearStateProgram: new TuplePType({ items: [bytesPType, bytesPType] }),
+    approvalProgram: new ReadonlyTuplePType({ items: [bytesPType, bytesPType] }),
+    clearStateProgram: new ReadonlyTuplePType({ items: [bytesPType, bytesPType] }),
     extraProgramPages: uint64PType,
     globalUints: uint64PType,
     globalBytes: uint64PType,
@@ -1469,7 +1883,7 @@ export const compiledContractType = new ObjectPType({
     localBytes: uint64PType,
   },
 })
-export const compiledLogicSigType = new ObjectPType({
+export const compiledLogicSigType = new ImmutableObjectPType({
   alias: new SymbolName({
     name: 'CompiledLogicSig',
     module: Constants.moduleNames.algoTs.compiled,
@@ -1492,14 +1906,20 @@ export const SuperPrototypeSelectorGeneric = new GenericPType({
     return new SuperPrototypeSelector({ bases: ptypes })
   },
 })
-export class SuperPrototypeSelector extends InternalType {
+export class SuperPrototypeSelector extends PType {
+  readonly [PType.IdSymbol] = 'SuperPrototypeSelector'
   readonly bases: readonly PType[]
+  readonly name = 'SuperPrototypeSelector'
+  readonly singleton = false
+  readonly wtype = undefined
+  readonly module = Constants.moduleNames.polytype
   constructor({ bases }: { bases: readonly PType[] }) {
-    super({
-      name: 'SuperPrototypeSelector',
-      module: Constants.moduleNames.polytype,
-    })
+    super()
     this.bases = bases
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitSuperPrototypeSelector(this)
   }
 }
 export const ClusteredPrototype = new InternalType({
@@ -1510,24 +1930,19 @@ export const PolytypeClassMethodHelper = new LibFunctionType({
   name: 'class',
   module: Constants.moduleNames.polytype,
 })
-
-export const MutableArrayConstructor = new LibClassType({
-  name: 'MutableArray',
-  module: Constants.moduleNames.algoTs.mutableArray,
-})
-export const MutableArrayGeneric = new GenericPType({
-  name: 'MutableArray',
-  module: Constants.moduleNames.algoTs.mutableArray,
-  parameterise: (typeArgs: readonly PType[]): MutableArrayType => {
-    codeInvariant(typeArgs.length === 1, 'MutableArray type expects exactly one type parameter')
+export const ReferenceArrayGeneric = new GenericPType({
+  name: 'ReferenceArray',
+  module: Constants.moduleNames.algoTs.referenceArray,
+  parameterise: (typeArgs: readonly PType[]): ReferenceArrayType => {
+    codeInvariant(typeArgs.length === 1, 'ReferenceArray type expects exactly one type parameter')
     const [elementType] = typeArgs
 
-    return new MutableArrayType({ elementType: elementType })
+    return new ReferenceArrayType({ elementType: elementType })
   },
 })
-export class MutableArrayType extends PType {
-  readonly module = Constants.moduleNames.algoTs.mutableArray
-  readonly immutable = false as const
+export class ReferenceArrayType extends PType {
+  readonly [PType.IdSymbol] = 'ReferenceArrayType'
+  readonly module = Constants.moduleNames.algoTs.referenceArray
   readonly name: string
   readonly singleton = false
   readonly sourceLocation: SourceLocation | undefined
@@ -1544,7 +1959,7 @@ export class MutableArrayType extends PType {
     immutable?: boolean
   }) {
     super()
-    this.name = name ?? `MutableArray<${elementType}>`
+    this.name = name ?? `ReferenceArray<${elementType}>`
     this.sourceLocation = sourceLocation
     this.elementType = elementType
   }
@@ -1556,9 +1971,17 @@ export class MutableArrayType extends PType {
       immutable: false,
     })
   }
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitReferenceArrayType(this)
+  }
 }
 
 export const itxnComposePType = new LibObjType({
   module: Constants.moduleNames.algoTs.itxnCompose,
   name: 'itxnCompose',
+})
+
+export const cloneFunctionPType = new LibFunctionType({
+  name: 'clone',
+  module: Constants.moduleNames.algoTs.util,
 })

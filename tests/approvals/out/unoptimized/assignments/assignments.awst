@@ -1,0 +1,129 @@
+subroutine resetCount(): void
+{
+  stores(0, 0)
+}
+subroutine getCount(): uint64
+{
+  return loads(0)
+}
+subroutine incCount(): void
+{
+  stores(0, loads(0) + 1)
+}
+contract AssignmentsAlgo
+{
+  reservedScratchSpace: [0]
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testPrimitives(u: uint64): void
+  {
+    p1: uint64 = u
+    p2: uint64 = 2
+    p2: uint64 = p2 + 1
+    assert(p2 == 3)
+    assert(p1 == u)
+  }
+  
+  testAccountDestructure(): Object3C0E3B9F
+  {
+    #[balance, minBalance]: readonly [uint64, uint64] = #[checked_maybe(acct_params_get<AcctBalance>(($0 = global<CurrentApplicationAddress>())), comment=account funded), checked_maybe(acct_params_get<AcctMinBalance>($0), comment=account funded)]
+    return new Object3C0E3B9F(balance=balance, minBalance=minBalance)
+  }
+  
+  testArrayDestructure(i_a: arc4.dynamic_array<uint64>, u: uint64, m_a: arc4.dynamic_array<uint64>): void
+  {
+    #[a1]: readonly [uint64] = #[i_a[1]]
+    assert(a1 == i_a[1])
+    tests/approvals/assignments.algo.ts::resetCount()
+    a5: arc4.tuple<uint64,uint64,uint64> = (#[a2, a3] = #[($1 = #[tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u)]).0, $1.1]), ARC4_ENCODE(#[$1.0, $1.1, $1.2], wtype=arc4.tuple<uint64,uint64,uint64>)
+    assert(tests/approvals/assignments.algo.ts::getCount() == 3, comment=logAndReturn called 3 times)
+    assert(a2 == u)
+    assert(a3 == u)
+    assert(&&(&&(&&(3 == 3, a5.0 == u), a5.1 == u), a5.2 == u), comment=assert target is match for conditions)
+    assert(3 == 3, comment=a5 length should be 3)
+    #[a4]: readonly [uint64] = #[($2 = #[1]).0]
+    assert(a4 == 1)
+    #[c, d]: readonly [uint64, uint64] = #[($3 = #[tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u), tests/approvals/assignments.algo.ts::logAndReturn(u)]).0, $3.1]
+    assert(&&(&&(2 == 2, c == u), d == u), comment=assert target is match for conditions)
+    #[a6, a7]: readonly [uint64, uint64] = #[m_a[0], m_a[1]]
+    assert(a6 == m_a[0])
+    assert(a7 == m_a[1])
+  }
+  
+  testArrayNarrowing(m_a: arc4.dynamic_array<uint64>, u: uint64): void
+  {
+    direct: arc4.dynamic_array<uint64> = copy(m_a)
+    m_a[0]: uint64 = m_a[0] + 1
+    direct[0]: uint64 = direct[0] + 2
+    assert(m_a[0] != direct[0])
+    narrowed: arc4.dynamic_array<uint64> = convert_array(copy(m_a), wtype=arc4.dynamic_array<uint64>)
+    narrowed2: arc4.dynamic_array<uint64> = narrowed
+    result: arc4.dynamic_array<uint64> = (fromLit = new arc4.dynamic_array<uint64>(($4 = #[u, u, u]).0, $4.1, $4.2)), new arc4.dynamic_array<uint64>(($5 = #[u, u, u]).0, $5.1, $5.2)
+    fromLit2: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(($6 = #[u, u, u]).0, $6.1, $6.2)
+  }
+  
+  testTupleToArray(m_t: arc4.tuple<uint64,uint64>, i_t: readonly [uint64, uint64]): void
+  {
+    m_a: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(copy(m_t).0, copy(m_t).1)
+    assert(&&(&&(m_a.length == 2, m_a[0] == m_t.0), m_a[1] == m_t.1), comment=assert target is match for conditions)
+    i_a: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(copy(m_t).0, copy(m_t).1)
+    assert(&&(&&(i_a.length == 2, i_a[0] == m_t.0), i_a[1] == m_t.1), comment=assert target is match for conditions)
+    i_a2: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(i_t.0, i_t.1)
+    assert(&&(&&(i_a2.length == 2, i_a2[0] == i_t.0), i_a2[1] == i_t.1), comment=assert target is match for conditions)
+  }
+  
+  testNested(i_a: arc4.dynamic_array<arc4.dynamic_array<uint64>>): void
+  {
+    #[#[a]]: readonly [readonly [uint64]] = #[#[i_a[0][0]]]
+    assert(a == i_a[0][0])
+  }
+  
+  testDestructureObj(m: Object3EB715E7, i: ReadonlyObject3EB715E7{ a: uint64, b: string }): void
+  {
+    #[a1, b1]: readonly [uint64, string] = #[m.a, m.b]
+    #[a2, b2]: readonly [uint64, string] = #[i.a, i.b]
+  }
+  
+  testObjLiteralNarrowing(a: uint64, b: uint64): void
+  {
+    mObj: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($7 = #{ a: a, b: b }).a, b=$7.b)
+    imObj: ImmutableObj{ a: uint64, b: uint64 } = #{ a: ($8 = #{ a: a, b: b }).a, b: $8.b }
+    mObj2: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($9 = #{ a: ($10 = #{ a: ($11 = #[123, 456]).0, b: $11.1 }).a, b: $10.b }).a, b=$9.b)
+    imObj2: ImmutableObj{ a: uint64, b: uint64 } = #{ a: ($12 = #{ a: ($13 = #{ a: ($14 = #[456, b]).0, b: $14.1 }).a, b: $13.b }).a, b: $12.b }
+    tests/approvals/assignments.algo.ts::resetCount()
+    mObj3: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($15 = #{ a: ($16 = tests/approvals/assignments.algo.ts::getVal()).a, b: $16.b }).a, b=$15.b)
+    assert(tests/approvals/assignments.algo.ts::getCount() == 1, comment=getVal should only be called once)
+    mObj4: tests/approvals/assignments.algo.ts::MutableObj = new tests/approvals/assignments.algo.ts::MutableObj(a=($17 = #{ a: ($18 = #{ a: ($19 = #[($20 = tests/approvals/assignments.algo.ts::getVal()).a, $20.b, a, b]).2, b: $19.3 }).a, b: $18.b }).a, b=$17.b)
+    assert(tests/approvals/assignments.algo.ts::getCount() == 2, comment=getVal should still be called once even though its result is not used)
+  }
+  
+  testMixed(m: arc4.dynamic_array<Object7CFAF5D6>): void
+  {
+    #[#[#[a1]]]: readonly [readonly [readonly [uint64]]] = #[#[#[m[0].a.0]]]
+    m: arc4.dynamic_array<Object7CFAF5D6> = new arc4.dynamic_array<Object7CFAF5D6>(new Object7CFAF5D6(a=ARC4_ENCODE(#[($21 = ($22 = ($23 = #[#{ a: #[($24 = ($25 = #{ a: ($26 = #[#[213]]).0 }).a).0] }]).0).a).0], wtype=arc4.tuple<uint64>)))
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+subroutine getVal(): ImmutableObj{ a: uint64, b: uint64 }
+{
+  tests/approvals/assignments.algo.ts::incCount()
+  return #{ a: ($27 = #{ a: ($28 = #[1, 2]).0, b: $28.1 }).a, b: $27.b }
+}
+subroutine logAndReturn(u: uint64): uint64
+{
+  tests/approvals/assignments.algo.ts::incCount()
+  log(itob(u))
+  return u
+}

@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    // tests/approvals/precompiled-apps.algo.ts:60
+    // tests/approvals/precompiled-apps.algo.ts:66
     // export class LargeProgram extends Contract {
     txn NumAppArgs
     bz main_bare_routing@7
@@ -12,13 +12,13 @@ main:
     match main_getBigBytesLength_route@3 main_delete_route@4
 
 main_after_if_else@11:
-    // tests/approvals/precompiled-apps.algo.ts:60
+    // tests/approvals/precompiled-apps.algo.ts:66
     // export class LargeProgram extends Contract {
     pushint 0 // 0
     return
 
 main_delete_route@4:
-    // tests/approvals/precompiled-apps.algo.ts:65
+    // tests/approvals/precompiled-apps.algo.ts:71
     // @abimethod({ allowActions: 'DeleteApplication' })
     txn OnCompletion
     pushint 5 // DeleteApplication
@@ -30,7 +30,7 @@ main_delete_route@4:
     return
 
 main_getBigBytesLength_route@3:
-    // tests/approvals/precompiled-apps.algo.ts:61
+    // tests/approvals/precompiled-apps.algo.ts:67
     // getBigBytesLength() {
     txn OnCompletion
     !
@@ -47,7 +47,7 @@ main_getBigBytesLength_route@3:
     return
 
 main_bare_routing@7:
-    // tests/approvals/precompiled-apps.algo.ts:60
+    // tests/approvals/precompiled-apps.algo.ts:66
     // export class LargeProgram extends Contract {
     txn OnCompletion
     bnz main_after_if_else@11
@@ -60,11 +60,11 @@ main_bare_routing@7:
 
 // tests/approvals/precompiled-apps.algo.ts::LargeProgram.getBigBytesLength() -> uint64:
 getBigBytesLength:
-    // tests/approvals/precompiled-apps.algo.ts:57
+    // tests/approvals/precompiled-apps.algo.ts:63
     // return op.bzero(4096)
     pushint 4096 // 4096
     bzero
-    // tests/approvals/precompiled-apps.algo.ts:62
+    // tests/approvals/precompiled-apps.algo.ts:68
     // return getBigBytes().length
     len
     retsub

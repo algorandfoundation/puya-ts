@@ -12,30 +12,30 @@ contract MyContract
   
   getXY(): XY{ x: uint64, y: uint64 }
   {
-    return { x: (#0 = { x: 1, y: 2 }).x, y: #0.y }
+    return #{ x: ($0 = #{ x: ($1 = #[1, 2]).0, y: $1.1 }).x, y: $0.y }
   }
   
   getYX(): YX{ y: uint64, x: uint64 }
   {
-    return { y: (#1 = { x: 222, y: 111 }).y, x: #1.x }
+    return #{ y: ($2 = #{ y: ($3 = #[222, 111]).1, x: $3.0 }).y, x: $2.x }
   }
   
-  getAnon(): getAnonResult{ x: uint64, y: uint64 }
+  getAnon(): ReadonlyObjectDC5110F2{ x: uint64, y: uint64 }
   {
-    return { x: (#2 = { x: 3, y: 4 }).x, y: #2.y }
+    return #{ x: 3, y: 4 }
   }
   
   test(x: XY{ x: uint64, y: uint64 }, y: YX{ y: uint64, x: uint64 }): void
   {
-    assert(x.y == y.y and x.x == y.x, comment=assert target is match for conditions)
+    assert(&&(x.y == y.y, x.x == y.x), comment=assert target is match for conditions)
   }
   
-  testing(): readonlytuple[XY{ x: uint64, y: uint64 }, YX{ y: uint64, x: uint64 }, object{ x: uint64, y: uint64 }]
+  testing(): readonly [XY{ x: uint64, y: uint64 }, YX{ y: uint64, x: uint64 }, ReadonlyObjectDC5110F2{ x: uint64, y: uint64 }]
   {
     a: XY{ x: uint64, y: uint64 } = tests/approvals/named-types.algo.ts::MyContract.getXY()
     b: YX{ y: uint64, x: uint64 } = tests/approvals/named-types.algo.ts::MyContract.getYX()
-    c: object{ x: uint64, y: uint64 } = { x: (#3 = tests/approvals/named-types.algo.ts::MyContract.getAnon()).x, y: #3.y }
-    return <tuple>[a, b, c]
+    c: ReadonlyObjectDC5110F2{ x: uint64, y: uint64 } = tests/approvals/named-types.algo.ts::MyContract.getAnon()
+    return #[a, b, c]
   }
   
   __algots__.defaultCreate(): void

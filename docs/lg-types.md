@@ -215,17 +215,46 @@ class Demo extends Contract {
 
 ### Arrays
 
-#### Immutable
+#### Mutable
 
 ```ts
 const myArray: uint64[] = [1, 2, 3]
 const myOtherArray = ['a', 'b', 'c']
 ```
 
-Arrays in Algorand TypeScript can be declared using the array literal syntax and are explicitly typed using either the `T[]` shorthand or `Array<T>` full name. The type can usually be inferred but uints will require a type hint. Native arrays are currently considered immutable (as if they were declared `readonly T[]`) as the AVM offers limited resources for storing mutable reference types in a heap. "Mutations" can be done using the pure methods available on the Array prototype.
+Arrays in Algorand TypeScript can be declared using the array literal syntax and are explicitly typed using either the `T[]` shorthand or `Array<T>` full name. The type can usually be inferred but uints will require a type hint. Native arrays are mutable. Mutations can be done using the methods available on the Array prototype, such as `push` and `pop` etc, or assigning directly to an index of the array.
 
 ```ts
-let myArray: uint64[] = [1, 2, 3]
+const myArray: uint64[] = [1, 2, 3]
+
+myArray.push(4)
+
+const item = myArray.pop()!
+
+myArray[0] = 1
+```
+
+Similar to other supported native types, much of the full prototype of Array is not supported but this coverage may expand over time.
+
+Mutable arrays are stored on the stack in the Puya compiler which (without getting into the technical details) necessitates that the compiler restricts having multiple variables refer to the same array in order to maintain semantic compatability between the TypeScript execution and the AVM execution. It is necessary to `clone` a mutable array when assigning one from one variable (or variable like construct - eg. state) to another.
+
+```ts
+const myArray = new Array<bytes>()
+
+const arrayCopy = clone(myArray)
+```
+
+#### Immutable
+
+```ts
+const myArray: readonly uint64[] = [1, 2, 3]
+const myOtherArray: ReadonlyArray<string> = ['a', 'b', 'c']
+```
+
+Immutable arrays in Algorand TypeScript are declared using the `readonly T[]` shorthand or `ReadonlyArray<T>` full name. Immutable arrays generally speaking do not need to be cloned when being assigned to other variables unless they contain mutable items. Immutable arrays can still be effectively mutated by making use of pure methods such as `with` and `concat` and reassigning the target variable.
+
+```ts
+let myArray: readonly uint64[] = [1, 2, 3]
 
 // Instead of .push
 myArray = [...myArray, 4]
@@ -234,24 +263,32 @@ myArray = [...myArray, 4]
 myArray = myArray.with(2, 3)
 ```
 
-Similar to other supported native types, much of the full prototype of Array is not supported but this coverage may expand over time.
+#### FixedArray
 
-#### Mutable
+The FixedArray type is a mutable array with a pre-defined length. Items can be updated/replaced but there is no `push` or `pop`. The FixedArray type is useful for pre-allocating a block of bytes in box storage or global/local state.
 
 ```ts
-import { MutableArray, uint64 } from '@algorandfoundation/algorand-typescript'
+import { FixedArray, uint64 } from '@algorandfoundation/algorand-typescript'
 
-const myMutable = new MutableArray<uint64>()
-myMutable.push(1)
-addToArray(myMutable)
-assert(myMutable.pop() === 4)
+const myFixed = new FixedArray<uint64, 3>()
+```
 
-function addToArray(x: MutableArray<uint64>) {
+#### ReferenceArray
+
+```ts
+import { ReferenceArray, uint64 } from '@algorandfoundation/algorand-typescript'
+
+const myReference = new ReferenceArray<uint64>()
+myReference.push(1)
+addToArray(myReference)
+assert(myReference.pop() === 4)
+
+function addToArray(x: myReference<uint64>) {
   x.push(4)
 }
 ```
 
-Mutable arrays can be declared using the [MutableArray](api/index/classes/MutableArray.md) type. This type makes use of [scratch space](https://dev.algorand.co/concepts/smart-contracts/languages/teal/#scratch-space-usage) as a heap in order to provide an array type with 'pass by reference' semantics. It is currently limited to fixed size item types.
+Reference arrays can be declared using the [ReferenceArray](api/index/classes/ReferenceArray.md) type. This type makes use of [scratch space](https://dev.algorand.co/concepts/smart-contracts/languages/teal/#scratch-space-usage) as a heap in order to provide an array type with 'pass by reference' semantics. It is currently limited to fixed size item types.
 
 ### Tuples
 
@@ -269,23 +306,24 @@ Tuples can be declared by appending the `as const` keywords to an array literal 
 ### Objects
 
 ```ts
-import { Uint64, Bytes, uint64 } from '@algorandfoundation/algorand-typescript'
+import { Uint64, uint64 } from '@algorandfoundation/algorand-typescript'
 
-type NamedObj = { x: uint64; y: uint64 }
-
-const myObj = { a: Uint64(123), b: Bytes('test'), c: false }
-
-function test(obj: NamedObj): uint64 {
-  return (obj.x = obj.y)
-}
+// These types and objects are mutable
+type Point = { y: uint64; x: uint64 }
+const p1: Point = { x: 1, y: 2 }
+const p2 = { x: Uint64(1), y: Uint64(2) }
+p1.x = 3
+p2.x = 3
 ```
 
-Object types and literals are treated as named tuples. The types themselves can be declared with a name using a `type NAME = { ... }` expression, or anonymously using an inline type annotation `let x: { a: boolean } = { ... }`. If no type annotation is present, the type will be inferred from the assigned values. Object types are immutable and are treated as if they were declared with the `Readonly` helper type. i.e. `{ a: boolean }` is equivalent to `Readonly<{ a: boolean }>`. An object's property can be updated using a spread expression.
+Object types and literals are treated as named tuples. The types themselves can be declared with a name using a `type NAME = { ... }` expression, or anonymously using an inline type annotation `let x: { a: boolean } = { ... }`. If no type annotation is present, the type will be inferred from the assigned values. Object types are mutable unless they are declared with the `Readonly` type helper type, or the `readonly` keyword on every property. i.e. `{ a: boolean }` is mutable and `Readonly<{ a: boolean }>` or `{ readonly a: boolean }` is immutable. An immutable object's property can be updated using a spread expression.
+
+Mutable objects have the same reference restriction and clone requirement as mutable arrays.
 
 ```ts
 import { Uint64 } from '@algorandfoundation/algorand-typescript'
 
-let obj = { first: 'John', last: 'Doh' }
+let obj: Readonly<{ first: string; last: string }> = { first: 'John', last: 'Doh' }
 obj = { ...obj, first: 'Jane' }
 ```
 
@@ -303,7 +341,7 @@ Where supported, the native equivalent of an ARC4 type can be obtained via the `
 
 ### Unsigned ints
 
-**Types:** `@algorandfoundation/algorand-typescript/arc4::UIntN`<br>
+**Types:** `@algorandfoundation/algorand-typescript/arc4::UInt`<br>
 **Encoding:** A big endian byte array of N bits<br>
 **Native equivalent:** `uint64` or `biguint`
 
@@ -311,7 +349,7 @@ Common bit sizes have also been aliased under `@algorandfoundation/algorand-type
 
 ### Unsigned fixed point decimals
 
-**Types:** `@algorandfoundation/algorand-typescript/arc4::UFixedNxM`<br>
+**Types:** `@algorandfoundation/algorand-typescript/arc4::UFixed`<br>
 **Encoding:** A big endian byte array of N bits where `encoded_value = value / (10^M)`<br>
 **Native equivalent:** _none_
 

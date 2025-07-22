@@ -3,9 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0
-    pushbytes ""
-    dup
+    intcblock 1
     // tests/approvals/assert-match.algo.ts:4
     // export class AssertMatchContract extends Contract {
     txn NumAppArgs
@@ -17,7 +15,7 @@ main:
 main_after_if_else@10:
     // tests/approvals/assert-match.algo.ts:4
     // export class AssertMatchContract extends Contract {
-    intc_1 // 0
+    pushint 0 // 0
     return
 
 main_testPay_route@3:
@@ -33,8 +31,6 @@ main_testPay_route@3:
     txn GroupIndex
     intc_0 // 1
     -
-    dup
-    bury 3
     dup
     gtxns TypeEnum
     intc_0 // pay
@@ -55,9 +51,9 @@ main_testPay_route@3:
     //   firstValid: { greaterThan: 1 },
     //   lastValid: { lessThan: 2 ** 40 },
     // })
+    dup
     gtxns Amount
     dup
-    bury 2
     // tests/approvals/assert-match.algo.ts:11
     // amount: { between: [100_000, 105_000] },
     pushint 105000 // 105000
@@ -71,8 +67,7 @@ main_testPay_route@3:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     <=
-    bz main_bool_false@22
-    dup
+    swap
     // tests/approvals/assert-match.algo.ts:11
     // amount: { between: [100_000, 105_000] },
     pushint 100000 // 100000
@@ -86,7 +81,7 @@ main_testPay_route@3:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     >=
-    bz main_bool_false@22
+    &&
     dig 1
     gtxns Sender
     // tests/approvals/assert-match.algo.ts:12
@@ -102,7 +97,7 @@ main_testPay_route@3:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     ==
-    bz main_bool_false@22
+    &&
     dig 1
     gtxns Receiver
     // tests/approvals/assert-match.algo.ts:13
@@ -118,7 +113,7 @@ main_testPay_route@3:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     ==
-    bz main_bool_false@22
+    &&
     dig 1
     gtxns CloseRemainderTo
     // tests/approvals/assert-match.algo.ts:14
@@ -134,7 +129,7 @@ main_testPay_route@3:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     ==
-    bz main_bool_false@22
+    &&
     dig 1
     gtxns FirstValid
     // tests/approvals/assert-match.algo.ts:15
@@ -150,8 +145,8 @@ main_testPay_route@3:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     >
-    bz main_bool_false@22
-    dig 1
+    &&
+    swap
     gtxns LastValid
     // tests/approvals/assert-match.algo.ts:16
     // lastValid: { lessThan: 2 ** 40 },
@@ -166,19 +161,7 @@ main_testPay_route@3:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     <
-    bz main_bool_false@22
-    intc_0 // 1
-
-main_bool_merge@23:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
+    &&
     assert // assert target is match for conditions
     // tests/approvals/assert-match.algo.ts:5
     // public testPay(pay: gtxn.PaymentTxn): boolean {
@@ -186,10 +169,6 @@ main_bool_merge@23:
     log
     intc_0 // 1
     return
-
-main_bool_false@22:
-    intc_1 // 0
-    b main_bool_merge@23
 
 main_bare_routing@6:
     // tests/approvals/assert-match.algo.ts:4

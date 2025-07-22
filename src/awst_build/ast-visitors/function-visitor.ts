@@ -2,27 +2,27 @@ import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import type * as awst from '../../awst/nodes'
 import type { Block } from '../../awst/nodes'
-import { AssignmentExpression, Goto, ReturnStatement } from '../../awst/nodes'
+import { Goto, ReturnStatement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
-import { codeInvariant, enumerate, hasFlags, instanceOfAny, invariant } from '../../util'
+import { codeInvariant, hasFlags, instanceOfAny, invariant } from '../../util'
 import type { Statements } from '../../visitor/syntax-names'
 import { getNodeName } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
 import type { InstanceBuilder } from '../eb'
 import { BuilderComparisonOp } from '../eb'
+import { CloneFunctionBuilder } from '../eb/clone-function-builder'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
-import { NativeArrayExpressionBuilder } from '../eb/native-array-expression-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
-import { TupleExpressionBuilder } from '../eb/tuple-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
-import type { PType } from '../ptypes'
-import { FunctionPType, ObjectPType } from '../ptypes'
-import { getSequenceItemType } from '../ptypes/util'
-import { typeRegistry } from '../type-registry'
+import { FunctionPType } from '../ptypes'
+import { containsMutableType } from '../ptypes/visitors/contains-mutable-visitor'
+import { IteratorTypeVisitor } from '../ptypes/visitors/iterator-type-visitor'
+import { instanceEb, typeRegistry } from '../type-registry'
+import { handleAssignmentStatement } from './assignments'
 import { BaseVisitor } from './base-visitor'
 import { maybeNodes } from './util'
 
@@ -78,13 +78,12 @@ export abstract class FunctionVisitor
           invariant(ts.isIdentifier(propertyNameIdentifier), 'propertyName must be an identifier')
 
           const propertyName = this.textVisitor.accept(propertyNameIdentifier)
-          codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported', sourceLocation)
+          codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported here', sourceLocation)
           codeInvariant(!element.initializer, 'Initializer on object binding pattern is not supported', sourceLocation)
 
           props.push([propertyName, this.visitBindingName(element.name, sourceLocation)])
         }
-        const ptype = ObjectPType.anonymous(props.map(([name, builder]): [string, PType] => [name, builder.ptype]))
-        return new ObjectLiteralExpressionBuilder(sourceLocation, ptype, [{ type: 'properties', properties: Object.fromEntries(props) }])
+        return ObjectLiteralExpressionBuilder.fromParts(sourceLocation, [{ type: 'properties', properties: Object.fromEntries(props) }])
       }
       case ts.SyntaxKind.ArrayBindingPattern: {
         const items: InstanceBuilder[] = []
@@ -96,22 +95,9 @@ export abstract class FunctionVisitor
           } else {
             codeInvariant(!element.initializer, 'Initializer on array binding expression is not supported', sourceLocation)
             codeInvariant(!element.propertyName, 'Property name on array binding expression is not supported', sourceLocation)
+            codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported here', sourceLocation)
 
-            if (element.dotDotDotToken) {
-              const spreadResult = this.visitBindingName(element.name, sourceLocation)
-              if (spreadResult instanceof NativeArrayExpressionBuilder) {
-                throw new CodeError(
-                  'Spread operator is not supported in assignment expressions where the resulting type is a variadic array',
-                  { sourceLocation },
-                )
-              } else if (spreadResult instanceof TupleExpressionBuilder) {
-                throw new CodeError('Spread operator is not currently supported with tuple expressions', { sourceLocation })
-              } else {
-                throw InternalError.shouldBeUnreachable()
-              }
-            } else {
-              items.push(this.visitBindingName(element.name, sourceLocation))
-            }
+            items.push(this.visitBindingName(element.name, sourceLocation))
           }
         }
         return new ArrayLiteralExpressionBuilder(sourceLocation, items)
@@ -140,7 +126,9 @@ export abstract class FunctionVisitor
           paramPType,
         )
 
-        assignments.push(this.handleAssignmentStatement(this.visitBindingName(p.name, sourceLocation), paramBuilder, sourceLocation))
+        assignments.push(
+          handleAssignmentStatement(this.context, this.visitBindingName(p.name, sourceLocation), paramBuilder, sourceLocation),
+        )
       }
     }
 
@@ -193,6 +181,7 @@ export abstract class FunctionVisitor
        */
       storeConst: if (isConstDeclaration && ts.isIdentifier(d.name)) {
         const targetType = this.context.getPTypeForNode(d.name)
+        if (!source.isConstant) break storeConst
         if (!source.resolvableToPType(targetType)) break storeConst
         const builder = source.resolveToPType(targetType)
         if (!builder.isConstant) break storeConst
@@ -200,7 +189,7 @@ export abstract class FunctionVisitor
         return []
       }
 
-      return this.handleAssignmentStatement(this.visitBindingName(d.name, sourceLocation), source, sourceLocation)
+      return handleAssignmentStatement(this.context, this.visitBindingName(d.name, sourceLocation), source, sourceLocation)
     })
   }
 
@@ -251,27 +240,44 @@ export abstract class FunctionVisitor
 
   visitForOfStatement(node: ts.ForOfStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
-    const sequenceLocation = this.sourceLocation(node.expression)
     const initializerLocation = this.sourceLocation(node.initializer)
-    const sequenceType = this.context.getPTypeForNode(node.expression)
-    const itemType = getSequenceItemType(sequenceType, sequenceLocation)
+    const sequence = requireInstanceBuilder(this.accept(node.expression))
+    if (containsMutableType(sequence.ptype)) {
+      sequence.checkForUnclonedMutables('when being iterated')
+    }
 
-    let items: awst.LValue
+    const itemType = IteratorTypeVisitor.accept(sequence.ptype)
+    codeInvariant(itemType, `${sequence.ptype} is not iterable`, this.sourceLocation(node.expression))
+    let items: InstanceBuilder
     if (ts.isExpression(node.initializer)) {
-      items = requireInstanceBuilder(this.accept(node.initializer)).resolveLValue()
+      items = requireInstanceBuilder(this.accept(node.initializer))
     } else {
       codeInvariant(node.initializer.declarations.length === 1, 'For of loops can only declare a single loop variable', initializerLocation)
       const [declaration] = node.initializer.declarations
-      items = this.buildLValue(this.visitBindingName(declaration.name, initializerLocation), itemType, initializerLocation)
+      items = this.visitBindingName(declaration.name, initializerLocation)
     }
+
+    const itemVar = instanceEb(
+      nodeFactory.varExpression({
+        name: this.context.generateVarName('temp'),
+        wtype: itemType.wtypeOrThrow,
+        sourceLocation: initializerLocation,
+      }),
+      itemType,
+    )
     using ctx = this.context.switchLoopCtx.enterLoop(node, sourceLocation)
     return nodeFactory.block(
       { sourceLocation },
       nodeFactory.forInLoop({
         sourceLocation,
-        sequence: requireInstanceBuilder(this.accept(node.expression)).iterate(sourceLocation),
-        items,
-        loopBody: nodeFactory.block({ sourceLocation }, this.accept(node.statement), ...maybeNodes(ctx.hasContinues, ctx.continueTarget)),
+        sequence: sequence.iterate(sourceLocation),
+        items: itemVar.resolveLValue(),
+        loopBody: nodeFactory.block(
+          { sourceLocation },
+          handleAssignmentStatement(this.context, items, CloneFunctionBuilder.clone(itemVar, itemVar.sourceLocation), initializerLocation),
+          this.accept(node.statement),
+          ...maybeNodes(ctx.hasContinues, ctx.continueTarget),
+        ),
       }),
       ...maybeNodes(ctx.hasBreaks, ctx.breakTarget),
     )
@@ -291,11 +297,6 @@ export abstract class FunctionVisitor
   }
   visitExpressionStatement(node: ts.ExpressionStatement): awst.Statement | awst.Statement[] {
     const expr = requireInstanceBuilder(this.accept(node.expression)).resolve()
-    if (expr instanceof AssignmentExpression) {
-      return nodeFactory.assignmentStatement({
-        ...expr,
-      })
-    }
     return nodeFactory.expressionStatement({
       expr,
     })
@@ -398,7 +399,7 @@ export abstract class FunctionVisitor
     let defaultCase: Block | null = null
 
     const clauses: awst.Statement[] = []
-    for (const [index, clause] of enumerate(node.caseBlock.clauses)) {
+    for (const [index, clause] of node.caseBlock.clauses.entries()) {
       const sourceLocation = this.sourceLocation(clause)
 
       const statements = clause.statements.flatMap((s) => this.accept(s))
@@ -476,7 +477,7 @@ export abstract class FunctionVisitor
     codeInvariant(!node.dotDotDotToken, 'Rest parameters are not supported', sourceLocation)
     codeInvariant(!node.questionToken, 'Optional parameters are not supported', sourceLocation)
     if (node.initializer) {
-      logger.warn(sourceLocation, 'TODO: Default parameter values')
+      logger.error(sourceLocation, 'Default parameter values are not supported')
     }
     const paramPType = this.context.getPTypeForNode(node.type)
 
@@ -487,11 +488,10 @@ export abstract class FunctionVisitor
         wtype: paramPType.wtypeOrThrow,
       })
     } else if (ts.isObjectBindingPattern(node.name)) {
-      codeInvariant(paramPType instanceof ObjectPType, 'Param type must be object if it is being destructured', sourceLocation)
       return nodeFactory.subroutineArgument({
         sourceLocation,
         name: this.context.resolveDestructuredParamName(node),
-        wtype: paramPType.wtype,
+        wtype: paramPType.wtypeOrThrow,
       })
     } else {
       throw new CodeError(`Unsupported parameter declaration type ${getNodeName(node)}`, { sourceLocation })

@@ -1,0 +1,527 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__() -> bool:
+    block@0: // L8
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@12
+    block@1: // abi_routing_L8
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "test_for_of_loop_tuple((uint64,uint64,uint64))uint64" => block@2, method "test_for_of_loop_destructured_tuple(uint64[])uint64" => block@3, method "test_for_of_loop_destructured_object((uint64,uint64)[])uint64" => block@4, method "test_for_of_loop_arc4_dynamic_array(uint64[])uint64" => block@5, method "test_for_of_loop_arc4_static_array(uint64[5])uint64" => block@6, method "test_for_of_loop_native_immutable_array(uint64[])uint64" => block@7, method "test_for_of_loop_native_mutable_array((uint64,uint64,uint64))uint64" => block@8, method "test_iterable_props(uint64[3],uint64[3],uint64[])uint64" => block@9, * => block@10}
+    block@2: // test_for_of_loop_tuple_route_L9
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 NoOp)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (!= tmp%5#0 0u)
+        (assert tmp%6#0) // can only call when not creating
+        let reinterpret_Encoded(uint64,uint64,uint64)%0#0: Encoded(uint64,uint64,uint64) = (txna ApplicationArgs 1)
+        let (tmp%7#0: uint64, tmp%8#0: uint64, tmp%9#0: uint64) = decode_bytes<(uint64,uint64,uint64,)>(reinterpret_Encoded(uint64,uint64,uint64)%0#0)
+        let tmp%10#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple(tmp%7#0, tmp%8#0, tmp%9#0)
+        let tmp%11#0: Encoded(uint64) = bytes_encode<uint64>(tmp%10#0)
+        let tmp%12#0: bytes = (concat 0x151f7c75 tmp%11#0)
+        (log tmp%12#0)
+        return 1u
+    block@3: // test_for_of_loop_destructured_tuple_route_L18
+        let tmp%13#0: uint64 = (txn OnCompletion)
+        let tmp%14#0: bool = (== tmp%13#0 NoOp)
+        (assert tmp%14#0) // OnCompletion is not NoOp
+        let tmp%15#0: uint64 = (txn ApplicationID)
+        let tmp%16#0: bool = (!= tmp%15#0 0u)
+        (assert tmp%16#0) // can only call when not creating
+        let reinterpret_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
+        let tmp%17#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple(reinterpret_Encoded(len+uint64[])%0#0)
+        let tmp%18#0: Encoded(uint64) = bytes_encode<uint64>(tmp%17#0)
+        let tmp%19#0: bytes = (concat 0x151f7c75 tmp%18#0)
+        (log tmp%19#0)
+        return 1u
+    block@4: // test_for_of_loop_destructured_object_route_L27
+        let tmp%20#0: uint64 = (txn OnCompletion)
+        let tmp%21#0: bool = (== tmp%20#0 NoOp)
+        (assert tmp%21#0) // OnCompletion is not NoOp
+        let tmp%22#0: uint64 = (txn ApplicationID)
+        let tmp%23#0: bool = (!= tmp%22#0 0u)
+        (assert tmp%23#0) // can only call when not creating
+        let reinterpret_Encoded(len+(uint64,uint64)[])%0#0: Encoded(len+(uint64,uint64)[]) = (txna ApplicationArgs 1)
+        let tmp%24#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object(reinterpret_Encoded(len+(uint64,uint64)[])%0#0)
+        let tmp%25#0: Encoded(uint64) = bytes_encode<uint64>(tmp%24#0)
+        let tmp%26#0: bytes = (concat 0x151f7c75 tmp%25#0)
+        (log tmp%26#0)
+        return 1u
+    block@5: // test_for_of_loop_arc4_dynamic_array_route_L36
+        let tmp%27#0: uint64 = (txn OnCompletion)
+        let tmp%28#0: bool = (== tmp%27#0 NoOp)
+        (assert tmp%28#0) // OnCompletion is not NoOp
+        let tmp%29#0: uint64 = (txn ApplicationID)
+        let tmp%30#0: bool = (!= tmp%29#0 0u)
+        (assert tmp%30#0) // can only call when not creating
+        let reinterpret_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
+        let tmp%31#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array(reinterpret_Encoded(len+uint64[])%1#0)
+        let tmp%32#0: Encoded(uint64) = bytes_encode<uint64>(tmp%31#0)
+        let tmp%33#0: bytes = (concat 0x151f7c75 tmp%32#0)
+        (log tmp%33#0)
+        return 1u
+    block@6: // test_for_of_loop_arc4_static_array_route_L45
+        let tmp%34#0: uint64 = (txn OnCompletion)
+        let tmp%35#0: bool = (== tmp%34#0 NoOp)
+        (assert tmp%35#0) // OnCompletion is not NoOp
+        let tmp%36#0: uint64 = (txn ApplicationID)
+        let tmp%37#0: bool = (!= tmp%36#0 0u)
+        (assert tmp%37#0) // can only call when not creating
+        let reinterpret_Encoded(uint64[5])%0#0: Encoded(uint64[5]) = (txna ApplicationArgs 1)
+        let tmp%38#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array(reinterpret_Encoded(uint64[5])%0#0)
+        let tmp%39#0: Encoded(uint64) = bytes_encode<uint64>(tmp%38#0)
+        let tmp%40#0: bytes = (concat 0x151f7c75 tmp%39#0)
+        (log tmp%40#0)
+        return 1u
+    block@7: // test_for_of_loop_native_immutable_array_route_L54
+        let tmp%41#0: uint64 = (txn OnCompletion)
+        let tmp%42#0: bool = (== tmp%41#0 NoOp)
+        (assert tmp%42#0) // OnCompletion is not NoOp
+        let tmp%43#0: uint64 = (txn ApplicationID)
+        let tmp%44#0: bool = (!= tmp%43#0 0u)
+        (assert tmp%44#0) // can only call when not creating
+        let reinterpret_Encoded(len+uint64[])%2#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
+        let tmp%45#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array(reinterpret_Encoded(len+uint64[])%2#0)
+        let tmp%46#0: Encoded(uint64) = bytes_encode<uint64>(tmp%45#0)
+        let tmp%47#0: bytes = (concat 0x151f7c75 tmp%46#0)
+        (log tmp%47#0)
+        return 1u
+    block@8: // test_for_of_loop_native_mutable_array_route_L63
+        let tmp%48#0: uint64 = (txn OnCompletion)
+        let tmp%49#0: bool = (== tmp%48#0 NoOp)
+        (assert tmp%49#0) // OnCompletion is not NoOp
+        let tmp%50#0: uint64 = (txn ApplicationID)
+        let tmp%51#0: bool = (!= tmp%50#0 0u)
+        (assert tmp%51#0) // can only call when not creating
+        let reinterpret_Encoded(uint64,uint64,uint64)%1#0: Encoded(uint64,uint64,uint64) = (txna ApplicationArgs 1)
+        let tmp%52#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(reinterpret_Encoded(uint64,uint64,uint64)%1#0)
+        let tmp%53#0: Encoded(uint64) = bytes_encode<uint64>(tmp%52#0)
+        let tmp%54#0: bytes = (concat 0x151f7c75 tmp%53#0)
+        (log tmp%54#0)
+        return 1u
+    block@9: // test_iterable_props_route_L73
+        let tmp%55#0: uint64 = (txn OnCompletion)
+        let tmp%56#0: bool = (== tmp%55#0 NoOp)
+        (assert tmp%56#0) // OnCompletion is not NoOp
+        let tmp%57#0: uint64 = (txn ApplicationID)
+        let tmp%58#0: bool = (!= tmp%57#0 0u)
+        (assert tmp%58#0) // can only call when not creating
+        let reinterpret_Encoded(uint64[3])%0#0: Encoded(uint64[3]) = (txna ApplicationArgs 1)
+        let reinterpret_Encoded(uint64[3])%1#0: Encoded(uint64[3]) = (txna ApplicationArgs 2)
+        let reinterpret_Encoded(len+uint64[])%3#0: Encoded(len+uint64[]) = (txna ApplicationArgs 3)
+        let tmp%59#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props(reinterpret_Encoded(uint64[3])%0#0, reinterpret_Encoded(uint64[3])%1#0, reinterpret_Encoded(len+uint64[])%3#0)
+        let tmp%60#0: Encoded(uint64) = bytes_encode<uint64>(tmp%59#0)
+        let tmp%61#0: bytes = (concat 0x151f7c75 tmp%60#0)
+        (log tmp%61#0)
+        return 1u
+    block@10: // switch_case_default_L8
+        goto block@11
+    block@11: // switch_case_next_L8
+        goto block@16
+    block@12: // bare_routing_L8
+        let tmp%62#0: uint64 = (txn OnCompletion)
+        switch tmp%62#0 {0u => block@13, * => block@14}
+    block@13: // __algots__.defaultCreate_L8
+        let tmp%63#0: uint64 = (txn ApplicationID)
+        let tmp%64#0: bool = (== tmp%63#0 0u)
+        (assert tmp%64#0) // can only call when creating
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__algots__.defaultCreate()
+        return 1u
+    block@14: // switch_case_default_L8
+        goto block@15
+    block@15: // switch_case_next_L8
+        goto block@16
+    block@16: // after_if_else_L8
+        return 0u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple(items.0: uint64, items.1: uint64, items.2: uint64) -> uint64:
+    block@0: // L9
+        let total#0: uint64 = 0u
+        let loop_counter%0#0: uint64 = 0u
+        let temp#0: uint64 = items.0#0
+        goto block@1
+    block@1: // for_body_L11
+        let loop_counter%0#1: uint64 = φ(loop_counter%0#0 <- block@0, loop_counter%0#2 <- block@5, loop_counter%0#3 <- block@6)
+        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@5, temp#3 <- block@6)
+        let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5, total#2 <- block@6)
+        let item#0: uint64 = temp#1
+        let tmp%0#0: uint64 = (+ total#1 item#0)
+        let total#2: uint64 = tmp%0#0
+        let tmp%1#0: bool = (== item#0 42u)
+        goto tmp%1#0 ? block@2 : block@3
+    block@2: // if_body_L13
+        goto block@8
+    block@3: // after_if_else_L13
+        goto block@4
+    block@4: // for_footer_L11
+        goto_nth [block@5, block@6][loop_counter%0#1] else goto block@7
+    block@5: // for_header_1_L11
+        let loop_counter%0#2: uint64 = 1u
+        let temp#2: uint64 = items.1#0
+        goto block@1
+    block@6: // for_header_2_L11
+        let loop_counter%0#3: uint64 = 2u
+        let temp#3: uint64 = items.2#0
+        goto block@1
+    block@7: // after_for_L11
+        goto block@8
+    block@8: // L11
+        return total#2
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple(items: Encoded(len+uint64[])) -> uint64:
+    block@0: // L18
+        let total#0: uint64 = 0u
+        let array_length%0#0: uint64 = (extract_uint16 items#0 0u)
+        let item_index_internal%0#0: uint64 = 0u
+        let reverse_index_internal%0#0: uint64 = array_length%0#0
+        goto block@1
+    block@1: // for_header_L20
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@5)
+        let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5)
+        let continue_looping%0#0: bool = (< item_index_internal%0#1 array_length%0#0)
+        goto continue_looping%0#0 ? block@2 : block@6
+    block@2: // for_body_L20
+        let array_item%0#0: Encoded(uint64) = extract_value(items#0, item_index_internal%0#1)
+        let values%0#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(array_item%0#0)
+        let temp.1#0: Encoded(uint64) = values%0#0
+        let temp.0#0: uint64 = item_index_internal%0#1
+        let index#0: uint64 = temp.0#0
+        let v#0: Encoded(uint64) = temp.1#0
+        let tmp%0#0: uint64 = decode_bytes<uint64>(v#0)
+        let tmp%1#0: uint64 = (+ total#1 tmp%0#0)
+        let total#2: uint64 = tmp%1#0
+        let tmp%2#0: bool = (>= total#2 42u)
+        goto tmp%2#0 ? block@3 : block@4
+    block@3: // if_body_L22
+        goto block@7
+    block@4: // after_if_else_L22
+        goto block@5
+    block@5: // for_footer_L20
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@1
+    block@6: // after_for_L20
+        goto block@7
+    block@7: // L20
+        let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
+        return total#3
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object(items: Encoded(len+(uint64,uint64)[])) -> uint64:
+    block@0: // L27
+        let total#0: uint64 = 0u
+        let array_length%0#0: uint64 = (extract_uint16 items#0 0u)
+        let item_index_internal%0#0: uint64 = 0u
+        let reverse_index_internal%0#0: uint64 = array_length%0#0
+        goto block@1
+    block@1: // for_header_L29
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@5)
+        let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5)
+        let continue_looping%0#0: bool = (< item_index_internal%0#1 array_length%0#0)
+        goto continue_looping%0#0 ? block@2 : block@6
+    block@2: // for_body_L29
+        let array_item%0#0: Encoded(uint64,uint64) = extract_value(items#0, item_index_internal%0#1)
+        let values%0#0: Encoded(uint64,uint64) = decode_bytes<Encoded(uint64,uint64)>(array_item%0#0)
+        let temp#0: Encoded(uint64,uint64) = values%0#0
+        let tuple_item%0#0: Encoded(uint64) = extract_value(temp#0, 0)
+        let values%1#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let tuple_item%1#0: Encoded(uint64) = extract_value(temp#0, 1)
+        let values%2#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
+        let x#0: uint64 = values%1#0
+        let y#0: uint64 = values%2#0
+        let tmp%0#0: uint64 = (+ x#0 y#0)
+        let tmp%1#0: uint64 = (+ total#1 tmp%0#0)
+        let total#2: uint64 = tmp%1#0
+        let tmp%2#0: bool = (>= total#2 42u)
+        goto tmp%2#0 ? block@3 : block@4
+    block@3: // if_body_L31
+        goto block@7
+    block@4: // after_if_else_L31
+        goto block@5
+    block@5: // for_footer_L29
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@1
+    block@6: // after_for_L29
+        goto block@7
+    block@7: // L29
+        let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
+        return total#3
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array(items: Encoded(len+uint64[])) -> uint64:
+    block@0: // L36
+        let total#0: uint64 = 0u
+        let array_length%0#0: uint64 = (extract_uint16 items#0 0u)
+        let item_index_internal%0#0: uint64 = 0u
+        let reverse_index_internal%0#0: uint64 = array_length%0#0
+        goto block@1
+    block@1: // for_header_L38
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@5)
+        let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5)
+        let continue_looping%0#0: bool = (< item_index_internal%0#1 array_length%0#0)
+        goto continue_looping%0#0 ? block@2 : block@6
+    block@2: // for_body_L38
+        let array_item%0#0: Encoded(uint64) = extract_value(items#0, item_index_internal%0#1)
+        let values%0#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(array_item%0#0)
+        let temp#0: Encoded(uint64) = values%0#0
+        let item#0: Encoded(uint64) = temp#0
+        let tmp%0#0: uint64 = decode_bytes<uint64>(item#0)
+        let tmp%1#0: uint64 = (+ total#1 tmp%0#0)
+        let total#2: uint64 = tmp%1#0
+        let tmp%2#0: uint64 = decode_bytes<uint64>(item#0)
+        let tmp%3#0: bool = (== tmp%2#0 42u)
+        goto tmp%3#0 ? block@3 : block@4
+    block@3: // if_body_L40
+        goto block@7
+    block@4: // after_if_else_L40
+        goto block@5
+    block@5: // for_footer_L38
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@1
+    block@6: // after_for_L38
+        goto block@7
+    block@7: // L38
+        let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
+        return total#3
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array(items: Encoded(uint64[5])) -> uint64:
+    block@0: // L45
+        let total#0: uint64 = 0u
+        let item_index_internal%0#0: uint64 = 0u
+        let reverse_index_internal%0#0: uint64 = 5u
+        goto block@1
+    block@1: // for_header_L47
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@5)
+        let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5)
+        let continue_looping%0#0: bool = (< item_index_internal%0#1 5u)
+        goto continue_looping%0#0 ? block@2 : block@6
+    block@2: // for_body_L47
+        let array_item%0#0: Encoded(uint64) = extract_value(items#0, item_index_internal%0#1)
+        let values%0#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(array_item%0#0)
+        let temp#0: Encoded(uint64) = values%0#0
+        let item#0: Encoded(uint64) = temp#0
+        let tmp%0#0: uint64 = decode_bytes<uint64>(item#0)
+        let tmp%1#0: uint64 = (+ total#1 tmp%0#0)
+        let total#2: uint64 = tmp%1#0
+        let tmp%2#0: uint64 = decode_bytes<uint64>(item#0)
+        let tmp%3#0: bool = (== tmp%2#0 42u)
+        goto tmp%3#0 ? block@3 : block@4
+    block@3: // if_body_L49
+        goto block@7
+    block@4: // after_if_else_L49
+        goto block@5
+    block@5: // for_footer_L47
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@1
+    block@6: // after_for_L47
+        goto block@7
+    block@7: // L47
+        let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
+        return total#3
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array(items: Encoded(len+uint64[])) -> uint64:
+    block@0: // L54
+        let total#0: uint64 = 0u
+        let array_length%0#0: uint64 = (extract_uint16 items#0 0u)
+        let item_index_internal%0#0: uint64 = 0u
+        let reverse_index_internal%0#0: uint64 = array_length%0#0
+        goto block@1
+    block@1: // for_header_L56
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@5)
+        let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5)
+        let continue_looping%0#0: bool = (< item_index_internal%0#1 array_length%0#0)
+        goto continue_looping%0#0 ? block@2 : block@6
+    block@2: // for_body_L56
+        let array_item%0#0: Encoded(uint64) = extract_value(items#0, item_index_internal%0#1)
+        let values%0#0: uint64 = decode_bytes<uint64>(array_item%0#0)
+        let temp#0: uint64 = values%0#0
+        let item#0: uint64 = temp#0
+        let tmp%0#0: uint64 = (+ total#1 item#0)
+        let total#2: uint64 = tmp%0#0
+        let tmp%1#0: bool = (== item#0 42u)
+        goto tmp%1#0 ? block@3 : block@4
+    block@3: // if_body_L58
+        goto block@7
+    block@4: // after_if_else_L58
+        goto block@5
+    block@5: // for_footer_L56
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@1
+    block@6: // after_for_L56
+        goto block@7
+    block@7: // L56
+        let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
+        return total#3
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(items: Encoded(uint64,uint64,uint64)) -> uint64:
+    block@0: // L63
+        let tuple_item%0#0: Encoded(uint64) = extract_value(items#0, 0)
+        let values%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let tuple_item%1#0: Encoded(uint64) = extract_value(items#0, 1)
+        let values%1#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
+        let tuple_item%2#0: Encoded(uint64) = extract_value(items#0, 2)
+        let values%2#0: uint64 = decode_bytes<uint64>(tuple_item%2#0)
+        let encoded_array%0#0: Encoded(uint64[]) = bytes_encode<uint64[]>(values%0#0, values%1#0, values%2#0)
+        let slot%0#0: Encoded(uint64[])* = new()
+        store(slot%0#0, encoded_array%0#0)
+        let mutable#0: Encoded(uint64[])* = slot%0#0
+        let total#0: uint64 = 0u
+        let slot_contents%0#0: Encoded(uint64[]) = load(mutable#0)
+        let bytes_len%0#0: uint64 = (len slot_contents%0#0)
+        let array_len%0#0: uint64 = (/ bytes_len%0#0 8u)
+        let item_index_internal%0#0: uint64 = 0u
+        let reverse_index_internal%0#0: uint64 = array_len%0#0
+        goto block@1
+    block@1: // for_header_L66
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@5)
+        let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5)
+        let continue_looping%0#0: bool = (< item_index_internal%0#1 array_len%0#0)
+        goto continue_looping%0#0 ? block@2 : block@6
+    block@2: // for_body_L66
+        let slot_contents%1#0: Encoded(uint64[]) = load(mutable#0)
+        let array_item%0#0: Encoded(uint64) = extract_value(slot_contents%1#0, item_index_internal%0#1)
+        let values%3#0: uint64 = decode_bytes<uint64>(array_item%0#0)
+        let temp#0: uint64 = values%3#0
+        let item#0: uint64 = temp#0
+        let tmp%0#0: uint64 = (+ total#1 item#0)
+        let total#2: uint64 = tmp%0#0
+        let tmp%1#0: bool = (== item#0 42u)
+        goto tmp%1#0 ? block@3 : block@4
+    block@3: // if_body_L68
+        goto block@7
+    block@4: // after_if_else_L68
+        goto block@5
+    block@5: // for_footer_L66
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@1
+    block@6: // after_for_L66
+        goto block@7
+    block@7: // L66
+        let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
+        return total#3
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props(static_array: Encoded(uint64[3]), fixed_array: Encoded(uint64[3]), dyn_array: Encoded(len+uint64[])) -> uint64:
+    block@0: // L73
+        let i#0: uint64 = 0u
+        (assert 1u) // Step cannot be zero
+        let temp#0: uint64 = 0u
+        goto block@1
+    block@1: // for_header_L75
+        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@3)
+        let i#1: uint64 = φ(i#0 <- block@0, i#2 <- block@3)
+        let continue_looping%0#0: bool = (< temp#1 3u)
+        goto continue_looping%0#0 ? block@2 : block@4
+    block@2: // for_body_L75
+        let a#0: uint64 = temp#1
+        let tmp%0#0: uint64 = (+ i#1 1u)
+        let i#2: uint64 = tmp%0#0
+        goto block@3
+    block@3: // for_footer_L75
+        let temp#2: uint64 = (+ temp#1 1u)
+        goto block@1
+    block@4: // after_for_L75
+        let item_index_internal%0#0: uint64 = 0u
+        let reverse_index_internal%0#0: uint64 = 3u
+        goto block@5
+    block@5: // for_header_L78
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@4, item_index_internal%0#2 <- block@7)
+        let i#3: uint64 = φ(i#1 <- block@4, i#4 <- block@7)
+        let continue_looping%1#0: bool = (< item_index_internal%0#1 3u)
+        goto continue_looping%1#0 ? block@6 : block@8
+    block@6: // for_body_L78
+        let array_item%0#0: Encoded(uint64) = extract_value(static_array#0, item_index_internal%0#1)
+        let values%0#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(array_item%0#0)
+        let temp₁.1#0: Encoded(uint64) = values%0#0
+        let temp₁.0#0: uint64 = item_index_internal%0#1
+        let (a₁.0#0: uint64, a₁.1#0: Encoded(uint64)) = (temp₁.0#0, temp₁.1#0)
+        let tmp%1#0: uint64 = (+ i#3 1u)
+        let i#4: uint64 = tmp%1#0
+        goto block@7
+    block@7: // for_footer_L78
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@5
+    block@8: // after_for_L78
+        (assert 1u) // Step cannot be zero
+        let temp₂#0: uint64 = 0u
+        goto block@9
+    block@9: // for_header_L81
+        let temp₂#1: uint64 = φ(temp₂#0 <- block@8, temp₂#2 <- block@11)
+        let i#5: uint64 = φ(i#3 <- block@8, i#6 <- block@11)
+        let continue_looping%2#0: bool = (< temp₂#1 3u)
+        goto continue_looping%2#0 ? block@10 : block@12
+    block@10: // for_body_L81
+        let a₂#0: uint64 = temp₂#1
+        let tmp%2#0: uint64 = (+ i#5 1u)
+        let i#6: uint64 = tmp%2#0
+        goto block@11
+    block@11: // for_footer_L81
+        let temp₂#2: uint64 = (+ temp₂#1 1u)
+        goto block@9
+    block@12: // after_for_L81
+        let item_index_internal%1#0: uint64 = 0u
+        let reverse_index_internal%1#0: uint64 = 3u
+        goto block@13
+    block@13: // for_header_L84
+        let item_index_internal%1#1: uint64 = φ(item_index_internal%1#0 <- block@12, item_index_internal%1#2 <- block@15)
+        let i#7: uint64 = φ(i#5 <- block@12, i#8 <- block@15)
+        let continue_looping%3#0: bool = (< item_index_internal%1#1 3u)
+        goto continue_looping%3#0 ? block@14 : block@16
+    block@14: // for_body_L84
+        let array_item%1#0: Encoded(uint64) = extract_value(fixed_array#0, item_index_internal%1#1)
+        let values%1#0: uint64 = decode_bytes<uint64>(array_item%1#0)
+        let temp₃.1#0: uint64 = values%1#0
+        let temp₃.0#0: uint64 = item_index_internal%1#1
+        let (a₃.0#0: uint64, a₃.1#0: uint64) = (temp₃.0#0, temp₃.1#0)
+        let tmp%3#0: uint64 = (+ i#7 1u)
+        let i#8: uint64 = tmp%3#0
+        goto block@15
+    block@15: // for_footer_L84
+        let item_index_internal%1#2: uint64 = (+ item_index_internal%1#1 1u)
+        goto block@13
+    block@16: // after_for_L84
+        let array_length%0#0: uint64 = (extract_uint16 dyn_array#0 0u)
+        (assert 1u) // Step cannot be zero
+        let temp₄#0: uint64 = 0u
+        goto block@17
+    block@17: // for_header_L87
+        let temp₄#1: uint64 = φ(temp₄#0 <- block@16, temp₄#2 <- block@19)
+        let i#9: uint64 = φ(i#7 <- block@16, i#10 <- block@19)
+        let continue_looping%4#0: bool = (< temp₄#1 array_length%0#0)
+        goto continue_looping%4#0 ? block@18 : block@20
+    block@18: // for_body_L87
+        let a₄#0: uint64 = temp₄#1
+        let tmp%4#0: uint64 = (+ i#9 1u)
+        let i#10: uint64 = tmp%4#0
+        goto block@19
+    block@19: // for_footer_L87
+        let temp₄#2: uint64 = (+ temp₄#1 1u)
+        goto block@17
+    block@20: // after_for_L87
+        let array_length%1#0: uint64 = (extract_uint16 dyn_array#0 0u)
+        let item_index_internal%2#0: uint64 = 0u
+        let reverse_index_internal%2#0: uint64 = array_length%1#0
+        goto block@21
+    block@21: // for_header_L90
+        let item_index_internal%2#1: uint64 = φ(item_index_internal%2#0 <- block@20, item_index_internal%2#2 <- block@23)
+        let i#11: uint64 = φ(i#9 <- block@20, i#12 <- block@23)
+        let continue_looping%5#0: bool = (< item_index_internal%2#1 array_length%1#0)
+        goto continue_looping%5#0 ? block@22 : block@24
+    block@22: // for_body_L90
+        let array_item%2#0: Encoded(uint64) = extract_value(dyn_array#0, item_index_internal%2#1)
+        let values%2#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(array_item%2#0)
+        let temp₅.1#0: Encoded(uint64) = values%2#0
+        let temp₅.0#0: uint64 = item_index_internal%2#1
+        let (a₅.0#0: uint64, a₅.1#0: Encoded(uint64)) = (temp₅.0#0, temp₅.1#0)
+        let tmp%5#0: uint64 = (+ i#11 1u)
+        let i#12: uint64 = tmp%5#0
+        goto block@23
+    block@23: // for_footer_L90
+        let item_index_internal%2#2: uint64 = (+ item_index_internal%2#1 1u)
+        goto block@21
+    block@24: // after_for_L90
+        return i#11
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__algots__.defaultCreate() -> void:
+    block@0: // L8
+        return 

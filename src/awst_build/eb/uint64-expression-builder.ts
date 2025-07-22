@@ -6,12 +6,22 @@ import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 
 import { NotSupported } from '../../errors'
-import { tryConvertEnum } from '../../util'
+import { codeInvariant, tryConvertEnum } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
-import { boolPType, BytesPType, stringPType, Uint64Function, uint64PType } from '../ptypes'
+import {
+  BigIntLiteralPType,
+  boolPType,
+  BytesPType,
+  itoaMethod,
+  NumericLiteralPType,
+  stringPType,
+  Uint64Function,
+  uint64PType,
+} from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from './index'
 import { BuilderBinaryOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
+import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
 import { requireExpressionOfType, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { compareUint64 } from './util/compare-uint64'
@@ -29,7 +39,7 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 0,
       callLocation: sourceLocation,
       funcName: 'Uint64',
-      argSpec: (a) => [a.optional(uint64PType, boolPType, stringPType)],
+      argSpec: (a) => [a.optional(uint64PType, NumericLiteralPType, BigIntLiteralPType, boolPType, stringPType)],
     })
 
     if (!value) {
@@ -40,7 +50,14 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
         }),
       )
     }
-    if (value.ptype.equals(boolPType)) {
+    if (value instanceof BigIntLiteralExpressionBuilder) {
+      return new UInt64ExpressionBuilder(
+        nodeFactory.uInt64Constant({
+          sourceLocation,
+          value: value.value,
+        }),
+      )
+    } else if (value.ptype.equals(boolPType)) {
       const expr = value.resolve()
       if (expr instanceof BoolConstant) {
         return new UInt64ExpressionBuilder(
@@ -67,7 +84,7 @@ export class UInt64FunctionBuilder extends FunctionBuilder {
         }),
       )
     }
-    return value
+    return value.resolveToPType(uint64PType)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
@@ -95,6 +112,14 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder<InstanceT
   constructor(expr: Expression) {
     super(expr, uint64PType)
   }
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'toString':
+        return new ToStringFunctionBuilder(this, sourceLocation)
+    }
+    return super.memberAccess(name, sourceLocation)
+  }
+
   boolEval(sourceLocation: SourceLocation, negate: boolean): Expression {
     const asBool = nodeFactory.reinterpretCast({
       sourceLocation,
@@ -206,5 +231,44 @@ export class UInt64ExpressionBuilder extends InstanceExpressionBuilder<InstanceT
 
   toBytes(sourceLocation: SourceLocation): InstanceBuilder {
     return instanceEb(intrinsicFactory.itob({ value: this.resolve(), sourceLocation }), new BytesPType({ length: 8n }))
+  }
+
+  toString(sourceLocation: SourceLocation): Expression {
+    return nodeFactory.subroutineCallExpression({
+      wtype: wtypes.stringWType,
+      target: nodeFactory.subroutineID({ target: itoaMethod.fullName }),
+      args: [
+        nodeFactory.callArg({
+          name: 'i',
+          value: this.resolve(),
+        }),
+      ],
+      sourceLocation,
+    })
+  }
+}
+
+class ToStringFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private builder: UInt64ExpressionBuilder,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [radix],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      argSpec: (a) => [a.optional(uint64PType)],
+      funcName: 'toString',
+      callLocation: sourceLocation,
+    })
+    codeInvariant(!radix, 'the radix parameter is not supported', radix?.sourceLocation)
+
+    return instanceEb(this.builder.toString(sourceLocation), stringPType)
   }
 }

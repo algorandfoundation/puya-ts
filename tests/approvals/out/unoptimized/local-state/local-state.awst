@@ -6,8 +6,9 @@ contract LocalStateDemo
     ["b1"]: bytes
     ["localBytes2"]: bytes
     ["localEncoded"]: arc4.static_array<arc4.uint64>
-    ["localTuple"]: readonlytuple[uint64, bytes]
-    ["localObject"]: object{ a: uint64, b: bytes }
+    ["localTuple"]: readonly [uint64, bytes]
+    ["localObject"]: ReadonlyObjectEFF43F36{ a: uint64, b: bytes }
+    ["localMutableObject"]: tests/approvals/local-state.algo.ts::Data
   }
   approvalProgram(): bool
   {
@@ -23,21 +24,22 @@ contract LocalStateDemo
   {
   }
   
-  setState(p: object{ a: uint64, b: bytes }, c: arc4.static_array<arc4.uint64>): void
+  setState(p: ObjectEFF43F36, c: arc4.static_array<arc4.uint64>): void
   {
-    { a: a, b: b }: object{ a: uint64, b: bytes } = p
+    #[a, b]: readonly [uint64, bytes] = #[p.a, p.b]
     LocalState[txn<Sender>()]["l1"]: uint64 = a
     LocalState[txn<Sender>()]["localUint2"]: uint64 = a
     LocalState[txn<Sender>()]["b1"]: bytes = b
     LocalState[txn<Sender>()]["localBytes2"]: bytes = b
     LocalState[txn<Sender>()]["localEncoded"]: arc4.static_array<arc4.uint64> = copy(c)
-    LocalState[txn<Sender>()]["localTuple"]: readonlytuple[uint64, bytes] = <tuple>[a, b]
-    LocalState[txn<Sender>()]["localObject"]: object{ a: uint64, b: bytes } = { a: a, b: b }
+    LocalState[txn<Sender>()]["localTuple"]: readonly [uint64, bytes] = #[($0 = #[a, b]).0, $0.1]
+    LocalState[txn<Sender>()]["localObject"]: ReadonlyObjectEFF43F36{ a: uint64, b: bytes } = #{ a: ($1 = #{ a: a, b: b }).a, b: $1.b }
+    LocalState[txn<Sender>()]["localMutableObject"]: tests/approvals/local-state.algo.ts::Data = new tests/approvals/local-state.algo.ts::Data(a=($2 = #{ a: a, b: b, c: True, d: "hello" }).a, b=$2.b, c=$2.c, d=$2.d)
   }
   
-  getState(): getStateResult{ localUint: uint64, localUint2: uint64, localBytes: bytes, localBytes2: bytes, localEncoded: arc4.static_array<arc4.uint64>, localTuple: readonlytuple[uint64, bytes], localObject: object{ a: uint64, b: bytes } }
+  getState(): ObjectE4D9E83F
   {
-    return { localUint: (#0 = { localUint: LocalState[txn<Sender>()]["l1"], localUint2: LocalState[txn<Sender>()]["localUint2"], localBytes: LocalState[txn<Sender>()]["b1"], localBytes2: LocalState[txn<Sender>()]["localBytes2"], localEncoded: copy(LocalState[txn<Sender>()]["localEncoded"]), localTuple: LocalState[txn<Sender>()]["localTuple"], localObject: LocalState[txn<Sender>()]["localObject"] }).localUint, localUint2: #0.localUint2, localBytes: #0.localBytes, localBytes2: #0.localBytes2, localEncoded: #0.localEncoded, localTuple: #0.localTuple, localObject: #0.localObject }
+    return new ObjectE4D9E83F(localUint=LocalState[txn<Sender>()]["l1"], localUint2=LocalState[txn<Sender>()]["localUint2"], localBytes=LocalState[txn<Sender>()]["b1"], localBytes2=LocalState[txn<Sender>()]["localBytes2"], localEncoded=copy(LocalState[txn<Sender>()]["localEncoded"]), localTuple=LocalState[txn<Sender>()]["localTuple"], localObject=LocalState[txn<Sender>()]["localObject"], localMutableObject=copy(LocalState[txn<Sender>()]["localMutableObject"]))
   }
   
   clearState(): void
@@ -49,6 +51,7 @@ contract LocalStateDemo
     STATE_DELETE(LocalState[txn<Sender>()]["localEncoded"])
     STATE_DELETE(LocalState[txn<Sender>()]["localTuple"])
     STATE_DELETE(LocalState[txn<Sender>()]["localObject"])
+    STATE_DELETE(LocalState[txn<Sender>()]["localMutableObject"])
   }
   
   __algots__.defaultCreate(): void

@@ -7,6 +7,7 @@ import {
   BoxMap,
   BoxRef,
   Bytes,
+  clone,
   ensureBudget,
   Global,
   GlobalState,
@@ -19,7 +20,7 @@ import {
   urange,
 } from '@algorandfoundation/algorand-typescript'
 
-type VoteIndexArray = arc4.DynamicArray<arc4.UintN<8>>
+type VoteIndexArray = arc4.DynamicArray<arc4.Uint<8>>
 
 const VOTE_INDEX_BYTES: uint64 = 1
 const VOTE_COUNT_BYTES: uint64 = 8
@@ -206,7 +207,7 @@ export class VotingRoundApp extends arc4.Contract {
       assert(answerOptionIndex < optionsCount, 'Answer option index invalid')
       this.incrementVoteInBox(cumulativeOffset + answerOptionIndex)
       cumulativeOffset += optionsCount
-      this.votesByAccount(Txn.sender).value = answerIds.copy()
+      this.votesByAccount(Txn.sender).value = clone(answerIds)
       this.voterCount.value += 1
     }
   }
@@ -227,7 +228,7 @@ export class VotingRoundApp extends arc4.Contract {
     for (const item of optionCounts) {
       totalOptions += item.native
     }
-    this.optionCounts.value = optionCounts.copy()
+    this.optionCounts.value = clone(optionCounts)
     this.totalOptions.value = totalOptions
   }
 

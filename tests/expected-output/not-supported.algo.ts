@@ -24,7 +24,7 @@ function test2(x: uint): uint {
     return x * 10
   }
 
-  // @expect-error Expected expression of type uint64, got never
+  // @expect-error Cannot resolve expression of type never to uint64
   return x
 }
 
@@ -48,12 +48,12 @@ class BadContract extends Contract {
     return this.#myState
   }
 
-  // @expect-error Not Supported: get accessors
+  // @expect-error Property declarations are not supported in contract definitions
   get someValue() {
     // The following is an error, but we don't parse accessor statement bodies
     return this.#myState
   }
-  // @expect-error Not Supported: set accessors
+  // @expect-error Property declarations are not supported in contract definitions
   set someValue(v: uint64) {
     // The following is an error, but we don't parse accessor statement bodies
     this.#myState = v
@@ -66,7 +66,7 @@ function notNull(): uint64 {
   // @expect-error Union types are not valid as a variable, parameter, return, or property type. Expression type is uint64 | undefined
   const x: uint64 | undefined = 123
 
-  // @expect-error Not Supported: non null assertions
+  // @expect-error The non-null assertion operator "!" is not valid here...
   return x!
 }
 

@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1
-    // tests/approvals/box-proxies.algo.ts:222
+    // tests/approvals/box-proxies.algo.ts:224
     // class BoxToRefTest extends Contract {
     txn NumAppArgs
     bz main_bare_routing@6
@@ -13,50 +13,50 @@ main:
     match main_test_route@3
 
 main_after_if_else@10:
-    // tests/approvals/box-proxies.algo.ts:222
+    // tests/approvals/box-proxies.algo.ts:224
     // class BoxToRefTest extends Contract {
     intc_0 // 0
     return
 
 main_test_route@3:
-    // tests/approvals/box-proxies.algo.ts:225
+    // tests/approvals/box-proxies.algo.ts:227
     // test() {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/box-proxies.algo.ts:226
+    // tests/approvals/box-proxies.algo.ts:228
     // const boxForCaller = this.boxMap(Txn.sender)
     txn Sender
-    // tests/approvals/box-proxies.algo.ts:228
+    // tests/approvals/box-proxies.algo.ts:230
     // boxForCaller.create()
     dup
     pushint 4 // 4
     box_create
     pop
-    // tests/approvals/box-proxies.algo.ts:232
-    // boxRef.replace(0, new UintN8(123).bytes)
+    // tests/approvals/box-proxies.algo.ts:234
+    // boxRef.replace(0, new Uint8(123).bytes)
     dup
     intc_0 // 0
     pushbytes 0x7b
     box_replace
-    // tests/approvals/box-proxies.algo.ts:234
+    // tests/approvals/box-proxies.algo.ts:236
     // assert(boxForCaller.value[0].native === 123, 'First array item in box should be 123')
     box_get
-    assert // Box must have value
+    pop
     intc_0 // 0
     getbyte
     pushint 123 // 123
     ==
     assert // First array item in box should be 123
-    // tests/approvals/box-proxies.algo.ts:225
+    // tests/approvals/box-proxies.algo.ts:227
     // test() {
     intc_1 // 1
     return
 
 main_bare_routing@6:
-    // tests/approvals/box-proxies.algo.ts:222
+    // tests/approvals/box-proxies.algo.ts:224
     // class BoxToRefTest extends Contract {
     txn OnCompletion
     bnz main_after_if_else@10

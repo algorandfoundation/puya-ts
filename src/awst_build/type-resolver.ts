@@ -4,7 +4,7 @@ import { Constants } from '../constants'
 import { CodeError, InternalError } from '../errors'
 import { logger } from '../logger'
 import type { DeliberateAny } from '../typescript-helpers'
-import { codeInvariant, hasFlags, intersectsFlags, invariant, isIn, normalisePath } from '../util'
+import { codeInvariant, hasFlags, instanceOfAny, intersectsFlags, invariant, isIn, normalisePath } from '../util'
 import { getNodeName } from '../visitor/syntax-names'
 import type { AppStorageType, PType } from './ptypes'
 import {
@@ -12,31 +12,36 @@ import {
   anyPType,
   ApprovalProgram,
   arc4BaseContractType,
-  ArrayPType,
   baseContractType,
   BigIntLiteralPType,
   bigIntPType,
   boolPType,
+  BoxMapPType,
+  BoxPType,
+  BoxRefPType,
   ClearStateProgram,
   ClusteredContractClassType,
   ClusteredPrototype,
   ContractClassPType,
   esSymbol,
   FunctionPType,
+  GlobalStateType,
   gtxnUnion,
+  ImmutableObjectPType,
   IntersectionPType,
+  LocalStateType,
   logicSigBaseType,
   LogicSigPType,
+  MutableObjectPType,
+  MutableTuplePType,
   NamespacePType,
   neverPType,
   nullPType,
   numberPType,
   NumericLiteralPType,
-  ObjectPType,
-  StorageProxyPType,
+  ReadonlyTuplePType,
   stringPType,
   SuperPrototypeSelector,
-  TuplePType,
   TypeParameterType,
   Uint64EnumType,
   undefinedPType,
@@ -136,7 +141,7 @@ export class TypeResolver {
       if (tsType.aliasSymbol) {
         break intersect
       }
-      // Special handling of struct base types which are an intersection of `StructBase` and the generic `T` type
+      // Special handling of struct and mutable object base types which are an intersection of `StructBase` or `MutableObjectBase` and the generic `T` type
       const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
       if (parts.some((p) => p.equals(arc4StructBaseType))) {
         return arc4StructBaseType
@@ -200,25 +205,15 @@ export class TypeResolver {
         sourceLocation,
       )
       codeInvariant(tsType.typeArguments, 'Tuple items must have types', sourceLocation)
-
-      return new TuplePType({
-        items: tsType.typeArguments.map((t) => this.resolveType(t, sourceLocation)),
-      })
+      const items = tsType.typeArguments.map((t) => this.resolveType(t, sourceLocation))
+      if (tsType.target.readonly) {
+        return new ReadonlyTuplePType({ items })
+      } else {
+        return new MutableTuplePType({ items })
+      }
     }
     if (isInstantiationExpression(tsType)) {
       return this.resolve(tsType.node.expression, sourceLocation)
-    }
-
-    if (this.checker.isArrayType(tsType)) {
-      const itemType = tsType.getNumberIndexType()
-      if (!itemType) {
-        throw new CodeError('Cannot determine array item type', { sourceLocation })
-      } else {
-        const itemPType = this.resolveType(itemType, sourceLocation)
-        return new ArrayPType({
-          elementType: itemPType,
-        })
-      }
     }
 
     invariant(typeName, 'Non builtin type must have a name', sourceLocation)
@@ -248,7 +243,9 @@ export class TypeResolver {
       if (it) return it
     }
 
-    if (typeName.module.startsWith('typescript/lib')) throw new CodeError(`${typeName.name} is not supported`, { sourceLocation })
+    if (typeName.module.startsWith('typescript/lib')) {
+      throw new CodeError(`${typeName.name} is not supported`, { sourceLocation })
+    }
 
     if (tsType.getConstructSignatures().length) {
       return this.reflectConstructorType(tsType, sourceLocation)
@@ -322,6 +319,7 @@ export class TypeResolver {
    * Given a literal value with a named symbol, check its parent to see if it's actually an enum member.
    *
    * @param tsType
+   * @param literalValue
    * @param sourceLocation
    * @private
    *
@@ -339,9 +337,11 @@ export class TypeResolver {
     }
   }
 
-  private reflectObjectType(tsType: ts.Type, sourceLocation: SourceLocation): ObjectPType {
+  private reflectObjectType(tsType: ts.Type, sourceLocation: SourceLocation): ImmutableObjectPType | MutableObjectPType {
     const typeAlias = tsType.aliasSymbol ? this.getSymbolFullName(tsType.aliasSymbol, sourceLocation) : undefined
     const properties: Record<string, PType> = {}
+
+    let expectReadonly: boolean | undefined = undefined
     for (const prop of tsType.getProperties()) {
       if (prop.name.startsWith('__@')) {
         // Symbol property - ignore
@@ -350,6 +350,14 @@ export class TypeResolver {
       }
       const type = this.checker.getTypeOfSymbol(prop)
       const propLocation = this.getLocationOfSymbol(prop) ?? sourceLocation
+      const readonly = isReadonlyPropertySymbol(prop)
+      if (expectReadonly === undefined) expectReadonly = readonly
+      if (expectReadonly !== readonly) {
+        const correction = expectReadonly
+          ? 'Add a readonly modifier to this property, or remove it from all others'
+          : 'Remove the readonly modifier from this property, or add it all others'
+        logger.error(propLocation, `All properties of a type must share the same readonly annotation. ${correction}`)
+      }
       const ptype = this.resolveType(type, propLocation)
       if (ptype instanceof FunctionPType) {
         logger.error(propLocation, `Invalid object property type. Functions are not supported`)
@@ -359,10 +367,11 @@ export class TypeResolver {
         properties[prop.name] = ptype
       }
     }
-    if (typeAlias) {
-      return new ObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType) })
+    if (expectReadonly) {
+      return new ImmutableObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType) })
+    } else {
+      return new MutableObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType) })
     }
-    return ObjectPType.anonymous(properties)
   }
 
   private reflectConstructorType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
@@ -444,7 +453,7 @@ export class TypeResolver {
     for (const prop of tsType.getProperties()) {
       const type = this.checker.getTypeOfSymbol(prop)
       const ptype = this.resolveType(type, this.getLocationOfSymbol(prop) ?? sourceLocation)
-      if (ptype instanceof StorageProxyPType) {
+      if (instanceOfAny(ptype, GlobalStateType, LocalStateType, BoxPType, BoxRefPType, BoxMapPType)) {
         properties[prop.name] = ptype
       } else if (ptype instanceof FunctionPType) {
         methods[prop.name] = ptype
@@ -485,8 +494,12 @@ export class TypeResolver {
     const typeName = type.symbol ? this.getSymbolFullName(type.symbol, sourceLocation) : undefined
     const aliasName = type.aliasSymbol ? this.getSymbolFullName(type.aliasSymbol, sourceLocation) : undefined
 
-    // If the alias was defined in algo-ts or polytype, respect the alias
-    if (aliasName?.module.startsWith(Constants.algoTsPackage) || aliasName?.module === Constants.moduleNames.polytype) {
+    // If the alias was defined in algo-ts, polytype, or typescript, respect the alias
+    if (
+      aliasName?.module.startsWith(Constants.algoTsPackage) ||
+      aliasName?.module === Constants.moduleNames.polytype ||
+      aliasName?.module.startsWith(Constants.moduleNames.typescript.es5)
+    ) {
       return aliasName
     }
     // If the type refers to a type literal in algo-ts or polytype, attempt to resolve the alias
@@ -567,6 +580,23 @@ function isIntersectionType(tsType: ts.Type): tsType is ts.IntersectionType {
 
 function isInstantiationExpression(tsType: ts.Type): tsType is ts.Type & { node: ts.ExpressionWithTypeArguments } {
   return isObjectType(tsType) && hasFlags(tsType.objectFlags, ObjectFlags.InstantiationExpressionType)
+}
+
+function isTransientPropertySymbol(prop: ts.Symbol): prop is ts.Symbol & { links: { checkFlags: number } } {
+  return hasFlags(prop.flags, ts.SymbolFlags.Transient)
+}
+
+function isReadonlyPropertySymbol(prop: ts.Symbol): boolean {
+  /*
+   * Here be dragons!! We're poking into the internal API here to check if the transient property symbol (ie a symbol created during type checking)
+   * has been marked with the check flag of readonly (8). CheckFlags is not exported so we have no way to confirm CheckFlags. Readonly is still 8
+   */
+  if (isTransientPropertySymbol(prop) && hasFlags(prop.links.checkFlags, 8)) {
+    return true
+  }
+  return (
+    prop.declarations?.some((d) => ts.isPropertySignature(d) && d.modifiers?.some((m) => m.kind === ts.SyntaxKind.ReadonlyKeyword)) ?? false
+  )
 }
 
 function tryGetTypeDescription(tsType: ts.Type): string | undefined {

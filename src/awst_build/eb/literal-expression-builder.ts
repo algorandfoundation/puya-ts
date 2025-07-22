@@ -50,7 +50,7 @@ export abstract class LiteralExpressionBuilder extends InstanceBuilder {
     this.throwInvalidExpression()
   }
 
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
     this.throwInvalidExpression()
   }
 

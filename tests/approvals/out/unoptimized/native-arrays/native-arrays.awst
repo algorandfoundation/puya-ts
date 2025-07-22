@@ -10,64 +10,171 @@ contract NativeArraysAlgo
     return True
   }
   
-  buildArray(): stack_array<uint64>
+  readonlyArray(): void
   {
-    return new stack_array<uint64>(1, 2, 3, 4)
+    myArray: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(($0 = #[1, 2, 3]).0, $0.1, $0.2)
+    myArray: arc4.dynamic_array<uint64> = convert_array(convert_array(myArray, wtype=arc4.dynamic_array<uint64>).concat(#[5]), wtype=arc4.dynamic_array<uint64>)
+    myArray: arc4.dynamic_array<uint64> = convert_array(convert_array(myArray, wtype=arc4.dynamic_array<uint64>).concat(new arc4.dynamic_array<uint64>(4)), wtype=arc4.dynamic_array<uint64>)
+    myArray: arc4.dynamic_array<uint64> = myArray.with(2, 3)
+    assert(&&(&&(&&(&&(&&(myArray.length == 5, myArray[0] == 1), myArray[1] == 2), myArray[2] == 3), myArray[3] == 5), myArray[4] == 4), comment=assert target is match for conditions)
+  }
+  
+  arrayInObject(): void
+  {
+    person: ReadonlyObject3BF4F995{ name: string, favouriteNumbers: arc4.dynamic_array<uint64> } = #{ name: ($1 = #{ name: ($2 = #{ name: ($3 = #["Alice", #[1337]]).0, favouriteNumbers: $3.1 }).name, favouriteNumbers: #[($4 = $2.favouriteNumbers).0] }).name, favouriteNumbers: new arc4.dynamic_array<uint64>(($5 = $1.favouriteNumbers).0) }
+    length: uint64 = person.favouriteNumbers.push(...#[42]), person.favouriteNumbers.length
+    assert(length == 2)
+  }
+  
+  buildArray(): arc4.dynamic_array<uint64>
+  {
+    return new arc4.dynamic_array<uint64>(1, 2, 3, 4)
+  }
+  
+  arrayFromCtor(): arc4.dynamic_array<uint64>
+  {
+    return new arc4.dynamic_array<uint64>(1, 2, 3)
+  }
+  
+  buildReadonly(): arc4.dynamic_array<uint64>
+  {
+    return new arc4.dynamic_array<uint64>(1, 2, 3, 4)
   }
   
   doThings(): void
   {
-    arr: stack_array<uint64> = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildArray()
-    assert(arr.length == 4 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
-    arr: stack_array<uint64> = arr.concat(new stack_array<uint64>(5))
-    assert(arr.length == 5 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4 and arr[4] == 5, comment=assert target is match for conditions)
-    top: uint64 = arr[arr.length - 1]
+    ensure_budget(1400, 0)
+    arr: arc4.dynamic_array<uint64> = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildArray()
+    arr.push(...#[5]), arr.length
+    assert(arr.pop() == 5)
+    assert(&&(&&(&&(&&(arr.length == 4, arr[0] == 1), arr[1] == 2), arr[2] == 3), arr[3] == 4), comment=assert target is match for conditions)
+    assert(arr[0] == 1)
+    assert(arr[arr.length - 1] == 4)
+    arr.push(...#[5]), arr.length
+    assert(&&(&&(&&(&&(&&(arr.length == 5, arr[0] == 1), arr[1] == 2), arr[2] == 3), arr[3] == 4), arr[4] == 5), comment=assert target is match for conditions)
+    top: uint64 = arr.pop()
     assert(top == 5)
-    arr: stack_array<uint64> = new stack_array<uint64>(1, 2, 3, 4)
-    assert(arr.length == 4 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
-    arr: stack_array<uint64> = arr.with(1, 10)
-    assert(arr.length == 4 and arr[0] == 1 and arr[1] == 10 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
-    t1: readonlytuple[uint64, uint64] = <tuple>[12, 13]
-    arr: stack_array<uint64> = arr.concat(arr).concat(<tuple>[11]).concat(t1)
-    assert(arr.length == 11 and arr[0] == 1 and arr[1] == 10 and arr[2] == 3 and arr[3] == 4 and arr[4] == 1 and arr[5] == 10 and arr[6] == 3 and arr[7] == 4 and arr[8] == 11 and arr[9] == 12 and arr[10] == 13, comment=assert target is match for conditions)
+    assert(&&(&&(&&(&&(arr.length == 4, arr[0] == 1), arr[1] == 2), arr[2] == 3), arr[3] == 4), comment=assert target is match for conditions)
+    arr[1]: uint64 = 10
+    arr2: arc4.dynamic_array<uint64> = arr.with(1, 5)
+    assert(&&(&&(&&(&&(arr.length == 4, arr[0] == 1), arr[1] == 10), arr[2] == 3), arr[3] == 4), comment=assert target is match for conditions)
+    assert(&&(&&(&&(&&(arr2.length == 4, arr2[0] == 1), arr2[1] == 5), arr2[2] == 3), arr2[3] == 4), comment=assert target is match for conditions)
+    t1: arc4.tuple<uint64,uint64> = ARC4_ENCODE(#[($6 = #[12, 13]).0, $6.1], wtype=arc4.tuple<uint64,uint64>)
+    arr: arc4.dynamic_array<uint64> = arr.concat(arr).concat(#[11]).concat(t1)
+    assert(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(arr.length == 11, arr[0] == 1), arr[1] == 10), arr[2] == 3), arr[3] == 4), arr[4] == 1), arr[5] == 10), arr[6] == 3), arr[7] == 4), arr[8] == 11), arr[9] == 12), arr[10] == 13), comment=assert target is match for conditions)
+    rArr1: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(($7 = #[1, 2, 3]).0, $7.1, $7.2)
+    rArr1: arc4.dynamic_array<uint64> = convert_array(convert_array(rArr1, wtype=arc4.dynamic_array<uint64>).concat(#[4]), wtype=arc4.dynamic_array<uint64>)
+    rArr1: arc4.dynamic_array<uint64> = convert_array(convert_array(rArr1, wtype=arc4.dynamic_array<uint64>).concat(new arc4.dynamic_array<uint64>(5)), wtype=arc4.dynamic_array<uint64>)
+    assert(&&(&&(&&(&&(&&(rArr1.length == 5, rArr1[0] == 1), rArr1[1] == 2), rArr1[2] == 3), rArr1[3] == 4), rArr1[4] == 5), comment=assert target is match for conditions)
+    fArr1: arc4.static_array<uint64> = bzero(size_of(arc4.static_array<uint64>))
+    fArr2: arc4.dynamic_array<uint64> = convert_array(fArr1, wtype=arc4.dynamic_array<uint64>).concat(fArr1)
+    assert(&&(&&(&&(&&(fArr1.length == 4, fArr1[0] == 0), fArr1[1] == 0), fArr1[2] == 0), fArr1[3] == 0), comment=assert target is match for conditions)
+    assert(&&(&&(&&(&&(&&(&&(&&(&&(fArr2.length == 8, fArr2[0] == 0), fArr2[1] == 0), fArr2[2] == 0), fArr2[3] == 0), fArr2[4] == 0), fArr2[5] == 0), fArr2[6] == 0), fArr2[7] == 0), comment=assert target is match for conditions)
+    arr3: arc4.dynamic_array<uint64> = convert_array(rArr1, wtype=arc4.dynamic_array<uint64>).concat(fArr2)
+    assert(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(arr3.length == 13, arr3[0] == 1), arr3[1] == 2), arr3[2] == 3), arr3[3] == 4), arr3[4] == 5), arr3[5] == 0), arr3[6] == 0), arr3[7] == 0), arr3[8] == 0), arr3[9] == 0), arr3[10] == 0), arr3[11] == 0), arr3[12] == 0), comment=assert target is match for conditions)
+    arr4: arc4.dynamic_array<uint64> = convert_array(rArr1, wtype=arc4.dynamic_array<uint64>).concat(arr)
+    assert(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(arr4.length == 16, arr4[0] == 1), arr4[1] == 2), arr4[2] == 3), arr4[3] == 4), arr4[4] == 5), arr4[5] == 1), arr4[6] == 10), arr4[7] == 3), arr4[8] == 4), arr4[9] == 1), arr4[10] == 10), arr4[11] == 3), arr4[12] == 4), arr4[13] == 11), arr4[14] == 12), arr4[15] == 13), comment=assert target is match for conditions)
+    arr5: arc4.dynamic_array<uint64> = convert_array(fArr1, wtype=arc4.dynamic_array<uint64>).concat(rArr1)
+    assert(&&(&&(&&(&&(&&(&&(&&(&&(&&(arr5.length == 9, arr5[0] == 0), arr5[1] == 0), arr5[2] == 0), arr5[3] == 0), arr5[4] == 1), arr5[5] == 2), arr5[6] == 3), arr5[7] == 4), arr5[8] == 5), comment=assert target is match for conditions)
+    arr6: arc4.dynamic_array<uint64> = convert_array(fArr1, wtype=arc4.dynamic_array<uint64>).concat(arr)
+    assert(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(arr6.length == 15, arr6[0] == 0), arr6[1] == 0), arr6[2] == 0), arr6[3] == 0), arr6[4] == 1), arr6[5] == 10), arr6[6] == 3), arr6[7] == 4), arr6[8] == 1), arr6[9] == 10), arr6[10] == 3), arr6[11] == 4), arr6[12] == 11), arr6[13] == 12), arr6[14] == 13), comment=assert target is match for conditions)
+    arr7: arc4.dynamic_array<uint64> = arr.concat(rArr1)
+    assert(arr7.length == 16)
+    assert(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(arr7.length == 16, arr7[0] == 1), arr7[1] == 10), arr7[2] == 3), arr7[3] == 4), arr7[4] == 1), arr7[5] == 10), arr7[6] == 3), arr7[7] == 4), arr7[8] == 11), arr7[9] == 12), arr7[10] == 13), arr7[11] == 1), arr7[12] == 2), arr7[13] == 3), arr7[14] == 4), arr7[15] == 5), comment=assert target is match for conditions)
+    arr8: arc4.dynamic_array<uint64> = arr.concat(fArr1)
+    assert(arr8.length == 15)
+    assert(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(&&(arr8.length == 15, arr8[0] == 1), arr8[1] == 10), arr8[2] == 3), arr8[3] == 4), arr8[4] == 1), arr8[5] == 10), arr8[6] == 3), arr8[7] == 4), arr8[8] == 11), arr8[9] == 12), arr8[10] == 13), arr8[11] == 0), arr8[12] == 0), arr8[13] == 0), arr8[14] == 0), comment=assert target is match for conditions)
+  }
+  
+  fixedArray(y: arc4.static_array<uint64>): void
+  {
+    x: arc4.static_array<uint64> = new arc4.static_array<uint64>(1, 2, 3, 4)
+    x[0]: uint64 = 0
+    assert(x[0] == y[0])
+    assert(&&(&&(&&(&&(x.length == 4, x[0] < 1), x[1] == 2), x[2] == 3), x[3] == 4), comment=assert target is match for conditions)
+    assert(y[49] >= 0, comment=assert target is match for conditions)
+    myVectors: arc4.static_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.static_array<tests/approvals/native-arrays.algo.ts::Vector>(new tests/approvals/native-arrays.algo.ts::Vector(x=($8 = #{ x: ($9 = #[1, 2]).0, y: $9.1 }).x, y=$8.y), new tests/approvals/native-arrays.algo.ts::Vector(x=($10 = #{ x: ($11 = #[3, 4]).0, y: $11.1 }).x, y=$10.y))
+    assert(&&(&&(myVectors.length == 2, &&(myVectors[0].x == 1, myVectors[0].y == 2)), &&(myVectors[1].x == 3, myVectors[1].y == 4)), comment=assert target is match for conditions)
+    myObject: ObjectA721194C = new ObjectA721194C(a=($12 = #{ a: new arc4.static_array<tests/approvals/native-arrays.algo.ts::Vector>(new tests/approvals/native-arrays.algo.ts::Vector(x=($13 = #{ x: ($14 = #[5, 6]).0, y: $14.1 }).x, y=$13.y)) }).a)
+    assert(&&(myObject.a.length == 1, &&(myObject.a[0].x == 5, myObject.a[0].y == 6)), comment=assert target is match for conditions)
+    z1: arc4.static_array<uint64> = bzero(size_of(arc4.static_array<uint64>))
+    assert(z1.length == 4)
+    assert(&&(&&(&&(&&(z1.length == 4, z1[0] == 0), z1[1] == 0), z1[2] == 0), z1[3] == 0), comment=assert target is match for conditions)
+    z1[0]: uint64 = 1
+    z1[1]: uint64 = 2
+    z1[2]: uint64 = 3
+    z1[3]: uint64 = 4
+    assert(&&(&&(&&(&&(z1.length == 4, z1[0] <= 1), z1[1] == 2), z1[2] == 3), z1[3] == 4), comment=assert target is match for conditions)
+    z2: arc4.static_array<bool> = bzero(size_of(arc4.static_array<bool>))
+    assert(z2[0] == False)
+    z3: arc4.static_array<arc4.static_array<uint64>> = bzero(size_of(arc4.static_array<arc4.static_array<uint64>>))
+    assert(z3.length == 4)
+    z4: arc4.static_array<tests/approvals/native-arrays.algo.ts::Vector> = bzero(size_of(arc4.static_array<tests/approvals/native-arrays.algo.ts::Vector>))
+    assert(z4.length == 4)
+    z5: arc4.static_array<arc4.uint64> = bzero(size_of(arc4.static_array<arc4.uint64>))
+    assert(z5.length == 4)
+    z6: arc4.static_array<arc4.tuple<uint64,bool>> = bzero(size_of(arc4.static_array<arc4.tuple<uint64,bool>>))
+    assert(z6.length == 4)
   }
   
   arc4Interop(): void
   {
     da1: arc4.dynamic_array<arc4.uint32> = new arc4.dynamic_array<arc4.uint32>(123, 123)
     sa1: arc4.static_array<arc4.uint32> = new arc4.static_array<arc4.uint32>(123, 123)
-    a1: stack_array<arc4.uint32> = new stack_array<arc4.uint32>(123, 123)
-    a1: stack_array<arc4.uint32> = a1.concat(da1).concat(sa1)
-    assert(a1.length == 6 and reinterpret_cast<bytes>(a1[0]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[1]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[2]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[3]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[4]) == reinterpret_cast<bytes>(123) and reinterpret_cast<bytes>(a1[5]) == reinterpret_cast<bytes>(123), comment=assert target is match for conditions)
+    a1: arc4.dynamic_array<arc4.uint32> = new arc4.dynamic_array<arc4.uint32>(($15 = #[123, 123]).0, $15.1)
+    a1: arc4.dynamic_array<arc4.uint32> = copy(a1).concat(copy(da1)).concat(copy(sa1))
+    assert(&&(&&(&&(&&(&&(&&(a1.length == 6, reinterpret_cast<bytes>(a1[0]) == reinterpret_cast<bytes>(123)), reinterpret_cast<bytes>(a1[1]) == reinterpret_cast<bytes>(123)), reinterpret_cast<bytes>(a1[2]) == reinterpret_cast<bytes>(123)), reinterpret_cast<bytes>(a1[3]) == reinterpret_cast<bytes>(123)), reinterpret_cast<bytes>(a1[4]) == reinterpret_cast<bytes>(123)), reinterpret_cast<bytes>(a1[5]) == reinterpret_cast<bytes>(123)), comment=assert target is match for conditions)
   }
   
-  structs(p: Vector{ x: uint64, y: uint64 }): stack_array<tests/approvals/native-arrays.algo.ts::Vector>
+  structs(p: tests/approvals/native-arrays.algo.ts::Vector): arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>
   {
-    { x: x, y: y }: object{ x: uint64, y: uint64 } = { x: p.x, y: p.y }
-    myVectors: stack_array<tests/approvals/native-arrays.algo.ts::Vector> = new stack_array<tests/approvals/native-arrays.algo.ts::Vector>()
-    myVectors: stack_array<tests/approvals/native-arrays.algo.ts::Vector> = new stack_array<tests/approvals/native-arrays.algo.ts::Vector>({ x: (#0 = { x: x, y: y }).x, y: #0.y })
-    assert(myVectors.length == 1 and myVectors[0].x == x and myVectors[0].y == y, comment=assert target is match for conditions)
+    #[x, y]: readonly [uint64, uint64] = #[p.x, p.y]
+    myVectors: arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>()
+    myVectors: arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector> = new arc4.dynamic_array<tests/approvals/native-arrays.algo.ts::Vector>(new tests/approvals/native-arrays.algo.ts::Vector(x=($16 = ($17 = #[#{ x: x, y: y }]).0).x, y=$16.y))
+    assert(&&(myVectors.length == 1, &&(myVectors[0].x == x, myVectors[0].y == y)), comment=assert target is match for conditions)
     return myVectors
   }
   
-  booleans(): stack_array<bool>
+  booleans(): arc4.dynamic_array<bool>
   {
-    return new stack_array<bool>(True, False, True)
+    return new arc4.dynamic_array<bool>(True, False, True)
   }
   
-  booleansStatic(): readonlytuple[bool, bool, bool]
+  booleansStatic(): readonly [bool, bool, bool]
   {
-    return <tuple>[True, False, True]
+    return #[True, False, True]
   }
   
-  arc4Booleans(): stack_array<arc4.bool>
+  arc4Booleans(): arc4.dynamic_array<arc4.bool>
   {
-    return new stack_array<arc4.bool>(True, False, True)
+    return new arc4.dynamic_array<arc4.bool>(True, False, True)
   }
   
-  arc4BooleansStatic(): readonlytuple[arc4.bool, arc4.bool, arc4.bool]
+  arc4BooleansStatic(): readonly [arc4.bool, arc4.bool, arc4.bool]
   {
-    return <tuple>[True, False, True]
+    return #[True, False, True]
+  }
+  
+  aliasing(mutable: arc4.dynamic_array<uint64>, readOnly: arc4.dynamic_array<uint64>): void
+  {
+    needClone: arc4.dynamic_array<uint64> = copy(mutable)
+    needClone[0]: uint64 = 5
+    noNeedClone: arc4.dynamic_array<uint64> = readOnly
+    needClone2: arc4.dynamic_array<uint64> = convert_array(copy(mutable), wtype=arc4.dynamic_array<uint64>)
+    mutable[1]: uint64 = mutable[1] + 2
+    assert(mutable[1] != needClone2[1], comment=These should not match)
+    tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(mutable)
+    tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(convert_array(mutable, wtype=arc4.dynamic_array<uint64>))
+    tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(readOnly)
+  }
+  
+  receiveMutable(a: arc4.dynamic_array<uint64>): void
+  {
+    a[0]: uint64 = 1
+  }
+  
+  receiveReadonly(a: arc4.dynamic_array<uint64>): void
+  {
   }
   
   __algots__.defaultCreate(): void

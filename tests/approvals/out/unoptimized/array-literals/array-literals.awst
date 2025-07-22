@@ -1,9 +1,9 @@
 subroutine test(a: uint64, b: uint64): void
 {
-  inferTuple: readonlytuple[uint64, uint64] = <tuple>[a, b]
-  explicitTuple: readonlytuple[uint64, uint64] = <tuple>[a, b]
-  conditionalExplicitTuple: readonlytuple[uint64, uint64] = (a < b ? <tuple>[a, b] : <tuple>[b, a])
-  <tuple>[c, d]: readonlytuple[uint64, uint64] = <tuple>[a, b]
-  <tuple>[_, g]: readonlytuple[uint64, uint64] = <tuple>[a, b]
-  <tuple>[h, _₁]: readonlytuple[uint64, uint64] = <tuple>[a, b]
+  inferTuple: readonly [uint64, uint64] = #[a, b]
+  explicitTuple: arc4.tuple<uint64,uint64> = ARC4_ENCODE(#[($0 = #[a, b]).0, $0.1], wtype=arc4.tuple<uint64,uint64>)
+  conditionalExplicitTuple: arc4.tuple<uint64,uint64> = (a < b ? ARC4_ENCODE(#[a, b], wtype=arc4.tuple<uint64,uint64>) : ARC4_ENCODE(#[b, a], wtype=arc4.tuple<uint64,uint64>))
+  #[c, d]: readonly [uint64, uint64] = #[($1 = #[a, b]).0, $1.1]
+  #[g]: readonly [uint64] = #[($2 = ARC4_ENCODE(#[a, b], wtype=arc4.tuple<uint64,uint64>)).1]
+  #[h]: readonly [uint64] = #[($3 = ARC4_ENCODE(#[a, b], wtype=arc4.tuple<uint64,uint64>)).0]
 }

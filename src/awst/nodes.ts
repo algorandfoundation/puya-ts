@@ -5,7 +5,6 @@ import type { ContractReference, LogicSigReference, OnCompletionAction } from '.
 import type { SourceLocation } from './source-location'
 import type { TxnField } from './txn-fields'
 import type { wtypes } from './wtypes'
-
 export abstract class Node {
   constructor(props: Props<Node>) {
     this.sourceLocation = props.sourceLocation
@@ -281,6 +280,18 @@ export class ARC4Decode extends Expression {
     return visitor.visitARC4Decode(this)
   }
 }
+export class ConvertArray extends Expression {
+  constructor(props: Props<ConvertArray>) {
+    super(props)
+    this.expr = props.expr
+    this.wtype = props.wtype
+  }
+  readonly expr: Expression
+  readonly wtype: wtypes.ARC4DynamicArray | wtypes.ARC4StaticArray | wtypes.ReferenceArray
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitConvertArray(this)
+  }
+}
 export class Copy extends Expression {
   constructor(props: Props<Copy>) {
     super(props)
@@ -302,7 +313,7 @@ export class ArrayConcat extends Expression {
   }
   readonly left: Expression
   readonly right: Expression
-  readonly wtype: wtypes.ARC4DynamicArray | wtypes.StackArray
+  readonly wtype: wtypes.ARC4DynamicArray
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitArrayConcat(this)
   }
@@ -344,7 +355,7 @@ export class ArrayReplace extends Expression {
   readonly base: Expression
   readonly index: Expression
   readonly value: Expression
-  readonly wtype: wtypes.StackArray
+  readonly wtype: wtypes.ARC4DynamicArray
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitArrayReplace(this)
   }
@@ -654,7 +665,7 @@ export class NewArray extends Expression {
     this.wtype = props.wtype
     this.values = props.values
   }
-  readonly wtype: wtypes.ARC4DynamicArray | wtypes.ARC4StaticArray | wtypes.ReferenceArray | wtypes.StackArray
+  readonly wtype: wtypes.ARC4DynamicArray | wtypes.ARC4StaticArray | wtypes.ReferenceArray
   readonly values: Array<Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNewArray(this)
@@ -726,6 +737,18 @@ export class AssignmentExpression extends Expression {
   readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAssignmentExpression(this)
+  }
+}
+export class CommaExpression extends Expression {
+  constructor(props: Props<CommaExpression>) {
+    super(props)
+    this.expressions = props.expressions
+    this.wtype = props.wtype
+  }
+  readonly expressions: Array<Expression>
+  readonly wtype: wtypes.WType
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitCommaExpression(this)
   }
 }
 export enum EqualityComparison {
@@ -1233,7 +1256,7 @@ export class NewStruct extends Expression {
     this.wtype = props.wtype
     this.values = props.values
   }
-  readonly wtype: wtypes.WStructType | wtypes.ARC4Struct
+  readonly wtype: wtypes.ARC4Struct
   readonly values: Map<string, Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNewStruct(this)
@@ -1510,6 +1533,7 @@ export const concreteNodes = {
   addressConstant: AddressConstant,
   aRC4Encode: ARC4Encode,
   aRC4Decode: ARC4Decode,
+  convertArray: ConvertArray,
   copy: Copy,
   arrayConcat: ArrayConcat,
   arrayExtend: ArrayExtend,
@@ -1542,6 +1566,7 @@ export const concreteNodes = {
   conditionalExpression: ConditionalExpression,
   assignmentStatement: AssignmentStatement,
   assignmentExpression: AssignmentExpression,
+  commaExpression: CommaExpression,
   numericComparisonExpression: NumericComparisonExpression,
   bytesComparisonExpression: BytesComparisonExpression,
   subroutineID: SubroutineID,
@@ -1621,6 +1646,7 @@ export interface ExpressionVisitor<T> {
   visitAddressConstant(expression: AddressConstant): T
   visitARC4Encode(expression: ARC4Encode): T
   visitARC4Decode(expression: ARC4Decode): T
+  visitConvertArray(expression: ConvertArray): T
   visitCopy(expression: Copy): T
   visitArrayConcat(expression: ArrayConcat): T
   visitArrayExtend(expression: ArrayExtend): T
@@ -1652,6 +1678,7 @@ export interface ExpressionVisitor<T> {
   visitArrayLength(expression: ArrayLength): T
   visitConditionalExpression(expression: ConditionalExpression): T
   visitAssignmentExpression(expression: AssignmentExpression): T
+  visitCommaExpression(expression: CommaExpression): T
   visitNumericComparisonExpression(expression: NumericComparisonExpression): T
   visitBytesComparisonExpression(expression: BytesComparisonExpression): T
   visitSubroutineCallExpression(expression: SubroutineCallExpression): T

@@ -28,7 +28,7 @@ import {
 } from '../../util'
 import type { PType, PTypeOrClass } from '../ptypes'
 import {
-  ArrayPType,
+  ArrayLiteralPType,
   bigIntPType,
   biguintPType,
   boolPType,
@@ -39,13 +39,14 @@ import {
   numberPType,
   NumericLiteralPType,
   stringPType,
+  TransientType,
   uint64PType,
 } from '../ptypes'
 import { instanceEb } from '../type-registry'
 import { BooleanExpressionBuilder } from './boolean-expression-builder'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from './index'
 import { BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
-import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
+import { NumericLiteralExpressionBuilder } from './literal/numeric-literal-expression-builder'
 import { AtFunctionBuilder } from './shared/at-function-builder'
 import { SliceFunctionBuilder } from './shared/slice-function-builder'
 import { StringExpressionBuilder } from './string-expression-builder'
@@ -109,17 +110,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 1,
       callLocation: sourceLocation,
       funcName: 'Bytes',
-      argSpec: (a) => [
-        a.optional(
-          numberPType,
-          bigIntPType,
-          uint64PType,
-          biguintPType,
-          stringPType,
-          bytesPType,
-          new ArrayPType({ elementType: uint64PType }),
-        ),
-      ],
+      argSpec: (a) => [a.optional(numberPType, bigIntPType, uint64PType, biguintPType, stringPType, bytesPType, ArrayLiteralPType)],
     })
     const exprType = BytesGeneric.parameterise([len])
     const empty = new BytesExpressionBuilder(
@@ -135,7 +126,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
 
     if (!initialValue) {
       bytesBuilder = empty
-    } else if (initialValue instanceof BigIntLiteralExpressionBuilder) {
+    } else if (initialValue.ptype instanceof TransientType) {
       logger.error(initialValue.sourceLocation, initialValue.ptype.expressionMessage)
       bytesBuilder = empty
     } else if (initialValue.ptype.equals(uint64PType)) {
@@ -150,7 +141,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       if (isStaticallyIterable(initialValue)) {
         const bytes: number[] = []
         for (const item of initialValue[StaticIterator]()) {
-          const byte = item.resolve()
+          const byte = item.resolveToPType(uint64PType).resolve()
           if (byte instanceof IntegerConstant && byte.value < 256n) {
             bytes.push(Number(byte.value))
           } else {
@@ -245,7 +236,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<BytesPType
           sourceLocation,
           `The '~' ${this.typeDescription} operator coerces the target value to a number type. Use {bytes expression}.bitwiseInvert() instead`,
         )
-        return new BigIntLiteralExpressionBuilder(0n, new NumericLiteralPType({ literalValue: 0n }), sourceLocation)
+        return new NumericLiteralExpressionBuilder(0n, new NumericLiteralPType({ literalValue: 0n }), sourceLocation)
     }
     return super.prefixUnaryOp(op, sourceLocation)
   }
@@ -278,6 +269,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<BytesPType
           this._expr,
           bytesPType,
           requireExpressionOfType(this.memberAccess('length', sourceLocation), uint64PType),
+          sourceLocation,
         )
       case 'slice':
         return new SliceFunctionBuilder(this._expr, bytesPType)
@@ -359,12 +351,18 @@ export class ConcatFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
       funcName: 'concat',
       genericTypeArgs: 0,
-      argSpec: (a) => [a.required(bytesPType)],
+      argSpec: (a) => [a.required(bytesPType, stringPType)],
     })
+    let right: Expression
+    if (other.ptype.equals(stringPType)) {
+      right = other.toBytes(other.sourceLocation).resolve()
+    } else {
+      right = requireExpressionOfType(other, bytesPType)
+    }
     return new BytesExpressionBuilder(
       intrinsicFactory.bytesConcat({
         left: requireExpressionOfType(this.builder, bytesPType),
-        right: requireExpressionOfType(other, bytesPType),
+        right,
         sourceLocation: sourceLocation,
       }),
       bytesPType,
