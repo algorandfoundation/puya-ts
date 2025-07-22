@@ -90,8 +90,6 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
 
   resolve(): Expression {
     throw new InternalError('Cannot resolve object literal', { sourceLocation: this.sourceLocation })
-    // Resolve object to a tuple using its own inferred types
-    //    return this.toObjectType(this.ptype.getImmutable())
   }
   resolveLValue(): LValue {
     return nodeFactory.tupleExpression({
