@@ -83,4 +83,18 @@ describe('gtxns contract', () => {
       'closeRemainderTo',
     ])
   })
+
+  test('gtxn union types compile correctly ', async ({ appClientGtxnsAlgo, algorand, testAccount }) => {
+    const result = await appClientGtxnsAlgo.send.call({
+      method: 'test5',
+      args: [
+        algorand.createTransaction.payment({
+          amount: algos(1),
+          receiver: appClientGtxnsAlgo.appAddress,
+          sender: testAccount,
+        }),
+      ],
+    })
+    expect(result.return).toBe(1n)
+  })
 })

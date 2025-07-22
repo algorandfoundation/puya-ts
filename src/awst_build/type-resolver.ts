@@ -26,7 +26,7 @@ import {
   esSymbol,
   FunctionPType,
   GlobalStateType,
-  gtxnUnion,
+  GroupTransactionPType,
   ImmutableObjectPType,
   IntersectionPType,
   LocalStateType,
@@ -43,6 +43,7 @@ import {
   stringPType,
   SuperPrototypeSelector,
   TypeParameterType,
+  Uint64EnumMemberType,
   Uint64EnumType,
   undefinedPType,
   UnionPType,
@@ -151,8 +152,20 @@ export class TypeResolver {
     }
     if (isUnionType(tsType)) {
       const ut = UnionPType.fromTypes(tsType.types.map((t) => this.resolveType(t, sourceLocation)))
-      if (ut.equals(gtxnUnion)) {
-        return anyGtxnType
+      if (ut instanceof UnionPType) {
+        const [first] = ut.types
+        if (ut.types.every((t) => t instanceof GroupTransactionPType)) {
+          // We can support unions of group transactions since the underlying wtype is just a uint64 value and the
+          // transaction _type_ can be discriminated with the .type property
+          // I don't _think_ there's any value in retaining which txn types constitute the union at the ptype level
+          return anyGtxnType
+        } else if (
+          first instanceof Uint64EnumMemberType &&
+          ut.types.every((t) => t instanceof Uint64EnumMemberType && t.enumType.equals(first.enumType))
+        ) {
+          // A union of enum members can be widened to the member type
+          return first.enumType.memberType
+        }
       }
       return ut
     }

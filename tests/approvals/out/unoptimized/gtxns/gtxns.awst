@@ -73,6 +73,18 @@ contract GtxnsAlgo
     return new Object3488A93F(sender=reinterpret_cast<bytes[32]>(gtxns<Sender>(pay)), fee=gtxns<Fee>(pay), firstValid=gtxns<FirstValid>(pay), firstValidTime=gtxns<FirstValidTime>(pay), lastValid=gtxns<LastValid>(pay), note=gtxns<Note>(pay), lease=gtxns<Lease>(pay), typeBytes=gtxns<Type>(pay), groupIndex=gtxns<GroupIndex>(pay), txnId=gtxns<TxID>(pay), rekeyTo=reinterpret_cast<bytes[32]>(gtxns<RekeyTo>(pay)), receiver=reinterpret_cast<bytes[32]>(gtxns<Receiver>(pay)), amount=gtxns<Amount>(pay), closeRemainderTo=reinterpret_cast<bytes[32]>(gtxns<CloseRemainderTo>(pay)))
   }
   
+  test5(txn: group_transaction): uint64
+  {
+    if (gtxns<TypeEnum>(txn) == reinterpret_cast<uint64>(1)) {
+      return 1
+    } else {
+      if (gtxns<TypeEnum>(txn) == reinterpret_cast<uint64>(4)) {
+        return 0
+      }
+    }
+    return 0
+  }
+  
   __algots__.defaultCreate(): void
   {
   }
