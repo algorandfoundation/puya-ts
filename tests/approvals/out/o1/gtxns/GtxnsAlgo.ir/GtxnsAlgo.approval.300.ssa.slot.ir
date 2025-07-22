@@ -1,11 +1,11 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
-        goto tmp%0#1 ? block@2 : block@10
-    block@2: // abi_routing_L15
+        goto tmp%0#1 ? block@2 : block@11
+    block@2: // abi_routing_L16
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "test()void" => block@3, method "test2()void" => block@4, method "test3()void" => block@5, method "test4(appl)void" => block@6, method "reflectAllPay(pay)(byte[32],uint64,uint64,uint64,uint64,byte[],byte[32],byte[],uint64,byte[32],byte[32],byte[32],uint64,byte[32])" => block@7, * => block@14}
-    block@3: // test_route_L16
+        switch tmp%2#0 {method "test()void" => block@3, method "test2()void" => block@4, method "test3()void" => block@5, method "test4(appl)void" => block@6, method "reflectAllPay(pay)(byte[32],uint64,uint64,uint64,uint64,byte[],byte[32],byte[],uint64,byte[32],byte[32],byte[32],uint64,byte[32])" => block@7, method "test5(txn)uint64" => block@8, * => block@15}
+    block@3: // test_route_L17
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (! tmp%3#0)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -13,8 +13,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%5#0) // can only call when not creating
         tests/approvals/gtxns.algo.ts::GtxnsAlgo.test()
         let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#0: bool = 1u
-        goto block@15
-    block@4: // test2_route_L20
+        goto block@16
+    block@4: // test2_route_L21
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (! tmp%7#0)
         (assert tmp%8#0) // OnCompletion is not NoOp
@@ -22,8 +22,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%9#0) // can only call when not creating
         tests/approvals/gtxns.algo.ts::GtxnsAlgo.test2()
         let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#1: bool = 1u
-        goto block@15
-    block@5: // test3_route_L46
+        goto block@16
+    block@5: // test3_route_L47
         let tmp%11#0: uint64 = (txn OnCompletion)
         let tmp%12#0: bool = (! tmp%11#0)
         (assert tmp%12#0) // OnCompletion is not NoOp
@@ -31,8 +31,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%13#0) // can only call when not creating
         tests/approvals/gtxns.algo.ts::GtxnsAlgo.test3()
         let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#2: bool = 1u
-        goto block@15
-    block@6: // test4_route_L52
+        goto block@16
+    block@6: // test4_route_L53
         let tmp%15#0: uint64 = (txn OnCompletion)
         let tmp%16#0: bool = (! tmp%15#0)
         (assert tmp%16#0) // OnCompletion is not NoOp
@@ -45,8 +45,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert gtxn_type_matches%0#0) // transaction type is appl
         tests/approvals/gtxns.algo.ts::GtxnsAlgo.test4(gtxn_idx%0#0)
         let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#3: bool = 1u
-        goto block@15
-    block@7: // reflectAllPay_route_L60
+        goto block@16
+    block@7: // reflectAllPay_route_L61
         let tmp%20#0: uint64 = (txn OnCompletion)
         let tmp%21#0: bool = (! tmp%20#0)
         (assert tmp%21#0) // OnCompletion is not NoOp
@@ -61,25 +61,39 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%26#0: bytes = (concat 0x151f7c75 tmp%25#0)
         (log tmp%26#0)
         let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#4: bool = 1u
-        goto block@15
-    block@10: // bare_routing_L15
+        goto block@16
+    block@8: // test5_route_L80
         let tmp%27#0: uint64 = (txn OnCompletion)
-        goto tmp%27#0 ? block@14 : block@11
-    block@11: // __algots__.defaultCreate_L15
-        let tmp%28#0: uint64 = (txn ApplicationID)
-        let tmp%29#0: bool = (! tmp%28#0)
-        (assert tmp%29#0) // can only call when creating
+        let tmp%28#0: bool = (! tmp%27#0)
+        (assert tmp%28#0) // OnCompletion is not NoOp
+        let tmp%29#0: uint64 = (txn ApplicationID)
+        (assert tmp%29#0) // can only call when not creating
+        let tmp%31#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%2#0: uint64 = (- tmp%31#0 1u)
+        let tmp%32#0: uint64 = tests/approvals/gtxns.algo.ts::GtxnsAlgo.test5(gtxn_idx%2#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%32#0)
+        let tmp%34#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
+        (log tmp%34#0)
         let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#5: bool = 1u
-        goto block@15
-    block@14: // after_if_else_L15
-        let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#6: bool = 0u
-        goto block@15
-    block@15: // after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#5 <- block@11, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#6 <- block@14)
+        goto block@16
+    block@11: // bare_routing_L16
+        let tmp%35#0: uint64 = (txn OnCompletion)
+        goto tmp%35#0 ? block@15 : block@12
+    block@12: // __algots__.defaultCreate_L16
+        let tmp%36#0: uint64 = (txn ApplicationID)
+        let tmp%37#0: bool = (! tmp%36#0)
+        (assert tmp%37#0) // can only call when creating
+        let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#6: bool = 1u
+        goto block@16
+    block@15: // after_if_else_L16
+        let tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#7: bool = 0u
+        goto block@16
+    block@16: // after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#6 <- block@12, tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__%0#7 <- block@15)
         return tmp%0#0
 
 subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.test() -> void:
-    block@0: // L16
+    block@0: // L17
         let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) 0u)
         let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 pay)
         (assert gtxn_type_matches%0#0) // transaction type is pay
@@ -88,66 +102,66 @@ subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.test() -> void:
         return 
 
 subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.test2() -> void:
-    block@0: // L20
+    block@0: // L21
         let tmp%0#0: uint64 = (global GroupSize)
         let temp#0: uint64 = 0u
         goto block@1
-    block@1: // for_header_L21
+    block@1: // for_header_L22
         let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@19)
         let continue_looping%0#0: bool = (< temp#1 tmp%0#0)
         goto continue_looping%0#0 ? block@2 : block@21
-    block@2: // for_body_L21
+    block@2: // for_body_L22
         let awst_tmp%0#0: uint64 = ((gtxns TypeEnum) temp#1)
         let tmp%1#0: bool = (== awst_tmp%0#0 6u)
         goto tmp%1#0 ? block@3 : block@5
-    block@3: // if_body_L24
+    block@3: // if_body_L25
         let tmp%2#0: uint64 = ((gtxns ApplicationID) temp#1)
         let tmp%3#0: bytes[8] = (itob tmp%2#0)
         (log tmp%3#0)
         goto block@19
-    block@5: // after_if_else_L24
+    block@5: // after_if_else_L25
         let tmp%4#0: bool = (== awst_tmp%0#0 4u)
         goto tmp%4#0 ? block@6 : block@8
-    block@6: // if_body_L27
+    block@6: // if_body_L28
         let tmp%5#0: uint64 = ((gtxns XferAsset) temp#1)
         let tmp%6#0: bytes[8] = (itob tmp%5#0)
         (log tmp%6#0)
         goto block@19
-    block@8: // after_if_else_L27
+    block@8: // after_if_else_L28
         let tmp%7#0: bool = (== awst_tmp%0#0 3u)
         goto tmp%7#0 ? block@9 : block@11
-    block@9: // if_body_L30
+    block@9: // if_body_L31
         let tmp%8#0: uint64 = ((gtxns ConfigAsset) temp#1)
         let tmp%9#0: bytes[8] = (itob tmp%8#0)
         (log tmp%9#0)
         goto block@19
-    block@11: // after_if_else_L30
+    block@11: // after_if_else_L31
         let tmp%10#0: bool = (== awst_tmp%0#0 1u)
         goto tmp%10#0 ? block@12 : block@14
-    block@12: // if_body_L33
+    block@12: // if_body_L34
         let tmp%11#0: account = ((gtxns Receiver) temp#1)
         (log tmp%11#0)
         goto block@19
-    block@14: // after_if_else_L33
+    block@14: // after_if_else_L34
         let tmp%12#0: bool = (== awst_tmp%0#0 2u)
         goto tmp%12#0 ? block@15 : block@17
-    block@15: // if_body_L36
+    block@15: // if_body_L37
         let tmp%13#0: bytes[32] = ((gtxns VotePK) temp#1)
         (log tmp%13#0)
         goto block@19
-    block@17: // after_if_else_L36
+    block@17: // after_if_else_L37
         let tmp%14#0: uint64 = ((gtxns FreezeAsset) temp#1)
         let tmp%15#0: bytes[8] = (itob tmp%14#0)
         (log tmp%15#0)
         goto block@19
-    block@19: // L23
+    block@19: // L24
         let temp#2: uint64 = (+ temp#1 1u)
         goto block@1
-    block@21: // after_for_L21
+    block@21: // after_for_L22
         return 
 
 subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.test3() -> void:
-    block@0: // L46
+    block@0: // L47
         let tmp%0#0: uint64 = (txn OnCompletion)
         let tmp%1#0: bool = (! tmp%0#0)
         (assert tmp%1#0) // OCA must be NoOp
@@ -158,7 +172,7 @@ subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.test3() -> void:
         return 
 
 subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.test4(other: uint64) -> void:
-    block@0: // L52
+    block@0: // L53
         let tmp%0#0: uint64 = ((gtxns OnCompletion) other#0)
         let tmp%1#0: bool = (! tmp%0#0)
         (assert tmp%1#0) // Other txn must be NoOp
@@ -178,7 +192,7 @@ subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.test4(other: uint64) -> void
         return 
 
 subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.reflectAllPay(pay: uint64) -> Encoded(uint8[32],uint64,uint64,uint64,uint64,(len+uint8[]),uint8[32],(len+uint8[]),uint64,uint8[32],uint8[32],uint8[32],uint64,uint8[32]):
-    block@0: // L60
+    block@0: // L61
         let reinterpret_bytes[32]%0#0: bytes[32] = ((gtxns Sender) pay#0)
         let tmp%0#0: uint64 = ((gtxns Fee) pay#0)
         let tmp%1#0: uint64 = ((gtxns FirstValid) pay#0)
@@ -227,3 +241,18 @@ subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.reflectAllPay(pay: uint64) -
         let aggregate%concat%0#0: bytes = (concat aggregate%head%13#0 aggregate%encoded_value%0#0)
         let aggregate%concat%1#0: bytes = (concat aggregate%concat%0#0 aggregate%encoded_value%1#0)
         return aggregate%concat%1#0
+
+subroutine tests/approvals/gtxns.algo.ts::GtxnsAlgo.test5(txn: uint64) -> uint64:
+    block@0: // L80
+        let tmp%0#0: uint64 = ((gtxns TypeEnum) txn#0)
+        let tmp%1#0: bool = (== tmp%0#0 1u)
+        goto tmp%1#0 ? block@1 : block@2
+    block@1: // if_body_L81
+        return 1u
+    block@2: // else_body_L83
+        let tmp%3#0: bool = (== tmp%0#0 4u)
+        goto tmp%3#0 ? block@3 : block@4
+    block@3: // if_body_L83
+        return 0u
+    block@4: // after_if_else_L83
+        return 0u

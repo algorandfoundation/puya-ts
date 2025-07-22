@@ -1,3 +1,4 @@
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import {
   assert,
   Bytes,
@@ -74,5 +75,15 @@ export class GtxnsAlgo extends Contract {
       amount: pay.amount,
       closeRemainderTo: pay.closeRemainderTo.bytes,
     }
+  }
+
+  test5(txn: gtxn.Transaction): uint64 {
+    if (txn.type === TransactionType.Payment) {
+      return 1
+    } else if (txn.type === TransactionType.AssetTransfer) {
+      // The compiler infers txn as a union of everything but payment here - which is a union type we can support
+      return 0
+    }
+    return 0
   }
 }
