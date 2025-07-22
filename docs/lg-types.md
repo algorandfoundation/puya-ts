@@ -263,6 +263,16 @@ myArray = [...myArray, 4]
 myArray = myArray.with(2, 3)
 ```
 
+#### FixedArray
+
+The FixedArray type is a mutable array with a pre-defined length. Items can be updated/replaced but there is no `push` or `pop`. The FixedArray type is useful for pre-allocating a block of bytes in box storage or global/local state.
+
+```ts
+import { FixedArray, uint64 } from '@algorandfoundation/algorand-typescript'
+
+const myFixed = new FixedArray<uint64, 3>()
+```
+
 #### ReferenceArray
 
 ```ts
