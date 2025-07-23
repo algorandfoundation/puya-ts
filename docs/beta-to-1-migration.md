@@ -80,6 +80,32 @@ const a = new arc4.StaticArray<UintN64, 3>(new UintN64(1), new UintN64(2), new U
 const b = clone(a)
 ```
 
+### ARC4 numeric types no longer have the 'N' and 'NxM' suffixes
+
+The 'N' and 'NxM' suffixes have been removed from the ARC4 numeric types, which results in more natural type names.
+
+```typescript
+/**** Before (puya-ts beta) ****/
+type User = {
+  id: arc4.UintN16
+  score: arc4.UFixedNxM<32, 4>
+}
+const user = {
+  id: new arc4.UintN<16>(1234),
+  score: new arc4.UFixedNxM<32, 4>('1.234'),
+}
+
+/**** After (puya-ts 1.0) ****/
+type User = {
+  id: arc4.Uint16
+  score: arc4.UFixed<32, 4>
+}
+const user = {
+  id: new arc4.Uint<16>(1234),
+  score: new arc4.UFixed<32, 4>('1.234'),
+}
+```
+
 ## New features
 
 ### Native mutable objects
