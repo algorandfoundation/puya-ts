@@ -1266,6 +1266,7 @@ export class BytesPType extends PType {
   readonly module: string
   readonly singleton = false
   readonly length: bigint | null
+  readonly fixedBitSize: bigint | null = null
 
   constructor({ length }: { length: bigint | null }) {
     super()
@@ -1273,6 +1274,7 @@ export class BytesPType extends PType {
     this.name = length === null ? 'bytes' : `bytes<${length}>`
     this.wtype = new wtypes.BytesWType({ length })
     this.module = Constants.moduleNames.algoTs.primitives
+    this.fixedBitSize = this.length === null ? null : this.length * 8n
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {

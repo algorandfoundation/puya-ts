@@ -265,7 +265,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_r
         let reinterpret_Encoded(uint64[50])%0#0: Encoded(uint64[50]) = (txna ApplicationArgs 1)
         tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(reinterpret_Encoded(uint64[50])%0#0)
         return 1u
-    block@9: // arc4Interop_route_L151
+    block@9: // arc4Interop_route_L157
         let tmp%37#0: uint64 = (txn OnCompletion)
         let tmp%38#0: bool = (== tmp%37#0 NoOp)
         (assert tmp%38#0) // OnCompletion is not NoOp
@@ -274,7 +274,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_r
         (assert tmp%40#0) // can only call when not creating
         tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop()
         return 1u
-    block@10: // structs_route_L164
+    block@10: // structs_route_L170
         let tmp%41#0: uint64 = (txn OnCompletion)
         let tmp%42#0: bool = (== tmp%41#0 NoOp)
         (assert tmp%42#0) // OnCompletion is not NoOp
@@ -286,7 +286,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_r
         let tmp%46#0: bytes = (concat 0x151f7c75 tmp%45#0)
         (log tmp%46#0)
         return 1u
-    block@11: // booleans_route_L173
+    block@11: // booleans_route_L179
         let tmp%47#0: uint64 = (txn OnCompletion)
         let tmp%48#0: bool = (== tmp%47#0 NoOp)
         (assert tmp%48#0) // OnCompletion is not NoOp
@@ -297,7 +297,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_r
         let tmp%52#0: bytes = (concat 0x151f7c75 tmp%51#0)
         (log tmp%52#0)
         return 1u
-    block@12: // booleansStatic_route_L177
+    block@12: // booleansStatic_route_L183
         let tmp%53#0: uint64 = (txn OnCompletion)
         let tmp%54#0: bool = (== tmp%53#0 NoOp)
         (assert tmp%54#0) // OnCompletion is not NoOp
@@ -309,7 +309,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_r
         let tmp%61#0: bytes = (concat 0x151f7c75 tmp%60#0)
         (log tmp%61#0)
         return 1u
-    block@13: // arc4Booleans_route_L181
+    block@13: // arc4Booleans_route_L187
         let tmp%62#0: uint64 = (txn OnCompletion)
         let tmp%63#0: bool = (== tmp%62#0 NoOp)
         (assert tmp%63#0) // OnCompletion is not NoOp
@@ -320,7 +320,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_r
         let tmp%67#0: bytes = (concat 0x151f7c75 tmp%66#0)
         (log tmp%67#0)
         return 1u
-    block@14: // arc4BooleansStatic_route_L185
+    block@14: // arc4BooleansStatic_route_L191
         let tmp%68#0: uint64 = (txn OnCompletion)
         let tmp%69#0: bool = (== tmp%68#0 NoOp)
         (assert tmp%69#0) // OnCompletion is not NoOp
@@ -332,7 +332,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_r
         let tmp%76#0: bytes = (concat 0x151f7c75 tmp%75#0)
         (log tmp%76#0)
         return 1u
-    block@15: // aliasing_route_L189
+    block@15: // aliasing_route_L195
         let tmp%77#0: uint64 = (txn OnCompletion)
         let tmp%78#0: bool = (== tmp%77#0 NoOp)
         (assert tmp%78#0) // OnCompletion is not NoOp
@@ -343,7 +343,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_r
         let reinterpret_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = (txna ApplicationArgs 2)
         tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(reinterpret_Encoded(len+uint64[])%0#0, reinterpret_Encoded(len+uint64[])%1#0)
         return 1u
-    block@16: // receiveMutable_route_L215
+    block@16: // receiveMutable_route_L221
         let tmp%81#0: uint64 = (txn OnCompletion)
         let tmp%82#0: bool = (== tmp%81#0 NoOp)
         (assert tmp%82#0) // OnCompletion is not NoOp
@@ -353,7 +353,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_r
         let reinterpret_Encoded(len+uint64[])%2#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
         let receiveMutable%0#0: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(reinterpret_Encoded(len+uint64[])%2#0)
         return 1u
-    block@17: // receiveReadonly_route_L219
+    block@17: // receiveReadonly_route_L225
         let tmp%85#0: uint64 = (txn OnCompletion)
         let tmp%86#0: bool = (== tmp%85#0 NoOp)
         (assert tmp%86#0) // OnCompletion is not NoOp
@@ -1259,110 +1259,118 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
         let encoded_value%0#0: Encoded(uint64) = bytes_encode<uint64>(0u)
         let updated_array%0#0: Encoded(uint64[4]) = replace_value(x#0, 0u, encoded_value%0#0)
         let x#1: Encoded(uint64[4]) = updated_array%0#0
+        let tmp%0#0: Encoded(uint64[50]) = (bzero 400u)
+        let x2#0: Encoded(uint64[50]) = tmp%0#0
+        let tmp%1#0: bool = (== 50u 50u)
+        (assert tmp%1#0)
+        let tmp%2#0: Encoded(uint8[32][12]) = (bzero 384u)
+        let x3#0: Encoded(uint8[32][12]) = tmp%2#0
+        let tmp%3#0: bool = (== 12u 12u)
+        (assert tmp%3#0)
         let array_item%0#0: Encoded(uint64) = extract_value(x#1, 0u)
         let values%0#0: uint64 = decode_bytes<uint64>(array_item%0#0)
         let array_item%1#0: Encoded(uint64) = extract_value(y#0, 0u)
         let values%1#0: uint64 = decode_bytes<uint64>(array_item%1#0)
-        let tmp%0#0: bool = (== values%0#0 values%1#0)
-        (assert tmp%0#0)
-        let tmp%1#0: bool = (== 4u 4u)
+        let tmp%4#0: bool = (== values%0#0 values%1#0)
+        (assert tmp%4#0)
+        let tmp%5#0: bool = (== 4u 4u)
         let array_item%2#0: Encoded(uint64) = extract_value(x#1, 0u)
         let values%2#0: uint64 = decode_bytes<uint64>(array_item%2#0)
-        let tmp%2#0: bool = (< values%2#0 1u)
-        let tmp%3#0: bool = (&& tmp%1#0 tmp%2#0)
+        let tmp%6#0: bool = (< values%2#0 1u)
+        let tmp%7#0: bool = (&& tmp%5#0 tmp%6#0)
         let array_item%3#0: Encoded(uint64) = extract_value(x#1, 1u)
         let values%3#0: uint64 = decode_bytes<uint64>(array_item%3#0)
-        let tmp%4#0: bool = (== values%3#0 2u)
-        let tmp%5#0: bool = (&& tmp%3#0 tmp%4#0)
+        let tmp%8#0: bool = (== values%3#0 2u)
+        let tmp%9#0: bool = (&& tmp%7#0 tmp%8#0)
         let array_item%4#0: Encoded(uint64) = extract_value(x#1, 2u)
         let values%4#0: uint64 = decode_bytes<uint64>(array_item%4#0)
-        let tmp%6#0: bool = (== values%4#0 3u)
-        let tmp%7#0: bool = (&& tmp%5#0 tmp%6#0)
+        let tmp%10#0: bool = (== values%4#0 3u)
+        let tmp%11#0: bool = (&& tmp%9#0 tmp%10#0)
         let array_item%5#0: Encoded(uint64) = extract_value(x#1, 3u)
         let values%5#0: uint64 = decode_bytes<uint64>(array_item%5#0)
-        let tmp%8#0: bool = (== values%5#0 4u)
-        let tmp%9#0: bool = (&& tmp%7#0 tmp%8#0)
-        (assert tmp%9#0) // assert target is match for conditions
+        let tmp%12#0: bool = (== values%5#0 4u)
+        let tmp%13#0: bool = (&& tmp%11#0 tmp%12#0)
+        (assert tmp%13#0) // assert target is match for conditions
         let array_item%6#0: Encoded(uint64) = extract_value(y#0, 49u)
         let values%6#0: uint64 = decode_bytes<uint64>(array_item%6#0)
-        let tmp%10#0: bool = (>= values%6#0 0u)
-        (assert tmp%10#0) // assert target is match for conditions
-        let tmp%11#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(1u, 2u)
-        let tmp%12#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(3u, 4u)
-        let encoded_array%1#0: Encoded((uint64,uint64)[2]) = bytes_encode<(uint64,uint64)[2]>(tmp%11#0, tmp%12#0)
+        let tmp%14#0: bool = (>= values%6#0 0u)
+        (assert tmp%14#0) // assert target is match for conditions
+        let tmp%15#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(1u, 2u)
+        let tmp%16#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(3u, 4u)
+        let encoded_array%1#0: Encoded((uint64,uint64)[2]) = bytes_encode<(uint64,uint64)[2]>(tmp%15#0, tmp%16#0)
         let myVectors#0: Encoded((uint64,uint64)[2]) = encoded_array%1#0
-        let tmp%13#0: bool = (== 2u 2u)
+        let tmp%17#0: bool = (== 2u 2u)
         let array_item%7#0: Encoded(uint64,uint64) = extract_value(myVectors#0, 0u)
         let values%7#0: Encoded(uint64,uint64) = decode_bytes<Encoded(uint64,uint64)>(array_item%7#0)
         let tuple_item%0#0: Encoded(uint64) = extract_value(values%7#0, 0)
         let values%8#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
-        let tmp%14#0: bool = (== values%8#0 1u)
+        let tmp%18#0: bool = (== values%8#0 1u)
         let array_item%8#0: Encoded(uint64,uint64) = extract_value(myVectors#0, 0u)
         let values%9#0: Encoded(uint64,uint64) = decode_bytes<Encoded(uint64,uint64)>(array_item%8#0)
         let tuple_item%1#0: Encoded(uint64) = extract_value(values%9#0, 1)
         let values%10#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
-        let tmp%15#0: bool = (== values%10#0 2u)
-        let tmp%16#0: bool = (&& tmp%14#0 tmp%15#0)
-        let tmp%17#0: bool = (&& tmp%13#0 tmp%16#0)
+        let tmp%19#0: bool = (== values%10#0 2u)
+        let tmp%20#0: bool = (&& tmp%18#0 tmp%19#0)
+        let tmp%21#0: bool = (&& tmp%17#0 tmp%20#0)
         let array_item%9#0: Encoded(uint64,uint64) = extract_value(myVectors#0, 1u)
         let values%11#0: Encoded(uint64,uint64) = decode_bytes<Encoded(uint64,uint64)>(array_item%9#0)
         let tuple_item%2#0: Encoded(uint64) = extract_value(values%11#0, 0)
         let values%12#0: uint64 = decode_bytes<uint64>(tuple_item%2#0)
-        let tmp%18#0: bool = (== values%12#0 3u)
+        let tmp%22#0: bool = (== values%12#0 3u)
         let array_item%10#0: Encoded(uint64,uint64) = extract_value(myVectors#0, 1u)
         let values%13#0: Encoded(uint64,uint64) = decode_bytes<Encoded(uint64,uint64)>(array_item%10#0)
         let tuple_item%3#0: Encoded(uint64) = extract_value(values%13#0, 1)
         let values%14#0: uint64 = decode_bytes<uint64>(tuple_item%3#0)
-        let tmp%19#0: bool = (== values%14#0 4u)
-        let tmp%20#0: bool = (&& tmp%18#0 tmp%19#0)
-        let tmp%21#0: bool = (&& tmp%17#0 tmp%20#0)
-        (assert tmp%21#0) // assert target is match for conditions
-        let tmp%22#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(5u, 6u)
-        let encoded_array%2#0: Encoded((uint64,uint64)[1]) = bytes_encode<(uint64,uint64)[1]>(tmp%22#0)
-        let tmp%23#0: Encoded((uint64,uint64)[1]) = bytes_encode<((uint64,uint64)[1])>(encoded_array%2#0)
-        let myObject#0: Encoded((uint64,uint64)[1]) = tmp%23#0
+        let tmp%23#0: bool = (== values%14#0 4u)
+        let tmp%24#0: bool = (&& tmp%22#0 tmp%23#0)
+        let tmp%25#0: bool = (&& tmp%21#0 tmp%24#0)
+        (assert tmp%25#0) // assert target is match for conditions
+        let tmp%26#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(5u, 6u)
+        let encoded_array%2#0: Encoded((uint64,uint64)[1]) = bytes_encode<(uint64,uint64)[1]>(tmp%26#0)
+        let tmp%27#0: Encoded((uint64,uint64)[1]) = bytes_encode<((uint64,uint64)[1])>(encoded_array%2#0)
+        let myObject#0: Encoded((uint64,uint64)[1]) = tmp%27#0
         let tuple_item%4#0: Encoded((uint64,uint64)[1]) = extract_value(myObject#0, 0)
         let values%15#0: Encoded((uint64,uint64)[1]) = decode_bytes<Encoded((uint64,uint64)[1])>(tuple_item%4#0)
-        let tmp%24#0: bool = (== 1u 1u)
+        let tmp%28#0: bool = (== 1u 1u)
         let tuple_item%5#0: Encoded((uint64,uint64)[1]) = extract_value(myObject#0, 0)
         let values%16#0: Encoded((uint64,uint64)[1]) = decode_bytes<Encoded((uint64,uint64)[1])>(tuple_item%5#0)
         let array_item%11#0: Encoded(uint64,uint64) = extract_value(values%16#0, 0u)
         let values%17#0: Encoded(uint64,uint64) = decode_bytes<Encoded(uint64,uint64)>(array_item%11#0)
         let tuple_item%6#0: Encoded(uint64) = extract_value(values%17#0, 0)
         let values%18#0: uint64 = decode_bytes<uint64>(tuple_item%6#0)
-        let tmp%25#0: bool = (== values%18#0 5u)
+        let tmp%29#0: bool = (== values%18#0 5u)
         let tuple_item%7#0: Encoded((uint64,uint64)[1]) = extract_value(myObject#0, 0)
         let values%19#0: Encoded((uint64,uint64)[1]) = decode_bytes<Encoded((uint64,uint64)[1])>(tuple_item%7#0)
         let array_item%12#0: Encoded(uint64,uint64) = extract_value(values%19#0, 0u)
         let values%20#0: Encoded(uint64,uint64) = decode_bytes<Encoded(uint64,uint64)>(array_item%12#0)
         let tuple_item%8#0: Encoded(uint64) = extract_value(values%20#0, 1)
         let values%21#0: uint64 = decode_bytes<uint64>(tuple_item%8#0)
-        let tmp%26#0: bool = (== values%21#0 6u)
-        let tmp%27#0: bool = (&& tmp%25#0 tmp%26#0)
-        let tmp%28#0: bool = (&& tmp%24#0 tmp%27#0)
-        (assert tmp%28#0) // assert target is match for conditions
-        let tmp%29#0: Encoded(uint64[4]) = (bzero 32u)
-        let z1#0: Encoded(uint64[4]) = tmp%29#0
-        let tmp%30#0: bool = (== 4u 4u)
-        (assert tmp%30#0)
-        let tmp%31#0: bool = (== 4u 4u)
+        let tmp%30#0: bool = (== values%21#0 6u)
+        let tmp%31#0: bool = (&& tmp%29#0 tmp%30#0)
+        let tmp%32#0: bool = (&& tmp%28#0 tmp%31#0)
+        (assert tmp%32#0) // assert target is match for conditions
+        let tmp%33#0: Encoded(uint64[4]) = (bzero 32u)
+        let z1#0: Encoded(uint64[4]) = tmp%33#0
+        let tmp%34#0: bool = (== 4u 4u)
+        (assert tmp%34#0)
+        let tmp%35#0: bool = (== 4u 4u)
         let array_item%13#0: Encoded(uint64) = extract_value(z1#0, 0u)
         let values%22#0: uint64 = decode_bytes<uint64>(array_item%13#0)
-        let tmp%32#0: bool = (== values%22#0 0u)
-        let tmp%33#0: bool = (&& tmp%31#0 tmp%32#0)
+        let tmp%36#0: bool = (== values%22#0 0u)
+        let tmp%37#0: bool = (&& tmp%35#0 tmp%36#0)
         let array_item%14#0: Encoded(uint64) = extract_value(z1#0, 1u)
         let values%23#0: uint64 = decode_bytes<uint64>(array_item%14#0)
-        let tmp%34#0: bool = (== values%23#0 0u)
-        let tmp%35#0: bool = (&& tmp%33#0 tmp%34#0)
+        let tmp%38#0: bool = (== values%23#0 0u)
+        let tmp%39#0: bool = (&& tmp%37#0 tmp%38#0)
         let array_item%15#0: Encoded(uint64) = extract_value(z1#0, 2u)
         let values%24#0: uint64 = decode_bytes<uint64>(array_item%15#0)
-        let tmp%36#0: bool = (== values%24#0 0u)
-        let tmp%37#0: bool = (&& tmp%35#0 tmp%36#0)
+        let tmp%40#0: bool = (== values%24#0 0u)
+        let tmp%41#0: bool = (&& tmp%39#0 tmp%40#0)
         let array_item%16#0: Encoded(uint64) = extract_value(z1#0, 3u)
         let values%25#0: uint64 = decode_bytes<uint64>(array_item%16#0)
-        let tmp%38#0: bool = (== values%25#0 0u)
-        let tmp%39#0: bool = (&& tmp%37#0 tmp%38#0)
-        (assert tmp%39#0) // assert target is match for conditions
+        let tmp%42#0: bool = (== values%25#0 0u)
+        let tmp%43#0: bool = (&& tmp%41#0 tmp%42#0)
+        (assert tmp%43#0) // assert target is match for conditions
         let encoded_value%1#0: Encoded(uint64) = bytes_encode<uint64>(1u)
         let updated_array%1#0: Encoded(uint64[4]) = replace_value(z1#0, 0u, encoded_value%1#0)
         let z1#1: Encoded(uint64[4]) = updated_array%1#0
@@ -1375,50 +1383,50 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
         let encoded_value%4#0: Encoded(uint64) = bytes_encode<uint64>(4u)
         let updated_array%4#0: Encoded(uint64[4]) = replace_value(z1#3, 3u, encoded_value%4#0)
         let z1#4: Encoded(uint64[4]) = updated_array%4#0
-        let tmp%40#0: bool = (== 4u 4u)
+        let tmp%44#0: bool = (== 4u 4u)
         let array_item%17#0: Encoded(uint64) = extract_value(z1#4, 0u)
         let values%26#0: uint64 = decode_bytes<uint64>(array_item%17#0)
-        let tmp%41#0: bool = (<= values%26#0 1u)
-        let tmp%42#0: bool = (&& tmp%40#0 tmp%41#0)
+        let tmp%45#0: bool = (<= values%26#0 1u)
+        let tmp%46#0: bool = (&& tmp%44#0 tmp%45#0)
         let array_item%18#0: Encoded(uint64) = extract_value(z1#4, 1u)
         let values%27#0: uint64 = decode_bytes<uint64>(array_item%18#0)
-        let tmp%43#0: bool = (== values%27#0 2u)
-        let tmp%44#0: bool = (&& tmp%42#0 tmp%43#0)
+        let tmp%47#0: bool = (== values%27#0 2u)
+        let tmp%48#0: bool = (&& tmp%46#0 tmp%47#0)
         let array_item%19#0: Encoded(uint64) = extract_value(z1#4, 2u)
         let values%28#0: uint64 = decode_bytes<uint64>(array_item%19#0)
-        let tmp%45#0: bool = (== values%28#0 3u)
-        let tmp%46#0: bool = (&& tmp%44#0 tmp%45#0)
+        let tmp%49#0: bool = (== values%28#0 3u)
+        let tmp%50#0: bool = (&& tmp%48#0 tmp%49#0)
         let array_item%20#0: Encoded(uint64) = extract_value(z1#4, 3u)
         let values%29#0: uint64 = decode_bytes<uint64>(array_item%20#0)
-        let tmp%47#0: bool = (== values%29#0 4u)
-        let tmp%48#0: bool = (&& tmp%46#0 tmp%47#0)
-        (assert tmp%48#0) // assert target is match for conditions
-        let tmp%49#0: Encoded(bool1[3]) = (bzero 1u)
-        let z2#0: Encoded(bool1[3]) = tmp%49#0
+        let tmp%51#0: bool = (== values%29#0 4u)
+        let tmp%52#0: bool = (&& tmp%50#0 tmp%51#0)
+        (assert tmp%52#0) // assert target is match for conditions
+        let tmp%53#0: Encoded(bool1[3]) = (bzero 1u)
+        let z2#0: Encoded(bool1[3]) = tmp%53#0
         let array_item%21#0: bool = extract_value(z2#0, 0u)
         let values%30#0: bool = decode_bytes<bool>(array_item%21#0)
-        let tmp%50#0: bool = (== values%30#0 0u)
-        (assert tmp%50#0)
-        let tmp%51#0: Encoded(uint64[2][4]) = (bzero 64u)
-        let z3#0: Encoded(uint64[2][4]) = tmp%51#0
-        let tmp%52#0: bool = (== 4u 4u)
-        (assert tmp%52#0)
-        let tmp%53#0: Encoded((uint64,uint64)[4]) = (bzero 64u)
-        let z4#0: Encoded((uint64,uint64)[4]) = tmp%53#0
-        let tmp%54#0: bool = (== 4u 4u)
+        let tmp%54#0: bool = (== values%30#0 0u)
         (assert tmp%54#0)
-        let tmp%55#0: Encoded(uint64[4]) = (bzero 32u)
-        let z5#0: Encoded(uint64[4]) = tmp%55#0
+        let tmp%55#0: Encoded(uint64[2][4]) = (bzero 64u)
+        let z3#0: Encoded(uint64[2][4]) = tmp%55#0
         let tmp%56#0: bool = (== 4u 4u)
         (assert tmp%56#0)
-        let tmp%57#0: Encoded((uint64,bool1)[4]) = (bzero 36u)
-        let z6#0: Encoded((uint64,bool1)[4]) = tmp%57#0
+        let tmp%57#0: Encoded((uint64,uint64)[4]) = (bzero 64u)
+        let z4#0: Encoded((uint64,uint64)[4]) = tmp%57#0
         let tmp%58#0: bool = (== 4u 4u)
         (assert tmp%58#0)
+        let tmp%59#0: Encoded(uint64[4]) = (bzero 32u)
+        let z5#0: Encoded(uint64[4]) = tmp%59#0
+        let tmp%60#0: bool = (== 4u 4u)
+        (assert tmp%60#0)
+        let tmp%61#0: Encoded((uint64,bool1)[4]) = (bzero 36u)
+        let z6#0: Encoded((uint64,bool1)[4]) = tmp%61#0
+        let tmp%62#0: bool = (== 4u 4u)
+        (assert tmp%62#0)
         return 
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop() -> void:
-    block@0: // L151
+    block@0: // L157
         let encoded_array%0#0: Encoded(len+uint32[]) = bytes_encode<(len+uint32[])>(0x0000007b, 0x0000007b)
         let da1#0: Encoded(len+uint32[]) = encoded_array%0#0
         let encoded_array%1#0: Encoded(uint32[2]) = bytes_encode<uint32[2]>(0x0000007b, 0x0000007b)
@@ -1474,7 +1482,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop()
         return 
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p: Encoded(uint64,uint64)) -> Encoded(len+(uint64,uint64)[]):
-    block@0: // L164
+    block@0: // L170
         let tuple_item%0#0: Encoded(uint64) = extract_value(p#0, 0)
         let values%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
         let tuple_item%1#0: Encoded(uint64) = extract_value(p#0, 1)
@@ -1504,16 +1512,16 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p: En
         return myVectors#1
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans() -> Encoded(len+bool1[]):
-    block@0: // L173
+    block@0: // L179
         let encoded_array%0#0: Encoded(len+bool1[]) = bytes_encode<(len+bool1[])>(1u, 0u, 1u)
         return encoded_array%0#0
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleansStatic() -> <bool, bool, bool>:
-    block@0: // L177
+    block@0: // L183
         return 1u 0u 1u
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans() -> Encoded(len+bool1[]):
-    block@0: // L181
+    block@0: // L187
         let tmp%0#0: Encoded(bool8) = bytes_encode<bool8>(1u)
         let tmp%1#0: Encoded(bool8) = bytes_encode<bool8>(0u)
         let tmp%2#0: Encoded(bool8) = bytes_encode<bool8>(1u)
@@ -1521,14 +1529,14 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans(
         return encoded_array%0#0
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansStatic() -> <Encoded(bool8), Encoded(bool8), Encoded(bool8)>:
-    block@0: // L185
+    block@0: // L191
         let tmp%0#0: Encoded(bool8) = bytes_encode<bool8>(1u)
         let tmp%1#0: Encoded(bool8) = bytes_encode<bool8>(0u)
         let tmp%2#0: Encoded(bool8) = bytes_encode<bool8>(1u)
         return tmp%0#0 tmp%1#0 tmp%2#0
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(mutable: Encoded(len+uint64[]), readOnly: Encoded(len+uint64[])) -> void:
-    block@0: // L189
+    block@0: // L195
         let needClone#0: Encoded(len+uint64[]) = mutable#0
         let encoded_value%0#0: Encoded(uint64) = bytes_encode<uint64>(5u)
         let updated_array%0#0: Encoded(len+uint64[]) = replace_value(needClone#0, 0u, encoded_value%0#0)
@@ -1556,7 +1564,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(muta
         return 
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(a: Encoded(len+uint64[])) -> Encoded(len+uint64[]):
-    block@0: // L215
+    block@0: // L221
         let a%is_original#0: bool = 1u
         let a%out#0: Encoded(len+uint64[]) = a#0
         let encoded_value%0#0: Encoded(uint64) = bytes_encode<uint64>(1u)
@@ -1571,7 +1579,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutabl
         return a%out#2
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(a: Encoded(len+uint64[])) -> void:
-    block@0: // L219
+    block@0: // L225
         return 
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__algots__.defaultCreate() -> void:
