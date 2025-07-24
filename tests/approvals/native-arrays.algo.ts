@@ -1,4 +1,4 @@
-import type { arc4, uint64 } from '@algorandfoundation/algorand-typescript'
+import type { arc4, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, assertMatch, clone, Contract, ensureBudget, FixedArray, Uint64 } from '@algorandfoundation/algorand-typescript'
 import { Bool, DynamicArray, StaticArray, Uint32 } from '@algorandfoundation/algorand-typescript/arc4'
 
@@ -109,6 +109,12 @@ export class NativeArraysAlgo extends Contract {
   fixedArray(y: FixedArray<uint64, 50>) {
     const x = new FixedArray<uint64, 4>(1, 2, 3, 4)
     x[0] = 0
+
+    const x2 = new FixedArray<uint64, 50>()
+    assert(x2.length === 50)
+
+    const x3 = new FixedArray<bytes<32>, 12>()
+    assert(x3.length === 12)
 
     assert(x[0] === y[0])
     assertMatch(x, [{ lessThan: 1 }, 2, 3, 4])
