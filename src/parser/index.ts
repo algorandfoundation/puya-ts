@@ -1,7 +1,7 @@
 import ts from 'typescript'
 import { SourceLocation } from '../awst/source-location'
-import { logger, LoggingContext } from '../logger'
-import type { AlgoFile, CompileOptions } from '../options'
+import { logger, LoggingContext, LogLevel, LogSource } from '../logger'
+import type { CompileOptions } from '../options'
 import type { DeliberateAny } from '../typescript-helpers'
 import { normalisePath } from '../util'
 import { resolveModuleNameLiterals } from './resolve-module-name-literals'
@@ -13,7 +13,7 @@ export type CreateProgramResult = {
   programDirectory: string
 }
 
-export function createTsProgram(options: Pick<CompileOptions, 'filePaths'>): CreateProgramResult {
+export function createTsProgram(options: Pick<CompileOptions, 'filePaths' | 'sourceFileProvider'>): CreateProgramResult {
   const compilerOptions: ts.CompilerOptions = {
     allowJs: false,
     strict: true,
@@ -27,19 +27,13 @@ export function createTsProgram(options: Pick<CompileOptions, 'filePaths'>): Cre
   }
 
   const host = ts.createCompilerHost(compilerOptions)
+  if (options.sourceFileProvider) {
+    const { fileExists, readFile } = host
+    const overridden = options.sourceFileProvider({ fileExists, readFile })
+    host.fileExists = overridden.fileExists
+    host.readFile = overridden.readFile
+  }
 
-  const fileMap = options.filePaths.reduce((acc, cur) => acc.set(cur.sourceFile, cur), new Map<string, AlgoFile>())
-  const { fileExists, readFile } = host
-  host.fileExists = function (fileName): boolean {
-    return fileMap.has(fileName) || fileExists(fileName)
-  }
-  host.readFile = function (fileName): string | undefined {
-    const matchedFile = fileMap.get(fileName)
-    if (matchedFile?.fileContents) {
-      return matchedFile.fileContents
-    }
-    return readFile(fileName)
-  }
   host.resolveModuleNameLiterals = resolveModuleNameLiterals
 
   const program = ts.createProgram(
@@ -64,10 +58,12 @@ export function createTsProgram(options: Pick<CompileOptions, 'filePaths'>): Cre
       }),
   )
 
-  LoggingContext.current.sourcesByPath = Object.fromEntries(
-    Object.entries(sourceFiles).map(([path, file]) => {
-      return [path, file.getFullText().replace(/\r\n/g, '\n').split(/\n/g)]
-    }),
+  LoggingContext.current.setSourcesByPath(
+    Object.fromEntries(
+      Object.entries(sourceFiles).map(([path, file]) => {
+        return [path, file.getFullText().split(/\n/g)]
+      }),
+    ),
   )
 
   reportDiagnostics(program)
@@ -85,10 +81,20 @@ function reportDiagnostics(program: ts.Program) {
       const text = typeof diagnostic.messageText === 'string' ? diagnostic.messageText : diagnostic.messageText.messageText
       switch (diagnostic.category) {
         case ts.DiagnosticCategory.Error:
-          logger.error(sourceLocation, text)
+          logger.addLog({
+            logSource: LogSource.TypeScript,
+            message: text,
+            sourceLocation,
+            level: LogLevel.Error,
+          })
           break
         case ts.DiagnosticCategory.Warning:
-          logger.warn(sourceLocation, text)
+          logger.addLog({
+            logSource: LogSource.TypeScript,
+            message: text,
+            sourceLocation,
+            level: LogLevel.Warning,
+          })
           break
       }
     }

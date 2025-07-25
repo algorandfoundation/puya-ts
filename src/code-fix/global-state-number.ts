@@ -1,5 +1,6 @@
 import ts from 'typescript'
 import type { SourceLocation } from '../awst/source-location'
+import { transientTypeErrors } from '../awst_build/ptypes/transient-type-errors'
 import { Constants } from '../constants'
 import { LogLevel } from '../logger'
 import type { TextEdit } from '../text-edit'
@@ -10,7 +11,8 @@ export class GlobalStateNumber extends CodeFix {
   constructor({ sourceLocation }: { sourceLocation: SourceLocation }) {
     super({
       sourceLocation,
-      message: 'Global state number bad!',
+      errorMessage: transientTypeErrors.nativeNumeric('number').usedAsType,
+      fixMessage: 'Use GlobalState<uint64>',
       logLevel: LogLevel.Error,
       edits: GlobalStateNumber.buildEdits(sourceLocation.node),
       requiredSymbols: [

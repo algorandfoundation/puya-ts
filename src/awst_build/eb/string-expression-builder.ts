@@ -26,7 +26,7 @@ export function stringFromTemplate(
     value: head,
   })
   for (const [value, joiningText] of spans) {
-    const valueStr = value.toString(sourceLocation)
+    const valueStr = value.toString(value.sourceLocation)
     result = nodeFactory.bytesBinaryOperation({
       left: result,
       right: valueStr,

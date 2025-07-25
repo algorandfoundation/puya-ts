@@ -2,13 +2,10 @@ import ts from 'typescript'
 import type * as awst from '../../awst/nodes'
 import { CodeError } from '../../errors'
 import { logger, patchErrorLocation } from '../../logger'
-import type { Position } from '../../text-edit'
-import { getNodeRange } from '../../text-edit'
 import { codeInvariant, expandMaybeArray, invariant } from '../../util'
 import type { ModuleStatements } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import type { ImportedSymbol, SourceFileImports } from '../context/diagnostics-context'
 import { requireInstanceBuilder } from '../eb/util'
 import { ContractClassPType, LogicSigPType } from '../ptypes'
 import { ARC4StructType } from '../ptypes/arc4-types'
@@ -22,12 +19,10 @@ type NodeOrDeferred = awst.AWST[] | awst.AWST | (() => awst.AWST[] | awst.AWST)
 
 export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStatements, NodeOrDeferred> {
   private _moduleStatements: NodeOrDeferred[] = []
-  private _imports: SourceFileImports
   private accept = <TNode extends ts.Node>(node: TNode) => accept<SourceFileVisitor, TNode>(this, node)
 
   constructor(sourceFile: ts.SourceFile) {
     super()
-    this._imports = this.context.diagnosticsCtx.importsForSourceFile(sourceFile.fileName)
     for (const statement of sourceFile.statements) {
       try {
         this._moduleStatements.push(this.accept(statement))
@@ -108,38 +103,6 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
     })
   }
   visitImportDeclaration(node: ts.ImportDeclaration): NodeOrDeferred {
-    if (!ts.isStringLiteral(node.moduleSpecifier)) return []
-
-    let insertLocation: Position | undefined = undefined
-    if (node.importClause?.namedBindings) {
-      const symbols: ImportedSymbol[] = []
-      if (ts.isNamedImports(node.importClause.namedBindings)) {
-        if (node.importClause.namedBindings.elements[0]) {
-          insertLocation = getNodeRange(node.importClause.namedBindings.elements[0]).start
-        }
-        for (const x of node.importClause.namedBindings.elements) {
-          if (x.propertyName) {
-            if (ts.isIdentifier(x.propertyName)) {
-              symbols.push({
-                name: x.propertyName.text,
-                alias: x.name.text,
-              })
-            }
-          } else {
-            symbols.push({
-              name: x.name.text,
-            })
-          }
-        }
-      }
-      this._imports.addStatement({
-        modulePath: node.moduleSpecifier.text,
-        typeOnly: node.importClause?.isTypeOnly,
-        symbols,
-        insertLocation,
-      })
-    }
-
     return []
   }
   visitClassDeclaration(node: ts.ClassDeclaration): NodeOrDeferred {
