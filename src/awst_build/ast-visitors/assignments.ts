@@ -135,7 +135,8 @@ function buildAssignmentExpression(
 ): InstanceBuilder {
   const expressionType = getAssignmentExpressionType(target.ptype, source.ptype)
   //  Skip single eval for non-destructuring assignments
-  const sourceSingle = isDestructuringAssignment(target) ? source.singleEvaluation() : source
+  const sourceSingle =
+    isDestructuringAssignment(target) || (!target.ptype.equals(expressionType) && !isStatement) ? source.singleEvaluation() : source
   const assignmentValues = buildAssignmentValues(target, sourceSingle, sourceLocation)
   const assignment = nodeFactory.assignmentExpression({
     target: assignmentValues.target,
@@ -144,7 +145,7 @@ function buildAssignmentExpression(
   })
 
   if (target.ptype.equals(expressionType) || isStatement) {
-    return instanceEb(assignment, expressionType)
+    return instanceEb(assignment, target.ptype)
   } else {
     return instanceEb(
       nodeFactory.commaExpression({

@@ -3,90 +3,159 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 32
+    intcblock 1 0 32
     bytecblock 0x151f7c75
-    // tests/approvals/static-bytes.algo.ts:14
+    intc_1 // 0
+    pushbytes ""
+    // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@11
-    pushbytess 0x25bb3465 0x63fbedbe 0x5c6f499c 0xd71280ea 0xa78000de 0xb976788f // method "hashAddresses(byte[32],byte[32])byte[32]", method "receiveB32(byte[32])byte[32]", method "receiveBytes(byte[],uint64)void", method "returnLength(byte[32])uint64", method "test()void", method "testArray()void"
+    bz main_bare_routing@13
+    pushbytess 0x25bb3465 0x63fbedbe 0x5c6f499c 0xd71280ea 0xa78000de 0xb976788f 0x9d52c38f 0xdf920f37 // method "hashAddresses(byte[32],byte[32])byte[32]", method "receiveB32(byte[32])byte[32]", method "receiveBytes(byte[],uint64)void", method "returnLength(byte[32])uint64", method "test()void", method "testArray()void", method "test2()byte[]", method "test3()void"
     txna ApplicationArgs 0
-    match main_hashAddresses_route@3 main_receiveB32_route@4 main_receiveBytes_route@5 main_returnLength_route@6 main_test_route@7 main_testArray_route@8
+    match main_hashAddresses_route@3 main_receiveB32_route@4 main_receiveBytes_route@5 main_returnLength_route@6 main_test_route@7 main_testArray_route@8 main_test2_route@9 main_test3_route@10
 
-main_after_if_else@15:
-    // tests/approvals/static-bytes.algo.ts:14
+main_after_if_else@17:
+    // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
-    pushint 0 // 0
+    intc_1 // 0
+    return
+
+main_test3_route@10:
+    // tests/approvals/static-bytes.algo.ts:62
+    // test3() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    intc_0 // 1
+    return
+
+main_test2_route@9:
+    // tests/approvals/static-bytes.algo.ts:52
+    // test2() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/static-bytes.algo.ts:53
+    // let result = Bytes.fromHex(EMPTY_HASH)
+    pushbytes 0x0000000000000000000000000000000000000000000000000000000000000000
+    bury 2
+    // tests/approvals/static-bytes.algo.ts:55
+    // for (let i: uint64 = 0; i < 5; i = i + 1) {
+    intc_1 // 0
+    bury 1
+
+main_while_top@24:
+    // tests/approvals/static-bytes.algo.ts:55
+    // for (let i: uint64 = 0; i < 5; i = i + 1) {
+    dup
+    pushint 5 // 5
+    <
+    bz main_after_while@26
+    // tests/approvals/static-bytes.algo.ts:56
+    // result = op.sha256(op.concat(result, result))
+    dig 1
+    dup
+    concat
+    sha256
+    bury 2
+    // tests/approvals/static-bytes.algo.ts:55
+    // for (let i: uint64 = 0; i < 5; i = i + 1) {
+    dup
+    intc_0 // 1
+    +
+    bury 1
+    b main_while_top@24
+
+main_after_while@26:
+    // tests/approvals/static-bytes.algo.ts:52
+    // test2() {
+    dig 1
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
     return
 
 main_testArray_route@8:
-    // tests/approvals/static-bytes.algo.ts:41
+    // tests/approvals/static-bytes.algo.ts:43
     // testArray() {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/static-bytes.algo.ts:42
+    // tests/approvals/static-bytes.algo.ts:44
     // const a = [Txn.sender.bytes, Txn.sender.bytes] as const
     txn Sender
-    // tests/approvals/static-bytes.algo.ts:42-43
+    // tests/approvals/static-bytes.algo.ts:44-45
     // const a = [Txn.sender.bytes, Txn.sender.bytes] as const
     // const b = new ReferenceArray<bytes<32>>(Txn.sender.bytes)
     dupn 2
-    // tests/approvals/static-bytes.algo.ts:44
+    // tests/approvals/static-bytes.algo.ts:46
     // b.push(...a)
     dig 2
     uncover 2
     concat
     concat // on error: max array length exceeded
-    // tests/approvals/static-bytes.algo.ts:46
+    // tests/approvals/static-bytes.algo.ts:48
     // const bitAnd = a[0].bitwiseAnd(b[0])
     extract 0 32 // on error: index access is out of bounds
     b&
-    // tests/approvals/static-bytes.algo.ts:47
+    // tests/approvals/static-bytes.algo.ts:49
     // assert(bitAnd === Txn.sender.bytes)
     txn Sender
     ==
     assert
-    // tests/approvals/static-bytes.algo.ts:41
+    // tests/approvals/static-bytes.algo.ts:43
     // testArray() {
     intc_0 // 1
     return
 
 main_test_route@7:
-    // tests/approvals/static-bytes.algo.ts:31
+    // tests/approvals/static-bytes.algo.ts:33
     // test() {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/static-bytes.algo.ts:32
+    // tests/approvals/static-bytes.algo.ts:34
     // this.receiveB32(Txn.sender.bytes)
     txn Sender
     callsub receiveB32
     pop
-    // tests/approvals/static-bytes.algo.ts:31
+    // tests/approvals/static-bytes.algo.ts:33
     // test() {
     intc_0 // 1
     return
 
 main_returnLength_route@6:
-    // tests/approvals/static-bytes.algo.ts:27
+    // tests/approvals/static-bytes.algo.ts:29
     // returnLength(b: bytes<32>): uint64 {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/static-bytes.algo.ts:14
+    // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/static-bytes.algo.ts:28
+    // tests/approvals/static-bytes.algo.ts:30
     // return b.length
     len
-    // tests/approvals/static-bytes.algo.ts:27
+    // tests/approvals/static-bytes.algo.ts:29
     // returnLength(b: bytes<32>): uint64 {
     itob
     bytec_0 // 0x151f7c75
@@ -97,47 +166,47 @@ main_returnLength_route@6:
     return
 
 main_receiveBytes_route@5:
-    // tests/approvals/static-bytes.algo.ts:23
+    // tests/approvals/static-bytes.algo.ts:25
     // receiveBytes(b: bytes, length: uint64) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/static-bytes.algo.ts:14
+    // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     txna ApplicationArgs 1
     extract 2 0
     txna ApplicationArgs 2
     btoi
-    // tests/approvals/static-bytes.algo.ts:24
+    // tests/approvals/static-bytes.algo.ts:26
     // assert(b.length === length)
     swap
     len
     ==
     assert
-    // tests/approvals/static-bytes.algo.ts:23
+    // tests/approvals/static-bytes.algo.ts:25
     // receiveBytes(b: bytes, length: uint64) {
     intc_0 // 1
     return
 
 main_receiveB32_route@4:
-    // tests/approvals/static-bytes.algo.ts:19
+    // tests/approvals/static-bytes.algo.ts:21
     // receiveB32(b: bytes<32>) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/static-bytes.algo.ts:14
+    // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/static-bytes.algo.ts:19
+    // tests/approvals/static-bytes.algo.ts:21
     // receiveB32(b: bytes<32>) {
     callsub receiveB32
     dup
     len
-    intc_1 // 32
+    intc_2 // 32
     ==
     assert // invalid size
     bytec_0 // 0x151f7c75
@@ -148,22 +217,22 @@ main_receiveB32_route@4:
     return
 
 main_hashAddresses_route@3:
-    // tests/approvals/static-bytes.algo.ts:15
+    // tests/approvals/static-bytes.algo.ts:17
     // hashAddresses(a1: B32, a2: B32): B32Alias {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/static-bytes.algo.ts:14
+    // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     txna ApplicationArgs 1
     txna ApplicationArgs 2
-    // tests/approvals/static-bytes.algo.ts:16
+    // tests/approvals/static-bytes.algo.ts:18
     // return sha512_256(a1.concat(a2))
     concat
     sha512_256
-    // tests/approvals/static-bytes.algo.ts:15
+    // tests/approvals/static-bytes.algo.ts:17
     // hashAddresses(a1: B32, a2: B32): B32Alias {
     bytec_0 // 0x151f7c75
     swap
@@ -172,11 +241,11 @@ main_hashAddresses_route@3:
     intc_0 // 1
     return
 
-main_bare_routing@11:
-    // tests/approvals/static-bytes.algo.ts:14
+main_bare_routing@13:
+    // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@15
+    bnz main_after_if_else@17
     txn ApplicationID
     !
     assert // can only call when creating
@@ -186,17 +255,17 @@ main_bare_routing@11:
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(b: bytes) -> bytes:
 receiveB32:
-    // tests/approvals/static-bytes.algo.ts:19
+    // tests/approvals/static-bytes.algo.ts:21
     // receiveB32(b: bytes<32>) {
     proto 1 1
-    // tests/approvals/static-bytes.algo.ts:20
+    // tests/approvals/static-bytes.algo.ts:22
     // assert(b.length === 32)
     frame_dig -1
     len
-    intc_1 // 32
+    intc_2 // 32
     ==
     assert
-    // tests/approvals/static-bytes.algo.ts:21
+    // tests/approvals/static-bytes.algo.ts:23
     // return sha512_256(b)
     frame_dig -1
     sha512_256
