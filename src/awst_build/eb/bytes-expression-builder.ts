@@ -1,5 +1,4 @@
 import type { awst } from '../../awst'
-
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
@@ -97,7 +96,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
     }
 
     const bytesBuilder = new BytesExpressionBuilder(result, bytesPType)
-    return exprType.length === null ? bytesBuilder : bytesToFixed(bytesBuilder, exprType, sourceLocation)
+    return exprType.fixedByteSize === null ? bytesBuilder : bytesToFixed(bytesBuilder, exprType, sourceLocation)
   }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -116,7 +115,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
     const empty = new BytesExpressionBuilder(
       nodeFactory.bytesConstant({
         sourceLocation,
-        value: new Uint8Array(Number(exprType.length)),
+        value: new Uint8Array(Number(exprType.fixedByteSize)),
         wtype: exprType.wtype,
       }),
       exprType,
@@ -163,7 +162,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       }
     }
 
-    return exprType.length === null ? bytesBuilder : bytesToFixed(bytesBuilder, exprType, sourceLocation)
+    return exprType.fixedByteSize === null ? bytesBuilder : bytesToFixed(bytesBuilder, exprType, sourceLocation)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
@@ -207,8 +206,8 @@ class FromEncodingBuilder extends FunctionBuilder {
 
     const value = wrapInCodeError(() => this.decodeLiteral(encodedValue.value), encodedValue.sourceLocation)
 
-    if (exprType.length !== null && value.length !== Number(exprType.length)) {
-      logger.error(sourceLocation, `Expected decoded bytes value of length ${exprType.length}, received ${value.length}`)
+    if (exprType.fixedByteSize !== null && value.length !== Number(exprType.fixedByteSize)) {
+      logger.error(sourceLocation, `Expected decoded bytes value of length ${exprType.fixedByteSize}, received ${value.length}`)
     }
 
     return new BytesExpressionBuilder(
@@ -320,7 +319,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<BytesPType
 
   resolvableToPType(ptype: PTypeOrClass): ptype is BytesPType {
     if (ptype instanceof BytesPType) {
-      return this.ptype.length === ptype.length || ptype.length === null
+      return this.ptype.fixedByteSize === ptype.fixedByteSize || ptype.fixedByteSize === null
     }
     return false
   }
@@ -371,12 +370,12 @@ export class ConcatFunctionBuilder extends FunctionBuilder {
 }
 
 export function bytesToFixed(builder: InstanceBuilder, fixedType: BytesPType, sourceLocation: SourceLocation): InstanceBuilder {
-  invariant(fixedType.length !== null, 'Should only be called for bytes with a fixed length', sourceLocation)
+  invariant(fixedType.fixedByteSize !== null, 'Should only be called for bytes with a fixed length', sourceLocation)
   const expr = builder.resolve()
   if (expr instanceof BytesConstant) {
     codeInvariant(
-      expr.value.length === Number(fixedType.length),
-      `Invalid bytes constant length of ${expr.value.length}, expected ${fixedType.length}`,
+      expr.value.length === Number(fixedType.fixedByteSize),
+      `Invalid bytes constant length of ${expr.value.length}, expected ${fixedType.fixedByteSize}`,
       builder.sourceLocation,
     )
     return new BytesExpressionBuilder(
@@ -391,7 +390,7 @@ export function bytesToFixed(builder: InstanceBuilder, fixedType: BytesPType, so
   const single = builder.singleEvaluation()
   return new BytesExpressionBuilder(
     nodeFactory.checkedMaybe({
-      comment: `Length must be ${fixedType.length}`,
+      comment: `Length must be ${fixedType.fixedByteSize}`,
       expr: nodeFactory.tupleExpression({
         items: [
           nodeFactory.reinterpretCast({
@@ -407,7 +406,7 @@ export function bytesToFixed(builder: InstanceBuilder, fixedType: BytesPType, so
               sourceLocation,
             }),
             rhs: nodeFactory.uInt64Constant({
-              value: fixedType.length,
+              value: fixedType.fixedByteSize,
               sourceLocation,
             }),
           }),

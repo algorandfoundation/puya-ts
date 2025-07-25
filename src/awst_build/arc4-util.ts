@@ -130,7 +130,8 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
   if (ptype.equals(boolPType)) return arc4BooleanType
   if (ptype.equals(uint64PType)) return new UintNType({ n: 64n })
   if (ptype.equals(biguintPType)) return new UintNType({ n: 512n })
-  if (ptype instanceof BytesPType) return ptype.length === null ? DynamicBytesType : new StaticBytesType({ length: ptype.length })
+  if (ptype instanceof BytesPType)
+    return ptype.fixedByteSize === null ? DynamicBytesType : new StaticBytesType({ length: ptype.fixedByteSize })
   if (ptype.equals(stringPType)) return arc4StringType
   if (ptype instanceof TransientType) {
     throw new CodeError(ptype.expressionMessage, { sourceLocation })
