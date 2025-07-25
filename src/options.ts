@@ -4,8 +4,11 @@ import type { Props } from './typescript-helpers'
 export interface AlgoFile {
   sourceFile: string
   outDir: string
-  fileContents?: string
 }
+
+export type FileExistsMethod = (fileName: string) => boolean
+export type ReadFileMethod = (fileName: string) => string | undefined
+export type SourceFileProvider = { fileExists: FileExistsMethod; readFile: ReadFileMethod }
 
 export class CompileOptions {
   public readonly filePaths: AlgoFile[]
@@ -36,6 +39,8 @@ export class CompileOptions {
   public readonly validateAbiArgs: boolean
   public readonly validateAbiReturn: boolean
 
+  public readonly sourceFileProvider?: (defaultProvider: SourceFileProvider) => SourceFileProvider
+
   constructor(options: Partial<Props<CompileOptions>> & { filePaths: AlgoFile[] }) {
     this.filePaths = options.filePaths
     this.logLevel = options.logLevel ?? LogLevel.Info
@@ -59,6 +64,7 @@ export class CompileOptions {
     this.templateVarsPrefix = options.templateVarsPrefix ?? defaultPuyaOptions.templateVarsPrefix
     this.localsCoalescingStrategy = options.localsCoalescingStrategy ?? defaultPuyaOptions.localsCoalescingStrategy
     this.customPuyaPath = options.customPuyaPath ?? process.env.PUYA_PATH
+    this.sourceFileProvider = options.sourceFileProvider
     this.validateAbiArgs = options.validateAbiArgs ?? defaultPuyaOptions.validateAbiArgs
     this.validateAbiReturn = options.validateAbiReturn ?? defaultPuyaOptions.validateAbiReturn
   }

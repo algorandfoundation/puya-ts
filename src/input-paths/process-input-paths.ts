@@ -8,9 +8,11 @@ import { determineOutDir } from './determine-out-dir'
 
 export const processInputPaths = ({
   paths,
+  ignoreUnmatchedPaths,
   workingDirectory = process.cwd(),
   outDir = 'out',
 }: {
+  ignoreUnmatchedPaths?: boolean
   paths: string[]
   outDir?: string
   workingDirectory?: string
@@ -33,7 +35,7 @@ export const processInputPaths = ({
     }
   }
 
-  if (filePaths.length === 0) {
+  if (filePaths.length === 0 && !ignoreUnmatchedPaths) {
     throw new PuyaError('Input paths did not match any .algo.ts files')
   }
 

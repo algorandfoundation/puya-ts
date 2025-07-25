@@ -4,8 +4,8 @@ import { BytesConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { GlobalStateNumber } from '../../../code-fix/global-state-number'
+import { logger } from '../../../logger'
 import { codeInvariant, invariant } from '../../../util'
-import { AwstBuildContext } from '../../context/awst-build-context'
 import { AppStorageDeclaration } from '../../models/app-storage-declaration'
 import type { ContractClassPType, PType } from '../../ptypes'
 import { boolPType, bytesPType, GlobalStateGeneric, GlobalStateType, numberPType, stringPType } from '../../ptypes'
@@ -25,7 +25,7 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const ptype = GlobalStateGeneric.parameterise(typeArgs)
     if (ptype.contentType.equals(numberPType)) {
-      AwstBuildContext.current.diagnosticsCtx.addCodeFix(new GlobalStateNumber({ sourceLocation }))
+      logger.addCodeFix(new GlobalStateNumber({ sourceLocation }))
     }
     const {
       args: [{ initialValue, key }],

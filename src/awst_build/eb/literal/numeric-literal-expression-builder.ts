@@ -90,4 +90,11 @@ export class NumericLiteralExpressionBuilder extends LiteralExpressionBuilder {
     // Nothing to see here
     return false
   }
+
+  toString(sourceLocation: SourceLocation): Expression {
+    return nodeFactory.stringConstant({
+      value: this.value.toString(),
+      sourceLocation: sourceLocation,
+    })
+  }
 }
