@@ -53,6 +53,22 @@ contract StaticBytesAlgo
     assert(bitAnd == reinterpret_cast<bytes[32]>(txn<Sender>()))
   }
   
+  test2(): bytes
+  {
+    result: bytes = 0x0000000000000000000000000000000000000000000000000000000000000000
+    i: uint64 = 0
+    while (i < 5) {
+      result: bytes = reinterpret_cast<bytes>(sha256(concat(result, result)))
+      i: uint64 = i + 1
+    }
+    return result
+  }
+  
+  test3(): void
+  {
+    x: bytes[32] = (y = reinterpret_cast<bytes>(($2 = reinterpret_cast<bytes[32]>(txn<Sender>())))), $2
+  }
+  
   __algots__.defaultCreate(): void
   {
   }
