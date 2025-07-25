@@ -1,10 +1,11 @@
 import { AsyncLocalStorage } from 'node:async_hooks'
-import { SourceLocation } from '../awst/source-location'
+import type { SourceLocation } from '../awst/source-location'
+import type { CodeFix } from '../code-fix/code-fix'
 import { PuyaError } from '../errors'
 import { invariant } from '../util'
 import type { LogSink } from './sinks'
 
-type NodeOrSourceLocation = SourceLocation | { sourceLocation: SourceLocation }
+type NodeOrSourceLocation = SourceLocation //| { sourceLocation: SourceLocation }
 
 export enum LogLevel {
   Error = 'error',
@@ -12,6 +13,13 @@ export enum LogLevel {
   Warning = 'warning',
   Debug = 'debug',
   Critical = 'critical',
+}
+
+export enum LogSource {
+  Unspecified,
+  TypeScript,
+  Puya,
+  CodeFix,
 }
 const logLevelToInt = {
   [LogLevel.Critical]: 4,
@@ -34,6 +42,8 @@ export type LogEvent = {
   message: string
   sourceLocation: SourceLocation | undefined
   stack?: string
+  logSource: LogSource
+  codeFix?: CodeFix
 }
 
 class PuyaLogger {
@@ -42,14 +52,13 @@ class PuyaLogger {
     this.logSinks = sinks
   }
 
-  addLog(level: LogEvent['level'], source: NodeOrSourceLocation | undefined, message: string, stack?: string) {
-    const logEvent: LogEvent = {
-      sourceLocation: source ? (source instanceof SourceLocation ? source : source.sourceLocation) : undefined,
-      message,
-      level,
-      stack,
-    }
-    LoggingContext.current.logEvents.push(logEvent)
+  addCodeFix(codeFix: CodeFix) {
+    invariant(codeFix.sourceLocation.file, 'Code fix cannot be added without a well-formed source location')
+    this.addLog(codeFix.logData)
+  }
+
+  addLog(logEvent: LogEvent) {
+    LoggingContext.current.addLog(logEvent)
     for (const sink of this.logSinks) {
       if (isMinLevel(logEvent.level, sink.minLogLevel)) {
         sink.add(logEvent)
@@ -62,31 +71,44 @@ class PuyaLogger {
   error(sourceOrError: NodeOrSourceLocation | undefined | Error, message?: string): void {
     if (sourceOrError instanceof Error) {
       // Don't include the stack for user errors as the message and source location is what's relevant
-      this.addLog(LogLevel.Error, tryGetSourceLocationFromError(sourceOrError), `${sourceOrError.message}`, sourceOrError.stack)
+      this.addLog({
+        level: LogLevel.Error,
+        sourceLocation: tryGetSourceLocationFromError(sourceOrError),
+        message: `${sourceOrError.message}`,
+        stack: sourceOrError.stack,
+        logSource: LogSource.Unspecified,
+      })
       if (sourceOrError.cause) {
-        this.addLog(
-          LogLevel.Debug,
-          tryGetSourceLocationFromError(sourceOrError.cause),
-          `Caused by: ${sourceOrError.cause}`,
-          (sourceOrError.cause as Error).stack,
-        )
+        this.addLog({
+          level: LogLevel.Debug,
+          sourceLocation: tryGetSourceLocationFromError(sourceOrError.cause),
+          message: `Caused by: ${sourceOrError.cause}`,
+          stack: (sourceOrError.cause as Error).stack,
+          logSource: LogSource.Unspecified,
+        })
       }
     } else {
       invariant(message, 'Log should include either a message or an error')
-      this.addLog(LogLevel.Error, sourceOrError, message, new Error().stack)
+      this.addLog({
+        level: LogLevel.Error,
+        sourceLocation: sourceOrError,
+        message,
+        stack: new Error().stack,
+        logSource: LogSource.Unspecified,
+      })
     }
   }
   info(source: NodeOrSourceLocation | undefined, message: string): void {
-    this.addLog(LogLevel.Info, source, message)
+    this.addLog({ level: LogLevel.Info, sourceLocation: source, message, logSource: LogSource.Unspecified })
   }
   debug(source: NodeOrSourceLocation | undefined, message: string): void {
-    this.addLog(LogLevel.Debug, source, message)
+    this.addLog({ level: LogLevel.Debug, sourceLocation: source, message, logSource: LogSource.Unspecified })
   }
   warn(source: NodeOrSourceLocation | undefined, message: string): void {
-    this.addLog(LogLevel.Warning, source, message)
+    this.addLog({ level: LogLevel.Warning, sourceLocation: source, message, logSource: LogSource.Unspecified })
   }
   critical(source: NodeOrSourceLocation | undefined, message: string): void {
-    this.addLog(LogLevel.Critical, source, message)
+    this.addLog({ level: LogLevel.Critical, sourceLocation: source, message, logSource: LogSource.Unspecified })
   }
 }
 
@@ -116,8 +138,41 @@ export const patchErrorLocation = <TArgs extends unknown[], TReturn>(
 }
 
 export class LoggingContext {
-  logEvents: LogEvent[] = []
-  sourcesByPath: Record<string, string[]> = {}
+  #logEvents: LogEvent[] = []
+  #sourcesByPath: Record<string, string[]> = {}
+  #logEventsByPath: Record<string, LogEvent[]> = {}
+
+  get logEvents(): readonly LogEvent[] {
+    return this.#logEvents
+  }
+  get logEventsByPath(): { readonly [path: string]: readonly LogEvent[] } {
+    return this.#logEventsByPath
+  }
+
+  get sourcesByPath(): { readonly [path: string]: readonly string[] } {
+    return this.#sourcesByPath
+  }
+
+  setSourcesByPath(sourcesByPath: Record<string, string[]>) {
+    this.#sourcesByPath = sourcesByPath
+    // Ensure every source file has an entry in #logEventsByPath
+    for (const filePath of Object.keys(sourcesByPath)) {
+      if (filePath in this.#logEventsByPath) continue
+      this.#logEventsByPath[filePath] = []
+    }
+  }
+
+  addLog(log: LogEvent) {
+    this.#logEvents.push(log)
+    const filePath = log.sourceLocation?.file
+    if (filePath) {
+      if (filePath in this.#logEventsByPath) {
+        this.#logEventsByPath[filePath].push(log)
+      } else {
+        this.#logEventsByPath[filePath] = [log]
+      }
+    }
+  }
 
   private constructor() {}
 

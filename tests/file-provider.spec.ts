@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { compile, LoggingContext } from '../src'
+import { compile, CompileOptions, LoggingContext } from '../src'
 import { Contract } from '../src/awst/nodes'
-import { CompileOptions } from '../src/options'
 import { invariant } from '../src/util'
 
-describe('Virtual files', () => {
+describe('File provider', () => {
   const contractVirtualFile = `
 import { Contract } from '@algorandfoundation/algorand-typescript'
 
@@ -15,19 +14,33 @@ class TestContract extends Contract {
 }
   `
 
-  it('can be compiled as if they existed', async () => {
+  it('can be overridden to support virtual files', async () => {
     const logging = LoggingContext.create().enterContext()
+
+    const sourceFile = 'tests/virtual-file/test-contract.algo.ts'
 
     const result = await compile(
       new CompileOptions({
         filePaths: [
           {
-            sourceFile: 'tests/virtual-file/test-contract.algo.ts',
+            sourceFile,
             outDir: 'tests/virtual-file/out',
-            fileContents: contractVirtualFile,
           },
         ],
         dryRun: true,
+        sourceFileProvider({ readFile, fileExists }) {
+          return {
+            readFile(fileName) {
+              if (fileName === sourceFile) {
+                return contractVirtualFile
+              }
+              return readFile(fileName)
+            },
+            fileExists(fileName) {
+              return fileName === sourceFile || fileExists(fileName)
+            },
+          }
+        },
       }),
     )
     expect(logging.hasErrors()).toBeFalsy()

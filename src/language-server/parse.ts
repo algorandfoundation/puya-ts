@@ -1,7 +1,8 @@
 import { ArgumentParser } from 'argparse'
 import { appVersion } from '../cli/app-version'
 import { checkNodeVersion } from '../cli/check-node-version'
-import { startLanguageServer } from './language-server'
+import type { LanguageServerOptions } from './puya-language-server'
+import { startLanguageServer } from './puya-language-server'
 
 export async function parseCliArguments() {
   checkNodeVersion()
@@ -23,9 +24,14 @@ export async function parseCliArguments() {
       /* eslint-disable-next-line no-console */
       console.log(appVersion(prog))
       break
-    default:
-      await startLanguageServer()
+    default: {
+      const options: LanguageServerOptions = {
+        port: parsePort(process.env.PUYA_TS_DEBUG_LSP_PORT),
+      }
+
+      await startLanguageServer(options)
       break
+    }
   }
 }
 
@@ -35,4 +41,13 @@ interface NoCommandArgs {
 }
 interface VersionCommand {
   command: 'version'
+}
+
+function parsePort(value: string | undefined) {
+  if (value === undefined) return undefined
+  const val = Number(value)
+  if (val > 0 && val < 2 ** 16 && Math.floor(val) === val) {
+    return val
+  }
+  throw new Error(`Invalid port number ${value}`)
 }

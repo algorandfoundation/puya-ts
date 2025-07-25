@@ -1,7 +1,7 @@
 import upath from 'upath'
 import { z } from 'zod'
 import { SourceLocation } from '../awst/source-location'
-import { logger, LogLevel } from '../logger'
+import { logger, LogLevel, LogSource } from '../logger'
 
 const puyaLog = z.object({
   level: z.nativeEnum(LogLevel),
@@ -31,7 +31,7 @@ export function deserializeAndLog(logText: string) {
           scope: 'range',
         })
       : undefined
-    logger.addLog(log.level, sourceLocation, log.message)
+    logger.addLog({ ...log, sourceLocation, logSource: LogSource.Puya })
   } catch (e) {
     logger.error(undefined, `Could not parse log output from puya cli ${e}`)
   }

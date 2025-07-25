@@ -1,5 +1,6 @@
 import type { SourceLocation } from '../awst/source-location'
-import type { LogLevel } from '../logger'
+import type { LogEvent, LogLevel } from '../logger'
+import { LogSource } from '../logger'
 import type { TextEdit } from '../text-edit'
 
 export type RequiredSymbol = {
@@ -10,32 +11,42 @@ export type RequiredSymbol = {
 
 export abstract class CodeFix {
   readonly logLevel: LogLevel
-  readonly message: string
+  readonly errorMessage: string
+  readonly fixMessage: string
   readonly sourceLocation: SourceLocation
   readonly edits: readonly TextEdit[]
   readonly requiredSymbols: readonly RequiredSymbol[]
 
   protected constructor({
     logLevel,
-    message,
+    errorMessage,
+    fixMessage,
     sourceLocation,
     edits,
     requiredSymbols,
   }: {
     logLevel: LogLevel
     sourceLocation: SourceLocation
-    message: string
+    errorMessage: string
+    fixMessage: string
     edits: TextEdit[]
     requiredSymbols: RequiredSymbol[]
   }) {
     this.logLevel = logLevel
-    this.message = message
+    this.errorMessage = errorMessage
+    this.fixMessage = fixMessage
     this.sourceLocation = sourceLocation
     this.edits = edits
     this.requiredSymbols = requiredSymbols
   }
 
-  get logData(): [logLevel: LogLevel, sourceLocation: SourceLocation, message: string] {
-    return [this.logLevel, this.sourceLocation, this.message]
+  get logData(): LogEvent {
+    return {
+      level: this.logLevel,
+      sourceLocation: this.sourceLocation,
+      message: this.errorMessage,
+      logSource: LogSource.CodeFix,
+      codeFix: this,
+    }
   }
 }
