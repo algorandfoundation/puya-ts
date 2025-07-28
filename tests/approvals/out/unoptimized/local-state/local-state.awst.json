@@ -3771,6 +3771,960 @@
         "_type": "ContractMethod",
         "source_location": {
           "file": "tests/approvals/local-state.algo.ts",
+          "line": 63,
+          "end_line": 64,
+          "column": 2,
+          "end_column": 67
+        },
+        "args": [
+          {
+            "_type": "SubroutineArgument",
+            "name": "key",
+            "source_location": {
+              "file": "tests/approvals/local-state.algo.ts",
+              "line": 64,
+              "end_line": 64,
+              "column": 32,
+              "end_column": 43
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "string",
+              "immutable": true
+            }
+          },
+          {
+            "_type": "SubroutineArgument",
+            "name": "value",
+            "source_location": {
+              "file": "tests/approvals/local-state.algo.ts",
+              "line": 64,
+              "end_line": 64,
+              "column": 45,
+              "end_column": 58
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "string",
+              "immutable": true
+            }
+          }
+        ],
+        "return_type": {
+          "_type": "WType",
+          "name": "string",
+          "immutable": true
+        },
+        "body": {
+          "_type": "Block",
+          "source_location": {
+            "file": "tests/approvals/local-state.algo.ts",
+            "line": 64,
+            "end_line": 75,
+            "column": 68,
+            "end_column": 3
+          },
+          "body": [
+            {
+              "_type": "AssignmentStatement",
+              "source_location": {
+                "file": "tests/approvals/local-state.algo.ts",
+                "line": 65,
+                "end_line": 65,
+                "column": 10,
+                "end_column": 29
+              },
+              "target": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 65,
+                  "end_line": 65,
+                  "column": 10,
+                  "end_column": 16
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "account",
+                  "immutable": true
+                },
+                "name": "sender"
+              },
+              "value": {
+                "_type": "IntrinsicCall",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 65,
+                  "end_line": 65,
+                  "column": 23,
+                  "end_column": 29
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "account",
+                  "immutable": true
+                },
+                "op_code": "txn",
+                "immediates": [
+                  "Sender"
+                ],
+                "stack_args": []
+              }
+            },
+            {
+              "_type": "ExpressionStatement",
+              "source_location": {
+                "file": "tests/approvals/local-state.algo.ts",
+                "line": 66,
+                "end_line": 66,
+                "column": 4,
+                "end_column": 98
+              },
+              "expr": {
+                "_type": "AssertExpression",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 66,
+                  "end_line": 66,
+                  "column": 4,
+                  "end_column": 98
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "void",
+                  "immutable": true
+                },
+                "condition": {
+                  "_type": "IntrinsicCall",
+                  "source_location": {
+                    "file": "tests/approvals/local-state.algo.ts",
+                    "line": 66,
+                    "end_line": 66,
+                    "column": 11,
+                    "end_column": 56
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true
+                  },
+                  "op_code": "app_opted_in",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/local-state.algo.ts",
+                        "line": 66,
+                        "end_line": 66,
+                        "column": 11,
+                        "end_column": 17
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "account",
+                        "immutable": true
+                      },
+                      "name": "sender"
+                    },
+                    {
+                      "_type": "IntrinsicCall",
+                      "source_location": {
+                        "file": "tests/approvals/local-state.algo.ts",
+                        "line": 66,
+                        "end_line": 66,
+                        "column": 35,
+                        "end_column": 55
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "application",
+                        "immutable": true
+                      },
+                      "op_code": "global",
+                      "immediates": [
+                        "CurrentApplicationID"
+                      ],
+                      "stack_args": []
+                    }
+                  ]
+                },
+                "error_message": "Account must opt in to contract first"
+              }
+            },
+            {
+              "_type": "AssignmentStatement",
+              "source_location": {
+                "file": "tests/approvals/local-state.algo.ts",
+                "line": 68,
+                "end_line": 68,
+                "column": 10,
+                "end_column": 58
+              },
+              "target": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 68,
+                  "end_line": 68,
+                  "column": 10,
+                  "end_column": 28
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "state_key",
+                  "immutable": true
+                },
+                "name": "localDynamicAccess"
+              },
+              "value": {
+                "_type": "ReinterpretCast",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 68,
+                  "end_line": 68,
+                  "column": 52,
+                  "end_column": 55
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "state_key",
+                  "immutable": true
+                },
+                "expr": {
+                  "_type": "ReinterpretCast",
+                  "source_location": {
+                    "file": "tests/approvals/local-state.algo.ts",
+                    "line": 68,
+                    "end_line": 68,
+                    "column": 52,
+                    "end_column": 55
+                  },
+                  "wtype": {
+                    "_type": "BytesWType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "length": null
+                  },
+                  "expr": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/local-state.algo.ts",
+                      "line": 68,
+                      "end_line": 68,
+                      "column": 52,
+                      "end_column": 55
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "string",
+                      "immutable": true
+                    },
+                    "name": "key"
+                  }
+                }
+              }
+            },
+            {
+              "_type": "AssignmentStatement",
+              "source_location": {
+                "file": "tests/approvals/local-state.algo.ts",
+                "line": 70,
+                "end_line": 70,
+                "column": 4,
+                "end_column": 44
+              },
+              "target": {
+                "_type": "AppAccountStateExpression",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 70,
+                  "end_line": 70,
+                  "column": 31,
+                  "end_column": 36
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "string",
+                  "immutable": true
+                },
+                "key": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/local-state.algo.ts",
+                    "line": 70,
+                    "end_line": 70,
+                    "column": 4,
+                    "end_column": 22
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "state_key",
+                    "immutable": true
+                  },
+                  "name": "localDynamicAccess"
+                },
+                "exists_assertion_message": "check LocalState exists",
+                "account": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/local-state.algo.ts",
+                    "line": 70,
+                    "end_line": 70,
+                    "column": 23,
+                    "end_column": 29
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "account",
+                    "immutable": true
+                  },
+                  "name": "sender"
+                }
+              },
+              "value": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 70,
+                  "end_line": 70,
+                  "column": 39,
+                  "end_column": 44
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "string",
+                  "immutable": true
+                },
+                "name": "value"
+              }
+            },
+            {
+              "_type": "ExpressionStatement",
+              "source_location": {
+                "file": "tests/approvals/local-state.algo.ts",
+                "line": 72,
+                "end_line": 72,
+                "column": 4,
+                "end_column": 54
+              },
+              "expr": {
+                "_type": "AssertExpression",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 72,
+                  "end_line": 72,
+                  "column": 4,
+                  "end_column": 54
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "void",
+                  "immutable": true
+                },
+                "condition": {
+                  "_type": "BytesComparisonExpression",
+                  "source_location": {
+                    "file": "tests/approvals/local-state.algo.ts",
+                    "line": 72,
+                    "end_line": 72,
+                    "column": 11,
+                    "end_column": 53
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true
+                  },
+                  "lhs": {
+                    "_type": "AppAccountStateExpression",
+                    "source_location": {
+                      "file": "tests/approvals/local-state.algo.ts",
+                      "line": 72,
+                      "end_line": 72,
+                      "column": 38,
+                      "end_column": 43
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "string",
+                      "immutable": true
+                    },
+                    "key": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/local-state.algo.ts",
+                        "line": 72,
+                        "end_line": 72,
+                        "column": 11,
+                        "end_column": 29
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "state_key",
+                        "immutable": true
+                      },
+                      "name": "localDynamicAccess"
+                    },
+                    "exists_assertion_message": "check LocalState exists",
+                    "account": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/local-state.algo.ts",
+                        "line": 72,
+                        "end_line": 72,
+                        "column": 30,
+                        "end_column": 36
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "account",
+                        "immutable": true
+                      },
+                      "name": "sender"
+                    }
+                  },
+                  "operator": "==",
+                  "rhs": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/local-state.algo.ts",
+                      "line": 72,
+                      "end_line": 72,
+                      "column": 48,
+                      "end_column": 53
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "string",
+                      "immutable": true
+                    },
+                    "name": "value"
+                  }
+                },
+                "error_message": null
+              }
+            },
+            {
+              "_type": "ReturnStatement",
+              "source_location": {
+                "file": "tests/approvals/local-state.algo.ts",
+                "line": 74,
+                "end_line": 74,
+                "column": 4,
+                "end_column": 43
+              },
+              "value": {
+                "_type": "AppAccountStateExpression",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 74,
+                  "end_line": 74,
+                  "column": 38,
+                  "end_column": 43
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "string",
+                  "immutable": true
+                },
+                "key": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/local-state.algo.ts",
+                    "line": 74,
+                    "end_line": 74,
+                    "column": 11,
+                    "end_column": 29
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "state_key",
+                    "immutable": true
+                  },
+                  "name": "localDynamicAccess"
+                },
+                "exists_assertion_message": "check LocalState exists",
+                "account": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/local-state.algo.ts",
+                    "line": 74,
+                    "end_line": 74,
+                    "column": 30,
+                    "end_column": 36
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "account",
+                    "immutable": true
+                  },
+                  "name": "sender"
+                }
+              }
+            }
+          ],
+          "label": null,
+          "comment": null
+        },
+        "documentation": {
+          "_type": "MethodDocumentation",
+          "description": "Writes a value to local state using a dynamic key.\nDemonstrates dynamic key-value storage in local state.",
+          "args": {
+            "key": "- The dynamic key to store the value under",
+            "value": "- The string value to store"
+          },
+          "returns": "The stored string value"
+        },
+        "inline": null,
+        "cref": "tests/approvals/local-state.algo.ts::LocalStateDemo",
+        "member_name": "writeDynamicLocalState",
+        "arc4_method_config": {
+          "_type": "ARC4ABIMethodConfig",
+          "source_location": {
+            "file": "tests/approvals/local-state.algo.ts",
+            "line": 63,
+            "end_line": 63,
+            "column": 3,
+            "end_column": 19
+          },
+          "allowed_completion_types": [
+            0
+          ],
+          "create": 3,
+          "name": "writeDynamicLocalState",
+          "resource_encoding": "value",
+          "readonly": false,
+          "default_args": {}
+        }
+      },
+      {
+        "_type": "ContractMethod",
+        "source_location": {
+          "file": "tests/approvals/local-state.algo.ts",
+          "line": 82,
+          "end_line": 83,
+          "column": 2,
+          "end_column": 51
+        },
+        "args": [
+          {
+            "_type": "SubroutineArgument",
+            "name": "key",
+            "source_location": {
+              "file": "tests/approvals/local-state.algo.ts",
+              "line": 83,
+              "end_line": 83,
+              "column": 31,
+              "end_column": 42
+            },
+            "wtype": {
+              "_type": "WType",
+              "name": "string",
+              "immutable": true
+            }
+          }
+        ],
+        "return_type": {
+          "_type": "WType",
+          "name": "string",
+          "immutable": true
+        },
+        "body": {
+          "_type": "Block",
+          "source_location": {
+            "file": "tests/approvals/local-state.algo.ts",
+            "line": 83,
+            "end_line": 93,
+            "column": 52,
+            "end_column": 3
+          },
+          "body": [
+            {
+              "_type": "AssignmentStatement",
+              "source_location": {
+                "file": "tests/approvals/local-state.algo.ts",
+                "line": 84,
+                "end_line": 84,
+                "column": 10,
+                "end_column": 29
+              },
+              "target": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 84,
+                  "end_line": 84,
+                  "column": 10,
+                  "end_column": 16
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "account",
+                  "immutable": true
+                },
+                "name": "sender"
+              },
+              "value": {
+                "_type": "IntrinsicCall",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 84,
+                  "end_line": 84,
+                  "column": 23,
+                  "end_column": 29
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "account",
+                  "immutable": true
+                },
+                "op_code": "txn",
+                "immediates": [
+                  "Sender"
+                ],
+                "stack_args": []
+              }
+            },
+            {
+              "_type": "ExpressionStatement",
+              "source_location": {
+                "file": "tests/approvals/local-state.algo.ts",
+                "line": 86,
+                "end_line": 86,
+                "column": 4,
+                "end_column": 98
+              },
+              "expr": {
+                "_type": "AssertExpression",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 86,
+                  "end_line": 86,
+                  "column": 4,
+                  "end_column": 98
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "void",
+                  "immutable": true
+                },
+                "condition": {
+                  "_type": "IntrinsicCall",
+                  "source_location": {
+                    "file": "tests/approvals/local-state.algo.ts",
+                    "line": 86,
+                    "end_line": 86,
+                    "column": 11,
+                    "end_column": 56
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true
+                  },
+                  "op_code": "app_opted_in",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/local-state.algo.ts",
+                        "line": 86,
+                        "end_line": 86,
+                        "column": 11,
+                        "end_column": 17
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "account",
+                        "immutable": true
+                      },
+                      "name": "sender"
+                    },
+                    {
+                      "_type": "IntrinsicCall",
+                      "source_location": {
+                        "file": "tests/approvals/local-state.algo.ts",
+                        "line": 86,
+                        "end_line": 86,
+                        "column": 35,
+                        "end_column": 55
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "application",
+                        "immutable": true
+                      },
+                      "op_code": "global",
+                      "immediates": [
+                        "CurrentApplicationID"
+                      ],
+                      "stack_args": []
+                    }
+                  ]
+                },
+                "error_message": "Account must opt in to contract first"
+              }
+            },
+            {
+              "_type": "AssignmentStatement",
+              "source_location": {
+                "file": "tests/approvals/local-state.algo.ts",
+                "line": 88,
+                "end_line": 88,
+                "column": 10,
+                "end_column": 58
+              },
+              "target": {
+                "_type": "VarExpression",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 88,
+                  "end_line": 88,
+                  "column": 10,
+                  "end_column": 28
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "state_key",
+                  "immutable": true
+                },
+                "name": "localDynamicAccess"
+              },
+              "value": {
+                "_type": "ReinterpretCast",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 88,
+                  "end_line": 88,
+                  "column": 52,
+                  "end_column": 55
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "state_key",
+                  "immutable": true
+                },
+                "expr": {
+                  "_type": "ReinterpretCast",
+                  "source_location": {
+                    "file": "tests/approvals/local-state.algo.ts",
+                    "line": 88,
+                    "end_line": 88,
+                    "column": 52,
+                    "end_column": 55
+                  },
+                  "wtype": {
+                    "_type": "BytesWType",
+                    "name": "bytes",
+                    "immutable": true,
+                    "length": null
+                  },
+                  "expr": {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "tests/approvals/local-state.algo.ts",
+                      "line": 88,
+                      "end_line": 88,
+                      "column": 52,
+                      "end_column": 55
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "string",
+                      "immutable": true
+                    },
+                    "name": "key"
+                  }
+                }
+              }
+            },
+            {
+              "_type": "ExpressionStatement",
+              "source_location": {
+                "file": "tests/approvals/local-state.algo.ts",
+                "line": 90,
+                "end_line": 90,
+                "column": 4,
+                "end_column": 64
+              },
+              "expr": {
+                "_type": "AssertExpression",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 90,
+                  "end_line": 90,
+                  "column": 4,
+                  "end_column": 64
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "void",
+                  "immutable": true
+                },
+                "condition": {
+                  "_type": "StateExists",
+                  "source_location": {
+                    "file": "tests/approvals/local-state.algo.ts",
+                    "line": 90,
+                    "end_line": 90,
+                    "column": 38,
+                    "end_column": 46
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "bool",
+                    "immutable": true
+                  },
+                  "field": {
+                    "_type": "AppAccountStateExpression",
+                    "source_location": {
+                      "file": "tests/approvals/local-state.algo.ts",
+                      "line": 90,
+                      "end_line": 90,
+                      "column": 11,
+                      "end_column": 37
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "string",
+                      "immutable": true
+                    },
+                    "key": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/local-state.algo.ts",
+                        "line": 90,
+                        "end_line": 90,
+                        "column": 11,
+                        "end_column": 29
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "state_key",
+                        "immutable": true
+                      },
+                      "name": "localDynamicAccess"
+                    },
+                    "exists_assertion_message": "check LocalState exists",
+                    "account": {
+                      "_type": "VarExpression",
+                      "source_location": {
+                        "file": "tests/approvals/local-state.algo.ts",
+                        "line": 90,
+                        "end_line": 90,
+                        "column": 30,
+                        "end_column": 36
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "account",
+                        "immutable": true
+                      },
+                      "name": "sender"
+                    }
+                  }
+                },
+                "error_message": "Key not found"
+              }
+            },
+            {
+              "_type": "ReturnStatement",
+              "source_location": {
+                "file": "tests/approvals/local-state.algo.ts",
+                "line": 92,
+                "end_line": 92,
+                "column": 4,
+                "end_column": 43
+              },
+              "value": {
+                "_type": "AppAccountStateExpression",
+                "source_location": {
+                  "file": "tests/approvals/local-state.algo.ts",
+                  "line": 92,
+                  "end_line": 92,
+                  "column": 38,
+                  "end_column": 43
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "string",
+                  "immutable": true
+                },
+                "key": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/local-state.algo.ts",
+                    "line": 92,
+                    "end_line": 92,
+                    "column": 11,
+                    "end_column": 29
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "state_key",
+                    "immutable": true
+                  },
+                  "name": "localDynamicAccess"
+                },
+                "exists_assertion_message": "check LocalState exists",
+                "account": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/local-state.algo.ts",
+                    "line": 92,
+                    "end_line": 92,
+                    "column": 30,
+                    "end_column": 36
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "account",
+                    "immutable": true
+                  },
+                  "name": "sender"
+                }
+              }
+            }
+          ],
+          "label": null,
+          "comment": null
+        },
+        "documentation": {
+          "_type": "MethodDocumentation",
+          "description": "Reads a value from local state using a dynamic key.",
+          "args": {
+            "key": "- The dynamic key to read the value from"
+          },
+          "returns": "The stored string value for the given key"
+        },
+        "inline": null,
+        "cref": "tests/approvals/local-state.algo.ts::LocalStateDemo",
+        "member_name": "readDynamicLocalState",
+        "arc4_method_config": {
+          "_type": "ARC4ABIMethodConfig",
+          "source_location": {
+            "file": "tests/approvals/local-state.algo.ts",
+            "line": 82,
+            "end_line": 82,
+            "column": 3,
+            "end_column": 19
+          },
+          "allowed_completion_types": [
+            0
+          ],
+          "create": 3,
+          "name": "readDynamicLocalState",
+          "resource_encoding": "value",
+          "readonly": false,
+          "default_args": {}
+        }
+      },
+      {
+        "_type": "ContractMethod",
+        "source_location": {
+          "file": "tests/approvals/local-state.algo.ts",
           "line": 8,
           "end_line": 8,
           "column": 0,
