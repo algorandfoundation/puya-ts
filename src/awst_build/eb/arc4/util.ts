@@ -89,6 +89,7 @@ export class EncodeArc4FunctionBuilder extends FunctionBuilder {
           value: valueToEncode.resolveToPType(valueType).resolve(),
           wtype: encodedType.wtype,
           sourceLocation,
+          errorMessage: null,
         }),
         sourceLocation,
         wtype: bytesPType.wtype,
@@ -133,6 +134,7 @@ export class DecodeArc4FunctionBuilder extends FunctionBuilder {
         }),
         wtype: ptype.wtypeOrThrow,
         sourceLocation,
+        errorMessage: null,
       }),
       ptype,
     )

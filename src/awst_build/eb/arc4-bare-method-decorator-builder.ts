@@ -30,6 +30,11 @@ const createMap: Record<string, ARC4CreateOption> = {
   disallow: ARC4CreateOption.disallow,
 }
 
+const resourceEncodingMap: Record<string, 'foreign_index' | 'value'> = {
+  foreign_index: 'foreign_index',
+  value: 'value',
+}
+
 export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
   get ptype(): PType {
     return arc4BareMethodDecorator
@@ -69,7 +74,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
-      args: [{ allowActions, onCreate, readonly, name, defaultArguments }],
+      args: [{ allowActions, onCreate, readonly, name, resourceEncoding, defaultArguments }],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -82,6 +87,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
           onCreate: a.optional(stringPType),
           readonly: a.optional(boolPType),
           name: a.optional(stringPType),
+          resourceEncoding: a.optional(stringPType),
           defaultArguments: a.optional(),
         }),
       ],
@@ -95,6 +101,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
       createLocation: onCreate?.sourceLocation,
       sourceLocation: sourceLocation,
       nameOverride: name ? requireStringConstant(name).value : undefined,
+      resourceEncoding: resourceEncoding && mapStringConstant(resourceEncodingMap, resourceEncoding?.resolve()),
       readonly: readonly ? requireBooleanConstant(readonly).value : false,
       defaultArguments: resolveDefaultArguments(defaultArguments, sourceLocation),
     })

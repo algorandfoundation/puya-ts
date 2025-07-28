@@ -13,6 +13,7 @@ export type Arc4AbiDecoratorData = {
   sourceLocation: SourceLocation
   readonly: boolean
   nameOverride: string | undefined
+  resourceEncoding?: 'foreign_index' | 'value'
   defaultArguments: Record<
     string,
     | {

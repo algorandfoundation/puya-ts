@@ -522,6 +522,7 @@ function parseAppArgs({
           value: resolvedArg,
           wtype: encodedType.wtype,
           sourceLocation: arg.sourceLocation,
+          errorMessage: null,
         })
       }),
     )
@@ -595,5 +596,6 @@ function getReturnValueExpr(itxnResult: Expression, returnType: PType, sourceLoc
     value: returnValueArc4,
     wtype: returnType.wtypeOrThrow,
     sourceLocation,
+    errorMessage: null,
   })
 }

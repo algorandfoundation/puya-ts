@@ -21,7 +21,7 @@ main_abi_routing@2:
     txna ApplicationArgs 0
     pushbytes 0x438c64f3 // method "renamedSomeMethod()void"
     pushbytes 0xf59e3cc4 // method "test()bool"
-    pushbytes 0xd04fc274 // method "referenceTypes(pay,asset,account,application,appl)void"
+    pushbytes 0x523a6db2 // method "referenceTypes(pay,uint64,address,uint64,appl)void"
     uncover 3
     match main_renamedSomeMethod_route@3 main_test_route@4 main_referenceTypes_route@5
 
@@ -60,13 +60,9 @@ main_referenceTypes_route@5:
     assert // transaction type is pay
     txna ApplicationArgs 1
     btoi
-    txnas Assets
     txna ApplicationArgs 2
-    btoi
-    txnas Accounts
     txna ApplicationArgs 3
     btoi
-    txnas Applications
     txn GroupIndex
     intc_1 // 1
     -

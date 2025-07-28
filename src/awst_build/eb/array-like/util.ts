@@ -27,7 +27,12 @@ export function newTuple(ptype: MutableTuplePType | ReadonlyTuplePType | ArrayLi
   })
 
   if (ptype instanceof MutableTuplePType) {
-    return nodeFactory.aRC4Encode({ value: tupleExpr, wtype: ptype.wtype, sourceLocation: valueProvider.sourceLocation })
+    return nodeFactory.aRC4Encode({
+      value: tupleExpr,
+      wtype: ptype.wtype,
+      sourceLocation: valueProvider.sourceLocation,
+      errorMessage: null,
+    })
   } else {
     return tupleExpr
   }

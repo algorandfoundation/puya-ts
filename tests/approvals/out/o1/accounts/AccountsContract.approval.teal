@@ -9,7 +9,7 @@ main:
     // export class AccountsContract extends Contract {
     txn NumAppArgs
     bz main_bare_routing@7
-    pushbytess 0x443be1d4 0xf62943d1 // method "getAccountInfo(account,asset)(byte[32],uint64,uint64,byte[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)", method "otherAccount()void"
+    pushbytess 0x0adee59f 0xf62943d1 // method "getAccountInfo(address,uint64)(byte[32],uint64,uint64,byte[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)", method "otherAccount()void"
     txna ApplicationArgs 0
     match main_getAccountInfo_route@3 main_otherAccount_route@4
 
@@ -41,11 +41,8 @@ main_getAccountInfo_route@3:
     // tests/approvals/accounts.algo.ts:8
     // export class AccountsContract extends Contract {
     txna ApplicationArgs 1
-    btoi
-    txnas Accounts
     txna ApplicationArgs 2
     btoi
-    txnas Assets
     // tests/approvals/accounts.algo.ts:9
     // public getAccountInfo(account: Account, asset: Asset) {
     callsub getAccountInfo

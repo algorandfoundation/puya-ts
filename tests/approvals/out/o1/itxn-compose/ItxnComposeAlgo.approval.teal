@@ -9,7 +9,7 @@ main:
     // class ItxnComposeAlgo extends Contract {
     txn NumAppArgs
     bz main_bare_routing@7
-    pushbytess 0x2ef58e27 0x90d29762 // method "distribute(address[],pay,application)void", method "conditionalBegin(uint64)void"
+    pushbytess 0x1ecad34c 0x90d29762 // method "distribute(address[],pay,uint64)void", method "conditionalBegin(uint64)void"
     txna ApplicationArgs 0
     match main_distribute_route@3 main_conditionalBegin_route@4
 
@@ -58,7 +58,6 @@ main_distribute_route@3:
     assert // transaction type is pay
     txna ApplicationArgs 2
     btoi
-    txnas Applications
     // tests/approvals/itxn-compose.algo.ts:19
     // distribute(addresses: Address[], funds: gtxn.PaymentTxn, verifier: Application) {
     callsub distribute
