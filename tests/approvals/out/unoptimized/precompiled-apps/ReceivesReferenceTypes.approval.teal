@@ -37,7 +37,7 @@ main_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTy
 
 main_receivesReferenceTypes_route@3:
     // tests/approvals/precompiled-apps.algo.ts:111
-    // receivesReferenceTypes(app: Application, acc: Account, asset: Asset) {
+    // @abimethod({ resourceEncoding: 'foreign_index' })
     txn OnCompletion
     intc_0 // NoOp
     ==
@@ -58,7 +58,7 @@ main_receivesReferenceTypes_route@3:
     btoi
     txnas Assets
     // tests/approvals/precompiled-apps.algo.ts:111
-    // receivesReferenceTypes(app: Application, acc: Account, asset: Asset) {
+    // @abimethod({ resourceEncoding: 'foreign_index' })
     uncover 2
     uncover 2
     uncover 2
@@ -93,22 +93,23 @@ main___algots__.defaultCreate@7:
 
 // tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes(app: uint64, acc: bytes, asset: uint64) -> void:
 receivesReferenceTypes:
-    // tests/approvals/precompiled-apps.algo.ts:111
+    // tests/approvals/precompiled-apps.algo.ts:111-112
+    // @abimethod({ resourceEncoding: 'foreign_index' })
     // receivesReferenceTypes(app: Application, acc: Account, asset: Asset) {
     proto 3 0
 
 receivesReferenceTypes_block@0:
-    // tests/approvals/precompiled-apps.algo.ts:112
+    // tests/approvals/precompiled-apps.algo.ts:113
     // log(app.address)
     frame_dig -3
     app_params_get AppAddress
     assert // application exists
     log
-    // tests/approvals/precompiled-apps.algo.ts:113
+    // tests/approvals/precompiled-apps.algo.ts:114
     // log(acc.bytes)
     frame_dig -2
     log
-    // tests/approvals/precompiled-apps.algo.ts:114
+    // tests/approvals/precompiled-apps.algo.ts:115
     // log(asset.name)
     frame_dig -1
     asset_params_get AssetName

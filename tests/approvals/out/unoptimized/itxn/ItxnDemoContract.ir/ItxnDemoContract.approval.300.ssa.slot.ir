@@ -13,7 +13,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto tmp%1#0 ? block@4 : block@12
     block@4: // abi_routing_L20
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "test1()void" => block@5, method "test2()void" => block@6, method "test3()void" => block@7, method "test4()void" => block@8, method "test5(application)void" => block@9, * => block@10}
+        switch tmp%2#0 {method "test1()void" => block@5, method "test2()void" => block@6, method "test3()void" => block@7, method "test4()void" => block@8, method "test5(uint64)void" => block@9, * => block@10}
     block@5: // test1_route_L23
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
@@ -61,10 +61,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%21#0: uint64 = (txn ApplicationID)
         let tmp%22#0: bool = (!= tmp%21#0 0u)
         (assert tmp%22#0) // can only call when not creating
-        let reinterpret_Encoded(uint8)%0#0: Encoded(uint8) = (txna ApplicationArgs 1)
-        let tmp%23#0: uint64 = (btoi reinterpret_Encoded(uint8)%0#0)
-        let tmp%24#0: uint64 = ((txnas Applications) tmp%23#0)
-        tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(tmp%24#0)
+        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
+        let tmp%23#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(tmp%23#0)
         let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#4: bool = 1u
         goto block@17
     block@10: // switch_case_default_L20
@@ -72,12 +71,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@11: // switch_case_next_L20
         goto block@16
     block@12: // bare_routing_L20
-        let tmp%25#0: uint64 = (txn OnCompletion)
-        switch tmp%25#0 {0u => block@13, * => block@14}
+        let tmp%24#0: uint64 = (txn OnCompletion)
+        switch tmp%24#0 {0u => block@13, * => block@14}
     block@13: // __algots__.defaultCreate_L20
-        let tmp%26#0: uint64 = (txn ApplicationID)
-        let tmp%27#0: bool = (== tmp%26#0 0u)
-        (assert tmp%27#0) // can only call when creating
+        let tmp%25#0: uint64 = (txn ApplicationID)
+        let tmp%26#0: bool = (== tmp%25#0 0u)
+        (assert tmp%26#0) // can only call when creating
         tests/approvals/itxn.algo.ts::ItxnDemoContract.__algots__.defaultCreate()
         let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#5: bool = 1u
         goto block@17

@@ -263,9 +263,11 @@ export class ARC4Encode extends Expression {
     super(props)
     this.value = props.value
     this.wtype = props.wtype
+    this.errorMessage = props.errorMessage
   }
   readonly value: Expression
   readonly wtype: wtypes.ARC4Type
+  readonly errorMessage: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4Encode(this)
   }
@@ -274,8 +276,10 @@ export class ARC4Decode extends Expression {
   constructor(props: Props<ARC4Decode>) {
     super(props)
     this.value = props.value
+    this.errorMessage = props.errorMessage
   }
   readonly value: Expression
+  readonly errorMessage: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4Decode(this)
   }
@@ -355,7 +359,7 @@ export class ArrayReplace extends Expression {
   readonly base: Expression
   readonly index: Expression
   readonly value: Expression
-  readonly wtype: wtypes.ARC4DynamicArray
+  readonly wtype: wtypes.ARC4Array
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitArrayReplace(this)
   }
@@ -1490,6 +1494,7 @@ export class ARC4ABIMethodConfig {
     this.allowedCompletionTypes = props.allowedCompletionTypes
     this.create = props.create
     this.name = props.name
+    this.resourceEncoding = props.resourceEncoding
     this.readonly = props.readonly
     this.defaultArgs = props.defaultArgs
   }
@@ -1497,6 +1502,7 @@ export class ARC4ABIMethodConfig {
   readonly allowedCompletionTypes: Array<OnCompletionAction>
   readonly create: ARC4CreateOption
   readonly name: string
+  readonly resourceEncoding: 'foreign_index' | 'value'
   readonly readonly: boolean
   readonly defaultArgs: Map<string, ABIMethodArgMemberDefault | ABIMethodArgConstantDefault>
 }

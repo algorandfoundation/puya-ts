@@ -20,7 +20,7 @@ main_abi_routing@2:
     // tests/approvals/accounts.algo.ts:8
     // export class AccountsContract extends Contract {
     txna ApplicationArgs 0
-    pushbytes 0x443be1d4 // method "getAccountInfo(account,asset)(byte[32],uint64,uint64,byte[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)"
+    pushbytes 0x0adee59f // method "getAccountInfo(address,uint64)(byte[32],uint64,uint64,byte[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)"
     pushbytes 0xf62943d1 // method "otherAccount()void"
     uncover 2
     match main_getAccountInfo_route@3 main_otherAccount_route@4
@@ -66,11 +66,8 @@ main_getAccountInfo_route@3:
     // tests/approvals/accounts.algo.ts:8
     // export class AccountsContract extends Contract {
     txna ApplicationArgs 1
-    btoi
-    txnas Accounts
     txna ApplicationArgs 2
     btoi
-    txnas Assets
     // tests/approvals/accounts.algo.ts:9
     // public getAccountInfo(account: Account, asset: Asset) {
     callsub getAccountInfo

@@ -33,6 +33,7 @@ export class CompileOptions {
   public readonly templateVarsPrefix: string
   public readonly localsCoalescingStrategy: LocalsCoalescingStrategy
   public readonly customPuyaPath?: string
+  public readonly resourceEncoding: 'foreign_index' | 'value'
 
   constructor(options: Partial<Props<CompileOptions>> & { filePaths: AlgoFile[] }) {
     this.filePaths = options.filePaths
@@ -57,6 +58,7 @@ export class CompileOptions {
     this.templateVarsPrefix = options.templateVarsPrefix ?? defaultPuyaOptions.templateVarsPrefix
     this.localsCoalescingStrategy = options.localsCoalescingStrategy ?? defaultPuyaOptions.localsCoalescingStrategy
     this.customPuyaPath = options.customPuyaPath ?? process.env.PUYA_PATH
+    this.resourceEncoding = options.resourceEncoding ?? defaultPuyaOptions.resourceEncoding
   }
 
   buildPuyaOptions(compilationSet: CompilationSetMapping) {
@@ -86,6 +88,7 @@ export const defaultPuyaOptions: PuyaPassThroughOptions = {
   targetAvmVersion: 10,
   cliTemplateDefinitions: {},
   templateVarsPrefix: 'TMPL_',
+  resourceEncoding: 'value',
   localsCoalescingStrategy: LocalsCoalescingStrategy.root_operand,
 }
 export type PuyaPassThroughOptions = Omit<PuyaOptions, 'compilationSet'>
@@ -106,6 +109,7 @@ export class PuyaOptions {
   cliTemplateDefinitions: Record<string, Uint8Array | bigint>
   templateVarsPrefix: string
   localsCoalescingStrategy: LocalsCoalescingStrategy
+  resourceEncoding: 'foreign_index' | 'value'
 
   compilationSet: CompilationSetMapping
   constructor(options: Props<PuyaOptions>) {
@@ -125,5 +129,6 @@ export class PuyaOptions {
     this.templateVarsPrefix = options.templateVarsPrefix
     this.localsCoalescingStrategy = options.localsCoalescingStrategy
     this.outputSourceMap = options.outputSourceMap
+    this.resourceEncoding = options.resourceEncoding
   }
 }
