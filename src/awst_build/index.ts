@@ -11,10 +11,10 @@ import { AwstBuildContext } from './context/awst-build-context'
 import { buildLibAwst } from './lib'
 import type { CompilationSet } from './models/contract-class-model'
 
-type BuildAwstOptions = Pick<CompileOptions, 'filePaths' | 'outputAwst' | 'outputAwstJson'>
+type BuildAwstOptions = Pick<CompileOptions, 'filePaths' | 'outputAwst' | 'outputAwstJson' | 'resourceEncoding'>
 
 export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: BuildAwstOptions): [AWST[], CompilationSet] {
-  return AwstBuildContext.run(program, () => {
+  return AwstBuildContext.run(program, options.resourceEncoding, () => {
     const moduleAwst: AWST[] = buildLibAwst()
     for (const [sourcePath, sourceFile] of Object.entries(sourceFiles)) {
       try {
