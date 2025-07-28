@@ -1,5 +1,5 @@
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { abimethod, arc4, clone, Contract, LocalState, Txn } from '@algorandfoundation/algorand-typescript'
+import { abimethod, arc4, assert, clone, Contract, Global, LocalState, Txn } from '@algorandfoundation/algorand-typescript'
 import type { StaticArray, Uint } from '@algorandfoundation/algorand-typescript/arc4'
 
 type SampleArray = StaticArray<Uint<64>, 10>
@@ -51,5 +51,44 @@ export class LocalStateDemo extends Contract {
     this.localTuple(Txn.sender).delete()
     this.localObject(Txn.sender).delete()
     this.localMutableObject(Txn.sender).delete()
+  }
+
+  /**
+   * Writes a value to local state using a dynamic key.
+   * Demonstrates dynamic key-value storage in local state.
+   * @param key - The dynamic key to store the value under
+   * @param value - The string value to store
+   * @returns The stored string value
+   */
+  @arc4.abimethod()
+  public writeDynamicLocalState(key: string, value: string): string {
+    const sender = Txn.sender
+    assert(sender.isOptedIn(Global.currentApplicationId), 'Account must opt in to contract first')
+
+    const localDynamicAccess = LocalState<string>({ key })
+
+    localDynamicAccess(sender).value = value
+
+    assert(localDynamicAccess(sender).value === value)
+
+    return localDynamicAccess(sender).value
+  }
+
+  /**
+   * Reads a value from local state using a dynamic key.
+   * @param key - The dynamic key to read the value from
+   * @returns The stored string value for the given key
+   */
+  @arc4.abimethod()
+  public readDynamicLocalState(key: string): string {
+    const sender = Txn.sender
+
+    assert(sender.isOptedIn(Global.currentApplicationId), 'Account must opt in to contract first')
+
+    const localDynamicAccess = LocalState<string>({ key })
+
+    assert(localDynamicAccess(sender).hasValue, 'Key not found')
+
+    return localDynamicAccess(sender).value
   }
 }

@@ -54,6 +54,25 @@ contract LocalStateDemo
     STATE_DELETE(LocalState[txn<Sender>()]["localMutableObject"])
   }
   
+  writeDynamicLocalState(key: string, value: string): string
+  {
+    sender: account = txn<Sender>()
+    assert(app_opted_in(sender, global<CurrentApplicationID>()), comment=Account must opt in to contract first)
+    localDynamicAccess: state_key = reinterpret_cast<state_key>(reinterpret_cast<bytes>(key))
+    LocalState[sender][localDynamicAccess]: string = value
+    assert(LocalState[sender][localDynamicAccess] == value)
+    return LocalState[sender][localDynamicAccess]
+  }
+  
+  readDynamicLocalState(key: string): string
+  {
+    sender: account = txn<Sender>()
+    assert(app_opted_in(sender, global<CurrentApplicationID>()), comment=Account must opt in to contract first)
+    localDynamicAccess: state_key = reinterpret_cast<state_key>(reinterpret_cast<bytes>(key))
+    assert(STATE_EXISTS(LocalState[sender][localDynamicAccess]), comment=Key not found)
+    return LocalState[sender][localDynamicAccess]
+  }
+  
   __algots__.defaultCreate(): void
   {
   }

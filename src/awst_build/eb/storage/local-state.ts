@@ -182,4 +182,9 @@ export class LocalStateFunctionResultBuilder extends InstanceBuilder<LocalStateT
       definedIn: contractType,
     })
   }
+
+  checkForUnclonedMutables(scenario: string) {
+    // Nothing to see here
+    return false
+  }
 }

@@ -38,4 +38,19 @@ describe('local state', () => {
 
     await expect(appClientLocalStateDemo.send.call({ method: 'getState' })).rejects.toThrow('Runtime error when executing LocalStateDemo')
   })
+
+  test('should write and read dynamic local state values', async ({ appClientLocalStateDemo }) => {
+    await appClientLocalStateDemo.send.optIn({ method: 'optIn' })
+
+    const testKey = 'testKey'
+    const testValue = 'testValue'
+
+    const writeResult = await appClientLocalStateDemo.send.call({ method: 'writeDynamicLocalState', args: [testKey, testValue] })
+
+    expect(writeResult.return).toEqual(testValue)
+
+    const readResult = await appClientLocalStateDemo.send.call({ method: 'readDynamicLocalState', args: [testKey] })
+
+    expect(readResult.return).toEqual(testValue)
+  })
 })
