@@ -10,6 +10,7 @@ import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant, isIn, sameSets } from '../../util'
 import { ptypeToAbiPType } from '../arc4-util'
+import { AwstBuildContext } from '../context/awst-build-context'
 import type { NodeBuilder } from '../eb'
 import { ContractSuperBuilder, ContractThisBuilder } from '../eb/contract-builder'
 import { requireExpressionOfType } from '../eb/util'
@@ -164,7 +165,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
           decorator.allowedCompletionTypes ?? conventionalDefaults?.allowedCompletionTypes ?? unspecifiedDefaults.allowedCompletionTypes,
         create: decorator.create ?? conventionalDefaults?.create ?? unspecifiedDefaults.create,
         name: decorator.nameOverride ?? functionType.name,
-        resourceEncoding: decorator.resourceEncoding ?? 'value',
+        resourceEncoding: decorator.resourceEncoding ?? AwstBuildContext.current.getResourceEncoding(),
         defaultArgs: new Map(
           Object.entries(decorator.defaultArguments).map(([parameterName, argConfig]) => [
             parameterName,
@@ -184,7 +185,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
         create: conventionalDefaults?.create ?? unspecifiedDefaults.create,
         sourceLocation: methodLocation,
         name: functionType.name,
-        resourceEncoding: 'value',
+        resourceEncoding: AwstBuildContext.current.getResourceEncoding(),
         readonly: false,
         defaultArgs: new Map(),
       })

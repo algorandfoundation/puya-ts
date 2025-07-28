@@ -5,6 +5,7 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { AppStorageDefinition, ARC4MethodConfig } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { logger } from '../../logger'
+import type { CompileOptions } from '../../options'
 import { invariant } from '../../util'
 import { DefaultMap } from '../../util/default-map'
 import { ConstantStore } from '../constant-store'
@@ -21,7 +22,10 @@ import { EvaluationContext } from './evaluation-context'
 import { SwitchLoopContext } from './switch-loop-context'
 import { UniqueNameResolver } from './unique-name-resolver'
 
+type ResourceEncoding = CompileOptions['resourceEncoding']
 export abstract class AwstBuildContext {
+  abstract getResourceEncoding(): ResourceEncoding
+
   /**
    * Get the source location of a node in the current source file
    * @param node
@@ -117,8 +121,8 @@ export abstract class AwstBuildContext {
 
   private static asyncStore = new AsyncLocalStorage<AwstBuildContext>()
 
-  static run<R>(program: ts.Program, cb: () => R) {
-    const ctx = AwstBuildContextImpl.forProgram(program)
+  static run<R>(program: ts.Program, resourceEncoding: ResourceEncoding, cb: () => R) {
+    const ctx = AwstBuildContextImpl.forProgram(program, resourceEncoding)
 
     return AwstBuildContext.asyncStore.run(ctx, cb)
   }
@@ -147,6 +151,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
     private readonly storageDeclarations: DefaultMap<string, Map<string, AppStorageDeclaration>>,
     private readonly arc4MethodConfig: DefaultMap<string, Map<string, ARC4MethodConfig>>,
     compilationSet: CompilationSet,
+    private readonly resourceEncoding: ResourceEncoding,
   ) {
     super()
     this.typeChecker = program.getTypeChecker()
@@ -170,6 +175,10 @@ class AwstBuildContextImpl extends AwstBuildContext {
       logger.error(sourceLocation, `Duplicate declaration of member ${memberName} on ${contractReference}`)
     }
     contractConfig.set(memberName, arc4MethodConfig)
+  }
+
+  getResourceEncoding(): ResourceEncoding {
+    return this.resourceEncoding
   }
 
   getArc4Config(contractType: ContractClassPType): ARC4MethodConfig[]
@@ -203,7 +212,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
     }
   }
 
-  static forProgram(program: ts.Program): AwstBuildContext {
+  static forProgram(program: ts.Program, resourceEncoding: ResourceEncoding): AwstBuildContext {
     return new AwstBuildContextImpl(
       program,
       new ConstantStore(program),
@@ -211,6 +220,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
       new DefaultMap(),
       new DefaultMap(),
       new CompilationSet(),
+      resourceEncoding,
     )
   }
 
@@ -226,6 +236,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
       this.storageDeclarations,
       this.arc4MethodConfig,
       this.#compilationSet,
+      this.resourceEncoding,
     )
   }
 
