@@ -130,6 +130,8 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
       return {
         _type: SingleEvaluation.name,
         ...(super.serializerFunction(key, value) as object),
+        // SingleEvaluation.wtype is ignored by puya during deserialization, but can create a lot of JSON
+        wtype: undefined,
         _id: String(this.#singleEvals.forSymbol(value.id)[0]),
       }
     }
