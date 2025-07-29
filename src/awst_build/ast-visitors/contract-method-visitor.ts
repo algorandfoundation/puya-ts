@@ -14,7 +14,7 @@ import { AwstBuildContext } from '../context/awst-build-context'
 import type { NodeBuilder } from '../eb'
 import { ContractSuperBuilder, ContractThisBuilder } from '../eb/contract-builder'
 import { requireExpressionOfType } from '../eb/util'
-import type { Arc4AbiDecoratorData, RoutingDecoratorData } from '../models/decorator-data'
+import type { Arc4AbiDecoratorData, ContractOptionsDecoratorData, RoutingDecoratorData } from '../models/decorator-data'
 import type { ContractClassPType, FunctionPType } from '../ptypes'
 import { GlobalStateType, LocalStateType, voidPType } from '../ptypes'
 import { DecoratorVisitor } from './decorator-visitor'
@@ -47,6 +47,11 @@ type RoutingProps = {
   create?: ARC4CreateOption
 }
 
+type ContractMeta = {
+  contractType: ContractClassPType
+  decoratorData: ContractOptionsDecoratorData | undefined
+}
+
 export class ContractMethodVisitor extends ContractMethodBaseVisitor {
   private readonly metaData: {
     cref: ContractReference
@@ -54,8 +59,8 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     sourceLocation: SourceLocation
   }
 
-  constructor(node: ts.MethodDeclaration, contractType: ContractClassPType) {
-    super(node, contractType)
+  constructor(node: ts.MethodDeclaration, contractMeta: ContractMeta) {
+    super(node, contractMeta.contractType)
     const sourceLocation = this.sourceLocation(node)
 
     const decorator = DecoratorVisitor.buildContractMethodData(node)
@@ -68,6 +73,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       decorator,
       modifiers,
       methodLocation: sourceLocation,
+      contractDecorator: contractMeta.decoratorData,
     })
 
     if (arc4MethodConfig)
@@ -100,8 +106,8 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     })
   }
 
-  public static buildContractMethod(node: ts.MethodDeclaration, contractType: ContractClassPType): () => awst.ContractMethod {
-    return visitInChildContext(this, node, contractType)
+  public static buildContractMethod(node: ts.MethodDeclaration, contractMeta: ContractMeta): () => awst.ContractMethod {
+    return visitInChildContext(this, node, contractMeta)
   }
 
   private buildArc4Config({
@@ -109,11 +115,13 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     decorator,
     modifiers: { isPublic, isStatic },
     methodLocation,
+    contractDecorator,
   }: {
     functionType: FunctionPType
     decorator: RoutingDecoratorData | undefined
     modifiers: { isPublic: boolean; isStatic: boolean }
     methodLocation: SourceLocation
+    contractDecorator: ContractOptionsDecoratorData | undefined
   }): awst.ARC4MethodConfig | null {
     const isProgramMethod = isIn(functionType.name, [
       Constants.symbolNames.approvalProgramMethodName,
@@ -165,7 +173,8 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
           decorator.allowedCompletionTypes ?? conventionalDefaults?.allowedCompletionTypes ?? unspecifiedDefaults.allowedCompletionTypes,
         create: decorator.create ?? conventionalDefaults?.create ?? unspecifiedDefaults.create,
         name: decorator.nameOverride ?? functionType.name,
-        resourceEncoding: decorator.resourceEncoding ?? AwstBuildContext.current.getResourceEncoding(),
+        resourceEncoding:
+          decorator.resourceEncoding ?? contractDecorator?.resourceEncoding ?? AwstBuildContext.current.compileOptions.resourceEncoding,
         defaultArgs: new Map(
           Object.entries(decorator.defaultArguments).map(([parameterName, argConfig]) => [
             parameterName,
@@ -185,7 +194,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
         create: conventionalDefaults?.create ?? unspecifiedDefaults.create,
         sourceLocation: methodLocation,
         name: functionType.name,
-        resourceEncoding: AwstBuildContext.current.getResourceEncoding(),
+        resourceEncoding: contractDecorator?.resourceEncoding ?? AwstBuildContext.current.compileOptions.resourceEncoding,
         readonly: false,
         defaultArgs: new Map(),
       })

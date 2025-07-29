@@ -1,0 +1,113 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+
+main_block@0:
+
+main_block@1:
+    // tests/approvals/resource-encoding.algo.ts:16-17
+    // @contract({ resourceEncoding: 'value' })
+    // class BaseValue extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@6
+
+main_abi_routing@2:
+    // tests/approvals/resource-encoding.algo.ts:16-17
+    // @contract({ resourceEncoding: 'value' })
+    // class BaseValue extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0xd6ce05d0 // method "testBaseValue(address)uint64"
+    swap
+    match main_testBaseValue_route@3
+
+main_switch_case_default@4:
+
+main_switch_case_next@5:
+
+main_after_if_else@10:
+    // tests/approvals/resource-encoding.algo.ts:16-17
+    // @contract({ resourceEncoding: 'value' })
+    // class BaseValue extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/resource-encoding.algo.ts::BaseValue.__puya_arc4_router__@11:
+    return
+
+main_testBaseValue_route@3:
+    // tests/approvals/resource-encoding.algo.ts:22
+    // testBaseValue(account: Account) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/resource-encoding.algo.ts:16-17
+    // @contract({ resourceEncoding: 'value' })
+    // class BaseValue extends Contract {
+    txna ApplicationArgs 1
+    // tests/approvals/resource-encoding.algo.ts:22
+    // testBaseValue(account: Account) {
+    callsub testBaseValue
+    itob
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/resource-encoding.algo.ts::BaseValue.__puya_arc4_router__@11
+
+main_bare_routing@6:
+    // tests/approvals/resource-encoding.algo.ts:16-17
+    // @contract({ resourceEncoding: 'value' })
+    // class BaseValue extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match main___algots__.defaultCreate@7
+
+main_switch_case_default@8:
+
+main_switch_case_next@9:
+    b main_after_if_else@10
+
+main___algots__.defaultCreate@7:
+    // tests/approvals/resource-encoding.algo.ts:16-17
+    // @contract({ resourceEncoding: 'value' })
+    // class BaseValue extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/resource-encoding.algo.ts::BaseValue.__puya_arc4_router__@11
+
+
+// tests/approvals/resource-encoding.algo.ts::BaseValue.testBaseValue(account: bytes) -> uint64:
+testBaseValue:
+    // tests/approvals/resource-encoding.algo.ts:22
+    // testBaseValue(account: Account) {
+    proto 1 1
+
+testBaseValue_block@0:
+    // tests/approvals/resource-encoding.algo.ts:23
+    // return account.balance
+    frame_dig -1
+    acct_params_get AcctBalance
+    assert // account funded
+    retsub
+
+
+// tests/approvals/resource-encoding.algo.ts::BaseValue.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
+    retsub

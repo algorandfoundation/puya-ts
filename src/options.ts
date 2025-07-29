@@ -1,3 +1,4 @@
+import type { ResourceEncoding } from './awst'
 import { LogLevel } from './logger'
 import type { Props } from './typescript-helpers'
 
@@ -109,7 +110,7 @@ export class PuyaOptions {
   cliTemplateDefinitions: Record<string, Uint8Array | bigint>
   templateVarsPrefix: string
   localsCoalescingStrategy: LocalsCoalescingStrategy
-  resourceEncoding: 'foreign_index' | 'value'
+  resourceEncoding: ResourceEncoding
 
   compilationSet: CompilationSetMapping
   constructor(options: Props<PuyaOptions>) {

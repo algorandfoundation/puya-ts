@@ -67,6 +67,13 @@ export function requestInstanceBuilder(builder: NodeBuilder): InstanceBuilder | 
   return undefined
 }
 
+export function mapStringConstant<T>(map: Record<string, T>, expr: Expression) {
+  codeInvariant(expr instanceof StringConstant, 'Expected string literal', expr.sourceLocation)
+  const strValue = expr.value
+  if (Object.hasOwn(map, strValue)) return map[strValue]
+  throw new CodeError(`${strValue} is not valid at this location`, { sourceLocation: expr.sourceLocation })
+}
+
 export function requireStringConstant(builder: NodeBuilder): awst.StringConstant {
   const constant = requireConstantOfType(builder, stringPType)
   codeInvariant(constant instanceof StringConstant, 'Expected string literal', builder.sourceLocation)

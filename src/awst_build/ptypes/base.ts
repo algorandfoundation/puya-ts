@@ -128,7 +128,7 @@ export abstract class PType {
   }
 }
 
-export interface ABIType {
+export interface ABICompatiblePType extends PType {
   readonly abiTypeSignature: string
 }
 

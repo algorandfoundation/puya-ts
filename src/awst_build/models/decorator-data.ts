@@ -1,3 +1,4 @@
+import type { ResourceEncoding } from '../../awst'
 import type { OnCompletionAction } from '../../awst/models'
 import type { ARC4CreateOption } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
@@ -13,7 +14,7 @@ export type Arc4AbiDecoratorData = {
   sourceLocation: SourceLocation
   readonly: boolean
   nameOverride: string | undefined
-  resourceEncoding?: 'foreign_index' | 'value'
+  resourceEncoding?: ResourceEncoding
   defaultArguments: Record<
     string,
     | {
@@ -48,6 +49,7 @@ export type ContractOptionsDecoratorData = {
   sourceLocation: SourceLocation
   avmVersion?: SupportedAvmVersion
   name?: string
+  resourceEncoding?: ResourceEncoding
   scratchSlots?: Set<bigint>
   stateTotals?: {
     globalUints?: bigint

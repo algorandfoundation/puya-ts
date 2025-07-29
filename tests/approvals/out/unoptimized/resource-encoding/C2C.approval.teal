@@ -1,0 +1,238 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 6
+    bytecblock 0x151f7c75
+
+main_block@0:
+
+main_block@1:
+    // tests/approvals/resource-encoding.algo.ts:49
+    // class C2C extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@7
+
+main_abi_routing@2:
+    // tests/approvals/resource-encoding.algo.ts:49
+    // class C2C extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0xfd89cbe5 // method "testCallToForeign(address,uint64)void"
+    pushbytes 0x0fefd6f7 // method "testCallToValue(address,uint64)void"
+    uncover 2
+    match main_testCallToForeign_route@3 main_testCallToValue_route@4
+
+main_switch_case_default@5:
+
+main_switch_case_next@6:
+
+main_after_if_else@11:
+    // tests/approvals/resource-encoding.algo.ts:49
+    // class C2C extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__@12:
+    return
+
+main_testCallToValue_route@4:
+    // tests/approvals/resource-encoding.algo.ts:58
+    // testCallToValue(account: Account, appId: Application) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/resource-encoding.algo.ts:49
+    // class C2C extends Contract {
+    txna ApplicationArgs 1
+    txna ApplicationArgs 2
+    btoi
+    // tests/approvals/resource-encoding.algo.ts:58
+    // testCallToValue(account: Account, appId: Application) {
+    callsub testCallToValue
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__@12
+
+main_testCallToForeign_route@3:
+    // tests/approvals/resource-encoding.algo.ts:50
+    // testCallToForeign(account: Account, appId: Application) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/resource-encoding.algo.ts:49
+    // class C2C extends Contract {
+    txna ApplicationArgs 1
+    txna ApplicationArgs 2
+    btoi
+    // tests/approvals/resource-encoding.algo.ts:50
+    // testCallToForeign(account: Account, appId: Application) {
+    callsub testCallToForeign
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__@12
+
+main_bare_routing@7:
+    // tests/approvals/resource-encoding.algo.ts:49
+    // class C2C extends Contract {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match main___algots__.defaultCreate@8
+
+main_switch_case_default@9:
+
+main_switch_case_next@10:
+    b main_after_if_else@11
+
+main___algots__.defaultCreate@8:
+    // tests/approvals/resource-encoding.algo.ts:49
+    // class C2C extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__@12
+
+
+// tests/approvals/resource-encoding.algo.ts::C2C.testCallToForeign(account: bytes, appId: uint64) -> void:
+testCallToForeign:
+    // tests/approvals/resource-encoding.algo.ts:50
+    // testCallToForeign(account: Account, appId: Application) {
+    proto 2 0
+
+testCallToForeign_block@0:
+    // tests/approvals/resource-encoding.algo.ts:51-54
+    // const { returnValue: res1 } = abiCall(Foreign.prototype.testExplicitForeign, {
+    //   appId,
+    //   args: [account],
+    // })
+    itxn_begin
+    // tests/approvals/resource-encoding.algo.ts:52
+    // appId,
+    frame_dig -1
+    // tests/approvals/resource-encoding.algo.ts:53
+    // args: [account],
+    frame_dig -2
+    itxn_field Accounts
+    // tests/approvals/resource-encoding.algo.ts:51-54
+    // const { returnValue: res1 } = abiCall(Foreign.prototype.testExplicitForeign, {
+    //   appId,
+    //   args: [account],
+    // })
+    pushbytes 0x115ff342 // method "testExplicitForeign(account)uint64"
+    itxn_field ApplicationArgs
+    pushbytes 0x01
+    itxn_field ApplicationArgs
+    itxn_field ApplicationID
+    // tests/approvals/resource-encoding.algo.ts:51-54
+    // const { returnValue: res1 } = abiCall(Foreign.prototype.testExplicitForeign, {
+    //   appId,
+    //   args: [account],
+    // })
+    intc_2 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+
+testCallToForeign_next_txn@1:
+    // tests/approvals/resource-encoding.algo.ts:51-54
+    // const { returnValue: res1 } = abiCall(Foreign.prototype.testExplicitForeign, {
+    //   appId,
+    //   args: [account],
+    // })
+    itxn_submit
+    itxn LastLog
+    dup
+    extract 4 0
+    swap
+    extract 0 4
+    bytec_0 // 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    btoi
+    // tests/approvals/resource-encoding.algo.ts:56
+    // assert(res1 === account.balance)
+    frame_dig -2
+    acct_params_get AcctBalance
+    assert // account funded
+    ==
+    assert
+    retsub
+
+
+// tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue(account: bytes, appId: uint64) -> void:
+testCallToValue:
+    // tests/approvals/resource-encoding.algo.ts:58
+    // testCallToValue(account: Account, appId: Application) {
+    proto 2 0
+
+testCallToValue_block@0:
+    // tests/approvals/resource-encoding.algo.ts:59-62
+    // const { returnValue: res1 } = abiCall(ByValue.prototype.testExplicitValue, {
+    //   appId,
+    //   args: [account],
+    // })
+    itxn_begin
+    // tests/approvals/resource-encoding.algo.ts:60
+    // appId,
+    frame_dig -1
+    // tests/approvals/resource-encoding.algo.ts:61
+    // args: [account],
+    frame_dig -2
+    // tests/approvals/resource-encoding.algo.ts:59-62
+    // const { returnValue: res1 } = abiCall(ByValue.prototype.testExplicitValue, {
+    //   appId,
+    //   args: [account],
+    // })
+    pushbytes 0xd7308a13 // method "testExplicitValue(address)uint64"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationArgs
+    itxn_field ApplicationID
+    intc_2 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+
+testCallToValue_next_txn@1:
+    // tests/approvals/resource-encoding.algo.ts:59-62
+    // const { returnValue: res1 } = abiCall(ByValue.prototype.testExplicitValue, {
+    //   appId,
+    //   args: [account],
+    // })
+    itxn_submit
+    itxn LastLog
+    dup
+    extract 4 0
+    swap
+    extract 0 4
+    bytec_0 // 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    btoi
+    // tests/approvals/resource-encoding.algo.ts:64
+    // assert(res1 === account.balance)
+    frame_dig -2
+    acct_params_get AcctBalance
+    assert // account funded
+    ==
+    assert
+    retsub
+
+
+// tests/approvals/resource-encoding.algo.ts::C2C.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
+    retsub

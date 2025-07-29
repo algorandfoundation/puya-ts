@@ -1,10 +1,11 @@
+import type { ResourceEncoding } from '../awst'
 import { nodeFactory } from '../awst/node-factory'
 import type { ARC4ABIMethodConfig } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
 import { wtypes } from '../awst/wtypes'
 import { CodeError } from '../errors'
 import { codeInvariant, invariant } from '../util'
-import type { ABIType, FunctionPType, PType } from './ptypes'
+import type { ABICompatiblePType, FunctionPType, PType } from './ptypes'
 import {
   ABICompatibleInstanceType,
   accountPType,
@@ -27,6 +28,7 @@ import {
   voidPType,
 } from './ptypes'
 import {
+  arc4AddressAlias,
   arc4BooleanType,
   ARC4EncodedType,
   arc4StringType,
@@ -45,7 +47,7 @@ import {
  * @param direction The direction of the parameter (in for method args, out for method returns)
  * @param sourceLocation The location of the method or parameter, for use in error metadata
  */
-export function ptypeToAbiPType(ptype: PType, direction: 'in' | 'out', sourceLocation: SourceLocation): PType & ABIType {
+export function ptypeToAbiPType(ptype: PType, direction: 'in' | 'out', sourceLocation: SourceLocation): ABICompatiblePType {
   if (ptype instanceof ARC4EncodedType) return ptype
   if (ptype instanceof GroupTransactionPType) {
     codeInvariant(direction === 'in', `${ptype.name} cannot be used as an ABI return type`, sourceLocation)
@@ -73,8 +75,10 @@ export function ptypeToAbiPType(ptype: PType, direction: 'in' | 'out', sourceLoc
  * @param sourceLocation The source location of the code generating the constant,
  */
 export function buildArc4MethodConstant(functionType: FunctionPType, arc4Config: ARC4ABIMethodConfig, sourceLocation: SourceLocation) {
-  const params = functionType.parameters.map(([_, ptype]) => getABITypeName(ptype, 'in', sourceLocation)).join(',')
-  const returnType = getABITypeName(functionType.returnType, 'out', sourceLocation)
+  const params = functionType.parameters
+    .map(([_, ptype]) => getABITypeName(ptype, 'in', arc4Config.resourceEncoding, sourceLocation))
+    .join(',')
+  const returnType = getABITypeName(functionType.returnType, 'out', arc4Config.resourceEncoding, sourceLocation)
   return nodeFactory.methodConstant({
     value: `${arc4Config.name}(${params})${returnType}`,
     wtype: new wtypes.BytesWType({ length: 4n }),
@@ -86,10 +90,22 @@ export function buildArc4MethodConstant(functionType: FunctionPType, arc4Config:
  * Get the ARC4 type name for a ptype, or throw if the ptype is not usable in an ABI method.
  * @param ptype The ptype of the parameter
  * @param direction The direction of the parameter (in for method args, out for method returns)
+ * @param resourceEncoding The encoding strategy for the foreign resource types (App, Asset, Account)
  * @param sourceLocation The location of the method or parameter, for use in error metadata
  */
-export function getABITypeName(ptype: PType, direction: 'in' | 'out', sourceLocation: SourceLocation): string {
-  return ptypeToAbiPType(ptype, direction, sourceLocation).abiTypeSignature
+export function getABITypeName(
+  ptype: PType,
+  direction: 'in' | 'out',
+  resourceEncoding: ResourceEncoding,
+  sourceLocation: SourceLocation,
+): string {
+  const abiType = ptypeToAbiPType(ptype, direction, sourceLocation)
+  if (resourceEncoding === 'value') {
+    if (abiType.equals(applicationPType)) return new UintNType({ n: 64n }).abiTypeSignature
+    if (abiType.equals(assetPType)) return new UintNType({ n: 64n }).abiTypeSignature
+    if (abiType.equals(accountPType)) return arc4AddressAlias.abiTypeSignature
+  }
+  return abiType.abiTypeSignature
 }
 
 /**

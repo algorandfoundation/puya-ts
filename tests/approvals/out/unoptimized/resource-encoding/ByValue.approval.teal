@@ -1,0 +1,150 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    bytecblock 0x151f7c75
+
+main_block@0:
+
+main_block@1:
+    // tests/approvals/resource-encoding.algo.ts:42
+    // class ByValue extends BaseValue {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@7
+
+main_abi_routing@2:
+    // tests/approvals/resource-encoding.algo.ts:42
+    // class ByValue extends BaseValue {
+    txna ApplicationArgs 0
+    pushbytes 0xd7308a13 // method "testExplicitValue(address)uint64"
+    pushbytes 0xd6ce05d0 // method "testBaseValue(address)uint64"
+    uncover 2
+    match main_testExplicitValue_route@3 main_testBaseValue_route@4
+
+main_switch_case_default@5:
+
+main_switch_case_next@6:
+
+main_after_if_else@11:
+    // tests/approvals/resource-encoding.algo.ts:42
+    // class ByValue extends BaseValue {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/resource-encoding.algo.ts::ByValue.__puya_arc4_router__@12:
+    return
+
+main_testBaseValue_route@4:
+    // tests/approvals/resource-encoding.algo.ts:22
+    // testBaseValue(account: Account) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/resource-encoding.algo.ts:42
+    // class ByValue extends BaseValue {
+    txna ApplicationArgs 1
+    // tests/approvals/resource-encoding.algo.ts:22
+    // testBaseValue(account: Account) {
+    callsub testBaseValue
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/resource-encoding.algo.ts::ByValue.__puya_arc4_router__@12
+
+main_testExplicitValue_route@3:
+    // tests/approvals/resource-encoding.algo.ts:43
+    // @abimethod({ resourceEncoding: 'value' })
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    // tests/approvals/resource-encoding.algo.ts:42
+    // class ByValue extends BaseValue {
+    txna ApplicationArgs 1
+    // tests/approvals/resource-encoding.algo.ts:43
+    // @abimethod({ resourceEncoding: 'value' })
+    callsub testExplicitValue
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/resource-encoding.algo.ts::ByValue.__puya_arc4_router__@12
+
+main_bare_routing@7:
+    // tests/approvals/resource-encoding.algo.ts:42
+    // class ByValue extends BaseValue {
+    txn OnCompletion
+    intc_0 // 0
+    swap
+    match main___algots__.defaultCreate@8
+
+main_switch_case_default@9:
+
+main_switch_case_next@10:
+    b main_after_if_else@11
+
+main___algots__.defaultCreate@8:
+    // tests/approvals/resource-encoding.algo.ts:42
+    // class ByValue extends BaseValue {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/resource-encoding.algo.ts::ByValue.__puya_arc4_router__@12
+
+
+// tests/approvals/resource-encoding.algo.ts::ByValue.testExplicitValue(account: bytes) -> uint64:
+testExplicitValue:
+    // tests/approvals/resource-encoding.algo.ts:43-44
+    // @abimethod({ resourceEncoding: 'value' })
+    // testExplicitValue(account: Account) {
+    proto 1 1
+
+testExplicitValue_block@0:
+    // tests/approvals/resource-encoding.algo.ts:45
+    // return account.balance
+    frame_dig -1
+    acct_params_get AcctBalance
+    assert // account funded
+    retsub
+
+
+// tests/approvals/resource-encoding.algo.ts::BaseValue.testBaseValue(account: bytes) -> uint64:
+testBaseValue:
+    // tests/approvals/resource-encoding.algo.ts:22
+    // testBaseValue(account: Account) {
+    proto 1 1
+
+testBaseValue_block@0:
+    // tests/approvals/resource-encoding.algo.ts:23
+    // return account.balance
+    frame_dig -1
+    acct_params_get AcctBalance
+    assert // account funded
+    retsub
+
+
+// tests/approvals/resource-encoding.algo.ts::ByValue.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+
+__algots__.defaultCreate_block@0:
+    retsub

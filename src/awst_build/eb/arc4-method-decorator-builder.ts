@@ -12,7 +12,7 @@ import { arc4AbiMethodDecorator, arc4BareMethodDecorator, boolPType, ReadonlyArr
 import type { InstanceBuilder } from './index'
 import { DecoratorDataBuilder, NodeBuilder } from './index'
 import { ObjectLiteralExpressionBuilder } from './literal/object-literal-expression-builder'
-import { requireBooleanConstant, requireInstanceBuilder, requireStringConstant } from './util'
+import { mapStringConstant, requireBooleanConstant, requireInstanceBuilder, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 
 const ocaMap: Record<string, OnCompletionAction> = {
@@ -60,7 +60,7 @@ export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
       type: Constants.symbolNames.arc4BareDecoratorName,
       allowedCompletionTypes: allowActions && resolveOnCompletionActions(allowActions),
       allowedCompletionTypesLocation: allowActions?.sourceLocation,
-      create: onCreate && mapStringConstant(createMap, onCreate?.resolve()),
+      create: onCreate && mapStringConstant(createMap, onCreate.resolve()),
       createLocation: onCreate?.sourceLocation,
       sourceLocation: sourceLocation,
     })
@@ -97,22 +97,15 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
       type: Constants.symbolNames.arc4AbiDecoratorName,
       allowedCompletionTypes: allowActions && resolveOnCompletionActions(allowActions),
       allowedCompletionTypesLocation: allowActions?.sourceLocation,
-      create: onCreate && mapStringConstant(createMap, onCreate?.resolve()),
+      create: onCreate && mapStringConstant(createMap, onCreate.resolve()),
       createLocation: onCreate?.sourceLocation,
       sourceLocation: sourceLocation,
       nameOverride: name ? requireStringConstant(name).value : undefined,
-      resourceEncoding: resourceEncoding && mapStringConstant(resourceEncodingMap, resourceEncoding?.resolve()),
+      resourceEncoding: resourceEncoding && mapStringConstant(resourceEncodingMap, resourceEncoding.resolve()),
       readonly: readonly ? requireBooleanConstant(readonly).value : false,
       defaultArguments: resolveDefaultArguments(defaultArguments, sourceLocation),
     })
   }
-}
-
-function mapStringConstant<T>(map: Record<string, T>, expr: Expression) {
-  codeInvariant(expr instanceof StringConstant, 'Expected string literal', expr.sourceLocation)
-  const strValue = expr.value
-  if (Object.hasOwn(map, strValue)) return map[strValue]
-  throw new CodeError(`${strValue} is not valid at this location`, { sourceLocation: expr.sourceLocation })
 }
 
 function resolveOnCompletionActions(oca: InstanceBuilder): OnCompletionAction[] {
