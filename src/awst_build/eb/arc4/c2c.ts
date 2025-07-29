@@ -8,6 +8,7 @@ import { wtypes } from '../../../awst/wtypes'
 import { Constants } from '../../../constants'
 import { logger } from '../../../logger'
 import { codeInvariant, enumFromValue, hexToUint8Array, invariant } from '../../../util'
+import { parseArc4Method } from '../../../util/arc4-signature-parser'
 import { buildArc4MethodConstant, ptypeToArc4EncodedType } from '../../arc4-util'
 import { AwstBuildContext } from '../../context/awst-build-context'
 import type { FunctionPType, PType } from '../../ptypes'
@@ -481,12 +482,14 @@ function parseAppArgs({
   }
 
   const appArgsBuilder = fields && fields.hasProperty('args') && fields.memberAccess('args', sourceLocation)
+  const parsedSignature = parseArc4Method(methodSelector.value)
   const appArgs: Expression[] = [methodSelector]
   if (appArgsBuilder) {
     codeInvariant(isStaticallyIterable(appArgsBuilder), 'Unsupported expression for args', appArgsBuilder.sourceLocation)
     appArgs.push(
       ...appArgsBuilder[StaticIterator]().flatMap((arg, index) => {
         const [paramName, paramType] = functionType.parameters[index]
+        const publicParamType = parsedSignature.parameters[index]
 
         if (paramType instanceof GroupTransactionPType) {
           codeInvariant(arg.ptype instanceof ItxnParamsPType, `${paramName} should be an ItxnParams object`)
@@ -500,14 +503,39 @@ function parseAppArgs({
           results.itxns.push(arg.resolve())
           return []
         }
+
         if (paramType.equals(assetPType)) {
-          return handleForeignRef(results.foreignAssets, 0n, paramType, arg)
+          if (publicParamType.equals(assetPType)) {
+            return handleForeignRef(results.foreignAssets, 0n, paramType, arg)
+          } else {
+            return nodeFactory.reinterpretCast({
+              expr: requireExpressionOfType(arg, assetPType),
+              sourceLocation: arg.sourceLocation,
+              wtype: wtypes.uint64WType,
+            })
+          }
         }
         if (paramType.equals(applicationPType)) {
-          return handleForeignRef(results.foreignApps, 1n, paramType, arg)
+          if (publicParamType.equals(applicationPType)) {
+            return handleForeignRef(results.foreignApps, 1n, paramType, arg)
+          } else {
+            return nodeFactory.reinterpretCast({
+              expr: requireExpressionOfType(arg, applicationPType),
+              sourceLocation: arg.sourceLocation,
+              wtype: wtypes.uint64WType,
+            })
+          }
         }
         if (paramType.equals(accountPType)) {
-          return handleForeignRef(results.foreignAccounts, 1n, paramType, arg)
+          if (publicParamType.equals(accountPType)) {
+            return handleForeignRef(results.foreignAccounts, 1n, paramType, arg)
+          } else {
+            return nodeFactory.reinterpretCast({
+              expr: requireExpressionOfType(arg, accountPType),
+              sourceLocation: arg.sourceLocation,
+              wtype: new wtypes.BytesWType({ length: 32n }),
+            })
+          }
         }
 
         const encodedType = ptypeToArc4EncodedType(paramType, sourceLocation)

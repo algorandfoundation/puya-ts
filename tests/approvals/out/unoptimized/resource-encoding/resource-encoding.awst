@@ -1,0 +1,132 @@
+contract BaseForeign
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testBaseForeign(account: account): uint64
+  {
+    return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract BaseValue
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testBaseValue(account: account): uint64
+  {
+    return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract Foreign
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testExplicitForeign(account: account): uint64
+  {
+    return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
+  }
+  
+  testImplicitValue(account: account): uint64
+  {
+    return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
+  }
+  
+  BaseForeign::testBaseForeign(account: account): uint64
+  {
+    return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract ByValue
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testExplicitValue(account: account): uint64
+  {
+    return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
+  }
+  
+  BaseValue::testBaseValue(account: account): uint64
+  {
+    return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract C2C
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testCallToForeign(account: account, appId: application): void
+  {
+    #[res1]: readonly [uint64] = #[($0 = #{ itxn: ($1 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, ApplicationArgs=#[Method("testExplicitForeign(account)uint64"), 1], Accounts=#[account]))), returnValue: ARC4_DECODE(reinterpret_cast<arc4.uint64>(checked_maybe(#[extract<4, 0>(($2 = $1.LastLog)), extract<0, 4>($2) == 0x151f7c75], comment=Bytes has valid prefix))) }).returnValue]
+    assert(res1 == checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded))
+  }
+  
+  testCallToValue(account: account, appId: application): void
+  {
+    #[res1]: readonly [uint64] = #[($3 = #{ itxn: ($4 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, ApplicationArgs=#[Method("testExplicitValue(address)uint64"), reinterpret_cast<bytes[32]>(account)]))), returnValue: ARC4_DECODE(reinterpret_cast<arc4.uint64>(checked_maybe(#[extract<4, 0>(($5 = $4.LastLog)), extract<0, 4>($5) == 0x151f7c75], comment=Bytes has valid prefix))) }).returnValue]
+    assert(res1 == checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded))
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

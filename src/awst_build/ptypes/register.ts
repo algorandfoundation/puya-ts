@@ -1,5 +1,5 @@
 import { Arc28EmitFunctionBuilder } from '../eb/arc28/arc-28-emit-function-builder'
-import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from '../eb/arc4-bare-method-decorator-builder'
+import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from '../eb/arc4-method-decorator-builder'
 import {
   AddressClassBuilder,
   AddressExpressionBuilder,

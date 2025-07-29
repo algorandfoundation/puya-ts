@@ -49,9 +49,12 @@ export class ContractVisitor extends ClassDefinitionVisitor {
 
     this._contractPType = ptype
 
-    const contractOptions = DecoratorVisitor.buildContractData(classDec)
-
-    const isAbstract = Boolean(classDec.modifiers?.some((m) => m.kind === ts.SyntaxKind.AbstractKeyword))
+    this.metaData = {
+      isAbstract: Boolean(classDec.modifiers?.some((m) => m.kind === ts.SyntaxKind.AbstractKeyword)),
+      sourceLocation,
+      contractOptions: DecoratorVisitor.buildContractData(classDec),
+      description: this.getNodeDescription(classDec),
+    }
 
     for (const property of classDec.members.filter(ts.isPropertyDeclaration)) {
       this.acceptAndIgnoreBuildErrors(property)
@@ -63,13 +66,6 @@ export class ContractVisitor extends ClassDefinitionVisitor {
       if (!ts.isConstructorDeclaration(member) && !ts.isPropertyDeclaration(member)) {
         this.acceptAndIgnoreBuildErrors(member)
       }
-    }
-
-    this.metaData = {
-      isAbstract,
-      sourceLocation,
-      contractOptions,
-      description: this.getNodeDescription(classDec),
     }
   }
 
@@ -159,7 +155,9 @@ export class ContractVisitor extends ClassDefinitionVisitor {
   }
 
   visitMethodDeclaration(node: ts.MethodDeclaration): void {
-    this._methods.push(ContractMethodVisitor.buildContractMethod(node, this._contractPType))
+    this._methods.push(
+      ContractMethodVisitor.buildContractMethod(node, { contractType: this._contractPType, decoratorData: this.metaData.contractOptions }),
+    )
   }
   visitPropertyDeclaration(node: ts.PropertyDeclaration): void {
     const sourceLocation = this.sourceLocation(node)

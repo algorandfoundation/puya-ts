@@ -6,7 +6,7 @@ import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported, throwError } from '../../errors'
 import { codeInvariant, distinctByEquality, instanceOfAny, invariant, sortBy, zipStrict } from '../../util'
 import { SymbolName } from '../symbol-name'
-import type { ABIType, PTypeOrClass } from './base'
+import type { ABICompatiblePType, PTypeOrClass } from './base'
 import { GenericPType, PType } from './base'
 
 import { transientTypeErrors } from './transient-type-errors'
@@ -519,7 +519,7 @@ export class InstanceType extends PType {
   }
 }
 
-export class ABICompatibleInstanceType extends InstanceType implements ABIType {
+export class ABICompatibleInstanceType extends InstanceType implements ABICompatiblePType {
   readonly abiTypeSignature: string
   constructor({ abiTypeSignature, ...props }: { name: string; module: string; wtype: wtypes.WType; abiTypeSignature: string }) {
     super(props)
@@ -1419,7 +1419,7 @@ export const logicSigOptionsDecorator = new LibFunctionType({
   name: 'logicsig',
 })
 
-export class GroupTransactionPType extends PType implements ABIType {
+export class GroupTransactionPType extends PType implements ABICompatiblePType {
   readonly [PType.IdSymbol] = 'GroupTransactionPType'
   get wtype() {
     return new wtypes.WGroupTransaction({

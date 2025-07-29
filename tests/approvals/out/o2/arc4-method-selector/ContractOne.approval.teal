@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1
+    intcblock 1 0
     // tests/approvals/arc4-method-selector.algo.ts:5
     // class ContractOne extends Contract {
     txn NumAppArgs
@@ -15,7 +15,7 @@ main:
 main_after_if_else@12:
     // tests/approvals/arc4-method-selector.algo.ts:5
     // class ContractOne extends Contract {
-    pushint 0 // 0
+    intc_1 // 0
     return
 
 main_test2_route@5:
@@ -26,6 +26,16 @@ main_test2_route@5:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
+    // tests/approvals/arc4-method-selector.algo.ts:15
+    // methodSelector(ContractTwo.prototype.referenceTypes) === methodSelector('referenceTypes(pay,asset,account,application,appl)void'),
+    intc_1 // 0
+    // tests/approvals/arc4-method-selector.algo.ts:14-16
+    // assert(
+    //   methodSelector(ContractTwo.prototype.referenceTypes) === methodSelector('referenceTypes(pay,asset,account,application,appl)void'),
+    // )
+    assert
+    // tests/approvals/arc4-method-selector.algo.ts:13
+    // test2() {
     intc_0 // 1
     return
 

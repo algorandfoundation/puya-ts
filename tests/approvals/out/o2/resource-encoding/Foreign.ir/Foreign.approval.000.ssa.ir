@@ -1,0 +1,98 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/resource-encoding.algo.ts::Foreign.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine tests/approvals/resource-encoding.algo.ts::Foreign.__puya_arc4_router__() -> bool:
+    block@0: // L27
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@7
+    block@1: // abi_routing_L27
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "testExplicitForeign(account)uint64" => block@2, method "testImplicitValue(address)uint64" => block@3, method "testBaseForeign(account)uint64" => block@4, * => block@5}
+    block@2: // testExplicitForeign_route_L28
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 NoOp)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (!= tmp%5#0 0u)
+        (assert tmp%6#0) // can only call when not creating
+        let reinterpret_Encoded(uint8)%0#0: Encoded(uint8) = (txna ApplicationArgs 1)
+        let tmp%7#0: uint64 = (btoi reinterpret_Encoded(uint8)%0#0)
+        let tmp%8#0: account = ((txnas Accounts) tmp%7#0)
+        let tmp%9#0: uint64 = tests/approvals/resource-encoding.algo.ts::Foreign.testExplicitForeign(tmp%8#0)
+        let tmp%10#0: Encoded(uint64) = bytes_encode<uint64>(tmp%9#0)
+        let tmp%11#0: bytes = (concat 0x151f7c75 tmp%10#0)
+        (log tmp%11#0)
+        return 1u
+    block@3: // testImplicitValue_route_L37
+        let tmp%12#0: uint64 = (txn OnCompletion)
+        let tmp%13#0: bool = (== tmp%12#0 NoOp)
+        (assert tmp%13#0) // OnCompletion is not NoOp
+        let tmp%14#0: uint64 = (txn ApplicationID)
+        let tmp%15#0: bool = (!= tmp%14#0 0u)
+        (assert tmp%15#0) // can only call when not creating
+        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 1)
+        let tmp%16#0: account = decode_bytes<account>(reinterpret_Encoded(uint8[32])%0#0)
+        let tmp%17#0: uint64 = tests/approvals/resource-encoding.algo.ts::Foreign.testImplicitValue(tmp%16#0)
+        let tmp%18#0: Encoded(uint64) = bytes_encode<uint64>(tmp%17#0)
+        let tmp%19#0: bytes = (concat 0x151f7c75 tmp%18#0)
+        (log tmp%19#0)
+        return 1u
+    block@4: // testBaseForeign_route_L11
+        let tmp%20#0: uint64 = (txn OnCompletion)
+        let tmp%21#0: bool = (== tmp%20#0 NoOp)
+        (assert tmp%21#0) // OnCompletion is not NoOp
+        let tmp%22#0: uint64 = (txn ApplicationID)
+        let tmp%23#0: bool = (!= tmp%22#0 0u)
+        (assert tmp%23#0) // can only call when not creating
+        let reinterpret_Encoded(uint8)%1#0: Encoded(uint8) = (txna ApplicationArgs 1)
+        let tmp%24#0: uint64 = (btoi reinterpret_Encoded(uint8)%1#0)
+        let tmp%25#0: account = ((txnas Accounts) tmp%24#0)
+        let tmp%26#0: uint64 = tests/approvals/resource-encoding.algo.ts::BaseForeign.testBaseForeign(tmp%25#0)
+        let tmp%27#0: Encoded(uint64) = bytes_encode<uint64>(tmp%26#0)
+        let tmp%28#0: bytes = (concat 0x151f7c75 tmp%27#0)
+        (log tmp%28#0)
+        return 1u
+    block@5: // switch_case_default_L27
+        goto block@6
+    block@6: // switch_case_next_L27
+        goto block@11
+    block@7: // bare_routing_L27
+        let tmp%29#0: uint64 = (txn OnCompletion)
+        switch tmp%29#0 {0u => block@8, * => block@9}
+    block@8: // __algots__.defaultCreate_L27
+        let tmp%30#0: uint64 = (txn ApplicationID)
+        let tmp%31#0: bool = (== tmp%30#0 0u)
+        (assert tmp%31#0) // can only call when creating
+        tests/approvals/resource-encoding.algo.ts::Foreign.__algots__.defaultCreate()
+        return 1u
+    block@9: // switch_case_default_L27
+        goto block@10
+    block@10: // switch_case_next_L27
+        goto block@11
+    block@11: // after_if_else_L27
+        return 0u
+
+subroutine tests/approvals/resource-encoding.algo.ts::Foreign.testExplicitForeign(account: account) -> uint64:
+    block@0: // L28
+        let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
+        (assert check%0#0) // account funded
+        return value%0#0
+
+subroutine tests/approvals/resource-encoding.algo.ts::Foreign.testImplicitValue(account: account) -> uint64:
+    block@0: // L37
+        let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
+        (assert check%0#0) // account funded
+        return value%0#0
+
+subroutine tests/approvals/resource-encoding.algo.ts::BaseForeign.testBaseForeign(account: account) -> uint64:
+    block@0: // L11
+        let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
+        (assert check%0#0) // account funded
+        return value%0#0
+
+subroutine tests/approvals/resource-encoding.algo.ts::Foreign.__algots__.defaultCreate() -> void:
+    block@0: // L27
+        return 

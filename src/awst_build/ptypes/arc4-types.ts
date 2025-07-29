@@ -481,6 +481,7 @@ export class StaticArrayType extends ARC4ArrayType {
     name,
     immutable,
     nativeType,
+    abiTypeSignature,
   }: {
     immutable?: boolean
     elementType: ARC4EncodedType
@@ -489,6 +490,7 @@ export class StaticArrayType extends ARC4ArrayType {
     wtype?: wtypes.ARC4StaticArray
     name?: string
     nativeType?: PType
+    abiTypeSignature?: string
   }) {
     codeInvariant(arraySize >= 0, 'StaticArray length must be greater than or equal to 0')
     super({ elementType })
@@ -505,7 +507,7 @@ export class StaticArrayType extends ARC4ArrayType {
         immutable: this.immutable,
       })
     this.fixedBitSize = PType.calculateFixedBitSize(new Array(Number(arraySize)).fill(elementType))
-    this.abiTypeSignature = `${this.elementType.abiTypeSignature}[${this.arraySize}]`
+    this.abiTypeSignature = abiTypeSignature ?? `${this.elementType.abiTypeSignature}[${this.arraySize}]`
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
@@ -518,6 +520,7 @@ export const arc4AddressAlias = new StaticArrayType({
   wtype: wtypes.arc4AddressAliasWType,
   nativeType: accountPType,
   immutable: true,
+  abiTypeSignature: 'address',
   name: 'Address',
 })
 
