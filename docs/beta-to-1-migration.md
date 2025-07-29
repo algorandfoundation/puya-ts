@@ -106,6 +106,24 @@ const user = {
 }
 ```
 
+### Direct import of functions and types from `gtxn` and `itxn` modules are no longer supported
+
+```typescript
+/**** Before (puya-ts beta) ****/
+import type { PaymentTxn } from '@algorandfoundation/algorand-typescript/gtxn'
+
+function reflectAllPay(pay: PaymentTxn) {
+  ...
+}
+
+/**** After (puya-ts 1.0) ****/
+import type { gtxn } from '@algorandfoundation/algorand-typescript'
+
+function reflectAllPay(pay: gtxn.PaymentTxn) {
+  ...
+}
+```
+
 ## New features
 
 ### Native mutable objects
