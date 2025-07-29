@@ -39,7 +39,7 @@ function serializeBigInt(value: bigint): unknown {
 }
 
 export class SnakeCaseSerializer<T> {
-  constructor(private readonly spaces = 2) {}
+  constructor(private readonly spaces = 0) {}
   public serialize(obj: T): string {
     return JSON.stringify(obj, (k, v) => this.serializerFunction(k, v), this.spaces)
   }
@@ -66,9 +66,10 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
     private options?: {
       sourcePaths?: 'absolute' | 'relative'
       programDirectory?: string
+      spaces?: number
     },
   ) {
-    super()
+    super(options?.spaces ?? 0)
   }
   #singleEvals = new SymbolToNumber()
 
@@ -144,5 +145,5 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
 }
 
 export function jsonSerializeAwst(awst: RootNode[]): string {
-  return new AwstSerializer().serialize(awst)
+  return new AwstSerializer({ spaces: 2 }).serialize(awst)
 }
