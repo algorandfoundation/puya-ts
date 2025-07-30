@@ -28,10 +28,18 @@ jobs:
     needs: ci
     runs-on: ubuntu-latest
     steps:
+      - name: Generate bot token
+        uses: actions/create-github-app-token@v1
+        id: app_token
+        with:
+          app-id: ${{ secrets.BOT_ID }}
+          private-key: ${{ secrets.BOT_SK }}
+
       - name: Clone repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ steps.app_token.outputs.token }}
 
       - name: Use Node.js 22.x
         uses: actions/setup-node@v4
@@ -48,7 +56,7 @@ jobs:
       - name: Generate semantic version for @algorandfoundation/puya-ts
         run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app_token.outputs.token }}
 
       - name: Copy puya-ts version to algo-ts
         run: |

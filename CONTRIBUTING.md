@@ -45,6 +45,8 @@ To set up the project locally:
    ```sh
    npm test
    ```
+> [!TIP]
+> Windows users: The initial test run may fail due to CRLF/LF line ending differences. If so, run `git add .` which will force git to recognise and cache the new line endings and allow the tests to complete.
 
 ## Adding New Op Codes for New AVM Versions
 
