@@ -7,6 +7,7 @@ import { buildBase85Encoder } from '../util/base-85'
 import { ContractReference, LogicSigReference } from './models'
 import type { RootNode } from './nodes'
 import { IntrinsicCall, SingleEvaluation } from './nodes'
+import { generateExcludedPropsObj } from './nodes-meta'
 import { SourceLocation } from './source-location'
 import { SymbolToNumber } from './util'
 
@@ -131,6 +132,7 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
         _type: SingleEvaluation.name,
         ...(super.serializerFunction(key, value) as object),
         _id: String(this.#singleEvals.forSymbol(value.id).id),
+        ...generateExcludedPropsObj(SingleEvaluation),
       }
     }
 
@@ -138,6 +140,7 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
       return {
         _type: value.constructor.name,
         ...(super.serializerFunction(key, value) as object),
+        ...generateExcludedPropsObj(value.constructor),
       }
     }
     return super.serializerFunction(key, value)
