@@ -113,6 +113,10 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
         goto block@23
     block@23: // after_if_else_L72
         (box_put "three" 0xffffffff)
+        let (maybe_value%0#2: bytes, maybe_exists%2#2: bool) = (box_get "three")
+        let state_get%0#2: bytes = (select 0x maybe_value%0#2 maybe_exists%2#2)
+        let tmp%3#2: bool = (== state_get%0#2 0xffffffff)
+        (assert tmp%3#2)
         let (aggregate%box_get%8#0: bytes, aggregate%box_get%9#0: bool) = (box_get "three")
         (assert aggregate%box_get%9#0) // Box must have value
         let storage_value%0#2: bytes = aggregate%box_get%8#0

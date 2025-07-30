@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 8 0 1 4
+    intcblock 8 2 0 1
     bytecblock 0x 0x0000007b 0x151f7c75 0x00 0x068101
 
 main_block@0:
@@ -12,7 +12,7 @@ main_block@1:
     // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
     txn NumAppArgs
-    intc_1 // 0
+    intc_2 // 0
     !=
     bz main_bare_routing@21
 
@@ -46,7 +46,7 @@ main_switch_case_next@20:
 main_after_if_else@25:
     // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
-    intc_1 // 0
+    intc_2 // 0
 
 main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26:
     return
@@ -55,11 +55,11 @@ main_receiveReadonly_route@18:
     // tests/approvals/native-arrays.algo.ts:225
     // receiveReadonly(a: readonly uint64[]) {}
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     // tests/approvals/native-arrays.algo.ts:6
@@ -68,18 +68,18 @@ main_receiveReadonly_route@18:
     // tests/approvals/native-arrays.algo.ts:225
     // receiveReadonly(a: readonly uint64[]) {}
     callsub receiveReadonly
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_receiveMutable_route@17:
     // tests/approvals/native-arrays.algo.ts:221
     // receiveMutable(a: uint64[]) {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     // tests/approvals/native-arrays.algo.ts:6
@@ -89,18 +89,18 @@ main_receiveMutable_route@17:
     // receiveMutable(a: uint64[]) {
     callsub receiveMutable
     pop
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_aliasing_route@16:
     // tests/approvals/native-arrays.algo.ts:195
     // aliasing(mutable: uint64[], readOnly: readonly uint64[]) {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     // tests/approvals/native-arrays.algo.ts:6
@@ -110,33 +110,33 @@ main_aliasing_route@16:
     // tests/approvals/native-arrays.algo.ts:195
     // aliasing(mutable: uint64[], readOnly: readonly uint64[]) {
     callsub aliasing
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_arc4BooleansStatic_route@15:
     // tests/approvals/native-arrays.algo.ts:191
     // arc4BooleansStatic() {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     callsub arc4BooleansStatic
     cover 2
-    intc_1 // 0
+    intc_2 // 0
     getbit
     swap
-    intc_2 // 1
+    intc_3 // 1
     uncover 2
     setbit
     swap
-    intc_1 // 0
+    intc_2 // 0
     getbit
     swap
-    pushint 2 // 2
+    intc_1 // 2
     uncover 2
     setbit
     bytec_0 // 0x
@@ -146,18 +146,18 @@ main_arc4BooleansStatic_route@15:
     swap
     concat
     log
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_arc4Booleans_route@14:
     // tests/approvals/native-arrays.algo.ts:187
     // arc4Booleans() {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     callsub arc4Booleans
@@ -165,31 +165,31 @@ main_arc4Booleans_route@14:
     swap
     concat
     log
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_booleansStatic_route@13:
     // tests/approvals/native-arrays.algo.ts:183
     // booleansStatic() {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     callsub booleansStatic
     cover 2
     swap
     bytec_3 // 0x00
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     setbit
-    intc_2 // 1
+    intc_3 // 1
     uncover 2
     setbit
-    pushint 2 // 2
+    intc_1 // 2
     uncover 2
     setbit
     bytec_0 // 0x
@@ -199,18 +199,18 @@ main_booleansStatic_route@13:
     swap
     concat
     log
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_booleans_route@12:
     // tests/approvals/native-arrays.algo.ts:179
     // booleans() {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     callsub booleans
@@ -218,18 +218,18 @@ main_booleans_route@12:
     swap
     concat
     log
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_structs_route@11:
     // tests/approvals/native-arrays.algo.ts:170
     // structs({ x, y }: Vector) {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     // tests/approvals/native-arrays.algo.ts:6
@@ -242,33 +242,33 @@ main_structs_route@11:
     swap
     concat
     log
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_arc4Interop_route@10:
     // tests/approvals/native-arrays.algo.ts:157
     // arc4Interop() {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     callsub arc4Interop
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_fixedArray_route@9:
     // tests/approvals/native-arrays.algo.ts:109
     // fixedArray(y: FixedArray<uint64, 50>) {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     // tests/approvals/native-arrays.algo.ts:6
@@ -277,33 +277,33 @@ main_fixedArray_route@9:
     // tests/approvals/native-arrays.algo.ts:109
     // fixedArray(y: FixedArray<uint64, 50>) {
     callsub fixedArray
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_doThings_route@8:
     // tests/approvals/native-arrays.algo.ts:42
     // doThings() {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     callsub doThings
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_buildReadonly_route@7:
     // tests/approvals/native-arrays.algo.ts:38
     // buildReadonly(): ReadonlyArray<uint64> {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     callsub buildReadonly
@@ -311,18 +311,18 @@ main_buildReadonly_route@7:
     swap
     concat
     log
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_arrayFromCtor_route@6:
     // tests/approvals/native-arrays.algo.ts:34
     // arrayFromCtor(): Array<uint64> {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     callsub arrayFromCtor
@@ -330,18 +330,18 @@ main_arrayFromCtor_route@6:
     swap
     concat
     log
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_buildArray_route@5:
     // tests/approvals/native-arrays.algo.ts:30
     // buildArray(): Array<uint64> {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     callsub buildArray
@@ -349,44 +349,44 @@ main_buildArray_route@5:
     swap
     concat
     log
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_arrayInObject_route@4:
     // tests/approvals/native-arrays.algo.ts:20
     // arrayInObject() {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     callsub arrayInObject
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_readonlyArray_route@3:
     // tests/approvals/native-arrays.algo.ts:7
     // readonlyArray() {
     txn OnCompletion
-    intc_1 // NoOp
+    intc_2 // NoOp
     ==
     assert // OnCompletion is not NoOp
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     !=
     assert // can only call when not creating
     callsub readonlyArray
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 main_bare_routing@21:
     // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
     txn OnCompletion
-    intc_1 // 0
+    intc_2 // 0
     swap
     match main___algots__.defaultCreate@22
 
@@ -399,11 +399,11 @@ main___algots__.defaultCreate@22:
     // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
     txn ApplicationID
-    intc_1 // 0
+    intc_2 // 0
     ==
     assert // can only call when creating
     callsub __algots__.defaultCreate
-    intc_2 // 1
+    intc_3 // 1
     b main_after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__@26
 
 
@@ -432,8 +432,8 @@ ensure_budget_while_body@2:
     itxn_field ApprovalProgram
     bytec 4 // 0x068101
     itxn_field ClearStateProgram
-    intc_1 // 0
-    intc_2 // 1
+    intc_2 // 0
+    intc_3 // 1
     frame_dig -1
     match ensure_budget_switch_case_0@3 ensure_budget_switch_case_1@4
 
@@ -449,7 +449,7 @@ ensure_budget_switch_case_1@4:
     b ensure_budget_switch_case_next@6
 
 ensure_budget_switch_case_0@3:
-    intc_1 // 0
+    intc_2 // 0
     itxn_field Fee
     b ensure_budget_switch_case_next@6
 
@@ -463,9 +463,9 @@ dynamic_array_pop_fixed_size:
 
 dynamic_array_pop_fixed_size_block@0:
     frame_dig -2
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
-    intc_2 // 1
+    intc_3 // 1
     -
     itob
     extract 6 0
@@ -481,7 +481,7 @@ dynamic_array_pop_fixed_size_block@0:
     extract3
     cover 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     substring3
     retsub
@@ -496,10 +496,10 @@ readonlyArray_block@0:
     pushint 3 // 3
     itob
     extract 6 2
-    intc_2 // 1
+    intc_3 // 1
     itob
     concat
-    pushint 2 // 2
+    intc_1 // 2
     itob
     concat
     pushint 3 // 3
@@ -516,45 +516,55 @@ readonlyArray_block@0:
     swap
     concat // on error: max array length exceeded
     swap
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
-    intc_2 // 1
+    intc_3 // 1
     +
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     // tests/approvals/native-arrays.algo.ts:12
     // myArray = [...myArray, Uint64(4)]
-    intc_2 // 1
+    intc_3 // 1
     itob
     extract 6 2
-    intc_3 // 4
+    pushint 4 // 4
     itob
     concat
-    extract 2 0
+    dup
+    len
+    swap
+    intc_1 // 2
+    uncover 2
+    substring3
     concat // on error: max array length exceeded
     dup
-    extract 2 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     len
     intc_0 // 8
     /
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     // tests/approvals/native-arrays.algo.ts:15
     // myArray = myArray.with(2, 3)
     pushint 3 // 3
     itob
-    pushint 2 // 2
+    intc_1 // 2
     intc_0 // 8
     *
-    pushint 2 // 2
+    intc_1 // 2
     +
     uncover 2
     swap
@@ -563,37 +573,55 @@ readonlyArray_block@0:
     // tests/approvals/native-arrays.algo.ts:17
     // assertMatch(myArray, [1, 2, 3, 5, 4])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     pushint 5 // 5
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_2 // 1
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    pushint 2 // 2
+    intc_1 // 2
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
     intc_0 // 8
     *
     intc_0 // 8
@@ -601,9 +629,16 @@ readonlyArray_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
@@ -612,16 +647,22 @@ readonlyArray_block@0:
     btoi
     pushint 5 // 5
     ==
+    uncover 2
     &&
     swap
-    extract 2 0
-    intc_3 // 4
+    dup
+    len
+    swap
+    intc_1 // 2
+    uncover 2
+    substring3
+    pushint 4 // 4
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
     &&
     assert // assert target is match for conditions
@@ -637,7 +678,7 @@ arrayInObject_block@0:
     //   name: 'Alice',
     //   favouriteNumbers: [1337],
     // }
-    intc_2 // 1
+    intc_3 // 1
     itob
     extract 6 2
     // tests/approvals/native-arrays.algo.ts:24
@@ -661,21 +702,21 @@ arrayInObject_block@0:
     swap
     concat // on error: max array length exceeded
     swap
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
-    intc_2 // 1
+    intc_3 // 1
     +
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     // tests/approvals/native-arrays.algo.ts:27
     // assert(length === 2)
-    pushint 2 // 2
+    intc_1 // 2
     ==
     assert
     retsub
@@ -687,19 +728,19 @@ buildArray:
 buildArray_block@0:
     // tests/approvals/native-arrays.algo.ts:31
     // return [1, 2, 3, 4]
-    intc_3 // 4
+    pushint 4 // 4
     itob
     extract 6 2
-    intc_2 // 1
+    intc_3 // 1
     itob
     concat
-    pushint 2 // 2
+    intc_1 // 2
     itob
     concat
     pushint 3 // 3
     itob
     concat
-    intc_3 // 4
+    pushint 4 // 4
     itob
     concat
     retsub
@@ -714,10 +755,10 @@ arrayFromCtor_block@0:
     pushint 3 // 3
     itob
     extract 6 2
-    intc_2 // 1
+    intc_3 // 1
     itob
     concat
-    pushint 2 // 2
+    intc_1 // 2
     itob
     concat
     pushint 3 // 3
@@ -732,19 +773,19 @@ buildReadonly:
 buildReadonly_block@0:
     // tests/approvals/native-arrays.algo.ts:39
     // return [1, 2, 3, 4]
-    intc_3 // 4
+    pushint 4 // 4
     itob
     extract 6 2
-    intc_2 // 1
+    intc_3 // 1
     itob
     concat
-    pushint 2 // 2
+    intc_1 // 2
     itob
     concat
     pushint 3 // 3
     itob
     concat
-    intc_3 // 4
+    pushint 4 // 4
     itob
     concat
     retsub
@@ -757,7 +798,7 @@ doThings_block@0:
     // tests/approvals/native-arrays.algo.ts:43
     // ensureBudget(1400)
     pushint 1400 // 1400
-    intc_1 // 0
+    intc_2 // 0
     callsub ensure_budget
     // tests/approvals/native-arrays.algo.ts:44
     // let arr = this.buildArray()
@@ -773,14 +814,14 @@ doThings_block@0:
     swap
     concat // on error: max array length exceeded
     swap
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
-    intc_2 // 1
+    intc_3 // 1
     +
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     // tests/approvals/native-arrays.algo.ts:47
@@ -795,37 +836,55 @@ doThings_block@0:
     // tests/approvals/native-arrays.algo.ts:48
     // assertMatch(arr, [1, 2, 3, 4])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
-    intc_3 // 4
+    pushint 4 // 4
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_2 // 1
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    pushint 2 // 2
+    intc_1 // 2
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
     intc_0 // 8
     *
     intc_0 // 8
@@ -833,48 +892,66 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:51
     // assert(arr[0] === 1)
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
     assert
     // tests/approvals/native-arrays.algo.ts:52
     // assert(arr.at(-1)! === 4)
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
-    intc_2 // 1
+    intc_3 // 1
     -
     dig 1
-    extract 2 0
+    len
+    swap
+    dig 2
+    intc_1 // 2
+    uncover 3
+    substring3
     swap
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
     assert
     // tests/approvals/native-arrays.algo.ts:55
@@ -888,50 +965,68 @@ doThings_block@0:
     swap
     concat // on error: max array length exceeded
     swap
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
-    intc_2 // 1
+    intc_3 // 1
     +
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     // tests/approvals/native-arrays.algo.ts:57
     // assertMatch(arr, [1, 2, 3, 4, 5])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     pushint 5 // 5
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_2 // 1
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    pushint 2 // 2
+    intc_1 // 2
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
     intc_0 // 8
     *
     intc_0 // 8
@@ -939,21 +1034,35 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_3 // 4
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    pushint 4 // 4
     intc_0 // 8
     *
     intc_0 // 8
@@ -961,6 +1070,7 @@ doThings_block@0:
     btoi
     pushint 5 // 5
     ==
+    uncover 2
     &&
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:60
@@ -977,37 +1087,55 @@ doThings_block@0:
     // tests/approvals/native-arrays.algo.ts:63
     // assertMatch(arr, [1, 2, 3, 4])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
-    intc_3 // 4
+    pushint 4 // 4
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_2 // 1
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    pushint 2 // 2
+    intc_1 // 2
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
     intc_0 // 8
     *
     intc_0 // 8
@@ -1015,27 +1143,35 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:66
     // arr[1] = 10
     pushint 10 // 10
     itob
-    intc_2 // 1
+    intc_3 // 1
     intc_0 // 8
     *
-    pushint 2 // 2
+    intc_1 // 2
     +
     uncover 2
     swap
@@ -1045,10 +1181,10 @@ doThings_block@0:
     // const arr2 = arr.with(1, 5)
     pushint 5 // 5
     itob
-    intc_2 // 1
+    intc_3 // 1
     intc_0 // 8
     *
-    pushint 2 // 2
+    intc_1 // 2
     +
     dig 2
     swap
@@ -1058,26 +1194,37 @@ doThings_block@0:
     // tests/approvals/native-arrays.algo.ts:70
     // assertMatch(arr, [1, 10, 3, 4])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
-    intc_3 // 4
+    pushint 4 // 4
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_2 // 1
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
@@ -1085,10 +1232,17 @@ doThings_block@0:
     btoi
     pushint 10 // 10
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
     intc_0 // 8
     *
     intc_0 // 8
@@ -1096,42 +1250,61 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:71
     // assertMatch(arr2, [1, 5, 3, 4])
     dig 1
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
-    intc_3 // 4
+    pushint 4 // 4
     ==
     swap
     dig 2
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dig 3
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
     uncover 2
     &&
+    swap
     dig 2
-    extract 2 0
-    intc_2 // 1
+    len
+    swap
+    dig 3
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
@@ -1139,28 +1312,43 @@ doThings_block@0:
     btoi
     pushint 5 // 5
     ==
-    &&
-    dig 2
-    extract 2 0
-    pushint 2 // 2
-    intc_0 // 8
-    *
-    intc_0 // 8
-    extract3 // on error: index access is out of bounds
-    btoi
-    pushint 3 // 3
-    ==
-    &&
     uncover 2
-    extract 2 0
+    &&
+    swap
+    dig 2
+    len
+    swap
+    dig 3
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
+    intc_0 // 8
+    *
+    intc_0 // 8
+    extract3 // on error: index access is out of bounds
+    btoi
+    pushint 3 // 3
+    ==
+    uncover 2
+    &&
+    swap
+    dig 2
+    len
+    swap
+    uncover 3
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:74
@@ -1176,19 +1364,29 @@ doThings_block@0:
     // tests/approvals/native-arrays.algo.ts:75
     // arr = arr.concat(arr).concat(11).concat(t1)
     dig 1
-    extract 2 0
+    len
+    swap
+    dig 2
+    intc_1 // 2
+    uncover 3
+    substring3
     uncover 2
     swap
     concat // on error: max array length exceeded
     dup
-    extract 2 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     len
     intc_0 // 8
     /
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     pushint 11 // 11
@@ -1200,52 +1398,68 @@ doThings_block@0:
     swap
     concat // on error: max array length exceeded
     swap
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
-    intc_2 // 1
+    intc_3 // 1
     +
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     swap
     concat // on error: max array length exceeded
     dup
-    extract 2 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     len
     intc_0 // 8
     /
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     // tests/approvals/native-arrays.algo.ts:76
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     pushint 11 // 11
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_2 // 1
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
@@ -1253,10 +1467,17 @@ doThings_block@0:
     btoi
     pushint 10 // 10
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
     intc_0 // 8
     *
     intc_0 // 8
@@ -1264,31 +1485,52 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_3 // 4
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    pushint 4 // 4
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 5 // 5
     intc_0 // 8
     *
@@ -1297,9 +1539,16 @@ doThings_block@0:
     btoi
     pushint 10 // 10
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 6 // 6
     intc_0 // 8
     *
@@ -1308,20 +1557,34 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 7 // 7
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     intc_0 // 8
     dup
     *
@@ -1330,9 +1593,16 @@ doThings_block@0:
     btoi
     pushint 11 // 11
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 9 // 9
     intc_0 // 8
     *
@@ -1341,9 +1611,16 @@ doThings_block@0:
     btoi
     pushint 12 // 12
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 10 // 10
     intc_0 // 8
     *
@@ -1352,6 +1629,7 @@ doThings_block@0:
     btoi
     pushint 13 // 13
     ==
+    uncover 2
     &&
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:78
@@ -1359,10 +1637,10 @@ doThings_block@0:
     pushint 3 // 3
     itob
     extract 6 2
-    intc_2 // 1
+    intc_3 // 1
     itob
     concat
-    pushint 2 // 2
+    intc_1 // 2
     itob
     concat
     pushint 3 // 3
@@ -1370,7 +1648,7 @@ doThings_block@0:
     concat
     // tests/approvals/native-arrays.algo.ts:79
     // rArr1 = rArr1.concat(Uint64(4))
-    intc_3 // 4
+    pushint 4 // 4
     itob
     bytec_0 // 0x
     swap
@@ -1379,71 +1657,99 @@ doThings_block@0:
     swap
     concat // on error: max array length exceeded
     swap
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
-    intc_2 // 1
+    intc_3 // 1
     +
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     // tests/approvals/native-arrays.algo.ts:80
     // rArr1 = [...rArr1, Uint64(5)]
-    intc_2 // 1
+    intc_3 // 1
     itob
     extract 6 2
     pushint 5 // 5
     itob
     concat
-    extract 2 0
+    dup
+    len
+    swap
+    intc_1 // 2
+    uncover 2
+    substring3
     concat // on error: max array length exceeded
     dup
-    extract 2 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     len
     intc_0 // 8
     /
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     // tests/approvals/native-arrays.algo.ts:81
     // assertMatch(rArr1, [1, 2, 3, 4, 5])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     pushint 5 // 5
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_2 // 1
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    pushint 2 // 2
+    intc_1 // 2
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
     intc_0 // 8
     *
     intc_0 // 8
@@ -1451,21 +1757,35 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_3 // 4
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    pushint 4 // 4
     intc_0 // 8
     *
     intc_0 // 8
@@ -1473,6 +1793,7 @@ doThings_block@0:
     btoi
     pushint 5 // 5
     ==
+    uncover 2
     &&
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:83
@@ -1481,7 +1802,7 @@ doThings_block@0:
     bzero
     // tests/approvals/native-arrays.algo.ts:84
     // const fArr2 = fArr1.concat(fArr1)
-    intc_3 // 4
+    pushint 4 // 4
     itob
     extract 6 2
     dig 1
@@ -1489,23 +1810,28 @@ doThings_block@0:
     dig 1
     concat // on error: max array length exceeded
     dup
-    extract 2 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     len
     intc_0 // 8
     /
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     swap
     // tests/approvals/native-arrays.algo.ts:85
     // assertMatch(fArr1, [0, 0, 0, 0])
-    intc_3 // 4
+    pushint 4 // 4
     dup
     ==
-    intc_1 // 0
+    intc_2 // 0
     intc_0 // 8
     *
     dig 2
@@ -1513,10 +1839,10 @@ doThings_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
     &&
-    intc_2 // 1
+    intc_3 // 1
     intc_0 // 8
     *
     dig 2
@@ -1524,10 +1850,10 @@ doThings_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
     &&
-    pushint 2 // 2
+    intc_1 // 2
     intc_0 // 8
     *
     dig 2
@@ -1535,7 +1861,7 @@ doThings_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
     &&
     pushint 3 // 3
@@ -1546,160 +1872,242 @@ doThings_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
     &&
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:86
     // assertMatch(fArr2, [0, 0, 0, 0, 0, 0, 0, 0])
     dig 1
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     intc_0 // 8
     ==
     swap
     dig 2
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dig 3
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
     uncover 2
     &&
+    swap
     dig 2
-    extract 2 0
-    intc_2 // 1
+    len
+    swap
+    dig 3
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
+    swap
     dig 2
-    extract 2 0
-    pushint 2 // 2
+    len
+    swap
+    dig 3
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
+    swap
     dig 2
-    extract 2 0
+    len
+    swap
+    dig 3
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
+    swap
     dig 2
-    extract 2 0
-    intc_3 // 4
+    len
+    swap
+    dig 3
+    intc_1 // 2
+    uncover 3
+    substring3
+    pushint 4 // 4
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
+    swap
     dig 2
-    extract 2 0
+    len
+    swap
+    dig 3
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 5 // 5
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
+    swap
     dig 2
-    extract 2 0
+    len
+    swap
+    dig 3
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 6 // 6
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
+    swap
     dig 2
-    extract 2 0
+    len
+    swap
+    dig 3
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 7 // 7
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:88
     // const arr3 = rArr1.concat(fArr2)
+    dig 1
+    len
     swap
-    extract 2 0
+    uncover 2
+    intc_1 // 2
+    uncover 3
+    substring3
     dig 2
     swap
     concat // on error: max array length exceeded
     dup
-    extract 2 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     len
     intc_0 // 8
     /
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     // tests/approvals/native-arrays.algo.ts:89
     // assertMatch(arr3, [1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     pushint 13 // 13
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_2 // 1
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    pushint 2 // 2
+    intc_1 // 2
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
     intc_0 // 8
     *
     intc_0 // 8
@@ -1707,21 +2115,35 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_3 // 4
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    pushint 4 // 4
     intc_0 // 8
     *
     intc_0 // 8
@@ -1729,148 +2151,231 @@ doThings_block@0:
     btoi
     pushint 5 // 5
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 5 // 5
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 6 // 6
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 7 // 7
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     intc_0 // 8
     dup
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 9 // 9
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 10 // 10
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 11 // 11
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
     swap
-    extract 2 0
+    dup
+    len
+    swap
+    intc_1 // 2
+    uncover 2
+    substring3
     pushint 12 // 12
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
     &&
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:91
     // const arr4 = rArr1.concat(arr)
     dig 2
-    extract 2 0
+    len
+    swap
+    dig 3
+    intc_1 // 2
+    uncover 3
+    substring3
     dig 2
     swap
     concat // on error: max array length exceeded
     dup
-    extract 2 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     len
     intc_0 // 8
     /
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     // tests/approvals/native-arrays.algo.ts:92
     // assertMatch(arr4, [1, 2, 3, 4, 5, 1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     pushint 16 // 16
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_2 // 1
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    pushint 2 // 2
+    intc_1 // 2
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
     intc_0 // 8
     *
     intc_0 // 8
@@ -1878,21 +2383,35 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_3 // 4
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    pushint 4 // 4
     intc_0 // 8
     *
     intc_0 // 8
@@ -1900,20 +2419,34 @@ doThings_block@0:
     btoi
     pushint 5 // 5
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 5 // 5
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 6 // 6
     intc_0 // 8
     *
@@ -1922,9 +2455,16 @@ doThings_block@0:
     btoi
     pushint 10 // 10
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 7 // 7
     intc_0 // 8
     *
@@ -1933,31 +2473,52 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     intc_0 // 8
     dup
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 9 // 9
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 10 // 10
     intc_0 // 8
     *
@@ -1966,9 +2527,16 @@ doThings_block@0:
     btoi
     pushint 10 // 10
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 11 // 11
     intc_0 // 8
     *
@@ -1977,20 +2545,34 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 12 // 12
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 13 // 13
     intc_0 // 8
     *
@@ -1999,9 +2581,16 @@ doThings_block@0:
     btoi
     pushint 11 // 11
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 14 // 14
     intc_0 // 8
     *
@@ -2010,9 +2599,15 @@ doThings_block@0:
     btoi
     pushint 12 // 12
     ==
+    uncover 2
     &&
     swap
-    extract 2 0
+    dup
+    len
+    swap
+    intc_1 // 2
+    uncover 2
+    substring3
     pushint 15 // 15
     intc_0 // 8
     *
@@ -2025,102 +2620,158 @@ doThings_block@0:
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:94
     // const arr5 = fArr1.concat(rArr1)
-    intc_3 // 4
+    pushint 4 // 4
     itob
     extract 6 2
     dig 1
     concat
     dig 2
-    extract 2 0
+    len
+    swap
+    dig 3
+    intc_1 // 2
+    uncover 3
+    substring3
     concat // on error: max array length exceeded
     dup
-    extract 2 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     len
     intc_0 // 8
     /
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     // tests/approvals/native-arrays.algo.ts:95
     // assertMatch(arr5, [0, 0, 0, 0, 1, 2, 3, 4, 5])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     pushint 9 // 9
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_2 // 1
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_3 // 4
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    pushint 4 // 4
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 5 // 5
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    pushint 2 // 2
+    intc_1 // 2
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 6 // 6
     intc_0 // 8
     *
@@ -2129,20 +2780,33 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 7 // 7
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
     swap
-    extract 2 0
+    dup
+    len
+    swap
+    intc_1 // 2
+    uncover 2
+    substring3
     intc_0 // 8
     dup
     *
@@ -2155,91 +2819,140 @@ doThings_block@0:
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:97
     // const arr6 = fArr1.concat(arr)
-    intc_3 // 4
+    pushint 4 // 4
     itob
     extract 6 2
     dig 1
     concat
     dig 3
-    extract 2 0
+    len
+    swap
+    dig 4
+    intc_1 // 2
+    uncover 3
+    substring3
     concat // on error: max array length exceeded
     dup
-    extract 2 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     len
     intc_0 // 8
     /
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     // tests/approvals/native-arrays.algo.ts:98
     // assertMatch(arr6, [0, 0, 0, 0, 1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     pushint 15 // 15
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_2 // 1
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_3 // 4
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    pushint 4 // 4
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 5 // 5
     intc_0 // 8
     *
@@ -2248,9 +2961,16 @@ doThings_block@0:
     btoi
     pushint 10 // 10
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 6 // 6
     intc_0 // 8
     *
@@ -2259,31 +2979,52 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 7 // 7
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     intc_0 // 8
     dup
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 9 // 9
     intc_0 // 8
     *
@@ -2292,9 +3033,16 @@ doThings_block@0:
     btoi
     pushint 10 // 10
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 10 // 10
     intc_0 // 8
     *
@@ -2303,20 +3051,34 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 11 // 11
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 12 // 12
     intc_0 // 8
     *
@@ -2325,9 +3087,16 @@ doThings_block@0:
     btoi
     pushint 11 // 11
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 13 // 13
     intc_0 // 8
     *
@@ -2336,9 +3105,15 @@ doThings_block@0:
     btoi
     pushint 12 // 12
     ==
+    uncover 2
     &&
     swap
-    extract 2 0
+    dup
+    len
+    swap
+    intc_1 // 2
+    uncover 2
+    substring3
     pushint 14 // 14
     intc_0 // 8
     *
@@ -2351,26 +3126,36 @@ doThings_block@0:
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:100
     // const arr7 = arr.concat(rArr1)
+    dig 1
+    len
     swap
-    extract 2 0
+    uncover 2
+    intc_1 // 2
+    uncover 3
+    substring3
     dig 2
     swap
     concat // on error: max array length exceeded
     dup
-    extract 2 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     len
     intc_0 // 8
     /
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     // tests/approvals/native-arrays.algo.ts:101
     // assert(arr7.length === 16)
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     pushint 16 // 16
     ==
@@ -2378,26 +3163,37 @@ doThings_block@0:
     // tests/approvals/native-arrays.algo.ts:102
     // assertMatch(arr7, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13, 1, 2, 3, 4, 5])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     pushint 16 // 16
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_2 // 1
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
@@ -2405,10 +3201,17 @@ doThings_block@0:
     btoi
     pushint 10 // 10
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
     intc_0 // 8
     *
     intc_0 // 8
@@ -2416,31 +3219,52 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_3 // 4
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    pushint 4 // 4
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 5 // 5
     intc_0 // 8
     *
@@ -2449,9 +3273,16 @@ doThings_block@0:
     btoi
     pushint 10 // 10
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 6 // 6
     intc_0 // 8
     *
@@ -2460,20 +3291,34 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 7 // 7
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     intc_0 // 8
     dup
     *
@@ -2482,9 +3327,16 @@ doThings_block@0:
     btoi
     pushint 11 // 11
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 9 // 9
     intc_0 // 8
     *
@@ -2493,9 +3345,16 @@ doThings_block@0:
     btoi
     pushint 12 // 12
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 10 // 10
     intc_0 // 8
     *
@@ -2504,31 +3363,52 @@ doThings_block@0:
     btoi
     pushint 13 // 13
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 11 // 11
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 12 // 12
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    pushint 2 // 2
+    intc_1 // 2
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 13 // 13
     intc_0 // 8
     *
@@ -2537,20 +3417,33 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 14 // 14
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
     swap
-    extract 2 0
+    dup
+    len
+    swap
+    intc_1 // 2
+    uncover 2
+    substring3
     pushint 15 // 15
     intc_0 // 8
     *
@@ -2565,20 +3458,25 @@ doThings_block@0:
     // const arr8 = arr.concat(fArr1)
     concat // on error: max array length exceeded
     dup
-    extract 2 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     len
     intc_0 // 8
     /
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     // tests/approvals/native-arrays.algo.ts:105
     // assert(arr8.length === 15)
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     pushint 15 // 15
     ==
@@ -2586,26 +3484,37 @@ doThings_block@0:
     // tests/approvals/native-arrays.algo.ts:106
     // assertMatch(arr8, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13, 0, 0, 0, 0])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     pushint 15 // 15
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_2 // 1
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
@@ -2613,10 +3522,17 @@ doThings_block@0:
     btoi
     pushint 10 // 10
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
     intc_0 // 8
     *
     intc_0 // 8
@@ -2624,31 +3540,52 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 3 // 3
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_3 // 4
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    pushint 4 // 4
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 5 // 5
     intc_0 // 8
     *
@@ -2657,9 +3594,16 @@ doThings_block@0:
     btoi
     pushint 10 // 10
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 6 // 6
     intc_0 // 8
     *
@@ -2668,20 +3612,34 @@ doThings_block@0:
     btoi
     pushint 3 // 3
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 7 // 7
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     intc_0 // 8
     dup
     *
@@ -2690,9 +3648,16 @@ doThings_block@0:
     btoi
     pushint 11 // 11
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 9 // 9
     intc_0 // 8
     *
@@ -2701,9 +3666,16 @@ doThings_block@0:
     btoi
     pushint 12 // 12
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 10 // 10
     intc_0 // 8
     *
@@ -2712,49 +3684,76 @@ doThings_block@0:
     btoi
     pushint 13 // 13
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 11 // 11
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 12 // 12
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
     pushint 13 // 13
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
+    uncover 2
     &&
     swap
-    extract 2 0
+    dup
+    len
+    swap
+    intc_1 // 2
+    uncover 2
+    substring3
     pushint 14 // 14
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
     &&
     assert // assert target is match for conditions
@@ -2770,25 +3769,25 @@ fixedArray:
 fixedArray_block@0:
     // tests/approvals/native-arrays.algo.ts:110
     // const x = new FixedArray<uint64, 4>(1, 2, 3, 4)
-    intc_2 // 1
+    intc_3 // 1
     itob
     bytec_0 // 0x
     swap
     concat
-    pushint 2 // 2
+    intc_1 // 2
     itob
     concat
     pushint 3 // 3
     itob
     concat
-    intc_3 // 4
+    pushint 4 // 4
     itob
     concat
     // tests/approvals/native-arrays.algo.ts:111
     // x[0] = 0
-    intc_1 // 0
+    intc_2 // 0
     itob
-    intc_1 // 0
+    intc_2 // 0
     intc_0 // 8
     *
     uncover 2
@@ -2809,7 +3808,7 @@ fixedArray_block@0:
     assert
     // tests/approvals/native-arrays.algo.ts:119
     // assert(x[0] === y[0])
-    intc_1 // 0
+    intc_2 // 0
     intc_0 // 8
     *
     dig 1
@@ -2817,7 +3816,7 @@ fixedArray_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     intc_0 // 8
     *
     frame_dig -1
@@ -2829,10 +3828,10 @@ fixedArray_block@0:
     assert
     // tests/approvals/native-arrays.algo.ts:120
     // assertMatch(x, [{ lessThan: 1 }, 2, 3, 4])
-    intc_3 // 4
+    pushint 4 // 4
     dup
     ==
-    intc_1 // 0
+    intc_2 // 0
     intc_0 // 8
     *
     dig 2
@@ -2840,10 +3839,10 @@ fixedArray_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     <
     &&
-    intc_2 // 1
+    intc_3 // 1
     intc_0 // 8
     *
     dig 2
@@ -2851,10 +3850,10 @@ fixedArray_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    pushint 2 // 2
+    intc_1 // 2
     ==
     &&
-    pushint 2 // 2
+    intc_1 // 2
     intc_0 // 8
     *
     dig 2
@@ -2873,7 +3872,7 @@ fixedArray_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
     &&
     assert // assert target is match for conditions
@@ -2887,17 +3886,17 @@ fixedArray_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     >=
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:123
     // const myVectors: FixedArray<Vector, 2> = new FixedArray<Vector, 2>({ x: 1, y: 2 }, { x: 3, y: 4 })
-    intc_2 // 1
+    intc_3 // 1
     itob
     bytec_0 // 0x
     swap
     concat
-    pushint 2 // 2
+    intc_1 // 2
     itob
     concat
     pushint 3 // 3
@@ -2905,7 +3904,7 @@ fixedArray_block@0:
     bytec_0 // 0x
     swap
     concat
-    intc_3 // 4
+    pushint 4 // 4
     itob
     concat
     bytec_0 // 0x
@@ -2918,24 +3917,24 @@ fixedArray_block@0:
     //   { x: 1, y: 2 },
     //   { x: 3, y: 4 },
     // ])
-    pushint 2 // 2
+    intc_1 // 2
     dup
     ==
     swap
-    intc_1 // 0
+    intc_2 // 0
     pushint 16 // 16
     *
     dig 1
     swap
     pushint 16 // 16
     extract3 // on error: index access is out of bounds
-    intc_1 // 0
+    intc_2 // 0
     intc_0 // 8
     extract3
     btoi
     // tests/approvals/native-arrays.algo.ts:125
     // { x: 1, y: 2 },
-    intc_2 // 1
+    intc_3 // 1
     // tests/approvals/native-arrays.algo.ts:124-127
     // assertMatch(myVectors, [
     //   { x: 1, y: 2 },
@@ -2943,7 +3942,7 @@ fixedArray_block@0:
     // ])
     ==
     swap
-    intc_1 // 0
+    intc_2 // 0
     pushint 16 // 16
     *
     dig 1
@@ -2956,7 +3955,7 @@ fixedArray_block@0:
     btoi
     // tests/approvals/native-arrays.algo.ts:125
     // { x: 1, y: 2 },
-    pushint 2 // 2
+    intc_1 // 2
     // tests/approvals/native-arrays.algo.ts:124-127
     // assertMatch(myVectors, [
     //   { x: 1, y: 2 },
@@ -2968,14 +3967,14 @@ fixedArray_block@0:
     uncover 2
     &&
     swap
-    intc_2 // 1
+    intc_3 // 1
     pushint 16 // 16
     *
     dig 1
     swap
     pushint 16 // 16
     extract3 // on error: index access is out of bounds
-    intc_1 // 0
+    intc_2 // 0
     intc_0 // 8
     extract3
     btoi
@@ -2989,7 +3988,7 @@ fixedArray_block@0:
     // ])
     ==
     swap
-    intc_2 // 1
+    intc_3 // 1
     pushint 16 // 16
     *
     pushint 16 // 16
@@ -3000,7 +3999,7 @@ fixedArray_block@0:
     btoi
     // tests/approvals/native-arrays.algo.ts:126
     // { x: 3, y: 4 },
-    intc_3 // 4
+    pushint 4 // 4
     // tests/approvals/native-arrays.algo.ts:124-127
     // assertMatch(myVectors, [
     //   { x: 1, y: 2 },
@@ -3028,30 +4027,30 @@ fixedArray_block@0:
     concat
     // tests/approvals/native-arrays.algo.ts:130
     // assertMatch(myObject.a, [{ x: 5, y: 6 }])
-    intc_2 // 1
+    intc_3 // 1
     dup
     ==
     swap
     dup
-    intc_1 // 0
+    intc_2 // 0
     pushint 16 // 16
     extract3
-    intc_1 // 0
+    intc_2 // 0
     pushint 16 // 16
     *
     pushint 16 // 16
     extract3 // on error: index access is out of bounds
-    intc_1 // 0
+    intc_2 // 0
     intc_0 // 8
     extract3
     btoi
     pushint 5 // 5
     ==
     swap
-    intc_1 // 0
+    intc_2 // 0
     pushint 16 // 16
     extract3
-    intc_1 // 0
+    intc_2 // 0
     pushint 16 // 16
     *
     pushint 16 // 16
@@ -3071,17 +4070,17 @@ fixedArray_block@0:
     bzero
     // tests/approvals/native-arrays.algo.ts:133
     // assert(z1.length === 4)
-    intc_3 // 4
+    pushint 4 // 4
     dup
     ==
     assert
     // tests/approvals/native-arrays.algo.ts:134
     // assertMatch(z1, [0, 0, 0, 0])
-    intc_3 // 4
+    pushint 4 // 4
     dup
     ==
     swap
-    intc_1 // 0
+    intc_2 // 0
     intc_0 // 8
     *
     dig 1
@@ -3089,11 +4088,11 @@ fixedArray_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
     uncover 2
     &&
-    intc_2 // 1
+    intc_3 // 1
     intc_0 // 8
     *
     dig 2
@@ -3101,10 +4100,10 @@ fixedArray_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
     &&
-    pushint 2 // 2
+    intc_1 // 2
     intc_0 // 8
     *
     dig 2
@@ -3112,7 +4111,7 @@ fixedArray_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
     &&
     pushint 3 // 3
@@ -3123,15 +4122,15 @@ fixedArray_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_1 // 0
+    intc_2 // 0
     ==
     &&
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:135
     // z1[0] = 1
-    intc_2 // 1
+    intc_3 // 1
     itob
-    intc_1 // 0
+    intc_2 // 0
     intc_0 // 8
     *
     uncover 2
@@ -3140,9 +4139,9 @@ fixedArray_block@0:
     replace3
     // tests/approvals/native-arrays.algo.ts:136
     // z1[1] = 2
-    pushint 2 // 2
+    intc_1 // 2
     itob
-    intc_2 // 1
+    intc_3 // 1
     intc_0 // 8
     *
     uncover 2
@@ -3153,7 +4152,7 @@ fixedArray_block@0:
     // z1[2] = 3
     pushint 3 // 3
     itob
-    pushint 2 // 2
+    intc_1 // 2
     intc_0 // 8
     *
     uncover 2
@@ -3162,7 +4161,7 @@ fixedArray_block@0:
     replace3
     // tests/approvals/native-arrays.algo.ts:138
     // z1[3] = 4
-    intc_3 // 4
+    pushint 4 // 4
     itob
     pushint 3 // 3
     intc_0 // 8
@@ -3173,11 +4172,11 @@ fixedArray_block@0:
     replace3
     // tests/approvals/native-arrays.algo.ts:139
     // assertMatch(z1, [{ lessThanEq: 1 }, 2, 3, 4])
-    intc_3 // 4
+    pushint 4 // 4
     dup
     ==
     swap
-    intc_1 // 0
+    intc_2 // 0
     intc_0 // 8
     *
     dig 1
@@ -3185,11 +4184,11 @@ fixedArray_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_2 // 1
+    intc_3 // 1
     <=
     uncover 2
     &&
-    intc_2 // 1
+    intc_3 // 1
     intc_0 // 8
     *
     dig 2
@@ -3197,10 +4196,10 @@ fixedArray_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    pushint 2 // 2
+    intc_1 // 2
     ==
     &&
-    pushint 2 // 2
+    intc_1 // 2
     intc_0 // 8
     *
     dig 2
@@ -3219,46 +4218,46 @@ fixedArray_block@0:
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
     &&
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:141
     // const z2 = new FixedArray<boolean, 3>()
-    intc_2 // 1
+    intc_3 // 1
     bzero
     // tests/approvals/native-arrays.algo.ts:142
     // assert(z2[0] === false)
-    intc_1 // 0
+    intc_2 // 0
     pushint 3 // 3
     <
     assert // index access is out of bounds
-    intc_1 // 0
+    intc_2 // 0
     getbit
-    intc_1 // 0
+    intc_2 // 0
     ==
     assert
     // tests/approvals/native-arrays.algo.ts:145
     // assert(z3.length === 4)
-    intc_3 // 4
+    pushint 4 // 4
     dup
     ==
     assert
     // tests/approvals/native-arrays.algo.ts:148
     // assert(z4.length === 4)
-    intc_3 // 4
+    pushint 4 // 4
     dup
     ==
     assert
     // tests/approvals/native-arrays.algo.ts:151
     // assert(z5.length === 4)
-    intc_3 // 4
+    pushint 4 // 4
     dup
     ==
     assert
     // tests/approvals/native-arrays.algo.ts:154
     // assert(z6.length === 4)
-    intc_3 // 4
+    pushint 4 // 4
     dup
     ==
     assert
@@ -3271,7 +4270,7 @@ arc4Interop:
 arc4Interop_block@0:
     // tests/approvals/native-arrays.algo.ts:160
     // const da1 = new DynamicArray(u1, u1)
-    pushint 2 // 2
+    intc_1 // 2
     itob
     extract 6 2
     bytec_1 // 0x0000007b
@@ -3288,7 +4287,7 @@ arc4Interop_block@0:
     swap
     // tests/approvals/native-arrays.algo.ts:163
     // let a1 = [u1, u1]
-    pushint 2 // 2
+    intc_1 // 2
     itob
     extract 6 2
     bytec_1 // 0x0000007b
@@ -3297,98 +4296,151 @@ arc4Interop_block@0:
     concat
     // tests/approvals/native-arrays.algo.ts:165
     // a1 = [...a1, ...da1, ...sa1]
+    dig 1
+    len
     swap
-    extract 2 0
+    uncover 2
+    intc_1 // 2
+    uncover 3
+    substring3
     concat // on error: max array length exceeded
     dup
-    extract 2 0
     len
-    intc_3 // 4
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    len
+    pushint 4 // 4
     /
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     swap
     concat // on error: max array length exceeded
     dup
-    extract 2 0
     len
-    intc_3 // 4
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    len
+    pushint 4 // 4
     /
     itob
     extract 6 2
     swap
-    intc_1 // 0
+    intc_2 // 0
     uncover 2
     replace3
     // tests/approvals/native-arrays.algo.ts:167
     // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
     pushint 6 // 6
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
-    intc_3 // 4
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
+    pushint 4 // 4
     *
-    intc_3 // 4
+    pushint 4 // 4
     extract3 // on error: index access is out of bounds
     bytec_1 // 0x0000007b
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
-    intc_2 // 1
-    intc_3 // 4
-    *
-    intc_3 // 4
-    extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
-    ==
-    &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
-    intc_3 // 4
-    *
-    intc_3 // 4
-    extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
-    ==
-    &&
-    dig 1
-    extract 2 0
-    pushint 3 // 3
-    intc_3 // 4
-    *
-    intc_3 // 4
-    extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
-    ==
-    &&
-    dig 1
-    extract 2 0
-    intc_3 // 4
+    swap
     dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
+    pushint 4 // 4
     *
-    intc_3 // 4
+    pushint 4 // 4
     extract3 // on error: index access is out of bounds
     bytec_1 // 0x0000007b
     ==
+    uncover 2
     &&
     swap
-    extract 2 0
-    pushint 5 // 5
-    intc_3 // 4
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_1 // 2
+    pushint 4 // 4
     *
-    intc_3 // 4
+    pushint 4 // 4
+    extract3 // on error: index access is out of bounds
+    bytec_1 // 0x0000007b
+    ==
+    uncover 2
+    &&
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    pushint 3 // 3
+    pushint 4 // 4
+    *
+    pushint 4 // 4
+    extract3 // on error: index access is out of bounds
+    bytec_1 // 0x0000007b
+    ==
+    uncover 2
+    &&
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    pushint 4 // 4
+    dup
+    *
+    pushint 4 // 4
+    extract3 // on error: index access is out of bounds
+    bytec_1 // 0x0000007b
+    ==
+    uncover 2
+    &&
+    swap
+    dup
+    len
+    swap
+    intc_1 // 2
+    uncover 2
+    substring3
+    pushint 5 // 5
+    pushint 4 // 4
+    *
+    pushint 4 // 4
     extract3 // on error: index access is out of bounds
     bytec_1 // 0x0000007b
     ==
@@ -3407,7 +4459,7 @@ structs_block@0:
     // tests/approvals/native-arrays.algo.ts:170
     // structs({ x, y }: Vector) {
     frame_dig -1
-    intc_1 // 0
+    intc_2 // 0
     intc_0 // 8
     extract3
     btoi
@@ -3427,7 +4479,7 @@ structs_block@0:
     dig 2
     itob
     concat
-    intc_2 // 1
+    intc_3 // 1
     itob
     extract 6 2
     swap
@@ -3435,19 +4487,24 @@ structs_block@0:
     // tests/approvals/native-arrays.algo.ts:175
     // assertMatch(myVectors, [{ x, y }])
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16
-    intc_2 // 1
+    intc_3 // 1
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     pushint 16 // 16
     *
     pushint 16 // 16
     extract3 // on error: index access is out of bounds
-    intc_1 // 0
+    intc_2 // 0
     intc_0 // 8
     extract3
     btoi
@@ -3455,8 +4512,13 @@ structs_block@0:
     ==
     swap
     dup
-    extract 2 0
-    intc_1 // 0
+    len
+    swap
+    dup
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_2 // 0
     pushint 16 // 16
     *
     pushint 16 // 16
@@ -3487,14 +4549,14 @@ booleans_block@0:
     itob
     extract 6 2
     bytec_3 // 0x00
-    intc_1 // 0
-    intc_2 // 1
+    intc_2 // 0
+    intc_3 // 1
     setbit
-    intc_2 // 1
-    intc_1 // 0
+    intc_3 // 1
+    intc_2 // 0
     setbit
-    pushint 2 // 2
-    intc_2 // 1
+    intc_1 // 2
+    intc_3 // 1
     setbit
     concat
     retsub
@@ -3506,9 +4568,9 @@ booleansStatic:
 booleansStatic_block@0:
     // tests/approvals/native-arrays.algo.ts:184
     // return [true, false, true] as const
-    intc_2 // 1
-    intc_1 // 0
-    intc_2 // 1
+    intc_3 // 1
+    intc_2 // 0
+    intc_3 // 1
     retsub
 
 
@@ -3519,33 +4581,33 @@ arc4Booleans_block@0:
     // tests/approvals/native-arrays.algo.ts:188
     // return [new Bool(true), new Bool(false), new Bool(true)]
     bytec_3 // 0x00
-    intc_1 // 0
-    intc_2 // 1
+    intc_2 // 0
+    intc_3 // 1
     setbit
     bytec_3 // 0x00
-    intc_1 // 0
+    intc_2 // 0
     dup
     setbit
     bytec_3 // 0x00
-    intc_1 // 0
-    intc_2 // 1
+    intc_2 // 0
+    intc_3 // 1
     setbit
     swap
     pushint 3 // 3
     itob
     extract 6 2
     cover 2
-    intc_1 // 0
+    intc_2 // 0
     getbit
     uncover 3
-    intc_2 // 1
+    intc_3 // 1
     uncover 2
     setbit
     swap
-    intc_1 // 0
+    intc_2 // 0
     getbit
     swap
-    pushint 2 // 2
+    intc_1 // 2
     uncover 2
     setbit
     concat
@@ -3559,16 +4621,16 @@ arc4BooleansStatic_block@0:
     // tests/approvals/native-arrays.algo.ts:192
     // return [new Bool(true), new Bool(false), new Bool(true)] as const
     bytec_3 // 0x00
-    intc_1 // 0
-    intc_2 // 1
+    intc_2 // 0
+    intc_3 // 1
     setbit
     bytec_3 // 0x00
-    intc_1 // 0
+    intc_2 // 0
     dup
     setbit
     bytec_3 // 0x00
-    intc_1 // 0
-    intc_2 // 1
+    intc_2 // 0
+    intc_3 // 1
     setbit
     uncover 2
     uncover 2
@@ -3589,20 +4651,24 @@ aliasing_block@0:
     // tests/approvals/native-arrays.algo.ts:206
     // mutable[1] += 2
     dup
-    extract 2 0
-    intc_2 // 1
+    len
+    frame_dig -2
+    intc_1 // 2
+    uncover 2
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    pushint 2 // 2
+    intc_1 // 2
     +
     itob
-    intc_2 // 1
+    intc_3 // 1
     intc_0 // 8
     *
-    pushint 2 // 2
+    intc_1 // 2
     +
     frame_dig -2
     swap
@@ -3612,16 +4678,25 @@ aliasing_block@0:
     frame_bury -2
     // tests/approvals/native-arrays.algo.ts:208
     // assert(mutable[1] !== needClone2[1], 'These should not match')
-    extract 2 0
-    intc_2 // 1
+    len
+    frame_dig -2
+    intc_1 // 2
+    uncover 2
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
     extract3 // on error: index access is out of bounds
     btoi
+    dig 1
+    len
     swap
-    extract 2 0
-    intc_2 // 1
+    uncover 2
+    intc_1 // 2
+    uncover 3
+    substring3
+    intc_3 // 1
     intc_0 // 8
     *
     intc_0 // 8
@@ -3655,19 +4730,19 @@ receiveMutable_block@0:
     frame_dig -1
     // tests/approvals/native-arrays.algo.ts:222
     // a[0] = 1
-    intc_2 // 1
+    intc_3 // 1
     itob
-    intc_1 // 0
+    intc_2 // 0
     intc_0 // 8
     *
-    pushint 2 // 2
+    intc_1 // 2
     +
     frame_dig -1
     swap
     uncover 2
     replace3
     frame_bury -1
-    intc_2 // 1
+    intc_3 // 1
     bz receiveMutable_after_if_else@2
 
 receiveMutable_if_body@1:

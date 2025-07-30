@@ -83,14 +83,12 @@ subroutine tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.t
 subroutine tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.testMutable(p: Encoded(uint64,(len+uint8[]),bool1)) -> void:
     block@0: // L13
         let tuple_item%0#0: Encoded(uint64) = extract_value(p#0, 0)
-        let values%0#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(tuple_item%0#0)
         let tuple_item%1#0: Encoded(len+uint8[]) = extract_value(p#0, 1)
-        let values%1#0: Encoded(len+uint8[]) = decode_bytes<Encoded(len+uint8[])>(tuple_item%1#0)
         let tuple_item%2#0: bool = extract_value(p#0, 2)
-        let values%2#0: Encoded(bool8) = decode_bytes<Encoded(bool8)>(tuple_item%2#0)
-        let a#0: Encoded(uint64) = values%0#0
-        let b#0: Encoded(len+uint8[]) = values%1#0
-        let c#0: Encoded(bool8) = values%2#0
+        let values%0#0: Encoded(bool8) = decode_bytes<Encoded(bool8)>(tuple_item%2#0)
+        let a#0: Encoded(uint64) = tuple_item%0#0
+        let b#0: Encoded(len+uint8[]) = tuple_item%1#0
+        let c#0: Encoded(bool8) = values%0#0
         let tmp%0#0: bytes = (concat a#0 b#0)
         let tmp%1#0: bytes = (concat tmp%0#0 c#0)
         (log tmp%1#0)

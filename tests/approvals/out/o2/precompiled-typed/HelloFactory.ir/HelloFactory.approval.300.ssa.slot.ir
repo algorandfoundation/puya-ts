@@ -31,9 +31,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         itxn_submit
         let awst_tmp%0#4: bytes = (itxn LastLog)
-        let tmp%4#5: bytes = ((extract 0 4) awst_tmp%0#4)
-        let tmp%5#4: bool = (== tmp%4#5 0x151f7c75)
-        (assert tmp%5#4) // Bytes has valid prefix
+        let tmp%4#4: bytes = ((extract 0 4) awst_tmp%0#4)
+        let tmp%5#3: bool = (== tmp%4#4 0x151f7c75)
+        (assert tmp%5#3) // Bytes has valid prefix
         let result#2: string = ((extract 6 0) awst_tmp%0#4)
         let tmp%7#4: bool = (== result#2 "hello world")
         (assert tmp%7#4)
@@ -50,8 +50,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%11#3) // Bytes has valid prefix
         let result2#0: string = ((extract 6 0) awst_tmp%1#2)
         let greetItxn.LastLog#0: bytes = (itxn LastLog)
-        let tmp%13#3: bool = (== result2#0 "hello abi")
-        (assert tmp%13#3)
+        let tmp%13#2: bool = (== result2#0 "hello abi")
+        (assert tmp%13#2)
         let tmp%16#1: bool = (== greetItxn.LastLog#0 0x151f7c75000968656c6c6f20616269)
         (assert tmp%16#1)
         itxn_begin
@@ -76,12 +76,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         itxn_submit
         let awst_tmp%3#0: bytes = (itxn LastLog)
-        let tmp%27#1: bytes = ((extract 0 4) awst_tmp%3#0)
-        let tmp%28#1: bool = (== tmp%27#1 0x151f7c75)
-        (assert tmp%28#1) // Bytes has valid prefix
+        let tmp%26#1: bytes = ((extract 0 4) awst_tmp%3#0)
+        let tmp%27#1: bool = (== tmp%26#1 0x151f7c75)
+        (assert tmp%27#1) // Bytes has valid prefix
         let result4#0: string = ((extract 6 0) awst_tmp%3#0)
-        let tmp%30#0: bool = (== result4#0 "hello world!")
-        (assert tmp%30#0)
+        let tmp%29#1: bool = (== result4#0 "hello world!")
+        (assert tmp%29#1)
         itxn_begin
         ((itxn_field ApplicationArgs) method "delete()void")
         ((itxn_field OnCompletion) 5u)
@@ -117,8 +117,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_submit
         let awst_tmp%0#3: bytes = (itxn LastLog)
         let tmp%3#5: bytes = ((extract 0 4) awst_tmp%0#3)
-        let tmp%4#4: bool = (== tmp%3#5 0x151f7c75)
-        (assert tmp%4#4) // Bytes has valid prefix
+        let tmp%4#3: bool = (== tmp%3#5 0x151f7c75)
+        (assert tmp%4#3) // Bytes has valid prefix
         let txn1.returnValue#0: string = ((extract 6 0) awst_tmp%0#3)
         let tmp%6#4: bool = (== txn1.returnValue#0 "hey world")
         (assert tmp%6#4)
@@ -131,12 +131,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         itxn_submit
         let awst_tmp%1#1: bytes = (itxn LastLog)
-        let tmp%12#2: bytes = ((extract 0 4) awst_tmp%1#1)
-        let tmp%13#2: bool = (== tmp%12#2 0x151f7c75)
-        (assert tmp%13#2) // Bytes has valid prefix
+        let tmp%11#2: bytes = ((extract 0 4) awst_tmp%1#1)
+        let tmp%12#1: bool = (== tmp%11#2 0x151f7c75)
+        (assert tmp%12#1) // Bytes has valid prefix
         let txn2.returnValue#0: string = ((extract 6 0) awst_tmp%1#1)
-        let tmp%15#1: bool = (== txn2.returnValue#0 "hey world!")
-        (assert tmp%15#1)
+        let tmp%14#1: bool = (== txn2.returnValue#0 "hey world!")
+        (assert tmp%14#1)
         itxn_begin
         ((itxn_field ApplicationArgs) method "delete()void")
         ((itxn_field OnCompletion) 5u)
@@ -172,8 +172,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_submit
         let awst_tmp%0#2: bytes = (itxn LastLog)
         let tmp%3#4: bytes = ((extract 0 4) awst_tmp%0#2)
-        let tmp%4#3: bool = (== tmp%3#4 0x151f7c75)
-        (assert tmp%4#3) // Bytes has valid prefix
+        let tmp%4#2: bool = (== tmp%3#4 0x151f7c75)
+        (assert tmp%4#2) // Bytes has valid prefix
         let result#1: string = ((extract 6 0) awst_tmp%0#2)
         let tmp%6#3: bool = (== result#1 "bonjour world")
         (assert tmp%6#3)
@@ -208,13 +208,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         itxn_submit
         let awst_tmp%0#1: bytes = (itxn LastLog)
-        let tmp%1#2: bytes = ((extract 4 0) awst_tmp%0#1)
+        let tmp%1#1: bytes = ((extract 4 0) awst_tmp%0#1)
         let tmp%2#3: bytes = ((extract 0 4) awst_tmp%0#1)
         let tmp%3#3: bool = (== tmp%2#3 0x151f7c75)
         (assert tmp%3#3) // Bytes has valid prefix
-        let result#0: uint64 = (btoi tmp%1#2)
-        let tmp%5#3: bool = (== result#0 4096u)
-        (assert tmp%5#3)
+        let result#0: uint64 = (btoi tmp%1#1)
+        let tmp%5#2: bool = (== result#0 4096u)
+        (assert tmp%5#2)
         itxn_begin
         ((itxn_field ApplicationArgs) method "delete()void")
         ((itxn_field OnCompletion) 5u)

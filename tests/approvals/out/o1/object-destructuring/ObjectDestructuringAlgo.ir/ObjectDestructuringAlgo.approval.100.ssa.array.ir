@@ -106,13 +106,12 @@ subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo
         let aggregate%as_Encoded((uint64,uint64),(uint64,uint64))%0#0: Encoded((uint64,uint64),(uint64,uint64)) = aggregate%head%5#0
         let arg#0: Encoded((uint64,uint64),(uint64,uint64)) = aggregate%as_Encoded((uint64,uint64),(uint64,uint64))%0#0
         let aggregate%extract%0#0: bytes = (extract3 arg#0 0u 16u)
-        let tuple_item%0#0: Encoded(uint64,uint64) = aggregate%extract%0#0
-        let values%0#1: Encoded(uint64,uint64) = tuple_item%0#0
-        let aggregate%extract%1#0: bytes = (extract3 values%0#1 0u 8u)
+        let aggregate%extract%1#0: bytes = (extract3 aggregate%extract%0#0 0u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#0
         let x#0: uint64 = (btoi tuple_item%1#0)
-        let aggregate%extract%2#0: bytes = (extract3 values%0#1 8u 8u)
-        let tuple_item%3#0: Encoded(uint64) = aggregate%extract%2#0
+        let aggregate%extract%2#0: bytes = (extract3 arg#0 0u 16u)
+        let aggregate%extract%3#0: bytes = (extract3 aggregate%extract%2#0 8u 8u)
+        let tuple_item%3#0: Encoded(uint64) = aggregate%extract%3#0
         let y#0: uint64 = (btoi tuple_item%3#0)
         let tmp%11#0: bool = (== x#0 10u)
         let tmp%12#0: bool = (&& 1u tmp%11#0)
@@ -124,10 +123,10 @@ subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo
         let aggregate%head%6#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%4#0)
         let aggregate%as_Encoded(uint64)%5#0: Encoded(uint64) = aggregate%head%6#0
         let y#1: Encoded(uint64) = aggregate%as_Encoded(uint64)%5#0
-        let aggregate%extract%3#0: bytes = (extract3 y#1 0u 8u)
-        let tuple_item%0#1: Encoded(uint64) = aggregate%extract%3#0
-        let values%0#2: uint64 = (btoi tuple_item%0#1)
-        let tmp%2#1: bool = (== values%0#2 434u)
+        let aggregate%extract%4#0: bytes = (extract3 y#1 0u 8u)
+        let tuple_item%0#1: Encoded(uint64) = aggregate%extract%4#0
+        let values%0#1: uint64 = (btoi tuple_item%0#1)
+        let tmp%2#1: bool = (== values%0#1 434u)
         let tmp%3#1: bool = (&& 1u tmp%2#1)
         let tmp%5#1: bool = (&& tmp%3#1 tmp%2#1)
         (assert tmp%5#1) // assert target is match for conditions
@@ -139,11 +138,11 @@ subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo
         let aggregate%head%8#0: bytes = (concat aggregate%head%7#0 aggregate%as_Encoded(uint64)%7#0)
         let aggregate%as_Encoded(uint64,uint64)%2#0: Encoded(uint64,uint64) = aggregate%head%8#0
         let awst_tmp%0#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%2#0
-        let aggregate%extract%4#0: bytes = (extract3 awst_tmp%0#0 8u 8u)
-        let tuple_item%0#2: Encoded(uint64) = aggregate%extract%4#0
+        let aggregate%extract%5#0: bytes = (extract3 awst_tmp%0#0 8u 8u)
+        let tuple_item%0#2: Encoded(uint64) = aggregate%extract%5#0
         let f#0: uint64 = (btoi tuple_item%0#2)
-        let aggregate%extract%5#0: bytes = (extract3 awst_tmp%0#0 0u 8u)
-        let tuple_item%1#1: Encoded(uint64) = aggregate%extract%5#0
+        let aggregate%extract%6#0: bytes = (extract3 awst_tmp%0#0 0u 8u)
+        let tuple_item%1#1: Encoded(uint64) = aggregate%extract%6#0
         let e#0: uint64 = (btoi tuple_item%1#1)
         let aggregate%as_bytes%0#0: bytes[8] = (itob 4u)
         let aggregate%len_u16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
@@ -161,131 +160,48 @@ subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo
         let aggregate%head%12#0: bytes = (concat aggregate%head%11#0 aggregate%as_Encoded(uint64)%11#0)
         let aggregate%as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = aggregate%head%12#0
         let res3#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#0
-        let array_length%0#0: uint64 = (extract_uint16 res3#0 0u)
-        let tmp%16#0: bool = (== array_length%0#0 4u)
-        let aggregate%array_trimmed%0#0: bytes = ((extract 2 0) res3#0)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 res3#0 0u)
+        let tmp%16#0: uint64 = aggregate%array_length%0#0
+        let tmp%17#0: bool = (== tmp%16#0 4u)
+        let aggregate%total_length%0#0: uint64 = (len res3#0)
+        let aggregate%array_trimmed%0#0: bytes = (substring3 res3#0 2u aggregate%total_length%0#0)
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 8u)
         let aggregate%encoded_element%0#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#0
         let values%0#0: uint64 = (btoi array_item%0#0)
-        let tmp%17#0: bool = (== values%0#0 4u)
-        let tmp%18#0: bool = (&& tmp%16#0 tmp%17#0)
-        let aggregate%array_trimmed%1#0: bytes = ((extract 2 0) res3#0)
+        let tmp%18#0: bool = (== values%0#0 4u)
+        let tmp%19#0: bool = (&& tmp%17#0 tmp%18#0)
+        let aggregate%total_length%1#0: uint64 = (len res3#0)
+        let aggregate%array_trimmed%1#0: bytes = (substring3 res3#0 2u aggregate%total_length%1#0)
         let aggregate%bytes_offset%1#0: uint64 = (* 1u 8u)
         let aggregate%encoded_element%1#0: bytes = (extract3 aggregate%array_trimmed%1#0 aggregate%bytes_offset%1#0 8u) // on error: index access is out of bounds
         let array_item%1#0: Encoded(uint64) = aggregate%encoded_element%1#0
         let values%1#0: uint64 = (btoi array_item%1#0)
-        let tmp%19#0: bool = (== values%1#0 1u)
-        let tmp%20#0: bool = (&& tmp%18#0 tmp%19#0)
-        let aggregate%array_trimmed%2#0: bytes = ((extract 2 0) res3#0)
+        let tmp%20#0: bool = (== values%1#0 1u)
+        let tmp%21#0: bool = (&& tmp%19#0 tmp%20#0)
+        let aggregate%total_length%2#0: uint64 = (len res3#0)
+        let aggregate%array_trimmed%2#0: bytes = (substring3 res3#0 2u aggregate%total_length%2#0)
         let aggregate%bytes_offset%2#0: uint64 = (* 2u 8u)
         let aggregate%encoded_element%2#0: bytes = (extract3 aggregate%array_trimmed%2#0 aggregate%bytes_offset%2#0 8u) // on error: index access is out of bounds
         let array_item%2#0: Encoded(uint64) = aggregate%encoded_element%2#0
         let values%2#0: uint64 = (btoi array_item%2#0)
-        let tmp%21#0: bool = (== values%2#0 4u)
-        let tmp%22#0: bool = (&& tmp%20#0 tmp%21#0)
-        let aggregate%array_trimmed%3#0: bytes = ((extract 2 0) res3#0)
+        let tmp%22#0: bool = (== values%2#0 4u)
+        let tmp%23#0: bool = (&& tmp%21#0 tmp%22#0)
+        let aggregate%total_length%3#0: uint64 = (len res3#0)
+        let aggregate%array_trimmed%3#0: bytes = (substring3 res3#0 2u aggregate%total_length%3#0)
         let aggregate%bytes_offset%3#0: uint64 = (* 3u 8u)
         let aggregate%encoded_element%3#0: bytes = (extract3 aggregate%array_trimmed%3#0 aggregate%bytes_offset%3#0 8u) // on error: index access is out of bounds
         let array_item%3#0: Encoded(uint64) = aggregate%encoded_element%3#0
         let values%3#0: uint64 = (btoi array_item%3#0)
-        let tmp%23#0: bool = (== values%3#0 1u)
-        let tmp%24#0: bool = (&& tmp%22#0 tmp%23#0)
-        (assert tmp%24#0) // assert target is match for conditions
+        let tmp%24#0: bool = (== values%3#0 1u)
+        let tmp%25#0: bool = (&& tmp%23#0 tmp%24#0)
+        (assert tmp%25#0) // assert target is match for conditions
         let awst_tmp%0#1: Encoded(uint64,(len+uint8[]),bool1,uint512) = tests/approvals/object-destructuring.algo.ts::produceItems()
-        let aggregate%extract%6#0: bytes = (extract3 awst_tmp%0#1 0u 8u)
-        let tuple_item%0#3: Encoded(uint64) = aggregate%extract%6#0
-        let a#0: uint64 = (btoi tuple_item%0#3)
-        let aggregate%extract_uint16%0#0: uint64 = (extract_uint16 awst_tmp%0#1 8u)
-        let aggregate%len%0#0: uint64 = (len awst_tmp%0#1)
-        let aggregate%substring3%0#0: bytes = (substring3 awst_tmp%0#1 aggregate%extract_uint16%0#0 aggregate%len%0#0)
-        let tuple_item%1#2: Encoded(len+uint8[]) = aggregate%substring3%0#0
-        let b#0: bytes = ((extract 2 0) tuple_item%1#2)
-        let aggregate%get_bit%0#0: uint64 = (getbit awst_tmp%0#1 80u)
-        let tuple_item%2#0: bool = aggregate%get_bit%0#0
-        let c#0: bool = tuple_item%2#0
-        let aggregate%extract%7#0: bytes = (extract3 awst_tmp%0#1 11u 64u)
-        let tuple_item%3#1: Encoded(uint512) = aggregate%extract%7#0
-        let d#0: biguint = tuple_item%3#1
         let awst_tmp%1#0: Encoded(uint64,(len+uint8[]),bool1,uint512) = tests/approvals/object-destructuring.algo.ts::produceItems()
-        let aggregate%extract%8#0: bytes = (extract3 awst_tmp%1#0 11u 64u)
-        let tuple_item%4#0: Encoded(uint512) = aggregate%extract%8#0
-        let e#1: biguint = tuple_item%4#0
         let f#1: Encoded(uint64,(len+uint8[]),bool1,uint512) = tests/approvals/object-destructuring.algo.ts::produceItems()
-        let aggregate%extract%9#0: bytes = (extract3 f#1 0u 8u)
-        let tuple_item%5#0: Encoded(uint64) = aggregate%extract%9#0
-        let g#0: uint64 = (btoi tuple_item%5#0)
-        let aggregate%extract%10#0: bytes = (extract3 f#1 11u 64u)
-        let tuple_item%6#0: Encoded(uint512) = aggregate%extract%10#0
-        let i#0: biguint = tuple_item%6#0
         let awst_tmp%3#0: Encoded(uint64,(len+uint8[]),bool1,uint512) = tests/approvals/object-destructuring.algo.ts::produceItems()
-        let aggregate%extract%11#0: bytes = (extract3 awst_tmp%3#0 0u 8u)
-        let tuple_item%7#0: Encoded(uint64) = aggregate%extract%11#0
-        let values%7#0: uint64 = (btoi tuple_item%7#0)
-        let aggregate%extract%12#0: bytes = (extract3 awst_tmp%3#0 11u 64u)
-        let tuple_item%8#0: Encoded(uint512) = aggregate%extract%12#0
-        let values%8#0: biguint = tuple_item%8#0
-        let aggregate%val_as_bytes%11#0: bytes[8] = (itob values%7#0)
-        let aggregate%as_Encoded(uint64)%12#0: Encoded(uint64) = aggregate%val_as_bytes%11#0
-        let aggregate%head%13#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%12#0)
-        let aggregate%value_len%0#0: uint64 = (len values%8#0)
-        let aggregate%len_ok%0#0: bool = (<= aggregate%value_len%0#0 64u)
-        (assert aggregate%len_ok%0#0) // overflow
-        let aggregate%bzero%0#0: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%0#0: bytes[64] = (b| values%8#0 aggregate%bzero%0#0)
-        let aggregate%as_Encoded(uint512)%0#0: Encoded(uint512) = aggregate%arc4_encoded%0#0
-        let aggregate%head%14#0: bytes = (concat aggregate%head%13#0 aggregate%as_Encoded(uint512)%0#0)
-        let aggregate%as_Encoded(uint64,uint512)%0#0: Encoded(uint64,uint512) = aggregate%head%14#0
-        let x#1: Encoded(uint64,uint512) = aggregate%as_Encoded(uint64,uint512)%0#0
         let awst_tmp%0#2: Encoded((uint64,uint64),(uint64,uint64)) = tests/approvals/object-destructuring.algo.ts::produceVector()
-        let aggregate%extract%13#0: bytes = (extract3 awst_tmp%0#2 0u 16u)
-        let tuple_item%0#4: Encoded(uint64,uint64) = aggregate%extract%13#0
-        let values%0#3: Encoded(uint64,uint64) = tuple_item%0#4
-        let aggregate%extract%14#0: bytes = (extract3 values%0#3 0u 8u)
-        let tuple_item%1#3: Encoded(uint64) = aggregate%extract%14#0
-        let x#2: uint64 = (btoi tuple_item%1#3)
-        let aggregate%extract%15#0: bytes = (extract3 values%0#3 8u 8u)
-        let tuple_item%3#2: Encoded(uint64) = aggregate%extract%15#0
-        let y#2: uint64 = (btoi tuple_item%3#2)
-        let aggregate%extract%16#0: bytes = (extract3 awst_tmp%0#2 16u 16u)
-        let tuple_item%4#1: Encoded(uint64,uint64) = aggregate%extract%16#0
-        let c2#0: Encoded(uint64,uint64) = tuple_item%4#1
         let awst_tmp%1#1: Encoded((uint64,uint64),(uint64,uint64)) = tests/approvals/object-destructuring.algo.ts::produceVector()
-        let aggregate%extract%17#0: bytes = (extract3 awst_tmp%1#1 0u 16u)
-        let tuple_item%5#1: Encoded(uint64,uint64) = aggregate%extract%17#0
-        let values%5#0: Encoded(uint64,uint64) = tuple_item%5#1
-        let aggregate%extract%18#0: bytes = (extract3 values%5#0 8u 8u)
-        let tuple_item%6#1: Encoded(uint64) = aggregate%extract%18#0
-        let b#1: uint64 = (btoi tuple_item%6#1)
         let f#2: Encoded((uint64,uint64),(uint64,uint64)) = tests/approvals/object-destructuring.algo.ts::produceVector()
-        let aggregate%extract%19#0: bytes = (extract3 f#2 0u 16u)
-        let tuple_item%7#1: Encoded(uint64,uint64) = aggregate%extract%19#0
-        let values%7#1: Encoded(uint64,uint64) = tuple_item%7#1
-        let aggregate%extract%20#0: bytes = (extract3 values%7#1 0u 8u)
-        let tuple_item%8#1: Encoded(uint64) = aggregate%extract%20#0
-        let g#1: uint64 = (btoi tuple_item%8#1)
-        let aggregate%extract%21#0: bytes = (extract3 f#2 16u 16u)
-        let tuple_item%9#0: Encoded(uint64,uint64) = aggregate%extract%21#0
-        let i#1: Encoded(uint64,uint64) = tuple_item%9#0
         let awst_tmp%3#1: Encoded((uint64,uint64),(uint64,uint64)) = tests/approvals/object-destructuring.algo.ts::produceVector()
-        let aggregate%extract%22#0: bytes = (extract3 awst_tmp%3#1 0u 16u)
-        let tuple_item%10#0: Encoded(uint64,uint64) = aggregate%extract%22#0
-        let values%10#0: Encoded(uint64,uint64) = tuple_item%10#0
-        let aggregate%extract%23#0: bytes = (extract3 values%10#0 0u 8u)
-        let tuple_item%11#0: Encoded(uint64) = aggregate%extract%23#0
-        let values%11#0: uint64 = (btoi tuple_item%11#0)
-        let aggregate%extract%24#0: bytes = (extract3 values%10#0 8u 8u)
-        let tuple_item%12#0: Encoded(uint64) = aggregate%extract%24#0
-        let values%12#0: uint64 = (btoi tuple_item%12#0)
-        let aggregate%val_as_bytes%12#0: bytes[8] = (itob values%11#0)
-        let aggregate%as_Encoded(uint64)%13#0: Encoded(uint64) = aggregate%val_as_bytes%12#0
-        let aggregate%head%15#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%13#0)
-        let aggregate%val_as_bytes%13#0: bytes[8] = (itob values%12#0)
-        let aggregate%as_Encoded(uint64)%14#0: Encoded(uint64) = aggregate%val_as_bytes%13#0
-        let aggregate%head%16#0: bytes = (concat aggregate%head%15#0 aggregate%as_Encoded(uint64)%14#0)
-        let aggregate%as_Encoded(uint64,uint64)%3#0: Encoded(uint64,uint64) = aggregate%head%16#0
-        let tmp%0#1: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%3#0
-        let aggregate%head%17#0: bytes = (concat 0x tmp%0#1)
-        let aggregate%as_Encoded((uint64,uint64))%0#0: Encoded((uint64,uint64)) = aggregate%head%17#0
-        let a#1: Encoded((uint64,uint64)) = aggregate%as_Encoded((uint64,uint64))%0#0
         return 

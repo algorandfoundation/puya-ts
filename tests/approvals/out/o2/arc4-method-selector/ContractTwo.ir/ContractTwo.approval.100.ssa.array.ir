@@ -37,12 +37,6 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) pay#0)
         let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 pay)
         (assert gtxn_type_matches%0#0) // transaction type is pay
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let asset#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 2)
-        let account#0: account = reinterpret_Encoded(uint8[32])%0#0
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 3)
-        let app#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
         let tmp%22#0: uint64 = (txn GroupIndex)
         let appTxn#0: uint64 = (- tmp%22#0 1u)
         let gtxn_type%1#0: uint64 = ((gtxns TypeEnum) appTxn#0)

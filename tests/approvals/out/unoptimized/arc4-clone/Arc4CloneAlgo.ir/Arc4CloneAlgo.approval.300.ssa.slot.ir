@@ -153,38 +153,39 @@ subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.aliasing(mutable: E
         let z#0: Encoded(len+uint64[]) = mutable#0
         let receive%0#0: Encoded(len+uint64[]) = tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receive(z#0)
         tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receiveReadonly(mutable#0)
-        let aggregate%as_bytes%2#0: bytes[8] = (itob 1u)
-        let aggregate%len_u16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%2#0)
-        let aggregate%val_as_bytes%3#0: bytes[8] = (itob 1u)
-        let aggregate%as_Encoded(uint64)%3#0: Encoded(uint64) = aggregate%val_as_bytes%3#0
-        let aggregate%head%4#0: bytes = (concat aggregate%len_u16%1#0 aggregate%as_Encoded(uint64)%3#0)
-        let aggregate%as_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = aggregate%head%4#0
-        let encoded_array%1#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%1#0
-        let aggregate%as_bytes%3#0: bytes[8] = (itob 1u)
-        let aggregate%len_u16%2#0: bytes = ((extract 6 2) aggregate%as_bytes%3#0)
-        let aggregate%as_bytes%4#0: bytes[8] = (itob 2u)
-        let aggregate%offset_as_uint16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%4#0)
-        let aggregate%head%5#0: bytes = (concat aggregate%len_u16%2#0 aggregate%offset_as_uint16%1#0)
-        let aggregate%concat%1#0: bytes = (concat aggregate%head%5#0 encoded_array%1#0)
-        let aggregate%as_Encoded(len+(len+uint64[])[])%0#0: Encoded(len+(len+uint64[])[]) = aggregate%concat%1#0
+        let aggregate%as_bytes%0#0: bytes[8] = (itob 1u)
+        let aggregate%len_u16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob 1u)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let aggregate%head%0#0: bytes = (concat aggregate%len_u16%0#0 aggregate%as_Encoded(uint64)%0#0)
+        let aggregate%as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = aggregate%head%0#0
+        let encoded_array%1#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#0
+        let aggregate%as_bytes%1#0: bytes[8] = (itob 1u)
+        let aggregate%len_u16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%1#0)
+        let aggregate%as_bytes%2#0: bytes[8] = (itob 2u)
+        let aggregate%offset_as_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%2#0)
+        let aggregate%head%1#0: bytes = (concat aggregate%len_u16%1#0 aggregate%offset_as_uint16%0#0)
+        let aggregate%concat%0#0: bytes = (concat aggregate%head%1#0 encoded_array%1#0)
+        let aggregate%as_Encoded(len+(len+uint64[])[])%0#0: Encoded(len+(len+uint64[])[]) = aggregate%concat%0#0
         let encoded_array%2#0: Encoded(len+(len+uint64[])[]) = aggregate%as_Encoded(len+(len+uint64[])[])%0#0
         let nestedMutables#0: Encoded(len+(len+uint64[])[]) = encoded_array%2#0
-        let aggregate%as_bytes%9#0: bytes[8] = (itob 1u)
-        let aggregate%len_u16%5#0: bytes = ((extract 6 2) aggregate%as_bytes%9#0)
-        let aggregate%val_as_bytes%5#0: bytes[8] = (itob 123u)
-        let aggregate%as_Encoded(uint64)%5#0: Encoded(uint64) = aggregate%val_as_bytes%5#0
-        let aggregate%head%9#0: bytes = (concat aggregate%len_u16%5#0 aggregate%as_Encoded(uint64)%5#0)
-        let aggregate%as_Encoded(len+uint64[])%3#0: Encoded(len+uint64[]) = aggregate%head%9#0
-        let encoded_array%5#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%3#0
+        let aggregate%as_bytes%3#0: bytes[8] = (itob 1u)
+        let aggregate%len_u16%2#0: bytes = ((extract 6 2) aggregate%as_bytes%3#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob 123u)
+        let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
+        let aggregate%head%2#0: bytes = (concat aggregate%len_u16%2#0 aggregate%as_Encoded(uint64)%1#0)
+        let aggregate%as_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = aggregate%head%2#0
+        let encoded_array%5#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%1#0
         let extract_uint16%0#0: uint64 = (extract_uint16 nestedMutables#0 0u)
-        let extract_to_end%0#0: bytes = ((extract 2 0) nestedMutables#0)
-        let aggregate%as_bytes%10#0: bytes[8] = (itob 2u)
-        let aggregate%offset_as_uint16%4#0: bytes = ((extract 6 2) aggregate%as_bytes%10#0)
-        let aggregate%head%10#0: bytes = (concat 0x aggregate%offset_as_uint16%4#0)
-        let aggregate%concat%4#0: bytes = (concat aggregate%head%10#0 encoded_array%5#0)
-        let aggregate%as_Encoded((len+uint64[])[])%0#0: Encoded((len+uint64[])[]) = aggregate%concat%4#0
-        let tmp%1#0: Encoded((len+uint64[])[]) = aggregate%as_Encoded((len+uint64[])[])%0#0
-        let as_Encoded(len+(len+uint64[])[])%0#0: Encoded(len+(len+uint64[])[]) = _puya_lib.arc4.dynamic_array_concat_dynamic_element(extract_uint16%0#0, extract_to_end%0#0, 1u, tmp%1#0)
+        let total_length%0#0: uint64 = (len nestedMutables#0)
+        let extract_to_end%0#0: bytes = (substring3 nestedMutables#0 2u total_length%0#0)
+        let aggregate%as_bytes%4#0: bytes[8] = (itob 2u)
+        let aggregate%offset_as_uint16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%4#0)
+        let aggregate%head%3#0: bytes = (concat 0x aggregate%offset_as_uint16%1#0)
+        let aggregate%concat%1#0: bytes = (concat aggregate%head%3#0 encoded_array%5#0)
+        let aggregate%as_Encoded((len+uint64[])[])%0#0: Encoded((len+uint64[])[]) = aggregate%concat%1#0
+        let tmp%3#0: Encoded((len+uint64[])[]) = aggregate%as_Encoded((len+uint64[])[])%0#0
+        let as_Encoded(len+(len+uint64[])[])%0#0: Encoded(len+(len+uint64[])[]) = _puya_lib.arc4.dynamic_array_concat_dynamic_element(extract_uint16%0#0, extract_to_end%0#0, 1u, tmp%3#0)
         return 
 
 subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receive(mutable: Encoded(len+uint64[])) -> Encoded(len+uint64[]):
@@ -202,21 +203,18 @@ subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn(arg: E
         let aggregate%len%0#0: uint64 = (len arg#0)
         let aggregate%substring3%0#0: bytes = (substring3 arg#0 aggregate%extract_uint16%0#0 aggregate%len%0#0)
         let tuple_item%0#0: Encoded((len+uint8[]),uint8) = aggregate%substring3%0#0
-        let values%0#0: Encoded((len+uint8[]),uint8) = tuple_item%0#0
         let aggregate%extract_uint16%1#0: uint64 = (extract_uint16 arg#0 10u)
         let aggregate%len%1#0: uint64 = (len arg#0)
         let aggregate%substring3%1#0: bytes = (substring3 arg#0 aggregate%extract_uint16%1#0 aggregate%len%1#0)
         let tuple_item%1#0: Encoded((len+uint8[]),uint8) = aggregate%substring3%1#0
-        let values%1#0: Encoded((len+uint8[]),uint8) = tuple_item%1#0
-        let (echo%0#0: Encoded((len+uint8[]),uint8), echo%1#0: Encoded((len+uint8[]),uint8)) = tests/approvals/arc4-clone.algo.ts::echo(values%1#0)
-        let tmp%0#0: bool = (== values%0#0 echo%0#0)
+        let (echo%0#0: Encoded((len+uint8[]),uint8), echo%1#0: Encoded((len+uint8[]),uint8)) = tests/approvals/arc4-clone.algo.ts::echo(tuple_item%1#0)
+        let tmp%0#0: bool = (== tuple_item%0#0 echo%0#0)
         (assert tmp%0#0) // this won't error
         let aggregate%extract_uint16%2#0: uint64 = (extract_uint16 arg#0 10u)
         let aggregate%len%2#0: uint64 = (len arg#0)
         let aggregate%substring3%2#0: bytes = (substring3 arg#0 aggregate%extract_uint16%2#0 aggregate%len%2#0)
         let tuple_item%2#0: Encoded((len+uint8[]),uint8) = aggregate%substring3%2#0
-        let values%2#0: Encoded((len+uint8[]),uint8) = tuple_item%2#0
-        return values%2#0
+        return tuple_item%2#0
 
 subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.__algots__.defaultCreate() -> void:
     block@0: // L16

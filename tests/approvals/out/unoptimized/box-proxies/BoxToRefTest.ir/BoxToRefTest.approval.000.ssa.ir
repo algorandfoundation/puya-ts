@@ -50,8 +50,7 @@ subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test() -> void:
         (box_replace boxRef#0 0u 0x7b)
         let storage_value%0#0: bytes = box_read(boxForCaller#0)
         let array_item%0#0: Encoded(uint8) = extract_value(storage_value%0#0, 0u)
-        let values%0#0: Encoded(uint8) = decode_bytes<Encoded(uint8)>(array_item%0#0)
-        let tmp%0#0: uint64 = decode_bytes<uint64>(values%0#0)
+        let tmp%0#0: uint64 = decode_bytes<uint64>(array_item%0#0)
         let tmp%1#0: bool = (== tmp%0#0 123u)
         (assert tmp%1#0) // First array item in box should be 123
         return 

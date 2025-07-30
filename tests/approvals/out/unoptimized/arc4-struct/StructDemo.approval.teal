@@ -396,18 +396,16 @@ mutateVector:
 mutateVector_block@0:
     // tests/approvals/arc4-struct.algo.ts:27
     // v1.x = newX
-    frame_dig -2
     frame_dig -3
     intc_0 // 0
-    uncover 2
+    frame_dig -2
     replace3
+    dup
     frame_bury -3
     // tests/approvals/arc4-struct.algo.ts:28
     // v1.y = newY
-    frame_dig -1
-    frame_dig -3
     intc_1 // 8
-    uncover 2
+    frame_dig -1
     replace3
     dup
     frame_bury -3
@@ -574,8 +572,6 @@ setLastCalled_block@0:
     dup
     box_get
     assert // Box must have value
-    uncover 2
-    swap
     dup
     pushint 25 // 25
     extract_uint16
@@ -588,14 +584,19 @@ setLastCalled_block@0:
     uncover 3
     substring3
     dup
-    extract 2 0
+    len
+    swap
+    dup
+    pushint 2 // 2
+    uncover 3
+    substring3
     frame_dig -2
     intc_3 // 20
     *
     intc_3 // 20
     extract3 // on error: index access is out of bounds
     pushint 12 // 12
-    uncover 4
+    uncover 5
     replace3
     frame_dig -2
     intc_3 // 20

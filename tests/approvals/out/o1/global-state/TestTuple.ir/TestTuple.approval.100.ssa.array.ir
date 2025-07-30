@@ -51,19 +51,25 @@ subroutine tests/approvals/global-state.algo.ts::TestTuple.testTuple() -> void:
         let aggregate%as_Encoded((len+utf8[]),uint64,bool1)%0#0: Encoded((len+utf8[]),uint64,bool1) = aggregate%concat%0#0
         let tmp%0#0: Encoded((len+utf8[]),uint64,bool1) = aggregate%as_Encoded((len+utf8[]),uint64,bool1)%0#0
         (app_global_put "t1" tmp%0#0)
-        let aggregate%extract_uint16%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
-        let aggregate%len%0#0: uint64 = (len tmp%0#0)
-        let aggregate%substring3%0#0: bytes = (substring3 tmp%0#0 aggregate%extract_uint16%0#0 aggregate%len%0#0)
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (app_global_get_ex 0u "t1")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let aggregate%extract_uint16%0#0: uint64 = (extract_uint16 maybe_value%0#0 0u)
+        let aggregate%len%0#0: uint64 = (len maybe_value%0#0)
+        let aggregate%substring3%0#0: bytes = (substring3 maybe_value%0#0 aggregate%extract_uint16%0#0 aggregate%len%0#0)
         let tuple_item%0#0: Encoded(len+utf8[]) = aggregate%substring3%0#0
         let values%0#0: string = ((extract 2 0) tuple_item%0#0)
         let tmp%1#0: bool = (== values%0#0 "hello")
         (assert tmp%1#0) // Tuple value should be set
-        let aggregate%extract%0#0: bytes = (extract3 tmp%0#0 2u 8u)
+        let (maybe_value%1#0: bytes, maybe_exists%1#0: bool) = (app_global_get_ex 0u "t1")
+        (assert maybe_exists%1#0) // check GlobalState exists
+        let aggregate%extract%0#0: bytes = (extract3 maybe_value%1#0 2u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%0#0
         let values%1#0: uint64 = (btoi tuple_item%1#0)
         let tmp%2#0: bool = (== values%1#0 123u)
         (assert tmp%2#0) // Tuple value should be set
-        let aggregate%get_bit%0#0: uint64 = (getbit tmp%0#0 80u)
+        let (maybe_value%2#0: bytes, maybe_exists%2#0: bool) = (app_global_get_ex 0u "t1")
+        (assert maybe_exists%2#0) // check GlobalState exists
+        let aggregate%get_bit%0#0: uint64 = (getbit maybe_value%2#0 80u)
         let tuple_item%2#0: bool = aggregate%get_bit%0#0
         let values%2#0: bool = tuple_item%2#0
         let tmp%3#0: bool = (== values%2#0 1u)
@@ -110,37 +116,113 @@ subroutine tests/approvals/global-state.algo.ts::TestTuple.testTuple() -> void:
         let aggregate%as_Encoded((len+utf8[]),((len+utf8[]),uint512,bool1))%0#0: Encoded((len+utf8[]),((len+utf8[]),uint512,bool1)) = aggregate%concat%3#0
         let tmp%5#0: Encoded((len+utf8[]),((len+utf8[]),uint512,bool1)) = aggregate%as_Encoded((len+utf8[]),((len+utf8[]),uint512,bool1))%0#0
         (app_global_put "t2" tmp%5#0)
-        let aggregate%extract_uint16%1#0: uint64 = (extract_uint16 tmp%5#0 0u)
-        let aggregate%extract_uint16%2#0: uint64 = (extract_uint16 tmp%5#0 2u)
-        let aggregate%substring3%1#0: bytes = (substring3 tmp%5#0 aggregate%extract_uint16%1#0 aggregate%extract_uint16%2#0)
+        let (maybe_value%3#0: bytes, maybe_exists%3#0: bool) = (app_global_get_ex 0u "t2")
+        (assert maybe_exists%3#0) // check GlobalState exists
+        let aggregate%extract_uint16%1#0: uint64 = (extract_uint16 maybe_value%3#0 0u)
+        let aggregate%extract_uint16%2#0: uint64 = (extract_uint16 maybe_value%3#0 2u)
+        let aggregate%substring3%1#0: bytes = (substring3 maybe_value%3#0 aggregate%extract_uint16%1#0 aggregate%extract_uint16%2#0)
         let tuple_item%3#0: Encoded(len+utf8[]) = aggregate%substring3%1#0
         let values%3#0: string = ((extract 2 0) tuple_item%3#0)
         let tmp%6#0: bool = (== values%3#0 "a")
         (assert tmp%6#0) // Tuple value should be set
-        let aggregate%extract_uint16%3#0: uint64 = (extract_uint16 tmp%5#0 2u)
-        let aggregate%len%1#0: uint64 = (len tmp%5#0)
-        let aggregate%substring3%2#0: bytes = (substring3 tmp%5#0 aggregate%extract_uint16%3#0 aggregate%len%1#0)
-        let tuple_item%4#0: Encoded((len+utf8[]),uint512,bool1) = aggregate%substring3%2#0
-        let values%4#0: Encoded((len+utf8[]),uint512,bool1) = tuple_item%4#0
-        let aggregate%extract_uint16%4#0: uint64 = (extract_uint16 values%4#0 0u)
-        let aggregate%len%2#0: uint64 = (len values%4#0)
-        let aggregate%substring3%3#0: bytes = (substring3 values%4#0 aggregate%extract_uint16%4#0 aggregate%len%2#0)
+        let (maybe_value%4#0: bytes, maybe_exists%4#0: bool) = (app_global_get_ex 0u "t2")
+        (assert maybe_exists%4#0) // check GlobalState exists
+        let aggregate%extract_uint16%3#0: uint64 = (extract_uint16 maybe_value%4#0 2u)
+        let aggregate%len%1#0: uint64 = (len maybe_value%4#0)
+        let aggregate%substring3%2#0: bytes = (substring3 maybe_value%4#0 aggregate%extract_uint16%3#0 aggregate%len%1#0)
+        let aggregate%extract_uint16%4#0: uint64 = (extract_uint16 aggregate%substring3%2#0 0u)
+        let aggregate%len%2#0: uint64 = (len aggregate%substring3%2#0)
+        let aggregate%substring3%3#0: bytes = (substring3 aggregate%substring3%2#0 aggregate%extract_uint16%4#0 aggregate%len%2#0)
         let tuple_item%5#0: Encoded(len+utf8[]) = aggregate%substring3%3#0
-        let values%5#0: string = ((extract 2 0) tuple_item%5#0)
-        let tmp%7#0: bool = (== values%5#0 "b")
+        let values%4#0: string = ((extract 2 0) tuple_item%5#0)
+        let tmp%7#0: bool = (== values%4#0 "b")
         (assert tmp%7#0) // Tuple value should be set
-        let aggregate%extract%1#0: bytes = (extract3 values%4#0 2u 64u)
+        let (maybe_value%5#0: bytes, maybe_exists%5#0: bool) = (app_global_get_ex 0u "t2")
+        (assert maybe_exists%5#0) // check GlobalState exists
+        let aggregate%extract_uint16%5#0: uint64 = (extract_uint16 maybe_value%5#0 2u)
+        let aggregate%len%3#0: uint64 = (len maybe_value%5#0)
+        let aggregate%substring3%4#0: bytes = (substring3 maybe_value%5#0 aggregate%extract_uint16%5#0 aggregate%len%3#0)
+        let aggregate%extract%1#0: bytes = (extract3 aggregate%substring3%4#0 2u 64u)
         let tuple_item%7#0: Encoded(uint512) = aggregate%extract%1#0
-        let values%7#0: biguint = tuple_item%7#0
-        let tmp%8#0: bool = (b== values%7#0 456b)
+        let values%5#0: biguint = tuple_item%7#0
+        let tmp%8#0: bool = (b== values%5#0 456b)
         (assert tmp%8#0) // Tuple value should be set
-        let aggregate%get_bit%1#0: uint64 = (getbit values%4#0 528u)
+        let (maybe_value%6#0: bytes, maybe_exists%6#0: bool) = (app_global_get_ex 0u "t2")
+        (assert maybe_exists%6#0) // check GlobalState exists
+        let aggregate%extract_uint16%6#0: uint64 = (extract_uint16 maybe_value%6#0 2u)
+        let aggregate%len%4#0: uint64 = (len maybe_value%6#0)
+        let aggregate%substring3%5#0: bytes = (substring3 maybe_value%6#0 aggregate%extract_uint16%6#0 aggregate%len%4#0)
+        let aggregate%get_bit%1#0: uint64 = (getbit aggregate%substring3%5#0 528u)
         let tuple_item%9#0: bool = aggregate%get_bit%1#0
-        let values%9#0: bool = tuple_item%9#0
-        let tmp%9#0: bool = (== values%9#0 1u)
+        let values%6#0: bool = tuple_item%9#0
+        let tmp%9#0: bool = (== values%6#0 1u)
         (assert tmp%9#0) // Tuple value should be set
         (app_global_put "t3" tmp%0#0)
+        let (maybe_value%7#0: bytes, maybe_exists%7#0: bool) = (app_global_get_ex 0u "t3")
+        (assert maybe_exists%7#0) // check GlobalState exists
+        let aggregate%extract_uint16%7#0: uint64 = (extract_uint16 maybe_value%7#0 0u)
+        let aggregate%len%5#0: uint64 = (len maybe_value%7#0)
+        let aggregate%substring3%6#0: bytes = (substring3 maybe_value%7#0 aggregate%extract_uint16%7#0 aggregate%len%5#0)
+        let tuple_item%10#0: Encoded(len+utf8[]) = aggregate%substring3%6#0
+        let values%7#0: string = ((extract 2 0) tuple_item%10#0)
+        let tmp%11#0: bool = (== values%7#0 "hello")
+        (assert tmp%11#0) // Object value should be set
+        let (maybe_value%8#0: bytes, maybe_exists%8#0: bool) = (app_global_get_ex 0u "t3")
+        (assert maybe_exists%8#0) // check GlobalState exists
+        let aggregate%extract%2#0: bytes = (extract3 maybe_value%8#0 2u 8u)
+        let tuple_item%11#0: Encoded(uint64) = aggregate%extract%2#0
+        let values%8#0: uint64 = (btoi tuple_item%11#0)
+        let tmp%12#0: bool = (== values%8#0 123u)
+        (assert tmp%12#0) // Object value should be set
+        let (maybe_value%9#0: bytes, maybe_exists%9#0: bool) = (app_global_get_ex 0u "t3")
+        (assert maybe_exists%9#0) // check GlobalState exists
+        let aggregate%get_bit%2#0: uint64 = (getbit maybe_value%9#0 80u)
+        let tuple_item%12#0: bool = aggregate%get_bit%2#0
+        let values%9#0: bool = tuple_item%12#0
+        let tmp%13#0: bool = (== values%9#0 1u)
+        (assert tmp%13#0) // Object value should be set
         (app_global_put "t4" tmp%5#0)
+        let (maybe_value%10#0: bytes, maybe_exists%10#0: bool) = (app_global_get_ex 0u "t4")
+        (assert maybe_exists%10#0) // check GlobalState exists
+        let aggregate%extract_uint16%8#0: uint64 = (extract_uint16 maybe_value%10#0 0u)
+        let aggregate%extract_uint16%9#0: uint64 = (extract_uint16 maybe_value%10#0 2u)
+        let aggregate%substring3%7#0: bytes = (substring3 maybe_value%10#0 aggregate%extract_uint16%8#0 aggregate%extract_uint16%9#0)
+        let tuple_item%13#0: Encoded(len+utf8[]) = aggregate%substring3%7#0
+        let values%10#0: string = ((extract 2 0) tuple_item%13#0)
+        let tmp%16#0: bool = (== values%10#0 "a")
+        (assert tmp%16#0) // Tuple value should be set
+        let (maybe_value%11#0: bytes, maybe_exists%11#0: bool) = (app_global_get_ex 0u "t4")
+        (assert maybe_exists%11#0) // check GlobalState exists
+        let aggregate%extract_uint16%10#0: uint64 = (extract_uint16 maybe_value%11#0 2u)
+        let aggregate%len%6#0: uint64 = (len maybe_value%11#0)
+        let aggregate%substring3%8#0: bytes = (substring3 maybe_value%11#0 aggregate%extract_uint16%10#0 aggregate%len%6#0)
+        let aggregate%extract_uint16%11#0: uint64 = (extract_uint16 aggregate%substring3%8#0 0u)
+        let aggregate%len%7#0: uint64 = (len aggregate%substring3%8#0)
+        let aggregate%substring3%9#0: bytes = (substring3 aggregate%substring3%8#0 aggregate%extract_uint16%11#0 aggregate%len%7#0)
+        let tuple_item%15#0: Encoded(len+utf8[]) = aggregate%substring3%9#0
+        let values%11#0: string = ((extract 2 0) tuple_item%15#0)
+        let tmp%17#0: bool = (== values%11#0 "b")
+        (assert tmp%17#0) // Tuple value should be set
+        let (maybe_value%12#0: bytes, maybe_exists%12#0: bool) = (app_global_get_ex 0u "t4")
+        (assert maybe_exists%12#0) // check GlobalState exists
+        let aggregate%extract_uint16%12#0: uint64 = (extract_uint16 maybe_value%12#0 2u)
+        let aggregate%len%8#0: uint64 = (len maybe_value%12#0)
+        let aggregate%substring3%10#0: bytes = (substring3 maybe_value%12#0 aggregate%extract_uint16%12#0 aggregate%len%8#0)
+        let aggregate%extract%3#0: bytes = (extract3 aggregate%substring3%10#0 2u 64u)
+        let tuple_item%17#0: Encoded(uint512) = aggregate%extract%3#0
+        let values%12#0: biguint = tuple_item%17#0
+        let tmp%18#0: bool = (b== values%12#0 456b)
+        (assert tmp%18#0) // Tuple value should be set
+        let (maybe_value%13#0: bytes, maybe_exists%13#0: bool) = (app_global_get_ex 0u "t4")
+        (assert maybe_exists%13#0) // check GlobalState exists
+        let aggregate%extract_uint16%13#0: uint64 = (extract_uint16 maybe_value%13#0 2u)
+        let aggregate%len%9#0: uint64 = (len maybe_value%13#0)
+        let aggregate%substring3%11#0: bytes = (substring3 maybe_value%13#0 aggregate%extract_uint16%13#0 aggregate%len%9#0)
+        let aggregate%get_bit%3#0: uint64 = (getbit aggregate%substring3%11#0 528u)
+        let tuple_item%19#0: bool = aggregate%get_bit%3#0
+        let values%13#0: bool = tuple_item%19#0
+        let tmp%19#0: bool = (== values%13#0 1u)
+        (assert tmp%19#0) // Tuple value should be set
         let aggregate%length%3#0: uint64 = (len "World")
         let aggregate%as_bytes%7#0: bytes[8] = (itob aggregate%length%3#0)
         let aggregate%length_uint16%3#0: bytes = ((extract 6 2) aggregate%as_bytes%7#0)
@@ -172,29 +254,36 @@ subroutine tests/approvals/global-state.algo.ts::TestTuple.testTuple() -> void:
         let aggregate%as_Encoded((len+utf8[]),uint64,bool1,(len+utf8[]))%0#0: Encoded((len+utf8[]),uint64,bool1,(len+utf8[])) = aggregate%concat%5#0
         let tmp%21#0: Encoded((len+utf8[]),uint64,bool1,(len+utf8[])) = aggregate%as_Encoded((len+utf8[]),uint64,bool1,(len+utf8[]))%0#0
         (app_global_put "t5" tmp%21#0)
-        let aggregate%extract_uint16%5#0: uint64 = (extract_uint16 tmp%21#0 0u)
-        let aggregate%extract_uint16%6#0: uint64 = (extract_uint16 tmp%21#0 11u)
-        let aggregate%substring3%4#0: bytes = (substring3 tmp%21#0 aggregate%extract_uint16%5#0 aggregate%extract_uint16%6#0)
-        let tuple_item%20#0: Encoded(len+utf8[]) = aggregate%substring3%4#0
-        let values%20#0: string = ((extract 2 0) tuple_item%20#0)
-        let tmp%22#0: bool = (== values%20#0 "hello")
+        let (maybe_value%14#0: bytes, maybe_exists%14#0: bool) = (app_global_get_ex 0u "t5")
+        (assert maybe_exists%14#0) // check GlobalState exists
+        let aggregate%extract_uint16%14#0: uint64 = (extract_uint16 maybe_value%14#0 0u)
+        let aggregate%extract_uint16%15#0: uint64 = (extract_uint16 maybe_value%14#0 11u)
+        let aggregate%substring3%12#0: bytes = (substring3 maybe_value%14#0 aggregate%extract_uint16%14#0 aggregate%extract_uint16%15#0)
+        let tuple_item%20#0: Encoded(len+utf8[]) = aggregate%substring3%12#0
+        let values%14#0: string = ((extract 2 0) tuple_item%20#0)
+        let tmp%22#0: bool = (== values%14#0 "hello")
         (assert tmp%22#0) // Mutable object value should be set
-        let aggregate%extract%2#0: bytes = (extract3 tmp%21#0 2u 8u)
-        let tuple_item%21#0: Encoded(uint64) = aggregate%extract%2#0
-        let values%21#0: uint64 = (btoi tuple_item%21#0)
-        let tmp%23#0: bool = (== values%21#0 123u)
+        let (maybe_value%15#0: bytes, maybe_exists%15#0: bool) = (app_global_get_ex 0u "t5")
+        (assert maybe_exists%15#0) // check GlobalState exists
+        let aggregate%extract%4#0: bytes = (extract3 maybe_value%15#0 2u 8u)
+        let tuple_item%21#0: Encoded(uint64) = aggregate%extract%4#0
+        let values%15#0: uint64 = (btoi tuple_item%21#0)
+        let tmp%23#0: bool = (== values%15#0 123u)
         (assert tmp%23#0) // Mutable object value should be set
-        let aggregate%get_bit%2#0: uint64 = (getbit tmp%21#0 80u)
-        let tuple_item%22#0: bool = aggregate%get_bit%2#0
-        let values%22#0: bool = tuple_item%22#0
-        let tmp%24#0: bool = (== values%22#0 1u)
+        let (maybe_value%16#0: bytes, maybe_exists%16#0: bool) = (app_global_get_ex 0u "t5")
+        (assert maybe_exists%16#0) // check GlobalState exists
+        let aggregate%get_bit%4#0: uint64 = (getbit maybe_value%16#0 80u)
+        let tuple_item%22#0: bool = aggregate%get_bit%4#0
+        let values%16#0: bool = tuple_item%22#0
+        let tmp%24#0: bool = (== values%16#0 1u)
         (assert tmp%24#0) // Mutable object value should be set
-        let aggregate%extract_uint16%7#0: uint64 = (extract_uint16 tmp%21#0 11u)
-        let aggregate%len%3#0: uint64 = (len tmp%21#0)
-        let aggregate%substring3%5#0: bytes = (substring3 tmp%21#0 aggregate%extract_uint16%7#0 aggregate%len%3#0)
-        let tuple_item%23#0: Encoded(len+utf8[]) = aggregate%substring3%5#0
-        let values%23#0: Encoded(len+utf8[]) = tuple_item%23#0
-        let tmp%25#0: string = ((extract 2 0) values%23#0)
+        let (maybe_value%17#0: bytes, maybe_exists%17#0: bool) = (app_global_get_ex 0u "t5")
+        (assert maybe_exists%17#0) // check GlobalState exists
+        let aggregate%extract_uint16%16#0: uint64 = (extract_uint16 maybe_value%17#0 11u)
+        let aggregate%len%10#0: uint64 = (len maybe_value%17#0)
+        let aggregate%substring3%13#0: bytes = (substring3 maybe_value%17#0 aggregate%extract_uint16%16#0 aggregate%len%10#0)
+        let tuple_item%23#0: Encoded(len+utf8[]) = aggregate%substring3%13#0
+        let tmp%25#0: string = ((extract 2 0) tuple_item%23#0)
         let tmp%26#0: bool = (== tmp%25#0 "World")
         (assert tmp%26#0) // Mutable object value should be set
         return 

@@ -317,20 +317,24 @@ aliasing_block@0:
     pushint 123 // 123
     itob
     concat
-    dig 1
+    swap
+    dup
     intc_0 // 0
     extract_uint16
     cover 2
+    dup
+    len
     swap
-    extract 2 0
-    swap
+    intc_1 // 2
+    uncover 2
+    substring3
     intc_1 // 2
     itob
     extract 6 2
     pushbytes 0x
     swap
     concat
-    swap
+    uncover 2
     concat
     uncover 2
     uncover 2
