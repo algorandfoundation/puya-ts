@@ -52,12 +52,9 @@ subroutine tests/approvals/tuples.algo.ts::TuplesAlgo.test(a: Encoded(uint64), b
         let arc4Tuple#0: Encoded(uint64,uint64,uint64) = tmp%1#0
         tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(readonlyTuple.0#0, readonlyTuple.1#0, readonlyTuple.2#0)
         let tuple_item%0#0: Encoded(uint64) = extract_value(mutableTuple#0, 0)
-        let values%0#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(tuple_item%0#0)
         let tuple_item%1#0: Encoded(uint64) = extract_value(mutableTuple#0, 1)
-        let values%1#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(tuple_item%1#0)
         let tuple_item%2#0: Encoded(uint64) = extract_value(mutableTuple#0, 2)
-        let values%2#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(tuple_item%2#0)
-        tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(values%0#0, values%1#0, values%2#0)
+        tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(tuple_item%0#0, tuple_item%1#0, tuple_item%2#0)
         let (tmp%2#0: Encoded(uint64), tmp%3#0: Encoded(uint64), tmp%4#0: Encoded(uint64)) = decode_bytes<(Encoded(uint64),Encoded(uint64),Encoded(uint64),)>(arc4Tuple#0)
         tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(tmp%2#0, tmp%3#0, tmp%4#0)
         tests/approvals/tuples.algo.ts::TuplesAlgo.receiveMutable(mutableTuple#0)
@@ -65,18 +62,14 @@ subroutine tests/approvals/tuples.algo.ts::TuplesAlgo.test(a: Encoded(uint64), b
         let y#0: Encoded(uint64) = readonlyTuple.1#0
         let z#0: Encoded(uint64) = readonlyTuple.2#0
         let tuple_item%3#0: Encoded(uint64) = extract_value(mutableTuple#0, 0)
-        let values%3#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(tuple_item%3#0)
         let tuple_item%4#0: Encoded(uint64) = extract_value(mutableTuple#0, 1)
-        let values%4#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(tuple_item%4#0)
         let tuple_item%5#0: Encoded(uint64) = extract_value(mutableTuple#0, 2)
-        let values%5#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(tuple_item%5#0)
-        let d#0: Encoded(uint64) = values%3#0
-        let e#0: Encoded(uint64) = values%4#0
-        let f#0: Encoded(uint64) = values%5#0
+        let d#0: Encoded(uint64) = tuple_item%3#0
+        let e#0: Encoded(uint64) = tuple_item%4#0
+        let f#0: Encoded(uint64) = tuple_item%5#0
         let g#0: Encoded(uint64) = readonlyTuple.0#0
         let tuple_item%6#0: Encoded(uint64) = extract_value(mutableTuple#0, 0)
-        let values%6#0: Encoded(uint64) = decode_bytes<Encoded(uint64)>(tuple_item%6#0)
-        let h#0: Encoded(uint64) = values%6#0
+        let h#0: Encoded(uint64) = tuple_item%6#0
         return 
 
 subroutine tests/approvals/tuples.algo.ts::TuplesAlgo.receiveReadonly(arg.0: Encoded(uint64), arg.1: Encoded(uint64), arg.2: Encoded(uint64)) -> uint64:

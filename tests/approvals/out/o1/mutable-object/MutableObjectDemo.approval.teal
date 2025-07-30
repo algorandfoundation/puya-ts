@@ -3,8 +3,8 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 8 16
-    bytecblock 0x151f7c75 "plugins"
+    intcblock 0 8 1 16
+    bytecblock 0x151f7c75 "plugins" "main"
     // tests/approvals/mutable-object.algo.ts:12
     // export class MutableObjectDemo extends Contract {
     txn NumAppArgs
@@ -34,7 +34,7 @@ main_setPlugin_route@13:
     // tests/approvals/mutable-object.algo.ts:123
     // public setPlugin(key: string) {
     callsub setPlugin
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_getMain_route@12:
@@ -50,7 +50,7 @@ main_getMain_route@12:
     swap
     concat
     log
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_getPlugin_route@11:
@@ -72,7 +72,7 @@ main_getPlugin_route@11:
     swap
     concat
     log
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_testArc4Encoding_route@10:
@@ -89,7 +89,7 @@ main_testArc4Encoding_route@10:
     // tests/approvals/mutable-object.algo.ts:92
     // testArc4Encoding(p: Point) {
     callsub testArc4Encoding
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_testAssertMatch_route@9:
@@ -107,7 +107,7 @@ main_testAssertMatch_route@9:
     // tests/approvals/mutable-object.algo.ts:75
     // testAssertMatch(x: uint64) {
     callsub testAssertMatch
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_testMethodSelector_route@8:
@@ -118,7 +118,7 @@ main_testMethodSelector_route@8:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_testNestedObjects_route@7:
@@ -135,7 +135,7 @@ main_testNestedObjects_route@7:
     // tests/approvals/mutable-object.algo.ts:49
     // public testNestedObjects(vp: VectorPoint) {
     callsub testNestedObjects
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_implicitCastingAndSpreading_route@6:
@@ -152,7 +152,7 @@ main_implicitCastingAndSpreading_route@6:
     // tests/approvals/mutable-object.algo.ts:34
     // public implicitCastingAndSpreading(v1: Vector) {
     callsub implicitCastingAndSpreading
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_mutateVector_route@5:
@@ -177,7 +177,7 @@ main_mutateVector_route@5:
     swap
     concat
     log
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_addVectors_route@4:
@@ -199,7 +199,7 @@ main_addVectors_route@4:
     swap
     concat
     log
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_testVectorCreationAndEquality_route@3:
@@ -211,7 +211,7 @@ main_testVectorCreationAndEquality_route@3:
     txn ApplicationID
     assert // can only call when not creating
     callsub testVectorCreationAndEquality
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_bare_routing@16:
@@ -222,7 +222,7 @@ main_bare_routing@16:
     txn ApplicationID
     !
     assert // can only call when creating
-    intc_1 // 1
+    intc_2 // 1
     return
 
 
@@ -232,7 +232,7 @@ testVectorCreationAndEquality:
     // const v1: Vector = { y: 1, x: 0 }
     intc_0 // 0
     itob
-    intc_1 // 1
+    intc_2 // 1
     itob
     // tests/approvals/mutable-object.algo.ts:15
     // log(v1.x)
@@ -261,10 +261,10 @@ addVectors:
     // tests/approvals/mutable-object.algo.ts:24
     // y: v1.y + v2.y,
     frame_dig -2
-    intc_2 // 8
+    intc_1 // 8
     extract_uint64
     frame_dig -1
-    intc_2 // 8
+    intc_1 // 8
     extract_uint64
     +
     // tests/approvals/mutable-object.algo.ts:22-25
@@ -318,7 +318,7 @@ implicitCastingAndSpreading:
     intc_0 // 0
     extract_uint64
     frame_dig -1
-    intc_2 // 8
+    intc_1 // 8
     extract_uint64
     dig 1
     itob
@@ -337,7 +337,7 @@ implicitCastingAndSpreading:
     // tests/approvals/mutable-object.algo.ts:41
     // assert(v3.y === v1.y)
     swap
-    intc_2 // 8
+    intc_1 // 8
     extract_uint64
     uncover 2
     ==
@@ -363,7 +363,7 @@ testNestedObjects:
     intc_0 // 0
     extract_uint64
     swap
-    intc_2 // 8
+    intc_1 // 8
     extract_uint64
     dig 1
     itob
@@ -375,7 +375,7 @@ testNestedObjects:
     frame_dig -1
     extract 16 16
     dup
-    intc_2 // 8
+    intc_1 // 8
     extract_uint64
     swap
     intc_0 // 0
@@ -403,7 +403,12 @@ testNestedObjects:
     // tests/approvals/mutable-object.algo.ts:54
     // log(vp1.v.y)
     swap
-    intc_2 // 8
+    // tests/approvals/mutable-object.algo.ts:53-54
+    // log(vp1.v.x)
+    // log(vp1.v.y)
+    intc_1 // 8
+    // tests/approvals/mutable-object.algo.ts:54
+    // log(vp1.v.y)
     extract_uint64
     dup
     itob
@@ -421,7 +426,12 @@ testNestedObjects:
     // tests/approvals/mutable-object.algo.ts:56
     // log(vp1.p.y)
     swap
-    intc_2 // 8
+    // tests/approvals/mutable-object.algo.ts:55-56
+    // log(vp1.p.x)
+    // log(vp1.p.y)
+    intc_1 // 8
+    // tests/approvals/mutable-object.algo.ts:56
+    // log(vp1.p.y)
     extract_uint64
     dup
     itob
@@ -472,7 +482,7 @@ testAssertMatch:
     //   x: x * 2,
     // })
     dup
-    intc_2 // 8
+    intc_1 // 8
     extract_uint64
     dup
     dig 3
@@ -496,7 +506,7 @@ testAssertMatch:
     // tests/approvals/mutable-object.algo.ts:87
     // assertMatch(obj, { x: v.x, y: v.y })
     dup
-    intc_2 // 8
+    intc_1 // 8
     extract_uint64
     dig 2
     ==
@@ -529,7 +539,7 @@ testArc4Encoding:
     // tests/approvals/mutable-object.algo.ts:93
     // assert(p.x !== p.y, 'For the purpose of this test, a should not equal b')
     frame_dig -1
-    intc_2 // 8
+    intc_1 // 8
     extract_uint64
     frame_dig -1
     intc_0 // 0
@@ -551,10 +561,10 @@ testArc4Encoding:
     // assert(pEncoded === objEncoded.slice(8).concat(objEncoded.slice(0, 8)), 'Encoded order should be swapped')
     dup
     len
-    intc_2 // 8
+    intc_1 // 8
     dig 1
     >=
-    intc_2 // 8
+    intc_1 // 8
     dig 2
     uncover 2
     select
@@ -592,13 +602,19 @@ getPlugin:
     concat
     // tests/approvals/mutable-object.algo.ts:108
     // const value = clone(this.plugins(key).value)
+    dup
     box_get
     assert // Box must have value
+    // tests/approvals/mutable-object.algo.ts:108-109
+    // const value = clone(this.plugins(key).value)
+    // assert(value.lastCalled.native > 0, 'Last called not zero')
+    swap
+    intc_3 // 16
+    intc_1 // 8
+    box_extract
     // tests/approvals/mutable-object.algo.ts:109
     // assert(value.lastCalled.native > 0, 'Last called not zero')
-    dup
-    intc_3 // 16
-    extract_uint64
+    btoi
     assert // Last called not zero
     // tests/approvals/mutable-object.algo.ts:110
     // return value
@@ -609,16 +625,23 @@ getPlugin:
 getMain:
     // tests/approvals/mutable-object.algo.ts:105
     // plugin = Box<PluginInfo>({ key: 'main' })
-    pushbytes "main"
+    bytec_2 // "main"
     // tests/approvals/mutable-object.algo.ts:114
     // const value = clone(this.plugin.value)
     box_get
     assert // Box must have value
+    // tests/approvals/mutable-object.algo.ts:105
+    // plugin = Box<PluginInfo>({ key: 'main' })
+    bytec_2 // "main"
+    // tests/approvals/mutable-object.algo.ts:114-115
+    // const value = clone(this.plugin.value)
+    // assert(value.lastCalled.native > 0, 'Last called not zero')
+    intc_3 // 16
+    intc_1 // 8
+    box_extract
     // tests/approvals/mutable-object.algo.ts:115
     // assert(value.lastCalled.native > 0, 'Last called not zero')
-    dup
-    intc_3 // 16
-    extract_uint64
+    btoi
     assert // Last called not zero
     // tests/approvals/mutable-object.algo.ts:116
     // return value

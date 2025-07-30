@@ -179,6 +179,8 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray() -> 
         let aggregate%as_Encoded(uint8[32][])%0#0: Encoded(uint8[32][]) = aggregate%head%0#0
         let encoded_array%0#0: Encoded(uint8[32][]) = aggregate%as_Encoded(uint8[32][])%0#0
         let b#0: Encoded(uint8[32][])* = new()
+        store(b#0, encoded_array%0#0)
+        let slot_contents%0#0: Encoded(uint8[32][]) = load(b#0)
         let aggregate%length%1#0: uint64 = (len a.0#0)
         let aggregate%lengths_equal%1#0: bool = (== aggregate%length%1#0 32u)
         (assert aggregate%lengths_equal%1#0) // invalid size
@@ -191,10 +193,11 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray() -> 
         let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 aggregate%as_Encoded(uint8[32])%2#0)
         let aggregate%as_Encoded(uint8[32][])%1#0: Encoded(uint8[32][]) = aggregate%head%2#0
         let tmp%0#0: Encoded(uint8[32][]) = aggregate%as_Encoded(uint8[32][])%1#0
-        let concat%0#0: Encoded(uint8[32][]) = (concat encoded_array%0#0 tmp%0#0) // on error: max array length exceeded
+        let concat%0#0: Encoded(uint8[32][]) = (concat slot_contents%0#0 tmp%0#0) // on error: max array length exceeded
         store(b#0, concat%0#0)
+        let slot_contents%1#0: Encoded(uint8[32][]) = load(b#0)
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 32u)
-        let aggregate%encoded_element%0#0: bytes = (extract3 concat%0#0 aggregate%bytes_offset%0#0 32u) // on error: index access is out of bounds
+        let aggregate%encoded_element%0#0: bytes = (extract3 slot_contents%1#0 aggregate%bytes_offset%0#0 32u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint8[32]) = aggregate%encoded_element%0#0
         let values%0#0: bytes[32] = array_item%0#0
         let bitAnd#0: bytes[32] = (b& a.0#0 values%0#0)

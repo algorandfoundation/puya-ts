@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 8 1 4 434
+    intcblock 0 8 1 2 434
     bytecblock 0x 0x03e7
 
 main_block@0:
@@ -330,10 +330,10 @@ produceVector_block@0:
     bytec_0 // 0x
     swap
     concat
-    pushint 2 // 2
+    intc_3 // 2
     itob
     concat
-    intc_3 // 4
+    pushint 4 // 4
     itob
     bytec_0 // 0x
     swap
@@ -377,7 +377,7 @@ testLiteralToLiteral:
 testLiteralToLiteral_block@0:
     // tests/approvals/object-destructuring.algo.ts:74
     // const { b: f, a: e } = ({ a: c, b: d } = { a, b })
-    intc_3 // 4
+    pushint 4 // 4
     itob
     bytec_0 // 0x
     swap
@@ -397,7 +397,7 @@ testLiteralToLiteral_block@0:
     btoi
     // tests/approvals/object-destructuring.algo.ts:75
     // return [e, f, c, d]
-    intc_3 // 4
+    pushint 4 // 4
     itob
     extract 6 2
     swap
@@ -408,7 +408,7 @@ testLiteralToLiteral_block@0:
     concat
     // tests/approvals/object-destructuring.algo.ts:74
     // const { b: f, a: e } = ({ a: c, b: d } = { a, b })
-    intc_3 // 4
+    pushint 4 // 4
     // tests/approvals/object-destructuring.algo.ts:75
     // return [e, f, c, d]
     itob
@@ -437,7 +437,7 @@ testNumericResolution_block@0:
     dup
     // tests/approvals/object-destructuring.algo.ts:81
     // assertMatch([x.a, y.a], [434, 434])
-    pushint 2 // 2
+    intc_3 // 2
     dup
     ==
     swap
@@ -467,13 +467,13 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_block
     // tests/approvals/object-destructuring.algo.ts:98
     // const res = testPartialDestructure({ x: 1, y: 4, z: 123n })
     intc_2 // 1
-    intc_3 // 4
+    pushint 4 // 4
     pushbytes 0x7b
     callsub testPartialDestructure
     swap
     // tests/approvals/object-destructuring.algo.ts:99
     // assertMatch(res, [1, 4])
-    pushint 2 // 2
+    intc_3 // 2
     dup
     ==
     swap
@@ -481,7 +481,7 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_block
     ==
     &&
     swap
-    intc_3 // 4
+    pushint 4 // 4
     ==
     &&
     assert // assert target is match for conditions
@@ -513,7 +513,7 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_block
     swap
     // tests/approvals/object-destructuring.algo.ts:102
     // assertMatch(res2, [10, 20])
-    pushint 2 // 2
+    intc_3 // 2
     dup
     ==
     swap
@@ -536,23 +536,34 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_block
     dup
     intc_0 // 0
     extract_uint16
-    intc_3 // 4
+    pushint 4 // 4
     ==
     swap
     dup
-    extract 2 0
+    len
+    swap
+    dup
+    intc_3 // 2
+    uncover 3
+    substring3
     intc_0 // 0
     intc_1 // 8
     *
     intc_1 // 8
     extract3 // on error: index access is out of bounds
     btoi
-    intc_3 // 4
+    pushint 4 // 4
     ==
     uncover 2
     &&
-    dig 1
-    extract 2 0
+    swap
+    dup
+    len
+    swap
+    dup
+    intc_3 // 2
+    uncover 3
+    substring3
     intc_2 // 1
     intc_1 // 8
     *
@@ -561,20 +572,33 @@ tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test_block
     btoi
     intc_2 // 1
     ==
-    &&
-    dig 1
-    extract 2 0
-    pushint 2 // 2
-    intc_1 // 8
-    *
-    intc_1 // 8
-    extract3 // on error: index access is out of bounds
-    btoi
-    intc_3 // 4
-    ==
+    uncover 2
     &&
     swap
-    extract 2 0
+    dup
+    len
+    swap
+    dup
+    intc_3 // 2
+    uncover 3
+    substring3
+    intc_3 // 2
+    intc_1 // 8
+    *
+    intc_1 // 8
+    extract3 // on error: index access is out of bounds
+    btoi
+    pushint 4 // 4
+    ==
+    uncover 2
+    &&
+    swap
+    dup
+    len
+    swap
+    intc_3 // 2
+    uncover 2
+    substring3
     pushint 3 // 3
     intc_1 // 8
     *

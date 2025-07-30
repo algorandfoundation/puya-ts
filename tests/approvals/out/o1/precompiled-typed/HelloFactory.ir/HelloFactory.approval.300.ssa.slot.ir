@@ -142,12 +142,12 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         ((itxn_field Fee) 0u)
         itxn_submit
         let awst_tmp%3#0: bytes = (itxn LastLog)
-        let tmp%27#0: bytes = ((extract 0 4) awst_tmp%3#0)
-        let tmp%28#0: bool = (== tmp%27#0 0x151f7c75)
-        (assert tmp%28#0) // Bytes has valid prefix
+        let tmp%26#0: bytes = ((extract 0 4) awst_tmp%3#0)
+        let tmp%27#0: bool = (== tmp%26#0 0x151f7c75)
+        (assert tmp%27#0) // Bytes has valid prefix
         let result4#0: string = ((extract 6 0) awst_tmp%3#0)
-        let tmp%30#0: bool = (== result4#0 "hello world!")
-        (assert tmp%30#0)
+        let tmp%29#0: bool = (== result4#0 "hello world!")
+        (assert tmp%29#0)
         itxn_begin
         ((itxn_field ApplicationArgs) method "delete()void")
         ((itxn_field OnCompletion) 5u)
@@ -193,12 +193,12 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         ((itxn_field Fee) 0u)
         itxn_submit
         let awst_tmp%1#0: bytes = (itxn LastLog)
-        let tmp%12#0: bytes = ((extract 0 4) awst_tmp%1#0)
-        let tmp%13#0: bool = (== tmp%12#0 0x151f7c75)
-        (assert tmp%13#0) // Bytes has valid prefix
+        let tmp%11#0: bytes = ((extract 0 4) awst_tmp%1#0)
+        let tmp%12#0: bool = (== tmp%11#0 0x151f7c75)
+        (assert tmp%12#0) // Bytes has valid prefix
         let txn2.returnValue#0: string = ((extract 6 0) awst_tmp%1#0)
-        let tmp%15#0: bool = (== txn2.returnValue#0 "hey world!")
-        (assert tmp%15#0)
+        let tmp%14#0: bool = (== txn2.returnValue#0 "hey world!")
+        (assert tmp%14#0)
         itxn_begin
         ((itxn_field ApplicationArgs) method "delete()void")
         ((itxn_field OnCompletion) 5u)

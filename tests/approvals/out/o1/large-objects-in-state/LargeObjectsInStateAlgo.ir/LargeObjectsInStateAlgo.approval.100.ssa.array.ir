@@ -88,22 +88,20 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount(index: uint64, xCount: uint64) -> void:
     block@0: // L29
-        let box%element_offset%0#0: uint64 = (* index#0 9u)
-        let box%box_extract%0#0: Encoded(uint64,uint8) = (box_extract "x" box%element_offset%0#0 9u)
-        let values%0#0: Encoded(uint64,uint8) = box%box_extract%0#0
-        let aggregate%extract%0#0: bytes = (extract3 values%0#0 0u 8u)
+        let box%element_offset%1#0: uint64 = (* index#0 9u)
+        let box%box_extract%1#0: Encoded(uint64,uint8) = (box_extract "x" box%element_offset%1#0 9u)
+        let aggregate%extract%0#0: bytes = (extract3 box%box_extract%1#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
-        let values%1#0: uint64 = (btoi tuple_item%0#0)
-        let tmp%0#0: uint64 = (+ values%1#0 xCount#0)
+        let values%0#0: uint64 = (btoi tuple_item%0#0)
+        let tmp%0#0: uint64 = (+ values%0#0 xCount#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#0)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
         let encoded_value%0#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        (box_replace "x" box%element_offset%0#0 encoded_value%0#0)
+        (box_replace "x" box%element_offset%1#0 encoded_value%0#0)
         return 
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts(index: uint64) -> Encoded(uint64,uint8):
     block@0: // L33
         let box%element_offset%0#0: uint64 = (* index#0 9u)
         let box%box_extract%0#0: Encoded(uint64,uint8) = (box_extract "x" box%element_offset%0#0 9u)
-        let values%0#0: Encoded(uint64,uint8) = box%box_extract%0#0
-        return values%0#0
+        return box%box_extract%0#0

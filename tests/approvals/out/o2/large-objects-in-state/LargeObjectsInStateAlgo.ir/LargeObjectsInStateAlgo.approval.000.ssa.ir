@@ -237,10 +237,9 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
     block@0: // L29
         let storage_value%0#0: bytes = box_read("x")
         let array_item%0#0: Encoded(uint64,uint8) = extract_value(storage_value%0#0, index#0)
-        let values%0#0: Encoded(uint64,uint8) = decode_bytes<Encoded(uint64,uint8)>(array_item%0#0)
-        let tuple_item%0#0: Encoded(uint64) = extract_value(values%0#0, 0)
-        let values%1#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
-        let tmp%0#0: uint64 = (+ values%1#0 xCount#0)
+        let tuple_item%0#0: Encoded(uint64) = extract_value(array_item%0#0, 0)
+        let values%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let tmp%0#0: uint64 = (+ values%0#0 xCount#0)
         let storage_value%1#0: bytes = box_read("x")
         let encoded_value%0#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
         let updated_array%0#0: Encoded((uint64,uint8)[800]) = replace_value(storage_value%1#0, index#0, 0, encoded_value%0#0)
@@ -251,8 +250,7 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
     block@0: // L33
         let storage_value%0#0: bytes = box_read("x")
         let array_item%0#0: Encoded(uint64,uint8) = extract_value(storage_value%0#0, index#0)
-        let values%0#0: Encoded(uint64,uint8) = decode_bytes<Encoded(uint64,uint8)>(array_item%0#0)
-        return values%0#0
+        return array_item%0#0
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__algots__.defaultCreate() -> void:
     block@0: // L14

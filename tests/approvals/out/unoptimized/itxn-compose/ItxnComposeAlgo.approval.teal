@@ -155,7 +155,11 @@ distribute_block@0:
     // tests/approvals/itxn-compose.algo.ts:29
     // receiver: addresses[0].bytes,
     frame_dig -3
-    extract 2 0
+    len
+    frame_dig -3
+    pushint 2 // 2
+    uncover 2
+    substring3
     intc_0 // 0
     intc_2 // 32
     *
@@ -248,7 +252,11 @@ distribute_for_body@2:
     // tests/approvals/itxn-compose.algo.ts:33
     // const addr = addresses[i]
     frame_dig -3
-    extract 2 0
+    len
+    frame_dig -3
+    pushint 2 // 2
+    uncover 2
+    substring3
     swap
     intc_2 // 32
     *
