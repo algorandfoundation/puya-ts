@@ -9,7 +9,7 @@ import { Constants } from '../../../constants'
 import { logger } from '../../../logger'
 import { codeInvariant, enumFromValue, hexToUint8Array, invariant } from '../../../util'
 import { parseArc4Method } from '../../../util/arc4-signature-parser'
-import { buildArc4MethodConstant, ptypeToArc4EncodedType } from '../../arc4-util'
+import { buildArc4MethodConstant, isResourceType, ptypeToArc4EncodedType, resourceTypeToValueType } from '../../arc4-util'
 import { AwstBuildContext } from '../../context/awst-build-context'
 import type { FunctionPType, PType } from '../../ptypes'
 import {
@@ -357,8 +357,11 @@ function formatApplicationCallResponse({
   // Extract return value and return
   const itxnSingle = nodeFactory.singleEvaluation({ source: itxnResult })
 
-  const responseType = TypedApplicationCallResponseGeneric.parameterise([functionType.returnType])
-  const returnValue = getReturnValueExpr(itxnSingle, functionType.returnType, sourceLocation)
+  const returnType = isResourceType(functionType.returnType)
+    ? resourceTypeToValueType(functionType.returnType, sourceLocation)
+    : functionType.returnType
+  const responseType = TypedApplicationCallResponseGeneric.parameterise([returnType])
+  const returnValue = getReturnValueExpr(itxnSingle, returnType, sourceLocation)
   return instanceEb(
     nodeFactory.tupleExpression({
       items: [itxnSingle, returnValue],

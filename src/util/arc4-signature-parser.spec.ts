@@ -76,6 +76,9 @@ describe('arc4 method parser', () => {
       ['test(uint8,uint8)uint8'],
       ['test(application,asset,account,address[])uint8'],
       ['test(uint8[],(uint16))(string,address)'],
+      ['test()application'],
+      ['test()asset'],
+      ['test()account'],
     ])('%s parses', (signature) => {
       const match = parseArc4Method(signature)
       expect(`${match.name}(${match.parameters.map((p) => p.abiTypeSignature).join(',')})${match.returnType.abiTypeSignature}`).toBe(

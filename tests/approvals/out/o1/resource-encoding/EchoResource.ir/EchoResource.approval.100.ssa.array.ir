@@ -4,7 +4,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto tmp%0#1 ? block@2 : block@7
     block@2: // abi_routing_L49
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "echoResourceByForeignIndex(asset,application,account)void" => block@3, method "echoResourceByValue(uint64,uint64,address)void" => block@4, * => block@11}
+        switch tmp%2#0 {method "echoResourceByForeignIndex(asset,application,account)uint64" => block@3, method "echoResourceByValue(uint64,uint64,address)void" => block@4, * => block@11}
     block@3: // echoResourceByForeignIndex_route_L50
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (! tmp%3#0)
@@ -20,31 +20,36 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let reinterpret_Encoded(uint8)%2#0: Encoded(uint8) = (txna ApplicationArgs 3)
         let tmp%11#0: uint64 = (btoi reinterpret_Encoded(uint8)%2#0)
         let tmp%12#0: account = ((txnas Accounts) tmp%11#0)
-        tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByForeignIndex(tmp%8#0, tmp%10#0, tmp%12#0)
+        let tmp%13#0: uint64 = tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByForeignIndex(tmp%8#0, tmp%10#0, tmp%12#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%13#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%14#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%15#0: bytes = (concat 0x151f7c75 tmp%14#0)
+        (log tmp%15#0)
         let tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#0: bool = 1u
         goto block@12
-    block@4: // echoResourceByValue_route_L60
-        let tmp%13#0: uint64 = (txn OnCompletion)
-        let tmp%14#0: bool = (! tmp%13#0)
-        (assert tmp%14#0) // OnCompletion is not NoOp
-        let tmp%15#0: uint64 = (txn ApplicationID)
-        (assert tmp%15#0) // can only call when not creating
+    block@4: // echoResourceByValue_route_L61
+        let tmp%16#0: uint64 = (txn OnCompletion)
+        let tmp%17#0: bool = (! tmp%16#0)
+        (assert tmp%17#0) // OnCompletion is not NoOp
+        let tmp%18#0: uint64 = (txn ApplicationID)
+        (assert tmp%18#0) // can only call when not creating
         let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%17#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let tmp%20#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
         let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let tmp%18#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
+        let tmp%21#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
         let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 3)
-        let tmp%19#0: account = reinterpret_Encoded(uint8[32])%0#0
-        tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByValue(tmp%17#0, tmp%18#0, tmp%19#0)
+        let tmp%22#0: account = reinterpret_Encoded(uint8[32])%0#0
+        tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByValue(tmp%20#0, tmp%21#0, tmp%22#0)
         let tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#1: bool = 1u
         goto block@12
     block@7: // bare_routing_L49
-        let tmp%20#0: uint64 = (txn OnCompletion)
-        goto tmp%20#0 ? block@11 : block@8
+        let tmp%23#0: uint64 = (txn OnCompletion)
+        goto tmp%23#0 ? block@11 : block@8
     block@8: // __algots__.defaultCreate_L49
-        let tmp%21#0: uint64 = (txn ApplicationID)
-        let tmp%22#0: bool = (! tmp%21#0)
-        (assert tmp%22#0) // can only call when creating
+        let tmp%24#0: uint64 = (txn ApplicationID)
+        let tmp%25#0: bool = (! tmp%24#0)
+        (assert tmp%25#0) // can only call when creating
         let tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#2: bool = 1u
         goto block@12
     block@11: // after_if_else_L49
@@ -54,7 +59,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#0: bool = φ(tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#0 <- block@3, tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#1 <- block@4, tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#2 <- block@8, tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#3 <- block@11)
         return tmp%0#0
 
-subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByForeignIndex(asset: uint64, app: uint64, acc: account) -> void:
+subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByForeignIndex(asset: uint64, app: uint64, acc: account) -> uint64:
     block@0: // L50
         let tmp%0#0: bytes = ((txnas ApplicationArgs) 1u)
         let assetIdx#0: uint64 = (btoi tmp%0#0)
@@ -71,10 +76,10 @@ subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceB
         let tmp%10#0: account = ((txnas Accounts) accIdx#0)
         let tmp%11#0: bool = (== acc#0 tmp%10#0)
         (assert tmp%11#0) // expected account to be passed by foreign_index
-        return 
+        return asset#0
 
 subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByValue(asset: uint64, app: uint64, acc: account) -> void:
-    block@0: // L60
+    block@0: // L61
         let tmp%0#0: bytes = ((txnas ApplicationArgs) 1u)
         let assetId#0: uint64 = (btoi tmp%0#0)
         let tmp%2#0: bool = (== asset#0 assetId#0)

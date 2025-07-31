@@ -48,13 +48,14 @@ class ByValue extends BaseValue {
 
 class EchoResource extends Contract {
   @abimethod({ resourceEncoding: 'foreign_index' })
-  echoResourceByForeignIndex(asset: Asset, app: Application, acc: Account) {
+  echoResourceByForeignIndex(asset: Asset, app: Application, acc: Account): Asset {
     const assetIdx = op.btoi(Txn.applicationArgs(1))
     assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by foreign_index')
     const appIdx = op.btoi(Txn.applicationArgs(2))
     assert(app === Txn.applications(appIdx), 'expected application to be passed by foreign_index')
     const accIdx = op.btoi(Txn.applicationArgs(3))
     assert(acc === Txn.accounts(accIdx), 'expected account to be passed by foreign_index')
+    return asset
   }
 
   @abimethod({ resourceEncoding: 'value' })

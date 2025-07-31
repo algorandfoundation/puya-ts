@@ -189,7 +189,7 @@ const arc4Type = A.coroutine<arc4Types.ARC4EncodedType>((parse) => {
   }
 })
 const voidType = simpleType('void', voidPType)
-const abiReturn = A.choice([voidType, arc4Type]).errorMap(updateErrorMessage('ABI return type'))
+const abiReturn = A.choice([voidType, resourceTypes, arc4Type]).errorMap(updateErrorMessage('ABI return type'))
 const abiParam = A.choice([resourceTypes, txnTypes, arc4Type]).errorMap(updateErrorMessage('ABI parameter type'))
 
 type ARC4MethodSignature = { name: string; parameters: ABICompatiblePType[]; returnType: ABICompatiblePType }

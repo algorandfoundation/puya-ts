@@ -113,7 +113,7 @@ contract EchoResource
     return True
   }
   
-  echoResourceByForeignIndex(asset: asset, app: application, acc: account): void
+  echoResourceByForeignIndex(asset: asset, app: application, acc: account): asset
   {
     assetIdx: uint64 = btoi(txnas<ApplicationArgs>(1))
     assert(asset == txnas<Assets>(assetIdx), comment=expected asset to be passed by foreign_index)
@@ -121,6 +121,7 @@ contract EchoResource
     assert(app == txnas<Applications>(appIdx), comment=expected application to be passed by foreign_index)
     accIdx: uint64 = btoi(txnas<ApplicationArgs>(3))
     assert(acc == txnas<Accounts>(accIdx), comment=expected account to be passed by foreign_index)
+    return asset
   }
   
   echoResourceByValue(asset: asset, app: application, acc: account): void
@@ -167,7 +168,7 @@ contract C2C
     compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/resource-encoding.algo.ts::EchoResource
     appId: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages)).CreatedApplicationID
     asset: asset = submit_txn(create_inner_transaction(Fee=0, TypeEnum=3, ConfigAssetTotal=1, ConfigAssetUnitName="T", ConfigAssetName="TEST")).CreatedAssetID
-    #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0, ApplicationArgs=#[Method("echoResourceByForeignIndex(asset,application,account)void"), 0, 1, 1], Applications=#[global<CurrentApplicationID>()], Assets=#[asset], Accounts=#[txn<Sender>()])) }
+    #{ itxn: ($6 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0, ApplicationArgs=#[Method("echoResourceByForeignIndex(asset,application,account)uint64"), 0, 1, 1], Applications=#[global<CurrentApplicationID>()], Assets=#[asset], Accounts=#[txn<Sender>()]))), returnValue: reinterpret_cast<arc4.uint64>(checked_maybe(#[extract<4, 0>(($7 = $6.LastLog)), extract<0, 4>($7) == 0x151f7c75], comment=Bytes has valid prefix)) }
     #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0, ApplicationArgs=#[Method("echoResourceByValue(uint64,uint64,address)void"), ARC4_ENCODE(asset, wtype=arc4.uint64), ARC4_ENCODE(global<CurrentApplicationID>(), wtype=arc4.uint64), ARC4_ENCODE(txn<Sender>(), wtype=arc4.static_array<arc4.byte>)])) }
   }
   

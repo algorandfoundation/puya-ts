@@ -41,6 +41,16 @@ import {
   UintNType,
 } from './ptypes/arc4-types'
 
+export const isResourceType = (ptype: PType): ptype is ABICompatibleInstanceType =>
+  ptype.equalsOneOf(applicationPType, accountPType, assetPType)
+
+export function resourceTypeToValueType(ptype: PType, sourceLocation: SourceLocation): ABICompatiblePType {
+  if (ptype.equals(accountPType)) return arc4AddressAlias
+  if (ptype.equals(assetPType)) return new UintNType({ n: 64n })
+  if (ptype.equals(applicationPType)) return new UintNType({ n: 64n })
+  throw new CodeError(`Cannot convert ${ptype} to a value type`, { sourceLocation })
+}
+
 /**
  * For a given ptype, return the equivalent ABI compatible type - or error if there is no compatible type
  * @param ptype The type of the parameter
@@ -53,10 +63,9 @@ export function ptypeToAbiPType(ptype: PType, direction: 'in' | 'out', sourceLoc
     codeInvariant(direction === 'in', `${ptype.name} cannot be used as an ABI return type`, sourceLocation)
     return ptype
   }
-  if (ptype.equalsOneOf(applicationPType, accountPType, assetPType)) {
+  if (isResourceType(ptype)) {
     invariant(ptype instanceof ABICompatibleInstanceType, 'application, account, and asset are all ABICompatibleInstanceType')
-    codeInvariant(direction === 'in', `${ptype.name} cannot be used as an ABI return type`, sourceLocation)
-    return ptype
+    return direction === 'out' ? resourceTypeToValueType(ptype, sourceLocation) : ptype
   }
   if (ptype.equals(voidPType)) {
     codeInvariant(direction === 'out', `${ptype.name} cannot be used as an ABI param type`, sourceLocation)

@@ -4,14 +4,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__() -> bool:
-    block@0: // L71
+    block@0: // L72
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@7
-    block@1: // abi_routing_L71
+    block@1: // abi_routing_L72
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "testCallToForeign(address,uint64)void" => block@2, method "testCallToValue(address,uint64)void" => block@3, method "testCallToEchoResource()void" => block@4, * => block@5}
-    block@2: // testCallToForeign_route_L72
+    block@2: // testCallToForeign_route_L73
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -24,7 +24,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__()
         let tmp%8#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%0#0)
         tests/approvals/resource-encoding.algo.ts::C2C.testCallToForeign(tmp%7#0, tmp%8#0)
         return 1u
-    block@3: // testCallToValue_route_L80
+    block@3: // testCallToValue_route_L81
         let tmp%9#0: uint64 = (txn OnCompletion)
         let tmp%10#0: bool = (== tmp%9#0 NoOp)
         (assert tmp%10#0) // OnCompletion is not NoOp
@@ -37,7 +37,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__()
         let tmp%14#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%1#0)
         tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue(tmp%13#0, tmp%14#0)
         return 1u
-    block@4: // testCallToEchoResource_route_L89
+    block@4: // testCallToEchoResource_route_L90
         let tmp%15#0: uint64 = (txn OnCompletion)
         let tmp%16#0: bool = (== tmp%15#0 NoOp)
         (assert tmp%16#0) // OnCompletion is not NoOp
@@ -46,28 +46,28 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__()
         (assert tmp%18#0) // can only call when not creating
         tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource()
         return 1u
-    block@5: // switch_case_default_L71
+    block@5: // switch_case_default_L72
         goto block@6
-    block@6: // switch_case_next_L71
+    block@6: // switch_case_next_L72
         goto block@11
-    block@7: // bare_routing_L71
+    block@7: // bare_routing_L72
         let tmp%19#0: uint64 = (txn OnCompletion)
         switch tmp%19#0 {0u => block@8, * => block@9}
-    block@8: // __algots__.defaultCreate_L71
+    block@8: // __algots__.defaultCreate_L72
         let tmp%20#0: uint64 = (txn ApplicationID)
         let tmp%21#0: bool = (== tmp%20#0 0u)
         (assert tmp%21#0) // can only call when creating
         tests/approvals/resource-encoding.algo.ts::C2C.__algots__.defaultCreate()
         return 1u
-    block@9: // switch_case_default_L71
+    block@9: // switch_case_default_L72
         goto block@10
-    block@10: // switch_case_next_L71
+    block@10: // switch_case_next_L72
         goto block@11
-    block@11: // after_if_else_L71
+    block@11: // after_if_else_L72
         return 0u
 
 subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToForeign(account: account, appId: uint64) -> void:
-    block@0: // L72
+    block@0: // L73
         itxn_begin
         let inner_txn_params%0#0: itxn_field_set = itxn_field_set(0)
         let inner_txn_params%0%%param_Fee_idx_0#0: uint64 = 0u
@@ -134,7 +134,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToForeign(acco
         ((itxn_field TypeEnum) inner_txn_params%0%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) inner_txn_params%0%%param_Fee_idx_0#0)
         goto block@1
-    block@1: // next_txn_L73
+    block@1: // next_txn_L74
         itxn_submit
         let awst_tmp%0#0: bytes = itxn[itxn_group_idx(0)].LastLog
         let tmp%0#0: bytes = ((extract 4 0) awst_tmp%0#0)
@@ -151,7 +151,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToForeign(acco
         return 
 
 subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue(account: account, appId: uint64) -> void:
-    block@0: // L80
+    block@0: // L81
         itxn_begin
         let inner_txn_params%0#0: itxn_field_set = itxn_field_set(0)
         let inner_txn_params%0%%param_Fee_idx_0#0: uint64 = 0u
@@ -217,7 +217,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue(accoun
         ((itxn_field TypeEnum) inner_txn_params%0%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) inner_txn_params%0%%param_Fee_idx_0#0)
         goto block@1
-    block@1: // next_txn_L81
+    block@1: // next_txn_L82
         itxn_submit
         let awst_tmp%0#0: bytes = itxn[itxn_group_idx(0)].LastLog
         let tmp%1#0: bytes = ((extract 4 0) awst_tmp%0#0)
@@ -234,7 +234,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue(accoun
         return 
 
 subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource() -> void:
-    block@0: // L89
+    block@0: // L90
         let (compiled.approvalProgram.0#0: bytes, compiled.approvalProgram.1#0: bytes, compiled.clearStateProgram.0#0: bytes, compiled.clearStateProgram.1#0: bytes, compiled.extraProgramPages#0: uint64, compiled.globalUints#0: uint64, compiled.globalBytes#0: uint64, compiled.localUints#0: uint64, compiled.localBytes#0: uint64) = (compiled_contract('tests/approvals/resource-encoding.algo.ts::EchoResource', field=ApprovalProgramPages, program_page=0), compiled_contract('tests/approvals/resource-encoding.algo.ts::EchoResource', field=ApprovalProgramPages, program_page=1), compiled_contract('tests/approvals/resource-encoding.algo.ts::EchoResource', field=ClearStateProgramPages, program_page=0), compiled_contract('tests/approvals/resource-encoding.algo.ts::EchoResource', field=ClearStateProgramPages, program_page=1), compiled_contract('tests/approvals/resource-encoding.algo.ts::EchoResource', field=ExtraProgramPages, program_page=None), compiled_contract('tests/approvals/resource-encoding.algo.ts::EchoResource', field=GlobalNumUint, program_page=None), compiled_contract('tests/approvals/resource-encoding.algo.ts::EchoResource', field=GlobalNumByteSlice, program_page=None), compiled_contract('tests/approvals/resource-encoding.algo.ts::EchoResource', field=LocalNumUint, program_page=None), compiled_contract('tests/approvals/resource-encoding.algo.ts::EchoResource', field=LocalNumByteSlice, program_page=None))
         itxn_begin
         let inner_txn_params%0#0: itxn_field_set = itxn_field_set(0)
@@ -314,7 +314,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         ((itxn_field TypeEnum) inner_txn_params%0%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) inner_txn_params%0%%param_Fee_idx_0#0)
         goto block@1
-    block@1: // next_txn_L92
+    block@1: // next_txn_L93
         itxn_submit
         let tmp%0#0: uint64 = itxn[itxn_group_idx(0)].CreatedApplicationID
         let appId#0: uint64 = tmp%0#0
@@ -382,7 +382,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         ((itxn_field TypeEnum) inner_txn_params%1%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) inner_txn_params%1%%param_Fee_idx_0#0)
         goto block@2
-    block@2: // next_txn_L93
+    block@2: // next_txn_L94
         itxn_submit
         let tmp%1#0: uint64 = itxn[itxn_group_idx(0)].CreatedAssetID
         let asset#0: uint64 = tmp%1#0
@@ -396,7 +396,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         let inner_txn_params%2%%ApplicationID_length#0: uint64 = 1u
         let inner_txn_params%2%%param_OnCompletion_idx_0#0: uint64 = 0u
         let inner_txn_params%2%%OnCompletion_length#0: uint64 = 1u
-        let inner_txn_params%2%%param_ApplicationArgs_idx_0#0: bytes[4] = method "echoResourceByForeignIndex(asset,application,account)void"
+        let inner_txn_params%2%%param_ApplicationArgs_idx_0#0: bytes[4] = method "echoResourceByForeignIndex(asset,application,account)uint64"
         let inner_txn_params%2%%param_ApplicationArgs_idx_1#0: bytes[1] = 0x00
         let inner_txn_params%2%%param_ApplicationArgs_idx_2#0: bytes[1] = 0x01
         let inner_txn_params%2%%param_ApplicationArgs_idx_3#0: bytes[1] = 0x01
@@ -464,8 +464,14 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         ((itxn_field TypeEnum) inner_txn_params%2%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) inner_txn_params%2%%param_Fee_idx_0#0)
         goto block@3
-    block@3: // next_txn_L101
+    block@3: // next_txn_L102
         itxn_submit
+        let awst_tmp%0#0: bytes = itxn[itxn_group_idx(0)].LastLog
+        let tmp%4#0: bytes = ((extract 4 0) awst_tmp%0#0)
+        let tmp%5#0: bytes = ((extract 0 4) awst_tmp%0#0)
+        let tmp%6#0: bool = (== tmp%5#0 0x151f7c75)
+        (assert tmp%6#0) // Bytes has valid prefix
+        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = tmp%4#0
         itxn_begin
         let inner_txn_params%3#0: itxn_field_set = itxn_field_set(3)
         let inner_txn_params%3%%param_Fee_idx_0#0: uint64 = 0u
@@ -476,15 +482,15 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         let inner_txn_params%3%%ApplicationID_length#0: uint64 = 1u
         let inner_txn_params%3%%param_OnCompletion_idx_0#0: uint64 = 0u
         let inner_txn_params%3%%OnCompletion_length#0: uint64 = 1u
-        let tmp%4#0: Encoded(uint64) = bytes_encode<uint64>(asset#0)
-        let tmp%5#0: uint64 = (global CurrentApplicationID)
-        let tmp%6#0: Encoded(uint64) = bytes_encode<uint64>(tmp%5#0)
-        let tmp%7#0: account = (txn Sender)
-        let tmp%8#0: Encoded(uint8[32]) = bytes_encode<uint8[32]>(tmp%7#0)
+        let tmp%7#0: Encoded(uint64) = bytes_encode<uint64>(asset#0)
+        let tmp%8#0: uint64 = (global CurrentApplicationID)
+        let tmp%9#0: Encoded(uint64) = bytes_encode<uint64>(tmp%8#0)
+        let tmp%10#0: account = (txn Sender)
+        let tmp%11#0: Encoded(uint8[32]) = bytes_encode<uint8[32]>(tmp%10#0)
         let inner_txn_params%3%%param_ApplicationArgs_idx_0#0: bytes[4] = method "echoResourceByValue(uint64,uint64,address)void"
-        let inner_txn_params%3%%param_ApplicationArgs_idx_1#0: Encoded(uint64) = tmp%4#0
-        let inner_txn_params%3%%param_ApplicationArgs_idx_2#0: Encoded(uint64) = tmp%6#0
-        let inner_txn_params%3%%param_ApplicationArgs_idx_3#0: Encoded(uint8[32]) = tmp%8#0
+        let inner_txn_params%3%%param_ApplicationArgs_idx_1#0: Encoded(uint64) = tmp%7#0
+        let inner_txn_params%3%%param_ApplicationArgs_idx_2#0: Encoded(uint64) = tmp%9#0
+        let inner_txn_params%3%%param_ApplicationArgs_idx_3#0: Encoded(uint8[32]) = tmp%11#0
         let inner_txn_params%3%%ApplicationArgs_length#0: uint64 = 4u
         let inner_txn_params%3%%Sender_length#0: uint64 = 0u
         let inner_txn_params%3%%Note_length#0: uint64 = 0u
@@ -541,10 +547,10 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         ((itxn_field TypeEnum) inner_txn_params%3%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) inner_txn_params%3%%param_Fee_idx_0#0)
         goto block@4
-    block@4: // next_txn_L106
+    block@4: // next_txn_L107
         itxn_submit
         return 
 
 subroutine tests/approvals/resource-encoding.algo.ts::C2C.__algots__.defaultCreate() -> void:
-    block@0: // L71
+    block@0: // L72
         return 
