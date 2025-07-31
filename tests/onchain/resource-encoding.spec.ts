@@ -6,7 +6,7 @@ describe('resource encoding', () => {
   const test = createArc4TestFixture('tests/approvals/resource-encoding.algo.ts', {
     Foreign: {},
     ByValue: {},
-    C2C: {},
+    C2C: { funding: algo(1) },
   })
 
   test('foreign index', async ({ appClientForeign, localnet }) => {
@@ -46,6 +46,13 @@ describe('resource encoding', () => {
     await appClientC2C.send.call({
       method: 'testCallToValue',
       args: [newAccount.addr.toString(), appClientByValue.appId],
+      extraFee: algo(1),
+    })
+  })
+
+  test('EchoResource', async ({ appClientC2C, localnet }) => {
+    await appClientC2C.send.call({
+      method: 'testCallToEchoResource',
       extraFee: algo(1),
     })
   })
