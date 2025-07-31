@@ -508,10 +508,11 @@ function parseAppArgs({
           if (publicParamType.equals(assetPType)) {
             return handleForeignRef(results.foreignAssets, 0n, paramType, arg)
           } else {
-            return nodeFactory.reinterpretCast({
-              expr: requireExpressionOfType(arg, assetPType),
+            return nodeFactory.aRC4Encode({
+              value: requireExpressionOfType(arg, assetPType),
               sourceLocation: arg.sourceLocation,
-              wtype: wtypes.uint64WType,
+              wtype: new wtypes.ARC4UIntN({ n: 64n }),
+              errorMessage: null,
             })
           }
         }
@@ -519,10 +520,11 @@ function parseAppArgs({
           if (publicParamType.equals(applicationPType)) {
             return handleForeignRef(results.foreignApps, 1n, paramType, arg)
           } else {
-            return nodeFactory.reinterpretCast({
-              expr: requireExpressionOfType(arg, applicationPType),
+            return nodeFactory.aRC4Encode({
+              value: requireExpressionOfType(arg, applicationPType),
               sourceLocation: arg.sourceLocation,
-              wtype: wtypes.uint64WType,
+              wtype: new wtypes.ARC4UIntN({ n: 64n }),
+              errorMessage: null,
             })
           }
         }
@@ -530,10 +532,11 @@ function parseAppArgs({
           if (publicParamType.equals(accountPType)) {
             return handleForeignRef(results.foreignAccounts, 1n, paramType, arg)
           } else {
-            return nodeFactory.reinterpretCast({
-              expr: requireExpressionOfType(arg, accountPType),
+            return nodeFactory.aRC4Encode({
+              value: requireExpressionOfType(arg, accountPType),
               sourceLocation: arg.sourceLocation,
-              wtype: new wtypes.BytesWType({ length: 32n }),
+              wtype: wtypes.arc4AddressAliasWType,
+              errorMessage: null,
             })
           }
         }

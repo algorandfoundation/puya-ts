@@ -3,36 +3,185 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 6
-    bytecblock 0x151f7c75
-    // tests/approvals/resource-encoding.algo.ts:49
+    intcblock 0 6 1
+    bytecblock 0x01 0x151f7c75
+    // tests/approvals/resource-encoding.algo.ts:71
     // class C2C extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
-    pushbytess 0xfd89cbe5 0x0fefd6f7 // method "testCallToForeign(address,uint64)void", method "testCallToValue(address,uint64)void"
+    bz main_bare_routing@8
+    pushbytess 0xfd89cbe5 0x0fefd6f7 0xe7bc0f52 // method "testCallToForeign(address,uint64)void", method "testCallToValue(address,uint64)void", method "testCallToEchoResource()void"
     txna ApplicationArgs 0
-    match main_testCallToForeign_route@3 main_testCallToValue_route@4
+    match main_testCallToForeign_route@3 main_testCallToValue_route@4 main_testCallToEchoResource_route@5
 
-main_after_if_else@11:
-    // tests/approvals/resource-encoding.algo.ts:49
+main_after_if_else@12:
+    // tests/approvals/resource-encoding.algo.ts:71
     // class C2C extends Contract {
     intc_0 // 0
     return
 
+main_testCallToEchoResource_route@5:
+    // tests/approvals/resource-encoding.algo.ts:89
+    // testCallToEchoResource() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/resource-encoding.algo.ts:92
+    // const appId = compiled.bareCreate().createdApp
+    itxn_begin
+    // tests/approvals/resource-encoding.algo.ts:90
+    // const compiled = compileArc4(EchoResource)
+    pushbytes base64(CoEBQw==)
+    itxn_field ClearStateProgramPages
+    pushbytes base64(CiADAQIDMRtBAHiCAgQ8YRNEBCp3rIE2GgCOAgAsAAOBAEMxGRREMRhENhoBFzYaAhc2GgMiwBoXTwMSRCPAGhdPAhJEJMAaEkQiQzEZFEQxGEQ2GgEXwDA2GgIXwDI2GgMXwBwiwBoXwDBPAxJEI8AaF8AyTwISRCTAGhfAHBJEIkMxGUD/mDEYFEQiQw==)
+    itxn_field ApprovalProgramPages
+    // tests/approvals/resource-encoding.algo.ts:92
+    // const appId = compiled.bareCreate().createdApp
+    intc_0 // 0
+    itxn_field OnCompletion
+    intc_1 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    itxn_submit
+    itxn CreatedApplicationID
+    // tests/approvals/resource-encoding.algo.ts:93-99
+    // const asset = itxn
+    //   .assetConfig({
+    //     total: 1,
+    //     unitName: 'T',
+    //     assetName: 'TEST',
+    //   })
+    //   .submit().createdAsset
+    itxn_begin
+    // tests/approvals/resource-encoding.algo.ts:97
+    // assetName: 'TEST',
+    pushbytes "TEST"
+    itxn_field ConfigAssetName
+    // tests/approvals/resource-encoding.algo.ts:96
+    // unitName: 'T',
+    pushbytes "T"
+    itxn_field ConfigAssetUnitName
+    // tests/approvals/resource-encoding.algo.ts:95
+    // total: 1,
+    intc_2 // 1
+    itxn_field ConfigAssetTotal
+    // tests/approvals/resource-encoding.algo.ts:93-98
+    // const asset = itxn
+    //   .assetConfig({
+    //     total: 1,
+    //     unitName: 'T',
+    //     assetName: 'TEST',
+    //   })
+    pushint 3 // 3
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    // tests/approvals/resource-encoding.algo.ts:93-99
+    // const asset = itxn
+    //   .assetConfig({
+    //     total: 1,
+    //     unitName: 'T',
+    //     assetName: 'TEST',
+    //   })
+    //   .submit().createdAsset
+    itxn_submit
+    // tests/approvals/resource-encoding.algo.ts:99
+    // .submit().createdAsset
+    itxn CreatedAssetID
+    // tests/approvals/resource-encoding.algo.ts:101-104
+    // compiled.call.echoResourceByForeignIndex({
+    //   args: [asset, Global.currentApplicationId, Txn.sender],
+    //   appId,
+    // })
+    itxn_begin
+    // tests/approvals/resource-encoding.algo.ts:102
+    // args: [asset, Global.currentApplicationId, Txn.sender],
+    global CurrentApplicationID
+    txn Sender
+    itxn_field Accounts
+    dig 1
+    itxn_field Assets
+    itxn_field Applications
+    // tests/approvals/resource-encoding.algo.ts:101-104
+    // compiled.call.echoResourceByForeignIndex({
+    //   args: [asset, Global.currentApplicationId, Txn.sender],
+    //   appId,
+    // })
+    pushbytes 0x3c611344 // method "echoResourceByForeignIndex(asset,application,account)void"
+    itxn_field ApplicationArgs
+    pushbytes 0x00
+    itxn_field ApplicationArgs
+    bytec_0 // 0x01
+    itxn_field ApplicationArgs
+    bytec_0 // 0x01
+    itxn_field ApplicationArgs
+    // tests/approvals/resource-encoding.algo.ts:101-104
+    // compiled.call.echoResourceByForeignIndex({
+    //   args: [asset, Global.currentApplicationId, Txn.sender],
+    //   appId,
+    // })
+    intc_0 // 0
+    itxn_field OnCompletion
+    dig 1
+    itxn_field ApplicationID
+    intc_1 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    itxn_submit
+    // tests/approvals/resource-encoding.algo.ts:106-109
+    // compiled.call.echoResourceByValue({
+    //   args: [asset, Global.currentApplicationId, Txn.sender],
+    //   appId,
+    // })
+    itxn_begin
+    // tests/approvals/resource-encoding.algo.ts:107
+    // args: [asset, Global.currentApplicationId, Txn.sender],
+    itob
+    global CurrentApplicationID
+    itob
+    txn Sender
+    // tests/approvals/resource-encoding.algo.ts:106-109
+    // compiled.call.echoResourceByValue({
+    //   args: [asset, Global.currentApplicationId, Txn.sender],
+    //   appId,
+    // })
+    pushbytes 0x2a77ac81 // method "echoResourceByValue(uint64,uint64,address)void"
+    itxn_field ApplicationArgs
+    uncover 2
+    itxn_field ApplicationArgs
+    swap
+    itxn_field ApplicationArgs
+    itxn_field ApplicationArgs
+    intc_0 // 0
+    itxn_field OnCompletion
+    itxn_field ApplicationID
+    intc_1 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    itxn_submit
+    // tests/approvals/resource-encoding.algo.ts:89
+    // testCallToEchoResource() {
+    intc_2 // 1
+    return
+
 main_testCallToValue_route@4:
-    // tests/approvals/resource-encoding.algo.ts:58
+    // tests/approvals/resource-encoding.algo.ts:80
     // testCallToValue(account: Account, appId: Application) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:49
+    // tests/approvals/resource-encoding.algo.ts:71
     // class C2C extends Contract {
     txna ApplicationArgs 1
     txna ApplicationArgs 2
     btoi
-    // tests/approvals/resource-encoding.algo.ts:59-62
+    // tests/approvals/resource-encoding.algo.ts:81-84
     // const { returnValue: res1 } = abiCall(ByValue.prototype.testExplicitValue, {
     //   appId,
     //   args: [account],
@@ -43,7 +192,7 @@ main_testCallToValue_route@4:
     dig 1
     itxn_field ApplicationArgs
     itxn_field ApplicationID
-    intc_2 // appl
+    intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -53,36 +202,36 @@ main_testCallToValue_route@4:
     extract 4 0
     swap
     extract 0 4
-    bytec_0 // 0x151f7c75
+    bytec_1 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
     btoi
-    // tests/approvals/resource-encoding.algo.ts:64
+    // tests/approvals/resource-encoding.algo.ts:86
     // assert(res1 === account.balance)
     swap
     acct_params_get AcctBalance
     assert // account funded
     ==
     assert
-    // tests/approvals/resource-encoding.algo.ts:58
+    // tests/approvals/resource-encoding.algo.ts:80
     // testCallToValue(account: Account, appId: Application) {
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_testCallToForeign_route@3:
-    // tests/approvals/resource-encoding.algo.ts:50
+    // tests/approvals/resource-encoding.algo.ts:72
     // testCallToForeign(account: Account, appId: Application) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:49
+    // tests/approvals/resource-encoding.algo.ts:71
     // class C2C extends Contract {
     txna ApplicationArgs 1
     txna ApplicationArgs 2
     btoi
-    // tests/approvals/resource-encoding.algo.ts:51-54
+    // tests/approvals/resource-encoding.algo.ts:73-76
     // const { returnValue: res1 } = abiCall(Foreign.prototype.testExplicitForeign, {
     //   appId,
     //   args: [account],
@@ -92,15 +241,15 @@ main_testCallToForeign_route@3:
     itxn_field Accounts
     pushbytes 0x115ff342 // method "testExplicitForeign(account)uint64"
     itxn_field ApplicationArgs
-    pushbytes 0x01
+    bytec_0 // 0x01
     itxn_field ApplicationArgs
     itxn_field ApplicationID
-    // tests/approvals/resource-encoding.algo.ts:51-54
+    // tests/approvals/resource-encoding.algo.ts:73-76
     // const { returnValue: res1 } = abiCall(Foreign.prototype.testExplicitForeign, {
     //   appId,
     //   args: [account],
     // })
-    intc_2 // appl
+    intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -110,29 +259,29 @@ main_testCallToForeign_route@3:
     extract 4 0
     swap
     extract 0 4
-    bytec_0 // 0x151f7c75
+    bytec_1 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
     btoi
-    // tests/approvals/resource-encoding.algo.ts:56
+    // tests/approvals/resource-encoding.algo.ts:78
     // assert(res1 === account.balance)
     swap
     acct_params_get AcctBalance
     assert // account funded
     ==
     assert
-    // tests/approvals/resource-encoding.algo.ts:50
+    // tests/approvals/resource-encoding.algo.ts:72
     // testCallToForeign(account: Account, appId: Application) {
-    intc_1 // 1
+    intc_2 // 1
     return
 
-main_bare_routing@7:
-    // tests/approvals/resource-encoding.algo.ts:49
+main_bare_routing@8:
+    // tests/approvals/resource-encoding.algo.ts:71
     // class C2C extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@11
+    bnz main_after_if_else@12
     txn ApplicationID
     !
     assert // can only call when creating
-    intc_1 // 1
+    intc_2 // 1
     return
