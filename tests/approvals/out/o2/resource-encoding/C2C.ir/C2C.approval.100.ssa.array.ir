@@ -2,10 +2,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@0: // L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
         goto tmp%0#1 ? block@2 : block@8
-    block@2: // abi_routing_L71
+    block@2: // abi_routing_L51
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "testCallToForeign(address,uint64)void" => block@3, method "testCallToValue(address,uint64)void" => block@4, method "testCallToEchoResource()void" => block@5, * => block@12}
-    block@3: // testCallToForeign_route_L72
+    block@3: // testCallToForeign_route_L52
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (! tmp%3#0)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -23,9 +23,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
-        let awst_tmp%0#1: bytes = (itxn LastLog)
-        let tmp%0#3: bytes = ((extract 4 0) awst_tmp%0#1)
-        let tmp%1#2: bytes = ((extract 0 4) awst_tmp%0#1)
+        let awst_tmp%0#2: bytes = (itxn LastLog)
+        let tmp%0#3: bytes = ((extract 4 0) awst_tmp%0#2)
+        let tmp%1#2: bytes = ((extract 0 4) awst_tmp%0#2)
         let tmp%2#3: bool = (== tmp%1#2 0x151f7c75)
         (assert tmp%2#3) // Bytes has valid prefix
         let res1#1: uint64 = (btoi tmp%0#3)
@@ -35,7 +35,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%4#2)
         let tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__%0#0: bool = 1u
         goto block@13
-    block@4: // testCallToValue_route_L80
+    block@4: // testCallToValue_route_L60
         let tmp%9#0: uint64 = (txn OnCompletion)
         let tmp%10#0: bool = (! tmp%9#0)
         (assert tmp%10#0) // OnCompletion is not NoOp
@@ -52,9 +52,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
-        let awst_tmp%0#0: bytes = (itxn LastLog)
-        let tmp%1#1: bytes = ((extract 4 0) awst_tmp%0#0)
-        let tmp%2#2: bytes = ((extract 0 4) awst_tmp%0#0)
+        let awst_tmp%0#1: bytes = (itxn LastLog)
+        let tmp%1#1: bytes = ((extract 4 0) awst_tmp%0#1)
+        let tmp%2#2: bytes = ((extract 0 4) awst_tmp%0#1)
         let tmp%3#2: bool = (== tmp%2#2 0x151f7c75)
         (assert tmp%3#2) // Bytes has valid prefix
         let res1#0: uint64 = (btoi tmp%1#1)
@@ -64,7 +64,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%5#2)
         let tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__%0#1: bool = 1u
         goto block@13
-    block@5: // testCallToEchoResource_route_L89
+    block@5: // testCallToEchoResource_route_L69
         let tmp%15#0: uint64 = (txn OnCompletion)
         let tmp%16#0: bool = (! tmp%15#0)
         (assert tmp%16#0) // OnCompletion is not NoOp
@@ -72,7 +72,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%17#0) // can only call when not creating
         itxn_begin
         ((itxn_field ClearStateProgramPages) CoEBQw==)
-        ((itxn_field ApprovalProgramPages) CiADAQIDMRtBAHiCAgQ8YRNEBCp3rIE2GgCOAgAsAAOBAEMxGRREMRhENhoBFzYaAhc2GgMiwBoXTwMSRCPAGhdPAhJEJMAaEkQiQzEZFEQxGEQ2GgEXwDA2GgIXwDI2GgMXwBwiwBoXwDBPAxJEI8AaF8AyTwISRCTAGhfAHBJEIkMxGUD/mDEYFEQiQw==)
+        ((itxn_field ApprovalProgramPages) CiADAQIDJgEEFR98dTEbQQCaggIED6ZcAwRNNwJ2NhoAjgIAOwADgQBDMRkURDEYRDYaARc2GgIXNhoDIsAaF0sDEkQjwBoXSwISRCTAGksBEkRPAhZPAhZQTFAoTFCwIkMxGRREMRhENhoBF8AwNhoCF8AyNhoDF8AcIsAaF0nAME8EEkQjwBoXScAyTwQSRCTAGhdJwBxPBBJETwIWTwIWUEwWUChMULAiQzEZQP92MRgURCJD)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
@@ -92,7 +92,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Accounts) tmp%3#1)
         ((itxn_field Assets) asset#0)
         ((itxn_field Applications) tmp%2#1)
-        ((itxn_field ApplicationArgs) method "echoResourceByForeignIndex(asset,application,account)void")
+        ((itxn_field ApplicationArgs) method "echoResourceByForeignIndex(asset,application,account)(uint64,uint64,uint64)")
         ((itxn_field ApplicationArgs) 0x00)
         ((itxn_field ApplicationArgs) 0x01)
         ((itxn_field ApplicationArgs) 0x01)
@@ -101,38 +101,80 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
+        let awst_tmp%0#0: bytes = (itxn LastLog)
+        let tmp%4#1: bytes = ((extract 4 0) awst_tmp%0#0)
+        let tmp%5#1: bytes = ((extract 0 4) awst_tmp%0#0)
+        let tmp%6#1: bool = (== tmp%5#1 0x151f7c75)
+        (assert tmp%6#1) // Bytes has valid prefix
+        let aggregate%extract%0#0: bytes = (extract3 tmp%4#1 0u 8u)
+        let aggregate%item0%0#0: uint64 = (btoi aggregate%extract%0#0)
+        let aggregate%extract%1#0: bytes = (extract3 tmp%4#1 8u 8u)
+        let aggregate%item1%0#0: uint64 = (btoi aggregate%extract%1#0)
+        let aggregate%extract%2#0: bytes = (extract3 tmp%4#1 16u 8u)
+        let aggregate%item2%0#0: uint64 = (btoi aggregate%extract%2#0)
+        let (indexes.0#0: uint64, indexes.1#0: uint64, indexes.2#0: uint64) = (aggregate%item0%0#0, aggregate%item1%0#0, aggregate%item2%0#0)
+        let tmp%11#1: bool = (! indexes.0#0)
+        let tmp%12#1: bool = (&& 1u tmp%11#1)
+        let tmp%13#1: bool = (== indexes.1#0 1u)
+        let tmp%14#1: bool = (&& tmp%12#1 tmp%13#1)
+        let tmp%15#1: bool = (== indexes.2#0 1u)
+        let tmp%16#1: bool = (&& tmp%14#1 tmp%15#1)
+        (assert tmp%16#1) // assert target is match for conditions
         itxn_begin
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob asset#0)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
-        let tmp%4#1: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%5#1: uint64 = (global CurrentApplicationID)
-        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%5#1)
+        let tmp%17#1: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%18#1: uint64 = (global CurrentApplicationID)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%18#1)
         let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
-        let tmp%6#1: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
-        let tmp%7#1: account = (txn Sender)
-        let aggregate%as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%7#1
-        let tmp%8#1: Encoded(uint8[32]) = aggregate%as_Encoded(uint8[32])%0#0
-        ((itxn_field ApplicationArgs) method "echoResourceByValue(uint64,uint64,address)void")
-        ((itxn_field ApplicationArgs) tmp%4#1)
-        ((itxn_field ApplicationArgs) tmp%6#1)
-        ((itxn_field ApplicationArgs) tmp%8#1)
+        let tmp%19#1: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
+        let tmp%20#1: account = (txn Sender)
+        let aggregate%as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%20#1
+        let tmp%21#1: Encoded(uint8[32]) = aggregate%as_Encoded(uint8[32])%0#0
+        ((itxn_field ApplicationArgs) method "echoResourceByValue(uint64,uint64,address)(uint64,uint64,address)")
+        ((itxn_field ApplicationArgs) tmp%17#1)
+        ((itxn_field ApplicationArgs) tmp%19#1)
+        ((itxn_field ApplicationArgs) tmp%21#1)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
+        let awst_tmp%1#0: bytes = (itxn LastLog)
+        let resources#0: Encoded(uint64,uint64,uint8[32]) = ((extract 4 0) awst_tmp%1#0)
+        let tmp%23#0: bytes = ((extract 0 4) awst_tmp%1#0)
+        let tmp%24#0: bool = (== tmp%23#0 0x151f7c75)
+        (assert tmp%24#0) // Bytes has valid prefix
+        let aggregate%extract%3#0: bytes = (extract3 resources#0 0u 8u)
+        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%3#0
+        let values%0#0: uint64 = (btoi tuple_item%0#0)
+        let tmp%26#0: bool = (== values%0#0 asset#0)
+        let tmp%27#0: bool = (&& 1u tmp%26#0)
+        let aggregate%extract%4#0: bytes = (extract3 resources#0 8u 8u)
+        let tuple_item%1#0: Encoded(uint64) = aggregate%extract%4#0
+        let values%1#0: uint64 = (btoi tuple_item%1#0)
+        let tmp%28#0: uint64 = (global CurrentApplicationID)
+        let tmp%29#0: bool = (== values%1#0 tmp%28#0)
+        let tmp%30#0: bool = (&& tmp%27#0 tmp%29#0)
+        let aggregate%extract%5#0: bytes = (extract3 resources#0 16u 32u)
+        let tuple_item%2#0: Encoded(uint8[32]) = aggregate%extract%5#0
+        let values%2#0: account = tuple_item%2#0
+        let tmp%31#0: account = (txn Sender)
+        let tmp%32#0: bool = (== values%2#0 tmp%31#0)
+        let tmp%33#0: bool = (&& tmp%30#0 tmp%32#0)
+        (assert tmp%33#0) // assert target is match for conditions
         let tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__%0#2: bool = 1u
         goto block@13
-    block@8: // bare_routing_L71
+    block@8: // bare_routing_L51
         let tmp%19#0: uint64 = (txn OnCompletion)
         goto tmp%19#0 ? block@12 : block@9
-    block@9: // __algots__.defaultCreate_L71
+    block@9: // __algots__.defaultCreate_L51
         let tmp%20#0: uint64 = (txn ApplicationID)
         let tmp%21#0: bool = (! tmp%20#0)
         (assert tmp%21#0) // can only call when creating
         let tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__%0#3: bool = 1u
         goto block@13
-    block@12: // after_if_else_L71
+    block@12: // after_if_else_L51
         let tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__%0#4: bool = 0u
         goto block@13
     block@13: // after_inlined_tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router___L1

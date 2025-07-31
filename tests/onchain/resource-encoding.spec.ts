@@ -12,8 +12,6 @@ describe('resource encoding', () => {
   test('foreign index', async ({ appClientForeign, localnet }) => {
     const newAccount = await localnet.context.generateAccount({ initialFunds: algo(5) })
     const balance = 5_000_000n
-    const res1 = await appClientForeign.send.call({ method: 'testBaseForeign', args: [newAccount.addr.toString()] })
-    expect(res1.return).toStrictEqual(balance)
     const res2 = await appClientForeign.send.call({ method: 'testExplicitForeign', args: [newAccount.addr.toString()] })
     expect(res2.return).toStrictEqual(balance)
 

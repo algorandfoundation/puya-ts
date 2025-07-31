@@ -329,6 +329,7 @@ export class UintNType extends ARC4EncodedType {
     return visitor.visitUintNType(this)
   }
 }
+export const arc4Uint64 = new UintNType({ n: 64n })
 export const UFixedNxMGeneric = new GenericPType({
   name: 'UFixed',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,

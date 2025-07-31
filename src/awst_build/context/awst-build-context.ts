@@ -5,7 +5,6 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { AppStorageDefinition, ARC4MethodConfig } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { logger } from '../../logger'
-import type { CompileOptions } from '../../options'
 import { invariant } from '../../util'
 import { DefaultMap } from '../../util/default-map'
 import { ConstantStore } from '../constant-store'
@@ -23,8 +22,6 @@ import { SwitchLoopContext } from './switch-loop-context'
 import { UniqueNameResolver } from './unique-name-resolver'
 
 export abstract class AwstBuildContext {
-  abstract get compileOptions(): CompileOptions
-
   /**
    * Get the source location of a node in the current source file
    * @param node
@@ -120,8 +117,8 @@ export abstract class AwstBuildContext {
 
   private static asyncStore = new AsyncLocalStorage<AwstBuildContext>()
 
-  static run<R>(program: ts.Program, compileOptions: CompileOptions, cb: () => R) {
-    const ctx = AwstBuildContextImpl.forProgram(program, compileOptions)
+  static run<R>(program: ts.Program, cb: () => R) {
+    const ctx = AwstBuildContextImpl.forProgram(program)
 
     return AwstBuildContext.asyncStore.run(ctx, cb)
   }
@@ -150,7 +147,6 @@ class AwstBuildContextImpl extends AwstBuildContext {
     private readonly storageDeclarations: DefaultMap<string, Map<string, AppStorageDeclaration>>,
     private readonly arc4MethodConfig: DefaultMap<string, Map<string, ARC4MethodConfig>>,
     compilationSet: CompilationSet,
-    public readonly compileOptions: CompileOptions,
   ) {
     super()
     this.typeChecker = program.getTypeChecker()
@@ -207,7 +203,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
     }
   }
 
-  static forProgram(program: ts.Program, compileOptions: CompileOptions): AwstBuildContext {
+  static forProgram(program: ts.Program): AwstBuildContext {
     return new AwstBuildContextImpl(
       program,
       new ConstantStore(program),
@@ -215,7 +211,6 @@ class AwstBuildContextImpl extends AwstBuildContext {
       new DefaultMap(),
       new DefaultMap(),
       new CompilationSet(),
-      compileOptions,
     )
   }
 
@@ -231,7 +226,6 @@ class AwstBuildContextImpl extends AwstBuildContext {
       this.storageDeclarations,
       this.arc4MethodConfig,
       this.#compilationSet,
-      this.compileOptions,
     )
   }
 

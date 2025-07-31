@@ -1,14 +1,14 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         goto block@1
-    block@1: // L71
+    block@1: // L51
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
         goto tmp%1#0 ? block@2 : block@8
-    block@2: // abi_routing_L71
+    block@2: // abi_routing_L51
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "testCallToForeign(address,uint64)void" => block@3, method "testCallToValue(address,uint64)void" => block@4, method "testCallToEchoResource()void" => block@5, * => block@6}
-    block@3: // testCallToForeign_route_L72
+    block@3: // testCallToForeign_route_L52
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -22,7 +22,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/resource-encoding.algo.ts::C2C.testCallToForeign(tmp%7#0, tmp%8#0)
         let tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__%0#0: bool = 1u
         goto block@13
-    block@4: // testCallToValue_route_L80
+    block@4: // testCallToValue_route_L60
         let tmp%9#0: uint64 = (txn OnCompletion)
         let tmp%10#0: bool = (== tmp%9#0 NoOp)
         (assert tmp%10#0) // OnCompletion is not NoOp
@@ -36,7 +36,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue(tmp%13#0, tmp%14#0)
         let tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__%0#1: bool = 1u
         goto block@13
-    block@5: // testCallToEchoResource_route_L89
+    block@5: // testCallToEchoResource_route_L69
         let tmp%15#0: uint64 = (txn OnCompletion)
         let tmp%16#0: bool = (== tmp%15#0 NoOp)
         (assert tmp%16#0) // OnCompletion is not NoOp
@@ -46,25 +46,25 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource()
         let tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__%0#2: bool = 1u
         goto block@13
-    block@6: // switch_case_default_L71
+    block@6: // switch_case_default_L51
         goto block@7
-    block@7: // switch_case_next_L71
+    block@7: // switch_case_next_L51
         goto block@12
-    block@8: // bare_routing_L71
+    block@8: // bare_routing_L51
         let tmp%19#0: uint64 = (txn OnCompletion)
         switch tmp%19#0 {0u => block@9, * => block@10}
-    block@9: // __algots__.defaultCreate_L71
+    block@9: // __algots__.defaultCreate_L51
         let tmp%20#0: uint64 = (txn ApplicationID)
         let tmp%21#0: bool = (== tmp%20#0 0u)
         (assert tmp%21#0) // can only call when creating
         tests/approvals/resource-encoding.algo.ts::C2C.__algots__.defaultCreate()
         let tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__%0#3: bool = 1u
         goto block@13
-    block@10: // switch_case_default_L71
+    block@10: // switch_case_default_L51
         goto block@11
-    block@11: // switch_case_next_L71
+    block@11: // switch_case_next_L51
         goto block@12
-    block@12: // after_if_else_L71
+    block@12: // after_if_else_L51
         let tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router__%0#4: bool = 0u
         goto block@13
     block@13: // after_inlined_tests/approvals/resource-encoding.algo.ts::C2C.__puya_arc4_router___L1
@@ -72,7 +72,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToForeign(account: account, appId: uint64) -> void:
-    block@0: // L72
+    block@0: // L52
         itxn_begin
         let inner_txn_params%0%%param_ApplicationID_idx_0#0: uint64 = appId#0
         let inner_txn_params%0%%param_Accounts_idx_0#0: account = account#0
@@ -83,7 +83,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToForeign(acco
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@1
-    block@1: // next_txn_L73
+    block@1: // next_txn_L53
         itxn_submit
         let awst_tmp%0#0: bytes = (itxn LastLog)
         let tmp%0#0: bytes = ((extract 4 0) awst_tmp%0#0)
@@ -100,7 +100,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToForeign(acco
         return 
 
 subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue(account: account, appId: uint64) -> void:
-    block@0: // L80
+    block@0: // L60
         itxn_begin
         let inner_txn_params%0%%param_ApplicationID_idx_0#0: uint64 = appId#0
         let aggregate%as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = account#0
@@ -112,7 +112,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue(accoun
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@1
-    block@1: // next_txn_L81
+    block@1: // next_txn_L61
         itxn_submit
         let awst_tmp%0#0: bytes = (itxn LastLog)
         let tmp%1#0: bytes = ((extract 4 0) awst_tmp%0#0)
@@ -129,7 +129,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue(accoun
         return 
 
 subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource() -> void:
-    block@0: // L89
+    block@0: // L69
         itxn_begin
         ((itxn_field ExtraProgramPages) 0u)
         ((itxn_field LocalNumUint) 0u)
@@ -138,13 +138,13 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         ((itxn_field GlobalNumUint) 0u)
         ((itxn_field ClearStateProgramPages) CoEBQw==)
         (itxn_field ClearStateProgramPages)
-        ((itxn_field ApprovalProgramPages) CiAEAAECAzEbIhNBAGQ2GgCABDxhE0SABCp3rIFPAo4CACQAAiJDMRkiEkQxGCITRDYaARc2GgIXNhoDTwJPAk8CiABmI0L/3TEZIhJEMRgiE0Q2GgEXwDA2GgIXwDI2GgMXwBxPAk8CTwKIABsjQv+0MRkiTI4BAANC/6gxGCISRIgAQSNC/52KAwAjwBoXwDCL/RJEJMAaF8Ayi/4SRCXAGhfAHIv/EkSJigMAI8AaF4v9EkQkwBoXi/4SRCXAGov/EkSJiQ==)
+        ((itxn_field ApprovalProgramPages) CiAEAAECAyYCBBUffHUAMRsiE0EAeTYaAIAED6ZcA4AETTcCdk8CjgIAKAACIkMxGSISRDEYIhNENhoBFzYaAhc2GgNPAk8CTwKIAIQoTFCwI0L/2TEZIhJEMRgiE0Q2GgEXwDA2GgIXwDI2GgMXwBxPAk8CTwKIACxOAkwWKUxQTBZQTBZQKExQsCNC/58xGSJMjgEAA0L/kzEYIhJEiABXI0L/iIoDAyPAGhdJwDCL/RJEJMAaF0nAMov+EkQlwBoXScAci/8SRE8CTwJPAomKAwEjwBoXi/0SRCTAGheL/hJEJcAai/8SRIv9FilMUIv+FlCL/1CJiQ==)
         (itxn_field ApprovalProgramPages)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@1
-    block@1: // next_txn_L92
+    block@1: // next_txn_L72
         itxn_submit
         let tmp%0#0: uint64 = (itxn CreatedApplicationID)
         let appId#0: uint64 = tmp%0#0
@@ -155,7 +155,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         ((itxn_field TypeEnum) 3u)
         ((itxn_field Fee) 0u)
         goto block@2
-    block@2: // next_txn_L93
+    block@2: // next_txn_L73
         itxn_submit
         let tmp%1#0: uint64 = (itxn CreatedAssetID)
         let asset#0: uint64 = tmp%1#0
@@ -169,7 +169,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         ((itxn_field Accounts) inner_txn_params%2%%param_Accounts_idx_0#0)
         ((itxn_field Assets) inner_txn_params%2%%param_Assets_idx_0#0)
         ((itxn_field Applications) inner_txn_params%2%%param_Applications_idx_0#0)
-        ((itxn_field ApplicationArgs) method "echoResourceByForeignIndex(asset,application,account)void")
+        ((itxn_field ApplicationArgs) method "echoResourceByForeignIndex(asset,application,account)(uint64,uint64,uint64)")
         ((itxn_field ApplicationArgs) 0x00)
         ((itxn_field ApplicationArgs) 0x01)
         ((itxn_field ApplicationArgs) 0x01)
@@ -178,24 +178,50 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@3
-    block@3: // next_txn_L101
+    block@3: // next_txn_L81
         itxn_submit
+        let awst_tmp%0#0: bytes = (itxn LastLog)
+        let tmp%4#0: bytes = ((extract 4 0) awst_tmp%0#0)
+        let tmp%5#0: bytes = ((extract 0 4) awst_tmp%0#0)
+        let tmp%6#0: bool = (== tmp%5#0 0x151f7c75)
+        (assert tmp%6#0) // Bytes has valid prefix
+        let reinterpret_Encoded(uint64,uint64,uint64)%0#0: Encoded(uint64,uint64,uint64) = tmp%4#0
+        let aggregate%extract%0#0: bytes = (extract3 reinterpret_Encoded(uint64,uint64,uint64)%0#0 0u 8u)
+        let aggregate%item0%0#0: uint64 = (btoi aggregate%extract%0#0)
+        let aggregate%extract%1#0: bytes = (extract3 reinterpret_Encoded(uint64,uint64,uint64)%0#0 8u 8u)
+        let aggregate%item1%0#0: uint64 = (btoi aggregate%extract%1#0)
+        let aggregate%extract%2#0: bytes = (extract3 reinterpret_Encoded(uint64,uint64,uint64)%0#0 16u 8u)
+        let aggregate%item2%0#0: uint64 = (btoi aggregate%extract%2#0)
+        let tmp%7#0: uint64 = aggregate%item0%0#0
+        let tmp%8#0: uint64 = aggregate%item1%0#0
+        let tmp%9#0: uint64 = aggregate%item2%0#0
+        let indexes.0#0: uint64 = tmp%7#0
+        let indexes.1#0: uint64 = tmp%8#0
+        let indexes.2#0: uint64 = tmp%9#0
+        let tmp%10#0: bool = (== 3u 3u)
+        let tmp%11#0: bool = (== indexes.0#0 0u)
+        let tmp%12#0: bool = (&& tmp%10#0 tmp%11#0)
+        let tmp%13#0: bool = (== indexes.1#0 1u)
+        let tmp%14#0: bool = (&& tmp%12#0 tmp%13#0)
+        let tmp%15#0: bool = (== indexes.2#0 1u)
+        let tmp%16#0: bool = (&& tmp%14#0 tmp%15#0)
+        (assert tmp%16#0) // assert target is match for conditions
         itxn_begin
         let inner_txn_params%3%%param_ApplicationID_idx_0#0: uint64 = appId#0
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob asset#0)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
-        let tmp%4#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%5#0: uint64 = (global CurrentApplicationID)
-        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%5#0)
+        let tmp%17#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%18#0: uint64 = (global CurrentApplicationID)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%18#0)
         let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
-        let tmp%6#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
-        let tmp%7#0: account = (txn Sender)
-        let aggregate%as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%7#0
-        let tmp%8#0: Encoded(uint8[32]) = aggregate%as_Encoded(uint8[32])%0#0
-        let inner_txn_params%3%%param_ApplicationArgs_idx_1#0: Encoded(uint64) = tmp%4#0
-        let inner_txn_params%3%%param_ApplicationArgs_idx_2#0: Encoded(uint64) = tmp%6#0
-        let inner_txn_params%3%%param_ApplicationArgs_idx_3#0: Encoded(uint8[32]) = tmp%8#0
-        ((itxn_field ApplicationArgs) method "echoResourceByValue(uint64,uint64,address)void")
+        let tmp%19#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
+        let tmp%20#0: account = (txn Sender)
+        let aggregate%as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%20#0
+        let tmp%21#0: Encoded(uint8[32]) = aggregate%as_Encoded(uint8[32])%0#0
+        let inner_txn_params%3%%param_ApplicationArgs_idx_1#0: Encoded(uint64) = tmp%17#0
+        let inner_txn_params%3%%param_ApplicationArgs_idx_2#0: Encoded(uint64) = tmp%19#0
+        let inner_txn_params%3%%param_ApplicationArgs_idx_3#0: Encoded(uint8[32]) = tmp%21#0
+        ((itxn_field ApplicationArgs) method "echoResourceByValue(uint64,uint64,address)(uint64,uint64,address)")
         ((itxn_field ApplicationArgs) inner_txn_params%3%%param_ApplicationArgs_idx_1#0)
         ((itxn_field ApplicationArgs) inner_txn_params%3%%param_ApplicationArgs_idx_2#0)
         ((itxn_field ApplicationArgs) inner_txn_params%3%%param_ApplicationArgs_idx_3#0)
@@ -204,10 +230,36 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@4
-    block@4: // next_txn_L106
+    block@4: // next_txn_L87
         itxn_submit
+        let awst_tmp%1#0: bytes = (itxn LastLog)
+        let tmp%22#0: bytes = ((extract 4 0) awst_tmp%1#0)
+        let tmp%23#0: bytes = ((extract 0 4) awst_tmp%1#0)
+        let tmp%24#0: bool = (== tmp%23#0 0x151f7c75)
+        (assert tmp%24#0) // Bytes has valid prefix
+        let reinterpret_Encoded(uint64,uint64,uint8[32])%0#0: Encoded(uint64,uint64,uint8[32]) = tmp%22#0
+        let resources#0: Encoded(uint64,uint64,uint8[32]) = reinterpret_Encoded(uint64,uint64,uint8[32])%0#0
+        let tmp%25#0: bool = (== 3u 3u)
+        let aggregate%extract%3#0: bytes = (extract3 resources#0 0u 8u)
+        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%3#0
+        let values%0#0: uint64 = (btoi tuple_item%0#0)
+        let tmp%26#0: bool = (== values%0#0 asset#0)
+        let tmp%27#0: bool = (&& tmp%25#0 tmp%26#0)
+        let aggregate%extract%4#0: bytes = (extract3 resources#0 8u 8u)
+        let tuple_item%1#0: Encoded(uint64) = aggregate%extract%4#0
+        let values%1#0: uint64 = (btoi tuple_item%1#0)
+        let tmp%28#0: uint64 = (global CurrentApplicationID)
+        let tmp%29#0: bool = (== values%1#0 tmp%28#0)
+        let tmp%30#0: bool = (&& tmp%27#0 tmp%29#0)
+        let aggregate%extract%5#0: bytes = (extract3 resources#0 16u 32u)
+        let tuple_item%2#0: Encoded(uint8[32]) = aggregate%extract%5#0
+        let values%2#0: account = tuple_item%2#0
+        let tmp%31#0: account = (txn Sender)
+        let tmp%32#0: bool = (== values%2#0 tmp%31#0)
+        let tmp%33#0: bool = (&& tmp%30#0 tmp%32#0)
+        (assert tmp%33#0) // assert target is match for conditions
         return 
 
 subroutine tests/approvals/resource-encoding.algo.ts::C2C.__algots__.defaultCreate() -> void:
-    block@0: // L71
+    block@0: // L51
         return 

@@ -1,4 +1,5 @@
 import type ts from 'typescript'
+import type { ResourceEncoding } from '../../awst'
 import { ContractReference, OnCompletionAction } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import type { ABIMethodArgConstantDefault, ABIMethodArgMemberDefault, ARC4MethodConfig } from '../../awst/nodes'
@@ -10,7 +11,6 @@ import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant, isIn, sameSets } from '../../util'
 import { ptypeToAbiPType } from '../arc4-util'
-import { AwstBuildContext } from '../context/awst-build-context'
 import type { NodeBuilder } from '../eb'
 import { ContractSuperBuilder, ContractThisBuilder } from '../eb/contract-builder'
 import { requireExpressionOfType } from '../eb/util'
@@ -162,7 +162,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     }
 
     if (decorator?.type === 'arc4.abimethod') {
-      this.checkABIMethodTypes(functionType, methodLocation)
+      this.checkABIMethodTypes(functionType, decorator.resourceEncoding ?? 'value', methodLocation)
       return new ARC4ABIMethodConfig({
         readonly: decorator.readonly,
         sourceLocation: decorator.sourceLocation,
@@ -170,7 +170,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
           decorator.allowedCompletionTypes ?? conventionalDefaults?.allowedCompletionTypes ?? unspecifiedDefaults.allowedCompletionTypes,
         create: decorator.create ?? conventionalDefaults?.create ?? unspecifiedDefaults.create,
         name: decorator.nameOverride ?? functionType.name,
-        resourceEncoding: decorator.resourceEncoding ?? AwstBuildContext.current.compileOptions.resourceEncoding,
+        resourceEncoding: decorator.resourceEncoding ?? 'value',
         defaultArgs: new Map(
           Object.entries(decorator.defaultArguments).map(([parameterName, argConfig]) => [
             parameterName,
@@ -184,13 +184,13 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
         ),
       })
     } else if (isPublic && this._contractType.isARC4) {
-      this.checkABIMethodTypes(functionType, methodLocation)
+      this.checkABIMethodTypes(functionType, 'value', methodLocation)
       return new ARC4ABIMethodConfig({
         allowedCompletionTypes: conventionalDefaults?.allowedCompletionTypes ?? unspecifiedDefaults.allowedCompletionTypes,
         create: conventionalDefaults?.create ?? unspecifiedDefaults.create,
         sourceLocation: methodLocation,
         name: functionType.name,
-        resourceEncoding: AwstBuildContext.current.compileOptions.resourceEncoding,
+        resourceEncoding: 'value',
         readonly: false,
         defaultArgs: new Map(),
       })
@@ -259,16 +259,16 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     }
   }
 
-  checkABIMethodTypes(functionType: FunctionPType, sourceLocation: SourceLocation) {
+  checkABIMethodTypes(functionType: FunctionPType, resourceEncoding: ResourceEncoding, sourceLocation: SourceLocation) {
     for (const [, paramType] of functionType.parameters) {
       codeInvariant(
-        ptypeToAbiPType(paramType, 'in', sourceLocation),
+        ptypeToAbiPType(paramType, 'in', resourceEncoding, sourceLocation),
         'ABI method parameter types must have an ARC4 equivalent',
         sourceLocation,
       )
     }
     codeInvariant(
-      ptypeToAbiPType(functionType.returnType, 'out', sourceLocation),
+      ptypeToAbiPType(functionType.returnType, 'out', resourceEncoding, sourceLocation),
       'ABI method return type must have an ARC4 equivalent',
       sourceLocation,
     )
