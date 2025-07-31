@@ -3,8 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    // tests/approvals/resource-encoding.algo.ts:5-6
-    // @contract({ resourceEncoding: 'foreign_index' })
+    // tests/approvals/resource-encoding.algo.ts:5
     // class BaseForeign extends Contract {
     txn NumAppArgs
     bz main_bare_routing@6
@@ -13,28 +12,26 @@ main:
     match main_testBaseForeign_route@3
 
 main_after_if_else@10:
-    // tests/approvals/resource-encoding.algo.ts:5-6
-    // @contract({ resourceEncoding: 'foreign_index' })
+    // tests/approvals/resource-encoding.algo.ts:5
     // class BaseForeign extends Contract {
     pushint 0 // 0
     return
 
 main_testBaseForeign_route@3:
-    // tests/approvals/resource-encoding.algo.ts:11
-    // testBaseForeign(account: Account) {
+    // tests/approvals/resource-encoding.algo.ts:10
+    // @abimethod({ resourceEncoding: 'foreign_index' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:5-6
-    // @contract({ resourceEncoding: 'foreign_index' })
+    // tests/approvals/resource-encoding.algo.ts:5
     // class BaseForeign extends Contract {
     txna ApplicationArgs 1
     btoi
     txnas Accounts
-    // tests/approvals/resource-encoding.algo.ts:11
-    // testBaseForeign(account: Account) {
+    // tests/approvals/resource-encoding.algo.ts:10
+    // @abimethod({ resourceEncoding: 'foreign_index' })
     callsub testBaseForeign
     itob
     pushbytes 0x151f7c75
@@ -45,8 +42,7 @@ main_testBaseForeign_route@3:
     return
 
 main_bare_routing@6:
-    // tests/approvals/resource-encoding.algo.ts:5-6
-    // @contract({ resourceEncoding: 'foreign_index' })
+    // tests/approvals/resource-encoding.algo.ts:5
     // class BaseForeign extends Contract {
     txn OnCompletion
     bnz main_after_if_else@10
@@ -59,7 +55,8 @@ main_bare_routing@6:
 
 // tests/approvals/resource-encoding.algo.ts::BaseForeign.testBaseForeign(account: bytes) -> uint64:
 testBaseForeign:
-    // tests/approvals/resource-encoding.algo.ts:11
+    // tests/approvals/resource-encoding.algo.ts:10-11
+    // @abimethod({ resourceEncoding: 'foreign_index' })
     // testBaseForeign(account: Account) {
     proto 1 1
     // tests/approvals/resource-encoding.algo.ts:12

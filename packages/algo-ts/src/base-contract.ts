@@ -77,20 +77,6 @@ export type ContractOptions = {
    * revert to the default behaviour
    */
   stateTotals?: StateTotals
-
-  /**
-   * The default resource encoding to use for methods on this contract.
-   *
-   * If no value is specified, the encoding is inherited from compiler options which uses a default encoding of 'value'
-   *
-   * foreign_index: Application, Asset, and Account arguments are included in the transaction's relevant foreign array. The argument
-   * value is the uint8 index of the resource in the that array.
-   * value: Application, Asset and Account arguments are passed by their uint64 id (Application and Asset) or bytes[32] address (Account).
-   * The resource must still be 'available' to this transaction but can take advantage of resource sharing within the transaction group.
-   *
-   * This setting is not inherited from base contracts and will only be applied to methods explicitly defined in this class body.
-   */
-  resourceEncoding?: 'foreign_index' | 'value'
 }
 
 /**

@@ -49,7 +49,6 @@ export type ContractOptionsDecoratorData = {
   sourceLocation: SourceLocation
   avmVersion?: SupportedAvmVersion
   name?: string
-  resourceEncoding?: ResourceEncoding
   scratchSlots?: Set<bigint>
   stateTotals?: {
     globalUints?: bigint

@@ -8,8 +8,7 @@ main:
 main_block@0:
 
 main_block@1:
-    // tests/approvals/resource-encoding.algo.ts:16-17
-    // @contract({ resourceEncoding: 'value' })
+    // tests/approvals/resource-encoding.algo.ts:16
     // class BaseValue extends Contract {
     txn NumAppArgs
     intc_0 // 0
@@ -17,8 +16,7 @@ main_block@1:
     bz main_bare_routing@6
 
 main_abi_routing@2:
-    // tests/approvals/resource-encoding.algo.ts:16-17
-    // @contract({ resourceEncoding: 'value' })
+    // tests/approvals/resource-encoding.algo.ts:16
     // class BaseValue extends Contract {
     txna ApplicationArgs 0
     pushbytes 0xd6ce05d0 // method "testBaseValue(address)uint64"
@@ -30,8 +28,7 @@ main_switch_case_default@4:
 main_switch_case_next@5:
 
 main_after_if_else@10:
-    // tests/approvals/resource-encoding.algo.ts:16-17
-    // @contract({ resourceEncoding: 'value' })
+    // tests/approvals/resource-encoding.algo.ts:16
     // class BaseValue extends Contract {
     intc_0 // 0
 
@@ -39,8 +36,8 @@ main_after_inlined_tests/approvals/resource-encoding.algo.ts::BaseValue.__puya_a
     return
 
 main_testBaseValue_route@3:
-    // tests/approvals/resource-encoding.algo.ts:22
-    // testBaseValue(account: Account) {
+    // tests/approvals/resource-encoding.algo.ts:21
+    // @abimethod({ resourceEncoding: 'value' })
     txn OnCompletion
     intc_0 // NoOp
     ==
@@ -49,12 +46,11 @@ main_testBaseValue_route@3:
     intc_0 // 0
     !=
     assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:16-17
-    // @contract({ resourceEncoding: 'value' })
+    // tests/approvals/resource-encoding.algo.ts:16
     // class BaseValue extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/resource-encoding.algo.ts:22
-    // testBaseValue(account: Account) {
+    // tests/approvals/resource-encoding.algo.ts:21
+    // @abimethod({ resourceEncoding: 'value' })
     callsub testBaseValue
     itob
     pushbytes 0x151f7c75
@@ -65,8 +61,7 @@ main_testBaseValue_route@3:
     b main_after_inlined_tests/approvals/resource-encoding.algo.ts::BaseValue.__puya_arc4_router__@11
 
 main_bare_routing@6:
-    // tests/approvals/resource-encoding.algo.ts:16-17
-    // @contract({ resourceEncoding: 'value' })
+    // tests/approvals/resource-encoding.algo.ts:16
     // class BaseValue extends Contract {
     txn OnCompletion
     intc_0 // 0
@@ -79,8 +74,7 @@ main_switch_case_next@9:
     b main_after_if_else@10
 
 main___algots__.defaultCreate@7:
-    // tests/approvals/resource-encoding.algo.ts:16-17
-    // @contract({ resourceEncoding: 'value' })
+    // tests/approvals/resource-encoding.algo.ts:16
     // class BaseValue extends Contract {
     txn ApplicationID
     intc_0 // 0
@@ -93,7 +87,8 @@ main___algots__.defaultCreate@7:
 
 // tests/approvals/resource-encoding.algo.ts::BaseValue.testBaseValue(account: bytes) -> uint64:
 testBaseValue:
-    // tests/approvals/resource-encoding.algo.ts:22
+    // tests/approvals/resource-encoding.algo.ts:21-22
+    // @abimethod({ resourceEncoding: 'value' })
     // testBaseValue(account: Account) {
     proto 1 1
 

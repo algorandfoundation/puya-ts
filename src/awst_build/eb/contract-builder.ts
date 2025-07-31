@@ -26,7 +26,7 @@ import { instanceEb } from '../type-registry'
 
 import { BaseContractMethodExpressionBuilder, ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
 import { DecoratorDataBuilder, FunctionBuilder, InstanceBuilder, NodeBuilder } from './index'
-import { mapStringConstant, requireLiteralNumber, requireStringConstant } from './util'
+import { requireLiteralNumber, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { requireAvmVersion } from './util/avm-version'
 import { processScratchRanges } from './util/scratch-slots'
@@ -221,16 +221,12 @@ class ContractClassPrototypeBuilder extends NodeBuilder {
     return super.memberAccess(name, sourceLocation)
   }
 }
-const resourceEncodingMap: Record<string, 'foreign_index' | 'value'> = {
-  foreign_index: 'foreign_index',
-  value: 'value',
-}
 
 export class ContractOptionsDecoratorBuilder extends FunctionBuilder {
   readonly ptype = contractOptionsDecorator
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
-      args: [{ avmVersion, name, stateTotals, scratchSlots, resourceEncoding }],
+      args: [{ avmVersion, name, stateTotals, scratchSlots }],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -240,7 +236,6 @@ export class ContractOptionsDecoratorBuilder extends FunctionBuilder {
       argSpec: (a) => [
         a.obj({
           avmVersion: a.optional(numberPType),
-          resourceEncoding: a.optional(stringPType),
           name: a.optional(stringPType),
           scratchSlots: a.optional(),
           stateTotals: a.optional(),
@@ -252,7 +247,6 @@ export class ContractOptionsDecoratorBuilder extends FunctionBuilder {
       type: 'contract',
       avmVersion: avmVersion && requireAvmVersion(avmVersion),
       name: name && requireStringConstant(name).value,
-      resourceEncoding: resourceEncoding && mapStringConstant(resourceEncodingMap, resourceEncoding.resolve()),
       stateTotals: stateTotals && buildStateTotals(stateTotals),
       scratchSlots: scratchSlots && processScratchRanges(scratchSlots),
       sourceLocation,
