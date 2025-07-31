@@ -14,7 +14,7 @@ import { ptypeToAbiPType } from '../arc4-util'
 import type { NodeBuilder } from '../eb'
 import { ContractSuperBuilder, ContractThisBuilder } from '../eb/contract-builder'
 import { requireExpressionOfType } from '../eb/util'
-import type { Arc4AbiDecoratorData, ContractOptionsDecoratorData, RoutingDecoratorData } from '../models/decorator-data'
+import type { Arc4AbiDecoratorData, RoutingDecoratorData } from '../models/decorator-data'
 import type { ContractClassPType, FunctionPType } from '../ptypes'
 import { GlobalStateType, LocalStateType, voidPType } from '../ptypes'
 import { DecoratorVisitor } from './decorator-visitor'
@@ -47,11 +47,6 @@ type RoutingProps = {
   create?: ARC4CreateOption
 }
 
-type ContractMeta = {
-  contractType: ContractClassPType
-  decoratorData: ContractOptionsDecoratorData | undefined
-}
-
 export class ContractMethodVisitor extends ContractMethodBaseVisitor {
   private readonly metaData: {
     cref: ContractReference
@@ -59,8 +54,8 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     sourceLocation: SourceLocation
   }
 
-  constructor(node: ts.MethodDeclaration, contractMeta: ContractMeta) {
-    super(node, contractMeta.contractType)
+  constructor(node: ts.MethodDeclaration, contractType: ContractClassPType) {
+    super(node, contractType)
     const sourceLocation = this.sourceLocation(node)
 
     const decorator = DecoratorVisitor.buildContractMethodData(node)
@@ -105,8 +100,8 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     })
   }
 
-  public static buildContractMethod(node: ts.MethodDeclaration, contractMeta: ContractMeta): () => awst.ContractMethod {
-    return visitInChildContext(this, node, contractMeta)
+  public static buildContractMethod(node: ts.MethodDeclaration, contractType: ContractClassPType): () => awst.ContractMethod {
+    return visitInChildContext(this, node, contractType)
   }
 
   private buildArc4Config({

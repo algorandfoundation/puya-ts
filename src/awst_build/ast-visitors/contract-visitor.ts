@@ -155,10 +155,9 @@ export class ContractVisitor extends ClassDefinitionVisitor {
   }
 
   visitMethodDeclaration(node: ts.MethodDeclaration): void {
-    this._methods.push(
-      ContractMethodVisitor.buildContractMethod(node, { contractType: this._contractPType, decoratorData: this.metaData.contractOptions }),
-    )
+    this._methods.push(ContractMethodVisitor.buildContractMethod(node, this._contractPType))
   }
+
   visitPropertyDeclaration(node: ts.PropertyDeclaration): void {
     const sourceLocation = this.sourceLocation(node)
     codeInvariant(!node.questionToken, 'Optional properties are not supported', sourceLocation)
