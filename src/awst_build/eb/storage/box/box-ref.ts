@@ -25,7 +25,7 @@ export class BoxRefFunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.obj({ key: a.required(bytesPType, stringPType) })],
     })
 
-    return new BoxRefExpressionBuilder(extractKey(key, wtypes.boxKeyWType), boxRefType)
+    return new BoxRefExpressionBuilder(extractKey(key, wtypes.boxKeyWType, sourceLocation), boxRefType)
   }
 }
 
