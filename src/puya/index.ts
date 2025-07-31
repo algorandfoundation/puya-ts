@@ -34,7 +34,7 @@ export async function invokePuya({
   using buildDir = generateTempDir()
 
   // Write AWST file
-  const moduleAwstFile = buildDir.makeFile({ name: 'module', ext: 'awst.json' })
+  const moduleAwstFile = buildDir.makeFile({ name: 'module', ext: 'awst.json', compress: true })
   logger.debug(undefined, `Writing awst to ${moduleAwstFile.filePath}`)
   const serializer = new AwstSerializer({
     programDirectory: programDirectory,
