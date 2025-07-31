@@ -33,7 +33,6 @@ export interface BuildCommandArgs {
   template_vars_prefix: string
   locals_coalescing_strategy: LocalsCoalescingStrategy
   paths: string[]
-  resource_encoding: 'foreign_index' | 'value'
   puya_path: string
 }
 
