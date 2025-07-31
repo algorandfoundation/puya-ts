@@ -39,8 +39,8 @@ main_after_inlined_tests/approvals/resource-encoding.algo.ts::Foreign.__puya_arc
     return
 
 main_testBaseForeign_route@5:
-    // tests/approvals/resource-encoding.algo.ts:11
-    // testBaseForeign(account: Account) {
+    // tests/approvals/resource-encoding.algo.ts:10
+    // @abimethod({ resourceEncoding: 'foreign_index' })
     txn OnCompletion
     intc_0 // NoOp
     ==
@@ -54,8 +54,8 @@ main_testBaseForeign_route@5:
     txna ApplicationArgs 1
     btoi
     txnas Accounts
-    // tests/approvals/resource-encoding.algo.ts:11
-    // testBaseForeign(account: Account) {
+    // tests/approvals/resource-encoding.algo.ts:10
+    // @abimethod({ resourceEncoding: 'foreign_index' })
     callsub testBaseForeign
     itob
     bytec_0 // 0x151f7c75
@@ -175,7 +175,8 @@ testImplicitValue_block@0:
 
 // tests/approvals/resource-encoding.algo.ts::BaseForeign.testBaseForeign(account: bytes) -> uint64:
 testBaseForeign:
-    // tests/approvals/resource-encoding.algo.ts:11
+    // tests/approvals/resource-encoding.algo.ts:10-11
+    // @abimethod({ resourceEncoding: 'foreign_index' })
     // testBaseForeign(account: Account) {
     proto 1 1
 

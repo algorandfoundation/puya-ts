@@ -19,8 +19,8 @@ main_after_if_else@11:
     return
 
 main_testBaseValue_route@4:
-    // tests/approvals/resource-encoding.algo.ts:22
-    // testBaseValue(account: Account) {
+    // tests/approvals/resource-encoding.algo.ts:21
+    // @abimethod({ resourceEncoding: 'value' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
@@ -29,8 +29,8 @@ main_testBaseValue_route@4:
     // tests/approvals/resource-encoding.algo.ts:42
     // class ByValue extends BaseValue {
     txna ApplicationArgs 1
-    // tests/approvals/resource-encoding.algo.ts:22
-    // testBaseValue(account: Account) {
+    // tests/approvals/resource-encoding.algo.ts:21
+    // @abimethod({ resourceEncoding: 'value' })
     callsub testBaseValue
     itob
     bytec_0 // 0x151f7c75
@@ -90,7 +90,8 @@ testExplicitValue:
 
 // tests/approvals/resource-encoding.algo.ts::BaseValue.testBaseValue(account: bytes) -> uint64:
 testBaseValue:
-    // tests/approvals/resource-encoding.algo.ts:22
+    // tests/approvals/resource-encoding.algo.ts:21-22
+    // @abimethod({ resourceEncoding: 'value' })
     // testBaseValue(account: Account) {
     proto 1 1
     // tests/approvals/resource-encoding.algo.ts:23

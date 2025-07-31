@@ -8,8 +8,7 @@ main:
 main_block@0:
 
 main_block@1:
-    // tests/approvals/resource-encoding.algo.ts:5-6
-    // @contract({ resourceEncoding: 'foreign_index' })
+    // tests/approvals/resource-encoding.algo.ts:5
     // class BaseForeign extends Contract {
     txn NumAppArgs
     intc_0 // 0
@@ -17,8 +16,7 @@ main_block@1:
     bz main_bare_routing@6
 
 main_abi_routing@2:
-    // tests/approvals/resource-encoding.algo.ts:5-6
-    // @contract({ resourceEncoding: 'foreign_index' })
+    // tests/approvals/resource-encoding.algo.ts:5
     // class BaseForeign extends Contract {
     txna ApplicationArgs 0
     pushbytes 0xd024ab8e // method "testBaseForeign(account)uint64"
@@ -30,8 +28,7 @@ main_switch_case_default@4:
 main_switch_case_next@5:
 
 main_after_if_else@10:
-    // tests/approvals/resource-encoding.algo.ts:5-6
-    // @contract({ resourceEncoding: 'foreign_index' })
+    // tests/approvals/resource-encoding.algo.ts:5
     // class BaseForeign extends Contract {
     intc_0 // 0
 
@@ -39,8 +36,8 @@ main_after_inlined_tests/approvals/resource-encoding.algo.ts::BaseForeign.__puya
     return
 
 main_testBaseForeign_route@3:
-    // tests/approvals/resource-encoding.algo.ts:11
-    // testBaseForeign(account: Account) {
+    // tests/approvals/resource-encoding.algo.ts:10
+    // @abimethod({ resourceEncoding: 'foreign_index' })
     txn OnCompletion
     intc_0 // NoOp
     ==
@@ -49,14 +46,13 @@ main_testBaseForeign_route@3:
     intc_0 // 0
     !=
     assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:5-6
-    // @contract({ resourceEncoding: 'foreign_index' })
+    // tests/approvals/resource-encoding.algo.ts:5
     // class BaseForeign extends Contract {
     txna ApplicationArgs 1
     btoi
     txnas Accounts
-    // tests/approvals/resource-encoding.algo.ts:11
-    // testBaseForeign(account: Account) {
+    // tests/approvals/resource-encoding.algo.ts:10
+    // @abimethod({ resourceEncoding: 'foreign_index' })
     callsub testBaseForeign
     itob
     pushbytes 0x151f7c75
@@ -67,8 +63,7 @@ main_testBaseForeign_route@3:
     b main_after_inlined_tests/approvals/resource-encoding.algo.ts::BaseForeign.__puya_arc4_router__@11
 
 main_bare_routing@6:
-    // tests/approvals/resource-encoding.algo.ts:5-6
-    // @contract({ resourceEncoding: 'foreign_index' })
+    // tests/approvals/resource-encoding.algo.ts:5
     // class BaseForeign extends Contract {
     txn OnCompletion
     intc_0 // 0
@@ -81,8 +76,7 @@ main_switch_case_next@9:
     b main_after_if_else@10
 
 main___algots__.defaultCreate@7:
-    // tests/approvals/resource-encoding.algo.ts:5-6
-    // @contract({ resourceEncoding: 'foreign_index' })
+    // tests/approvals/resource-encoding.algo.ts:5
     // class BaseForeign extends Contract {
     txn ApplicationID
     intc_0 // 0
@@ -95,7 +89,8 @@ main___algots__.defaultCreate@7:
 
 // tests/approvals/resource-encoding.algo.ts::BaseForeign.testBaseForeign(account: bytes) -> uint64:
 testBaseForeign:
-    // tests/approvals/resource-encoding.algo.ts:11
+    // tests/approvals/resource-encoding.algo.ts:10-11
+    // @abimethod({ resourceEncoding: 'foreign_index' })
     // testBaseForeign(account: Account) {
     proto 1 1
 

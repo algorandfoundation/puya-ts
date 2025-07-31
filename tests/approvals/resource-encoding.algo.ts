@@ -1,24 +1,24 @@
 import type { Account, Application, Asset } from '@algorandfoundation/algorand-typescript'
-import { abimethod, assert, contract, Contract, Global, itxn, op, Txn } from '@algorandfoundation/algorand-typescript'
+import { abimethod, assert, Contract, Global, itxn, op, Txn } from '@algorandfoundation/algorand-typescript'
 import { abiCall, compileArc4 } from '@algorandfoundation/algorand-typescript/arc4'
 
-@contract({ resourceEncoding: 'foreign_index' })
 class BaseForeign extends Contract {
   /**
    * Should inherit encoding from contract decorator
    * @param account
    */
+  @abimethod({ resourceEncoding: 'foreign_index' })
   testBaseForeign(account: Account) {
     return account.balance
   }
 }
 
-@contract({ resourceEncoding: 'value' })
 class BaseValue extends Contract {
   /**
    * Should inherit encoding from contract decorator
    * @param account
    */
+  @abimethod({ resourceEncoding: 'value' })
   testBaseValue(account: Account) {
     return account.balance
   }

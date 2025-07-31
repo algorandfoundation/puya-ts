@@ -73,7 +73,6 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       decorator,
       modifiers,
       methodLocation: sourceLocation,
-      contractDecorator: contractMeta.decoratorData,
     })
 
     if (arc4MethodConfig)
@@ -115,13 +114,11 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     decorator,
     modifiers: { isPublic, isStatic },
     methodLocation,
-    contractDecorator,
   }: {
     functionType: FunctionPType
     decorator: RoutingDecoratorData | undefined
     modifiers: { isPublic: boolean; isStatic: boolean }
     methodLocation: SourceLocation
-    contractDecorator: ContractOptionsDecoratorData | undefined
   }): awst.ARC4MethodConfig | null {
     const isProgramMethod = isIn(functionType.name, [
       Constants.symbolNames.approvalProgramMethodName,
@@ -173,8 +170,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
           decorator.allowedCompletionTypes ?? conventionalDefaults?.allowedCompletionTypes ?? unspecifiedDefaults.allowedCompletionTypes,
         create: decorator.create ?? conventionalDefaults?.create ?? unspecifiedDefaults.create,
         name: decorator.nameOverride ?? functionType.name,
-        resourceEncoding:
-          decorator.resourceEncoding ?? contractDecorator?.resourceEncoding ?? AwstBuildContext.current.compileOptions.resourceEncoding,
+        resourceEncoding: decorator.resourceEncoding ?? AwstBuildContext.current.compileOptions.resourceEncoding,
         defaultArgs: new Map(
           Object.entries(decorator.defaultArguments).map(([parameterName, argConfig]) => [
             parameterName,
@@ -194,7 +190,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
         create: conventionalDefaults?.create ?? unspecifiedDefaults.create,
         sourceLocation: methodLocation,
         name: functionType.name,
-        resourceEncoding: contractDecorator?.resourceEncoding ?? AwstBuildContext.current.compileOptions.resourceEncoding,
+        resourceEncoding: AwstBuildContext.current.compileOptions.resourceEncoding,
         readonly: false,
         defaultArgs: new Map(),
       })
