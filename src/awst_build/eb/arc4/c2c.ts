@@ -513,7 +513,6 @@ function parseAppArgs({
               value: requireExpressionOfType(arg, assetPType),
               sourceLocation: arg.sourceLocation,
               wtype: arc4Uint64.wtype,
-              errorMessage: null,
             })
           }
         }
@@ -525,7 +524,6 @@ function parseAppArgs({
               value: requireExpressionOfType(arg, applicationPType),
               sourceLocation: arg.sourceLocation,
               wtype: arc4Uint64.wtype,
-              errorMessage: null,
             })
           }
         }
@@ -537,7 +535,6 @@ function parseAppArgs({
               value: requireExpressionOfType(arg, accountPType),
               sourceLocation: arg.sourceLocation,
               wtype: wtypes.arc4AddressAliasWType,
-              errorMessage: null,
             })
           }
         }
@@ -554,7 +551,6 @@ function parseAppArgs({
           value: resolvedArg,
           wtype: encodedType.wtype,
           sourceLocation: arg.sourceLocation,
-          errorMessage: null,
         })
       }),
     )
@@ -628,6 +624,5 @@ function getReturnValueExpr(itxnResult: Expression, returnType: PType, sourceLoc
     value: returnValueArc4,
     wtype: returnType.wtypeOrThrow,
     sourceLocation,
-    errorMessage: null,
   })
 }

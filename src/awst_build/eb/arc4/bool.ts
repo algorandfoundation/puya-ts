@@ -45,7 +45,6 @@ export class BoolClassBuilder extends ClassBuilder {
           value: value,
           wtype: wtypes.arc4BooleanWType,
           sourceLocation,
-          errorMessage: null,
         })
       }
     }

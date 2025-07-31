@@ -56,7 +56,6 @@ export class Arc4TupleClassBuilder extends ClassBuilder {
         }),
         wtype: ptype.wtype,
         sourceLocation,
-        errorMessage: null,
       }),
       ptype,
     )
