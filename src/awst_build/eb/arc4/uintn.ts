@@ -90,7 +90,6 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
           wtype: ptype.wtype,
           sourceLocation,
           value: initialValue,
-          errorMessage: null,
         }),
         ptype,
       )
@@ -116,7 +115,6 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
           wtype: ptype.wtype,
           sourceLocation,
           value: initialValue,
-          errorMessage: null,
         }),
         ptype,
       )

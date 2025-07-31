@@ -51,7 +51,6 @@ export class StrClassBuilder extends ClassBuilder {
           value: expr,
           wtype: wtypes.arc4StringAliasWType,
           sourceLocation,
-          errorMessage: null,
         }),
       )
     }

@@ -31,7 +31,6 @@ export function newTuple(ptype: MutableTuplePType | ReadonlyTuplePType | ArrayLi
       value: tupleExpr,
       wtype: ptype.wtype,
       sourceLocation: valueProvider.sourceLocation,
-      errorMessage: null,
     })
   } else {
     return tupleExpr

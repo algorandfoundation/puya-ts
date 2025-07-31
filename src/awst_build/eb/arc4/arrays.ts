@@ -214,7 +214,6 @@ export class StaticBytesClassBuilder extends ClassBuilder {
           value: initialValue.resolve(),
           sourceLocation,
           wtype: resultPType.wtype,
-          errorMessage: null,
         }),
         resultPType,
       )
@@ -264,7 +263,6 @@ export class DynamicBytesClassBuilder extends ClassBuilder {
           value,
           sourceLocation,
           wtype: resultPType.wtype,
-          errorMessage: null,
         }),
         resultPType,
       )
@@ -311,7 +309,6 @@ export abstract class ArrayExpressionBuilder<
             value: this.resolve(),
             wtype: this.ptype.nativeType.wtypeOrThrow,
             sourceLocation,
-            errorMessage: null,
           }),
           this.ptype.nativeType,
         )
@@ -370,7 +367,6 @@ export class StaticArrayExpressionBuilder extends ArrayExpressionBuilder<StaticA
             value: this.resolve(),
             wtype: this.ptype.nativeType.wtypeOrThrow,
             sourceLocation,
-            errorMessage: null,
           }),
           this.ptype.nativeType,
         )

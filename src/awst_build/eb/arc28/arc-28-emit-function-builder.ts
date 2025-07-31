@@ -23,7 +23,6 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
       value: builder.resolve(),
       sourceLocation: builder.sourceLocation,
       wtype: encodedType.wtype,
-      errorMessage: null,
     })
   }
 
@@ -128,7 +127,6 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
           wtype: arc4Equivalent.wtype,
           sourceLocation: eventBuilder.sourceLocation,
           value: eventBuilder.resolve(),
-          errorMessage: null,
         }),
         sourceLocation,
       )

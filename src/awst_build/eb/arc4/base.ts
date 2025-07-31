@@ -49,7 +49,6 @@ export class Arc4EncodedBaseExpressionBuilder<T extends ARC4EncodedType> extends
             value: this.resolve(),
             sourceLocation,
             wtype: this.ptype.nativeType.wtypeOrThrow,
-            errorMessage: null,
           }),
           this.ptype.nativeType,
         )

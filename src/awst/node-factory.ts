@@ -6,6 +6,8 @@ import { codeInvariant, instanceOfAny, invariant } from '../util'
 import { constantEvaluation } from './constant-evaluation'
 import type { Expression, Statement } from './nodes'
 import {
+  ARC4Decode,
+  ARC4Encode,
   ArrayLength,
   ArrayReplace,
   AssignmentExpression,
@@ -343,6 +345,18 @@ const explicitNodeFactory = {
       expressions,
       sourceLocation,
       wtype,
+    })
+  },
+  aRC4Encode(props: Omit<Props<ARC4Encode>, 'errorMessage'>) {
+    return new ARC4Encode({
+      ...props,
+      errorMessage: null,
+    })
+  },
+  aRC4Decode(props: Omit<Props<ARC4Decode>, 'errorMessage'>) {
+    return new ARC4Decode({
+      ...props,
+      errorMessage: null,
     })
   },
 } satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => DeliberateAny }
