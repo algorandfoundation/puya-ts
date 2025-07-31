@@ -12,7 +12,7 @@ import { buildLibAwst } from './lib'
 import type { CompilationSet } from './models/contract-class-model'
 
 export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: CompileOptions): [AWST[], CompilationSet] {
-  return AwstBuildContext.run(program, options, () => {
+  return AwstBuildContext.run(program, () => {
     const moduleAwst: AWST[] = buildLibAwst()
     for (const [sourcePath, sourceFile] of Object.entries(sourceFiles)) {
       try {

@@ -3,58 +3,33 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1
     bytecblock 0x151f7c75
-    // tests/approvals/resource-encoding.algo.ts:27
-    // class Foreign extends BaseForeign {
+    // tests/approvals/resource-encoding.algo.ts:5
+    // class Foreign extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@8
-    pushbytess 0x115ff342 0x129c3321 0xd024ab8e // method "testExplicitForeign(account)uint64", method "testImplicitValue(address)uint64", method "testBaseForeign(account)uint64"
+    bz main_bare_routing@7
+    pushbytess 0x115ff342 0x129c3321 // method "testExplicitForeign(account)uint64", method "testImplicitValue(address)uint64"
     txna ApplicationArgs 0
-    match main_testExplicitForeign_route@3 main_testImplicitValue_route@4 main_testBaseForeign_route@5
+    match main_testExplicitForeign_route@3 main_testImplicitValue_route@4
 
-main_after_if_else@12:
-    // tests/approvals/resource-encoding.algo.ts:27
-    // class Foreign extends BaseForeign {
+main_after_if_else@11:
+    // tests/approvals/resource-encoding.algo.ts:5
+    // class Foreign extends Contract {
     pushint 0 // 0
     return
 
-main_testBaseForeign_route@5:
-    // tests/approvals/resource-encoding.algo.ts:10
-    // @abimethod({ resourceEncoding: 'foreign_index' })
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:27
-    // class Foreign extends BaseForeign {
-    txna ApplicationArgs 1
-    btoi
-    txnas Accounts
-    // tests/approvals/resource-encoding.algo.ts:10
-    // @abimethod({ resourceEncoding: 'foreign_index' })
-    callsub testBaseForeign
-    itob
-    bytec_0 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_0 // 1
-    return
-
 main_testImplicitValue_route@4:
-    // tests/approvals/resource-encoding.algo.ts:37
+    // tests/approvals/resource-encoding.algo.ts:15
     // testImplicitValue(account: Account) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:27
-    // class Foreign extends BaseForeign {
+    // tests/approvals/resource-encoding.algo.ts:5
+    // class Foreign extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/resource-encoding.algo.ts:37
+    // tests/approvals/resource-encoding.algo.ts:15
     // testImplicitValue(account: Account) {
     callsub testImplicitValue
     itob
@@ -62,23 +37,23 @@ main_testImplicitValue_route@4:
     swap
     concat
     log
-    intc_0 // 1
+    pushint 1 // 1
     return
 
 main_testExplicitForeign_route@3:
-    // tests/approvals/resource-encoding.algo.ts:28
+    // tests/approvals/resource-encoding.algo.ts:6
     // @abimethod({ resourceEncoding: 'foreign_index' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:27
-    // class Foreign extends BaseForeign {
+    // tests/approvals/resource-encoding.algo.ts:5
+    // class Foreign extends Contract {
     txna ApplicationArgs 1
     btoi
     txnas Accounts
-    // tests/approvals/resource-encoding.algo.ts:28
+    // tests/approvals/resource-encoding.algo.ts:6
     // @abimethod({ resourceEncoding: 'foreign_index' })
     callsub testExplicitForeign
     itob
@@ -86,28 +61,28 @@ main_testExplicitForeign_route@3:
     swap
     concat
     log
-    intc_0 // 1
+    pushint 1 // 1
     return
 
-main_bare_routing@8:
-    // tests/approvals/resource-encoding.algo.ts:27
-    // class Foreign extends BaseForeign {
+main_bare_routing@7:
+    // tests/approvals/resource-encoding.algo.ts:5
+    // class Foreign extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@12
+    bnz main_after_if_else@11
     txn ApplicationID
     !
     assert // can only call when creating
-    intc_0 // 1
+    pushint 1 // 1
     return
 
 
 // tests/approvals/resource-encoding.algo.ts::Foreign.testExplicitForeign(account: bytes) -> uint64:
 testExplicitForeign:
-    // tests/approvals/resource-encoding.algo.ts:28-29
+    // tests/approvals/resource-encoding.algo.ts:6-7
     // @abimethod({ resourceEncoding: 'foreign_index' })
     // testExplicitForeign(account: Account) {
     proto 1 1
-    // tests/approvals/resource-encoding.algo.ts:30
+    // tests/approvals/resource-encoding.algo.ts:8
     // return account.balance
     frame_dig -1
     acct_params_get AcctBalance
@@ -117,24 +92,10 @@ testExplicitForeign:
 
 // tests/approvals/resource-encoding.algo.ts::Foreign.testImplicitValue(account: bytes) -> uint64:
 testImplicitValue:
-    // tests/approvals/resource-encoding.algo.ts:37
+    // tests/approvals/resource-encoding.algo.ts:15
     // testImplicitValue(account: Account) {
     proto 1 1
-    // tests/approvals/resource-encoding.algo.ts:38
-    // return account.balance
-    frame_dig -1
-    acct_params_get AcctBalance
-    assert // account funded
-    retsub
-
-
-// tests/approvals/resource-encoding.algo.ts::BaseForeign.testBaseForeign(account: bytes) -> uint64:
-testBaseForeign:
-    // tests/approvals/resource-encoding.algo.ts:10-11
-    // @abimethod({ resourceEncoding: 'foreign_index' })
-    // testBaseForeign(account: Account) {
-    proto 1 1
-    // tests/approvals/resource-encoding.algo.ts:12
+    // tests/approvals/resource-encoding.algo.ts:16
     // return account.balance
     frame_dig -1
     acct_params_get AcctBalance

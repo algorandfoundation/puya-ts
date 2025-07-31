@@ -1,47 +1,3 @@
-contract BaseForeign
-{
-  approvalProgram(): bool
-  {
-    return arc4Router()
-  }
-  
-  clearProgram(): bool
-  {
-    return True
-  }
-  
-  testBaseForeign(account: account): uint64
-  {
-    return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
-  }
-  
-  __algots__.defaultCreate(): void
-  {
-  }
-  
-}
-contract BaseValue
-{
-  approvalProgram(): bool
-  {
-    return arc4Router()
-  }
-  
-  clearProgram(): bool
-  {
-    return True
-  }
-  
-  testBaseValue(account: account): uint64
-  {
-    return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
-  }
-  
-  __algots__.defaultCreate(): void
-  {
-  }
-  
-}
 contract Foreign
 {
   approvalProgram(): bool
@@ -60,11 +16,6 @@ contract Foreign
   }
   
   testImplicitValue(account: account): uint64
-  {
-    return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
-  }
-  
-  BaseForeign::testBaseForeign(account: account): uint64
   {
     return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
   }
@@ -91,11 +42,6 @@ contract ByValue
     return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
   }
   
-  BaseValue::testBaseValue(account: account): uint64
-  {
-    return checked_maybe(acct_params_get<AcctBalance>(account), comment=account funded)
-  }
-  
   __algots__.defaultCreate(): void
   {
   }
@@ -113,7 +59,7 @@ contract EchoResource
     return True
   }
   
-  echoResourceByForeignIndex(asset: asset, app: application, acc: account): void
+  echoResourceByForeignIndex(asset: asset, app: application, acc: account): readonly [uint64, uint64, uint64]
   {
     assetIdx: uint64 = btoi(txnas<ApplicationArgs>(1))
     assert(asset == txnas<Assets>(assetIdx), comment=expected asset to be passed by foreign_index)
@@ -121,9 +67,10 @@ contract EchoResource
     assert(app == txnas<Applications>(appIdx), comment=expected application to be passed by foreign_index)
     accIdx: uint64 = btoi(txnas<ApplicationArgs>(3))
     assert(acc == txnas<Accounts>(accIdx), comment=expected account to be passed by foreign_index)
+    return #[assetIdx, appIdx, accIdx]
   }
   
-  echoResourceByValue(asset: asset, app: application, acc: account): void
+  echoResourceByValue(asset: asset, app: application, acc: account): arc4.tuple<asset,application,account>
   {
     assetId: uint64 = btoi(txnas<ApplicationArgs>(1))
     assert(reinterpret_cast<uint64>(asset) == assetId, comment=expected asset to be passed by value)
@@ -131,6 +78,7 @@ contract EchoResource
     assert(reinterpret_cast<uint64>(app) == appId, comment=expected application to be passed by value)
     address: bytes = txnas<ApplicationArgs>(3)
     assert(reinterpret_cast<bytes>(reinterpret_cast<bytes[32]>(acc)) == address, comment=expected account to be passed by value)
+    return ARC4_ENCODE(#[asset, app, acc], wtype=arc4.tuple<asset,application,account>)
   }
   
   __algots__.defaultCreate(): void
@@ -167,8 +115,10 @@ contract C2C
     compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/resource-encoding.algo.ts::EchoResource
     appId: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages)).CreatedApplicationID
     asset: asset = submit_txn(create_inner_transaction(Fee=0, TypeEnum=3, ConfigAssetTotal=1, ConfigAssetUnitName="T", ConfigAssetName="TEST")).CreatedAssetID
-    #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0, ApplicationArgs=#[Method("echoResourceByForeignIndex(asset,application,account)void"), 0, 1, 1], Applications=#[global<CurrentApplicationID>()], Assets=#[asset], Accounts=#[txn<Sender>()])) }
-    #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0, ApplicationArgs=#[Method("echoResourceByValue(uint64,uint64,address)void"), ARC4_ENCODE(asset, wtype=arc4.uint64), ARC4_ENCODE(global<CurrentApplicationID>(), wtype=arc4.uint64), ARC4_ENCODE(txn<Sender>(), wtype=arc4.static_array<arc4.byte>)])) }
+    #[indexes]: readonly [readonly [uint64, uint64, uint64]] = #[($6 = #{ itxn: ($7 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0, ApplicationArgs=#[Method("echoResourceByForeignIndex(asset,application,account)(uint64,uint64,uint64)"), 0, 1, 1], Applications=#[global<CurrentApplicationID>()], Assets=#[asset], Accounts=#[txn<Sender>()]))), returnValue: ARC4_DECODE(reinterpret_cast<arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64>>(checked_maybe(#[extract<4, 0>(($8 = $7.LastLog)), extract<0, 4>($8) == 0x151f7c75], comment=Bytes has valid prefix))) }).returnValue]
+    assert(&&(&&(&&(3 == 3, indexes.0 == 0), indexes.1 == 1), indexes.2 == 1), comment=assert target is match for conditions)
+    #[resources]: readonly [arc4.tuple<asset,application,account>] = #[($9 = #{ itxn: ($10 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0, ApplicationArgs=#[Method("echoResourceByValue(uint64,uint64,address)(uint64,uint64,address)"), ARC4_ENCODE(asset, wtype=arc4.uint64), ARC4_ENCODE(global<CurrentApplicationID>(), wtype=arc4.uint64), ARC4_ENCODE(txn<Sender>(), wtype=arc4.static_array<arc4.byte>)]))), returnValue: ARC4_DECODE(reinterpret_cast<arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.byte>>>(checked_maybe(#[extract<4, 0>(($11 = $10.LastLog)), extract<0, 4>($11) == 0x151f7c75], comment=Bytes has valid prefix))) }).returnValue]
+    assert(&&(&&(&&(3 == 3, resources.0 == asset), resources.1 == global<CurrentApplicationID>()), resources.2 == txn<Sender>()), comment=assert target is match for conditions)
   }
   
   __algots__.defaultCreate(): void

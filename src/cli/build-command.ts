@@ -160,12 +160,6 @@ export function addBuildCommand(parser: ArgumentParser) {
     default: ['.'],
   })
 
-  parser.add_argument('--resource-encoding', {
-    choices: ['foreign_index', 'value'],
-    default: defaultPuyaOptions.resourceEncoding,
-    help: 'If "foreign_index", then resource types (Application, Asset, Account) should be passed as an index into their appropriate foreign array. The default option "value" is for these values to be passed directly.',
-  })
-
   parser.add_argument('--puya-path', {
     help: 'The path to Puya. If not provided, puya-ts will automatically download the appropriate binary for your system',
   })
@@ -203,7 +197,6 @@ export async function buildCommand(args: BuildCommandArgs) {
           cliTemplateDefinitions: Object.fromEntries(args.cli_template_definitions?.map(parseCliTemplateVar) ?? []),
           templateVarsPrefix: args.template_vars_prefix,
           localsCoalescingStrategy: args.locals_coalescing_strategy,
-          resourceEncoding: args.resource_encoding,
 
           customPuyaPath: args.puya_path,
         }),

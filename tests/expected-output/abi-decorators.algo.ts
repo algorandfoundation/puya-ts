@@ -1,4 +1,4 @@
-import type { Account, Application, Asset, bytes, gtxn, itxn, uint64 } from '@algorandfoundation/algorand-typescript'
+import type { bytes, gtxn, itxn, uint64 } from '@algorandfoundation/algorand-typescript'
 import { abimethod, baremethod, Contract, err, GlobalState, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 export default class AbiDecorators extends Contract {
@@ -19,18 +19,6 @@ export default class AbiDecorators extends Contract {
   @abimethod({ defaultArguments: { a: { from: 'globalValue' } } })
   public methodWithDefaults(a: bytes): void {}
 
-  // @expect-error Asset cannot be used as an ABI return type
-  badReturnsAsset(): Asset {
-    err('No implementation')
-  }
-  // @expect-error Account cannot be used as an ABI return type
-  badReturnsAccount(): Account {
-    err('No implementation')
-  }
-  // @expect-error Application cannot be used as an ABI return type
-  badReturnsApplication(): Application {
-    err('No implementation')
-  }
   // @expect-error PaymentTxn cannot be used as an ABI return type
   badReturnsGtxn(): gtxn.PaymentTxn {
     err('No implementation')

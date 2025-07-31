@@ -26,6 +26,7 @@ import {
 } from '../../ptypes'
 import {
   abiCallFunction,
+  arc4Uint64,
   compileArc4Function,
   ContractProxyGeneric,
   ContractProxyType,
@@ -511,7 +512,7 @@ function parseAppArgs({
             return nodeFactory.aRC4Encode({
               value: requireExpressionOfType(arg, assetPType),
               sourceLocation: arg.sourceLocation,
-              wtype: new wtypes.ARC4UIntN({ n: 64n }),
+              wtype: arc4Uint64.wtype,
               errorMessage: null,
             })
           }
@@ -523,7 +524,7 @@ function parseAppArgs({
             return nodeFactory.aRC4Encode({
               value: requireExpressionOfType(arg, applicationPType),
               sourceLocation: arg.sourceLocation,
-              wtype: new wtypes.ARC4UIntN({ n: 64n }),
+              wtype: arc4Uint64.wtype,
               errorMessage: null,
             })
           }

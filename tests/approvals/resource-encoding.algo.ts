@@ -1,37 +1,15 @@
 import type { Account, Application, Asset } from '@algorandfoundation/algorand-typescript'
-import { abimethod, assert, Contract, Global, itxn, op, Txn } from '@algorandfoundation/algorand-typescript'
+import { abimethod, assert, assertMatch, Contract, Global, itxn, op, Txn } from '@algorandfoundation/algorand-typescript'
 import { abiCall, compileArc4 } from '@algorandfoundation/algorand-typescript/arc4'
 
-class BaseForeign extends Contract {
-  /**
-   * Should inherit encoding from contract decorator
-   * @param account
-   */
-  @abimethod({ resourceEncoding: 'foreign_index' })
-  testBaseForeign(account: Account) {
-    return account.balance
-  }
-}
-
-class BaseValue extends Contract {
-  /**
-   * Should inherit encoding from contract decorator
-   * @param account
-   */
-  @abimethod({ resourceEncoding: 'value' })
-  testBaseValue(account: Account) {
-    return account.balance
-  }
-}
-
-class Foreign extends BaseForeign {
+class Foreign extends Contract {
   @abimethod({ resourceEncoding: 'foreign_index' })
   testExplicitForeign(account: Account) {
     return account.balance
   }
 
   /**
-   * Should implicitly use 'value' encoding inherited from the compiler options (and not inherit from the base contract)
+   * Should implicitly use default 'value'
    * @param account
    */
   testImplicitValue(account: Account) {
@@ -39,7 +17,7 @@ class Foreign extends BaseForeign {
   }
 }
 
-class ByValue extends BaseValue {
+class ByValue extends Contract {
   @abimethod({ resourceEncoding: 'value' })
   testExplicitValue(account: Account) {
     return account.balance
@@ -55,16 +33,18 @@ class EchoResource extends Contract {
     assert(app === Txn.applications(appIdx), 'expected application to be passed by foreign_index')
     const accIdx = op.btoi(Txn.applicationArgs(3))
     assert(acc === Txn.accounts(accIdx), 'expected account to be passed by foreign_index')
+    return [assetIdx, appIdx, accIdx] as const
   }
 
   @abimethod({ resourceEncoding: 'value' })
-  echoResourceByValue(asset: Asset, app: Application, acc: Account) {
+  echoResourceByValue(asset: Asset, app: Application, acc: Account): [Asset, Application, Account] {
     const assetId = op.btoi(Txn.applicationArgs(1))
     assert(asset.id === assetId, 'expected asset to be passed by value')
     const appId = op.btoi(Txn.applicationArgs(2))
     assert(app.id === appId, 'expected application to be passed by value')
     const address = Txn.applicationArgs(3)
     assert(acc.bytes === address, 'expected account to be passed by value')
+    return [asset, app, acc]
   }
 }
 
@@ -98,14 +78,17 @@ class C2C extends Contract {
       })
       .submit().createdAsset
 
-    compiled.call.echoResourceByForeignIndex({
+    const { returnValue: indexes } = compiled.call.echoResourceByForeignIndex({
+      args: [asset, Global.currentApplicationId, Txn.sender],
+      appId,
+    })
+    assertMatch(indexes, [0, 1, 1])
+
+    const { returnValue: resources } = compiled.call.echoResourceByValue({
       args: [asset, Global.currentApplicationId, Txn.sender],
       appId,
     })
 
-    compiled.call.echoResourceByValue({
-      args: [asset, Global.currentApplicationId, Txn.sender],
-      appId,
-    })
+    assertMatch(resources, [asset, Global.currentApplicationId, Txn.sender])
   }
 }
