@@ -106,9 +106,7 @@ export type AbiMethodConfig<TContract extends Contract> = {
    */
   name?: string
   /**
-   * The resource encoding to use for this method.
-   *
-   * If no value is specified, the encoding is inherited from the contract options, then compiler options which uses a default encoding of 'value'
+   * The resource encoding to use for this method. The default is 'value'
    *
    * foreign_index: Application, Asset, and Account arguments are included in the transaction's relevant foreign array. The argument
    * value is the uint8 index of the resource in the that array.
