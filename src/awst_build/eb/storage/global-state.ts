@@ -39,10 +39,12 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
     })
     const ptype = new GlobalStateType({ content: contentPType })
 
-    return new GlobalStateFunctionResultBuilder(extractKey(key, wtypes.stateKeyWType), ptype, {
-      initialValue: initialValue?.resolve(),
+    return new GlobalStateFunctionResultBuilder(
+      extractKey(key, wtypes.stateKeyWType, sourceLocation),
+      ptype,
+      initialValue?.resolve(),
       sourceLocation,
-    })
+    )
   }
 }
 
@@ -82,13 +84,13 @@ export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<Glob
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'delete':
-        return new GlobalStateDeleteFunctionBuilder(this.buildField(), sourceLocation)
+        return new GlobalStateDeleteFunctionBuilder(this.buildField(this.sourceLocation), sourceLocation)
       case 'value':
-        return typeRegistry.getInstanceEb(this.buildField(), this.ptype.contentType)
+        return typeRegistry.getInstanceEb(this.buildField(sourceLocation), this.ptype.contentType)
       case 'hasValue':
         return new BooleanExpressionBuilder(
           nodeFactory.stateExists({
-            field: this.buildField(),
+            field: this.buildField(this.sourceLocation),
             wtype: boolPType.wtype,
             sourceLocation,
           }),
@@ -97,12 +99,12 @@ export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<Glob
     return super.memberAccess(name, sourceLocation)
   }
 
-  protected buildField(): AppStateExpression {
+  protected buildField(sourceLocation: SourceLocation): AppStateExpression {
     return nodeFactory.appStateExpression({
       key: this._expr,
       wtype: this.ptype.contentType.wtypeOrThrow,
       existsAssertionMessage: 'check GlobalState exists',
-      sourceLocation: this.sourceLocation,
+      sourceLocation,
     })
   }
 }
@@ -121,21 +123,19 @@ export class GlobalStateFunctionResultBuilder extends GlobalStateExpressionBuild
 
   private readonly _keyExpr: Expression | undefined
 
-  constructor(expr: Expression | undefined, ptype: PType, config: { initialValue?: Expression; sourceLocation: SourceLocation }) {
-    const sourceLocation = expr?.sourceLocation ?? config?.sourceLocation
-    invariant(sourceLocation, 'Must have expression or config')
+  constructor(expr: Expression | undefined, ptype: PType, initialValue: Expression | undefined, sourceLocation: SourceLocation) {
     super(expr ?? nodeFactory.voidConstant({ sourceLocation }), ptype)
-    this.initialValue = config.initialValue
+    this.initialValue = initialValue
     this._keyExpr = expr
   }
 
-  protected buildField(): AppStateExpression {
+  protected buildField(sourceLocation: SourceLocation): AppStateExpression {
     codeInvariant(
       this._keyExpr,
       'Global state must have explicit key provided if not being assigned to a contract property',
       this.sourceLocation,
     )
-    return super.buildField()
+    return super.buildField(sourceLocation)
   }
 
   buildStorageDeclaration(

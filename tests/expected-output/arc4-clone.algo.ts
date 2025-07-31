@@ -1,5 +1,5 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { Contract, FixedArray, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { Contract, FixedArray, GlobalState, LocalState, Txn, Uint64 } from '@algorandfoundation/algorand-typescript'
 import { DynamicArray, StaticArray, Uint8 } from '@algorandfoundation/algorand-typescript/arc4'
 
 export class Arc4CloneAlgo extends Contract {
@@ -80,6 +80,12 @@ export class Arc4CloneAlgo extends Contract {
       const [x] = temp
       noop()
     }
+
+    // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being assigned to another variable
+    const m11 = LocalState<string[]>({ key: 'abc' })(Txn.sender).value
+
+    // @expect-error cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when being assigned to another variable
+    const m12 = GlobalState<uint64[]>({ key: 'def' }).value
   }
 
   receive(mutable: uint64[]) {}

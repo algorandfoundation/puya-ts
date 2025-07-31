@@ -37,7 +37,7 @@ export class LocalStateFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
     })
     const ptype = new LocalStateType({ content: contentPType })
-    return new LocalStateFunctionResultBuilder(extractKey(key, wtypes.stateKeyWType), ptype, { sourceLocation })
+    return new LocalStateFunctionResultBuilder(extractKey(key, wtypes.stateKeyWType, sourceLocation), ptype, { sourceLocation })
   }
 }
 
@@ -139,6 +139,15 @@ class LocalStateDeleteFunctionBuilder extends FunctionBuilder {
 export class LocalStateFunctionResultBuilder extends InstanceBuilder<LocalStateType> {
   readonly isConstant = false
 
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    codeInvariant(
+      this._expr,
+      'Local state must have explicit key provided if not being assigned to a contract property',
+      this.sourceLocation,
+    )
+    return new LocalStateExpressionBuilder(this._expr, this.ptype).call(args, typeArgs, sourceLocation)
+  }
+
   resolve(): Expression {
     codeInvariant(
       this._expr,
@@ -147,6 +156,7 @@ export class LocalStateFunctionResultBuilder extends InstanceBuilder<LocalStateT
     )
     return this._expr
   }
+
   resolveLValue(): LValue {
     throw CodeError.invalidAssignmentTarget({ name: this.typeDescription, sourceLocation: this.sourceLocation })
   }

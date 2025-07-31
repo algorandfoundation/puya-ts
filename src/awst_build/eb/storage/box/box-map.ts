@@ -27,7 +27,7 @@ export class BoxMapFunctionBuilder extends FunctionBuilder {
     })
 
     const ptype = new BoxMapPType({ content: contentPType, keyType: keySuffixType })
-    return new BoxMapExpressionBuilder(extractKey(keyPrefix, wtypes.boxKeyWType), ptype)
+    return new BoxMapExpressionBuilder(extractKey(keyPrefix, wtypes.boxKeyWType, sourceLocation), ptype)
   }
 }
 
