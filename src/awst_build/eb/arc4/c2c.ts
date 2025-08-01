@@ -26,6 +26,7 @@ import {
 } from '../../ptypes'
 import {
   abiCallFunction,
+  arc4AddressAlias,
   arc4Uint64,
   compileArc4Function,
   ContractProxyGeneric,
@@ -505,53 +506,33 @@ function parseAppArgs({
           return []
         }
 
-        if (paramType.equals(assetPType)) {
-          if (publicParamType.equals(assetPType)) {
-            return handleForeignRef(results.foreignAssets, 0n, paramType, arg)
-          } else {
-            return nodeFactory.aRC4Encode({
-              value: requireExpressionOfType(arg, assetPType),
-              sourceLocation: arg.sourceLocation,
-              wtype: arc4Uint64.wtype,
-            })
-          }
-        }
-        if (paramType.equals(applicationPType)) {
-          if (publicParamType.equals(applicationPType)) {
-            return handleForeignRef(results.foreignApps, 1n, paramType, arg)
-          } else {
-            return nodeFactory.aRC4Encode({
-              value: requireExpressionOfType(arg, applicationPType),
-              sourceLocation: arg.sourceLocation,
-              wtype: arc4Uint64.wtype,
-            })
-          }
-        }
-        if (paramType.equals(accountPType)) {
-          if (publicParamType.equals(accountPType)) {
-            return handleForeignRef(results.foreignAccounts, 1n, paramType, arg)
-          } else {
-            return nodeFactory.aRC4Encode({
-              value: requireExpressionOfType(arg, accountPType),
-              sourceLocation: arg.sourceLocation,
-              wtype: wtypes.arc4AddressAliasWType,
-            })
-          }
+        if (publicParamType.equals(assetPType)) {
+          return handleForeignRef(results.foreignAssets, 0n, paramType, arg)
+        } else if (publicParamType.equals(applicationPType)) {
+          return handleForeignRef(results.foreignApps, 1n, paramType, arg)
+        } else if (publicParamType.equals(accountPType)) {
+          return handleForeignRef(results.foreignAccounts, 1n, paramType, arg)
         }
 
-        const encodedType = ptypeToArc4EncodedType(paramType, sourceLocation)
+        let encodedType
+        if (paramType.equals(assetPType) || paramType.equals(applicationPType)) {
+          encodedType = arc4Uint64
+        } else if (paramType.equals(accountPType)) {
+          encodedType = arc4AddressAlias
+        } else {
+          encodedType = ptypeToArc4EncodedType(paramType, sourceLocation)
+        }
 
         const resolvedArg = requireExpressionOfType(arg, paramType)
-
         if (encodedType.equals(paramType)) {
           return resolvedArg
+        } else {
+          return nodeFactory.aRC4Encode({
+            value: resolvedArg,
+            wtype: encodedType.wtype,
+            sourceLocation: arg.sourceLocation,
+          })
         }
-
-        return nodeFactory.aRC4Encode({
-          value: resolvedArg,
-          wtype: encodedType.wtype,
-          sourceLocation: arg.sourceLocation,
-        })
       }),
     )
   }
