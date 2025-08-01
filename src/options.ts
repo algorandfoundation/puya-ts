@@ -1,4 +1,3 @@
-import type { ResourceEncoding } from './awst'
 import { LogLevel } from './logger'
 import type { Props } from './typescript-helpers'
 
@@ -87,7 +86,6 @@ export const defaultPuyaOptions: PuyaPassThroughOptions = {
   targetAvmVersion: 10,
   cliTemplateDefinitions: {},
   templateVarsPrefix: 'TMPL_',
-  resourceEncoding: 'value',
   localsCoalescingStrategy: LocalsCoalescingStrategy.root_operand,
 }
 export type PuyaPassThroughOptions = Omit<PuyaOptions, 'compilationSet'>
@@ -108,7 +106,6 @@ export class PuyaOptions {
   cliTemplateDefinitions: Record<string, Uint8Array | bigint>
   templateVarsPrefix: string
   localsCoalescingStrategy: LocalsCoalescingStrategy
-  resourceEncoding: ResourceEncoding
   compilationSet: CompilationSetMapping
 
   constructor(options: Props<PuyaOptions>) {
@@ -128,6 +125,5 @@ export class PuyaOptions {
     this.templateVarsPrefix = options.templateVarsPrefix
     this.localsCoalescingStrategy = options.localsCoalescingStrategy
     this.outputSourceMap = options.outputSourceMap
-    this.resourceEncoding = options.resourceEncoding
   }
 }
