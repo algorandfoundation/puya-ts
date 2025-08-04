@@ -1,10 +1,10 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
-        goto tmp%0#1 ? block@2 : block@13
+        goto tmp%0#1 ? block@2 : block@14
     block@2: // abi_routing_L16
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "hashAddresses(byte[32],byte[32])byte[32]" => block@3, method "receiveB32(byte[32])byte[32]" => block@4, method "receiveBytes(byte[],uint64)void" => block@5, method "returnLength(byte[32])uint64" => block@6, method "test()void" => block@7, method "testArray()void" => block@8, method "test2()byte[]" => block@9, method "test3()void" => block@10, * => block@17}
+        switch tmp%2#0 {method "hashAddresses(byte[32],byte[32])byte[32]" => block@3, method "receiveB32(byte[32])byte[32]" => block@4, method "receiveBytes(byte[],uint64)void" => block@5, method "returnLength(byte[32])uint64" => block@6, method "test()void" => block@7, method "testArray()void" => block@8, method "test2()byte[]" => block@9, method "test3()void" => block@10, method "test4()void" => block@11, * => block@18}
     block@3: // hashAddresses_route_L17
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (! tmp%3#0)
@@ -13,12 +13,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%5#0) // can only call when not creating
         let a1#0: bytes[32] = (txna ApplicationArgs 1)
         let a2#0: bytes[32] = (txna ApplicationArgs 2)
-        let tmp%0#7: bytes = (concat a1#0 a2#0)
-        let tmp%1#4: bytes[32] = (sha512_256 tmp%0#7)
-        let tmp%11#0: bytes = (concat 0x151f7c75 tmp%1#4)
+        let tmp%0#8: bytes = (concat a1#0 a2#0)
+        let tmp%1#5: bytes[32] = (sha512_256 tmp%0#8)
+        let tmp%11#0: bytes = (concat 0x151f7c75 tmp%1#5)
         (log tmp%11#0)
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#0: bool = 1u
-        goto block@18
+        goto block@19
     block@4: // receiveB32_route_L21
         let tmp%12#0: uint64 = (txn OnCompletion)
         let tmp%13#0: bool = (! tmp%12#0)
@@ -33,7 +33,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%19#0: bytes = (concat 0x151f7c75 tmp%17#0)
         (log tmp%19#0)
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#1: bool = 1u
-        goto block@18
+        goto block@19
     block@5: // receiveBytes_route_L25
         let tmp%20#0: uint64 = (txn OnCompletion)
         let tmp%21#0: bool = (! tmp%20#0)
@@ -41,27 +41,27 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%22#0: uint64 = (txn ApplicationID)
         (assert tmp%22#0) // can only call when not creating
         let reinterpret_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = (txna ApplicationArgs 1)
-        let b#3: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%0#0)
+        let b#4: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%0#0)
         let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
         let length#1: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let tmp%0#9: uint64 = (len b#3)
-        let tmp%1#6: bool = (== tmp%0#9 length#1)
-        (assert tmp%1#6)
+        let tmp%0#10: uint64 = (len b#4)
+        let tmp%1#7: bool = (== tmp%0#10 length#1)
+        (assert tmp%1#7)
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#2: bool = 1u
-        goto block@18
+        goto block@19
     block@6: // returnLength_route_L29
         let tmp%26#0: uint64 = (txn OnCompletion)
         let tmp%27#0: bool = (! tmp%26#0)
         (assert tmp%27#0) // OnCompletion is not NoOp
         let tmp%28#0: uint64 = (txn ApplicationID)
         (assert tmp%28#0) // can only call when not creating
-        let b#1: bytes[32] = (txna ApplicationArgs 1)
-        let tmp%0#6: uint64 = (len b#1)
-        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#6)
+        let b#2: bytes[32] = (txna ApplicationArgs 1)
+        let tmp%0#7: uint64 = (len b#2)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#7)
         let tmp%33#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
         (log tmp%33#0)
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#3: bool = 1u
-        goto block@18
+        goto block@19
     block@7: // test_route_L33
         let tmp%34#0: uint64 = (txn OnCompletion)
         let tmp%35#0: bool = (! tmp%34#0)
@@ -71,7 +71,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let reinterpret_bytes[32]%0#0: bytes[32] = (txn Sender)
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(reinterpret_bytes[32]%0#0)
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#4: bool = 1u
-        goto block@18
+        goto block@19
     block@8: // testArray_route_L43
         let tmp%38#0: uint64 = (txn OnCompletion)
         let tmp%39#0: bool = (! tmp%38#0)
@@ -87,10 +87,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%encoded_element%0#0: bytes = ((extract 0 32) concat%0#0) // on error: index access is out of bounds
         let bitAnd#0: bytes[32] = (b& a.0#0 aggregate%encoded_element%0#0)
         let reinterpret_bytes[32]%3#0: bytes[32] = (txn Sender)
-        let tmp%2#1: bool = (== bitAnd#0 reinterpret_bytes[32]%3#0)
-        (assert tmp%2#1)
+        let tmp%2#2: bool = (== bitAnd#0 reinterpret_bytes[32]%3#0)
+        (assert tmp%2#2)
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#5: bool = 1u
-        goto block@18
+        goto block@19
     block@9: // test2_route_L52
         let tmp%42#0: uint64 = (txn OnCompletion)
         let tmp%43#0: bool = (! tmp%42#0)
@@ -99,18 +99,18 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%44#0) // can only call when not creating
         let result#0: bytes = 0x0000000000000000000000000000000000000000000000000000000000000000
         let i#0: uint64 = 0u
-        goto block@24
-    block@24: // while_top_L55
-        let i#1: uint64 = φ(i#0 <- block@9, i#2 <- block@25)
-        let result#1: bytes = φ(result#0 <- block@9, result#2 <- block@25)
-        let tmp%0#2: bool = (< i#1 5u)
-        goto tmp%0#2 ? block@25 : block@26
-    block@25: // while_body_L55
-        let tmp%1#1: bytes = (concat result#1 result#1)
-        let result#2: bytes = (sha256 tmp%1#1)
+        goto block@27
+    block@27: // while_top_L55
+        let i#1: uint64 = φ(i#0 <- block@9, i#2 <- block@28)
+        let result#1: bytes = φ(result#0 <- block@9, result#2 <- block@28)
+        let tmp%0#3: bool = (< i#1 5u)
+        goto tmp%0#3 ? block@28 : block@29
+    block@28: // while_body_L55
+        let tmp%1#2: bytes = (concat result#1 result#1)
+        let result#2: bytes = (sha256 tmp%1#2)
         let i#2: uint64 = (+ i#1 1u)
-        goto block@24
-    block@26: // after_while_L55
+        goto block@27
+    block@29: // after_while_L55
         let aggregate%length%5#0: uint64 = (len result#1)
         let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%5#0)
         let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
@@ -118,7 +118,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%48#0: bytes = (concat 0x151f7c75 aggregate%encoded_value%0#0)
         (log tmp%48#0)
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#6: bool = 1u
-        goto block@18
+        goto block@19
     block@10: // test3_route_L62
         let tmp%49#0: uint64 = (txn OnCompletion)
         let tmp%50#0: bool = (! tmp%49#0)
@@ -126,21 +126,29 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%51#0: uint64 = (txn ApplicationID)
         (assert tmp%51#0) // can only call when not creating
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#7: bool = 1u
-        goto block@18
-    block@13: // bare_routing_L16
+        goto block@19
+    block@11: // test4_route_L67
         let tmp%53#0: uint64 = (txn OnCompletion)
-        goto tmp%53#0 ? block@17 : block@14
-    block@14: // __algots__.defaultCreate_L16
-        let tmp%54#0: uint64 = (txn ApplicationID)
-        let tmp%55#0: bool = (! tmp%54#0)
-        (assert tmp%55#0) // can only call when creating
+        let tmp%54#0: bool = (! tmp%53#0)
+        (assert tmp%54#0) // OnCompletion is not NoOp
+        let tmp%55#0: uint64 = (txn ApplicationID)
+        (assert tmp%55#0) // can only call when not creating
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#8: bool = 1u
-        goto block@18
-    block@17: // after_if_else_L16
-        let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#9: bool = 0u
-        goto block@18
-    block@18: // after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#6 <- block@26, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#7 <- block@10, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#8 <- block@14, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#9 <- block@17)
+        goto block@19
+    block@14: // bare_routing_L16
+        let tmp%57#0: uint64 = (txn OnCompletion)
+        goto tmp%57#0 ? block@18 : block@15
+    block@15: // __algots__.defaultCreate_L16
+        let tmp%58#0: uint64 = (txn ApplicationID)
+        let tmp%59#0: bool = (! tmp%58#0)
+        (assert tmp%59#0) // can only call when creating
+        let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#9: bool = 1u
+        goto block@19
+    block@18: // after_if_else_L16
+        let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#10: bool = 0u
+        goto block@19
+    block@19: // after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#6 <- block@29, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#7 <- block@10, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#8 <- block@11, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#9 <- block@15, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#10 <- block@18)
         return tmp%0#0
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(b: bytes[32]) -> bytes[32]:

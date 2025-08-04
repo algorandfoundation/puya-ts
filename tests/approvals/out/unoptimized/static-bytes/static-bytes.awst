@@ -69,6 +69,13 @@ contract StaticBytesAlgo
     x: bytes[32] = (y = reinterpret_cast<bytes>(($2 = reinterpret_cast<bytes[32]>(txn<Sender>())))), $2
   }
   
+  test4(): void
+  {
+    b: bytes = reinterpret_cast<bytes>(reinterpret_cast<bytes[32]>(txn<Sender>()))
+    addr: bytes[32] = checked_maybe(#[reinterpret_cast<bytes[32]>(b), len(b) == 32], comment=Length must be 32)
+    assert(len(addr) == 32)
+  }
+  
   __algots__.defaultCreate(): void
   {
   }

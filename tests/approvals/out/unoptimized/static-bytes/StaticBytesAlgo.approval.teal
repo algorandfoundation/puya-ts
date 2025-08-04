@@ -16,7 +16,7 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@13
+    bz main_bare_routing@14
 
 main_abi_routing@2:
     // tests/approvals/static-bytes.algo.ts:16
@@ -30,20 +30,36 @@ main_abi_routing@2:
     pushbytes 0xb976788f // method "testArray()void"
     pushbytes 0x9d52c38f // method "test2()byte[]"
     pushbytes 0xdf920f37 // method "test3()void"
-    uncover 8
-    match main_hashAddresses_route@3 main_receiveB32_route@4 main_receiveBytes_route@5 main_returnLength_route@6 main_test_route@7 main_testArray_route@8 main_test2_route@9 main_test3_route@10
+    pushbytes 0x3d46345c // method "test4()void"
+    uncover 9
+    match main_hashAddresses_route@3 main_receiveB32_route@4 main_receiveBytes_route@5 main_returnLength_route@6 main_test_route@7 main_testArray_route@8 main_test2_route@9 main_test3_route@10 main_test4_route@11
 
-main_switch_case_default@11:
+main_switch_case_default@12:
 
-main_switch_case_next@12:
+main_switch_case_next@13:
 
-main_after_if_else@17:
+main_after_if_else@18:
     // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     intc_0 // 0
 
-main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@18:
+main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19:
     return
+
+main_test4_route@11:
+    // tests/approvals/static-bytes.algo.ts:67
+    // test4() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub test4
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
 
 main_test3_route@10:
     // tests/approvals/static-bytes.algo.ts:62
@@ -58,7 +74,7 @@ main_test3_route@10:
     assert // can only call when not creating
     callsub test3
     intc_1 // 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@18
+    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
 
 main_test2_route@9:
     // tests/approvals/static-bytes.algo.ts:52
@@ -83,7 +99,7 @@ main_test2_route@9:
     concat
     log
     intc_1 // 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@18
+    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
 
 main_testArray_route@8:
     // tests/approvals/static-bytes.algo.ts:43
@@ -98,7 +114,7 @@ main_testArray_route@8:
     assert // can only call when not creating
     callsub testArray
     intc_1 // 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@18
+    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
 
 main_test_route@7:
     // tests/approvals/static-bytes.algo.ts:33
@@ -113,7 +129,7 @@ main_test_route@7:
     assert // can only call when not creating
     callsub test
     intc_1 // 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@18
+    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
 
 main_returnLength_route@6:
     // tests/approvals/static-bytes.algo.ts:29
@@ -138,7 +154,7 @@ main_returnLength_route@6:
     concat
     log
     intc_1 // 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@18
+    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
 
 main_receiveBytes_route@5:
     // tests/approvals/static-bytes.algo.ts:25
@@ -161,7 +177,7 @@ main_receiveBytes_route@5:
     // receiveBytes(b: bytes, length: uint64) {
     callsub receiveBytes
     intc_1 // 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@18
+    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
 
 main_receiveB32_route@4:
     // tests/approvals/static-bytes.algo.ts:21
@@ -190,7 +206,7 @@ main_receiveB32_route@4:
     concat
     log
     intc_1 // 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@18
+    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
 
 main_hashAddresses_route@3:
     // tests/approvals/static-bytes.algo.ts:17
@@ -220,22 +236,22 @@ main_hashAddresses_route@3:
     concat
     log
     intc_1 // 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@18
+    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
 
-main_bare_routing@13:
+main_bare_routing@14:
     // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     txn OnCompletion
     intc_0 // 0
     swap
-    match main___algots__.defaultCreate@14
+    match main___algots__.defaultCreate@15
 
-main_switch_case_default@15:
+main_switch_case_default@16:
 
-main_switch_case_next@16:
-    b main_after_if_else@17
+main_switch_case_next@17:
+    b main_after_if_else@18
 
-main___algots__.defaultCreate@14:
+main___algots__.defaultCreate@15:
     // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     txn ApplicationID
@@ -244,7 +260,7 @@ main___algots__.defaultCreate@14:
     assert // can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@18
+    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
 
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses(a1: bytes, a2: bytes) -> bytes:
@@ -475,6 +491,29 @@ test2_after_while@3:
 test3:
 
 test3_block@0:
+    retsub
+
+
+// tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4() -> void:
+test4:
+
+test4_block@0:
+    // tests/approvals/static-bytes.algo.ts:68
+    // const b: bytes = Txn.sender.bytes
+    txn Sender
+    // tests/approvals/static-bytes.algo.ts:69
+    // const addr = Bytes<32>(b)
+    dup
+    len
+    intc_2 // 32
+    ==
+    assert // Length must be 32
+    // tests/approvals/static-bytes.algo.ts:70
+    // assert(addr.length === 32)
+    len
+    intc_2 // 32
+    ==
+    assert
     retsub
 
 
