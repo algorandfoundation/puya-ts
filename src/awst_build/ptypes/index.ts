@@ -505,13 +505,12 @@ export class InstanceType extends PType {
   readonly name: string
   readonly module: string
   readonly singleton = false
-  readonly fixedBitSize: bigint | null
-  constructor({ name, module, wtype, fixedBitSize }: { name: string; module: string; wtype: wtypes.WType; fixedBitSize?: bigint | null }) {
+
+  constructor({ name, module, wtype }: { name: string; module: string; wtype: wtypes.WType }) {
     super()
     this.name = name
     this.wtype = wtype
     this.module = module
-    this.fixedBitSize = fixedBitSize ?? null
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
@@ -702,7 +701,6 @@ export class FunctionPType extends PType {
 }
 export class ArrayLiteralPType extends PType {
   readonly [PType.IdSymbol] = 'ArrayLiteralPType'
-  readonly fixedBitSize: bigint | null
 
   get fullName() {
     return `${this.module}::[${this.items.map((i) => i).join(', ')}]`
@@ -721,7 +719,6 @@ export class ArrayLiteralPType extends PType {
     this.name = `[${props.items.map((i) => i.name).join(', ')}]`
 
     this.items = props.items
-    this.fixedBitSize = PType.calculateFixedBitSize(this.items)
   }
 
   get wtype() {
@@ -753,7 +750,6 @@ export class ArrayLiteralPType extends PType {
 export class MutableTuplePType extends PType {
   readonly [PType.IdSymbol] = 'MutableTuplePType'
   readonly module: string = 'lib.d.ts'
-  readonly fixedBitSize: bigint | null
 
   get name() {
     return `[${this.items.map((i) => i.name).join(', ')}]`
@@ -767,7 +763,6 @@ export class MutableTuplePType extends PType {
   constructor(props: { items: PType[] }) {
     super()
     this.items = props.items
-    this.fixedBitSize = PType.calculateFixedBitSize(this.items)
   }
 
   get wtype(): wtypes.ARC4Tuple {
@@ -784,7 +779,6 @@ export class MutableTuplePType extends PType {
 export class ReadonlyTuplePType extends PType {
   readonly [PType.IdSymbol] = 'ReadonlyTuplePType'
   readonly module: string = 'lib.d.ts'
-  readonly fixedBitSize: bigint | null
 
   get name() {
     return `readonly [${this.items.map((i) => i.name).join(', ')}]`
@@ -798,7 +792,6 @@ export class ReadonlyTuplePType extends PType {
   constructor(props: { items: PType[] }) {
     super()
     this.items = props.items
-    this.fixedBitSize = PType.calculateFixedBitSize(this.items)
   }
 
   get wtype(): wtypes.WTuple {
@@ -907,7 +900,6 @@ export class FixedArrayPType extends PType {
   readonly name: string
   readonly module: string = Constants.moduleNames.algoTs.arrays
   readonly arraySize: bigint
-  readonly fixedBitSize: bigint | null = null
   get fullName() {
     return `${this.module}::FixedArray<${this.elementType.fullName}>`
   }
@@ -916,7 +908,6 @@ export class FixedArrayPType extends PType {
     this.elementType = props.elementType
     this.name = `FixedArray<${props.elementType.name}, ${props.arraySize}>`
     this.arraySize = props.arraySize
-    this.fixedBitSize = PType.calculateFixedBitSize(new Array(Number(this.arraySize)).fill(this.elementType))
   }
   get wtype() {
     return new wtypes.ARC4StaticArray({
@@ -948,7 +939,6 @@ abstract class ObjectPType extends PType {
   readonly properties: Record<string, PType>
   readonly singleton = false
   readonly immutable: boolean
-  readonly fixedBitSize: bigint | null = null
 
   constructor(props: {
     alias?: SymbolName | null
@@ -963,7 +953,6 @@ abstract class ObjectPType extends PType {
     this.description = props.description
     this.alias = props.alias ?? null
     this.immutable = props.immutable
-    this.fixedBitSize = PType.calculateFixedBitSize(Object.values(this.properties))
   }
 
   orderedProperties() {
@@ -1166,7 +1155,6 @@ export const boolPType = new InstanceType({
   name: 'boolean',
   module: 'lib.d.ts',
   wtype: wtypes.boolWType,
-  fixedBitSize: 64n,
 })
 
 export const BooleanFunction = new LibFunctionType({
@@ -1204,7 +1192,6 @@ export const uint64PType = new InstanceType({
   name: 'uint64',
   module: Constants.moduleNames.algoTs.primitives,
   wtype: wtypes.uint64WType,
-  fixedBitSize: 64n,
 })
 export const biguintPType = new InstanceType({
   name: 'biguint',
@@ -1266,7 +1253,6 @@ export class BytesPType extends PType {
   readonly module: string
   readonly singleton = false
   readonly length: bigint | null
-  readonly fixedBitSize: bigint | null = null
 
   constructor({ length }: { length: bigint | null }) {
     super()
@@ -1274,7 +1260,6 @@ export class BytesPType extends PType {
     this.name = length === null ? 'bytes' : `bytes<${length}>`
     this.wtype = new wtypes.BytesWType({ length })
     this.module = Constants.moduleNames.algoTs.primitives
-    this.fixedBitSize = this.length === null ? null : this.length * 8n
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {

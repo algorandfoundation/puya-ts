@@ -37,6 +37,7 @@ import { indexAccess } from '../util/array/index-access'
 import { arrayLength } from '../util/array/length'
 import { resolveCompatExpression } from '../util/resolve-compat-builder'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
+import { wtypes } from '../../../awst/wtypes'
 
 export class DynamicArrayClassBuilder extends ClassBuilder {
   readonly ptype = DynamicArrayGeneric
@@ -80,9 +81,12 @@ export class StaticArrayClassBuilder extends ClassBuilder {
       argSpec: (a) => args.map((_) => a.required(ptype.elementType)),
     })
     if (initialItems.length === 0) {
-      codeInvariant(ptype.fixedByteSize !== null, 'Zero arg constructor can only be used for static arrays with a fixed size encoding.')
       return new StaticArrayExpressionBuilder(
-        intrinsicFactory.bzero({ size: ptype.fixedByteSize, wtype: ptype.wtype, sourceLocation }),
+        intrinsicFactory.bzero({
+          size: nodeFactory.sizeOf({ sizeWtype: ptype.wtype, wtype: wtypes.uint64WType, sourceLocation }),
+          wtype: ptype.wtype,
+          sourceLocation,
+        }),
         ptype,
       )
     }

@@ -13,6 +13,7 @@ import { ClassBuilder, FunctionBuilder } from '../index'
 import { requireIntegerConstant } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
+import { wtypes } from '../../../awst/wtypes'
 
 export class Arc4TupleClassBuilder extends ClassBuilder {
   readonly ptype = Arc4TupleGeneric
@@ -32,9 +33,12 @@ export class Arc4TupleClassBuilder extends ClassBuilder {
     const ptype = Arc4TupleGeneric.parameterise([tupleType])
 
     if (args.length === 0) {
-      codeInvariant(ptype.fixedByteSize !== null, 'Zero arg constructor can only be used for tuples with a fixed size encoding.')
       return new Arc4TupleExpressionBuilder(
-        intrinsicFactory.bzero({ size: ptype.fixedByteSize, wtype: ptype.wtype, sourceLocation }),
+        intrinsicFactory.bzero({
+          size: nodeFactory.sizeOf({ sizeWtype: ptype.wtype, wtype: wtypes.uint64WType, sourceLocation }),
+          wtype: ptype.wtype,
+          sourceLocation,
+        }),
         ptype,
       )
     }
