@@ -9,7 +9,7 @@ main:
 main_block@0:
 
 main_block@1:
-    // tests/approvals/resource-encoding.algo.ts:27
+    // tests/approvals/resource-encoding.algo.ts:38
     // class EchoResource extends Contract {
     txn NumAppArgs
     intc_0 // 0
@@ -17,20 +17,20 @@ main_block@1:
     bz main_bare_routing@7
 
 main_abi_routing@2:
-    // tests/approvals/resource-encoding.algo.ts:27
+    // tests/approvals/resource-encoding.algo.ts:38
     // class EchoResource extends Contract {
     txna ApplicationArgs 0
-    pushbytes 0x0fa65c03 // method "echoResourceByForeignIndex(asset,application,account)(uint64,uint64,uint64)"
+    pushbytes 0x77e28d74 // method "echoResourceByIndex(asset,application,account)(uint64,uint64,address)"
     pushbytes 0x4d370276 // method "echoResourceByValue(uint64,uint64,address)(uint64,uint64,address)"
     uncover 2
-    match main_echoResourceByForeignIndex_route@3 main_echoResourceByValue_route@4
+    match main_echoResourceByIndex_route@3 main_echoResourceByValue_route@4
 
 main_switch_case_default@5:
 
 main_switch_case_next@6:
 
 main_after_if_else@11:
-    // tests/approvals/resource-encoding.algo.ts:27
+    // tests/approvals/resource-encoding.algo.ts:38
     // class EchoResource extends Contract {
     intc_0 // 0
 
@@ -38,8 +38,8 @@ main_after_inlined_tests/approvals/resource-encoding.algo.ts::EchoResource.__puy
     return
 
 main_echoResourceByValue_route@4:
-    // tests/approvals/resource-encoding.algo.ts:39
-    // @abimethod({ resourceEncoding: 'value' })
+    // tests/approvals/resource-encoding.algo.ts:50
+    // @abimethod({ resourceEncoding: 'Value' })
     txn OnCompletion
     intc_0 // NoOp
     ==
@@ -48,15 +48,15 @@ main_echoResourceByValue_route@4:
     intc_0 // 0
     !=
     assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:27
+    // tests/approvals/resource-encoding.algo.ts:38
     // class EchoResource extends Contract {
     txna ApplicationArgs 1
     btoi
     txna ApplicationArgs 2
     btoi
     txna ApplicationArgs 3
-    // tests/approvals/resource-encoding.algo.ts:39
-    // @abimethod({ resourceEncoding: 'value' })
+    // tests/approvals/resource-encoding.algo.ts:50
+    // @abimethod({ resourceEncoding: 'Value' })
     uncover 2
     uncover 2
     uncover 2
@@ -68,9 +68,9 @@ main_echoResourceByValue_route@4:
     intc_1 // 1
     b main_after_inlined_tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__@12
 
-main_echoResourceByForeignIndex_route@3:
-    // tests/approvals/resource-encoding.algo.ts:28
-    // @abimethod({ resourceEncoding: 'foreign_index' })
+main_echoResourceByIndex_route@3:
+    // tests/approvals/resource-encoding.algo.ts:39
+    // @abimethod({ resourceEncoding: 'Index' })
     txn OnCompletion
     intc_0 // NoOp
     ==
@@ -79,7 +79,7 @@ main_echoResourceByForeignIndex_route@3:
     intc_0 // 0
     !=
     assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:27
+    // tests/approvals/resource-encoding.algo.ts:38
     // class EchoResource extends Contract {
     txna ApplicationArgs 1
     btoi
@@ -90,24 +90,12 @@ main_echoResourceByForeignIndex_route@3:
     txna ApplicationArgs 3
     btoi
     txnas Accounts
-    // tests/approvals/resource-encoding.algo.ts:28
-    // @abimethod({ resourceEncoding: 'foreign_index' })
+    // tests/approvals/resource-encoding.algo.ts:39
+    // @abimethod({ resourceEncoding: 'Index' })
     uncover 2
     uncover 2
     uncover 2
-    callsub echoResourceByForeignIndex
-    cover 2
-    swap
-    itob
-    bytec_1 // 0x
-    swap
-    concat
-    swap
-    itob
-    concat
-    swap
-    itob
-    concat
+    callsub echoResourceByIndex
     bytec_0 // 0x151f7c75
     swap
     concat
@@ -116,7 +104,7 @@ main_echoResourceByForeignIndex_route@3:
     b main_after_inlined_tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__@12
 
 main_bare_routing@7:
-    // tests/approvals/resource-encoding.algo.ts:27
+    // tests/approvals/resource-encoding.algo.ts:38
     // class EchoResource extends Contract {
     txn OnCompletion
     intc_0 // 0
@@ -129,7 +117,7 @@ main_switch_case_next@10:
     b main_after_if_else@11
 
 main___algots__.defaultCreate@8:
-    // tests/approvals/resource-encoding.algo.ts:27
+    // tests/approvals/resource-encoding.algo.ts:38
     // class EchoResource extends Contract {
     txn ApplicationID
     intc_0 // 0
@@ -140,96 +128,100 @@ main___algots__.defaultCreate@8:
     b main_after_inlined_tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__@12
 
 
-// tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByForeignIndex(asset: uint64, app: uint64, acc: bytes) -> uint64, uint64, uint64:
-echoResourceByForeignIndex:
-    // tests/approvals/resource-encoding.algo.ts:28-29
-    // @abimethod({ resourceEncoding: 'foreign_index' })
-    // echoResourceByForeignIndex(asset: Asset, app: Application, acc: Account) {
-    proto 3 3
+// tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByIndex(asset: uint64, app: uint64, acc: bytes) -> bytes:
+echoResourceByIndex:
+    // tests/approvals/resource-encoding.algo.ts:39-40
+    // @abimethod({ resourceEncoding: 'Index' })
+    // echoResourceByIndex(asset: Asset, app: Application, acc: Account): [Asset, Application, Account] {
+    proto 3 1
 
-echoResourceByForeignIndex_block@0:
-    // tests/approvals/resource-encoding.algo.ts:30
+echoResourceByIndex_block@0:
+    // tests/approvals/resource-encoding.algo.ts:41
     // const assetIdx = op.btoi(Txn.applicationArgs(1))
     intc_1 // 1
     txnas ApplicationArgs
     btoi
-    // tests/approvals/resource-encoding.algo.ts:31
-    // assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by foreign_index')
-    dup
+    // tests/approvals/resource-encoding.algo.ts:42
+    // assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by Index')
     txnas Assets
     frame_dig -3
     ==
-    assert // expected asset to be passed by foreign_index
-    // tests/approvals/resource-encoding.algo.ts:32
+    assert // expected asset to be passed by Index
+    // tests/approvals/resource-encoding.algo.ts:43
     // const appIdx = op.btoi(Txn.applicationArgs(2))
     intc_2 // 2
     txnas ApplicationArgs
     btoi
-    // tests/approvals/resource-encoding.algo.ts:33
-    // assert(app === Txn.applications(appIdx), 'expected application to be passed by foreign_index')
-    dup
+    // tests/approvals/resource-encoding.algo.ts:44
+    // assert(app === Txn.applications(appIdx), 'expected application to be passed by Index')
     txnas Applications
     frame_dig -2
     ==
-    assert // expected application to be passed by foreign_index
-    // tests/approvals/resource-encoding.algo.ts:34
+    assert // expected application to be passed by Index
+    // tests/approvals/resource-encoding.algo.ts:45
     // const accIdx = op.btoi(Txn.applicationArgs(3))
     intc_3 // 3
     txnas ApplicationArgs
     btoi
-    // tests/approvals/resource-encoding.algo.ts:35
-    // assert(acc === Txn.accounts(accIdx), 'expected account to be passed by foreign_index')
-    dup
+    // tests/approvals/resource-encoding.algo.ts:46
+    // assert(acc === Txn.accounts(accIdx), 'expected account to be passed by Index')
     txnas Accounts
     frame_dig -1
     ==
-    assert // expected account to be passed by foreign_index
-    // tests/approvals/resource-encoding.algo.ts:36
-    // return [assetIdx, appIdx, accIdx] as const
-    uncover 2
-    uncover 2
-    uncover 2
+    assert // expected account to be passed by Index
+    // tests/approvals/resource-encoding.algo.ts:47
+    // return [asset, app, acc] as const
+    frame_dig -3
+    itob
+    bytec_1 // 0x
+    swap
+    concat
+    frame_dig -2
+    itob
+    concat
+    frame_dig -1
+    concat
     retsub
 
 
 // tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByValue(asset: uint64, app: uint64, acc: bytes) -> bytes:
 echoResourceByValue:
-    // tests/approvals/resource-encoding.algo.ts:39-40
-    // @abimethod({ resourceEncoding: 'value' })
+    // tests/approvals/resource-encoding.algo.ts:50-51
+    // @abimethod({ resourceEncoding: 'Value' })
     // echoResourceByValue(asset: Asset, app: Application, acc: Account): [Asset, Application, Account] {
     proto 3 1
 
 echoResourceByValue_block@0:
-    // tests/approvals/resource-encoding.algo.ts:41
+    // tests/approvals/resource-encoding.algo.ts:52
     // const assetId = op.btoi(Txn.applicationArgs(1))
     intc_1 // 1
     txnas ApplicationArgs
     btoi
-    // tests/approvals/resource-encoding.algo.ts:42
-    // assert(asset.id === assetId, 'expected asset to be passed by value')
+    // tests/approvals/resource-encoding.algo.ts:53
+    // assert(asset === Asset(assetId), 'expected asset to be passed by Value')
     frame_dig -3
     ==
-    assert // expected asset to be passed by value
-    // tests/approvals/resource-encoding.algo.ts:43
+    assert // expected asset to be passed by Value
+    // tests/approvals/resource-encoding.algo.ts:54
     // const appId = op.btoi(Txn.applicationArgs(2))
     intc_2 // 2
     txnas ApplicationArgs
     btoi
-    // tests/approvals/resource-encoding.algo.ts:44
-    // assert(app.id === appId, 'expected application to be passed by value')
+    // tests/approvals/resource-encoding.algo.ts:55
+    // assert(app === Application(appId), 'expected application to be passed by Value')
     frame_dig -2
     ==
-    assert // expected application to be passed by value
-    // tests/approvals/resource-encoding.algo.ts:45
+    assert // expected application to be passed by Value
+    // tests/approvals/resource-encoding.algo.ts:56
     // const address = Txn.applicationArgs(3)
     intc_3 // 3
     txnas ApplicationArgs
-    // tests/approvals/resource-encoding.algo.ts:46
-    // assert(acc.bytes === address, 'expected account to be passed by value')
+    // tests/approvals/resource-encoding.algo.ts:57
+    // assert(acc === Account(address), 'expected account to be passed by Value')
     frame_dig -1
     ==
-    assert // expected account to be passed by value
-    // tests/approvals/resource-encoding.algo.ts:47
+    assert // expected account to be passed by Value
+    // tests/approvals/resource-encoding.algo.ts:58
     // return [asset, app, acc]
     frame_dig -3
     itob

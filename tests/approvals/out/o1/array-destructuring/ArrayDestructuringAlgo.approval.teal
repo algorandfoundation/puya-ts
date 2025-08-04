@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 64 0
+    intcblock 1 64
     // tests/approvals/array-destructuring.algo.ts:4
     // export class ArrayDestructuringAlgo extends Contract {
     txn NumAppArgs
@@ -15,7 +15,7 @@ main:
 main_after_if_else@13:
     // tests/approvals/array-destructuring.algo.ts:4
     // export class ArrayDestructuringAlgo extends Contract {
-    intc_2 // 0
+    pushint 0 // 0
     return
 
 main_produceFixed_route@6:
@@ -65,9 +65,6 @@ main_testNested_route@3:
     // export class ArrayDestructuringAlgo extends Contract {
     txna ApplicationArgs 1
     dup
-    intc_2 // 0
-    extract_uint64
-    swap
     extract 8 128
     dup
     extract 0 64
@@ -76,7 +73,7 @@ main_testNested_route@3:
     // tests/approvals/array-destructuring.algo.ts:5
     // testNested(arg: readonly [uint64, readonly [biguint, biguint]]) {
     uncover 2
-    itob
+    extract 0 8
     dig 2
     len
     intc_1 // 64

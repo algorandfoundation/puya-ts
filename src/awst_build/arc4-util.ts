@@ -62,14 +62,14 @@ export function ptypeToAbiPType(
   }
   if (ptype.equalsOneOf(applicationPType, assetPType)) {
     invariant(ptype instanceof ABICompatibleInstanceType, 'application and asset are all ABICompatibleInstanceType')
-    if (resourceEncoding === 'foreign_index' && direction === 'in') {
+    if (resourceEncoding === 'index' && direction === 'in') {
       return ptype
     }
     return arc4Uint64
   }
   if (ptype.equals(accountPType)) {
     invariant(ptype instanceof ABICompatibleInstanceType, 'account is ABICompatibleInstanceType')
-    if (resourceEncoding === 'foreign_index' && direction === 'in') {
+    if (resourceEncoding === 'index' && direction === 'in') {
       return ptype
     }
     return arc4AddressAlias

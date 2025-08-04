@@ -30,9 +30,9 @@ const createMap: Record<string, ARC4CreateOption> = {
   disallow: ARC4CreateOption.disallow,
 }
 
-const resourceEncodingMap: Record<string, 'foreign_index' | 'value'> = {
-  foreign_index: 'foreign_index',
-  value: 'value',
+const resourceEncodingMap: Record<string, 'index' | 'value'> = {
+  Index: 'index',
+  Value: 'value',
 }
 
 export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {

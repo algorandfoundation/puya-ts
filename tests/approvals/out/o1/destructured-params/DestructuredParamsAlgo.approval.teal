@@ -83,8 +83,7 @@ test:
     // test({ a, b, c }: { a: uint64; b: bytes; c: boolean }): void {
     proto 1 1
     frame_dig -1
-    intc_1 // 0
-    extract_uint64
+    extract 0 8
     frame_dig -1
     intc_2 // 8
     extract_uint16
@@ -99,9 +98,7 @@ test:
     getbit
     // tests/approvals/destructured-params.algo.ts:10
     // log(a, b, c)
-    uncover 2
-    itob
-    uncover 2
+    cover 2
     concat
     swap
     itob
