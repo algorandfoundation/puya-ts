@@ -124,6 +124,51 @@ function reflectAllPay(pay: gtxn.PaymentTxn) {
 }
 ```
 
+### Application, Asset and Account arguments are now passed by their uint64 id (Application and Asset) or bytes[32] address (Account) by default
+
+`resourceEncoding: 'foreign_index' | 'value'` option is added to `@abimethod` decorator config with `value` as default. Use `foreign_index` for those methods which need to preserve the previous behaviour.
+
+```typescript
+/**** Before (puya-ts beta) ****/
+test(asset: Asset, app: Application, acc: Account) {
+  const assetIdx = op.btoi(Txn.applicationArgs(1))
+  assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by foreign_index')
+
+  const appIdx = op.btoi(Txn.applicationArgs(2))
+  assert(app === Txn.applications(appIdx), 'expected application to be passed by foreign_index')
+
+  const accIdx = op.btoi(Txn.applicationArgs(3))
+  assert(acc === Txn.accounts(accIdx), 'expected account to be passed by foreign_index')
+}
+
+
+/**** After (puya-ts 1.0) ****/
+// use `foreign_index` resource encoding to keep old behaviour
+@abimethod({ resourceEncoding: 'foreign_index' })
+test(asset: Asset, app: Application, acc: Account) {
+  const assetIdx = op.btoi(Txn.applicationArgs(1))
+  assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by foreign_index')
+
+  const appIdx = op.btoi(Txn.applicationArgs(2))
+  assert(app === Txn.applications(appIdx), 'expected application to be passed by foreign_index')
+
+  const accIdx = op.btoi(Txn.applicationArgs(3))
+  assert(acc === Txn.accounts(accIdx), 'expected account to be passed by foreign_index')
+}
+
+// or update the implementation to use default `value` resource encoding
+test(asset: Asset, app: Application, acc: Account) {
+  const assetId = op.btoi(Txn.applicationArgs(1))
+  assert(asset.id === assetId, 'expected asset to be passed by value')
+
+  const appId = op.btoi(Txn.applicationArgs(2))
+  assert(app.id === appId, 'expected application to be passed by value')
+
+  const address = Txn.applicationArgs(3)
+  assert(acc.bytes === address, 'expected account to be passed by value')
+}
+```
+
 ## New features
 
 ### Native mutable objects
