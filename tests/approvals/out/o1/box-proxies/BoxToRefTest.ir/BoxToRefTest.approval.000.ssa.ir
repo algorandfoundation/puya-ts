@@ -4,14 +4,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.__puya_arc4_router__() -> bool:
-    block@0: // L224
+    block@0: // L236
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@5
-    block@1: // abi_routing_L224
+    block@1: // abi_routing_L236
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "test()void" => block@2, * => block@3}
-    block@2: // test_route_L227
+    block@2: // test_route_L239
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         (assert tmp%4#0) // OnCompletion is not NoOp
@@ -20,28 +20,28 @@ subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.__puya_arc4_router_
         (assert tmp%6#0) // can only call when not creating
         tests/approvals/box-proxies.algo.ts::BoxToRefTest.test()
         return 1u
-    block@3: // switch_case_default_L224
+    block@3: // switch_case_default_L236
         goto block@4
-    block@4: // switch_case_next_L224
+    block@4: // switch_case_next_L236
         goto block@9
-    block@5: // bare_routing_L224
+    block@5: // bare_routing_L236
         let tmp%7#0: uint64 = (txn OnCompletion)
         switch tmp%7#0 {0u => block@6, * => block@7}
-    block@6: // __algots__.defaultCreate_L224
+    block@6: // __algots__.defaultCreate_L236
         let tmp%8#0: uint64 = (txn ApplicationID)
         let tmp%9#0: bool = (== tmp%8#0 0u)
         (assert tmp%9#0) // can only call when creating
         tests/approvals/box-proxies.algo.ts::BoxToRefTest.__algots__.defaultCreate()
         return 1u
-    block@7: // switch_case_default_L224
+    block@7: // switch_case_default_L236
         goto block@8
-    block@8: // switch_case_next_L224
+    block@8: // switch_case_next_L236
         goto block@9
-    block@9: // after_if_else_L224
+    block@9: // after_if_else_L236
         return 0u
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test() -> void:
-    block@0: // L227
+    block@0: // L239
         let materialized_values%0#0: account = (txn Sender)
         let box_prefixed_key%0#0: bytes = (concat "" materialized_values%0#0)
         let boxForCaller#0: bytes = box_prefixed_key%0#0
@@ -56,5 +56,5 @@ subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test() -> void:
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.__algots__.defaultCreate() -> void:
-    block@0: // L224
+    block@0: // L236
         return 

@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    // tests/approvals/box-proxies.algo.ts:240
+    // tests/approvals/box-proxies.algo.ts:252
     // class CompositeKeyTest extends Contract {
     txn NumAppArgs
     bz main_bare_routing@6
@@ -12,37 +12,37 @@ main:
     match main_test_route@3
 
 main_after_if_else@10:
-    // tests/approvals/box-proxies.algo.ts:240
+    // tests/approvals/box-proxies.algo.ts:252
     // class CompositeKeyTest extends Contract {
     pushint 0 // 0
     return
 
 main_test_route@3:
-    // tests/approvals/box-proxies.algo.ts:243
+    // tests/approvals/box-proxies.algo.ts:255
     // test(key: { a: uint64; b: uint64 }, val: string) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/box-proxies.algo.ts:240
+    // tests/approvals/box-proxies.algo.ts:252
     // class CompositeKeyTest extends Contract {
     txna ApplicationArgs 1
     txna ApplicationArgs 2
     extract 2 0
-    // tests/approvals/box-proxies.algo.ts:244
+    // tests/approvals/box-proxies.algo.ts:256
     // this.boxMap(key).value = val
     dig 1
     box_del
     pop
     box_put
-    // tests/approvals/box-proxies.algo.ts:243
+    // tests/approvals/box-proxies.algo.ts:255
     // test(key: { a: uint64; b: uint64 }, val: string) {
     pushint 1 // 1
     return
 
 main_bare_routing@6:
-    // tests/approvals/box-proxies.algo.ts:240
+    // tests/approvals/box-proxies.algo.ts:252
     // class CompositeKeyTest extends Contract {
     txn OnCompletion
     bnz main_after_if_else@10

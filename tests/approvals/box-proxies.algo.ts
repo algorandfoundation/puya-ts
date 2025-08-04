@@ -1,10 +1,22 @@
-import type { Account, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, BaseContract, Box, BoxMap, BoxRef, Bytes, Contract, Txn } from '@algorandfoundation/algorand-typescript'
-import type { Bool, DynamicArray, StaticArray, Tuple, Uint32 } from '@algorandfoundation/algorand-typescript/arc4'
+import type { Account, bytes, FixedArray, uint64 } from '@algorandfoundation/algorand-typescript'
+import {
+  assert,
+  BaseContract,
+  Box,
+  BoxMap,
+  BoxRef,
+  Bytes,
+  clone,
+  Contract,
+  ensureBudget,
+  Txn,
+} from '@algorandfoundation/algorand-typescript'
+import type { Address, Bool, DynamicArray, StaticArray, Tuple, Uint32 } from '@algorandfoundation/algorand-typescript/arc4'
 import { Uint8 } from '@algorandfoundation/algorand-typescript/arc4'
 import { itob } from '@algorandfoundation/algorand-typescript/op'
 
 const boxA = Box<string>({ key: Bytes('A') })
+
 function testBox(box: Box<string>, value: string) {
   box.value = value
   boxA.value = value
@@ -242,5 +254,33 @@ class CompositeKeyTest extends Contract {
 
   test(key: { a: uint64; b: uint64 }, val: string) {
     this.boxMap(key).value = val
+  }
+}
+
+type Info = {
+  account: Address
+  balance: uint64
+  totalRewarded: uint64
+  rewardTokenBalance: uint64
+  entryRound: uint64
+}
+
+export class LargeBox extends Contract {
+  box = Box<FixedArray<Info, 200>>({ key: 'large' })
+
+  test() {
+    ensureBudget(7000)
+    this.box.create()
+    assert(this.box.length === 200 * 64, 'Box should be created with the correct size')
+    assert(this.box.value.length === 200, 'Box value should be an array of 200 items')
+    for (const [index, v] of this.box.value.entries()) {
+      const x = clone(v)
+
+      x.balance = index + 10
+
+      this.box.value[index] = clone(x)
+
+      assert(this.box.value[index].balance === index + 10)
+    }
   }
 }

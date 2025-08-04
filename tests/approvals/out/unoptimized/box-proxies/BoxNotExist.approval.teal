@@ -8,7 +8,7 @@ main:
     intc_0 // 0
 
 main_block@0:
-    // tests/approvals/box-proxies.algo.ts:113
+    // tests/approvals/box-proxies.algo.ts:125
     // if (Txn.applicationId.id !== 0) {
     txn ApplicationID
     intc_0 // 0
@@ -16,17 +16,17 @@ main_block@0:
     bz main_after_if_else@11
 
 main_if_body@1:
-    // tests/approvals/box-proxies.algo.ts:114
+    // tests/approvals/box-proxies.algo.ts:126
     // switch (Txn.applicationArgs(0).toString()) {
     intc_0 // 0
     txnas ApplicationArgs
     dup
     bury 2
-    // tests/approvals/box-proxies.algo.ts:115
+    // tests/approvals/box-proxies.algo.ts:127
     // case 'box':
     pushbytes "box"
     ==
-    // tests/approvals/box-proxies.algo.ts:115-116
+    // tests/approvals/box-proxies.algo.ts:127-128
     // case 'box':
     //   return Box<boolean>({ key: 'abc' }).value
     bz main_after_if_else@4
@@ -34,7 +34,7 @@ main_if_body@1:
 main_if_body@2:
 
 main_block@3:
-    // tests/approvals/box-proxies.algo.ts:116
+    // tests/approvals/box-proxies.algo.ts:128
     // return Box<boolean>({ key: 'abc' }).value
     bytec_0 // "abc"
     box_get
@@ -43,12 +43,12 @@ main_block@3:
     return
 
 main_after_if_else@4:
-    // tests/approvals/box-proxies.algo.ts:117
+    // tests/approvals/box-proxies.algo.ts:129
     // case 'boxmap':
     dup
     pushbytes "boxmap"
     ==
-    // tests/approvals/box-proxies.algo.ts:117-118
+    // tests/approvals/box-proxies.algo.ts:129-130
     // case 'boxmap':
     //   return BoxMap<string, boolean>({ keyPrefix: 'a' })('bc').value
     bz main_after_if_else@7
@@ -56,7 +56,7 @@ main_after_if_else@4:
 main_if_body@5:
 
 main_block@6:
-    // tests/approvals/box-proxies.algo.ts:118
+    // tests/approvals/box-proxies.algo.ts:130
     // return BoxMap<string, boolean>({ keyPrefix: 'a' })('bc').value
     pushbytes "a"
     pushbytes "bc"
@@ -67,12 +67,12 @@ main_block@6:
     return
 
 main_after_if_else@7:
-    // tests/approvals/box-proxies.algo.ts:119
+    // tests/approvals/box-proxies.algo.ts:131
     // case 'createbox':
     dup
     pushbytes "createbox"
     ==
-    // tests/approvals/box-proxies.algo.ts:119-121
+    // tests/approvals/box-proxies.algo.ts:131-133
     // case 'createbox':
     //   Box<boolean>({ key: 'abc' }).value = true
     //   return true
@@ -81,14 +81,14 @@ main_after_if_else@7:
 main_if_body@8:
 
 main_block@9:
-    // tests/approvals/box-proxies.algo.ts:120
+    // tests/approvals/box-proxies.algo.ts:132
     // Box<boolean>({ key: 'abc' }).value = true
     intc_1 // 1
     itob
     bytec_0 // "abc"
     swap
     box_put
-    // tests/approvals/box-proxies.algo.ts:121
+    // tests/approvals/box-proxies.algo.ts:133
     // return true
     intc_1 // 1
     return
@@ -96,7 +96,7 @@ main_block@9:
 main_after_if_else@10:
 
 main_after_if_else@11:
-    // tests/approvals/box-proxies.algo.ts:124
+    // tests/approvals/box-proxies.algo.ts:136
     // return true
     intc_1 // 1
     return
