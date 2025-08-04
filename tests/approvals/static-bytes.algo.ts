@@ -63,6 +63,12 @@ class StaticBytesAlgo extends Contract {
     let y: bytes
     const x: bytes<32> = (y = Txn.sender.bytes)
   }
+
+  test4() {
+    const b: bytes = Txn.sender.bytes
+    const addr = Bytes<32>(b)
+    assert(addr.length === 32)
+  }
 }
 
 type B<T extends uint64> = bytes<T>

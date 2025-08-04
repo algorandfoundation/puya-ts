@@ -5,10 +5,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@1: // L16
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
-        goto tmp%1#0 ? block@2 : block@13
+        goto tmp%1#0 ? block@2 : block@14
     block@2: // abi_routing_L16
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "hashAddresses(byte[32],byte[32])byte[32]" => block@3, method "receiveB32(byte[32])byte[32]" => block@4, method "receiveBytes(byte[],uint64)void" => block@5, method "returnLength(byte[32])uint64" => block@6, method "test()void" => block@7, method "testArray()void" => block@8, method "test2()byte[]" => block@9, method "test3()void" => block@10, * => block@11}
+        switch tmp%2#0 {method "hashAddresses(byte[32],byte[32])byte[32]" => block@3, method "receiveB32(byte[32])byte[32]" => block@4, method "receiveBytes(byte[],uint64)void" => block@5, method "returnLength(byte[32])uint64" => block@6, method "test()void" => block@7, method "testArray()void" => block@8, method "test2()byte[]" => block@9, method "test3()void" => block@10, method "test4()void" => block@11, * => block@12}
     block@3: // hashAddresses_route_L17
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
@@ -29,7 +29,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%11#0: bytes = (concat 0x151f7c75 tmp%10#0)
         (log tmp%11#0)
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#0: bool = 1u
-        goto block@18
+        goto block@19
     block@4: // receiveB32_route_L21
         let tmp%12#0: uint64 = (txn OnCompletion)
         let tmp%13#0: bool = (== tmp%12#0 NoOp)
@@ -48,7 +48,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%19#0: bytes = (concat 0x151f7c75 tmp%18#0)
         (log tmp%19#0)
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#1: bool = 1u
-        goto block@18
+        goto block@19
     block@5: // receiveBytes_route_L25
         let tmp%20#0: uint64 = (txn OnCompletion)
         let tmp%21#0: bool = (== tmp%20#0 NoOp)
@@ -62,7 +62,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%25#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes(tmp%24#0, tmp%25#0)
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#2: bool = 1u
-        goto block@18
+        goto block@19
     block@6: // returnLength_route_L29
         let tmp%26#0: uint64 = (txn OnCompletion)
         let tmp%27#0: bool = (== tmp%26#0 NoOp)
@@ -79,7 +79,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%33#0: bytes = (concat 0x151f7c75 tmp%32#0)
         (log tmp%33#0)
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#3: bool = 1u
-        goto block@18
+        goto block@19
     block@7: // test_route_L33
         let tmp%34#0: uint64 = (txn OnCompletion)
         let tmp%35#0: bool = (== tmp%34#0 NoOp)
@@ -89,7 +89,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%37#0) // can only call when not creating
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test()
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#4: bool = 1u
-        goto block@18
+        goto block@19
     block@8: // testArray_route_L43
         let tmp%38#0: uint64 = (txn OnCompletion)
         let tmp%39#0: bool = (== tmp%38#0 NoOp)
@@ -99,7 +99,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%41#0) // can only call when not creating
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray()
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#5: bool = 1u
-        goto block@18
+        goto block@19
     block@9: // test2_route_L52
         let tmp%42#0: uint64 = (txn OnCompletion)
         let tmp%43#0: bool = (== tmp%42#0 NoOp)
@@ -117,7 +117,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%48#0: bytes = (concat 0x151f7c75 tmp%47#0)
         (log tmp%48#0)
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#6: bool = 1u
-        goto block@18
+        goto block@19
     block@10: // test3_route_L62
         let tmp%49#0: uint64 = (txn OnCompletion)
         let tmp%50#0: bool = (== tmp%49#0 NoOp)
@@ -127,30 +127,40 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%52#0) // can only call when not creating
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test3()
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#7: bool = 1u
-        goto block@18
-    block@11: // switch_case_default_L16
-        goto block@12
-    block@12: // switch_case_next_L16
-        goto block@17
-    block@13: // bare_routing_L16
+        goto block@19
+    block@11: // test4_route_L67
         let tmp%53#0: uint64 = (txn OnCompletion)
-        switch tmp%53#0 {0u => block@14, * => block@15}
-    block@14: // __algots__.defaultCreate_L16
-        let tmp%54#0: uint64 = (txn ApplicationID)
-        let tmp%55#0: bool = (== tmp%54#0 0u)
-        (assert tmp%55#0) // can only call when creating
-        tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__algots__.defaultCreate()
+        let tmp%54#0: bool = (== tmp%53#0 NoOp)
+        (assert tmp%54#0) // OnCompletion is not NoOp
+        let tmp%55#0: uint64 = (txn ApplicationID)
+        let tmp%56#0: bool = (!= tmp%55#0 0u)
+        (assert tmp%56#0) // can only call when not creating
+        tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4()
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#8: bool = 1u
+        goto block@19
+    block@12: // switch_case_default_L16
+        goto block@13
+    block@13: // switch_case_next_L16
         goto block@18
-    block@15: // switch_case_default_L16
-        goto block@16
-    block@16: // switch_case_next_L16
+    block@14: // bare_routing_L16
+        let tmp%57#0: uint64 = (txn OnCompletion)
+        switch tmp%57#0 {0u => block@15, * => block@16}
+    block@15: // __algots__.defaultCreate_L16
+        let tmp%58#0: uint64 = (txn ApplicationID)
+        let tmp%59#0: bool = (== tmp%58#0 0u)
+        (assert tmp%59#0) // can only call when creating
+        tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__algots__.defaultCreate()
+        let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#9: bool = 1u
+        goto block@19
+    block@16: // switch_case_default_L16
         goto block@17
-    block@17: // after_if_else_L16
-        let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#9: bool = 0u
+    block@17: // switch_case_next_L16
         goto block@18
-    block@18: // after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#6 <- block@9, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#7 <- block@10, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#8 <- block@14, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#9 <- block@17)
+    block@18: // after_if_else_L16
+        let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#10: bool = 0u
+        goto block@19
+    block@19: // after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#6 <- block@9, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#7 <- block@10, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#8 <- block@11, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#9 <- block@15, tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#10 <- block@18)
         return tmp%0#0
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses(a1: bytes[32], a2: bytes[32]) -> bytes[32]:
@@ -266,6 +276,20 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2() -> byte
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test3() -> void:
     block@0: // L62
+        return 
+
+subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4() -> void:
+    block@0: // L67
+        let reinterpret_bytes[32]%0#0: bytes[32] = (txn Sender)
+        let b#0: bytes = reinterpret_bytes[32]%0#0
+        let reinterpret_bytes[32]%1#0: bytes[32] = b#0
+        let tmp%0#0: uint64 = (len b#0)
+        let tmp%1#0: bool = (== tmp%0#0 32u)
+        (assert tmp%1#0) // Length must be 32
+        let addr#0: bytes[32] = reinterpret_bytes[32]%1#0
+        let tmp%2#0: uint64 = (len addr#0)
+        let tmp%3#0: bool = (== tmp%2#0 32u)
+        (assert tmp%3#0)
         return 
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__algots__.defaultCreate() -> void:

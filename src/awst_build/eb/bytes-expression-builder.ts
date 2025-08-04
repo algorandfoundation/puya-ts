@@ -136,7 +136,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
     } else if (initialValue.ptype.equals(stringPType)) {
       bytesBuilder = initialValue.toBytes(sourceLocation)
     } else if (initialValue.ptype.equals(bytesPType)) {
-      return initialValue
+      bytesBuilder = initialValue
     } else {
       if (isStaticallyIterable(initialValue)) {
         const bytes: number[] = []

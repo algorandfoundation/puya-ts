@@ -10,15 +10,26 @@ main:
     // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@13
-    pushbytess 0x25bb3465 0x63fbedbe 0x5c6f499c 0xd71280ea 0xa78000de 0xb976788f 0x9d52c38f 0xdf920f37 // method "hashAddresses(byte[32],byte[32])byte[32]", method "receiveB32(byte[32])byte[32]", method "receiveBytes(byte[],uint64)void", method "returnLength(byte[32])uint64", method "test()void", method "testArray()void", method "test2()byte[]", method "test3()void"
+    bz main_bare_routing@14
+    pushbytess 0x25bb3465 0x63fbedbe 0x5c6f499c 0xd71280ea 0xa78000de 0xb976788f 0x9d52c38f 0xdf920f37 0x3d46345c // method "hashAddresses(byte[32],byte[32])byte[32]", method "receiveB32(byte[32])byte[32]", method "receiveBytes(byte[],uint64)void", method "returnLength(byte[32])uint64", method "test()void", method "testArray()void", method "test2()byte[]", method "test3()void", method "test4()void"
     txna ApplicationArgs 0
-    match main_hashAddresses_route@3 main_receiveB32_route@4 main_receiveBytes_route@5 main_returnLength_route@6 main_test_route@7 main_testArray_route@8 main_test2_route@9 main_test3_route@10
+    match main_hashAddresses_route@3 main_receiveB32_route@4 main_receiveBytes_route@5 main_returnLength_route@6 main_test_route@7 main_testArray_route@8 main_test2_route@9 main_test3_route@10 main_test4_route@11
 
-main_after_if_else@17:
+main_after_if_else@18:
     // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     intc_1 // 0
+    return
+
+main_test4_route@11:
+    // tests/approvals/static-bytes.algo.ts:67
+    // test4() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    intc_0 // 1
     return
 
 main_test3_route@10:
@@ -49,13 +60,13 @@ main_test2_route@9:
     intc_1 // 0
     bury 1
 
-main_while_top@24:
+main_while_top@27:
     // tests/approvals/static-bytes.algo.ts:55
     // for (let i: uint64 = 0; i < 5; i = i + 1) {
     dup
     pushint 5 // 5
     <
-    bz main_after_while@26
+    bz main_after_while@29
     // tests/approvals/static-bytes.algo.ts:56
     // result = op.sha256(op.concat(result, result))
     dig 1
@@ -69,9 +80,9 @@ main_while_top@24:
     intc_0 // 1
     +
     bury 1
-    b main_while_top@24
+    b main_while_top@27
 
-main_after_while@26:
+main_after_while@29:
     // tests/approvals/static-bytes.algo.ts:52
     // test2() {
     dig 1
@@ -241,11 +252,11 @@ main_hashAddresses_route@3:
     intc_0 // 1
     return
 
-main_bare_routing@13:
+main_bare_routing@14:
     // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@17
+    bnz main_after_if_else@18
     txn ApplicationID
     !
     assert // can only call when creating
