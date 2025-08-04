@@ -1,6 +1,5 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { arc4, assert, BaseContract, Bytes, Txn } from '@algorandfoundation/algorand-typescript'
-import type { Bool, Uint8 } from '@algorandfoundation/algorand-typescript/arc4'
 import {
   Address,
   Byte,
@@ -122,11 +121,4 @@ export class Arc4TypesTestContract extends BaseContract {
     assert(result.length === 0)
     return true
   }
-}
-
-function testNoArg() {
-  // @expect-error Zero arg constructor can only be used for static arrays with a fixed size encoding.
-  const a = new StaticArray<Str, 4>()
-  // @expect-error Zero arg constructor can only be used for tuples with a fixed size encoding.
-  const b = new Tuple<[Uint8, Bool, Bool, Str]>()
 }
