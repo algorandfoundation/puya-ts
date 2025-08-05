@@ -1,19 +1,19 @@
 main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
-    block@0: // L99
+    block@0: // L111
         let tmp%0#0: uint64 = (txn ApplicationID)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@2
-    block@1: // if_body_L100
+    block@1: // if_body_L112
         tests/approvals/box-proxies.algo.ts::testBox("one", "aaaaaargh")
         let tmp%2#0: bytes[8] = (itob 256456u)
         tests/approvals/box-proxies.algo.ts::testBoxMap("two", "what?", tmp%2#0)
         tests/approvals/box-proxies.algo.ts::testBoxRef("three", 99u)
         goto block@2
-    block@2: // after_if_else_L100
+    block@2: // after_if_else_L112
         return 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::testBox(box: bytes, value: string) -> void:
-    block@0: // L8
+    block@0: // L20
         (box_del box#0)
         (box_put box#0 value#0)
         (box_del "A")
@@ -32,16 +32,16 @@ subroutine tests/approvals/box-proxies.algo.ts::testBox(box: bytes, value: strin
         (assert tmp%2#0)
         let (_%0#0: uint64, maybe_exists%0#0: bool) = (box_len box#0)
         goto maybe_exists%0#0 ? block@1 : block@3
-    block@1: // and_contd_L17
+    block@1: // and_contd_L29
         let (_%1#0: uint64, maybe_exists%1#0: bool) = (box_len "A")
         goto maybe_exists%1#0 ? block@2 : block@3
-    block@2: // bool_true_L17
+    block@2: // bool_true_L29
         let and_result%0#0: bool = 1u
         goto block@4
-    block@3: // bool_false_L17
+    block@3: // bool_false_L29
         let and_result%0#1: bool = 0u
         goto block@4
-    block@4: // bool_merge_L17
+    block@4: // bool_merge_L29
         let and_result%0#2: bool = φ(and_result%0#0 <- block@2, and_result%0#1 <- block@3)
         (assert and_result%0#2)
         let (value%0#0: uint64, check%0#0: bool) = (box_len box#0)
@@ -55,16 +55,16 @@ subroutine tests/approvals/box-proxies.algo.ts::testBox(box: bytes, value: strin
         (assert isBoxADeleted#0) // delete failed
         let (_%2#0: uint64, maybe_exists%2#0: bool) = (box_len box#0)
         goto maybe_exists%2#0 ? block@7 : block@5
-    block@5: // and_contd_L24
+    block@5: // and_contd_L36
         let (_%3#0: uint64, maybe_exists%3#0: bool) = (box_len "A")
         goto maybe_exists%3#0 ? block@7 : block@6
-    block@6: // bool_true_L24
+    block@6: // bool_true_L36
         let and_result%1#0: bool = 1u
         goto block@8
-    block@7: // bool_false_L24
+    block@7: // bool_false_L36
         let and_result%1#1: bool = 0u
         goto block@8
-    block@8: // bool_merge_L24
+    block@8: // bool_merge_L36
         let and_result%1#2: bool = φ(and_result%1#0 <- block@6, and_result%1#1 <- block@7)
         (assert and_result%1#2)
         let (maybe_value%0#0: bytes, maybe_exists%4#0: bool) = (box_get "A")
@@ -85,7 +85,7 @@ subroutine tests/approvals/box-proxies.algo.ts::testBox(box: bytes, value: strin
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::testBoxMap(box: bytes, key: string, value: bytes) -> void:
-    block@0: // L38
+    block@0: // L50
         let box_prefixed_key%0#0: bytes = (concat box#0 key#0)
         (box_del box_prefixed_key%0#0)
         (box_put box_prefixed_key%0#0 value#0)
@@ -137,36 +137,36 @@ subroutine tests/approvals/box-proxies.algo.ts::testBoxMap(box: bytes, key: stri
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::testBoxRef(box: bytes, length: uint64) -> void:
-    block@0: // L63
+    block@0: // L75
         let tmp%0#0: bool = (== box#0 "three")
         (assert tmp%0#0)
         let tmp%1#0: bool = (== "abc" "abc")
         (assert tmp%1#0)
         let (_%0#0: uint64, maybe_exists%0#0: bool) = (box_len "abc")
         goto maybe_exists%0#0 ? block@2 : block@1
-    block@1: // if_body_L67
+    block@1: // if_body_L79
         (box_create "abc" 1000u)
         goto block@5
-    block@2: // else_body_L69
+    block@2: // else_body_L81
         let (value%0#0: uint64, check%0#0: bool) = (box_len "abc")
         (assert check%0#0) // Box must have value
         let tmp%2#0: bool = (!= value%0#0 length#0)
         goto tmp%2#0 ? block@3 : block@4
-    block@3: // if_body_L69
+    block@3: // if_body_L81
         (box_resize "abc" length#0)
         goto block@4
-    block@4: // after_if_else_L69
+    block@4: // after_if_else_L81
         goto block@5
-    block@5: // after_if_else_L67
+    block@5: // after_if_else_L79
         let (_%1#0: uint64, maybe_exists%1#0: bool) = (box_len box#0)
         goto maybe_exists%1#0 ? block@6 : block@7
-    block@6: // if_body_L72
+    block@6: // if_body_L84
         (box_resize box#0 4u)
         goto block@8
-    block@7: // else_body_L74
+    block@7: // else_body_L86
         (box_create box#0 4u)
         goto block@8
-    block@8: // after_if_else_L72
+    block@8: // after_if_else_L84
         (box_put box#0 0xffffffff)
         let (maybe_value%0#0: bytes, maybe_exists%2#0: bool) = (box_get box#0)
         let state_get%0#0: bytes = (select 0x maybe_value%0#0 maybe_exists%2#0)

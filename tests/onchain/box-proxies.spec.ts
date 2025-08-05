@@ -4,7 +4,7 @@ import { bigIntToUint8Array, invariant, utf8ToUint8Array } from '../../src/util'
 import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
 
 describe('BoxProxies', () => {
-  const test = createBaseTestFixture('tests/approvals/box-proxies.algo.ts', ['BoxContract', 'BoxNotExist'])
+  const test = createBaseTestFixture('tests/approvals/box-proxies.algo.ts', ['BoxContract', 'BoxNotExist', 'LargeBox'])
 
   test('Should run', async ({ BoxContractInvoker, algorand, testAccount }) => {
     const created = await BoxContractInvoker.send()
@@ -94,5 +94,29 @@ describe('BoxProxies', () => {
       args: [{ a: 1, b: 2 }, 'value'],
       boxReferences: [bigIntToUint8Array(1n << (8n + 2n), 16)],
     })
+  })
+})
+
+const APPROVE = new Uint8Array([0x09, 0x81, 0x01])
+
+describe('LargeBox', () => {
+  const test = createArc4TestFixture('tests/approvals/box-proxies.algo.ts', { LargeBox: { funding: algos(6) } })
+
+  test('should work with large boxes', async ({ appClientLargeBox, algorand, testAccount }) => {
+    const call = await appClientLargeBox.createTransaction.call({
+      method: 'test',
+      boxReferences: ['large', ...Array(7).fill('')],
+      extraFee: algos(1),
+    })
+    await algorand
+      .newGroup()
+      .addAppCreate({
+        approvalProgram: APPROVE,
+        clearStateProgram: APPROVE,
+        sender: testAccount.addr,
+        boxReferences: Array(5).fill(''),
+      })
+      .addTransaction(call.transactions[0])
+      .send()
   })
 })

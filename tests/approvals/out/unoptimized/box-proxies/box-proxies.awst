@@ -298,3 +298,38 @@ contract CompositeKeyTest
   }
   
 }
+contract LargeBox
+{
+  boxes {
+    ["large"]: arc4.static_array<tests/approvals/box-proxies.algo.ts::Info>
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(): void
+  {
+    ensure_budget(7000, 0)
+    box_create("large", size_of(arc4.static_array<tests/approvals/box-proxies.algo.ts::Info>))
+    assert(checked_maybe(box_len("large"), comment=Box must have value) == 12800, comment=Box should be created with the correct size)
+    assert(Box["large"].value.length == 200, comment=Box value should be an array of 200 items)
+    for (temp in enumerate(Box["large"].value)) {
+      #[index, v]: readonly [uint64, tests/approvals/box-proxies.algo.ts::Info] = #[($9 = copy(temp)).0, $9.1]
+      x: tests/approvals/box-proxies.algo.ts::Info = copy(v)
+      x.balance: uint64 = index + 10
+      Box["large"].value[index]: tests/approvals/box-proxies.algo.ts::Info = copy(x)
+      assert(Box["large"].value[index].balance == index + 10)
+    }
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
