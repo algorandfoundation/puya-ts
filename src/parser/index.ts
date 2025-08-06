@@ -22,6 +22,7 @@ export function createTsProgram(options: Pick<CompileOptions, 'filePaths'>): Cre
     libReplacement: false,
     target: ts.ScriptTarget.ES2023,
     module: ts.ModuleKind.ESNext,
+    types: [],
     moduleResolution: ts.ModuleResolutionKind.Bundler,
   }
 
