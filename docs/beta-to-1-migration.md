@@ -126,51 +126,51 @@ function reflectAllPay(pay: gtxn.PaymentTxn) {
 
 ### Application, Asset and Account arguments are now passed by their uint64 id (Application and Asset) or bytes[32] address (Account) by default
 
-`resourceEncoding: 'Index' | 'Value'` option is added to `@abimethod` decorator config with `value` as default. Use `Index` for those methods which need to preserve the previous behaviour.
+`resourceEncoding: 'index' | 'value'` option is added to `@abimethod` decorator config with `value` as default. Use `index` for those methods which need to preserve the previous behaviour.
 
 ```typescript
 /**** Before (puya-ts beta) ****/
 test(asset: Asset, app: Application, acc: Account) {
   const assetIdx = op.btoi(Txn.applicationArgs(1))
-  assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by Index')
+  assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by index')
 
   const appIdx = op.btoi(Txn.applicationArgs(2))
-  assert(app === Txn.applications(appIdx), 'expected application to be passed by Index')
+  assert(app === Txn.applications(appIdx), 'expected application to be passed by index')
 
   const accIdx = op.btoi(Txn.applicationArgs(3))
-  assert(acc === Txn.accounts(accIdx), 'expected account to be passed by Index')
+  assert(acc === Txn.accounts(accIdx), 'expected account to be passed by index')
 
   return [assetIdx, appIdx, accIdx] as const
 }
 
 
 /**** After (puya-ts 1.0) ****/
-// use `Index` resource encoding to keep old behaviour
-@abimethod({ resourceEncoding: 'Index' })
+// use `index` resource encoding to keep old behaviour
+@abimethod({ resourceEncoding: 'index' })
 test(asset: Asset, app: Application, acc: Account) {
   const assetIdx = op.btoi(Txn.applicationArgs(1))
-  assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by Index')
+  assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by index')
 
   const appIdx = op.btoi(Txn.applicationArgs(2))
-  assert(app === Txn.applications(appIdx), 'expected application to be passed by Index')
+  assert(app === Txn.applications(appIdx), 'expected application to be passed by index')
 
   const accIdx = op.btoi(Txn.applicationArgs(3))
-  assert(acc === Txn.accounts(accIdx), 'expected account to be passed by Index')
+  assert(acc === Txn.accounts(accIdx), 'expected account to be passed by index')
 
   return [assetIdx, appIdx, accIdx] as const
 }
 
-// or update the implementation to use default `Value` resource encoding
+// or update the implementation to use default `value` resource encoding
 
 test(asset: Asset, app: Application, acc: Account): [Asset, Application, Account] {
   const assetId = op.btoi(Txn.applicationArgs(1))
-  assert(asset === Asset(assetId), 'expected asset to be passed by Value')
+  assert(asset === Asset(assetId), 'expected asset to be passed by value')
 
   const appId = op.btoi(Txn.applicationArgs(2))
-  assert(app === Application(appId), 'expected application to be passed by Value')
+  assert(app === Application(appId), 'expected application to be passed by value')
 
   const address = Txn.applicationArgs(3)
-  assert(acc === Account(address), 'expected account to be passed by Value')
+  assert(acc === Account(address), 'expected account to be passed by value')
 
   return [asset, app, acc]
 }
