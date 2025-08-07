@@ -62,22 +62,22 @@ contract EchoResource
   echoResourceByIndex(asset: asset, app: application, acc: account): arc4.tuple<asset,application,account>
   {
     assetIdx: uint64 = btoi(txnas<ApplicationArgs>(1))
-    assert(asset == txnas<Assets>(assetIdx), comment=expected asset to be passed by Index)
+    assert(asset == txnas<Assets>(assetIdx), comment=expected asset to be passed by index)
     appIdx: uint64 = btoi(txnas<ApplicationArgs>(2))
-    assert(app == txnas<Applications>(appIdx), comment=expected application to be passed by Index)
+    assert(app == txnas<Applications>(appIdx), comment=expected application to be passed by index)
     accIdx: uint64 = btoi(txnas<ApplicationArgs>(3))
-    assert(acc == txnas<Accounts>(accIdx), comment=expected account to be passed by Index)
+    assert(acc == txnas<Accounts>(accIdx), comment=expected account to be passed by index)
     return ARC4_ENCODE(#[asset, app, acc], wtype=arc4.tuple<asset,application,account>)
   }
   
   echoResourceByValue(asset: asset, app: application, acc: account): arc4.tuple<asset,application,account>
   {
     assetId: uint64 = btoi(txnas<ApplicationArgs>(1))
-    assert(asset == reinterpret_cast<asset>(assetId), comment=expected asset to be passed by Value)
+    assert(asset == reinterpret_cast<asset>(assetId), comment=expected asset to be passed by value)
     appId: uint64 = btoi(txnas<ApplicationArgs>(2))
-    assert(app == reinterpret_cast<application>(appId), comment=expected application to be passed by Value)
+    assert(app == reinterpret_cast<application>(appId), comment=expected application to be passed by value)
     address: bytes = txnas<ApplicationArgs>(3)
-    assert(acc == reinterpret_cast<account>(address), comment=expected account to be passed by Value)
+    assert(acc == reinterpret_cast<account>(address), comment=expected account to be passed by value)
     return ARC4_ENCODE(#[asset, app, acc], wtype=arc4.tuple<asset,application,account>)
   }
   

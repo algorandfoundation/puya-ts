@@ -31,8 +31,8 @@ const createMap: Record<string, ARC4CreateOption> = {
 }
 
 const resourceEncodingMap: Record<string, 'index' | 'value'> = {
-  Index: 'index',
-  Value: 'value',
+  index: 'index',
+  value: 'value',
 }
 
 export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {

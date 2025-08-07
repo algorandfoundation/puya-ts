@@ -14,7 +14,7 @@ import {
 import { abiCall, compileArc4 } from '@algorandfoundation/algorand-typescript/arc4'
 
 class ByIndex extends Contract {
-  @abimethod({ resourceEncoding: 'Index' })
+  @abimethod({ resourceEncoding: 'index' })
   testExplicitIndex(account: Account) {
     return account.balance
   }
@@ -29,32 +29,32 @@ class ByIndex extends Contract {
 }
 
 class ByValue extends Contract {
-  @abimethod({ resourceEncoding: 'Value' })
+  @abimethod({ resourceEncoding: 'value' })
   testExplicitValue(account: Account) {
     return account.balance
   }
 }
 
 class EchoResource extends Contract {
-  @abimethod({ resourceEncoding: 'Index' })
+  @abimethod({ resourceEncoding: 'index' })
   echoResourceByIndex(asset: Asset, app: Application, acc: Account): [Asset, Application, Account] {
     const assetIdx = op.btoi(Txn.applicationArgs(1))
-    assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by Index')
+    assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by index')
     const appIdx = op.btoi(Txn.applicationArgs(2))
-    assert(app === Txn.applications(appIdx), 'expected application to be passed by Index')
+    assert(app === Txn.applications(appIdx), 'expected application to be passed by index')
     const accIdx = op.btoi(Txn.applicationArgs(3))
-    assert(acc === Txn.accounts(accIdx), 'expected account to be passed by Index')
+    assert(acc === Txn.accounts(accIdx), 'expected account to be passed by index')
     return [asset, app, acc] as const
   }
 
-  @abimethod({ resourceEncoding: 'Value' })
+  @abimethod({ resourceEncoding: 'value' })
   echoResourceByValue(asset: Asset, app: Application, acc: Account): [Asset, Application, Account] {
     const assetId = op.btoi(Txn.applicationArgs(1))
-    assert(asset === Asset(assetId), 'expected asset to be passed by Value')
+    assert(asset === Asset(assetId), 'expected asset to be passed by value')
     const appId = op.btoi(Txn.applicationArgs(2))
-    assert(app === Application(appId), 'expected application to be passed by Value')
+    assert(app === Application(appId), 'expected application to be passed by value')
     const address = Txn.applicationArgs(3)
-    assert(acc === Account(address), 'expected account to be passed by Value')
+    assert(acc === Account(address), 'expected account to be passed by value')
     return [asset, app, acc]
   }
 }

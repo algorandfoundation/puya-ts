@@ -63,10 +63,10 @@ export type CreateOptions = 'allow' | 'disallow' | 'require'
 /**
  * The possible options for the resource encoding to use for the method
  *
- * Index: Application, Asset, and Account arguments are included in the transaction's relevant foreign array. The argument value is the uint8 index of the resource in the that array.
- * Value: Application, Asset and Account arguments are passed by their uint64 id (Application and Asset) or bytes[32] address (Account).
+ * index: Application, Asset, and Account arguments are included in the transaction's relevant foreign array. The argument value is the uint8 index of the resource in the that array.
+ * value: Application, Asset and Account arguments are passed by their uint64 id (Application and Asset) or bytes[32] address (Account).
  */
-export type ResourceEncodingOptions = 'Index' | 'Value'
+export type ResourceEncodingOptions = 'index' | 'value'
 
 /**
  * Type alias for a default argument schema
@@ -116,8 +116,8 @@ export type AbiMethodConfig<TContract extends Contract> = {
   /**
    * The resource encoding to use for this method. The default is 'value'
    *
-   * Index: Application, Asset, and Account arguments are included in the transaction's relevant foreign array. The argument value is the uint8 index of the resource in the that array.
-   * Value: Application, Asset and Account arguments are passed by their uint64 id (Application and Asset) or bytes[32] address (Account).
+   * index: Application, Asset, and Account arguments are included in the transaction's relevant foreign array. The argument value is the uint8 index of the resource in the that array.
+   * value: Application, Asset and Account arguments are passed by their uint64 id (Application and Asset) or bytes[32] address (Account).
    *
    * The resource must still be 'available' to this transaction but can take advantage of resource sharing within the transaction group.
    */

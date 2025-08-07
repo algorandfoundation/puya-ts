@@ -21,7 +21,7 @@ main_after_if_else@11:
 
 main_echoResourceByValue_route@4:
     // tests/approvals/resource-encoding.algo.ts:50
-    // @abimethod({ resourceEncoding: 'Value' })
+    // @abimethod({ resourceEncoding: 'value' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
@@ -35,7 +35,7 @@ main_echoResourceByValue_route@4:
     btoi
     txna ApplicationArgs 3
     // tests/approvals/resource-encoding.algo.ts:50
-    // @abimethod({ resourceEncoding: 'Value' })
+    // @abimethod({ resourceEncoding: 'value' })
     callsub echoResourceByValue
     bytec_0 // 0x151f7c75
     swap
@@ -46,7 +46,7 @@ main_echoResourceByValue_route@4:
 
 main_echoResourceByIndex_route@3:
     // tests/approvals/resource-encoding.algo.ts:39
-    // @abimethod({ resourceEncoding: 'Index' })
+    // @abimethod({ resourceEncoding: 'index' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
@@ -64,7 +64,7 @@ main_echoResourceByIndex_route@3:
     btoi
     txnas Accounts
     // tests/approvals/resource-encoding.algo.ts:39
-    // @abimethod({ resourceEncoding: 'Index' })
+    // @abimethod({ resourceEncoding: 'index' })
     callsub echoResourceByIndex
     bytec_0 // 0x151f7c75
     swap
@@ -88,7 +88,7 @@ main_bare_routing@7:
 // tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByIndex(asset: uint64, app: uint64, acc: bytes) -> bytes:
 echoResourceByIndex:
     // tests/approvals/resource-encoding.algo.ts:39-40
-    // @abimethod({ resourceEncoding: 'Index' })
+    // @abimethod({ resourceEncoding: 'index' })
     // echoResourceByIndex(asset: Asset, app: Application, acc: Account): [Asset, Application, Account] {
     proto 3 1
     // tests/approvals/resource-encoding.algo.ts:41
@@ -97,33 +97,33 @@ echoResourceByIndex:
     txnas ApplicationArgs
     btoi
     // tests/approvals/resource-encoding.algo.ts:42
-    // assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by Index')
+    // assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by index')
     txnas Assets
     frame_dig -3
     ==
-    assert // expected asset to be passed by Index
+    assert // expected asset to be passed by index
     // tests/approvals/resource-encoding.algo.ts:43
     // const appIdx = op.btoi(Txn.applicationArgs(2))
     intc_1 // 2
     txnas ApplicationArgs
     btoi
     // tests/approvals/resource-encoding.algo.ts:44
-    // assert(app === Txn.applications(appIdx), 'expected application to be passed by Index')
+    // assert(app === Txn.applications(appIdx), 'expected application to be passed by index')
     txnas Applications
     frame_dig -2
     ==
-    assert // expected application to be passed by Index
+    assert // expected application to be passed by index
     // tests/approvals/resource-encoding.algo.ts:45
     // const accIdx = op.btoi(Txn.applicationArgs(3))
     intc_2 // 3
     txnas ApplicationArgs
     btoi
     // tests/approvals/resource-encoding.algo.ts:46
-    // assert(acc === Txn.accounts(accIdx), 'expected account to be passed by Index')
+    // assert(acc === Txn.accounts(accIdx), 'expected account to be passed by index')
     txnas Accounts
     frame_dig -1
     ==
-    assert // expected account to be passed by Index
+    assert // expected account to be passed by index
     // tests/approvals/resource-encoding.algo.ts:47
     // return [asset, app, acc] as const
     frame_dig -3
@@ -139,7 +139,7 @@ echoResourceByIndex:
 // tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByValue(asset: uint64, app: uint64, acc: bytes) -> bytes:
 echoResourceByValue:
     // tests/approvals/resource-encoding.algo.ts:50-51
-    // @abimethod({ resourceEncoding: 'Value' })
+    // @abimethod({ resourceEncoding: 'value' })
     // echoResourceByValue(asset: Asset, app: Application, acc: Account): [Asset, Application, Account] {
     proto 3 1
     // tests/approvals/resource-encoding.algo.ts:52
@@ -148,29 +148,29 @@ echoResourceByValue:
     txnas ApplicationArgs
     btoi
     // tests/approvals/resource-encoding.algo.ts:53
-    // assert(asset === Asset(assetId), 'expected asset to be passed by Value')
+    // assert(asset === Asset(assetId), 'expected asset to be passed by value')
     frame_dig -3
     ==
-    assert // expected asset to be passed by Value
+    assert // expected asset to be passed by value
     // tests/approvals/resource-encoding.algo.ts:54
     // const appId = op.btoi(Txn.applicationArgs(2))
     intc_1 // 2
     txnas ApplicationArgs
     btoi
     // tests/approvals/resource-encoding.algo.ts:55
-    // assert(app === Application(appId), 'expected application to be passed by Value')
+    // assert(app === Application(appId), 'expected application to be passed by value')
     frame_dig -2
     ==
-    assert // expected application to be passed by Value
+    assert // expected application to be passed by value
     // tests/approvals/resource-encoding.algo.ts:56
     // const address = Txn.applicationArgs(3)
     intc_2 // 3
     txnas ApplicationArgs
     // tests/approvals/resource-encoding.algo.ts:57
-    // assert(acc === Account(address), 'expected account to be passed by Value')
+    // assert(acc === Account(address), 'expected account to be passed by value')
     frame_dig -1
     ==
-    assert // expected account to be passed by Value
+    assert // expected account to be passed by value
     // tests/approvals/resource-encoding.algo.ts:58
     // return [asset, app, acc]
     frame_dig -3
