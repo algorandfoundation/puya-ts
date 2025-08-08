@@ -7,7 +7,7 @@ main:
     // export class ReceivesReferenceTypes extends Contract {
     txn NumAppArgs
     bz main_bare_routing@6
-    pushbytes 0x833d1212 // method "receivesReferenceTypes(application,account,asset)void"
+    pushbytes 0x66698d18 // method "receivesReferenceTypes(uint64,address,uint64)void"
     txna ApplicationArgs 0
     match main_receivesReferenceTypes_route@3
 
@@ -19,7 +19,7 @@ main_after_if_else@10:
 
 main_receivesReferenceTypes_route@3:
     // tests/approvals/precompiled-apps.algo.ts:111
-    // @abimethod({ resourceEncoding: 'foreign_index' })
+    // receivesReferenceTypes(app: Application, acc: Account, asset: Asset) {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
@@ -29,15 +29,11 @@ main_receivesReferenceTypes_route@3:
     // export class ReceivesReferenceTypes extends Contract {
     txna ApplicationArgs 1
     btoi
-    txnas Applications
     txna ApplicationArgs 2
-    btoi
-    txnas Accounts
     txna ApplicationArgs 3
     btoi
-    txnas Assets
     // tests/approvals/precompiled-apps.algo.ts:111
-    // @abimethod({ resourceEncoding: 'foreign_index' })
+    // receivesReferenceTypes(app: Application, acc: Account, asset: Asset) {
     callsub receivesReferenceTypes
     pushint 1 // 1
     return
@@ -56,21 +52,20 @@ main_bare_routing@6:
 
 // tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes(app: uint64, acc: bytes, asset: uint64) -> void:
 receivesReferenceTypes:
-    // tests/approvals/precompiled-apps.algo.ts:111-112
-    // @abimethod({ resourceEncoding: 'foreign_index' })
+    // tests/approvals/precompiled-apps.algo.ts:111
     // receivesReferenceTypes(app: Application, acc: Account, asset: Asset) {
     proto 3 0
-    // tests/approvals/precompiled-apps.algo.ts:113
+    // tests/approvals/precompiled-apps.algo.ts:112
     // log(app.address)
     frame_dig -3
     app_params_get AppAddress
     assert // application exists
     log
-    // tests/approvals/precompiled-apps.algo.ts:114
+    // tests/approvals/precompiled-apps.algo.ts:113
     // log(acc.bytes)
     frame_dig -2
     log
-    // tests/approvals/precompiled-apps.algo.ts:115
+    // tests/approvals/precompiled-apps.algo.ts:114
     // log(asset.name)
     frame_dig -1
     asset_params_get AssetName

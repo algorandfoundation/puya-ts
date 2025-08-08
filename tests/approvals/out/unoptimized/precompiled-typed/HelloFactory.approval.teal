@@ -1352,7 +1352,7 @@ test_call_contract_with_reference_types_block@0:
     itxn_field ClearStateProgramPages
     bytec_0 // 0x
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiACAAExGyITQQA5NhoAgASDPRISTI4BAAIiQzEZIhJEMRgiE0Q2GgEXwDI2GgIXwBw2GgMXwDBPAk8CTwKIABsjQv/WMRkiTI4BAANC/8oxGCISRIgAFyNC/7+KAwCL/XIIRLCL/rCL/3EERLCJiQ==)
+    pushbytes base64(CiACAAExGyITQQAyNhoAgARmaY0YTI4BAAIiQzEZIhJEMRgiE0Q2GgEXNhoCNhoDF08CTwJPAogAGyNC/90xGSJMjgEAA0L/0TEYIhJEiAAXI0L/xooDAIv9cghEsIv+sIv/cQREsImJ)
     itxn_field ApprovalProgramPages
     bytec_0 // 0x
     itxn_field ApprovalProgramPages
@@ -1435,29 +1435,23 @@ test_call_contract_with_reference_types_next_txn@2:
     // tests/approvals/precompiled-typed.algo.ts:168
     // args: [Global.currentApplicationId, Txn.sender, asset],
     global CurrentApplicationID
-    swap
+    itob
     txn Sender
-    itxn_field Accounts
-    itxn_field Assets
-    itxn_field Applications
+    uncover 2
+    itob
+    uncover 2
+    swap
+    cover 2
     // tests/approvals/precompiled-typed.algo.ts:167-170
     // const result = compiled.call.receivesReferenceTypes({
     //   args: [Global.currentApplicationId, Txn.sender, asset],
     //   appId,
     // })
-    pushbytes 0x833d1212 // method "receivesReferenceTypes(application,account,asset)void"
+    pushbytes 0x66698d18 // method "receivesReferenceTypes(uint64,address,uint64)void"
     itxn_field ApplicationArgs
-    pushbytes 0x01
     itxn_field ApplicationArgs
-    pushbytes 0x01
     itxn_field ApplicationArgs
-    pushbytes 0x00
     itxn_field ApplicationArgs
-    // tests/approvals/precompiled-typed.algo.ts:167-170
-    // const result = compiled.call.receivesReferenceTypes({
-    //   args: [Global.currentApplicationId, Txn.sender, asset],
-    //   appId,
-    // })
     intc_0 // 0
     itxn_field OnCompletion
     itxn_field ApplicationID

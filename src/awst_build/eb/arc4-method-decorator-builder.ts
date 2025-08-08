@@ -30,8 +30,8 @@ const createMap: Record<string, ARC4CreateOption> = {
   disallow: ARC4CreateOption.disallow,
 }
 
-const resourceEncodingMap: Record<string, 'foreign_index' | 'value'> = {
-  foreign_index: 'foreign_index',
+const resourceEncodingMap: Record<string, 'index' | 'value'> = {
+  index: 'index',
   value: 'value',
 }
 

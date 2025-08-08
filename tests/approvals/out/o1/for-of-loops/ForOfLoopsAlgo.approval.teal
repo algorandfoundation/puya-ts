@@ -530,21 +530,14 @@ test_for_of_loop_native_mutable_array:
     // tests/approvals/for-of-loops.algo.ts:64
     // const mutable = new ReferenceArray(...items)
     frame_dig -1
-    intc_1 // 0
-    extract_uint64
+    extract 0 8
     frame_dig -1
-    intc_2 // 8
-    extract_uint64
+    extract 8 8
     frame_dig -1
-    pushint 16 // 16
-    extract_uint64
-    uncover 2
-    itob
-    uncover 2
-    itob
+    extract 16 8
+    cover 2
     concat
     swap
-    itob
     concat
     dup
     // tests/approvals/for-of-loops.algo.ts:65

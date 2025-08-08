@@ -4,19 +4,19 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('resource encoding', () => {
   const test = createArc4TestFixture('tests/approvals/resource-encoding.algo.ts', {
-    Foreign: {},
+    ByIndex: {},
     ByValue: {},
     C2C: { funding: algo(1) },
   })
 
-  test('foreign index', async ({ appClientForeign, localnet }) => {
+  test('index', async ({ appClientByIndex, localnet }) => {
     const newAccount = await localnet.context.generateAccount({ initialFunds: algo(5) })
     const balance = 5_000_000n
-    const res2 = await appClientForeign.send.call({ method: 'testExplicitForeign', args: [newAccount.addr.toString()] })
+    const res2 = await appClientByIndex.send.call({ method: 'testExplicitIndex', args: [newAccount.addr.toString()] })
     expect(res2.return).toStrictEqual(balance)
 
     await expect(
-      appClientForeign.send.call({
+      appClientByIndex.send.call({
         method: 'testImplicitValue',
         args: [newAccount.addr.toString()],
         accountReferences: [],
@@ -24,7 +24,7 @@ describe('resource encoding', () => {
       }),
     ).rejects.toThrow('invalid Account reference')
 
-    const res3 = await appClientForeign.send.call({
+    const res3 = await appClientByIndex.send.call({
       method: 'testImplicitValue',
       args: [newAccount.addr.toString()],
       accountReferences: [newAccount.addr.toString()],
@@ -33,12 +33,12 @@ describe('resource encoding', () => {
     expect(res3.return).toStrictEqual(balance)
   })
 
-  test('c2c', async ({ appClientForeign, appClientByValue, appClientC2C, localnet }) => {
+  test('c2c', async ({ appClientByIndex, appClientByValue, appClientC2C, localnet }) => {
     const newAccount = await localnet.context.generateAccount({ initialFunds: algo(5) })
 
     await appClientC2C.send.call({
-      method: 'testCallToForeign',
-      args: [newAccount.addr.toString(), appClientForeign.appId],
+      method: 'testCallToIndex',
+      args: [newAccount.addr.toString(), appClientByIndex.appId],
       extraFee: algo(1),
     })
     await appClientC2C.send.call({
