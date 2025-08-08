@@ -21908,17 +21908,24 @@
                                         {
                                           "_type": "ARC4UIntN",
                                           "arc4_alias": null,
-                                          "n": 8
+                                          "n": 64
+                                        },
+                                        {
+                                          "_type": "ARC4StaticArray",
+                                          "immutable": true,
+                                          "arc4_alias": "address",
+                                          "element_type": {
+                                            "_type": "ARC4UIntN",
+                                            "arc4_alias": "byte",
+                                            "n": 8
+                                          },
+                                          "source_location": null,
+                                          "array_size": 32
                                         },
                                         {
                                           "_type": "ARC4UIntN",
                                           "arc4_alias": null,
-                                          "n": 8
-                                        },
-                                        {
-                                          "_type": "ARC4UIntN",
-                                          "arc4_alias": null,
-                                          "n": 8
+                                          "n": 64
                                         }
                                       ]
                                     },
@@ -21936,87 +21943,10 @@
                                           "_type": "BytesWType",
                                           "length": 4
                                         },
-                                        "value": "receivesReferenceTypes(application,account,asset)void"
+                                        "value": "receivesReferenceTypes(uint64,address,uint64)void"
                                       },
                                       {
-                                        "_type": "IntegerConstant",
-                                        "source_location": {
-                                          "_type": "SourceLocation",
-                                          "file": null,
-                                          "line": 1,
-                                          "end_line": 1,
-                                          "column": 0,
-                                          "end_column": 1
-                                        },
-                                        "wtype": {
-                                          "_type": "ARC4UIntN",
-                                          "arc4_alias": null,
-                                          "n": 8
-                                        },
-                                        "value": 1,
-                                        "teal_alias": null
-                                      },
-                                      {
-                                        "_type": "IntegerConstant",
-                                        "source_location": {
-                                          "_type": "SourceLocation",
-                                          "file": null,
-                                          "line": 1,
-                                          "end_line": 1,
-                                          "column": 0,
-                                          "end_column": 1
-                                        },
-                                        "wtype": {
-                                          "_type": "ARC4UIntN",
-                                          "arc4_alias": null,
-                                          "n": 8
-                                        },
-                                        "value": 1,
-                                        "teal_alias": null
-                                      },
-                                      {
-                                        "_type": "IntegerConstant",
-                                        "source_location": {
-                                          "_type": "SourceLocation",
-                                          "file": null,
-                                          "line": 1,
-                                          "end_line": 1,
-                                          "column": 0,
-                                          "end_column": 1
-                                        },
-                                        "wtype": {
-                                          "_type": "ARC4UIntN",
-                                          "arc4_alias": null,
-                                          "n": 8
-                                        },
-                                        "value": 0,
-                                        "teal_alias": null
-                                      }
-                                    ]
-                                  },
-                                  "Applications": {
-                                    "_type": "TupleExpression",
-                                    "source_location": {
-                                      "file": "tests/approvals/precompiled-typed.algo.ts",
-                                      "line": 167,
-                                      "end_line": 170,
-                                      "column": 19,
-                                      "end_column": 6
-                                    },
-                                    "wtype": {
-                                      "_type": "WTuple",
-                                      "name": "tuple",
-                                      "types": [
-                                        {
-                                          "_type": "WType",
-                                          "name": "application",
-                                          "immutable": true
-                                        }
-                                      ]
-                                    },
-                                    "items": [
-                                      {
-                                        "_type": "IntrinsicCall",
+                                        "_type": "ARC4Encode",
                                         "source_location": {
                                           "file": "tests/approvals/precompiled-typed.algo.ts",
                                           "line": 168,
@@ -22025,80 +21955,34 @@
                                           "end_column": 40
                                         },
                                         "wtype": {
-                                          "_type": "WType",
-                                          "name": "application",
-                                          "immutable": true
+                                          "_type": "ARC4UIntN",
+                                          "arc4_alias": null,
+                                          "n": 64
                                         },
-                                        "op_code": "global",
-                                        "immediates": [
-                                          "CurrentApplicationID"
-                                        ],
-                                        "stack_args": []
-                                      }
-                                    ]
-                                  },
-                                  "Assets": {
-                                    "_type": "TupleExpression",
-                                    "source_location": {
-                                      "file": "tests/approvals/precompiled-typed.algo.ts",
-                                      "line": 167,
-                                      "end_line": 170,
-                                      "column": 19,
-                                      "end_column": 6
-                                    },
-                                    "wtype": {
-                                      "_type": "WTuple",
-                                      "name": "tuple",
-                                      "types": [
-                                        {
-                                          "_type": "WType",
-                                          "name": "asset",
-                                          "immutable": true
-                                        }
-                                      ]
-                                    },
-                                    "items": [
+                                        "value": {
+                                          "_type": "IntrinsicCall",
+                                          "source_location": {
+                                            "file": "tests/approvals/precompiled-typed.algo.ts",
+                                            "line": 168,
+                                            "end_line": 168,
+                                            "column": 20,
+                                            "end_column": 40
+                                          },
+                                          "wtype": {
+                                            "_type": "WType",
+                                            "name": "application",
+                                            "immutable": true
+                                          },
+                                          "op_code": "global",
+                                          "immediates": [
+                                            "CurrentApplicationID"
+                                          ],
+                                          "stack_args": []
+                                        },
+                                        "error_message": null
+                                      },
                                       {
-                                        "_type": "VarExpression",
-                                        "source_location": {
-                                          "file": "tests/approvals/precompiled-typed.algo.ts",
-                                          "line": 168,
-                                          "end_line": 168,
-                                          "column": 54,
-                                          "end_column": 59
-                                        },
-                                        "wtype": {
-                                          "_type": "WType",
-                                          "name": "asset",
-                                          "immutable": true
-                                        },
-                                        "name": "asset"
-                                      }
-                                    ]
-                                  },
-                                  "Accounts": {
-                                    "_type": "TupleExpression",
-                                    "source_location": {
-                                      "file": "tests/approvals/precompiled-typed.algo.ts",
-                                      "line": 167,
-                                      "end_line": 170,
-                                      "column": 19,
-                                      "end_column": 6
-                                    },
-                                    "wtype": {
-                                      "_type": "WTuple",
-                                      "name": "tuple",
-                                      "types": [
-                                        {
-                                          "_type": "WType",
-                                          "name": "account",
-                                          "immutable": true
-                                        }
-                                      ]
-                                    },
-                                    "items": [
-                                      {
-                                        "_type": "IntrinsicCall",
+                                        "_type": "ARC4Encode",
                                         "source_location": {
                                           "file": "tests/approvals/precompiled-typed.algo.ts",
                                           "line": 168,
@@ -22107,15 +21991,70 @@
                                           "end_column": 52
                                         },
                                         "wtype": {
-                                          "_type": "WType",
-                                          "name": "account",
-                                          "immutable": true
+                                          "_type": "ARC4StaticArray",
+                                          "immutable": true,
+                                          "arc4_alias": "address",
+                                          "element_type": {
+                                            "_type": "ARC4UIntN",
+                                            "arc4_alias": "byte",
+                                            "n": 8
+                                          },
+                                          "source_location": null,
+                                          "array_size": 32
                                         },
-                                        "op_code": "txn",
-                                        "immediates": [
-                                          "Sender"
-                                        ],
-                                        "stack_args": []
+                                        "value": {
+                                          "_type": "IntrinsicCall",
+                                          "source_location": {
+                                            "file": "tests/approvals/precompiled-typed.algo.ts",
+                                            "line": 168,
+                                            "end_line": 168,
+                                            "column": 46,
+                                            "end_column": 52
+                                          },
+                                          "wtype": {
+                                            "_type": "WType",
+                                            "name": "account",
+                                            "immutable": true
+                                          },
+                                          "op_code": "txn",
+                                          "immediates": [
+                                            "Sender"
+                                          ],
+                                          "stack_args": []
+                                        },
+                                        "error_message": null
+                                      },
+                                      {
+                                        "_type": "ARC4Encode",
+                                        "source_location": {
+                                          "file": "tests/approvals/precompiled-typed.algo.ts",
+                                          "line": 168,
+                                          "end_line": 168,
+                                          "column": 54,
+                                          "end_column": 59
+                                        },
+                                        "wtype": {
+                                          "_type": "ARC4UIntN",
+                                          "arc4_alias": null,
+                                          "n": 64
+                                        },
+                                        "value": {
+                                          "_type": "VarExpression",
+                                          "source_location": {
+                                            "file": "tests/approvals/precompiled-typed.algo.ts",
+                                            "line": 168,
+                                            "end_line": 168,
+                                            "column": 54,
+                                            "end_column": 59
+                                          },
+                                          "wtype": {
+                                            "_type": "WType",
+                                            "name": "asset",
+                                            "immutable": true
+                                          },
+                                          "name": "asset"
+                                        },
+                                        "error_message": null
                                       }
                                     ]
                                   }

@@ -108,7 +108,6 @@ export class ReceivesTxns extends Contract {
 }
 
 export class ReceivesReferenceTypes extends Contract {
-  @abimethod({ resourceEncoding: 'index' })
   receivesReferenceTypes(app: Application, acc: Account, asset: Asset) {
     log(app.address)
     log(acc.bytes)

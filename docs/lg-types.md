@@ -175,7 +175,7 @@ const account = Account('A7NMWS3NT3IUDMLVO26ULGXGIIOUQ3ND2TXSER6EBGRZNOBOUIQXHIB
 const account2 = Account(Bytes.fromHex('07DACB4B6D9ED141B17576BD459AE6421D486DA3D4EF2247C409A396B82EA221')) // Create from account public key bytes
 ```
 
-They can also be used in ABI method parameters where they will be created referencing the relevant `foreign_*` array on the transaction. See [ARC4 reference types](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md#reference-types)
+They can also be used in ABI method parameters where they will be created referencing the relevant array on the transaction. See [ARC4 reference types](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md#reference-types)
 
 ### Group Transactions
 
