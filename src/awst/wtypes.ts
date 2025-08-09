@@ -93,7 +93,6 @@ export namespace wtypes {
         name: props.name ?? 'tuple',
         immutable: true,
       })
-      invariant(props.types.length, 'Tuple length cannot be zero')
       this.types = props.types
       if (props.names) {
         invariant(props.names.length === props.types.length, 'If names is provided, length must match types')
