@@ -5,15 +5,20 @@
 main:
     intcblock 0 1
     bytecblock 0x151f7c75 "common"
+    pushbytes ""
+    b main_block@0
 
 main_block@0:
     txn ApplicationID
     bnz main_after_if_else@2
+    b main_if_body@1
 
 main_if_body@1:
     callsub constructor
+    b main_after_if_else@2
 
 main_after_if_else@2:
+    b main_block@3
 
 main_block@3:
     // tests/approvals/multi-inheritance.algo.ts:22
@@ -22,6 +27,7 @@ main_block@3:
     intc_0 // 0
     !=
     bz main_bare_routing@10
+    b main_abi_routing@4
 
 main_abi_routing@4:
     // tests/approvals/multi-inheritance.algo.ts:22
@@ -32,15 +38,20 @@ main_abi_routing@4:
     pushbytes 0xf9f5142c // method "b2CantOverride()string"
     uncover 3
     match main_methodOne_route@5 main_methodCommon_route@6 main_b2CantOverride_route@7
+    b main_switch_case_default@8
 
 main_switch_case_default@8:
+    b main_switch_case_next@9
 
 main_switch_case_next@9:
+    b main_after_if_else@14
 
 main_after_if_else@14:
     // tests/approvals/multi-inheritance.algo.ts:22
     // export class BaseOne extends CommonBase {
     intc_0 // 0
+    bury 1
+    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::BaseOne.__puya_arc4_router__@15
 
 main_after_inlined_tests/approvals/multi-inheritance.algo.ts::BaseOne.__puya_arc4_router__@15:
     return
@@ -61,13 +72,14 @@ main_b2CantOverride_route@7:
     len
     itob
     extract 6 2
-    swap
+    uncover 1
     concat
     bytec_0 // 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::BaseOne.__puya_arc4_router__@15
 
 main_methodCommon_route@6:
@@ -86,13 +98,14 @@ main_methodCommon_route@6:
     len
     itob
     extract 6 2
-    swap
+    uncover 1
     concat
     bytec_0 // 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::BaseOne.__puya_arc4_router__@15
 
 main_methodOne_route@5:
@@ -111,13 +124,14 @@ main_methodOne_route@5:
     len
     itob
     extract 6 2
-    swap
+    uncover 1
     concat
     bytec_0 // 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::BaseOne.__puya_arc4_router__@15
 
 main_bare_routing@10:
@@ -125,10 +139,12 @@ main_bare_routing@10:
     // export class BaseOne extends CommonBase {
     txn OnCompletion
     intc_0 // 0
-    swap
+    uncover 1
     match main___algots__.defaultCreate@11
+    b main_switch_case_default@12
 
 main_switch_case_default@12:
+    b main_switch_case_next@13
 
 main_switch_case_next@13:
     b main_after_if_else@14
@@ -142,11 +158,13 @@ main___algots__.defaultCreate@11:
     assert // can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::BaseOne.__puya_arc4_router__@15
 
 
 // tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> bytes:
 methodOne:
+    b methodOne_block@0
 
 methodOne_block@0:
     // tests/approvals/multi-inheritance.algo.ts:25
@@ -157,6 +175,7 @@ methodOne_block@0:
 
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
 methodCommon:
+    b methodCommon_block@0
 
 methodCommon_block@0:
     // tests/approvals/multi-inheritance.algo.ts:14
@@ -167,6 +186,7 @@ methodCommon_block@0:
 
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
 b2CantOverride:
+    b b2CantOverride_block@0
 
 b2CantOverride_block@0:
     // tests/approvals/multi-inheritance.algo.ts:18
@@ -177,6 +197,7 @@ b2CantOverride_block@0:
 
 // tests/approvals/multi-inheritance.algo.ts::BaseOne.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
 
 __algots__.defaultCreate_block@0:
     retsub
@@ -184,6 +205,7 @@ __algots__.defaultCreate_block@0:
 
 // tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor() -> void:
 constructor:
+    b constructor_block@0
 
 constructor_block@0:
     // tests/approvals/multi-inheritance.algo.ts:22
@@ -199,10 +221,17 @@ constructor_block@0:
 
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
 tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor:
+    b tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_block@0
 
 tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_block@0:
+    // tests/approvals/multi-inheritance.algo.ts:10
+    // export class CommonBase extends Contract {
+    b tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_block@1
 
 tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_block@1:
+    // tests/approvals/multi-inheritance.algo.ts:10
+    // export class CommonBase extends Contract {
+    b tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2
 
 tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
     // tests/approvals/multi-inheritance.algo.ts:11

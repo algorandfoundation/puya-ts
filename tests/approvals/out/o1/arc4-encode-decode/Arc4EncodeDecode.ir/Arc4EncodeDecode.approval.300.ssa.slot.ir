@@ -133,7 +133,7 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         let aggregate%array_length%1#0: uint64 = (extract_uint16 reinterpret_Encoded(len+bool1[])%0#0 0u)
         let tmp%20#0: bool = (== aggregate%array_length%1#0 1u)
         (assert aggregate%array_length%1#0) // index access is out of bounds
-        let aggregate%get_bit%1#0: uint64 = (getbit reinterpret_Encoded(len+bool1[])%0#0 16u)
+        let aggregate%get_bit%1#0: bool = (getbit reinterpret_Encoded(len+bool1[])%0#0 16u)
         let tmp%21#0: bool = (== aggregate%get_bit%1#0 b#0)
         let tmp%22#0: bool = (&& tmp%20#0 tmp%21#0)
         (assert tmp%22#0) // Array of boolean matches

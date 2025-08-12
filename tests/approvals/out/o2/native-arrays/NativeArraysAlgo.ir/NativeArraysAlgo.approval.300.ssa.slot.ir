@@ -164,7 +164,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let values%0#0: uint64 = (extract_uint64 mutable#0 10u)
         let tmp%1#1: uint64 = (+ values%0#0 2u)
         let aggregate%val_as_bytes%51#0: bytes[8] = (itob tmp%1#1)
-        let mutable#1: Encoded(len+uint64[]) = ((replace2 10) mutable#0 aggregate%val_as_bytes%51#0)
+        let mutable#1: Encoded(len+uint64[]) = ((replace2 10) mutable#0 aggregate%val_as_bytes%51#0) // on error: index access is out of bounds
         let values%1#0: uint64 = (extract_uint64 mutable#1 10u)
         let tmp%2#1: bool = (!= values%1#0 values%0#0)
         (assert tmp%2#1) // These should not match

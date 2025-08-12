@@ -13,10 +13,7 @@ main:
     match main_noMoreThanks_route@3 main_createApplication_route@4 main_setLocal_route@5 main_optInToApplication_route@6 main_updateApplication_route@7
 
 main_after_if_else@14:
-    // tests/approvals/teal-script-conventions.algo.ts:5
-    // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
-    pushint 0 // 0
-    return
+    err
 
 main_updateApplication_route@7:
     // tests/approvals/teal-script-conventions.algo.ts:25
@@ -76,9 +73,15 @@ main_createApplication_route@4:
     // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
     txna ApplicationArgs 1
     extract 2 0
+    // tests/approvals/teal-script-conventions.algo.ts:6
+    // global = GlobalState<bytes>()
+    pushbytes "global"
+    // tests/approvals/teal-script-conventions.algo.ts:14
+    // this.global.value = value
+    swap
+    app_global_put
     // tests/approvals/teal-script-conventions.algo.ts:12
     // @abimethod({ allowActions: ['NoOp', 'DeleteApplication'] })
-    callsub createApplication
     intc_0 // 1
     return
 
@@ -117,22 +120,6 @@ main_deleteApplication@11:
     assert // can only call when not creating
     intc_0 // 1
     return
-
-
-// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.createApplication(value: bytes) -> void:
-createApplication:
-    // tests/approvals/teal-script-conventions.algo.ts:12-13
-    // @abimethod({ allowActions: ['NoOp', 'DeleteApplication'] })
-    // createApplication(value: bytes) {
-    proto 1 0
-    // tests/approvals/teal-script-conventions.algo.ts:6
-    // global = GlobalState<bytes>()
-    pushbytes "global"
-    // tests/approvals/teal-script-conventions.algo.ts:14
-    // this.global.value = value
-    frame_dig -1
-    app_global_put
-    retsub
 
 
 // tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.setLocal(value: bytes) -> void:

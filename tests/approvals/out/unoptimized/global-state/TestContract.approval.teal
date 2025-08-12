@@ -5,13 +5,17 @@
 main:
     intcblock 0 2
     bytecblock "testState" "baseTestState" "testing 123"
+    pushbytes ""
+    b main_block@0
 
 main_block@0:
     txn ApplicationID
     bnz main_after_if_else@2
+    b main_if_body@1
 
 main_if_body@1:
     callsub constructor
+    b main_after_if_else@2
 
 main_after_if_else@2:
     // tests/approvals/global-state.algo.ts:33
@@ -23,7 +27,8 @@ main_after_if_else@2:
     // tests/approvals/global-state.algo.ts:33
     // assert(this.testState.hasValue, 'State should have value')
     app_global_get_ex
-    bury 1
+    cover 1
+    bury 2
     assert // State should have value
     // tests/approvals/global-state.algo.ts:34
     // assert(this.testState.value === 2, 'Value should equal 2')
@@ -48,7 +53,7 @@ main_after_if_else@2:
     bytec_0 // "testState"
     // tests/approvals/global-state.algo.ts:36
     // this.testState.value = op.btoi(Txn.applicationArgs(0))
-    swap
+    uncover 1
     app_global_put
     // tests/approvals/global-state.algo.ts:20
     // noInitial = GlobalState<bytes>()
@@ -65,6 +70,7 @@ main_after_if_else@2:
 
 // tests/approvals/global-state.algo.ts::TestContract.constructor() -> void:
 constructor:
+    b constructor_block@0
 
 constructor_block@0:
     // tests/approvals/global-state.algo.ts:27
@@ -110,17 +116,24 @@ constructor_block@0:
     pushbytes "noInitialInt"
     // tests/approvals/global-state.algo.ts:29
     // this.noInitialInt.value = someValue * this.testState.value
-    swap
+    uncover 1
     app_global_put
     retsub
 
 
 // tests/approvals/global-state.algo.ts::BaseTestContract.constructor() -> void:
 tests/approvals/global-state.algo.ts::BaseTestContract.constructor:
+    b tests/approvals/global-state.algo.ts::BaseTestContract.constructor_block@0
 
 tests/approvals/global-state.algo.ts::BaseTestContract.constructor_block@0:
+    // tests/approvals/global-state.algo.ts:15
+    // export abstract class BaseTestContract extends BaseContract {
+    b tests/approvals/global-state.algo.ts::BaseTestContract.constructor_block@1
 
 tests/approvals/global-state.algo.ts::BaseTestContract.constructor_block@1:
+    // tests/approvals/global-state.algo.ts:15
+    // export abstract class BaseTestContract extends BaseContract {
+    b tests/approvals/global-state.algo.ts::BaseTestContract.constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2
 
 tests/approvals/global-state.algo.ts::BaseTestContract.constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
     // tests/approvals/global-state.algo.ts:16

@@ -11,7 +11,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%4#0) // OnCompletion is not NoOp
         let tmp%5#0: uint64 = (txn ApplicationID)
         (assert tmp%5#0) // can only call when not creating
-        tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test()
+        (app_global_put "myState" 1u)
         let tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__puya_arc4_router__%0#0: bool = 1u
         goto block@11
     block@6: // bare_routing_L4
@@ -29,8 +29,3 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@11: // after_inlined_tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__puya_arc4_router___L1
         let tmp%0#0: bool = φ(tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__puya_arc4_router__%0#1 <- block@7, tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__puya_arc4_router__%0#2 <- block@10)
         return tmp%0#0
-
-subroutine tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test() -> void:
-    block@0: // L16
-        (app_global_put "myState" 1u)
-        return 

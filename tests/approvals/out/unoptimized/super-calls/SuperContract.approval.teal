@@ -4,13 +4,16 @@
 // tests/approvals/super-calls.algo.ts::SuperContract.approvalProgram() -> uint64:
 main:
     bytecblock "g1"
+    b main_block@0
 
 main_block@0:
     txn ApplicationID
     bnz main_after_if_else@2
+    b main_if_body@1
 
 main_if_body@1:
     callsub constructor
+    b main_after_if_else@2
 
 main_after_if_else@2:
     // tests/approvals/super-calls.algo.ts:8
@@ -34,10 +37,17 @@ main_after_if_else@2:
 
 // tests/approvals/super-calls.algo.ts::SuperContract.constructor() -> void:
 constructor:
+    b constructor_block@0
 
 constructor_block@0:
+    // tests/approvals/super-calls.algo.ts:4
+    // export class SuperContract extends BaseContract {
+    b constructor_block@1
 
 constructor_block@1:
+    // tests/approvals/super-calls.algo.ts:4
+    // export class SuperContract extends BaseContract {
+    b constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2
 
 constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
     // tests/approvals/super-calls.algo.ts:5

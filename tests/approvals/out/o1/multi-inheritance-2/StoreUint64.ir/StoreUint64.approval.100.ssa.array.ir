@@ -12,8 +12,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%5#0: uint64 = (txn ApplicationID)
         (assert tmp%5#0) // can only call when not creating
         let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%7#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.setStore(tmp%7#0)
+        let value#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        (app_global_put "uint64Store" value#0)
         let tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.__puya_arc4_router__%0#0: bool = 1u
         goto block@11
     block@6: // bare_routing_L13
@@ -31,8 +31,3 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@11: // after_inlined_tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.__puya_arc4_router___L1
         let tmp%0#0: bool = φ(tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.__puya_arc4_router__%0#0 <- block@3, tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.__puya_arc4_router__%0#1 <- block@7, tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.__puya_arc4_router__%0#2 <- block@10)
         return tmp%0#0
-
-subroutine tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.setStore(value: uint64) -> void:
-    block@0: // L16
-        (app_global_put "uint64Store" value#0)
-        return 

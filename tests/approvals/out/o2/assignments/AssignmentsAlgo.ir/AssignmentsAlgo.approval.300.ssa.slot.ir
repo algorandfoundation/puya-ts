@@ -92,10 +92,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let values%0#1: uint64 = (extract_uint64 m_a#1 2u)
         let tmp%0#4: uint64 = (+ values%0#1 1u)
         let aggregate%val_as_bytes%5#0: bytes[8] = (itob tmp%0#4)
-        let m_a#2: Encoded(len+uint64[]) = ((replace2 2) m_a#1 aggregate%val_as_bytes%5#0)
+        let m_a#2: Encoded(len+uint64[]) = ((replace2 2) m_a#1 aggregate%val_as_bytes%5#0) // on error: index access is out of bounds
         let tmp%1#2: uint64 = (+ values%0#1 2u)
         let aggregate%val_as_bytes%6#0: bytes[8] = (itob tmp%1#2)
-        let direct#1: Encoded(len+uint64[]) = ((replace2 2) m_a#1 aggregate%val_as_bytes%6#0)
+        let direct#1: Encoded(len+uint64[]) = ((replace2 2) m_a#1 aggregate%val_as_bytes%6#0) // on error: index access is out of bounds
         let values%2#1: uint64 = (extract_uint64 m_a#2 2u)
         let values%3#0: uint64 = (extract_uint64 direct#1 2u)
         let tmp%2#2: bool = (!= values%2#1 values%3#0)

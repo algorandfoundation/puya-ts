@@ -5,15 +5,20 @@
 main:
     intcblock 0 1
     bytecblock 0x151f7c75
+    pushbytes ""
+    b main_block@0
 
 main_block@0:
     txn ApplicationID
     bnz main_after_if_else@2
+    b main_if_body@1
 
 main_if_body@1:
     callsub constructor
+    b main_after_if_else@2
 
 main_after_if_else@2:
+    b main_block@3
 
 main_block@3:
     // tests/approvals/abi-decorators.algo.ts:4
@@ -22,6 +27,7 @@ main_block@3:
     intc_0 // 0
     !=
     bz main_bare_routing@12
+    b main_abi_routing@4
 
 main_abi_routing@4:
     // tests/approvals/abi-decorators.algo.ts:4
@@ -34,15 +40,20 @@ main_abi_routing@4:
     pushbytes 0xc1367374 // method "methodWithDefaults(uint64,uint64,uint64)uint64"
     uncover 5
     match main_justNoop_route@5 main_createMethod_route@6 main_allActions_route@7 main_overrideReadonlyName_route@8 main_methodWithDefaults_route@9
+    b main_switch_case_default@10
 
 main_switch_case_default@10:
+    b main_switch_case_next@11
 
 main_switch_case_next@11:
+    b main_after_if_else@13
 
 main_after_if_else@13:
     // tests/approvals/abi-decorators.algo.ts:4
     // export default class AbiDecorators extends Contract {
     intc_0 // 0
+    bury 1
+    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
 
 main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14:
     return
@@ -74,10 +85,11 @@ main_methodWithDefaults_route@9:
     callsub methodWithDefaults
     itob
     bytec_0 // 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
 
 main_overrideReadonlyName_route@8:
@@ -94,10 +106,11 @@ main_overrideReadonlyName_route@8:
     callsub readonly
     itob
     bytec_0 // 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
 
 main_allActions_route@7:
@@ -109,6 +122,7 @@ main_allActions_route@7:
     assert // can only call when not creating
     callsub allActions
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
 
 main_createMethod_route@6:
@@ -124,6 +138,7 @@ main_createMethod_route@6:
     assert // can only call when creating
     callsub createMethod
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
 
 main_justNoop_route@5:
@@ -139,6 +154,7 @@ main_justNoop_route@5:
     assert // can only call when not creating
     callsub justNoop
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
 
 main_bare_routing@12:
@@ -147,6 +163,7 @@ main_bare_routing@12:
 
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.justNoop() -> void:
 justNoop:
+    b justNoop_block@0
 
 justNoop_block@0:
     retsub
@@ -154,6 +171,7 @@ justNoop_block@0:
 
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.createMethod() -> void:
 createMethod:
+    b createMethod_block@0
 
 createMethod_block@0:
     retsub
@@ -161,6 +179,7 @@ createMethod_block@0:
 
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.allActions() -> void:
 allActions:
+    b allActions_block@0
 
 allActions_block@0:
     retsub
@@ -168,6 +187,7 @@ allActions_block@0:
 
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.readonly() -> uint64:
 readonly:
+    b readonly_block@0
 
 readonly_block@0:
     // tests/approvals/abi-decorators.algo.ts:13
@@ -182,6 +202,7 @@ methodWithDefaults:
     // @abimethod({ defaultArguments: { a: { from: 'globalValue' }, b: { from: 'readonly' }, c: { constant: 145 } } })
     // public methodWithDefaults(a: uint64, b: uint64, c: uint64): uint64 {
     proto 3 1
+    b methodWithDefaults_block@0
 
 methodWithDefaults_block@0:
     // tests/approvals/abi-decorators.algo.ts:20
@@ -196,10 +217,17 @@ methodWithDefaults_block@0:
 
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.constructor() -> void:
 constructor:
+    b constructor_block@0
 
 constructor_block@0:
+    // tests/approvals/abi-decorators.algo.ts:4
+    // export default class AbiDecorators extends Contract {
+    b constructor_block@1
 
 constructor_block@1:
+    // tests/approvals/abi-decorators.algo.ts:4
+    // export default class AbiDecorators extends Contract {
+    b constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2
 
 constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
     // tests/approvals/abi-decorators.algo.ts:16

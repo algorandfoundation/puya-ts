@@ -3,16 +3,18 @@
 
 // tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 4
-    bytecblock "A" 0x "abc" 0xffffffff "one" "two" "three"
+    intcblock 0 1 4
+    bytecblock 0x "A" "abc" 0xffffffff "one" "two" "three"
+    b main_block@0
 
 main_block@0:
     // tests/approvals/box-proxies.algo.ts:112
     // if (Txn.applicationId.id !== 0) {
     txn ApplicationID
-    intc_1 // 0
+    intc_0 // 0
     !=
     bz main_after_if_else@2
+    b main_if_body@1
 
 main_if_body@1:
     // tests/approvals/box-proxies.algo.ts:107
@@ -41,11 +43,12 @@ main_if_body@1:
     // testBoxRef(this.boxRefThree, 99)
     pushint 99 // 99
     callsub testBoxRef
+    b main_after_if_else@2
 
 main_after_if_else@2:
     // tests/approvals/box-proxies.algo.ts:119
     // return true
-    intc_0 // 1
+    intc_1 // 1
     return
 
 
@@ -54,6 +57,14 @@ testBox:
     // tests/approvals/box-proxies.algo.ts:20
     // function testBox(box: Box<string>, value: string) {
     proto 2 0
+    intc_0 // 0
+    intc_0 // 0
+    bytec_0 // ""
+    bytec_0 // ""
+    bytec_0 // ""
+    bytec_0 // ""
+    bytec_0 // ""
+    b testBox_block@0
 
 testBox_block@0:
     // tests/approvals/box-proxies.algo.ts:21
@@ -66,10 +77,10 @@ testBox_block@0:
     box_put
     // tests/approvals/box-proxies.algo.ts:22
     // boxA.value = value
-    bytec_0 // "A"
+    bytec_1 // "A"
     box_del
     pop
-    bytec_0 // "A"
+    bytec_1 // "A"
     frame_dig -1
     box_put
     // tests/approvals/box-proxies.algo.ts:24
@@ -80,8 +91,8 @@ testBox_block@0:
     assert
     // tests/approvals/box-proxies.algo.ts:25
     // assert(boxA.key === Bytes('A'))
-    bytec_0 // "A"
-    dup
+    bytec_1 // "A"
+    bytec_1 // "A"
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:27
@@ -89,7 +100,7 @@ testBox_block@0:
     frame_dig -2
     box_get
     assert // Box must have value
-    bytec_0 // "A"
+    bytec_1 // "A"
     box_get
     assert // Box must have value
     ==
@@ -98,23 +109,28 @@ testBox_block@0:
     // assert(box.exists && boxA.exists)
     frame_dig -2
     box_len
-    bury 1
     bz testBox_bool_false@3
+    b testBox_and_contd@1
 
 testBox_and_contd@1:
     // tests/approvals/box-proxies.algo.ts:29
     // assert(box.exists && boxA.exists)
-    bytec_0 // "A"
+    bytec_1 // "A"
     box_len
-    bury 1
+    cover 1
+    frame_bury 2
     bz testBox_bool_false@3
+    b testBox_bool_true@2
 
 testBox_bool_true@2:
-    intc_0 // 1
+    intc_1 // 1
+    frame_bury 5
+    b testBox_bool_merge@4
 
 testBox_bool_merge@4:
     // tests/approvals/box-proxies.algo.ts:29
     // assert(box.exists && boxA.exists)
+    frame_dig 5
     assert
     // tests/approvals/box-proxies.algo.ts:31
     // assert(box.length)
@@ -129,7 +145,7 @@ testBox_bool_merge@4:
     assert // delete failed
     // tests/approvals/box-proxies.algo.ts:34
     // const isBoxADeleted = boxA.delete()
-    bytec_0 // "A"
+    bytec_1 // "A"
     box_del
     // tests/approvals/box-proxies.algo.ts:35
     // assert(isBoxADeleted, 'delete failed')
@@ -138,38 +154,45 @@ testBox_bool_merge@4:
     // assert(!box.exists && !boxA.exists)
     frame_dig -2
     box_len
-    bury 1
+    cover 1
+    frame_bury 3
     bnz testBox_bool_false@7
+    b testBox_and_contd@5
 
 testBox_and_contd@5:
     // tests/approvals/box-proxies.algo.ts:36
     // assert(!box.exists && !boxA.exists)
-    bytec_0 // "A"
+    bytec_1 // "A"
     box_len
-    bury 1
+    cover 1
+    frame_bury 4
     bnz testBox_bool_false@7
+    b testBox_bool_true@6
 
 testBox_bool_true@6:
-    intc_0 // 1
+    intc_1 // 1
+    frame_bury 6
+    b testBox_bool_merge@8
 
 testBox_bool_merge@8:
     // tests/approvals/box-proxies.algo.ts:36
     // assert(!box.exists && !boxA.exists)
+    frame_dig 6
     assert
     // tests/approvals/box-proxies.algo.ts:39
     // assert(boxA.get({ default: defaultVal }) === box.get({ default: defaultVal }))
-    bytec_0 // "A"
+    bytec_1 // "A"
     box_get
-    swap
+    cover 1
     pushbytes "O"
-    swap
+    uncover 1
     uncover 2
     select
     frame_dig -2
     box_get
-    swap
+    cover 1
     pushbytes "O"
-    swap
+    uncover 1
     uncover 2
     select
     ==
@@ -178,7 +201,8 @@ testBox_bool_merge@8:
     // let [, e] = box.maybe()
     frame_dig -2
     box_get
-    bury 1
+    cover 1
+    frame_bury 0
     // tests/approvals/box-proxies.algo.ts:42
     // assert(!e)
     !
@@ -195,18 +219,21 @@ testBox_bool_merge@8:
     // ;[, e] = box.maybe()
     frame_dig -2
     box_get
-    bury 1
+    cover 1
+    frame_bury 1
     // tests/approvals/box-proxies.algo.ts:45
     // assert(e)
     assert
     retsub
 
 testBox_bool_false@7:
-    intc_1 // 0
+    intc_0 // 0
+    frame_bury 6
     b testBox_bool_merge@8
 
 testBox_bool_false@3:
-    intc_1 // 0
+    intc_0 // 0
+    frame_bury 5
     b testBox_bool_merge@4
 
 
@@ -215,6 +242,7 @@ testBoxMap:
     // tests/approvals/box-proxies.algo.ts:50
     // function testBoxMap(box: BoxMap<string, bytes>, key: string, value: bytes) {
     proto 3 0
+    b testBoxMap_block@0
 
 testBoxMap_block@0:
     // tests/approvals/box-proxies.algo.ts:51
@@ -229,7 +257,7 @@ testBoxMap_block@0:
     box_put
     // tests/approvals/box-proxies.algo.ts:52
     // boxMap(key).value = value
-    bytec_1 // ""
+    bytec_0 // ""
     frame_dig -2
     concat
     dup
@@ -239,13 +267,12 @@ testBoxMap_block@0:
     box_put
     // tests/approvals/box-proxies.algo.ts:54
     // const boxMapItem = boxMap(key)
-    bytec_1 // ""
+    bytec_0 // ""
     frame_dig -2
     concat
     // tests/approvals/box-proxies.algo.ts:56
     // assert(boxMapItem.exists)
     box_len
-    bury 1
     assert
     // tests/approvals/box-proxies.algo.ts:58
     // assert(box.keyPrefix === Bytes('two'))
@@ -255,8 +282,8 @@ testBoxMap_block@0:
     assert
     // tests/approvals/box-proxies.algo.ts:59
     // assert(boxMap.keyPrefix === Bytes(''))
-    bytec_1 // ""
-    dup
+    bytec_0 // ""
+    bytec_0 // ""
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:61
@@ -273,7 +300,6 @@ testBoxMap_block@0:
     frame_dig -2
     concat
     box_get
-    bury 1
     assert
     // tests/approvals/box-proxies.algo.ts:65
     // assert(box(key).value === boxMap(key).value)
@@ -282,7 +308,7 @@ testBoxMap_block@0:
     concat
     box_get
     assert // Box must have value
-    bytec_1 // ""
+    bytec_0 // ""
     frame_dig -2
     concat
     box_get
@@ -300,32 +326,32 @@ testBoxMap_block@0:
     assert // delete failed
     // tests/approvals/box-proxies.algo.ts:70
     // assert(box(`${key}x`).get({ default: Bytes('b') }) === boxMap(`${key}x`).get({ default: Bytes('b') }))
-    bytec_1 // ""
+    bytec_0 // ""
     frame_dig -2
     concat
     pushbytes "x"
     concat
     frame_dig -3
-    swap
+    uncover 1
     concat
     box_get
-    swap
+    cover 1
     pushbytes "b"
-    swap
+    uncover 1
     uncover 2
     select
-    bytec_1 // ""
+    bytec_0 // ""
     frame_dig -2
     concat
     pushbytes "x"
     concat
-    bytec_1 // ""
-    swap
+    bytec_0 // ""
+    uncover 1
     concat
     box_get
-    swap
+    cover 1
     pushbytes "b"
-    swap
+    uncover 1
     uncover 2
     select
     ==
@@ -338,6 +364,10 @@ testBoxRef:
     // tests/approvals/box-proxies.algo.ts:75
     // function testBoxRef(box: BoxRef, length: uint64) {
     proto 2 0
+    intc_0 // 0
+    bytec_0 // ""
+    bytec_0 // ""
+    b testBoxRef_block@0
 
 testBoxRef_block@0:
     // tests/approvals/box-proxies.algo.ts:76
@@ -349,15 +379,15 @@ testBoxRef_block@0:
     // tests/approvals/box-proxies.algo.ts:77
     // assert(boxRef.key === Bytes('abc'))
     bytec_2 // "abc"
-    dup
+    bytec_2 // "abc"
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:79
     // if (!boxRef.exists) {
     bytec_2 // "abc"
     box_len
-    bury 1
     bnz testBoxRef_else_body@2
+    b testBoxRef_if_body@1
 
 testBoxRef_if_body@1:
     // tests/approvals/box-proxies.algo.ts:80
@@ -366,14 +396,17 @@ testBoxRef_if_body@1:
     pushint 1000 // 1000
     box_create
     pop
+    b testBoxRef_after_if_else@5
 
 testBoxRef_after_if_else@5:
     // tests/approvals/box-proxies.algo.ts:84
     // if (box.exists) {
     frame_dig -2
     box_len
-    bury 1
+    cover 1
+    frame_bury 1
     bz testBoxRef_else_body@7
+    b testBoxRef_if_body@6
 
 testBoxRef_if_body@6:
     // tests/approvals/box-proxies.algo.ts:85
@@ -381,6 +414,7 @@ testBoxRef_if_body@6:
     frame_dig -2
     intc_2 // 4
     box_resize
+    b testBoxRef_after_if_else@8
 
 testBoxRef_after_if_else@8:
     // tests/approvals/box-proxies.algo.ts:90
@@ -392,9 +426,9 @@ testBoxRef_after_if_else@8:
     // assert(box.get({ default: Bytes() }) === Bytes.fromHex('FFFFFFFF'))
     frame_dig -2
     box_get
-    swap
-    bytec_1 // 0x
-    swap
+    cover 1
+    bytec_0 // 0x
+    uncover 1
     uncover 2
     select
     bytec_3 // 0xffffffff
@@ -404,7 +438,8 @@ testBoxRef_after_if_else@8:
     // const maybeBox = box.maybe()
     frame_dig -2
     box_get
-    bury 1
+    cover 1
+    frame_bury 0
     // tests/approvals/box-proxies.algo.ts:95
     // assert(maybeBox[1])
     assert
@@ -419,8 +454,8 @@ testBoxRef_after_if_else@8:
     // tests/approvals/box-proxies.algo.ts:98
     // box.splice(1, 1, Bytes.fromHex('00'))
     frame_dig -2
-    intc_0 // 1
-    dup
+    intc_1 // 1
+    intc_1 // 1
     pushbytes 0x00
     box_splice
     // tests/approvals/box-proxies.algo.ts:99
@@ -442,7 +477,8 @@ testBoxRef_after_if_else@8:
     // assert(!box.exists)
     frame_dig -2
     box_len
-    bury 1
+    cover 1
+    frame_bury 2
     !
     assert
     retsub
@@ -465,6 +501,7 @@ testBoxRef_else_body@2:
     frame_dig -1
     !=
     bz testBoxRef_after_if_else@4
+    b testBoxRef_if_body@3
 
 testBoxRef_if_body@3:
     // tests/approvals/box-proxies.algo.ts:82
@@ -472,6 +509,7 @@ testBoxRef_if_body@3:
     bytec_2 // "abc"
     frame_dig -1
     box_resize
+    b testBoxRef_after_if_else@4
 
 testBoxRef_after_if_else@4:
     b testBoxRef_after_if_else@5

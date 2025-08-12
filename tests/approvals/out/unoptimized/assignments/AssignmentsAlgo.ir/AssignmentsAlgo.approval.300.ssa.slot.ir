@@ -338,7 +338,7 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayNarrowi
         let encoded_value%0#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
         let aggregate%write_offset%0#0: uint64 = (* 0u 8u)
         let aggregate%write_offset_with_length_header%0#0: uint64 = (+ aggregate%write_offset%0#0 2u)
-        let aggregate%updated_array%0#0: bytes = (replace3 m_a#0 aggregate%write_offset_with_length_header%0#0 encoded_value%0#0)
+        let aggregate%updated_array%0#0: bytes = (replace3 m_a#0 aggregate%write_offset_with_length_header%0#0 encoded_value%0#0) // on error: index access is out of bounds
         let updated_array%0#0: Encoded(len+uint64[]) = aggregate%updated_array%0#0
         let m_a#1: Encoded(len+uint64[]) = updated_array%0#0
         let aggregate%total_length%2#0: uint64 = (len direct#0)
@@ -353,7 +353,7 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayNarrowi
         let encoded_value%1#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
         let aggregate%write_offset%1#0: uint64 = (* 0u 8u)
         let aggregate%write_offset_with_length_header%1#0: uint64 = (+ aggregate%write_offset%1#0 2u)
-        let aggregate%updated_array%1#0: bytes = (replace3 direct#0 aggregate%write_offset_with_length_header%1#0 encoded_value%1#0)
+        let aggregate%updated_array%1#0: bytes = (replace3 direct#0 aggregate%write_offset_with_length_header%1#0 encoded_value%1#0) // on error: index access is out of bounds
         let updated_array%1#0: Encoded(len+uint64[]) = aggregate%updated_array%1#0
         let direct#1: Encoded(len+uint64[]) = updated_array%1#0
         let aggregate%total_length%4#0: uint64 = (len m_a#1)

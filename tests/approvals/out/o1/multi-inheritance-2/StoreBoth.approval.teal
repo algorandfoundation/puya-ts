@@ -3,6 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
+    bytecblock "stringStore"
     // tests/approvals/multi-inheritance-2.algo.ts:21
     // class StoreBoth extends classes(StoreString, StoreUint64) {
     txn NumAppArgs
@@ -12,10 +13,7 @@ main:
     match main_test_route@5 main_setStore_route@6
 
 main_after_if_else@13:
-    // tests/approvals/multi-inheritance-2.algo.ts:21
-    // class StoreBoth extends classes(StoreString, StoreUint64) {
-    pushint 0 // 0
-    return
+    err
 
 main_setStore_route@6:
     // tests/approvals/multi-inheritance-2.algo.ts:8
@@ -29,9 +27,15 @@ main_setStore_route@6:
     // class StoreBoth extends classes(StoreString, StoreUint64) {
     txna ApplicationArgs 1
     extract 2 0
+    // tests/approvals/multi-inheritance-2.algo.ts:6
+    // stringStore = GlobalState<string>()
+    bytec_0 // "stringStore"
+    // tests/approvals/multi-inheritance-2.algo.ts:9
+    // this.stringStore.value = value
+    swap
+    app_global_put
     // tests/approvals/multi-inheritance-2.algo.ts:8
     // setStore(value: string) {
-    callsub setStore
     pushint 1 // 1
     return
 
@@ -72,30 +76,18 @@ test:
     // tests/approvals/multi-inheritance-2.algo.ts:22
     // test(theString: string, theUint: uint64) {
     proto 2 0
-    // tests/approvals/multi-inheritance-2.algo.ts:24
-    // this.setStore(theString)
+    // tests/approvals/multi-inheritance-2.algo.ts:6
+    // stringStore = GlobalState<string>()
+    bytec_0 // "stringStore"
+    // tests/approvals/multi-inheritance-2.algo.ts:9
+    // this.stringStore.value = value
     frame_dig -2
-    callsub setStore
+    app_global_put
     // tests/approvals/multi-inheritance-2.algo.ts:14
     // uint64Store = GlobalState<uint64>()
     pushbytes "uint64Store"
     // tests/approvals/multi-inheritance-2.algo.ts:17
     // this.uint64Store.value = value
-    frame_dig -1
-    app_global_put
-    retsub
-
-
-// tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore(value: bytes) -> void:
-setStore:
-    // tests/approvals/multi-inheritance-2.algo.ts:8
-    // setStore(value: string) {
-    proto 1 0
-    // tests/approvals/multi-inheritance-2.algo.ts:6
-    // stringStore = GlobalState<string>()
-    pushbytes "stringStore"
-    // tests/approvals/multi-inheritance-2.algo.ts:9
-    // this.stringStore.value = value
     frame_dig -1
     app_global_put
     retsub

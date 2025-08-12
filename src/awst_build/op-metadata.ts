@@ -1370,7 +1370,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           { name: 'a', ptypes: [ptypes.bytesPType, ptypes.uint64PType] },
           { name: 'b', ptypes: [ptypes.uint64PType] },
         ],
-        returnType: ptypes.uint64PType,
+        returnType: ptypes.boolPType,
       },
     ],
   },

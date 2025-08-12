@@ -37,7 +37,12 @@ main_someMethod_route@3:
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    callsub someMethod
+    // tests/approvals/arc4-hybrid.algo.ts:17
+    // log('some method')
+    pushbytes "some method"
+    log
+    // tests/approvals/arc4-hybrid.algo.ts:16
+    // someMethod() {
     pushint 1 // 1
     b main_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@7
 
@@ -51,12 +56,3 @@ main_bare_routing@4:
     assert // can only call when creating
     pushint 1 // 1
     b main_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@7
-
-
-// tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod() -> void:
-someMethod:
-    // tests/approvals/arc4-hybrid.algo.ts:17
-    // log('some method')
-    pushbytes "some method"
-    log
-    retsub

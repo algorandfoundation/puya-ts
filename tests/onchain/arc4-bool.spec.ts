@@ -12,9 +12,9 @@ describe('arc4 bool', () => {
       args: [
         {
           useRounds: true,
-          lastValid: 1000n,
+          lastValid: 0n,
           cooldown: 10n,
-          lastCalled: 1000n,
+          lastCalled: 0n,
           exists: true,
           hasMethodRestrictions: false,
         },

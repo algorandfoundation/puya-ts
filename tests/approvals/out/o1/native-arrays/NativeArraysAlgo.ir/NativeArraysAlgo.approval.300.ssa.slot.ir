@@ -266,8 +266,8 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let tmp%48#0: bool = (&& tmp%46#0 tmp%47#0)
         (assert tmp%48#0) // assert target is match for conditions
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob 10u)
-        let arr#5: Encoded(len+uint64[]) = ((replace2 10) arr#4 aggregate%val_as_bytes%1#0)
-        let arr2#0: Encoded(len+uint64[]) = ((replace2 10) arr#5 aggregate%val_as_bytes%0#0)
+        let arr#5: Encoded(len+uint64[]) = ((replace2 10) arr#4 aggregate%val_as_bytes%1#0) // on error: index access is out of bounds
+        let arr2#0: Encoded(len+uint64[]) = ((replace2 10) arr#5 aggregate%val_as_bytes%0#0) // on error: index access is out of bounds
         let aggregate%array_length%4#0: uint64 = (extract_uint16 arr#5 0u)
         let tmp%50#0: bool = (== aggregate%array_length%4#0 4u)
         let aggregate%array_trimmed%16#0: bytes = ((extract 2 0) arr#5)
@@ -620,7 +620,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(muta
         let values%0#0: uint64 = (extract_uint64 mutable#0 10u)
         let tmp%1#0: uint64 = (+ values%0#0 2u)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#0)
-        let mutable#1: Encoded(len+uint64[]) = ((replace2 10) mutable#0 aggregate%val_as_bytes%0#0)
+        let mutable#1: Encoded(len+uint64[]) = ((replace2 10) mutable#0 aggregate%val_as_bytes%0#0) // on error: index access is out of bounds
         let values%1#0: uint64 = (extract_uint64 mutable#1 10u)
         let tmp%2#0: bool = (!= values%1#0 values%0#0)
         (assert tmp%2#0) // These should not match
@@ -630,5 +630,5 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(muta
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(a: Encoded(len+uint64[])) -> Encoded(len+uint64[]):
     block@0: // L221
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob 1u)
-        let a#1: Encoded(len+uint64[]) = ((replace2 2) a#0 aggregate%val_as_bytes%0#0)
+        let a#1: Encoded(len+uint64[]) = ((replace2 2) a#0 aggregate%val_as_bytes%0#0) // on error: index access is out of bounds
         return a#1

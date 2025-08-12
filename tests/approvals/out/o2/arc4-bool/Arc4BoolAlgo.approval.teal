@@ -1,0 +1,171 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0
+    pushbytes ""
+    dupn 4
+    // tests/approvals/arc4-bool.algo.ts:4
+    // class Arc4BoolAlgo extends Contract {
+    txn NumAppArgs
+    bz main_bare_routing@6
+    pushbytes 0xb0d2ae75 // method "test((bool,uint64,uint64,uint64,bool,bool))(bool,bool,bool,bool,bool)"
+    txna ApplicationArgs 0
+    match main_test_route@3
+
+main_after_if_else@10:
+    err
+
+main_test_route@3:
+    // tests/approvals/arc4-bool.algo.ts:5-19
+    // test({
+    //   useRounds,
+    //   lastValid,
+    //   cooldown,
+    //   lastCalled,
+    //   exists,
+    //   hasMethodRestrictions,
+    // }: {
+    //   useRounds: boolean
+    //   lastValid: uint64
+    //   cooldown: uint64
+    //   lastCalled: uint64
+    //   exists: boolean
+    //   hasMethodRestrictions: boolean
+    // }) {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/arc4-bool.algo.ts:4
+    // class Arc4BoolAlgo extends Contract {
+    txna ApplicationArgs 1
+    // tests/approvals/arc4-bool.algo.ts:5-19
+    // test({
+    //   useRounds,
+    //   lastValid,
+    //   cooldown,
+    //   lastCalled,
+    //   exists,
+    //   hasMethodRestrictions,
+    // }: {
+    //   useRounds: boolean
+    //   lastValid: uint64
+    //   cooldown: uint64
+    //   lastCalled: uint64
+    //   exists: boolean
+    //   hasMethodRestrictions: boolean
+    // }) {
+    dup
+    intc_1 // 0
+    getbit
+    dig 1
+    intc_0 // 1
+    extract_uint64
+    bury 3
+    dig 1
+    pushint 9 // 9
+    extract_uint64
+    bury 7
+    dig 1
+    pushint 17 // 17
+    extract_uint64
+    bury 4
+    dig 1
+    pushint 200 // 200
+    getbit
+    bury 6
+    swap
+    pushint 201 // 201
+    getbit
+    bury 4
+    // tests/approvals/arc4-bool.algo.ts:20
+    // const epochRef = useRounds ? Global.round : Global.latestTimestamp
+    bz main_ternary_false@16
+    global Round
+
+main_ternary_merge@17:
+    // tests/approvals/arc4-bool.algo.ts:24
+    // expired: epochRef > lastValid,
+    dup
+    dig 2
+    >
+    // tests/approvals/arc4-bool.algo.ts:25
+    // hasCooldown: cooldown > 0,
+    dig 6
+    dup
+    cover 2
+    intc_1 // 0
+    >
+    // tests/approvals/arc4-bool.algo.ts:26
+    // onCooldown: epochRef - lastCalled < cooldown,
+    uncover 3
+    dig 5
+    -
+    uncover 3
+    <
+    // tests/approvals/arc4-bool.algo.ts:22-28
+    // return {
+    //   exists,
+    //   expired: epochRef > lastValid,
+    //   hasCooldown: cooldown > 0,
+    //   onCooldown: epochRef - lastCalled < cooldown,
+    //   hasMethodRestrictions,
+    // }
+    pushbytes 0x00
+    intc_1 // 0
+    dig 8
+    setbit
+    intc_0 // 1
+    uncover 4
+    setbit
+    pushint 2 // 2
+    uncover 3
+    setbit
+    pushint 3 // 3
+    uncover 2
+    setbit
+    pushint 4 // 4
+    dig 4
+    setbit
+    // tests/approvals/arc4-bool.algo.ts:5-19
+    // test({
+    //   useRounds,
+    //   lastValid,
+    //   cooldown,
+    //   lastCalled,
+    //   exists,
+    //   hasMethodRestrictions,
+    // }: {
+    //   useRounds: boolean
+    //   lastValid: uint64
+    //   cooldown: uint64
+    //   lastCalled: uint64
+    //   exists: boolean
+    //   hasMethodRestrictions: boolean
+    // }) {
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_ternary_false@16:
+    // tests/approvals/arc4-bool.algo.ts:20
+    // const epochRef = useRounds ? Global.round : Global.latestTimestamp
+    global LatestTimestamp
+    b main_ternary_merge@17
+
+main_bare_routing@6:
+    // tests/approvals/arc4-bool.algo.ts:4
+    // class Arc4BoolAlgo extends Contract {
+    txn OnCompletion
+    bnz main_after_if_else@10
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_0 // 1
+    return

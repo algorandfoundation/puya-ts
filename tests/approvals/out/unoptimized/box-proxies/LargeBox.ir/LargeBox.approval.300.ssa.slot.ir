@@ -115,7 +115,7 @@ subroutine tests/approvals/box-proxies.algo.ts::LargeBox.test() -> void:
         (assert aggregate%box_get%5#0) // Box must have value
         let storage_value%2#0: bytes = aggregate%box_get%4#0
         let aggregate%write_offset%0#0: uint64 = (* index#0 64u)
-        let aggregate%updated_array%0#0: bytes = (replace3 storage_value%2#0 aggregate%write_offset%0#0 x#1)
+        let aggregate%updated_array%0#0: bytes = (replace3 storage_value%2#0 aggregate%write_offset%0#0 x#1) // on error: index access is out of bounds
         let updated_array%0#0: Encoded((uint8[32],uint64,uint64,uint64,uint64)[200]) = aggregate%updated_array%0#0
         (box_put "large" updated_array%0#0)
         let (aggregate%box_get%6#0: bytes, aggregate%box_get%7#0: bool) = (box_get "large")

@@ -129,7 +129,7 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
         let aggregate%encoded_element%1#0: bytes = (extract3 storage_value%1#0 aggregate%bytes_offset%1#0 9u) // on error: index access is out of bounds
         let aggregate%updated_data%0#0: bytes = (replace3 aggregate%encoded_element%1#0 0u encoded_value%0#0)
         let aggregate%write_offset%0#0: uint64 = (* index#0 9u)
-        let aggregate%updated_array%0#0: bytes = (replace3 storage_value%1#0 aggregate%write_offset%0#0 aggregate%updated_data%0#0)
+        let aggregate%updated_array%0#0: bytes = (replace3 storage_value%1#0 aggregate%write_offset%0#0 aggregate%updated_data%0#0) // on error: index access is out of bounds
         let updated_array%0#0: Encoded((uint64,uint8)[800]) = aggregate%updated_array%0#0
         (box_put "x" updated_array%0#0)
         return 

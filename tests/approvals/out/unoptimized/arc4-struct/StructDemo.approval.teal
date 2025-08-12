@@ -5,8 +5,11 @@
 main:
     intcblock 0 8 1 20
     bytecblock 0x 0x151f7c75 0x0000000000000000 "plugins" 0x0000000000000001 0xa78000de
+    bytec_0 // ""
+    b main_block@0
 
 main_block@0:
+    b main_block@1
 
 main_block@1:
     // tests/approvals/arc4-struct.algo.ts:10
@@ -15,6 +18,7 @@ main_block@1:
     intc_0 // 0
     !=
     bz main_bare_routing@15
+    b main_abi_routing@2
 
 main_abi_routing@2:
     // tests/approvals/arc4-struct.algo.ts:10
@@ -32,15 +36,20 @@ main_abi_routing@2:
     pushbytes 0xa9bc61f1 // method "setPlugin(string)void"
     uncover 10
     match main_testVectorCreationAndEquality_route@3 main_addVectors_route@4 main_mutateVector_route@5 main_implicitCastingAndSpreading_route@6 main_toAndFromBytes_route@7 main_toNative_route@8 main_getPlugin_route@9 main_getMain_route@10 main_setLastCalled_route@11 main_setPlugin_route@12
+    b main_switch_case_default@13
 
 main_switch_case_default@13:
+    b main_switch_case_next@14
 
 main_switch_case_next@14:
+    b main_after_if_else@19
 
 main_after_if_else@19:
     // tests/approvals/arc4-struct.algo.ts:10
     // class StructDemo extends Contract {
     intc_0 // 0
+    bury 1
+    b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
 
 main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20:
     return
@@ -64,6 +73,7 @@ main_setPlugin_route@12:
     // public setPlugin(key: string) {
     callsub setPlugin
     intc_2 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
 
 main_setLastCalled_route@11:
@@ -92,6 +102,7 @@ main_setLastCalled_route@11:
     uncover 2
     callsub setLastCalled
     intc_2 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
 
 main_getMain_route@10:
@@ -107,10 +118,11 @@ main_getMain_route@10:
     assert // can only call when not creating
     callsub getMain
     bytec_1 // 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_2 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
 
 main_getPlugin_route@9:
@@ -132,10 +144,11 @@ main_getPlugin_route@9:
     // public getPlugin(key: string): PluginInfo {
     callsub getPlugin
     bytec_1 // 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_2 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
 
 main_toNative_route@8:
@@ -156,10 +169,11 @@ main_toNative_route@8:
     // public toNative(v1: Vector) {
     callsub toNative
     bytec_1 // 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_2 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
 
 main_toAndFromBytes_route@7:
@@ -180,10 +194,11 @@ main_toAndFromBytes_route@7:
     // public toAndFromBytes(v1: Vector): Vector {
     callsub toAndFromBytes
     bytec_1 // 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_2 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
 
 main_implicitCastingAndSpreading_route@6:
@@ -204,6 +219,7 @@ main_implicitCastingAndSpreading_route@6:
     // public implicitCastingAndSpreading(v1: Vector) {
     callsub implicitCastingAndSpreading
     intc_2 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
 
 main_mutateVector_route@5:
@@ -229,10 +245,11 @@ main_mutateVector_route@5:
     uncover 2
     callsub mutateVector
     bytec_1 // 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_2 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
 
 main_addVectors_route@4:
@@ -254,10 +271,11 @@ main_addVectors_route@4:
     // public addVectors(v1: Vector, v2: Vector) {
     callsub addVectors
     bytec_1 // 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_2 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
 
 main_testVectorCreationAndEquality_route@3:
@@ -273,6 +291,7 @@ main_testVectorCreationAndEquality_route@3:
     assert // can only call when not creating
     callsub testVectorCreationAndEquality
     intc_2 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
 
 main_bare_routing@15:
@@ -280,10 +299,12 @@ main_bare_routing@15:
     // class StructDemo extends Contract {
     txn OnCompletion
     intc_0 // 0
-    swap
+    uncover 1
     match main___algots__.defaultCreate@16
+    b main_switch_case_default@17
 
 main_switch_case_default@17:
+    b main_switch_case_next@18
 
 main_switch_case_next@18:
     b main_after_if_else@19
@@ -297,11 +318,13 @@ main___algots__.defaultCreate@16:
     assert // can only call when creating
     callsub __algots__.defaultCreate
     intc_2 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
 
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality() -> void:
 testVectorCreationAndEquality:
+    b testVectorCreationAndEquality_block@0
 
 testVectorCreationAndEquality_block@0:
     // tests/approvals/arc4-struct.algo.ts:12
@@ -322,7 +345,7 @@ testVectorCreationAndEquality_block@0:
     // log(v1.y)
     dup
     intc_1 // 8
-    dup
+    intc_1 // 8
     extract3
     log
     // tests/approvals/arc4-struct.algo.ts:15
@@ -344,6 +367,7 @@ addVectors:
     // tests/approvals/arc4-struct.algo.ts:19
     // public addVectors(v1: Vector, v2: Vector) {
     proto 2 1
+    b addVectors_block@0
 
 addVectors_block@0:
     // tests/approvals/arc4-struct.algo.ts:21
@@ -364,12 +388,12 @@ addVectors_block@0:
     // y: new ARC4Uint64(v1.y.native + v2.y.native),
     frame_dig -2
     intc_1 // 8
-    dup
+    intc_1 // 8
     extract3
     btoi
     frame_dig -1
     intc_1 // 8
-    dup
+    intc_1 // 8
     extract3
     btoi
     +
@@ -382,7 +406,7 @@ addVectors_block@0:
     bytec_0 // 0x
     uncover 2
     concat
-    swap
+    uncover 1
     concat
     retsub
 
@@ -392,6 +416,7 @@ mutateVector:
     // tests/approvals/arc4-struct.algo.ts:26
     // public mutateVector(v1: Vector, newX: ARC4Uint64, newY: ARC4Uint64): Vector {
     proto 3 1
+    b mutateVector_block@0
 
 mutateVector_block@0:
     // tests/approvals/arc4-struct.algo.ts:27
@@ -419,6 +444,7 @@ implicitCastingAndSpreading:
     // tests/approvals/arc4-struct.algo.ts:32
     // public implicitCastingAndSpreading(v1: Vector) {
     proto 1 0
+    b implicitCastingAndSpreading_block@0
 
 implicitCastingAndSpreading_block@0:
     // tests/approvals/arc4-struct.algo.ts:33
@@ -429,12 +455,12 @@ implicitCastingAndSpreading_block@0:
     extract3
     frame_dig -1
     intc_1 // 8
-    dup
+    intc_1 // 8
     extract3
     bytec_0 // 0x
     uncover 2
     concat
-    swap
+    uncover 1
     concat
     // tests/approvals/arc4-struct.algo.ts:34
     // const v3 = new Vector({ ...v2 })
@@ -442,15 +468,15 @@ implicitCastingAndSpreading_block@0:
     intc_0 // 0
     intc_1 // 8
     extract3
-    swap
+    cover 1
     dup
     intc_1 // 8
-    dup
+    intc_1 // 8
     extract3
     bytec_0 // 0x
     uncover 3
     concat
-    swap
+    uncover 1
     concat
     // tests/approvals/arc4-struct.algo.ts:35
     // assert(v1.bytes === v2.bytes)
@@ -471,6 +497,7 @@ toAndFromBytes:
     // tests/approvals/arc4-struct.algo.ts:39
     // public toAndFromBytes(v1: Vector): Vector {
     proto 1 1
+    b toAndFromBytes_block@0
 
 toAndFromBytes_block@0:
     // tests/approvals/arc4-struct.algo.ts:40
@@ -486,6 +513,7 @@ toNative:
     // tests/approvals/arc4-struct.algo.ts:44
     // public toNative(v1: Vector) {
     proto 1 1
+    b toNative_block@0
 
 toNative_block@0:
     // tests/approvals/arc4-struct.algo.ts:45
@@ -499,6 +527,7 @@ getPlugin:
     // tests/approvals/arc4-struct.algo.ts:52
     // public getPlugin(key: string): PluginInfo {
     proto 1 1
+    b getPlugin_block@0
 
 getPlugin_block@0:
     // tests/approvals/arc4-struct.algo.ts:48
@@ -527,6 +556,7 @@ getPlugin_block@0:
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.getMain() -> bytes:
 getMain:
+    b getMain_block@0
 
 getMain_block@0:
     // tests/approvals/arc4-struct.algo.ts:50
@@ -556,6 +586,7 @@ setLastCalled:
     // tests/approvals/arc4-struct.algo.ts:64
     // public setLastCalled(key: string, index: uint64, lastCalled: uint64) {
     proto 3 0
+    b setLastCalled_block@0
 
 setLastCalled_block@0:
     // tests/approvals/arc4-struct.algo.ts:65
@@ -575,17 +606,17 @@ setLastCalled_block@0:
     dup
     pushint 25 // 25
     extract_uint16
-    swap
+    cover 1
     dup
     len
-    swap
+    cover 1
     dup
     uncover 3
     uncover 3
     substring3
     dup
     len
-    swap
+    cover 1
     dup
     pushint 2 // 2
     uncover 3
@@ -604,9 +635,9 @@ setLastCalled_block@0:
     pushint 2 // 2
     +
     uncover 2
-    swap
+    uncover 1
     uncover 2
-    replace3
+    replace3 // on error: index access is out of bounds
     dig 1
     pushint 25 // 25
     extract_uint16
@@ -614,7 +645,7 @@ setLastCalled_block@0:
     intc_0 // 0
     uncover 2
     extract3
-    swap
+    uncover 1
     concat
     dig 1
     box_del
@@ -628,13 +659,14 @@ setPlugin:
     // tests/approvals/arc4-struct.algo.ts:68
     // public setPlugin(key: string) {
     proto 1 0
+    b setPlugin_block@0
 
 setPlugin_block@0:
     // tests/approvals/arc4-struct.algo.ts:73
     // adminPrivileges: new arc4.Bool(false),
     pushbytes 0x00
     intc_0 // 0
-    dup
+    intc_0 // 0
     setbit
     // tests/approvals/arc4-struct.algo.ts:76
     // selector: new arc4.StaticBytes(methodSelector('test()void')),
@@ -691,7 +723,7 @@ setPlugin_block@0:
     intc_2 // 1
     itob
     extract 6 2
-    swap
+    uncover 1
     concat
     // tests/approvals/arc4-struct.algo.ts:69-81
     // this.plugins(key).value = new PluginInfo({
@@ -768,7 +800,7 @@ setPlugin_block@0:
     itob
     extract 6 2
     concat
-    swap
+    uncover 1
     concat
     // tests/approvals/arc4-struct.algo.ts:48
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
@@ -792,13 +824,14 @@ setPlugin_block@0:
     dup
     box_del
     pop
-    swap
+    uncover 1
     box_put
     retsub
 
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
 
 __algots__.defaultCreate_block@0:
     retsub

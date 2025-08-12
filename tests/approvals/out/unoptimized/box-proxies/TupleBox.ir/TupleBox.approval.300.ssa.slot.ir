@@ -118,7 +118,7 @@ subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBox() -> void:
         let (aggregate%box_get%4#0: bytes, aggregate%box_get%5#0: bool) = (box_get "t1")
         (assert aggregate%box_get%5#0) // Box must have value
         let storage_value%2#0: bytes = aggregate%box_get%4#0
-        let aggregate%get_bit%0#0: uint64 = (getbit storage_value%2#0 32u)
+        let aggregate%get_bit%0#0: bool = (getbit storage_value%2#0 32u)
         let tuple_item%2#0: bool = aggregate%get_bit%0#0
         let values%2#0: bool = tuple_item%2#0
         (assert values%2#0)
@@ -171,7 +171,7 @@ subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBox() -> void:
         let (aggregate%box_get%10#0: bytes, aggregate%box_get%11#0: bool) = (box_get "t2")
         (assert aggregate%box_get%11#0) // Box must have value
         let storage_value%5#0: bytes = aggregate%box_get%10#0
-        let aggregate%get_bit%1#0: uint64 = (getbit storage_value%5#0 32u)
+        let aggregate%get_bit%1#0: bool = (getbit storage_value%5#0 32u)
         let tuple_item%5#0: bool = aggregate%get_bit%1#0
         let values%5#0: bool = tuple_item%5#0
         (assert values%5#0)
@@ -278,7 +278,7 @@ subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap() -> void:
         let (aggregate%box_get%4#0: bytes, aggregate%box_get%5#0: bool) = (box_get box_prefixed_key%7#0)
         (assert aggregate%box_get%5#0) // Box must have value
         let storage_value%2#0: bytes = aggregate%box_get%4#0
-        let aggregate%get_bit%0#0: uint64 = (getbit storage_value%2#0 32u)
+        let aggregate%get_bit%0#0: bool = (getbit storage_value%2#0 32u)
         let tuple_item%2#0: bool = aggregate%get_bit%0#0
         let values%2#0: bool = tuple_item%2#0
         (assert values%2#0)
@@ -311,7 +311,7 @@ subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap() -> void:
         let (aggregate%box_get%10#0: bytes, aggregate%box_get%11#0: bool) = (box_get box_prefixed_key%11#0)
         (assert aggregate%box_get%11#0) // Box must have value
         let storage_value%5#0: bytes = aggregate%box_get%10#0
-        let aggregate%get_bit%1#0: uint64 = (getbit storage_value%5#0 32u)
+        let aggregate%get_bit%1#0: bool = (getbit storage_value%5#0 32u)
         let tuple_item%5#0: bool = aggregate%get_bit%1#0
         let values%5#0: bool = tuple_item%5#0
         (assert values%5#0)
