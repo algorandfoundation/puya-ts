@@ -176,6 +176,14 @@ test(asset: Asset, app: Application, acc: Account): [Asset, Application, Account
 }
 ```
 
+### Rename test files from `.(spec|test).ts` to `.algo.(spec|test).ts`.
+
+Existing test files that need to run in simulated AVM environment or import modules from `algorand-typescript` or `algorand-typescript-testing` packages should be renamed accordingly.
+
+`pyuaTsTransformer` will only provide the simulated AVM environment and executable implementations of `algorand-typescript` module to files with those extensions, excluding standard `.spec.ts` or `.test.ts` files (e.g.`e2e.spec.ts`).
+
+This change can improve test performance by ensuring only relevant files are processed through `puyaTsTransformer`.
+
 ## New features
 
 ### Native mutable objects
