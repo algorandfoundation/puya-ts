@@ -158,9 +158,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%71#0: bool = (!= tmp%70#0 0u)
         (assert tmp%71#0) // can only call when not creating
         let (tmp%72#0: Encoded(bool8), tmp%73#0: Encoded(bool8), tmp%74#0: Encoded(bool8)) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansStatic()
-        let aggregate%get_bit%0#0: uint64 = (getbit tmp%73#0 0u)
+        let aggregate%get_bit%0#0: bool = (getbit tmp%73#0 0u)
         let aggregate%set_bit%2#0: Encoded(bool8) = (setbit tmp%72#0 1u aggregate%get_bit%0#0)
-        let aggregate%get_bit%1#0: uint64 = (getbit tmp%74#0 0u)
+        let aggregate%get_bit%1#0: bool = (getbit tmp%74#0 0u)
         let aggregate%set_bit%3#0: Encoded(bool8) = (setbit aggregate%set_bit%2#0 2u aggregate%get_bit%1#0)
         let aggregate%head%1#0: bytes = (concat 0x aggregate%set_bit%3#0)
         let aggregate%as_Encoded(bool1,bool1,bool1)%1#0: Encoded(bool1,bool1,bool1) = aggregate%head%1#0
@@ -467,7 +467,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray
         let aggregate%encoded_element%0#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
         let aggregate%write_offset%0#0: uint64 = (* 2u 8u)
         let aggregate%write_offset_with_length_header%0#0: uint64 = (+ aggregate%write_offset%0#0 2u)
-        let aggregate%updated_array%0#0: bytes = (replace3 myArray#2 aggregate%write_offset_with_length_header%0#0 encoded_value%0#0)
+        let aggregate%updated_array%0#0: bytes = (replace3 myArray#2 aggregate%write_offset_with_length_header%0#0 encoded_value%0#0) // on error: index access is out of bounds
         let updated_array%0#0: Encoded(len+uint64[]) = aggregate%updated_array%0#0
         let myArray#3: Encoded(len+uint64[]) = updated_array%0#0
         let aggregate%array_length%0#0: uint64 = (extract_uint16 myArray#3 0u)
@@ -789,7 +789,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let aggregate%encoded_element%15#0: bytes = (extract3 aggregate%array_trimmed%15#0 aggregate%bytes_offset%15#0 8u) // on error: index access is out of bounds
         let aggregate%write_offset%0#0: uint64 = (* 1u 8u)
         let aggregate%write_offset_with_length_header%0#0: uint64 = (+ aggregate%write_offset%0#0 2u)
-        let aggregate%updated_array%0#0: bytes = (replace3 arr#4 aggregate%write_offset_with_length_header%0#0 encoded_value%0#0)
+        let aggregate%updated_array%0#0: bytes = (replace3 arr#4 aggregate%write_offset_with_length_header%0#0 encoded_value%0#0) // on error: index access is out of bounds
         let updated_array%0#0: Encoded(len+uint64[]) = aggregate%updated_array%0#0
         let arr#5: Encoded(len+uint64[]) = updated_array%0#0
         let aggregate%val_as_bytes%3#0: bytes[8] = (itob 5u)
@@ -801,7 +801,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         let aggregate%encoded_element%16#0: bytes = (extract3 aggregate%array_trimmed%16#0 aggregate%bytes_offset%16#0 8u) // on error: index access is out of bounds
         let aggregate%write_offset%1#0: uint64 = (* 1u 8u)
         let aggregate%write_offset_with_length_header%1#0: uint64 = (+ aggregate%write_offset%1#0 2u)
-        let aggregate%updated_array%1#0: bytes = (replace3 arr#5 aggregate%write_offset_with_length_header%1#0 encoded_value%1#0)
+        let aggregate%updated_array%1#0: bytes = (replace3 arr#5 aggregate%write_offset_with_length_header%1#0 encoded_value%1#0) // on error: index access is out of bounds
         let updated_array%1#0: Encoded(len+uint64[]) = aggregate%updated_array%1#0
         let arr2#0: Encoded(len+uint64[]) = updated_array%1#0
         let aggregate%array_length%4#0: uint64 = (extract_uint16 arr#5 0u)
@@ -2018,7 +2018,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 8u)
         let aggregate%encoded_element%0#0: bytes = (extract3 x#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
         let aggregate%write_offset%0#0: uint64 = (* 0u 8u)
-        let aggregate%updated_array%0#0: bytes = (replace3 x#0 aggregate%write_offset%0#0 encoded_value%0#0)
+        let aggregate%updated_array%0#0: bytes = (replace3 x#0 aggregate%write_offset%0#0 encoded_value%0#0) // on error: index access is out of bounds
         let updated_array%0#0: Encoded(uint64[4]) = aggregate%updated_array%0#0
         let x#1: Encoded(uint64[4]) = updated_array%0#0
         let tmp%0#0: Encoded(uint64[50]) = (bzero 400u)
@@ -2208,7 +2208,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
         let aggregate%bytes_offset%18#0: uint64 = (* 0u 8u)
         let aggregate%encoded_element%18#0: bytes = (extract3 z1#0 aggregate%bytes_offset%18#0 8u) // on error: index access is out of bounds
         let aggregate%write_offset%1#0: uint64 = (* 0u 8u)
-        let aggregate%updated_array%1#0: bytes = (replace3 z1#0 aggregate%write_offset%1#0 encoded_value%1#0)
+        let aggregate%updated_array%1#0: bytes = (replace3 z1#0 aggregate%write_offset%1#0 encoded_value%1#0) // on error: index access is out of bounds
         let updated_array%1#0: Encoded(uint64[4]) = aggregate%updated_array%1#0
         let z1#1: Encoded(uint64[4]) = updated_array%1#0
         let aggregate%val_as_bytes%12#0: bytes[8] = (itob 2u)
@@ -2217,7 +2217,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
         let aggregate%bytes_offset%19#0: uint64 = (* 1u 8u)
         let aggregate%encoded_element%19#0: bytes = (extract3 z1#1 aggregate%bytes_offset%19#0 8u) // on error: index access is out of bounds
         let aggregate%write_offset%2#0: uint64 = (* 1u 8u)
-        let aggregate%updated_array%2#0: bytes = (replace3 z1#1 aggregate%write_offset%2#0 encoded_value%2#0)
+        let aggregate%updated_array%2#0: bytes = (replace3 z1#1 aggregate%write_offset%2#0 encoded_value%2#0) // on error: index access is out of bounds
         let updated_array%2#0: Encoded(uint64[4]) = aggregate%updated_array%2#0
         let z1#2: Encoded(uint64[4]) = updated_array%2#0
         let aggregate%val_as_bytes%13#0: bytes[8] = (itob 3u)
@@ -2226,7 +2226,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
         let aggregate%bytes_offset%20#0: uint64 = (* 2u 8u)
         let aggregate%encoded_element%20#0: bytes = (extract3 z1#2 aggregate%bytes_offset%20#0 8u) // on error: index access is out of bounds
         let aggregate%write_offset%3#0: uint64 = (* 2u 8u)
-        let aggregate%updated_array%3#0: bytes = (replace3 z1#2 aggregate%write_offset%3#0 encoded_value%3#0)
+        let aggregate%updated_array%3#0: bytes = (replace3 z1#2 aggregate%write_offset%3#0 encoded_value%3#0) // on error: index access is out of bounds
         let updated_array%3#0: Encoded(uint64[4]) = aggregate%updated_array%3#0
         let z1#3: Encoded(uint64[4]) = updated_array%3#0
         let aggregate%val_as_bytes%14#0: bytes[8] = (itob 4u)
@@ -2235,7 +2235,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
         let aggregate%bytes_offset%21#0: uint64 = (* 3u 8u)
         let aggregate%encoded_element%21#0: bytes = (extract3 z1#3 aggregate%bytes_offset%21#0 8u) // on error: index access is out of bounds
         let aggregate%write_offset%4#0: uint64 = (* 3u 8u)
-        let aggregate%updated_array%4#0: bytes = (replace3 z1#3 aggregate%write_offset%4#0 encoded_value%4#0)
+        let aggregate%updated_array%4#0: bytes = (replace3 z1#3 aggregate%write_offset%4#0 encoded_value%4#0) // on error: index access is out of bounds
         let updated_array%4#0: Encoded(uint64[4]) = aggregate%updated_array%4#0
         let z1#4: Encoded(uint64[4]) = updated_array%4#0
         let tmp%51#0: uint64 = 4u
@@ -2269,7 +2269,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
         let z2#0: Encoded(bool1[3]) = tmp%61#0
         let aggregate%lt%0#0: bool = (< 0u 3u)
         (assert aggregate%lt%0#0) // index access is out of bounds
-        let aggregate%get_bit%0#0: uint64 = (getbit z2#0 0u)
+        let aggregate%get_bit%0#0: bool = (getbit z2#0 0u)
         let array_item%21#0: bool = aggregate%get_bit%0#0
         let values%21#0: bool = array_item%21#0
         let tmp%62#0: bool = (== values%21#0 0u)
@@ -2465,9 +2465,9 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans(
         let tmp%2#0: Encoded(bool8) = aggregate%as_Encoded(bool8)%2#0
         let aggregate%as_bytes%0#0: bytes[8] = (itob 3u)
         let aggregate%len_u16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
-        let aggregate%get_bit%0#0: uint64 = (getbit tmp%1#0 0u)
+        let aggregate%get_bit%0#0: bool = (getbit tmp%1#0 0u)
         let aggregate%set_bit%0#0: Encoded(bool8) = (setbit tmp%0#0 1u aggregate%get_bit%0#0)
-        let aggregate%get_bit%1#0: uint64 = (getbit tmp%2#0 0u)
+        let aggregate%get_bit%1#0: bool = (getbit tmp%2#0 0u)
         let aggregate%set_bit%1#0: Encoded(bool8) = (setbit aggregate%set_bit%0#0 2u aggregate%get_bit%1#0)
         let aggregate%head%0#0: bytes = (concat aggregate%len_u16%0#0 aggregate%set_bit%1#0)
         let aggregate%as_Encoded(len+bool1[])%0#0: Encoded(len+bool1[]) = aggregate%head%0#0
@@ -2506,7 +2506,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(muta
         let aggregate%encoded_element%1#0: bytes = (extract3 aggregate%array_trimmed%1#0 aggregate%bytes_offset%1#0 8u) // on error: index access is out of bounds
         let aggregate%write_offset%0#0: uint64 = (* 1u 8u)
         let aggregate%write_offset_with_length_header%0#0: uint64 = (+ aggregate%write_offset%0#0 2u)
-        let aggregate%updated_array%0#0: bytes = (replace3 mutable#0 aggregate%write_offset_with_length_header%0#0 encoded_value%1#0)
+        let aggregate%updated_array%0#0: bytes = (replace3 mutable#0 aggregate%write_offset_with_length_header%0#0 encoded_value%1#0) // on error: index access is out of bounds
         let updated_array%1#0: Encoded(len+uint64[]) = aggregate%updated_array%0#0
         let mutable#1: Encoded(len+uint64[]) = updated_array%1#0
         let aggregate%total_length%2#0: uint64 = (len mutable#1)
@@ -2541,7 +2541,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutabl
         let aggregate%encoded_element%0#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
         let aggregate%write_offset%0#0: uint64 = (* 0u 8u)
         let aggregate%write_offset_with_length_header%0#0: uint64 = (+ aggregate%write_offset%0#0 2u)
-        let aggregate%updated_array%0#0: bytes = (replace3 a#0 aggregate%write_offset_with_length_header%0#0 encoded_value%0#0)
+        let aggregate%updated_array%0#0: bytes = (replace3 a#0 aggregate%write_offset_with_length_header%0#0 encoded_value%0#0) // on error: index access is out of bounds
         let updated_array%0#0: Encoded(len+uint64[]) = aggregate%updated_array%0#0
         let a#1: Encoded(len+uint64[]) = updated_array%0#0
         goto 1u ? block@1 : block@2

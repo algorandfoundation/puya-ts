@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 3 2 0
+    intcblock 1 3 2 4
     bytecblock "evalCount" "hmmm" 0xff base64(ZHNmc2Rmc2Q=) base32(ONSGMZ3OMJTGOZDGMRSGM)
     // tests/approvals/switch-statements.algo.ts:4
     // export class DemoContract extends Contract {
@@ -14,10 +14,7 @@ main:
     match main_run_route@3 main_test_side_effects_route@4 main_test_non_trivial_termination_of_clause_route@5
 
 main_after_if_else@12:
-    // tests/approvals/switch-statements.algo.ts:4
-    // export class DemoContract extends Contract {
-    intc_3 // 0
-    return
+    err
 
 main_test_non_trivial_termination_of_clause_route@5:
     // tests/approvals/switch-statements.algo.ts:83
@@ -111,7 +108,7 @@ run:
     assert
     // tests/approvals/switch-statements.algo.ts:9
     // assert(this.test_uint64(4) === 3)
-    pushint 4 // 4
+    intc_3 // 4
     callsub test_uint64
     intc_1 // 3
     ==
@@ -139,7 +136,7 @@ run:
     assert
     // tests/approvals/switch-statements.algo.ts:14
     // assert(this.test_break(4) === 14)
-    pushint 4 // 4
+    intc_3 // 4
     callsub test_break
     pushint 14 // 14
     ==
@@ -200,7 +197,7 @@ test_uint64:
     // tests/approvals/switch-statements.algo.ts:28
     // case Uint64(4):
     frame_dig -1
-    pushint 4 // 4
+    intc_3 // 4
     ==
     // tests/approvals/switch-statements.algo.ts:28-29
     // case Uint64(4):
@@ -243,7 +240,7 @@ test_break:
     // tests/approvals/switch-statements.algo.ts:41
     // case Uint64(4):
     frame_dig -1
-    pushint 4 // 4
+    intc_3 // 4
     ==
     // tests/approvals/switch-statements.algo.ts:41-43
     // case Uint64(4):
@@ -331,7 +328,7 @@ test_bytes_block@11:
 test_bytes_after_if_else@12:
     // tests/approvals/switch-statements.algo.ts:58
     // return false
-    intc_3 // 0
+    pushint 0 // 0
     retsub
 
 
@@ -342,7 +339,7 @@ increaseEvalAndReturn:
     proto 1 1
     // tests/approvals/switch-statements.algo.ts:64
     // this.evalCount.value++
-    intc_3 // 0
+    pushint 0 // 0
     // tests/approvals/switch-statements.algo.ts:61
     // evalCount = GlobalState<uint64>()
     bytec_0 // "evalCount"
@@ -375,7 +372,7 @@ test_side_effects:
     bytec_0 // "evalCount"
     // tests/approvals/switch-statements.algo.ts:69
     // this.evalCount.value = 0
-    intc_3 // 0
+    pushint 0 // 0
     app_global_put
     // tests/approvals/switch-statements.algo.ts:72
     // case this.increaseEvalAndReturn(n - 1):
@@ -410,7 +407,7 @@ test_side_effects:
 test_side_effects_block@10:
     // tests/approvals/switch-statements.algo.ts:80
     // assert(this.evalCount.value === 2, 'Only two functions should be evaluated')
-    intc_3 // 0
+    pushint 0 // 0
     // tests/approvals/switch-statements.algo.ts:61
     // evalCount = GlobalState<uint64>()
     bytec_0 // "evalCount"

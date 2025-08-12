@@ -305,7 +305,7 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled(key: st
         let aggregate%updated_data%0#0: bytes = (replace3 aggregate%encoded_element%0#0 12u tmp%0#0)
         let aggregate%write_offset%0#0: uint64 = (* index#0 20u)
         let aggregate%write_offset_with_length_header%0#0: uint64 = (+ aggregate%write_offset%0#0 2u)
-        let aggregate%updated_array%0#0: bytes = (replace3 aggregate%substring3%0#0 aggregate%write_offset_with_length_header%0#0 aggregate%updated_data%0#0)
+        let aggregate%updated_array%0#0: bytes = (replace3 aggregate%substring3%0#0 aggregate%write_offset_with_length_header%0#0 aggregate%updated_data%0#0) // on error: index access is out of bounds
         let aggregate%item_offset%0#0: uint64 = (extract_uint16 storage_value%0#0 25u)
         let aggregate%data_up_to_item%0#0: bytes = (extract3 storage_value%0#0 0u aggregate%item_offset%0#0)
         let aggregate%updated_data%1#0: bytes = (concat aggregate%data_up_to_item%0#0 aggregate%updated_array%0#0)

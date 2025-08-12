@@ -5,8 +5,11 @@
 main:
     intcblock 0 1 3 4
     bytecblock 0x 0x0b6325ed 0x388cc12d 0x00 0xa313c066
+    bytec_0 // ""
+    b main_block@0
 
 main_block@0:
+    b main_block@1
 
 main_block@1:
     // tests/approvals/arc-28-events.algo.ts:13
@@ -15,6 +18,7 @@ main_block@1:
     intc_0 // 0
     !=
     bz main_bare_routing@8
+    b main_abi_routing@2
 
 main_abi_routing@2:
     // tests/approvals/arc-28-events.algo.ts:13
@@ -25,15 +29,20 @@ main_abi_routing@2:
     pushbytes 0xd4c97c9c // method "emitDynamicBytes(byte[],byte[])void"
     uncover 3
     match main_emitSwapped_route@3 main_emitCustom_route@4 main_emitDynamicBytes_route@5
+    b main_switch_case_default@6
 
 main_switch_case_default@6:
+    b main_switch_case_next@7
 
 main_switch_case_next@7:
+    b main_after_if_else@12
 
 main_after_if_else@12:
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
     intc_0 // 0
+    bury 1
+    b main_after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__@13
 
 main_after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__@13:
     return
@@ -58,6 +67,7 @@ main_emitDynamicBytes_route@5:
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     callsub emitDynamicBytes
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__@13
 
 main_emitCustom_route@4:
@@ -82,6 +92,7 @@ main_emitCustom_route@4:
     // emitCustom(arg0: string, arg1: boolean) {
     callsub emitCustom
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__@13
 
 main_emitSwapped_route@3:
@@ -103,6 +114,7 @@ main_emitSwapped_route@3:
     // emitSwapped(a: Uint8, b: Uint8) {
     callsub emitSwapped
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__@13
 
 main_bare_routing@8:
@@ -110,10 +122,12 @@ main_bare_routing@8:
     // class EventEmitter extends Contract {
     txn OnCompletion
     intc_0 // 0
-    swap
+    uncover 1
     match main___algots__.defaultCreate@9
+    b main_switch_case_default@10
 
 main_switch_case_default@10:
+    b main_switch_case_next@11
 
 main_switch_case_next@11:
     b main_after_if_else@12
@@ -127,6 +141,7 @@ main___algots__.defaultCreate@9:
     assert // can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__@13
 
 
@@ -135,6 +150,7 @@ emitSwapped:
     // tests/approvals/arc-28-events.algo.ts:14
     // emitSwapped(a: Uint8, b: Uint8) {
     proto 2 0
+    b emitSwapped_block@0
 
 emitSwapped_block@0:
     // tests/approvals/arc-28-events.algo.ts:15
@@ -145,7 +161,7 @@ emitSwapped_block@0:
     frame_dig -2
     concat
     bytec_1 // method "Swapped(uint8,uint8)"
-    swap
+    uncover 1
     concat
     log
     // tests/approvals/arc-28-events.algo.ts:17
@@ -158,7 +174,7 @@ emitSwapped_block@0:
     // tests/approvals/arc-28-events.algo.ts:18
     // emit(x)
     bytec_1 // method "Swapped(uint8,uint8)"
-    swap
+    uncover 1
     concat
     log
     // tests/approvals/arc-28-events.algo.ts:20-23
@@ -174,7 +190,7 @@ emitSwapped_block@0:
     // tests/approvals/arc-28-events.algo.ts:24
     // emit(y)
     pushbytes 0x441e2cd8 // method "SwappedArc4(uint8,uint8)"
-    swap
+    uncover 1
     concat
     log
     // tests/approvals/arc-28-events.algo.ts:26
@@ -185,7 +201,7 @@ emitSwapped_block@0:
     frame_dig -2
     concat
     bytec_1 // method "Swapped(uint8,uint8)"
-    swap
+    uncover 1
     concat
     log
     // tests/approvals/arc-28-events.algo.ts:28
@@ -196,7 +212,7 @@ emitSwapped_block@0:
     frame_dig -2
     concat
     bytec_1 // method "Swapped(uint8,uint8)"
-    swap
+    uncover 1
     concat
     log
     // tests/approvals/arc-28-events.algo.ts:29
@@ -207,12 +223,12 @@ emitSwapped_block@0:
     frame_dig -1
     concat
     bytec_0 // 0x
-    swap
+    uncover 1
     concat
     frame_dig -2
     concat
     bytec_2 // method "Swapped((uint8,uint8),uint8)"
-    swap
+    uncover 1
     concat
     log
     // tests/approvals/arc-28-events.algo.ts:31
@@ -223,12 +239,12 @@ emitSwapped_block@0:
     frame_dig -1
     concat
     bytec_0 // 0x
-    swap
+    uncover 1
     concat
     frame_dig -2
     concat
     bytec_2 // method "Swapped((uint8,uint8),uint8)"
-    swap
+    uncover 1
     concat
     log
     // tests/approvals/arc-28-events.algo.ts:32
@@ -244,14 +260,14 @@ emitSwapped_block@0:
     itob
     extract 6 2
     bytec_0 // 0x
-    swap
+    uncover 1
     concat
     frame_dig -2
     concat
-    swap
+    uncover 1
     concat
     pushbytes 0x08754e0c // method "Swapped(uint8[],uint8)"
-    swap
+    uncover 1
     concat
     log
     retsub
@@ -262,6 +278,7 @@ emitCustom:
     // tests/approvals/arc-28-events.algo.ts:35
     // emitCustom(arg0: string, arg1: boolean) {
     proto 2 0
+    b emitCustom_block@0
 
 emitCustom_block@0:
     // tests/approvals/arc-28-events.algo.ts:36
@@ -280,14 +297,14 @@ emitCustom_block@0:
     itob
     extract 6 2
     bytec_0 // 0x
-    swap
+    uncover 1
     concat
-    swap
+    uncover 1
     concat
-    swap
+    uncover 1
     concat
     bytec 4 // method "Custom(string,bool)"
-    swap
+    uncover 1
     concat
     log
     // tests/approvals/arc-28-events.algo.ts:37
@@ -306,14 +323,14 @@ emitCustom_block@0:
     itob
     extract 6 2
     bytec_0 // 0x
-    swap
+    uncover 1
     concat
-    swap
+    uncover 1
     concat
-    swap
+    uncover 1
     concat
     bytec 4 // method "Custom(string,bool)"
-    swap
+    uncover 1
     concat
     log
     retsub
@@ -324,6 +341,7 @@ emitDynamicBytes:
     // tests/approvals/arc-28-events.algo.ts:40
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     proto 2 0
+    b emitDynamicBytes_block@0
 
 emitDynamicBytes_block@0:
     // tests/approvals/arc-28-events.algo.ts:42
@@ -338,9 +356,9 @@ emitDynamicBytes_block@0:
     itob
     extract 6 2
     bytec_0 // 0x
-    swap
+    uncover 1
     concat
-    swap
+    cover 1
     dup
     len
     intc_3 // 4
@@ -348,14 +366,14 @@ emitDynamicBytes_block@0:
     itob
     extract 6 2
     uncover 2
-    swap
+    uncover 1
     concat
-    swap
+    uncover 1
     concat
     frame_dig -1
     concat
     pushbytes 0x4524e1dd // method "DB(byte[],byte[])"
-    swap
+    uncover 1
     concat
     log
     retsub
@@ -363,6 +381,7 @@ emitDynamicBytes_block@0:
 
 // tests/approvals/arc-28-events.algo.ts::EventEmitter.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
 
 __algots__.defaultCreate_block@0:
     retsub

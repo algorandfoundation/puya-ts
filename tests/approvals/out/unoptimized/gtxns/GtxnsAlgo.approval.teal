@@ -4,9 +4,12 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1 32 6
-    bytecblock 0xdf920f37 0x151f7c75 0x "Hello test4"
+    bytecblock 0x 0xdf920f37 0x151f7c75 "Hello test4"
+    bytec_0 // ""
+    b main_block@0
 
 main_block@0:
+    b main_block@1
 
 main_block@1:
     // tests/approvals/gtxns.algo.ts:16
@@ -15,6 +18,7 @@ main_block@1:
     intc_0 // 0
     !=
     bz main_bare_routing@11
+    b main_abi_routing@2
 
 main_abi_routing@2:
     // tests/approvals/gtxns.algo.ts:16
@@ -22,21 +26,26 @@ main_abi_routing@2:
     txna ApplicationArgs 0
     pushbytes 0xa78000de // method "test()void"
     pushbytes 0xf1908524 // method "test2()void"
-    bytec_0 // method "test3()void"
+    bytec_1 // method "test3()void"
     pushbytes 0xedb4f973 // method "test4(appl)void"
     pushbytes 0x13de6a54 // method "reflectAllPay(pay)(byte[32],uint64,uint64,uint64,uint64,byte[],byte[32],byte[],uint64,byte[32],byte[32],byte[32],uint64,byte[32])"
     pushbytes 0x7459fb1f // method "test5(txn)uint64"
     uncover 6
     match main_test_route@3 main_test2_route@4 main_test3_route@5 main_test4_route@6 main_reflectAllPay_route@7 main_test5_route@8
+    b main_switch_case_default@9
 
 main_switch_case_default@9:
+    b main_switch_case_next@10
 
 main_switch_case_next@10:
+    b main_after_if_else@15
 
 main_after_if_else@15:
     // tests/approvals/gtxns.algo.ts:16
     // export class GtxnsAlgo extends Contract {
     intc_0 // 0
+    bury 1
+    b main_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__@16
 
 main_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__@16:
     return
@@ -61,11 +70,12 @@ main_test5_route@8:
     // test5(txn: gtxn.Transaction): uint64 {
     callsub test5
     itob
-    bytec_1 // 0x151f7c75
-    swap
+    bytec_2 // 0x151f7c75
+    uncover 1
     concat
     log
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__@16
 
 main_reflectAllPay_route@7:
@@ -92,11 +102,12 @@ main_reflectAllPay_route@7:
     // tests/approvals/gtxns.algo.ts:61
     // reflectAllPay(pay: gtxn.PaymentTxn) {
     callsub reflectAllPay
-    bytec_1 // 0x151f7c75
-    swap
+    bytec_2 // 0x151f7c75
+    uncover 1
     concat
     log
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__@16
 
 main_test4_route@6:
@@ -124,6 +135,7 @@ main_test4_route@6:
     // test4(other: gtxn.ApplicationCallTxn) {
     callsub test4
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__@16
 
 main_test3_route@5:
@@ -139,6 +151,7 @@ main_test3_route@5:
     assert // can only call when not creating
     callsub test3
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__@16
 
 main_test2_route@4:
@@ -154,6 +167,7 @@ main_test2_route@4:
     assert // can only call when not creating
     callsub test2
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__@16
 
 main_test_route@3:
@@ -169,6 +183,7 @@ main_test_route@3:
     assert // can only call when not creating
     callsub test
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__@16
 
 main_bare_routing@11:
@@ -176,10 +191,12 @@ main_bare_routing@11:
     // export class GtxnsAlgo extends Contract {
     txn OnCompletion
     intc_0 // 0
-    swap
+    uncover 1
     match main___algots__.defaultCreate@12
+    b main_switch_case_default@13
 
 main_switch_case_default@13:
+    b main_switch_case_next@14
 
 main_switch_case_next@14:
     b main_after_if_else@15
@@ -193,11 +210,13 @@ main___algots__.defaultCreate@12:
     assert // can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.__puya_arc4_router__@16
 
 
 // tests/approvals/gtxns.algo.ts::GtxnsAlgo.test() -> void:
 test:
+    b test_block@0
 
 test_block@0:
     // tests/approvals/gtxns.algo.ts:18
@@ -220,8 +239,9 @@ test2:
     // tests/approvals/gtxns.algo.ts:21
     // test2() {
     proto 0 0
-    bytec_2 // ""
-    dup
+    bytec_0 // ""
+    bytec_0 // ""
+    b test2_block@0
 
 test2_block@0:
     // tests/approvals/gtxns.algo.ts:22
@@ -230,6 +250,7 @@ test2_block@0:
     intc_1 // 1
     assert // Step cannot be zero
     intc_0 // 0
+    b test2_for_header@1
 
 test2_for_header@1:
     // tests/approvals/gtxns.algo.ts:22
@@ -238,6 +259,7 @@ test2_for_header@1:
     frame_dig 2
     <
     bz test2_after_for@21
+    b test2_for_body@2
 
 test2_for_body@2:
     // tests/approvals/gtxns.algo.ts:22
@@ -261,8 +283,10 @@ test2_for_body@2:
     //   log(txn.appId.id)
     //   break
     bz test2_after_if_else@5
+    b test2_if_body@3
 
 test2_if_body@3:
+    b test2_block@4
 
 test2_block@4:
     // tests/approvals/gtxns.algo.ts:26
@@ -271,8 +295,12 @@ test2_block@4:
     gtxns ApplicationID
     itob
     log
+    // tests/approvals/gtxns.algo.ts:27
+    // break
+    b test2_block@19
 
 test2_block@19:
+    b test2_for_footer@20
 
 test2_for_footer@20:
     // tests/approvals/gtxns.algo.ts:22
@@ -294,8 +322,10 @@ test2_after_if_else@5:
     //   log(txn.xferAsset.id)
     //   break
     bz test2_after_if_else@8
+    b test2_if_body@6
 
 test2_if_body@6:
+    b test2_block@7
 
 test2_block@7:
     // tests/approvals/gtxns.algo.ts:29
@@ -319,8 +349,10 @@ test2_after_if_else@8:
     //   log(txn.configAsset.id)
     //   break
     bz test2_after_if_else@11
+    b test2_if_body@9
 
 test2_if_body@9:
+    b test2_block@10
 
 test2_block@10:
     // tests/approvals/gtxns.algo.ts:32
@@ -344,8 +376,10 @@ test2_after_if_else@11:
     //   log(txn.receiver)
     //   break
     bz test2_after_if_else@14
+    b test2_if_body@12
 
 test2_if_body@12:
+    b test2_block@13
 
 test2_block@13:
     // tests/approvals/gtxns.algo.ts:35
@@ -368,8 +402,10 @@ test2_after_if_else@14:
     //   log(txn.voteKey)
     //   break
     bz test2_after_if_else@17
+    b test2_if_body@15
 
 test2_if_body@15:
+    b test2_block@16
 
 test2_block@16:
     // tests/approvals/gtxns.algo.ts:38
@@ -382,6 +418,7 @@ test2_block@16:
     b test2_block@19
 
 test2_after_if_else@17:
+    b test2_block@18
 
 test2_block@18:
     // tests/approvals/gtxns.algo.ts:41
@@ -400,6 +437,7 @@ test2_after_for@21:
 
 // tests/approvals/gtxns.algo.ts::GtxnsAlgo.test3() -> void:
 test3:
+    b test3_block@0
 
 test3_block@0:
     // tests/approvals/gtxns.algo.ts:48
@@ -426,6 +464,7 @@ test4:
     // tests/approvals/gtxns.algo.ts:53
     // test4(other: gtxn.ApplicationCallTxn) {
     proto 1 0
+    b test4_block@0
 
 test4_block@0:
     // tests/approvals/gtxns.algo.ts:54
@@ -454,7 +493,7 @@ test4_block@0:
     frame_dig -1
     intc_0 // 0
     gtxnsas ApplicationArgs
-    bytec_0 // method "test3()void"
+    bytec_1 // method "test3()void"
     ==
     assert
     // tests/approvals/gtxns.algo.ts:58
@@ -472,6 +511,7 @@ reflectAllPay:
     // tests/approvals/gtxns.algo.ts:61
     // reflectAllPay(pay: gtxn.PaymentTxn) {
     proto 1 1
+    b reflectAllPay_block@0
 
 reflectAllPay_block@0:
     // tests/approvals/gtxns.algo.ts:63
@@ -482,7 +522,7 @@ reflectAllPay_block@0:
     // fee: pay.fee,
     frame_dig -1
     gtxns Fee
-    swap
+    cover 1
     // tests/approvals/gtxns.algo.ts:65
     // firstValid: pay.firstValid,
     frame_dig -1
@@ -565,19 +605,19 @@ reflectAllPay_block@0:
     intc_2 // 32
     ==
     assert // invalid size
-    bytec_2 // 0x
-    swap
+    bytec_0 // 0x
+    uncover 1
     concat
-    swap
+    uncover 1
     itob
     concat
-    swap
+    uncover 1
     itob
     concat
-    swap
+    uncover 1
     itob
     concat
-    swap
+    uncover 1
     itob
     concat
     dig 1
@@ -590,14 +630,14 @@ reflectAllPay_block@0:
     itob
     extract 6 2
     uncover 2
-    swap
+    uncover 1
     concat
-    swap
+    cover 1
     dup
     len
     pushint 244 // 244
     +
-    swap
+    cover 1
     dig 3
     len
     intc_2 // 32
@@ -605,7 +645,7 @@ reflectAllPay_block@0:
     assert // invalid size
     uncover 3
     uncover 3
-    swap
+    uncover 1
     concat
     dig 3
     len
@@ -652,9 +692,9 @@ reflectAllPay_block@0:
     assert // invalid size
     uncover 3
     concat
-    swap
+    uncover 1
     concat
-    swap
+    uncover 1
     concat
     retsub
 
@@ -664,6 +704,7 @@ test5:
     // tests/approvals/gtxns.algo.ts:80
     // test5(txn: gtxn.Transaction): uint64 {
     proto 1 1
+    b test5_block@0
 
 test5_block@0:
     // tests/approvals/gtxns.algo.ts:81
@@ -673,6 +714,7 @@ test5_block@0:
     intc_1 // 1
     ==
     bz test5_else_body@2
+    b test5_if_body@1
 
 test5_if_body@1:
     // tests/approvals/gtxns.algo.ts:82
@@ -688,6 +730,7 @@ test5_else_body@2:
     pushint 4 // 4
     ==
     bz test5_after_if_else@4
+    b test5_if_body@3
 
 test5_if_body@3:
     // tests/approvals/gtxns.algo.ts:85
@@ -696,6 +739,7 @@ test5_if_body@3:
     retsub
 
 test5_after_if_else@4:
+    b test5_after_if_else@5
 
 test5_after_if_else@5:
     // tests/approvals/gtxns.algo.ts:87
@@ -706,6 +750,7 @@ test5_after_if_else@5:
 
 // tests/approvals/gtxns.algo.ts::GtxnsAlgo.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
 
 __algots__.defaultCreate_block@0:
     retsub

@@ -201,6 +201,7 @@ const TYPE_MAP: Record<string, AlgoTsType> = {
   application: AlgoTsType.Application,
   asset: AlgoTsType.Asset,
   bool: AlgoTsType.Boolean,
+  bool_only: AlgoTsType.Boolean,
   boxName: AlgoTsType.Bytes,
   stateKey: AlgoTsType.Bytes,
   uint8: AlgoTsType.Uint64,

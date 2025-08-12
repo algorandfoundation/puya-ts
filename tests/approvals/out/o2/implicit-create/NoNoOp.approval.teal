@@ -3,21 +3,16 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1
     // tests/approvals/implicit-create.algo.ts:8
     // export class NoNoOp extends Contract {
     txn NumAppArgs
     bnz main_after_if_else@8
-    pushint 4 // 4
-    intc_0 // 0
+    pushints 4 0 // 4, 0
     txn OnCompletion
     match main_handleUpdate@4 main___algots__.defaultCreate@5
 
 main_after_if_else@8:
-    // tests/approvals/implicit-create.algo.ts:8
-    // export class NoNoOp extends Contract {
-    intc_0 // 0
-    return
+    err
 
 main___algots__.defaultCreate@5:
     // tests/approvals/implicit-create.algo.ts:8
@@ -25,7 +20,7 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     assert // can only call when creating
-    intc_1 // 1
+    pushint 1 // 1
     return
 
 main_handleUpdate@4:
@@ -33,5 +28,5 @@ main_handleUpdate@4:
     // @baremethod({ allowActions: 'UpdateApplication' })
     txn ApplicationID
     assert // can only call when not creating
-    intc_1 // 1
+    pushint 1 // 1
     return

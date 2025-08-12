@@ -14,10 +14,7 @@ main:
     match main_readonlyArray_route@3 main_arrayInObject_route@4 main_buildArray_route@5 main_arrayFromCtor_route@6 main_buildReadonly_route@7 main_doThings_route@8 main_fixedArray_route@9 main_arc4Interop_route@10 main_structs_route@11 main_booleans_route@12 main_booleansStatic_route@13 main_arc4Booleans_route@14 main_arc4BooleansStatic_route@15 main_aliasing_route@16 main_receiveMutable_route@17 main_receiveReadonly_route@18
 
 main_after_if_else@25:
-    // tests/approvals/native-arrays.algo.ts:6
-    // export class NativeArraysAlgo extends Contract {
-    intc_3 // 0
-    return
+    err
 
 main_receiveReadonly_route@18:
     // tests/approvals/native-arrays.algo.ts:225
@@ -463,12 +460,12 @@ doThings_after_while@7:
     // arr[1] = 10
     intc_1 // 10
     itob
-    replace2 10
+    replace2 10 // on error: index access is out of bounds
     // tests/approvals/native-arrays.algo.ts:68
     // const arr2 = arr.with(1, 5)
     dup
     uncover 2
-    replace2 10
+    replace2 10 // on error: index access is out of bounds
     // tests/approvals/native-arrays.algo.ts:70
     // assertMatch(arr, [1, 10, 3, 4])
     dig 1
@@ -1197,7 +1194,7 @@ aliasing:
     itob
     frame_dig -2
     swap
-    replace2 10
+    replace2 10 // on error: index access is out of bounds
     dup
     frame_bury -2
     intc_1 // 10
@@ -1225,7 +1222,7 @@ receiveMutable:
     itob
     frame_dig -1
     swap
-    replace2 2
+    replace2 2 // on error: index access is out of bounds
     dup
     frame_bury -1
     retsub

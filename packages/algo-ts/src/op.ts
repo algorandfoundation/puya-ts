@@ -940,7 +940,7 @@ export function gaid(a: uint64): uint64 {
  * @see Native TEAL opcode: [`getbit`](https://dev.algorand.co/reference/algorand-teal/opcodes#getbit)
  * Min AVM version: 3
  */
-export function getBit(a: bytes | uint64, b: uint64): uint64 {
+export function getBit(a: bytes | uint64, b: uint64): boolean {
   throw new NoImplementation()
 }
 

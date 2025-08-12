@@ -19,8 +19,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%6#0: bool = (! tmp%5#0)
         (assert tmp%6#0) // can only call when creating
         let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
-        let tmp%7#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
-        tests/approvals/precompiled-apps.algo.ts::Hello.create(tmp%7#0)
+        let greeting#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
+        (app_global_put "greeting" greeting#0)
         let tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_router__%0#0: bool = 1u
         goto block@14
     block@6: // delete_route_L20
@@ -82,11 +82,6 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@14: // after_inlined_tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_router___L1
         let tmp%0#0: bool = φ(tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_router__%0#0 <- block@5, tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_router__%0#1 <- block@6, tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_router__%0#2 <- block@7, tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_router__%0#3 <- block@8, tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_router__%0#4 <- block@9, tests/approvals/precompiled-apps.algo.ts::Hello.__puya_arc4_router__%0#5 <- block@13)
         return tmp%0#0
-
-subroutine tests/approvals/precompiled-apps.algo.ts::Hello.create(greeting: string) -> void:
-    block@0: // L36
-        (app_global_put "greeting" greeting#0)
-        return 
 
 subroutine tests/approvals/precompiled-apps.algo.ts::HelloBase.greet(name: string) -> string:
     block@0: // L26

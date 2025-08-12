@@ -23,10 +23,7 @@ main_after_if_else@2:
     match main_helloCreate_route@5 main_delete_route@6 main_update_route@7 main_greet_route@8 main_sendGreetings_route@9
 
 main_after_if_else@13:
-    // tests/approvals/precompiled-apps.algo.ts:35
-    // export class Hello extends HelloBase {
-    intc_1 // 0
-    return
+    err
 
 main_sendGreetings_route@9:
     // tests/approvals/precompiled-apps.algo.ts:30
@@ -120,27 +117,17 @@ main_helloCreate_route@5:
     // export class Hello extends HelloBase {
     txna ApplicationArgs 1
     extract 2 0
-    // tests/approvals/precompiled-apps.algo.ts:36
-    // @abimethod({ name: 'helloCreate', onCreate: 'require' })
-    callsub create
-    intc_0 // 1
-    return
-
-
-// tests/approvals/precompiled-apps.algo.ts::Hello.create(greeting: bytes) -> void:
-create:
-    // tests/approvals/precompiled-apps.algo.ts:36-37
-    // @abimethod({ name: 'helloCreate', onCreate: 'require' })
-    // create(greeting: string) {
-    proto 1 0
     // tests/approvals/precompiled-apps.algo.ts:18
     // greeting = GlobalState({ initialValue: '' })
     bytec_0 // "greeting"
     // tests/approvals/precompiled-apps.algo.ts:38
     // this.greeting.value = greeting
-    frame_dig -1
+    swap
     app_global_put
-    retsub
+    // tests/approvals/precompiled-apps.algo.ts:36
+    // @abimethod({ name: 'helloCreate', onCreate: 'require' })
+    intc_0 // 1
+    return
 
 
 // tests/approvals/precompiled-apps.algo.ts::HelloBase.greet(name: bytes) -> bytes:

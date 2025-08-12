@@ -25,8 +25,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%15#0: bool = (! tmp%14#0)
         (assert tmp%15#0) // can only call when creating
         let reinterpret_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = (txna ApplicationArgs 1)
-        let tmp%16#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%0#0)
-        tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.createApplication(tmp%16#0)
+        let value#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%0#0)
+        (app_global_put "global" value#0)
         let tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.__puya_arc4_router__%0#1: bool = 1u
         goto block@15
     block@5: // setLocal_route_L17
@@ -70,11 +70,6 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@15: // after_inlined_tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.__puya_arc4_router___L1
         let tmp%0#0: bool = φ(tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.__puya_arc4_router__%0#5 <- block@11, tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.__puya_arc4_router__%0#6 <- block@14)
         return tmp%0#0
-
-subroutine tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.createApplication(value: bytes) -> void:
-    block@0: // L12
-        (app_global_put "global" value#0)
-        return 
 
 subroutine tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.setLocal(value: string) -> void:
     block@0: // L17

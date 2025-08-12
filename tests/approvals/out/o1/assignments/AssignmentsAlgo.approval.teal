@@ -15,11 +15,7 @@ main:
     match main_testPrimitives_route@3 main_testAccountDestructure_route@4 main_testArrayDestructure_route@5 main_testArrayNarrowing_route@6 main_testTupleToArray_route@7 main_testNested_route@8 main_testDestructureObj_route@9 main_testObjLiteralNarrowing_route@10 main_testMixed_route@11
 
 main_after_if_else@18:
-    // tests/approvals/assignments.algo.ts:19-20
-    // @contract({ scratchSlots: [countSlot] })
-    // export class AssignmentsAlgo extends Contract {
-    intc_2 // 0
-    return
+    err
 
 main_testMixed_route@11:
     // tests/approvals/assignments.algo.ts:103
@@ -328,7 +324,7 @@ testArrayNarrowing:
     itob
     frame_dig -2
     swap
-    replace2 2
+    replace2 2 // on error: index access is out of bounds
     // tests/approvals/assignments.algo.ts:57
     // direct[0] += 2
     swap
@@ -337,7 +333,7 @@ testArrayNarrowing:
     itob
     frame_dig -2
     swap
-    replace2 2
+    replace2 2 // on error: index access is out of bounds
     // tests/approvals/assignments.algo.ts:58
     // assert(m_a[0] !== direct[0])
     swap

@@ -4,8 +4,11 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1
+    pushbytes ""
+    b main_block@0
 
 main_block@0:
+    b main_block@1
 
 main_block@1:
     // tests/approvals/itxn.algo.ts:226
@@ -14,23 +17,29 @@ main_block@1:
     intc_0 // 0
     !=
     bz main_bare_routing@6
+    b main_abi_routing@2
 
 main_abi_routing@2:
     // tests/approvals/itxn.algo.ts:226
     // class ItxnReceiver extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x1971d197 // method "receivePay(uint64,pay,string)(uint64,uint64,string)"
-    swap
+    uncover 1
     match main_receivePay_route@3
+    b main_switch_case_default@4
 
 main_switch_case_default@4:
+    b main_switch_case_next@5
 
 main_switch_case_next@5:
+    b main_after_if_else@10
 
 main_after_if_else@10:
     // tests/approvals/itxn.algo.ts:226
     // class ItxnReceiver extends Contract {
     intc_0 // 0
+    bury 1
+    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnReceiver.__puya_arc4_router__@11
 
 main_after_inlined_tests/approvals/itxn.algo.ts::ItxnReceiver.__puya_arc4_router__@11:
     return
@@ -67,10 +76,11 @@ main_receivePay_route@3:
     uncover 2
     callsub receivePay
     pushbytes 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnReceiver.__puya_arc4_router__@11
 
 main_bare_routing@6:
@@ -78,10 +88,12 @@ main_bare_routing@6:
     // class ItxnReceiver extends Contract {
     txn OnCompletion
     intc_0 // 0
-    swap
+    uncover 1
     match main___algots__.defaultCreate@7
+    b main_switch_case_default@8
 
 main_switch_case_default@8:
+    b main_switch_case_next@9
 
 main_switch_case_next@9:
     b main_after_if_else@10
@@ -95,6 +107,7 @@ main___algots__.defaultCreate@7:
     assert // can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
+    bury 1
     b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnReceiver.__puya_arc4_router__@11
 
 
@@ -103,6 +116,7 @@ receivePay:
     // tests/approvals/itxn.algo.ts:227
     // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
     proto 3 1
+    b receivePay_block@0
 
 receivePay_block@0:
     // tests/approvals/itxn.algo.ts:228
@@ -112,9 +126,9 @@ receivePay_block@0:
     frame_dig -3
     itob
     pushbytes 0x
-    swap
+    uncover 1
     concat
-    swap
+    uncover 1
     itob
     concat
     frame_dig -1
@@ -127,15 +141,16 @@ receivePay_block@0:
     itob
     extract 6 2
     uncover 2
-    swap
+    uncover 1
     concat
-    swap
+    uncover 1
     concat
     retsub
 
 
 // tests/approvals/itxn.algo.ts::ItxnReceiver.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
 
 __algots__.defaultCreate_block@0:
     retsub

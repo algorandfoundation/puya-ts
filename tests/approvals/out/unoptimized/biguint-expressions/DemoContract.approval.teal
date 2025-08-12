@@ -4,7 +4,8 @@
 // tests/approvals/biguint-expressions.algo.ts::DemoContract.approvalProgram() -> uint64:
 main:
     intcblock 4 0 1
-    bytecblock 0x 0x01
+    bytecblock 0x 0x01 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff 0x045fcc91fd8e73
+    b main_block@0
 
 main_block@0:
     // tests/approvals/biguint-expressions.algo.ts:32
@@ -34,12 +35,13 @@ testConstructor:
     // tests/approvals/biguint-expressions.algo.ts:5
     // function testConstructor(a: uint64, a_b: biguint, b: boolean, b_b: biguint, c: bytes, c_b: biguint) {
     proto 6 0
+    b testConstructor_block@0
 
 testConstructor_block@0:
     // tests/approvals/biguint-expressions.algo.ts:6
     // assert(BigUint() === 0n)
     bytec_0 // 0x
-    dup
+    bytec_0 // 0x
     b==
     assert
     // tests/approvals/biguint-expressions.algo.ts:7
@@ -59,37 +61,37 @@ testConstructor_block@0:
     // tests/approvals/biguint-expressions.algo.ts:9
     // assert(BigUint(0) === 0n)
     bytec_0 // 0x
-    dup
+    bytec_0 // 0x
     b==
     assert
     // tests/approvals/biguint-expressions.algo.ts:10
     // assert(BigUint(1) === 1n)
     bytec_1 // 0x01
-    dup
+    bytec_1 // 0x01
     b==
     assert
     // tests/approvals/biguint-expressions.algo.ts:11
     // assert(BigUint(0n) === 0n)
     bytec_0 // 0x
-    dup
+    bytec_0 // 0x
     b==
     assert
     // tests/approvals/biguint-expressions.algo.ts:12
     // assert(BigUint(1n) === 1n)
     bytec_1 // 0x01
-    dup
+    bytec_1 // 0x01
     b==
     assert
     // tests/approvals/biguint-expressions.algo.ts:13
     // assert(BigUint(2n ** 512n - 1n) === 2n ** 512n - 1n)
-    pushbytes 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-    dup
+    bytec_2 // 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+    bytec_2 // 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     b==
     assert
     // tests/approvals/biguint-expressions.algo.ts:14
     // assert(BigUint('1231232134123123') === 1231232134123123n)
-    pushbytes 0x045fcc91fd8e73
-    dup
+    bytec_3 // 0x045fcc91fd8e73
+    bytec_3 // 0x045fcc91fd8e73
     b==
     assert
     // tests/approvals/biguint-expressions.algo.ts:15
@@ -102,11 +104,11 @@ testConstructor_block@0:
     // tests/approvals/biguint-expressions.algo.ts:16
     // assert(BigUint(a * a) === a_b * a_b)
     frame_dig -6
-    dup
+    frame_dig -6
     *
     itob
     frame_dig -5
-    dup
+    frame_dig -5
     b*
     b==
     assert
@@ -131,6 +133,7 @@ testOps:
     // tests/approvals/biguint-expressions.algo.ts:21
     // function testOps(smaller: biguint, larger: biguint) {
     proto 2 0
+    b testOps_block@0
 
 testOps_block@0:
     // tests/approvals/biguint-expressions.algo.ts:22
@@ -142,7 +145,7 @@ testOps_block@0:
     // tests/approvals/biguint-expressions.algo.ts:23
     // assert(smaller <= smaller)
     frame_dig -2
-    dup
+    frame_dig -2
     b<=
     assert
     // tests/approvals/biguint-expressions.algo.ts:24
@@ -154,13 +157,13 @@ testOps_block@0:
     // tests/approvals/biguint-expressions.algo.ts:25
     // assert(larger >= larger)
     frame_dig -1
-    dup
+    frame_dig -1
     b>=
     assert
     // tests/approvals/biguint-expressions.algo.ts:26
     // assert(smaller === BigUint(smaller))
     frame_dig -2
-    dup
+    frame_dig -2
     b==
     assert
     // tests/approvals/biguint-expressions.algo.ts:27

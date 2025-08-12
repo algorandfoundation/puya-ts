@@ -70,7 +70,7 @@ subroutine tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.t
         let aggregate%extract_uint16%0#0: uint64 = (extract_uint16 p#0 8u)
         let aggregate%len%0#0: uint64 = (len p#0)
         let b#0: Encoded(len+uint8[]) = (substring3 p#0 aggregate%extract_uint16%0#0 aggregate%len%0#0)
-        let aggregate%get_bit%0#0: uint64 = (getbit p#0 80u)
+        let aggregate%get_bit%0#0: bool = (getbit p#0 80u)
         let c#0: Encoded(bool8) = (setbit 0x00 0u aggregate%get_bit%0#0)
         let tmp%0#0: bytes = (concat a#0 b#0)
         let tmp%1#0: bytes = (concat tmp%0#0 c#0)

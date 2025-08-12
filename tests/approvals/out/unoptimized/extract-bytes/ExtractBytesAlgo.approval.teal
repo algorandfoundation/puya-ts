@@ -5,6 +5,7 @@
 main:
     intcblock 2 0
     bytecblock "abcdefg" "cdefg" "cd"
+    b main_block@0
 
 main_block@0:
     // tests/approvals/extract-bytes.algo.ts:7
@@ -23,6 +24,7 @@ test:
     // tests/approvals/extract-bytes.algo.ts:11
     // private test(two: uint64, zero: uint64) {
     proto 2 0
+    b test_block@0
 
 test_block@0:
     // tests/approvals/extract-bytes.algo.ts:12
@@ -61,7 +63,7 @@ test_block@0:
     // assert(extract(b, 2, 2) === Bytes('cd'))
     bytec_0 // "abcdefg"
     intc_0 // 2
-    dup
+    intc_0 // 2
     extract3
     bytec_2 // "cd"
     ==
@@ -70,7 +72,7 @@ test_block@0:
     // assert(extract(b, two, two) === Bytes('cd'))
     bytec_0 // "abcdefg"
     frame_dig -2
-    dup
+    frame_dig -2
     extract3
     bytec_2 // "cd"
     ==

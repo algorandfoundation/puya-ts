@@ -1,0 +1,24 @@
+contract Arc4BoolAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(p: ObjectCB267EF3): Object7D615236
+  {
+    #[useRounds, lastValid, cooldown, lastCalled, exists, hasMethodRestrictions]: readonly [bool, uint64, uint64, uint64, bool, bool] = #[p.useRounds, p.lastValid, p.cooldown, p.lastCalled, p.exists, p.hasMethodRestrictions]
+    epochRef: uint64 = (useRounds ? global<Round>() : global<LatestTimestamp>())
+    return new Object7D615236(exists=exists, expired=epochRef > lastValid, hasCooldown=cooldown > 0, onCooldown=epochRef - lastCalled < cooldown, hasMethodRestrictions=hasMethodRestrictions)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
