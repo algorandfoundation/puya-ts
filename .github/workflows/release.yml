@@ -51,6 +51,7 @@ jobs:
       - name: Download package artifacts
         uses: actions/download-artifact@v4
         with:
+          pattern: '*-node-22.x'
           path: artifacts
 
       - name: Generate semantic version for @algorandfoundation/puya-ts
@@ -60,10 +61,10 @@ jobs:
 
       - name: Copy puya-ts version to algo-ts
         run: |
-          cd artifacts/puya-ts
+          cd artifacts/puya-ts-node-22.x
           newVersion=$(npm view ./ version)
           npm pkg set dependencies.@algorandfoundation/algorand-typescript=$newVersion
-          cd ../algo-ts
+          cd ../algo-ts-node-22.x
           npm pkg set version=$newVersion
 
       - name: Publish @algorandfoundation/algorand-typescript
@@ -71,19 +72,17 @@ jobs:
         id: publish-algo-ts
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: artifacts/algo-ts/package.json
+          package: artifacts/algo-ts-node-22.x/package.json
           access: 'public'
           # Tagging 'main' branch with latest for now, even though it's beta because we don't have a non-beta
           tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'latest' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
-
-
 
       - name: Publish @algorandfoundation/puya-ts
         uses: JS-DevTools/npm-publish@v3
         id: publish-puya-ts
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: artifacts/puya-ts/package.json
+          package: artifacts/puya-ts-node-22.x/package.json
           access: 'public'
           # Tagging 'main' branch with latest for now, even though it's beta because we don't have a non-beta
           tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'latest' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
