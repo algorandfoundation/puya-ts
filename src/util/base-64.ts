@@ -10,7 +10,7 @@ import { throwError } from '../errors'
 
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.split('')
 
-const charToNum = new Map(alphabet.entries().map(([i, c]) => [c, i]))
+const charToNum = new Map([...alphabet.entries()].map(([i, c]) => [c, i]))
 const numToChar = new Map(alphabet.entries())
 
 function getCharForNum(n: number): string {
