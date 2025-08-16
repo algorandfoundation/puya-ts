@@ -1,6 +1,6 @@
 subroutine padTo32(b: bytes[16]): bytes[32]
 {
-  return checked_maybe(#[reinterpret_cast<bytes[32]>(($0 = reinterpret_cast<bytes>(b) | bzero(32))), len($0) == 32], comment=Length must be 32)
+  return reinterpret_cast<bytes[32]>(reinterpret_cast<bytes>(b) | bzero(32))
 }
 contract StaticBytesAlgo
 {
@@ -40,7 +40,7 @@ contract StaticBytesAlgo
     tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(reinterpret_cast<bytes[32]>(txn<Sender>()))
     tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes(reinterpret_cast<bytes>(reinterpret_cast<bytes[32]>(txn<Sender>())), 32)
     tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32("abcdefghabcdefghabcdefghabcdefgh")
-    joined: bytes[55] = checked_maybe(#[reinterpret_cast<bytes[55]>(($1 = "" + "abc" + 0xaaff + b32<AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ> + b64<SGVsbG8gQWxnb3JhbmQ=>)), len($1) == 55], comment=Length must be 55)
+    joined: bytes[55] = checked_maybe(#[reinterpret_cast<bytes[55]>(($0 = "" + "abc" + 0xaaff + b32<AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ> + b64<SGVsbG8gQWxnb3JhbmQ=>)), len($0) == 55], comment=Length must be 55)
     assert(len(joined) == 55)
   }
   
@@ -66,7 +66,7 @@ contract StaticBytesAlgo
   
   test3(): void
   {
-    x: bytes[32] = (y = reinterpret_cast<bytes>(($2 = reinterpret_cast<bytes[32]>(txn<Sender>())))), $2
+    x: bytes[32] = (y = reinterpret_cast<bytes>(($1 = reinterpret_cast<bytes[32]>(txn<Sender>())))), $1
   }
   
   test4(): void
