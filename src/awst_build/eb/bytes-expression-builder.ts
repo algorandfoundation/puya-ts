@@ -441,7 +441,7 @@ export class ToFixedLengthFunctionBuilder extends FunctionBuilder {
       ],
     })
     const sizeConst = requireIntegerConstant(length)
-    const assertLength = checked === undefined ? true : requireBooleanConstant(checked)
+    const assertLength = checked === undefined ? true : requireBooleanConstant(checked).value
     const ptype = new BytesPType({ length: sizeConst.value })
 
     if (assertLength) {

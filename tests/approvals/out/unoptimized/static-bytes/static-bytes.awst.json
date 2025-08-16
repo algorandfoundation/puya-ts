@@ -49,7 +49,7 @@
             "end_column": 71
           },
           "value": {
-            "_type": "CheckedMaybe",
+            "_type": "ReinterpretCast",
             "source_location": {
               "file": "tests/approvals/static-bytes.algo.ts",
               "line": 13,
@@ -57,262 +57,77 @@
               "column": 9,
               "end_column": 71
             },
+            "wtype": {
+              "_type": "BytesWType",
+              "length": 32
+            },
             "expr": {
-              "_type": "TupleExpression",
+              "_type": "BytesBinaryOperation",
               "source_location": {
                 "file": "tests/approvals/static-bytes.algo.ts",
                 "line": 13,
                 "end_line": 13,
                 "column": 9,
-                "end_column": 71
+                "end_column": 31
               },
               "wtype": {
-                "_type": "WTuple",
-                "name": "tuple",
-                "types": [
-                  {
-                    "_type": "BytesWType",
-                    "length": 32
-                  },
-                  {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true
-                  }
-                ]
+                "_type": "BytesWType",
+                "length": null
               },
-              "items": [
-                {
-                  "_type": "ReinterpretCast",
+              "left": {
+                "_type": "ReinterpretCast",
+                "source_location": {
+                  "file": "tests/approvals/static-bytes.algo.ts",
+                  "line": 13,
+                  "end_line": 13,
+                  "column": 9,
+                  "end_column": 10
+                },
+                "wtype": {
+                  "_type": "BytesWType",
+                  "length": null
+                },
+                "expr": {
+                  "_type": "VarExpression",
                   "source_location": {
                     "file": "tests/approvals/static-bytes.algo.ts",
                     "line": 13,
                     "end_line": 13,
                     "column": 9,
-                    "end_column": 71
+                    "end_column": 10
                   },
                   "wtype": {
                     "_type": "BytesWType",
-                    "length": 32
+                    "length": 16
                   },
-                  "expr": {
-                    "_type": "SingleEvaluation",
-                    "source_location": {
-                      "file": "tests/approvals/static-bytes.algo.ts",
-                      "line": 13,
-                      "end_line": 13,
-                      "column": 9,
-                      "end_column": 31
-                    },
-                    "source": {
-                      "_type": "BytesBinaryOperation",
-                      "source_location": {
-                        "file": "tests/approvals/static-bytes.algo.ts",
-                        "line": 13,
-                        "end_line": 13,
-                        "column": 9,
-                        "end_column": 31
-                      },
-                      "wtype": {
-                        "_type": "BytesWType",
-                        "length": null
-                      },
-                      "left": {
-                        "_type": "ReinterpretCast",
-                        "source_location": {
-                          "file": "tests/approvals/static-bytes.algo.ts",
-                          "line": 13,
-                          "end_line": 13,
-                          "column": 9,
-                          "end_column": 10
-                        },
-                        "wtype": {
-                          "_type": "BytesWType",
-                          "length": null
-                        },
-                        "expr": {
-                          "_type": "VarExpression",
-                          "source_location": {
-                            "file": "tests/approvals/static-bytes.algo.ts",
-                            "line": 13,
-                            "end_line": 13,
-                            "column": 9,
-                            "end_column": 10
-                          },
-                          "wtype": {
-                            "_type": "BytesWType",
-                            "length": 16
-                          },
-                          "name": "b"
-                        }
-                      },
-                      "op": "|",
-                      "right": {
-                        "_type": "IntrinsicCall",
-                        "source_location": {
-                          "file": "tests/approvals/static-bytes.algo.ts",
-                          "line": 13,
-                          "end_line": 13,
-                          "column": 21,
-                          "end_column": 30
-                        },
-                        "wtype": {
-                          "_type": "BytesWType",
-                          "length": null
-                        },
-                        "op_code": "bzero",
-                        "immediates": [],
-                        "stack_args": [
-                          {
-                            "_type": "IntegerConstant",
-                            "source_location": {
-                              "file": "tests/approvals/static-bytes.algo.ts",
-                              "line": 13,
-                              "end_line": 13,
-                              "column": 27,
-                              "end_column": 29
-                            },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "value": 32,
-                            "teal_alias": null
-                          }
-                        ]
-                      }
-                    },
-                    "_id": "0"
-                  }
+                  "name": "b"
+                }
+              },
+              "op": "|",
+              "right": {
+                "_type": "IntrinsicCall",
+                "source_location": {
+                  "file": "tests/approvals/static-bytes.algo.ts",
+                  "line": 13,
+                  "end_line": 13,
+                  "column": 21,
+                  "end_column": 30
                 },
-                {
-                  "_type": "NumericComparisonExpression",
-                  "source_location": {
-                    "file": "tests/approvals/static-bytes.algo.ts",
-                    "line": 13,
-                    "end_line": 13,
-                    "column": 9,
-                    "end_column": 71
-                  },
-                  "lhs": {
-                    "_type": "IntrinsicCall",
-                    "source_location": {
-                      "file": "tests/approvals/static-bytes.algo.ts",
-                      "line": 13,
-                      "end_line": 13,
-                      "column": 9,
-                      "end_column": 71
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "op_code": "len",
-                    "immediates": [],
-                    "stack_args": [
-                      {
-                        "_type": "SingleEvaluation",
-                        "source_location": {
-                          "file": "tests/approvals/static-bytes.algo.ts",
-                          "line": 13,
-                          "end_line": 13,
-                          "column": 9,
-                          "end_column": 31
-                        },
-                        "source": {
-                          "_type": "BytesBinaryOperation",
-                          "source_location": {
-                            "file": "tests/approvals/static-bytes.algo.ts",
-                            "line": 13,
-                            "end_line": 13,
-                            "column": 9,
-                            "end_column": 31
-                          },
-                          "wtype": {
-                            "_type": "BytesWType",
-                            "length": null
-                          },
-                          "left": {
-                            "_type": "ReinterpretCast",
-                            "source_location": {
-                              "file": "tests/approvals/static-bytes.algo.ts",
-                              "line": 13,
-                              "end_line": 13,
-                              "column": 9,
-                              "end_column": 10
-                            },
-                            "wtype": {
-                              "_type": "BytesWType",
-                              "length": null
-                            },
-                            "expr": {
-                              "_type": "VarExpression",
-                              "source_location": {
-                                "file": "tests/approvals/static-bytes.algo.ts",
-                                "line": 13,
-                                "end_line": 13,
-                                "column": 9,
-                                "end_column": 10
-                              },
-                              "wtype": {
-                                "_type": "BytesWType",
-                                "length": 16
-                              },
-                              "name": "b"
-                            }
-                          },
-                          "op": "|",
-                          "right": {
-                            "_type": "IntrinsicCall",
-                            "source_location": {
-                              "file": "tests/approvals/static-bytes.algo.ts",
-                              "line": 13,
-                              "end_line": 13,
-                              "column": 21,
-                              "end_column": 30
-                            },
-                            "wtype": {
-                              "_type": "BytesWType",
-                              "length": null
-                            },
-                            "op_code": "bzero",
-                            "immediates": [],
-                            "stack_args": [
-                              {
-                                "_type": "IntegerConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/static-bytes.algo.ts",
-                                  "line": 13,
-                                  "end_line": 13,
-                                  "column": 27,
-                                  "end_column": 29
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "uint64",
-                                  "immutable": true
-                                },
-                                "value": 32,
-                                "teal_alias": null
-                              }
-                            ]
-                          }
-                        },
-                        "_id": "0"
-                      }
-                    ]
-                  },
-                  "operator": "==",
-                  "rhs": {
+                "wtype": {
+                  "_type": "BytesWType",
+                  "length": null
+                },
+                "op_code": "bzero",
+                "immediates": [],
+                "stack_args": [
+                  {
                     "_type": "IntegerConstant",
                     "source_location": {
                       "file": "tests/approvals/static-bytes.algo.ts",
                       "line": 13,
                       "end_line": 13,
-                      "column": 9,
-                      "end_column": 71
+                      "column": 27,
+                      "end_column": 29
                     },
                     "wtype": {
                       "_type": "WType",
@@ -322,10 +137,9 @@
                     "value": 32,
                     "teal_alias": null
                   }
-                }
-              ]
-            },
-            "comment": "Length must be 32"
+                ]
+              }
+            }
           }
         }
       ],
@@ -1654,7 +1468,7 @@
                             "encoding": "base64"
                           }
                         },
-                        "_id": "1"
+                        "_id": "0"
                       }
                     },
                     {
@@ -1832,7 +1646,7 @@
                                 "encoding": "base64"
                               }
                             },
-                            "_id": "1"
+                            "_id": "0"
                           }
                         ]
                       },
@@ -3154,7 +2968,7 @@
                             "stack_args": []
                           }
                         },
-                        "_id": "2"
+                        "_id": "1"
                       }
                     }
                   },
@@ -3201,7 +3015,7 @@
                         "stack_args": []
                       }
                     },
-                    "_id": "2"
+                    "_id": "1"
                   }
                 ]
               }
