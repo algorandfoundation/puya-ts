@@ -13,7 +13,17 @@ export { hexToUint8Array, uint8ArrayToHex } from './base-16'
 // Polyfills for Set methods that are not available on older versions of Node
 if (!Set.prototype.union) {
   Set.prototype.union = function (other) {
-    return new Set([...this, ...other])
+    // Convert ReadonlySetLike to iterable by checking if it's a Set or has values method
+    let otherIterable: Iterable<unknown>
+    if (other instanceof Set) {
+      otherIterable = other
+    } else if ('values' in other && typeof other.values === 'function') {
+      otherIterable = other.values()
+    } else {
+      throw new TypeError('Argument must be a ReadonlySetLike')
+    }
+
+    return new Set([...this, ...otherIterable])
   }
 }
 
