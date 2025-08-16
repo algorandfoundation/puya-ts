@@ -11,21 +11,7 @@ import { generateExcludedPropsObj } from './nodes-meta'
 import { SourceLocation } from './source-location'
 import { SymbolToNumber } from './util'
 
-type JSONWithRaw = typeof JSON & {
-  /**
-   * This method exists in Node 21+ and several browsers but hasn't made its way into the typescript lib
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/rawJSON
-   *
-   *
-   */
-  rawJSON?(value: string): string
-}
-
 function serializeBigInt(value: bigint): unknown {
-  const jsonWithRaw = JSON as unknown as JSONWithRaw
-  if (jsonWithRaw.rawJSON) {
-    return jsonWithRaw.rawJSON(`${value}`)
-  }
   if (value < 0n) {
     if (value < Number.MIN_SAFE_INTEGER) {
       throw new InternalError(`Cannot safely serialize ${value} to JSON`)
