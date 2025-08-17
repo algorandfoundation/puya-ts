@@ -198,7 +198,7 @@ export const AppGlobal = {
   /**
    * global state of the key A in the current application
    * @param a state key.
-   *  * @return value. The value is zero (of type uint64) if the key does not exist.
+   * @return value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_global_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get)
    * Min AVM version: 2
    */
@@ -209,7 +209,7 @@ export const AppGlobal = {
   /**
    * global state of the key A in the current application
    * @param a state key.
-   *  * @return value. The value is zero (of type uint64) if the key does not exist.
+   * @return value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_global_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get)
    * Min AVM version: 2
    */
@@ -220,7 +220,7 @@ export const AppGlobal = {
   /**
    * X is the global state of application A, key B. Y is 1 if key existed, else 0
    * @param a Txn.ForeignApps offset (or, since v4, an _available_ application id), state key.
-   *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
+   * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_global_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get_ex)
    * Min AVM version: 2
    */
@@ -231,7 +231,7 @@ export const AppGlobal = {
   /**
    * X is the global state of application A, key B. Y is 1 if key existed, else 0
    * @param a Txn.ForeignApps offset (or, since v4, an _available_ application id), state key.
-   *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
+   * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_global_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get_ex)
    * Min AVM version: 2
    */
@@ -267,7 +267,7 @@ export const AppLocal = {
   /**
    * local state of the key B in the current application in account A
    * @param a Txn.Accounts offset (or, since v4, an _available_ account address), state key.
-   *  * @return value. The value is zero (of type uint64) if the key does not exist.
+   * @return value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_local_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get)
    * Min AVM version: 2
    */
@@ -278,7 +278,7 @@ export const AppLocal = {
   /**
    * local state of the key B in the current application in account A
    * @param a Txn.Accounts offset (or, since v4, an _available_ account address), state key.
-   *  * @return value. The value is zero (of type uint64) if the key does not exist.
+   * @return value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_local_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get)
    * Min AVM version: 2
    */
@@ -289,7 +289,7 @@ export const AppLocal = {
   /**
    * X is the local state of application B, key C in account A. Y is 1 if key existed, else 0
    * @param a Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset), state key.
-   *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
+   * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_local_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get_ex)
    * Min AVM version: 2
    */
@@ -300,7 +300,7 @@ export const AppLocal = {
   /**
    * X is the local state of application B, key C in account A. Y is 1 if key existed, else 0
    * @param a Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset), state key.
-   *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
+   * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_local_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get_ex)
    * Min AVM version: 2
    */
@@ -322,7 +322,7 @@ export const AppLocal = {
 /**
  * 1 if account A is opted in to application B, else 0
  * @param a Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
- *  * @return 1 if opted in and 0 otherwise.
+ * @return 1 if opted in and 0 otherwise.
  * @see Native TEAL opcode: [`app_opted_in`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_opted_in)
  * Min AVM version: 2
  */
@@ -530,7 +530,7 @@ export const AssetParams = {
 /**
  * balance for account A, in microalgos. The balance is observed after the effects of previous transactions in the group, and after the fee for the current transaction is deducted. Changes caused by inner transactions are observable immediately following `itxn_submit`
  * @param a Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
- *  * @return value.
+ * @return value.
  * @see Native TEAL opcode: [`balance`](https://dev.algorand.co/reference/algorand-teal/opcodes#balance)
  * Min AVM version: 2
  */
@@ -3333,7 +3333,7 @@ export function mimc(c: MimcConfigurations, a: bytes): bytes<32> {
 /**
  * minimum required balance for account A, in microalgos. Required balance is affected by ASA, App, and Box usage. When creating or opting into an app, the minimum balance grows before the app code runs, therefore the increase is visible there. When deleting or closing out, the minimum balance decreases after the app executes. Changes caused by inner transactions or box usage are observable immediately following the opcode effecting the change.
  * @param a Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
- *  * @return value.
+ * @return value.
  * @see Native TEAL opcode: [`min_balance`](https://dev.algorand.co/reference/algorand-teal/opcodes#min_balance)
  * Min AVM version: 3
  */
