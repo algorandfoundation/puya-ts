@@ -91,6 +91,7 @@ export class BigUintFunctionBuilder extends FunctionBuilder {
       biguint = nodeFactory.bigUIntConstant({
         value: initialValue.value,
         sourceLocation: sourceLocation,
+        errorLocation: initialValue.sourceLocation,
       })
     } else {
       return initialValue.resolveToPType(biguintPType)
