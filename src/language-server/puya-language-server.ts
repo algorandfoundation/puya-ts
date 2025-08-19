@@ -1,6 +1,4 @@
-import { CodeActionKind } from 'vscode-languageserver'
 import { TextDocument } from 'vscode-languageserver-textdocument'
-import type { Connection } from 'vscode-languageserver/node'
 import * as lsp from 'vscode-languageserver/node'
 import { Constants } from '../constants'
 import { CompileTriggerQueue } from './compile-trigger-queue'
@@ -40,7 +38,7 @@ export class PuyaLanguageServer {
   readonly logger: LsLogger
   readonly diagnosticsMgr: DiagnosticsManager
   readonly compileWorker: CompileWorker
-  constructor(public readonly connection: Connection) {
+  constructor(public readonly connection: lsp.Connection) {
     console.log('Language server started')
     this.logger = new LsLogger(connection)
     this.diagnosticsMgr = new DiagnosticsManager()
@@ -110,7 +108,7 @@ export class PuyaLanguageServer {
       if (isCodeFixData(d.data)) {
         return {
           title: d.data.message,
-          kind: CodeActionKind.QuickFix,
+          kind: lsp.CodeActionKind.QuickFix,
           diagnostics: [d],
           edit: {
             changes: {
