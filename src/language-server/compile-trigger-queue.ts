@@ -12,7 +12,6 @@ export class CompileTriggerQueue {
   private readonly queue: CompileTrigger[] = []
 
   enqueue(trigger: CompileTrigger) {
-    // TODO: Aggregate unprocessed triggers
     if (this.queue.length === 0) {
       this.queue.push(trigger)
     }

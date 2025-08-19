@@ -120,7 +120,11 @@ export class GlobalStateFunctionResultBuilder extends GlobalStateExpressionBuild
       'Global state must have explicit key provided if not being assigned to a contract property',
       this.sourceLocation,
     )
-    codeInvariant(!this.initialValue, 'Global state can only have an initial value specified if being assigned to a contract property')
+    codeInvariant(
+      !this.initialValue,
+      'Global state can only have an initial value specified if being assigned to a contract property',
+      this.initialValue?.sourceLocation,
+    )
     return this._expr
   }
   public readonly initialValue: Expression | undefined

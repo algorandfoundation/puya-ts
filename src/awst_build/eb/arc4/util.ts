@@ -213,6 +213,7 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
       codeInvariant(
         methodSignature instanceof ContractMethodExpressionBuilder,
         `Expected contract instance method, found ${methodSignature.typeDescription}`,
+        methodSignature.sourceLocation,
       )
       return instanceEb(methodSignature.getMethodSelector(sourceLocation), methodConstantType)
     } else {

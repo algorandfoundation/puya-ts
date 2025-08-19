@@ -115,7 +115,7 @@ function parseObjArg<T extends ObjArgSpec>(
           throw new CodeError(
             `${subject} has an incorrect type for property '${property}' of ${builder.ptype}. Expected ${spec.t.join(' or ')}`,
             {
-              sourceLocation: arg?.sourceLocation ?? sourceLocation,
+              sourceLocation: builder.sourceLocation,
             },
           )
         }
