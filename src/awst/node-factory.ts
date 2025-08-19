@@ -88,9 +88,17 @@ const explicitNodeFactory = {
       tealAlias: tealAlias ?? null,
     })
   },
-  bigUIntConstant({ value, sourceLocation }: { value: bigint; sourceLocation: SourceLocation }): IntegerConstant {
+  bigUIntConstant({
+    value,
+    sourceLocation,
+    errorLocation,
+  }: {
+    value: bigint
+    sourceLocation: SourceLocation
+    errorLocation?: SourceLocation
+  }): IntegerConstant {
     if (value < 0n || value >= 2n ** 512n) {
-      throw new CodeError(`biguint overflow or underflow: ${value}`, { sourceLocation })
+      throw new CodeError(`biguint overflow or underflow: ${value}`, { sourceLocation: errorLocation ?? sourceLocation })
     }
     return new IntegerConstant({
       value,

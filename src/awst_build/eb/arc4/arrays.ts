@@ -3,6 +3,7 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import { BytesConstant, StringConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
+import { wtypes } from '../../../awst/wtypes'
 import { Constants } from '../../../constants'
 import { wrapInCodeError } from '../../../errors'
 import { logger } from '../../../logger'
@@ -37,7 +38,6 @@ import { indexAccess } from '../util/array/index-access'
 import { arrayLength } from '../util/array/length'
 import { resolveCompatExpression } from '../util/resolve-compat-builder'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
-import { wtypes } from '../../../awst/wtypes'
 
 export class DynamicArrayClassBuilder extends ClassBuilder {
   readonly ptype = DynamicArrayGeneric
@@ -203,7 +203,7 @@ export class StaticBytesClassBuilder extends ClassBuilder {
     }
     const value = resolveCompatExpression(initialValue, bytesPType)
     if (value instanceof BytesConstant) {
-      codeInvariant(value.value.length === byteLength, `Value should have byte length of ${byteLength}`, sourceLocation)
+      codeInvariant(value.value.length === byteLength, `Value should have byte length of ${byteLength}`, value.sourceLocation)
       return instanceEb(
         nodeFactory.bytesConstant({
           value: value.value,
