@@ -12,11 +12,11 @@ ARC4 defines an Application Binary Interface (ABI) for how data should be passed
 
 The most basic [types on the AVM](https://dev.algorand.co/concepts/smart-contracts/avm/#stack-types)
 are `uint64` and `bytes`, representing unsigned 64-bit integers and byte arrays respectively.
-These are represented by [`uint64`](./#uint64) and [`bytes`](./#bytes) in Algorand TypeScript.
+These are represented by [`uint64`](#uint64) and [`bytes`](#bytes) in Algorand TypeScript.
 
 There are further "bounded" types supported by the AVM, which are backed by these two simple primitives.
 For example, `biguint` represents a variably sized (up to 512-bits), unsigned integer, but is actually
-backed by a `byte[]`. This is represented by [`biguint`](./#biguint) in Algorand TypeScript.
+backed by a `byte[]`. This is represented by [`biguint`](#biguint) in Algorand TypeScript.
 
 ### Number and BigInt
 
@@ -288,7 +288,7 @@ function addToArray(x: myReference<uint64>) {
 }
 ```
 
-Reference arrays can be declared using the [ReferenceArray](api/index/classes/ReferenceArray.md) type. This type makes use of [scratch space](https://dev.algorand.co/concepts/smart-contracts/languages/teal/#scratch-space-usage) as a heap in order to provide an array type with 'pass by reference' semantics. It is currently limited to fixed size item types.
+Reference arrays can be declared using the [ReferenceArray](../classes/index.ReferenceArray.html) type. This type makes use of [scratch space](https://dev.algorand.co/concepts/smart-contracts/languages/teal/#scratch-space-usage) as a heap in order to provide an array type with 'pass by reference' semantics. It is currently limited to fixed size item types.
 
 ### Tuples
 
@@ -372,7 +372,7 @@ Like `DynamicBytes` but the length header can be omitted as the data is assumed 
 ### Static arrays
 
 **Type:** `@algorandfoundation/algorand-typescript/arc4::StaticArray`<br>
-**Encoding:** See [ARC4 Container Packing](#ARC4-Container-Packing)<br>
+**Encoding:** See [ARC4 Container Packing](#arc4-container-packing)<br>
 **Native equivalent:** _none_
 
 An ARC4 StaticArray is an array of a fixed size. The item type is specified by the first generic parameter and the size is specified by the second.
@@ -389,7 +389,7 @@ reference an address in an ARC4 struct, tuple or return type. It is a subclass o
 ### Dynamic arrays
 
 **Type:** `@algorandfoundation/algorand-typescript/arc4::DynamicArray`<br>
-**Encoding:** See [ARC4 Container Packing](#ARC4-Container-Packing)<br>
+**Encoding:** See [ARC4 Container Packing](#arc4-container-packing)<br>
 **Native equivalent:** _none_
 
 An ARC4 DynamicArray is an array of a variable size. The item type is specified by the first generic parameter. Items can be added and removed via `.pop`, `.append`, and `.extend`.
@@ -399,7 +399,7 @@ The current length of the array is encoded in a 16-bit prefix similar to the `ar
 ### Tuples
 
 **Type:** `@algorandfoundation/algorand-typescript/arc4::Tuple`<br>
-**Encoding:** See [ARC4 Container Packing](#ARC4-Container-Packing)<br>
+**Encoding:** See [ARC4 Container Packing](#arc4-container-packing)<br>
 **Native equivalent:** TypeScript tuple
 
 ARC4 Tuples are immutable statically sized arrays of mixed item types. Item types can be specified via generic parameters or inferred from constructor parameters.
@@ -407,7 +407,7 @@ ARC4 Tuples are immutable statically sized arrays of mixed item types. Item type
 ### Structs
 
 **Type:** `@algorandfoundation/algorand-typescript/arc4::Struct`<br>
-**Encoding:** See [ARC4 Container Packing](#ARC4-Container-Packing)<br>
+**Encoding:** See [ARC4 Container Packing](#arc4-container-packing)<br>
 **Native equivalent:** _None_
 
 ARC4 Structs are named tuples. Items can be accessed via names instead of indexes. They are also mutable

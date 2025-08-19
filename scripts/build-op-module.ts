@@ -678,7 +678,11 @@ function getMappedType(t: string | null, enumName: string | null): AlgoTsType {
 const getOpDocs = (op: Op): string[] => [
   ...(op.doc ?? [])
     .filter(Boolean)
-    .map((d: string) => `${d.replace('params: ', '@param ').replace('Return: ', '\n * @return ')}`.split('\n').map((s) => s.trimEnd()))
+    .map((d: string) =>
+      `${d.replace('params: ', `@param ${op.stack_inputs[0]?.name?.toLowerCase()} `).replace('Return: ', '\n@return ')}`
+        .split('\n')
+        .map((s) => s.trimEnd()),
+    )
     .flat(),
   `@see Native TEAL opcode: [\`${op.name}\`](https://dev.algorand.co/reference/algorand-teal/opcodes#${op.name})`,
 ]

@@ -115,7 +115,6 @@ export function Account(publicKey: bytes): Account
 /**
  * Create a new account object representing the provided address
  * @param address A 56 character base-32 encoded Algorand address
- * @constructor
  */
 export function Account(address: string): Account
 export function Account(publicKeyOrAddress?: bytes | string): Account {
