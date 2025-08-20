@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { awst } from '../../awst'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
@@ -61,7 +62,7 @@ export class StringFunctionBuilder extends FunctionBuilder {
     return stringFromTemplate(head, spans, sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [value],
     } = parseFunctionArgs({
@@ -197,7 +198,7 @@ export class ConcatExpressionBuilder extends FunctionBuilder {
     super(expr.sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const { args: others } = parseFunctionArgs({
       args,
       typeArgs,

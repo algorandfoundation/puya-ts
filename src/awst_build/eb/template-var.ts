@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import type { SourceLocation } from '../../awst/source-location'
 import { logger } from '../../logger'
@@ -13,7 +14,7 @@ import { parseFunctionArgs } from './util/arg-parsing'
 export class TemplateVarFunctionBuilder extends FunctionBuilder {
   readonly ptype = TemplateVarFunction
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [name, prefix],
       ptypes: [varType],

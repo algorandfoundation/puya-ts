@@ -29,6 +29,7 @@ export function deserializeAndLog(logText: string) {
           column: log.location.column,
           endColumn: log.location.end_column ?? log.location.column,
           scope: 'range',
+          node: undefined,
         })
       : undefined
     logger.addLog({ ...log, sourceLocation, logSource: LogSource.Puya })

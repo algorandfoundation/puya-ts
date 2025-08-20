@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import type { awst } from '../../awst'
 
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
@@ -95,7 +96,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
     return new BytesExpressionBuilder(result, bytesPType)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [initialValue],
     } = parseFunctionArgs({
@@ -182,7 +183,7 @@ class FromEncodingBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [valueBuilder],
     } = parseFunctionArgs({
@@ -328,7 +329,7 @@ export class ConcatFunctionBuilder extends FunctionBuilder {
     super(builder.sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [other],
     } = parseFunctionArgs({
@@ -415,7 +416,7 @@ export class ToFixedLengthFunctionBuilder extends FunctionBuilder {
     super(builder.sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [{ length, strategy }],
     } = parseFunctionArgs({
@@ -455,7 +456,7 @@ export class BytesInvertBuilder extends FunctionBuilder {
     super(builder.sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     parseFunctionArgs({ args, typeArgs, genericTypeArgs: 0, callLocation: sourceLocation, funcName: 'bitwiseInvert', argSpec: (a) => [] })
     return new BytesExpressionBuilder(
       nodeFactory.bytesUnaryOperation({
@@ -477,7 +478,7 @@ export class BitwiseOpFunctionBuilder extends FunctionBuilder {
     super(left.sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [other],
     } = parseFunctionArgs({
@@ -510,7 +511,7 @@ export class ToStringBuilder extends FunctionBuilder {
     super(builder.sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     parseFunctionArgs({ args, typeArgs, genericTypeArgs: 0, callLocation: sourceLocation, funcName: 'toString', argSpec: (a) => [] })
     return new StringExpressionBuilder(
       nodeFactory.reinterpretCast({
@@ -527,7 +528,7 @@ class EqualsFunctionBuilder extends FunctionBuilder {
     super(expr.sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [right],
     } = parseFunctionArgs({

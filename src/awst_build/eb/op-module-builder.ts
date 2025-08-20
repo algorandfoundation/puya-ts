@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
 import { Expression, IntegerConstant, StringConstant, UInt64BinaryOperator } from '../../awst/nodes'
@@ -155,7 +156,7 @@ abstract class IntrinsicOpBuilderBase extends FunctionBuilder {
     }
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     if (this.opMapping.op === 'extract3') {
       return this.handleExtract(args, typeArgs, sourceLocation)
     }

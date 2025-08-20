@@ -38,6 +38,7 @@ export class PuyaLanguageServer {
   readonly logger: LsLogger
   readonly diagnosticsMgr: DiagnosticsManager
   readonly compileWorker: CompileWorker
+
   constructor(public readonly connection: lsp.Connection) {
     console.log('Language server started')
     this.logger = new LsLogger(connection)
@@ -49,12 +50,17 @@ export class PuyaLanguageServer {
     connection.onCodeAction(this.codeAction.bind(this))
     this.documents.onDidChangeContent(this.documentDidChangeContent.bind(this))
     this.diagnosticsMgr.onFileDiagnosticsChanged(this.fileDiagnosticsChanged.bind(this))
+    connection.onShutdown(this.shutdown.bind(this))
   }
 
   start() {
     this.documents.listen(this.connection)
     this.connection.listen()
     this.compileWorker.start()
+  }
+
+  shutdown() {
+    this.compileWorker.stop()
   }
 
   initialize(params: lsp.InitializeParams): lsp.InitializeResult {
@@ -86,6 +92,7 @@ export class PuyaLanguageServer {
 
   documentDidChangeContent(params: lsp.TextDocumentChangeEvent<TextDocument>) {
     this.connection.console.log(`[Document Changed]: ${params.document.uri}`)
+    this.diagnosticsMgr.setDiagnostics({ fileUri: params.document.uri, version: params.document.version, diagnostics: [] })
 
     this.triggers.enqueue({
       type: 'workspace',

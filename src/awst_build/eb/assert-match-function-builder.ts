@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import type { SourceLocation } from '../../awst/source-location'
 import { codeInvariant } from '../../util'
@@ -12,7 +13,7 @@ import { VoidExpressionBuilder } from './void-expression-builder'
 export class AssertMatchFunctionBuilder extends NodeBuilder {
   readonly ptype = assertMatchFunction
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [subject, tests, comment],
     } = parseFunctionArgs({

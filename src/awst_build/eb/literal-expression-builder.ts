@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import type { awst } from '../../awst'
 import type { Expression, LValue } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
@@ -37,7 +38,7 @@ export abstract class LiteralExpressionBuilder extends InstanceBuilder {
     this.throwInvalidExpression()
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     this.throwInvalidExpression()
   }
 

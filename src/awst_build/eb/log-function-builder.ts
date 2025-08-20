@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import type { awst } from '../../awst'
 
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
@@ -13,7 +14,7 @@ import { requireInstanceBuilder } from './util'
 import { VoidExpressionBuilder } from './void-expression-builder'
 
 export class LogFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const argsExps = args.map((a) => requireInstanceBuilder(a))
 
     let logBytes: awst.Expression

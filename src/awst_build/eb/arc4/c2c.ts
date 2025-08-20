@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { OnCompletionAction, TransactionKind } from '../../../awst/models'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { ARC4MethodConfig, Expression, MethodConstant } from '../../../awst/nodes'
@@ -48,7 +49,7 @@ import { validatePrefix } from './util'
 export class AbiCallFunctionBuilder extends FunctionBuilder {
   readonly ptype = abiCallFunction
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       ptypes: [functionType],
       args: [options],
@@ -96,7 +97,7 @@ export class AbiCallFunctionBuilder extends FunctionBuilder {
 export class CompileArc4FunctionBuilder extends CompileFunctionBuilder {
   readonly ptype = compileArc4Function
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const result = requireInstanceBuilder(super.call(args, [], sourceLocation)).resolve()
     codeInvariant(result instanceof CompiledContract, `${this.typeDescription} expects a contract type`, sourceLocation)
     const proxyType = ContractProxyGeneric.parameterise([...typeArgs])
@@ -141,7 +142,7 @@ export class ContractProxyBareCreateFunctionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [fields],
     } = parseFunctionArgs({
@@ -205,7 +206,7 @@ export class ContractProxyCallFunctionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [fields],
     } = parseFunctionArgs({

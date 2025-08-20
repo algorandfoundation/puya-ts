@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import type { Expression, LValue } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
@@ -29,7 +30,7 @@ export class LogicSigClassBuilder extends InstanceBuilder {
     throw new CodeError('LogicSig class cannot be constructed manually')
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     throw new CodeError('LogicSig class cannot be called manually')
   }
 }
@@ -37,7 +38,7 @@ export class LogicSigClassBuilder extends InstanceBuilder {
 export class LogicSigOptionsDecoratorBuilder extends FunctionBuilder {
   readonly ptype = logicSigOptionsDecorator
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [{ avmVersion, name, scratchSlots }],
     } = parseFunctionArgs({

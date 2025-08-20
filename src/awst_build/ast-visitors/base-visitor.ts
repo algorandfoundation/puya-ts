@@ -2,7 +2,8 @@ import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import { type Expression, type MethodDocumentation } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { CodeError, InternalError, NotSupported } from '../../errors'
+import { InvalidNonNullAssertion } from '../../code-fix/invalid-non-null-assertion'
+import { CodeError, FixableCodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
 import type { Expressions } from '../../visitor/syntax-names'
@@ -82,7 +83,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     return new BooleanExpressionBuilder(nodeFactory.boolConstant({ value: true, sourceLocation: this.sourceLocation(node) }))
   }
 
-  sourceLocation(node: ts.Node): SourceLocation {
+  sourceLocation<TNode extends ts.Node>(node: TNode): SourceLocation<TNode> {
     return this.context.getSourceLocation(node)
   }
 
@@ -536,10 +537,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       return target.base
     }
 
-    throw new CodeError(
-      'The non-null assertion operator "!" is not valid here. It is only valid in limited scenarios where built in types require it. Eg. Array.prototype.pop',
-      { sourceLocation: this.sourceLocation(node) },
-    )
+    throw new FixableCodeError(new InvalidNonNullAssertion({ sourceLocation: this.sourceLocation(node) }))
   }
 
   visitSatisfiesExpression(node: ts.SatisfiesExpression): NodeBuilder {
