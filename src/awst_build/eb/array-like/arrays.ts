@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { intrinsicFactory } from '../../../awst/intrinsic-factory'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
@@ -142,7 +143,8 @@ class PopFunctionBuilder extends FunctionBuilder {
   ) {
     super(sourceLocation)
   }
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     parseFunctionArgs({
       args,
       typeArgs,
@@ -172,7 +174,8 @@ class PushFunctionBuilder extends FunctionBuilder {
   ) {
     super(sourceLocation)
   }
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const elementType = this.arrayBuilder.ptype.elementType
     const { args: items } = parseFunctionArgs({
       args,
@@ -216,7 +219,7 @@ class ConcatFunctionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [...items],
     } = parseFunctionArgs({
@@ -256,7 +259,7 @@ class WithFunctionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [index, newValue],
     } = parseFunctionArgs({

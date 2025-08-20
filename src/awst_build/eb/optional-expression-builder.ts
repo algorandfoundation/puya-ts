@@ -1,6 +1,9 @@
+import type ts from 'typescript'
 import type { Expression, LValue } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { CodeError } from '../../errors'
+
+import { RequiresNonNullAssertion } from '../../code-fix/requires-non-null-assertion'
+import { FixableCodeError } from '../../errors'
 import type { PType, PTypeOrClass } from '../ptypes'
 import { undefinedPType, UnionPType } from '../ptypes'
 import type { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, InstanceBuilder, NodeBuilder } from './index'
@@ -56,9 +59,7 @@ export class OptionalExpressionBuilder extends WrappingInstanceBuilder {
   }
 
   #throwRequiresBang(): never {
-    throw new CodeError('This expression requires a non-null assertion operator "!" immediately proceeding it', {
-      sourceLocation: this.sourceLocation,
-    })
+    throw new FixableCodeError(new RequiresNonNullAssertion({ sourceLocation: this.sourceLocation }))
   }
 
   resolve(): Expression {
@@ -70,7 +71,8 @@ export class OptionalExpressionBuilder extends WrappingInstanceBuilder {
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
     this.#throwRequiresBang()
   }
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     this.#throwRequiresBang()
   }
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {

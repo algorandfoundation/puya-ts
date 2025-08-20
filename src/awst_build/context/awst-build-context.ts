@@ -27,7 +27,7 @@ export abstract class AwstBuildContext {
    * Get the source location of a node in the current source file
    * @param node
    */
-  abstract getSourceLocation(node: ts.Node): SourceLocation
+  abstract getSourceLocation<TNode extends ts.Node>(node: TNode): SourceLocation<TNode>
 
   /**
    * Get NodeBuilder instance for the given identifier.
@@ -294,7 +294,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
     )
   }
 
-  getSourceLocation(node: ts.Node) {
+  getSourceLocation<TNode extends ts.Node>(node: TNode) {
     return SourceLocation.fromNode(node, this.program.getCurrentDirectory())
   }
 

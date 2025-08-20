@@ -10,7 +10,7 @@ import { CompileOptions } from '../options'
 import { isIn } from '../util'
 import { DefaultMap } from '../util/default-map'
 import { sleep } from '../util/sleep'
-import type { CompileTriggerQueue, FileCompileTrigger, WorkspaceCompileTrigger } from './compile-trigger-queue'
+import type { CompileTriggerQueue, WorkspaceCompileTrigger } from './compile-trigger-queue'
 import type { DiagnosticsManager } from './diagnostics-manager'
 import type { LsLogger } from './ls-logger'
 import { type LogEventWithSource, mapper } from './mapping'
@@ -32,9 +32,6 @@ export class CompileWorker {
           switch (work.type) {
             case 'workspace':
               await this.compileWorkspaces(work)
-              break
-            case 'file':
-              await this.compileFiles(work)
               break
           }
         } else {
@@ -61,6 +58,7 @@ export class CompileWorker {
 
   private async compileAlgoFiles(algoFiles: AlgoFile[]) {
     const documents = this.documents
+    const documentVersions: Record<string, number | undefined> = {}
     this.logger.debug(`[Compiling Files]: \n${algoFiles.map((f) => f.sourceFile).join('\n')}`)
 
     const logCtx = LoggingContext.create()
@@ -76,6 +74,7 @@ export class CompileWorker {
                   const fileUri = URI.file(fileName).toString()
                   const doc = documents.get(fileUri)
                   if (doc) {
+                    documentVersions[fileUri] = doc.version
                     return doc.getText()
                   }
                   return readFile(fileName)
@@ -110,39 +109,7 @@ export class CompileWorker {
 
     for (const [file, diagnostics] of results.entries()) {
       const fileUri = URI.file(file).toString()
-      await this.diagnostics.setDiagnostics(fileUri, diagnostics)
+      await this.diagnostics.setDiagnostics({ fileUri, diagnostics, version: documentVersions[fileUri] })
     }
   }
-
-  private async compileFiles(filesTrigger: FileCompileTrigger) {
-    this.logger.debug(`[File Compile] \n${filesTrigger.files.join('\n')}`)
-
-    const filePaths = filesTrigger.files.map((ws) => URI.parse(ws).fsPath)
-
-    const algoFiles = processInputPaths({ paths: filePaths, ignoreUnmatchedPaths: true })
-    if (algoFiles.length === 0) return
-
-    await this.compileAlgoFiles(algoFiles)
-  }
 }
-/*
-
-function prepareFiles(workspaceFolder: string, documents: TextDocuments<TextDocument>) {
-  const files = processInputPaths({ paths: [workspaceFolder] })
-
-  // To support unsaved files, we need to replace the file content with the content of the document
-  return files.map((file) => {
-    const fileUri = URI.file(upath.join(workspaceFolder, file.sourceFile)).toString()
-    const document = documents.get(fileUri)
-
-    if (document) {
-      return {
-        ...file,
-        fileContents: document.getText(),
-      } satisfies AlgoFile
-    }
-
-    return file
-  })
-}
- */

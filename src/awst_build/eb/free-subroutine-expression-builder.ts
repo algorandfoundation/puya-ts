@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { ContractReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import type {
@@ -40,7 +41,7 @@ export abstract class SubroutineExpressionBuilder extends InstanceBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const { args: mappedArgs } = parseFunctionArgs({
       args,
       typeArgs,

@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import type { TransactionKind } from '../../../awst/models'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
@@ -33,7 +34,7 @@ export class ItxnParamsFactoryFunctionBuilder extends FunctionBuilder {
     this.ptype = ptype
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [initialFields],
     } = parseFunctionArgs({
@@ -140,7 +141,7 @@ abstract class InnerTxnFieldsMethodBuilder extends FunctionBuilder {
 }
 
 class SubmitInnerTxnMethodBuilder extends InnerTxnFieldsMethodBuilder {
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     parseFunctionArgs({
       args,
       typeArgs,
@@ -165,7 +166,7 @@ class SubmitInnerTxnMethodBuilder extends InnerTxnFieldsMethodBuilder {
 export class SubmitItxnGroupFunctionBuilder extends FunctionBuilder {
   ptype = submitGroupItxnFunction
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const { args: itxnParams } = parseFunctionArgs({
       args,
       typeArgs,
@@ -194,7 +195,7 @@ export class SubmitItxnGroupFunctionBuilder extends FunctionBuilder {
 }
 
 class SetInnerTxnMethodBuilder extends InnerTxnFieldsMethodBuilder {
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [updatedFields],
     } = parseFunctionArgs({
@@ -223,7 +224,7 @@ class SetInnerTxnMethodBuilder extends InnerTxnFieldsMethodBuilder {
   }
 }
 class CopyInnerTxnMethodBuilder extends InnerTxnFieldsMethodBuilder {
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     parseFunctionArgs({
       args,
       typeArgs,

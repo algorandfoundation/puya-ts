@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { SourceLocation } from '../../../awst/source-location'
 import type { PType } from '../../ptypes'
@@ -11,7 +12,7 @@ export class ArrayPopFunctionBuilder extends FunctionBuilder {
     super(arrayBuilder.sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const elementType = this.arrayBuilder.ptype.elementType
     parseFunctionArgs({
       args,

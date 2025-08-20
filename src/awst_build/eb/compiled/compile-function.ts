@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { ContractReference, LogicSigReference } from '../../../awst/models'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
@@ -23,7 +24,7 @@ import { parseFunctionArgs } from '../util/arg-parsing'
 export class CompileFunctionBuilder extends FunctionBuilder {
   readonly ptype = compileFunctionType
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [contractOrSig, options],
     } = parseFunctionArgs({

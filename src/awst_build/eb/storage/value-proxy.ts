@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import type {
   AppAccountStateExpression,
   AppStateExpression,
@@ -48,7 +49,8 @@ export abstract class ValueProxy<TPType extends PType> extends InstanceExpressio
   postfixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     return this.proxied.postfixUnaryOp(op, sourceLocation)
   }
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     return this.proxied.call(args, typeArgs, sourceLocation)
   }
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {

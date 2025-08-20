@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../../../awst/node-factory'
 import type { Expression } from '../../../../awst/nodes'
 import type { SourceLocation } from '../../../../awst/source-location'
@@ -13,7 +14,7 @@ import { BoxProxyExpressionBuilder } from './base'
 import { BoxExpressionBuilder } from './box'
 
 export class BoxMapFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       ptypes: [keySuffixType, contentPType],
       args: [{ keyPrefix }],
@@ -36,7 +37,8 @@ export class BoxMapExpressionBuilder extends BoxProxyExpressionBuilder<BoxMapPTy
     invariant(ptype instanceof BoxMapPType, 'BoxMapExpressionBuilder must be constructed with ptype of BoxMapPType')
     super(expr, ptype)
   }
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [key],
     } = parseFunctionArgs({

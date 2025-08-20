@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { OnCompletionAction } from '../../awst/models'
 import type { Expression } from '../../awst/nodes'
 import { ARC4CreateOption, NewArray, StringConstant, TupleExpression } from '../../awst/nodes'
@@ -42,7 +43,7 @@ const validateEncodingMap: Record<string, boolean> = {
 export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
   readonly ptype = arc4BareMethodDecorator
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [{ allowActions, onCreate }],
     } = parseFunctionArgs({
@@ -84,7 +85,7 @@ export class ReadonlyDecoratorBuilder extends DecoratorDataBuilder {
 export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
   readonly ptype = arc4AbiMethodDecorator
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [{ allowActions, onCreate, readonly, name, resourceEncoding, defaultArguments, validateEncoding }],
     } = parseFunctionArgs({

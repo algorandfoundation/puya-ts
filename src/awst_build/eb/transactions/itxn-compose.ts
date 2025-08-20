@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { TransactionKind } from '../../../awst/models'
 import { nodeFactory } from '../../../awst/node-factory'
 import { ARC4ABIMethodConfig, type Expression } from '../../../awst/nodes'
@@ -47,7 +48,7 @@ class ItxnComposeBeginOrNextFunctionBuilder extends FunctionBuilder {
     return this.methodCalled === 'begin'
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const itxns: Expression[] = []
 
     if (args.length === 1) {
@@ -137,7 +138,7 @@ class ItxnComposeBeginOrNextFunctionBuilder extends FunctionBuilder {
 }
 
 class ItxnComposeSubmitFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     parseFunctionArgs({
       args,
       typeArgs,

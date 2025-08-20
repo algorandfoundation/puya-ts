@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression, StringConstant } from '../../../awst/nodes'
 import { SourceLocation } from '../../../awst/source-location'
@@ -56,7 +57,7 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
     return [this.encode(builder, inferredEncodedType), inferredEncodedType]
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [nameOrObj, ...props],
       ptypes: [genericArg],

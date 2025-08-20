@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { BytesConstant, Expression } from '../../../awst/nodes'
 import { EqualityComparison } from '../../../awst/nodes'
@@ -28,7 +29,7 @@ import { parseFunctionArgs } from '../util/arg-parsing'
 export class ConvertBytesFunctionBuilder extends FunctionBuilder {
   readonly ptype = convertBytesFunction
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       ptypes: [ptype],
       args: [theBytes, { prefix, strategy }],
@@ -67,7 +68,7 @@ export class ConvertBytesFunctionBuilder extends FunctionBuilder {
 export class EncodeArc4FunctionBuilder extends FunctionBuilder {
   readonly ptype = encodeArc4Function
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [valueToEncode],
       ptypes: [valueType],
@@ -110,7 +111,7 @@ export class EncodeArc4FunctionBuilder extends FunctionBuilder {
 export class DecodeArc4FunctionBuilder extends FunctionBuilder {
   readonly ptype = decodeArc4Function
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       ptypes: [ptype],
       args: [theBytes, prefixType],
@@ -200,7 +201,7 @@ function getPrefixValue(arg: InstanceBuilder | undefined): BytesConstant | undef
 export class MethodSelectorFunctionBuilder extends FunctionBuilder {
   readonly ptype = methodSelectorFunction
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [methodSignature],
     } = parseFunctionArgs({
@@ -241,7 +242,7 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
 export class SizeOfFunctionBuilder extends FunctionBuilder {
   readonly ptype = sizeOfFunction
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       ptypes: [typeToEncode],
     } = parseFunctionArgs({

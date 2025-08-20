@@ -1,14 +1,14 @@
 import ts from 'typescript'
 import { invariant, normalisePath } from '../util'
 
-export class SourceLocation {
+export class SourceLocation<TNode extends ts.Node | undefined = ts.Node | undefined> {
   file: string | null
   line: number
   endLine: number
   column: number
   endColumn: number
   scope: 'file' | 'range'
-  node: ts.Node | undefined
+  node: TNode
 
   constructor(props: {
     file?: string | null
@@ -17,7 +17,7 @@ export class SourceLocation {
     column: number
     endColumn: number
     scope: SourceLocation['scope']
-    node?: ts.Node
+    node: TNode
   }) {
     invariant(props.line <= props.endLine, 'Start line must be before end line')
     if (props.line === props.endLine) invariant(props.column <= props.endColumn, 'Start column must be before end column')
@@ -58,7 +58,7 @@ export class SourceLocation {
     }
   }
 
-  static fromNode(node: ts.Node, programDirectory: string): SourceLocation {
+  static fromNode<TNode extends ts.Node>(node: TNode, programDirectory: string): SourceLocation<TNode> {
     const sourceFile = node.getSourceFile()
 
     const { start, end } = SourceLocation.getStartAndEnd(node)
@@ -87,6 +87,7 @@ export class SourceLocation {
       column: 0,
       endColumn: endLoc.character,
       scope: 'file',
+      node: undefined,
     })
   }
 
@@ -101,6 +102,7 @@ export class SourceLocation {
       column: startLoc.character,
       endColumn: endLoc.character,
       scope: 'range',
+      node: undefined,
     })
   }
 
@@ -114,6 +116,7 @@ export class SourceLocation {
       column: startLoc.character,
       endColumn: startLoc.character,
       scope: 'range',
+      node: undefined,
     })
   }
 
@@ -127,6 +130,7 @@ export class SourceLocation {
     column: 0,
     endColumn: 1,
     scope: 'file',
+    node: undefined,
   })
 }
 

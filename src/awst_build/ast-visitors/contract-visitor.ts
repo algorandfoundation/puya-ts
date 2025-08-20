@@ -9,11 +9,9 @@ import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
-import { ContractSuperBuilder } from '../eb/contract-builder'
 import { BoxProxyExpressionBuilder } from '../eb/storage/box'
 import { GlobalStateFunctionResultBuilder } from '../eb/storage/global-state'
 import { LocalStateFunctionResultBuilder } from '../eb/storage/local-state'
-import { requireInstanceBuilder } from '../eb/util'
 import { ContractClassModel } from '../models/contract-class-model'
 import type { ContractOptionsDecoratorData } from '../models/decorator-data'
 import type { ContractClassPType } from '../ptypes'
@@ -138,9 +136,14 @@ export class ContractVisitor extends ClassDefinitionVisitor {
       body: nodeFactory.block(
         { sourceLocation },
         nodeFactory.expressionStatement({
-          expr: requireInstanceBuilder(
-            new ContractSuperBuilder(this._contractPType.baseTypes[0], sourceLocation).call([], [], sourceLocation),
-          ).resolve(),
+          expr: nodeFactory.subroutineCallExpression({
+            target: nodeFactory.instanceSuperMethodTarget({
+              memberName: Constants.symbolNames.constructorMethodName,
+            }),
+            args: [],
+            sourceLocation,
+            wtype: wtypes.voidWType,
+          }),
         }),
         ...this._propertyInitialization,
       ),

@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 
 import type { Expression, LValue } from '../../awst/nodes'
@@ -83,7 +84,7 @@ export class ContractSuperBuilder extends ContractThisBuilder {
     super(ptype, sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     codeInvariant(args.length === 0, 'Constructor arguments are not supported', sourceLocation)
     codeInvariant(typeArgs.length === 0, 'Super calls cannot be generic', sourceLocation)
     return new VoidExpressionBuilder(
@@ -121,7 +122,8 @@ class PolytypeClassSuperMethodBuilder extends FunctionBuilder {
   ) {
     super(sourceLocation)
   }
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [contract],
     } = parseFunctionArgs({
@@ -191,7 +193,7 @@ export class ContractClassBuilder extends InstanceBuilder {
     throw new CodeError('Contract class cannot be constructed manually')
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     throw new CodeError('Contract class cannot be called manually')
   }
 
@@ -223,7 +225,8 @@ class ContractClassPrototypeBuilder extends NodeBuilder {
 
 export class ContractOptionsDecoratorBuilder extends FunctionBuilder {
   readonly ptype = contractOptionsDecorator
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [{ avmVersion, name, stateTotals, scratchSlots }],
     } = parseFunctionArgs({
