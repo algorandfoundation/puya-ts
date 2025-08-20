@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { StringConstant } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
@@ -12,7 +13,7 @@ import { parseFunctionArgs } from './util/arg-parsing'
 import { VoidExpressionBuilder } from './void-expression-builder'
 
 export class AssertFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const [condition, message, ...rest] = args
     if (rest.length !== 0) {
       throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
@@ -39,7 +40,7 @@ export class AssertFunctionBuilder extends FunctionBuilder {
 }
 
 export class ErrFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [message],
     } = parseFunctionArgs({

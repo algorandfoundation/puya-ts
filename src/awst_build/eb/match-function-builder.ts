@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import type { Expression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
@@ -26,7 +27,7 @@ import { parseFunctionArgs } from './util/arg-parsing'
 export class MatchFunctionBuilder extends NodeBuilder {
   readonly ptype = matchFunction
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [subject, tests],
     } = parseFunctionArgs({

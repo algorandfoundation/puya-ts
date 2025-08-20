@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../../../awst/node-factory'
 import type { SourceLocation } from '../../../../awst/source-location'
 import { codeInvariant } from '../../../../util'
@@ -25,7 +26,7 @@ export class EntriesFunctionBuilder extends FunctionBuilder {
     super(arrayBuilder.sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     parseFunctionArgs({ args, typeArgs, callLocation: sourceLocation, argSpec: (_) => [], genericTypeArgs: 0, funcName: 'entries' })
 
     const sequenceType = IteratorTypeVisitor.accept(this.arrayBuilder.ptype)
@@ -47,7 +48,7 @@ export class KeysFunctionBuilder extends FunctionBuilder {
     super(arrayBuilder.sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     parseFunctionArgs({ args, typeArgs, callLocation: sourceLocation, argSpec: (_) => [], genericTypeArgs: 0, funcName: 'keys' })
 
     const sequenceType = IteratorTypeVisitor.accept(this.arrayBuilder.ptype)

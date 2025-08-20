@@ -1,7 +1,9 @@
+import type ts from 'typescript'
 import { intrinsicFactory } from '../../../awst/intrinsic-factory'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
+import { wtypes } from '../../../awst/wtypes'
 import { logger } from '../../../logger'
 import { codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
@@ -13,7 +15,6 @@ import { ClassBuilder, FunctionBuilder } from '../index'
 import { requireIntegerConstant } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
-import { wtypes } from '../../../awst/wtypes'
 
 export class Arc4TupleClassBuilder extends ClassBuilder {
   readonly ptype = Arc4TupleGeneric
@@ -96,7 +97,8 @@ class Arc4TupleAtFunctionBuilder extends FunctionBuilder {
   ) {
     super(sourceLocation)
   }
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [index],
     } = parseFunctionArgs({

@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { awst, isConstant, isConstantOrTemplateVar } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
 import { TupleItemExpression } from '../../awst/nodes'
@@ -62,7 +63,7 @@ export abstract class NodeBuilder {
     return this.constructor.name
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     throw new NotSupported(`Calling ${this.typeDescription}`, {
       sourceLocation,
     })
@@ -230,7 +231,11 @@ export abstract class WrappingInstanceBuilder<TPType extends PType = PType> exte
   abstract binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder
   abstract iterate(sourceLocation: SourceLocation): awst.Expression
   abstract augmentedAssignment(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder
-  abstract call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder
+  abstract call(
+    args: ReadonlyArray<NodeBuilder>,
+    typeArgs: ReadonlyArray<PType>,
+    sourceLocation: SourceLocation<ts.CallExpression>,
+  ): NodeBuilder
   abstract newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder
   abstract taggedTemplate(
     head: string,
@@ -249,7 +254,7 @@ export abstract class ClassBuilder extends NodeBuilder {
 
   abstract newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     throw new CodeError(`${this.typeDescription} should be called with the \`new\` keyword`, { sourceLocation })
   }
 }
@@ -261,7 +266,11 @@ export abstract class FunctionBuilder extends NodeBuilder {
     super(location)
   }
 
-  abstract call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder
+  abstract call(
+    args: ReadonlyArray<NodeBuilder>,
+    typeArgs: ReadonlyArray<PType>,
+    sourceLocation: SourceLocation<ts.CallExpression>,
+  ): NodeBuilder
 }
 
 export abstract class InstanceExpressionBuilder<TPType extends PType> extends InstanceBuilder<PType> {

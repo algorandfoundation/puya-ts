@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { awst } from '../../awst'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
@@ -32,7 +33,7 @@ import { parseFunctionArgs } from './util/arg-parsing'
 export class BigUintFunctionBuilder extends FunctionBuilder {
   readonly ptype = BigUintFunction
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [initialValue],
     } = parseFunctionArgs({

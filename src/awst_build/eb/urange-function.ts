@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import type { awst } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
 import type { SourceLocation } from '../../awst/source-location'
@@ -10,7 +11,7 @@ import { IterableIteratorExpressionBuilder } from './iterable-iterator-expressio
 import { parseFunctionArgs } from './util/arg-parsing'
 
 export class UrangeFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const { args: uArgs } = parseFunctionArgs({
       args,
       typeArgs,

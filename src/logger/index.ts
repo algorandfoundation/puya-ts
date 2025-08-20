@@ -1,7 +1,7 @@
 import { AsyncLocalStorage } from 'node:async_hooks'
 import type { SourceLocation } from '../awst/source-location'
 import type { CodeFix } from '../code-fix/code-fix'
-import { PuyaError } from '../errors'
+import { FixableCodeError, PuyaError } from '../errors'
 import { invariant } from '../util'
 import type { LogSink } from './sinks'
 
@@ -68,7 +68,9 @@ class PuyaLogger {
   error(error: Error): void
   error(source: NodeOrSourceLocation | undefined, message: string): void
   error(sourceOrError: NodeOrSourceLocation | undefined | Error, message?: string): void {
-    if (sourceOrError instanceof Error) {
+    if (sourceOrError instanceof FixableCodeError) {
+      this.addCodeFix(sourceOrError.codeFix)
+    } else if (sourceOrError instanceof Error) {
       // Don't include the stack for user errors as the message and source location is what's relevant
       this.addLog({
         level: LogLevel.Error,

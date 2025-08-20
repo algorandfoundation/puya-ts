@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import { IntegerConstant } from '../../../awst/nodes'
@@ -59,7 +60,7 @@ export class GroupTransactionFunctionBuilder extends FunctionBuilder {
     this.ptype = ptype
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [groupIndexBuilder],
     } = parseFunctionArgs({
@@ -95,7 +96,7 @@ class IndexedTransactionFieldFunctionBuilder extends FunctionBuilder {
     super(gtxn.sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [index],
     } = parseFunctionArgs({

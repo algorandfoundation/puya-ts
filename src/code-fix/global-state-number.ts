@@ -1,4 +1,4 @@
-import ts from 'typescript'
+import type ts from 'typescript'
 import type { SourceLocation } from '../awst/source-location'
 import { transientTypeErrors } from '../awst_build/ptypes/transient-type-errors'
 import { Constants } from '../constants'
@@ -8,7 +8,7 @@ import { getNodeRange } from '../text-edit'
 import { CodeFix } from './code-fix'
 
 export class GlobalStateNumber extends CodeFix {
-  constructor({ sourceLocation }: { sourceLocation: SourceLocation }) {
+  constructor({ sourceLocation }: { sourceLocation: SourceLocation<ts.CallExpression> }) {
     super({
       sourceLocation,
       errorMessage: transientTypeErrors.nativeNumeric('number').usedAsType,
@@ -25,9 +25,7 @@ export class GlobalStateNumber extends CodeFix {
     })
   }
 
-  static buildEdits(node: ts.Node | undefined): TextEdit[] {
-    if (!node || !ts.isCallExpression(node)) return []
-
+  static buildEdits(node: ts.CallExpression): TextEdit[] {
     if (node.typeArguments?.length) {
       return [
         {
