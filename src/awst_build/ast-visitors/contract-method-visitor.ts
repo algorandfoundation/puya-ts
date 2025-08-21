@@ -159,7 +159,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     if (decorator?.type === 'arc4.abimethod') {
       this.checkABIMethodTypes(functionType, decorator.resourceEncoding ?? 'value', methodLocation)
       return new ARC4ABIMethodConfig({
-        readonly: decorator.readonly,
+        readonly: decorator.readonly ?? false,
         sourceLocation: decorator.sourceLocation,
         allowedCompletionTypes:
           decorator.allowedCompletionTypes ?? conventionalDefaults?.allowedCompletionTypes ?? unspecifiedDefaults.allowedCompletionTypes,
@@ -186,7 +186,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
         sourceLocation: methodLocation,
         name: functionType.name,
         resourceEncoding: 'value',
-        readonly: false,
+        readonly: decorator?.readonly ?? false,
         defaultArgs: new Map(),
       })
     }
@@ -198,7 +198,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     decorator: RoutingDecoratorData | undefined,
     impliedByConvention: RoutingProps | undefined,
   ) {
-    if (!decorator || !impliedByConvention) return
+    if (!decorator || !impliedByConvention || decorator.type === 'arc4.readonly') return
 
     if (
       decorator.allowedCompletionTypes !== undefined &&

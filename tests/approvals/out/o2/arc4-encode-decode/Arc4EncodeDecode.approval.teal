@@ -21,7 +21,7 @@ main_after_if_else@11:
     err
 
 main_testDecoding_route@4:
-    // tests/approvals/arc4-encode-decode.algo.ts:69-84
+    // tests/approvals/arc4-encode-decode.algo.ts:65-80
     // testDecoding(
     //   a: uint64,
     //   a_bytes: bytes,
@@ -72,14 +72,14 @@ main_testDecoding_route@4:
     txna ApplicationArgs 13
     txna ApplicationArgs 14
     extract 2 0
-    // tests/approvals/arc4-encode-decode.algo.ts:85
+    // tests/approvals/arc4-encode-decode.algo.ts:81
     // assert(decodeArc4<uint64>(a_bytes) === a)
     dig 14
     btoi
     dig 16
     ==
     assert
-    // tests/approvals/arc4-encode-decode.algo.ts:86
+    // tests/approvals/arc4-encode-decode.algo.ts:82
     // assert(decodeArc4<boolean>(b_bytes) === b)
     dig 12
     intc_0 // 0
@@ -87,20 +87,20 @@ main_testDecoding_route@4:
     dig 14
     ==
     assert
-    // tests/approvals/arc4-encode-decode.algo.ts:87
+    // tests/approvals/arc4-encode-decode.algo.ts:83
     // assert(decodeArc4<biguint>(c_bytes) === c)
     dig 10
     dig 12
     b==
     assert
-    // tests/approvals/arc4-encode-decode.algo.ts:88
+    // tests/approvals/arc4-encode-decode.algo.ts:84
     // assert(decodeArc4<string>(d_bytes) === d)
     uncover 8
     extract 4 0
     dig 9
     ==
     assert
-    // tests/approvals/arc4-encode-decode.algo.ts:89
+    // tests/approvals/arc4-encode-decode.algo.ts:85
     // assertMatch(decodeArc4<TestObj>(e_bytes), e)
     uncover 5
     extract 2 8
@@ -131,10 +131,10 @@ main_testDecoding_route@4:
     uncover 2
     &&
     assert // assert target is match for conditions
-    // tests/approvals/arc4-encode-decode.algo.ts:91
+    // tests/approvals/arc4-encode-decode.algo.ts:87
     // const lenPrefix = itob(1).slice(6, 8)
     bytec_0 // 0x0001
-    // tests/approvals/arc4-encode-decode.algo.ts:93
+    // tests/approvals/arc4-encode-decode.algo.ts:89
     // assertMatch(decodeArc4<uint64[]>(lenPrefix.concat(a_bytes)), [a], 'Array of uint64 matches')
     uncover 14
     concat
@@ -150,10 +150,10 @@ main_testDecoding_route@4:
     ==
     &&
     assert // Array of uint64 matches
-    // tests/approvals/arc4-encode-decode.algo.ts:91
+    // tests/approvals/arc4-encode-decode.algo.ts:87
     // const lenPrefix = itob(1).slice(6, 8)
     bytec_0 // 0x0001
-    // tests/approvals/arc4-encode-decode.algo.ts:94
+    // tests/approvals/arc4-encode-decode.algo.ts:90
     // assertMatch(decodeArc4<boolean[]>(lenPrefix.concat(b_bytes)), [b], 'Array of boolean matches')
     uncover 12
     concat
@@ -172,16 +172,16 @@ main_testDecoding_route@4:
     ==
     &&
     assert // Array of boolean matches
-    // tests/approvals/arc4-encode-decode.algo.ts:91
+    // tests/approvals/arc4-encode-decode.algo.ts:87
     // const lenPrefix = itob(1).slice(6, 8)
     bytec_0 // 0x0001
-    // tests/approvals/arc4-encode-decode.algo.ts:95
+    // tests/approvals/arc4-encode-decode.algo.ts:91
     // log(lenPrefix.concat(c_bytes))
     uncover 10
     concat
     dup
     log
-    // tests/approvals/arc4-encode-decode.algo.ts:96
+    // tests/approvals/arc4-encode-decode.algo.ts:92
     // assertMatch(decodeArc4<biguint[]>(lenPrefix.concat(c_bytes)), [c], 'Array of biguint matches')
     dup
     intc_0 // 0
@@ -194,7 +194,7 @@ main_testDecoding_route@4:
     b==
     &&
     assert // Array of biguint matches
-    // tests/approvals/arc4-encode-decode.algo.ts:97
+    // tests/approvals/arc4-encode-decode.algo.ts:93
     // assertMatch(decodeArc4<string[]>(Bytes`${lenPrefix}${offsetHeader}${d_bytes}`), [d], 'Array of string matches')
     bytec_1 // 0x00010002
     uncover 8
@@ -222,7 +222,7 @@ main_testDecoding_route@4:
     ==
     &&
     assert // Array of string matches
-    // tests/approvals/arc4-encode-decode.algo.ts:99
+    // tests/approvals/arc4-encode-decode.algo.ts:95
     // assertMatch(decodeArc4<TestObj[]>(Bytes`${lenPrefix}${offsetHeader}${e_bytes}`), [e], 'Array of struct matches')
     bytec_1 // 0x00010002
     uncover 7
@@ -266,10 +266,10 @@ main_testDecoding_route@4:
     &&
     &&
     assert // Array of struct matches
-    // tests/approvals/arc4-encode-decode.algo.ts:91
+    // tests/approvals/arc4-encode-decode.algo.ts:87
     // const lenPrefix = itob(1).slice(6, 8)
     bytec_0 // 0x0001
-    // tests/approvals/arc4-encode-decode.algo.ts:100
+    // tests/approvals/arc4-encode-decode.algo.ts:96
     // assertMatch(decodeArc4<Address[]>(Bytes`${lenPrefix}${f_bytes}`), [f], 'Array of address matches')
     uncover 3
     concat
@@ -284,11 +284,11 @@ main_testDecoding_route@4:
     ==
     &&
     assert // Array of address matches
-    // tests/approvals/arc4-encode-decode.algo.ts:102
+    // tests/approvals/arc4-encode-decode.algo.ts:98
     // assert(decodeArc4<bytes<12>>(g_bytes) === g)
     ==
     assert
-    // tests/approvals/arc4-encode-decode.algo.ts:69-84
+    // tests/approvals/arc4-encode-decode.algo.ts:65-80
     // testDecoding(
     //   a: uint64,
     //   a_bytes: bytes,

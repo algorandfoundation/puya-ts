@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     bytecblock 0x151f7c75
-    // tests/approvals/abi-decorators.algo.ts:24
+    // tests/approvals/abi-decorators.algo.ts:35
     // export class OverloadedMethods extends Contract {
     txn NumAppArgs
     bz main_bare_routing@7
@@ -16,23 +16,23 @@ main_after_if_else@11:
     err
 
 main_doThing_route@4:
-    // tests/approvals/abi-decorators.algo.ts:30
+    // tests/approvals/abi-decorators.algo.ts:41
     // @abimethod({ name: 'doThing' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-decorators.algo.ts:24
+    // tests/approvals/abi-decorators.algo.ts:35
     // export class OverloadedMethods extends Contract {
     txna ApplicationArgs 1
     btoi
     txna ApplicationArgs 2
     btoi
-    // tests/approvals/abi-decorators.algo.ts:32
+    // tests/approvals/abi-decorators.algo.ts:43
     // return x * y
     *
-    // tests/approvals/abi-decorators.algo.ts:30
+    // tests/approvals/abi-decorators.algo.ts:41
     // @abimethod({ name: 'doThing' })
     itob
     bytec_0 // 0x151f7c75
@@ -43,7 +43,7 @@ main_doThing_route@4:
     return
 
 main_doThing_route@3:
-    // tests/approvals/abi-decorators.algo.ts:25
+    // tests/approvals/abi-decorators.algo.ts:36
     // @abimethod({ name: 'doThing' })
     txn OnCompletion
     !
@@ -51,10 +51,10 @@ main_doThing_route@3:
     txn ApplicationID
     assert // can only call when not creating
     bytec_0 // 0x151f7c75
-    // tests/approvals/abi-decorators.algo.ts:24
+    // tests/approvals/abi-decorators.algo.ts:35
     // export class OverloadedMethods extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-decorators.algo.ts:25
+    // tests/approvals/abi-decorators.algo.ts:36
     // @abimethod({ name: 'doThing' })
     concat
     log
@@ -62,7 +62,7 @@ main_doThing_route@3:
     return
 
 main_bare_routing@7:
-    // tests/approvals/abi-decorators.algo.ts:24
+    // tests/approvals/abi-decorators.algo.ts:35
     // export class OverloadedMethods extends Contract {
     txn OnCompletion
     bnz main_after_if_else@11

@@ -26,7 +26,7 @@ main_block@3:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@12
+    bz main_bare_routing@14
     b main_abi_routing@4
 
 main_abi_routing@4:
@@ -38,25 +38,66 @@ main_abi_routing@4:
     pushbytes 0x63c27aba // method "allActions()void"
     pushbytes 0x14d1b6ea // method "overrideReadonlyName()uint64"
     pushbytes 0xc1367374 // method "methodWithDefaults(uint64,uint64,uint64)uint64"
-    uncover 5
-    match main_justNoop_route@5 main_createMethod_route@6 main_allActions_route@7 main_overrideReadonlyName_route@8 main_methodWithDefaults_route@9
-    b main_switch_case_default@10
+    pushbytes 0xcd93cce2 // method "readonlyAlt()uint64"
+    pushbytes 0x09b10ffd // method "readonlyAlt2()uint64"
+    uncover 7
+    match main_justNoop_route@5 main_createMethod_route@6 main_allActions_route@7 main_overrideReadonlyName_route@8 main_methodWithDefaults_route@9 main_readonlyAlt_route@10 main_readonlyAlt2_route@11
+    b main_switch_case_default@12
 
-main_switch_case_default@10:
-    b main_switch_case_next@11
+main_switch_case_default@12:
+    b main_switch_case_next@13
 
-main_switch_case_next@11:
-    b main_after_if_else@13
+main_switch_case_next@13:
+    b main_after_if_else@15
 
-main_after_if_else@13:
+main_after_if_else@15:
     // tests/approvals/abi-decorators.algo.ts:4
     // export default class AbiDecorators extends Contract {
     intc_0 // 0
     bury 1
-    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
+    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@16
 
-main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14:
+main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@16:
     return
+
+main_readonlyAlt2_route@11:
+    // tests/approvals/abi-decorators.algo.ts:29
+    // @abimethod({ onCreate: 'allow' })
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    callsub readonlyAlt2
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    bury 1
+    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@16
+
+main_readonlyAlt_route@10:
+    // tests/approvals/abi-decorators.algo.ts:23-24
+    // @readonly
+    // public readonlyAlt(): uint64 {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub readonlyAlt
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    bury 1
+    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@16
 
 main_methodWithDefaults_route@9:
     // tests/approvals/abi-decorators.algo.ts:18
@@ -90,7 +131,7 @@ main_methodWithDefaults_route@9:
     log
     intc_1 // 1
     bury 1
-    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
+    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@16
 
 main_overrideReadonlyName_route@8:
     // tests/approvals/abi-decorators.algo.ts:11
@@ -111,7 +152,7 @@ main_overrideReadonlyName_route@8:
     log
     intc_1 // 1
     bury 1
-    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
+    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@16
 
 main_allActions_route@7:
     // tests/approvals/abi-decorators.algo.ts:9
@@ -123,7 +164,7 @@ main_allActions_route@7:
     callsub allActions
     intc_1 // 1
     bury 1
-    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
+    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@16
 
 main_createMethod_route@6:
     // tests/approvals/abi-decorators.algo.ts:7
@@ -139,7 +180,7 @@ main_createMethod_route@6:
     callsub createMethod
     intc_1 // 1
     bury 1
-    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
+    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@16
 
 main_justNoop_route@5:
     // tests/approvals/abi-decorators.algo.ts:5
@@ -155,10 +196,10 @@ main_justNoop_route@5:
     callsub justNoop
     intc_1 // 1
     bury 1
-    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@14
+    b main_after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__@16
 
-main_bare_routing@12:
-    b main_after_if_else@13
+main_bare_routing@14:
+    b main_after_if_else@15
 
 
 // tests/approvals/abi-decorators.algo.ts::AbiDecorators.justNoop() -> void:
@@ -212,6 +253,28 @@ methodWithDefaults_block@0:
     *
     frame_dig -1
     +
+    retsub
+
+
+// tests/approvals/abi-decorators.algo.ts::AbiDecorators.readonlyAlt() -> uint64:
+readonlyAlt:
+    b readonlyAlt_block@0
+
+readonlyAlt_block@0:
+    // tests/approvals/abi-decorators.algo.ts:25
+    // return 1
+    intc_1 // 1
+    retsub
+
+
+// tests/approvals/abi-decorators.algo.ts::AbiDecorators.readonlyAlt2() -> uint64:
+readonlyAlt2:
+    b readonlyAlt2_block@0
+
+readonlyAlt2_block@0:
+    // tests/approvals/abi-decorators.algo.ts:31
+    // return 2
+    pushint 2 // 2
     retsub
 
 

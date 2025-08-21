@@ -11,12 +11,12 @@ import { isArc4EncodableType, ptypeToArc4EncodedType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
 import { BytesPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
 import {
-  arc4EncodedLengthFunction,
   ARC4EncodedType,
   decodeArc4Function,
   encodeArc4Function,
   interpretAsArc4Function,
   methodSelectorFunction,
+  sizeOfFunction,
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import { ContractMethodExpressionBuilder, SubroutineExpressionBuilder } from '../free-subroutine-expression-builder'
@@ -227,8 +227,8 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export class Arc4EncodedLengthFunctionBuilder extends FunctionBuilder {
-  readonly ptype = arc4EncodedLengthFunction
+export class SizeOfFunctionBuilder extends FunctionBuilder {
+  readonly ptype = sizeOfFunction
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {

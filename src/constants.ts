@@ -38,6 +38,7 @@ export const Constants = {
   symbolNames: {
     approvalProgramMethodName: 'approvalProgram',
     clearStateProgramMethodName: 'clearStateProgram',
+    readonlyDecoratorName: 'arc4.readonly',
     arc4BareDecoratorName: 'arc4.baremethod',
     arc4AbiDecoratorName: 'arc4.abimethod',
     contractOptionsDecoratorName: 'contract',
