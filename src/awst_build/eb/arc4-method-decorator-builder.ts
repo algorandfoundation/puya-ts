@@ -8,7 +8,7 @@ import { logger } from '../../logger'
 import { codeInvariant } from '../../util'
 import type { Arc4AbiDecoratorData } from '../models/decorator-data'
 import type { PType } from '../ptypes'
-import { arc4AbiMethodDecorator, arc4BareMethodDecorator, boolPType, ReadonlyArrayPType, stringPType } from '../ptypes'
+import { arc4AbiMethodDecorator, arc4BareMethodDecorator, boolPType, ReadonlyArrayPType, readonlyDecorator, stringPType } from '../ptypes'
 import type { InstanceBuilder } from './index'
 import { DecoratorDataBuilder, NodeBuilder } from './index'
 import { ObjectLiteralExpressionBuilder } from './literal/object-literal-expression-builder'
@@ -36,9 +36,7 @@ const resourceEncodingMap: Record<string, 'index' | 'value'> = {
 }
 
 export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
-  get ptype(): PType {
-    return arc4BareMethodDecorator
-  }
+  readonly ptype = arc4BareMethodDecorator
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
@@ -48,7 +46,7 @@ export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
       typeArgs,
       genericTypeArgs: 1,
       callLocation: sourceLocation,
-      funcName: 'arc4.baremethod',
+      funcName: this.typeDescription,
       argSpec: (a) => [
         a.obj({
           allowActions: a.optional(stringPType, new ReadonlyArrayPType({ elementType: stringPType })),
@@ -67,10 +65,20 @@ export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
   }
 }
 
-export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
-  get ptype(): PType {
-    return arc4AbiMethodDecorator
+export class ReadonlyDecoratorBuilder extends DecoratorDataBuilder {
+  readonly ptype = readonlyDecorator
+
+  constructor(sourceLocation: SourceLocation) {
+    super(sourceLocation, {
+      type: Constants.symbolNames.readonlyDecoratorName,
+      readonly: true,
+      sourceLocation,
+    })
   }
+}
+
+export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
+  readonly ptype = arc4AbiMethodDecorator
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
@@ -102,7 +110,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
       sourceLocation: sourceLocation,
       nameOverride: name ? requireStringConstant(name).value : undefined,
       resourceEncoding: resourceEncoding && mapStringConstant(resourceEncodingMap, resourceEncoding.resolve()),
-      readonly: readonly ? requireBooleanConstant(readonly).value : false,
+      readonly: readonly ? requireBooleanConstant(readonly).value : undefined,
       defaultArguments: resolveDefaultArguments(defaultArguments, sourceLocation),
     })
   }

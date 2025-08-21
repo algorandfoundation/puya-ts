@@ -1393,6 +1393,10 @@ export const arc4AbiMethodDecorator = new LibFunctionType({
   module: Constants.moduleNames.algoTs.arc4.index,
   name: 'abimethod',
 })
+export const readonlyDecorator = new LibFunctionType({
+  module: Constants.moduleNames.algoTs.arc4.index,
+  name: 'readonly',
+})
 
 export const contractOptionsDecorator = new LibFunctionType({
   module: Constants.moduleNames.algoTs.baseContract,

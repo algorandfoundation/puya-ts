@@ -560,8 +560,8 @@ export const encodeArc4Function = new LibFunctionType({
   name: 'encodeArc4',
   module: Constants.moduleNames.algoTs.arc4.index,
 })
-export const arc4EncodedLengthFunction = new LibFunctionType({
-  name: 'arc4EncodedLength',
+export const sizeOfFunction = new LibFunctionType({
+  name: 'sizeOf',
   module: Constants.moduleNames.algoTs.arc4.index,
 })
 

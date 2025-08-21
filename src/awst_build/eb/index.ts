@@ -362,9 +362,8 @@ export function requireLValue(expr: awst.Expression): awst.LValue {
 }
 
 export class DecoratorDataBuilder extends NodeBuilder {
-  get ptype(): PType | undefined {
-    return undefined
-  }
+  readonly ptype: PType | undefined = undefined
+
   constructor(
     sourceLocation: SourceLocation,
     private readonly data: DecoratorData,

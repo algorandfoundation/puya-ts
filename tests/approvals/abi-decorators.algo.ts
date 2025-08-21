@@ -1,5 +1,5 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { abimethod, Contract, GlobalState, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { abimethod, Contract, GlobalState, readonly, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 export default class AbiDecorators extends Contract {
   @abimethod({ allowActions: 'NoOp' })
@@ -18,6 +18,17 @@ export default class AbiDecorators extends Contract {
   @abimethod({ defaultArguments: { a: { from: 'globalValue' }, b: { from: 'readonly' }, c: { constant: 145 } } })
   public methodWithDefaults(a: uint64, b: uint64, c: uint64): uint64 {
     return a * b + c
+  }
+
+  @readonly
+  public readonlyAlt(): uint64 {
+    return 1
+  }
+
+  @readonly
+  @abimethod({ onCreate: 'allow' })
+  public readonlyAlt2(): uint64 {
+    return 2
   }
 }
 

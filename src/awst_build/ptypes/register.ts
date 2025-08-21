@@ -1,5 +1,9 @@
 import { Arc28EmitFunctionBuilder } from '../eb/arc28/arc-28-emit-function-builder'
-import { Arc4AbiMethodDecoratorBuilder, Arc4BareMethodDecoratorBuilder } from '../eb/arc4-method-decorator-builder'
+import {
+  Arc4AbiMethodDecoratorBuilder,
+  Arc4BareMethodDecoratorBuilder,
+  ReadonlyDecoratorBuilder,
+} from '../eb/arc4-method-decorator-builder'
 import {
   AddressClassBuilder,
   AddressExpressionBuilder,
@@ -20,11 +24,11 @@ import { Arc4TupleClassBuilder, Arc4TupleExpressionBuilder } from '../eb/arc4/tu
 import { UFixedNxMClassBuilder, UFixedNxMExpressionBuilder } from '../eb/arc4/ufixed'
 import { classBuilderForUintNAlias, UintNClassBuilder, UintNExpressionBuilder } from '../eb/arc4/uintn'
 import {
-  Arc4EncodedLengthFunctionBuilder,
   DecodeArc4FunctionBuilder,
   EncodeArc4FunctionBuilder,
   InterpretAsArc4FunctionBuilder,
   MethodSelectorFunctionBuilder,
+  SizeOfFunctionBuilder,
 } from '../eb/arc4/util'
 import {
   FixedArrayClassBuilder,
@@ -97,7 +101,6 @@ import {
   ARC4BoolClass,
   arc4BooleanType,
   arc4ByteAlias,
-  arc4EncodedLengthFunction,
   ARC4StrClass,
   arc4StringType,
   ARC4StructClass,
@@ -116,6 +119,7 @@ import {
   encodeArc4Function,
   interpretAsArc4Function,
   methodSelectorFunction,
+  sizeOfFunction,
   StaticArrayGeneric,
   StaticArrayType,
   StaticBytesGeneric,
@@ -232,6 +236,7 @@ import {
   PromiseType,
   ReadonlyArrayGeneric,
   ReadonlyArrayPType,
+  readonlyDecorator,
   ReadonlyGeneric,
   ReadonlyTuplePType,
   ReferenceArrayGeneric,
@@ -410,6 +415,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: assetPType, instanceEb: AssetExpressionBuilder })
 
   // ARC4 encoded
+  typeRegistry.register({ ptype: readonlyDecorator, singletonEb: ReadonlyDecoratorBuilder })
   typeRegistry.register({ ptype: arc4AbiMethodDecorator, singletonEb: Arc4AbiMethodDecoratorBuilder })
   typeRegistry.register({ ptype: arc4BareMethodDecorator, singletonEb: Arc4BareMethodDecoratorBuilder })
   typeRegistry.register({ ptype: ByteClass, singletonEb: classBuilderForUintNAlias(ByteClass, arc4ByteAlias) })
@@ -477,7 +483,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: encodeArc4Function, singletonEb: EncodeArc4FunctionBuilder })
   typeRegistry.register({ ptype: decodeArc4Function, singletonEb: DecodeArc4FunctionBuilder })
   typeRegistry.register({ ptype: methodSelectorFunction, singletonEb: MethodSelectorFunctionBuilder })
-  typeRegistry.register({ ptype: arc4EncodedLengthFunction, singletonEb: Arc4EncodedLengthFunctionBuilder })
+  typeRegistry.register({ ptype: sizeOfFunction, singletonEb: SizeOfFunctionBuilder })
   typeRegistry.register({ ptype: compileArc4Function, singletonEb: CompileArc4FunctionBuilder })
   typeRegistry.register({ ptype: abiCallFunction, singletonEb: AbiCallFunctionBuilder })
   typeRegistry.registerGeneric({ ptype: ContractProxyType, generic: ContractProxyGeneric, instanceEb: ContractProxyExpressionBuilder })

@@ -144,6 +144,18 @@ export function abimethod<TContract extends Contract>(config?: AbiMethodConfig<T
     throw new NoImplementation()
   }
 }
+/**
+ * Declares this abi method does not mutate chain state and can be called using a simulate call to the same effect.
+ *
+ * Shorthand for `@abimethod({readonly: true})`
+ * @typeParam TContract the type of the contract this method is a part of
+ */
+export function readonly<TContract extends Contract, TArgs extends DeliberateAny[], TReturn>(
+  target: (this: TContract, ...args: TArgs) => TReturn,
+  ctx: ClassMethodDecoratorContext<TContract>,
+): (this: TContract, ...args: TArgs) => TReturn {
+  throw new NoImplementation()
+}
 
 /**
  * Configuration options for a bare method
@@ -219,11 +231,11 @@ export function encodeArc4<const T>(value: T): bytes {
 }
 
 /**
- * Return the total number of bytes required to store T as ARC4 bytes.
+ * Return the total number of bytes required to store T as bytes.
  *
  * T must represent a type with a fixed length encoding scheme.
  * @typeParam T Any native or arc4 type with a fixed encoding size.
  */
-export function arc4EncodedLength<T>(): uint64 {
+export function sizeOf<T>(): uint64 {
   throw new NoImplementation()
 }

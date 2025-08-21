@@ -2,12 +2,12 @@ import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typesc
 import { assert, assertMatch, Bytes, Contract, ensureBudget, log } from '@algorandfoundation/algorand-typescript'
 import type { Address } from '@algorandfoundation/algorand-typescript/arc4'
 import {
-  arc4EncodedLength,
   Bool,
   decodeArc4,
   DynamicArray,
   DynamicBytes,
   encodeArc4,
+  sizeOf,
   StaticArray,
   StaticBytes,
   Str,
@@ -51,19 +51,15 @@ export class Arc4EncodeDecode extends Contract {
     assert(encodeArc4<Address[]>([f]) === new DynamicArray(f).bytes)
     assert(encodeArc4<bytes<12>[]>([g]) === new DynamicArray(new StaticBytes(g)).bytes)
 
-    assert(arc4EncodedLength<uint64>() === 8)
-    assert(arc4EncodedLength<boolean>() === 1)
-    assert(arc4EncodedLength<Uint<512>>() === 64)
-    assert(arc4EncodedLength<[uint64, uint64, boolean]>() === 17)
-    assert(arc4EncodedLength<[uint64, uint64, boolean, boolean]>() === 17)
-    assert(arc4EncodedLength<[StaticArray<Bool, 10>, boolean, boolean]>() === 3)
-    assert(
-      arc4EncodedLength<
-        [[boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean], boolean, boolean]
-      >() === 3,
-    )
-    assert(arc4EncodedLength<typeof g>() === 12)
-    assert(arc4EncodedLength<StaticMutableObject>() === 20)
+    assert(sizeOf<uint64>() === 8)
+    assert(sizeOf<boolean>() === 1)
+    assert(sizeOf<Uint<512>>() === 64)
+    assert(sizeOf<[uint64, uint64, boolean]>() === 17)
+    assert(sizeOf<[uint64, uint64, boolean, boolean]>() === 17)
+    assert(sizeOf<[StaticArray<Bool, 10>, boolean, boolean]>() === 3)
+    assert(sizeOf<[[boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean], boolean, boolean]>() === 3)
+    assert(sizeOf<typeof g>() === 12)
+    assert(sizeOf<StaticMutableObject>() === 20)
   }
 
   testDecoding(
