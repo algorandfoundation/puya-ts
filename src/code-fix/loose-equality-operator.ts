@@ -8,16 +8,16 @@ import { CodeFix } from './code-fix'
 export class LooseEqualityOperator extends CodeFix {
   constructor({
     sourceLocation,
-    operatorUsed,
+    errorMessage,
     operatorRequired,
   }: {
     sourceLocation: SourceLocation<ts.BinaryOperatorToken>
-    operatorUsed: string
+    errorMessage: string
     operatorRequired: string
   }) {
     super({
       sourceLocation,
-      errorMessage: `Loose equality operator '${operatorUsed}' is not supported. Please use strict equality operator '${operatorRequired}'`,
+      errorMessage,
       fixMessage: `Replace with ${operatorRequired}`,
       logLevel: LogLevel.Error,
       edits: LooseEqualityOperator.buildEdits(sourceLocation.node, operatorRequired),
