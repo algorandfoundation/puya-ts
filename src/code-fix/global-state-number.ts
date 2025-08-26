@@ -1,7 +1,6 @@
 import type ts from 'typescript'
 import type { SourceLocation } from '../awst/source-location'
 import { transientTypeErrors } from '../awst_build/ptypes/transient-type-errors'
-import { Constants } from '../constants'
 import { LogLevel } from '../logger'
 import type { TextEdit } from '../text-edit'
 import { getNodeRange } from '../text-edit'
@@ -15,13 +14,6 @@ export class GlobalStateNumber extends CodeFix {
       fixMessage: 'Use GlobalState<uint64>',
       logLevel: LogLevel.Error,
       edits: GlobalStateNumber.buildEdits(sourceLocation.node),
-      requiredSymbols: [
-        {
-          name: 'uint64',
-          module: Constants.algoTsPackage,
-          typeOnly: true,
-        },
-      ],
     })
   }
 

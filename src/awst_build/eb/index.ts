@@ -3,6 +3,7 @@ import { awst, isConstant, isConstantOrTemplateVar } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
 import { TupleItemExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
+import { RequiresArc4Clone } from '../../code-fix/requires-arc4-clone'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { instanceOfAny } from '../../util'
@@ -298,10 +299,13 @@ export abstract class InstanceExpressionBuilder<TPType extends PType> extends In
   checkForUnclonedMutables(scenario: string) {
     if (isReferableExpression(this._expr)) {
       if (isOrContainsMutableType(this.ptype)) {
-        logger.error(
-          this.sourceLocation,
-          `cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when ${scenario}`,
+        logger.addCodeFix(
+          new RequiresArc4Clone({
+            sourceLocation: this.sourceLocation,
+            errorMessage: `cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when ${scenario}`,
+          }),
         )
+
         return true
       }
     }
