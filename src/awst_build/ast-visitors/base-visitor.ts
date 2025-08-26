@@ -3,6 +3,7 @@ import { nodeFactory } from '../../awst/node-factory'
 import { type Expression, type MethodDocumentation } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { InvalidNonNullAssertion } from '../../code-fix/invalid-non-null-assertion'
+import { LooseEqualityOperator } from '../../code-fix/loose-equality-operator'
 import { CodeError, FixableCodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
@@ -242,7 +243,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
       return this.context.getBuilderForNode(node.name)
     }
     const property = this.textVisitor.accept(node.name)
-    return target.memberAccess(property, this.sourceLocation(node.name))
+    return target.memberAccess(property, this.sourceLocation(node))
   }
 
   visitElementAccessExpression(node: ts.ElementAccessExpression): NodeBuilder {
@@ -350,10 +351,10 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     const sourceLocation = this.sourceLocation(token)
     switch (token.kind) {
       case ts.SyntaxKind.EqualsEqualsToken:
-        logger.error(sourceLocation, `Loose equality operator '==' is not supported. Please use strict equality operator '==='`)
+        logger.addCodeFix(new LooseEqualityOperator({ sourceLocation, operatorUsed: '==', operatorRequired: '===' }))
         return ts.SyntaxKind.EqualsEqualsEqualsToken
       case ts.SyntaxKind.ExclamationEqualsToken:
-        logger.error(sourceLocation, `Loose inequality operator '!=' is not supported. Please use strict inequality operator '!=='`)
+        logger.addCodeFix(new LooseEqualityOperator({ sourceLocation, operatorUsed: '!=', operatorRequired: '!==' }))
         return ts.SyntaxKind.ExclamationEqualsEqualsToken
       default:
         return token.kind

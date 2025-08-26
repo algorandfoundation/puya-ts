@@ -14,7 +14,7 @@ export function applyEdits(file: string, edits: TextEdit[]) {
     let currentEdit = orderedEdits.shift()
 
     for (const [line, lineText] of file.split('\n').entries()) {
-      for (const [col, character] of lineText.split('').entries()) {
+      for (const [col, character] of lineText.split('').concat('\n').entries()) {
         const currentPos = { line, col }
         if (!inEdit && currentEdit) {
           if (equal(currentPos, currentEdit.range.start)) {
@@ -34,7 +34,6 @@ export function applyEdits(file: string, edits: TextEdit[]) {
 
         yield character
       }
-      yield '\n'
     }
   }
 

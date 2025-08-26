@@ -5,7 +5,7 @@ class TestContract extends Contract {
   test(x: uint64[]) {
     const notNeeded = x[0]
 
-    x.pop()
+    x.pop()!
   }
 }
 

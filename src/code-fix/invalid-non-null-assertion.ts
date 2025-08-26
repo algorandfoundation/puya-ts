@@ -14,7 +14,6 @@ export class InvalidNonNullAssertion extends CodeFix {
       fixMessage: "Remove '!'",
       logLevel: LogLevel.Error,
       edits: InvalidNonNullAssertion.buildEdits(sourceLocation.node),
-      requiredSymbols: [],
     })
   }
 
