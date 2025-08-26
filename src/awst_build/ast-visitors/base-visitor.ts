@@ -351,10 +351,22 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     const sourceLocation = this.sourceLocation(token)
     switch (token.kind) {
       case ts.SyntaxKind.EqualsEqualsToken:
-        logger.addCodeFix(new LooseEqualityOperator({ sourceLocation, operatorUsed: '==', operatorRequired: '===' }))
+        logger.addCodeFix(
+          new LooseEqualityOperator({
+            sourceLocation,
+            errorMessage: `Loose equality operator '==' is not supported. Please use strict equality operator '==='`,
+            operatorRequired: '===',
+          }),
+        )
         return ts.SyntaxKind.EqualsEqualsEqualsToken
       case ts.SyntaxKind.ExclamationEqualsToken:
-        logger.addCodeFix(new LooseEqualityOperator({ sourceLocation, operatorUsed: '!=', operatorRequired: '!==' }))
+        logger.addCodeFix(
+          new LooseEqualityOperator({
+            sourceLocation,
+            errorMessage: `Loose inequality operator '!=' is not supported. Please use strict inequality operator '!=='`,
+            operatorRequired: '!==',
+          }),
+        )
         return ts.SyntaxKind.ExclamationEqualsEqualsToken
       default:
         return token.kind
