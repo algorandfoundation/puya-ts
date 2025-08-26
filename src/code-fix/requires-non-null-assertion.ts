@@ -13,7 +13,6 @@ export class RequiresNonNullAssertion extends CodeFix {
       fixMessage: "Insert required '!'",
       logLevel: LogLevel.Error,
       edits: RequiresNonNullAssertion.buildEdits(sourceLocation.node),
-      requiredSymbols: [],
     })
   }
 

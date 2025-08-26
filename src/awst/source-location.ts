@@ -10,6 +10,14 @@ export class SourceLocation<TNode extends ts.Node | undefined = ts.Node | undefi
   scope: 'file' | 'range'
   node: TNode
 
+  /**
+   * Asserts this source location has a node and returns source location with updated typing
+   */
+  withNode(): SourceLocation<ts.Node> {
+    invariant(this.node, 'Source location must have node', this)
+    return this as SourceLocation<ts.Node>
+  }
+
   constructor(props: {
     file?: string | null
     line: number
