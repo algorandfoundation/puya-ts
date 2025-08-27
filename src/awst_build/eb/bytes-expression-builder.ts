@@ -31,7 +31,6 @@ import {
   ArrayLiteralPType,
   bigIntPType,
   biguintPType,
-  boolPType,
   BytesFunction,
   BytesGeneric,
   BytesPType,
@@ -52,7 +51,7 @@ import { SliceFunctionBuilder } from './shared/slice-function-builder'
 import { StringExpressionBuilder } from './string-expression-builder'
 import { isStaticallyIterable, StaticIterator } from './traits/static-iterator'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
-import { requireBooleanConstant, requireExpressionOfType, requireIntegerConstant, requireStringConstant } from './util'
+import { mapStringConstant, requireExpressionOfType, requireIntegerConstant, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { compareBytes } from './util/compare-bytes'
 
@@ -419,6 +418,11 @@ export function bytesToFixed(builder: InstanceBuilder, fixedType: BytesPType, so
   )
 }
 
+const fixedConversionStrategyMap: Record<string, 'assert-length' | 'unsafe-cast'> = {
+  'assert-length': 'assert-length',
+  'unsafe-cast': 'unsafe-cast',
+}
+
 export class ToFixedLengthFunctionBuilder extends FunctionBuilder {
   constructor(private builder: BytesExpressionBuilder) {
     super(builder.sourceLocation)
@@ -426,7 +430,7 @@ export class ToFixedLengthFunctionBuilder extends FunctionBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
-      args: [{ length, checked }],
+      args: [{ length, strategy }],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -436,15 +440,15 @@ export class ToFixedLengthFunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [
         a.obj({
           length: a.required(NumericLiteralPType),
-          checked: a.optional(boolPType),
+          strategy: a.optional(stringPType),
         }),
       ],
     })
     const sizeConst = requireIntegerConstant(length)
-    const assertLength = checked === undefined ? true : requireBooleanConstant(checked).value
+    const parsedStrategy = strategy === undefined ? 'assert-length' : mapStringConstant(fixedConversionStrategyMap, strategy.resolve())
     const ptype = new BytesPType({ length: sizeConst.value })
 
-    if (assertLength) {
+    if (parsedStrategy === 'assert-length') {
       return bytesToFixed(this.builder, ptype, sourceLocation)
     } else {
       return instanceEb(

@@ -10,7 +10,7 @@ const fromBase64 = Bytes.fromBase64<14>('SGVsbG8gQWxnb3JhbmQ=')
 const EMPTY_HASH = '0000000000000000000000000000000000000000000000000000000000000000'
 
 function padTo32(b: bytes<16>): bytes<32> {
-  return b.bitwiseOr(bzero(32)).toFixed({ length: 32, checked: false })
+  return b.bitwiseOr(bzero(32)).toFixed({ length: 32, strategy: 'unsafe-cast' })
 }
 
 class StaticBytesAlgo extends Contract {
@@ -34,10 +34,14 @@ class StaticBytesAlgo extends Contract {
     this.receiveB32(Txn.sender.bytes)
     this.receiveBytes(Txn.sender.bytes, 32)
 
-    this.receiveB32(Bytes`abcdefghabcdefghabcdefghabcdefgh`.toFixed({ length: 32 }))
+    this.receiveB32(Bytes`abcdefghabcdefghabcdefghabcdefgh`.toFixed({ length: 32, strategy: 'assert-length' }))
 
     const joined = Bytes<55>`${fromUtf8}${fromHex}${fromBase32}${fromBase64}`
     assert(joined.length === 55)
+
+    const padded = padTo32(Txn.sender.bytes.slice(0, 16).toFixed({ length: 16 }))
+
+    assert(padded.length === 32)
   }
 
   testArray() {
