@@ -81,7 +81,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test()
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#4: bool = 1u
         goto block@19
-    block@8: // testArray_route_L43
+    block@8: // testArray_route_L47
         let tmp%38#0: uint64 = (txn OnCompletion)
         let tmp%39#0: bool = (! tmp%38#0)
         (assert tmp%39#0) // OnCompletion is not NoOp
@@ -90,7 +90,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray()
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#5: bool = 1u
         goto block@19
-    block@9: // test2_route_L52
+    block@9: // test2_route_L56
         let tmp%42#0: uint64 = (txn OnCompletion)
         let tmp%43#0: bool = (! tmp%42#0)
         (assert tmp%43#0) // OnCompletion is not NoOp
@@ -107,7 +107,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%48#0)
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#6: bool = 1u
         goto block@19
-    block@10: // test3_route_L62
+    block@10: // test3_route_L66
         let tmp%49#0: uint64 = (txn OnCompletion)
         let tmp%50#0: bool = (! tmp%49#0)
         (assert tmp%50#0) // OnCompletion is not NoOp
@@ -115,7 +115,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%51#0) // can only call when not creating
         let tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__%0#7: bool = 1u
         goto block@19
-    block@11: // test4_route_L67
+    block@11: // test4_route_L71
         let tmp%53#0: uint64 = (txn OnCompletion)
         let tmp%54#0: bool = (! tmp%53#0)
         (assert tmp%54#0) // OnCompletion is not NoOp
@@ -172,10 +172,20 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test() -> void:
         let reinterpret_bytes[32]%1#0: bytes[32] = (txn Sender)
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes(reinterpret_bytes[32]%1#0, 32u)
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32("abcdefghabcdefghabcdefghabcdefgh")
+        let reinterpret_bytes[32]%2#0: bytes[32] = (txn Sender)
+        let b#0: bytes[16] = ((substring 0 16) reinterpret_bytes[32]%2#0)
+        let tmp%7#0: uint64 = (len b#0)
+        let tmp%8#0: bool = (== tmp%7#0 16u)
+        (assert tmp%8#0) // Length must be 16
+        let tmp%0#1: bytes = (bzero 32u)
+        let padded#0: bytes[32] = (b| b#0 tmp%0#1)
+        let tmp%10#0: uint64 = (len padded#0)
+        let tmp%11#0: bool = (== tmp%10#0 32u)
+        (assert tmp%11#0)
         return 
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray() -> void:
-    block@0: // L43
+    block@0: // L47
         let a.0#0: bytes[32] = (txn Sender)
         let a.1#0: bytes[32] = (txn Sender)
         let reinterpret_bytes[32]%2#0: bytes[32] = (txn Sender)
@@ -215,19 +225,19 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray() -> 
         return 
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2() -> bytes:
-    block@0: // L52
+    block@0: // L56
         let result#0: bytes = 0x0000000000000000000000000000000000000000000000000000000000000000
         let i#0: uint64 = 0u
         goto block@1
-    block@1: // while_top_L55
+    block@1: // while_top_L59
         let i#1: uint64 = φ(i#0 <- block@0, i#2 <- block@2)
         let result#1: bytes = φ(result#0 <- block@0, result#2 <- block@2)
         let tmp%0#0: bool = (< i#1 5u)
         goto tmp%0#0 ? block@2 : block@3
-    block@2: // while_body_L55
+    block@2: // while_body_L59
         let tmp%1#0: bytes = (concat result#1 result#1)
         let result#2: bytes = (sha256 tmp%1#0)
         let i#2: uint64 = (+ i#1 1u)
         goto block@1
-    block@3: // after_while_L55
+    block@3: // after_while_L59
         return result#1

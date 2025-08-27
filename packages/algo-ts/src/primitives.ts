@@ -216,7 +216,7 @@ export type bytes<out TLength extends uint64 = uint64> = {
   toString(): string
 
   /**
-   * Change this unbounded bytes instance into a bounded one, optionally asserting the length
+   * Change this unbounded bytes instance into a bounded one
    * @param options Options for the conversion
    */
   toFixed<TNewLength extends TLength>(options: {
@@ -225,9 +225,14 @@ export type bytes<out TLength extends uint64 = uint64> = {
      */
     length: TNewLength
     /**
-     * Whether to assert the underlying value has the specified length (default: `true`)
+     * The strategy to use for converting to a fixed length bytes type (default: assert-length)
+     *
+     * assert-length: Asserts that the byte sequence has the specified length and fail if it differs
+     * unsafe-cast: Reinterpret the byte sequence as a fixed length type without any checks. This will succeed even if the value
+     *              is not of the specified length but will result in undefined behaviour for any code that makes use of this value.
+     *
      */
-    checked?: boolean
+    strategy?: 'assert-length' | 'unsafe-cast'
   }): bytes<TNewLength>
 }
 
