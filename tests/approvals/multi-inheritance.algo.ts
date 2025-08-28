@@ -64,12 +64,12 @@ export class MultiBases extends classes(NameStore, BaseOne, BaseTwo) {
 
 class AbiCallMultiInheritance extends Contract {
   test(app: Application) {
-    abiCall(MultiBases.prototype.methodTwo, {
+    abiCall<typeof MultiBases.prototype.methodTwo>({
       args: [],
       appId: app,
     })
 
-    const result = abiCall(AbiCallMultiInheritance.prototype.add, {
+    const result = abiCall<typeof AbiCallMultiInheritance.prototype.add>({
       args: [1, 2],
     }).returnValue
 

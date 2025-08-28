@@ -24,7 +24,8 @@ class HelloFactory extends Contract {
     })
     assert(result === 'hello world')
 
-    const { returnValue: result2, itxn: greetItxn } = abiCall(Hello.prototype.greet, {
+    const { returnValue: result2, itxn: greetItxn } = abiCall({
+      method: Hello.prototype.greet,
       appId: app,
       args: ['abi'],
     })
@@ -32,13 +33,15 @@ class HelloFactory extends Contract {
     assert(result2 === 'hello abi')
     assert(greetItxn.lastLog === Bytes.fromHex('151f7c75').concat(new Str('hello abi').bytes))
 
-    const result3 = abiCall(HelloStubbed.prototype.greet, {
+    const result3 = abiCall({
+      method: HelloStubbed.prototype.greet,
       appId: app,
       args: ['stubbed'],
     }).returnValue
     assert(result3 === 'hello stubbed')
 
-    const result4 = abiCall(Hello.prototype.sendGreetings, {
+    const result4 = abiCall({
+      method: Hello.prototype.sendGreetings,
       appId: app,
       args: [{ name: 'world', termination: new arc4.Str('!') }],
     }).returnValue

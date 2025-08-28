@@ -61,7 +61,8 @@ class EchoResource extends Contract {
 
 class C2C extends Contract {
   testCallToIndex(account: Account, appId: Application) {
-    const { returnValue: res1 } = abiCall(ByIndex.prototype.testExplicitIndex, {
+    const { returnValue: res1 } = abiCall({
+      method: ByIndex.prototype.testExplicitIndex,
       appId,
       args: [account],
     })
@@ -69,7 +70,7 @@ class C2C extends Contract {
     assert(res1 === account.balance)
   }
   testCallToValue(account: Account, appId: Application) {
-    const { returnValue: res1 } = abiCall(ByValue.prototype.testExplicitValue, {
+    const { returnValue: res1 } = abiCall<typeof ByValue.prototype.testExplicitValue>({
       appId,
       args: [account],
     })

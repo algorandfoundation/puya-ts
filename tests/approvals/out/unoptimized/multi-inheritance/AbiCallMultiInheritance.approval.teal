@@ -134,7 +134,7 @@ test:
 
 test_block@0:
     // tests/approvals/multi-inheritance.algo.ts:67-70
-    // abiCall(MultiBases.prototype.methodTwo, {
+    // abiCall<typeof MultiBases.prototype.methodTwo>({
     //   args: [],
     //   appId: app,
     // })
@@ -143,7 +143,7 @@ test_block@0:
     // appId: app,
     frame_dig -1
     // tests/approvals/multi-inheritance.algo.ts:67-70
-    // abiCall(MultiBases.prototype.methodTwo, {
+    // abiCall<typeof MultiBases.prototype.methodTwo>({
     //   args: [],
     //   appId: app,
     // })
@@ -158,7 +158,7 @@ test_block@0:
 
 test_next_txn@1:
     // tests/approvals/multi-inheritance.algo.ts:67-70
-    // abiCall(MultiBases.prototype.methodTwo, {
+    // abiCall<typeof MultiBases.prototype.methodTwo>({
     //   args: [],
     //   appId: app,
     // })
@@ -169,7 +169,7 @@ test_next_txn@1:
     ==
     assert // Bytes has valid prefix
     // tests/approvals/multi-inheritance.algo.ts:72-74
-    // const result = abiCall(AbiCallMultiInheritance.prototype.add, {
+    // const result = abiCall<typeof AbiCallMultiInheritance.prototype.add>({
     //   args: [1, 2],
     // }).returnValue
     itxn_begin
@@ -181,7 +181,7 @@ test_next_txn@1:
     itob
     cover 1
     // tests/approvals/multi-inheritance.algo.ts:72-74
-    // const result = abiCall(AbiCallMultiInheritance.prototype.add, {
+    // const result = abiCall<typeof AbiCallMultiInheritance.prototype.add>({
     //   args: [1, 2],
     // }).returnValue
     bytec_1 // method "add(uint64,uint64)uint64"
@@ -196,7 +196,7 @@ test_next_txn@1:
 
 test_next_txn@2:
     // tests/approvals/multi-inheritance.algo.ts:72-74
-    // const result = abiCall(AbiCallMultiInheritance.prototype.add, {
+    // const result = abiCall<typeof AbiCallMultiInheritance.prototype.add>({
     //   args: [1, 2],
     // }).returnValue
     itxn_submit

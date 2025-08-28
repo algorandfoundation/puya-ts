@@ -48,6 +48,7 @@ export class ContractVisitor extends ClassDefinitionVisitor {
     codeInvariant(classDec.name, 'Anonymous classes are not supported for contracts', sourceLocation)
 
     this._contractPType = ptype
+    this.context.registerContractType(ptype)
 
     this.metaData = {
       isAbstract: Boolean(classDec.modifiers?.some((m) => m.kind === ts.SyntaxKind.AbstractKeyword)),
