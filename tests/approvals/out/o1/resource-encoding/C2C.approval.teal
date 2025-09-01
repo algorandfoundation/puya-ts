@@ -17,7 +17,7 @@ main_after_if_else@12:
     err
 
 main_testCallToEchoResource_route@5:
-    // tests/approvals/resource-encoding.algo.ts:80
+    // tests/approvals/resource-encoding.algo.ts:81
     // testCallToEchoResource() {
     txn OnCompletion
     !
@@ -29,7 +29,7 @@ main_testCallToEchoResource_route@5:
     return
 
 main_testCallToValue_route@4:
-    // tests/approvals/resource-encoding.algo.ts:71
+    // tests/approvals/resource-encoding.algo.ts:72
     // testCallToValue(account: Account, appId: Application) {
     txn OnCompletion
     !
@@ -41,7 +41,7 @@ main_testCallToValue_route@4:
     txna ApplicationArgs 1
     txna ApplicationArgs 2
     btoi
-    // tests/approvals/resource-encoding.algo.ts:71
+    // tests/approvals/resource-encoding.algo.ts:72
     // testCallToValue(account: Account, appId: Application) {
     callsub testCallToValue
     intc_1 // 1
@@ -83,8 +83,9 @@ testCallToIndex:
     // tests/approvals/resource-encoding.algo.ts:63
     // testCallToIndex(account: Account, appId: Application) {
     proto 2 0
-    // tests/approvals/resource-encoding.algo.ts:64-67
-    // const { returnValue: res1 } = abiCall(ByIndex.prototype.testExplicitIndex, {
+    // tests/approvals/resource-encoding.algo.ts:64-68
+    // const { returnValue: res1 } = abiCall({
+    //   method: ByIndex.prototype.testExplicitIndex,
     //   appId,
     //   args: [account],
     // })
@@ -97,8 +98,9 @@ testCallToIndex:
     itxn_field ApplicationArgs
     frame_dig -1
     itxn_field ApplicationID
-    // tests/approvals/resource-encoding.algo.ts:64-67
-    // const { returnValue: res1 } = abiCall(ByIndex.prototype.testExplicitIndex, {
+    // tests/approvals/resource-encoding.algo.ts:64-68
+    // const { returnValue: res1 } = abiCall({
+    //   method: ByIndex.prototype.testExplicitIndex,
     //   appId,
     //   args: [account],
     // })
@@ -116,7 +118,7 @@ testCallToIndex:
     ==
     assert // Bytes has valid prefix
     btoi
-    // tests/approvals/resource-encoding.algo.ts:69
+    // tests/approvals/resource-encoding.algo.ts:70
     // assert(res1 === account.balance)
     frame_dig -2
     acct_params_get AcctBalance
@@ -128,11 +130,11 @@ testCallToIndex:
 
 // tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue(account: bytes, appId: uint64) -> void:
 testCallToValue:
-    // tests/approvals/resource-encoding.algo.ts:71
+    // tests/approvals/resource-encoding.algo.ts:72
     // testCallToValue(account: Account, appId: Application) {
     proto 2 0
-    // tests/approvals/resource-encoding.algo.ts:72-75
-    // const { returnValue: res1 } = abiCall(ByValue.prototype.testExplicitValue, {
+    // tests/approvals/resource-encoding.algo.ts:73-76
+    // const { returnValue: res1 } = abiCall<typeof ByValue.prototype.testExplicitValue>({
     //   appId,
     //   args: [account],
     // })
@@ -157,7 +159,7 @@ testCallToValue:
     ==
     assert // Bytes has valid prefix
     btoi
-    // tests/approvals/resource-encoding.algo.ts:77
+    // tests/approvals/resource-encoding.algo.ts:78
     // assert(res1 === account.balance)
     frame_dig -2
     acct_params_get AcctBalance
@@ -169,16 +171,16 @@ testCallToValue:
 
 // tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource() -> void:
 testCallToEchoResource:
-    // tests/approvals/resource-encoding.algo.ts:83
+    // tests/approvals/resource-encoding.algo.ts:84
     // const appId = compiled.bareCreate().createdApp
     itxn_begin
-    // tests/approvals/resource-encoding.algo.ts:81
+    // tests/approvals/resource-encoding.algo.ts:82
     // const compiled = compileArc4(EchoResource)
     pushbytes base64(CoEBQw==)
     itxn_field ClearStateProgramPages
     pushbytes base64(CiADAQIDJgEEFR98dTEbQQBTggIEd+KNdARNNwJ2NhoAjgIAHAABADEZFEQxGEQ2GgEXNhoCFzYaA4gAXyhMULAiQzEZFEQxGEQ2GgEXwDA2GgIXwDI2GgMXwByIABEoTFCwIkMxGUD/vTEYFEQiQ4oDASLAGhfAMIv9EkQjwBoXwDKL/hJEJMAaF8Aci/8SRIv9Fov+FlCL/1CJigMBIsAaF4v9EkQjwBoXi/4SRCTAGov/EkSL/RaL/hZQi/9QiQ==)
     itxn_field ApprovalProgramPages
-    // tests/approvals/resource-encoding.algo.ts:83
+    // tests/approvals/resource-encoding.algo.ts:84
     // const appId = compiled.bareCreate().createdApp
     intc_0 // 0
     itxn_field OnCompletion
@@ -188,7 +190,7 @@ testCallToEchoResource:
     itxn_field Fee
     itxn_submit
     itxn CreatedApplicationID
-    // tests/approvals/resource-encoding.algo.ts:84-90
+    // tests/approvals/resource-encoding.algo.ts:85-91
     // const asset = itxn
     //   .assetConfig({
     //     total: 1,
@@ -197,19 +199,19 @@ testCallToEchoResource:
     //   })
     //   .submit().createdAsset
     itxn_begin
-    // tests/approvals/resource-encoding.algo.ts:88
+    // tests/approvals/resource-encoding.algo.ts:89
     // assetName: 'TEST',
     pushbytes "TEST"
     itxn_field ConfigAssetName
-    // tests/approvals/resource-encoding.algo.ts:87
+    // tests/approvals/resource-encoding.algo.ts:88
     // unitName: 'T',
     pushbytes "T"
     itxn_field ConfigAssetUnitName
-    // tests/approvals/resource-encoding.algo.ts:86
+    // tests/approvals/resource-encoding.algo.ts:87
     // total: 1,
     intc_1 // 1
     itxn_field ConfigAssetTotal
-    // tests/approvals/resource-encoding.algo.ts:84-89
+    // tests/approvals/resource-encoding.algo.ts:85-90
     // const asset = itxn
     //   .assetConfig({
     //     total: 1,
@@ -220,7 +222,7 @@ testCallToEchoResource:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    // tests/approvals/resource-encoding.algo.ts:84-90
+    // tests/approvals/resource-encoding.algo.ts:85-91
     // const asset = itxn
     //   .assetConfig({
     //     total: 1,
@@ -229,16 +231,16 @@ testCallToEchoResource:
     //   })
     //   .submit().createdAsset
     itxn_submit
-    // tests/approvals/resource-encoding.algo.ts:90
+    // tests/approvals/resource-encoding.algo.ts:91
     // .submit().createdAsset
     itxn CreatedAssetID
-    // tests/approvals/resource-encoding.algo.ts:92-95
+    // tests/approvals/resource-encoding.algo.ts:93-96
     // const { returnValue: indexes } = compiled.call.echoResourceByIndex({
     //   args: [asset, Global.currentApplicationId, Txn.sender],
     //   appId,
     // })
     itxn_begin
-    // tests/approvals/resource-encoding.algo.ts:93
+    // tests/approvals/resource-encoding.algo.ts:94
     // args: [asset, Global.currentApplicationId, Txn.sender],
     global CurrentApplicationID
     txn Sender
@@ -246,7 +248,7 @@ testCallToEchoResource:
     dig 1
     itxn_field Assets
     itxn_field Applications
-    // tests/approvals/resource-encoding.algo.ts:92-95
+    // tests/approvals/resource-encoding.algo.ts:93-96
     // const { returnValue: indexes } = compiled.call.echoResourceByIndex({
     //   args: [asset, Global.currentApplicationId, Txn.sender],
     //   appId,
@@ -259,7 +261,7 @@ testCallToEchoResource:
     itxn_field ApplicationArgs
     bytec_1 // 0x01
     itxn_field ApplicationArgs
-    // tests/approvals/resource-encoding.algo.ts:92-95
+    // tests/approvals/resource-encoding.algo.ts:93-96
     // const { returnValue: indexes } = compiled.call.echoResourceByIndex({
     //   args: [asset, Global.currentApplicationId, Txn.sender],
     //   appId,
@@ -279,7 +281,7 @@ testCallToEchoResource:
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
-    // tests/approvals/resource-encoding.algo.ts:96
+    // tests/approvals/resource-encoding.algo.ts:97
     // assertMatch(indexes, [asset, Global.currentApplicationId, Txn.sender])
     dup
     intc_3 // 4
@@ -300,20 +302,20 @@ testCallToEchoResource:
     ==
     &&
     assert // assert target is match for conditions
-    // tests/approvals/resource-encoding.algo.ts:98-101
+    // tests/approvals/resource-encoding.algo.ts:99-102
     // const { returnValue: resources } = compiled.call.echoResourceByValue({
     //   args: [asset, Global.currentApplicationId, Txn.sender],
     //   appId,
     // })
     itxn_begin
-    // tests/approvals/resource-encoding.algo.ts:99
+    // tests/approvals/resource-encoding.algo.ts:100
     // args: [asset, Global.currentApplicationId, Txn.sender],
     dup
     itob
     global CurrentApplicationID
     itob
     txn Sender
-    // tests/approvals/resource-encoding.algo.ts:98-101
+    // tests/approvals/resource-encoding.algo.ts:99-102
     // const { returnValue: resources } = compiled.call.echoResourceByValue({
     //   args: [asset, Global.currentApplicationId, Txn.sender],
     //   appId,
@@ -340,7 +342,7 @@ testCallToEchoResource:
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
-    // tests/approvals/resource-encoding.algo.ts:103
+    // tests/approvals/resource-encoding.algo.ts:104
     // assertMatch(resources, [asset, Global.currentApplicationId, Txn.sender])
     dup
     intc_3 // 4

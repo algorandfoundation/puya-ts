@@ -412,6 +412,13 @@ export class TypeResolver {
 
     codeInvariant(callSignatures.length === 1, 'User defined functions must have exactly 1 call signature', sourceLocation)
     const [sig] = callSignatures
+    let declaredIn: SymbolName | undefined = undefined
+    const declaredInNode = sig.declaration?.parent
+    if (declaredInNode && ts.isClassDeclaration(declaredInNode)) {
+      const declaredInType = this.checker.getTypeAtLocation(declaredInNode)
+      declaredIn = this.getTypeName(declaredInType, sourceLocation)
+    }
+
     const returnType = this.resolveType(sig.getReturnType(), sourceLocation)
     const parameters = sig.getParameters().map((p) => {
       const paramType = this.checker.getTypeOfSymbol(p)
@@ -423,6 +430,7 @@ export class TypeResolver {
       name: typeName.name,
       module: typeName.module,
       sourceLocation,
+      declaredIn,
     })
   }
 

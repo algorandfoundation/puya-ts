@@ -11,7 +11,7 @@ import { codeInvariant, enumFromValue, hexToUint8Array, invariant } from '../../
 import { parseArc4Method } from '../../../util/arc4-signature-parser'
 import { buildArc4MethodConstant, ptypeToArc4EncodedType } from '../../arc4-util'
 import { AwstBuildContext } from '../../context/awst-build-context'
-import type { FunctionPType, PType } from '../../ptypes'
+import type { PType } from '../../ptypes'
 import {
   accountPType,
   applicationCallItxnParamsType,
@@ -20,6 +20,7 @@ import {
   assetPType,
   bytesPType,
   compiledContractType,
+  FunctionPType,
   GroupTransactionPType,
   ItxnParamsPType,
   voidPType,
@@ -36,7 +37,6 @@ import {
 import { txnFieldName } from '../../txn-fields'
 import { instanceEb } from '../../type-registry'
 import { CompileFunctionBuilder } from '../compiled/compile-function'
-import { ContractMethodExpressionBuilder } from '../free-subroutine-expression-builder'
 import type { InstanceBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
 import { isStaticallyIterable, StaticIterator } from '../traits/static-iterator'
@@ -50,32 +50,40 @@ export class AbiCallFunctionBuilder extends FunctionBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
-      args: [functionRef, fields],
+      ptypes: [functionType],
+      args: [options],
     } = parseFunctionArgs({
       args,
       typeArgs,
-      genericTypeArgs: 2,
-      argSpec: (a) => [a.passthrough(), a.required()],
+      genericTypeArgs: 1,
+      argSpec: (a) => [a.required()],
       callLocation: sourceLocation,
       funcName: this.typeDescription,
     })
+    codeInvariant(
+      functionType instanceof FunctionPType,
+      'Generic type variable TMethod must be a contract method. eg. abiCall<typeof YourContract.prototype.yourMethod>',
+      sourceLocation,
+    )
+    codeInvariant(
+      functionType.declaredIn,
+      `${functionType.name} does not appear to be a contract method. Ensure you are calling a function defined on a contract class eg. abiCall<typeof YourContract.prototype.yourMethod>`,
+      sourceLocation,
+    )
 
-    invariant(functionRef instanceof ContractMethodExpressionBuilder, `Arg 0 of ${this.typeDescription} should be an arc4 contract method`)
-    const {
-      target: { memberName },
-      contractType,
-      ptype: functionType,
-    } = functionRef
-    const arc4Config = AwstBuildContext.current.getArc4Config(contractType, memberName)
+    const contractType = AwstBuildContext.current.getContractTypeByName(functionType.declaredIn)
+    invariant(contractType, `${functionType.declaredIn} has not been visited`)
+
+    const arc4Config = AwstBuildContext.current.getArc4Config(contractType, functionType.name)
     codeInvariant(
       arc4Config instanceof ARC4ABIMethodConfig,
-      `${memberName} is not an ABI method, or the containing contract has not been visited (possibly due to a circular reference)`,
-      functionRef.sourceLocation,
+      `${functionType.name} is not an ABI method. Only ABI compatible methods can be called with this helper.`,
+      sourceLocation,
     )
     const methodSelector = buildArc4MethodConstant(functionType, arc4Config, sourceLocation)
 
     const itxnResult = makeApplicationCall({
-      fields,
+      fields: options,
       methodSelector,
       functionType,
       arc4Config,
@@ -232,7 +240,7 @@ export class ContractProxyCallFunctionBuilder extends FunctionBuilder {
     })
   }
 }
-const typedAppCallIgnoredFields = new Set(['args', 'appArgs'])
+const typedAppCallIgnoredFields = new Set(['args', 'appArgs', 'method'])
 
 export function buildApplicationCallTxnFields({
   sourceLocation,

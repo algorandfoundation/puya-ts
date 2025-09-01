@@ -15,6 +15,7 @@ import { CompilationSet } from '../models/contract-class-model'
 import type { LogicSigClassModel } from '../models/logic-sig-class-model'
 import type { ContractClassPType, PType } from '../ptypes'
 import { arc4BaseContractType, baseContractType, ClusteredContractClassType } from '../ptypes'
+import type { SymbolName } from '../symbol-name'
 import { typeRegistry } from '../type-registry'
 import { TypeResolver } from '../type-resolver'
 import { EvaluationContext } from './evaluation-context'
@@ -93,6 +94,8 @@ export abstract class AwstBuildContext {
     arc4MethodConfig: ARC4MethodConfig
     memberName: string
   }): void
+  abstract registerContractType(contractType: ContractClassPType): void
+  abstract getContractTypeByName(contractName: SymbolName): ContractClassPType | undefined
   abstract getArc4Config(contractType: ContractClassPType, memberName: string): ARC4MethodConfig | undefined
   abstract getArc4Config(contractType: ContractClassPType): ARC4MethodConfig[]
 
@@ -146,12 +149,20 @@ class AwstBuildContextImpl extends AwstBuildContext {
     private readonly nameResolver: UniqueNameResolver,
     private readonly storageDeclarations: DefaultMap<string, Map<string, AppStorageDeclaration>>,
     private readonly arc4MethodConfig: DefaultMap<string, Map<string, ARC4MethodConfig>>,
+    private readonly contractTypes: Record<string, ContractClassPType>,
     compilationSet: CompilationSet,
   ) {
     super()
     this.typeChecker = program.getTypeChecker()
     this.typeResolver = new TypeResolver(this.typeChecker, this.program.getCurrentDirectory())
     this.#compilationSet = compilationSet
+  }
+
+  registerContractType(contractType: ContractClassPType): void {
+    this.contractTypes[contractType.fullName] = contractType
+  }
+  getContractTypeByName(contractName: SymbolName): ContractClassPType | undefined {
+    return this.contractTypes[contractName.fullName]
   }
 
   addArc4Config({
@@ -210,6 +221,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
       new UniqueNameResolver(),
       new DefaultMap(),
       new DefaultMap(),
+      {},
       new CompilationSet(),
     )
   }
@@ -225,6 +237,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
       this.nameResolver.createChild(),
       this.storageDeclarations,
       this.arc4MethodConfig,
+      this.contractTypes,
       this.#compilationSet,
     )
   }
