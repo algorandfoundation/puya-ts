@@ -184,6 +184,79 @@ Existing test files that need to run in a simulated AVM environment or import mo
 
 This change can improve test performance by ensuring only relevant files are processed through `puyaTsTransformer`.
 
+### Rename `arc4EncodedLength` function to `sizeOf`
+
+```typescript
+/**** Before (puya-ts beta) ****/
+assert(arc4EncodedLength<uint64>() === 8)
+assert(arc4EncodedLength<boolean>() === 1)
+assert(arc4EncodedLength<UintN<512>>() === 64)
+assert(arc4EncodedLength<[StaticArray<Bool, 10>, boolean, boolean]>() === 3)
+
+/**** After (puya-ts 1.0) ****/
+assert(sizeOf<uint64>() === 8)
+assert(sizeOf<boolean>() === 1)
+assert(sizeOf<UintN<512>>() === 64)
+assert(sizeOf<[StaticArray<Bool, 10>, boolean, boolean]>() === 3)
+```
+
+### Change `abiCall` helper signature to support type only imports
+
+The signature of `abiCall` helper changes from
+
+```typescript
+abiCall(MyContract.prototype.myMethod, { ... })
+```
+
+to
+
+```typescript
+abiCall({ method: MyContract.prototype.myMethod, ... })
+```
+
+The new `method` property exists to provide a natural way to specify the `TMethod` generic parameter, but it is optional and alternatively the generic arg can be specified explicitly with
+
+```typescript
+abiCall<typeof MyContract.prototype.myMethod>({ ... })
+```
+
+This form of invocation supports using type only imports `import type { MyContract } from '...'` which allow for circular references versus value imports which cannot be circular.
+
+If in some unforseen circumstances, both type argument and `method` property are provided to `abiCall` helper, the type argument takes precedence over the `method` property and the method specified by the type argument is actually called.
+
+```typescript
+/**** Before (puya-ts beta) ****/
+const result2 = abiCall(Hello.prototype.greet, {
+  appId: app,
+  args: ['abi'],
+}).returnValue
+
+assert(result2 === 'hello abi')
+
+const result3 = abiCall(HelloStubbed.prototype.greet, {
+  appId: app,
+  args: ['stubbed'],
+}).returnValue
+assert(result3 === 'hello stubbed')
+
+/**** After (puya-ts 1.0) ****/
+// provide method property
+const result2 = abiCall({
+  method: Hello.prototype.greet,
+  appId: app,
+  args: ['abi'],
+}).returnValue
+
+assert(result2 === 'hello abi')
+
+// or provide type argument, this approach supports using type only imports
+const result3 = abiCall<typeof HelloStubbed.prototype.greet>({
+  appId: app,
+  args: ['stubbed'],
+}).returnValue
+assert(result3 === 'hello stubbed')
+```
+
 ## New features
 
 ### Native mutable objects
@@ -230,7 +303,7 @@ An optional length generic type argument has been added for declaring statically
 
 The original unbounded `bytes` type without the length generic remains available and no changes are required unless you want to take advantage of the new feature.
 
-Due to covariance a `bytes<N>` value can always be assigned to a `bytes` target but in order to do the opposite, you will need to call `.toFixed` on the unbounded value. This method takes a length and an optional boolean `checked` (defaults to `true`) option to indicate if this conversion should be _checked_ at runtime (via asserting the length) versus an `unchecked` conversion which changes the type but doesn't verify the length.
+Due to covariance a `bytes<N>` value can always be assigned to a `bytes` target but in order to do the opposite, you will need to call `.toFixed` on the unbounded value. This method takes a length and an optional `strategy` parameter with valid options of `'assert-length'` or `'unsafe-cast'`(defaults to `'assert-length'`) to indicate if this conversion should assert the length of the input versus an `unsafe` casting which changes the type but doesn't verify the input length.
 
 ```typescript
 snapshotPublicKey = GlobalState<bytes<32>>()
@@ -238,7 +311,7 @@ snapshotPublicKey = GlobalState<bytes<32>>()
 const fromUtf8 = Bytes<3>('abc')
 
 function padTo32(b: bytes<16>): bytes<32> {
-  return b.bitwiseOr(bzero(32)).toFixed({ length: 32, checked: false })
+  return b.bitwiseOr(bzero(32)).toFixed({ length: 32, strategy: 'unsafe-cast' })
 }
 ```
 
@@ -328,4 +401,22 @@ distribute(addresses: Address[], funds: gtxn.PaymentTxn, verifier: Application) 
 ```typescript
 assertMatch(xObj, { x: { not: 3 } }, 'x should not be 3')
 assertMatch(Txn, { sender: { not: Global.zeroAddress } })
+```
+
+### `@readonly` decorator can be use instead of `@abimethod({ readonly: true })`
+
+A new `@readonly` decorator has been added to provide a shorthand for `@abimethod({ readonly: true })`. Setting `readonly` flag via `@abimethod` decorator is still available to avoid needing multiple decorators when other options are also needed to be set e.g. `@arc4.abimethod({ allowActions: ['NoOp'], readonly: true })`.
+
+```typescript
+// use @abimethod decorator to set `readonly` flag
+@abimethod({ readonly: true })
+public getPreconditions(signature: bytes<64>): VotingPreconditions {
+  ...
+}
+
+// or use @readonly decorator
+@readonly
+public getPreconditions(signature: bytes<64>): VotingPreconditions {
+  ...
+}
 ```
