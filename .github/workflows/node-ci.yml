@@ -4,7 +4,7 @@ on:
       node-version:
         required: false
         type: string
-        default: 18.x
+        default: '["20.x", "22.x", "24.x"]'
       python-version:
         required: false
         type: string
@@ -94,6 +94,9 @@ on:
 jobs:
   node-ci:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ${{ fromJSON(inputs.node-version) }}
 
     defaults:
       run:
@@ -107,10 +110,10 @@ jobs:
           fetch-depth: 0
 
       # setup node + private repo access
-      - name: Use Node.js ${{ inputs.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ inputs.node-version }}
+          node-version: ${{ matrix.node-version }}
           registry-url: 'https://npm.pkg.github.com'
           scope: '@makerxstudio'
           cache: 'npm'
@@ -189,5 +192,5 @@ jobs:
         if: ${{ inputs.upload-artifact-name }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.upload-artifact-name }}
+          name: ${{ inputs.upload-artifact-name }}-node-${{ matrix.node-version }}
           path: ${{ inputs.upload-artifact-path }}
