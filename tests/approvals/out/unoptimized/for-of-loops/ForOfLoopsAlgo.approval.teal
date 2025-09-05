@@ -4,10 +4,9 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1 8 42
-    bytecblock 0x 0x151f7c75
+    bytecblock 0x151f7c75 0x
     pushbytes 0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     store 0
-    bytec_0 // ""
     b main_block@0
 
 main_block@0:
@@ -19,10 +18,23 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@13
+    bz main___algots__.defaultCreate@15
     b main_abi_routing@2
 
 main_abi_routing@2:
+    // tests/approvals/for-of-loops.algo.ts:8
+    // export class ForOfLoopsAlgo extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@13
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
     // tests/approvals/for-of-loops.algo.ts:8
     // export class ForOfLoopsAlgo extends Contract {
     txna ApplicationArgs 0
@@ -35,225 +47,94 @@ main_abi_routing@2:
     pushbytes 0xa1cc0d94 // method "test_for_of_loop_native_mutable_array((uint64,uint64,uint64))uint64"
     pushbytes 0x961846c6 // method "test_iterable_props(uint64[3],uint64[3],uint64[])uint64"
     uncover 8
-    match main_test_for_of_loop_tuple_route@3 main_test_for_of_loop_destructured_tuple_route@4 main_test_for_of_loop_destructured_object_route@5 main_test_for_of_loop_arc4_dynamic_array_route@6 main_test_for_of_loop_arc4_static_array_route@7 main_test_for_of_loop_native_immutable_array_route@8 main_test_for_of_loop_native_mutable_array_route@9 main_test_iterable_props_route@10
-    b main_switch_case_default@11
-
-main_switch_case_default@11:
+    match main_test_for_of_loop_tuple_route@4 main_test_for_of_loop_destructured_tuple_route@5 main_test_for_of_loop_destructured_object_route@6 main_test_for_of_loop_arc4_dynamic_array_route@7 main_test_for_of_loop_arc4_static_array_route@8 main_test_for_of_loop_native_immutable_array_route@9 main_test_for_of_loop_native_mutable_array_route@10 main_test_iterable_props_route@11
     b main_switch_case_next@12
 
 main_switch_case_next@12:
-    b main_after_if_else@17
+    b main_after_if_else@14
 
-main_after_if_else@17:
+main_after_if_else@14:
+    b main_after_if_else@16
+
+main_after_if_else@16:
     // tests/approvals/for-of-loops.algo.ts:8
     // export class ForOfLoopsAlgo extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__@18
+    err
 
-main_after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__@18:
-    return
-
-main_test_iterable_props_route@10:
+main_test_iterable_props_route@11:
     // tests/approvals/for-of-loops.algo.ts:73
     // test_iterable_props(static_array: StaticArray<Uint64, 3>, fixed_array: FixedArray<uint64, 3>, dyn_array: DynamicArray<Uint64>) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
-    txna ApplicationArgs 1
-    txna ApplicationArgs 2
-    txna ApplicationArgs 3
-    // tests/approvals/for-of-loops.algo.ts:73
-    // test_iterable_props(static_array: StaticArray<Uint64, 3>, fixed_array: FixedArray<uint64, 3>, dyn_array: DynamicArray<Uint64>) {
-    uncover 2
-    uncover 2
-    uncover 2
     callsub test_iterable_props
-    itob
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__@18
+    b main_switch_case_next@12
 
-main_test_for_of_loop_native_mutable_array_route@9:
-    // tests/approvals/for-of-loops.algo.ts:63
-    // test_for_of_loop_native_mutable_array(items: [uint64, uint64, uint64]) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
-    txna ApplicationArgs 1
+main_test_for_of_loop_native_mutable_array_route@10:
     // tests/approvals/for-of-loops.algo.ts:63
     // test_for_of_loop_native_mutable_array(items: [uint64, uint64, uint64]) {
     callsub test_for_of_loop_native_mutable_array
-    itob
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__@18
+    b main_switch_case_next@12
 
-main_test_for_of_loop_native_immutable_array_route@8:
-    // tests/approvals/for-of-loops.algo.ts:54
-    // test_for_of_loop_native_immutable_array(items: Array<uint64>) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
-    txna ApplicationArgs 1
+main_test_for_of_loop_native_immutable_array_route@9:
     // tests/approvals/for-of-loops.algo.ts:54
     // test_for_of_loop_native_immutable_array(items: Array<uint64>) {
     callsub test_for_of_loop_native_immutable_array
-    itob
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__@18
+    b main_switch_case_next@12
 
-main_test_for_of_loop_arc4_static_array_route@7:
-    // tests/approvals/for-of-loops.algo.ts:45
-    // test_for_of_loop_arc4_static_array(items: StaticArray<Uint64, 5>) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
-    txna ApplicationArgs 1
+main_test_for_of_loop_arc4_static_array_route@8:
     // tests/approvals/for-of-loops.algo.ts:45
     // test_for_of_loop_arc4_static_array(items: StaticArray<Uint64, 5>) {
     callsub test_for_of_loop_arc4_static_array
-    itob
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__@18
+    b main_switch_case_next@12
 
-main_test_for_of_loop_arc4_dynamic_array_route@6:
-    // tests/approvals/for-of-loops.algo.ts:36
-    // test_for_of_loop_arc4_dynamic_array(items: DynamicArray<Uint64>) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
-    txna ApplicationArgs 1
+main_test_for_of_loop_arc4_dynamic_array_route@7:
     // tests/approvals/for-of-loops.algo.ts:36
     // test_for_of_loop_arc4_dynamic_array(items: DynamicArray<Uint64>) {
     callsub test_for_of_loop_arc4_dynamic_array
-    itob
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__@18
+    b main_switch_case_next@12
 
-main_test_for_of_loop_destructured_object_route@5:
-    // tests/approvals/for-of-loops.algo.ts:27
-    // test_for_of_loop_destructured_object(items: Point[]) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
-    txna ApplicationArgs 1
+main_test_for_of_loop_destructured_object_route@6:
     // tests/approvals/for-of-loops.algo.ts:27
     // test_for_of_loop_destructured_object(items: Point[]) {
     callsub test_for_of_loop_destructured_object
-    itob
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__@18
+    b main_switch_case_next@12
 
-main_test_for_of_loop_destructured_tuple_route@4:
-    // tests/approvals/for-of-loops.algo.ts:18
-    // test_for_of_loop_destructured_tuple(items: DynamicArray<Uint64>) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
-    txna ApplicationArgs 1
+main_test_for_of_loop_destructured_tuple_route@5:
     // tests/approvals/for-of-loops.algo.ts:18
     // test_for_of_loop_destructured_tuple(items: DynamicArray<Uint64>) {
     callsub test_for_of_loop_destructured_tuple
-    itob
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__@18
+    b main_switch_case_next@12
 
-main_test_for_of_loop_tuple_route@3:
+main_test_for_of_loop_tuple_route@4:
     // tests/approvals/for-of-loops.algo.ts:9
     // test_for_of_loop_tuple(items: readonly [uint64, uint64, uint64]) {
+    callsub test_for_of_loop_tuple
+    b main_switch_case_next@12
+
+main_create_NoOp@13:
+    b main_after_if_else@14
+
+main___algots__.defaultCreate@15:
+    // tests/approvals/for-of-loops.algo.ts:8
+    // export class ForOfLoopsAlgo extends Contract {
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
     txn ApplicationID
     intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple[routing]() -> void:
+test_for_of_loop_tuple:
+    b test_for_of_loop_tuple_block@0
+
+test_for_of_loop_tuple_block@0:
+    // tests/approvals/for-of-loops.algo.ts:9
+    // test_for_of_loop_tuple(items: readonly [uint64, uint64, uint64]) {
     txna ApplicationArgs 1
     dup
     intc_0 // 0
@@ -275,57 +156,158 @@ main_test_for_of_loop_tuple_route@3:
     cover 1
     uncover 2
     uncover 1
-    // tests/approvals/for-of-loops.algo.ts:9
-    // test_for_of_loop_tuple(items: readonly [uint64, uint64, uint64]) {
     uncover 2
     uncover 2
     uncover 2
-    callsub test_for_of_loop_tuple
+    callsub tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple
     itob
-    bytec_1 // 0x151f7c75
+    bytec_0 // 0x151f7c75
     uncover 1
     concat
     log
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__@18
+    return
 
-main_bare_routing@13:
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
-    txn OnCompletion
-    intc_0 // 0
+
+// tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple[routing]() -> void:
+test_for_of_loop_destructured_tuple:
+    b test_for_of_loop_destructured_tuple_block@0
+
+test_for_of_loop_destructured_tuple_block@0:
+    // tests/approvals/for-of-loops.algo.ts:18
+    // test_for_of_loop_destructured_tuple(items: DynamicArray<Uint64>) {
+    txna ApplicationArgs 1
+    callsub tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple
+    itob
+    bytec_0 // 0x151f7c75
     uncover 1
-    match main___algots__.defaultCreate@14
-    b main_switch_case_default@15
-
-main_switch_case_default@15:
-    b main_switch_case_next@16
-
-main_switch_case_next@16:
-    b main_after_if_else@17
-
-main___algots__.defaultCreate@14:
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
-    txn ApplicationID
-    intc_0 // 0
-    ==
-    assert // can only call when creating
-    callsub __algots__.defaultCreate
+    concat
+    log
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router__@18
+    return
+
+
+// tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object[routing]() -> void:
+test_for_of_loop_destructured_object:
+    b test_for_of_loop_destructured_object_block@0
+
+test_for_of_loop_destructured_object_block@0:
+    // tests/approvals/for-of-loops.algo.ts:27
+    // test_for_of_loop_destructured_object(items: Point[]) {
+    txna ApplicationArgs 1
+    callsub tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array[routing]() -> void:
+test_for_of_loop_arc4_dynamic_array:
+    b test_for_of_loop_arc4_dynamic_array_block@0
+
+test_for_of_loop_arc4_dynamic_array_block@0:
+    // tests/approvals/for-of-loops.algo.ts:36
+    // test_for_of_loop_arc4_dynamic_array(items: DynamicArray<Uint64>) {
+    txna ApplicationArgs 1
+    callsub tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array[routing]() -> void:
+test_for_of_loop_arc4_static_array:
+    b test_for_of_loop_arc4_static_array_block@0
+
+test_for_of_loop_arc4_static_array_block@0:
+    // tests/approvals/for-of-loops.algo.ts:45
+    // test_for_of_loop_arc4_static_array(items: StaticArray<Uint64, 5>) {
+    txna ApplicationArgs 1
+    callsub tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array[routing]() -> void:
+test_for_of_loop_native_immutable_array:
+    b test_for_of_loop_native_immutable_array_block@0
+
+test_for_of_loop_native_immutable_array_block@0:
+    // tests/approvals/for-of-loops.algo.ts:54
+    // test_for_of_loop_native_immutable_array(items: Array<uint64>) {
+    txna ApplicationArgs 1
+    callsub tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array[routing]() -> void:
+test_for_of_loop_native_mutable_array:
+    b test_for_of_loop_native_mutable_array_block@0
+
+test_for_of_loop_native_mutable_array_block@0:
+    // tests/approvals/for-of-loops.algo.ts:63
+    // test_for_of_loop_native_mutable_array(items: [uint64, uint64, uint64]) {
+    txna ApplicationArgs 1
+    callsub tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props[routing]() -> void:
+test_iterable_props:
+    b test_iterable_props_block@0
+
+test_iterable_props_block@0:
+    // tests/approvals/for-of-loops.algo.ts:73
+    // test_iterable_props(static_array: StaticArray<Uint64, 3>, fixed_array: FixedArray<uint64, 3>, dyn_array: DynamicArray<Uint64>) {
+    txna ApplicationArgs 1
+    txna ApplicationArgs 2
+    txna ApplicationArgs 3
+    uncover 2
+    uncover 2
+    uncover 2
+    callsub tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
 
 
 // tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple(items.0: uint64, items.1: uint64, items.2: uint64) -> uint64:
-test_for_of_loop_tuple:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple:
     // tests/approvals/for-of-loops.algo.ts:9
     // test_for_of_loop_tuple(items: readonly [uint64, uint64, uint64]) {
     proto 3 1
-    b test_for_of_loop_tuple_block@0
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_block@0
 
-test_for_of_loop_tuple_block@0:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_block@0:
     // tests/approvals/for-of-loops.algo.ts:10
     // let total: uint64 = 0
     intc_0 // 0
@@ -333,9 +315,9 @@ test_for_of_loop_tuple_block@0:
     // tests/approvals/for-of-loops.algo.ts:11
     // for (const item of items) {
     frame_dig -3
-    b test_for_of_loop_tuple_for_body@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_for_body@1
 
-test_for_of_loop_tuple_for_body@1:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_for_body@1:
     // tests/approvals/for-of-loops.algo.ts:11
     // for (const item of items) {
     frame_dig 2
@@ -349,59 +331,59 @@ test_for_of_loop_tuple_for_body@1:
     // if (item === stopNumber) break
     intc_3 // 42
     ==
-    bz test_for_of_loop_tuple_after_if_else@3
-    b test_for_of_loop_tuple_if_body@2
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_after_if_else@3
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_if_body@2
 
-test_for_of_loop_tuple_if_body@2:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_if_body@2:
     // tests/approvals/for-of-loops.algo.ts:13
     // if (item === stopNumber) break
-    b test_for_of_loop_tuple_block@8
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_block@8
 
-test_for_of_loop_tuple_block@8:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_block@8:
     // tests/approvals/for-of-loops.algo.ts:15
     // return total
     retsub
 
-test_for_of_loop_tuple_after_if_else@3:
-    b test_for_of_loop_tuple_for_footer@4
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_after_if_else@3:
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_for_footer@4
 
-test_for_of_loop_tuple_for_footer@4:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_for_footer@4:
     // tests/approvals/for-of-loops.algo.ts:11
     // for (const item of items) {
     frame_dig 1
-    switch test_for_of_loop_tuple_for_header_1@5 test_for_of_loop_tuple_for_header_2@6
-    b test_for_of_loop_tuple_after_for@7
+    switch tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_for_header_1@5 tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_for_header_2@6
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_after_for@7
 
-test_for_of_loop_tuple_after_for@7:
-    b test_for_of_loop_tuple_block@8
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_after_for@7:
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_block@8
 
-test_for_of_loop_tuple_for_header_2@6:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_for_header_2@6:
     pushint 2 // 2
     frame_bury 1
     // tests/approvals/for-of-loops.algo.ts:11
     // for (const item of items) {
     frame_dig -1
     frame_bury 2
-    b test_for_of_loop_tuple_for_body@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_for_body@1
 
-test_for_of_loop_tuple_for_header_1@5:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_for_header_1@5:
     intc_1 // 1
     frame_bury 1
     // tests/approvals/for-of-loops.algo.ts:11
     // for (const item of items) {
     frame_dig -2
     frame_bury 2
-    b test_for_of_loop_tuple_for_body@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple_for_body@1
 
 
 // tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple(items: bytes) -> uint64:
-test_for_of_loop_destructured_tuple:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple:
     // tests/approvals/for-of-loops.algo.ts:18
     // test_for_of_loop_destructured_tuple(items: DynamicArray<Uint64>) {
     proto 1 1
-    b test_for_of_loop_destructured_tuple_block@0
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_block@0
 
-test_for_of_loop_destructured_tuple_block@0:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_block@0:
     // tests/approvals/for-of-loops.algo.ts:19
     // let total: uint64 = 0
     intc_0 // 0
@@ -411,18 +393,18 @@ test_for_of_loop_destructured_tuple_block@0:
     intc_0 // 0
     extract_uint16
     intc_0 // 0
-    b test_for_of_loop_destructured_tuple_for_header@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_for_header@1
 
-test_for_of_loop_destructured_tuple_for_header@1:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_for_header@1:
     // tests/approvals/for-of-loops.algo.ts:20
     // for (const [index, v] of items.entries()) {
     frame_dig 2
     frame_dig 1
     <
-    bz test_for_of_loop_destructured_tuple_after_for@6
-    b test_for_of_loop_destructured_tuple_for_body@2
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_after_for@6
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_for_body@2
 
-test_for_of_loop_destructured_tuple_for_body@2:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_for_body@2:
     // tests/approvals/for-of-loops.algo.ts:20
     // for (const [index, v] of items.entries()) {
     frame_dig -1
@@ -437,7 +419,7 @@ test_for_of_loop_destructured_tuple_for_body@2:
     intc_2 // 8
     extract3 // on error: index access is out of bounds
     // tests/approvals/for-of-loops.algo.ts:21
-    // total += v.native
+    // total += v.asUint64()
     btoi
     frame_dig 0
     +
@@ -447,41 +429,41 @@ test_for_of_loop_destructured_tuple_for_body@2:
     // if (total >= stopNumber) break
     intc_3 // 42
     >=
-    bz test_for_of_loop_destructured_tuple_after_if_else@4
-    b test_for_of_loop_destructured_tuple_if_body@3
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_after_if_else@4
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_if_body@3
 
-test_for_of_loop_destructured_tuple_if_body@3:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_if_body@3:
     // tests/approvals/for-of-loops.algo.ts:22
     // if (total >= stopNumber) break
-    b test_for_of_loop_destructured_tuple_block@7
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_block@7
 
-test_for_of_loop_destructured_tuple_block@7:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_block@7:
     // tests/approvals/for-of-loops.algo.ts:24
     // return total
     retsub
 
-test_for_of_loop_destructured_tuple_after_if_else@4:
-    b test_for_of_loop_destructured_tuple_for_footer@5
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_after_if_else@4:
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_for_footer@5
 
-test_for_of_loop_destructured_tuple_for_footer@5:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_for_footer@5:
     frame_dig 2
     intc_1 // 1
     +
     frame_bury 2
-    b test_for_of_loop_destructured_tuple_for_header@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_for_header@1
 
-test_for_of_loop_destructured_tuple_after_for@6:
-    b test_for_of_loop_destructured_tuple_block@7
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_after_for@6:
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_block@7
 
 
 // tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object(items: bytes) -> uint64:
-test_for_of_loop_destructured_object:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object:
     // tests/approvals/for-of-loops.algo.ts:27
     // test_for_of_loop_destructured_object(items: Point[]) {
     proto 1 1
-    b test_for_of_loop_destructured_object_block@0
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_block@0
 
-test_for_of_loop_destructured_object_block@0:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_block@0:
     // tests/approvals/for-of-loops.algo.ts:28
     // let total: uint64 = 0
     intc_0 // 0
@@ -491,18 +473,18 @@ test_for_of_loop_destructured_object_block@0:
     intc_0 // 0
     extract_uint16
     intc_0 // 0
-    b test_for_of_loop_destructured_object_for_header@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_for_header@1
 
-test_for_of_loop_destructured_object_for_header@1:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_for_header@1:
     // tests/approvals/for-of-loops.algo.ts:29
     // for (const { x, y } of clone(items)) {
     frame_dig 2
     frame_dig 1
     <
-    bz test_for_of_loop_destructured_object_after_for@6
-    b test_for_of_loop_destructured_object_for_body@2
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_after_for@6
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_for_body@2
 
-test_for_of_loop_destructured_object_for_body@2:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_for_body@2:
     // tests/approvals/for-of-loops.algo.ts:29
     // for (const { x, y } of clone(items)) {
     frame_dig -1
@@ -537,41 +519,41 @@ test_for_of_loop_destructured_object_for_body@2:
     // if (total >= stopNumber) break
     intc_3 // 42
     >=
-    bz test_for_of_loop_destructured_object_after_if_else@4
-    b test_for_of_loop_destructured_object_if_body@3
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_after_if_else@4
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_if_body@3
 
-test_for_of_loop_destructured_object_if_body@3:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_if_body@3:
     // tests/approvals/for-of-loops.algo.ts:31
     // if (total >= stopNumber) break
-    b test_for_of_loop_destructured_object_block@7
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_block@7
 
-test_for_of_loop_destructured_object_block@7:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_block@7:
     // tests/approvals/for-of-loops.algo.ts:33
     // return total
     retsub
 
-test_for_of_loop_destructured_object_after_if_else@4:
-    b test_for_of_loop_destructured_object_for_footer@5
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_after_if_else@4:
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_for_footer@5
 
-test_for_of_loop_destructured_object_for_footer@5:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_for_footer@5:
     frame_dig 2
     intc_1 // 1
     +
     frame_bury 2
-    b test_for_of_loop_destructured_object_for_header@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_for_header@1
 
-test_for_of_loop_destructured_object_after_for@6:
-    b test_for_of_loop_destructured_object_block@7
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_after_for@6:
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_block@7
 
 
 // tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array(items: bytes) -> uint64:
-test_for_of_loop_arc4_dynamic_array:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array:
     // tests/approvals/for-of-loops.algo.ts:36
     // test_for_of_loop_arc4_dynamic_array(items: DynamicArray<Uint64>) {
     proto 1 1
-    b test_for_of_loop_arc4_dynamic_array_block@0
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_block@0
 
-test_for_of_loop_arc4_dynamic_array_block@0:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_block@0:
     // tests/approvals/for-of-loops.algo.ts:37
     // let total: uint64 = 0
     intc_0 // 0
@@ -581,18 +563,18 @@ test_for_of_loop_arc4_dynamic_array_block@0:
     intc_0 // 0
     extract_uint16
     intc_0 // 0
-    b test_for_of_loop_arc4_dynamic_array_for_header@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_for_header@1
 
-test_for_of_loop_arc4_dynamic_array_for_header@1:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_for_header@1:
     // tests/approvals/for-of-loops.algo.ts:38
     // for (const item of items) {
     frame_dig 2
     frame_dig 1
     <
-    bz test_for_of_loop_arc4_dynamic_array_after_for@6
-    b test_for_of_loop_arc4_dynamic_array_for_body@2
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_after_for@6
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_for_body@2
 
-test_for_of_loop_arc4_dynamic_array_for_body@2:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_for_body@2:
     // tests/approvals/for-of-loops.algo.ts:38
     // for (const item of items) {
     frame_dig -1
@@ -607,68 +589,68 @@ test_for_of_loop_arc4_dynamic_array_for_body@2:
     intc_2 // 8
     extract3 // on error: index access is out of bounds
     // tests/approvals/for-of-loops.algo.ts:39
-    // total += item.native
+    // total += item.asUint64()
     dup
     btoi
     frame_dig 0
     +
     frame_bury 0
     // tests/approvals/for-of-loops.algo.ts:40
-    // if (item.native === stopNumber) break
+    // if (item.asUint64() === stopNumber) break
     btoi
     intc_3 // 42
     ==
-    bz test_for_of_loop_arc4_dynamic_array_after_if_else@4
-    b test_for_of_loop_arc4_dynamic_array_if_body@3
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_after_if_else@4
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_if_body@3
 
-test_for_of_loop_arc4_dynamic_array_if_body@3:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_if_body@3:
     // tests/approvals/for-of-loops.algo.ts:40
-    // if (item.native === stopNumber) break
-    b test_for_of_loop_arc4_dynamic_array_block@7
+    // if (item.asUint64() === stopNumber) break
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_block@7
 
-test_for_of_loop_arc4_dynamic_array_block@7:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_block@7:
     // tests/approvals/for-of-loops.algo.ts:42
     // return total
     retsub
 
-test_for_of_loop_arc4_dynamic_array_after_if_else@4:
-    b test_for_of_loop_arc4_dynamic_array_for_footer@5
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_after_if_else@4:
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_for_footer@5
 
-test_for_of_loop_arc4_dynamic_array_for_footer@5:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_for_footer@5:
     frame_dig 2
     intc_1 // 1
     +
     frame_bury 2
-    b test_for_of_loop_arc4_dynamic_array_for_header@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_for_header@1
 
-test_for_of_loop_arc4_dynamic_array_after_for@6:
-    b test_for_of_loop_arc4_dynamic_array_block@7
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_after_for@6:
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_block@7
 
 
 // tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array(items: bytes) -> uint64:
-test_for_of_loop_arc4_static_array:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array:
     // tests/approvals/for-of-loops.algo.ts:45
     // test_for_of_loop_arc4_static_array(items: StaticArray<Uint64, 5>) {
     proto 1 1
-    b test_for_of_loop_arc4_static_array_block@0
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_block@0
 
-test_for_of_loop_arc4_static_array_block@0:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_block@0:
     // tests/approvals/for-of-loops.algo.ts:46
     // let total: uint64 = 0
     intc_0 // 0
     intc_0 // 0
-    b test_for_of_loop_arc4_static_array_for_header@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_for_header@1
 
-test_for_of_loop_arc4_static_array_for_header@1:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_for_header@1:
     // tests/approvals/for-of-loops.algo.ts:47
     // for (const item of items) {
     frame_dig 1
     pushint 5 // 5
     <
-    bz test_for_of_loop_arc4_static_array_after_for@6
-    b test_for_of_loop_arc4_static_array_for_body@2
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_after_for@6
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_for_body@2
 
-test_for_of_loop_arc4_static_array_for_body@2:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_for_body@2:
     // tests/approvals/for-of-loops.algo.ts:47
     // for (const item of items) {
     frame_dig 1
@@ -679,52 +661,52 @@ test_for_of_loop_arc4_static_array_for_body@2:
     intc_2 // 8
     extract3 // on error: index access is out of bounds
     // tests/approvals/for-of-loops.algo.ts:48
-    // total += item.native
+    // total += item.asUint64()
     dup
     btoi
     frame_dig 0
     +
     frame_bury 0
     // tests/approvals/for-of-loops.algo.ts:49
-    // if (item.native === stopNumber) break
+    // if (item.asUint64() === stopNumber) break
     btoi
     intc_3 // 42
     ==
-    bz test_for_of_loop_arc4_static_array_after_if_else@4
-    b test_for_of_loop_arc4_static_array_if_body@3
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_after_if_else@4
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_if_body@3
 
-test_for_of_loop_arc4_static_array_if_body@3:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_if_body@3:
     // tests/approvals/for-of-loops.algo.ts:49
-    // if (item.native === stopNumber) break
-    b test_for_of_loop_arc4_static_array_block@7
+    // if (item.asUint64() === stopNumber) break
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_block@7
 
-test_for_of_loop_arc4_static_array_block@7:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_block@7:
     // tests/approvals/for-of-loops.algo.ts:51
     // return total
     retsub
 
-test_for_of_loop_arc4_static_array_after_if_else@4:
-    b test_for_of_loop_arc4_static_array_for_footer@5
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_after_if_else@4:
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_for_footer@5
 
-test_for_of_loop_arc4_static_array_for_footer@5:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_for_footer@5:
     frame_dig 1
     intc_1 // 1
     +
     frame_bury 1
-    b test_for_of_loop_arc4_static_array_for_header@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_for_header@1
 
-test_for_of_loop_arc4_static_array_after_for@6:
-    b test_for_of_loop_arc4_static_array_block@7
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_after_for@6:
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array_block@7
 
 
 // tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array(items: bytes) -> uint64:
-test_for_of_loop_native_immutable_array:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array:
     // tests/approvals/for-of-loops.algo.ts:54
     // test_for_of_loop_native_immutable_array(items: Array<uint64>) {
     proto 1 1
-    b test_for_of_loop_native_immutable_array_block@0
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_block@0
 
-test_for_of_loop_native_immutable_array_block@0:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_block@0:
     // tests/approvals/for-of-loops.algo.ts:55
     // let total: uint64 = 0
     intc_0 // 0
@@ -734,18 +716,18 @@ test_for_of_loop_native_immutable_array_block@0:
     intc_0 // 0
     extract_uint16
     intc_0 // 0
-    b test_for_of_loop_native_immutable_array_for_header@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_for_header@1
 
-test_for_of_loop_native_immutable_array_for_header@1:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_for_header@1:
     // tests/approvals/for-of-loops.algo.ts:56
     // for (const item of items) {
     frame_dig 2
     frame_dig 1
     <
-    bz test_for_of_loop_native_immutable_array_after_for@6
-    b test_for_of_loop_native_immutable_array_for_body@2
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_after_for@6
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_for_body@2
 
-test_for_of_loop_native_immutable_array_for_body@2:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_for_body@2:
     // tests/approvals/for-of-loops.algo.ts:56
     // for (const item of items) {
     frame_dig -1
@@ -770,41 +752,41 @@ test_for_of_loop_native_immutable_array_for_body@2:
     // if (item === stopNumber) break
     intc_3 // 42
     ==
-    bz test_for_of_loop_native_immutable_array_after_if_else@4
-    b test_for_of_loop_native_immutable_array_if_body@3
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_after_if_else@4
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_if_body@3
 
-test_for_of_loop_native_immutable_array_if_body@3:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_if_body@3:
     // tests/approvals/for-of-loops.algo.ts:58
     // if (item === stopNumber) break
-    b test_for_of_loop_native_immutable_array_block@7
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_block@7
 
-test_for_of_loop_native_immutable_array_block@7:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_block@7:
     // tests/approvals/for-of-loops.algo.ts:60
     // return total
     retsub
 
-test_for_of_loop_native_immutable_array_after_if_else@4:
-    b test_for_of_loop_native_immutable_array_for_footer@5
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_after_if_else@4:
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_for_footer@5
 
-test_for_of_loop_native_immutable_array_for_footer@5:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_for_footer@5:
     frame_dig 2
     intc_1 // 1
     +
     frame_bury 2
-    b test_for_of_loop_native_immutable_array_for_header@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_for_header@1
 
-test_for_of_loop_native_immutable_array_after_for@6:
-    b test_for_of_loop_native_immutable_array_block@7
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_after_for@6:
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_block@7
 
 
 // tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(items: bytes) -> uint64:
-test_for_of_loop_native_mutable_array:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array:
     // tests/approvals/for-of-loops.algo.ts:63
     // test_for_of_loop_native_mutable_array(items: [uint64, uint64, uint64]) {
     proto 1 1
-    b test_for_of_loop_native_mutable_array_block@0
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_block@0
 
-test_for_of_loop_native_mutable_array_block@0:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_block@0:
     // tests/approvals/for-of-loops.algo.ts:64
     // const mutable = new ReferenceArray(...items)
     frame_dig -1
@@ -824,7 +806,7 @@ test_for_of_loop_native_mutable_array_block@0:
     btoi
     uncover 2
     itob
-    bytec_0 // 0x
+    bytec_1 // 0x
     uncover 1
     concat
     uncover 2
@@ -849,18 +831,18 @@ test_for_of_loop_native_mutable_array_block@0:
     intc_2 // 8
     /
     intc_0 // 0
-    b test_for_of_loop_native_mutable_array_for_header@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_for_header@1
 
-test_for_of_loop_native_mutable_array_for_header@1:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_for_header@1:
     // tests/approvals/for-of-loops.algo.ts:66
     // for (const item of mutable) {
     frame_dig 3
     frame_dig 2
     <
-    bz test_for_of_loop_native_mutable_array_after_for@6
-    b test_for_of_loop_native_mutable_array_for_body@2
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_after_for@6
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_for_body@2
 
-test_for_of_loop_native_mutable_array_for_body@2:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_for_body@2:
     // tests/approvals/for-of-loops.algo.ts:66
     // for (const item of mutable) {
     frame_dig 0
@@ -881,50 +863,50 @@ test_for_of_loop_native_mutable_array_for_body@2:
     // if (item === stopNumber) break
     intc_3 // 42
     ==
-    bz test_for_of_loop_native_mutable_array_after_if_else@4
-    b test_for_of_loop_native_mutable_array_if_body@3
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_after_if_else@4
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_if_body@3
 
-test_for_of_loop_native_mutable_array_if_body@3:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_if_body@3:
     // tests/approvals/for-of-loops.algo.ts:68
     // if (item === stopNumber) break
-    b test_for_of_loop_native_mutable_array_block@7
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_block@7
 
-test_for_of_loop_native_mutable_array_block@7:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_block@7:
     // tests/approvals/for-of-loops.algo.ts:70
     // return total
     frame_dig 1
     frame_bury 0
     retsub
 
-test_for_of_loop_native_mutable_array_after_if_else@4:
-    b test_for_of_loop_native_mutable_array_for_footer@5
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_after_if_else@4:
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_for_footer@5
 
-test_for_of_loop_native_mutable_array_for_footer@5:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_for_footer@5:
     frame_dig 3
     intc_1 // 1
     +
     frame_bury 3
-    b test_for_of_loop_native_mutable_array_for_header@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_for_header@1
 
-test_for_of_loop_native_mutable_array_after_for@6:
-    b test_for_of_loop_native_mutable_array_block@7
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_after_for@6:
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array_block@7
 
 
 // tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props(static_array: bytes, fixed_array: bytes, dyn_array: bytes) -> uint64:
-test_iterable_props:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props:
     // tests/approvals/for-of-loops.algo.ts:73
     // test_iterable_props(static_array: StaticArray<Uint64, 3>, fixed_array: FixedArray<uint64, 3>, dyn_array: DynamicArray<Uint64>) {
     proto 3 1
-    bytec_0 // ""
-    bytec_0 // ""
-    bytec_0 // ""
-    bytec_0 // ""
-    bytec_0 // ""
-    bytec_0 // ""
-    bytec_0 // ""
-    b test_iterable_props_block@0
+    bytec_1 // ""
+    bytec_1 // ""
+    bytec_1 // ""
+    bytec_1 // ""
+    bytec_1 // ""
+    bytec_1 // ""
+    bytec_1 // ""
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_block@0
 
-test_iterable_props_block@0:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_block@0:
     // tests/approvals/for-of-loops.algo.ts:74
     // let i: uint64 = 0
     intc_0 // 0
@@ -933,132 +915,132 @@ test_iterable_props_block@0:
     intc_1 // 1
     assert // Step cannot be zero
     intc_0 // 0
-    b test_iterable_props_for_header@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@1
 
-test_iterable_props_for_header@1:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@1:
     // tests/approvals/for-of-loops.algo.ts:75
     // for (const a of static_array.keys()) {
     frame_dig 8
     pushint 3 // 3
     <
-    bz test_iterable_props_after_for@4
-    b test_iterable_props_for_body@2
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_after_for@4
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_body@2
 
-test_iterable_props_for_body@2:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_body@2:
     // tests/approvals/for-of-loops.algo.ts:76
     // i++
     frame_dig 7
     intc_1 // 1
     +
     frame_bury 7
-    b test_iterable_props_for_footer@3
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_footer@3
 
-test_iterable_props_for_footer@3:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_footer@3:
     // tests/approvals/for-of-loops.algo.ts:75
     // for (const a of static_array.keys()) {
     frame_dig 8
     intc_1 // 1
     +
     frame_bury 8
-    b test_iterable_props_for_header@1
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@1
 
-test_iterable_props_after_for@4:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_after_for@4:
     intc_0 // 0
     frame_bury 1
-    b test_iterable_props_for_header@5
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@5
 
-test_iterable_props_for_header@5:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@5:
     // tests/approvals/for-of-loops.algo.ts:78
     // for (const a of static_array.entries()) {
     frame_dig 1
     pushint 3 // 3
     <
-    bz test_iterable_props_after_for@8
-    b test_iterable_props_for_body@6
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_after_for@8
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_body@6
 
-test_iterable_props_for_body@6:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_body@6:
     // tests/approvals/for-of-loops.algo.ts:79
     // i++
     frame_dig 7
     intc_1 // 1
     +
     frame_bury 7
-    b test_iterable_props_for_footer@7
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_footer@7
 
-test_iterable_props_for_footer@7:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_footer@7:
     frame_dig 1
     intc_1 // 1
     +
     frame_bury 1
-    b test_iterable_props_for_header@5
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@5
 
-test_iterable_props_after_for@8:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_after_for@8:
     // tests/approvals/for-of-loops.algo.ts:81
     // for (const a of fixed_array.keys()) {
     intc_1 // 1
     assert // Step cannot be zero
     intc_0 // 0
     frame_bury 4
-    b test_iterable_props_for_header@9
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@9
 
-test_iterable_props_for_header@9:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@9:
     // tests/approvals/for-of-loops.algo.ts:81
     // for (const a of fixed_array.keys()) {
     frame_dig 4
     pushint 3 // 3
     <
-    bz test_iterable_props_after_for@12
-    b test_iterable_props_for_body@10
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_after_for@12
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_body@10
 
-test_iterable_props_for_body@10:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_body@10:
     // tests/approvals/for-of-loops.algo.ts:82
     // i++
     frame_dig 7
     intc_1 // 1
     +
     frame_bury 7
-    b test_iterable_props_for_footer@11
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_footer@11
 
-test_iterable_props_for_footer@11:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_footer@11:
     // tests/approvals/for-of-loops.algo.ts:81
     // for (const a of fixed_array.keys()) {
     frame_dig 4
     intc_1 // 1
     +
     frame_bury 4
-    b test_iterable_props_for_header@9
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@9
 
-test_iterable_props_after_for@12:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_after_for@12:
     intc_0 // 0
     frame_bury 2
-    b test_iterable_props_for_header@13
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@13
 
-test_iterable_props_for_header@13:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@13:
     // tests/approvals/for-of-loops.algo.ts:84
     // for (const a of fixed_array.entries()) {
     frame_dig 2
     pushint 3 // 3
     <
-    bz test_iterable_props_after_for@16
-    b test_iterable_props_for_body@14
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_after_for@16
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_body@14
 
-test_iterable_props_for_body@14:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_body@14:
     // tests/approvals/for-of-loops.algo.ts:85
     // i++
     frame_dig 7
     intc_1 // 1
     +
     frame_bury 7
-    b test_iterable_props_for_footer@15
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_footer@15
 
-test_iterable_props_for_footer@15:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_footer@15:
     frame_dig 2
     intc_1 // 1
     +
     frame_bury 2
-    b test_iterable_props_for_header@13
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@13
 
-test_iterable_props_after_for@16:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_after_for@16:
     // tests/approvals/for-of-loops.algo.ts:87
     // for (const a of dyn_array.keys()) {
     frame_dig -1
@@ -1069,36 +1051,36 @@ test_iterable_props_after_for@16:
     assert // Step cannot be zero
     intc_0 // 0
     frame_bury 5
-    b test_iterable_props_for_header@17
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@17
 
-test_iterable_props_for_header@17:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@17:
     // tests/approvals/for-of-loops.algo.ts:87
     // for (const a of dyn_array.keys()) {
     frame_dig 5
     frame_dig 6
     <
-    bz test_iterable_props_after_for@20
-    b test_iterable_props_for_body@18
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_after_for@20
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_body@18
 
-test_iterable_props_for_body@18:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_body@18:
     // tests/approvals/for-of-loops.algo.ts:88
     // i++
     frame_dig 7
     intc_1 // 1
     +
     frame_bury 7
-    b test_iterable_props_for_footer@19
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_footer@19
 
-test_iterable_props_for_footer@19:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_footer@19:
     // tests/approvals/for-of-loops.algo.ts:87
     // for (const a of dyn_array.keys()) {
     frame_dig 5
     intc_1 // 1
     +
     frame_bury 5
-    b test_iterable_props_for_header@17
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@17
 
-test_iterable_props_after_for@20:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_after_for@20:
     // tests/approvals/for-of-loops.algo.ts:90
     // for (const a of dyn_array.entries()) {
     frame_dig -1
@@ -1107,34 +1089,34 @@ test_iterable_props_after_for@20:
     frame_bury 0
     intc_0 // 0
     frame_bury 3
-    b test_iterable_props_for_header@21
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@21
 
-test_iterable_props_for_header@21:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@21:
     // tests/approvals/for-of-loops.algo.ts:90
     // for (const a of dyn_array.entries()) {
     frame_dig 3
     frame_dig 0
     <
-    bz test_iterable_props_after_for@24
-    b test_iterable_props_for_body@22
+    bz tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_after_for@24
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_body@22
 
-test_iterable_props_for_body@22:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_body@22:
     // tests/approvals/for-of-loops.algo.ts:91
     // i++
     frame_dig 7
     intc_1 // 1
     +
     frame_bury 7
-    b test_iterable_props_for_footer@23
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_footer@23
 
-test_iterable_props_for_footer@23:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_footer@23:
     frame_dig 3
     intc_1 // 1
     +
     frame_bury 3
-    b test_iterable_props_for_header@21
+    b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_for_header@21
 
-test_iterable_props_after_for@24:
+tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_after_for@24:
     // tests/approvals/for-of-loops.algo.ts:93
     // return i
     frame_dig 7

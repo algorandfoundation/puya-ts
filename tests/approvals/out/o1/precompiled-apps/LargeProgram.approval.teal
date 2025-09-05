@@ -6,56 +6,44 @@ main:
     // tests/approvals/precompiled-apps.algo.ts:66
     // export class LargeProgram extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
-    pushbytess 0x02bf30cf 0x24378d3c // method "getBigBytesLength()uint64", method "delete()void"
+    bz main___algots__.defaultCreate@6
+    pushbytess 0x24378d3c 0x02bf30cf // method "delete()void", method "getBigBytesLength()uint64"
     txna ApplicationArgs 0
-    match main_getBigBytesLength_route@3 main_delete_route@4
-
-main_after_if_else@11:
+    match main_delete_route@3 main_getBigBytesLength_route@4
     err
 
-main_delete_route@4:
+main_getBigBytesLength_route@4:
+    // tests/approvals/precompiled-apps.algo.ts:67
+    // getBigBytesLength() {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    b getBigBytesLength
+
+main_delete_route@3:
     // tests/approvals/precompiled-apps.algo.ts:71
     // @abimethod({ allowActions: 'DeleteApplication' })
     txn OnCompletion
     pushint 5 // DeleteApplication
     ==
-    assert // OnCompletion is not DeleteApplication
     txn ApplicationID
-    assert // can only call when not creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be DeleteApplication && can only call when not creating
 
-main_getBigBytesLength_route@3:
-    // tests/approvals/precompiled-apps.algo.ts:67
-    // getBigBytesLength() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    callsub getBigBytesLength
-    itob
-    pushbytes 0x151f7c75
-    swap
-    concat
-    log
-    pushint 1 // 1
-    return
-
-main_bare_routing@7:
+main___algots__.defaultCreate@6:
     // tests/approvals/precompiled-apps.algo.ts:66
     // export class LargeProgram extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@11
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
 
 
-// tests/approvals/precompiled-apps.algo.ts::LargeProgram.getBigBytesLength() -> uint64:
+// tests/approvals/precompiled-apps.algo.ts::LargeProgram.getBigBytesLength[routing]() -> void:
 getBigBytesLength:
     // tests/approvals/precompiled-apps.algo.ts:63
     // return op.bzero(4096)
@@ -64,4 +52,12 @@ getBigBytesLength:
     // tests/approvals/precompiled-apps.algo.ts:68
     // return getBigBytes().length
     len
-    retsub
+    // tests/approvals/precompiled-apps.algo.ts:67
+    // getBigBytesLength() {
+    itob
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    pushint 1 // 1
+    return

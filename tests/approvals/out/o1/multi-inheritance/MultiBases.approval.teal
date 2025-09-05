@@ -35,125 +35,87 @@ main_after_if_else@2:
     // tests/approvals/multi-inheritance.algo.ts:45
     // export class MultiBases extends classes(NameStore, BaseOne, BaseTwo) {
     txn NumAppArgs
-    bz main_bare_routing@15
-    pushbytess 0x290eba9f 0x839d96ff 0xa978ca56 0x88547eb8 0xc32533e3 0x455c8d09 0xf9f5142c 0x363b329e // method "methodMulti()string", method "methodCallsSuper()string", method "callB2CantOverride()string", method "callB2Common()string", method "methodOne()string", method "methodCommon()string", method "b2CantOverride()string", method "methodTwo()string"
-    txna ApplicationArgs 0
-    match main_methodMulti_route@5 main_methodCallsSuper_route@6 main_callB2CantOverride_route@7 main_callB2Common_route@8 main_methodOne_route@9 main_methodCommon_route@10 main_b2CantOverride_route@11 main_methodTwo_route@12
-
-main_after_if_else@19:
-    err
-
-main_methodTwo_route@12:
-    // tests/approvals/multi-inheritance.algo.ts:31
-    // methodTwo() {
+    bz main___algots__.defaultCreate@17
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    assert
+    pushbytess 0x290eba9f 0x839d96ff 0xa978ca56 0x88547eb8 0xc32533e3 0x455c8d09 0xf9f5142c 0x363b329e // method "methodMulti()string", method "methodCallsSuper()string", method "callB2CantOverride()string", method "callB2Common()string", method "methodOne()string", method "methodCommon()string", method "b2CantOverride()string", method "methodTwo()string"
+    txna ApplicationArgs 0
+    match main_methodMulti_route@6 main_methodCallsSuper_route@7 main_callB2CantOverride_route@8 main_callB2Common_route@9 main_methodOne_route@10 main_methodCommon_route@11 main_b2CantOverride_route@12 main_methodTwo_route@13
+    err
+
+main_methodTwo_route@13:
+    // tests/approvals/multi-inheritance.algo.ts:31
+    // methodTwo() {
     bytec_0 // 0x151f7c750008626173652d74776f
     log
     intc_0 // 1
     return
 
-main_b2CantOverride_route@11:
+main_b2CantOverride_route@12:
     // tests/approvals/multi-inheritance.algo.ts:17
     // b2CantOverride(): string {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     bytec_1 // 0x151f7c750006636f6d6d6f6e
     log
     intc_0 // 1
     return
 
-main_methodCommon_route@10:
+main_methodCommon_route@11:
     // tests/approvals/multi-inheritance.algo.ts:13
     // methodCommon() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     bytec_1 // 0x151f7c750006636f6d6d6f6e
     log
     intc_0 // 1
     return
 
-main_methodOne_route@9:
+main_methodOne_route@10:
     // tests/approvals/multi-inheritance.algo.ts:24
     // methodOne() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     pushbytes 0x151f7c750008626173652d6f6e65
     log
     intc_0 // 1
     return
 
-main_callB2Common_route@8:
+main_callB2Common_route@9:
     // tests/approvals/multi-inheritance.algo.ts:60
     // callB2Common() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     bytec_1 // 0x151f7c750006636f6d6d6f6e
     log
     intc_0 // 1
     return
 
-main_callB2CantOverride_route@7:
+main_callB2CantOverride_route@8:
     // tests/approvals/multi-inheritance.algo.ts:56
     // callB2CantOverride() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     bytec_0 // 0x151f7c750008626173652d74776f
     log
     intc_0 // 1
     return
 
-main_methodCallsSuper_route@6:
+main_methodCallsSuper_route@7:
     // tests/approvals/multi-inheritance.algo.ts:52
     // methodCallsSuper() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     bytec_0 // 0x151f7c750008626173652d74776f
     log
     intc_0 // 1
     return
 
-main_methodMulti_route@5:
+main_methodMulti_route@6:
     // tests/approvals/multi-inheritance.algo.ts:48
     // methodMulti() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     pushbytes 0x151f7c75000b6d756c74692d6261736573
     log
     intc_0 // 1
     return
 
-main_bare_routing@15:
+main___algots__.defaultCreate@17:
     // tests/approvals/multi-inheritance.algo.ts:45
     // export class MultiBases extends classes(NameStore, BaseOne, BaseTwo) {
     txn OnCompletion
-    bnz main_after_if_else@19
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_0 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

@@ -29,10 +29,10 @@ function test(n: uint64, b: biguint, c: Uint<256>) {
   const y = new Uint<16>()
   assert(y.bytes.length === 2)
   const z = new Uint<8>(n)
-  const z_native = z.native
+  const z_native = z.asUint64()
   assert(z_native === n)
   const a = new Uint<128>(b)
-  const a_native = a.native
+  const a_native = a.asBigUint()
   assert(a_native === b)
 
   assert(c.bytes.length === 256 / 8)

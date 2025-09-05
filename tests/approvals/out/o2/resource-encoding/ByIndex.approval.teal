@@ -7,24 +7,20 @@ main:
     // tests/approvals/resource-encoding.algo.ts:16
     // class ByIndex extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
-    pushbytess 0x34359fb6 0x129c3321 // method "testExplicitIndex(account)uint64", method "testImplicitValue(address)uint64"
-    txna ApplicationArgs 0
-    match main_testExplicitIndex_route@3 main_testImplicitValue_route@4
-
-main_after_if_else@11:
-    err
-
-main_testImplicitValue_route@4:
-    // tests/approvals/resource-encoding.algo.ts:26
-    // testImplicitValue(account: Account) {
+    bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:16
-    // class ByIndex extends Contract {
+    assert
+    pushbytess 0x34359fb6 0x129c3321 // method "testExplicitIndex(account)uint64", method "testImplicitValue(address)uint64"
+    txna ApplicationArgs 0
+    match main_testExplicitIndex_route@4 main_testImplicitValue_route@5
+    err
+
+main_testImplicitValue_route@5:
+    // tests/approvals/resource-encoding.algo.ts:26
+    // testImplicitValue(account: Account) {
     txna ApplicationArgs 1
     // tests/approvals/resource-encoding.algo.ts:27
     // return account.balance
@@ -40,16 +36,9 @@ main_testImplicitValue_route@4:
     pushint 1 // 1
     return
 
-main_testExplicitIndex_route@3:
+main_testExplicitIndex_route@4:
     // tests/approvals/resource-encoding.algo.ts:17
     // @abimethod({ resourceEncoding: 'index' })
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:16
-    // class ByIndex extends Contract {
     txna ApplicationArgs 1
     btoi
     txnas Accounts
@@ -67,13 +56,12 @@ main_testExplicitIndex_route@3:
     pushint 1 // 1
     return
 
-main_bare_routing@7:
+main___algots__.defaultCreate@9:
     // tests/approvals/resource-encoding.algo.ts:16
     // class ByIndex extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@11
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

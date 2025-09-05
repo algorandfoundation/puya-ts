@@ -4,7 +4,7 @@ import { EqualityComparison } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { tryConvertEnum } from '../../../util'
-import { bytesPType, type PType } from '../../ptypes'
+import { biguintPType, bytesPType, uint64PType, type PType } from '../../ptypes'
 import type { ARC4EncodedType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
@@ -94,6 +94,46 @@ class Arc4EqualsFunctionBuilder extends FunctionBuilder {
         rhs: right.toBytes(sourceLocation).resolve(),
         sourceLocation,
       }),
+    )
+  }
+}
+
+export class AsUint64FunctionBuilder extends FunctionBuilder {
+  constructor(
+    private expr: Arc4EncodedBaseExpressionBuilder<ARC4EncodedType>,
+    location: SourceLocation,
+  ) {
+    super(location)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    return instanceEb(
+      nodeFactory.aRC4Decode({
+        value: this.expr.resolve(),
+        sourceLocation,
+        wtype: uint64PType.wtype,
+      }),
+      uint64PType,
+    )
+  }
+}
+
+export class AsBigUintFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private expr: Arc4EncodedBaseExpressionBuilder<ARC4EncodedType>,
+    location: SourceLocation,
+  ) {
+    super(location)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    return instanceEb(
+      nodeFactory.aRC4Decode({
+        value: this.expr.resolve(),
+        sourceLocation,
+        wtype: biguintPType.wtype,
+      }),
+      biguintPType,
     )
   }
 }

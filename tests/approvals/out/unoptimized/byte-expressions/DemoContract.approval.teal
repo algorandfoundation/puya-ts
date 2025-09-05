@@ -4,8 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 4 1 5
-    bytecblock 0x 0x0000000000000001 0x0100 "123" 0x01020304
-    bytec_0 // ""
+    bytecblock 0x0000000000000001 0x0100 "123" 0x01020304
     b main_block@0
 
 main_block@0:
@@ -17,7 +16,7 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     b main_abi_routing@2
 
 main_abi_routing@2:
@@ -27,23 +26,15 @@ main_abi_routing@2:
     pushbytes 0xf59e3cc4 // method "test()bool"
     uncover 1
     match main_test_route@3
-    b main_switch_case_default@4
+    b main_switch_case_next@4
 
-main_switch_case_default@4:
-    b main_switch_case_next@5
+main_switch_case_next@4:
+    b main_after_if_else@6
 
-main_switch_case_next@5:
-    b main_after_if_else@10
-
-main_after_if_else@10:
+main_after_if_else@6:
     // tests/approvals/byte-expressions.algo.ts:32
     // class DemoContract extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/byte-expressions.algo.ts::DemoContract.__puya_arc4_router__@11
-
-main_after_inlined_tests/approvals/byte-expressions.algo.ts::DemoContract.__puya_arc4_router__@11:
-    return
+    err
 
 main_test_route@3:
     // tests/approvals/byte-expressions.algo.ts:33
@@ -51,50 +42,28 @@ main_test_route@3:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
     txn ApplicationID
     intc_0 // 0
     !=
-    assert // can only call when not creating
-    callsub tests/approvals/byte-expressions.algo.ts::DemoContract.test
-    pushbytes 0x00
-    intc_0 // 0
-    uncover 2
-    setbit
-    pushbytes 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/byte-expressions.algo.ts::DemoContract.__puya_arc4_router__@11
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    callsub tests/approvals/byte-expressions.algo.ts::DemoContract.test[routing]
+    b main_switch_case_next@4
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/byte-expressions.algo.ts:32
     // class DemoContract extends Contract {
     txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@7
-    b main_switch_case_default@8
-
-main_switch_case_default@8:
-    b main_switch_case_next@9
-
-main_switch_case_next@9:
-    b main_after_if_else@10
-
-main___algots__.defaultCreate@7:
-    // tests/approvals/byte-expressions.algo.ts:32
-    // class DemoContract extends Contract {
+    intc_0 // NoOp
+    ==
     txn ApplicationID
     intc_0 // 0
     ==
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
     intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/byte-expressions.algo.ts::DemoContract.__puya_arc4_router__@11
+    return
 
 
 // tests/approvals/byte-expressions.algo.ts::test(a: uint64, b: bytes, c: bytes) -> void:
@@ -107,7 +76,7 @@ test:
 test_block@0:
     // tests/approvals/byte-expressions.algo.ts:6
     // assert(Bytes().length === 0, 'Empty bytes has length of 0')
-    bytec_0 // 0x
+    pushbytes 0x
     len
     intc_0 // 0
     ==
@@ -127,14 +96,14 @@ test_block@0:
     assert // Bytes(uint64) is equivalent to itob
     // tests/approvals/byte-expressions.algo.ts:8
     // assert(Bytes(Uint64(1)) === Bytes.fromHex('0000000000000001'), 'Bytes(uint64) returns an 8 byte encoding')
-    bytec_1 // 0x0000000000000001
-    bytec_1 // 0x0000000000000001
+    bytec_0 // 0x0000000000000001
+    bytec_0 // 0x0000000000000001
     ==
     assert // Bytes(uint64) returns an 8 byte encoding
     // tests/approvals/byte-expressions.algo.ts:9
     // assert(Bytes(BigUint(256)) === Bytes.fromHex('0100'))
-    bytec_2 // 0x0100
-    bytec_2 // 0x0100
+    bytec_1 // 0x0100
+    bytec_1 // 0x0100
     ==
     assert
     // tests/approvals/byte-expressions.algo.ts:10
@@ -151,14 +120,14 @@ test_block@0:
     assert
     // tests/approvals/byte-expressions.algo.ts:12
     // assert(Bytes(Bytes('123')) === Bytes('123'))
-    bytec_3 // "123"
-    bytec_3 // "123"
+    bytec_2 // "123"
+    bytec_2 // "123"
     ==
     assert
     // tests/approvals/byte-expressions.algo.ts:13
     // assert(Bytes([1, 2, 3, 4]) === Bytes.fromHex('01020304'))
-    bytec 4 // 0x01020304
-    bytec 4 // 0x01020304
+    bytec_3 // 0x01020304
+    bytec_3 // 0x01020304
     ==
     assert
     retsub
@@ -284,6 +253,26 @@ test2_block@0:
     ==
     assert
     retsub
+
+
+// tests/approvals/byte-expressions.algo.ts::DemoContract.test[routing]() -> void:
+tests/approvals/byte-expressions.algo.ts::DemoContract.test[routing]:
+    b tests/approvals/byte-expressions.algo.ts::DemoContract.test[routing]_block@0
+
+tests/approvals/byte-expressions.algo.ts::DemoContract.test[routing]_block@0:
+    // tests/approvals/byte-expressions.algo.ts:33
+    // public test() {
+    callsub tests/approvals/byte-expressions.algo.ts::DemoContract.test
+    pushbytes 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
+    pushbytes 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_2 // 1
+    return
 
 
 // tests/approvals/byte-expressions.algo.ts::DemoContract.test() -> uint64:

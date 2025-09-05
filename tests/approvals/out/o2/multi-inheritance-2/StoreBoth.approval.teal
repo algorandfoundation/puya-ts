@@ -7,24 +7,20 @@ main:
     // tests/approvals/multi-inheritance-2.algo.ts:21
     // class StoreBoth extends classes(StoreString, StoreUint64) {
     txn NumAppArgs
-    bz main_bare_routing@9
-    pushbytess 0xcf362d69 0x48f26e85 // method "test(string,uint64)void", method "setStore(string)void"
-    txna ApplicationArgs 0
-    match main_test_route@5 main_setStore_route@6
-
-main_after_if_else@13:
-    err
-
-main_setStore_route@6:
-    // tests/approvals/multi-inheritance-2.algo.ts:8
-    // setStore(value: string) {
+    bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/multi-inheritance-2.algo.ts:21
-    // class StoreBoth extends classes(StoreString, StoreUint64) {
+    assert
+    pushbytess 0xcf362d69 0x48f26e85 // method "test(string,uint64)void", method "setStore(string)void"
+    txna ApplicationArgs 0
+    match main_test_route@6 main_setStore_route@7
+    err
+
+main_setStore_route@7:
+    // tests/approvals/multi-inheritance-2.algo.ts:8
+    // setStore(value: string) {
     txna ApplicationArgs 1
     extract 2 0
     // tests/approvals/multi-inheritance-2.algo.ts:6
@@ -39,16 +35,9 @@ main_setStore_route@6:
     pushint 1 // 1
     return
 
-main_test_route@5:
+main_test_route@6:
     // tests/approvals/multi-inheritance-2.algo.ts:22
     // test(theString: string, theUint: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/multi-inheritance-2.algo.ts:21
-    // class StoreBoth extends classes(StoreString, StoreUint64) {
     txna ApplicationArgs 1
     extract 2 0
     txna ApplicationArgs 2
@@ -72,13 +61,12 @@ main_test_route@5:
     pushint 1 // 1
     return
 
-main_bare_routing@9:
+main___algots__.defaultCreate@11:
     // tests/approvals/multi-inheritance-2.algo.ts:21
     // class StoreBoth extends classes(StoreString, StoreUint64) {
     txn OnCompletion
-    bnz main_after_if_else@13
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

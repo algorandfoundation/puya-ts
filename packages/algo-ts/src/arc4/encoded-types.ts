@@ -70,10 +70,7 @@ type BigUintBitSize =
  * Defines supported bit sizes for the UintN and UFixed types
  */
 export type BitSize = UintBitSize | BigUintBitSize
-/**
- * Conditional type which returns the native equivalent type for a given UintN bit size
- */
-type NativeForArc4Int<N extends BitSize> = N extends UintBitSize ? uint64 : biguint
+
 /**
  * Conditional type which returns the compat type relevant to a given UintN bit size
  */
@@ -146,9 +143,16 @@ export class Uint<N extends BitSize> extends ARC4Encoded {
   }
 
   /**
-   * Retrieve the decoded native uint64 or biguint
+   * Retrieve the decoded native uint64
    */
-  get native(): NativeForArc4Int<N> {
+  asUint64(): uint64 {
+    throw new NoImplementation()
+  }
+
+  /**
+   * Retrieve the decoded native biguint
+   */
+  asBigUint(): biguint {
     throw new NoImplementation()
   }
 }
@@ -201,13 +205,6 @@ export class UFixed<N extends BitSize, M extends number> extends ARC4Encoded {
    */
   constructor(v?: `${number}.${number}`) {
     super()
-  }
-
-  /**
-   * Retrieve the decoded native uint64 or biguint where the returned integer represents the fixed decimal value * (10 ^ M)
-   */
-  get native(): NativeForArc4Int<N> {
-    throw new NoImplementation()
   }
 }
 

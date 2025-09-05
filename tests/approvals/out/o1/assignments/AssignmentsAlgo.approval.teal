@@ -9,175 +9,54 @@ main:
     // @contract({ scratchSlots: [countSlot] })
     // export class AssignmentsAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@14
+    bz main___algots__.defaultCreate@16
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
     pushbytess 0x702ea108 0xedda85e9 0x5b2f7713 0x90cccb3d 0xd8be93bf 0x5a3fec5a 0x27a4f367 0xd6c9f486 0x6e03ad0c // method "testPrimitives(uint64)void", method "testAccountDestructure()(uint64,uint64)", method "testArrayDestructure(uint64[],uint64,uint64[])void", method "testArrayNarrowing(uint64[],uint64)void", method "testTupleToArray((uint64,uint64),(uint64,uint64))void", method "testNested(uint64[][])void", method "testDestructureObj((uint64,string),(uint64,string))void", method "testObjLiteralNarrowing(uint64,uint64)void", method "testMixed(((uint64))[])void"
     txna ApplicationArgs 0
-    match main_testPrimitives_route@3 main_testAccountDestructure_route@4 main_testArrayDestructure_route@5 main_testArrayNarrowing_route@6 main_testTupleToArray_route@7 main_testNested_route@8 main_testDestructureObj_route@9 main_testObjLiteralNarrowing_route@10 main_testMixed_route@11
-
-main_after_if_else@18:
+    match main_testPrimitives_route@4 testAccountDestructure testArrayDestructure testArrayNarrowing testTupleToArray main_testNested_route@9 main_testDestructureObj_route@10 testObjLiteralNarrowing main_testMixed_route@12
     err
 
-main_testMixed_route@11:
+main_testMixed_route@12:
     // tests/approvals/assignments.algo.ts:103
     // testMixed(m: Array<{ a: [uint64] }>) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     intc_0 // 1
     return
 
-main_testObjLiteralNarrowing_route@10:
-    // tests/approvals/assignments.algo.ts:88
-    // testObjLiteralNarrowing(a: uint64, b: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/assignments.algo.ts:19-20
-    // @contract({ scratchSlots: [countSlot] })
-    // export class AssignmentsAlgo extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    txna ApplicationArgs 2
-    btoi
-    // tests/approvals/assignments.algo.ts:88
-    // testObjLiteralNarrowing(a: uint64, b: uint64) {
-    callsub testObjLiteralNarrowing
-    intc_0 // 1
-    return
-
-main_testDestructureObj_route@9:
+main_testDestructureObj_route@10:
     // tests/approvals/assignments.algo.ts:83
     // testDestructureObj(m: { a: uint64; b: string }, i: Readonly<{ a: uint64; b: string }>) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     intc_0 // 1
     return
 
-main_testNested_route@8:
+main_testNested_route@9:
     // tests/approvals/assignments.algo.ts:78
     // testNested(i_a: ReadonlyArray<ReadonlyArray<uint64>>) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     intc_0 // 1
     return
 
-main_testTupleToArray_route@7:
-    // tests/approvals/assignments.algo.ts:68
-    // testTupleToArray(m_t: [uint64, uint64], i_t: readonly [uint64, uint64]) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/assignments.algo.ts:19-20
-    // @contract({ scratchSlots: [countSlot] })
-    // export class AssignmentsAlgo extends Contract {
-    txna ApplicationArgs 1
-    txna ApplicationArgs 2
-    dup
-    intc_2 // 0
-    extract_uint64
-    swap
-    intc_3 // 8
-    extract_uint64
-    // tests/approvals/assignments.algo.ts:68
-    // testTupleToArray(m_t: [uint64, uint64], i_t: readonly [uint64, uint64]) {
-    callsub testTupleToArray
-    intc_0 // 1
-    return
-
-main_testArrayNarrowing_route@6:
-    // tests/approvals/assignments.algo.ts:54
-    // testArrayNarrowing(m_a: uint64[], u: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/assignments.algo.ts:19-20
-    // @contract({ scratchSlots: [countSlot] })
-    // export class AssignmentsAlgo extends Contract {
-    txna ApplicationArgs 1
-    txna ApplicationArgs 2
-    btoi
-    // tests/approvals/assignments.algo.ts:54
-    // testArrayNarrowing(m_a: uint64[], u: uint64) {
-    callsub testArrayNarrowing
-    intc_0 // 1
-    return
-
-main_testArrayDestructure_route@5:
-    // tests/approvals/assignments.algo.ts:34
-    // testArrayDestructure(i_a: ReadonlyArray<uint64>, u: uint64, m_a: uint64[]) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/assignments.algo.ts:19-20
-    // @contract({ scratchSlots: [countSlot] })
-    // export class AssignmentsAlgo extends Contract {
-    txna ApplicationArgs 1
-    txna ApplicationArgs 2
-    btoi
-    txna ApplicationArgs 3
-    // tests/approvals/assignments.algo.ts:34
-    // testArrayDestructure(i_a: ReadonlyArray<uint64>, u: uint64, m_a: uint64[]) {
-    callsub testArrayDestructure
-    intc_0 // 1
-    return
-
-main_testAccountDestructure_route@4:
-    // tests/approvals/assignments.algo.ts:29
-    // testAccountDestructure() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    callsub testAccountDestructure
-    pushbytes 0x151f7c75
-    swap
-    concat
-    log
-    intc_0 // 1
-    return
-
-main_testPrimitives_route@3:
+main_testPrimitives_route@4:
     // tests/approvals/assignments.algo.ts:21
     // testPrimitives(u: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     intc_0 // 1
     return
 
-main_bare_routing@14:
+main___algots__.defaultCreate@16:
     // tests/approvals/assignments.algo.ts:19-20
     // @contract({ scratchSlots: [countSlot] })
     // export class AssignmentsAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@18
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_0 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
 
 
-// tests/approvals/assignments.algo.ts::AssignmentsAlgo.testAccountDestructure() -> bytes:
+// tests/approvals/assignments.algo.ts::AssignmentsAlgo.testAccountDestructure[routing]() -> void:
 testAccountDestructure:
     // tests/approvals/assignments.algo.ts:30
     // const { balance, minBalance } = Global.currentApplicationAddress
@@ -195,14 +74,22 @@ testAccountDestructure:
     swap
     itob
     concat
-    retsub
+    // tests/approvals/assignments.algo.ts:29
+    // testAccountDestructure() {
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
 
 
-// tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayDestructure(i_a: bytes, u: uint64, m_a: bytes) -> void:
+// tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayDestructure[routing]() -> void:
 testArrayDestructure:
     // tests/approvals/assignments.algo.ts:34
     // testArrayDestructure(i_a: ReadonlyArray<uint64>, u: uint64, m_a: uint64[]) {
-    proto 3 0
+    txna ApplicationArgs 2
+    btoi
     // tests/approvals/assignments.algo.ts:9
     // op.Scratch.store(countSlot, 0)
     intc_2 // 0
@@ -215,7 +102,7 @@ testArrayDestructure:
     store 0
     // tests/approvals/assignments.algo.ts:124
     // log(u)
-    frame_dig -2
+    dup
     itob
     dup
     log
@@ -259,20 +146,20 @@ testArrayDestructure:
     dup
     intc_2 // 0
     extract_uint64
-    frame_dig -2
+    dig 3
     ==
     intc_0 // 1
     &&
     dig 1
     intc_3 // 8
     extract_uint64
-    frame_dig -2
+    dig 4
     ==
     &&
     swap
     pushint 16 // 16
     extract_uint64
-    frame_dig -2
+    uncover 3
     ==
     &&
     assert // assert target is match for conditions
@@ -305,24 +192,27 @@ testArrayDestructure:
     // tests/approvals/assignments.algo.ts:124
     // log(u)
     log
-    retsub
+    // tests/approvals/assignments.algo.ts:34
+    // testArrayDestructure(i_a: ReadonlyArray<uint64>, u: uint64, m_a: uint64[]) {
+    intc_0 // 1
+    return
 
 
-// tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayNarrowing(m_a: bytes, u: uint64) -> void:
+// tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayNarrowing[routing]() -> void:
 testArrayNarrowing:
     // tests/approvals/assignments.algo.ts:54
     // testArrayNarrowing(m_a: uint64[], u: uint64) {
-    proto 2 0
+    txna ApplicationArgs 1
     // tests/approvals/assignments.algo.ts:56
     // m_a[0] += 1
-    frame_dig -2
+    dup
     intc_1 // 2
     extract_uint64
     dup
     intc_0 // 1
     +
     itob
-    frame_dig -2
+    dig 2
     swap
     replace2 2 // on error: index access is out of bounds
     // tests/approvals/assignments.algo.ts:57
@@ -331,7 +221,7 @@ testArrayNarrowing:
     intc_1 // 2
     +
     itob
-    frame_dig -2
+    uncover 2
     swap
     replace2 2 // on error: index access is out of bounds
     // tests/approvals/assignments.algo.ts:58
@@ -343,21 +233,29 @@ testArrayNarrowing:
     intc_1 // 2
     extract_uint64
     !=
-    assert
-    retsub
+    // tests/approvals/assignments.algo.ts:54
+    // testArrayNarrowing(m_a: uint64[], u: uint64) {
+    return
 
 
-// tests/approvals/assignments.algo.ts::AssignmentsAlgo.testTupleToArray(m_t: bytes, i_t.0: uint64, i_t.1: uint64) -> void:
+// tests/approvals/assignments.algo.ts::AssignmentsAlgo.testTupleToArray[routing]() -> void:
 testTupleToArray:
     // tests/approvals/assignments.algo.ts:68
     // testTupleToArray(m_t: [uint64, uint64], i_t: readonly [uint64, uint64]) {
-    proto 3 0
-    // tests/approvals/assignments.algo.ts:69
-    // const m_a: uint64[] = clone(m_t)
-    frame_dig -3
+    txna ApplicationArgs 1
+    txna ApplicationArgs 2
+    dup
     intc_2 // 0
     extract_uint64
-    frame_dig -3
+    swap
+    intc_3 // 8
+    extract_uint64
+    // tests/approvals/assignments.algo.ts:69
+    // const m_a: uint64[] = clone(m_t)
+    dig 2
+    intc_2 // 0
+    extract_uint64
+    uncover 3
     intc_3 // 8
     extract_uint64
     dig 1
@@ -390,12 +288,12 @@ testTupleToArray:
     assert // assert target is match for conditions
     // tests/approvals/assignments.algo.ts:74
     // const i_a2: readonly uint64[] = i_t
-    frame_dig -2
+    dig 1
     itob
     bytec_0 // 0x0002
     swap
     concat
-    frame_dig -1
+    dig 1
     itob
     concat
     // tests/approvals/assignments.algo.ts:75
@@ -408,24 +306,22 @@ testTupleToArray:
     dig 1
     intc_1 // 2
     extract_uint64
-    frame_dig -2
+    uncover 4
     ==
     &&
     swap
     pushint 10 // 10
     extract_uint64
-    frame_dig -1
+    uncover 2
     ==
     &&
-    assert // assert target is match for conditions
-    retsub
+    // tests/approvals/assignments.algo.ts:68
+    // testTupleToArray(m_t: [uint64, uint64], i_t: readonly [uint64, uint64]) {
+    return // on error: assert target is match for conditions
 
 
-// tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNarrowing(a: uint64, b: uint64) -> void:
+// tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNarrowing[routing]() -> void:
 testObjLiteralNarrowing:
-    // tests/approvals/assignments.algo.ts:88
-    // testObjLiteralNarrowing(a: uint64, b: uint64) {
-    proto 2 0
     // tests/approvals/assignments.algo.ts:9
     // op.Scratch.store(countSlot, 0)
     intc_2 // 0
@@ -457,5 +353,6 @@ testObjLiteralNarrowing:
     // assert(getCount() === 2, 'getVal should still be called once even though its result is not used')
     intc_1 // 2
     ==
-    assert // getVal should still be called once even though its result is not used
-    retsub
+    // tests/approvals/assignments.algo.ts:88
+    // testObjLiteralNarrowing(a: uint64, b: uint64) {
+    return // on error: getVal should still be called once even though its result is not used

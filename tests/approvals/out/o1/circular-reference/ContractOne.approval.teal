@@ -7,12 +7,10 @@ main:
     // tests/approvals/circular-reference.algo.ts:6
     // export class ContractOne extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     bytec_0 // method "test(uint64)void"
     txna ApplicationArgs 0
     match main_test_route@3
-
-main_after_if_else@10:
     err
 
 main_test_route@3:
@@ -20,46 +18,40 @@ main_test_route@3:
     // test(appId: Application) {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/circular-reference.algo.ts:6
-    // export class ContractOne extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    // tests/approvals/circular-reference.algo.ts:7
-    // test(appId: Application) {
-    callsub test
-    pushint 1 // 1
-    return
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    b test
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/circular-reference.algo.ts:6
     // export class ContractOne extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
 
 
-// tests/approvals/circular-reference.algo.ts::ContractOne.test(appId: uint64) -> void:
+// tests/approvals/circular-reference.algo.ts::ContractOne.test[routing]() -> void:
 test:
     // tests/approvals/circular-reference.algo.ts:7
     // test(appId: Application) {
-    proto 1 0
+    txna ApplicationArgs 1
+    btoi
     // tests/approvals/circular-reference.algo.ts:8
     // abiCall<typeof ContractTwo.prototype.test>({ appId })
     itxn_begin
     bytec_0 // method "test(uint64)void"
     itxn_field ApplicationArgs
-    frame_dig -1
     itxn_field ApplicationID
     pushint 6 // appl
     itxn_field TypeEnum
     pushint 0 // 0
     itxn_field Fee
     itxn_submit
-    retsub
+    // tests/approvals/circular-reference.algo.ts:7
+    // test(appId: Application) {
+    pushint 1 // 1
+    return

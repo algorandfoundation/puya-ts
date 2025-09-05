@@ -6,12 +6,10 @@ main:
     // tests/approvals/resource-encoding.algo.ts:31
     // class ByValue extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     pushbytes 0xd7308a13 // method "testExplicitValue(address)uint64"
     txna ApplicationArgs 0
     match main_testExplicitValue_route@3
-
-main_after_if_else@10:
     err
 
 main_testExplicitValue_route@3:
@@ -19,11 +17,9 @@ main_testExplicitValue_route@3:
     // @abimethod({ resourceEncoding: 'value' })
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:31
-    // class ByValue extends Contract {
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     txna ApplicationArgs 1
     // tests/approvals/resource-encoding.algo.ts:34
     // return account.balance
@@ -39,13 +35,12 @@ main_testExplicitValue_route@3:
     pushint 1 // 1
     return
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/resource-encoding.algo.ts:31
     // class ByValue extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

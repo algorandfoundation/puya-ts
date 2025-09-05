@@ -80,6 +80,20 @@ subroutine testTuple(): void
   t1: arc4.tuple<arc4.static_array<arc4.byte>,arc4.byte> = ARC4_ENCODE(#[Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ"), 0], wtype=arc4.tuple<arc4.static_array<arc4.byte>,arc4.byte>)
   assert(2 == 2)
 }
+subroutine testAsUint64(): void
+{
+  assert(ARC4_DECODE(42) == 42)
+  assert(ARC4_DECODE(18446744073709551615) == 18446744073709551615)
+  assert(ARC4_DECODE(1) == 1)
+  assert(ARC4_DECODE(18446744073709551615) == 18446744073709551615)
+}
+subroutine testAsBigUint(): void
+{
+  assert(ARC4_DECODE(42) == 42)
+  assert(ARC4_DECODE(18446744073709551615) == 18446744073709551615)
+  assert(ARC4_DECODE(1) == 1)
+  assert(ARC4_DECODE(115792089237316195423570985008687907853269984665640564039457584007913129639935) == 115792089237316195423570985008687907853269984665640564039457584007913129639935)
+}
 contract Arc4TypesTestContract
 {
   approvalProgram(): bool
@@ -98,6 +112,8 @@ contract Arc4TypesTestContract
     tests/approvals/arc4-types.algo.ts::testZeroValues()
     result: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>()
     assert(result.length == 0)
+    tests/approvals/arc4-types.algo.ts::testAsUint64()
+    tests/approvals/arc4-types.algo.ts::testAsBigUint()
     return True
   }
   

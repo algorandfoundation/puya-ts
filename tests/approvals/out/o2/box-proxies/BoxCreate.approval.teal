@@ -3,17 +3,15 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 8 1 10 40
+    intcblock 8 10 40 2
     bytecblock "a" "b" "c" "d" "bool" "arc4b"
     // tests/approvals/box-proxies.algo.ts:140
     // class BoxCreate extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     pushbytes 0x932010c1 // method "createBoxes()void"
     txna ApplicationArgs 0
     match main_createBoxes_route@3
-
-main_after_if_else@10:
     err
 
 main_createBoxes_route@3:
@@ -21,15 +19,15 @@ main_createBoxes_route@3:
     // createBoxes() {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     // tests/approvals/box-proxies.algo.ts:143
     // boxStr = Box<string>({ key: 'a' })
     bytec_0 // "a"
     // tests/approvals/box-proxies.algo.ts:150
     // this.boxStr.create({ size: 10 })
-    intc_2 // 10
+    intc_1 // 10
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:143
@@ -39,7 +37,7 @@ main_createBoxes_route@3:
     // assert(this.boxStr.length === 10)
     box_len
     pop
-    intc_2 // 10
+    intc_1 // 10
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:144
@@ -65,7 +63,7 @@ main_createBoxes_route@3:
     bytec_2 // "c"
     // tests/approvals/box-proxies.algo.ts:154
     // this.boxStaticArray.create()
-    intc_3 // 40
+    intc_2 // 40
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:145
@@ -75,7 +73,7 @@ main_createBoxes_route@3:
     // assert(this.boxStaticArray.length === (32 / 8) * 10)
     box_len
     pop
-    intc_3 // 40
+    intc_2 // 40
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:146
@@ -83,7 +81,7 @@ main_createBoxes_route@3:
     bytec_3 // "d"
     // tests/approvals/box-proxies.algo.ts:156
     // this.boxDynamicArray.create({ size: 2 })
-    pushint 2 // 2
+    intc_3 // 2
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:146
@@ -93,7 +91,7 @@ main_createBoxes_route@3:
     // assert(this.boxDynamicArray.length === 2)
     box_len
     pop
-    pushint 2 // 2
+    intc_3 // 2
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:147
@@ -137,7 +135,7 @@ main_createBoxes_route@3:
     bytec 5 // "arc4b"
     // tests/approvals/box-proxies.algo.ts:162
     // this.boxArc4Bool.create()
-    intc_1 // 1
+    pushint 1 // 1
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:142
@@ -147,21 +145,18 @@ main_createBoxes_route@3:
     // assert(this.boxArc4Bool.length === 1)
     box_len
     pop
-    intc_1 // 1
+    pushint 1 // 1
     ==
-    assert
     // tests/approvals/box-proxies.algo.ts:149
     // createBoxes() {
-    intc_1 // 1
     return
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/box-proxies.algo.ts:140
     // class BoxCreate extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

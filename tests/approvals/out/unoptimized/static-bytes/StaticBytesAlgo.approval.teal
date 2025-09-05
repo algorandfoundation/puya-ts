@@ -3,11 +3,10 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 32 1 16
-    bytecblock 0x 0x151f7c75
+    intcblock 32 1 0 16
+    bytecblock 0x151f7c75 0x
     pushbytes 0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     store 0
-    bytec_0 // ""
     b main_block@0
 
 main_block@0:
@@ -17,12 +16,25 @@ main_block@1:
     // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     txn NumAppArgs
-    intc_0 // 0
+    intc_2 // 0
     !=
-    bz main_bare_routing@14
+    bz main___algots__.defaultCreate@16
     b main_abi_routing@2
 
 main_abi_routing@2:
+    // tests/approvals/static-bytes.algo.ts:16
+    // class StaticBytesAlgo extends Contract {
+    txn OnCompletion
+    intc_2 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_2 // 0
+    !=
+    bz main_create_NoOp@14
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
     // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     txna ApplicationArgs 0
@@ -36,252 +48,91 @@ main_abi_routing@2:
     pushbytes 0xdf920f37 // method "test3()void"
     pushbytes 0x3d46345c // method "test4()void"
     uncover 9
-    match main_hashAddresses_route@3 main_receiveB32_route@4 main_receiveBytes_route@5 main_returnLength_route@6 main_test_route@7 main_testArray_route@8 main_test2_route@9 main_test3_route@10 main_test4_route@11
-    b main_switch_case_default@12
-
-main_switch_case_default@12:
+    match main_hashAddresses_route@4 main_receiveB32_route@5 main_receiveBytes_route@6 main_returnLength_route@7 main_test_route@8 main_testArray_route@9 main_test2_route@10 main_test3_route@11 main_test4_route@12
     b main_switch_case_next@13
 
 main_switch_case_next@13:
-    b main_after_if_else@18
+    b main_after_if_else@15
 
-main_after_if_else@18:
+main_after_if_else@15:
+    b main_after_if_else@17
+
+main_after_if_else@17:
     // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
+    err
 
-main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19:
-    return
-
-main_test4_route@11:
+main_test4_route@12:
     // tests/approvals/static-bytes.algo.ts:71
     // test4() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub test4
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
+    b main_switch_case_next@13
 
-main_test3_route@10:
+main_test3_route@11:
     // tests/approvals/static-bytes.algo.ts:66
     // test3() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub test3
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
+    b main_switch_case_next@13
 
-main_test2_route@9:
+main_test2_route@10:
     // tests/approvals/static-bytes.algo.ts:56
     // test2() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub test2
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
+    b main_switch_case_next@13
 
-main_testArray_route@8:
+main_testArray_route@9:
     // tests/approvals/static-bytes.algo.ts:47
     // testArray() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub testArray
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
+    b main_switch_case_next@13
 
-main_test_route@7:
+main_test_route@8:
     // tests/approvals/static-bytes.algo.ts:33
     // test() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub test
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
+    b main_switch_case_next@13
 
-main_returnLength_route@6:
-    // tests/approvals/static-bytes.algo.ts:29
-    // returnLength(b: bytes<32>): uint64 {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/static-bytes.algo.ts:16
-    // class StaticBytesAlgo extends Contract {
-    txna ApplicationArgs 1
+main_returnLength_route@7:
     // tests/approvals/static-bytes.algo.ts:29
     // returnLength(b: bytes<32>): uint64 {
     callsub returnLength
-    itob
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
+    b main_switch_case_next@13
 
-main_receiveBytes_route@5:
-    // tests/approvals/static-bytes.algo.ts:25
-    // receiveBytes(b: bytes, length: uint64) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/static-bytes.algo.ts:16
-    // class StaticBytesAlgo extends Contract {
-    txna ApplicationArgs 1
-    extract 2 0
-    txna ApplicationArgs 2
-    btoi
+main_receiveBytes_route@6:
     // tests/approvals/static-bytes.algo.ts:25
     // receiveBytes(b: bytes, length: uint64) {
     callsub receiveBytes
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
+    b main_switch_case_next@13
 
-main_receiveB32_route@4:
-    // tests/approvals/static-bytes.algo.ts:21
-    // receiveB32(b: bytes<32>) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/static-bytes.algo.ts:16
-    // class StaticBytesAlgo extends Contract {
-    txna ApplicationArgs 1
+main_receiveB32_route@5:
     // tests/approvals/static-bytes.algo.ts:21
     // receiveB32(b: bytes<32>) {
     callsub receiveB32
-    dup
-    len
-    intc_1 // 32
-    ==
-    assert // invalid size
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
+    b main_switch_case_next@13
 
-main_hashAddresses_route@3:
-    // tests/approvals/static-bytes.algo.ts:17
-    // hashAddresses(a1: B32, a2: B32): B32Alias {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/static-bytes.algo.ts:16
-    // class StaticBytesAlgo extends Contract {
-    txna ApplicationArgs 1
-    txna ApplicationArgs 2
+main_hashAddresses_route@4:
     // tests/approvals/static-bytes.algo.ts:17
     // hashAddresses(a1: B32, a2: B32): B32Alias {
     callsub hashAddresses
-    dup
-    len
-    intc_1 // 32
-    ==
-    assert // invalid size
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
+    b main_switch_case_next@13
 
-main_bare_routing@14:
+main_create_NoOp@14:
+    b main_after_if_else@15
+
+main___algots__.defaultCreate@16:
     // tests/approvals/static-bytes.algo.ts:16
     // class StaticBytesAlgo extends Contract {
     txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@15
-    b main_switch_case_default@16
-
-main_switch_case_default@16:
-    b main_switch_case_next@17
-
-main_switch_case_next@17:
-    b main_after_if_else@18
-
-main___algots__.defaultCreate@15:
-    // tests/approvals/static-bytes.algo.ts:16
-    // class StaticBytesAlgo extends Contract {
-    txn ApplicationID
-    intc_0 // 0
+    intc_2 // NoOp
     ==
-    assert // can only call when creating
+    txn ApplicationID
+    intc_2 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__@19
+    intc_1 // 1
+    return
 
 
 // tests/approvals/static-bytes.algo.ts::padTo32(b: bytes) -> bytes:
@@ -294,21 +145,170 @@ padTo32:
 padTo32_block@0:
     // tests/approvals/static-bytes.algo.ts:13
     // return b.bitwiseOr(bzero(32)).toFixed({ length: 32, strategy: 'unsafe-cast' })
-    intc_1 // 32
+    intc_0 // 32
     bzero
     frame_dig -1
     b|
     retsub
 
 
-// tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses(a1: bytes, a2: bytes) -> bytes:
+// tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses[routing]() -> void:
 hashAddresses:
-    // tests/approvals/static-bytes.algo.ts:17
-    // hashAddresses(a1: B32, a2: B32): B32Alias {
-    proto 2 1
     b hashAddresses_block@0
 
 hashAddresses_block@0:
+    // tests/approvals/static-bytes.algo.ts:17
+    // hashAddresses(a1: B32, a2: B32): B32Alias {
+    txna ApplicationArgs 1
+    txna ApplicationArgs 2
+    callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses
+    dup
+    len
+    intc_0 // 32
+    ==
+    assert // invalid size
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32[routing]() -> void:
+receiveB32:
+    b receiveB32_block@0
+
+receiveB32_block@0:
+    // tests/approvals/static-bytes.algo.ts:21
+    // receiveB32(b: bytes<32>) {
+    txna ApplicationArgs 1
+    callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32
+    dup
+    len
+    intc_0 // 32
+    ==
+    assert // invalid size
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes[routing]() -> void:
+receiveBytes:
+    b receiveBytes_block@0
+
+receiveBytes_block@0:
+    // tests/approvals/static-bytes.algo.ts:25
+    // receiveBytes(b: bytes, length: uint64) {
+    txna ApplicationArgs 1
+    extract 2 0
+    txna ApplicationArgs 2
+    btoi
+    callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes
+    intc_1 // 1
+    return
+
+
+// tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.returnLength[routing]() -> void:
+returnLength:
+    b returnLength_block@0
+
+returnLength_block@0:
+    // tests/approvals/static-bytes.algo.ts:29
+    // returnLength(b: bytes<32>): uint64 {
+    txna ApplicationArgs 1
+    callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.returnLength
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test[routing]() -> void:
+test:
+    b test_block@0
+
+test_block@0:
+    // tests/approvals/static-bytes.algo.ts:33
+    // test() {
+    callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test
+    intc_1 // 1
+    return
+
+
+// tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray[routing]() -> void:
+testArray:
+    b testArray_block@0
+
+testArray_block@0:
+    // tests/approvals/static-bytes.algo.ts:47
+    // testArray() {
+    callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray
+    intc_1 // 1
+    return
+
+
+// tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2[routing]() -> void:
+test2:
+    b test2_block@0
+
+test2_block@0:
+    // tests/approvals/static-bytes.algo.ts:56
+    // test2() {
+    callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test3[routing]() -> void:
+test3:
+    b test3_block@0
+
+test3_block@0:
+    // tests/approvals/static-bytes.algo.ts:66
+    // test3() {
+    callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test3
+    intc_1 // 1
+    return
+
+
+// tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4[routing]() -> void:
+test4:
+    b test4_block@0
+
+test4_block@0:
+    // tests/approvals/static-bytes.algo.ts:71
+    // test4() {
+    callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4
+    intc_1 // 1
+    return
+
+
+// tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses(a1: bytes, a2: bytes) -> bytes:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses:
+    // tests/approvals/static-bytes.algo.ts:17
+    // hashAddresses(a1: B32, a2: B32): B32Alias {
+    proto 2 1
+    b tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses_block@0
+
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses_block@0:
     // tests/approvals/static-bytes.algo.ts:18
     // return sha512_256(a1.concat(a2))
     frame_dig -2
@@ -319,18 +319,18 @@ hashAddresses_block@0:
 
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(b: bytes) -> bytes:
-receiveB32:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32:
     // tests/approvals/static-bytes.algo.ts:21
     // receiveB32(b: bytes<32>) {
     proto 1 1
-    b receiveB32_block@0
+    b tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32_block@0
 
-receiveB32_block@0:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32_block@0:
     // tests/approvals/static-bytes.algo.ts:22
     // assert(b.length === 32)
     frame_dig -1
     len
-    intc_1 // 32
+    intc_0 // 32
     ==
     assert
     // tests/approvals/static-bytes.algo.ts:23
@@ -341,13 +341,13 @@ receiveB32_block@0:
 
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes(b: bytes, length: uint64) -> void:
-receiveBytes:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes:
     // tests/approvals/static-bytes.algo.ts:25
     // receiveBytes(b: bytes, length: uint64) {
     proto 2 0
-    b receiveBytes_block@0
+    b tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes_block@0
 
-receiveBytes_block@0:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes_block@0:
     // tests/approvals/static-bytes.algo.ts:26
     // assert(b.length === length)
     frame_dig -2
@@ -359,13 +359,13 @@ receiveBytes_block@0:
 
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.returnLength(b: bytes) -> uint64:
-returnLength:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.returnLength:
     // tests/approvals/static-bytes.algo.ts:29
     // returnLength(b: bytes<32>): uint64 {
     proto 1 1
-    b returnLength_block@0
+    b tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.returnLength_block@0
 
-returnLength_block@0:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.returnLength_block@0:
     // tests/approvals/static-bytes.algo.ts:30
     // return b.length
     frame_dig -1
@@ -374,28 +374,28 @@ returnLength_block@0:
 
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test() -> void:
-test:
-    b test_block@0
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test:
+    b tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test_block@0
 
-test_block@0:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test_block@0:
     // tests/approvals/static-bytes.algo.ts:34
     // this.receiveB32(Txn.sender.bytes)
     txn Sender
-    callsub receiveB32
+    callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32
     pop
     // tests/approvals/static-bytes.algo.ts:35
     // this.receiveBytes(Txn.sender.bytes, 32)
     txn Sender
-    intc_1 // 32
-    callsub receiveBytes
+    intc_0 // 32
+    callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes
     // tests/approvals/static-bytes.algo.ts:37
     // this.receiveB32(Bytes`abcdefghabcdefghabcdefghabcdefgh`.toFixed({ length: 32, strategy: 'assert-length' }))
     pushbytes "abcdefghabcdefghabcdefghabcdefgh"
-    callsub receiveB32
+    callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32
     pop
     // tests/approvals/static-bytes.algo.ts:39
     // const joined = Bytes<55>`${fromUtf8}${fromHex}${fromBase32}${fromBase64}`
-    bytec_0 // ""
+    bytec_1 // ""
     pushbytes "abc"
     concat
     pushbytes 0xaaff
@@ -420,10 +420,10 @@ test_block@0:
     txn Sender
     dup
     len
-    intc_0 // 0
+    intc_2 // 0
     dig 1
     >=
-    intc_0 // 0
+    intc_2 // 0
     dig 2
     uncover 2
     select
@@ -448,17 +448,17 @@ test_block@0:
     // tests/approvals/static-bytes.algo.ts:44
     // assert(padded.length === 32)
     len
-    intc_1 // 32
+    intc_0 // 32
     ==
     assert
     retsub
 
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray() -> void:
-testArray:
-    b testArray_block@0
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray:
+    b tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray_block@0
 
-testArray_block@0:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray_block@0:
     // tests/approvals/static-bytes.algo.ts:48
     // const a = [Txn.sender.bytes, Txn.sender.bytes] as const
     txn Sender
@@ -469,10 +469,10 @@ testArray_block@0:
     txn Sender
     dup
     len
-    intc_1 // 32
+    intc_0 // 32
     ==
     assert // invalid size
-    bytec_0 // 0x
+    bytec_1 // 0x
     uncover 1
     concat
     callsub _puya_lib.mem.new_slot
@@ -486,16 +486,16 @@ testArray_block@0:
     cover 1
     dig 2
     len
-    intc_1 // 32
+    intc_0 // 32
     ==
     assert // invalid size
     dig 2
-    bytec_0 // 0x
+    bytec_1 // 0x
     uncover 1
     concat
     dig 4
     len
-    intc_1 // 32
+    intc_0 // 32
     ==
     assert // invalid size
     uncover 4
@@ -509,10 +509,10 @@ testArray_block@0:
     // tests/approvals/static-bytes.algo.ts:52
     // const bitAnd = a[0].bitwiseAnd(b[0])
     loads
-    intc_0 // 0
-    intc_1 // 32
+    intc_2 // 0
+    intc_0 // 32
     *
-    intc_1 // 32
+    intc_0 // 32
     extract3 // on error: index access is out of bounds
     b&
     // tests/approvals/static-bytes.algo.ts:53
@@ -524,31 +524,31 @@ testArray_block@0:
 
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2() -> bytes:
-test2:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2:
     // tests/approvals/static-bytes.algo.ts:56
     // test2() {
     proto 0 1
-    b test2_block@0
+    b tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2_block@0
 
-test2_block@0:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2_block@0:
     // tests/approvals/static-bytes.algo.ts:57
     // let result = Bytes.fromHex(EMPTY_HASH)
     pushbytes 0x0000000000000000000000000000000000000000000000000000000000000000
     // tests/approvals/static-bytes.algo.ts:59
     // for (let i: uint64 = 0; i < 5; i = i + 1) {
-    intc_0 // 0
-    b test2_while_top@1
+    intc_2 // 0
+    b tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2_while_top@1
 
-test2_while_top@1:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2_while_top@1:
     // tests/approvals/static-bytes.algo.ts:59
     // for (let i: uint64 = 0; i < 5; i = i + 1) {
     frame_dig 1
     pushint 5 // 5
     <
-    bz test2_after_while@3
-    b test2_while_body@2
+    bz tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2_after_while@3
+    b tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2_while_body@2
 
-test2_while_body@2:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2_while_body@2:
     // tests/approvals/static-bytes.algo.ts:60
     // result = op.sha256(op.concat(result, result))
     frame_dig 0
@@ -559,30 +559,30 @@ test2_while_body@2:
     // tests/approvals/static-bytes.algo.ts:59
     // for (let i: uint64 = 0; i < 5; i = i + 1) {
     frame_dig 1
-    intc_2 // 1
+    intc_1 // 1
     +
     frame_bury 1
-    b test2_while_top@1
+    b tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2_while_top@1
 
-test2_after_while@3:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2_after_while@3:
     // tests/approvals/static-bytes.algo.ts:63
     // return result
     retsub
 
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test3() -> void:
-test3:
-    b test3_block@0
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test3:
+    b tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test3_block@0
 
-test3_block@0:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test3_block@0:
     retsub
 
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4() -> void:
-test4:
-    b test4_block@0
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4:
+    b tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4_block@0
 
-test4_block@0:
+tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4_block@0:
     // tests/approvals/static-bytes.algo.ts:72
     // const b: bytes = Txn.sender.bytes
     txn Sender
@@ -590,13 +590,13 @@ test4_block@0:
     // const addr = Bytes<32>(b)
     dup
     len
-    intc_1 // 32
+    intc_0 // 32
     ==
     assert // Length must be 32
     // tests/approvals/static-bytes.algo.ts:74
     // assert(addr.length === 32)
     len
-    intc_1 // 32
+    intc_0 // 32
     ==
     assert
     retsub
@@ -621,7 +621,7 @@ _puya_lib.mem.new_slot@entry:
     pushint 256 // 256
     dig 2
     -
-    intc_0 // 0
+    intc_2 // 0
     setbit // on error: no available slots
     store 0
     retsub

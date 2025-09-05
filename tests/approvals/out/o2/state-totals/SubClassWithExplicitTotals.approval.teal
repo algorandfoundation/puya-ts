@@ -17,12 +17,10 @@ main_after_if_else@2:
     // @contract({ stateTotals: { globalUints: 4, localUints: 0 } })
     // export class SubClassWithExplicitTotals extends BaseWithState {}
     txn NumAppArgs
-    bz main_bare_routing@8
+    bz main___algots__.defaultCreate@7
     pushbytes 0x2cd95aa1 // method "setState(uint64)void"
     txna ApplicationArgs 0
     match main_setState_route@5
-
-main_after_if_else@12:
     err
 
 main_setState_route@5:
@@ -30,12 +28,9 @@ main_setState_route@5:
     // setState(n: uint64) {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/state-totals.algo.ts:24-25
-    // @contract({ stateTotals: { globalUints: 4, localUints: 0 } })
-    // export class SubClassWithExplicitTotals extends BaseWithState {}
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     txna ApplicationArgs 1
     btoi
     // tests/approvals/state-totals.algo.ts:5
@@ -57,14 +52,13 @@ main_setState_route@5:
     pushint 1 // 1
     return
 
-main_bare_routing@8:
+main___algots__.defaultCreate@7:
     // tests/approvals/state-totals.algo.ts:24-25
     // @contract({ stateTotals: { globalUints: 4, localUints: 0 } })
     // export class SubClassWithExplicitTotals extends BaseWithState {}
     txn OnCompletion
-    bnz main_after_if_else@12
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

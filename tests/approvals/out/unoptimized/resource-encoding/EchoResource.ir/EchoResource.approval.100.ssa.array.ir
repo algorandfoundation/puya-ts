@@ -4,73 +4,72 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@1: // L38
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
-        goto tmp%1#0 ? block@2 : block@7
+        goto tmp%1#0 ? block@2 : block@9
     block@2: // abi_routing_L38
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "echoResourceByIndex(asset,application,account)(uint64,uint64,address)" => block@3, method "echoResourceByValue(uint64,uint64,address)(uint64,uint64,address)" => block@4, * => block@5}
-    block@3: // echoResourceByIndex_route_L39
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (== tmp%3#0 NoOp)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        let tmp%6#0: bool = (!= tmp%5#0 0u)
-        (assert tmp%6#0) // can only call when not creating
-        let reinterpret_Encoded(uint8)%0#0: Encoded(uint8) = (txna ApplicationArgs 1)
-        let tmp%7#0: uint64 = (btoi reinterpret_Encoded(uint8)%0#0)
-        let tmp%8#0: uint64 = ((txnas Assets) tmp%7#0)
-        let reinterpret_Encoded(uint8)%1#0: Encoded(uint8) = (txna ApplicationArgs 2)
-        let tmp%9#0: uint64 = (btoi reinterpret_Encoded(uint8)%1#0)
-        let tmp%10#0: uint64 = ((txnas Applications) tmp%9#0)
-        let reinterpret_Encoded(uint8)%2#0: Encoded(uint8) = (txna ApplicationArgs 3)
-        let tmp%11#0: uint64 = (btoi reinterpret_Encoded(uint8)%2#0)
-        let tmp%12#0: account = ((txnas Accounts) tmp%11#0)
-        let tmp%13#0: Encoded(uint64,uint64,uint8[32]) = tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByIndex(tmp%8#0, tmp%10#0, tmp%12#0)
-        let tmp%14#0: bytes = (concat 0x151f7c75 tmp%13#0)
-        (log tmp%14#0)
-        let tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#0: bool = 1u
-        goto block@12
-    block@4: // echoResourceByValue_route_L50
-        let tmp%15#0: uint64 = (txn OnCompletion)
-        let tmp%16#0: bool = (== tmp%15#0 NoOp)
-        (assert tmp%16#0) // OnCompletion is not NoOp
-        let tmp%17#0: uint64 = (txn ApplicationID)
-        let tmp%18#0: bool = (!= tmp%17#0 0u)
-        (assert tmp%18#0) // can only call when not creating
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%19#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let tmp%20#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 3)
-        let tmp%21#0: account = reinterpret_Encoded(uint8[32])%0#0
-        let tmp%22#0: Encoded(uint64,uint64,uint8[32]) = tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByValue(tmp%19#0, tmp%20#0, tmp%21#0)
-        let tmp%23#0: bytes = (concat 0x151f7c75 tmp%22#0)
-        (log tmp%23#0)
-        let tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#1: bool = 1u
-        goto block@12
-    block@5: // switch_case_default_L38
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@3 : block@7
+    block@3: // call_NoOp_L38
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "echoResourceByIndex(asset,application,account)(uint64,uint64,address)" => block@4, method "echoResourceByValue(uint64,uint64,address)(uint64,uint64,address)" => block@5, * => block@6}
+    block@4: // echoResourceByIndex_route_L39
+        tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByIndex[routing]()
+        goto block@6
+    block@5: // echoResourceByValue_route_L50
+        tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByValue[routing]()
         goto block@6
     block@6: // switch_case_next_L38
-        goto block@11
-    block@7: // bare_routing_L38
-        let tmp%24#0: uint64 = (txn OnCompletion)
-        switch tmp%24#0 {0u => block@8, * => block@9}
-    block@8: // __algots__.defaultCreate_L38
-        let tmp%25#0: uint64 = (txn ApplicationID)
-        let tmp%26#0: bool = (== tmp%25#0 0u)
-        (assert tmp%26#0) // can only call when creating
-        tests/approvals/resource-encoding.algo.ts::EchoResource.__algots__.defaultCreate()
-        let tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#2: bool = 1u
-        goto block@12
-    block@9: // switch_case_default_L38
+        goto block@8
+    block@7: // create_NoOp_L38
+        goto block@8
+    block@8: // after_if_else_L38
         goto block@10
-    block@10: // switch_case_next_L38
-        goto block@11
-    block@11: // after_if_else_L38
-        let tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#3: bool = 0u
-        goto block@12
-    block@12: // after_inlined_tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#0 <- block@3, tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#1 <- block@4, tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#2 <- block@8, tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router__%0#3 <- block@11)
+    block@9: // __algots__.defaultCreate_L38
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/resource-encoding.algo.ts::EchoResource.__algots__.defaultCreate()
+        exit 1u
+    block@10: // after_if_else_L38
+        exit 0u
+    block@11: // after_inlined_tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
         return tmp%0#0
+
+subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByIndex[routing]() -> void:
+    block@0: // L39
+        let reinterpret_Encoded(uint8)%0#0: Encoded(uint8) = (txna ApplicationArgs 1)
+        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint8)%0#0)
+        let tmp%1#0: uint64 = ((txnas Assets) tmp%0#0)
+        let reinterpret_Encoded(uint8)%1#0: Encoded(uint8) = (txna ApplicationArgs 2)
+        let tmp%2#0: uint64 = (btoi reinterpret_Encoded(uint8)%1#0)
+        let tmp%3#0: uint64 = ((txnas Applications) tmp%2#0)
+        let reinterpret_Encoded(uint8)%2#0: Encoded(uint8) = (txna ApplicationArgs 3)
+        let tmp%4#0: uint64 = (btoi reinterpret_Encoded(uint8)%2#0)
+        let tmp%5#0: account = ((txnas Accounts) tmp%4#0)
+        let tmp%6#0: Encoded(uint64,uint64,uint8[32]) = tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByIndex(tmp%1#0, tmp%3#0, tmp%5#0)
+        let tmp%7#0: bytes = (concat 0x151f7c75 tmp%6#0)
+        (log tmp%7#0)
+        exit 1u
+
+subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByValue[routing]() -> void:
+    block@0: // L50
+        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
+        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
+        let tmp%1#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
+        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 3)
+        let tmp%2#0: account = reinterpret_Encoded(uint8[32])%0#0
+        let tmp%3#0: Encoded(uint64,uint64,uint8[32]) = tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByValue(tmp%0#0, tmp%1#0, tmp%2#0)
+        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
+        (log tmp%4#0)
+        exit 1u
 
 subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByIndex(asset: uint64, app: uint64, acc: account) -> Encoded(uint64,uint64,uint8[32]):
     block@0: // L39

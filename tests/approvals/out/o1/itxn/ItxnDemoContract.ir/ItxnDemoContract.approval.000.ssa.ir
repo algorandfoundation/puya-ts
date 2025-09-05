@@ -13,76 +13,76 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__()
     block@0: // L20
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
-        goto tmp%1#0 ? block@1 : block@9
+        goto tmp%1#0 ? block@1 : block@11
     block@1: // abi_routing_L20
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "test1()void" => block@2, method "test2()void" => block@3, method "test3()void" => block@4, method "test4()void" => block@5, method "test5(uint64)void" => block@6, * => block@7}
-    block@2: // test1_route_L23
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (== tmp%3#0 NoOp)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        let tmp%6#0: bool = (!= tmp%5#0 0u)
-        (assert tmp%6#0) // can only call when not creating
-        tests/approvals/itxn.algo.ts::ItxnDemoContract.test1()
-        return 1u
-    block@3: // test2_route_L71
-        let tmp%7#0: uint64 = (txn OnCompletion)
-        let tmp%8#0: bool = (== tmp%7#0 NoOp)
-        (assert tmp%8#0) // OnCompletion is not NoOp
-        let tmp%9#0: uint64 = (txn ApplicationID)
-        let tmp%10#0: bool = (!= tmp%9#0 0u)
-        (assert tmp%10#0) // can only call when not creating
-        tests/approvals/itxn.algo.ts::ItxnDemoContract.test2()
-        return 1u
-    block@4: // test3_route_L108
-        let tmp%11#0: uint64 = (txn OnCompletion)
-        let tmp%12#0: bool = (== tmp%11#0 NoOp)
-        (assert tmp%12#0) // OnCompletion is not NoOp
-        let tmp%13#0: uint64 = (txn ApplicationID)
-        let tmp%14#0: bool = (!= tmp%13#0 0u)
-        (assert tmp%14#0) // can only call when not creating
-        tests/approvals/itxn.algo.ts::ItxnDemoContract.test3()
-        return 1u
-    block@5: // test4_route_L184
-        let tmp%15#0: uint64 = (txn OnCompletion)
-        let tmp%16#0: bool = (== tmp%15#0 NoOp)
-        (assert tmp%16#0) // OnCompletion is not NoOp
-        let tmp%17#0: uint64 = (txn ApplicationID)
-        let tmp%18#0: bool = (!= tmp%17#0 0u)
-        (assert tmp%18#0) // can only call when not creating
-        tests/approvals/itxn.algo.ts::ItxnDemoContract.test4()
-        return 1u
-    block@6: // test5_route_L207
-        let tmp%19#0: uint64 = (txn OnCompletion)
-        let tmp%20#0: bool = (== tmp%19#0 NoOp)
-        (assert tmp%20#0) // OnCompletion is not NoOp
-        let tmp%21#0: uint64 = (txn ApplicationID)
-        let tmp%22#0: bool = (!= tmp%21#0 0u)
-        (assert tmp%22#0) // can only call when not creating
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%23#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%0#0)
-        tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(tmp%23#0)
-        return 1u
-    block@7: // switch_case_default_L20
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@2 : block@9
+    block@2: // call_NoOp_L20
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "test1()void" => block@3, method "test2()void" => block@4, method "test3()void" => block@5, method "test4()void" => block@6, method "test5(uint64)void" => block@7, * => block@8}
+    block@3: // test1_route_L23
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test1[routing]()
+        goto block@8
+    block@4: // test2_route_L71
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test2[routing]()
+        goto block@8
+    block@5: // test3_route_L108
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test3[routing]()
+        goto block@8
+    block@6: // test4_route_L184
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test4[routing]()
+        goto block@8
+    block@7: // test5_route_L207
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test5[routing]()
         goto block@8
     block@8: // switch_case_next_L20
-        goto block@13
-    block@9: // bare_routing_L20
-        let tmp%24#0: uint64 = (txn OnCompletion)
-        switch tmp%24#0 {0u => block@10, * => block@11}
-    block@10: // __algots__.defaultCreate_L20
-        let tmp%25#0: uint64 = (txn ApplicationID)
-        let tmp%26#0: bool = (== tmp%25#0 0u)
-        (assert tmp%26#0) // can only call when creating
-        tests/approvals/itxn.algo.ts::ItxnDemoContract.__algots__.defaultCreate()
-        return 1u
-    block@11: // switch_case_default_L20
+        goto block@10
+    block@9: // create_NoOp_L20
+        goto block@10
+    block@10: // after_if_else_L20
         goto block@12
-    block@12: // switch_case_next_L20
-        goto block@13
-    block@13: // after_if_else_L20
-        return 0u
+    block@11: // __algots__.defaultCreate_L20
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.__algots__.defaultCreate()
+        exit 1u
+    block@12: // after_if_else_L20
+        exit 0u
+
+subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1[routing]() -> void:
+    block@0: // L23
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test1()
+        exit 1u
+
+subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2[routing]() -> void:
+    block@0: // L71
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test2()
+        exit 1u
+
+subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3[routing]() -> void:
+    block@0: // L108
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test3()
+        exit 1u
+
+subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test4[routing]() -> void:
+    block@0: // L184
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test4()
+        exit 1u
+
+subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test5[routing]() -> void:
+    block@0: // L207
+        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
+        let tmp%0#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%0#0)
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(tmp%0#0)
+        exit 1u
 
 subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
     block@0: // L23

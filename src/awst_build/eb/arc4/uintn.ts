@@ -11,7 +11,7 @@ import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { isValidLiteralForPType } from '../util/is-valid-literal-for-ptype'
-import { Arc4EncodedBaseExpressionBuilder } from './base'
+import { Arc4EncodedBaseExpressionBuilder, AsBigUintFunctionBuilder, AsUint64FunctionBuilder } from './base'
 
 export class UintNClassBuilder extends ClassBuilder {
   readonly ptype = UintNGeneric
@@ -127,5 +127,15 @@ export class UintNExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<Uin
   constructor(expr: Expression, ptype: PType) {
     invariant(ptype instanceof UintNType, 'ptype must be instance of UIntNType')
     super(expr, ptype)
+  }
+
+  memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    switch (name) {
+      case 'asUint64':
+        return new AsUint64FunctionBuilder(this, sourceLocation)
+      case 'asBigUint':
+        return new AsBigUintFunctionBuilder(this, sourceLocation)
+    }
+    return super.memberAccess(name, sourceLocation)
   }
 }

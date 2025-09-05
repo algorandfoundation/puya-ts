@@ -5,7 +5,6 @@
 main:
     intcblock 0 1
     bytecblock "oneGlobal"
-    pushbytes ""
     b main_block@0
 
 main_block@0:
@@ -27,7 +26,7 @@ main_block@3:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@8
+    bz main___algots__.defaultCreate@7
     b main_abi_routing@4
 
 main_abi_routing@4:
@@ -38,24 +37,16 @@ main_abi_routing@4:
     pushbytes 0x2cd95aa1 // method "setState(uint64)void"
     uncover 1
     match main_setState_route@5
-    b main_switch_case_default@6
+    b main_switch_case_next@6
 
-main_switch_case_default@6:
-    b main_switch_case_next@7
+main_switch_case_next@6:
+    b main_after_if_else@8
 
-main_switch_case_next@7:
-    b main_after_if_else@12
-
-main_after_if_else@12:
+main_after_if_else@8:
     // tests/approvals/state-totals.algo.ts:27-28
     // @contract({ stateTotals: {} })
     // export class ExtendsSubWithTotals extends SubClassWithExplicitTotals {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.__puya_arc4_router__@13
-
-main_after_inlined_tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.__puya_arc4_router__@13:
-    return
+    err
 
 main_setState_route@5:
     // tests/approvals/state-totals.algo.ts:31
@@ -63,62 +54,54 @@ main_setState_route@5:
     txn OnCompletion
     intc_1 // OptIn
     ==
-    assert // OnCompletion is not OptIn
     txn ApplicationID
     intc_0 // 0
     !=
-    assert // can only call when not creating
-    // tests/approvals/state-totals.algo.ts:27-28
-    // @contract({ stateTotals: {} })
-    // export class ExtendsSubWithTotals extends SubClassWithExplicitTotals {
-    txna ApplicationArgs 1
-    btoi
-    // tests/approvals/state-totals.algo.ts:31
-    // @abimethod({ allowActions: 'OptIn' })
+    &&
+    assert // OnCompletion must be OptIn && can only call when not creating
     callsub setState
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.__puya_arc4_router__@13
+    b main_switch_case_next@6
 
-main_bare_routing@8:
+main___algots__.defaultCreate@7:
     // tests/approvals/state-totals.algo.ts:27-28
     // @contract({ stateTotals: {} })
     // export class ExtendsSubWithTotals extends SubClassWithExplicitTotals {
     txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@9
-    b main_switch_case_default@10
-
-main_switch_case_default@10:
-    b main_switch_case_next@11
-
-main_switch_case_next@11:
-    b main_after_if_else@12
-
-main___algots__.defaultCreate@9:
-    // tests/approvals/state-totals.algo.ts:27-28
-    // @contract({ stateTotals: {} })
-    // export class ExtendsSubWithTotals extends SubClassWithExplicitTotals {
+    intc_0 // NoOp
+    ==
     txn ApplicationID
     intc_0 // 0
     ==
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.__puya_arc4_router__@13
+    return
+
+
+// tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.setState[routing]() -> void:
+setState:
+    b setState_block@0
+
+setState_block@0:
+    // tests/approvals/state-totals.algo.ts:31
+    // @abimethod({ allowActions: 'OptIn' })
+    txna ApplicationArgs 1
+    btoi
+    callsub tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.setState
+    intc_1 // 1
+    return
 
 
 // tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.setState(n: uint64) -> void:
-setState:
+tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.setState:
     // tests/approvals/state-totals.algo.ts:31-32
     // @abimethod({ allowActions: 'OptIn' })
     // setState(n: uint64) {
     proto 1 0
-    b setState_block@0
+    b tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.setState_block@0
 
-setState_block@0:
+tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.setState_block@0:
     // tests/approvals/state-totals.algo.ts:33
     // super.setState(n)
     frame_dig -1

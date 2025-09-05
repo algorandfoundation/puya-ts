@@ -6,80 +6,52 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (app_global_put "globalValue" 123u)
         goto block@2
     block@2: // after_if_else_L1
-        let tmp%0#1: uint64 = (txn NumAppArgs)
-        goto tmp%0#1 ? block@4 : block@15
-    block@4: // abi_routing_L4
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "justNoop()void" => block@5, method "createMethod()void" => block@6, method "allActions()void" => block@7, method "overrideReadonlyName()uint64" => block@8, method "methodWithDefaults(uint64,uint64,uint64)uint64" => block@9, method "readonlyAlt()uint64" => block@10, method "readonlyAlt2()uint64" => block@11, * => block@15}
-    block@5: // justNoop_route_L5
+        let tmp%0#1: bytes = (txna ApplicationArgs 0)
+        switch tmp%0#1 {method "allActions()void" => block@4, * => block@5}
+    block@4: // allActions_route_L9
+        let tmp%1#0: uint64 = (txn ApplicationID)
+        (assert tmp%1#0) // can only call when not creating
+        exit 1u
+    block@5: // switch_case_next_L4
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (! tmp%3#0)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        (assert tmp%5#0) // can only call when not creating
-        let tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#0: bool = 1u
-        goto block@16
-    block@6: // createMethod_route_L7
-        let tmp%7#0: uint64 = (txn OnCompletion)
-        let tmp%8#0: bool = (! tmp%7#0)
-        (assert tmp%8#0) // OnCompletion is not NoOp
-        let tmp%9#0: uint64 = (txn ApplicationID)
-        let tmp%10#0: bool = (! tmp%9#0)
-        (assert tmp%10#0) // can only call when creating
-        let tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#1: bool = 1u
-        goto block@16
-    block@7: // allActions_route_L9
-        let tmp%11#0: uint64 = (txn ApplicationID)
-        (assert tmp%11#0) // can only call when not creating
-        let tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#2: bool = 1u
-        goto block@16
-    block@8: // overrideReadonlyName_route_L11
-        let tmp%13#0: uint64 = (txn OnCompletion)
-        let tmp%14#0: bool = (! tmp%13#0)
-        (assert tmp%14#0) // OnCompletion is not NoOp
-        let tmp%15#0: uint64 = (txn ApplicationID)
-        (assert tmp%15#0) // can only call when not creating
+        (assert tmp%4#0) // OnCompletion must be NoOp
+        let tmp%5#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%5#0 {method "readonlyAlt2()uint64" => block@6, * => block@7}
+    block@6: // readonlyAlt2_route_L29
+        (log 0x151f7c750000000000000002)
+        exit 1u
+    block@7: // switch_case_next_L4
+        let tmp%6#0: uint64 = (txn ApplicationID)
+        goto tmp%6#0 ? block@8 : block@14
+    block@8: // call_NoOp_L4
+        let tmp%8#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%8#0 {method "justNoop()void" => block@9, method "overrideReadonlyName()uint64" => block@10, method "methodWithDefaults(uint64,uint64,uint64)uint64" => block@11, method "readonlyAlt()uint64" => block@12, * => block@17}
+    block@9: // justNoop_route_L5
+        exit 1u
+    block@10: // overrideReadonlyName_route_L11
         (log 0x151f7c750000000000000005)
-        let tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#3: bool = 1u
-        goto block@16
-    block@9: // methodWithDefaults_route_L18
-        let tmp%20#0: uint64 = (txn OnCompletion)
-        let tmp%21#0: bool = (! tmp%20#0)
-        (assert tmp%21#0) // OnCompletion is not NoOp
-        let tmp%22#0: uint64 = (txn ApplicationID)
-        (assert tmp%22#0) // can only call when not creating
+        exit 1u
+    block@11: // methodWithDefaults_route_L18
         let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
         let a#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
         let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
         let b#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
         let reinterpret_Encoded(uint64)%2#0: Encoded(uint64) = (txna ApplicationArgs 3)
         let c#0: uint64 = (btoi reinterpret_Encoded(uint64)%2#0)
-        let tmp%0#2: uint64 = (* a#0 b#0)
-        let tmp%1#1: uint64 = (+ tmp%0#2 c#0)
-        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%1#1)
-        let tmp%29#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%1#0)
-        (log tmp%29#0)
-        let tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#4: bool = 1u
-        goto block@16
-    block@10: // readonlyAlt_route_L23
-        let tmp%30#0: uint64 = (txn OnCompletion)
-        let tmp%31#0: bool = (! tmp%30#0)
-        (assert tmp%31#0) // OnCompletion is not NoOp
-        let tmp%32#0: uint64 = (txn ApplicationID)
-        (assert tmp%32#0) // can only call when not creating
+        let tmp%0#3: uint64 = (* a#0 b#0)
+        let tmp%1#3: uint64 = (+ tmp%0#3 c#0)
+        let aggregate%val_as_bytes%2#0: bytes[8] = (itob tmp%1#3)
+        let tmp%5#1: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%2#0)
+        (log tmp%5#1)
+        exit 1u
+    block@12: // readonlyAlt_route_L23
         (log 0x151f7c750000000000000001)
-        let tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#5: bool = 1u
-        goto block@16
-    block@11: // readonlyAlt2_route_L29
-        let tmp%37#0: uint64 = (txn OnCompletion)
-        let tmp%38#0: bool = (! tmp%37#0)
-        (assert tmp%38#0) // OnCompletion is not NoOp
-        (log 0x151f7c750000000000000002)
-        let tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#6: bool = 1u
-        goto block@16
-    block@15: // after_if_else_L4
-        let tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#7: bool = 0u
-        goto block@16
-    block@16: // after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#0 <- block@5, tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#1 <- block@6, tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#2 <- block@7, tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#3 <- block@8, tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#4 <- block@9, tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#5 <- block@10, tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#6 <- block@11, tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#7 <- block@15)
-        return tmp%0#0
+        exit 1u
+    block@14: // create_NoOp_L4
+        let tmp%9#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%9#0 {method "createMethod()void" => block@15, * => block@17}
+    block@15: // createMethod_route_L7
+        exit 1u
+    block@17: // after_if_else_L4
+        fail

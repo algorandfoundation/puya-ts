@@ -10,26 +10,22 @@ main:
     // tests/approvals/gtxns.algo.ts:16
     // export class GtxnsAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@11
+    bz main___algots__.defaultCreate@13
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
     pushbytess 0xa78000de 0xf1908524 // method "test()void", method "test2()void"
     bytec_0 // method "test3()void"
     pushbytess 0xedb4f973 0x13de6a54 0x7459fb1f // method "test4(appl)void", method "reflectAllPay(pay)(byte[32],uint64,uint64,uint64,uint64,byte[],byte[32],byte[],uint64,byte[32],byte[32],byte[32],uint64,byte[32])", method "test5(txn)uint64"
     txna ApplicationArgs 0
-    match main_test_route@3 main_test2_route@4 main_test3_route@5 main_test4_route@6 main_reflectAllPay_route@7 main_test5_route@8
-
-main_after_if_else@15:
+    match main_test_route@4 main_test2_route@5 main_test3_route@6 main_test4_route@7 main_reflectAllPay_route@8 main_test5_route@9
     err
 
-main_test5_route@8:
+main_test5_route@9:
     // tests/approvals/gtxns.algo.ts:80
     // test5(txn: gtxn.Transaction): uint64 {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/gtxns.algo.ts:16
-    // export class GtxnsAlgo extends Contract {
     txn GroupIndex
     intc_0 // 1
     -
@@ -40,12 +36,12 @@ main_test5_route@8:
     bury 2
     intc_0 // 1
     ==
-    bz main_else_body@21
+    bz main_else_body@18
     // tests/approvals/gtxns.algo.ts:82
     // return 1
     intc_0 // 1
 
-main_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.test5@24:
+main_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.test5@21:
     // tests/approvals/gtxns.algo.ts:80
     // test5(txn: gtxn.Transaction): uint64 {
     itob
@@ -56,7 +52,7 @@ main_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.test5@24:
     intc_0 // 1
     return
 
-main_else_body@21:
+main_else_body@18:
     // tests/approvals/gtxns.algo.ts:83
     // } else if (txn.type === TransactionType.AssetTransfer) {
     dup
@@ -68,18 +64,11 @@ main_else_body@21:
     intc_1 // 0
     // tests/approvals/gtxns.algo.ts:80
     // test5(txn: gtxn.Transaction): uint64 {
-    b main_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.test5@24
+    b main_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.test5@21
 
-main_reflectAllPay_route@7:
+main_reflectAllPay_route@8:
     // tests/approvals/gtxns.algo.ts:61
     // reflectAllPay(pay: gtxn.PaymentTxn) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/gtxns.algo.ts:16
-    // export class GtxnsAlgo extends Contract {
     txn GroupIndex
     intc_0 // 1
     -
@@ -230,16 +219,9 @@ main_reflectAllPay_route@7:
     intc_0 // 1
     return
 
-main_test4_route@6:
+main_test4_route@7:
     // tests/approvals/gtxns.algo.ts:53
     // test4(other: gtxn.ApplicationCallTxn) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/gtxns.algo.ts:16
-    // export class GtxnsAlgo extends Contract {
     txn GroupIndex
     intc_0 // 1
     -
@@ -280,20 +262,11 @@ main_test4_route@6:
     gtxns ApplicationID
     global CurrentApplicationID
     ==
-    assert
     // tests/approvals/gtxns.algo.ts:53
     // test4(other: gtxn.ApplicationCallTxn) {
-    intc_0 // 1
     return
 
-main_test3_route@5:
-    // tests/approvals/gtxns.algo.ts:47
-    // test3() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_test3_route@6:
     // tests/approvals/gtxns.algo.ts:48
     // assert(Txn.onCompletion === OnCompleteAction.NoOp, 'OCA must be NoOp')
     txn OnCompletion
@@ -314,14 +287,7 @@ main_test3_route@5:
     intc_0 // 1
     return
 
-main_test2_route@4:
-    // tests/approvals/gtxns.algo.ts:21
-    // test2() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_test2_route@5:
     // tests/approvals/gtxns.algo.ts:22
     // for (const i of urange(Global.groupSize)) {
     global GroupSize
@@ -329,12 +295,12 @@ main_test2_route@4:
     intc_1 // 0
     bury 2
 
-main_for_header@32:
+main_for_header@30:
     // tests/approvals/gtxns.algo.ts:22
     // for (const i of urange(Global.groupSize)) {
     dup2
     <
-    bz main_after_for@45
+    bz main_after_for@43
     // tests/approvals/gtxns.algo.ts:24
     // switch (txn.type) {
     dig 1
@@ -349,7 +315,7 @@ main_for_header@32:
     // case TransactionType.ApplicationCall:
     //   log(txn.appId.id)
     //   break
-    bz main_after_if_else@35
+    bz main_after_if_else@33
     // tests/approvals/gtxns.algo.ts:26
     // log(txn.appId.id)
     dig 1
@@ -357,16 +323,16 @@ main_for_header@32:
     itob
     log
 
-main_block@44:
+main_block@42:
     // tests/approvals/gtxns.algo.ts:22
     // for (const i of urange(Global.groupSize)) {
     dig 1
     intc_0 // 1
     +
     bury 2
-    b main_for_header@32
+    b main_for_header@30
 
-main_after_if_else@35:
+main_after_if_else@33:
     // tests/approvals/gtxns.algo.ts:28
     // case TransactionType.AssetTransfer:
     dig 2
@@ -376,7 +342,7 @@ main_after_if_else@35:
     // case TransactionType.AssetTransfer:
     //   log(txn.xferAsset.id)
     //   break
-    bz main_after_if_else@37
+    bz main_after_if_else@35
     // tests/approvals/gtxns.algo.ts:29
     // log(txn.xferAsset.id)
     dig 1
@@ -385,9 +351,9 @@ main_after_if_else@35:
     log
     // tests/approvals/gtxns.algo.ts:30
     // break
-    b main_block@44
+    b main_block@42
 
-main_after_if_else@37:
+main_after_if_else@35:
     // tests/approvals/gtxns.algo.ts:31
     // case TransactionType.AssetConfig:
     dig 2
@@ -397,7 +363,7 @@ main_after_if_else@37:
     // case TransactionType.AssetConfig:
     //   log(txn.configAsset.id)
     //   break
-    bz main_after_if_else@39
+    bz main_after_if_else@37
     // tests/approvals/gtxns.algo.ts:32
     // log(txn.configAsset.id)
     dig 1
@@ -406,9 +372,9 @@ main_after_if_else@37:
     log
     // tests/approvals/gtxns.algo.ts:33
     // break
-    b main_block@44
+    b main_block@42
 
-main_after_if_else@39:
+main_after_if_else@37:
     // tests/approvals/gtxns.algo.ts:34
     // case TransactionType.Payment:
     dig 2
@@ -418,7 +384,7 @@ main_after_if_else@39:
     // case TransactionType.Payment:
     //   log(txn.receiver)
     //   break
-    bz main_after_if_else@41
+    bz main_after_if_else@39
     // tests/approvals/gtxns.algo.ts:35
     // log(txn.receiver)
     dig 1
@@ -426,9 +392,9 @@ main_after_if_else@39:
     log
     // tests/approvals/gtxns.algo.ts:36
     // break
-    b main_block@44
+    b main_block@42
 
-main_after_if_else@41:
+main_after_if_else@39:
     // tests/approvals/gtxns.algo.ts:37
     // case TransactionType.KeyRegistration:
     dig 2
@@ -438,7 +404,7 @@ main_after_if_else@41:
     // case TransactionType.KeyRegistration:
     //   log(txn.voteKey)
     //   break
-    bz main_after_if_else@43
+    bz main_after_if_else@41
     // tests/approvals/gtxns.algo.ts:38
     // log(txn.voteKey)
     dig 1
@@ -446,9 +412,9 @@ main_after_if_else@41:
     log
     // tests/approvals/gtxns.algo.ts:39
     // break
-    b main_block@44
+    b main_block@42
 
-main_after_if_else@43:
+main_after_if_else@41:
     // tests/approvals/gtxns.algo.ts:41
     // log(txn.freezeAsset.id)
     dig 1
@@ -457,22 +423,15 @@ main_after_if_else@43:
     log
     // tests/approvals/gtxns.algo.ts:42
     // break
-    b main_block@44
+    b main_block@42
 
-main_after_for@45:
+main_after_for@43:
     // tests/approvals/gtxns.algo.ts:21
     // test2() {
     intc_0 // 1
     return
 
-main_test_route@3:
-    // tests/approvals/gtxns.algo.ts:17
-    // test() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_test_route@4:
     // tests/approvals/gtxns.algo.ts:18
     // assert(gtxn.PaymentTxn(0).amount > 0)
     intc_1 // 0
@@ -482,19 +441,16 @@ main_test_route@3:
     assert // transaction type is pay
     intc_1 // 0
     gtxns Amount
-    assert
     // tests/approvals/gtxns.algo.ts:17
     // test() {
-    intc_0 // 1
     return
 
-main_bare_routing@11:
+main___algots__.defaultCreate@13:
     // tests/approvals/gtxns.algo.ts:16
     // export class GtxnsAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@15
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_0 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

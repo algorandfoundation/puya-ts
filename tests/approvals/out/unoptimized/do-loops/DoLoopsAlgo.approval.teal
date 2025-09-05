@@ -5,7 +5,6 @@
 main:
     intcblock 0 1
     bytecblock 0x151f7c75
-    pushbytes ""
     b main_block@0
 
 main_block@0:
@@ -17,10 +16,23 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@8
+    bz main___algots__.defaultCreate@10
     b main_abi_routing@2
 
 main_abi_routing@2:
+    // tests/approvals/do-loops.algo.ts:4
+    // export class DoLoopsAlgo extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@8
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
     // tests/approvals/do-loops.algo.ts:4
     // export class DoLoopsAlgo extends Contract {
     txna ApplicationArgs 0
@@ -28,161 +40,141 @@ main_abi_routing@2:
     pushbytes 0xace2eb21 // method "testDoBreak(uint64,uint64)uint64"
     pushbytes 0x78e8d516 // method "testDoContinue(uint64,uint64)uint64"
     uncover 3
-    match main_testDo_route@3 main_testDoBreak_route@4 main_testDoContinue_route@5
-    b main_switch_case_default@6
-
-main_switch_case_default@6:
+    match main_testDo_route@4 main_testDoBreak_route@5 main_testDoContinue_route@6
     b main_switch_case_next@7
 
 main_switch_case_next@7:
-    b main_after_if_else@12
+    b main_after_if_else@9
 
-main_after_if_else@12:
+main_after_if_else@9:
+    b main_after_if_else@11
+
+main_after_if_else@11:
     // tests/approvals/do-loops.algo.ts:4
     // export class DoLoopsAlgo extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/do-loops.algo.ts::DoLoopsAlgo.__puya_arc4_router__@13
+    err
 
-main_after_inlined_tests/approvals/do-loops.algo.ts::DoLoopsAlgo.__puya_arc4_router__@13:
-    return
-
-main_testDoContinue_route@5:
-    // tests/approvals/do-loops.algo.ts:23
-    // testDoContinue(stop: uint64, mod: uint64) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/do-loops.algo.ts:4
-    // export class DoLoopsAlgo extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    txna ApplicationArgs 2
-    btoi
+main_testDoContinue_route@6:
     // tests/approvals/do-loops.algo.ts:23
     // testDoContinue(stop: uint64, mod: uint64) {
     callsub testDoContinue
+    b main_switch_case_next@7
+
+main_testDoBreak_route@5:
+    // tests/approvals/do-loops.algo.ts:12
+    // testDoBreak(stop: uint64, breakMod: uint64) {
+    callsub testDoBreak
+    b main_switch_case_next@7
+
+main_testDo_route@4:
+    // tests/approvals/do-loops.algo.ts:5
+    // testDo(stop: uint64) {
+    callsub testDo
+    b main_switch_case_next@7
+
+main_create_NoOp@8:
+    b main_after_if_else@9
+
+main___algots__.defaultCreate@10:
+    // tests/approvals/do-loops.algo.ts:4
+    // export class DoLoopsAlgo extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo[routing]() -> void:
+testDo:
+    b testDo_block@0
+
+testDo_block@0:
+    // tests/approvals/do-loops.algo.ts:5
+    // testDo(stop: uint64) {
+    txna ApplicationArgs 1
+    btoi
+    callsub tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo
     itob
     bytec_0 // 0x151f7c75
     uncover 1
     concat
     log
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/do-loops.algo.ts::DoLoopsAlgo.__puya_arc4_router__@13
+    return
 
-main_testDoBreak_route@4:
+
+// tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak[routing]() -> void:
+testDoBreak:
+    b testDoBreak_block@0
+
+testDoBreak_block@0:
     // tests/approvals/do-loops.algo.ts:12
     // testDoBreak(stop: uint64, breakMod: uint64) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/do-loops.algo.ts:4
-    // export class DoLoopsAlgo extends Contract {
     txna ApplicationArgs 1
     btoi
     txna ApplicationArgs 2
     btoi
-    // tests/approvals/do-loops.algo.ts:12
-    // testDoBreak(stop: uint64, breakMod: uint64) {
-    callsub testDoBreak
+    callsub tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak
     itob
     bytec_0 // 0x151f7c75
     uncover 1
     concat
     log
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/do-loops.algo.ts::DoLoopsAlgo.__puya_arc4_router__@13
+    return
 
-main_testDo_route@3:
-    // tests/approvals/do-loops.algo.ts:5
-    // testDo(stop: uint64) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/do-loops.algo.ts:4
-    // export class DoLoopsAlgo extends Contract {
+
+// tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue[routing]() -> void:
+testDoContinue:
+    b testDoContinue_block@0
+
+testDoContinue_block@0:
+    // tests/approvals/do-loops.algo.ts:23
+    // testDoContinue(stop: uint64, mod: uint64) {
     txna ApplicationArgs 1
     btoi
-    // tests/approvals/do-loops.algo.ts:5
-    // testDo(stop: uint64) {
-    callsub testDo
+    txna ApplicationArgs 2
+    btoi
+    callsub tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue
     itob
     bytec_0 // 0x151f7c75
     uncover 1
     concat
     log
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/do-loops.algo.ts::DoLoopsAlgo.__puya_arc4_router__@13
-
-main_bare_routing@8:
-    // tests/approvals/do-loops.algo.ts:4
-    // export class DoLoopsAlgo extends Contract {
-    txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@9
-    b main_switch_case_default@10
-
-main_switch_case_default@10:
-    b main_switch_case_next@11
-
-main_switch_case_next@11:
-    b main_after_if_else@12
-
-main___algots__.defaultCreate@9:
-    // tests/approvals/do-loops.algo.ts:4
-    // export class DoLoopsAlgo extends Contract {
-    txn ApplicationID
-    intc_0 // 0
-    ==
-    assert // can only call when creating
-    callsub __algots__.defaultCreate
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/do-loops.algo.ts::DoLoopsAlgo.__puya_arc4_router__@13
+    return
 
 
 // tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo(stop: uint64) -> uint64:
-testDo:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo:
     // tests/approvals/do-loops.algo.ts:5
     // testDo(stop: uint64) {
     proto 1 1
-    b testDo_block@0
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_block@0
 
-testDo_block@0:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_block@0:
     // tests/approvals/do-loops.algo.ts:6
     // let i = Uint64(0)
     intc_0 // 0
-    b testDo_while_top@1
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_while_top@1
 
-testDo_while_top@1:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_while_top@1:
     // tests/approvals/do-loops.algo.ts:7-9
     // do {
     //   i += 1
     // } while (i < stop)
     intc_1 // 1
-    bz testDo_after_while@5
-    b testDo_while_body@2
+    bz tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_after_while@5
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_while_body@2
 
-testDo_while_body@2:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_while_body@2:
     // tests/approvals/do-loops.algo.ts:8
     // i += 1
     frame_dig 0
@@ -194,47 +186,47 @@ testDo_while_body@2:
     // } while (i < stop)
     frame_dig -1
     <
-    bnz testDo_after_if_else@4
-    b testDo_if_body@3
+    bnz tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_after_if_else@4
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_if_body@3
 
-testDo_if_body@3:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_if_body@3:
     // tests/approvals/do-loops.algo.ts:7-9
     // do {
     //   i += 1
     // } while (i < stop)
-    b testDo_block@6
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_block@6
 
-testDo_block@6:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_block@6:
     // tests/approvals/do-loops.algo.ts:10
     // return i
     frame_dig 0
     uncover 1
     retsub
 
-testDo_after_if_else@4:
-    b testDo_while_top@1
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_after_if_else@4:
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_while_top@1
 
-testDo_after_while@5:
-    b testDo_block@6
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_after_while@5:
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDo_block@6
 
 
 // tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak(stop: uint64, breakMod: uint64) -> uint64:
-testDoBreak:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak:
     // tests/approvals/do-loops.algo.ts:12
     // testDoBreak(stop: uint64, breakMod: uint64) {
     proto 2 1
-    b testDoBreak_block@0
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_block@0
 
-testDoBreak_block@0:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_block@0:
     // tests/approvals/do-loops.algo.ts:13
     // let total = Uint64(0)
     intc_0 // 0
     // tests/approvals/do-loops.algo.ts:14
     // let i = Uint64(0)
     intc_0 // 0
-    b testDoBreak_while_top@1
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_while_top@1
 
-testDoBreak_while_top@1:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_while_top@1:
     // tests/approvals/do-loops.algo.ts:15-20
     // do {
     //   if (i > 0 && i % breakMod === 0) break
@@ -243,19 +235,19 @@ testDoBreak_while_top@1:
     //   total += i
     // } while (i < stop)
     intc_1 // 1
-    bz testDoBreak_after_while@8
-    b testDoBreak_while_body@2
+    bz tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_after_while@8
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_while_body@2
 
-testDoBreak_while_body@2:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_while_body@2:
     // tests/approvals/do-loops.algo.ts:16
     // if (i > 0 && i % breakMod === 0) break
     frame_dig 1
     intc_0 // 0
     >
-    bz testDoBreak_after_if_else@5
-    b testDoBreak_and_contd@3
+    bz tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_after_if_else@5
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_and_contd@3
 
-testDoBreak_and_contd@3:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_and_contd@3:
     // tests/approvals/do-loops.algo.ts:16
     // if (i > 0 && i % breakMod === 0) break
     frame_dig 1
@@ -263,20 +255,20 @@ testDoBreak_and_contd@3:
     %
     intc_0 // 0
     ==
-    bz testDoBreak_after_if_else@5
-    b testDoBreak_if_body@4
+    bz tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_after_if_else@5
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_if_body@4
 
-testDoBreak_if_body@4:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_if_body@4:
     // tests/approvals/do-loops.algo.ts:16
     // if (i > 0 && i % breakMod === 0) break
-    b testDoBreak_block@9
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_block@9
 
-testDoBreak_block@9:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_block@9:
     // tests/approvals/do-loops.algo.ts:21
     // return total
     retsub
 
-testDoBreak_after_if_else@5:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_after_if_else@5:
     // tests/approvals/do-loops.algo.ts:18
     // i += 1
     frame_dig 1
@@ -294,10 +286,10 @@ testDoBreak_after_if_else@5:
     // } while (i < stop)
     frame_dig -2
     <
-    bnz testDoBreak_after_if_else@7
-    b testDoBreak_if_body@6
+    bnz tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_after_if_else@7
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_if_body@6
 
-testDoBreak_if_body@6:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_if_body@6:
     // tests/approvals/do-loops.algo.ts:15-20
     // do {
     //   if (i > 0 && i % breakMod === 0) break
@@ -305,32 +297,32 @@ testDoBreak_if_body@6:
     //   i += 1
     //   total += i
     // } while (i < stop)
-    b testDoBreak_block@9
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_block@9
 
-testDoBreak_after_if_else@7:
-    b testDoBreak_while_top@1
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_after_if_else@7:
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_while_top@1
 
-testDoBreak_after_while@8:
-    b testDoBreak_block@9
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_after_while@8:
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoBreak_block@9
 
 
 // tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue(stop: uint64, mod: uint64) -> uint64:
-testDoContinue:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue:
     // tests/approvals/do-loops.algo.ts:23
     // testDoContinue(stop: uint64, mod: uint64) {
     proto 2 1
-    b testDoContinue_block@0
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_block@0
 
-testDoContinue_block@0:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_block@0:
     // tests/approvals/do-loops.algo.ts:24
     // let i = Uint64(0)
     intc_0 // 0
     // tests/approvals/do-loops.algo.ts:25
     // let total = Uint64(0)
     intc_0 // 0
-    b testDoContinue_while_top@1
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_while_top@1
 
-testDoContinue_while_top@1:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_while_top@1:
     // tests/approvals/do-loops.algo.ts:26-34
     // do {
     //   if (i > 0 && i % mod === 0) {
@@ -342,19 +334,19 @@ testDoContinue_while_top@1:
     //   i += 1
     // } while (i < stop)
     intc_1 // 1
-    bz testDoContinue_after_while@9
-    b testDoContinue_while_body@2
+    bz tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_after_while@9
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_while_body@2
 
-testDoContinue_while_body@2:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_while_body@2:
     // tests/approvals/do-loops.algo.ts:27
     // if (i > 0 && i % mod === 0) {
     frame_dig 0
     intc_0 // 0
     >
-    bz testDoContinue_after_if_else@5
-    b testDoContinue_and_contd@3
+    bz tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_after_if_else@5
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_and_contd@3
 
-testDoContinue_and_contd@3:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_and_contd@3:
     // tests/approvals/do-loops.algo.ts:27
     // if (i > 0 && i % mod === 0) {
     frame_dig 0
@@ -362,10 +354,10 @@ testDoContinue_and_contd@3:
     %
     intc_0 // 0
     ==
-    bz testDoContinue_after_if_else@5
-    b testDoContinue_if_body@4
+    bz tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_after_if_else@5
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_if_body@4
 
-testDoContinue_if_body@4:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_if_body@4:
     // tests/approvals/do-loops.algo.ts:28
     // total += 2
     frame_dig 1
@@ -380,18 +372,18 @@ testDoContinue_if_body@4:
     frame_bury 0
     // tests/approvals/do-loops.algo.ts:30
     // continue
-    b testDoContinue_block@6
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_block@6
 
-testDoContinue_block@6:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_block@6:
     // tests/approvals/do-loops.algo.ts:34
     // } while (i < stop)
     frame_dig 0
     frame_dig -2
     <
-    bnz testDoContinue_after_if_else@8
-    b testDoContinue_if_body@7
+    bnz tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_after_if_else@8
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_if_body@7
 
-testDoContinue_if_body@7:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_if_body@7:
     // tests/approvals/do-loops.algo.ts:26-34
     // do {
     //   if (i > 0 && i % mod === 0) {
@@ -402,19 +394,19 @@ testDoContinue_if_body@7:
     //   total += 1
     //   i += 1
     // } while (i < stop)
-    b testDoContinue_block@10
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_block@10
 
-testDoContinue_block@10:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_block@10:
     // tests/approvals/do-loops.algo.ts:35
     // return total
     frame_dig 1
     frame_bury 0
     retsub
 
-testDoContinue_after_if_else@8:
-    b testDoContinue_while_top@1
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_after_if_else@8:
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_while_top@1
 
-testDoContinue_after_if_else@5:
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_after_if_else@5:
     // tests/approvals/do-loops.algo.ts:32
     // total += 1
     frame_dig 1
@@ -427,10 +419,10 @@ testDoContinue_after_if_else@5:
     intc_1 // 1
     +
     frame_bury 0
-    b testDoContinue_block@6
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_block@6
 
-testDoContinue_after_while@9:
-    b testDoContinue_block@10
+tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_after_while@9:
+    b tests/approvals/do-loops.algo.ts::DoLoopsAlgo.testDoContinue_block@10
 
 
 // tests/approvals/do-loops.algo.ts::DoLoopsAlgo.__algots__.defaultCreate() -> void:

@@ -4,7 +4,6 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1
-    pushbytes ""
     b main_block@0
 
 main_block@0:
@@ -16,7 +15,7 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     b main_abi_routing@2
 
 main_abi_routing@2:
@@ -26,23 +25,15 @@ main_abi_routing@2:
     pushbytes 0x28a52d73 // method "testWhile(uint64)uint64"
     uncover 1
     match main_testWhile_route@3
-    b main_switch_case_default@4
+    b main_switch_case_next@4
 
-main_switch_case_default@4:
-    b main_switch_case_next@5
+main_switch_case_next@4:
+    b main_after_if_else@6
 
-main_switch_case_next@5:
-    b main_after_if_else@10
-
-main_after_if_else@10:
+main_after_if_else@6:
     // tests/approvals/while-loops.algo.ts:4
     // class DemoContract extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/while-loops.algo.ts::DemoContract.__puya_arc4_router__@11
-
-main_after_inlined_tests/approvals/while-loops.algo.ts::DemoContract.__puya_arc4_router__@11:
-    return
+    err
 
 main_testWhile_route@3:
     // tests/approvals/while-loops.algo.ts:5
@@ -50,69 +41,63 @@ main_testWhile_route@3:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
     txn ApplicationID
     intc_0 // 0
     !=
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    callsub testWhile
+    b main_switch_case_next@4
+
+main___algots__.defaultCreate@5:
     // tests/approvals/while-loops.algo.ts:4
     // class DemoContract extends Contract {
-    txna ApplicationArgs 1
-    btoi
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/while-loops.algo.ts::DemoContract.testWhile[routing]() -> void:
+testWhile:
+    b testWhile_block@0
+
+testWhile_block@0:
     // tests/approvals/while-loops.algo.ts:5
     // public testWhile(stop: uint64) {
-    callsub testWhile
+    txna ApplicationArgs 1
+    btoi
+    callsub tests/approvals/while-loops.algo.ts::DemoContract.testWhile
     itob
     pushbytes 0x151f7c75
     uncover 1
     concat
     log
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/while-loops.algo.ts::DemoContract.__puya_arc4_router__@11
-
-main_bare_routing@6:
-    // tests/approvals/while-loops.algo.ts:4
-    // class DemoContract extends Contract {
-    txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@7
-    b main_switch_case_default@8
-
-main_switch_case_default@8:
-    b main_switch_case_next@9
-
-main_switch_case_next@9:
-    b main_after_if_else@10
-
-main___algots__.defaultCreate@7:
-    // tests/approvals/while-loops.algo.ts:4
-    // class DemoContract extends Contract {
-    txn ApplicationID
-    intc_0 // 0
-    ==
-    assert // can only call when creating
-    callsub __algots__.defaultCreate
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/while-loops.algo.ts::DemoContract.__puya_arc4_router__@11
+    return
 
 
 // tests/approvals/while-loops.algo.ts::DemoContract.testWhile(stop: uint64) -> uint64:
-testWhile:
+tests/approvals/while-loops.algo.ts::DemoContract.testWhile:
     // tests/approvals/while-loops.algo.ts:5
     // public testWhile(stop: uint64) {
     proto 1 1
-    b testWhile_block@0
+    b tests/approvals/while-loops.algo.ts::DemoContract.testWhile_block@0
 
-testWhile_block@0:
+tests/approvals/while-loops.algo.ts::DemoContract.testWhile_block@0:
     // tests/approvals/while-loops.algo.ts:6
     // let i = Uint64(0)
     intc_0 // 0
-    b testWhile_while_top@1
+    b tests/approvals/while-loops.algo.ts::DemoContract.testWhile_while_top@1
 
-testWhile_while_top@1:
+tests/approvals/while-loops.algo.ts::DemoContract.testWhile_while_top@1:
     // tests/approvals/while-loops.algo.ts:7
     // while (i < stop) {
     frame_dig 0
@@ -122,19 +107,19 @@ testWhile_while_top@1:
     // while (i < stop) {
     //   i += 1
     // }
-    bz testWhile_after_while@3
-    b testWhile_while_body@2
+    bz tests/approvals/while-loops.algo.ts::DemoContract.testWhile_after_while@3
+    b tests/approvals/while-loops.algo.ts::DemoContract.testWhile_while_body@2
 
-testWhile_while_body@2:
+tests/approvals/while-loops.algo.ts::DemoContract.testWhile_while_body@2:
     // tests/approvals/while-loops.algo.ts:8
     // i += 1
     frame_dig 0
     intc_1 // 1
     +
     frame_bury 0
-    b testWhile_while_top@1
+    b tests/approvals/while-loops.algo.ts::DemoContract.testWhile_while_top@1
 
-testWhile_after_while@3:
+tests/approvals/while-loops.algo.ts::DemoContract.testWhile_after_while@3:
     // tests/approvals/while-loops.algo.ts:11
     // return i
     frame_dig 0

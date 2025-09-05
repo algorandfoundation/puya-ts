@@ -106,13 +106,13 @@ export class MutableObjectDemo extends Contract {
 
   public getPlugin(key: string): PluginInfo {
     const value = clone(this.plugins(key).value)
-    assert(value.lastCalled.native > 0, 'Last called not zero')
+    assert(value.lastCalled.asUint64() > 0, 'Last called not zero')
     return value
   }
 
   public getMain() {
     const value = clone(this.plugin.value)
-    assert(value.lastCalled.native > 0, 'Last called not zero')
+    assert(value.lastCalled.asUint64() > 0, 'Last called not zero')
     return value
   }
 

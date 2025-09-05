@@ -4,94 +4,85 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@1: // L13
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
-        goto tmp%1#0 ? block@2 : block@11
+        goto tmp%1#0 ? block@2 : block@13
     block@2: // abi_routing_L13
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "test_compile_contract()void" => block@3, method "test_compile_contract_with_template()void" => block@4, method "test_compile_contract_with_template_and_custom_prefix()void" => block@5, method "test_compile_contract_large()void" => block@6, method "test_call_contract_with_transactions()void" => block@7, method "test_call_contract_with_reference_types()void" => block@8, * => block@9}
-    block@3: // test_compile_contract_route_L14
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (== tmp%3#0 NoOp)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        let tmp%6#0: bool = (!= tmp%5#0 0u)
-        (assert tmp%6#0) // can only call when not creating
-        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract()
-        let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#0: bool = 1u
-        goto block@16
-    block@4: // test_compile_contract_with_template_route_L56
-        let tmp%7#0: uint64 = (txn OnCompletion)
-        let tmp%8#0: bool = (== tmp%7#0 NoOp)
-        (assert tmp%8#0) // OnCompletion is not NoOp
-        let tmp%9#0: uint64 = (txn ApplicationID)
-        let tmp%10#0: bool = (!= tmp%9#0 0u)
-        (assert tmp%10#0) // can only call when not creating
-        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_with_template()
-        let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#1: bool = 1u
-        goto block@16
-    block@5: // test_compile_contract_with_template_and_custom_prefix_route_L81
-        let tmp%11#0: uint64 = (txn OnCompletion)
-        let tmp%12#0: bool = (== tmp%11#0 NoOp)
-        (assert tmp%12#0) // OnCompletion is not NoOp
-        let tmp%13#0: uint64 = (txn ApplicationID)
-        let tmp%14#0: bool = (!= tmp%13#0 0u)
-        (assert tmp%14#0) // can only call when not creating
-        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix()
-        let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#2: bool = 1u
-        goto block@16
-    block@6: // test_compile_contract_large_route_L98
-        let tmp%15#0: uint64 = (txn OnCompletion)
-        let tmp%16#0: bool = (== tmp%15#0 NoOp)
-        (assert tmp%16#0) // OnCompletion is not NoOp
-        let tmp%17#0: uint64 = (txn ApplicationID)
-        let tmp%18#0: bool = (!= tmp%17#0 0u)
-        (assert tmp%18#0) // can only call when not creating
-        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_large()
-        let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#3: bool = 1u
-        goto block@16
-    block@7: // test_call_contract_with_transactions_route_L114
-        let tmp%19#0: uint64 = (txn OnCompletion)
-        let tmp%20#0: bool = (== tmp%19#0 NoOp)
-        (assert tmp%20#0) // OnCompletion is not NoOp
-        let tmp%21#0: uint64 = (txn ApplicationID)
-        let tmp%22#0: bool = (!= tmp%21#0 0u)
-        (assert tmp%22#0) // can only call when not creating
-        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_transactions()
-        let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#4: bool = 1u
-        goto block@16
-    block@8: // test_call_contract_with_reference_types_route_L157
-        let tmp%23#0: uint64 = (txn OnCompletion)
-        let tmp%24#0: bool = (== tmp%23#0 NoOp)
-        (assert tmp%24#0) // OnCompletion is not NoOp
-        let tmp%25#0: uint64 = (txn ApplicationID)
-        let tmp%26#0: bool = (!= tmp%25#0 0u)
-        (assert tmp%26#0) // can only call when not creating
-        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_reference_types()
-        let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#5: bool = 1u
-        goto block@16
-    block@9: // switch_case_default_L13
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@3 : block@11
+    block@3: // call_NoOp_L13
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "test_compile_contract()void" => block@4, method "test_compile_contract_with_template()void" => block@5, method "test_compile_contract_with_template_and_custom_prefix()void" => block@6, method "test_compile_contract_large()void" => block@7, method "test_call_contract_with_transactions()void" => block@8, method "test_call_contract_with_reference_types()void" => block@9, * => block@10}
+    block@4: // test_compile_contract_route_L14
+        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract[routing]()
+        goto block@10
+    block@5: // test_compile_contract_with_template_route_L56
+        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_with_template[routing]()
+        goto block@10
+    block@6: // test_compile_contract_with_template_and_custom_prefix_route_L81
+        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix[routing]()
+        goto block@10
+    block@7: // test_compile_contract_large_route_L98
+        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_large[routing]()
+        goto block@10
+    block@8: // test_call_contract_with_transactions_route_L114
+        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_transactions[routing]()
+        goto block@10
+    block@9: // test_call_contract_with_reference_types_route_L157
+        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_reference_types[routing]()
         goto block@10
     block@10: // switch_case_next_L13
-        goto block@15
-    block@11: // bare_routing_L13
-        let tmp%27#0: uint64 = (txn OnCompletion)
-        switch tmp%27#0 {0u => block@12, * => block@13}
-    block@12: // __algots__.defaultCreate_L13
-        let tmp%28#0: uint64 = (txn ApplicationID)
-        let tmp%29#0: bool = (== tmp%28#0 0u)
-        (assert tmp%29#0) // can only call when creating
-        tests/approvals/precompiled-typed.algo.ts::HelloFactory.__algots__.defaultCreate()
-        let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#6: bool = 1u
-        goto block@16
-    block@13: // switch_case_default_L13
+        goto block@12
+    block@11: // create_NoOp_L13
+        goto block@12
+    block@12: // after_if_else_L13
         goto block@14
-    block@14: // switch_case_next_L13
-        goto block@15
-    block@15: // after_if_else_L13
-        let tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#7: bool = 0u
-        goto block@16
-    block@16: // after_inlined_tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#0 <- block@3, tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#1 <- block@4, tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#2 <- block@5, tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#3 <- block@6, tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#4 <- block@7, tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#5 <- block@8, tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#6 <- block@12, tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router__%0#7 <- block@15)
+    block@13: // __algots__.defaultCreate_L13
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/precompiled-typed.algo.ts::HelloFactory.__algots__.defaultCreate()
+        exit 1u
+    block@14: // after_if_else_L13
+        exit 0u
+    block@15: // after_inlined_tests/approvals/precompiled-typed.algo.ts::HelloFactory.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
         return tmp%0#0
+
+subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract[routing]() -> void:
+    block@0: // L14
+        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract()
+        exit 1u
+
+subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_with_template[routing]() -> void:
+    block@0: // L56
+        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_with_template()
+        exit 1u
+
+subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix[routing]() -> void:
+    block@0: // L81
+        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix()
+        exit 1u
+
+subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_large[routing]() -> void:
+    block@0: // L98
+        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_large()
+        exit 1u
+
+subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_transactions[routing]() -> void:
+    block@0: // L114
+        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_transactions()
+        exit 1u
+
+subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_reference_types[routing]() -> void:
+    block@0: // L157
+        tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_reference_types()
+        exit 1u
 
 subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract() -> void:
     block@0: // L14
@@ -112,7 +103,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         ((itxn_field GlobalNumUint) 0u)
         ((itxn_field ClearStateProgramPages) CkIAAIEBQw==)
         (itxn_field ClearStateProgramPages)
-        ((itxn_field ApprovalProgramPages) CiADAAECJgQACGdyZWV0aW5nBBUffHUBIChCAAAxGEAACUIAAIgBO0IAAEIAADEbIhNBAM5CAAA2GgCABACSJa6ABCQ3jTyABKDoGHKABNCiggCABFGAuiBPBY4FAIMAbwBbADQAEEIAAEIAAEIAACJFAUIAAEMxGSISRDEYIhNENhoBiACmSRUWVwYCTwFQKk8BULAjRQFC/9sxGSISRDEYIhNENhoBVwIAiABrSRUWVwYCTwFQKk8BULAjRQFC/7QxGYEEEkQxGCITRIgARSNFAUL/oDEZgQUSRDEYIhNEiAAtI0UBQv+MMRkiEkQxGCISRDYaAVcCAIgACSNFAUL/c0L/aooBAEIAACmL/2eJQgAAiUIAAImKAQFCAAAiKWVEKE8BUCtQi/9QiYoBAUIAACIpZUQoTwFQK1CL/yJZi/8kWYv/TwJPAlJXAgBQi/8kWYv/FYv/TwJPAlJXAgBQiUIAAEIAAEIAACkoZ4k=)
+        ((itxn_field ApprovalProgramPages) CiADAAECJgQIZ3JlZXRpbmcABBUffHUBIEIAADEYQAAJQgAAiAFGQgAAQgAANhoAgAQkN408gASg6BhyTwKOAgBoAFdCAAAxGSISRDEYIhNBAC1CAAA2GgCABNCiggCABFGAuiBPAo4CAA0AB0IAAEIAAACIAIBC//aIAF5C//A2GgCABACSJa5PAY4BAAZCAABC/96IACVC//cxGYEEEjEYIhMQRIgAKkL/mzEZgQUSMRgiExBEiAARQv+KQgAANhoBVwIAiABHI0NCAACIAEojQ0IAAIgARiNDQgAANhoBVwIAiAA8SRUWVwYCTwFQKk8BULAjQ0IAADYaAYgAN0kVFlcGAk8BUCpPAVCwI0OKAQBCAAAoi/9niUIAAIlCAACJigEBQgAAIihlRClPAVArUIv/UImKAQFCAAAiKGVEKU8BUCtQi/8iWYv/JFmL/08CTwJSVwIAUIv/JFmL/xWL/08CTwJSVwIAUIlCAABCAABCAAAoKWeJ)
         (itxn_field ApprovalProgramPages)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
@@ -283,7 +274,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         ((itxn_field GlobalNumUint) 0u)
         ((itxn_field ClearStateProgramPages) CkIAAIEBQw==)
         (itxn_field ClearStateProgramPages)
-        ((itxn_field ApprovalProgramPages) CiADAAECJgUACGdyZWV0aW5nBBUffHUBIANoZXkoQgAAMRhAAAlCAACIAS5CAABCAAAxGyITQQDIQgAANhoAgARMXGG6gAQkN408gASg6BhygATQooIAgARRgLogTwWOBQCDAG8AWwA0ABBCAABCAABCAAAiRQFCAABDMRkiEkQxGCITRDYaAYgAmUkVFlcGAk8BUCpPAVCwI0UBQv/bMRkiEkQxGCITRDYaAVcCAIgAXkkVFlcGAk8BUCpPAVCwI0UBQv+0MRmBBBJEMRgiE0SIADgjRQFC/6AxGYEFEkQxGCITRIgAICNFAUL/jDEZIhJEMRgiEkSIAAkjRQFC/3lC/3BCAACJQgAAiUIAAImKAQFCAAAiKWVEKE8BUCtQi/9QiYoBAUIAACIpZUQoTwFQK1CL/yJZi/8kWYv/TwJPAlJXAgBQi/8kWYv/FYv/TwJPAlJXAgBQiUIAAIgABSknBGeJQgAAQgAAQgAAKShniQ==)
+        ((itxn_field ApprovalProgramPages) CiADAAECJgUIZ3JlZXRpbmcABBUffHUBIANoZXlCAAAxGEAACUIAAIgBOUIAAEIAADYaAIAEJDeNPIAEoOgYck8CjgIAaABXQgAAMRkiEkQxGCITQQAtQgAANhoAgATQooIAgARRgLogTwKOAgANAAdCAABCAAAAiAB6Qv/2iABYQv/wNhoAgARMXGG6TwGOAQAGQgAAQv/eiAAlQv/3MRmBBBIxGCITEESIACRC/5sxGYEFEjEYIhMQRIgAC0L/ikIAAIgARyNDQgAAiABDI0NCAACIAD8jQ0IAADYaAVcCAIgANUkVFlcGAk8BUCpPAVCwI0NCAAA2GgGIADBJFRZXBgJPAVAqTwFQsCNDQgAAiUIAAIlCAACJigEBQgAAIihlRClPAVArUIv/UImKAQFCAAAiKGVEKU8BUCtQi/8iWYv/JFmL/08CTwJSVwIAUIv/JFmL/xWL/08CTwJSVwIAUIlCAACIAAUoJwRniUIAAEIAAEIAACgpZ4k=)
         (itxn_field ApprovalProgramPages)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
@@ -420,7 +411,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         ((itxn_field GlobalNumUint) 0u)
         ((itxn_field ClearStateProgramPages) CkIAAIEBQw==)
         (itxn_field ClearStateProgramPages)
-        ((itxn_field ApprovalProgramPages) CiADAAECJgUACGdyZWV0aW5nBBUffHUBIAdib25qb3VyKEIAADEYQAAJQgAAiAEuQgAAQgAAMRsiE0EAyEIAADYaAIAETFxhuoAEJDeNPIAEoOgYcoAE0KKCAIAEUYC6IE8FjgUAgwBvAFsANAAQQgAAQgAAQgAAIkUBQgAAQzEZIhJEMRgiE0Q2GgGIAJlJFRZXBgJPAVAqTwFQsCNFAUL/2zEZIhJEMRgiE0Q2GgFXAgCIAF5JFRZXBgJPAVAqTwFQsCNFAUL/tDEZgQQSRDEYIhNEiAA4I0UBQv+gMRmBBRJEMRgiE0SIACAjRQFC/4wxGSISRDEYIhJEiAAJI0UBQv95Qv9wQgAAiUIAAIlCAACJigEBQgAAIillRChPAVArUIv/UImKAQFCAAAiKWVEKE8BUCtQi/8iWYv/JFmL/08CTwJSVwIAUIv/JFmL/xWL/08CTwJSVwIAUIlCAACIAAUpJwRniUIAAEIAAEIAACkoZ4k=)
+        ((itxn_field ApprovalProgramPages) CiADAAECJgUIZ3JlZXRpbmcABBUffHUBIAdib25qb3VyQgAAMRhAAAlCAACIATlCAABCAAA2GgCABCQ3jTyABKDoGHJPAo4CAGgAV0IAADEZIhJEMRgiE0EALUIAADYaAIAE0KKCAIAEUYC6IE8CjgIADQAHQgAAQgAAAIgAekL/9ogAWEL/8DYaAIAETFxhuk8BjgEABkIAAEL/3ogAJUL/9zEZgQQSMRgiExBEiAAkQv+bMRmBBRIxGCITEESIAAtC/4pCAACIAEcjQ0IAAIgAQyNDQgAAiAA/I0NCAAA2GgFXAgCIADVJFRZXBgJPAVAqTwFQsCNDQgAANhoBiAAwSRUWVwYCTwFQKk8BULAjQ0IAAIlCAACJQgAAiYoBAUIAACIoZUQpTwFQK1CL/1CJigEBQgAAIihlRClPAVArUIv/IlmL/yRZi/9PAk8CUlcCAFCL/yRZi/8Vi/9PAk8CUlcCAFCJQgAAiAAFKCcEZ4lCAABCAABCAAAoKWeJ)
         (itxn_field ApprovalProgramPages)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
@@ -480,7 +471,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         ((itxn_field GlobalNumUint) 0u)
         ((itxn_field ClearStateProgramPages) CkIAAIEBQw==)
         (itxn_field ClearStateProgramPages)
-        ((itxn_field ApprovalProgramPages) CiACAAGAAEIAAEIAADEbIhNBAFxCAAA2GgCABAK/MM+ABCQ3jTxPAo4CACQAEEIAAEIAAEIAACJFAUIAAEMxGYEFEkQxGCITRIgAVCNFAUL/6zEZIhJEMRgiE0SIADkWgAQVH3x1TwFQsCNFAUL/zTEZIk8BjgEACUIAAEIAAEL/tTEYIhJEiAAaI0UBQv+tQgAAgYAgr4lCAACI//IViUIAAIlCAACJ)
+        ((itxn_field ApprovalProgramPages) CiACAAFCAABCAAAxGyITQQBCQgAANhoAgAQkN408gAQCvzDPTwKOAgAXAAdCAABCAAAAMRkiEjEYIhMQRIgAK0L/7DEZgQUSMRgiExBEiAAtQv/bMRkiEjEYIhIQRIgAMSNDQgAAgYAgr4lCAACIABUWgAQVH3x1TwFQsCNDQgAAiAAKI0NCAACI/9cViUIAAIlCAACJ)
         (itxn_field ApprovalProgramPages)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
@@ -532,7 +523,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_con
         ((itxn_field GlobalNumUint) 0u)
         ((itxn_field ClearStateProgramPages) CkIAAIEBQw==)
         (itxn_field ClearStateProgramPages)
-        ((itxn_field ApprovalProgramPages) CiADAAEDJgIABBUffHUoQgAAQgAAMRsiE0EAw0IAADYaAIAEj2iS74AEnNh944AE02bIaYAEgbZzUk8EjgQAgABjADgAEEIAAEIAAEIAACJFAUIAAEMxGSISRDEYIhNEMRaBAglJOBAkEkQxFiMJSTgQIxJEiAEKI0UBQv/XMRkiEkQxGCITRDEWIwlJOBAkEkSIAOJJFRZXBgJPAVApTwFQsCNFAUL/rDEZIhJEMRgiE0QxFiMJiABKFilPAVCwI0UBQv+PMRkiEkQxGCITRIgALBYpTwFQsCNFAUL/djEZIk8BjgEACUIAAEIAAEL/XjEYIhJEiACeI0UBQv9WQgAAI4mKAQEoKCgoQgAAi/84EEkkEkEAKEIAAEIAAIv/ODxJjABBAA9CAACLAIwCQgAAiwKMAImL/zghjAJC//KLBIEGEkEAKEIAAEIAAIv/OD1JjAFBAA9CAACLAYwDQgAAiwOMAImL/zgYjANC//JCAAAijACJigEBQgAAi/84F4mKAgBCAACL/jgQJBJEi/84ECMSRIlCAACJ)
+        ((itxn_field ApprovalProgramPages) CiADAQADJgIABBUffHVCAABCAAAxGyMTQQBeQgAAMRkjEkQxGCMTQQBMQgAANhoAgASPaJLvgASc2H3jgATTZshpgASBtnNSTwSOBAAcABYAEAAKQgAAQgAAQgAAAIgAZ0L/84gAQUL/7YgAKUL/54gAFUL/4UL/4TEZIxIxGCMSEESIAPciQ0IAAIgAVxYpTwFQsCJDQgAAMRYiCYgAShYpTwFQsCJDQgAAMRYiCUk4ECQSRIgApUkVFlcGAk8BUClPAVCwIkNCAAAxFoECCUk4ECQSRDEWIglJOBAiEkSIAIUiQ0IAACKJigEBKCgoKEIAAIv/OBBJJBJBAChCAABCAACL/zg8SYwAQQAPQgAAiwCMAkIAAIsCjACJi/84IYwCQv/yiwSBBhJBAChCAABCAACL/zg9SYwBQQAPQgAAiwGMA0IAAIsDjACJi/84GIwDQv/yQgAAI4wAiYoBAUIAAIv/OBeJigIAQgAAi/44ECQSRIv/OBAiEkSJQgAAiQ==)
         (itxn_field ApprovalProgramPages)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
@@ -653,7 +644,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_con
         ((itxn_field GlobalNumUint) 0u)
         ((itxn_field ClearStateProgramPages) CkIAAIEBQw==)
         (itxn_field ClearStateProgramPages)
-        ((itxn_field ApprovalProgramPages) CiACAAGAAEIAAEIAADEbIhNBAEZCAAA2GgCABGZpjRhPAY4BABBCAABCAABCAAAiRQFCAABDMRkiEkQxGCITRDYaARc2GgI2GgMXTwJPAk8CiAAmI0UBQv/bMRkiTwGOAQAJQgAAQgAAQv/DMRgiEkSIABwjRQFC/7uKAwBCAACL/XIIRLCL/rCL/3EERLCJQgAAiQ==)
+        ((itxn_field ApprovalProgramPages) CiACAAFCAABCAAAxGyITQQApQgAANhoAgARmaY0YTwGOAQAHQgAAQgAAADEZIhIxGCITEESIABJC/+wxGSISMRgiEhBEiAAxI0NCAAA2GgEXNhoCNhoDF08CTwJPAogAAiNDigMAQgAAi/1yCESwi/6wi/9xBESwiUIAAIk=)
         (itxn_field ApprovalProgramPages)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)

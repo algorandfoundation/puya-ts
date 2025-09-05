@@ -1,73 +1,49 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
-        goto tmp%0#1 ? block@2 : block@8
+        goto tmp%0#1 ? block@2 : block@10
     block@2: // abi_routing_L4
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "testSingleArg()uint64[]" => block@3, method "testTwoArg()uint64[]" => block@4, method "testThreeArg()uint64[]" => block@5, * => block@12}
-    block@3: // testSingleArg_route_L5
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (! tmp%3#0)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        (assert tmp%5#0) // can only call when not creating
-        let tmp%7#0: Encoded(len+uint64[]) = tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg()
-        let tmp%8#0: bytes = (concat 0x151f7c75 tmp%7#0)
-        (log tmp%8#0)
-        let tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#0: bool = 1u
-        goto block@13
-    block@4: // testTwoArg_route_L12
-        let tmp%9#0: uint64 = (txn OnCompletion)
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        (assert tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "testSingleArg()uint64[]" => block@4, method "testTwoArg()uint64[]" => block@5, method "testThreeArg()uint64[]" => block@6, * => block@9}
+    block@4: // testSingleArg_route_L5
+        tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg[routing]()
+        goto block@9
+    block@5: // testTwoArg_route_L12
+        tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg[routing]()
+        goto block@9
+    block@6: // testThreeArg_route_L19
+        tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg[routing]()
+        goto block@9
+    block@9: // after_if_else_L4
+        fail
+    block@10: // __algots__.defaultCreate_L4
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (! tmp%9#0)
-        (assert tmp%10#0) // OnCompletion is not NoOp
-        let tmp%11#0: uint64 = (txn ApplicationID)
-        (assert tmp%11#0) // can only call when not creating
-        let tmp%13#0: Encoded(len+uint64[]) = tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg()
-        let tmp%14#0: bytes = (concat 0x151f7c75 tmp%13#0)
-        (log tmp%14#0)
-        let tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#1: bool = 1u
-        goto block@13
-    block@5: // testThreeArg_route_L19
-        let tmp%15#0: uint64 = (txn OnCompletion)
-        let tmp%16#0: bool = (! tmp%15#0)
-        (assert tmp%16#0) // OnCompletion is not NoOp
-        let tmp%17#0: uint64 = (txn ApplicationID)
-        (assert tmp%17#0) // can only call when not creating
-        let tmp%19#0: Encoded(len+uint64[]) = tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg()
-        let tmp%20#0: bytes = (concat 0x151f7c75 tmp%19#0)
-        (log tmp%20#0)
-        let tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#2: bool = 1u
-        goto block@13
-    block@8: // bare_routing_L4
-        let tmp%21#0: uint64 = (txn OnCompletion)
-        goto tmp%21#0 ? block@12 : block@9
-    block@9: // __algots__.defaultCreate_L4
-        let tmp%22#0: uint64 = (txn ApplicationID)
-        let tmp%23#0: bool = (! tmp%22#0)
-        (assert tmp%23#0) // can only call when creating
-        let tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#3: bool = 1u
-        goto block@13
-    block@12: // after_if_else_L4
-        let tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#4: bool = 0u
-        goto block@13
-    block@13: // after_inlined_tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#3 <- block@9, tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__%0#4 <- block@12)
-        return tmp%0#0
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u
 
-subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> Encoded(len+uint64[]):
+subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg[routing]() -> void:
     block@0: // L5
         let aggregate%as_bytes%0#0: bytes[8] = (itob 0u)
         let aggregate%len_u16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
         let aggregate%as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = aggregate%len_u16%0#0
         let results#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#0
         let temp#0: uint64 = 0u
-        goto block@1
-    block@1: // for_header_L7
-        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@2)
-        let results#1: Encoded(len+uint64[]) = φ(results#0 <- block@0, results#2 <- block@2)
+        goto block@2
+    block@2: // for_header_L7
+        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@3)
+        let results#1: Encoded(len+uint64[]) = φ(results#0 <- block@0, results#2 <- block@3)
         let continue_looping%0#0: bool = (< temp#1 5u)
-        goto continue_looping%0#0 ? block@2 : block@4
-    block@2: // for_body_L7
+        goto continue_looping%0#0 ? block@3 : block@5
+    block@3: // for_body_L7
         let aggregate%as_bytes%1#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%1#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob temp#1)
@@ -84,24 +60,26 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> Encoded
         let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
         let results#2: Encoded(len+uint64[]) = ((replace2 0) concat%0#0 as_u16_bytes%0#0)
         let temp#2: uint64 = (+ temp#1 1u)
-        goto block@1
-    block@4: // after_for_L7
-        return results#1
+        goto block@2
+    block@5: // after_for_L7
+        let tmp%1#0: bytes = (concat 0x151f7c75 results#1)
+        (log tmp%1#0)
+        exit 1u
 
-subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> Encoded(len+uint64[]):
+subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg[routing]() -> void:
     block@0: // L12
         let aggregate%as_bytes%0#0: bytes[8] = (itob 0u)
         let aggregate%len_u16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
         let aggregate%as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = aggregate%len_u16%0#0
         let results#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#0
         let temp#0: uint64 = 2u
-        goto block@1
-    block@1: // for_header_L14
-        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@2)
-        let results#1: Encoded(len+uint64[]) = φ(results#0 <- block@0, results#2 <- block@2)
+        goto block@2
+    block@2: // for_header_L14
+        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@3)
+        let results#1: Encoded(len+uint64[]) = φ(results#0 <- block@0, results#2 <- block@3)
         let continue_looping%0#0: bool = (< temp#1 5u)
-        goto continue_looping%0#0 ? block@2 : block@4
-    block@2: // for_body_L14
+        goto continue_looping%0#0 ? block@3 : block@5
+    block@3: // for_body_L14
         let aggregate%as_bytes%1#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%1#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob temp#1)
@@ -118,24 +96,26 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> Encoded(le
         let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
         let results#2: Encoded(len+uint64[]) = ((replace2 0) concat%0#0 as_u16_bytes%0#0)
         let temp#2: uint64 = (+ temp#1 1u)
-        goto block@1
-    block@4: // after_for_L14
-        return results#1
+        goto block@2
+    block@5: // after_for_L14
+        let tmp%1#0: bytes = (concat 0x151f7c75 results#1)
+        (log tmp%1#0)
+        exit 1u
 
-subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg() -> Encoded(len+uint64[]):
+subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg[routing]() -> void:
     block@0: // L19
         let aggregate%as_bytes%0#0: bytes[8] = (itob 0u)
         let aggregate%len_u16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
         let aggregate%as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = aggregate%len_u16%0#0
         let results#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#0
         let temp#0: uint64 = 2u
-        goto block@1
-    block@1: // for_header_L21
-        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@2)
-        let results#1: Encoded(len+uint64[]) = φ(results#0 <- block@0, results#2 <- block@2)
+        goto block@2
+    block@2: // for_header_L21
+        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@3)
+        let results#1: Encoded(len+uint64[]) = φ(results#0 <- block@0, results#2 <- block@3)
         let continue_looping%0#0: bool = (< temp#1 10u)
-        goto continue_looping%0#0 ? block@2 : block@4
-    block@2: // for_body_L21
+        goto continue_looping%0#0 ? block@3 : block@5
+    block@3: // for_body_L21
         let aggregate%as_bytes%1#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%1#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob temp#1)
@@ -152,6 +132,8 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg() -> Encoded(
         let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
         let results#2: Encoded(len+uint64[]) = ((replace2 0) concat%0#0 as_u16_bytes%0#0)
         let temp#2: uint64 = (+ temp#1 3u)
-        goto block@1
-    block@4: // after_for_L21
-        return results#1
+        goto block@2
+    block@5: // after_for_L21
+        let tmp%1#0: bytes = (concat 0x151f7c75 results#1)
+        (log tmp%1#0)
+        exit 1u

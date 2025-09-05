@@ -3,330 +3,275 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0
+    intcblock 0 1
     bytecblock 0x151f7c75
     // tests/approvals/for-loops.algo.ts:4
     // class ForLoopsAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@9
+    bz main___algots__.defaultCreate@11
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
     pushbytess 0xf8654f73 0x287f4c02 0x4bd7778c 0x33675e06 // method "test_for_loop(uint64,uint64,uint64)uint64", method "test_for_loop_break(uint64,uint64,uint64)uint64", method "test_for_loop_continue(uint64,uint64,uint64)uint64", method "test_for_loop_labelled(uint64,uint64,uint64)uint64"
     txna ApplicationArgs 0
-    match main_test_for_loop_route@3 main_test_for_loop_break_route@4 main_test_for_loop_continue_route@5 main_test_for_loop_labelled_route@6
-
-main_after_if_else@13:
+    match test_for_loop test_for_loop_break test_for_loop_continue test_for_loop_labelled
     err
 
-main_test_for_loop_labelled_route@6:
-    // tests/approvals/for-loops.algo.ts:32
-    // test_for_loop_labelled(start: uint64, stop: uint64, step: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/for-loops.algo.ts:4
-    // class ForLoopsAlgo extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    txna ApplicationArgs 2
-    btoi
-    txna ApplicationArgs 3
-    btoi
-    // tests/approvals/for-loops.algo.ts:32
-    // test_for_loop_labelled(start: uint64, stop: uint64, step: uint64) {
-    callsub test_for_loop_labelled
-    itob
-    bytec_0 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_0 // 1
-    return
-
-main_test_for_loop_continue_route@5:
-    // tests/approvals/for-loops.algo.ts:24
-    // test_for_loop_continue(start: uint64, stop: uint64, step: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/for-loops.algo.ts:4
-    // class ForLoopsAlgo extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    txna ApplicationArgs 2
-    btoi
-    txna ApplicationArgs 3
-    btoi
-    // tests/approvals/for-loops.algo.ts:24
-    // test_for_loop_continue(start: uint64, stop: uint64, step: uint64) {
-    callsub test_for_loop_continue
-    itob
-    bytec_0 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_0 // 1
-    return
-
-main_test_for_loop_break_route@4:
-    // tests/approvals/for-loops.algo.ts:13
-    // test_for_loop_break(start: uint64, stop: uint64, step: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/for-loops.algo.ts:4
-    // class ForLoopsAlgo extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    txna ApplicationArgs 2
-    btoi
-    txna ApplicationArgs 3
-    btoi
-    // tests/approvals/for-loops.algo.ts:13
-    // test_for_loop_break(start: uint64, stop: uint64, step: uint64) {
-    callsub test_for_loop_break
-    itob
-    bytec_0 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_0 // 1
-    return
-
-main_test_for_loop_route@3:
-    // tests/approvals/for-loops.algo.ts:5
-    // test_for_loop(start: uint64, stop: uint64, step: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/for-loops.algo.ts:4
-    // class ForLoopsAlgo extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    txna ApplicationArgs 2
-    btoi
-    txna ApplicationArgs 3
-    btoi
-    // tests/approvals/for-loops.algo.ts:5
-    // test_for_loop(start: uint64, stop: uint64, step: uint64) {
-    callsub test_for_loop
-    itob
-    bytec_0 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_0 // 1
-    return
-
-main_bare_routing@9:
+main___algots__.defaultCreate@11:
     // tests/approvals/for-loops.algo.ts:4
     // class ForLoopsAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@13
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_0 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
 
 
-// tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop(start: uint64, stop: uint64, step: uint64) -> uint64:
+// tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop[routing]() -> void:
 test_for_loop:
     // tests/approvals/for-loops.algo.ts:5
     // test_for_loop(start: uint64, stop: uint64, step: uint64) {
-    proto 3 1
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    swap
+    txna ApplicationArgs 3
+    btoi
+    swap
     // tests/approvals/for-loops.algo.ts:6
     // let total = Uint64(0)
-    intc_1 // 0
-    frame_dig -3
+    intc_0 // 0
+    swap
 
-test_for_loop_while_top@1:
+test_for_loop_while_top@2:
     // tests/approvals/for-loops.algo.ts:7
     // for (let i = start; i < stop; i += step) {
-    frame_dig 1
-    frame_dig -2
+    dup
+    dig 4
     <
-    bz test_for_loop_after_while@3
+    bz test_for_loop_after_while@4
     // tests/approvals/for-loops.algo.ts:8
     // total += i
-    frame_dig 0
-    frame_dig 1
+    dup2
     dup
     cover 2
     +
-    frame_bury 0
+    bury 3
     // tests/approvals/for-loops.algo.ts:7
     // for (let i = start; i < stop; i += step) {
-    frame_dig -1
+    dig 3
     +
-    frame_bury 1
-    b test_for_loop_while_top@1
+    bury 1
+    b test_for_loop_while_top@2
 
-test_for_loop_after_while@3:
-    // tests/approvals/for-loops.algo.ts:10
-    // return total
-    retsub
+test_for_loop_after_while@4:
+    // tests/approvals/for-loops.algo.ts:5
+    // test_for_loop(start: uint64, stop: uint64, step: uint64) {
+    dig 1
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
 
 
-// tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_break(start: uint64, stop: uint64, step: uint64) -> uint64:
+// tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_break[routing]() -> void:
 test_for_loop_break:
     // tests/approvals/for-loops.algo.ts:13
     // test_for_loop_break(start: uint64, stop: uint64, step: uint64) {
-    proto 3 1
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    swap
+    txna ApplicationArgs 3
+    btoi
+    swap
     // tests/approvals/for-loops.algo.ts:14
     // let total = Uint64(0)
-    intc_1 // 0
-    frame_dig -3
+    intc_0 // 0
+    swap
 
-test_for_loop_break_while_top@1:
+test_for_loop_break_while_top@2:
     // tests/approvals/for-loops.algo.ts:15
     // for (let i = start; i < stop; i += step) {
-    frame_dig 1
-    frame_dig -2
+    dup
+    dig 4
     <
-    bz test_for_loop_break_block@6
+    bz test_for_loop_break_block@7
     // tests/approvals/for-loops.algo.ts:16
     // total += i
-    frame_dig 0
-    frame_dig 1
+    dup2
     +
     dup
-    frame_bury 0
+    bury 3
     // tests/approvals/for-loops.algo.ts:17
     // if (total > 10) {
     pushint 10 // 10
     >
-    bnz test_for_loop_break_block@6
+    bnz test_for_loop_break_block@7
     // tests/approvals/for-loops.algo.ts:15
     // for (let i = start; i < stop; i += step) {
-    frame_dig 1
-    frame_dig -1
+    dup
+    dig 3
     +
-    frame_bury 1
-    b test_for_loop_break_while_top@1
+    bury 1
+    b test_for_loop_break_while_top@2
 
-test_for_loop_break_block@6:
-    // tests/approvals/for-loops.algo.ts:21
-    // return total
-    retsub
+test_for_loop_break_block@7:
+    // tests/approvals/for-loops.algo.ts:13
+    // test_for_loop_break(start: uint64, stop: uint64, step: uint64) {
+    dig 1
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
 
 
-// tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_continue(start: uint64, stop: uint64, step: uint64) -> uint64:
+// tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_continue[routing]() -> void:
 test_for_loop_continue:
     // tests/approvals/for-loops.algo.ts:24
     // test_for_loop_continue(start: uint64, stop: uint64, step: uint64) {
-    proto 3 1
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    swap
+    txna ApplicationArgs 3
+    btoi
+    swap
     // tests/approvals/for-loops.algo.ts:25
     // let total = Uint64(0)
-    intc_1 // 0
-    frame_dig -3
+    intc_0 // 0
+    swap
 
-test_for_loop_continue_while_top@1:
+test_for_loop_continue_while_top@2:
     // tests/approvals/for-loops.algo.ts:26
     // for (let i = start; i < stop; i += step) {
-    frame_dig 1
-    frame_dig -2
+    dup
+    dig 4
     <
-    bz test_for_loop_continue_after_while@6
+    bz test_for_loop_continue_after_while@7
     // tests/approvals/for-loops.algo.ts:27
     // if (i % 5 === 0) continue
-    frame_dig 1
+    dup
     pushint 5 // 5
     %
-    bz test_for_loop_continue_block@5
+    bz test_for_loop_continue_block@6
     // tests/approvals/for-loops.algo.ts:28
     // total += i
-    frame_dig 0
-    frame_dig 1
+    dup2
     +
-    frame_bury 0
+    bury 2
 
-test_for_loop_continue_block@5:
+test_for_loop_continue_block@6:
     // tests/approvals/for-loops.algo.ts:26
     // for (let i = start; i < stop; i += step) {
-    frame_dig 1
-    frame_dig -1
+    dup
+    dig 3
     +
-    frame_bury 1
-    b test_for_loop_continue_while_top@1
+    bury 1
+    b test_for_loop_continue_while_top@2
 
-test_for_loop_continue_after_while@6:
-    // tests/approvals/for-loops.algo.ts:30
-    // return total
-    retsub
+test_for_loop_continue_after_while@7:
+    // tests/approvals/for-loops.algo.ts:24
+    // test_for_loop_continue(start: uint64, stop: uint64, step: uint64) {
+    dig 1
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
 
 
-// tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_labelled(start: uint64, stop: uint64, step: uint64) -> uint64:
+// tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_labelled[routing]() -> void:
 test_for_loop_labelled:
+    pushbytes ""
     // tests/approvals/for-loops.algo.ts:32
     // test_for_loop_labelled(start: uint64, stop: uint64, step: uint64) {
-    proto 3 1
-    pushbytes ""
+    txna ApplicationArgs 1
+    btoi
+    dup
+    txna ApplicationArgs 2
+    btoi
+    swap
+    txna ApplicationArgs 3
+    btoi
+    swap
     // tests/approvals/for-loops.algo.ts:33
     // let total = Uint64(0)
-    intc_1 // 0
-    frame_dig -3
+    intc_0 // 0
+    swap
 
-test_for_loop_labelled_while_top@1:
+test_for_loop_labelled_while_top@2:
     // tests/approvals/for-loops.algo.ts:34
     // outer: for (let i = start; i < stop; i += step) {
-    frame_dig 2
-    frame_dig -2
+    dup
+    dig 4
     <
-    bz test_for_loop_labelled_block@9
-    frame_dig -3
-    frame_bury 0
+    bz test_for_loop_labelled_block@10
+    dig 4
+    bury 6
 
-test_for_loop_labelled_while_top@3:
+test_for_loop_labelled_while_top@4:
     // tests/approvals/for-loops.algo.ts:35
     // for (let j = start; j < stop; j += step) {
-    frame_dig 0
-    frame_dig -2
+    dig 5
+    dig 4
     <
-    bz test_for_loop_labelled_after_while@7
+    bz test_for_loop_labelled_after_while@8
     // tests/approvals/for-loops.algo.ts:36
     // total += i + j
-    frame_dig 2
-    dup
-    frame_dig 0
+    dupn 2
+    dig 7
     dup
     cover 3
     +
-    frame_dig 1
+    dig 4
     +
-    frame_bury 1
+    bury 4
     // tests/approvals/for-loops.algo.ts:38
     // if (i * j > stop) break outer
     *
-    frame_dig -2
+    dig 4
     >
-    bnz test_for_loop_labelled_block@9
+    bnz test_for_loop_labelled_block@10
     // tests/approvals/for-loops.algo.ts:35
     // for (let j = start; j < stop; j += step) {
-    frame_dig 0
-    frame_dig -1
+    dig 5
+    dig 3
     +
-    frame_bury 0
-    b test_for_loop_labelled_while_top@3
+    bury 6
+    b test_for_loop_labelled_while_top@4
 
-test_for_loop_labelled_block@9:
-    // tests/approvals/for-loops.algo.ts:41
-    // return total
-    frame_dig 1
-    frame_bury 0
-    retsub
+test_for_loop_labelled_block@10:
+    // tests/approvals/for-loops.algo.ts:32
+    // test_for_loop_labelled(start: uint64, stop: uint64, step: uint64) {
+    dig 1
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
 
-test_for_loop_labelled_after_while@7:
+test_for_loop_labelled_after_while@8:
     // tests/approvals/for-loops.algo.ts:34
     // outer: for (let i = start; i < stop; i += step) {
-    frame_dig 2
-    frame_dig -1
+    dup
+    dig 3
     +
-    frame_bury 2
-    b test_for_loop_labelled_while_top@1
+    bury 1
+    b test_for_loop_labelled_while_top@2

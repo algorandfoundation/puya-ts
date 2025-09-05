@@ -21,24 +21,20 @@ main_after_if_else@2:
     // tests/approvals/itxn.algo.ts:20
     // export class ItxnDemoContract extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@12
-    pushbytess 0x20254f91 0xf1908524 0xdf920f37 0x3d46345c 0xd4c6a8f5 // method "test1()void", method "test2()void", method "test3()void", method "test4()void", method "test5(uint64)void"
-    txna ApplicationArgs 0
-    match main_test1_route@5 main_test2_route@6 main_test3_route@7 main_test4_route@8 main_test5_route@9
-
-main_after_if_else@16:
-    err
-
-main_test5_route@9:
-    // tests/approvals/itxn.algo.ts:207
-    // public test5(appId: Application) {
+    bz main___algots__.defaultCreate@14
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/itxn.algo.ts:20
-    // export class ItxnDemoContract extends Contract {
+    assert
+    pushbytess 0x20254f91 0xf1908524 0xdf920f37 0x3d46345c 0xd4c6a8f5 // method "test1()void", method "test2()void", method "test3()void", method "test4()void", method "test5(uint64)void"
+    txna ApplicationArgs 0
+    match main_test1_route@6 main_test2_route@7 main_test3_route@8 main_test4_route@9 main_test5_route@10
+    err
+
+main_test5_route@10:
+    // tests/approvals/itxn.algo.ts:207
+    // public test5(appId: Application) {
     txna ApplicationArgs 1
     btoi
     // tests/approvals/itxn.algo.ts:209
@@ -124,20 +120,11 @@ main_test5_route@9:
     pushbytes "hello"
     ==
     &&
-    assert // assert target is match for conditions
     // tests/approvals/itxn.algo.ts:207
     // public test5(appId: Application) {
-    pushint 1 // 1
-    return
+    return // on error: assert target is match for conditions
 
-main_test4_route@8:
-    // tests/approvals/itxn.algo.ts:184
-    // public test4() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_test4_route@9:
     // tests/approvals/itxn.algo.ts:185
     // const lotsOfBytes = op.bzero(2044)
     pushint 2044 // 2044
@@ -279,20 +266,11 @@ main_test4_route@8:
     itxna ClearStateProgramPages 0
     bytec_0 // 0x098101
     ==
-    assert // expected clear state page
     // tests/approvals/itxn.algo.ts:184
     // public test4() {
-    pushint 1 // 1
-    return
+    return // on error: expected clear state page
 
-main_test3_route@7:
-    // tests/approvals/itxn.algo.ts:108
-    // public test3() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_test3_route@8:
     // tests/approvals/itxn.algo.ts:147-164
     // const [app1, app2, app3, app4, app5, app6, app7, app8, app9, app10, app11, app12, app13, app14, app15, app16] = itxn.submitGroup(
     //   appTxn1,
@@ -905,20 +883,11 @@ main_test3_route@7:
     itxna Logs 0
     bytec 17 // "16"
     ==
-    assert
     // tests/approvals/itxn.algo.ts:108
     // public test3() {
-    pushint 1 // 1
     return
 
-main_test2_route@6:
-    // tests/approvals/itxn.algo.ts:71
-    // public test2() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_test2_route@7:
     intc_0 // 0
     bury 5
     pushbytes ""
@@ -926,7 +895,7 @@ main_test2_route@6:
     // tests/approvals/itxn.algo.ts:73
     // if (Txn.numAppArgs) {
     txn NumAppArgs
-    bz main_else_body@28
+    bz main_else_body@25
     // tests/approvals/itxn.algo.ts:74
     // const args = [Bytes('1'), Bytes('2')] as const
     bytec_2 // "1"
@@ -947,17 +916,17 @@ main_test2_route@6:
     // note: 'with args param set',
     bytec 18 // "with args param set"
 
-main_after_if_else@29:
+main_after_if_else@26:
     // tests/approvals/itxn.algo.ts:90
     // const createAppTxn = createAppParams.submit()
     itxn_begin
     itxn_field Note
     dig 1
-    bz main_next_field@31
+    bz main_next_field@28
     dup
     itxn_field OnCompletion
 
-main_next_field@31:
+main_next_field@28:
     dig 6
     itxn_field ApplicationArgs
     dig 5
@@ -967,11 +936,11 @@ main_next_field@31:
     >=
     // tests/approvals/itxn.algo.ts:90
     // const createAppTxn = createAppParams.submit()
-    bz main_next_field@33
+    bz main_next_field@30
     dig 4
     itxn_field ApplicationArgs
 
-main_next_field@33:
+main_next_field@30:
     // tests/approvals/itxn.algo.ts:77
     // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
@@ -1014,7 +983,7 @@ main_next_field@33:
     txn NumAppArgs
     pushint 1 // 1
     >
-    bz main_after_if_else@35
+    bz main_after_if_else@32
     // tests/approvals/itxn.algo.ts:95-102
     // const createAppTxn2 = itxn
     //   .applicationCall({
@@ -1076,13 +1045,13 @@ main_next_field@33:
     ==
     assert
 
-main_after_if_else@35:
+main_after_if_else@32:
     // tests/approvals/itxn.algo.ts:71
     // public test2() {
     pushint 1 // 1
     return
 
-main_else_body@28:
+main_else_body@25:
     // tests/approvals/itxn.algo.ts:86
     // appArgs: [Bytes('3'), new Str('4'), Bytes('5')],
     pushbytes 0x000134
@@ -1101,16 +1070,9 @@ main_else_body@28:
     intc_0 // 0
     bury 4
     bury 7
-    b main_after_if_else@29
+    b main_after_if_else@26
 
-main_test1_route@5:
-    // tests/approvals/itxn.algo.ts:23
-    // public test1() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_test1_route@6:
     // tests/approvals/itxn.algo.ts:31
     // manager: Global.currentApplicationAddress,
     global CurrentApplicationAddress
@@ -1378,13 +1340,12 @@ main_test1_route@5:
     pushint 1 // 1
     return
 
-main_bare_routing@12:
+main___algots__.defaultCreate@14:
     // tests/approvals/itxn.algo.ts:20
     // export class ItxnDemoContract extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@16
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

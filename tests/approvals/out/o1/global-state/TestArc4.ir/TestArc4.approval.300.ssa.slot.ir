@@ -1,46 +1,44 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
-        goto tmp%0#1 ? block@2 : block@7
+        goto tmp%0#1 ? block@2 : block@9
     block@2: // abi_routing_L44
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "setState(string,uint64)void" => block@3, method "deleteState(string)void" => block@4, * => block@11}
-    block@3: // setState_route_L46
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (! tmp%3#0)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        (assert tmp%5#0) // can only call when not creating
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        (assert tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "setState(string,uint64)void" => block@4, method "deleteState(string)void" => block@5, * => block@8}
+    block@4: // setState_route_L46
+        tests/approvals/global-state.algo.ts::TestArc4.setState[routing]()
+        goto block@8
+    block@5: // deleteState_route_L52
+        tests/approvals/global-state.algo.ts::TestArc4.deleteState[routing]()
+        goto block@8
+    block@8: // after_if_else_L44
+        fail
+    block@9: // __algots__.defaultCreate_L44
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (! tmp%9#0)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u
+
+subroutine tests/approvals/global-state.algo.ts::TestArc4.setState[routing]() -> void:
+    block@0: // L46
         let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
-        let key#1: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
+        let key#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
         let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
         let value#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        (app_global_put key#1 value#0)
-        let tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#0: bool = 1u
-        goto block@12
-    block@4: // deleteState_route_L52
-        let tmp%9#0: uint64 = (txn OnCompletion)
-        let tmp%10#0: bool = (! tmp%9#0)
-        (assert tmp%10#0) // OnCompletion is not NoOp
-        let tmp%11#0: uint64 = (txn ApplicationID)
-        (assert tmp%11#0) // can only call when not creating
-        let reinterpret_Encoded(len+utf8[])%1#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
-        let key#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%1#0)
+        (app_global_put key#0 value#0)
+        exit 1u
+
+subroutine tests/approvals/global-state.algo.ts::TestArc4.deleteState[routing]() -> void:
+    block@0: // L52
+        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
+        let key#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
         (app_global_del key#0)
-        let tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#1: bool = 1u
-        goto block@12
-    block@7: // bare_routing_L44
-        let tmp%14#0: uint64 = (txn OnCompletion)
-        goto tmp%14#0 ? block@11 : block@8
-    block@8: // __algots__.defaultCreate_L44
-        let tmp%15#0: uint64 = (txn ApplicationID)
-        let tmp%16#0: bool = (! tmp%15#0)
-        (assert tmp%16#0) // can only call when creating
-        let tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#2: bool = 1u
-        goto block@12
-    block@11: // after_if_else_L44
-        let tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#3: bool = 0u
-        goto block@12
-    block@12: // after_inlined_tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#0 <- block@3, tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#1 <- block@4, tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#2 <- block@8, tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#3 <- block@11)
-        return tmp%0#0
+        exit 1u

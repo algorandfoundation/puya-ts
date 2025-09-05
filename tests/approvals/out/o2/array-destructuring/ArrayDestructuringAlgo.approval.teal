@@ -7,59 +7,34 @@ main:
     // tests/approvals/array-destructuring.algo.ts:4
     // export class ArrayDestructuringAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@9
-    pushbytess 0x74b7e8df 0xa78000de 0x2dafc6c6 0xd48b6983 // method "testNested((uint64,(uint512,uint512)))(uint64,(uint512,uint512),uint64,uint512)", method "test()void", method "testLiteralDestructuring()void", method "produceFixed()uint64[3]"
-    txna ApplicationArgs 0
-    match main_testNested_route@3 main_test_route@4 main_testLiteralDestructuring_route@5 main_produceFixed_route@6
-
-main_after_if_else@13:
-    err
-
-main_produceFixed_route@6:
-    // tests/approvals/array-destructuring.algo.ts:44
-    // produceFixed(): FixedArray<uint64, 3> {
+    bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    assert
+    pushbytess 0x74b7e8df 0xa78000de 0x2dafc6c6 0xd48b6983 // method "testNested((uint64,(uint512,uint512)))(uint64,(uint512,uint512),uint64,uint512)", method "test()void", method "testLiteralDestructuring()void", method "produceFixed()uint64[3]"
+    txna ApplicationArgs 0
+    match main_testNested_route@4 main_test_route@5 main_test_route@5 main_produceFixed_route@7
+    err
+
+main_produceFixed_route@7:
+    // tests/approvals/array-destructuring.algo.ts:44
+    // produceFixed(): FixedArray<uint64, 3> {
     pushbytes 0x151f7c75000000000000000100000000000000020000000000000003
     log
     intc_0 // 1
     return
 
-main_testLiteralDestructuring_route@5:
-    // tests/approvals/array-destructuring.algo.ts:34
-    // testLiteralDestructuring() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    intc_0 // 1
-    return
-
-main_test_route@4:
+main_test_route@5:
     // tests/approvals/array-destructuring.algo.ts:11
     // test() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     intc_0 // 1
     return
 
-main_testNested_route@3:
+main_testNested_route@4:
     // tests/approvals/array-destructuring.algo.ts:5
     // testNested(arg: readonly [uint64, readonly [biguint, biguint]]) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/array-destructuring.algo.ts:4
-    // export class ArrayDestructuringAlgo extends Contract {
     txna ApplicationArgs 1
     dup
     extract 8 128
@@ -67,8 +42,6 @@ main_testNested_route@3:
     extract 0 64
     swap
     extract 64 64
-    // tests/approvals/array-destructuring.algo.ts:5
-    // testNested(arg: readonly [uint64, readonly [biguint, biguint]]) {
     uncover 2
     extract 0 8
     dig 2
@@ -106,13 +79,12 @@ main_testNested_route@3:
     intc_0 // 1
     return
 
-main_bare_routing@9:
+main___algots__.defaultCreate@11:
     // tests/approvals/array-destructuring.algo.ts:4
     // export class ArrayDestructuringAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@13
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_0 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

@@ -9,18 +9,17 @@ main:
     log
     // tests/approvals/arc4-hybrid.algo.ts:3
     // class Arc4HybridAlgo extends Contract {
+    pushint 0 // 0
     txn NumAppArgs
-    bz main_bare_routing@4
+    bz main___algots__.defaultCreate@5
     pushbytes 0xc258469e // method "someMethod()void"
     txna ApplicationArgs 0
     match main_someMethod_route@3
 
-main_after_if_else@6:
-    // tests/approvals/arc4-hybrid.algo.ts:3
-    // class Arc4HybridAlgo extends Contract {
-    pushint 0 // 0
+main_switch_case_next@4:
+    dup
 
-main_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@7:
+main_after_if_else@6:
     // tests/approvals/arc4-hybrid.algo.ts:7
     // log('after')
     pushbytes "after"
@@ -34,9 +33,9 @@ main_someMethod_route@3:
     // someMethod() {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     // tests/approvals/arc4-hybrid.algo.ts:17
     // log('some method')
     pushbytes "some method"
@@ -44,15 +43,17 @@ main_someMethod_route@3:
     // tests/approvals/arc4-hybrid.algo.ts:16
     // someMethod() {
     pushint 1 // 1
-    b main_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@7
+    bury 1
+    b main_switch_case_next@4
 
-main_bare_routing@4:
+main___algots__.defaultCreate@5:
     // tests/approvals/arc4-hybrid.algo.ts:3
     // class Arc4HybridAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@6
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     pushint 1 // 1
-    b main_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@7
+    b main_after_if_else@6

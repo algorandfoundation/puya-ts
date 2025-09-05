@@ -8,24 +8,20 @@ main:
     // tests/approvals/large-objects-in-state.algo.ts:14
     // class LargeObjectsInStateAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@9
-    pushbytess 0x9beff36a 0xa4e8d164 0x1960177c 0x25f323d0 // method "getMbr()uint64", method "bootstrap(pay)void", method "increaseXCount(uint64,uint64)void", method "getCounts(uint64)(uint64,uint8)"
-    txna ApplicationArgs 0
-    match main_getMbr_route@3 main_bootstrap_route@4 main_increaseXCount_route@5 main_getCounts_route@6
-
-main_after_if_else@13:
-    err
-
-main_getCounts_route@6:
-    // tests/approvals/large-objects-in-state.algo.ts:33
-    // getCounts(index: uint64) {
+    bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/large-objects-in-state.algo.ts:14
-    // class LargeObjectsInStateAlgo extends Contract {
+    assert
+    pushbytess 0x9beff36a 0xa4e8d164 0x1960177c 0x25f323d0 // method "getMbr()uint64", method "bootstrap(pay)void", method "increaseXCount(uint64,uint64)void", method "getCounts(uint64)(uint64,uint8)"
+    txna ApplicationArgs 0
+    match main_getMbr_route@4 main_bootstrap_route@5 main_increaseXCount_route@6 main_getCounts_route@7
+    err
+
+main_getCounts_route@7:
+    // tests/approvals/large-objects-in-state.algo.ts:33
+    // getCounts(index: uint64) {
     txna ApplicationArgs 1
     btoi
     // tests/approvals/large-objects-in-state.algo.ts:34
@@ -49,16 +45,9 @@ main_getCounts_route@6:
     intc_0 // 1
     return
 
-main_increaseXCount_route@5:
+main_increaseXCount_route@6:
     // tests/approvals/large-objects-in-state.algo.ts:29
     // increaseXCount(index: uint64, xCount: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/large-objects-in-state.algo.ts:14
-    // class LargeObjectsInStateAlgo extends Contract {
     txna ApplicationArgs 1
     btoi
     txna ApplicationArgs 2
@@ -93,16 +82,9 @@ main_increaseXCount_route@5:
     intc_0 // 1
     return
 
-main_bootstrap_route@4:
+main_bootstrap_route@5:
     // tests/approvals/large-objects-in-state.algo.ts:21
     // bootstrap(pay: gtxn.PaymentTxn) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/large-objects-in-state.algo.ts:14
-    // class LargeObjectsInStateAlgo extends Contract {
     txn GroupIndex
     intc_0 // 1
     -
@@ -153,26 +135,20 @@ main_bootstrap_route@4:
     intc_0 // 1
     return
 
-main_getMbr_route@3:
+main_getMbr_route@4:
     // tests/approvals/large-objects-in-state.algo.ts:17
     // getMbr(): uint64 {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     pushbytes 0x151f7c7500000000002d83f4
     log
     intc_0 // 1
     return
 
-main_bare_routing@9:
+main___algots__.defaultCreate@11:
     // tests/approvals/large-objects-in-state.algo.ts:14
     // class LargeObjectsInStateAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@13
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_0 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

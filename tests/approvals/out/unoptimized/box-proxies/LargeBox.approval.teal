@@ -5,7 +5,6 @@
 main:
     intcblock 0 64 1 10 200
     bytecblock "large" 0x068101
-    pushbytes ""
     b main_block@0
 
 main_block@0:
@@ -17,7 +16,7 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     b main_abi_routing@2
 
 main_abi_routing@2:
@@ -27,23 +26,15 @@ main_abi_routing@2:
     pushbytes 0xa78000de // method "test()void"
     uncover 1
     match main_test_route@3
-    b main_switch_case_default@4
+    b main_switch_case_next@4
 
-main_switch_case_default@4:
-    b main_switch_case_next@5
+main_switch_case_next@4:
+    b main_after_if_else@6
 
-main_switch_case_next@5:
-    b main_after_if_else@10
-
-main_after_if_else@10:
+main_after_if_else@6:
     // tests/approvals/box-proxies.algo.ts:268
     // export class LargeBox extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/box-proxies.algo.ts::LargeBox.__puya_arc4_router__@11
-
-main_after_inlined_tests/approvals/box-proxies.algo.ts::LargeBox.__puya_arc4_router__@11:
-    return
+    err
 
 main_test_route@3:
     // tests/approvals/box-proxies.algo.ts:271
@@ -51,42 +42,28 @@ main_test_route@3:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
     txn ApplicationID
     intc_0 // 0
     !=
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     callsub test
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/box-proxies.algo.ts::LargeBox.__puya_arc4_router__@11
+    b main_switch_case_next@4
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/box-proxies.algo.ts:268
     // export class LargeBox extends Contract {
     txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@7
-    b main_switch_case_default@8
-
-main_switch_case_default@8:
-    b main_switch_case_next@9
-
-main_switch_case_next@9:
-    b main_after_if_else@10
-
-main___algots__.defaultCreate@7:
-    // tests/approvals/box-proxies.algo.ts:268
-    // export class LargeBox extends Contract {
+    intc_0 // NoOp
+    ==
     txn ApplicationID
     intc_0 // 0
     ==
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
     intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/box-proxies.algo.ts::LargeBox.__puya_arc4_router__@11
+    return
 
 
 // _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
@@ -104,7 +81,7 @@ ensure_budget_while_top@1:
     global OpcodeBudget
     frame_dig 0
     <
-    bz ensure_budget_after_while@7
+    bz ensure_budget_after_while@6
     b ensure_budget_while_body@2
 
 ensure_budget_while_body@2:
@@ -121,37 +98,46 @@ ensure_budget_while_body@2:
     intc_2 // 1
     frame_dig -1
     match ensure_budget_switch_case_0@3 ensure_budget_switch_case_1@4
-    b ensure_budget_switch_case_default@5
+    b ensure_budget_switch_case_next@5
 
-ensure_budget_switch_case_default@5:
-    b ensure_budget_switch_case_next@6
-
-ensure_budget_switch_case_next@6:
+ensure_budget_switch_case_next@5:
     itxn_submit
     b ensure_budget_while_top@1
 
 ensure_budget_switch_case_1@4:
     global MinTxnFee
     itxn_field Fee
-    b ensure_budget_switch_case_next@6
+    b ensure_budget_switch_case_next@5
 
 ensure_budget_switch_case_0@3:
     intc_0 // 0
     itxn_field Fee
-    b ensure_budget_switch_case_next@6
+    b ensure_budget_switch_case_next@5
 
-ensure_budget_after_while@7:
+ensure_budget_after_while@6:
     retsub
 
 
-// tests/approvals/box-proxies.algo.ts::LargeBox.test() -> void:
+// tests/approvals/box-proxies.algo.ts::LargeBox.test[routing]() -> void:
 test:
-    // tests/approvals/box-proxies.algo.ts:271
-    // test() {
-    proto 0 0
     b test_block@0
 
 test_block@0:
+    // tests/approvals/box-proxies.algo.ts:271
+    // test() {
+    callsub tests/approvals/box-proxies.algo.ts::LargeBox.test
+    intc_2 // 1
+    return
+
+
+// tests/approvals/box-proxies.algo.ts::LargeBox.test() -> void:
+tests/approvals/box-proxies.algo.ts::LargeBox.test:
+    // tests/approvals/box-proxies.algo.ts:271
+    // test() {
+    proto 0 0
+    b tests/approvals/box-proxies.algo.ts::LargeBox.test_block@0
+
+tests/approvals/box-proxies.algo.ts::LargeBox.test_block@0:
     // tests/approvals/box-proxies.algo.ts:272
     // ensureBudget(7000)
     pushint 7000 // 7000
@@ -194,18 +180,18 @@ test_block@0:
     box_get
     assert // Box must have value
     intc_0 // 0
-    b test_for_header@1
+    b tests/approvals/box-proxies.algo.ts::LargeBox.test_for_header@1
 
-test_for_header@1:
+tests/approvals/box-proxies.algo.ts::LargeBox.test_for_header@1:
     // tests/approvals/box-proxies.algo.ts:276
     // for (const [index, v] of this.box.value.entries()) {
     frame_dig 2
     intc 4 // 200
     <
-    bz test_after_for@4
-    b test_for_body@2
+    bz tests/approvals/box-proxies.algo.ts::LargeBox.test_after_for@4
+    b tests/approvals/box-proxies.algo.ts::LargeBox.test_for_body@2
 
-test_for_body@2:
+tests/approvals/box-proxies.algo.ts::LargeBox.test_for_body@2:
     // tests/approvals/box-proxies.algo.ts:276
     // for (const [index, v] of this.box.value.entries()) {
     frame_dig 2
@@ -269,16 +255,16 @@ test_for_body@2:
     +
     ==
     assert
-    b test_for_footer@3
+    b tests/approvals/box-proxies.algo.ts::LargeBox.test_for_footer@3
 
-test_for_footer@3:
+tests/approvals/box-proxies.algo.ts::LargeBox.test_for_footer@3:
     frame_dig 2
     intc_2 // 1
     +
     frame_bury 2
-    b test_for_header@1
+    b tests/approvals/box-proxies.algo.ts::LargeBox.test_for_header@1
 
-test_after_for@4:
+tests/approvals/box-proxies.algo.ts::LargeBox.test_after_for@4:
     retsub
 
 

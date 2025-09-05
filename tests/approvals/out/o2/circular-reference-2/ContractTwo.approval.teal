@@ -7,12 +7,10 @@ main:
     // tests/approvals/circular-reference-2.algo.ts:6
     // export class ContractTwo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     bytec_0 // method "test(uint64)void"
     txna ApplicationArgs 0
     match main_test_route@3
-
-main_after_if_else@10:
     err
 
 main_test_route@3:
@@ -20,11 +18,9 @@ main_test_route@3:
     // test(appId: Application) {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/circular-reference-2.algo.ts:6
-    // export class ContractTwo extends Contract {
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     txna ApplicationArgs 1
     btoi
     // tests/approvals/circular-reference-2.algo.ts:8
@@ -43,13 +39,12 @@ main_test_route@3:
     pushint 1 // 1
     return
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/circular-reference-2.algo.ts:6
     // export class ContractTwo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

@@ -5,7 +5,6 @@
 main:
     intcblock 0 6 1 3 1000
     bytecblock 0x098101 0x09361a00b08101 0x "name" "1" "unit" "2" "4" "AST1" "AST2" "AST3" "3" "5" "hello" "3rd" "with args param set" "42" "10" "11" "12" "13" "14" "15" "16"
-    bytec_2 // ""
     b main_block@0
 
 main_block@0:
@@ -26,10 +25,23 @@ main_block@3:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@12
+    bz main___algots__.defaultCreate@14
     b main_abi_routing@4
 
 main_abi_routing@4:
+    // tests/approvals/itxn.algo.ts:20
+    // export class ItxnDemoContract extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@12
+    b main_call_NoOp@5
+
+main_call_NoOp@5:
     // tests/approvals/itxn.algo.ts:20
     // export class ItxnDemoContract extends Contract {
     txna ApplicationArgs 0
@@ -39,149 +51,141 @@ main_abi_routing@4:
     pushbytes 0x3d46345c // method "test4()void"
     pushbytes 0xd4c6a8f5 // method "test5(uint64)void"
     uncover 5
-    match main_test1_route@5 main_test2_route@6 main_test3_route@7 main_test4_route@8 main_test5_route@9
-    b main_switch_case_default@10
-
-main_switch_case_default@10:
+    match main_test1_route@6 main_test2_route@7 main_test3_route@8 main_test4_route@9 main_test5_route@10
     b main_switch_case_next@11
 
 main_switch_case_next@11:
-    b main_after_if_else@16
+    b main_after_if_else@13
 
-main_after_if_else@16:
+main_after_if_else@13:
+    b main_after_if_else@15
+
+main_after_if_else@15:
     // tests/approvals/itxn.algo.ts:20
     // export class ItxnDemoContract extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
+    err
 
-main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17:
-    return
-
-main_test5_route@9:
-    // tests/approvals/itxn.algo.ts:207
-    // public test5(appId: Application) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/itxn.algo.ts:20
-    // export class ItxnDemoContract extends Contract {
-    txna ApplicationArgs 1
-    btoi
+main_test5_route@10:
     // tests/approvals/itxn.algo.ts:207
     // public test5(appId: Application) {
     callsub test5
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
+    b main_switch_case_next@11
 
-main_test4_route@8:
+main_test4_route@9:
     // tests/approvals/itxn.algo.ts:184
     // public test4() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub test4
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
+    b main_switch_case_next@11
 
-main_test3_route@7:
+main_test3_route@8:
     // tests/approvals/itxn.algo.ts:108
     // public test3() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub test3
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
+    b main_switch_case_next@11
 
-main_test2_route@6:
+main_test2_route@7:
     // tests/approvals/itxn.algo.ts:71
     // public test2() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub test2
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
+    b main_switch_case_next@11
 
-main_test1_route@5:
+main_test1_route@6:
     // tests/approvals/itxn.algo.ts:23
     // public test1() {
+    callsub test1
+    b main_switch_case_next@11
+
+main_create_NoOp@12:
+    b main_after_if_else@13
+
+main___algots__.defaultCreate@14:
+    // tests/approvals/itxn.algo.ts:20
+    // export class ItxnDemoContract extends Contract {
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub test1
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
-
-main_bare_routing@12:
-    // tests/approvals/itxn.algo.ts:20
-    // export class ItxnDemoContract extends Contract {
-    txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@13
-    b main_switch_case_default@14
-
-main_switch_case_default@14:
-    b main_switch_case_next@15
-
-main_switch_case_next@15:
-    b main_after_if_else@16
-
-main___algots__.defaultCreate@13:
-    // tests/approvals/itxn.algo.ts:20
-    // export class ItxnDemoContract extends Contract {
     txn ApplicationID
     intc_0 // 0
     ==
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
     intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__@17
+    return
+
+
+// tests/approvals/itxn.algo.ts::ItxnDemoContract.test1[routing]() -> void:
+test1:
+    b test1_block@0
+
+test1_block@0:
+    // tests/approvals/itxn.algo.ts:23
+    // public test1() {
+    callsub tests/approvals/itxn.algo.ts::ItxnDemoContract.test1
+    intc_2 // 1
+    return
+
+
+// tests/approvals/itxn.algo.ts::ItxnDemoContract.test2[routing]() -> void:
+test2:
+    b test2_block@0
+
+test2_block@0:
+    // tests/approvals/itxn.algo.ts:71
+    // public test2() {
+    callsub tests/approvals/itxn.algo.ts::ItxnDemoContract.test2
+    intc_2 // 1
+    return
+
+
+// tests/approvals/itxn.algo.ts::ItxnDemoContract.test3[routing]() -> void:
+test3:
+    b test3_block@0
+
+test3_block@0:
+    // tests/approvals/itxn.algo.ts:108
+    // public test3() {
+    callsub tests/approvals/itxn.algo.ts::ItxnDemoContract.test3
+    intc_2 // 1
+    return
+
+
+// tests/approvals/itxn.algo.ts::ItxnDemoContract.test4[routing]() -> void:
+test4:
+    b test4_block@0
+
+test4_block@0:
+    // tests/approvals/itxn.algo.ts:184
+    // public test4() {
+    callsub tests/approvals/itxn.algo.ts::ItxnDemoContract.test4
+    intc_2 // 1
+    return
+
+
+// tests/approvals/itxn.algo.ts::ItxnDemoContract.test5[routing]() -> void:
+test5:
+    b test5_block@0
+
+test5_block@0:
+    // tests/approvals/itxn.algo.ts:207
+    // public test5(appId: Application) {
+    txna ApplicationArgs 1
+    btoi
+    callsub tests/approvals/itxn.algo.ts::ItxnDemoContract.test5
+    intc_2 // 1
+    return
 
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
-test1:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test1:
     // tests/approvals/itxn.algo.ts:23
     // public test1() {
     proto 0 0
     intc_0 // 0
     bytec_2 // ""
-    b test1_block@0
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_block@0
 
-test1_block@0:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_block@0:
     // tests/approvals/itxn.algo.ts:21
     // name = GlobalState({ initialValue: Bytes() })
     bytec_3 // "name"
@@ -247,9 +251,9 @@ test1_block@0:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test1_next_txn@1
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_txn@1
 
-test1_next_txn@1:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_txn@1:
     // tests/approvals/itxn.algo.ts:36
     // const asset1_txn = assetParams.submit()
     itxn_submit
@@ -300,9 +304,9 @@ test1_next_txn@1:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test1_next_txn@2
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_txn@2
 
-test1_next_txn@2:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_txn@2:
     // tests/approvals/itxn.algo.ts:40
     // const asset2_txn = assetParams.submit()
     itxn_submit
@@ -358,9 +362,9 @@ test1_next_txn@2:
     // fee: 0,
     intc_0 // 0
     itxn_field Fee
-    b test1_next_txn@3
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_txn@3
 
-test1_next_txn@3:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_txn@3:
     // tests/approvals/itxn.algo.ts:57
     // const [appCreateTxn, asset3_txn] = itxn.submitGroup(appCreateParams, assetParams)
     itxn_next
@@ -397,9 +401,9 @@ test1_next_txn@3:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test1_next_txn@4
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_txn@4
 
-test1_next_txn@4:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_txn@4:
     // tests/approvals/itxn.algo.ts:57
     // const [appCreateTxn, asset3_txn] = itxn.submitGroup(appCreateParams, assetParams)
     itxn_submit
@@ -424,17 +428,17 @@ test1_next_txn@4:
     >=
     // tests/approvals/itxn.algo.ts:68
     // itxn.submitGroup(appCreateParams, assetParams)
-    bz test1_next_field@6
-    b test1_set_Note_0_to_0@5
+    bz tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_field@6
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_set_Note_0_to_0@5
 
-test1_set_Note_0_to_0@5:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_set_Note_0_to_0@5:
     // tests/approvals/itxn.algo.ts:63
     // note: '3rd',
     bytec 14 // "3rd"
     itxn_field Note
-    b test1_next_field@6
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_field@6
 
-test1_next_field@6:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_field@6:
     // tests/approvals/itxn.algo.ts:49
     // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
@@ -455,9 +459,9 @@ test1_next_field@6:
     // fee: 0,
     intc_0 // 0
     itxn_field Fee
-    b test1_next_txn@7
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_txn@7
 
-test1_next_txn@7:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_txn@7:
     // tests/approvals/itxn.algo.ts:68
     // itxn.submitGroup(appCreateParams, assetParams)
     itxn_next
@@ -468,17 +472,17 @@ test1_next_txn@7:
     >=
     // tests/approvals/itxn.algo.ts:68
     // itxn.submitGroup(appCreateParams, assetParams)
-    bz test1_next_field@9
-    b test1_set_Note_0_to_0@8
+    bz tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_field@9
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_set_Note_0_to_0@8
 
-test1_set_Note_0_to_0@8:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_set_Note_0_to_0@8:
     // tests/approvals/itxn.algo.ts:66
     // note: '3rd',
     bytec 14 // "3rd"
     itxn_field Note
-    b test1_next_field@9
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_field@9
 
-test1_next_field@9:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_field@9:
     frame_dig 3
     itxn_field ConfigAssetReserve
     frame_dig 2
@@ -512,9 +516,9 @@ test1_next_field@9:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test1_next_txn@10
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_txn@10
 
-test1_next_txn@10:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test1_next_txn@10:
     // tests/approvals/itxn.algo.ts:68
     // itxn.submitGroup(appCreateParams, assetParams)
     itxn_submit
@@ -522,7 +526,7 @@ test1_next_txn@10:
 
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
-test2:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test2:
     // tests/approvals/itxn.algo.ts:71
     // public test2() {
     proto 0 0
@@ -532,18 +536,18 @@ test2:
     intc_0 // 0
     bytec_2 // ""
     bytec_2 // ""
-    b test2_block@0
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_block@0
 
-test2_block@0:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_block@0:
     intc_0 // 0
     bytec_2 // ""
     // tests/approvals/itxn.algo.ts:73
     // if (Txn.numAppArgs) {
     txn NumAppArgs
-    bz test2_else_body@2
-    b test2_if_body@1
+    bz tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_else_body@2
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_if_body@1
 
-test2_if_body@1:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_if_body@1:
     // tests/approvals/itxn.algo.ts:74
     // const args = [Bytes('1'), Bytes('2')] as const
     bytec 4 // "1"
@@ -564,9 +568,9 @@ test2_if_body@1:
     // note: 'with args param set',
     bytec 15 // "with args param set"
     frame_bury 2
-    b test2_after_if_else@3
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_after_if_else@3
 
-test2_after_if_else@3:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_after_if_else@3:
     // tests/approvals/itxn.algo.ts:90
     // const createAppTxn = createAppParams.submit()
     itxn_begin
@@ -575,15 +579,15 @@ test2_after_if_else@3:
     frame_dig 5
     intc_2 // 1
     >=
-    bz test2_next_field@5
-    b test2_set_OnCompletion_0_to_0@4
+    bz tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_next_field@5
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_set_OnCompletion_0_to_0@4
 
-test2_set_OnCompletion_0_to_0@4:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_set_OnCompletion_0_to_0@4:
     frame_dig 7
     itxn_field OnCompletion
-    b test2_next_field@5
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_next_field@5
 
-test2_next_field@5:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_next_field@5:
     frame_dig 0
     itxn_field ApplicationArgs
     frame_dig 1
@@ -593,15 +597,15 @@ test2_next_field@5:
     >=
     // tests/approvals/itxn.algo.ts:90
     // const createAppTxn = createAppParams.submit()
-    bz test2_next_field@7
-    b test2_set_ApplicationArgs_2_to_2@6
+    bz tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_next_field@7
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_set_ApplicationArgs_2_to_2@6
 
-test2_set_ApplicationArgs_2_to_2@6:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_set_ApplicationArgs_2_to_2@6:
     frame_dig 6
     itxn_field ApplicationArgs
-    b test2_next_field@7
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_next_field@7
 
-test2_next_field@7:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_next_field@7:
     // tests/approvals/itxn.algo.ts:77
     // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
@@ -622,9 +626,9 @@ test2_next_field@7:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test2_next_txn@8
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_next_txn@8
 
-test2_next_txn@8:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_next_txn@8:
     // tests/approvals/itxn.algo.ts:90
     // const createAppTxn = createAppParams.submit()
     itxn_submit
@@ -649,10 +653,10 @@ test2_next_txn@8:
     txn NumAppArgs
     intc_2 // 1
     >
-    bz test2_after_if_else@11
-    b test2_if_body@9
+    bz tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_after_if_else@11
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_if_body@9
 
-test2_if_body@9:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_if_body@9:
     // tests/approvals/itxn.algo.ts:95-102
     // const createAppTxn2 = itxn
     //   .applicationCall({
@@ -691,9 +695,9 @@ test2_if_body@9:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test2_next_txn@10
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_next_txn@10
 
-test2_next_txn@10:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_next_txn@10:
     // tests/approvals/itxn.algo.ts:95-102
     // const createAppTxn2 = itxn
     //   .applicationCall({
@@ -717,12 +721,12 @@ test2_next_txn@10:
     bytec 15 // "with args param set"
     ==
     assert
-    b test2_after_if_else@11
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_after_if_else@11
 
-test2_after_if_else@11:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_after_if_else@11:
     retsub
 
-test2_else_body@2:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_else_body@2:
     // tests/approvals/itxn.algo.ts:86
     // appArgs: [Bytes('3'), new Str('4'), Bytes('5')],
     bytec 7 // "4"
@@ -746,14 +750,14 @@ test2_else_body@2:
     // createAppParams = itxn.applicationCall({
     intc_0 // 0
     frame_bury 5
-    b test2_after_if_else@3
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test2_after_if_else@3
 
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
-test3:
-    b test3_block@0
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3:
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_block@0
 
-test3_block@0:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_block@0:
     // tests/approvals/itxn.algo.ts:147-164
     // const [app1, app2, app3, app4, app5, app6, app7, app8, app9, app10, app11, app12, app13, app14, app15, app16] = itxn.submitGroup(
     //   appTxn1,
@@ -801,9 +805,9 @@ test3_block@0:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@1
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@1
 
-test3_next_txn@1:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@1:
     // tests/approvals/itxn.algo.ts:149
     // appTxn2,
     itxn_next
@@ -834,9 +838,9 @@ test3_next_txn@1:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@2
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@2
 
-test3_next_txn@2:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@2:
     // tests/approvals/itxn.algo.ts:150
     // appTxn3,
     itxn_next
@@ -867,9 +871,9 @@ test3_next_txn@2:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@3
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@3
 
-test3_next_txn@3:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@3:
     // tests/approvals/itxn.algo.ts:151
     // appTxn4,
     itxn_next
@@ -900,9 +904,9 @@ test3_next_txn@3:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@4
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@4
 
-test3_next_txn@4:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@4:
     // tests/approvals/itxn.algo.ts:152
     // appTxn5,
     itxn_next
@@ -933,9 +937,9 @@ test3_next_txn@4:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@5
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@5
 
-test3_next_txn@5:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@5:
     // tests/approvals/itxn.algo.ts:153
     // appTxn6,
     itxn_next
@@ -966,9 +970,9 @@ test3_next_txn@5:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@6
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@6
 
-test3_next_txn@6:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@6:
     // tests/approvals/itxn.algo.ts:154
     // appTxn7,
     itxn_next
@@ -999,9 +1003,9 @@ test3_next_txn@6:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@7
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@7
 
-test3_next_txn@7:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@7:
     // tests/approvals/itxn.algo.ts:155
     // appTxn8,
     itxn_next
@@ -1032,9 +1036,9 @@ test3_next_txn@7:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@8
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@8
 
-test3_next_txn@8:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@8:
     // tests/approvals/itxn.algo.ts:156
     // appTxn9,
     itxn_next
@@ -1065,9 +1069,9 @@ test3_next_txn@8:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@9
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@9
 
-test3_next_txn@9:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@9:
     // tests/approvals/itxn.algo.ts:157
     // appTxn10,
     itxn_next
@@ -1098,9 +1102,9 @@ test3_next_txn@9:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@10
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@10
 
-test3_next_txn@10:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@10:
     // tests/approvals/itxn.algo.ts:158
     // appTxn11,
     itxn_next
@@ -1131,9 +1135,9 @@ test3_next_txn@10:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@11
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@11
 
-test3_next_txn@11:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@11:
     // tests/approvals/itxn.algo.ts:159
     // appTxn12,
     itxn_next
@@ -1164,9 +1168,9 @@ test3_next_txn@11:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@12
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@12
 
-test3_next_txn@12:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@12:
     // tests/approvals/itxn.algo.ts:160
     // appTxn13,
     itxn_next
@@ -1197,9 +1201,9 @@ test3_next_txn@12:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@13
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@13
 
-test3_next_txn@13:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@13:
     // tests/approvals/itxn.algo.ts:161
     // appTxn14,
     itxn_next
@@ -1230,9 +1234,9 @@ test3_next_txn@13:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@14
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@14
 
-test3_next_txn@14:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@14:
     // tests/approvals/itxn.algo.ts:162
     // appTxn15,
     itxn_next
@@ -1263,9 +1267,9 @@ test3_next_txn@14:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@15
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@15
 
-test3_next_txn@15:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@15:
     // tests/approvals/itxn.algo.ts:163
     // appTxn16,
     itxn_next
@@ -1296,9 +1300,9 @@ test3_next_txn@15:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test3_next_txn@16
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@16
 
-test3_next_txn@16:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test3_next_txn@16:
     // tests/approvals/itxn.algo.ts:147-164
     // const [app1, app2, app3, app4, app5, app6, app7, app8, app9, app10, app11, app12, app13, app14, app15, app16] = itxn.submitGroup(
     //   appTxn1,
@@ -1435,13 +1439,13 @@ test3_next_txn@16:
 
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.test4() -> void:
-test4:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test4:
     // tests/approvals/itxn.algo.ts:184
     // public test4() {
     proto 0 0
-    b test4_block@0
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test4_block@0
 
-test4_block@0:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test4_block@0:
     // tests/approvals/itxn.algo.ts:185
     // const lotsOfBytes = op.bzero(2044)
     pushint 2044 // 2044
@@ -1505,9 +1509,9 @@ test4_block@0:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test4_next_txn@1
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test4_next_txn@1
 
-test4_next_txn@1:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test4_next_txn@1:
     // tests/approvals/itxn.algo.ts:198
     // const app1 = appTxn1.submit()
     itxn_submit
@@ -1612,13 +1616,13 @@ test4_next_txn@1:
 
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -> void:
-test5:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test5:
     // tests/approvals/itxn.algo.ts:207
     // public test5(appId: Application) {
     proto 1 0
-    b test5_block@0
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test5_block@0
 
-test5_block@0:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test5_block@0:
     // tests/approvals/itxn.algo.ts:209
     // receiver: appId.address,
     frame_dig -1
@@ -1654,9 +1658,9 @@ test5_block@0:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test5_next_txn@1
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test5_next_txn@1
 
-test5_next_txn@1:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test5_next_txn@1:
     // tests/approvals/itxn.algo.ts:218
     // const [, appRes] = itxn.submitGroup(pay, app)
     itxn_next
@@ -1679,9 +1683,9 @@ test5_next_txn@1:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test5_next_txn@2
+    b tests/approvals/itxn.algo.ts::ItxnDemoContract.test5_next_txn@2
 
-test5_next_txn@2:
+tests/approvals/itxn.algo.ts::ItxnDemoContract.test5_next_txn@2:
     // tests/approvals/itxn.algo.ts:218
     // const [, appRes] = itxn.submitGroup(pay, app)
     itxn_submit

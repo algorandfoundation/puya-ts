@@ -4,64 +4,64 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@1: // L66
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
-        goto tmp%1#0 ? block@2 : block@7
+        goto tmp%1#0 ? block@2 : block@6
     block@2: // abi_routing_L66
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "getBigBytesLength()uint64" => block@3, method "delete()void" => block@4, * => block@5}
-    block@3: // getBigBytesLength_route_L67
+        switch tmp%2#0 {method "delete()void" => block@3, method "getBigBytesLength()uint64" => block@4, * => block@5}
+    block@3: // delete_route_L71
         let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (== tmp%3#0 NoOp)
-        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%4#0: bool = (== tmp%3#0 DeleteApplication)
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
-        (assert tmp%6#0) // can only call when not creating
-        let tmp%7#0: uint64 = tests/approvals/precompiled-apps.algo.ts::LargeProgram.getBigBytesLength()
-        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%7#0)
-        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
-        let tmp%8#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%9#0: bytes = (concat 0x151f7c75 tmp%8#0)
-        (log tmp%9#0)
-        let tests/approvals/precompiled-apps.algo.ts::LargeProgram.__puya_arc4_router__%0#0: bool = 1u
-        goto block@12
-    block@4: // delete_route_L71
-        let tmp%10#0: uint64 = (txn OnCompletion)
-        let tmp%11#0: bool = (== tmp%10#0 DeleteApplication)
-        (assert tmp%11#0) // OnCompletion is not DeleteApplication
-        let tmp%12#0: uint64 = (txn ApplicationID)
-        let tmp%13#0: bool = (!= tmp%12#0 0u)
-        (assert tmp%13#0) // can only call when not creating
-        tests/approvals/precompiled-apps.algo.ts::LargeProgram.delete()
-        let tests/approvals/precompiled-apps.algo.ts::LargeProgram.__puya_arc4_router__%0#1: bool = 1u
-        goto block@12
-    block@5: // switch_case_default_L66
-        goto block@6
-    block@6: // switch_case_next_L66
-        goto block@11
-    block@7: // bare_routing_L66
-        let tmp%14#0: uint64 = (txn OnCompletion)
-        switch tmp%14#0 {0u => block@8, * => block@9}
-    block@8: // __algots__.defaultCreate_L66
+        let tmp%7#0: bool = (&& tmp%4#0 tmp%6#0)
+        (assert tmp%7#0) // OnCompletion must be DeleteApplication && can only call when not creating
+        tests/approvals/precompiled-apps.algo.ts::LargeProgram.delete[routing]()
+        goto block@5
+    block@4: // getBigBytesLength_route_L67
+        let tmp%8#0: uint64 = (txn OnCompletion)
+        let tmp%9#0: bool = (== tmp%8#0 NoOp)
+        let tmp%10#0: uint64 = (txn ApplicationID)
+        let tmp%11#0: bool = (!= tmp%10#0 0u)
+        let tmp%12#0: bool = (&& tmp%9#0 tmp%11#0)
+        (assert tmp%12#0) // OnCompletion must be NoOp && can only call when not creating
+        tests/approvals/precompiled-apps.algo.ts::LargeProgram.getBigBytesLength[routing]()
+        goto block@5
+    block@5: // switch_case_next_L66
+        goto block@7
+    block@6: // __algots__.defaultCreate_L66
+        let tmp%13#0: uint64 = (txn OnCompletion)
+        let tmp%14#0: bool = (== tmp%13#0 NoOp)
         let tmp%15#0: uint64 = (txn ApplicationID)
         let tmp%16#0: bool = (== tmp%15#0 0u)
-        (assert tmp%16#0) // can only call when creating
+        let tmp%17#0: bool = (&& tmp%14#0 tmp%16#0)
+        (assert tmp%17#0) // OnCompletion must be NoOp && can only call when creating
         tests/approvals/precompiled-apps.algo.ts::LargeProgram.__algots__.defaultCreate()
-        let tests/approvals/precompiled-apps.algo.ts::LargeProgram.__puya_arc4_router__%0#2: bool = 1u
-        goto block@12
-    block@9: // switch_case_default_L66
-        goto block@10
-    block@10: // switch_case_next_L66
-        goto block@11
-    block@11: // after_if_else_L66
-        let tests/approvals/precompiled-apps.algo.ts::LargeProgram.__puya_arc4_router__%0#3: bool = 0u
-        goto block@12
-    block@12: // after_inlined_tests/approvals/precompiled-apps.algo.ts::LargeProgram.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/precompiled-apps.algo.ts::LargeProgram.__puya_arc4_router__%0#0 <- block@3, tests/approvals/precompiled-apps.algo.ts::LargeProgram.__puya_arc4_router__%0#1 <- block@4, tests/approvals/precompiled-apps.algo.ts::LargeProgram.__puya_arc4_router__%0#2 <- block@8, tests/approvals/precompiled-apps.algo.ts::LargeProgram.__puya_arc4_router__%0#3 <- block@11)
+        exit 1u
+    block@7: // after_if_else_L66
+        exit 0u
+    block@8: // after_inlined_tests/approvals/precompiled-apps.algo.ts::LargeProgram.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
         return tmp%0#0
 
 subroutine tests/approvals/precompiled-apps.algo.ts::getBigBytes() -> bytes:
     block@0: // L62
         let tmp%0#0: bytes = (bzero 4096u)
         return tmp%0#0
+
+subroutine tests/approvals/precompiled-apps.algo.ts::LargeProgram.getBigBytesLength[routing]() -> void:
+    block@0: // L67
+        let tmp%0#0: uint64 = tests/approvals/precompiled-apps.algo.ts::LargeProgram.getBigBytesLength()
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%1#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/precompiled-apps.algo.ts::LargeProgram.delete[routing]() -> void:
+    block@0: // L71
+        tests/approvals/precompiled-apps.algo.ts::LargeProgram.delete()
+        exit 1u
 
 subroutine tests/approvals/precompiled-apps.algo.ts::LargeProgram.getBigBytesLength() -> uint64:
     block@0: // L67

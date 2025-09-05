@@ -7,55 +7,41 @@ main:
     // tests/approvals/teal-script-conventions.algo.ts:5
     // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
     txn NumAppArgs
-    bz main_bare_routing@10
-    pushbytess 0x766a657e 0x2f2be517 0xdf7300bb 0x01a3a3ff 0x46f76533 // method "noMoreThanks(uint64)uint64", method "createApplication(byte[])void", method "setLocal(string)void", method "optInToApplication()void", method "updateApplication()void"
+    bz main_deleteApplication@9
+    pushbytess 0x766a657e 0x2f2be517 0x01a3a3ff 0x46f76533 0xdf7300bb // method "noMoreThanks(uint64)uint64", method "createApplication(byte[])void", method "optInToApplication()void", method "updateApplication()void", method "setLocal(string)void"
     txna ApplicationArgs 0
-    match main_noMoreThanks_route@3 main_createApplication_route@4 main_setLocal_route@5 main_optInToApplication_route@6 main_updateApplication_route@7
-
-main_after_if_else@14:
+    match main_noMoreThanks_route@3 main_createApplication_route@4 main_optInToApplication_route@5 main_updateApplication_route@6 main_setLocal_route@7
     err
 
-main_updateApplication_route@7:
+main_setLocal_route@7:
+    // tests/approvals/teal-script-conventions.algo.ts:17
+    // setLocal(value: string) {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    b setLocal
+
+main_updateApplication_route@6:
     // tests/approvals/teal-script-conventions.algo.ts:25
     // updateApplication() {}
     txn OnCompletion
     pushint 4 // UpdateApplication
     ==
-    assert // OnCompletion is not UpdateApplication
     txn ApplicationID
-    assert // can only call when not creating
-    intc_0 // 1
-    return
+    &&
+    return // on error: OnCompletion must be UpdateApplication && can only call when not creating
 
-main_optInToApplication_route@6:
+main_optInToApplication_route@5:
     // tests/approvals/teal-script-conventions.algo.ts:23
     // optInToApplication() {}
     txn OnCompletion
     intc_0 // OptIn
     ==
-    assert // OnCompletion is not OptIn
     txn ApplicationID
-    assert // can only call when not creating
-    intc_0 // 1
-    return
-
-main_setLocal_route@5:
-    // tests/approvals/teal-script-conventions.algo.ts:17
-    // setLocal(value: string) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/teal-script-conventions.algo.ts:5
-    // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
-    txna ApplicationArgs 1
-    extract 2 0
-    // tests/approvals/teal-script-conventions.algo.ts:17
-    // setLocal(value: string) {
-    callsub setLocal
-    intc_0 // 1
-    return
+    &&
+    return // on error: OnCompletion must be OptIn && can only call when not creating
 
 main_createApplication_route@4:
     // tests/approvals/teal-script-conventions.algo.ts:12
@@ -65,12 +51,50 @@ main_createApplication_route@4:
     shl
     pushint 33 // 33
     &
-    assert // OnCompletion is not one of NoOp, DeleteApplication
     txn ApplicationID
     !
-    assert // can only call when creating
-    // tests/approvals/teal-script-conventions.algo.ts:5
-    // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
+    &&
+    assert // OnCompletion must be one of NoOp, DeleteApplication && can only call when creating
+    b createApplication
+
+main_noMoreThanks_route@3:
+    // tests/approvals/teal-script-conventions.algo.ts:8
+    // @abimethod({ name: 'noMoreThanks' })
+    txn OnCompletion
+    pushint 2 // CloseOut
+    ==
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be CloseOut && can only call when not creating
+    b closeOutOfApplication
+
+main_deleteApplication@9:
+    // tests/approvals/teal-script-conventions.algo.ts:20
+    // @baremethod()
+    txn OnCompletion
+    pushint 5 // DeleteApplication
+    ==
+    txn ApplicationID
+    &&
+    return // on error: OnCompletion must be DeleteApplication && can only call when not creating
+
+
+// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.closeOutOfApplication[routing]() -> void:
+closeOutOfApplication:
+    // tests/approvals/teal-script-conventions.algo.ts:8
+    // @abimethod({ name: 'noMoreThanks' })
+    pushbytes 0x151f7c75
+    txna ApplicationArgs 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.createApplication[routing]() -> void:
+createApplication:
+    // tests/approvals/teal-script-conventions.algo.ts:12
+    // @abimethod({ allowActions: ['NoOp', 'DeleteApplication'] })
     txna ApplicationArgs 1
     extract 2 0
     // tests/approvals/teal-script-conventions.algo.ts:6
@@ -85,48 +109,13 @@ main_createApplication_route@4:
     intc_0 // 1
     return
 
-main_noMoreThanks_route@3:
-    // tests/approvals/teal-script-conventions.algo.ts:8
-    // @abimethod({ name: 'noMoreThanks' })
-    txn OnCompletion
-    pushint 2 // CloseOut
-    ==
-    assert // OnCompletion is not CloseOut
-    txn ApplicationID
-    assert // can only call when not creating
-    pushbytes 0x151f7c75
-    // tests/approvals/teal-script-conventions.algo.ts:5
-    // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
-    txna ApplicationArgs 1
-    // tests/approvals/teal-script-conventions.algo.ts:8
-    // @abimethod({ name: 'noMoreThanks' })
-    concat
-    log
-    intc_0 // 1
-    return
 
-main_bare_routing@10:
-    // tests/approvals/teal-script-conventions.algo.ts:5
-    // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
-    pushint 5 // 5
-    txn OnCompletion
-    match main_deleteApplication@11
-    b main_after_if_else@14
-
-main_deleteApplication@11:
-    // tests/approvals/teal-script-conventions.algo.ts:20
-    // @baremethod()
-    txn ApplicationID
-    assert // can only call when not creating
-    intc_0 // 1
-    return
-
-
-// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.setLocal(value: bytes) -> void:
+// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.setLocal[routing]() -> void:
 setLocal:
     // tests/approvals/teal-script-conventions.algo.ts:17
     // setLocal(value: string) {
-    proto 1 0
+    txna ApplicationArgs 1
+    extract 2 0
     // tests/approvals/teal-script-conventions.algo.ts:18
     // this.local(Txn.sender).value = value
     txn Sender
@@ -135,6 +124,9 @@ setLocal:
     pushbytes "local"
     // tests/approvals/teal-script-conventions.algo.ts:18
     // this.local(Txn.sender).value = value
-    frame_dig -1
+    uncover 2
     app_local_put
-    retsub
+    // tests/approvals/teal-script-conventions.algo.ts:17
+    // setLocal(value: string) {
+    intc_0 // 1
+    return

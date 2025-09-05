@@ -7,99 +7,107 @@ subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_route
     block@0: // L8
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
-        goto tmp%1#0 ? block@1 : block@10
+        goto tmp%1#0 ? block@1 : block@13
     block@1: // abi_routing_L8
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "optIn()void" => block@2, method "setState((uint64,byte[]),uint64[10])void" => block@3, method "getState()(uint64,uint64,byte[],byte[],uint64[10],(uint64,byte[]),(uint64,byte[]),(uint64,byte[],bool,string))" => block@4, method "clearState()void" => block@5, method "writeDynamicLocalState(string,string)string" => block@6, method "readDynamicLocalState(string)string" => block@7, * => block@8}
+        switch tmp%2#0 {method "optIn()void" => block@2, * => block@3}
     block@2: // optIn_route_L18
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 OptIn)
-        (assert tmp%4#0) // OnCompletion is not OptIn
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
-        (assert tmp%6#0) // can only call when not creating
+        let tmp%7#0: bool = (&& tmp%4#0 tmp%6#0)
+        (assert tmp%7#0) // OnCompletion must be OptIn && can only call when not creating
+        tests/approvals/local-state.algo.ts::LocalStateDemo.optIn[routing]()
+        goto block@3
+    block@3: // switch_case_next_L8
+        let tmp%8#0: uint64 = (txn OnCompletion)
+        let tmp%9#0: bool = (== tmp%8#0 NoOp)
+        (assert tmp%9#0) // OnCompletion must be NoOp
+        let tmp%10#0: uint64 = (txn ApplicationID)
+        let tmp%11#0: bool = (!= tmp%10#0 0u)
+        goto tmp%11#0 ? block@4 : block@11
+    block@4: // call_NoOp_L8
+        let tmp%12#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%12#0 {method "setState((uint64,byte[]),uint64[10])void" => block@5, method "getState()(uint64,uint64,byte[],byte[],uint64[10],(uint64,byte[]),(uint64,byte[]),(uint64,byte[],bool,string))" => block@6, method "clearState()void" => block@7, method "writeDynamicLocalState(string,string)string" => block@8, method "readDynamicLocalState(string)string" => block@9, * => block@10}
+    block@5: // setState_route_L21
+        tests/approvals/local-state.algo.ts::LocalStateDemo.setState[routing]()
+        goto block@10
+    block@6: // getState_route_L32
+        tests/approvals/local-state.algo.ts::LocalStateDemo.getState[routing]()
+        goto block@10
+    block@7: // clearState_route_L45
+        tests/approvals/local-state.algo.ts::LocalStateDemo.clearState[routing]()
+        goto block@10
+    block@8: // writeDynamicLocalState_route_L63
+        tests/approvals/local-state.algo.ts::LocalStateDemo.writeDynamicLocalState[routing]()
+        goto block@10
+    block@9: // readDynamicLocalState_route_L82
+        tests/approvals/local-state.algo.ts::LocalStateDemo.readDynamicLocalState[routing]()
+        goto block@10
+    block@10: // switch_case_next_L8
+        goto block@12
+    block@11: // create_NoOp_L8
+        goto block@12
+    block@12: // after_if_else_L8
+        goto block@14
+    block@13: // __algots__.defaultCreate_L8
+        let tmp%13#0: uint64 = (txn OnCompletion)
+        let tmp%14#0: bool = (== tmp%13#0 NoOp)
+        let tmp%15#0: uint64 = (txn ApplicationID)
+        let tmp%16#0: bool = (== tmp%15#0 0u)
+        let tmp%17#0: bool = (&& tmp%14#0 tmp%16#0)
+        (assert tmp%17#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/local-state.algo.ts::LocalStateDemo.__algots__.defaultCreate()
+        exit 1u
+    block@14: // after_if_else_L8
+        exit 0u
+
+subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.optIn[routing]() -> void:
+    block@0: // L18
         tests/approvals/local-state.algo.ts::LocalStateDemo.optIn()
-        return 1u
-    block@3: // setState_route_L21
-        let tmp%7#0: uint64 = (txn OnCompletion)
-        let tmp%8#0: bool = (== tmp%7#0 NoOp)
-        (assert tmp%8#0) // OnCompletion is not NoOp
-        let tmp%9#0: uint64 = (txn ApplicationID)
-        let tmp%10#0: bool = (!= tmp%9#0 0u)
-        (assert tmp%10#0) // can only call when not creating
+        exit 1u
+
+subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.setState[routing]() -> void:
+    block@0: // L21
         let reinterpret_Encoded(uint64,(len+uint8[]))%0#0: Encoded(uint64,(len+uint8[])) = (txna ApplicationArgs 1)
         let reinterpret_Encoded(uint64[10])%0#0: Encoded(uint64[10]) = (txna ApplicationArgs 2)
         tests/approvals/local-state.algo.ts::LocalStateDemo.setState(reinterpret_Encoded(uint64,(len+uint8[]))%0#0, reinterpret_Encoded(uint64[10])%0#0)
-        return 1u
-    block@4: // getState_route_L32
-        let tmp%11#0: uint64 = (txn OnCompletion)
-        let tmp%12#0: bool = (== tmp%11#0 NoOp)
-        (assert tmp%12#0) // OnCompletion is not NoOp
-        let tmp%13#0: uint64 = (txn ApplicationID)
-        let tmp%14#0: bool = (!= tmp%13#0 0u)
-        (assert tmp%14#0) // can only call when not creating
-        let tmp%15#0: Encoded(uint64,uint64,(len+uint8[]),(len+uint8[]),uint64[10],(uint64,(len+uint8[])),(uint64,(len+uint8[])),(uint64,(len+uint8[]),bool1,(len+utf8[]))) = tests/approvals/local-state.algo.ts::LocalStateDemo.getState()
-        let tmp%16#0: bytes = (concat 0x151f7c75 tmp%15#0)
-        (log tmp%16#0)
-        return 1u
-    block@5: // clearState_route_L45
-        let tmp%17#0: uint64 = (txn OnCompletion)
-        let tmp%18#0: bool = (== tmp%17#0 NoOp)
-        (assert tmp%18#0) // OnCompletion is not NoOp
-        let tmp%19#0: uint64 = (txn ApplicationID)
-        let tmp%20#0: bool = (!= tmp%19#0 0u)
-        (assert tmp%20#0) // can only call when not creating
+        exit 1u
+
+subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.getState[routing]() -> void:
+    block@0: // L32
+        let tmp%0#0: Encoded(uint64,uint64,(len+uint8[]),(len+uint8[]),uint64[10],(uint64,(len+uint8[])),(uint64,(len+uint8[])),(uint64,(len+uint8[]),bool1,(len+utf8[]))) = tests/approvals/local-state.algo.ts::LocalStateDemo.getState()
+        let tmp%1#0: bytes = (concat 0x151f7c75 tmp%0#0)
+        (log tmp%1#0)
+        exit 1u
+
+subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.clearState[routing]() -> void:
+    block@0: // L45
         tests/approvals/local-state.algo.ts::LocalStateDemo.clearState()
-        return 1u
-    block@6: // writeDynamicLocalState_route_L63
-        let tmp%21#0: uint64 = (txn OnCompletion)
-        let tmp%22#0: bool = (== tmp%21#0 NoOp)
-        (assert tmp%22#0) // OnCompletion is not NoOp
-        let tmp%23#0: uint64 = (txn ApplicationID)
-        let tmp%24#0: bool = (!= tmp%23#0 0u)
-        (assert tmp%24#0) // can only call when not creating
+        exit 1u
+
+subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.writeDynamicLocalState[routing]() -> void:
+    block@0: // L63
         let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
-        let tmp%25#0: string = decode_bytes<string>(reinterpret_Encoded(len+utf8[])%0#0)
+        let tmp%0#0: string = decode_bytes<string>(reinterpret_Encoded(len+utf8[])%0#0)
         let reinterpret_Encoded(len+utf8[])%1#0: Encoded(len+utf8[]) = (txna ApplicationArgs 2)
-        let tmp%26#0: string = decode_bytes<string>(reinterpret_Encoded(len+utf8[])%1#0)
-        let tmp%27#0: string = tests/approvals/local-state.algo.ts::LocalStateDemo.writeDynamicLocalState(tmp%25#0, tmp%26#0)
-        let tmp%28#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>(tmp%27#0)
-        let tmp%29#0: bytes = (concat 0x151f7c75 tmp%28#0)
-        (log tmp%29#0)
-        return 1u
-    block@7: // readDynamicLocalState_route_L82
-        let tmp%30#0: uint64 = (txn OnCompletion)
-        let tmp%31#0: bool = (== tmp%30#0 NoOp)
-        (assert tmp%31#0) // OnCompletion is not NoOp
-        let tmp%32#0: uint64 = (txn ApplicationID)
-        let tmp%33#0: bool = (!= tmp%32#0 0u)
-        (assert tmp%33#0) // can only call when not creating
-        let reinterpret_Encoded(len+utf8[])%2#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
-        let tmp%34#0: string = decode_bytes<string>(reinterpret_Encoded(len+utf8[])%2#0)
-        let tmp%35#0: string = tests/approvals/local-state.algo.ts::LocalStateDemo.readDynamicLocalState(tmp%34#0)
-        let tmp%36#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>(tmp%35#0)
-        let tmp%37#0: bytes = (concat 0x151f7c75 tmp%36#0)
-        (log tmp%37#0)
-        return 1u
-    block@8: // switch_case_default_L8
-        goto block@9
-    block@9: // switch_case_next_L8
-        goto block@14
-    block@10: // bare_routing_L8
-        let tmp%38#0: uint64 = (txn OnCompletion)
-        switch tmp%38#0 {0u => block@11, * => block@12}
-    block@11: // __algots__.defaultCreate_L8
-        let tmp%39#0: uint64 = (txn ApplicationID)
-        let tmp%40#0: bool = (== tmp%39#0 0u)
-        (assert tmp%40#0) // can only call when creating
-        tests/approvals/local-state.algo.ts::LocalStateDemo.__algots__.defaultCreate()
-        return 1u
-    block@12: // switch_case_default_L8
-        goto block@13
-    block@13: // switch_case_next_L8
-        goto block@14
-    block@14: // after_if_else_L8
-        return 0u
+        let tmp%1#0: string = decode_bytes<string>(reinterpret_Encoded(len+utf8[])%1#0)
+        let tmp%2#0: string = tests/approvals/local-state.algo.ts::LocalStateDemo.writeDynamicLocalState(tmp%0#0, tmp%1#0)
+        let tmp%3#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>(tmp%2#0)
+        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
+        (log tmp%4#0)
+        exit 1u
+
+subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.readDynamicLocalState[routing]() -> void:
+    block@0: // L82
+        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
+        let tmp%0#0: string = decode_bytes<string>(reinterpret_Encoded(len+utf8[])%0#0)
+        let tmp%1#0: string = tests/approvals/local-state.algo.ts::LocalStateDemo.readDynamicLocalState(tmp%0#0)
+        let tmp%2#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>(tmp%1#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
 
 subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.optIn() -> void:
     block@0: // L18

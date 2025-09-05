@@ -8,24 +8,20 @@ main:
     // tests/approvals/mutable-object.algo.ts:12
     // export class MutableObjectDemo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@16
-    pushbytess 0x89388ddd 0xef322d6d 0x02458807 0xcb81deb8 0xba27a9ba 0x2f670a55 0xd4c81f5b 0xf4835c23 0x3814f92a 0x007a4cb0 0xa9bc61f1 // method "testVectorCreationAndEquality()void", method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)", method "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)", method "implicitCastingAndSpreading((uint64,uint64))void", method "testNestedObjects(((uint64,uint64),(uint64,uint64)))void", method "testMethodSelector()void", method "testAssertMatch(uint64)void", method "testArc4Encoding((uint64,uint64))void", method "getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])", method "getMain()(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])", method "setPlugin(string)void"
-    txna ApplicationArgs 0
-    match main_testVectorCreationAndEquality_route@3 main_addVectors_route@4 main_mutateVector_route@5 main_implicitCastingAndSpreading_route@6 main_testNestedObjects_route@7 main_testMethodSelector_route@8 main_testAssertMatch_route@9 main_testArc4Encoding_route@10 main_getPlugin_route@11 main_getMain_route@12 main_setPlugin_route@13
-
-main_after_if_else@20:
-    err
-
-main_setPlugin_route@13:
-    // tests/approvals/mutable-object.algo.ts:123
-    // public setPlugin(key: string) {
+    bz main___algots__.defaultCreate@18
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/mutable-object.algo.ts:12
-    // export class MutableObjectDemo extends Contract {
+    assert
+    pushbytess 0x89388ddd 0xef322d6d 0x02458807 0xcb81deb8 0xba27a9ba 0x2f670a55 0xd4c81f5b 0xf4835c23 0x3814f92a 0x007a4cb0 0xa9bc61f1 // method "testVectorCreationAndEquality()void", method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)", method "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)", method "implicitCastingAndSpreading((uint64,uint64))void", method "testNestedObjects(((uint64,uint64),(uint64,uint64)))void", method "testMethodSelector()void", method "testAssertMatch(uint64)void", method "testArc4Encoding((uint64,uint64))void", method "getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])", method "getMain()(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])", method "setPlugin(string)void"
+    txna ApplicationArgs 0
+    match main_testVectorCreationAndEquality_route@4 main_addVectors_route@5 main_mutateVector_route@6 main_implicitCastingAndSpreading_route@7 main_testNestedObjects_route@8 main_testMethodSelector_route@9 main_testAssertMatch_route@10 main_testArc4Encoding_route@11 main_getPlugin_route@12 main_getMain_route@13 main_setPlugin_route@14
+    err
+
+main_setPlugin_route@14:
+    // tests/approvals/mutable-object.algo.ts:123
+    // public setPlugin(key: string) {
     txna ApplicationArgs 1
     extract 2 0
     // tests/approvals/mutable-object.algo.ts:103
@@ -57,14 +53,7 @@ main_setPlugin_route@13:
     intc_2 // 1
     return
 
-main_getMain_route@12:
-    // tests/approvals/mutable-object.algo.ts:113
-    // public getMain() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_getMain_route@13:
     // tests/approvals/mutable-object.algo.ts:105
     // plugin = Box<PluginInfo>({ key: 'main' })
     bytec_2 // "main"
@@ -77,12 +66,12 @@ main_getMain_route@12:
     bytec_2 // "main"
     // tests/approvals/mutable-object.algo.ts:114-115
     // const value = clone(this.plugin.value)
-    // assert(value.lastCalled.native > 0, 'Last called not zero')
+    // assert(value.lastCalled.asUint64() > 0, 'Last called not zero')
     intc_3 // 16
     intc_0 // 8
     box_extract
     // tests/approvals/mutable-object.algo.ts:115
-    // assert(value.lastCalled.native > 0, 'Last called not zero')
+    // assert(value.lastCalled.asUint64() > 0, 'Last called not zero')
     btoi
     assert // Last called not zero
     // tests/approvals/mutable-object.algo.ts:113
@@ -94,16 +83,9 @@ main_getMain_route@12:
     intc_2 // 1
     return
 
-main_getPlugin_route@11:
+main_getPlugin_route@12:
     // tests/approvals/mutable-object.algo.ts:107
     // public getPlugin(key: string): PluginInfo {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/mutable-object.algo.ts:12
-    // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 1
     extract 2 0
     // tests/approvals/mutable-object.algo.ts:103
@@ -118,13 +100,13 @@ main_getPlugin_route@11:
     assert // Box must have value
     // tests/approvals/mutable-object.algo.ts:108-109
     // const value = clone(this.plugins(key).value)
-    // assert(value.lastCalled.native > 0, 'Last called not zero')
+    // assert(value.lastCalled.asUint64() > 0, 'Last called not zero')
     swap
     intc_3 // 16
     intc_0 // 8
     box_extract
     // tests/approvals/mutable-object.algo.ts:109
-    // assert(value.lastCalled.native > 0, 'Last called not zero')
+    // assert(value.lastCalled.asUint64() > 0, 'Last called not zero')
     btoi
     assert // Last called not zero
     // tests/approvals/mutable-object.algo.ts:107
@@ -136,16 +118,9 @@ main_getPlugin_route@11:
     intc_2 // 1
     return
 
-main_testArc4Encoding_route@10:
+main_testArc4Encoding_route@11:
     // tests/approvals/mutable-object.algo.ts:92
     // testArc4Encoding(p: Point) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/mutable-object.algo.ts:12
-    // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 1
     // tests/approvals/mutable-object.algo.ts:93
     // assert(p.x !== p.y, 'For the purpose of this test, a should not equal b')
@@ -195,22 +170,13 @@ main_testArc4Encoding_route@10:
     substring3
     concat
     ==
-    assert // Encoded order should be swapped
     // tests/approvals/mutable-object.algo.ts:92
     // testArc4Encoding(p: Point) {
-    intc_2 // 1
-    return
+    return // on error: Encoded order should be swapped
 
-main_testAssertMatch_route@9:
+main_testAssertMatch_route@10:
     // tests/approvals/mutable-object.algo.ts:75
     // testAssertMatch(x: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/mutable-object.algo.ts:12
-    // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 1
     btoi
     // tests/approvals/mutable-object.algo.ts:78
@@ -277,33 +243,19 @@ main_testAssertMatch_route@9:
     // tests/approvals/mutable-object.algo.ts:89
     // assertMatch(obj, { x: { greaterThan: x } })
     <
-    assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:75
     // testAssertMatch(x: uint64) {
-    intc_2 // 1
-    return
+    return // on error: assert target is match for conditions
 
-main_testMethodSelector_route@8:
+main_testMethodSelector_route@9:
     // tests/approvals/mutable-object.algo.ts:60
     // public testMethodSelector() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     intc_2 // 1
     return
 
-main_testNestedObjects_route@7:
+main_testNestedObjects_route@8:
     // tests/approvals/mutable-object.algo.ts:49
     // public testNestedObjects(vp: VectorPoint) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/mutable-object.algo.ts:12
-    // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 1
     // tests/approvals/mutable-object.algo.ts:50
     // const v1 = { x: vp.v.x, y: vp.v.y }
@@ -403,22 +355,13 @@ main_testNestedObjects_route@7:
     ==
     &&
     &&
-    assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:49
     // public testNestedObjects(vp: VectorPoint) {
-    intc_2 // 1
-    return
+    return // on error: assert target is match for conditions
 
-main_implicitCastingAndSpreading_route@6:
+main_implicitCastingAndSpreading_route@7:
     // tests/approvals/mutable-object.algo.ts:34
     // public implicitCastingAndSpreading(v1: Vector) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/mutable-object.algo.ts:12
-    // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 1
     // tests/approvals/mutable-object.algo.ts:36
     // const v3 = { ...v2 }
@@ -454,22 +397,13 @@ main_implicitCastingAndSpreading_route@6:
     // tests/approvals/mutable-object.algo.ts:42
     // assertMatch(v3, v1)
     &&
-    assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:34
     // public implicitCastingAndSpreading(v1: Vector) {
-    intc_2 // 1
-    return
+    return // on error: assert target is match for conditions
 
-main_mutateVector_route@5:
+main_mutateVector_route@6:
     // tests/approvals/mutable-object.algo.ts:28
     // public mutateVector(v1: Vector, newX: uint64, newY: uint64): Vector {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/mutable-object.algo.ts:12
-    // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 3
     txna ApplicationArgs 1
     txna ApplicationArgs 2
@@ -489,16 +423,9 @@ main_mutateVector_route@5:
     intc_2 // 1
     return
 
-main_addVectors_route@4:
+main_addVectors_route@5:
     // tests/approvals/mutable-object.algo.ts:21
     // public addVectors(v1: Vector, v2: Vector): Vector {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/mutable-object.algo.ts:12
-    // export class MutableObjectDemo extends Contract {
     txna ApplicationArgs 1
     txna ApplicationArgs 2
     // tests/approvals/mutable-object.algo.ts:23
@@ -538,14 +465,7 @@ main_addVectors_route@4:
     intc_2 // 1
     return
 
-main_testVectorCreationAndEquality_route@3:
-    // tests/approvals/mutable-object.algo.ts:13
-    // public testVectorCreationAndEquality() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_testVectorCreationAndEquality_route@4:
     // tests/approvals/mutable-object.algo.ts:14
     // const v1: Vector = { y: 1, x: 0 }
     intc_1 // 0
@@ -564,13 +484,12 @@ main_testVectorCreationAndEquality_route@3:
     intc_2 // 1
     return
 
-main_bare_routing@16:
+main___algots__.defaultCreate@18:
     // tests/approvals/mutable-object.algo.ts:12
     // export class MutableObjectDemo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@20
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_2 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

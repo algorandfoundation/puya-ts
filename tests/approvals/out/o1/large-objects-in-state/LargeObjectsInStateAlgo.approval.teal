@@ -8,66 +8,40 @@ main:
     // tests/approvals/large-objects-in-state.algo.ts:14
     // class LargeObjectsInStateAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@9
-    pushbytess 0x9beff36a 0xa4e8d164 0x1960177c 0x25f323d0 // method "getMbr()uint64", method "bootstrap(pay)void", method "increaseXCount(uint64,uint64)void", method "getCounts(uint64)(uint64,uint8)"
-    txna ApplicationArgs 0
-    match main_getMbr_route@3 main_bootstrap_route@4 main_increaseXCount_route@5 main_getCounts_route@6
-
-main_after_if_else@13:
-    err
-
-main_getCounts_route@6:
-    // tests/approvals/large-objects-in-state.algo.ts:33
-    // getCounts(index: uint64) {
+    bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/large-objects-in-state.algo.ts:14
-    // class LargeObjectsInStateAlgo extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    // tests/approvals/large-objects-in-state.algo.ts:33
-    // getCounts(index: uint64) {
-    callsub getCounts
-    pushbytes 0x151f7c75
-    swap
-    concat
+    assert
+    pushbytess 0x9beff36a 0xa4e8d164 0x1960177c 0x25f323d0 // method "getMbr()uint64", method "bootstrap(pay)void", method "increaseXCount(uint64,uint64)void", method "getCounts(uint64)(uint64,uint8)"
+    txna ApplicationArgs 0
+    match main_getMbr_route@4 bootstrap increaseXCount getCounts
+    err
+
+main_getMbr_route@4:
+    // tests/approvals/large-objects-in-state.algo.ts:17
+    // getMbr(): uint64 {
+    pushbytes 0x151f7c7500000000002d83f4
     log
     intc_0 // 1
     return
 
-main_increaseXCount_route@5:
-    // tests/approvals/large-objects-in-state.algo.ts:29
-    // increaseXCount(index: uint64, xCount: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main___algots__.defaultCreate@11:
     // tests/approvals/large-objects-in-state.algo.ts:14
     // class LargeObjectsInStateAlgo extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    txna ApplicationArgs 2
-    btoi
-    // tests/approvals/large-objects-in-state.algo.ts:29
-    // increaseXCount(index: uint64, xCount: uint64) {
-    callsub increaseXCount
-    intc_0 // 1
-    return
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
 
-main_bootstrap_route@4:
+
+// tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstrap[routing]() -> void:
+bootstrap:
     // tests/approvals/large-objects-in-state.algo.ts:21
     // bootstrap(pay: gtxn.PaymentTxn) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/large-objects-in-state.algo.ts:14
-    // class LargeObjectsInStateAlgo extends Contract {
     txn GroupIndex
     intc_0 // 1
     -
@@ -76,48 +50,12 @@ main_bootstrap_route@4:
     intc_0 // pay
     ==
     assert // transaction type is pay
-    // tests/approvals/large-objects-in-state.algo.ts:21
-    // bootstrap(pay: gtxn.PaymentTxn) {
-    callsub bootstrap
-    intc_0 // 1
-    return
-
-main_getMbr_route@3:
-    // tests/approvals/large-objects-in-state.algo.ts:17
-    // getMbr(): uint64 {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    pushbytes 0x151f7c7500000000002d83f4
-    log
-    intc_0 // 1
-    return
-
-main_bare_routing@9:
-    // tests/approvals/large-objects-in-state.algo.ts:14
-    // class LargeObjectsInStateAlgo extends Contract {
-    txn OnCompletion
-    bnz main_after_if_else@13
-    txn ApplicationID
-    !
-    assert // can only call when creating
-    intc_0 // 1
-    return
-
-
-// tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstrap(pay: uint64) -> void:
-bootstrap:
-    // tests/approvals/large-objects-in-state.algo.ts:21
-    // bootstrap(pay: gtxn.PaymentTxn) {
-    proto 1 0
     // tests/approvals/large-objects-in-state.algo.ts:22-25
     // assertMatch(pay, {
     //   amount: BOX_MBR + ACCOUNT_BASE_MBR,
     //   receiver: Global.currentApplicationAddress,
     // })
-    frame_dig -1
+    dup
     gtxns Amount
     // tests/approvals/large-objects-in-state.algo.ts:23
     // amount: BOX_MBR + ACCOUNT_BASE_MBR,
@@ -128,7 +66,7 @@ bootstrap:
     //   receiver: Global.currentApplicationAddress,
     // })
     ==
-    frame_dig -1
+    swap
     gtxns Receiver
     // tests/approvals/large-objects-in-state.algo.ts:24
     // receiver: Global.currentApplicationAddress,
@@ -149,17 +87,23 @@ bootstrap:
     pushint 7200 // 7200
     box_create
     pop
-    retsub
+    // tests/approvals/large-objects-in-state.algo.ts:21
+    // bootstrap(pay: gtxn.PaymentTxn) {
+    intc_0 // 1
+    return
 
 
-// tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount(index: uint64, xCount: uint64) -> void:
+// tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount[routing]() -> void:
 increaseXCount:
     // tests/approvals/large-objects-in-state.algo.ts:29
     // increaseXCount(index: uint64, xCount: uint64) {
-    proto 2 0
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
     // tests/approvals/large-objects-in-state.algo.ts:30
     // this.storage.value[index].x += xCount
-    frame_dig -2
+    swap
     intc_1 // 9
     *
     // tests/approvals/large-objects-in-state.algo.ts:15
@@ -172,7 +116,7 @@ increaseXCount:
     box_extract
     pushint 0 // 0
     extract_uint64
-    frame_dig -1
+    uncover 2
     +
     itob
     // tests/approvals/large-objects-in-state.algo.ts:15
@@ -182,17 +126,20 @@ increaseXCount:
     // this.storage.value[index].x += xCount
     cover 2
     box_replace
-    retsub
+    // tests/approvals/large-objects-in-state.algo.ts:29
+    // increaseXCount(index: uint64, xCount: uint64) {
+    intc_0 // 1
+    return
 
 
-// tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts(index: uint64) -> bytes:
+// tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts[routing]() -> void:
 getCounts:
     // tests/approvals/large-objects-in-state.algo.ts:33
     // getCounts(index: uint64) {
-    proto 1 1
+    txna ApplicationArgs 1
+    btoi
     // tests/approvals/large-objects-in-state.algo.ts:34
     // return this.storage.value[index]
-    frame_dig -1
     intc_1 // 9
     *
     // tests/approvals/large-objects-in-state.algo.ts:15
@@ -203,4 +150,11 @@ getCounts:
     swap
     intc_1 // 9
     box_extract
-    retsub
+    // tests/approvals/large-objects-in-state.algo.ts:33
+    // getCounts(index: uint64) {
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return

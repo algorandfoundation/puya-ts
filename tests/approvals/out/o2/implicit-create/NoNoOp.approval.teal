@@ -6,27 +6,22 @@ main:
     // tests/approvals/implicit-create.algo.ts:8
     // export class NoNoOp extends Contract {
     txn NumAppArgs
-    bnz main_after_if_else@8
-    pushints 4 0 // 4, 0
+    !
+    assert
+    pushints 0 4 // NoOp, UpdateApplication
     txn OnCompletion
-    match main_handleUpdate@4 main___algots__.defaultCreate@5
-
-main_after_if_else@8:
+    match main___algots__.defaultCreate@4 main_handleUpdate@5
     err
 
-main___algots__.defaultCreate@5:
+main_handleUpdate@5:
+    // tests/approvals/implicit-create.algo.ts:9
+    // @baremethod({ allowActions: 'UpdateApplication' })
+    txn ApplicationID
+    return // on error: can only call when not creating
+
+main___algots__.defaultCreate@4:
     // tests/approvals/implicit-create.algo.ts:8
     // export class NoNoOp extends Contract {
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
-
-main_handleUpdate@4:
-    // tests/approvals/implicit-create.algo.ts:9
-    // @baremethod({ allowActions: 'UpdateApplication' })
-    txn ApplicationID
-    assert // can only call when not creating
-    pushint 1 // 1
-    return
+    return // on error: can only call when creating
