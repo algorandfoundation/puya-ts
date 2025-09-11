@@ -3,29 +3,24 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1
     bytecblock 0x0003
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@8
-    pushbytess 0x8769b79a 0xf14889d7 0xd4c97c9c // method "emitSwapped(uint8,uint8)void", method "emitCustom(string,bool)void", method "emitDynamicBytes(byte[],byte[])void"
-    txna ApplicationArgs 0
-    match main_emitSwapped_route@3 main_emitCustom_route@4 main_emitDynamicBytes_route@5
-
-main_after_if_else@12:
-    err
-
-main_emitDynamicBytes_route@5:
-    // tests/approvals/arc-28-events.algo.ts:40
-    // emitDynamicBytes(x: bytes, y: DynamicBytes) {
+    bz main___algots__.defaultCreate@10
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/arc-28-events.algo.ts:13
-    // class EventEmitter extends Contract {
+    assert
+    pushbytess 0x8769b79a 0xf14889d7 0xd4c97c9c // method "emitSwapped(uint8,uint8)void", method "emitCustom(string,bool)void", method "emitDynamicBytes(byte[],byte[])void"
+    txna ApplicationArgs 0
+    match main_emitSwapped_route@4 main_emitCustom_route@5 main_emitDynamicBytes_route@6
+    err
+
+main_emitDynamicBytes_route@6:
+    // tests/approvals/arc-28-events.algo.ts:40
+    // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     txna ApplicationArgs 1
     txna ApplicationArgs 2
     // tests/approvals/arc-28-events.algo.ts:42
@@ -49,25 +44,18 @@ main_emitDynamicBytes_route@5:
     log
     // tests/approvals/arc-28-events.algo.ts:40
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
-    intc_0 // 1
+    pushint 1 // 1
     return
 
-main_emitCustom_route@4:
+main_emitCustom_route@5:
     // tests/approvals/arc-28-events.algo.ts:35
     // emitCustom(arg0: string, arg1: boolean) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/arc-28-events.algo.ts:13
-    // class EventEmitter extends Contract {
     txna ApplicationArgs 1
     // tests/approvals/arc-28-events.algo.ts:36
     // emit('Custom', arg0, arg1)
     bytec_0 // 0x0003
-    // tests/approvals/arc-28-events.algo.ts:13
-    // class EventEmitter extends Contract {
+    // tests/approvals/arc-28-events.algo.ts:35
+    // emitCustom(arg0: string, arg1: boolean) {
     txna ApplicationArgs 2
     // tests/approvals/arc-28-events.algo.ts:36
     // emit('Custom', arg0, arg1)
@@ -84,19 +72,12 @@ main_emitCustom_route@4:
     log
     // tests/approvals/arc-28-events.algo.ts:35
     // emitCustom(arg0: string, arg1: boolean) {
-    intc_0 // 1
+    pushint 1 // 1
     return
 
-main_emitSwapped_route@3:
+main_emitSwapped_route@4:
     // tests/approvals/arc-28-events.algo.ts:14
     // emitSwapped(a: Uint8, b: Uint8) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/arc-28-events.algo.ts:13
-    // class EventEmitter extends Contract {
     txna ApplicationArgs 1
     txna ApplicationArgs 2
     // tests/approvals/arc-28-events.algo.ts:15
@@ -159,16 +140,15 @@ main_emitSwapped_route@3:
     log
     // tests/approvals/arc-28-events.algo.ts:14
     // emitSwapped(a: Uint8, b: Uint8) {
-    intc_0 // 1
+    pushint 1 // 1
     return
 
-main_bare_routing@8:
+main___algots__.defaultCreate@10:
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@12
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_0 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

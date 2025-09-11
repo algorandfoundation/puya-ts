@@ -3,104 +3,76 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    bytecblock 0x151f7c75
     // tests/approvals/jsdoc.algo.ts:20
     // export class JSDocDemo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
     pushbytess 0x60d93beb 0x6618726a // method "test(uint64,byte[])(uint64)", method "test2(byte[])(byte[])"
     txna ApplicationArgs 0
-    match main_test_route@3 main_test2_route@4
-
-main_after_if_else@11:
+    match test test2
     err
 
-main_test2_route@4:
-    // tests/approvals/jsdoc.algo.ts:39
-    // test2(a: bytes): DemoType {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/jsdoc.algo.ts:20
-    // export class JSDocDemo extends Contract {
-    txna ApplicationArgs 1
-    extract 2 0
-    // tests/approvals/jsdoc.algo.ts:39
-    // test2(a: bytes): DemoType {
-    callsub test2
-    bytec_0 // 0x151f7c75
-    swap
-    concat
-    log
-    pushint 1 // 1
-    return
-
-main_test_route@3:
-    // tests/approvals/jsdoc.algo.ts:30
-    // test(a: uint64, b: bytes): DemoStruct {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/jsdoc.algo.ts:20
-    // export class JSDocDemo extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    txna ApplicationArgs 2
-    extract 2 0
-    // tests/approvals/jsdoc.algo.ts:30
-    // test(a: uint64, b: bytes): DemoStruct {
-    callsub test
-    bytec_0 // 0x151f7c75
-    swap
-    concat
-    log
-    pushint 1 // 1
-    return
-
-main_bare_routing@7:
+main___algots__.defaultCreate@9:
     // tests/approvals/jsdoc.algo.ts:20
     // export class JSDocDemo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@11
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
 
 
-// tests/approvals/jsdoc.algo.ts::JSDocDemo.test(a: uint64, b: bytes) -> bytes:
+// tests/approvals/jsdoc.algo.ts::JSDocDemo.test[routing]() -> void:
 test:
     // tests/approvals/jsdoc.algo.ts:30
     // test(a: uint64, b: bytes): DemoStruct {
-    proto 2 1
-    // tests/approvals/jsdoc.algo.ts:31
-    // return new DemoStruct({ a: new Uint<64>(a) })
-    frame_dig -2
-    itob
-    retsub
+    pushbytes 0x151f7c75
+    txna ApplicationArgs 1
+    concat
+    log
+    pushint 1 // 1
+    return
 
 
-// tests/approvals/jsdoc.algo.ts::JSDocDemo.test2(a: bytes) -> bytes:
+// tests/approvals/jsdoc.algo.ts::JSDocDemo.test2[routing]() -> void:
 test2:
     // tests/approvals/jsdoc.algo.ts:39
     // test2(a: bytes): DemoType {
-    proto 1 1
+    txna ApplicationArgs 1
+    extract 2 0
     // tests/approvals/jsdoc.algo.ts:40-42
     // return {
     //   a,
     // }
-    frame_dig -1
+    dup
     len
     itob
     extract 6 2
-    frame_dig -1
-    concat
-    pushbytes 0x0002
     swap
     concat
-    retsub
+    // tests/approvals/jsdoc.algo.ts:39-42
+    // test2(a: bytes): DemoType {
+    //   return {
+    //     a,
+    //   }
+    pushbytes 0x151f7c750002
+    // tests/approvals/jsdoc.algo.ts:39
+    // test2(a: bytes): DemoType {
+    swap
+    // tests/approvals/jsdoc.algo.ts:39-42
+    // test2(a: bytes): DemoType {
+    //   return {
+    //     a,
+    //   }
+    concat
+    // tests/approvals/jsdoc.algo.ts:39
+    // test2(a: bytes): DemoType {
+    log
+    pushint 1 // 1
+    return

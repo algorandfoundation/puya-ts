@@ -3,9 +3,8 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1
+    intcblock 1 0
     bytecblock 0x151f7c75 "common" "base-two"
-    pushbytes ""
     b main_block@0
 
 main_block@0:
@@ -24,12 +23,25 @@ main_block@3:
     // tests/approvals/multi-inheritance.algo.ts:45
     // export class MultiBases extends classes(NameStore, BaseOne, BaseTwo) {
     txn NumAppArgs
-    intc_0 // 0
+    intc_1 // 0
     !=
-    bz main_bare_routing@15
+    bz main___algots__.defaultCreate@17
     b main_abi_routing@4
 
 main_abi_routing@4:
+    // tests/approvals/multi-inheritance.algo.ts:45
+    // export class MultiBases extends classes(NameStore, BaseOne, BaseTwo) {
+    txn OnCompletion
+    intc_1 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_1 // 0
+    !=
+    bz main_create_NoOp@15
+    b main_call_NoOp@5
+
+main_call_NoOp@5:
     // tests/approvals/multi-inheritance.algo.ts:45
     // export class MultiBases extends classes(NameStore, BaseOne, BaseTwo) {
     txna ApplicationArgs 0
@@ -42,266 +54,268 @@ main_abi_routing@4:
     pushbytes 0xf9f5142c // method "b2CantOverride()string"
     pushbytes 0x363b329e // method "methodTwo()string"
     uncover 8
-    match main_methodMulti_route@5 main_methodCallsSuper_route@6 main_callB2CantOverride_route@7 main_callB2Common_route@8 main_methodOne_route@9 main_methodCommon_route@10 main_b2CantOverride_route@11 main_methodTwo_route@12
-    b main_switch_case_default@13
-
-main_switch_case_default@13:
+    match main_methodMulti_route@6 main_methodCallsSuper_route@7 main_callB2CantOverride_route@8 main_callB2Common_route@9 main_methodOne_route@10 main_methodCommon_route@11 main_b2CantOverride_route@12 main_methodTwo_route@13
     b main_switch_case_next@14
 
 main_switch_case_next@14:
-    b main_after_if_else@19
+    b main_after_if_else@16
 
-main_after_if_else@19:
+main_after_if_else@16:
+    b main_after_if_else@18
+
+main_after_if_else@18:
     // tests/approvals/multi-inheritance.algo.ts:45
     // export class MultiBases extends classes(NameStore, BaseOne, BaseTwo) {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__@20
+    err
 
-main_after_inlined_tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__@20:
-    return
-
-main_methodTwo_route@12:
+main_methodTwo_route@13:
     // tests/approvals/multi-inheritance.algo.ts:31
     // methodTwo() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub methodTwo
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_0 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_b2CantOverride_route@11:
+main_b2CantOverride_route@12:
     // tests/approvals/multi-inheritance.algo.ts:17
     // b2CantOverride(): string {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub b2CantOverride
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_0 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_methodCommon_route@10:
+main_methodCommon_route@11:
     // tests/approvals/multi-inheritance.algo.ts:13
     // methodCommon() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub methodCommon
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_0 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_methodOne_route@9:
+main_methodOne_route@10:
     // tests/approvals/multi-inheritance.algo.ts:24
     // methodOne() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub methodOne
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_0 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_callB2Common_route@8:
+main_callB2Common_route@9:
     // tests/approvals/multi-inheritance.algo.ts:60
     // callB2Common() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub callB2Common
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_0 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_callB2CantOverride_route@7:
+main_callB2CantOverride_route@8:
     // tests/approvals/multi-inheritance.algo.ts:56
     // callB2CantOverride() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub callB2CantOverride
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_0 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_methodCallsSuper_route@6:
+main_methodCallsSuper_route@7:
     // tests/approvals/multi-inheritance.algo.ts:52
     // methodCallsSuper() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub methodCallsSuper
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_0 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_methodMulti_route@5:
+main_methodMulti_route@6:
     // tests/approvals/multi-inheritance.algo.ts:48
     // methodMulti() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub methodMulti
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_0 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_bare_routing@15:
+main_create_NoOp@15:
+    b main_after_if_else@16
+
+main___algots__.defaultCreate@17:
     // tests/approvals/multi-inheritance.algo.ts:45
     // export class MultiBases extends classes(NameStore, BaseOne, BaseTwo) {
     txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@16
-    b main_switch_case_default@17
-
-main_switch_case_default@17:
-    b main_switch_case_next@18
-
-main_switch_case_next@18:
-    b main_after_if_else@19
-
-main___algots__.defaultCreate@16:
-    // tests/approvals/multi-inheritance.algo.ts:45
-    // export class MultiBases extends classes(NameStore, BaseOne, BaseTwo) {
-    txn ApplicationID
-    intc_0 // 0
+    intc_1 // NoOp
     ==
-    assert // can only call when creating
+    txn ApplicationID
+    intc_1 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router__@20
+    intc_0 // 1
+    return
 
 
-// tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti() -> bytes:
+// tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti[routing]() -> void:
 methodMulti:
     b methodMulti_block@0
 
 methodMulti_block@0:
+    // tests/approvals/multi-inheritance.algo.ts:48
+    // methodMulti() {
+    callsub tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper[routing]() -> void:
+methodCallsSuper:
+    b methodCallsSuper_block@0
+
+methodCallsSuper_block@0:
+    // tests/approvals/multi-inheritance.algo.ts:52
+    // methodCallsSuper() {
+    callsub tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride[routing]() -> void:
+callB2CantOverride:
+    b callB2CantOverride_block@0
+
+callB2CantOverride_block@0:
+    // tests/approvals/multi-inheritance.algo.ts:56
+    // callB2CantOverride() {
+    callsub tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common[routing]() -> void:
+callB2Common:
+    b callB2Common_block@0
+
+callB2Common_block@0:
+    // tests/approvals/multi-inheritance.algo.ts:60
+    // callB2Common() {
+    callsub tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne[routing]() -> void:
+methodOne:
+    b methodOne_block@0
+
+methodOne_block@0:
+    // tests/approvals/multi-inheritance.algo.ts:24
+    // methodOne() {
+    callsub tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon[routing]() -> void:
+methodCommon:
+    b methodCommon_block@0
+
+methodCommon_block@0:
+    // tests/approvals/multi-inheritance.algo.ts:13
+    // methodCommon() {
+    callsub tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride[routing]() -> void:
+b2CantOverride:
+    b b2CantOverride_block@0
+
+b2CantOverride_block@0:
+    // tests/approvals/multi-inheritance.algo.ts:17
+    // b2CantOverride(): string {
+    callsub tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo[routing]() -> void:
+methodTwo:
+    b methodTwo_block@0
+
+methodTwo_block@0:
+    // tests/approvals/multi-inheritance.algo.ts:31
+    // methodTwo() {
+    callsub tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti() -> bytes:
+tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti:
+    b tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti_block@0
+
+tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti_block@0:
     // tests/approvals/multi-inheritance.algo.ts:49
     // return 'multi-bases'
     pushbytes "multi-bases"
@@ -309,21 +323,21 @@ methodMulti_block@0:
 
 
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper() -> bytes:
-methodCallsSuper:
-    b methodCallsSuper_block@0
+tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper:
+    b tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper_block@0
 
-methodCallsSuper_block@0:
+tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper_block@0:
     // tests/approvals/multi-inheritance.algo.ts:53
     // return super.methodTwo()
-    callsub methodTwo
+    callsub tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo
     retsub
 
 
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride() -> bytes:
-callB2CantOverride:
-    b callB2CantOverride_block@0
+tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride:
+    b tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride_block@0
 
-callB2CantOverride_block@0:
+tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride_block@0:
     // tests/approvals/multi-inheritance.algo.ts:57
     // return super.class(BaseTwo).b2CantOverride()
     callsub tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride
@@ -331,21 +345,21 @@ callB2CantOverride_block@0:
 
 
 // tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common() -> bytes:
-callB2Common:
-    b callB2Common_block@0
+tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common:
+    b tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common_block@0
 
-callB2Common_block@0:
+tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common_block@0:
     // tests/approvals/multi-inheritance.algo.ts:61
     // return super.class(BaseTwo).methodCommon()
-    callsub methodCommon
+    callsub tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon
     retsub
 
 
 // tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> bytes:
-methodOne:
-    b methodOne_block@0
+tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne:
+    b tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne_block@0
 
-methodOne_block@0:
+tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne_block@0:
     // tests/approvals/multi-inheritance.algo.ts:25
     // return 'base-one'
     pushbytes "base-one"
@@ -353,10 +367,10 @@ methodOne_block@0:
 
 
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
-methodCommon:
-    b methodCommon_block@0
+tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon:
+    b tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon_block@0
 
-methodCommon_block@0:
+tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon_block@0:
     // tests/approvals/multi-inheritance.algo.ts:14
     // return 'common'
     bytec_1 // "common"
@@ -364,10 +378,10 @@ methodCommon_block@0:
 
 
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
-b2CantOverride:
-    b b2CantOverride_block@0
+tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride:
+    b tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride_block@0
 
-b2CantOverride_block@0:
+tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride_block@0:
     // tests/approvals/multi-inheritance.algo.ts:18
     // return 'common'
     bytec_1 // "common"
@@ -375,10 +389,10 @@ b2CantOverride_block@0:
 
 
 // tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo() -> bytes:
-methodTwo:
-    b methodTwo_block@0
+tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo:
+    b tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo_block@0
 
-methodTwo_block@0:
+tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo_block@0:
     // tests/approvals/multi-inheritance.algo.ts:32
     // return 'base-two'
     bytec_2 // "base-two"

@@ -3,17 +3,15 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 8 10 40
+    intcblock 8 10 40 2
     bytecblock "a" "b" "c" "d" "bool" "arc4b"
     // tests/approvals/box-proxies.algo.ts:140
     // class BoxCreate extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     pushbytes 0x932010c1 // method "createBoxes()void"
     txna ApplicationArgs 0
     match main_createBoxes_route@3
-
-main_after_if_else@10:
     err
 
 main_createBoxes_route@3:
@@ -21,33 +19,30 @@ main_createBoxes_route@3:
     // createBoxes() {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    callsub createBoxes
-    intc_0 // 1
-    return
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    b createBoxes
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/box-proxies.algo.ts:140
     // class BoxCreate extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_0 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
 
 
-// tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes() -> void:
+// tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes[routing]() -> void:
 createBoxes:
     // tests/approvals/box-proxies.algo.ts:143
     // boxStr = Box<string>({ key: 'a' })
     bytec_0 // "a"
     // tests/approvals/box-proxies.algo.ts:150
     // this.boxStr.create({ size: 10 })
-    intc_2 // 10
+    intc_1 // 10
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:143
@@ -57,7 +52,7 @@ createBoxes:
     // assert(this.boxStr.length === 10)
     box_len
     pop
-    intc_2 // 10
+    intc_1 // 10
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:144
@@ -65,7 +60,7 @@ createBoxes:
     bytec_1 // "b"
     // tests/approvals/box-proxies.algo.ts:152
     // this.boxUint.create()
-    intc_1 // 8
+    intc_0 // 8
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:144
@@ -75,7 +70,7 @@ createBoxes:
     // assert(this.boxUint.length === 8)
     box_len
     pop
-    intc_1 // 8
+    intc_0 // 8
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:145
@@ -83,7 +78,7 @@ createBoxes:
     bytec_2 // "c"
     // tests/approvals/box-proxies.algo.ts:154
     // this.boxStaticArray.create()
-    intc_3 // 40
+    intc_2 // 40
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:145
@@ -93,7 +88,7 @@ createBoxes:
     // assert(this.boxStaticArray.length === (32 / 8) * 10)
     box_len
     pop
-    intc_3 // 40
+    intc_2 // 40
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:146
@@ -101,7 +96,7 @@ createBoxes:
     bytec_3 // "d"
     // tests/approvals/box-proxies.algo.ts:156
     // this.boxDynamicArray.create({ size: 2 })
-    pushint 2 // 2
+    intc_3 // 2
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:146
@@ -111,7 +106,7 @@ createBoxes:
     // assert(this.boxDynamicArray.length === 2)
     box_len
     pop
-    pushint 2 // 2
+    intc_3 // 2
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:147
@@ -137,7 +132,7 @@ createBoxes:
     bytec 4 // "bool"
     // tests/approvals/box-proxies.algo.ts:160
     // this.boxBool.create()
-    intc_1 // 8
+    intc_0 // 8
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:141
@@ -147,7 +142,7 @@ createBoxes:
     // assert(this.boxBool.length === 8)
     box_len
     pop
-    intc_1 // 8
+    intc_0 // 8
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:142
@@ -155,7 +150,7 @@ createBoxes:
     bytec 5 // "arc4b"
     // tests/approvals/box-proxies.algo.ts:162
     // this.boxArc4Bool.create()
-    intc_0 // 1
+    pushint 1 // 1
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:142
@@ -165,7 +160,8 @@ createBoxes:
     // assert(this.boxArc4Bool.length === 1)
     box_len
     pop
-    intc_0 // 1
+    pushint 1 // 1
     ==
-    assert
-    retsub
+    // tests/approvals/box-proxies.algo.ts:149
+    // createBoxes() {
+    return

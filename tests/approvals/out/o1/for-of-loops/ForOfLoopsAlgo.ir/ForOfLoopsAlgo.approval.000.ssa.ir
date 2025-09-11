@@ -7,136 +7,133 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_rout
     block@0: // L8
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
-        goto tmp%1#0 ? block@1 : block@12
+        goto tmp%1#0 ? block@1 : block@14
     block@1: // abi_routing_L8
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "test_for_of_loop_tuple((uint64,uint64,uint64))uint64" => block@2, method "test_for_of_loop_destructured_tuple(uint64[])uint64" => block@3, method "test_for_of_loop_destructured_object((uint64,uint64)[])uint64" => block@4, method "test_for_of_loop_arc4_dynamic_array(uint64[])uint64" => block@5, method "test_for_of_loop_arc4_static_array(uint64[5])uint64" => block@6, method "test_for_of_loop_native_immutable_array(uint64[])uint64" => block@7, method "test_for_of_loop_native_mutable_array((uint64,uint64,uint64))uint64" => block@8, method "test_iterable_props(uint64[3],uint64[3],uint64[])uint64" => block@9, * => block@10}
-    block@2: // test_for_of_loop_tuple_route_L9
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (== tmp%3#0 NoOp)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        let tmp%6#0: bool = (!= tmp%5#0 0u)
-        (assert tmp%6#0) // can only call when not creating
-        let reinterpret_Encoded(uint64,uint64,uint64)%0#0: Encoded(uint64,uint64,uint64) = (txna ApplicationArgs 1)
-        let (tmp%7#0: uint64, tmp%8#0: uint64, tmp%9#0: uint64) = decode_bytes<(uint64,uint64,uint64,)>(reinterpret_Encoded(uint64,uint64,uint64)%0#0)
-        let tmp%10#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple(tmp%7#0, tmp%8#0, tmp%9#0)
-        let tmp%11#0: Encoded(uint64) = bytes_encode<uint64>(tmp%10#0)
-        let tmp%12#0: bytes = (concat 0x151f7c75 tmp%11#0)
-        (log tmp%12#0)
-        return 1u
-    block@3: // test_for_of_loop_destructured_tuple_route_L18
-        let tmp%13#0: uint64 = (txn OnCompletion)
-        let tmp%14#0: bool = (== tmp%13#0 NoOp)
-        (assert tmp%14#0) // OnCompletion is not NoOp
-        let tmp%15#0: uint64 = (txn ApplicationID)
-        let tmp%16#0: bool = (!= tmp%15#0 0u)
-        (assert tmp%16#0) // can only call when not creating
-        let reinterpret_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
-        let tmp%17#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple(reinterpret_Encoded(len+uint64[])%0#0)
-        let tmp%18#0: Encoded(uint64) = bytes_encode<uint64>(tmp%17#0)
-        let tmp%19#0: bytes = (concat 0x151f7c75 tmp%18#0)
-        (log tmp%19#0)
-        return 1u
-    block@4: // test_for_of_loop_destructured_object_route_L27
-        let tmp%20#0: uint64 = (txn OnCompletion)
-        let tmp%21#0: bool = (== tmp%20#0 NoOp)
-        (assert tmp%21#0) // OnCompletion is not NoOp
-        let tmp%22#0: uint64 = (txn ApplicationID)
-        let tmp%23#0: bool = (!= tmp%22#0 0u)
-        (assert tmp%23#0) // can only call when not creating
-        let reinterpret_Encoded(len+(uint64,uint64)[])%0#0: Encoded(len+(uint64,uint64)[]) = (txna ApplicationArgs 1)
-        let tmp%24#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object(reinterpret_Encoded(len+(uint64,uint64)[])%0#0)
-        let tmp%25#0: Encoded(uint64) = bytes_encode<uint64>(tmp%24#0)
-        let tmp%26#0: bytes = (concat 0x151f7c75 tmp%25#0)
-        (log tmp%26#0)
-        return 1u
-    block@5: // test_for_of_loop_arc4_dynamic_array_route_L36
-        let tmp%27#0: uint64 = (txn OnCompletion)
-        let tmp%28#0: bool = (== tmp%27#0 NoOp)
-        (assert tmp%28#0) // OnCompletion is not NoOp
-        let tmp%29#0: uint64 = (txn ApplicationID)
-        let tmp%30#0: bool = (!= tmp%29#0 0u)
-        (assert tmp%30#0) // can only call when not creating
-        let reinterpret_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
-        let tmp%31#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array(reinterpret_Encoded(len+uint64[])%1#0)
-        let tmp%32#0: Encoded(uint64) = bytes_encode<uint64>(tmp%31#0)
-        let tmp%33#0: bytes = (concat 0x151f7c75 tmp%32#0)
-        (log tmp%33#0)
-        return 1u
-    block@6: // test_for_of_loop_arc4_static_array_route_L45
-        let tmp%34#0: uint64 = (txn OnCompletion)
-        let tmp%35#0: bool = (== tmp%34#0 NoOp)
-        (assert tmp%35#0) // OnCompletion is not NoOp
-        let tmp%36#0: uint64 = (txn ApplicationID)
-        let tmp%37#0: bool = (!= tmp%36#0 0u)
-        (assert tmp%37#0) // can only call when not creating
-        let reinterpret_Encoded(uint64[5])%0#0: Encoded(uint64[5]) = (txna ApplicationArgs 1)
-        let tmp%38#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array(reinterpret_Encoded(uint64[5])%0#0)
-        let tmp%39#0: Encoded(uint64) = bytes_encode<uint64>(tmp%38#0)
-        let tmp%40#0: bytes = (concat 0x151f7c75 tmp%39#0)
-        (log tmp%40#0)
-        return 1u
-    block@7: // test_for_of_loop_native_immutable_array_route_L54
-        let tmp%41#0: uint64 = (txn OnCompletion)
-        let tmp%42#0: bool = (== tmp%41#0 NoOp)
-        (assert tmp%42#0) // OnCompletion is not NoOp
-        let tmp%43#0: uint64 = (txn ApplicationID)
-        let tmp%44#0: bool = (!= tmp%43#0 0u)
-        (assert tmp%44#0) // can only call when not creating
-        let reinterpret_Encoded(len+uint64[])%2#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
-        let tmp%45#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array(reinterpret_Encoded(len+uint64[])%2#0)
-        let tmp%46#0: Encoded(uint64) = bytes_encode<uint64>(tmp%45#0)
-        let tmp%47#0: bytes = (concat 0x151f7c75 tmp%46#0)
-        (log tmp%47#0)
-        return 1u
-    block@8: // test_for_of_loop_native_mutable_array_route_L63
-        let tmp%48#0: uint64 = (txn OnCompletion)
-        let tmp%49#0: bool = (== tmp%48#0 NoOp)
-        (assert tmp%49#0) // OnCompletion is not NoOp
-        let tmp%50#0: uint64 = (txn ApplicationID)
-        let tmp%51#0: bool = (!= tmp%50#0 0u)
-        (assert tmp%51#0) // can only call when not creating
-        let reinterpret_Encoded(uint64,uint64,uint64)%1#0: Encoded(uint64,uint64,uint64) = (txna ApplicationArgs 1)
-        let tmp%52#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(reinterpret_Encoded(uint64,uint64,uint64)%1#0)
-        let tmp%53#0: Encoded(uint64) = bytes_encode<uint64>(tmp%52#0)
-        let tmp%54#0: bytes = (concat 0x151f7c75 tmp%53#0)
-        (log tmp%54#0)
-        return 1u
-    block@9: // test_iterable_props_route_L73
-        let tmp%55#0: uint64 = (txn OnCompletion)
-        let tmp%56#0: bool = (== tmp%55#0 NoOp)
-        (assert tmp%56#0) // OnCompletion is not NoOp
-        let tmp%57#0: uint64 = (txn ApplicationID)
-        let tmp%58#0: bool = (!= tmp%57#0 0u)
-        (assert tmp%58#0) // can only call when not creating
-        let reinterpret_Encoded(uint64[3])%0#0: Encoded(uint64[3]) = (txna ApplicationArgs 1)
-        let reinterpret_Encoded(uint64[3])%1#0: Encoded(uint64[3]) = (txna ApplicationArgs 2)
-        let reinterpret_Encoded(len+uint64[])%3#0: Encoded(len+uint64[]) = (txna ApplicationArgs 3)
-        let tmp%59#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props(reinterpret_Encoded(uint64[3])%0#0, reinterpret_Encoded(uint64[3])%1#0, reinterpret_Encoded(len+uint64[])%3#0)
-        let tmp%60#0: Encoded(uint64) = bytes_encode<uint64>(tmp%59#0)
-        let tmp%61#0: bytes = (concat 0x151f7c75 tmp%60#0)
-        (log tmp%61#0)
-        return 1u
-    block@10: // switch_case_default_L8
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@2 : block@12
+    block@2: // call_NoOp_L8
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "test_for_of_loop_tuple((uint64,uint64,uint64))uint64" => block@3, method "test_for_of_loop_destructured_tuple(uint64[])uint64" => block@4, method "test_for_of_loop_destructured_object((uint64,uint64)[])uint64" => block@5, method "test_for_of_loop_arc4_dynamic_array(uint64[])uint64" => block@6, method "test_for_of_loop_arc4_static_array(uint64[5])uint64" => block@7, method "test_for_of_loop_native_immutable_array(uint64[])uint64" => block@8, method "test_for_of_loop_native_mutable_array((uint64,uint64,uint64))uint64" => block@9, method "test_iterable_props(uint64[3],uint64[3],uint64[])uint64" => block@10, * => block@11}
+    block@3: // test_for_of_loop_tuple_route_L9
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple[routing]()
+        goto block@11
+    block@4: // test_for_of_loop_destructured_tuple_route_L18
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple[routing]()
+        goto block@11
+    block@5: // test_for_of_loop_destructured_object_route_L27
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object[routing]()
+        goto block@11
+    block@6: // test_for_of_loop_arc4_dynamic_array_route_L36
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array[routing]()
+        goto block@11
+    block@7: // test_for_of_loop_arc4_static_array_route_L45
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array[routing]()
+        goto block@11
+    block@8: // test_for_of_loop_native_immutable_array_route_L54
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array[routing]()
+        goto block@11
+    block@9: // test_for_of_loop_native_mutable_array_route_L63
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array[routing]()
+        goto block@11
+    block@10: // test_iterable_props_route_L73
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props[routing]()
         goto block@11
     block@11: // switch_case_next_L8
-        goto block@16
-    block@12: // bare_routing_L8
-        let tmp%62#0: uint64 = (txn OnCompletion)
-        switch tmp%62#0 {0u => block@13, * => block@14}
-    block@13: // __algots__.defaultCreate_L8
-        let tmp%63#0: uint64 = (txn ApplicationID)
-        let tmp%64#0: bool = (== tmp%63#0 0u)
-        (assert tmp%64#0) // can only call when creating
-        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__algots__.defaultCreate()
-        return 1u
-    block@14: // switch_case_default_L8
+        goto block@13
+    block@12: // create_NoOp_L8
+        goto block@13
+    block@13: // after_if_else_L8
         goto block@15
-    block@15: // switch_case_next_L8
-        goto block@16
-    block@16: // after_if_else_L8
-        return 0u
+    block@14: // __algots__.defaultCreate_L8
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__algots__.defaultCreate()
+        exit 1u
+    block@15: // after_if_else_L8
+        exit 0u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple[routing]() -> void:
+    block@0: // L9
+        let reinterpret_Encoded(uint64,uint64,uint64)%0#0: Encoded(uint64,uint64,uint64) = (txna ApplicationArgs 1)
+        let (tmp%0#0: uint64, tmp%1#0: uint64, tmp%2#0: uint64) = decode_bytes<(uint64,uint64,uint64,)>(reinterpret_Encoded(uint64,uint64,uint64)%0#0)
+        let tmp%3#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple(tmp%0#0, tmp%1#0, tmp%2#0)
+        let tmp%4#0: Encoded(uint64) = bytes_encode<uint64>(tmp%3#0)
+        let tmp%5#0: bytes = (concat 0x151f7c75 tmp%4#0)
+        (log tmp%5#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple[routing]() -> void:
+    block@0: // L18
+        let reinterpret_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
+        let tmp%0#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple(reinterpret_Encoded(len+uint64[])%0#0)
+        let tmp%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object[routing]() -> void:
+    block@0: // L27
+        let reinterpret_Encoded(len+(uint64,uint64)[])%0#0: Encoded(len+(uint64,uint64)[]) = (txna ApplicationArgs 1)
+        let tmp%0#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object(reinterpret_Encoded(len+(uint64,uint64)[])%0#0)
+        let tmp%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array[routing]() -> void:
+    block@0: // L36
+        let reinterpret_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
+        let tmp%0#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array(reinterpret_Encoded(len+uint64[])%0#0)
+        let tmp%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array[routing]() -> void:
+    block@0: // L45
+        let reinterpret_Encoded(uint64[5])%0#0: Encoded(uint64[5]) = (txna ApplicationArgs 1)
+        let tmp%0#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array(reinterpret_Encoded(uint64[5])%0#0)
+        let tmp%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array[routing]() -> void:
+    block@0: // L54
+        let reinterpret_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
+        let tmp%0#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array(reinterpret_Encoded(len+uint64[])%0#0)
+        let tmp%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array[routing]() -> void:
+    block@0: // L63
+        let reinterpret_Encoded(uint64,uint64,uint64)%0#0: Encoded(uint64,uint64,uint64) = (txna ApplicationArgs 1)
+        let tmp%0#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(reinterpret_Encoded(uint64,uint64,uint64)%0#0)
+        let tmp%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props[routing]() -> void:
+    block@0: // L73
+        let reinterpret_Encoded(uint64[3])%0#0: Encoded(uint64[3]) = (txna ApplicationArgs 1)
+        let reinterpret_Encoded(uint64[3])%1#0: Encoded(uint64[3]) = (txna ApplicationArgs 2)
+        let reinterpret_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = (txna ApplicationArgs 3)
+        let tmp%0#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props(reinterpret_Encoded(uint64[3])%0#0, reinterpret_Encoded(uint64[3])%1#0, reinterpret_Encoded(len+uint64[])%0#0)
+        let tmp%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
 
 subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple(items.0: uint64, items.1: uint64, items.2: uint64) -> uint64:
     block@0: // L9

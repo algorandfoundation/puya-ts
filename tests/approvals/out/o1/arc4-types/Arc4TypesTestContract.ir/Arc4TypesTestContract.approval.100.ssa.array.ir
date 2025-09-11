@@ -2,7 +2,7 @@ main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
     block@2: // while_top_L20
         let tmp%1#1: uint64 = (global OpcodeBudget)
         let tmp%2#0: bool = (> 1410u tmp%1#1)
-        goto tmp%2#0 ? block@3 : block@8
+        goto tmp%2#0 ? block@3 : block@7
     block@3: // while_body_L21
         itxn_begin
         ((itxn_field TypeEnum) appl)
@@ -12,7 +12,7 @@ main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
         ((itxn_field Fee) 0u)
         itxn_submit
         goto block@2
-    block@8: // after_while_L20
+    block@7: // after_while_L20
         let aggregate%length%0#0: uint64 = (len "")
         let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
         let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
@@ -91,11 +91,11 @@ main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
         let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#0
         let array_length#0: uint64 = (extract_uint16 myArray#1 0u)
         let length_minus_1#0: uint64 = (- array_length#0 1u)
-        let tmp%2#9: bytes = (itob length_minus_1#0)
-        let tmp%3#9: bytes = ((extract 6 0) tmp%2#9)
-        let result#1: bytes = ((replace2 0) myArray#1 tmp%3#9)
-        let tmp%5#5: uint64 = (len result#1)
-        let item_location#0: uint64 = (- tmp%5#5 8u)
+        let tmp%2#11: bytes = (itob length_minus_1#0)
+        let tmp%3#11: bytes = ((extract 6 0) tmp%2#11)
+        let result#1: bytes = ((replace2 0) myArray#1 tmp%3#11)
+        let tmp%5#8: uint64 = (len result#1)
+        let item_location#0: uint64 = (- tmp%5#8 8u)
         let popped#0: bytes = (extract3 result#1 item_location#0 8u)
         let tmp%4#2: bool = (== array_item%0#0 popped#0)
         (assert tmp%4#2)
@@ -300,4 +300,40 @@ main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
         let tmp%0#0: uint64 = aggregate%array_length%1#0
         let tmp%1#0: bool = (! tmp%0#0)
         (assert tmp%1#0)
+        let tmp%0#11: uint64 = (btoi 0x2a)
+        let tmp%1#10: bool = (== tmp%0#11 42u)
+        (assert tmp%1#10)
+        let tmp%2#9: uint64 = (btoi 0xffffffffffffffff)
+        let tmp%3#9: bool = (== tmp%2#9 18446744073709551615u)
+        (assert tmp%3#9)
+        let aggregate%bitlen%1#0: uint64 = (bitlen 0x00000000000000000000000000000001)
+        let aggregate%lte%0#0: bool = (<= aggregate%bitlen%1#0 64u)
+        (assert aggregate%lte%0#0) // overflow
+        let aggregate%len%0#0: uint64 = (len 0x00000000000000000000000000000001)
+        let aggregate%sub%0#0: uint64 = (- aggregate%len%0#0 8u)
+        let aggregate%extract_uint64%0#0: uint64 = (extract_uint64 0x00000000000000000000000000000001 aggregate%sub%0#0)
+        let tmp%4#7: uint64 = aggregate%extract_uint64%0#0
+        let tmp%5#6: bool = (== tmp%4#7 1u)
+        (assert tmp%5#6)
+        let aggregate%bitlen%2#0: uint64 = (bitlen 0x000000000000000000000000000000000000000000000000ffffffffffffffff)
+        let aggregate%lte%1#0: bool = (<= aggregate%bitlen%2#0 64u)
+        (assert aggregate%lte%1#0) // overflow
+        let aggregate%len%1#0: uint64 = (len 0x000000000000000000000000000000000000000000000000ffffffffffffffff)
+        let aggregate%sub%1#0: uint64 = (- aggregate%len%1#0 8u)
+        let aggregate%extract_uint64%1#0: uint64 = (extract_uint64 0x000000000000000000000000000000000000000000000000ffffffffffffffff aggregate%sub%1#0)
+        let tmp%6#5: uint64 = aggregate%extract_uint64%1#0
+        let tmp%7#5: bool = (== tmp%6#5 18446744073709551615u)
+        (assert tmp%7#5)
+        let tmp%0#12: biguint = 0x2a
+        let tmp%1#11: bool = (b== tmp%0#12 42b)
+        (assert tmp%1#11)
+        let tmp%2#10: biguint = 0xffffffffffffffff
+        let tmp%3#10: bool = (b== tmp%2#10 18446744073709551615b)
+        (assert tmp%3#10)
+        let tmp%4#8: biguint = 0x00000000000000000000000000000001
+        let tmp%5#7: bool = (b== tmp%4#8 1b)
+        (assert tmp%5#7)
+        let tmp%6#6: biguint = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+        let tmp%7#6: bool = (b== tmp%6#6 115792089237316195423570985008687907853269984665640564039457584007913129639935b)
+        (assert tmp%7#6)
         return 1u

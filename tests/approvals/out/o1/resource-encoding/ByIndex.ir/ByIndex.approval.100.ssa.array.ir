@@ -1,67 +1,55 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
-        goto tmp%0#1 ? block@2 : block@7
+        goto tmp%0#1 ? block@2 : block@9
     block@2: // abi_routing_L16
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "testExplicitIndex(account)uint64" => block@3, method "testImplicitValue(address)uint64" => block@4, * => block@11}
-    block@3: // testExplicitIndex_route_L17
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (! tmp%3#0)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        (assert tmp%5#0) // can only call when not creating
-        let reinterpret_Encoded(uint8)%0#0: Encoded(uint8) = (txna ApplicationArgs 1)
-        let tmp%7#0: uint64 = (btoi reinterpret_Encoded(uint8)%0#0)
-        let tmp%8#0: account = ((txnas Accounts) tmp%7#0)
-        let tmp%9#0: uint64 = tests/approvals/resource-encoding.algo.ts::ByIndex.testExplicitIndex(tmp%8#0)
-        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%9#0)
-        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
-        let tmp%10#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%11#0: bytes = (concat 0x151f7c75 tmp%10#0)
-        (log tmp%11#0)
-        let tests/approvals/resource-encoding.algo.ts::ByIndex.__puya_arc4_router__%0#0: bool = 1u
-        goto block@12
-    block@4: // testImplicitValue_route_L26
-        let tmp%12#0: uint64 = (txn OnCompletion)
-        let tmp%13#0: bool = (! tmp%12#0)
-        (assert tmp%13#0) // OnCompletion is not NoOp
-        let tmp%14#0: uint64 = (txn ApplicationID)
-        (assert tmp%14#0) // can only call when not creating
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 1)
-        let tmp%16#0: account = reinterpret_Encoded(uint8[32])%0#0
-        let tmp%17#0: uint64 = tests/approvals/resource-encoding.algo.ts::ByIndex.testImplicitValue(tmp%16#0)
-        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%17#0)
-        let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
-        let tmp%18#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
-        let tmp%19#0: bytes = (concat 0x151f7c75 tmp%18#0)
-        (log tmp%19#0)
-        let tests/approvals/resource-encoding.algo.ts::ByIndex.__puya_arc4_router__%0#1: bool = 1u
-        goto block@12
-    block@7: // bare_routing_L16
-        let tmp%20#0: uint64 = (txn OnCompletion)
-        goto tmp%20#0 ? block@11 : block@8
-    block@8: // __algots__.defaultCreate_L16
-        let tmp%21#0: uint64 = (txn ApplicationID)
-        let tmp%22#0: bool = (! tmp%21#0)
-        (assert tmp%22#0) // can only call when creating
-        let tests/approvals/resource-encoding.algo.ts::ByIndex.__puya_arc4_router__%0#2: bool = 1u
-        goto block@12
-    block@11: // after_if_else_L16
-        let tests/approvals/resource-encoding.algo.ts::ByIndex.__puya_arc4_router__%0#3: bool = 0u
-        goto block@12
-    block@12: // after_inlined_tests/approvals/resource-encoding.algo.ts::ByIndex.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/resource-encoding.algo.ts::ByIndex.__puya_arc4_router__%0#0 <- block@3, tests/approvals/resource-encoding.algo.ts::ByIndex.__puya_arc4_router__%0#1 <- block@4, tests/approvals/resource-encoding.algo.ts::ByIndex.__puya_arc4_router__%0#2 <- block@8, tests/approvals/resource-encoding.algo.ts::ByIndex.__puya_arc4_router__%0#3 <- block@11)
-        return tmp%0#0
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        (assert tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "testExplicitIndex(account)uint64" => block@4, method "testImplicitValue(address)uint64" => block@5, * => block@8}
+    block@4: // testExplicitIndex_route_L17
+        tests/approvals/resource-encoding.algo.ts::ByIndex.testExplicitIndex[routing]()
+        goto block@8
+    block@5: // testImplicitValue_route_L26
+        tests/approvals/resource-encoding.algo.ts::ByIndex.testImplicitValue[routing]()
+        goto block@8
+    block@8: // after_if_else_L16
+        fail
+    block@9: // __algots__.defaultCreate_L16
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (! tmp%9#0)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u
 
-subroutine tests/approvals/resource-encoding.algo.ts::ByIndex.testExplicitIndex(account: account) -> uint64:
+subroutine tests/approvals/resource-encoding.algo.ts::ByIndex.testExplicitIndex[routing]() -> void:
     block@0: // L17
+        let reinterpret_Encoded(uint8)%0#0: Encoded(uint8) = (txna ApplicationArgs 1)
+        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint8)%0#0)
+        let account#0: account = ((txnas Accounts) tmp%0#0)
         let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
         (assert check%0#0) // account funded
-        return value%0#0
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob value%0#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%3#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
+        (log tmp%4#0)
+        exit 1u
 
-subroutine tests/approvals/resource-encoding.algo.ts::ByIndex.testImplicitValue(account: account) -> uint64:
+subroutine tests/approvals/resource-encoding.algo.ts::ByIndex.testImplicitValue[routing]() -> void:
     block@0: // L26
+        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 1)
+        let account#0: account = reinterpret_Encoded(uint8[32])%0#0
         let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
         (assert check%0#0) // account funded
-        return value%0#0
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob value%0#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%2#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u

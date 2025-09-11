@@ -4,8 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1 32
-    bytecblock 0x 0x068101
-    bytec_0 // ""
+    bytecblock 0x068101
     b main_block@0
 
 main_block@0:
@@ -17,104 +16,72 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@7
+    bz main___algots__.defaultCreate@9
     b main_abi_routing@2
 
 main_abi_routing@2:
+    // tests/approvals/accounts.algo.ts:8
+    // export class AccountsContract extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@7
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
     // tests/approvals/accounts.algo.ts:8
     // export class AccountsContract extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x0adee59f // method "getAccountInfo(address,uint64)(byte[32],uint64,uint64,byte[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)"
     pushbytes 0xf62943d1 // method "otherAccount()void"
     uncover 2
-    match main_getAccountInfo_route@3 main_otherAccount_route@4
-    b main_switch_case_default@5
-
-main_switch_case_default@5:
+    match main_getAccountInfo_route@4 main_otherAccount_route@5
     b main_switch_case_next@6
 
 main_switch_case_next@6:
-    b main_after_if_else@11
+    b main_after_if_else@8
 
-main_after_if_else@11:
+main_after_if_else@8:
+    b main_after_if_else@10
+
+main_after_if_else@10:
     // tests/approvals/accounts.algo.ts:8
     // export class AccountsContract extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__@12
+    err
 
-main_after_inlined_tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__@12:
-    return
-
-main_otherAccount_route@4:
+main_otherAccount_route@5:
     // tests/approvals/accounts.algo.ts:30
     // public otherAccount() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub otherAccount
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__@12
+    b main_switch_case_next@6
 
-main_getAccountInfo_route@3:
-    // tests/approvals/accounts.algo.ts:9
-    // public getAccountInfo(account: Account, asset: Asset) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/accounts.algo.ts:8
-    // export class AccountsContract extends Contract {
-    txna ApplicationArgs 1
-    txna ApplicationArgs 2
-    btoi
+main_getAccountInfo_route@4:
     // tests/approvals/accounts.algo.ts:9
     // public getAccountInfo(account: Account, asset: Asset) {
     callsub getAccountInfo
-    pushbytes 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__@12
+    b main_switch_case_next@6
 
-main_bare_routing@7:
+main_create_NoOp@7:
+    b main_after_if_else@8
+
+main___algots__.defaultCreate@9:
     // tests/approvals/accounts.algo.ts:8
     // export class AccountsContract extends Contract {
     txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@8
-    b main_switch_case_default@9
-
-main_switch_case_default@9:
-    b main_switch_case_next@10
-
-main_switch_case_next@10:
-    b main_after_if_else@11
-
-main___algots__.defaultCreate@8:
-    // tests/approvals/accounts.algo.ts:8
-    // export class AccountsContract extends Contract {
+    intc_0 // NoOp
+    ==
     txn ApplicationID
     intc_0 // 0
     ==
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__@12
+    return
 
 
 // _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
@@ -132,7 +99,7 @@ ensure_budget_while_top@1:
     global OpcodeBudget
     frame_dig 0
     <
-    bz ensure_budget_after_while@7
+    bz ensure_budget_after_while@6
     b ensure_budget_while_body@2
 
 ensure_budget_while_body@2:
@@ -141,45 +108,73 @@ ensure_budget_while_body@2:
     itxn_field TypeEnum
     pushint 5 // DeleteApplication
     itxn_field OnCompletion
-    bytec_1 // 0x068101
+    bytec_0 // 0x068101
     itxn_field ApprovalProgram
-    bytec_1 // 0x068101
+    bytec_0 // 0x068101
     itxn_field ClearStateProgram
     intc_0 // 0
     intc_1 // 1
     frame_dig -1
     match ensure_budget_switch_case_0@3 ensure_budget_switch_case_1@4
-    b ensure_budget_switch_case_default@5
+    b ensure_budget_switch_case_next@5
 
-ensure_budget_switch_case_default@5:
-    b ensure_budget_switch_case_next@6
-
-ensure_budget_switch_case_next@6:
+ensure_budget_switch_case_next@5:
     itxn_submit
     b ensure_budget_while_top@1
 
 ensure_budget_switch_case_1@4:
     global MinTxnFee
     itxn_field Fee
-    b ensure_budget_switch_case_next@6
+    b ensure_budget_switch_case_next@5
 
 ensure_budget_switch_case_0@3:
     intc_0 // 0
     itxn_field Fee
-    b ensure_budget_switch_case_next@6
+    b ensure_budget_switch_case_next@5
 
-ensure_budget_after_while@7:
+ensure_budget_after_while@6:
     retsub
 
 
-// tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo(account: bytes, asset: uint64) -> bytes:
+// tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo[routing]() -> void:
 getAccountInfo:
-    // tests/approvals/accounts.algo.ts:9
-    // public getAccountInfo(account: Account, asset: Asset) {
-    proto 2 1
     b getAccountInfo_block@0
 
 getAccountInfo_block@0:
+    // tests/approvals/accounts.algo.ts:9
+    // public getAccountInfo(account: Account, asset: Asset) {
+    txna ApplicationArgs 1
+    txna ApplicationArgs 2
+    btoi
+    callsub tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo
+    pushbytes 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/accounts.algo.ts::AccountsContract.otherAccount[routing]() -> void:
+otherAccount:
+    b otherAccount_block@0
+
+otherAccount_block@0:
+    // tests/approvals/accounts.algo.ts:30
+    // public otherAccount() {
+    callsub tests/approvals/accounts.algo.ts::AccountsContract.otherAccount
+    intc_1 // 1
+    return
+
+
+// tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo(account: bytes, asset: uint64) -> bytes:
+tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo:
+    // tests/approvals/accounts.algo.ts:9
+    // public getAccountInfo(account: Account, asset: Asset) {
+    proto 2 1
+    b tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo_block@0
+
+tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo_block@0:
     // tests/approvals/accounts.algo.ts:10
     // ensureBudget(1400)
     pushint 1400 // 1400
@@ -308,7 +303,7 @@ getAccountInfo_block@0:
     intc_2 // 32
     ==
     assert // invalid size
-    bytec_0 // 0x
+    pushbytes 0x
     uncover 1
     concat
     uncover 1
@@ -364,10 +359,10 @@ getAccountInfo_block@0:
 
 
 // tests/approvals/accounts.algo.ts::AccountsContract.otherAccount() -> void:
-otherAccount:
-    b otherAccount_block@0
+tests/approvals/accounts.algo.ts::AccountsContract.otherAccount:
+    b tests/approvals/accounts.algo.ts::AccountsContract.otherAccount_block@0
 
-otherAccount_block@0:
+tests/approvals/accounts.algo.ts::AccountsContract.otherAccount_block@0:
     retsub
 
 

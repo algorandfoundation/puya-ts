@@ -3,16 +3,14 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 5 1 0 4
+    intcblock 5 0 4 6
     // tests/approvals/match-expr.algo.ts:4
     // class MatchExprAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     pushbytes 0x937e729a // method "testMatches(uint64)void"
     txna ApplicationArgs 0
     match main_testMatches_route@3
-
-main_after_if_else@10:
     err
 
 main_testMatches_route@3:
@@ -20,44 +18,35 @@ main_testMatches_route@3:
     // public testMatches(x: uint64) {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/match-expr.algo.ts:4
-    // class MatchExprAlgo extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    // tests/approvals/match-expr.algo.ts:5
-    // public testMatches(x: uint64) {
-    callsub testMatches
-    intc_1 // 1
-    return
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    b testMatches
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/match-expr.algo.ts:4
     // class MatchExprAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
 
 
-// tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint64) -> void:
+// tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches[routing]() -> void:
 testMatches:
     // tests/approvals/match-expr.algo.ts:5
     // public testMatches(x: uint64) {
-    proto 1 0
+    txna ApplicationArgs 1
+    btoi
     // tests/approvals/match-expr.algo.ts:6
     // const xObj = { x }
-    frame_dig -1
     itob
     // tests/approvals/match-expr.algo.ts:7
     // assertMatch(xObj, { x: 5 }, 'x should be 5')
     dup
-    intc_2 // 0
+    intc_1 // 0
     extract_uint64
     dup
     intc_0 // 5
@@ -78,13 +67,13 @@ testMatches:
     // tests/approvals/match-expr.algo.ts:10
     // assert(match(xObj, { x: { greaterThan: 4 } }))
     dup
-    intc_3 // 4
+    intc_2 // 4
     >
     assert
     // tests/approvals/match-expr.algo.ts:11
     // assert(match(xObj, { x: { lessThan: 6 } }))
     dup
-    pushint 6 // 6
+    intc_3 // 6
     <
     assert
     // tests/approvals/match-expr.algo.ts:12
@@ -106,9 +95,9 @@ testMatches:
     // tests/approvals/match-expr.algo.ts:17
     // assert(match(xArray, [5]))
     dup
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16
-    intc_1 // 1
+    pushint 1 // 1
     ==
     swap
     pushint 2 // 2
@@ -122,7 +111,7 @@ testMatches:
     // tests/approvals/match-expr.algo.ts:18
     // assert(match(xArray, [{ greaterThan: 4 }]))
     dup
-    intc_3 // 4
+    intc_2 // 4
     >
     dig 2
     &&
@@ -130,7 +119,7 @@ testMatches:
     // tests/approvals/match-expr.algo.ts:19
     // assert(match(xArray, [{ lessThan: 6 }]))
     dup
-    pushint 6 // 6
+    intc_3 // 6
     <
     dig 2
     &&
@@ -148,5 +137,6 @@ testMatches:
     intc_0 // 5
     <=
     &&
-    assert
-    retsub
+    // tests/approvals/match-expr.algo.ts:5
+    // public testMatches(x: uint64) {
+    return

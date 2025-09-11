@@ -4,7 +4,6 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1
-    pushbytes ""
     b main_block@0
 
 main_block@0:
@@ -20,47 +19,27 @@ main_block@1:
     b main_abi_routing@2
 
 main_abi_routing@2:
-    b main_after_if_else@8
+    b main_after_if_else@7
 
-main_after_if_else@8:
+main_after_if_else@7:
     // tests/approvals/implicit-create.algo.ts:8
     // export class NoNoOp extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router__@9
-
-main_after_inlined_tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router__@9:
-    return
+    err
 
 main_bare_routing@3:
     // tests/approvals/implicit-create.algo.ts:8
     // export class NoNoOp extends Contract {
     txn OnCompletion
-    pushint 4 // 4
-    intc_0 // 0
+    intc_0 // NoOp
+    pushint 4 // UpdateApplication
     uncover 2
-    match main_handleUpdate@4 main___algots__.defaultCreate@5
-    b main_switch_case_default@6
+    match main___algots__.defaultCreate@4 main_handleUpdate@5
+    b main_switch_case_next@6
 
-main_switch_case_default@6:
-    b main_switch_case_next@7
+main_switch_case_next@6:
+    b main_after_if_else@7
 
-main_switch_case_next@7:
-    b main_after_if_else@8
-
-main___algots__.defaultCreate@5:
-    // tests/approvals/implicit-create.algo.ts:8
-    // export class NoNoOp extends Contract {
-    txn ApplicationID
-    intc_0 // 0
-    ==
-    assert // can only call when creating
-    callsub __algots__.defaultCreate
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router__@9
-
-main_handleUpdate@4:
+main_handleUpdate@5:
     // tests/approvals/implicit-create.algo.ts:9
     // @baremethod({ allowActions: 'UpdateApplication' })
     txn ApplicationID
@@ -69,8 +48,18 @@ main_handleUpdate@4:
     assert // can only call when not creating
     callsub handleUpdate
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router__@9
+    return
+
+main___algots__.defaultCreate@4:
+    // tests/approvals/implicit-create.algo.ts:8
+    // export class NoNoOp extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
 
 
 // tests/approvals/implicit-create.algo.ts::NoNoOp.handleUpdate() -> void:

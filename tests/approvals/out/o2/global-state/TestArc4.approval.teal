@@ -7,25 +7,20 @@ main:
     // @contract({ stateTotals: { globalUints: 5 } })
     // export class TestArc4 extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
-    pushbytess 0xa1504061 0xfd47fdd1 // method "setState(string,uint64)void", method "deleteState(string)void"
-    txna ApplicationArgs 0
-    match main_setState_route@3 main_deleteState_route@4
-
-main_after_if_else@11:
-    err
-
-main_deleteState_route@4:
-    // tests/approvals/global-state.algo.ts:52
-    // deleteState(key: string) {
+    bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/global-state.algo.ts:44-45
-    // @contract({ stateTotals: { globalUints: 5 } })
-    // export class TestArc4 extends Contract {
+    assert
+    pushbytess 0xa1504061 0xfd47fdd1 // method "setState(string,uint64)void", method "deleteState(string)void"
+    txna ApplicationArgs 0
+    match main_setState_route@4 main_deleteState_route@5
+    err
+
+main_deleteState_route@5:
+    // tests/approvals/global-state.algo.ts:52
+    // deleteState(key: string) {
     txna ApplicationArgs 1
     extract 2 0
     // tests/approvals/global-state.algo.ts:53
@@ -36,17 +31,9 @@ main_deleteState_route@4:
     pushint 1 // 1
     return
 
-main_setState_route@3:
+main_setState_route@4:
     // tests/approvals/global-state.algo.ts:46
     // setState(key: string, value: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/global-state.algo.ts:44-45
-    // @contract({ stateTotals: { globalUints: 5 } })
-    // export class TestArc4 extends Contract {
     txna ApplicationArgs 1
     extract 2 0
     txna ApplicationArgs 2
@@ -59,14 +46,13 @@ main_setState_route@3:
     pushint 1 // 1
     return
 
-main_bare_routing@7:
+main___algots__.defaultCreate@9:
     // tests/approvals/global-state.algo.ts:44-45
     // @contract({ stateTotals: { globalUints: 5 } })
     // export class TestArc4 extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@11
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

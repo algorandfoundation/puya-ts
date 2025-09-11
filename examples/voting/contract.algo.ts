@@ -129,9 +129,9 @@ export class VotingRoundApp extends arc4.Contract {
       if (questionIndex > 0) {
         note += ','
       }
-      if (questionOptions.native > 0) {
+      if (questionOptions.asUint64() > 0) {
         note += '['
-        for (let optionIndex = Uint64(0); optionIndex <= questionOptions.native; optionIndex++) {
+        for (let optionIndex = Uint64(0); optionIndex <= questionOptions.asUint64(); optionIndex++) {
           if (optionIndex > 0) {
             note += ','
           }
@@ -202,8 +202,8 @@ export class VotingRoundApp extends arc4.Contract {
     )
     let cumulativeOffset = Uint64(0)
     for (const questionIndex of urange(questionsCount)) {
-      const answerOptionIndex = answerIds.at(questionIndex).native
-      const optionsCount = this.optionCounts.value.at(questionIndex).native
+      const answerOptionIndex = answerIds.at(questionIndex).asUint64()
+      const optionsCount = this.optionCounts.value.at(questionIndex).asUint64()
       assert(answerOptionIndex < optionsCount, 'Answer option index invalid')
       this.incrementVoteInBox(cumulativeOffset + answerOptionIndex)
       cumulativeOffset += optionsCount
@@ -226,7 +226,7 @@ export class VotingRoundApp extends arc4.Contract {
 
     let totalOptions = Uint64(0)
     for (const item of optionCounts) {
-      totalOptions += item.native
+      totalOptions += item.asUint64()
     }
     this.optionCounts.value = clone(optionCounts)
     this.totalOptions.value = totalOptions

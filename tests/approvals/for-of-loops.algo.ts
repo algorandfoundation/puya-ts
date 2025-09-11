@@ -18,7 +18,7 @@ export class ForOfLoopsAlgo extends Contract {
   test_for_of_loop_destructured_tuple(items: DynamicArray<Uint64>) {
     let total: uint64 = 0
     for (const [index, v] of items.entries()) {
-      total += v.native
+      total += v.asUint64()
       if (total >= stopNumber) break
     }
     return total
@@ -36,8 +36,8 @@ export class ForOfLoopsAlgo extends Contract {
   test_for_of_loop_arc4_dynamic_array(items: DynamicArray<Uint64>) {
     let total: uint64 = 0
     for (const item of items) {
-      total += item.native
-      if (item.native === stopNumber) break
+      total += item.asUint64()
+      if (item.asUint64() === stopNumber) break
     }
     return total
   }
@@ -45,8 +45,8 @@ export class ForOfLoopsAlgo extends Contract {
   test_for_of_loop_arc4_static_array(items: StaticArray<Uint64, 5>) {
     let total: uint64 = 0
     for (const item of items) {
-      total += item.native
-      if (item.native === stopNumber) break
+      total += item.asUint64()
+      if (item.asUint64() === stopNumber) break
     }
     return total
   }

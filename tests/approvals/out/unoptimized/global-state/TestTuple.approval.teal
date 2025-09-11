@@ -5,7 +5,6 @@
 main:
     intcblock 0 2 1 123
     bytecblock "hello" 0x "b" 0x01c8 "a" 0x00 "t2" "t4" "t5" "t1" "t3" "World"
-    bytec_1 // ""
     b main_block@0
 
 main_block@0:
@@ -17,7 +16,7 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     b main_abi_routing@2
 
 main_abi_routing@2:
@@ -27,23 +26,15 @@ main_abi_routing@2:
     pushbytes 0x125477f5 // method "testTuple()void"
     uncover 1
     match main_testTuple_route@3
-    b main_switch_case_default@4
+    b main_switch_case_next@4
 
-main_switch_case_default@4:
-    b main_switch_case_next@5
+main_switch_case_next@4:
+    b main_after_if_else@6
 
-main_switch_case_next@5:
-    b main_after_if_else@10
-
-main_after_if_else@10:
+main_after_if_else@6:
     // tests/approvals/global-state.algo.ts:59
     // export class TestTuple extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_router__@11
-
-main_after_inlined_tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_router__@11:
-    return
+    err
 
 main_testTuple_route@3:
     // tests/approvals/global-state.algo.ts:68
@@ -51,49 +42,47 @@ main_testTuple_route@3:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
     txn ApplicationID
     intc_0 // 0
     !=
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     callsub testTuple
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_router__@11
+    b main_switch_case_next@4
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/global-state.algo.ts:59
     // export class TestTuple extends Contract {
     txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@7
-    b main_switch_case_default@8
-
-main_switch_case_default@8:
-    b main_switch_case_next@9
-
-main_switch_case_next@9:
-    b main_after_if_else@10
-
-main___algots__.defaultCreate@7:
-    // tests/approvals/global-state.algo.ts:59
-    // export class TestTuple extends Contract {
+    intc_0 // NoOp
+    ==
     txn ApplicationID
     intc_0 // 0
     ==
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
     intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/global-state.algo.ts::TestTuple.__puya_arc4_router__@11
+    return
 
 
-// tests/approvals/global-state.algo.ts::TestTuple.testTuple() -> void:
+// tests/approvals/global-state.algo.ts::TestTuple.testTuple[routing]() -> void:
 testTuple:
     b testTuple_block@0
 
 testTuple_block@0:
+    // tests/approvals/global-state.algo.ts:68
+    // testTuple() {
+    callsub tests/approvals/global-state.algo.ts::TestTuple.testTuple
+    intc_2 // 1
+    return
+
+
+// tests/approvals/global-state.algo.ts::TestTuple.testTuple() -> void:
+tests/approvals/global-state.algo.ts::TestTuple.testTuple:
+    b tests/approvals/global-state.algo.ts::TestTuple.testTuple_block@0
+
+tests/approvals/global-state.algo.ts::TestTuple.testTuple_block@0:
     // tests/approvals/global-state.algo.ts:69
     // this.t1.value = ['hello', 123, true]
     bytec_0 // "hello"

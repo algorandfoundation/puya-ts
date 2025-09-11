@@ -4,74 +4,71 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@1: // L13
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
-        goto tmp%1#0 ? block@2 : block@8
+        goto tmp%1#0 ? block@2 : block@10
     block@2: // abi_routing_L13
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "emitSwapped(uint8,uint8)void" => block@3, method "emitCustom(string,bool)void" => block@4, method "emitDynamicBytes(byte[],byte[])void" => block@5, * => block@6}
-    block@3: // emitSwapped_route_L14
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (== tmp%3#0 NoOp)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        let tmp%6#0: bool = (!= tmp%5#0 0u)
-        (assert tmp%6#0) // can only call when not creating
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@3 : block@8
+    block@3: // call_NoOp_L13
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "emitSwapped(uint8,uint8)void" => block@4, method "emitCustom(string,bool)void" => block@5, method "emitDynamicBytes(byte[],byte[])void" => block@6, * => block@7}
+    block@4: // emitSwapped_route_L14
+        tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped[routing]()
+        goto block@7
+    block@5: // emitCustom_route_L35
+        tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom[routing]()
+        goto block@7
+    block@6: // emitDynamicBytes_route_L40
+        tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes[routing]()
+        goto block@7
+    block@7: // switch_case_next_L13
+        goto block@9
+    block@8: // create_NoOp_L13
+        goto block@9
+    block@9: // after_if_else_L13
+        goto block@11
+    block@10: // __algots__.defaultCreate_L13
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/arc-28-events.algo.ts::EventEmitter.__algots__.defaultCreate()
+        exit 1u
+    block@11: // after_if_else_L13
+        exit 0u
+    block@12: // after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
+        return tmp%0#0
+
+subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped[routing]() -> void:
+    block@0: // L14
         let reinterpret_Encoded(uint8)%0#0: Encoded(uint8) = (txna ApplicationArgs 1)
         let reinterpret_Encoded(uint8)%1#0: Encoded(uint8) = (txna ApplicationArgs 2)
         tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped(reinterpret_Encoded(uint8)%0#0, reinterpret_Encoded(uint8)%1#0)
-        let tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__%0#0: bool = 1u
-        goto block@13
-    block@4: // emitCustom_route_L35
-        let tmp%7#0: uint64 = (txn OnCompletion)
-        let tmp%8#0: bool = (== tmp%7#0 NoOp)
-        (assert tmp%8#0) // OnCompletion is not NoOp
-        let tmp%9#0: uint64 = (txn ApplicationID)
-        let tmp%10#0: bool = (!= tmp%9#0 0u)
-        (assert tmp%10#0) // can only call when not creating
+        exit 1u
+
+subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom[routing]() -> void:
+    block@0: // L35
         let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
-        let tmp%11#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
+        let tmp%0#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
         let reinterpret_Encoded(bool8)%0#0: Encoded(bool8) = (txna ApplicationArgs 2)
         let aggregate%get_bit%0#0: bool = (getbit reinterpret_Encoded(bool8)%0#0 0u)
-        let tmp%12#0: bool = aggregate%get_bit%0#0
-        tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(tmp%11#0, tmp%12#0)
-        let tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__%0#1: bool = 1u
-        goto block@13
-    block@5: // emitDynamicBytes_route_L40
-        let tmp%13#0: uint64 = (txn OnCompletion)
-        let tmp%14#0: bool = (== tmp%13#0 NoOp)
-        (assert tmp%14#0) // OnCompletion is not NoOp
-        let tmp%15#0: uint64 = (txn ApplicationID)
-        let tmp%16#0: bool = (!= tmp%15#0 0u)
-        (assert tmp%16#0) // can only call when not creating
+        let tmp%1#0: bool = aggregate%get_bit%0#0
+        tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(tmp%0#0, tmp%1#0)
+        exit 1u
+
+subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes[routing]() -> void:
+    block@0: // L40
         let reinterpret_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = (txna ApplicationArgs 1)
-        let tmp%17#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%0#0)
+        let tmp%0#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%0#0)
         let reinterpret_Encoded(len+uint8[])%1#0: Encoded(len+uint8[]) = (txna ApplicationArgs 2)
-        tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes(tmp%17#0, reinterpret_Encoded(len+uint8[])%1#0)
-        let tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__%0#2: bool = 1u
-        goto block@13
-    block@6: // switch_case_default_L13
-        goto block@7
-    block@7: // switch_case_next_L13
-        goto block@12
-    block@8: // bare_routing_L13
-        let tmp%18#0: uint64 = (txn OnCompletion)
-        switch tmp%18#0 {0u => block@9, * => block@10}
-    block@9: // __algots__.defaultCreate_L13
-        let tmp%19#0: uint64 = (txn ApplicationID)
-        let tmp%20#0: bool = (== tmp%19#0 0u)
-        (assert tmp%20#0) // can only call when creating
-        tests/approvals/arc-28-events.algo.ts::EventEmitter.__algots__.defaultCreate()
-        let tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__%0#3: bool = 1u
-        goto block@13
-    block@10: // switch_case_default_L13
-        goto block@11
-    block@11: // switch_case_next_L13
-        goto block@12
-    block@12: // after_if_else_L13
-        let tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__%0#4: bool = 0u
-        goto block@13
-    block@13: // after_inlined_tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__%0#0 <- block@3, tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__%0#1 <- block@4, tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__%0#2 <- block@5, tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__%0#3 <- block@9, tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_router__%0#4 <- block@12)
-        return tmp%0#0
+        tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes(tmp%0#0, reinterpret_Encoded(len+uint8[])%1#0)
+        exit 1u
 
 subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped(a: Encoded(uint8), b: Encoded(uint8)) -> void:
     block@0: // L14

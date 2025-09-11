@@ -7,31 +7,53 @@ main:
     // tests/approvals/abi-decorators.algo.ts:35
     // export class OverloadedMethods extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
-    pushbytess 0x7920dd57 0x1cefbc5a // method "doThing(uint64)uint64", method "doThing(uint64,uint64)uint64"
-    txna ApplicationArgs 0
-    match main_doThing_route@3 main_doThing_route@4
-
-main_after_if_else@11:
-    err
-
-main_doThing_route@4:
-    // tests/approvals/abi-decorators.algo.ts:41
-    // @abimethod({ name: 'doThing' })
+    bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    assert
+    pushbytess 0x7920dd57 0x1cefbc5a // method "doThing(uint64)uint64", method "doThing(uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match doThingOne doThingTwo
+    err
+
+main___algots__.defaultCreate@9:
     // tests/approvals/abi-decorators.algo.ts:35
     // export class OverloadedMethods extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
+
+
+// tests/approvals/abi-decorators.algo.ts::OverloadedMethods.doThingOne[routing]() -> void:
+doThingOne:
+    // tests/approvals/abi-decorators.algo.ts:36
+    // @abimethod({ name: 'doThing' })
+    bytec_0 // 0x151f7c75
+    txna ApplicationArgs 1
+    concat
+    log
+    pushint 1 // 1
+    return
+
+
+// tests/approvals/abi-decorators.algo.ts::OverloadedMethods.doThingTwo[routing]() -> void:
+doThingTwo:
+    // tests/approvals/abi-decorators.algo.ts:41
+    // @abimethod({ name: 'doThing' })
     txna ApplicationArgs 1
     btoi
     txna ApplicationArgs 2
     btoi
+    // tests/approvals/abi-decorators.algo.ts:43
+    // return x * y
+    *
     // tests/approvals/abi-decorators.algo.ts:41
     // @abimethod({ name: 'doThing' })
-    callsub doThingTwo
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -39,47 +61,3 @@ main_doThing_route@4:
     log
     pushint 1 // 1
     return
-
-main_doThing_route@3:
-    // tests/approvals/abi-decorators.algo.ts:36
-    // @abimethod({ name: 'doThing' })
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    bytec_0 // 0x151f7c75
-    // tests/approvals/abi-decorators.algo.ts:35
-    // export class OverloadedMethods extends Contract {
-    txna ApplicationArgs 1
-    // tests/approvals/abi-decorators.algo.ts:36
-    // @abimethod({ name: 'doThing' })
-    concat
-    log
-    pushint 1 // 1
-    return
-
-main_bare_routing@7:
-    // tests/approvals/abi-decorators.algo.ts:35
-    // export class OverloadedMethods extends Contract {
-    txn OnCompletion
-    bnz main_after_if_else@11
-    txn ApplicationID
-    !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
-
-
-// tests/approvals/abi-decorators.algo.ts::OverloadedMethods.doThingTwo(x: uint64, y: uint64) -> uint64:
-doThingTwo:
-    // tests/approvals/abi-decorators.algo.ts:41-42
-    // @abimethod({ name: 'doThing' })
-    // doThingTwo(x: uint64, y: uint64): uint64 {
-    proto 2 1
-    // tests/approvals/abi-decorators.algo.ts:43
-    // return x * y
-    frame_dig -2
-    frame_dig -1
-    *
-    retsub

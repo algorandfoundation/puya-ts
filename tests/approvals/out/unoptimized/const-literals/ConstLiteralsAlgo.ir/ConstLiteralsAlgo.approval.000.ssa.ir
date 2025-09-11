@@ -7,101 +7,100 @@ subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__puya_arc4
     block@0: // L15
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
-        goto tmp%1#0 ? block@1 : block@10
+        goto tmp%1#0 ? block@1 : block@12
     block@1: // abi_routing_L15
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "test()uint64" => block@2, method "test2()uint64" => block@3, method "test3()uint64" => block@4, method "test4()uint64" => block@5, method "test5()uint512" => block@6, method "test6()uint512" => block@7, * => block@8}
-    block@2: // test_route_L16
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (== tmp%3#0 NoOp)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        let tmp%6#0: bool = (!= tmp%5#0 0u)
-        (assert tmp%6#0) // can only call when not creating
-        let tmp%7#0: uint64 = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test()
-        let tmp%8#0: Encoded(uint64) = bytes_encode<uint64>(tmp%7#0)
-        let tmp%9#0: bytes = (concat 0x151f7c75 tmp%8#0)
-        (log tmp%9#0)
-        return 1u
-    block@3: // test2_route_L20
-        let tmp%10#0: uint64 = (txn OnCompletion)
-        let tmp%11#0: bool = (== tmp%10#0 NoOp)
-        (assert tmp%11#0) // OnCompletion is not NoOp
-        let tmp%12#0: uint64 = (txn ApplicationID)
-        let tmp%13#0: bool = (!= tmp%12#0 0u)
-        (assert tmp%13#0) // can only call when not creating
-        let tmp%14#0: uint64 = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test2()
-        let tmp%15#0: Encoded(uint64) = bytes_encode<uint64>(tmp%14#0)
-        let tmp%16#0: bytes = (concat 0x151f7c75 tmp%15#0)
-        (log tmp%16#0)
-        return 1u
-    block@4: // test3_route_L25
-        let tmp%17#0: uint64 = (txn OnCompletion)
-        let tmp%18#0: bool = (== tmp%17#0 NoOp)
-        (assert tmp%18#0) // OnCompletion is not NoOp
-        let tmp%19#0: uint64 = (txn ApplicationID)
-        let tmp%20#0: bool = (!= tmp%19#0 0u)
-        (assert tmp%20#0) // can only call when not creating
-        let tmp%21#0: uint64 = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test3()
-        let tmp%22#0: Encoded(uint64) = bytes_encode<uint64>(tmp%21#0)
-        let tmp%23#0: bytes = (concat 0x151f7c75 tmp%22#0)
-        (log tmp%23#0)
-        return 1u
-    block@5: // test4_route_L32
-        let tmp%24#0: uint64 = (txn OnCompletion)
-        let tmp%25#0: bool = (== tmp%24#0 NoOp)
-        (assert tmp%25#0) // OnCompletion is not NoOp
-        let tmp%26#0: uint64 = (txn ApplicationID)
-        let tmp%27#0: bool = (!= tmp%26#0 0u)
-        (assert tmp%27#0) // can only call when not creating
-        let tmp%28#0: uint64 = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test4()
-        let tmp%29#0: Encoded(uint64) = bytes_encode<uint64>(tmp%28#0)
-        let tmp%30#0: bytes = (concat 0x151f7c75 tmp%29#0)
-        (log tmp%30#0)
-        return 1u
-    block@6: // test5_route_L37
-        let tmp%31#0: uint64 = (txn OnCompletion)
-        let tmp%32#0: bool = (== tmp%31#0 NoOp)
-        (assert tmp%32#0) // OnCompletion is not NoOp
-        let tmp%33#0: uint64 = (txn ApplicationID)
-        let tmp%34#0: bool = (!= tmp%33#0 0u)
-        (assert tmp%34#0) // can only call when not creating
-        let tmp%35#0: biguint = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test5()
-        let tmp%36#0: Encoded(uint512) = bytes_encode<uint512>(tmp%35#0)
-        let tmp%37#0: bytes = (concat 0x151f7c75 tmp%36#0)
-        (log tmp%37#0)
-        return 1u
-    block@7: // test6_route_L41
-        let tmp%38#0: uint64 = (txn OnCompletion)
-        let tmp%39#0: bool = (== tmp%38#0 NoOp)
-        (assert tmp%39#0) // OnCompletion is not NoOp
-        let tmp%40#0: uint64 = (txn ApplicationID)
-        let tmp%41#0: bool = (!= tmp%40#0 0u)
-        (assert tmp%41#0) // can only call when not creating
-        let tmp%42#0: biguint = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test6()
-        let tmp%43#0: Encoded(uint512) = bytes_encode<uint512>(tmp%42#0)
-        let tmp%44#0: bytes = (concat 0x151f7c75 tmp%43#0)
-        (log tmp%44#0)
-        return 1u
-    block@8: // switch_case_default_L15
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@2 : block@10
+    block@2: // call_NoOp_L15
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "test()uint64" => block@3, method "test2()uint64" => block@4, method "test3()uint64" => block@5, method "test4()uint64" => block@6, method "test5()uint512" => block@7, method "test6()uint512" => block@8, * => block@9}
+    block@3: // test_route_L16
+        tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test[routing]()
+        goto block@9
+    block@4: // test2_route_L20
+        tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test2[routing]()
+        goto block@9
+    block@5: // test3_route_L25
+        tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test3[routing]()
+        goto block@9
+    block@6: // test4_route_L32
+        tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test4[routing]()
+        goto block@9
+    block@7: // test5_route_L37
+        tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test5[routing]()
+        goto block@9
+    block@8: // test6_route_L41
+        tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test6[routing]()
         goto block@9
     block@9: // switch_case_next_L15
-        goto block@14
-    block@10: // bare_routing_L15
-        let tmp%45#0: uint64 = (txn OnCompletion)
-        switch tmp%45#0 {0u => block@11, * => block@12}
-    block@11: // __algots__.defaultCreate_L15
-        let tmp%46#0: uint64 = (txn ApplicationID)
-        let tmp%47#0: bool = (== tmp%46#0 0u)
-        (assert tmp%47#0) // can only call when creating
-        tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__algots__.defaultCreate()
-        return 1u
-    block@12: // switch_case_default_L15
+        goto block@11
+    block@10: // create_NoOp_L15
+        goto block@11
+    block@11: // after_if_else_L15
         goto block@13
-    block@13: // switch_case_next_L15
-        goto block@14
-    block@14: // after_if_else_L15
-        return 0u
+    block@12: // __algots__.defaultCreate_L15
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.__algots__.defaultCreate()
+        exit 1u
+    block@13: // after_if_else_L15
+        exit 0u
+
+subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test[routing]() -> void:
+    block@0: // L16
+        let tmp%0#0: uint64 = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test()
+        let tmp%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test2[routing]() -> void:
+    block@0: // L20
+        let tmp%0#0: uint64 = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test2()
+        let tmp%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test3[routing]() -> void:
+    block@0: // L25
+        let tmp%0#0: uint64 = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test3()
+        let tmp%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test4[routing]() -> void:
+    block@0: // L32
+        let tmp%0#0: uint64 = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test4()
+        let tmp%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test5[routing]() -> void:
+    block@0: // L37
+        let tmp%0#0: biguint = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test5()
+        let tmp%1#0: Encoded(uint512) = bytes_encode<uint512>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test6[routing]() -> void:
+    block@0: // L41
+        let tmp%0#0: biguint = tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test6()
+        let tmp%1#0: Encoded(uint512) = bytes_encode<uint512>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
 
 subroutine tests/approvals/const-literals.algo.ts::ConstLiteralsAlgo.test() -> uint64:
     block@0: // L16

@@ -17,93 +17,29 @@ main_after_if_else@2:
     // tests/approvals/itxn.algo.ts:20
     // export class ItxnDemoContract extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@12
+    bz main___algots__.defaultCreate@14
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
     pushbytess 0x20254f91 0xf1908524 0xdf920f37 0x3d46345c 0xd4c6a8f5 // method "test1()void", method "test2()void", method "test3()void", method "test4()void", method "test5(uint64)void"
     txna ApplicationArgs 0
-    match main_test1_route@5 main_test2_route@6 main_test3_route@7 main_test4_route@8 main_test5_route@9
-
-main_after_if_else@16:
+    match test1 test2 test3 test4 test5
     err
 
-main_test5_route@9:
-    // tests/approvals/itxn.algo.ts:207
-    // public test5(appId: Application) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/itxn.algo.ts:20
-    // export class ItxnDemoContract extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    // tests/approvals/itxn.algo.ts:207
-    // public test5(appId: Application) {
-    callsub test5
-    pushint 1 // 1
-    return
-
-main_test4_route@8:
-    // tests/approvals/itxn.algo.ts:184
-    // public test4() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    callsub test4
-    pushint 1 // 1
-    return
-
-main_test3_route@7:
-    // tests/approvals/itxn.algo.ts:108
-    // public test3() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    callsub test3
-    pushint 1 // 1
-    return
-
-main_test2_route@6:
-    // tests/approvals/itxn.algo.ts:71
-    // public test2() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    callsub test2
-    pushint 1 // 1
-    return
-
-main_test1_route@5:
-    // tests/approvals/itxn.algo.ts:23
-    // public test1() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    callsub test1
-    pushint 1 // 1
-    return
-
-main_bare_routing@12:
+main___algots__.defaultCreate@14:
     // tests/approvals/itxn.algo.ts:20
     // export class ItxnDemoContract extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@16
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
 
 
-// tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
+// tests/approvals/itxn.algo.ts::ItxnDemoContract.test1[routing]() -> void:
 test1:
     // tests/approvals/itxn.algo.ts:31
     // manager: Global.currentApplicationAddress,
@@ -367,14 +303,14 @@ test1:
     // tests/approvals/itxn.algo.ts:68
     // itxn.submitGroup(appCreateParams, assetParams)
     itxn_submit
-    retsub
+    // tests/approvals/itxn.algo.ts:23
+    // public test1() {
+    pushint 1 // 1
+    return
 
 
-// tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
+// tests/approvals/itxn.algo.ts::ItxnDemoContract.test2[routing]() -> void:
 test2:
-    // tests/approvals/itxn.algo.ts:71
-    // public test2() {
-    proto 0 0
     intc_0 // 0
     dupn 2
     pushbytes ""
@@ -384,52 +320,52 @@ test2:
     // tests/approvals/itxn.algo.ts:73
     // if (Txn.numAppArgs) {
     txn NumAppArgs
-    bz test2_else_body@2
+    bz test2_else_body@3
     // tests/approvals/itxn.algo.ts:74
     // const args = [Bytes('1'), Bytes('2')] as const
     bytec_2 // "1"
-    frame_bury 0
+    bury 7
     bytec 5 // "2"
-    frame_bury 1
+    bury 6
     // tests/approvals/itxn.algo.ts:78
     // appArgs: args,
     pushint 2 // 2
-    frame_bury 3
+    bury 4
     // tests/approvals/itxn.algo.ts:79
     // onCompletion: OnCompleteAction.NoOp,
     intc_0 // 0
-    frame_bury 6
+    bury 1
     pushint 1 // 1
-    frame_bury 4
+    bury 3
     // tests/approvals/itxn.algo.ts:80
     // note: 'with args param set',
     bytec 12 // "with args param set"
 
-test2_after_if_else@3:
+test2_after_if_else@4:
     // tests/approvals/itxn.algo.ts:90
     // const createAppTxn = createAppParams.submit()
     itxn_begin
     itxn_field Note
-    frame_dig 4
-    bz test2_next_field@5
-    frame_dig 6
+    dig 2
+    bz test2_next_field@6
+    dup
     itxn_field OnCompletion
 
-test2_next_field@5:
-    frame_dig 0
+test2_next_field@6:
+    dig 6
     itxn_field ApplicationArgs
-    frame_dig 1
+    dig 5
     itxn_field ApplicationArgs
-    frame_dig 3
+    dig 3
     intc_3 // 3
     >=
     // tests/approvals/itxn.algo.ts:90
     // const createAppTxn = createAppParams.submit()
-    bz test2_next_field@7
-    frame_dig 5
+    bz test2_next_field@8
+    dig 1
     itxn_field ApplicationArgs
 
-test2_next_field@7:
+test2_next_field@8:
     // tests/approvals/itxn.algo.ts:77
     // clearStateProgram: APPROVE,
     bytec_0 // 0x098101
@@ -454,7 +390,7 @@ test2_next_field@7:
     // const createAppTxn = createAppParams.submit()
     itxn_submit
     itxn Note
-    frame_bury 2
+    bury 5
     // tests/approvals/itxn.algo.ts:91
     // assert(createAppTxn.appArgs(0) === Bytes('1'), 'correct args used 1')
     itxna ApplicationArgs 0
@@ -472,7 +408,7 @@ test2_next_field@7:
     txn NumAppArgs
     pushint 1 // 1
     >
-    bz test2_after_if_else@11
+    bz test2_after_if_else@12
     // tests/approvals/itxn.algo.ts:95-102
     // const createAppTxn2 = itxn
     //   .applicationCall({
@@ -529,24 +465,27 @@ test2_next_field@7:
     assert // correct args used 2
     // tests/approvals/itxn.algo.ts:104
     // assert(createAppTxn.note === Bytes('with args param set'))
-    frame_dig 2
+    dig 4
     bytec 12 // "with args param set"
     ==
     assert
 
-test2_after_if_else@11:
-    retsub
+test2_after_if_else@12:
+    // tests/approvals/itxn.algo.ts:71
+    // public test2() {
+    pushint 1 // 1
+    return
 
-test2_else_body@2:
+test2_else_body@3:
     // tests/approvals/itxn.algo.ts:86
     // appArgs: [Bytes('3'), new Str('4'), Bytes('5')],
     pushbytes 0x000134
     bytec 8 // "3"
-    frame_bury 0
+    bury 8
     bytec 9 // "5"
-    frame_bury 5
+    bury 3
     intc_3 // 3
-    frame_bury 3
+    bury 5
     // tests/approvals/itxn.algo.ts:87
     // note: 'no args param set',
     pushbytes "no args param set"
@@ -554,12 +493,12 @@ test2_else_body@2:
     // tests/approvals/itxn.algo.ts:83
     // createAppParams = itxn.applicationCall({
     intc_0 // 0
-    frame_bury 4
-    frame_bury 1
-    b test2_after_if_else@3
+    bury 5
+    bury 7
+    b test2_after_if_else@4
 
 
-// tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
+// tests/approvals/itxn.algo.ts::ItxnDemoContract.test3[routing]() -> void:
 test3:
     // tests/approvals/itxn.algo.ts:147-164
     // const [app1, app2, app3, app4, app5, app6, app7, app8, app9, app10, app11, app12, app13, app14, app15, app16] = itxn.submitGroup(
@@ -1173,11 +1112,12 @@ test3:
     itxna Logs 0
     bytec 20 // "16"
     ==
-    assert
-    retsub
+    // tests/approvals/itxn.algo.ts:108
+    // public test3() {
+    return
 
 
-// tests/approvals/itxn.algo.ts::ItxnDemoContract.test4() -> void:
+// tests/approvals/itxn.algo.ts::ItxnDemoContract.test4[routing]() -> void:
 test4:
     // tests/approvals/itxn.algo.ts:185
     // const lotsOfBytes = op.bzero(2044)
@@ -1320,18 +1260,20 @@ test4:
     itxna ClearStateProgramPages 0
     bytec_0 // 0x098101
     ==
-    assert // expected clear state page
-    retsub
+    // tests/approvals/itxn.algo.ts:184
+    // public test4() {
+    return // on error: expected clear state page
 
 
-// tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -> void:
+// tests/approvals/itxn.algo.ts::ItxnDemoContract.test5[routing]() -> void:
 test5:
     // tests/approvals/itxn.algo.ts:207
     // public test5(appId: Application) {
-    proto 1 0
+    txna ApplicationArgs 1
+    btoi
     // tests/approvals/itxn.algo.ts:209
     // receiver: appId.address,
-    frame_dig -1
+    dup
     app_params_get AppAddress
     assert // application exists
     // tests/approvals/itxn.algo.ts:218
@@ -1362,7 +1304,6 @@ test5:
     itxn_field ApplicationArgs
     pushbytes 0x000568656c6c6f
     itxn_field ApplicationArgs
-    frame_dig -1
     itxn_field ApplicationID
     // tests/approvals/itxn.algo.ts:213-216
     // const app = itxn.applicationCall({
@@ -1413,5 +1354,6 @@ test5:
     pushbytes "hello"
     ==
     &&
-    assert // assert target is match for conditions
-    retsub
+    // tests/approvals/itxn.algo.ts:207
+    // public test5(appId: Application) {
+    return // on error: assert target is match for conditions

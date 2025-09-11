@@ -14,24 +14,20 @@ main_after_if_else@2:
     // tests/approvals/inheritance-b.algo.ts:16
     // export class ConcreteArc4Contract extends Arc4Contract {
     txn NumAppArgs
-    bz main_bare_routing@9
-    pushbytess 0xc73da9b9 0xf161dc37 // method "getVeryImportantValue()string", method "simpleAbiMethod(uint64,uint64)uint64"
-    txna ApplicationArgs 0
-    match main_getVeryImportantValue_route@5 main_simpleAbiMethod_route@6
-
-main_after_if_else@13:
-    err
-
-main_simpleAbiMethod_route@6:
-    // tests/approvals/inheritance-a.algo.ts:17
-    // public simpleAbiMethod(a: uint64, b: uint64): uint64 {
+    bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/inheritance-b.algo.ts:16
-    // export class ConcreteArc4Contract extends Arc4Contract {
+    assert
+    pushbytess 0xc73da9b9 0xf161dc37 // method "getVeryImportantValue()string", method "simpleAbiMethod(uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match main_getVeryImportantValue_route@6 main_simpleAbiMethod_route@7
+    err
+
+main_simpleAbiMethod_route@7:
+    // tests/approvals/inheritance-a.algo.ts:17
+    // public simpleAbiMethod(a: uint64, b: uint64): uint64 {
     txna ApplicationArgs 1
     btoi
     txna ApplicationArgs 2
@@ -49,26 +45,20 @@ main_simpleAbiMethod_route@6:
     pushint 1 // 1
     return
 
-main_getVeryImportantValue_route@5:
+main_getVeryImportantValue_route@6:
     // tests/approvals/inheritance-b.algo.ts:18
     // public getVeryImportantValue() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     pushbytes 0x151f7c750007343268656c6c6f
     log
     pushint 1 // 1
     return
 
-main_bare_routing@9:
+main___algots__.defaultCreate@11:
     // tests/approvals/inheritance-b.algo.ts:16
     // export class ConcreteArc4Contract extends Arc4Contract {
     txn OnCompletion
-    bnz main_after_if_else@13
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

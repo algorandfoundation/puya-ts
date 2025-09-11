@@ -4,46 +4,42 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@1: // L4
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
-        goto tmp%1#0 ? block@2 : block@6
+        goto tmp%1#0 ? block@2 : block@5
     block@2: // abi_routing_L4
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "testMatches(uint64)void" => block@3, * => block@4}
     block@3: // testMatches_route_L5
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
-        (assert tmp%4#0) // OnCompletion is not NoOp
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
-        (assert tmp%6#0) // can only call when not creating
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%7#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(tmp%7#0)
-        let tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#0: bool = 1u
-        goto block@11
-    block@4: // switch_case_default_L4
-        goto block@5
-    block@5: // switch_case_next_L4
-        goto block@10
-    block@6: // bare_routing_L4
+        let tmp%7#0: bool = (&& tmp%4#0 tmp%6#0)
+        (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
+        tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches[routing]()
+        goto block@4
+    block@4: // switch_case_next_L4
+        goto block@6
+    block@5: // __algots__.defaultCreate_L4
         let tmp%8#0: uint64 = (txn OnCompletion)
-        switch tmp%8#0 {0u => block@7, * => block@8}
-    block@7: // __algots__.defaultCreate_L4
-        let tmp%9#0: uint64 = (txn ApplicationID)
-        let tmp%10#0: bool = (== tmp%9#0 0u)
-        (assert tmp%10#0) // can only call when creating
+        let tmp%9#0: bool = (== tmp%8#0 NoOp)
+        let tmp%10#0: uint64 = (txn ApplicationID)
+        let tmp%11#0: bool = (== tmp%10#0 0u)
+        let tmp%12#0: bool = (&& tmp%9#0 tmp%11#0)
+        (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
         tests/approvals/match-expr.algo.ts::MatchExprAlgo.__algots__.defaultCreate()
-        let tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#1: bool = 1u
-        goto block@11
-    block@8: // switch_case_default_L4
-        goto block@9
-    block@9: // switch_case_next_L4
-        goto block@10
-    block@10: // after_if_else_L4
-        let tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#2: bool = 0u
-        goto block@11
-    block@11: // after_inlined_tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#1 <- block@7, tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#2 <- block@10)
+        exit 1u
+    block@6: // after_if_else_L4
+        exit 0u
+    block@7: // after_inlined_tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
         return tmp%0#0
+
+subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches[routing]() -> void:
+    block@0: // L5
+        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
+        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(tmp%0#0)
+        exit 1u
 
 subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint64) -> void:
     block@0: // L5

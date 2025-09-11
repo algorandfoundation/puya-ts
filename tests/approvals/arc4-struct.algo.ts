@@ -18,8 +18,8 @@ class StructDemo extends Contract {
 
   public addVectors(v1: Vector, v2: Vector) {
     return new Vector({
-      x: new ARC4Uint64(v1.x.native + v2.x.native),
-      y: new ARC4Uint64(v1.y.native + v2.y.native),
+      x: new ARC4Uint64(v1.x.asUint64() + v2.x.asUint64()),
+      y: new ARC4Uint64(v1.y.asUint64() + v2.y.asUint64()),
     })
   }
 
@@ -51,13 +51,13 @@ class StructDemo extends Contract {
 
   public getPlugin(key: string): PluginInfo {
     const value = clone(this.plugins(key).value)
-    assert(value.lastCalled.native > 0, 'Last called not zero')
+    assert(value.lastCalled.asUint64() > 0, 'Last called not zero')
     return value
   }
 
   public getMain() {
     const value = clone(this.plugin.value)
-    assert(value.lastCalled.native > 0, 'Last called not zero')
+    assert(value.lastCalled.asUint64() > 0, 'Last called not zero')
     return value
   }
 

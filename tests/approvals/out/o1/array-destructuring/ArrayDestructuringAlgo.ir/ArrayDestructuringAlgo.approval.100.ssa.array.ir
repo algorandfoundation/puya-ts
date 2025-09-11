@@ -1,16 +1,40 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
-        goto tmp%0#1 ? block@2 : block@9
+        goto tmp%0#1 ? block@2 : block@11
     block@2: // abi_routing_L4
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "testNested((uint64,(uint512,uint512)))(uint64,(uint512,uint512),uint64,uint512)" => block@3, method "test()void" => block@4, method "testLiteralDestructuring()void" => block@5, method "produceFixed()uint64[3]" => block@6, * => block@13}
-    block@3: // testNested_route_L5
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (! tmp%3#0)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        (assert tmp%5#0) // can only call when not creating
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        (assert tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "testNested((uint64,(uint512,uint512)))(uint64,(uint512,uint512),uint64,uint512)" => block@4, method "test()void" => block@5, method "testLiteralDestructuring()void" => block@6, method "produceFixed()uint64[3]" => block@7, * => block@10}
+    block@4: // testNested_route_L5
+        tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested[routing]()
+        goto block@10
+    block@5: // test_route_L11
+        tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.test[routing]()
+        goto block@10
+    block@6: // testLiteralDestructuring_route_L34
+        tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testLiteralDestructuring[routing]()
+        goto block@10
+    block@7: // produceFixed_route_L44
+        tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceFixed[routing]()
+        goto block@10
+    block@10: // after_if_else_L4
+        fail
+    block@11: // __algots__.defaultCreate_L4
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (! tmp%9#0)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u
+
+subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested[routing]() -> void:
+    block@0: // L5
         let reinterpret_Encoded(uint64,(uint512,uint512))%0#0: Encoded(uint64,(uint512,uint512)) = (txna ApplicationArgs 1)
         let aggregate%extract%0#0: bytes = (extract3 reinterpret_Encoded(uint64,(uint512,uint512))%0#0 0u 8u)
         let aggregate%item0%0#0: uint64 = (btoi aggregate%extract%0#0)
@@ -48,62 +72,17 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%as_Encoded(uint512)%2#0: Encoded(uint512) = aggregate%arc4_encoded%2#0
         let aggregate%head%5#0: bytes = (concat aggregate%head%4#0 aggregate%as_Encoded(uint512)%2#0)
         let aggregate%as_Encoded(uint64,(uint512,uint512),uint64,uint512)%0#0: Encoded(uint64,(uint512,uint512),uint64,uint512) = aggregate%head%5#0
-        let tmp%15#0: Encoded(uint64,(uint512,uint512),uint64,uint512) = aggregate%as_Encoded(uint64,(uint512,uint512),uint64,uint512)%0#0
-        let tmp%16#0: bytes = (concat 0x151f7c75 tmp%15#0)
-        (log tmp%16#0)
-        let tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#0: bool = 1u
-        goto block@14
-    block@4: // test_route_L11
-        let tmp%17#0: uint64 = (txn OnCompletion)
-        let tmp%18#0: bool = (! tmp%17#0)
-        (assert tmp%18#0) // OnCompletion is not NoOp
-        let tmp%19#0: uint64 = (txn ApplicationID)
-        (assert tmp%19#0) // can only call when not creating
-        tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.test()
-        let tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#1: bool = 1u
-        goto block@14
-    block@5: // testLiteralDestructuring_route_L34
-        let tmp%21#0: uint64 = (txn OnCompletion)
-        let tmp%22#0: bool = (! tmp%21#0)
-        (assert tmp%22#0) // OnCompletion is not NoOp
-        let tmp%23#0: uint64 = (txn ApplicationID)
-        (assert tmp%23#0) // can only call when not creating
-        tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testLiteralDestructuring()
-        let tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#2: bool = 1u
-        goto block@14
-    block@6: // produceFixed_route_L44
-        let tmp%25#0: uint64 = (txn OnCompletion)
-        let tmp%26#0: bool = (! tmp%25#0)
-        (assert tmp%26#0) // OnCompletion is not NoOp
-        let tmp%27#0: uint64 = (txn ApplicationID)
-        (assert tmp%27#0) // can only call when not creating
-        let tmp%29#0: Encoded(uint64[3]) = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceFixed()
-        let tmp%30#0: bytes = (concat 0x151f7c75 tmp%29#0)
-        (log tmp%30#0)
-        let tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#3: bool = 1u
-        goto block@14
-    block@9: // bare_routing_L4
-        let tmp%31#0: uint64 = (txn OnCompletion)
-        goto tmp%31#0 ? block@13 : block@10
-    block@10: // __algots__.defaultCreate_L4
-        let tmp%32#0: uint64 = (txn ApplicationID)
-        let tmp%33#0: bool = (! tmp%32#0)
-        (assert tmp%33#0) // can only call when creating
-        let tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#4: bool = 1u
-        goto block@14
-    block@13: // after_if_else_L4
-        let tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#5: bool = 0u
-        goto block@14
-    block@14: // after_inlined_tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#3 <- block@6, tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#4 <- block@10, tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__puya_arc4_router__%0#5 <- block@13)
-        return tmp%0#0
+        let tmp%8#0: Encoded(uint64,(uint512,uint512),uint64,uint512) = aggregate%as_Encoded(uint64,(uint512,uint512),uint64,uint512)%0#0
+        let tmp%9#0: bytes = (concat 0x151f7c75 tmp%8#0)
+        (log tmp%9#0)
+        exit 1u
 
-subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.test() -> void:
+subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.test[routing]() -> void:
     block@0: // L11
         let awst_tmp%12#0: Encoded(uint64[3]) = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceFixed()
-        return 
+        exit 1u
 
-subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testLiteralDestructuring() -> void:
+subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testLiteralDestructuring[routing]() -> void:
     block@0: // L34
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob 1u)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
@@ -123,7 +102,14 @@ subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.t
         (assert tmp%0#0)
         let tmp%1#0: bool = (== y#0 2u)
         (assert tmp%1#0)
-        return 
+        exit 1u
+
+subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceFixed[routing]() -> void:
+    block@0: // L44
+        let tmp%0#0: Encoded(uint64[3]) = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceFixed()
+        let tmp%1#0: bytes = (concat 0x151f7c75 tmp%0#0)
+        (log tmp%1#0)
+        exit 1u
 
 subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceFixed() -> Encoded(uint64[3]):
     block@0: // L44

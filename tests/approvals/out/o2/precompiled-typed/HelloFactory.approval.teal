@@ -8,22 +8,18 @@ main:
     // tests/approvals/precompiled-typed.algo.ts:13
     // class HelloFactory extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@11
-    pushbytess 0x2a17995c 0xe3254bc9 0xe2b7c692 0x02947ca2 0x495e0010 0x27519e7b // method "test_compile_contract()void", method "test_compile_contract_with_template()void", method "test_compile_contract_with_template_and_custom_prefix()void", method "test_compile_contract_large()void", method "test_call_contract_with_transactions()void", method "test_call_contract_with_reference_types()void"
-    txna ApplicationArgs 0
-    match main_test_compile_contract_route@3 main_test_compile_contract_with_template_route@4 main_test_compile_contract_with_template_and_custom_prefix_route@5 main_test_compile_contract_large_route@6 main_test_call_contract_with_transactions_route@7 main_test_call_contract_with_reference_types_route@8
-
-main_after_if_else@15:
-    err
-
-main_test_call_contract_with_reference_types_route@8:
-    // tests/approvals/precompiled-typed.algo.ts:157
-    // test_call_contract_with_reference_types() {
+    bz main___algots__.defaultCreate@13
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    assert
+    pushbytess 0x2a17995c 0xe3254bc9 0xe2b7c692 0x02947ca2 0x495e0010 0x27519e7b // method "test_compile_contract()void", method "test_compile_contract_with_template()void", method "test_compile_contract_with_template_and_custom_prefix()void", method "test_compile_contract_large()void", method "test_call_contract_with_transactions()void", method "test_call_contract_with_reference_types()void"
+    txna ApplicationArgs 0
+    match main_test_compile_contract_route@4 main_test_compile_contract_with_template_route@5 main_test_compile_contract_with_template_and_custom_prefix_route@6 main_test_compile_contract_large_route@7 main_test_call_contract_with_transactions_route@8 main_test_call_contract_with_reference_types_route@9
+    err
+
+main_test_call_contract_with_reference_types_route@9:
     // tests/approvals/precompiled-typed.algo.ts:160
     // const appId = compiled.bareCreate().createdApp
     itxn_begin
@@ -31,7 +27,7 @@ main_test_call_contract_with_reference_types_route@8:
     // const compiled = compileArc4(ReceivesReferenceTypes)
     bytec_1 // base64(CoEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CjEbQQAvgARmaY0YNhoAjgEAAQAxGRREMRhENhoBFzYaAjYaAxdPAnIIRLBMsHEERLCBAUMxGUD/2TEYFESBAUM=)
+    pushbytes base64(CjEbQQAvgARmaY0YNhoAjgEAAQAxGRQxGBBENhoBFzYaAjYaAxdPAnIIRLBMsHEERLCBAUMxGRQxGBQQQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:160
     // const appId = compiled.bareCreate().createdApp
@@ -140,20 +136,11 @@ main_test_call_contract_with_reference_types_route@8:
     asset_params_get AssetName
     assert // asset exists
     ==
-    assert
     // tests/approvals/precompiled-typed.algo.ts:157
     // test_call_contract_with_reference_types() {
-    intc_2 // 1
     return
 
-main_test_call_contract_with_transactions_route@7:
-    // tests/approvals/precompiled-typed.algo.ts:114
-    // test_call_contract_with_transactions() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_test_call_contract_with_transactions_route@8:
     // tests/approvals/precompiled-typed.algo.ts:117
     // const appId = compiled.bareCreate().createdApp
     itxn_begin
@@ -161,7 +148,7 @@ main_test_call_contract_with_transactions_route@7:
     // const compiled = compileArc4(ReceivesTxns)
     bytec_1 // base64(CoEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiACAQOAAEcDMRtBANeCBASPaJLvBJzYfeME02bIaQSBtnNSNhoAjgQAnABGACYAAQAxGRREMRhEMRaBAgk4EEkjEkQxFiIJOBBJIhJETCMSRCISRCJDMRkURDEYRDEWIglJOBAjEkQ4F4AGFR98dQAgTFCwIkMxGRREMRhEMRYiCUlFAjgQSUUFIxJBAB1JODxJRQRBAA5LAhaABBUffHVMULAiQ0k4IUL/7ksDgQYSQQAUSTg9SUUDQQAFSwFC/9hJOBhC/9KBAEL/zTEZFEQxGESADBUffHUAAAAAAAAAAbAiQzEZQP9HMRgURCJD)
+    pushbytes base64(CiACAQOAAEcDMRtBAMAxGRREMRhEggQEj2iS7wSc2H3jBNNmyGkEgbZzUjYaAI4EAIUANgAdAAEAMRaBAgk4EEkjEkQxFiIJOBBJIhJETCMSRCISQzEWIglJOBAjEkQ4F4AGFR98dQAgTFCwIkMxFiIJSUUCOBBJRQUjEkEAHUk4PElFBEEADksCFoAEFR98dUxQsCJDSTghQv/uSwOBBhJBABRJOD1JRQNBAAVLAUL/2Ek4GEL/0oEAQv/NgAwVH3x1AAAAAAAAAAGwIkMxGRQxGBQQQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:117
     // const appId = compiled.bareCreate().createdApp
@@ -394,14 +381,7 @@ main_test_call_contract_with_transactions_route@7:
     intc_2 // 1
     return
 
-main_test_compile_contract_large_route@6:
-    // tests/approvals/precompiled-typed.algo.ts:98
-    // test_compile_contract_large() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_test_compile_contract_large_route@7:
     // tests/approvals/precompiled-typed.algo.ts:101
     // const largeApp = compiled.bareCreate().createdApp
     itxn_begin
@@ -409,7 +389,7 @@ main_test_compile_contract_large_route@6:
     // const compiled = compileArc4(LargeProgram)
     bytec_1 // base64(CoEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CjEbQQA7ggIEAr8wzwQkN408NhoAjgIADQABADEZgQUSRDEYRIEBQzEZFEQxGESBgCCvFRaABBUffHVMULCBAUMxGUD/1TEYFESBAUM=)
+    pushbytes base64(CjEbQQA4ggIEJDeNPAQCvzDPNhoAjgIAGgABADEZFDEYEESBgCCvFRaABBUffHVMULCBAUMxGYEFEjEYEEMxGRQxGBQQQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:101
     // const largeApp = compiled.bareCreate().createdApp
@@ -471,14 +451,7 @@ main_test_compile_contract_large_route@6:
     intc_2 // 1
     return
 
-main_test_compile_contract_with_template_and_custom_prefix_route@5:
-    // tests/approvals/precompiled-typed.algo.ts:81
-    // test_compile_contract_with_template_and_custom_prefix() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_test_compile_contract_with_template_and_custom_prefix_route@6:
     // tests/approvals/precompiled-typed.algo.ts:84
     // const helloApp = compiled.call.create().itxn.createdApp
     itxn_begin
@@ -490,7 +463,7 @@ main_test_compile_contract_with_template_and_custom_prefix_route@5:
     itxn_field GlobalNumByteSlice
     bytec_1 // base64(CoEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiACAQAmBAhncmVldGluZwEgBBUffHUHYm9uam91cjEYQAADKCtnMRtBACqCBQRMXGG6BCQ3jTwEoOgYcgTQooIABFGAuiA2GgCOBQB6AG8AZABBAAEAMRkURDEYRDYaASMoZUQpUEsBI1lLAoECWUsDTwJLAlJXAgBPAkxQSwIVTE4DUlcCAFBJFRZXBgJMUCpMULAiQzEZFEQxGEQ2GgFXAgAjKGVEKVBMUEkVFlcGAkxQKkxQsCJDMRmBBBJEMRhEIkMxGYEFEkQxGEQiQzEZFEQxGBREIkM=)
+    pushbytes base64(CiACAAEmBAhncmVldGluZwEgBBUffHUHYm9uam91cjEYQAADKCtnggIEJDeNPASg6BhyNhoAjgIAjQCEMRkURDEYQQBrggIE0KKCAARRgLogNhoAjgIAOgABADYaASIoZUQpUEsBIllLAoECWUsDTwJLAlJXAgBPAkxQSwIVTE4DUlcCAFBJFRZXBgJMUCpMULAjQzYaAVcCACIoZUQpUExQSRUWVwYCTFAqTFCwI0OABExcYbo2GgCOAQABACNDMRmBBBIxGBBDMRmBBRIxGBBD)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:84
     // const helloApp = compiled.call.create().itxn.createdApp
@@ -560,14 +533,7 @@ main_test_compile_contract_with_template_and_custom_prefix_route@5:
     intc_2 // 1
     return
 
-main_test_compile_contract_with_template_route@4:
-    // tests/approvals/precompiled-typed.algo.ts:56
-    // test_compile_contract_with_template() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_test_compile_contract_with_template_route@5:
     // tests/approvals/precompiled-typed.algo.ts:59
     // const helloApp = compiled.call.create().itxn.createdApp
     itxn_begin
@@ -579,7 +545,7 @@ main_test_compile_contract_with_template_route@4:
     itxn_field GlobalNumByteSlice
     bytec_1 // base64(CoEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiACAQAmBAhncmVldGluZwEgBBUffHUDaGV5MRhAAAMoK2cxG0EAKoIFBExcYboEJDeNPASg6BhyBNCiggAEUYC6IDYaAI4FAHoAbwBkAEEAAQAxGRREMRhENhoBIyhlRClQSwEjWUsCgQJZSwNPAksCUlcCAE8CTFBLAhVMTgNSVwIAUEkVFlcGAkxQKkxQsCJDMRkURDEYRDYaAVcCACMoZUQpUExQSRUWVwYCTFAqTFCwIkMxGYEEEkQxGEQiQzEZgQUSRDEYRCJDMRkURDEYFEQiQw==)
+    pushbytes base64(CiACAAEmBAhncmVldGluZwEgBBUffHUDaGV5MRhAAAMoK2eCAgQkN408BKDoGHI2GgCOAgCNAIQxGRREMRhBAGuCAgTQooIABFGAuiA2GgCOAgA6AAEANhoBIihlRClQSwEiWUsCgQJZSwNPAksCUlcCAE8CTFBLAhVMTgNSVwIAUEkVFlcGAkxQKkxQsCNDNhoBVwIAIihlRClQTFBJFRZXBgJMUCpMULAjQ4AETFxhujYaAI4BAAEAI0MxGYEEEjEYEEMxGYEFEjEYEEM=)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:59
     // const helloApp = compiled.call.create().itxn.createdApp
@@ -687,14 +653,7 @@ main_test_compile_contract_with_template_route@4:
     intc_2 // 1
     return
 
-main_test_compile_contract_route@3:
-    // tests/approvals/precompiled-typed.algo.ts:14
-    // test_compile_contract() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_test_compile_contract_route@4:
     // tests/approvals/precompiled-typed.algo.ts:17-19
     // const app = compiled.call.create({
     //   args: ['hello'],
@@ -712,7 +671,7 @@ main_test_compile_contract_route@3:
     itxn_field GlobalNumByteSlice
     bytec_1 // base64(CoEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiACAQAmAwhncmVldGluZwEgBBUffHUxGEAABCiAAGcxG0EAKoIFBACSJa4EJDeNPASg6BhyBNCiggAEUYC6IDYaAI4FAHoAbwBkAEEAAQAxGRREMRhENhoBIyhlRClQSwEjWUsCgQJZSwNPAksCUlcCAE8CTFBLAhVMTgNSVwIAUEkVFlcGAkxQKkxQsCJDMRkURDEYRDYaAVcCACMoZUQpUExQSRUWVwYCTFAqTFCwIkMxGYEEEkQxGEQiQzEZgQUSRDEYRCJDMRkURDEYFEQ2GgFXAgAoTGciQw==)
+    pushbytes base64(CiACAAEmAwhncmVldGluZwEgBBUffHUxGEAABCiAAGeCAgQkN408BKDoGHI2GgCOAgCWAI0xGRREMRhBAGuCAgTQooIABFGAuiA2GgCOAgA6AAEANhoBIihlRClQSwEiWUsCgQJZSwNPAksCUlcCAE8CTFBLAhVMTgNSVwIAUEkVFlcGAkxQKkxQsCNDNhoBVwIAIihlRClQTFBJFRZXBgJMUCpMULAjQ4AEAJIlrjYaAI4BAAEANhoBVwIAKExnI0MxGYEEEjEYEEMxGYEFEjEYEEM=)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:17-19
     // const app = compiled.call.create({
@@ -907,13 +866,12 @@ main_test_compile_contract_route@3:
     intc_2 // 1
     return
 
-main_bare_routing@11:
+main___algots__.defaultCreate@13:
     // tests/approvals/precompiled-typed.algo.ts:13
     // class HelloFactory extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@15
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_2 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

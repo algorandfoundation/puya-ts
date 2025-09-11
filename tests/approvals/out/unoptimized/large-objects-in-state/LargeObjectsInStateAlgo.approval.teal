@@ -5,7 +5,6 @@
 main:
     intcblock 0 1 9 2982900
     bytecblock "x" 0x151f7c75
-    pushbytes ""
     b main_block@0
 
 main_block@0:
@@ -17,10 +16,23 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@9
+    bz main___algots__.defaultCreate@11
     b main_abi_routing@2
 
 main_abi_routing@2:
+    // tests/approvals/large-objects-in-state.algo.ts:14
+    // class LargeObjectsInStateAlgo extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@9
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
     // tests/approvals/large-objects-in-state.algo.ts:14
     // class LargeObjectsInStateAlgo extends Contract {
     txna ApplicationArgs 0
@@ -29,88 +41,87 @@ main_abi_routing@2:
     pushbytes 0x1960177c // method "increaseXCount(uint64,uint64)void"
     pushbytes 0x25f323d0 // method "getCounts(uint64)(uint64,uint8)"
     uncover 4
-    match main_getMbr_route@3 main_bootstrap_route@4 main_increaseXCount_route@5 main_getCounts_route@6
-    b main_switch_case_default@7
-
-main_switch_case_default@7:
+    match main_getMbr_route@4 main_bootstrap_route@5 main_increaseXCount_route@6 main_getCounts_route@7
     b main_switch_case_next@8
 
 main_switch_case_next@8:
-    b main_after_if_else@13
+    b main_after_if_else@10
 
-main_after_if_else@13:
+main_after_if_else@10:
+    b main_after_if_else@12
+
+main_after_if_else@12:
     // tests/approvals/large-objects-in-state.algo.ts:14
     // class LargeObjectsInStateAlgo extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__@14
+    err
 
-main_after_inlined_tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__@14:
-    return
-
-main_getCounts_route@6:
-    // tests/approvals/large-objects-in-state.algo.ts:33
-    // getCounts(index: uint64) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/large-objects-in-state.algo.ts:14
-    // class LargeObjectsInStateAlgo extends Contract {
-    txna ApplicationArgs 1
-    btoi
+main_getCounts_route@7:
     // tests/approvals/large-objects-in-state.algo.ts:33
     // getCounts(index: uint64) {
     callsub getCounts
+    b main_switch_case_next@8
+
+main_increaseXCount_route@6:
+    // tests/approvals/large-objects-in-state.algo.ts:29
+    // increaseXCount(index: uint64, xCount: uint64) {
+    callsub increaseXCount
+    b main_switch_case_next@8
+
+main_bootstrap_route@5:
+    // tests/approvals/large-objects-in-state.algo.ts:21
+    // bootstrap(pay: gtxn.PaymentTxn) {
+    callsub bootstrap
+    b main_switch_case_next@8
+
+main_getMbr_route@4:
+    // tests/approvals/large-objects-in-state.algo.ts:17
+    // getMbr(): uint64 {
+    callsub getMbr
+    b main_switch_case_next@8
+
+main_create_NoOp@9:
+    b main_after_if_else@10
+
+main___algots__.defaultCreate@11:
+    // tests/approvals/large-objects-in-state.algo.ts:14
+    // class LargeObjectsInStateAlgo extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getMbr[routing]() -> void:
+getMbr:
+    b getMbr_block@0
+
+getMbr_block@0:
+    // tests/approvals/large-objects-in-state.algo.ts:17
+    // getMbr(): uint64 {
+    callsub tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getMbr
+    itob
     bytec_1 // 0x151f7c75
     uncover 1
     concat
     log
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__@14
+    return
 
-main_increaseXCount_route@5:
-    // tests/approvals/large-objects-in-state.algo.ts:29
-    // increaseXCount(index: uint64, xCount: uint64) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/large-objects-in-state.algo.ts:14
-    // class LargeObjectsInStateAlgo extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    txna ApplicationArgs 2
-    btoi
-    // tests/approvals/large-objects-in-state.algo.ts:29
-    // increaseXCount(index: uint64, xCount: uint64) {
-    callsub increaseXCount
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__@14
 
-main_bootstrap_route@4:
+// tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstrap[routing]() -> void:
+bootstrap:
+    b bootstrap_block@0
+
+bootstrap_block@0:
     // tests/approvals/large-objects-in-state.algo.ts:21
     // bootstrap(pay: gtxn.PaymentTxn) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/large-objects-in-state.algo.ts:14
-    // class LargeObjectsInStateAlgo extends Contract {
     txn GroupIndex
     intc_1 // 1
     -
@@ -119,67 +130,50 @@ main_bootstrap_route@4:
     intc_1 // pay
     ==
     assert // transaction type is pay
-    // tests/approvals/large-objects-in-state.algo.ts:21
-    // bootstrap(pay: gtxn.PaymentTxn) {
-    callsub bootstrap
+    callsub tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstrap
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__@14
+    return
 
-main_getMbr_route@3:
-    // tests/approvals/large-objects-in-state.algo.ts:17
-    // getMbr(): uint64 {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub getMbr
-    itob
+
+// tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount[routing]() -> void:
+increaseXCount:
+    b increaseXCount_block@0
+
+increaseXCount_block@0:
+    // tests/approvals/large-objects-in-state.algo.ts:29
+    // increaseXCount(index: uint64, xCount: uint64) {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    callsub tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount
+    intc_1 // 1
+    return
+
+
+// tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts[routing]() -> void:
+getCounts:
+    b getCounts_block@0
+
+getCounts_block@0:
+    // tests/approvals/large-objects-in-state.algo.ts:33
+    // getCounts(index: uint64) {
+    txna ApplicationArgs 1
+    btoi
+    callsub tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts
     bytec_1 // 0x151f7c75
     uncover 1
     concat
     log
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__@14
-
-main_bare_routing@9:
-    // tests/approvals/large-objects-in-state.algo.ts:14
-    // class LargeObjectsInStateAlgo extends Contract {
-    txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@10
-    b main_switch_case_default@11
-
-main_switch_case_default@11:
-    b main_switch_case_next@12
-
-main_switch_case_next@12:
-    b main_after_if_else@13
-
-main___algots__.defaultCreate@10:
-    // tests/approvals/large-objects-in-state.algo.ts:14
-    // class LargeObjectsInStateAlgo extends Contract {
-    txn ApplicationID
-    intc_0 // 0
-    ==
-    assert // can only call when creating
-    callsub __algots__.defaultCreate
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__puya_arc4_router__@14
+    return
 
 
 // tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getMbr() -> uint64:
-getMbr:
-    b getMbr_block@0
+tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getMbr:
+    b tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getMbr_block@0
 
-getMbr_block@0:
+tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getMbr_block@0:
     // tests/approvals/large-objects-in-state.algo.ts:18
     // return BOX_MBR + ACCOUNT_BASE_MBR
     intc_3 // 2982900
@@ -187,13 +181,13 @@ getMbr_block@0:
 
 
 // tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstrap(pay: uint64) -> void:
-bootstrap:
+tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstrap:
     // tests/approvals/large-objects-in-state.algo.ts:21
     // bootstrap(pay: gtxn.PaymentTxn) {
     proto 1 0
-    b bootstrap_block@0
+    b tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstrap_block@0
 
-bootstrap_block@0:
+tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstrap_block@0:
     // tests/approvals/large-objects-in-state.algo.ts:22-25
     // assertMatch(pay, {
     //   amount: BOX_MBR + ACCOUNT_BASE_MBR,
@@ -235,13 +229,13 @@ bootstrap_block@0:
 
 
 // tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount(index: uint64, xCount: uint64) -> void:
-increaseXCount:
+tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount:
     // tests/approvals/large-objects-in-state.algo.ts:29
     // increaseXCount(index: uint64, xCount: uint64) {
     proto 2 0
-    b increaseXCount_block@0
+    b tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount_block@0
 
-increaseXCount_block@0:
+tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount_block@0:
     // tests/approvals/large-objects-in-state.algo.ts:15
     // storage = Box<FixedArray<Counts, typeof MAX_ITEMS>>({ key: 'x' })
     bytec_0 // "x"
@@ -298,13 +292,13 @@ increaseXCount_block@0:
 
 
 // tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts(index: uint64) -> bytes:
-getCounts:
+tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts:
     // tests/approvals/large-objects-in-state.algo.ts:33
     // getCounts(index: uint64) {
     proto 1 1
-    b getCounts_block@0
+    b tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts_block@0
 
-getCounts_block@0:
+tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts_block@0:
     // tests/approvals/large-objects-in-state.algo.ts:15
     // storage = Box<FixedArray<Counts, typeof MAX_ITEMS>>({ key: 'x' })
     bytec_0 // "x"

@@ -4,45 +4,71 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 1 TMPL_AN_INT
-    bytecblock 0x151f7c75 TMPL_AN_ADDRESS TMPL_SOME_BYTES TMPL_A_STRING
+    bytecblock 0x151f7c75 TMPL_A_STRING TMPL_SOME_BYTES TMPL_AN_ADDRESS
     // tests/approvals/template-var.algo.ts:7
     // export class MyContract extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@9
-    pushbytess 0xbe93200b 0xc1a13295 0xaf43db36 0x0559cac1 // method "getInt()uint64", method "getString()string", method "getBytes()byte[]", method "getAddress()address"
-    txna ApplicationArgs 0
-    match main_getInt_route@3 main_getString_route@4 main_getBytes_route@5 main_getAddress_route@6
-
-main_after_if_else@13:
-    err
-
-main_getAddress_route@6:
-    // tests/approvals/template-var.algo.ts:20
-    // getAddress() {
+    bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    assert
+    pushbytess 0xbe93200b 0xc1a13295 0xaf43db36 0x0559cac1 // method "getInt()uint64", method "getString()string", method "getBytes()byte[]", method "getAddress()address"
+    txna ApplicationArgs 0
+    match getInt getString getBytes getAddress
+    err
+
+main___algots__.defaultCreate@11:
+    // tests/approvals/template-var.algo.ts:7
+    // export class MyContract extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
+
+
+// tests/approvals/template-var.algo.ts::MyContract.getInt[routing]() -> void:
+getInt:
+    // tests/approvals/template-var.algo.ts:9
+    // return TemplateVar<uint64>('AN_INT')
+    intc_1 // TMPL_AN_INT
+    // tests/approvals/template-var.algo.ts:8
+    // getInt() {
+    itob
     bytec_0 // 0x151f7c75
-    // tests/approvals/template-var.algo.ts:21
-    // return specialAddress
-    bytec_1 // TMPL_AN_ADDRESS
-    // tests/approvals/template-var.algo.ts:20
-    // getAddress() {
+    swap
     concat
     log
     intc_0 // 1
     return
 
-main_getBytes_route@5:
-    // tests/approvals/template-var.algo.ts:16
-    // getBytes() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+
+// tests/approvals/template-var.algo.ts::MyContract.getString[routing]() -> void:
+getString:
+    // tests/approvals/template-var.algo.ts:13
+    // return TemplateVar<string>('A_STRING')
+    bytec_1 // TMPL_A_STRING
+    // tests/approvals/template-var.algo.ts:12
+    // getString() {
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/template-var.algo.ts::MyContract.getBytes[routing]() -> void:
+getBytes:
     // tests/approvals/template-var.algo.ts:17
     // return TemplateVar<bytes>('SOME_BYTES')
     bytec_2 // TMPL_SOME_BYTES
@@ -61,60 +87,18 @@ main_getBytes_route@5:
     intc_0 // 1
     return
 
-main_getString_route@4:
-    // tests/approvals/template-var.algo.ts:12
-    // getString() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/template-var.algo.ts:13
-    // return TemplateVar<string>('A_STRING')
-    bytec_3 // TMPL_A_STRING
-    // tests/approvals/template-var.algo.ts:12
-    // getString() {
-    dup
-    len
-    itob
-    extract 6 2
-    swap
-    concat
+
+// tests/approvals/template-var.algo.ts::MyContract.getAddress[routing]() -> void:
+getAddress:
+    // tests/approvals/template-var.algo.ts:20
+    // getAddress() {
     bytec_0 // 0x151f7c75
-    swap
+    // tests/approvals/template-var.algo.ts:21
+    // return specialAddress
+    bytec_3 // TMPL_AN_ADDRESS
+    // tests/approvals/template-var.algo.ts:20
+    // getAddress() {
     concat
     log
-    intc_0 // 1
-    return
-
-main_getInt_route@3:
-    // tests/approvals/template-var.algo.ts:8
-    // getInt() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/template-var.algo.ts:9
-    // return TemplateVar<uint64>('AN_INT')
-    intc_1 // TMPL_AN_INT
-    // tests/approvals/template-var.algo.ts:8
-    // getInt() {
-    itob
-    bytec_0 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_0 // 1
-    return
-
-main_bare_routing@9:
-    // tests/approvals/template-var.algo.ts:7
-    // export class MyContract extends Contract {
-    txn OnCompletion
-    bnz main_after_if_else@13
-    txn ApplicationID
-    !
-    assert // can only call when creating
     intc_0 // 1
     return

@@ -5,7 +5,6 @@
 main:
     intcblock 0 1 8 10
     bytecblock 0x 0x151f7c75 "l1" "localUint2" "b1" "localBytes2" "localEncoded" "localTuple" "localObject" "localMutableObject" "hello"
-    bytec_0 // ""
     b main_block@0
 
 main_block@0:
@@ -17,7 +16,7 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@11
+    bz main___algots__.defaultCreate@14
     b main_abi_routing@2
 
 main_abi_routing@2:
@@ -25,154 +24,79 @@ main_abi_routing@2:
     // export class LocalStateDemo extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x29314d95 // method "optIn()void"
+    uncover 1
+    match main_optIn_route@3
+    b main_switch_case_next@4
+
+main_switch_case_next@4:
+    // tests/approvals/local-state.algo.ts:8
+    // export class LocalStateDemo extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@12
+    b main_call_NoOp@5
+
+main_call_NoOp@5:
+    // tests/approvals/local-state.algo.ts:8
+    // export class LocalStateDemo extends Contract {
+    txna ApplicationArgs 0
     pushbytes 0xaaefcb43 // method "setState((uint64,byte[]),uint64[10])void"
     pushbytes 0x0ea2c469 // method "getState()(uint64,uint64,byte[],byte[],uint64[10],(uint64,byte[]),(uint64,byte[]),(uint64,byte[],bool,string))"
     pushbytes 0x11170534 // method "clearState()void"
     pushbytes 0x2793c249 // method "writeDynamicLocalState(string,string)string"
     pushbytes 0x213631f5 // method "readDynamicLocalState(string)string"
-    uncover 6
-    match main_optIn_route@3 main_setState_route@4 main_getState_route@5 main_clearState_route@6 main_writeDynamicLocalState_route@7 main_readDynamicLocalState_route@8
-    b main_switch_case_default@9
+    uncover 5
+    match main_setState_route@6 main_getState_route@7 main_clearState_route@8 main_writeDynamicLocalState_route@9 main_readDynamicLocalState_route@10
+    b main_switch_case_next@11
 
-main_switch_case_default@9:
-    b main_switch_case_next@10
+main_switch_case_next@11:
+    b main_after_if_else@13
 
-main_switch_case_next@10:
+main_after_if_else@13:
     b main_after_if_else@15
 
 main_after_if_else@15:
     // tests/approvals/local-state.algo.ts:8
     // export class LocalStateDemo extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__@16
+    err
 
-main_after_inlined_tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__@16:
-    return
-
-main_readDynamicLocalState_route@8:
-    // tests/approvals/local-state.algo.ts:82
-    // @arc4.abimethod()
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/local-state.algo.ts:8
-    // export class LocalStateDemo extends Contract {
-    txna ApplicationArgs 1
-    extract 2 0
+main_readDynamicLocalState_route@10:
     // tests/approvals/local-state.algo.ts:82
     // @arc4.abimethod()
     callsub readDynamicLocalState
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__@16
+    b main_switch_case_next@11
 
-main_writeDynamicLocalState_route@7:
-    // tests/approvals/local-state.algo.ts:63
-    // @arc4.abimethod()
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/local-state.algo.ts:8
-    // export class LocalStateDemo extends Contract {
-    txna ApplicationArgs 1
-    extract 2 0
-    txna ApplicationArgs 2
-    extract 2 0
+main_writeDynamicLocalState_route@9:
     // tests/approvals/local-state.algo.ts:63
     // @arc4.abimethod()
     callsub writeDynamicLocalState
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__@16
+    b main_switch_case_next@11
 
-main_clearState_route@6:
+main_clearState_route@8:
     // tests/approvals/local-state.algo.ts:45
     // public clearState() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub clearState
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__@16
+    b main_switch_case_next@11
 
-main_getState_route@5:
+main_getState_route@7:
     // tests/approvals/local-state.algo.ts:32
     // public getState() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub getState
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__@16
+    b main_switch_case_next@11
 
-main_setState_route@4:
-    // tests/approvals/local-state.algo.ts:21
-    // public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/local-state.algo.ts:8
-    // export class LocalStateDemo extends Contract {
-    txna ApplicationArgs 1
-    txna ApplicationArgs 2
+main_setState_route@6:
     // tests/approvals/local-state.algo.ts:21
     // public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
     callsub setState
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__@16
+    b main_switch_case_next@11
+
+main_create_NoOp@12:
+    b main_after_if_else@13
 
 main_optIn_route@3:
     // tests/approvals/local-state.algo.ts:18
@@ -180,60 +104,150 @@ main_optIn_route@3:
     txn OnCompletion
     intc_1 // OptIn
     ==
-    assert // OnCompletion is not OptIn
     txn ApplicationID
     intc_0 // 0
     !=
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be OptIn && can only call when not creating
     callsub optIn
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__@16
+    b main_switch_case_next@4
 
-main_bare_routing@11:
+main___algots__.defaultCreate@14:
     // tests/approvals/local-state.algo.ts:8
     // export class LocalStateDemo extends Contract {
     txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@12
-    b main_switch_case_default@13
-
-main_switch_case_default@13:
-    b main_switch_case_next@14
-
-main_switch_case_next@14:
-    b main_after_if_else@15
-
-main___algots__.defaultCreate@12:
-    // tests/approvals/local-state.algo.ts:8
-    // export class LocalStateDemo extends Contract {
+    intc_0 // NoOp
+    ==
     txn ApplicationID
     intc_0 // 0
     ==
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__@16
+    return
 
 
-// tests/approvals/local-state.algo.ts::LocalStateDemo.optIn() -> void:
+// tests/approvals/local-state.algo.ts::LocalStateDemo.optIn[routing]() -> void:
 optIn:
     b optIn_block@0
 
 optIn_block@0:
+    // tests/approvals/local-state.algo.ts:18
+    // @abimethod({ allowActions: 'OptIn' })
+    callsub tests/approvals/local-state.algo.ts::LocalStateDemo.optIn
+    intc_1 // 1
+    return
+
+
+// tests/approvals/local-state.algo.ts::LocalStateDemo.setState[routing]() -> void:
+setState:
+    b setState_block@0
+
+setState_block@0:
+    // tests/approvals/local-state.algo.ts:21
+    // public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
+    txna ApplicationArgs 1
+    txna ApplicationArgs 2
+    callsub tests/approvals/local-state.algo.ts::LocalStateDemo.setState
+    intc_1 // 1
+    return
+
+
+// tests/approvals/local-state.algo.ts::LocalStateDemo.getState[routing]() -> void:
+getState:
+    b getState_block@0
+
+getState_block@0:
+    // tests/approvals/local-state.algo.ts:32
+    // public getState() {
+    callsub tests/approvals/local-state.algo.ts::LocalStateDemo.getState
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/local-state.algo.ts::LocalStateDemo.clearState[routing]() -> void:
+clearState:
+    b clearState_block@0
+
+clearState_block@0:
+    // tests/approvals/local-state.algo.ts:45
+    // public clearState() {
+    callsub tests/approvals/local-state.algo.ts::LocalStateDemo.clearState
+    intc_1 // 1
+    return
+
+
+// tests/approvals/local-state.algo.ts::LocalStateDemo.writeDynamicLocalState[routing]() -> void:
+writeDynamicLocalState:
+    b writeDynamicLocalState_block@0
+
+writeDynamicLocalState_block@0:
+    // tests/approvals/local-state.algo.ts:63
+    // @arc4.abimethod()
+    txna ApplicationArgs 1
+    extract 2 0
+    txna ApplicationArgs 2
+    extract 2 0
+    callsub tests/approvals/local-state.algo.ts::LocalStateDemo.writeDynamicLocalState
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/local-state.algo.ts::LocalStateDemo.readDynamicLocalState[routing]() -> void:
+readDynamicLocalState:
+    b readDynamicLocalState_block@0
+
+readDynamicLocalState_block@0:
+    // tests/approvals/local-state.algo.ts:82
+    // @arc4.abimethod()
+    txna ApplicationArgs 1
+    extract 2 0
+    callsub tests/approvals/local-state.algo.ts::LocalStateDemo.readDynamicLocalState
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/local-state.algo.ts::LocalStateDemo.optIn() -> void:
+tests/approvals/local-state.algo.ts::LocalStateDemo.optIn:
+    b tests/approvals/local-state.algo.ts::LocalStateDemo.optIn_block@0
+
+tests/approvals/local-state.algo.ts::LocalStateDemo.optIn_block@0:
     retsub
 
 
 // tests/approvals/local-state.algo.ts::LocalStateDemo.setState(p: bytes, c: bytes) -> void:
-setState:
+tests/approvals/local-state.algo.ts::LocalStateDemo.setState:
     // tests/approvals/local-state.algo.ts:21
     // public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
     proto 2 0
-    b setState_block@0
+    b tests/approvals/local-state.algo.ts::LocalStateDemo.setState_block@0
 
-setState_block@0:
+tests/approvals/local-state.algo.ts::LocalStateDemo.setState_block@0:
     // tests/approvals/local-state.algo.ts:21
     // public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
     frame_dig -2
@@ -422,10 +436,10 @@ setState_block@0:
 
 
 // tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> bytes:
-getState:
-    b getState_block@0
+tests/approvals/local-state.algo.ts::LocalStateDemo.getState:
+    b tests/approvals/local-state.algo.ts::LocalStateDemo.getState_block@0
 
-getState_block@0:
+tests/approvals/local-state.algo.ts::LocalStateDemo.getState_block@0:
     // tests/approvals/local-state.algo.ts:34
     // localUint: this.localUint(Txn.sender).value,
     txn Sender
@@ -695,10 +709,10 @@ getState_block@0:
 
 
 // tests/approvals/local-state.algo.ts::LocalStateDemo.clearState() -> void:
-clearState:
-    b clearState_block@0
+tests/approvals/local-state.algo.ts::LocalStateDemo.clearState:
+    b tests/approvals/local-state.algo.ts::LocalStateDemo.clearState_block@0
 
-clearState_block@0:
+tests/approvals/local-state.algo.ts::LocalStateDemo.clearState_block@0:
     // tests/approvals/local-state.algo.ts:46
     // this.localUint(Txn.sender).delete()
     txn Sender
@@ -775,14 +789,14 @@ clearState_block@0:
 
 
 // tests/approvals/local-state.algo.ts::LocalStateDemo.writeDynamicLocalState(key: bytes, value: bytes) -> bytes:
-writeDynamicLocalState:
+tests/approvals/local-state.algo.ts::LocalStateDemo.writeDynamicLocalState:
     // tests/approvals/local-state.algo.ts:63-64
     // @arc4.abimethod()
     // public writeDynamicLocalState(key: string, value: string): string {
     proto 2 1
-    b writeDynamicLocalState_block@0
+    b tests/approvals/local-state.algo.ts::LocalStateDemo.writeDynamicLocalState_block@0
 
-writeDynamicLocalState_block@0:
+tests/approvals/local-state.algo.ts::LocalStateDemo.writeDynamicLocalState_block@0:
     // tests/approvals/local-state.algo.ts:65
     // const sender = Txn.sender
     txn Sender
@@ -822,14 +836,14 @@ writeDynamicLocalState_block@0:
 
 
 // tests/approvals/local-state.algo.ts::LocalStateDemo.readDynamicLocalState(key: bytes) -> bytes:
-readDynamicLocalState:
+tests/approvals/local-state.algo.ts::LocalStateDemo.readDynamicLocalState:
     // tests/approvals/local-state.algo.ts:82-83
     // @arc4.abimethod()
     // public readDynamicLocalState(key: string): string {
     proto 1 1
-    b readDynamicLocalState_block@0
+    b tests/approvals/local-state.algo.ts::LocalStateDemo.readDynamicLocalState_block@0
 
-readDynamicLocalState_block@0:
+tests/approvals/local-state.algo.ts::LocalStateDemo.readDynamicLocalState_block@0:
     // tests/approvals/local-state.algo.ts:84
     // const sender = Txn.sender
     txn Sender

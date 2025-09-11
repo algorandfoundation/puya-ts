@@ -4,8 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1 2
-    bytecblock "" "greeting" 0x151f7c75 " " PRFX_GREETING
-    bytec_0 // ""
+    bytecblock "greeting" "" 0x151f7c75 " " PRFX_GREETING
     b main_block@0
 
 main_block@0:
@@ -23,199 +22,229 @@ main_after_if_else@2:
 main_block@3:
     // tests/approvals/precompiled-apps.algo.ts:52
     // export class HelloTemplateCustomPrefix extends HelloBase {
-    txn NumAppArgs
+    txna ApplicationArgs 0
+    pushbytes 0x24378d3c // method "delete()void"
+    pushbytes 0xa0e81872 // method "update()void"
+    uncover 2
+    match main_delete_route@4 main_update_route@5
+    b main_switch_case_next@6
+
+main_switch_case_next@6:
+    // tests/approvals/precompiled-apps.algo.ts:52
+    // export class HelloTemplateCustomPrefix extends HelloBase {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
     intc_0 // 0
     !=
-    bz main_bare_routing@12
-    b main_abi_routing@4
+    bz main_create_NoOp@11
+    b main_call_NoOp@7
 
-main_abi_routing@4:
+main_call_NoOp@7:
     // tests/approvals/precompiled-apps.algo.ts:52
     // export class HelloTemplateCustomPrefix extends HelloBase {
     txna ApplicationArgs 0
-    pushbytes 0x4c5c61ba // method "create()void"
-    pushbytes 0x24378d3c // method "delete()void"
-    pushbytes 0xa0e81872 // method "update()void"
     pushbytes 0xd0a28200 // method "greet(string)string"
     pushbytes 0x5180ba20 // method "sendGreetings((string,string))string"
-    uncover 5
-    match main_create_route@5 main_delete_route@6 main_update_route@7 main_greet_route@8 main_sendGreetings_route@9
-    b main_switch_case_default@10
+    uncover 2
+    match main_greet_route@8 main_sendGreetings_route@9
+    b main_switch_case_next@10
 
-main_switch_case_default@10:
-    b main_switch_case_next@11
+main_switch_case_next@10:
+    b main_after_if_else@14
 
-main_switch_case_next@11:
-    b main_after_if_else@13
-
-main_after_if_else@13:
+main_after_if_else@14:
     // tests/approvals/precompiled-apps.algo.ts:52
     // export class HelloTemplateCustomPrefix extends HelloBase {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router__@14
-
-main_after_inlined_tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router__@14:
-    return
+    err
 
 main_sendGreetings_route@9:
     // tests/approvals/precompiled-apps.algo.ts:30
     // sendGreetings(a: Greeting): string {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/precompiled-apps.algo.ts:52
-    // export class HelloTemplateCustomPrefix extends HelloBase {
-    txna ApplicationArgs 1
-    // tests/approvals/precompiled-apps.algo.ts:30
-    // sendGreetings(a: Greeting): string {
     callsub sendGreetings
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_2 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router__@14
+    b main_switch_case_next@10
 
 main_greet_route@8:
     // tests/approvals/precompiled-apps.algo.ts:26
     // greet(name: string): string {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
+    callsub greet
+    b main_switch_case_next@10
+
+main_create_NoOp@11:
     // tests/approvals/precompiled-apps.algo.ts:52
     // export class HelloTemplateCustomPrefix extends HelloBase {
-    txna ApplicationArgs 1
-    extract 2 0
-    // tests/approvals/precompiled-apps.algo.ts:26
-    // greet(name: string): string {
-    callsub greet
-    dup
-    len
-    itob
-    extract 6 2
+    txna ApplicationArgs 0
+    pushbytes 0x4c5c61ba // method "create()void"
     uncover 1
-    concat
-    bytec_2 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router__@14
+    match main_create_route@12
+    b main_switch_case_next@13
 
-main_update_route@7:
+main_switch_case_next@13:
+    b main_after_if_else@14
+
+main_create_route@12:
+    // tests/approvals/precompiled-apps.algo.ts:58
+    // @abimethod({ onCreate: 'require' })
+    callsub create
+    b main_switch_case_next@13
+
+main_update_route@5:
     // tests/approvals/precompiled-apps.algo.ts:23
     // @abimethod({ allowActions: 'UpdateApplication' })
     txn OnCompletion
     pushint 4 // UpdateApplication
     ==
-    assert // OnCompletion is not UpdateApplication
     txn ApplicationID
     intc_0 // 0
     !=
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be UpdateApplication && can only call when not creating
     callsub update
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router__@14
+    b main_switch_case_next@6
 
-main_delete_route@6:
+main_delete_route@4:
     // tests/approvals/precompiled-apps.algo.ts:20
     // @abimethod({ allowActions: 'DeleteApplication' })
     txn OnCompletion
     pushint 5 // DeleteApplication
     ==
-    assert // OnCompletion is not DeleteApplication
     txn ApplicationID
     intc_0 // 0
     !=
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be DeleteApplication && can only call when not creating
     callsub delete
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router__@14
-
-main_create_route@5:
-    // tests/approvals/precompiled-apps.algo.ts:58
-    // @abimethod({ onCreate: 'require' })
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    ==
-    assert // can only call when creating
-    callsub create
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.__puya_arc4_router__@14
-
-main_bare_routing@12:
-    b main_after_if_else@13
+    b main_switch_case_next@6
 
 
-// tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.create() -> void:
+// tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.create[routing]() -> void:
 create:
     b create_block@0
 
 create_block@0:
-    retsub
+    // tests/approvals/precompiled-apps.algo.ts:58
+    // @abimethod({ onCreate: 'require' })
+    callsub tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.create
+    intc_1 // 1
+    return
 
 
-// tests/approvals/precompiled-apps.algo.ts::HelloBase.delete() -> void:
+// tests/approvals/precompiled-apps.algo.ts::HelloBase.delete[routing]() -> void:
 delete:
     b delete_block@0
 
 delete_block@0:
-    retsub
+    // tests/approvals/precompiled-apps.algo.ts:20
+    // @abimethod({ allowActions: 'DeleteApplication' })
+    callsub tests/approvals/precompiled-apps.algo.ts::HelloBase.delete
+    intc_1 // 1
+    return
 
 
-// tests/approvals/precompiled-apps.algo.ts::HelloBase.update() -> void:
+// tests/approvals/precompiled-apps.algo.ts::HelloBase.update[routing]() -> void:
 update:
     b update_block@0
 
 update_block@0:
+    // tests/approvals/precompiled-apps.algo.ts:23
+    // @abimethod({ allowActions: 'UpdateApplication' })
+    callsub tests/approvals/precompiled-apps.algo.ts::HelloBase.update
+    intc_1 // 1
+    return
+
+
+// tests/approvals/precompiled-apps.algo.ts::HelloBase.greet[routing]() -> void:
+greet:
+    b greet_block@0
+
+greet_block@0:
+    // tests/approvals/precompiled-apps.algo.ts:26
+    // greet(name: string): string {
+    txna ApplicationArgs 1
+    extract 2 0
+    callsub tests/approvals/precompiled-apps.algo.ts::HelloBase.greet
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_2 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/precompiled-apps.algo.ts::HelloBase.sendGreetings[routing]() -> void:
+sendGreetings:
+    b sendGreetings_block@0
+
+sendGreetings_block@0:
+    // tests/approvals/precompiled-apps.algo.ts:30
+    // sendGreetings(a: Greeting): string {
+    txna ApplicationArgs 1
+    callsub tests/approvals/precompiled-apps.algo.ts::HelloBase.sendGreetings
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_2 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.create() -> void:
+tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.create:
+    b tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.create_block@0
+
+tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix.create_block@0:
+    retsub
+
+
+// tests/approvals/precompiled-apps.algo.ts::HelloBase.delete() -> void:
+tests/approvals/precompiled-apps.algo.ts::HelloBase.delete:
+    b tests/approvals/precompiled-apps.algo.ts::HelloBase.delete_block@0
+
+tests/approvals/precompiled-apps.algo.ts::HelloBase.delete_block@0:
+    retsub
+
+
+// tests/approvals/precompiled-apps.algo.ts::HelloBase.update() -> void:
+tests/approvals/precompiled-apps.algo.ts::HelloBase.update:
+    b tests/approvals/precompiled-apps.algo.ts::HelloBase.update_block@0
+
+tests/approvals/precompiled-apps.algo.ts::HelloBase.update_block@0:
     retsub
 
 
 // tests/approvals/precompiled-apps.algo.ts::HelloBase.greet(name: bytes) -> bytes:
-greet:
+tests/approvals/precompiled-apps.algo.ts::HelloBase.greet:
     // tests/approvals/precompiled-apps.algo.ts:26
     // greet(name: string): string {
     proto 1 1
-    b greet_block@0
+    b tests/approvals/precompiled-apps.algo.ts::HelloBase.greet_block@0
 
-greet_block@0:
+tests/approvals/precompiled-apps.algo.ts::HelloBase.greet_block@0:
     // tests/approvals/precompiled-apps.algo.ts:27
     // return `${this.greeting.value} ${name}`
     intc_0 // 0
     // tests/approvals/precompiled-apps.algo.ts:18
     // greeting = GlobalState({ initialValue: '' })
-    bytec_1 // "greeting"
+    bytec_0 // "greeting"
     // tests/approvals/precompiled-apps.algo.ts:27
     // return `${this.greeting.value} ${name}`
     app_global_get_ex
     assert // check GlobalState exists
-    bytec_0 // ""
+    bytec_1 // ""
     uncover 1
     concat
     bytec_3 // " "
@@ -226,24 +255,24 @@ greet_block@0:
 
 
 // tests/approvals/precompiled-apps.algo.ts::HelloBase.sendGreetings(a: bytes) -> bytes:
-sendGreetings:
+tests/approvals/precompiled-apps.algo.ts::HelloBase.sendGreetings:
     // tests/approvals/precompiled-apps.algo.ts:30
     // sendGreetings(a: Greeting): string {
     proto 1 1
-    b sendGreetings_block@0
+    b tests/approvals/precompiled-apps.algo.ts::HelloBase.sendGreetings_block@0
 
-sendGreetings_block@0:
+tests/approvals/precompiled-apps.algo.ts::HelloBase.sendGreetings_block@0:
     // tests/approvals/precompiled-apps.algo.ts:31
     // return `${this.greeting.value} ${a.name}${a.termination.native}`
     intc_0 // 0
     // tests/approvals/precompiled-apps.algo.ts:18
     // greeting = GlobalState({ initialValue: '' })
-    bytec_1 // "greeting"
+    bytec_0 // "greeting"
     // tests/approvals/precompiled-apps.algo.ts:31
     // return `${this.greeting.value} ${a.name}${a.termination.native}`
     app_global_get_ex
     assert // check GlobalState exists
-    bytec_0 // ""
+    bytec_1 // ""
     uncover 1
     concat
     bytec_3 // " "
@@ -284,7 +313,7 @@ constructor_block@0:
     callsub tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor
     // tests/approvals/precompiled-apps.algo.ts:18
     // greeting = GlobalState({ initialValue: '' })
-    bytec_1 // "greeting"
+    bytec_0 // "greeting"
     // tests/approvals/precompiled-apps.algo.ts:55
     // this.greeting.value = TemplateVar<string>('GREETING', 'PRFX_')
     bytec 4 // PRFX_GREETING
@@ -309,7 +338,7 @@ tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor_block@1:
 tests/approvals/precompiled-apps.algo.ts::HelloBase.constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
     // tests/approvals/precompiled-apps.algo.ts:18
     // greeting = GlobalState({ initialValue: '' })
-    bytec_1 // "greeting"
-    bytec_0 // ""
+    bytec_0 // "greeting"
+    bytec_1 // ""
     app_global_put
     retsub

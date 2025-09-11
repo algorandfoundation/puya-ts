@@ -245,7 +245,7 @@ class BoxToRefTest extends Contract {
 
     boxRef.replace(0, new Uint8(123).bytes)
 
-    assert(boxForCaller.value[0].native === 123, 'First array item in box should be 123')
+    assert(boxForCaller.value[0].asUint64() === 123, 'First array item in box should be 123')
   }
 }
 

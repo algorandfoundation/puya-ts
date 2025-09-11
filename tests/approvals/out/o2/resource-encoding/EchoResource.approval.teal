@@ -8,24 +8,20 @@ main:
     // tests/approvals/resource-encoding.algo.ts:38
     // class EchoResource extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
-    pushbytess 0x77e28d74 0x4d370276 // method "echoResourceByIndex(asset,application,account)(uint64,uint64,address)", method "echoResourceByValue(uint64,uint64,address)(uint64,uint64,address)"
-    txna ApplicationArgs 0
-    match main_echoResourceByIndex_route@3 main_echoResourceByValue_route@4
-
-main_after_if_else@11:
-    err
-
-main_echoResourceByValue_route@4:
-    // tests/approvals/resource-encoding.algo.ts:50
-    // @abimethod({ resourceEncoding: 'value' })
+    bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:38
-    // class EchoResource extends Contract {
+    assert
+    pushbytess 0x77e28d74 0x4d370276 // method "echoResourceByIndex(asset,application,account)(uint64,uint64,address)", method "echoResourceByValue(uint64,uint64,address)(uint64,uint64,address)"
+    txna ApplicationArgs 0
+    match main_echoResourceByIndex_route@4 main_echoResourceByValue_route@5
+    err
+
+main_echoResourceByValue_route@5:
+    // tests/approvals/resource-encoding.algo.ts:50
+    // @abimethod({ resourceEncoding: 'value' })
     txna ApplicationArgs 1
     btoi
     txna ApplicationArgs 2
@@ -78,16 +74,9 @@ main_echoResourceByValue_route@4:
     intc_0 // 1
     return
 
-main_echoResourceByIndex_route@3:
+main_echoResourceByIndex_route@4:
     // tests/approvals/resource-encoding.algo.ts:39
     // @abimethod({ resourceEncoding: 'index' })
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:38
-    // class EchoResource extends Contract {
     txna ApplicationArgs 1
     btoi
     txnas Assets
@@ -148,13 +137,12 @@ main_echoResourceByIndex_route@3:
     intc_0 // 1
     return
 
-main_bare_routing@7:
+main___algots__.defaultCreate@9:
     // tests/approvals/resource-encoding.algo.ts:38
     // class EchoResource extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@11
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_0 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

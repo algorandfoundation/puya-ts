@@ -5,7 +5,6 @@
 main:
     intcblock 0 1
     bytecblock 0x151f7c75 "common"
-    pushbytes ""
     b main_block@0
 
 main_block@0:
@@ -26,10 +25,23 @@ main_block@3:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@10
+    bz main___algots__.defaultCreate@12
     b main_abi_routing@4
 
 main_abi_routing@4:
+    // tests/approvals/multi-inheritance.algo.ts:22
+    // export class BaseOne extends CommonBase {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@10
+    b main_call_NoOp@5
+
+main_call_NoOp@5:
     // tests/approvals/multi-inheritance.algo.ts:22
     // export class BaseOne extends CommonBase {
     txna ApplicationArgs 0
@@ -37,136 +49,128 @@ main_abi_routing@4:
     pushbytes 0x455c8d09 // method "methodCommon()string"
     pushbytes 0xf9f5142c // method "b2CantOverride()string"
     uncover 3
-    match main_methodOne_route@5 main_methodCommon_route@6 main_b2CantOverride_route@7
-    b main_switch_case_default@8
-
-main_switch_case_default@8:
+    match main_methodOne_route@6 main_methodCommon_route@7 main_b2CantOverride_route@8
     b main_switch_case_next@9
 
 main_switch_case_next@9:
-    b main_after_if_else@14
+    b main_after_if_else@11
 
-main_after_if_else@14:
+main_after_if_else@11:
+    b main_after_if_else@13
+
+main_after_if_else@13:
     // tests/approvals/multi-inheritance.algo.ts:22
     // export class BaseOne extends CommonBase {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::BaseOne.__puya_arc4_router__@15
+    err
 
-main_after_inlined_tests/approvals/multi-inheritance.algo.ts::BaseOne.__puya_arc4_router__@15:
-    return
-
-main_b2CantOverride_route@7:
+main_b2CantOverride_route@8:
     // tests/approvals/multi-inheritance.algo.ts:17
     // b2CantOverride(): string {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub b2CantOverride
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_0 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::BaseOne.__puya_arc4_router__@15
+    b main_switch_case_next@9
 
-main_methodCommon_route@6:
+main_methodCommon_route@7:
     // tests/approvals/multi-inheritance.algo.ts:13
     // methodCommon() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub methodCommon
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_0 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::BaseOne.__puya_arc4_router__@15
+    b main_switch_case_next@9
 
-main_methodOne_route@5:
+main_methodOne_route@6:
     // tests/approvals/multi-inheritance.algo.ts:24
     // methodOne() {
+    callsub methodOne
+    b main_switch_case_next@9
+
+main_create_NoOp@10:
+    b main_after_if_else@11
+
+main___algots__.defaultCreate@12:
+    // tests/approvals/multi-inheritance.algo.ts:22
+    // export class BaseOne extends CommonBase {
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub methodOne
-    dup
-    len
-    itob
-    extract 6 2
-    uncover 1
-    concat
-    bytec_0 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::BaseOne.__puya_arc4_router__@15
-
-main_bare_routing@10:
-    // tests/approvals/multi-inheritance.algo.ts:22
-    // export class BaseOne extends CommonBase {
-    txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@11
-    b main_switch_case_default@12
-
-main_switch_case_default@12:
-    b main_switch_case_next@13
-
-main_switch_case_next@13:
-    b main_after_if_else@14
-
-main___algots__.defaultCreate@11:
-    // tests/approvals/multi-inheritance.algo.ts:22
-    // export class BaseOne extends CommonBase {
     txn ApplicationID
     intc_0 // 0
     ==
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/multi-inheritance.algo.ts::BaseOne.__puya_arc4_router__@15
+    return
 
 
-// tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> bytes:
+// tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne[routing]() -> void:
 methodOne:
     b methodOne_block@0
 
 methodOne_block@0:
+    // tests/approvals/multi-inheritance.algo.ts:24
+    // methodOne() {
+    callsub tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon[routing]() -> void:
+methodCommon:
+    b methodCommon_block@0
+
+methodCommon_block@0:
+    // tests/approvals/multi-inheritance.algo.ts:13
+    // methodCommon() {
+    callsub tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride[routing]() -> void:
+b2CantOverride:
+    b b2CantOverride_block@0
+
+b2CantOverride_block@0:
+    // tests/approvals/multi-inheritance.algo.ts:17
+    // b2CantOverride(): string {
+    callsub tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> bytes:
+tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne:
+    b tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne_block@0
+
+tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne_block@0:
     // tests/approvals/multi-inheritance.algo.ts:25
     // return 'base-one'
     pushbytes "base-one"
@@ -174,10 +178,10 @@ methodOne_block@0:
 
 
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
-methodCommon:
-    b methodCommon_block@0
+tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon:
+    b tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon_block@0
 
-methodCommon_block@0:
+tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon_block@0:
     // tests/approvals/multi-inheritance.algo.ts:14
     // return 'common'
     bytec_1 // "common"
@@ -185,10 +189,10 @@ methodCommon_block@0:
 
 
 // tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
-b2CantOverride:
-    b b2CantOverride_block@0
+tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride:
+    b tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride_block@0
 
-b2CantOverride_block@0:
+tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride_block@0:
     // tests/approvals/multi-inheritance.algo.ts:18
     // return 'common'
     bytec_1 // "common"

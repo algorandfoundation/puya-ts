@@ -6,17 +6,11 @@ main:
     // tests/approvals/box-proxies.algo.ts:167
     // class BoxMapTest extends Contract {
     txn NumAppArgs
-    bnz main_after_if_else@7
+    !
+    assert
     txn OnCompletion
-    bnz main_after_if_else@7
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
-
-main_after_if_else@7:
-    // tests/approvals/box-proxies.algo.ts:167
-    // class BoxMapTest extends Contract {
-    pushint 0 // 0
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

@@ -6,24 +6,20 @@ main:
     // tests/approvals/jsdoc.algo.ts:20
     // export class JSDocDemo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
-    pushbytess 0x60d93beb 0x6618726a // method "test(uint64,byte[])(uint64)", method "test2(byte[])(byte[])"
-    txna ApplicationArgs 0
-    match main_test_route@3 main_test2_route@4
-
-main_after_if_else@11:
-    err
-
-main_test2_route@4:
-    // tests/approvals/jsdoc.algo.ts:39
-    // test2(a: bytes): DemoType {
+    bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/jsdoc.algo.ts:20
-    // export class JSDocDemo extends Contract {
+    assert
+    pushbytess 0x60d93beb 0x6618726a // method "test(uint64,byte[])(uint64)", method "test2(byte[])(byte[])"
+    txna ApplicationArgs 0
+    match main_test_route@4 main_test2_route@5
+    err
+
+main_test2_route@5:
+    // tests/approvals/jsdoc.algo.ts:39
+    // test2(a: bytes): DemoType {
     txna ApplicationArgs 1
     extract 2 0
     // tests/approvals/jsdoc.algo.ts:40-42
@@ -57,32 +53,22 @@ main_test2_route@4:
     pushint 1 // 1
     return
 
-main_test_route@3:
+main_test_route@4:
     // tests/approvals/jsdoc.algo.ts:30
     // test(a: uint64, b: bytes): DemoStruct {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     pushbytes 0x151f7c75
-    // tests/approvals/jsdoc.algo.ts:20
-    // export class JSDocDemo extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/jsdoc.algo.ts:30
-    // test(a: uint64, b: bytes): DemoStruct {
     concat
     log
     pushint 1 // 1
     return
 
-main_bare_routing@7:
+main___algots__.defaultCreate@9:
     // tests/approvals/jsdoc.algo.ts:20
     // export class JSDocDemo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@11
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

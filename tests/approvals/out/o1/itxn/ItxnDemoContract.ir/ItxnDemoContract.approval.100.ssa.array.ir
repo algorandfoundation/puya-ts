@@ -7,74 +7,42 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto block@2
     block@2: // after_if_else_L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
-        goto tmp%0#1 ? block@4 : block@12
+        goto tmp%0#1 ? block@4 : block@14
     block@4: // abi_routing_L20
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "test1()void" => block@5, method "test2()void" => block@6, method "test3()void" => block@7, method "test4()void" => block@8, method "test5(uint64)void" => block@9, * => block@16}
-    block@5: // test1_route_L23
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (! tmp%3#0)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        (assert tmp%5#0) // can only call when not creating
-        tests/approvals/itxn.algo.ts::ItxnDemoContract.test1()
-        let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#0: bool = 1u
-        goto block@17
-    block@6: // test2_route_L71
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        (assert tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "test1()void" => block@6, method "test2()void" => block@7, method "test3()void" => block@8, method "test4()void" => block@9, method "test5(uint64)void" => block@10, * => block@13}
+    block@6: // test1_route_L23
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test1[routing]()
+        goto block@13
+    block@7: // test2_route_L71
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test2[routing]()
+        goto block@13
+    block@8: // test3_route_L108
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test3[routing]()
+        goto block@13
+    block@9: // test4_route_L184
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test4[routing]()
+        goto block@13
+    block@10: // test5_route_L207
+        tests/approvals/itxn.algo.ts::ItxnDemoContract.test5[routing]()
+        goto block@13
+    block@13: // after_if_else_L20
+        fail
+    block@14: // __algots__.defaultCreate_L20
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (! tmp%7#0)
-        (assert tmp%8#0) // OnCompletion is not NoOp
         let tmp%9#0: uint64 = (txn ApplicationID)
-        (assert tmp%9#0) // can only call when not creating
-        tests/approvals/itxn.algo.ts::ItxnDemoContract.test2()
-        let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#1: bool = 1u
-        goto block@17
-    block@7: // test3_route_L108
-        let tmp%11#0: uint64 = (txn OnCompletion)
-        let tmp%12#0: bool = (! tmp%11#0)
-        (assert tmp%12#0) // OnCompletion is not NoOp
-        let tmp%13#0: uint64 = (txn ApplicationID)
-        (assert tmp%13#0) // can only call when not creating
-        tests/approvals/itxn.algo.ts::ItxnDemoContract.test3()
-        let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#2: bool = 1u
-        goto block@17
-    block@8: // test4_route_L184
-        let tmp%15#0: uint64 = (txn OnCompletion)
-        let tmp%16#0: bool = (! tmp%15#0)
-        (assert tmp%16#0) // OnCompletion is not NoOp
-        let tmp%17#0: uint64 = (txn ApplicationID)
-        (assert tmp%17#0) // can only call when not creating
-        tests/approvals/itxn.algo.ts::ItxnDemoContract.test4()
-        let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#3: bool = 1u
-        goto block@17
-    block@9: // test5_route_L207
-        let tmp%19#0: uint64 = (txn OnCompletion)
-        let tmp%20#0: bool = (! tmp%19#0)
-        (assert tmp%20#0) // OnCompletion is not NoOp
-        let tmp%21#0: uint64 = (txn ApplicationID)
-        (assert tmp%21#0) // can only call when not creating
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%23#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(tmp%23#0)
-        let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#4: bool = 1u
-        goto block@17
-    block@12: // bare_routing_L20
-        let tmp%24#0: uint64 = (txn OnCompletion)
-        goto tmp%24#0 ? block@16 : block@13
-    block@13: // __algots__.defaultCreate_L20
-        let tmp%25#0: uint64 = (txn ApplicationID)
-        let tmp%26#0: bool = (! tmp%25#0)
-        (assert tmp%26#0) // can only call when creating
-        let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#5: bool = 1u
-        goto block@17
-    block@16: // after_if_else_L20
-        let tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#6: bool = 0u
-        goto block@17
-    block@17: // after_inlined_tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#0 <- block@5, tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#1 <- block@6, tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#2 <- block@7, tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#3 <- block@8, tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#4 <- block@9, tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#5 <- block@13, tests/approvals/itxn.algo.ts::ItxnDemoContract.__puya_arc4_router__%0#6 <- block@16)
-        return tmp%0#0
+        let tmp%10#0: bool = (! tmp%9#0)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u
 
-subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
+subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1[routing]() -> void:
     block@0: // L23
         let assetParams%%param_ConfigAssetManager_idx_0#0: account = (global CurrentApplicationAddress)
         let assetParams%%param_ConfigAssetReserve_idx_0#0: account = (global CurrentApplicationAddress)
@@ -152,23 +120,23 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
         ((itxn_field TypeEnum) 3u)
         ((itxn_field Fee) 0u)
         itxn_submit
-        return 
+        exit 1u
 
-subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
+subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2[routing]() -> void:
     block@0: // L71
-        let createAppParams%%param_OnCompletion_idx_0#2: uint64 = undefined
         let createAppParams%%param_ApplicationArgs_idx_2#3: bytes = undefined
+        let createAppParams%%param_OnCompletion_idx_0#2: uint64 = undefined
         let reinterpret_bool%0#0: bool = (txn NumAppArgs)
-        goto reinterpret_bool%0#0 ? block@1 : block@2
-    block@1: // if_body_L73
+        goto reinterpret_bool%0#0 ? block@2 : block@3
+    block@2: // if_body_L73
         let createAppParams%%param_ApplicationArgs_idx_0#0: bytes = "1"
         let createAppParams%%param_ApplicationArgs_idx_1#0: bytes = "2"
         let createAppParams%%ApplicationArgs_length#0: uint64 = 2u
         let createAppParams%%param_OnCompletion_idx_0#0: uint64 = 0u
         let createAppParams%%OnCompletion_length#0: uint64 = 1u
         let createAppParams%%param_Note_idx_0#0: bytes[19] = "with args param set"
-        goto block@3
-    block@2: // else_body_L82
+        goto block@4
+    block@3: // else_body_L82
         let aggregate%length%0#0: uint64 = (len "4")
         let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
         let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
@@ -180,30 +148,30 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
         let createAppParams%%ApplicationArgs_length#1: uint64 = 3u
         let createAppParams%%param_Note_idx_0#1: bytes[17] = "no args param set"
         let createAppParams%%OnCompletion_length#1: uint64 = 0u
-        goto block@3
-    block@3: // after_if_else_L73
-        let createAppParams%%param_Note_idx_0#2: bytes = φ(createAppParams%%param_Note_idx_0#0 <- block@1, createAppParams%%param_Note_idx_0#1 <- block@2)
-        let createAppParams%%OnCompletion_length#2: uint64 = φ(createAppParams%%OnCompletion_length#0 <- block@1, createAppParams%%OnCompletion_length#1 <- block@2)
-        let createAppParams%%param_OnCompletion_idx_0#1: uint64 = φ(createAppParams%%param_OnCompletion_idx_0#0 <- block@1, createAppParams%%param_OnCompletion_idx_0#2 <- block@2)
-        let createAppParams%%param_ApplicationArgs_idx_0#3: bytes = φ(createAppParams%%param_ApplicationArgs_idx_0#0 <- block@1, createAppParams%%param_ApplicationArgs_idx_0#1 <- block@2)
-        let createAppParams%%param_ApplicationArgs_idx_1#3: bytes = φ(createAppParams%%param_ApplicationArgs_idx_1#0 <- block@1, tmp%0#0 <- block@2)
-        let createAppParams%%ApplicationArgs_length#3: uint64 = φ(createAppParams%%ApplicationArgs_length#0 <- block@1, createAppParams%%ApplicationArgs_length#1 <- block@2)
-        let createAppParams%%param_ApplicationArgs_idx_2#2: bytes = φ(createAppParams%%param_ApplicationArgs_idx_2#3 <- block@1, createAppParams%%param_ApplicationArgs_idx_2#0 <- block@2)
+        goto block@4
+    block@4: // after_if_else_L73
+        let createAppParams%%param_Note_idx_0#2: bytes = φ(createAppParams%%param_Note_idx_0#0 <- block@2, createAppParams%%param_Note_idx_0#1 <- block@3)
+        let createAppParams%%OnCompletion_length#2: uint64 = φ(createAppParams%%OnCompletion_length#0 <- block@2, createAppParams%%OnCompletion_length#1 <- block@3)
+        let createAppParams%%param_OnCompletion_idx_0#1: uint64 = φ(createAppParams%%param_OnCompletion_idx_0#0 <- block@2, createAppParams%%param_OnCompletion_idx_0#2 <- block@3)
+        let createAppParams%%param_ApplicationArgs_idx_0#3: bytes = φ(createAppParams%%param_ApplicationArgs_idx_0#0 <- block@2, createAppParams%%param_ApplicationArgs_idx_0#1 <- block@3)
+        let createAppParams%%param_ApplicationArgs_idx_1#3: bytes = φ(createAppParams%%param_ApplicationArgs_idx_1#0 <- block@2, tmp%0#0 <- block@3)
+        let createAppParams%%ApplicationArgs_length#3: uint64 = φ(createAppParams%%ApplicationArgs_length#0 <- block@2, createAppParams%%ApplicationArgs_length#1 <- block@3)
+        let createAppParams%%param_ApplicationArgs_idx_2#2: bytes = φ(createAppParams%%param_ApplicationArgs_idx_2#3 <- block@2, createAppParams%%param_ApplicationArgs_idx_2#0 <- block@3)
         itxn_begin
         ((itxn_field Note) createAppParams%%param_Note_idx_0#2)
-        goto createAppParams%%OnCompletion_length#2 ? block@4 : block@5
-    block@4: // set_OnCompletion_0_to_0_L90
+        goto createAppParams%%OnCompletion_length#2 ? block@5 : block@6
+    block@5: // set_OnCompletion_0_to_0_L90
         ((itxn_field OnCompletion) createAppParams%%param_OnCompletion_idx_0#1)
-        goto block@5
-    block@5: // next_field_L90
+        goto block@6
+    block@6: // next_field_L90
         ((itxn_field ApplicationArgs) createAppParams%%param_ApplicationArgs_idx_0#3)
         ((itxn_field ApplicationArgs) createAppParams%%param_ApplicationArgs_idx_1#3)
         let is_ApplicationArgs_count_gte_3%0#0: bool = (>= createAppParams%%ApplicationArgs_length#3 3u)
-        goto is_ApplicationArgs_count_gte_3%0#0 ? block@6 : block@7
-    block@6: // set_ApplicationArgs_2_to_2_L90
+        goto is_ApplicationArgs_count_gte_3%0#0 ? block@7 : block@8
+    block@7: // set_ApplicationArgs_2_to_2_L90
         ((itxn_field ApplicationArgs) createAppParams%%param_ApplicationArgs_idx_2#2)
-        goto block@7
-    block@7: // next_field_L90
+        goto block@8
+    block@8: // next_field_L90
         ((itxn_field ClearStateProgramPages) 0x098101)
         ((itxn_field ApprovalProgramPages) 0x098101)
         ((itxn_field TypeEnum) 6u)
@@ -218,8 +186,8 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
         (assert tmp%4#0) // correct args used 2
         let tmp%5#0: uint64 = (txn NumAppArgs)
         let tmp%6#0: bool = (> tmp%5#0 1u)
-        goto tmp%6#0 ? block@9 : block@11
-    block@9: // if_body_L94
+        goto tmp%6#0 ? block@10 : block@12
+    block@10: // if_body_L94
         itxn_begin
         ((itxn_field ApplicationArgs) "42")
         ((itxn_field OnCompletion) 5u)
@@ -233,11 +201,11 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
         (assert tmp%8#0) // correct args used 2
         let tmp%9#0: bool = (== createAppTxn.Note#0 "with args param set")
         (assert tmp%9#0)
-        goto block@11
-    block@11: // after_if_else_L94
-        return 
+        goto block@12
+    block@12: // after_if_else_L94
+        exit 1u
 
-subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
+subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3[routing]() -> void:
     block@0: // L108
         itxn_begin
         ((itxn_field ApplicationArgs) "1")
@@ -400,9 +368,9 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let tmp%30#0: bytes = (itxna Logs 0)
         let tmp%31#0: bool = (== tmp%30#0 "16")
         (assert tmp%31#0)
-        return 
+        exit 1u
 
-subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test4() -> void:
+subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test4[routing]() -> void:
     block@0: // L184
         let lotsOfBytes#0: bytes = (bzero 2044u)
         let tmp%1#0: bytes = (concat 0x80fc0f lotsOfBytes#0)
@@ -450,10 +418,12 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test4() -> void:
         let tmp%15#0: bytes = (itxna ClearStateProgramPages 0)
         let tmp%16#0: bool = (== tmp%15#0 0x098101)
         (assert tmp%16#0) // expected clear state page
-        return 
+        exit 1u
 
-subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -> void:
+subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test5[routing]() -> void:
     block@0: // L207
+        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
+        let appId#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
         let (value%0#0: account, check%0#0: bool) = ((app_params_get AppAddress) appId#0)
         (assert check%0#0) // application exists
         let aggregate%length%0#0: uint64 = (len "hello")
@@ -461,7 +431,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -
         let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
         let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 "hello")
         let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%0#0
-        let tmp%0#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
+        let tmp%0#1: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
         itxn_begin
         ((itxn_field Amount) 1000u)
         ((itxn_field Receiver) value%0#0)
@@ -470,7 +440,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -
         itxn_next
         ((itxn_field ApplicationArgs) method "receivePay(uint64,pay,string)(uint64,uint64,string)")
         ((itxn_field ApplicationArgs) 0x0000000000000001)
-        ((itxn_field ApplicationArgs) tmp%0#0)
+        ((itxn_field ApplicationArgs) tmp%0#1)
         ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) 6u)
         ((itxn_field Fee) 0u)
@@ -498,4 +468,4 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -
         let tmp%9#0: bool = (== values%2#0 "hello")
         let tmp%10#0: bool = (&& tmp%8#0 tmp%9#0)
         (assert tmp%10#0) // assert target is match for conditions
-        return 
+        exit 1u

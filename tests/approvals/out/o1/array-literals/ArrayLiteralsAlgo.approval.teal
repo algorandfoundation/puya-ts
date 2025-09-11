@@ -6,45 +6,37 @@ main:
     // tests/approvals/array-literals.algo.ts:9
     // class ArrayLiteralsAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
-    pushbytess 0xe04ac19e 0x341a3794 // method "test(uint64,uint64)void", method "test2()uint64"
-    txna ApplicationArgs 0
-    match main_test_route@3 main_test2_route@4
-
-main_after_if_else@11:
-    err
-
-main_test2_route@4:
-    // tests/approvals/array-literals.algo.ts:22
-    // test2(): uint64 {
+    bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    assert
+    pushbytess 0xe04ac19e 0x341a3794 // method "test(uint64,uint64)void", method "test2()uint64"
+    txna ApplicationArgs 0
+    match main_test_route@4 main_test2_route@5
+    err
+
+main_test2_route@5:
+    // tests/approvals/array-literals.algo.ts:22
+    // test2(): uint64 {
     pushbytes 0x151f7c750000000000000001
     log
     pushint 1 // 1
     return
 
-main_test_route@3:
+main_test_route@4:
     // tests/approvals/array-literals.algo.ts:10
     // test(a: uint64, b: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     pushint 1 // 1
     return
 
-main_bare_routing@7:
+main___algots__.defaultCreate@9:
     // tests/approvals/array-literals.algo.ts:9
     // class ArrayLiteralsAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@11
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

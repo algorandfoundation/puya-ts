@@ -5,7 +5,6 @@
 main:
     intcblock 0 1 8
     bytecblock 0x 0x151f7c75
-    bytec_0 // ""
     b main_block@0
 
 main_block@0:
@@ -17,10 +16,23 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@10
+    bz main___algots__.defaultCreate@12
     b main_abi_routing@2
 
 main_abi_routing@2:
+    // tests/approvals/named-types.algo.ts:14
+    // export class MyContract extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@10
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
     // tests/approvals/named-types.algo.ts:14
     // export class MyContract extends Contract {
     txna ApplicationArgs 0
@@ -30,37 +42,187 @@ main_abi_routing@2:
     pushbytes 0xdc75f81d // method "test((uint64,uint64),(uint64,uint64))void"
     pushbytes 0x040e2e4e // method "testing()((uint64,uint64),(uint64,uint64),(uint64,uint64))"
     uncover 5
-    match main_getXY_route@3 main_getYX_route@4 main_getAnon_route@5 main_test_route@6 main_testing_route@7
-    b main_switch_case_default@8
-
-main_switch_case_default@8:
+    match main_getXY_route@4 main_getYX_route@5 main_getAnon_route@6 main_test_route@7 main_testing_route@8
     b main_switch_case_next@9
 
 main_switch_case_next@9:
-    b main_after_if_else@14
+    b main_after_if_else@11
 
-main_after_if_else@14:
+main_after_if_else@11:
+    b main_after_if_else@13
+
+main_after_if_else@13:
     // tests/approvals/named-types.algo.ts:14
     // export class MyContract extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15
+    err
 
-main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15:
-    return
-
-main_testing_route@7:
+main_testing_route@8:
     // tests/approvals/named-types.algo.ts:40
     // public testing() {
+    callsub testing
+    b main_switch_case_next@9
+
+main_test_route@7:
+    // tests/approvals/named-types.algo.ts:36
+    // public test(x: XY, y: YX) {
+    callsub test
+    b main_switch_case_next@9
+
+main_getAnon_route@6:
+    // tests/approvals/named-types.algo.ts:29
+    // public getAnon() {
+    callsub getAnon
+    b main_switch_case_next@9
+
+main_getYX_route@5:
+    // tests/approvals/named-types.algo.ts:22
+    // public getYX(): YX {
+    callsub getYX
+    b main_switch_case_next@9
+
+main_getXY_route@4:
+    // tests/approvals/named-types.algo.ts:15
+    // public getXY(): XY {
+    callsub getXY
+    b main_switch_case_next@9
+
+main_create_NoOp@10:
+    b main_after_if_else@11
+
+main___algots__.defaultCreate@12:
+    // tests/approvals/named-types.algo.ts:14
+    // export class MyContract extends Contract {
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
     txn ApplicationID
     intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub testing
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/named-types.algo.ts::MyContract.getXY[routing]() -> void:
+getXY:
+    b getXY_block@0
+
+getXY_block@0:
+    // tests/approvals/named-types.algo.ts:15
+    // public getXY(): XY {
+    callsub tests/approvals/named-types.algo.ts::MyContract.getXY
+    cover 1
+    itob
+    bytec_0 // 0x
+    uncover 1
+    concat
+    uncover 1
+    itob
+    concat
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/named-types.algo.ts::MyContract.getYX[routing]() -> void:
+getYX:
+    b getYX_block@0
+
+getYX_block@0:
+    // tests/approvals/named-types.algo.ts:22
+    // public getYX(): YX {
+    callsub tests/approvals/named-types.algo.ts::MyContract.getYX
+    cover 1
+    itob
+    bytec_0 // 0x
+    uncover 1
+    concat
+    uncover 1
+    itob
+    concat
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/named-types.algo.ts::MyContract.getAnon[routing]() -> void:
+getAnon:
+    b getAnon_block@0
+
+getAnon_block@0:
+    // tests/approvals/named-types.algo.ts:29
+    // public getAnon() {
+    callsub tests/approvals/named-types.algo.ts::MyContract.getAnon
+    cover 1
+    itob
+    bytec_0 // 0x
+    uncover 1
+    concat
+    uncover 1
+    itob
+    concat
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/named-types.algo.ts::MyContract.test[routing]() -> void:
+test:
+    b test_block@0
+
+test_block@0:
+    // tests/approvals/named-types.algo.ts:36
+    // public test(x: XY, y: YX) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    intc_2 // 8
+    extract3
+    btoi
+    cover 1
+    intc_2 // 8
+    intc_2 // 8
+    extract3
+    btoi
+    txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    intc_2 // 8
+    extract3
+    btoi
+    cover 1
+    intc_2 // 8
+    intc_2 // 8
+    extract3
+    btoi
+    uncover 3
+    uncover 3
+    uncover 3
+    uncover 3
+    callsub tests/approvals/named-types.algo.ts::MyContract.test
+    intc_1 // 1
+    return
+
+
+// tests/approvals/named-types.algo.ts::MyContract.testing[routing]() -> void:
+testing:
+    b testing_block@0
+
+testing_block@0:
+    // tests/approvals/named-types.algo.ts:40
+    // public testing() {
+    callsub tests/approvals/named-types.algo.ts::MyContract.testing
     cover 5
     cover 4
     cover 3
@@ -99,172 +261,14 @@ main_testing_route@7:
     concat
     log
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15
-
-main_test_route@6:
-    // tests/approvals/named-types.algo.ts:36
-    // public test(x: XY, y: YX) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/named-types.algo.ts:14
-    // export class MyContract extends Contract {
-    txna ApplicationArgs 1
-    dup
-    intc_0 // 0
-    intc_2 // 8
-    extract3
-    btoi
-    cover 1
-    intc_2 // 8
-    intc_2 // 8
-    extract3
-    btoi
-    txna ApplicationArgs 2
-    dup
-    intc_0 // 0
-    intc_2 // 8
-    extract3
-    btoi
-    cover 1
-    intc_2 // 8
-    intc_2 // 8
-    extract3
-    btoi
-    // tests/approvals/named-types.algo.ts:36
-    // public test(x: XY, y: YX) {
-    uncover 3
-    uncover 3
-    uncover 3
-    uncover 3
-    callsub test
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15
-
-main_getAnon_route@5:
-    // tests/approvals/named-types.algo.ts:29
-    // public getAnon() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub getAnon
-    cover 1
-    itob
-    bytec_0 // 0x
-    uncover 1
-    concat
-    uncover 1
-    itob
-    concat
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15
-
-main_getYX_route@4:
-    // tests/approvals/named-types.algo.ts:22
-    // public getYX(): YX {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub getYX
-    cover 1
-    itob
-    bytec_0 // 0x
-    uncover 1
-    concat
-    uncover 1
-    itob
-    concat
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15
-
-main_getXY_route@3:
-    // tests/approvals/named-types.algo.ts:15
-    // public getXY(): XY {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub getXY
-    cover 1
-    itob
-    bytec_0 // 0x
-    uncover 1
-    concat
-    uncover 1
-    itob
-    concat
-    bytec_1 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15
-
-main_bare_routing@10:
-    // tests/approvals/named-types.algo.ts:14
-    // export class MyContract extends Contract {
-    txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@11
-    b main_switch_case_default@12
-
-main_switch_case_default@12:
-    b main_switch_case_next@13
-
-main_switch_case_next@13:
-    b main_after_if_else@14
-
-main___algots__.defaultCreate@11:
-    // tests/approvals/named-types.algo.ts:14
-    // export class MyContract extends Contract {
-    txn ApplicationID
-    intc_0 // 0
-    ==
-    assert // can only call when creating
-    callsub __algots__.defaultCreate
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__@15
+    return
 
 
 // tests/approvals/named-types.algo.ts::MyContract.getXY() -> uint64, uint64:
-getXY:
-    b getXY_block@0
+tests/approvals/named-types.algo.ts::MyContract.getXY:
+    b tests/approvals/named-types.algo.ts::MyContract.getXY_block@0
 
-getXY_block@0:
+tests/approvals/named-types.algo.ts::MyContract.getXY_block@0:
     // tests/approvals/named-types.algo.ts:17
     // x: 1,
     intc_1 // 1
@@ -280,10 +284,10 @@ getXY_block@0:
 
 
 // tests/approvals/named-types.algo.ts::MyContract.getYX() -> uint64, uint64:
-getYX:
-    b getYX_block@0
+tests/approvals/named-types.algo.ts::MyContract.getYX:
+    b tests/approvals/named-types.algo.ts::MyContract.getYX_block@0
 
-getYX_block@0:
+tests/approvals/named-types.algo.ts::MyContract.getYX_block@0:
     // tests/approvals/named-types.algo.ts:25
     // y: 111,
     pushint 111 // 111
@@ -299,10 +303,10 @@ getYX_block@0:
 
 
 // tests/approvals/named-types.algo.ts::MyContract.getAnon() -> uint64, uint64:
-getAnon:
-    b getAnon_block@0
+tests/approvals/named-types.algo.ts::MyContract.getAnon:
+    b tests/approvals/named-types.algo.ts::MyContract.getAnon_block@0
 
-getAnon_block@0:
+tests/approvals/named-types.algo.ts::MyContract.getAnon_block@0:
     // tests/approvals/named-types.algo.ts:31
     // x: Uint64(3),
     pushint 3 // 3
@@ -318,13 +322,13 @@ getAnon_block@0:
 
 
 // tests/approvals/named-types.algo.ts::MyContract.test(x.x: uint64, x.y: uint64, y.y: uint64, y.x: uint64) -> void:
-test:
+tests/approvals/named-types.algo.ts::MyContract.test:
     // tests/approvals/named-types.algo.ts:36
     // public test(x: XY, y: YX) {
     proto 4 0
-    b test_block@0
+    b tests/approvals/named-types.algo.ts::MyContract.test_block@0
 
-test_block@0:
+tests/approvals/named-types.algo.ts::MyContract.test_block@0:
     // tests/approvals/named-types.algo.ts:37
     // assertMatch(x, { ...y })
     frame_dig -3
@@ -339,19 +343,19 @@ test_block@0:
 
 
 // tests/approvals/named-types.algo.ts::MyContract.testing() -> uint64, uint64, uint64, uint64, uint64, uint64:
-testing:
-    b testing_block@0
+tests/approvals/named-types.algo.ts::MyContract.testing:
+    b tests/approvals/named-types.algo.ts::MyContract.testing_block@0
 
-testing_block@0:
+tests/approvals/named-types.algo.ts::MyContract.testing_block@0:
     // tests/approvals/named-types.algo.ts:41
     // const a = this.getXY()
-    callsub getXY
+    callsub tests/approvals/named-types.algo.ts::MyContract.getXY
     // tests/approvals/named-types.algo.ts:42
     // const b = this.getYX()
-    callsub getYX
+    callsub tests/approvals/named-types.algo.ts::MyContract.getYX
     // tests/approvals/named-types.algo.ts:43
     // const c = this.getAnon()
-    callsub getAnon
+    callsub tests/approvals/named-types.algo.ts::MyContract.getAnon
     // tests/approvals/named-types.algo.ts:44
     // return [a, b, c] as const
     uncover 5

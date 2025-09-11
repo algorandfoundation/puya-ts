@@ -331,7 +331,7 @@ obj = { ...obj, first: 'Jane' }
 
 ARC4 encoded types live in the `/arc4` module
 
-Where supported, the native equivalent of an ARC4 type can be obtained via the `.native` property. It is possible to use native types in an ABI method and the router will automatically encode and decode these types to their ARC4 equivalent.
+Where supported, the native equivalent of an ARC4 type can be obtained via the `.native` property, or via `.asUint64` and `.asBigUint` methods for `Uint` types. It is possible to use native types in an ABI method and the router will automatically encode and decode these types to their ARC4 equivalent.
 
 ### Booleans
 
@@ -343,7 +343,7 @@ Where supported, the native equivalent of an ARC4 type can be obtained via the `
 
 **Types:** `@algorandfoundation/algorand-typescript/arc4::UInt`<br>
 **Encoding:** A big endian byte array of N bits<br>
-**Native equivalent:** `uint64` or `biguint`
+**Native equivalent:** `uint64` or `biguint` accessible via the corresponding `.asUint64()` and `.asBigUint()` methods
 
 Common bit sizes have also been aliased under `@algorandfoundation/algorand-typescript/arc4::UInt8`, `@algorandfoundation/algorand-typescript/arc4::UInt16` etc. A uint of any size between 8 and 512 bits (in intervals of 8bits) can be created using a generic parameter. `Byte` is an alias of `UintN<8>`
 

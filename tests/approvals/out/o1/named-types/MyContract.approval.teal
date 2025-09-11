@@ -7,37 +7,64 @@ main:
     // tests/approvals/named-types.algo.ts:14
     // export class MyContract extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@10
-    pushbytess 0xf02228b0 0xd908575b 0x577b1ffc 0xdc75f81d 0x040e2e4e // method "getXY()(uint64,uint64)", method "getYX()(uint64,uint64)", method "getAnon()(uint64,uint64)", method "test((uint64,uint64),(uint64,uint64))void", method "testing()((uint64,uint64),(uint64,uint64),(uint64,uint64))"
-    txna ApplicationArgs 0
-    match main_getXY_route@3 main_getYX_route@4 main_getAnon_route@5 main_test_route@6 main_testing_route@7
-
-main_after_if_else@14:
-    err
-
-main_testing_route@7:
-    // tests/approvals/named-types.algo.ts:40
-    // public testing() {
+    bz main___algots__.defaultCreate@12
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    assert
+    pushbytess 0xf02228b0 0xd908575b 0x577b1ffc 0xdc75f81d 0x040e2e4e // method "getXY()(uint64,uint64)", method "getYX()(uint64,uint64)", method "getAnon()(uint64,uint64)", method "test((uint64,uint64),(uint64,uint64))void", method "testing()((uint64,uint64),(uint64,uint64),(uint64,uint64))"
+    txna ApplicationArgs 0
+    match main_getXY_route@4 main_getYX_route@5 main_getAnon_route@6 test main_testing_route@8
+    err
+
+main_testing_route@8:
+    // tests/approvals/named-types.algo.ts:40
+    // public testing() {
     pushbytes 0x151f7c7500000000000000010000000000000002000000000000006f00000000000000de00000000000000030000000000000004
     log
     intc_0 // 1
     return
 
-main_test_route@6:
-    // tests/approvals/named-types.algo.ts:36
-    // public test(x: XY, y: YX) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_getAnon_route@6:
+    // tests/approvals/named-types.algo.ts:29
+    // public getAnon() {
+    pushbytes 0x151f7c7500000000000000030000000000000004
+    log
+    intc_0 // 1
+    return
+
+main_getYX_route@5:
+    // tests/approvals/named-types.algo.ts:22
+    // public getYX(): YX {
+    pushbytes 0x151f7c75000000000000006f00000000000000de
+    log
+    intc_0 // 1
+    return
+
+main_getXY_route@4:
+    // tests/approvals/named-types.algo.ts:15
+    // public getXY(): XY {
+    pushbytes 0x151f7c7500000000000000010000000000000002
+    log
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@12:
     // tests/approvals/named-types.algo.ts:14
     // export class MyContract extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
+
+
+// tests/approvals/named-types.algo.ts::MyContract.test[routing]() -> void:
+test:
+    // tests/approvals/named-types.algo.ts:36
+    // public test(x: XY, y: YX) {
     txna ApplicationArgs 1
     dup
     intc_1 // 0
@@ -52,76 +79,13 @@ main_test_route@6:
     swap
     intc_2 // 8
     extract_uint64
-    // tests/approvals/named-types.algo.ts:36
-    // public test(x: XY, y: YX) {
-    callsub test
-    intc_0 // 1
-    return
-
-main_getAnon_route@5:
-    // tests/approvals/named-types.algo.ts:29
-    // public getAnon() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    pushbytes 0x151f7c7500000000000000030000000000000004
-    log
-    intc_0 // 1
-    return
-
-main_getYX_route@4:
-    // tests/approvals/named-types.algo.ts:22
-    // public getYX(): YX {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    pushbytes 0x151f7c75000000000000006f00000000000000de
-    log
-    intc_0 // 1
-    return
-
-main_getXY_route@3:
-    // tests/approvals/named-types.algo.ts:15
-    // public getXY(): XY {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    pushbytes 0x151f7c7500000000000000010000000000000002
-    log
-    intc_0 // 1
-    return
-
-main_bare_routing@10:
-    // tests/approvals/named-types.algo.ts:14
-    // export class MyContract extends Contract {
-    txn OnCompletion
-    bnz main_after_if_else@14
-    txn ApplicationID
-    !
-    assert // can only call when creating
-    intc_0 // 1
-    return
-
-
-// tests/approvals/named-types.algo.ts::MyContract.test(x.x: uint64, x.y: uint64, y.y: uint64, y.x: uint64) -> void:
-test:
-    // tests/approvals/named-types.algo.ts:36
-    // public test(x: XY, y: YX) {
-    proto 4 0
     // tests/approvals/named-types.algo.ts:37
     // assertMatch(x, { ...y })
-    frame_dig -3
-    frame_dig -2
+    cover 2
     ==
-    frame_dig -4
-    frame_dig -1
+    cover 2
     ==
     &&
-    assert // assert target is match for conditions
-    retsub
+    // tests/approvals/named-types.algo.ts:36
+    // public test(x: XY, y: YX) {
+    return // on error: assert target is match for conditions

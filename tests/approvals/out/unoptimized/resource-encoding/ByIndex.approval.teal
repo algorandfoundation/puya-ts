@@ -5,7 +5,6 @@
 main:
     intcblock 0 1
     bytecblock 0x151f7c75
-    pushbytes ""
     b main_block@0
 
 main_block@0:
@@ -17,126 +16,121 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@7
+    bz main___algots__.defaultCreate@9
     b main_abi_routing@2
 
 main_abi_routing@2:
+    // tests/approvals/resource-encoding.algo.ts:16
+    // class ByIndex extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@7
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
     // tests/approvals/resource-encoding.algo.ts:16
     // class ByIndex extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x34359fb6 // method "testExplicitIndex(account)uint64"
     pushbytes 0x129c3321 // method "testImplicitValue(address)uint64"
     uncover 2
-    match main_testExplicitIndex_route@3 main_testImplicitValue_route@4
-    b main_switch_case_default@5
-
-main_switch_case_default@5:
+    match main_testExplicitIndex_route@4 main_testImplicitValue_route@5
     b main_switch_case_next@6
 
 main_switch_case_next@6:
-    b main_after_if_else@11
+    b main_after_if_else@8
 
-main_after_if_else@11:
+main_after_if_else@8:
+    b main_after_if_else@10
+
+main_after_if_else@10:
     // tests/approvals/resource-encoding.algo.ts:16
     // class ByIndex extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/resource-encoding.algo.ts::ByIndex.__puya_arc4_router__@12
+    err
 
-main_after_inlined_tests/approvals/resource-encoding.algo.ts::ByIndex.__puya_arc4_router__@12:
-    return
-
-main_testImplicitValue_route@4:
-    // tests/approvals/resource-encoding.algo.ts:26
-    // testImplicitValue(account: Account) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:16
-    // class ByIndex extends Contract {
-    txna ApplicationArgs 1
+main_testImplicitValue_route@5:
     // tests/approvals/resource-encoding.algo.ts:26
     // testImplicitValue(account: Account) {
     callsub testImplicitValue
-    itob
-    bytec_0 // 0x151f7c75
-    uncover 1
-    concat
-    log
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/resource-encoding.algo.ts::ByIndex.__puya_arc4_router__@12
+    b main_switch_case_next@6
 
-main_testExplicitIndex_route@3:
-    // tests/approvals/resource-encoding.algo.ts:17
-    // @abimethod({ resourceEncoding: 'index' })
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/resource-encoding.algo.ts:16
-    // class ByIndex extends Contract {
-    txna ApplicationArgs 1
-    btoi
-    txnas Accounts
+main_testExplicitIndex_route@4:
     // tests/approvals/resource-encoding.algo.ts:17
     // @abimethod({ resourceEncoding: 'index' })
     callsub testExplicitIndex
+    b main_switch_case_next@6
+
+main_create_NoOp@7:
+    b main_after_if_else@8
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/resource-encoding.algo.ts:16
+    // class ByIndex extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/resource-encoding.algo.ts::ByIndex.testExplicitIndex[routing]() -> void:
+testExplicitIndex:
+    b testExplicitIndex_block@0
+
+testExplicitIndex_block@0:
+    // tests/approvals/resource-encoding.algo.ts:17
+    // @abimethod({ resourceEncoding: 'index' })
+    txna ApplicationArgs 1
+    btoi
+    txnas Accounts
+    callsub tests/approvals/resource-encoding.algo.ts::ByIndex.testExplicitIndex
     itob
     bytec_0 // 0x151f7c75
     uncover 1
     concat
     log
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/resource-encoding.algo.ts::ByIndex.__puya_arc4_router__@12
+    return
 
-main_bare_routing@7:
-    // tests/approvals/resource-encoding.algo.ts:16
-    // class ByIndex extends Contract {
-    txn OnCompletion
-    intc_0 // 0
+
+// tests/approvals/resource-encoding.algo.ts::ByIndex.testImplicitValue[routing]() -> void:
+testImplicitValue:
+    b testImplicitValue_block@0
+
+testImplicitValue_block@0:
+    // tests/approvals/resource-encoding.algo.ts:26
+    // testImplicitValue(account: Account) {
+    txna ApplicationArgs 1
+    callsub tests/approvals/resource-encoding.algo.ts::ByIndex.testImplicitValue
+    itob
+    bytec_0 // 0x151f7c75
     uncover 1
-    match main___algots__.defaultCreate@8
-    b main_switch_case_default@9
-
-main_switch_case_default@9:
-    b main_switch_case_next@10
-
-main_switch_case_next@10:
-    b main_after_if_else@11
-
-main___algots__.defaultCreate@8:
-    // tests/approvals/resource-encoding.algo.ts:16
-    // class ByIndex extends Contract {
-    txn ApplicationID
-    intc_0 // 0
-    ==
-    assert // can only call when creating
-    callsub __algots__.defaultCreate
+    concat
+    log
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/resource-encoding.algo.ts::ByIndex.__puya_arc4_router__@12
+    return
 
 
 // tests/approvals/resource-encoding.algo.ts::ByIndex.testExplicitIndex(account: bytes) -> uint64:
-testExplicitIndex:
+tests/approvals/resource-encoding.algo.ts::ByIndex.testExplicitIndex:
     // tests/approvals/resource-encoding.algo.ts:17-18
     // @abimethod({ resourceEncoding: 'index' })
     // testExplicitIndex(account: Account) {
     proto 1 1
-    b testExplicitIndex_block@0
+    b tests/approvals/resource-encoding.algo.ts::ByIndex.testExplicitIndex_block@0
 
-testExplicitIndex_block@0:
+tests/approvals/resource-encoding.algo.ts::ByIndex.testExplicitIndex_block@0:
     // tests/approvals/resource-encoding.algo.ts:19
     // return account.balance
     frame_dig -1
@@ -146,13 +140,13 @@ testExplicitIndex_block@0:
 
 
 // tests/approvals/resource-encoding.algo.ts::ByIndex.testImplicitValue(account: bytes) -> uint64:
-testImplicitValue:
+tests/approvals/resource-encoding.algo.ts::ByIndex.testImplicitValue:
     // tests/approvals/resource-encoding.algo.ts:26
     // testImplicitValue(account: Account) {
     proto 1 1
-    b testImplicitValue_block@0
+    b tests/approvals/resource-encoding.algo.ts::ByIndex.testImplicitValue_block@0
 
-testImplicitValue_block@0:
+tests/approvals/resource-encoding.algo.ts::ByIndex.testImplicitValue_block@0:
     // tests/approvals/resource-encoding.algo.ts:27
     // return account.balance
     frame_dig -1

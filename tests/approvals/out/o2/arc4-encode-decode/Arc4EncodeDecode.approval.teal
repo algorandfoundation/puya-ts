@@ -12,15 +12,18 @@ main:
     // tests/approvals/arc4-encode-decode.algo.ts:24
     // export class Arc4EncodeDecode extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
     pushbytess 0x34b146c1 0x00fd2534 // method "testEncoding(uint64,bool,uint512,byte[],string,address,byte[12])void", method "testDecoding(uint64,byte[],bool,byte[],uint512,byte[],string,byte[],(uint64,byte[]),byte[],address,byte[],byte[12],byte[])void"
     txna ApplicationArgs 0
-    match main_testEncoding_route@3 main_testDecoding_route@4
-
-main_after_if_else@11:
+    match main_testEncoding_route@4 main_testDecoding_route@5
     err
 
-main_testDecoding_route@4:
+main_testDecoding_route@5:
     // tests/approvals/arc4-encode-decode.algo.ts:65-80
     // testDecoding(
     //   a: uint64,
@@ -38,13 +41,6 @@ main_testDecoding_route@4:
     //   g: bytes<12>,
     //   g_bytes: bytes,
     // ) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/arc4-encode-decode.algo.ts:24
-    // export class Arc4EncodeDecode extends Contract {
     txna ApplicationArgs 1
     btoi
     txna ApplicationArgs 2
@@ -287,7 +283,6 @@ main_testDecoding_route@4:
     // tests/approvals/arc4-encode-decode.algo.ts:98
     // assert(decodeArc4<bytes<12>>(g_bytes) === g)
     ==
-    assert
     // tests/approvals/arc4-encode-decode.algo.ts:65-80
     // testDecoding(
     //   a: uint64,
@@ -305,19 +300,11 @@ main_testDecoding_route@4:
     //   g: bytes<12>,
     //   g_bytes: bytes,
     // ) {
-    intc_1 // 1
     return
 
-main_testEncoding_route@3:
+main_testEncoding_route@4:
     // tests/approvals/arc4-encode-decode.algo.ts:25
     // testEncoding(a: uint64, b: boolean, c: biguint, d: bytes, e: string, f: Address, g: bytes<12>) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/arc4-encode-decode.algo.ts:24
-    // export class Arc4EncodeDecode extends Contract {
     txna ApplicationArgs 1
     dup
     bury 4
@@ -344,11 +331,11 @@ main_testEncoding_route@3:
     txna ApplicationArgs 7
     bury 7
 
-main_while_top@18:
+main_while_top@11:
     pushint 1410 // 1410
     global OpcodeBudget
     >
-    bz main_after_while@21
+    bz main_after_while@16
     itxn_begin
     pushint 6 // appl
     itxn_field TypeEnum
@@ -361,9 +348,9 @@ main_while_top@18:
     intc_0 // 0
     itxn_field Fee
     itxn_submit
-    b main_while_top@18
+    b main_while_top@11
 
-main_after_while@21:
+main_after_while@16:
     // tests/approvals/arc4-encode-decode.algo.ts:29
     // assert(encodeArc4(c) === new Uint<512>(c).bytes)
     dig 9
@@ -500,19 +487,16 @@ main_after_while@21:
     uncover 2
     concat
     ==
-    assert
     // tests/approvals/arc4-encode-decode.algo.ts:25
     // testEncoding(a: uint64, b: boolean, c: biguint, d: bytes, e: string, f: Address, g: bytes<12>) {
-    intc_1 // 1
     return
 
-main_bare_routing@7:
+main___algots__.defaultCreate@9:
     // tests/approvals/arc4-encode-decode.algo.ts:24
     // export class Arc4EncodeDecode extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@11
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

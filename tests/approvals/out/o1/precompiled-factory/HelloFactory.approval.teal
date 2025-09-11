@@ -8,75 +8,29 @@ main:
     // tests/approvals/precompiled-factory.algo.ts:6
     // class HelloFactory extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@9
+    bz main___algots__.defaultCreate@11
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
     pushbytess 0x2a17995c 0xe3254bc9 0xe2b7c692 0x02947ca2 // method "test_compile_contract()void", method "test_compile_contract_with_template()void", method "test_compile_contract_with_template_and_custom_prefix()void", method "test_compile_contract_large()void"
     txna ApplicationArgs 0
-    match main_test_compile_contract_route@3 main_test_compile_contract_with_template_route@4 main_test_compile_contract_with_template_and_custom_prefix_route@5 main_test_compile_contract_large_route@6
-
-main_after_if_else@13:
+    match test_compile_contract test_compile_contract_with_template test_compile_contract_with_template_and_custom_prefix test_compile_contract_large
     err
 
-main_test_compile_contract_large_route@6:
-    // tests/approvals/precompiled-factory.algo.ts:100
-    // test_compile_contract_large() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    callsub test_compile_contract_large
-    intc_2 // 1
-    return
-
-main_test_compile_contract_with_template_and_custom_prefix_route@5:
-    // tests/approvals/precompiled-factory.algo.ts:69
-    // test_compile_contract_with_template_and_custom_prefix() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    callsub test_compile_contract_with_template_and_custom_prefix
-    intc_2 // 1
-    return
-
-main_test_compile_contract_with_template_route@4:
-    // tests/approvals/precompiled-factory.algo.ts:38
-    // test_compile_contract_with_template() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    callsub test_compile_contract_with_template
-    intc_2 // 1
-    return
-
-main_test_compile_contract_route@3:
-    // tests/approvals/precompiled-factory.algo.ts:7
-    // test_compile_contract() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    callsub test_compile_contract
-    intc_2 // 1
-    return
-
-main_bare_routing@9:
+main___algots__.defaultCreate@11:
     // tests/approvals/precompiled-factory.algo.ts:6
     // class HelloFactory extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@13
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_2 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
 
 
-// tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract() -> void:
+// tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract[routing]() -> void:
 test_compile_contract:
     // tests/approvals/precompiled-factory.algo.ts:10-17
     // const helloApp = itxn
@@ -94,7 +48,7 @@ test_compile_contract:
     itxn_field GlobalNumByteSlice
     bytec_0 // base64(CoEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiACAQAmAwhncmVldGluZwQVH3x1ASAxGEAABCiAAGcxG0EAKoIFBACSJa4EJDeNPASg6BhyBNCiggAEUYC6IDYaAI4FAFAARQA6ABwAAQAxGRREMRhENhoBiABiSRUWVwYCTFApTFCwIkMxGRREMRhENhoBVwIAiAA3SRUWVwYCTFApTFCwIkMxGYEEEkQxGEQiQzEZgQUSRDEYRCJDMRkURDEYFEQ2GgFXAgAoTGciQ4oBASMoZUQqUIv/UImKAQEjKGVEKlCL/yNZi/+BAlmL/08CSwJSVwIATwJMUIv/FYv/TwNPAlJXAgBQiQ==)
+    pushbytes base64(CiACAQAmAwhncmVldGluZwEgBBUffHUxGEAABCiAAGeCAgQkN408BKDoGHI2GgCOAgA2AC0xGRREMRhBABaCAgTQooIABFGAuiA2GgCOAgAsAEgAgAQAkiWuNhoAjgEAEwAxGYEEEjEYEEMxGYEFEjEYEEM2GgFXAgAoTGciQzYaAVcCACMoZUQpUExQSRUWVwYCTFAqTFCwIkM2GgEjKGVEKVBLASNZSwKBAllLA08CSwJSVwIATwJMUEsCFU8DTwNPAlJXAgBQSRUWVwYCTFAqTFCwIkM=)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-factory.algo.ts:12
     // appArgs: [methodSelector(Hello.prototype.create), encodeArc4('hello')],
@@ -213,10 +167,13 @@ test_compile_contract:
     //   })
     //   .submit()
     itxn_submit
-    retsub
+    // tests/approvals/precompiled-factory.algo.ts:7
+    // test_compile_contract() {
+    intc_2 // 1
+    return
 
 
-// tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template() -> void:
+// tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template[routing]() -> void:
 test_compile_contract_with_template:
     // tests/approvals/precompiled-factory.algo.ts:41-48
     // const helloApp = itxn
@@ -236,7 +193,7 @@ test_compile_contract_with_template:
     // const compiled = compile(HelloTemplate, { templateVars: { GREETING: 'hey' } })
     bytec_0 // base64(CoEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiACAQAmBAhncmVldGluZwQVH3x1ASADaGV5MRhAAAMoK2cxG0EAKoIFBExcYboEJDeNPASg6BhyBNCiggAEUYC6IDYaAI4FAFAARQA6ABwAAQAxGRREMRhENhoBiABZSRUWVwYCTFApTFCwIkMxGRREMRhENhoBVwIAiAAuSRUWVwYCTFApTFCwIkMxGYEEEkQxGEQiQzEZgQUSRDEYRCJDMRkURDEYFEQiQ4oBASMoZUQqUIv/UImKAQEjKGVEKlCL/yNZi/+BAlmL/08CSwJSVwIATwJMUIv/FYv/TwNPAlJXAgBQiQ==)
+    pushbytes base64(CiACAQAmBAhncmVldGluZwEgBBUffHUDaGV5MRhAAAMoK2eCAgQkN408BKDoGHI2GgCOAgA4AC8xGRREMRhBABaCAgTQooIABFGAuiA2GgCOAgAjAD8AgARMXGG6NhoAjgEAAQAiQzEZgQQSMRgQQzEZgQUSMRgQQzYaAVcCACMoZUQpUExQSRUWVwYCTFAqTFCwIkM2GgEjKGVEKVBLASNZSwKBAllLA08CSwJSVwIATwJMUEsCFU8DTwNPAlJXAgBQSRUWVwYCTFAqTFCwIkM=)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-factory.algo.ts:43
     // appArgs: [methodSelector('create()void')],
@@ -353,10 +310,13 @@ test_compile_contract_with_template:
     //   })
     //   .submit()
     itxn_submit
-    retsub
+    // tests/approvals/precompiled-factory.algo.ts:38
+    // test_compile_contract_with_template() {
+    intc_2 // 1
+    return
 
 
-// tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix() -> void:
+// tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix[routing]() -> void:
 test_compile_contract_with_template_and_custom_prefix:
     // tests/approvals/precompiled-factory.algo.ts:72-79
     // const helloApp = itxn
@@ -376,7 +336,7 @@ test_compile_contract_with_template_and_custom_prefix:
     // const compiled = compile(HelloTemplateCustomPrefix, { templateVars: { GREETING: 'bonjour' }, templateVarsPrefix: 'PRFX_' })
     bytec_0 // base64(CoEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiACAQAmBAhncmVldGluZwQVH3x1ASAHYm9uam91cjEYQAADKCtnMRtBACqCBQRMXGG6BCQ3jTwEoOgYcgTQooIABFGAuiA2GgCOBQBQAEUAOgAcAAEAMRkURDEYRDYaAYgAWUkVFlcGAkxQKUxQsCJDMRkURDEYRDYaAVcCAIgALkkVFlcGAkxQKUxQsCJDMRmBBBJEMRhEIkMxGYEFEkQxGEQiQzEZFEQxGBREIkOKAQEjKGVEKlCL/1CJigEBIyhlRCpQi/8jWYv/gQJZi/9PAksCUlcCAE8CTFCL/xWL/08DTwJSVwIAUIk=)
+    pushbytes base64(CiACAQAmBAhncmVldGluZwEgBBUffHUHYm9uam91cjEYQAADKCtnggIEJDeNPASg6BhyNhoAjgIAOAAvMRkURDEYQQAWggIE0KKCAARRgLogNhoAjgIAIwA/AIAETFxhujYaAI4BAAEAIkMxGYEEEjEYEEMxGYEFEjEYEEM2GgFXAgAjKGVEKVBMUEkVFlcGAkxQKkxQsCJDNhoBIyhlRClQSwEjWUsCgQJZSwNPAksCUlcCAE8CTFBLAhVPA08DTwJSVwIAUEkVFlcGAkxQKkxQsCJD)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-factory.algo.ts:74
     // appArgs: [methodSelector('create()void')],
@@ -493,10 +453,13 @@ test_compile_contract_with_template_and_custom_prefix:
     //   })
     //   .submit()
     itxn_submit
-    retsub
+    // tests/approvals/precompiled-factory.algo.ts:69
+    // test_compile_contract_with_template_and_custom_prefix() {
+    intc_2 // 1
+    return
 
 
-// tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large() -> void:
+// tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large[routing]() -> void:
 test_compile_contract_large:
     // tests/approvals/precompiled-factory.algo.ts:103-110
     // const largeApp = itxn
@@ -512,7 +475,7 @@ test_compile_contract_large:
     // const compiled = compile(LargeProgram)
     bytec_0 // base64(CoEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CjEbQQA5ggIEAr8wzwQkN408NhoAjgIADQABADEZgQUSRDEYRIEBQzEZFEQxGESIABkWgAQVH3x1TFCwgQFDMRlA/9cxGBREgQFDgYAgrxWJ)
+    pushbytes base64(CjEbQQApggIEJDeNPAQCvzDPNhoAjgIACwABADEZFDEYEERCABExGYEFEjEYEEMxGRQxGBQQQ4GAIK8VFoAEFR98dUxQsIEBQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-factory.algo.ts:103-109
     // const largeApp = itxn
@@ -625,4 +588,7 @@ test_compile_contract_large:
     //   })
     //   .submit()
     itxn_submit
-    retsub
+    // tests/approvals/precompiled-factory.algo.ts:100
+    // test_compile_contract_large() {
+    intc_2 // 1
+    return

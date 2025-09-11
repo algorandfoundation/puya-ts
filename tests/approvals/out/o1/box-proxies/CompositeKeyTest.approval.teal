@@ -6,12 +6,10 @@ main:
     // tests/approvals/box-proxies.algo.ts:252
     // class CompositeKeyTest extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     pushbytes 0x197a4167 // method "test((uint64,uint64),string)void"
     txna ApplicationArgs 0
     match main_test_route@3
-
-main_after_if_else@10:
     err
 
 main_test_route@3:
@@ -19,43 +17,36 @@ main_test_route@3:
     // test(key: { a: uint64; b: uint64 }, val: string) {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/box-proxies.algo.ts:252
-    // class CompositeKeyTest extends Contract {
-    txna ApplicationArgs 1
-    txna ApplicationArgs 2
-    extract 2 0
-    // tests/approvals/box-proxies.algo.ts:255
-    // test(key: { a: uint64; b: uint64 }, val: string) {
-    callsub test
-    pushint 1 // 1
-    return
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    b test
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/box-proxies.algo.ts:252
     // class CompositeKeyTest extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
 
 
-// tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test(key: bytes, val: bytes) -> void:
+// tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test[routing]() -> void:
 test:
     // tests/approvals/box-proxies.algo.ts:255
     // test(key: { a: uint64; b: uint64 }, val: string) {
-    proto 2 0
+    txna ApplicationArgs 1
+    txna ApplicationArgs 2
+    extract 2 0
     // tests/approvals/box-proxies.algo.ts:256
     // this.boxMap(key).value = val
-    frame_dig -2
+    dig 1
     box_del
     pop
-    frame_dig -2
-    frame_dig -1
     box_put
-    retsub
+    // tests/approvals/box-proxies.algo.ts:255
+    // test(key: { a: uint64; b: uint64 }, val: string) {
+    pushint 1 // 1
+    return

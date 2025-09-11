@@ -5,7 +5,6 @@
 main:
     intcblock 0 6 1 5
     bytecblock 0x "world" base64(CkIAAIEBQw==) 0x151f7c75 0x24378d3c 0xd0a28200 "hello" 0x4c5c61ba
-    bytec_0 // ""
     b main_block@0
 
 main_block@0:
@@ -17,10 +16,23 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@9
+    bz main___algots__.defaultCreate@11
     b main_abi_routing@2
 
 main_abi_routing@2:
+    // tests/approvals/precompiled-factory.algo.ts:6
+    // class HelloFactory extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@9
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
     // tests/approvals/precompiled-factory.algo.ts:6
     // class HelloFactory extends Contract {
     txna ApplicationArgs 0
@@ -29,126 +41,120 @@ main_abi_routing@2:
     pushbytes 0xe2b7c692 // method "test_compile_contract_with_template_and_custom_prefix()void"
     pushbytes 0x02947ca2 // method "test_compile_contract_large()void"
     uncover 4
-    match main_test_compile_contract_route@3 main_test_compile_contract_with_template_route@4 main_test_compile_contract_with_template_and_custom_prefix_route@5 main_test_compile_contract_large_route@6
-    b main_switch_case_default@7
-
-main_switch_case_default@7:
+    match main_test_compile_contract_route@4 main_test_compile_contract_with_template_route@5 main_test_compile_contract_with_template_and_custom_prefix_route@6 main_test_compile_contract_large_route@7
     b main_switch_case_next@8
 
 main_switch_case_next@8:
-    b main_after_if_else@13
+    b main_after_if_else@10
 
-main_after_if_else@13:
+main_after_if_else@10:
+    b main_after_if_else@12
+
+main_after_if_else@12:
     // tests/approvals/precompiled-factory.algo.ts:6
     // class HelloFactory extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/precompiled-factory.algo.ts::HelloFactory.__puya_arc4_router__@14
+    err
 
-main_after_inlined_tests/approvals/precompiled-factory.algo.ts::HelloFactory.__puya_arc4_router__@14:
-    return
-
-main_test_compile_contract_large_route@6:
+main_test_compile_contract_large_route@7:
     // tests/approvals/precompiled-factory.algo.ts:100
     // test_compile_contract_large() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub test_compile_contract_large
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/precompiled-factory.algo.ts::HelloFactory.__puya_arc4_router__@14
+    b main_switch_case_next@8
 
-main_test_compile_contract_with_template_and_custom_prefix_route@5:
+main_test_compile_contract_with_template_and_custom_prefix_route@6:
     // tests/approvals/precompiled-factory.algo.ts:69
     // test_compile_contract_with_template_and_custom_prefix() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub test_compile_contract_with_template_and_custom_prefix
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/precompiled-factory.algo.ts::HelloFactory.__puya_arc4_router__@14
+    b main_switch_case_next@8
 
-main_test_compile_contract_with_template_route@4:
+main_test_compile_contract_with_template_route@5:
     // tests/approvals/precompiled-factory.algo.ts:38
     // test_compile_contract_with_template() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub test_compile_contract_with_template
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/precompiled-factory.algo.ts::HelloFactory.__puya_arc4_router__@14
+    b main_switch_case_next@8
 
-main_test_compile_contract_route@3:
+main_test_compile_contract_route@4:
     // tests/approvals/precompiled-factory.algo.ts:7
     // test_compile_contract() {
+    callsub test_compile_contract
+    b main_switch_case_next@8
+
+main_create_NoOp@9:
+    b main_after_if_else@10
+
+main___algots__.defaultCreate@11:
+    // tests/approvals/precompiled-factory.algo.ts:6
+    // class HelloFactory extends Contract {
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub test_compile_contract
-    intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/precompiled-factory.algo.ts::HelloFactory.__puya_arc4_router__@14
-
-main_bare_routing@9:
-    // tests/approvals/precompiled-factory.algo.ts:6
-    // class HelloFactory extends Contract {
-    txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@10
-    b main_switch_case_default@11
-
-main_switch_case_default@11:
-    b main_switch_case_next@12
-
-main_switch_case_next@12:
-    b main_after_if_else@13
-
-main___algots__.defaultCreate@10:
-    // tests/approvals/precompiled-factory.algo.ts:6
-    // class HelloFactory extends Contract {
     txn ApplicationID
     intc_0 // 0
     ==
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
     intc_2 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/precompiled-factory.algo.ts::HelloFactory.__puya_arc4_router__@14
+    return
+
+
+// tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract[routing]() -> void:
+test_compile_contract:
+    b test_compile_contract_block@0
+
+test_compile_contract_block@0:
+    // tests/approvals/precompiled-factory.algo.ts:7
+    // test_compile_contract() {
+    callsub tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract
+    intc_2 // 1
+    return
+
+
+// tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template[routing]() -> void:
+test_compile_contract_with_template:
+    b test_compile_contract_with_template_block@0
+
+test_compile_contract_with_template_block@0:
+    // tests/approvals/precompiled-factory.algo.ts:38
+    // test_compile_contract_with_template() {
+    callsub tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template
+    intc_2 // 1
+    return
+
+
+// tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix[routing]() -> void:
+test_compile_contract_with_template_and_custom_prefix:
+    b test_compile_contract_with_template_and_custom_prefix_block@0
+
+test_compile_contract_with_template_and_custom_prefix_block@0:
+    // tests/approvals/precompiled-factory.algo.ts:69
+    // test_compile_contract_with_template_and_custom_prefix() {
+    callsub tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix
+    intc_2 // 1
+    return
+
+
+// tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large[routing]() -> void:
+test_compile_contract_large:
+    b test_compile_contract_large_block@0
+
+test_compile_contract_large_block@0:
+    // tests/approvals/precompiled-factory.algo.ts:100
+    // test_compile_contract_large() {
+    callsub tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large
+    intc_2 // 1
+    return
 
 
 // tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract() -> void:
-test_compile_contract:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract:
     // tests/approvals/precompiled-factory.algo.ts:7
     // test_compile_contract() {
     proto 0 0
     bytec_0 // ""
-    b test_compile_contract_block@0
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_block@0
 
-test_compile_contract_block@0:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_block@0:
     // tests/approvals/precompiled-factory.algo.ts:10-17
     // const helloApp = itxn
     //   .applicationCall({
@@ -175,7 +181,7 @@ test_compile_contract_block@0:
     itxn_field ClearStateProgramPages
     bytec_0 // 0x
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiADAAECJgQACGdyZWV0aW5nBBUffHUBIChCAAAxGEAACUIAAIgBO0IAAEIAADEbIhNBAM5CAAA2GgCABACSJa6ABCQ3jTyABKDoGHKABNCiggCABFGAuiBPBY4FAIMAbwBbADQAEEIAAEIAAEIAACJFAUIAAEMxGSISRDEYIhNENhoBiACmSRUWVwYCTwFQKk8BULAjRQFC/9sxGSISRDEYIhNENhoBVwIAiABrSRUWVwYCTwFQKk8BULAjRQFC/7QxGYEEEkQxGCITRIgARSNFAUL/oDEZgQUSRDEYIhNEiAAtI0UBQv+MMRkiEkQxGCISRDYaAVcCAIgACSNFAUL/c0L/aooBAEIAACmL/2eJQgAAiUIAAImKAQFCAAAiKWVEKE8BUCtQi/9QiYoBAUIAACIpZUQoTwFQK1CL/yJZi/8kWYv/TwJPAlJXAgBQi/8kWYv/FYv/TwJPAlJXAgBQiUIAAEIAAEIAACkoZ4k=)
+    pushbytes base64(CiADAAECJgQIZ3JlZXRpbmcABBUffHUBIEIAADEYQAAJQgAAiAFGQgAAQgAANhoAgAQkN408gASg6BhyTwKOAgBoAFdCAAAxGSISRDEYIhNBAC1CAAA2GgCABNCiggCABFGAuiBPAo4CAA0AB0IAAEIAAACIAIBC//aIAF5C//A2GgCABACSJa5PAY4BAAZCAABC/96IACVC//cxGYEEEjEYIhMQRIgAKkL/mzEZgQUSMRgiExBEiAARQv+KQgAANhoBVwIAiABHI0NCAACIAEojQ0IAAIgARiNDQgAANhoBVwIAiAA8SRUWVwYCTwFQKk8BULAjQ0IAADYaAYgAN0kVFlcGAk8BUCpPAVCwI0OKAQBCAAAoi/9niUIAAIlCAACJigEBQgAAIihlRClPAVArUIv/UImKAQFCAAAiKGVEKU8BUCtQi/8iWYv/JFmL/08CTwJSVwIAUIv/JFmL/xWL/08CTwJSVwIAUIlCAABCAABCAAAoKWeJ)
     itxn_field ApprovalProgramPages
     bytec_0 // 0x
     itxn_field ApprovalProgramPages
@@ -196,9 +202,9 @@ test_compile_contract_block@0:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test_compile_contract_next_txn@1
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_next_txn@1
 
-test_compile_contract_next_txn@1:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_next_txn@1:
     // tests/approvals/precompiled-factory.algo.ts:10-17
     // const helloApp = itxn
     //   .applicationCall({
@@ -258,9 +264,9 @@ test_compile_contract_next_txn@1:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test_compile_contract_next_txn@2
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_next_txn@2
 
-test_compile_contract_next_txn@2:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_next_txn@2:
     // tests/approvals/precompiled-factory.algo.ts:19-24
     // const txn = itxn
     //   .applicationCall({
@@ -317,9 +323,9 @@ test_compile_contract_next_txn@2:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test_compile_contract_next_txn@3
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_next_txn@3
 
-test_compile_contract_next_txn@3:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_next_txn@3:
     // tests/approvals/precompiled-factory.algo.ts:29-35
     // itxn
     //   .applicationCall({
@@ -333,14 +339,14 @@ test_compile_contract_next_txn@3:
 
 
 // tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template() -> void:
-test_compile_contract_with_template:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template:
     // tests/approvals/precompiled-factory.algo.ts:38
     // test_compile_contract_with_template() {
     proto 0 0
     bytec_0 // ""
-    b test_compile_contract_with_template_block@0
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_block@0
 
-test_compile_contract_with_template_block@0:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_block@0:
     // tests/approvals/precompiled-factory.algo.ts:41-48
     // const helloApp = itxn
     //   .applicationCall({
@@ -361,7 +367,7 @@ test_compile_contract_with_template_block@0:
     itxn_field ClearStateProgramPages
     bytec_0 // 0x
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiADAAECJgUACGdyZWV0aW5nBBUffHUBIANoZXkoQgAAMRhAAAlCAACIAS5CAABCAAAxGyITQQDIQgAANhoAgARMXGG6gAQkN408gASg6BhygATQooIAgARRgLogTwWOBQCDAG8AWwA0ABBCAABCAABCAAAiRQFCAABDMRkiEkQxGCITRDYaAYgAmUkVFlcGAk8BUCpPAVCwI0UBQv/bMRkiEkQxGCITRDYaAVcCAIgAXkkVFlcGAk8BUCpPAVCwI0UBQv+0MRmBBBJEMRgiE0SIADgjRQFC/6AxGYEFEkQxGCITRIgAICNFAUL/jDEZIhJEMRgiEkSIAAkjRQFC/3lC/3BCAACJQgAAiUIAAImKAQFCAAAiKWVEKE8BUCtQi/9QiYoBAUIAACIpZUQoTwFQK1CL/yJZi/8kWYv/TwJPAlJXAgBQi/8kWYv/FYv/TwJPAlJXAgBQiUIAAIgABSknBGeJQgAAQgAAQgAAKShniQ==)
+    pushbytes base64(CiADAAECJgUIZ3JlZXRpbmcABBUffHUBIANoZXlCAAAxGEAACUIAAIgBOUIAAEIAADYaAIAEJDeNPIAEoOgYck8CjgIAaABXQgAAMRkiEkQxGCITQQAtQgAANhoAgATQooIAgARRgLogTwKOAgANAAdCAABCAAAAiAB6Qv/2iABYQv/wNhoAgARMXGG6TwGOAQAGQgAAQv/eiAAlQv/3MRmBBBIxGCITEESIACRC/5sxGYEFEjEYIhMQRIgAC0L/ikIAAIgARyNDQgAAiABDI0NCAACIAD8jQ0IAADYaAVcCAIgANUkVFlcGAk8BUCpPAVCwI0NCAAA2GgGIADBJFRZXBgJPAVAqTwFQsCNDQgAAiUIAAIlCAACJigEBQgAAIihlRClPAVArUIv/UImKAQFCAAAiKGVEKU8BUCtQi/8iWYv/JFmL/08CTwJSVwIAUIv/JFmL/xWL/08CTwJSVwIAUIlCAACIAAUoJwRniUIAAEIAAEIAACgpZ4k=)
     itxn_field ApprovalProgramPages
     bytec_0 // 0x
     itxn_field ApprovalProgramPages
@@ -381,9 +387,9 @@ test_compile_contract_with_template_block@0:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test_compile_contract_with_template_next_txn@1
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_next_txn@1
 
-test_compile_contract_with_template_next_txn@1:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_next_txn@1:
     // tests/approvals/precompiled-factory.algo.ts:41-48
     // const helloApp = itxn
     //   .applicationCall({
@@ -443,9 +449,9 @@ test_compile_contract_with_template_next_txn@1:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test_compile_contract_with_template_next_txn@2
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_next_txn@2
 
-test_compile_contract_with_template_next_txn@2:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_next_txn@2:
     // tests/approvals/precompiled-factory.algo.ts:50-55
     // const txn = itxn
     //   .applicationCall({
@@ -502,9 +508,9 @@ test_compile_contract_with_template_next_txn@2:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test_compile_contract_with_template_next_txn@3
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_next_txn@3
 
-test_compile_contract_with_template_next_txn@3:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_next_txn@3:
     // tests/approvals/precompiled-factory.algo.ts:60-66
     // itxn
     //   .applicationCall({
@@ -518,14 +524,14 @@ test_compile_contract_with_template_next_txn@3:
 
 
 // tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix() -> void:
-test_compile_contract_with_template_and_custom_prefix:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix:
     // tests/approvals/precompiled-factory.algo.ts:69
     // test_compile_contract_with_template_and_custom_prefix() {
     proto 0 0
     bytec_0 // ""
-    b test_compile_contract_with_template_and_custom_prefix_block@0
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix_block@0
 
-test_compile_contract_with_template_and_custom_prefix_block@0:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix_block@0:
     // tests/approvals/precompiled-factory.algo.ts:72-79
     // const helloApp = itxn
     //   .applicationCall({
@@ -546,7 +552,7 @@ test_compile_contract_with_template_and_custom_prefix_block@0:
     itxn_field ClearStateProgramPages
     bytec_0 // 0x
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiADAAECJgUACGdyZWV0aW5nBBUffHUBIAdib25qb3VyKEIAADEYQAAJQgAAiAEuQgAAQgAAMRsiE0EAyEIAADYaAIAETFxhuoAEJDeNPIAEoOgYcoAE0KKCAIAEUYC6IE8FjgUAgwBvAFsANAAQQgAAQgAAQgAAIkUBQgAAQzEZIhJEMRgiE0Q2GgGIAJlJFRZXBgJPAVAqTwFQsCNFAUL/2zEZIhJEMRgiE0Q2GgFXAgCIAF5JFRZXBgJPAVAqTwFQsCNFAUL/tDEZgQQSRDEYIhNEiAA4I0UBQv+gMRmBBRJEMRgiE0SIACAjRQFC/4wxGSISRDEYIhJEiAAJI0UBQv95Qv9wQgAAiUIAAIlCAACJigEBQgAAIillRChPAVArUIv/UImKAQFCAAAiKWVEKE8BUCtQi/8iWYv/JFmL/08CTwJSVwIAUIv/JFmL/xWL/08CTwJSVwIAUIlCAACIAAUpJwRniUIAAEIAAEIAACkoZ4k=)
+    pushbytes base64(CiADAAECJgUIZ3JlZXRpbmcABBUffHUBIAdib25qb3VyQgAAMRhAAAlCAACIATlCAABCAAA2GgCABCQ3jTyABKDoGHJPAo4CAGgAV0IAADEZIhJEMRgiE0EALUIAADYaAIAE0KKCAIAEUYC6IE8CjgIADQAHQgAAQgAAAIgAekL/9ogAWEL/8DYaAIAETFxhuk8BjgEABkIAAEL/3ogAJUL/9zEZgQQSMRgiExBEiAAkQv+bMRmBBRIxGCITEESIAAtC/4pCAACIAEcjQ0IAAIgAQyNDQgAAiAA/I0NCAAA2GgFXAgCIADVJFRZXBgJPAVAqTwFQsCNDQgAANhoBiAAwSRUWVwYCTwFQKk8BULAjQ0IAAIlCAACJQgAAiYoBAUIAACIoZUQpTwFQK1CL/1CJigEBQgAAIihlRClPAVArUIv/IlmL/yRZi/9PAk8CUlcCAFCL/yRZi/8Vi/9PAk8CUlcCAFCJQgAAiAAFKCcEZ4lCAABCAABCAAAoKWeJ)
     itxn_field ApprovalProgramPages
     bytec_0 // 0x
     itxn_field ApprovalProgramPages
@@ -566,9 +572,9 @@ test_compile_contract_with_template_and_custom_prefix_block@0:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test_compile_contract_with_template_and_custom_prefix_next_txn@1
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix_next_txn@1
 
-test_compile_contract_with_template_and_custom_prefix_next_txn@1:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix_next_txn@1:
     // tests/approvals/precompiled-factory.algo.ts:72-79
     // const helloApp = itxn
     //   .applicationCall({
@@ -628,9 +634,9 @@ test_compile_contract_with_template_and_custom_prefix_next_txn@1:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test_compile_contract_with_template_and_custom_prefix_next_txn@2
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix_next_txn@2
 
-test_compile_contract_with_template_and_custom_prefix_next_txn@2:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix_next_txn@2:
     // tests/approvals/precompiled-factory.algo.ts:81-86
     // const txn = itxn
     //   .applicationCall({
@@ -687,9 +693,9 @@ test_compile_contract_with_template_and_custom_prefix_next_txn@2:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test_compile_contract_with_template_and_custom_prefix_next_txn@3
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix_next_txn@3
 
-test_compile_contract_with_template_and_custom_prefix_next_txn@3:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix_next_txn@3:
     // tests/approvals/precompiled-factory.algo.ts:91-97
     // itxn
     //   .applicationCall({
@@ -703,14 +709,14 @@ test_compile_contract_with_template_and_custom_prefix_next_txn@3:
 
 
 // tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large() -> void:
-test_compile_contract_large:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large:
     // tests/approvals/precompiled-factory.algo.ts:100
     // test_compile_contract_large() {
     proto 0 0
     bytec_0 // ""
-    b test_compile_contract_large_block@0
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large_block@0
 
-test_compile_contract_large_block@0:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large_block@0:
     // tests/approvals/precompiled-factory.algo.ts:103-110
     // const largeApp = itxn
     //   .applicationCall({
@@ -731,7 +737,7 @@ test_compile_contract_large_block@0:
     itxn_field ClearStateProgramPages
     bytec_0 // 0x
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiACAAGAAEIAAEIAADEbIhNBAFxCAAA2GgCABAK/MM+ABCQ3jTxPAo4CACQAEEIAAEIAAEIAACJFAUIAAEMxGYEFEkQxGCITRIgAVCNFAUL/6zEZIhJEMRgiE0SIADkWgAQVH3x1TwFQsCNFAUL/zTEZIk8BjgEACUIAAEIAAEL/tTEYIhJEiAAaI0UBQv+tQgAAgYAgr4lCAACI//IViUIAAIlCAACJ)
+    pushbytes base64(CiACAAFCAABCAAAxGyITQQBCQgAANhoAgAQkN408gAQCvzDPTwKOAgAXAAdCAABCAAAAMRkiEjEYIhMQRIgAK0L/7DEZgQUSMRgiExBEiAAtQv/bMRkiEjEYIhIQRIgAMSNDQgAAgYAgr4lCAACIABUWgAQVH3x1TwFQsCNDQgAAiAAKI0NCAACI/9cViUIAAIlCAACJ)
     itxn_field ApprovalProgramPages
     bytec_0 // 0x
     itxn_field ApprovalProgramPages
@@ -747,9 +753,9 @@ test_compile_contract_large_block@0:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test_compile_contract_large_next_txn@1
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large_next_txn@1
 
-test_compile_contract_large_next_txn@1:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large_next_txn@1:
     // tests/approvals/precompiled-factory.algo.ts:103-110
     // const largeApp = itxn
     //   .applicationCall({
@@ -797,9 +803,9 @@ test_compile_contract_large_next_txn@1:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test_compile_contract_large_next_txn@2
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large_next_txn@2
 
-test_compile_contract_large_next_txn@2:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large_next_txn@2:
     // tests/approvals/precompiled-factory.algo.ts:112-117
     // const txn = itxn
     //   .applicationCall({
@@ -856,9 +862,9 @@ test_compile_contract_large_next_txn@2:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b test_compile_contract_large_next_txn@3
+    b tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large_next_txn@3
 
-test_compile_contract_large_next_txn@3:
+tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large_next_txn@3:
     // tests/approvals/precompiled-factory.algo.ts:122-128
     // itxn
     //   .applicationCall({

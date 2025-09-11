@@ -4,59 +4,42 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@1: // L8
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
-        goto tmp%1#0 ? block@2 : block@7
+        goto tmp%1#0 ? block@2 : block@9
     block@2: // abi_routing_L8
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "getAccountInfo(address,uint64)(byte[32],uint64,uint64,byte[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)" => block@3, method "otherAccount()void" => block@4, * => block@5}
-    block@3: // getAccountInfo_route_L9
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (== tmp%3#0 NoOp)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        let tmp%6#0: bool = (!= tmp%5#0 0u)
-        (assert tmp%6#0) // can only call when not creating
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 1)
-        let tmp%7#0: account = reinterpret_Encoded(uint8[32])%0#0
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let tmp%8#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let tmp%9#0: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1,bool1) = tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo(tmp%7#0, tmp%8#0)
-        let tmp%10#0: bytes = (concat 0x151f7c75 tmp%9#0)
-        (log tmp%10#0)
-        let tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#0: bool = 1u
-        goto block@12
-    block@4: // otherAccount_route_L30
-        let tmp%11#0: uint64 = (txn OnCompletion)
-        let tmp%12#0: bool = (== tmp%11#0 NoOp)
-        (assert tmp%12#0) // OnCompletion is not NoOp
-        let tmp%13#0: uint64 = (txn ApplicationID)
-        let tmp%14#0: bool = (!= tmp%13#0 0u)
-        (assert tmp%14#0) // can only call when not creating
-        tests/approvals/accounts.algo.ts::AccountsContract.otherAccount()
-        let tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#1: bool = 1u
-        goto block@12
-    block@5: // switch_case_default_L8
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@3 : block@7
+    block@3: // call_NoOp_L8
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "getAccountInfo(address,uint64)(byte[32],uint64,uint64,byte[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)" => block@4, method "otherAccount()void" => block@5, * => block@6}
+    block@4: // getAccountInfo_route_L9
+        tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo[routing]()
+        goto block@6
+    block@5: // otherAccount_route_L30
+        tests/approvals/accounts.algo.ts::AccountsContract.otherAccount[routing]()
         goto block@6
     block@6: // switch_case_next_L8
-        goto block@11
-    block@7: // bare_routing_L8
-        let tmp%15#0: uint64 = (txn OnCompletion)
-        switch tmp%15#0 {0u => block@8, * => block@9}
-    block@8: // __algots__.defaultCreate_L8
-        let tmp%16#0: uint64 = (txn ApplicationID)
-        let tmp%17#0: bool = (== tmp%16#0 0u)
-        (assert tmp%17#0) // can only call when creating
-        tests/approvals/accounts.algo.ts::AccountsContract.__algots__.defaultCreate()
-        let tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#2: bool = 1u
-        goto block@12
-    block@9: // switch_case_default_L8
+        goto block@8
+    block@7: // create_NoOp_L8
+        goto block@8
+    block@8: // after_if_else_L8
         goto block@10
-    block@10: // switch_case_next_L8
-        goto block@11
-    block@11: // after_if_else_L8
-        let tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#3: bool = 0u
-        goto block@12
-    block@12: // after_inlined_tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#0 <- block@3, tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#1 <- block@4, tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#2 <- block@8, tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router__%0#3 <- block@11)
+    block@9: // __algots__.defaultCreate_L8
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/accounts.algo.ts::AccountsContract.__algots__.defaultCreate()
+        exit 1u
+    block@10: // after_if_else_L8
+        exit 0u
+    block@11: // after_inlined_tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
         return tmp%0#0
 
 subroutine _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
@@ -67,7 +50,7 @@ subroutine _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uin
     block@1: // while_top_L20
         let tmp%1#0: uint64 = (global OpcodeBudget)
         let tmp%2#0: bool = (> required_budget_with_buffer#0 tmp%1#0)
-        goto tmp%2#0 ? block@2 : block@7
+        goto tmp%2#0 ? block@2 : block@6
     block@2: // while_body_L21
         itxn_begin
         ((itxn_field TypeEnum) appl)
@@ -77,18 +60,32 @@ subroutine _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uin
         switch fee_source#0 {0u => block@3, 1u => block@4, * => block@5}
     block@3: // switch_case_0_L28
         ((itxn_field Fee) 0u)
-        goto block@6
+        goto block@5
     block@4: // switch_case_1_L30
         let tmp%3#0: uint64 = (global MinTxnFee)
         ((itxn_field Fee) tmp%3#0)
-        goto block@6
-    block@5: // switch_case_default_L26
-        goto block@6
-    block@6: // switch_case_next_L26
+        goto block@5
+    block@5: // switch_case_next_L26
         itxn_submit
         goto block@1
-    block@7: // after_while_L20
+    block@6: // after_while_L20
         return 
+
+subroutine tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo[routing]() -> void:
+    block@0: // L9
+        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 1)
+        let tmp%0#0: account = reinterpret_Encoded(uint8[32])%0#0
+        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
+        let tmp%1#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let tmp%2#0: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1,bool1) = tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo(tmp%0#0, tmp%1#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/accounts.algo.ts::AccountsContract.otherAccount[routing]() -> void:
+    block@0: // L30
+        tests/approvals/accounts.algo.ts::AccountsContract.otherAccount()
+        exit 1u
 
 subroutine tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo(account: account, asset: uint64) -> Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1,bool1):
     block@0: // L9

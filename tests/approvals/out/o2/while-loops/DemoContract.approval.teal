@@ -8,12 +8,10 @@ main:
     // tests/approvals/while-loops.algo.ts:4
     // class DemoContract extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     pushbytes 0x28a52d73 // method "testWhile(uint64)uint64"
     txna ApplicationArgs 0
     match main_testWhile_route@3
-
-main_after_if_else@10:
     err
 
 main_testWhile_route@3:
@@ -21,11 +19,9 @@ main_testWhile_route@3:
     // public testWhile(stop: uint64) {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/while-loops.algo.ts:4
-    // class DemoContract extends Contract {
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     txna ApplicationArgs 1
     btoi
     bury 1
@@ -34,7 +30,7 @@ main_testWhile_route@3:
     pushint 0 // 0
     bury 2
 
-main_while_top@15:
+main_while_top@9:
     // tests/approvals/while-loops.algo.ts:7
     // while (i < stop) {
     dup2
@@ -43,16 +39,16 @@ main_while_top@15:
     // while (i < stop) {
     //   i += 1
     // }
-    bz main_after_while@17
+    bz main_after_while@11
     // tests/approvals/while-loops.algo.ts:8
     // i += 1
     dig 1
     pushint 1 // 1
     +
     bury 2
-    b main_while_top@15
+    b main_while_top@9
 
-main_after_while@17:
+main_after_while@11:
     // tests/approvals/while-loops.algo.ts:5
     // public testWhile(stop: uint64) {
     dig 1
@@ -64,13 +60,12 @@ main_after_while@17:
     pushint 1 // 1
     return
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/while-loops.algo.ts:4
     // class DemoContract extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    pushint 1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

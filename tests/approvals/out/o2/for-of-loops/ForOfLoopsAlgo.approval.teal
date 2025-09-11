@@ -12,24 +12,20 @@ main:
     // tests/approvals/for-of-loops.algo.ts:8
     // export class ForOfLoopsAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@13
-    pushbytess 0xcf1f20b8 0xc2a2bd6b 0xf3b4fec8 0x8c16ee87 0xb2c753bf 0xd1b5beee 0xa1cc0d94 0x961846c6 // method "test_for_of_loop_tuple((uint64,uint64,uint64))uint64", method "test_for_of_loop_destructured_tuple(uint64[])uint64", method "test_for_of_loop_destructured_object((uint64,uint64)[])uint64", method "test_for_of_loop_arc4_dynamic_array(uint64[])uint64", method "test_for_of_loop_arc4_static_array(uint64[5])uint64", method "test_for_of_loop_native_immutable_array(uint64[])uint64", method "test_for_of_loop_native_mutable_array((uint64,uint64,uint64))uint64", method "test_iterable_props(uint64[3],uint64[3],uint64[])uint64"
-    txna ApplicationArgs 0
-    match main_test_for_of_loop_tuple_route@3 main_test_for_of_loop_destructured_tuple_route@4 main_test_for_of_loop_destructured_object_route@5 main_test_for_of_loop_arc4_dynamic_array_route@6 main_test_for_of_loop_arc4_static_array_route@7 main_test_for_of_loop_native_immutable_array_route@8 main_test_for_of_loop_native_mutable_array_route@9 main_test_iterable_props_route@10
-
-main_after_if_else@17:
-    err
-
-main_test_iterable_props_route@10:
-    // tests/approvals/for-of-loops.algo.ts:73
-    // test_iterable_props(static_array: StaticArray<Uint64, 3>, fixed_array: FixedArray<uint64, 3>, dyn_array: DynamicArray<Uint64>) {
+    bz main___algots__.defaultCreate@15
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
+    assert
+    pushbytess 0xcf1f20b8 0xc2a2bd6b 0xf3b4fec8 0x8c16ee87 0xb2c753bf 0xd1b5beee 0xa1cc0d94 0x961846c6 // method "test_for_of_loop_tuple((uint64,uint64,uint64))uint64", method "test_for_of_loop_destructured_tuple(uint64[])uint64", method "test_for_of_loop_destructured_object((uint64,uint64)[])uint64", method "test_for_of_loop_arc4_dynamic_array(uint64[])uint64", method "test_for_of_loop_arc4_static_array(uint64[5])uint64", method "test_for_of_loop_native_immutable_array(uint64[])uint64", method "test_for_of_loop_native_mutable_array((uint64,uint64,uint64))uint64", method "test_iterable_props(uint64[3],uint64[3],uint64[])uint64"
+    txna ApplicationArgs 0
+    match main_test_for_of_loop_tuple_route@4 main_test_for_of_loop_destructured_tuple_route@5 main_test_for_of_loop_destructured_object_route@6 main_test_for_of_loop_arc4_dynamic_array_route@7 main_test_for_of_loop_arc4_static_array_route@8 main_test_for_of_loop_native_immutable_array_route@9 main_test_for_of_loop_native_mutable_array_route@10 main_test_iterable_props_route@11
+    err
+
+main_test_iterable_props_route@11:
+    // tests/approvals/for-of-loops.algo.ts:73
+    // test_iterable_props(static_array: StaticArray<Uint64, 3>, fixed_array: FixedArray<uint64, 3>, dyn_array: DynamicArray<Uint64>) {
     txna ApplicationArgs 3
     bury 22
     // tests/approvals/for-of-loops.algo.ts:74
@@ -41,13 +37,13 @@ main_test_iterable_props_route@10:
     intc_0 // 0
     bury 8
 
-main_for_header@22:
+main_for_header@19:
     // tests/approvals/for-of-loops.algo.ts:75
     // for (const a of static_array.keys()) {
     dig 7
     pushint 3 // 3
     <
-    bz main_after_for@24
+    bz main_after_for@21
     // tests/approvals/for-of-loops.algo.ts:76
     // i++
     dig 12
@@ -60,19 +56,19 @@ main_for_header@22:
     intc_1 // 1
     +
     bury 8
-    b main_for_header@22
+    b main_for_header@19
 
-main_after_for@24:
+main_after_for@21:
     intc_0 // 0
     bury 6
 
-main_for_header@25:
+main_for_header@22:
     // tests/approvals/for-of-loops.algo.ts:78
     // for (const a of static_array.entries()) {
     dig 5
     pushint 3 // 3
     <
-    bz main_after_for@27
+    bz main_after_for@24
     // tests/approvals/for-of-loops.algo.ts:79
     // i++
     dig 12
@@ -83,21 +79,21 @@ main_for_header@25:
     intc_1 // 1
     +
     bury 6
-    b main_for_header@25
+    b main_for_header@22
 
-main_after_for@27:
+main_after_for@24:
     // tests/approvals/for-of-loops.algo.ts:81
     // for (const a of fixed_array.keys()) {
     intc_0 // 0
     bury 5
 
-main_for_header@28:
+main_for_header@25:
     // tests/approvals/for-of-loops.algo.ts:81
     // for (const a of fixed_array.keys()) {
     dig 4
     pushint 3 // 3
     <
-    bz main_after_for@30
+    bz main_after_for@27
     // tests/approvals/for-of-loops.algo.ts:82
     // i++
     dig 12
@@ -110,19 +106,19 @@ main_for_header@28:
     intc_1 // 1
     +
     bury 5
-    b main_for_header@28
+    b main_for_header@25
 
-main_after_for@30:
+main_after_for@27:
     intc_0 // 0
     bury 4
 
-main_for_header@31:
+main_for_header@28:
     // tests/approvals/for-of-loops.algo.ts:84
     // for (const a of fixed_array.entries()) {
     dig 3
     pushint 3 // 3
     <
-    bz main_after_for@33
+    bz main_after_for@30
     // tests/approvals/for-of-loops.algo.ts:85
     // i++
     dig 12
@@ -133,9 +129,9 @@ main_for_header@31:
     intc_1 // 1
     +
     bury 4
-    b main_for_header@31
+    b main_for_header@28
 
-main_after_for@33:
+main_after_for@30:
     // tests/approvals/for-of-loops.algo.ts:87
     // for (const a of dyn_array.keys()) {
     dig 21
@@ -145,13 +141,13 @@ main_after_for@33:
     intc_0 // 0
     bury 3
 
-main_for_header@34:
+main_for_header@31:
     // tests/approvals/for-of-loops.algo.ts:87
     // for (const a of dyn_array.keys()) {
     dig 2
     dig 14
     <
-    bz main_after_for@36
+    bz main_after_for@33
     // tests/approvals/for-of-loops.algo.ts:88
     // i++
     dig 12
@@ -164,19 +160,19 @@ main_for_header@34:
     intc_1 // 1
     +
     bury 3
-    b main_for_header@34
+    b main_for_header@31
 
-main_after_for@36:
+main_after_for@33:
     intc_0 // 0
     bury 2
 
-main_for_header@37:
+main_for_header@34:
     // tests/approvals/for-of-loops.algo.ts:90
     // for (const a of dyn_array.entries()) {
     dig 1
     dig 14
     <
-    bz main_after_for@39
+    bz main_after_for@36
     // tests/approvals/for-of-loops.algo.ts:91
     // i++
     dig 12
@@ -187,9 +183,9 @@ main_for_header@37:
     intc_1 // 1
     +
     bury 2
-    b main_for_header@37
+    b main_for_header@34
 
-main_after_for@39:
+main_after_for@36:
     // tests/approvals/for-of-loops.algo.ts:73
     // test_iterable_props(static_array: StaticArray<Uint64, 3>, fixed_array: FixedArray<uint64, 3>, dyn_array: DynamicArray<Uint64>) {
     dig 12
@@ -201,16 +197,9 @@ main_after_for@39:
     intc_1 // 1
     return
 
-main_test_for_of_loop_native_mutable_array_route@9:
+main_test_for_of_loop_native_mutable_array_route@10:
     // tests/approvals/for-of-loops.algo.ts:63
     // test_for_of_loop_native_mutable_array(items: [uint64, uint64, uint64]) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
     txna ApplicationArgs 1
     // tests/approvals/for-of-loops.algo.ts:64
     // const mutable = new ReferenceArray(...items)
@@ -239,13 +228,13 @@ main_test_for_of_loop_native_mutable_array_route@9:
     intc_0 // 0
     bury 12
 
-main_for_header@42:
+main_for_header@39:
     // tests/approvals/for-of-loops.algo.ts:66
     // for (const item of mutable) {
     dig 11
     dig 19
     <
-    bz main_block@47
+    bz main_block@44
     dig 19
     dig 12
     intc_2 // 8
@@ -260,14 +249,14 @@ main_for_header@42:
     // if (item === stopNumber) break
     intc_3 // 42
     ==
-    bnz main_block@47
+    bnz main_block@44
     dig 11
     intc_1 // 1
     +
     bury 12
-    b main_for_header@42
+    b main_for_header@39
 
-main_block@47:
+main_block@44:
     // tests/approvals/for-of-loops.algo.ts:63
     // test_for_of_loop_native_mutable_array(items: [uint64, uint64, uint64]) {
     dup
@@ -279,16 +268,9 @@ main_block@47:
     intc_1 // 1
     return
 
-main_test_for_of_loop_native_immutable_array_route@8:
+main_test_for_of_loop_native_immutable_array_route@9:
     // tests/approvals/for-of-loops.algo.ts:54
     // test_for_of_loop_native_immutable_array(items: Array<uint64>) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
     txna ApplicationArgs 1
     dup
     bury 22
@@ -304,13 +286,13 @@ main_test_for_of_loop_native_immutable_array_route@8:
     intc_0 // 0
     bury 12
 
-main_for_header@50:
+main_for_header@47:
     // tests/approvals/for-of-loops.algo.ts:56
     // for (const item of items) {
     dig 11
     dig 15
     <
-    bz main_block@55
+    bz main_block@52
     dig 20
     extract 2 0
     dig 12
@@ -326,14 +308,14 @@ main_for_header@50:
     // if (item === stopNumber) break
     intc_3 // 42
     ==
-    bnz main_block@55
+    bnz main_block@52
     dig 11
     intc_1 // 1
     +
     bury 12
-    b main_for_header@50
+    b main_for_header@47
 
-main_block@55:
+main_block@52:
     // tests/approvals/for-of-loops.algo.ts:54
     // test_for_of_loop_native_immutable_array(items: Array<uint64>) {
     dup
@@ -345,16 +327,9 @@ main_block@55:
     intc_1 // 1
     return
 
-main_test_for_of_loop_arc4_static_array_route@7:
+main_test_for_of_loop_arc4_static_array_route@8:
     // tests/approvals/for-of-loops.algo.ts:45
     // test_for_of_loop_arc4_static_array(items: StaticArray<Uint64, 5>) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
     txna ApplicationArgs 1
     bury 21
     // tests/approvals/for-of-loops.algo.ts:46
@@ -364,18 +339,18 @@ main_test_for_of_loop_arc4_static_array_route@7:
     intc_0 // 0
     bury 12
 
-main_for_header@58:
+main_for_header@55:
     // tests/approvals/for-of-loops.algo.ts:47
     // for (const item of items) {
     dig 11
     pushint 5 // 5
     <
-    bz main_block@63
+    bz main_block@60
     dig 11
     intc_2 // 8
     *
     // tests/approvals/for-of-loops.algo.ts:48
-    // total += item.native
+    // total += item.asUint64()
     dig 21
     swap
     extract_uint64
@@ -383,17 +358,17 @@ main_for_header@58:
     +
     bury 2
     // tests/approvals/for-of-loops.algo.ts:49
-    // if (item.native === stopNumber) break
+    // if (item.asUint64() === stopNumber) break
     intc_3 // 42
     ==
-    bnz main_block@63
+    bnz main_block@60
     dig 11
     intc_1 // 1
     +
     bury 12
-    b main_for_header@58
+    b main_for_header@55
 
-main_block@63:
+main_block@60:
     // tests/approvals/for-of-loops.algo.ts:45
     // test_for_of_loop_arc4_static_array(items: StaticArray<Uint64, 5>) {
     dup
@@ -405,16 +380,9 @@ main_block@63:
     intc_1 // 1
     return
 
-main_test_for_of_loop_arc4_dynamic_array_route@6:
+main_test_for_of_loop_arc4_dynamic_array_route@7:
     // tests/approvals/for-of-loops.algo.ts:36
     // test_for_of_loop_arc4_dynamic_array(items: DynamicArray<Uint64>) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
     txna ApplicationArgs 1
     dup
     bury 22
@@ -430,36 +398,36 @@ main_test_for_of_loop_arc4_dynamic_array_route@6:
     intc_0 // 0
     bury 12
 
-main_for_header@66:
+main_for_header@63:
     // tests/approvals/for-of-loops.algo.ts:38
     // for (const item of items) {
     dig 11
     dig 16
     <
-    bz main_block@71
+    bz main_block@68
     dig 20
     extract 2 0
     dig 12
     intc_2 // 8
     *
     // tests/approvals/for-of-loops.algo.ts:39
-    // total += item.native
+    // total += item.asUint64()
     extract_uint64
     dup2
     +
     bury 2
     // tests/approvals/for-of-loops.algo.ts:40
-    // if (item.native === stopNumber) break
+    // if (item.asUint64() === stopNumber) break
     intc_3 // 42
     ==
-    bnz main_block@71
+    bnz main_block@68
     dig 11
     intc_1 // 1
     +
     bury 12
-    b main_for_header@66
+    b main_for_header@63
 
-main_block@71:
+main_block@68:
     // tests/approvals/for-of-loops.algo.ts:36
     // test_for_of_loop_arc4_dynamic_array(items: DynamicArray<Uint64>) {
     dup
@@ -471,16 +439,9 @@ main_block@71:
     intc_1 // 1
     return
 
-main_test_for_of_loop_destructured_object_route@5:
+main_test_for_of_loop_destructured_object_route@6:
     // tests/approvals/for-of-loops.algo.ts:27
     // test_for_of_loop_destructured_object(items: Point[]) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
     txna ApplicationArgs 1
     dup
     bury 22
@@ -496,13 +457,13 @@ main_test_for_of_loop_destructured_object_route@5:
     intc_0 // 0
     bury 12
 
-main_for_header@74:
+main_for_header@71:
     // tests/approvals/for-of-loops.algo.ts:29
     // for (const { x, y } of clone(items)) {
     dig 11
     dig 17
     <
-    bz main_block@79
+    bz main_block@76
     dig 20
     extract 2 0
     dig 12
@@ -527,14 +488,14 @@ main_for_header@74:
     // if (total >= stopNumber) break
     intc_3 // 42
     >=
-    bnz main_block@79
+    bnz main_block@76
     dig 11
     intc_1 // 1
     +
     bury 12
-    b main_for_header@74
+    b main_for_header@71
 
-main_block@79:
+main_block@76:
     // tests/approvals/for-of-loops.algo.ts:27
     // test_for_of_loop_destructured_object(items: Point[]) {
     dup
@@ -546,16 +507,9 @@ main_block@79:
     intc_1 // 1
     return
 
-main_test_for_of_loop_destructured_tuple_route@4:
+main_test_for_of_loop_destructured_tuple_route@5:
     // tests/approvals/for-of-loops.algo.ts:18
     // test_for_of_loop_destructured_tuple(items: DynamicArray<Uint64>) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
     txna ApplicationArgs 1
     dup
     bury 22
@@ -571,20 +525,20 @@ main_test_for_of_loop_destructured_tuple_route@4:
     intc_0 // 0
     bury 7
 
-main_for_header@82:
+main_for_header@79:
     // tests/approvals/for-of-loops.algo.ts:20
     // for (const [index, v] of items.entries()) {
     dig 6
     dig 18
     <
-    bz main_block@87
+    bz main_block@84
     dig 20
     extract 2 0
     dig 7
     intc_2 // 8
     *
     // tests/approvals/for-of-loops.algo.ts:21
-    // total += v.native
+    // total += v.asUint64()
     extract_uint64
     dig 1
     +
@@ -594,14 +548,14 @@ main_for_header@82:
     // if (total >= stopNumber) break
     intc_3 // 42
     >=
-    bnz main_block@87
+    bnz main_block@84
     dig 6
     intc_1 // 1
     +
     bury 7
-    b main_for_header@82
+    b main_for_header@79
 
-main_block@87:
+main_block@84:
     // tests/approvals/for-of-loops.algo.ts:18
     // test_for_of_loop_destructured_tuple(items: DynamicArray<Uint64>) {
     dup
@@ -613,16 +567,9 @@ main_block@87:
     intc_1 // 1
     return
 
-main_test_for_of_loop_tuple_route@3:
+main_test_for_of_loop_tuple_route@4:
     // tests/approvals/for-of-loops.algo.ts:9
     // test_for_of_loop_tuple(items: readonly [uint64, uint64, uint64]) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/for-of-loops.algo.ts:8
-    // export class ForOfLoopsAlgo extends Contract {
     txna ApplicationArgs 1
     dup
     intc_0 // 0
@@ -643,7 +590,7 @@ main_test_for_of_loop_tuple_route@3:
     bury 10
     bury 8
 
-main_for_body@90:
+main_for_body@87:
     // tests/approvals/for-of-loops.algo.ts:12
     // total += item
     dup
@@ -656,13 +603,13 @@ main_for_body@90:
     // if (item === stopNumber) break
     intc_3 // 42
     ==
-    bnz main_block@94
+    bnz main_block@91
     // tests/approvals/for-of-loops.algo.ts:11
     // for (const item of items) {
     dig 8
-    switch main_for_header_1@92 main_for_header_2@93
+    switch main_for_header_1@89 main_for_header_2@90
 
-main_block@94:
+main_block@91:
     // tests/approvals/for-of-loops.algo.ts:9
     // test_for_of_loop_tuple(items: readonly [uint64, uint64, uint64]) {
     dup
@@ -674,27 +621,26 @@ main_block@94:
     intc_1 // 1
     return
 
-main_for_header_2@93:
+main_for_header_2@90:
     pushint 2 // 2
     bury 9
     dig 9
     bury 8
-    b main_for_body@90
+    b main_for_body@87
 
-main_for_header_1@92:
+main_for_header_1@89:
     intc_1 // 1
     bury 9
     dig 10
     bury 8
-    b main_for_body@90
+    b main_for_body@87
 
-main_bare_routing@13:
+main___algots__.defaultCreate@15:
     // tests/approvals/for-of-loops.algo.ts:8
     // export class ForOfLoopsAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@17
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

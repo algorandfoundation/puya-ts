@@ -9,33 +9,24 @@ main:
     // @contract({ scratchSlots: [countSlot] })
     // export class AssignmentsAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@14
-    pushbytess 0x702ea108 0xedda85e9 0x5b2f7713 0x90cccb3d 0xd8be93bf 0x5a3fec5a 0x27a4f367 0xd6c9f486 0x6e03ad0c // method "testPrimitives(uint64)void", method "testAccountDestructure()(uint64,uint64)", method "testArrayDestructure(uint64[],uint64,uint64[])void", method "testArrayNarrowing(uint64[],uint64)void", method "testTupleToArray((uint64,uint64),(uint64,uint64))void", method "testNested(uint64[][])void", method "testDestructureObj((uint64,string),(uint64,string))void", method "testObjLiteralNarrowing(uint64,uint64)void", method "testMixed(((uint64))[])void"
-    txna ApplicationArgs 0
-    match main_testPrimitives_route@3 main_testAccountDestructure_route@4 main_testArrayDestructure_route@5 main_testArrayNarrowing_route@6 main_testTupleToArray_route@7 main_testNested_route@8 main_testDestructureObj_route@9 main_testObjLiteralNarrowing_route@10 main_testMixed_route@11
-
-main_after_if_else@18:
-    err
-
-main_testMixed_route@11:
-    // tests/approvals/assignments.algo.ts:103
-    // testMixed(m: Array<{ a: [uint64] }>) {
+    bz main___algots__.defaultCreate@16
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    assert
+    pushbytess 0x702ea108 0xedda85e9 0x5b2f7713 0x90cccb3d 0xd8be93bf 0x5a3fec5a 0x27a4f367 0xd6c9f486 0x6e03ad0c // method "testPrimitives(uint64)void", method "testAccountDestructure()(uint64,uint64)", method "testArrayDestructure(uint64[],uint64,uint64[])void", method "testArrayNarrowing(uint64[],uint64)void", method "testTupleToArray((uint64,uint64),(uint64,uint64))void", method "testNested(uint64[][])void", method "testDestructureObj((uint64,string),(uint64,string))void", method "testObjLiteralNarrowing(uint64,uint64)void", method "testMixed(((uint64))[])void"
+    txna ApplicationArgs 0
+    match main_testPrimitives_route@4 main_testAccountDestructure_route@5 main_testArrayDestructure_route@6 main_testArrayNarrowing_route@7 main_testTupleToArray_route@8 main_testPrimitives_route@4 main_testPrimitives_route@4 main_testObjLiteralNarrowing_route@11 main_testPrimitives_route@4
+    err
+
+main_testPrimitives_route@4:
+    // tests/approvals/assignments.algo.ts:21
+    // testPrimitives(u: uint64) {
     intc_0 // 1
     return
 
-main_testObjLiteralNarrowing_route@10:
-    // tests/approvals/assignments.algo.ts:88
-    // testObjLiteralNarrowing(a: uint64, b: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_testObjLiteralNarrowing_route@11:
     // tests/approvals/assignments.algo.ts:9
     // op.Scratch.store(countSlot, 0)
     intc_2 // 0
@@ -67,45 +58,13 @@ main_testObjLiteralNarrowing_route@10:
     // assert(getCount() === 2, 'getVal should still be called once even though its result is not used')
     intc_1 // 2
     ==
-    assert // getVal should still be called once even though its result is not used
     // tests/approvals/assignments.algo.ts:88
     // testObjLiteralNarrowing(a: uint64, b: uint64) {
-    intc_0 // 1
-    return
+    return // on error: getVal should still be called once even though its result is not used
 
-main_testDestructureObj_route@9:
-    // tests/approvals/assignments.algo.ts:83
-    // testDestructureObj(m: { a: uint64; b: string }, i: Readonly<{ a: uint64; b: string }>) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    intc_0 // 1
-    return
-
-main_testNested_route@8:
-    // tests/approvals/assignments.algo.ts:78
-    // testNested(i_a: ReadonlyArray<ReadonlyArray<uint64>>) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    intc_0 // 1
-    return
-
-main_testTupleToArray_route@7:
+main_testTupleToArray_route@8:
     // tests/approvals/assignments.algo.ts:68
     // testTupleToArray(m_t: [uint64, uint64], i_t: readonly [uint64, uint64]) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/assignments.algo.ts:19-20
-    // @contract({ scratchSlots: [countSlot] })
-    // export class AssignmentsAlgo extends Contract {
     txna ApplicationArgs 1
     txna ApplicationArgs 2
     dup
@@ -179,23 +138,13 @@ main_testTupleToArray_route@7:
     uncover 2
     ==
     &&
-    assert // assert target is match for conditions
     // tests/approvals/assignments.algo.ts:68
     // testTupleToArray(m_t: [uint64, uint64], i_t: readonly [uint64, uint64]) {
-    intc_0 // 1
-    return
+    return // on error: assert target is match for conditions
 
-main_testArrayNarrowing_route@6:
+main_testArrayNarrowing_route@7:
     // tests/approvals/assignments.algo.ts:54
     // testArrayNarrowing(m_a: uint64[], u: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/assignments.algo.ts:19-20
-    // @contract({ scratchSlots: [countSlot] })
-    // export class AssignmentsAlgo extends Contract {
     txna ApplicationArgs 1
     // tests/approvals/assignments.algo.ts:56
     // m_a[0] += 1
@@ -227,23 +176,13 @@ main_testArrayNarrowing_route@6:
     intc_1 // 2
     extract_uint64
     !=
-    assert
     // tests/approvals/assignments.algo.ts:54
     // testArrayNarrowing(m_a: uint64[], u: uint64) {
-    intc_0 // 1
     return
 
-main_testArrayDestructure_route@5:
+main_testArrayDestructure_route@6:
     // tests/approvals/assignments.algo.ts:34
     // testArrayDestructure(i_a: ReadonlyArray<uint64>, u: uint64, m_a: uint64[]) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/assignments.algo.ts:19-20
-    // @contract({ scratchSlots: [countSlot] })
-    // export class AssignmentsAlgo extends Contract {
     txna ApplicationArgs 2
     btoi
     // tests/approvals/assignments.algo.ts:9
@@ -353,14 +292,7 @@ main_testArrayDestructure_route@5:
     intc_0 // 1
     return
 
-main_testAccountDestructure_route@4:
-    // tests/approvals/assignments.algo.ts:29
-    // testAccountDestructure() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main_testAccountDestructure_route@5:
     // tests/approvals/assignments.algo.ts:30
     // const { balance, minBalance } = Global.currentApplicationAddress
     global CurrentApplicationAddress
@@ -386,25 +318,13 @@ main_testAccountDestructure_route@4:
     intc_0 // 1
     return
 
-main_testPrimitives_route@3:
-    // tests/approvals/assignments.algo.ts:21
-    // testPrimitives(u: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    intc_0 // 1
-    return
-
-main_bare_routing@14:
+main___algots__.defaultCreate@16:
     // tests/approvals/assignments.algo.ts:19-20
     // @contract({ scratchSlots: [countSlot] })
     // export class AssignmentsAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@18
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_0 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

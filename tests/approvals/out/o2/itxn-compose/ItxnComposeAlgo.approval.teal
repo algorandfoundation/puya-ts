@@ -11,24 +11,20 @@ main:
     // tests/approvals/itxn-compose.algo.ts:18
     // class ItxnComposeAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
-    pushbytess 0x1ecad34c 0x90d29762 // method "distribute(address[],pay,uint64)void", method "conditionalBegin(uint64)void"
-    txna ApplicationArgs 0
-    match main_distribute_route@3 main_conditionalBegin_route@4
-
-main_after_if_else@11:
-    err
-
-main_conditionalBegin_route@4:
-    // tests/approvals/itxn-compose.algo.ts:52
-    // conditionalBegin(count: uint64) {
+    bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/itxn-compose.algo.ts:18
-    // class ItxnComposeAlgo extends Contract {
+    assert
+    pushbytess 0x1ecad34c 0x90d29762 // method "distribute(address[],pay,uint64)void", method "conditionalBegin(uint64)void"
+    txna ApplicationArgs 0
+    match main_distribute_route@4 main_conditionalBegin_route@5
+    err
+
+main_conditionalBegin_route@5:
+    // tests/approvals/itxn-compose.algo.ts:52
+    // conditionalBegin(count: uint64) {
     txna ApplicationArgs 1
     btoi
     bury 5
@@ -45,7 +41,7 @@ main_conditionalBegin_route@4:
     itxn_field GlobalNumByteSlice
     pushbytes base64(CoEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CiACAQAmAwhncmVldGluZwEgBBUffHUxGEAABCiAAGcxG0EAKoIFBACSJa4EJDeNPASg6BhyBNCiggAEUYC6IDYaAI4FAHoAbwBkAEEAAQAxGRREMRhENhoBIyhlRClQSwEjWUsCgQJZSwNPAksCUlcCAE8CTFBLAhVMTgNSVwIAUEkVFlcGAkxQKkxQsCJDMRkURDEYRDYaAVcCACMoZUQpUExQSRUWVwYCTFAqTFCwIkMxGYEEEkQxGEQiQzEZgQUSRDEYRCJDMRkURDEYFEQ2GgFXAgAoTGciQw==)
+    pushbytes base64(CiACAAEmAwhncmVldGluZwEgBBUffHUxGEAABCiAAGeCAgQkN408BKDoGHI2GgCOAgCWAI0xGRREMRhBAGuCAgTQooIABFGAuiA2GgCOAgA6AAEANhoBIihlRClQSwEiWUsCgQJZSwNPAksCUlcCAE8CTFBLAhVMTgNSVwIAUEkVFlcGAkxQKkxQsCNDNhoBVwIAIihlRClQTFBJFRZXBgJMUCpMULAjQ4AEAJIlrjYaAI4BAAEANhoBVwIAKExnI0MxGYEEEjEYEEMxGYEFEjEYEEM=)
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn-compose.algo.ts:54
     // const appId = hello.call.create({ args: ['Hi'] }).itxn.createdApp
@@ -63,17 +59,17 @@ main_conditionalBegin_route@4:
     intc_0 // 0
     bury 4
 
-main_for_header@16:
+main_for_header@13:
     // tests/approvals/itxn-compose.algo.ts:56
     // for (const i of urange(count)) {
     dig 3
     dig 5
     <
-    bz main_after_for@21
+    bz main_after_for@18
     // tests/approvals/itxn-compose.algo.ts:57
     // if (i === 0) {
     dig 3
-    bnz main_else_body@19
+    bnz main_else_body@16
     // tests/approvals/itxn-compose.algo.ts:58
     // itxnCompose.begin(Hello.prototype.greet, { appId, args: ['ho'] })
     itxn_begin
@@ -88,16 +84,16 @@ main_for_header@16:
     intc_0 // 0
     itxn_field Fee
 
-main_after_if_else@20:
+main_after_if_else@17:
     // tests/approvals/itxn-compose.algo.ts:56
     // for (const i of urange(count)) {
     dig 3
     intc_1 // 1
     +
     bury 4
-    b main_for_header@16
+    b main_for_header@13
 
-main_else_body@19:
+main_else_body@16:
     // tests/approvals/itxn-compose.algo.ts:60
     // itxnCompose.next(Hello.prototype.greet, { appId, args: ['ho'] })
     itxn_next
@@ -111,9 +107,9 @@ main_else_body@19:
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    b main_after_if_else@20
+    b main_after_if_else@17
 
-main_after_for@21:
+main_after_for@18:
     // tests/approvals/itxn-compose.algo.ts:63
     // itxnCompose.submit()
     itxn_submit
@@ -122,16 +118,9 @@ main_after_for@21:
     intc_1 // 1
     return
 
-main_distribute_route@3:
+main_distribute_route@4:
     // tests/approvals/itxn-compose.algo.ts:19
     // distribute(addresses: Address[], funds: gtxn.PaymentTxn, verifier: Application) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/itxn-compose.algo.ts:18
-    // class ItxnComposeAlgo extends Contract {
     txna ApplicationArgs 1
     txn GroupIndex
     intc_1 // 1
@@ -237,13 +226,13 @@ main_distribute_route@3:
     intc_1 // 1
     bury 4
 
-main_for_header@24:
+main_for_header@21:
     // tests/approvals/itxn-compose.algo.ts:32
     // for (const i of urange(1, addresses.length)) {
     dig 3
     dig 7
     <
-    bz main_after_for@26
+    bz main_after_for@23
     // tests/approvals/itxn-compose.algo.ts:33
     // const addr = addresses[i]
     dig 3
@@ -272,9 +261,9 @@ main_for_header@24:
     intc_1 // 1
     +
     bury 4
-    b main_for_header@24
+    b main_for_header@21
 
-main_after_for@26:
+main_after_for@23:
     // tests/approvals/itxn-compose.algo.ts:40-42
     // itxnCompose.next(VerifierContract.prototype.verify, {
     //   appId: verifier,
@@ -315,13 +304,12 @@ main_after_for@26:
     intc_1 // 1
     return
 
-main_bare_routing@7:
+main___algots__.defaultCreate@9:
     // tests/approvals/itxn-compose.algo.ts:18
     // class ItxnComposeAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@11
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_1 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating

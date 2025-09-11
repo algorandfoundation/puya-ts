@@ -5,7 +5,6 @@
 main:
     intcblock 0 1
     bytecblock "myState" "a"
-    pushbytes ""
     b main_block@0
 
 main_block@0:
@@ -17,7 +16,7 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     b main_abi_routing@2
 
 main_abi_routing@2:
@@ -27,23 +26,15 @@ main_abi_routing@2:
     pushbytes 0xa78000de // method "test()void"
     uncover 1
     match main_test_route@3
-    b main_switch_case_default@4
+    b main_switch_case_next@4
 
-main_switch_case_default@4:
-    b main_switch_case_next@5
+main_switch_case_next@4:
+    b main_after_if_else@6
 
-main_switch_case_next@5:
-    b main_after_if_else@10
-
-main_after_if_else@10:
+main_after_if_else@6:
     // tests/approvals/single-eval.algo.ts:4
     // class SingleEvalAlgo extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__puya_arc4_router__@11
-
-main_after_inlined_tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__puya_arc4_router__@11:
-    return
+    err
 
 main_test_route@3:
     // tests/approvals/single-eval.algo.ts:16
@@ -51,42 +42,40 @@ main_test_route@3:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
     txn ApplicationID
     intc_0 // 0
     !=
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     callsub test
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__puya_arc4_router__@11
+    b main_switch_case_next@4
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/single-eval.algo.ts:4
     // class SingleEvalAlgo extends Contract {
     txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@7
-    b main_switch_case_default@8
-
-main_switch_case_default@8:
-    b main_switch_case_next@9
-
-main_switch_case_next@9:
-    b main_after_if_else@10
-
-main___algots__.defaultCreate@7:
-    // tests/approvals/single-eval.algo.ts:4
-    // class SingleEvalAlgo extends Contract {
+    intc_0 // NoOp
+    ==
     txn ApplicationID
     intc_0 // 0
     ==
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__puya_arc4_router__@11
+    return
+
+
+// tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test[routing]() -> void:
+test:
+    b test_block@0
+
+test_block@0:
+    // tests/approvals/single-eval.algo.ts:16
+    // test() {
+    callsub tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test
+    intc_1 // 1
+    return
 
 
 // tests/approvals/single-eval.algo.ts::SingleEvalAlgo.a() -> bytes:
@@ -131,14 +120,14 @@ b_block@0:
 
 
 // tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test() -> void:
-test:
+tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test:
     // tests/approvals/single-eval.algo.ts:16
     // test() {
     proto 0 0
     intc_0 // 0
-    b test_block@0
+    b tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test_block@0
 
-test_block@0:
+tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test_block@0:
     // tests/approvals/single-eval.algo.ts:5
     // myState = GlobalState<uint64>()
     bytec_0 // "myState"
@@ -151,17 +140,17 @@ test_block@0:
     callsub a
     dup
     len
-    bz test_ternary_false@2
-    b test_ternary_true@1
+    bz tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test_ternary_false@2
+    b tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test_ternary_true@1
 
-test_ternary_true@1:
+tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test_ternary_true@1:
     // tests/approvals/single-eval.algo.ts:18
     // const result = this.a() || this.b()
     frame_dig 1
     frame_bury 0
-    b test_ternary_merge@3
+    b tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test_ternary_merge@3
 
-test_ternary_merge@3:
+tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test_ternary_merge@3:
     // tests/approvals/single-eval.algo.ts:18
     // const result = this.a() || this.b()
     frame_dig 0
@@ -185,12 +174,12 @@ test_ternary_merge@3:
     assert // Result should be "a"
     retsub
 
-test_ternary_false@2:
+tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test_ternary_false@2:
     // tests/approvals/single-eval.algo.ts:18
     // const result = this.a() || this.b()
     callsub b
     frame_bury 0
-    b test_ternary_merge@3
+    b tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test_ternary_merge@3
 
 
 // tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__algots__.defaultCreate() -> void:

@@ -1,5 +1,5 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { arc4, assert, assertMatch, BaseContract, BigUint, Bytes, ensureBudget, Txn } from '@algorandfoundation/algorand-typescript'
+import { arc4, assert, assertMatch, BaseContract, BigUint, Bytes, ensureBudget, Txn, Uint64 } from '@algorandfoundation/algorand-typescript'
 import {
   Address,
   Bool,
@@ -16,7 +16,6 @@ import {
   Uint,
   Uint128,
   Uint32,
-  Uint64,
   Uint8,
 } from '@algorandfoundation/algorand-typescript/arc4'
 import { bzero } from '@algorandfoundation/algorand-typescript/op'
@@ -37,12 +36,12 @@ function testUintN(n: uint64, b: biguint, c: Uint<256>) {
   const y = new Uint<16>()
   assert(y.bytes.length === 2)
   const z = new Uint<8>(n)
-  const z_native = z.native
+  const z_native = z.asUint64()
   assert(z_native === n)
   const big128 = new Uint128(2n ** 100n)
 
   const a = new Uint<128>(b)
-  const a_native = a.native
+  const a_native = a.asBigUint()
   assert(a_native === b)
 
   assert(c.bytes.length === 256 / 8)
@@ -52,9 +51,9 @@ function testUintN(n: uint64, b: biguint, c: Uint<256>) {
 
   assert(a_from_bytes === a)
 
-  const aliased64 = new Uint64(12)
+  const aliased64 = new arc4.Uint64(12)
 
-  assert(aliased64.native === 12)
+  assert(aliased64.asUint64() === 12)
   const aliased32 = new Uint32(50545)
   assert(BigUint(aliased32.bytes) === 50545n)
 
@@ -153,6 +152,37 @@ function testTuple() {
   assert(t1.length === 2)
 }
 
+function testAsUint64() {
+  const MAX_UINT64 = 2n ** 64n - 1n
+  const u8 = new arc4.Uint8(42)
+  assert(u8.asUint64() === 42)
+
+  const u64 = new arc4.Uint64(MAX_UINT64)
+  assert(u64.asUint64() === Uint64(MAX_UINT64))
+
+  const uint128 = new arc4.Uint<128>(1)
+  assert(uint128.asUint64() === 1)
+
+  const uint256 = new arc4.Uint<256>(MAX_UINT64)
+  assert(uint256.asUint64() === Uint64(MAX_UINT64))
+}
+
+function testAsBigUint() {
+  const u8 = new arc4.Uint8(42)
+  assert(u8.asBigUint() === 42n)
+
+  const MAX_UINT64 = 2n ** 64n - 1n
+  const u64 = new arc4.Uint64(MAX_UINT64)
+  assert(u64.asBigUint() === BigUint(MAX_UINT64))
+
+  const uint128 = new arc4.Uint<128>(1)
+  assert(uint128.asBigUint() === 1n)
+
+  const MAX_UINT256 = 2n ** 256n - 1n
+  const uint256 = new arc4.Uint<256>(MAX_UINT256)
+  assert(uint256.asBigUint() === BigUint(MAX_UINT256))
+}
+
 export class Arc4TypesTestContract extends BaseContract {
   public getArc4Values(): [Byte, Uint<8>, Address] {
     return [new Byte(), new Uint(255), new Address()]
@@ -174,6 +204,8 @@ export class Arc4TypesTestContract extends BaseContract {
     testZeroValues()
     const result = new arc4.DynamicArray<arc4.Uint<64>>()
     assert(result.length === 0)
+    testAsUint64()
+    testAsBigUint()
     return true
   }
 }

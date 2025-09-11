@@ -3,16 +3,14 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0
+    intcblock 0 1
     // tests/approvals/arc4-bool.algo.ts:4
     // class Arc4BoolAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     pushbytes 0xb0d2ae75 // method "test((bool,uint64,uint64,uint64,bool,bool))(bool,bool,bool,bool,bool)"
     txna ApplicationArgs 0
     match main_test_route@3
-
-main_after_if_else@10:
     err
 
 main_test_route@3:
@@ -34,49 +32,23 @@ main_test_route@3:
     // }) {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/arc4-bool.algo.ts:4
-    // class Arc4BoolAlgo extends Contract {
-    txna ApplicationArgs 1
-    // tests/approvals/arc4-bool.algo.ts:5-19
-    // test({
-    //   useRounds,
-    //   lastValid,
-    //   cooldown,
-    //   lastCalled,
-    //   exists,
-    //   hasMethodRestrictions,
-    // }: {
-    //   useRounds: boolean
-    //   lastValid: uint64
-    //   cooldown: uint64
-    //   lastCalled: uint64
-    //   exists: boolean
-    //   hasMethodRestrictions: boolean
-    // }) {
-    callsub test
-    pushbytes 0x151f7c75
-    swap
-    concat
-    log
-    intc_0 // 1
-    return
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    b test
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/arc4-bool.algo.ts:4
     // class Arc4BoolAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_0 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
 
 
-// tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.test(p: bytes) -> bytes:
+// tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.test[routing]() -> void:
 test:
     // tests/approvals/arc4-bool.algo.ts:5-19
     // test({
@@ -94,52 +66,52 @@ test:
     //   exists: boolean
     //   hasMethodRestrictions: boolean
     // }) {
-    proto 1 1
-    frame_dig -1
-    intc_1 // 0
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
     getbit
-    frame_dig -1
-    intc_0 // 1
+    dig 1
+    intc_1 // 1
     extract_uint64
-    swap
-    frame_dig -1
+    cover 2
+    dig 1
     pushint 9 // 9
     extract_uint64
-    swap
-    frame_dig -1
+    cover 2
+    dig 1
     pushint 17 // 17
     extract_uint64
-    swap
-    frame_dig -1
+    cover 2
+    dig 1
     pushint 200 // 200
     getbit
+    cover 2
     swap
-    frame_dig -1
     pushint 201 // 201
     getbit
     swap
     // tests/approvals/arc4-bool.algo.ts:20
     // const epochRef = useRounds ? Global.round : Global.latestTimestamp
-    bz test_ternary_false@2
+    bz test_ternary_false@3
     global Round
 
-test_ternary_merge@3:
+test_ternary_merge@4:
     // tests/approvals/arc4-bool.algo.ts:24
     // expired: epochRef > lastValid,
     dup
-    frame_dig 0
+    dig 6
     >
     // tests/approvals/arc4-bool.algo.ts:25
     // hasCooldown: cooldown > 0,
-    frame_dig 1
+    dig 5
     dup
     cover 2
-    intc_1 // 0
+    intc_0 // 0
     >
     // tests/approvals/arc4-bool.algo.ts:26
     // onCooldown: epochRef - lastCalled < cooldown,
     uncover 3
-    frame_dig 2
+    dig 6
     -
     uncover 3
     <
@@ -152,10 +124,10 @@ test_ternary_merge@3:
     //   hasMethodRestrictions,
     // }
     pushbytes 0x00
-    intc_1 // 0
-    frame_dig 3
+    intc_0 // 0
+    dig 6
     setbit
-    intc_0 // 1
+    intc_1 // 1
     uncover 4
     setbit
     pushint 2 // 2
@@ -165,13 +137,33 @@ test_ternary_merge@3:
     uncover 2
     setbit
     pushint 4 // 4
-    frame_dig 4
+    dig 2
     setbit
-    frame_bury 0
-    retsub
+    // tests/approvals/arc4-bool.algo.ts:5-19
+    // test({
+    //   useRounds,
+    //   lastValid,
+    //   cooldown,
+    //   lastCalled,
+    //   exists,
+    //   hasMethodRestrictions,
+    // }: {
+    //   useRounds: boolean
+    //   lastValid: uint64
+    //   cooldown: uint64
+    //   lastCalled: uint64
+    //   exists: boolean
+    //   hasMethodRestrictions: boolean
+    // }) {
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
 
-test_ternary_false@2:
+test_ternary_false@3:
     // tests/approvals/arc4-bool.algo.ts:20
     // const epochRef = useRounds ? Global.round : Global.latestTimestamp
     global LatestTimestamp
-    b test_ternary_merge@3
+    b test_ternary_merge@4

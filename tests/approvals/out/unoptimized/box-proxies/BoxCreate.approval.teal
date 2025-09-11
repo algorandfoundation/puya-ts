@@ -5,7 +5,6 @@
 main:
     intcblock 0 1 8 10
     bytecblock "a" "b" "c" "d" "bool" "arc4b"
-    pushbytes ""
     b main_block@0
 
 main_block@0:
@@ -17,7 +16,7 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     b main_abi_routing@2
 
 main_abi_routing@2:
@@ -27,23 +26,15 @@ main_abi_routing@2:
     pushbytes 0x932010c1 // method "createBoxes()void"
     uncover 1
     match main_createBoxes_route@3
-    b main_switch_case_default@4
+    b main_switch_case_next@4
 
-main_switch_case_default@4:
-    b main_switch_case_next@5
+main_switch_case_next@4:
+    b main_after_if_else@6
 
-main_switch_case_next@5:
-    b main_after_if_else@10
-
-main_after_if_else@10:
+main_after_if_else@6:
     // tests/approvals/box-proxies.algo.ts:140
     // class BoxCreate extends Contract {
-    intc_0 // 0
-    bury 1
-    b main_after_inlined_tests/approvals/box-proxies.algo.ts::BoxCreate.__puya_arc4_router__@11
-
-main_after_inlined_tests/approvals/box-proxies.algo.ts::BoxCreate.__puya_arc4_router__@11:
-    return
+    err
 
 main_createBoxes_route@3:
     // tests/approvals/box-proxies.algo.ts:149
@@ -51,49 +42,47 @@ main_createBoxes_route@3:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
     txn ApplicationID
     intc_0 // 0
     !=
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     callsub createBoxes
-    intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/box-proxies.algo.ts::BoxCreate.__puya_arc4_router__@11
+    b main_switch_case_next@4
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/box-proxies.algo.ts:140
     // class BoxCreate extends Contract {
     txn OnCompletion
-    intc_0 // 0
-    uncover 1
-    match main___algots__.defaultCreate@7
-    b main_switch_case_default@8
-
-main_switch_case_default@8:
-    b main_switch_case_next@9
-
-main_switch_case_next@9:
-    b main_after_if_else@10
-
-main___algots__.defaultCreate@7:
-    // tests/approvals/box-proxies.algo.ts:140
-    // class BoxCreate extends Contract {
+    intc_0 // NoOp
+    ==
     txn ApplicationID
     intc_0 // 0
     ==
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    bury 1
-    b main_after_inlined_tests/approvals/box-proxies.algo.ts::BoxCreate.__puya_arc4_router__@11
+    return
 
 
-// tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes() -> void:
+// tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes[routing]() -> void:
 createBoxes:
     b createBoxes_block@0
 
 createBoxes_block@0:
+    // tests/approvals/box-proxies.algo.ts:149
+    // createBoxes() {
+    callsub tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes
+    intc_1 // 1
+    return
+
+
+// tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes() -> void:
+tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes:
+    b tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes_block@0
+
+tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes_block@0:
     // tests/approvals/box-proxies.algo.ts:143
     // boxStr = Box<string>({ key: 'a' })
     bytec_0 // "a"

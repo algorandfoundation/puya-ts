@@ -9,24 +9,20 @@ main:
     // tests/approvals/precompiled-apps.algo.ts:85
     // export class ReceivesTxns extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@9
-    pushbytess 0x8f6892ef 0x9cd87de3 0xd366c869 0x81b67352 // method "getOne()uint64", method "receivesAnyTxn(txn)uint64", method "receivesAssetConfig(acfg)byte[]", method "receivesAssetConfigAndPay(acfg,pay)void"
-    txna ApplicationArgs 0
-    match main_getOne_route@3 main_receivesAnyTxn_route@4 main_receivesAssetConfig_route@5 main_receivesAssetConfigAndPay_route@6
-
-main_after_if_else@13:
-    err
-
-main_receivesAssetConfigAndPay_route@6:
-    // tests/approvals/precompiled-apps.algo.ts:104
-    // receivesAssetConfigAndPay(assetCfg: gtxn.AssetConfigTxn, payTxn: gtxn.PaymentTxn): void {
+    bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/precompiled-apps.algo.ts:85
-    // export class ReceivesTxns extends Contract {
+    assert
+    pushbytess 0x8f6892ef 0x9cd87de3 0xd366c869 0x81b67352 // method "getOne()uint64", method "receivesAnyTxn(txn)uint64", method "receivesAssetConfig(acfg)byte[]", method "receivesAssetConfigAndPay(acfg,pay)void"
+    txna ApplicationArgs 0
+    match main_getOne_route@4 main_receivesAnyTxn_route@5 main_receivesAssetConfig_route@6 main_receivesAssetConfigAndPay_route@7
+    err
+
+main_receivesAssetConfigAndPay_route@7:
+    // tests/approvals/precompiled-apps.algo.ts:104
+    // receivesAssetConfigAndPay(assetCfg: gtxn.AssetConfigTxn, payTxn: gtxn.PaymentTxn): void {
     txn GroupIndex
     pushint 2 // 2
     -
@@ -53,22 +49,13 @@ main_receivesAssetConfigAndPay_route@6:
     // assert(payTxn.type === TransactionType.Payment)
     intc_0 // 1
     ==
-    assert
     // tests/approvals/precompiled-apps.algo.ts:104
     // receivesAssetConfigAndPay(assetCfg: gtxn.AssetConfigTxn, payTxn: gtxn.PaymentTxn): void {
-    intc_0 // 1
     return
 
-main_receivesAssetConfig_route@5:
+main_receivesAssetConfig_route@6:
     // tests/approvals/precompiled-apps.algo.ts:101
     // receivesAssetConfig(assetCfg: gtxn.AssetConfigTxn): bytes {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/precompiled-apps.algo.ts:85
-    // export class ReceivesTxns extends Contract {
     txn GroupIndex
     intc_0 // 1
     -
@@ -89,16 +76,9 @@ main_receivesAssetConfig_route@5:
     intc_0 // 1
     return
 
-main_receivesAnyTxn_route@4:
+main_receivesAnyTxn_route@5:
     // tests/approvals/precompiled-apps.algo.ts:90
     // receivesAnyTxn(txn: gtxn.Transaction): uint64 {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/precompiled-apps.algo.ts:85
-    // export class ReceivesTxns extends Contract {
     txn GroupIndex
     intc_0 // 1
     -
@@ -116,17 +96,17 @@ main_receivesAnyTxn_route@4:
     // tests/approvals/precompiled-apps.algo.ts:92-93
     // case TransactionType.AssetConfig:
     //   return txn.createdAsset.id || txn.configAsset.id
-    bz main_after_if_else@26
+    bz main_after_if_else@23
     // tests/approvals/precompiled-apps.algo.ts:93
     // return txn.createdAsset.id || txn.configAsset.id
     dup
     gtxns CreatedAssetID
     dup
     bury 4
-    bz main_ternary_false@24
+    bz main_ternary_false@21
     dig 2
 
-main_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@32:
+main_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@29:
     // tests/approvals/precompiled-apps.algo.ts:90
     // receivesAnyTxn(txn: gtxn.Transaction): uint64 {
     itob
@@ -137,16 +117,16 @@ main_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receiv
     intc_0 // 1
     return
 
-main_ternary_false@24:
+main_ternary_false@21:
     // tests/approvals/precompiled-apps.algo.ts:93
     // return txn.createdAsset.id || txn.configAsset.id
     dup
     gtxns ConfigAsset
     // tests/approvals/precompiled-apps.algo.ts:90
     // receivesAnyTxn(txn: gtxn.Transaction): uint64 {
-    b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@32
+    b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@29
 
-main_after_if_else@26:
+main_after_if_else@23:
     // tests/approvals/precompiled-apps.algo.ts:94
     // case TransactionType.ApplicationCall:
     dig 3
@@ -155,56 +135,50 @@ main_after_if_else@26:
     // tests/approvals/precompiled-apps.algo.ts:94-95
     // case TransactionType.ApplicationCall:
     //   return txn.createdApp.id || txn.appId.id
-    bz main_after_if_else@31
+    bz main_after_if_else@28
     // tests/approvals/precompiled-apps.algo.ts:95
     // return txn.createdApp.id || txn.appId.id
     dup
     gtxns CreatedApplicationID
     dup
     bury 3
-    bz main_ternary_false@29
+    bz main_ternary_false@26
     dig 1
     // tests/approvals/precompiled-apps.algo.ts:90
     // receivesAnyTxn(txn: gtxn.Transaction): uint64 {
-    b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@32
+    b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@29
 
-main_ternary_false@29:
+main_ternary_false@26:
     // tests/approvals/precompiled-apps.algo.ts:95
     // return txn.createdApp.id || txn.appId.id
     dup
     gtxns ApplicationID
     // tests/approvals/precompiled-apps.algo.ts:90
     // receivesAnyTxn(txn: gtxn.Transaction): uint64 {
-    b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@32
+    b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@29
 
-main_after_if_else@31:
+main_after_if_else@28:
     // tests/approvals/precompiled-apps.algo.ts:97
     // return 0
     pushint 0 // 0
     // tests/approvals/precompiled-apps.algo.ts:90
     // receivesAnyTxn(txn: gtxn.Transaction): uint64 {
-    b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@32
+    b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@29
 
-main_getOne_route@3:
+main_getOne_route@4:
     // tests/approvals/precompiled-apps.algo.ts:86
     // getOne(): uint64 {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     pushbytes 0x151f7c750000000000000001
     log
     intc_0 // 1
     return
 
-main_bare_routing@9:
+main___algots__.defaultCreate@11:
     // tests/approvals/precompiled-apps.algo.ts:85
     // export class ReceivesTxns extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@13
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_0 // 1
-    return
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
