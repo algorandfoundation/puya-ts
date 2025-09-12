@@ -19,18 +19,18 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         exit 1u
     block@5: // test2_route_L21
         let tmp%0#9: uint64 = (global GroupSize)
-        let temp#0: uint64 = 0u
+        let value_internal%0#0: uint64 = 0u
         goto block@30
     block@30: // for_header_L22
-        let temp#1: uint64 = φ(temp#0 <- block@5, temp#2 <- block@42)
-        let continue_looping%0#0: bool = (< temp#1 tmp%0#9)
+        let temp#0: uint64 = φ(value_internal%0#0 <- block@5, value_internal%0#2 <- block@42)
+        let continue_looping%0#0: bool = (< temp#0 tmp%0#9)
         goto continue_looping%0#0 ? block@31 : block@43
     block@31: // for_body_L22
-        let awst_tmp%0#0: uint64 = ((gtxns TypeEnum) temp#1)
+        let awst_tmp%0#0: uint64 = ((gtxns TypeEnum) temp#0)
         let tmp%1#7: bool = (== awst_tmp%0#0 6u)
         goto tmp%1#7 ? block@32 : block@33
     block@32: // if_body_L25
-        let tmp%2#5: uint64 = ((gtxns ApplicationID) temp#1)
+        let tmp%2#5: uint64 = ((gtxns ApplicationID) temp#0)
         let tmp%3#6: bytes[8] = (itob tmp%2#5)
         (log tmp%3#6)
         goto block@42
@@ -38,7 +38,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%4#3: bool = (== awst_tmp%0#0 4u)
         goto tmp%4#3 ? block@34 : block@35
     block@34: // if_body_L28
-        let tmp%5#3: uint64 = ((gtxns XferAsset) temp#1)
+        let tmp%5#3: uint64 = ((gtxns XferAsset) temp#0)
         let tmp%6#3: bytes[8] = (itob tmp%5#3)
         (log tmp%6#3)
         goto block@42
@@ -46,7 +46,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%7#3: bool = (== awst_tmp%0#0 3u)
         goto tmp%7#3 ? block@36 : block@37
     block@36: // if_body_L31
-        let tmp%8#3: uint64 = ((gtxns ConfigAsset) temp#1)
+        let tmp%8#3: uint64 = ((gtxns ConfigAsset) temp#0)
         let tmp%9#3: bytes[8] = (itob tmp%8#3)
         (log tmp%9#3)
         goto block@42
@@ -54,23 +54,23 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%10#3: bool = (== awst_tmp%0#0 1u)
         goto tmp%10#3 ? block@38 : block@39
     block@38: // if_body_L34
-        let tmp%11#1: account = ((gtxns Receiver) temp#1)
+        let tmp%11#1: account = ((gtxns Receiver) temp#0)
         (log tmp%11#1)
         goto block@42
     block@39: // after_if_else_L34
         let tmp%12#0: bool = (== awst_tmp%0#0 2u)
         goto tmp%12#0 ? block@40 : block@41
     block@40: // if_body_L37
-        let tmp%13#0: bytes[32] = ((gtxns VotePK) temp#1)
+        let tmp%13#0: bytes[32] = ((gtxns VotePK) temp#0)
         (log tmp%13#0)
         goto block@42
     block@41: // after_if_else_L37
-        let tmp%14#0: uint64 = ((gtxns FreezeAsset) temp#1)
+        let tmp%14#0: uint64 = ((gtxns FreezeAsset) temp#0)
         let tmp%15#0: bytes[8] = (itob tmp%14#0)
         (log tmp%15#0)
         goto block@42
     block@42: // L24
-        let temp#2: uint64 = (+ temp#1 1u)
+        let value_internal%0#2: uint64 = (+ temp#0 1u)
         goto block@30
     block@43: // after_for_L22
         exit 1u

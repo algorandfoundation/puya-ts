@@ -5,7 +5,7 @@
 main:
     intcblock 8 10 40 2
     bytecblock "a" "b" "c" "d" "bool" "arc4b"
-    // tests/approvals/box-proxies.algo.ts:140
+    // tests/approvals/box-proxies.algo.ts:142
     // class BoxCreate extends Contract {
     txn NumAppArgs
     bz main___algots__.defaultCreate@5
@@ -15,7 +15,7 @@ main:
     err
 
 main_createBoxes_route@3:
-    // tests/approvals/box-proxies.algo.ts:149
+    // tests/approvals/box-proxies.algo.ts:151
     // createBoxes() {
     txn OnCompletion
     !
@@ -25,7 +25,7 @@ main_createBoxes_route@3:
     b createBoxes
 
 main___algots__.defaultCreate@5:
-    // tests/approvals/box-proxies.algo.ts:140
+    // tests/approvals/box-proxies.algo.ts:142
     // class BoxCreate extends Contract {
     txn OnCompletion
     !
@@ -37,131 +37,131 @@ main___algots__.defaultCreate@5:
 
 // tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes[routing]() -> void:
 createBoxes:
-    // tests/approvals/box-proxies.algo.ts:143
+    // tests/approvals/box-proxies.algo.ts:145
     // boxStr = Box<string>({ key: 'a' })
     bytec_0 // "a"
-    // tests/approvals/box-proxies.algo.ts:150
+    // tests/approvals/box-proxies.algo.ts:152
     // this.boxStr.create({ size: 10 })
     intc_1 // 10
     box_create
     pop
-    // tests/approvals/box-proxies.algo.ts:143
+    // tests/approvals/box-proxies.algo.ts:145
     // boxStr = Box<string>({ key: 'a' })
     bytec_0 // "a"
-    // tests/approvals/box-proxies.algo.ts:151
+    // tests/approvals/box-proxies.algo.ts:153
     // assert(this.boxStr.length === 10)
     box_len
     pop
     intc_1 // 10
     ==
     assert
-    // tests/approvals/box-proxies.algo.ts:144
+    // tests/approvals/box-proxies.algo.ts:146
     // boxUint = Box<uint64>({ key: 'b' })
     bytec_1 // "b"
-    // tests/approvals/box-proxies.algo.ts:152
+    // tests/approvals/box-proxies.algo.ts:154
     // this.boxUint.create()
     intc_0 // 8
     box_create
     pop
-    // tests/approvals/box-proxies.algo.ts:144
+    // tests/approvals/box-proxies.algo.ts:146
     // boxUint = Box<uint64>({ key: 'b' })
     bytec_1 // "b"
-    // tests/approvals/box-proxies.algo.ts:153
+    // tests/approvals/box-proxies.algo.ts:155
     // assert(this.boxUint.length === 8)
     box_len
     pop
     intc_0 // 8
     ==
     assert
-    // tests/approvals/box-proxies.algo.ts:145
+    // tests/approvals/box-proxies.algo.ts:147
     // boxStaticArray = Box<StaticArray<Uint32, 10>>({ key: 'c' })
     bytec_2 // "c"
-    // tests/approvals/box-proxies.algo.ts:154
+    // tests/approvals/box-proxies.algo.ts:156
     // this.boxStaticArray.create()
     intc_2 // 40
     box_create
     pop
-    // tests/approvals/box-proxies.algo.ts:145
+    // tests/approvals/box-proxies.algo.ts:147
     // boxStaticArray = Box<StaticArray<Uint32, 10>>({ key: 'c' })
     bytec_2 // "c"
-    // tests/approvals/box-proxies.algo.ts:155
+    // tests/approvals/box-proxies.algo.ts:157
     // assert(this.boxStaticArray.length === (32 / 8) * 10)
     box_len
     pop
     intc_2 // 40
     ==
     assert
-    // tests/approvals/box-proxies.algo.ts:146
+    // tests/approvals/box-proxies.algo.ts:148
     // boxDynamicArray = Box<DynamicArray<Uint8>>({ key: 'd' })
     bytec_3 // "d"
-    // tests/approvals/box-proxies.algo.ts:156
+    // tests/approvals/box-proxies.algo.ts:158
     // this.boxDynamicArray.create({ size: 2 })
     intc_3 // 2
     box_create
     pop
-    // tests/approvals/box-proxies.algo.ts:146
+    // tests/approvals/box-proxies.algo.ts:148
     // boxDynamicArray = Box<DynamicArray<Uint8>>({ key: 'd' })
     bytec_3 // "d"
-    // tests/approvals/box-proxies.algo.ts:157
+    // tests/approvals/box-proxies.algo.ts:159
     // assert(this.boxDynamicArray.length === 2)
     box_len
     pop
     intc_3 // 2
     ==
     assert
-    // tests/approvals/box-proxies.algo.ts:147
+    // tests/approvals/box-proxies.algo.ts:149
     // boxTuple = Box<Tuple<[Uint8, Uint8, Bool, Bool]>>({ key: 'e' })
     pushbytes "e"
-    // tests/approvals/box-proxies.algo.ts:158
+    // tests/approvals/box-proxies.algo.ts:160
     // this.boxTuple.create()
     pushint 3 // 3
     box_create
     pop
-    // tests/approvals/box-proxies.algo.ts:147
+    // tests/approvals/box-proxies.algo.ts:149
     // boxTuple = Box<Tuple<[Uint8, Uint8, Bool, Bool]>>({ key: 'e' })
     pushbytes "e"
-    // tests/approvals/box-proxies.algo.ts:159
+    // tests/approvals/box-proxies.algo.ts:161
     // assert(this.boxTuple.length === 3)
     box_len
     pop
     pushint 3 // 3
     ==
     assert
-    // tests/approvals/box-proxies.algo.ts:141
+    // tests/approvals/box-proxies.algo.ts:143
     // boxBool = Box<boolean>({ key: 'bool' })
     bytec 4 // "bool"
-    // tests/approvals/box-proxies.algo.ts:160
+    // tests/approvals/box-proxies.algo.ts:162
     // this.boxBool.create()
     intc_0 // 8
     box_create
     pop
-    // tests/approvals/box-proxies.algo.ts:141
+    // tests/approvals/box-proxies.algo.ts:143
     // boxBool = Box<boolean>({ key: 'bool' })
     bytec 4 // "bool"
-    // tests/approvals/box-proxies.algo.ts:161
+    // tests/approvals/box-proxies.algo.ts:163
     // assert(this.boxBool.length === 8)
     box_len
     pop
     intc_0 // 8
     ==
     assert
-    // tests/approvals/box-proxies.algo.ts:142
+    // tests/approvals/box-proxies.algo.ts:144
     // boxArc4Bool = Box<Bool>({ key: 'arc4b' })
     bytec 5 // "arc4b"
-    // tests/approvals/box-proxies.algo.ts:162
+    // tests/approvals/box-proxies.algo.ts:164
     // this.boxArc4Bool.create()
     pushint 1 // 1
     box_create
     pop
-    // tests/approvals/box-proxies.algo.ts:142
+    // tests/approvals/box-proxies.algo.ts:144
     // boxArc4Bool = Box<Bool>({ key: 'arc4b' })
     bytec 5 // "arc4b"
-    // tests/approvals/box-proxies.algo.ts:163
+    // tests/approvals/box-proxies.algo.ts:165
     // assert(this.boxArc4Bool.length === 1)
     box_len
     pop
     pushint 1 // 1
     ==
-    // tests/approvals/box-proxies.algo.ts:149
+    // tests/approvals/box-proxies.algo.ts:151
     // createBoxes() {
     return

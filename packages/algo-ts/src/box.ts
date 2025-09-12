@@ -55,9 +55,45 @@ export type Box<TValue> = {
   readonly length: uint64
 
   /**
-   * Returns a BoxRef instance which allows for more direct mutation of the bytes contained in this box
+   * Splice the specified bytes into the box starting at `start`, removing `length` bytes
+   * from the existing value and replacing them with `value` before appending the remainder of the original box value.
+   *
+   * If the resulting byte value is larger than length, bytes will be trimmed from the end
+   * If the resulting byte value is smaller than length, zero bytes will be appended to the end
+   * Error if the box does not exist
+   * @param start The index to start inserting the value
+   * @param length The number of bytes after `start` to be omitted
+   * @param value The value to be inserted
    */
-  readonly ref: BoxRef
+  splice(start: uint64, length: uint64, value: bytes): void
+  /**
+   * Replace bytes in a box starting at `start`.
+   *
+   * Error if the box does not exist
+   * Error if `start` + `value.length` is greater than the box size
+   * @param start The index to start replacing
+   * @param value The value to be written
+   */
+  replace(start: uint64, value: bytes): void
+  /**
+   * Extract a slice of bytes from the box
+   *
+   * Error if the box does not exist
+   * Error if `start` + `length` is greater than the box size
+   * @param start The index to start extracting
+   * @param length The number of bytes to extract
+   * @returns The extracted bytes
+   */
+  extract(start: uint64, length: uint64): bytes
+  /**
+   * Resize the box to the specified size.
+   *
+   * Adds zero bytes to the end if the new size is larger
+   * Removes end bytes if the new size is smaller
+   * Error if the box does not exist
+   * @param newSize The new size for the box
+   */
+  resize(newSize: uint64): void
 }
 /**
  * A BoxMap proxy

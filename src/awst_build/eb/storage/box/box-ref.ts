@@ -103,7 +103,7 @@ class BoxRefCreateFunctionBuilder extends BoxRefBaseFunctionBuilder {
     )
   }
 }
-class BoxRefResizeFunctionBuilder extends BoxRefBaseFunctionBuilder {
+export class BoxRefResizeFunctionBuilder extends BoxRefBaseFunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [size],
@@ -127,7 +127,7 @@ class BoxRefResizeFunctionBuilder extends BoxRefBaseFunctionBuilder {
     )
   }
 }
-class BoxRefExtractFunctionBuilder extends BoxRefBaseFunctionBuilder {
+export class BoxRefExtractFunctionBuilder extends BoxRefBaseFunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [start, length],
@@ -151,7 +151,7 @@ class BoxRefExtractFunctionBuilder extends BoxRefBaseFunctionBuilder {
     )
   }
 }
-class BoxRefReplaceFunctionBuilder extends BoxRefBaseFunctionBuilder {
+export class BoxRefReplaceFunctionBuilder extends BoxRefBaseFunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [start, value],
@@ -228,7 +228,7 @@ class BoxRefPutFunctionBuilder extends BoxRefBaseFunctionBuilder {
     )
   }
 }
-class BoxRefSpliceFunctionBuilder extends BoxRefBaseFunctionBuilder {
+export class BoxRefSpliceFunctionBuilder extends BoxRefBaseFunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [start, stop, value],

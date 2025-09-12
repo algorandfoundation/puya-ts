@@ -1,5 +1,6 @@
 import type { Account, bytes, FixedArray, uint64 } from '@algorandfoundation/algorand-typescript'
 import {
+  arc4,
   assert,
   BaseContract,
   Box,
@@ -10,10 +11,11 @@ import {
   Contract,
   ensureBudget,
   Txn,
+  Uint64,
 } from '@algorandfoundation/algorand-typescript'
 import type { Address, Bool, DynamicArray, StaticArray, Tuple, Uint32 } from '@algorandfoundation/algorand-typescript/arc4'
-import { Uint8 } from '@algorandfoundation/algorand-typescript/arc4'
-import { itob } from '@algorandfoundation/algorand-typescript/op'
+import { sizeOf, Uint8 } from '@algorandfoundation/algorand-typescript/arc4'
+import { Global, itob } from '@algorandfoundation/algorand-typescript/op'
 
 const boxA = Box<string>({ key: Bytes('A') })
 
@@ -241,7 +243,7 @@ class BoxToRefTest extends Contract {
 
     boxForCaller.create()
 
-    const boxRef = boxForCaller.ref
+    const boxRef = boxForCaller
 
     boxRef.replace(0, new Uint8(123).bytes)
 
@@ -283,4 +285,250 @@ export class LargeBox extends Contract {
       assert(this.box.value[index].balance === index + 10)
     }
   }
+}
+
+type StaticInts = arc4.StaticArray<arc4.Uint8, 4>
+type Bytes1024 = FixedArray<arc4.Byte, 1024>
+type ManyInts = FixedArray<uint64, 513>
+
+type LargeStruct = {
+  a: Bytes1024
+  b: Bytes1024
+  c: Bytes1024
+  d: Bytes1024
+  e: uint64
+  f: Bytes1024
+  g: Bytes1024
+  h: uint64
+}
+
+type FixedArrayUint64 = {
+  length: arc4.Uint16
+  arr: FixedArray<uint64, 4095>
+}
+
+type DynamicArrayInAStruct = {
+  a: uint64
+  arr: Array<uint64>
+  b: uint64
+  arr2: Array<uint64>
+}
+
+type FixedArrayInAStruct = {
+  a: uint64
+  arr_offset: arc4.Uint16
+  b: uint64
+  arr2_offset: arc4.Uint16
+  arr: FixedArrayUint64
+}
+
+export type InnerStruct = {
+  c: uint64
+  arrArr: Array<Array<uint64>>
+  d: uint64
+}
+
+type NestedStruct = {
+  a: uint64
+  inner: InnerStruct
+  woah: Array<InnerStruct>
+  b: uint64
+}
+
+type LargeNestedStruct = {
+  padding: FixedArray<arc4.Byte, 4096>
+  nested: NestedStruct
+}
+
+class Arc4BoxContract extends arc4.Contract {
+  boxA = Box<uint64>({ key: 'boxA' })
+  boxB = Box<arc4.DynamicBytes>({ key: 'b' })
+  boxC = Box<arc4.Str>({ key: 'BOX_C' })
+  boxD = Box<bytes>({ key: 'boxD' })
+  boxMap = BoxMap<uint64, string>({ keyPrefix: '' })
+  boxRef = Box<bytes>({ key: 'boxRef' })
+  boxLarge = Box<LargeStruct>({ key: 'boxLarge' })
+  manyInts = Box<ManyInts>({ key: 'manyInts' })
+
+  dynamicBox = Box<Array<uint64>>({ key: 'dynamicBox' })
+  dynamicArrStruct = Box<DynamicArrayInAStruct>({ key: 'dynamicArrStruct' })
+  tooManyBools = Box<FixedArray<boolean, 33_000>>({ key: 'tooManyBools' })
+
+  constructor() {
+    super()
+    assert(sizeOf<ManyInts>() > 4096, 'expected ManyInts to exceed max bytes size')
+  }
+
+  setBoxes(a: uint64, b: bytes, c: arc4.Str) {
+    const dynamicBytes = new arc4.DynamicBytes(b)
+    this.boxA.value = a
+    this.boxB.value = dynamicBytes
+    this.boxC.value = c
+    this.boxD.value = dynamicBytes.native
+    this.boxLarge.create()
+    this.boxLarge.value.e = 42
+    this.boxLarge.replace(sizeOf<Bytes1024>() * 4, new arc4.Uint64(42).bytes)
+
+    const bValue = clone(this.boxB.value)
+    assert(this.boxB.value.length === bValue.length, 'direct reference should match copy')
+    this.boxA.value += 3
+
+    // test.length
+    assert(this.boxA.length === 8)
+    assert(this.boxB.length === dynamicBytes.bytes.length)
+    assert(this.boxC.length === c.bytes.length)
+    assert(this.boxD.length === dynamicBytes.native.length)
+
+    // test.value.bytes
+    assert(this.boxC.value.bytes.at(0) === c.bytes.at(0))
+    assert(this.boxC.value.bytes.at(-1) === c.bytes.at(-1))
+    assert(this.boxC.value.bytes.slice(0, -1) === c.bytes.slice(0, -1))
+    assert(this.boxC.value.bytes.slice(0, 2) === c.bytes.slice(0, 2))
+
+    // test.value with Bytes type
+    assert(this.boxD.value.at(0) === dynamicBytes.native.at(0))
+    assert(this.boxD.value.at(-1) === dynamicBytes.native.at(-1))
+    assert(this.boxD.value.slice(0, -1) === dynamicBytes.native.slice(0, -1))
+    assert(this.boxD.value.slice(0, 5) === dynamicBytes.native.slice(0, 5))
+    assert(this.boxD.value.slice(0, Uint64(2)) === dynamicBytes.native.slice(0, Uint64(2)))
+    assert(this.boxLarge.length === sizeOf<LargeStruct>())
+  }
+
+  checkKeys() {
+    assert(this.boxA.key === Bytes('boxA'), 'box a key ok')
+    assert(this.boxB.key === Bytes('b'), 'box b key ok')
+    assert(this.boxC.key === Bytes('BOX_C'), 'box c key ok')
+    assert(this.boxLarge.key === Bytes('boxLarge'), 'box large key ok')
+  }
+
+  createManyInts() {
+    this.manyInts.create()
+  }
+
+  setManyInts(index: uint64, value: uint64) {
+    this.manyInts.value[index] = value
+  }
+
+  sumManyInts() {
+    ensureBudget(10_500)
+    let total = Uint64(0)
+    for (const val of this.manyInts.value) {
+      total = total + val
+    }
+    return total
+  }
+
+  deleteBoxes() {
+    this.boxA.delete()
+    this.boxB.delete()
+    this.boxC.delete()
+    assert(this.boxA.get({ default: Uint64(42) }) === 42)
+    assert(this.boxB.get({ default: new arc4.DynamicBytes(Bytes('42')) }).native === Bytes('42'))
+    assert(this.boxC.get({ default: new arc4.Str('42') }).native === '42')
+
+    const [a, aExists] = this.boxA.maybe()
+    assert(!aExists)
+    assert(a === 0)
+    this.boxLarge.delete()
+  }
+  indirectExtractAndReplace() {
+    const large = clone(this.boxLarge.value)
+    large.e += 1
+    this.boxLarge.value = clone(large)
+  }
+
+  readBoxes(): readonly [uint64, bytes, arc4.Str, uint64] {
+    return [Uint64(getBoxValuePlus1(this.boxA) - 1), this.boxB.value.native, this.boxC.value, this.boxLarge.value.e] as const
+  }
+
+  boxesExist(): readonly [boolean, boolean, boolean, boolean] {
+    return [this.boxA.exists, this.boxB.exists, this.boxC.exists, this.boxLarge.exists] as const
+  }
+
+  sliceBox() {
+    const box0 = Box<bytes>({ key: '0' })
+    box0.value = Bytes('Testing testing 123')
+    assert(box0.value.slice(0, 7) === Bytes('Testing'))
+
+    this.boxC.value = new arc4.Str('Hello')
+    assert(this.boxC.value.bytes.slice(2, 10) === Bytes('Hello'))
+  }
+
+  arc4Box() {
+    const boxD = Box<StaticInts>({ key: Bytes('d') })
+    boxD.value = new arc4.StaticArray(new arc4.Uint8(0), new arc4.Uint8(1), new arc4.Uint8(2), new arc4.Uint8(3))
+    assert(boxD.value[0].asUint64() === 0)
+    assert(boxD.value[1].asUint64() === 1)
+    assert(boxD.value[2].asUint64() === 2)
+    assert(boxD.value[3].asUint64() === 3)
+  }
+
+  testBoxRef() {
+    // init ref, with valid key types
+    const boxRef1 = Box<bytes>({ key: 'blob' })
+    assert(!boxRef1.exists, 'no data')
+    const boxRef2 = Box<bytes>({ key: Bytes('blob') })
+    assert(!boxRef2.exists, 'no data')
+
+    // create
+    assert(boxRef1.create({ size: Uint64(32) }))
+    assert(boxRef1.exists, 'has data')
+    // manipulate data
+    const senderBytes = Txn.sender.bytes
+    const appAddress = Global.currentApplicationAddress.bytes
+    const value3 = Bytes('hello')
+    boxRef1.replace(0, senderBytes)
+    boxRef1.resize(8000)
+    boxRef1.splice(0, 0, appAddress)
+    boxRef1.replace(64, value3)
+    const prefix = boxRef1.extract(0, 32 * 2 + value3.length)
+    assert(prefix === appAddress.concat(senderBytes).concat(value3))
+    // delete
+    boxRef1.delete()
+    assert(boxRef1.key === Bytes('blob'))
+    // query
+    const [value, exists] = boxRef1.maybe()
+    assert(!exists)
+    assert(value === Bytes(''))
+    assert(boxRef1.get({ default: senderBytes }) === senderBytes)
+    // update
+    boxRef1.value = senderBytes.concat(appAddress)
+    assert(boxRef1.exists, 'Blob exists')
+    assert(boxRef1.length === 64)
+    assert(getBoxRefLength(boxRef1) === 64)
+    // instance box ref
+    this.boxRef.create({ size: Uint64(32) })
+    assert(this.boxRef.exists, 'has data')
+    this.boxRef.delete()
+  }
+
+  createBools() {
+    this.tooManyBools.create()
+  }
+
+  setBool(index: uint64, value: boolean) {
+    this.tooManyBools.value[index] = value
+  }
+
+  sumBools(stopAtTotal: uint64): uint64 {
+    ensureBudget(13_000)
+    let total: uint64 = 0
+    for (const value of this.tooManyBools.value) {
+      if (value) {
+        total += 1
+      }
+      if (total === stopAtTotal) {
+        break
+      }
+    }
+    return total
+  }
+}
+
+function getBoxValuePlus1(box: Box<uint64>): uint64 {
+  return Uint64(box.value + 1)
+}
+
+function getBoxRefLength(ref: Box<bytes>): uint64 {
+  return ref.length
 }

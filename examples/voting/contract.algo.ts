@@ -4,8 +4,8 @@ import {
   arc4,
   assert,
   assertMatch,
+  Box,
   BoxMap,
-  BoxRef,
   Bytes,
   clone,
   ensureBudget,
@@ -44,7 +44,7 @@ export class VotingRoundApp extends arc4.Contract {
   isBootstrapped = GlobalState<boolean>({ initialValue: false })
   voterCount = GlobalState({ initialValue: Uint64(0) })
   closeTime = GlobalState<uint64>()
-  tallyBox = BoxRef({ key: Bytes`V` })
+  tallyBox = Box<bytes>({ key: Bytes`V` })
   votesByAccount = BoxMap<Account, VoteIndexArray>({ keyPrefix: Bytes() })
   voteId = GlobalState<string>()
   snapshotPublicKey = GlobalState<bytes<32>>()

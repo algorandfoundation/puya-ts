@@ -4,13 +4,18 @@ import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { boolPType, BoxPType, boxRefType, bytesPType, ReadonlyTuplePType, stringPType, uint64PType } from '../../../ptypes'
+import { boolPType, BoxPType, bytesPType, ReadonlyTuplePType, stringPType, uint64PType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { extractKey } from '../util'
 import { boxExists, boxLength, BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
-import { BoxRefExpressionBuilder } from './box-ref'
+import {
+  BoxRefExtractFunctionBuilder,
+  BoxRefReplaceFunctionBuilder,
+  BoxRefResizeFunctionBuilder,
+  BoxRefSpliceFunctionBuilder,
+} from './box-ref'
 
 export class BoxFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -60,8 +65,14 @@ export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
         return new BoxGetFunctionBuilder(boxValueExpr, this.ptype.contentType, sourceLocation)
       case 'maybe':
         return new BoxMaybeFunctionBuilder(boxValueExpr, this.ptype.contentType, sourceLocation)
-      case 'ref':
-        return new BoxRefExpressionBuilder(this._expr, boxRefType)
+      case 'extract':
+        return new BoxRefExtractFunctionBuilder(boxValueExpr)
+      case 'replace':
+        return new BoxRefReplaceFunctionBuilder(boxValueExpr)
+      case 'resize':
+        return new BoxRefResizeFunctionBuilder(boxValueExpr)
+      case 'splice':
+        return new BoxRefSpliceFunctionBuilder(boxValueExpr)
     }
     return super.memberAccess(name, sourceLocation)
   }
