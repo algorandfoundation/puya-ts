@@ -4,18 +4,12 @@ import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
-import { boolPType, BoxPType, bytesPType, ReadonlyTuplePType, stringPType, uint64PType } from '../../../ptypes'
+import { boolPType, BoxPType, bytesPType, ReadonlyTuplePType, stringPType, uint64PType, voidPType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { extractKey } from '../util'
 import { boxExists, boxLength, BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
-import {
-  BoxRefExtractFunctionBuilder,
-  BoxRefReplaceFunctionBuilder,
-  BoxRefResizeFunctionBuilder,
-  BoxRefSpliceFunctionBuilder,
-} from './box-ref'
 
 export class BoxFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -66,13 +60,13 @@ export class BoxExpressionBuilder extends BoxProxyExpressionBuilder<BoxPType> {
       case 'maybe':
         return new BoxMaybeFunctionBuilder(boxValueExpr, this.ptype.contentType, sourceLocation)
       case 'extract':
-        return new BoxRefExtractFunctionBuilder(boxValueExpr)
+        return new BoxExtractFunctionBuilder(boxValueExpr, sourceLocation)
       case 'replace':
-        return new BoxRefReplaceFunctionBuilder(boxValueExpr)
+        return new BoxReplaceFunctionBuilder(boxValueExpr, sourceLocation)
       case 'resize':
-        return new BoxRefResizeFunctionBuilder(boxValueExpr)
+        return new BoxResizeFunctionBuilder(boxValueExpr, sourceLocation)
       case 'splice':
-        return new BoxRefSpliceFunctionBuilder(boxValueExpr)
+        return new BoxSpliceFunctionBuilder(boxValueExpr, sourceLocation)
     }
     return super.memberAccess(name, sourceLocation)
   }
@@ -216,6 +210,132 @@ class BoxMaybeFunctionBuilder extends FunctionBuilder {
         field: this.boxValue,
       }),
       type,
+    )
+  }
+}
+
+export class BoxResizeFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private boxValue: BoxValueExpression,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [size],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      funcName: 'Box.resize',
+      callLocation: sourceLocation,
+      argSpec: (a) => [a.required(uint64PType)],
+    })
+    return instanceEb(
+      nodeFactory.intrinsicCall({
+        opCode: 'box_resize',
+        stackArgs: [this.boxValue.key, size.resolve()],
+        wtype: wtypes.voidWType,
+        immediates: [],
+        sourceLocation,
+      }),
+      voidPType,
+    )
+  }
+}
+export class BoxExtractFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private boxValue: BoxValueExpression,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [start, length],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      funcName: 'Box.extract',
+      callLocation: sourceLocation,
+      argSpec: (a) => [a.required(uint64PType), a.required(uint64PType)],
+    })
+    return instanceEb(
+      nodeFactory.intrinsicCall({
+        opCode: 'box_extract',
+        stackArgs: [this.boxValue.key, start.resolve(), length.resolve()],
+        wtype: wtypes.bytesWType,
+        immediates: [],
+        sourceLocation,
+      }),
+      bytesPType,
+    )
+  }
+}
+export class BoxReplaceFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private boxValue: BoxValueExpression,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [start, value],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      funcName: 'Box.replace',
+      callLocation: sourceLocation,
+      argSpec: (a) => [a.required(uint64PType), a.required(bytesPType)],
+    })
+    return instanceEb(
+      nodeFactory.intrinsicCall({
+        opCode: 'box_replace',
+        stackArgs: [this.boxValue.key, start.resolve(), value.resolve()],
+        wtype: wtypes.voidWType,
+        immediates: [],
+        sourceLocation,
+      }),
+      voidPType,
+    )
+  }
+}
+
+export class BoxSpliceFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private boxValue: BoxValueExpression,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    const {
+      args: [start, stop, value],
+    } = parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      funcName: 'Box.splice',
+      callLocation: sourceLocation,
+      argSpec: (a) => [a.required(uint64PType), a.required(uint64PType), a.required(bytesPType)],
+    })
+    return instanceEb(
+      nodeFactory.intrinsicCall({
+        opCode: 'box_splice',
+        stackArgs: [this.boxValue.key, start.resolve(), stop.resolve(), value.resolve()],
+        wtype: wtypes.voidWType,
+        immediates: [],
+        sourceLocation,
+      }),
+      voidPType,
     )
   }
 }

@@ -2,10 +2,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@0: // L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
         goto tmp%0#1 ? block@2 : block@5
-    block@2: // abi_routing_L270
+    block@2: // abi_routing_L269
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "test()void" => block@3, * => block@4}
-    block@3: // test_route_L273
+    block@3: // test_route_L272
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (! tmp%3#0)
         let tmp%5#0: uint64 = (txn ApplicationID)
@@ -13,9 +13,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
         tests/approvals/box-proxies.algo.ts::LargeBox.test[routing]()
         goto block@4
-    block@4: // switch_case_next_L270
+    block@4: // switch_case_next_L269
         fail
-    block@5: // __algots__.defaultCreate_L270
+    block@5: // __algots__.defaultCreate_L269
         let tmp%8#0: uint64 = (txn OnCompletion)
         let tmp%9#0: bool = (! tmp%8#0)
         let tmp%10#0: uint64 = (txn ApplicationID)
@@ -45,11 +45,11 @@ subroutine tests/approvals/box-proxies.algo.ts::LargeBox.test[routing]() -> void
         (assert tmp%0#0) // Box should be created with the correct size
         let item_index_internal%0#0: uint64 = 0u
         goto block@2
-    block@2: // for_header_L278
+    block@2: // for_header_L277
         let temp.0#0: uint64 = φ(item_index_internal%0#0 <- block@12, item_index_internal%0#2 <- block@3)
         let continue_looping%0#0: bool = (< temp.0#0 200u)
         goto continue_looping%0#0 ? block@3 : block@5
-    block@3: // for_body_L278
+    block@3: // for_body_L277
         let box%element_offset%0#0: uint64 = (* temp.0#0 64u)
         let temp.1#0: Encoded(uint8[32],uint64,uint64,uint64,uint64) = (box_extract "large" box%element_offset%0#0 64u)
         let tmp%3#0: uint64 = (+ temp.0#0 10u)
@@ -62,5 +62,5 @@ subroutine tests/approvals/box-proxies.algo.ts::LargeBox.test[routing]() -> void
         (assert tmp%5#0)
         let item_index_internal%0#2: uint64 = (+ temp.0#0 1u)
         goto block@2
-    block@5: // after_for_L278
+    block@5: // after_for_L277
         exit 1u

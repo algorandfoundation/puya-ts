@@ -49,7 +49,7 @@ subroutine testBoxRef(box: box_key, length: uint64): void
   } else {
     box_create(box, 4)
   }
-  box_put(box, 0xffffffff)
+  Box[box].value: bytes = 0xffffffff
   assert(STATE_GET(Box[box].value, default=0x) == 0xffffffff)
   maybeBox: readonly [bytes, bool] = STATE_GET_EX(Box[box].value)
   assert(maybeBox.1)

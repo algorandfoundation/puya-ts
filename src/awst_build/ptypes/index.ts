@@ -424,21 +424,7 @@ export class BoxMapPType extends StorageProxyPType {
     return visitor.visitBoxMapPType(this)
   }
 }
-export class BoxRefPType extends StorageProxyPType {
-  readonly [PType.IdSymbol] = 'BoxRefPType'
-  readonly module = Constants.moduleNames.algoTs.box
-  get name() {
-    return 'BoxRef'
-  }
-  constructor() {
-    super({ keyWType: wtypes.boxKeyWType, content: bytesPType })
-  }
-
-  accept<T>(visitor: PTypeVisitor<T>): T {
-    return visitor.visitBoxRefPType(this)
-  }
-}
-export type AppStorageType = GlobalStateType | LocalStateType | BoxPType | BoxRefPType | BoxMapPType
+export type AppStorageType = GlobalStateType | LocalStateType | BoxPType | BoxMapPType
 
 /**
  * An open generic type parameter
@@ -1339,11 +1325,6 @@ export const ApplicationFunctionType = new LibFunctionType({
   name: 'Application',
   module: Constants.moduleNames.algoTs.reference,
 })
-export const BoxRefFunction = new LibFunctionType({
-  name: 'BoxRef',
-  module: Constants.moduleNames.algoTs.box,
-})
-export const boxRefType = new BoxRefPType()
 
 export const ClearStateProgram = new FunctionPType({
   name: Constants.symbolNames.clearStateProgramMethodName,

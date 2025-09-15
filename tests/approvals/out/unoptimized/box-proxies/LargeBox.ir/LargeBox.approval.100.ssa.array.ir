@@ -1,14 +1,14 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         goto block@1
-    block@1: // L270
+    block@1: // L269
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
         goto tmp%1#0 ? block@2 : block@5
-    block@2: // abi_routing_L270
+    block@2: // abi_routing_L269
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "test()void" => block@3, * => block@4}
-    block@3: // test_route_L273
+    block@3: // test_route_L272
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         let tmp%5#0: uint64 = (txn ApplicationID)
@@ -17,9 +17,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
         tests/approvals/box-proxies.algo.ts::LargeBox.test[routing]()
         goto block@4
-    block@4: // switch_case_next_L270
+    block@4: // switch_case_next_L269
         goto block@6
-    block@5: // __algots__.defaultCreate_L270
+    block@5: // __algots__.defaultCreate_L269
         let tmp%8#0: uint64 = (txn OnCompletion)
         let tmp%9#0: bool = (== tmp%8#0 NoOp)
         let tmp%10#0: uint64 = (txn ApplicationID)
@@ -28,7 +28,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
         tests/approvals/box-proxies.algo.ts::LargeBox.__algots__.defaultCreate()
         exit 1u
-    block@6: // after_if_else_L270
+    block@6: // after_if_else_L269
         exit 0u
     block@7: // after_inlined_tests/approvals/box-proxies.algo.ts::LargeBox.__puya_arc4_router___L1
         let tmp%0#0: bool = undefined
@@ -198,12 +198,12 @@ subroutine _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(ar
         return array_head_and_tail#1
 
 subroutine tests/approvals/box-proxies.algo.ts::LargeBox.test[routing]() -> void:
-    block@0: // L273
+    block@0: // L272
         tests/approvals/box-proxies.algo.ts::LargeBox.test()
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::LargeBox.test() -> void:
-    block@0: // L273
+    block@0: // L272
         _puya_lib.util.ensure_budget(7000u, 0u)
         (box_create "large" 12800u)
         let (value%0#0: uint64, check%0#0: bool) = (box_len "large")
@@ -222,11 +222,11 @@ subroutine tests/approvals/box-proxies.algo.ts::LargeBox.test() -> void:
         let array_length%0#0: uint64 = 200u
         let item_index_internal%0#0: uint64 = 0u
         goto block@1
-    block@1: // for_header_L278
+    block@1: // for_header_L277
         let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@3)
         let continue_looping%0#0: bool = (< item_index_internal%0#1 array_length%0#0)
         goto continue_looping%0#0 ? block@2 : block@4
-    block@2: // for_body_L278
+    block@2: // for_body_L277
         let aggregate%bytes_offset%0#0: uint64 = (* item_index_internal%0#1 64u)
         let aggregate%encoded_element%0#0: bytes = (extract3 storage_value%1#0 aggregate%bytes_offset%0#0 64u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint8[32],uint64,uint64,uint64,uint64) = aggregate%encoded_element%0#0
@@ -265,12 +265,12 @@ subroutine tests/approvals/box-proxies.algo.ts::LargeBox.test() -> void:
         let tmp%5#0: bool = (== values%0#0 tmp%4#0)
         (assert tmp%5#0)
         goto block@3
-    block@3: // for_footer_L278
+    block@3: // for_footer_L277
         let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
         goto block@1
-    block@4: // after_for_L278
+    block@4: // after_for_L277
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::LargeBox.__algots__.defaultCreate() -> void:
-    block@0: // L270
+    block@0: // L269
         return 

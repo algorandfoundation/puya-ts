@@ -5,7 +5,6 @@ import {
   BaseContract,
   Box,
   BoxMap,
-  BoxRef,
   Bytes,
   clone,
   Contract,
@@ -72,9 +71,9 @@ function testBoxMap(box: BoxMap<string, bytes>, key: string, value: bytes) {
   assert(box(`${key}x`).get({ default: Bytes('b') }) === boxMap(`${key}x`).get({ default: Bytes('b') }))
 }
 
-const boxRef = BoxRef({ key: 'abc' })
+const boxRef = Box<bytes>({ key: 'abc' })
 
-function testBoxRef(box: BoxRef, length: uint64) {
+function testBoxRef(box: Box<bytes>, length: uint64) {
   assert(box.key === Bytes('three'))
   assert(boxRef.key === Bytes('abc'))
 
@@ -89,7 +88,7 @@ function testBoxRef(box: BoxRef, length: uint64) {
     box.create({ size: 4 })
   }
   const someBytes = Bytes.fromHex('FFFFFFFF')
-  box.put(someBytes)
+  box.value = someBytes
 
   assert(box.get({ default: Bytes() }) === Bytes.fromHex('FFFFFFFF'))
 
@@ -108,7 +107,7 @@ function testBoxRef(box: BoxRef, length: uint64) {
 export class BoxContract extends BaseContract {
   boxOne = Box<string>({ key: 'one' })
   boxMapTwo = BoxMap<string, bytes>({ keyPrefix: 'two' })
-  boxRefThree = BoxRef({ key: 'three' })
+  boxRefThree = Box<bytes>({ key: 'three' })
 
   approvalProgram(): boolean {
     if (Txn.applicationId.id !== 0) {
