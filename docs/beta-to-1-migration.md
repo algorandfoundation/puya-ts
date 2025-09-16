@@ -257,6 +257,78 @@ const result3 = abiCall<typeof HelloStubbed.prototype.greet>({
 assert(result3 === 'hello stubbed')
 ```
 
+### Rename `interpretAsArc4` function to `converBytes`
+
+The function now accepts an `options` object with `strategy: 'unsafe-cast'` and an optional `prefix` parameter.
+
+```typescript
+/**** Before (puya-ts beta) ****/
+const x = interpretAsArc4<Uint<32>>(a)
+const y = interpretAsArc4<Byte>(b, 'log')
+
+/**** After (puya-ts 1.0) ****/
+const x = convertBytes<Uint<32>>(a, { strategy: 'unsafe-cast' })
+const y = convertBytes<Byte>(b, { prefix: 'log', strategy: 'unsafe-cast' })
+```
+
+### Remove `BoxRef`, use `Box<bytes>` instead
+
+`Box<bytes>` now includes all functionality previously available in `BoxRef`, including `extract`, `replace`, `resize`, and `splice` methods.
+
+```typescript
+/**** Before (puya-ts beta) ****/
+const box = BoxRef({ key: 'test_key' })
+box.create({ size: 32768 })
+
+const boxValue = new Uint8Array(Array(5).fill([0x01, 0x02]).flat())
+box.put(Bytes(boxValue))
+
+const replacement = new Uint8Array(Array(2).fill(0x11))
+box.splice(1, 5, Bytes(replacement))
+
+box.replace(0, Bytes(0x11))
+
+const extracted = box.extract(0, 3)
+
+box.resize(newSize)
+
+/**** After (puya-ts 1.0) ****/
+const box = Box<bytes>({ key: 'test_key' })
+box.create({ size: 32768 })
+
+const boxValue = new Uint8Array(Array(5).fill([0x01, 0x02]).flat())
+box.value = Bytes(boxValue)
+
+const replacement = new Uint8Array(Array(2).fill(0x11))
+box.splice(1, 5, Bytes(replacement))
+
+box.replace(0, Bytes(0x11))
+
+const extracted = box.extract(0, 3)
+
+box.resize(newSize)
+```
+
+### replace `.native` property with `.asUint64()` and `.asBigUint()` methods for `arc4.Uint` types
+
+For `Uint` types larger than 64 bits, `.asUint64()` throws an overflow error if the value exceeds `uint64` bounds.
+
+```typescript
+/**** Before (puya-ts beta) ****/
+const z = new Uint<8>(n)
+const z_native = z.native
+
+const a = new Uint<128>(b)
+const a_native = a.native
+
+/**** After (puya-ts 1.0) ****/
+const z = new Uint<8>(n)
+const z_native = z.asUint64()
+
+const a = new Uint<128>(b)
+const a_native = a.asBigUint()
+```
+
 ## New features
 
 ### Native mutable objects
@@ -342,9 +414,9 @@ boxMap = BoxMap<{ a: uint64; b: uint64 }, string>({ keyPrefix: '' })
 boxMap({ a: 1, b: 2 }).value = 'test'
 ```
 
-### `Box` supports direct bytes access
+### `Box` supports direct bytes access via `extract`, `replace`, `resize`, and `splice` methods
 
-A `ref` property was added to the `Box` type for direct access to box bytes.
+`extract`, `replace`, `resize`, and `splice` methods were added to the `Box` type for direct access to box bytes.
 
 **Note:** This enables direct manipulation of the bytes of any box, though it should be noted that mutations via this approach are not validated against the `Box` value type which could lead to box content being invalid for the expected type.
 
@@ -354,9 +426,7 @@ const boxForCaller = this.boxMap(Txn.sender)
 
 boxForCaller.create()
 
-const boxRef = boxForCaller.ref
-
-boxRef.replace(0, new UintN8(123).bytes)
+boxForCaller.replace(0, new UintN8(123).bytes)
 ```
 
 ### Inner transaction groups can be dynamically composed
