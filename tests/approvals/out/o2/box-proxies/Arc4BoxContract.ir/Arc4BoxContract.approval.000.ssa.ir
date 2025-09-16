@@ -175,85 +175,85 @@ subroutine _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(ar
         return array_head_and_tail#1
 
 subroutine tests/approvals/box-proxies.algo.ts::getBoxValuePlus1(box: bytes) -> uint64:
-    block@0: // L527
+    block@0: // L525
         let storage_value%0#0: bytes = box_read(box#0)
         let maybe_value_converted%0#0: uint64 = (btoi storage_value%0#0)
         let tmp%0#0: uint64 = (+ maybe_value_converted%0#0 1u)
         return tmp%0#0
 
 subroutine tests/approvals/box-proxies.algo.ts::getBoxRefLength(ref: bytes) -> uint64:
-    block@0: // L531
+    block@0: // L529
         let (value%0#0: uint64, check%0#0: bool) = (box_len ref#0)
         (assert check%0#0) // Box must have value
         return value%0#0
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.__puya_arc4_router__() -> bool:
-    block@0: // L342
+    block@0: // L340
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@21
-    block@1: // abi_routing_L342
+    block@1: // abi_routing_L340
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
         (assert tmp%3#0) // OnCompletion must be NoOp
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
         goto tmp%5#0 ? block@2 : block@19
-    block@2: // call_NoOp_L342
+    block@2: // call_NoOp_L340
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
         switch tmp%6#0 {method "setBoxes(uint64,byte[],string)void" => block@3, method "checkKeys()void" => block@4, method "createManyInts()void" => block@5, method "setManyInts(uint64,uint64)void" => block@6, method "sumManyInts()uint64" => block@7, method "deleteBoxes()void" => block@8, method "indirectExtractAndReplace()void" => block@9, method "readBoxes()(uint64,byte[],string,uint64)" => block@10, method "boxesExist()(bool,bool,bool,bool)" => block@11, method "sliceBox()void" => block@12, method "arc4Box()void" => block@13, method "testBoxRef()void" => block@14, method "createBools()void" => block@15, method "setBool(uint64,bool)void" => block@16, method "sumBools(uint64)uint64" => block@17, * => block@18}
-    block@3: // setBoxes_route_L361
+    block@3: // setBoxes_route_L359
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes[routing]()
         goto block@18
-    block@4: // checkKeys_route_L396
+    block@4: // checkKeys_route_L394
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.checkKeys[routing]()
         goto block@18
-    block@5: // createManyInts_route_L403
+    block@5: // createManyInts_route_L401
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.createManyInts[routing]()
         goto block@18
-    block@6: // setManyInts_route_L407
+    block@6: // setManyInts_route_L405
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setManyInts[routing]()
         goto block@18
-    block@7: // sumManyInts_route_L411
+    block@7: // sumManyInts_route_L409
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumManyInts[routing]()
         goto block@18
-    block@8: // deleteBoxes_route_L420
+    block@8: // deleteBoxes_route_L418
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.deleteBoxes[routing]()
         goto block@18
-    block@9: // indirectExtractAndReplace_route_L433
+    block@9: // indirectExtractAndReplace_route_L431
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.indirectExtractAndReplace[routing]()
         goto block@18
-    block@10: // readBoxes_route_L439
+    block@10: // readBoxes_route_L437
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.readBoxes[routing]()
         goto block@18
-    block@11: // boxesExist_route_L443
+    block@11: // boxesExist_route_L441
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.boxesExist[routing]()
         goto block@18
-    block@12: // sliceBox_route_L447
+    block@12: // sliceBox_route_L445
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sliceBox[routing]()
         goto block@18
-    block@13: // arc4Box_route_L456
+    block@13: // arc4Box_route_L454
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.arc4Box[routing]()
         goto block@18
-    block@14: // testBoxRef_route_L465
+    block@14: // testBoxRef_route_L463
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.testBoxRef[routing]()
         goto block@18
-    block@15: // createBools_route_L504
+    block@15: // createBools_route_L502
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.createBools[routing]()
         goto block@18
-    block@16: // setBool_route_L508
+    block@16: // setBool_route_L506
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBool[routing]()
         goto block@18
-    block@17: // sumBools_route_L512
+    block@17: // sumBools_route_L510
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools[routing]()
         goto block@18
-    block@18: // switch_case_next_L342
+    block@18: // switch_case_next_L340
         goto block@20
-    block@19: // create_NoOp_L342
+    block@19: // create_NoOp_L340
         goto block@20
-    block@20: // after_if_else_L342
+    block@20: // after_if_else_L340
         goto block@22
-    block@21: // __algots__.defaultCreate_L342
+    block@21: // __algots__.defaultCreate_L340
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (== tmp%7#0 NoOp)
         let tmp%9#0: uint64 = (txn ApplicationID)
@@ -262,11 +262,11 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.__puya_arc4_rout
         (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.__algots__.defaultCreate()
         exit 1u
-    block@22: // after_if_else_L342
+    block@22: // after_if_else_L340
         exit 0u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes[routing]() -> void:
-    block@0: // L361
+    block@0: // L359
         let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
         let tmp%0#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%0#0)
         let reinterpret_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = (txna ApplicationArgs 2)
@@ -276,17 +276,17 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes[routing
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.checkKeys[routing]() -> void:
-    block@0: // L396
+    block@0: // L394
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.checkKeys()
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.createManyInts[routing]() -> void:
-    block@0: // L403
+    block@0: // L401
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.createManyInts()
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setManyInts[routing]() -> void:
-    block@0: // L407
+    block@0: // L405
         let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
         let tmp%0#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%0#0)
         let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
@@ -295,7 +295,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setManyInts[rout
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumManyInts[routing]() -> void:
-    block@0: // L411
+    block@0: // L409
         let tmp%0#0: uint64 = tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumManyInts()
         let tmp%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
         let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
@@ -303,17 +303,17 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumManyInts[rout
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.deleteBoxes[routing]() -> void:
-    block@0: // L420
+    block@0: // L418
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.deleteBoxes()
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.indirectExtractAndReplace[routing]() -> void:
-    block@0: // L433
+    block@0: // L431
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.indirectExtractAndReplace()
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.readBoxes[routing]() -> void:
-    block@0: // L439
+    block@0: // L437
         let (tmp%0#0: uint64, tmp%1#0: bytes, tmp%2#0: Encoded(len+utf8[]), tmp%3#0: uint64) = tests/approvals/box-proxies.algo.ts::Arc4BoxContract.readBoxes()
         let tmp%4#0: Encoded(uint64,(len+uint8[]),(len+utf8[]),uint64) = bytes_encode<(uint64,(len+uint8[]),(len+utf8[]),uint64)>(tmp%0#0, tmp%1#0, tmp%2#0, tmp%3#0)
         let tmp%5#0: bytes = (concat 0x151f7c75 tmp%4#0)
@@ -321,7 +321,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.readBoxes[routin
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.boxesExist[routing]() -> void:
-    block@0: // L443
+    block@0: // L441
         let (tmp%0#0: bool, tmp%1#0: bool, tmp%2#0: bool, tmp%3#0: bool) = tests/approvals/box-proxies.algo.ts::Arc4BoxContract.boxesExist()
         let tmp%4#0: Encoded(bool1,bool1,bool1,bool1) = bytes_encode<(bool1,bool1,bool1,bool1)>(tmp%0#0, tmp%1#0, tmp%2#0, tmp%3#0)
         let tmp%5#0: bytes = (concat 0x151f7c75 tmp%4#0)
@@ -329,27 +329,27 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.boxesExist[routi
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sliceBox[routing]() -> void:
-    block@0: // L447
+    block@0: // L445
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sliceBox()
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.arc4Box[routing]() -> void:
-    block@0: // L456
+    block@0: // L454
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.arc4Box()
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.testBoxRef[routing]() -> void:
-    block@0: // L465
+    block@0: // L463
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.testBoxRef()
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.createBools[routing]() -> void:
-    block@0: // L504
+    block@0: // L502
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.createBools()
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBool[routing]() -> void:
-    block@0: // L508
+    block@0: // L506
         let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
         let tmp%0#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%0#0)
         let reinterpret_Encoded(bool8)%0#0: Encoded(bool8) = (txna ApplicationArgs 2)
@@ -358,7 +358,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBool[routing]
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools[routing]() -> void:
-    block@0: // L512
+    block@0: // L510
         let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
         let tmp%0#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%0#0)
         let tmp%1#0: uint64 = tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools(tmp%0#0)
@@ -368,7 +368,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools[routing
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes(a: uint64, b: bytes, c: Encoded(len+utf8[])) -> void:
-    block@0: // L361
+    block@0: // L359
         let tmp%0#0: Encoded(len+uint8[]) = bytes_encode<(len+uint8[])>(b#0)
         let dynamicBytes#0: Encoded(len+uint8[]) = tmp%0#0
         let encoded_value%0#0: bytes[8] = (itob a#0)
@@ -546,7 +546,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes(a: uint
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.checkKeys() -> void:
-    block@0: // L396
+    block@0: // L394
         let tmp%0#0: bool = (== "boxA" "boxA")
         (assert tmp%0#0) // box a key ok
         let tmp%1#0: bool = (== "b" "b")
@@ -558,12 +558,12 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.checkKeys() -> v
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.createManyInts() -> void:
-    block@0: // L403
+    block@0: // L401
         (box_create "manyInts" 4104u)
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setManyInts(index: uint64, value: uint64) -> void:
-    block@0: // L407
+    block@0: // L405
         let storage_value%0#0: bytes = box_read("manyInts")
         let encoded_value%0#0: Encoded(uint64) = bytes_encode<uint64>(value#0)
         let updated_array%0#0: Encoded(uint64[513]) = replace_value(storage_value%0#0, index#0, encoded_value%0#0)
@@ -571,7 +571,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setManyInts(inde
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumManyInts() -> uint64:
-    block@0: // L411
+    block@0: // L409
         _puya_lib.util.ensure_budget(10500u, 0u)
         let total#0: uint64 = 0u
         let storage_value%0#0: bytes = box_read("manyInts")
@@ -579,12 +579,12 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumManyInts() ->
         let item_index_internal%0#0: uint64 = 0u
         let reverse_index_internal%0#0: uint64 = array_length%0#0
         goto block@1
-    block@1: // for_header_L414
+    block@1: // for_header_L412
         let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@3)
         let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@3)
         let continue_looping%0#0: bool = (< item_index_internal%0#1 array_length%0#0)
         goto continue_looping%0#0 ? block@2 : block@4
-    block@2: // for_body_L414
+    block@2: // for_body_L412
         let array_item%0#0: Encoded(uint64) = extract_value(storage_value%0#0, item_index_internal%0#1)
         let values%0#0: uint64 = decode_bytes<uint64>(array_item%0#0)
         let temp#0: uint64 = values%0#0
@@ -592,14 +592,14 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumManyInts() ->
         let tmp%0#0: uint64 = (+ total#1 val#0)
         let total#2: uint64 = tmp%0#0
         goto block@3
-    block@3: // for_footer_L414
+    block@3: // for_footer_L412
         let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
         goto block@1
-    block@4: // after_for_L414
+    block@4: // after_for_L412
         return total#1
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.deleteBoxes() -> void:
-    block@0: // L420
+    block@0: // L418
         (box_del "boxA")
         (box_del "b")
         (box_del "BOX_C")
@@ -631,7 +631,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.deleteBoxes() ->
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.indirectExtractAndReplace() -> void:
-    block@0: // L433
+    block@0: // L431
         let storage_value%0#0: bytes = box_read("boxLarge")
         let large#0: Encoded(uint8[1024],uint8[1024],uint8[1024],uint8[1024],uint64,uint8[1024],uint8[1024],uint64) = storage_value%0#0
         let tuple_item%0#0: Encoded(uint64) = extract_value(large#0, 4)
@@ -644,7 +644,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.indirectExtractA
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.readBoxes() -> <uint64, bytes, Encoded(len+utf8[]), uint64>:
-    block@0: // L439
+    block@0: // L437
         let tmp%0#0: uint64 = tests/approvals/box-proxies.algo.ts::getBoxValuePlus1("boxA")
         let tmp%1#0: uint64 = (- tmp%0#0 1u)
         let storage_value%0#0: bytes = box_read("b")
@@ -656,7 +656,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.readBoxes() -> <
         return tmp%1#0 tmp%2#0 storage_value%1#0 values%0#0
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.boxesExist() -> <bool, bool, bool, bool>:
-    block@0: // L443
+    block@0: // L441
         let (_%0#0: uint64, maybe_exists%0#0: bool) = (box_len "boxA")
         let (_%1#0: uint64, maybe_exists%1#0: bool) = (box_len "b")
         let (_%2#0: uint64, maybe_exists%2#0: bool) = (box_len "BOX_C")
@@ -664,7 +664,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.boxesExist() -> 
         return maybe_exists%0#0 maybe_exists%1#0 maybe_exists%2#0 maybe_exists%3#0
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sliceBox() -> void:
-    block@0: // L447
+    block@0: // L445
         box_write("0", "Testing testing 123")
         let storage_value%0#0: bytes = box_read("0")
         let length%0#0: uint64 = (len storage_value%0#0)
@@ -689,7 +689,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sliceBox() -> vo
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.arc4Box() -> void:
-    block@0: // L456
+    block@0: // L454
         let encoded_array%0#0: Encoded(uint8[4]) = bytes_encode<uint8[4]>(0x00, 0x01, 0x02, 0x03)
         box_write("d", encoded_array%0#0)
         let storage_value%0#0: bytes = box_read("d")
@@ -715,7 +715,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.arc4Box() -> voi
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.testBoxRef() -> void:
-    block@0: // L465
+    block@0: // L463
         let (_%0#0: uint64, maybe_exists%0#0: bool) = (box_len "blob")
         let tmp%0#0: bool = (! maybe_exists%0#0)
         (assert tmp%0#0) // no data
@@ -774,12 +774,12 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.testBoxRef() -> 
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.createBools() -> void:
-    block@0: // L504
+    block@0: // L502
         (box_create "tooManyBools" 4125u)
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBool(index: uint64, value: bool) -> void:
-    block@0: // L508
+    block@0: // L506
         let storage_value%0#0: bytes = box_read("tooManyBools")
         let encoded_value%0#0: Encoded(bool1) = bytes_encode<bool1>(value#0)
         let updated_array%0#0: Encoded(bool1[33000]) = replace_value(storage_value%0#0, index#0, encoded_value%0#0)
@@ -787,7 +787,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBool(index: u
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools(stopAtTotal: uint64) -> uint64:
-    block@0: // L512
+    block@0: // L510
         _puya_lib.util.ensure_budget(13000u, 0u)
         let total#0: uint64 = 0u
         let storage_value%0#0: bytes = box_read("tooManyBools")
@@ -795,44 +795,44 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools(stopAtT
         let item_index_internal%0#0: uint64 = 0u
         let reverse_index_internal%0#0: uint64 = array_length%0#0
         goto block@1
-    block@1: // for_header_L515
+    block@1: // for_header_L513
         let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@7)
         let total#1: uint64 = φ(total#0 <- block@0, total#3 <- block@7)
         let continue_looping%0#0: bool = (< item_index_internal%0#1 array_length%0#0)
         goto continue_looping%0#0 ? block@2 : block@8
-    block@2: // for_body_L515
+    block@2: // for_body_L513
         let array_item%0#0: bool = extract_value(storage_value%0#0, item_index_internal%0#1)
         let values%0#0: bool = decode_bytes<bool>(array_item%0#0)
         let temp#0: bool = values%0#0
         let value#0: bool = temp#0
         goto value#0 ? block@3 : block@4
-    block@3: // if_body_L516
+    block@3: // if_body_L514
         let tmp%0#0: uint64 = (+ total#1 1u)
         let total#2: uint64 = tmp%0#0
         goto block@4
-    block@4: // after_if_else_L516
+    block@4: // after_if_else_L514
         let total#3: uint64 = φ(total#1 <- block@2, total#2 <- block@3)
         let tmp%1#0: bool = (== total#3 stopAtTotal#0)
         goto tmp%1#0 ? block@5 : block@6
-    block@5: // if_body_L519
+    block@5: // if_body_L517
         goto block@9
-    block@6: // after_if_else_L519
+    block@6: // after_if_else_L517
         goto block@7
-    block@7: // for_footer_L515
+    block@7: // for_footer_L513
         let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
         goto block@1
-    block@8: // after_for_L515
+    block@8: // after_for_L513
         goto block@9
-    block@9: // L515
+    block@9: // L513
         let total#4: uint64 = φ(total#3 <- block@5, total#1 <- block@8)
         return total#4
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.__algots__.defaultCreate() -> void:
-    block@0: // L342
+    block@0: // L340
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.constructor() -> void:
-    block@0: // L356
+    block@0: // L354
         @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
         let tmp%0#0: bool = (> 4104u 4096u)
         (assert tmp%0#0) // expected ManyInts to exceed max bytes size

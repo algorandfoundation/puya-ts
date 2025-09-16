@@ -12,8 +12,6 @@ import {
   Txn,
   Uint64,
 } from '@algorandfoundation/algorand-typescript'
-import type { Address, Bool, DynamicArray, StaticArray, Tuple, Uint32 } from '@algorandfoundation/algorand-typescript/arc4'
-import { sizeOf, Uint8 } from '@algorandfoundation/algorand-typescript/arc4'
 import { Global, itob } from '@algorandfoundation/algorand-typescript/op'
 
 const boxA = Box<string>({ key: Bytes('A') })
@@ -140,12 +138,12 @@ class BoxNotExist extends BaseContract {
 
 class BoxCreate extends Contract {
   boxBool = Box<boolean>({ key: 'bool' })
-  boxArc4Bool = Box<Bool>({ key: 'arc4b' })
+  boxArc4Bool = Box<arc4.Bool>({ key: 'arc4b' })
   boxStr = Box<string>({ key: 'a' })
   boxUint = Box<uint64>({ key: 'b' })
-  boxStaticArray = Box<StaticArray<Uint32, 10>>({ key: 'c' })
-  boxDynamicArray = Box<DynamicArray<Uint8>>({ key: 'd' })
-  boxTuple = Box<Tuple<[Uint8, Uint8, Bool, Bool]>>({ key: 'e' })
+  boxStaticArray = Box<arc4.StaticArray<arc4.Uint32, 10>>({ key: 'c' })
+  boxDynamicArray = Box<arc4.DynamicArray<arc4.Uint8>>({ key: 'd' })
+  boxTuple = Box<arc4.Tuple<[arc4.Uint8, arc4.Uint8, arc4.Bool, arc4.Bool]>>({ key: 'e' })
 
   createBoxes() {
     this.boxStr.create({ size: 10 })
@@ -235,7 +233,7 @@ class TupleBox extends Contract {
 }
 
 class BoxToRefTest extends Contract {
-  boxMap = BoxMap<Account, StaticArray<Uint8, 4>>({ keyPrefix: '' })
+  boxMap = BoxMap<Account, arc4.StaticArray<arc4.Uint8, 4>>({ keyPrefix: '' })
 
   test() {
     const boxForCaller = this.boxMap(Txn.sender)
@@ -244,7 +242,7 @@ class BoxToRefTest extends Contract {
 
     const boxRef = boxForCaller
 
-    boxRef.replace(0, new Uint8(123).bytes)
+    boxRef.replace(0, new arc4.Uint8(123).bytes)
 
     assert(boxForCaller.value[0].asUint64() === 123, 'First array item in box should be 123')
   }
@@ -259,7 +257,7 @@ class CompositeKeyTest extends Contract {
 }
 
 type Info = {
-  account: Address
+  account: arc4.Address
   balance: uint64
   totalRewarded: uint64
   rewardTokenBalance: uint64
@@ -355,7 +353,7 @@ class Arc4BoxContract extends arc4.Contract {
 
   constructor() {
     super()
-    assert(sizeOf<ManyInts>() > 4096, 'expected ManyInts to exceed max bytes size')
+    assert(arc4.sizeOf<ManyInts>() > 4096, 'expected ManyInts to exceed max bytes size')
   }
 
   setBoxes(a: uint64, b: bytes, c: arc4.Str) {
@@ -366,7 +364,7 @@ class Arc4BoxContract extends arc4.Contract {
     this.boxD.value = dynamicBytes.native
     this.boxLarge.create()
     this.boxLarge.value.e = 42
-    this.boxLarge.replace(sizeOf<Bytes1024>() * 4, new arc4.Uint64(42).bytes)
+    this.boxLarge.replace(arc4.sizeOf<Bytes1024>() * 4, new arc4.Uint64(42).bytes)
 
     const bValue = clone(this.boxB.value)
     assert(this.boxB.value.length === bValue.length, 'direct reference should match copy')
@@ -390,7 +388,7 @@ class Arc4BoxContract extends arc4.Contract {
     assert(this.boxD.value.slice(0, -1) === dynamicBytes.native.slice(0, -1))
     assert(this.boxD.value.slice(0, 5) === dynamicBytes.native.slice(0, 5))
     assert(this.boxD.value.slice(0, Uint64(2)) === dynamicBytes.native.slice(0, Uint64(2)))
-    assert(this.boxLarge.length === sizeOf<LargeStruct>())
+    assert(this.boxLarge.length === arc4.sizeOf<LargeStruct>())
   }
 
   checkKeys() {

@@ -1,14 +1,14 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         goto block@1
-    block@1: // L237
+    block@1: // L235
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
         goto tmp%1#0 ? block@2 : block@5
-    block@2: // abi_routing_L237
+    block@2: // abi_routing_L235
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "test()void" => block@3, * => block@4}
-    block@3: // test_route_L240
+    block@3: // test_route_L238
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         let tmp%5#0: uint64 = (txn ApplicationID)
@@ -17,9 +17,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
         tests/approvals/box-proxies.algo.ts::BoxToRefTest.test[routing]()
         goto block@4
-    block@4: // switch_case_next_L237
+    block@4: // switch_case_next_L235
         goto block@6
-    block@5: // __algots__.defaultCreate_L237
+    block@5: // __algots__.defaultCreate_L235
         let tmp%8#0: uint64 = (txn OnCompletion)
         let tmp%9#0: bool = (== tmp%8#0 NoOp)
         let tmp%10#0: uint64 = (txn ApplicationID)
@@ -28,19 +28,19 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
         tests/approvals/box-proxies.algo.ts::BoxToRefTest.__algots__.defaultCreate()
         exit 1u
-    block@6: // after_if_else_L237
+    block@6: // after_if_else_L235
         exit 0u
     block@7: // after_inlined_tests/approvals/box-proxies.algo.ts::BoxToRefTest.__puya_arc4_router___L1
         let tmp%0#0: bool = undefined
         return tmp%0#0
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test[routing]() -> void:
-    block@0: // L240
+    block@0: // L238
         tests/approvals/box-proxies.algo.ts::BoxToRefTest.test()
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test() -> void:
-    block@0: // L240
+    block@0: // L238
         let materialized_values%0#0: account = (txn Sender)
         let box_prefixed_key%0#0: bytes = (concat "" materialized_values%0#0)
         let boxForCaller#0: bytes = box_prefixed_key%0#0
@@ -59,5 +59,5 @@ subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test() -> void:
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.__algots__.defaultCreate() -> void:
-    block@0: // L237
+    block@0: // L235
         return 

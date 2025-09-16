@@ -1,33 +1,33 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         goto block@1
-    block@1: // L174
+    block@1: // L172
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
         goto tmp%1#0 ? block@2 : block@9
-    block@2: // abi_routing_L174
+    block@2: // abi_routing_L172
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
         (assert tmp%3#0) // OnCompletion must be NoOp
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
         goto tmp%5#0 ? block@3 : block@7
-    block@3: // call_NoOp_L174
+    block@3: // call_NoOp_L172
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
         switch tmp%6#0 {method "testBox()void" => block@4, method "testBoxMap()void" => block@5, * => block@6}
-    block@4: // testBox_route_L180
+    block@4: // testBox_route_L178
         tests/approvals/box-proxies.algo.ts::TupleBox.testBox[routing]()
         goto block@6
-    block@5: // testBoxMap_route_L206
+    block@5: // testBoxMap_route_L204
         tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap[routing]()
         goto block@6
-    block@6: // switch_case_next_L174
+    block@6: // switch_case_next_L172
         goto block@8
-    block@7: // create_NoOp_L174
+    block@7: // create_NoOp_L172
         goto block@8
-    block@8: // after_if_else_L174
+    block@8: // after_if_else_L172
         goto block@10
-    block@9: // __algots__.defaultCreate_L174
+    block@9: // __algots__.defaultCreate_L172
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (== tmp%7#0 NoOp)
         let tmp%9#0: uint64 = (txn ApplicationID)
@@ -36,24 +36,24 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
         tests/approvals/box-proxies.algo.ts::TupleBox.__algots__.defaultCreate()
         exit 1u
-    block@10: // after_if_else_L174
+    block@10: // after_if_else_L172
         exit 0u
     block@11: // after_inlined_tests/approvals/box-proxies.algo.ts::TupleBox.__puya_arc4_router___L1
         let tmp%0#0: bool = undefined
         return tmp%0#0
 
 subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBox[routing]() -> void:
-    block@0: // L180
+    block@0: // L178
         tests/approvals/box-proxies.algo.ts::TupleBox.testBox()
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap[routing]() -> void:
-    block@0: // L206
+    block@0: // L204
         tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap()
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBox() -> void:
-    block@0: // L180
+    block@0: // L178
         (box_create "t1" 10u)
         (box_create "t2" 20u)
         let (value%0#0: uint64, check%0#0: bool) = (box_len "t1")
@@ -189,7 +189,7 @@ subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBox() -> void:
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap() -> void:
-    block@0: // L206
+    block@0: // L204
         let box_prefixed_key%0#0: bytes = (concat "tm1" "a")
         let (_%0#0: uint64, maybe_exists%0#0: bool) = (box_len box_prefixed_key%0#0)
         let tmp%0#0: bool = (! maybe_exists%0#0)
@@ -401,5 +401,5 @@ subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap() -> void:
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::TupleBox.__algots__.defaultCreate() -> void:
-    block@0: // L174
+    block@0: // L172
         return 
