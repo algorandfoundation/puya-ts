@@ -49,7 +49,7 @@ subroutine testBoxRef(box: box_key, length: uint64): void
   } else {
     box_create(box, 4)
   }
-  box_put(box, 0xffffffff)
+  Box[box].value: bytes = 0xffffffff
   assert(STATE_GET(Box[box].value, default=0x) == 0xffffffff)
   maybeBox: readonly [bytes, bool] = STATE_GET_EX(Box[box].value)
   assert(maybeBox.1)
@@ -332,4 +332,217 @@ contract LargeBox
   {
   }
   
+}
+contract Arc4BoxContract
+{
+  boxes {
+    ["boxA"]: uint64
+    ["b"]: arc4.dynamic_array<arc4.byte>
+    ["BOX_C"]: arc4.dynamic_array<arc4.byte>
+    ["boxD"]: bytes
+    [""]: uint64 => string
+    ["boxRef"]: bytes
+    ["boxLarge"]: tests/approvals/box-proxies.algo.ts::LargeStruct
+    ["manyInts"]: arc4.static_array<uint64>
+    ["dynamicBox"]: arc4.dynamic_array<uint64>
+    ["dynamicArrStruct"]: tests/approvals/box-proxies.algo.ts::DynamicArrayInAStruct
+    ["tooManyBools"]: arc4.static_array<bool>
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  setBoxes(a: uint64, b: bytes, c: arc4.dynamic_array<arc4.byte>): void
+  {
+    dynamicBytes: arc4.dynamic_array<arc4.byte> = ARC4_ENCODE(b, wtype=arc4.dynamic_array<arc4.byte>)
+    Box["boxA"].value: uint64 = a
+    Box["b"].value: arc4.dynamic_array<arc4.byte> = dynamicBytes
+    Box["BOX_C"].value: arc4.dynamic_array<arc4.byte> = c
+    Box["boxD"].value: bytes = ARC4_DECODE(dynamicBytes)
+    box_create("boxLarge", size_of(tests/approvals/box-proxies.algo.ts::LargeStruct))
+    Box["boxLarge"].value.e: uint64 = 42
+    box_replace("boxLarge", size_of(arc4.static_array<arc4.byte>) * 4, reinterpret_cast<bytes>(42))
+    bValue: arc4.dynamic_array<arc4.byte> = copy(Box["b"].value)
+    assert(Box["b"].value.length == bValue.length, comment=direct reference should match copy)
+    Box["boxA"].value: uint64 = Box["boxA"].value + 3
+    assert(checked_maybe(box_len("boxA"), comment=Box must have value) == 8)
+    assert(checked_maybe(box_len("b"), comment=Box must have value) == len(reinterpret_cast<bytes>(dynamicBytes)))
+    assert(checked_maybe(box_len("BOX_C"), comment=Box must have value) == len(reinterpret_cast<bytes>(c)))
+    assert(checked_maybe(box_len("boxD"), comment=Box must have value) == len(ARC4_DECODE(dynamicBytes)))
+    assert(reinterpret_cast<bytes>(Box["BOX_C"].value)[0] == reinterpret_cast<bytes>(c)[0])
+    assert(reinterpret_cast<bytes>(Box["BOX_C"].value)[len(reinterpret_cast<bytes>(Box["BOX_C"].value)) - 1] == reinterpret_cast<bytes>(c)[len(reinterpret_cast<bytes>(c)) - 1])
+    assert(reinterpret_cast<bytes>(Box["BOX_C"].value).slice(0, -1) == reinterpret_cast<bytes>(c).slice(0, -1))
+    assert(reinterpret_cast<bytes>(Box["BOX_C"].value).slice(0, 2) == reinterpret_cast<bytes>(c).slice(0, 2))
+    assert(Box["boxD"].value[0] == ARC4_DECODE(dynamicBytes)[0])
+    assert(Box["boxD"].value[len(Box["boxD"].value) - 1] == ARC4_DECODE(dynamicBytes)[len(ARC4_DECODE(dynamicBytes)) - 1])
+    assert(Box["boxD"].value.slice(0, -1) == ARC4_DECODE(dynamicBytes).slice(0, -1))
+    assert(Box["boxD"].value.slice(0, 5) == ARC4_DECODE(dynamicBytes).slice(0, 5))
+    assert(Box["boxD"].value.slice(0, 2) == ARC4_DECODE(dynamicBytes).slice(0, 2))
+    assert(checked_maybe(box_len("boxLarge"), comment=Box must have value) == size_of(LargeStruct))
+  }
+  
+  checkKeys(): void
+  {
+    assert("boxA" == "boxA", comment=box a key ok)
+    assert("b" == "b", comment=box b key ok)
+    assert("BOX_C" == "BOX_C", comment=box c key ok)
+    assert("boxLarge" == "boxLarge", comment=box large key ok)
+  }
+  
+  createManyInts(): void
+  {
+    box_create("manyInts", size_of(arc4.static_array<uint64>))
+  }
+  
+  setManyInts(index: uint64, value: uint64): void
+  {
+    Box["manyInts"].value[index]: uint64 = value
+  }
+  
+  sumManyInts(): uint64
+  {
+    ensure_budget(10500, 0)
+    total: uint64 = 0
+    for (temp in Box["manyInts"].value) {
+      val: uint64 = copy(temp)
+      total: uint64 = total + val
+    }
+    return total
+  }
+  
+  deleteBoxes(): void
+  {
+    STATE_DELETE(Box["boxA"].value)
+    STATE_DELETE(Box["b"].value)
+    STATE_DELETE(Box["BOX_C"].value)
+    assert(STATE_GET(Box["boxA"].value, default=42) == 42)
+    assert(ARC4_DECODE(STATE_GET(Box["b"].value, default=0x00023432)) == "42")
+    assert(ARC4_DECODE(STATE_GET(Box["BOX_C"].value, default="42")) == "42")
+    #[a, aExists]: readonly [uint64, bool] = #[($10 = STATE_GET_EX(Box["boxA"].value)).0, $10.1]
+    assert(!aExists)
+    assert(a == 0)
+    STATE_DELETE(Box["boxLarge"].value)
+  }
+  
+  indirectExtractAndReplace(): void
+  {
+    large: tests/approvals/box-proxies.algo.ts::LargeStruct = copy(Box["boxLarge"].value)
+    large.e: uint64 = large.e + 1
+    Box["boxLarge"].value: tests/approvals/box-proxies.algo.ts::LargeStruct = copy(large)
+  }
+  
+  readBoxes(): readonly [uint64, bytes, arc4.dynamic_array<arc4.byte>, uint64]
+  {
+    return #[tests/approvals/box-proxies.algo.ts::getBoxValuePlus1("boxA") - 1, ARC4_DECODE(Box["b"].value), Box["BOX_C"].value, Box["boxLarge"].value.e]
+  }
+  
+  boxesExist(): readonly [bool, bool, bool, bool]
+  {
+    return #[STATE_EXISTS(Box["boxA"].value), STATE_EXISTS(Box["b"].value), STATE_EXISTS(Box["BOX_C"].value), STATE_EXISTS(Box["boxLarge"].value)]
+  }
+  
+  sliceBox(): void
+  {
+    Box["0"].value: bytes = "Testing testing 123"
+    assert(Box["0"].value.slice(0, 7) == "Testing")
+    Box["BOX_C"].value: arc4.dynamic_array<arc4.byte> = "Hello"
+    assert(reinterpret_cast<bytes>(Box["BOX_C"].value).slice(2, 10) == "Hello")
+  }
+  
+  arc4Box(): void
+  {
+    Box["d"].value: arc4.static_array<arc4.uint8> = new arc4.static_array<arc4.uint8>(0, 1, 2, 3)
+    assert(ARC4_DECODE(Box["d"].value[0]) == 0)
+    assert(ARC4_DECODE(Box["d"].value[1]) == 1)
+    assert(ARC4_DECODE(Box["d"].value[2]) == 2)
+    assert(ARC4_DECODE(Box["d"].value[3]) == 3)
+  }
+  
+  testBoxRef(): void
+  {
+    assert(!STATE_EXISTS(Box["blob"].value), comment=no data)
+    assert(!STATE_EXISTS(Box["blob"].value), comment=no data)
+    assert(box_create("blob", 32))
+    assert(STATE_EXISTS(Box["blob"].value), comment=has data)
+    senderBytes: bytes[32] = reinterpret_cast<bytes[32]>(txn<Sender>())
+    appAddress: bytes[32] = reinterpret_cast<bytes[32]>(global<CurrentApplicationAddress>())
+    box_replace("blob", 0, reinterpret_cast<bytes>(senderBytes))
+    box_resize("blob", 8000)
+    box_splice("blob", 0, 0, reinterpret_cast<bytes>(appAddress))
+    box_replace("blob", 64, "hello")
+    prefix: bytes = box_extract("blob", 0, 64 + len("hello"))
+    assert(prefix == concat(concat(reinterpret_cast<bytes>(appAddress), reinterpret_cast<bytes>(senderBytes)), "hello"))
+    STATE_DELETE(Box["blob"].value)
+    assert("blob" == "blob")
+    #[value, exists]: readonly [bytes, bool] = #[($11 = STATE_GET_EX(Box["blob"].value)).0, $11.1]
+    assert(!exists)
+    assert(value == "")
+    assert(STATE_GET(Box["blob"].value, default=reinterpret_cast<bytes>(senderBytes)) == reinterpret_cast<bytes>(senderBytes))
+    Box["blob"].value: bytes = concat(reinterpret_cast<bytes>(senderBytes), reinterpret_cast<bytes>(appAddress))
+    assert(STATE_EXISTS(Box["blob"].value), comment=Blob exists)
+    assert(checked_maybe(box_len("blob"), comment=Box must have value) == 64)
+    assert(tests/approvals/box-proxies.algo.ts::getBoxRefLength("blob") == 64)
+    box_create("boxRef", 32)
+    assert(STATE_EXISTS(Box["boxRef"].value), comment=has data)
+    STATE_DELETE(Box["boxRef"].value)
+  }
+  
+  createBools(): void
+  {
+    box_create("tooManyBools", size_of(arc4.static_array<bool>))
+  }
+  
+  setBool(index: uint64, value: bool): void
+  {
+    Box["tooManyBools"].value[index]: bool = value
+  }
+  
+  sumBools(stopAtTotal: uint64): uint64
+  {
+    ensure_budget(13000, 0)
+    total: uint64 = 0
+    for (temp in Box["tooManyBools"].value) {
+      value: bool = copy(temp)
+      if (value) {
+        total: uint64 = total + 1
+      }
+      if (total == stopAtTotal) {
+        goto #loop₁ᵇ
+      }
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    assert(size_of(arc4.static_array<arc4.uint64>) > 4096, comment=expected ManyInts to exceed max bytes size)
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+subroutine getBoxValuePlus1(box: box_key): uint64
+{
+  return Box[box].value + 1
+}
+subroutine getBoxRefLength(ref: box_key): uint64
+{
+  return checked_maybe(box_len(ref), comment=Box must have value)
 }

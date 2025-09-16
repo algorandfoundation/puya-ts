@@ -4,14 +4,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/box-proxies.algo.ts::CompositeKeyTest.__puya_arc4_router__() -> bool:
-    block@0: // L252
+    block@0: // L251
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@4
-    block@1: // abi_routing_L252
+    block@1: // abi_routing_L251
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "test((uint64,uint64),string)void" => block@2, * => block@3}
-    block@2: // test_route_L255
+    block@2: // test_route_L254
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         let tmp%5#0: uint64 = (txn ApplicationID)
@@ -20,9 +20,9 @@ subroutine tests/approvals/box-proxies.algo.ts::CompositeKeyTest.__puya_arc4_rou
         (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
         tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test[routing]()
         goto block@3
-    block@3: // switch_case_next_L252
+    block@3: // switch_case_next_L251
         goto block@5
-    block@4: // __algots__.defaultCreate_L252
+    block@4: // __algots__.defaultCreate_L251
         let tmp%8#0: uint64 = (txn OnCompletion)
         let tmp%9#0: bool = (== tmp%8#0 NoOp)
         let tmp%10#0: uint64 = (txn ApplicationID)
@@ -31,11 +31,11 @@ subroutine tests/approvals/box-proxies.algo.ts::CompositeKeyTest.__puya_arc4_rou
         (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
         tests/approvals/box-proxies.algo.ts::CompositeKeyTest.__algots__.defaultCreate()
         exit 1u
-    block@5: // after_if_else_L252
+    block@5: // after_if_else_L251
         exit 0u
 
 subroutine tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test[routing]() -> void:
-    block@0: // L255
+    block@0: // L254
         let reinterpret_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
         let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 2)
         let tmp%0#0: string = decode_bytes<string>(reinterpret_Encoded(len+utf8[])%0#0)
@@ -43,11 +43,11 @@ subroutine tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test[routing]()
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test(key: Encoded(uint64,uint64), val: string) -> void:
-    block@0: // L255
+    block@0: // L254
         let box_prefixed_key%0#0: bytes = (concat "" key#0)
         box_write(box_prefixed_key%0#0, val#0)
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::CompositeKeyTest.__algots__.defaultCreate() -> void:
-    block@0: // L252
+    block@0: // L251
         return 

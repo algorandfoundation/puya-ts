@@ -5,7 +5,7 @@ import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
 import { invariant, utf8ToUint8Array } from '../../util'
 import type { AppStorageType, ContractClassPType } from '../ptypes'
-import { BoxMapPType, BoxPType, BoxRefPType, GlobalStateType, LocalStateType, TransientType, UnsupportedType } from '../ptypes'
+import { BoxMapPType, BoxPType, GlobalStateType, LocalStateType, TransientType, UnsupportedType } from '../ptypes'
 
 export class AppStorageDeclaration {
   readonly memberName: string
@@ -37,10 +37,7 @@ export class AppStorageDeclaration {
     if (this.ptype instanceof LocalStateType) {
       return AppStorageKind.accountLocal
     }
-    invariant(
-      this.ptype instanceof BoxPType || this.ptype instanceof BoxRefPType || this.ptype instanceof BoxMapPType,
-      'Must be exhaustive check on ptype',
-    )
+    invariant(this.ptype instanceof BoxPType || this.ptype instanceof BoxMapPType, 'Must be exhaustive check on ptype')
     return AppStorageKind.box
   }
 

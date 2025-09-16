@@ -49,21 +49,21 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Amount) values%1#0)
         ((itxn_field TypeEnum) values%0#0)
         ((itxn_field Fee) 0u)
-        let temp#3: uint64 = 1u
+        let value_internal%0#3: uint64 = 1u
         goto block@21
     block@21: // for_header_L32
-        let temp#4: uint64 = φ(temp#3 <- block@4, temp#5 <- block@22)
-        let continue_looping%0#1: bool = (< temp#4 aggregate%array_length%0#0)
+        let temp#1: uint64 = φ(value_internal%0#3 <- block@4, value_internal%0#5 <- block@22)
+        let continue_looping%0#1: bool = (< temp#1 aggregate%array_length%0#0)
         goto continue_looping%0#1 ? block@22 : block@23
     block@22: // for_body_L32
-        let aggregate%bytes_offset%1#0: uint64 = (* temp#4 32u)
+        let aggregate%bytes_offset%1#0: uint64 = (* temp#1 32u)
         let addr#0: Encoded(uint8[32]) = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%1#0 32u) // on error: index access is out of bounds
         itxn_next
         ((itxn_field Receiver) addr#0)
         ((itxn_field Amount) values%1#0)
         ((itxn_field TypeEnum) values%0#0)
         ((itxn_field Fee) 0u)
-        let temp#5: uint64 = (+ temp#4 1u)
+        let value_internal%0#5: uint64 = (+ temp#1 1u)
         goto block@21
     block@23: // after_for_L32
         itxn_next
@@ -91,14 +91,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         itxn_submit
         let appId#0: uint64 = (gitxn 0 CreatedApplicationID)
-        let temp#0: uint64 = 0u
+        let value_internal%0#0: uint64 = 0u
         goto block@13
     block@13: // for_header_L56
-        let temp#1: uint64 = φ(temp#0 <- block@5, temp#2 <- block@17)
-        let continue_looping%0#0: bool = (< temp#1 count#0)
+        let temp#0: uint64 = φ(value_internal%0#0 <- block@5, value_internal%0#2 <- block@17)
+        let continue_looping%0#0: bool = (< temp#0 count#0)
         goto continue_looping%0#0 ? block@14 : block@18
     block@14: // for_body_L56
-        goto temp#1 ? block@16 : block@15
+        goto temp#0 ? block@16 : block@15
     block@15: // if_body_L57
         itxn_begin
         ((itxn_field ApplicationArgs) method "greet(string)string")
@@ -116,7 +116,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         goto block@17
     block@17: // after_if_else_L57
-        let temp#2: uint64 = (+ temp#1 1u)
+        let value_internal%0#2: uint64 = (+ temp#0 1u)
         goto block@13
     block@18: // after_for_L56
         itxn_submit

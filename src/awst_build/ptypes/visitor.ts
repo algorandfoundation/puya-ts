@@ -15,7 +15,6 @@ import type {
   ArrayPType,
   BoxMapPType,
   BoxPType,
-  BoxRefPType,
   BytesPType,
   ContractClassPType,
   FixedArrayPType,
@@ -108,7 +107,6 @@ export interface PTypeVisitor<T> {
   visitLocalStateType(ptype: LocalStateType): T
   visitBoxPType(ptype: BoxPType): T
   visitBoxMapPType(ptype: BoxMapPType): T
-  visitBoxRefPType(ptype: BoxRefPType): T
 
   visitTypeParameterType(ptype: TypeParameterType): T
 

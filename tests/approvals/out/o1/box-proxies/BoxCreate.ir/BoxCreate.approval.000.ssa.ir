@@ -4,14 +4,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxCreate.__puya_arc4_router__() -> bool:
-    block@0: // L140
+    block@0: // L139
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@4
-    block@1: // abi_routing_L140
+    block@1: // abi_routing_L139
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "createBoxes()void" => block@2, * => block@3}
-    block@2: // createBoxes_route_L149
+    block@2: // createBoxes_route_L148
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         let tmp%5#0: uint64 = (txn ApplicationID)
@@ -20,9 +20,9 @@ subroutine tests/approvals/box-proxies.algo.ts::BoxCreate.__puya_arc4_router__()
         (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
         tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes[routing]()
         goto block@3
-    block@3: // switch_case_next_L140
+    block@3: // switch_case_next_L139
         goto block@5
-    block@4: // __algots__.defaultCreate_L140
+    block@4: // __algots__.defaultCreate_L139
         let tmp%8#0: uint64 = (txn OnCompletion)
         let tmp%9#0: bool = (== tmp%8#0 NoOp)
         let tmp%10#0: uint64 = (txn ApplicationID)
@@ -31,16 +31,16 @@ subroutine tests/approvals/box-proxies.algo.ts::BoxCreate.__puya_arc4_router__()
         (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
         tests/approvals/box-proxies.algo.ts::BoxCreate.__algots__.defaultCreate()
         exit 1u
-    block@5: // after_if_else_L140
+    block@5: // after_if_else_L139
         exit 0u
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes[routing]() -> void:
-    block@0: // L149
+    block@0: // L148
         tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes()
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes() -> void:
-    block@0: // L149
+    block@0: // L148
         (box_create "a" 10u)
         let (value%0#0: uint64, check%0#0: bool) = (box_len "a")
         (assert check%0#0) // Box must have value
@@ -79,5 +79,5 @@ subroutine tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes() -> void:
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxCreate.__algots__.defaultCreate() -> void:
-    block@0: // L140
+    block@0: // L139
         return 

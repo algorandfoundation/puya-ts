@@ -67,14 +67,7 @@ import { ReferenceArrayClassBuilder, ReferenceArrayExpressionBuilder } from '../
 import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/reference/account'
 import { ApplicationExpressionBuilder, ApplicationFunctionBuilder } from '../eb/reference/application'
 import { AssetExpressionBuilder, AssetFunctionBuilder } from '../eb/reference/asset'
-import {
-  BoxExpressionBuilder,
-  BoxFunctionBuilder,
-  BoxMapExpressionBuilder,
-  BoxMapFunctionBuilder,
-  BoxRefExpressionBuilder,
-  BoxRefFunctionBuilder,
-} from '../eb/storage/box'
+import { BoxExpressionBuilder, BoxFunctionBuilder, BoxMapExpressionBuilder, BoxMapFunctionBuilder } from '../eb/storage/box'
 import { GlobalStateExpressionBuilder, GlobalStateFunctionBuilder } from '../eb/storage/global-state'
 import { LocalStateExpressionBuilder, LocalStateFunctionBuilder } from '../eb/storage/local-state'
 import { StringExpressionBuilder, StringFunctionBuilder } from '../eb/string-expression-builder'
@@ -179,8 +172,6 @@ import {
   BoxMapGeneric,
   BoxMapPType,
   BoxPType,
-  BoxRefFunction,
-  boxRefType,
   BytesFunction,
   BytesGeneric,
   bytesPType,
@@ -403,8 +394,6 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
     instanceEb: BoxMapExpressionBuilder,
     singletonEb: BoxMapFunctionBuilder,
   })
-  typeRegistry.register({ ptype: BoxRefFunction, singletonEb: BoxRefFunctionBuilder })
-  typeRegistry.register({ ptype: boxRefType, instanceEb: BoxRefExpressionBuilder })
 
   // Reference types
   typeRegistry.register({ ptype: ApplicationFunctionType, singletonEb: ApplicationFunctionBuilder })

@@ -4,16 +4,14 @@ import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
 import { codeInvariant } from '../../../../util'
 import { AppStorageDeclaration } from '../../../models/app-storage-declaration'
-import type { BoxPType, BoxRefPType } from '../../../ptypes'
+import type { BoxPType } from '../../../ptypes'
 import { boolPType, BoxMapPType, bytesPType, type ContractClassPType, type PType, uint64PType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
 import type { InstanceBuilder } from '../../index'
 import { InstanceExpressionBuilder } from '../../index'
 import { ValueProxy } from '../value-proxy'
 
-export abstract class BoxProxyExpressionBuilder<
-  TProxyType extends BoxMapPType | BoxRefPType | BoxPType,
-> extends InstanceExpressionBuilder<TProxyType> {
+export abstract class BoxProxyExpressionBuilder<TProxyType extends BoxMapPType | BoxPType> extends InstanceExpressionBuilder<TProxyType> {
   buildStorageDeclaration(
     memberName: string,
     memberLocation: SourceLocation,

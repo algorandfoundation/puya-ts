@@ -1,8 +1,8 @@
 main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
-    block@0: // L111
+    block@0: // L110
         let tmp%0#0: uint64 = (txn ApplicationID)
         goto tmp%0#0 ? block@1 : block@2
-    block@1: // if_body_L112
+    block@1: // if_body_L111
         (box_del "one")
         (box_put "one" "aaaaaargh")
         (box_del "A")
@@ -13,16 +13,16 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
         (assert tmp%2#1)
         let (_%0#0: uint64, maybe_exists%0#0: bool) = (box_len "one")
         goto maybe_exists%0#0 ? block@4 : block@6
-    block@4: // and_contd_L29
+    block@4: // and_contd_L28
         let (_%1#0: uint64, maybe_exists%1#0: bool) = (box_len "A")
         goto maybe_exists%1#0 ? block@5 : block@6
-    block@5: // bool_true_L29
+    block@5: // bool_true_L28
         let and_result%0#0: bool = 1u
         goto block@7
-    block@6: // bool_false_L29
+    block@6: // bool_false_L28
         let and_result%0#1: bool = 0u
         goto block@7
-    block@7: // bool_merge_L29
+    block@7: // bool_merge_L28
         let and_result%0#2: bool = φ(and_result%0#0 <- block@5, and_result%0#1 <- block@6)
         (assert and_result%0#2)
         let (value%0#0: uint64, check%0#0: bool) = (box_len "one")
@@ -34,16 +34,16 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
         (assert isBoxADeleted#0) // delete failed
         let (_%2#0: uint64, maybe_exists%2#0: bool) = (box_len "one")
         goto maybe_exists%2#0 ? block@10 : block@8
-    block@8: // and_contd_L36
+    block@8: // and_contd_L35
         let (_%3#0: uint64, maybe_exists%3#0: bool) = (box_len "A")
         goto maybe_exists%3#0 ? block@10 : block@9
-    block@9: // bool_true_L36
+    block@9: // bool_true_L35
         let and_result%1#0: bool = 1u
         goto block@11
-    block@10: // bool_false_L36
+    block@10: // bool_false_L35
         let and_result%1#1: bool = 0u
         goto block@11
-    block@11: // bool_merge_L36
+    block@11: // bool_merge_L35
         let and_result%1#2: bool = φ(and_result%1#0 <- block@9, and_result%1#1 <- block@10)
         (assert and_result%1#2)
         let (maybe_value%0#0: bytes, maybe_exists%4#0: bool) = (box_get "A")
@@ -78,27 +78,28 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
         (assert tmp%6#1)
         let (_%0#2: uint64, maybe_exists%0#2: bool) = (box_len "abc")
         goto maybe_exists%0#2 ? block@17 : block@16
-    block@16: // if_body_L79
+    block@16: // if_body_L78
         (box_create "abc" 1000u)
         goto block@20
-    block@17: // else_body_L81
+    block@17: // else_body_L80
         let (value%0#2: uint64, check%0#2: bool) = (box_len "abc")
         (assert check%0#2) // Box must have value
         let tmp%2#3: bool = (!= value%0#2 99u)
         goto tmp%2#3 ? block@18 : block@20
-    block@18: // if_body_L81
+    block@18: // if_body_L80
         (box_resize "abc" 99u)
         goto block@20
-    block@20: // after_if_else_L79
+    block@20: // after_if_else_L78
         let (_%1#1: uint64, maybe_exists%1#2: bool) = (box_len "three")
         goto maybe_exists%1#2 ? block@21 : block@22
-    block@21: // if_body_L84
+    block@21: // if_body_L83
         (box_resize "three" 4u)
         goto block@23
-    block@22: // else_body_L86
+    block@22: // else_body_L85
         (box_create "three" 4u)
         goto block@23
-    block@23: // after_if_else_L84
+    block@23: // after_if_else_L83
+        (box_del "three")
         (box_put "three" 0xffffffff)
         (box_splice "three" 1u 1u 0x00)
         let (aggregate%box_get%10#0: bytes, aggregate%box_get%11#0: bool) = (box_get "three")
@@ -110,5 +111,5 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
         let tmp%7#0: bool = (! maybe_exists%4#1)
         (assert tmp%7#0)
         goto block@2
-    block@2: // after_if_else_L112
+    block@2: // after_if_else_L111
         return 1u

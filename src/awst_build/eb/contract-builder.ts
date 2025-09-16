@@ -12,7 +12,6 @@ import type { PType } from '../ptypes'
 import {
   BoxMapPType,
   BoxPType,
-  BoxRefPType,
   ClusteredContractClassType,
   ContractClassPType,
   contractOptionsDecorator,
@@ -57,7 +56,7 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
     const property = this.ptype.properties[name]
     if (property) {
       const storageDeclaration = AwstBuildContext.current.getStorageDeclaration(this.ptype, name)
-      if (instanceOfAny(property, GlobalStateType, LocalStateType, BoxPType, BoxRefPType, BoxMapPType)) {
+      if (instanceOfAny(property, GlobalStateType, LocalStateType, BoxPType, BoxMapPType)) {
         codeInvariant(storageDeclaration, `No declaration exists for property ${property}.`, sourceLocation)
         return instanceEb(storageDeclaration.key, property)
       }

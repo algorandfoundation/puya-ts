@@ -4,7 +4,6 @@ import type {
   ArrayPType,
   BoxMapPType,
   BoxPType,
-  BoxRefPType,
   BytesPType,
   ContractClassPType,
   FixedArrayPType,
@@ -200,9 +199,6 @@ export abstract class DefaultVisitor<T> implements PTypeVisitor<T> {
     return this.defaultReturn(ptype)
   }
   visitBoxMapPType(ptype: BoxMapPType): T {
-    return this.defaultReturn(ptype)
-  }
-  visitBoxRefPType(ptype: BoxRefPType): T {
     return this.defaultReturn(ptype)
   }
   visitTypeParameterType(ptype: TypeParameterType): T {

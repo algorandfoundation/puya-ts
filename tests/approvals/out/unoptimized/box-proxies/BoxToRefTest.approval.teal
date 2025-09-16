@@ -10,7 +10,7 @@ main_block@0:
     b main_block@1
 
 main_block@1:
-    // tests/approvals/box-proxies.algo.ts:236
+    // tests/approvals/box-proxies.algo.ts:235
     // class BoxToRefTest extends Contract {
     txn NumAppArgs
     intc_0 // 0
@@ -19,7 +19,7 @@ main_block@1:
     b main_abi_routing@2
 
 main_abi_routing@2:
-    // tests/approvals/box-proxies.algo.ts:236
+    // tests/approvals/box-proxies.algo.ts:235
     // class BoxToRefTest extends Contract {
     txna ApplicationArgs 0
     pushbytes 0xa78000de // method "test()void"
@@ -31,12 +31,12 @@ main_switch_case_next@4:
     b main_after_if_else@6
 
 main_after_if_else@6:
-    // tests/approvals/box-proxies.algo.ts:236
+    // tests/approvals/box-proxies.algo.ts:235
     // class BoxToRefTest extends Contract {
     err
 
 main_test_route@3:
-    // tests/approvals/box-proxies.algo.ts:239
+    // tests/approvals/box-proxies.algo.ts:238
     // test() {
     txn OnCompletion
     intc_0 // NoOp
@@ -50,7 +50,7 @@ main_test_route@3:
     b main_switch_case_next@4
 
 main___algots__.defaultCreate@5:
-    // tests/approvals/box-proxies.algo.ts:236
+    // tests/approvals/box-proxies.algo.ts:235
     // class BoxToRefTest extends Contract {
     txn OnCompletion
     intc_0 // NoOp
@@ -70,7 +70,7 @@ test:
     b test_block@0
 
 test_block@0:
-    // tests/approvals/box-proxies.algo.ts:239
+    // tests/approvals/box-proxies.algo.ts:238
     // test() {
     callsub tests/approvals/box-proxies.algo.ts::BoxToRefTest.test
     intc_1 // 1
@@ -82,29 +82,29 @@ tests/approvals/box-proxies.algo.ts::BoxToRefTest.test:
     b tests/approvals/box-proxies.algo.ts::BoxToRefTest.test_block@0
 
 tests/approvals/box-proxies.algo.ts::BoxToRefTest.test_block@0:
-    // tests/approvals/box-proxies.algo.ts:240
+    // tests/approvals/box-proxies.algo.ts:239
     // const boxForCaller = this.boxMap(Txn.sender)
     txn Sender
-    // tests/approvals/box-proxies.algo.ts:237
-    // boxMap = BoxMap<Account, StaticArray<Uint8, 4>>({ keyPrefix: '' })
+    // tests/approvals/box-proxies.algo.ts:236
+    // boxMap = BoxMap<Account, arc4.StaticArray<arc4.Uint8, 4>>({ keyPrefix: '' })
     pushbytes ""
     uncover 1
     concat
-    // tests/approvals/box-proxies.algo.ts:242
+    // tests/approvals/box-proxies.algo.ts:241
     // boxForCaller.create()
     dup
     pushint 4 // 4
     box_create
     pop
-    // tests/approvals/box-proxies.algo.ts:244
-    // const boxRef = boxForCaller.ref
+    // tests/approvals/box-proxies.algo.ts:243
+    // const boxRef = boxForCaller
     dup
-    // tests/approvals/box-proxies.algo.ts:246
-    // boxRef.replace(0, new Uint8(123).bytes)
+    // tests/approvals/box-proxies.algo.ts:245
+    // boxRef.replace(0, new arc4.Uint8(123).bytes)
     intc_0 // 0
     pushbytes 0x7b
     box_replace
-    // tests/approvals/box-proxies.algo.ts:248
+    // tests/approvals/box-proxies.algo.ts:247
     // assert(boxForCaller.value[0].asUint64() === 123, 'First array item in box should be 123')
     box_get
     assert // Box must have value
