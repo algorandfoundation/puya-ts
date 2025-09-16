@@ -24,9 +24,9 @@ import { Arc4TupleClassBuilder, Arc4TupleExpressionBuilder } from '../eb/arc4/tu
 import { UFixedNxMClassBuilder, UFixedNxMExpressionBuilder } from '../eb/arc4/ufixed'
 import { classBuilderForUintNAlias, UintNClassBuilder, UintNExpressionBuilder } from '../eb/arc4/uintn'
 import {
+  ConvertBytesFunctionBuilder,
   DecodeArc4FunctionBuilder,
   EncodeArc4FunctionBuilder,
-  InterpretAsArc4FunctionBuilder,
   MethodSelectorFunctionBuilder,
   SizeOfFunctionBuilder,
 } from '../eb/arc4/util'
@@ -104,13 +104,13 @@ import {
   compileArc4Function,
   ContractProxyGeneric,
   ContractProxyType,
+  convertBytesFunction,
   decodeArc4Function,
   DynamicArrayGeneric,
   DynamicArrayType,
   DynamicBytesConstructor,
   DynamicBytesType,
   encodeArc4Function,
-  interpretAsArc4Function,
   methodSelectorFunction,
   sizeOfFunction,
   StaticArrayGeneric,
@@ -468,7 +468,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: ARC4StructClass, singletonEb: StructClassBuilder })
 
   // ARC4 lib
-  typeRegistry.register({ ptype: interpretAsArc4Function, singletonEb: InterpretAsArc4FunctionBuilder })
+  typeRegistry.register({ ptype: convertBytesFunction, singletonEb: ConvertBytesFunctionBuilder })
   typeRegistry.register({ ptype: encodeArc4Function, singletonEb: EncodeArc4FunctionBuilder })
   typeRegistry.register({ ptype: decodeArc4Function, singletonEb: DecodeArc4FunctionBuilder })
   typeRegistry.register({ ptype: methodSelectorFunction, singletonEb: MethodSelectorFunctionBuilder })

@@ -209,7 +209,7 @@ export function methodSelector(methodSignature: string | InstanceMethod<Contract
  * @param bytes An arc4 encoded bytes value
  * @param prefix The prefix (if any), present in the bytes value. This prefix will be validated and removed
  */
-export function interpretAsArc4<T extends ARC4Encoded>(bytes: BytesCompat, prefix: 'none' | 'log' = 'none'): T {
+export function convertBytes<T extends ARC4Encoded>(bytes: BytesCompat, options: { prefix?: 'none' | 'log'; strategy: 'unsafe-cast' }): T {
   throw new NoImplementation()
 }
 

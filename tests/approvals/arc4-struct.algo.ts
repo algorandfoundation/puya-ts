@@ -1,6 +1,6 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { arc4, assert, Box, BoxMap, clone, Contract, log } from '@algorandfoundation/algorand-typescript'
-import { interpretAsArc4, methodSelector, Struct, Uint } from '@algorandfoundation/algorand-typescript/arc4'
+import { convertBytes, methodSelector, Struct, Uint } from '@algorandfoundation/algorand-typescript/arc4'
 
 type ARC4Uint64 = Uint<64>
 const ARC4Uint64 = Uint<64>
@@ -38,7 +38,7 @@ class StructDemo extends Contract {
 
   public toAndFromBytes(v1: Vector): Vector {
     const v1_bytes = v1.bytes
-    return interpretAsArc4<Vector>(v1_bytes)
+    return convertBytes<Vector>(v1_bytes, { strategy: 'unsafe-cast' })
   }
 
   public toNative(v1: Vector) {

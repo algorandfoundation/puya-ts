@@ -12,9 +12,9 @@ import type { PType } from '../../ptypes'
 import { BytesPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
 import {
   ARC4EncodedType,
+  convertBytesFunction,
   decodeArc4Function,
   encodeArc4Function,
-  interpretAsArc4Function,
   methodSelectorFunction,
   sizeOfFunction,
 } from '../../ptypes/arc4-types'
@@ -25,24 +25,31 @@ import { FunctionBuilder } from '../index'
 import { requireStringConstant } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 
-export class InterpretAsArc4FunctionBuilder extends FunctionBuilder {
-  readonly ptype = interpretAsArc4Function
+export class ConvertBytesFunctionBuilder extends FunctionBuilder {
+  readonly ptype = convertBytesFunction
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       ptypes: [ptype],
-      args: [theBytes, prefixType],
+      args: [theBytes, { prefix, strategy: _ }],
     } = parseFunctionArgs({
       args,
       typeArgs,
       genericTypeArgs: 1,
       funcName: this.typeDescription,
-      argSpec: (a) => [a.required(bytesPType), a.optional(stringPType)],
+      argSpec: (a) => [
+        a.required(bytesPType),
+        a.obj({
+          prefix: a.optional(stringPType),
+          strategy: a.optional(stringPType),
+        }),
+      ],
+
       callLocation: sourceLocation,
     })
     codeInvariant(ptype instanceof ARC4EncodedType, 'Generic type must be an ARC4 encoded type')
 
-    const prefixBytes = getPrefixValue(prefixType)
+    const prefixBytes = getPrefixValue(prefix)
 
     return instanceEb(
       nodeFactory.reinterpretCast({
@@ -114,7 +121,7 @@ export class DecodeArc4FunctionBuilder extends FunctionBuilder {
     })
     codeInvariant(
       !(ptype instanceof ARC4EncodedType),
-      `Cannot decode to ${ptype} as it is an ARC4 type. Use \`interpretAsArc4<${ptype}>\` instead`,
+      `Cannot decode to ${ptype} as it is an ARC4 type. Use \`convertBytes<${ptype}>\` instead`,
       sourceLocation,
     )
 
