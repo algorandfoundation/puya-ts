@@ -551,8 +551,8 @@ export const DynamicBytesType = new DynamicArrayType({
   nativeType: bytesPType,
 })
 
-export const interpretAsArc4Function = new LibFunctionType({
-  name: 'interpretAsArc4',
+export const convertBytesFunction = new LibFunctionType({
+  name: 'convertBytes',
   module: Constants.moduleNames.algoTs.arc4.index,
 })
 

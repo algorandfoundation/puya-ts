@@ -4,10 +4,10 @@ import {
   Address,
   Bool,
   Byte,
+  convertBytes,
   DynamicArray,
   DynamicBytes,
   encodeArc4,
-  interpretAsArc4,
   StaticArray,
   StaticBytes,
   Str,
@@ -47,7 +47,7 @@ function testUintN(n: uint64, b: biguint, c: Uint<256>) {
   assert(c.bytes.length === 256 / 8)
 
   const a_bytes = a.bytes
-  const a_from_bytes = interpretAsArc4<Uint<128>>(a_bytes)
+  const a_from_bytes = convertBytes<Uint<128>>(a_bytes, { strategy: 'unsafe-cast' })
 
   assert(a_from_bytes === a)
 
@@ -70,7 +70,7 @@ function testStr() {
 
   const s2_bytes = s2.bytes
 
-  const s2_from_bytes = interpretAsArc4<Str>(s2_bytes)
+  const s2_from_bytes = convertBytes<Str>(s2_bytes, { strategy: 'unsafe-cast' })
 
   assert(s2 === s2_from_bytes)
 }
