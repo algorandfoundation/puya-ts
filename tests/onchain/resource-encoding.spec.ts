@@ -22,7 +22,7 @@ describe('resource encoding', () => {
         accountReferences: [],
         populateAppCallResources: false,
       }),
-    ).rejects.toThrow('invalid Account reference')
+    ).rejects.toThrow('unavailable Account')
 
     const res3 = await appClientByIndex.send.call({
       method: 'testImplicitValue',
