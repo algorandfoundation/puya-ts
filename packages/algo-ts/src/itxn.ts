@@ -573,6 +573,10 @@ export namespace itxn {
      * Number of logs
      */
     readonly numLogs: uint64
+    /**
+     * Application version for which the txn must reject
+     */
+    readonly rejectVersion: uint64
   }
   export interface PaymentFields {
     /**
@@ -955,6 +959,10 @@ export namespace itxn {
      * @param index Index of the application to get
      */
     apps?: readonly [...(Application | uint64)[]]
+    /**
+     * Application version for which the txn must reject
+     */
+    rejectVersion?: uint64
   }
   /**
    * A union of all ItxnParams types

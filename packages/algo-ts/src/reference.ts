@@ -286,4 +286,9 @@ export type Application = {
    * Address for which this application has authority
    */
   readonly address: Account
+
+  /**
+   * Version of the app, incremented each time the approval or clear program changes
+   */
+  readonly version: uint64
 }

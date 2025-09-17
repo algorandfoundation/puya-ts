@@ -1,0 +1,48 @@
+#pragma version 12
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/avm12.algo.ts:49-50
+    // @contract({ avmVersion: 12 })
+    // class ContractV0 extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0xa0e81872 // method "update()void"
+    txna ApplicationArgs 0
+    match main_update_route@3
+    err
+
+main_update_route@3:
+    // tests/approvals/avm12.algo.ts:51
+    // @abimethod({ allowActions: 'UpdateApplication' })
+    txn OnCompletion
+    pushint 4 // UpdateApplication
+    ==
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be UpdateApplication && can only call when not creating
+    b update
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/avm12.algo.ts:49-50
+    // @contract({ avmVersion: 12 })
+    // class ContractV0 extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return // on error: OnCompletion must be NoOp && can only call when creating
+
+
+// tests/approvals/avm12.algo.ts::ContractV0.update[routing]() -> void:
+update:
+    // tests/approvals/avm12.algo.ts:53
+    // assert(Txn.rejectVersion === 1, 'can only update if caller expects this to be currently be v0')
+    txn RejectVersion
+    pushint 1 // 1
+    ==
+    // tests/approvals/avm12.algo.ts:51
+    // @abimethod({ allowActions: 'UpdateApplication' })
+    return // on error: can only update if caller expects this to be currently be v0

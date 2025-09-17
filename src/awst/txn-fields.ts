@@ -67,4 +67,5 @@ export enum TxnField {
   Logs = 'Logs',
   ApprovalProgramPages = 'ApprovalProgramPages',
   ClearStateProgramPages = 'ClearStateProgramPages',
+  RejectVersion = 'RejectVersion',
 }

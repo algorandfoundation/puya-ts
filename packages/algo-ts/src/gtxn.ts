@@ -573,6 +573,10 @@ export namespace gtxn {
      * Number of logs
      */
     readonly numLogs: uint64
+    /**
+     * Application version for which the txn must reject
+     */
+    readonly rejectVersion: uint64
   }
   /**
    * A group transaction of any type

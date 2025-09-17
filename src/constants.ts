@@ -65,8 +65,8 @@ export const Constants = {
     zeroAddressB32: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ',
   },
 
-  supportedAvmVersions: [10n, 11n],
-  targetedPuyaVersion: '5.0.0-rc.11',
+  supportedAvmVersions: [10n, 11n, 12n, 13n],
+  targetedPuyaVersion: '5.0.0-rc.12',
   puyaGithubRepo: 'algorandfoundation/puya',
   minNodeVersion: '20.11.1',
   languageServerSource: 'puyats',

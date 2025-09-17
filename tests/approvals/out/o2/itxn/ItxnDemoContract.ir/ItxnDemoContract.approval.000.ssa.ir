@@ -149,6 +149,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
         let assetParams%%Applications_length#0: uint64 = 0u
         let assetParams%%ApprovalProgramPages_length#0: uint64 = 0u
         let assetParams%%ClearStateProgramPages_length#0: uint64 = 0u
+        let assetParams%%RejectVersion_length#0: uint64 = 0u
         (app_global_put "name" "AST2")
         itxn_begin
         ((itxn_field ConfigAssetReserve) assetParams%%param_ConfigAssetReserve_idx_0#0)
@@ -225,6 +226,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
         let asset1_txn.StateProofPK#0: bytes = itxn[asset1_txn#0].StateProofPK
         let asset1_txn.NumApprovalProgramPages#0: uint64 = itxn[asset1_txn#0].NumApprovalProgramPages
         let asset1_txn.NumClearStateProgramPages#0: uint64 = itxn[asset1_txn#0].NumClearStateProgramPages
+        let asset1_txn.RejectVersion#0: uint64 = itxn[asset1_txn#0].RejectVersion
         let assetParams#1: itxn_field_set = itxn_field_set(1)
         let (maybe_value%1#0: bytes, maybe_exists%1#0: bool) = (app_global_get_ex 0u "name")
         (assert maybe_exists%1#0) // check GlobalState exists
@@ -305,6 +307,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
         let asset2_txn.StateProofPK#0: bytes = itxn[asset2_txn#0].StateProofPK
         let asset2_txn.NumApprovalProgramPages#0: uint64 = itxn[asset2_txn#0].NumApprovalProgramPages
         let asset2_txn.NumClearStateProgramPages#0: uint64 = itxn[asset2_txn#0].NumClearStateProgramPages
+        let asset2_txn.RejectVersion#0: uint64 = itxn[asset2_txn#0].RejectVersion
         let tmp%0#0: bool = (== asset1_txn.ConfigAssetName#0 "AST1")
         (assert tmp%0#0) // asset1_txn is correct
         let tmp%1#0: bool = (== asset2_txn.ConfigAssetName#0 "AST2")
@@ -373,6 +376,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
         let appCreateParams%%Accounts_length#0: uint64 = 0u
         let appCreateParams%%Assets_length#0: uint64 = 0u
         let appCreateParams%%Applications_length#0: uint64 = 0u
+        let appCreateParams%%RejectVersion_length#0: uint64 = 0u
         let assetParams#2: itxn_field_set = itxn_field_set(3)
         let assetParams%%param_ConfigAssetName_idx_0#2: bytes[4] = "AST3"
         let assetParams%%ConfigAssetName_length#2: uint64 = 1u
@@ -459,6 +463,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
         let appCreateTxn.StateProofPK#0: bytes = itxn[appCreateTxn#0].StateProofPK
         let appCreateTxn.NumApprovalProgramPages#0: uint64 = itxn[appCreateTxn#0].NumApprovalProgramPages
         let appCreateTxn.NumClearStateProgramPages#0: uint64 = itxn[appCreateTxn#0].NumClearStateProgramPages
+        let appCreateTxn.RejectVersion#0: uint64 = itxn[appCreateTxn#0].RejectVersion
         let asset3_txn._is_last#0: bool = 1u
         let asset3_txn.Sender#0: account = itxn[asset3_txn#0].Sender
         let asset3_txn.Fee#0: uint64 = itxn[asset3_txn#0].Fee
@@ -521,6 +526,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
         let asset3_txn.StateProofPK#0: bytes = itxn[asset3_txn#0].StateProofPK
         let asset3_txn.NumApprovalProgramPages#0: uint64 = itxn[asset3_txn#0].NumApprovalProgramPages
         let asset3_txn.NumClearStateProgramPages#0: uint64 = itxn[asset3_txn#0].NumClearStateProgramPages
+        let asset3_txn.RejectVersion#0: uint64 = itxn[asset3_txn#0].RejectVersion
         let reinterpret_bool%0#0: bool = appCreateTxn.CreatedApplicationID#0
         (assert reinterpret_bool%0#0) // app is created
         let tmp%4#0: bool = (== asset3_txn.ConfigAssetName#0 "AST3")
@@ -632,6 +638,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
         let createAppParams%%Accounts_length#0: uint64 = 0u
         let createAppParams%%Assets_length#0: uint64 = 0u
         let createAppParams%%Applications_length#0: uint64 = 0u
+        let createAppParams%%RejectVersion_length#0: uint64 = 0u
         goto block@3
     block@2: // else_body_L82
         let createAppParams#1: itxn_field_set = itxn_field_set(1)
@@ -695,6 +702,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
         let createAppParams%%Accounts_length#1: uint64 = 0u
         let createAppParams%%Assets_length#1: uint64 = 0u
         let createAppParams%%Applications_length#1: uint64 = 0u
+        let createAppParams%%RejectVersion_length#1: uint64 = 0u
         goto block@3
     block@3: // after_if_else_L73
         let createAppParams%%param_Note_idx_0#2: bytes = φ(createAppParams%%param_Note_idx_0#0 <- block@1, createAppParams%%param_Note_idx_0#1 <- block@2)
@@ -794,6 +802,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
         let createAppTxn.StateProofPK#0: bytes = itxn[createAppTxn#0].StateProofPK
         let createAppTxn.NumApprovalProgramPages#0: uint64 = itxn[createAppTxn#0].NumApprovalProgramPages
         let createAppTxn.NumClearStateProgramPages#0: uint64 = itxn[createAppTxn#0].NumClearStateProgramPages
+        let createAppTxn.RejectVersion#0: uint64 = itxn[createAppTxn#0].RejectVersion
         let tmp%1#0: bytes = itxn[createAppTxn#0].ApplicationArgs[0u]
         let tmp%2#0: bool = (== tmp%1#0 "1")
         (assert tmp%2#0) // correct args used 1
@@ -863,6 +872,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
         let inner_txn_params%0%%Accounts_length#0: uint64 = 0u
         let inner_txn_params%0%%Assets_length#0: uint64 = 0u
         let inner_txn_params%0%%Applications_length#0: uint64 = 0u
+        let inner_txn_params%0%%RejectVersion_length#0: uint64 = 0u
         ((itxn_field ApplicationArgs) inner_txn_params%0%%param_ApplicationArgs_idx_0#0)
         ((itxn_field OnCompletion) inner_txn_params%0%%param_OnCompletion_idx_0#0)
         ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_0#0)
@@ -935,6 +945,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test2() -> void:
         let createAppTxn2.StateProofPK#0: bytes = itxn[createAppTxn2#0].StateProofPK
         let createAppTxn2.NumApprovalProgramPages#0: uint64 = itxn[createAppTxn2#0].NumApprovalProgramPages
         let createAppTxn2.NumClearStateProgramPages#0: uint64 = itxn[createAppTxn2#0].NumClearStateProgramPages
+        let createAppTxn2.RejectVersion#0: uint64 = itxn[createAppTxn2#0].RejectVersion
         let tmp%7#0: bytes = itxn[createAppTxn2#0].ApplicationArgs[0u]
         let tmp%8#0: bool = (== tmp%7#0 "42")
         (assert tmp%8#0) // correct args used 2
@@ -1004,6 +1015,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn1%%Accounts_length#0: uint64 = 0u
         let appTxn1%%Assets_length#0: uint64 = 0u
         let appTxn1%%Applications_length#0: uint64 = 0u
+        let appTxn1%%RejectVersion_length#0: uint64 = 0u
         let appTxn2%%Sender_length#0: uint64 = appTxn1%%Sender_length#0
         let appTxn2%%param_Fee_idx_0#0: uint64 = appTxn1%%param_Fee_idx_0#0
         let appTxn2%%Fee_length#0: uint64 = appTxn1%%Fee_length#0
@@ -1061,6 +1073,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn2%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn2%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn2%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn2%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn2#0: itxn_field_set = itxn_field_set(1)
         let appTxn2%%param_ApplicationArgs_idx_0#1: bytes[1] = "2"
         let appTxn2%%ApplicationArgs_length#1: uint64 = 1u
@@ -1121,6 +1134,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn3%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn3%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn3%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn3%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn3#0: itxn_field_set = itxn_field_set(2)
         let appTxn3%%param_ApplicationArgs_idx_0#1: bytes[1] = "3"
         let appTxn3%%ApplicationArgs_length#1: uint64 = 1u
@@ -1181,6 +1195,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn4%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn4%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn4%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn4%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn4#0: itxn_field_set = itxn_field_set(3)
         let appTxn4%%param_ApplicationArgs_idx_0#1: bytes[1] = "4"
         let appTxn4%%ApplicationArgs_length#1: uint64 = 1u
@@ -1241,6 +1256,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn5%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn5%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn5%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn5%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn5#0: itxn_field_set = itxn_field_set(4)
         let appTxn5%%param_ApplicationArgs_idx_0#1: bytes[1] = "5"
         let appTxn5%%ApplicationArgs_length#1: uint64 = 1u
@@ -1301,6 +1317,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn6%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn6%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn6%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn6%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn6#0: itxn_field_set = itxn_field_set(5)
         let appTxn6%%param_ApplicationArgs_idx_0#1: bytes[1] = "6"
         let appTxn6%%ApplicationArgs_length#1: uint64 = 1u
@@ -1361,6 +1378,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn7%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn7%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn7%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn7%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn7#0: itxn_field_set = itxn_field_set(6)
         let appTxn7%%param_ApplicationArgs_idx_0#1: bytes[1] = "7"
         let appTxn7%%ApplicationArgs_length#1: uint64 = 1u
@@ -1421,6 +1439,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn8%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn8%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn8%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn8%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn8#0: itxn_field_set = itxn_field_set(7)
         let appTxn8%%param_ApplicationArgs_idx_0#1: bytes[1] = "8"
         let appTxn8%%ApplicationArgs_length#1: uint64 = 1u
@@ -1481,6 +1500,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn9%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn9%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn9%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn9%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn9#0: itxn_field_set = itxn_field_set(8)
         let appTxn9%%param_ApplicationArgs_idx_0#1: bytes[1] = "9"
         let appTxn9%%ApplicationArgs_length#1: uint64 = 1u
@@ -1541,6 +1561,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn10%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn10%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn10%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn10%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn10#0: itxn_field_set = itxn_field_set(9)
         let appTxn10%%param_ApplicationArgs_idx_0#1: bytes[2] = "10"
         let appTxn10%%ApplicationArgs_length#1: uint64 = 1u
@@ -1601,6 +1622,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn11%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn11%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn11%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn11%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn11#0: itxn_field_set = itxn_field_set(10)
         let appTxn11%%param_ApplicationArgs_idx_0#1: bytes[2] = "11"
         let appTxn11%%ApplicationArgs_length#1: uint64 = 1u
@@ -1661,6 +1683,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn12%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn12%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn12%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn12%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn12#0: itxn_field_set = itxn_field_set(11)
         let appTxn12%%param_ApplicationArgs_idx_0#1: bytes[2] = "12"
         let appTxn12%%ApplicationArgs_length#1: uint64 = 1u
@@ -1721,6 +1744,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn13%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn13%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn13%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn13%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn13#0: itxn_field_set = itxn_field_set(12)
         let appTxn13%%param_ApplicationArgs_idx_0#1: bytes[2] = "13"
         let appTxn13%%ApplicationArgs_length#1: uint64 = 1u
@@ -1781,6 +1805,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn14%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn14%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn14%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn14%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn14#0: itxn_field_set = itxn_field_set(13)
         let appTxn14%%param_ApplicationArgs_idx_0#1: bytes[2] = "14"
         let appTxn14%%ApplicationArgs_length#1: uint64 = 1u
@@ -1841,6 +1866,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn15%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn15%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn15%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn15%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn15#0: itxn_field_set = itxn_field_set(14)
         let appTxn15%%param_ApplicationArgs_idx_0#1: bytes[2] = "15"
         let appTxn15%%ApplicationArgs_length#1: uint64 = 1u
@@ -1901,6 +1927,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let appTxn16%%ApprovalProgramPages_length#0: uint64 = appTxn1%%ApprovalProgramPages_length#0
         let appTxn16%%param_ClearStateProgramPages_idx_0#0: bytes[3] = appTxn1%%param_ClearStateProgramPages_idx_0#0
         let appTxn16%%ClearStateProgramPages_length#0: uint64 = appTxn1%%ClearStateProgramPages_length#0
+        let appTxn16%%RejectVersion_length#0: uint64 = appTxn1%%RejectVersion_length#0
         let appTxn16#0: itxn_field_set = itxn_field_set(15)
         let appTxn16%%param_ApplicationArgs_idx_0#1: bytes[2] = "16"
         let appTxn16%%ApplicationArgs_length#1: uint64 = 1u
@@ -2127,6 +2154,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app1.StateProofPK#0: bytes = itxn[app1#0].StateProofPK
         let app1.NumApprovalProgramPages#0: uint64 = itxn[app1#0].NumApprovalProgramPages
         let app1.NumClearStateProgramPages#0: uint64 = itxn[app1#0].NumClearStateProgramPages
+        let app1.RejectVersion#0: uint64 = itxn[app1#0].RejectVersion
         let app2._is_last#0: bool = 0u
         let app2.Sender#0: account = itxn[app2#0].Sender
         let app2.Fee#0: uint64 = itxn[app2#0].Fee
@@ -2189,6 +2217,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app2.StateProofPK#0: bytes = itxn[app2#0].StateProofPK
         let app2.NumApprovalProgramPages#0: uint64 = itxn[app2#0].NumApprovalProgramPages
         let app2.NumClearStateProgramPages#0: uint64 = itxn[app2#0].NumClearStateProgramPages
+        let app2.RejectVersion#0: uint64 = itxn[app2#0].RejectVersion
         let app3._is_last#0: bool = 0u
         let app3.Sender#0: account = itxn[app3#0].Sender
         let app3.Fee#0: uint64 = itxn[app3#0].Fee
@@ -2251,6 +2280,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app3.StateProofPK#0: bytes = itxn[app3#0].StateProofPK
         let app3.NumApprovalProgramPages#0: uint64 = itxn[app3#0].NumApprovalProgramPages
         let app3.NumClearStateProgramPages#0: uint64 = itxn[app3#0].NumClearStateProgramPages
+        let app3.RejectVersion#0: uint64 = itxn[app3#0].RejectVersion
         let app4._is_last#0: bool = 0u
         let app4.Sender#0: account = itxn[app4#0].Sender
         let app4.Fee#0: uint64 = itxn[app4#0].Fee
@@ -2313,6 +2343,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app4.StateProofPK#0: bytes = itxn[app4#0].StateProofPK
         let app4.NumApprovalProgramPages#0: uint64 = itxn[app4#0].NumApprovalProgramPages
         let app4.NumClearStateProgramPages#0: uint64 = itxn[app4#0].NumClearStateProgramPages
+        let app4.RejectVersion#0: uint64 = itxn[app4#0].RejectVersion
         let app5._is_last#0: bool = 0u
         let app5.Sender#0: account = itxn[app5#0].Sender
         let app5.Fee#0: uint64 = itxn[app5#0].Fee
@@ -2375,6 +2406,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app5.StateProofPK#0: bytes = itxn[app5#0].StateProofPK
         let app5.NumApprovalProgramPages#0: uint64 = itxn[app5#0].NumApprovalProgramPages
         let app5.NumClearStateProgramPages#0: uint64 = itxn[app5#0].NumClearStateProgramPages
+        let app5.RejectVersion#0: uint64 = itxn[app5#0].RejectVersion
         let app6._is_last#0: bool = 0u
         let app6.Sender#0: account = itxn[app6#0].Sender
         let app6.Fee#0: uint64 = itxn[app6#0].Fee
@@ -2437,6 +2469,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app6.StateProofPK#0: bytes = itxn[app6#0].StateProofPK
         let app6.NumApprovalProgramPages#0: uint64 = itxn[app6#0].NumApprovalProgramPages
         let app6.NumClearStateProgramPages#0: uint64 = itxn[app6#0].NumClearStateProgramPages
+        let app6.RejectVersion#0: uint64 = itxn[app6#0].RejectVersion
         let app7._is_last#0: bool = 0u
         let app7.Sender#0: account = itxn[app7#0].Sender
         let app7.Fee#0: uint64 = itxn[app7#0].Fee
@@ -2499,6 +2532,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app7.StateProofPK#0: bytes = itxn[app7#0].StateProofPK
         let app7.NumApprovalProgramPages#0: uint64 = itxn[app7#0].NumApprovalProgramPages
         let app7.NumClearStateProgramPages#0: uint64 = itxn[app7#0].NumClearStateProgramPages
+        let app7.RejectVersion#0: uint64 = itxn[app7#0].RejectVersion
         let app8._is_last#0: bool = 0u
         let app8.Sender#0: account = itxn[app8#0].Sender
         let app8.Fee#0: uint64 = itxn[app8#0].Fee
@@ -2561,6 +2595,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app8.StateProofPK#0: bytes = itxn[app8#0].StateProofPK
         let app8.NumApprovalProgramPages#0: uint64 = itxn[app8#0].NumApprovalProgramPages
         let app8.NumClearStateProgramPages#0: uint64 = itxn[app8#0].NumClearStateProgramPages
+        let app8.RejectVersion#0: uint64 = itxn[app8#0].RejectVersion
         let app9._is_last#0: bool = 0u
         let app9.Sender#0: account = itxn[app9#0].Sender
         let app9.Fee#0: uint64 = itxn[app9#0].Fee
@@ -2623,6 +2658,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app9.StateProofPK#0: bytes = itxn[app9#0].StateProofPK
         let app9.NumApprovalProgramPages#0: uint64 = itxn[app9#0].NumApprovalProgramPages
         let app9.NumClearStateProgramPages#0: uint64 = itxn[app9#0].NumClearStateProgramPages
+        let app9.RejectVersion#0: uint64 = itxn[app9#0].RejectVersion
         let app10._is_last#0: bool = 0u
         let app10.Sender#0: account = itxn[app10#0].Sender
         let app10.Fee#0: uint64 = itxn[app10#0].Fee
@@ -2685,6 +2721,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app10.StateProofPK#0: bytes = itxn[app10#0].StateProofPK
         let app10.NumApprovalProgramPages#0: uint64 = itxn[app10#0].NumApprovalProgramPages
         let app10.NumClearStateProgramPages#0: uint64 = itxn[app10#0].NumClearStateProgramPages
+        let app10.RejectVersion#0: uint64 = itxn[app10#0].RejectVersion
         let app11._is_last#0: bool = 0u
         let app11.Sender#0: account = itxn[app11#0].Sender
         let app11.Fee#0: uint64 = itxn[app11#0].Fee
@@ -2747,6 +2784,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app11.StateProofPK#0: bytes = itxn[app11#0].StateProofPK
         let app11.NumApprovalProgramPages#0: uint64 = itxn[app11#0].NumApprovalProgramPages
         let app11.NumClearStateProgramPages#0: uint64 = itxn[app11#0].NumClearStateProgramPages
+        let app11.RejectVersion#0: uint64 = itxn[app11#0].RejectVersion
         let app12._is_last#0: bool = 0u
         let app12.Sender#0: account = itxn[app12#0].Sender
         let app12.Fee#0: uint64 = itxn[app12#0].Fee
@@ -2809,6 +2847,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app12.StateProofPK#0: bytes = itxn[app12#0].StateProofPK
         let app12.NumApprovalProgramPages#0: uint64 = itxn[app12#0].NumApprovalProgramPages
         let app12.NumClearStateProgramPages#0: uint64 = itxn[app12#0].NumClearStateProgramPages
+        let app12.RejectVersion#0: uint64 = itxn[app12#0].RejectVersion
         let app13._is_last#0: bool = 0u
         let app13.Sender#0: account = itxn[app13#0].Sender
         let app13.Fee#0: uint64 = itxn[app13#0].Fee
@@ -2871,6 +2910,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app13.StateProofPK#0: bytes = itxn[app13#0].StateProofPK
         let app13.NumApprovalProgramPages#0: uint64 = itxn[app13#0].NumApprovalProgramPages
         let app13.NumClearStateProgramPages#0: uint64 = itxn[app13#0].NumClearStateProgramPages
+        let app13.RejectVersion#0: uint64 = itxn[app13#0].RejectVersion
         let app14._is_last#0: bool = 0u
         let app14.Sender#0: account = itxn[app14#0].Sender
         let app14.Fee#0: uint64 = itxn[app14#0].Fee
@@ -2933,6 +2973,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app14.StateProofPK#0: bytes = itxn[app14#0].StateProofPK
         let app14.NumApprovalProgramPages#0: uint64 = itxn[app14#0].NumApprovalProgramPages
         let app14.NumClearStateProgramPages#0: uint64 = itxn[app14#0].NumClearStateProgramPages
+        let app14.RejectVersion#0: uint64 = itxn[app14#0].RejectVersion
         let app15._is_last#0: bool = 0u
         let app15.Sender#0: account = itxn[app15#0].Sender
         let app15.Fee#0: uint64 = itxn[app15#0].Fee
@@ -2995,6 +3036,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app15.StateProofPK#0: bytes = itxn[app15#0].StateProofPK
         let app15.NumApprovalProgramPages#0: uint64 = itxn[app15#0].NumApprovalProgramPages
         let app15.NumClearStateProgramPages#0: uint64 = itxn[app15#0].NumClearStateProgramPages
+        let app15.RejectVersion#0: uint64 = itxn[app15#0].RejectVersion
         let app16._is_last#0: bool = 1u
         let app16.Sender#0: account = itxn[app16#0].Sender
         let app16.Fee#0: uint64 = itxn[app16#0].Fee
@@ -3057,6 +3099,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3() -> void:
         let app16.StateProofPK#0: bytes = itxn[app16#0].StateProofPK
         let app16.NumApprovalProgramPages#0: uint64 = itxn[app16#0].NumApprovalProgramPages
         let app16.NumClearStateProgramPages#0: uint64 = itxn[app16#0].NumClearStateProgramPages
+        let app16.RejectVersion#0: uint64 = itxn[app16#0].RejectVersion
         let tmp%0#0: bytes = itxn[app1#0].Logs[0u]
         let tmp%1#0: bool = (== tmp%0#0 "1")
         (assert tmp%1#0)
@@ -3176,6 +3219,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test4() -> void:
         let appTxn1%%Accounts_length#0: uint64 = 0u
         let appTxn1%%Assets_length#0: uint64 = 0u
         let appTxn1%%Applications_length#0: uint64 = 0u
+        let appTxn1%%RejectVersion_length#0: uint64 = 0u
         itxn_begin
         ((itxn_field ExtraProgramPages) appTxn1%%param_ExtraProgramPages_idx_0#0)
         ((itxn_field ApplicationArgs) appTxn1%%param_ApplicationArgs_idx_0#0)
@@ -3253,6 +3297,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test4() -> void:
         let app1.StateProofPK#0: bytes = itxn[app1#0].StateProofPK
         let app1.NumApprovalProgramPages#0: uint64 = itxn[app1#0].NumApprovalProgramPages
         let app1.NumClearStateProgramPages#0: uint64 = itxn[app1#0].NumClearStateProgramPages
+        let app1.RejectVersion#0: uint64 = itxn[app1#0].RejectVersion
         let tmp%3#0: bool = (== app1.ExtraProgramPages#0 3u)
         (assert tmp%3#0) // extra pages = 3
         let tmp%4#0: bool = (== app1.NumApprovalProgramPages#0 2u)
@@ -3347,6 +3392,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -
         let pay%%Applications_length#0: uint64 = 0u
         let pay%%ApprovalProgramPages_length#0: uint64 = 0u
         let pay%%ClearStateProgramPages_length#0: uint64 = 0u
+        let pay%%RejectVersion_length#0: uint64 = 0u
         let app#0: itxn_field_set = itxn_field_set(1)
         let app%%param_Fee_idx_0#0: uint64 = 0u
         let app%%Fee_length#0: uint64 = 1u
@@ -3406,6 +3452,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -
         let app%%Applications_length#0: uint64 = 0u
         let app%%ApprovalProgramPages_length#0: uint64 = 0u
         let app%%ClearStateProgramPages_length#0: uint64 = 0u
+        let app%%RejectVersion_length#0: uint64 = 0u
         itxn_begin
         ((itxn_field Amount) pay%%param_Amount_idx_0#0)
         ((itxn_field Receiver) pay%%param_Receiver_idx_0#0)
@@ -3487,6 +3534,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -
         let _.StateProofPK#0: bytes = itxn[_#0].StateProofPK
         let _.NumApprovalProgramPages#0: uint64 = itxn[_#0].NumApprovalProgramPages
         let _.NumClearStateProgramPages#0: uint64 = itxn[_#0].NumClearStateProgramPages
+        let _.RejectVersion#0: uint64 = itxn[_#0].RejectVersion
         let appRes._is_last#0: bool = 1u
         let appRes.Sender#0: account = itxn[appRes#0].Sender
         let appRes.Fee#0: uint64 = itxn[appRes#0].Fee
@@ -3549,6 +3597,7 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test5(appId: uint64) -
         let appRes.StateProofPK#0: bytes = itxn[appRes#0].StateProofPK
         let appRes.NumApprovalProgramPages#0: uint64 = itxn[appRes#0].NumApprovalProgramPages
         let appRes.NumClearStateProgramPages#0: uint64 = itxn[appRes#0].NumClearStateProgramPages
+        let appRes.RejectVersion#0: uint64 = itxn[appRes#0].RejectVersion
         let tmp%1#0: bytes = ((extract 4 0) appRes.LastLog#0)
         let tmp%2#0: bytes = ((extract 0 4) appRes.LastLog#0)
         let tmp%3#0: bool = (== tmp%2#0 0x151f7c75)
