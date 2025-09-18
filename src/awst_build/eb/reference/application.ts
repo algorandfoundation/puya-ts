@@ -47,6 +47,7 @@ export class ApplicationExpressionBuilder extends Uint64BackedReferenceTypeExpre
         extraProgramPages: ['AppExtraProgramPages', uint64PType],
         creator: ['AppCreator', accountPType],
         address: ['AppAddress', accountPType],
+        version: ['AppVersion', uint64PType],
       },
       fieldBoolComment: 'application exists',
     })

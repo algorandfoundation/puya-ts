@@ -1,0 +1,127 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        goto block@1
+    block@1: // L14
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#1 0u)
+        goto tmp%1#0 ? block@2 : block@9
+    block@2: // abi_routing_L14
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@3 : block@7
+    block@3: // call_NoOp_L14
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "testFalconVerify()void" => block@4, method "testRejectVersion()void" => block@5, * => block@6}
+    block@4: // testFalconVerify_route_L16
+        tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify[routing]()
+        goto block@6
+    block@5: // testRejectVersion_route_L20
+        tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion[routing]()
+        goto block@6
+    block@6: // switch_case_next_L14
+        goto block@8
+    block@7: // create_NoOp_L14
+        goto block@8
+    block@8: // after_if_else_L14
+        goto block@10
+    block@9: // __algots__.defaultCreate_L14
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/avm12.algo.ts::Avm12Contract.__algots__.defaultCreate()
+        exit 1u
+    block@10: // after_if_else_L14
+        exit 0u
+    block@11: // after_inlined_tests/approvals/avm12.algo.ts::Avm12Contract.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
+        return tmp%0#0
+
+subroutine tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify[routing]() -> void:
+    block@0: // L16
+        tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify()
+        exit 1u
+
+subroutine tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion[routing]() -> void:
+    block@0: // L20
+        tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion()
+        exit 1u
+
+subroutine tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify() -> void:
+    block@0: // L16
+        let awst_tmp%0#0: bytes = (bzero 1793u)
+        let reinterpret_bytes[1793]%0#0: bytes[1793] = awst_tmp%0#0
+        let tmp%0#0: uint64 = (len awst_tmp%0#0)
+        let tmp%1#0: bool = (== tmp%0#0 1793u)
+        (assert tmp%1#0) // Length must be 1793
+        let tmp%2#0: bool = (falcon_verify 0x 0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 reinterpret_bytes[1793]%0#0)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0)
+        return 
+
+subroutine tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion() -> void:
+    block@0: // L20
+        itxn_begin
+        ((itxn_field ExtraProgramPages) 0u)
+        ((itxn_field LocalNumUint) 0u)
+        ((itxn_field LocalNumByteSlice) 0u)
+        ((itxn_field GlobalNumByteSlice) 0u)
+        ((itxn_field GlobalNumUint) 0u)
+        ((itxn_field ClearStateProgramPages) DEIAAIEBQw==)
+        (itxn_field ClearStateProgramPages)
+        ((itxn_field ApprovalProgramPages) DCACAAFCAABCAAAxGyITQQAqQgAANhoAgASg6BhyTwGOAQAHQgAAQgAAADEZgQQSMRgiExBEiAASQv/rMRkiEjEYIhIQRIgAEyNDQgAAiAACI0NCAAAxRCMSRIlCAACJ)
+        (itxn_field ApprovalProgramPages)
+        ((itxn_field OnCompletion) 0u)
+        ((itxn_field TypeEnum) appl)
+        ((itxn_field Fee) 0u)
+        goto block@1
+    block@1: // next_txn_L22
+        itxn_submit
+        let v0Txn.CreatedApplicationID#0: uint64 = (itxn CreatedApplicationID)
+        let app#0: uint64 = v0Txn.CreatedApplicationID#0
+        let (value%0#0: uint64, check%0#0: bool) = ((app_params_get AppVersion) app#0)
+        (assert check%0#0) // application exists
+        let tmp%0#0: bool = (== value%0#0 0u)
+        (assert tmp%0#0) // should be version 0
+        itxn_begin
+        let inner_txn_params%1%%param_ApplicationID_idx_0#0: uint64 = app#0
+        ((itxn_field ApplicationArgs) method "update()void")
+        ((itxn_field ExtraProgramPages) 0u)
+        ((itxn_field ClearStateProgramPages) DEIAAIEBQw==)
+        (itxn_field ClearStateProgramPages)
+        ((itxn_field ApprovalProgramPages) DCACAAFCAABCAAAxGyITQQAqQgAANhoAgAQkN408TwGOAQAHQgAAQgAAADEZgQUSMRgiExBEiAASQv/rMRkiEjEYIhIQRIgAFCNDQgAAiAACI0NCAAAxRIECEkSJQgAAiQ==)
+        (itxn_field ApprovalProgramPages)
+        ((itxn_field OnCompletion) 4u)
+        ((itxn_field ApplicationID) inner_txn_params%1%%param_ApplicationID_idx_0#0)
+        ((itxn_field RejectVersion) 1u)
+        ((itxn_field TypeEnum) appl)
+        ((itxn_field Fee) 0u)
+        goto block@2
+    block@2: // next_txn_L28
+        itxn_submit
+        let v1Txn.itxn.ApplicationID#0: uint64 = (itxn ApplicationID)
+        let (value%1#0: uint64, check%1#0: bool) = ((app_params_get AppVersion) v1Txn.itxn.ApplicationID#0)
+        (assert check%1#0) // application exists
+        let tmp%1#0: bool = (== value%1#0 1u)
+        (assert tmp%1#0) // should be version 1
+        itxn_begin
+        let inner_txn_params%2%%param_ApplicationID_idx_0#0: uint64 = app#0
+        ((itxn_field RejectVersion) 2u)
+        ((itxn_field ApplicationID) inner_txn_params%2%%param_ApplicationID_idx_0#0)
+        ((itxn_field OnCompletion) 5u)
+        ((itxn_field ApplicationArgs) method "delete()void")
+        ((itxn_field TypeEnum) 6u)
+        ((itxn_field Fee) 0u)
+        goto block@3
+    block@3: // next_txn_L38
+        itxn_submit
+        return 
+
+subroutine tests/approvals/avm12.algo.ts::Avm12Contract.__algots__.defaultCreate() -> void:
+    block@0: // L14
+        return 

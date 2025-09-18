@@ -401,6 +401,14 @@ export const AppParams = {
   appAddress(a: Application | uint64): readonly [Account, boolean] {
     throw new NoImplementation()
   },
+
+  /**
+   * Version of the app, incremented each time the approval or clear program changes
+   * Min AVM version: 12
+   */
+  appVersion(a: Application | uint64): readonly [uint64, boolean] {
+    throw new NoImplementation()
+  },
 }
 
 /**
@@ -916,7 +924,7 @@ export function extractUint64(a: bytes, b: uint64): uint64 {
 }
 
 /**
- * for (data A, compressed-format signature B, pubkey C) verify the signature of data against the pubkey
+ * for (data A, compressed-format signature B, pubkey C) verify the signature of data against the pubkey => {0 or 1}
  * @see Native TEAL opcode: [`falcon_verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#falcon_verify)
  * Min AVM version: 12
  */
@@ -1462,10 +1470,10 @@ export const GITxn = {
   },
 
   /**
-   * 64 byte state proof public key
+   * State proof public key
    * Min AVM version: 6
    */
-  stateProofPk(t: uint64): bytes {
+  stateProofPk(t: uint64): bytes<64> {
     throw new NoImplementation()
   },
 
@@ -1498,6 +1506,14 @@ export const GITxn = {
    * Min AVM version: 7
    */
   numClearStateProgramPages(t: uint64): uint64 {
+    throw new NoImplementation()
+  },
+
+  /**
+   * Application version for which the txn must reject
+   * Min AVM version: 12
+   */
+  rejectVersion(t: uint64): uint64 {
     throw new NoImplementation()
   },
 }
@@ -2214,10 +2230,10 @@ export const GTxn = {
   },
 
   /**
-   * 64 byte state proof public key
+   * State proof public key
    * Min AVM version: 6
    */
-  stateProofPk(a: uint64): bytes {
+  stateProofPk(a: uint64): bytes<64> {
     throw new NoImplementation()
   },
 
@@ -2250,6 +2266,14 @@ export const GTxn = {
    * Min AVM version: 7
    */
   numClearStateProgramPages(a: uint64): uint64 {
+    throw new NoImplementation()
+  },
+
+  /**
+   * Application version for which the txn must reject
+   * Min AVM version: 12
+   */
+  rejectVersion(a: uint64): uint64 {
     throw new NoImplementation()
   },
 }
@@ -2772,10 +2796,10 @@ export const ITxn = {
   },
 
   /**
-   * 64 byte state proof public key
+   * State proof public key
    * Min AVM version: 6
    */
-  get stateProofPk(): bytes {
+  get stateProofPk(): bytes<64> {
     throw new NoImplementation()
   },
 
@@ -2808,6 +2832,14 @@ export const ITxn = {
    * Min AVM version: 7
    */
   get numClearStateProgramPages(): uint64 {
+    throw new NoImplementation()
+  },
+
+  /**
+   * Application version for which the txn must reject
+   * Min AVM version: 12
+   */
+  get rejectVersion(): uint64 {
     throw new NoImplementation()
   },
 }
@@ -3211,10 +3243,10 @@ export const ITxnCreate = {
   },
 
   /**
-   * 64 byte state proof public key
+   * State proof public key
    * Min AVM version: 6
    */
-  setStateProofPk(a: bytes): void {
+  setStateProofPk(a: bytes<64>): void {
     throw new NoImplementation()
   },
 
@@ -3231,6 +3263,14 @@ export const ITxnCreate = {
    * Min AVM version: 7
    */
   setClearStateProgramPages(a: bytes): void {
+    throw new NoImplementation()
+  },
+
+  /**
+   * Application version for which the txn must reject
+   * Min AVM version: 12
+   */
+  setRejectVersion(a: uint64): void {
     throw new NoImplementation()
   },
 
@@ -3444,7 +3484,7 @@ export function substring(a: bytes, b: uint64, c: uint64): bytes {
 /**
  * sumhash512 of value A, yields [64]byte
  * @see Native TEAL opcode: [`sumhash512`](https://dev.algorand.co/reference/algorand-teal/opcodes#sumhash512)
- * Min AVM version: 12
+ * Min AVM version: 13
  */
 export function sumhash512(a: bytes): bytes<64> {
   throw new NoImplementation()
@@ -3959,10 +3999,10 @@ export const Txn = {
   },
 
   /**
-   * 64 byte state proof public key
+   * State proof public key
    * Min AVM version: 6
    */
-  get stateProofPk(): bytes {
+  get stateProofPk(): bytes<64> {
     throw new NoImplementation()
   },
 
@@ -3995,6 +4035,14 @@ export const Txn = {
    * Min AVM version: 7
    */
   get numClearStateProgramPages(): uint64 {
+    throw new NoImplementation()
+  },
+
+  /**
+   * Application version for which the txn must reject
+   * Min AVM version: 12
+   */
+  get rejectVersion(): uint64 {
     throw new NoImplementation()
   },
 }

@@ -529,6 +529,18 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           },
         ],
       },
+      appVersion: {
+        type: 'op-mapping',
+        op: 'app_params_get',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['AppVersion'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
+            returnType: new ptypes.ReadonlyTuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
+          },
+        ],
+      },
     },
   },
   arg: {
@@ -2157,7 +2169,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['t'],
             immediateArgs: [{ name: 't', ptypes: [ptypes.uint64PType] }, 'StateProofPK'],
             stackArgs: [],
-            returnType: ptypes.bytesPType,
+            returnType: new ptypes.BytesPType({ length: 64n }),
           },
         ],
       },
@@ -2204,6 +2216,18 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['t'],
             immediateArgs: [{ name: 't', ptypes: [ptypes.uint64PType] }, 'NumClearStateProgramPages'],
+            stackArgs: [],
+            returnType: ptypes.uint64PType,
+          },
+        ],
+      },
+      rejectVersion: {
+        type: 'op-mapping',
+        op: 'gitxn',
+        signatures: [
+          {
+            argNames: ['t'],
+            immediateArgs: [{ name: 't', ptypes: [ptypes.uint64PType] }, 'RejectVersion'],
             stackArgs: [],
             returnType: ptypes.uint64PType,
           },
@@ -3145,7 +3169,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['a'],
             immediateArgs: ['StateProofPK'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
-            returnType: ptypes.bytesPType,
+            returnType: new ptypes.BytesPType({ length: 64n }),
           },
         ],
       },
@@ -3198,6 +3222,18 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['NumClearStateProgramPages'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
+            returnType: ptypes.uint64PType,
+          },
+        ],
+      },
+      rejectVersion: {
+        type: 'op-mapping',
+        op: 'gtxns',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['RejectVersion'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
             returnType: ptypes.uint64PType,
           },
@@ -3576,7 +3612,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       stateProofPk: {
         type: 'op-mapping',
         op: 'itxn',
-        signatures: [{ argNames: [], immediateArgs: ['StateProofPK'], stackArgs: [], returnType: ptypes.bytesPType }],
+        signatures: [{ argNames: [], immediateArgs: ['StateProofPK'], stackArgs: [], returnType: new ptypes.BytesPType({ length: 64n }) }],
       },
       approvalProgramPages: {
         type: 'op-mapping',
@@ -3611,6 +3647,11 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         type: 'op-mapping',
         op: 'itxn',
         signatures: [{ argNames: [], immediateArgs: ['NumClearStateProgramPages'], stackArgs: [], returnType: ptypes.uint64PType }],
+      },
+      rejectVersion: {
+        type: 'op-mapping',
+        op: 'itxn',
+        signatures: [{ argNames: [], immediateArgs: ['RejectVersion'], stackArgs: [], returnType: ptypes.uint64PType }],
       },
     },
   },
@@ -4206,7 +4247,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['StateProofPK'],
-            stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
+            stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 64n })] }],
             returnType: ptypes.voidPType,
           },
         ],
@@ -4231,6 +4272,18 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             argNames: ['a'],
             immediateArgs: ['ClearStateProgramPages'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
+            returnType: ptypes.voidPType,
+          },
+        ],
+      },
+      setRejectVersion: {
+        type: 'op-mapping',
+        op: 'itxn_field',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['RejectVersion'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
             returnType: ptypes.voidPType,
           },
         ],
@@ -4888,7 +4941,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       stateProofPk: {
         type: 'op-mapping',
         op: 'txn',
-        signatures: [{ argNames: [], immediateArgs: ['StateProofPK'], stackArgs: [], returnType: ptypes.bytesPType }],
+        signatures: [{ argNames: [], immediateArgs: ['StateProofPK'], stackArgs: [], returnType: new ptypes.BytesPType({ length: 64n }) }],
       },
       approvalProgramPages: {
         type: 'op-mapping',
@@ -4923,6 +4976,11 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         type: 'op-mapping',
         op: 'txn',
         signatures: [{ argNames: [], immediateArgs: ['NumClearStateProgramPages'], stackArgs: [], returnType: ptypes.uint64PType }],
+      },
+      rejectVersion: {
+        type: 'op-mapping',
+        op: 'txn',
+        signatures: [{ argNames: [], immediateArgs: ['RejectVersion'], stackArgs: [], returnType: ptypes.uint64PType }],
       },
     },
   },

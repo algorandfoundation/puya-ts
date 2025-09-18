@@ -262,6 +262,12 @@ export const applicationCallTxnFields = {
    * Number of logs
    */
   numLogs: { field: TxnField.NumLogs, ptype: uint64PType, comment: 'Number of logs', computed: true },
+
+  rejectVersion: {
+    field: TxnField.RejectVersion,
+    ptype: uint64PType,
+    comment: 'Application version for which the txn must reject',
+  },
 } satisfies TxnFieldsMetaData
 
 const anyTxnFields = {
