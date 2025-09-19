@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 4 1 5
+    intcblock 0 4 1 8
     bytecblock 0x0000000000000001 0x0100 "123" 0x01020304
     b main_block@0
 
@@ -11,7 +11,7 @@ main_block@0:
     b main_block@1
 
 main_block@1:
-    // tests/approvals/byte-expressions.algo.ts:32
+    // tests/approvals/byte-expressions.algo.ts:38
     // class DemoContract extends Contract {
     txn NumAppArgs
     intc_0 // 0
@@ -20,7 +20,7 @@ main_block@1:
     b main_abi_routing@2
 
 main_abi_routing@2:
-    // tests/approvals/byte-expressions.algo.ts:32
+    // tests/approvals/byte-expressions.algo.ts:38
     // class DemoContract extends Contract {
     txna ApplicationArgs 0
     pushbytes 0xf59e3cc4 // method "test()bool"
@@ -32,12 +32,12 @@ main_switch_case_next@4:
     b main_after_if_else@6
 
 main_after_if_else@6:
-    // tests/approvals/byte-expressions.algo.ts:32
+    // tests/approvals/byte-expressions.algo.ts:38
     // class DemoContract extends Contract {
     err
 
 main_test_route@3:
-    // tests/approvals/byte-expressions.algo.ts:33
+    // tests/approvals/byte-expressions.algo.ts:39
     // public test() {
     txn OnCompletion
     intc_0 // NoOp
@@ -51,7 +51,7 @@ main_test_route@3:
     b main_switch_case_next@4
 
 main___algots__.defaultCreate@5:
-    // tests/approvals/byte-expressions.algo.ts:32
+    // tests/approvals/byte-expressions.algo.ts:38
     // class DemoContract extends Contract {
     txn OnCompletion
     intc_0 // NoOp
@@ -87,7 +87,7 @@ test_block@0:
     itob
     dup
     len
-    pushint 8 // 8
+    intc_3 // 8
     ==
     assert // Length must be 8
     frame_dig -3
@@ -145,7 +145,7 @@ test2_block@0:
     // assert(btoi(a) === 5, 'a must be bytes for 5')
     frame_dig -2
     btoi
-    intc_3 // 5
+    pushint 5 // 5
     ==
     assert // a must be bytes for 5
     // tests/approvals/byte-expressions.algo.ts:18
@@ -255,12 +255,44 @@ test2_block@0:
     retsub
 
 
+// tests/approvals/byte-expressions.algo.ts::test3(a: bytes, b: bytes, c: bytes) -> void:
+test3:
+    // tests/approvals/byte-expressions.algo.ts:32
+    // function test3(a: bytes<8>, b: bytes<16>, c: bytes<32>) {
+    proto 3 0
+    b test3_block@0
+
+test3_block@0:
+    // tests/approvals/byte-expressions.algo.ts:33
+    // assert(a.length === 8)
+    frame_dig -3
+    len
+    intc_3 // 8
+    ==
+    assert
+    // tests/approvals/byte-expressions.algo.ts:34
+    // assert(b.length === 16)
+    frame_dig -2
+    len
+    pushint 16 // 16
+    ==
+    assert
+    // tests/approvals/byte-expressions.algo.ts:35
+    // assert(c.length === 32)
+    frame_dig -1
+    len
+    pushint 32 // 32
+    ==
+    assert
+    retsub
+
+
 // tests/approvals/byte-expressions.algo.ts::DemoContract.test[routing]() -> void:
 tests/approvals/byte-expressions.algo.ts::DemoContract.test[routing]:
     b tests/approvals/byte-expressions.algo.ts::DemoContract.test[routing]_block@0
 
 tests/approvals/byte-expressions.algo.ts::DemoContract.test[routing]_block@0:
-    // tests/approvals/byte-expressions.algo.ts:33
+    // tests/approvals/byte-expressions.algo.ts:39
     // public test() {
     callsub tests/approvals/byte-expressions.algo.ts::DemoContract.test
     pushbytes 0x00
@@ -280,20 +312,34 @@ tests/approvals/byte-expressions.algo.ts::DemoContract.test:
     b tests/approvals/byte-expressions.algo.ts::DemoContract.test_block@0
 
 tests/approvals/byte-expressions.algo.ts::DemoContract.test_block@0:
-    // tests/approvals/byte-expressions.algo.ts:34
+    // tests/approvals/byte-expressions.algo.ts:40
     // test(1, 50n, 'things')
     intc_2 // 1
     pushbytes 0x32
     pushbytes "things"
     callsub test
-    // tests/approvals/byte-expressions.algo.ts:35
+    // tests/approvals/byte-expressions.algo.ts:41
     // test2(itob(5), itob(12))
-    intc_3 // 5
+    pushint 5 // 5
     itob
     pushint 12 // 12
     itob
     callsub test2
-    // tests/approvals/byte-expressions.algo.ts:36
+    // tests/approvals/byte-expressions.algo.ts:42
+    // const x = Bytes<8>()
+    intc_3 // 8
+    bzero
+    // tests/approvals/byte-expressions.algo.ts:43
+    // test3(x, Bytes(), Bytes<32>())
+    pushint 16 // 16
+    bzero
+    pushint 32 // 32
+    bzero
+    uncover 2
+    uncover 2
+    uncover 2
+    callsub test3
+    // tests/approvals/byte-expressions.algo.ts:44
     // return true
     intc_2 // 1
     retsub

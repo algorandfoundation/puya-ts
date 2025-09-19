@@ -29,10 +29,18 @@ function test2(a: bytes<8>, b: bytes<8>) {
   assert(a.concat(b) === Bytes.fromHex('0000000000000005000000000000000C'))
 }
 
+function test3(a: bytes<8>, b: bytes<16>, c: bytes<32>) {
+  assert(a.length === 8)
+  assert(b.length === 16)
+  assert(c.length === 32)
+}
+
 class DemoContract extends Contract {
   public test() {
     test(1, 50n, 'things')
     test2(itob(5), itob(12))
+    const x = Bytes<8>()
+    test3(x, Bytes(), Bytes<32>())
     return true
   }
 }

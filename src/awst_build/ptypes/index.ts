@@ -1261,7 +1261,12 @@ export const BytesGeneric = new GenericPType({
   parameterise(typeArgs: readonly PType[]): BytesPType {
     codeInvariant(typeArgs.length === 1, `${this.name} type expects exactly one type parameter`)
     const bytesSize = typeArgs[0]
-    if (bytesSize.equals(uint64PType)) {
+    if (
+      bytesSize.equals(uint64PType) ||
+      // A union of numeric literals and uint64, this can happen only for intrinsic calls like `ecdsaPkDecompress(v: Ecdsa, a: bytes<33> | bytes)`
+      // union types are not allowed in user code
+      (bytesSize instanceof UnionPType && bytesSize.types.every((t) => t.equals(uint64PType) || t instanceof NumericLiteralPType))
+    ) {
       return new BytesPType({
         length: null,
       })

@@ -112,20 +112,20 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.optional(numberPType, bigIntPType, uint64PType, biguintPType, stringPType, bytesPType, ArrayLiteralPType)],
     })
     const exprType = BytesGeneric.parameterise([len])
-    const empty = new BytesExpressionBuilder(
-      nodeFactory.bytesConstant({
-        sourceLocation,
-        value: new Uint8Array(Number(exprType.length)),
-        wtype: exprType.wtype,
-      }),
-      exprType,
-    )
-
-    let bytesBuilder: InstanceBuilder
-
+    const emptyExpr =
+      exprType.length === null
+        ? nodeFactory.bytesConstant({
+            sourceLocation,
+            value: new Uint8Array(0),
+            wtype: exprType.wtype,
+          })
+        : intrinsicFactory.bzero({ size: exprType.length ?? 0n, sourceLocation, wtype: exprType.wtype })
+    const empty = new BytesExpressionBuilder(emptyExpr, exprType)
     if (!initialValue) {
-      bytesBuilder = empty
-    } else if (initialValue.ptype instanceof TransientType) {
+      return empty
+    }
+    let bytesBuilder: InstanceBuilder
+    if (initialValue.ptype instanceof TransientType) {
       logger.error(initialValue.sourceLocation, initialValue.ptype.expressionMessage)
       bytesBuilder = empty
     } else if (initialValue.ptype.equals(uint64PType)) {
