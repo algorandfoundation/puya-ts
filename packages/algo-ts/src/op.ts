@@ -835,7 +835,7 @@ export const EllipticCurve = {
  * @see Native TEAL opcode: [`ecdsa_pk_decompress`](https://dev.algorand.co/reference/algorand-teal/opcodes#ecdsa_pk_decompress)
  * Min AVM version: 5
  */
-export function ecdsaPkDecompress(v: Ecdsa, a: bytes<33>): readonly [bytes<32>, bytes<32>] {
+export function ecdsaPkDecompress(v: Ecdsa, a: bytes<33> | bytes): readonly [bytes<32>, bytes<32>] {
   throw new NoImplementation()
 }
 
@@ -845,7 +845,13 @@ export function ecdsaPkDecompress(v: Ecdsa, a: bytes<33>): readonly [bytes<32>, 
  * @see Native TEAL opcode: [`ecdsa_pk_recover`](https://dev.algorand.co/reference/algorand-teal/opcodes#ecdsa_pk_recover)
  * Min AVM version: 5
  */
-export function ecdsaPkRecover(v: Ecdsa, a: bytes<32>, b: uint64, c: bytes<32>, d: bytes<32>): readonly [bytes<32>, bytes<32>] {
+export function ecdsaPkRecover(
+  v: Ecdsa,
+  a: bytes<32> | bytes,
+  b: uint64,
+  c: bytes<32> | bytes,
+  d: bytes<32> | bytes,
+): readonly [bytes<32>, bytes<32>] {
   throw new NoImplementation()
 }
 
@@ -855,7 +861,14 @@ export function ecdsaPkRecover(v: Ecdsa, a: bytes<32>, b: uint64, c: bytes<32>, 
  * @see Native TEAL opcode: [`ecdsa_verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#ecdsa_verify)
  * Min AVM version: 5
  */
-export function ecdsaVerify(v: Ecdsa, a: bytes<32>, b: bytes<32>, c: bytes<32>, d: bytes<32>, e: bytes<32>): boolean {
+export function ecdsaVerify(
+  v: Ecdsa,
+  a: bytes<32> | bytes,
+  b: bytes<32> | bytes,
+  c: bytes<32> | bytes,
+  d: bytes<32> | bytes,
+  e: bytes<32> | bytes,
+): boolean {
   throw new NoImplementation()
 }
 
@@ -865,7 +878,7 @@ export function ecdsaVerify(v: Ecdsa, a: bytes<32>, b: bytes<32>, c: bytes<32>, 
  * @see Native TEAL opcode: [`ed25519verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#ed25519verify)
  * Min AVM version: 1
  */
-export function ed25519verify(a: bytes, b: bytes<64>, c: bytes<32>): boolean {
+export function ed25519verify(a: bytes, b: bytes<64> | bytes, c: bytes<32> | bytes): boolean {
   throw new NoImplementation()
 }
 
@@ -874,7 +887,7 @@ export function ed25519verify(a: bytes, b: bytes<64>, c: bytes<32>): boolean {
  * @see Native TEAL opcode: [`ed25519verify_bare`](https://dev.algorand.co/reference/algorand-teal/opcodes#ed25519verify_bare)
  * Min AVM version: 7
  */
-export function ed25519verifyBare(a: bytes, b: bytes<64>, c: bytes<32>): boolean {
+export function ed25519verifyBare(a: bytes, b: bytes<64> | bytes, c: bytes<32> | bytes): boolean {
   throw new NoImplementation()
 }
 
@@ -928,7 +941,7 @@ export function extractUint64(a: bytes, b: uint64): uint64 {
  * @see Native TEAL opcode: [`falcon_verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#falcon_verify)
  * Min AVM version: 12
  */
-export function falconVerify(a: bytes, b: bytes<1232>, c: bytes<1793>): boolean {
+export function falconVerify(a: bytes, b: bytes<1232> | bytes, c: bytes<1793> | bytes): boolean {
   throw new NoImplementation()
 }
 
@@ -2910,7 +2923,7 @@ export const ITxnCreate = {
    * 32 byte address
    * Min AVM version: 5
    */
-  setVotePk(a: bytes<32>): void {
+  setVotePk(a: bytes<32> | bytes): void {
     throw new NoImplementation()
   },
 
@@ -2918,7 +2931,7 @@ export const ITxnCreate = {
    * 32 byte address
    * Min AVM version: 5
    */
-  setSelectionPk(a: bytes<32>): void {
+  setSelectionPk(a: bytes<32> | bytes): void {
     throw new NoImplementation()
   },
 
@@ -3118,7 +3131,7 @@ export const ITxnCreate = {
    * 32 byte commitment to unspecified asset metadata
    * Min AVM version: 2
    */
-  setConfigAssetMetadataHash(a: bytes<32>): void {
+  setConfigAssetMetadataHash(a: bytes<32> | bytes): void {
     throw new NoImplementation()
   },
 
@@ -3246,7 +3259,7 @@ export const ITxnCreate = {
    * State proof public key
    * Min AVM version: 6
    */
-  setStateProofPk(a: bytes<64>): void {
+  setStateProofPk(a: bytes<64> | bytes): void {
     throw new NoImplementation()
   },
 
@@ -4071,7 +4084,7 @@ export const VoterParams = {
  * @see Native TEAL opcode: [`vrf_verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#vrf_verify)
  * Min AVM version: 7
  */
-export function vrfVerify(s: VrfVerify, a: bytes, b: bytes<80>, c: bytes<32>): readonly [bytes<64>, boolean] {
+export function vrfVerify(s: VrfVerify, a: bytes, b: bytes<80> | bytes, c: bytes<32> | bytes): readonly [bytes<64>, boolean] {
   throw new NoImplementation()
 }
 

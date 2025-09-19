@@ -167,6 +167,9 @@ export const AlgoTsType = {
 }
 
 function getInputTypes(typ: AlgoTsType): AlgoTsType {
+  if (typ instanceof BytesAlgoTsType) {
+    return new UnionAlgoTsType(typ, AlgoTsType.Bytes)
+  }
   switch (typ.name) {
     case 'Asset':
     case 'Application':

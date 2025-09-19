@@ -1197,7 +1197,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       {
         argNames: ['v', 'a'],
         immediateArgs: [{ name: 'v', ptypes: [ptypes.ecdsaPType] }],
-        stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 33n })] }],
+        stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 33n }), ptypes.bytesPType] }],
         returnType: new ptypes.ReadonlyTuplePType({
           items: [new ptypes.BytesPType({ length: 32n }), new ptypes.BytesPType({ length: 32n })],
         }),
@@ -1212,10 +1212,10 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         argNames: ['v', 'a', 'b', 'c', 'd'],
         immediateArgs: [{ name: 'v', ptypes: [ptypes.ecdsaPType] }],
         stackArgs: [
-          { name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n })] },
+          { name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n }), ptypes.bytesPType] },
           { name: 'b', ptypes: [ptypes.uint64PType] },
-          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n })] },
-          { name: 'd', ptypes: [new ptypes.BytesPType({ length: 32n })] },
+          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n }), ptypes.bytesPType] },
+          { name: 'd', ptypes: [new ptypes.BytesPType({ length: 32n }), ptypes.bytesPType] },
         ],
         returnType: new ptypes.ReadonlyTuplePType({
           items: [new ptypes.BytesPType({ length: 32n }), new ptypes.BytesPType({ length: 32n })],
@@ -1231,11 +1231,11 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         argNames: ['v', 'a', 'b', 'c', 'd', 'e'],
         immediateArgs: [{ name: 'v', ptypes: [ptypes.ecdsaPType] }],
         stackArgs: [
-          { name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n })] },
-          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 32n })] },
-          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n })] },
-          { name: 'd', ptypes: [new ptypes.BytesPType({ length: 32n })] },
-          { name: 'e', ptypes: [new ptypes.BytesPType({ length: 32n })] },
+          { name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n }), ptypes.bytesPType] },
+          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 32n }), ptypes.bytesPType] },
+          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n }), ptypes.bytesPType] },
+          { name: 'd', ptypes: [new ptypes.BytesPType({ length: 32n }), ptypes.bytesPType] },
+          { name: 'e', ptypes: [new ptypes.BytesPType({ length: 32n }), ptypes.bytesPType] },
         ],
         returnType: ptypes.boolPType,
       },
@@ -1250,8 +1250,8 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         immediateArgs: [],
         stackArgs: [
           { name: 'a', ptypes: [ptypes.bytesPType] },
-          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 64n })] },
-          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n })] },
+          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 64n }), ptypes.bytesPType] },
+          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n }), ptypes.bytesPType] },
         ],
         returnType: ptypes.boolPType,
       },
@@ -1266,8 +1266,8 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         immediateArgs: [],
         stackArgs: [
           { name: 'a', ptypes: [ptypes.bytesPType] },
-          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 64n })] },
-          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n })] },
+          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 64n }), ptypes.bytesPType] },
+          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n }), ptypes.bytesPType] },
         ],
         returnType: ptypes.boolPType,
       },
@@ -1357,8 +1357,8 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         immediateArgs: [],
         stackArgs: [
           { name: 'a', ptypes: [ptypes.bytesPType] },
-          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 1232n })] },
-          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 1793n })] },
+          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 1232n }), ptypes.bytesPType] },
+          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 1793n }), ptypes.bytesPType] },
         ],
         returnType: ptypes.boolPType,
       },
@@ -3743,7 +3743,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['VotePK'],
-            stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n })] }],
+            stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n }), ptypes.bytesPType] }],
             returnType: ptypes.voidPType,
           },
         ],
@@ -3755,7 +3755,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['SelectionPK'],
-            stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n })] }],
+            stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n }), ptypes.bytesPType] }],
             returnType: ptypes.voidPType,
           },
         ],
@@ -4055,7 +4055,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['ConfigAssetMetadataHash'],
-            stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n })] }],
+            stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 32n }), ptypes.bytesPType] }],
             returnType: ptypes.voidPType,
           },
         ],
@@ -4247,7 +4247,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
           {
             argNames: ['a'],
             immediateArgs: ['StateProofPK'],
-            stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 64n })] }],
+            stackArgs: [{ name: 'a', ptypes: [new ptypes.BytesPType({ length: 64n }), ptypes.bytesPType] }],
             returnType: ptypes.voidPType,
           },
         ],
@@ -5023,8 +5023,8 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         immediateArgs: [{ name: 's', ptypes: [ptypes.vrfVerifyPType] }],
         stackArgs: [
           { name: 'a', ptypes: [ptypes.bytesPType] },
-          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 80n })] },
-          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n })] },
+          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 80n }), ptypes.bytesPType] },
+          { name: 'c', ptypes: [new ptypes.BytesPType({ length: 32n }), ptypes.bytesPType] },
         ],
         returnType: new ptypes.ReadonlyTuplePType({ items: [new ptypes.BytesPType({ length: 64n }), ptypes.boolPType] }),
       },
