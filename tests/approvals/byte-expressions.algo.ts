@@ -39,8 +39,7 @@ class DemoContract extends Contract {
   public test() {
     test(1, 50n, 'things')
     test2(itob(5), itob(12))
-    const x = Bytes<8>()
-    test3(x, Bytes(), Bytes<32>())
+    test3(op.bzero(8), op.bzero(16), op.bzero(32))
     return true
   }
 }

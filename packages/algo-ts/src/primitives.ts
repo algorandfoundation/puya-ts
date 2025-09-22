@@ -241,35 +241,35 @@ export type bytes<out TLength extends uint64 = uint64> = {
  * @param value
  * @param replacements
  */
-export function Bytes<TLength extends uint64 = uint64>(value: TemplateStringsArray, ...replacements: BytesCompat[]): bytes<TLength>
+export function Bytes(value: TemplateStringsArray, ...replacements: BytesCompat[]): bytes<uint64>
 /**
  * Create a byte array from a utf8 string
  */
-export function Bytes<TLength extends uint64 = uint64>(value: string): bytes<TLength>
+export function Bytes(value: string): bytes<uint64>
 /**
  * No op, returns the provided byte array.
  */
-export function Bytes<TLength extends uint64 = uint64>(value: bytes): bytes<TLength>
+export function Bytes(value: bytes): bytes<uint64>
 /**
  * Create a byte array from a biguint value encoded as a variable length big-endian number
  */
-export function Bytes<TLength extends uint64 = uint64>(value: biguint): bytes<TLength>
+export function Bytes(value: biguint): bytes<uint64>
 /**
- * Create a byte array from a uint64 value encoded as a fixed length 64-bit number
+ * Create a byte array from a uint64 value encoded as a a variable length 64-bit number
  */
-export function Bytes<TLength extends 8 = 8>(value: uint64): bytes<TLength>
+export function Bytes(value: uint64): bytes<uint64>
 /**
  * Create a byte array from an Iterable<uint64> where each item is interpreted as a single byte and must be between 0 and 255 inclusively
  */
-export function Bytes<TLength extends uint64 = uint64>(value: Iterable<uint64>): bytes<TLength>
+export function Bytes(value: Iterable<uint64>): bytes<uint64>
 /**
  * Create an empty byte array
  */
-export function Bytes<TLength extends uint64 = uint64>(): bytes<TLength>
-export function Bytes<TLength extends uint64 = uint64>(
+export function Bytes(): bytes<uint64>
+export function Bytes(
   value?: BytesCompat | TemplateStringsArray | biguint | uint64 | Iterable<number>,
   ...replacements: BytesCompat[]
-): bytes<TLength> {
+): bytes<uint64> {
   throw new NoImplementation()
 }
 
@@ -277,22 +277,21 @@ export function Bytes<TLength extends uint64 = uint64>(
  * Create a new bytes value from a hexadecimal encoded string
  * @param hex A literal string of hexadecimal characters
  */
-Bytes.fromHex = <TLength extends uint64 = uint64>(hex: string): bytes<TLength> => {
+Bytes.fromHex = (hex: string): bytes<uint64> => {
   throw new NoImplementation()
 }
 /**
  * Create a new bytes value from a base 64 encoded string
  * @param b64 A literal string of b64 encoded characters
  */
-Bytes.fromBase64 = <TLength extends uint64 = uint64>(b64: string): bytes<TLength> => {
+Bytes.fromBase64 = (b64: string): bytes<uint64> => {
   throw new NoImplementation()
 }
-
 /**
  * Create a new bytes value from a base 32 encoded string
  * @param b32 A literal string of b32 encoded characters
  */
-Bytes.fromBase32 = <TLength extends uint64 = uint64>(b32: string): bytes<TLength> => {
+Bytes.fromBase32 = (b32: string): bytes<uint64> => {
   throw new NoImplementation()
 }
 

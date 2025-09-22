@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 4 1 8
+    intcblock 0 4 1 5
     bytecblock 0x0000000000000001 0x0100 "123" 0x01020304
     b main_block@0
 
@@ -85,11 +85,6 @@ test_block@0:
     // assert(Bytes(a) === op.itob(a), 'Bytes(uint64) is equivalent to itob')
     frame_dig -3
     itob
-    dup
-    len
-    intc_3 // 8
-    ==
-    assert // Length must be 8
     frame_dig -3
     itob
     ==
@@ -145,7 +140,7 @@ test2_block@0:
     // assert(btoi(a) === 5, 'a must be bytes for 5')
     frame_dig -2
     btoi
-    pushint 5 // 5
+    intc_3 // 5
     ==
     assert // a must be bytes for 5
     // tests/approvals/byte-expressions.algo.ts:18
@@ -267,7 +262,7 @@ test3_block@0:
     // assert(a.length === 8)
     frame_dig -3
     len
-    intc_3 // 8
+    pushint 8 // 8
     ==
     assert
     // tests/approvals/byte-expressions.algo.ts:34
@@ -320,17 +315,15 @@ tests/approvals/byte-expressions.algo.ts::DemoContract.test_block@0:
     callsub test
     // tests/approvals/byte-expressions.algo.ts:41
     // test2(itob(5), itob(12))
-    pushint 5 // 5
+    intc_3 // 5
     itob
     pushint 12 // 12
     itob
     callsub test2
     // tests/approvals/byte-expressions.algo.ts:42
-    // const x = Bytes<8>()
-    intc_3 // 8
+    // test3(op.bzero(8), op.bzero(16), op.bzero(32))
+    pushint 8 // 8
     bzero
-    // tests/approvals/byte-expressions.algo.ts:43
-    // test3(x, Bytes(), Bytes<32>())
     pushint 16 // 16
     bzero
     pushint 32 // 32
@@ -339,7 +332,7 @@ tests/approvals/byte-expressions.algo.ts::DemoContract.test_block@0:
     uncover 2
     uncover 2
     callsub test3
-    // tests/approvals/byte-expressions.algo.ts:44
+    // tests/approvals/byte-expressions.algo.ts:43
     // return true
     intc_2 // 1
     retsub

@@ -394,7 +394,7 @@ tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test_block@0:
     callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32
     pop
     // tests/approvals/static-bytes.algo.ts:39
-    // const joined = Bytes<55>`${fromUtf8}${fromHex}${fromBase32}${fromBase64}`
+    // const joined = Bytes`${fromUtf8}${fromHex}${fromBase32}${fromBase64}`.toFixed({ length: 55 })
     bytec_1 // ""
     pushbytes "abc"
     concat
@@ -587,7 +587,7 @@ tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4_block@0:
     // const b: bytes = Txn.sender.bytes
     txn Sender
     // tests/approvals/static-bytes.algo.ts:73
-    // const addr = Bytes<32>(b)
+    // const addr = Bytes(b).toFixed({ length: 32 })
     dup
     len
     intc_0 // 32

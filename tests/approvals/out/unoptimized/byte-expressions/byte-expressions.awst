@@ -1,7 +1,7 @@
 subroutine test(a: uint64, b: biguint, c: string): void
 {
   assert(len(0x) == 0, comment=Empty bytes has length of 0)
-  assert(checked_maybe(#[reinterpret_cast<bytes[8]>(($0 = itob(a))), len($0) == 8], comment=Length must be 8) == itob(a), comment=Bytes(uint64) is equivalent to itob)
+  assert(itob(a) == itob(a), comment=Bytes(uint64) is equivalent to itob)
   assert(0x0000000000000001 == 0x0000000000000001, comment=Bytes(uint64) returns an 8 byte encoding)
   assert(reinterpret_cast<bytes>(256) == 0x0100)
   assert(reinterpret_cast<biguint>(reinterpret_cast<bytes>(b)) == b, comment=Round trip of biguint to bytes and back results in the same value)
@@ -43,8 +43,7 @@ contract DemoContract
   {
     tests/approvals/byte-expressions.algo.ts::test(1, 50, "things")
     tests/approvals/byte-expressions.algo.ts::test2(itob(5), itob(12))
-    x: bytes[8] = bzero(8)
-    tests/approvals/byte-expressions.algo.ts::test3(x, bzero(16), bzero(32))
+    tests/approvals/byte-expressions.algo.ts::test3(bzero(8), bzero(16), bzero(32))
     return True
   }
   
