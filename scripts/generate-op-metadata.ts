@@ -1,6 +1,6 @@
 import { camelCase } from 'change-case'
 import type { OpFunction, OpGrouping, OpModule, OpOverloadedFunction } from './build-op-module'
-import { AlgoTsType, BytesAlgoTsType, EnumAlgoTsType, UnionAlgoTsType } from './build-op-module'
+import { AlgoTsType, BytesAlgoTsType, EnumAlgoTsType, GenericAlgoTsType, UnionAlgoTsType } from './build-op-module'
 
 export function* emitOpMetaData(opModule: OpModule) {
   function* emitHeader() {
@@ -54,6 +54,10 @@ export type IntrinsicOpGrouping = {
     }
     if (t instanceof BytesAlgoTsType) {
       yield `new ptypes.BytesPType({length: ${t.size}n})`
+      return
+    }
+    if (t instanceof GenericAlgoTsType && t.baseAlgoTsType) {
+      yield algoTsToPType(t.baseAlgoTsType).next().value
       return
     }
     switch (t) {
@@ -194,7 +198,9 @@ export type IntrinsicOpGrouping = {
     yield `export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGrouping> = {\n`
     for (const item of opModule.items) {
       if (item.type === 'op-function') {
-        yield* emitOpMapping(item)
+        if (item.name.search(/\W.*$/) < 0) {
+          yield* emitOpMapping(item)
+        }
       } else if (item.type === 'op-overloaded-function') {
         yield* emitOpOverloadedMapping(item)
       } else {

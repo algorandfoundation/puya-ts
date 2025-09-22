@@ -12,8 +12,8 @@ contract MyContract
   
   test(): void
   {
-    a: bytes = ~bzero(8)
-    b: uint64 = btoi(a)
+    a: bytes[8] = ~bzero(8)
+    b: uint64 = btoi(reinterpret_cast<bytes>(a))
     assert(b == 18446744073709551615)
     c: uint64 = shr(b, 32)
     assert(c == 4294967295)

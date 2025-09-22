@@ -107,7 +107,7 @@ export type bytes<out TLength extends uint64 = uint64> = {
   /**
    * Retrieve the length of the byte sequence
    */
-  readonly length: TLength
+  readonly length: uint64
 
   /**
    * Retrieve the byte at the index i

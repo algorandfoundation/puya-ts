@@ -3,9 +3,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#0: bool = tests/approvals/precompiled-apps.algo.ts::LargeProgram.__puya_arc4_router__()
         return tmp%0#0
 
-subroutine tests/approvals/precompiled-apps.algo.ts::getBigBytes() -> bytes:
+subroutine tests/approvals/precompiled-apps.algo.ts::getBigBytes() -> bytes[4096]:
     block@0: // L62
-        let tmp%0#0: bytes = (bzero 4096u)
+        let tmp%0#0: bytes[4096] = (bzero 4096u)
         return tmp%0#0
 
 subroutine tests/approvals/precompiled-apps.algo.ts::LargeProgram.__puya_arc4_router__() -> bool:
@@ -63,7 +63,7 @@ subroutine tests/approvals/precompiled-apps.algo.ts::LargeProgram.delete[routing
 
 subroutine tests/approvals/precompiled-apps.algo.ts::LargeProgram.getBigBytesLength() -> uint64:
     block@0: // L67
-        let tmp%0#0: bytes = tests/approvals/precompiled-apps.algo.ts::getBigBytes()
+        let tmp%0#0: bytes[4096] = tests/approvals/precompiled-apps.algo.ts::getBigBytes()
         let tmp%1#0: uint64 = (len tmp%0#0)
         return tmp%1#0
 

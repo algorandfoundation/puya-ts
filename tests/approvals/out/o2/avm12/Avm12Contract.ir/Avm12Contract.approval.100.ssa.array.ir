@@ -11,13 +11,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
         switch tmp%6#0 {method "testFalconVerify()void" => block@4, method "testRejectVersion()void" => block@5, * => block@8}
     block@4: // testFalconVerify_route_L16
-        let awst_tmp%0#0: bytes = (bzero 1793u)
-        let tmp%0#3: uint64 = (len awst_tmp%0#0)
-        let tmp%1#2: bool = (== tmp%0#3 1793u)
-        (assert tmp%1#2) // Length must be 1793
-        let tmp%2#1: bool = (falcon_verify 0x 0x awst_tmp%0#0)
-        let tmp%3#1: bool = (! tmp%2#1)
-        (assert tmp%3#1)
+        let tmp%0#3: bytes[1793] = (bzero 1793u)
+        let tmp%1#2: bool = (falcon_verify 0x 0x tmp%0#3)
+        let tmp%2#1: bool = (! tmp%1#2)
+        (assert tmp%2#1)
         exit 1u
     block@5: // testRejectVersion_route_L20
         itxn_begin

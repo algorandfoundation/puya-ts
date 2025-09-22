@@ -29,13 +29,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify[routing]() -> void:
     block@0: // L16
-        let awst_tmp%0#0: bytes = (bzero 1793u)
-        let tmp%0#0: uint64 = (len awst_tmp%0#0)
-        let tmp%1#0: bool = (== tmp%0#0 1793u)
-        (assert tmp%1#0) // Length must be 1793
-        let tmp%2#0: bool = (falcon_verify 0x 0x awst_tmp%0#0)
-        let tmp%3#0: bool = (! tmp%2#0)
-        (assert tmp%3#0)
+        let tmp%0#0: bytes[1793] = (bzero 1793u)
+        let tmp%1#0: bool = (falcon_verify 0x 0x tmp%0#0)
+        let tmp%2#0: bool = (! tmp%1#0)
+        (assert tmp%2#0)
         exit 1u
 
 subroutine tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion[routing]() -> void:

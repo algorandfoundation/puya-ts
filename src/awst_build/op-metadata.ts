@@ -1043,13 +1043,6 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       { argNames: ['a'], immediateArgs: [], stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }], returnType: ptypes.uint64PType },
     ],
   },
-  bzero: {
-    type: 'op-mapping',
-    op: 'bzero',
-    signatures: [
-      { argNames: ['a'], immediateArgs: [], stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }], returnType: ptypes.bytesPType },
-    ],
-  },
   concat: {
     type: 'op-mapping',
     op: 'concat',

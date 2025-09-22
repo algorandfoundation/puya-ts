@@ -105,7 +105,7 @@
               },
               "op": "|",
               "right": {
-                "_type": "IntrinsicCall",
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/static-bytes.algo.ts",
                   "line": 13,
@@ -117,27 +117,41 @@
                   "_type": "BytesWType",
                   "length": null
                 },
-                "op_code": "bzero",
-                "immediates": [],
-                "stack_args": [
-                  {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/static-bytes.algo.ts",
-                      "line": 13,
-                      "end_line": 13,
-                      "column": 27,
-                      "end_column": 29
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "value": 32,
-                    "teal_alias": null
-                  }
-                ]
+                "expr": {
+                  "_type": "IntrinsicCall",
+                  "source_location": {
+                    "file": "tests/approvals/static-bytes.algo.ts",
+                    "line": 13,
+                    "end_line": 13,
+                    "column": 21,
+                    "end_column": 30
+                  },
+                  "wtype": {
+                    "_type": "BytesWType",
+                    "length": 32
+                  },
+                  "op_code": "bzero",
+                  "immediates": [],
+                  "stack_args": [
+                    {
+                      "_type": "IntegerConstant",
+                      "source_location": {
+                        "file": "tests/approvals/static-bytes.algo.ts",
+                        "line": 13,
+                        "end_line": 13,
+                        "column": 21,
+                        "end_column": 30
+                      },
+                      "wtype": {
+                        "_type": "WType",
+                        "name": "uint64",
+                        "immutable": true
+                      },
+                      "value": 32,
+                      "teal_alias": null
+                    }
+                  ]
+                }
               }
             }
           }

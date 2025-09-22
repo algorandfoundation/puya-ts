@@ -114,7 +114,7 @@ const OPERATOR_OPCODES = new Set([
   '~',
 ])
 
-export type AlgoTsType = SimpleAlgoTsType | BytesAlgoTsType | EnumAlgoTsType | UnionAlgoTsType
+export type AlgoTsType = SimpleAlgoTsType | BytesAlgoTsType | EnumAlgoTsType | UnionAlgoTsType | GenericAlgoTsType
 
 export class SimpleAlgoTsType {
   constructor(
@@ -148,6 +148,21 @@ export class UnionAlgoTsType {
   readonly types: AlgoTsType[]
   constructor(...types: AlgoTsType[]) {
     this.types = types
+  }
+}
+
+export class GenericAlgoTsType {
+  constructor(
+    public readonly genericParams: string,
+    public readonly baseAlgoTsType?: AlgoTsType,
+    private readonly tsNameOverride?: string,
+  ) {}
+  get name(): string {
+    return this.tsNameOverride ?? (this.baseAlgoTsType ? `${this.baseAlgoTsType.name}<${this.genericParams}>` : this.genericParams)
+  }
+
+  get tsName(): string {
+    return this.tsNameOverride ?? (this.baseAlgoTsType ? `${this.baseAlgoTsType.tsName}<${this.genericParams}>` : this.genericParams)
   }
 }
 
@@ -350,6 +365,24 @@ const GROUPED_OPCODES: { name: string; doc: string; ops: { [key: string]: OpName
   { name: 'ITxn', doc: 'Get values for the last inner transaction', ops: { itxn: {}, itxnas: {} } },
 ]
 
+const GENERIC_OPCODES: Map<
+  string,
+  {
+    typeArgs: Array<{ name: string; constraint?: string }>
+    inputArgs: Array<{ name: string; type: GenericAlgoTsType }>
+    returnTypes: GenericAlgoTsType[]
+  }
+> = new Map([
+  [
+    'bzero',
+    {
+      typeArgs: [{ name: 'TLength', constraint: 'extends uint64 = uint64' }],
+      inputArgs: [{ name: 'A', type: new GenericAlgoTsType('TLength', AlgoTsType.Uint64, 'TLength') }],
+      returnTypes: [new GenericAlgoTsType('TLength', AlgoTsType.Bytes)],
+    },
+  ],
+])
+
 export type OpArg = {
   name: string
   type: AlgoTsType
@@ -487,18 +520,23 @@ export function buildOpModule() {
         })
       }
     } else {
+      const genericOpCode = GENERIC_OPCODES.get(opCode)
       opFunctions.push(
         ...splitUnionReturnTypes({
           type: 'op-function',
           opCode: opCode,
           minAvmVersion: def.min_avm_version,
-          name: getOpName(def.name, opNameConfig),
+          name: `${getOpName(def.name, opNameConfig)}${genericOpCode ? ` <${genericOpCode.typeArgs.map((t) => [t.name, t.constraint].join(' ')).join(', ')}>` : ''}`,
           immediateArgs: def.immediate_args.map((i) => ({
             name: camelCase(i.name),
-            type: getInputTypes(getMappedType(i.immediate_type, i.arg_enum)),
+            type:
+              genericOpCode?.inputArgs.find((a) => a.name === i.name)?.type || getInputTypes(getMappedType(i.immediate_type, i.arg_enum)),
           })),
-          stackArgs: def.stack_inputs.map((i) => ({ name: camelCase(i.name), type: getInputTypes(getMappedType(i.stack_type, null)) })),
-          returnTypes: def.stack_outputs.map((o) => getMappedType(o.stack_type, null)),
+          stackArgs: def.stack_inputs.map((i) => ({
+            name: camelCase(i.name),
+            type: genericOpCode?.inputArgs.find((a) => a.name === i.name)?.type || getInputTypes(getMappedType(i.stack_type, null)),
+          })),
+          returnTypes: genericOpCode?.returnTypes || def.stack_outputs.map((o) => getMappedType(o.stack_type, null)),
           docs: getOpDocs(def),
         }),
       )

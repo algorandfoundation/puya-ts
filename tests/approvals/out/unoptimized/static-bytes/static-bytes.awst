@@ -1,6 +1,6 @@
 subroutine padTo32(b: bytes[16]): bytes[32]
 {
-  return reinterpret_cast<bytes[32]>(reinterpret_cast<bytes>(b) | bzero(32))
+  return reinterpret_cast<bytes[32]>(reinterpret_cast<bytes>(b) | reinterpret_cast<bytes>(bzero(32)))
 }
 contract StaticBytesAlgo
 {

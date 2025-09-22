@@ -14,7 +14,7 @@ import {
 @contract({ avmVersion: 12 })
 class Avm12Contract extends Contract {
   testFalconVerify() {
-    assert(!op.falconVerify(Bytes(), Bytes(), op.bzero(1793).toFixed({ length: 1793 })))
+    assert(!op.falconVerify(Bytes(), Bytes(), op.bzero(1793)))
   }
 
   testRejectVersion() {

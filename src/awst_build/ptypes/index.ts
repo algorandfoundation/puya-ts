@@ -629,6 +629,10 @@ export class IntrinsicFunctionTypeType extends PType {
   }
 }
 
+export const bzeroFunction = new IntrinsicFunctionType({
+  name: 'bzero',
+})
+
 export class NamespacePType extends PType {
   readonly [PType.IdSymbol] = 'NamespacePType'
   readonly wtype: undefined

@@ -546,7 +546,7 @@ subroutine tests/approvals/arc4-types.algo.ts::testZeroValues() -> void:
         let aggregate%len_u16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
         let aggregate%as_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = aggregate%len_u16%0#0
         let encoded_array%3#0: Encoded(len+uint8[]) = aggregate%as_Encoded(len+uint8[])%0#0
-        let tmp%19#0: bytes = (bzero 2u)
+        let tmp%19#0: bytes[2] = (bzero 2u)
         let tmp%20#0: bool = (== encoded_array%3#0 tmp%19#0)
         (assert tmp%20#0)
         let tmp%21#0: Encoded(bool1,bool1,bool1,bool1,bool1,bool1,bool1,bool1,bool1) = (bzero 2u)
@@ -571,28 +571,28 @@ subroutine tests/approvals/arc4-types.algo.ts::testZeroValues() -> void:
         let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 "")
         let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%0#0
         let tmp%24#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
-        let tmp%25#0: bytes = (bzero 2u)
+        let tmp%25#0: bytes[2] = (bzero 2u)
         let tmp%26#0: bool = (== tmp%24#0 tmp%25#0)
         (assert tmp%26#0)
-        let tmp%27#0: bytes = (bzero 2u)
+        let tmp%27#0: bytes[2] = (bzero 2u)
         let tmp%28#0: bool = (== 0x0000 tmp%27#0)
         (assert tmp%28#0)
-        let tmp%29#0: bytes = (bzero 5u)
+        let tmp%29#0: bytes[5] = (bzero 5u)
         let tmp%30#0: bool = (== 0x0000000000 tmp%29#0)
         (assert tmp%30#0)
-        let tmp%31#0: bytes = (bzero 32u)
+        let tmp%31#0: bytes[32] = (bzero 32u)
         let tmp%32#0: bool = (== addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ tmp%31#0)
         (assert tmp%32#0)
-        let tmp%33#0: bytes = (bzero 4u)
+        let tmp%33#0: bytes[4] = (bzero 4u)
         let tmp%34#0: bool = (== 0x00000000 tmp%33#0)
         (assert tmp%34#0)
         let aggregate%encoded_bool%15#0: bytes[1] = (setbit 0x00 0u 0u)
         let aggregate%as_Encoded(bool8)%13#0: Encoded(bool8) = aggregate%encoded_bool%15#0
         let tmp%35#0: Encoded(bool8) = aggregate%as_Encoded(bool8)%13#0
-        let tmp%36#0: bytes = (bzero 1u)
+        let tmp%36#0: bytes[1] = (bzero 1u)
         let tmp%37#0: bool = (== tmp%35#0 tmp%36#0)
         (assert tmp%37#0)
-        let tmp%38#0: bytes = (bzero 4u)
+        let tmp%38#0: bytes[4] = (bzero 4u)
         let tmp%39#0: bool = (== 0x00000000 tmp%38#0)
         (assert tmp%39#0)
         return 

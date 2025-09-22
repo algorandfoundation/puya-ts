@@ -722,7 +722,7 @@ export function btoi(a: bytes): uint64 {
  * @see Native TEAL opcode: [`bzero`](https://dev.algorand.co/reference/algorand-teal/opcodes#bzero)
  * Min AVM version: 4
  */
-export function bzero(a: uint64): bytes {
+export function bzero<TLength extends uint64 = uint64>(a: TLength): bytes<TLength> {
   throw new NoImplementation()
 }
 

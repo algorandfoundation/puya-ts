@@ -55,7 +55,7 @@ subroutine tests/approvals/biguint-expressions.algo.ts::testOps(smaller: biguint
         (assert tmp%3#0)
         let tmp%4#0: bool = (b== smaller#0 smaller#0)
         (assert tmp%4#0)
-        let tmp%5#0: bytes = (bzero 4u)
+        let tmp%5#0: bytes[4] = (bzero 4u)
         let reinterpret_biguint%0#0: biguint = (concat tmp%5#0 smaller#0)
         let tmp%6#0: bool = (b== smaller#0 reinterpret_biguint%0#0)
         (assert tmp%6#0) // Leading zeros should be ignored in equality

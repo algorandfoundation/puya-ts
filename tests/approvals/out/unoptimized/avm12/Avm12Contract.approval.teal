@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 6 1793
+    intcblock 0 1 6
     bytecblock 0x base64(DEIAAIEBQw==)
     b main_block@0
 
@@ -119,14 +119,9 @@ tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify:
 
 tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify_block@0:
     // tests/approvals/avm12.algo.ts:17
-    // assert(!op.falconVerify(Bytes(), Bytes(), op.bzero(1793).toFixed({ length: 1793 })))
-    intc_3 // 1793
+    // assert(!op.falconVerify(Bytes(), Bytes(), op.bzero(1793)))
+    pushint 1793 // 1793
     bzero
-    dup
-    len
-    intc_3 // 1793
-    ==
-    assert // Length must be 1793
     bytec_0 // 0x
     bytec_0 // 0x
     uncover 2

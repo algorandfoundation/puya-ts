@@ -97,7 +97,7 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test[routing]()
         let tmp%7#0: uint64 = (len b#0)
         let tmp%8#0: bool = (== tmp%7#0 16u)
         (assert tmp%8#0) // Length must be 16
-        let tmp%0#1: bytes = (bzero 32u)
+        let tmp%0#1: bytes[32] = (bzero 32u)
         let padded#0: bytes[32] = (b| b#0 tmp%0#1)
         let tmp%10#0: uint64 = (len padded#0)
         let tmp%11#0: bool = (== tmp%10#0 32u)

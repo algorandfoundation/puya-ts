@@ -41,9 +41,9 @@ subroutine tests/approvals/ops.algo.ts::MyContract.test[routing]() -> void:
 
 subroutine tests/approvals/ops.algo.ts::MyContract.test() -> void:
     block@0: // L7
-        let tmp%0#0: bytes = (bzero 8u)
+        let tmp%0#0: bytes[8] = (bzero 8u)
         let tmp%1#0: bytes = (b~ tmp%0#0)
-        let a#0: bytes = tmp%1#0
+        let a#0: bytes[8] = tmp%1#0
         let tmp%2#0: uint64 = (btoi a#0)
         let b#0: uint64 = tmp%2#0
         let tmp%3#0: bool = (== b#0 18446744073709551615u)
