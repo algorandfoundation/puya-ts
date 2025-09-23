@@ -1,5 +1,5 @@
 import type { DeliberateAny } from '../typescript-helpers'
-import { bigIntToUint8Array } from '../util'
+import { bigIntToUint8Array, invariant } from '../util'
 import { nodeFactory } from './node-factory'
 import type { Expression } from './nodes'
 import * as awst from './nodes'
@@ -98,6 +98,12 @@ export const intrinsicFactory = {
     })
   },
   bzero({ size, sourceLocation, wtype }: { size: bigint | Expression; sourceLocation: SourceLocation; wtype?: wtypes.WType }) {
+    // If the size is a bigint and the wtype is a BytesWType with a different length, that's an error
+    invariant(
+      typeof size !== 'bigint' || !wtype || !(wtype instanceof wtypes.BytesWType) || wtype.length === size,
+      'bzero wtype length must match size',
+    )
+
     return nodeFactory.intrinsicCall({
       opCode: 'bzero',
       immediates: [],
