@@ -7,6 +7,10 @@ function parseString(x: unknown) {
   invariant(typeof x === 'string', `expected string, received ${typeof x}`)
   return x
 }
+function parseNullOrString(x: unknown) {
+  if (x === null) return null
+  return parseString(x)
+}
 function parseNumber(x: unknown) {
   invariant(typeof x === 'number', `expected number, received ${typeof x}`)
   return x
@@ -32,7 +36,7 @@ function parseSourceLocation(x: unknown) {
   if (x === null) return null
   const obj = x as Record<string, unknown>
   return {
-    file: parseString(obj.file),
+    file: parseNullOrString(obj.file),
     line: parseNumber(obj.line),
     end_line: parseNullOrNumber(obj.end_line),
     column: parseNumber(obj.column),
@@ -50,11 +54,11 @@ function parsePuyaLog(x: unknown) {
   }
 }
 
-export function deserializeAndLog(logText: string) {
+export function deserializeAndLog(puyaLog: unknown) {
   try {
-    const log = parsePuyaLog(JSON.parse(logText))
+    const log = parsePuyaLog(puyaLog)
 
-    const sourceLocation = log.location
+    const sourceLocation = log.location?.file
       ? new SourceLocation({
           file: upath.normalize(log.location.file),
           line: log.location.line,

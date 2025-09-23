@@ -2,7 +2,6 @@ import type * as lsp from 'vscode-languageserver'
 import type { TextDocument } from 'vscode-languageserver-textdocument'
 import type { TextDocuments } from 'vscode-languageserver/node.js'
 import { URI } from 'vscode-uri'
-import { compile } from '../compile'
 import { processInputPaths } from '../input-paths/process-input-paths'
 import { LoggingContext, LogLevel, LogSource } from '../logger'
 import type { AlgoFile } from '../options'
@@ -14,17 +13,29 @@ import type { CompileTriggerQueue, WorkspaceCompileTrigger } from './compile-tri
 import type { DiagnosticsManager } from './diagnostics-manager'
 import type { LsLogger } from './ls-logger'
 import { type LogEventWithSource, mapper } from './mapping'
+import { registerPTypes } from '../awst_build/ptypes/register'
+import { typeRegistry } from '../awst_build/type-registry'
+import { createTsProgram } from '../parser'
+import { buildAwst } from '../awst_build'
+import { validateAwst } from '../awst/validation'
+import type { PuyaService } from '../puya/puya-service'
+import { getPuyaService } from '../puya/puya-service'
+import { deserializeAndLog } from '../puya/log-deserializer'
 
 export class CompileWorker {
   stopped: boolean = false
+  puyaService: PuyaService
   constructor(
     private readonly queue: CompileTriggerQueue,
     private readonly documents: TextDocuments<TextDocument>,
     private readonly logger: LsLogger,
     private readonly diagnostics: DiagnosticsManager,
-  ) {}
+    puyaPath: string,
+  ) {
+    this.puyaService = getPuyaService(puyaPath)
+  }
 
-  start(): void {
+  start() {
     setTimeout(async () => {
       while (!this.stopped) {
         const work = this.queue.tryDequeue()
@@ -41,7 +52,8 @@ export class CompileWorker {
     })
   }
 
-  stop() {
+  async stop() {
+    await this.puyaService.shutdown()
     this.stopped = true
   }
 
@@ -64,29 +76,26 @@ export class CompileWorker {
     const logCtx = LoggingContext.create()
     await logCtx.run(
       async () =>
-        await compile(
-          new CompileOptions({
-            filePaths: algoFiles,
-            dryRun: true,
-            sourceFileProvider({ readFile, fileExists }) {
-              return {
-                readFile(fileName) {
-                  const fileUri = URI.file(fileName).toString()
-                  const doc = documents.get(fileUri)
-                  if (doc) {
-                    documentVersions[fileUri] = doc.version
-                    return doc.getText()
-                  }
-                  return readFile(fileName)
-                },
-                fileExists(fileName) {
-                  const fileUri = URI.file(fileName).toString()
-                  return Boolean(documents.get(fileUri)) || fileExists(fileName)
-                },
-              }
-            },
-          }),
-        ),
+        await analyse(this.puyaService, {
+          filePaths: algoFiles,
+          sourceFileProvider({ readFile, fileExists }) {
+            return {
+              readFile(fileName) {
+                const fileUri = URI.file(fileName).toString()
+                const doc = documents.get(fileUri)
+                if (doc) {
+                  documentVersions[fileUri] = doc.version
+                  return doc.getText()
+                }
+                return readFile(fileName)
+              },
+              fileExists(fileName) {
+                const fileUri = URI.file(fileName).toString()
+                return Boolean(documents.get(fileUri)) || fileExists(fileName)
+              },
+            }
+          },
+        }),
     )
 
     const results = new DefaultMap<string, lsp.Diagnostic[]>()
@@ -111,5 +120,25 @@ export class CompileWorker {
       const fileUri = URI.file(file).toString()
       await this.diagnostics.setDiagnostics({ fileUri, diagnostics, version: documentVersions[fileUri] })
     }
+  }
+}
+
+async function analyse(puyaService: PuyaService, options: Pick<CompileOptions, 'filePaths' | 'sourceFileProvider'>): Promise<void> {
+  const loggerCtx = LoggingContext.current
+  registerPTypes(typeRegistry)
+  const compileOptions = new CompileOptions(options)
+  const programResult = createTsProgram(compileOptions)
+  if (loggerCtx.hasErrors()) {
+    return
+  }
+  const { moduleAwst } = buildAwst(programResult, compileOptions)
+  validateAwst(moduleAwst)
+
+  if (loggerCtx.hasErrors()) {
+    return
+  }
+  const response = await puyaService.analyse(programResult.programDirectory, moduleAwst)
+  for (const log of response.logs) {
+    deserializeAndLog(log)
   }
 }
