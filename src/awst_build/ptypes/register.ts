@@ -345,7 +345,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: bzeroFunction, singletonEb: BzeroFunctionBuilder })
   typeRegistry.register({
     ptype: new IntrinsicFunctionTypeType({
-      name: `$bzeroType`,
+      name: 'bzeroType',
     }),
     instanceEb: IntrinsicOpGroupOrFunctionTypeBuilder,
   })
