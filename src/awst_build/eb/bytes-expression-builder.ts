@@ -32,7 +32,6 @@ import {
   bigIntPType,
   biguintPType,
   BytesFunction,
-  BytesGeneric,
   BytesPType,
   bytesPType,
   numberPType,
@@ -61,11 +60,9 @@ export class BytesFunctionBuilder extends FunctionBuilder {
   taggedTemplate(
     head: string,
     spans: ReadonlyArray<readonly [InstanceBuilder, string]>,
-    typeArgs: ReadonlyArray<PType>,
+    _typeArgs: ReadonlyArray<PType>,
     sourceLocation: SourceLocation,
   ): InstanceBuilder {
-    const exprType = BytesGeneric.parameterise(typeArgs)
-
     let result: awst.Expression = nodeFactory.bytesConstant({
       sourceLocation,
       encoding: BytesEncoding.utf8,
@@ -95,37 +92,34 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       }
     }
 
-    const bytesBuilder = new BytesExpressionBuilder(result, bytesPType)
-    return exprType.length === null ? bytesBuilder : bytesToFixed(bytesBuilder, exprType, sourceLocation)
+    return new BytesExpressionBuilder(result, bytesPType)
   }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [initialValue],
-      ptypes: [len],
     } = parseFunctionArgs({
       args,
       typeArgs,
-      genericTypeArgs: 1,
+      genericTypeArgs: 0,
       callLocation: sourceLocation,
       funcName: 'Bytes',
       argSpec: (a) => [a.optional(numberPType, bigIntPType, uint64PType, biguintPType, stringPType, bytesPType, ArrayLiteralPType)],
     })
-    const exprType = BytesGeneric.parameterise([len])
+
     const empty = new BytesExpressionBuilder(
       nodeFactory.bytesConstant({
         sourceLocation,
-        value: new Uint8Array(Number(exprType.length)),
-        wtype: exprType.wtype,
+        value: new Uint8Array(0),
+        wtype: bytesPType.wtype,
       }),
-      exprType,
+      bytesPType,
     )
-
-    let bytesBuilder: InstanceBuilder
-
     if (!initialValue) {
-      bytesBuilder = empty
-    } else if (initialValue.ptype instanceof TransientType) {
+      return empty
+    }
+    let bytesBuilder: InstanceBuilder
+    if (initialValue.ptype instanceof TransientType) {
       logger.error(initialValue.sourceLocation, initialValue.ptype.expressionMessage)
       bytesBuilder = empty
     } else if (initialValue.ptype.equals(uint64PType)) {
@@ -152,9 +146,9 @@ export class BytesFunctionBuilder extends FunctionBuilder {
           nodeFactory.bytesConstant({
             value: Uint8Array.from(bytes),
             sourceLocation: initialValue.sourceLocation,
-            wtype: exprType.wtype,
+            wtype: bytesPType.wtype,
           }),
-          exprType,
+          bytesPType,
         )
       } else {
         logger.error(initialValue.sourceLocation, 'Only array literals or tuples are supported here')
@@ -162,7 +156,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       }
     }
 
-    return exprType.length === null ? bytesBuilder : bytesToFixed(bytesBuilder, exprType, sourceLocation)
+    return bytesBuilder
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
@@ -191,33 +185,26 @@ class FromEncodingBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       args: [valueBuilder],
-      ptypes: [len],
     } = parseFunctionArgs({
       args,
       typeArgs,
       callLocation: sourceLocation,
-      genericTypeArgs: 1,
+      genericTypeArgs: 0,
       funcName: this.functionName,
       argSpec: (a) => [a.required(stringPType)],
     })
-    const exprType = BytesGeneric.parameterise([len])
-
     const encodedValue = requireStringConstant(valueBuilder)
 
     const value = wrapInCodeError(() => this.decodeLiteral(encodedValue.value), encodedValue.sourceLocation)
-
-    if (exprType.length !== null && value.length !== Number(exprType.length)) {
-      logger.error(sourceLocation, `Expected decoded bytes value of length ${exprType.length}, received ${value.length}`)
-    }
 
     return new BytesExpressionBuilder(
       nodeFactory.bytesConstant({
         value: value,
         encoding: this.encoding,
         sourceLocation,
-        wtype: exprType.wtype,
+        wtype: bytesPType.wtype,
       }),
-      exprType,
+      bytesPType,
     )
   }
 }

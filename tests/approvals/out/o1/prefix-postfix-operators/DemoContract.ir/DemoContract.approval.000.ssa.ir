@@ -90,7 +90,7 @@ subroutine tests/approvals/prefix-postfix-operators.algo.ts::test_biguint(x: big
 
 subroutine tests/approvals/prefix-postfix-operators.algo.ts::test_bytes(x: bytes) -> void:
     block@0: // L50
-        let tmp%0#0: bytes = (bzero 4u)
+        let tmp%0#0: bytes[4] = (bzero 4u)
         let tmp%1#0: bool = (== x#0 tmp%0#0)
         (assert tmp%1#0) // x must be 4 unset bytes
         let tmp%2#0: bytes = (b~ x#0)
@@ -142,7 +142,7 @@ subroutine tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.test()
     block@0: // L58
         tests/approvals/prefix-postfix-operators.algo.ts::test_uint64(10u, 5u)
         tests/approvals/prefix-postfix-operators.algo.ts::test_biguint(10b, 5b)
-        let tmp%0#0: bytes = (bzero 4u)
+        let tmp%0#0: bytes[4] = (bzero 4u)
         tests/approvals/prefix-postfix-operators.algo.ts::test_bytes(tmp%0#0)
         return 1u
 

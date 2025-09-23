@@ -21,7 +21,7 @@ subroutine testOps(smaller: biguint, larger: biguint): void
   assert(larger > smaller)
   assert(larger >= larger)
   assert(smaller == smaller)
-  assert(smaller == reinterpret_cast<biguint>(concat(bzero(4), reinterpret_cast<bytes>(smaller))), comment=Leading zeros should be ignored in equality)
+  assert(smaller == reinterpret_cast<biguint>(concat(reinterpret_cast<bytes>(bzero(4)), reinterpret_cast<bytes>(smaller))), comment=Leading zeros should be ignored in equality)
 }
 contract DemoContract
 {

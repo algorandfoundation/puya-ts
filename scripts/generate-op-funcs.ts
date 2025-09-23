@@ -93,7 +93,7 @@ import { TransactionType } from "./transactions";
   for (const item of module.items) {
     if (item.type === 'op-function') {
       yield* emitDoc(item.docs, item.minAvmVersion)
-      yield `export function ${camelCase(item.name)}(`
+      yield `export function ${item.name}(`
       for (const arg of item.immediateArgs) {
         yield* emitArg(arg)
       }

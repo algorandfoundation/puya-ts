@@ -6,5 +6,6 @@ describe('ops', () => {
 
   test('runs', async ({ appClientMyContract }) => {
     await appClientMyContract.send.call({ method: 'test' })
+    await appClientMyContract.send.call({ method: 'test2', args: [32n] })
   })
 })

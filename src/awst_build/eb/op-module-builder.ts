@@ -8,6 +8,7 @@ import type { IntrinsicOpGrouping, IntrinsicOpMapping } from '../op-metadata'
 import { OP_METADATA } from '../op-metadata'
 import type { PType } from '../ptypes'
 import {
+  BytesPType,
   bytesPType,
   IntrinsicEnumType,
   IntrinsicFunctionGroupType,
@@ -177,6 +178,13 @@ abstract class IntrinsicOpBuilderBase extends FunctionBuilder {
           continue
         }
         const thisArg = args[sig.argNames.indexOf(arg.name)]
+
+        const bytesParamLength = (arg.ptypes.find((ptype) => ptype instanceof BytesPType && ptype.length) as BytesPType)?.length
+        if (thisArg.ptype instanceof BytesPType && thisArg.ptype.length && bytesParamLength && bytesParamLength !== thisArg.ptype.length) {
+          throw new CodeError(`Argument ${arg.name} must be bytes<${bytesParamLength}>`, {
+            sourceLocation,
+          })
+        }
 
         for (const ptype of arg.ptypes) {
           const expr = requestExpressionOfType(thisArg, ptype)

@@ -530,10 +530,15 @@ export class StaticBytes<TLength extends uint64 = 0> extends Arc4ArrayBase<Byte>
   [TypeProperty]?: `arc4.StaticBytes<${TLength}>`
 
   /**
-   * Create a new StaticBytes instance from native bytes
+   * Create a new StaticBytes instance from native fixed sized bytes
    * @param value The bytes
    */
   constructor(value: bytes<TLength>)
+  /**
+   * Create a new StaticBytes instance from native bytes
+   * @param value The bytes
+   */
+  constructor(value: bytes)
   /**
    * Create a new StaticBytes instance from a utf8 string
    * @param value A string

@@ -110,8 +110,8 @@ contract ItxnDemoContract
   
   test4(): void
   {
-    lotsOfBytes: bytes = bzero(2044)
-    approval2: bytes = concat(concat(0x80fc0f, lotsOfBytes), 0x48)
+    lotsOfBytes: bytes[2044] = bzero(2044)
+    approval2: bytes = concat(concat(0x80fc0f, reinterpret_cast<bytes>(lotsOfBytes)), 0x48)
     appTxn1: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=#[0x098101, approval2, approval2, approval2], ClearStateProgramPages=#[0x098101], OnCompletion=5, ApplicationArgs=#["1"], ExtraProgramPages=3)
     app1: inner_transaction_appl = submit_txn(appTxn1)
     assert(app1.ExtraProgramPages == 3, comment=extra pages = 3)

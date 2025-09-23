@@ -45,6 +45,7 @@ import { AssertMatchFunctionBuilder } from '../eb/assert-match-function-builder'
 import { BigUintExpressionBuilder, BigUintFunctionBuilder } from '../eb/biguint-expression-builder'
 import { BooleanExpressionBuilder, BooleanFunctionBuilder } from '../eb/boolean-expression-builder'
 import { BytesExpressionBuilder, BytesFunctionBuilder } from '../eb/bytes-expression-builder'
+import { BzeroFunctionBuilder } from '../eb/bzero-function-builder'
 import { CloneFunctionBuilder } from '../eb/clone-function-builder'
 import { CompileFunctionBuilder } from '../eb/compiled/compile-function'
 import { ContractClassBuilder, ContractOptionsDecoratorBuilder } from '../eb/contract-builder'
@@ -176,6 +177,7 @@ import {
   BytesGeneric,
   bytesPType,
   BytesPType,
+  bzeroFunction,
   ClassMethodDecoratorContext,
   cloneFunctionPType,
   compileFunctionType,
@@ -338,6 +340,15 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   })
 
   typeRegistry.register({ ptype: FunctionPType, singletonEb: FreeSubroutineExpressionBuilder })
+
+  // Op overrides
+  typeRegistry.register({ ptype: bzeroFunction, singletonEb: BzeroFunctionBuilder })
+  typeRegistry.register({
+    ptype: new IntrinsicFunctionTypeType({
+      name: 'bzeroType',
+    }),
+    instanceEb: IntrinsicOpGroupOrFunctionTypeBuilder,
+  })
 
   // Op types
   typeRegistry.register({ ptype: NamespacePType, singletonEb: NamespaceBuilder })

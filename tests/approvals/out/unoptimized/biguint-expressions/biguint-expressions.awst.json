@@ -1668,7 +1668,7 @@
                   "immediates": [],
                   "stack_args": [
                     {
-                      "_type": "IntrinsicCall",
+                      "_type": "ReinterpretCast",
                       "source_location": {
                         "file": "tests/approvals/biguint-expressions.algo.ts",
                         "line": 27,
@@ -1680,27 +1680,41 @@
                         "_type": "BytesWType",
                         "length": null
                       },
-                      "op_code": "bzero",
-                      "immediates": [],
-                      "stack_args": [
-                        {
-                          "_type": "IntegerConstant",
-                          "source_location": {
-                            "file": "tests/approvals/biguint-expressions.algo.ts",
-                            "line": 27,
-                            "end_line": 27,
-                            "column": 38,
-                            "end_column": 39
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true
-                          },
-                          "value": 4,
-                          "teal_alias": null
-                        }
-                      ]
+                      "expr": {
+                        "_type": "IntrinsicCall",
+                        "source_location": {
+                          "file": "tests/approvals/biguint-expressions.algo.ts",
+                          "line": 27,
+                          "end_line": 27,
+                          "column": 29,
+                          "end_column": 40
+                        },
+                        "wtype": {
+                          "_type": "BytesWType",
+                          "length": 4
+                        },
+                        "op_code": "bzero",
+                        "immediates": [],
+                        "stack_args": [
+                          {
+                            "_type": "IntegerConstant",
+                            "source_location": {
+                              "file": "tests/approvals/biguint-expressions.algo.ts",
+                              "line": 27,
+                              "end_line": 27,
+                              "column": 38,
+                              "end_column": 39
+                            },
+                            "wtype": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "value": 4,
+                            "teal_alias": null
+                          }
+                        ]
+                      }
                     },
                     {
                       "_type": "ReinterpretCast",
