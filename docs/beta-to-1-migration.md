@@ -380,7 +380,7 @@ Due to covariance a `bytes<N>` value can always be assigned to a `bytes` target 
 ```typescript
 snapshotPublicKey = GlobalState<bytes<32>>()
 
-const fromUtf8 = Bytes<3>('abc')
+const fromUtf8 = Bytes('abc').toFixed({ length: 3 })
 
 function padTo32(b: bytes<16>): bytes<32> {
   return b.bitwiseOr(bzero(32)).toFixed({ length: 32, strategy: 'unsafe-cast' })
