@@ -1,7 +1,9 @@
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { Bytes } from '@algorandfoundation/algorand-typescript'
+import { Bytes, op } from '@algorandfoundation/algorand-typescript'
 
 function testUnsupported(i: uint64) {
+  // @expect-error Argument b must be bytes<1232>
+  op.falconVerify(Bytes(), Bytes().toFixed({ length: 32, strategy: 'unsafe-cast' }), op.bzero(1793))
   // @expect-error Expression of type `number` must be explicitly converted to an algo-ts type...
   Bytes(1)
   // @expect-error Expression of type `bigint` must be explicitly converted to an algo-ts type...
