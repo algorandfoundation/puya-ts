@@ -92,9 +92,9 @@ function testDynamicBytes(someBytes: bytes) {
 function testStaticBytes() {
   const s1 = new StaticBytes()
   const s2 = new StaticBytes<4>()
-  const s3 = new StaticBytes<5>(Bytes.fromHex('AABBCCDDEE').toFixed({ length: 5 }))
+  const s3 = new StaticBytes<5>(Bytes.fromHex('AABBCCDDEE'))
 
-  const s5 = new StaticArray<StaticBytes<5>, 1>(new StaticBytes<5>(Bytes.fromHex('AABBCCDDEE').toFixed({ length: 5 })))
+  const s5 = new StaticArray<StaticBytes<5>, 1>(new StaticBytes<5>(Bytes.fromHex('AABBCCDDEE')))
   assert(s5[0].native === Bytes.fromHex('AABBCCDDEE'))
 
   const s4 = s2.concat(s3)

@@ -8,13 +8,14 @@ import type { IntrinsicOpGrouping, IntrinsicOpMapping } from '../op-metadata'
 import { OP_METADATA } from '../op-metadata'
 import type { PType } from '../ptypes'
 import {
-  BytesPType, bytesPType,
+  BytesPType,
+  bytesPType,
   IntrinsicEnumType,
   IntrinsicFunctionGroupType,
   IntrinsicFunctionType,
   stringPType,
   uint64PType,
-  voidPType
+  voidPType,
 } from '../ptypes'
 import { instanceEb, typeRegistry } from '../type-registry'
 import { FunctionBuilder, InstanceExpressionBuilder, NodeBuilder } from './index'
