@@ -1,18 +1,17 @@
-import { AwstSerializer, SnakeCaseSerializer } from '../awst/json-serialize-awst'
+import path from 'node:path'
+import ts from 'typescript'
 import type { AWST } from '../awst/nodes'
 import type { CompilationSet } from '../awst_build/models/contract-class-model'
-import { logger, LogLevel } from '../logger'
+import { LogLevel } from '../logger'
 import type { CompileOptions } from '../options'
 import type { SourceFileMapping } from '../parser'
-import { jsonSerializeSourceFiles } from '../parser/json-serialize-source-files'
-import { generateTempDir } from '../util/generate-temp-file'
 import { buildCompilationSetMapping } from './build-compilation-set-mapping'
-import { checkPuyaVersion } from './check-puya-version'
+import { getPuyaService } from './puya-service'
 import { deserializeAndLog } from './log-deserializer'
+import { checkPuyaVersion } from './check-puya-version'
 import { resolvePuyaPath } from './resolve-puya-path'
-import { runPuya } from './run-puya'
 
-export async function invokePuya({
+export async function puyaCompile({
   moduleAwst,
   programDirectory,
   sourceFiles,
@@ -30,24 +29,7 @@ export async function invokePuya({
   }
 
   const puyaPath = options.customPuyaPath ?? (await resolvePuyaPath())
-
-  using buildDir = generateTempDir()
-
-  // Write AWST file
-  const moduleAwstFile = buildDir.makeFile({ name: 'module', ext: 'awst.json', compress: true })
-  logger.debug(undefined, `Writing awst to ${moduleAwstFile.filePath}`)
-  const serializer = new AwstSerializer({
-    programDirectory: programDirectory,
-    sourcePaths: 'absolute',
-  })
-  moduleAwstFile.writeFileSync(serializer.serialize(moduleAwst), 'utf-8')
-
-  // Write source annotations
-  const moduleSourceFile = buildDir.makeFile({ name: 'sources', ext: 'json' })
-  logger.debug(undefined, `Write source to ${moduleSourceFile.filePath}`)
-  moduleSourceFile.writeFileSync(jsonSerializeSourceFiles(sourceFiles, programDirectory), 'utf-8')
-
-  // Write puya options
+  const puyaService = getPuyaService(puyaPath)
   const puyaOptions = options.buildPuyaOptions(
     buildCompilationSetMapping({
       awst: moduleAwst,
@@ -55,30 +37,19 @@ export async function invokePuya({
       compilationSet,
     }),
   )
-  const optionsFile = buildDir.makeFile({ name: 'options', ext: 'json' })
-  logger.debug(undefined, `Write options to ${optionsFile.filePath}`)
-  optionsFile.writeFileSync(new SnakeCaseSerializer().serialize(puyaOptions))
-  const puyaArgs = [
-    '--options',
-    optionsFile.filePath,
-    `--awst`,
-    moduleAwstFile.filePath,
-    `--source-annotations`,
-    moduleSourceFile.filePath,
-    '--log-level',
-    getPuyaLogLevel(options.logLevel),
-    '--log-format',
-    'json',
-  ]
-  // Useful to have this in a var to copy/paste when debugging puya
-  const puyaArgsStr = puyaArgs.join(' ')
-  logger.debug(undefined, `Invoking puya: ${puyaPath} ${puyaArgsStr}`)
-  await runPuya({
-    command: puyaPath,
-    args: puyaArgs,
-    cwd: programDirectory,
-    onOutput: deserializeAndLog,
+
+  const response = await puyaService.compile({
+    awst: moduleAwst,
+    options: puyaOptions,
+    base_path: programDirectory,
+    log_level: getPuyaLogLevel(options.logLevel),
+    source_annotations: getSourceFileContents(sourceFiles, programDirectory),
   })
+  // TODO: approval tests could be sped up by caching puyaService and only shutting down once tests are complete
+  await puyaService.shutdown()
+  for (const log of response.logs) {
+    deserializeAndLog(log)
+  }
 }
 
 function getPuyaLogLevel(logLevel: LogLevel): string {
@@ -94,4 +65,12 @@ function getPuyaLogLevel(logLevel: LogLevel): string {
     case LogLevel.Critical:
       return 'critical'
   }
+}
+function getSourceFileContents(sourceFiles: SourceFileMapping, programDirectory: string) {
+  return Object.fromEntries(
+    Object.entries(sourceFiles).map(([key, value]) => {
+      const source = ts.isSourceFile(value) ? value.getFullText().replace(/\r\n/g, '\n').split(/\n/g) : value
+      return [path.join(programDirectory, key), source] as const
+    }),
+  )
 }

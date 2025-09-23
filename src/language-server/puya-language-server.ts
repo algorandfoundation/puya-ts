@@ -7,6 +7,7 @@ import type { FileDiagnosticsChanged } from './diagnostics-manager'
 import { DiagnosticsManager } from './diagnostics-manager'
 import { LsLogger } from './ls-logger'
 import { isCodeFixData } from './mapping'
+import { resolvePuyaPath } from '../puya/resolve-puya-path'
 
 /* eslint-disable no-console */
 
@@ -39,11 +40,14 @@ export class PuyaLanguageServer {
   readonly diagnosticsMgr: DiagnosticsManager
   readonly compileWorker: CompileWorker
 
-  constructor(public readonly connection: lsp.Connection) {
+  constructor(
+    public readonly connection: lsp.Connection,
+    puyaPath: string,
+  ) {
     console.log('Language server started')
     this.logger = new LsLogger(connection)
     this.diagnosticsMgr = new DiagnosticsManager()
-    this.compileWorker = new CompileWorker(this.triggers, this.documents, this.logger, this.diagnosticsMgr)
+    this.compileWorker = new CompileWorker(this.triggers, this.documents, this.logger, this.diagnosticsMgr, puyaPath)
 
     connection.onInitialize(this.initialize.bind(this))
     connection.onInitialized(this.initialized.bind(this))
@@ -59,8 +63,8 @@ export class PuyaLanguageServer {
     this.compileWorker.start()
   }
 
-  shutdown() {
-    this.compileWorker.stop()
+  async shutdown() {
+    await this.compileWorker.stop()
   }
 
   initialize(params: lsp.InitializeParams): lsp.InitializeResult {
@@ -133,6 +137,8 @@ export async function startLanguageServer(options: LanguageServerOptions) {
   console.log('Language server starting...')
 
   const connection = await resolveConnection(options.port)
-  const server = new PuyaLanguageServer(connection)
+  // TODO: allow overriding puya path?
+  const puyaPath = await resolvePuyaPath()
+  const server = new PuyaLanguageServer(connection, puyaPath)
   server.start()
 }

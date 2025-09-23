@@ -48,7 +48,7 @@ export class SnakeCaseSerializer<T> {
   }
 }
 
-export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
+export class AwstSerializer<T> extends SnakeCaseSerializer<T> {
   constructor(
     private options?: {
       sourcePaths?: 'absolute' | 'relative'

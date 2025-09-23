@@ -8,7 +8,7 @@ import { typeRegistry } from './awst_build/type-registry'
 import { logger, LoggingContext } from './logger'
 import type { CompileOptions } from './options'
 import { createTsProgram } from './parser'
-import { invokePuya } from './puya'
+import { puyaCompile } from './puya'
 
 export type CompileResult = {
   programDirectory: string
@@ -41,7 +41,7 @@ export async function compile(options: CompileOptions): Promise<CompileResult> {
     }
   }
   if (!options.dryRun) {
-    await invokePuya({
+    await puyaCompile({
       options,
       moduleAwst,
       programDirectory: programResult.programDirectory,
