@@ -22,6 +22,12 @@ contract MyContract
     assert(gtxnsas<ApplicationArgs>(txn<GroupIndex>(), 0) == reinterpret_cast<bytes>(Method("test()void")))
   }
   
+  test2(size: uint64): void
+  {
+    a: bytes = bzero(size)
+    assert(len(a) == size)
+  }
+  
   __algots__.defaultCreate(): void
   {
   }
