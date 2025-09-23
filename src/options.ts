@@ -83,7 +83,7 @@ export const defaultPuyaOptions: PuyaPassThroughOptions = {
   outputBytecode: false,
   debugLevel: 1,
   optimizationLevel: 1,
-  targetAvmVersion: 10,
+  targetAvmVersion: 11,
   cliTemplateDefinitions: {},
   templateVarsPrefix: 'TMPL_',
   localsCoalescingStrategy: LocalsCoalescingStrategy.root_operand,
