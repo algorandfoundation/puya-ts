@@ -130,7 +130,7 @@ export function addBuildCommand(parser: ArgumentParser) {
   })
   parser.add_argument('--target-avm-version', {
     default: defaultPuyaOptions.targetAvmVersion.toString(),
-    choices: ['10', '11'],
+    choices: ['10', '11', '12', '13'],
     help: 'Select the targeted AVM version for compilation output',
   })
 
