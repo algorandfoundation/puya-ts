@@ -62,7 +62,7 @@ export class CompileWorker {
 
     const workspacePaths = workspaceTrigger.workspaces.map((ws) => URI.parse(ws).fsPath)
 
-    const algoFiles = processInputPaths({ paths: workspacePaths, ignoreUnmatchedPaths: true })
+    const algoFiles = processInputPaths({ paths: workspacePaths, workingDirectory: '', ignoreUnmatchedPaths: true })
     if (algoFiles.length === 0) return
 
     await this.compileAlgoFiles(algoFiles)
