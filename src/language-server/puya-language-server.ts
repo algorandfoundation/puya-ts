@@ -134,7 +134,8 @@ export class PuyaLanguageServer {
 }
 
 export async function startLanguageServer(options: LanguageServerOptions) {
-  console.log('Language server starting...')
+  // output to stderr to avoid interfering with stdio protocol
+  console.error('Language server starting...')
 
   const connection = await resolveConnection(options.port)
   // TODO: allow overriding puya path?
