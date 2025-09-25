@@ -91,7 +91,9 @@ export class PuyaLanguageServer {
     // TODO: Maybe need to make sure diagnostics for a single file are always sent in the order they're produced
     this.connection.console.log(`[Diagnostics Changed]: ${params.uri}`)
 
-    void this.connection.sendDiagnostics(params)
+    void this.connection.sendDiagnostics(params).then(() => {
+      this.connection.console.log(`[Diagnostics Sent]: ${params.uri}`)
+    })
   }
 
   documentDidChangeContent(params: lsp.TextDocumentChangeEvent<TextDocument>) {

@@ -8,17 +8,20 @@ import type { ChildProcess } from 'node:child_process'
 
 const codeFixes = upath.resolve('tests/code-fix')
 const codeFixUri = `file://${codeFixes}`
+/* eslint-disable no-console */
+const log = console.error
 
 describe('Language Server', () => {
   const processes: ChildProcess[] = []
   function getLanguageServer() {
     const process = spawn('npx', ['tsx', 'src/cli-ls.ts', '--stdio'], {
-      stdio: ['pipe', 'pipe', 'inherit'],
+      stdio: ['pipe', 'pipe', 'ignore'],
     })
 
     const connection = ls.createProtocolConnection(new StreamMessageReader(process.stdout), new StreamMessageWriter(process.stdin))
     connection.listen()
     expect(process.pid, 'language server pid').toBeTruthy()
+    log(`started language server process: ${process.pid}`)
     expect(process.exitCode, 'language server exit code').toBeNull()
     processes.push(process)
     return {
@@ -30,7 +33,10 @@ describe('Language Server', () => {
   afterAll(() => {
     for (const process of processes) {
       if (process.exitCode === null) {
+        log(`process ${process.pid} still alive, killing`)
         process.kill()
+      } else {
+        log(`process ${process.pid} already ended with exit code: ${process.exitCode}`)
       }
     }
   })
@@ -57,7 +63,27 @@ describe('Language Server', () => {
   })
   it('publishes diagnostics', async () => {
     const { connection, process } = getLanguageServer()
+    const onConnectionError = connection.onError((err) => {
+      log(`connection error: ${err}`)
+    })
+    const exit = new Promise<void>((resolve) => {
+      process.once('error', (err) => {
+        log(`error: ${err}`)
+        resolve()
+      })
+      process.once('exit', (code) => {
+        log(`exit: ${code}`)
+        resolve()
+      })
+    })
+    process.once('close', (code) => {
+      log(`process closed: ${code}`)
+    })
     await initialize(connection)
+    log('initialized')
+    const logHandler = connection.onNotification(ls.LogMessageNotification.type, (msg) => {
+      log(`SERVER: ${msg.type}: ${msg.message}`)
+    })
 
     const path = upath.join(codeFixes, 'unsupported-tokens.algo.ts')
     const uri = `file://${path}`
@@ -71,6 +97,7 @@ describe('Language Server', () => {
     }
     const nextDiagnostic = new Promise<ls.PublishDiagnosticsParams>((resolve, reject) => {
       const notification = connection.onNotification(ls.PublishDiagnosticsNotification.type, (n) => {
+        log(`received ${n.diagnostics.length} diagnostics for ${n.uri}`)
         if (n.uri === uri) {
           // two sets of diagnostics are published, one on initial change and one after the workspace has been analysed
           // this test is only interested in the second diagnostic, however, they may be received in either order
@@ -82,9 +109,10 @@ describe('Language Server', () => {
         }
       })
     })
+    log(`sending open notification for ${uri}`)
     await connection.sendNotification(ls.DidOpenTextDocumentNotification.type, open)
-    expect(process.exitCode, 'language server process should still be running').toBeNull()
     const diagnostic = await nextDiagnostic
+    log(`received diagnostic uri=${diagnostic.uri}, version=${diagnostic.version}`)
     expect(diagnostic, 'diagnostic').toMatchObject({
       uri: uri,
       diagnostics: [
@@ -96,9 +124,16 @@ describe('Language Server', () => {
         },
       ],
     })
+    expect(process.exitCode, 'language server process should still be running').toBeNull()
+    log(`sending shutdown`)
     await connection.sendRequest(ls.ShutdownRequest.type)
+    logHandler.dispose()
+    onConnectionError.dispose()
+    log(`sending exit`)
     await connection.sendNotification(ls.ExitNotification.type)
+    log(`connection.end`)
     connection.end()
+    await exit
   })
 })
 
@@ -114,5 +149,7 @@ async function initialize(connection: ls.ProtocolConnection) {
       },
     ],
   }
-  return await connection.sendRequest(ls.InitializeRequest.type, init)
+  const result = await connection.sendRequest(ls.InitializeRequest.type, init)
+  await connection.sendNotification(ls.InitializedNotification.type, {})
+  return result
 }
