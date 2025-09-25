@@ -61,7 +61,9 @@ export function getPuyaService(puyaPath: string): PuyaService {
 
 function getPuyaServiceConnection(path: string) {
   logger.debug(undefined, `puya serve: using ${path}`)
-  const childProcess = spawn(path, ['serve'])
+  const childProcess = spawn(path, ['serve'], {
+    stdio: ['pipe', 'pipe', 'ignore'],
+  })
   logger.debug(undefined, `puya serve: running`)
   const connection = rpc.createMessageConnection(
     new rpc.StreamMessageReader(childProcess.stdout),
