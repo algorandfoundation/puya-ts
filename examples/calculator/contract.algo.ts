@@ -6,7 +6,7 @@ const SUB = Uint64(2)
 const MUL = Uint64(3)
 const DIV = Uint64(4)
 function itoa(i: uint64): string {
-  const digits = Bytes`0123456789`
+  const digits = Bytes`0123456789`.toFixed({ length: 10 })
   const radix = digits.length
   if (i < radix) {
     return digits.at(i).toString()

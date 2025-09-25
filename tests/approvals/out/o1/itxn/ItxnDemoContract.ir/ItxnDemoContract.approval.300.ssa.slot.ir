@@ -367,8 +367,8 @@ subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test3[routing]() -> vo
 
 subroutine tests/approvals/itxn.algo.ts::ItxnDemoContract.test4[routing]() -> void:
     block@0: // L184
-        let lotsOfBytes#0: bytes[2044] = (bzero 2044u)
-        let tmp%1#0: bytes = (concat 0x80fc0f lotsOfBytes#0)
+        let tmp%0#0: bytes[2044] = (bzero 2044u)
+        let tmp%1#0: bytes = (concat 0x80fc0f tmp%0#0)
         let approval2#0: bytes = (concat tmp%1#0 0x48)
         itxn_begin
         ((itxn_field ExtraProgramPages) 3u)

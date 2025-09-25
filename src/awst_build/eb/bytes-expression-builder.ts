@@ -10,6 +10,7 @@ import {
   BytesUnaryOperator,
   EqualityComparison,
   IntegerConstant,
+  IntrinsicCall,
   NumericComparison,
 } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
@@ -32,6 +33,7 @@ import {
   bigIntPType,
   biguintPType,
   BytesFunction,
+  BytesGeneric,
   BytesPType,
   bytesPType,
   numberPType,
@@ -50,8 +52,15 @@ import { SliceFunctionBuilder } from './shared/slice-function-builder'
 import { StringExpressionBuilder } from './string-expression-builder'
 import { isStaticallyIterable, StaticIterator } from './traits/static-iterator'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
-import { mapStringConstant, requireExpressionOfType, requireIntegerConstant, requireStringConstant } from './util'
-import { parseFunctionArgs } from './util/arg-parsing'
+import {
+  mapStringConstant,
+  requestBuilderOfType,
+  requireBuilderOfType,
+  requireExpressionOfType,
+  requireIntegerConstant,
+  requireStringConstant,
+} from './util'
+import { parseFunctionArgs, parseFunctionObjArg } from './util/arg-parsing'
 import { compareBytes } from './util/compare-bytes'
 
 export class BytesFunctionBuilder extends FunctionBuilder {
@@ -96,25 +105,42 @@ export class BytesFunctionBuilder extends FunctionBuilder {
   }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    const {
-      args: [initialValue],
-    } = parseFunctionArgs({
-      args,
-      typeArgs,
-      genericTypeArgs: 0,
-      callLocation: sourceLocation,
-      funcName: 'Bytes',
-      argSpec: (a) => [a.optional(numberPType, bigIntPType, uint64PType, biguintPType, stringPType, bytesPType, ArrayLiteralPType)],
-    })
+    const exprType = BytesGeneric.parameterise([typeArgs[0] ?? uint64PType])
+    const emptyExpr =
+      exprType.length === null || exprType.length === 0n
+        ? nodeFactory.bytesConstant({
+            sourceLocation,
+            value: new Uint8Array(0),
+            wtype: exprType.wtype,
+          })
+        : intrinsicFactory.bzero({ size: exprType.length, sourceLocation, wtype: exprType.wtype })
+    const empty = new BytesExpressionBuilder(emptyExpr, exprType)
 
-    const empty = new BytesExpressionBuilder(
-      nodeFactory.bytesConstant({
-        sourceLocation,
-        value: new Uint8Array(0),
-        wtype: bytesPType.wtype,
-      }),
-      bytesPType,
-    )
+    let initialValue: InstanceBuilder | undefined
+    if (args[0] !== undefined) {
+      for (const t of [numberPType, bigIntPType, uint64PType, biguintPType, stringPType, bytesPType, ArrayLiteralPType]) {
+        const builder = requestBuilderOfType(args[0], t)
+        if (builder) {
+          initialValue = builder
+          break
+        }
+      }
+    }
+
+    let toFixedStrategy: 'assert-length' | 'unsafe-cast' = 'assert-length'
+    for (const [index, arg] of args.entries()) {
+      if (!initialValue || index > 0) {
+        const { strategy } = parseFunctionObjArg({
+          arg,
+          argIndex: index,
+          funcName: 'Bytes',
+          callLocation: sourceLocation,
+          argSpec: (a) => a.obj({ length: a.required(NumericLiteralPType), strategy: a.optional(stringPType) }),
+        })
+        toFixedStrategy = strategy === undefined ? 'assert-length' : mapStringConstant(fixedConversionStrategyMap, strategy.resolve())
+      }
+    }
+
     if (!initialValue) {
       return empty
     }
@@ -146,9 +172,9 @@ export class BytesFunctionBuilder extends FunctionBuilder {
           nodeFactory.bytesConstant({
             value: Uint8Array.from(bytes),
             sourceLocation: initialValue.sourceLocation,
-            wtype: bytesPType.wtype,
+            wtype: exprType.wtype,
           }),
-          bytesPType,
+          exprType,
         )
       } else {
         logger.error(initialValue.sourceLocation, 'Only array literals or tuples are supported here')
@@ -156,7 +182,10 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       }
     }
 
-    return bytesBuilder
+    if (exprType.length !== null && bytesBuilder.isConstant && toFixedStrategy !== 'assert-length') {
+      logger.error(sourceLocation, `Invalid strategy value of '${toFixedStrategy}'. Expected 'assert-length' for constant values`)
+    }
+    return exprType.length === null ? bytesBuilder : bytesToFixed(bytesBuilder, exprType, sourceLocation, toFixedStrategy)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
@@ -183,28 +212,38 @@ class FromEncodingBuilder extends FunctionBuilder {
   }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    const {
-      args: [valueBuilder],
-    } = parseFunctionArgs({
-      args,
-      typeArgs,
-      callLocation: sourceLocation,
-      genericTypeArgs: 0,
-      funcName: this.functionName,
-      argSpec: (a) => [a.required(stringPType)],
-    })
+    const exprType = BytesGeneric.parameterise([typeArgs[0] ?? uint64PType])
+    const valueBuilder = requireBuilderOfType(args[0], stringPType)
     const encodedValue = requireStringConstant(valueBuilder)
 
     const value = wrapInCodeError(() => this.decodeLiteral(encodedValue.value), encodedValue.sourceLocation)
+
+    if (exprType.length !== null && value.length !== Number(exprType.length)) {
+      logger.error(sourceLocation, `Expected decoded bytes value of length ${exprType.length}, received ${value.length}`)
+    }
+
+    if (args[1] !== undefined) {
+      const { strategy } = parseFunctionObjArg({
+        arg: args[1],
+        argIndex: 1,
+        funcName: this.functionName,
+        callLocation: sourceLocation,
+        argSpec: (a) => a.obj({ length: a.required(NumericLiteralPType), strategy: a.optional(stringPType) }),
+      })
+      const toFixedStrategy = strategy === undefined ? 'assert-length' : mapStringConstant(fixedConversionStrategyMap, strategy.resolve())
+      if (toFixedStrategy !== 'assert-length') {
+        logger.error(sourceLocation, `Invalid strategy value of '${toFixedStrategy}'. Expected 'assert-length'`)
+      }
+    }
 
     return new BytesExpressionBuilder(
       nodeFactory.bytesConstant({
         value: value,
         encoding: this.encoding,
         sourceLocation,
-        wtype: bytesPType.wtype,
+        wtype: exprType.wtype,
       }),
-      bytesPType,
+      exprType,
     )
   }
 }
@@ -214,6 +253,10 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<BytesPType
     invariant(ptype instanceof BytesPType, 'ptype must be BytesPType')
     invariant(expr.wtype.equals(ptype.wtype), 'Expr wtype must match ptype.wtype')
     super(expr, ptype)
+  }
+
+  get isConstant(): boolean {
+    return super.isConstant || (this._expr instanceof IntrinsicCall && this._expr.opCode === 'bzero')
   }
   prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     switch (op) {
@@ -356,9 +399,25 @@ export class ConcatFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export function bytesToFixed(builder: InstanceBuilder, fixedType: BytesPType, sourceLocation: SourceLocation): InstanceBuilder {
+export function bytesToFixed(
+  builder: InstanceBuilder,
+  fixedType: BytesPType,
+  sourceLocation: SourceLocation,
+  strategy: 'assert-length' | 'unsafe-cast' = 'assert-length',
+): InstanceBuilder {
   invariant(fixedType.length !== null, 'Should only be called for bytes with a fixed length', sourceLocation)
+
   const expr = builder.resolve()
+  if (strategy === 'unsafe-cast') {
+    return instanceEb(
+      nodeFactory.reinterpretCast({
+        expr: expr,
+        wtype: fixedType.wtype,
+        sourceLocation,
+      }),
+      fixedType,
+    )
+  }
   if (expr instanceof BytesConstant) {
     codeInvariant(
       expr.value.length === Number(fixedType.length),

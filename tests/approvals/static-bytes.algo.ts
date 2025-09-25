@@ -2,10 +2,10 @@ import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, Bytes, Contract, op, ReferenceArray, Txn } from '@algorandfoundation/algorand-typescript'
 import { bzero, sha512_256 } from '@algorandfoundation/algorand-typescript/op'
 
-const fromUtf8 = Bytes('abc').toFixed({ length: 3 })
-const fromHex = Bytes.fromHex('AAFF').toFixed({ length: 2 })
-const fromBase32 = Bytes.fromBase32('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ').toFixed({ length: 36 })
-const fromBase64 = Bytes.fromBase64('SGVsbG8gQWxnb3JhbmQ=').toFixed({ length: 14 })
+const fromUtf8 = Bytes('abc', { length: 3 })
+const fromHex = Bytes.fromHex('AAFF', { length: 2 })
+const fromBase32 = Bytes.fromBase32('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ', { length: 36 })
+const fromBase64 = Bytes.fromBase64('SGVsbG8gQWxnb3JhbmQ=', { length: 14 })
 
 const EMPTY_HASH = '0000000000000000000000000000000000000000000000000000000000000000'
 
@@ -70,7 +70,7 @@ class StaticBytesAlgo extends Contract {
 
   test4() {
     const b: bytes = Txn.sender.bytes
-    const addr = Bytes(b).toFixed({ length: 32 })
+    const addr = Bytes(b, { length: 32 })
     assert(addr.length === 32)
   }
 }

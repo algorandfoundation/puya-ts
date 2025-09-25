@@ -167,6 +167,22 @@ const argSpecFactory = {
 
 export type ArgSpecFactory = typeof argSpecFactory
 
+export function parseFunctionObjArg<const TArgMap extends ObjArgSpec>({
+  arg,
+  argIndex,
+  funcName,
+  callLocation,
+  argSpec,
+}: {
+  arg: NodeBuilder
+  argIndex: number
+  funcName: string
+  callLocation: SourceLocation
+  argSpec: (a: ArgSpecFactory) => TArgMap
+}) {
+  return parseObjArg(arg, callLocation, `Arg ${argIndex} for ${funcName}`, argSpec(argSpecFactory))
+}
+
 export function parseFunctionArgs<const TGenericCount extends number, const TArgMap extends [...ArgMap[]]>({
   args,
   typeArgs,
