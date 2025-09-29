@@ -1,4 +1,4 @@
-import { ArgumentParser } from 'argparse'
+import { ArgumentParser, BooleanOptionalAction } from 'argparse'
 import { appVersion } from '../cli/app-version'
 import { checkNodeVersion } from '../cli/check-node-version'
 import type { LanguageServerOptions } from './puya-language-server'
@@ -17,6 +17,12 @@ export async function parseCliArguments() {
     const: 'version',
     dest: 'command',
   })
+  parser.add_argument('--debug-mode', {
+    help: 'Start the language server in debug mode. Server will listen on the debug port (default 4001) for connections.',
+    default: false,
+    dest: 'debugMode',
+    action: BooleanOptionalAction,
+  })
   const [result, _] = parser.parse_known_args() as [PuyaTsCommand, unknown]
 
   switch (result.command) {
@@ -26,7 +32,7 @@ export async function parseCliArguments() {
       break
     default: {
       const options: LanguageServerOptions = {
-        port: parsePort(process.env.PUYA_TS_DEBUG_LSP_PORT),
+        port: result.debugMode ? (parsePort(process.env.PUYA_TS_DEBUG_LSP_PORT) ?? 4001) : undefined,
       }
 
       await startLanguageServer(options)
@@ -38,6 +44,7 @@ export async function parseCliArguments() {
 type PuyaTsCommand = NoCommandArgs | VersionCommand
 interface NoCommandArgs {
   command: 'none'
+  debugMode: boolean
 }
 interface VersionCommand {
   command: 'version'
