@@ -60,7 +60,7 @@ import {
   requireIntegerConstant,
   requireStringConstant,
 } from './util'
-import { parseFunctionArgs, parseFunctionObjArg } from './util/arg-parsing'
+import { parseFunctionArgs } from './util/arg-parsing'
 import { compareBytes } from './util/compare-bytes'
 
 export class BytesFunctionBuilder extends FunctionBuilder {
@@ -128,17 +128,20 @@ export class BytesFunctionBuilder extends FunctionBuilder {
     }
 
     let toFixedStrategy: 'assert-length' | 'unsafe-cast' = 'assert-length'
-    for (const [index, arg] of args.entries()) {
-      if (!initialValue || index > 0) {
-        const { strategy } = parseFunctionObjArg({
-          arg,
-          argIndex: index,
-          funcName: 'Bytes',
-          callLocation: sourceLocation,
-          argSpec: (a) => a.obj({ length: a.required(NumericLiteralPType), strategy: a.optional(stringPType) }),
-        })
-        toFixedStrategy = strategy === undefined ? 'assert-length' : mapStringConstant(fixedConversionStrategyMap, strategy.resolve())
-      }
+    if ((!initialValue && args.length) || args.length > 1) {
+      const { args: parsedArgs } = parseFunctionArgs({
+        args: args,
+        typeArgs: [],
+        funcName: 'Bytes',
+        callLocation: sourceLocation,
+        genericTypeArgs: 0,
+        argSpec: (a) => [
+          ...(args.length > 1 ? [a.passthrough()] : []),
+          a.obj({ length: a.required(NumericLiteralPType), strategy: a.optional(stringPType) }),
+        ],
+      })
+      const { strategy } = parsedArgs.at(-1) as unknown as { length: NumericLiteralExpressionBuilder; strategy?: StringExpressionBuilder }
+      toFixedStrategy = strategy === undefined ? 'assert-length' : mapStringConstant(fixedConversionStrategyMap, strategy.resolve())
     }
 
     if (!initialValue) {
@@ -223,12 +226,15 @@ class FromEncodingBuilder extends FunctionBuilder {
     }
 
     if (args[1] !== undefined) {
-      const { strategy } = parseFunctionObjArg({
-        arg: args[1],
-        argIndex: 1,
+      const {
+        args: [_, { strategy }],
+      } = parseFunctionArgs({
+        args,
+        typeArgs: [],
+        genericTypeArgs: 0,
         funcName: this.functionName,
         callLocation: sourceLocation,
-        argSpec: (a) => a.obj({ length: a.required(NumericLiteralPType), strategy: a.optional(stringPType) }),
+        argSpec: (a) => [a.passthrough(), a.obj({ length: a.required(NumericLiteralPType), strategy: a.optional(stringPType) })],
       })
       const toFixedStrategy = strategy === undefined ? 'assert-length' : mapStringConstant(fixedConversionStrategyMap, strategy.resolve())
       if (toFixedStrategy !== 'assert-length') {
