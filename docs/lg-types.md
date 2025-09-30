@@ -4,15 +4,15 @@ title: Types
 
 # Types
 
-Types in Algorand TypeScript can be divided into two camps, 'native' AVM types where the implementation is opaque, and it is up to the compiler and the AVM how the type is represented in memory; and 'ARC4 Encoded types' where the in memory representation is always a byte array, and the exact format is determined by the [ARC4 Spec](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md#encoding).
+Types in Algorand TypeScript can be divided into two camps, 'native' AVM types where the implementation is opaque, and it is up to the compiler and the AVM how the type is represented in memory; and 'ARC4 Encoded types' where the in-memory representation is always a byte array, and the exact format is determined by the [ARC4 Spec](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md#encoding).
 
-ARC4 defines an Application Binary Interface (ABI) for how data should be passed to and from a smart contract, and represents a sensible standard for how data should be represented at rest (eg. in Box storage or Application State). It is not necessarily the most optimal format for an in memory representation and for data which is being mutated. For this reason we offer both sets of types and a developer can choose the most appropriate one for their usage. As a beginner the native types will feel more natural to use, but it is useful to be aware of the encoded versions when it comes to optimizing your application.
+ARC4 defines an Application Binary Interface (ABI) for how data should be passed to and from a smart contract, and represents a sensible standard for how data should be represented at rest (e.g. in Box storage or Application State). It is not necessarily the most optimal format for an in-memory representation and for data which is being mutated. For this reason we offer both sets of types and a developer can choose the most appropriate one for their usage. As a beginner the native types will feel more natural to use, but it is useful to be aware of the encoded versions when it comes to optimising your application.
 
 ## AVM Types
 
 The most basic [types on the AVM](https://dev.algorand.co/concepts/smart-contracts/avm/#stack-types)
 are `uint64` and `bytes`, representing unsigned 64-bit integers and byte arrays respectively.
-These are represented by [`uint64`](#uint64) and [`bytes`](#bytes) in Algorand TypeScript.
+In Algorand TypeScript, these are represented by [`uint64`](#uint64) and [`bytes`](#bytes) types.
 
 There are further "bounded" types supported by the AVM, which are backed by these two simple primitives.
 For example, `biguint` represents a variably sized (up to 512-bits), unsigned integer, but is actually
@@ -20,7 +20,7 @@ backed by a `byte[]`. This is represented by [`biguint`](#biguint) in Algorand T
 
 ### Number and BigInt
 
-JavaScript's native `number` and `bigint` cannot be used as variable, parameter, return, or storage types as they do not have an equivalent representation on the AVM. They can however be used to define numeric constants which are then interpreted as `uint64` or `biguint` values when used elsewhere. As such, Algorand TypeScript supports `number` and `bigint` literals when they assigned to a `const` variable. Basic expressions are also allowed as long as they evaluate to a compile-time constant.
+JavaScript's native `number` and `bigint` cannot be used as variable, parameter, return, or storage types as they do not have an equivalent representation on the AVM. They can however be used to define numeric constants which are then interpreted as `uint64` or `biguint` values when used elsewhere. As such, Algorand TypeScript supports `number` and `bigint` literals when they are assigned to a `const` variable. Basic expressions are also allowed as long as they evaluate to a compile-time constant.
 
 ```ts
 import { BigUint, uint64 } from '@algorandfoundation/algorand-typescript'
@@ -34,7 +34,7 @@ let myUint: uint64 = x
 let myBiguint = BigUint(a)
 ```
 
-> **Note:** `number` literals cannot exceed `Number.MAX_SAFE_INTEGER` as they will lose precision when parsed, but it is possible to write expressions that would evaluate to unsafe integers eg. `2 ** 54`. This is because evaluation is handled by the compiler and performed using the `bigint` type.
+> **Note:** `number` literals cannot exceed `Number.MAX_SAFE_INTEGER` as they will lose precision when parsed, but it is possible to write expressions that would evaluate to unsafe integers e.g. `2 ** 54`. This is because evaluation is handled by the compiler, which performs calculations using the `bigint` type.
 
 ### Uint64
 
@@ -62,7 +62,7 @@ demo(Uint64(true))
 demo(Uint64(34 + 3435))
 ```
 
-Math operations with the `uint64` work the same as EcmaScript's `number` type however due to a hard limitation in TypeScript, it is not possible to control the type of these expressions - they will always be inferred as `number`. As a result, a type annotation will be required making use of the expression value if the type cannot be inferred from usage.
+Math operations with the `uint64` work the same as EcmaScript's `number` type, however due to a hard limitation in TypeScript, it is not possible to control the type of these expressions - they will always be inferred as `number`. As a result, a type annotation will be required making use of the expression value if the type cannot be inferred from usage.
 
 ```ts
 import { Uint64, uint64 } from '@algorandfoundation/algorand-typescript'
@@ -85,7 +85,7 @@ const d = Uint64(a * x)
 
 ### BigUint
 
-`biguint` represents an unsigned integer of up to 512-bit. The leading `0` padding is variable and not guaranteed. Operations made using a `biguint` are more expensive in terms of [opcode budget](https://dev.algorand.co/concepts/smart-contracts/languages/teal/#dynamic-operational-cost) by an order of magnitude, as such - the `biguint` type should only be used when dealing with integers which are larger than 64-bit. A `biguint` can be declared with a bigint literal (A number with an `n` suffix) and a type annotation of `biguint`, or by using the `BigUint` factory method. The same constraints of the `uint64` type apply here with regards to required type annotations.
+`biguint` represents an unsigned integer of up to 512-bit. The leading `0` padding is variable and not guaranteed. Operations made using a `biguint` are more expensive in terms of [opcode budget](https://dev.algorand.co/concepts/smart-contracts/languages/teal/#dynamic-operational-cost) by an order of magnitude. As such, the `biguint` type should only be used when dealing with integers which are larger than 64-bit. A `biguint` can be declared with a bigint literal (A number with an `n` suffix) and a type annotation of `biguint`, or by using the `BigUint` factory method. The same constraints of the `uint64` type apply here with regards to required type annotations.
 
 ```ts
 import { BigUint, bigint } from '@algorandfoundation/algorand-typescript'
@@ -123,7 +123,7 @@ const interpolated = Bytes`${fromUtf8}${fromHex}${fromBase32}${fromBase64}`
 const concatenated = fromUtf8.concat(fromHex).concat(fromBase32).concat(fromBase64)
 ```
 
-The variable length bytes type can be converted to a byte array of a specific length by calling `.toFixed`. Due to covariance a `bytes<N>` value can always be assigned to a `bytes` target but in order to do the opposite, you will need to call `.toFixed` on the unbounded value. This method takes a length and an optional `strategy` parameter with `assert-length` and `unsafe-cast` as valid options, (defaults to `'assert-length'`) to indicate if this conversion should assert the length of the input versus an `unsafe` casting which changes the type but doesn't verify the input length.
+The variable length bytes type can be converted to a byte array of a specific length by calling `.toFixed`. Due to covariance, a `bytes<N>` value can always be assigned to a `bytes` target but in order to do the opposite, you will need to call `.toFixed` on the unbounded value. This method takes a length and an optional `strategy` parameter with `assert-length` and `unsafe-cast` as valid options, (defaults to `'assert-length'`) to indicate if this conversion should assert the length of the input versus an `unsafe` casting which changes the type but doesn't verify the input length.
 
 ```ts
 const fromUtf8 = Bytes('abc').toFixed({ length: 3 })
@@ -138,7 +138,7 @@ function padTo32(b: bytes<16>): bytes<32> {
 
 ### String
 
-`string` literals and values are supported in Algorand TypeScript however most of the prototype is not implemented. Strings in EcmaScript are implemented using utf-16 characters and achieving semantic compatability for any prototype method which slices or splits strings based on characters would be non-trivial (and opcode expensive) to implement on the AVM with no clear benefit as string manipulation tasks can easily be performed off-chain. Algorand TypeScript APIs which expect a `bytes` value will often also accept a `string` value. In these cases, the `string` will be interpreted as a `utf8` encoded value.
+`string` literals and values are supported in Algorand TypeScript; however, most of the prototype is not implemented. Strings in EcmaScript are implemented using UTF-16 characters, and achieving semantic compatibility for any prototype method which slices or splits strings based on characters would be non-trivial (and opcode expensive) to implement on the AVM with no clear benefit, as string manipulation tasks can easily be performed off-chain. Algorand TypeScript APIs which expect a `bytes` value will often also accept a `string` value. In these cases, the `string` will be interpreted as a UTF-8 encoded value.
 
 ```ts
 const a = 'Hello'
@@ -222,7 +222,7 @@ const myArray: uint64[] = [1, 2, 3]
 const myOtherArray = ['a', 'b', 'c']
 ```
 
-Arrays in Algorand TypeScript can be declared using the array literal syntax and are explicitly typed using either the `T[]` shorthand or `Array<T>` full name. The type can usually be inferred but uints will require a type hint. Native arrays are mutable. Mutations can be done using the methods available on the Array prototype, such as `push` and `pop` etc, or assigning directly to an index of the array.
+Arrays in Algorand TypeScript can be declared using the array literal syntax and are explicitly typed using either the `T[]` shorthand or `Array<T>` full name. The type can usually be inferred but uints will require a type hint. Native arrays are mutable. Mutations can be done using the methods available on the Array prototype, such as `push` and `pop`, etc., or assigning directly to an index of the array.
 
 ```ts
 const myArray: uint64[] = [1, 2, 3]
@@ -236,7 +236,7 @@ myArray[0] = 1
 
 Similar to other supported native types, much of the full prototype of Array is not supported but this coverage may expand over time.
 
-Mutable arrays are stored on the stack in the Puya compiler which (without getting into the technical details) necessitates that the compiler restricts having multiple variables refer to the same array in order to maintain semantic compatability between the TypeScript execution and the AVM execution. It is necessary to `clone` a mutable array when assigning one from one variable (or variable like construct - eg. state) to another.
+Mutable arrays are stored on the stack in the Puya compiler which (without getting into the technical details) necessitates that the compiler restricts having multiple variables refer to the same array in order to maintain semantic compatibility between the TypeScript execution and the AVM execution. It is necessary to `clone` a mutable array when assigning one from one variable (or variable like construct - e.g. state) to another.
 
 ```ts
 const myArray = new Array<bytes>()
@@ -251,7 +251,7 @@ const myArray: readonly uint64[] = [1, 2, 3]
 const myOtherArray: ReadonlyArray<string> = ['a', 'b', 'c']
 ```
 
-Immutable arrays in Algorand TypeScript are declared using the `readonly T[]` shorthand or `ReadonlyArray<T>` full name. Immutable arrays generally speaking do not need to be cloned when being assigned to other variables unless they contain mutable items. Immutable arrays can still be effectively mutated by making use of pure methods such as `with` and `concat` and reassigning the target variable.
+Immutable arrays in Algorand TypeScript are declared using the `readonly T[]` shorthand or `ReadonlyArray<T>` full name. Immutable arrays, generally speaking, do not need to be cloned when being assigned to other variables unless they contain mutable items. Immutable arrays can still be effectively mutated by making use of pure methods such as `with` and `concat` and reassigning the target variable.
 
 ```ts
 let myArray: readonly uint64[] = [1, 2, 3]
@@ -283,7 +283,7 @@ myReference.push(1)
 addToArray(myReference)
 assert(myReference.pop() === 4)
 
-function addToArray(x: myReference<uint64>) {
+function addToArray(x: ReferenceArray<uint64>) {
   x.push(4)
 }
 ```
@@ -345,7 +345,7 @@ Where supported, the native equivalent of an ARC4 type can be obtained via the `
 **Encoding:** A big endian byte array of N bits<br>
 **Native equivalent:** `uint64` or `biguint` accessible via the corresponding `.asUint64()` and `.asBigUint()` methods
 
-Common bit sizes have also been aliased under `@algorandfoundation/algorand-typescript/arc4::UInt8`, `@algorandfoundation/algorand-typescript/arc4::UInt16` etc. A uint of any size between 8 and 512 bits (in intervals of 8bits) can be created using a generic parameter. `Byte` is an alias of `UintN<8>`
+Common bit sizes have also been aliased under `@algorandfoundation/algorand-typescript/arc4::UInt8`, `@algorandfoundation/algorand-typescript/arc4::UInt16`, etc. An uint of any size between 8 and 512 bits (in intervals of 8 bits) can be created using a generic parameter. `Byte` is an alias of `UintN<8>`
 
 ### Unsigned fixed point decimals
 
@@ -423,6 +423,6 @@ Containers are composed of a head and a tail portion, with a possible length pre
                   ^ Offsets are from the start of the head bytes
 ```
 
-- Fixed length items (eg. bool, uintn, byte, or a static array of a fixed length item) are inserted directly into the head
-- Variable length items (eg. bytes, string, dynamic array, or even a static array of a variable length item) are inserted into the tail. The head will include a 16-bit number representing the offset of the tail data, the offset is the total number of bytes in the head + the number of bytes preceding the tail data for this item (ie. the tail bytes of any previous items)
+- Fixed length items (e.g. bool, uintn, byte, or a static array of a fixed length item) are inserted directly into the head
+- Variable length items (e.g. bytes, string, dynamic array, or even a static array of a variable length item) are inserted into the tail. The head will include a 16-bit number representing the offset of the tail data, the offset is the total number of bytes in the head + the number of bytes preceding the tail data for this item (i.e. the tail bytes of any previous items)
 - Consecutive boolean values are packed into CEIL(N / 8) bytes where each bit will represent a single boolean value (big endian)
