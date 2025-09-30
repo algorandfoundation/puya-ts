@@ -1,4 +1,4 @@
-import type { awst } from '../../awst'
+import { isConstant, type awst } from '../../awst'
 
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
@@ -261,8 +261,8 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<BytesPType
     super(expr, ptype)
   }
 
-  get isConstant(): boolean {
-    return super.isConstant || (this._expr instanceof IntrinsicCall && this._expr.opCode === 'bzero')
+  get isConstantOp(): boolean {
+    return this._expr instanceof IntrinsicCall && this._expr.opCode === 'bzero' && this._expr.stackArgs.every(isConstant)
   }
   prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     switch (op) {

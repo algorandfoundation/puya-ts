@@ -234,16 +234,6 @@ export type bytes<out TLength extends uint64 = uint64> = {
    * Change this unbounded bytes instance into a bounded one
    * @param options Options for the conversion
    */
-  /**
-   * Change this unbounded bytes instance into a bounded one
-   *
-   * @param options Options for the conversion
-   * @param options.length The length for the bounded type
-   * @param options.strategy The strategy to use for converting to a fixed length bytes type (default: 'assert-length').
-   *   - 'assert-length': Asserts that the byte sequence has the specified length and fails if it differs
-   *   - 'unsafe-cast': Reinterprets the byte sequence as a fixed length type without any checks. This will succeed even if the value
-   *     is not of the specified length but will result in undefined behaviour for any code that makes use of this value.
-   */
   toFixed<TNewLength extends TLength>(options: ToFixedBytesOptions<TNewLength>): bytes<TNewLength>
 }
 
@@ -318,11 +308,6 @@ export namespace Bytes {
    * Create a new bytes value from a hexadecimal encoded string
    * @param hex A literal string of hexadecimal characters
    * @param options Options for bounded bytes
-   * @param options.length The length for the bounded type
-   * @param options.strategy The strategy to use for converting to a fixed length bytes type (default: 'assert-length').
-   *   - 'assert-length': Asserts that the byte sequence has the specified length and fails if it differs
-   *   - 'unsafe-cast': Reinterprets the byte sequence as a fixed length type without any checks. This will succeed even if the value
-   *     is not of the specified length but will result in undefined behaviour for any code that makes use of this value.
    */
   export function fromHex<TLength extends uint64>(hex: string, options: ToFixedBytesOptions<TLength>): bytes<TLength>
   export function fromHex<TLength extends uint64 = uint64>(hex: string, options?: ToFixedBytesOptions<TLength>): bytes<TLength> {
@@ -338,11 +323,6 @@ export namespace Bytes {
    * Create a new bytes value from a base 64 encoded string
    * @param b64 A literal string of b64 encoded characters
    * @param options Options for bounded bytes
-   * @param options.length The length for the bounded type
-   * @param options.strategy The strategy to use for converting to a fixed length bytes type (default: 'assert-length').
-   *   - 'assert-length': Asserts that the byte sequence has the specified length and fails if it differs
-   *   - 'unsafe-cast': Reinterprets the byte sequence as a fixed length type without any checks. This will succeed even if the value
-   *     is not of the specified length but will result in undefined behaviour for any code that makes use of this value.
    */
   export function fromBase64<TLength extends uint64>(b64: string, options: ToFixedBytesOptions<TLength>): bytes<TLength>
   export function fromBase64<TLength extends uint64 = uint64>(b64: string, options?: ToFixedBytesOptions<TLength>): bytes<TLength> {
@@ -358,11 +338,6 @@ export namespace Bytes {
    * Create a new bytes value from a base 32 encoded string
    * @param b32 A literal string of b32 encoded characters
    * @param options Options for bounded bytes
-   * @param options.length The length for the bounded type
-   * @param options.strategy The strategy to use for converting to a fixed length bytes type (default: 'assert-length').
-   *   - 'assert-length': Asserts that the byte sequence has the specified length and fails if it differs
-   *   - 'unsafe-cast': Reinterprets the byte sequence as a fixed length type without any checks. This will succeed even if the value
-   *     is not of the specified length but will result in undefined behaviour for any code that makes use of this value.
    */
   export function fromBase32<TLength extends uint64>(b32: string, options: ToFixedBytesOptions<TLength>): bytes<TLength>
   export function fromBase32<TLength extends uint64 = uint64>(b32: string, options?: ToFixedBytesOptions<TLength>): bytes<TLength> {

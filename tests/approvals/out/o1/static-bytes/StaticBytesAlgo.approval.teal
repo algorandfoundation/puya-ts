@@ -5,7 +5,7 @@
 main:
     intcblock 1 32
     bytecblock 0x151f7c75
-    // tests/approvals/static-bytes.algo.ts:16
+    // tests/approvals/static-bytes.algo.ts:17
     // class StaticBytesAlgo extends Contract {
     txn NumAppArgs
     bz main___algots__.defaultCreate@16
@@ -20,19 +20,19 @@ main:
     err
 
 main_test4_route@12:
-    // tests/approvals/static-bytes.algo.ts:71
+    // tests/approvals/static-bytes.algo.ts:72
     // test4() {
     intc_0 // 1
     return
 
 main_test3_route@11:
-    // tests/approvals/static-bytes.algo.ts:66
+    // tests/approvals/static-bytes.algo.ts:67
     // test3() {
     intc_0 // 1
     return
 
 main___algots__.defaultCreate@16:
-    // tests/approvals/static-bytes.algo.ts:16
+    // tests/approvals/static-bytes.algo.ts:17
     // class StaticBytesAlgo extends Contract {
     txn OnCompletion
     !
@@ -44,15 +44,15 @@ main___algots__.defaultCreate@16:
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses[routing]() -> void:
 hashAddresses:
-    // tests/approvals/static-bytes.algo.ts:17
+    // tests/approvals/static-bytes.algo.ts:18
     // hashAddresses(a1: B32, a2: B32): B32Alias {
     txna ApplicationArgs 1
     txna ApplicationArgs 2
-    // tests/approvals/static-bytes.algo.ts:18
+    // tests/approvals/static-bytes.algo.ts:19
     // return sha512_256(a1.concat(a2))
     concat
     sha512_256
-    // tests/approvals/static-bytes.algo.ts:17
+    // tests/approvals/static-bytes.algo.ts:18
     // hashAddresses(a1: B32, a2: B32): B32Alias {
     bytec_0 // 0x151f7c75
     swap
@@ -64,7 +64,7 @@ hashAddresses:
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32[routing]() -> void:
 receiveB32:
-    // tests/approvals/static-bytes.algo.ts:21
+    // tests/approvals/static-bytes.algo.ts:22
     // receiveB32(b: bytes<32>) {
     txna ApplicationArgs 1
     callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32
@@ -83,31 +83,31 @@ receiveB32:
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes[routing]() -> void:
 receiveBytes:
-    // tests/approvals/static-bytes.algo.ts:25
+    // tests/approvals/static-bytes.algo.ts:26
     // receiveBytes(b: bytes, length: uint64) {
     txna ApplicationArgs 1
     extract 2 0
     txna ApplicationArgs 2
     btoi
-    // tests/approvals/static-bytes.algo.ts:26
+    // tests/approvals/static-bytes.algo.ts:27
     // assert(b.length === length)
     swap
     len
     ==
-    // tests/approvals/static-bytes.algo.ts:25
+    // tests/approvals/static-bytes.algo.ts:26
     // receiveBytes(b: bytes, length: uint64) {
     return
 
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.returnLength[routing]() -> void:
 returnLength:
-    // tests/approvals/static-bytes.algo.ts:29
+    // tests/approvals/static-bytes.algo.ts:30
     // returnLength(b: bytes<32>): uint64 {
     txna ApplicationArgs 1
-    // tests/approvals/static-bytes.algo.ts:30
+    // tests/approvals/static-bytes.algo.ts:31
     // return b.length
     len
-    // tests/approvals/static-bytes.algo.ts:29
+    // tests/approvals/static-bytes.algo.ts:30
     // returnLength(b: bytes<32>): uint64 {
     itob
     bytec_0 // 0x151f7c75
@@ -120,17 +120,17 @@ returnLength:
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test[routing]() -> void:
 test:
-    // tests/approvals/static-bytes.algo.ts:34
+    // tests/approvals/static-bytes.algo.ts:35
     // this.receiveB32(Txn.sender.bytes)
     txn Sender
     callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32
     pop
-    // tests/approvals/static-bytes.algo.ts:37
+    // tests/approvals/static-bytes.algo.ts:38
     // this.receiveB32(Bytes`abcdefghabcdefghabcdefghabcdefgh`.toFixed({ length: 32, strategy: 'assert-length' }))
     pushbytes "abcdefghabcdefghabcdefghabcdefgh"
     callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32
     pop
-    // tests/approvals/static-bytes.algo.ts:42
+    // tests/approvals/static-bytes.algo.ts:43
     // const padded = padTo32(Txn.sender.bytes.slice(0, 16).toFixed({ length: 16 }))
     txn Sender
     substring 0 16
@@ -139,73 +139,73 @@ test:
     pushint 16 // 16
     ==
     assert // Length must be 16
-    // tests/approvals/static-bytes.algo.ts:13
+    // tests/approvals/static-bytes.algo.ts:14
     // return b.bitwiseOr(bzero(32)).toFixed({ length: 32, strategy: 'unsafe-cast' })
     intc_1 // 32
     bzero
     b|
-    // tests/approvals/static-bytes.algo.ts:44
+    // tests/approvals/static-bytes.algo.ts:45
     // assert(padded.length === 32)
     len
     intc_1 // 32
     ==
-    // tests/approvals/static-bytes.algo.ts:33
+    // tests/approvals/static-bytes.algo.ts:34
     // test() {
     return
 
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray[routing]() -> void:
 testArray:
-    // tests/approvals/static-bytes.algo.ts:48
+    // tests/approvals/static-bytes.algo.ts:49
     // const a = [Txn.sender.bytes, Txn.sender.bytes] as const
     txn Sender
-    // tests/approvals/static-bytes.algo.ts:48-49
+    // tests/approvals/static-bytes.algo.ts:49-50
     // const a = [Txn.sender.bytes, Txn.sender.bytes] as const
     // const b = new ReferenceArray<bytes<32>>(Txn.sender.bytes)
     dupn 2
-    // tests/approvals/static-bytes.algo.ts:50
+    // tests/approvals/static-bytes.algo.ts:51
     // b.push(...a)
     dig 2
     uncover 2
     concat
     concat // on error: max array length exceeded
-    // tests/approvals/static-bytes.algo.ts:52
+    // tests/approvals/static-bytes.algo.ts:53
     // const bitAnd = a[0].bitwiseAnd(b[0])
     extract 0 32 // on error: index access is out of bounds
     b&
-    // tests/approvals/static-bytes.algo.ts:53
+    // tests/approvals/static-bytes.algo.ts:54
     // assert(bitAnd === Txn.sender.bytes)
     txn Sender
     ==
-    // tests/approvals/static-bytes.algo.ts:47
+    // tests/approvals/static-bytes.algo.ts:48
     // testArray() {
     return
 
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2[routing]() -> void:
 test2:
-    // tests/approvals/static-bytes.algo.ts:57
+    // tests/approvals/static-bytes.algo.ts:58
     // let result = Bytes.fromHex(EMPTY_HASH)
     pushbytes 0x0000000000000000000000000000000000000000000000000000000000000000
-    // tests/approvals/static-bytes.algo.ts:59
+    // tests/approvals/static-bytes.algo.ts:60
     // for (let i: uint64 = 0; i < 5; i = i + 1) {
     pushint 0 // 0
 
 test2_while_top@2:
-    // tests/approvals/static-bytes.algo.ts:59
+    // tests/approvals/static-bytes.algo.ts:60
     // for (let i: uint64 = 0; i < 5; i = i + 1) {
     dup
     pushint 5 // 5
     <
     bz test2_after_while@4
-    // tests/approvals/static-bytes.algo.ts:60
+    // tests/approvals/static-bytes.algo.ts:61
     // result = op.sha256(op.concat(result, result))
     dig 1
     dup
     concat
     sha256
     bury 2
-    // tests/approvals/static-bytes.algo.ts:59
+    // tests/approvals/static-bytes.algo.ts:60
     // for (let i: uint64 = 0; i < 5; i = i + 1) {
     dup
     intc_0 // 1
@@ -214,7 +214,7 @@ test2_while_top@2:
     b test2_while_top@2
 
 test2_after_while@4:
-    // tests/approvals/static-bytes.algo.ts:56
+    // tests/approvals/static-bytes.algo.ts:57
     // test2() {
     dig 1
     dup
@@ -233,17 +233,17 @@ test2_after_while@4:
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(b: bytes) -> bytes:
 tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32:
-    // tests/approvals/static-bytes.algo.ts:21
+    // tests/approvals/static-bytes.algo.ts:22
     // receiveB32(b: bytes<32>) {
     proto 1 1
-    // tests/approvals/static-bytes.algo.ts:22
+    // tests/approvals/static-bytes.algo.ts:23
     // assert(b.length === 32)
     frame_dig -1
     len
     intc_1 // 32
     ==
     assert
-    // tests/approvals/static-bytes.algo.ts:23
+    // tests/approvals/static-bytes.algo.ts:24
     // return sha512_256(b)
     frame_dig -1
     sha512_256

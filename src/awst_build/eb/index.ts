@@ -117,6 +117,11 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
 
   abstract get isConstant(): boolean
 
+  // true if `expr` is an op code such as `bzero` which produces a constant value if all args are constant
+  get isConstantOp(): boolean | undefined {
+    return undefined
+  }
+
   /**
    * Returns a boolean indicating if the current builder can be resolved to the target type.
    * Resolvable meaning it may have a different type, but would be assignable to the target type in TypeScript

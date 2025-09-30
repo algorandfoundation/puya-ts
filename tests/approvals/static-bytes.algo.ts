@@ -2,6 +2,7 @@ import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, Bytes, Contract, op, ReferenceArray, Txn } from '@algorandfoundation/algorand-typescript'
 import { bzero, sha512_256 } from '@algorandfoundation/algorand-typescript/op'
 
+const fromEmpty = Bytes({ length: 16 })
 const fromUtf8 = Bytes('abc', { length: 3 })
 const fromHex = Bytes.fromHex('AAFF', { length: 2 })
 const fromBase32 = Bytes.fromBase32('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ', { length: 36 })
@@ -36,8 +37,8 @@ class StaticBytesAlgo extends Contract {
 
     this.receiveB32(Bytes`abcdefghabcdefghabcdefghabcdefgh`.toFixed({ length: 32, strategy: 'assert-length' }))
 
-    const joined = Bytes`${fromUtf8}${fromHex}${fromBase32}${fromBase64}`.toFixed({ length: 55 })
-    assert(joined.length === 55)
+    const joined = Bytes`${fromEmpty}${fromUtf8}${fromHex}${fromBase32}${fromBase64}`.toFixed({ length: 71 })
+    assert(joined.length === 71)
 
     const padded = padTo32(Txn.sender.bytes.slice(0, 16).toFixed({ length: 16 }))
 

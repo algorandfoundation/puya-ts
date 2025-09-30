@@ -4,60 +4,60 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/static-bytes.algo.ts::padTo32(b: bytes[16]) -> bytes[32]:
-    block@0: // L12
+    block@0: // L13
         let tmp%0#0: bytes[32] = (bzero 32u)
         let reinterpret_bytes[32]%0#0: bytes[32] = (b| b#0 tmp%0#0)
         return reinterpret_bytes[32]%0#0
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__() -> bool:
-    block@0: // L16
+    block@0: // L17
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@15
-    block@1: // abi_routing_L16
+    block@1: // abi_routing_L17
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
         (assert tmp%3#0) // OnCompletion must be NoOp
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
         goto tmp%5#0 ? block@2 : block@13
-    block@2: // call_NoOp_L16
+    block@2: // call_NoOp_L17
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
         switch tmp%6#0 {method "hashAddresses(byte[32],byte[32])byte[32]" => block@3, method "receiveB32(byte[32])byte[32]" => block@4, method "receiveBytes(byte[],uint64)void" => block@5, method "returnLength(byte[32])uint64" => block@6, method "test()void" => block@7, method "testArray()void" => block@8, method "test2()byte[]" => block@9, method "test3()void" => block@10, method "test4()void" => block@11, * => block@12}
-    block@3: // hashAddresses_route_L17
+    block@3: // hashAddresses_route_L18
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses[routing]()
         goto block@12
-    block@4: // receiveB32_route_L21
+    block@4: // receiveB32_route_L22
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32[routing]()
         goto block@12
-    block@5: // receiveBytes_route_L25
+    block@5: // receiveBytes_route_L26
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes[routing]()
         goto block@12
-    block@6: // returnLength_route_L29
+    block@6: // returnLength_route_L30
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.returnLength[routing]()
         goto block@12
-    block@7: // test_route_L33
+    block@7: // test_route_L34
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test[routing]()
         goto block@12
-    block@8: // testArray_route_L47
+    block@8: // testArray_route_L48
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray[routing]()
         goto block@12
-    block@9: // test2_route_L56
+    block@9: // test2_route_L57
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2[routing]()
         goto block@12
-    block@10: // test3_route_L66
+    block@10: // test3_route_L67
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test3[routing]()
         goto block@12
-    block@11: // test4_route_L71
+    block@11: // test4_route_L72
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4[routing]()
         goto block@12
-    block@12: // switch_case_next_L16
+    block@12: // switch_case_next_L17
         goto block@14
-    block@13: // create_NoOp_L16
+    block@13: // create_NoOp_L17
         goto block@14
-    block@14: // after_if_else_L16
+    block@14: // after_if_else_L17
         goto block@16
-    block@15: // __algots__.defaultCreate_L16
+    block@15: // __algots__.defaultCreate_L17
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (== tmp%7#0 NoOp)
         let tmp%9#0: uint64 = (txn ApplicationID)
@@ -66,11 +66,11 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_rou
         (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__algots__.defaultCreate()
         exit 1u
-    block@16: // after_if_else_L16
+    block@16: // after_if_else_L17
         exit 0u
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses[routing]() -> void:
-    block@0: // L17
+    block@0: // L18
         let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 1)
         let tmp%0#0: bytes[32] = decode_bytes<bytes[32]>(reinterpret_Encoded(uint8[32])%0#0)
         let reinterpret_Encoded(uint8[32])%1#0: Encoded(uint8[32]) = (txna ApplicationArgs 2)
@@ -82,7 +82,7 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses[r
         exit 1u
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32[routing]() -> void:
-    block@0: // L21
+    block@0: // L22
         let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 1)
         let tmp%0#0: bytes[32] = decode_bytes<bytes[32]>(reinterpret_Encoded(uint8[32])%0#0)
         let tmp%1#0: bytes[32] = tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(tmp%0#0)
@@ -92,7 +92,7 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32[rout
         exit 1u
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes[routing]() -> void:
-    block@0: // L25
+    block@0: // L26
         let reinterpret_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = (txna ApplicationArgs 1)
         let tmp%0#0: bytes = decode_bytes<bytes>(reinterpret_Encoded(len+uint8[])%0#0)
         let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
@@ -101,7 +101,7 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes[ro
         exit 1u
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.returnLength[routing]() -> void:
-    block@0: // L29
+    block@0: // L30
         let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 1)
         let tmp%0#0: bytes[32] = decode_bytes<bytes[32]>(reinterpret_Encoded(uint8[32])%0#0)
         let tmp%1#0: uint64 = tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.returnLength(tmp%0#0)
@@ -111,17 +111,17 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.returnLength[ro
         exit 1u
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test[routing]() -> void:
-    block@0: // L33
+    block@0: // L34
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test()
         exit 1u
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray[routing]() -> void:
-    block@0: // L47
+    block@0: // L48
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray()
         exit 1u
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2[routing]() -> void:
-    block@0: // L56
+    block@0: // L57
         let tmp%0#0: bytes = tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2()
         let tmp%1#0: Encoded(len+uint8[]) = bytes_encode<(len+uint8[])>(tmp%0#0)
         let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
@@ -129,23 +129,23 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2[routing](
         exit 1u
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test3[routing]() -> void:
-    block@0: // L66
+    block@0: // L67
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test3()
         exit 1u
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4[routing]() -> void:
-    block@0: // L71
+    block@0: // L72
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4()
         exit 1u
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.hashAddresses(a1: bytes[32], a2: bytes[32]) -> bytes[32]:
-    block@0: // L17
+    block@0: // L18
         let tmp%0#0: bytes = (concat a1#0 a2#0)
         let tmp%1#0: bytes[32] = (sha512_256 tmp%0#0)
         return tmp%1#0
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(b: bytes[32]) -> bytes[32]:
-    block@0: // L21
+    block@0: // L22
         let tmp%0#0: uint64 = (len b#0)
         let tmp%1#0: bool = (== tmp%0#0 32u)
         (assert tmp%1#0)
@@ -153,36 +153,38 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(b: b
         return tmp%2#0
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes(b: bytes, length: uint64) -> void:
-    block@0: // L25
+    block@0: // L26
         let tmp%0#0: uint64 = (len b#0)
         let tmp%1#0: bool = (== tmp%0#0 length#0)
         (assert tmp%1#0)
         return 
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.returnLength(b: bytes[32]) -> uint64:
-    block@0: // L29
+    block@0: // L30
         let tmp%0#0: uint64 = (len b#0)
         return tmp%0#0
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test() -> void:
-    block@0: // L33
+    block@0: // L34
         let reinterpret_bytes[32]%0#0: bytes[32] = (txn Sender)
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(reinterpret_bytes[32]%0#0)
         let reinterpret_bytes[32]%1#0: bytes[32] = (txn Sender)
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes(reinterpret_bytes[32]%1#0, 32u)
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32("abcdefghabcdefghabcdefghabcdefgh")
-        let tmp%0#0: bytes = (concat "" "abc")
-        let tmp%1#0: bytes = (concat tmp%0#0 0xaaff)
-        let tmp%2#0: bytes = (concat tmp%1#0 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ)
-        let awst_tmp%0#0: bytes = (concat tmp%2#0 SGVsbG8gQWxnb3JhbmQ=)
-        let reinterpret_bytes[55]%0#0: bytes[55] = awst_tmp%0#0
-        let tmp%3#0: uint64 = (len awst_tmp%0#0)
-        let tmp%4#0: bool = (== tmp%3#0 55u)
-        (assert tmp%4#0) // Length must be 55
-        let joined#0: bytes[55] = reinterpret_bytes[55]%0#0
-        let tmp%5#0: uint64 = (len joined#0)
-        let tmp%6#0: bool = (== tmp%5#0 55u)
-        (assert tmp%6#0)
+        let tmp%0#0: bytes[16] = (bzero 16u)
+        let tmp%1#0: bytes = (concat "" tmp%0#0)
+        let tmp%2#0: bytes = (concat tmp%1#0 "abc")
+        let tmp%3#0: bytes = (concat tmp%2#0 0xaaff)
+        let tmp%4#0: bytes = (concat tmp%3#0 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ)
+        let awst_tmp%0#0: bytes = (concat tmp%4#0 SGVsbG8gQWxnb3JhbmQ=)
+        let reinterpret_bytes[71]%0#0: bytes[71] = awst_tmp%0#0
+        let tmp%5#0: uint64 = (len awst_tmp%0#0)
+        let tmp%6#0: bool = (== tmp%5#0 71u)
+        (assert tmp%6#0) // Length must be 71
+        let joined#0: bytes[71] = reinterpret_bytes[71]%0#0
+        let tmp%7#0: uint64 = (len joined#0)
+        let tmp%8#0: bool = (== tmp%7#0 71u)
+        (assert tmp%8#0)
         let reinterpret_bytes[32]%2#0: bytes[32] = (txn Sender)
         let length%0#0: uint64 = (len reinterpret_bytes[32]%2#0)
         let is_out_of_bounds%0#0: bool = (>= 0u length%0#0)
@@ -191,18 +193,18 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test() -> void:
         let bounded_index%1#0: uint64 = (select 16u length%0#0 is_out_of_bounds%1#0)
         let awst_tmp%1#0: bytes = (substring3 reinterpret_bytes[32]%2#0 bounded_index%0#0 bounded_index%1#0)
         let reinterpret_bytes[16]%0#0: bytes[16] = awst_tmp%1#0
-        let tmp%7#0: uint64 = (len awst_tmp%1#0)
-        let tmp%8#0: bool = (== tmp%7#0 16u)
-        (assert tmp%8#0) // Length must be 16
-        let tmp%9#0: bytes[32] = tests/approvals/static-bytes.algo.ts::padTo32(reinterpret_bytes[16]%0#0)
-        let padded#0: bytes[32] = tmp%9#0
-        let tmp%10#0: uint64 = (len padded#0)
-        let tmp%11#0: bool = (== tmp%10#0 32u)
-        (assert tmp%11#0)
+        let tmp%9#0: uint64 = (len awst_tmp%1#0)
+        let tmp%10#0: bool = (== tmp%9#0 16u)
+        (assert tmp%10#0) // Length must be 16
+        let tmp%11#0: bytes[32] = tests/approvals/static-bytes.algo.ts::padTo32(reinterpret_bytes[16]%0#0)
+        let padded#0: bytes[32] = tmp%11#0
+        let tmp%12#0: uint64 = (len padded#0)
+        let tmp%13#0: bool = (== tmp%12#0 32u)
+        (assert tmp%13#0)
         return 
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray() -> void:
-    block@0: // L47
+    block@0: // L48
         let reinterpret_bytes[32]%0#0: bytes[32] = (txn Sender)
         let reinterpret_bytes[32]%1#0: bytes[32] = (txn Sender)
         let (a.0#0: bytes[32], a.1#0: bytes[32]) = (reinterpret_bytes[32]%0#0, reinterpret_bytes[32]%1#0)
@@ -226,34 +228,34 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray() -> 
         return 
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2() -> bytes:
-    block@0: // L56
+    block@0: // L57
         let result#0: bytes = 0x0000000000000000000000000000000000000000000000000000000000000000
         let i#0: uint64 = 0u
         goto block@1
-    block@1: // while_top_L59
+    block@1: // while_top_L60
         let i#1: uint64 = φ(i#0 <- block@0, i#2 <- block@2)
         let result#1: bytes = φ(result#0 <- block@0, result#2 <- block@2)
         let tmp%0#0: bool = (< i#1 5u)
         goto tmp%0#0 ? block@2 : block@3
-    block@2: // while_body_L59
+    block@2: // while_body_L60
         let tmp%1#0: bytes = (concat result#1 result#1)
         let tmp%2#0: bytes[32] = (sha256 tmp%1#0)
         let result#2: bytes = tmp%2#0
         let tmp%3#0: uint64 = (+ i#1 1u)
         let i#2: uint64 = tmp%3#0
         goto block@1
-    block@3: // after_while_L59
+    block@3: // after_while_L60
         return result#1
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test3() -> void:
-    block@0: // L66
+    block@0: // L67
         let reinterpret_bytes[32]%0#0: bytes[32] = (txn Sender)
         let y#0: bytes = reinterpret_bytes[32]%0#0
         let x#0: bytes[32] = reinterpret_bytes[32]%0#0
         return 
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4() -> void:
-    block@0: // L71
+    block@0: // L72
         let reinterpret_bytes[32]%0#0: bytes[32] = (txn Sender)
         let b#0: bytes = reinterpret_bytes[32]%0#0
         let reinterpret_bytes[32]%1#0: bytes[32] = b#0
@@ -267,5 +269,5 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test4() -> void
         return 
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__algots__.defaultCreate() -> void:
-    block@0: // L16
+    block@0: // L17
         return 
