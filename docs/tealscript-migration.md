@@ -383,10 +383,10 @@ add(a: uint64, b: uint64): uint64 {
 }
 ```
 
-#### UintN types
+#### Uint types
 
 TEALScript supports typed numeric literals for most common uint types, such as `uint8`, `uint16`, `uint256`, etc. In Algorand TypeScript,
-the UintN constructors must be used.
+the Uint constructors must be used.
 
 ##### TEALScript
 
@@ -401,10 +401,10 @@ addOne(n: uint256): uint256 {
 ##### Algorand TypeScript
 
 ```ts
-addOne(n: UintN256): UintN256 {
-  // Need to explicitly use UintN256 constructor to get uint256 and use bigint to perform arithmetic
+addOne(n: Uint256): Uint256 {
+  // Need to explicitly use Uint256 constructor to get uint256 and use bigint to perform arithmetic
   const one = 1n;
-  const sum = new UintN256(n.native + one + one);
+  const sum = new Uint256(n.native + one + one);
   return sum;
 }
 ```
@@ -412,8 +412,8 @@ addOne(n: UintN256): UintN256 {
 #### Math and Overflows
 
 In TEALScript, overflow checks do not occur until the value is encoded (returned, logged, put into an array/object). In Algorand TypeScript,
-overflow checking occurs whenever the `UintN` constructor is used. Since overflow checking is fairly expensive, it is recommended to not use
-the `UintN` type until it needs to be encoded.
+overflow checking occurs whenever the `Uint` constructor is used. Since overflow checking is fairly expensive, it is recommended to not use
+the `Uint` type until it needs to be encoded.
 
 ##### TEALScript
 
@@ -431,12 +431,12 @@ addToNumber(n: uint8) {
 ##### Algorand TypeScript
 
 ```ts
-addToNumber(n: UintN8) {
+addToNumber(n: Uint8) {
   // Use biguint for intermediate values which can go up to u512
   const x: biguint = 255
   const sum: biguint = BigUint(n.bytes) + x
 
-  return new UintN8(sum - x)
+  return new Uint8(sum - x)
 }
 ```
 
@@ -456,8 +456,8 @@ convertNumber(n: uint64): uint8 {
 ##### Algorand TypeScript
 
 ```ts
-convertNumber(n: uint64): UintN8 {
-  return new UintN8(n)
+convertNumber(n: uint64): Uint8 {
+  return new Uint8(n)
 }
 ```
 
