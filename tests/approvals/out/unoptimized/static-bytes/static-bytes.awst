@@ -40,8 +40,8 @@ contract StaticBytesAlgo
     tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(reinterpret_cast<bytes[32]>(txn<Sender>()))
     tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes(reinterpret_cast<bytes>(reinterpret_cast<bytes[32]>(txn<Sender>())), 32)
     tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32("abcdefghabcdefghabcdefghabcdefgh")
-    joined: bytes[55] = checked_maybe(#[reinterpret_cast<bytes[55]>(($0 = "" + "abc" + 0xaaff + b32<AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ> + b64<SGVsbG8gQWxnb3JhbmQ=>)), len($0) == 55], comment=Length must be 55)
-    assert(len(joined) == 55)
+    joined: bytes[71] = checked_maybe(#[reinterpret_cast<bytes[71]>(($0 = "" + bzero(16) + "abc" + 0xaaff + b32<AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ> + b64<SGVsbG8gQWxnb3JhbmQ=>)), len($0) == 71], comment=Length must be 71)
+    assert(len(joined) == 71)
     padded: bytes[32] = tests/approvals/static-bytes.algo.ts::padTo32(checked_maybe(#[reinterpret_cast<bytes[16]>(($1 = reinterpret_cast<bytes[32]>(txn<Sender>()).slice(0, 16))), len($1) == 16], comment=Length must be 16))
     assert(len(padded) == 32)
   }

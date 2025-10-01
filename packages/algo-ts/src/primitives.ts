@@ -98,6 +98,21 @@ export function BigUint(v?: BigUintCompat | string): biguint {
   throw new NoImplementation()
 }
 
+type ToFixedBytesOptions<TLength extends uint64 = uint64> = {
+  /**
+   * The length for the bounded type
+   */
+  length: TLength
+  /**
+   * The strategy to use for converting to a fixed length bytes type (default: 'assert-length')
+   *
+   * - 'assert-length': Asserts that the byte sequence has the specified length and fails if it differs
+   * - 'unsafe-cast': Reinterprets the byte sequence as a fixed length type without any checks. This will succeed even if the value
+   *              is not of the specified length but will result in undefined behaviour for any code that makes use of this value.
+   *
+   */
+  strategy?: 'assert-length' | 'unsafe-cast'
+}
 /**
  * A sequence of zero or more bytes (ie. byte[])
  *
@@ -219,21 +234,7 @@ export type bytes<out TLength extends uint64 = uint64> = {
    * Change this unbounded bytes instance into a bounded one
    * @param options Options for the conversion
    */
-  toFixed<TNewLength extends TLength>(options: {
-    /**
-     * The length for the bounded type
-     */
-    length: TNewLength
-    /**
-     * The strategy to use for converting to a fixed length bytes type (default: assert-length)
-     *
-     * assert-length: Asserts that the byte sequence has the specified length and fail if it differs
-     * unsafe-cast: Reinterpret the byte sequence as a fixed length type without any checks. This will succeed even if the value
-     *              is not of the specified length but will result in undefined behaviour for any code that makes use of this value.
-     *
-     */
-    strategy?: 'assert-length' | 'unsafe-cast'
-  }): bytes<TNewLength>
+  toFixed<TNewLength extends TLength>(options: ToFixedBytesOptions<TNewLength>): bytes<TNewLength>
 }
 
 /**
@@ -247,52 +248,101 @@ export function Bytes(value: TemplateStringsArray, ...replacements: BytesCompat[
  */
 export function Bytes(value: string): bytes<uint64>
 /**
+ * Create a byte array from a utf8 string
+ */
+export function Bytes<TLength extends uint64>(value: string, options: ToFixedBytesOptions<TLength>): bytes<TLength>
+/**
  * No op, returns the provided byte array.
  */
 export function Bytes(value: bytes): bytes<uint64>
+/**
+ * No op, returns the provided byte array.
+ */
+export function Bytes<TLength extends uint64>(value: bytes, options: ToFixedBytesOptions<TLength>): bytes<TLength>
 /**
  * Create a byte array from a biguint value encoded as a variable length big-endian number
  */
 export function Bytes(value: biguint): bytes<uint64>
 /**
+ * Create a byte array from a biguint value encoded as a variable length big-endian number
+ */
+export function Bytes<TLength extends uint64>(value: biguint, options: ToFixedBytesOptions<TLength>): bytes<TLength>
+/**
  * Create a byte array from a uint64 value encoded as a a variable length 64-bit number
  */
 export function Bytes(value: uint64): bytes<uint64>
+/**
+ * Create a byte array from a uint64 value encoded as a a variable length 64-bit number
+ */
+export function Bytes<TLength extends uint64 = 8>(value: uint64, options: ToFixedBytesOptions<TLength>): bytes<TLength>
 /**
  * Create a byte array from an Iterable<uint64> where each item is interpreted as a single byte and must be between 0 and 255 inclusively
  */
 export function Bytes(value: Iterable<uint64>): bytes<uint64>
 /**
+ * Create a byte array from an Iterable<uint64> where each item is interpreted as a single byte and must be between 0 and 255 inclusively
+ */
+export function Bytes<TLength extends uint64>(value: Iterable<uint64>, options: ToFixedBytesOptions<TLength>): bytes<TLength>
+/**
  * Create an empty byte array
  */
 export function Bytes(): bytes<uint64>
-export function Bytes(
-  value?: BytesCompat | TemplateStringsArray | biguint | uint64 | Iterable<number>,
-  ...replacements: BytesCompat[]
-): bytes<uint64> {
+/**
+ * Create an empty byte array
+ */
+export function Bytes<TLength extends uint64 = uint64>(options: ToFixedBytesOptions<TLength>): bytes<TLength>
+export function Bytes<TLength extends uint64 = uint64>(
+  value?: BytesCompat | TemplateStringsArray | biguint | uint64 | Iterable<number> | ToFixedBytesOptions<TLength>,
+  ...replacements: [ToFixedBytesOptions<TLength>] | BytesCompat[] | undefined[]
+): bytes<TLength> {
   throw new NoImplementation()
 }
 
-/**
- * Create a new bytes value from a hexadecimal encoded string
- * @param hex A literal string of hexadecimal characters
- */
-Bytes.fromHex = (hex: string): bytes<uint64> => {
-  throw new NoImplementation()
-}
-/**
- * Create a new bytes value from a base 64 encoded string
- * @param b64 A literal string of b64 encoded characters
- */
-Bytes.fromBase64 = (b64: string): bytes<uint64> => {
-  throw new NoImplementation()
-}
-/**
- * Create a new bytes value from a base 32 encoded string
- * @param b32 A literal string of b32 encoded characters
- */
-Bytes.fromBase32 = (b32: string): bytes<uint64> => {
-  throw new NoImplementation()
+export namespace Bytes {
+  /**
+   * Create a new bytes value from a hexadecimal encoded string
+   * @param hex A literal string of hexadecimal characters
+   */
+  export function fromHex(hex: string): bytes<uint64>
+  /**
+   * Create a new bytes value from a hexadecimal encoded string
+   * @param hex A literal string of hexadecimal characters
+   * @param options Options for bounded bytes
+   */
+  export function fromHex<TLength extends uint64>(hex: string, options: ToFixedBytesOptions<TLength>): bytes<TLength>
+  export function fromHex<TLength extends uint64 = uint64>(hex: string, options?: ToFixedBytesOptions<TLength>): bytes<TLength> {
+    throw new NoImplementation()
+  }
+
+  /**
+   * Create a new bytes value from a base 64 encoded string
+   * @param b64 A literal string of b64 encoded characters
+   */
+  export function fromBase64(b64: string): bytes<uint64>
+  /**
+   * Create a new bytes value from a base 64 encoded string
+   * @param b64 A literal string of b64 encoded characters
+   * @param options Options for bounded bytes
+   */
+  export function fromBase64<TLength extends uint64>(b64: string, options: ToFixedBytesOptions<TLength>): bytes<TLength>
+  export function fromBase64<TLength extends uint64 = uint64>(b64: string, options?: ToFixedBytesOptions<TLength>): bytes<TLength> {
+    throw new NoImplementation()
+  }
+
+  /**
+   * Create a new bytes value from a base 32 encoded string
+   * @param b32 A literal string of b32 encoded characters
+   */
+  export function fromBase32(b32: string): bytes<uint64>
+  /**
+   * Create a new bytes value from a base 32 encoded string
+   * @param b32 A literal string of b32 encoded characters
+   * @param options Options for bounded bytes
+   */
+  export function fromBase32<TLength extends uint64>(b32: string, options: ToFixedBytesOptions<TLength>): bytes<TLength>
+  export function fromBase32<TLength extends uint64 = uint64>(b32: string, options?: ToFixedBytesOptions<TLength>): bytes<TLength> {
+    throw new NoImplementation()
+  }
 }
 
 /**
