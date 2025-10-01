@@ -4,7 +4,7 @@
 
 ### Object literals are mutable by default
 
-Object literals are now mutable by default which can be leveraged without any changes.
+Object literals are now mutable by default, which can be leveraged without any changes.
 If you'd like to keep the same execution semantics as before, then apply a `readonly` or `as const` modifier to make them immutable.
 
 ```typescript
@@ -31,7 +31,7 @@ const p2 = { x: Uint64(1), y: Uint64(2) } as const
 
 ### Native arrays are mutable by default
 
-Native arrays are now mutable by default which can be leveraged without any changes.
+Native arrays are now mutable by default, which can be leveraged without any changes.
 If you'd like to keep the same execution semantics as before, then apply a `readonly` or `as const` modifier to make them immutable.
 
 ```typescript
@@ -222,7 +222,7 @@ abiCall<typeof MyContract.prototype.myMethod>({ ... })
 
 This form of invocation supports using type only imports `import type { MyContract } from '...'` which allow for circular references versus value imports which cannot be circular.
 
-If in some unforseen circumstances, both type argument and `method` property are provided to `abiCall` helper, the type argument takes precedence over the `method` property and the method specified by the type argument is actually called.
+If, in some unforeseen circumstances, both a type argument and the `method` property are provided to the `abiCall` helper, the type argument takes precedence and the method specified by the type argument is called.
 
 ```typescript
 /**** Before (puya-ts beta) ****/
@@ -257,7 +257,7 @@ const result3 = abiCall<typeof HelloStubbed.prototype.greet>({
 assert(result3 === 'hello stubbed')
 ```
 
-### Rename `interpretAsArc4` function to `converBytes`
+### Rename `interpretAsArc4` function to `convertBytes`
 
 The function now accepts an `options` object with `strategy: 'unsafe-cast'` and an optional `prefix` parameter.
 
@@ -362,7 +362,7 @@ a.push(4)
 
 ### New `FixedArray` type
 
-A `FixedArray` type was added which has a fixed sized, is mutable and supports both arc4 and native types. You typically don't need to use an `arc4.StaticArray` anymore.
+A `FixedArray` type was added which has a fixed size, is mutable, and supports both arc4 and native types. You typically don't need to use an `arc4.StaticArray` anymore.
 
 ```typescript
 const x = new FixedArray<uint64, 4>(1, 2, 3, 4)
@@ -375,12 +375,12 @@ An optional length generic type argument has been added for declaring statically
 
 The original unbounded `bytes` type without the length generic remains available and no changes are required unless you want to take advantage of the new feature.
 
-Due to covariance a `bytes<N>` value can always be assigned to a `bytes` target but in order to do the opposite, you will need to call `.toFixed` on the unbounded value. This method takes a length and an optional `strategy` parameter with valid options of `'assert-length'` or `'unsafe-cast'`(defaults to `'assert-length'`) to indicate if this conversion should assert the length of the input versus an `unsafe` casting which changes the type but doesn't verify the input length.
+The bytes type can also be declared with a length and an optional `strategy` parameter with valid options of `'assert-length'` or `'unsafe-cast'` (defaults to `'assert-length'`) to indicate if it should assert the length of the input versus an `unsafe` casting which doesn't verify the input length. Due to covariance a `bytes<N>` value can always be assigned to a `bytes` target but in order to do the opposite, you will need to call `.toFixed` on the unbounded value. This method takes the same options parameter with a length and an optional `strategy` properties.
 
 ```typescript
 snapshotPublicKey = GlobalState<bytes<32>>()
 
-const fromUtf8 = Bytes('abc').toFixed({ length: 3 })
+const fromUtf8 = Bytes('abc', { length: 3 })
 
 function padTo32(b: bytes<16>): bytes<32> {
   return b.bitwiseOr(bzero(32)).toFixed({ length: 32, strategy: 'unsafe-cast' })
@@ -473,7 +473,7 @@ assertMatch(xObj, { x: { not: 3 } }, 'x should not be 3')
 assertMatch(Txn, { sender: { not: Global.zeroAddress } })
 ```
 
-### `@readonly` decorator can be use instead of `@abimethod({ readonly: true })`
+### `@readonly` decorator can be used instead of `@abimethod({ readonly: true })`
 
 A new `@readonly` decorator has been added to provide a shorthand for `@abimethod({ readonly: true })`. Setting `readonly` flag via `@abimethod` decorator is still available to avoid needing multiple decorators when other options are also needed to be set e.g. `@arc4.abimethod({ allowActions: ['NoOp'], readonly: true })`.
 
