@@ -25,6 +25,10 @@ This document is up-to-date as of TEALScript v0.107.0 and Algorand TypeScript v1
 | `verify...Txn` | `assertMatch` | `assertMatch` can be used on any txn type or any object |
 | `globals` | [`Global`](TODO: link to Global docs) ||
 | `StaticArray` | `FixedArray` | May not cover all cases. See the array section for more details |
+| `AppID` | `Application` ||
+| `AssetID` | `Asset` ||
+| `Address` | `Account` | Algorand TypeScript does have an `arc4.Address` type, but `Account` should always be used instead. By default it's
+ABI type will be `address` |
 
 ## Migrations
 
