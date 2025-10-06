@@ -416,7 +416,7 @@ addOne(n: uint256): uint256 {
 addOne(n: Uint256): Uint256 {
   // Need to explicitly use Uint256 constructor to get uint256 and use bigint to perform arithmetic
   const one = 1n;
-  const sum = new Uint256(n.native + one + 2n);
+  const sum = new Uint256(n.asBigUint() + one + 2n);
   return sum;
 }
 ```
