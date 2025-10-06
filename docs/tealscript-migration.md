@@ -239,10 +239,6 @@ const result = compiled.call.greet({
 assert(result === 'hello world')
 ```
 
-### Reference Types
-
-TODO: For 1.0 we will probably have similar types to TEALScript (i.e. `AppID` that is an ABI `uint64`) but exact API is TBD
-
 ### Compiled Contract Information
 
 TEALScript contracts have static methods for getting the contract programs and schema. In Algorand TypeScript, you must first explicitly
