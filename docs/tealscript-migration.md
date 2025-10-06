@@ -323,6 +323,19 @@ class AppCaller extends LogicSig {
 }
 ```
 
+They can also exist outside of contracts and re-used across multiple contracts.
+
+```ts
+
+const APP_ID = TemplateVar<uint64>('APP_ID');
+
+class AppCaller extends LogicSig {
+  logic(): void {
+    assert(this.txn.applicationID === APP_ID);
+  }
+}
+```
+
 ### Importing
 
 In TEALScript, all of the type are injecting into the global namespace. This means no importing is required for most functions and objects.
