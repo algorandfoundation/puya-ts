@@ -4,31 +4,31 @@ This document is up-to-date as of TEALScript v0.107.0 and Algorand TypeScript v1
 
 ## Migration Table
 
-| TEALScript | Algorand TypeScript | Notes |
-| --- | --- | --- |
-| JS Object | JS Object | Algorand TypeScript does not yet support nested dynamic types in JavaScript objects. TEALScript allows one level of nesting. For nested dynamic types, see [Objects](#objects) |
-| JS Array | JS Array | Algorand TypeScript does not yet support nested dynamic types in JavaScript arrays. TEALScript allows one level ofnesting. For nested dynamic types, see [Arrays](#arrays) |
-| `EventLogger` | [`emit`](https://dev.algorand.co/reference/algorand-typescript/api-reference/index/functions/emit) ||
-| `BoxKey` | [`Box`](TOOD: link to box docs) | The crate method has new parameters as shown [here](TODO: link to box section) |
-| `Txn` | `Transaction` ||
-| `PayTxn` | `PaymentTxn` ||
-| `AppCallTxn` | `ApplicationCallTxn` ||
-| `KeyRegTxn` | `KeyRegistrationTxn` ||
-| `OnCompletion` | `OnCompleteAction` ||
-| Eliptic curve opcodes (i.e `ecAdd`) | Now under [`ElipticCurve`](TODO: link to EC docs) (i.e. `ElipticCurve.add`) ||
-| `GlobalStateKey` | `GlobalState` ||
-| `LocalStateKey` | `LocalState` ||
-| `GlobalStateMap` | Not yet supported ||
-| `LocalStateMap` | Not yet supported ||
-| `isOptedInToApp` and `isOptedInToAsset` | [`isOptedIn`](TODO: link to isOptedInDocs) ||
-| `this.txn` | [`Txn`](TOOD: link to Txn docs) ||
-| `verify...Txn` | `assertMatch` | `assertMatch` can be used on any txn type or any object |
-| `globals` | [`Global`](TODO: link to Global docs) ||
-| `StaticArray` | `FixedArray` | May not cover all cases. See the array section for more details |
-| `AppID` | `Application` ||
-| `AssetID` | `Asset` ||
-| `Address` | `Account` | Algorand TypeScript does have an `arc4.Address` type, but `Account` should always be used instead. By default it's
-ABI type will be `address` |
+| TEALScript                              | Algorand TypeScript                                                                                | Notes                                                                                                                                                                          |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| JS Object                               | JS Object                                                                                          | Algorand TypeScript does not yet support nested dynamic types in JavaScript objects. TEALScript allows one level of nesting. For nested dynamic types, see [Objects](#objects) |
+| JS Array                                | JS Array                                                                                           | Algorand TypeScript does not yet support nested dynamic types in JavaScript arrays. TEALScript allows one level ofnesting. For nested dynamic types, see [Arrays](#arrays)     |
+| `EventLogger`                           | [`emit`](https://dev.algorand.co/reference/algorand-typescript/api-reference/index/functions/emit) |                                                                                                                                                                                |
+| `BoxKey`                                | \[`Box`\]                                                                                          |                                                                                                                                                                                |
+| `Txn`                                   | `Transaction`                                                                                      |                                                                                                                                                                                |
+| `PayTxn`                                | `PaymentTxn`                                                                                       |                                                                                                                                                                                |
+| `AppCallTxn`                            | `ApplicationCallTxn`                                                                               |                                                                                                                                                                                |
+| `KeyRegTxn`                             | `KeyRegistrationTxn`                                                                               |                                                                                                                                                                                |
+| `OnCompletion`                          | `OnCompleteAction`                                                                                 |                                                                                                                                                                                |
+| Eliptic curve opcodes (i.e `ecAdd`)     | Now under \[`ElipticCurve`\] (i.e. `ElipticCurve.add`)                                             |                                                                                                                                                                                |
+| `GlobalStateKey`                        | `GlobalState`                                                                                      |                                                                                                                                                                                |
+| `LocalStateKey`                         | `LocalState`                                                                                       |                                                                                                                                                                                |
+| `GlobalStateMap`                        | Not yet supported                                                                                  |                                                                                                                                                                                |
+| `LocalStateMap`                         | Not yet supported                                                                                  |                                                                                                                                                                                |
+| `isOptedInToApp` and `isOptedInToAsset` | \[`isOptedIn`\]                                                                                    |                                                                                                                                                                                |
+| `this.txn`                              | \[`Txn`\]                                                                                          |                                                                                                                                                                                |
+| `verify...Txn`                          | `assertMatch`                                                                                      | `assertMatch` can be used on any txn type or any object                                                                                                                        |
+| `globals`                               | \[`Global`\]                                                                                       |                                                                                                                                                                                |
+| `StaticArray`                           | `FixedArray`                                                                                       | May not cover all cases. See the array section for more details                                                                                                                |
+| `AppID`                                 | `Application`                                                                                      |                                                                                                                                                                                |
+| `AssetID`                               | `Asset`                                                                                            |                                                                                                                                                                                |
+| `Address`                               | `Account`                                                                                          | Algorand TypeScript does have an `arc4.Address` type, but `Account` should always be used instead. By default it's                                                             |
+| ABI type will be `address`              |                                                                                                    |                                                                                                                                                                                |
 
 ## Migrations
 
