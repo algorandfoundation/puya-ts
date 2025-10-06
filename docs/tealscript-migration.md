@@ -1,6 +1,6 @@
 # TEALScript Migration Guide
 
-This document is up-to-date as of TEALScript v0.107.0 and Algorand TypeScript v1.0.0-beta71
+This document is up-to-date as of TEALScript v0.107.0 and Algorand TypeScript v1.0.0-alpha.87
 
 ## Migration Table
 
