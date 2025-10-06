@@ -416,8 +416,18 @@ addOne(n: uint256): uint256 {
 addOne(n: Uint256): Uint256 {
   // Need to explicitly use Uint256 constructor to get uint256 and use bigint to perform arithmetic
   const one = 1n;
-  const sum = new Uint256(n.native + one + one);
+  const sum = new Uint256(n.native + one + 2n);
   return sum;
+}
+```
+
+NOTE: In Algorand TypeScript, it's generally best to use `biguint` for intermediate values until the final value needs to be encoded as a specific Uint type.
+
+```ts
+addOne(n: Uint256): Uint256 {
+  const one = 1n;
+  const sum: biguint = n.asBigUint() + one + 2n;
+  return new Uint256(sum);
 }
 ```
 
