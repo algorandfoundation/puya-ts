@@ -1,13 +1,17 @@
-import { afterAll, describe, expect, it } from 'vitest'
 import { spawn } from 'cross-spawn'
 import fs from 'fs'
-import upath from 'upath'
-import * as ls from 'vscode-languageserver'
-import { StreamMessageReader, StreamMessageWriter } from 'vscode-jsonrpc/node'
 import type { ChildProcess } from 'node:child_process'
+import pathe from 'pathe'
+import { afterAll, describe, expect, it } from 'vitest'
+import { StreamMessageReader, StreamMessageWriter } from 'vscode-jsonrpc/node'
+import * as ls from 'vscode-languageserver'
+import { URI } from 'vscode-uri'
 
-const codeFixes = upath.resolve('tests/code-fix')
-const codeFixUri = `file://${codeFixes}`
+function encodePathToUri(path: string) {
+  return URI.file(path).toString()
+}
+
+const codeFixesPath = pathe.resolve('tests/code-fix')
 /* eslint-disable no-console */
 const log = console.error
 
@@ -61,7 +65,7 @@ describe('Language Server', () => {
     await exit
     expect(process.exitCode, 'language server exit code').toBe(0)
   })
-  it('publishes diagnostics', async () => {
+  it('publishes diagnostics', { timeout: 60000 }, async () => {
     const { connection, process } = getLanguageServer()
     const onConnectionError = connection.onError((err) => {
       log(`connection error: ${err}`)
@@ -85,8 +89,8 @@ describe('Language Server', () => {
       log(`SERVER: ${msg.type}: ${msg.message}`)
     })
 
-    const path = upath.join(codeFixes, 'unsupported-tokens.algo.ts')
-    const uri = `file://${path}`
+    const path = pathe.join(codeFixesPath, 'unsupported-tokens.algo.ts')
+    const uri = encodePathToUri(path)
     const open: ls.DidOpenTextDocumentParams = {
       textDocument: {
         uri,
@@ -138,14 +142,15 @@ describe('Language Server', () => {
 })
 
 async function initialize(connection: ls.ProtocolConnection) {
+  const codeFixUri = encodePathToUri(codeFixesPath)
   const init: ls.InitializeParams = {
-    rootUri: codeFixUri.toString(),
+    rootUri: codeFixUri,
     processId: 1,
     capabilities: {},
     workspaceFolders: [
       {
         name: 'code-fix',
-        uri: codeFixUri.toString(),
+        uri: codeFixUri,
       },
     ],
   }

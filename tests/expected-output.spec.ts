@@ -7,6 +7,7 @@ import type { LogEvent } from '../src/logger'
 import { isMinLevel, LoggingContext, LogLevel } from '../src/logger'
 import { CompileOptions } from '../src/options'
 import { enumFromValue, invariant } from '../src/util'
+import { AbsolutePath } from '../src/util/absolute-path'
 
 /**
  * Verify that specific code produces specific compiler output.
@@ -41,11 +42,12 @@ describe('Expected output', async () => {
   invariant(result.ast, 'Compilation must result in ast')
   const paths = Object.entries(result.ast ?? {}).map(([path, ast]) => ({
     path,
+    testName: AbsolutePath.resolve({ path }).relativeTo('tests/expected-output'),
     ast,
-    logs: logCtx.logEvents.filter((l) => l.sourceLocation?.file === path && l.message !== 'AWST build failure. See previous errors'),
+    logs: logCtx.logEvents.filter((l) => l.sourceLocation?.file?.equals(path) && l.message !== 'AWST build failure. See previous errors'),
   }))
 
-  describe.each(paths)('$path', ({ logs, ast }) => {
+  describe.each(paths)('$testName', ({ logs, ast }) => {
     it('has expected output', () => {
       const expectedLogs = extractExpectLogs(ast, result.programDirectory)
       const matchedLogs = new Set<LogEvent>()
@@ -123,7 +125,7 @@ type ExpectedLog = {
   test(log: LogEvent): boolean
 }
 
-function extractExpectLogs(sourceFile: ts.SourceFile, programDirectory: string) {
+function extractExpectLogs(sourceFile: ts.SourceFile, programDirectory: AbsolutePath) {
   const expectedLogs: ExpectedLog[] = []
 
   ts.visitNode(sourceFile, visit)

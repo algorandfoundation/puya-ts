@@ -1,13 +1,13 @@
 import fs from 'fs'
 import { fileURLToPath } from 'node:url'
-import upath from 'upath'
+import pathe from 'pathe'
 import { Constants } from '../constants'
 
 export function appVersion(name: string = 'puya-ts') {
-  let dirName = upath.dirname(fileURLToPath(import.meta.url))
+  let dirName = pathe.dirname(fileURLToPath(import.meta.url))
 
   while (true) {
-    const packageJsonPath = upath.join(dirName, 'package.json')
+    const packageJsonPath = pathe.join(dirName, 'package.json')
     if (fs.existsSync(packageJsonPath)) {
       const version = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')).version
       return [
@@ -18,8 +18,8 @@ export function appVersion(name: string = 'puya-ts') {
         `AVM ${Constants.supportedAvmVersions.join(', ')}`,
       ].join('\r\n')
     }
-    if (dirName === upath.dirname(dirName)) break
-    dirName = upath.dirname(dirName)
+    if (dirName === pathe.dirname(dirName)) break
+    dirName = pathe.dirname(dirName)
   }
   return `Cannot determine puya-ts version`
 }

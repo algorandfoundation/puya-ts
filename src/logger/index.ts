@@ -166,7 +166,7 @@ export class LoggingContext {
 
   addLog(log: LogEvent) {
     this.#logEvents.push(log)
-    const filePath = log.sourceLocation?.file
+    const filePath = log.sourceLocation?.file?.toString()
     if (filePath) {
       if (filePath in this.#logEventsByPath) {
         this.#logEventsByPath[filePath].push(log)

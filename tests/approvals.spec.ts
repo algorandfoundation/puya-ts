@@ -5,14 +5,14 @@ import { describe, expect, it } from 'vitest'
 import { gatherOutputStats } from '../scripts/gather-output-stats'
 import { compile, CompileOptions, processInputPaths } from '../src'
 import { isErrorOrCritical, LoggingContext, LogLevel } from '../src/logger'
-import { normalisePath } from '../src/util'
+import { AbsolutePath } from '../src/util/absolute-path'
 import { invokeCli } from '../src/util/invoke-cli'
 
 describe('Approvals', async () => {
   await rimraf('tests/approvals/out')
 
   const contractFiles = globSync('tests/approvals/*.algo.ts')
-    .map((p) => normalisePath(p, process.cwd()))
+    .map((p) => AbsolutePath.resolve({ path: p }))
     .toSorted()
   describe.each([
     ['Unoptimized', 'out/unoptimized/[name]', { optimizationLevel: 0, outputAwstJson: true, outputAwst: true }],
@@ -40,10 +40,10 @@ describe('Approvals', async () => {
       )
     })
     it.each(contractFiles)('%s', (contractFilePath) => {
-      const awst = result.awst?.filter((s) => s.sourceLocation.file === contractFilePath)
+      const awst = result.awst?.filter((s) => s.sourceLocation.file?.equals(contractFilePath))
 
       const errors = logCtx.logEvents.filter(
-        (l) => (!l.sourceLocation || l.sourceLocation.file === contractFilePath) && isErrorOrCritical(l.level),
+        (l) => (!l.sourceLocation || l.sourceLocation.file?.equals(contractFilePath)) && isErrorOrCritical(l.level),
       )
       if (errors.length === 0) {
         expect(errors.length).toBe(0)

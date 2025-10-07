@@ -2,6 +2,7 @@ import EventEmitter from 'node:events'
 import type * as lsp from 'vscode-languageserver'
 import { zipStrict } from '../util'
 import { DefaultMap } from '../util/default-map'
+import type { LsLogger } from './ls-logger'
 
 function diagnosticsAreSame(a: lsp.Diagnostic, b: lsp.Diagnostic) {
   return (
@@ -56,7 +57,7 @@ export class DiagnosticsManager {
   private readonly sourceFiles = new DefaultMap<lsp.DocumentUri, SourceFileDiagnostics>()
   private readonly events = new EventEmitter<DiagnosticEvents>()
 
-  constructor() {}
+  constructor(public readonly logger: LsLogger) {}
 
   setDiagnostics({
     fileUri,
@@ -67,6 +68,7 @@ export class DiagnosticsManager {
     diagnostics: lsp.Diagnostic[]
     version: number | undefined
   }) {
+    this.logger.debug(`[DiagMgr] Setting diagnostics for ${fileUri} ${version ?? '<no version>'}`)
     const fileDiagnostics = this.sourceFiles.getOrDefault(fileUri, () => new SourceFileDiagnostics())
     if (fileDiagnostics.setDiagnostics({ diagnostics, version })) {
       this.events.emit('fileDiagnosticsChanged', { uri: fileUri, diagnostics, version })

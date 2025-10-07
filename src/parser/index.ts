@@ -3,14 +3,14 @@ import { SourceLocation } from '../awst/source-location'
 import { logger, LoggingContext, LogLevel, LogSource } from '../logger'
 import type { CompileOptions } from '../options'
 import type { DeliberateAny } from '../typescript-helpers'
-import { normalisePath } from '../util'
+import { AbsolutePath } from '../util/absolute-path'
 import { resolveModuleNameLiterals } from './resolve-module-name-literals'
 
 export type SourceFileMapping = Record<string, ts.SourceFile>
 export type CreateProgramResult = {
   sourceFiles: SourceFileMapping
   program: ts.Program
-  programDirectory: string
+  programDirectory: AbsolutePath
 }
 
 export function createTsProgram(options: Pick<CompileOptions, 'filePaths' | 'sourceFileProvider'>): CreateProgramResult {
@@ -37,11 +37,11 @@ export function createTsProgram(options: Pick<CompileOptions, 'filePaths' | 'sou
   host.resolveModuleNameLiterals = resolveModuleNameLiterals
 
   const program = ts.createProgram(
-    options.filePaths.map((p) => p.sourceFile),
+    options.filePaths.map((p) => p.sourceFile.toString()),
     compilerOptions,
     host,
   )
-  const programDirectory = program.getCurrentDirectory()
+  const programDirectory = AbsolutePath.resolve({ path: program.getCurrentDirectory() })
 
   const sourceFiles = Object.fromEntries(
     program
@@ -54,7 +54,7 @@ export function createTsProgram(options: Pick<CompileOptions, 'filePaths' | 'sou
             'File is being interpreted as a script because it has no import or export statements. Containing statements will be evaluated in a global context.',
           )
         }
-        return [normalisePath(f.fileName, programDirectory), f]
+        return [AbsolutePath.resolve({ path: f.fileName, workingDirectory: programDirectory }).toString(), f]
       }),
   )
 
@@ -70,14 +70,14 @@ export function createTsProgram(options: Pick<CompileOptions, 'filePaths' | 'sou
   return {
     sourceFiles,
     program,
-    programDirectory: program.getCurrentDirectory(),
+    programDirectory: AbsolutePath.resolve({ path: program.getCurrentDirectory() }),
   }
 }
 
 function reportDiagnostics(program: ts.Program) {
   function reportDiagnostic(diagnostic: ts.Diagnostic) {
     if (isDiagnosticWithLocation(diagnostic)) {
-      const sourceLocation = SourceLocation.fromDiagnostic(diagnostic, program.getCurrentDirectory())
+      const sourceLocation = SourceLocation.fromDiagnostic(diagnostic, AbsolutePath.resolve({ path: program.getCurrentDirectory() }))
       const text = typeof diagnostic.messageText === 'string' ? diagnostic.messageText : diagnostic.messageText.messageText
       switch (diagnostic.category) {
         case ts.DiagnosticCategory.Error:

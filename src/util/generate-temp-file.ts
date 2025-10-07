@@ -5,7 +5,7 @@ import type { WriteFileOptions } from 'node:fs'
 import { writeFileSync } from 'node:fs'
 import { gzipSync } from 'node:zlib'
 import os from 'os'
-import upath from 'upath'
+import pathe from 'pathe'
 import { mkDirIfNotExists } from './index'
 
 export type TempFile = {
@@ -15,14 +15,14 @@ export type TempFile = {
 } & Disposable
 
 function ensureTempDir(): string {
-  const tempDir = upath.join(os.tmpdir(), 'puya-ts')
+  const tempDir = pathe.join(os.tmpdir(), 'puya-ts')
   mkDirIfNotExists(tempDir)
   return tempDir
 }
 
 export function generateTempFile(options?: { ext?: string }): TempFile {
   const { ext = 'tmp' } = options ?? {}
-  const filePath = upath.join(ensureTempDir(), `${randomUUID()}.${ext}`)
+  const filePath = pathe.join(ensureTempDir(), `${randomUUID()}.${ext}`)
 
   return {
     get filePath() {
@@ -47,7 +47,7 @@ export type TempDir = {
 } & Disposable
 
 export function generateTempDir(): TempDir {
-  const dirPath = upath.join(ensureTempDir(), `${randomUUID()}`)
+  const dirPath = pathe.join(ensureTempDir(), `${randomUUID()}`)
   mkDirIfNotExists(dirPath)
 
   return {
@@ -55,14 +55,14 @@ export function generateTempDir(): TempDir {
       return dirPath
     },
     *files(): IterableIterator<string> {
-      for (const p of globIterateSync(upath.join(dirPath, '**'), {
+      for (const p of globIterateSync(pathe.join(dirPath, '**'), {
         nodir: true,
       })) {
         yield p
       }
     },
     makeFile({ name, ext, compress }) {
-      const path = upath.join(this.dirPath, `${name}.${ext ?? 'tmp'}${compress ? '.gz' : ''}`)
+      const path = pathe.join(this.dirPath, `${name}.${ext ?? 'tmp'}${compress ? '.gz' : ''}`)
       return {
         get filePath() {
           return path

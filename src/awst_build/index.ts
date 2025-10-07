@@ -1,4 +1,4 @@
-import { jsonSerializeAwst } from '../awst/json-serialize-awst'
+import { AwstSerializer } from '../awst/json-serialize-awst'
 import type { AWST } from '../awst/nodes'
 import { ToCodeVisitor } from '../awst/to-code-visitor'
 import type { AlgoFile, CompileOptions } from '../options'
@@ -21,7 +21,7 @@ type AwstBuildResult = {
   compilationSet: CompilationSet
 }
 
-export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: BuildAwstOptions): AwstBuildResult {
+export function buildAwst({ program, sourceFiles, programDirectory }: CreateProgramResult, options: BuildAwstOptions): AwstBuildResult {
   return AwstBuildContext.run(program, () => {
     const moduleAwst: AWST[] = buildLibAwst()
     const deferredModules: DeferredModule[] = []
@@ -29,7 +29,7 @@ export function buildAwst({ program, sourceFiles }: CreateProgramResult, options
       deferredModules.push(
         AwstBuildContext.current.runInChildContext((deferred) => {
           const visitor = new SourceFileVisitor(sourceFile)
-          const algoFile = options.filePaths.find((p) => p.sourceFile === sourcePath)
+          const algoFile = options.filePaths.find((p) => p.sourceFile.toString() === sourcePath)
 
           return deferred(() => ({ awst: visitor.buildModule(), algoFile }))
         }),
@@ -57,7 +57,7 @@ export function buildAwst({ program, sourceFiles }: CreateProgramResult, options
           kind: ArtifactKind.AwstJson,
           obj: awst,
           buildArtifact(module): string {
-            return jsonSerializeAwst(module)
+            return new AwstSerializer({ spaces: 2, pathsRelativeTo: programDirectory }).serialize(module)
           },
         })
       }
