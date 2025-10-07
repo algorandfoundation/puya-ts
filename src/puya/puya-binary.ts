@@ -2,8 +2,8 @@ import * as crypto from 'crypto'
 import * as fs from 'fs'
 import { fileURLToPath } from 'node:url'
 import * as path from 'path'
+import pathe from 'pathe'
 import * as tar from 'tar'
-import upath from 'upath'
 import { Constants } from '../constants'
 import { InternalError } from '../errors'
 import { logger } from '../logger'
@@ -20,9 +20,9 @@ function getBinaryName(): string {
 
 function getPuyaTsDir(): string {
   try {
-    return upath.dirname(require.resolve('@algorandfoundation/puya-ts'))
+    return pathe.dirname(require.resolve('@algorandfoundation/puya-ts'))
   } catch {
-    return upath.dirname(fileURLToPath(import.meta.url))
+    return pathe.dirname(fileURLToPath(import.meta.url))
   }
 }
 

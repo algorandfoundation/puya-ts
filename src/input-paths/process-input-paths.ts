@@ -1,33 +1,33 @@
 import { globSync } from 'glob'
-import upath from 'upath'
+import pathe, { normalize } from 'pathe'
+
 import { PuyaError } from '../errors'
 import { logger } from '../logger'
 import type { AlgoFile } from '../options'
-import { normalisePath } from '../util'
+import { AbsolutePath } from '../util/absolute-path'
 import { determineOutDir } from './determine-out-dir'
 
 export const processInputPaths = ({
   paths,
   ignoreUnmatchedPaths,
-  workingDirectory = process.cwd(),
+  workingDirectory = AbsolutePath.resolve({ path: process.cwd() }),
   outDir = 'out',
 }: {
   ignoreUnmatchedPaths?: boolean
   paths: string[]
   outDir?: string
-  workingDirectory?: string
+  workingDirectory?: AbsolutePath
 }): AlgoFile[] => {
   const filePaths: AlgoFile[] = []
 
-  for (const p of paths.map((p) => upath.normalizeTrim(p))) {
-    const globPath = p.endsWith('.algo.ts') ? p : upath.join(p, '**/*.algo.ts')
+  for (const p of paths.map((p) => pathe.normalize(p))) {
+    const globPath = p.endsWith('.algo.ts') ? p : pathe.join(p, '**/*.algo.ts')
     const matches = globSync(globPath)
     if (matches.length) {
       for (const match of matches) {
-        const sourceFile = normalisePath(match, workingDirectory)
         filePaths.push({
-          sourceFile,
-          outDir: determineOutDir(p, sourceFile, outDir),
+          sourceFile: AbsolutePath.resolve({ path: match, workingDirectory }),
+          outDir: AbsolutePath.resolve({ path: determineOutDir(p, normalize(match), outDir), workingDirectory }),
         })
       }
     } else {
@@ -44,7 +44,7 @@ export const processInputPaths = ({
 
 function replaceOutDirTokens(algoFile: AlgoFile): AlgoFile {
   const replacements = {
-    name: upath.basename(algoFile.sourceFile).replace('.algo.ts', ''),
+    name: algoFile.sourceFile.basename('.algo.ts'),
   }
 
   return {

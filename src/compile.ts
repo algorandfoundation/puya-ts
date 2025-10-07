@@ -10,9 +10,10 @@ import { logger, LoggingContext } from './logger'
 import type { CompileOptions } from './options'
 import { createTsProgram } from './parser'
 import { puyaCompile } from './puya'
+import type { AbsolutePath } from './util/absolute-path'
 
 export type CompileResult = {
-  programDirectory: string
+  programDirectory: AbsolutePath
   awst?: AWST[]
   ast?: Record<string, ts.SourceFile>
   compilationSet?: CompilationSet

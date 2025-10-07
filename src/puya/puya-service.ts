@@ -1,10 +1,11 @@
-import { AwstSerializer, SnakeCaseSerializer } from '../awst/json-serialize-awst'
-import type { RootNode } from '../awst/nodes'
-import { logger } from '../logger'
-import type { PuyaOptions } from '../options'
 import { spawn } from 'cross-spawn'
 import * as rpc from 'vscode-jsonrpc/node'
+import { AwstSerializer, SnakeCaseSerializer } from '../awst/json-serialize-awst'
+import type { RootNode } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
+import { logger } from '../logger'
+import type { PuyaOptions } from '../options'
+import type { AbsolutePath } from '../util/absolute-path'
 
 interface AnalyseParams {
   awst: RootNode[]
@@ -27,17 +28,17 @@ interface LogResult {
 }
 
 export interface PuyaService {
-  analyse(programDirectory: string, awst: RootNode[]): Promise<LogResult>
+  analyse(programDirectory: AbsolutePath, awst: RootNode[]): Promise<LogResult>
   compile(options: CompileParams): Promise<LogResult>
   shutdown(): Promise<void>
 }
 
 export function getPuyaService(puyaPath: string): PuyaService {
   const connection = getPuyaServiceConnection(puyaPath)
-  async function analyse(programDirectory: string, awst: RootNode[]) {
+  async function analyse(programDirectory: AbsolutePath, awst: RootNode[]) {
     logger.debug(undefined, `puya serve: analyse: ${programDirectory}`)
     const type = new rpc.RequestType<AnalyseParams, LogResult, void>('analyse')
-    return await connection.sendRequest(type, { awst, base_path: programDirectory })
+    return await connection.sendRequest(type, { awst, base_path: programDirectory.toString() })
   }
 
   async function compile(params: CompileParams) {
@@ -62,7 +63,7 @@ export function getPuyaService(puyaPath: string): PuyaService {
 function getPuyaServiceConnection(path: string) {
   logger.debug(undefined, `puya serve: using ${path}`)
   const childProcess = spawn(path, ['serve'], {
-    stdio: ['pipe', 'pipe', 'ignore'],
+    stdio: ['pipe', 'pipe', 'pipe'],
   })
   logger.debug(undefined, `puya serve: running`)
   const connection = rpc.createMessageConnection(
@@ -74,6 +75,11 @@ function getPuyaServiceConnection(path: string) {
       },
     }),
   )
+  childProcess.once('error', (e) => logger.error(undefined, `puya server: exited prematurely ${e}`))
+  connection.onError(([error]) => {
+    logger.error(error)
+  })
+
   connection.listen()
   logger.debug(undefined, `puya serve: connection listening`)
   return connection
@@ -85,7 +91,7 @@ function encodeMessage(msg: rpc.Message, options: rpc.ContentTypeEncoderOptions)
   if (typeof params === 'object' && params !== null) {
     const programDirectory = 'base_path' in params ? params.base_path : undefined
     if (typeof programDirectory === 'string') {
-      serializer = new AwstSerializer({ sourcePaths: 'absolute', programDirectory })
+      serializer = new AwstSerializer()
     }
   }
   if (serializer === undefined) {

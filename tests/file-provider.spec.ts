@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { compile, CompileOptions, LoggingContext } from '../src'
 import { Contract } from '../src/awst/nodes'
 import { invariant } from '../src/util'
+import { AbsolutePath } from '../src/util/absolute-path'
 
 describe('File provider', () => {
   const contractVirtualFile = `
@@ -17,27 +18,27 @@ class TestContract extends Contract {
   it('can be overridden to support virtual files', async () => {
     const logging = LoggingContext.create().enterContext()
 
-    const sourceFile = 'tests/virtual-file/test-contract.algo.ts'
+    const sourceFile = AbsolutePath.resolve({ path: 'tests/virtual-file/test-contract.algo.ts' })
 
     const result = await compile(
       new CompileOptions({
         filePaths: [
           {
             sourceFile,
-            outDir: 'tests/virtual-file/out',
+            outDir: AbsolutePath.resolve({ path: 'tests/virtual-file/out' }),
           },
         ],
         dryRun: true,
         sourceFileProvider({ readFile, fileExists }) {
           return {
             readFile(fileName) {
-              if (fileName === sourceFile) {
+              if (fileName === sourceFile.toString()) {
                 return contractVirtualFile
               }
               return readFile(fileName)
             },
             fileExists(fileName) {
-              return fileName === sourceFile || fileExists(fileName)
+              return fileName === sourceFile.toString() || fileExists(fileName)
             },
           }
         },

@@ -2,7 +2,7 @@
 import chalk from 'chalk'
 import { sync } from 'cross-spawn'
 import fs from 'fs'
-import upath from 'upath'
+import pathe from 'pathe'
 import type { OpModule } from './build-op-module'
 import { buildOpModule } from './build-op-module'
 import { emitOpFuncTypes } from './generate-op-funcs'
@@ -73,7 +73,7 @@ function runCodeGen(puyaTsRootDir: string) {
     }
     console.log(chalk.blueBright(`Generating ${desc}`))
 
-    const fullPath = upath.join(puyaTsRootDir, projectRoot, outPath)
+    const fullPath = pathe.join(puyaTsRootDir, projectRoot, outPath)
     console.log(chalk.blue(`Writing text to ${fullPath}`))
     fs.writeFileSync(fullPath, Array.from(emitFn(opModule)).join(''), 'utf8')
     if (skipLint) {
@@ -81,7 +81,7 @@ function runCodeGen(puyaTsRootDir: string) {
       continue
     }
     console.log(chalk.blue(`Linting ${fullPath}`))
-    lintFile(upath.join(puyaTsRootDir, projectRoot), outPath)
+    lintFile(pathe.join(puyaTsRootDir, projectRoot), outPath)
   }
   console.log(chalk.green('Done!'))
 }
@@ -101,7 +101,7 @@ function lintFile(cwd: string, path: string) {
 function resolveProjectRoot() {
   const cwd = process.cwd()
   if (cwd.endsWith('scripts')) {
-    return upath.join(cwd, '../')
+    return pathe.join(cwd, '../')
   }
   return cwd
 }

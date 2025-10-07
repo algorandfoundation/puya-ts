@@ -1,8 +1,9 @@
 import ts from 'typescript'
-import { invariant, normalisePath } from '../util'
+import { invariant } from '../util'
+import { AbsolutePath } from '../util/absolute-path'
 
 export class SourceLocation<TNode extends ts.Node | undefined = ts.Node | undefined> {
-  file: string | null
+  file: AbsolutePath | null
   line: number
   endLine: number
   column: number
@@ -19,7 +20,7 @@ export class SourceLocation<TNode extends ts.Node | undefined = ts.Node | undefi
   }
 
   constructor(props: {
-    file?: string | null
+    file?: AbsolutePath | null
     line: number
     endLine: number
     column: number
@@ -66,7 +67,7 @@ export class SourceLocation<TNode extends ts.Node | undefined = ts.Node | undefi
     }
   }
 
-  static fromNode<TNode extends ts.Node>(node: TNode, programDirectory: string): SourceLocation<TNode> {
+  static fromNode<TNode extends ts.Node>(node: TNode, programDirectory: AbsolutePath): SourceLocation<TNode> {
     const sourceFile = node.getSourceFile()
 
     const { start, end } = SourceLocation.getStartAndEnd(node)
@@ -75,7 +76,7 @@ export class SourceLocation<TNode extends ts.Node | undefined = ts.Node | undefi
     const endLoc = sourceFile.getLineAndCharacterOfPosition(end)
 
     return new SourceLocation({
-      file: normalisePath(sourceFile.fileName, programDirectory),
+      file: AbsolutePath.resolve({ path: sourceFile.fileName, workingDirectory: programDirectory }),
       line: startLoc.line + 1,
       endLine: endLoc.line + 1,
       column: startLoc.character,
@@ -85,11 +86,11 @@ export class SourceLocation<TNode extends ts.Node | undefined = ts.Node | undefi
     })
   }
 
-  static fromFile(sourceFile: ts.SourceFile, programDirectory: string): SourceLocation {
+  static fromFile(sourceFile: ts.SourceFile, programDirectory: AbsolutePath): SourceLocation {
     const endPos = sourceFile.getEnd()
     const endLoc = sourceFile.getLineAndCharacterOfPosition(endPos)
     return new SourceLocation({
-      file: normalisePath(sourceFile.fileName, programDirectory),
+      file: AbsolutePath.resolve({ path: sourceFile.fileName, workingDirectory: programDirectory }),
       line: 1,
       endLine: endLoc.line + 1,
       column: 0,
@@ -99,12 +100,12 @@ export class SourceLocation<TNode extends ts.Node | undefined = ts.Node | undefi
     })
   }
 
-  static fromTextRange(sourceFile: ts.SourceFile, textRange: ts.TextRange, programDirectory: string): SourceLocation {
+  static fromTextRange(sourceFile: ts.SourceFile, textRange: ts.TextRange, programDirectory: AbsolutePath): SourceLocation {
     const startLoc = sourceFile.getLineAndCharacterOfPosition(textRange.pos)
     const endLoc = sourceFile.getLineAndCharacterOfPosition(textRange.end)
 
     return new SourceLocation({
-      file: normalisePath(sourceFile.fileName, programDirectory),
+      file: AbsolutePath.resolve({ path: sourceFile.fileName, workingDirectory: programDirectory }),
       line: startLoc.line + 1,
       endLine: endLoc.line + 1,
       column: startLoc.character,
@@ -114,11 +115,11 @@ export class SourceLocation<TNode extends ts.Node | undefined = ts.Node | undefi
     })
   }
 
-  static fromDiagnostic(diagnostic: ts.DiagnosticWithLocation, programDirectory: string): SourceLocation {
+  static fromDiagnostic(diagnostic: ts.DiagnosticWithLocation, programDirectory: AbsolutePath): SourceLocation {
     const startLoc = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start)
 
     return new SourceLocation({
-      file: normalisePath(diagnostic.file.fileName, programDirectory),
+      file: AbsolutePath.resolve({ path: diagnostic.file.fileName, workingDirectory: programDirectory }),
       line: startLoc.line + 1,
       endLine: startLoc.line + 1,
       column: startLoc.character,

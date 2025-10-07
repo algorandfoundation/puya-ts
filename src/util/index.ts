@@ -1,10 +1,11 @@
 import fs from 'node:fs'
 import { TextDecoder } from 'node:util'
-import upath from 'upath'
+import pathe from 'pathe'
 import type { SourceLocation } from '../awst/source-location'
 import { Constants } from '../constants'
 import { CodeError, InternalError } from '../errors'
 import type { DeliberateAny } from '../typescript-helpers'
+import type { AbsolutePath } from './absolute-path'
 
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
 export { base64ToUint8Array, uint8ArrayToBase64 } from './base-64'
@@ -185,7 +186,7 @@ export function instanceOfAny<T extends Array<new (...args: DeliberateAny[]) => 
 }
 
 /**
- * Normalise a file path to only include relevant segments.
+ * Extract a module name from a file path
  *
  *  - Anything in /node_modules/ is truncated to <package-name>/path.ext
  *  - Anything in workingDirectory is truncated relative to the workingDirectory
@@ -193,7 +194,7 @@ export function instanceOfAny<T extends Array<new (...args: DeliberateAny[]) => 
  * @param filePath
  * @param workingDirectory
  */
-export function normalisePath(filePath: string, workingDirectory: string): string {
+export function extractModuleName(filePath: string, workingDirectory: AbsolutePath): string {
   const localPackageName = /packages\/algo-ts\/dist\/(.*)$/.exec(filePath)
   if (localPackageName) {
     return `${Constants.algoTsPackage}/${localPackageName[1]}`
@@ -202,8 +203,8 @@ export function normalisePath(filePath: string, workingDirectory: string): strin
   if (nodeModuleName) {
     return nodeModuleName[1]
   }
-  const cwd = upath.normalize(`${workingDirectory}/`)
-  const normalizedPath = upath.normalize(filePath)
+  const cwd = pathe.normalize(`${workingDirectory}/`)
+  const normalizedPath = pathe.normalize(filePath)
   const moduleName = normalizedPath.startsWith(cwd) ? normalizedPath.slice(cwd.length) : normalizedPath
   return moduleName.replaceAll('\\', '/')
 }

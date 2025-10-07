@@ -2,10 +2,18 @@ import type * as lsp from 'vscode-languageserver'
 import type { TextDocument } from 'vscode-languageserver-textdocument'
 import type { TextDocuments } from 'vscode-languageserver/node.js'
 import { URI } from 'vscode-uri'
+import { validateAwst } from '../awst/validation'
+import { buildAwst } from '../awst_build'
+import { registerPTypes } from '../awst_build/ptypes/register'
+import { typeRegistry } from '../awst_build/type-registry'
 import { processInputPaths } from '../input-paths/process-input-paths'
 import { LoggingContext, LogLevel, LogSource } from '../logger'
 import type { AlgoFile } from '../options'
 import { CompileOptions } from '../options'
+import { createTsProgram } from '../parser'
+import { deserializeAndLog } from '../puya/log-deserializer'
+import type { PuyaService } from '../puya/puya-service'
+import { getPuyaService } from '../puya/puya-service'
 import { isIn } from '../util'
 import { DefaultMap } from '../util/default-map'
 import { sleep } from '../util/sleep'
@@ -13,14 +21,7 @@ import type { CompileTriggerQueue, WorkspaceCompileTrigger } from './compile-tri
 import type { DiagnosticsManager } from './diagnostics-manager'
 import type { LsLogger } from './ls-logger'
 import { type LogEventWithSource, mapper } from './mapping'
-import { registerPTypes } from '../awst_build/ptypes/register'
-import { typeRegistry } from '../awst_build/type-registry'
-import { createTsProgram } from '../parser'
-import { buildAwst } from '../awst_build'
-import { validateAwst } from '../awst/validation'
-import type { PuyaService } from '../puya/puya-service'
-import { getPuyaService } from '../puya/puya-service'
-import { deserializeAndLog } from '../puya/log-deserializer'
+import { LogExceptions } from './util/log-exceptions'
 
 export class CompileWorker {
   stopped: boolean = false
@@ -57,15 +58,24 @@ export class CompileWorker {
     this.stopped = true
   }
 
+  @LogExceptions
   private async compileWorkspaces(workspaceTrigger: WorkspaceCompileTrigger) {
-    this.logger.debug(`[Workspace Compile] \n${workspaceTrigger.workspaces.join('\n')}`)
+    try {
+      this.logger.debug(`[Workspace Compile] \n${workspaceTrigger.workspaces.join('\n')}`)
 
-    const workspacePaths = workspaceTrigger.workspaces.map((ws) => URI.parse(ws).fsPath)
+      const workspacePaths = workspaceTrigger.workspaces.map((ws) => URI.parse(ws).fsPath)
+      this.logger.debug(`[Workspace Compile] \n${workspacePaths.join('\n')}`)
 
-    const algoFiles = processInputPaths({ paths: workspacePaths, ignoreUnmatchedPaths: true })
-    if (algoFiles.length === 0) return
+      const algoFiles = processInputPaths({ paths: workspacePaths, ignoreUnmatchedPaths: true })
+      if (algoFiles.length === 0) {
+        this.logger.debug('[Workspace Compile] Skipping compilation as there are no matched algo files')
+        return
+      }
 
-    await this.compileAlgoFiles(algoFiles)
+      await this.compileAlgoFiles(algoFiles)
+    } catch (e) {
+      this.logger.error(`Unhandled error in compilation ${e}`)
+    }
   }
 
   private async compileAlgoFiles(algoFiles: AlgoFile[]) {
@@ -118,7 +128,7 @@ export class CompileWorker {
 
     for (const [file, diagnostics] of results.entries()) {
       const fileUri = URI.file(file).toString()
-      await this.diagnostics.setDiagnostics({ fileUri, diagnostics, version: documentVersions[fileUri] })
+      this.diagnostics.setDiagnostics({ fileUri, diagnostics, version: documentVersions[fileUri] })
     }
   }
 }

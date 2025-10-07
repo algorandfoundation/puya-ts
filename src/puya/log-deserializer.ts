@@ -1,7 +1,7 @@
-import upath from 'upath'
 import { SourceLocation } from '../awst/source-location'
 import { logger, LogLevel, LogSource } from '../logger'
 import { invariant } from '../util'
+import { AbsolutePath } from '../util/absolute-path'
 
 function parseString(x: unknown) {
   invariant(typeof x === 'string', `expected string, received ${typeof x}`)
@@ -39,7 +39,7 @@ function parseSourceLocation(x: unknown) {
     file: parseNullOrString(obj.file),
     line: parseNumber(obj.line),
     end_line: parseNullOrNumber(obj.end_line),
-    column: parseNumber(obj.column),
+    column: parseNullOrNumber(obj.column),
     end_column: parseNullOrNumber(obj.end_column),
   }
 }
@@ -60,11 +60,11 @@ export function deserializeAndLog(puyaLog: unknown) {
 
     const sourceLocation = log.location?.file
       ? new SourceLocation({
-          file: upath.normalize(log.location.file),
+          file: AbsolutePath.resolve({ path: log.location.file }),
           line: log.location.line,
           endLine: log.location.end_line ?? log.location.line + 1,
-          column: log.location.column,
-          endColumn: log.location.end_column ?? log.location.column,
+          column: log.location.column ?? 0,
+          endColumn: log.location.end_column ?? log.location.column ?? 0,
           scope: 'range',
           node: undefined,
         })

@@ -1,6 +1,6 @@
 import fs from 'fs'
 import { globSync } from 'glob'
-import upath from 'upath'
+import pathe from 'pathe'
 import { sortBy } from '../src/util'
 import { DefaultMap } from '../src/util/default-map'
 
@@ -17,7 +17,7 @@ type AppCompilation = {
 
 export function gatherOutputStats(dir: string) {
   const apps = new DefaultMap<string, AppStats>()
-  const files = globSync(upath.join(dir, '**/out/**/*.teal'))
+  const files = globSync(pathe.join(dir, '**/out/**/*.teal'))
   let longestName = 0
   for (const file of files) {
     const { level, name, program } = parseFileName(file)
@@ -63,7 +63,7 @@ export function gatherOutputStats(dir: string) {
 function parseFileName(programPath: string): { name: string; program: 'approval' | 'clear'; level: 'unoptimized' | 'o1' | 'o2' } {
   const [_, level, moduleName] = /out[/\\]([^/\\]+)[/\\]([^/\\]+)[/\\]/.exec(programPath) ?? []
 
-  const [name, programRaw] = upath.basename(programPath).split('.')
+  const [name, programRaw] = pathe.basename(programPath).split('.')
   let program: 'approval' | 'clear'
   switch (programRaw) {
     case 'clear':
@@ -113,4 +113,4 @@ function countOps(programPath: string): number {
     }).length
 }
 
-gatherOutputStats(upath.join(__dirname, '../tests'))
+gatherOutputStats(pathe.join(__dirname, '../tests'))
