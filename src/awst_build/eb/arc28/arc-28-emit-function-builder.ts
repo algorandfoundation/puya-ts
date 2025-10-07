@@ -71,7 +71,7 @@ export class Arc28EmitFunctionBuilder extends FunctionBuilder {
     })
 
     if (nameOrObj.ptype.equals(stringPType)) {
-      const thisModule = nameOrObj.sourceLocation.file ?? ''
+      const thisModule = nameOrObj.sourceLocation.file?.toString() ?? ''
 
       const fields: Record<string, ARC4EncodedType> = {}
       const values = new Map<string, Expression>()

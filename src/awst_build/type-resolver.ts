@@ -4,7 +4,8 @@ import { Constants } from '../constants'
 import { CodeError, InternalError } from '../errors'
 import { logger } from '../logger'
 import type { DeliberateAny } from '../typescript-helpers'
-import { codeInvariant, hasFlags, instanceOfAny, intersectsFlags, invariant, isIn, normalisePath } from '../util'
+import { codeInvariant, extractModuleName, hasFlags, instanceOfAny, intersectsFlags, invariant, isIn } from '../util'
+import type { AbsolutePath } from '../util/absolute-path'
 import { getNodeName } from '../visitor/syntax-names'
 import type { AppStorageType, PType } from './ptypes'
 import {
@@ -56,7 +57,7 @@ import { typeRegistry } from './type-registry'
 export class TypeResolver {
   constructor(
     private readonly checker: ts.TypeChecker,
-    private readonly programDirectory: string,
+    private readonly programDirectory: AbsolutePath,
   ) {}
 
   private getUnaliasedSymbolForNode(node: ts.Node) {
@@ -558,11 +559,11 @@ export class TypeResolver {
         !intersectsFlags(symbol.flags, ts.SymbolFlags.Function | ts.SymbolFlags.RegularEnum)
       ) {
         return new SymbolName({
-          module: normalisePath(declaration.getSourceFile().fileName, this.programDirectory),
+          module: extractModuleName(declaration.getSourceFile().fileName, this.programDirectory),
           name: '*',
         })
       }
-      return new SymbolName({ module: normalisePath(declaration.getSourceFile().fileName, this.programDirectory), name: symbolName })
+      return new SymbolName({ module: extractModuleName(declaration.getSourceFile().fileName, this.programDirectory), name: symbolName })
     }
     return undefined
   }

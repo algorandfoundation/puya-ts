@@ -5,7 +5,7 @@ import type { WriteFileOptions } from 'node:fs'
 import { writeFileSync } from 'node:fs'
 import { gzipSync } from 'node:zlib'
 import os from 'os'
-import upath from 'upath'
+import pathe from 'pathe'
 
 export type TempFile = {
   writeFileSync(data: NodeJS.ArrayBufferView, options?: WriteFileOptions): void
@@ -16,7 +16,7 @@ export type TempFile = {
 export function generateTempFile(options?: { ext?: string }): TempFile {
   const { ext = 'tmp' } = options ?? {}
   const tempDir = generateTempDir()
-  const filePath = upath.join(tempDir.dirPath, `${randomUUID()}.${ext}`)
+  const filePath = pathe.join(tempDir.dirPath, `${randomUUID()}.${ext}`)
 
   return {
     get filePath() {
@@ -41,21 +41,21 @@ export type TempDir = {
 } & Disposable
 
 export function generateTempDir(): TempDir {
-  const dirPath = fs.mkdtempSync(upath.join(os.tmpdir(), 'puya-ts-'))
+  const dirPath = fs.mkdtempSync(pathe.join(os.tmpdir(), 'puya-ts-'))
 
   return {
     get dirPath() {
       return dirPath
     },
     *files(): IterableIterator<string> {
-      for (const p of globIterateSync(upath.join(dirPath, '**'), {
+      for (const p of globIterateSync(pathe.join(dirPath, '**'), {
         nodir: true,
       })) {
         yield p
       }
     },
     makeFile({ name, ext, compress }) {
-      const path = upath.join(this.dirPath, `${name}.${ext ?? 'tmp'}${compress ? '.gz' : ''}`)
+      const path = pathe.join(this.dirPath, `${name}.${ext ?? 'tmp'}${compress ? '.gz' : ''}`)
       return {
         get filePath() {
           return path

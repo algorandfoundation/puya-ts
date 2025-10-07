@@ -1,13 +1,14 @@
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import * as lsp from 'vscode-languageserver/node'
 import { Constants } from '../constants'
+import { resolvePuyaPath } from '../puya/resolve-puya-path'
 import { CompileTriggerQueue } from './compile-trigger-queue'
 import { CompileWorker } from './compile-worker'
 import type { FileDiagnosticsChanged } from './diagnostics-manager'
 import { DiagnosticsManager } from './diagnostics-manager'
 import { LsLogger } from './ls-logger'
 import { isCodeFixData } from './mapping'
-import { resolvePuyaPath } from '../puya/resolve-puya-path'
+import { LogExceptions } from './util/log-exceptions'
 
 /* eslint-disable no-console */
 
@@ -46,7 +47,7 @@ export class PuyaLanguageServer {
   ) {
     console.log('Language server started')
     this.logger = new LsLogger(connection)
-    this.diagnosticsMgr = new DiagnosticsManager()
+    this.diagnosticsMgr = new DiagnosticsManager(this.logger)
     this.compileWorker = new CompileWorker(this.triggers, this.documents, this.logger, this.diagnosticsMgr, puyaPath)
 
     connection.onInitialize(this.initialize.bind(this))
@@ -83,10 +84,12 @@ export class PuyaLanguageServer {
     }
   }
 
+  @LogExceptions
   initialized(params: lsp.InitializedParams) {
     this.connection.console.log(`${Constants.languageServerSource}-ls initialized`)
   }
 
+  @LogExceptions
   fileDiagnosticsChanged(params: FileDiagnosticsChanged) {
     // TODO: Maybe need to make sure diagnostics for a single file are always sent in the order they're produced
     this.connection.console.log(`[Diagnostics Changed]: ${params.uri}`)
@@ -94,6 +97,7 @@ export class PuyaLanguageServer {
     void this.connection.sendDiagnostics(params)
   }
 
+  @LogExceptions
   documentDidChangeContent(params: lsp.TextDocumentChangeEvent<TextDocument>) {
     this.connection.console.log(`[Document Changed]: ${params.document.uri}`)
     this.diagnosticsMgr.setDiagnostics({ fileUri: params.document.uri, version: params.document.version, diagnostics: [] })
@@ -114,6 +118,7 @@ export class PuyaLanguageServer {
    * invoked/applied if selected
    * @param params
    */
+  @LogExceptions
   codeAction(params: lsp.CodeActionParams): lsp.CodeAction[] {
     return params.context.diagnostics.flatMap((d): lsp.CodeAction | lsp.CodeAction[] => {
       if (isCodeFixData(d.data)) {
@@ -138,8 +143,12 @@ export async function startLanguageServer(options: LanguageServerOptions) {
   console.error('Language server starting...')
 
   const connection = await resolveConnection(options.port)
-  // TODO: allow overriding puya path?
-  const puyaPath = await resolvePuyaPath()
-  const server = new PuyaLanguageServer(connection, puyaPath)
-  server.start()
+  try {
+    // TODO: allow overriding puya path?
+    const puyaPath = await resolvePuyaPath()
+    const server = new PuyaLanguageServer(connection, puyaPath)
+    server.start()
+  } catch (e) {
+    connection.console.error(`Unhandled exception ${e}`)
+  }
 }

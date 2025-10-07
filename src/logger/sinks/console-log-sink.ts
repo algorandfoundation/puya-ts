@@ -36,7 +36,7 @@ export class ConsoleLogSink implements LogSink {
   }
 
   getSourceSummary(sourceLocation: SourceLocation, indent: number): string {
-    const sourceFile = sourceLocation.file && LoggingContext.current.sourcesByPath[sourceLocation.file]
+    const sourceFile = sourceLocation.file && LoggingContext.current.sourcesByPath[sourceLocation.file.toString()]
     if (!sourceFile || sourceLocation.scope === 'file') return ''
 
     const line = sourceFile[sourceLocation.line - 1]

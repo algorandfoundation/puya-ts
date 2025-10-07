@@ -1,9 +1,10 @@
 import { LogLevel } from './logger'
 import type { Props } from './typescript-helpers'
+import type { AbsolutePath } from './util/absolute-path'
 
 export interface AlgoFile {
-  sourceFile: string
-  outDir: string
+  sourceFile: AbsolutePath
+  outDir: AbsolutePath
 }
 
 export type FileExistsMethod = (fileName: string) => boolean

@@ -1,14 +1,14 @@
-import path from 'node:path'
 import ts from 'typescript'
 import type { AWST } from '../awst/nodes'
 import type { CompilationSet } from '../awst_build/models/contract-class-model'
 import { LogLevel } from '../logger'
 import type { CompileOptions } from '../options'
 import type { SourceFileMapping } from '../parser'
+import type { AbsolutePath } from '../util/absolute-path'
 import { buildCompilationSetMapping } from './build-compilation-set-mapping'
-import { getPuyaService } from './puya-service'
-import { deserializeAndLog } from './log-deserializer'
 import { checkPuyaVersion } from './check-puya-version'
+import { deserializeAndLog } from './log-deserializer'
+import { getPuyaService } from './puya-service'
 import { resolvePuyaPath } from './resolve-puya-path'
 
 export async function puyaCompile({
@@ -19,7 +19,7 @@ export async function puyaCompile({
   compilationSet,
 }: {
   moduleAwst: AWST[]
-  programDirectory: string
+  programDirectory: AbsolutePath
   sourceFiles: SourceFileMapping
   options: CompileOptions
   compilationSet: CompilationSet
@@ -41,9 +41,9 @@ export async function puyaCompile({
   const response = await puyaService.compile({
     awst: moduleAwst,
     options: puyaOptions,
-    base_path: programDirectory,
+    base_path: programDirectory.toString(),
     log_level: getPuyaLogLevel(options.logLevel),
-    source_annotations: getSourceFileContents(sourceFiles, programDirectory),
+    source_annotations: getSourceFileContents(sourceFiles),
   })
   // TODO: approval tests could be sped up by caching puyaService and only shutting down once tests are complete
   await puyaService.shutdown()
@@ -66,11 +66,11 @@ function getPuyaLogLevel(logLevel: LogLevel): string {
       return 'critical'
   }
 }
-function getSourceFileContents(sourceFiles: SourceFileMapping, programDirectory: string) {
+function getSourceFileContents(sourceFiles: SourceFileMapping) {
   return Object.fromEntries(
     Object.entries(sourceFiles).map(([key, value]) => {
       const source = ts.isSourceFile(value) ? value.getFullText().replace(/\r\n/g, '\n').split(/\n/g) : value
-      return [path.join(programDirectory, key), source] as const
+      return [key, source] as const
     }),
   )
 }

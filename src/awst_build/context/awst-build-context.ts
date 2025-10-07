@@ -6,6 +6,7 @@ import type { AppStorageDefinition, ARC4MethodConfig } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { logger } from '../../logger'
 import { invariant } from '../../util'
+import { AbsolutePath } from '../../util/absolute-path'
 import { DefaultMap } from '../../util/default-map'
 import { ConstantStore } from '../constant-store'
 import type { InstanceBuilder, NodeBuilder } from '../eb'
@@ -154,7 +155,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
   ) {
     super()
     this.typeChecker = program.getTypeChecker()
-    this.typeResolver = new TypeResolver(this.typeChecker, this.program.getCurrentDirectory())
+    this.typeResolver = new TypeResolver(this.typeChecker, AbsolutePath.resolve({ path: this.program.getCurrentDirectory() }))
     this.#compilationSet = compilationSet
   }
 
@@ -295,7 +296,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
   }
 
   getSourceLocation<TNode extends ts.Node>(node: TNode) {
-    return SourceLocation.fromNode(node, this.program.getCurrentDirectory())
+    return SourceLocation.fromNode(node, AbsolutePath.resolve({ path: this.program.getCurrentDirectory() }))
   }
 
   addStorageDeclaration(declaration: AppStorageDeclaration): void {
