@@ -28,6 +28,7 @@ This document is up-to-date as of TEALScript v0.107.0 and Algorand TypeScript v1
 | `AppID`                                 | `Application`                                                                                      |                                                                                                                                                                       |
 | `AssetID`                               | `Asset`                                                                                            |                                                                                                                                                                       |
 | `Address`                               | `Account`                                                                                          | Algorand TypeScript does have an `arc4.Address` type, but `Account` should always be used instead. By default its ABI type will be `address` in ABI method signatures |
+| `throw Error('error message')`          | `err('error message')`                                                                             |                                                                                                                                                                       |
 
 ## Migrations
 
