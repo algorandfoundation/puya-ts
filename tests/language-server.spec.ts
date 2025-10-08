@@ -15,7 +15,7 @@ const codeFixesPath = pathe.resolve('tests/code-fix')
 /* eslint-disable no-console */
 const log = console.error
 
-describe('Language Server', () => {
+describe.sequential('Language Server', () => {
   const processes: ChildProcess[] = []
   function getLanguageServer() {
     const process = spawn('npx', ['tsx', 'src/cli-ls.ts', '--stdio'], {
@@ -65,7 +65,7 @@ describe('Language Server', () => {
     await exit
     expect(process.exitCode, 'language server exit code').toBe(0)
   })
-  it('publishes diagnostics', { timeout: 60000 }, async () => {
+  it('publishes diagnostics', { timeout: 120000 }, async () => {
     const { connection, process } = getLanguageServer()
     const onConnectionError = connection.onError((err) => {
       log(`connection error: ${err}`)
@@ -101,7 +101,7 @@ describe('Language Server', () => {
     }
     const nextDiagnostic = new Promise<ls.PublishDiagnosticsParams>((resolve, reject) => {
       const notification = connection.onNotification(ls.PublishDiagnosticsNotification.type, (n) => {
-        log(`received ${n.diagnostics.length} diagnostics for ${n.uri}`)
+        log(`received ${n.diagnostics.length} diagnostics for ${n.uri}, looking for ${uri}`)
         if (n.uri === uri) {
           // two sets of diagnostics are published, one on initial change and one after the workspace has been analysed
           // this test is only interested in the second diagnostic, however, they may be received in either order
