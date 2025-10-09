@@ -11,35 +11,6 @@ export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
 export { base64ToUint8Array, uint8ArrayToBase64 } from './base-64'
 export { hexToUint8Array, uint8ArrayToHex } from './base-16'
 
-// Polyfills for Set methods that are not available on older versions of Node
-if (!Set.prototype.union) {
-  Set.prototype.union = function (other) {
-    // Convert ReadonlySetLike to iterable by checking if it's a Set or has values method
-    let otherIterable: Iterable<unknown>
-    if (other instanceof Set) {
-      otherIterable = other
-    } else if ('values' in other && typeof other.values === 'function') {
-      otherIterable = other.values()
-    } else {
-      throw new TypeError('Argument must be a ReadonlySetLike')
-    }
-
-    return new Set([...this, ...otherIterable])
-  }
-}
-
-if (!Set.prototype.intersection) {
-  Set.prototype.intersection = function (other) {
-    return new Set([...this].filter((e) => other.has(e)))
-  }
-}
-
-if (!Set.prototype.difference) {
-  Set.prototype.difference = function (other) {
-    return new Set([...this].filter((e) => !other.has(e)))
-  }
-}
-
 class InvariantError extends InternalError {}
 
 /**

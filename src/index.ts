@@ -1,3 +1,4 @@
+import './util/polyfills'
 import {
   base32ToUint8Array,
   base64ToUint8Array,
