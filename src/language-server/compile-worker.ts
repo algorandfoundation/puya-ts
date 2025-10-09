@@ -24,7 +24,8 @@ import { type LogEventWithSource, mapper } from './mapping'
 import { LogExceptions } from './util/log-exceptions'
 
 export class CompileWorker {
-  stopped: boolean = false
+  stopping: boolean = false
+  private stopped = Promise.withResolvers<void>()
   puyaService: PuyaService
   constructor(
     private readonly queue: CompileTriggerQueue,
@@ -38,7 +39,7 @@ export class CompileWorker {
 
   start() {
     setTimeout(async () => {
-      while (!this.stopped) {
+      while (!this.stopping) {
         const work = this.queue.tryDequeue()
         if (work) {
           switch (work.type) {
@@ -50,12 +51,14 @@ export class CompileWorker {
           await sleep(1000)
         }
       }
+      this.stopped.resolve()
     })
   }
 
   async stop() {
+    this.stopping = true
     await this.puyaService.shutdown()
-    this.stopped = true
+    await this.stopped.promise
   }
 
   @LogExceptions
@@ -129,6 +132,7 @@ export class CompileWorker {
     for (const [file, diagnostics] of results.entries()) {
       const fileUri = URI.file(file).toString()
       this.diagnostics.setDiagnostics({ fileUri, diagnostics, version: documentVersions[fileUri] })
+      await sleep(0) // surrender thread between each file
     }
   }
 }
