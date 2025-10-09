@@ -40,6 +40,7 @@ export class PuyaLanguageServer {
   readonly logger: LsLogger
   readonly diagnosticsMgr: DiagnosticsManager
   readonly compileWorker: CompileWorker
+  stopping = false
 
   constructor(
     public readonly connection: lsp.Connection,
@@ -65,7 +66,10 @@ export class PuyaLanguageServer {
   }
 
   async shutdown() {
+    this.logger.log('[PuyaLanguageServer] Shutting down')
+    this.stopping = true
     await this.compileWorker.stop()
+    this.logger.log('[PuyaLanguageServer] Shutdown')
   }
 
   initialize(params: lsp.InitializeParams): lsp.InitializeResult {
@@ -91,14 +95,23 @@ export class PuyaLanguageServer {
 
   @LogExceptions
   fileDiagnosticsChanged(params: FileDiagnosticsChanged) {
+    if (this.stopping) return
     // TODO: Maybe need to make sure diagnostics for a single file are always sent in the order they're produced
     this.connection.console.log(`[Diagnostics Changed]: ${params.uri}`)
 
-    void this.connection.sendDiagnostics(params)
+    void this.connection.sendDiagnostics(params).then(
+      () => {
+        this.connection.console.log(`[Diagnostics Sent]: ${params.uri}`)
+      },
+      (e) => {
+        this.connection.console.error(`[Diagnostic Send Error] ${params.uri} ${e}`)
+      },
+    )
   }
 
   @LogExceptions
   documentDidChangeContent(params: lsp.TextDocumentChangeEvent<TextDocument>) {
+    if (this.stopping) return
     this.connection.console.log(`[Document Changed]: ${params.document.uri}`)
     this.diagnosticsMgr.setDiagnostics({ fileUri: params.document.uri, version: params.document.version, diagnostics: [] })
 
