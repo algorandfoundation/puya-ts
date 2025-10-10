@@ -6,9 +6,8 @@ import type { CompileOptions } from '../options'
 import type { SourceFileMapping } from '../parser'
 import type { AbsolutePath } from '../util/absolute-path'
 import { buildCompilationSetMapping } from './build-compilation-set-mapping'
-import { checkPuyaVersion } from './check-puya-version'
 import { deserializeAndLog } from './log-deserializer'
-import { getPuyaService } from './puya-service'
+import { PuyaService } from './puya-service'
 import { resolvePuyaPath } from './resolve-puya-path'
 
 export async function puyaCompile({
@@ -24,12 +23,8 @@ export async function puyaCompile({
   options: CompileOptions
   compilationSet: CompilationSet
 }) {
-  if (options.customPuyaPath && !options.skipVersionCheck) {
-    await checkPuyaVersion(options.customPuyaPath)
-  }
-
-  const puyaPath = options.customPuyaPath ?? (await resolvePuyaPath())
-  const puyaService = getPuyaService(puyaPath)
+  const puyaPath = await resolvePuyaPath(options)
+  const puyaService = PuyaService.getInstance({ puyaPath })
   const puyaOptions = options.buildPuyaOptions(
     buildCompilationSetMapping({
       awst: moduleAwst,
