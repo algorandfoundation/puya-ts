@@ -1,16 +1,15 @@
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import * as lsp from 'vscode-languageserver/node'
 import { Constants } from '../constants'
+import { logger } from '../logger'
+import { LanguageServerLogSink } from '../logger/sinks/language-server-log-sink'
 import { resolvePuyaPath } from '../puya/resolve-puya-path'
 import { CompileTriggerQueue } from './compile-trigger-queue'
 import { CompileWorker } from './compile-worker'
 import type { FileDiagnosticsChanged } from './diagnostics-manager'
 import { DiagnosticsManager } from './diagnostics-manager'
-import { LsLogger } from './ls-logger'
 import { isCodeFixData } from './mapping'
 import { LogExceptions } from './util/log-exceptions'
-
-/* eslint-disable no-console */
 
 const resolveConnection = async (lspPort: number | undefined) => {
   if (!lspPort) {
@@ -31,13 +30,13 @@ const resolveConnection = async (lspPort: number | undefined) => {
 
 export type LanguageServerOptions = {
   port?: number
+  customPuyaPath?: string
 }
 
 export class PuyaLanguageServer {
   readonly documents = new lsp.TextDocuments(TextDocument)
   readonly triggers = new CompileTriggerQueue()
   readonly workspaceFolders: lsp.URI[] = []
-  readonly logger: LsLogger
   readonly diagnosticsMgr: DiagnosticsManager
   readonly compileWorker: CompileWorker
   stopping = false
@@ -46,10 +45,8 @@ export class PuyaLanguageServer {
     public readonly connection: lsp.Connection,
     puyaPath: string,
   ) {
-    console.log('Language server started')
-    this.logger = new LsLogger(connection)
-    this.diagnosticsMgr = new DiagnosticsManager(this.logger)
-    this.compileWorker = new CompileWorker(this.triggers, this.documents, this.logger, this.diagnosticsMgr, puyaPath)
+    this.diagnosticsMgr = new DiagnosticsManager()
+    this.compileWorker = new CompileWorker(this.triggers, this.documents, this.diagnosticsMgr, puyaPath)
 
     connection.onInitialize(this.initialize.bind(this))
     connection.onInitialized(this.initialized.bind(this))
@@ -66,10 +63,10 @@ export class PuyaLanguageServer {
   }
 
   async shutdown() {
-    this.logger.log('[PuyaLanguageServer] Shutting down')
+    logger.debug(undefined, '[PuyaLanguageServer] Shutting down')
     this.stopping = true
     await this.compileWorker.stop()
-    this.logger.log('[PuyaLanguageServer] Shutdown')
+    logger.debug(undefined, '[PuyaLanguageServer] Shutdown')
   }
 
   initialize(params: lsp.InitializeParams): lsp.InitializeResult {
@@ -90,23 +87,22 @@ export class PuyaLanguageServer {
 
   @LogExceptions
   initialized(params: lsp.InitializedParams) {
-    this.connection.console.log(`${Constants.languageServerSource}-ls initialized`)
+    logger.debug(undefined, `${Constants.languageServerSource}-ls initialized`)
   }
 
-  @LogExceptions
-  fileDiagnosticsChanged(params: FileDiagnosticsChanged) {
-    if (this.stopping) return
-    // TODO: Maybe need to make sure diagnostics for a single file are always sent in the order they're produced
-    this.connection.console.log(`[Diagnostics Changed]: ${params.uri}`)
+  blah = Promise.resolve()
 
-    void this.connection.sendDiagnostics(params).then(
-      () => {
-        this.connection.console.log(`[Diagnostics Sent]: ${params.uri}`)
-      },
-      (e) => {
-        this.connection.console.error(`[Diagnostic Send Error] ${params.uri} ${e}`)
-      },
-    )
+  @LogExceptions
+  async fileDiagnosticsChanged(params: FileDiagnosticsChanged) {
+    if (this.stopping) {
+      this.connection.console.debug(`[Diagnostics Ignored (shutting down)]: ${params.uri}`)
+      return
+    }
+    // TODO: Maybe need to make sure diagnostics for a single file are always sent in the order they're produced
+    this.connection.console.debug(`[Diagnostics Changed]: ${params.uri}`)
+
+    await this.connection.sendDiagnostics(params)
+    this.connection.console.debug(`[Diagnostics Sent]: ${params.uri}`)
   }
 
   @LogExceptions
@@ -152,13 +148,10 @@ export class PuyaLanguageServer {
 }
 
 export async function startLanguageServer(options: LanguageServerOptions) {
-  // output to stderr to avoid interfering with stdio protocol
-  console.error('Language server starting...')
-
   const connection = await resolveConnection(options.port)
+  logger.configure([new LanguageServerLogSink(connection)])
   try {
-    // TODO: allow overriding puya path?
-    const puyaPath = await resolvePuyaPath()
+    const puyaPath = await resolvePuyaPath(options)
     const server = new PuyaLanguageServer(connection, puyaPath)
     server.start()
   } catch (e) {
