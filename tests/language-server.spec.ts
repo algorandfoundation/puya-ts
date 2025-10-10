@@ -99,15 +99,15 @@ describe.sequential('Language Server', () => {
         text: fs.readFileSync(path, 'utf8'),
       },
     }
+
     const nextDiagnostic = new Promise<ls.PublishDiagnosticsParams>((resolve, reject) => {
-      const notification = connection.onNotification(ls.PublishDiagnosticsNotification.type, (n) => {
+      connection.onNotification(ls.PublishDiagnosticsNotification.type, (n) => {
         log(`received ${n.diagnostics.length} diagnostics for ${n.uri}, looking for ${uri}`)
         if (n.uri === uri) {
           // two sets of diagnostics are published, one on initial change and one after the workspace has been analysed
           // this test is only interested in the second diagnostic, however, they may be received in either order
           // so only resolve if there are the expected diagnostics
           if (n.diagnostics.length) {
-            notification.dispose()
             resolve(n)
           }
         }
