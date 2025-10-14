@@ -22,8 +22,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob 2u)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
         let tmp%1#5: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%2#3: bytes = (concat 0x151f7c75 tmp%1#5)
-        (log tmp%2#3)
+        let tmp%2#4: bytes = (concat 0x151f7c75 tmp%1#5)
+        (log tmp%2#4)
         exit 1u
     block@7: // switch_case_next_L4
         let tmp%6#0: uint64 = (txn ApplicationID)
@@ -37,23 +37,32 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob 5u)
         let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
         let tmp%1#4: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
-        let tmp%2#2: bytes = (concat 0x151f7c75 tmp%1#4)
-        (log tmp%2#2)
+        let tmp%2#3: bytes = (concat 0x151f7c75 tmp%1#4)
+        (log tmp%2#3)
         exit 1u
     block@11: // methodWithDefaults_route_L18
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let a#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let b#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
-        let reinterpret_Encoded(uint64)%2#0: Encoded(uint64) = (txna ApplicationArgs 3)
-        let c#0: uint64 = (btoi reinterpret_Encoded(uint64)%2#0)
+        let tmp%0#2: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#2)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let a#0: uint64 = (btoi tmp%0#2)
+        let tmp%2#2: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#2)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let b#0: uint64 = (btoi tmp%2#2)
+        let tmp%4#1: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#1)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for uint64
+        let c#0: uint64 = (btoi tmp%4#1)
         let tmp%0#3: uint64 = (* a#0 b#0)
         let tmp%1#3: uint64 = (+ tmp%0#3 c#0)
         let aggregate%val_as_bytes%2#0: bytes[8] = (itob tmp%1#3)
         let aggregate%as_Encoded(uint64)%2#0: Encoded(uint64) = aggregate%val_as_bytes%2#0
-        let tmp%4#1: Encoded(uint64) = aggregate%as_Encoded(uint64)%2#0
-        let tmp%5#1: bytes = (concat 0x151f7c75 tmp%4#1)
-        (log tmp%5#1)
+        let tmp%7#1: Encoded(uint64) = aggregate%as_Encoded(uint64)%2#0
+        let tmp%8#1: bytes = (concat 0x151f7c75 tmp%7#1)
+        (log tmp%8#1)
         exit 1u
     block@12: // readonlyAlt_route_L23
         let aggregate%val_as_bytes%3#0: bytes[8] = (itob 1u)

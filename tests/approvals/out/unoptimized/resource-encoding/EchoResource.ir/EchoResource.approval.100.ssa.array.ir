@@ -44,31 +44,55 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByIndex[routing]() -> void:
     block@0: // L39
-        let reinterpret_Encoded(uint8)%0#0: Encoded(uint8) = (txna ApplicationArgs 1)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint8)%0#0)
-        let tmp%1#0: uint64 = ((txnas Assets) tmp%0#0)
-        let reinterpret_Encoded(uint8)%1#0: Encoded(uint8) = (txna ApplicationArgs 2)
-        let tmp%2#0: uint64 = (btoi reinterpret_Encoded(uint8)%1#0)
-        let tmp%3#0: uint64 = ((txnas Applications) tmp%2#0)
-        let reinterpret_Encoded(uint8)%2#0: Encoded(uint8) = (txna ApplicationArgs 3)
-        let tmp%4#0: uint64 = (btoi reinterpret_Encoded(uint8)%2#0)
-        let tmp%5#0: account = ((txnas Accounts) tmp%4#0)
-        let tmp%6#0: Encoded(uint64,uint64,uint8[32]) = tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByIndex(tmp%1#0, tmp%3#0, tmp%5#0)
-        let tmp%7#0: bytes = (concat 0x151f7c75 tmp%6#0)
-        (log tmp%7#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 1u)
+        (assert eq%0#0) // invalid number of bytes for uint8
+        let as_Encoded(uint8)%0#0: Encoded(uint8) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint8)%0#0)
+        let tmp%2#0: uint64 = ((txnas Assets) tmp%1#0)
+        let tmp%3#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%3#0)
+        let eq%1#0: bool = (== len%1#0 1u)
+        (assert eq%1#0) // invalid number of bytes for uint8
+        let as_Encoded(uint8)%1#0: Encoded(uint8) = tmp%3#0
+        let tmp%4#0: uint64 = (btoi as_Encoded(uint8)%1#0)
+        let tmp%5#0: uint64 = ((txnas Applications) tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%6#0)
+        let eq%2#0: bool = (== len%2#0 1u)
+        (assert eq%2#0) // invalid number of bytes for uint8
+        let as_Encoded(uint8)%2#0: Encoded(uint8) = tmp%6#0
+        let tmp%7#0: uint64 = (btoi as_Encoded(uint8)%2#0)
+        let tmp%8#0: account = ((txnas Accounts) tmp%7#0)
+        let tmp%9#0: Encoded(uint64,uint64,uint8[32]) = tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByIndex(tmp%2#0, tmp%5#0, tmp%8#0)
+        let tmp%10#0: bytes = (concat 0x151f7c75 tmp%9#0)
+        (log tmp%10#0)
         exit 1u
 
 subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByValue[routing]() -> void:
     block@0: // L50
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let tmp%1#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 3)
-        let tmp%2#0: account = reinterpret_Encoded(uint8[32])%0#0
-        let tmp%3#0: Encoded(uint64,uint64,uint8[32]) = tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByValue(tmp%0#0, tmp%1#0, tmp%2#0)
-        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
-        (log tmp%4#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%1#0: Encoded(uint64) = tmp%2#0
+        let tmp%3#0: uint64 = (btoi as_Encoded(uint64)%1#0)
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 32u)
+        (assert eq%2#0) // invalid number of bytes for uint8[32]
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%4#0
+        let tmp%5#0: account = as_Encoded(uint8[32])%0#0
+        let tmp%6#0: Encoded(uint64,uint64,uint8[32]) = tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByValue(tmp%1#0, tmp%3#0, tmp%5#0)
+        let tmp%7#0: bytes = (concat 0x151f7c75 tmp%6#0)
+        (log tmp%7#0)
         exit 1u
 
 subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByIndex(asset: uint64, app: uint64, acc: account) -> Encoded(uint64,uint64,uint8[32]):

@@ -11,12 +11,15 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%7#0: bool = (&& tmp%4#0 tmp%5#0)
         (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let length#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let tmp%0#2: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#2)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let length#0: uint64 = (btoi tmp%0#2)
         goto block@13
     block@13: // while_top_L20
-        let tmp%1#2: uint64 = (global OpcodeBudget)
-        let tmp%2#1: bool = (> 2010u tmp%1#2)
+        let tmp%1#3: uint64 = (global OpcodeBudget)
+        let tmp%2#1: bool = (> 2010u tmp%1#3)
         goto tmp%2#1 ? block@14 : block@18
     block@14: // while_body_L21
         itxn_begin
@@ -44,8 +47,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
         let aggregate%head%0#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#0)
         let aggregate%as_Encoded(uint64[])%1#0: Encoded(uint64[]) = aggregate%head%0#0
-        let tmp%1#1: Encoded(uint64[]) = aggregate%as_Encoded(uint64[])%1#0
-        let concat%0#0: Encoded(uint64[]) = (concat slot_contents%0#0 tmp%1#1) // on error: max array length exceeded
+        let tmp%1#2: Encoded(uint64[]) = aggregate%as_Encoded(uint64[])%1#0
+        let concat%0#0: Encoded(uint64[]) = (concat slot_contents%0#0 tmp%1#2) // on error: max array length exceeded
         store(ma#0, concat%0#0)
         let i#2: uint64 = (+ i#1 1u)
         goto block@9
@@ -58,10 +61,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%4#1)
         (assert length#0) // has length
         let slot_contents%1#0: Encoded(uint64[]) = load(ma#0)
-        let len%0#0: uint64 = (len slot_contents%1#0)
-        let sub%0#0: uint64 = (- len%0#0 8u)
+        let len%0#1: uint64 = (len slot_contents%1#0)
+        let sub%0#0: uint64 = (- len%0#1 8u)
         let extract%0#0: bytes = (extract3 slot_contents%1#0 0u sub%0#0)
-        let extract_to_end%0#0: bytes = (substring3 slot_contents%1#0 sub%0#0 len%0#0)
+        let extract_to_end%0#0: bytes = (substring3 slot_contents%1#0 sub%0#0 len%0#1)
         let popped#0: uint64 = (btoi extract_to_end%0#0)
         store(ma#0, extract%0#0)
         let tmp%6#1: uint64 = (- length#0 1u)

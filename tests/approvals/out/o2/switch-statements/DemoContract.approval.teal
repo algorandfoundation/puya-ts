@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 2
+    intcblock 1 8 0 2
     bytecblock "evalCount"
     pushbytes ""
     dup
@@ -25,10 +25,20 @@ main_test_non_trivial_termination_of_clause_route@6:
     // tests/approvals/switch-statements.algo.ts:83
     // public test_non_trivial_termination_of_clause(n: uint64, y: uint64): uint64 {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     dup
     bury 3
     txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     bury 2
     // tests/approvals/switch-statements.algo.ts:85
@@ -46,7 +56,7 @@ main_test_non_trivial_termination_of_clause_route@6:
     // tests/approvals/switch-statements.algo.ts:86
     // if (y % 2 === 0) {
     dup
-    intc_2 // 2
+    intc_3 // 2
     %
     bnz main_else_body@16
     dup
@@ -82,6 +92,11 @@ main_test_side_effects_route@5:
     // tests/approvals/switch-statements.algo.ts:68
     // public test_side_effects(n: uint64) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     dup
     bury 3
@@ -90,7 +105,7 @@ main_test_side_effects_route@5:
     bytec_0 // "evalCount"
     // tests/approvals/switch-statements.algo.ts:69
     // this.evalCount.value = 0
-    intc_1 // 0
+    intc_2 // 0
     app_global_put
     // tests/approvals/switch-statements.algo.ts:72
     // case this.increaseEvalAndReturn(n - 1):
@@ -124,7 +139,7 @@ main_test_side_effects_route@5:
 main_block@23:
     // tests/approvals/switch-statements.algo.ts:80
     // assert(this.evalCount.value === 2, 'Only two functions should be evaluated')
-    intc_1 // 0
+    intc_2 // 0
     // tests/approvals/switch-statements.algo.ts:61
     // evalCount = GlobalState<uint64>()
     bytec_0 // "evalCount"
@@ -132,7 +147,7 @@ main_block@23:
     // assert(this.evalCount.value === 2, 'Only two functions should be evaluated')
     app_global_get_ex
     assert // check GlobalState exists
-    intc_2 // 2
+    intc_3 // 2
     ==
     // tests/approvals/switch-statements.algo.ts:68
     // public test_side_effects(n: uint64) {
@@ -162,7 +177,7 @@ increaseEvalAndReturn:
     proto 1 1
     // tests/approvals/switch-statements.algo.ts:64
     // this.evalCount.value++
-    intc_1 // 0
+    intc_2 // 0
     // tests/approvals/switch-statements.algo.ts:61
     // evalCount = GlobalState<uint64>()
     bytec_0 // "evalCount"

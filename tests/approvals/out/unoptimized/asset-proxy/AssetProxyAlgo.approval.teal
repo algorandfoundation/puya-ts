@@ -73,6 +73,11 @@ testAsset_block@0:
     // tests/approvals/asset-proxy.algo.ts:5
     // testAsset(asset: Asset): void {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/asset-proxy.algo.ts::AssetProxyAlgo.testAsset
     intc_1 // 1

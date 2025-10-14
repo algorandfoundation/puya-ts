@@ -87,6 +87,11 @@ setState_block@0:
     // tests/approvals/state-totals.algo.ts:31
     // @abimethod({ allowActions: 'OptIn' })
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/state-totals.algo.ts::ExtendsSubWithTotals.setState
     intc_1 // 1

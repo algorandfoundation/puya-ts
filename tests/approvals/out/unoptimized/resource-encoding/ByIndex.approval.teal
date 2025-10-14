@@ -92,6 +92,11 @@ testExplicitIndex_block@0:
     // tests/approvals/resource-encoding.algo.ts:17
     // @abimethod({ resourceEncoding: 'index' })
     txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 1
+    ==
+    assert // invalid number of bytes for uint8
     btoi
     txnas Accounts
     callsub tests/approvals/resource-encoding.algo.ts::ByIndex.testExplicitIndex
@@ -112,6 +117,11 @@ testImplicitValue_block@0:
     // tests/approvals/resource-encoding.algo.ts:26
     // testImplicitValue(account: Account) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     callsub tests/approvals/resource-encoding.algo.ts::ByIndex.testImplicitValue
     itob
     bytec_0 // 0x151f7c75

@@ -56,7 +56,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable[routing]()
         goto block@22
     block@19: // receiveReadonly_route_L225
-        exit 1u
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly[routing]()
+        goto block@22
     block@22: // after_if_else_L6
         fail
     block@23: // __algots__.defaultCreate_L6
@@ -1771,6 +1772,9 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings[rout
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray[routing]() -> void:
     block@0: // L109
         let y#0: Encoded(uint64[50]) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len y#0)
+        let eq%0#0: bool = (== len%0#0 400u)
+        (assert eq%0#0) // invalid number of bytes for uint64[50]
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob 1u)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
         let aggregate%head%0#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#0)
@@ -2112,6 +2116,9 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop[r
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs[routing]() -> void:
     block@0: // L170
         let p#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len p#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
         let aggregate%extract%0#0: bytes = (extract3 p#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
         let x#0: uint64 = (btoi tuple_item%0#0)
@@ -2133,7 +2140,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs[routi
         let myVectors#1: Encoded(len+(uint64,uint64)[]) = aggregate%as_Encoded(len+(uint64,uint64)[])%0#0
         let aggregate%array_length%0#0: uint64 = (extract_uint16 myVectors#1 0u)
         let tmp%1#1: uint64 = aggregate%array_length%0#0
-        let tmp%2#0: bool = (== tmp%1#1 1u)
+        let tmp%2#1: bool = (== tmp%1#1 1u)
         let aggregate%total_length%0#0: uint64 = (len myVectors#1)
         let aggregate%array_trimmed%0#0: bytes = (substring3 myVectors#1 2u aggregate%total_length%0#0)
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 16u)
@@ -2151,10 +2158,10 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs[routi
         let values%3#0: uint64 = (btoi tuple_item%3#0)
         let tmp%4#0: bool = (== values%3#0 y#0)
         let tmp%5#0: bool = (&& tmp%3#0 tmp%4#0)
-        let tmp%6#0: bool = (&& tmp%2#0 tmp%5#0)
+        let tmp%6#0: bool = (&& tmp%2#1 tmp%5#0)
         (assert tmp%6#0) // assert target is match for conditions
-        let tmp%1#0: bytes = (concat 0x151f7c75 myVectors#1)
-        (log tmp%1#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 myVectors#1)
+        (log tmp%2#0)
         exit 1u
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans[routing]() -> void:
@@ -2226,14 +2233,29 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansS
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing[routing]() -> void:
     block@0: // L195
         let mutable#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 mutable#0 0u)
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len mutable#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
+        let readOnly#0: Encoded(len+uint64[]) = (txna ApplicationArgs 2)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 readOnly#0 0u)
+        let length%1#0: uint64 = aggregate%array_length%1#0
+        let mul%1#0: uint64 = (* length%1#0 8u)
+        let add%1#0: uint64 = (+ mul%1#0 2u)
+        let len%1#0: uint64 = (len readOnly#0)
+        let eq%1#0: bool = (== len%1#0 add%1#0)
+        (assert eq%1#0) // invalid number of bytes for (len+uint64[])
         let aggregate%total_length%0#0: uint64 = (len mutable#0)
         let aggregate%array_trimmed%0#0: bytes = (substring3 mutable#0 2u aggregate%total_length%0#0)
         let aggregate%bytes_offset%0#0: uint64 = (* 1u 8u)
         let aggregate%encoded_element%0#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#0
         let values%0#0: uint64 = (btoi array_item%0#0)
-        let tmp%1#0: uint64 = (+ values%0#0 2u)
-        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#0)
+        let tmp%1#1: uint64 = (+ values%0#0 2u)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#1)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
         let encoded_value%1#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
         let aggregate%total_length%1#0: uint64 = (len mutable#0)
@@ -2257,8 +2279,27 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing[rout
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable[routing]() -> void:
     block@0: // L221
-        let reinterpret_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
-        let receiveMutable%0#0: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(reinterpret_Encoded(len+uint64[])%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
+        let receiveMutable%0#0: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(tmp%0#0)
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly[routing]() -> void:
+    block@0: // L225
+        let a#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 a#0 0u)
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len a#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
         exit 1u
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildArray() -> Encoded(len+uint64[]):

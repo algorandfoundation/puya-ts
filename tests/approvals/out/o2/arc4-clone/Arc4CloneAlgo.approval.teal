@@ -3,6 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
+    intcblock 0 8 2
     // tests/approvals/arc4-clone.algo.ts:16
     // export class Arc4CloneAlgo extends Contract {
     txn NumAppArgs
@@ -14,7 +15,7 @@ main:
     assert
     pushbytess 0x398e270d 0x80acbe10 0xe213f5b6 0x63e40e8d // method "aliasing(uint64[])void", method "receive(uint64[])void", method "receiveReadonly(uint64[])void", method "structReturn((uint64,string,(byte[],uint8)))(byte[],uint8)"
     txna ApplicationArgs 0
-    match main_aliasing_route@4 main_aliasing_route@4 main_aliasing_route@4 main_structReturn_route@7
+    match main_aliasing_route@4 main_receive_route@5 main_receiveReadonly_route@6 main_structReturn_route@7
     err
 
 main_structReturn_route@7:
@@ -38,11 +39,53 @@ main_structReturn_route@7:
     pushint 1 // 1
     return
 
+main_receiveReadonly_route@6:
+    // tests/approvals/arc4-clone.algo.ts:51
+    // receiveReadonly(a: readonly uint64[]) {}
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_1 // 8
+    *
+    intc_2 // 2
+    +
+    swap
+    len
+    ==
+    return // on error: invalid number of bytes for (len+uint64[])
+
+main_receive_route@5:
+    // tests/approvals/arc4-clone.algo.ts:49
+    // receive(mutable: uint64[]) {}
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_1 // 8
+    *
+    intc_2 // 2
+    +
+    swap
+    len
+    ==
+    return // on error: invalid number of bytes for (len+uint64[])
+
 main_aliasing_route@4:
     // tests/approvals/arc4-clone.algo.ts:17
     // aliasing(mutable: uint64[]) {
-    pushint 1 // 1
-    return
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_1 // 8
+    *
+    intc_2 // 2
+    +
+    swap
+    len
+    ==
+    return // on error: invalid number of bytes for (len+uint64[])
 
 main___algots__.defaultCreate@11:
     // tests/approvals/arc4-clone.algo.ts:16

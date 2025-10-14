@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 2 3
+    intcblock 1 2 3 8
     bytecblock 0x151f7c75
     // tests/approvals/resource-encoding.algo.ts:38
     // class EchoResource extends Contract {
@@ -35,12 +35,27 @@ echoResourceByIndex:
     // tests/approvals/resource-encoding.algo.ts:39
     // @abimethod({ resourceEncoding: 'index' })
     txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for uint8
     btoi
     txnas Assets
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for uint8
     btoi
     txnas Applications
     txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for uint8
     btoi
     txnas Accounts
     // tests/approvals/resource-encoding.algo.ts:41
@@ -100,10 +115,25 @@ echoResourceByValue:
     // tests/approvals/resource-encoding.algo.ts:50
     // @abimethod({ resourceEncoding: 'value' })
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 3
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     // tests/approvals/resource-encoding.algo.ts:52
     // const assetId = op.btoi(Txn.applicationArgs(1))
     intc_0 // 1

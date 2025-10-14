@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1
+    intcblock 1 8
     txn ApplicationID
     bnz main_after_if_else@2
     // tests/approvals/abi-decorators.algo.ts:16
@@ -88,10 +88,25 @@ methodWithDefaults:
     // tests/approvals/abi-decorators.algo.ts:18
     // @abimethod({ defaultArguments: { a: { from: 'globalValue' }, b: { from: 'readonly' }, c: { constant: 145 } } })
     txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 3
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/abi-decorators.algo.ts:20
     // return a * b + c

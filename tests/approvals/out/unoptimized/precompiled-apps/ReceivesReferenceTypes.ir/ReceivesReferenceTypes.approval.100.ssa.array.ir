@@ -36,13 +36,25 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes[routing]() -> void:
     block@0: // L111
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 2)
-        let tmp%1#0: account = reinterpret_Encoded(uint8[32])%0#0
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 3)
-        let tmp%2#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
-        tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes(tmp%0#0, tmp%1#0, tmp%2#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 32u)
+        (assert eq%1#0) // invalid number of bytes for uint8[32]
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%2#0
+        let tmp%3#0: account = as_Encoded(uint8[32])%0#0
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%1#0: Encoded(uint64) = tmp%4#0
+        let tmp%5#0: uint64 = (btoi as_Encoded(uint64)%1#0)
+        tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes(tmp%1#0, tmp%3#0, tmp%5#0)
         exit 1u
 
 subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes(app: uint64, acc: account, asset: uint64) -> void:

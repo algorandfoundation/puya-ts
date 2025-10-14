@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 32
+    intcblock 1 32 0
     bytecblock 0x068101
     // tests/approvals/accounts.algo.ts:8
     // export class AccountsContract extends Contract {
@@ -41,7 +41,17 @@ getAccountInfo:
     // tests/approvals/accounts.algo.ts:9
     // public getAccountInfo(account: Account, asset: Asset) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     txna ApplicationArgs 2
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
 
 getAccountInfo_while_top@2:
@@ -58,7 +68,7 @@ getAccountInfo_while_top@2:
     itxn_field ApprovalProgram
     bytec_0 // 0x068101
     itxn_field ClearStateProgram
-    intc_1 // 0
+    intc_2 // 0
     itxn_field Fee
     itxn_submit
     b getAccountInfo_while_top@2
@@ -155,11 +165,6 @@ getAccountInfo_after_while@7:
     //   isOptInApp: account.isOptedIn(Global.currentApplicationId),
     //   isOptInAsset: account.isOptedIn(asset),
     // }
-    dig 13
-    len
-    intc_2 // 32
-    ==
-    assert // invalid size
     uncover 12
     itob
     uncover 13
@@ -170,7 +175,7 @@ getAccountInfo_after_while@7:
     concat
     dig 11
     len
-    intc_2 // 32
+    intc_1 // 32
     ==
     assert // invalid size
     uncover 11
@@ -203,7 +208,7 @@ getAccountInfo_after_while@7:
     itob
     concat
     pushbytes 0x00
-    intc_1 // 0
+    intc_2 // 0
     uncover 3
     setbit
     intc_0 // 1

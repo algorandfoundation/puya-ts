@@ -44,28 +44,40 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/abi-decorators.algo.ts::OverloadedMethods.doThingOne[routing]() -> void:
     block@0: // L36
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let tmp%1#0: uint64 = tests/approvals/abi-decorators.algo.ts::OverloadedMethods.doThingOne(tmp%0#0)
-        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#0)
-        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
-        let tmp%2#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
-        (log tmp%3#0)
-        exit 1u
-
-subroutine tests/approvals/abi-decorators.algo.ts::OverloadedMethods.doThingTwo[routing]() -> void:
-    block@0: // L41
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let tmp%1#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
-        let tmp%2#0: uint64 = tests/approvals/abi-decorators.algo.ts::OverloadedMethods.doThingTwo(tmp%0#0, tmp%1#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: uint64 = tests/approvals/abi-decorators.algo.ts::OverloadedMethods.doThingOne(tmp%1#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%2#0)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
         let tmp%3#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
         let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
         (log tmp%4#0)
+        exit 1u
+
+subroutine tests/approvals/abi-decorators.algo.ts::OverloadedMethods.doThingTwo[routing]() -> void:
+    block@0: // L41
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%1#0: Encoded(uint64) = tmp%2#0
+        let tmp%3#0: uint64 = (btoi as_Encoded(uint64)%1#0)
+        let tmp%4#0: uint64 = tests/approvals/abi-decorators.algo.ts::OverloadedMethods.doThingTwo(tmp%1#0, tmp%3#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%4#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%5#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%6#0: bytes = (concat 0x151f7c75 tmp%5#0)
+        (log tmp%6#0)
         exit 1u
 
 subroutine tests/approvals/abi-decorators.algo.ts::OverloadedMethods.doThingOne(x: uint64) -> uint64:

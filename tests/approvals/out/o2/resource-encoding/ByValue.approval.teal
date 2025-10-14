@@ -21,6 +21,11 @@ main_testExplicitValue_route@3:
     &&
     assert // OnCompletion must be NoOp && can only call when not creating
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     // tests/approvals/resource-encoding.algo.ts:34
     // return account.balance
     acct_params_get AcctBalance

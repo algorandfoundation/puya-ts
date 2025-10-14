@@ -58,14 +58,22 @@ subroutine tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.getVeryIm
 
 subroutine tests/approvals/inheritance-a.algo.ts::Arc4Contract.simpleAbiMethod[routing]() -> void:
     block@0: // L17
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%0#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let tmp%1#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%1#0)
-        let tmp%2#0: uint64 = tests/approvals/inheritance-a.algo.ts::Arc4Contract.simpleAbiMethod(tmp%0#0, tmp%1#0)
-        let tmp%3#0: Encoded(uint64) = bytes_encode<uint64>(tmp%2#0)
-        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
-        (log tmp%4#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = decode_bytes<uint64>(as_Encoded(uint64)%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%1#0: Encoded(uint64) = tmp%2#0
+        let tmp%3#0: uint64 = decode_bytes<uint64>(as_Encoded(uint64)%1#0)
+        let tmp%4#0: uint64 = tests/approvals/inheritance-a.algo.ts::Arc4Contract.simpleAbiMethod(tmp%1#0, tmp%3#0)
+        let tmp%5#0: Encoded(uint64) = bytes_encode<uint64>(tmp%4#0)
+        let tmp%6#0: bytes = (concat 0x151f7c75 tmp%5#0)
+        (log tmp%6#0)
         exit 1u
 
 subroutine tests/approvals/inheritance-b.algo.ts::ConcreteArc4Contract.getVeryImportantValue() -> string:

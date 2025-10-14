@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 8
+    intcblock 1 16 0 8
     // tests/approvals/named-types.algo.ts:14
     // export class MyContract extends Contract {
     txn NumAppArgs
@@ -67,17 +67,27 @@ test:
     // public test(x: XY, y: YX) {
     txna ApplicationArgs 1
     dup
-    intc_1 // 0
+    len
+    intc_1 // 16
+    ==
+    assert // invalid number of bytes for (uint64,uint64)
+    dup
+    intc_2 // 0
     extract_uint64
     swap
-    intc_2 // 8
+    intc_3 // 8
     extract_uint64
     txna ApplicationArgs 2
     dup
-    intc_1 // 0
+    len
+    intc_1 // 16
+    ==
+    assert // invalid number of bytes for (uint64,uint64)
+    dup
+    intc_2 // 0
     extract_uint64
     swap
-    intc_2 // 8
+    intc_3 // 8
     extract_uint64
     // tests/approvals/named-types.algo.ts:37
     // assertMatch(x, { ...y })

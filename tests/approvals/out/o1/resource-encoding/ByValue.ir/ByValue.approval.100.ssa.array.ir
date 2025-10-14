@@ -26,13 +26,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/resource-encoding.algo.ts::ByValue.testExplicitValue[routing]() -> void:
     block@0: // L32
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 1)
-        let account#0: account = reinterpret_Encoded(uint8[32])%0#0
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 32u)
+        (assert eq%0#0) // invalid number of bytes for uint8[32]
+        let account#0: account = tmp%0#0
         let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
         (assert check%0#0) // account funded
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob value%0#0)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
-        let tmp%2#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
-        (log tmp%3#0)
+        let tmp%3#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
+        (log tmp%4#0)
         exit 1u

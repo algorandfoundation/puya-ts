@@ -11,22 +11,28 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
         switch tmp%6#0 {method "testExplicitIndex(account)uint64" => block@4, method "testImplicitValue(address)uint64" => block@5, * => block@8}
     block@4: // testExplicitIndex_route_L17
-        let reinterpret_Encoded(uint8)%0#0: Encoded(uint8) = (txna ApplicationArgs 1)
-        let tmp%0#2: uint64 = (btoi reinterpret_Encoded(uint8)%0#0)
-        let account#1: account = ((txnas Accounts) tmp%0#2)
+        let tmp%0#3: bytes = (txna ApplicationArgs 1)
+        let len%0#1: uint64 = (len tmp%0#3)
+        let eq%0#1: bool = (== len%0#1 1u)
+        (assert eq%0#1) // invalid number of bytes for uint8
+        let tmp%1#1: uint64 = (btoi tmp%0#3)
+        let account#1: account = ((txnas Accounts) tmp%1#1)
         let (value%0#1: uint64, check%0#1: bool) = ((acct_params_get AcctBalance) account#1)
         (assert check%0#1) // account funded
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob value%0#1)
-        let tmp%4#1: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
-        (log tmp%4#1)
+        let tmp%5#1: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
+        (log tmp%5#1)
         exit 1u
     block@5: // testImplicitValue_route_L26
         let account#0: account = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len account#0)
+        let eq%0#0: bool = (== len%0#0 32u)
+        (assert eq%0#0) // invalid number of bytes for uint8[32]
         let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
         (assert check%0#0) // account funded
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob value%0#0)
-        let tmp%3#1: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%1#0)
-        (log tmp%3#1)
+        let tmp%4#1: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%1#0)
+        (log tmp%4#1)
         exit 1u
     block@8: // after_if_else_L16
         fail

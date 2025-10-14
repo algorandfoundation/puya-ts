@@ -11,10 +11,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
         switch tmp%6#0 {method "testCallToIndex(address,uint64)void" => block@4, method "testCallToValue(address,uint64)void" => block@5, method "testCallToEchoResource()void" => block@6, * => block@9}
     block@4: // testCallToIndex_route_L63
-        let reinterpret_Encoded(uint8[32])%0#1: Encoded(uint8[32]) = (txna ApplicationArgs 1)
-        let account#1: account = reinterpret_Encoded(uint8[32])%0#1
-        let reinterpret_Encoded(uint64)%0#1: Encoded(uint64) = (txna ApplicationArgs 2)
-        let appId#2: uint64 = (btoi reinterpret_Encoded(uint64)%0#1)
+        let tmp%0#4: bytes = (txna ApplicationArgs 1)
+        let len%0#1: uint64 = (len tmp%0#4)
+        let eq%0#1: bool = (== len%0#1 32u)
+        (assert eq%0#1) // invalid number of bytes for uint8[32]
+        let account#1: account = tmp%0#4
+        let tmp%2#4: bytes = (txna ApplicationArgs 2)
+        let len%1#1: uint64 = (len tmp%2#4)
+        let eq%1#1: bool = (== len%1#1 8u)
+        (assert eq%1#1) // invalid number of bytes for uint64
+        let appId#2: uint64 = (btoi tmp%2#4)
         itxn_begin
         ((itxn_field Accounts) account#1)
         ((itxn_field ApplicationArgs) method "testExplicitIndex(account)uint64")
@@ -26,8 +32,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let awst_tmp%0#2: bytes = (itxn LastLog)
         let tmp%0#5: bytes = ((extract 4 0) awst_tmp%0#2)
         let tmp%1#4: bytes = ((extract 0 4) awst_tmp%0#2)
-        let tmp%2#3: bool = (== tmp%1#4 0x151f7c75)
-        (assert tmp%2#3) // Bytes has valid prefix
+        let tmp%2#5: bool = (== tmp%1#4 0x151f7c75)
+        (assert tmp%2#5) // Bytes has valid prefix
         let res1#1: uint64 = (btoi tmp%0#5)
         let (value%0#1: uint64, check%0#1: bool) = ((acct_params_get AcctBalance) account#1)
         (assert check%0#1) // account funded
@@ -35,22 +41,28 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%4#1)
         exit 1u
     block@5: // testCallToValue_route_L72
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 1)
-        let account#0: account = reinterpret_Encoded(uint8[32])%0#0
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let appId#1: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let tmp%0#2: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#2)
+        let eq%0#0: bool = (== len%0#0 32u)
+        (assert eq%0#0) // invalid number of bytes for uint8[32]
+        let account#0: account = tmp%0#2
+        let tmp%2#2: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#2)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let appId#1: uint64 = (btoi tmp%2#2)
         itxn_begin
         ((itxn_field ApplicationArgs) method "testExplicitValue(address)uint64")
-        ((itxn_field ApplicationArgs) reinterpret_Encoded(uint8[32])%0#0)
+        ((itxn_field ApplicationArgs) tmp%0#2)
         ((itxn_field ApplicationID) appId#1)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
         let awst_tmp%0#1: bytes = (itxn LastLog)
         let tmp%1#2: bytes = ((extract 4 0) awst_tmp%0#1)
-        let tmp%2#2: bytes = ((extract 0 4) awst_tmp%0#1)
-        let tmp%3#2: bool = (== tmp%2#2 0x151f7c75)
-        (assert tmp%3#2) // Bytes has valid prefix
+        let tmp%2#3: bytes = ((extract 0 4) awst_tmp%0#1)
+        let tmp%3#3: bool = (== tmp%2#3 0x151f7c75)
+        (assert tmp%3#3) // Bytes has valid prefix
         let res1#0: uint64 = (btoi tmp%1#2)
         let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
         (assert check%0#0) // account funded
@@ -60,7 +72,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@6: // testCallToEchoResource_route_L81
         itxn_begin
         ((itxn_field ClearStateProgramPages) C4EBQw==)
-        ((itxn_field ApprovalProgramPages) CyADAQIDJgEEFR98dTEbQQCNMRkURDEYRIICBHfijXQETTcCdjYaAI4CADIAAQA2GgEXNhoCFzYaAyLAGhdLAxJEI8AaF0sCEkQkwBpLARJETwIWTwIWUExQKExQsCJDNhoBF8AwNhoCF8AyNhoDF8AcIsAaF8AwSwMSRCPAGhfAMksCEkQkwBoXwBxLARJETwIWTwIWUExQKExQsCJDMRkUMRgUEEM=)
+        ((itxn_field ApprovalProgramPages) CyAEAQgCAyYBBBUffHUxG0EArDEZFEQxGESCAgR34o10BE03AnY2GgCOAgBCAAEANhoBSRUjEkQXNhoCSRUjEkQXNhoDSRWBIBJEIsAaF0sDEkQkwBoXSwISRCXAGksBEkRPAhZPAhZQTFAoTFCwIkM2GgFJFSISRBfAMDYaAkkVIhJEF8AyNhoDSRUiEkQXwBwiwBoXwDBLAxJEJMAaF8AySwISRCXAGhfAHEsBEkRPAhZPAhZQTFAoTFCwIkMxGRQxGBQQQw==)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)

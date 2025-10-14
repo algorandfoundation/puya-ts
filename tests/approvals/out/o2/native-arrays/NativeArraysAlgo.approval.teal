@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 10 8
+    intcblock 0 1 8 2
     bytecblock 0x068101
     // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
@@ -16,32 +16,81 @@ main:
     assert
     pushbytess 0x7d318589 0xb0ac9066 0x0f4c11ca 0xaaa29f70 0xe2d5e035 0x13a588c8 0xd6ecc1e6 0x787b50b2 0xeb87a064 0xbc61d6b8 0x8f544473 0x43e7ee45 0xcbe3a4f8 0x143f223b 0xd9895442 0xe213f5b6 // method "readonlyArray()void", method "arrayInObject()void", method "buildArray()uint64[]", method "arrayFromCtor()uint64[]", method "buildReadonly()uint64[]", method "doThings()void", method "fixedArray(uint64[50])void", method "arc4Interop()void", method "structs((uint64,uint64))(uint64,uint64)[]", method "booleans()bool[]", method "booleansStatic()(bool,bool,bool)", method "arc4Booleans()bool[]", method "arc4BooleansStatic()(bool,bool,bool)", method "aliasing(uint64[],uint64[])void", method "receiveMutable(uint64[])void", method "receiveReadonly(uint64[])void"
     txna ApplicationArgs 0
-    match main_readonlyArray_route@4 main_readonlyArray_route@4 main_buildArray_route@6 main_arrayFromCtor_route@7 main_buildArray_route@6 main_while_top@29 main_fixedArray_route@10 main_readonlyArray_route@4 main_structs_route@12 main_booleans_route@13 main_booleansStatic_route@14 main_booleans_route@13 main_booleansStatic_route@14 main_aliasing_route@17 main_readonlyArray_route@4 main_readonlyArray_route@4
+    match main_readonlyArray_route@4 main_readonlyArray_route@4 main_buildArray_route@6 main_arrayFromCtor_route@7 main_buildArray_route@6 main_while_top@29 main_fixedArray_route@10 main_readonlyArray_route@4 main_structs_route@12 main_booleans_route@13 main_booleansStatic_route@14 main_booleans_route@13 main_booleansStatic_route@14 main_aliasing_route@17 main_receiveMutable_route@18 main_receiveReadonly_route@19
     err
 
-main_readonlyArray_route@4:
-    // tests/approvals/native-arrays.algo.ts:7
-    // readonlyArray() {
-    intc_0 // 1
-    return
+main_receiveReadonly_route@19:
+    // tests/approvals/native-arrays.algo.ts:225
+    // receiveReadonly(a: readonly uint64[]) {}
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_2 // 8
+    *
+    intc_3 // 2
+    +
+    swap
+    len
+    ==
+    return // on error: invalid number of bytes for (len+uint64[])
+
+main_receiveMutable_route@18:
+    // tests/approvals/native-arrays.algo.ts:221
+    // receiveMutable(a: uint64[]) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_2 // 8
+    *
+    intc_3 // 2
+    +
+    swap
+    len
+    ==
+    return // on error: invalid number of bytes for (len+uint64[])
 
 main_aliasing_route@17:
     // tests/approvals/native-arrays.algo.ts:195
     // aliasing(mutable: uint64[], readOnly: readonly uint64[]) {
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_2 // 8
+    *
+    intc_3 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint64[])
+    txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_2 // 8
+    *
+    intc_3 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for (len+uint64[])
     // tests/approvals/native-arrays.algo.ts:206
     // mutable[1] += 2
     dup
-    intc_2 // 10
+    pushint 10 // 10
     extract_uint64
     dup
-    pushint 2 // 2
+    intc_3 // 2
     +
     itob
     uncover 2
     swap
     replace2 10 // on error: index access is out of bounds
-    intc_2 // 10
+    pushint 10 // 10
     // tests/approvals/native-arrays.algo.ts:208
     // assert(mutable[1] !== needClone2[1], 'These should not match')
     extract_uint64
@@ -55,7 +104,7 @@ main_booleansStatic_route@14:
     // booleansStatic() {
     pushbytes 0x151f7c75a0
     log
-    intc_0 // 1
+    intc_1 // 1
     return
 
 main_booleans_route@13:
@@ -63,7 +112,7 @@ main_booleans_route@13:
     // booleans() {
     pushbytes 0x151f7c750003a0
     log
-    intc_0 // 1
+    intc_1 // 1
     return
 
 main_structs_route@12:
@@ -71,10 +120,15 @@ main_structs_route@12:
     // structs({ x, y }: Vector) {
     txna ApplicationArgs 1
     dup
-    intc_1 // 0
+    len
+    pushint 16 // 16
+    ==
+    assert // invalid number of bytes for (uint64,uint64)
+    dup
+    intc_0 // 0
     extract_uint64
     swap
-    intc_3 // 8
+    intc_2 // 8
     extract_uint64
     // tests/approvals/native-arrays.algo.ts:173
     // myVectors = [{ x, y }]
@@ -89,19 +143,19 @@ main_structs_route@12:
     // tests/approvals/native-arrays.algo.ts:175
     // assertMatch(myVectors, [{ x, y }])
     dup
-    intc_1 // 0
+    intc_0 // 0
     extract_uint16
-    intc_0 // 1
+    intc_1 // 1
     ==
     dig 1
     extract 2 16
     dup
-    intc_1 // 0
+    intc_0 // 0
     extract_uint64
     uncover 5
     ==
     swap
-    intc_3 // 8
+    intc_2 // 8
     extract_uint64
     uncover 4
     ==
@@ -114,16 +168,27 @@ main_structs_route@12:
     swap
     concat
     log
-    intc_0 // 1
+    intc_1 // 1
+    return
+
+main_readonlyArray_route@4:
+    // tests/approvals/native-arrays.algo.ts:7
+    // readonlyArray() {
+    intc_1 // 1
     return
 
 main_fixedArray_route@10:
     // tests/approvals/native-arrays.algo.ts:109
     // fixedArray(y: FixedArray<uint64, 50>) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 400 // 400
+    ==
+    assert // invalid number of bytes for uint64[50]
     // tests/approvals/native-arrays.algo.ts:119
     // assert(x[0] === y[0])
-    intc_1 // 0
+    intc_0 // 0
     extract_uint64
     !
     // tests/approvals/native-arrays.algo.ts:109
@@ -144,7 +209,7 @@ main_while_top@29:
     itxn_field ApprovalProgram
     bytec_0 // 0x068101
     itxn_field ClearStateProgram
-    intc_1 // 0
+    intc_0 // 0
     itxn_field Fee
     itxn_submit
     b main_while_top@29
@@ -154,7 +219,7 @@ main_buildArray_route@6:
     // buildArray(): Array<uint64> {
     pushbytes 0x151f7c7500040000000000000001000000000000000200000000000000030000000000000004
     log
-    intc_0 // 1
+    intc_1 // 1
     return
 
 main_arrayFromCtor_route@7:
@@ -162,7 +227,7 @@ main_arrayFromCtor_route@7:
     // arrayFromCtor(): Array<uint64> {
     pushbytes 0x151f7c750003000000000000000100000000000000020000000000000003
     log
-    intc_0 // 1
+    intc_1 // 1
     return
 
 main___algots__.defaultCreate@23:

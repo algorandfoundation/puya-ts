@@ -14,7 +14,7 @@ main:
     assert
     pushbytess 0xe04ac19e 0x341a3794 // method "test(uint64,uint64)void", method "test2()uint64"
     txna ApplicationArgs 0
-    match main_test_route@4 main_test2_route@5
+    match test main_test2_route@5
     err
 
 main_test2_route@5:
@@ -22,12 +22,6 @@ main_test2_route@5:
     // test2(): uint64 {
     pushbytes 0x151f7c750000000000000001
     log
-    pushint 1 // 1
-    return
-
-main_test_route@4:
-    // tests/approvals/array-literals.algo.ts:10
-    // test(a: uint64, b: uint64) {
     pushint 1 // 1
     return
 
@@ -40,3 +34,19 @@ main___algots__.defaultCreate@9:
     !
     &&
     return // on error: OnCompletion must be NoOp && can only call when creating
+
+
+// tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test[routing]() -> void:
+test:
+    // tests/approvals/array-literals.algo.ts:10
+    // test(a: uint64, b: uint64) {
+    txna ApplicationArgs 1
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
+    txna ApplicationArgs 2
+    len
+    pushint 8 // 8
+    ==
+    return // on error: invalid number of bytes for uint64

@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1
+    intcblock 1 8
     // tests/approvals/arc4-method-selector.algo.ts:20
     // class ContractTwo extends Contract {
     txn NumAppArgs
@@ -54,6 +54,21 @@ referenceTypes:
     intc_0 // pay
     ==
     assert // transaction type is pay
+    txna ApplicationArgs 1
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for uint64
+    txna ApplicationArgs 2
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
+    txna ApplicationArgs 3
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for uint64
     txn GroupIndex
     intc_0 // 1
     -

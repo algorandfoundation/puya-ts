@@ -255,7 +255,13 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testVectorC
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.addVectors[routing]() -> void:
     block@0: // L21
         let v1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len v1#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
         let v2#0: Encoded(uint64,uint64) = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len v2#0)
+        let eq%1#0: bool = (== len%1#0 16u)
+        (assert eq%1#0) // invalid number of bytes for (uint64,uint64)
         let aggregate%extract%0#0: bytes = (extract3 v1#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
         let values%0#0: uint64 = (btoi tuple_item%0#0)
@@ -277,29 +283,41 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.addVectors[
         let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
         let aggregate%head%1#0: bytes = (concat aggregate%head%0#0 aggregate%as_Encoded(uint64)%1#0)
         let aggregate%as_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = aggregate%head%1#0
-        let tmp%2#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%0#0
-        let tmp%1#0: bytes = (concat 0x151f7c75 tmp%2#0)
-        (log tmp%1#0)
+        let tmp%2#1: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%0#0
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#1)
+        (log tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.mutateVector[routing]() -> void:
     block@0: // L28
         let v1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 3)
+        let len%0#0: uint64 = (len v1#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
+        let tmp%1#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%1#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let tmp%3#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%3#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for uint64
         let aggregate%extract%0#0: bytes = (extract3 v1#0 0u 8u)
-        let aggregate%updated_data%0#0: bytes = (replace3 v1#0 0u reinterpret_Encoded(uint64)%0#0)
+        let aggregate%updated_data%0#0: bytes = (replace3 v1#0 0u tmp%1#0)
         let v1#1: Encoded(uint64,uint64) = aggregate%updated_data%0#0
         let aggregate%extract%1#0: bytes = (extract3 v1#1 8u 8u)
-        let aggregate%updated_data%1#0: bytes = (replace3 v1#1 8u reinterpret_Encoded(uint64)%1#0)
+        let aggregate%updated_data%1#0: bytes = (replace3 v1#1 8u tmp%3#0)
         let v1#2: Encoded(uint64,uint64) = aggregate%updated_data%1#0
-        let tmp%3#0: bytes = (concat 0x151f7c75 v1#2)
-        (log tmp%3#0)
+        let tmp%6#0: bytes = (concat 0x151f7c75 v1#2)
+        (log tmp%6#0)
         exit 1u
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.implicitCastingAndSpreading[routing]() -> void:
     block@0: // L34
         let v1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len v1#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
         let aggregate%extract%0#0: bytes = (extract3 v1#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
         let values%0#0: uint64 = (btoi tuple_item%0#0)
@@ -331,6 +349,9 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.implicitCas
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedObjects[routing]() -> void:
     block@0: // L49
         let vp#0: Encoded((uint64,uint64),(uint64,uint64)) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len vp#0)
+        let eq%0#0: bool = (== len%0#0 32u)
+        (assert eq%0#0) // invalid number of bytes for ((uint64,uint64),(uint64,uint64))
         let aggregate%extract%0#0: bytes = (extract3 vp#0 0u 16u)
         let aggregate%extract%1#0: bytes = (extract3 aggregate%extract%0#0 0u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#0
@@ -403,8 +424,11 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedO
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertMatch[routing]() -> void:
     block@0: // L75
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let x#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let x#0: uint64 = (btoi tmp%0#0)
         let b#0: uint64 = (* x#0 2u)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob b#0)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
@@ -451,14 +475,17 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Encoding[routing]() -> void:
     block@0: // L92
         let p#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len p#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
         let aggregate%extract%0#0: bytes = (extract3 p#0 8u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
         let values%0#0: uint64 = (btoi tuple_item%0#0)
         let aggregate%extract%1#0: bytes = (extract3 p#0 0u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#0
         let values%1#0: uint64 = (btoi tuple_item%1#0)
-        let tmp%0#0: bool = (!= values%0#0 values%1#0)
-        (assert tmp%0#0) // For the purpose of this test, a should not equal b
+        let tmp%0#1: bool = (!= values%0#0 values%1#0)
+        (assert tmp%0#1) // For the purpose of this test, a should not equal b
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob values%0#0)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
         let aggregate%head%0#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#0)
@@ -481,8 +508,14 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Enc
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin[routing]() -> void:
     block@0: // L107
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
-        let key#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let add%0#0: uint64 = (+ length%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+utf8[])
+        let key#0: string = ((extract 2 0) tmp%0#0)
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get box_prefixed_key%0#0)
         (assert aggregate%box_get%1#0) // Box must have value
@@ -490,8 +523,8 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin[r
         let box%box_extract%0#0: Encoded(uint64) = (box_extract box_prefixed_key%0#0 16u 8u)
         let tmp%0#1: uint64 = (btoi box%box_extract%0#0)
         (assert tmp%0#1) // Last called not zero
-        let tmp%2#0: bytes = (concat 0x151f7c75 value#0)
-        (log tmp%2#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 value#0)
+        (log tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getMain[routing]() -> void:
@@ -508,8 +541,14 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getMain[rou
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setPlugin[routing]() -> void:
     block@0: // L123
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
-        let key#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let add%0#0: uint64 = (+ length%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+utf8[])
+        let key#0: string = ((extract 2 0) tmp%0#0)
         let aggregate%encoded_bool%0#0: bytes[1] = (setbit 0x00 0u 0u)
         let aggregate%as_Encoded(bool8)%0#0: Encoded(bool8) = aggregate%encoded_bool%0#0
         let tmp%0#1: Encoded(bool8) = aggregate%as_Encoded(bool8)%0#0
@@ -517,8 +556,8 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setPlugin[r
         let aggregate%lengths_equal%0#0: bool = (== aggregate%length%0#0 4u)
         (assert aggregate%lengths_equal%0#0) // invalid size
         let aggregate%as_Encoded(uint8[4])%0#0: Encoded(uint8[4]) = method "test()void"
-        let tmp%1#0: Encoded(uint8[4]) = aggregate%as_Encoded(uint8[4])%0#0
-        let aggregate%head%0#0: bytes = (concat 0x tmp%1#0)
+        let tmp%1#1: Encoded(uint8[4]) = aggregate%as_Encoded(uint8[4])%0#0
+        let aggregate%head%0#0: bytes = (concat 0x tmp%1#1)
         let aggregate%head%1#0: bytes = (concat aggregate%head%0#0 0x0000000000000001)
         let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 0x0000000000000001)
         let aggregate%as_Encoded(uint8[4],uint64,uint64)%0#0: Encoded(uint8[4],uint64,uint64) = aggregate%head%2#0

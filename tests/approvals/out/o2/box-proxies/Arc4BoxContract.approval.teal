@@ -25,6 +25,11 @@ main_sumBools_route@20:
     // tests/approvals/box-proxies.algo.ts:510
     // sumBools(stopAtTotal: uint64): uint64 {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     bury 2
     // tests/approvals/box-proxies.algo.ts:511
@@ -110,8 +115,18 @@ main_setBool_route@19:
     // tests/approvals/box-proxies.algo.ts:506
     // setBool(index: uint64, value: boolean) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for bool8
     intc_1 // 0
     getbit
     // tests/approvals/box-proxies.algo.ts:507
@@ -671,8 +686,18 @@ main_setManyInts_route@9:
     // tests/approvals/box-proxies.algo.ts:405
     // setManyInts(index: uint64, value: uint64) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for uint64
     // tests/approvals/box-proxies.algo.ts:406
     // this.manyInts.value[index] = value
     swap
@@ -715,14 +740,41 @@ main_setBoxes_route@6:
     // tests/approvals/box-proxies.algo.ts:359
     // setBoxes(a: uint64, b: bytes, c: arc4.Str) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 2
     dup
+    intc_1 // 0
+    extract_uint16
+    intc_3 // 2
+    +
+    dig 1
+    len
+    dup
+    uncover 2
+    ==
+    assert // invalid number of bytes for (len+uint8[])
+    dig 1
     extract 2 0
     txna ApplicationArgs 3
+    dup
+    intc_1 // 0
+    extract_uint16
+    intc_3 // 2
+    +
+    dig 1
+    len
+    dup
+    uncover 2
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     // tests/approvals/box-proxies.algo.ts:361
     // this.boxA.value = a
-    uncover 3
+    uncover 5
     itob
     // tests/approvals/box-proxies.algo.ts:341
     // boxA = Box<uint64>({ key: 'boxA' })
@@ -743,7 +795,7 @@ main_setBoxes_route@6:
     bytec 4 // "b"
     // tests/approvals/box-proxies.algo.ts:362
     // this.boxB.value = dynamicBytes
-    dig 3
+    dig 5
     box_put
     // tests/approvals/box-proxies.algo.ts:343
     // boxC = Box<arc4.Str>({ key: 'BOX_C' })
@@ -757,21 +809,21 @@ main_setBoxes_route@6:
     bytec_1 // "BOX_C"
     // tests/approvals/box-proxies.algo.ts:363
     // this.boxC.value = c
-    dig 1
-    box_put
-    // tests/approvals/box-proxies.algo.ts:344
-    // boxD = Box<bytes>({ key: 'boxD' })
-    bytec 9 // "boxD"
-    // tests/approvals/box-proxies.algo.ts:364
-    // this.boxD.value = dynamicBytes.native
-    box_del
-    pop
-    // tests/approvals/box-proxies.algo.ts:344
-    // boxD = Box<bytes>({ key: 'boxD' })
-    bytec 9 // "boxD"
-    // tests/approvals/box-proxies.algo.ts:364
-    // this.boxD.value = dynamicBytes.native
     dig 2
+    box_put
+    // tests/approvals/box-proxies.algo.ts:344
+    // boxD = Box<bytes>({ key: 'boxD' })
+    bytec 9 // "boxD"
+    // tests/approvals/box-proxies.algo.ts:364
+    // this.boxD.value = dynamicBytes.native
+    box_del
+    pop
+    // tests/approvals/box-proxies.algo.ts:344
+    // boxD = Box<bytes>({ key: 'boxD' })
+    bytec 9 // "boxD"
+    // tests/approvals/box-proxies.algo.ts:364
+    // this.boxD.value = dynamicBytes.native
+    dig 3
     box_put
     // tests/approvals/box-proxies.algo.ts:347
     // boxLarge = Box<LargeStruct>({ key: 'boxLarge' })
@@ -836,8 +888,7 @@ main_setBoxes_route@6:
     // assert(this.boxB.length === dynamicBytes.bytes.length)
     box_len
     pop
-    dig 3
-    len
+    uncover 4
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:343
@@ -847,9 +898,6 @@ main_setBoxes_route@6:
     // assert(this.boxC.length === c.bytes.length)
     box_len
     assert // Box must have value
-    dig 1
-    len
-    swap
     dig 1
     ==
     assert

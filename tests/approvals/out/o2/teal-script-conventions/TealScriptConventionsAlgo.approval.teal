@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1
+    intcblock 1 2 0
     // tests/approvals/teal-script-conventions.algo.ts:5
     // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
     txn NumAppArgs
@@ -22,6 +22,15 @@ main_setLocal_route@7:
     &&
     assert // OnCompletion must be NoOp && can only call when not creating
     txna ApplicationArgs 1
+    dup
+    intc_2 // 0
+    extract_uint16
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     // tests/approvals/teal-script-conventions.algo.ts:18
     // this.local(Txn.sender).value = value
@@ -71,6 +80,15 @@ main_createApplication_route@4:
     &&
     assert // OnCompletion must be one of NoOp, DeleteApplication && can only call when creating
     txna ApplicationArgs 1
+    dup
+    intc_2 // 0
+    extract_uint16
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint8[])
     extract 2 0
     // tests/approvals/teal-script-conventions.algo.ts:6
     // global = GlobalState<bytes>()
@@ -88,13 +106,19 @@ main_noMoreThanks_route@3:
     // tests/approvals/teal-script-conventions.algo.ts:8
     // @abimethod({ name: 'noMoreThanks' })
     txn OnCompletion
-    pushint 2 // CloseOut
+    intc_1 // CloseOut
     ==
     txn ApplicationID
     &&
     assert // OnCompletion must be CloseOut && can only call when not creating
-    pushbytes 0x151f7c75
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
+    pushbytes 0x151f7c75
+    swap
     concat
     log
     intc_0 // 1

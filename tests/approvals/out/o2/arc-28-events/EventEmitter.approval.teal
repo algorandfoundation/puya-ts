@@ -3,6 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
+    intcblock 1 0 2
     bytecblock 0x0003
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
@@ -22,12 +23,31 @@ main_emitDynamicBytes_route@6:
     // tests/approvals/arc-28-events.algo.ts:40
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     txna ApplicationArgs 1
-    txna ApplicationArgs 2
-    // tests/approvals/arc-28-events.algo.ts:42
-    // emit('DB(byte[],byte[])', x, y)
+    dup
+    intc_1 // 0
+    extract_uint16
+    intc_2 // 2
+    +
     dig 1
     len
+    dup
+    uncover 2
+    ==
+    assert // invalid number of bytes for (len+uint8[])
+    txna ApplicationArgs 2
+    dup
+    intc_1 // 0
+    extract_uint16
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint8[])
+    // tests/approvals/arc-28-events.algo.ts:42
+    // emit('DB(byte[],byte[])', x, y)
     pushint 4 // 4
+    uncover 2
     +
     itob
     extract 6 2
@@ -44,21 +64,32 @@ main_emitDynamicBytes_route@6:
     log
     // tests/approvals/arc-28-events.algo.ts:40
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
-    pushint 1 // 1
+    intc_0 // 1
     return
 
 main_emitCustom_route@5:
     // tests/approvals/arc-28-events.algo.ts:35
     // emitCustom(arg0: string, arg1: boolean) {
     txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for bool8
     // tests/approvals/arc-28-events.algo.ts:36
     // emit('Custom', arg0, arg1)
     bytec_0 // 0x0003
-    // tests/approvals/arc-28-events.algo.ts:35
-    // emitCustom(arg0: string, arg1: boolean) {
-    txna ApplicationArgs 2
-    // tests/approvals/arc-28-events.algo.ts:36
-    // emit('Custom', arg0, arg1)
+    swap
     concat
     swap
     concat
@@ -72,14 +103,24 @@ main_emitCustom_route@5:
     log
     // tests/approvals/arc-28-events.algo.ts:35
     // emitCustom(arg0: string, arg1: boolean) {
-    pushint 1 // 1
+    intc_0 // 1
     return
 
 main_emitSwapped_route@4:
     // tests/approvals/arc-28-events.algo.ts:14
     // emitSwapped(a: Uint8, b: Uint8) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for uint8
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for uint8
     // tests/approvals/arc-28-events.algo.ts:15
     // emit<Swapped>({ a: b, b: a })
     dup
@@ -140,7 +181,7 @@ main_emitSwapped_route@4:
     log
     // tests/approvals/arc-28-events.algo.ts:14
     // emitSwapped(a: Uint8, b: Uint8) {
-    pushint 1 // 1
+    intc_0 // 1
     return
 
 main___algots__.defaultCreate@10:

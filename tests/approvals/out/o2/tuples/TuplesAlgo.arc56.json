@@ -70,7 +70,7 @@
             "sourceInfo": [
                 {
                     "pc": [
-                        34
+                        58
                     ],
                     "errorMessage": "OnCompletion must be NoOp && can only call when creating"
                 },
@@ -79,6 +79,14 @@
                         26
                     ],
                     "errorMessage": "OnCompletion must be NoOp && can only call when not creating"
+                },
+                {
+                    "pc": [
+                        34,
+                        42,
+                        50
+                    ],
+                    "errorMessage": "invalid number of bytes for uint64"
                 }
             ],
             "pcOffsetMethod": "none"
@@ -89,18 +97,18 @@
         }
     },
     "source": {
-        "approval": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYXJjNC9pbmRleC5kLnRzOjpDb250cmFjdC5hcHByb3ZhbFByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvdHVwbGVzLmFsZ28udHM6NgogICAgLy8gY2xhc3MgVHVwbGVzQWxnbyBleHRlbmRzIENvbnRyYWN0IHsKICAgIHR4biBOdW1BcHBBcmdzCiAgICBieiBtYWluX19fYWxnb3RzX18uZGVmYXVsdENyZWF0ZUA1CiAgICBwdXNoYnl0ZXMgMHgzN2U3Y2U4NyAvLyBtZXRob2QgInRlc3QodWludDY0LHVpbnQ2NCx1aW50NjQpdm9pZCIKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDAKICAgIG1hdGNoIG1haW5fdGVzdF9yb3V0ZUAzCiAgICBlcnIKCm1haW5fdGVzdF9yb3V0ZUAzOgogICAgLy8gdGVzdHMvYXBwcm92YWxzL3R1cGxlcy5hbGdvLnRzOjcKICAgIC8vIHRlc3QoYTogVWludDY0LCBiOiBVaW50NjQsIGM6IFVpbnQ2NCkgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgICYmCiAgICByZXR1cm4gLy8gb24gZXJyb3I6IE9uQ29tcGxldGlvbiBtdXN0IGJlIE5vT3AgJiYgY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwoKbWFpbl9fX2FsZ290c19fLmRlZmF1bHRDcmVhdGVANToKICAgIC8vIHRlc3RzL2FwcHJvdmFscy90dXBsZXMuYWxnby50czo2CiAgICAvLyBjbGFzcyBUdXBsZXNBbGdvIGV4dGVuZHMgQ29udHJhY3QgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgICEKICAgICYmCiAgICByZXR1cm4gLy8gb24gZXJyb3I6IE9uQ29tcGxldGlvbiBtdXN0IGJlIE5vT3AgJiYgY2FuIG9ubHkgY2FsbCB3aGVuIGNyZWF0aW5nCg==",
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYXJjNC9pbmRleC5kLnRzOjpDb250cmFjdC5hcHByb3ZhbFByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvdHVwbGVzLmFsZ28udHM6NgogICAgLy8gY2xhc3MgVHVwbGVzQWxnbyBleHRlbmRzIENvbnRyYWN0IHsKICAgIHR4biBOdW1BcHBBcmdzCiAgICBieiBtYWluX19fYWxnb3RzX18uZGVmYXVsdENyZWF0ZUA1CiAgICBwdXNoYnl0ZXMgMHgzN2U3Y2U4NyAvLyBtZXRob2QgInRlc3QodWludDY0LHVpbnQ2NCx1aW50NjQpdm9pZCIKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDAKICAgIG1hdGNoIG1haW5fdGVzdF9yb3V0ZUAzCiAgICBlcnIKCm1haW5fdGVzdF9yb3V0ZUAzOgogICAgLy8gdGVzdHMvYXBwcm92YWxzL3R1cGxlcy5hbGdvLnRzOjcKICAgIC8vIHRlc3QoYTogVWludDY0LCBiOiBVaW50NjQsIGM6IFVpbnQ2NCkgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgICYmCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIG11c3QgYmUgTm9PcCAmJiBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAxCiAgICBsZW4KICAgIHB1c2hpbnQgOCAvLyA4CiAgICA9PQogICAgYXNzZXJ0IC8vIGludmFsaWQgbnVtYmVyIG9mIGJ5dGVzIGZvciB1aW50NjQKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDIKICAgIGxlbgogICAgcHVzaGludCA4IC8vIDgKICAgID09CiAgICBhc3NlcnQgLy8gaW52YWxpZCBudW1iZXIgb2YgYnl0ZXMgZm9yIHVpbnQ2NAogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMwogICAgbGVuCiAgICBwdXNoaW50IDggLy8gOAogICAgPT0KICAgIHJldHVybiAvLyBvbiBlcnJvcjogaW52YWxpZCBudW1iZXIgb2YgYnl0ZXMgZm9yIHVpbnQ2NAoKbWFpbl9fX2FsZ290c19fLmRlZmF1bHRDcmVhdGVANToKICAgIC8vIHRlc3RzL2FwcHJvdmFscy90dXBsZXMuYWxnby50czo2CiAgICAvLyBjbGFzcyBUdXBsZXNBbGdvIGV4dGVuZHMgQ29udHJhY3QgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgICEKICAgICYmCiAgICByZXR1cm4gLy8gb24gZXJyb3I6IE9uQ29tcGxldGlvbiBtdXN0IGJlIE5vT3AgJiYgY2FuIG9ubHkgY2FsbCB3aGVuIGNyZWF0aW5nCg==",
         "clear": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYmFzZS1jb250cmFjdC5kLnRzOjpCYXNlQ29udHJhY3QuY2xlYXJTdGF0ZVByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBwdXNoaW50IDEgLy8gMQogICAgcmV0dXJuCg=="
     },
     "byteCode": {
-        "approval": "CzEbQQAVgAQ3586HNhoAjgEAAQAxGRQxGBBDMRkUMRgUEEM=",
+        "approval": "CzEbQQAtgAQ3586HNhoAjgEAAQAxGRQxGBBENhoBFYEIEkQ2GgIVgQgSRDYaAxWBCBJDMRkUMRgUEEM=",
         "clear": "C4EBQw=="
     },
     "compilerInfo": {
         "compiler": "puya",
         "compilerVersion": {
             "major": 5,
-            "minor": 0,
+            "minor": 2,
             "patch": 0
         }
     },

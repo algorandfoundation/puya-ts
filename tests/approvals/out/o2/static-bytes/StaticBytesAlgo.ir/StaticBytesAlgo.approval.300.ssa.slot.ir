@@ -12,36 +12,55 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         switch tmp%6#0 {method "hashAddresses(byte[32],byte[32])byte[32]" => block@4, method "receiveB32(byte[32])byte[32]" => block@5, method "receiveBytes(byte[],uint64)void" => block@6, method "returnLength(byte[32])uint64" => block@7, method "test()void" => block@8, method "testArray()void" => block@9, method "test2()byte[]" => block@10, method "test3()void" => block@11, method "test4()void" => block@12, * => block@15}
     block@4: // hashAddresses_route_L18
         let a1#0: bytes[32] = (txna ApplicationArgs 1)
+        let len%0#3: uint64 = (len a1#0)
+        let eq%0#3: bool = (== len%0#3 32u)
+        (assert eq%0#3) // invalid number of bytes for uint8[32]
         let a2#0: bytes[32] = (txna ApplicationArgs 2)
+        let len%1#1: uint64 = (len a2#0)
+        let eq%1#1: bool = (== len%1#1 32u)
+        (assert eq%1#1) // invalid number of bytes for uint8[32]
         let tmp%0#12: bytes = (concat a1#0 a2#0)
         let tmp%1#8: bytes[32] = (sha512_256 tmp%0#12)
-        let tmp%4#2: bytes = (concat 0x151f7c75 tmp%1#8)
-        (log tmp%4#2)
+        let tmp%6#2: bytes = (concat 0x151f7c75 tmp%1#8)
+        (log tmp%6#2)
         exit 1u
     block@5: // receiveB32_route_L22
-        let reinterpret_Encoded(uint8[32])%0#1: Encoded(uint8[32]) = (txna ApplicationArgs 1)
-        let tmp%1#6: bytes[32] = tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(reinterpret_Encoded(uint8[32])%0#1)
-        let aggregate%length%1#0: uint64 = (len tmp%1#6)
+        let tmp%0#10: bytes = (txna ApplicationArgs 1)
+        let len%0#2: uint64 = (len tmp%0#10)
+        let eq%0#2: bool = (== len%0#2 32u)
+        (assert eq%0#2) // invalid number of bytes for uint8[32]
+        let tmp%2#6: bytes[32] = tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(tmp%0#10)
+        let aggregate%length%1#0: uint64 = (len tmp%2#6)
         let aggregate%lengths_equal%1#0: bool = (== aggregate%length%1#0 32u)
         (assert aggregate%lengths_equal%1#0) // invalid size
-        let tmp%3#4: bytes = (concat 0x151f7c75 tmp%1#6)
-        (log tmp%3#4)
+        let tmp%4#3: bytes = (concat 0x151f7c75 tmp%2#6)
+        (log tmp%4#3)
         exit 1u
     block@6: // receiveBytes_route_L26
-        let reinterpret_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = (txna ApplicationArgs 1)
-        let b#6: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%0#0)
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let length#1: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let tmp%0#9: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#9 0u)
+        let add%0#0: uint64 = (+ aggregate%array_length%0#0 2u)
+        let len%0#1: uint64 = (len tmp%0#9)
+        let eq%0#1: bool = (== len%0#1 add%0#0)
+        (assert eq%0#1) // invalid number of bytes for (len+uint8[])
+        let b#6: bytes = ((extract 2 0) tmp%0#9)
+        let tmp%2#5: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#5)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let length#1: uint64 = (btoi tmp%2#5)
         let tmp%0#16: uint64 = (len b#6)
         let tmp%1#11: bool = (== tmp%0#16 length#1)
         (assert tmp%1#11)
         exit 1u
     block@7: // returnLength_route_L30
         let b#2: bytes[32] = (txna ApplicationArgs 1)
-        let tmp%0#8: uint64 = (len b#2)
-        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#8)
-        let tmp%3#3: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
-        (log tmp%3#3)
+        let len%0#0: uint64 = (len b#2)
+        let eq%0#0: bool = (== len%0#0 32u)
+        (assert eq%0#0) // invalid number of bytes for uint8[32]
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob len%0#0)
+        let tmp%4#2: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
+        (log tmp%4#2)
         exit 1u
     block@8: // test_route_L34
         let reinterpret_bytes[32]%0#0: bytes[32] = (txn Sender)

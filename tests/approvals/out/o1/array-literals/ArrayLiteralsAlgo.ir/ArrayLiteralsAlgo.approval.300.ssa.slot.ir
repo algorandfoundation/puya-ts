@@ -11,7 +11,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
         switch tmp%6#0 {method "test(uint64,uint64)void" => block@4, method "test2()uint64" => block@5, * => block@8}
     block@4: // test_route_L10
-        exit 1u
+        tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test[routing]()
+        goto block@8
     block@5: // test2_route_L22
         (log 0x151f7c750000000000000001)
         exit 1u
@@ -24,4 +25,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%10#0: bool = (! tmp%9#0)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
         (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u
+
+subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test[routing]() -> void:
+    block@0: // L10
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
         exit 1u
