@@ -29,8 +29,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.test[routing]() -> void:
     block@0: // L66
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let app#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let app#0: uint64 = (btoi tmp%0#0)
         itxn_begin
         ((itxn_field ApplicationArgs) method "methodTwo()string")
         ((itxn_field ApplicationID) app#0)
@@ -38,8 +41,8 @@ subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.te
         ((itxn_field Fee) 0u)
         itxn_submit
         let awst_tmp%0#0: bytes = (itxn LastLog)
-        let tmp%1#0: bytes = ((extract 0 4) awst_tmp%0#0)
-        let tmp%2#0: bool = (== tmp%1#0 0x151f7c75)
+        let tmp%1#1: bytes = ((extract 0 4) awst_tmp%0#0)
+        let tmp%2#0: bool = (== tmp%1#1 0x151f7c75)
         (assert tmp%2#0) // Bytes has valid prefix
         itxn_begin
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob 1u)
@@ -66,14 +69,20 @@ subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.te
 
 subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.add[routing]() -> void:
     block@0: // L79
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let a#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let b#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let a#0: uint64 = (btoi tmp%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let b#0: uint64 = (btoi tmp%2#0)
         let tmp%0#1: uint64 = (+ a#0 b#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#1)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
-        let tmp%3#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
-        (log tmp%4#0)
+        let tmp%5#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%6#0: bytes = (concat 0x151f7c75 tmp%5#0)
+        (log tmp%6#0)
         exit 1u

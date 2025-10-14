@@ -47,10 +47,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple[routing]() -> void:
     block@0: // L9
-        let reinterpret_Encoded(uint64,uint64,uint64)%0#0: Encoded(uint64,uint64,uint64) = (txna ApplicationArgs 1)
-        let items.0#0: uint64 = (extract_uint64 reinterpret_Encoded(uint64,uint64,uint64)%0#0 0u)
-        let items.1#0: uint64 = (extract_uint64 reinterpret_Encoded(uint64,uint64,uint64)%0#0 8u)
-        let items.2#0: uint64 = (extract_uint64 reinterpret_Encoded(uint64,uint64,uint64)%0#0 16u)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 24u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,uint64,uint64)
+        let items.0#0: uint64 = (extract_uint64 tmp%0#0 0u)
+        let items.1#0: uint64 = (extract_uint64 tmp%0#0 8u)
+        let items.2#0: uint64 = (extract_uint64 tmp%0#0 16u)
         let total#0: uint64 = 0u
         let loop_counter%0#0: uint64 = 0u
         goto block@2
@@ -71,15 +74,20 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         goto block@2
     block@9: // L11
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob total#2)
-        let tmp%5#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
-        (log tmp%5#0)
+        let tmp%6#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
+        (log tmp%6#0)
         exit 1u
 
 subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple[routing]() -> void:
     block@0: // L18
         let items#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
-        let total#0: uint64 = 0u
         let aggregate%array_length%0#0: uint64 = (extract_uint16 items#0 0u)
+        let mul%0#0: uint64 = (* aggregate%array_length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len items#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
+        let total#0: uint64 = 0u
         let item_index_internal%0#0: uint64 = 0u
         goto block@2
     block@2: // for_header_L20
@@ -104,15 +112,20 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
     block@8: // L20
         let total#3: uint64 = φ(total#2 <- block@4, total#1 <- block@7)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob total#3)
-        let tmp%2#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
-        (log tmp%2#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
+        (log tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object[routing]() -> void:
     block@0: // L27
         let items#0: Encoded(len+(uint64,uint64)[]) = (txna ApplicationArgs 1)
-        let total#0: uint64 = 0u
         let aggregate%array_length%0#0: uint64 = (extract_uint16 items#0 0u)
+        let mul%0#0: uint64 = (* aggregate%array_length%0#0 16u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len items#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+(uint64,uint64)[])
+        let total#0: uint64 = 0u
         let item_index_internal%0#0: uint64 = 0u
         goto block@2
     block@2: // for_header_L29
@@ -140,15 +153,20 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
     block@8: // L29
         let total#3: uint64 = φ(total#2 <- block@4, total#1 <- block@7)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob total#3)
-        let tmp%2#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
-        (log tmp%2#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
+        (log tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array[routing]() -> void:
     block@0: // L36
         let items#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
-        let total#0: uint64 = 0u
         let aggregate%array_length%0#0: uint64 = (extract_uint16 items#0 0u)
+        let mul%0#0: uint64 = (* aggregate%array_length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len items#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
+        let total#0: uint64 = 0u
         let item_index_internal%0#0: uint64 = 0u
         goto block@2
     block@2: // for_header_L38
@@ -161,8 +179,8 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let aggregate%bytes_offset%0#0: uint64 = (* item_index_internal%0#1 8u)
         let tmp%0#1: uint64 = (extract_uint64 aggregate%array_trimmed%0#0 aggregate%bytes_offset%0#0)
         let total#2: uint64 = (+ total#1 tmp%0#1)
-        let tmp%3#0: bool = (== tmp%0#1 42u)
-        goto tmp%3#0 ? block@4 : block@5
+        let tmp%3#1: bool = (== tmp%0#1 42u)
+        goto tmp%3#1 ? block@4 : block@5
     block@4: // if_body_L40
         goto block@8
     block@5: // after_if_else_L40
@@ -173,13 +191,16 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
     block@8: // L38
         let total#3: uint64 = φ(total#2 <- block@4, total#1 <- block@7)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob total#3)
-        let tmp%2#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
-        (log tmp%2#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
+        (log tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array[routing]() -> void:
     block@0: // L45
         let items#0: Encoded(uint64[5]) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len items#0)
+        let eq%0#0: bool = (== len%0#0 40u)
+        (assert eq%0#0) // invalid number of bytes for uint64[5]
         let total#0: uint64 = 0u
         let item_index_internal%0#0: uint64 = 0u
         goto block@2
@@ -192,8 +213,8 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let aggregate%bytes_offset%0#0: uint64 = (* item_index_internal%0#1 8u)
         let tmp%0#1: uint64 = (extract_uint64 items#0 aggregate%bytes_offset%0#0)
         let total#2: uint64 = (+ total#1 tmp%0#1)
-        let tmp%3#0: bool = (== tmp%0#1 42u)
-        goto tmp%3#0 ? block@4 : block@5
+        let tmp%3#1: bool = (== tmp%0#1 42u)
+        goto tmp%3#1 ? block@4 : block@5
     block@4: // if_body_L49
         goto block@8
     block@5: // after_if_else_L49
@@ -204,15 +225,20 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
     block@8: // L47
         let total#3: uint64 = φ(total#2 <- block@4, total#1 <- block@7)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob total#3)
-        let tmp%2#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
-        (log tmp%2#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
+        (log tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array[routing]() -> void:
     block@0: // L54
         let items#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
-        let total#0: uint64 = 0u
         let aggregate%array_length%0#0: uint64 = (extract_uint16 items#0 0u)
+        let mul%0#0: uint64 = (* aggregate%array_length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len items#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
+        let total#0: uint64 = 0u
         let item_index_internal%0#0: uint64 = 0u
         goto block@2
     block@2: // for_header_L56
@@ -237,13 +263,16 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
     block@8: // L56
         let total#3: uint64 = φ(total#2 <- block@4, total#1 <- block@7)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob total#3)
-        let tmp%2#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
-        (log tmp%2#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
+        (log tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array[routing]() -> void:
     block@0: // L63
         let items#0: Encoded(uint64,uint64,uint64) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len items#0)
+        let eq%0#0: bool = (== len%0#0 24u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,uint64,uint64)
         let aggregate%extract%0#0: bytes = ((extract 0 8) items#0)
         let aggregate%extract%1#0: bytes = ((extract 8 8) items#0)
         let aggregate%extract%2#0: bytes = ((extract 16 8) items#0)
@@ -277,13 +306,27 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
     block@8: // L66
         let total#3: uint64 = φ(total#2 <- block@4, total#1 <- block@7)
         let aggregate%val_as_bytes%3#0: bytes[8] = (itob total#3)
-        let tmp%2#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%3#0)
-        (log tmp%2#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%3#0)
+        (log tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props[routing]() -> void:
     block@0: // L73
+        let static_array#0: Encoded(uint64[3]) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len static_array#0)
+        let eq%0#0: bool = (== len%0#0 24u)
+        (assert eq%0#0) // invalid number of bytes for uint64[3]
+        let fixed_array#0: Encoded(uint64[3]) = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len fixed_array#0)
+        let eq%1#0: bool = (== len%1#0 24u)
+        (assert eq%1#0) // invalid number of bytes for uint64[3]
         let dyn_array#0: Encoded(len+uint64[]) = (txna ApplicationArgs 3)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 dyn_array#0 0u)
+        let mul%0#0: uint64 = (* aggregate%array_length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%2#0: uint64 = (len dyn_array#0)
+        let eq%2#0: bool = (== len%2#0 add%0#0)
+        (assert eq%2#0) // invalid number of bytes for (len+uint64[])
         let i#0: uint64 = 0u
         let value_internal%0#0: uint64 = 0u
         goto block@2
@@ -333,7 +376,6 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_pr
         let item_index_internal%1#2: uint64 = (+ temp₃.0#0 1u)
         goto block@14
     block@17: // after_for_L84
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 dyn_array#0 0u)
         let value_internal%2#0: uint64 = 0u
         goto block@18
     block@18: // for_header_L87
@@ -359,6 +401,6 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_pr
         goto block@22
     block@25: // after_for_L90
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob i#11)
-        let tmp%2#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
-        (log tmp%2#0)
+        let tmp%5#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
+        (log tmp%5#0)
         exit 1u

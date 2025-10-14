@@ -35,10 +35,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested[routing]() -> void:
     block@0: // L5
-        let reinterpret_Encoded(uint64,(uint512,uint512))%0#0: Encoded(uint64,(uint512,uint512)) = (txna ApplicationArgs 1)
-        let aggregate%extract%0#0: bytes = (extract3 reinterpret_Encoded(uint64,(uint512,uint512))%0#0 0u 8u)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 136u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,(uint512,uint512))
+        let aggregate%extract%0#0: bytes = (extract3 tmp%0#0 0u 8u)
         let aggregate%item0%0#0: uint64 = (btoi aggregate%extract%0#0)
-        let aggregate%extract%1#0: bytes = (extract3 reinterpret_Encoded(uint64,(uint512,uint512))%0#0 8u 128u)
+        let aggregate%extract%1#0: bytes = (extract3 tmp%0#0 8u 128u)
         let aggregate%extract%2#0: bytes = (extract3 aggregate%extract%1#0 0u 64u)
         let aggregate%extract%3#0: bytes = (extract3 aggregate%extract%1#0 64u 64u)
         let (arg.0#0: uint64, arg.1.0#0: biguint, arg.1.1#0: biguint) = (aggregate%item0%0#0, aggregate%extract%2#0, aggregate%extract%3#0)
@@ -72,9 +75,9 @@ subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.t
         let aggregate%as_Encoded(uint512)%2#0: Encoded(uint512) = aggregate%arc4_encoded%2#0
         let aggregate%head%5#0: bytes = (concat aggregate%head%4#0 aggregate%as_Encoded(uint512)%2#0)
         let aggregate%as_Encoded(uint64,(uint512,uint512),uint64,uint512)%0#0: Encoded(uint64,(uint512,uint512),uint64,uint512) = aggregate%head%5#0
-        let tmp%8#0: Encoded(uint64,(uint512,uint512),uint64,uint512) = aggregate%as_Encoded(uint64,(uint512,uint512),uint64,uint512)%0#0
-        let tmp%9#0: bytes = (concat 0x151f7c75 tmp%8#0)
-        (log tmp%9#0)
+        let tmp%9#0: Encoded(uint64,(uint512,uint512),uint64,uint512) = aggregate%as_Encoded(uint64,(uint512,uint512),uint64,uint512)%0#0
+        let tmp%10#0: bytes = (concat 0x151f7c75 tmp%9#0)
+        (log tmp%10#0)
         exit 1u
 
 subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.test[routing]() -> void:

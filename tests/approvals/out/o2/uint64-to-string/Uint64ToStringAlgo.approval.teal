@@ -23,6 +23,11 @@ main_test_route@3:
     &&
     assert // OnCompletion must be NoOp && can only call when not creating
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/uint64-to-string.algo.ts:8
     // assert(y.toString() === '123')

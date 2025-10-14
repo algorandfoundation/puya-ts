@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 6 1 4
+    intcblock 0 6 1 32
     bytecblock 0x151f7c75 0x01
     // tests/approvals/resource-encoding.algo.ts:62
     // class C2C extends Contract {
@@ -35,7 +35,17 @@ testCallToIndex:
     // tests/approvals/resource-encoding.algo.ts:63
     // testCallToIndex(account: Account, appId: Application) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     txna ApplicationArgs 2
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:64-68
     // const { returnValue: res1 } = abiCall({
@@ -87,7 +97,17 @@ testCallToValue:
     // tests/approvals/resource-encoding.algo.ts:72
     // testCallToValue(account: Account, appId: Application) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     txna ApplicationArgs 2
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:73-76
     // const { returnValue: res1 } = abiCall<typeof ByValue.prototype.testExplicitValue>({
@@ -134,7 +154,7 @@ testCallToEchoResource:
     // const compiled = compileArc4(EchoResource)
     pushbytes base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyADAQIDJgEEFR98dTEbQQAdMRkURDEYRIICBHfijXQETTcCdjYaAI4CAAkASAAxGRQxGBQQQzYaARfAMDYaAhfAMjYaAxfAHCLAGhfAMEsDEkQjwBoXwDJLAhJEJMAaF8AcSwESRE8CFk8CFlBMUChMULAiQzYaARc2GgIXNhoDIsAaF0sDEkQjwBoXSwISRCTAGksBEkRPAhZPAhZQTFAoTFCwIkM=)
+    pushbytes base64(CyAEAQIDCCYBBBUffHUxG0EAHTEZFEQxGESCAgR34o10BE03AnY2GgCOAgAJAFcAMRkUMRgUEEM2GgFJFSISRBfAMDYaAkkVIhJEF8AyNhoDSRUiEkQXwBwiwBoXwDBLAxJEI8AaF8AySwISRCTAGhfAHEsBEkRPAhZPAhZQTFAoTFCwIkM2GgFJFSUSRBc2GgJJFSUSRBc2GgNJFYEgEkQiwBoXSwMSRCPAGhdLAhJEJMAaSwESRE8CFk8CFlBMUChMULAiQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/resource-encoding.algo.ts:84
     // const appId = compiled.bareCreate().createdApp
@@ -240,7 +260,7 @@ testCallToEchoResource:
     // tests/approvals/resource-encoding.algo.ts:97
     // assertMatch(indexes, [asset, Global.currentApplicationId, Txn.sender])
     dup
-    intc_3 // 4
+    pushint 4 // 4
     extract_uint64
     dig 2
     ==
@@ -301,7 +321,7 @@ testCallToEchoResource:
     // tests/approvals/resource-encoding.algo.ts:104
     // assertMatch(resources, [asset, Global.currentApplicationId, Txn.sender])
     dup
-    intc_3 // 4
+    pushint 4 // 4
     extract_uint64
     uncover 2
     ==

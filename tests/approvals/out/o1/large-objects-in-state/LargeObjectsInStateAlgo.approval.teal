@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 9
+    intcblock 1 9 8
     bytecblock "x"
     // tests/approvals/large-objects-in-state.algo.ts:14
     // class LargeObjectsInStateAlgo extends Contract {
@@ -98,8 +98,18 @@ increaseXCount:
     // tests/approvals/large-objects-in-state.algo.ts:29
     // increaseXCount(index: uint64, xCount: uint64) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/large-objects-in-state.algo.ts:30
     // this.storage.value[index].x += xCount
@@ -137,6 +147,11 @@ getCounts:
     // tests/approvals/large-objects-in-state.algo.ts:33
     // getCounts(index: uint64) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/large-objects-in-state.algo.ts:34
     // return this.storage.value[index]

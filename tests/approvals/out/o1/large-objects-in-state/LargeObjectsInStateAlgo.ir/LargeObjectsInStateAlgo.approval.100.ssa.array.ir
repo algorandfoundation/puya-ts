@@ -61,10 +61,16 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount[routing]() -> void:
     block@0: // L29
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let index#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let xCount#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let index#0: uint64 = (btoi tmp%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let xCount#0: uint64 = (btoi tmp%2#0)
         let box%element_offset%1#0: uint64 = (* index#0 9u)
         let box%box_extract%1#0: Encoded(uint64,uint8) = (box_extract "x" box%element_offset%1#0 9u)
         let aggregate%extract%0#0: bytes = (extract3 box%box_extract%1#0 0u 8u)
@@ -79,10 +85,13 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts[routing]() -> void:
     block@0: // L33
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let index#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let index#0: uint64 = (btoi tmp%0#0)
         let box%element_offset%0#0: uint64 = (* index#0 9u)
         let box%box_extract%0#0: Encoded(uint64,uint8) = (box_extract "x" box%element_offset%0#0 9u)
-        let tmp%2#0: bytes = (concat 0x151f7c75 box%box_extract%0#0)
-        (log tmp%2#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 box%box_extract%0#0)
+        (log tmp%3#0)
         exit 1u

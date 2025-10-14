@@ -101,6 +101,11 @@ test_block@0:
     //   hasMethodRestrictions: boolean
     // }) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 26 // 26
+    ==
+    assert // invalid number of bytes for (bool1,uint64,uint64,uint64,bool1,bool1)
     callsub tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.test
     pushbytes 0x151f7c75
     uncover 1

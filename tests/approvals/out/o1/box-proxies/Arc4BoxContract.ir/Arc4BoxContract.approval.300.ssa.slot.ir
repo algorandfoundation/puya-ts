@@ -95,11 +95,24 @@ subroutine _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uin
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes[routing]() -> void:
     block@0: // L359
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let a#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let a#0: uint64 = (btoi tmp%0#0)
         let dynamicBytes#0: Encoded(len+uint8[]) = (txna ApplicationArgs 2)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 dynamicBytes#0 0u)
+        let add%0#0: uint64 = (+ aggregate%array_length%0#0 2u)
+        let len%1#0: uint64 = (len dynamicBytes#0)
+        let eq%1#0: bool = (== len%1#0 add%0#0)
+        (assert eq%1#0) // invalid number of bytes for (len+uint8[])
         let b#0: bytes = ((extract 2 0) dynamicBytes#0)
         let c#0: Encoded(len+utf8[]) = (txna ApplicationArgs 3)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 c#0 0u)
+        let add%1#0: uint64 = (+ aggregate%array_length%1#0 2u)
+        let len%2#0: uint64 = (len c#0)
+        let eq%2#0: bool = (== len%2#0 add%1#0)
+        (assert eq%2#0) // invalid number of bytes for (len+utf8[])
         let encoded_value%0#0: bytes[8] = (itob a#0)
         (box_put "boxA" encoded_value%0#0)
         (box_del "b")
@@ -122,13 +135,11 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes[routing
         let tmp%7#0: bool = (== value%0#0 8u)
         (assert tmp%7#0)
         let (value%1#0: uint64, check%1#0: bool) = (box_len "b")
-        let tmp%8#0: uint64 = (len dynamicBytes#0)
-        let tmp%9#0: bool = (== value%1#0 tmp%8#0)
+        let tmp%9#0: bool = (== value%1#0 len%1#0)
         (assert tmp%9#0)
         let (value%2#0: uint64, check%2#0: bool) = (box_len "BOX_C")
         (assert check%2#0) // Box must have value
-        let tmp%10#0: uint64 = (len c#0)
-        let tmp%11#0: bool = (== value%2#0 tmp%10#0)
+        let tmp%11#0: bool = (== value%2#0 len%2#0)
         (assert tmp%11#0)
         let (value%3#0: uint64, check%3#0: bool) = (box_len "boxD")
         let tmp%13#0: uint64 = (len b#0)
@@ -142,7 +153,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes[routing
         let tmp%16#0: uint64 = (len aggregate%box_get%2#0)
         let tmp%17#0: uint64 = (- tmp%16#0 1u)
         let extract%2#0: bytes = (extract3 aggregate%box_get%2#0 tmp%17#0 1u)
-        let tmp%19#0: uint64 = (- tmp%10#0 1u)
+        let tmp%19#0: uint64 = (- len%2#0 1u)
         let extract%3#0: bytes = (extract3 c#0 tmp%19#0 1u)
         let tmp%20#0: bool = (== extract%2#0 extract%3#0)
         (assert tmp%20#0)
@@ -154,11 +165,11 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes[routing
         let end_before_start%0#0: bool = (< bounded_index%1#0 bounded_index%0#0)
         let end%0#0: uint64 = (select bounded_index%1#0 bounded_index%0#0 end_before_start%0#0)
         let tmp%21#0: bytes = (substring3 aggregate%box_get%2#0 bounded_index%0#0 end%0#0)
-        let is_out_of_bounds%2#0: bool = (>= 0u tmp%10#0)
-        let bounded_index%2#0: uint64 = (select 0u tmp%10#0 is_out_of_bounds%2#0)
-        let is_out_of_bounds%3#0: bool = (>= 1u tmp%10#0)
-        let bounded_offset%1#0: uint64 = (select 1u tmp%10#0 is_out_of_bounds%3#0)
-        let bounded_index%3#0: uint64 = (- tmp%10#0 bounded_offset%1#0)
+        let is_out_of_bounds%2#0: bool = (>= 0u len%2#0)
+        let bounded_index%2#0: uint64 = (select 0u len%2#0 is_out_of_bounds%2#0)
+        let is_out_of_bounds%3#0: bool = (>= 1u len%2#0)
+        let bounded_offset%1#0: uint64 = (select 1u len%2#0 is_out_of_bounds%3#0)
+        let bounded_index%3#0: uint64 = (- len%2#0 bounded_offset%1#0)
         let end_before_start%1#0: bool = (< bounded_index%3#0 bounded_index%2#0)
         let end%1#0: uint64 = (select bounded_index%3#0 bounded_index%2#0 end_before_start%1#0)
         let tmp%22#0: bytes = (substring3 c#0 bounded_index%2#0 end%1#0)
@@ -167,8 +178,8 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes[routing
         let is_out_of_bounds%5#0: bool = (>= 2u tmp%16#0)
         let bounded_index%5#0: uint64 = (select 2u tmp%16#0 is_out_of_bounds%5#0)
         let tmp%24#0: bytes = (substring3 aggregate%box_get%2#0 bounded_index%0#0 bounded_index%5#0)
-        let is_out_of_bounds%7#0: bool = (>= 2u tmp%10#0)
-        let bounded_index%7#0: uint64 = (select 2u tmp%10#0 is_out_of_bounds%7#0)
+        let is_out_of_bounds%7#0: bool = (>= 2u len%2#0)
+        let bounded_index%7#0: uint64 = (select 2u len%2#0 is_out_of_bounds%7#0)
         let tmp%25#0: bytes = (substring3 c#0 bounded_index%2#0 bounded_index%7#0)
         let tmp%26#0: bool = (== tmp%24#0 tmp%25#0)
         (assert tmp%26#0)
@@ -225,11 +236,17 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes[routing
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setManyInts[routing]() -> void:
     block@0: // L405
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let index#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let index#0: uint64 = (btoi tmp%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
         let box%element_offset%0#0: uint64 = (* index#0 8u)
-        (box_replace "manyInts" box%element_offset%0#0 reinterpret_Encoded(uint64)%1#0)
+        (box_replace "manyInts" box%element_offset%0#0 tmp%2#0)
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumManyInts[routing]() -> void:
@@ -405,10 +422,16 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.testBoxRef[routi
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBool[routing]() -> void:
     block@0: // L506
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let index#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(bool8)%0#0: Encoded(bool8) = (txna ApplicationArgs 2)
-        let value#0: bool = (getbit reinterpret_Encoded(bool8)%0#0 0u)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let index#0: uint64 = (btoi tmp%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 1u)
+        (assert eq%1#0) // invalid number of bytes for bool8
+        let value#0: bool = (getbit tmp%2#0 0u)
         let box%element_byte_offset%0#0: uint64 = (/ index#0 8u)
         let box%element_bit_offset%0#0: uint64 = (% index#0 8u)
         let box%box_extract%0#0: Encoded(bool1[8]) = (box_extract "tooManyBools" box%element_byte_offset%0#0 1u)
@@ -420,8 +443,11 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBool[routing]
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools[routing]() -> void:
     block@0: // L510
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let stopAtTotal#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let stopAtTotal#0: uint64 = (btoi tmp%0#0)
         _puya_lib.util.ensure_budget(13000u, 0u)
         let total#0: uint64 = 0u
         let (aggregate%box_get%0#0: uint64, aggregate%box_get%1#0: bool) = (box_len "tooManyBools")
@@ -456,6 +482,6 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools[routing
     block@10: // L513
         let total#4: uint64 = φ(total#3 <- block@6, total#1 <- block@9)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob total#4)
-        let tmp%3#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
-        (log tmp%3#0)
+        let tmp%4#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
+        (log tmp%4#0)
         exit 1u

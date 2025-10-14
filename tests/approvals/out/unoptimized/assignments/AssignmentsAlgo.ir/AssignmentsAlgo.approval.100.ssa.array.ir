@@ -228,9 +228,13 @@ subroutine tests/approvals/assignments.algo.ts::logAndReturn(u: uint64) -> uint6
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testPrimitives[routing]() -> void:
     block@0: // L21
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testPrimitives(tmp%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testPrimitives(tmp%1#0)
         exit 1u
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testAccountDestructure[routing]() -> void:
@@ -242,66 +246,125 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testAccountDestr
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayDestructure[routing]() -> void:
     block@0: // L34
-        let reinterpret_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = (txna ApplicationArgs 3)
-        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayDestructure(reinterpret_Encoded(len+uint64[])%0#0, tmp%0#0, reinterpret_Encoded(len+uint64[])%1#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
+        let tmp%1#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%1#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%1#0
+        let tmp%2#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%3#0: bytes = (txna ApplicationArgs 3)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 tmp%3#0 0u)
+        let length%1#0: uint64 = aggregate%array_length%1#0
+        let mul%1#0: uint64 = (* length%1#0 8u)
+        let add%1#0: uint64 = (+ mul%1#0 2u)
+        let len%2#0: uint64 = (len tmp%3#0)
+        let eq%2#0: bool = (== len%2#0 add%1#0)
+        (assert eq%2#0) // invalid number of bytes for (len+uint64[])
+        let as_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = tmp%3#0
+        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayDestructure(as_Encoded(len+uint64[])%0#0, tmp%2#0, as_Encoded(len+uint64[])%1#0)
         exit 1u
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayNarrowing[routing]() -> void:
     block@0: // L54
-        let reinterpret_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayNarrowing(reinterpret_Encoded(len+uint64[])%0#0, tmp%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
+        let tmp%1#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%1#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%1#0
+        let tmp%2#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayNarrowing(as_Encoded(len+uint64[])%0#0, tmp%2#0)
         exit 1u
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testTupleToArray[routing]() -> void:
     block@0: // L68
-        let reinterpret_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
-        let reinterpret_Encoded(uint64,uint64)%1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 2)
-        let aggregate%extract%0#0: bytes = (extract3 reinterpret_Encoded(uint64,uint64)%1#0 0u 8u)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
+        let as_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = tmp%0#0
+        let tmp%1#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%1#0)
+        let eq%1#0: bool = (== len%1#0 16u)
+        (assert eq%1#0) // invalid number of bytes for (uint64,uint64)
+        let as_Encoded(uint64,uint64)%1#0: Encoded(uint64,uint64) = tmp%1#0
+        let aggregate%extract%0#0: bytes = (extract3 as_Encoded(uint64,uint64)%1#0 0u 8u)
         let aggregate%item0%0#0: uint64 = (btoi aggregate%extract%0#0)
-        let aggregate%extract%1#0: bytes = (extract3 reinterpret_Encoded(uint64,uint64)%1#0 8u 8u)
+        let aggregate%extract%1#0: bytes = (extract3 as_Encoded(uint64,uint64)%1#0 8u 8u)
         let aggregate%item1%0#0: uint64 = (btoi aggregate%extract%1#0)
-        let (tmp%0#0: uint64, tmp%1#0: uint64) = (aggregate%item0%0#0, aggregate%item1%0#0)
-        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testTupleToArray(reinterpret_Encoded(uint64,uint64)%0#0, tmp%0#0, tmp%1#0)
+        let (tmp%2#0: uint64, tmp%3#0: uint64) = (aggregate%item0%0#0, aggregate%item1%0#0)
+        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testTupleToArray(as_Encoded(uint64,uint64)%0#0, tmp%2#0, tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testNested[routing]() -> void:
     block@0: // L78
-        let reinterpret_Encoded(len+(len+uint64[])[])%0#0: Encoded(len+(len+uint64[])[]) = (txna ApplicationArgs 1)
-        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testNested(reinterpret_Encoded(len+(len+uint64[])[])%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let as_Encoded(len+(len+uint64[])[])%0#0: Encoded(len+(len+uint64[])[]) = tmp%0#0
+        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testNested(as_Encoded(len+(len+uint64[])[])%0#0)
         exit 1u
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testDestructureObj[routing]() -> void:
     block@0: // L83
-        let reinterpret_Encoded(uint64,(len+utf8[]))%0#0: Encoded(uint64,(len+utf8[])) = (txna ApplicationArgs 1)
-        let reinterpret_Encoded(uint64,(len+utf8[]))%1#0: Encoded(uint64,(len+utf8[])) = (txna ApplicationArgs 2)
-        let aggregate%extract%0#0: bytes = (extract3 reinterpret_Encoded(uint64,(len+utf8[]))%1#0 0u 8u)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let as_Encoded(uint64,(len+utf8[]))%0#0: Encoded(uint64,(len+utf8[])) = tmp%0#0
+        let tmp%1#0: bytes = (txna ApplicationArgs 2)
+        let as_Encoded(uint64,(len+utf8[]))%1#0: Encoded(uint64,(len+utf8[])) = tmp%1#0
+        let aggregate%extract%0#0: bytes = (extract3 as_Encoded(uint64,(len+utf8[]))%1#0 0u 8u)
         let aggregate%item0%0#0: uint64 = (btoi aggregate%extract%0#0)
-        let aggregate%extract_uint16%0#0: uint64 = (extract_uint16 reinterpret_Encoded(uint64,(len+utf8[]))%1#0 8u)
-        let aggregate%len%0#0: uint64 = (len reinterpret_Encoded(uint64,(len+utf8[]))%1#0)
-        let aggregate%substring3%0#0: bytes = (substring3 reinterpret_Encoded(uint64,(len+utf8[]))%1#0 aggregate%extract_uint16%0#0 aggregate%len%0#0)
+        let aggregate%extract_uint16%0#0: uint64 = (extract_uint16 as_Encoded(uint64,(len+utf8[]))%1#0 8u)
+        let aggregate%len%0#0: uint64 = (len as_Encoded(uint64,(len+utf8[]))%1#0)
+        let aggregate%substring3%0#0: bytes = (substring3 as_Encoded(uint64,(len+utf8[]))%1#0 aggregate%extract_uint16%0#0 aggregate%len%0#0)
         let aggregate%item1%0#0: bytes = ((extract 2 0) aggregate%substring3%0#0)
-        let (tmp%0#0: uint64, tmp%1#0: string) = (aggregate%item0%0#0, aggregate%item1%0#0)
-        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testDestructureObj(reinterpret_Encoded(uint64,(len+utf8[]))%0#0, tmp%0#0, tmp%1#0)
+        let (tmp%2#0: uint64, tmp%3#0: string) = (aggregate%item0%0#0, aggregate%item1%0#0)
+        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testDestructureObj(as_Encoded(uint64,(len+utf8[]))%0#0, tmp%2#0, tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNarrowing[routing]() -> void:
     block@0: // L88
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let tmp%1#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
-        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNarrowing(tmp%0#0, tmp%1#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%1#0: Encoded(uint64) = tmp%2#0
+        let tmp%3#0: uint64 = (btoi as_Encoded(uint64)%1#0)
+        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNarrowing(tmp%1#0, tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testMixed[routing]() -> void:
     block@0: // L103
-        let reinterpret_Encoded(len+((uint64))[])%0#0: Encoded(len+((uint64))[]) = (txna ApplicationArgs 1)
-        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testMixed(reinterpret_Encoded(len+((uint64))[])%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+((uint64))[])
+        let as_Encoded(len+((uint64))[])%0#0: Encoded(len+((uint64))[]) = tmp%0#0
+        tests/approvals/assignments.algo.ts::AssignmentsAlgo.testMixed(as_Encoded(len+((uint64))[])%0#0)
         exit 1u
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testPrimitives(u: uint64) -> void:

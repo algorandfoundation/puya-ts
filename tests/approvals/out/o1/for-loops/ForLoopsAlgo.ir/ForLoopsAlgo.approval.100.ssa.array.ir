@@ -35,12 +35,21 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop[routing]() -> void:
     block@0: // L5
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let start#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let stop#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
-        let reinterpret_Encoded(uint64)%2#0: Encoded(uint64) = (txna ApplicationArgs 3)
-        let step#0: uint64 = (btoi reinterpret_Encoded(uint64)%2#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let start#0: uint64 = (btoi tmp%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let stop#0: uint64 = (btoi tmp%2#0)
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for uint64
+        let step#0: uint64 = (btoi tmp%4#0)
         let total#0: uint64 = 0u
         goto block@2
     block@2: // while_top_L7
@@ -55,19 +64,28 @@ subroutine tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop[routing
     block@4: // after_while_L7
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob total#1)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
-        let tmp%4#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%5#0: bytes = (concat 0x151f7c75 tmp%4#0)
-        (log tmp%5#0)
+        let tmp%7#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%8#0: bytes = (concat 0x151f7c75 tmp%7#0)
+        (log tmp%8#0)
         exit 1u
 
 subroutine tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_break[routing]() -> void:
     block@0: // L13
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let start#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let stop#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
-        let reinterpret_Encoded(uint64)%2#0: Encoded(uint64) = (txna ApplicationArgs 3)
-        let step#0: uint64 = (btoi reinterpret_Encoded(uint64)%2#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let start#0: uint64 = (btoi tmp%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let stop#0: uint64 = (btoi tmp%2#0)
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for uint64
+        let step#0: uint64 = (btoi tmp%4#0)
         let total#0: uint64 = 0u
         goto block@2
     block@2: // while_top_L15
@@ -90,19 +108,28 @@ subroutine tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_break[r
         let total#3: uint64 = φ(total#2 <- block@4, total#1 <- block@6)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob total#3)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
-        let tmp%4#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%5#0: bytes = (concat 0x151f7c75 tmp%4#0)
-        (log tmp%5#0)
+        let tmp%7#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%8#0: bytes = (concat 0x151f7c75 tmp%7#0)
+        (log tmp%8#0)
         exit 1u
 
 subroutine tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_continue[routing]() -> void:
     block@0: // L24
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let start#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let stop#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
-        let reinterpret_Encoded(uint64)%2#0: Encoded(uint64) = (txna ApplicationArgs 3)
-        let step#0: uint64 = (btoi reinterpret_Encoded(uint64)%2#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let start#0: uint64 = (btoi tmp%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let stop#0: uint64 = (btoi tmp%2#0)
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for uint64
+        let step#0: uint64 = (btoi tmp%4#0)
         let total#0: uint64 = 0u
         goto block@2
     block@2: // while_top_L26
@@ -125,19 +152,28 @@ subroutine tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_continu
     block@7: // after_while_L26
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob total#1)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
-        let tmp%4#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%5#0: bytes = (concat 0x151f7c75 tmp%4#0)
-        (log tmp%5#0)
+        let tmp%7#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%8#0: bytes = (concat 0x151f7c75 tmp%7#0)
+        (log tmp%8#0)
         exit 1u
 
 subroutine tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_labelled[routing]() -> void:
     block@0: // L32
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let start#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let stop#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
-        let reinterpret_Encoded(uint64)%2#0: Encoded(uint64) = (txna ApplicationArgs 3)
-        let step#0: uint64 = (btoi reinterpret_Encoded(uint64)%2#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let start#0: uint64 = (btoi tmp%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let stop#0: uint64 = (btoi tmp%2#0)
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for uint64
+        let step#0: uint64 = (btoi tmp%4#0)
         let total#0: uint64 = 0u
         goto block@2
     block@2: // while_top_L34
@@ -172,7 +208,7 @@ subroutine tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_labelle
         let total#4: uint64 = φ(total#2 <- block@6, total#3 <- block@9)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob total#4)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
-        let tmp%4#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%5#0: bytes = (concat 0x151f7c75 tmp%4#0)
-        (log tmp%5#0)
+        let tmp%7#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%8#0: bytes = (concat 0x151f7c75 tmp%7#0)
+        (log tmp%8#0)
         exit 1u

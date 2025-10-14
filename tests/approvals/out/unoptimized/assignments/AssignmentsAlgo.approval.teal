@@ -231,6 +231,11 @@ testPrimitives_block@0:
     // tests/approvals/assignments.algo.ts:21
     // testPrimitives(u: uint64) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/assignments.algo.ts::AssignmentsAlgo.testPrimitives
     intc_3 // 1
@@ -261,9 +266,36 @@ testArrayDestructure_block@0:
     // tests/approvals/assignments.algo.ts:34
     // testArrayDestructure(i_a: ReadonlyArray<uint64>, u: uint64, m_a: uint64[]) {
     txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16
+    intc_0 // 8
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint64[])
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 3
+    dup
+    intc_1 // 0
+    extract_uint16
+    intc_0 // 8
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint64[])
     uncover 2
     uncover 2
     uncover 2
@@ -280,7 +312,23 @@ testArrayNarrowing_block@0:
     // tests/approvals/assignments.algo.ts:54
     // testArrayNarrowing(m_a: uint64[], u: uint64) {
     txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16
+    intc_0 // 8
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint64[])
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayNarrowing
     intc_3 // 1
@@ -295,7 +343,17 @@ testTupleToArray_block@0:
     // tests/approvals/assignments.algo.ts:68
     // testTupleToArray(m_t: [uint64, uint64], i_t: readonly [uint64, uint64]) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 16 // 16
+    ==
+    assert // invalid number of bytes for (uint64,uint64)
     txna ApplicationArgs 2
+    dup
+    len
+    pushint 16 // 16
+    ==
+    assert // invalid number of bytes for (uint64,uint64)
     dup
     intc_1 // 0
     intc_0 // 8
@@ -369,8 +427,18 @@ testObjLiteralNarrowing_block@0:
     // tests/approvals/assignments.algo.ts:88
     // testObjLiteralNarrowing(a: uint64, b: uint64) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/assignments.algo.ts::AssignmentsAlgo.testObjLiteralNarrowing
     intc_3 // 1
@@ -385,6 +453,17 @@ testMixed_block@0:
     // tests/approvals/assignments.algo.ts:103
     // testMixed(m: Array<{ a: [uint64] }>) {
     txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16
+    intc_0 // 8
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+((uint64))[])
     callsub tests/approvals/assignments.algo.ts::AssignmentsAlgo.testMixed
     intc_3 // 1
     return

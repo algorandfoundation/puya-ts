@@ -73,6 +73,11 @@ testExplicitValue_block@0:
     // tests/approvals/resource-encoding.algo.ts:32
     // @abimethod({ resourceEncoding: 'value' })
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     callsub tests/approvals/resource-encoding.algo.ts::ByValue.testExplicitValue
     itob
     pushbytes 0x151f7c75

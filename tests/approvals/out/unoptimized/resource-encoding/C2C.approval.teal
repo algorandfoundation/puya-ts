@@ -99,7 +99,17 @@ testCallToIndex_block@0:
     // tests/approvals/resource-encoding.algo.ts:63
     // testCallToIndex(account: Account, appId: Application) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/resource-encoding.algo.ts::C2C.testCallToIndex
     intc_2 // 1
@@ -114,7 +124,17 @@ testCallToValue_block@0:
     // tests/approvals/resource-encoding.algo.ts:72
     // testCallToValue(account: Account, appId: Application) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue
     intc_2 // 1
@@ -295,7 +315,7 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource_block@0:
     itxn_field ClearStateProgramPages
     bytec_1 // 0x
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyAEAAECAyYCBBUffHUAQgAAQgAAMRsiE0EAQkIAADEZIhJEMRgiE0EAMEIAADYaAIAEd+KNdIAETTcCdk8CjgIAEAAKQgAAQgAAQgAAAIgAQEL/84gAFUL/7UL/7TEZIhIxGCISEESIAKQjQ0IAADYaARfAMDYaAhfAMjYaAxfAHE8CTwJPAogAJShPAVCwI0NCAAA2GgEXNhoCFzYaA08CTwJPAogAOihPAVCwI0OKAwFCAAAjwBoXwDCL/RJEJMAaF8Ayi/4SRCXAGhfAHIv/EkSL/RYpTwFQi/4WUIv/UImKAwFCAAAjwBoXi/0SRCTAGheL/hJEJcAai/8SRIv9FilPAVCL/hZQi/9QiUIAAIk=)
+    pushbytes base64(CyAEAQAIAiYCBBUffHUAQgAAQgAAMRsjE0EAQkIAADEZIxJEMRgjE0EAMEIAADYaAIAEd+KNdIAETTcCdk8CjgIAEAAKQgAAQgAAQgAAAIgAT0L/84gAFUL/7UL/7TEZIxIxGCMSEESIAMUiQ0IAADYaAUkVIhJEF8AwNhoCSRUiEkQXwDI2GgNJFSISRBfAHE8CTwJPAogANShPAVCwIkNCAAA2GgFJFSQSRBc2GgJJFSQSRBc2GgNJFYEgEkRPAk8CTwKIADsoTwFQsCJDigMBQgAAIsAaF8Awi/0SRCXAGhfAMov+EkSBA8AaF8Aci/8SRIv9FilPAVCL/hZQi/9QiYoDAUIAACLAGheL/RJEJcAaF4v+EkSBA8Aai/8SRIv9FilPAVCL/hZQi/9QiUIAAIk=)
     itxn_field ApprovalProgramPages
     bytec_1 // 0x
     itxn_field ApprovalProgramPages

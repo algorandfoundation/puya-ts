@@ -47,14 +47,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test[routing]() -> void:
     block@0: // L9
-        let reinterpret_Encoded(uint64,(len+uint8[]),bool1)%0#0: Encoded(uint64,(len+uint8[]),bool1) = (txna ApplicationArgs 1)
-        let test%0#0: Encoded(uint64,(len+uint8[]),bool1) = tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test(reinterpret_Encoded(uint64,(len+uint8[]),bool1)%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let as_Encoded(uint64,(len+uint8[]),bool1)%0#0: Encoded(uint64,(len+uint8[]),bool1) = tmp%0#0
+        let test%0#0: Encoded(uint64,(len+uint8[]),bool1) = tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test(as_Encoded(uint64,(len+uint8[]),bool1)%0#0)
         exit 1u
 
 subroutine tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.testMutable[routing]() -> void:
     block@0: // L13
-        let reinterpret_Encoded(uint64,(len+uint8[]),bool1)%0#0: Encoded(uint64,(len+uint8[]),bool1) = (txna ApplicationArgs 1)
-        tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.testMutable(reinterpret_Encoded(uint64,(len+uint8[]),bool1)%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let as_Encoded(uint64,(len+uint8[]),bool1)%0#0: Encoded(uint64,(len+uint8[]),bool1) = tmp%0#0
+        tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.testMutable(as_Encoded(uint64,(len+uint8[]),bool1)%0#0)
         exit 1u
 
 subroutine tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.init[routing]() -> void:

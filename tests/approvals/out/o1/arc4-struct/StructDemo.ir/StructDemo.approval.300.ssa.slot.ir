@@ -60,34 +60,52 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAnd
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors[routing]() -> void:
     block@0: // L19
         let v1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len v1#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
         let v2#0: Encoded(uint64,uint64) = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len v2#0)
+        let eq%1#0: bool = (== len%1#0 16u)
+        (assert eq%1#0) // invalid number of bytes for (uint64,uint64)
         let tmp%0#1: uint64 = (extract_uint64 v1#0 0u)
         let tmp%1#1: uint64 = (extract_uint64 v2#0 0u)
-        let tmp%2#0: uint64 = (+ tmp%0#1 tmp%1#1)
-        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%2#0)
+        let tmp%2#1: uint64 = (+ tmp%0#1 tmp%1#1)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%2#1)
         let tmp%4#0: uint64 = (extract_uint64 v1#0 8u)
         let tmp%5#0: uint64 = (extract_uint64 v2#0 8u)
         let tmp%6#0: uint64 = (+ tmp%4#0 tmp%5#0)
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%6#0)
         let aggregate%head%1#0: bytes = (concat aggregate%val_as_bytes%0#0 aggregate%val_as_bytes%1#0)
-        let tmp%1#0: bytes = (concat 0x151f7c75 aggregate%head%1#0)
-        (log tmp%1#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 aggregate%head%1#0)
+        (log tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.mutateVector[routing]() -> void:
     block@0: // L26
         let v1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len v1#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
         let newX#0: Encoded(uint64) = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len newX#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
         let newY#0: Encoded(uint64) = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len newY#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for uint64
         let v1#1: Encoded(uint64,uint64) = ((replace2 0) v1#0 newX#0)
         let v1#2: Encoded(uint64,uint64) = ((replace2 8) v1#1 newY#0)
-        let tmp%1#0: bytes = (concat 0x151f7c75 v1#2)
-        (log tmp%1#0)
+        let tmp%4#0: bytes = (concat 0x151f7c75 v1#2)
+        (log tmp%4#0)
         exit 1u
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading[routing]() -> void:
     block@0: // L32
         let v1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len v1#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
         let aggregate%extract%0#0: bytes = ((extract 0 8) v1#0)
         let aggregate%extract%1#0: bytes = ((extract 8 8) v1#0)
         let v2#0: Encoded(uint64,uint64) = (concat aggregate%extract%0#0 aggregate%extract%1#0)
@@ -103,29 +121,40 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpr
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes[routing]() -> void:
     block@0: // L39
         let v1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
-        let tmp%1#0: bytes = (concat 0x151f7c75 v1#0)
-        (log tmp%1#0)
+        let len%0#0: uint64 = (len v1#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
+        let tmp%2#0: bytes = (concat 0x151f7c75 v1#0)
+        (log tmp%2#0)
         exit 1u
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toNative[routing]() -> void:
     block@0: // L44
         let v1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
-        let tmp%1#0: bytes = (concat 0x151f7c75 v1#0)
-        (log tmp%1#0)
+        let len%0#0: uint64 = (len v1#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
+        let tmp%2#0: bytes = (concat 0x151f7c75 v1#0)
+        (log tmp%2#0)
         exit 1u
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin[routing]() -> void:
     block@0: // L52
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
-        let key#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
+        let add%0#0: uint64 = (+ aggregate%array_length%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+utf8[])
+        let key#0: string = ((extract 2 0) tmp%0#0)
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         let (value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])), aggregate%box_get%1#0: bool) = (box_get box_prefixed_key%0#0)
         (assert aggregate%box_get%1#0) // Box must have value
         let box%box_extract%0#0: Encoded(uint64) = (box_extract box_prefixed_key%0#0 16u 8u)
         let tmp%0#1: uint64 = (btoi box%box_extract%0#0)
         (assert tmp%0#1) // Last called not zero
-        let tmp%2#0: bytes = (concat 0x151f7c75 value#0)
-        (log tmp%2#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 value#0)
+        (log tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getMain[routing]() -> void:
@@ -141,21 +170,37 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getMain[routing]() ->
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled[routing]() -> void:
     block@0: // L64
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
-        let key#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let index#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 3)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
+        let add%0#0: uint64 = (+ aggregate%array_length%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+utf8[])
+        let key#0: string = ((extract 2 0) tmp%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let index#0: uint64 = (btoi tmp%2#0)
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for uint64
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         let box%element_offset%0#0: uint64 = (* index#0 20u)
         let box%offset%2#0: uint64 = (+ box%element_offset%0#0 41u)
-        (box_replace box_prefixed_key%0#0 box%offset%2#0 reinterpret_Encoded(uint64)%1#0)
+        (box_replace box_prefixed_key%0#0 box%offset%2#0 tmp%4#0)
         exit 1u
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin[routing]() -> void:
     block@0: // L68
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
-        let key#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
+        let add%0#0: uint64 = (+ aggregate%array_length%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+utf8[])
+        let key#0: string = ((extract 2 0) tmp%0#0)
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         (box_del box_prefixed_key%0#0)
         (box_put box_prefixed_key%0#0 0x00000000000000010000000000000000000000000000000000001b0001a78000de00000000000000010000000000000001)

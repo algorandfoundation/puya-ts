@@ -73,6 +73,11 @@ receivePay_block@0:
     // tests/approvals/itxn.algo.ts:227
     // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txn GroupIndex
     intc_1 // 1
@@ -83,6 +88,17 @@ receivePay_block@0:
     ==
     assert // transaction type is pay
     txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_1 // 1
+    *
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     uncover 2
     uncover 2

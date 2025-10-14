@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 8
+    intcblock 0 1 2 8
     bytecblock 0x151f7c75 "l1" "localUint2" "b1" "localBytes2" "localEncoded" "localTuple" "localObject" "localMutableObject" 0x000a
     // tests/approvals/local-state.algo.ts:8
     // export class LocalStateDemo extends Contract {
@@ -26,6 +26,15 @@ main_readDynamicLocalState_route@10:
     // tests/approvals/local-state.algo.ts:82
     // @arc4.abimethod()
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     // tests/approvals/local-state.algo.ts:84
     // const sender = Txn.sender
@@ -61,8 +70,26 @@ main_writeDynamicLocalState_route@9:
     // tests/approvals/local-state.algo.ts:63
     // @arc4.abimethod()
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     // tests/approvals/local-state.algo.ts:65
     // const sender = Txn.sender
@@ -241,7 +268,7 @@ main_getState_route@7:
     dup
     extract 0 8
     dig 1
-    intc_2 // 8
+    intc_3 // 8
     extract_uint16
     dig 2
     len
@@ -263,7 +290,7 @@ main_getState_route@7:
     dup
     extract 0 8
     dig 1
-    intc_2 // 8
+    intc_3 // 8
     extract_uint16
     dig 2
     len
@@ -399,11 +426,16 @@ main_setState_route@6:
     // public setState({ a, b }: { a: uint64; b: bytes }, c: SampleArray) {
     txna ApplicationArgs 1
     txna ApplicationArgs 2
+    dup
+    len
+    pushint 80 // 80
+    ==
+    assert // invalid number of bytes for uint64[10]
     dig 1
     intc_0 // 0
     extract_uint64
     dig 2
-    intc_2 // 8
+    intc_3 // 8
     extract_uint16
     dig 3
     len

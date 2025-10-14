@@ -73,6 +73,11 @@ setStore_block@0:
     // tests/approvals/multi-inheritance-2.algo.ts:16
     // setStore(value: uint64) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.setStore
     intc_1 // 1

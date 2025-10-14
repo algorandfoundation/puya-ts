@@ -73,6 +73,11 @@ testMatches_block@0:
     // tests/approvals/match-expr.algo.ts:5
     // public testMatches(x: uint64) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches
     intc_2 // 1

@@ -279,10 +279,37 @@ setBoxes_block@0:
     // tests/approvals/box-proxies.algo.ts:359
     // setBoxes(a: uint64, b: bytes, c: arc4.Str) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    intc_1 // 0
+    extract_uint16
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint8[])
     extract 2 0
     txna ApplicationArgs 3
+    dup
+    intc_1 // 0
+    extract_uint16
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     uncover 2
     uncover 2
     uncover 2
@@ -323,8 +350,18 @@ setManyInts_block@0:
     // tests/approvals/box-proxies.algo.ts:405
     // setManyInts(index: uint64, value: uint64) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setManyInts
     intc_0 // 1
@@ -516,8 +553,18 @@ setBool_block@0:
     // tests/approvals/box-proxies.algo.ts:506
     // setBool(index: uint64, value: boolean) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for bool8
     intc_1 // 0
     getbit
     callsub tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBool
@@ -533,6 +580,11 @@ sumBools_block@0:
     // tests/approvals/box-proxies.algo.ts:510
     // sumBools(stopAtTotal: uint64): uint64 {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools
     itob

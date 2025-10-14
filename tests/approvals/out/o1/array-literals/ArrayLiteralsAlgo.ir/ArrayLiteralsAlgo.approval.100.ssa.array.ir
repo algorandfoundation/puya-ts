@@ -11,7 +11,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
         switch tmp%6#0 {method "test(uint64,uint64)void" => block@4, method "test2()uint64" => block@5, * => block@8}
     block@4: // test_route_L10
-        exit 1u
+        tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test[routing]()
+        goto block@8
     block@5: // test2_route_L22
         tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test2[routing]()
         goto block@8
@@ -202,6 +203,18 @@ subroutine _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(ar
         goto block@1
     block@4: // after_for_L342
         return array_head_and_tail#1
+
+subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test[routing]() -> void:
+    block@0: // L10
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        exit 1u
 
 subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test2[routing]() -> void:
     block@0: // L22

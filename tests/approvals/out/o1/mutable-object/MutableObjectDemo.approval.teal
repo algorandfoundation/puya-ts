@@ -62,7 +62,17 @@ addVectors:
     // tests/approvals/mutable-object.algo.ts:21
     // public addVectors(v1: Vector, v2: Vector): Vector {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for (uint64,uint64)
     txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for (uint64,uint64)
     // tests/approvals/mutable-object.algo.ts:23
     // x: v1.x + v2.x,
     dig 1
@@ -105,11 +115,27 @@ addVectors:
 mutateVector:
     // tests/approvals/mutable-object.algo.ts:28
     // public mutateVector(v1: Vector, newX: uint64, newY: uint64): Vector {
-    txna ApplicationArgs 3
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for (uint64,uint64)
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for uint64
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for uint64
     // tests/approvals/mutable-object.algo.ts:29
     // v1.x = newX
+    cover 2
     replace2 0
     // tests/approvals/mutable-object.algo.ts:30
     // v1.y = newY
@@ -130,6 +156,11 @@ implicitCastingAndSpreading:
     // tests/approvals/mutable-object.algo.ts:34
     // public implicitCastingAndSpreading(v1: Vector) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for (uint64,uint64)
     // tests/approvals/mutable-object.algo.ts:36
     // const v3 = { ...v2 }
     dup
@@ -174,6 +205,11 @@ testNestedObjects:
     // tests/approvals/mutable-object.algo.ts:49
     // public testNestedObjects(vp: VectorPoint) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for ((uint64,uint64),(uint64,uint64))
     // tests/approvals/mutable-object.algo.ts:50
     // const v1 = { x: vp.v.x, y: vp.v.y }
     dup
@@ -282,6 +318,11 @@ testAssertMatch:
     // tests/approvals/mutable-object.algo.ts:75
     // testAssertMatch(x: uint64) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/mutable-object.algo.ts:78
     // y: (b = x * 2),
@@ -357,6 +398,11 @@ testArc4Encoding:
     // tests/approvals/mutable-object.algo.ts:92
     // testArc4Encoding(p: Point) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for (uint64,uint64)
     // tests/approvals/mutable-object.algo.ts:93
     // assert(p.x !== p.y, 'For the purpose of this test, a should not equal b')
     dup
@@ -416,6 +462,15 @@ getPlugin:
     // tests/approvals/mutable-object.algo.ts:107
     // public getPlugin(key: string): PluginInfo {
     txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     // tests/approvals/mutable-object.algo.ts:103
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
@@ -485,6 +540,15 @@ setPlugin:
     // tests/approvals/mutable-object.algo.ts:123
     // public setPlugin(key: string) {
     txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     // tests/approvals/mutable-object.algo.ts:103
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
