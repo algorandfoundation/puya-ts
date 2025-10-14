@@ -13,12 +13,13 @@ export enum LogLevel {
   Debug = 'debug',
   Critical = 'critical',
 }
-const logLevelToInt = {
-  [LogLevel.Critical]: 4,
-  [LogLevel.Error]: 3,
-  [LogLevel.Info]: 1,
-  [LogLevel.Warning]: 2,
-  [LogLevel.Debug]: 0,
+export const logLevelToInt = {
+  // values match puya values
+  [LogLevel.Critical]: 50,
+  [LogLevel.Error]: 40,
+  [LogLevel.Info]: 30,
+  [LogLevel.Warning]: 20,
+  [LogLevel.Debug]: 10,
 }
 
 export const isMinLevel = (logLevel: LogLevel, minLevel: LogLevel): boolean => {
