@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1
+    intcblock 0 1 2
     bytecblock "greeting" " " 0x151f7c75 TMPL_GREETING
     txn ApplicationID
     bnz main_after_if_else@2
@@ -51,7 +51,7 @@ main_sendGreetings_route@9:
     intc_0 // 0
     extract_uint16
     dig 2
-    pushint 2 // 2
+    intc_2 // 2
     extract_uint16
     dig 3
     uncover 2
@@ -87,6 +87,15 @@ main_greet_route@8:
     // tests/approvals/precompiled-apps.algo.ts:26
     // greet(name: string): string {
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     // tests/approvals/precompiled-apps.algo.ts:27
     // return `${this.greeting.value} ${name}`

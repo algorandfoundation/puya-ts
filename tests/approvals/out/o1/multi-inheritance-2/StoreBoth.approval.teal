@@ -3,6 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
+    intcblock 0 2 1
     bytecblock "stringStore"
     // tests/approvals/multi-inheritance-2.algo.ts:21
     // class StoreBoth extends classes(StoreString, StoreUint64) {
@@ -34,8 +35,22 @@ test:
     // tests/approvals/multi-inheritance-2.algo.ts:22
     // test(theString: string, theUint: uint64) {
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     txna ApplicationArgs 2
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/multi-inheritance-2.algo.ts:6
     // stringStore = GlobalState<string>()
@@ -53,7 +68,7 @@ test:
     app_global_put
     // tests/approvals/multi-inheritance-2.algo.ts:22
     // test(theString: string, theUint: uint64) {
-    pushint 1 // 1
+    intc_2 // 1
     return
 
 
@@ -62,6 +77,15 @@ setStore:
     // tests/approvals/multi-inheritance-2.algo.ts:8
     // setStore(value: string) {
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     // tests/approvals/multi-inheritance-2.algo.ts:6
     // stringStore = GlobalState<string>()
@@ -72,5 +96,5 @@ setStore:
     app_global_put
     // tests/approvals/multi-inheritance-2.algo.ts:8
     // setStore(value: string) {
-    pushint 1 // 1
+    intc_2 // 1
     return

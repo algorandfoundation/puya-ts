@@ -128,6 +128,11 @@ test_block@0:
     // tests/approvals/reference-arrays.algo.ts:5
     // test(length: uint64) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/reference-arrays.algo.ts::ReferenceArraysAlgo.test
     intc_1 // 1

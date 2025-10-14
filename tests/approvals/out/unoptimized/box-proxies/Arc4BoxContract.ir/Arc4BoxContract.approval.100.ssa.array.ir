@@ -267,12 +267,32 @@ subroutine tests/approvals/box-proxies.algo.ts::getBoxRefLength(ref: bytes) -> u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes[routing]() -> void:
     block@0: // L359
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = (txna ApplicationArgs 2)
-        let tmp%1#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%0#0)
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 3)
-        tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes(tmp%0#0, tmp%1#0, reinterpret_Encoded(len+utf8[])%0#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%2#0 0u)
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 add%0#0)
+        (assert eq%1#0) // invalid number of bytes for (len+uint8[])
+        let as_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = tmp%2#0
+        let tmp%3#0: bytes = ((extract 2 0) as_Encoded(len+uint8[])%0#0)
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 tmp%4#0 0u)
+        let length%1#0: uint64 = aggregate%array_length%1#0
+        let mul%1#0: uint64 = (* length%1#0 1u)
+        let add%1#0: uint64 = (+ mul%1#0 2u)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 add%1#0)
+        (assert eq%2#0) // invalid number of bytes for (len+utf8[])
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%4#0
+        tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes(tmp%1#0, tmp%3#0, as_Encoded(len+utf8[])%0#0)
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.checkKeys[routing]() -> void:
@@ -287,11 +307,19 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.createManyInts[r
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setManyInts[routing]() -> void:
     block@0: // L405
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let tmp%1#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
-        tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setManyInts(tmp%0#0, tmp%1#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%1#0: Encoded(uint64) = tmp%2#0
+        let tmp%3#0: uint64 = (btoi as_Encoded(uint64)%1#0)
+        tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setManyInts(tmp%1#0, tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumManyInts[routing]() -> void:
@@ -382,24 +410,36 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.createBools[rout
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBool[routing]() -> void:
     block@0: // L506
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(bool8)%0#0: Encoded(bool8) = (txna ApplicationArgs 2)
-        let aggregate%get_bit%0#0: bool = (getbit reinterpret_Encoded(bool8)%0#0 0u)
-        let tmp%1#0: bool = aggregate%get_bit%0#0
-        tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBool(tmp%0#0, tmp%1#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 1u)
+        (assert eq%1#0) // invalid number of bytes for bool8
+        let as_Encoded(bool8)%0#0: Encoded(bool8) = tmp%2#0
+        let aggregate%get_bit%0#0: bool = (getbit as_Encoded(bool8)%0#0 0u)
+        let tmp%3#0: bool = aggregate%get_bit%0#0
+        tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBool(tmp%1#0, tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools[routing]() -> void:
     block@0: // L510
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let tmp%1#0: uint64 = tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools(tmp%0#0)
-        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: uint64 = tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools(tmp%1#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%2#0)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
-        let tmp%2#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
-        (log tmp%3#0)
+        let tmp%3#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
+        (log tmp%4#0)
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes(a: uint64, b: bytes, c: Encoded(len+utf8[])) -> void:

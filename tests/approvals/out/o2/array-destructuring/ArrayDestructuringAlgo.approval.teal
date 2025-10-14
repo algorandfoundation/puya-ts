@@ -37,6 +37,11 @@ main_testNested_route@4:
     // testNested(arg: readonly [uint64, readonly [biguint, biguint]]) {
     txna ApplicationArgs 1
     dup
+    len
+    pushint 136 // 136
+    ==
+    assert // invalid number of bytes for (uint64,(uint512,uint512))
+    dup
     extract 8 128
     dup
     extract 0 64

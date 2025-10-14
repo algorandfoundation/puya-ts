@@ -32,8 +32,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%15#0: bytes = (txna ApplicationArgs 0)
         switch tmp%15#0 {method "greet(string)string" => block@8, method "sendGreetings((string,string))string" => block@9, * => block@14}
     block@8: // greet_route_L26
-        let reinterpret_Encoded(len+utf8[])%0#1: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
-        let name#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#1)
+        let tmp%0#5: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#5 0u)
+        let add%0#1: uint64 = (+ aggregate%array_length%0#0 2u)
+        let len%0#1: uint64 = (len tmp%0#5)
+        let eq%0#1: bool = (== len%0#1 add%0#1)
+        (assert eq%0#1) // invalid number of bytes for (len+utf8[])
+        let name#0: string = ((extract 2 0) tmp%0#5)
         let (maybe_value%0#1: bytes, maybe_exists%0#1: bool) = (app_global_get_ex 0u "greeting")
         (assert maybe_exists%0#1) // check GlobalState exists
         let tmp%1#4: bytes = (concat maybe_value%0#1 " ")
@@ -42,8 +47,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
         let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
         let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%2#4)
-        let tmp%3#2: bytes = (concat 0x151f7c75 aggregate%encoded_value%0#0)
-        (log tmp%3#2)
+        let tmp%4#2: bytes = (concat 0x151f7c75 aggregate%encoded_value%0#0)
+        (log tmp%4#2)
         exit 1u
     block@9: // sendGreetings_route_L30
         let a#0: Encoded((len+utf8[]),(len+utf8[])) = (txna ApplicationArgs 1)
@@ -57,21 +62,26 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%2#2: bytes = (concat tmp%1#2 values%0#0)
         let aggregate%len%0#0: uint64 = (len a#0)
         let aggregate%substring3%1#0: bytes = (substring3 a#0 aggregate%extract_uint16%1#0 aggregate%len%0#0)
-        let tmp%3#1: string = ((extract 2 0) aggregate%substring3%1#0)
-        let tmp%4#1: bytes = (concat tmp%2#2 tmp%3#1)
+        let tmp%3#2: string = ((extract 2 0) aggregate%substring3%1#0)
+        let tmp%4#1: bytes = (concat tmp%2#2 tmp%3#2)
         let aggregate%length%1#0: uint64 = (len tmp%4#1)
         let aggregate%as_bytes%1#0: bytes[8] = (itob aggregate%length%1#0)
         let aggregate%length_uint16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%1#0)
         let aggregate%encoded_value%1#0: bytes = (concat aggregate%length_uint16%1#0 tmp%4#1)
-        let tmp%2#1: bytes = (concat 0x151f7c75 aggregate%encoded_value%1#0)
-        (log tmp%2#1)
+        let tmp%3#1: bytes = (concat 0x151f7c75 aggregate%encoded_value%1#0)
+        (log tmp%3#1)
         exit 1u
     block@11: // create_NoOp_L35
         let tmp%16#0: bytes = (txna ApplicationArgs 0)
         switch tmp%16#0 {method "helloCreate(string)void" => block@12, * => block@14}
     block@12: // helloCreate_route_L36
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
-        let greeting#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
+        let tmp%0#2: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 tmp%0#2 0u)
+        let add%0#0: uint64 = (+ aggregate%array_length%1#0 2u)
+        let len%0#0: uint64 = (len tmp%0#2)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+utf8[])
+        let greeting#0: string = ((extract 2 0) tmp%0#2)
         (app_global_put "greeting" greeting#0)
         exit 1u
     block@14: // after_if_else_L35

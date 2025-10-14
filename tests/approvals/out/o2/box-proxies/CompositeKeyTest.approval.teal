@@ -21,7 +21,21 @@ main_test_route@3:
     &&
     assert // OnCompletion must be NoOp && can only call when not creating
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 16 // 16
+    ==
+    assert // invalid number of bytes for (uint64,uint64)
     txna ApplicationArgs 2
+    dup
+    pushint 0 // 0
+    extract_uint16
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     // tests/approvals/box-proxies.algo.ts:255
     // this.boxMap(key).value = val

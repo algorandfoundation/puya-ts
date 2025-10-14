@@ -73,53 +73,174 @@ subroutine _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uin
 
 subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding[routing]() -> void:
     block@0: // L25
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(bool8)%0#0: Encoded(bool8) = (txna ApplicationArgs 2)
-        let aggregate%get_bit%0#0: bool = (getbit reinterpret_Encoded(bool8)%0#0 0u)
-        let tmp%1#0: bool = aggregate%get_bit%0#0
-        let reinterpret_Encoded(uint512)%0#0: Encoded(uint512) = (txna ApplicationArgs 3)
-        let tmp%2#0: biguint = reinterpret_Encoded(uint512)%0#0
-        let reinterpret_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = (txna ApplicationArgs 4)
-        let tmp%3#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%0#0)
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 5)
-        let tmp%4#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 6)
-        let reinterpret_Encoded(uint8[12])%0#0: Encoded(uint8[12]) = (txna ApplicationArgs 7)
-        let tmp%5#0: bytes[12] = reinterpret_Encoded(uint8[12])%0#0
-        tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding(tmp%0#0, tmp%1#0, tmp%2#0, tmp%3#0, tmp%4#0, reinterpret_Encoded(uint8[32])%0#0, tmp%5#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 1u)
+        (assert eq%1#0) // invalid number of bytes for bool8
+        let as_Encoded(bool8)%0#0: Encoded(bool8) = tmp%2#0
+        let aggregate%get_bit%0#0: bool = (getbit as_Encoded(bool8)%0#0 0u)
+        let tmp%3#0: bool = aggregate%get_bit%0#0
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 64u)
+        (assert eq%2#0) // invalid number of bytes for uint512
+        let as_Encoded(uint512)%0#0: Encoded(uint512) = tmp%4#0
+        let tmp%5#0: biguint = as_Encoded(uint512)%0#0
+        let tmp%6#0: bytes = (txna ApplicationArgs 4)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%6#0 0u)
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%3#0: uint64 = (len tmp%6#0)
+        let eq%3#0: bool = (== len%3#0 add%0#0)
+        (assert eq%3#0) // invalid number of bytes for (len+uint8[])
+        let as_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = tmp%6#0
+        let tmp%7#0: bytes = ((extract 2 0) as_Encoded(len+uint8[])%0#0)
+        let tmp%8#0: bytes = (txna ApplicationArgs 5)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 tmp%8#0 0u)
+        let length%1#0: uint64 = aggregate%array_length%1#0
+        let mul%1#0: uint64 = (* length%1#0 1u)
+        let add%1#0: uint64 = (+ mul%1#0 2u)
+        let len%4#0: uint64 = (len tmp%8#0)
+        let eq%4#0: bool = (== len%4#0 add%1#0)
+        (assert eq%4#0) // invalid number of bytes for (len+utf8[])
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%8#0
+        let tmp%9#0: string = ((extract 2 0) as_Encoded(len+utf8[])%0#0)
+        let tmp%10#0: bytes = (txna ApplicationArgs 6)
+        let len%5#0: uint64 = (len tmp%10#0)
+        let eq%5#0: bool = (== len%5#0 32u)
+        (assert eq%5#0) // invalid number of bytes for uint8[32]
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%10#0
+        let tmp%11#0: bytes = (txna ApplicationArgs 7)
+        let len%6#0: uint64 = (len tmp%11#0)
+        let eq%6#0: bool = (== len%6#0 12u)
+        (assert eq%6#0) // invalid number of bytes for uint8[12]
+        let as_Encoded(uint8[12])%0#0: Encoded(uint8[12]) = tmp%11#0
+        let tmp%12#0: bytes[12] = as_Encoded(uint8[12])%0#0
+        tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding(tmp%1#0, tmp%3#0, tmp%5#0, tmp%7#0, tmp%9#0, as_Encoded(uint8[32])%0#0, tmp%12#0)
         exit 1u
 
 subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding[routing]() -> void:
     block@0: // L65
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%0#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = (txna ApplicationArgs 2)
-        let tmp%1#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%0#0)
-        let reinterpret_Encoded(bool8)%0#0: Encoded(bool8) = (txna ApplicationArgs 3)
-        let aggregate%get_bit%0#0: bool = (getbit reinterpret_Encoded(bool8)%0#0 0u)
-        let tmp%2#0: bool = aggregate%get_bit%0#0
-        let reinterpret_Encoded(len+uint8[])%1#0: Encoded(len+uint8[]) = (txna ApplicationArgs 4)
-        let tmp%3#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%1#0)
-        let reinterpret_Encoded(uint512)%0#0: Encoded(uint512) = (txna ApplicationArgs 5)
-        let tmp%4#0: biguint = reinterpret_Encoded(uint512)%0#0
-        let reinterpret_Encoded(len+uint8[])%2#0: Encoded(len+uint8[]) = (txna ApplicationArgs 6)
-        let tmp%5#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%2#0)
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 7)
-        let tmp%6#0: string = ((extract 2 0) reinterpret_Encoded(len+utf8[])%0#0)
-        let reinterpret_Encoded(len+uint8[])%3#0: Encoded(len+uint8[]) = (txna ApplicationArgs 8)
-        let tmp%7#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%3#0)
-        let reinterpret_Encoded(uint64,(len+uint8[]))%0#0: Encoded(uint64,(len+uint8[])) = (txna ApplicationArgs 9)
-        let reinterpret_Encoded(len+uint8[])%4#0: Encoded(len+uint8[]) = (txna ApplicationArgs 10)
-        let tmp%8#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%4#0)
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 11)
-        let reinterpret_Encoded(len+uint8[])%5#0: Encoded(len+uint8[]) = (txna ApplicationArgs 12)
-        let tmp%9#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%5#0)
-        let reinterpret_Encoded(uint8[12])%0#0: Encoded(uint8[12]) = (txna ApplicationArgs 13)
-        let tmp%10#0: bytes[12] = reinterpret_Encoded(uint8[12])%0#0
-        let reinterpret_Encoded(len+uint8[])%6#0: Encoded(len+uint8[]) = (txna ApplicationArgs 14)
-        let tmp%11#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[])%6#0)
-        tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding(tmp%0#0, tmp%1#0, tmp%2#0, tmp%3#0, tmp%4#0, tmp%5#0, tmp%6#0, tmp%7#0, reinterpret_Encoded(uint64,(len+uint8[]))%0#0, tmp%8#0, reinterpret_Encoded(uint8[32])%0#0, tmp%9#0, tmp%10#0, tmp%11#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%2#0 0u)
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 add%0#0)
+        (assert eq%1#0) // invalid number of bytes for (len+uint8[])
+        let as_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = tmp%2#0
+        let tmp%3#0: bytes = ((extract 2 0) as_Encoded(len+uint8[])%0#0)
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 1u)
+        (assert eq%2#0) // invalid number of bytes for bool8
+        let as_Encoded(bool8)%0#0: Encoded(bool8) = tmp%4#0
+        let aggregate%get_bit%0#0: bool = (getbit as_Encoded(bool8)%0#0 0u)
+        let tmp%5#0: bool = aggregate%get_bit%0#0
+        let tmp%6#0: bytes = (txna ApplicationArgs 4)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 tmp%6#0 0u)
+        let length%1#0: uint64 = aggregate%array_length%1#0
+        let mul%1#0: uint64 = (* length%1#0 1u)
+        let add%1#0: uint64 = (+ mul%1#0 2u)
+        let len%3#0: uint64 = (len tmp%6#0)
+        let eq%3#0: bool = (== len%3#0 add%1#0)
+        (assert eq%3#0) // invalid number of bytes for (len+uint8[])
+        let as_Encoded(len+uint8[])%1#0: Encoded(len+uint8[]) = tmp%6#0
+        let tmp%7#0: bytes = ((extract 2 0) as_Encoded(len+uint8[])%1#0)
+        let tmp%8#0: bytes = (txna ApplicationArgs 5)
+        let len%4#0: uint64 = (len tmp%8#0)
+        let eq%4#0: bool = (== len%4#0 64u)
+        (assert eq%4#0) // invalid number of bytes for uint512
+        let as_Encoded(uint512)%0#0: Encoded(uint512) = tmp%8#0
+        let tmp%9#0: biguint = as_Encoded(uint512)%0#0
+        let tmp%10#0: bytes = (txna ApplicationArgs 6)
+        let aggregate%array_length%2#0: uint64 = (extract_uint16 tmp%10#0 0u)
+        let length%2#0: uint64 = aggregate%array_length%2#0
+        let mul%2#0: uint64 = (* length%2#0 1u)
+        let add%2#0: uint64 = (+ mul%2#0 2u)
+        let len%5#0: uint64 = (len tmp%10#0)
+        let eq%5#0: bool = (== len%5#0 add%2#0)
+        (assert eq%5#0) // invalid number of bytes for (len+uint8[])
+        let as_Encoded(len+uint8[])%2#0: Encoded(len+uint8[]) = tmp%10#0
+        let tmp%11#0: bytes = ((extract 2 0) as_Encoded(len+uint8[])%2#0)
+        let tmp%12#0: bytes = (txna ApplicationArgs 7)
+        let aggregate%array_length%3#0: uint64 = (extract_uint16 tmp%12#0 0u)
+        let length%3#0: uint64 = aggregate%array_length%3#0
+        let mul%3#0: uint64 = (* length%3#0 1u)
+        let add%3#0: uint64 = (+ mul%3#0 2u)
+        let len%6#0: uint64 = (len tmp%12#0)
+        let eq%6#0: bool = (== len%6#0 add%3#0)
+        (assert eq%6#0) // invalid number of bytes for (len+utf8[])
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%12#0
+        let tmp%13#0: string = ((extract 2 0) as_Encoded(len+utf8[])%0#0)
+        let tmp%14#0: bytes = (txna ApplicationArgs 8)
+        let aggregate%array_length%4#0: uint64 = (extract_uint16 tmp%14#0 0u)
+        let length%4#0: uint64 = aggregate%array_length%4#0
+        let mul%4#0: uint64 = (* length%4#0 1u)
+        let add%4#0: uint64 = (+ mul%4#0 2u)
+        let len%7#0: uint64 = (len tmp%14#0)
+        let eq%7#0: bool = (== len%7#0 add%4#0)
+        (assert eq%7#0) // invalid number of bytes for (len+uint8[])
+        let as_Encoded(len+uint8[])%3#0: Encoded(len+uint8[]) = tmp%14#0
+        let tmp%15#0: bytes = ((extract 2 0) as_Encoded(len+uint8[])%3#0)
+        let tmp%16#0: bytes = (txna ApplicationArgs 9)
+        let as_Encoded(uint64,(len+uint8[]))%0#0: Encoded(uint64,(len+uint8[])) = tmp%16#0
+        let tmp%17#0: bytes = (txna ApplicationArgs 10)
+        let aggregate%array_length%5#0: uint64 = (extract_uint16 tmp%17#0 0u)
+        let length%5#0: uint64 = aggregate%array_length%5#0
+        let mul%5#0: uint64 = (* length%5#0 1u)
+        let add%5#0: uint64 = (+ mul%5#0 2u)
+        let len%8#0: uint64 = (len tmp%17#0)
+        let eq%8#0: bool = (== len%8#0 add%5#0)
+        (assert eq%8#0) // invalid number of bytes for (len+uint8[])
+        let as_Encoded(len+uint8[])%4#0: Encoded(len+uint8[]) = tmp%17#0
+        let tmp%18#0: bytes = ((extract 2 0) as_Encoded(len+uint8[])%4#0)
+        let tmp%19#0: bytes = (txna ApplicationArgs 11)
+        let len%9#0: uint64 = (len tmp%19#0)
+        let eq%9#0: bool = (== len%9#0 32u)
+        (assert eq%9#0) // invalid number of bytes for uint8[32]
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%19#0
+        let tmp%20#0: bytes = (txna ApplicationArgs 12)
+        let aggregate%array_length%6#0: uint64 = (extract_uint16 tmp%20#0 0u)
+        let length%6#0: uint64 = aggregate%array_length%6#0
+        let mul%6#0: uint64 = (* length%6#0 1u)
+        let add%6#0: uint64 = (+ mul%6#0 2u)
+        let len%10#0: uint64 = (len tmp%20#0)
+        let eq%10#0: bool = (== len%10#0 add%6#0)
+        (assert eq%10#0) // invalid number of bytes for (len+uint8[])
+        let as_Encoded(len+uint8[])%5#0: Encoded(len+uint8[]) = tmp%20#0
+        let tmp%21#0: bytes = ((extract 2 0) as_Encoded(len+uint8[])%5#0)
+        let tmp%22#0: bytes = (txna ApplicationArgs 13)
+        let len%11#0: uint64 = (len tmp%22#0)
+        let eq%11#0: bool = (== len%11#0 12u)
+        (assert eq%11#0) // invalid number of bytes for uint8[12]
+        let as_Encoded(uint8[12])%0#0: Encoded(uint8[12]) = tmp%22#0
+        let tmp%23#0: bytes[12] = as_Encoded(uint8[12])%0#0
+        let tmp%24#0: bytes = (txna ApplicationArgs 14)
+        let aggregate%array_length%7#0: uint64 = (extract_uint16 tmp%24#0 0u)
+        let length%7#0: uint64 = aggregate%array_length%7#0
+        let mul%7#0: uint64 = (* length%7#0 1u)
+        let add%7#0: uint64 = (+ mul%7#0 2u)
+        let len%12#0: uint64 = (len tmp%24#0)
+        let eq%12#0: bool = (== len%12#0 add%7#0)
+        (assert eq%12#0) // invalid number of bytes for (len+uint8[])
+        let as_Encoded(len+uint8[])%6#0: Encoded(len+uint8[]) = tmp%24#0
+        let tmp%25#0: bytes = ((extract 2 0) as_Encoded(len+uint8[])%6#0)
+        tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding(tmp%1#0, tmp%3#0, tmp%5#0, tmp%7#0, tmp%9#0, tmp%11#0, tmp%13#0, tmp%15#0, as_Encoded(uint64,(len+uint8[]))%0#0, tmp%18#0, as_Encoded(uint8[32])%0#0, tmp%21#0, tmp%23#0, tmp%25#0)
         exit 1u
 
 subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding(a: uint64, b: bool, c: biguint, d: bytes, e: string, f: Encoded(uint8[32]), g: bytes[12]) -> void:

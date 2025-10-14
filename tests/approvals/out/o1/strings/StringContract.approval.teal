@@ -3,6 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
+    intcblock 0 2 1
     bytecblock 0x151f7c75
     // tests/approvals/strings.algo.ts:3
     // class StringContract extends Contract {
@@ -34,8 +35,26 @@ join:
     // tests/approvals/strings.algo.ts:4
     // join(a: string, b: string): string {
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     // tests/approvals/strings.algo.ts:5
     // return a + b
@@ -52,7 +71,7 @@ join:
     swap
     concat
     log
-    pushint 1 // 1
+    intc_2 // 1
     return
 
 
@@ -61,6 +80,15 @@ interpolate:
     // tests/approvals/strings.algo.ts:8
     // interpolate(a: string): string {
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     // tests/approvals/strings.algo.ts:9
     // return `You interpolated ${a}`
@@ -79,5 +107,5 @@ interpolate:
     swap
     concat
     log
-    pushint 1 // 1
+    intc_2 // 1
     return

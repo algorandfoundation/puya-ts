@@ -34,6 +34,11 @@ testExplicitIndex:
     // tests/approvals/resource-encoding.algo.ts:17
     // @abimethod({ resourceEncoding: 'index' })
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 1 // 1
+    ==
+    assert // invalid number of bytes for uint8
     btoi
     txnas Accounts
     // tests/approvals/resource-encoding.algo.ts:19
@@ -56,6 +61,11 @@ testImplicitValue:
     // tests/approvals/resource-encoding.algo.ts:26
     // testImplicitValue(account: Account) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     // tests/approvals/resource-encoding.algo.ts:27
     // return account.balance
     acct_params_get AcctBalance

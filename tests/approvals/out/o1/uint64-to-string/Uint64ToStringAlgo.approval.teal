@@ -69,6 +69,11 @@ test:
     // tests/approvals/uint64-to-string.algo.ts:5
     // test(x: uint64): string {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/uint64-to-string.algo.ts:8
     // assert(y.toString() === '123')

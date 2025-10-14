@@ -12,7 +12,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         switch tmp%6#0 {method "emitSwapped(uint8,uint8)void" => block@4, method "emitCustom(string,bool)void" => block@5, method "emitDynamicBytes(byte[],byte[])void" => block@6, * => block@9}
     block@4: // emitSwapped_route_L14
         let a#0: Encoded(uint8) = (txna ApplicationArgs 1)
+        let len%0#2: uint64 = (len a#0)
+        let eq%0#2: bool = (== len%0#2 1u)
+        (assert eq%0#2) // invalid number of bytes for uint8
         let b#0: Encoded(uint8) = (txna ApplicationArgs 2)
+        let len%1#2: uint64 = (len b#0)
+        let eq%1#2: bool = (== len%1#2 1u)
+        (assert eq%1#2) // invalid number of bytes for uint8
         let aggregate%head%0#0: bytes = (concat 0x b#0)
         let aggregate%head%1#0: bytes = (concat aggregate%head%0#0 a#0)
         let aggregate%as_Encoded(uint8,uint8)%0#0: Encoded(uint8,uint8) = aggregate%head%1#0
@@ -54,39 +60,60 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log event%7#0)
         exit 1u
     block@5: // emitCustom_route_L35
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
-        let reinterpret_Encoded(bool8)%0#0: Encoded(bool8) = (txna ApplicationArgs 2)
+        let tmp%0#4: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#4 0u)
+        let length%0#1: uint64 = aggregate%array_length%0#0
+        let add%0#1: uint64 = (+ length%0#1 2u)
+        let len%0#1: uint64 = (len tmp%0#4)
+        let eq%0#1: bool = (== len%0#1 add%0#1)
+        (assert eq%0#1) // invalid number of bytes for (len+utf8[])
+        let tmp%2#1: bytes = (txna ApplicationArgs 2)
+        let len%1#1: uint64 = (len tmp%2#1)
+        let eq%1#1: bool = (== len%1#1 1u)
+        (assert eq%1#1) // invalid number of bytes for bool8
         let aggregate%as_bytes%2#0: bytes[8] = (itob 3u)
         let aggregate%offset_as_uint16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%2#0)
         let aggregate%head%10#0: bytes = (concat 0x aggregate%offset_as_uint16%1#0)
-        let aggregate%data_length%1#0: uint64 = (len reinterpret_Encoded(len+utf8[])%0#0)
+        let aggregate%data_length%1#0: uint64 = (len tmp%0#4)
         let aggregate%current_tail_offset%1#0: uint64 = (+ 3u aggregate%data_length%1#0)
-        let aggregate%head%11#0: bytes = (concat aggregate%head%10#0 reinterpret_Encoded(bool8)%0#0)
-        let aggregate%concat%1#0: bytes = (concat aggregate%head%11#0 reinterpret_Encoded(len+utf8[])%0#0)
+        let aggregate%head%11#0: bytes = (concat aggregate%head%10#0 tmp%2#1)
+        let aggregate%concat%1#0: bytes = (concat aggregate%head%11#0 tmp%0#4)
         let aggregate%as_Encoded((len+utf8[]),bool1)%0#0: Encoded((len+utf8[]),bool1) = aggregate%concat%1#0
-        let tmp%2#1: Encoded((len+utf8[]),bool1) = aggregate%as_Encoded((len+utf8[]),bool1)%0#0
-        let event%0#1: bytes = (concat method "Custom(string,bool)" tmp%2#1)
+        let tmp%2#2: Encoded((len+utf8[]),bool1) = aggregate%as_Encoded((len+utf8[]),bool1)%0#0
+        let event%0#1: bytes = (concat method "Custom(string,bool)" tmp%2#2)
         (log event%0#1)
         (log event%0#1)
         exit 1u
     block@6: // emitDynamicBytes_route_L40
-        let reinterpret_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = (txna ApplicationArgs 1)
+        let tmp%0#2: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 tmp%0#2 0u)
+        let length%0#0: uint64 = aggregate%array_length%1#0
+        let add%0#0: uint64 = (+ length%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#2)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+uint8[])
         let y#0: Encoded(len+uint8[]) = (txna ApplicationArgs 2)
+        let aggregate%array_length%2#0: uint64 = (extract_uint16 y#0 0u)
+        let length%1#0: uint64 = aggregate%array_length%2#0
+        let add%1#0: uint64 = (+ length%1#0 2u)
+        let len%1#0: uint64 = (len y#0)
+        let eq%1#0: bool = (== len%1#0 add%1#0)
+        (assert eq%1#0) // invalid number of bytes for (len+uint8[])
         let aggregate%as_bytes%3#0: bytes[8] = (itob 4u)
         let aggregate%offset_as_uint16%2#0: bytes = ((extract 6 2) aggregate%as_bytes%3#0)
         let aggregate%head%12#0: bytes = (concat 0x aggregate%offset_as_uint16%2#0)
-        let aggregate%data_length%2#0: uint64 = (len reinterpret_Encoded(len+uint8[])%0#0)
+        let aggregate%data_length%2#0: uint64 = (len tmp%0#2)
         let aggregate%current_tail_offset%2#0: uint64 = (+ 4u aggregate%data_length%2#0)
         let aggregate%as_bytes%4#0: bytes[8] = (itob aggregate%current_tail_offset%2#0)
         let aggregate%offset_as_uint16%3#0: bytes = ((extract 6 2) aggregate%as_bytes%4#0)
         let aggregate%head%13#0: bytes = (concat aggregate%head%12#0 aggregate%offset_as_uint16%3#0)
         let aggregate%data_length%3#0: uint64 = (len y#0)
         let aggregate%current_tail_offset%3#0: uint64 = (+ aggregate%current_tail_offset%2#0 aggregate%data_length%3#0)
-        let aggregate%concat%2#0: bytes = (concat aggregate%head%13#0 reinterpret_Encoded(len+uint8[])%0#0)
+        let aggregate%concat%2#0: bytes = (concat aggregate%head%13#0 tmp%0#2)
         let aggregate%concat%3#0: bytes = (concat aggregate%concat%2#0 y#0)
         let aggregate%as_Encoded((len+uint8[]),(len+uint8[]))%0#0: Encoded((len+uint8[]),(len+uint8[])) = aggregate%concat%3#0
-        let tmp%1#1: Encoded((len+uint8[]),(len+uint8[])) = aggregate%as_Encoded((len+uint8[]),(len+uint8[]))%0#0
-        let event%0#0: bytes = (concat method "DB(byte[],byte[])" tmp%1#1)
+        let tmp%1#2: Encoded((len+uint8[]),(len+uint8[])) = aggregate%as_Encoded((len+uint8[]),(len+uint8[]))%0#0
+        let event%0#0: bytes = (concat method "DB(byte[],byte[])" tmp%1#2)
         (log event%0#0)
         exit 1u
     block@9: // after_if_else_L13

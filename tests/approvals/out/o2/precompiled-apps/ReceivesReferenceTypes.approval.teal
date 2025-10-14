@@ -21,9 +21,24 @@ main_receivesReferenceTypes_route@3:
     &&
     assert // OnCompletion must be NoOp && can only call when not creating
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     txna ApplicationArgs 3
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/precompiled-apps.algo.ts:112
     // log(app.address)

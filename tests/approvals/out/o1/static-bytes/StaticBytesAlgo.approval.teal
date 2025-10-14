@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 32
+    intcblock 32 1 0
     bytecblock 0x151f7c75
     // tests/approvals/static-bytes.algo.ts:17
     // class StaticBytesAlgo extends Contract {
@@ -22,13 +22,13 @@ main:
 main_test4_route@12:
     // tests/approvals/static-bytes.algo.ts:72
     // test4() {
-    intc_0 // 1
+    intc_1 // 1
     return
 
 main_test3_route@11:
     // tests/approvals/static-bytes.algo.ts:67
     // test3() {
-    intc_0 // 1
+    intc_1 // 1
     return
 
 main___algots__.defaultCreate@16:
@@ -47,7 +47,17 @@ hashAddresses:
     // tests/approvals/static-bytes.algo.ts:18
     // hashAddresses(a1: B32, a2: B32): B32Alias {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     // tests/approvals/static-bytes.algo.ts:19
     // return sha512_256(a1.concat(a2))
     concat
@@ -58,7 +68,7 @@ hashAddresses:
     swap
     concat
     log
-    intc_0 // 1
+    intc_1 // 1
     return
 
 
@@ -67,17 +77,22 @@ receiveB32:
     // tests/approvals/static-bytes.algo.ts:22
     // receiveB32(b: bytes<32>) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32
     dup
     len
-    intc_1 // 32
+    intc_0 // 32
     ==
     assert // invalid size
     bytec_0 // 0x151f7c75
     swap
     concat
     log
-    intc_0 // 1
+    intc_1 // 1
     return
 
 
@@ -86,8 +101,22 @@ receiveBytes:
     // tests/approvals/static-bytes.algo.ts:26
     // receiveBytes(b: bytes, length: uint64) {
     txna ApplicationArgs 1
+    dup
+    intc_2 // 0
+    extract_uint16
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint8[])
     extract 2 0
     txna ApplicationArgs 2
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/static-bytes.algo.ts:27
     // assert(b.length === length)
@@ -104,17 +133,17 @@ returnLength:
     // tests/approvals/static-bytes.algo.ts:30
     // returnLength(b: bytes<32>): uint64 {
     txna ApplicationArgs 1
-    // tests/approvals/static-bytes.algo.ts:31
-    // return b.length
     len
-    // tests/approvals/static-bytes.algo.ts:30
-    // returnLength(b: bytes<32>): uint64 {
+    dup
+    intc_0 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     itob
     bytec_0 // 0x151f7c75
     swap
     concat
     log
-    intc_0 // 1
+    intc_1 // 1
     return
 
 
@@ -141,13 +170,13 @@ test:
     assert // Length must be 16
     // tests/approvals/static-bytes.algo.ts:14
     // return b.bitwiseOr(bzero(32)).toFixed({ length: 32, strategy: 'unsafe-cast' })
-    intc_1 // 32
+    intc_0 // 32
     bzero
     b|
     // tests/approvals/static-bytes.algo.ts:45
     // assert(padded.length === 32)
     len
-    intc_1 // 32
+    intc_0 // 32
     ==
     // tests/approvals/static-bytes.algo.ts:34
     // test() {
@@ -189,7 +218,7 @@ test2:
     pushbytes 0x0000000000000000000000000000000000000000000000000000000000000000
     // tests/approvals/static-bytes.algo.ts:60
     // for (let i: uint64 = 0; i < 5; i = i + 1) {
-    pushint 0 // 0
+    intc_2 // 0
 
 test2_while_top@2:
     // tests/approvals/static-bytes.algo.ts:60
@@ -208,7 +237,7 @@ test2_while_top@2:
     // tests/approvals/static-bytes.algo.ts:60
     // for (let i: uint64 = 0; i < 5; i = i + 1) {
     dup
-    intc_0 // 1
+    intc_1 // 1
     +
     bury 1
     b test2_while_top@2
@@ -227,7 +256,7 @@ test2_after_while@4:
     swap
     concat
     log
-    intc_0 // 1
+    intc_1 // 1
     return
 
 
@@ -240,7 +269,7 @@ tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32:
     // assert(b.length === 32)
     frame_dig -1
     len
-    intc_1 // 32
+    intc_0 // 32
     ==
     assert
     // tests/approvals/static-bytes.algo.ts:24

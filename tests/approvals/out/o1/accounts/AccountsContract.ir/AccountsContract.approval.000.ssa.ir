@@ -73,13 +73,21 @@ subroutine tests/approvals/accounts.algo.ts::AccountsContract.__puya_arc4_router
 
 subroutine tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo[routing]() -> void:
     block@0: // L9
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 1)
-        let tmp%0#0: account = decode_bytes<account>(reinterpret_Encoded(uint8[32])%0#0)
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let tmp%1#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%0#0)
-        let tmp%2#0: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1,bool1) = tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo(tmp%0#0, tmp%1#0)
-        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
-        (log tmp%3#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 32u)
+        (assert eq%0#0) // invalid number of bytes for uint8[32]
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%0#0
+        let tmp%1#0: account = decode_bytes<account>(as_Encoded(uint8[32])%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%2#0
+        let tmp%3#0: uint64 = decode_bytes<uint64>(as_Encoded(uint64)%0#0)
+        let tmp%4#0: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1,bool1) = tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo(tmp%1#0, tmp%3#0)
+        let tmp%5#0: bytes = (concat 0x151f7c75 tmp%4#0)
+        (log tmp%5#0)
         exit 1u
 
 subroutine tests/approvals/accounts.algo.ts::AccountsContract.otherAccount[routing]() -> void:

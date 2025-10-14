@@ -65,18 +65,30 @@ subroutine tests/approvals/arc4-method-selector.algo.ts::ContractTwo.referenceTy
         let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) gtxn_idx%0#0)
         let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 pay)
         (assert gtxn_type_matches%0#0) // transaction type is pay
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let tmp%1#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%0#0)
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 2)
-        let tmp%2#0: account = decode_bytes<account>(reinterpret_Encoded(uint8[32])%0#0)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 3)
-        let tmp%3#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%1#0)
-        let tmp%4#0: uint64 = (txn GroupIndex)
-        let gtxn_idx%1#0: uint64 = (- tmp%4#0 1u)
+        let tmp%1#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%1#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%1#0
+        let tmp%2#0: uint64 = decode_bytes<uint64>(as_Encoded(uint64)%0#0)
+        let tmp%3#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%3#0)
+        let eq%1#0: bool = (== len%1#0 32u)
+        (assert eq%1#0) // invalid number of bytes for uint8[32]
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%3#0
+        let tmp%4#0: account = decode_bytes<account>(as_Encoded(uint8[32])%0#0)
+        let tmp%5#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%5#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%1#0: Encoded(uint64) = tmp%5#0
+        let tmp%6#0: uint64 = decode_bytes<uint64>(as_Encoded(uint64)%1#0)
+        let tmp%7#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%1#0: uint64 = (- tmp%7#0 1u)
         let gtxn_type%1#0: uint64 = ((gtxns TypeEnum) gtxn_idx%1#0)
         let gtxn_type_matches%1#0: bool = (== gtxn_type%1#0 appl)
         (assert gtxn_type_matches%1#0) // transaction type is appl
-        tests/approvals/arc4-method-selector.algo.ts::ContractTwo.referenceTypes(gtxn_idx%0#0, tmp%1#0, tmp%2#0, tmp%3#0, gtxn_idx%1#0)
+        tests/approvals/arc4-method-selector.algo.ts::ContractTwo.referenceTypes(gtxn_idx%0#0, tmp%2#0, tmp%4#0, tmp%6#0, gtxn_idx%1#0)
         exit 1u
 
 subroutine tests/approvals/arc4-method-selector.algo.ts::ContractTwo.someMethod() -> void:

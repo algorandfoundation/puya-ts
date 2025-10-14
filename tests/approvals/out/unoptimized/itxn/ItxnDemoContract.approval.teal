@@ -170,6 +170,11 @@ test5_block@0:
     // tests/approvals/itxn.algo.ts:207
     // public test5(appId: Application) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/itxn.algo.ts::ItxnDemoContract.test5
     intc_2 // 1

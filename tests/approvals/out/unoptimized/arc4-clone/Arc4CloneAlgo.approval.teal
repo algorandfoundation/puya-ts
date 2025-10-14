@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 10
+    intcblock 0 1 8 2
     b main_block@0
 
 main_block@0:
@@ -120,6 +120,17 @@ aliasing_block@0:
     // tests/approvals/arc4-clone.algo.ts:17
     // aliasing(mutable: uint64[]) {
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_2 // 8
+    *
+    intc_3 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint64[])
     callsub tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.aliasing
     intc_1 // 1
     return
@@ -133,6 +144,17 @@ receive_block@0:
     // tests/approvals/arc4-clone.algo.ts:49
     // receive(mutable: uint64[]) {}
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_2 // 8
+    *
+    intc_3 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint64[])
     callsub tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receive
     intc_1 // 1
     return
@@ -146,6 +168,17 @@ receiveReadonly_block@0:
     // tests/approvals/arc4-clone.algo.ts:51
     // receiveReadonly(a: readonly uint64[]) {}
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_2 // 8
+    *
+    intc_3 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint64[])
     callsub tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receiveReadonly
     intc_1 // 1
     return
@@ -221,7 +254,7 @@ tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn_block@0:
     // tests/approvals/arc4-clone.algo.ts:55
     // assert(arg.shared === echo(arg.shared), "this won't error")
     frame_dig -1
-    intc_2 // 10
+    pushint 10 // 10
     extract_uint16
     frame_dig -1
     len
@@ -230,7 +263,7 @@ tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn_block@0:
     uncover 2
     substring3
     frame_dig -1
-    intc_2 // 10
+    pushint 10 // 10
     extract_uint16
     frame_dig -1
     len
@@ -245,7 +278,7 @@ tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn_block@0:
     // tests/approvals/arc4-clone.algo.ts:56
     // return arg.shared
     frame_dig -1
-    intc_2 // 10
+    pushint 10 // 10
     extract_uint16
     frame_dig -1
     len

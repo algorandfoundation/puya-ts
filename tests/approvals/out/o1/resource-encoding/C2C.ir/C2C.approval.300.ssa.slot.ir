@@ -33,8 +33,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToIndex[routing]() -> void:
     block@0: // L63
         let account#0: account = (txna ApplicationArgs 1)
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let appId#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let len%0#0: uint64 = (len account#0)
+        let eq%0#0: bool = (== len%0#0 32u)
+        (assert eq%0#0) // invalid number of bytes for uint8[32]
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let appId#0: uint64 = (btoi tmp%2#0)
         itxn_begin
         ((itxn_field Accounts) account#0)
         ((itxn_field ApplicationArgs) method "testExplicitIndex(account)uint64")
@@ -46,8 +52,8 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToIndex[routin
         let awst_tmp%0#0: bytes = (itxn LastLog)
         let tmp%0#1: bytes = ((extract 4 0) awst_tmp%0#0)
         let tmp%1#1: bytes = ((extract 0 4) awst_tmp%0#0)
-        let tmp%2#0: bool = (== tmp%1#1 0x151f7c75)
-        (assert tmp%2#0) // Bytes has valid prefix
+        let tmp%2#1: bool = (== tmp%1#1 0x151f7c75)
+        (assert tmp%2#1) // Bytes has valid prefix
         let res1#0: uint64 = (btoi tmp%0#1)
         let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
         (assert check%0#0) // account funded
@@ -58,8 +64,14 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToIndex[routin
 subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue[routing]() -> void:
     block@0: // L72
         let account#0: account = (txna ApplicationArgs 1)
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let appId#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let len%0#0: uint64 = (len account#0)
+        let eq%0#0: bool = (== len%0#0 32u)
+        (assert eq%0#0) // invalid number of bytes for uint8[32]
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let appId#0: uint64 = (btoi tmp%2#0)
         itxn_begin
         ((itxn_field ApplicationArgs) method "testExplicitValue(address)uint64")
         ((itxn_field ApplicationArgs) account#0)
@@ -69,9 +81,9 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue[routin
         itxn_submit
         let awst_tmp%0#0: bytes = (itxn LastLog)
         let tmp%1#1: bytes = ((extract 4 0) awst_tmp%0#0)
-        let tmp%2#0: bytes = ((extract 0 4) awst_tmp%0#0)
-        let tmp%3#0: bool = (== tmp%2#0 0x151f7c75)
-        (assert tmp%3#0) // Bytes has valid prefix
+        let tmp%2#1: bytes = ((extract 0 4) awst_tmp%0#0)
+        let tmp%3#1: bool = (== tmp%2#1 0x151f7c75)
+        (assert tmp%3#1) // Bytes has valid prefix
         let res1#0: uint64 = (btoi tmp%1#1)
         let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
         (assert check%0#0) // account funded
@@ -83,7 +95,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
     block@0: // L81
         itxn_begin
         ((itxn_field ClearStateProgramPages) C4EBQw==)
-        ((itxn_field ApprovalProgramPages) CyADAQIDJgEEFR98dTEbQQAdMRkURDEYRIICBHfijXQETTcCdjYaAI4CAAkASAAxGRQxGBQQQzYaARfAMDYaAhfAMjYaAxfAHCLAGhfAMEsDEkQjwBoXwDJLAhJEJMAaF8AcSwESRE8CFk8CFlBMUChMULAiQzYaARc2GgIXNhoDIsAaF0sDEkQjwBoXSwISRCTAGksBEkRPAhZPAhZQTFAoTFCwIkM=)
+        ((itxn_field ApprovalProgramPages) CyAEAQIDCCYBBBUffHUxG0EAHTEZFEQxGESCAgR34o10BE03AnY2GgCOAgAJAFcAMRkUMRgUEEM2GgFJFSISRBfAMDYaAkkVIhJEF8AyNhoDSRUiEkQXwBwiwBoXwDBLAxJEI8AaF8AySwISRCTAGhfAHEsBEkRPAhZPAhZQTFAoTFCwIkM2GgFJFSUSRBc2GgJJFSUSRBc2GgNJFYEgEkQiwBoXSwMSRCPAGhdLAhJEJMAaSwESRE8CFk8CFlBMUChMULAiQw==)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)

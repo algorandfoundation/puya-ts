@@ -50,49 +50,53 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested[routing]() -> void:
     block@0: // L5
-        let reinterpret_Encoded(uint64,(uint512,uint512))%0#0: Encoded(uint64,(uint512,uint512)) = (txna ApplicationArgs 1)
-        let aggregate%extract%0#0: bytes = (extract3 reinterpret_Encoded(uint64,(uint512,uint512))%0#0 0u 8u)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 136u)
+        (assert eq%0#0) // invalid number of bytes for (uint64,(uint512,uint512))
+        let as_Encoded(uint64,(uint512,uint512))%0#0: Encoded(uint64,(uint512,uint512)) = tmp%0#0
+        let aggregate%extract%0#0: bytes = (extract3 as_Encoded(uint64,(uint512,uint512))%0#0 0u 8u)
         let aggregate%item0%0#0: uint64 = (btoi aggregate%extract%0#0)
-        let aggregate%extract%1#0: bytes = (extract3 reinterpret_Encoded(uint64,(uint512,uint512))%0#0 8u 128u)
+        let aggregate%extract%1#0: bytes = (extract3 as_Encoded(uint64,(uint512,uint512))%0#0 8u 128u)
         let aggregate%extract%2#0: bytes = (extract3 aggregate%extract%1#0 0u 64u)
         let aggregate%extract%3#0: bytes = (extract3 aggregate%extract%1#0 64u 64u)
-        let tmp%0#0: uint64 = aggregate%item0%0#0
-        let tmp%1#0: biguint = aggregate%extract%2#0
-        let tmp%2#0: biguint = aggregate%extract%3#0
-        let (tmp%3#0: uint64, tmp%4#0: biguint, tmp%5#0: biguint, tmp%6#0: uint64, tmp%7#0: biguint) = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested(tmp%0#0, tmp%1#0, tmp%2#0)
-        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%3#0)
+        let tmp%1#0: uint64 = aggregate%item0%0#0
+        let tmp%2#0: biguint = aggregate%extract%2#0
+        let tmp%3#0: biguint = aggregate%extract%3#0
+        let (tmp%4#0: uint64, tmp%5#0: biguint, tmp%6#0: biguint, tmp%7#0: uint64, tmp%8#0: biguint) = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested(tmp%1#0, tmp%2#0, tmp%3#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%4#0)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
         let aggregate%head%0#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#0)
-        let aggregate%value_len%0#0: uint64 = (len tmp%4#0)
+        let aggregate%value_len%0#0: uint64 = (len tmp%5#0)
         let aggregate%len_ok%0#0: bool = (<= aggregate%value_len%0#0 64u)
         (assert aggregate%len_ok%0#0) // overflow
         let aggregate%bzero%0#0: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%0#0: bytes[64] = (b| tmp%4#0 aggregate%bzero%0#0)
+        let aggregate%arc4_encoded%0#0: bytes[64] = (b| tmp%5#0 aggregate%bzero%0#0)
         let aggregate%as_Encoded(uint512)%0#0: Encoded(uint512) = aggregate%arc4_encoded%0#0
         let aggregate%head%1#0: bytes = (concat 0x aggregate%as_Encoded(uint512)%0#0)
-        let aggregate%value_len%1#0: uint64 = (len tmp%5#0)
+        let aggregate%value_len%1#0: uint64 = (len tmp%6#0)
         let aggregate%len_ok%1#0: bool = (<= aggregate%value_len%1#0 64u)
         (assert aggregate%len_ok%1#0) // overflow
         let aggregate%bzero%1#0: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%1#0: bytes[64] = (b| tmp%5#0 aggregate%bzero%1#0)
+        let aggregate%arc4_encoded%1#0: bytes[64] = (b| tmp%6#0 aggregate%bzero%1#0)
         let aggregate%as_Encoded(uint512)%1#0: Encoded(uint512) = aggregate%arc4_encoded%1#0
         let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 aggregate%as_Encoded(uint512)%1#0)
         let aggregate%as_Encoded(uint512,uint512)%0#0: Encoded(uint512,uint512) = aggregate%head%2#0
         let aggregate%head%3#0: bytes = (concat aggregate%head%0#0 aggregate%as_Encoded(uint512,uint512)%0#0)
-        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%6#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%7#0)
         let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
         let aggregate%head%4#0: bytes = (concat aggregate%head%3#0 aggregate%as_Encoded(uint64)%1#0)
-        let aggregate%value_len%2#0: uint64 = (len tmp%7#0)
+        let aggregate%value_len%2#0: uint64 = (len tmp%8#0)
         let aggregate%len_ok%2#0: bool = (<= aggregate%value_len%2#0 64u)
         (assert aggregate%len_ok%2#0) // overflow
         let aggregate%bzero%2#0: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%2#0: bytes[64] = (b| tmp%7#0 aggregate%bzero%2#0)
+        let aggregate%arc4_encoded%2#0: bytes[64] = (b| tmp%8#0 aggregate%bzero%2#0)
         let aggregate%as_Encoded(uint512)%2#0: Encoded(uint512) = aggregate%arc4_encoded%2#0
         let aggregate%head%5#0: bytes = (concat aggregate%head%4#0 aggregate%as_Encoded(uint512)%2#0)
         let aggregate%as_Encoded(uint64,(uint512,uint512),uint64,uint512)%0#0: Encoded(uint64,(uint512,uint512),uint64,uint512) = aggregate%head%5#0
-        let tmp%8#0: Encoded(uint64,(uint512,uint512),uint64,uint512) = aggregate%as_Encoded(uint64,(uint512,uint512),uint64,uint512)%0#0
-        let tmp%9#0: bytes = (concat 0x151f7c75 tmp%8#0)
-        (log tmp%9#0)
+        let tmp%9#0: Encoded(uint64,(uint512,uint512),uint64,uint512) = aggregate%as_Encoded(uint64,(uint512,uint512),uint64,uint512)%0#0
+        let tmp%10#0: bytes = (concat 0x151f7c75 tmp%9#0)
+        (log tmp%10#0)
         exit 1u
 
 subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.test[routing]() -> void:

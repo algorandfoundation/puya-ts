@@ -357,6 +357,11 @@ fixedArray_block@0:
     // tests/approvals/native-arrays.algo.ts:109
     // fixedArray(y: FixedArray<uint64, 50>) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 400 // 400
+    ==
+    assert // invalid number of bytes for uint64[50]
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray
     intc_3 // 1
     return
@@ -382,6 +387,11 @@ structs_block@0:
     // tests/approvals/native-arrays.algo.ts:170
     // structs({ x, y }: Vector) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 16 // 16
+    ==
+    assert // invalid number of bytes for (uint64,uint64)
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs
     bytec_2 // 0x151f7c75
     uncover 1
@@ -495,7 +505,29 @@ aliasing_block@0:
     // tests/approvals/native-arrays.algo.ts:195
     // aliasing(mutable: uint64[], readOnly: readonly uint64[]) {
     txna ApplicationArgs 1
+    dup
+    intc_2 // 0
+    extract_uint16
+    intc_0 // 8
+    *
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint64[])
     txna ApplicationArgs 2
+    dup
+    intc_2 // 0
+    extract_uint16
+    intc_0 // 8
+    *
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint64[])
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing
     intc_3 // 1
     return
@@ -509,6 +541,17 @@ receiveMutable_block@0:
     // tests/approvals/native-arrays.algo.ts:221
     // receiveMutable(a: uint64[]) {
     txna ApplicationArgs 1
+    dup
+    intc_2 // 0
+    extract_uint16
+    intc_0 // 8
+    *
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint64[])
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable
     intc_3 // 1
     return
@@ -522,6 +565,17 @@ receiveReadonly_block@0:
     // tests/approvals/native-arrays.algo.ts:225
     // receiveReadonly(a: readonly uint64[]) {}
     txna ApplicationArgs 1
+    dup
+    intc_2 // 0
+    extract_uint16
+    intc_0 // 8
+    *
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+uint64[])
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly
     intc_3 // 1
     return

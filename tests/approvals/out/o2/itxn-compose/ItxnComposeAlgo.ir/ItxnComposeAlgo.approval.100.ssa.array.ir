@@ -12,24 +12,34 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         switch tmp%6#0 {method "distribute(address[],pay,uint64)void" => block@4, method "conditionalBegin(uint64)void" => block@5, * => block@8}
     block@4: // distribute_route_L19
         let addresses#0: Encoded(len+uint8[32][]) = (txna ApplicationArgs 1)
-        let tmp%0#4: uint64 = (txn GroupIndex)
-        let funds#0: uint64 = (- tmp%0#4 1u)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 addresses#0 0u)
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 32u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#1: uint64 = (len addresses#0)
+        let eq%0#1: bool = (== len%0#1 add%0#0)
+        (assert eq%0#1) // invalid number of bytes for (len+uint8[32][])
+        let tmp%1#1: uint64 = (txn GroupIndex)
+        let funds#0: uint64 = (- tmp%1#1 1u)
         let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) funds#0)
         let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 pay)
         (assert gtxn_type_matches%0#0) // transaction type is pay
-        let reinterpret_Encoded(uint64)%0#1: Encoded(uint64) = (txna ApplicationArgs 2)
-        let verifier#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#1)
+        let tmp%2#2: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#2)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let verifier#0: uint64 = (btoi tmp%2#2)
         let tmp%0#5: account = ((gtxns Receiver) funds#0)
         let tmp%1#2: account = (global CurrentApplicationAddress)
-        let tmp%2#2: bool = (== tmp%0#5 tmp%1#2)
-        (assert tmp%2#2) // assert target is match for conditions
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 addresses#0 0u)
-        let reinterpret_bool%0#0: bool = aggregate%array_length%0#0
-        (assert reinterpret_bool%0#0) // must provide some accounts
-        let tmp%3#2: uint64 = ((gtxns Amount) funds#0)
+        let tmp%2#3: bool = (== tmp%0#5 tmp%1#2)
+        (assert tmp%2#3) // assert target is match for conditions
         let aggregate%array_length%1#0: uint64 = (extract_uint16 addresses#0 0u)
-        let tmp%4#2: uint64 = aggregate%array_length%1#0
-        let share#0: uint64 = (/ tmp%3#2 tmp%4#2)
+        let reinterpret_bool%0#0: bool = aggregate%array_length%1#0
+        (assert reinterpret_bool%0#0) // must provide some accounts
+        let tmp%3#3: uint64 = ((gtxns Amount) funds#0)
+        let aggregate%array_length%2#0: uint64 = (extract_uint16 addresses#0 0u)
+        let tmp%4#2: uint64 = aggregate%array_length%2#0
+        let share#0: uint64 = (/ tmp%3#3 tmp%4#2)
         let aggregate%total_length%0#0: uint64 = (len addresses#0)
         let aggregate%array_trimmed%0#0: bytes = (substring3 addresses#0 2u aggregate%total_length%0#0)
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 32u)
@@ -70,8 +80,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Amount) values%1#0)
         ((itxn_field TypeEnum) values%0#0)
         ((itxn_field Fee) 0u)
-        let aggregate%array_length%2#0: uint64 = (extract_uint16 addresses#0 0u)
-        let tmp%7#1: uint64 = aggregate%array_length%2#0
+        let aggregate%array_length%3#0: uint64 = (extract_uint16 addresses#0 0u)
+        let tmp%7#1: uint64 = aggregate%array_length%3#0
         let value_internal%0#3: uint64 = 1u
         goto block@21
     block@21: // for_header_L32
@@ -104,8 +114,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_submit
         exit 1u
     block@5: // conditionalBegin_route_L52
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let count#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let tmp%0#2: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#2)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let count#0: uint64 = (btoi tmp%0#2)
         itxn_begin
         let aggregate%length%1#0: uint64 = (len "Hi")
         let aggregate%as_bytes%2#0: bytes[8] = (itob aggregate%length%1#0)
@@ -117,7 +130,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field ApplicationArgs) tmp%0#3)
         ((itxn_field GlobalNumByteSlice) 1u)
         ((itxn_field ClearStateProgramPages) C4EBQw==)
-        ((itxn_field ApprovalProgramPages) CyACAAEmAwhncmVldGluZwEgBBUffHUxGEAABCiAAGeCAgQkN408BKDoGHI2GgCOAgCWAI0xGRREMRhBAGuCAgTQooIABFGAuiA2GgCOAgA6AAEANhoBIihlRClQSwEiWUsCgQJZSwNPAksCUlcCAE8CTFBLAhVMTgNSVwIAUEkVFlcGAkxQKkxQsCNDNhoBVwIAIihlRClQTFBJFRZXBgJMUCpMULAjQ4AEAJIlrjYaAI4BAAEANhoBVwIAKExnI0MxGYEEEjEYEEMxGYEFEjEYEEM=)
+        ((itxn_field ApprovalProgramPages) CyADAAIBJgMIZ3JlZXRpbmcBIAQVH3x1MRhAAAQogABnggIEJDeNPASg6BhyNhoAjgIAqQCgMRkURDEYQQB0ggIE0KKCAARRgLogNhoAjgIAOQABADYaASIoZUQpUEsBIllLAiNZSwNPAksCUlcCAE8CTFBLAhVMTgNSVwIAUEkVFlcGAkxQKkxQsCRDNhoBSSJZIwhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwJEOABACSJa42GgCOAQABADYaAUkiWSMISwEVEkRXAgAoTGckQzEZgQQSMRgQQzEZgQUSMRgQQw==)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)

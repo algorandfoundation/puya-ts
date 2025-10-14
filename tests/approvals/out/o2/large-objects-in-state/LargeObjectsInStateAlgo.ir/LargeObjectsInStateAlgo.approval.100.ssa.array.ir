@@ -18,43 +18,52 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (log tmp%2#3)
         exit 1u
     block@5: // bootstrap_route_L21
-        let tmp%0#4: uint64 = (txn GroupIndex)
-        let pay#0: uint64 = (- tmp%0#4 1u)
+        let tmp%0#5: uint64 = (txn GroupIndex)
+        let pay#0: uint64 = (- tmp%0#5 1u)
         let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) pay#0)
         let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 pay)
         (assert gtxn_type_matches%0#0) // transaction type is pay
-        let tmp%0#5: uint64 = ((gtxns Amount) pay#0)
-        let tmp%1#1: bool = (== tmp%0#5 2982900u)
+        let tmp%0#6: uint64 = ((gtxns Amount) pay#0)
+        let tmp%1#1: bool = (== tmp%0#6 2982900u)
         let tmp%2#2: account = ((gtxns Receiver) pay#0)
-        let tmp%3#1: account = (global CurrentApplicationAddress)
-        let tmp%4#1: bool = (== tmp%2#2 tmp%3#1)
+        let tmp%3#2: account = (global CurrentApplicationAddress)
+        let tmp%4#1: bool = (== tmp%2#2 tmp%3#2)
         let tmp%5#1: bool = (&& tmp%1#1 tmp%4#1)
         (assert tmp%5#1) // assert target is match for conditions
         (box_create "x" 7200u)
         exit 1u
     block@6: // increaseXCount_route_L29
-        let reinterpret_Encoded(uint64)%0#1: Encoded(uint64) = (txna ApplicationArgs 1)
-        let index#1: uint64 = (btoi reinterpret_Encoded(uint64)%0#1)
-        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let xCount#0: uint64 = (btoi reinterpret_Encoded(uint64)%1#0)
+        let tmp%0#3: bytes = (txna ApplicationArgs 1)
+        let len%0#1: uint64 = (len tmp%0#3)
+        let eq%0#1: bool = (== len%0#1 8u)
+        (assert eq%0#1) // invalid number of bytes for uint64
+        let index#1: uint64 = (btoi tmp%0#3)
+        let tmp%2#1: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#1)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let xCount#0: uint64 = (btoi tmp%2#1)
         let box%element_offset%1#0: uint64 = (* index#1 9u)
         let box%box_extract%1#0: Encoded(uint64,uint8) = (box_extract "x" box%element_offset%1#0 9u)
         let aggregate%extract%0#0: bytes = (extract3 box%box_extract%1#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
         let values%0#0: uint64 = (btoi tuple_item%0#0)
-        let tmp%0#3: uint64 = (+ values%0#0 xCount#0)
-        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%0#3)
+        let tmp%0#4: uint64 = (+ values%0#0 xCount#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%0#4)
         let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
         let encoded_value%0#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
         (box_replace "x" box%element_offset%1#0 encoded_value%0#0)
         exit 1u
     block@7: // getCounts_route_L33
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 1)
-        let index#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let tmp%0#2: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#2)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for uint64
+        let index#0: uint64 = (btoi tmp%0#2)
         let box%element_offset%0#0: uint64 = (* index#0 9u)
         let box%box_extract%0#0: Encoded(uint64,uint8) = (box_extract "x" box%element_offset%0#0 9u)
-        let tmp%2#1: bytes = (concat 0x151f7c75 box%box_extract%0#0)
-        (log tmp%2#1)
+        let tmp%3#1: bytes = (concat 0x151f7c75 box%box_extract%0#0)
+        (log tmp%3#1)
         exit 1u
     block@10: // after_if_else_L14
         fail

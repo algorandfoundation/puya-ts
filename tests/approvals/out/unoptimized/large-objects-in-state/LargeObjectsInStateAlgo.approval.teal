@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 9 2982900
+    intcblock 0 1 9 8 2982900
     bytecblock "x" 0x151f7c75
     b main_block@0
 
@@ -143,8 +143,18 @@ increaseXCount_block@0:
     // tests/approvals/large-objects-in-state.algo.ts:29
     // increaseXCount(index: uint64, xCount: uint64) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount
     intc_1 // 1
@@ -159,6 +169,11 @@ getCounts_block@0:
     // tests/approvals/large-objects-in-state.algo.ts:33
     // getCounts(index: uint64) {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     callsub tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts
     bytec_1 // 0x151f7c75
@@ -176,7 +191,7 @@ tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getMbr:
 tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getMbr_block@0:
     // tests/approvals/large-objects-in-state.algo.ts:18
     // return BOX_MBR + ACCOUNT_BASE_MBR
-    intc_3 // 2982900
+    intc 4 // 2982900
     retsub
 
 
@@ -197,7 +212,7 @@ tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstra
     gtxns Amount
     // tests/approvals/large-objects-in-state.algo.ts:23
     // amount: BOX_MBR + ACCOUNT_BASE_MBR,
-    intc_3 // 2982900
+    intc 4 // 2982900
     // tests/approvals/large-objects-in-state.algo.ts:22-25
     // assertMatch(pay, {
     //   amount: BOX_MBR + ACCOUNT_BASE_MBR,
@@ -249,7 +264,7 @@ tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increase
     intc_2 // 9
     extract3 // on error: index access is out of bounds
     intc_0 // 0
-    pushint 8 // 8
+    intc_3 // 8
     extract3
     btoi
     frame_dig -1

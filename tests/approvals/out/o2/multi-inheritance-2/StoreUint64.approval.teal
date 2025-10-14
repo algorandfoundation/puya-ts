@@ -21,6 +21,11 @@ main_setStore_route@3:
     &&
     assert // OnCompletion must be NoOp && can only call when not creating
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/multi-inheritance-2.algo.ts:14
     // uint64Store = GlobalState<uint64>()

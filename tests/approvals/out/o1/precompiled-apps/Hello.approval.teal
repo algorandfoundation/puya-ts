@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0
+    intcblock 0 2 1
     bytecblock "greeting" " " 0x151f7c75
     txn ApplicationID
     bnz main_after_if_else@2
@@ -63,6 +63,15 @@ create:
     // tests/approvals/precompiled-apps.algo.ts:36
     // @abimethod({ name: 'helloCreate', onCreate: 'require' })
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     // tests/approvals/precompiled-apps.algo.ts:18
     // greeting = GlobalState({ initialValue: '' })
@@ -73,7 +82,7 @@ create:
     app_global_put
     // tests/approvals/precompiled-apps.algo.ts:36
     // @abimethod({ name: 'helloCreate', onCreate: 'require' })
-    intc_0 // 1
+    intc_2 // 1
     return
 
 
@@ -82,10 +91,19 @@ greet:
     // tests/approvals/precompiled-apps.algo.ts:26
     // greet(name: string): string {
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for (len+utf8[])
     extract 2 0
     // tests/approvals/precompiled-apps.algo.ts:27
     // return `${this.greeting.value} ${name}`
-    intc_1 // 0
+    intc_0 // 0
     // tests/approvals/precompiled-apps.algo.ts:18
     // greeting = GlobalState({ initialValue: '' })
     bytec_0 // "greeting"
@@ -109,7 +127,7 @@ greet:
     swap
     concat
     log
-    intc_0 // 1
+    intc_2 // 1
     return
 
 
@@ -120,7 +138,7 @@ sendGreetings:
     txna ApplicationArgs 1
     // tests/approvals/precompiled-apps.algo.ts:31
     // return `${this.greeting.value} ${a.name}${a.termination.native}`
-    intc_1 // 0
+    intc_0 // 0
     // tests/approvals/precompiled-apps.algo.ts:18
     // greeting = GlobalState({ initialValue: '' })
     bytec_0 // "greeting"
@@ -131,10 +149,10 @@ sendGreetings:
     bytec_1 // " "
     concat
     dig 1
-    intc_1 // 0
+    intc_0 // 0
     extract_uint16
     dig 2
-    pushint 2 // 2
+    intc_1 // 2
     extract_uint16
     dig 3
     uncover 2
@@ -164,5 +182,5 @@ sendGreetings:
     swap
     concat
     log
-    intc_0 // 1
+    intc_2 // 1
     return

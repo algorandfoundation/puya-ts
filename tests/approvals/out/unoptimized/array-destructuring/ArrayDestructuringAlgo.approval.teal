@@ -107,6 +107,11 @@ testNested_block@0:
     // testNested(arg: readonly [uint64, readonly [biguint, biguint]]) {
     txna ApplicationArgs 1
     dup
+    len
+    pushint 136 // 136
+    ==
+    assert // invalid number of bytes for (uint64,(uint512,uint512))
+    dup
     intc_0 // 0
     intc_3 // 8
     extract3

@@ -27,7 +27,7 @@ main_testCallToEchoResource_route@6:
     // const compiled = compileArc4(EchoResource)
     pushbytes base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyADAQIDJgEEFR98dTEbQQCNMRkURDEYRIICBHfijXQETTcCdjYaAI4CADIAAQA2GgEXNhoCFzYaAyLAGhdLAxJEI8AaF0sCEkQkwBpLARJETwIWTwIWUExQKExQsCJDNhoBF8AwNhoCF8AyNhoDF8AcIsAaF8AwSwMSRCPAGhfAMksCEkQkwBoXwBxLARJETwIWTwIWUExQKExQsCJDMRkUMRgUEEM=)
+    pushbytes base64(CyAEAQgCAyYBBBUffHUxG0EArDEZFEQxGESCAgR34o10BE03AnY2GgCOAgBCAAEANhoBSRUjEkQXNhoCSRUjEkQXNhoDSRWBIBJEIsAaF0sDEkQkwBoXSwISRCXAGksBEkRPAhZPAhZQTFAoTFCwIkM2GgFJFSISRBfAMDYaAkkVIhJEF8AyNhoDSRUiEkQXwBwiwBoXwDBLAxJEJMAaF8AySwISRCXAGhfAHEsBEkRPAhZPAhZQTFAoTFCwIkMxGRQxGBQQQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/resource-encoding.algo.ts:84
     // const appId = compiled.bareCreate().createdApp
@@ -219,7 +219,17 @@ main_testCallToValue_route@5:
     // tests/approvals/resource-encoding.algo.ts:72
     // testCallToValue(account: Account, appId: Application) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     txna ApplicationArgs 2
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:73-76
     // const { returnValue: res1 } = abiCall<typeof ByValue.prototype.testExplicitValue>({
@@ -260,7 +270,17 @@ main_testCallToIndex_route@4:
     // tests/approvals/resource-encoding.algo.ts:63
     // testCallToIndex(account: Account, appId: Application) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     txna ApplicationArgs 2
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:64-68
     // const { returnValue: res1 } = abiCall({

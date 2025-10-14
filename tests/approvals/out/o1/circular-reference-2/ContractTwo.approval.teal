@@ -39,6 +39,11 @@ test:
     // tests/approvals/circular-reference-2.algo.ts:7
     // test(appId: Application) {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/circular-reference-2.algo.ts:8
     // abiCall<typeof ContractOne.prototype.test>({ appId })

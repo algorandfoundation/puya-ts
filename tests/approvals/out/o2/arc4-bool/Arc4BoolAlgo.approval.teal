@@ -39,6 +39,11 @@ main_test_route@3:
     assert // OnCompletion must be NoOp && can only call when not creating
     txna ApplicationArgs 1
     dup
+    len
+    pushint 26 // 26
+    ==
+    assert // invalid number of bytes for (bool1,uint64,uint64,uint64,bool1,bool1)
+    dup
     intc_0 // 0
     getbit
     dig 1

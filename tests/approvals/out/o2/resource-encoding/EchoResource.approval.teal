@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 2 3
+    intcblock 1 8 2 3
     bytecblock 0x151f7c75
     // tests/approvals/resource-encoding.algo.ts:38
     // class EchoResource extends Contract {
@@ -23,10 +23,25 @@ main_echoResourceByValue_route@5:
     // tests/approvals/resource-encoding.algo.ts:50
     // @abimethod({ resourceEncoding: 'value' })
     txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for uint64
     btoi
     txna ApplicationArgs 3
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for uint8[32]
     // tests/approvals/resource-encoding.algo.ts:52
     // const assetId = op.btoi(Txn.applicationArgs(1))
     intc_0 // 1
@@ -39,7 +54,7 @@ main_echoResourceByValue_route@5:
     assert // expected asset to be passed by value
     // tests/approvals/resource-encoding.algo.ts:54
     // const appId = op.btoi(Txn.applicationArgs(2))
-    intc_1 // 2
+    intc_2 // 2
     txnas ApplicationArgs
     btoi
     // tests/approvals/resource-encoding.algo.ts:55
@@ -49,7 +64,7 @@ main_echoResourceByValue_route@5:
     assert // expected application to be passed by value
     // tests/approvals/resource-encoding.algo.ts:56
     // const address = Txn.applicationArgs(3)
-    intc_2 // 3
+    intc_3 // 3
     txnas ApplicationArgs
     // tests/approvals/resource-encoding.algo.ts:57
     // assert(acc === Account(address), 'expected account to be passed by value')
@@ -78,12 +93,27 @@ main_echoResourceByIndex_route@4:
     // tests/approvals/resource-encoding.algo.ts:39
     // @abimethod({ resourceEncoding: 'index' })
     txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for uint8
     btoi
     txnas Assets
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for uint8
     btoi
     txnas Applications
     txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for uint8
     btoi
     txnas Accounts
     // tests/approvals/resource-encoding.algo.ts:41
@@ -99,7 +129,7 @@ main_echoResourceByIndex_route@4:
     assert // expected asset to be passed by index
     // tests/approvals/resource-encoding.algo.ts:43
     // const appIdx = op.btoi(Txn.applicationArgs(2))
-    intc_1 // 2
+    intc_2 // 2
     txnas ApplicationArgs
     btoi
     // tests/approvals/resource-encoding.algo.ts:44
@@ -110,7 +140,7 @@ main_echoResourceByIndex_route@4:
     assert // expected application to be passed by index
     // tests/approvals/resource-encoding.algo.ts:45
     // const accIdx = op.btoi(Txn.applicationArgs(3))
-    intc_2 // 3
+    intc_3 // 3
     txnas ApplicationArgs
     btoi
     // tests/approvals/resource-encoding.algo.ts:46

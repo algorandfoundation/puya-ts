@@ -47,20 +47,36 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 
 subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToIndex[routing]() -> void:
     block@0: // L63
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 1)
-        let tmp%0#0: account = reinterpret_Encoded(uint8[32])%0#0
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let tmp%1#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        tests/approvals/resource-encoding.algo.ts::C2C.testCallToIndex(tmp%0#0, tmp%1#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 32u)
+        (assert eq%0#0) // invalid number of bytes for uint8[32]
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%0#0
+        let tmp%1#0: account = as_Encoded(uint8[32])%0#0
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%2#0
+        let tmp%3#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        tests/approvals/resource-encoding.algo.ts::C2C.testCallToIndex(tmp%1#0, tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue[routing]() -> void:
     block@0: // L72
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txna ApplicationArgs 1)
-        let tmp%0#0: account = reinterpret_Encoded(uint8[32])%0#0
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = (txna ApplicationArgs 2)
-        let tmp%1#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
-        tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue(tmp%0#0, tmp%1#0)
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 32u)
+        (assert eq%0#0) // invalid number of bytes for uint8[32]
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%0#0
+        let tmp%1#0: account = as_Encoded(uint8[32])%0#0
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%2#0
+        let tmp%3#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue(tmp%1#0, tmp%3#0)
         exit 1u
 
 subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource[routing]() -> void:
@@ -135,7 +151,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         ((itxn_field GlobalNumUint) 0u)
         ((itxn_field ClearStateProgramPages) C0IAAIEBQw==)
         (itxn_field ClearStateProgramPages)
-        ((itxn_field ApprovalProgramPages) CyAEAAECAyYCBBUffHUAQgAAQgAAMRsiE0EAQkIAADEZIhJEMRgiE0EAMEIAADYaAIAEd+KNdIAETTcCdk8CjgIAEAAKQgAAQgAAQgAAAIgAQEL/84gAFUL/7UL/7TEZIhIxGCISEESIAKQjQ0IAADYaARfAMDYaAhfAMjYaAxfAHE8CTwJPAogAJShPAVCwI0NCAAA2GgEXNhoCFzYaA08CTwJPAogAOihPAVCwI0OKAwFCAAAjwBoXwDCL/RJEJMAaF8Ayi/4SRCXAGhfAHIv/EkSL/RYpTwFQi/4WUIv/UImKAwFCAAAjwBoXi/0SRCTAGheL/hJEJcAai/8SRIv9FilPAVCL/hZQi/9QiUIAAIk=)
+        ((itxn_field ApprovalProgramPages) CyAEAQAIAiYCBBUffHUAQgAAQgAAMRsjE0EAQkIAADEZIxJEMRgjE0EAMEIAADYaAIAEd+KNdIAETTcCdk8CjgIAEAAKQgAAQgAAQgAAAIgAT0L/84gAFUL/7UL/7TEZIxIxGCMSEESIAMUiQ0IAADYaAUkVIhJEF8AwNhoCSRUiEkQXwDI2GgNJFSISRBfAHE8CTwJPAogANShPAVCwIkNCAAA2GgFJFSQSRBc2GgJJFSQSRBc2GgNJFYEgEkRPAk8CTwKIADsoTwFQsCJDigMBQgAAIsAaF8Awi/0SRCXAGhfAMov+EkSBA8AaF8Aci/8SRIv9FilPAVCL/hZQi/9QiYoDAUIAACLAGheL/RJEJcAaF4v+EkSBA8Aai/8SRIv9FilPAVCL/hZQi/9QiUIAAIk=)
         (itxn_field ApprovalProgramPages)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
