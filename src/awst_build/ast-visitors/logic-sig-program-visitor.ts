@@ -20,6 +20,7 @@ export class LogicSigProgramVisitor extends FunctionVisitor {
       body,
       documentation,
       inline: null,
+      pure: false,
     })
   }
 

@@ -28,6 +28,7 @@ export function buildLibAwst(): AWST[] {
       documentation: nodeFactory.methodDocumentation(),
       body: nodeFactory.block({ sourceLocation: SourceLocation.None }),
       inline: true,
+      pure: false,
     }),
     methods: [],
     appState: [],
@@ -53,6 +54,7 @@ export function buildLibAwst(): AWST[] {
         }),
       ),
       inline: null,
+      pure: false,
     }),
   })
   AwstBuildContext.current.addToCompilationSet(baseContractCref, baseContract)
@@ -85,6 +87,7 @@ export function buildLibAwst(): AWST[] {
         }),
       ),
       inline: null,
+      pure: false,
     }),
   })
   AwstBuildContext.current.addToCompilationSet(contractCref, contract)
@@ -185,6 +188,7 @@ function buildItoa(): Subroutine {
     ),
     documentation: nodeFactory.methodDocumentation({}),
     inline: null,
+    pure: false,
     id: itoaMethod.fullName,
     name: itoaMethod.name,
   })

@@ -284,6 +284,20 @@ export class ARC4Decode extends Expression {
     return visitor.visitARC4Decode(this)
   }
 }
+export class ARC4FromBytes extends Expression {
+  constructor(props: Props<ARC4FromBytes>) {
+    super(props)
+    this.value = props.value
+    this.wtype = props.wtype
+    this.validate = props.validate
+  }
+  readonly value: Expression
+  readonly wtype: wtypes.ARC4Type
+  readonly validate: boolean
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitARC4FromBytes(this)
+  }
+}
 export class ConvertArray extends Expression {
   constructor(props: Props<ConvertArray>) {
     super(props)
@@ -468,6 +482,18 @@ export class TupleItemExpression extends Expression {
   readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitTupleItemExpression(this)
+  }
+}
+export class NamedTupleExpression extends Expression {
+  constructor(props: Props<NamedTupleExpression>) {
+    super(props)
+    this.wtype = props.wtype
+    this.values = props.values
+  }
+  readonly wtype: wtypes.WTuple
+  readonly values: Map<string, Expression>
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitNamedTupleExpression(this)
   }
 }
 export class VarExpression extends Expression {
@@ -1300,12 +1326,14 @@ export abstract class _Function extends Node {
     this.body = props.body
     this.documentation = props.documentation
     this.inline = props.inline
+    this.pure = props.pure
   }
   readonly args: Array<SubroutineArgument>
   readonly returnType: wtypes.WType
   readonly body: Block
   readonly documentation: MethodDocumentation
   readonly inline: boolean | null
+  readonly pure: boolean
 }
 export class Subroutine extends classes(_Function, RootNode) {
   constructor(props: Props<Subroutine>) {
@@ -1539,6 +1567,7 @@ export const concreteNodes = {
   addressConstant: AddressConstant,
   aRC4Encode: ARC4Encode,
   aRC4Decode: ARC4Decode,
+  aRC4FromBytes: ARC4FromBytes,
   convertArray: ConvertArray,
   copy: Copy,
   arrayConcat: ArrayConcat,
@@ -1553,6 +1582,7 @@ export const concreteNodes = {
   checkedMaybe: CheckedMaybe,
   tupleExpression: TupleExpression,
   tupleItemExpression: TupleItemExpression,
+  namedTupleExpression: NamedTupleExpression,
   varExpression: VarExpression,
   innerTransactionField: InnerTransactionField,
   setInnerTransactionFields: SetInnerTransactionFields,
@@ -1652,6 +1682,7 @@ export interface ExpressionVisitor<T> {
   visitAddressConstant(expression: AddressConstant): T
   visitARC4Encode(expression: ARC4Encode): T
   visitARC4Decode(expression: ARC4Decode): T
+  visitARC4FromBytes(expression: ARC4FromBytes): T
   visitConvertArray(expression: ConvertArray): T
   visitCopy(expression: Copy): T
   visitArrayConcat(expression: ArrayConcat): T
@@ -1666,6 +1697,7 @@ export interface ExpressionVisitor<T> {
   visitCheckedMaybe(expression: CheckedMaybe): T
   visitTupleExpression(expression: TupleExpression): T
   visitTupleItemExpression(expression: TupleItemExpression): T
+  visitNamedTupleExpression(expression: NamedTupleExpression): T
   visitVarExpression(expression: VarExpression): T
   visitInnerTransactionField(expression: InnerTransactionField): T
   visitSetInnerTransactionFields(expression: SetInnerTransactionFields): T

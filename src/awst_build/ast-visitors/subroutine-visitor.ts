@@ -22,6 +22,7 @@ export class SubroutineVisitor extends FunctionVisitor {
       body,
       documentation,
       inline: null,
+      pure: false,
     })
   }
 
