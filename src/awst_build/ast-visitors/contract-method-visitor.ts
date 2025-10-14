@@ -97,6 +97,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       cref: this.metaData.cref,
       documentation,
       inline: null,
+      pure: false,
     })
   }
 

@@ -168,6 +168,7 @@ export class ContractClassModel {
       }),
       arc4MethodConfig: null,
       inline: null, // TODO: Expose inline hint option
+      pure: false,
     })
     const ctorTargets: awst.ContractMethod[] = []
     for (const baseType of clusteredType.baseTypes) {
@@ -267,6 +268,7 @@ export class ContractClassModel {
         sourceLocation: this.sourceLocation,
       }),
       inline: null, // TODO: Expose inline hint option?
+      pure: false,
     })
   }
 }

@@ -5,6 +5,7 @@ import type {
   AppStorageDefinition,
   ARC4Decode,
   ARC4Encode,
+  ARC4FromBytes,
   ARC4Router,
   ArrayConcat,
   ArrayExtend,
@@ -57,6 +58,7 @@ import type {
   LoopContinue,
   LoopExit,
   MethodConstant,
+  NamedTupleExpression,
   NewArray,
   NewStruct,
   Not,
@@ -264,6 +266,16 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
 
   visitTupleItemExpression(expression: TupleItemExpression): void {
     expression.base.accept(this)
+  }
+
+  visitARC4FromBytes(expression: ARC4FromBytes): void {
+    expression.value.accept(this)
+  }
+
+  visitNamedTupleExpression(expression: NamedTupleExpression): void {
+    for (const v of expression.values.values()) {
+      v.accept(this)
+    }
   }
 
   visitVarExpression(expression: VarExpression): void {}

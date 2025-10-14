@@ -145,6 +145,7 @@ export class ContractVisitor extends ClassDefinitionVisitor {
         ...this._propertyInitialization,
       ),
       inline: null,
+      pure: false,
     })
   }
 

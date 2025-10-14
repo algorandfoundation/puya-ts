@@ -156,6 +156,17 @@ export class ToCodeVisitor
   visitARC4Decode(expression: nodes.ARC4Decode): string {
     return `ARC4_DECODE(${expression.value.accept(this)})`
   }
+  visitARC4FromBytes(expression: nodes.ARC4FromBytes): string {
+    return `ARC4_FROM_BYTES(${expression.value.accept(this)}, ${expression.wtype})`
+  }
+  visitNamedTupleExpression(expression: nodes.NamedTupleExpression): string {
+    return `#{ ${expression.values
+      .entries()
+      .map(([name, value]) => `${name}: ${value.accept(this)}`)
+      .toArray()
+      .join(', ')} }`
+  }
+
   visitIntrinsicCall(expression: nodes.IntrinsicCall): string {
     const immediates = expression.immediates.length ? `<${expression.immediates.map((i) => i).join(', ')}>` : ''
     const stack = expression.stackArgs.map((a) => a.accept(this)).join(', ')
