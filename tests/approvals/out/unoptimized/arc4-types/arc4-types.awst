@@ -15,7 +15,7 @@ subroutine testUintN(n: uint64, b: biguint, c: arc4.uint256): void
   assert(a_native == b)
   assert(len(reinterpret_cast<bytes>(c)) == 32)
   a_bytes: bytes = reinterpret_cast<bytes>(a)
-  a_from_bytes: arc4.uint128 = reinterpret_cast<arc4.uint128>(a_bytes)
+  a_from_bytes: arc4.uint128 = ARC4_FROM_BYTES(a_bytes, arc4.uint128)
   assert(reinterpret_cast<bytes>(a_from_bytes) == reinterpret_cast<bytes>(a))
   assert(ARC4_DECODE(12) == 12)
   assert(reinterpret_cast<biguint>(reinterpret_cast<bytes>(50545)) == 50545)
@@ -26,7 +26,7 @@ subroutine testStr(): void
   assert(reinterpret_cast<bytes>("") == reinterpret_cast<bytes>(0), comment=Empty string should equal the uint16 length prefix)
   assert(ARC4_DECODE("Hello") == "Hello")
   s2_bytes: bytes = reinterpret_cast<bytes>("Hello")
-  s2_from_bytes: arc4.dynamic_array<arc4.byte> = reinterpret_cast<arc4.dynamic_array<arc4.byte>>(s2_bytes)
+  s2_from_bytes: arc4.dynamic_array<arc4.byte> = ARC4_FROM_BYTES(s2_bytes, arc4.dynamic_array<arc4.byte>)
   assert(reinterpret_cast<bytes>("Hello") == reinterpret_cast<bytes>(s2_from_bytes))
 }
 subroutine testDynamicBytes(someBytes: bytes): void

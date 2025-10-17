@@ -237,8 +237,11 @@ subroutine tests/approvals/arc4-types.algo.ts::testUintN(n: uint64, b: biguint, 
         let tmp%12#0: bool = (== tmp%11#0 32u)
         (assert tmp%12#0)
         let a_bytes#0: bytes = a#0
-        let reinterpret_Encoded(uint128)%0#0: Encoded(uint128) = a_bytes#0
-        let a_from_bytes#0: Encoded(uint128) = reinterpret_Encoded(uint128)%0#0
+        let len%0#0: uint64 = (len a_bytes#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for uint128
+        let as_Encoded(uint128)%0#0: Encoded(uint128) = a_bytes#0
+        let a_from_bytes#0: Encoded(uint128) = as_Encoded(uint128)%0#0
         let tmp%13#0: bool = (== a_from_bytes#0 a#0)
         (assert tmp%13#0)
         let tmp%14#0: uint64 = decode_bytes<uint64>(0x000000000000000c)
@@ -263,8 +266,14 @@ subroutine tests/approvals/arc4-types.algo.ts::testStr() -> void:
         (assert tmp%4#0)
         let tmp%5#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>("Hello")
         let s2_bytes#0: bytes = tmp%5#0
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = s2_bytes#0
-        let s2_from_bytes#0: Encoded(len+utf8[]) = reinterpret_Encoded(len+utf8[])%0#0
+        let length%0#0: uint64 = array_len(s2_bytes#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len s2_bytes#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for (len+utf8[])
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = s2_bytes#0
+        let s2_from_bytes#0: Encoded(len+utf8[]) = as_Encoded(len+utf8[])%0#0
         let tmp%6#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>("Hello")
         let tmp%7#0: bool = (== tmp%6#0 s2_from_bytes#0)
         (assert tmp%7#0)

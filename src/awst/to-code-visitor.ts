@@ -157,7 +157,7 @@ export class ToCodeVisitor
     return `ARC4_DECODE(${expression.value.accept(this)})`
   }
   visitARC4FromBytes(expression: nodes.ARC4FromBytes): string {
-    return `ARC4_FROM_BYTES(${expression.value.accept(this)}, ${expression.wtype})`
+    return `ARC4_FROM_BYTES(${expression.value.accept(this)}, ${expression.wtype}, validate=${expression.validate})`
   }
   visitNamedTupleExpression(expression: nodes.NamedTupleExpression): string {
     return `#{ ${expression.values

@@ -28,4 +28,19 @@ describe('abi validation', () => {
     const res2 = await appClientAbiValidationAlgo.send.call({ method: 'withoutValidation', args: [b32] })
     expect(res2.return).toBe(32n)
   })
+
+  test('with manual validation in convert, fails on invalid', async ({ appClientAbiValidationAlgo }) => {
+    await expect(appClientAbiValidationAlgo.send.call({ method: 'manualValidationInConvert', args: [b31] })).rejects.toThrow(
+      'invalid number of bytes for uint8[32]',
+    )
+    const res = await appClientAbiValidationAlgo.send.call({ method: 'manualValidationInConvert', args: [b32] })
+    expect(res.return).toBe(32n)
+  })
+  test('with manual validation after convert, fails on invalid', async ({ appClientAbiValidationAlgo }) => {
+    await expect(appClientAbiValidationAlgo.send.call({ method: 'manualValidationAfterConvert', args: [b31] })).rejects.toThrow(
+      'invalid number of bytes for uint8[32]',
+    )
+    const res = await appClientAbiValidationAlgo.send.call({ method: 'manualValidationAfterConvert', args: [b32] })
+    expect(res.return).toBe(32n)
+  })
 })

@@ -214,11 +214,18 @@ export function methodSelector(methodSignature: string | InstanceMethod<Contract
 }
 
 /**
- * Interpret the provided bytes as an ARC4 encoded type with no validation
+ * Interpret the provided bytes as an ARC4 encoded type
  * @param bytes An arc4 encoded bytes value
- * @param prefix The prefix (if any), present in the bytes value. This prefix will be validated and removed
+ * @param options Options for how the bytes should be converted
+ * @param options.prefix The prefix (if any), present in the bytes value. This prefix will be validated and removed
+ * @param options.strategy The strategy used for converting bytes.
+ *         `unsafe-cast`: Reinterpret the value as an ARC4 encoded type without validation
+ *         `validate`: Asserts the encoding of the raw bytes matches the expected type
  */
-export function convertBytes<T extends ARC4Encoded>(bytes: BytesCompat, options: { prefix?: 'none' | 'log'; strategy: 'unsafe-cast' }): T {
+export function convertBytes<T extends ARC4Encoded>(
+  bytes: BytesCompat,
+  options: { prefix?: 'none' | 'log'; strategy: 'unsafe-cast' | 'validate' },
+): T {
   throw new NoImplementation()
 }
 

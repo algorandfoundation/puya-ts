@@ -4,7 +4,7 @@ import { EqualityComparison } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { tryConvertEnum } from '../../../util'
-import { biguintPType, bytesPType, uint64PType, type PType } from '../../ptypes'
+import { biguintPType, bytesPType, type PType, uint64PType, voidPType } from '../../ptypes'
 import type { ARC4EncodedType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
@@ -42,6 +42,9 @@ export class Arc4EncodedBaseExpressionBuilder<T extends ARC4EncodedType> extends
         return this.toBytes(sourceLocation)
       case 'equals':
         return new Arc4EqualsFunctionBuilder(this, sourceLocation)
+      case 'validate':
+        return new ValidateFunctionBuilder(this, sourceLocation)
+
       case 'native':
         if (this.ptype.nativeType === undefined) break
         return instanceEb(
@@ -64,6 +67,41 @@ export class Arc4EncodedBaseExpressionBuilder<T extends ARC4EncodedType> extends
         sourceLocation,
       }),
       bytesPType,
+    )
+  }
+}
+
+class ValidateFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private target: Arc4EncodedBaseExpressionBuilder<ARC4EncodedType>,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'validate',
+      argSpec: () => [],
+    })
+
+    const expr = nodeFactory.aRC4FromBytes({
+      value: this.target.toBytes(this.target.sourceLocation).resolve(),
+      validate: true,
+      wtype: this.target.ptype.wtype,
+      sourceLocation,
+    })
+
+    return instanceEb(
+      nodeFactory.commaExpression({
+        expressions: [expr, nodeFactory.voidConstant({ sourceLocation })],
+        sourceLocation,
+      }),
+      voidPType,
     )
   }
 }
