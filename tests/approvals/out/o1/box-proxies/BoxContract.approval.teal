@@ -4,7 +4,7 @@
 // tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram() -> uint64:
 main:
     intcblock 1 4 99 0
-    bytecblock "one" "three" "A" "twowhat?" "what?" "abc" "aaaaaargh" 0xffffffff
+    bytecblock "one" "three" "A" "twowhat?" "aaaaaargh" "abc" "what?"
     // tests/approvals/box-proxies.algo.ts:99
     // if (Txn.applicationId.id !== 0) {
     txn ApplicationID
@@ -21,7 +21,7 @@ main:
     bytec_0 // "one"
     // tests/approvals/box-proxies.algo.ts:100
     // testBox(this.boxOne, 'aaaaaargh')
-    bytec 6 // "aaaaaargh"
+    bytec 4 // "aaaaaargh"
     // tests/approvals/box-proxies.algo.ts:8
     // box.value = value
     box_put
@@ -37,7 +37,7 @@ main:
     bytec_2 // "A"
     // tests/approvals/box-proxies.algo.ts:100
     // testBox(this.boxOne, 'aaaaaargh')
-    bytec 6 // "aaaaaargh"
+    bytec 4 // "aaaaaargh"
     // tests/approvals/box-proxies.algo.ts:9
     // boxA.value = value
     box_put
@@ -48,13 +48,11 @@ main:
     // assert(box.value === boxA.value)
     box_get
     assert // Box must have value
-    // tests/approvals/box-proxies.algo.ts:6
-    // const boxA = Box<string>({ key: Bytes('A') })
-    bytec_2 // "A"
+    // tests/approvals/box-proxies.algo.ts:100
+    // testBox(this.boxOne, 'aaaaaargh')
+    bytec 4 // "aaaaaargh"
     // tests/approvals/box-proxies.algo.ts:14
     // assert(box.value === boxA.value)
-    box_get
-    assert // Box must have value
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:94
@@ -149,17 +147,12 @@ main_bool_merge@11:
     pushbytes "O"
     // tests/approvals/box-proxies.algo.ts:26
     // assert(boxA.get({ default: defaultVal }) === box.get({ default: defaultVal }))
-    cover 2
+    uncover 2
+    dig 2
     select
+    uncover 2
     ==
     assert
-    // tests/approvals/box-proxies.algo.ts:94
-    // boxOne = Box<string>({ key: 'one' })
-    bytec_0 // "one"
-    // tests/approvals/box-proxies.algo.ts:28
-    // let [, e] = box.maybe()
-    box_get
-    bury 1
     // tests/approvals/box-proxies.algo.ts:29
     // assert(!e)
     !
@@ -176,20 +169,10 @@ main_bool_merge@11:
     bytec_0 // "one"
     // tests/approvals/box-proxies.algo.ts:100
     // testBox(this.boxOne, 'aaaaaargh')
-    bytec 6 // "aaaaaargh"
+    bytec 4 // "aaaaaargh"
     // tests/approvals/box-proxies.algo.ts:30
     // box.value = value
     box_put
-    // tests/approvals/box-proxies.algo.ts:94
-    // boxOne = Box<string>({ key: 'one' })
-    bytec_0 // "one"
-    // tests/approvals/box-proxies.algo.ts:31
-    // ;[, e] = box.maybe()
-    box_get
-    bury 1
-    // tests/approvals/box-proxies.algo.ts:32
-    // assert(e)
-    assert
     // tests/approvals/box-proxies.algo.ts:102
     // testBoxMap(this.boxMapTwo, 'what?', itob(256456))
     pushint 256456 // 256456
@@ -204,21 +187,21 @@ main_bool_merge@11:
     box_put
     // tests/approvals/box-proxies.algo.ts:102
     // testBoxMap(this.boxMapTwo, 'what?', itob(256456))
-    bytec 4 // "what?"
+    bytec 6 // "what?"
     // tests/approvals/box-proxies.algo.ts:39
     // boxMap(key).value = value
     box_del
     pop
     // tests/approvals/box-proxies.algo.ts:102
     // testBoxMap(this.boxMapTwo, 'what?', itob(256456))
-    bytec 4 // "what?"
+    bytec 6 // "what?"
     // tests/approvals/box-proxies.algo.ts:39
     // boxMap(key).value = value
-    swap
+    dig 1
     box_put
     // tests/approvals/box-proxies.algo.ts:102
     // testBoxMap(this.boxMapTwo, 'what?', itob(256456))
-    bytec 4 // "what?"
+    bytec 6 // "what?"
     // tests/approvals/box-proxies.algo.ts:43
     // assert(boxMapItem.exists)
     box_len
@@ -234,20 +217,9 @@ main_bool_merge@11:
     // assert(box(key).maybe()[1])
     bytec_3 // "twowhat?"
     box_get
-    bury 1
     assert
     // tests/approvals/box-proxies.algo.ts:52
     // assert(box(key).value === boxMap(key).value)
-    bytec_3 // "twowhat?"
-    box_get
-    assert // Box must have value
-    // tests/approvals/box-proxies.algo.ts:102
-    // testBoxMap(this.boxMapTwo, 'what?', itob(256456))
-    bytec 4 // "what?"
-    // tests/approvals/box-proxies.algo.ts:52
-    // assert(box(key).value === boxMap(key).value)
-    box_get
-    assert // Box must have value
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:54
@@ -311,42 +283,10 @@ main_after_if_else@23:
     bytec_1 // "three"
     // tests/approvals/box-proxies.algo.ts:76
     // const someBytes = Bytes.fromHex('FFFFFFFF')
-    bytec 7 // 0xffffffff
+    pushbytes 0xffffffff
     // tests/approvals/box-proxies.algo.ts:77
     // box.put(someBytes)
     box_put
-    // tests/approvals/box-proxies.algo.ts:96
-    // boxRefThree = BoxRef({ key: 'three' })
-    bytec_1 // "three"
-    // tests/approvals/box-proxies.algo.ts:79
-    // assert(box.get({ default: Bytes() }) === Bytes.fromHex('FFFFFFFF'))
-    box_get
-    pushbytes 0x
-    cover 2
-    select
-    bytec 7 // 0xffffffff
-    ==
-    assert
-    // tests/approvals/box-proxies.algo.ts:96
-    // boxRefThree = BoxRef({ key: 'three' })
-    bytec_1 // "three"
-    // tests/approvals/box-proxies.algo.ts:81
-    // const maybeBox = box.maybe()
-    box_get
-    bury 1
-    // tests/approvals/box-proxies.algo.ts:82
-    // assert(maybeBox[1])
-    assert
-    // tests/approvals/box-proxies.algo.ts:96
-    // boxRefThree = BoxRef({ key: 'three' })
-    bytec_1 // "three"
-    // tests/approvals/box-proxies.algo.ts:84
-    // assert(box.value === Bytes.fromHex('FFFFFFFF'))
-    box_get
-    assert // Box must have value
-    bytec 7 // 0xffffffff
-    ==
-    assert
     // tests/approvals/box-proxies.algo.ts:96
     // boxRefThree = BoxRef({ key: 'three' })
     bytec_1 // "three"

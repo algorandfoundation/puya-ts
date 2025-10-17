@@ -12,7 +12,6 @@ import { parseFunctionArgs } from '../../util/arg-parsing'
 import { extractKey } from '../util'
 import { BoxProxyExpressionBuilder } from './base'
 import { BoxExpressionBuilder } from './box'
-import { checkBoxType } from './util'
 
 export class BoxMapFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
@@ -27,7 +26,6 @@ export class BoxMapFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 2,
       argSpec: (a) => [a.obj({ keyPrefix: a.required(bytesPType, stringPType) })],
     })
-    checkBoxType(contentPType, sourceLocation)
 
     const ptype = new BoxMapPType({ content: contentPType, keyType: keySuffixType })
     return new BoxMapExpressionBuilder(extractKey(keyPrefix, wtypes.boxKeyWType), ptype)

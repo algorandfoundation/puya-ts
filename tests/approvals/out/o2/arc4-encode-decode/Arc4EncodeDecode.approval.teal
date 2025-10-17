@@ -575,10 +575,14 @@ main_after_while@53:
     assert
     // tests/approvals/arc4-encode-decode.algo.ts:41
     // assert(encodeArc4<biguint[]>([c]) === new DynamicArray(new UintN<512>(c)).bytes)
-    bytec_0 // 0x0001
-    dig 36
+    dig 35
     dup
-    cover 2
+    len
+    pushint 64 // 64
+    /
+    itob
+    extract 6 2
+    dig 1
     concat
     bytec_0 // 0x0001
     uncover 2
@@ -609,10 +613,14 @@ main_after_while@53:
     assert
     // tests/approvals/arc4-encode-decode.algo.ts:44
     // assert(encodeArc4<Address[]>([f]) === new DynamicArray(f).bytes)
-    bytec_0 // 0x0001
-    dig 21
+    dig 20
     dup
-    cover 2
+    len
+    pushint 32 // 32
+    /
+    itob
+    extract 6 2
+    dig 1
     concat
     bytec_0 // 0x0001
     uncover 2

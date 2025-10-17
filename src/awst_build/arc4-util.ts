@@ -81,7 +81,7 @@ export function buildArc4MethodConstant(functionType: FunctionPType, arc4Config:
 export function getABITypeName(ptype: PType, direction: 'in' | 'out', sourceLocation: SourceLocation): string {
   const arc4Type = ptypeToAbiPType(ptype, direction, sourceLocation)
   if (arc4Type.wtype instanceof wtypes.ARC4Type || arc4Type.wtype instanceof wtypes.WGroupTransaction) {
-    return arc4Type.wtype.arc4Name
+    return arc4Type.wtype.arc4Alias
   }
   return arc4Type.wtypeOrThrow.name
 }

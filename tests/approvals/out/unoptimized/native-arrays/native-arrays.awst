@@ -27,8 +27,8 @@ contract NativeArraysAlgo
     assert(arr.length == 4 and arr[0] == 1 and arr[1] == 2 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
     arr: stack_array<uint64> = arr.with(1, 10)
     assert(arr.length == 4 and arr[0] == 1 and arr[1] == 10 and arr[2] == 3 and arr[3] == 4, comment=assert target is match for conditions)
-    t1: readonlytuple[uint64, uint64] = <tuple>[12, 13]
-    arr: stack_array<uint64> = arr.concat(arr).concat(<tuple>[11]).concat(t1)
+    t1: readonlytuple[uint64, uint64] = #[12, 13]
+    arr: stack_array<uint64> = arr.concat(arr).concat(#[11]).concat(t1)
     assert(arr.length == 11 and arr[0] == 1 and arr[1] == 10 and arr[2] == 3 and arr[3] == 4 and arr[4] == 1 and arr[5] == 10 and arr[6] == 3 and arr[7] == 4 and arr[8] == 11 and arr[9] == 12 and arr[10] == 13, comment=assert target is match for conditions)
   }
   
@@ -43,9 +43,9 @@ contract NativeArraysAlgo
   
   structs(p: Vector{ x: uint64, y: uint64 }): stack_array<tests/approvals/native-arrays.algo.ts::Vector>
   {
-    { x: x, y: y }: object{ x: uint64, y: uint64 } = { x: p.x, y: p.y }
+    #{ x: x, y: y }: object{ x: uint64, y: uint64 } = #{ x: p.x, y: p.y }
     myVectors: stack_array<tests/approvals/native-arrays.algo.ts::Vector> = new stack_array<tests/approvals/native-arrays.algo.ts::Vector>()
-    myVectors: stack_array<tests/approvals/native-arrays.algo.ts::Vector> = new stack_array<tests/approvals/native-arrays.algo.ts::Vector>({ x: (#0 = { x: x, y: y }).x, y: #0.y })
+    myVectors: stack_array<tests/approvals/native-arrays.algo.ts::Vector> = new stack_array<tests/approvals/native-arrays.algo.ts::Vector>(#{ x: ($0 = #{ x: x, y: y }).x, y: $0.y })
     assert(myVectors.length == 1 and myVectors[0].x == x and myVectors[0].y == y, comment=assert target is match for conditions)
     return myVectors
   }
@@ -57,7 +57,7 @@ contract NativeArraysAlgo
   
   booleansStatic(): readonlytuple[bool, bool, bool]
   {
-    return <tuple>[True, False, True]
+    return #[True, False, True]
   }
   
   arc4Booleans(): stack_array<arc4.bool>
@@ -67,7 +67,7 @@ contract NativeArraysAlgo
   
   arc4BooleansStatic(): readonlytuple[arc4.bool, arc4.bool, arc4.bool]
   {
-    return <tuple>[True, False, True]
+    return #[True, False, True]
   }
   
   __algots__.defaultCreate(): void

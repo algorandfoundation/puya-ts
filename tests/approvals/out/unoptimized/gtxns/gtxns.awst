@@ -19,27 +19,27 @@ contract GtxnsAlgo
   {
     for (i in urange(0, global<GroupSize>(), 1)) {
       txn: group_transaction = group_transaction(index=i, type=group_transaction)
-      if ((#0 = gtxns<TypeEnum>(txn)) == reinterpret_cast<uint64>(6)) {
+      if (($0 = gtxns<TypeEnum>(txn)) == reinterpret_cast<uint64>(6)) {
         #switch₁ᶜ₀:
         log(itob(reinterpret_cast<uint64>(gtxns<ApplicationID>(txn))))
         goto #switch₁ᵇ
       }
-      if (#0 == reinterpret_cast<uint64>(4)) {
+      if ($0 == reinterpret_cast<uint64>(4)) {
         #switch₁ᶜ₁:
         log(itob(reinterpret_cast<uint64>(gtxns<XferAsset>(txn))))
         goto #switch₁ᵇ
       }
-      if (#0 == reinterpret_cast<uint64>(3)) {
+      if ($0 == reinterpret_cast<uint64>(3)) {
         #switch₁ᶜ₂:
         log(itob(reinterpret_cast<uint64>(gtxns<ConfigAsset>(txn))))
         goto #switch₁ᵇ
       }
-      if (#0 == reinterpret_cast<uint64>(1)) {
+      if ($0 == reinterpret_cast<uint64>(1)) {
         #switch₁ᶜ₃:
         log(reinterpret_cast<bytes>(gtxns<Receiver>(txn)))
         goto #switch₁ᵇ
       }
-      if (#0 == reinterpret_cast<uint64>(2)) {
+      if ($0 == reinterpret_cast<uint64>(2)) {
         #switch₁ᶜ₄:
         log(gtxns<VotePK>(txn))
         goto #switch₁ᵇ

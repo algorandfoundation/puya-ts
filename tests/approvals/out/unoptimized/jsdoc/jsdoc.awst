@@ -18,12 +18,12 @@ contract JSDocDemo
   
   test(a: uint64, b: bytes): DemoStruct
   {
-    return new DemoStruct(a=(#0 = { a: ARC4_ENCODE(a, wtype=arc4.uint64) }).a)
+    return new DemoStruct(a=($0 = #{ a: ARC4_ENCODE(a, wtype=arc4.uint64) }).a)
   }
   
   test2(a: bytes): DemoType{ a: bytes }
   {
-    return { a: (#1 = { a: a }).a }
+    return #{ a: ($1 = #{ a: a }).a }
   }
   
   __algots__.defaultCreate(): void
