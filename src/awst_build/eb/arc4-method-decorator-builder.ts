@@ -82,7 +82,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
-      args: [{ allowActions, onCreate, readonly, name, resourceEncoding, defaultArguments }],
+      args: [{ allowActions, onCreate, readonly, name, resourceEncoding, defaultArguments, validateInputs }],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -96,6 +96,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
           readonly: a.optional(boolPType),
           name: a.optional(stringPType),
           resourceEncoding: a.optional(stringPType),
+          validateInputs: a.optional(boolPType),
           defaultArguments: a.optional(),
         }),
       ],
@@ -110,6 +111,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
       sourceLocation: sourceLocation,
       nameOverride: name ? requireStringConstant(name).value : undefined,
       resourceEncoding: resourceEncoding && mapStringConstant(resourceEncodingMap, resourceEncoding.resolve()),
+      validateInputs: validateInputs && requireBooleanConstant(validateInputs).value,
       readonly: readonly ? requireBooleanConstant(readonly).value : undefined,
       defaultArguments: resolveDefaultArguments(defaultArguments, sourceLocation),
     })

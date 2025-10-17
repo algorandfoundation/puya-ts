@@ -5,6 +5,7 @@ import type { ContractReference, LogicSigReference, OnCompletionAction } from '.
 import type { SourceLocation } from './source-location'
 import type { TxnField } from './txn-fields'
 import type { wtypes } from './wtypes'
+
 export abstract class Node {
   constructor(props: Props<Node>) {
     this.sourceLocation = props.sourceLocation
@@ -1523,6 +1524,7 @@ export class ARC4ABIMethodConfig {
     this.create = props.create
     this.name = props.name
     this.resourceEncoding = props.resourceEncoding
+    this.validateEncoding = props.validateEncoding
     this.readonly = props.readonly
     this.defaultArgs = props.defaultArgs
   }
@@ -1531,6 +1533,7 @@ export class ARC4ABIMethodConfig {
   readonly create: ARC4CreateOption
   readonly name: string
   readonly resourceEncoding: 'index' | 'value'
+  readonly validateEncoding: boolean | null
   readonly readonly: boolean
   readonly defaultArgs: Map<string, ABIMethodArgMemberDefault | ABIMethodArgConstantDefault>
 }

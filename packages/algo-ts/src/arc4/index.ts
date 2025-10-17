@@ -124,6 +124,15 @@ export type AbiMethodConfig<TContract extends Contract> = {
   resourceEncoding?: ResourceEncodingOptions
 
   /**
+   * Controls validation of ABI arguments
+   *
+   * true: Compiler will validate the encoding of argument values against their declared type
+   * false: Compiler will interpret the argument values as their declared type.
+   * default/empty: Inherit from CLI option --validate-abi-values
+   */
+  validateInputs?: boolean
+
+  /**
    * Specify default arguments that can be populated by clients calling this method.
    *
    * A map of parameter names to the default argument source
