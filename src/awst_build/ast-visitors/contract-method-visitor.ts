@@ -164,6 +164,8 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
           decorator.allowedCompletionTypes ?? conventionalDefaults?.allowedCompletionTypes ?? unspecifiedDefaults.allowedCompletionTypes,
         create: decorator.create ?? conventionalDefaults?.create ?? unspecifiedDefaults.create,
         name: decorator.nameOverride ?? functionType.name,
+        // TODO: Uncomment this once nodes.ts has been updated to include the new property
+        // validateEncoding: decorator.validateInputs ?? null,
         defaultArgs: new Map(
           Object.entries(decorator.defaultArguments).map(([parameterName, argConfig]) => [
             parameterName,
@@ -183,6 +185,8 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
         create: conventionalDefaults?.create ?? unspecifiedDefaults.create,
         sourceLocation: methodLocation,
         name: functionType.name,
+        // TODO: Uncomment this once nodes.ts has been updated to include the new property
+        // validateEncoding: null,
         readonly: false,
         defaultArgs: new Map(),
       })

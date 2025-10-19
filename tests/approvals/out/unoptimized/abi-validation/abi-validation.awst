@@ -1,0 +1,38 @@
+contract AbiValidationAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  withValidation(value: arc4.static_array<arc4.byte>): uint64
+  {
+    return value.length
+  }
+  
+  withoutValidation(value: arc4.static_array<arc4.byte>): uint64
+  {
+    return value.length
+  }
+  
+  defaultValidation(value: arc4.static_array<arc4.byte>): uint64
+  {
+    return value.length
+  }
+  
+  manualValidationAfterConvert(rawBytes: bytes): uint64
+  {
+    value: arc4.static_array<arc4.byte> = reinterpret_cast<arc4.static_array<arc4.byte>>(rawBytes)
+    return value.length
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

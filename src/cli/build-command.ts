@@ -32,6 +32,8 @@ export interface BuildCommandArgs {
   cli_template_definitions: string[]
   template_vars_prefix: string
   locals_coalescing_strategy: LocalsCoalescingStrategy
+  validate_abi_values: boolean
+  validate_abi_dynamic_severity: LogLevel
   paths: string[]
   puya_path: string
 }
@@ -152,6 +154,19 @@ export function addBuildCommand(parser: ArgumentParser) {
     default: defaultPuyaOptions.localsCoalescingStrategy,
   })
 
+  parser.add_argument('--validate-abi-values', {
+    help: 'Validates ABI transaction arguments by ensuring they are the correct size',
+    action: BooleanOptionalAction,
+    default: defaultPuyaOptions.validateAbiValues,
+  })
+
+  addEnumArg(parser, {
+    name: '--validate-abi-dynamic-severity',
+    enumType: LogLevel,
+    help: 'Severity level for unvalidatable dynamic ABI types',
+    default: defaultPuyaOptions.validateAbiDynamicSeverity,
+  })
+
   parser.add_argument('paths', {
     metavar: 'PATHS',
     nargs: '*',
@@ -196,7 +211,8 @@ export async function buildCommand(args: BuildCommandArgs) {
           cliTemplateDefinitions: Object.fromEntries(args.cli_template_definitions?.map(parseCliTemplateVar) ?? []),
           templateVarsPrefix: args.template_vars_prefix,
           localsCoalescingStrategy: args.locals_coalescing_strategy,
-
+          validateAbiValues: args.validate_abi_values,
+          validateAbiDynamicSeverity: args.validate_abi_dynamic_severity,
           customPuyaPath: args.puya_path,
         }),
       )

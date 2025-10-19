@@ -13,6 +13,7 @@ export type Arc4AbiDecoratorData = {
   sourceLocation: SourceLocation
   readonly: boolean
   nameOverride: string | undefined
+  validateInputs: boolean | undefined
   defaultArguments: Record<
     string,
     | {

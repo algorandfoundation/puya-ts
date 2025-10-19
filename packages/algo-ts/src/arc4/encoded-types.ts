@@ -1,5 +1,5 @@
 import { NoImplementation } from '../internal/errors'
-import { biguint, BigUintCompat, bytes, BytesBacked, BytesCompat, NTuple, StringCompat, uint64, Uint64Compat } from '../primitives'
+import { biguint, BigUintCompat, bytes, BytesBacked, NTuple, StringCompat, uint64, Uint64Compat } from '../primitives'
 import { Account } from '../reference'
 
 /**
@@ -95,6 +95,13 @@ export abstract class ARC4Encoded implements BytesBacked {
    * Retrieve the encoded bytes for this type
    */
   get bytes(): bytes {
+    throw new NoImplementation()
+  }
+
+  /**
+   * Asserts the encoded bytes for this type are well-formed
+   */
+  validate(): void {
     throw new NoImplementation()
   }
 }

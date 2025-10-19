@@ -43,6 +43,8 @@ export class Arc4EncodedBaseExpressionBuilder<T extends ARC4EncodedType> extends
         return new BytesExpressionBuilder(this.toBytes(sourceLocation))
       case 'equals':
         return new Arc4EqualsFunctionBuilder(this, sourceLocation)
+      case 'validate':
+        return new ValidateFunctionBuilder(this, sourceLocation)
       case 'native':
         if (this.ptype.nativeType === undefined) break
         return instanceEb(
@@ -63,6 +65,42 @@ export class Arc4EncodedBaseExpressionBuilder<T extends ARC4EncodedType> extends
       wtype: wtypes.bytesWType,
       sourceLocation,
     })
+  }
+}
+
+class ValidateFunctionBuilder extends FunctionBuilder {
+  constructor(
+    private target: Arc4EncodedBaseExpressionBuilder<ARC4EncodedType>,
+    sourceLocation: SourceLocation,
+  ) {
+    super(sourceLocation)
+  }
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+    parseFunctionArgs({
+      args,
+      typeArgs,
+      genericTypeArgs: 0,
+      callLocation: sourceLocation,
+      funcName: 'validate',
+      argSpec: () => [],
+    })
+    // Need updated puya to include arc4frombytes
+    throw new Error('Not implemented')
+    // const expr = nodeFactory.aRC4FromBytes({
+    //   value: this.target.toBytes(this.target.sourceLocation).resolve(),
+    //   validate: true,
+    //   wtype: this.target.ptype.wtype,
+    //   sourceLocation,
+    // })
+    //
+    // return instanceEb(
+    //   nodeFactory.commaExpression({
+    //     expressions: [expr, nodeFactory.voidConstant({ sourceLocation })],
+    //     sourceLocation,
+    //   }),
+    //   voidPType,
+    // )
   }
 }
 
