@@ -440,7 +440,7 @@ The following sources of ABI values are always validated by the compiler by defa
 - Bytes.toFixed (with the `assert-length` strategy)
 - decodeArc4
 
-NOTE: Argument validation can be disabled globally via the `--validate-abi-args` flags. Similarly, return value validation can be disable via the `--validate-abi-return` flag. It is also possible for a method implementation to disable validation for its own arguments via the `validateEncoding` option on the `abimethod` decorator. Per-method validation settings override the global compiler settings.
+**NOTE**: Argument validation can be disabled globally via the `--validate-abi-args` flags. Similarly, return value validation can be disable via the `--validate-abi-return` flag. It is also possible for a method implementation to disable validation for its own arguments via the `validateEncoding` option on the `abimethod` decorator. Per-method argument validation settings override the global compiler settings. If one wishes to disable the return validation, you can parse the return value directly from the inner transaction's last log and use an unsafe method (`convertBytes`) for converting the bytes to the desired ABI type.
 
 ### Non-Validated Sources
 
@@ -482,6 +482,7 @@ One can be sure that the value in `acctBox` is always valid because the only sou
 export class BoxReadWrite extends Contract {
   acctBox = Box<Account>({ key: "a" });
 
+  @abimethod({ validateEncoding: 'unsafe-disable' })
   writeToBox(acct: Account): void {
     assert(acct.bytes.length === 32, "Account must be 32 bytes");
     this.acctBox.value = acct;
@@ -496,8 +497,8 @@ export class BoxReadWrite extends Contract {
 Similarly, if a the Account is constructed from bytes, a manual validation should be performed:
 
 ```ts
-  writeToBox(acct: bytes): void {
-    assert(acct.length === 32, "Account must be 32 bytes");
-    this.acctBox.value = Account(acct);
+  writeToBox(acctBytes: bytes): void {
+    assert(acctBytes.length === 32, "Account must be 32 bytes");
+    this.acctBox.value = Account(acctBytes);
   }
 ```
