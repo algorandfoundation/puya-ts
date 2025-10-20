@@ -281,7 +281,7 @@ subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo
         tests/approvals/object-destructuring.algo.ts::testNumericResolution()
         let tmp%15#0: Encoded(len+uint64[]) = tests/approvals/object-destructuring.algo.ts::testLiteralToLiteral()
         let res3#0: Encoded(len+uint64[]) = tmp%15#0
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 res3#0 0u)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 res3#0 0u) // on error: invalid array length header
         let tmp%16#0: uint64 = aggregate%array_length%0#0
         let tmp%17#0: bool = (== tmp%16#0 4u)
         let aggregate%total_length%0#0: uint64 = (len res3#0)

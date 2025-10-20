@@ -47,7 +47,7 @@ function testUintN(n: uint64, b: biguint, c: Uint<256>) {
   assert(c.bytes.length === 256 / 8)
 
   const a_bytes = a.bytes
-  const a_from_bytes = convertBytes<Uint<128>>(a_bytes, { strategy: 'unsafe-cast' })
+  const a_from_bytes = convertBytes<Uint<128>>(a_bytes, { strategy: 'validate' })
 
   assert(a_from_bytes === a)
 
@@ -70,7 +70,7 @@ function testStr() {
 
   const s2_bytes = s2.bytes
 
-  const s2_from_bytes = convertBytes<Str>(s2_bytes, { strategy: 'unsafe-cast' })
+  const s2_from_bytes = convertBytes<Str>(s2_bytes, { strategy: 'validate' })
 
   assert(s2 === s2_from_bytes)
 }

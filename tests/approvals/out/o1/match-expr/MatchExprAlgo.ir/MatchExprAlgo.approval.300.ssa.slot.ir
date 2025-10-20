@@ -29,7 +29,7 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches[routing
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 8u)
-        (assert eq%0#0) // invalid number of bytes for uint64
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
         let x#0: uint64 = (btoi tmp%0#0)
         let xObj#0: Encoded(uint64) = (itob x#0)
         let values%0#0: uint64 = (extract_uint64 xObj#0 0u)
@@ -50,7 +50,7 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches[routing
         let tmp%9#0: bool = (<= values%0#0 5u)
         (assert tmp%9#0)
         let xArray#0: Encoded(len+uint64[]) = (concat 0x0001 xObj#0)
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 xArray#0 0u)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
         let tmp%11#0: bool = (== aggregate%array_length%0#0 1u)
         let values%6#0: uint64 = (extract_uint64 xArray#0 2u)
         let tmp%12#0: bool = (== values%6#0 5u)

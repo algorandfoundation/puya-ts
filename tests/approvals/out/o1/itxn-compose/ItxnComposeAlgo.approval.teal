@@ -27,7 +27,9 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return
 
 
 // tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.distribute[routing]() -> void:
@@ -37,7 +39,7 @@ distribute:
     txna ApplicationArgs 1
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     dup
     cover 2
     dup
@@ -48,7 +50,7 @@ distribute:
     dig 2
     len
     ==
-    assert // invalid number of bytes for (len+uint8[32][])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.static_array<arc4.uint8, 32>>
     txn GroupIndex
     intc_1 // 1
     -
@@ -62,7 +64,7 @@ distribute:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     cover 3
     // tests/approvals/itxn-compose.algo.ts:20-22
@@ -237,7 +239,7 @@ conditionalBegin:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/itxn-compose.algo.ts:54
     // const appId = hello.call.create({ args: ['Hi'] }).itxn.createdApp
@@ -252,7 +254,7 @@ conditionalBegin:
     itxn_field GlobalNumByteSlice
     pushbytes base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyADAAIBJgMIZ3JlZXRpbmcBIAQVH3x1MRhAAAQogABnggIEJDeNPASg6BhyNhoAjgIANgAtMRkURDEYQQAWggIE0KKCAARRgLogNhoAjgIANgBcAIAEAJIlrjYaAI4BABMAMRmBBBIxGBBDMRmBBRIxGBBDNhoBSSJZIwhLARUSRFcCAChMZyRDNhoBSSJZIwhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwJEM2GgEiKGVEKVBLASJZSwIjWUsDTwJLAlJXAgBPAkxQSwIVTwNPA08CUlcCAFBJFRZXBgJMUCpMULAkQw==)
+    pushbytes base64(CyAEAAECBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CADcALTEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CADkAXwCABACSJa42GgCOAQAWADEZJRIxGBBEI0MxGYEFEjEYEEQjQzYaAUkiWSQISwEVEkRXAgAoTGcjQzYaAUkiWSQISwEVEkRXAgAiKGVEKVBMUEkVFlcGAkxQKkxQsCNDNhoBSRVLASJZSSUSREsCSwFLA1IiWYEGCEsDJFlJSwISREsESwFLBVJJIlkkCE8DCE8EEkQiKGVEKVBOBE4EUlcCAFBMVwIAUEkVFlcGAkxQKkxQsCND)
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn-compose.algo.ts:54
     // const appId = hello.call.create({ args: ['Hi'] }).itxn.createdApp

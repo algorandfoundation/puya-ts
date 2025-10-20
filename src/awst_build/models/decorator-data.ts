@@ -14,7 +14,8 @@ export type Arc4AbiDecoratorData = {
   sourceLocation: SourceLocation
   readonly: boolean | undefined
   nameOverride: string | undefined
-  resourceEncoding?: ResourceEncoding
+  resourceEncoding: ResourceEncoding | undefined
+  validateEncoding: boolean | undefined
   defaultArguments: Record<
     string,
     | {

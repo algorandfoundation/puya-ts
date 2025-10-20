@@ -25,7 +25,7 @@ main_testExplicitValue_route@3:
     len
     pushint 32 // 32
     ==
-    assert // invalid number of bytes for uint8[32]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     // tests/approvals/resource-encoding.algo.ts:34
     // return account.balance
     acct_params_get AcctBalance
@@ -48,4 +48,6 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return

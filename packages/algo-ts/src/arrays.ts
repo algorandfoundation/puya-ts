@@ -27,7 +27,7 @@ export class FixedArray<TItem, TLength extends number> implements ConcatArray<TI
   }
 
   /**
-   * Returns the current length of this array
+   * Returns the (compile-time) length of this array
    */
   get length(): uint64 {
     throw new NoImplementation()

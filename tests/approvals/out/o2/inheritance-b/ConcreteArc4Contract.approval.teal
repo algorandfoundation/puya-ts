@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 8 1
+    intcblock 1 8
     txn ApplicationID
     bnz main_after_if_else@2
     // tests/approvals/inheritance-b.algo.ts:17
@@ -32,16 +32,16 @@ main_simpleAbiMethod_route@7:
     txna ApplicationArgs 1
     dup
     len
-    intc_0 // 8
+    intc_1 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     len
-    intc_0 // 8
+    intc_1 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/inheritance-a.algo.ts:18
     // return a + b
@@ -53,7 +53,7 @@ main_simpleAbiMethod_route@7:
     swap
     concat
     log
-    intc_1 // 1
+    intc_0 // 1
     return
 
 main_getVeryImportantValue_route@6:
@@ -61,7 +61,7 @@ main_getVeryImportantValue_route@6:
     // public getVeryImportantValue() {
     pushbytes 0x151f7c750007343268656c6c6f
     log
-    intc_1 // 1
+    intc_0 // 1
     return
 
 main___algots__.defaultCreate@11:
@@ -72,4 +72,6 @@ main___algots__.defaultCreate@11:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return

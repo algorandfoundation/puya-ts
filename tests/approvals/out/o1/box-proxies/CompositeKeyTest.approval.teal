@@ -30,7 +30,9 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return
 
 
 // tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test[routing]() -> void:
@@ -42,17 +44,17 @@ test:
     len
     pushint 16 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for ObjectACED9E72
     txna ApplicationArgs 2
     dup
     pushint 0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 2 // 2
     +
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/box-proxies.algo.ts:255
     // this.boxMap(key).value = val

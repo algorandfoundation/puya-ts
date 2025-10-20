@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 8 0 1
+    intcblock 8 1 0
     bytecblock 0x151f7c75
     // tests/approvals/for-loops.algo.ts:4
     // class ForLoopsAlgo extends Contract {
@@ -27,7 +27,9 @@ main___algots__.defaultCreate@11:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return
 
 
 // tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop[routing]() -> void:
@@ -39,14 +41,14 @@ test_for_loop:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     swap
     txna ApplicationArgs 3
@@ -54,12 +56,12 @@ test_for_loop:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     swap
     // tests/approvals/for-loops.algo.ts:6
     // let total = Uint64(0)
-    intc_1 // 0
+    intc_2 // 0
     swap
 
 test_for_loop_while_top@2:
@@ -92,7 +94,7 @@ test_for_loop_after_while@4:
     swap
     concat
     log
-    intc_2 // 1
+    intc_1 // 1
     return
 
 
@@ -105,14 +107,14 @@ test_for_loop_break:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     swap
     txna ApplicationArgs 3
@@ -120,12 +122,12 @@ test_for_loop_break:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     swap
     // tests/approvals/for-loops.algo.ts:14
     // let total = Uint64(0)
-    intc_1 // 0
+    intc_2 // 0
     swap
 
 test_for_loop_break_while_top@2:
@@ -163,7 +165,7 @@ test_for_loop_break_block@7:
     swap
     concat
     log
-    intc_2 // 1
+    intc_1 // 1
     return
 
 
@@ -176,14 +178,14 @@ test_for_loop_continue:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     swap
     txna ApplicationArgs 3
@@ -191,12 +193,12 @@ test_for_loop_continue:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     swap
     // tests/approvals/for-loops.algo.ts:25
     // let total = Uint64(0)
-    intc_1 // 0
+    intc_2 // 0
     swap
 
 test_for_loop_continue_while_top@2:
@@ -236,7 +238,7 @@ test_for_loop_continue_after_while@7:
     swap
     concat
     log
-    intc_2 // 1
+    intc_1 // 1
     return
 
 
@@ -250,7 +252,7 @@ test_for_loop_labelled:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     dup
     txna ApplicationArgs 2
@@ -258,7 +260,7 @@ test_for_loop_labelled:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     swap
     txna ApplicationArgs 3
@@ -266,12 +268,12 @@ test_for_loop_labelled:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     swap
     // tests/approvals/for-loops.algo.ts:33
     // let total = Uint64(0)
-    intc_1 // 0
+    intc_2 // 0
     swap
 
 test_for_loop_labelled_while_top@2:
@@ -324,7 +326,7 @@ test_for_loop_labelled_block@10:
     swap
     concat
     log
-    intc_2 // 1
+    intc_1 // 1
     return
 
 test_for_loop_labelled_after_while@8:

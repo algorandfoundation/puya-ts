@@ -27,7 +27,9 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return
 
 
 // tests/approvals/ops.algo.ts::MyContract.test[routing]() -> void:
@@ -67,7 +69,7 @@ test2:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/ops.algo.ts:24
     // const a = bzero(size)

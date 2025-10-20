@@ -140,7 +140,7 @@ test_for_of_loop_tuple_block@0:
     len
     pushint 24 // 24
     ==
-    assert // invalid number of bytes for (uint64,uint64,uint64)
+    assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64>
     dup
     intc_0 // 0
     intc_2 // 8
@@ -184,7 +184,7 @@ test_for_of_loop_destructured_tuple_block@0:
     txna ApplicationArgs 1
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_2 // 8
     *
     intc_3 // 2
@@ -192,7 +192,7 @@ test_for_of_loop_destructured_tuple_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
     callsub tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple
     itob
     bytec_0 // 0x151f7c75
@@ -213,7 +213,7 @@ test_for_of_loop_destructured_object_block@0:
     txna ApplicationArgs 1
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 16 // 16
     *
     intc_3 // 2
@@ -221,7 +221,7 @@ test_for_of_loop_destructured_object_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+(uint64,uint64)[])
+    assert // invalid number of bytes for arc4.dynamic_array<tests/approvals/for-of-loops.algo.ts::Point>
     callsub tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object
     itob
     bytec_0 // 0x151f7c75
@@ -242,7 +242,7 @@ test_for_of_loop_arc4_dynamic_array_block@0:
     txna ApplicationArgs 1
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_2 // 8
     *
     intc_3 // 2
@@ -250,7 +250,7 @@ test_for_of_loop_arc4_dynamic_array_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
     callsub tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array
     itob
     bytec_0 // 0x151f7c75
@@ -273,7 +273,7 @@ test_for_of_loop_arc4_static_array_block@0:
     len
     pushint 40 // 40
     ==
-    assert // invalid number of bytes for uint64[5]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint64, 5>
     callsub tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array
     itob
     bytec_0 // 0x151f7c75
@@ -294,7 +294,7 @@ test_for_of_loop_native_immutable_array_block@0:
     txna ApplicationArgs 1
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_2 // 8
     *
     intc_3 // 2
@@ -302,7 +302,7 @@ test_for_of_loop_native_immutable_array_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<uint64>
     callsub tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array
     itob
     bytec_0 // 0x151f7c75
@@ -325,7 +325,7 @@ test_for_of_loop_native_mutable_array_block@0:
     len
     pushint 24 // 24
     ==
-    assert // invalid number of bytes for (uint64,uint64,uint64)
+    assert // invalid number of bytes for arc4.tuple<uint64,uint64,uint64>
     callsub tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array
     itob
     bytec_0 // 0x151f7c75
@@ -348,17 +348,17 @@ test_iterable_props_block@0:
     len
     pushint 24 // 24
     ==
-    assert // invalid number of bytes for uint64[3]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint64, 3>
     txna ApplicationArgs 2
     dup
     len
     pushint 24 // 24
     ==
-    assert // invalid number of bytes for uint64[3]
+    assert // invalid number of bytes for arc4.static_array<uint64, 3>
     txna ApplicationArgs 3
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_2 // 8
     *
     intc_3 // 2
@@ -366,7 +366,7 @@ test_iterable_props_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
     uncover 2
     uncover 2
     uncover 2
@@ -471,7 +471,7 @@ tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructur
     // for (const [index, v] of items.entries()) {
     frame_dig -1
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_0 // 0
     b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple_for_header@1
 
@@ -551,7 +551,7 @@ tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructur
     // for (const { x, y } of clone(items)) {
     frame_dig -1
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_0 // 0
     b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object_for_header@1
 
@@ -641,7 +641,7 @@ tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynam
     // for (const item of items) {
     frame_dig -1
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_0 // 0
     b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array_for_header@1
 
@@ -794,7 +794,7 @@ tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_imm
     // for (const item of items) {
     frame_dig -1
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_0 // 0
     b tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array_for_header@1
 
@@ -1125,7 +1125,7 @@ tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_after_f
     // for (const a of dyn_array.keys()) {
     frame_dig -1
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     frame_bury 4
     intc_1 // 1
     assert // Step cannot be zero
@@ -1165,7 +1165,7 @@ tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props_after_f
     // for (const a of dyn_array.entries()) {
     frame_dig -1
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     frame_bury 0
     intc_0 // 0
     frame_bury 3

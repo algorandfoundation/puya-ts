@@ -30,7 +30,9 @@ main_delete_route@3:
     ==
     txn ApplicationID
     &&
-    return // on error: OnCompletion must be DeleteApplication && can only call when not creating
+    assert // OnCompletion must be DeleteApplication && can only call when not creating
+    pushint 1 // 1
+    return
 
 main___algots__.defaultCreate@6:
     // tests/approvals/precompiled-apps.algo.ts:66
@@ -40,7 +42,9 @@ main___algots__.defaultCreate@6:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return
 
 
 // tests/approvals/precompiled-apps.algo.ts::LargeProgram.getBigBytesLength[routing]() -> void:

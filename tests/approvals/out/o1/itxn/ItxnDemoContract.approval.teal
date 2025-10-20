@@ -36,7 +36,9 @@ main___algots__.defaultCreate@14:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return
 
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.test1[routing]() -> void:
@@ -1260,9 +1262,11 @@ test4:
     itxna ClearStateProgramPages 0
     bytec_0 // 0x098101
     ==
+    assert // expected clear state page
     // tests/approvals/itxn.algo.ts:184
     // public test4() {
-    return // on error: expected clear state page
+    pushint 1 // 1
+    return
 
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.test5[routing]() -> void:
@@ -1274,7 +1278,7 @@ test5:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/itxn.algo.ts:209
     // receiver: appId.address,
@@ -1359,6 +1363,8 @@ test5:
     pushbytes "hello"
     ==
     &&
+    assert // assert target is match for conditions
     // tests/approvals/itxn.algo.ts:207
     // public test5(appId: Application) {
-    return // on error: assert target is match for conditions
+    pushint 1 // 1
+    return

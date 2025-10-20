@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 8 0 1
+    intcblock 8 1 0
     bytecblock 0x 0x068101
     // tests/approvals/reference-arrays.algo.ts:4
     // class ReferenceArraysAlgo extends Contract {
@@ -32,12 +32,14 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return
 
 
 // tests/approvals/reference-arrays.algo.ts::ReferenceArraysAlgo.test[routing]() -> void:
 test:
-    intc_1 // 0
+    intc_2 // 0
     bytec_0 // ""
     // tests/approvals/reference-arrays.algo.ts:5
     // test(length: uint64) {
@@ -46,7 +48,7 @@ test:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
 
 test_while_top@6:
@@ -63,7 +65,7 @@ test_while_top@6:
     itxn_field ApprovalProgram
     bytec_1 // 0x068101
     itxn_field ClearStateProgram
-    intc_1 // 0
+    intc_2 // 0
     itxn_field Fee
     itxn_submit
     b test_while_top@6
@@ -75,7 +77,7 @@ test_after_while@11:
     bury 3
     // tests/approvals/reference-arrays.algo.ts:8
     // for (let i: uint64 = 0; i < length; i++) {
-    intc_1 // 0
+    intc_2 // 0
     bury 2
 
 test_while_top@2:
@@ -95,7 +97,7 @@ test_while_top@2:
     bury 4
     // tests/approvals/reference-arrays.algo.ts:8
     // for (let i: uint64 = 0; i < length; i++) {
-    intc_2 // 1
+    intc_1 // 1
     +
     bury 2
     b test_while_top@2
@@ -124,7 +126,7 @@ test_after_while@4:
     intc_0 // 8
     -
     dig 3
-    intc_1 // 0
+    intc_2 // 0
     dig 2
     extract3
     uncover 4
@@ -137,7 +139,7 @@ test_after_while@4:
     // tests/approvals/reference-arrays.algo.ts:16
     // assert(popped === length - 1)
     dig 2
-    intc_2 // 1
+    intc_1 // 1
     -
     ==
     assert
@@ -147,7 +149,7 @@ test_after_while@4:
     len
     intc_0 // 8
     /
-    intc_2 // 1
+    intc_1 // 1
     -
     intc_0 // 8
     *
@@ -163,7 +165,7 @@ test_after_while@4:
     // assert(ma.at(1) === 1)
     intc_0 // 8
     extract_uint64
-    intc_2 // 1
+    intc_1 // 1
     ==
     // tests/approvals/reference-arrays.algo.ts:5
     // test(length: uint64) {

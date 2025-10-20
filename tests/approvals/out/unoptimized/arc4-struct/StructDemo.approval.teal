@@ -164,13 +164,13 @@ addVectors_block@0:
     len
     intc_3 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for Vector
     txna ApplicationArgs 2
     dup
     len
     intc_3 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for Vector
     callsub tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors
     bytec_1 // 0x151f7c75
     uncover 1
@@ -192,19 +192,19 @@ mutateVector_block@0:
     len
     intc_3 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for Vector
     txna ApplicationArgs 2
     dup
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     txna ApplicationArgs 3
     dup
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     uncover 2
     uncover 2
     uncover 2
@@ -229,7 +229,7 @@ implicitCastingAndSpreading_block@0:
     len
     intc_3 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for Vector
     callsub tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading
     intc_2 // 1
     return
@@ -247,7 +247,7 @@ toAndFromBytes_block@0:
     len
     intc_3 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for Vector
     callsub tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes
     bytec_1 // 0x151f7c75
     uncover 1
@@ -269,7 +269,7 @@ toNative_block@0:
     len
     intc_3 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for Vector
     callsub tests/approvals/arc4-struct.algo.ts::StructDemo.toNative
     bytec_1 // 0x151f7c75
     uncover 1
@@ -289,7 +289,7 @@ getPlugin_block@0:
     txna ApplicationArgs 1
     dup
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_2 // 1
     *
     pushint 2 // 2
@@ -297,7 +297,7 @@ getPlugin_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     callsub tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin
     bytec_1 // 0x151f7c75
@@ -334,7 +334,7 @@ setLastCalled_block@0:
     txna ApplicationArgs 1
     dup
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_2 // 1
     *
     pushint 2 // 2
@@ -342,21 +342,21 @@ setLastCalled_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 2
     dup
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 3
     dup
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     uncover 2
     uncover 2
@@ -376,7 +376,7 @@ setPlugin_block@0:
     txna ApplicationArgs 1
     dup
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_2 // 1
     *
     pushint 2 // 2
@@ -384,7 +384,7 @@ setPlugin_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     callsub tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin
     intc_2 // 1

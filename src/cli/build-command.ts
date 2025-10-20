@@ -30,10 +30,10 @@ export interface BuildCommandArgs {
   optimization_level: string
   target_avm_version: string
   cli_template_definitions: string[]
+  validate_abi_args: boolean
+  validate_abi_return: boolean
   template_vars_prefix: string
   locals_coalescing_strategy: LocalsCoalescingStrategy
-  validate_abi_values: boolean
-  validate_abi_dynamic_severity: LogLevel
   paths: string[]
   puya_path: string
 }
@@ -142,6 +142,18 @@ export function addBuildCommand(parser: ArgumentParser) {
     help: 'Define template vars for use when assembling via --output-bytecode, should be specified without the prefix (see --template-vars-prefix)',
   })
 
+  parser.add_argument('--validate-abi-args', {
+    action: BooleanOptionalAction,
+    default: defaultPuyaOptions.validateAbiArgs,
+    help: 'Validates ABI transaction arguments by ensuring they are encoded correctly',
+  })
+
+  parser.add_argument('--validate-abi-return', {
+    action: BooleanOptionalAction,
+    default: defaultPuyaOptions.validateAbiReturn,
+    help: "Validates encoding of ABI return values when using convertBytes with 'log' `prefix` option, arc4.abiCall, and strongly typed contract to contract calls",
+  })
+
   parser.add_argument('--template-vars-prefix', {
     help: 'Define the prefix to use with --template-var',
     default: defaultPuyaOptions.templateVarsPrefix,
@@ -152,19 +164,6 @@ export function addBuildCommand(parser: ArgumentParser) {
     enumType: LocalsCoalescingStrategy,
     help: 'Strategy choice for out-of-ssa local variable coalescing. The best choice for your app is best determined through experimentation',
     default: defaultPuyaOptions.localsCoalescingStrategy,
-  })
-
-  parser.add_argument('--validate-abi-values', {
-    help: 'Validates ABI transaction arguments by ensuring they are the correct size',
-    action: BooleanOptionalAction,
-    default: defaultPuyaOptions.validateAbiValues,
-  })
-
-  addEnumArg(parser, {
-    name: '--validate-abi-dynamic-severity',
-    enumType: LogLevel,
-    help: 'Severity level for unvalidatable dynamic ABI types',
-    default: defaultPuyaOptions.validateAbiDynamicSeverity,
   })
 
   parser.add_argument('paths', {
@@ -211,9 +210,9 @@ export async function buildCommand(args: BuildCommandArgs) {
           cliTemplateDefinitions: Object.fromEntries(args.cli_template_definitions?.map(parseCliTemplateVar) ?? []),
           templateVarsPrefix: args.template_vars_prefix,
           localsCoalescingStrategy: args.locals_coalescing_strategy,
-          validateAbiValues: args.validate_abi_values,
-          validateAbiDynamicSeverity: args.validate_abi_dynamic_severity,
           customPuyaPath: args.puya_path,
+          validateAbiArgs: args.validate_abi_args,
+          validateAbiReturn: args.validate_abi_return,
         }),
       )
       logCtx.exitIfErrors()

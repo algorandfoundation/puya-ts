@@ -27,7 +27,7 @@ main_test_route@3:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/uint64-to-string.algo.ts:8
     // assert(y.toString() === '123')
@@ -69,7 +69,9 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
 
 
 // puya-ts::itoa(i: uint64) -> bytes:

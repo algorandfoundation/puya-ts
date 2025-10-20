@@ -361,7 +361,7 @@ fixedArray_block@0:
     len
     pushint 400 // 400
     ==
-    assert // invalid number of bytes for uint64[50]
+    assert // invalid number of bytes for arc4.static_array<uint64, 50>
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray
     intc_3 // 1
     return
@@ -391,7 +391,7 @@ structs_block@0:
     len
     pushint 16 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for tests/approvals/native-arrays.algo.ts::Vector
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs
     bytec_2 // 0x151f7c75
     uncover 1
@@ -507,7 +507,7 @@ aliasing_block@0:
     txna ApplicationArgs 1
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_0 // 8
     *
     intc_1 // 2
@@ -515,11 +515,11 @@ aliasing_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<uint64>
     txna ApplicationArgs 2
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_0 // 8
     *
     intc_1 // 2
@@ -527,7 +527,7 @@ aliasing_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<uint64>
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing
     intc_3 // 1
     return
@@ -543,7 +543,7 @@ receiveMutable_block@0:
     txna ApplicationArgs 1
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_0 // 8
     *
     intc_1 // 2
@@ -551,7 +551,7 @@ receiveMutable_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<uint64>
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable
     intc_3 // 1
     return
@@ -567,7 +567,7 @@ receiveReadonly_block@0:
     txna ApplicationArgs 1
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_0 // 8
     *
     intc_1 // 2
@@ -575,7 +575,7 @@ receiveReadonly_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<uint64>
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly
     intc_3 // 1
     return
@@ -669,7 +669,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray_block@0:
     // assertMatch(myArray, [1, 2, 3, 5, 4])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 5 // 5
     ==
     cover 1
@@ -809,7 +809,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject_block@0:
     uncover 2
     replace3
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     // tests/approvals/native-arrays.algo.ts:27
     // assert(length === 2)
     intc_1 // 2
@@ -937,7 +937,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assertMatch(arr, [1, 2, 3, 4])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 4 // 4
     ==
     cover 1
@@ -1035,7 +1035,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assert(arr.at(-1)! === 4)
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_3 // 1
     -
     dig 1
@@ -1079,7 +1079,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assertMatch(arr, [1, 2, 3, 4, 5])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 5 // 5
     ==
     cover 1
@@ -1188,7 +1188,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assertMatch(arr, [1, 2, 3, 4])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 4 // 4
     ==
     cover 1
@@ -1295,7 +1295,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assertMatch(arr, [1, 10, 3, 4])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 4 // 4
     ==
     cover 1
@@ -1375,7 +1375,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assertMatch(arr2, [1, 5, 3, 4])
     dig 1
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 4 // 4
     ==
     cover 1
@@ -1530,7 +1530,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 11 // 11
     ==
     cover 1
@@ -1802,7 +1802,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assertMatch(rArr1, [1, 2, 3, 4, 5])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 5 // 5
     ==
     cover 1
@@ -1980,7 +1980,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assertMatch(fArr2, [0, 0, 0, 0, 0, 0, 0, 0])
     dig 1
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_0 // 8
     ==
     cover 1
@@ -2160,7 +2160,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assertMatch(arr3, [1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 13 // 13
     ==
     cover 1
@@ -2428,7 +2428,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assertMatch(arr4, [1, 2, 3, 4, 5, 1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 16 // 16
     ==
     cover 1
@@ -2753,7 +2753,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assertMatch(arr5, [0, 0, 0, 0, 1, 2, 3, 4, 5])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 9 // 9
     ==
     cover 1
@@ -2952,7 +2952,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assertMatch(arr6, [0, 0, 0, 0, 1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 15 // 15
     ==
     cover 1
@@ -3256,7 +3256,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assert(arr7.length === 16)
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 16 // 16
     ==
     assert
@@ -3264,7 +3264,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assertMatch(arr7, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13, 1, 2, 3, 4, 5])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 16 // 16
     ==
     cover 1
@@ -3577,7 +3577,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assert(arr8.length === 15)
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 15 // 15
     ==
     assert
@@ -3585,7 +3585,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     // assertMatch(arr8, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13, 0, 0, 0, 0])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 15 // 15
     ==
     cover 1
@@ -4444,7 +4444,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_block@0:
     // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 6 // 6
     ==
     cover 1
@@ -4591,7 +4591,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs_block@0:
     // assertMatch(myVectors, [{ x, y }])
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_3 // 1
     ==
     cover 1

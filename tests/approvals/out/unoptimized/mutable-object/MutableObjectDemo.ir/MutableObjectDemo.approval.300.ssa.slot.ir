@@ -79,12 +79,12 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.addVectors[
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 16u)
-        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
+        (assert eq%0#0) // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Vector
         let as_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = tmp%0#0
         let tmp%1#0: bytes = (txna ApplicationArgs 2)
         let len%1#0: uint64 = (len tmp%1#0)
         let eq%1#0: bool = (== len%1#0 16u)
-        (assert eq%1#0) // invalid number of bytes for (uint64,uint64)
+        (assert eq%1#0) // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Vector
         let as_Encoded(uint64,uint64)%1#0: Encoded(uint64,uint64) = tmp%1#0
         let tmp%2#0: Encoded(uint64,uint64) = tests/approvals/mutable-object.algo.ts::MutableObjectDemo.addVectors(as_Encoded(uint64,uint64)%0#0, as_Encoded(uint64,uint64)%1#0)
         let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
@@ -96,18 +96,18 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.mutateVecto
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 16u)
-        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
+        (assert eq%0#0) // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Vector
         let as_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = tmp%0#0
         let tmp%1#0: bytes = (txna ApplicationArgs 2)
         let len%1#0: uint64 = (len tmp%1#0)
         let eq%1#0: bool = (== len%1#0 8u)
-        (assert eq%1#0) // invalid number of bytes for uint64
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
         let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%1#0
         let tmp%2#0: uint64 = (btoi as_Encoded(uint64)%0#0)
         let tmp%3#0: bytes = (txna ApplicationArgs 3)
         let len%2#0: uint64 = (len tmp%3#0)
         let eq%2#0: bool = (== len%2#0 8u)
-        (assert eq%2#0) // invalid number of bytes for uint64
+        (assert eq%2#0) // invalid number of bytes for arc4.uint64
         let as_Encoded(uint64)%1#0: Encoded(uint64) = tmp%3#0
         let tmp%4#0: uint64 = (btoi as_Encoded(uint64)%1#0)
         let tmp%5#0: Encoded(uint64,uint64) = tests/approvals/mutable-object.algo.ts::MutableObjectDemo.mutateVector(as_Encoded(uint64,uint64)%0#0, tmp%2#0, tmp%4#0)
@@ -120,7 +120,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.implicitCas
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 16u)
-        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
+        (assert eq%0#0) // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Vector
         let as_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = tmp%0#0
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.implicitCastingAndSpreading(as_Encoded(uint64,uint64)%0#0)
         exit 1u
@@ -130,7 +130,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedO
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 32u)
-        (assert eq%0#0) // invalid number of bytes for ((uint64,uint64),(uint64,uint64))
+        (assert eq%0#0) // invalid number of bytes for tests/approvals/mutable-object.algo.ts::VectorPoint
         let as_Encoded((uint64,uint64),(uint64,uint64))%0#0: Encoded((uint64,uint64),(uint64,uint64)) = tmp%0#0
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedObjects(as_Encoded((uint64,uint64),(uint64,uint64))%0#0)
         exit 1u
@@ -145,7 +145,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertM
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 8u)
-        (assert eq%0#0) // invalid number of bytes for uint64
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
         let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
         let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertMatch(tmp%1#0)
@@ -156,7 +156,7 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Enc
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 16u)
-        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
+        (assert eq%0#0) // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Point
         let as_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = tmp%0#0
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Encoding(as_Encoded(uint64,uint64)%0#0)
         exit 1u
@@ -164,13 +164,13 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Enc
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin[routing]() -> void:
     block@0: // L107
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
         let length%0#0: uint64 = aggregate%array_length%0#0
         let mul%0#0: uint64 = (* length%0#0 1u)
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+utf8[])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
         let tmp%1#0: string = ((extract 2 0) as_Encoded(len+utf8[])%0#0)
         let tmp%2#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin(tmp%1#0)
@@ -188,13 +188,13 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getMain[rou
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setPlugin[routing]() -> void:
     block@0: // L123
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
         let length%0#0: uint64 = aggregate%array_length%0#0
         let mul%0#0: uint64 = (* length%0#0 1u)
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+utf8[])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
         let tmp%1#0: string = ((extract 2 0) as_Encoded(len+utf8[])%0#0)
         tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setPlugin(tmp%1#0)
