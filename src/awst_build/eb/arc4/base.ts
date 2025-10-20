@@ -42,7 +42,6 @@ export class Arc4EncodedBaseExpressionBuilder<T extends ARC4EncodedType> extends
         return this.toBytes(sourceLocation)
       case 'equals':
         return new Arc4EqualsFunctionBuilder(this, sourceLocation)
-
       case 'native':
         if (this.ptype.nativeType === undefined) break
         return instanceEb(
