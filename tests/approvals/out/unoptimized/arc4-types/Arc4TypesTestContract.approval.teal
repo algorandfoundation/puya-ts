@@ -59,7 +59,7 @@ main_block@0:
     // tests/approvals/arc4-types.algo.ts:206
     // assert(result.length === 0)
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_0 // 0
     ==
     assert
@@ -254,7 +254,7 @@ testUintN_block@0:
     len
     pushint 16 // 16
     ==
-    assert // invalid number of bytes for uint128
+    assert // invalid number of bytes for arc4.uint128
     // tests/approvals/arc4-types.algo.ts:52
     // assert(a_from_bytes === a)
     ==
@@ -322,7 +322,7 @@ testStr_block@0:
     // const s2_from_bytes = convertBytes<Str>(s2_bytes, { strategy: 'validate' })
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_3 // 1
     *
     intc_2 // 2
@@ -330,7 +330,7 @@ testStr_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     // tests/approvals/arc4-types.algo.ts:75
     // assert(s2 === s2_from_bytes)
     bytec_2 // "Hello"
@@ -633,7 +633,7 @@ testArrays_block@0:
     // assertMatch(doubleArray, [n, n, n, n, n, n, n, n])
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 8
     ==
     cover 1

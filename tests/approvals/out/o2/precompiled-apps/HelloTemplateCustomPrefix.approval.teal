@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 2
+    intcblock 0 1 2 4
     bytecblock "greeting" " " 0x151f7c75 PRFX_GREETING
     txn ApplicationID
     bnz main_after_if_else@2
@@ -35,6 +35,44 @@ main_sendGreetings_route@9:
     // tests/approvals/precompiled-apps.algo.ts:30
     // sendGreetings(a: Greeting): string {
     txna ApplicationArgs 1
+    dup
+    len
+    dig 1
+    intc_0 // 0
+    extract_uint16 // on error: invalid tuple encoding
+    dup
+    intc_3 // 4
+    ==
+    assert // invalid tail pointer at index 0 of ((len+utf8[]),(len+utf8[]))
+    dig 2
+    dig 1
+    dig 3
+    substring3
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    pushint 6 // 6
+    +
+    dig 3
+    intc_2 // 2
+    extract_uint16 // on error: invalid tuple encoding
+    dup
+    dig 2
+    ==
+    assert // invalid tail pointer at index 1 of ((len+utf8[]),(len+utf8[]))
+    dig 4
+    dig 1
+    dig 5
+    substring3
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    uncover 3
+    +
+    uncover 4
+    ==
+    assert // invalid number of bytes for tests/approvals/precompiled-apps.algo.ts::Greeting
     // tests/approvals/precompiled-apps.algo.ts:31
     // return `${this.greeting.value} ${a.name}${a.termination.native}`
     intc_0 // 0
@@ -47,25 +85,12 @@ main_sendGreetings_route@9:
     assert // check GlobalState exists
     bytec_1 // " "
     concat
-    dig 1
-    intc_0 // 0
-    extract_uint16
-    dig 2
-    intc_2 // 2
-    extract_uint16
-    dig 3
-    uncover 2
-    dig 2
+    cover 4
+    cover 4
     substring3
     extract 2 0
-    uncover 2
-    swap
     concat
-    dig 2
-    len
     swap
-    cover 3
-    substring3
     extract 2 0
     concat
     // tests/approvals/precompiled-apps.algo.ts:30
@@ -89,13 +114,13 @@ main_greet_route@8:
     txna ApplicationArgs 1
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_2 // 2
     +
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/precompiled-apps.algo.ts:27
     // return `${this.greeting.value} ${name}`
@@ -144,11 +169,13 @@ main_update_route@5:
     // tests/approvals/precompiled-apps.algo.ts:23
     // @abimethod({ allowActions: 'UpdateApplication' })
     txn OnCompletion
-    pushint 4 // UpdateApplication
+    intc_3 // UpdateApplication
     ==
     txn ApplicationID
     &&
-    return // on error: OnCompletion must be UpdateApplication && can only call when not creating
+    assert // OnCompletion must be UpdateApplication && can only call when not creating
+    intc_1 // 1
+    return
 
 main_delete_route@4:
     // tests/approvals/precompiled-apps.algo.ts:20
@@ -158,4 +185,6 @@ main_delete_route@4:
     ==
     txn ApplicationID
     &&
-    return // on error: OnCompletion must be DeleteApplication && can only call when not creating
+    assert // OnCompletion must be DeleteApplication && can only call when not creating
+    intc_1 // 1
+    return

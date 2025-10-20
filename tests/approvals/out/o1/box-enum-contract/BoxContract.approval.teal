@@ -3,6 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
+    intcblock 1
     bytecblock "oca" "txn"
     // tests/approvals/box-enum-contract.algo.ts:4
     // export class BoxContract extends arc4.Contract {
@@ -26,14 +27,16 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
 
 
 // tests/approvals/box-enum-contract.algo.ts::BoxContract.storeEnums[routing]() -> void:
 storeEnums:
     // tests/approvals/box-enum-contract.algo.ts:10
     // this.oca.value = OnCompleteAction.OptIn
-    pushint 1 // 1
+    intc_0 // 1
     itob
     // tests/approvals/box-enum-contract.algo.ts:5
     // oca = Box<OnCompleteAction>({ key: Bytes('oca') })
@@ -55,7 +58,7 @@ storeEnums:
     box_put
     // tests/approvals/box-enum-contract.algo.ts:8
     // @arc4.abimethod({ name: 'store_enums' })
-    pushint 1 // 1
+    intc_0 // 1
     return
 
 
@@ -94,5 +97,5 @@ readEnums:
     swap
     concat
     log
-    pushint 1 // 1
+    intc_0 // 1
     return

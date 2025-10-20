@@ -33,7 +33,9 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return
 
 
 // tests/approvals/avm12.algo.ts::ContractV1.delete[routing]() -> void:
@@ -43,6 +45,8 @@ delete:
     txn RejectVersion
     pushint 2 // 2
     ==
+    assert // can only update if caller expects this to be currently be v1
     // tests/approvals/avm12.algo.ts:59
     // @abimethod({ allowActions: 'DeleteApplication' })
-    return // on error: can only update if caller expects this to be currently be v1
+    pushint 1 // 1
+    return

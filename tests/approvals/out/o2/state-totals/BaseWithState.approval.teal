@@ -35,7 +35,7 @@ main_setState_route@5:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/state-totals.algo.ts:5
     // oneGlobal = GlobalState({ initialValue: Uint64(1) })
@@ -64,4 +64,6 @@ main___algots__.defaultCreate@7:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return

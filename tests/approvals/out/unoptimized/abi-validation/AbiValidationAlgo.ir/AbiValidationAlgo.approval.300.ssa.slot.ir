@@ -56,7 +56,7 @@ subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.withValidat
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 32u)
-        (assert eq%0#0) // invalid number of bytes for uint8[32]
+        (assert eq%0#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
         let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%0#0
         let tmp%1#0: bytes[32] = as_Encoded(uint8[32])%0#0
         let tmp%2#0: uint64 = tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.withValidation(tmp%1#0)
@@ -70,9 +70,6 @@ subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.withValidat
 subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.withoutValidation[routing]() -> void:
     block@0: // L11
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
-        let len%0#0: uint64 = (len tmp%0#0)
-        let eq%0#0: bool = (== len%0#0 32u)
-        (assert eq%0#0) // invalid number of bytes for uint8[32]
         let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%0#0
         let tmp%1#0: bytes[32] = as_Encoded(uint8[32])%0#0
         let tmp%2#0: uint64 = tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.withoutValidation(tmp%1#0)
@@ -88,7 +85,7 @@ subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.defaultVali
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 32u)
-        (assert eq%0#0) // invalid number of bytes for uint8[32]
+        (assert eq%0#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
         let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%0#0
         let tmp%1#0: bytes[32] = as_Encoded(uint8[32])%0#0
         let tmp%2#0: uint64 = tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.defaultValidation(tmp%1#0)
@@ -102,13 +99,13 @@ subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.defaultVali
 subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidationInConvert[routing]() -> void:
     block@0: // L20
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
         let length%0#0: uint64 = aggregate%array_length%0#0
         let mul%0#0: uint64 = (* length%0#0 1u)
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+uint8[])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         let as_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = tmp%0#0
         let tmp%1#0: bytes = ((extract 2 0) as_Encoded(len+uint8[])%0#0)
         let tmp%2#0: uint64 = tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidationInConvert(tmp%1#0)
@@ -122,13 +119,13 @@ subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValid
 subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidationAfterConvert[routing]() -> void:
     block@0: // L25
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
         let length%0#0: uint64 = aggregate%array_length%0#0
         let mul%0#0: uint64 = (* length%0#0 1u)
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+uint8[])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         let as_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = tmp%0#0
         let tmp%1#0: bytes = ((extract 2 0) as_Encoded(len+uint8[])%0#0)
         let tmp%2#0: uint64 = tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidationAfterConvert(tmp%1#0)
@@ -158,7 +155,7 @@ subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValid
     block@0: // L20
         let len%0#0: uint64 = (len rawBytes#0)
         let eq%0#0: bool = (== len%0#0 32u)
-        (assert eq%0#0) // invalid number of bytes for uint8[32]
+        (assert eq%0#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
         return 32u
 
 subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidationAfterConvert(rawBytes: bytes) -> uint64:
@@ -167,7 +164,7 @@ subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValid
         let value#0: Encoded(uint8[32]) = as_Encoded(uint8[32])%0#0
         let len%0#0: uint64 = (len value#0)
         let eq%0#0: bool = (== len%0#0 32u)
-        (assert eq%0#0) // invalid number of bytes for uint8[32]
+        (assert eq%0#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
         return 32u
 
 subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.__algots__.defaultCreate() -> void:

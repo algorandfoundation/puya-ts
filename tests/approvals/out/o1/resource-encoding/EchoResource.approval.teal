@@ -27,7 +27,9 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
 
 
 // tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByIndex[routing]() -> void:
@@ -39,7 +41,7 @@ echoResourceByIndex:
     len
     intc_0 // 1
     ==
-    assert // invalid number of bytes for uint8
+    assert // invalid number of bytes for arc4.uint8
     btoi
     txnas Assets
     txna ApplicationArgs 2
@@ -47,7 +49,7 @@ echoResourceByIndex:
     len
     intc_0 // 1
     ==
-    assert // invalid number of bytes for uint8
+    assert // invalid number of bytes for arc4.uint8
     btoi
     txnas Applications
     txna ApplicationArgs 3
@@ -55,7 +57,7 @@ echoResourceByIndex:
     len
     intc_0 // 1
     ==
-    assert // invalid number of bytes for uint8
+    assert // invalid number of bytes for arc4.uint8
     btoi
     txnas Accounts
     // tests/approvals/resource-encoding.algo.ts:41
@@ -119,21 +121,21 @@ echoResourceByValue:
     len
     intc_3 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     len
     intc_3 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 3
     dup
     len
     pushint 32 // 32
     ==
-    assert // invalid number of bytes for uint8[32]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     // tests/approvals/resource-encoding.algo.ts:52
     // const assetId = op.btoi(Txn.applicationArgs(1))
     intc_0 // 1

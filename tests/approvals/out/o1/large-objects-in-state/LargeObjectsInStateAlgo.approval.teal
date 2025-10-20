@@ -35,7 +35,9 @@ main___algots__.defaultCreate@11:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
 
 
 // tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstrap[routing]() -> void:
@@ -102,14 +104,14 @@ increaseXCount:
     len
     intc_2 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     len
     intc_2 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/large-objects-in-state.algo.ts:30
     // this.storage.value[index].x += xCount
@@ -151,7 +153,7 @@ getCounts:
     len
     intc_2 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/large-objects-in-state.algo.ts:34
     // return this.storage.value[index]

@@ -26,7 +26,7 @@ main_testMatches_route@3:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/match-expr.algo.ts:6
     // const xObj = { x }
@@ -84,7 +84,7 @@ main_testMatches_route@3:
     // assert(match(xArray, [5]))
     dup
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 1 // 1
     ==
     swap
@@ -137,4 +137,6 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return

@@ -39,7 +39,7 @@ subroutine tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test[routing]()
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 16u)
-        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
+        (assert eq%0#0) // invalid number of bytes for ObjectACED9E72
         let as_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = tmp%0#0
         let tmp%1#0: bytes = (txna ApplicationArgs 2)
         let length%0#0: uint64 = array_len(tmp%1#0)
@@ -47,7 +47,7 @@ subroutine tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test[routing]()
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%1#0: uint64 = (len tmp%1#0)
         let eq%1#0: bool = (== len%1#0 add%0#0)
-        (assert eq%1#0) // invalid number of bytes for (len+utf8[])
+        (assert eq%1#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%1#0
         let tmp%2#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
         tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test(as_Encoded(uint64,uint64)%0#0, tmp%2#0)

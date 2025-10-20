@@ -58,7 +58,9 @@ main___algots__.defaultCreate@12:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
 
 
 // tests/approvals/named-types.algo.ts::MyContract.test[routing]() -> void:
@@ -70,7 +72,7 @@ test:
     len
     intc_1 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for tests/approvals/named-types.algo.ts::XY
     dup
     intc_2 // 0
     extract_uint64
@@ -82,7 +84,7 @@ test:
     len
     intc_1 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for tests/approvals/named-types.algo.ts::YX
     dup
     intc_2 // 0
     extract_uint64
@@ -96,6 +98,8 @@ test:
     cover 2
     ==
     &&
+    assert // assert target is match for conditions
     // tests/approvals/named-types.algo.ts:36
     // public test(x: XY, y: YX) {
-    return // on error: assert target is match for conditions
+    intc_0 // 1
+    return

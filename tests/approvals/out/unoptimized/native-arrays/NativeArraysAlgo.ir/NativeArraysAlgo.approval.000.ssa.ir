@@ -309,7 +309,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray[ro
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 400u)
-        (assert eq%0#0) // invalid number of bytes for uint64[50]
+        (assert eq%0#0) // invalid number of bytes for arc4.static_array<uint64, 50>
         let as_Encoded(uint64[50])%0#0: Encoded(uint64[50]) = tmp%0#0
         tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(as_Encoded(uint64[50])%0#0)
         exit 1u
@@ -324,7 +324,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs[routi
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 16u)
-        (assert eq%0#0) // invalid number of bytes for (uint64,uint64)
+        (assert eq%0#0) // invalid number of bytes for tests/approvals/native-arrays.algo.ts::Vector
         let as_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = tmp%0#0
         let tmp%1#0: Encoded(len+(uint64,uint64)[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(as_Encoded(uint64,uint64)%0#0)
         let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
@@ -369,7 +369,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing[rout
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<uint64>
         let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
         let tmp%1#0: bytes = (txna ApplicationArgs 2)
         let length%1#0: uint64 = array_len(tmp%1#0)
@@ -377,7 +377,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing[rout
         let add%1#0: uint64 = (+ mul%1#0 2u)
         let len%1#0: uint64 = (len tmp%1#0)
         let eq%1#0: bool = (== len%1#0 add%1#0)
-        (assert eq%1#0) // invalid number of bytes for (len+uint64[])
+        (assert eq%1#0) // invalid number of bytes for arc4.dynamic_array<uint64>
         let as_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = tmp%1#0
         tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(as_Encoded(len+uint64[])%0#0, as_Encoded(len+uint64[])%1#0)
         exit 1u
@@ -390,7 +390,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutabl
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<uint64>
         let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
         let receiveMutable%0#0: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(as_Encoded(len+uint64[])%0#0)
         exit 1u
@@ -403,7 +403,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadon
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<uint64>
         let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
         tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(as_Encoded(len+uint64[])%0#0)
         exit 1u

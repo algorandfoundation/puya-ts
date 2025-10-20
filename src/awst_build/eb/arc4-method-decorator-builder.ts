@@ -35,6 +35,10 @@ const resourceEncodingMap: Record<string, 'index' | 'value'> = {
   value: 'value',
 }
 
+const validateEncodingMap: Record<string, 'unsafe-disabled' | 'args'> = {
+  'unsafe-disabled': 'unsafe-disabled',
+  args: 'args',
+}
 export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
   readonly ptype = arc4BareMethodDecorator
 
@@ -82,7 +86,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
-      args: [{ allowActions, onCreate, readonly, name, resourceEncoding, defaultArguments, validateInputs }],
+      args: [{ allowActions, onCreate, readonly, name, resourceEncoding, defaultArguments, validateEncoding }],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -96,12 +100,14 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
           readonly: a.optional(boolPType),
           name: a.optional(stringPType),
           resourceEncoding: a.optional(stringPType),
-          validateInputs: a.optional(boolPType),
+          validateEncoding: a.optional(stringPType),
           defaultArguments: a.optional(),
         }),
       ],
     })
 
+    const validateEncodingStr =
+      validateEncoding === undefined ? undefined : mapStringConstant(validateEncodingMap, validateEncoding.resolve())
     return new DecoratorDataBuilder(sourceLocation, {
       type: Constants.symbolNames.arc4AbiDecoratorName,
       allowedCompletionTypes: allowActions && resolveOnCompletionActions(allowActions),
@@ -111,7 +117,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
       sourceLocation: sourceLocation,
       nameOverride: name ? requireStringConstant(name).value : undefined,
       resourceEncoding: resourceEncoding && mapStringConstant(resourceEncodingMap, resourceEncoding.resolve()),
-      validateInputs: validateInputs && requireBooleanConstant(validateInputs).value,
+      validateEncoding: validateEncodingStr === 'args' ? true : validateEncodingStr === 'unsafe-disabled' ? false : undefined,
       readonly: readonly ? requireBooleanConstant(readonly).value : undefined,
       defaultArguments: resolveDefaultArguments(defaultArguments, sourceLocation),
     })

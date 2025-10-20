@@ -42,7 +42,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let y#1: Encoded(uint64[50]) = (txna ApplicationArgs 1)
         let len%0#5: uint64 = (len y#1)
         let eq%0#4: bool = (== len%0#5 400u)
-        (assert eq%0#4) // invalid number of bytes for uint64[50]
+        (assert eq%0#4) // invalid number of bytes for arc4.static_array<uint64, 50>
         let values%1#1: uint64 = (extract_uint64 y#1 0u)
         let tmp%6#3: bool = (! values%1#1)
         (assert tmp%6#3)
@@ -53,14 +53,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let p#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
         let len%0#3: uint64 = (len p#0)
         let eq%0#3: bool = (== len%0#3 16u)
-        (assert eq%0#3) // invalid number of bytes for (uint64,uint64)
+        (assert eq%0#3) // invalid number of bytes for tests/approvals/native-arrays.algo.ts::Vector
         let x#0: uint64 = (extract_uint64 p#0 0u)
         let y#0: uint64 = (extract_uint64 p#0 8u)
         let aggregate%val_as_bytes%49#0: bytes[8] = (itob x#0)
         let aggregate%val_as_bytes%50#0: bytes[8] = (itob y#0)
         let aggregate%head%50#0: bytes = (concat aggregate%val_as_bytes%49#0 aggregate%val_as_bytes%50#0)
         let myVectors#1: Encoded(len+(uint64,uint64)[]) = (concat 0x0001 aggregate%head%50#0)
-        let aggregate%array_length%20#0: uint64 = (extract_uint16 myVectors#1 0u)
+        let aggregate%array_length%20#0: uint64 = (extract_uint16 myVectors#1 0u) // on error: invalid array length header
         let tmp%2#3: bool = (== aggregate%array_length%20#0 1u)
         let aggregate%encoded_element%172#0: bytes = ((extract 2 16) myVectors#1)
         let values%2#0: uint64 = (extract_uint64 aggregate%encoded_element%172#0 0u)
@@ -87,19 +87,19 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         exit 1u
     block@17: // aliasing_route_L195
         let mutable#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
-        let aggregate%array_length%21#0: uint64 = (extract_uint16 mutable#0 0u)
+        let aggregate%array_length%21#0: uint64 = (extract_uint16 mutable#0 0u) // on error: invalid array length header
         let mul%0#2: uint64 = (* aggregate%array_length%21#0 8u)
         let add%0#2: uint64 = (+ mul%0#2 2u)
         let len%0#2: uint64 = (len mutable#0)
         let eq%0#2: bool = (== len%0#2 add%0#2)
-        (assert eq%0#2) // invalid number of bytes for (len+uint64[])
+        (assert eq%0#2) // invalid number of bytes for arc4.dynamic_array<uint64>
         let readOnly#0: Encoded(len+uint64[]) = (txna ApplicationArgs 2)
-        let aggregate%array_length%22#0: uint64 = (extract_uint16 readOnly#0 0u)
+        let aggregate%array_length%22#0: uint64 = (extract_uint16 readOnly#0 0u) // on error: invalid array length header
         let mul%1#0: uint64 = (* aggregate%array_length%22#0 8u)
         let add%1#0: uint64 = (+ mul%1#0 2u)
         let len%1#0: uint64 = (len readOnly#0)
         let eq%1#0: bool = (== len%1#0 add%1#0)
-        (assert eq%1#0) // invalid number of bytes for (len+uint64[])
+        (assert eq%1#0) // invalid number of bytes for arc4.dynamic_array<uint64>
         let values%0#0: uint64 = (extract_uint64 mutable#0 10u)
         let tmp%1#2: uint64 = (+ values%0#0 2u)
         let aggregate%val_as_bytes%51#0: bytes[8] = (itob tmp%1#2)
@@ -110,21 +110,21 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         exit 1u
     block@18: // receiveMutable_route_L221
         let a#1: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
-        let aggregate%array_length%23#0: uint64 = (extract_uint16 a#1 0u)
+        let aggregate%array_length%23#0: uint64 = (extract_uint16 a#1 0u) // on error: invalid array length header
         let mul%0#1: uint64 = (* aggregate%array_length%23#0 8u)
         let add%0#1: uint64 = (+ mul%0#1 2u)
         let len%0#1: uint64 = (len a#1)
         let eq%0#1: bool = (== len%0#1 add%0#1)
-        (assert eq%0#1) // invalid number of bytes for (len+uint64[])
+        (assert eq%0#1) // invalid number of bytes for arc4.dynamic_array<uint64>
         exit 1u
     block@19: // receiveReadonly_route_L225
         let a#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
-        let aggregate%array_length%24#0: uint64 = (extract_uint16 a#0 0u)
+        let aggregate%array_length%24#0: uint64 = (extract_uint16 a#0 0u) // on error: invalid array length header
         let mul%0#0: uint64 = (* aggregate%array_length%24#0 8u)
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len a#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<uint64>
         exit 1u
     block@22: // after_if_else_L6
         fail

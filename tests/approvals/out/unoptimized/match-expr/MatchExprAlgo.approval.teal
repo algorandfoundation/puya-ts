@@ -77,7 +77,7 @@ testMatches_block@0:
     len
     intc_1 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     callsub tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches
     intc_2 // 1
@@ -176,7 +176,7 @@ tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches_block@0:
     // assert(match(xArray, [5]))
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_2 // 1
     ==
     cover 1
@@ -202,7 +202,7 @@ tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches_block@0:
     // assert(match(xArray, [{ greaterThan: 4 }]))
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_2 // 1
     ==
     cover 1
@@ -228,7 +228,7 @@ tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches_block@0:
     // assert(match(xArray, [{ lessThan: 6 }]))
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_2 // 1
     ==
     cover 1
@@ -254,7 +254,7 @@ tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches_block@0:
     // assert(match(xArray, [{ greaterThanEq: 5 }]))
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_2 // 1
     ==
     cover 1
@@ -280,7 +280,7 @@ tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches_block@0:
     // assert(match(xArray, [{ lessThanEq: 5 }]))
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_2 // 1
     ==
     cover 1

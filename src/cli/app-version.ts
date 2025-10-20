@@ -1,7 +1,7 @@
-import fs from 'fs';
-import { fileURLToPath } from 'node:url';
-import upath from 'upath';
-import { Constants } from '../constants';
+import fs from 'fs'
+import { fileURLToPath } from 'node:url'
+import upath from 'upath'
+import { Constants } from '../constants'
 
 export function appVersion(options?: { name?: string; withAVMVersion?: boolean }): string {
   let dirName = upath.dirname(fileURLToPath(import.meta.url))
