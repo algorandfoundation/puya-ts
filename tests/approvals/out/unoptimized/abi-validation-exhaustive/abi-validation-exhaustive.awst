@@ -1,0 +1,132 @@
+contract AbiValidationExhaustive
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  validate_uint64(value: arc4.uint64): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.uint64, validate=true), void
+  }
+  
+  validate_uint8(value: arc4.uint8): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.uint8, validate=true), void
+  }
+  
+  validate_uint512(value: arc4.uint512): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.uint512, validate=true), void
+  }
+  
+  validate_ufixed64(value: arc4.ufixed64x2): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.ufixed64x2, validate=true), void
+  }
+  
+  validate_uint8_arr(value: arc4.dynamic_array<arc4.uint8>): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.dynamic_array<arc4.uint8>, validate=true), void
+  }
+  
+  validate_uint8_arr3(value: arc4.static_array<arc4.uint8>): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.uint8>, validate=true), void
+  }
+  
+  validate_bool(value: arc4.bool): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.bool, validate=true), void
+  }
+  
+  validate_byte(value: arc4.byte): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.byte, validate=true), void
+  }
+  
+  validate_string(value: arc4.dynamic_array<arc4.byte>): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.dynamic_array<arc4.byte>, validate=true), void
+  }
+  
+  validate_bytes(value: arc4.dynamic_array<arc4.byte>): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.dynamic_array<arc4.byte>, validate=true), void
+  }
+  
+  validate_address(value: arc4.static_array<arc4.byte>): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.byte>, validate=true), void
+  }
+  
+  validate_account(value: arc4.static_array<arc4.byte>): void
+  {
+    ARC4_FROM_BYTES(ARC4_DECODE(value), wtype=arc4.static_array<arc4.byte>, validate=true), void
+  }
+  
+  validate_bool_arr(value: arc4.dynamic_array<arc4.bool>): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.dynamic_array<arc4.bool>, validate=true), void
+  }
+  
+  validate_bool_arr3(value: arc4.static_array<arc4.bool>): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.bool>, validate=true), void
+  }
+  
+  validate_static_tuple(value: arc4.tuple<uint64,uint8>): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.tuple<uint64,uint8>, validate=true), void
+  }
+  
+  validate_dynamic_tuple(value: arc4.tuple<uint64,uint8,string>): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.tuple<uint64,uint8,string>, validate=true), void
+  }
+  
+  validate_static_struct(value: ARC4StaticStruct): void
+  {
+    ARC4_FROM_BYTES(value, wtype=ARC4StaticStruct, validate=true), void
+  }
+  
+  validate_dynamic_struct(value: ARC4DynamicStruct): void
+  {
+    ARC4_FROM_BYTES(value, wtype=ARC4DynamicStruct, validate=true), void
+  }
+  
+  validate_static_struct_arr(value: arc4.dynamic_array<ARC4StaticStruct>): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.dynamic_array<ARC4StaticStruct>, validate=true), void
+  }
+  
+  validate_static_struct_arr3(value: arc4.static_array<ARC4StaticStruct>): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<ARC4StaticStruct>, validate=true), void
+  }
+  
+  validate_dynamic_struct_arr(value: arc4.dynamic_array<ARC4DynamicStruct>): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.dynamic_array<ARC4DynamicStruct>, validate=true), void
+  }
+  
+  validate_dynamic_struct_arr3(value: arc4.static_array<ARC4DynamicStruct>): void
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<ARC4DynamicStruct>, validate=true), void
+  }
+  
+  validate_dynamic_struct_with_a_bool(value: WithABool): void
+  {
+    ARC4_FROM_BYTES(value, wtype=WithABool, validate=true), void
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

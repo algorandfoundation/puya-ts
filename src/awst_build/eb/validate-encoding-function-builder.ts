@@ -1,39 +1,3 @@
-// class ValidateFunctionBuilder extends FunctionBuilder {
-//   constructor(
-//     private target: Arc4EncodedBaseExpressionBuilder<ARC4EncodedType>,
-//     sourceLocation: SourceLocation,
-//   ) {
-//     super(sourceLocation)
-//   }
-
-//   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-//     parseFunctionArgs({
-//       args,
-//       typeArgs,
-//       genericTypeArgs: 0,
-//       callLocation: sourceLocation,
-//       funcName: 'validate',
-//       argSpec: () => [],
-//     })
-
-//     const expr = nodeFactory.aRC4FromBytes({
-//       value: this.target.resolve(),
-//       validate: true,
-//       wtype: this.target.ptype.wtype,
-//       sourceLocation,
-//     })
-
-//     return instanceEb(
-//       nodeFactory.commaExpression({
-//         expressions: [expr, nodeFactory.voidConstant({ sourceLocation })],
-//         sourceLocation,
-//         wtype: voidPType.wtype,
-//       }),
-//       voidPType,
-//     )
-//   }
-// }
-
 import { nodeFactory } from '../../awst/node-factory'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
