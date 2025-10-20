@@ -9,16 +9,14 @@ import { logger } from '../../../logger'
 import { codeInvariant, hexToUint8Array } from '../../../util'
 import { isArc4EncodableType, ptypeToArc4EncodedType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
-import { accountPType, BytesPType, bytesPType, stringPType, uint64PType, voidPType } from '../../ptypes'
+import { BytesPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
 import {
-  arc4AddressAlias,
   ARC4EncodedType,
   convertBytesFunction,
   decodeArc4Function,
   encodeArc4Function,
   methodSelectorFunction,
   sizeOfFunction,
-  validateBytesFunction,
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import { ContractMethodExpressionBuilder, SubroutineExpressionBuilder } from '../free-subroutine-expression-builder'
@@ -66,41 +64,6 @@ export class ConvertBytesFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export class ValidateBytesFunctionBuilder extends FunctionBuilder {
-  readonly ptype = validateBytesFunction
-
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    const {
-      ptypes: [ptype],
-      args: [theBytes],
-    } = parseFunctionArgs({
-      args,
-      typeArgs,
-      genericTypeArgs: 1,
-      funcName: this.typeDescription,
-      argSpec: (a) => [a.required(bytesPType)],
-      callLocation: sourceLocation,
-    })
-
-    const validateType = ptype.equals(accountPType) ? arc4AddressAlias : ptype
-    codeInvariant(validateType.wtype instanceof wtypes.ARC4Type, 'Can only validate ARC4-encoded types')
-
-    const expr = nodeFactory.aRC4FromBytes({
-      value: theBytes.resolve(),
-      validate: true,
-      wtype: validateType.wtype,
-      sourceLocation,
-    })
-
-    return instanceEb(
-      nodeFactory.commaExpression({
-        expressions: [expr, nodeFactory.voidConstant({ sourceLocation })],
-        sourceLocation,
-      }),
-      voidPType,
-    )
-  }
-}
 export class EncodeArc4FunctionBuilder extends FunctionBuilder {
   readonly ptype = encodeArc4Function
 

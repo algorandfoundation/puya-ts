@@ -556,11 +556,6 @@ export const convertBytesFunction = new LibFunctionType({
   module: Constants.moduleNames.algoTs.arc4.index,
 })
 
-export const validateBytesFunction = new LibFunctionType({
-  name: 'validateBytes',
-  module: Constants.moduleNames.algoTs.arc4.index,
-})
-
 export const encodeArc4Function = new LibFunctionType({
   name: 'encodeArc4',
   module: Constants.moduleNames.algoTs.arc4.index,

@@ -29,7 +29,6 @@ import {
   EncodeArc4FunctionBuilder,
   MethodSelectorFunctionBuilder,
   SizeOfFunctionBuilder,
-  ValidateBytesFunctionBuilder,
 } from '../eb/arc4/util'
 import {
   FixedArrayClassBuilder,
@@ -86,6 +85,7 @@ import { Uint64EnumMemberExpressionBuilder, Uint64EnumTypeBuilder } from '../eb/
 import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from '../eb/uint64-expression-builder'
 import { UnresolvableExpressionBuilder } from '../eb/unresolvable-expression-builder'
 import { UrangeFunctionBuilder } from '../eb/urange-function'
+import { ValidateFunctionBuilder } from '../eb/validate-function-builder'
 import { VoidExpressionBuilder } from '../eb/void-expression-builder'
 import { OP_METADATA } from '../op-metadata'
 import type { TypeRegistry } from '../type-registry'
@@ -129,7 +129,6 @@ import {
   UintN8Class,
   UintNGeneric,
   UintNType,
-  validateBytesFunction,
 } from './arc4-types'
 import {
   AccountFunction,
@@ -248,6 +247,7 @@ import {
   Uint64Function,
   uint64PType,
   urangeFunction,
+  validateFunctionPType,
   voidPType,
 } from './index'
 import { ALL_OP_ENUMS } from './op-ptypes'
@@ -324,6 +324,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: compileFunctionType, singletonEb: CompileFunctionBuilder })
   typeRegistry.register({ ptype: arc28EmitFunction, singletonEb: Arc28EmitFunctionBuilder })
   typeRegistry.register({ ptype: cloneFunctionPType, singletonEb: CloneFunctionBuilder })
+  typeRegistry.register({ ptype: validateFunctionPType, singletonEb: ValidateFunctionBuilder })
   typeRegistry.register({ ptype: ContractClassPType, singletonEb: ContractClassBuilder })
   typeRegistry.register({ ptype: contractOptionsDecorator, singletonEb: ContractOptionsDecoratorBuilder })
   typeRegistry.register({ ptype: LogicSigPType, singletonEb: LogicSigClassBuilder })
@@ -482,7 +483,6 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
 
   // ARC4 lib
   typeRegistry.register({ ptype: convertBytesFunction, singletonEb: ConvertBytesFunctionBuilder })
-  typeRegistry.register({ ptype: validateBytesFunction, singletonEb: ValidateBytesFunctionBuilder })
   typeRegistry.register({ ptype: encodeArc4Function, singletonEb: EncodeArc4FunctionBuilder })
   typeRegistry.register({ ptype: decodeArc4Function, singletonEb: DecodeArc4FunctionBuilder })
   typeRegistry.register({ ptype: methodSelectorFunction, singletonEb: MethodSelectorFunctionBuilder })

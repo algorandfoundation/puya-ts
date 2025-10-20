@@ -188,3 +188,12 @@ export type NumberRange = { from: number; to: number }
 export function clone<T>(value: T): T {
   throw new NoImplementation()
 }
+
+/**
+ * Performs validation to ensure the value is well-formed, errors if it is not
+ * @param value The value to validate
+ *
+ */
+export function validate<T>(value: T) {
+  throw new NoImplementation()
+}
