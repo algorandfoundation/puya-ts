@@ -4,39 +4,42 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@1: // L6
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
-        goto tmp%1#0 ? block@2 : block@12
+        goto tmp%1#0 ? block@2 : block@13
     block@2: // abi_routing_L6
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
         (assert tmp%3#0) // OnCompletion must be NoOp
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
-        goto tmp%5#0 ? block@3 : block@10
+        goto tmp%5#0 ? block@3 : block@11
     block@3: // call_NoOp_L6
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%6#0 {method "withValidation(byte[32])uint64" => block@4, method "withoutValidation(byte[32])uint64" => block@5, method "defaultValidation(byte[32])uint64" => block@6, method "manualValidationInConvert(byte[])uint64" => block@7, method "manualValidationAfterConvert(byte[])uint64" => block@8, * => block@9}
+        switch tmp%6#0 {method "withValidation(byte[32])uint64" => block@4, method "withoutValidation(byte[32])uint64" => block@5, method "defaultValidation(byte[32])uint64" => block@6, method "manualValidation(byte[32])uint64" => block@7, method "manualValidationInConvert(byte[])uint64" => block@8, method "manualValidationAfterConvert(byte[])uint64" => block@9, * => block@10}
     block@4: // withValidation_route_L7
         tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.withValidation[routing]()
-        goto block@9
+        goto block@10
     block@5: // withoutValidation_route_L11
         tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.withoutValidation[routing]()
-        goto block@9
+        goto block@10
     block@6: // defaultValidation_route_L16
         tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.defaultValidation[routing]()
-        goto block@9
-    block@7: // manualValidationInConvert_route_L20
+        goto block@10
+    block@7: // manualValidation_route_L20
+        tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidation[routing]()
+        goto block@10
+    block@8: // manualValidationInConvert_route_L26
         tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidationInConvert[routing]()
-        goto block@9
-    block@8: // manualValidationAfterConvert_route_L25
+        goto block@10
+    block@9: // manualValidationAfterConvert_route_L31
         tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidationAfterConvert[routing]()
-        goto block@9
-    block@9: // switch_case_next_L6
-        goto block@11
-    block@10: // create_NoOp_L6
-        goto block@11
-    block@11: // after_if_else_L6
-        goto block@13
-    block@12: // __algots__.defaultCreate_L6
+        goto block@10
+    block@10: // switch_case_next_L6
+        goto block@12
+    block@11: // create_NoOp_L6
+        goto block@12
+    block@12: // after_if_else_L6
+        goto block@14
+    block@13: // __algots__.defaultCreate_L6
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (== tmp%7#0 NoOp)
         let tmp%9#0: uint64 = (txn ApplicationID)
@@ -45,9 +48,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
         tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.__algots__.defaultCreate()
         exit 1u
-    block@13: // after_if_else_L6
+    block@14: // after_if_else_L6
         exit 0u
-    block@14: // after_inlined_tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.__puya_arc4_router___L1
+    block@15: // after_inlined_tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.__puya_arc4_router___L1
         let tmp%0#0: bool = undefined
         return tmp%0#0
 
@@ -96,8 +99,21 @@ subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.defaultVali
         (log tmp%4#0)
         exit 1u
 
-subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidationInConvert[routing]() -> void:
+subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidation[routing]() -> void:
     block@0: // L20
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%0#0
+        let tmp%1#0: bytes[32] = as_Encoded(uint8[32])%0#0
+        let tmp%2#0: uint64 = tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidation(tmp%1#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%2#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%3#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
+        (log tmp%4#0)
+        exit 1u
+
+subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidationInConvert[routing]() -> void:
+    block@0: // L26
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
         let length%0#0: uint64 = aggregate%array_length%0#0
@@ -117,7 +133,7 @@ subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValid
         exit 1u
 
 subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidationAfterConvert[routing]() -> void:
-    block@0: // L25
+    block@0: // L31
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
         let length%0#0: uint64 = aggregate%array_length%0#0
@@ -151,15 +167,23 @@ subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.defaultVali
         let tmp%0#0: uint64 = (len value#0)
         return tmp%0#0
 
-subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidationInConvert(rawBytes: bytes) -> uint64:
+subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidation(value: bytes[32]) -> uint64:
     block@0: // L20
+        let len%0#0: uint64 = (len value#0)
+        let eq%0#0: bool = (== len%0#0 32u)
+        (assert eq%0#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        let tmp%0#0: uint64 = (len value#0)
+        return tmp%0#0
+
+subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidationInConvert(rawBytes: bytes) -> uint64:
+    block@0: // L26
         let len%0#0: uint64 = (len rawBytes#0)
         let eq%0#0: bool = (== len%0#0 32u)
         (assert eq%0#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
         return 32u
 
 subroutine tests/approvals/abi-validation.algo.ts::AbiValidationAlgo.manualValidationAfterConvert(rawBytes: bytes) -> uint64:
-    block@0: // L25
+    block@0: // L31
         let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = rawBytes#0
         let value#0: Encoded(uint8[32]) = as_Encoded(uint8[32])%0#0
         let len%0#0: uint64 = (len value#0)

@@ -1963,7 +1963,7 @@ export const cloneFunctionPType = new LibFunctionType({
   module: Constants.moduleNames.algoTs.util,
 })
 
-export const validateFunctionPType = new LibFunctionType({
-  name: 'validate',
+export const validateEncodingFunctionPType = new LibFunctionType({
+  name: 'validateEncoding',
   module: Constants.moduleNames.algoTs.util,
 })

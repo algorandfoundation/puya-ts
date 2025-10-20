@@ -194,6 +194,6 @@ export function clone<T>(value: T): T {
  * @param value The value to validate
  *
  */
-export function validate<T>(value: T) {
+export function validateEncoding<T>(value: T) {
   throw new NoImplementation()
 }

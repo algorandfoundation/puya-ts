@@ -2,14 +2,14 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { codeInvariant } from '../../util'
-import { accountPType, validateFunctionPType, voidPType, type PType } from '../ptypes'
-import { arc4AddressAlias } from '../ptypes/arc4-types'
+import { accountPType, BytesPType, validateEncodingFunctionPType, voidPType, type PType } from '../ptypes'
+import { arc4AddressAlias, StaticBytesType } from '../ptypes/arc4-types'
 import { instanceEb } from '../type-registry'
 import { FunctionBuilder, type NodeBuilder } from './index'
 import { parseFunctionArgs } from './util/arg-parsing'
 
-export class ValidateFunctionBuilder extends FunctionBuilder {
-  readonly ptype = validateFunctionPType
+export class ValidateEncodingFunctionBuilder extends FunctionBuilder {
+  readonly ptype = validateEncodingFunctionPType
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
@@ -24,7 +24,14 @@ export class ValidateFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
     })
 
-    const validateType = ptype.equals(accountPType) ? arc4AddressAlias : ptype
+    codeInvariant(!(ptype instanceof BytesPType) || ptype.length !== null, 'Cannot validate unbounded bytes')
+
+    const validateType = ptype.equals(accountPType)
+      ? arc4AddressAlias
+      : ptype instanceof BytesPType && ptype.length !== null
+        ? new StaticBytesType({ length: ptype.length })
+        : ptype
+
     codeInvariant(validateType.wtype instanceof wtypes.ARC4Type, 'Can only validate ARC4-encoded types')
 
     const expr = nodeFactory.aRC4FromBytes({
