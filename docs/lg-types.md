@@ -440,6 +440,8 @@ The following sources of ABI values are always validated by the compiler by defa
 - Bytes.toFixed (with the `assert-length` strategy)
 - decodeArc4
 
+NOTE: Argument validation can be disabled globally via the `--validate-abi-args` flags. Similarly, return value validation can be disable via the `--validate-abi-return` flag. It is also possible for a method implementation to disable validation for its own arguments via the `validateEncoding` option on the `abimethod` decorator. Per-method validation settings override the global compiler settings.
+
 ### Non-Validated Sources
 
 There are certain places where one can get an ABI value that is not fully validated:
