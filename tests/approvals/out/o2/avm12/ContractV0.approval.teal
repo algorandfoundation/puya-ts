@@ -27,9 +27,11 @@ main_update_route@3:
     txn RejectVersion
     pushint 1 // 1
     ==
+    assert // can only update if caller expects this to be currently be v0
     // tests/approvals/avm12.algo.ts:51
     // @abimethod({ allowActions: 'UpdateApplication' })
-    return // on error: can only update if caller expects this to be currently be v0
+    pushint 1 // 1
+    return
 
 main___algots__.defaultCreate@5:
     // tests/approvals/avm12.algo.ts:49-50
@@ -40,4 +42,6 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return

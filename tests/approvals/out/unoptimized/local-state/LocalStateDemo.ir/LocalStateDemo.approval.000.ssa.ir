@@ -71,11 +71,23 @@ subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.optIn[routing]() 
 subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.setState[routing]() -> void:
     block@0: // L21
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let tuple_len%0#0: uint64 = (len tmp%0#0)
+        let extract_uint16%0#0: uint64 = (extract_uint16 tmp%0#0 8u) // on error: invalid tuple encoding
+        let eq%0#0: bool = (== extract_uint16%0#0 10u)
+        (assert eq%0#0) // invalid tail pointer at index 1 of (uint64,(len+uint8[]))
+        let substring3%0#0: bytes = (substring3 tmp%0#0 extract_uint16%0#0 tuple_len%0#0)
+        let length%0#0: uint64 = array_len(substring3%0#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let add%1#0: uint64 = (+ 10u add%0#0)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%1#0: bool = (== len%0#0 add%1#0)
+        (assert eq%1#0) // invalid number of bytes for ObjectEFF43F36
         let as_Encoded(uint64,(len+uint8[]))%0#0: Encoded(uint64,(len+uint8[])) = tmp%0#0
         let tmp%1#0: bytes = (txna ApplicationArgs 2)
-        let len%0#0: uint64 = (len tmp%1#0)
-        let eq%0#0: bool = (== len%0#0 80u)
-        (assert eq%0#0) // invalid number of bytes for uint64[10]
+        let len%1#0: uint64 = (len tmp%1#0)
+        let eq%2#0: bool = (== len%1#0 80u)
+        (assert eq%2#0) // invalid number of bytes for arc4.static_array<arc4.uint64, 10>
         let as_Encoded(uint64[10])%0#0: Encoded(uint64[10]) = tmp%1#0
         tests/approvals/local-state.algo.ts::LocalStateDemo.setState(as_Encoded(uint64,(len+uint8[]))%0#0, as_Encoded(uint64[10])%0#0)
         exit 1u
@@ -100,7 +112,7 @@ subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.writeDynamicLocal
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+utf8[])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
         let tmp%1#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
         let tmp%2#0: bytes = (txna ApplicationArgs 2)
@@ -109,7 +121,7 @@ subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.writeDynamicLocal
         let add%1#0: uint64 = (+ mul%1#0 2u)
         let len%1#0: uint64 = (len tmp%2#0)
         let eq%1#0: bool = (== len%1#0 add%1#0)
-        (assert eq%1#0) // invalid number of bytes for (len+utf8[])
+        (assert eq%1#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         let as_Encoded(len+utf8[])%1#0: Encoded(len+utf8[]) = tmp%2#0
         let tmp%3#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%1#0)
         let tmp%4#0: string = tests/approvals/local-state.algo.ts::LocalStateDemo.writeDynamicLocalState(tmp%1#0, tmp%3#0)
@@ -126,7 +138,7 @@ subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.readDynamicLocalS
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+utf8[])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
         let tmp%1#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
         let tmp%2#0: string = tests/approvals/local-state.algo.ts::LocalStateDemo.readDynamicLocalState(tmp%1#0)

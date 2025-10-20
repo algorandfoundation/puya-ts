@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 10 1 123
+    intcblock 1 10 123
     bytecblock 0x30313233343536373839 "123"
     // tests/approvals/uint64-to-string.algo.ts:4
     // class Uint64ToStringAlgo extends Contract {
@@ -32,33 +32,35 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
 
 
 // puya-ts::itoa(i: uint64) -> bytes:
 itoa:
     proto 1 1
     frame_dig -1
-    intc_0 // 10
+    intc_1 // 10
     <
     bz itoa_else_body@2
     bytec_0 // 0x30313233343536373839
     frame_dig -1
-    intc_1 // 1
+    intc_0 // 1
     extract3
     retsub
 
 itoa_else_body@2:
     frame_dig -1
-    intc_0 // 10
+    intc_1 // 10
     /
     callsub itoa
     frame_dig -1
-    intc_0 // 10
+    intc_1 // 10
     %
     bytec_0 // 0x30313233343536373839
     swap
-    intc_1 // 1
+    intc_0 // 1
     extract3
     concat
     retsub
@@ -73,7 +75,7 @@ test:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/uint64-to-string.algo.ts:8
     // assert(y.toString() === '123')
@@ -104,5 +106,5 @@ test:
     swap
     concat
     log
-    intc_1 // 1
+    intc_0 // 1
     return

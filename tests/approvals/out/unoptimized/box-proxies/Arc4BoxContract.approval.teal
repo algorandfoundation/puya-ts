@@ -283,12 +283,12 @@ setBoxes_block@0:
     len
     intc_3 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
     intc_2 // 2
@@ -296,12 +296,12 @@ setBoxes_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 3
     dup
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
     intc_2 // 2
@@ -309,7 +309,7 @@ setBoxes_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     uncover 2
     uncover 2
     uncover 2
@@ -354,14 +354,14 @@ setManyInts_block@0:
     len
     intc_3 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     len
     intc_3 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     callsub tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setManyInts
     intc_0 // 1
@@ -557,14 +557,14 @@ setBool_block@0:
     len
     intc_3 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     len
     intc_0 // 1
     ==
-    assert // invalid number of bytes for bool8
+    assert // invalid number of bytes for arc4.bool
     intc_1 // 0
     getbit
     callsub tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBool
@@ -584,7 +584,7 @@ sumBools_block@0:
     len
     intc_3 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     callsub tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools
     itob
@@ -725,10 +725,10 @@ tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes_block@0:
     box_get
     assert // Box must have value
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     uncover 1
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     ==
     assert // direct reference should match copy
     // tests/approvals/box-proxies.algo.ts:341

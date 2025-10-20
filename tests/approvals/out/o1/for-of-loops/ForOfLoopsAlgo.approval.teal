@@ -27,7 +27,9 @@ main___algots__.defaultCreate@15:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
 
 
 // tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple[routing]() -> void:
@@ -39,7 +41,7 @@ test_for_of_loop_tuple:
     len
     pushint 24 // 24
     ==
-    assert // invalid number of bytes for (uint64,uint64,uint64)
+    assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64>
     dup
     intc_1 // 0
     extract_uint64
@@ -107,7 +109,7 @@ test_for_of_loop_destructured_tuple:
     txna ApplicationArgs 1
     dupn 2
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     dup
     cover 2
     intc_2 // 8
@@ -117,7 +119,7 @@ test_for_of_loop_destructured_tuple:
     swap
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
     // tests/approvals/for-of-loops.algo.ts:19
     // let total: uint64 = 0
     intc_1 // 0
@@ -173,7 +175,7 @@ test_for_of_loop_destructured_object:
     txna ApplicationArgs 1
     dupn 2
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     dup
     cover 2
     pushint 16 // 16
@@ -183,7 +185,7 @@ test_for_of_loop_destructured_object:
     swap
     len
     ==
-    assert // invalid number of bytes for (len+(uint64,uint64)[])
+    assert // invalid number of bytes for arc4.dynamic_array<tests/approvals/for-of-loops.algo.ts::Point>
     // tests/approvals/for-of-loops.algo.ts:28
     // let total: uint64 = 0
     intc_1 // 0
@@ -247,7 +249,7 @@ test_for_of_loop_arc4_dynamic_array:
     txna ApplicationArgs 1
     dupn 2
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     dup
     cover 2
     intc_2 // 8
@@ -257,7 +259,7 @@ test_for_of_loop_arc4_dynamic_array:
     swap
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
     // tests/approvals/for-of-loops.algo.ts:37
     // let total: uint64 = 0
     intc_1 // 0
@@ -315,7 +317,7 @@ test_for_of_loop_arc4_static_array:
     len
     pushint 40 // 40
     ==
-    assert // invalid number of bytes for uint64[5]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint64, 5>
     // tests/approvals/for-of-loops.algo.ts:46
     // let total: uint64 = 0
     intc_1 // 0
@@ -371,7 +373,7 @@ test_for_of_loop_native_immutable_array:
     txna ApplicationArgs 1
     dupn 2
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     dup
     cover 2
     intc_2 // 8
@@ -381,7 +383,7 @@ test_for_of_loop_native_immutable_array:
     swap
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<uint64>
     // tests/approvals/for-of-loops.algo.ts:55
     // let total: uint64 = 0
     intc_1 // 0
@@ -439,7 +441,7 @@ test_for_of_loop_native_mutable_array:
     len
     pushint 24 // 24
     ==
-    assert // invalid number of bytes for (uint64,uint64,uint64)
+    assert // invalid number of bytes for arc4.tuple<uint64,uint64,uint64>
     // tests/approvals/for-of-loops.algo.ts:64
     // const mutable = new ReferenceArray(...items)
     dup
@@ -516,16 +518,16 @@ test_iterable_props:
     len
     pushint 24 // 24
     ==
-    assert // invalid number of bytes for uint64[3]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint64, 3>
     txna ApplicationArgs 2
     len
     pushint 24 // 24
     ==
-    assert // invalid number of bytes for uint64[3]
+    assert // invalid number of bytes for arc4.static_array<uint64, 3>
     txna ApplicationArgs 3
     dup
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     dup
     cover 2
     intc_2 // 8
@@ -535,7 +537,7 @@ test_iterable_props:
     swap
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
     // tests/approvals/for-of-loops.algo.ts:74
     // let i: uint64 = 0
     intc_1 // 0

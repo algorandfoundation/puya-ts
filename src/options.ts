@@ -1,4 +1,4 @@
-import { LogLevel, logLevelToInt } from './logger'
+import { LogLevel } from './logger'
 import type { Props } from './typescript-helpers'
 
 export interface AlgoFile {
@@ -32,9 +32,9 @@ export class CompileOptions {
   public readonly cliTemplateDefinitions: Record<string, Uint8Array | bigint>
   public readonly templateVarsPrefix: string
   public readonly localsCoalescingStrategy: LocalsCoalescingStrategy
-  public readonly validateAbiValues: boolean
-  public readonly validateAbiDynamicSeverity: LogLevel
   public readonly customPuyaPath?: string
+  public readonly validateAbiArgs: boolean
+  public readonly validateAbiReturn: boolean
 
   constructor(options: Partial<Props<CompileOptions>> & { filePaths: AlgoFile[] }) {
     this.filePaths = options.filePaths
@@ -58,9 +58,9 @@ export class CompileOptions {
     this.cliTemplateDefinitions = options.cliTemplateDefinitions ?? defaultPuyaOptions.cliTemplateDefinitions
     this.templateVarsPrefix = options.templateVarsPrefix ?? defaultPuyaOptions.templateVarsPrefix
     this.localsCoalescingStrategy = options.localsCoalescingStrategy ?? defaultPuyaOptions.localsCoalescingStrategy
-    this.validateAbiValues = options.validateAbiValues ?? defaultPuyaOptions.validateAbiValues
-    this.validateAbiDynamicSeverity = options.validateAbiDynamicSeverity ?? defaultPuyaOptions.validateAbiDynamicSeverity
     this.customPuyaPath = options.customPuyaPath ?? process.env.PUYA_PATH
+    this.validateAbiArgs = options.validateAbiArgs ?? defaultPuyaOptions.validateAbiArgs
+    this.validateAbiReturn = options.validateAbiReturn ?? defaultPuyaOptions.validateAbiReturn
   }
 
   buildPuyaOptions(compilationSet: CompilationSetMapping) {
@@ -68,7 +68,6 @@ export class CompileOptions {
       ...this,
       compilationSet,
       resourceEncoding: 'value',
-      validateAbiDynamicSeverity: logLevelToInt[this.validateAbiDynamicSeverity],
     })
   }
 }
@@ -96,8 +95,8 @@ export const defaultPuyaOptions: PuyaPassThroughOptions = {
   cliTemplateDefinitions: {},
   templateVarsPrefix: 'TMPL_',
   localsCoalescingStrategy: LocalsCoalescingStrategy.root_operand,
-  validateAbiValues: true,
-  validateAbiDynamicSeverity: LogLevel.Warning,
+  validateAbiArgs: true,
+  validateAbiReturn: true,
 }
 export type PuyaPassThroughOptions = Omit<PuyaOptions, 'compilationSet'>
 
@@ -117,9 +116,9 @@ export class PuyaOptions {
   cliTemplateDefinitions: Record<string, Uint8Array | bigint>
   templateVarsPrefix: string
   localsCoalescingStrategy: LocalsCoalescingStrategy
-  validateAbiValues: boolean
-  validateAbiDynamicSeverity: LogLevel
   compilationSet: CompilationSetMapping
+  validateAbiArgs: boolean
+  validateAbiReturn: boolean
 
   constructor(options: Props<PuyaOptions>) {
     this.compilationSet = options.compilationSet
@@ -137,8 +136,8 @@ export class PuyaOptions {
     this.cliTemplateDefinitions = options.cliTemplateDefinitions
     this.templateVarsPrefix = options.templateVarsPrefix
     this.localsCoalescingStrategy = options.localsCoalescingStrategy
-    this.validateAbiValues = options.validateAbiValues
-    this.validateAbiDynamicSeverity = options.validateAbiDynamicSeverity
     this.outputSourceMap = options.outputSourceMap
+    this.validateAbiArgs = options.validateAbiArgs
+    this.validateAbiReturn = options.validateAbiReturn
   }
 }

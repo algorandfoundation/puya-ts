@@ -163,14 +163,14 @@ testEncoding_block@0:
     len
     intc_3 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     len
     intc_1 // 1
     ==
-    assert // invalid number of bytes for bool8
+    assert // invalid number of bytes for arc4.bool
     intc_0 // 0
     getbit
     txna ApplicationArgs 3
@@ -178,11 +178,11 @@ testEncoding_block@0:
     len
     pushint 64 // 64
     ==
-    assert // invalid number of bytes for uint512
+    assert // invalid number of bytes for arc4.uint512
     txna ApplicationArgs 4
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
     intc_2 // 2
@@ -190,12 +190,12 @@ testEncoding_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 5
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
     intc_2 // 2
@@ -203,20 +203,20 @@ testEncoding_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 6
     dup
     len
     pushint 32 // 32
     ==
-    assert // invalid number of bytes for uint8[32]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 7
     dup
     len
     pushint 12 // 12
     ==
-    assert // invalid number of bytes for uint8[12]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 12>
     uncover 6
     uncover 6
     uncover 6
@@ -256,12 +256,12 @@ testDecoding_block@0:
     len
     intc_3 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
     intc_2 // 2
@@ -269,20 +269,20 @@ testDecoding_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 3
     dup
     len
     intc_1 // 1
     ==
-    assert // invalid number of bytes for bool8
+    assert // invalid number of bytes for arc4.bool
     intc_0 // 0
     getbit
     txna ApplicationArgs 4
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
     intc_2 // 2
@@ -290,18 +290,18 @@ testDecoding_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 5
     dup
     len
     pushint 64 // 64
     ==
-    assert // invalid number of bytes for uint512
+    assert // invalid number of bytes for arc4.uint512
     txna ApplicationArgs 6
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
     intc_2 // 2
@@ -309,12 +309,12 @@ testDecoding_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 7
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
     intc_2 // 2
@@ -322,12 +322,12 @@ testDecoding_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 8
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
     intc_2 // 2
@@ -335,13 +335,39 @@ testDecoding_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 9
+    dup
+    len
+    cover 1
+    dup
+    intc_3 // 8
+    extract_uint16 // on error: invalid tuple encoding
+    dup
+    pushint 10 // 10
+    ==
+    assert // invalid tail pointer at index 1 of (uint64,(len+uint8[]))
+    dig 1
+    uncover 1
+    uncover 3
+    substring3
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    intc_2 // 2
+    +
+    pushint 10 // 10
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for tests/approvals/arc4-encode-decode.algo.ts::TestObj
     txna ApplicationArgs 10
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
     intc_2 // 2
@@ -349,18 +375,18 @@ testDecoding_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 11
     dup
     len
     pushint 32 // 32
     ==
-    assert // invalid number of bytes for uint8[32]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 12
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
     intc_2 // 2
@@ -368,18 +394,18 @@ testDecoding_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 13
     dup
     len
     pushint 12 // 12
     ==
-    assert // invalid number of bytes for uint8[12]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 12>
     txna ApplicationArgs 14
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
     intc_2 // 2
@@ -387,7 +413,7 @@ testDecoding_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     uncover 13
     uncover 13
@@ -1161,7 +1187,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     frame_dig -13
     concat
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     ==
     cover 1
@@ -1191,7 +1217,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     frame_dig -11
     concat
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     ==
     cover 1
@@ -1200,7 +1226,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     concat
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_0 // 0
     >
     assert // index access is out of bounds
@@ -1225,7 +1251,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     frame_dig -9
     concat
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     ==
     cover 1
@@ -1258,7 +1284,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     frame_dig -7
     concat
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     ==
     cover 2
@@ -1278,7 +1304,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     substring3
     cover 1
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_0 // 0
     >
     assert // index access is out of bounds
@@ -1314,7 +1340,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     frame_dig -5
     concat
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     ==
     cover 2
@@ -1334,7 +1360,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     substring3
     cover 1
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     cover 1
     intc_0 // 0
     intc_2 // 2
@@ -1391,7 +1417,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     substring3
     cover 1
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     cover 1
     intc_0 // 0
     intc_2 // 2
@@ -1456,7 +1482,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     frame_dig -3
     concat
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     ==
     cover 1

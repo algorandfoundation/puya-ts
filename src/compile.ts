@@ -5,6 +5,7 @@ import { buildAwst } from './awst_build'
 import type { CompilationSet } from './awst_build/models/contract-class-model'
 import { registerPTypes } from './awst_build/ptypes/register'
 import { typeRegistry } from './awst_build/type-registry'
+import { appVersion } from './cli/app-version'
 import { logger, LoggingContext } from './logger'
 import type { CompileOptions } from './options'
 import { createTsProgram } from './parser'
@@ -20,6 +21,7 @@ export type CompileResult = {
 export async function compile(options: CompileOptions): Promise<CompileResult> {
   const loggerCtx = LoggingContext.current
   registerPTypes(typeRegistry)
+  logger.info(undefined, appVersion({ withAVMVersion: false }))
   const programResult = createTsProgram(options)
   if (loggerCtx.hasErrors()) {
     logger.info(undefined, 'Compilation halted due to parse errors')

@@ -77,11 +77,11 @@ test_block@0:
     len
     pushint 16 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for ObjectACED9E72
     txna ApplicationArgs 2
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
     pushint 2 // 2
@@ -89,7 +89,7 @@ test_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     callsub tests/approvals/box-proxies.algo.ts::CompositeKeyTest.test
     intc_1 // 1

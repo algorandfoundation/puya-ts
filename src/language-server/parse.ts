@@ -21,7 +21,7 @@ export async function parseCliArguments() {
   switch (result.command) {
     case 'version':
       /* eslint-disable-next-line no-console */
-      console.log(appVersion(prog))
+      console.log(appVersion({ name: prog }))
       break
     default:
       await startLanguageServer()

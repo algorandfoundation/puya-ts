@@ -30,16 +30,16 @@ main_test_iterable_props_route@11:
     len
     pushint 24 // 24
     ==
-    assert // invalid number of bytes for uint64[3]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint64, 3>
     txna ApplicationArgs 2
     len
     pushint 24 // 24
     ==
-    assert // invalid number of bytes for uint64[3]
+    assert // invalid number of bytes for arc4.static_array<uint64, 3>
     txna ApplicationArgs 3
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     dup
     bury 16
     intc_2 // 8
@@ -49,7 +49,7 @@ main_test_iterable_props_route@11:
     swap
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
     // tests/approvals/for-of-loops.algo.ts:74
     // let i: uint64 = 0
     intc_0 // 0
@@ -223,7 +223,7 @@ main_test_for_of_loop_native_mutable_array_route@10:
     len
     pushint 24 // 24
     ==
-    assert // invalid number of bytes for (uint64,uint64,uint64)
+    assert // invalid number of bytes for arc4.tuple<uint64,uint64,uint64>
     // tests/approvals/for-of-loops.algo.ts:64
     // const mutable = new ReferenceArray(...items)
     dup
@@ -299,7 +299,7 @@ main_test_for_of_loop_native_immutable_array_route@9:
     bury 22
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     dup
     bury 17
     intc_2 // 8
@@ -309,7 +309,7 @@ main_test_for_of_loop_native_immutable_array_route@9:
     swap
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<uint64>
     // tests/approvals/for-of-loops.algo.ts:55
     // let total: uint64 = 0
     intc_0 // 0
@@ -367,7 +367,7 @@ main_test_for_of_loop_arc4_static_array_route@8:
     len
     pushint 40 // 40
     ==
-    assert // invalid number of bytes for uint64[5]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint64, 5>
     // tests/approvals/for-of-loops.algo.ts:46
     // let total: uint64 = 0
     intc_0 // 0
@@ -424,7 +424,7 @@ main_test_for_of_loop_arc4_dynamic_array_route@7:
     bury 22
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     dup
     bury 18
     intc_2 // 8
@@ -434,7 +434,7 @@ main_test_for_of_loop_arc4_dynamic_array_route@7:
     swap
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
     // tests/approvals/for-of-loops.algo.ts:37
     // let total: uint64 = 0
     intc_0 // 0
@@ -491,7 +491,7 @@ main_test_for_of_loop_destructured_object_route@6:
     bury 22
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     dup
     bury 19
     pushint 16 // 16
@@ -501,7 +501,7 @@ main_test_for_of_loop_destructured_object_route@6:
     swap
     len
     ==
-    assert // invalid number of bytes for (len+(uint64,uint64)[])
+    assert // invalid number of bytes for arc4.dynamic_array<tests/approvals/for-of-loops.algo.ts::Point>
     // tests/approvals/for-of-loops.algo.ts:28
     // let total: uint64 = 0
     intc_0 // 0
@@ -567,7 +567,7 @@ main_test_for_of_loop_destructured_tuple_route@5:
     bury 22
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     dup
     bury 20
     intc_2 // 8
@@ -577,7 +577,7 @@ main_test_for_of_loop_destructured_tuple_route@5:
     swap
     len
     ==
-    assert // invalid number of bytes for (len+uint64[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
     // tests/approvals/for-of-loops.algo.ts:19
     // let total: uint64 = 0
     intc_0 // 0
@@ -635,7 +635,7 @@ main_test_for_of_loop_tuple_route@4:
     len
     pushint 24 // 24
     ==
-    assert // invalid number of bytes for (uint64,uint64,uint64)
+    assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64>
     dup
     intc_0 // 0
     extract_uint64
@@ -708,4 +708,6 @@ main___algots__.defaultCreate@15:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return

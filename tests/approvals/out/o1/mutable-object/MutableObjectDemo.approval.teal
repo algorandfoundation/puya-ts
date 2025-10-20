@@ -33,7 +33,9 @@ main___algots__.defaultCreate@18:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_2 // 1
+    return
 
 
 // tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testVectorCreationAndEquality[routing]() -> void:
@@ -66,13 +68,13 @@ addVectors:
     len
     intc_3 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Vector
     txna ApplicationArgs 2
     dup
     len
     intc_3 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Vector
     // tests/approvals/mutable-object.algo.ts:23
     // x: v1.x + v2.x,
     dig 1
@@ -120,19 +122,19 @@ mutateVector:
     len
     intc_3 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Vector
     txna ApplicationArgs 2
     dup
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     txna ApplicationArgs 3
     dup
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     // tests/approvals/mutable-object.algo.ts:29
     // v1.x = newX
     cover 2
@@ -160,7 +162,7 @@ implicitCastingAndSpreading:
     len
     intc_3 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Vector
     // tests/approvals/mutable-object.algo.ts:36
     // const v3 = { ...v2 }
     dup
@@ -195,9 +197,11 @@ implicitCastingAndSpreading:
     // tests/approvals/mutable-object.algo.ts:42
     // assertMatch(v3, v1)
     &&
+    assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:34
     // public implicitCastingAndSpreading(v1: Vector) {
-    return // on error: assert target is match for conditions
+    intc_2 // 1
+    return
 
 
 // tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedObjects[routing]() -> void:
@@ -209,7 +213,7 @@ testNestedObjects:
     len
     pushint 32 // 32
     ==
-    assert // invalid number of bytes for ((uint64,uint64),(uint64,uint64))
+    assert // invalid number of bytes for tests/approvals/mutable-object.algo.ts::VectorPoint
     // tests/approvals/mutable-object.algo.ts:50
     // const v1 = { x: vp.v.x, y: vp.v.y }
     dup
@@ -308,9 +312,11 @@ testNestedObjects:
     ==
     &&
     &&
+    assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:49
     // public testNestedObjects(vp: VectorPoint) {
-    return // on error: assert target is match for conditions
+    intc_2 // 1
+    return
 
 
 // tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertMatch[routing]() -> void:
@@ -322,7 +328,7 @@ testAssertMatch:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/mutable-object.algo.ts:78
     // y: (b = x * 2),
@@ -388,9 +394,11 @@ testAssertMatch:
     // tests/approvals/mutable-object.algo.ts:89
     // assertMatch(obj, { x: { greaterThan: x } })
     <
+    assert // assert target is match for conditions
     // tests/approvals/mutable-object.algo.ts:75
     // testAssertMatch(x: uint64) {
-    return // on error: assert target is match for conditions
+    intc_2 // 1
+    return
 
 
 // tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Encoding[routing]() -> void:
@@ -402,7 +410,7 @@ testArc4Encoding:
     len
     intc_3 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Point
     // tests/approvals/mutable-object.algo.ts:93
     // assert(p.x !== p.y, 'For the purpose of this test, a should not equal b')
     dup
@@ -452,9 +460,11 @@ testArc4Encoding:
     substring3
     concat
     ==
+    assert // Encoded order should be swapped
     // tests/approvals/mutable-object.algo.ts:92
     // testArc4Encoding(p: Point) {
-    return // on error: Encoded order should be swapped
+    intc_2 // 1
+    return
 
 
 // tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin[routing]() -> void:
@@ -464,13 +474,13 @@ getPlugin:
     txna ApplicationArgs 1
     dup
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 2 // 2
     +
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/mutable-object.algo.ts:103
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
@@ -542,13 +552,13 @@ setPlugin:
     txna ApplicationArgs 1
     dup
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 2 // 2
     +
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/mutable-object.algo.ts:103
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })

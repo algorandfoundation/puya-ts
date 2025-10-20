@@ -29,7 +29,7 @@ main_sumBools_route@20:
     len
     intc_2 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     bury 2
     // tests/approvals/box-proxies.algo.ts:511
@@ -119,14 +119,14 @@ main_setBool_route@19:
     len
     intc_2 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     len
     intc_0 // 1
     ==
-    assert // invalid number of bytes for bool8
+    assert // invalid number of bytes for arc4.bool
     intc_1 // 0
     getbit
     // tests/approvals/box-proxies.algo.ts:507
@@ -690,14 +690,14 @@ main_setManyInts_route@9:
     len
     intc_2 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     len
     intc_2 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     // tests/approvals/box-proxies.algo.ts:406
     // this.manyInts.value[index] = value
     swap
@@ -744,12 +744,12 @@ main_setBoxes_route@6:
     len
     intc_2 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_3 // 2
     +
     dig 1
@@ -757,13 +757,13 @@ main_setBoxes_route@6:
     dup
     uncover 2
     ==
-    assert // invalid number of bytes for (len+uint8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     dig 1
     extract 2 0
     txna ApplicationArgs 3
     dup
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_3 // 2
     +
     dig 1
@@ -771,7 +771,7 @@ main_setBoxes_route@6:
     dup
     uncover 2
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     // tests/approvals/box-proxies.algo.ts:361
     // this.boxA.value = a
     uncover 5
@@ -1194,7 +1194,9 @@ main___algots__.defaultCreate@24:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
 
 
 // _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:

@@ -140,7 +140,7 @@ closeOutOfApplication_block@0:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     callsub tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.closeOutOfApplication
     itob
@@ -162,7 +162,7 @@ createApplication_block@0:
     txna ApplicationArgs 1
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
     intc_2 // 2
@@ -170,7 +170,7 @@ createApplication_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     callsub tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.createApplication
     intc_1 // 1
@@ -187,7 +187,7 @@ setLocal_block@0:
     txna ApplicationArgs 1
     dup
     intc_0 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
     intc_2 // 2
@@ -195,7 +195,7 @@ setLocal_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     callsub tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.setLocal
     intc_1 // 1

@@ -45,13 +45,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
 subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.distribute[routing]() -> void:
     block@0: // L19
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
         let length%0#0: uint64 = aggregate%array_length%0#0
         let mul%0#0: uint64 = (* length%0#0 32u)
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+uint8[32][])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.static_array<arc4.uint8, 32>>
         let as_Encoded(len+uint8[32][])%0#0: Encoded(len+uint8[32][]) = tmp%0#0
         let tmp%1#0: uint64 = (txn GroupIndex)
         let gtxn_idx%0#0: uint64 = (- tmp%1#0 1u)
@@ -61,7 +61,7 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.distribute[rout
         let tmp%2#0: bytes = (txna ApplicationArgs 2)
         let len%1#0: uint64 = (len tmp%2#0)
         let eq%1#0: bool = (== len%1#0 8u)
-        (assert eq%1#0) // invalid number of bytes for uint64
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
         let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%2#0
         let tmp%3#0: uint64 = (btoi as_Encoded(uint64)%0#0)
         tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.distribute(as_Encoded(len+uint8[32][])%0#0, gtxn_idx%0#0, tmp%3#0)
@@ -72,7 +72,7 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegi
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 8u)
-        (assert eq%0#0) // invalid number of bytes for uint64
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
         let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
         let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
         tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegin(tmp%1#0)
@@ -84,11 +84,11 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.distribute(addr
         let tmp%1#0: account = (global CurrentApplicationAddress)
         let tmp%2#0: bool = (== tmp%0#0 tmp%1#0)
         (assert tmp%2#0) // assert target is match for conditions
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 addresses#0 0u)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 addresses#0 0u) // on error: invalid array length header
         let reinterpret_bool%0#0: bool = aggregate%array_length%0#0
         (assert reinterpret_bool%0#0) // must provide some accounts
         let tmp%3#0: uint64 = ((gtxns Amount) funds#0)
-        let aggregate%array_length%1#0: uint64 = (extract_uint16 addresses#0 0u)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 addresses#0 0u) // on error: invalid array length header
         let tmp%4#0: uint64 = aggregate%array_length%1#0
         let tmp%5#0: uint64 = (/ tmp%3#0 tmp%4#0)
         let share#0: uint64 = tmp%5#0
@@ -135,7 +135,7 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.distribute(addr
         ((itxn_field Amount) inner_txn_params%0%%param_Amount_idx_0#0)
         ((itxn_field TypeEnum) inner_txn_params%0%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) 0u)
-        let aggregate%array_length%2#0: uint64 = (extract_uint16 addresses#0 0u)
+        let aggregate%array_length%2#0: uint64 = (extract_uint16 addresses#0 0u) // on error: invalid array length header
         let tmp%7#0: uint64 = aggregate%array_length%2#0
         (assert 1u) // Step cannot be zero
         let value_internal%0#0: uint64 = 1u
@@ -205,7 +205,7 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegi
         ((itxn_field GlobalNumUint) 0u)
         ((itxn_field ClearStateProgramPages) C0IAAIEBQw==)
         (itxn_field ClearStateProgramPages)
-        ((itxn_field ApprovalProgramPages) CyADAAECJgQIZ3JlZXRpbmcABBUffHUBIEIAADEYQAAJQgAAiAFeQgAAQgAANhoAgAQkN408gASg6BhyTwKOAgBoAFdCAAAxGSISRDEYIhNBAC1CAAA2GgCABNCiggCABFGAuiBPAo4CAA0AB0IAAEIAAACIAJhC//aIAGpC//A2GgCABACSJa5PAY4BAAZCAABC/96IACVC//cxGYEEEjEYIhMQRIgANkL/mzEZgQUSMRgiExBEiAAdQv+KQgAANhoBSSJZIwskCEsBFRJEVwIAiABTI0NCAACIAFYjQ0IAAIgAUiNDQgAANhoBSSJZIwskCEsBFRJEVwIAiAA8SRUWVwYCTwFQKk8BULAjQ0IAADYaAYgAN0kVFlcGAk8BUCpPAVCwI0OKAQBCAAAoi/9niUIAAIlCAACJigEBQgAAIihlRClPAVArUIv/UImKAQFCAAAiKGVEKU8BUCtQi/8iWYv/JFmL/08CTwJSVwIAUIv/JFmL/xWL/08CTwJSVwIAUIlCAABCAABCAAAoKWeJ)
+        ((itxn_field ApprovalProgramPages) CyAEAAECBCYECGdyZWV0aW5nAAQVH3x1ASBCAAAxGEAACUIAAIgBk0IAAEIAADYaAIAEJDeNPIAEoOgYck8CjgIAZwBXQgAAMRkiEkQxGCITQQAtQgAANhoAgATQooIAgARRgLogTwKOAgANAAdCAABCAAAAiACXQv/2iABpQv/wNhoAgAQAkiWuTwGOAQAGQgAAQv/eiAAkQv/3MRklEjEYIhMQRIgANkL/nDEZgQUSMRgiExBEiAAdQv+LQgAANhoBSSJZIwskCEsBFRJEVwIAiACJI0NCAACIAIwjQ0IAAIgAiCNDQgAANhoBSSJZIwskCEsBFRJEVwIAiABySRUWVwYCTwFQKk8BULAjQ0IAADYaAUkVTgFJIllJJRJESwFPAUsDUiJZIwskCCUISwEkWUlLAhJESwJPAU8EUiJZIwskCAhLARUSRIgAN0kVFlcGAk8BUCpPAVCwI0OKAQBCAAAoi/9niUIAAIlCAACJigEBQgAAIihlRClPAVArUIv/UImKAQFCAAAiKGVEKU8BUCtQi/8iWYv/JFmL/08CTwJSVwIAUIv/JFmL/xWL/08CTwJSVwIAUIlCAABCAABCAAAoKWeJ)
         (itxn_field ApprovalProgramPages)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)

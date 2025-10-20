@@ -31,7 +31,9 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return
 
 
 // tests/approvals/circular-reference.algo.ts::ContractOne.test[routing]() -> void:
@@ -43,7 +45,7 @@ test:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/circular-reference.algo.ts:8
     // abiCall<typeof ContractTwo.prototype.test>({ appId })

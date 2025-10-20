@@ -12,12 +12,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         switch tmp%6#0 {method "distribute(address[],pay,uint64)void" => block@4, method "conditionalBegin(uint64)void" => block@5, * => block@8}
     block@4: // distribute_route_L19
         let addresses#0: Encoded(len+uint8[32][]) = (txna ApplicationArgs 1)
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 addresses#0 0u)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 addresses#0 0u) // on error: invalid array length header
         let mul%0#0: uint64 = (* aggregate%array_length%0#0 32u)
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#1: uint64 = (len addresses#0)
         let eq%0#1: bool = (== len%0#1 add%0#0)
-        (assert eq%0#1) // invalid number of bytes for (len+uint8[32][])
+        (assert eq%0#1) // invalid number of bytes for arc4.dynamic_array<arc4.static_array<arc4.uint8, 32>>
         let tmp%1#1: uint64 = (txn GroupIndex)
         let funds#0: uint64 = (- tmp%1#1 1u)
         let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) funds#0)
@@ -26,7 +26,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%2#2: bytes = (txna ApplicationArgs 2)
         let len%1#0: uint64 = (len tmp%2#2)
         let eq%1#0: bool = (== len%1#0 8u)
-        (assert eq%1#0) // invalid number of bytes for uint64
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
         let verifier#0: uint64 = (btoi tmp%2#2)
         let tmp%0#5: account = ((gtxns Receiver) funds#0)
         let tmp%1#2: account = (global CurrentApplicationAddress)
@@ -89,14 +89,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#2: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#2)
         let eq%0#0: bool = (== len%0#0 8u)
-        (assert eq%0#0) // invalid number of bytes for uint64
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
         let count#0: uint64 = (btoi tmp%0#2)
         itxn_begin
         ((itxn_field ApplicationArgs) method "helloCreate(string)void")
         ((itxn_field ApplicationArgs) 0x00024869)
         ((itxn_field GlobalNumByteSlice) 1u)
         ((itxn_field ClearStateProgramPages) C4EBQw==)
-        ((itxn_field ApprovalProgramPages) CyADAAIBJgMIZ3JlZXRpbmcBIAQVH3x1MRhAAAQogABnggIEJDeNPASg6BhyNhoAjgIAqQCgMRkURDEYQQB0ggIE0KKCAARRgLogNhoAjgIAOQABADYaASIoZUQpUEsBIllLAiNZSwNPAksCUlcCAE8CTFBLAhVMTgNSVwIAUEkVFlcGAkxQKkxQsCRDNhoBSSJZIwhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwJEOABACSJa42GgCOAQABADYaAUkiWSMISwEVEkRXAgAoTGckQzEZgQQSMRgQQzEZgQUSMRgQQw==)
+        ((itxn_field ApprovalProgramPages) CyAEAAECBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CAMkAvzEZFEQxGEEAk4ICBNCiggAEUYC6IDYaAI4CAFgAAQA2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMkWUlLAhJESwRLAUsFUkkiWSQITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwI0M2GgFJIlkkCEsBFRJEVwIAIihlRClQTFBJFRZXBgJMUCpMULAjQ4AEAJIlrjYaAI4BAAEANhoBSSJZJAhLARUSRFcCAChMZyNDMRklEjEYEEQjQzEZgQUSMRgQRCND)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)

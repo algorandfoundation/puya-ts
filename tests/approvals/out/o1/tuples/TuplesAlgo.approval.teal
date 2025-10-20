@@ -3,6 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
+    intcblock 8 1
     // tests/approvals/tuples.algo.ts:6
     // class TuplesAlgo extends Contract {
     txn NumAppArgs
@@ -30,7 +31,9 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return
 
 
 // tests/approvals/tuples.algo.ts::TuplesAlgo.test[routing]() -> void:
@@ -39,16 +42,18 @@ test:
     // test(a: Uint64, b: Uint64, c: Uint64) {
     txna ApplicationArgs 1
     len
-    pushint 8 // 8
+    intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     txna ApplicationArgs 2
     len
-    pushint 8 // 8
+    intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     txna ApplicationArgs 3
     len
-    pushint 8 // 8
+    intc_0 // 8
     ==
-    return // on error: invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
+    intc_1 // 1
+    return

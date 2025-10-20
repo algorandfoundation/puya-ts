@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0
+    intcblock 0 1
     // tests/approvals/avm11.algo.ts:23-24
     // @contract({ name: 'AVM11Contract', avmVersion: 11 })
     // export class Avm11Contract extends Contract {
@@ -33,7 +33,9 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return
 
 
 // tests/approvals/avm11.algo.ts::Avm11Contract.testNewOps[routing]() -> void:
@@ -119,5 +121,5 @@ testNewOps:
     popn 2
     // tests/approvals/avm11.algo.ts:25
     // testNewOps() {
-    pushint 1 // 1
+    intc_1 // 1
     return

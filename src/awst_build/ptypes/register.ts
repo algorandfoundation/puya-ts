@@ -85,6 +85,7 @@ import { Uint64EnumMemberExpressionBuilder, Uint64EnumTypeBuilder } from '../eb/
 import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from '../eb/uint64-expression-builder'
 import { UnresolvableExpressionBuilder } from '../eb/unresolvable-expression-builder'
 import { UrangeFunctionBuilder } from '../eb/urange-function'
+import { ValidateEncodingFunctionBuilder } from '../eb/validate-encoding-function-builder'
 import { VoidExpressionBuilder } from '../eb/void-expression-builder'
 import { OP_METADATA } from '../op-metadata'
 import type { TypeRegistry } from '../type-registry'
@@ -246,6 +247,7 @@ import {
   Uint64Function,
   uint64PType,
   urangeFunction,
+  validateEncodingFunctionPType,
   voidPType,
 } from './index'
 import { ALL_OP_ENUMS } from './op-ptypes'
@@ -322,6 +324,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: compileFunctionType, singletonEb: CompileFunctionBuilder })
   typeRegistry.register({ ptype: arc28EmitFunction, singletonEb: Arc28EmitFunctionBuilder })
   typeRegistry.register({ ptype: cloneFunctionPType, singletonEb: CloneFunctionBuilder })
+  typeRegistry.register({ ptype: validateEncodingFunctionPType, singletonEb: ValidateEncodingFunctionBuilder })
   typeRegistry.register({ ptype: ContractClassPType, singletonEb: ContractClassBuilder })
   typeRegistry.register({ ptype: contractOptionsDecorator, singletonEb: ContractOptionsDecoratorBuilder })
   typeRegistry.register({ ptype: LogicSigPType, singletonEb: LogicSigClassBuilder })

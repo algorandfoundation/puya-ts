@@ -24,13 +24,13 @@ main_setLocal_route@7:
     txna ApplicationArgs 1
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 2
     +
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/teal-script-conventions.algo.ts:18
     // this.local(Txn.sender).value = value
@@ -55,7 +55,9 @@ main_updateApplication_route@6:
     ==
     txn ApplicationID
     &&
-    return // on error: OnCompletion must be UpdateApplication && can only call when not creating
+    assert // OnCompletion must be UpdateApplication && can only call when not creating
+    intc_0 // 1
+    return
 
 main_optInToApplication_route@5:
     // tests/approvals/teal-script-conventions.algo.ts:23
@@ -65,7 +67,9 @@ main_optInToApplication_route@5:
     ==
     txn ApplicationID
     &&
-    return // on error: OnCompletion must be OptIn && can only call when not creating
+    assert // OnCompletion must be OptIn && can only call when not creating
+    intc_0 // 1
+    return
 
 main_createApplication_route@4:
     // tests/approvals/teal-script-conventions.algo.ts:12
@@ -82,13 +86,13 @@ main_createApplication_route@4:
     txna ApplicationArgs 1
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_1 // 2
     +
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/teal-script-conventions.algo.ts:6
     // global = GlobalState<bytes>()
@@ -116,7 +120,7 @@ main_noMoreThanks_route@3:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     pushbytes 0x151f7c75
     swap
     concat
@@ -132,4 +136,6 @@ main_deleteApplication@9:
     ==
     txn ApplicationID
     &&
-    return // on error: OnCompletion must be DeleteApplication && can only call when not creating
+    assert // OnCompletion must be DeleteApplication && can only call when not creating
+    intc_0 // 1
+    return

@@ -31,7 +31,7 @@ export class ConvertBytesFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
       ptypes: [ptype],
-      args: [theBytes, { prefix, strategy: _ }],
+      args: [theBytes, { prefix, strategy }],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -41,7 +41,7 @@ export class ConvertBytesFunctionBuilder extends FunctionBuilder {
         a.required(bytesPType),
         a.obj({
           prefix: a.optional(stringPType),
-          strategy: a.optional(stringPType),
+          strategy: a.required(stringPType),
         }),
       ],
 
@@ -50,10 +50,12 @@ export class ConvertBytesFunctionBuilder extends FunctionBuilder {
     codeInvariant(ptype instanceof ARC4EncodedType, 'Generic type must be an ARC4 encoded type')
 
     const prefixBytes = getPrefixValue(prefix)
+    const validate = requireStringConstant(strategy).value === 'validate'
 
     return instanceEb(
-      nodeFactory.reinterpretCast({
-        expr: validatePrefix(theBytes, prefixBytes, sourceLocation),
+      nodeFactory.aRC4FromBytes({
+        value: validatePrefix(theBytes, prefixBytes, sourceLocation),
+        validate,
         wtype: ptype.wtype,
         sourceLocation,
       }),
@@ -61,6 +63,7 @@ export class ConvertBytesFunctionBuilder extends FunctionBuilder {
     )
   }
 }
+
 export class EncodeArc4FunctionBuilder extends FunctionBuilder {
   readonly ptype = encodeArc4Function
 

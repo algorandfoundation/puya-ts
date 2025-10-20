@@ -139,7 +139,7 @@ main_returnLength_route@7:
     dup
     intc_0 // 32
     ==
-    assert // invalid number of bytes for uint8[32]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -154,20 +154,20 @@ main_receiveBytes_route@6:
     txna ApplicationArgs 1
     dup
     intc_2 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     pushint 2 // 2
     +
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+uint8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 2
     dup
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/static-bytes.algo.ts:27
     // assert(b.length === length)
@@ -186,7 +186,7 @@ main_receiveB32_route@5:
     len
     intc_0 // 32
     ==
-    assert // invalid number of bytes for uint8[32]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     callsub receiveB32
     dup
     len
@@ -208,13 +208,13 @@ main_hashAddresses_route@4:
     len
     intc_0 // 32
     ==
-    assert // invalid number of bytes for uint8[32]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 2
     dup
     len
     intc_0 // 32
     ==
-    assert // invalid number of bytes for uint8[32]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     // tests/approvals/static-bytes.algo.ts:19
     // return sha512_256(a1.concat(a2))
     concat
@@ -236,7 +236,9 @@ main___algots__.defaultCreate@16:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return
 
 
 // tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(b: bytes) -> bytes:

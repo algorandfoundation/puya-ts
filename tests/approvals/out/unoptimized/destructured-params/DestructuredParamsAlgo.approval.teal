@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 8 80
+    intcblock 0 1 8 11
     bytecblock 0x 0x00 "Hello"
     b main_block@0
 
@@ -99,6 +99,32 @@ test_block@0:
     // tests/approvals/destructured-params.algo.ts:9
     // test({ a, b, c }: { a: uint64; b: bytes; c: boolean }): void {
     txna ApplicationArgs 1
+    dup
+    len
+    cover 1
+    dup
+    intc_2 // 8
+    extract_uint16 // on error: invalid tuple encoding
+    dup
+    intc_3 // 11
+    ==
+    assert // invalid tail pointer at index 1 of (uint64,(len+uint8[]),bool1)
+    dig 1
+    uncover 1
+    uncover 3
+    substring3
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    pushint 2 // 2
+    +
+    intc_3 // 11
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for Object4B7314A9
     callsub tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test
     intc_1 // 1
     return
@@ -112,6 +138,32 @@ testMutable_block@0:
     // tests/approvals/destructured-params.algo.ts:13
     // testMutable({ a, b, c }: Arc4) {
     txna ApplicationArgs 1
+    dup
+    len
+    cover 1
+    dup
+    intc_2 // 8
+    extract_uint16 // on error: invalid tuple encoding
+    dup
+    intc_3 // 11
+    ==
+    assert // invalid tail pointer at index 1 of (uint64,(len+uint8[]),bool1)
+    dig 1
+    uncover 1
+    uncover 3
+    substring3
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    pushint 2 // 2
+    +
+    intc_3 // 11
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for Arc4
     callsub tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.testMutable
     intc_1 // 1
     return
@@ -156,7 +208,7 @@ tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test_block@0
     substring3
     extract 2 0
     frame_dig -1
-    intc_3 // 80
+    pushint 80 // 80
     getbit
     uncover 2
     cover 1
@@ -197,7 +249,7 @@ tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.testMutable_
     uncover 2
     substring3
     frame_dig -1
-    intc_3 // 80
+    pushint 80 // 80
     getbit
     bytec_1 // 0x00
     intc_0 // 0
@@ -238,7 +290,7 @@ tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.init_block@0
     extract 6 2
     bytec_0 // ""
     concat
-    pushint 11 // 11
+    intc_3 // 11
     itob
     extract 6 2
     uncover 2
@@ -265,7 +317,7 @@ tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.init_block@0
     extract 6 2
     bytec_2 // "Hello"
     concat
-    pushint 11 // 11
+    intc_3 // 11
     itob
     extract 6 2
     uncover 2

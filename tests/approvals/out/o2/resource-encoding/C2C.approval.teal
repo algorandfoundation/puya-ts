@@ -27,7 +27,7 @@ main_testCallToEchoResource_route@6:
     // const compiled = compileArc4(EchoResource)
     pushbytes base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyAEAQgCAyYBBBUffHUxG0EArDEZFEQxGESCAgR34o10BE03AnY2GgCOAgBCAAEANhoBSRUjEkQXNhoCSRUjEkQXNhoDSRWBIBJEIsAaF0sDEkQkwBoXSwISRCXAGksBEkRPAhZPAhZQTFAoTFCwIkM2GgFJFSISRBfAMDYaAkkVIhJEF8AyNhoDSRUiEkQXwBwiwBoXwDBLAxJEJMAaF8AySwISRCXAGhfAHEsBEkRPAhZPAhZQTFAoTFCwIkMxGRQxGBQQQw==)
+    pushbytes base64(CyAEAQgCAyYBBBUffHUxG0EArDEZFEQxGESCAgR34o10BE03AnY2GgCOAgBCAAEANhoBSRUjEkQXNhoCSRUjEkQXNhoDSRWBIBJEIsAaF0sDEkQkwBoXSwISRCXAGksBEkRPAhZPAhZQTFAoTFCwIkM2GgFJFSISRBfAMDYaAkkVIhJEF8AyNhoDSRUiEkQXwBwiwBoXwDBLAxJEJMAaF8AySwISRCXAGhfAHEsBEkRPAhZPAhZQTFAoTFCwIkMxGRQxGBQQRCJD)
     itxn_field ApprovalProgramPages
     // tests/approvals/resource-encoding.algo.ts:84
     // const appId = compiled.bareCreate().createdApp
@@ -211,9 +211,11 @@ main_testCallToEchoResource_route@6:
     txn Sender
     ==
     &&
+    assert // assert target is match for conditions
     // tests/approvals/resource-encoding.algo.ts:81
     // testCallToEchoResource() {
-    return // on error: assert target is match for conditions
+    intc_2 // 1
+    return
 
 main_testCallToValue_route@5:
     // tests/approvals/resource-encoding.algo.ts:72
@@ -223,13 +225,13 @@ main_testCallToValue_route@5:
     len
     pushint 32 // 32
     ==
-    assert // invalid number of bytes for uint8[32]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 2
     dup
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:73-76
     // const { returnValue: res1 } = abiCall<typeof ByValue.prototype.testExplicitValue>({
@@ -274,13 +276,13 @@ main_testCallToIndex_route@4:
     len
     pushint 32 // 32
     ==
-    assert // invalid number of bytes for uint8[32]
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 2
     dup
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:64-68
     // const { returnValue: res1 } = abiCall({
@@ -334,4 +336,6 @@ main___algots__.defaultCreate@10:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_2 // 1
+    return

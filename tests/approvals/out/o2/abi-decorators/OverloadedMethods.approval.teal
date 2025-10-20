@@ -27,14 +27,14 @@ main_doThing_route@5:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/abi-decorators.algo.ts:43
     // return x * y
@@ -57,7 +57,7 @@ main_doThing_route@4:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     bytec_0 // 0x151f7c75
     swap
     concat
@@ -73,4 +73,6 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return

@@ -65,7 +65,7 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 24u)
-        (assert eq%0#0) // invalid number of bytes for (uint64,uint64,uint64)
+        (assert eq%0#0) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64>
         let as_Encoded(uint64,uint64,uint64)%0#0: Encoded(uint64,uint64,uint64) = tmp%0#0
         let (tmp%1#0: uint64, tmp%2#0: uint64, tmp%3#0: uint64) = decode_bytes<(uint64,uint64,uint64,)>(as_Encoded(uint64,uint64,uint64)%0#0)
         let tmp%4#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple(tmp%1#0, tmp%2#0, tmp%3#0)
@@ -82,7 +82,7 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
         let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
         let tmp%1#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple(as_Encoded(len+uint64[])%0#0)
         let tmp%2#0: Encoded(uint64) = bytes_encode<uint64>(tmp%1#0)
@@ -98,7 +98,7 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+(uint64,uint64)[])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<tests/approvals/for-of-loops.algo.ts::Point>
         let as_Encoded(len+(uint64,uint64)[])%0#0: Encoded(len+(uint64,uint64)[]) = tmp%0#0
         let tmp%1#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object(as_Encoded(len+(uint64,uint64)[])%0#0)
         let tmp%2#0: Encoded(uint64) = bytes_encode<uint64>(tmp%1#0)
@@ -114,7 +114,7 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
         let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
         let tmp%1#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array(as_Encoded(len+uint64[])%0#0)
         let tmp%2#0: Encoded(uint64) = bytes_encode<uint64>(tmp%1#0)
@@ -127,7 +127,7 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 40u)
-        (assert eq%0#0) // invalid number of bytes for uint64[5]
+        (assert eq%0#0) // invalid number of bytes for arc4.static_array<arc4.uint64, 5>
         let as_Encoded(uint64[5])%0#0: Encoded(uint64[5]) = tmp%0#0
         let tmp%1#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array(as_Encoded(uint64[5])%0#0)
         let tmp%2#0: Encoded(uint64) = bytes_encode<uint64>(tmp%1#0)
@@ -143,7 +143,7 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for (len+uint64[])
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<uint64>
         let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
         let tmp%1#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array(as_Encoded(len+uint64[])%0#0)
         let tmp%2#0: Encoded(uint64) = bytes_encode<uint64>(tmp%1#0)
@@ -156,7 +156,7 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 24u)
-        (assert eq%0#0) // invalid number of bytes for (uint64,uint64,uint64)
+        (assert eq%0#0) // invalid number of bytes for arc4.tuple<uint64,uint64,uint64>
         let as_Encoded(uint64,uint64,uint64)%0#0: Encoded(uint64,uint64,uint64) = tmp%0#0
         let tmp%1#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(as_Encoded(uint64,uint64,uint64)%0#0)
         let tmp%2#0: Encoded(uint64) = bytes_encode<uint64>(tmp%1#0)
@@ -169,12 +169,12 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_pr
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 24u)
-        (assert eq%0#0) // invalid number of bytes for uint64[3]
+        (assert eq%0#0) // invalid number of bytes for arc4.static_array<arc4.uint64, 3>
         let as_Encoded(uint64[3])%0#0: Encoded(uint64[3]) = tmp%0#0
         let tmp%1#0: bytes = (txna ApplicationArgs 2)
         let len%1#0: uint64 = (len tmp%1#0)
         let eq%1#0: bool = (== len%1#0 24u)
-        (assert eq%1#0) // invalid number of bytes for uint64[3]
+        (assert eq%1#0) // invalid number of bytes for arc4.static_array<uint64, 3>
         let as_Encoded(uint64[3])%1#0: Encoded(uint64[3]) = tmp%1#0
         let tmp%2#0: bytes = (txna ApplicationArgs 3)
         let length%0#0: uint64 = array_len(tmp%2#0)
@@ -182,7 +182,7 @@ subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_pr
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%2#0: uint64 = (len tmp%2#0)
         let eq%2#0: bool = (== len%2#0 add%0#0)
-        (assert eq%2#0) // invalid number of bytes for (len+uint64[])
+        (assert eq%2#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
         let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%2#0
         let tmp%3#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props(as_Encoded(uint64[3])%0#0, as_Encoded(uint64[3])%1#0, as_Encoded(len+uint64[])%0#0)
         let tmp%4#0: Encoded(uint64) = bytes_encode<uint64>(tmp%3#0)

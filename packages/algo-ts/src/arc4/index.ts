@@ -69,6 +69,13 @@ export type CreateOptions = 'allow' | 'disallow' | 'require'
 export type ResourceEncodingOptions = 'index' | 'value'
 
 /**
+ * The possible options for validation behaviour for this method
+ * args: ABI arguments are validated automatically to ensure they are encoded correctly.
+ * unsafe-disabled: No automatic validation occurs. Arguments can instead be validated manually.
+ */
+export type ValidateEncodingOptions = 'unsafe-disabled' | 'args'
+
+/**
  * Type alias for a default argument schema
  * @typeParam TContract The type of the contract containing the method this default argument is for
  */
@@ -122,6 +129,15 @@ export type AbiMethodConfig<TContract extends Contract> = {
    * The resource must still be 'available' to this transaction but can take advantage of resource sharing within the transaction group.
    */
   resourceEncoding?: ResourceEncodingOptions
+
+  /**
+   * Controls validation behaviour for this method.
+   *
+   * If "args", then ABI arguments are validated automatically to ensure they are encoded correctly.
+   * If "unsafe-disabled", then no automatic validation occurs. Arguments can instead be validated using the validateEncoding(...) function.
+   * The default behaviour of this option can be controlled with the --validate-abi-args CLI flag.
+   */
+  validateEncoding?: ValidateEncodingOptions
 
   /**
    * Specify default arguments that can be populated by clients calling this method.
@@ -205,11 +221,18 @@ export function methodSelector(methodSignature: string | InstanceMethod<Contract
 }
 
 /**
- * Interpret the provided bytes as an ARC4 encoded type with no validation
+ * Interpret the provided bytes as an ARC4 encoded type
  * @param bytes An arc4 encoded bytes value
- * @param prefix The prefix (if any), present in the bytes value. This prefix will be validated and removed
+ * @param options Options for how the bytes should be converted
+ * @param options.prefix The prefix (if any), present in the bytes value. This prefix will be validated and removed
+ * @param options.strategy The strategy used for converting bytes.
+ *         `unsafe-cast`: Reinterpret the value as an ARC4 encoded type without validation
+ *         `validate`: Asserts the encoding of the raw bytes matches the expected type
  */
-export function convertBytes<T extends ARC4Encoded>(bytes: BytesCompat, options: { prefix?: 'none' | 'log'; strategy: 'unsafe-cast' }): T {
+export function convertBytes<T extends ARC4Encoded>(
+  bytes: BytesCompat,
+  options: { prefix?: 'none' | 'log'; strategy: 'unsafe-cast' | 'validate' },
+): T {
   throw new NoImplementation()
 }
 

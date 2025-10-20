@@ -39,7 +39,7 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches[routing
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 8u)
-        (assert eq%0#0) // invalid number of bytes for uint64
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
         let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
         let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
         tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(tmp%1#0)
@@ -95,7 +95,7 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
         let aggregate%as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = aggregate%head%1#0
         let encoded_array%0#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#0
         let xArray#0: Encoded(len+uint64[]) = encoded_array%0#0
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 xArray#0 0u)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
         let tmp%10#0: uint64 = aggregate%array_length%0#0
         let tmp%11#0: bool = (== tmp%10#0 1u)
         let aggregate%total_length%0#0: uint64 = (len xArray#0)
@@ -107,7 +107,7 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
         let tmp%12#0: bool = (== values%6#0 5u)
         let tmp%13#0: bool = (&& tmp%11#0 tmp%12#0)
         (assert tmp%13#0)
-        let aggregate%array_length%1#0: uint64 = (extract_uint16 xArray#0 0u)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
         let tmp%14#0: uint64 = aggregate%array_length%1#0
         let tmp%15#0: bool = (== tmp%14#0 1u)
         let aggregate%total_length%1#0: uint64 = (len xArray#0)
@@ -119,7 +119,7 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
         let tmp%16#0: bool = (> values%7#0 4u)
         let tmp%17#0: bool = (&& tmp%15#0 tmp%16#0)
         (assert tmp%17#0)
-        let aggregate%array_length%2#0: uint64 = (extract_uint16 xArray#0 0u)
+        let aggregate%array_length%2#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
         let tmp%18#0: uint64 = aggregate%array_length%2#0
         let tmp%19#0: bool = (== tmp%18#0 1u)
         let aggregate%total_length%2#0: uint64 = (len xArray#0)
@@ -131,7 +131,7 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
         let tmp%20#0: bool = (< values%8#0 6u)
         let tmp%21#0: bool = (&& tmp%19#0 tmp%20#0)
         (assert tmp%21#0)
-        let aggregate%array_length%3#0: uint64 = (extract_uint16 xArray#0 0u)
+        let aggregate%array_length%3#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
         let tmp%22#0: uint64 = aggregate%array_length%3#0
         let tmp%23#0: bool = (== tmp%22#0 1u)
         let aggregate%total_length%3#0: uint64 = (len xArray#0)
@@ -143,7 +143,7 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
         let tmp%24#0: bool = (>= values%9#0 5u)
         let tmp%25#0: bool = (&& tmp%23#0 tmp%24#0)
         (assert tmp%25#0)
-        let aggregate%array_length%4#0: uint64 = (extract_uint16 xArray#0 0u)
+        let aggregate%array_length%4#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
         let tmp%26#0: uint64 = aggregate%array_length%4#0
         let tmp%27#0: bool = (== tmp%26#0 1u)
         let aggregate%total_length%4#0: uint64 = (len xArray#0)

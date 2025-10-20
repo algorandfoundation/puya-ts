@@ -25,7 +25,7 @@ main_testAsset_route@3:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/asset-proxy.algo.ts:6
     // log(asset.id)
@@ -136,4 +136,6 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return

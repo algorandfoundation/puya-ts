@@ -171,13 +171,13 @@ addVectors_block@0:
     len
     intc_2 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Vector
     txna ApplicationArgs 2
     dup
     len
     intc_2 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Vector
     callsub tests/approvals/mutable-object.algo.ts::MutableObjectDemo.addVectors
     bytec_1 // 0x151f7c75
     uncover 1
@@ -199,20 +199,20 @@ mutateVector_block@0:
     len
     intc_2 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Vector
     txna ApplicationArgs 2
     dup
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 3
     dup
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     uncover 2
     uncover 2
@@ -238,7 +238,7 @@ implicitCastingAndSpreading_block@0:
     len
     intc_2 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Vector
     callsub tests/approvals/mutable-object.algo.ts::MutableObjectDemo.implicitCastingAndSpreading
     intc_3 // 1
     return
@@ -256,7 +256,7 @@ testNestedObjects_block@0:
     len
     pushint 32 // 32
     ==
-    assert // invalid number of bytes for ((uint64,uint64),(uint64,uint64))
+    assert // invalid number of bytes for tests/approvals/mutable-object.algo.ts::VectorPoint
     callsub tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testNestedObjects
     intc_3 // 1
     return
@@ -286,7 +286,7 @@ testAssertMatch_block@0:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     callsub tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testAssertMatch
     intc_3 // 1
@@ -305,7 +305,7 @@ testArc4Encoding_block@0:
     len
     intc_2 // 16
     ==
-    assert // invalid number of bytes for (uint64,uint64)
+    assert // invalid number of bytes for tests/approvals/mutable-object.algo.ts::Point
     callsub tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Encoding
     intc_3 // 1
     return
@@ -321,7 +321,7 @@ getPlugin_block@0:
     txna ApplicationArgs 1
     dup
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_3 // 1
     *
     pushint 2 // 2
@@ -329,7 +329,7 @@ getPlugin_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     callsub tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin
     bytec_1 // 0x151f7c75
@@ -366,7 +366,7 @@ setPlugin_block@0:
     txna ApplicationArgs 1
     dup
     intc_1 // 0
-    extract_uint16
+    extract_uint16 // on error: invalid array length header
     intc_3 // 1
     *
     pushint 2 // 2
@@ -374,7 +374,7 @@ setPlugin_block@0:
     dig 1
     len
     ==
-    assert // invalid number of bytes for (len+utf8[])
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     callsub tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setPlugin
     intc_3 // 1

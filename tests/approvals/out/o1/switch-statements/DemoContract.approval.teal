@@ -27,7 +27,9 @@ main___algots__.defaultCreate@10:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
 
 
 // tests/approvals/switch-statements.algo.ts::DemoContract.run[routing]() -> void:
@@ -134,7 +136,7 @@ test_side_effects:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     dup
     // tests/approvals/switch-statements.algo.ts:61
@@ -185,9 +187,11 @@ test_side_effects_block@11:
     assert // check GlobalState exists
     intc_2 // 2
     ==
+    assert // Only two functions should be evaluated
     // tests/approvals/switch-statements.algo.ts:68
     // public test_side_effects(n: uint64) {
-    return // on error: Only two functions should be evaluated
+    intc_0 // 1
+    return
 
 
 // tests/approvals/switch-statements.algo.ts::DemoContract.test_non_trivial_termination_of_clause[routing]() -> void:
@@ -199,7 +203,7 @@ test_non_trivial_termination_of_clause:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     dup
     txna ApplicationArgs 2
@@ -207,7 +211,7 @@ test_non_trivial_termination_of_clause:
     len
     pushint 8 // 8
     ==
-    assert // invalid number of bytes for uint64
+    assert // invalid number of bytes for arc4.uint64
     btoi
     swap
     // tests/approvals/switch-statements.algo.ts:85

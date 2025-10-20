@@ -17,7 +17,7 @@ main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
         let aggregate%as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = aggregate%len_u16%0#0
         let encoded_array%0#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#0
         let result#0: Encoded(len+uint64[]) = encoded_array%0#0
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 result#0 0u)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 result#0 0u) // on error: invalid array length header
         let tmp%0#0: uint64 = aggregate%array_length%0#0
         let tmp%1#0: bool = (== tmp%0#0 0u)
         (assert tmp%1#0)
@@ -117,8 +117,11 @@ subroutine tests/approvals/arc4-types.algo.ts::testUintN(n: uint64, b: biguint, 
         let tmp%12#0: bool = (== tmp%11#0 32u)
         (assert tmp%12#0)
         let a_bytes#0: bytes = a#0
-        let reinterpret_Encoded(uint128)%0#0: Encoded(uint128) = a_bytes#0
-        let a_from_bytes#0: Encoded(uint128) = reinterpret_Encoded(uint128)%0#0
+        let len%0#0: uint64 = (len a_bytes#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint128
+        let as_Encoded(uint128)%0#0: Encoded(uint128) = a_bytes#0
+        let a_from_bytes#0: Encoded(uint128) = as_Encoded(uint128)%0#0
         let tmp%13#0: bool = (== a_from_bytes#0 a#0)
         (assert tmp%13#0)
         let tmp%14#0: uint64 = (btoi 0x000000000000000c)
@@ -157,8 +160,15 @@ subroutine tests/approvals/arc4-types.algo.ts::testStr() -> void:
         let aggregate%as_Encoded(len+utf8[])%2#0: Encoded(len+utf8[]) = aggregate%encoded_value%2#0
         let tmp%5#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%2#0
         let s2_bytes#0: bytes = tmp%5#0
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = s2_bytes#0
-        let s2_from_bytes#0: Encoded(len+utf8[]) = reinterpret_Encoded(len+utf8[])%0#0
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 s2_bytes#0 0u) // on error: invalid array length header
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len s2_bytes#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = s2_bytes#0
+        let s2_from_bytes#0: Encoded(len+utf8[]) = as_Encoded(len+utf8[])%0#0
         let aggregate%length%3#0: uint64 = (len "Hello")
         let aggregate%as_bytes%3#0: bytes[8] = (itob aggregate%length%3#0)
         let aggregate%length_uint16%3#0: bytes = ((extract 6 2) aggregate%as_bytes%3#0)
@@ -315,7 +325,7 @@ subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: Encoded(uint64)) ->
         let tmp%11#0: bool = (== array_item%3#0 n#0)
         let tmp%12#0: bool = (&& tmp%10#0 tmp%11#0)
         (assert tmp%12#0) // assert target is match for conditions
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 doubleArray#0 0u)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 doubleArray#0 0u) // on error: invalid array length header
         let tmp%13#0: uint64 = aggregate%array_length%0#0
         let tmp%14#0: bool = (== tmp%13#0 8u)
         let aggregate%total_length%0#0: uint64 = (len doubleArray#0)

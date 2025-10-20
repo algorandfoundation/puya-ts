@@ -32,19 +32,19 @@ subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceB
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 1u)
-        (assert eq%0#0) // invalid number of bytes for uint8
+        (assert eq%0#0) // invalid number of bytes for arc4.uint8
         let tmp%1#0: uint64 = (btoi tmp%0#0)
         let asset#0: uint64 = ((txnas Assets) tmp%1#0)
         let tmp%3#0: bytes = (txna ApplicationArgs 2)
         let len%1#0: uint64 = (len tmp%3#0)
         let eq%1#0: bool = (== len%1#0 1u)
-        (assert eq%1#0) // invalid number of bytes for uint8
+        (assert eq%1#0) // invalid number of bytes for arc4.uint8
         let tmp%4#0: uint64 = (btoi tmp%3#0)
         let app#0: uint64 = ((txnas Applications) tmp%4#0)
         let tmp%6#0: bytes = (txna ApplicationArgs 3)
         let len%2#0: uint64 = (len tmp%6#0)
         let eq%2#0: bool = (== len%2#0 1u)
-        (assert eq%2#0) // invalid number of bytes for uint8
+        (assert eq%2#0) // invalid number of bytes for arc4.uint8
         let tmp%7#0: uint64 = (btoi tmp%6#0)
         let acc#0: account = ((txnas Accounts) tmp%7#0)
         let tmp%0#1: bytes = ((txnas ApplicationArgs) 1u)
@@ -75,17 +75,17 @@ subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceB
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 8u)
-        (assert eq%0#0) // invalid number of bytes for uint64
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
         let asset#0: uint64 = (btoi tmp%0#0)
         let tmp%2#0: bytes = (txna ApplicationArgs 2)
         let len%1#0: uint64 = (len tmp%2#0)
         let eq%1#0: bool = (== len%1#0 8u)
-        (assert eq%1#0) // invalid number of bytes for uint64
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
         let app#0: uint64 = (btoi tmp%2#0)
         let acc#0: account = (txna ApplicationArgs 3)
         let len%2#0: uint64 = (len acc#0)
         let eq%2#0: bool = (== len%2#0 32u)
-        (assert eq%2#0) // invalid number of bytes for uint8[32]
+        (assert eq%2#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
         let tmp%0#1: bytes = ((txnas ApplicationArgs) 1u)
         let assetId#0: uint64 = (btoi tmp%0#1)
         let tmp%2#1: bool = (== asset#0 assetId#0)

@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 4 1 10
+    intcblock 1 0 4 10
     bytecblock "tm1a" "t1" "t2" "tm2a" 0x0005000c80000568656c6c6f0005776f726c64 "tm1b" 0x0005000a0000036162630003646566 "tm2b"
     // tests/approvals/box-proxies.algo.ts:172
     // class TupleBox extends Contract {
@@ -27,7 +27,9 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    return // on error: OnCompletion must be NoOp && can only call when creating
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
 
 
 // tests/approvals/box-proxies.algo.ts::TupleBox.testBox[routing]() -> void:
@@ -87,10 +89,10 @@ testBox:
     bytec_1 // "t1"
     // tests/approvals/box-proxies.algo.ts:190
     // assert(this.box1.value[2])
-    intc_1 // 4
-    intc_2 // 1
+    intc_2 // 4
+    intc_0 // 1
     box_extract
-    intc_0 // 0
+    intc_1 // 0
     getbit
     assert
     // tests/approvals/box-proxies.algo.ts:174
@@ -114,10 +116,10 @@ testBox:
     bytec_2 // "t2"
     // tests/approvals/box-proxies.algo.ts:195
     // assert(this.box2.value.c)
-    intc_1 // 4
-    intc_2 // 1
+    intc_2 // 4
+    intc_0 // 1
     box_extract
-    intc_0 // 0
+    intc_1 // 0
     getbit
     assert
     // tests/approvals/box-proxies.algo.ts:173
@@ -222,7 +224,7 @@ testBoxMap:
     box_get
     pop
     dup
-    intc_0 // 0
+    intc_1 // 0
     extract_uint16
     dig 1
     pushint 2 // 2
@@ -249,10 +251,10 @@ testBoxMap:
     bytec_0 // "tm1a"
     // tests/approvals/box-proxies.algo.ts:214
     // assert(this.boxMap1('a').value[2])
-    intc_1 // 4
-    intc_2 // 1
+    intc_2 // 4
+    intc_0 // 1
     box_extract
-    intc_0 // 0
+    intc_1 // 0
     getbit
     assert
     // tests/approvals/box-proxies.algo.ts:176
@@ -260,10 +262,10 @@ testBoxMap:
     bytec_3 // "tm2a"
     // tests/approvals/box-proxies.algo.ts:219
     // assert(this.boxMap2('a').value.c)
-    intc_1 // 4
-    intc_2 // 1
+    intc_2 // 4
+    intc_0 // 1
     box_extract
-    intc_0 // 0
+    intc_1 // 0
     getbit
     assert
     // tests/approvals/box-proxies.algo.ts:175

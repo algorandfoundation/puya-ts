@@ -17,11 +17,15 @@ main_handleUpdate@5:
     // tests/approvals/implicit-create.algo.ts:9
     // @baremethod({ allowActions: 'UpdateApplication' })
     txn ApplicationID
-    return // on error: can only call when not creating
+    assert // can only call when not creating
+    pushint 1 // 1
+    return
 
 main___algots__.defaultCreate@4:
     // tests/approvals/implicit-create.algo.ts:8
     // export class NoNoOp extends Contract {
     txn ApplicationID
     !
-    return // on error: can only call when creating
+    assert // can only call when creating
+    pushint 1 // 1
+    return
