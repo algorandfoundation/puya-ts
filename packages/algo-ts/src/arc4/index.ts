@@ -81,21 +81,21 @@ export type ValidateEncodingOptions = 'unsafe-disabled' | 'args'
  */
 export type DefaultArgument<TContract extends Contract> =
   | {
-    /**
-     * A compile time constant value to be used as a default
-     */
-    constant: string | boolean | number | bigint
-  }
+      /**
+       * A compile time constant value to be used as a default
+       */
+      constant: string | boolean | number | bigint
+    }
   | {
-    /**
-     * Retrieve the default value from a member of this contract. The member can be
-     *
-     * LocalState: The value is retrieved from the calling user's local state before invoking this method
-     * GlobalState: The value is retrieved from the specified global state key before invoking this method
-     * Method: Any readonly abimethod with no arguments can be used as a source
-     */
-    from: keyof TContract
-  }
+      /**
+       * Retrieve the default value from a member of this contract. The member can be
+       *
+       * LocalState: The value is retrieved from the calling user's local state before invoking this method
+       * GlobalState: The value is retrieved from the specified global state key before invoking this method
+       * Method: Any readonly abimethod with no arguments can be used as a source
+       */
+      from: keyof TContract
+    }
 /**
  * Configuration options for an abi method
  * @typeParam TContract the type of the contract this method is a part of
