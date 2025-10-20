@@ -438,7 +438,7 @@ The following sources of ABI values are always validated by the compiler by defa
 - ABI method arguments (when called externally)
 - ABI return values
 - Bytes.toFixed (with the `assert-length` strategy)
-- decodeArc4
+- decodeArc4 or convertBytes with the `validate` strategy
 
 **NOTE**: Argument validation can be disabled globally via the `--validate-abi-args` flags. Similarly, return value validation can be disable via the `--validate-abi-return` flag. It is also possible for a method implementation to disable validation for its own arguments via the `validateEncoding` option on the `abimethod` decorator. Per-method argument validation settings override the global compiler settings. If one wishes to disable the return validation, you can parse the return value directly from the inner transaction's last log and use an unsafe method (`convertBytes`) for converting the bytes to the desired ABI type.
 
