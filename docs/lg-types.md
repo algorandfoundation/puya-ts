@@ -426,3 +426,76 @@ Containers are composed of a head and a tail portion, with a possible length pre
 - Fixed length items (e.g. bool, uintn, byte, or a static array of a fixed length item) are inserted directly into the head
 - Variable length items (e.g. bytes, string, dynamic array, or even a static array of a variable length item) are inserted into the tail. The head will include a 16-bit number representing the offset of the tail data, the offset is the total number of bytes in the head + the number of bytes preceding the tail data for this item (i.e. the tail bytes of any previous items)
 - Consecutive boolean values are packed into CEIL(N / 8) bytes where each bit will represent a single boolean value (big endian)
+
+## Type Validation
+
+TODO(joe-p): link to ABI validation docs when ready
+
+### Validated Sources of Values
+
+The following sources of ABI values are always validated by the compiler by default.
+
+- ABI method arguments (when called externally)
+- ABI return values
+- Bytes.toFixed (with the `assert-length` strategy)
+- decodeArc4
+
+### Non-Validated Sources
+
+There are certain places where one can get an ABI value that is not fully validated:
+
+- Global state
+- Local state
+- Boxes
+- Subroutine arguments
+- Subroutine return values
+- convertBytes
+- Account/Address constructor
+
+There are no automatic validation steps taken for these values because it is assumed that the value was validated before reaching this point by the compiler.
+
+For example, if a method takes an ABI value as an argument and stores it in a box, the value is validated when taken as input from the method arguments but not when placed in the box. By default, all sources of ABI values other than what is listed above does have ABI validation, thus it would be inefficient to perform validation again every time the value is used.
+
+It should be noted, however, that all the validation methods the Puya compiler does automatically can be disabled on a per-method basis. This means it is theoretically possible for an incorrectly encoded value to come from one of the listed sources, but it will always be clear in the source code that this is the case.
+
+For example, given the following contract:
+
+```ts
+export class BoxReadWrite extends Contract {
+  acctBox = Box<Account>({ key: "a" });
+
+  writeToBox(acct: Account): void {
+    this.acctBox.value = acct;
+  }
+
+  readFromBox(): Account {
+    return this.acctBox.value;
+  }
+}
+```
+
+One can be sure that the value in `acctBox` is always valid because the only source of the value is an ABI argument (`acct` in `writeToBox`). If validation was disabled, however, then one cannot trust that it is properly encoded and should perform a manual validation and should perform a manual validation if required:
+
+```ts
+export class BoxReadWrite extends Contract {
+  acctBox = Box<Account>({ key: "a" });
+
+  writeToBox(acct: Account): void {
+    assert(acct.bytes.length === 32, "Account must be 32 bytes");
+    this.acctBox.value = acct;
+  }
+
+  readFromBox(): Account {
+    return this.acctBox.value;
+  }
+}
+```
+
+Similarly, if a the Account is constructed from bytes, a manual validation should be performed:
+
+```ts
+  writeToBox(acct: bytes): void {
+    assert(acct.length === 32, "Account must be 32 bytes");
+    this.acctBox.value = Account(acct);
+  }
+```
