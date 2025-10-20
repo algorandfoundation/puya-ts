@@ -35,9 +35,9 @@ const resourceEncodingMap: Record<string, 'index' | 'value'> = {
   value: 'value',
 }
 
-const validateEncodingMap: Record<string, 'unsafe-disabled' | 'args'> = {
-  'unsafe-disabled': 'unsafe-disabled',
-  args: 'args',
+const validateEncodingMap: Record<string, boolean> = {
+  'unsafe-disabled': false,
+  args: true,
 }
 export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
   readonly ptype = arc4BareMethodDecorator
@@ -106,8 +106,6 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
       ],
     })
 
-    const validateEncodingStr =
-      validateEncoding === undefined ? undefined : mapStringConstant(validateEncodingMap, validateEncoding.resolve())
     return new DecoratorDataBuilder(sourceLocation, {
       type: Constants.symbolNames.arc4AbiDecoratorName,
       allowedCompletionTypes: allowActions && resolveOnCompletionActions(allowActions),
@@ -117,7 +115,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
       sourceLocation: sourceLocation,
       nameOverride: name ? requireStringConstant(name).value : undefined,
       resourceEncoding: resourceEncoding && mapStringConstant(resourceEncodingMap, resourceEncoding.resolve()),
-      validateEncoding: validateEncodingStr === 'args' ? true : validateEncodingStr === 'unsafe-disabled' ? false : undefined,
+      validateEncoding: validateEncoding && mapStringConstant(validateEncodingMap, validateEncoding.resolve()),
       readonly: readonly ? requireBooleanConstant(readonly).value : undefined,
       defaultArguments: resolveDefaultArguments(defaultArguments, sourceLocation),
     })
