@@ -345,7 +345,7 @@ export class StaticArray<TItem extends ARC4Encoded, TLength extends number> exte
   }
 
   /**
-   * Returns the (compile-time) length of this array
+   * Returns the statically declared length of this array
    */
   get length(): uint64 {
     throw new NoImplementation()
@@ -575,7 +575,7 @@ export class StaticBytes<TLength extends uint64 = 0> extends Arc4ArrayBase<Byte>
   }
 
   /**
-   * Returns the (compile-time) length of this array
+   * Returns the statically declared length of this byte array
    */
   get length(): uint64 {
     throw new NoImplementation()
