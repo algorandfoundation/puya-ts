@@ -30,6 +30,8 @@ export interface BuildCommandArgs {
   optimization_level: string
   target_avm_version: string
   cli_template_definitions: string[]
+  validate_abi_args: boolean
+  validate_abi_return: boolean
   template_vars_prefix: string
   locals_coalescing_strategy: LocalsCoalescingStrategy
   paths: string[]
@@ -140,6 +142,18 @@ export function addBuildCommand(parser: ArgumentParser) {
     help: 'Define template vars for use when assembling via --output-bytecode, should be specified without the prefix (see --template-vars-prefix)',
   })
 
+  parser.add_argument('--validate-abi-args', {
+    action: BooleanOptionalAction,
+    default: defaultPuyaOptions.validateAbiArgs,
+    help: 'Validates ABI transaction arguments by ensuring they are encoded correctly',
+  })
+
+  parser.add_argument('--validate-abi-return', {
+    action: BooleanOptionalAction,
+    default: defaultPuyaOptions.validateAbiReturn,
+    help: "Validates encoding of ABI return values when using convertBytes with 'log' `prefix` option, arc4.abiCall, and strongly typed contract to contract calls",
+  })
+
   parser.add_argument('--template-vars-prefix', {
     help: 'Define the prefix to use with --template-var',
     default: defaultPuyaOptions.templateVarsPrefix,
@@ -197,6 +211,8 @@ export async function buildCommand(args: BuildCommandArgs) {
           templateVarsPrefix: args.template_vars_prefix,
           localsCoalescingStrategy: args.locals_coalescing_strategy,
           customPuyaPath: args.puya_path,
+          validateAbiArgs: args.validate_abi_args,
+          validateAbiReturn: args.validate_abi_return,
         }),
       )
       logCtx.exitIfErrors()
