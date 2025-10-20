@@ -5,6 +5,7 @@ import type {
   AppStorageDefinition,
   ARC4Decode,
   ARC4Encode,
+  ARC4FromBytes,
   ARC4Router,
   ArrayConcat,
   ArrayExtend,
@@ -222,6 +223,10 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
   }
 
   visitARC4Decode(expression: ARC4Decode): void {
+    expression.value.accept(this)
+  }
+
+  visitARC4FromBytes(expression: ARC4FromBytes): void {
     expression.value.accept(this)
   }
 

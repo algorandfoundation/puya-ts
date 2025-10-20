@@ -5,7 +5,6 @@ import type { ContractReference, LogicSigReference, OnCompletionAction } from '.
 import type { SourceLocation } from './source-location'
 import type { TxnField } from './txn-fields'
 import type { wtypes } from './wtypes'
-
 export abstract class Node {
   constructor(props: Props<Node>) {
     this.sourceLocation = props.sourceLocation
@@ -279,6 +278,20 @@ export class ARC4Decode extends Expression {
   readonly value: Expression
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4Decode(this)
+  }
+}
+export class ARC4FromBytes extends Expression {
+  constructor(props: Props<ARC4FromBytes>) {
+    super(props)
+    this.value = props.value
+    this.wtype = props.wtype
+    this.validate = props.validate
+  }
+  readonly value: Expression
+  readonly wtype: wtypes.WType
+  readonly validate: boolean
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitARC4FromBytes(this)
   }
 }
 export class Copy extends Expression {
@@ -1481,6 +1494,7 @@ export class ARC4ABIMethodConfig {
     this.name = props.name
     this.readonly = props.readonly
     this.defaultArgs = props.defaultArgs
+    this.validateEncoding = props.validateEncoding
   }
   readonly sourceLocation: SourceLocation
   readonly allowedCompletionTypes: Array<OnCompletionAction>
@@ -1488,6 +1502,7 @@ export class ARC4ABIMethodConfig {
   readonly name: string
   readonly readonly: boolean
   readonly defaultArgs: Map<string, ABIMethodArgMemberDefault | ABIMethodArgConstantDefault>
+  readonly validateEncoding: boolean | null
 }
 export type Constant = IntegerConstant | DecimalConstant | BoolConstant | BytesConstant | AddressConstant | MethodConstant
 export type LValue =
@@ -1522,6 +1537,7 @@ export const concreteNodes = {
   addressConstant: AddressConstant,
   aRC4Encode: ARC4Encode,
   aRC4Decode: ARC4Decode,
+  aRC4FromBytes: ARC4FromBytes,
   copy: Copy,
   arrayConcat: ArrayConcat,
   arrayExtend: ArrayExtend,
@@ -1634,6 +1650,7 @@ export interface ExpressionVisitor<T> {
   visitAddressConstant(expression: AddressConstant): T
   visitARC4Encode(expression: ARC4Encode): T
   visitARC4Decode(expression: ARC4Decode): T
+  visitARC4FromBytes(expression: ARC4FromBytes): T
   visitCopy(expression: Copy): T
   visitArrayConcat(expression: ArrayConcat): T
   visitArrayExtend(expression: ArrayExtend): T

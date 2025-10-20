@@ -4,7 +4,7 @@ import { EqualityComparison } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { tryConvertEnum } from '../../../util'
-import { type PType } from '../../ptypes'
+import { voidPType, type PType } from '../../ptypes'
 import type { ARC4EncodedType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
@@ -85,22 +85,21 @@ class ValidateFunctionBuilder extends FunctionBuilder {
       funcName: 'validate',
       argSpec: () => [],
     })
-    // Need updated puya to include arc4frombytes
-    throw new Error('Not implemented')
-    // const expr = nodeFactory.aRC4FromBytes({
-    //   value: this.target.toBytes(this.target.sourceLocation).resolve(),
-    //   validate: true,
-    //   wtype: this.target.ptype.wtype,
-    //   sourceLocation,
-    // })
-    //
-    // return instanceEb(
-    //   nodeFactory.commaExpression({
-    //     expressions: [expr, nodeFactory.voidConstant({ sourceLocation })],
-    //     sourceLocation,
-    //   }),
-    //   voidPType,
-    // )
+    const expr = nodeFactory.aRC4FromBytes({
+      value: this.target.toBytes(this.target.sourceLocation),
+      validate: true,
+      wtype: this.target.ptype.wtype,
+      sourceLocation,
+    })
+
+    return instanceEb(
+      nodeFactory.commaExpression({
+        expressions: [expr, nodeFactory.voidConstant({ sourceLocation })],
+        sourceLocation,
+        wtype: voidPType.wtype,
+      }),
+      voidPType,
+    )
   }
 }
 
