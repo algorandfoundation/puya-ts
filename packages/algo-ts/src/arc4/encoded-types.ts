@@ -97,13 +97,6 @@ export abstract class ARC4Encoded implements BytesBacked {
   get bytes(): bytes {
     throw new NoImplementation()
   }
-
-  /**
-   * Asserts the encoded bytes for this type are well-formed
-   */
-  validate(): void {
-    throw new NoImplementation()
-  }
 }
 
 /**

@@ -861,6 +861,11 @@ export const errFunction = new LibFunctionType({
   module: Constants.moduleNames.algoTs.util,
 })
 
+export const validateEncodingFunctionPType = new LibFunctionType({
+  name: 'validateEncoding',
+  module: Constants.moduleNames.algoTs.util,
+})
+
 export const assetPType = new InstanceType({
   name: 'Asset',
   wtype: wtypes.assetWType,

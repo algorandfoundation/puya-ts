@@ -1,5 +1,5 @@
 import type { bytes } from '@algorandfoundation/algorand-typescript'
-import { abimethod, Contract } from '@algorandfoundation/algorand-typescript'
+import { abimethod, Contract, validateEncoding } from '@algorandfoundation/algorand-typescript'
 import type { StaticBytes } from '@algorandfoundation/algorand-typescript/arc4'
 import { interpretAsArc4 } from '@algorandfoundation/algorand-typescript/arc4'
 
@@ -20,7 +20,7 @@ class AbiValidationAlgo extends Contract {
 
   manualValidationAfterConvert(rawBytes: bytes) {
     const value = interpretAsArc4<StaticBytes<32>>(rawBytes)
-    value.validate()
+    validateEncoding(value)
     return value.bytes.length
   }
 }
