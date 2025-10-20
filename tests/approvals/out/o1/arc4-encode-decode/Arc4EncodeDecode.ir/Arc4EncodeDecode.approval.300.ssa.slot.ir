@@ -11,60 +11,136 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%4#0) // OnCompletion is not NoOp
         let tmp%5#0: uint64 = (txn ApplicationID)
         (assert tmp%5#0) // can only call when not creating
-        let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%7#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
-        let reinterpret_bytes[1]%0#0: bytes[1] = (txna ApplicationArgs 2)
-        let tmp%8#0: bool = (getbit reinterpret_bytes[1]%0#0 0u)
-        let reinterpret_bytes[64]%0#0: bytes[64] = (txna ApplicationArgs 3)
-        let tmp%9#0: bytes = (txna ApplicationArgs 4)
-        let tmp%10#0: bytes = ((extract 2 0) tmp%9#0)
-        let tmp%11#0: bytes = (txna ApplicationArgs 5)
-        let tmp%12#0: bytes = ((extract 2 0) tmp%11#0)
-        let reinterpret_bytes[32]%0#0: bytes[32] = (txna ApplicationArgs 6)
-        tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding(tmp%7#0, tmp%8#0, reinterpret_bytes[64]%0#0, tmp%10#0, tmp%12#0, reinterpret_bytes[32]%0#0)
+        let tmp%7#0: bytes = (txna ApplicationArgs 1)
+        let value_len%0#0: uint64 = (len tmp%7#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 8u)
+        (assert size_is_correct%0#0) // invalid number of bytes for arc4.uint64
+        let tmp%8#0: uint64 = (btoi tmp%7#0)
+        let tmp%9#0: bytes = (txna ApplicationArgs 2)
+        let value_len%1#0: uint64 = (len tmp%9#0)
+        let size_is_correct%1#0: bool = (== value_len%1#0 1u)
+        (assert size_is_correct%1#0) // invalid number of bytes for arc4.bool
+        let tmp%10#0: bool = (getbit tmp%9#0 0u)
+        let tmp%11#0: bytes = (txna ApplicationArgs 3)
+        let value_len%2#0: uint64 = (len tmp%11#0)
+        let size_is_correct%2#0: bool = (== value_len%2#0 64u)
+        (assert size_is_correct%2#0) // invalid number of bytes for arc4.uint512
+        let tmp%12#0: bytes = (txna ApplicationArgs 4)
+        let length%0#0: uint64 = (extract_uint16 tmp%12#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%0#0: uint64 = (+ length%0#0 2u)
+        let value_len%3#0: uint64 = (len tmp%12#0)
+        let size_is_correct%3#0: bool = (== value_len%3#0 num_bytes_with_header%0#0)
+        (assert size_is_correct%3#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let tmp%13#0: bytes = ((extract 2 0) tmp%12#0)
+        let tmp%14#0: bytes = (txna ApplicationArgs 5)
+        let length%1#0: uint64 = (extract_uint16 tmp%14#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%1#0: uint64 = (+ length%1#0 2u)
+        let value_len%4#0: uint64 = (len tmp%14#0)
+        let size_is_correct%4#0: bool = (== value_len%4#0 num_bytes_with_header%1#0)
+        (assert size_is_correct%4#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let tmp%15#0: bytes = ((extract 2 0) tmp%14#0)
+        let tmp%16#0: bytes = (txna ApplicationArgs 6)
+        let value_len%5#0: uint64 = (len tmp%16#0)
+        let size_is_correct%5#0: bool = (== value_len%5#0 32u)
+        (assert size_is_correct%5#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding(tmp%8#0, tmp%10#0, tmp%11#0, tmp%13#0, tmp%15#0, tmp%16#0)
         let tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.__puya_arc4_router__%0#0: bool = 1u
         goto block@12
     block@4: // testDecoding_route_L59
-        let tmp%13#0: uint64 = (txn OnCompletion)
-        let tmp%14#0: bool = (! tmp%13#0)
-        (assert tmp%14#0) // OnCompletion is not NoOp
-        let tmp%15#0: uint64 = (txn ApplicationID)
-        (assert tmp%15#0) // can only call when not creating
-        let reinterpret_bytes[8]%1#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%17#0: uint64 = (btoi reinterpret_bytes[8]%1#0)
-        let tmp%18#0: bytes = (txna ApplicationArgs 2)
-        let tmp%19#0: bytes = ((extract 2 0) tmp%18#0)
-        let reinterpret_bytes[1]%1#0: bytes[1] = (txna ApplicationArgs 3)
-        let tmp%20#0: bool = (getbit reinterpret_bytes[1]%1#0 0u)
-        let tmp%21#0: bytes = (txna ApplicationArgs 4)
-        let tmp%22#0: bytes = ((extract 2 0) tmp%21#0)
-        let reinterpret_bytes[64]%1#0: bytes[64] = (txna ApplicationArgs 5)
-        let tmp%23#0: bytes = (txna ApplicationArgs 6)
+        let tmp%17#0: uint64 = (txn OnCompletion)
+        let tmp%18#0: bool = (! tmp%17#0)
+        (assert tmp%18#0) // OnCompletion is not NoOp
+        let tmp%19#0: uint64 = (txn ApplicationID)
+        (assert tmp%19#0) // can only call when not creating
+        let tmp%21#0: bytes = (txna ApplicationArgs 1)
+        let value_len%6#0: uint64 = (len tmp%21#0)
+        let size_is_correct%6#0: bool = (== value_len%6#0 8u)
+        (assert size_is_correct%6#0) // invalid number of bytes for arc4.uint64
+        let tmp%22#0: uint64 = (btoi tmp%21#0)
+        let tmp%23#0: bytes = (txna ApplicationArgs 2)
+        let length%2#0: uint64 = (extract_uint16 tmp%23#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%2#0: uint64 = (+ length%2#0 2u)
+        let value_len%7#0: uint64 = (len tmp%23#0)
+        let size_is_correct%7#0: bool = (== value_len%7#0 num_bytes_with_header%2#0)
+        (assert size_is_correct%7#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         let tmp%24#0: bytes = ((extract 2 0) tmp%23#0)
-        let tmp%25#0: bytes = (txna ApplicationArgs 7)
-        let tmp%26#0: bytes = ((extract 2 0) tmp%25#0)
-        let tmp%27#0: bytes = (txna ApplicationArgs 8)
+        let tmp%25#0: bytes = (txna ApplicationArgs 3)
+        let value_len%8#0: uint64 = (len tmp%25#0)
+        let size_is_correct%8#0: bool = (== value_len%8#0 1u)
+        (assert size_is_correct%8#0) // invalid number of bytes for arc4.bool
+        let tmp%26#0: bool = (getbit tmp%25#0 0u)
+        let tmp%27#0: bytes = (txna ApplicationArgs 4)
+        let length%3#0: uint64 = (extract_uint16 tmp%27#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%3#0: uint64 = (+ length%3#0 2u)
+        let value_len%9#0: uint64 = (len tmp%27#0)
+        let size_is_correct%9#0: bool = (== value_len%9#0 num_bytes_with_header%3#0)
+        (assert size_is_correct%9#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         let tmp%28#0: bytes = ((extract 2 0) tmp%27#0)
-        let tmp%29#0: bytes = (txna ApplicationArgs 9)
-        let item0%0#0: bytes = ((extract 0 8) tmp%29#0) // on error: Index access is out of bounds
-        let item_start_offset%0#0: uint64 = (extract_uint16 tmp%29#0 8u)
-        let item_end_offset%0#0: uint64 = (len tmp%29#0)
-        let item1%0#0: bytes = (substring3 tmp%29#0 item_start_offset%0#0 item_end_offset%0#0)
-        let tmp%30#0: bytes = (txna ApplicationArgs 10)
+        let tmp%29#0: bytes = (txna ApplicationArgs 5)
+        let value_len%10#0: uint64 = (len tmp%29#0)
+        let size_is_correct%10#0: bool = (== value_len%10#0 64u)
+        (assert size_is_correct%10#0) // invalid number of bytes for arc4.uint512
+        let tmp%30#0: bytes = (txna ApplicationArgs 6)
+        let length%4#0: uint64 = (extract_uint16 tmp%30#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%4#0: uint64 = (+ length%4#0 2u)
+        let value_len%11#0: uint64 = (len tmp%30#0)
+        let size_is_correct%11#0: bool = (== value_len%11#0 num_bytes_with_header%4#0)
+        (assert size_is_correct%11#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         let tmp%31#0: bytes = ((extract 2 0) tmp%30#0)
-        let reinterpret_bytes[32]%1#0: bytes[32] = (txna ApplicationArgs 11)
-        let tmp%32#0: bytes = (txna ApplicationArgs 12)
+        let tmp%32#0: bytes = (txna ApplicationArgs 7)
+        let length%5#0: uint64 = (extract_uint16 tmp%32#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%5#0: uint64 = (+ length%5#0 2u)
+        let value_len%12#0: uint64 = (len tmp%32#0)
+        let size_is_correct%12#0: bool = (== value_len%12#0 num_bytes_with_header%5#0)
+        (assert size_is_correct%12#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         let tmp%33#0: bytes = ((extract 2 0) tmp%32#0)
-        tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding(tmp%17#0, tmp%19#0, tmp%20#0, tmp%22#0, reinterpret_bytes[64]%1#0, tmp%24#0, tmp%26#0, tmp%28#0, item0%0#0, item1%0#0, tmp%31#0, reinterpret_bytes[32]%1#0, tmp%33#0)
+        let tmp%34#0: bytes = (txna ApplicationArgs 8)
+        let length%6#0: uint64 = (extract_uint16 tmp%34#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%6#0: uint64 = (+ length%6#0 2u)
+        let value_len%13#0: uint64 = (len tmp%34#0)
+        let size_is_correct%13#0: bool = (== value_len%13#0 num_bytes_with_header%6#0)
+        (assert size_is_correct%13#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let tmp%35#0: bytes = ((extract 2 0) tmp%34#0)
+        let tmp%36#0: bytes = (txna ApplicationArgs 9)
+        let tuple_len%0#0: uint64 = (len tmp%36#0)
+        let offset%0#0: uint64 = (extract_uint16 tmp%36#0 8u) // on error: invalid tuple encoding
+        let offset_is_correct%0#0: bool = (== offset%0#0 10u)
+        (assert offset_is_correct%0#0) // invalid tail pointer at index 1 of tests/approvals/arc4-encode-decode.algo.ts::TestObj
+        let item%0#0: bytes = (substring3 tmp%36#0 offset%0#0 tuple_len%0#0)
+        let length%7#0: uint64 = (extract_uint16 item%0#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%7#0: uint64 = (+ length%7#0 2u)
+        let num_bytes_value%0#0: uint64 = (+ 10u num_bytes_with_header%7#0)
+        let size_is_correct%14#0: bool = (== tuple_len%0#0 num_bytes_value%0#0)
+        (assert size_is_correct%14#0) // invalid number of bytes for tests/approvals/arc4-encode-decode.algo.ts::TestObj
+        let item0%0#0: bytes = ((extract 0 8) tmp%36#0) // on error: Index access is out of bounds
+        let tmp%37#0: bytes = (txna ApplicationArgs 10)
+        let length%8#0: uint64 = (extract_uint16 tmp%37#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%8#0: uint64 = (+ length%8#0 2u)
+        let value_len%15#0: uint64 = (len tmp%37#0)
+        let size_is_correct%15#0: bool = (== value_len%15#0 num_bytes_with_header%8#0)
+        (assert size_is_correct%15#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let tmp%38#0: bytes = ((extract 2 0) tmp%37#0)
+        let tmp%39#0: bytes = (txna ApplicationArgs 11)
+        let value_len%16#0: uint64 = (len tmp%39#0)
+        let size_is_correct%16#0: bool = (== value_len%16#0 32u)
+        (assert size_is_correct%16#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        let tmp%40#0: bytes = (txna ApplicationArgs 12)
+        let length%9#0: uint64 = (extract_uint16 tmp%40#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%9#0: uint64 = (+ length%9#0 2u)
+        let value_len%17#0: uint64 = (len tmp%40#0)
+        let size_is_correct%17#0: bool = (== value_len%17#0 num_bytes_with_header%9#0)
+        (assert size_is_correct%17#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let tmp%41#0: bytes = ((extract 2 0) tmp%40#0)
+        tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding(tmp%22#0, tmp%24#0, tmp%26#0, tmp%28#0, tmp%29#0, tmp%31#0, tmp%33#0, tmp%35#0, item0%0#0, item%0#0, tmp%38#0, tmp%39#0, tmp%41#0)
         let tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.__puya_arc4_router__%0#1: bool = 1u
         goto block@12
     block@7: // bare_routing_L21
-        let tmp%34#0: uint64 = (txn OnCompletion)
-        goto tmp%34#0 ? block@11 : block@8
+        let tmp%42#0: uint64 = (txn OnCompletion)
+        goto tmp%42#0 ? block@11 : block@8
     block@8: // __algots__.defaultCreate_L21
-        let tmp%35#0: uint64 = (txn ApplicationID)
-        let tmp%36#0: bool = (! tmp%35#0)
-        (assert tmp%36#0) // can only call when creating
+        let tmp%43#0: uint64 = (txn ApplicationID)
+        let tmp%44#0: bool = (! tmp%43#0)
+        (assert tmp%44#0) // can only call when creating
         let tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.__puya_arc4_router__%0#2: bool = 1u
         goto block@12
     block@11: // after_if_else_L21

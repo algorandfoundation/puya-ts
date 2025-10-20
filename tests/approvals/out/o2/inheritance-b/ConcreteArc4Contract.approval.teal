@@ -3,6 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
+    intcblock 1 8
     txn ApplicationID
     bnz main_after_if_else@2
     // tests/approvals/inheritance-b.algo.ts:17
@@ -36,8 +37,18 @@ main_simpleAbiMethod_route@6:
     // tests/approvals/inheritance-b.algo.ts:16
     // export class ConcreteArc4Contract extends Arc4Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/inheritance-a.algo.ts:18
     // return a + b
@@ -49,7 +60,7 @@ main_simpleAbiMethod_route@6:
     swap
     concat
     log
-    pushint 1 // 1
+    intc_0 // 1
     return
 
 main_getVeryImportantValue_route@5:
@@ -62,7 +73,7 @@ main_getVeryImportantValue_route@5:
     assert // can only call when not creating
     pushbytes 0x151f7c750007343268656c6c6f
     log
-    pushint 1 // 1
+    intc_0 // 1
     return
 
 main_bare_routing@9:
@@ -73,5 +84,5 @@ main_bare_routing@9:
     txn ApplicationID
     !
     assert // can only call when creating
-    pushint 1 // 1
+    intc_0 // 1
     return

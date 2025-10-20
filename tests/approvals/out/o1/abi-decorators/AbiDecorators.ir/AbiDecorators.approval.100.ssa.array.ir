@@ -48,16 +48,25 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%19#0) // OnCompletion is not NoOp
         let tmp%20#0: uint64 = (txn ApplicationID)
         (assert tmp%20#0) // can only call when not creating
-        let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%22#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
-        let reinterpret_bytes[8]%1#0: bytes[8] = (txna ApplicationArgs 2)
-        let tmp%23#0: uint64 = (btoi reinterpret_bytes[8]%1#0)
-        let reinterpret_bytes[8]%2#0: bytes[8] = (txna ApplicationArgs 3)
-        let tmp%24#0: uint64 = (btoi reinterpret_bytes[8]%2#0)
-        let to_encode%1#0: uint64 = tests/approvals/abi-decorators.algo.ts::AbiDecorators.methodWithDefaults(tmp%22#0, tmp%23#0, tmp%24#0)
+        let tmp%22#0: bytes = (txna ApplicationArgs 1)
+        let value_len%0#0: uint64 = (len tmp%22#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 8u)
+        (assert size_is_correct%0#0) // invalid number of bytes for arc4.uint64
+        let tmp%23#0: uint64 = (btoi tmp%22#0)
+        let tmp%24#0: bytes = (txna ApplicationArgs 2)
+        let value_len%1#0: uint64 = (len tmp%24#0)
+        let size_is_correct%1#0: bool = (== value_len%1#0 8u)
+        (assert size_is_correct%1#0) // invalid number of bytes for arc4.uint64
+        let tmp%25#0: uint64 = (btoi tmp%24#0)
+        let tmp%26#0: bytes = (txna ApplicationArgs 3)
+        let value_len%2#0: uint64 = (len tmp%26#0)
+        let size_is_correct%2#0: bool = (== value_len%2#0 8u)
+        (assert size_is_correct%2#0) // invalid number of bytes for arc4.uint64
+        let tmp%27#0: uint64 = (btoi tmp%26#0)
+        let to_encode%1#0: uint64 = tests/approvals/abi-decorators.algo.ts::AbiDecorators.methodWithDefaults(tmp%23#0, tmp%25#0, tmp%27#0)
         let val_as_bytes%1#0: bytes[8] = (itob to_encode%1#0)
-        let tmp%25#0: bytes = (concat 0x151f7c75 val_as_bytes%1#0)
-        (log tmp%25#0)
+        let tmp%28#0: bytes = (concat 0x151f7c75 val_as_bytes%1#0)
+        (log tmp%28#0)
         let tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router__%0#4: bool = 1u
         goto block@14
     block@13: // after_if_else_L4

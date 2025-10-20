@@ -85,8 +85,9 @@ class ValidateFunctionBuilder extends FunctionBuilder {
       funcName: 'validate',
       argSpec: () => [],
     })
+
     const expr = nodeFactory.aRC4FromBytes({
-      value: this.target.toBytes(this.target.sourceLocation),
+      value: this.target.resolve(),
       validate: true,
       wtype: this.target.ptype.wtype,
       sourceLocation,

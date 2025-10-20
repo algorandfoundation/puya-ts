@@ -18,52 +18,70 @@ subroutine tests/approvals/teal-script-conventions.algo.ts::TealScriptConvention
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         (assert tmp%6#0) // can only call when not creating
-        let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%7#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
-        let to_encode%0#0: uint64 = tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.closeOutOfApplication(tmp%7#0)
+        let tmp%7#0: bytes = (txna ApplicationArgs 1)
+        let value_len%0#0: uint64 = (len tmp%7#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 8u)
+        (assert size_is_correct%0#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%0#0: bytes[8] = tmp%7#0
+        let tmp%8#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
+        let to_encode%0#0: uint64 = tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.closeOutOfApplication(tmp%8#0)
         let val_as_bytes%0#0: bytes[8] = (itob to_encode%0#0)
-        let tmp%8#0: bytes = (concat 0x151f7c75 val_as_bytes%0#0)
-        (log tmp%8#0)
+        let tmp%9#0: bytes = (concat 0x151f7c75 val_as_bytes%0#0)
+        (log tmp%9#0)
         return 1u
     block@3: // createApplication_route_L12
-        let tmp%9#0: uint64 = (txn OnCompletion)
-        let tmp%10#0: uint64 = (shl 1u tmp%9#0)
-        let tmp%11#0: uint64 = (& tmp%10#0 33u)
-        (assert tmp%11#0) // OnCompletion is not one of NoOp, DeleteApplication
-        let tmp%12#0: uint64 = (txn ApplicationID)
-        let tmp%13#0: bool = (== tmp%12#0 0u)
-        (assert tmp%13#0) // can only call when creating
-        let tmp%14#0: bytes = (txna ApplicationArgs 1)
-        let tmp%15#0: bytes = ((extract 2 0) tmp%14#0)
-        tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.createApplication(tmp%15#0)
+        let tmp%10#0: uint64 = (txn OnCompletion)
+        let tmp%11#0: uint64 = (shl 1u tmp%10#0)
+        let tmp%12#0: uint64 = (& tmp%11#0 33u)
+        (assert tmp%12#0) // OnCompletion is not one of NoOp, DeleteApplication
+        let tmp%13#0: uint64 = (txn ApplicationID)
+        let tmp%14#0: bool = (== tmp%13#0 0u)
+        (assert tmp%14#0) // can only call when creating
+        let tmp%15#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = (extract_uint16 tmp%15#0 0u) // on error: invalid array length header
+        let num_bytes%0#0: uint64 = (* length%0#0 1u)
+        let num_bytes_with_header%0#0: uint64 = (+ num_bytes%0#0 2u)
+        let value_len%1#0: uint64 = (len tmp%15#0)
+        let size_is_correct%1#0: bool = (== value_len%1#0 num_bytes_with_header%0#0)
+        (assert size_is_correct%1#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let reinterpret_bytes%0#0: bytes = tmp%15#0
+        let tmp%16#0: bytes = ((extract 2 0) reinterpret_bytes%0#0)
+        tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.createApplication(tmp%16#0)
         return 1u
     block@4: // setLocal_route_L17
-        let tmp%16#0: uint64 = (txn OnCompletion)
-        let tmp%17#0: bool = (== tmp%16#0 NoOp)
-        (assert tmp%17#0) // OnCompletion is not NoOp
-        let tmp%18#0: uint64 = (txn ApplicationID)
-        let tmp%19#0: bool = (!= tmp%18#0 0u)
-        (assert tmp%19#0) // can only call when not creating
-        let tmp%20#0: bytes = (txna ApplicationArgs 1)
-        let tmp%21#0: bytes = ((extract 2 0) tmp%20#0)
-        tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.setLocal(tmp%21#0)
+        let tmp%17#0: uint64 = (txn OnCompletion)
+        let tmp%18#0: bool = (== tmp%17#0 NoOp)
+        (assert tmp%18#0) // OnCompletion is not NoOp
+        let tmp%19#0: uint64 = (txn ApplicationID)
+        let tmp%20#0: bool = (!= tmp%19#0 0u)
+        (assert tmp%20#0) // can only call when not creating
+        let tmp%21#0: bytes = (txna ApplicationArgs 1)
+        let length%1#0: uint64 = (extract_uint16 tmp%21#0 0u) // on error: invalid array length header
+        let num_bytes%1#0: uint64 = (* length%1#0 1u)
+        let num_bytes_with_header%1#0: uint64 = (+ num_bytes%1#0 2u)
+        let value_len%2#0: uint64 = (len tmp%21#0)
+        let size_is_correct%2#0: bool = (== value_len%2#0 num_bytes_with_header%1#0)
+        (assert size_is_correct%2#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let reinterpret_bytes%1#0: bytes = tmp%21#0
+        let tmp%22#0: bytes = ((extract 2 0) reinterpret_bytes%1#0)
+        tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.setLocal(tmp%22#0)
         return 1u
     block@5: // optInToApplication_route_L23
-        let tmp%22#0: uint64 = (txn OnCompletion)
-        let tmp%23#0: bool = (== tmp%22#0 OptIn)
-        (assert tmp%23#0) // OnCompletion is not OptIn
-        let tmp%24#0: uint64 = (txn ApplicationID)
-        let tmp%25#0: bool = (!= tmp%24#0 0u)
-        (assert tmp%25#0) // can only call when not creating
+        let tmp%23#0: uint64 = (txn OnCompletion)
+        let tmp%24#0: bool = (== tmp%23#0 OptIn)
+        (assert tmp%24#0) // OnCompletion is not OptIn
+        let tmp%25#0: uint64 = (txn ApplicationID)
+        let tmp%26#0: bool = (!= tmp%25#0 0u)
+        (assert tmp%26#0) // can only call when not creating
         tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.optInToApplication()
         return 1u
     block@6: // updateApplication_route_L25
-        let tmp%26#0: uint64 = (txn OnCompletion)
-        let tmp%27#0: bool = (== tmp%26#0 UpdateApplication)
-        (assert tmp%27#0) // OnCompletion is not UpdateApplication
-        let tmp%28#0: uint64 = (txn ApplicationID)
-        let tmp%29#0: bool = (!= tmp%28#0 0u)
-        (assert tmp%29#0) // can only call when not creating
+        let tmp%27#0: uint64 = (txn OnCompletion)
+        let tmp%28#0: bool = (== tmp%27#0 UpdateApplication)
+        (assert tmp%28#0) // OnCompletion is not UpdateApplication
+        let tmp%29#0: uint64 = (txn ApplicationID)
+        let tmp%30#0: bool = (!= tmp%29#0 0u)
+        (assert tmp%30#0) // can only call when not creating
         tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.updateApplication()
         return 1u
     block@7: // switch_case_default_L5
@@ -71,12 +89,12 @@ subroutine tests/approvals/teal-script-conventions.algo.ts::TealScriptConvention
     block@8: // switch_case_next_L5
         goto block@13
     block@9: // bare_routing_L5
-        let tmp%30#0: uint64 = (txn OnCompletion)
-        switch tmp%30#0 {5u => block@10, * => block@11}
+        let tmp%31#0: uint64 = (txn OnCompletion)
+        switch tmp%31#0 {5u => block@10, * => block@11}
     block@10: // deleteApplication_L20
-        let tmp%31#0: uint64 = (txn ApplicationID)
-        let tmp%32#0: bool = (!= tmp%31#0 0u)
-        (assert tmp%32#0) // can only call when not creating
+        let tmp%32#0: uint64 = (txn ApplicationID)
+        let tmp%33#0: bool = (!= tmp%32#0 0u)
+        (assert tmp%33#0) // can only call when not creating
         tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.deleteApplication()
         return 1u
     block@11: // switch_case_default_L5

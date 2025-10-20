@@ -18,46 +18,79 @@ subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.__puya_arc4_route
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         (assert tmp%6#0) // can only call when not creating
-        let reinterpret_bytes[1]%0#0: bytes[1] = (txna ApplicationArgs 1)
-        let reinterpret_bytes[1]%1#0: bytes[1] = (txna ApplicationArgs 2)
+        let tmp%7#0: bytes = (txna ApplicationArgs 1)
+        let value_len%0#0: uint64 = (len tmp%7#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 1u)
+        (assert size_is_correct%0#0) // invalid number of bytes for arc4.uint8
+        let reinterpret_bytes[1]%0#0: bytes[1] = tmp%7#0
+        let tmp%8#0: bytes = (txna ApplicationArgs 2)
+        let value_len%1#0: uint64 = (len tmp%8#0)
+        let size_is_correct%1#0: bool = (== value_len%1#0 1u)
+        (assert size_is_correct%1#0) // invalid number of bytes for arc4.uint8
+        let reinterpret_bytes[1]%1#0: bytes[1] = tmp%8#0
         tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped(reinterpret_bytes[1]%0#0, reinterpret_bytes[1]%1#0)
         return 1u
     block@3: // emitCustom_route_L32
-        let tmp%7#0: uint64 = (txn OnCompletion)
-        let tmp%8#0: bool = (== tmp%7#0 NoOp)
-        (assert tmp%8#0) // OnCompletion is not NoOp
-        let tmp%9#0: uint64 = (txn ApplicationID)
-        let tmp%10#0: bool = (!= tmp%9#0 0u)
-        (assert tmp%10#0) // can only call when not creating
-        let tmp%11#0: bytes = (txna ApplicationArgs 1)
-        let tmp%12#0: bytes = ((extract 2 0) tmp%11#0)
-        let reinterpret_bytes[1]%2#0: bytes[1] = (txna ApplicationArgs 2)
-        let tmp%13#0: bool = (getbit reinterpret_bytes[1]%2#0 0u)
-        tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(tmp%12#0, tmp%13#0)
+        let tmp%9#0: uint64 = (txn OnCompletion)
+        let tmp%10#0: bool = (== tmp%9#0 NoOp)
+        (assert tmp%10#0) // OnCompletion is not NoOp
+        let tmp%11#0: uint64 = (txn ApplicationID)
+        let tmp%12#0: bool = (!= tmp%11#0 0u)
+        (assert tmp%12#0) // can only call when not creating
+        let tmp%13#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = (extract_uint16 tmp%13#0 0u) // on error: invalid array length header
+        let num_bytes%0#0: uint64 = (* length%0#0 1u)
+        let num_bytes_with_header%0#0: uint64 = (+ num_bytes%0#0 2u)
+        let value_len%2#0: uint64 = (len tmp%13#0)
+        let size_is_correct%2#0: bool = (== value_len%2#0 num_bytes_with_header%0#0)
+        (assert size_is_correct%2#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let reinterpret_bytes%0#0: bytes = tmp%13#0
+        let tmp%14#0: bytes = ((extract 2 0) reinterpret_bytes%0#0)
+        let tmp%15#0: bytes = (txna ApplicationArgs 2)
+        let value_len%3#0: uint64 = (len tmp%15#0)
+        let size_is_correct%3#0: bool = (== value_len%3#0 1u)
+        (assert size_is_correct%3#0) // invalid number of bytes for arc4.bool
+        let reinterpret_bytes[1]%2#0: bytes[1] = tmp%15#0
+        let tmp%16#0: bool = (getbit reinterpret_bytes[1]%2#0 0u)
+        tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(tmp%14#0, tmp%16#0)
         return 1u
     block@4: // emitDynamicBytes_route_L37
-        let tmp%14#0: uint64 = (txn OnCompletion)
-        let tmp%15#0: bool = (== tmp%14#0 NoOp)
-        (assert tmp%15#0) // OnCompletion is not NoOp
-        let tmp%16#0: uint64 = (txn ApplicationID)
-        let tmp%17#0: bool = (!= tmp%16#0 0u)
-        (assert tmp%17#0) // can only call when not creating
-        let tmp%18#0: bytes = (txna ApplicationArgs 1)
-        let tmp%19#0: bytes = ((extract 2 0) tmp%18#0)
-        let tmp%20#0: bytes = (txna ApplicationArgs 2)
-        tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes(tmp%19#0, tmp%20#0)
+        let tmp%17#0: uint64 = (txn OnCompletion)
+        let tmp%18#0: bool = (== tmp%17#0 NoOp)
+        (assert tmp%18#0) // OnCompletion is not NoOp
+        let tmp%19#0: uint64 = (txn ApplicationID)
+        let tmp%20#0: bool = (!= tmp%19#0 0u)
+        (assert tmp%20#0) // can only call when not creating
+        let tmp%21#0: bytes = (txna ApplicationArgs 1)
+        let length%1#0: uint64 = (extract_uint16 tmp%21#0 0u) // on error: invalid array length header
+        let num_bytes%1#0: uint64 = (* length%1#0 1u)
+        let num_bytes_with_header%1#0: uint64 = (+ num_bytes%1#0 2u)
+        let value_len%4#0: uint64 = (len tmp%21#0)
+        let size_is_correct%4#0: bool = (== value_len%4#0 num_bytes_with_header%1#0)
+        (assert size_is_correct%4#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let reinterpret_bytes%1#0: bytes = tmp%21#0
+        let tmp%22#0: bytes = ((extract 2 0) reinterpret_bytes%1#0)
+        let tmp%23#0: bytes = (txna ApplicationArgs 2)
+        let length%2#0: uint64 = (extract_uint16 tmp%23#0 0u) // on error: invalid array length header
+        let num_bytes%2#0: uint64 = (* length%2#0 1u)
+        let num_bytes_with_header%2#0: uint64 = (+ num_bytes%2#0 2u)
+        let value_len%5#0: uint64 = (len tmp%23#0)
+        let size_is_correct%5#0: bool = (== value_len%5#0 num_bytes_with_header%2#0)
+        (assert size_is_correct%5#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let reinterpret_bytes%2#0: bytes = tmp%23#0
+        tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes(tmp%22#0, reinterpret_bytes%2#0)
         return 1u
     block@5: // switch_case_default_L13
         goto block@6
     block@6: // switch_case_next_L13
         goto block@11
     block@7: // bare_routing_L13
-        let tmp%21#0: uint64 = (txn OnCompletion)
-        switch tmp%21#0 {0u => block@8, * => block@9}
+        let tmp%24#0: uint64 = (txn OnCompletion)
+        switch tmp%24#0 {0u => block@8, * => block@9}
     block@8: // __algots__.defaultCreate_L13
-        let tmp%22#0: uint64 = (txn ApplicationID)
-        let tmp%23#0: bool = (== tmp%22#0 0u)
-        (assert tmp%23#0) // can only call when creating
+        let tmp%25#0: uint64 = (txn ApplicationID)
+        let tmp%26#0: bool = (== tmp%25#0 0u)
+        (assert tmp%26#0) // can only call when creating
         tests/approvals/arc-28-events.algo.ts::EventEmitter.__algots__.defaultCreate()
         return 1u
     block@9: // switch_case_default_L13

@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 8 1 20
+    intcblock 0 8 1 16
     bytecblock 0x 0x151f7c75 0x0000000000000000 "plugins" 0x0000000000000001 0xa78000de
 
 main_block@0:
@@ -59,6 +59,17 @@ main_setPlugin_route@12:
     // tests/approvals/arc4-struct.algo.ts:10
     // class StructDemo extends Contract {
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 1
+    *
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/arc4-struct.algo.ts:68
     // public setPlugin(key: string) {
@@ -80,10 +91,31 @@ main_setLastCalled_route@11:
     // tests/approvals/arc4-struct.algo.ts:10
     // class StructDemo extends Contract {
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 1
+    *
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 3
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/arc4-struct.algo.ts:64
     // public setLastCalled(key: string, index: uint64, lastCalled: uint64) {
@@ -127,6 +159,17 @@ main_getPlugin_route@9:
     // tests/approvals/arc4-struct.algo.ts:10
     // class StructDemo extends Contract {
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 1
+    *
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/arc4-struct.algo.ts:52
     // public getPlugin(key: string): PluginInfo {
@@ -152,6 +195,11 @@ main_toNative_route@8:
     // tests/approvals/arc4-struct.algo.ts:10
     // class StructDemo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for Vector
     // tests/approvals/arc4-struct.algo.ts:44
     // public toNative(v1: Vector) {
     callsub toNative
@@ -182,6 +230,11 @@ main_toAndFromBytes_route@7:
     // tests/approvals/arc4-struct.algo.ts:10
     // class StructDemo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for Vector
     // tests/approvals/arc4-struct.algo.ts:39
     // public toAndFromBytes(v1: Vector): Vector {
     callsub toAndFromBytes
@@ -206,6 +259,11 @@ main_implicitCastingAndSpreading_route@6:
     // tests/approvals/arc4-struct.algo.ts:10
     // class StructDemo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for Vector
     // tests/approvals/arc4-struct.algo.ts:32
     // public implicitCastingAndSpreading(v1: Vector) {
     callsub implicitCastingAndSpreading
@@ -226,8 +284,23 @@ main_mutateVector_route@5:
     // tests/approvals/arc4-struct.algo.ts:10
     // class StructDemo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for Vector
     txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     txna ApplicationArgs 3
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     // tests/approvals/arc4-struct.algo.ts:26
     // public mutateVector(v1: Vector, newX: ARC4Uint64, newY: ARC4Uint64): Vector {
     uncover 2
@@ -255,7 +328,17 @@ main_addVectors_route@4:
     // tests/approvals/arc4-struct.algo.ts:10
     // class StructDemo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for Vector
     txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for Vector
     // tests/approvals/arc4-struct.algo.ts:19
     // public addVectors(v1: Vector, v2: Vector) {
     callsub addVectors
@@ -528,7 +611,7 @@ getPlugin_block@0:
     // tests/approvals/arc4-struct.algo.ts:54
     // assert(value.lastCalled.native > 0, 'Last called not zero')
     dup
-    pushint 16 // 16
+    intc_3 // 16
     intc_1 // 8
     extract3 // on error: Index access is out of bounds
     btoi
@@ -554,7 +637,7 @@ getMain_block@0:
     // tests/approvals/arc4-struct.algo.ts:60
     // assert(value.lastCalled.native > 0, 'Last called not zero')
     dup
-    pushint 16 // 16
+    intc_3 // 16
     intc_1 // 8
     extract3 // on error: Index access is out of bounds
     btoi
@@ -601,9 +684,9 @@ setLastCalled_block@0:
     dup
     extract 2 0
     frame_dig -2
-    intc_3 // 20
+    pushint 20 // 20
     *
-    intc_3 // 20
+    pushint 20 // 20
     extract3 // on error: Index access is out of bounds
     uncover 4
     swap
@@ -618,7 +701,7 @@ setLastCalled_block@0:
     >
     assert // Index access is out of bounds
     frame_dig -2
-    intc_3 // 20
+    pushint 20 // 20
     *
     pushint 2 // 2
     +

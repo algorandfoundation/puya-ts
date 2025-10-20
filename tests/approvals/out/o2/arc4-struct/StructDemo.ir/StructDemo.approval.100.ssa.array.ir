@@ -22,7 +22,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         (assert tmp%9#0) // can only call when not creating
         let v1#6: bytes[16] = (txna ApplicationArgs 1)
+        let value_len%0#0: uint64 = (len v1#6)
+        let size_is_correct%0#0: bool = (== value_len%0#0 16u)
+        (assert size_is_correct%0#0) // invalid number of bytes for Vector
         let v2#1: bytes[16] = (txna ApplicationArgs 2)
+        let value_len%1#0: uint64 = (len v2#1)
+        let size_is_correct%1#0: bool = (== value_len%1#0 16u)
+        (assert size_is_correct%1#0) // invalid number of bytes for Vector
         let tmp%1#5: uint64 = (extract_uint64 v1#6 0u)
         let tmp%3#3: uint64 = (extract_uint64 v2#1 0u)
         let to_encode%0#0: uint64 = (+ tmp%1#5 tmp%3#3)
@@ -32,32 +38,44 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let to_encode%1#0: uint64 = (+ tmp%5#1 tmp%7#1)
         let val_as_bytes%1#0: bytes[8] = (itob to_encode%1#0)
         let encoded_tuple_buffer%2#2: bytes = (concat val_as_bytes%0#1 val_as_bytes%1#0)
-        let tmp%12#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%2#2)
-        (log tmp%12#0)
+        let tmp%14#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%2#2)
+        (log tmp%14#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#1: bool = 1u
         goto block@20
     block@5: // mutateVector_route_L26
-        let tmp%13#0: uint64 = (txn OnCompletion)
-        let tmp%14#0: bool = (! tmp%13#0)
-        (assert tmp%14#0) // OnCompletion is not NoOp
-        let tmp%15#0: uint64 = (txn ApplicationID)
-        (assert tmp%15#0) // can only call when not creating
+        let tmp%15#0: uint64 = (txn OnCompletion)
+        let tmp%16#0: bool = (! tmp%15#0)
+        (assert tmp%16#0) // OnCompletion is not NoOp
+        let tmp%17#0: uint64 = (txn ApplicationID)
+        (assert tmp%17#0) // can only call when not creating
         let v1#3: bytes[16] = (txna ApplicationArgs 1)
+        let value_len%2#0: uint64 = (len v1#3)
+        let size_is_correct%2#0: bool = (== value_len%2#0 16u)
+        (assert size_is_correct%2#0) // invalid number of bytes for Vector
         let newX#0: bytes[8] = (txna ApplicationArgs 2)
+        let value_len%3#0: uint64 = (len newX#0)
+        let size_is_correct%3#0: bool = (== value_len%3#0 8u)
+        (assert size_is_correct%3#0) // invalid number of bytes for arc4.uint64
         let newY#0: bytes[8] = (txna ApplicationArgs 3)
+        let value_len%4#0: uint64 = (len newY#0)
+        let size_is_correct%4#0: bool = (== value_len%4#0 8u)
+        (assert size_is_correct%4#0) // invalid number of bytes for arc4.uint64
         let v1#4: bytes[16] = ((replace2 0) v1#3 newX#0)
         let v1#5: bytes[16] = ((replace2 8) v1#4 newY#0)
-        let tmp%18#0: bytes = (concat 0x151f7c75 v1#5)
-        (log tmp%18#0)
+        let tmp%23#0: bytes = (concat 0x151f7c75 v1#5)
+        (log tmp%23#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#2: bool = 1u
         goto block@20
     block@6: // implicitCastingAndSpreading_route_L32
-        let tmp%19#0: uint64 = (txn OnCompletion)
-        let tmp%20#0: bool = (! tmp%19#0)
-        (assert tmp%20#0) // OnCompletion is not NoOp
-        let tmp%21#0: uint64 = (txn ApplicationID)
-        (assert tmp%21#0) // can only call when not creating
+        let tmp%24#0: uint64 = (txn OnCompletion)
+        let tmp%25#0: bool = (! tmp%24#0)
+        (assert tmp%25#0) // OnCompletion is not NoOp
+        let tmp%26#0: uint64 = (txn ApplicationID)
+        (assert tmp%26#0) // can only call when not creating
         let v1#2: bytes[16] = (txna ApplicationArgs 1)
+        let value_len%5#0: uint64 = (len v1#2)
+        let size_is_correct%5#0: bool = (== value_len%5#0 16u)
+        (assert size_is_correct%5#0) // invalid number of bytes for Vector
         let item0%0#1: bytes = ((extract 0 8) v1#2) // on error: Index access is out of bounds
         let item1%0#1: bytes = ((extract 8 8) v1#2) // on error: Index access is out of bounds
         let v2#0: bytes[16] = (concat item0%0#1 item1%0#1)
@@ -71,73 +89,95 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#3: bool = 1u
         goto block@20
     block@7: // toAndFromBytes_route_L39
-        let tmp%23#0: uint64 = (txn OnCompletion)
-        let tmp%24#0: bool = (! tmp%23#0)
-        (assert tmp%24#0) // OnCompletion is not NoOp
-        let tmp%25#0: uint64 = (txn ApplicationID)
-        (assert tmp%25#0) // can only call when not creating
-        let v1#1: bytes[16] = (txna ApplicationArgs 1)
-        let tmp%28#0: bytes = (concat 0x151f7c75 v1#1)
-        (log tmp%28#0)
-        let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#4: bool = 1u
-        goto block@20
-    block@8: // toNative_route_L44
         let tmp%29#0: uint64 = (txn OnCompletion)
         let tmp%30#0: bool = (! tmp%29#0)
         (assert tmp%30#0) // OnCompletion is not NoOp
         let tmp%31#0: uint64 = (txn ApplicationID)
         (assert tmp%31#0) // can only call when not creating
+        let v1#1: bytes[16] = (txna ApplicationArgs 1)
+        let value_len%6#0: uint64 = (len v1#1)
+        let size_is_correct%6#0: bool = (== value_len%6#0 16u)
+        (assert size_is_correct%6#0) // invalid number of bytes for Vector
+        let tmp%35#0: bytes = (concat 0x151f7c75 v1#1)
+        (log tmp%35#0)
+        let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#4: bool = 1u
+        goto block@20
+    block@8: // toNative_route_L44
+        let tmp%36#0: uint64 = (txn OnCompletion)
+        let tmp%37#0: bool = (! tmp%36#0)
+        (assert tmp%37#0) // OnCompletion is not NoOp
+        let tmp%38#0: uint64 = (txn ApplicationID)
+        (assert tmp%38#0) // can only call when not creating
         let v1#0: bytes[16] = (txna ApplicationArgs 1)
+        let value_len%7#0: uint64 = (len v1#0)
+        let size_is_correct%7#0: bool = (== value_len%7#0 16u)
+        (assert size_is_correct%7#0) // invalid number of bytes for Vector
         let item0%0#0: bytes = ((extract 0 8) v1#0) // on error: Index access is out of bounds
         let item1%0#0: bytes = ((extract 8 8) v1#0) // on error: Index access is out of bounds
         let encoded_tuple_buffer%2#0: bytes = (concat item0%0#0 item1%0#0)
-        let tmp%33#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%2#0)
-        (log tmp%33#0)
+        let tmp%41#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%2#0)
+        (log tmp%41#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#5: bool = 1u
         goto block@20
     block@9: // getPlugin_route_L52
-        let tmp%34#0: uint64 = (txn OnCompletion)
-        let tmp%35#0: bool = (! tmp%34#0)
-        (assert tmp%35#0) // OnCompletion is not NoOp
-        let tmp%36#0: uint64 = (txn ApplicationID)
-        (assert tmp%36#0) // can only call when not creating
-        let tmp%38#0: bytes = (txna ApplicationArgs 1)
-        let key#2: bytes = ((extract 2 0) tmp%38#0)
-        let tmp%0#5: bytes = (concat "plugins" key#2)
-        let (value#1: bytes, maybe_exists%0#2: bool) = (box_get tmp%0#5)
-        (assert maybe_exists%0#2) // Box must have value
-        let tmp%2#3: uint64 = (extract_uint64 value#1 16u)
-        (assert tmp%2#3) // Last called not zero
-        let tmp%41#0: bytes = (concat 0x151f7c75 value#1)
-        (log tmp%41#0)
-        let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#6: bool = 1u
-        goto block@20
-    block@10: // getMain_route_L58
         let tmp%42#0: uint64 = (txn OnCompletion)
         let tmp%43#0: bool = (! tmp%42#0)
         (assert tmp%43#0) // OnCompletion is not NoOp
         let tmp%44#0: uint64 = (txn ApplicationID)
         (assert tmp%44#0) // can only call when not creating
+        let tmp%46#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = (extract_uint16 tmp%46#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%0#0: uint64 = (+ length%0#0 2u)
+        let value_len%8#0: uint64 = (len tmp%46#0)
+        let size_is_correct%8#0: bool = (== value_len%8#0 num_bytes_with_header%0#0)
+        (assert size_is_correct%8#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#2: bytes = ((extract 2 0) tmp%46#0)
+        let tmp%0#5: bytes = (concat "plugins" key#2)
+        let (value#1: bytes, maybe_exists%0#2: bool) = (box_get tmp%0#5)
+        (assert maybe_exists%0#2) // Box must have value
+        let tmp%2#3: uint64 = (extract_uint64 value#1 16u)
+        (assert tmp%2#3) // Last called not zero
+        let tmp%49#0: bytes = (concat 0x151f7c75 value#1)
+        (log tmp%49#0)
+        let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#6: bool = 1u
+        goto block@20
+    block@10: // getMain_route_L58
+        let tmp%50#0: uint64 = (txn OnCompletion)
+        let tmp%51#0: bool = (! tmp%50#0)
+        (assert tmp%51#0) // OnCompletion is not NoOp
+        let tmp%52#0: uint64 = (txn ApplicationID)
+        (assert tmp%52#0) // can only call when not creating
         let (value#0: bytes, maybe_exists%0#1: bool) = (box_get "main")
         (assert maybe_exists%0#1) // Box must have value
         let tmp%1#2: uint64 = (extract_uint64 value#0 16u)
         (assert tmp%1#2) // Last called not zero
-        let tmp%47#0: bytes = (concat 0x151f7c75 value#0)
-        (log tmp%47#0)
+        let tmp%55#0: bytes = (concat 0x151f7c75 value#0)
+        (log tmp%55#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#7: bool = 1u
         goto block@20
     block@11: // setLastCalled_route_L64
-        let tmp%48#0: uint64 = (txn OnCompletion)
-        let tmp%49#0: bool = (! tmp%48#0)
-        (assert tmp%49#0) // OnCompletion is not NoOp
-        let tmp%50#0: uint64 = (txn ApplicationID)
-        (assert tmp%50#0) // can only call when not creating
-        let tmp%52#0: bytes = (txna ApplicationArgs 1)
-        let key#1: bytes = ((extract 2 0) tmp%52#0)
-        let reinterpret_bytes[8]%2#0: bytes[8] = (txna ApplicationArgs 2)
-        let index#0: uint64 = (btoi reinterpret_bytes[8]%2#0)
-        let reinterpret_bytes[8]%3#0: bytes[8] = (txna ApplicationArgs 3)
-        let lastCalled#0: uint64 = (btoi reinterpret_bytes[8]%3#0)
+        let tmp%56#0: uint64 = (txn OnCompletion)
+        let tmp%57#0: bool = (! tmp%56#0)
+        (assert tmp%57#0) // OnCompletion is not NoOp
+        let tmp%58#0: uint64 = (txn ApplicationID)
+        (assert tmp%58#0) // can only call when not creating
+        let tmp%60#0: bytes = (txna ApplicationArgs 1)
+        let length%1#0: uint64 = (extract_uint16 tmp%60#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%1#0: uint64 = (+ length%1#0 2u)
+        let value_len%9#0: uint64 = (len tmp%60#0)
+        let size_is_correct%9#0: bool = (== value_len%9#0 num_bytes_with_header%1#0)
+        (assert size_is_correct%9#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#1: bytes = ((extract 2 0) tmp%60#0)
+        let tmp%62#0: bytes = (txna ApplicationArgs 2)
+        let value_len%10#0: uint64 = (len tmp%62#0)
+        let size_is_correct%10#0: bool = (== value_len%10#0 8u)
+        (assert size_is_correct%10#0) // invalid number of bytes for arc4.uint64
+        let index#0: uint64 = (btoi tmp%62#0)
+        let tmp%64#0: bytes = (txna ApplicationArgs 3)
+        let value_len%11#0: uint64 = (len tmp%64#0)
+        let size_is_correct%11#0: bool = (== value_len%11#0 8u)
+        (assert size_is_correct%11#0) // invalid number of bytes for arc4.uint64
+        let lastCalled#0: uint64 = (btoi tmp%64#0)
         let val_as_bytes%0#0: bytes[8] = (itob lastCalled#0)
         let tmp%0#3: bytes = (concat "plugins" key#1)
         let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (box_get tmp%0#3)
@@ -161,25 +201,30 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#8: bool = 1u
         goto block@20
     block@12: // setPlugin_route_L68
-        let tmp%56#0: uint64 = (txn OnCompletion)
-        let tmp%57#0: bool = (! tmp%56#0)
-        (assert tmp%57#0) // OnCompletion is not NoOp
-        let tmp%58#0: uint64 = (txn ApplicationID)
-        (assert tmp%58#0) // can only call when not creating
-        let tmp%60#0: bytes = (txna ApplicationArgs 1)
-        let key#0: bytes = ((extract 2 0) tmp%60#0)
+        let tmp%66#0: uint64 = (txn OnCompletion)
+        let tmp%67#0: bool = (! tmp%66#0)
+        (assert tmp%67#0) // OnCompletion is not NoOp
+        let tmp%68#0: uint64 = (txn ApplicationID)
+        (assert tmp%68#0) // can only call when not creating
+        let tmp%70#0: bytes = (txna ApplicationArgs 1)
+        let length%2#0: uint64 = (extract_uint16 tmp%70#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%2#0: uint64 = (+ length%2#0 2u)
+        let value_len%12#0: uint64 = (len tmp%70#0)
+        let size_is_correct%12#0: bool = (== value_len%12#0 num_bytes_with_header%2#0)
+        (assert size_is_correct%12#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#0: bytes = ((extract 2 0) tmp%70#0)
         let tmp%0#2: bytes = (concat "plugins" key#0)
         (box_del tmp%0#2)
         (box_put tmp%0#2 0x00000000000000010000000000000000000000000000000000001b0001a78000de00000000000000010000000000000001)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#9: bool = 1u
         goto block@20
     block@15: // bare_routing_L10
-        let tmp%62#0: uint64 = (txn OnCompletion)
-        goto tmp%62#0 ? block@19 : block@16
+        let tmp%72#0: uint64 = (txn OnCompletion)
+        goto tmp%72#0 ? block@19 : block@16
     block@16: // __algots__.defaultCreate_L10
-        let tmp%63#0: uint64 = (txn ApplicationID)
-        let tmp%64#0: bool = (! tmp%63#0)
-        (assert tmp%64#0) // can only call when creating
+        let tmp%73#0: uint64 = (txn ApplicationID)
+        let tmp%74#0: bool = (! tmp%73#0)
+        (assert tmp%74#0) // can only call when creating
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#10: bool = 1u
         goto block@20
     block@19: // after_if_else_L10

@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0
+    intcblock 1 0 2
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
     txn NumAppArgs
@@ -29,8 +29,26 @@ main_emitDynamicBytes_route@5:
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
     txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 2
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     // tests/approvals/arc-28-events.algo.ts:38
     // emit('DB(byte[],byte[])', x, y)
     dig 1
@@ -72,8 +90,22 @@ main_emitCustom_route@4:
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
     txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.bool
     intc_1 // 0
     getbit
     // tests/approvals/arc-28-events.algo.ts:33
@@ -117,7 +149,17 @@ main_emitSwapped_route@3:
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
     // tests/approvals/arc-28-events.algo.ts:15
     // emit<Swapped>({ a: b, b: a })
     dup

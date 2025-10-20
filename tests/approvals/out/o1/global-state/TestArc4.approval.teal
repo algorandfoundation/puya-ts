@@ -3,6 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
+    intcblock 0 1 2
     // tests/approvals/global-state.algo.ts:33-34
     // @contract({ stateTotals: { globalUints: 5 } })
     // export class TestArc4 extends Contract {
@@ -16,7 +17,7 @@ main_after_if_else@11:
     // tests/approvals/global-state.algo.ts:33-34
     // @contract({ stateTotals: { globalUints: 5 } })
     // export class TestArc4 extends Contract {
-    pushint 0 // 0
+    intc_0 // 0
     return
 
 main_deleteState_route@4:
@@ -31,11 +32,20 @@ main_deleteState_route@4:
     // @contract({ stateTotals: { globalUints: 5 } })
     // export class TestArc4 extends Contract {
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/global-state.algo.ts:41
     // deleteState(key: string) {
     callsub deleteState
-    pushint 1 // 1
+    intc_1 // 1
     return
 
 main_setState_route@3:
@@ -50,13 +60,27 @@ main_setState_route@3:
     // @contract({ stateTotals: { globalUints: 5 } })
     // export class TestArc4 extends Contract {
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 2
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/global-state.algo.ts:35
     // setState(key: string, value: uint64) {
     callsub setState
-    pushint 1 // 1
+    intc_1 // 1
     return
 
 main_bare_routing@7:
@@ -68,7 +92,7 @@ main_bare_routing@7:
     txn ApplicationID
     !
     assert // can only call when creating
-    pushint 1 // 1
+    intc_1 // 1
     return
 
 

@@ -41,6 +41,15 @@ main_greet_route@8:
     // tests/approvals/precompiled-apps.algo.ts:46
     // export class HelloTemplateCustomPrefix extends HelloBase {
     txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/precompiled-apps.algo.ts:24
     // greet(name: string): string {

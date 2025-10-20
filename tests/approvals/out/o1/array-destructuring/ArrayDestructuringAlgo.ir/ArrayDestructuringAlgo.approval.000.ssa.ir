@@ -18,7 +18,11 @@ subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo._
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         (assert tmp%6#0) // can only call when not creating
-        let reinterpret_bytes[136]%0#0: bytes[136] = (txna ApplicationArgs 1)
+        let tmp%7#0: bytes = (txna ApplicationArgs 1)
+        let value_len%0#0: uint64 = (len tmp%7#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 136u)
+        (assert size_is_correct%0#0) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.tuple<arc4.uint512,arc4.uint512>>
+        let reinterpret_bytes[136]%0#0: bytes[136] = tmp%7#0
         let item0%0#0: bytes = (extract3 reinterpret_bytes[136]%0#0 0u 8u) // on error: Index access is out of bounds
         let item0%1#0: uint64 = (btoi item0%0#0)
         let item1%0#0: bytes = (extract3 reinterpret_bytes[136]%0#0 8u 128u) // on error: Index access is out of bounds
@@ -26,13 +30,13 @@ subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo._
         let item1%1#0: bytes = (extract3 item1%0#0 64u 64u) // on error: Index access is out of bounds
         let (elements_to_encode%0#0: uint64, elements_to_encode%1#0: biguint, elements_to_encode%2#0: biguint, elements_to_encode%3#0: uint64, elements_to_encode%4#0: biguint) = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested(item0%1#0, item0%2#0, item1%1#0)
         let val_as_bytes%0#0: bytes[8] = (itob elements_to_encode%0#0)
-        let value_len%0#0: uint64 = (len elements_to_encode%1#0)
-        let len_ok%0#0: bool = (<= value_len%0#0 64u)
+        let value_len%1#0: uint64 = (len elements_to_encode%1#0)
+        let len_ok%0#0: bool = (<= value_len%1#0 64u)
         (assert len_ok%0#0) // overflow
         let bzero%0#0: bytes = (bzero 64u)
         let arc4_encoded%0#0: bytes[64] = (b| elements_to_encode%1#0 bzero%0#0)
-        let value_len%1#0: uint64 = (len elements_to_encode%2#0)
-        let len_ok%1#0: bool = (<= value_len%1#0 64u)
+        let value_len%2#0: uint64 = (len elements_to_encode%2#0)
+        let len_ok%1#0: bool = (<= value_len%2#0 64u)
         (assert len_ok%1#0) // overflow
         let bzero%1#0: bytes = (bzero 64u)
         let arc4_encoded%1#0: bytes[64] = (b| elements_to_encode%2#0 bzero%1#0)
@@ -41,8 +45,8 @@ subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo._
         let encoded_tuple_buffer%1#0: bytes = (concat encoded_tuple_buffer%0#0 arc4_encoded%0#0)
         let encoded_tuple_buffer%2#0: bytes = (concat encoded_tuple_buffer%1#0 arc4_encoded%1#0)
         let val_as_bytes%1#0: bytes[8] = (itob elements_to_encode%3#0)
-        let value_len%2#0: uint64 = (len elements_to_encode%4#0)
-        let len_ok%2#0: bool = (<= value_len%2#0 64u)
+        let value_len%3#0: uint64 = (len elements_to_encode%4#0)
+        let len_ok%2#0: bool = (<= value_len%3#0 64u)
         (assert len_ok%2#0) // overflow
         let bzero%2#0: bytes = (bzero 64u)
         let arc4_encoded%2#0: bytes[64] = (b| elements_to_encode%4#0 bzero%2#0)
@@ -52,25 +56,25 @@ subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo._
         let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 encoded_tuple_buffer%2#0)
         let encoded_tuple_buffer%6#0: bytes = (concat encoded_tuple_buffer%5#0 val_as_bytes%1#0)
         let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 arc4_encoded%2#0)
-        let tmp%7#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%7#0)
-        (log tmp%7#0)
+        let tmp%8#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%7#0)
+        (log tmp%8#0)
         return 1u
     block@3: // test_route_L11
-        let tmp%8#0: uint64 = (txn OnCompletion)
-        let tmp%9#0: bool = (== tmp%8#0 NoOp)
-        (assert tmp%9#0) // OnCompletion is not NoOp
-        let tmp%10#0: uint64 = (txn ApplicationID)
-        let tmp%11#0: bool = (!= tmp%10#0 0u)
-        (assert tmp%11#0) // can only call when not creating
+        let tmp%9#0: uint64 = (txn OnCompletion)
+        let tmp%10#0: bool = (== tmp%9#0 NoOp)
+        (assert tmp%10#0) // OnCompletion is not NoOp
+        let tmp%11#0: uint64 = (txn ApplicationID)
+        let tmp%12#0: bool = (!= tmp%11#0 0u)
+        (assert tmp%12#0) // can only call when not creating
         tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.test()
         return 1u
     block@4: // testLiteralDestructuring_route_L32
-        let tmp%12#0: uint64 = (txn OnCompletion)
-        let tmp%13#0: bool = (== tmp%12#0 NoOp)
-        (assert tmp%13#0) // OnCompletion is not NoOp
-        let tmp%14#0: uint64 = (txn ApplicationID)
-        let tmp%15#0: bool = (!= tmp%14#0 0u)
-        (assert tmp%15#0) // can only call when not creating
+        let tmp%13#0: uint64 = (txn OnCompletion)
+        let tmp%14#0: bool = (== tmp%13#0 NoOp)
+        (assert tmp%14#0) // OnCompletion is not NoOp
+        let tmp%15#0: uint64 = (txn ApplicationID)
+        let tmp%16#0: bool = (!= tmp%15#0 0u)
+        (assert tmp%16#0) // can only call when not creating
         tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testLiteralDestructuring()
         return 1u
     block@5: // switch_case_default_L4
@@ -78,12 +82,12 @@ subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo._
     block@6: // switch_case_next_L4
         goto block@11
     block@7: // bare_routing_L4
-        let tmp%16#0: uint64 = (txn OnCompletion)
-        switch tmp%16#0 {0u => block@8, * => block@9}
+        let tmp%17#0: uint64 = (txn OnCompletion)
+        switch tmp%17#0 {0u => block@8, * => block@9}
     block@8: // __algots__.defaultCreate_L4
-        let tmp%17#0: uint64 = (txn ApplicationID)
-        let tmp%18#0: bool = (== tmp%17#0 0u)
-        (assert tmp%18#0) // can only call when creating
+        let tmp%18#0: uint64 = (txn ApplicationID)
+        let tmp%19#0: bool = (== tmp%18#0 0u)
+        (assert tmp%19#0) // can only call when creating
         tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.__algots__.defaultCreate()
         return 1u
     block@9: // switch_case_default_L4

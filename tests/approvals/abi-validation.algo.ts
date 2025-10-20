@@ -4,12 +4,12 @@ import type { StaticBytes } from '@algorandfoundation/algorand-typescript/arc4'
 import { interpretAsArc4 } from '@algorandfoundation/algorand-typescript/arc4'
 
 class AbiValidationAlgo extends Contract {
-  @abimethod({ validateInputs: true })
+  @abimethod({ validateEncoding: 'args' })
   withValidation(value: StaticBytes<32>) {
     return value.bytes.length
   }
 
-  @abimethod({ validateInputs: false })
+  @abimethod({ validateEncoding: 'unsafe-disabled' })
   withoutValidation(value: StaticBytes<32>) {
     return value.bytes.length
   }

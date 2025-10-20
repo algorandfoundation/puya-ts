@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0
+    intcblock 1 8 0
     bytecblock 0x151f7c75
     // tests/approvals/do-loops.algo.ts:4
     // export class DoLoopsAlgo extends Contract {
@@ -16,7 +16,7 @@ main:
 main_after_if_else@12:
     // tests/approvals/do-loops.algo.ts:4
     // export class DoLoopsAlgo extends Contract {
-    intc_1 // 0
+    intc_2 // 0
     return
 
 main_testDoContinue_route@5:
@@ -30,8 +30,18 @@ main_testDoContinue_route@5:
     // tests/approvals/do-loops.algo.ts:4
     // export class DoLoopsAlgo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/do-loops.algo.ts:23
     // testDoContinue(stop: uint64, mod: uint64) {
@@ -55,8 +65,18 @@ main_testDoBreak_route@4:
     // tests/approvals/do-loops.algo.ts:4
     // export class DoLoopsAlgo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/do-loops.algo.ts:12
     // testDoBreak(stop: uint64, breakMod: uint64) {
@@ -80,6 +100,11 @@ main_testDo_route@3:
     // tests/approvals/do-loops.algo.ts:4
     // export class DoLoopsAlgo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/do-loops.algo.ts:5
     // testDo(stop: uint64) {
@@ -111,7 +136,7 @@ testDo:
     proto 1 1
     // tests/approvals/do-loops.algo.ts:6
     // let i = Uint64(0)
-    intc_1 // 0
+    intc_2 // 0
 
 testDo_while_top@1:
     // tests/approvals/do-loops.algo.ts:8
@@ -136,7 +161,7 @@ testDoBreak:
     proto 2 1
     // tests/approvals/do-loops.algo.ts:13
     // let total = Uint64(0)
-    intc_1 // 0
+    intc_2 // 0
     // tests/approvals/do-loops.algo.ts:14
     // let i = Uint64(0)
     dup
@@ -184,7 +209,7 @@ testDoContinue:
     proto 2 1
     // tests/approvals/do-loops.algo.ts:24
     // let i = Uint64(0)
-    intc_1 // 0
+    intc_2 // 0
     // tests/approvals/do-loops.algo.ts:25
     // let total = Uint64(0)
     dup

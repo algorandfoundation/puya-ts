@@ -11,12 +11,21 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%4#0) // OnCompletion is not NoOp
         let tmp%5#0: uint64 = (txn ApplicationID)
         (assert tmp%5#0) // can only call when not creating
-        let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 1)
-        let start#3: uint64 = (btoi reinterpret_bytes[8]%0#0)
-        let reinterpret_bytes[8]%1#0: bytes[8] = (txna ApplicationArgs 2)
-        let stop#3: uint64 = (btoi reinterpret_bytes[8]%1#0)
-        let reinterpret_bytes[8]%2#0: bytes[8] = (txna ApplicationArgs 3)
-        let step#3: uint64 = (btoi reinterpret_bytes[8]%2#0)
+        let tmp%7#0: bytes = (txna ApplicationArgs 1)
+        let value_len%0#0: uint64 = (len tmp%7#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 8u)
+        (assert size_is_correct%0#0) // invalid number of bytes for arc4.uint64
+        let start#3: uint64 = (btoi tmp%7#0)
+        let tmp%9#0: bytes = (txna ApplicationArgs 2)
+        let value_len%1#0: uint64 = (len tmp%9#0)
+        let size_is_correct%1#0: bool = (== value_len%1#0 8u)
+        (assert size_is_correct%1#0) // invalid number of bytes for arc4.uint64
+        let stop#3: uint64 = (btoi tmp%9#0)
+        let tmp%11#0: bytes = (txna ApplicationArgs 3)
+        let value_len%2#0: uint64 = (len tmp%11#0)
+        let size_is_correct%2#0: bool = (== value_len%2#0 8u)
+        (assert size_is_correct%2#0) // invalid number of bytes for arc4.uint64
+        let step#3: uint64 = (btoi tmp%11#0)
         let total#13: uint64 = 0u
         goto block@45
     block@45: // while_top_L7
@@ -30,22 +39,31 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto block@45
     block@47: // after_while_L7
         let val_as_bytes%0#0: bytes[8] = (itob total#14)
-        let tmp%10#0: bytes = (concat 0x151f7c75 val_as_bytes%0#0)
-        (log tmp%10#0)
+        let tmp%13#0: bytes = (concat 0x151f7c75 val_as_bytes%0#0)
+        (log tmp%13#0)
         let tests/approvals/for-loops.algo.ts::ForLoopsAlgo.__puya_arc4_router__%0#0: bool = 1u
         goto block@14
     block@4: // test_for_loop_break_route_L13
-        let tmp%11#0: uint64 = (txn OnCompletion)
-        let tmp%12#0: bool = (! tmp%11#0)
-        (assert tmp%12#0) // OnCompletion is not NoOp
-        let tmp%13#0: uint64 = (txn ApplicationID)
-        (assert tmp%13#0) // can only call when not creating
-        let reinterpret_bytes[8]%3#0: bytes[8] = (txna ApplicationArgs 1)
-        let start#2: uint64 = (btoi reinterpret_bytes[8]%3#0)
-        let reinterpret_bytes[8]%4#0: bytes[8] = (txna ApplicationArgs 2)
-        let stop#2: uint64 = (btoi reinterpret_bytes[8]%4#0)
-        let reinterpret_bytes[8]%5#0: bytes[8] = (txna ApplicationArgs 3)
-        let step#2: uint64 = (btoi reinterpret_bytes[8]%5#0)
+        let tmp%14#0: uint64 = (txn OnCompletion)
+        let tmp%15#0: bool = (! tmp%14#0)
+        (assert tmp%15#0) // OnCompletion is not NoOp
+        let tmp%16#0: uint64 = (txn ApplicationID)
+        (assert tmp%16#0) // can only call when not creating
+        let tmp%18#0: bytes = (txna ApplicationArgs 1)
+        let value_len%3#0: uint64 = (len tmp%18#0)
+        let size_is_correct%3#0: bool = (== value_len%3#0 8u)
+        (assert size_is_correct%3#0) // invalid number of bytes for arc4.uint64
+        let start#2: uint64 = (btoi tmp%18#0)
+        let tmp%20#0: bytes = (txna ApplicationArgs 2)
+        let value_len%4#0: uint64 = (len tmp%20#0)
+        let size_is_correct%4#0: bool = (== value_len%4#0 8u)
+        (assert size_is_correct%4#0) // invalid number of bytes for arc4.uint64
+        let stop#2: uint64 = (btoi tmp%20#0)
+        let tmp%22#0: bytes = (txna ApplicationArgs 3)
+        let value_len%5#0: uint64 = (len tmp%22#0)
+        let size_is_correct%5#0: bool = (== value_len%5#0 8u)
+        (assert size_is_correct%5#0) // invalid number of bytes for arc4.uint64
+        let step#2: uint64 = (btoi tmp%22#0)
         let total#9: uint64 = 0u
         goto block@37
     block@37: // while_top_L15
@@ -67,22 +85,31 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@42: // L15
         let total#12: uint64 = φ(total#11 <- block@39, total#10 <- block@41)
         let val_as_bytes%1#0: bytes[8] = (itob total#12)
-        let tmp%18#0: bytes = (concat 0x151f7c75 val_as_bytes%1#0)
-        (log tmp%18#0)
+        let tmp%24#0: bytes = (concat 0x151f7c75 val_as_bytes%1#0)
+        (log tmp%24#0)
         let tests/approvals/for-loops.algo.ts::ForLoopsAlgo.__puya_arc4_router__%0#1: bool = 1u
         goto block@14
     block@5: // test_for_loop_continue_route_L24
-        let tmp%19#0: uint64 = (txn OnCompletion)
-        let tmp%20#0: bool = (! tmp%19#0)
-        (assert tmp%20#0) // OnCompletion is not NoOp
-        let tmp%21#0: uint64 = (txn ApplicationID)
-        (assert tmp%21#0) // can only call when not creating
-        let reinterpret_bytes[8]%6#0: bytes[8] = (txna ApplicationArgs 1)
-        let start#1: uint64 = (btoi reinterpret_bytes[8]%6#0)
-        let reinterpret_bytes[8]%7#0: bytes[8] = (txna ApplicationArgs 2)
-        let stop#1: uint64 = (btoi reinterpret_bytes[8]%7#0)
-        let reinterpret_bytes[8]%8#0: bytes[8] = (txna ApplicationArgs 3)
-        let step#1: uint64 = (btoi reinterpret_bytes[8]%8#0)
+        let tmp%25#0: uint64 = (txn OnCompletion)
+        let tmp%26#0: bool = (! tmp%25#0)
+        (assert tmp%26#0) // OnCompletion is not NoOp
+        let tmp%27#0: uint64 = (txn ApplicationID)
+        (assert tmp%27#0) // can only call when not creating
+        let tmp%29#0: bytes = (txna ApplicationArgs 1)
+        let value_len%6#0: uint64 = (len tmp%29#0)
+        let size_is_correct%6#0: bool = (== value_len%6#0 8u)
+        (assert size_is_correct%6#0) // invalid number of bytes for arc4.uint64
+        let start#1: uint64 = (btoi tmp%29#0)
+        let tmp%31#0: bytes = (txna ApplicationArgs 2)
+        let value_len%7#0: uint64 = (len tmp%31#0)
+        let size_is_correct%7#0: bool = (== value_len%7#0 8u)
+        (assert size_is_correct%7#0) // invalid number of bytes for arc4.uint64
+        let stop#1: uint64 = (btoi tmp%31#0)
+        let tmp%33#0: bytes = (txna ApplicationArgs 3)
+        let value_len%8#0: uint64 = (len tmp%33#0)
+        let size_is_correct%8#0: bool = (== value_len%8#0 8u)
+        (assert size_is_correct%8#0) // invalid number of bytes for arc4.uint64
+        let step#1: uint64 = (btoi tmp%33#0)
         let total#5: uint64 = 0u
         goto block@29
     block@29: // while_top_L26
@@ -104,22 +131,31 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto block@29
     block@34: // after_while_L26
         let val_as_bytes%2#0: bytes[8] = (itob total#6)
-        let tmp%26#0: bytes = (concat 0x151f7c75 val_as_bytes%2#0)
-        (log tmp%26#0)
+        let tmp%35#0: bytes = (concat 0x151f7c75 val_as_bytes%2#0)
+        (log tmp%35#0)
         let tests/approvals/for-loops.algo.ts::ForLoopsAlgo.__puya_arc4_router__%0#2: bool = 1u
         goto block@14
     block@6: // test_for_loop_labelled_route_L32
-        let tmp%27#0: uint64 = (txn OnCompletion)
-        let tmp%28#0: bool = (! tmp%27#0)
-        (assert tmp%28#0) // OnCompletion is not NoOp
-        let tmp%29#0: uint64 = (txn ApplicationID)
-        (assert tmp%29#0) // can only call when not creating
-        let reinterpret_bytes[8]%9#0: bytes[8] = (txna ApplicationArgs 1)
-        let start#0: uint64 = (btoi reinterpret_bytes[8]%9#0)
-        let reinterpret_bytes[8]%10#0: bytes[8] = (txna ApplicationArgs 2)
-        let stop#0: uint64 = (btoi reinterpret_bytes[8]%10#0)
-        let reinterpret_bytes[8]%11#0: bytes[8] = (txna ApplicationArgs 3)
-        let step#0: uint64 = (btoi reinterpret_bytes[8]%11#0)
+        let tmp%36#0: uint64 = (txn OnCompletion)
+        let tmp%37#0: bool = (! tmp%36#0)
+        (assert tmp%37#0) // OnCompletion is not NoOp
+        let tmp%38#0: uint64 = (txn ApplicationID)
+        (assert tmp%38#0) // can only call when not creating
+        let tmp%40#0: bytes = (txna ApplicationArgs 1)
+        let value_len%9#0: uint64 = (len tmp%40#0)
+        let size_is_correct%9#0: bool = (== value_len%9#0 8u)
+        (assert size_is_correct%9#0) // invalid number of bytes for arc4.uint64
+        let start#0: uint64 = (btoi tmp%40#0)
+        let tmp%42#0: bytes = (txna ApplicationArgs 2)
+        let value_len%10#0: uint64 = (len tmp%42#0)
+        let size_is_correct%10#0: bool = (== value_len%10#0 8u)
+        (assert size_is_correct%10#0) // invalid number of bytes for arc4.uint64
+        let stop#0: uint64 = (btoi tmp%42#0)
+        let tmp%44#0: bytes = (txna ApplicationArgs 3)
+        let value_len%11#0: uint64 = (len tmp%44#0)
+        let size_is_correct%11#0: bool = (== value_len%11#0 8u)
+        (assert size_is_correct%11#0) // invalid number of bytes for arc4.uint64
+        let step#0: uint64 = (btoi tmp%44#0)
         let total#0: uint64 = 0u
         goto block@18
     block@18: // while_top_L34
@@ -153,17 +189,17 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@26: // L34
         let total#4: uint64 = φ(total#2 <- block@22, total#3 <- block@25)
         let val_as_bytes%3#0: bytes[8] = (itob total#4)
-        let tmp%34#0: bytes = (concat 0x151f7c75 val_as_bytes%3#0)
-        (log tmp%34#0)
+        let tmp%46#0: bytes = (concat 0x151f7c75 val_as_bytes%3#0)
+        (log tmp%46#0)
         let tests/approvals/for-loops.algo.ts::ForLoopsAlgo.__puya_arc4_router__%0#3: bool = 1u
         goto block@14
     block@9: // bare_routing_L4
-        let tmp%35#0: uint64 = (txn OnCompletion)
-        goto tmp%35#0 ? block@13 : block@10
+        let tmp%47#0: uint64 = (txn OnCompletion)
+        goto tmp%47#0 ? block@13 : block@10
     block@10: // __algots__.defaultCreate_L4
-        let tmp%36#0: uint64 = (txn ApplicationID)
-        let tmp%37#0: bool = (! tmp%36#0)
-        (assert tmp%37#0) // can only call when creating
+        let tmp%48#0: uint64 = (txn ApplicationID)
+        let tmp%49#0: bool = (! tmp%48#0)
+        (assert tmp%49#0) // can only call when creating
         let tests/approvals/for-loops.algo.ts::ForLoopsAlgo.__puya_arc4_router__%0#4: bool = 1u
         goto block@14
     block@13: // after_if_else_L4

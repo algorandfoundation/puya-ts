@@ -63,12 +63,20 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%20#0: uint64 = (txn ApplicationID)
         let tmp%21#0: bool = (!= tmp%20#0 0u)
         (assert tmp%21#0) // can only call when not creating
-        let reinterpret_bytes[16]%0#0: bytes[16] = (txna ApplicationArgs 1)
+        let tmp%22#0: bytes = (txna ApplicationArgs 1)
+        let value_len%0#0: uint64 = (len tmp%22#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 16u)
+        (assert size_is_correct%0#0) // invalid number of bytes for tests/approvals/named-types.algo.ts::XY
+        let reinterpret_bytes[16]%0#0: bytes[16] = tmp%22#0
         let item0%0#0: bytes = (extract3 reinterpret_bytes[16]%0#0 0u 8u) // on error: Index access is out of bounds
         let item0%1#0: uint64 = (btoi item0%0#0)
         let item1%0#0: bytes = (extract3 reinterpret_bytes[16]%0#0 8u 8u) // on error: Index access is out of bounds
         let item1%1#0: uint64 = (btoi item1%0#0)
-        let reinterpret_bytes[16]%1#0: bytes[16] = (txna ApplicationArgs 2)
+        let tmp%23#0: bytes = (txna ApplicationArgs 2)
+        let value_len%1#0: uint64 = (len tmp%23#0)
+        let size_is_correct%1#0: bool = (== value_len%1#0 16u)
+        (assert size_is_correct%1#0) // invalid number of bytes for tests/approvals/named-types.algo.ts::YX
+        let reinterpret_bytes[16]%1#0: bytes[16] = tmp%23#0
         let item0%2#0: bytes = (extract3 reinterpret_bytes[16]%1#0 0u 8u) // on error: Index access is out of bounds
         let item0%3#0: uint64 = (btoi item0%2#0)
         let item1%2#0: bytes = (extract3 reinterpret_bytes[16]%1#0 8u 8u) // on error: Index access is out of bounds
@@ -77,12 +85,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__%0#3: bool = 1u
         goto block@15
     block@7: // testing_route_L40
-        let tmp%22#0: uint64 = (txn OnCompletion)
-        let tmp%23#0: bool = (== tmp%22#0 NoOp)
-        (assert tmp%23#0) // OnCompletion is not NoOp
-        let tmp%24#0: uint64 = (txn ApplicationID)
-        let tmp%25#0: bool = (!= tmp%24#0 0u)
-        (assert tmp%25#0) // can only call when not creating
+        let tmp%24#0: uint64 = (txn OnCompletion)
+        let tmp%25#0: bool = (== tmp%24#0 NoOp)
+        (assert tmp%25#0) // OnCompletion is not NoOp
+        let tmp%26#0: uint64 = (txn ApplicationID)
+        let tmp%27#0: bool = (!= tmp%26#0 0u)
+        (assert tmp%27#0) // can only call when not creating
         let (elements_to_encode%6#0: uint64, elements_to_encode%7#0: uint64, elements_to_encode%8#0: uint64, elements_to_encode%9#0: uint64, elements_to_encode%10#0: uint64, elements_to_encode%11#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.testing()
         let val_as_bytes%6#0: bytes[8] = (itob elements_to_encode%6#0)
         let val_as_bytes%7#0: bytes[8] = (itob elements_to_encode%7#0)
@@ -99,8 +107,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let encoded_tuple_buffer%19#0: bytes = (concat 0x encoded_tuple_buffer%11#0)
         let encoded_tuple_buffer%20#0: bytes = (concat encoded_tuple_buffer%19#0 encoded_tuple_buffer%14#0)
         let encoded_tuple_buffer%21#0: bytes = (concat encoded_tuple_buffer%20#0 encoded_tuple_buffer%17#0)
-        let tmp%26#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%21#0)
-        (log tmp%26#0)
+        let tmp%28#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%21#0)
+        (log tmp%28#0)
         let tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__%0#4: bool = 1u
         goto block@15
     block@8: // switch_case_default_L14
@@ -108,12 +116,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@9: // switch_case_next_L14
         goto block@14
     block@10: // bare_routing_L14
-        let tmp%27#0: uint64 = (txn OnCompletion)
-        switch tmp%27#0 {0u => block@11, * => block@12}
+        let tmp%29#0: uint64 = (txn OnCompletion)
+        switch tmp%29#0 {0u => block@11, * => block@12}
     block@11: // __algots__.defaultCreate_L14
-        let tmp%28#0: uint64 = (txn ApplicationID)
-        let tmp%29#0: bool = (== tmp%28#0 0u)
-        (assert tmp%29#0) // can only call when creating
+        let tmp%30#0: uint64 = (txn ApplicationID)
+        let tmp%31#0: bool = (== tmp%30#0 0u)
+        (assert tmp%31#0) // can only call when creating
         tests/approvals/named-types.algo.ts::MyContract.__algots__.defaultCreate()
         let tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__%0#5: bool = 1u
         goto block@15

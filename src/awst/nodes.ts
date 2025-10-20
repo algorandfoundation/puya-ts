@@ -1492,17 +1492,17 @@ export class ARC4ABIMethodConfig {
     this.allowedCompletionTypes = props.allowedCompletionTypes
     this.create = props.create
     this.name = props.name
+    this.validateEncoding = props.validateEncoding
     this.readonly = props.readonly
     this.defaultArgs = props.defaultArgs
-    this.validateEncoding = props.validateEncoding
   }
   readonly sourceLocation: SourceLocation
   readonly allowedCompletionTypes: Array<OnCompletionAction>
   readonly create: ARC4CreateOption
   readonly name: string
+  readonly validateEncoding: boolean | null
   readonly readonly: boolean
   readonly defaultArgs: Map<string, ABIMethodArgMemberDefault | ABIMethodArgConstantDefault>
-  readonly validateEncoding: boolean | null
 }
 export type Constant = IntegerConstant | DecimalConstant | BoolConstant | BytesConstant | AddressConstant | MethodConstant
 export type LValue =

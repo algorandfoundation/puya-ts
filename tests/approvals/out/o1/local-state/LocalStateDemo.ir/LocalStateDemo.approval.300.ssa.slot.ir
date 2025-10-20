@@ -20,30 +20,40 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         (assert tmp%9#0) // can only call when not creating
         let tmp%11#0: bytes = (txna ApplicationArgs 1)
+        let tuple_len%0#0: uint64 = (len tmp%11#0)
+        let offset%0#0: uint64 = (extract_uint16 tmp%11#0 8u) // on error: invalid tuple encoding
+        let offset_is_correct%0#0: bool = (== offset%0#0 10u)
+        (assert offset_is_correct%0#0) // invalid tail pointer at index 1 of lib.d.ts::object
+        let item%0#0: bytes = (substring3 tmp%11#0 offset%0#0 tuple_len%0#0)
+        let length%0#0: uint64 = (extract_uint16 item%0#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%0#0: uint64 = (+ length%0#0 2u)
+        let num_bytes_value%0#0: uint64 = (+ 10u num_bytes_with_header%0#0)
+        let size_is_correct%0#0: bool = (== tuple_len%0#0 num_bytes_value%0#0)
+        (assert size_is_correct%0#0) // invalid number of bytes for lib.d.ts::object
         let item0%1#0: uint64 = (extract_uint64 tmp%11#0 0u)
-        let item_start_offset%0#0: uint64 = (extract_uint16 tmp%11#0 8u)
-        let item_end_offset%0#0: uint64 = (len tmp%11#0)
-        let item1%0#0: bytes = (substring3 tmp%11#0 item_start_offset%0#0 item_end_offset%0#0)
-        let item1%1#0: bytes = ((extract 2 0) item1%0#0)
-        let reinterpret_bytes[80]%0#0: bytes[80] = (txna ApplicationArgs 2)
-        tests/approvals/local-state.algo.ts::LocalStateDemo.setState(item0%1#0, item1%1#0, reinterpret_bytes[80]%0#0)
+        let item1%1#0: bytes = ((extract 2 0) item%0#0)
+        let tmp%12#0: bytes = (txna ApplicationArgs 2)
+        let value_len%1#0: uint64 = (len tmp%12#0)
+        let size_is_correct%1#0: bool = (== value_len%1#0 80u)
+        (assert size_is_correct%1#0) // invalid number of bytes for arc4.static_array<arc4.uint64, 10>
+        tests/approvals/local-state.algo.ts::LocalStateDemo.setState(item0%1#0, item1%1#0, tmp%12#0)
         let tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#1: bool = 1u
         goto block@14
     block@5: // getState_route_L25
-        let tmp%12#0: uint64 = (txn OnCompletion)
-        let tmp%13#0: bool = (! tmp%12#0)
-        (assert tmp%13#0) // OnCompletion is not NoOp
-        let tmp%14#0: uint64 = (txn ApplicationID)
-        (assert tmp%14#0) // can only call when not creating
+        let tmp%13#0: uint64 = (txn OnCompletion)
+        let tmp%14#0: bool = (! tmp%13#0)
+        (assert tmp%14#0) // OnCompletion is not NoOp
+        let tmp%15#0: uint64 = (txn ApplicationID)
+        (assert tmp%15#0) // can only call when not creating
         let (elements_to_encode%0#0: uint64, elements_to_encode%1#0: uint64, elements_to_encode%2#0: bytes, elements_to_encode%3#0: bytes, elements_to_encode%4#0: bytes[80]) = tests/approvals/local-state.algo.ts::LocalStateDemo.getState()
         let val_as_bytes%0#0: bytes[8] = (itob elements_to_encode%0#0)
         let val_as_bytes%1#0: bytes[8] = (itob elements_to_encode%1#0)
-        let length%0#0: uint64 = (len elements_to_encode%2#0)
-        let as_bytes%0#0: bytes[8] = (itob length%0#0)
+        let length%1#0: uint64 = (len elements_to_encode%2#0)
+        let as_bytes%0#0: bytes[8] = (itob length%1#0)
         let length_uint16%0#0: bytes = ((extract 6 2) as_bytes%0#0)
         let encoded_value%0#0: bytes = (concat length_uint16%0#0 elements_to_encode%2#0)
-        let length%1#0: uint64 = (len elements_to_encode%3#0)
-        let as_bytes%1#0: bytes[8] = (itob length%1#0)
+        let length%2#0: uint64 = (len elements_to_encode%3#0)
+        let as_bytes%1#0: bytes[8] = (itob length%2#0)
         let length_uint16%1#0: bytes = ((extract 6 2) as_bytes%1#0)
         let encoded_value%1#0: bytes = (concat length_uint16%1#0 elements_to_encode%3#0)
         let encoded_tuple_buffer%2#0: bytes = (concat val_as_bytes%0#0 val_as_bytes%1#0)
@@ -56,26 +66,26 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let encoded_tuple_buffer%5#0: bytes = (concat encoded_tuple_buffer%4#0 elements_to_encode%4#0)
         let encoded_tuple_buffer%6#0: bytes = (concat encoded_tuple_buffer%5#0 encoded_value%0#0)
         let encoded_tuple_buffer%7#0: bytes = (concat encoded_tuple_buffer%6#0 encoded_value%1#0)
-        let tmp%16#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%7#0)
-        (log tmp%16#0)
+        let tmp%17#0: bytes = (concat 0x151f7c75 encoded_tuple_buffer%7#0)
+        (log tmp%17#0)
         let tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#2: bool = 1u
         goto block@14
     block@6: // clearState_route_L35
-        let tmp%17#0: uint64 = (txn OnCompletion)
-        let tmp%18#0: bool = (! tmp%17#0)
-        (assert tmp%18#0) // OnCompletion is not NoOp
-        let tmp%19#0: uint64 = (txn ApplicationID)
-        (assert tmp%19#0) // can only call when not creating
+        let tmp%18#0: uint64 = (txn OnCompletion)
+        let tmp%19#0: bool = (! tmp%18#0)
+        (assert tmp%19#0) // OnCompletion is not NoOp
+        let tmp%20#0: uint64 = (txn ApplicationID)
+        (assert tmp%20#0) // can only call when not creating
         tests/approvals/local-state.algo.ts::LocalStateDemo.clearState()
         let tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#3: bool = 1u
         goto block@14
     block@9: // bare_routing_L7
-        let tmp%21#0: uint64 = (txn OnCompletion)
-        goto tmp%21#0 ? block@13 : block@10
+        let tmp%22#0: uint64 = (txn OnCompletion)
+        goto tmp%22#0 ? block@13 : block@10
     block@10: // __algots__.defaultCreate_L7
-        let tmp%22#0: uint64 = (txn ApplicationID)
-        let tmp%23#0: bool = (! tmp%22#0)
-        (assert tmp%23#0) // can only call when creating
+        let tmp%23#0: uint64 = (txn ApplicationID)
+        let tmp%24#0: bool = (! tmp%23#0)
+        (assert tmp%24#0) // can only call when creating
         let tests/approvals/local-state.algo.ts::LocalStateDemo.__puya_arc4_router__%0#4: bool = 1u
         goto block@14
     block@13: // after_if_else_L7

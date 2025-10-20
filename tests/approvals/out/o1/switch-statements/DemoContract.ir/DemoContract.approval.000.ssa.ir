@@ -27,37 +27,49 @@ subroutine tests/approvals/switch-statements.algo.ts::DemoContract.__puya_arc4_r
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (!= tmp%9#0 0u)
         (assert tmp%10#0) // can only call when not creating
-        let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%11#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
-        tests/approvals/switch-statements.algo.ts::DemoContract.test_side_effects(tmp%11#0)
+        let tmp%11#0: bytes = (txna ApplicationArgs 1)
+        let value_len%0#0: uint64 = (len tmp%11#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 8u)
+        (assert size_is_correct%0#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%0#0: bytes[8] = tmp%11#0
+        let tmp%12#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
+        tests/approvals/switch-statements.algo.ts::DemoContract.test_side_effects(tmp%12#0)
         return 1u
     block@4: // test_non_trivial_termination_of_clause_route_L83
-        let tmp%12#0: uint64 = (txn OnCompletion)
-        let tmp%13#0: bool = (== tmp%12#0 NoOp)
-        (assert tmp%13#0) // OnCompletion is not NoOp
-        let tmp%14#0: uint64 = (txn ApplicationID)
-        let tmp%15#0: bool = (!= tmp%14#0 0u)
-        (assert tmp%15#0) // can only call when not creating
-        let reinterpret_bytes[8]%1#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%16#0: uint64 = (btoi reinterpret_bytes[8]%1#0)
-        let reinterpret_bytes[8]%2#0: bytes[8] = (txna ApplicationArgs 2)
-        let tmp%17#0: uint64 = (btoi reinterpret_bytes[8]%2#0)
-        let to_encode%0#0: uint64 = tests/approvals/switch-statements.algo.ts::DemoContract.test_non_trivial_termination_of_clause(tmp%16#0, tmp%17#0)
+        let tmp%13#0: uint64 = (txn OnCompletion)
+        let tmp%14#0: bool = (== tmp%13#0 NoOp)
+        (assert tmp%14#0) // OnCompletion is not NoOp
+        let tmp%15#0: uint64 = (txn ApplicationID)
+        let tmp%16#0: bool = (!= tmp%15#0 0u)
+        (assert tmp%16#0) // can only call when not creating
+        let tmp%17#0: bytes = (txna ApplicationArgs 1)
+        let value_len%1#0: uint64 = (len tmp%17#0)
+        let size_is_correct%1#0: bool = (== value_len%1#0 8u)
+        (assert size_is_correct%1#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%1#0: bytes[8] = tmp%17#0
+        let tmp%18#0: uint64 = (btoi reinterpret_bytes[8]%1#0)
+        let tmp%19#0: bytes = (txna ApplicationArgs 2)
+        let value_len%2#0: uint64 = (len tmp%19#0)
+        let size_is_correct%2#0: bool = (== value_len%2#0 8u)
+        (assert size_is_correct%2#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%2#0: bytes[8] = tmp%19#0
+        let tmp%20#0: uint64 = (btoi reinterpret_bytes[8]%2#0)
+        let to_encode%0#0: uint64 = tests/approvals/switch-statements.algo.ts::DemoContract.test_non_trivial_termination_of_clause(tmp%18#0, tmp%20#0)
         let val_as_bytes%0#0: bytes[8] = (itob to_encode%0#0)
-        let tmp%18#0: bytes = (concat 0x151f7c75 val_as_bytes%0#0)
-        (log tmp%18#0)
+        let tmp%21#0: bytes = (concat 0x151f7c75 val_as_bytes%0#0)
+        (log tmp%21#0)
         return 1u
     block@5: // switch_case_default_L4
         goto block@6
     block@6: // switch_case_next_L4
         goto block@11
     block@7: // bare_routing_L4
-        let tmp%19#0: uint64 = (txn OnCompletion)
-        switch tmp%19#0 {0u => block@8, * => block@9}
+        let tmp%22#0: uint64 = (txn OnCompletion)
+        switch tmp%22#0 {0u => block@8, * => block@9}
     block@8: // __algots__.defaultCreate_L4
-        let tmp%20#0: uint64 = (txn ApplicationID)
-        let tmp%21#0: bool = (== tmp%20#0 0u)
-        (assert tmp%21#0) // can only call when creating
+        let tmp%23#0: uint64 = (txn ApplicationID)
+        let tmp%24#0: bool = (== tmp%23#0 0u)
+        (assert tmp%24#0) // can only call when creating
         tests/approvals/switch-statements.algo.ts::DemoContract.__algots__.defaultCreate()
         return 1u
     block@9: // switch_case_default_L4

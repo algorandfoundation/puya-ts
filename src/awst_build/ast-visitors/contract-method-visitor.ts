@@ -164,7 +164,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
           decorator.allowedCompletionTypes ?? conventionalDefaults?.allowedCompletionTypes ?? unspecifiedDefaults.allowedCompletionTypes,
         create: decorator.create ?? conventionalDefaults?.create ?? unspecifiedDefaults.create,
         name: decorator.nameOverride ?? functionType.name,
-        validateEncoding: decorator.validateInputs ?? null,
+        validateEncoding: decorator.validateEncoding ?? null,
         defaultArgs: new Map(
           Object.entries(decorator.defaultArguments).map(([parameterName, argConfig]) => [
             parameterName,

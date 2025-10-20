@@ -18,82 +18,130 @@ subroutine tests/approvals/for-loops.algo.ts::ForLoopsAlgo.__puya_arc4_router__(
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         (assert tmp%6#0) // can only call when not creating
-        let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%7#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
-        let reinterpret_bytes[8]%1#0: bytes[8] = (txna ApplicationArgs 2)
-        let tmp%8#0: uint64 = (btoi reinterpret_bytes[8]%1#0)
-        let reinterpret_bytes[8]%2#0: bytes[8] = (txna ApplicationArgs 3)
-        let tmp%9#0: uint64 = (btoi reinterpret_bytes[8]%2#0)
-        let to_encode%0#0: uint64 = tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop(tmp%7#0, tmp%8#0, tmp%9#0)
+        let tmp%7#0: bytes = (txna ApplicationArgs 1)
+        let value_len%0#0: uint64 = (len tmp%7#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 8u)
+        (assert size_is_correct%0#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%0#0: bytes[8] = tmp%7#0
+        let tmp%8#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
+        let tmp%9#0: bytes = (txna ApplicationArgs 2)
+        let value_len%1#0: uint64 = (len tmp%9#0)
+        let size_is_correct%1#0: bool = (== value_len%1#0 8u)
+        (assert size_is_correct%1#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%1#0: bytes[8] = tmp%9#0
+        let tmp%10#0: uint64 = (btoi reinterpret_bytes[8]%1#0)
+        let tmp%11#0: bytes = (txna ApplicationArgs 3)
+        let value_len%2#0: uint64 = (len tmp%11#0)
+        let size_is_correct%2#0: bool = (== value_len%2#0 8u)
+        (assert size_is_correct%2#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%2#0: bytes[8] = tmp%11#0
+        let tmp%12#0: uint64 = (btoi reinterpret_bytes[8]%2#0)
+        let to_encode%0#0: uint64 = tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop(tmp%8#0, tmp%10#0, tmp%12#0)
         let val_as_bytes%0#0: bytes[8] = (itob to_encode%0#0)
-        let tmp%10#0: bytes = (concat 0x151f7c75 val_as_bytes%0#0)
-        (log tmp%10#0)
+        let tmp%13#0: bytes = (concat 0x151f7c75 val_as_bytes%0#0)
+        (log tmp%13#0)
         return 1u
     block@3: // test_for_loop_break_route_L13
-        let tmp%11#0: uint64 = (txn OnCompletion)
-        let tmp%12#0: bool = (== tmp%11#0 NoOp)
-        (assert tmp%12#0) // OnCompletion is not NoOp
-        let tmp%13#0: uint64 = (txn ApplicationID)
-        let tmp%14#0: bool = (!= tmp%13#0 0u)
-        (assert tmp%14#0) // can only call when not creating
-        let reinterpret_bytes[8]%3#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%15#0: uint64 = (btoi reinterpret_bytes[8]%3#0)
-        let reinterpret_bytes[8]%4#0: bytes[8] = (txna ApplicationArgs 2)
-        let tmp%16#0: uint64 = (btoi reinterpret_bytes[8]%4#0)
-        let reinterpret_bytes[8]%5#0: bytes[8] = (txna ApplicationArgs 3)
-        let tmp%17#0: uint64 = (btoi reinterpret_bytes[8]%5#0)
-        let to_encode%1#0: uint64 = tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_break(tmp%15#0, tmp%16#0, tmp%17#0)
+        let tmp%14#0: uint64 = (txn OnCompletion)
+        let tmp%15#0: bool = (== tmp%14#0 NoOp)
+        (assert tmp%15#0) // OnCompletion is not NoOp
+        let tmp%16#0: uint64 = (txn ApplicationID)
+        let tmp%17#0: bool = (!= tmp%16#0 0u)
+        (assert tmp%17#0) // can only call when not creating
+        let tmp%18#0: bytes = (txna ApplicationArgs 1)
+        let value_len%3#0: uint64 = (len tmp%18#0)
+        let size_is_correct%3#0: bool = (== value_len%3#0 8u)
+        (assert size_is_correct%3#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%3#0: bytes[8] = tmp%18#0
+        let tmp%19#0: uint64 = (btoi reinterpret_bytes[8]%3#0)
+        let tmp%20#0: bytes = (txna ApplicationArgs 2)
+        let value_len%4#0: uint64 = (len tmp%20#0)
+        let size_is_correct%4#0: bool = (== value_len%4#0 8u)
+        (assert size_is_correct%4#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%4#0: bytes[8] = tmp%20#0
+        let tmp%21#0: uint64 = (btoi reinterpret_bytes[8]%4#0)
+        let tmp%22#0: bytes = (txna ApplicationArgs 3)
+        let value_len%5#0: uint64 = (len tmp%22#0)
+        let size_is_correct%5#0: bool = (== value_len%5#0 8u)
+        (assert size_is_correct%5#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%5#0: bytes[8] = tmp%22#0
+        let tmp%23#0: uint64 = (btoi reinterpret_bytes[8]%5#0)
+        let to_encode%1#0: uint64 = tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_break(tmp%19#0, tmp%21#0, tmp%23#0)
         let val_as_bytes%1#0: bytes[8] = (itob to_encode%1#0)
-        let tmp%18#0: bytes = (concat 0x151f7c75 val_as_bytes%1#0)
-        (log tmp%18#0)
+        let tmp%24#0: bytes = (concat 0x151f7c75 val_as_bytes%1#0)
+        (log tmp%24#0)
         return 1u
     block@4: // test_for_loop_continue_route_L24
-        let tmp%19#0: uint64 = (txn OnCompletion)
-        let tmp%20#0: bool = (== tmp%19#0 NoOp)
-        (assert tmp%20#0) // OnCompletion is not NoOp
-        let tmp%21#0: uint64 = (txn ApplicationID)
-        let tmp%22#0: bool = (!= tmp%21#0 0u)
-        (assert tmp%22#0) // can only call when not creating
-        let reinterpret_bytes[8]%6#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%23#0: uint64 = (btoi reinterpret_bytes[8]%6#0)
-        let reinterpret_bytes[8]%7#0: bytes[8] = (txna ApplicationArgs 2)
-        let tmp%24#0: uint64 = (btoi reinterpret_bytes[8]%7#0)
-        let reinterpret_bytes[8]%8#0: bytes[8] = (txna ApplicationArgs 3)
-        let tmp%25#0: uint64 = (btoi reinterpret_bytes[8]%8#0)
-        let to_encode%2#0: uint64 = tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_continue(tmp%23#0, tmp%24#0, tmp%25#0)
+        let tmp%25#0: uint64 = (txn OnCompletion)
+        let tmp%26#0: bool = (== tmp%25#0 NoOp)
+        (assert tmp%26#0) // OnCompletion is not NoOp
+        let tmp%27#0: uint64 = (txn ApplicationID)
+        let tmp%28#0: bool = (!= tmp%27#0 0u)
+        (assert tmp%28#0) // can only call when not creating
+        let tmp%29#0: bytes = (txna ApplicationArgs 1)
+        let value_len%6#0: uint64 = (len tmp%29#0)
+        let size_is_correct%6#0: bool = (== value_len%6#0 8u)
+        (assert size_is_correct%6#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%6#0: bytes[8] = tmp%29#0
+        let tmp%30#0: uint64 = (btoi reinterpret_bytes[8]%6#0)
+        let tmp%31#0: bytes = (txna ApplicationArgs 2)
+        let value_len%7#0: uint64 = (len tmp%31#0)
+        let size_is_correct%7#0: bool = (== value_len%7#0 8u)
+        (assert size_is_correct%7#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%7#0: bytes[8] = tmp%31#0
+        let tmp%32#0: uint64 = (btoi reinterpret_bytes[8]%7#0)
+        let tmp%33#0: bytes = (txna ApplicationArgs 3)
+        let value_len%8#0: uint64 = (len tmp%33#0)
+        let size_is_correct%8#0: bool = (== value_len%8#0 8u)
+        (assert size_is_correct%8#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%8#0: bytes[8] = tmp%33#0
+        let tmp%34#0: uint64 = (btoi reinterpret_bytes[8]%8#0)
+        let to_encode%2#0: uint64 = tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_continue(tmp%30#0, tmp%32#0, tmp%34#0)
         let val_as_bytes%2#0: bytes[8] = (itob to_encode%2#0)
-        let tmp%26#0: bytes = (concat 0x151f7c75 val_as_bytes%2#0)
-        (log tmp%26#0)
+        let tmp%35#0: bytes = (concat 0x151f7c75 val_as_bytes%2#0)
+        (log tmp%35#0)
         return 1u
     block@5: // test_for_loop_labelled_route_L32
-        let tmp%27#0: uint64 = (txn OnCompletion)
-        let tmp%28#0: bool = (== tmp%27#0 NoOp)
-        (assert tmp%28#0) // OnCompletion is not NoOp
-        let tmp%29#0: uint64 = (txn ApplicationID)
-        let tmp%30#0: bool = (!= tmp%29#0 0u)
-        (assert tmp%30#0) // can only call when not creating
-        let reinterpret_bytes[8]%9#0: bytes[8] = (txna ApplicationArgs 1)
-        let tmp%31#0: uint64 = (btoi reinterpret_bytes[8]%9#0)
-        let reinterpret_bytes[8]%10#0: bytes[8] = (txna ApplicationArgs 2)
-        let tmp%32#0: uint64 = (btoi reinterpret_bytes[8]%10#0)
-        let reinterpret_bytes[8]%11#0: bytes[8] = (txna ApplicationArgs 3)
-        let tmp%33#0: uint64 = (btoi reinterpret_bytes[8]%11#0)
-        let to_encode%3#0: uint64 = tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_labelled(tmp%31#0, tmp%32#0, tmp%33#0)
+        let tmp%36#0: uint64 = (txn OnCompletion)
+        let tmp%37#0: bool = (== tmp%36#0 NoOp)
+        (assert tmp%37#0) // OnCompletion is not NoOp
+        let tmp%38#0: uint64 = (txn ApplicationID)
+        let tmp%39#0: bool = (!= tmp%38#0 0u)
+        (assert tmp%39#0) // can only call when not creating
+        let tmp%40#0: bytes = (txna ApplicationArgs 1)
+        let value_len%9#0: uint64 = (len tmp%40#0)
+        let size_is_correct%9#0: bool = (== value_len%9#0 8u)
+        (assert size_is_correct%9#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%9#0: bytes[8] = tmp%40#0
+        let tmp%41#0: uint64 = (btoi reinterpret_bytes[8]%9#0)
+        let tmp%42#0: bytes = (txna ApplicationArgs 2)
+        let value_len%10#0: uint64 = (len tmp%42#0)
+        let size_is_correct%10#0: bool = (== value_len%10#0 8u)
+        (assert size_is_correct%10#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%10#0: bytes[8] = tmp%42#0
+        let tmp%43#0: uint64 = (btoi reinterpret_bytes[8]%10#0)
+        let tmp%44#0: bytes = (txna ApplicationArgs 3)
+        let value_len%11#0: uint64 = (len tmp%44#0)
+        let size_is_correct%11#0: bool = (== value_len%11#0 8u)
+        (assert size_is_correct%11#0) // invalid number of bytes for arc4.uint64
+        let reinterpret_bytes[8]%11#0: bytes[8] = tmp%44#0
+        let tmp%45#0: uint64 = (btoi reinterpret_bytes[8]%11#0)
+        let to_encode%3#0: uint64 = tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_labelled(tmp%41#0, tmp%43#0, tmp%45#0)
         let val_as_bytes%3#0: bytes[8] = (itob to_encode%3#0)
-        let tmp%34#0: bytes = (concat 0x151f7c75 val_as_bytes%3#0)
-        (log tmp%34#0)
+        let tmp%46#0: bytes = (concat 0x151f7c75 val_as_bytes%3#0)
+        (log tmp%46#0)
         return 1u
     block@6: // switch_case_default_L4
         goto block@7
     block@7: // switch_case_next_L4
         goto block@12
     block@8: // bare_routing_L4
-        let tmp%35#0: uint64 = (txn OnCompletion)
-        switch tmp%35#0 {0u => block@9, * => block@10}
+        let tmp%47#0: uint64 = (txn OnCompletion)
+        switch tmp%47#0 {0u => block@9, * => block@10}
     block@9: // __algots__.defaultCreate_L4
-        let tmp%36#0: uint64 = (txn ApplicationID)
-        let tmp%37#0: bool = (== tmp%36#0 0u)
-        (assert tmp%37#0) // can only call when creating
+        let tmp%48#0: uint64 = (txn ApplicationID)
+        let tmp%49#0: bool = (== tmp%48#0 0u)
+        (assert tmp%49#0) // can only call when creating
         tests/approvals/for-loops.algo.ts::ForLoopsAlgo.__algots__.defaultCreate()
         return 1u
     block@10: // switch_case_default_L4

@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 8 7
+    intcblock 1 0 8 16
     bytecblock 0x151f7c75 0x151f7c75a0 0x0000 0x800080
     // tests/approvals/native-arrays.algo.ts:6
     // export class NativeArraysAlgo extends Contract {
@@ -89,6 +89,11 @@ main_structs_route@6:
     // export class NativeArraysAlgo extends Contract {
     txna ApplicationArgs 1
     dup
+    len
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for tests/approvals/native-arrays.algo.ts::Vector
+    dup
     intc_1 // 0
     extract_uint64
     swap
@@ -171,14 +176,14 @@ dynamic_array_concat_bits:
     dup
     uncover 2
     uncover 3
-    intc_3 // 7
+    pushint 7 // 7
     +
     intc_2 // 8
     /
     dup
     cover 3
     swap
-    intc_3 // 7
+    pushint 7 // 7
     +
     intc_2 // 8
     /
@@ -201,7 +206,7 @@ dynamic_array_concat_bits_after_if_else@2:
     intc_1 // 0
     frame_bury 0
     frame_dig 3
-    pushint 16 // 16
+    intc_3 // 16
     +
     dup
     frame_bury 2
@@ -255,7 +260,7 @@ structs:
     // myVectors = [{ x, y }]
     dup
     len
-    pushint 16 // 16
+    intc_3 // 16
     /
     itob
     extract 6 2

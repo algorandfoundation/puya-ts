@@ -43,21 +43,33 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) gtxn_idx%0#0)
         let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 pay)
         (assert gtxn_type_matches%0#0) // transaction type is pay
-        let reinterpret_bytes[1]%0#0: bytes[1] = (txna ApplicationArgs 1)
-        let tmp%17#0: uint64 = (btoi reinterpret_bytes[1]%0#0)
-        let tmp%18#0: uint64 = ((txnas Assets) tmp%17#0)
-        let reinterpret_bytes[1]%1#0: bytes[1] = (txna ApplicationArgs 2)
-        let tmp%19#0: uint64 = (btoi reinterpret_bytes[1]%1#0)
-        let tmp%20#0: bytes[32] = ((txnas Accounts) tmp%19#0)
-        let reinterpret_bytes[1]%2#0: bytes[1] = (txna ApplicationArgs 3)
-        let tmp%21#0: uint64 = (btoi reinterpret_bytes[1]%2#0)
-        let tmp%22#0: uint64 = ((txnas Applications) tmp%21#0)
-        let tmp%23#0: uint64 = (txn GroupIndex)
-        let gtxn_idx%1#0: uint64 = (- tmp%23#0 1u)
+        let tmp%17#0: bytes = (txna ApplicationArgs 1)
+        let value_len%0#0: uint64 = (len tmp%17#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 1u)
+        (assert size_is_correct%0#0) // invalid number of bytes for arc4.uint8
+        let reinterpret_bytes[1]%0#0: bytes[1] = tmp%17#0
+        let tmp%18#0: uint64 = (btoi reinterpret_bytes[1]%0#0)
+        let tmp%19#0: uint64 = ((txnas Assets) tmp%18#0)
+        let tmp%20#0: bytes = (txna ApplicationArgs 2)
+        let value_len%1#0: uint64 = (len tmp%20#0)
+        let size_is_correct%1#0: bool = (== value_len%1#0 1u)
+        (assert size_is_correct%1#0) // invalid number of bytes for arc4.uint8
+        let reinterpret_bytes[1]%1#0: bytes[1] = tmp%20#0
+        let tmp%21#0: uint64 = (btoi reinterpret_bytes[1]%1#0)
+        let tmp%22#0: bytes[32] = ((txnas Accounts) tmp%21#0)
+        let tmp%23#0: bytes = (txna ApplicationArgs 3)
+        let value_len%2#0: uint64 = (len tmp%23#0)
+        let size_is_correct%2#0: bool = (== value_len%2#0 1u)
+        (assert size_is_correct%2#0) // invalid number of bytes for arc4.uint8
+        let reinterpret_bytes[1]%2#0: bytes[1] = tmp%23#0
+        let tmp%24#0: uint64 = (btoi reinterpret_bytes[1]%2#0)
+        let tmp%25#0: uint64 = ((txnas Applications) tmp%24#0)
+        let tmp%26#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%1#0: uint64 = (- tmp%26#0 1u)
         let gtxn_type%1#0: uint64 = ((gtxns TypeEnum) gtxn_idx%1#0)
         let gtxn_type_matches%1#0: bool = (== gtxn_type%1#0 appl)
         (assert gtxn_type_matches%1#0) // transaction type is appl
-        tests/approvals/arc4-method-selector.algo.ts::ContractTwo.referenceTypes(gtxn_idx%0#0, tmp%18#0, tmp%20#0, tmp%22#0, gtxn_idx%1#0)
+        tests/approvals/arc4-method-selector.algo.ts::ContractTwo.referenceTypes(gtxn_idx%0#0, tmp%19#0, tmp%22#0, tmp%25#0, gtxn_idx%1#0)
         let tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__%0#2: bool = 1u
         goto block@13
     block@6: // switch_case_default_L20
@@ -65,12 +77,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@7: // switch_case_next_L20
         goto block@12
     block@8: // bare_routing_L20
-        let tmp%24#0: uint64 = (txn OnCompletion)
-        switch tmp%24#0 {0u => block@9, * => block@10}
+        let tmp%27#0: uint64 = (txn OnCompletion)
+        switch tmp%27#0 {0u => block@9, * => block@10}
     block@9: // __algots__.defaultCreate_L20
-        let tmp%25#0: uint64 = (txn ApplicationID)
-        let tmp%26#0: bool = (== tmp%25#0 0u)
-        (assert tmp%26#0) // can only call when creating
+        let tmp%28#0: uint64 = (txn ApplicationID)
+        let tmp%29#0: bool = (== tmp%28#0 0u)
+        (assert tmp%29#0) // can only call when creating
         tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__algots__.defaultCreate()
         let tests/approvals/arc4-method-selector.algo.ts::ContractTwo.__puya_arc4_router__%0#3: bool = 1u
         goto block@13

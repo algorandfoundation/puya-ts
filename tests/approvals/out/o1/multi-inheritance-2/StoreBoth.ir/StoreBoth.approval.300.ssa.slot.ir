@@ -12,30 +12,43 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%5#0: uint64 = (txn ApplicationID)
         (assert tmp%5#0) // can only call when not creating
         let tmp%7#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = (extract_uint16 tmp%7#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%0#0: uint64 = (+ length%0#0 2u)
+        let value_len%0#0: uint64 = (len tmp%7#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 num_bytes_with_header%0#0)
+        (assert size_is_correct%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         let tmp%8#0: bytes = ((extract 2 0) tmp%7#0)
-        let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 2)
-        let tmp%9#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
-        tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.test(tmp%8#0, tmp%9#0)
+        let tmp%9#0: bytes = (txna ApplicationArgs 2)
+        let value_len%1#0: uint64 = (len tmp%9#0)
+        let size_is_correct%1#0: bool = (== value_len%1#0 8u)
+        (assert size_is_correct%1#0) // invalid number of bytes for arc4.uint64
+        let tmp%10#0: uint64 = (btoi tmp%9#0)
+        tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.test(tmp%8#0, tmp%10#0)
         let tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.__puya_arc4_router__%0#0: bool = 1u
         goto block@14
     block@6: // setStore_route_L8
-        let tmp%10#0: uint64 = (txn OnCompletion)
-        let tmp%11#0: bool = (! tmp%10#0)
-        (assert tmp%11#0) // OnCompletion is not NoOp
-        let tmp%12#0: uint64 = (txn ApplicationID)
-        (assert tmp%12#0) // can only call when not creating
-        let tmp%14#0: bytes = (txna ApplicationArgs 1)
-        let tmp%15#0: bytes = ((extract 2 0) tmp%14#0)
-        tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore(tmp%15#0)
+        let tmp%11#0: uint64 = (txn OnCompletion)
+        let tmp%12#0: bool = (! tmp%11#0)
+        (assert tmp%12#0) // OnCompletion is not NoOp
+        let tmp%13#0: uint64 = (txn ApplicationID)
+        (assert tmp%13#0) // can only call when not creating
+        let tmp%15#0: bytes = (txna ApplicationArgs 1)
+        let length%1#0: uint64 = (extract_uint16 tmp%15#0 0u) // on error: invalid array length header
+        let num_bytes_with_header%1#0: uint64 = (+ length%1#0 2u)
+        let value_len%2#0: uint64 = (len tmp%15#0)
+        let size_is_correct%2#0: bool = (== value_len%2#0 num_bytes_with_header%1#0)
+        (assert size_is_correct%2#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let tmp%16#0: bytes = ((extract 2 0) tmp%15#0)
+        tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore(tmp%16#0)
         let tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.__puya_arc4_router__%0#1: bool = 1u
         goto block@14
     block@9: // bare_routing_L21
-        let tmp%16#0: uint64 = (txn OnCompletion)
-        goto tmp%16#0 ? block@13 : block@10
+        let tmp%17#0: uint64 = (txn OnCompletion)
+        goto tmp%17#0 ? block@13 : block@10
     block@10: // __algots__.defaultCreate_L21
-        let tmp%17#0: uint64 = (txn ApplicationID)
-        let tmp%18#0: bool = (! tmp%17#0)
-        (assert tmp%18#0) // can only call when creating
+        let tmp%18#0: uint64 = (txn ApplicationID)
+        let tmp%19#0: bool = (! tmp%18#0)
+        (assert tmp%19#0) // can only call when creating
         let tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.__puya_arc4_router__%0#2: bool = 1u
         goto block@14
     block@13: // after_if_else_L21

@@ -3,6 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
+    intcblock 1
     // tests/approvals/precompiled-apps.algo.ts:104
     // export class ReceivesReferenceTypes extends Contract {
     txn NumAppArgs
@@ -28,18 +29,33 @@ main_receivesReferenceTypes_route@3:
     // tests/approvals/precompiled-apps.algo.ts:104
     // export class ReceivesReferenceTypes extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
     btoi
     txnas Applications
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
     btoi
     txnas Accounts
     txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
     btoi
     txnas Assets
     // tests/approvals/precompiled-apps.algo.ts:105
     // receivesReferenceTypes(app: Application, acc: Account, asset: Asset) {
     callsub receivesReferenceTypes
-    pushint 1 // 1
+    intc_0 // 1
     return
 
 main_bare_routing@6:
@@ -50,7 +66,7 @@ main_bare_routing@6:
     txn ApplicationID
     !
     assert // can only call when creating
-    pushint 1 // 1
+    intc_0 // 1
     return
 
 

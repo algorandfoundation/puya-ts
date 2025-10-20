@@ -11,8 +11,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%4#0) // OnCompletion is not NoOp
         let tmp%5#0: uint64 = (txn ApplicationID)
         (assert tmp%5#0) // can only call when not creating
-        let reinterpret_bytes[8]%0#0: bytes[8] = (txna ApplicationArgs 1)
-        let x#0: uint64 = (btoi reinterpret_bytes[8]%0#0)
+        let tmp%7#0: bytes = (txna ApplicationArgs 1)
+        let value_len%0#0: uint64 = (len tmp%7#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 8u)
+        (assert size_is_correct%0#0) // invalid number of bytes for arc4.uint64
+        let x#0: uint64 = (btoi tmp%7#0)
         let tmp%0#2: bool = (== x#0 5u)
         (assert tmp%0#2) // x should be 5
         let tmp%1#1: bool = (> x#0 4u)
@@ -43,8 +46,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert and_result%0#2)
         goto tmp%6#1 ? block@19 : block@21
     block@19: // and_contd_L17
-        let tmp%11#0: uint64 = (extract_uint64 xArray#0 2u)
-        let tmp%12#0: bool = (> tmp%11#0 4u)
+        let tmp%11#1: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%12#0: bool = (> tmp%11#1 4u)
         goto tmp%12#0 ? block@20 : block@21
     block@20: // bool_true_L17
         let and_result%1#0: bool = 1u
@@ -100,12 +103,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#0: bool = 1u
         goto block@11
     block@6: // bare_routing_L4
-        let tmp%8#0: uint64 = (txn OnCompletion)
-        goto tmp%8#0 ? block@10 : block@7
+        let tmp%9#0: uint64 = (txn OnCompletion)
+        goto tmp%9#0 ? block@10 : block@7
     block@7: // __algots__.defaultCreate_L4
-        let tmp%9#0: uint64 = (txn ApplicationID)
-        let tmp%10#0: bool = (! tmp%9#0)
-        (assert tmp%10#0) // can only call when creating
+        let tmp%10#0: uint64 = (txn ApplicationID)
+        let tmp%11#0: bool = (! tmp%10#0)
+        (assert tmp%11#0) // can only call when creating
         let tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#1: bool = 1u
         goto block@11
     block@10: // after_if_else_L4

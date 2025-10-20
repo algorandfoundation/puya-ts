@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1
+    intcblock 0 1 10
     bytecblock "l1" "localUint2" "b1" "localBytes2" "localEncoded"
     // tests/approvals/local-state.algo.ts:7
     // export class LocalStateDemo extends Contract {
@@ -195,18 +195,39 @@ main_setState_route@4:
     // export class LocalStateDemo extends Contract {
     txna ApplicationArgs 1
     dup
-    intc_0 // 0
-    extract_uint64
+    len
     dig 1
     pushint 8 // 8
-    extract_uint16
+    extract_uint16 // on error: invalid tuple encoding
+    dup
+    intc_2 // 10
+    ==
+    assert // invalid tail pointer at index 1 of lib.d.ts::object
     dig 2
-    len
-    uncover 3
-    cover 2
+    swap
+    dig 2
     substring3
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    pushint 2 // 2
+    +
+    intc_2 // 10
+    +
+    uncover 2
+    ==
+    assert // invalid number of bytes for lib.d.ts::object
+    swap
+    intc_0 // 0
+    extract_uint64
+    swap
     extract 2 0
     txna ApplicationArgs 2
+    dup
+    len
+    pushint 80 // 80
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint64, 10>
     // tests/approvals/local-state.algo.ts:18
     // this.localUint(Txn.sender).value = a
     txn Sender
