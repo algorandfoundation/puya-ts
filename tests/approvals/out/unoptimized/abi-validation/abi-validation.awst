@@ -34,7 +34,7 @@ contract AbiValidationAlgo
   manualValidationAfterConvert(rawBytes: bytes): uint64
   {
     value: arc4.static_array<arc4.byte> = ARC4_FROM_BYTES(rawBytes, arc4.static_array<arc4.byte>, validate=false)
-    ARC4_FROM_BYTES(reinterpret_cast<bytes>(value), arc4.static_array<arc4.byte>, validate=true), void
+    ARC4_FROM_BYTES(rawBytes, arc4.static_array<arc4.byte>, validate=true), void
     return value.length
   }
   

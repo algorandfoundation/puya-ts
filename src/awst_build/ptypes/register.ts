@@ -29,6 +29,7 @@ import {
   EncodeArc4FunctionBuilder,
   MethodSelectorFunctionBuilder,
   SizeOfFunctionBuilder,
+  ValidateBytesFunctionBuilder,
 } from '../eb/arc4/util'
 import {
   FixedArrayClassBuilder,
@@ -128,6 +129,7 @@ import {
   UintN8Class,
   UintNGeneric,
   UintNType,
+  validateBytesFunction,
 } from './arc4-types'
 import {
   AccountFunction,
@@ -480,6 +482,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
 
   // ARC4 lib
   typeRegistry.register({ ptype: convertBytesFunction, singletonEb: ConvertBytesFunctionBuilder })
+  typeRegistry.register({ ptype: validateBytesFunction, singletonEb: ValidateBytesFunctionBuilder })
   typeRegistry.register({ ptype: encodeArc4Function, singletonEb: EncodeArc4FunctionBuilder })
   typeRegistry.register({ ptype: decodeArc4Function, singletonEb: DecodeArc4FunctionBuilder })
   typeRegistry.register({ ptype: methodSelectorFunction, singletonEb: MethodSelectorFunctionBuilder })

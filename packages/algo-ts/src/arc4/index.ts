@@ -237,6 +237,15 @@ export function convertBytes<T extends ARC4Encoded>(
 }
 
 /**
+ * Performs validation to ensure the bytes value is well-formed for type T, errors if it is not
+ * @param bytes A bytes value
+ *
+ */
+export function validateBytes<T>(bytes: BytesCompat) {
+  throw new NoImplementation()
+}
+
+/**
  * Decode the provided bytes to a native Algorand TypeScript value
  * @param bytes An arc4 encoded bytes value
  * @param prefix The prefix (if any), present in the bytes value. This prefix will be validated and removed
