@@ -1,0 +1,126 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        goto tmp%0#1 ? block@2 : block@6
+    block@2: // abi_routing_L4
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "testMatches(uint64)void" => block@3, * => block@10}
+    block@3: // testMatches_route_L5
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (! tmp%3#0)
+        (assert tmp%4#0) // OnCompletion is not NoOp
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        (assert tmp%5#0) // can only call when not creating
+        let tmp%7#0: bytes = (txna ApplicationArgs 1)
+        let value_len%0#0: uint64 = (len tmp%7#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 8u)
+        (assert size_is_correct%0#0) // invalid number of bytes for arc4.uint64
+        let x#0: uint64 = (btoi tmp%7#0)
+        let tmp%0#2: bool = (== x#0 5u)
+        (assert tmp%0#2) // x should be 5
+        let tmp%1#1: bool = (> x#0 4u)
+        (assert tmp%1#1)
+        let tmp%2#1: bool = (< x#0 6u)
+        (assert tmp%2#1)
+        let tmp%3#1: bool = (>= x#0 5u)
+        (assert tmp%3#1)
+        let tmp%4#1: bool = (<= x#0 5u)
+        (assert tmp%4#1)
+        let array%sub_item%0#1: bytes[8] = (itob x#0)
+        let array%encoded%0#1: encoded_uint64[] = (concat 0x array%sub_item%0#1)
+        let array%data%0#1: encoded_uint64[] = (concat 0x array%encoded%0#1)
+        let encoded%0#0: encoded_uint64[] = array%data%0#1
+        let byte_len%0#0: uint64 = (len encoded%0#0)
+        let len_%0#0: uint64 = (/ byte_len%0#0 8u)
+        let as_bytes%0#0: bytes[8] = (itob len_%0#0)
+        let len_16_bit%0#0: bytes = ((extract 6 2) as_bytes%0#0)
+        let xArray#0: encoded_uint64[] = (concat len_16_bit%0#0 encoded%0#0)
+        let tmp%5#1: uint64 = (extract_uint16 xArray#0 0u)
+        let tmp%6#1: bool = (== tmp%5#1 1u)
+        goto tmp%6#1 ? block@15 : block@17
+    block@15: // and_contd_L16
+        let tmp%7#1: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%8#1: bool = (== tmp%7#1 5u)
+        goto tmp%8#1 ? block@16 : block@17
+    block@16: // bool_true_L16
+        let and_result%0#0: bool = 1u
+        goto block@18
+    block@17: // bool_false_L16
+        let and_result%0#1: bool = 0u
+        goto block@18
+    block@18: // bool_merge_L16
+        let and_result%0#2: bool = φ(and_result%0#0 <- block@16, and_result%0#1 <- block@17)
+        (assert and_result%0#2)
+        goto tmp%6#1 ? block@19 : block@21
+    block@19: // and_contd_L17
+        let tmp%11#1: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%12#0: bool = (> tmp%11#1 4u)
+        goto tmp%12#0 ? block@20 : block@21
+    block@20: // bool_true_L17
+        let and_result%1#0: bool = 1u
+        goto block@22
+    block@21: // bool_false_L17
+        let and_result%1#1: bool = 0u
+        goto block@22
+    block@22: // bool_merge_L17
+        let and_result%1#2: bool = φ(and_result%1#0 <- block@20, and_result%1#1 <- block@21)
+        (assert and_result%1#2)
+        goto tmp%6#1 ? block@23 : block@25
+    block@23: // and_contd_L18
+        let tmp%15#0: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%16#0: bool = (< tmp%15#0 6u)
+        goto tmp%16#0 ? block@24 : block@25
+    block@24: // bool_true_L18
+        let and_result%2#0: bool = 1u
+        goto block@26
+    block@25: // bool_false_L18
+        let and_result%2#1: bool = 0u
+        goto block@26
+    block@26: // bool_merge_L18
+        let and_result%2#2: bool = φ(and_result%2#0 <- block@24, and_result%2#1 <- block@25)
+        (assert and_result%2#2)
+        goto tmp%6#1 ? block@27 : block@29
+    block@27: // and_contd_L19
+        let tmp%19#0: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%20#0: bool = (>= tmp%19#0 5u)
+        goto tmp%20#0 ? block@28 : block@29
+    block@28: // bool_true_L19
+        let and_result%3#0: bool = 1u
+        goto block@30
+    block@29: // bool_false_L19
+        let and_result%3#1: bool = 0u
+        goto block@30
+    block@30: // bool_merge_L19
+        let and_result%3#2: bool = φ(and_result%3#0 <- block@28, and_result%3#1 <- block@29)
+        (assert and_result%3#2)
+        goto tmp%6#1 ? block@31 : block@33
+    block@31: // and_contd_L20
+        let tmp%23#0: uint64 = (extract_uint64 xArray#0 2u)
+        let tmp%24#0: bool = (<= tmp%23#0 5u)
+        goto tmp%24#0 ? block@32 : block@33
+    block@32: // bool_true_L20
+        let and_result%4#0: bool = 1u
+        goto block@34
+    block@33: // bool_false_L20
+        let and_result%4#1: bool = 0u
+        goto block@34
+    block@34: // bool_merge_L20
+        let and_result%4#2: bool = φ(and_result%4#0 <- block@32, and_result%4#1 <- block@33)
+        (assert and_result%4#2)
+        let tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#0: bool = 1u
+        goto block@11
+    block@6: // bare_routing_L4
+        let tmp%9#0: uint64 = (txn OnCompletion)
+        goto tmp%9#0 ? block@10 : block@7
+    block@7: // __algots__.defaultCreate_L4
+        let tmp%10#0: uint64 = (txn ApplicationID)
+        let tmp%11#0: bool = (! tmp%10#0)
+        (assert tmp%11#0) // can only call when creating
+        let tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#1: bool = 1u
+        goto block@11
+    block@10: // after_if_else_L4
+        let tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#2: bool = 0u
+        goto block@11
+    block@11: // after_inlined_tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router___L1
+        let tmp%0#0: bool = φ(tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#0 <- block@34, tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#1 <- block@7, tests/approvals/match-expr.algo.ts::MatchExprAlgo.__puya_arc4_router__%0#2 <- block@10)
+        return tmp%0#0

@@ -157,3 +157,12 @@ export function urange(a: Uint64Compat, b?: Uint64Compat, c?: Uint64Compat): Ite
  * Defines a numeric range including all numbers between from and to
  */
 export type NumberRange = { from: number; to: number }
+
+/**
+ * Performs validation to ensure the value is well-formed, errors if it is not
+ * @param value The value to validate
+ *
+ */
+export function validateEncoding<T>(value: T) {
+  throw new NoImplementation()
+}

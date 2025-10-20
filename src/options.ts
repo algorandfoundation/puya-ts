@@ -33,6 +33,8 @@ export class CompileOptions {
   public readonly templateVarsPrefix: string
   public readonly localsCoalescingStrategy: LocalsCoalescingStrategy
   public readonly customPuyaPath?: string
+  public readonly validateAbiArgs: boolean
+  public readonly validateAbiReturn: boolean
 
   constructor(options: Partial<Props<CompileOptions>> & { filePaths: AlgoFile[] }) {
     this.filePaths = options.filePaths
@@ -57,6 +59,8 @@ export class CompileOptions {
     this.templateVarsPrefix = options.templateVarsPrefix ?? defaultPuyaOptions.templateVarsPrefix
     this.localsCoalescingStrategy = options.localsCoalescingStrategy ?? defaultPuyaOptions.localsCoalescingStrategy
     this.customPuyaPath = options.customPuyaPath
+    this.validateAbiArgs = options.validateAbiArgs ?? defaultPuyaOptions.validateAbiArgs
+    this.validateAbiReturn = options.validateAbiReturn ?? defaultPuyaOptions.validateAbiReturn
   }
 
   buildPuyaOptions(compilationSet: CompilationSetMapping) {
@@ -87,6 +91,8 @@ export const defaultPuyaOptions: PuyaPassThroughOptions = {
   cliTemplateDefinitions: {},
   templateVarsPrefix: 'TMPL_',
   localsCoalescingStrategy: LocalsCoalescingStrategy.root_operand,
+  validateAbiArgs: true,
+  validateAbiReturn: true,
 }
 export type PuyaPassThroughOptions = Omit<PuyaOptions, 'compilationSet'>
 
@@ -106,8 +112,10 @@ export class PuyaOptions {
   cliTemplateDefinitions: Record<string, Uint8Array | bigint>
   templateVarsPrefix: string
   localsCoalescingStrategy: LocalsCoalescingStrategy
-
+  validateAbiArgs: boolean
+  validateAbiReturn: boolean
   compilationSet: CompilationSetMapping
+
   constructor(options: Props<PuyaOptions>) {
     this.compilationSet = options.compilationSet
     this.outputTeal = options.outputTeal
@@ -125,5 +133,7 @@ export class PuyaOptions {
     this.templateVarsPrefix = options.templateVarsPrefix
     this.localsCoalescingStrategy = options.localsCoalescingStrategy
     this.outputSourceMap = options.outputSourceMap
+    this.validateAbiArgs = options.validateAbiArgs
+    this.validateAbiReturn = options.validateAbiReturn
   }
 }

@@ -5,7 +5,6 @@ import type { ContractReference, LogicSigReference, OnCompletionAction } from '.
 import type { SourceLocation } from './source-location'
 import type { TxnField } from './txn-fields'
 import type { wtypes } from './wtypes'
-
 export abstract class Node {
   constructor(props: Props<Node>) {
     this.sourceLocation = props.sourceLocation
@@ -190,12 +189,12 @@ export enum BytesEncoding {
 export class BytesConstant extends Expression {
   constructor(props: Props<BytesConstant>) {
     super(props)
-    this.wtype = props.wtype
     this.value = props.value
+    this.wtype = props.wtype
     this.encoding = props.encoding
   }
-  readonly wtype: wtypes.WType
   readonly value: Uint8Array
+  readonly wtype: wtypes.WType
   readonly encoding: BytesEncoding
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBytesConstant(this)
@@ -271,6 +270,30 @@ export class ARC4Encode extends Expression {
     return visitor.visitARC4Encode(this)
   }
 }
+export class ARC4Decode extends Expression {
+  constructor(props: Props<ARC4Decode>) {
+    super(props)
+    this.value = props.value
+  }
+  readonly value: Expression
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitARC4Decode(this)
+  }
+}
+export class ARC4FromBytes extends Expression {
+  constructor(props: Props<ARC4FromBytes>) {
+    super(props)
+    this.value = props.value
+    this.wtype = props.wtype
+    this.validate = props.validate
+  }
+  readonly value: Expression
+  readonly wtype: wtypes.WType
+  readonly validate: boolean
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitARC4FromBytes(this)
+  }
+}
 export class Copy extends Expression {
   constructor(props: Props<Copy>) {
     super(props)
@@ -339,14 +362,16 @@ export class ArrayReplace extends Expression {
     return visitor.visitArrayReplace(this)
   }
 }
-export class ARC4Decode extends Expression {
-  constructor(props: Props<ARC4Decode>) {
+export class SizeOf extends Expression {
+  constructor(props: Props<SizeOf>) {
     super(props)
-    this.value = props.value
+    this.sizeWtype = props.sizeWtype
+    this.wtype = props.wtype
   }
-  readonly value: Expression
+  readonly sizeWtype: wtypes.WType
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
-    return visitor.visitARC4Decode(this)
+    return visitor.visitSizeOf(this)
   }
 }
 export class IntrinsicCall extends Expression {
@@ -467,6 +492,20 @@ export class InnerTransactionField extends Expression {
     return visitor.visitInnerTransactionField(this)
   }
 }
+export class SetInnerTransactionFields extends Expression {
+  constructor(props: Props<SetInnerTransactionFields>) {
+    super(props)
+    this.itxns = props.itxns
+    this.startWithBegin = props.startWithBegin
+    this.wtype = props.wtype
+  }
+  readonly itxns: Array<Expression>
+  readonly startWithBegin: boolean
+  readonly wtype: wtypes.WType
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitSetInnerTransactionFields(this)
+  }
+}
 export class SubmitInnerTransaction extends Expression {
   constructor(props: Props<SubmitInnerTransaction>) {
     super(props)
@@ -498,9 +537,11 @@ export class IndexExpression extends Expression {
     super(props)
     this.base = props.base
     this.index = props.index
+    this.wtype = props.wtype
   }
   readonly base: Expression
   readonly index: Expression
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIndexExpression(this)
   }
@@ -511,10 +552,12 @@ export class SliceExpression extends Expression {
     this.base = props.base
     this.beginIndex = props.beginIndex
     this.endIndex = props.endIndex
+    this.wtype = props.wtype
   }
   readonly base: Expression
   readonly beginIndex: Expression | null
   readonly endIndex: Expression | null
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSliceExpression(this)
   }
@@ -525,13 +568,20 @@ export class IntersectionSliceExpression extends Expression {
     this.base = props.base
     this.beginIndex = props.beginIndex
     this.endIndex = props.endIndex
+    this.wtype = props.wtype
   }
   readonly base: Expression
   readonly beginIndex: Expression | bigint | null
   readonly endIndex: Expression | bigint | null
+  readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitIntersectionSliceExpression(this)
   }
+}
+export enum AppStorageKind {
+  appGlobal = 1,
+  accountLocal = 2,
+  box = 3,
 }
 export class AppStateExpression extends Expression {
   constructor(props: Props<AppStateExpression>) {
@@ -557,6 +607,20 @@ export class AppAccountStateExpression extends Expression {
   readonly account: Expression
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAppAccountStateExpression(this)
+  }
+}
+export class BoxPrefixedKeyExpression extends Expression {
+  constructor(props: Props<BoxPrefixedKeyExpression>) {
+    super(props)
+    this.prefix = props.prefix
+    this.key = props.key
+    this.wtype = props.wtype
+  }
+  readonly prefix: Expression
+  readonly key: Expression
+  readonly wtype: wtypes.WType
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitBoxPrefixedKeyExpression(this)
   }
 }
 export class BoxValueExpression extends Expression {
@@ -675,6 +739,18 @@ export class AssignmentExpression extends Expression {
   readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAssignmentExpression(this)
+  }
+}
+export class CommaExpression extends Expression {
+  constructor(props: Props<CommaExpression>) {
+    super(props)
+    this.expressions = props.expressions
+    this.wtype = props.wtype
+  }
+  readonly expressions: Array<Expression>
+  readonly wtype: wtypes.WType
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitCommaExpression(this)
   }
 }
 export enum EqualityComparison {
@@ -881,7 +957,14 @@ export class BigUIntPostfixUnaryOperation extends Expression {
     this.wtype = props.wtype
   }
   readonly op: BigUIntPostfixUnaryOperator
-  readonly target: Expression
+  readonly target:
+    | VarExpression
+    | FieldExpression
+    | IndexExpression
+    | TupleExpression
+    | AppStateExpression
+    | AppAccountStateExpression
+    | BoxValueExpression
   readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitBigUIntPostfixUnaryOperation(this)
@@ -1254,11 +1337,6 @@ export class ContractMethod extends classes(_Function, ContractMemberNode) {
     return visitor.visitContractMethod(this)
   }
 }
-export enum AppStorageKind {
-  appGlobal = 1,
-  accountLocal = 2,
-  box = 3,
-}
 export class AppStorageDefinition extends ContractMemberNode {
   constructor(props: Props<AppStorageDefinition>) {
     super(props)
@@ -1414,6 +1492,7 @@ export class ARC4ABIMethodConfig {
     this.allowedCompletionTypes = props.allowedCompletionTypes
     this.create = props.create
     this.name = props.name
+    this.validateEncoding = props.validateEncoding
     this.readonly = props.readonly
     this.defaultArgs = props.defaultArgs
   }
@@ -1421,13 +1500,21 @@ export class ARC4ABIMethodConfig {
   readonly allowedCompletionTypes: Array<OnCompletionAction>
   readonly create: ARC4CreateOption
   readonly name: string
+  readonly validateEncoding: boolean | null
   readonly readonly: boolean
   readonly defaultArgs: Map<string, ABIMethodArgMemberDefault | ABIMethodArgConstantDefault>
 }
-export type LValue = VarExpression | FieldExpression | IndexExpression | TupleExpression | AppStateExpression | AppAccountStateExpression
-export type Constant = IntegerConstant | BoolConstant | BytesConstant | StringConstant | DecimalConstant | MethodConstant | AddressConstant
-export type AWST = Contract | LogicSignature | Subroutine
+export type Constant = IntegerConstant | DecimalConstant | BoolConstant | BytesConstant | AddressConstant | MethodConstant
+export type LValue =
+  | VarExpression
+  | FieldExpression
+  | IndexExpression
+  | TupleExpression
+  | AppStateExpression
+  | AppAccountStateExpression
+  | BoxValueExpression
 export type ARC4MethodConfig = ARC4BareMethodConfig | ARC4ABIMethodConfig
+export type AWST = Subroutine | LogicSignature | Contract
 export const concreteNodes = {
   expressionStatement: ExpressionStatement,
   block: Block,
@@ -1449,12 +1536,14 @@ export const concreteNodes = {
   methodConstant: MethodConstant,
   addressConstant: AddressConstant,
   aRC4Encode: ARC4Encode,
+  aRC4Decode: ARC4Decode,
+  aRC4FromBytes: ARC4FromBytes,
   copy: Copy,
   arrayConcat: ArrayConcat,
   arrayExtend: ArrayExtend,
   arrayPop: ArrayPop,
   arrayReplace: ArrayReplace,
-  aRC4Decode: ARC4Decode,
+  sizeOf: SizeOf,
   intrinsicCall: IntrinsicCall,
   createInnerTransaction: CreateInnerTransaction,
   updateInnerTransaction: UpdateInnerTransaction,
@@ -1464,6 +1553,7 @@ export const concreteNodes = {
   tupleItemExpression: TupleItemExpression,
   varExpression: VarExpression,
   innerTransactionField: InnerTransactionField,
+  setInnerTransactionFields: SetInnerTransactionFields,
   submitInnerTransaction: SubmitInnerTransaction,
   fieldExpression: FieldExpression,
   indexExpression: IndexExpression,
@@ -1471,6 +1561,7 @@ export const concreteNodes = {
   intersectionSliceExpression: IntersectionSliceExpression,
   appStateExpression: AppStateExpression,
   appAccountStateExpression: AppAccountStateExpression,
+  boxPrefixedKeyExpression: BoxPrefixedKeyExpression,
   boxValueExpression: BoxValueExpression,
   singleEvaluation: SingleEvaluation,
   reinterpretCast: ReinterpretCast,
@@ -1479,6 +1570,7 @@ export const concreteNodes = {
   conditionalExpression: ConditionalExpression,
   assignmentStatement: AssignmentStatement,
   assignmentExpression: AssignmentExpression,
+  commaExpression: CommaExpression,
   numericComparisonExpression: NumericComparisonExpression,
   bytesComparisonExpression: BytesComparisonExpression,
   subroutineID: SubroutineID,
@@ -1529,6 +1621,22 @@ export const concreteNodes = {
   uInt64Constant: IntegerConstant,
   bigUIntConstant: IntegerConstant,
 } as const
+export interface StatementVisitor<T> {
+  visitExpressionStatement(statement: ExpressionStatement): T
+  visitBlock(statement: Block): T
+  visitGoto(statement: Goto): T
+  visitIfElse(statement: IfElse): T
+  visitSwitch(statement: Switch): T
+  visitWhileLoop(statement: WhileLoop): T
+  visitLoopExit(statement: LoopExit): T
+  visitLoopContinue(statement: LoopContinue): T
+  visitReturnStatement(statement: ReturnStatement): T
+  visitAssignmentStatement(statement: AssignmentStatement): T
+  visitUInt64AugmentedAssignment(statement: UInt64AugmentedAssignment): T
+  visitBigUIntAugmentedAssignment(statement: BigUIntAugmentedAssignment): T
+  visitBytesAugmentedAssignment(statement: BytesAugmentedAssignment): T
+  visitForInLoop(statement: ForInLoop): T
+}
 export interface ExpressionVisitor<T> {
   visitAssertExpression(expression: AssertExpression): T
   visitIntegerConstant(expression: IntegerConstant): T
@@ -1541,12 +1649,14 @@ export interface ExpressionVisitor<T> {
   visitMethodConstant(expression: MethodConstant): T
   visitAddressConstant(expression: AddressConstant): T
   visitARC4Encode(expression: ARC4Encode): T
+  visitARC4Decode(expression: ARC4Decode): T
+  visitARC4FromBytes(expression: ARC4FromBytes): T
   visitCopy(expression: Copy): T
   visitArrayConcat(expression: ArrayConcat): T
   visitArrayExtend(expression: ArrayExtend): T
   visitArrayPop(expression: ArrayPop): T
   visitArrayReplace(expression: ArrayReplace): T
-  visitARC4Decode(expression: ARC4Decode): T
+  visitSizeOf(expression: SizeOf): T
   visitIntrinsicCall(expression: IntrinsicCall): T
   visitCreateInnerTransaction(expression: CreateInnerTransaction): T
   visitUpdateInnerTransaction(expression: UpdateInnerTransaction): T
@@ -1556,6 +1666,7 @@ export interface ExpressionVisitor<T> {
   visitTupleItemExpression(expression: TupleItemExpression): T
   visitVarExpression(expression: VarExpression): T
   visitInnerTransactionField(expression: InnerTransactionField): T
+  visitSetInnerTransactionFields(expression: SetInnerTransactionFields): T
   visitSubmitInnerTransaction(expression: SubmitInnerTransaction): T
   visitFieldExpression(expression: FieldExpression): T
   visitIndexExpression(expression: IndexExpression): T
@@ -1563,6 +1674,7 @@ export interface ExpressionVisitor<T> {
   visitIntersectionSliceExpression(expression: IntersectionSliceExpression): T
   visitAppStateExpression(expression: AppStateExpression): T
   visitAppAccountStateExpression(expression: AppAccountStateExpression): T
+  visitBoxPrefixedKeyExpression(expression: BoxPrefixedKeyExpression): T
   visitBoxValueExpression(expression: BoxValueExpression): T
   visitSingleEvaluation(expression: SingleEvaluation): T
   visitReinterpretCast(expression: ReinterpretCast): T
@@ -1570,6 +1682,7 @@ export interface ExpressionVisitor<T> {
   visitArrayLength(expression: ArrayLength): T
   visitConditionalExpression(expression: ConditionalExpression): T
   visitAssignmentExpression(expression: AssignmentExpression): T
+  visitCommaExpression(expression: CommaExpression): T
   visitNumericComparisonExpression(expression: NumericComparisonExpression): T
   visitBytesComparisonExpression(expression: BytesComparisonExpression): T
   visitSubroutineCallExpression(expression: SubroutineCallExpression): T
@@ -1596,28 +1709,12 @@ export interface ExpressionVisitor<T> {
   visitCompiledLogicSig(expression: CompiledLogicSig): T
   visitARC4Router(expression: ARC4Router): T
 }
-export interface StatementVisitor<T> {
-  visitExpressionStatement(statement: ExpressionStatement): T
-  visitBlock(statement: Block): T
-  visitGoto(statement: Goto): T
-  visitIfElse(statement: IfElse): T
-  visitSwitch(statement: Switch): T
-  visitWhileLoop(statement: WhileLoop): T
-  visitLoopExit(statement: LoopExit): T
-  visitLoopContinue(statement: LoopContinue): T
-  visitReturnStatement(statement: ReturnStatement): T
-  visitAssignmentStatement(statement: AssignmentStatement): T
-  visitUInt64AugmentedAssignment(statement: UInt64AugmentedAssignment): T
-  visitBigUIntAugmentedAssignment(statement: BigUIntAugmentedAssignment): T
-  visitBytesAugmentedAssignment(statement: BytesAugmentedAssignment): T
-  visitForInLoop(statement: ForInLoop): T
-}
-export interface ContractMemberNodeVisitor<T> {
-  visitContractMethod(contractMemberNode: ContractMethod): T
-  visitAppStorageDefinition(contractMemberNode: AppStorageDefinition): T
-}
 export interface RootNodeVisitor<T> {
   visitSubroutine(rootNode: Subroutine): T
   visitLogicSignature(rootNode: LogicSignature): T
   visitContract(rootNode: Contract): T
+}
+export interface ContractMemberNodeVisitor<T> {
+  visitContractMethod(contractMemberNode: ContractMethod): T
+  visitAppStorageDefinition(contractMemberNode: AppStorageDefinition): T
 }

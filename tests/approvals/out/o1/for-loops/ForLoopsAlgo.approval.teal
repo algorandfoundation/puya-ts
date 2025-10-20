@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1
+    intcblock 8 0 1
     bytecblock 0x151f7c75
     // tests/approvals/for-loops.algo.ts:4
     // class ForLoopsAlgo extends Contract {
@@ -16,7 +16,7 @@ main:
 main_after_if_else@13:
     // tests/approvals/for-loops.algo.ts:4
     // class ForLoopsAlgo extends Contract {
-    intc_0 // 0
+    intc_1 // 0
     return
 
 main_test_for_loop_labelled_route@6:
@@ -30,10 +30,25 @@ main_test_for_loop_labelled_route@6:
     // tests/approvals/for-loops.algo.ts:4
     // class ForLoopsAlgo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/for-loops.algo.ts:32
     // test_for_loop_labelled(start: uint64, stop: uint64, step: uint64) {
@@ -43,7 +58,7 @@ main_test_for_loop_labelled_route@6:
     swap
     concat
     log
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_test_for_loop_continue_route@5:
@@ -57,10 +72,25 @@ main_test_for_loop_continue_route@5:
     // tests/approvals/for-loops.algo.ts:4
     // class ForLoopsAlgo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/for-loops.algo.ts:24
     // test_for_loop_continue(start: uint64, stop: uint64, step: uint64) {
@@ -70,7 +100,7 @@ main_test_for_loop_continue_route@5:
     swap
     concat
     log
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_test_for_loop_break_route@4:
@@ -84,10 +114,25 @@ main_test_for_loop_break_route@4:
     // tests/approvals/for-loops.algo.ts:4
     // class ForLoopsAlgo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/for-loops.algo.ts:13
     // test_for_loop_break(start: uint64, stop: uint64, step: uint64) {
@@ -97,7 +142,7 @@ main_test_for_loop_break_route@4:
     swap
     concat
     log
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_test_for_loop_route@3:
@@ -111,10 +156,25 @@ main_test_for_loop_route@3:
     // tests/approvals/for-loops.algo.ts:4
     // class ForLoopsAlgo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/for-loops.algo.ts:5
     // test_for_loop(start: uint64, stop: uint64, step: uint64) {
@@ -124,7 +184,7 @@ main_test_for_loop_route@3:
     swap
     concat
     log
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_bare_routing@9:
@@ -135,7 +195,7 @@ main_bare_routing@9:
     txn ApplicationID
     !
     assert // can only call when creating
-    intc_1 // 1
+    intc_2 // 1
     return
 
 
@@ -146,7 +206,7 @@ test_for_loop:
     proto 3 1
     // tests/approvals/for-loops.algo.ts:6
     // let total = Uint64(0)
-    intc_0 // 0
+    intc_1 // 0
     frame_dig -3
 
 test_for_loop_while_top@1:
@@ -184,7 +244,7 @@ test_for_loop_break:
     proto 3 1
     // tests/approvals/for-loops.algo.ts:14
     // let total = Uint64(0)
-    intc_0 // 0
+    intc_1 // 0
     frame_dig -3
 
 test_for_loop_break_while_top@1:
@@ -227,7 +287,7 @@ test_for_loop_continue:
     proto 3 1
     // tests/approvals/for-loops.algo.ts:25
     // let total = Uint64(0)
-    intc_0 // 0
+    intc_1 // 0
     frame_dig -3
 
 test_for_loop_continue_while_top@1:
@@ -273,7 +333,7 @@ test_for_loop_labelled:
     pushbytes ""
     // tests/approvals/for-loops.algo.ts:33
     // let total = Uint64(0)
-    intc_0 // 0
+    intc_1 // 0
     frame_dig -3
 
 test_for_loop_labelled_while_top@1:

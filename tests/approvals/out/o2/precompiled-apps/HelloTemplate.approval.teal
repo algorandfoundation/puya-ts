@@ -10,9 +10,6 @@ main:
     // tests/approvals/precompiled-apps.algo.ts:16
     // greeting = GlobalState({ initialValue: '' })
     bytec_0 // "greeting"
-    pushbytes ""
-    app_global_put
-    bytec_0 // "greeting"
     // tests/approvals/precompiled-apps.algo.ts:39
     // this.greeting.value = TemplateVar<string>('GREETING')
     bytec_1 // TMPL_GREETING
@@ -44,6 +41,15 @@ main_greet_route@8:
     // tests/approvals/precompiled-apps.algo.ts:36
     // export class HelloTemplate extends HelloBase {
     txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/precompiled-apps.algo.ts:16
     // greeting = GlobalState({ initialValue: '' })

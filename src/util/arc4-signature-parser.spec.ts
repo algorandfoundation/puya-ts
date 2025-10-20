@@ -39,7 +39,7 @@ describe('arc4 signature parser', () => {
     ])('%s parses', (arc4TypeString) => {
       const match = parseArc4Type(arc4TypeString)
 
-      expect(match.wtype.arc4Name).toBe(arc4TypeString)
+      expect(match.wtype.arc4Alias).toBe(arc4TypeString)
     })
   })
   describe('errors on invalid types', () => {

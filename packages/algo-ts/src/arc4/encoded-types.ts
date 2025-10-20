@@ -1,5 +1,5 @@
 import { NoImplementation } from '../internal/errors'
-import { biguint, BigUintCompat, bytes, BytesBacked, BytesCompat, NTuple, StringCompat, uint64, Uint64Compat } from '../primitives'
+import { biguint, BigUintCompat, bytes, BytesBacked, NTuple, StringCompat, uint64, Uint64Compat } from '../primitives'
 import { Account } from '../reference'
 
 /**
@@ -342,6 +342,13 @@ export class StaticArray<TItem extends ARC4Encoded, TLength extends number> exte
   get native(): NTuple<TItem, TLength> {
     throw new NoImplementation()
   }
+
+  /**
+   * Returns the (compile-time) length of this array
+   */
+  get length(): uint64 {
+    throw new NoImplementation()
+  }
 }
 
 /**
@@ -569,6 +576,13 @@ export class StaticBytes<TLength extends number = 0> extends Arc4ArrayBase<Byte>
    * @param other Another array of bytes to concat with this one
    */
   concat(other: Arc4ArrayBase<Byte>): DynamicBytes {
+    throw new NoImplementation()
+  }
+
+  /**
+   * Returns the (compile-time) length of this array
+   */
+  get length(): uint64 {
     throw new NoImplementation()
   }
 }

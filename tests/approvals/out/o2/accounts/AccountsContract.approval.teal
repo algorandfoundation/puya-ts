@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1
-    bytecblock 0x068101 0x0020 0x00
+    bytecblock 0x068101 0x00
     intc_0 // 0
     pushbytes ""
     // tests/approvals/accounts.algo.ts:8
@@ -43,10 +43,20 @@ main_getAccountInfo_route@3:
     // tests/approvals/accounts.algo.ts:8
     // export class AccountsContract extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
     btoi
     txnas Accounts
     bury 2
     txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
     btoi
     txnas Assets
     bury 1
@@ -146,14 +156,17 @@ main_after_while@21:
     pop
     // tests/approvals/accounts.algo.ts:9
     // public getAccountInfo(account: Account, asset: Asset) {
-    bytec_1 // 0x0020
+    pushbytes 0x0020
     uncover 15
     concat
     uncover 14
     itob
     uncover 14
     itob
-    bytec_1 // 0x0020
+    dig 14
+    len
+    itob
+    extract 6 2
     uncover 15
     concat
     uncover 14
@@ -174,11 +187,11 @@ main_after_while@21:
     itob
     uncover 13
     itob
-    bytec_2 // 0x00
+    bytec_1 // 0x00
     intc_0 // 0
     uncover 15
     setbit
-    bytec_2 // 0x00
+    bytec_1 // 0x00
     intc_0 // 0
     uncover 16
     setbit

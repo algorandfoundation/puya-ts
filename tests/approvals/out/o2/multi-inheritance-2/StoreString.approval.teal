@@ -3,6 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
+    intcblock 0 1
     // tests/approvals/multi-inheritance-2.algo.ts:5
     // class StoreString extends Contract {
     txn NumAppArgs
@@ -14,7 +15,7 @@ main:
 main_after_if_else@10:
     // tests/approvals/multi-inheritance-2.algo.ts:5
     // class StoreString extends Contract {
-    pushint 0 // 0
+    intc_0 // 0
     return
 
 main_setStore_route@3:
@@ -28,6 +29,15 @@ main_setStore_route@3:
     // tests/approvals/multi-inheritance-2.algo.ts:5
     // class StoreString extends Contract {
     txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/multi-inheritance-2.algo.ts:6
     // stringStore = GlobalState<string>()
@@ -38,7 +48,7 @@ main_setStore_route@3:
     app_global_put
     // tests/approvals/multi-inheritance-2.algo.ts:8
     // setStore(value: string) {
-    pushint 1 // 1
+    intc_1 // 1
     return
 
 main_bare_routing@6:
@@ -49,5 +59,5 @@ main_bare_routing@6:
     txn ApplicationID
     !
     assert // can only call when creating
-    pushint 1 // 1
+    intc_1 // 1
     return

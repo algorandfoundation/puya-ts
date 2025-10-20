@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0
+    intcblock 1 0 8
     bytecblock 0x151f7c75
     pushbytes ""
     dupn 4
@@ -32,9 +32,19 @@ main_testDoContinue_route@5:
     // tests/approvals/do-loops.algo.ts:4
     // export class DoLoopsAlgo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     bury 2
     txna ApplicationArgs 2
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     bury 3
     // tests/approvals/do-loops.algo.ts:24
@@ -112,9 +122,19 @@ main_testDoBreak_route@4:
     // tests/approvals/do-loops.algo.ts:4
     // export class DoLoopsAlgo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     bury 2
     txna ApplicationArgs 2
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     bury 5
     // tests/approvals/do-loops.algo.ts:13
@@ -178,6 +198,11 @@ main_testDo_route@3:
     // tests/approvals/do-loops.algo.ts:4
     // export class DoLoopsAlgo extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     bury 2
     // tests/approvals/do-loops.algo.ts:6

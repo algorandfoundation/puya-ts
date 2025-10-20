@@ -237,7 +237,7 @@ export class ARC4StructType extends ARC4EncodedType {
   }
 
   get signature(): string {
-    return `${this.name}${this.wtype.arc4Name}`
+    return `${this.name}${this.wtype.arc4Alias}`
   }
 }
 

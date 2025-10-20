@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 2
+    intcblock 1 0 8 2
     bytecblock "evalCount"
     pushbytes ""
     dup
@@ -32,10 +32,20 @@ main_test_non_trivial_termination_of_clause_route@5:
     // tests/approvals/switch-statements.algo.ts:4
     // export class DemoContract extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     dup
     bury 3
     txna ApplicationArgs 2
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     bury 2
     // tests/approvals/switch-statements.algo.ts:85
@@ -53,7 +63,7 @@ main_test_non_trivial_termination_of_clause_route@5:
     // tests/approvals/switch-statements.algo.ts:86
     // if (y % 2 === 0) {
     dup
-    intc_2 // 2
+    intc_3 // 2
     %
     bnz main_else_body@19
     dup
@@ -96,6 +106,11 @@ main_test_side_effects_route@4:
     // tests/approvals/switch-statements.algo.ts:4
     // export class DemoContract extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     dup
     bury 3
@@ -144,7 +159,7 @@ main_block@25:
     assert // check GlobalState exists
     // tests/approvals/switch-statements.algo.ts:80
     // assert(this.evalCount.value === 2, 'Only two functions should be evaluated')
-    intc_2 // 2
+    intc_3 // 2
     ==
     assert // Only two functions should be evaluated
     // tests/approvals/switch-statements.algo.ts:68

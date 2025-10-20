@@ -73,6 +73,7 @@ import { Uint64EnumMemberExpressionBuilder, Uint64EnumTypeBuilder } from '../eb/
 import { UInt64ExpressionBuilder, UInt64FunctionBuilder } from '../eb/uint64-expression-builder'
 import { UnresolvableExpressionBuilder } from '../eb/unresolvable-expression-builder'
 import { UrangeFunctionBuilder } from '../eb/urange-function'
+import { ValidateEncodingFunctionBuilder } from '../eb/validate-encoding-function-builder'
 import { VoidExpressionBuilder } from '../eb/void-expression-builder'
 import { OP_METADATA } from '../op-metadata'
 import type { TypeRegistry } from '../type-registry'
@@ -230,6 +231,7 @@ import {
   Uint64Function,
   uint64PType,
   urangeFunction,
+  validateEncodingFunctionPType,
   voidPType,
 } from './index'
 import { ALL_OP_ENUMS } from './op-ptypes'
@@ -275,6 +277,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: logFunction, singletonEb: LogFunctionBuilder })
   typeRegistry.register({ ptype: assertFunction, singletonEb: AssertFunctionBuilder })
   typeRegistry.register({ ptype: errFunction, singletonEb: ErrFunctionBuilder })
+  typeRegistry.register({ ptype: validateEncodingFunctionPType, singletonEb: ValidateEncodingFunctionBuilder })
   typeRegistry.register({ ptype: matchFunction, singletonEb: MatchFunctionBuilder })
   typeRegistry.register({ ptype: assertMatchFunction, singletonEb: AssertMatchFunctionBuilder })
   typeRegistry.register({ ptype: ensureBudgetFunction, singletonEb: EnsureBudgetFunctionBuilder })

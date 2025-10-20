@@ -1,17 +1,17 @@
 subroutine test_assign_from_var(x: object{ a: uint64, b: uint64 }): void
 {
-  obj: BthenA{ b: uint64, a: uint64 } = { b: x.b, a: x.a }
+  obj: BthenA{ b: uint64, a: uint64 } = #{ b: x.b, a: x.a }
 }
 subroutine test_assign_from_literal(x: uint64): void
 {
-  obj: object{ a: uint64, z: uint64 } = { a: (#0 = { z: (b = x * 2), a: b }).a, z: #0.z }
+  obj: object{ a: uint64, z: uint64 } = #{ a: ($0 = #{ z: (b = x * 2), a: b }).a, z: $0.z }
 }
 contract Demo
 {
   approvalProgram(): bool
   {
     tests/approvals/property-ordering.algo.ts::test_assign_from_literal(4)
-    tests/approvals/property-ordering.algo.ts::test_assign_from_var({ a: (#1 = { a: 3, b: 4 }).a, b: #1.b })
+    tests/approvals/property-ordering.algo.ts::test_assign_from_var(#{ a: ($1 = #{ a: 3, b: 4 }).a, b: $1.b })
     return True
   }
   

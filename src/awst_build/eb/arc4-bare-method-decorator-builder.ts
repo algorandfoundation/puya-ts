@@ -30,6 +30,11 @@ const createMap: Record<string, ARC4CreateOption> = {
   disallow: ARC4CreateOption.disallow,
 }
 
+const validateEncodingMap: Record<string, 'unsafe-disabled' | 'args'> = {
+  'unsafe-disabled': 'unsafe-disabled',
+  args: 'args',
+}
+
 export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
   get ptype(): PType {
     return arc4BareMethodDecorator
@@ -69,7 +74,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {
-      args: [{ allowActions, onCreate, readonly, name, defaultArguments }],
+      args: [{ allowActions, onCreate, readonly, name, defaultArguments, validateEncoding }],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -82,11 +87,14 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
           onCreate: a.optional(stringPType),
           readonly: a.optional(boolPType),
           name: a.optional(stringPType),
+          validateEncoding: a.optional(stringPType),
           defaultArguments: a.optional(),
         }),
       ],
     })
 
+    const validateEncodingStr =
+      validateEncoding === undefined ? undefined : mapStringConstant(validateEncodingMap, validateEncoding.resolve())
     return new DecoratorDataBuilder(sourceLocation, {
       type: Constants.symbolNames.arc4AbiDecoratorName,
       allowedCompletionTypes: allowActions && resolveOnCompletionActions(allowActions),
@@ -95,6 +103,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
       createLocation: onCreate?.sourceLocation,
       sourceLocation: sourceLocation,
       nameOverride: name ? requireStringConstant(name).value : undefined,
+      validateEncoding: validateEncodingStr === 'args' ? true : validateEncodingStr === 'unsafe-disabled' ? false : undefined,
       readonly: readonly ? requireBooleanConstant(readonly).value : false,
       defaultArguments: resolveDefaultArguments(defaultArguments, sourceLocation),
     })

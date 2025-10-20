@@ -64,22 +64,118 @@ main_testDecoding_route@4:
     // tests/approvals/arc4-encode-decode.algo.ts:21
     // export class Arc4EncodeDecode extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 3
+    dup
+    len
+    intc_1 // 1
+    ==
+    assert // invalid number of bytes for arc4.bool
     intc_0 // 0
     getbit
     txna ApplicationArgs 4
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 5
+    dup
+    len
+    pushint 64 // 64
+    ==
+    assert // invalid number of bytes for arc4.uint512
     txna ApplicationArgs 6
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 7
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 8
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 9
+    dup
+    len
+    swap
+    dup
+    intc_3 // 8
+    extract_uint16 // on error: invalid tuple encoding
+    dup
+    pushint 10 // 10
+    ==
+    assert // invalid tail pointer at index 1 of tests/approvals/arc4-encode-decode.algo.ts::TestObj
+    dig 1
+    swap
+    uncover 3
+    substring3
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    intc_2 // 2
+    +
+    pushint 10 // 10
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for tests/approvals/arc4-encode-decode.algo.ts::TestObj
     dup
     intc_0 // 0
     intc_3 // 8
@@ -96,9 +192,36 @@ main_testDecoding_route@4:
     uncover 2
     substring3
     txna ApplicationArgs 10
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 11
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 12
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/arc4-encode-decode.algo.ts:59-72
     // testDecoding(
@@ -146,16 +269,58 @@ main_testEncoding_route@3:
     // tests/approvals/arc4-encode-decode.algo.ts:21
     // export class Arc4EncodeDecode extends Contract {
     txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 1
+    ==
+    assert // invalid number of bytes for arc4.bool
     intc_0 // 0
     getbit
     txna ApplicationArgs 3
+    dup
+    len
+    pushint 64 // 64
+    ==
+    assert // invalid number of bytes for arc4.uint512
     txna ApplicationArgs 4
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 5
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     txna ApplicationArgs 6
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     // tests/approvals/arc4-encode-decode.algo.ts:22
     // testEncoding(a: uint64, b: boolean, c: biguint, d: bytes, e: string, f: Address) {
     uncover 5

@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1
+    intcblock 1 0 2
     // tests/approvals/teal-script-conventions.algo.ts:5
     // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
     txn NumAppArgs
@@ -15,7 +15,7 @@ main:
 main_after_if_else@14:
     // tests/approvals/teal-script-conventions.algo.ts:5
     // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
-    pushint 0 // 0
+    intc_1 // 0
     return
 
 main_updateApplication_route@7:
@@ -53,6 +53,15 @@ main_setLocal_route@5:
     // tests/approvals/teal-script-conventions.algo.ts:5
     // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
     txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/teal-script-conventions.algo.ts:18
     // this.local(Txn.sender).value = value
@@ -84,6 +93,15 @@ main_createApplication_route@4:
     // tests/approvals/teal-script-conventions.algo.ts:5
     // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
     txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
     // tests/approvals/teal-script-conventions.algo.ts:6
     // global = GlobalState<bytes>()
@@ -101,7 +119,7 @@ main_noMoreThanks_route@3:
     // tests/approvals/teal-script-conventions.algo.ts:8
     // @abimethod({ name: 'noMoreThanks' })
     txn OnCompletion
-    pushint 2 // CloseOut
+    intc_2 // CloseOut
     ==
     assert // OnCompletion is not CloseOut
     txn ApplicationID
@@ -109,6 +127,11 @@ main_noMoreThanks_route@3:
     // tests/approvals/teal-script-conventions.algo.ts:5
     // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
     txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/teal-script-conventions.algo.ts:8
     // @abimethod({ name: 'noMoreThanks' })

@@ -30,6 +30,8 @@ export interface BuildCommandArgs {
   optimization_level: string
   target_avm_version: string
   cli_template_definitions: string[]
+  validate_abi_args: boolean
+  validate_abi_return: boolean
   template_vars_prefix: string
   locals_coalescing_strategy: LocalsCoalescingStrategy
   paths: string[]
@@ -152,6 +154,18 @@ export function addBuildCommand(parser: ArgumentParser) {
     default: defaultPuyaOptions.localsCoalescingStrategy,
   })
 
+  parser.add_argument('--validate-abi-args', {
+    action: BooleanOptionalAction,
+    default: defaultPuyaOptions.validateAbiArgs,
+    help: 'Validates ABI transaction arguments by ensuring they are encoded correctly',
+  })
+
+  parser.add_argument('--validate-abi-return', {
+    action: BooleanOptionalAction,
+    default: defaultPuyaOptions.validateAbiReturn,
+    help: "Validates encoding of ABI return values when using interpretAsArc4 with 'log' `prefix` option, arc4.abiCall, and strongly typed contract to contract calls",
+  })
+
   parser.add_argument('paths', {
     metavar: 'PATHS',
     nargs: '*',
@@ -196,8 +210,9 @@ export async function buildCommand(args: BuildCommandArgs) {
           cliTemplateDefinitions: Object.fromEntries(args.cli_template_definitions?.map(parseCliTemplateVar) ?? []),
           templateVarsPrefix: args.template_vars_prefix,
           localsCoalescingStrategy: args.locals_coalescing_strategy,
-
           customPuyaPath: args.puya_path,
+          validateAbiArgs: args.validate_abi_args,
+          validateAbiReturn: args.validate_abi_return,
         }),
       )
       logCtx.exitIfErrors()

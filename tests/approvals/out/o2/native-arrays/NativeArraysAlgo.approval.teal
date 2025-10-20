@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 8 3
+    intcblock 1 0 8 16
     bytecblock 0x151f7c75 "" 0x151f7c75a0 0x0000 0x800080
     intc_1 // 0
     dup
@@ -48,7 +48,7 @@ main_arc4Booleans_route@9:
     // return [new Bool(true), new Bool(false), new Bool(true)]
     bytec_3 // 0x0000
     bytec 4 // 0x800080
-    intc_3 // 3
+    pushint 3 // 3
     intc_2 // 8
     callsub dynamic_array_concat_bits
     // tests/approvals/native-arrays.algo.ts:71
@@ -85,7 +85,7 @@ main_booleans_route@7:
     // return [true, false, true]
     bytec_3 // 0x0000
     bytec 4 // 0x800080
-    intc_3 // 3
+    pushint 3 // 3
     intc_2 // 8
     callsub dynamic_array_concat_bits
     // tests/approvals/native-arrays.algo.ts:63
@@ -109,6 +109,11 @@ main_structs_route@6:
     // export class NativeArraysAlgo extends Contract {
     txna ApplicationArgs 1
     dup
+    len
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for tests/approvals/native-arrays.algo.ts::Vector
+    dup
     intc_1 // 0
     extract_uint64
     dup
@@ -129,7 +134,7 @@ main_structs_route@6:
     // myVectors = [{ x, y }]
     dup
     len
-    pushint 16 // 16
+    intc_3 // 16
     /
     itob
     extract 6 2
@@ -275,7 +280,7 @@ dynamic_array_concat_bits_after_if_else@2:
     intc_1 // 0
     frame_bury 0
     frame_dig 3
-    pushint 16 // 16
+    intc_3 // 16
     +
     dup
     frame_bury 2

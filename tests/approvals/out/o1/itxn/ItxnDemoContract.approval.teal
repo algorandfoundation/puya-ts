@@ -4,12 +4,12 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 6 5 3 1000
-    bytecblock 0x098101 0x09361a00b08101 "name" "1" "unit" "2" "AST1" "AST2" "AST3" "3" "4" "5" "3rd" "with args param set" "42" "10" "11" "12" "13" "14" "15" "16"
+    bytecblock 0x098101 0x09361a00b08101 "1" "AST2" "unit" "2" "AST1" "AST3" "3" "4" "5" "name" "3rd" "with args param set" "42" "10" "11" "12" "13" "14" "15" "16"
     txn ApplicationID
     bnz main_after_if_else@2
     // tests/approvals/itxn.algo.ts:7
     // name = GlobalState({ initialValue: Bytes() })
-    bytec_2 // "name"
+    bytec 11 // "name"
     pushbytes 0x
     app_global_put
 
@@ -90,19 +90,6 @@ main_bare_routing@11:
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.test1() -> void:
 test1:
-    // tests/approvals/itxn.algo.ts:7
-    // name = GlobalState({ initialValue: Bytes() })
-    bytec_2 // "name"
-    // tests/approvals/itxn.algo.ts:10
-    // this.name.value = Bytes('AST1')
-    bytec 6 // "AST1"
-    app_global_put
-    // tests/approvals/itxn.algo.ts:7
-    // name = GlobalState({ initialValue: Bytes() })
-    intc_0 // 0
-    bytec_2 // "name"
-    app_global_get_ex
-    assert // check GlobalState exists
     // tests/approvals/itxn.algo.ts:17
     // manager: Global.currentApplicationAddress,
     global CurrentApplicationAddress
@@ -111,10 +98,10 @@ test1:
     dup
     // tests/approvals/itxn.algo.ts:7
     // name = GlobalState({ initialValue: Bytes() })
-    bytec_2 // "name"
+    bytec 11 // "name"
     // tests/approvals/itxn.algo.ts:21
     // this.name.value = Bytes('AST2')
-    bytec 7 // "AST2"
+    bytec_3 // "AST2"
     app_global_put
     // tests/approvals/itxn.algo.ts:22
     // const asset1_txn = assetParams.submit()
@@ -131,7 +118,9 @@ test1:
     // unitName: 'unit',
     bytec 4 // "unit"
     itxn_field ConfigAssetUnitName
-    uncover 2
+    // tests/approvals/itxn.algo.ts:10
+    // this.name.value = Bytes('AST1')
+    bytec 6 // "AST1"
     itxn_field ConfigAssetName
     // tests/approvals/itxn.algo.ts:13
     // total: 1000,
@@ -155,18 +144,12 @@ test1:
     itxn_submit
     itxn ConfigAssetName
     itxn CreatedAssetID
-    // tests/approvals/itxn.algo.ts:7
-    // name = GlobalState({ initialValue: Bytes() })
-    intc_0 // 0
-    bytec_2 // "name"
-    app_global_get_ex
-    assert // check GlobalState exists
     // tests/approvals/itxn.algo.ts:26
     // const asset2_txn = assetParams.submit()
     itxn_begin
-    dig 3
+    dig 2
     itxn_field ConfigAssetReserve
-    dig 4
+    dig 3
     itxn_field ConfigAssetManager
     // tests/approvals/itxn.algo.ts:16
     // decimals: 3,
@@ -176,6 +159,9 @@ test1:
     // unitName: 'unit',
     bytec 4 // "unit"
     itxn_field ConfigAssetUnitName
+    // tests/approvals/itxn.algo.ts:21
+    // this.name.value = Bytes('AST2')
+    bytec_3 // "AST2"
     itxn_field ConfigAssetName
     // tests/approvals/itxn.algo.ts:13
     // total: 1000,
@@ -208,7 +194,7 @@ test1:
     // tests/approvals/itxn.algo.ts:29
     // assert(asset2_txn.assetName === Bytes('AST2'), 'asset2_txn is correct')
     swap
-    bytec 7 // "AST2"
+    bytec_3 // "AST2"
     ==
     assert // asset2_txn is correct
     // tests/approvals/itxn.algo.ts:30
@@ -223,7 +209,7 @@ test1:
     // assert(asset2_txn.createdAsset.name === Bytes('AST2'), 'created asset 2 is correct')
     asset_params_get AssetName
     assert // asset exists
-    bytec 7 // "AST2"
+    bytec_3 // "AST2"
     ==
     assert // created asset 2 is correct
     // tests/approvals/itxn.algo.ts:43
@@ -264,7 +250,7 @@ test1:
     itxn_field ConfigAssetUnitName
     // tests/approvals/itxn.algo.ts:40
     // assetName: 'AST3',
-    bytec 8 // "AST3"
+    bytec 7 // "AST3"
     itxn_field ConfigAssetName
     // tests/approvals/itxn.algo.ts:13
     // total: 1000,
@@ -293,7 +279,7 @@ test1:
     assert // app is created
     // tests/approvals/itxn.algo.ts:46
     // assert(asset3_txn.assetName === Bytes('AST3'), 'asset3_txn is correct')
-    bytec 8 // "AST3"
+    bytec 7 // "AST3"
     ==
     assert // asset3_txn is correct
     // tests/approvals/itxn.algo.ts:54
@@ -340,7 +326,7 @@ test1:
     itxn_field ConfigAssetUnitName
     // tests/approvals/itxn.algo.ts:40
     // assetName: 'AST3',
-    bytec 8 // "AST3"
+    bytec 7 // "AST3"
     itxn_field ConfigAssetName
     // tests/approvals/itxn.algo.ts:13
     // total: 1000,
@@ -382,7 +368,7 @@ test2:
     bz test2_else_body@2
     // tests/approvals/itxn.algo.ts:60
     // const args = [Bytes('1'), Bytes('2')] as const
-    bytec_3 // "1"
+    bytec_2 // "1"
     frame_bury 0
     bytec 5 // "2"
     frame_bury 1
@@ -451,7 +437,7 @@ test2_next_field@7:
     // tests/approvals/itxn.algo.ts:77
     // assert(createAppTxn.appArgs(0) === Bytes('1'), 'correct args used 1')
     itxna ApplicationArgs 0
-    bytec_3 // "1"
+    bytec_2 // "1"
     ==
     assert // correct args used 1
     // tests/approvals/itxn.algo.ts:78
@@ -531,11 +517,11 @@ test2_after_if_else@11:
 test2_else_body@2:
     // tests/approvals/itxn.algo.ts:72
     // appArgs: [Bytes('3'), '4', Bytes('5')],
-    bytec 9 // "3"
+    bytec 8 // "3"
     frame_bury 0
-    bytec 10 // "4"
+    bytec 9 // "4"
     frame_bury 1
-    bytec 11 // "5"
+    bytec 10 // "5"
     frame_bury 5
     intc_3 // 3
     frame_bury 3
@@ -573,7 +559,7 @@ test3:
     itxn_begin
     // tests/approvals/itxn.algo.ts:99
     // appArgs: [Bytes('1')],
-    bytec_3 // "1"
+    bytec_2 // "1"
     itxn_field ApplicationArgs
     // tests/approvals/itxn.algo.ts:98
     // onCompletion: OnCompleteAction.DeleteApplication,
@@ -641,7 +627,7 @@ test3:
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:105
     // appTxn3.set({ appArgs: [Bytes('3')] })
-    bytec 9 // "3"
+    bytec 8 // "3"
     itxn_field ApplicationArgs
     // tests/approvals/itxn.algo.ts:98
     // onCompletion: OnCompleteAction.DeleteApplication,
@@ -671,7 +657,7 @@ test3:
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:107
     // appTxn4.set({ appArgs: [Bytes('4')] })
-    bytec 10 // "4"
+    bytec 9 // "4"
     itxn_field ApplicationArgs
     // tests/approvals/itxn.algo.ts:98
     // onCompletion: OnCompleteAction.DeleteApplication,
@@ -701,7 +687,7 @@ test3:
     itxn_field ApprovalProgramPages
     // tests/approvals/itxn.algo.ts:109
     // appTxn5.set({ appArgs: [Bytes('5')] })
-    bytec 11 // "5"
+    bytec 10 // "5"
     itxn_field ApplicationArgs
     // tests/approvals/itxn.algo.ts:98
     // onCompletion: OnCompleteAction.DeleteApplication,
@@ -1071,7 +1057,7 @@ test3:
     // tests/approvals/itxn.algo.ts:152
     // assert(app1.logs(0) === Bytes('1'))
     gitxna 0 Logs 0
-    bytec_3 // "1"
+    bytec_2 // "1"
     ==
     assert
     // tests/approvals/itxn.algo.ts:153
@@ -1083,19 +1069,19 @@ test3:
     // tests/approvals/itxn.algo.ts:154
     // assert(app3.logs(0) === Bytes('3'))
     gitxna 2 Logs 0
-    bytec 9 // "3"
+    bytec 8 // "3"
     ==
     assert
     // tests/approvals/itxn.algo.ts:155
     // assert(app4.logs(0) === Bytes('4'))
     gitxna 3 Logs 0
-    bytec 10 // "4"
+    bytec 9 // "4"
     ==
     assert
     // tests/approvals/itxn.algo.ts:156
     // assert(app5.logs(0) === Bytes('5'))
     gitxna 4 Logs 0
-    bytec 11 // "5"
+    bytec 10 // "5"
     ==
     assert
     // tests/approvals/itxn.algo.ts:157
@@ -1198,7 +1184,7 @@ test4:
     itxn_field ExtraProgramPages
     // tests/approvals/itxn.algo.ts:181
     // appArgs: [Bytes('1')],
-    bytec_3 // "1"
+    bytec_2 // "1"
     itxn_field ApplicationArgs
     // tests/approvals/itxn.algo.ts:180
     // onCompletion: OnCompleteAction.DeleteApplication,

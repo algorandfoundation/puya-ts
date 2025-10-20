@@ -49,7 +49,7 @@ subroutine testStaticBytes(): void
 subroutine testArrays(n: arc4.uint64): void
 {
   myArray: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>(n, n, n)
-  myArray.push(...<tuple>[n]
+  myArray.push(...#[n])
   doubleArray: arc4.dynamic_array<arc4.uint64> = myArray.concat(myArray)
   assert(reinterpret_cast<bytes>(doubleArray) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.uint64>(n, n, n, n, n, n, n, n)))
   myStatic: arc4.static_array<arc4.uint64> = new arc4.static_array<arc4.uint64>(n, n)
@@ -75,11 +75,11 @@ subroutine testAddress(): void
 }
 subroutine testTuple(): void
 {
-  t: arc4.tuple<uint64> = ARC4_ENCODE(<tuple>[34], wtype=arc4.tuple<uint64>)
+  t: arc4.tuple<uint64> = ARC4_ENCODE(#[34], wtype=arc4.tuple<uint64>)
   firstItem: arc4.uint64 = t.0
   firstItemIndexer: arc4.uint64 = ARC4_DECODE(t).0
   assert(reinterpret_cast<bytes>(firstItem) == reinterpret_cast<bytes>(firstItemIndexer))
-  t1: arc4.tuple<address,byte> = ARC4_ENCODE(<tuple>[Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ"), 0], wtype=arc4.tuple<address,byte>)
+  t1: arc4.tuple<address,byte> = ARC4_ENCODE(#[Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ"), 0], wtype=arc4.tuple<address,byte>)
   assert(2 == 2)
 }
 contract Arc4TypesTestContract
@@ -110,7 +110,7 @@ contract Arc4TypesTestContract
   
   getArc4Values(): readonlytuple[arc4.byte, arc4.uint8, arc4.static_array<arc4.byte>]
   {
-    return <tuple>[0, 255, Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")]
+    return #[0, 255, Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")]
   }
   
 }
@@ -120,7 +120,7 @@ subroutine testZeroValues(): void
   assert(reinterpret_cast<bytes>(bzero(1)) == reinterpret_cast<bytes>(new arc4.static_array<arc4.bool>(False, False, False, False)))
   assert(reinterpret_cast<bytes>(bzero(2)) == reinterpret_cast<bytes>(new arc4.static_array<arc4.bool>(False, False, False, False, False, False, False, False, False)))
   assert(reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.uint8>()) == bzero(2))
-  assert(reinterpret_cast<bytes>(bzero(2)) == reinterpret_cast<bytes>(ARC4_ENCODE(<tuple>[False, False, False, False, False, False, False, False, False], wtype=arc4.tuple<bool,bool,bool,bool,bool,bool,bool,bool,bool>)))
+  assert(reinterpret_cast<bytes>(bzero(2)) == reinterpret_cast<bytes>(ARC4_ENCODE(#[False, False, False, False, False, False, False, False, False], wtype=arc4.tuple<bool,bool,bool,bool,bool,bool,bool,bool,bool>)))
   assert(reinterpret_cast<bytes>("") == bzero(2))
   assert(0x0000 == bzero(2))
   assert(0x0000000000 == bzero(5))

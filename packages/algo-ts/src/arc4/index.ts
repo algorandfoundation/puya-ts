@@ -5,8 +5,8 @@ import { OnCompleteActionStr } from '../on-complete-action'
 import { bytes, BytesCompat, uint64 } from '../primitives'
 import { ARC4Encoded } from './encoded-types'
 
-export * from './encoded-types'
 export * from './c2c'
+export * from './encoded-types'
 
 /**
  * The base type for all ARC4 contracts in Algorand TypeScript
@@ -61,6 +61,13 @@ export interface ConventionalRouting {
 export type CreateOptions = 'allow' | 'disallow' | 'require'
 
 /**
+ * The possible options for validation behaviour for this method
+ * args: ABI arguments are validated automatically to ensure they are encoded correctly.
+ * unsafe-disabled: No automatic validation occurs. Arguments can instead be validated manually.
+ */
+export type ValidateEncodingOptions = 'unsafe-disabled' | 'args'
+
+/**
  * Type alias for a default argument schema
  * @typeParam TContract The type of the contract containing the method this default argument is for
  */
@@ -105,6 +112,15 @@ export type AbiMethodConfig<TContract extends Contract> = {
    * Override the name used to generate the abi method selector
    */
   name?: string
+
+  /**
+   * Controls validation behaviour for this method.
+   *
+   * If "args", then ABI arguments are validated automatically to ensure they are encoded correctly.
+   * If "unsafe-disabled", then no automatic validation occurs. Arguments can instead be validated using the validateEncoding(...) function.
+   * The default behaviour of this option can be controlled with the --validate-abi-args CLI flag.
+   */
+  validateEncoding?: ValidateEncodingOptions
 
   /**
    * Specify default arguments that can be populated by clients calling this method.

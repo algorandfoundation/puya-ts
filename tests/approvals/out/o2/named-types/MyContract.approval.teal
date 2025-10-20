@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 8
+    intcblock 1 0 16 8
     pushbytes ""
     dup
     // tests/approvals/named-types.algo.ts:14
@@ -45,17 +45,27 @@ main_test_route@6:
     // export class MyContract extends Contract {
     txna ApplicationArgs 1
     dup
+    len
+    intc_2 // 16
+    ==
+    assert // invalid number of bytes for tests/approvals/named-types.algo.ts::XY
+    dup
     intc_1 // 0
     extract_uint64
     bury 3
-    intc_2 // 8
+    intc_3 // 8
     extract_uint64
     txna ApplicationArgs 2
+    dup
+    len
+    intc_2 // 16
+    ==
+    assert // invalid number of bytes for tests/approvals/named-types.algo.ts::YX
     dup
     intc_1 // 0
     extract_uint64
     swap
-    intc_2 // 8
+    intc_3 // 8
     extract_uint64
     bury 3
     // tests/approvals/named-types.algo.ts:37
