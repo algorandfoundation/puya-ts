@@ -1,16 +1,16 @@
-import type { Account, FixedArray, uint64 } from '@algorandfoundation/algorand-typescript';
-import { Contract, validateEncoding } from '@algorandfoundation/algorand-typescript';
-import * as arc4 from '@algorandfoundation/algorand-typescript/arc4';
+import type { Account, FixedArray, uint64 } from '@algorandfoundation/algorand-typescript'
+import { Contract, validateEncoding } from '@algorandfoundation/algorand-typescript'
+import * as arc4 from '@algorandfoundation/algorand-typescript/arc4'
 
-class ARC4StaticStruct extends arc4.Struct<{ foo: arc4.Uint64; bar: arc4.Uint8 }> { }
-class ARC4DynamicStruct extends arc4.Struct<{ foo: arc4.Uint64; bar: arc4.Uint8; baz: arc4.Str }> { }
+class ARC4StaticStruct extends arc4.Struct<{ foo: arc4.Uint64; bar: arc4.Uint8 }> {}
+class ARC4DynamicStruct extends arc4.Struct<{ foo: arc4.Uint64; bar: arc4.Uint8; baz: arc4.Str }> {}
 type NativeStaticStruct = { foo: uint64; bar: arc4.Uint8 }
 type NativeDynamicStruct = {
   foo: uint64
   bar: arc4.Uint8
   baz: string
 }
-class WithABool extends arc4.Struct<{ foo: arc4.Uint8; bar: arc4.DynamicBytes; baz: arc4.Bool }> { }
+class WithABool extends arc4.Struct<{ foo: arc4.Uint8; bar: arc4.DynamicBytes; baz: arc4.Bool }> {}
 type ARC4StaticTuple = arc4.Tuple<[arc4.Uint64, arc4.Uint8]>
 type ARC4DynamicTuple = arc4.Tuple<[arc4.Uint64, arc4.Uint8, arc4.Str]>
 
