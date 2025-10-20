@@ -117,7 +117,7 @@ export type AbiMethodConfig<TContract extends Contract> = {
    * Controls validation behaviour for this method.
    *
    * If "args", then ABI arguments are validated automatically to ensure they are encoded correctly.
-   * If "unsafe-disabled", then no automatic validation occurs. Arguments can instead be validated using the .validate() method.
+   * If "unsafe-disabled", then no automatic validation occurs. Arguments can instead be validated using the validateEncoding(...) function.
    * The default behaviour of this option can be controlled with the --validate-abi-args CLI flag.
    */
   validateEncoding?: ValidateEncodingOptions

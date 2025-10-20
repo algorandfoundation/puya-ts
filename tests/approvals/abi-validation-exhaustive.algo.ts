@@ -1,9 +1,9 @@
-import { Contract, validateEncoding } from '@algorandfoundation/algorand-typescript';
-import * as arc4 from '@algorandfoundation/algorand-typescript/arc4';
+import { Contract, validateEncoding } from '@algorandfoundation/algorand-typescript'
+import * as arc4 from '@algorandfoundation/algorand-typescript/arc4'
 
-class ARC4StaticStruct extends arc4.Struct<{ foo: arc4.UintN64; bar: arc4.UintN8 }> { }
-class ARC4DynamicStruct extends arc4.Struct<{ foo: arc4.UintN64; bar: arc4.UintN8; baz: arc4.Str }> { }
-class WithABool extends arc4.Struct<{ foo: arc4.UintN8; bar: arc4.DynamicBytes; baz: arc4.Bool }> { }
+class ARC4StaticStruct extends arc4.Struct<{ foo: arc4.UintN64; bar: arc4.UintN8 }> {}
+class ARC4DynamicStruct extends arc4.Struct<{ foo: arc4.UintN64; bar: arc4.UintN8; baz: arc4.Str }> {}
+class WithABool extends arc4.Struct<{ foo: arc4.UintN8; bar: arc4.DynamicBytes; baz: arc4.Bool }> {}
 type ARC4StaticTuple = arc4.Tuple<[arc4.UintN64, arc4.UintN8]>
 type ARC4DynamicTuple = arc4.Tuple<[arc4.UintN64, arc4.UintN8, arc4.Str]>
 
