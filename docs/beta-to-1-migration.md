@@ -76,7 +76,7 @@ const a = new arc4.StaticArray<UintN64, 3>(new UintN64(1), new UintN64(2), new U
 const b = a.copy()
 
 /**** After (puya-ts 1.0) ****/
-const a = new arc4.StaticArray<UintN64, 3>(new UintN64(1), new UintN64(2), new UintN64(3))
+const a = new arc4.StaticArray<Uint64, 3>(new Uint64(1), new Uint64(2), new Uint64(3))
 const b = clone(a)
 ```
 
@@ -180,7 +180,7 @@ test(asset: Asset, app: Application, acc: Account): [Asset, Application, Account
 
 Existing test files that need to run in a simulated AVM environment or import modules from `algorand-typescript` or `algorand-typescript-testing` packages should be renamed to have either the `.algo.spec.ts` or `.algo.test.ts` extension.
 
-`puyaTsTransformer` will only provide the simulated AVM environment and executable implementations of `algorand-typescript` module to files with those extensions, excluding standard `.spec.ts` or `.test.ts` files (e.g.`e2e.spec.ts`).
+`puyaTsTransformer` will only provide the simulated AVM environment and executable implementations of `algorand-typescript` module to files with those extensions, excluding standard `.spec.ts` or `.test.ts` files (e.g. `e2e.spec.ts`).
 
 This change can improve test performance by ensuring only relevant files are processed through `puyaTsTransformer`.
 
@@ -196,7 +196,7 @@ assert(arc4EncodedLength<[StaticArray<Bool, 10>, boolean, boolean]>() === 3)
 /**** After (puya-ts 1.0) ****/
 assert(sizeOf<uint64>() === 8)
 assert(sizeOf<boolean>() === 1)
-assert(sizeOf<UintN<512>>() === 64)
+assert(sizeOf<Uint<512>>() === 64)
 assert(sizeOf<[StaticArray<Bool, 10>, boolean, boolean]>() === 3)
 ```
 
@@ -259,7 +259,7 @@ assert(result3 === 'hello stubbed')
 
 ### Rename `interpretAsArc4` function to `convertBytes`
 
-The function now accepts an `options` object with `strategy: 'unsafe-cast'` and an optional `prefix` parameter.
+The function now accepts an `options` object with `strategy: 'unsafe-cast' | 'validate'` and an optional `prefix` parameter.
 
 ```typescript
 /**** Before (puya-ts beta) ****/
@@ -267,7 +267,7 @@ const x = interpretAsArc4<Uint<32>>(a)
 const y = interpretAsArc4<Byte>(b, 'log')
 
 /**** After (puya-ts 1.0) ****/
-const x = convertBytes<Uint<32>>(a, { strategy: 'unsafe-cast' })
+const x = convertBytes<Uint<32>>(a, { strategy: 'validate' })
 const y = convertBytes<Byte>(b, { prefix: 'log', strategy: 'unsafe-cast' })
 ```
 
@@ -391,7 +391,7 @@ function padTo32(b: bytes<16>): bytes<32> {
 
 We now support `number` and `bigint` literals when they are assigned to a `const` variable. Basic expressions are also allowed as long as they evaluate to a compile-time constant.
 
-**Note:** `number` literals cannot exceed `Number.MAX_SAFE_INTEGER` as they will lose precision when parsed, but it is possible to write expressions that would evaluate to unsafe integers eg. `2 ** 54`. This is because evaluation is handled by the compiler and performed using the `bigint` type.
+**Note:** `number` literals cannot exceed `Number.MAX_SAFE_INTEGER` as they will lose precision when parsed, but it is possible to write expressions that would evaluate to unsafe integers e.g. `2 ** 54`. This is because evaluation is handled by the compiler and performed using the `bigint` type.
 
 ```typescript
 const x = 123
@@ -421,12 +421,12 @@ boxMap({ a: 1, b: 2 }).value = 'test'
 **Note:** This enables direct manipulation of the bytes of any box, though it should be noted that mutations via this approach are not validated against the `Box` value type which could lead to box content being invalid for the expected type.
 
 ```typescript
-boxMap = BoxMap<Account, StaticArray<UintN8, 4>>({ keyPrefix: '' })
+boxMap = BoxMap<Account, StaticArray<Uint8, 4>>({ keyPrefix: '' })
 const boxForCaller = this.boxMap(Txn.sender)
 
 boxForCaller.create()
 
-boxForCaller.replace(0, new UintN8(123).bytes)
+boxForCaller.replace(0, new Uint8(123).bytes)
 ```
 
 ### Inner transaction groups can be dynamically composed
@@ -490,3 +490,50 @@ public getPreconditions(signature: bytes<64>): VotingPreconditions {
   ...
 }
 ```
+
+### `validateEncoding` option is added to `@abimethod` decorator
+
+`validateEncoding` option controls validation behaviour for the method and has valid values of `"args"` and `"unsafe-disabled"`.
+
+If `"args"`, then ABI arguments are validated automatically to ensure they are encoded correctly.
+If `"unsafe-disabled"`, then no automatic validation occurs. Arguments can instead be validated using the validateEncoding(...) function.
+
+The default behaviour of this option can be controlled with the --validate-abi-args CLI flag.
+
+```typescript
+class AbiValidationAlgo extends Contract {
+  @abimethod({ validateEncoding: 'args' })
+  withValidation(value: bytes<32>) {
+    return value.length
+  }
+
+  @abimethod({ validateEncoding: 'unsafe-disabled' })
+  withoutValidation(value: bytes<32>) {
+    return value.length
+  }
+
+  // performs validation on `value` parameter by default
+  defaultValidation(value: bytes<32>) {
+    return value.length
+  }
+}
+```
+
+### `validateEncoding` function can be used to ensure the value is well-formed
+
+It performs validation to ensure the value is well-formed and throws errors if it is not.
+
+```typescript
+class AbiValidationAlgo extends Contract {
+  @abimethod({ validateEncoding: 'unsafe-disabled' })
+  manualValidation(value: bytes<32>) {
+    validateEncoding(value)
+    return value.length
+  }
+}
+```
+
+### `--validate-abi-args` and `--validate-abi-return` CLI flags are added
+
+- `--validate-abi-args`: validates ABI transaction arguments by ensuring they are encoded correctly.
+- `--validate-abi-return`: validates encoding of ABI return values when using convertBytes with 'log' `prefix` option, `arc4.abiCall`, and strongly typed contract to contract calls.
