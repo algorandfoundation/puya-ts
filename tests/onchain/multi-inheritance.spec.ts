@@ -2,11 +2,14 @@ import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('multi-inheritance', () => {
-  const test = createArc4TestFixture('tests/approvals/multi-inheritance.algo.ts', {
-    CommonBase: {},
-    BaseOne: {},
-    BaseTwo: {},
-    MultiBases: {},
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/multi-inheritance.algo.ts',
+    contracts: {
+      CommonBase: {},
+      BaseOne: {},
+      BaseTwo: {},
+      MultiBases: {},
+    },
   })
 
   test('CommonBase has all state', async ({ appClientCommonBase, expect }) => {
@@ -64,8 +67,11 @@ describe('multi-inheritance', () => {
 })
 
 describe('multi-inheritance 2', () => {
-  const test = createArc4TestFixture('tests/approvals/multi-inheritance-2.algo.ts', {
-    StoreBoth: {},
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/multi-inheritance-2.algo.ts',
+    contracts: {
+      StoreBoth: {},
+    },
   })
 
   test('Both base functions can be resolved', async ({ appClientStoreBoth }) => {

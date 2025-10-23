@@ -88,11 +88,22 @@ type ProgramInvoker = {
 type BaseFixtureContextFor<T extends string> = {
   [key in T as `${key}Invoker`]: ProgramInvoker
 }
-export function createBaseTestFixture<TContracts extends string = ''>(
-  path: string,
-  contracts: TContracts[],
-  newScopeAt: typeof beforeAll | typeof beforeEach = beforeAll,
-) {
+/**
+ * Creates a base test fixture for testing compiled Algorand smart contracts.
+ *
+ * @param options - Configuration options for the test fixture
+ * @param options.path - Path to the TypeScript file containing the contracts
+ * @param options.contracts - Array of contract names to create fixtures for
+ * @param options.newScopeAt - When to create a new test scope. Defaults to `beforeAll` for shared state across tests.
+ *                              Use `beforeEach` to create a fresh state for each test.
+ */
+export function createBaseTestFixture<TContracts extends string = ''>(options: {
+  path: string
+  contracts: TContracts[]
+  /** When to create a new test scope. Defaults to `beforeAll`. Use `beforeEach` for fresh state per test. */
+  newScopeAt?: typeof beforeAll | typeof beforeEach
+}) {
+  const { path, contracts, newScopeAt = beforeAll } = options
   const lazyCompile = createLazyCompiler(path, { outputArc56: false, outputBytecode: true })
   const localnet = algorandFixture({
     testAccountFunding: microAlgos(100_000_000_000),
@@ -164,11 +175,22 @@ type ContractConfig = {
   funding?: AlgoAmount
 }
 
-export function createArc4TestFixture<TContracts extends string = ''>(
-  path: string,
-  contracts: Record<TContracts, ContractConfig> | TContracts[],
-  newScopeAt: typeof beforeAll | typeof beforeEach = beforeAll,
-) {
+/**
+ * Creates an ARC-4 test fixture for testing Algorand ARC-4 smart contracts.
+ *
+ * @param options - Configuration options for the test fixture
+ * @param options.path - Path to the TypeScript file containing the ARC-4 contracts
+ * @param options.contracts - Contract configuration as either an array of names or pairs of name with deployment config
+ * @param options.newScopeAt - When to create a new test scope. Defaults to `beforeAll` for shared state across tests.
+ *                              Use `beforeEach` to create a fresh state for each test.
+ */
+export function createArc4TestFixture<TContracts extends string = ''>(options: {
+  path: string
+  contracts: Record<TContracts, ContractConfig> | TContracts[]
+  /** When to create a new test scope. Defaults to `beforeAll`. Use `beforeEach` for fresh state per test. */
+  newScopeAt?: typeof beforeAll | typeof beforeEach
+}) {
+  const { path, contracts, newScopeAt = beforeAll } = options
   const lazyCompile = createLazyCompiler(path, { outputArc56: true, outputBytecode: false })
   const localnet = algorandFixture({
     testAccountFunding: microAlgos(100_000_000_000),

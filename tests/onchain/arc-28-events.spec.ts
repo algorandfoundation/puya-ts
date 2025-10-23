@@ -3,7 +3,7 @@ import { uint8ArrayToHex, utf8ToUint8Array } from '../../src/util'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('arc 28 events', () => {
-  const test = createArc4TestFixture('tests/approvals/arc-28-events.algo.ts', { EventEmitter: {} })
+  const test = createArc4TestFixture({ path: 'tests/approvals/arc-28-events.algo.ts', contracts: { EventEmitter: {} } })
 
   test('It works with struct types', async ({ appClientEventEmitter, expect }) => {
     const result = await appClientEventEmitter.send.call({ method: 'emitSwapped', args: [0, 255] })

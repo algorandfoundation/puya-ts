@@ -2,8 +2,11 @@ import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('array literals', () => {
-  const test = createArc4TestFixture('tests/approvals/array-literals.algo.ts', {
-    ArrayLiteralsAlgo: {},
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/array-literals.algo.ts',
+    contracts: {
+      ArrayLiteralsAlgo: {},
+    },
   })
 
   test('test', async ({ appClientArrayLiteralsAlgo }) => {

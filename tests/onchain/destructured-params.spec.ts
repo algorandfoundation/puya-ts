@@ -3,8 +3,11 @@ import { bigIntToUint8Array, hexToUint8Array, joinUint8Arrays, utf8ToUint8Array 
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('destructed params', () => {
-  const test = createArc4TestFixture('tests/approvals/destructured-params.algo.ts', {
-    DestructuredParamsAlgo: {},
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/destructured-params.algo.ts',
+    contracts: {
+      DestructuredParamsAlgo: {},
+    },
   })
   test('Works from abi', async ({ appClientDestructuredParamsAlgo }) => {
     const result = await appClientDestructuredParamsAlgo.send.call({ method: 'test', args: [{ a: 1, b: hexToUint8Array('FF'), c: true }] })

@@ -2,7 +2,10 @@ import { describe } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('arc4 method selector', () => {
-  const test = createArc4TestFixture('tests/approvals/arc4-method-selector.algo.ts', { ContractOne: {}, ContractTwo: {} })
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/arc4-method-selector.algo.ts',
+    contracts: { ContractOne: {}, ContractTwo: {} },
+  })
 
   test('It gets the correct method selector', async ({ appClientContractTwo, expect }) => {
     const result = await appClientContractTwo.send.call({ method: 'test', args: [] })

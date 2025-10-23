@@ -12,10 +12,13 @@ describe('template var', () => {
     SOME_BYTES: hexToUint8Array('FF0044'),
     AN_ADDRESS: address.publicKey,
   }
-  const test = createArc4TestFixture('tests/approvals/template-var.algo.ts', {
-    MyContract: {
-      deployParams: {
-        deployTimeParams: templateVars,
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/template-var.algo.ts',
+    contracts: {
+      MyContract: {
+        deployParams: {
+          deployTimeParams: templateVars,
+        },
       },
     },
   })

@@ -3,10 +3,13 @@ import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('resource encoding', () => {
-  const test = createArc4TestFixture('tests/approvals/resource-encoding.algo.ts', {
-    ByIndex: {},
-    ByValue: {},
-    C2C: { funding: algo(1) },
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/resource-encoding.algo.ts',
+    contracts: {
+      ByIndex: {},
+      ByValue: {},
+      C2C: { funding: algo(1) },
+    },
   })
 
   test('index', async ({ appClientByIndex, localnet }) => {

@@ -3,9 +3,12 @@ import { describe } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('itxn compose', () => {
-  const test = createArc4TestFixture('tests/approvals/itxn-compose.algo.ts', {
-    ItxnComposeAlgo: { funding: algos(5) },
-    VerifierContract: {},
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/itxn-compose.algo.ts',
+    contracts: {
+      ItxnComposeAlgo: { funding: algos(5) },
+      VerifierContract: {},
+    },
   })
 
   test('it can be called', async ({ localnet, algorand, appClientVerifierContract, appClientItxnComposeAlgo, testAccount }) => {
