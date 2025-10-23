@@ -3,12 +3,15 @@ import { describe } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('abi-decorators', () => {
-  const test = createArc4TestFixture('tests/approvals/abi-decorators.algo.ts', {
-    AbiDecorators: { deployParams: { createParams: { method: 'createMethod' } } },
-    OverloadedMethods: {},
-    BaseAbi: {},
-    SubAbi: {},
-    SubAbi2: {},
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/abi-decorators.algo.ts',
+    contracts: {
+      AbiDecorators: { deployParams: { createParams: { method: 'createMethod' } } },
+      OverloadedMethods: {},
+      BaseAbi: {},
+      SubAbi: {},
+      SubAbi2: {},
+    },
   })
   test('can be created', async ({ appFactoryAbiDecorators }) => {
     await appFactoryAbiDecorators.send.create({ method: 'createMethod' })

@@ -3,8 +3,11 @@ import { invariant, uint8ArrayToBase32, uint8ArrayToBigInt, uint8ArrayToHex, uin
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('asset proxy contract', () => {
-  const test = createArc4TestFixture('tests/approvals/asset-proxy.algo.ts', {
-    AssetProxyAlgo: {},
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/asset-proxy.algo.ts',
+    contracts: {
+      AssetProxyAlgo: {},
+    },
   })
   test('it runs', async ({ appClientAssetProxyAlgo, assetFactory, testAccount, expect }) => {
     const mdh = new Uint8Array(32)

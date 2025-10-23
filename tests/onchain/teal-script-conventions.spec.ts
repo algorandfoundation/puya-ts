@@ -4,8 +4,11 @@ import { utf8ToUint8Array } from '../../src/util'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('teal-script conventions', () => {
-  const test = createArc4TestFixture('tests/approvals/teal-script-conventions.algo.ts', {
-    TealScriptConventionsAlgo: {},
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/teal-script-conventions.algo.ts',
+    contracts: {
+      TealScriptConventionsAlgo: {},
+    },
   })
 
   test('lifecycle methods are routed as expected', async ({ appFactoryTealScriptConventionsAlgo, testAccount }) => {

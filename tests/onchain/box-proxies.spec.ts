@@ -5,7 +5,7 @@ import { bigIntToUint8Array, invariant, uint8ArrayToUtf8, utf8ToUint8Array } fro
 import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
 
 describe('BoxProxies', () => {
-  const test = createBaseTestFixture('tests/approvals/box-proxies.algo.ts', ['BoxContract', 'BoxNotExist', 'LargeBox'])
+  const test = createBaseTestFixture({ path: 'tests/approvals/box-proxies.algo.ts', contracts: ['BoxContract', 'BoxNotExist', 'LargeBox'] })
 
   test('Should run', async ({ BoxContractInvoker, algorand, testAccount }) => {
     const created = await BoxContractInvoker.send()
@@ -72,12 +72,15 @@ describe('BoxProxies', () => {
     })
   })
 
-  const it = createArc4TestFixture('tests/approvals/box-proxies.algo.ts', {
-    BoxCreate: { funding: algos(1) },
-    Arc4BoxContract: { funding: algos(10) },
-    TupleBox: { funding: algos(1) },
-    BoxToRefTest: { funding: algos(1) },
-    CompositeKeyTest: { funding: algos(1) },
+  const it = createArc4TestFixture({
+    path: 'tests/approvals/box-proxies.algo.ts',
+    contracts: {
+      BoxCreate: { funding: algos(1) },
+      Arc4BoxContract: { funding: algos(10) },
+      TupleBox: { funding: algos(1) },
+      BoxToRefTest: { funding: algos(1) },
+      CompositeKeyTest: { funding: algos(1) },
+    },
   })
   it('creates boxes of the min size', async ({ appClientBoxCreate }) => {
     await appClientBoxCreate.send.call({ method: 'createBoxes', boxReferences: ['bool', 'arc4b', 'a', 'b', 'c', 'd', 'e'] })
@@ -293,7 +296,7 @@ describe('BoxProxies', () => {
 const APPROVE = new Uint8Array([0x09, 0x81, 0x01])
 
 describe('LargeBox', () => {
-  const test = createArc4TestFixture('tests/approvals/box-proxies.algo.ts', { LargeBox: { funding: algos(6) } })
+  const test = createArc4TestFixture({ path: 'tests/approvals/box-proxies.algo.ts', contracts: { LargeBox: { funding: algos(6) } } })
 
   test('should work with large boxes', async ({ appClientLargeBox, algorand, testAccount }) => {
     const call = await appClientLargeBox.createTransaction.call({

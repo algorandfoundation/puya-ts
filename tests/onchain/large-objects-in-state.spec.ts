@@ -4,7 +4,7 @@ import { invariant } from '../../src/util'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('large-objects-in-state', () => {
-  const test = createArc4TestFixture('tests/approvals/large-objects-in-state.algo.ts', { LargeObjectsInStateAlgo: {} })
+  const test = createArc4TestFixture({ path: 'tests/approvals/large-objects-in-state.algo.ts', contracts: { LargeObjectsInStateAlgo: {} } })
 
   test('it runs', async ({ appFactoryLargeObjectsInStateAlgo, algorand, testAccount }) => {
     const { appClient } = await appFactoryLargeObjectsInStateAlgo.send.bare.create({})

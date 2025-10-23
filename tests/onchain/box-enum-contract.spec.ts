@@ -3,7 +3,7 @@ import { describe } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('box-enum-contract', () => {
-  const test = createArc4TestFixture('tests/approvals/box-enum-contract.algo.ts', { BoxContract: {} })
+  const test = createArc4TestFixture({ path: 'tests/approvals/box-enum-contract.algo.ts', contracts: { BoxContract: {} } })
 
   test('can store and load enums', async ({ appClientBoxContract, expect }) => {
     await appClientBoxContract.fundAppAccount({ amount: algo(1) })

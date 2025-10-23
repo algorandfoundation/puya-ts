@@ -5,7 +5,7 @@ import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixtur
 
 describe('inheritance', () => {
   describe('non arc4', () => {
-    const test = createBaseTestFixture('tests/approvals/inheritance-b.algo.ts', ['ConcreteSimpleContract'])
+    const test = createBaseTestFixture({ path: 'tests/approvals/inheritance-b.algo.ts', contracts: ['ConcreteSimpleContract'] })
     test('Simple contract can be created', async ({ ConcreteSimpleContractInvoker, expect }) => {
       const result = await ConcreteSimpleContractInvoker.send({
         args: [bigIntToUint8Array(10n), bigIntToUint8Array(2n)],
@@ -16,7 +16,7 @@ describe('inheritance', () => {
     })
   })
   describe('arc4', () => {
-    const test = createArc4TestFixture('tests/approvals/inheritance-b.algo.ts', { ConcreteArc4Contract: {} })
+    const test = createArc4TestFixture({ path: 'tests/approvals/inheritance-b.algo.ts', contracts: { ConcreteArc4Contract: {} } })
     test('ARC4 contract can be created', async ({ appFactoryConcreteArc4Contract }) => {
       await appFactoryConcreteArc4Contract.send.bare.create()
     })

@@ -3,11 +3,14 @@ import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('State totals', () => {
-  const test = createArc4TestFixture('tests/approvals/state-totals.algo.ts', {
-    ExtendsSubWithTotals: {},
-    BaseWithState: {},
-    SubClassWithState: {},
-    SubClassWithExplicitTotals: {},
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/state-totals.algo.ts',
+    contracts: {
+      ExtendsSubWithTotals: {},
+      BaseWithState: {},
+      SubClassWithState: {},
+      SubClassWithExplicitTotals: {},
+    },
   })
 
   test('BaseWithState has correct totals', ({ appSpecBaseWithState }) => {

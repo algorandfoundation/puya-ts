@@ -3,8 +3,11 @@ import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('native arrays', () => {
-  const test = createArc4TestFixture('tests/approvals/native-arrays.algo.ts', {
-    NativeArraysAlgo: {},
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/native-arrays.algo.ts',
+    contracts: {
+      NativeArraysAlgo: {},
+    },
   })
   test('it runs', async ({ appClientNativeArraysAlgo }) => {
     await appClientNativeArraysAlgo.send.call({ method: 'doThings', args: [], extraFee: algos(1) })

@@ -17,7 +17,7 @@ describe('abi validation routing', () => {
   const validB32 = abiBytes32.encode(b32)
   const invalidB32 = abiBytes32.encode(b32).slice(0, -1)
 
-  const test = createArc4TestFixture('tests/approvals/abi-validation.algo.ts', { AbiValidationAlgo: {} })
+  const test = createArc4TestFixture({ path: 'tests/approvals/abi-validation.algo.ts', contracts: { AbiValidationAlgo: {} } })
   test('with validation fails on invalid', async ({ appClientAbiValidationAlgo }) => {
     const withValidation = algosdk.ABIMethod.fromSignature('withValidation(byte[32])uint64')
 

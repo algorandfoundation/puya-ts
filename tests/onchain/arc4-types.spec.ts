@@ -4,7 +4,7 @@ import { bigIntToUint8Array, utf8ToUint8Array } from '../../src/util'
 import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
 
 describe('arc4-types', () => {
-  const test = createBaseTestFixture('tests/approvals/arc4-types.algo.ts', ['Arc4TypesTestContract'])
+  const test = createBaseTestFixture({ path: 'tests/approvals/arc4-types.algo.ts', contracts: ['Arc4TypesTestContract'] })
 
   test('runs', async ({ Arc4TypesTestContractInvoker }) => {
     await Arc4TypesTestContractInvoker.send({ extraFee: algos(1) })
@@ -12,7 +12,7 @@ describe('arc4-types', () => {
 })
 
 describe('arc4-struct', () => {
-  const test = createArc4TestFixture('tests/approvals/arc4-struct.algo.ts', { StructDemo: {} })
+  const test = createArc4TestFixture({ path: 'tests/approvals/arc4-struct.algo.ts', contracts: { StructDemo: {} } })
 
   test('testVectorCreationAndEquality', async ({ appClientStructDemo }) => {
     await appClientStructDemo.send.call({ method: 'testVectorCreationAndEquality' })
@@ -39,7 +39,7 @@ describe('arc4-struct', () => {
   })
 })
 describe('arc4-encode-decode', () => {
-  const test = createArc4TestFixture('tests/approvals/arc4-encode-decode.algo.ts', { Arc4EncodeDecode: {} })
+  const test = createArc4TestFixture({ path: 'tests/approvals/arc4-encode-decode.algo.ts', contracts: { Arc4EncodeDecode: {} } })
   test('encoding', async ({ appClientArc4EncodeDecode, testAccount }) => {
     await appClientArc4EncodeDecode.send.call({
       method: 'testEncoding',

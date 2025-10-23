@@ -3,9 +3,12 @@ import { describe } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('itxn contract', () => {
-  const test = createArc4TestFixture('tests/approvals/itxn.algo.ts', {
-    ItxnDemoContract: { funding: algos(2) },
-    ItxnReceiver: { funding: algos(1) },
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/itxn.algo.ts',
+    contracts: {
+      ItxnDemoContract: { funding: algos(2) },
+      ItxnReceiver: { funding: algos(1) },
+    },
   })
 
   test('test1 runs', async ({ appClientItxnDemoContract }) => {

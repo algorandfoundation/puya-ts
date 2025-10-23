@@ -4,7 +4,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('precompiled', () => {
   describe('un-typed', () => {
-    const test = createArc4TestFixture('tests/approvals/precompiled-factory.algo.ts', { HelloFactory: {} })
+    const test = createArc4TestFixture({ path: 'tests/approvals/precompiled-factory.algo.ts', contracts: { HelloFactory: {} } })
 
     test('Hello contract can be deployed', async ({ appClientHelloFactory }) => {
       await appClientHelloFactory.send.call({ method: 'test_compile_contract', extraFee: algo(1) })
@@ -20,7 +20,10 @@ describe('precompiled', () => {
     })
   })
   describe('typed', () => {
-    const test = createArc4TestFixture('tests/approvals/precompiled-typed.algo.ts', { HelloFactory: { funding: algo(1) } })
+    const test = createArc4TestFixture({
+      path: 'tests/approvals/precompiled-typed.algo.ts',
+      contracts: { HelloFactory: { funding: algo(1) } },
+    })
 
     test('Hello contract can be deployed', async ({ appClientHelloFactory }) => {
       await appClientHelloFactory.send.call({ method: 'test_compile_contract', extraFee: algo(1) })

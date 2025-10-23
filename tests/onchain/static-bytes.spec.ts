@@ -3,8 +3,11 @@ import { invariant } from '../../src/util'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('static bytes', () => {
-  const test = createArc4TestFixture('tests/approvals/static-bytes.algo.ts', {
-    StaticBytesAlgo: {},
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/static-bytes.algo.ts',
+    contracts: {
+      StaticBytesAlgo: {},
+    },
   })
   test('it works as abi parameter and return type', async ({ appClientStaticBytesAlgo, testAccount }) => {
     const result = await appClientStaticBytesAlgo.send.call({ method: 'receiveB32', args: [testAccount.addr.publicKey] })

@@ -40,7 +40,10 @@ function convertToBytes(sizeOrBytesValue: Uint8Array | number | (number | Uint8A
 }
 
 describe('abi validation exhaustive', () => {
-  const test = createArc4TestFixture('tests/approvals/abi-validation-exhaustive.algo.ts', { AbiValidationExhaustive: {} })
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/abi-validation-exhaustive.algo.ts',
+    contracts: { AbiValidationExhaustive: {} },
+  })
   test.for<[string, number | Uint8Array | (number | Uint8Array)[]]>([
     ['uint64', 8],
     ['ufixed64', 8],

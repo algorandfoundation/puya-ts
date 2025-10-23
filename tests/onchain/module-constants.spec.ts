@@ -2,7 +2,7 @@ import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('module constants', () => {
-  const test = createArc4TestFixture('tests/approvals/module-constants.algo.ts', { ModuleConstantsAlgo: {} })
+  const test = createArc4TestFixture({ path: 'tests/approvals/module-constants.algo.ts', contracts: { ModuleConstantsAlgo: {} } })
 
   test('bool constants work', async ({ appClientModuleConstantsAlgo }) => {
     const result = await appClientModuleConstantsAlgo.send.call({ method: 'getBoolConstants' })

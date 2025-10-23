@@ -2,8 +2,11 @@ import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('for loops', () => {
-  const test = createArc4TestFixture('tests/approvals/for-of-loops.algo.ts', {
-    ForOfLoopsAlgo: {},
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/for-of-loops.algo.ts',
+    contracts: {
+      ForOfLoopsAlgo: {},
+    },
   })
 
   test('test_for_of_loop_tuple', async ({ appClientForOfLoopsAlgo }) => {
