@@ -12,8 +12,8 @@ import type { AlgorandFixture } from '@algorandfoundation/algokit-utils/types/te
 import type { Use } from '@vitest/runner/types'
 import { OnApplicationComplete } from 'algosdk'
 import fs from 'fs'
-import type { ExpectStatic } from 'vitest'
-import { test } from 'vitest'
+import type { beforeEach, ExpectStatic } from 'vitest'
+import { beforeAll, test } from 'vitest'
 import { compile, CompileOptions, processInputPaths } from '../../../src'
 import { LoggingContext, LogLevel } from '../../../src/logger'
 import type { DeliberateAny } from '../../../src/typescript-helpers'
@@ -28,7 +28,6 @@ const algorandTestFixture = (localnetFixture: AlgorandFixture) =>
     assetFactory: (assetCreateParams: AssetCreateParams) => Promise<bigint>
   }>({
     localnet: async ({ expect }, use) => {
-      await localnetFixture.beforeEach()
       await use(localnetFixture)
     },
     testAccount: async ({ localnet }, use) => {
@@ -89,7 +88,11 @@ type ProgramInvoker = {
 type BaseFixtureContextFor<T extends string> = {
   [key in T as `${key}Invoker`]: ProgramInvoker
 }
-export function createBaseTestFixture<TContracts extends string = ''>(path: string, contracts: TContracts[]) {
+export function createBaseTestFixture<TContracts extends string = ''>(
+  path: string,
+  contracts: TContracts[],
+  newScopeAt: typeof beforeAll | typeof beforeEach = beforeAll,
+) {
   const lazyCompile = createLazyCompiler(path, { outputArc56: false, outputBytecode: true })
   const localnet = algorandFixture({
     testAccountFunding: microAlgos(100_000_000_000),
@@ -143,7 +146,9 @@ export function createBaseTestFixture<TContracts extends string = ''>(path: stri
       })
     }
   }
-  return algorandTestFixture(localnet).extend<BaseFixtureContextFor<TContracts>>(ctx)
+  const fixture = algorandTestFixture(localnet).extend<BaseFixtureContextFor<TContracts>>(ctx)
+  newScopeAt(localnet.newScope)
+  return fixture
 }
 
 type Arc4FixtureContextFor<T extends string> = {
@@ -162,6 +167,7 @@ type ContractConfig = {
 export function createArc4TestFixture<TContracts extends string = ''>(
   path: string,
   contracts: Record<TContracts, ContractConfig> | TContracts[],
+  newScopeAt: typeof beforeAll | typeof beforeEach = beforeAll,
 ) {
   const lazyCompile = createLazyCompiler(path, { outputArc56: true, outputBytecode: false })
   const localnet = algorandFixture({
@@ -225,7 +231,9 @@ export function createArc4TestFixture<TContracts extends string = ''>(
       await use(appClient)
     }
   }
-  return algorandTestFixture(localnet).extend<Arc4FixtureContextFor<TContracts>>(ctx)
+  const fixture = algorandTestFixture(localnet).extend<Arc4FixtureContextFor<TContracts>>(ctx)
+  newScopeAt(localnet.newScope)
+  return fixture
 }
 
 type CompilationArtifacts = {
