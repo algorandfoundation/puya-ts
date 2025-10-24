@@ -1,6 +1,7 @@
 import type { Account, FixedArray, uint64 } from '@algorandfoundation/algorand-typescript'
-import { Contract, validateEncoding } from '@algorandfoundation/algorand-typescript'
+import { Bytes, Contract, validateEncoding } from '@algorandfoundation/algorand-typescript'
 import * as arc4 from '@algorandfoundation/algorand-typescript/arc4'
+import { abiCall, compileArc4, convertBytes } from '@algorandfoundation/algorand-typescript/arc4'
 
 class ARC4StaticStruct extends arc4.Struct<{ foo: arc4.Uint64; bar: arc4.Uint8 }> {}
 class ARC4DynamicStruct extends arc4.Struct<{ foo: arc4.Uint64; bar: arc4.Uint8; baz: arc4.Str }> {}
@@ -130,5 +131,25 @@ class AbiValidationExhaustive extends Contract {
   @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
   validate_native_dynamic_struct_arr3(value: FixedArray<NativeDynamicStruct, 3>) {
     validateEncoding(value)
+  }
+
+  validate_c2c() {
+    const compiled = compileArc4(InvalidContract)
+
+    const app = compiled.call.create({}).itxn.createdApp
+    // call should fail validation as invalidValue returns a malformed array
+    abiCall({
+      method: InvalidContract.prototype.invalidValue,
+      appId: app,
+    })
+  }
+}
+
+class InvalidContract extends Contract {
+  @arc4.abimethod({ onCreate: 'require' })
+  create() {}
+
+  invalidValue() {
+    return convertBytes<arc4.StaticArray<arc4.Uint64, 3>>(Bytes('invalid'), { strategy: 'unsafe-cast' })
   }
 }

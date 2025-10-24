@@ -1,6 +1,7 @@
 import algosdk from 'algosdk'
 import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
+import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount'
 
 // Constants for test data
 const VALID_DYNAMIC_STRUCT_BYTES = new Uint8Array([...Array(9).fill(0), 0, 11, 0, 0])
@@ -246,5 +247,14 @@ describe('abi validation exhaustive', () => {
         args: [selector, bytesValue],
       }),
     ).rejects.toThrow(expectedError)
+  })
+
+  test('inner transaction fails due to invalid return', async ({ appClientAbiValidationExhaustive }) => {
+    await expect(
+      appClientAbiValidationExhaustive.send.call({
+        method: 'validate_c2c',
+        staticFee: new AlgoAmount({ microAlgos: 3000 }),
+      }),
+    ).rejects.toThrow('invalid number of bytes for arc4.static_array<arc4.uint64, 3>')
   })
 })
