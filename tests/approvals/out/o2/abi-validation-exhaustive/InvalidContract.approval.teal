@@ -1,0 +1,51 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:117
+    // class InvalidContract extends Contract {
+    txn NumAppArgs
+    bz main_after_if_else@8
+    pushbytess 0x4c5c61ba 0x45cf05ef // method "create()void", method "invalidValue()uint64[3]"
+    txna ApplicationArgs 0
+    match main_create_route@3 main_invalidValue_route@4
+
+main_after_if_else@8:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:117
+    // class InvalidContract extends Contract {
+    pushint 0 // 0
+    return
+
+main_invalidValue_route@4:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:124
+    // invalidValue() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/abi-validation-exhaustive.algo.ts:118
+    // g_bytes = GlobalState<bytes>({ key: 'g' })
+    pushbytess "g" "invalid" // "g", "invalid"
+    // tests/approvals/abi-validation-exhaustive.algo.ts:125
+    // this.g_bytes.value = Bytes('invalid')
+    app_global_put
+    // tests/approvals/abi-validation-exhaustive.algo.ts:124
+    // invalidValue() {
+    pushbytes 0x151f7c75696e76616c6964
+    log
+    pushint 1 // 1
+    return
+
+main_create_route@3:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:121
+    // @arc4.abimethod({ onCreate: 'require' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    pushint 1 // 1
+    return

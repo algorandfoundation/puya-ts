@@ -2,19 +2,17 @@ import { jsonSerializeAwst } from '../awst/json-serialize-awst'
 import type { AWST } from '../awst/nodes'
 import { ToCodeVisitor } from '../awst/to-code-visitor'
 import { logger } from '../logger'
-import type { CompileOptions } from '../options'
 import type { CreateProgramResult } from '../parser'
 import { invariant } from '../util'
 import { ArtifactKind, writeArtifact } from '../write-artifact'
 import { SourceFileVisitor } from './ast-visitors/source-file-visitor'
+import type { BuildAwstOptions } from './context/awst-build-context'
 import { AwstBuildContext } from './context/awst-build-context'
 import { buildLibAwst } from './lib'
 import type { CompilationSet } from './models/contract-class-model'
 
-type BuildAwstOptions = Pick<CompileOptions, 'filePaths' | 'outputAwst' | 'outputAwstJson'>
-
 export function buildAwst({ program, sourceFiles }: CreateProgramResult, options: BuildAwstOptions): [AWST[], CompilationSet] {
-  return AwstBuildContext.run(program, () => {
+  return AwstBuildContext.run(program, options, () => {
     buildLibAwst()
     const moduleAwst: AWST[] = []
     for (const [sourcePath, sourceFile] of Object.entries(sourceFiles)) {

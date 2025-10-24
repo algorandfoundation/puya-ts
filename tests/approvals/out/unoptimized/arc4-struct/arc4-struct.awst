@@ -46,7 +46,7 @@ contract StructDemo
   toAndFromBytes(v1: Vector): Vector
   {
     v1_bytes: bytes = reinterpret_cast<bytes>(v1)
-    return reinterpret_cast<Vector>(v1_bytes)
+    return ARC4_FROM_BYTES(v1_bytes, wtype=Vector, validate=true)
   }
   
   toNative(v1: Vector): toNativeResult{ x: arc4.uint64, y: arc4.uint64 }

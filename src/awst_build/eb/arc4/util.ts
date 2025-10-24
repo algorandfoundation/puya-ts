@@ -45,8 +45,9 @@ export class InterpretAsArc4FunctionBuilder extends FunctionBuilder {
     const prefixBytes = getPrefixValue(prefixType)
 
     return instanceEb(
-      nodeFactory.reinterpretCast({
-        expr: validatePrefix(theBytes, prefixBytes, sourceLocation),
+      nodeFactory.aRC4FromBytes({
+        value: validatePrefix(theBytes, prefixBytes, sourceLocation),
+        validate: true,
         wtype: ptype.wtype,
         sourceLocation,
       }),

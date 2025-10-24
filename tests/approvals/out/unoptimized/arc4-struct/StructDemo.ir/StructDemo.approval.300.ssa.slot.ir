@@ -291,6 +291,9 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpr
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes(v1: bytes[16]) -> bytes[16]:
     block@0: // L39
         let v1_bytes#0: bytes = v1#0
+        let value_len%0#0: uint64 = (len v1_bytes#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 16u)
+        (assert size_is_correct%0#0) // invalid number of bytes for Vector
         let reinterpret_bytes[16]%0#0: bytes[16] = v1_bytes#0
         return reinterpret_bytes[16]%0#0
 
