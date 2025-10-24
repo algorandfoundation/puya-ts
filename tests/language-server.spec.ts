@@ -5,7 +5,6 @@ import { afterAll, describe, expect, it } from 'vitest'
 import { StreamMessageReader, StreamMessageWriter } from 'vscode-jsonrpc/node'
 import * as ls from 'vscode-languageserver'
 import { URI } from 'vscode-uri'
-import { sleep } from '../src/util/sleep'
 import { invariant } from '../src/util'
 
 function encodePathToUri(path: string) {
@@ -78,7 +77,7 @@ describe('Language Server', () => {
     await exit
     expect(process.exitCode, 'language server exit code').toBe(0)
   })
-  it('publishes diagnostics', { timeout: 2000_000 }, async () => {
+  it('publishes diagnostics', async () => {
     const { connection, process, processId } = getLanguageServer()
 
     const exit = new Promise<void>((resolve) => {
@@ -95,13 +94,9 @@ describe('Language Server', () => {
         resolve()
       })
     })
-    await initialize(connection, processId)
-    log('initialized')
 
-    await sleep(1000)
     const path = pathe.join(codeFixesPath, 'unsupported-tokens.algo.ts')
     const uri = encodePathToUri(path)
-
     const nextDiagnostic = new Promise<ls.PublishDiagnosticsParams>((resolve, reject) => {
       connection.onNotification(ls.PublishDiagnosticsNotification.type, (n) => {
         if (n.uri === uri) {
@@ -114,6 +109,9 @@ describe('Language Server', () => {
         }
       })
     })
+    await initialize(connection, processId)
+    log('initialized')
+
     const diagnostic = await nextDiagnostic
     expect(diagnostic, 'diagnostic').toMatchObject({
       uri: uri,
