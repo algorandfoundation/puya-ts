@@ -1,0 +1,103 @@
+#pragma version 10
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+
+main_block@0:
+
+main_block@1:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:117
+    // class InvalidContract extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@7
+
+main_abi_routing@2:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:117
+    // class InvalidContract extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x4c5c61ba // method "create()void"
+    pushbytes 0x45cf05ef // method "invalidValue()uint64[3]"
+    uncover 2
+    match main_create_route@3 main_invalidValue_route@4
+
+main_switch_case_default@5:
+
+main_switch_case_next@6:
+
+main_after_if_else@8:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:117
+    // class InvalidContract extends Contract {
+    intc_0 // 0
+
+main_after_inlined_tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.__puya_arc4_router__@9:
+    return
+
+main_invalidValue_route@4:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:124
+    // invalidValue() {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub invalidValue
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.__puya_arc4_router__@9
+
+main_create_route@3:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:121
+    // @arc4.abimethod({ onCreate: 'require' })
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub create
+    intc_1 // 1
+    b main_after_inlined_tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.__puya_arc4_router__@9
+
+main_bare_routing@7:
+    b main_after_if_else@8
+
+
+// tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.create() -> void:
+create:
+
+create_block@0:
+    retsub
+
+
+// tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.invalidValue() -> bytes:
+invalidValue:
+
+invalidValue_block@0:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:118
+    // g_bytes = GlobalState<bytes>({ key: 'g' })
+    pushbytes "g"
+    // tests/approvals/abi-validation-exhaustive.algo.ts:125
+    // this.g_bytes.value = Bytes('invalid')
+    pushbytes "invalid"
+    app_global_put
+    // tests/approvals/abi-validation-exhaustive.algo.ts:119
+    // g_fixed = GlobalState<arc4.StaticArray<arc4.UintN64, 3>>({ key: 'g' })
+    intc_0 // 0
+    pushbytes "g"
+    app_global_get_ex
+    assert // check GlobalState exists
+    // tests/approvals/abi-validation-exhaustive.algo.ts:126
+    // return this.g_fixed.value
+    retsub

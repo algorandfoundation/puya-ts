@@ -75,11 +75,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%30#0) // OnCompletion is not NoOp
         let tmp%31#0: uint64 = (txn ApplicationID)
         (assert tmp%31#0) // can only call when not creating
-        let v1#0: bytes[16] = (txna ApplicationArgs 1)
-        let value_len%6#0: uint64 = (len v1#0)
+        let tmp%33#0: bytes = (txna ApplicationArgs 1)
+        let value_len%6#0: uint64 = (len tmp%33#0)
         let size_is_correct%6#0: bool = (== value_len%6#0 16u)
         (assert size_is_correct%6#0) // invalid number of bytes for Vector
-        let tmp%35#0: bytes = (concat 0x151f7c75 v1#0)
+        let tmp%34#0: bytes[16] = tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes(tmp%33#0)
+        let tmp%35#0: bytes = (concat 0x151f7c75 tmp%34#0)
         (log tmp%35#0)
         let tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__%0#4: bool = 1u
         goto block@20
@@ -224,6 +225,13 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpr
         let tmp%3#0: bool = (== v3#0 v1#0)
         (assert tmp%3#0)
         return 
+
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes(v1: bytes[16]) -> bytes[16]:
+    block@0: // L39
+        let value_len%0#0: uint64 = (len v1#0)
+        let size_is_correct%0#0: bool = (== value_len%0#0 16u)
+        (assert size_is_correct%0#0) // invalid number of bytes for Vector
+        return v1#0
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toNative(v1: bytes[16]) -> <bytes[8], bytes[8]>:
     block@0: // L44

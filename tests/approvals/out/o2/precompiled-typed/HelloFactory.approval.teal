@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 6 1 3
+    intcblock 0 6 1 2
     bytecblock 0x151f7c75 base64(CoEBQw==) 0xd0a28200 "TEST" "T" 0x24378d3c 0x0005776f726c64 0x9cd87de3 0x4c5c61ba
     // tests/approvals/precompiled-typed.algo.ts:13
     // class HelloFactory extends Contract {
@@ -74,7 +74,7 @@ main_test_call_contract_with_reference_types_route@8:
     //     unitName: 'T',
     //     assetName: 'TEST',
     //   })
-    intc_3 // 3
+    pushint 3 // 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -207,7 +207,7 @@ main_test_call_contract_with_transactions_route@7:
     //   unitName: 'T',
     //   assetName: 'TEST',
     // })
-    intc_3 // 3
+    pushint 3 // 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -229,10 +229,17 @@ main_test_call_contract_with_transactions_route@7:
     itxn_field Fee
     itxn_submit
     gitxn 1 LastLog
+    dup
+    extract 4 0
+    swap
     extract 0 4
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     // tests/approvals/precompiled-typed.algo.ts:116-119
     // compiled.call.receivesAnyTxn({
     //   appId,
@@ -272,10 +279,17 @@ main_test_call_contract_with_transactions_route@7:
     itxn_field Fee
     itxn_submit
     gitxn 1 LastLog
+    dup
+    extract 4 0
+    swap
     extract 0 4
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     // tests/approvals/precompiled-typed.algo.ts:121-124
     // compiled.call.receivesAssetConfig({
     //   appId,
@@ -300,7 +314,7 @@ main_test_call_contract_with_transactions_route@7:
     //   unitName: 'T',
     //   assetName: 'TEST',
     // })
-    intc_3 // 3
+    pushint 3 // 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -322,10 +336,22 @@ main_test_call_contract_with_transactions_route@7:
     itxn_field Fee
     itxn_submit
     gitxn 1 LastLog
+    dup
+    extract 4 0
+    swap
     extract 0 4
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_3 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     // tests/approvals/precompiled-typed.algo.ts:127
     // receiver: appId.address,
     dup
@@ -360,7 +386,7 @@ main_test_call_contract_with_transactions_route@7:
     //   unitName: 'T',
     //   assetName: 'TEST',
     // })
-    intc_3 // 3
+    pushint 3 // 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -455,6 +481,11 @@ main_test_compile_contract_large_route@6:
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/precompiled-typed.algo.ts:88
     // assert(result === 4096)
@@ -540,10 +571,21 @@ main_test_compile_contract_with_template_and_custom_prefix_route@5:
     itxn_submit
     itxn LastLog
     dup
+    extract 4 0
+    dig 1
     extract 0 4
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_3 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:72
     // assert(result === 'bonjour world')
@@ -629,10 +671,21 @@ main_test_compile_contract_with_template_route@4:
     itxn_submit
     itxn LastLog
     dup
+    extract 4 0
+    dig 1
     extract 0 4
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_3 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:55
     // assert(txn.returnValue === 'hey world')
@@ -728,10 +781,21 @@ main_test_compile_contract_route@3:
     itxn_submit
     itxn LastLog
     dup
+    extract 4 0
+    dig 1
     extract 0 4
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_3 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:25
     // assert(result === 'hello world')
@@ -764,10 +828,21 @@ main_test_compile_contract_route@3:
     itxn_submit
     itxn LastLog
     dup
+    extract 4 0
+    dig 1
     extract 0 4
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_3 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:32
     // assert(result2 === 'hello abi')
@@ -800,10 +875,21 @@ main_test_compile_contract_route@3:
     itxn_submit
     itxn LastLog
     dup
+    extract 4 0
+    dig 1
     extract 0 4
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_3 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:38
     // assert(result3 === 'hello stubbed')

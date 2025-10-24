@@ -8,32 +8,93 @@ main:
     dup
     pushbytes ""
     dupn 2
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@28
-    pushbytess 0x4d758c59 0x6bb7b963 0x18852cd6 0x5b2efbe1 0xecca7a98 0x94da73c0 0x26230de1 0x3ec77fac 0xf111c07e 0x3f68b7d1 0x674c0e87 0x091ab848 0xf3289fb8 0x91acee51 0x4e641e99 0x6536e3c2 0x93522cb8 0xbf888825 0x22aa90d6 0x6eecb49d 0x28388829 0x7e804bbf 0xce26c72c // method "validate_uint64(uint64)void", method "validate_uint8(uint8)void", method "validate_uint512(uint512)void", method "validate_ufixed64(ufixed64x2)void", method "validate_uint8_arr(uint8[])void", method "validate_uint8_arr3(uint8[3])void", method "validate_bool(bool)void", method "validate_byte(byte)void", method "validate_string(string)void", method "validate_bytes(byte[])void", method "validate_address(address)void", method "validate_account(address)void", method "validate_bool_arr(bool[])void", method "validate_bool_arr3(bool[3])void", method "validate_static_tuple((uint64,uint8))void", method "validate_dynamic_tuple((uint64,uint8,string))void", method "validate_static_struct((uint64,uint8))void", method "validate_dynamic_struct((uint64,uint8,string))void", method "validate_static_struct_arr((uint64,uint8)[])void", method "validate_static_struct_arr3((uint64,uint8)[3])void", method "validate_dynamic_struct_arr((uint64,uint8,string)[])void", method "validate_dynamic_struct_arr3((uint64,uint8,string)[3])void", method "validate_dynamic_struct_with_a_bool((uint8,byte[],bool))void"
+    bz main_bare_routing@29
+    pushbytess 0x4d758c59 0x6bb7b963 0x18852cd6 0x5b2efbe1 0xecca7a98 0x94da73c0 0x26230de1 0x3ec77fac 0xf111c07e 0x3f68b7d1 0x674c0e87 0x091ab848 0xf3289fb8 0x91acee51 0x4e641e99 0x6536e3c2 0x93522cb8 0xbf888825 0x22aa90d6 0x6eecb49d 0x28388829 0x7e804bbf 0xce26c72c 0xd0b582f1 // method "validate_uint64(uint64)void", method "validate_uint8(uint8)void", method "validate_uint512(uint512)void", method "validate_ufixed64(ufixed64x2)void", method "validate_uint8_arr(uint8[])void", method "validate_uint8_arr3(uint8[3])void", method "validate_bool(bool)void", method "validate_byte(byte)void", method "validate_string(string)void", method "validate_bytes(byte[])void", method "validate_address(address)void", method "validate_account(address)void", method "validate_bool_arr(bool[])void", method "validate_bool_arr3(bool[3])void", method "validate_static_tuple((uint64,uint8))void", method "validate_dynamic_tuple((uint64,uint8,string))void", method "validate_static_struct((uint64,uint8))void", method "validate_dynamic_struct((uint64,uint8,string))void", method "validate_static_struct_arr((uint64,uint8)[])void", method "validate_static_struct_arr3((uint64,uint8)[3])void", method "validate_dynamic_struct_arr((uint64,uint8,string)[])void", method "validate_dynamic_struct_arr3((uint64,uint8,string)[3])void", method "validate_dynamic_struct_with_a_bool((uint8,byte[],bool))void", method "validate_c2c()void"
     txna ApplicationArgs 0
-    match main_validate_uint64_route@3 main_validate_uint8_route@4 main_validate_uint512_route@5 main_validate_ufixed64_route@6 main_validate_uint8_arr_route@7 main_validate_uint8_arr3_route@8 main_validate_bool_route@9 main_validate_byte_route@10 main_validate_string_route@11 main_validate_bytes_route@12 main_validate_address_route@13 main_validate_account_route@14 main_validate_bool_arr_route@15 main_validate_bool_arr3_route@16 main_validate_static_tuple_route@17 main_validate_dynamic_tuple_route@18 main_validate_static_struct_route@19 main_validate_dynamic_struct_route@20 main_validate_static_struct_arr_route@21 main_validate_static_struct_arr3_route@22 main_validate_dynamic_struct_arr_route@23 main_validate_dynamic_struct_arr3_route@24 main_validate_dynamic_struct_with_a_bool_route@25
+    match main_validate_uint64_route@3 main_validate_uint8_route@4 main_validate_uint512_route@5 main_validate_ufixed64_route@6 main_validate_uint8_arr_route@7 main_validate_uint8_arr3_route@8 main_validate_bool_route@9 main_validate_byte_route@10 main_validate_string_route@11 main_validate_bytes_route@12 main_validate_address_route@13 main_validate_account_route@14 main_validate_bool_arr_route@15 main_validate_bool_arr3_route@16 main_validate_static_tuple_route@17 main_validate_dynamic_tuple_route@18 main_validate_static_struct_route@19 main_validate_dynamic_struct_route@20 main_validate_static_struct_arr_route@21 main_validate_static_struct_arr3_route@22 main_validate_dynamic_struct_arr_route@23 main_validate_dynamic_struct_arr3_route@24 main_validate_dynamic_struct_with_a_bool_route@25 main_validate_c2c_route@26
 
-main_after_if_else@32:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+main_after_if_else@33:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     intc_1 // 0
     return
 
+main_validate_c2c_route@26:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:106
+    // validate_c2c() {
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // tests/approvals/abi-validation-exhaustive.algo.ts:109
+    // const app = compiled.call.create({}).itxn.createdApp
+    itxn_begin
+    pushbytes 0x4c5c61ba // method "create()void"
+    itxn_field ApplicationArgs
+    // tests/approvals/abi-validation-exhaustive.algo.ts:107
+    // const compiled = compileArc4(InvalidContract)
+    intc_2 // 2
+    itxn_field GlobalNumByteSlice
+    pushbytes base64(CoEBQw==)
+    itxn_field ClearStateProgramPages
+    pushbytes base64(CjEbQQAVggIETFxhugRFzwXvNhoAjgIAKAADgQBDMRkURDEYRIICAWcHaW52YWxpZGeACxUffHVpbnZhbGlksIEBQzEZFEQxGBREgQFD)
+    itxn_field ApprovalProgramPages
+    // tests/approvals/abi-validation-exhaustive.algo.ts:109
+    // const app = compiled.call.create({}).itxn.createdApp
+    intc_1 // 0
+    itxn_field OnCompletion
+    pushint 6 // appl
+    itxn_field TypeEnum
+    intc_1 // 0
+    itxn_field Fee
+    itxn_submit
+    gitxn 0 CreatedApplicationID
+    // tests/approvals/abi-validation-exhaustive.algo.ts:111-113
+    // abiCall(InvalidContract.prototype.invalidValue, {
+    //   appId: app,
+    // })
+    itxn_begin
+    pushbytes 0x45cf05ef // method "invalidValue()uint64[3]"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationID
+    pushint 6 // appl
+    itxn_field TypeEnum
+    intc_1 // 0
+    itxn_field Fee
+    itxn_submit
+    itxn LastLog
+    dup
+    extract 4 0
+    swap
+    extract 0 4
+    pushbytes 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    len
+    pushint 24 // 24
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint64, 3>
+    // tests/approvals/abi-validation-exhaustive.algo.ts:106
+    // validate_c2c() {
+    intc_0 // 1
+    return
+
 main_validate_dynamic_struct_with_a_bool_route@25:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:99
+    // tests/approvals/abi-validation-exhaustive.algo.ts:101
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:101
+    // tests/approvals/abi-validation-exhaustive.algo.ts:103
     // validateEncoding(value)
     dup
     len
@@ -56,37 +117,37 @@ main_validate_dynamic_struct_with_a_bool_route@25:
     +
     ==
     assert // invalid number of bytes for WithABool
-    // tests/approvals/abi-validation-exhaustive.algo.ts:99
+    // tests/approvals/abi-validation-exhaustive.algo.ts:101
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_dynamic_struct_arr3_route@24:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:95
+    // tests/approvals/abi-validation-exhaustive.algo.ts:97
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
     bury 4
-    // tests/approvals/abi-validation-exhaustive.algo.ts:97
+    // tests/approvals/abi-validation-exhaustive.algo.ts:99
     // validateEncoding(value)
     pushint 6 // 6
     bury 1
     intc_1 // 0
     bury 3
 
-main_for_header@39:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:97
+main_for_header@42:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:99
     // validateEncoding(value)
     dig 2
     pushint 3 // 3
     <
-    bz main_after_for@41
+    bz main_after_for@44
     dig 2
     dup
     intc_2 // 2
@@ -126,35 +187,35 @@ main_for_header@39:
     intc_0 // 1
     +
     bury 3
-    b main_for_header@39
+    b main_for_header@42
 
-main_after_for@41:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:97
+main_after_for@44:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:99
     // validateEncoding(value)
     dig 3
     len
     dig 1
     ==
     assert // invalid number of bytes for arc4.static_array<ARC4DynamicStruct, 3>
-    // tests/approvals/abi-validation-exhaustive.algo.ts:95
+    // tests/approvals/abi-validation-exhaustive.algo.ts:97
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_dynamic_struct_arr_route@23:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:91
+    // tests/approvals/abi-validation-exhaustive.algo.ts:93
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
     dup
     bury 5
-    // tests/approvals/abi-validation-exhaustive.algo.ts:93
+    // tests/approvals/abi-validation-exhaustive.algo.ts:95
     // validateEncoding(value)
     dup
     intc_1 // 0
@@ -170,13 +231,13 @@ main_validate_dynamic_struct_arr_route@23:
     intc_1 // 0
     bury 3
 
-main_for_header@44:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:93
+main_for_header@47:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:95
     // validateEncoding(value)
     dig 2
     dig 2
     <
-    bz main_after_for@46
+    bz main_after_for@49
     dig 2
     dup
     intc_2 // 2
@@ -216,10 +277,10 @@ main_for_header@44:
     intc_0 // 1
     +
     bury 3
-    b main_for_header@44
+    b main_for_header@47
 
-main_after_for@46:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:93
+main_after_for@49:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:95
     // validateEncoding(value)
     dup
     intc_2 // 2
@@ -228,45 +289,45 @@ main_after_for@46:
     len
     ==
     assert // invalid number of bytes for arc4.dynamic_array<ARC4DynamicStruct>
-    // tests/approvals/abi-validation-exhaustive.algo.ts:91
+    // tests/approvals/abi-validation-exhaustive.algo.ts:93
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_static_struct_arr3_route@22:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:87
+    // tests/approvals/abi-validation-exhaustive.algo.ts:89
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:89
+    // tests/approvals/abi-validation-exhaustive.algo.ts:91
     // validateEncoding(value)
     len
     pushint 27 // 27
     ==
     assert // invalid number of bytes for arc4.static_array<ARC4StaticStruct, 3>
-    // tests/approvals/abi-validation-exhaustive.algo.ts:87
+    // tests/approvals/abi-validation-exhaustive.algo.ts:89
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_static_struct_arr_route@21:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:83
+    // tests/approvals/abi-validation-exhaustive.algo.ts:85
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:85
+    // tests/approvals/abi-validation-exhaustive.algo.ts:87
     // validateEncoding(value)
     dup
     intc_1 // 0
@@ -279,23 +340,23 @@ main_validate_static_struct_arr_route@21:
     len
     ==
     assert // invalid number of bytes for arc4.dynamic_array<ARC4StaticStruct>
-    // tests/approvals/abi-validation-exhaustive.algo.ts:83
+    // tests/approvals/abi-validation-exhaustive.algo.ts:85
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_dynamic_struct_route@20:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:79
+    // tests/approvals/abi-validation-exhaustive.algo.ts:81
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:81
+    // tests/approvals/abi-validation-exhaustive.algo.ts:83
     // validateEncoding(value)
     dup
     len
@@ -318,45 +379,45 @@ main_validate_dynamic_struct_route@20:
     +
     ==
     assert // invalid number of bytes for ARC4DynamicStruct
-    // tests/approvals/abi-validation-exhaustive.algo.ts:79
+    // tests/approvals/abi-validation-exhaustive.algo.ts:81
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_static_struct_route@19:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:75
+    // tests/approvals/abi-validation-exhaustive.algo.ts:77
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:77
+    // tests/approvals/abi-validation-exhaustive.algo.ts:79
     // validateEncoding(value)
     len
     pushint 9 // 9
     ==
     assert // invalid number of bytes for ARC4StaticStruct
-    // tests/approvals/abi-validation-exhaustive.algo.ts:75
+    // tests/approvals/abi-validation-exhaustive.algo.ts:77
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_dynamic_tuple_route@18:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:71
+    // tests/approvals/abi-validation-exhaustive.algo.ts:73
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:73
+    // tests/approvals/abi-validation-exhaustive.algo.ts:75
     // validateEncoding(value)
     dup
     len
@@ -379,67 +440,67 @@ main_validate_dynamic_tuple_route@18:
     +
     ==
     assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint8,arc4.dynamic_array<arc4.uint8>>
-    // tests/approvals/abi-validation-exhaustive.algo.ts:71
+    // tests/approvals/abi-validation-exhaustive.algo.ts:73
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_static_tuple_route@17:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:67
+    // tests/approvals/abi-validation-exhaustive.algo.ts:69
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:69
+    // tests/approvals/abi-validation-exhaustive.algo.ts:71
     // validateEncoding(value)
     len
     pushint 9 // 9
     ==
     assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint8>
-    // tests/approvals/abi-validation-exhaustive.algo.ts:67
+    // tests/approvals/abi-validation-exhaustive.algo.ts:69
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_bool_arr3_route@16:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:63
+    // tests/approvals/abi-validation-exhaustive.algo.ts:65
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:65
+    // tests/approvals/abi-validation-exhaustive.algo.ts:67
     // validateEncoding(value)
     len
     intc_0 // 1
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.bool, 3>
-    // tests/approvals/abi-validation-exhaustive.algo.ts:63
+    // tests/approvals/abi-validation-exhaustive.algo.ts:65
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_bool_arr_route@15:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:59
+    // tests/approvals/abi-validation-exhaustive.algo.ts:61
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:61
+    // tests/approvals/abi-validation-exhaustive.algo.ts:63
     // validateEncoding(value)
     dup
     intc_1 // 0
@@ -454,67 +515,67 @@ main_validate_bool_arr_route@15:
     len
     ==
     assert // invalid number of bytes for arc4.dynamic_array<arc4.bool>
-    // tests/approvals/abi-validation-exhaustive.algo.ts:59
+    // tests/approvals/abi-validation-exhaustive.algo.ts:61
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_account_route@14:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:55
+    // tests/approvals/abi-validation-exhaustive.algo.ts:57
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:57
+    // tests/approvals/abi-validation-exhaustive.algo.ts:59
     // validateEncoding(value.native)
     len
     pushint 32 // 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
-    // tests/approvals/abi-validation-exhaustive.algo.ts:55
+    // tests/approvals/abi-validation-exhaustive.algo.ts:57
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_address_route@13:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:51
+    // tests/approvals/abi-validation-exhaustive.algo.ts:53
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:53
+    // tests/approvals/abi-validation-exhaustive.algo.ts:55
     // validateEncoding(value)
     len
     pushint 32 // 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
-    // tests/approvals/abi-validation-exhaustive.algo.ts:51
+    // tests/approvals/abi-validation-exhaustive.algo.ts:53
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_bytes_route@12:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:47
+    // tests/approvals/abi-validation-exhaustive.algo.ts:49
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:49
+    // tests/approvals/abi-validation-exhaustive.algo.ts:51
     // validateEncoding(value)
     dup
     intc_1 // 0
@@ -525,23 +586,23 @@ main_validate_bytes_route@12:
     len
     ==
     assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-    // tests/approvals/abi-validation-exhaustive.algo.ts:47
+    // tests/approvals/abi-validation-exhaustive.algo.ts:49
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_string_route@11:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:43
+    // tests/approvals/abi-validation-exhaustive.algo.ts:45
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:45
+    // tests/approvals/abi-validation-exhaustive.algo.ts:47
     // validateEncoding(value)
     dup
     intc_1 // 0
@@ -552,89 +613,89 @@ main_validate_string_route@11:
     len
     ==
     assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-    // tests/approvals/abi-validation-exhaustive.algo.ts:43
+    // tests/approvals/abi-validation-exhaustive.algo.ts:45
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_byte_route@10:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:39
+    // tests/approvals/abi-validation-exhaustive.algo.ts:41
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:41
+    // tests/approvals/abi-validation-exhaustive.algo.ts:43
     // validateEncoding(value)
     len
     intc_0 // 1
     ==
     assert // invalid number of bytes for arc4.uint8
-    // tests/approvals/abi-validation-exhaustive.algo.ts:39
+    // tests/approvals/abi-validation-exhaustive.algo.ts:41
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_bool_route@9:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:35
+    // tests/approvals/abi-validation-exhaustive.algo.ts:37
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:37
+    // tests/approvals/abi-validation-exhaustive.algo.ts:39
     // validateEncoding(value)
     len
     intc_0 // 1
     ==
     assert // invalid number of bytes for arc4.bool
-    // tests/approvals/abi-validation-exhaustive.algo.ts:35
+    // tests/approvals/abi-validation-exhaustive.algo.ts:37
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_uint8_arr3_route@8:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:31
+    // tests/approvals/abi-validation-exhaustive.algo.ts:33
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:33
+    // tests/approvals/abi-validation-exhaustive.algo.ts:35
     // validateEncoding(value)
     len
     pushint 3 // 3
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 3>
-    // tests/approvals/abi-validation-exhaustive.algo.ts:31
+    // tests/approvals/abi-validation-exhaustive.algo.ts:33
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_uint8_arr_route@7:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:27
+    // tests/approvals/abi-validation-exhaustive.algo.ts:29
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:29
+    // tests/approvals/abi-validation-exhaustive.algo.ts:31
     // validateEncoding(value)
     dup
     intc_1 // 0
@@ -645,104 +706,104 @@ main_validate_uint8_arr_route@7:
     len
     ==
     assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-    // tests/approvals/abi-validation-exhaustive.algo.ts:27
+    // tests/approvals/abi-validation-exhaustive.algo.ts:29
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_ufixed64_route@6:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:23
+    // tests/approvals/abi-validation-exhaustive.algo.ts:25
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:25
+    // tests/approvals/abi-validation-exhaustive.algo.ts:27
     // validateEncoding(value)
     len
     pushint 8 // 8
     ==
     assert // invalid number of bytes for arc4.ufixed64x2
-    // tests/approvals/abi-validation-exhaustive.algo.ts:23
+    // tests/approvals/abi-validation-exhaustive.algo.ts:25
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_uint512_route@5:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:19
+    // tests/approvals/abi-validation-exhaustive.algo.ts:21
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:21
+    // tests/approvals/abi-validation-exhaustive.algo.ts:23
     // validateEncoding(value)
     len
     pushint 64 // 64
     ==
     assert // invalid number of bytes for arc4.uint512
-    // tests/approvals/abi-validation-exhaustive.algo.ts:19
+    // tests/approvals/abi-validation-exhaustive.algo.ts:21
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_uint8_route@4:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:15
+    // tests/approvals/abi-validation-exhaustive.algo.ts:17
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:17
+    // tests/approvals/abi-validation-exhaustive.algo.ts:19
     // validateEncoding(value)
     len
     intc_0 // 1
     ==
     assert // invalid number of bytes for arc4.uint8
-    // tests/approvals/abi-validation-exhaustive.algo.ts:15
+    // tests/approvals/abi-validation-exhaustive.algo.ts:17
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
 main_validate_uint64_route@3:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:11
+    // tests/approvals/abi-validation-exhaustive.algo.ts:13
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 1
-    // tests/approvals/abi-validation-exhaustive.algo.ts:13
+    // tests/approvals/abi-validation-exhaustive.algo.ts:15
     // validateEncoding(value)
     len
     pushint 8 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
-    // tests/approvals/abi-validation-exhaustive.algo.ts:11
+    // tests/approvals/abi-validation-exhaustive.algo.ts:13
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     intc_0 // 1
     return
 
-main_bare_routing@28:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:10
+main_bare_routing@29:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:12
     // class AbiValidationExhaustive extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@32
+    bnz main_after_if_else@33
     txn ApplicationID
     !
     assert // can only call when creating

@@ -125,8 +125,42 @@ contract AbiValidationExhaustive
     ARC4_FROM_BYTES(value, wtype=WithABool, validate=true), void
   }
   
+  validate_c2c(): void
+  {
+    compiled: CompiledContract{ approvalProgram: readonlytuple[bytes, bytes], clearStateProgram: readonlytuple[bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract
+    app: application = #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages, ApplicationArgs=#[Method("create()void")])) }.itxn.CreatedApplicationID
+    #{ itxn: ($0 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=app, ApplicationArgs=#[Method("invalidValue()uint64[3]")]))), returnValue: ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($1 = $0.LastLog)), extract<0, 4>($1) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.static_array<arc4.uint64>, validate=true) }
+  }
+  
   __algots__.defaultCreate(): void
   {
+  }
+  
+}
+contract InvalidContract
+{
+  globals {
+    ["g"]: bytes
+    ["g"]: arc4.static_array<arc4.uint64>
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  create(): void
+  {
+  }
+  
+  invalidValue(): arc4.static_array<arc4.uint64>
+  {
+    GlobalState["g"]: bytes = "invalid"
+    return GlobalState["g"]
   }
   
 }
