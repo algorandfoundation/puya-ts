@@ -540,8 +540,9 @@ function getReturnValueExpr(itxnResult: Expression, returnType: PType, sourceLoc
 
   const arc4Return = ptypeToArc4EncodedType(returnType, sourceLocation)
 
-  const returnValueArc4 = nodeFactory.reinterpretCast({
-    expr: unprefixedLog,
+  const returnValueArc4 = nodeFactory.aRC4FromBytes({
+    value: unprefixedLog,
+    validate: AwstBuildContext.current.options.validateAbiReturn,
     sourceLocation,
     wtype: arc4Return.wtype,
   })
