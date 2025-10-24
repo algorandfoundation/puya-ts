@@ -214,6 +214,11 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToIndex_next_txn@1:
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:70
     // assert(res1 === account.balance)
@@ -275,6 +280,11 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue_next_txn@1:
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:78
     // assert(res1 === account.balance)
@@ -442,6 +452,11 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource_next_txn@3
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    len
+    pushint 48 // 48
+    ==
+    assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
     // tests/approvals/resource-encoding.algo.ts:97
     // assertMatch(indexes, [asset, Global.currentApplicationId, Txn.sender])
     pushint 3 // 3
@@ -528,6 +543,11 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource_next_txn@4
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    len
+    pushint 48 // 48
+    ==
+    assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
     // tests/approvals/resource-encoding.algo.ts:104
     // assertMatch(resources, [asset, Global.currentApplicationId, Txn.sender])
     pushint 3 // 3

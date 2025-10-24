@@ -103,8 +103,11 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToIndex(accoun
         let tmp%1#0: bytes = ((extract 0 4) awst_tmp%0#0)
         let tmp%2#0: bool = (== tmp%1#0 0x151f7c75)
         (assert tmp%2#0) // Bytes has valid prefix
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
-        let tmp%3#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%3#0: uint64 = (btoi as_Encoded(uint64)%0#0)
         let res1#0: uint64 = tmp%3#0
         let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
         (assert check%0#0) // account funded
@@ -132,8 +135,11 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue(accoun
         let tmp%2#0: bytes = ((extract 0 4) awst_tmp%0#0)
         let tmp%3#0: bool = (== tmp%2#0 0x151f7c75)
         (assert tmp%3#0) // Bytes has valid prefix
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = tmp%1#0
-        let tmp%4#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let len%0#0: uint64 = (len tmp%1#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%1#0
+        let tmp%4#0: uint64 = (btoi as_Encoded(uint64)%0#0)
         let res1#0: uint64 = tmp%4#0
         let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
         (assert check%0#0) // account funded
@@ -198,8 +204,11 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         let tmp%5#0: bytes = ((extract 0 4) awst_tmp%0#0)
         let tmp%6#0: bool = (== tmp%5#0 0x151f7c75)
         (assert tmp%6#0) // Bytes has valid prefix
-        let reinterpret_Encoded(uint64,uint64,uint8[32])%0#0: Encoded(uint64,uint64,uint8[32]) = tmp%4#0
-        let indexes#0: Encoded(uint64,uint64,uint8[32]) = reinterpret_Encoded(uint64,uint64,uint8[32])%0#0
+        let len%0#0: uint64 = (len tmp%4#0)
+        let eq%0#0: bool = (== len%0#0 48u)
+        (assert eq%0#0) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
+        let as_Encoded(uint64,uint64,uint8[32])%0#0: Encoded(uint64,uint64,uint8[32]) = tmp%4#0
+        let indexes#0: Encoded(uint64,uint64,uint8[32]) = as_Encoded(uint64,uint64,uint8[32])%0#0
         let tmp%7#0: bool = (== 3u 3u)
         let aggregate%extract%0#0: bytes = (extract3 indexes#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
@@ -250,8 +259,11 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         let tmp%22#0: bytes = ((extract 0 4) awst_tmp%1#0)
         let tmp%23#0: bool = (== tmp%22#0 0x151f7c75)
         (assert tmp%23#0) // Bytes has valid prefix
-        let reinterpret_Encoded(uint64,uint64,uint8[32])%1#0: Encoded(uint64,uint64,uint8[32]) = tmp%21#0
-        let resources#0: Encoded(uint64,uint64,uint8[32]) = reinterpret_Encoded(uint64,uint64,uint8[32])%1#0
+        let len%1#0: uint64 = (len tmp%21#0)
+        let eq%1#0: bool = (== len%1#0 48u)
+        (assert eq%1#0) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
+        let as_Encoded(uint64,uint64,uint8[32])%1#0: Encoded(uint64,uint64,uint8[32]) = tmp%21#0
+        let resources#0: Encoded(uint64,uint64,uint8[32]) = as_Encoded(uint64,uint64,uint8[32])%1#0
         let tmp%24#0: bool = (== 3u 3u)
         let aggregate%extract%3#0: bytes = (extract3 resources#0 0u 8u)
         let tuple_item%3#0: Encoded(uint64) = aggregate%extract%3#0

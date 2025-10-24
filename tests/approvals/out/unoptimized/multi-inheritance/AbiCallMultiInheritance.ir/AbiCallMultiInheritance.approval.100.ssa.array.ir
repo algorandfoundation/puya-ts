@@ -87,9 +87,17 @@ subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.te
     block@1: // next_txn_L67
         itxn_submit
         let awst_tmp%0#0: bytes = (itxn LastLog)
+        let tmp%0#0: bytes = ((extract 4 0) awst_tmp%0#0)
         let tmp%1#0: bytes = ((extract 0 4) awst_tmp%0#0)
         let tmp%2#0: bool = (== tmp%1#0 0x151f7c75)
         (assert tmp%2#0) // Bytes has valid prefix
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         itxn_begin
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob 1u)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
@@ -112,8 +120,11 @@ subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.te
         let tmp%7#0: bytes = ((extract 0 4) awst_tmp%1#0)
         let tmp%8#0: bool = (== tmp%7#0 0x151f7c75)
         (assert tmp%8#0) // Bytes has valid prefix
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = tmp%6#0
-        let tmp%9#0: uint64 = (btoi reinterpret_Encoded(uint64)%0#0)
+        let len%1#0: uint64 = (len tmp%6#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%6#0
+        let tmp%9#0: uint64 = (btoi as_Encoded(uint64)%0#0)
         let result#0: uint64 = tmp%9#0
         let tmp%10#0: bool = (== result#0 3u)
         (assert tmp%10#0)

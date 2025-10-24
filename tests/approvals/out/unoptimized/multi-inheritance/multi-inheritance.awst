@@ -279,8 +279,8 @@ contract AbiCallMultiInheritance
   
   test(app: application): void
   {
-    #{ itxn: ($0 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=app, ApplicationArgs=#[Method("methodTwo()string")]))), returnValue: ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.byte>>(checked_maybe(#[extract<4, 0>(($1 = $0.LastLog)), extract<0, 4>($1) == 0x151f7c75], comment=Bytes has valid prefix))) }
-    result: uint64 = #{ itxn: ($2 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationArgs=#[Method("add(uint64,uint64)uint64"), ARC4_ENCODE(1, wtype=arc4.uint64), ARC4_ENCODE(2, wtype=arc4.uint64)]))), returnValue: ARC4_DECODE(reinterpret_cast<arc4.uint64>(checked_maybe(#[extract<4, 0>(($3 = $2.LastLog)), extract<0, 4>($3) == 0x151f7c75], comment=Bytes has valid prefix))) }.returnValue
+    #{ itxn: ($0 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=app, ApplicationArgs=#[Method("methodTwo()string")]))), returnValue: ARC4_DECODE(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($1 = $0.LastLog)), extract<0, 4>($1) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.dynamic_array<arc4.byte>, validate=true)) }
+    result: uint64 = #{ itxn: ($2 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationArgs=#[Method("add(uint64,uint64)uint64"), ARC4_ENCODE(1, wtype=arc4.uint64), ARC4_ENCODE(2, wtype=arc4.uint64)]))), returnValue: ARC4_DECODE(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($3 = $2.LastLog)), extract<0, 4>($3) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.uint64, validate=true)) }.returnValue
     assert(result == 3)
   }
   
