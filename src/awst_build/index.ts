@@ -1,10 +1,11 @@
 import { AwstSerializer } from '../awst/json-serialize-awst'
 import type { AWST } from '../awst/nodes'
 import { ToCodeVisitor } from '../awst/to-code-visitor'
-import type { AlgoFile, CompileOptions } from '../options'
+import type { AlgoFile } from '../options'
 import type { CreateProgramResult } from '../parser'
 import { ArtifactKind, writeArtifact } from '../write-artifact'
 import { SourceFileVisitor } from './ast-visitors/source-file-visitor'
+import type { BuildAwstOptions } from './context/awst-build-context'
 import { AwstBuildContext } from './context/awst-build-context'
 import { buildLibAwst } from './lib'
 import type { CompilationSet } from './models/contract-class-model'
@@ -14,15 +15,13 @@ type DeferredModule = () => {
   algoFile: AlgoFile | undefined
 }
 
-type BuildAwstOptions = Pick<CompileOptions, 'filePaths' | 'outputAwst' | 'outputAwstJson'>
-
 type AwstBuildResult = {
   moduleAwst: AWST[]
   compilationSet: CompilationSet
 }
 
 export function buildAwst({ program, sourceFiles, programDirectory }: CreateProgramResult, options: BuildAwstOptions): AwstBuildResult {
-  return AwstBuildContext.run(program, () => {
+  return AwstBuildContext.run(program, options, () => {
     const moduleAwst: AWST[] = buildLibAwst()
     const deferredModules: DeferredModule[] = []
     for (const [sourcePath, sourceFile] of Object.entries(sourceFiles)) {
