@@ -15,7 +15,6 @@ import { deserializeAndLog } from '../puya/log-deserializer'
 import { PuyaService } from '../puya/puya-service'
 import { isIn } from '../util'
 import { DefaultMap } from '../util/default-map'
-import { sleep } from '../util/sleep'
 import type { CompileTriggerQueue, WorkspaceCompileTrigger } from './compile-trigger-queue'
 import type { DiagnosticsManager } from './diagnostics-manager'
 import { type LogEventWithSource, mapper } from './mapping'
@@ -24,12 +23,15 @@ import { logCaughtExpression, LogExceptions } from './util/log-exceptions'
 export class CompileWorker {
   stopping: boolean = false
   private stopped = Promise.withResolvers<void>()
+  private sleeping: PromiseWithResolvers<void> | undefined = undefined
   constructor(
     private readonly queue: CompileTriggerQueue,
     private readonly documents: TextDocuments<TextDocument>,
     private readonly diagnostics: DiagnosticsManager,
     private readonly puyaPath: string,
-  ) {}
+  ) {
+    this.queue.onItemEnqueued(this.onCompileTriggerQueueItemQueued.bind(this))
+  }
 
   start() {
     setTimeout(async () => {
@@ -43,7 +45,8 @@ export class CompileWorker {
                 break
             }
           } else {
-            await sleep(1000)
+            this.sleeping = Promise.withResolvers()
+            await this.sleeping.promise
           }
         } catch (e) {
           logCaughtExpression(e)
@@ -52,10 +55,16 @@ export class CompileWorker {
       this.stopped.resolve()
     })
   }
+
   @LogExceptions
   async stop() {
     this.stopping = true
+    this.sleeping?.resolve()
     await this.stopped.promise
+  }
+
+  onCompileTriggerQueueItemQueued() {
+    this.sleeping?.resolve()
   }
 
   @LogExceptions
