@@ -1,0 +1,1306 @@
+---
+title: Algorand TypeScript Migration Guides
+---
+
+## Migrating Algorand TypeScript beta to 1.0
+
+This guide outlines the steps required to migrate your Algorand TypeScript projects from the beta version to version 1.0. Version 1.0 introduces significant improvements, including native mutable objects and arrays, simplified type names, and enhanced functionality for inner transactions. However, it also includes breaking changes that require updates to your codebase. This guide is divided into two sections: Breaking Changes, which require action to ensure compatibility, and New Features, which highlight opportunities to leverage new functionality. Each section includes code examples to illustrate the changes.
+
+### Breaking changes
+
+#### Object literals are mutable by default
+
+Object literals are now mutable by default, which can be leveraged without any changes. If you'd like to keep the same execution semantics as before, then apply a `readonly` or `as const` modifier to make them immutable.
+
+**Before (Algorand TypeScript beta)**
+
+```ts
+import { uint64, Uint64 } from '@algorandfoundation/algorand-typescript';
+
+...
+
+// These types and objects are immutable
+type Point = { y: uint64; x: uint64 };
+const p1: Point = { x: 1, y: 2 };
+const p2 = { x: Uint64(1), y: Uint64(2) };
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { uint64, Uint64 } from '@algorandfoundation/algorand-typescript';
+
+...
+
+// These types and objects are mutable
+type Point = { y: uint64; x: uint64 };
+const p1: Point = { x: 1, y: 2 };
+const p2 = { x: Uint64(1), y: Uint64(2) };
+p1.x = 3;
+p2.x = 3;
+
+// or if you want to maintain the previous execution semantics
+// explicitly mark as `readonly` or `as const`
+type Point = Readonly<{ y: uint64; x: uint64 }>;
+const p1: Point = { x: 1, y: 2 };
+const p2 = { x: Uint64(1), y: Uint64(2) } as const;
+```
+
+#### Native arrays are mutable by default
+
+Native arrays are now mutable by default, which can be used without any changes.
+If you'd like to keep the same execution semantics as before, then apply a `readonly` or `as const` modifier to make them immutable.
+
+**Before (Algorand TypeScript beta)**
+
+```ts
+import { uint64, Uint64 } from '@algorandfoundation/algorand-typescript'
+
+...
+
+// The arrays are immutable
+const t1: uint64[] = [1, 2, 3];
+const t2 = [Uint64(1), Uint64(2), Uint64(3)];
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { uint64, Uint64 } from '@algorandfoundation/algorand-typescript';
+
+// The arrays are mutable
+const t1: uint64[] = [1, 2, 3];
+const t2 = [Uint64(1), Uint64(2), Uint64(3)];
+
+t1[0] = 3;
+t1.push(4);
+t2[0] = 3;
+t2.push(4);
+
+// or if you want to maintain the previous execution semantics
+// explicitly mark as `readonly` or `as const`
+const t1: readonly uint64[] = [1, 2, 3];
+const t2 = [Uint64(1), Uint64(2), Uint64(3)] as const;
+```
+
+#### `MutableArray` has been renamed to `ReferenceArray`
+
+Now that native arrays are mutable by default, it was confusing to call the scratch slot backed arrays with reference semantics `MutableArray`, so they have been renamed.
+
+**Before (Algorand TypeScript beta)**
+
+```ts
+import { uint64, MutableArray } from '@algorandfoundation/algorand-typescript'
+
+...
+
+const a = new MutableArray<uint64>();
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { uint64, ReferenceArray } from '@algorandfoundation/algorand-typescript';
+
+...
+
+const a = new ReferenceArray<uint64>();
+```
+
+#### Replace `xxx.copy()` calls with `clone(xxx)`
+
+**Before (Algorand TypeScript beta)**
+
+```ts
+import { copy, arc4, UintN64, StaticArray } from '@algorandfoundation/algorand-typescript'
+
+...
+
+const a = new arc4.StaticArray<UintN64, 3>(new UintN64(1), new UintN64(2), new UintN64(3));
+const b = a.copy();
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { arc4, clone } from '@algorandfoundation/algorand-typescript'
+
+...
+
+public example(): void {
+  const a = new arc4.StaticArray<arc4.Uint64, 3>(new arc4.Uint64(1), new arc4.Uint64(2), new arc4.Uint64(3))
+  const b = clone(a)
+}
+```
+
+#### ARC4 numeric types no longer have the 'N' and 'NxM' suffixes
+
+The 'N' and 'NxM' suffixes have been removed from the ARC4 numeric types, which results in more natural type names.
+
+**Before (Algorand TypeScript beta)**
+
+```ts
+import { arc4 } from '@algorandfoundation/algorand-typescript'
+
+...
+
+type User = {
+  id: arc4.UintN16;
+  score: arc4.UFixedNxM<32, 4>;
+};
+
+const user = {
+  id: new arc4.UintN<16>(1234),
+  score: new arc4.UFixedNxM<32, 4>('1.234'),
+};
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { arc4 } from '@algorandfoundation/algorand-typescript'
+
+...
+
+type User = {
+  id: arc4.Uint16;
+  score: arc4.UFixed<32, 4>;
+};
+
+const user = {
+  id: new arc4.Uint<16>(1234),
+  score: new arc4.UFixed<32, 4>('1.234'),
+};
+```
+
+#### Direct import of functions and types from `gtxn` and `itxn` modules are no longer supported
+
+**Before (Algorand TypeScript beta)**
+
+```ts
+import type { PaymentTxn } from '@algorandfoundation/algorand-typescript/gtxn'
+
+...
+
+function reflectAllPay(pay: PaymentTxn) {
+  ...
+}
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import type { gtxn } from '@algorandfoundation/algorand-typescript'
+
+...
+
+function reflectAllPay(pay: gtxn.PaymentTxn) {
+  ...
+}
+```
+
+#### Application, Asset and Account arguments are now passed by their uint64 id (Application and Asset) or bytes[32] address (Account) by default
+
+`resourceEncoding: 'index' | 'value'` option is added to `@abimethod` decorator config with `value` as default. Use `index` for those methods which need to preserve the previous behaviour.
+
+**Before (Algorand TypeScript beta)**
+
+```ts
+import {
+  Account,
+  Application,
+  Asset,
+  Txn,
+  assert,
+  op,
+} from '@algorandfoundation/algorand-typescript'
+
+...
+
+test(asset: Asset, app: Application, acc: Account) {
+  const assetIdx = op.btoi(Txn.applicationArgs(1))
+  assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by index')
+
+  const appIdx = op.btoi(Txn.applicationArgs(2))
+  assert(app === Txn.applications(appIdx), 'expected application to be passed by index')
+
+  const accIdx = op.btoi(Txn.applicationArgs(3))
+  assert(acc === Txn.accounts(accIdx), 'expected account to be passed by index')
+
+  return [assetIdx, appIdx, accIdx] as const
+}
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import {
+  Account,
+  Application,
+  Asset,
+  Txn,
+  assert,
+  op,
+  abimethod,
+} from '@algorandfoundation/algorand-typescript'
+
+...
+// use `index` resource encoding to keep old behaviour
+@abimethod({ resourceEncoding: 'index' })
+test(asset: Asset, app: Application, acc: Account) {
+  const assetIdx = op.btoi(Txn.applicationArgs(1))
+  assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by index')
+
+  const appIdx = op.btoi(Txn.applicationArgs(2))
+  assert(app === Txn.applications(appIdx), 'expected application to be passed by index')
+
+  const accIdx = op.btoi(Txn.applicationArgs(3))
+  assert(acc === Txn.accounts(accIdx), 'expected account to be passed by index')
+
+  return [assetIdx, appIdx, accIdx] as const
+}
+```
+
+Alternatively, update the implementation to use default `value` resource encoding.
+
+```ts
+...
+
+test(asset: Asset, app: Application, acc: Account): [Asset, Application, Account] {
+  const assetId = op.btoi(Txn.applicationArgs(1))
+  assert(asset === Asset(assetId), 'expected asset to be passed by value')
+
+  const appId = op.btoi(Txn.applicationArgs(2))
+  assert(app === Application(appId), 'expected application to be passed by value')
+
+  const address = Txn.applicationArgs(3)
+  assert(acc === Account(address), 'expected account to be passed by value')
+
+  return [asset, app, acc]
+}
+```
+
+#### Rename test files from `.(spec|test).ts` to `.algo.(spec|test).ts`.
+
+Existing test files that need to run in a simulated AVM environment or import modules from `algorand-typescript` or `algorand-typescript-testing` packages should be renamed to have either the `.algo.spec.ts` or `.algo.test.ts` extension.
+
+`puyaTsTransformer` will only provide the simulated AVM environment and executable implementations of `algorand-typescript` module to files with those extensions, excluding standard `.spec.ts` or `.test.ts` files (e.g. `e2e.spec.ts`).
+
+This change can improve test performance by ensuring only relevant files are processed through `algorandTsTransformer`.
+
+#### Rename `arc4EncodedLength` function to `sizeOf`
+
+**Before (Algorand TypeScript beta)**
+
+```ts
+...
+
+assert(arc4EncodedLength<uint64>() === 8);
+assert(arc4EncodedLength<boolean>() === 1);
+assert(arc4EncodedLength<UintN<512>>() === 64);
+assert(arc4EncodedLength<[StaticArray<Bool, 10>, boolean, boolean]>() === 3);
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+...
+
+assert(sizeOf<uint64>() === 8);
+assert(sizeOf<boolean>() === 1);
+assert(sizeOf<Uint<512>>() === 64);
+assert(sizeOf<[StaticArray<Bool, 10>, boolean, boolean]>() === 3);
+```
+
+#### Change `abiCall` helper signature to support type only imports
+
+The signature of `abiCall` helper changes from
+
+```ts
+import { arc4 } from '@algorandfoundation/algorand-typescript'
+import MyContract from './MyContract.algo'
+
+...
+
+arc4.abiCall(MyContract.prototype.myMethod, { ... })
+```
+
+to
+
+```ts
+import { arc4 } from '@algorandfoundation/algorand-typescript'
+import MyContract from './MyContract.algo'
+
+...
+
+arc4.abiCall({ method: MyContract.prototype.myMethod, ... })
+```
+
+The new `method` property exists to provide a natural way to specify the `TMethod` generic parameter, but it is optional and alternatively the generic arg can be specified explicitly with
+
+```ts
+import { arc4 } from '@algorandfoundation/algorand-typescript'
+import MyContract from './MyContract.algo'
+
+...
+
+arc4.abiCall<typeof MyContract.prototype.myMethod>({ ... })
+```
+
+This form of invocation supports using type only imports `import type { MyContract } from '...'` which allow for circular references versus value imports which cannot be circular.
+
+If, in some unforeseen circumstances, both a type argument and the `method` property are provided to the `abiCall` helper, the type argument takes precedence and the method specified by the type argument is called.
+
+**Before (Algorand TypeScript beta)**
+
+```ts
+import { arc4, assert } from '@algorandfoundation/algorand-typescript'
+import Hello, { HelloStubbed } from './Hello.algo'
+
+...
+
+const result2 = arc4.abiCall(Hello.prototype.greet, {
+  appId: 1234,
+  args: ['abi'],
+}).returnValue;
+
+assert(result2 === 'hello abi');
+
+const result3 = arc4.abiCall(HelloStubbed.prototype.greet, {
+  appId: 1234,
+  args: ['stubbed'],
+}).returnValue;
+assert(result3 === 'hello stubbed');
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { arc4, assert } from '@algorandfoundation/algorand-typescript'
+import Hello, { HelloStubbed } from './Hello.algo'
+
+...
+
+// provide method property
+const result2 = arc4.abiCall({
+  method: Hello.prototype.greet,
+  appId: app,
+  args: ['abi'],
+}).returnValue;
+
+assert(result2 === 'hello abi');
+
+// or provide type argument, this approach supports using type only imports
+const result3 = arc4.abiCall<typeof HelloStubbed.prototype.greet>({
+  appId: app,
+  args: ['stubbed'],
+}).returnValue;
+assert(result3 === 'hello stubbed');
+```
+
+#### Rename `interpretAsArc4` function to `convertBytes`
+
+The function now accepts an `options` object with `strategy: 'unsafe-cast' | 'validate'` and an optional `prefix` parameter.
+
+**Before (Algorand TypeScript beta)**
+
+```ts
+import { arc4 } from '@algorandfoundation/algorand-typescript'
+
+...
+
+const x = arc4.interpretAsArc4<Uint<32>>(a);
+const y = arc4.interpretAsArc4<Byte>(b, 'log');
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { arc4 } from '@algorandfoundation/algorand-typescript'
+
+...
+
+const x = arc4.convertBytes<arc4.Uint<32>>(a, { strategy: 'validate' });
+const y = arc4.convertBytes<arc4.Byte>(b, { prefix: 'log', strategy: 'unsafe-cast' });
+```
+
+#### Remove `BoxRef`, use `Box<bytes>` instead
+
+`Box<bytes>` now includes all functionality previously available in `BoxRef`, including `extract`, `replace`, `resize`, and `splice` methods.
+
+**Before (Algorand TypeScript beta)**
+
+```ts
+import { Contract, BoxRef, Bytes, bytes } from '@algorandfoundation/algorand-typescript'
+
+...
+
+const box = BoxRef({ key: 'test_key' });
+box.create({ size: 32768 });
+
+const boxValue = new Uint8Array(Array(5).fill([0x01, 0x02]).flat());
+box.put(Bytes(boxValue));
+
+const replacement = new Uint8Array(Array(2).fill(0x11));
+box.splice(1, 5, Bytes(replacement));
+
+box.replace(0, Bytes(0x11));
+
+const extracted = box.extract(0, 3);
+
+box.resize(extracted.size);
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { Contract, Box, Bytes, bytes } from '@algorandfoundation/algorand-typescript'
+
+...
+
+const box = Box<bytes>({ key: 'test_key' })
+box.create({ size: 32768 })
+
+const boxValue = new Uint8Array(Array(5).fill([0x01, 0x02]).flat())
+box.value = Bytes(boxValue)
+
+const replacement = new Uint8Array(Array(2).fill(0x11))
+box.splice(1, 5, Bytes(replacement))
+
+box.replace(0, Bytes(0x11))
+
+const extracted = box.extract(0, 3)
+
+box.resize(extracted.length)
+```
+
+#### replace `.native` property with `.asUint64()` and `.asBigUint()` methods for `arc4.Uint` types
+
+For `Uint` types larger than 64 bits, `.asUint64()` throws an overflow error if the value exceeds `uint64` bounds.
+
+**Before (Algorand TypeScript beta)**
+
+```ts
+import { arc4 } from '@algorandfoundation/algorand-typescript'
+
+...
+
+const z = new arc4.UintN8(n);
+const z_native = z.native;
+
+const a = new arc4.UintN128(b);
+const a_native = a.native;
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { arc4 } from '@algorandfoundation/algorand-typescript'
+
+...
+
+const z = new arc4.Uint<8>(n);
+const z_native = z.asUint64();
+
+const a = new arc4.Uint<128>(b);
+const a_native = a.asBigUint();
+```
+
+### New features
+
+#### Native mutable objects
+
+```typescript
+type Point = { x: uint64; y: uint64 };
+const p: Point = { x: 1, y: 2 };
+// or
+const p: { x: uint64; y: uint64 } = { x: 1, y: 2 };
+// or
+const p = { x: Uint64(1), y: Uint64(2) };
+
+p.x = 3;
+p.y = 4;
+```
+
+#### Native mutable arrays
+
+The native TypeScript array is mutable and supports both arc4 and native types. You typically don't need to use an `arc4.DynamicArray` anymore.
+
+```ts
+const a: Array<uint64> = [1, 2, 3];
+// or
+const a: uint64[] = [1, 2, 3];
+// or
+const a = [Uint64(1), Uint64(2), Uint64(3)];
+
+a[0] = 10;
+a.push(4);
+```
+
+#### New `FixedArray` type
+
+A `FixedArray` type was added which has a fixed size, is mutable, and supports both arc4 and native types. You typically don't need to use an `arc4.StaticArray` anymore.
+
+```ts
+const x = new FixedArray<uint64, 4>(1, 2, 3, 4);
+x[0] = 0;
+```
+
+#### `Bytes` type now supports fixed size byte sequences
+
+An optional length generic type argument has been added for declaring statically sized byte sequences.
+
+The original unbounded `bytes` type without the length generic remains available and no changes are required unless you want to take advantage of the new feature.
+
+The bytes type can also be declared with a length and an optional `strategy` parameter with valid options of `'assert-length'` or `'unsafe-cast'` (defaults to `'assert-length'`) to indicate if it should assert the length of the input versus an `unsafe` casting which doesn't verify the input length. Due to covariance a `bytes<N>` value can always be assigned to a `bytes` target but in order to do the opposite, you will need to call `.toFixed` on the unbounded value. This method takes the same options parameter with a length and an optional `strategy` properties.
+
+```ts
+snapshotPublicKey = GlobalState<bytes<32>>();
+
+const fromUtf8 = Bytes('abc', { length: 3 });
+
+function padTo32(b: bytes<16>): bytes<32> {
+  return b.bitwiseOr(bzero(32)).toFixed({ length: 32, strategy: 'unsafe-cast' });
+}
+```
+
+#### Number and bigint types can be used when declaring consts
+
+We now support `number` and `bigint` literals when they are assigned to a `const` variable. Basic expressions are also allowed as long as they evaluate to a compile-time constant.
+
+:::note
+`number` literals cannot exceed `Number.MAX_SAFE_INTEGER` as they will lose precision when parsed, but it is possible to write expressions that would evaluate to unsafe integers e.g. `2 ** 54`. This is because evaluation is handled by the compiler and performed using the `bigint` type.
+:::
+
+```typescript
+const x = 123;
+const y = x * 500;
+const a = 2n ** 128n;
+```
+
+#### Tuples can be stored in boxes, global and local state
+
+```typescript
+boxA = Box<[string, bytes]>({ key: Bytes('A') });
+boxA.value = ['Hello', Bytes('World')];
+```
+
+#### Box maps support composite key types
+
+```typescript
+boxMap = BoxMap<{ a: uint64; b: uint64 }, string>({ keyPrefix: '' });
+
+boxMap({ a: 1, b: 2 }).value = 'test';
+```
+
+#### `Box` supports direct bytes access via `extract`, `replace`, `resize`, and `splice` methods
+
+`extract`, `replace`, `resize`, and `splice` methods were added to the `Box` type for direct access to box bytes.
+
+:::note
+This enables direct manipulation of the bytes of any box, though it should be noted that mutations via this approach are not validated against the `Box` value type which could lead to box content being invalid for the expected type.
+:::
+
+```typescript
+boxMap = BoxMap<Account, StaticArray<Uint8, 4>>({ keyPrefix: '' });
+const boxForCaller = this.boxMap(Txn.sender);
+
+boxForCaller.create();
+
+boxForCaller.replace(0, new Uint8(123).bytes);
+```
+
+#### Inner transaction groups can be dynamically composed
+
+The `itxnCompose` helper exposes three methods, `begin` and `next`, and `submit`. Multiple calls to `begin`, or calls to `next` that are not preceded by a `begin` will fail when executed on chain.
+
+Use `GITxn` ops (e.g. `op.GITxn.lastLog(1)`) to read the result from any of these transactions.
+
+```typescript
+distribute(addresses: Address[], funds: gtxn.PaymentTxn, verifier: Application) {
+  const share: uint64 = funds.amount / addresses.length
+  const payFields = {
+    type: TransactionType.Payment,
+    amount: share,
+    receiver: addresses[0].bytes,
+  } satisfies PaymentComposeFields
+
+  itxnCompose.begin(payFields)
+  for (const i of urange(1, addresses.length)) {
+    const addr = addresses[i]
+    itxnCompose.next({
+      ...payFields,
+
+      receiver: addr.bytes,
+    })
+  }
+  itxnCompose.next(VerifierContract.prototype.verify, {
+    appId: verifier,
+  })
+  itxnCompose.next(
+    itxn.assetConfig({
+      assetName: 'abc',
+    }),
+  )
+
+  itxnCompose.submit()
+}
+```
+
+#### `not` expressions are now supported on `match` and `assertMatch`
+
+```typescript
+assertMatch(xObj, { x: { not: 3 } }, 'x should not be 3');
+assertMatch(Txn, { sender: { not: Global.zeroAddress } });
+```
+
+#### `@readonly` decorator can be used instead of `@abimethod({ readonly: true })`
+
+A new `@readonly` decorator has been added to provide a shorthand for `@abimethod({ readonly: true })`. Setting `readonly` flag via `@abimethod` decorator is still available to avoid needing multiple decorators when other options are also needed to be set e.g. `@arc4.abimethod({ allowActions: ['NoOp'], readonly: true })`.
+
+```typescript
+// use @abimethod decorator to set `readonly` flag
+@abimethod({ readonly: true })
+public getPreconditions(signature: bytes<64>): VotingPreconditions {
+  ...
+}
+
+// or use @readonly decorator
+@readonly
+public getPreconditions(signature: bytes<64>): VotingPreconditions {
+  ...
+}
+```
+
+#### `validateEncoding` option is added to `@abimethod` decorator
+
+`validateEncoding` option controls validation behaviour for the method and has valid values of `"args"` and `"unsafe-disabled"`.
+
+If `"args"`, then ABI arguments are validated automatically to ensure they are encoded correctly.
+If `"unsafe-disabled"`, then no automatic validation occurs. Arguments can instead be validated using the validateEncoding(...) function.
+
+The default behaviour of this option can be controlled with the --validate-abi-args CLI flag.
+
+```typescript
+class AbiValidationAlgo extends Contract {
+  @abimethod({ validateEncoding: 'args' })
+  withValidation(value: bytes<32>) {
+    return value.length;
+  }
+
+  @abimethod({ validateEncoding: 'unsafe-disabled' })
+  withoutValidation(value: bytes<32>) {
+    return value.length;
+  }
+
+  // performs validation on `value` parameter by default
+  defaultValidation(value: bytes<32>) {
+    return value.length;
+  }
+}
+```
+
+#### `validateEncoding` function can be used to ensure the value is well-formed
+
+It performs validation to ensure the value is well-formed and throws errors if it is not.
+
+```typescript
+class AbiValidationAlgo extends Contract {
+  @abimethod({ validateEncoding: 'unsafe-disabled' })
+  manualValidation(value: bytes<32>) {
+    validateEncoding(value);
+    return value.length;
+  }
+}
+```
+
+#### `--validate-abi-args` and `--validate-abi-return` CLI flags are added
+
+- `--validate-abi-args`: validates ABI transaction arguments by ensuring they are encoded correctly.
+- `--validate-abi-return`: validates encoding of ABI return values when using convertBytes with 'log' `prefix` option, `arc4.abiCall`, and strongly typed contract to contract calls.
+
+## Migrating TEALScript to Algorand TypeScript 1.0
+
+This document is up-to-date as of TEALScript v0.107.0 and Algorand TypeScript v1.0.0
+
+### Migration Table
+
+| TEALScript                              | Algorand TypeScript                                                                                | Notes                                                                                                                                                                 |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `EventLogger`                           | [`emit`](https://dev.algorand.co/reference/algorand-typescript/api-reference/index/functions/emit) |                                                                                                                                                                       |
+| `BoxKey`                                | \[`Box`\]                                                                                          |                                                                                                                                                                       |
+| `Txn`                                   | `Transaction`                                                                                      |                                                                                                                                                                       |
+| `PayTxn`                                | `PaymentTxn`                                                                                       |                                                                                                                                                                       |
+| `AppCallTxn`                            | `ApplicationCallTxn`                                                                               |                                                                                                                                                                       |
+| `KeyRegTxn`                             | `KeyRegistrationTxn`                                                                               |                                                                                                                                                                       |
+| `OnCompletion`                          | `OnCompleteAction`                                                                                 |                                                                                                                                                                       |
+| Eliptic curve opcodes (i.e `ecAdd`)     | Now under \[`ElipticCurve`\] (i.e. `ElipticCurve.add`)                                             |                                                                                                                                                                       |
+| `GlobalStateKey`                        | `GlobalState`                                                                                      |                                                                                                                                                                       |
+| `LocalStateKey`                         | `LocalState`                                                                                       |                                                                                                                                                                       |
+| `GlobalStateMap`                        | Not yet supported                                                                                  |                                                                                                                                                                       |
+| `LocalStateMap`                         | Not yet supported                                                                                  |                                                                                                                                                                       |
+| `isOptedInToApp` and `isOptedInToAsset` | \[`isOptedIn`\]                                                                                    |                                                                                                                                                                       |
+| `this.txn`                              | \[`Txn`\]                                                                                          |                                                                                                                                                                       |
+| `this.app`                              | `Global.currentApplicationAddress`                                                                 | We can add support for `this.app`, but may be after 1.0                                                                                                               |
+| `verify...Txn`                          | `assertMatch`                                                                                      | `assertMatch` can be used on any txn type or any object                                                                                                               |
+| `globals`                               | \[`Global`\]                                                                                       |                                                                                                                                                                       |
+| `StaticArray`                           | `FixedArray`                                                                                       | May not cover all cases. See the array section for more details                                                                                                       |
+| `AppID`                                 | `Application`                                                                                      |                                                                                                                                                                       |
+| `AssetID`                               | `Asset`                                                                                            |                                                                                                                                                                       |
+| `Address`                               | `Account`                                                                                          | Algorand TypeScript does have an `arc4.Address` type, but `Account` should always be used instead. By default its ABI type will be `address` in ABI method signatures |
+| `throw Error('error message')`          | `err('error message')`                                                                             |                                                                                                                                                                       |
+
+### Migrations
+
+#### Emitting Events
+
+**Before (TEALScript)**
+
+```ts
+class Swapper {
+  swap = new EventLogger<{
+    assetA: AssetID;
+    assetB: AssetID;
+  }>();
+
+  doSwap(a: AssetID, b: AssetID) {
+    this.swap.log({ assetA: a, assetB: b });
+  }
+}
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { uint64, emit } from '@algorandfoundation/algorand-typescript';
+
+type Swap = { assetA: uint64; assetB: uint64 };
+
+class Swapper {
+  public doSwap(a: uint64, b: uint64): void {
+    emit('swap', { assetA: a, assetB: b } as Swap);
+  }
+}
+```
+
+The event name can also be inferred from the name of a defined type
+
+```ts
+import { uint64, emit, Contract } from '@algorandfoundation/algorand-typescript';
+
+type swap = { assetA: uint64; assetB: uint64 };
+
+class Swapper extends Contract {
+  doSwap(a: uint64, b: uint64) {
+    emit<swap>({ assetA: a, assetB: b });
+  }
+}
+```
+
+#### Box Creation
+
+In TEALScript boxes are created via the create method: `create(size?: uint64)`.
+
+In Algorand TypeScript the create method uses an object with a size parameter: `create(options?: { size?: uint64 })`
+
+In both, the size will automatically be determined for fixed-length types, thus the size parameter is optional
+
+#### Inner Transactions
+
+The interfaces for forming, sending, and inspecting inner transactions have significantly improved with Algorand TypeScript, but the interfaces are quite different. They all revolve around the `itxn` namespace.
+
+##### Sending a transaction
+
+**Before (TEALScript)**
+
+```ts
+...
+
+sendAssetConfig({
+  total: 1000,
+  assetName: 'AST1',
+  unitName: 'unit'
+  decimals: 3,
+  manager: this.app.address,
+  reserve: this.app.address
+})
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { itxn, Global, log } from '@algorandfoundation/algorand-typescript';
+
+...
+
+const assetParams = itxn.assetConfig({
+  total: 1000,
+  assetName: 'AST1',
+  unitName: 'unit',
+  decimals: 3,
+  manager: Global.currentApplicationAddress,
+  reserve: Global.currentApplicationAddress,
+});
+
+const asset1_txn = assetParams.submit();
+log(asset1_txn.createdAsset.id);
+```
+
+##### Sending a Transaction Group
+
+**Before (TEALScript)**
+
+```ts
+...
+
+this.pendingGroup.addAssetCreation({
+  configAssetTotal: 1000,
+  configAssetName: 'AST3',
+  configAssetUnitName: 'unit',
+  configAssetDecimals: 3,
+  configAssetManager: this.app.address,
+  configAssetReserve: this.app.address,
+});
+
+this.pendingGroup.addAppCall({
+  approvalProgram: APPROVE,
+  clearStateProgram: APPROVE,
+  fee: 0,
+});
+
+const appCreateTxn = this.lastInnerGroup[0];
+const asset3_txn = this.lastInnerGroup[1];
+
+assert(appCreateTxn.createdApplicationID, 'app is created');
+assert(asset3_txn.createdAssetID === 'AST3', 'asset3_txn is correct');
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { uint64, Contract, itxn, Global, assert, Bytes } from '@algorandfoundation/algorand-typescript'
+
+...
+
+const assetParams = itxn.assetConfig({
+  total: 1000,
+  assetName: 'AST3',
+  unitName: 'unit',
+  decimals: 3,
+  manager: Global.currentApplicationAddress,
+  reserve: Global.currentApplicationAddress,
+});
+
+const appCreateParams = itxn.applicationCall({
+  approvalProgram: APPROVAL_PROGRAM,
+  clearStateProgram: CLEAR_STATE_PROGRAM,
+  fee: 0,
+});
+
+const [appCreateTxn, asset3_txn] = itxn.submitGroup(appCreateParams, assetParams);
+
+assert(appCreateTxn.createdApp, 'app is created');
+assert(asset3_txn.assetName === Bytes('AST3'), 'asset3_txn is correct');
+```
+
+#### Typed Method Calls
+
+In Algorand TypeScript, there is a specific `abiCall` method for typed contract-to-contract calls instead of a generic like in TEALScript.
+
+These examples are for calling a contract method with the signature `greet(name: string): string` in a contract `Hello` that returns `"hello " + name`
+
+**Before (TEALScript)**
+
+```ts
+...
+
+const result = sendMethodCall<typeof Hello.prototype.greet>({
+  applicationID: app,
+  methodArgs: ['algo dev'],
+});
+
+assert(result === 'hello algo dev');
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { uint64, Contract, arc4, assert } from '@algorandfoundation/algorand-typescript'
+
+...
+
+const result = arc4.abiCall({
+  method: Hello.prototype.greet,
+  appId: 1234,
+  args: ['algo dev'],
+}).returnValue;
+
+assert(result === 'hello algo dev');
+```
+
+Alternatively, provide type argument, this approach supports using type only imports.
+
+```ts
+import type { HelloStubbed } from './HelloWorld.algo'
+
+...
+
+const result3 = arc4.abiCall<typeof HelloStubbed.prototype.greet>({
+  appId: 1234,
+  args: ['stubbed'],
+}).returnValue
+
+assert(result3 === 'hello stubbed')
+```
+
+#### App Creation
+
+In Algorand TypeScript, you must first explicitly compile a contract before creating it or access the programs/schema
+
+**Before (TEALScript)**
+
+```ts
+sendMethodCall<typeof Greeter.prototype.createApplication>({
+  clearStateProgram: Greeter.clearProgram(),
+  approvalProgram: Greeter.approvalProgram(),
+  globalNumUint: Greeter.schema.global.numUint,
+  methodArgs: ['hello'],
+});
+
+const app = this.itxn.createdApplicationId;
+
+const result = sendMethodCall<typeof Greeter.prototype.greet>({
+  applicationID: app,
+  methodArgs: ['world'],
+});
+
+assert(result == 'hello world');
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { Contract, arc4, assert } from '@algorandfoundation/algorand-typescript';
+import Greeter from './Greeter.algo';
+
+// // First explicitly compile the app
+const compiled = arc4.compileArc4(Greeter);
+
+const app = arc4.abiCall({
+  method: compiled.call.createApplication,
+  args: ['hello'],
+  globalNumUint: compiled.globalUints,
+}).itxn.createdApp;
+
+const result = arc4.abiCall({
+  method: compiled.call.greet,
+  args: ['world'],
+  appId: app,
+}).returnValue;
+
+assert(result === 'hello world');
+```
+
+#### Compiled Contract Information
+
+TEALScript contracts have static methods for getting the contract programs and schema. In Algorand TypeScript, you must first explicitly
+compile the contract and then use the resulting object to access program information.
+
+**Before (TEALScript)**
+
+```ts
+// Access program information directly via static methods
+sendMethodCall<typeof Greeter.prototype.createApplication>({
+  clearStateProgram: Greeter.clearProgram(),
+  approvalProgram: Greeter.approvalProgram(),
+  globalNumUint: Greeter.schema.global.numUint,
+  methodArgs: ['hello'],
+});
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+// First explicitly compile the app
+const compiled = arc4.compileArc4(Greeter);
+
+// Then access program information on the compiled object
+const app = arc4.abiCall({
+  method: compiled.call.createApplication,
+  args: ['hello'],
+  globalNumUint: compiled.globalUints,
+}).itxn.createdApp;
+```
+
+#### Logic Sigs
+
+In TEALScript, logic sigs must implement the `logic` method which may take one or more arguments which map to the lsig arguments when forming the transaction. All lsigs are approved unless an error occurs. Algorand TypeScript also requires implementation of the `program` method but it may not take an arguments and must return a `boolean` or `uint64` indicating whether the transaction is approved or not.
+
+**Before (TEALScript)**
+
+```ts
+class DangerousPaymentLsig extends LogicSig {
+  logic(amt: uint64) {
+    assert(this.txn.amount === amt);
+  }
+}
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { op, LogicSig, Txn } from '@algorandfoundation/algorand-typescript';
+
+class DangerousPaymentLsig extends LogicSig {
+  program() {
+    const amt = op.btoi(op.arg(0));
+    return Txn.amount === amt;
+  }
+}
+```
+
+#### Template Variables
+
+In TEALScript, template variables must be properties of a contract. In Algorand TypeScript, they can be defined like any other variable.
+
+**Before (TEALScript)**
+
+```ts
+class AppCaller extends LogicSig {
+  APP_ID = TemplateVar<AppID>();
+
+  logic(): void {
+    assert(this.txn.applicationID === this.APP_ID);
+  }
+}
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import {
+  LogicSig,
+  Txn,
+  TemplateVar,
+  assert,
+  uint64,
+} from '@algorandfoundation/algorand-typescript';
+
+class AppCaller extends LogicSig {
+  program(): boolean {
+    assert(Txn.applicationId.id === TemplateVar<uint64>('APP_ID'));
+    return true;
+  }
+}
+```
+
+They can also exist outside of contracts and re-used across multiple contracts.
+
+```ts
+...
+
+const APP_ID = TemplateVar<uint64>('APP_ID');
+
+class AppCaller extends LogicSig {
+  program(): boolean {
+    assert(Txn.applicationId.id === APP_ID);
+    return true;
+  }
+}
+```
+
+#### Importing
+
+In TEALScript, all of the type are injecting into the global namespace. This means no importing is required for most functions and objects. Algorand TypeScript, however, requires explicit importing of every type, allowing for better LSP discovery.
+
+**Before (TEALScript)**
+
+```ts
+import { LogicSig } from '@algorandfoundation/tealscript';
+
+class AppCaller extends LogicSig {
+  logic(): void {
+    // No need to import assert
+    assert(this.txn.applicationID === 1234);
+  }
+}
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import {
+  LogicSig,
+  Txn,
+  assert,
+  uint64,
+  TemplateVar,
+} from '@algorandfoundation/algorand-typescript';
+
+class AppCaller extends LogicSig {
+  program(): boolean {
+    assert(Txn.applicationId.id === APP_ID);
+    return true;
+  }
+}
+```
+
+#### Numerical Types
+
+##### `number` Type
+
+Both TEALScript and Algorand TypeScript have a `uint64` type, but Algorand TypeScript disallows any types to be resolved as `number`. This means all arithmetic values must be explicitly typed as `uint64`, otherwise they will have the `number` type which is not allowed.
+
+**Before (TEALScript)**
+
+```ts
+...
+
+add(a: uint64, b: uint64): uint64 {
+  // Type not needed for sum
+  const sum = a + b;
+  return sum;
+}
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { uint64 } from '@algorandfoundation/algorand-typescript';
+
+...
+
+add(a: uint64, b: uint64): uint64 {
+  // The type is required for sum
+  const sum: uint64 = a + b;
+  return sum;
+}
+
+```
+
+##### Uint types
+
+TEALScript supports typed numeric literals for most common uint types, such as `uint8`, `uint16`, `uint256`, etc. In Algorand TypeScript, the arc4.Uint constructors must be used.
+
+**Before (TEALScript)**
+
+```ts
+...
+
+addOne(n: uint256): uint256 {
+  const one: uint256 = 1;
+  const sum = n + one;
+  return sum;
+}
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { arc4, biguint } from '@algorandfoundation/algorand-typescript'
+
+...
+
+addOne(n: arc4.Uint<256>): arc4.Uint<256> {
+  // Need to explicitly use Uint<256> constructor to get uint256 and use biguint to perform arithmetic
+  const one = 1n;
+  const sum: biguint = n.asBigUint() + one + 2n;
+  return new arc4.Uint<256>(sum);
+}
+```
+
+:::note
+In Algorand TypeScript, it's generally best to use `biguint` for intermediate values until the final value needs to be encoded as a specific Uint type.
+:::
+
+##### Math and Overflows
+
+In TEALScript, overflow checks do not occur until the value is encoded (returned, logged, put into an array/object). In Algorand TypeScript, overflow checking occurs whenever the `Uint` constructor is used. Since overflow checking is fairly expensive, it is recommended to not use the `Uint` type until it needs to be encoded.
+
+**Before (TEALScript)**
+
+```ts
+...
+
+addToNumber(n: uint8) {
+  assert(n != 0)
+  const x: uint8 = 255
+  const sum = n + x // Intermediate value of overflows the max uint8, but not checked here
+
+  // final returned value is within max value of uint8, so no error
+  return sum - x
+}
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { uint64, arc4, biguint } from '@algorandfoundation/algorand-typescript'
+
+...
+
+addToNumber(n: arc4.Uint<8>) {
+  // Use biguint for intermediate values which can go up to u512
+  const x: biguint = 255n
+  const sum: biguint = n.asBigUint() + x
+
+  return new arc4.Uint8(sum - x)
+}
+```
+
+#### Casting
+
+In TEALScript, the `as` keyword is used to cast values as different types. Much like regular typescript, the `as` keyword in Algorand TypeScript cannot change runtime behavior. This means constructors must be used instead of `as`
+
+**Before (TEALScript)**
+
+```ts
+...
+
+convertNumber(n: uint64): uint8 {
+  return n as uint8
+}
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { uint64, arc4 } from '@algorandfoundation/algorand-typescript'
+
+...
+
+convertNumber(n: uint64): arc4.Uint<8> {
+  return new arc4.Uint<8>(n)
+}
+```
+
+#### Array & Object References
+
+TEALScript allows developers to create mutable references to arrays and objects, even when nested. Algorand TypeScript, however, does not allow this. Any new variables must copy the array or object.
+
+**Before (TEALScript)**
+
+```ts
+...
+
+const a: uint64[] = [1, 2, 3];
+const b = a;
+b.push(4);
+
+assert(a === b); // a and b are referencing the same array
+```
+
+**After (Algorand TypeScript 1.0)**
+
+```ts
+import { uint64, clone, assertMatch } from '@algorandfoundation/algorand-typescript'
+
+...
+
+const a: uint64[] = [1, 2, 3]
+const b = clone(a)
+b.push(4)
+
+assertMatch(a, [1, 2, 3])
+assertMatch(b, [1, 2, 3, 4]) // a and b are different arrays
+```
