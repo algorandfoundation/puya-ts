@@ -20,7 +20,8 @@ import { TypeResolver } from '../type-resolver'
 import { EvaluationContext } from './evaluation-context'
 import { SwitchLoopContext } from './switch-loop-context'
 import { UniqueNameResolver } from './unique-name-resolver'
-
+import type { CompileOptions } from '../../options'
+export type BuildAwstOptions = Pick<CompileOptions, 'filePaths' | 'outputAwst' | 'outputAwstJson' | 'validateAbiReturn'>
 export abstract class AwstBuildContext {
   /**
    * Get the source location of a node in the current source file
@@ -81,6 +82,7 @@ export abstract class AwstBuildContext {
    * Retrieve the switch loop context
    */
   abstract get switchLoopCtx(): SwitchLoopContext
+  abstract get options(): BuildAwstOptions
 
   abstract addStorageDeclaration(declaration: AppStorageDeclaration): void
   abstract addArc4Config(methodData: {
@@ -113,8 +115,8 @@ export abstract class AwstBuildContext {
 
   private static asyncStore = new AsyncLocalStorage<AwstBuildContext>()
 
-  static run<R>(program: ts.Program, cb: () => R) {
-    const ctx = AwstBuildContextImpl.forProgram(program)
+  static run<R>(program: ts.Program, options: BuildAwstOptions, cb: () => R) {
+    const ctx = AwstBuildContextImpl.forProgram(program, options)
 
     return AwstBuildContext.asyncStore.run(ctx, cb)
   }
@@ -138,6 +140,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
   readonly #compilationSet: CompilationSet
   private constructor(
     public readonly program: ts.Program,
+    public readonly options: BuildAwstOptions,
     private readonly constants: ConstantStore,
     private readonly nameResolver: UniqueNameResolver,
     private readonly storageDeclarations: Map<string, Map<string, AppStorageDeclaration>>,
@@ -202,9 +205,10 @@ class AwstBuildContextImpl extends AwstBuildContext {
     }
   }
 
-  static forProgram(program: ts.Program): AwstBuildContext {
+  static forProgram(program: ts.Program, options: BuildAwstOptions): AwstBuildContext {
     return new AwstBuildContextImpl(
       program,
+      options,
       new ConstantStore(program),
       new UniqueNameResolver(),
       new Map(),
@@ -220,6 +224,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
   createChildContext(): AwstBuildContext {
     return new AwstBuildContextImpl(
       this.program,
+      this.options,
       this.constants,
       this.nameResolver.createChild(),
       this.storageDeclarations,
