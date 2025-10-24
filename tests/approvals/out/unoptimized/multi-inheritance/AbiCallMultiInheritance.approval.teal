@@ -173,10 +173,24 @@ tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.test_next_txn
     // })
     itxn_submit
     itxn LastLog
+    dup
+    extract 4 0
+    cover 1
     extract 0 4
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    pushint 2 // 2
+    +
+    uncover 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     // tests/approvals/multi-inheritance.algo.ts:72-74
     // const result = abiCall<typeof AbiCallMultiInheritance.prototype.add>({
     //   args: [1, 2],
@@ -217,6 +231,11 @@ tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.test_next_txn
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/multi-inheritance.algo.ts:76
     // assert(result === 3)

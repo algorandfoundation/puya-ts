@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 6 32
+    intcblock 0 1 6 8
     bytecblock 0x151f7c75 0x01
     // tests/approvals/resource-encoding.algo.ts:62
     // class C2C extends Contract {
@@ -39,13 +39,13 @@ testCallToIndex:
     txna ApplicationArgs 1
     dup
     len
-    intc_3 // 32
+    pushint 32 // 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 2
     dup
     len
-    pushint 8 // 8
+    intc_3 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -82,6 +82,11 @@ testCallToIndex:
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:70
     // assert(res1 === account.balance)
@@ -101,13 +106,13 @@ testCallToValue:
     txna ApplicationArgs 1
     dup
     len
-    intc_3 // 32
+    pushint 32 // 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 2
     dup
     len
-    pushint 8 // 8
+    intc_3 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -135,6 +140,11 @@ testCallToValue:
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:78
     // assert(res1 === account.balance)
@@ -253,10 +263,16 @@ testCallToEchoResource:
     itxn_submit
     itxn LastLog
     dup
+    extract 4 0
+    dig 1
     extract 0 4
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    len
+    pushint 48 // 48
+    ==
+    assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
     // tests/approvals/resource-encoding.algo.ts:97
     // assertMatch(indexes, [asset, Global.currentApplicationId, Txn.sender])
     dup
@@ -314,10 +330,16 @@ testCallToEchoResource:
     itxn_submit
     itxn LastLog
     dup
+    extract 4 0
+    dig 1
     extract 0 4
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    len
+    pushint 48 // 48
+    ==
+    assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
     // tests/approvals/resource-encoding.algo.ts:104
     // assertMatch(resources, [asset, Global.currentApplicationId, Txn.sender])
     dup

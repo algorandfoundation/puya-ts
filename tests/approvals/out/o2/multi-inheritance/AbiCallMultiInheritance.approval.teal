@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 8 1 6 0
+    intcblock 8 1 0 6
     bytecblock 0x151f7c75 0xfe6bdf69
     // tests/approvals/multi-inheritance.algo.ts:65
     // class AbiCallMultiInheritance extends Contract {
@@ -69,16 +69,28 @@ main_test_route@4:
     pushbytes 0x363b329e // method "methodTwo()string"
     itxn_field ApplicationArgs
     itxn_field ApplicationID
-    intc_2 // appl
+    intc_3 // appl
     itxn_field TypeEnum
-    intc_3 // 0
+    intc_2 // 0
     itxn_field Fee
     itxn_submit
     itxn LastLog
+    dup
+    extract 4 0
+    swap
     extract 0 4
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    intc_2 // 0
+    extract_uint16 // on error: invalid array length header
+    pushint 2 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     // tests/approvals/multi-inheritance.algo.ts:72-74
     // const result = abiCall<typeof AbiCallMultiInheritance.prototype.add>({
     //   args: [1, 2],
@@ -99,9 +111,9 @@ main_test_route@4:
     swap
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
-    intc_2 // appl
+    intc_3 // appl
     itxn_field TypeEnum
-    intc_3 // 0
+    intc_2 // 0
     itxn_field Fee
     itxn_submit
     itxn LastLog
@@ -112,6 +124,11 @@ main_test_route@4:
     bytec_0 // 0x151f7c75
     ==
     assert // Bytes has valid prefix
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/multi-inheritance.algo.ts:76
     // assert(result === 3)

@@ -1,0 +1,38 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:148
+    // class InvalidContract extends Contract {
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    bz main_create_NoOp@5
+    pushbytes 0x45cf05ef // method "invalidValue()uint64[3]"
+    txna ApplicationArgs 0
+    match main_invalidValue_route@3
+    err
+
+main_invalidValue_route@3:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:152
+    // invalidValue() {
+    pushbytes 0x151f7c75696e76616c6964
+    log
+    pushint 1 // 1
+    return
+
+main_create_NoOp@5:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:148
+    // class InvalidContract extends Contract {
+    pushbytes 0x4c5c61ba // method "create()void"
+    txna ApplicationArgs 0
+    match main_create_route@6
+    err
+
+main_create_route@6:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:149
+    // @arc4.abimethod({ onCreate: 'require' })
+    pushint 1 // 1
+    return

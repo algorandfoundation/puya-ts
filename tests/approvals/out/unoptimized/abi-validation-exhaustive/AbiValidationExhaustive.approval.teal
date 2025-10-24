@@ -3,36 +3,36 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 2 0 11
+    intcblock 1 0 2 11
     b main_block@0
 
 main_block@0:
     b main_block@1
 
 main_block@1:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:17
+    // tests/approvals/abi-validation-exhaustive.algo.ts:18
     // class AbiValidationExhaustive extends Contract {
     txn NumAppArgs
-    intc_2 // 0
+    intc_1 // 0
     !=
-    bz main___algots__.defaultCreate@36
+    bz main___algots__.defaultCreate@37
     b main_abi_routing@2
 
 main_abi_routing@2:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:17
+    // tests/approvals/abi-validation-exhaustive.algo.ts:18
     // class AbiValidationExhaustive extends Contract {
     txn OnCompletion
-    intc_2 // NoOp
+    intc_1 // NoOp
     ==
     assert // OnCompletion must be NoOp
     txn ApplicationID
-    intc_2 // 0
+    intc_1 // 0
     !=
-    bz main_create_NoOp@34
+    bz main_create_NoOp@35
     b main_call_NoOp@3
 
 main_call_NoOp@3:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:17
+    // tests/approvals/abi-validation-exhaustive.algo.ts:18
     // class AbiValidationExhaustive extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x4d758c59 // method "validate_uint64(uint64)void"
@@ -64,206 +64,213 @@ main_call_NoOp@3:
     pushbytes 0xba5195fd // method "validate_native_static_struct_arr3((uint64,uint8)[3])void"
     pushbytes 0xe36b3224 // method "validate_native_dynamic_struct_arr((uint64,uint8,string)[])void"
     pushbytes 0x574e9479 // method "validate_native_dynamic_struct_arr3((uint64,uint8,string)[3])void"
-    uncover 29
-    match main_validate_uint64_route@4 main_validate_uint8_route@5 main_validate_uint512_route@6 main_validate_ufixed64_route@7 main_validate_uint8_arr_route@8 main_validate_uint8_arr3_route@9 main_validate_bool_route@10 main_validate_byte_route@11 main_validate_string_route@12 main_validate_bytes_route@13 main_validate_address_route@14 main_validate_account_route@15 main_validate_bool_arr_route@16 main_validate_bool_arr3_route@17 main_validate_static_tuple_route@18 main_validate_dynamic_tuple_route@19 main_validate_static_struct_route@20 main_validate_dynamic_struct_route@21 main_validate_static_struct_arr_route@22 main_validate_static_struct_arr3_route@23 main_validate_dynamic_struct_arr_route@24 main_validate_dynamic_struct_arr3_route@25 main_validate_dynamic_struct_with_a_bool_route@26 main_validate_native_static_struct_route@27 main_validate_native_dynamic_struct_route@28 main_validate_native_static_struct_arr_route@29 main_validate_native_static_struct_arr3_route@30 main_validate_native_dynamic_struct_arr_route@31 main_validate_native_dynamic_struct_arr3_route@32
-    b main_switch_case_next@33
+    pushbytes 0xd0b582f1 // method "validate_c2c()void"
+    uncover 30
+    match main_validate_uint64_route@4 main_validate_uint8_route@5 main_validate_uint512_route@6 main_validate_ufixed64_route@7 main_validate_uint8_arr_route@8 main_validate_uint8_arr3_route@9 main_validate_bool_route@10 main_validate_byte_route@11 main_validate_string_route@12 main_validate_bytes_route@13 main_validate_address_route@14 main_validate_account_route@15 main_validate_bool_arr_route@16 main_validate_bool_arr3_route@17 main_validate_static_tuple_route@18 main_validate_dynamic_tuple_route@19 main_validate_static_struct_route@20 main_validate_dynamic_struct_route@21 main_validate_static_struct_arr_route@22 main_validate_static_struct_arr3_route@23 main_validate_dynamic_struct_arr_route@24 main_validate_dynamic_struct_arr3_route@25 main_validate_dynamic_struct_with_a_bool_route@26 main_validate_native_static_struct_route@27 main_validate_native_dynamic_struct_route@28 main_validate_native_static_struct_arr_route@29 main_validate_native_static_struct_arr3_route@30 main_validate_native_dynamic_struct_arr_route@31 main_validate_native_dynamic_struct_arr3_route@32 main_validate_c2c_route@33
+    b main_switch_case_next@34
 
-main_switch_case_next@33:
-    b main_after_if_else@35
+main_switch_case_next@34:
+    b main_after_if_else@36
 
-main_after_if_else@35:
-    b main_after_if_else@37
+main_after_if_else@36:
+    b main_after_if_else@38
 
-main_after_if_else@37:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:17
+main_after_if_else@38:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:18
     // class AbiValidationExhaustive extends Contract {
     err
 
+main_validate_c2c_route@33:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:136
+    // validate_c2c() {
+    callsub validate_c2c
+    b main_switch_case_next@34
+
 main_validate_native_dynamic_struct_arr3_route@32:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:130
+    // tests/approvals/abi-validation-exhaustive.algo.ts:131
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_native_dynamic_struct_arr3
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_native_dynamic_struct_arr_route@31:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:126
+    // tests/approvals/abi-validation-exhaustive.algo.ts:127
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_native_dynamic_struct_arr
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_native_static_struct_arr3_route@30:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:122
+    // tests/approvals/abi-validation-exhaustive.algo.ts:123
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_native_static_struct_arr3
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_native_static_struct_arr_route@29:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:118
+    // tests/approvals/abi-validation-exhaustive.algo.ts:119
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_native_static_struct_arr
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_native_dynamic_struct_route@28:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:114
+    // tests/approvals/abi-validation-exhaustive.algo.ts:115
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_native_dynamic_struct
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_native_static_struct_route@27:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:110
+    // tests/approvals/abi-validation-exhaustive.algo.ts:111
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_native_static_struct
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_dynamic_struct_with_a_bool_route@26:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:106
+    // tests/approvals/abi-validation-exhaustive.algo.ts:107
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_dynamic_struct_with_a_bool
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_dynamic_struct_arr3_route@25:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:102
+    // tests/approvals/abi-validation-exhaustive.algo.ts:103
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_dynamic_struct_arr3
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_dynamic_struct_arr_route@24:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:98
+    // tests/approvals/abi-validation-exhaustive.algo.ts:99
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_dynamic_struct_arr
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_static_struct_arr3_route@23:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:94
+    // tests/approvals/abi-validation-exhaustive.algo.ts:95
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_static_struct_arr3
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_static_struct_arr_route@22:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:90
+    // tests/approvals/abi-validation-exhaustive.algo.ts:91
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_static_struct_arr
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_dynamic_struct_route@21:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:86
+    // tests/approvals/abi-validation-exhaustive.algo.ts:87
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_dynamic_struct
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_static_struct_route@20:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:82
+    // tests/approvals/abi-validation-exhaustive.algo.ts:83
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_static_struct
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_dynamic_tuple_route@19:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:78
+    // tests/approvals/abi-validation-exhaustive.algo.ts:79
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_dynamic_tuple
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_static_tuple_route@18:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:74
+    // tests/approvals/abi-validation-exhaustive.algo.ts:75
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_static_tuple
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_bool_arr3_route@17:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:70
+    // tests/approvals/abi-validation-exhaustive.algo.ts:71
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_bool_arr3
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_bool_arr_route@16:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:66
+    // tests/approvals/abi-validation-exhaustive.algo.ts:67
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_bool_arr
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_account_route@15:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:62
+    // tests/approvals/abi-validation-exhaustive.algo.ts:63
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_account
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_address_route@14:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:58
+    // tests/approvals/abi-validation-exhaustive.algo.ts:59
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_address
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_bytes_route@13:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:54
+    // tests/approvals/abi-validation-exhaustive.algo.ts:55
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_bytes
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_string_route@12:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:50
+    // tests/approvals/abi-validation-exhaustive.algo.ts:51
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_string
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_byte_route@11:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:46
+    // tests/approvals/abi-validation-exhaustive.algo.ts:47
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_byte
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_bool_route@10:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:42
+    // tests/approvals/abi-validation-exhaustive.algo.ts:43
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_bool
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_uint8_arr3_route@9:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:38
+    // tests/approvals/abi-validation-exhaustive.algo.ts:39
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_uint8_arr3
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_uint8_arr_route@8:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:34
+    // tests/approvals/abi-validation-exhaustive.algo.ts:35
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_uint8_arr
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_ufixed64_route@7:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:30
+    // tests/approvals/abi-validation-exhaustive.algo.ts:31
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_ufixed64
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_uint512_route@6:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:26
+    // tests/approvals/abi-validation-exhaustive.algo.ts:27
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_uint512
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_uint8_route@5:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:22
+    // tests/approvals/abi-validation-exhaustive.algo.ts:23
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_uint8
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
 main_validate_uint64_route@4:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:18
+    // tests/approvals/abi-validation-exhaustive.algo.ts:19
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     callsub validate_uint64
-    b main_switch_case_next@33
+    b main_switch_case_next@34
 
-main_create_NoOp@34:
-    b main_after_if_else@35
+main_create_NoOp@35:
+    b main_after_if_else@36
 
-main___algots__.defaultCreate@36:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:17
+main___algots__.defaultCreate@37:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:18
     // class AbiValidationExhaustive extends Contract {
     txn OnCompletion
-    intc_2 // NoOp
+    intc_1 // NoOp
     ==
     txn ApplicationID
-    intc_2 // 0
+    intc_1 // 0
     ==
     &&
     assert // OnCompletion must be NoOp && can only call when creating
@@ -277,7 +284,7 @@ validate_uint64:
     b validate_uint64_block@0
 
 validate_uint64_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:18
+    // tests/approvals/abi-validation-exhaustive.algo.ts:19
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint64
@@ -290,7 +297,7 @@ validate_uint8:
     b validate_uint8_block@0
 
 validate_uint8_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:22
+    // tests/approvals/abi-validation-exhaustive.algo.ts:23
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8
@@ -303,7 +310,7 @@ validate_uint512:
     b validate_uint512_block@0
 
 validate_uint512_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:26
+    // tests/approvals/abi-validation-exhaustive.algo.ts:27
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint512
@@ -316,7 +323,7 @@ validate_ufixed64:
     b validate_ufixed64_block@0
 
 validate_ufixed64_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:30
+    // tests/approvals/abi-validation-exhaustive.algo.ts:31
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_ufixed64
@@ -329,7 +336,7 @@ validate_uint8_arr:
     b validate_uint8_arr_block@0
 
 validate_uint8_arr_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:34
+    // tests/approvals/abi-validation-exhaustive.algo.ts:35
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8_arr
@@ -342,7 +349,7 @@ validate_uint8_arr3:
     b validate_uint8_arr3_block@0
 
 validate_uint8_arr3_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:38
+    // tests/approvals/abi-validation-exhaustive.algo.ts:39
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8_arr3
@@ -355,7 +362,7 @@ validate_bool:
     b validate_bool_block@0
 
 validate_bool_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:42
+    // tests/approvals/abi-validation-exhaustive.algo.ts:43
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool
@@ -368,7 +375,7 @@ validate_byte:
     b validate_byte_block@0
 
 validate_byte_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:46
+    // tests/approvals/abi-validation-exhaustive.algo.ts:47
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_byte
@@ -381,7 +388,7 @@ validate_string:
     b validate_string_block@0
 
 validate_string_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:50
+    // tests/approvals/abi-validation-exhaustive.algo.ts:51
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_string
@@ -394,7 +401,7 @@ validate_bytes:
     b validate_bytes_block@0
 
 validate_bytes_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:54
+    // tests/approvals/abi-validation-exhaustive.algo.ts:55
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bytes
@@ -407,7 +414,7 @@ validate_address:
     b validate_address_block@0
 
 validate_address_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:58
+    // tests/approvals/abi-validation-exhaustive.algo.ts:59
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_address
@@ -420,7 +427,7 @@ validate_account:
     b validate_account_block@0
 
 validate_account_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:62
+    // tests/approvals/abi-validation-exhaustive.algo.ts:63
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_account
@@ -433,7 +440,7 @@ validate_bool_arr:
     b validate_bool_arr_block@0
 
 validate_bool_arr_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:66
+    // tests/approvals/abi-validation-exhaustive.algo.ts:67
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool_arr
@@ -446,7 +453,7 @@ validate_bool_arr3:
     b validate_bool_arr3_block@0
 
 validate_bool_arr3_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:70
+    // tests/approvals/abi-validation-exhaustive.algo.ts:71
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool_arr3
@@ -459,7 +466,7 @@ validate_static_tuple:
     b validate_static_tuple_block@0
 
 validate_static_tuple_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:74
+    // tests/approvals/abi-validation-exhaustive.algo.ts:75
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_tuple
@@ -472,7 +479,7 @@ validate_dynamic_tuple:
     b validate_dynamic_tuple_block@0
 
 validate_dynamic_tuple_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:78
+    // tests/approvals/abi-validation-exhaustive.algo.ts:79
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_tuple
@@ -485,7 +492,7 @@ validate_static_struct:
     b validate_static_struct_block@0
 
 validate_static_struct_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:82
+    // tests/approvals/abi-validation-exhaustive.algo.ts:83
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct
@@ -498,7 +505,7 @@ validate_dynamic_struct:
     b validate_dynamic_struct_block@0
 
 validate_dynamic_struct_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:86
+    // tests/approvals/abi-validation-exhaustive.algo.ts:87
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct
@@ -511,7 +518,7 @@ validate_static_struct_arr:
     b validate_static_struct_arr_block@0
 
 validate_static_struct_arr_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:90
+    // tests/approvals/abi-validation-exhaustive.algo.ts:91
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct_arr
@@ -524,7 +531,7 @@ validate_static_struct_arr3:
     b validate_static_struct_arr3_block@0
 
 validate_static_struct_arr3_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:94
+    // tests/approvals/abi-validation-exhaustive.algo.ts:95
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct_arr3
@@ -537,7 +544,7 @@ validate_dynamic_struct_arr:
     b validate_dynamic_struct_arr_block@0
 
 validate_dynamic_struct_arr_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:98
+    // tests/approvals/abi-validation-exhaustive.algo.ts:99
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr
@@ -550,7 +557,7 @@ validate_dynamic_struct_arr3:
     b validate_dynamic_struct_arr3_block@0
 
 validate_dynamic_struct_arr3_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:102
+    // tests/approvals/abi-validation-exhaustive.algo.ts:103
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr3
@@ -563,7 +570,7 @@ validate_dynamic_struct_with_a_bool:
     b validate_dynamic_struct_with_a_bool_block@0
 
 validate_dynamic_struct_with_a_bool_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:106
+    // tests/approvals/abi-validation-exhaustive.algo.ts:107
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_with_a_bool
@@ -576,7 +583,7 @@ validate_native_static_struct:
     b validate_native_static_struct_block@0
 
 validate_native_static_struct_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:110
+    // tests/approvals/abi-validation-exhaustive.algo.ts:111
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct
@@ -589,7 +596,7 @@ validate_native_dynamic_struct:
     b validate_native_dynamic_struct_block@0
 
 validate_native_dynamic_struct_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:114
+    // tests/approvals/abi-validation-exhaustive.algo.ts:115
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct
@@ -602,7 +609,7 @@ validate_native_static_struct_arr:
     b validate_native_static_struct_arr_block@0
 
 validate_native_static_struct_arr_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:118
+    // tests/approvals/abi-validation-exhaustive.algo.ts:119
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct_arr
@@ -615,7 +622,7 @@ validate_native_static_struct_arr3:
     b validate_native_static_struct_arr3_block@0
 
 validate_native_static_struct_arr3_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:122
+    // tests/approvals/abi-validation-exhaustive.algo.ts:123
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct_arr3
@@ -628,7 +635,7 @@ validate_native_dynamic_struct_arr:
     b validate_native_dynamic_struct_arr_block@0
 
 validate_native_dynamic_struct_arr_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:126
+    // tests/approvals/abi-validation-exhaustive.algo.ts:127
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr
@@ -641,7 +648,7 @@ validate_native_dynamic_struct_arr3:
     b validate_native_dynamic_struct_arr3_block@0
 
 validate_native_dynamic_struct_arr3_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:130
+    // tests/approvals/abi-validation-exhaustive.algo.ts:131
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     txna ApplicationArgs 1
     callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr3
@@ -649,16 +656,28 @@ validate_native_dynamic_struct_arr3_block@0:
     return
 
 
+// tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_c2c[routing]() -> void:
+validate_c2c:
+    b validate_c2c_block@0
+
+validate_c2c_block@0:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:136
+    // validate_c2c() {
+    callsub tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_c2c
+    intc_0 // 1
+    return
+
+
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint64(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint64:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:18-19
+    // tests/approvals/abi-validation-exhaustive.algo.ts:19-20
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_uint64(value: arc4.Uint64) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint64_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint64_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:20
+    // tests/approvals/abi-validation-exhaustive.algo.ts:21
     // validateEncoding(value)
     frame_dig -1
     len
@@ -670,14 +689,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:22-23
+    // tests/approvals/abi-validation-exhaustive.algo.ts:23-24
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_uint8(value: arc4.Uint8) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:24
+    // tests/approvals/abi-validation-exhaustive.algo.ts:25
     // validateEncoding(value)
     frame_dig -1
     len
@@ -689,14 +708,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint512(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint512:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:26-27
+    // tests/approvals/abi-validation-exhaustive.algo.ts:27-28
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_uint512(value: arc4.Uint<512>) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint512_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint512_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:28
+    // tests/approvals/abi-validation-exhaustive.algo.ts:29
     // validateEncoding(value)
     frame_dig -1
     len
@@ -708,14 +727,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_ufixed64(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_ufixed64:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:30-31
+    // tests/approvals/abi-validation-exhaustive.algo.ts:31-32
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_ufixed64(value: arc4.UFixed<64, 2>) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_ufixed64_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_ufixed64_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:32
+    // tests/approvals/abi-validation-exhaustive.algo.ts:33
     // validateEncoding(value)
     frame_dig -1
     len
@@ -727,21 +746,21 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8_arr(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8_arr:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:34-35
+    // tests/approvals/abi-validation-exhaustive.algo.ts:35-36
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_uint8_arr(value: arc4.DynamicArray<arc4.Uint8>) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8_arr_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8_arr_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:36
+    // tests/approvals/abi-validation-exhaustive.algo.ts:37
     // validateEncoding(value)
     frame_dig -1
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
-    intc_1 // 2
+    intc_2 // 2
     +
     frame_dig -1
     len
@@ -752,14 +771,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8_arr3(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8_arr3:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:38-39
+    // tests/approvals/abi-validation-exhaustive.algo.ts:39-40
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_uint8_arr3(value: arc4.StaticArray<arc4.Uint8, 3>) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8_arr3_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint8_arr3_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:40
+    // tests/approvals/abi-validation-exhaustive.algo.ts:41
     // validateEncoding(value)
     frame_dig -1
     len
@@ -771,14 +790,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:42-43
+    // tests/approvals/abi-validation-exhaustive.algo.ts:43-44
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_bool(value: arc4.Bool) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:44
+    // tests/approvals/abi-validation-exhaustive.algo.ts:45
     // validateEncoding(value)
     frame_dig -1
     len
@@ -790,14 +809,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_byte(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_byte:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:46-47
+    // tests/approvals/abi-validation-exhaustive.algo.ts:47-48
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_byte(value: arc4.Byte) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_byte_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_byte_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:48
+    // tests/approvals/abi-validation-exhaustive.algo.ts:49
     // validateEncoding(value)
     frame_dig -1
     len
@@ -809,21 +828,21 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_string(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_string:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:50-51
+    // tests/approvals/abi-validation-exhaustive.algo.ts:51-52
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_string(value: arc4.Str) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_string_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_string_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:52
+    // tests/approvals/abi-validation-exhaustive.algo.ts:53
     // validateEncoding(value)
     frame_dig -1
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
-    intc_1 // 2
+    intc_2 // 2
     +
     frame_dig -1
     len
@@ -834,21 +853,21 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bytes(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bytes:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:54-55
+    // tests/approvals/abi-validation-exhaustive.algo.ts:55-56
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_bytes(value: arc4.DynamicBytes) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bytes_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bytes_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:56
+    // tests/approvals/abi-validation-exhaustive.algo.ts:57
     // validateEncoding(value)
     frame_dig -1
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
-    intc_1 // 2
+    intc_2 // 2
     +
     frame_dig -1
     len
@@ -859,14 +878,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_address(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_address:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:58-59
+    // tests/approvals/abi-validation-exhaustive.algo.ts:59-60
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_address(value: arc4.Address) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_address_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_address_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:60
+    // tests/approvals/abi-validation-exhaustive.algo.ts:61
     // validateEncoding(value)
     frame_dig -1
     len
@@ -878,14 +897,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_account(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_account:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:62-63
+    // tests/approvals/abi-validation-exhaustive.algo.ts:63-64
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_account(value: Account) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_account_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_account_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:64
+    // tests/approvals/abi-validation-exhaustive.algo.ts:65
     // validateEncoding(value)
     frame_dig -1
     len
@@ -897,17 +916,17 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool_arr(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool_arr:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:66-67
+    // tests/approvals/abi-validation-exhaustive.algo.ts:67-68
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_bool_arr(value: arc4.DynamicArray<arc4.Bool>) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool_arr_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool_arr_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:68
+    // tests/approvals/abi-validation-exhaustive.algo.ts:69
     // validateEncoding(value)
     frame_dig -1
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
@@ -915,7 +934,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     +
     pushint 8 // 8
     /
-    intc_1 // 2
+    intc_2 // 2
     +
     frame_dig -1
     len
@@ -926,14 +945,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool_arr3(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool_arr3:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:70-71
+    // tests/approvals/abi-validation-exhaustive.algo.ts:71-72
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_bool_arr3(value: arc4.StaticArray<arc4.Bool, 3>) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool_arr3_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_bool_arr3_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:72
+    // tests/approvals/abi-validation-exhaustive.algo.ts:73
     // validateEncoding(value)
     frame_dig -1
     len
@@ -945,14 +964,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_tuple(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_tuple:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:74-75
+    // tests/approvals/abi-validation-exhaustive.algo.ts:75-76
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_static_tuple(value: ARC4StaticTuple) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_tuple_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_tuple_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:76
+    // tests/approvals/abi-validation-exhaustive.algo.ts:77
     // validateEncoding(value)
     frame_dig -1
     len
@@ -964,14 +983,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_tuple(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_tuple:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:78-79
+    // tests/approvals/abi-validation-exhaustive.algo.ts:79-80
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_dynamic_tuple(value: ARC4DynamicTuple) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_tuple_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_tuple_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:80
+    // tests/approvals/abi-validation-exhaustive.algo.ts:81
     // validateEncoding(value)
     frame_dig -1
     len
@@ -986,11 +1005,11 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     uncover 1
     uncover 2
     substring3
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
-    intc_1 // 2
+    intc_2 // 2
     +
     intc_3 // 11
     +
@@ -1003,14 +1022,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:82-83
+    // tests/approvals/abi-validation-exhaustive.algo.ts:83-84
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_static_struct(value: ARC4StaticStruct) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:84
+    // tests/approvals/abi-validation-exhaustive.algo.ts:85
     // validateEncoding(value)
     frame_dig -1
     len
@@ -1022,14 +1041,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:86-87
+    // tests/approvals/abi-validation-exhaustive.algo.ts:87-88
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_dynamic_struct(value: ARC4DynamicStruct) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:88
+    // tests/approvals/abi-validation-exhaustive.algo.ts:89
     // validateEncoding(value)
     frame_dig -1
     len
@@ -1044,11 +1063,11 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     uncover 1
     uncover 2
     substring3
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
-    intc_1 // 2
+    intc_2 // 2
     +
     intc_3 // 11
     +
@@ -1061,21 +1080,21 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct_arr(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct_arr:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:90-91
+    // tests/approvals/abi-validation-exhaustive.algo.ts:91-92
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_static_struct_arr(value: arc4.DynamicArray<ARC4StaticStruct>) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct_arr_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct_arr_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:92
+    // tests/approvals/abi-validation-exhaustive.algo.ts:93
     // validateEncoding(value)
     frame_dig -1
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     pushint 9 // 9
     *
-    intc_1 // 2
+    intc_2 // 2
     +
     frame_dig -1
     len
@@ -1086,14 +1105,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct_arr3(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct_arr3:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:94-95
+    // tests/approvals/abi-validation-exhaustive.algo.ts:95-96
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_static_struct_arr3(value: arc4.StaticArray<ARC4StaticStruct, 3>) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct_arr3_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_static_struct_arr3_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:96
+    // tests/approvals/abi-validation-exhaustive.algo.ts:97
     // validateEncoding(value)
     frame_dig -1
     len
@@ -1105,32 +1124,32 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:98-99
+    // tests/approvals/abi-validation-exhaustive.algo.ts:99-100
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_dynamic_struct_arr(value: arc4.DynamicArray<ARC4DynamicStruct>) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:100
+    // tests/approvals/abi-validation-exhaustive.algo.ts:101
     // validateEncoding(value)
     frame_dig -1
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     dup
-    intc_1 // 2
+    intc_2 // 2
     *
     frame_dig -1
     len
     frame_dig -1
-    intc_1 // 2
+    intc_2 // 2
     uncover 2
     substring3
-    intc_2 // 0
+    intc_1 // 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr_for_header@1
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr_for_header@1:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:100
+    // tests/approvals/abi-validation-exhaustive.algo.ts:101
     // validateEncoding(value)
     frame_dig 3
     frame_dig 0
@@ -1139,10 +1158,10 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr_for_body@2
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr_for_body@2:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:100
+    // tests/approvals/abi-validation-exhaustive.algo.ts:101
     // validateEncoding(value)
     frame_dig 3
-    intc_1 // 2
+    intc_2 // 2
     *
     frame_dig 2
     dup
@@ -1174,11 +1193,11 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     assert // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
     uncover 2
     substring3
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
-    intc_1 // 2
+    intc_2 // 2
     +
     intc_3 // 11
     +
@@ -1194,10 +1213,10 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr_for_header@1
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr_after_for@4:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:100
+    // tests/approvals/abi-validation-exhaustive.algo.ts:101
     // validateEncoding(value)
     frame_dig 1
-    intc_1 // 2
+    intc_2 // 2
     +
     frame_dig -1
     len
@@ -1208,23 +1227,23 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr3(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr3:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:102-103
+    // tests/approvals/abi-validation-exhaustive.algo.ts:103-104
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_dynamic_struct_arr3(value: arc4.StaticArray<ARC4DynamicStruct, 3>) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr3_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr3_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:104
+    // tests/approvals/abi-validation-exhaustive.algo.ts:105
     // validateEncoding(value)
     pushint 3 // 3
-    intc_1 // 2
+    intc_2 // 2
     *
-    intc_2 // 0
+    intc_1 // 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr3_for_header@1
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr3_for_header@1:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:104
+    // tests/approvals/abi-validation-exhaustive.algo.ts:105
     // validateEncoding(value)
     frame_dig 1
     pushint 3 // 3
@@ -1233,10 +1252,10 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr3_for_body@2
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr3_for_body@2:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:104
+    // tests/approvals/abi-validation-exhaustive.algo.ts:105
     // validateEncoding(value)
     frame_dig 1
-    intc_1 // 2
+    intc_2 // 2
     *
     frame_dig -1
     uncover 1
@@ -1265,11 +1284,11 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     assert // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
     uncover 2
     substring3
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
-    intc_1 // 2
+    intc_2 // 2
     +
     intc_3 // 11
     +
@@ -1285,7 +1304,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr3_for_header@1
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr3_after_for@4:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:104
+    // tests/approvals/abi-validation-exhaustive.algo.ts:105
     // validateEncoding(value)
     frame_dig -1
     len
@@ -1297,14 +1316,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_with_a_bool(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_with_a_bool:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:106-107
+    // tests/approvals/abi-validation-exhaustive.algo.ts:107-108
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_dynamic_struct_with_a_bool(value: WithABool) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_with_a_bool_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_with_a_bool_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:108
+    // tests/approvals/abi-validation-exhaustive.algo.ts:109
     // validateEncoding(value)
     frame_dig -1
     len
@@ -1319,11 +1338,11 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     uncover 1
     uncover 2
     substring3
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
-    intc_1 // 2
+    intc_2 // 2
     +
     pushint 4 // 4
     +
@@ -1336,14 +1355,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:110-111
+    // tests/approvals/abi-validation-exhaustive.algo.ts:111-112
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_native_static_struct(value: NativeStaticStruct) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:112
+    // tests/approvals/abi-validation-exhaustive.algo.ts:113
     // validateEncoding(value)
     frame_dig -1
     len
@@ -1355,14 +1374,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:114-115
+    // tests/approvals/abi-validation-exhaustive.algo.ts:115-116
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_native_dynamic_struct(value: NativeDynamicStruct) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:116
+    // tests/approvals/abi-validation-exhaustive.algo.ts:117
     // validateEncoding(value)
     frame_dig -1
     len
@@ -1377,11 +1396,11 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     uncover 1
     uncover 2
     substring3
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
-    intc_1 // 2
+    intc_2 // 2
     +
     intc_3 // 11
     +
@@ -1394,21 +1413,21 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct_arr(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct_arr:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:118-119
+    // tests/approvals/abi-validation-exhaustive.algo.ts:119-120
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_native_static_struct_arr(value: Array<NativeStaticStruct>) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct_arr_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct_arr_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:120
+    // tests/approvals/abi-validation-exhaustive.algo.ts:121
     // validateEncoding(value)
     frame_dig -1
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     pushint 9 // 9
     *
-    intc_1 // 2
+    intc_2 // 2
     +
     frame_dig -1
     len
@@ -1419,14 +1438,14 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct_arr3(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct_arr3:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:122-123
+    // tests/approvals/abi-validation-exhaustive.algo.ts:123-124
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_native_static_struct_arr3(value: FixedArray<NativeStaticStruct, 3>) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct_arr3_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_static_struct_arr3_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:124
+    // tests/approvals/abi-validation-exhaustive.algo.ts:125
     // validateEncoding(value)
     frame_dig -1
     len
@@ -1438,32 +1457,32 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:126-127
+    // tests/approvals/abi-validation-exhaustive.algo.ts:127-128
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_native_dynamic_struct_arr(value: NativeDynamicStruct[]) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:128
+    // tests/approvals/abi-validation-exhaustive.algo.ts:129
     // validateEncoding(value)
     frame_dig -1
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     dup
-    intc_1 // 2
+    intc_2 // 2
     *
     frame_dig -1
     len
     frame_dig -1
-    intc_1 // 2
+    intc_2 // 2
     uncover 2
     substring3
-    intc_2 // 0
+    intc_1 // 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr_for_header@1
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr_for_header@1:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:128
+    // tests/approvals/abi-validation-exhaustive.algo.ts:129
     // validateEncoding(value)
     frame_dig 3
     frame_dig 0
@@ -1472,10 +1491,10 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr_for_body@2
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr_for_body@2:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:128
+    // tests/approvals/abi-validation-exhaustive.algo.ts:129
     // validateEncoding(value)
     frame_dig 3
-    intc_1 // 2
+    intc_2 // 2
     *
     frame_dig 2
     dup
@@ -1507,11 +1526,11 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     assert // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
     uncover 2
     substring3
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
-    intc_1 // 2
+    intc_2 // 2
     +
     intc_3 // 11
     +
@@ -1527,10 +1546,10 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr_for_header@1
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr_after_for@4:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:128
+    // tests/approvals/abi-validation-exhaustive.algo.ts:129
     // validateEncoding(value)
     frame_dig 1
-    intc_1 // 2
+    intc_2 // 2
     +
     frame_dig -1
     len
@@ -1541,23 +1560,23 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr3(value: bytes) -> void:
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr3:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:130-131
+    // tests/approvals/abi-validation-exhaustive.algo.ts:131-132
     // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
     // validate_native_dynamic_struct_arr3(value: FixedArray<NativeDynamicStruct, 3>) {
     proto 1 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr3_block@0
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr3_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:132
+    // tests/approvals/abi-validation-exhaustive.algo.ts:133
     // validateEncoding(value)
     pushint 3 // 3
-    intc_1 // 2
+    intc_2 // 2
     *
-    intc_2 // 0
+    intc_1 // 0
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr3_for_header@1
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr3_for_header@1:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:132
+    // tests/approvals/abi-validation-exhaustive.algo.ts:133
     // validateEncoding(value)
     frame_dig 1
     pushint 3 // 3
@@ -1566,10 +1585,10 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr3_for_body@2
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr3_for_body@2:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:132
+    // tests/approvals/abi-validation-exhaustive.algo.ts:133
     // validateEncoding(value)
     frame_dig 1
-    intc_1 // 2
+    intc_2 // 2
     *
     frame_dig -1
     uncover 1
@@ -1598,11 +1617,11 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     assert // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
     uncover 2
     substring3
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
-    intc_1 // 2
+    intc_2 // 2
     +
     intc_3 // 11
     +
@@ -1618,13 +1637,95 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr3_for_header@1
 
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr3_after_for@4:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:132
+    // tests/approvals/abi-validation-exhaustive.algo.ts:133
     // validateEncoding(value)
     frame_dig -1
     len
     frame_dig 0
     ==
     assert // invalid number of bytes for arc4.static_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeDynamicStruct, 3>
+    retsub
+
+
+// tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_c2c() -> void:
+tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_c2c:
+    b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_c2c_block@0
+
+tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_c2c_block@0:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:139
+    // const app = compiled.call.create({}).itxn.createdApp
+    itxn_begin
+    pushbytes 0x4c5c61ba // method "create()void"
+    itxn_field ApplicationArgs
+    // tests/approvals/abi-validation-exhaustive.algo.ts:137
+    // const compiled = compileArc4(InvalidContract)
+    intc_1 // 0
+    itxn_field ExtraProgramPages
+    intc_1 // 0
+    itxn_field LocalNumUint
+    intc_1 // 0
+    itxn_field LocalNumByteSlice
+    intc_1 // 0
+    itxn_field GlobalNumByteSlice
+    intc_1 // 0
+    itxn_field GlobalNumUint
+    pushbytes base64(C0IAAIEBQw==)
+    itxn_field ClearStateProgramPages
+    pushbytes 0x
+    itxn_field ClearStateProgramPages
+    pushbytes base64(CyACAAFCAABCAAAxGSISRDEYIhNBAB9CAAA2GgCABEXPBe9PAY4BAAdCAABCAAAAiAAmQv/2NhoAgARMXGG6TwGOAQAGQgAAQv/kiAADQv/3QgAAiAAUI0NCAACIABCABBUffHVPAVCwI0NCAACJQgAAgAdpbnZhbGlkiQ==)
+    itxn_field ApprovalProgramPages
+    pushbytes 0x
+    itxn_field ApprovalProgramPages
+    // tests/approvals/abi-validation-exhaustive.algo.ts:139
+    // const app = compiled.call.create({}).itxn.createdApp
+    intc_1 // 0
+    itxn_field OnCompletion
+    pushint 6 // appl
+    itxn_field TypeEnum
+    intc_1 // 0
+    itxn_field Fee
+    b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_c2c_next_txn@1
+
+tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_c2c_next_txn@1:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:139
+    // const app = compiled.call.create({}).itxn.createdApp
+    itxn_submit
+    gitxn 0 CreatedApplicationID
+    // tests/approvals/abi-validation-exhaustive.algo.ts:141-144
+    // abiCall({
+    //   method: InvalidContract.prototype.invalidValue,
+    //   appId: app,
+    // })
+    itxn_begin
+    pushbytes 0x45cf05ef // method "invalidValue()uint64[3]"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationID
+    pushint 6 // appl
+    itxn_field TypeEnum
+    intc_1 // 0
+    itxn_field Fee
+    b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_c2c_next_txn@2
+
+tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_c2c_next_txn@2:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:141-144
+    // abiCall({
+    //   method: InvalidContract.prototype.invalidValue,
+    //   appId: app,
+    // })
+    itxn_submit
+    itxn LastLog
+    dup
+    extract 4 0
+    cover 1
+    extract 0 4
+    pushbytes 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    len
+    pushint 24 // 24
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint64, 3>
     retsub
 
 
