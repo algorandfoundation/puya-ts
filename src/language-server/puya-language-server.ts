@@ -90,8 +90,6 @@ export class PuyaLanguageServer {
     logger.debug(undefined, `${Constants.languageServerSource}-ls initialized`)
   }
 
-  blah = Promise.resolve()
-
   @LogExceptions
   async fileDiagnosticsChanged(params: FileDiagnosticsChanged) {
     if (this.stopping) {
