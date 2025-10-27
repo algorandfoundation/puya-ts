@@ -6,7 +6,7 @@ import type { LogSink } from './index'
 export class LanguageServerLogSink implements LogSink {
   constructor(private connection: lsp.Connection) {}
 
-  readonly minLogLevel = LogLevel.Debug
+  minLogLevel = LogLevel.Debug
 
   add(e: LogEvent): void {
     if (e.sourceLocation) return // Ignore code specific logs
