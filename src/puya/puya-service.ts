@@ -65,8 +65,8 @@ function getPuyaServiceConnection(path: string) {
   logger.debug(undefined, `puya serve: using ${path}`)
   const childProcess = spawn(path, ['serve'], {
     stdio: ['pipe', 'pipe', process.stderr],
+    env: { ...process.env, NO_COLOR: '1' },
   })
-  childProcess.stdout.pipe(process.stderr)
   logger.debug(undefined, `puya serve: running`)
   const connection = rpc.createMessageConnection(
     new rpc.StreamMessageReader(childProcess.stdout),

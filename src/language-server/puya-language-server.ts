@@ -1,6 +1,7 @@
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import * as lsp from 'vscode-languageserver/node'
 import { Constants } from '../constants'
+import { LogLevel } from '../logger'
 import { logger } from '../logger'
 import { LanguageServerLogSink } from '../logger/sinks/language-server-log-sink'
 import { resolvePuyaPath } from '../puya/resolve-puya-path'
@@ -10,6 +11,11 @@ import type { FileDiagnosticsChanged } from './diagnostics-manager'
 import { DiagnosticsManager } from './diagnostics-manager'
 import { isCodeFixData } from './mapping'
 import { LogExceptions } from './util/log-exceptions'
+
+interface LanguageServerConfiguration {
+  // use LogLevel member names to maintain consistency with other extension settings
+  logLevel?: Omit<keyof typeof LogLevel, 'Critical'>
+}
 
 const resolveConnection = async (lspPort: number | undefined) => {
   if (!lspPort) {
@@ -43,6 +49,7 @@ export class PuyaLanguageServer {
 
   constructor(
     public readonly connection: lsp.Connection,
+    private readonly loggingSink: LanguageServerLogSink,
     puyaPath: string,
   ) {
     this.diagnosticsMgr = new DiagnosticsManager()
@@ -51,6 +58,7 @@ export class PuyaLanguageServer {
     connection.onInitialize(this.initialize.bind(this))
     connection.onInitialized(this.initialized.bind(this))
     connection.onCodeAction(this.codeAction.bind(this))
+    connection.onDidChangeConfiguration(this.configurationChange.bind(this))
     this.documents.onDidChangeContent(this.documentDidChangeContent.bind(this))
     this.diagnosticsMgr.onFileDiagnosticsChanged(this.fileDiagnosticsChanged.bind(this))
     connection.onShutdown(this.shutdown.bind(this))
@@ -89,8 +97,6 @@ export class PuyaLanguageServer {
   initialized(params: lsp.InitializedParams) {
     logger.debug(undefined, `${Constants.languageServerSource}-ls initialized`)
   }
-
-  blah = Promise.resolve()
 
   @LogExceptions
   async fileDiagnosticsChanged(params: FileDiagnosticsChanged) {
@@ -145,14 +151,25 @@ export class PuyaLanguageServer {
       return []
     })
   }
+
+  @LogExceptions
+  configurationChange(params: lsp.DidChangeConfigurationParams) {
+    const settings = params.settings as LanguageServerConfiguration
+    const logLevel = LogLevel[settings.logLevel as keyof typeof LogLevel]
+    if (logLevel !== undefined) {
+      this.connection.console.debug(`setting log level to ${logLevel}`)
+      this.loggingSink.minLogLevel = logLevel
+    }
+  }
 }
 
 export async function startLanguageServer(options: LanguageServerOptions) {
   const connection = await resolveConnection(options.port)
-  logger.configure([new LanguageServerLogSink(connection)])
+  const languageServerSink = new LanguageServerLogSink(connection)
+  logger.configure([languageServerSink])
   try {
     const puyaPath = await resolvePuyaPath(options)
-    const server = new PuyaLanguageServer(connection, puyaPath)
+    const server = new PuyaLanguageServer(connection, languageServerSink, puyaPath)
     server.start()
   } catch (e) {
     connection.console.error(`Unhandled exception ${e}`)
