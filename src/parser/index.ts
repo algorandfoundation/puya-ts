@@ -13,6 +13,10 @@ export type CreateProgramResult = {
   programDirectory: AbsolutePath
 }
 
+const ProgramCache: {
+  previousProgram?: undefined | ts.Program
+} = {}
+
 export function createTsProgram(options: Pick<CompileOptions, 'filePaths' | 'sourceFileProvider'>): CreateProgramResult {
   const compilerOptions: ts.CompilerOptions = {
     allowJs: false,
@@ -40,7 +44,9 @@ export function createTsProgram(options: Pick<CompileOptions, 'filePaths' | 'sou
     options.filePaths.map((p) => p.sourceFile.toString()),
     compilerOptions,
     host,
+    ProgramCache.previousProgram,
   )
+  ProgramCache.previousProgram = program
   const programDirectory = AbsolutePath.resolve({ path: program.getCurrentDirectory() })
 
   const sourceFiles = Object.fromEntries(
