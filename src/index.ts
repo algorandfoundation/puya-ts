@@ -1,4 +1,3 @@
-import './util/polyfills'
 import {
   base32ToUint8Array,
   base64ToUint8Array,
@@ -11,6 +10,7 @@ import {
   uint8ArrayToUtf8,
   utf8ToUint8Array,
 } from './util'
+import './util/polyfills'
 
 export { SourceLocation } from './awst/source-location'
 export * as ptypes from './awst_build/ptypes/for-export'
@@ -21,6 +21,7 @@ export { compile } from './compile'
 export { processInputPaths } from './input-paths/process-input-paths'
 export { LoggingContext } from './logger'
 export { CompileOptions } from './options'
+export { AbsolutePath } from './util/absolute-path'
 
 export const encodingUtil = {
   utf8ToUint8Array,
