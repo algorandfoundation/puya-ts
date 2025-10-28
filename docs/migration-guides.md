@@ -2,9 +2,15 @@
 title: Algorand TypeScript Migration Guides
 ---
 
+This page contains migration guides for updating to Algorand TypeScript 1.0.
+
+- **[Algorand TypeScript beta to 1.0](#migrating-algorand-typescript-beta-to-10)** - If you have an existing Algorand TypeScript beta project, this guide details the breaking changes and new features you need to be aware of when upgrading to version 1.0.
+
+- **[TEALScript to Algorand TypeScript 1.0](#migrating-tealscript-to-algorand-typescript-10)** - If you're migrating from TEALScript, this guide provides a mapping of TEALScript concepts to their Algorand TypeScript equivalents with code examples for common patterns.
+
 ## Migrating Algorand TypeScript beta to 1.0
 
-This guide outlines the steps required to migrate your Algorand TypeScript projects from the beta version to version 1.0. Version 1.0 introduces significant improvements, including native mutable objects and arrays, simplified type names, and enhanced functionality for inner transactions. However, it also includes breaking changes that require updates to your codebase. This guide is divided into two sections: Breaking Changes, which require action to ensure compatibility, and New Features, which highlight opportunities to leverage new functionality. Each section includes code examples to illustrate the changes.
+This guide outlines the steps required to migrate your Algorand TypeScript projects from the beta version to version 1.0. Version 1.0 introduces significant improvements, including native mutable objects and arrays, simplified type names, and enhanced functionality for inner transactions. However, it also includes breaking changes that require updates to your codebase. This guide is divided into two sections: [Breaking Changes](#breaking-changes), which require action to ensure compatibility, and [New Features](#new-features), which highlight opportunities to leverage new functionality. Each section includes code examples to illustrate the changes.
 
 ### Breaking changes
 
