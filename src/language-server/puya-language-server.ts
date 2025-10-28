@@ -114,7 +114,7 @@ export class PuyaLanguageServer {
   documentDidChangeContent(params: lsp.TextDocumentChangeEvent<TextDocument>) {
     if (this.stopping) return
     logger.debug(undefined, `[Document Changed]: ${params.document.uri}`)
-    this.diagnosticsMgr.setDiagnostics({ fileUri: params.document.uri, version: params.document.version, diagnostics: [] })
+    this.diagnosticsMgr.setDiagnostics({ fileUri: params.document.uri, version: params.document.version, diagnostics: 'pending' })
 
     this.triggers.enqueue({
       type: 'workspace',
