@@ -129,8 +129,9 @@ export class SourceLocation<TNode extends ts.Node | undefined = ts.Node | undefi
     })
   }
 
-  toString() {
-    return `${this.file}:${this.line}:${this.column + 1}`
+  toString(options?: { pathsRelativeTo?: AbsolutePath }) {
+    const filePath = options?.pathsRelativeTo ? this.file?.relativeTo(options.pathsRelativeTo) : this.file?.toString()
+    return `${filePath}:${this.line}:${this.column + 1}`
   }
 
   static None = new SourceLocation({

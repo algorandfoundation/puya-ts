@@ -8,6 +8,7 @@ import { CompileOptions, defaultPuyaOptions, LocalsCoalescingStrategy } from '..
 
 import { parseCliTemplateVar } from '../util/template-var-cli-parser'
 import { addEnumArg, convertInt } from './util'
+import { AbsolutePath } from '../util/absolute-path'
 
 export interface BuildCommandArgs {
   command: 'build'
@@ -181,7 +182,7 @@ export function addBuildCommand(parser: ArgumentParser) {
 export async function buildCommand(args: BuildCommandArgs) {
   const logCtx = LoggingContext.create()
   return logCtx.run(async () => {
-    logger.configure([new ConsoleLogSink(args.log_level)])
+    logger.configure([new ConsoleLogSink(args.log_level, AbsolutePath.resolve({ path: '' }))])
     try {
       const filePaths = processInputPaths({ paths: args.paths, outDir: args.out_dir })
 
