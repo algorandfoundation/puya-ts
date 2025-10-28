@@ -24,6 +24,7 @@ export class CompileWorker {
   stopping: boolean = false
   private stopped = Promise.withResolvers<void>()
   private sleeping: PromiseWithResolvers<void> | undefined = undefined
+  private activeBuild: AbortController | undefined = undefined
   constructor(
     private readonly queue: CompileTriggerQueue,
     private readonly documents: TextDocuments<TextDocument>,
@@ -41,7 +42,9 @@ export class CompileWorker {
           if (work) {
             switch (work.type) {
               case 'workspace':
-                await this.compileWorkspaces(work)
+                this.activeBuild = new AbortController()
+                await this.compileWorkspaces(work, this.activeBuild.signal)
+                delete this.activeBuild
                 break
             }
           } else {
@@ -64,11 +67,12 @@ export class CompileWorker {
   }
 
   onCompileTriggerQueueItemQueued() {
+    this.activeBuild?.abort('Build has been superseded')
     this.sleeping?.resolve()
   }
 
   @LogExceptions
-  private async compileWorkspaces(workspaceTrigger: WorkspaceCompileTrigger) {
+  private async compileWorkspaces(workspaceTrigger: WorkspaceCompileTrigger, abortSignal: AbortSignal) {
     logger.debug(undefined, `[Workspace Compile] \n${workspaceTrigger.workspaces.join('\n')}`)
 
     const workspacePaths = workspaceTrigger.workspaces.map((ws) => URI.parse(ws).fsPath)
@@ -80,38 +84,38 @@ export class CompileWorker {
       return
     }
 
-    await this.compileAlgoFiles(algoFiles)
+    await this.compileAlgoFiles(algoFiles, abortSignal)
   }
   @LogExceptions
-  private async compileAlgoFiles(algoFiles: AlgoFile[]) {
+  private async compileAlgoFiles(algoFiles: AlgoFile[], abortSignal: AbortSignal) {
     const documents = this.documents
     const documentVersions: Record<string, number | undefined> = {}
     logger.debug(undefined, `[Compiling Files]: \n${algoFiles.map((f) => f.sourceFile).join('\n')}`)
 
     const logCtx = LoggingContext.create()
-    await logCtx.run(
-      async () =>
-        await analyse({
-          puyaPath: this.puyaPath,
-          filePaths: algoFiles,
-          sourceFileProvider({ readFile, fileExists }) {
-            return {
-              readFile(fileName) {
-                const fileUri = URI.file(fileName).toString()
-                const doc = documents.get(fileUri)
-                if (doc) {
-                  documentVersions[fileUri] = doc.version
-                  return doc.getText()
-                }
-                return readFile(fileName)
-              },
-              fileExists(fileName) {
-                const fileUri = URI.file(fileName).toString()
-                return Boolean(documents.get(fileUri)) || fileExists(fileName)
-              },
-            }
-          },
-        }),
+    await logCtx.run(() =>
+      analyse({
+        puyaPath: this.puyaPath,
+        filePaths: algoFiles,
+        abortSignal,
+        sourceFileProvider({ readFile, fileExists }) {
+          return {
+            readFile(fileName) {
+              const fileUri = URI.file(fileName).toString()
+              const doc = documents.get(fileUri)
+              if (doc) {
+                documentVersions[fileUri] = doc.version
+                return doc.getText()
+              }
+              return readFile(fileName)
+            },
+            fileExists(fileName) {
+              const fileUri = URI.file(fileName).toString()
+              return Boolean(documents.get(fileUri)) || fileExists(fileName)
+            },
+          }
+        },
+      }),
     )
 
     const results = new DefaultMap<string, lsp.Diagnostic[]>()
@@ -139,7 +143,9 @@ export class CompileWorker {
   }
 }
 
-async function analyse(options: Pick<CompileOptions, 'filePaths' | 'sourceFileProvider'> & { puyaPath: string }): Promise<void> {
+async function analyse(
+  options: Pick<CompileOptions, 'filePaths' | 'sourceFileProvider'> & { puyaPath: string; abortSignal: AbortSignal },
+): Promise<void> {
   const loggerCtx = LoggingContext.current
   registerPTypes(typeRegistry)
   const compileOptions = new CompileOptions(options)
@@ -150,7 +156,7 @@ async function analyse(options: Pick<CompileOptions, 'filePaths' | 'sourceFilePr
   const { moduleAwst } = buildAwst(programResult, compileOptions)
   validateAwst(moduleAwst)
 
-  if (loggerCtx.hasErrors()) {
+  if (loggerCtx.hasErrors() || options.abortSignal.aborted) {
     return
   }
 
