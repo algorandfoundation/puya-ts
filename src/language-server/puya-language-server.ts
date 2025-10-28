@@ -1,8 +1,7 @@
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import * as lsp from 'vscode-languageserver/node'
 import { Constants } from '../constants'
-import { LogLevel } from '../logger'
-import { logger } from '../logger'
+import { logger, LogLevel } from '../logger'
 import { LanguageServerLogSink } from '../logger/sinks/language-server-log-sink'
 import { resolvePuyaPath } from '../puya/resolve-puya-path'
 import { CompileTriggerQueue } from './compile-trigger-queue'
@@ -101,20 +100,20 @@ export class PuyaLanguageServer {
   @LogExceptions
   async fileDiagnosticsChanged(params: FileDiagnosticsChanged) {
     if (this.stopping) {
-      this.connection.console.debug(`[Diagnostics Ignored (shutting down)]: ${params.uri}`)
+      logger.debug(undefined, `[Diagnostics Ignored (shutting down)]: ${params.uri}`)
       return
     }
     // TODO: Maybe need to make sure diagnostics for a single file are always sent in the order they're produced
-    this.connection.console.debug(`[Diagnostics Changed]: ${params.uri}`)
+    logger.debug(undefined, `[Diagnostics Changed]: ${params.uri}`)
 
     await this.connection.sendDiagnostics(params)
-    this.connection.console.debug(`[Diagnostics Sent]: ${params.uri}`)
+    logger.debug(undefined, `[Diagnostics Sent]: ${params.uri}`)
   }
 
   @LogExceptions
   documentDidChangeContent(params: lsp.TextDocumentChangeEvent<TextDocument>) {
     if (this.stopping) return
-    this.connection.console.log(`[Document Changed]: ${params.document.uri}`)
+    logger.debug(undefined, `[Document Changed]: ${params.document.uri}`)
     this.diagnosticsMgr.setDiagnostics({ fileUri: params.document.uri, version: params.document.version, diagnostics: [] })
 
     this.triggers.enqueue({
@@ -157,7 +156,7 @@ export class PuyaLanguageServer {
     const settings = params.settings as LanguageServerConfiguration
     const logLevel = LogLevel[settings.logLevel as keyof typeof LogLevel]
     if (logLevel !== undefined) {
-      this.connection.console.debug(`setting log level to ${logLevel}`)
+      logger.debug(undefined, `setting log level to ${logLevel}`)
       this.loggingSink.minLogLevel = logLevel
     }
   }
