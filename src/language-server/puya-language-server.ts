@@ -10,6 +10,7 @@ import type { FileDiagnosticsChanged } from './diagnostics-manager'
 import { DiagnosticsManager } from './diagnostics-manager'
 import { isCodeFixData } from './mapping'
 import { LogExceptions } from './util/log-exceptions'
+import { appVersion } from '../cli/app-version'
 
 interface LanguageServerConfiguration {
   // use LogLevel member names to maintain consistency with other extension settings
@@ -103,7 +104,6 @@ export class PuyaLanguageServer {
       logger.debug(undefined, `[Diagnostics Ignored (shutting down)]: ${params.uri}`)
       return
     }
-    // TODO: Maybe need to make sure diagnostics for a single file are always sent in the order they're produced
     logger.debug(undefined, `[Diagnostics Changed]: ${params.uri}`)
 
     await this.connection.sendDiagnostics(params)
@@ -162,7 +162,11 @@ export class PuyaLanguageServer {
   }
 }
 
+// eslint-disable-next-line no-console
+const cliLog = console.error
+
 export async function startLanguageServer(options: LanguageServerOptions) {
+  cliLog(`Puya-TS Language Server:\n${appVersion({ withAVMVersion: false })}`)
   const connection = await resolveConnection(options.port)
   const languageServerSink = new LanguageServerLogSink(connection)
   logger.configure([languageServerSink])
