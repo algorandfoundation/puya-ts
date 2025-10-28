@@ -7,6 +7,12 @@ on:
       - main
       - release
   workflow_dispatch:
+    inputs:
+      publish-prod-release:
+        description: "Publishing a production release? If false (default), won't create a production release."
+        type: boolean
+        required: false
+        default: false
 
 concurrency: release
 
@@ -15,7 +21,8 @@ permissions:
   issues: write
   pull-requests: write
   checks: write
-
+env:
+  PUBLISH_RELEASE: ${{ (github.ref_name != 'release' || inputs.publish-prod-release) && 'true' || 'false' }}
 jobs:
   ci:
     name: Build and test
@@ -65,6 +72,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app_token.outputs.token }}
 
       - name: Copy puya-ts version to algo-ts
+        if: ${{ env.PUBLISH_RELEASE == 'true' }}
         run: |
           cd artifacts/puya-ts
           newVersion=$(npm view ./ version)
@@ -73,21 +81,31 @@ jobs:
           npm pkg set version=$newVersion
 
       - name: Publish @algorandfoundation/algorand-typescript
+        if: ${{ env.PUBLISH_RELEASE == 'true' }}
         uses: JS-DevTools/npm-publish@v3
         id: publish-algo-ts
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: artifacts/algo-ts/package.json
           access: 'public'
-          # Tagging 'main' branch with latest for now, even though it's beta because we don't have a non-beta
-          tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'latest' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
+          tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'beta' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
 
       - name: Publish @algorandfoundation/puya-ts
+        if: ${{ env.PUBLISH_RELEASE == 'true' }}
         uses: JS-DevTools/npm-publish@v3
         id: publish-puya-ts
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: artifacts/puya-ts/package.json
           access: 'public'
-          # Tagging 'main' branch with latest for now, even though it's beta because we don't have a non-beta
-          tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'latest' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
+          tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'beta' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
+
+  publish-docs:
+    name: Publish docs
+    needs: release
+    if: ${{ inputs.publish-prod-release }}
+    uses: ./.github/workflows/gh-pages.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
