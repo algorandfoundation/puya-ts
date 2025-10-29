@@ -36,7 +36,7 @@ Use this checklist to work through the required changes when migrating from beta
 
 Object literals are now mutable by default, which can be leveraged without any changes. If you'd like to keep the same execution semantics as before, then apply a `readonly` or `as const` modifier to make them immutable.
 
-**Before (Algorand TypeScript beta)**
+**BEFORE - Algorand TypeScript beta**
 
 ```ts
 import { uint64, Uint64 } from '@algorandfoundation/algorand-typescript';
@@ -49,7 +49,7 @@ const p1: Point = { x: 1, y: 2 };
 const p2 = { x: Uint64(1), y: Uint64(2) };
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { uint64, Uint64 } from '@algorandfoundation/algorand-typescript';
@@ -75,7 +75,7 @@ const p2 = { x: Uint64(1), y: Uint64(2) } as const;
 Native arrays are now mutable by default, which can be used without any changes.
 If you'd like to keep the same execution semantics as before, then apply a `readonly` or `as const` modifier to make them immutable.
 
-**Before (Algorand TypeScript beta)**
+**BEFORE - Algorand TypeScript beta**
 
 ```ts
 import { uint64, Uint64 } from '@algorandfoundation/algorand-typescript'
@@ -87,7 +87,7 @@ const t1: uint64[] = [1, 2, 3];
 const t2 = [Uint64(1), Uint64(2), Uint64(3)];
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { uint64, Uint64 } from '@algorandfoundation/algorand-typescript';
@@ -111,7 +111,7 @@ const t2 = [Uint64(1), Uint64(2), Uint64(3)] as const;
 
 Now that native arrays are mutable by default, it was confusing to call the scratch slot backed arrays with reference semantics `MutableArray`, so they have been renamed.
 
-**Before (Algorand TypeScript beta)**
+**BEFORE - Algorand TypeScript beta**
 
 ```ts
 import { uint64, MutableArray } from '@algorandfoundation/algorand-typescript'
@@ -121,7 +121,7 @@ import { uint64, MutableArray } from '@algorandfoundation/algorand-typescript'
 const a = new MutableArray<uint64>();
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { uint64, ReferenceArray } from '@algorandfoundation/algorand-typescript';
@@ -133,7 +133,7 @@ const a = new ReferenceArray<uint64>();
 
 #### Replace `xxx.copy()` calls with `clone(xxx)`
 
-**Before (Algorand TypeScript beta)**
+**BEFORE - Algorand TypeScript beta**
 
 ```ts
 import { copy, arc4, UintN64, StaticArray } from '@algorandfoundation/algorand-typescript'
@@ -144,7 +144,7 @@ const a = new arc4.StaticArray<UintN64, 3>(new UintN64(1), new UintN64(2), new U
 const b = a.copy();
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { arc4, clone } from '@algorandfoundation/algorand-typescript'
@@ -161,7 +161,7 @@ public example(): void {
 
 The 'N' and 'NxM' suffixes have been removed from the ARC4 numeric types, which results in more natural type names.
 
-**Before (Algorand TypeScript beta)**
+**BEFORE - Algorand TypeScript beta**
 
 ```ts
 import { arc4 } from '@algorandfoundation/algorand-typescript'
@@ -179,7 +179,7 @@ const user = {
 };
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { arc4 } from '@algorandfoundation/algorand-typescript'
@@ -199,7 +199,7 @@ const user = {
 
 #### Direct import of functions and types from `gtxn` and `itxn` modules are no longer supported
 
-**Before (Algorand TypeScript beta)**
+**BEFORE - Algorand TypeScript beta**
 
 ```ts
 import type { PaymentTxn } from '@algorandfoundation/algorand-typescript/gtxn'
@@ -211,7 +211,7 @@ function reflectAllPay(pay: PaymentTxn) {
 }
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import type { gtxn } from '@algorandfoundation/algorand-typescript'
@@ -227,7 +227,7 @@ function reflectAllPay(pay: gtxn.PaymentTxn) {
 
 `resourceEncoding: 'index' | 'value'` option is added to `@abimethod` decorator config with `value` as default. Use `index` for those methods which need to preserve the previous behaviour.
 
-**Before (Algorand TypeScript beta)**
+**BEFORE - Algorand TypeScript beta**
 
 ```ts
 import {
@@ -255,7 +255,7 @@ test(asset: Asset, app: Application, acc: Account) {
 }
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import {
@@ -314,7 +314,7 @@ This change can improve test performance by ensuring only relevant files are pro
 
 #### Rename `arc4EncodedLength` function to `sizeOf`
 
-**Before (Algorand TypeScript beta)**
+**BEFORE - Algorand TypeScript beta**
 
 ```ts
 ...
@@ -325,7 +325,7 @@ assert(arc4EncodedLength<UintN<512>>() === 64);
 assert(arc4EncodedLength<[StaticArray<Bool, 10>, boolean, boolean]>() === 3);
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 ...
@@ -375,7 +375,7 @@ This form of invocation supports using type only imports `import type { MyContra
 
 If, in some unforeseen circumstances, both a type argument and the `method` property are provided to the `abiCall` helper, the type argument takes precedence and the method specified by the type argument is called.
 
-**Before (Algorand TypeScript beta)**
+**BEFORE - Algorand TypeScript beta**
 
 ```ts
 import { arc4, assert } from '@algorandfoundation/algorand-typescript'
@@ -397,7 +397,7 @@ const result3 = arc4.abiCall(HelloStubbed.prototype.greet, {
 assert(result3 === 'hello stubbed');
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { arc4, assert } from '@algorandfoundation/algorand-typescript'
@@ -426,7 +426,7 @@ assert(result3 === 'hello stubbed');
 
 The function now accepts an `options` object with `strategy: 'unsafe-cast' | 'validate'` and an optional `prefix` parameter.
 
-**Before (Algorand TypeScript beta)**
+**BEFORE - Algorand TypeScript beta**
 
 ```ts
 import { arc4 } from '@algorandfoundation/algorand-typescript'
@@ -437,7 +437,7 @@ const x = arc4.interpretAsArc4<Uint<32>>(a);
 const y = arc4.interpretAsArc4<Byte>(b, 'log');
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { arc4 } from '@algorandfoundation/algorand-typescript'
@@ -452,7 +452,7 @@ const y = arc4.convertBytes<arc4.Byte>(b, { prefix: 'log', strategy: 'unsafe-cas
 
 `Box<bytes>` now includes all functionality previously available in `BoxRef`, including `extract`, `replace`, `resize`, and `splice` methods.
 
-**Before (Algorand TypeScript beta)**
+**BEFORE - Algorand TypeScript beta**
 
 ```ts
 import { Contract, BoxRef, Bytes, bytes } from '@algorandfoundation/algorand-typescript'
@@ -475,7 +475,7 @@ const extracted = box.extract(0, 3);
 box.resize(extracted.size);
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { Contract, Box, Bytes, bytes } from '@algorandfoundation/algorand-typescript'
@@ -502,7 +502,7 @@ box.resize(extracted.length)
 
 For `Uint` types larger than 64 bits, `.asUint64()` throws an overflow error if the value exceeds `uint64` bounds.
 
-**Before (Algorand TypeScript beta)**
+**BEFORE - Algorand TypeScript beta**
 
 ```ts
 import { arc4 } from '@algorandfoundation/algorand-typescript'
@@ -516,7 +516,7 @@ const a = new arc4.UintN128(b);
 const a_native = a.native;
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { arc4 } from '@algorandfoundation/algorand-typescript'
@@ -797,7 +797,7 @@ Use this checklist to work through the required changes when migrating from TEAL
 
 #### Emitting Events
 
-**Before (TEALScript)**
+**BEFORE - TEALScript**
 
 ```ts
 class Swapper {
@@ -812,7 +812,7 @@ class Swapper {
 }
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { uint64, emit } from '@algorandfoundation/algorand-typescript';
@@ -854,7 +854,7 @@ The interfaces for forming, sending, and inspecting inner transactions have sign
 
 ##### Sending a transaction
 
-**Before (TEALScript)**
+**BEFORE - TEALScript**
 
 ```ts
 ...
@@ -869,7 +869,7 @@ sendAssetConfig({
 })
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { itxn, Global, log } from '@algorandfoundation/algorand-typescript';
@@ -891,7 +891,7 @@ log(asset1_txn.createdAsset.id);
 
 ##### Sending a Transaction Group
 
-**Before (TEALScript)**
+**BEFORE - TEALScript**
 
 ```ts
 ...
@@ -918,7 +918,7 @@ assert(appCreateTxn.createdApplicationID, 'app is created');
 assert(asset3_txn.createdAssetID === 'AST3', 'asset3_txn is correct');
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { uint64, Contract, itxn, Global, assert, Bytes } from '@algorandfoundation/algorand-typescript'
@@ -952,7 +952,7 @@ In Algorand TypeScript, there is a specific `abiCall` method for typed contract-
 
 These examples are for calling a contract method with the signature `greet(name: string): string` in a contract `Hello` that returns `"hello " + name`
 
-**Before (TEALScript)**
+**BEFORE - TEALScript**
 
 ```ts
 ...
@@ -965,7 +965,7 @@ const result = sendMethodCall<typeof Hello.prototype.greet>({
 assert(result === 'hello algo dev');
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { uint64, Contract, arc4, assert } from '@algorandfoundation/algorand-typescript'
@@ -1000,7 +1000,7 @@ assert(result3 === 'hello stubbed')
 
 In Algorand TypeScript, you must first explicitly compile a contract before creating it or access the programs/schema
 
-**Before (TEALScript)**
+**BEFORE - TEALScript**
 
 ```ts
 sendMethodCall<typeof Greeter.prototype.createApplication>({
@@ -1020,7 +1020,7 @@ const result = sendMethodCall<typeof Greeter.prototype.greet>({
 assert(result == 'hello world');
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { Contract, arc4, assert } from '@algorandfoundation/algorand-typescript';
@@ -1049,7 +1049,7 @@ assert(result === 'hello world');
 TEALScript contracts have static methods for getting the contract programs and schema. In Algorand TypeScript, you must first explicitly
 compile the contract and then use the resulting object to access program information.
 
-**Before (TEALScript)**
+**BEFORE - TEALScript**
 
 ```ts
 // Access program information directly via static methods
@@ -1061,7 +1061,7 @@ sendMethodCall<typeof Greeter.prototype.createApplication>({
 });
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 // First explicitly compile the app
@@ -1079,7 +1079,7 @@ const app = arc4.abiCall({
 
 In TEALScript, logic sigs must implement the `logic` method which may take one or more arguments which map to the lsig arguments when forming the transaction. All lsigs are approved unless an error occurs. Algorand TypeScript also requires implementation of the `program` method but it may not take an arguments and must return a `boolean` or `uint64` indicating whether the transaction is approved or not.
 
-**Before (TEALScript)**
+**BEFORE - TEALScript**
 
 ```ts
 class DangerousPaymentLsig extends LogicSig {
@@ -1089,7 +1089,7 @@ class DangerousPaymentLsig extends LogicSig {
 }
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { op, LogicSig, Txn } from '@algorandfoundation/algorand-typescript';
@@ -1106,7 +1106,7 @@ class DangerousPaymentLsig extends LogicSig {
 
 In TEALScript, template variables must be properties of a contract. In Algorand TypeScript, they can be defined like any other variable.
 
-**Before (TEALScript)**
+**BEFORE - TEALScript**
 
 ```ts
 class AppCaller extends LogicSig {
@@ -1118,7 +1118,7 @@ class AppCaller extends LogicSig {
 }
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import {
@@ -1156,7 +1156,7 @@ class AppCaller extends LogicSig {
 
 In TEALScript, all of the type are injecting into the global namespace. This means no importing is required for most functions and objects. Algorand TypeScript, however, requires explicit importing of every type, allowing for better LSP discovery.
 
-**Before (TEALScript)**
+**BEFORE - TEALScript**
 
 ```ts
 import { LogicSig } from '@algorandfoundation/tealscript';
@@ -1169,7 +1169,7 @@ class AppCaller extends LogicSig {
 }
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import {
@@ -1194,7 +1194,7 @@ class AppCaller extends LogicSig {
 
 Both TEALScript and Algorand TypeScript have a `uint64` type, but Algorand TypeScript disallows any types to be resolved as `number`. This means all arithmetic values must be explicitly typed as `uint64`, otherwise they will have the `number` type which is not allowed.
 
-**Before (TEALScript)**
+**BEFORE - TEALScript**
 
 ```ts
 ...
@@ -1206,7 +1206,7 @@ add(a: uint64, b: uint64): uint64 {
 }
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { uint64 } from '@algorandfoundation/algorand-typescript';
@@ -1225,7 +1225,7 @@ add(a: uint64, b: uint64): uint64 {
 
 TEALScript supports typed numeric literals for most common uint types, such as `uint8`, `uint16`, `uint256`, etc. In Algorand TypeScript, the arc4.Uint constructors must be used.
 
-**Before (TEALScript)**
+**BEFORE - TEALScript**
 
 ```ts
 ...
@@ -1237,7 +1237,7 @@ addOne(n: uint256): uint256 {
 }
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { arc4, biguint } from '@algorandfoundation/algorand-typescript'
@@ -1260,7 +1260,7 @@ In Algorand TypeScript, it's generally best to use `biguint` for intermediate va
 
 In TEALScript, overflow checks do not occur until the value is encoded (returned, logged, put into an array/object). In Algorand TypeScript, overflow checking occurs whenever the `Uint` constructor is used. Since overflow checking is fairly expensive, it is recommended to not use the `Uint` type until it needs to be encoded.
 
-**Before (TEALScript)**
+**BEFORE - TEALScript**
 
 ```ts
 ...
@@ -1275,7 +1275,7 @@ addToNumber(n: uint8) {
 }
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { uint64, arc4, biguint } from '@algorandfoundation/algorand-typescript'
@@ -1295,7 +1295,7 @@ addToNumber(n: arc4.Uint<8>) {
 
 In TEALScript, the `as` keyword is used to cast values as different types. Much like regular typescript, the `as` keyword in Algorand TypeScript cannot change runtime behavior. This means constructors must be used instead of `as`
 
-**Before (TEALScript)**
+**BEFORE - TEALScript**
 
 ```ts
 ...
@@ -1305,7 +1305,7 @@ convertNumber(n: uint64): uint8 {
 }
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { uint64, arc4 } from '@algorandfoundation/algorand-typescript'
@@ -1321,7 +1321,7 @@ convertNumber(n: uint64): arc4.Uint<8> {
 
 TEALScript allows developers to create mutable references to arrays and objects, even when nested. Algorand TypeScript, however, does not allow this. Any new variables must copy the array or object.
 
-**Before (TEALScript)**
+**BEFORE - TEALScript**
 
 ```ts
 ...
@@ -1333,7 +1333,7 @@ b.push(4);
 assert(a === b); // a and b are referencing the same array
 ```
 
-**After (Algorand TypeScript 1.0)**
+**AFTER - Algorand TypeScript 1.0**
 
 ```ts
 import { uint64, clone, assertMatch } from '@algorandfoundation/algorand-typescript'
