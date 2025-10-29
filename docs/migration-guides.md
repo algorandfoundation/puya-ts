@@ -469,13 +469,12 @@ import { Contract, BoxRef, Bytes, bytes } from '@algorandfoundation/algorand-typ
 const box = BoxRef({ key: 'test_key' });
 box.create({ size: 32768 });
 
-const boxValue = new Uint8Array(Array(5).fill([0x01, 0x02]).flat());
-box.put(Bytes(boxValue));
+const boxValue = Bytes('FOO')
+box.put(boxValue);
 
-const replacement = new Uint8Array(Array(2).fill(0x11));
-box.splice(1, 5, Bytes(replacement));
-
-box.replace(0, Bytes(0x11));
+box.resize(Uint64(6))
+box.splice(Uint64(3), Uint64(3), Bytes('BAR')) // FOOBAR
+box.replace(Uint64(0), Bytes('BAR')) // BARBAR
 
 const extracted = box.extract(0, 3);
 
@@ -492,17 +491,17 @@ import { Contract, Box, Bytes, bytes } from '@algorandfoundation/algorand-typesc
 const box = Box<bytes>({ key: 'test_key' })
 box.create({ size: 32768 })
 
-const boxValue = new Uint8Array(Array(5).fill([0x01, 0x02]).flat())
-box.value = Bytes(boxValue)
+box.value = Bytes('FOO')
 
-const replacement = new Uint8Array(Array(2).fill(0x11))
-box.splice(1, 5, Bytes(replacement))
+box.resize(Uint64(6))
+box.splice(Uint64(3), Uint64(3), Bytes('BAR')) // FOOBAR
+box.replace(Uint64(0), Bytes('BAR')) // BARBAR
 
-box.replace(0, Bytes(0x11))
-
-const extracted = box.extract(0, 3)
+const extracted = box.extract(Uint64(0), Uint64(3)) // BAR
 
 box.resize(extracted.length)
+
+return box.value
 ```
 
 #### Replace `.native` property with `.asUint64()` or `.asBigUint()` methods
