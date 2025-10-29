@@ -12,6 +12,24 @@ This page contains migration guides for updating to Algorand TypeScript 1.0.
 
 This guide outlines the steps required to migrate your Algorand TypeScript projects from the beta version to version 1.0. Version 1.0 introduces significant improvements, including native mutable objects and arrays, simplified type names, and enhanced functionality for inner transactions. However, it also includes breaking changes that require updates to your codebase. This guide is divided into two sections: [Breaking Changes](#breaking-changes), which require action to ensure compatibility, and [New Features](#new-features), which highlight opportunities to leverage new functionality. Each section includes code examples to illustrate the changes.
 
+### Migration Checklist
+
+Use this checklist to work through the required changes when migrating from beta to 1.0:
+
+- [ ] **[Object literals](#object-literals-are-mutable-by-default)**: Add `readonly` or `as const` modifiers to object literals if you need to maintain immutable semantics
+- [ ] **[Native arrays](#native-arrays-are-mutable-by-default)**: Add `readonly` or `as const` modifiers to arrays if you need to maintain immutable semantics
+- [ ] **[MutableArray → ReferenceArray](#mutablearray-has-been-renamed-to-referencearray)**: Replace all `MutableArray` imports and usages with `ReferenceArray`
+- [ ] **[Copy method](#replace-xxxcopy-calls-with-clonexxx)**: Replace all `.copy()` method calls with the `clone()` function
+- [ ] **[ARC4 numeric types](#arc4-numeric-types-no-longer-have-the-n-and-nxm-suffixes)**: Remove 'N' and 'NxM' suffixes from ARC4 types (e.g., `UintN<16>` → `Uint<16>`, `UFixedNxM<32, 4>` → `UFixed<32, 4>`)
+- [ ] **[gtxn/itxn imports](#direct-import-of-functions-and-types-from-gtxn-and-itxn-modules-are-no-longer-supported)**: Update direct imports to use namespaced imports (e.g., `import type { PaymentTxn } from 'gtxn'` → `import type { gtxn }`, then use `gtxn.PaymentTxn`)
+- [ ] **[Resource encoding](#application-asset-and-account-arguments-are-now-passed-by-their-uint64-id-application-and-asset-or-bytes32-address-account-by-default)**: Add `resourceEncoding: 'index'` to `@abimethod` decorators for methods using `Asset`, `Application`, or `Account` parameters that need the old index-based behavior, or update implementation to use value-based encoding
+- [ ] **[Test files](#rename-test-files-from-specortest.ts-to-algospecortest.ts)**: Rename test files from `.(spec|test).ts` to `.algo.(spec|test).ts`
+- [ ] **[arc4EncodedLength](#rename-arc4encodedlength-function-to-sizeof)**: Replace `arc4EncodedLength` with `sizeOf`
+- [ ] **[abiCall signature](#change-abicall-helper-signature-to-support-type-only-imports)**: Update `arc4.abiCall(Method.prototype.method, { ... })` to `arc4.abiCall({ method: Method.prototype.method, ... })` or use type argument syntax
+- [ ] **[interpretAsArc4](#rename-interpretasarc4-function-to-convertbytes)**: Replace `arc4.interpretAsArc4<T>(value)` with `arc4.convertBytes<T>(value, { strategy: 'validate' })` or `{ strategy: 'unsafe-cast' }`
+- [ ] **[BoxRef](#remove-boxref-use-boxbytes-instead)**: Replace `BoxRef` with `Box<bytes>` and update `.put()` to `.value =` and `.size` to `.length`
+- [ ] **[.native property](#replace-native-property-with-asuint64-and-asbiguint-methods-for-arc4uint-types)**: Replace `.native` with `.asUint64()` for arc4.Uint types ≤64 bits, or `.asBigUint()` for larger types
+
 ### Breaking changes
 
 #### Object literals are mutable by default
@@ -727,7 +745,26 @@ class AbiValidationAlgo extends Contract {
 
 ## Migrating TEALScript to Algorand TypeScript 1.0
 
-This document is up-to-date as of TEALScript v0.107.0 and Algorand TypeScript v1.0.0
+This guide outlines the steps required to migrate your TEALScript projects to Algorand TypeScript 1.0. Algorand TypeScript 1.0 introduces significant improvements over TEALScript, including explicit imports for better IDE support, enhanced inner transaction interfaces, and more robust type safety. However, it also includes breaking changes that require updates to your codebase. This guide is divided into two sections: [Migration Checklist](#migration-checklist), which provides a systematic approach to the migration process, and [Migrations](#migrations), which includes detailed code examples for each major change. Each section includes code examples to illustrate the transformations.
+
+### Migration Checklist
+
+Use this checklist to work through the required changes when migrating from TEALScript to Algorand TypeScript 1.0:
+
+- [ ] **[Add explicit imports](#importing)**: Replace global namespace usage with explicit imports from `@algorandfoundation/algorand-typescript`
+- [ ] **[Update event logging](#emitting-events)**: Replace `EventLogger` with `emit()` function
+- [ ] **[Update box creation](#box-creation)**: Change `box.create(size)` to `box.create({ size })`
+- [ ] **[Refactor inner transactions](#inner-transactions)**: Update to use `itxn` namespace methods (`itxn.payment()`, `itxn.assetConfig()`, etc.)
+- [ ] **[Update typed method calls](#typed-method-calls)**: Replace `sendMethodCall` with `arc4.abiCall({ method, appId, args })`
+- [ ] **[Update app creation](#app-creation)**: Use `arc4.compileArc4()` before creating apps, access schema via compiled object
+- [ ] **[Update compiled contract access](#compiled-contract-information)**: Replace static methods (`Contract.approvalProgram()`) with `arc4.compileArc4()` result
+- [ ] **[Update logic sigs](#logic-sigs)**: Rename `logic()` to `program()`, add return statement, use `op.arg()` for arguments
+- [ ] **[Update template variables](#template-variables)**: Move template vars outside class properties, use `TemplateVar<uint64>('NAME')` syntax
+- [ ] **[Add explicit type annotations](#numerical-types)**: Add `:uint64` type annotations to all arithmetic operations and intermediate values
+- [ ] **[Update numeric types](#numerical-types)**: Replace typed literals (`uint256`) with `arc4.Uint<256>` constructors and `biguint` for arithmetic
+- [ ] **[Replace type casting](#casting)**: Replace `as uint8` with constructor calls like `new arc4.Uint<8>(value)`
+- [ ] **[Update array/object references](#array--object-references)**: Replace mutable references with `clone()` function when needed
+- [ ] **Update type names**: Use [Migration Table](#migration-table) to replace renamed types (`EventLogger` → `emit`, `AppID` → `Application`, `Address` → `Account`, etc.)
 
 ### Migration Table
 
