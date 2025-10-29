@@ -16,25 +16,25 @@ This guide outlines the steps required to migrate your Algorand TypeScript proje
 
 Use this checklist to work through the required changes when migrating from beta to 1.0:
 
-- [ ] **[Object literals](#object-literals-are-mutable-by-default)**: Add `readonly` or `as const` modifiers to object literals if you need to maintain immutable semantics
-- [ ] **[Native arrays](#native-arrays-are-mutable-by-default)**: Add `readonly` or `as const` modifiers to arrays if you need to maintain immutable semantics
-- [ ] **[MutableArray → ReferenceArray](#mutablearray-has-been-renamed-to-referencearray)**: Replace all `MutableArray` imports and usages with `ReferenceArray`
+- [ ] **[Object literals](#review-object-literals---add-readonly-or-as-const-if-immutability-needed)**: Add `readonly` or `as const` modifiers to object literals if you need to maintain immutable semantics
+- [ ] **[Native arrays](#review-native-arrays---add-readonly-or-as-const-if-immutability-needed)**: Add `readonly` or `as const` modifiers to arrays if you need to maintain immutable semantics
+- [ ] **[MutableArray → ReferenceArray](#rename-mutablearray-to-referencearray)**: Replace all `MutableArray` imports and usages with `ReferenceArray`
 - [ ] **[Copy method](#replace-xxxcopy-calls-with-clonexxx)**: Replace all `.copy()` method calls with the `clone()` function
-- [ ] **[ARC4 numeric types](#arc4-numeric-types-no-longer-have-the-n-and-nxm-suffixes)**: Remove 'N' and 'NxM' suffixes from ARC4 types (e.g., `UintN<16>` → `Uint<16>`, `UFixedNxM<32, 4>` → `UFixed<32, 4>`)
-- [ ] **[gtxn/itxn imports](#direct-import-of-functions-and-types-from-gtxn-and-itxn-modules-are-no-longer-supported)**: Update direct imports to use namespaced imports (e.g., `import type { PaymentTxn } from 'gtxn'` → `import type { gtxn }`, then use `gtxn.PaymentTxn`)
-- [ ] **[Resource encoding](#application-asset-and-account-arguments-are-now-passed-by-their-uint64-id-application-and-asset-or-bytes32-address-account-by-default)**: Add `resourceEncoding: 'index'` to `@abimethod` decorators for methods using `Asset`, `Application`, or `Account` parameters that need the old index-based behavior, or update implementation to use value-based encoding
+- [ ] **[ARC4 numeric types](#remove-n-and-nxm-suffixes-from-arc4-numeric-types)**: Remove 'N' and 'NxM' suffixes from ARC4 types
+- [ ] **[gtxn/itxn imports](#update-gtxn-and-itxn-imports-to-use-namespaced-imports)**: Update direct imports to use namespaced imports
+- [ ] **[Resource encoding](#update-methods-with-asset-application-or-account-parameters-to-handle-value-encoding)**: Add `resourceEncoding: 'index'` to `@abimethod` decorators for methods using `Asset`, `Application`, or `Account` parameters that need the old index-based behavior, or update implementation to use value-based encoding
 - [ ] **[Test files](#rename-test-files-from-specortest.ts-to-algospecortest.ts)**: Rename test files from `.(spec|test).ts` to `.algo.(spec|test).ts`
 - [ ] **[arc4EncodedLength](#rename-arc4encodedlength-function-to-sizeof)**: Replace `arc4EncodedLength` with `sizeOf`
-- [ ] **[abiCall signature](#change-abicall-helper-signature-to-support-type-only-imports)**: Update `arc4.abiCall(Method.prototype.method, { ... })` to `arc4.abiCall({ method: Method.prototype.method, ... })` or use type argument syntax
+- [ ] **[abiCall signature](#update-abicall-syntax-to-use-object-parameter)**: Update `arc4.abiCall(Method.prototype.method, { ... })` to `arc4.abiCall({ method: Method.prototype.method, ... })` or use type argument syntax
 - [ ] **[interpretAsArc4](#rename-interpretasarc4-function-to-convertbytes)**: Replace `arc4.interpretAsArc4<T>(value)` with `arc4.convertBytes<T>(value, { strategy: 'validate' })` or `{ strategy: 'unsafe-cast' }`
-- [ ] **[BoxRef](#remove-boxref-use-boxbytes-instead)**: Replace `BoxRef` with `Box<bytes>` and update `.put()` to `.value =` and `.size` to `.length`
-- [ ] **[.native property](#replace-native-property-with-asuint64-and-asbiguint-methods-for-arc4uint-types)**: Replace `.native` with `.asUint64()` for arc4.Uint types ≤64 bits, or `.asBigUint()` for larger types
+- [ ] **[BoxRef](#replace-boxref-with-boxbytes)**: Replace `BoxRef` with `Box<bytes>` and update `.put()` to `.value =` and `.size` to `.length`
+- [ ] **[.native property](#replace-native-property-with-asuint64-or-asbiguint-methods)**: Replace `.native` with `.asUint64()` for arc4.Uint types ≤64 bits, or `.asBigUint()` for larger types
 
 ### Breaking changes
 
-#### Object literals are mutable by default
+#### Review object literals - add `readonly` or `as const` if immutability needed
 
-Object literals are now mutable by default, which can be leveraged without any changes. If you'd like to keep the same execution semantics as before, then apply a `readonly` or `as const` modifier to make them immutable.
+Object literals are now mutable by default, which can be used without any changes. If you'd like to keep the same execution semantics as before, then apply a `readonly` or `as const` modifier to make them immutable.
 
 **BEFORE - Algorand TypeScript beta**
 
@@ -70,7 +70,7 @@ const p1: Point = { x: 1, y: 2 };
 const p2 = { x: Uint64(1), y: Uint64(2) } as const;
 ```
 
-#### Native arrays are mutable by default
+#### Review native arrays - add `readonly` or `as const` if immutability needed
 
 Native arrays are now mutable by default, which can be used without any changes.
 If you'd like to keep the same execution semantics as before, then apply a `readonly` or `as const` modifier to make them immutable.
@@ -109,7 +109,7 @@ const t1: readonly uint64[] = [1, 2, 3];
 const t2 = [Uint64(1), Uint64(2), Uint64(3)] as const;
 ```
 
-#### `MutableArray` has been renamed to `ReferenceArray`
+#### Rename `MutableArray` to `ReferenceArray`
 
 Now that native arrays are mutable by default, it was confusing to call the scratch slot backed arrays with reference semantics `MutableArray`, so they have been renamed.
 
@@ -159,7 +159,7 @@ public example(): void {
 }
 ```
 
-#### ARC4 numeric types no longer have the 'N' and 'NxM' suffixes
+#### Remove 'N' and 'NxM' suffixes from ARC4 numeric types
 
 The 'N' and 'NxM' suffixes have been removed from the ARC4 numeric types, which results in more natural type names.
 
@@ -199,7 +199,7 @@ const user = {
 };
 ```
 
-#### Direct import of functions and types from `gtxn` and `itxn` modules are no longer supported
+#### Update `gtxn` and `itxn` imports to use namespaced imports
 
 **BEFORE - Algorand TypeScript beta**
 
@@ -208,7 +208,7 @@ import type { PaymentTxn } from '@algorandfoundation/algorand-typescript/gtxn'
 
 // ... rest of code
 
-function reflectAllPay(pay: PaymentTxn) {
+function makePayment(payment: PaymentTxn) {
   // ... implementation
 }
 ```
@@ -220,14 +220,14 @@ import type { gtxn } from '@algorandfoundation/algorand-typescript'
 
 // ... rest of code
 
-function reflectAllPay(pay: gtxn.PaymentTxn) {
+function makePayment(payment: gtxn.PaymentTxn) {
   // ... implementation
 }
 ```
 
-#### Application, Asset and Account arguments are now passed by their uint64 id (Application and Asset) or bytes[32] address (Account) by default
+#### Update methods with Asset, Application, or Account parameters to handle value encoding
 
-`resourceEncoding: 'index' | 'value'` option is added to `@abimethod` decorator config with `value` as default. Use `index` for those methods which need to preserve the previous behaviour.
+`resourceEncoding: 'index' | 'value'` option is added to `@abimethod` decorator config with `value` as default. Application, Asset and Account arguments are now passed by their uint64 id (Application and Asset) or bytes[32] address (Account) by default. Use `resourceEncoding: 'index'` for methods that need to preserve the previous index-based behaviour.
 
 **BEFORE - Algorand TypeScript beta**
 
@@ -320,6 +320,8 @@ This change can improve test performance by ensuring only relevant files are pro
 **BEFORE - Algorand TypeScript beta**
 
 ```ts
+import { arc4EncodedLength, assert } from '@algorandfoundation/algorand-typescript'
+
 // ... rest of code
 
 assert(arc4EncodedLength<uint64>() === 8);
@@ -331,6 +333,8 @@ assert(arc4EncodedLength<[StaticArray<Bool, 10>, boolean, boolean]>() === 3);
 **AFTER - Algorand TypeScript 1.0**
 
 ```ts
+import { sizeOf, assert } from '@algorandfoundation/algorand-typescript'
+
 // ... rest of code
 
 assert(sizeOf<uint64>() === 8);
@@ -339,7 +343,7 @@ assert(sizeOf<Uint<512>>() === 64);
 assert(sizeOf<[StaticArray<Bool, 10>, boolean, boolean]>() === 3);
 ```
 
-#### Change `abiCall` helper signature to support type only imports
+#### Update `abiCall` syntax to use object parameter
 
 The signature of `abiCall` helper changes from
 
@@ -451,7 +455,7 @@ const x = arc4.convertBytes<arc4.Uint<32>>(a, { strategy: 'validate' });
 const y = arc4.convertBytes<arc4.Byte>(b, { prefix: 'log', strategy: 'unsafe-cast' });
 ```
 
-#### Remove `BoxRef`, use `Box<bytes>` instead
+#### Replace `BoxRef` with `Box<bytes>`
 
 `Box<bytes>` now includes all functionality previously available in `BoxRef`, including `extract`, `replace`, `resize`, and `splice` methods.
 
@@ -501,7 +505,7 @@ const extracted = box.extract(0, 3)
 box.resize(extracted.length)
 ```
 
-#### replace `.native` property with `.asUint64()` and `.asBigUint()` methods for `arc4.Uint` types
+#### Replace `.native` property with `.asUint64()` or `.asBigUint()` methods
 
 For `Uint` types larger than 64 bits, `.asUint64()` throws an overflow error if the value exceeds `uint64` bounds.
 
@@ -754,19 +758,19 @@ This guide outlines the steps required to migrate your TEALScript projects to Al
 
 Use this checklist to work through the required changes when migrating from TEALScript to Algorand TypeScript 1.0:
 
-- [ ] **[Add explicit imports](#importing)**: Replace global namespace usage with explicit imports from `@algorandfoundation/algorand-typescript`
-- [ ] **[Update event logging](#emitting-events)**: Replace `EventLogger` with `emit()` function
-- [ ] **[Update box creation](#box-creation)**: Change `box.create(size)` to `box.create({ size })`
-- [ ] **[Refactor inner transactions](#inner-transactions)**: Update to use `itxn` namespace methods (`itxn.payment()`, `itxn.assetConfig()`, etc.)
-- [ ] **[Update typed method calls](#typed-method-calls)**: Replace `sendMethodCall` with `arc4.abiCall({ method, appId, args })`
-- [ ] **[Update app creation](#app-creation)**: Use `arc4.compileArc4()` before creating apps, access schema via compiled object
-- [ ] **[Update compiled contract access](#compiled-contract-information)**: Replace static methods (`Contract.approvalProgram()`) with `arc4.compileArc4()` result
-- [ ] **[Update logic sigs](#logic-sigs)**: Rename `logic()` to `program()`, add return statement, use `op.arg()` for arguments
-- [ ] **[Update template variables](#template-variables)**: Move template vars outside class properties, use `TemplateVar<uint64>('NAME')` syntax
-- [ ] **[Add explicit type annotations](#numerical-types)**: Add `:uint64` type annotations to all arithmetic operations and intermediate values
-- [ ] **[Update numeric types](#numerical-types)**: Replace typed literals (`uint256`) with `arc4.Uint<256>` constructors and `biguint` for arithmetic
-- [ ] **[Replace type casting](#casting)**: Replace `as uint8` with constructor calls like `new arc4.Uint<8>(value)`
-- [ ] **[Update array/object references](#array--object-references)**: Replace mutable references with `clone()` function when needed
+- [ ] **[Add explicit imports](#add-explicit-imports-for-all-types-and-functions)**: Replace global namespace usage with explicit imports from `@algorandfoundation/algorand-typescript`
+- [ ] **[Update event logging](#replace-eventlogger-with-emit-function)**: Replace `EventLogger` with `emit()` function
+- [ ] **[Update box creation](#update-box-creation-syntax-to-use-object-parameter)**: Change `box.create(size)` to `box.create({ size })`
+- [ ] **[Refactor inner transactions](#refactor-inner-transactions-to-use-itxn-namespace)**: Update to use `itxn` namespace methods (`itxn.payment()`, `itxn.assetConfig()`, etc.)
+- [ ] **[Update typed method calls](#replace-sendmethodcall-with-arc4abicall)**: Replace `sendMethodCall` with `arc4.abiCall({ method, appId, args })`
+- [ ] **[Update app creation](#use-arc4compilearc4-before-creating-apps)**: Use `arc4.compileArc4()` before creating apps, access schema via compiled object
+- [ ] **[Update compiled contract access](#replace-static-methods-with-arc4compilearc4-for-program-access)**: Replace static methods (`Contract.approvalProgram()`) with `arc4.compileArc4()` result
+- [ ] **[Update logic sigs](#rename-logic-to-program-and-add-return-statement)**: Rename `logic()` to `program()`, add return statement, use `op.arg()` for arguments
+- [ ] **[Update template variables](#move-template-variables-outside-class-properties)**: Move template vars outside class properties, use `TemplateVar<uint64>('NAME')` syntax
+- [ ] **[Add explicit type annotations](#add-explicit-type-annotations-to-all-numeric-values)**: Add `:uint64` type annotations to all arithmetic operations and intermediate values
+- [ ] **[Update numeric types](#replace-typed-literals-with-arc4uint-constructors)**: Replace typed literals (`uint256`) with `arc4.Uint<256>` constructors and `biguint` for arithmetic
+- [ ] **[Replace type casting](#replace-as-type-casts-with-constructor-calls)**: Replace `as uint8` with constructor calls like `new arc4.Uint<8>(value)`
+- [ ] **[Update array/object references](#use-clone-for-array-and-object-copies)**: Replace mutable references with `clone()` function when needed
 - [ ] **Update type names**: Use [Migration Table](#migration-table) to replace renamed types (`EventLogger` → `emit`, `AppID` → `Application`, `Address` → `Account`, etc.)
 
 ### Migration Table
@@ -798,7 +802,7 @@ Use this checklist to work through the required changes when migrating from TEAL
 
 ### Migrations
 
-#### Emitting Events
+#### Replace `EventLogger` with `emit()` function
 
 **BEFORE - TEALScript**
 
@@ -843,7 +847,7 @@ class Swapper extends Contract {
 }
 ```
 
-#### Box Creation
+#### Update box creation syntax to use object parameter
 
 In TEALScript boxes are created via the create method: `create(size?: uint64)`.
 
@@ -851,7 +855,7 @@ In Algorand TypeScript the create method uses an object with a size parameter: `
 
 In both, the size will automatically be determined for fixed-length types, thus the size parameter is optional
 
-#### Inner Transactions
+#### Refactor inner transactions to use `itxn` namespace
 
 The interfaces for forming, sending, and inspecting inner transactions have significantly improved with Algorand TypeScript, but the interfaces are quite different. They all revolve around the `itxn` namespace.
 
@@ -949,7 +953,7 @@ assert(appCreateTxn.createdApp, 'app is created');
 assert(asset3_txn.assetName === Bytes('AST3'), 'asset3_txn is correct');
 ```
 
-#### Typed Method Calls
+#### Replace `sendMethodCall` with `arc4.abiCall`
 
 In Algorand TypeScript, there is a specific `abiCall` method for typed contract-to-contract calls instead of a generic like in TEALScript.
 
@@ -999,7 +1003,7 @@ const result3 = arc4.abiCall<typeof HelloStubbed.prototype.greet>({
 assert(result3 === 'hello stubbed')
 ```
 
-#### App Creation
+#### Use `arc4.compileArc4()` before creating apps
 
 In Algorand TypeScript, you must first explicitly compile a contract before creating it or access the programs/schema
 
@@ -1047,7 +1051,7 @@ const result = arc4.abiCall({
 assert(result === 'hello world');
 ```
 
-#### Compiled Contract Information
+#### Replace static methods with `arc4.compileArc4()` for program access
 
 TEALScript contracts have static methods for getting the contract programs and schema. In Algorand TypeScript, you must first explicitly
 compile the contract and then use the resulting object to access program information.
@@ -1078,7 +1082,7 @@ const app = arc4.abiCall({
 }).itxn.createdApp;
 ```
 
-#### Logic Sigs
+#### Rename `logic()` to `program()` and add return statement
 
 In TEALScript, logic sigs must implement the `logic` method which may take one or more arguments which map to the lsig arguments when forming the transaction. All lsigs are approved unless an error occurs. Algorand TypeScript also requires implementation of the `program` method but it may not take an arguments and must return a `boolean` or `uint64` indicating whether the transaction is approved or not.
 
@@ -1105,7 +1109,7 @@ class DangerousPaymentLsig extends LogicSig {
 }
 ```
 
-#### Template Variables
+#### Move template variables outside class properties
 
 In TEALScript, template variables must be properties of a contract. In Algorand TypeScript, they can be defined like any other variable.
 
@@ -1155,7 +1159,7 @@ class AppCaller extends LogicSig {
 }
 ```
 
-#### Importing
+#### Add explicit imports for all types and functions
 
 In TEALScript, all of the type are injecting into the global namespace. This means no importing is required for most functions and objects. Algorand TypeScript, however, requires explicit importing of every type, allowing for better LSP discovery.
 
@@ -1191,9 +1195,9 @@ class AppCaller extends LogicSig {
 }
 ```
 
-#### Numerical Types
+#### Add explicit type annotations to all numeric values
 
-##### `number` Type
+##### Add `:uint64` type annotations to arithmetic operations
 
 Both TEALScript and Algorand TypeScript have a `uint64` type, but Algorand TypeScript disallows any types to be resolved as `number`. This means all arithmetic values must be explicitly typed as `uint64`, otherwise they will have the `number` type which is not allowed.
 
@@ -1224,7 +1228,7 @@ add(a: uint64, b: uint64): uint64 {
 
 ```
 
-##### Uint types
+##### Replace typed literals with `arc4.Uint` constructors
 
 TEALScript supports typed numeric literals for most common uint types, such as `uint8`, `uint16`, `uint256`, etc. In Algorand TypeScript, the arc4.Uint constructors must be used.
 
@@ -1259,7 +1263,7 @@ addOne(n: arc4.Uint<256>): arc4.Uint<256> {
 In Algorand TypeScript, it's generally best to use `biguint` for intermediate values until the final value needs to be encoded as a specific Uint type.
 :::
 
-##### Math and Overflows
+##### Use `biguint` for intermediate values to avoid overflow checks
 
 In TEALScript, overflow checks do not occur until the value is encoded (returned, logged, put into an array/object). In Algorand TypeScript, overflow checking occurs whenever the `Uint` constructor is used. Since overflow checking is fairly expensive, it is recommended to not use the `Uint` type until it needs to be encoded.
 
@@ -1294,7 +1298,7 @@ addToNumber(n: arc4.Uint<8>) {
 }
 ```
 
-#### Casting
+#### Replace `as` type casts with constructor calls
 
 In TEALScript, the `as` keyword is used to cast values as different types. Much like regular typescript, the `as` keyword in Algorand TypeScript cannot change runtime behavior. This means constructors must be used instead of `as`
 
@@ -1320,7 +1324,7 @@ convertNumber(n: uint64): arc4.Uint<8> {
 }
 ```
 
-#### Array & Object References
+#### Use `clone()` for array and object copies
 
 TEALScript allows developers to create mutable references to arrays and objects, even when nested. Algorand TypeScript, however, does not allow this. Any new variables must copy the array or object.
 
