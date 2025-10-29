@@ -41,7 +41,7 @@ Object literals are now mutable by default, which can be leveraged without any c
 ```ts
 import { uint64, Uint64 } from '@algorandfoundation/algorand-typescript';
 
-...
+// ... rest of code
 
 // These types and objects are immutable
 type Point = { y: uint64; x: uint64 };
@@ -54,7 +54,7 @@ const p2 = { x: Uint64(1), y: Uint64(2) };
 ```ts
 import { uint64, Uint64 } from '@algorandfoundation/algorand-typescript';
 
-...
+// ... rest of code
 
 // These types and objects are mutable
 type Point = { y: uint64; x: uint64 };
@@ -80,7 +80,7 @@ If you'd like to keep the same execution semantics as before, then apply a `read
 ```ts
 import { uint64, Uint64 } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 // The arrays are immutable
 const t1: uint64[] = [1, 2, 3];
@@ -91,6 +91,8 @@ const t2 = [Uint64(1), Uint64(2), Uint64(3)];
 
 ```ts
 import { uint64, Uint64 } from '@algorandfoundation/algorand-typescript';
+
+// ... rest of code
 
 // The arrays are mutable
 const t1: uint64[] = [1, 2, 3];
@@ -116,7 +118,7 @@ Now that native arrays are mutable by default, it was confusing to call the scra
 ```ts
 import { uint64, MutableArray } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 const a = new MutableArray<uint64>();
 ```
@@ -126,7 +128,7 @@ const a = new MutableArray<uint64>();
 ```ts
 import { uint64, ReferenceArray } from '@algorandfoundation/algorand-typescript';
 
-...
+// ... rest of code
 
 const a = new ReferenceArray<uint64>();
 ```
@@ -138,7 +140,7 @@ const a = new ReferenceArray<uint64>();
 ```ts
 import { copy, arc4, UintN64, StaticArray } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 const a = new arc4.StaticArray<UintN64, 3>(new UintN64(1), new UintN64(2), new UintN64(3));
 const b = a.copy();
@@ -149,7 +151,7 @@ const b = a.copy();
 ```ts
 import { arc4, clone } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 public example(): void {
   const a = new arc4.StaticArray<arc4.Uint64, 3>(new arc4.Uint64(1), new arc4.Uint64(2), new arc4.Uint64(3))
@@ -166,7 +168,7 @@ The 'N' and 'NxM' suffixes have been removed from the ARC4 numeric types, which 
 ```ts
 import { arc4 } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 type User = {
   id: arc4.UintN16;
@@ -184,7 +186,7 @@ const user = {
 ```ts
 import { arc4 } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 type User = {
   id: arc4.Uint16;
@@ -204,10 +206,10 @@ const user = {
 ```ts
 import type { PaymentTxn } from '@algorandfoundation/algorand-typescript/gtxn'
 
-...
+// ... rest of code
 
 function reflectAllPay(pay: PaymentTxn) {
-  ...
+  // ... implementation
 }
 ```
 
@@ -216,10 +218,10 @@ function reflectAllPay(pay: PaymentTxn) {
 ```ts
 import type { gtxn } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 function reflectAllPay(pay: gtxn.PaymentTxn) {
-  ...
+  // ... implementation
 }
 ```
 
@@ -239,7 +241,7 @@ import {
   op,
 } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 test(asset: Asset, app: Application, acc: Account) {
   const assetIdx = op.btoi(Txn.applicationArgs(1))
@@ -268,7 +270,8 @@ import {
   abimethod,
 } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
+
 // use `index` resource encoding to keep old behaviour
 @abimethod({ resourceEncoding: 'index' })
 test(asset: Asset, app: Application, acc: Account) {
@@ -288,7 +291,7 @@ test(asset: Asset, app: Application, acc: Account) {
 Alternatively, update the implementation to use default `value` resource encoding.
 
 ```ts
-...
+// ... rest of code
 
 test(asset: Asset, app: Application, acc: Account): [Asset, Application, Account] {
   const assetId = op.btoi(Txn.applicationArgs(1))
@@ -317,7 +320,7 @@ This change can improve test performance by ensuring only relevant files are pro
 **BEFORE - Algorand TypeScript beta**
 
 ```ts
-...
+// ... rest of code
 
 assert(arc4EncodedLength<uint64>() === 8);
 assert(arc4EncodedLength<boolean>() === 1);
@@ -328,7 +331,7 @@ assert(arc4EncodedLength<[StaticArray<Bool, 10>, boolean, boolean]>() === 3);
 **AFTER - Algorand TypeScript 1.0**
 
 ```ts
-...
+// ... rest of code
 
 assert(sizeOf<uint64>() === 8);
 assert(sizeOf<boolean>() === 1);
@@ -344,7 +347,7 @@ The signature of `abiCall` helper changes from
 import { arc4 } from '@algorandfoundation/algorand-typescript'
 import MyContract from './MyContract.algo'
 
-...
+// ... rest of code
 
 arc4.abiCall(MyContract.prototype.myMethod, { ... })
 ```
@@ -355,7 +358,7 @@ to
 import { arc4 } from '@algorandfoundation/algorand-typescript'
 import MyContract from './MyContract.algo'
 
-...
+// ... rest of code
 
 arc4.abiCall({ method: MyContract.prototype.myMethod, ... })
 ```
@@ -366,7 +369,7 @@ The new `method` property exists to provide a natural way to specify the `TMetho
 import { arc4 } from '@algorandfoundation/algorand-typescript'
 import MyContract from './MyContract.algo'
 
-...
+// ... rest of code
 
 arc4.abiCall<typeof MyContract.prototype.myMethod>({ ... })
 ```
@@ -381,7 +384,7 @@ If, in some unforeseen circumstances, both a type argument and the `method` prop
 import { arc4, assert } from '@algorandfoundation/algorand-typescript'
 import Hello, { HelloStubbed } from './Hello.algo'
 
-...
+// ... rest of code
 
 const result2 = arc4.abiCall(Hello.prototype.greet, {
   appId: 1234,
@@ -403,7 +406,7 @@ assert(result3 === 'hello stubbed');
 import { arc4, assert } from '@algorandfoundation/algorand-typescript'
 import Hello, { HelloStubbed } from './Hello.algo'
 
-...
+// ... rest of code
 
 // provide method property
 const result2 = arc4.abiCall({
@@ -431,7 +434,7 @@ The function now accepts an `options` object with `strategy: 'unsafe-cast' | 'va
 ```ts
 import { arc4 } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 const x = arc4.interpretAsArc4<Uint<32>>(a);
 const y = arc4.interpretAsArc4<Byte>(b, 'log');
@@ -442,7 +445,7 @@ const y = arc4.interpretAsArc4<Byte>(b, 'log');
 ```ts
 import { arc4 } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 const x = arc4.convertBytes<arc4.Uint<32>>(a, { strategy: 'validate' });
 const y = arc4.convertBytes<arc4.Byte>(b, { prefix: 'log', strategy: 'unsafe-cast' });
@@ -457,7 +460,7 @@ const y = arc4.convertBytes<arc4.Byte>(b, { prefix: 'log', strategy: 'unsafe-cas
 ```ts
 import { Contract, BoxRef, Bytes, bytes } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 const box = BoxRef({ key: 'test_key' });
 box.create({ size: 32768 });
@@ -480,7 +483,7 @@ box.resize(extracted.size);
 ```ts
 import { Contract, Box, Bytes, bytes } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 const box = Box<bytes>({ key: 'test_key' })
 box.create({ size: 32768 })
@@ -507,7 +510,7 @@ For `Uint` types larger than 64 bits, `.asUint64()` throws an overflow error if 
 ```ts
 import { arc4 } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 const z = new arc4.UintN8(n);
 const z_native = z.native;
@@ -521,7 +524,7 @@ const a_native = a.native;
 ```ts
 import { arc4 } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 const z = new arc4.Uint<8>(n);
 const z_native = z.asUint64();
@@ -857,7 +860,7 @@ The interfaces for forming, sending, and inspecting inner transactions have sign
 **BEFORE - TEALScript**
 
 ```ts
-...
+// ... rest of code
 
 sendAssetConfig({
   total: 1000,
@@ -874,7 +877,7 @@ sendAssetConfig({
 ```ts
 import { itxn, Global, log } from '@algorandfoundation/algorand-typescript';
 
-...
+// ... rest of code
 
 const assetParams = itxn.assetConfig({
   total: 1000,
@@ -894,7 +897,7 @@ log(asset1_txn.createdAsset.id);
 **BEFORE - TEALScript**
 
 ```ts
-...
+// ... rest of code
 
 this.pendingGroup.addAssetCreation({
   configAssetTotal: 1000,
@@ -923,7 +926,7 @@ assert(asset3_txn.createdAssetID === 'AST3', 'asset3_txn is correct');
 ```ts
 import { uint64, Contract, itxn, Global, assert, Bytes } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 const assetParams = itxn.assetConfig({
   total: 1000,
@@ -955,7 +958,7 @@ These examples are for calling a contract method with the signature `greet(name:
 **BEFORE - TEALScript**
 
 ```ts
-...
+// ... rest of code
 
 const result = sendMethodCall<typeof Hello.prototype.greet>({
   applicationID: app,
@@ -970,7 +973,7 @@ assert(result === 'hello algo dev');
 ```ts
 import { uint64, Contract, arc4, assert } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 const result = arc4.abiCall({
   method: Hello.prototype.greet,
@@ -986,7 +989,7 @@ Alternatively, provide type argument, this approach supports using type only imp
 ```ts
 import type { HelloStubbed } from './HelloWorld.algo'
 
-...
+// ... rest of code
 
 const result3 = arc4.abiCall<typeof HelloStubbed.prototype.greet>({
   appId: 1234,
@@ -1140,7 +1143,7 @@ class AppCaller extends LogicSig {
 They can also exist outside of contracts and re-used across multiple contracts.
 
 ```ts
-...
+// ... imports and other code
 
 const APP_ID = TemplateVar<uint64>('APP_ID');
 
@@ -1197,7 +1200,7 @@ Both TEALScript and Algorand TypeScript have a `uint64` type, but Algorand TypeS
 **BEFORE - TEALScript**
 
 ```ts
-...
+// ... rest of code
 
 add(a: uint64, b: uint64): uint64 {
   // Type not needed for sum
@@ -1211,7 +1214,7 @@ add(a: uint64, b: uint64): uint64 {
 ```ts
 import { uint64 } from '@algorandfoundation/algorand-typescript';
 
-...
+// ... rest of code
 
 add(a: uint64, b: uint64): uint64 {
   // The type is required for sum
@@ -1228,7 +1231,7 @@ TEALScript supports typed numeric literals for most common uint types, such as `
 **BEFORE - TEALScript**
 
 ```ts
-...
+// ... rest of code
 
 addOne(n: uint256): uint256 {
   const one: uint256 = 1;
@@ -1242,7 +1245,7 @@ addOne(n: uint256): uint256 {
 ```ts
 import { arc4, biguint } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 addOne(n: arc4.Uint<256>): arc4.Uint<256> {
   // Need to explicitly use Uint<256> constructor to get uint256 and use biguint to perform arithmetic
@@ -1263,7 +1266,7 @@ In TEALScript, overflow checks do not occur until the value is encoded (returned
 **BEFORE - TEALScript**
 
 ```ts
-...
+// ... rest of code
 
 addToNumber(n: uint8) {
   assert(n != 0)
@@ -1280,7 +1283,7 @@ addToNumber(n: uint8) {
 ```ts
 import { uint64, arc4, biguint } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 addToNumber(n: arc4.Uint<8>) {
   // Use biguint for intermediate values which can go up to u512
@@ -1298,7 +1301,7 @@ In TEALScript, the `as` keyword is used to cast values as different types. Much 
 **BEFORE - TEALScript**
 
 ```ts
-...
+// ... rest of code
 
 convertNumber(n: uint64): uint8 {
   return n as uint8
@@ -1310,7 +1313,7 @@ convertNumber(n: uint64): uint8 {
 ```ts
 import { uint64, arc4 } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 convertNumber(n: uint64): arc4.Uint<8> {
   return new arc4.Uint<8>(n)
@@ -1324,7 +1327,7 @@ TEALScript allows developers to create mutable references to arrays and objects,
 **BEFORE - TEALScript**
 
 ```ts
-...
+// ... rest of code
 
 const a: uint64[] = [1, 2, 3];
 const b = a;
@@ -1338,7 +1341,7 @@ assert(a === b); // a and b are referencing the same array
 ```ts
 import { uint64, clone, assertMatch } from '@algorandfoundation/algorand-typescript'
 
-...
+// ... rest of code
 
 const a: uint64[] = [1, 2, 3]
 const b = clone(a)
