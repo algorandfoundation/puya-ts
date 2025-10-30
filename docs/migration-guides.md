@@ -974,6 +974,22 @@ assert(result === 'hello algo dev');
 **AFTER - Algorand TypeScript 1.0**
 
 ```ts
+import { arc4, assert } from '@algorandfoundation/algorand-typescript'
+import type { HelloStubbed } from './HelloWorld.algo'
+
+// ... rest of code
+
+const result3 = arc4.abiCall<typeof HelloStubbed.prototype.greet>({
+  appId: 1234,
+  args: ['algo dev'],
+}).returnValue
+
+assert(result3 === 'hello algo dev')
+```
+
+Alternatively, reference the method directly.
+
+```ts
 import { uint64, Contract, arc4, assert } from '@algorandfoundation/algorand-typescript'
 
 // ... rest of code
@@ -985,21 +1001,6 @@ const result = arc4.abiCall({
 }).returnValue;
 
 assert(result === 'hello algo dev');
-```
-
-Alternatively, provide type argument, this approach supports using type only imports.
-
-```ts
-import type { HelloStubbed } from './HelloWorld.algo'
-
-// ... rest of code
-
-const result3 = arc4.abiCall<typeof HelloStubbed.prototype.greet>({
-  appId: 1234,
-  args: ['stubbed'],
-}).returnValue
-
-assert(result3 === 'hello stubbed')
 ```
 
 #### Use `arc4.compileArc4()` before creating apps
