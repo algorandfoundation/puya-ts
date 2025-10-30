@@ -138,12 +138,14 @@ const a = new ReferenceArray<uint64>();
 **BEFORE - Algorand TypeScript beta**
 
 ```ts
-import { copy, arc4, UintN64, StaticArray } from '@algorandfoundation/algorand-typescript'
+import { arc4 } from '@algorandfoundation/algorand-typescript'
 
 // ... rest of code
 
-const a = new arc4.StaticArray<UintN64, 3>(new UintN64(1), new UintN64(2), new UintN64(3));
-const b = a.copy();
+public example(): void {
+  const a = new arc4.StaticArray<arc4.UintN64, 3>(new arc4.UintN64(1), new arc4.UintN64(2), new arc4.UintN64(3));
+  const b = a.copy();
+}
 ```
 
 **AFTER - Algorand TypeScript 1.0**
