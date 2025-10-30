@@ -10,4 +10,5 @@ Algorand TypeScript is compiled for execution on the AVM by PuyaTs, a TypeScript
 
 - [Language Guide](./language-guide.md)
 - [CLI Guide](./cli.md)
-- [Reference docs](./reference.md)
+- [Reference Docs](./reference.md)
+- [Migration Guides to 1.0.1](./migration-guides.md)
