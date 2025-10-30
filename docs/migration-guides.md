@@ -355,7 +355,9 @@ import MyContract from './MyContract.algo'
 
 // ... rest of code
 
-arc4.abiCall(MyContract.prototype.myMethod, { ... })
+arc4.abiCall(MyContract.prototype.myMethod, { 
+  // ... implementation
+})
 ```
 
 to
@@ -366,18 +368,22 @@ import MyContract from './MyContract.algo'
 
 // ... rest of code
 
-arc4.abiCall({ method: MyContract.prototype.myMethod, ... })
+arc4.abiCall({ method: MyContract.prototype.myMethod, 
+  // ... implementation
+})
 ```
 
 The new `method` property exists to provide a natural way to specify the `TMethod` generic parameter, but it is optional and alternatively the generic arg can be specified explicitly with
 
 ```ts
 import { arc4 } from '@algorandfoundation/algorand-typescript'
-import MyContract from './MyContract.algo'
+import type { MyContract } from '../MyContract/contract.algo'
 
 // ... rest of code
 
-arc4.abiCall<typeof MyContract.prototype.myMethod>({ ... })
+arc4.abiCall<typeof MyContract.prototype.myMethod>({ 
+  // ... implementation
+})
 ```
 
 This form of invocation supports using type only imports `import type { MyContract } from '...'` which allow for circular references versus value imports which cannot be circular.
