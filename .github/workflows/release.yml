@@ -60,11 +60,13 @@ jobs:
           mv artifacts/algo-ts-node-22.x artifacts/algo-ts
 
       - name: Generate semantic version for @algorandfoundation/puya-ts
+        if: github.ref_name != 'main'
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ steps.app_token.outputs.token }}
 
       - name: Copy puya-ts version to algo-ts
+        if: github.ref_name != 'main'
         run: |
           cd artifacts/puya-ts
           newVersion=$(npm view ./ version)
@@ -73,6 +75,7 @@ jobs:
           npm pkg set version=$newVersion
 
       - name: Publish @algorandfoundation/algorand-typescript
+        if: github.ref_name != 'main'
         uses: JS-DevTools/npm-publish@v3
         id: publish-algo-ts
         with:
@@ -82,6 +85,7 @@ jobs:
           tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'beta' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
 
       - name: Publish @algorandfoundation/puya-ts
+        if: github.ref_name != 'main'
         uses: JS-DevTools/npm-publish@v3
         id: publish-puya-ts
         with:
