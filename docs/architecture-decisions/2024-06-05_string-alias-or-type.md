@@ -16,9 +16,9 @@ A byte array (`byte[]`) on the AVM can be one of three things
 
 ARC4 specifies `byte` as just an alias for `uint8` and `string` as an alias for `byte[]`. These aliases have no effect on the encoding of data but do communicate intent to consumers of the contract. Existing client generators expose an argument aliased with `string` as a string type native to the client platform (`string` for javascript and `str` for python) whereas an argument defined as `byte[]` will be exposed those most appropriate binary type for the client platform (`Uint8Array` for javascript and `bytes` for python). Although documented as just an alias, generated clients consider `string` and `byte[]` to be distinct types.
 
-Algorand Python uses `algopy.Bytes` to represent a byte array and `algopy.String` to represent a utf8 string. The string type has a `.bytes` property to retrieve the underlying byte array and a byte array can be re-interpreted as a string with `String.from_bytes(...)`. In addition to these types, Algorand Python also has arc4 encoded equivalents `aglopy.arc4.DynamicBytes` and `algopy.arc4.String` which represent data encoded as per the arc4 spec. 
+Algorand Python uses `algopy.Bytes` to represent a byte array and `algopy.String` to represent a utf8 string. The string type has a `.bytes` property to retrieve the underlying byte array and a byte array can be re-interpreted as a string with `String.from_bytes(...)`. In addition to these types, Algorand Python also has arc4 encoded equivalents `aglopy.arc4.DynamicBytes` and `algopy.arc4.String` which represent data encoded as per the arc4 spec.
 
-The purpose of this ADR is to decide how strings are represented in Algorand TS. 
+The purpose of this ADR is to decide how strings are represented in Algorand TS.
 
 
 ## Requirements
@@ -53,11 +53,11 @@ Cons:
  - It would not be possible to evolve the api of a `str` independently from that of `bytes`. (eg. ability to index/slice/iterate chars instead of bytes)
  - No semantic separation of data that is 'a utf8 encoded string' and data that is general binary
  - Type aliases are not typically semantically significant in TypeScript, aliased symbols are followed back to the declaring type. Supporting this option would mean adding an exception to this behaviour.
-   - For example: Adding `type Banana = uint64` and then using `Banana` everywhere instead of `uint64` should not affect the compiler output or type checking. 
+   - For example: Adding `type Banana = uint64` and then using `Banana` everywhere instead of `uint64` should not affect the compiler output or type checking.
 
-### Option 2 - str is its own type  
+### Option 2 - str is its own type
 
-Introduce a new type not directly interchangeable with bytes. 
+Introduce a new type not directly interchangeable with bytes.
 
 ```ts
 export type str = {
@@ -102,14 +102,9 @@ Pros:
  - Can use literals
  - Can use `+` and `+=`
 
-Cons: 
+Cons:
  - Some operations will feel more verbose eg. getting the byte length will require `Bytes(value).length` since `value.length` should return the number of utf-16 code units to be semantically correct.
- 
-
-## Preferred options
-
-TBD
 
 ## Selected option
 
-TBD
+Option 3 has been selected. The benefits of meeting developer expectations outweigh the cons of not being able to support all operations.
