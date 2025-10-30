@@ -448,8 +448,8 @@ import { arc4 } from '@algorandfoundation/algorand-typescript'
 
 // ... rest of code
 
-const x = arc4.interpretAsArc4<Uint<32>>(a);
-const y = arc4.interpretAsArc4<Byte>(b, 'log');
+const x = arc4.interpretAsArc4<arc4.UintN<32>>(someBytes);
+const y = arc4.interpretAsArc4<arc4.Byte>(someBytes, "log");
 ```
 
 **AFTER - Algorand TypeScript 1.0**
@@ -459,8 +459,8 @@ import { arc4 } from '@algorandfoundation/algorand-typescript'
 
 // ... rest of code
 
-const x = arc4.convertBytes<arc4.Uint<32>>(a, { strategy: 'validate' });
-const y = arc4.convertBytes<arc4.Byte>(b, { prefix: 'log', strategy: 'unsafe-cast' });
+const x = arc4.convertBytes<arc4.Uint<32>>(someBytes, { strategy: 'validate' });
+const y = arc4.convertBytes<arc4.Byte>(someBytes, { prefix: 'log', strategy: 'unsafe-cast' });
 ```
 
 #### Replace `BoxRef` with `Box<bytes>`
