@@ -1,0 +1,172 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    bytecblock "oneGlobal"
+    b main_block@0
+
+main_block@0:
+    txn ApplicationID
+    bnz main_after_if_else@2
+    b main_if_body@1
+
+main_if_body@1:
+    callsub constructor
+    b main_after_if_else@2
+
+main_after_if_else@2:
+    b main_block@3
+
+main_block@3:
+    // tests/approvals/state-totals.algo.ts:15
+    // export class SubClassWithState extends BaseWithState {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main___algots__.defaultCreate@7
+    b main_abi_routing@4
+
+main_abi_routing@4:
+    // tests/approvals/state-totals.algo.ts:15
+    // export class SubClassWithState extends BaseWithState {
+    txna ApplicationArgs 0
+    pushbytes 0x2cd95aa1 // method "setState(uint64)void"
+    uncover 1
+    match main_setState_route@5
+    b main_switch_case_next@6
+
+main_switch_case_next@6:
+    b main_after_if_else@8
+
+main_after_if_else@8:
+    // tests/approvals/state-totals.algo.ts:15
+    // export class SubClassWithState extends BaseWithState {
+    err
+
+main_setState_route@5:
+    // tests/approvals/state-totals.algo.ts:18
+    // setState(n: uint64) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    callsub setState
+    b main_switch_case_next@6
+
+main___algots__.defaultCreate@7:
+    // tests/approvals/state-totals.algo.ts:15
+    // export class SubClassWithState extends BaseWithState {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/state-totals.algo.ts::SubClassWithState.setState[routing]() -> void:
+setState:
+    b setState_block@0
+
+setState_block@0:
+    // tests/approvals/state-totals.algo.ts:18
+    // setState(n: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/state-totals.algo.ts::SubClassWithState.setState
+    intc_1 // 1
+    return
+
+
+// tests/approvals/state-totals.algo.ts::SubClassWithState.setState(n: uint64) -> void:
+tests/approvals/state-totals.algo.ts::SubClassWithState.setState:
+    // tests/approvals/state-totals.algo.ts:18
+    // setState(n: uint64) {
+    proto 1 0
+    b tests/approvals/state-totals.algo.ts::SubClassWithState.setState_block@0
+
+tests/approvals/state-totals.algo.ts::SubClassWithState.setState_block@0:
+    // tests/approvals/state-totals.algo.ts:19
+    // super.setState(n)
+    frame_dig -1
+    callsub tests/approvals/state-totals.algo.ts::BaseWithState.setState
+    // tests/approvals/state-totals.algo.ts:16
+    // threeGlobal = GlobalState<uint64>()
+    pushbytes "threeGlobal"
+    // tests/approvals/state-totals.algo.ts:20
+    // this.threeGlobal.value = n
+    frame_dig -1
+    app_global_put
+    retsub
+
+
+// tests/approvals/state-totals.algo.ts::BaseWithState.setState(n: uint64) -> void:
+tests/approvals/state-totals.algo.ts::BaseWithState.setState:
+    // tests/approvals/state-totals.algo.ts:9
+    // setState(n: uint64) {
+    proto 1 0
+    b tests/approvals/state-totals.algo.ts::BaseWithState.setState_block@0
+
+tests/approvals/state-totals.algo.ts::BaseWithState.setState_block@0:
+    // tests/approvals/state-totals.algo.ts:5
+    // oneGlobal = GlobalState({ initialValue: Uint64(1) })
+    bytec_0 // "oneGlobal"
+    // tests/approvals/state-totals.algo.ts:10
+    // this.oneGlobal.value = n
+    frame_dig -1
+    app_global_put
+    // tests/approvals/state-totals.algo.ts:6
+    // twoGlobal = GlobalState<uint64>()
+    pushbytes "twoGlobal"
+    // tests/approvals/state-totals.algo.ts:11
+    // this.twoGlobal.value = n
+    frame_dig -1
+    app_global_put
+    retsub
+
+
+// tests/approvals/state-totals.algo.ts::SubClassWithState.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
+
+__algots__.defaultCreate_block@0:
+    retsub
+
+
+// tests/approvals/state-totals.algo.ts::BaseWithState.constructor() -> void:
+constructor:
+    b constructor_block@0
+
+constructor_block@0:
+    // tests/approvals/state-totals.algo.ts:4
+    // export class BaseWithState extends Contract {
+    b constructor_block@1
+
+constructor_block@1:
+    // tests/approvals/state-totals.algo.ts:4
+    // export class BaseWithState extends Contract {
+    b constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2
+
+constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
+    // tests/approvals/state-totals.algo.ts:5
+    // oneGlobal = GlobalState({ initialValue: Uint64(1) })
+    bytec_0 // "oneGlobal"
+    intc_1 // 1
+    app_global_put
+    retsub

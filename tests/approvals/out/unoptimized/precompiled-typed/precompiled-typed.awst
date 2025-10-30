@@ -1,0 +1,87 @@
+contract HelloFactory
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test_compile_contract(): void
+  {
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::Hello
+    app: application = #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages, ApplicationArgs=#[Method("helloCreate(string)void"), ARC4_ENCODE("hello", wtype=arc4.dynamic_array<arc4.byte>)])) }.itxn.CreatedApplicationID
+    #[result]: readonly [string] = #[($0 = #{ itxn: ($1 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=app, OnCompletion=0, ApplicationArgs=#[Method("greet(string)string"), ARC4_ENCODE("world", wtype=arc4.dynamic_array<arc4.byte>)]))), returnValue: ARC4_DECODE(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($2 = $1.LastLog)), extract<0, 4>($2) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.dynamic_array<arc4.byte>, validate=true)) }).returnValue]
+    assert(result == "hello world")
+    #[result2, greetItxn]: readonly [string, inner_transaction_appl] = #[($3 = #{ itxn: ($4 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=app, ApplicationArgs=#[Method("greet(string)string"), ARC4_ENCODE("abi", wtype=arc4.dynamic_array<arc4.byte>)]))), returnValue: ARC4_DECODE(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($5 = $4.LastLog)), extract<0, 4>($5) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.dynamic_array<arc4.byte>, validate=true)) }).returnValue, $3.itxn]
+    assert(result2 == "hello abi")
+    assert(greetItxn.LastLog == concat(0x151f7c75, reinterpret_cast<bytes>("hello abi")))
+    result3: string = #{ itxn: ($6 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=app, ApplicationArgs=#[Method("greet(string)string"), ARC4_ENCODE("stubbed", wtype=arc4.dynamic_array<arc4.byte>)]))), returnValue: ARC4_DECODE(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($7 = $6.LastLog)), extract<0, 4>($7) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.dynamic_array<arc4.byte>, validate=true)) }.returnValue
+    assert(result3 == "hello stubbed")
+    result4: string = #{ itxn: ($8 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=app, ApplicationArgs=#[Method("sendGreetings((string,string))string"), ARC4_ENCODE(new tests/approvals/precompiled-apps.algo.ts::Greeting(name="world", termination="!"), wtype=Greeting)]))), returnValue: ARC4_DECODE(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($9 = $8.LastLog)), extract<0, 4>($9) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.dynamic_array<arc4.byte>, validate=true)) }.returnValue
+    assert(result4 == "hello world!")
+    #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=app, OnCompletion=5, ApplicationArgs=#[Method("delete()void")])) }
+  }
+  
+  test_compile_contract_with_template(): void
+  {
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::HelloTemplate, GREETING="hey"
+    helloApp: application = #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages, ApplicationArgs=#[Method("create()void")])) }.itxn.CreatedApplicationID
+    txn1: ReadonlyObjectA16C4F1D{ itxn: inner_transaction_appl, returnValue: string } = #{ itxn: ($10 = #{ itxn: ($11 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=helloApp, OnCompletion=0, ApplicationArgs=#[Method("greet(string)string"), ARC4_ENCODE("world", wtype=arc4.dynamic_array<arc4.byte>)]))), returnValue: ARC4_DECODE(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($12 = $11.LastLog)), extract<0, 4>($12) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.dynamic_array<arc4.byte>, validate=true)) }).itxn, returnValue: $10.returnValue }
+    assert(txn1.returnValue == "hey world")
+    greeting: Object3244DE12 = new Object3244DE12(name=($13 = #{ name: "world", termination: "!" }).name, termination=$13.termination)
+    txn2: ReadonlyObjectA16C4F1D{ itxn: inner_transaction_appl, returnValue: string } = #{ itxn: ($14 = #{ itxn: ($15 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=helloApp, OnCompletion=0, ApplicationArgs=#[Method("sendGreetings((string,string))string"), ARC4_ENCODE(new tests/approvals/precompiled-apps.algo.ts::Greeting(name=greeting.name, termination=greeting.termination), wtype=Greeting)]))), returnValue: ARC4_DECODE(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($16 = $15.LastLog)), extract<0, 4>($16) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.dynamic_array<arc4.byte>, validate=true)) }).itxn, returnValue: $14.returnValue }
+    assert(txn2.returnValue == "hey world!")
+    #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=helloApp, OnCompletion=5, ApplicationArgs=#[Method("delete()void")])) }
+  }
+  
+  test_compile_contract_with_template_and_custom_prefix(): void
+  {
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix, prefix=PRFX_, GREETING="bonjour"
+    helloApp: application = #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages, ApplicationArgs=#[Method("create()void")])) }.itxn.CreatedApplicationID
+    #[result]: readonly [string] = #[($17 = #{ itxn: ($18 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=helloApp, OnCompletion=0, ApplicationArgs=#[Method("greet(string)string"), ARC4_ENCODE("world", wtype=arc4.dynamic_array<arc4.byte>)]))), returnValue: ARC4_DECODE(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($19 = $18.LastLog)), extract<0, 4>($19) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.dynamic_array<arc4.byte>, validate=true)) }).returnValue]
+    assert(result == "bonjour world")
+    #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=helloApp, OnCompletion=5, ApplicationArgs=#[Method("delete()void")])) }
+  }
+  
+  test_compile_contract_large(): void
+  {
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::LargeProgram
+    largeApp: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages)).CreatedApplicationID
+    #[result]: readonly [uint64] = #[($20 = #{ itxn: ($21 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=largeApp, OnCompletion=0, ApplicationArgs=#[Method("getBigBytesLength()uint64")]))), returnValue: ARC4_DECODE(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($22 = $21.LastLog)), extract<0, 4>($22) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.uint64, validate=true)) }).returnValue]
+    assert(result == 4096)
+    #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=largeApp, OnCompletion=5, ApplicationArgs=#[Method("delete()void")])) }
+  }
+  
+  test_call_contract_with_transactions(): void
+  {
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::ReceivesTxns
+    appId: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages)).CreatedApplicationID
+    assetCreate: inner_transaction_fields_acfg = create_inner_transaction(Fee=0, TypeEnum=3, ConfigAssetTotal=1, ConfigAssetUnitName="T", ConfigAssetName="TEST")
+    #{ itxn: ($23 = submit_txn(assetCreate, create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0, ApplicationArgs=#[Method("receivesAnyTxn(txn)uint64")])).1), returnValue: ARC4_DECODE(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($24 = $23.LastLog)), extract<0, 4>($24) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.uint64, validate=true)) }
+    appCall: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApplicationID=appId, ApplicationArgs=#[Method("getOne()uint64")])
+    #{ itxn: ($25 = submit_txn(appCall, create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0, ApplicationArgs=#[Method("receivesAnyTxn(txn)uint64")])).1), returnValue: ARC4_DECODE(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($26 = $25.LastLog)), extract<0, 4>($26) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.uint64, validate=true)) }
+    #{ itxn: ($27 = submit_txn(assetCreate, create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0, ApplicationArgs=#[Method("receivesAssetConfig(acfg)byte[]")])).1), returnValue: ARC4_DECODE(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($28 = $27.LastLog)), extract<0, 4>($28) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.dynamic_array<arc4.byte>, validate=true)) }
+    pay: inner_transaction_fields_pay = create_inner_transaction(Fee=0, TypeEnum=1, Receiver=checked_maybe(app_params_get<AppAddress>(appId), comment=application exists), Amount=100000, Sender=checked_maybe(app_params_get<AppAddress>(global<CurrentApplicationID>()), comment=application exists))
+    #{ itxn: submit_txn(assetCreate, pay, create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0, ApplicationArgs=#[Method("receivesAssetConfigAndPay(acfg,pay)void")])).2 }
+  }
+  
+  test_call_contract_with_reference_types(): void
+  {
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes
+    appId: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages)).CreatedApplicationID
+    asset: asset = submit_txn(create_inner_transaction(Fee=0, TypeEnum=3, ConfigAssetTotal=1, ConfigAssetUnitName="T", ConfigAssetName="TEST")).CreatedAssetID
+    result: ReadonlyObject90CBA08A{ itxn: inner_transaction_appl } = #{ itxn: ($29 = #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0, ApplicationArgs=#[Method("receivesReferenceTypes(uint64,address,uint64)void"), ARC4_ENCODE(global<CurrentApplicationID>(), wtype=arc4.uint64), ARC4_ENCODE(txn<Sender>(), wtype=arc4.static_array<arc4.byte>), ARC4_ENCODE(asset, wtype=arc4.uint64)])) }).itxn }
+    assert(result.itxn.Logs[0] == reinterpret_cast<bytes>(reinterpret_cast<bytes[32]>(global<CurrentApplicationAddress>())))
+    assert(result.itxn.Logs[1] == reinterpret_cast<bytes>(reinterpret_cast<bytes[32]>(txn<Sender>())))
+    assert(result.itxn.Logs[2] == checked_maybe(asset_params_get<AssetName>(asset), comment=asset exists))
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

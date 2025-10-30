@@ -1,0 +1,223 @@
+{
+    "name": "MyContract",
+    "structs": {
+        "ReadonlyObjectDC5110F2": [
+            {
+                "name": "x",
+                "type": "uint64"
+            },
+            {
+                "name": "y",
+                "type": "uint64"
+            }
+        ],
+        "XY": [
+            {
+                "name": "x",
+                "type": "uint64"
+            },
+            {
+                "name": "y",
+                "type": "uint64"
+            }
+        ],
+        "YX": [
+            {
+                "name": "y",
+                "type": "uint64"
+            },
+            {
+                "name": "x",
+                "type": "uint64"
+            }
+        ]
+    },
+    "methods": [
+        {
+            "name": "getXY",
+            "args": [],
+            "returns": {
+                "type": "(uint64,uint64)",
+                "struct": "XY"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "getYX",
+            "args": [],
+            "returns": {
+                "type": "(uint64,uint64)",
+                "struct": "YX"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "getAnon",
+            "args": [],
+            "returns": {
+                "type": "(uint64,uint64)",
+                "struct": "ReadonlyObjectDC5110F2"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "test",
+            "args": [
+                {
+                    "type": "(uint64,uint64)",
+                    "struct": "XY",
+                    "name": "x"
+                },
+                {
+                    "type": "(uint64,uint64)",
+                    "struct": "YX",
+                    "name": "y"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "testing",
+            "args": [],
+            "returns": {
+                "type": "((uint64,uint64),(uint64,uint64),(uint64,uint64))"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        }
+    ],
+    "arcs": [
+        22,
+        28
+    ],
+    "networks": {},
+    "state": {
+        "schema": {
+            "global": {
+                "ints": 0,
+                "bytes": 0
+            },
+            "local": {
+                "ints": 0,
+                "bytes": 0
+            }
+        },
+        "keys": {
+            "global": {},
+            "local": {},
+            "box": {}
+        },
+        "maps": {
+            "global": {},
+            "local": {},
+            "box": {}
+        }
+    },
+    "bareActions": {
+        "create": [
+            "NoOp"
+        ],
+        "call": []
+    },
+    "sourceInfo": {
+        "approval": {
+            "sourceInfo": [
+                {
+                    "pc": [
+                        15
+                    ],
+                    "errorMessage": "OnCompletion must be NoOp"
+                },
+                {
+                    "pc": [
+                        201
+                    ],
+                    "errorMessage": "OnCompletion must be NoOp && can only call when creating"
+                },
+                {
+                    "pc": [
+                        239
+                    ],
+                    "errorMessage": "assert target is match for conditions"
+                },
+                {
+                    "pc": [
+                        211
+                    ],
+                    "errorMessage": "invalid number of bytes for tests/approvals/named-types.algo.ts::XY"
+                },
+                {
+                    "pc": [
+                        225
+                    ],
+                    "errorMessage": "invalid number of bytes for tests/approvals/named-types.algo.ts::YX"
+                }
+            ],
+            "pcOffsetMethod": "none"
+        },
+        "clear": {
+            "sourceInfo": [],
+            "pcOffsetMethod": "none"
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYXJjNC9pbmRleC5kLnRzOjpDb250cmFjdC5hcHByb3ZhbFByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBpbnRjYmxvY2sgMSAxNiAwIDgKICAgIC8vIHRlc3RzL2FwcHJvdmFscy9uYW1lZC10eXBlcy5hbGdvLnRzOjE0CiAgICAvLyBleHBvcnQgY2xhc3MgTXlDb250cmFjdCBleHRlbmRzIENvbnRyYWN0IHsKICAgIHR4biBOdW1BcHBBcmdzCiAgICBieiBtYWluX19fYWxnb3RzX18uZGVmYXVsdENyZWF0ZUAxMgogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBtdXN0IGJlIE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQKICAgIHB1c2hieXRlc3MgMHhmMDIyMjhiMCAweGQ5MDg1NzViIDB4NTc3YjFmZmMgMHhkYzc1ZjgxZCAweDA0MGUyZTRlIC8vIG1ldGhvZCAiZ2V0WFkoKSh1aW50NjQsdWludDY0KSIsIG1ldGhvZCAiZ2V0WVgoKSh1aW50NjQsdWludDY0KSIsIG1ldGhvZCAiZ2V0QW5vbigpKHVpbnQ2NCx1aW50NjQpIiwgbWV0aG9kICJ0ZXN0KCh1aW50NjQsdWludDY0KSwodWludDY0LHVpbnQ2NCkpdm9pZCIsIG1ldGhvZCAidGVzdGluZygpKCh1aW50NjQsdWludDY0KSwodWludDY0LHVpbnQ2NCksKHVpbnQ2NCx1aW50NjQpKSIKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDAKICAgIG1hdGNoIG1haW5fZ2V0WFlfcm91dGVANCBtYWluX2dldFlYX3JvdXRlQDUgbWFpbl9nZXRBbm9uX3JvdXRlQDYgdGVzdCBtYWluX3Rlc3Rpbmdfcm91dGVAOAogICAgZXJyCgptYWluX3Rlc3Rpbmdfcm91dGVAODoKICAgIC8vIHRlc3RzL2FwcHJvdmFscy9uYW1lZC10eXBlcy5hbGdvLnRzOjQwCiAgICAvLyBwdWJsaWMgdGVzdGluZygpIHsKICAgIHB1c2hieXRlcyAweDE1MWY3Yzc1MDAwMDAwMDAwMDAwMDAwMTAwMDAwMDAwMDAwMDAwMDIwMDAwMDAwMDAwMDAwMDZmMDAwMDAwMDAwMDAwMDBkZTAwMDAwMDAwMDAwMDAwMDMwMDAwMDAwMDAwMDAwMDA0CiAgICBsb2cKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fZ2V0QW5vbl9yb3V0ZUA2OgogICAgLy8gdGVzdHMvYXBwcm92YWxzL25hbWVkLXR5cGVzLmFsZ28udHM6MjkKICAgIC8vIHB1YmxpYyBnZXRBbm9uKCkgewogICAgcHVzaGJ5dGVzIDB4MTUxZjdjNzUwMDAwMDAwMDAwMDAwMDAzMDAwMDAwMDAwMDAwMDAwNAogICAgbG9nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX2dldFlYX3JvdXRlQDU6CiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvbmFtZWQtdHlwZXMuYWxnby50czoyMgogICAgLy8gcHVibGljIGdldFlYKCk6IFlYIHsKICAgIHB1c2hieXRlcyAweDE1MWY3Yzc1MDAwMDAwMDAwMDAwMDA2ZjAwMDAwMDAwMDAwMDAwZGUKICAgIGxvZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9nZXRYWV9yb3V0ZUA0OgogICAgLy8gdGVzdHMvYXBwcm92YWxzL25hbWVkLXR5cGVzLmFsZ28udHM6MTUKICAgIC8vIHB1YmxpYyBnZXRYWSgpOiBYWSB7CiAgICBwdXNoYnl0ZXMgMHgxNTFmN2M3NTAwMDAwMDAwMDAwMDAwMDEwMDAwMDAwMDAwMDAwMDAyCiAgICBsb2cKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fX19hbGdvdHNfXy5kZWZhdWx0Q3JlYXRlQDEyOgogICAgLy8gdGVzdHMvYXBwcm92YWxzL25hbWVkLXR5cGVzLmFsZ28udHM6MTQKICAgIC8vIGV4cG9ydCBjbGFzcyBNeUNvbnRyYWN0IGV4dGVuZHMgQ29udHJhY3QgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgICEKICAgICYmCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIG11c3QgYmUgTm9PcCAmJiBjYW4gb25seSBjYWxsIHdoZW4gY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCgovLyB0ZXN0cy9hcHByb3ZhbHMvbmFtZWQtdHlwZXMuYWxnby50czo6TXlDb250cmFjdC50ZXN0W3JvdXRpbmddKCkgLT4gdm9pZDoKdGVzdDoKICAgIC8vIHRlc3RzL2FwcHJvdmFscy9uYW1lZC10eXBlcy5hbGdvLnRzOjM2CiAgICAvLyBwdWJsaWMgdGVzdCh4OiBYWSwgeTogWVgpIHsKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDEKICAgIGR1cAogICAgbGVuCiAgICBpbnRjXzEgLy8gMTYKICAgID09CiAgICBhc3NlcnQgLy8gaW52YWxpZCBudW1iZXIgb2YgYnl0ZXMgZm9yIHRlc3RzL2FwcHJvdmFscy9uYW1lZC10eXBlcy5hbGdvLnRzOjpYWQogICAgZHVwCiAgICBpbnRjXzIgLy8gMAogICAgZXh0cmFjdF91aW50NjQKICAgIHN3YXAKICAgIGludGNfMyAvLyA4CiAgICBleHRyYWN0X3VpbnQ2NAogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgogICAgZHVwCiAgICBsZW4KICAgIGludGNfMSAvLyAxNgogICAgPT0KICAgIGFzc2VydCAvLyBpbnZhbGlkIG51bWJlciBvZiBieXRlcyBmb3IgdGVzdHMvYXBwcm92YWxzL25hbWVkLXR5cGVzLmFsZ28udHM6OllYCiAgICBkdXAKICAgIGludGNfMiAvLyAwCiAgICBleHRyYWN0X3VpbnQ2NAogICAgc3dhcAogICAgaW50Y18zIC8vIDgKICAgIGV4dHJhY3RfdWludDY0CiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvbmFtZWQtdHlwZXMuYWxnby50czozNwogICAgLy8gYXNzZXJ0TWF0Y2goeCwgeyAuLi55IH0pCiAgICBjb3ZlciAyCiAgICA9PQogICAgY292ZXIgMgogICAgPT0KICAgICYmCiAgICBhc3NlcnQgLy8gYXNzZXJ0IHRhcmdldCBpcyBtYXRjaCBmb3IgY29uZGl0aW9ucwogICAgLy8gdGVzdHMvYXBwcm92YWxzL25hbWVkLXR5cGVzLmFsZ28udHM6MzYKICAgIC8vIHB1YmxpYyB0ZXN0KHg6IFhZLCB5OiBZWCkgewogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgo=",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYmFzZS1jb250cmFjdC5kLnRzOjpCYXNlQ29udHJhY3QuY2xlYXJTdGF0ZVByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBwdXNoaW50IDEgLy8gMQogICAgcmV0dXJuCg=="
+    },
+    "byteCode": {
+        "approval": "CyAEARAACDEbQQC2MRkURDEYRIIFBPAiKLAE2QhXWwRXex/8BNx1+B0EBA4uTjYaAI4FAGwAUwA6AI8AAQCANBUffHUAAAAAAAAAAQAAAAAAAAACAAAAAAAAAG8AAAAAAAAA3gAAAAAAAAADAAAAAAAAAASwIkOAFBUffHUAAAAAAAAAAwAAAAAAAAAEsCJDgBQVH3x1AAAAAAAAAG8AAAAAAAAA3rAiQ4AUFR98dQAAAAAAAAABAAAAAAAAAAKwIkMxGRQxGBQQRCJDNhoBSRUjEkRJJFtMJVs2GgJJFSMSREkkW0wlW04CEk4CEhBEIkM=",
+        "clear": "C4EBQw=="
+    },
+    "compilerInfo": {
+        "compiler": "puya",
+        "compilerVersion": {
+            "major": 5,
+            "minor": 3,
+            "patch": 2
+        }
+    },
+    "events": [],
+    "templateVariables": {}
+}

@@ -1,0 +1,140 @@
+#pragma version 11
+#pragma typetrack false
+
+// tests/approvals/boolean-conversions.algo.ts::BooleanConversionsAlgo.approvalProgram() -> uint64:
+main:
+    intcblock 1 0
+    bytecblock 0x "abc" 0x01 "abcdef"
+    b main_block@0
+
+main_block@0:
+    // tests/approvals/boolean-conversions.algo.ts:34
+    // test_truthyness()
+    callsub test_truthyness
+    // tests/approvals/boolean-conversions.algo.ts:35
+    // test_booleans_are_equal()
+    callsub test_booleans_are_equal
+    // tests/approvals/boolean-conversions.algo.ts:36
+    // return true
+    intc_0 // 1
+    return
+
+
+// tests/approvals/boolean-conversions.algo.ts::test_truthyness() -> void:
+test_truthyness:
+    b test_truthyness_block@0
+
+test_truthyness_block@0:
+    // tests/approvals/boolean-conversions.algo.ts:6
+    // assert(!Uint64(0), 'Zero is falsy')
+    intc_1 // 0
+    !
+    assert // Zero is falsy
+    // tests/approvals/boolean-conversions.algo.ts:7
+    // assert(Uint64(1), 'Non zero is truthy')
+    intc_0 // 1
+    assert // Non zero is truthy
+    // tests/approvals/boolean-conversions.algo.ts:8
+    // assert(!BigUint(0), 'Zero is falsy')
+    bytec_0 // 0x
+    bitlen
+    !
+    assert // Zero is falsy
+    // tests/approvals/boolean-conversions.algo.ts:9
+    // assert(BigUint(1), 'Non zero is truthy')
+    bytec_2 // 0x01
+    bitlen
+    assert // Non zero is truthy
+    // tests/approvals/boolean-conversions.algo.ts:10
+    // assert(!Bytes(), 'Empty is falsy')
+    bytec_0 // 0x
+    len
+    !
+    assert // Empty is falsy
+    // tests/approvals/boolean-conversions.algo.ts:11
+    // assert(Bytes('abc'), 'Non empty is truthy')
+    bytec_1 // "abc"
+    len
+    assert // Non empty is truthy
+    // tests/approvals/boolean-conversions.algo.ts:13
+    // assert(!empty, 'Empty is falsy')
+    bytec_0 // ""
+    len
+    !
+    assert // Empty is falsy
+    // tests/approvals/boolean-conversions.algo.ts:14
+    // assert('abc', 'Non empty is truthy')
+    bytec_1 // "abc"
+    len
+    assert // Non empty is truthy
+    // tests/approvals/boolean-conversions.algo.ts:15
+    // assert(!false, 'False is falsy')
+    intc_1 // 0
+    !
+    assert // False is falsy
+    retsub
+
+
+// tests/approvals/boolean-conversions.algo.ts::test_booleans_are_equal() -> void:
+test_booleans_are_equal:
+    b test_booleans_are_equal_block@0
+
+test_booleans_are_equal_block@0:
+    // tests/approvals/boolean-conversions.algo.ts:21
+    // assert(Boolean(1) === Boolean(5))
+    intc_0 // 1
+    !
+    !
+    intc_0 // 1
+    !
+    !
+    ==
+    assert
+    // tests/approvals/boolean-conversions.algo.ts:22
+    // assert(Boolean(Uint64(1)) === Boolean(Uint64(5)))
+    intc_0 // 1
+    !
+    !
+    pushint 5 // 5
+    !
+    !
+    ==
+    assert
+    // tests/approvals/boolean-conversions.algo.ts:23
+    // assert(Boolean(BigUint(1)) === Boolean(BigUint(5)))
+    bytec_2 // 0x01
+    bitlen
+    !
+    !
+    pushbytes 0x05
+    bitlen
+    !
+    !
+    ==
+    assert
+    // tests/approvals/boolean-conversions.algo.ts:24
+    // assert(Boolean(Bytes('abc')) === Boolean(Bytes('abcdef')))
+    bytec_1 // "abc"
+    bytec_0 // 0x
+    !=
+    bytec_3 // "abcdef"
+    bytec_0 // 0x
+    !=
+    ==
+    assert
+    // tests/approvals/boolean-conversions.algo.ts:26
+    // assert(Boolean('abc') === Boolean('abcdef'))
+    bytec_1 // "abc"
+    bytec_0 // 0x
+    !=
+    bytec_3 // "abcdef"
+    bytec_0 // 0x
+    !=
+    ==
+    assert
+    // tests/approvals/boolean-conversions.algo.ts:29
+    // assert(!boolNoArgs)
+    intc_1 // 0
+    !
+    assert
+    retsub

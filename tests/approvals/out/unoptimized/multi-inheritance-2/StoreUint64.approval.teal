@@ -1,0 +1,110 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // tests/approvals/multi-inheritance-2.algo.ts:13
+    // class StoreUint64 extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main___algots__.defaultCreate@5
+    b main_abi_routing@2
+
+main_abi_routing@2:
+    // tests/approvals/multi-inheritance-2.algo.ts:13
+    // class StoreUint64 extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x3ccf1199 // method "setStore(uint64)void"
+    uncover 1
+    match main_setStore_route@3
+    b main_switch_case_next@4
+
+main_switch_case_next@4:
+    b main_after_if_else@6
+
+main_after_if_else@6:
+    // tests/approvals/multi-inheritance-2.algo.ts:13
+    // class StoreUint64 extends Contract {
+    err
+
+main_setStore_route@3:
+    // tests/approvals/multi-inheritance-2.algo.ts:16
+    // setStore(value: uint64) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    callsub setStore
+    b main_switch_case_next@4
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/multi-inheritance-2.algo.ts:13
+    // class StoreUint64 extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.setStore[routing]() -> void:
+setStore:
+    b setStore_block@0
+
+setStore_block@0:
+    // tests/approvals/multi-inheritance-2.algo.ts:16
+    // setStore(value: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.setStore
+    intc_1 // 1
+    return
+
+
+// tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.setStore(value: uint64) -> void:
+tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.setStore:
+    // tests/approvals/multi-inheritance-2.algo.ts:16
+    // setStore(value: uint64) {
+    proto 1 0
+    b tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.setStore_block@0
+
+tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.setStore_block@0:
+    // tests/approvals/multi-inheritance-2.algo.ts:14
+    // uint64Store = GlobalState<uint64>()
+    pushbytes "uint64Store"
+    // tests/approvals/multi-inheritance-2.algo.ts:17
+    // this.uint64Store.value = value
+    frame_dig -1
+    app_global_put
+    retsub
+
+
+// tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
+
+__algots__.defaultCreate_block@0:
+    retsub

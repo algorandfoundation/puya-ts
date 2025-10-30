@@ -1,0 +1,146 @@
+contract ForOfLoopsAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test_for_of_loop_tuple(items: readonly [uint64, uint64, uint64]): uint64
+  {
+    total: uint64 = 0
+    for (temp in items) {
+      item: uint64 = copy(temp)
+      total: uint64 = total + item
+      if (item == 42) {
+        goto #loop₁ᵇ
+      }
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
+  test_for_of_loop_destructured_tuple(items: arc4.dynamic_array<arc4.uint64>): uint64
+  {
+    total: uint64 = 0
+    for (temp in enumerate(items)) {
+      #[index, v]: readonly [uint64, arc4.uint64] = #[($0 = copy(temp)).0, $0.1]
+      total: uint64 = total + ARC4_DECODE(v)
+      if (total >= 42) {
+        goto #loop₁ᵇ
+      }
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
+  test_for_of_loop_destructured_object(items: arc4.dynamic_array<tests/approvals/for-of-loops.algo.ts::Point>): uint64
+  {
+    total: uint64 = 0
+    for (temp in copy(items)) {
+      #[x, y]: readonly [uint64, uint64] = #[($1 = copy(temp)).x, $1.y]
+      total: uint64 = total + x + y
+      if (total >= 42) {
+        goto #loop₁ᵇ
+      }
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
+  test_for_of_loop_arc4_dynamic_array(items: arc4.dynamic_array<arc4.uint64>): uint64
+  {
+    total: uint64 = 0
+    for (temp in items) {
+      item: arc4.uint64 = copy(temp)
+      total: uint64 = total + ARC4_DECODE(item)
+      if (ARC4_DECODE(item) == 42) {
+        goto #loop₁ᵇ
+      }
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
+  test_for_of_loop_arc4_static_array(items: arc4.static_array<arc4.uint64>): uint64
+  {
+    total: uint64 = 0
+    for (temp in items) {
+      item: arc4.uint64 = copy(temp)
+      total: uint64 = total + ARC4_DECODE(item)
+      if (ARC4_DECODE(item) == 42) {
+        goto #loop₁ᵇ
+      }
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
+  test_for_of_loop_native_immutable_array(items: arc4.dynamic_array<uint64>): uint64
+  {
+    total: uint64 = 0
+    for (temp in items) {
+      item: uint64 = copy(temp)
+      total: uint64 = total + item
+      if (item == 42) {
+        goto #loop₁ᵇ
+      }
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
+  test_for_of_loop_native_mutable_array(items: arc4.tuple<uint64,uint64,uint64>): uint64
+  {
+    mutable: ref_array<uint64> = new ref_array<uint64>(items.0, items.1, items.2)
+    total: uint64 = 0
+    for (temp in mutable) {
+      item: uint64 = copy(temp)
+      total: uint64 = total + item
+      if (item == 42) {
+        goto #loop₁ᵇ
+      }
+    }
+    #loop₁ᵇ:
+    return total
+  }
+  
+  test_iterable_props(static_array: arc4.static_array<arc4.uint64>, fixed_array: arc4.static_array<uint64>, dyn_array: arc4.dynamic_array<arc4.uint64>): uint64
+  {
+    i: uint64 = 0
+    for (temp in urange(0, static_array.length, 1)) {
+      a: uint64 = copy(temp)
+      i++
+    }
+    for (temp₁ in enumerate(static_array)) {
+      a₁: readonly [uint64, arc4.uint64] = copy(temp₁)
+      i++
+    }
+    for (temp₂ in urange(0, fixed_array.length, 1)) {
+      a₂: uint64 = copy(temp₂)
+      i++
+    }
+    for (temp₃ in enumerate(fixed_array)) {
+      a₃: readonly [uint64, uint64] = copy(temp₃)
+      i++
+    }
+    for (temp₄ in urange(0, dyn_array.length, 1)) {
+      a₄: uint64 = copy(temp₄)
+      i++
+    }
+    for (temp₅ in enumerate(dyn_array)) {
+      a₅: readonly [uint64, arc4.uint64] = copy(temp₅)
+      i++
+    }
+    return i
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

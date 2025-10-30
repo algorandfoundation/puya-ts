@@ -1,0 +1,36 @@
+contract DestructuredParamsAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(p: Object4B7314A9): void
+  {
+    #[a, b, c]: readonly [uint64, bytes, bool] = #[p.a, p.b, p.c]
+    log(concat(concat(itob(a), b), itob(c)))
+  }
+  
+  testMutable(p: Arc4): void
+  {
+    #[a, b, c]: readonly [arc4.uint64, arc4.dynamic_array<arc4.byte>, arc4.bool] = #[p.a, p.b, p.c]
+    log(concat(concat(reinterpret_cast<bytes>(a), reinterpret_cast<bytes>(b)), reinterpret_cast<bytes>(c)))
+  }
+  
+  init(): void
+  {
+    tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test(new Object4B7314A9(a=($0 = #{ a: ($1 = #[456, "", False]).0, b: $1.1, c: $1.2 }).a, b=$0.b, c=$0.c))
+    temp: Object4B7314A9 = new Object4B7314A9(a=($2 = #{ a: 2, b: "Hello", c: True }).a, b=$2.b, c=$2.c)
+    tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test(temp)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

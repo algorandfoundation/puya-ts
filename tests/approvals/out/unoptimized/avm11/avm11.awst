@@ -1,0 +1,45 @@
+
+logicsig tests/approvals/avm11.algo.ts::Avm11Sig {
+  return len(mimc<BN254Mp110>(0x00000000000000000000000000000000000000000000000000000000499602d2))
+}
+contract AVM11Contract
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testNewOps(): void
+  {
+    assert(Boolean(len(mimc<BLS12_381Mp111>(0x00000000000000000000000000000000000000000000000000000000499602d2))))
+    assert(Boolean(online_stake()))
+    #[a, b]: readonly [bool, bool] = #[($0 = acct_params_get<AcctIncentiveEligible>(txn<Sender>())).0, $0.1]
+    #[c, d]: readonly [uint64, bool] = #[($1 = acct_params_get<AcctLastProposed>(txn<Sender>())).0, $1.1]
+    #[e, f]: readonly [uint64, bool] = #[($2 = acct_params_get<AcctLastProposed>(txn<Sender>())).0, $2.1]
+    assert(block<BlkProposer>(0) != global<ZeroAddress>(), comment=proposer)
+    assert(Boolean(block<BlkFeesCollected>(0)), comment=fees collected)
+    assert(Boolean(block<BlkBonus>(0)), comment=bonus)
+    assert(Boolean(len(block<BlkBranch>(0))), comment=branch)
+    assert(block<BlkFeeSink>(0) != global<ZeroAddress>(), comment=fee sink)
+    assert(Boolean(len(block<BlkProtocol>(0))), comment=protocol)
+    assert(Boolean(block<BlkTxnCounter>(0)), comment=txn counter)
+    assert(Boolean(block<BlkProposerPayout>(0)), comment=proposer payout)
+    assert(global<PayoutsEnabled>(), comment=payouts_enabled)
+    assert(Boolean(global<PayoutsGoOnlineFee>()), comment=payouts_go_online_fee)
+    assert(Boolean(global<PayoutsPercent>()), comment=payouts_percent)
+    assert(Boolean(global<PayoutsMinBalance>()), comment=payouts_min_balance)
+    assert(Boolean(global<PayoutsMaxBalance>()), comment=payouts_max_balance)
+    #[g, h]: readonly [uint64, bool] = #[($3 = voter_params_get<VoterBalance>(0)).0, $3.1]
+    #[i, j]: readonly [bool, bool] = #[($4 = voter_params_get<VoterIncentiveEligible>(0)).0, $4.1]
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

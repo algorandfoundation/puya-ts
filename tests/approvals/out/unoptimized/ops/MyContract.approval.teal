@@ -1,0 +1,197 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 8
+    bytecblock 0xa78000de
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // tests/approvals/ops.algo.ts:7
+    // class MyContract extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main___algots__.defaultCreate@9
+    b main_abi_routing@2
+
+main_abi_routing@2:
+    // tests/approvals/ops.algo.ts:7
+    // class MyContract extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@7
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
+    // tests/approvals/ops.algo.ts:7
+    // class MyContract extends Contract {
+    txna ApplicationArgs 0
+    bytec_0 // method "test()void"
+    pushbytes 0x0a4743a6 // method "test2(uint64)void"
+    uncover 2
+    match main_test_route@4 main_test2_route@5
+    b main_switch_case_next@6
+
+main_switch_case_next@6:
+    b main_after_if_else@8
+
+main_after_if_else@8:
+    b main_after_if_else@10
+
+main_after_if_else@10:
+    // tests/approvals/ops.algo.ts:7
+    // class MyContract extends Contract {
+    err
+
+main_test2_route@5:
+    // tests/approvals/ops.algo.ts:23
+    // test2(size: uint64) {
+    callsub test2
+    b main_switch_case_next@6
+
+main_test_route@4:
+    // tests/approvals/ops.algo.ts:8
+    // test() {
+    callsub test
+    b main_switch_case_next@6
+
+main_create_NoOp@7:
+    b main_after_if_else@8
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/ops.algo.ts:7
+    // class MyContract extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/ops.algo.ts::MyContract.test[routing]() -> void:
+test:
+    b test_block@0
+
+test_block@0:
+    // tests/approvals/ops.algo.ts:8
+    // test() {
+    callsub tests/approvals/ops.algo.ts::MyContract.test
+    intc_1 // 1
+    return
+
+
+// tests/approvals/ops.algo.ts::MyContract.test2[routing]() -> void:
+test2:
+    b test2_block@0
+
+test2_block@0:
+    // tests/approvals/ops.algo.ts:23
+    // test2(size: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/ops.algo.ts::MyContract.test2
+    intc_1 // 1
+    return
+
+
+// tests/approvals/ops.algo.ts::MyContract.test() -> void:
+tests/approvals/ops.algo.ts::MyContract.test:
+    b tests/approvals/ops.algo.ts::MyContract.test_block@0
+
+tests/approvals/ops.algo.ts::MyContract.test_block@0:
+    // tests/approvals/ops.algo.ts:9
+    // const a = bzero(8).bitwiseInvert()
+    intc_2 // 8
+    bzero
+    b~
+    // tests/approvals/ops.algo.ts:10
+    // const b = op2.btoi(a)
+    btoi
+    // tests/approvals/ops.algo.ts:11
+    // assert(b === 2 ** 64 - 1)
+    dup
+    pushint 18446744073709551615 // 18446744073709551615
+    ==
+    assert
+    // tests/approvals/ops.algo.ts:13
+    // const c = op.shr(b, 32)
+    pushint 32 // 32
+    shr
+    // tests/approvals/ops.algo.ts:15
+    // assert(c === 2 ** 32 - 1)
+    pushint 4294967295 // 4294967295
+    ==
+    assert
+    // tests/approvals/ops.algo.ts:17
+    // assert(GTxn.applicationId(Txn.groupIndex) === Txn.applicationId)
+    txn GroupIndex
+    gtxns ApplicationID
+    txn ApplicationID
+    ==
+    assert
+    // tests/approvals/ops.algo.ts:19
+    // assert(Txn.applicationArgs(0) === methodSelector('test()void'))
+    intc_0 // 0
+    txnas ApplicationArgs
+    bytec_0 // method "test()void"
+    ==
+    assert
+    // tests/approvals/ops.algo.ts:20
+    // assert(GTxn.applicationArgs(Txn.groupIndex, 0) === methodSelector(MyContract.prototype.test))
+    txn GroupIndex
+    intc_0 // 0
+    gtxnsas ApplicationArgs
+    bytec_0 // method "test()void"
+    ==
+    assert
+    retsub
+
+
+// tests/approvals/ops.algo.ts::MyContract.test2(size: uint64) -> void:
+tests/approvals/ops.algo.ts::MyContract.test2:
+    // tests/approvals/ops.algo.ts:23
+    // test2(size: uint64) {
+    proto 1 0
+    b tests/approvals/ops.algo.ts::MyContract.test2_block@0
+
+tests/approvals/ops.algo.ts::MyContract.test2_block@0:
+    // tests/approvals/ops.algo.ts:24
+    // const a = bzero(size)
+    frame_dig -1
+    bzero
+    // tests/approvals/ops.algo.ts:25
+    // assert(a.length === size)
+    len
+    frame_dig -1
+    ==
+    assert
+    retsub
+
+
+// tests/approvals/ops.algo.ts::MyContract.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
+
+__algots__.defaultCreate_block@0:
+    retsub

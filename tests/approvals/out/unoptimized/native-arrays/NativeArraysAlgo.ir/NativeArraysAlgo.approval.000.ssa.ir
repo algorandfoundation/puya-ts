@@ -1,0 +1,1624 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
+    block@0: // L12
+        let tmp%0#0: uint64 = (+ required_budget#0 10u)
+        let required_budget_with_buffer#0: uint64 = tmp%0#0
+        goto block@1
+    block@1: // while_top_L20
+        let tmp%1#0: uint64 = (global OpcodeBudget)
+        let tmp%2#0: bool = (> required_budget_with_buffer#0 tmp%1#0)
+        goto tmp%2#0 ? block@2 : block@6
+    block@2: // while_body_L21
+        itxn_begin
+        ((itxn_field TypeEnum) appl)
+        ((itxn_field OnCompletion) DeleteApplication)
+        ((itxn_field ApprovalProgram) 0x068101)
+        ((itxn_field ClearStateProgram) 0x068101)
+        switch fee_source#0 {0u => block@3, 1u => block@4, * => block@5}
+    block@3: // switch_case_0_L28
+        ((itxn_field Fee) 0u)
+        goto block@5
+    block@4: // switch_case_1_L30
+        let tmp%3#0: uint64 = (global MinTxnFee)
+        ((itxn_field Fee) tmp%3#0)
+        goto block@5
+    block@5: // switch_case_next_L26
+        itxn_submit
+        goto block@1
+    block@6: // after_while_L20
+        return 
+
+subroutine _puya_lib.arc4.dynamic_array_pop_fixed_size(array: bytes, fixed_byte_size: uint64) -> <bytes, bytes>:
+    block@0: // L46
+        let tmp%0#0: uint64 = (extract_uint16 array#0 0u)
+        let array_length#0: uint64 = tmp%0#0
+        let tmp%1#0: uint64 = (- array_length#0 1u)
+        let length_minus_1#0: uint64 = tmp%1#0
+        let tmp%2#0: bytes = (itob length_minus_1#0)
+        let tmp%3#0: bytes = ((extract 6 0) tmp%2#0)
+        let tmp%4#0: bytes = ((replace2 0) array#0 tmp%3#0)
+        let result#0: bytes = tmp%4#0
+        let tmp%5#0: uint64 = (len result#0)
+        let tmp%6#0: uint64 = (- tmp%5#0 fixed_byte_size#0)
+        let item_location#0: uint64 = tmp%6#0
+        let tmp%7#0: bytes = (extract3 result#0 item_location#0 fixed_byte_size#0)
+        let popped#0: bytes = tmp%7#0
+        let tmp%8#0: bytes = (substring3 result#0 0u item_location#0)
+        let result#1: bytes = tmp%8#0
+        return popped#0 result#1
+
+subroutine _puya_lib.arc4.dynamic_array_replace_byte_length_head(array: bytes, new_item: bytes, index: uint64) -> bytes:
+    block@0: // L227
+        let tmp%0#0: bytes = ((substring 0 2) array#0)
+        let size_b#0: bytes = tmp%0#0
+        let tmp%1#0: uint64 = (btoi size_b#0)
+        let array_length#0: uint64 = tmp%1#0
+        let tmp%2#0: bytes = ((extract 2 0) array#0)
+        let tmp%3#0: bytes = _puya_lib.arc4.static_array_replace_byte_length_head(tmp%2#0, new_item#0, index#0, array_length#0)
+        let tmp%4#0: bytes = (concat size_b#0 tmp%3#0)
+        return tmp%4#0
+
+subroutine _puya_lib.arc4.dynamic_array_replace_dynamic_element(source: bytes, new_item: bytes, index: uint64) -> bytes:
+    block@0: // L251
+        let tmp%0#0: bytes = ((substring 0 2) source#0)
+        let size_b#0: bytes = tmp%0#0
+        let tmp%1#0: uint64 = (btoi size_b#0)
+        let array_length#0: uint64 = tmp%1#0
+        let tmp%2#0: bytes = ((extract 2 0) source#0)
+        let tmp%3#0: bytes = _puya_lib.arc4.static_array_replace_dynamic_element(tmp%2#0, new_item#0, index#0, array_length#0)
+        let tmp%4#0: bytes = (concat size_b#0 tmp%3#0)
+        return tmp%4#0
+
+subroutine _puya_lib.arc4.static_array_replace_dynamic_element(array_head_and_tail: bytes, new_item: bytes, index: uint64, array_length: uint64) -> bytes:
+    block@0: // L264
+        let tmp%0#0: uint64 = (* index#0 2u)
+        let tmp%1#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%0#0)
+        let original_offset#0: uint64 = tmp%1#0
+        let tmp%2#0: uint64 = (+ index#0 1u)
+        let tmp%3#0: uint64 = (* tmp%2#0 2u)
+        let tmp%4#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%3#0)
+        let next_item_offset#0: uint64 = tmp%4#0
+        let tmp%5#0: uint64 = (len array_head_and_tail#0)
+        let end_of_tail#0: uint64 = tmp%5#0
+        let tmp%6#0: uint64 = (- array_length#0 index#0)
+        let tmp%7#0: uint64 = (- tmp%6#0 1u)
+        let is_before_end#0: uint64 = tmp%7#0
+        let tmp%8#0: uint64 = (select end_of_tail#0 next_item_offset#0 is_before_end#0)
+        let end_offset#0: uint64 = tmp%8#0
+        let tmp%9#0: uint64 = (- end_offset#0 original_offset#0)
+        let original_item_length#0: uint64 = tmp%9#0
+        let tmp%10#0: uint64 = (len new_item#0)
+        let new_item_length#0: uint64 = tmp%10#0
+        let tmp%11#0: bytes = (substring3 array_head_and_tail#0 0u original_offset#0)
+        let tmp%12#0: bytes = (concat tmp%11#0 new_item#0)
+        let tmp%13#0: bytes = (substring3 array_head_and_tail#0 end_offset#0 end_of_tail#0)
+        let tmp%14#0: bytes = (concat tmp%12#0 tmp%13#0)
+        let new_head_and_tail#0: bytes = tmp%14#0
+        let tmp%15#0: uint64 = (* array_length#0 2u)
+        let tmp%16#0: uint64 = (+ index#0 1u)
+        let tmp%17#0: uint64 = (* tmp%16#0 2u)
+        (assert 2u) // Step cannot be zero
+        let value_internal%0#0: uint64 = tmp%17#0
+        goto block@1
+    block@1: // for_header_L282
+        let value_internal%0#1: uint64 = φ(value_internal%0#0 <- block@0, value_internal%0#2 <- block@3)
+        let new_head_and_tail#1: bytes = φ(new_head_and_tail#0 <- block@0, new_head_and_tail#2 <- block@3)
+        let continue_looping%0#0: bool = (< value_internal%0#1 tmp%15#0)
+        goto continue_looping%0#0 ? block@2 : block@4
+    block@2: // for_body_L283
+        let head_offset#0: uint64 = value_internal%0#1
+        let tmp%18#0: uint64 = (extract_uint16 new_head_and_tail#1 head_offset#0)
+        let tail_offset#0: uint64 = tmp%18#0
+        let tmp%19#0: uint64 = (+ tail_offset#0 new_item_length#0)
+        let tail_offset#1: uint64 = tmp%19#0
+        let tmp%20#0: uint64 = (- tail_offset#1 original_item_length#0)
+        let tail_offset#2: uint64 = tmp%20#0
+        let tmp%21#0: bytes = (itob tail_offset#2)
+        let tmp%22#0: bytes = ((extract 6 2) tmp%21#0)
+        let tail_offset_bytes#0: bytes = tmp%22#0
+        let tmp%23#0: bytes = (replace3 new_head_and_tail#1 head_offset#0 tail_offset_bytes#0)
+        let new_head_and_tail#2: bytes = tmp%23#0
+        goto block@3
+    block@3: // for_footer_L282
+        let value_internal%0#2: uint64 = (+ value_internal%0#1 2u)
+        goto block@1
+    block@4: // after_for_L282
+        return new_head_and_tail#1
+
+subroutine _puya_lib.arc4.static_array_replace_byte_length_head(array_head_and_tail: bytes, new_item: bytes, index: uint64, array_length: uint64) -> bytes:
+    block@0: // L291
+        let tmp%0#0: bool = (< index#0 array_length#0)
+        (assert tmp%0#0) // Index out of bounds
+        let tmp%1#0: uint64 = (* index#0 2u)
+        let tmp%2#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%1#0)
+        let offset_for_index#0: uint64 = tmp%2#0
+        let tmp%3#0: uint64 = (extract_uint16 array_head_and_tail#0 offset_for_index#0)
+        let old_item_length#0: uint64 = tmp%3#0
+        let tmp%4#0: uint64 = (+ offset_for_index#0 old_item_length#0)
+        let tmp%5#0: uint64 = (+ tmp%4#0 2u)
+        let old_item_end#0: uint64 = tmp%5#0
+        let tmp%6#0: bytes = (substring3 array_head_and_tail#0 0u offset_for_index#0)
+        let tmp%7#0: bytes = (concat tmp%6#0 new_item#0)
+        let tmp%8#0: uint64 = (len array_head_and_tail#0)
+        let tmp%9#0: bytes = (substring3 array_head_and_tail#0 old_item_end#0 tmp%8#0)
+        let tmp%10#0: bytes = (concat tmp%7#0 tmp%9#0)
+        let tmp%11#0: bytes = _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(tmp%10#0, array_length#0, index#0)
+        return tmp%11#0
+
+subroutine _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(array_head_and_tail: bytes, length: uint64, start_at_index: uint64) -> bytes:
+    block@0: // L320
+        let tmp%0#0: uint64 = (* length#0 2u)
+        let tmp%1#0: uint64 = (* start_at_index#0 2u)
+        let tmp%2#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%1#0)
+        let tmp%3#0: uint64 = (select tmp%0#0 tmp%2#0 start_at_index#0)
+        let tail_offset#0: uint64 = tmp%3#0
+        let tmp%4#0: uint64 = (* length#0 2u)
+        let tmp%5#0: uint64 = (* start_at_index#0 2u)
+        (assert 2u) // Step cannot be zero
+        let value_internal%0#0: uint64 = tmp%5#0
+        goto block@1
+    block@1: // for_header_L342
+        let value_internal%0#1: uint64 = φ(value_internal%0#0 <- block@0, value_internal%0#2 <- block@3)
+        let tail_offset#1: uint64 = φ(tail_offset#0 <- block@0, tail_offset#2 <- block@3)
+        let array_head_and_tail#1: bytes = φ(array_head_and_tail#0 <- block@0, array_head_and_tail#2 <- block@3)
+        let continue_looping%0#0: bool = (< value_internal%0#1 tmp%4#0)
+        goto continue_looping%0#0 ? block@2 : block@4
+    block@2: // for_body_L343
+        let head_offset#0: uint64 = value_internal%0#1
+        let tmp%6#0: bytes = (itob tail_offset#1)
+        let tmp%7#0: bytes = ((extract 6 2) tmp%6#0)
+        let tail_offset_bytes#0: bytes = tmp%7#0
+        let tmp%8#0: bytes = (replace3 array_head_and_tail#1 head_offset#0 tail_offset_bytes#0)
+        let array_head_and_tail#2: bytes = tmp%8#0
+        let tmp%9#0: uint64 = (extract_uint16 array_head_and_tail#2 tail_offset#1)
+        let tmp%10#0: uint64 = (+ tmp%9#0 2u)
+        let tmp%11#0: uint64 = (+ tail_offset#1 tmp%10#0)
+        let tail_offset#2: uint64 = tmp%11#0
+        let tmp%12#0: uint64 = (+ head_offset#0 2u)
+        let head_offset#1: uint64 = tmp%12#0
+        goto block@3
+    block@3: // for_footer_L342
+        let value_internal%0#2: uint64 = (+ value_internal%0#1 2u)
+        goto block@1
+    block@4: // after_for_L342
+        return array_head_and_tail#1
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__() -> bool:
+    block@0: // L6
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@22
+    block@1: // abi_routing_L6
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@2 : block@20
+    block@2: // call_NoOp_L6
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "readonlyArray()void" => block@3, method "arrayInObject()void" => block@4, method "buildArray()uint64[]" => block@5, method "arrayFromCtor()uint64[]" => block@6, method "buildReadonly()uint64[]" => block@7, method "doThings()void" => block@8, method "fixedArray(uint64[50])void" => block@9, method "arc4Interop()void" => block@10, method "structs((uint64,uint64))(uint64,uint64)[]" => block@11, method "booleans()bool[]" => block@12, method "booleansStatic()(bool,bool,bool)" => block@13, method "arc4Booleans()bool[]" => block@14, method "arc4BooleansStatic()(bool,bool,bool)" => block@15, method "aliasing(uint64[],uint64[])void" => block@16, method "receiveMutable(uint64[])void" => block@17, method "receiveReadonly(uint64[])void" => block@18, * => block@19}
+    block@3: // readonlyArray_route_L7
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray[routing]()
+        goto block@19
+    block@4: // arrayInObject_route_L20
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject[routing]()
+        goto block@19
+    block@5: // buildArray_route_L30
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildArray[routing]()
+        goto block@19
+    block@6: // arrayFromCtor_route_L34
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayFromCtor[routing]()
+        goto block@19
+    block@7: // buildReadonly_route_L38
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildReadonly[routing]()
+        goto block@19
+    block@8: // doThings_route_L42
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings[routing]()
+        goto block@19
+    block@9: // fixedArray_route_L109
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray[routing]()
+        goto block@19
+    block@10: // arc4Interop_route_L157
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop[routing]()
+        goto block@19
+    block@11: // structs_route_L170
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs[routing]()
+        goto block@19
+    block@12: // booleans_route_L179
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans[routing]()
+        goto block@19
+    block@13: // booleansStatic_route_L183
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleansStatic[routing]()
+        goto block@19
+    block@14: // arc4Booleans_route_L187
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans[routing]()
+        goto block@19
+    block@15: // arc4BooleansStatic_route_L191
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansStatic[routing]()
+        goto block@19
+    block@16: // aliasing_route_L195
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing[routing]()
+        goto block@19
+    block@17: // receiveMutable_route_L221
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable[routing]()
+        goto block@19
+    block@18: // receiveReadonly_route_L225
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly[routing]()
+        goto block@19
+    block@19: // switch_case_next_L6
+        goto block@21
+    block@20: // create_NoOp_L6
+        goto block@21
+    block@21: // after_if_else_L6
+        goto block@23
+    block@22: // __algots__.defaultCreate_L6
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__algots__.defaultCreate()
+        exit 1u
+    block@23: // after_if_else_L6
+        exit 0u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray[routing]() -> void:
+    block@0: // L7
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray()
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject[routing]() -> void:
+    block@0: // L20
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject()
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildArray[routing]() -> void:
+    block@0: // L30
+        let tmp%0#0: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildArray()
+        let tmp%1#0: bytes = (concat 0x151f7c75 tmp%0#0)
+        (log tmp%1#0)
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayFromCtor[routing]() -> void:
+    block@0: // L34
+        let tmp%0#0: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayFromCtor()
+        let tmp%1#0: bytes = (concat 0x151f7c75 tmp%0#0)
+        (log tmp%1#0)
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildReadonly[routing]() -> void:
+    block@0: // L38
+        let tmp%0#0: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildReadonly()
+        let tmp%1#0: bytes = (concat 0x151f7c75 tmp%0#0)
+        (log tmp%1#0)
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings[routing]() -> void:
+    block@0: // L42
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings()
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray[routing]() -> void:
+    block@0: // L109
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 400u)
+        (assert eq%0#0) // invalid number of bytes for arc4.static_array<uint64, 50>
+        let as_Encoded(uint64[50])%0#0: Encoded(uint64[50]) = tmp%0#0
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(as_Encoded(uint64[50])%0#0)
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop[routing]() -> void:
+    block@0: // L157
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop()
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs[routing]() -> void:
+    block@0: // L170
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for tests/approvals/native-arrays.algo.ts::Vector
+        let as_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = tmp%0#0
+        let tmp%1#0: Encoded(len+(uint64,uint64)[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(as_Encoded(uint64,uint64)%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans[routing]() -> void:
+    block@0: // L179
+        let tmp%0#0: Encoded(len+bool1[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans()
+        let tmp%1#0: bytes = (concat 0x151f7c75 tmp%0#0)
+        (log tmp%1#0)
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleansStatic[routing]() -> void:
+    block@0: // L183
+        let (tmp%0#0: bool, tmp%1#0: bool, tmp%2#0: bool) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleansStatic()
+        let tmp%3#0: Encoded(bool1,bool1,bool1) = bytes_encode<(bool1,bool1,bool1)>(tmp%0#0, tmp%1#0, tmp%2#0)
+        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
+        (log tmp%4#0)
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans[routing]() -> void:
+    block@0: // L187
+        let tmp%0#0: Encoded(len+bool1[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans()
+        let tmp%1#0: bytes = (concat 0x151f7c75 tmp%0#0)
+        (log tmp%1#0)
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansStatic[routing]() -> void:
+    block@0: // L191
+        let (tmp%0#0: Encoded(bool8), tmp%1#0: Encoded(bool8), tmp%2#0: Encoded(bool8)) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansStatic()
+        let tmp%3#0: Encoded(bool1,bool1,bool1) = bytes_encode<(bool1,bool1,bool1)>(tmp%0#0, tmp%1#0, tmp%2#0)
+        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
+        (log tmp%4#0)
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing[routing]() -> void:
+    block@0: // L195
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<uint64>
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
+        let tmp%1#0: bytes = (txna ApplicationArgs 2)
+        let length%1#0: uint64 = array_len(tmp%1#0)
+        let mul%1#0: uint64 = (* length%1#0 8u)
+        let add%1#0: uint64 = (+ mul%1#0 2u)
+        let len%1#0: uint64 = (len tmp%1#0)
+        let eq%1#0: bool = (== len%1#0 add%1#0)
+        (assert eq%1#0) // invalid number of bytes for arc4.dynamic_array<uint64>
+        let as_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = tmp%1#0
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(as_Encoded(len+uint64[])%0#0, as_Encoded(len+uint64[])%1#0)
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable[routing]() -> void:
+    block@0: // L221
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<uint64>
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
+        let receiveMutable%0#0: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(as_Encoded(len+uint64[])%0#0)
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly[routing]() -> void:
+    block@0: // L225
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<uint64>
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(as_Encoded(len+uint64[])%0#0)
+        exit 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray() -> void:
+    block@0: // L7
+        let encoded_array%0#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(1u, 2u, 3u)
+        let myArray#0: Encoded(len+uint64[]) = encoded_array%0#0
+        let tmp%0#0: uint64 = array_len(myArray#0)
+        let tmp%1#0: Encoded(uint64[]) = bytes_encode<uint64[]>(5u)
+        let concat%0#0: Encoded(len+uint64[]) = (concat myArray#0 tmp%1#0) // on error: max array length exceeded
+        let extract_uint16%0#0: uint64 = (extract_uint16 myArray#0 0u)
+        let add%0#0: uint64 = (+ extract_uint16%0#0 1u)
+        let as_bytes%0#0: bytes[8] = (itob add%0#0)
+        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
+        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = replace%0#0
+        let tmp%2#0: uint64 = array_len(as_Encoded(len+uint64[])%0#0)
+        let myArray#1: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
+        let tmp%3#0: uint64 = array_len(myArray#1)
+        let encoded_array%1#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(4u)
+        let total_length%0#0: uint64 = (len encoded_array%1#0)
+        let extract_to_end%0#0: bytes = (substring3 encoded_array%1#0 2u total_length%0#0)
+        let concat%1#0: Encoded(len+uint64[]) = (concat myArray#1 extract_to_end%0#0) // on error: max array length exceeded
+        let total_length%1#0: uint64 = (len concat%1#0)
+        let extract_to_end%1#0: bytes = (substring3 concat%1#0 2u total_length%1#0)
+        let len%0#0: uint64 = (len extract_to_end%1#0)
+        let div_floor%0#0: uint64 = (/ len%0#0 8u)
+        let as_bytes%1#0: bytes[8] = (itob div_floor%0#0)
+        let as_u16_bytes%1#0: bytes = ((extract 6 2) as_bytes%1#0)
+        let replace%1#0: bytes = (replace3 concat%1#0 0u as_u16_bytes%1#0)
+        let as_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = replace%1#0
+        let tmp%4#0: uint64 = array_len(as_Encoded(len+uint64[])%1#0)
+        let myArray#2: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%1#0
+        let encoded_value%0#0: Encoded(uint64) = bytes_encode<uint64>(3u)
+        let updated_array%0#0: Encoded(len+uint64[]) = replace_value(myArray#2, 2u, encoded_value%0#0)
+        let myArray#3: Encoded(len+uint64[]) = updated_array%0#0
+        let tmp%5#0: uint64 = array_len(myArray#3)
+        let tmp%6#0: bool = (== tmp%5#0 5u)
+        let array_item%0#0: Encoded(uint64) = extract_value(myArray#3, 0u)
+        let values%0#0: uint64 = decode_bytes<uint64>(array_item%0#0)
+        let tmp%7#0: bool = (== values%0#0 1u)
+        let tmp%8#0: bool = (&& tmp%6#0 tmp%7#0)
+        let array_item%1#0: Encoded(uint64) = extract_value(myArray#3, 1u)
+        let values%1#0: uint64 = decode_bytes<uint64>(array_item%1#0)
+        let tmp%9#0: bool = (== values%1#0 2u)
+        let tmp%10#0: bool = (&& tmp%8#0 tmp%9#0)
+        let array_item%2#0: Encoded(uint64) = extract_value(myArray#3, 2u)
+        let values%2#0: uint64 = decode_bytes<uint64>(array_item%2#0)
+        let tmp%11#0: bool = (== values%2#0 3u)
+        let tmp%12#0: bool = (&& tmp%10#0 tmp%11#0)
+        let array_item%3#0: Encoded(uint64) = extract_value(myArray#3, 3u)
+        let values%3#0: uint64 = decode_bytes<uint64>(array_item%3#0)
+        let tmp%13#0: bool = (== values%3#0 5u)
+        let tmp%14#0: bool = (&& tmp%12#0 tmp%13#0)
+        let array_item%4#0: Encoded(uint64) = extract_value(myArray#3, 4u)
+        let values%4#0: uint64 = decode_bytes<uint64>(array_item%4#0)
+        let tmp%15#0: bool = (== values%4#0 4u)
+        let tmp%16#0: bool = (&& tmp%14#0 tmp%15#0)
+        (assert tmp%16#0) // assert target is match for conditions
+        return 
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject() -> void:
+    block@0: // L20
+        let encoded_array%0#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(1337u)
+        let (person.name#0: string, person.favouriteNumbers#0: Encoded(len+uint64[])) = ("Alice", encoded_array%0#0)
+        let tmp%0#0: Encoded(uint64[]) = bytes_encode<uint64[]>(42u)
+        let concat%0#0: Encoded(len+uint64[]) = (concat person.favouriteNumbers#0 tmp%0#0) // on error: max array length exceeded
+        let extract_uint16%0#0: uint64 = (extract_uint16 person.favouriteNumbers#0 0u)
+        let add%0#0: uint64 = (+ extract_uint16%0#0 1u)
+        let as_bytes%0#0: bytes[8] = (itob add%0#0)
+        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
+        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = replace%0#0
+        let person.favouriteNumbers#1: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
+        let tmp%1#0: uint64 = array_len(person.favouriteNumbers#1)
+        let length#0: uint64 = tmp%1#0
+        let tmp%2#0: bool = (== length#0 2u)
+        (assert tmp%2#0)
+        return 
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildArray() -> Encoded(len+uint64[]):
+    block@0: // L30
+        let encoded_array%0#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(1u, 2u, 3u, 4u)
+        return encoded_array%0#0
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayFromCtor() -> Encoded(len+uint64[]):
+    block@0: // L34
+        let encoded_array%0#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(1u, 2u, 3u)
+        return encoded_array%0#0
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildReadonly() -> Encoded(len+uint64[]):
+    block@0: // L38
+        let encoded_array%0#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(1u, 2u, 3u, 4u)
+        return encoded_array%0#0
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() -> void:
+    block@0: // L42
+        _puya_lib.util.ensure_budget(1400u, 0u)
+        let tmp%0#0: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildArray()
+        let arr#0: Encoded(len+uint64[]) = tmp%0#0
+        let tmp%1#0: Encoded(uint64[]) = bytes_encode<uint64[]>(5u)
+        let concat%0#0: Encoded(len+uint64[]) = (concat arr#0 tmp%1#0) // on error: max array length exceeded
+        let extract_uint16%0#0: uint64 = (extract_uint16 arr#0 0u)
+        let add%0#0: uint64 = (+ extract_uint16%0#0 1u)
+        let as_bytes%0#0: bytes[8] = (itob add%0#0)
+        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
+        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = replace%0#0
+        let arr#1: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
+        let tmp%2#0: uint64 = array_len(arr#1)
+        let (tmp%3#0: bytes, tmp%4#0: bytes) = _puya_lib.arc4.dynamic_array_pop_fixed_size(arr#1, 8u)
+        let tmp%5#0: uint64 = decode_bytes<uint64>(tmp%3#0)
+        let arr#2: Encoded(len+uint64[]) = tmp%4#0
+        let tmp%6#0: bool = (== tmp%5#0 5u)
+        (assert tmp%6#0)
+        let tmp%7#0: uint64 = array_len(arr#2)
+        let tmp%8#0: bool = (== tmp%7#0 4u)
+        let array_item%0#0: Encoded(uint64) = extract_value(arr#2, 0u)
+        let values%0#0: uint64 = decode_bytes<uint64>(array_item%0#0)
+        let tmp%9#0: bool = (== values%0#0 1u)
+        let tmp%10#0: bool = (&& tmp%8#0 tmp%9#0)
+        let array_item%1#0: Encoded(uint64) = extract_value(arr#2, 1u)
+        let values%1#0: uint64 = decode_bytes<uint64>(array_item%1#0)
+        let tmp%11#0: bool = (== values%1#0 2u)
+        let tmp%12#0: bool = (&& tmp%10#0 tmp%11#0)
+        let array_item%2#0: Encoded(uint64) = extract_value(arr#2, 2u)
+        let values%2#0: uint64 = decode_bytes<uint64>(array_item%2#0)
+        let tmp%13#0: bool = (== values%2#0 3u)
+        let tmp%14#0: bool = (&& tmp%12#0 tmp%13#0)
+        let array_item%3#0: Encoded(uint64) = extract_value(arr#2, 3u)
+        let values%3#0: uint64 = decode_bytes<uint64>(array_item%3#0)
+        let tmp%15#0: bool = (== values%3#0 4u)
+        let tmp%16#0: bool = (&& tmp%14#0 tmp%15#0)
+        (assert tmp%16#0) // assert target is match for conditions
+        let array_item%4#0: Encoded(uint64) = extract_value(arr#2, 0u)
+        let values%4#0: uint64 = decode_bytes<uint64>(array_item%4#0)
+        let tmp%17#0: bool = (== values%4#0 1u)
+        (assert tmp%17#0)
+        let tmp%18#0: uint64 = array_len(arr#2)
+        let tmp%19#0: uint64 = (- tmp%18#0 1u)
+        let array_item%5#0: Encoded(uint64) = extract_value(arr#2, tmp%19#0)
+        let values%5#0: uint64 = decode_bytes<uint64>(array_item%5#0)
+        let tmp%20#0: bool = (== values%5#0 4u)
+        (assert tmp%20#0)
+        let tmp%21#0: Encoded(uint64[]) = bytes_encode<uint64[]>(5u)
+        let concat%1#0: Encoded(len+uint64[]) = (concat arr#2 tmp%21#0) // on error: max array length exceeded
+        let extract_uint16%1#0: uint64 = (extract_uint16 arr#2 0u)
+        let add%1#0: uint64 = (+ extract_uint16%1#0 1u)
+        let as_bytes%1#0: bytes[8] = (itob add%1#0)
+        let as_u16_bytes%1#0: bytes = ((extract 6 2) as_bytes%1#0)
+        let replace%1#0: bytes = (replace3 concat%1#0 0u as_u16_bytes%1#0)
+        let as_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = replace%1#0
+        let arr#3: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%1#0
+        let tmp%22#0: uint64 = array_len(arr#3)
+        let tmp%23#0: uint64 = array_len(arr#3)
+        let tmp%24#0: bool = (== tmp%23#0 5u)
+        let array_item%6#0: Encoded(uint64) = extract_value(arr#3, 0u)
+        let values%6#0: uint64 = decode_bytes<uint64>(array_item%6#0)
+        let tmp%25#0: bool = (== values%6#0 1u)
+        let tmp%26#0: bool = (&& tmp%24#0 tmp%25#0)
+        let array_item%7#0: Encoded(uint64) = extract_value(arr#3, 1u)
+        let values%7#0: uint64 = decode_bytes<uint64>(array_item%7#0)
+        let tmp%27#0: bool = (== values%7#0 2u)
+        let tmp%28#0: bool = (&& tmp%26#0 tmp%27#0)
+        let array_item%8#0: Encoded(uint64) = extract_value(arr#3, 2u)
+        let values%8#0: uint64 = decode_bytes<uint64>(array_item%8#0)
+        let tmp%29#0: bool = (== values%8#0 3u)
+        let tmp%30#0: bool = (&& tmp%28#0 tmp%29#0)
+        let array_item%9#0: Encoded(uint64) = extract_value(arr#3, 3u)
+        let values%9#0: uint64 = decode_bytes<uint64>(array_item%9#0)
+        let tmp%31#0: bool = (== values%9#0 4u)
+        let tmp%32#0: bool = (&& tmp%30#0 tmp%31#0)
+        let array_item%10#0: Encoded(uint64) = extract_value(arr#3, 4u)
+        let values%10#0: uint64 = decode_bytes<uint64>(array_item%10#0)
+        let tmp%33#0: bool = (== values%10#0 5u)
+        let tmp%34#0: bool = (&& tmp%32#0 tmp%33#0)
+        (assert tmp%34#0) // assert target is match for conditions
+        let (tmp%35#0: bytes, tmp%36#0: bytes) = _puya_lib.arc4.dynamic_array_pop_fixed_size(arr#3, 8u)
+        let tmp%37#0: uint64 = decode_bytes<uint64>(tmp%35#0)
+        let arr#4: Encoded(len+uint64[]) = tmp%36#0
+        let top#0: uint64 = tmp%37#0
+        let tmp%38#0: bool = (== top#0 5u)
+        (assert tmp%38#0)
+        let tmp%39#0: uint64 = array_len(arr#4)
+        let tmp%40#0: bool = (== tmp%39#0 4u)
+        let array_item%11#0: Encoded(uint64) = extract_value(arr#4, 0u)
+        let values%11#0: uint64 = decode_bytes<uint64>(array_item%11#0)
+        let tmp%41#0: bool = (== values%11#0 1u)
+        let tmp%42#0: bool = (&& tmp%40#0 tmp%41#0)
+        let array_item%12#0: Encoded(uint64) = extract_value(arr#4, 1u)
+        let values%12#0: uint64 = decode_bytes<uint64>(array_item%12#0)
+        let tmp%43#0: bool = (== values%12#0 2u)
+        let tmp%44#0: bool = (&& tmp%42#0 tmp%43#0)
+        let array_item%13#0: Encoded(uint64) = extract_value(arr#4, 2u)
+        let values%13#0: uint64 = decode_bytes<uint64>(array_item%13#0)
+        let tmp%45#0: bool = (== values%13#0 3u)
+        let tmp%46#0: bool = (&& tmp%44#0 tmp%45#0)
+        let array_item%14#0: Encoded(uint64) = extract_value(arr#4, 3u)
+        let values%14#0: uint64 = decode_bytes<uint64>(array_item%14#0)
+        let tmp%47#0: bool = (== values%14#0 4u)
+        let tmp%48#0: bool = (&& tmp%46#0 tmp%47#0)
+        (assert tmp%48#0) // assert target is match for conditions
+        let encoded_value%0#0: Encoded(uint64) = bytes_encode<uint64>(10u)
+        let updated_array%0#0: Encoded(len+uint64[]) = replace_value(arr#4, 1u, encoded_value%0#0)
+        let arr#5: Encoded(len+uint64[]) = updated_array%0#0
+        let encoded_value%1#0: Encoded(uint64) = bytes_encode<uint64>(5u)
+        let updated_array%1#0: Encoded(len+uint64[]) = replace_value(arr#5, 1u, encoded_value%1#0)
+        let arr2#0: Encoded(len+uint64[]) = updated_array%1#0
+        let tmp%49#0: uint64 = array_len(arr#5)
+        let tmp%50#0: bool = (== tmp%49#0 4u)
+        let array_item%15#0: Encoded(uint64) = extract_value(arr#5, 0u)
+        let values%15#0: uint64 = decode_bytes<uint64>(array_item%15#0)
+        let tmp%51#0: bool = (== values%15#0 1u)
+        let tmp%52#0: bool = (&& tmp%50#0 tmp%51#0)
+        let array_item%16#0: Encoded(uint64) = extract_value(arr#5, 1u)
+        let values%16#0: uint64 = decode_bytes<uint64>(array_item%16#0)
+        let tmp%53#0: bool = (== values%16#0 10u)
+        let tmp%54#0: bool = (&& tmp%52#0 tmp%53#0)
+        let array_item%17#0: Encoded(uint64) = extract_value(arr#5, 2u)
+        let values%17#0: uint64 = decode_bytes<uint64>(array_item%17#0)
+        let tmp%55#0: bool = (== values%17#0 3u)
+        let tmp%56#0: bool = (&& tmp%54#0 tmp%55#0)
+        let array_item%18#0: Encoded(uint64) = extract_value(arr#5, 3u)
+        let values%18#0: uint64 = decode_bytes<uint64>(array_item%18#0)
+        let tmp%57#0: bool = (== values%18#0 4u)
+        let tmp%58#0: bool = (&& tmp%56#0 tmp%57#0)
+        (assert tmp%58#0) // assert target is match for conditions
+        let tmp%59#0: uint64 = array_len(arr2#0)
+        let tmp%60#0: bool = (== tmp%59#0 4u)
+        let array_item%19#0: Encoded(uint64) = extract_value(arr2#0, 0u)
+        let values%19#0: uint64 = decode_bytes<uint64>(array_item%19#0)
+        let tmp%61#0: bool = (== values%19#0 1u)
+        let tmp%62#0: bool = (&& tmp%60#0 tmp%61#0)
+        let array_item%20#0: Encoded(uint64) = extract_value(arr2#0, 1u)
+        let values%20#0: uint64 = decode_bytes<uint64>(array_item%20#0)
+        let tmp%63#0: bool = (== values%20#0 5u)
+        let tmp%64#0: bool = (&& tmp%62#0 tmp%63#0)
+        let array_item%21#0: Encoded(uint64) = extract_value(arr2#0, 2u)
+        let values%21#0: uint64 = decode_bytes<uint64>(array_item%21#0)
+        let tmp%65#0: bool = (== values%21#0 3u)
+        let tmp%66#0: bool = (&& tmp%64#0 tmp%65#0)
+        let array_item%22#0: Encoded(uint64) = extract_value(arr2#0, 3u)
+        let values%22#0: uint64 = decode_bytes<uint64>(array_item%22#0)
+        let tmp%67#0: bool = (== values%22#0 4u)
+        let tmp%68#0: bool = (&& tmp%66#0 tmp%67#0)
+        (assert tmp%68#0) // assert target is match for conditions
+        let tmp%69#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(12u, 13u)
+        let t1#0: Encoded(uint64,uint64) = tmp%69#0
+        let total_length%0#0: uint64 = (len arr#5)
+        let extract_to_end%0#0: bytes = (substring3 arr#5 2u total_length%0#0)
+        let concat%2#0: Encoded(len+uint64[]) = (concat arr#5 extract_to_end%0#0) // on error: max array length exceeded
+        let total_length%1#0: uint64 = (len concat%2#0)
+        let extract_to_end%1#0: bytes = (substring3 concat%2#0 2u total_length%1#0)
+        let len%0#0: uint64 = (len extract_to_end%1#0)
+        let div_floor%0#0: uint64 = (/ len%0#0 8u)
+        let as_bytes%2#0: bytes[8] = (itob div_floor%0#0)
+        let as_u16_bytes%2#0: bytes = ((extract 6 2) as_bytes%2#0)
+        let replace%2#0: bytes = (replace3 concat%2#0 0u as_u16_bytes%2#0)
+        let as_Encoded(len+uint64[])%2#0: Encoded(len+uint64[]) = replace%2#0
+        let tmp%70#0: Encoded(uint64[]) = bytes_encode<uint64[]>(11u)
+        let concat%3#0: Encoded(len+uint64[]) = (concat as_Encoded(len+uint64[])%2#0 tmp%70#0) // on error: max array length exceeded
+        let extract_uint16%2#0: uint64 = (extract_uint16 as_Encoded(len+uint64[])%2#0 0u)
+        let add%2#0: uint64 = (+ extract_uint16%2#0 1u)
+        let as_bytes%3#0: bytes[8] = (itob add%2#0)
+        let as_u16_bytes%3#0: bytes = ((extract 6 2) as_bytes%3#0)
+        let replace%3#0: bytes = (replace3 concat%3#0 0u as_u16_bytes%3#0)
+        let as_Encoded(len+uint64[])%3#0: Encoded(len+uint64[]) = replace%3#0
+        let concat%4#0: Encoded(len+uint64[]) = (concat as_Encoded(len+uint64[])%3#0 t1#0) // on error: max array length exceeded
+        let total_length%2#0: uint64 = (len concat%4#0)
+        let extract_to_end%2#0: bytes = (substring3 concat%4#0 2u total_length%2#0)
+        let len%1#0: uint64 = (len extract_to_end%2#0)
+        let div_floor%1#0: uint64 = (/ len%1#0 8u)
+        let as_bytes%4#0: bytes[8] = (itob div_floor%1#0)
+        let as_u16_bytes%4#0: bytes = ((extract 6 2) as_bytes%4#0)
+        let replace%4#0: bytes = (replace3 concat%4#0 0u as_u16_bytes%4#0)
+        let as_Encoded(len+uint64[])%4#0: Encoded(len+uint64[]) = replace%4#0
+        let arr#6: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%4#0
+        let tmp%71#0: uint64 = array_len(arr#6)
+        let tmp%72#0: bool = (== tmp%71#0 11u)
+        let array_item%23#0: Encoded(uint64) = extract_value(arr#6, 0u)
+        let values%23#0: uint64 = decode_bytes<uint64>(array_item%23#0)
+        let tmp%73#0: bool = (== values%23#0 1u)
+        let tmp%74#0: bool = (&& tmp%72#0 tmp%73#0)
+        let array_item%24#0: Encoded(uint64) = extract_value(arr#6, 1u)
+        let values%24#0: uint64 = decode_bytes<uint64>(array_item%24#0)
+        let tmp%75#0: bool = (== values%24#0 10u)
+        let tmp%76#0: bool = (&& tmp%74#0 tmp%75#0)
+        let array_item%25#0: Encoded(uint64) = extract_value(arr#6, 2u)
+        let values%25#0: uint64 = decode_bytes<uint64>(array_item%25#0)
+        let tmp%77#0: bool = (== values%25#0 3u)
+        let tmp%78#0: bool = (&& tmp%76#0 tmp%77#0)
+        let array_item%26#0: Encoded(uint64) = extract_value(arr#6, 3u)
+        let values%26#0: uint64 = decode_bytes<uint64>(array_item%26#0)
+        let tmp%79#0: bool = (== values%26#0 4u)
+        let tmp%80#0: bool = (&& tmp%78#0 tmp%79#0)
+        let array_item%27#0: Encoded(uint64) = extract_value(arr#6, 4u)
+        let values%27#0: uint64 = decode_bytes<uint64>(array_item%27#0)
+        let tmp%81#0: bool = (== values%27#0 1u)
+        let tmp%82#0: bool = (&& tmp%80#0 tmp%81#0)
+        let array_item%28#0: Encoded(uint64) = extract_value(arr#6, 5u)
+        let values%28#0: uint64 = decode_bytes<uint64>(array_item%28#0)
+        let tmp%83#0: bool = (== values%28#0 10u)
+        let tmp%84#0: bool = (&& tmp%82#0 tmp%83#0)
+        let array_item%29#0: Encoded(uint64) = extract_value(arr#6, 6u)
+        let values%29#0: uint64 = decode_bytes<uint64>(array_item%29#0)
+        let tmp%85#0: bool = (== values%29#0 3u)
+        let tmp%86#0: bool = (&& tmp%84#0 tmp%85#0)
+        let array_item%30#0: Encoded(uint64) = extract_value(arr#6, 7u)
+        let values%30#0: uint64 = decode_bytes<uint64>(array_item%30#0)
+        let tmp%87#0: bool = (== values%30#0 4u)
+        let tmp%88#0: bool = (&& tmp%86#0 tmp%87#0)
+        let array_item%31#0: Encoded(uint64) = extract_value(arr#6, 8u)
+        let values%31#0: uint64 = decode_bytes<uint64>(array_item%31#0)
+        let tmp%89#0: bool = (== values%31#0 11u)
+        let tmp%90#0: bool = (&& tmp%88#0 tmp%89#0)
+        let array_item%32#0: Encoded(uint64) = extract_value(arr#6, 9u)
+        let values%32#0: uint64 = decode_bytes<uint64>(array_item%32#0)
+        let tmp%91#0: bool = (== values%32#0 12u)
+        let tmp%92#0: bool = (&& tmp%90#0 tmp%91#0)
+        let array_item%33#0: Encoded(uint64) = extract_value(arr#6, 10u)
+        let values%33#0: uint64 = decode_bytes<uint64>(array_item%33#0)
+        let tmp%93#0: bool = (== values%33#0 13u)
+        let tmp%94#0: bool = (&& tmp%92#0 tmp%93#0)
+        (assert tmp%94#0) // assert target is match for conditions
+        let encoded_array%0#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(1u, 2u, 3u)
+        let rArr1#0: Encoded(len+uint64[]) = encoded_array%0#0
+        let tmp%95#0: uint64 = array_len(rArr1#0)
+        let tmp%96#0: Encoded(uint64[]) = bytes_encode<uint64[]>(4u)
+        let concat%5#0: Encoded(len+uint64[]) = (concat rArr1#0 tmp%96#0) // on error: max array length exceeded
+        let extract_uint16%3#0: uint64 = (extract_uint16 rArr1#0 0u)
+        let add%3#0: uint64 = (+ extract_uint16%3#0 1u)
+        let as_bytes%5#0: bytes[8] = (itob add%3#0)
+        let as_u16_bytes%5#0: bytes = ((extract 6 2) as_bytes%5#0)
+        let replace%5#0: bytes = (replace3 concat%5#0 0u as_u16_bytes%5#0)
+        let as_Encoded(len+uint64[])%5#0: Encoded(len+uint64[]) = replace%5#0
+        let tmp%97#0: uint64 = array_len(as_Encoded(len+uint64[])%5#0)
+        let rArr1#1: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%5#0
+        let tmp%98#0: uint64 = array_len(rArr1#1)
+        let encoded_array%1#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(5u)
+        let total_length%3#0: uint64 = (len encoded_array%1#0)
+        let extract_to_end%3#0: bytes = (substring3 encoded_array%1#0 2u total_length%3#0)
+        let concat%6#0: Encoded(len+uint64[]) = (concat rArr1#1 extract_to_end%3#0) // on error: max array length exceeded
+        let total_length%4#0: uint64 = (len concat%6#0)
+        let extract_to_end%4#0: bytes = (substring3 concat%6#0 2u total_length%4#0)
+        let len%2#0: uint64 = (len extract_to_end%4#0)
+        let div_floor%2#0: uint64 = (/ len%2#0 8u)
+        let as_bytes%6#0: bytes[8] = (itob div_floor%2#0)
+        let as_u16_bytes%6#0: bytes = ((extract 6 2) as_bytes%6#0)
+        let replace%6#0: bytes = (replace3 concat%6#0 0u as_u16_bytes%6#0)
+        let as_Encoded(len+uint64[])%6#0: Encoded(len+uint64[]) = replace%6#0
+        let tmp%99#0: uint64 = array_len(as_Encoded(len+uint64[])%6#0)
+        let rArr1#2: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%6#0
+        let tmp%100#0: uint64 = array_len(rArr1#2)
+        let tmp%101#0: bool = (== tmp%100#0 5u)
+        let array_item%34#0: Encoded(uint64) = extract_value(rArr1#2, 0u)
+        let values%34#0: uint64 = decode_bytes<uint64>(array_item%34#0)
+        let tmp%102#0: bool = (== values%34#0 1u)
+        let tmp%103#0: bool = (&& tmp%101#0 tmp%102#0)
+        let array_item%35#0: Encoded(uint64) = extract_value(rArr1#2, 1u)
+        let values%35#0: uint64 = decode_bytes<uint64>(array_item%35#0)
+        let tmp%104#0: bool = (== values%35#0 2u)
+        let tmp%105#0: bool = (&& tmp%103#0 tmp%104#0)
+        let array_item%36#0: Encoded(uint64) = extract_value(rArr1#2, 2u)
+        let values%36#0: uint64 = decode_bytes<uint64>(array_item%36#0)
+        let tmp%106#0: bool = (== values%36#0 3u)
+        let tmp%107#0: bool = (&& tmp%105#0 tmp%106#0)
+        let array_item%37#0: Encoded(uint64) = extract_value(rArr1#2, 3u)
+        let values%37#0: uint64 = decode_bytes<uint64>(array_item%37#0)
+        let tmp%108#0: bool = (== values%37#0 4u)
+        let tmp%109#0: bool = (&& tmp%107#0 tmp%108#0)
+        let array_item%38#0: Encoded(uint64) = extract_value(rArr1#2, 4u)
+        let values%38#0: uint64 = decode_bytes<uint64>(array_item%38#0)
+        let tmp%110#0: bool = (== values%38#0 5u)
+        let tmp%111#0: bool = (&& tmp%109#0 tmp%110#0)
+        (assert tmp%111#0) // assert target is match for conditions
+        let tmp%112#0: Encoded(uint64[4]) = (bzero 32u)
+        let fArr1#0: Encoded(uint64[4]) = tmp%112#0
+        let tmp%113#0: uint64 = array_len(fArr1#0)
+        let as_bytes%7#0: bytes[8] = (itob tmp%113#0)
+        let as_u16_bytes%7#0: bytes = ((extract 6 2) as_bytes%7#0)
+        let converted_array%0#0: Encoded(len+uint64[]) = (concat as_u16_bytes%7#0 fArr1#0)
+        let concat%7#0: Encoded(len+uint64[]) = (concat converted_array%0#0 fArr1#0) // on error: max array length exceeded
+        let total_length%5#0: uint64 = (len concat%7#0)
+        let extract_to_end%5#0: bytes = (substring3 concat%7#0 2u total_length%5#0)
+        let len%3#0: uint64 = (len extract_to_end%5#0)
+        let div_floor%3#0: uint64 = (/ len%3#0 8u)
+        let as_bytes%8#0: bytes[8] = (itob div_floor%3#0)
+        let as_u16_bytes%8#0: bytes = ((extract 6 2) as_bytes%8#0)
+        let replace%7#0: bytes = (replace3 concat%7#0 0u as_u16_bytes%8#0)
+        let as_Encoded(len+uint64[])%7#0: Encoded(len+uint64[]) = replace%7#0
+        let fArr2#0: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%7#0
+        let tmp%114#0: uint64 = array_len(fArr1#0)
+        let tmp%115#0: bool = (== tmp%114#0 4u)
+        let array_item%39#0: Encoded(uint64) = extract_value(fArr1#0, 0u)
+        let values%39#0: uint64 = decode_bytes<uint64>(array_item%39#0)
+        let tmp%116#0: bool = (== values%39#0 0u)
+        let tmp%117#0: bool = (&& tmp%115#0 tmp%116#0)
+        let array_item%40#0: Encoded(uint64) = extract_value(fArr1#0, 1u)
+        let values%40#0: uint64 = decode_bytes<uint64>(array_item%40#0)
+        let tmp%118#0: bool = (== values%40#0 0u)
+        let tmp%119#0: bool = (&& tmp%117#0 tmp%118#0)
+        let array_item%41#0: Encoded(uint64) = extract_value(fArr1#0, 2u)
+        let values%41#0: uint64 = decode_bytes<uint64>(array_item%41#0)
+        let tmp%120#0: bool = (== values%41#0 0u)
+        let tmp%121#0: bool = (&& tmp%119#0 tmp%120#0)
+        let array_item%42#0: Encoded(uint64) = extract_value(fArr1#0, 3u)
+        let values%42#0: uint64 = decode_bytes<uint64>(array_item%42#0)
+        let tmp%122#0: bool = (== values%42#0 0u)
+        let tmp%123#0: bool = (&& tmp%121#0 tmp%122#0)
+        (assert tmp%123#0) // assert target is match for conditions
+        let tmp%124#0: uint64 = array_len(fArr2#0)
+        let tmp%125#0: bool = (== tmp%124#0 8u)
+        let array_item%43#0: Encoded(uint64) = extract_value(fArr2#0, 0u)
+        let values%43#0: uint64 = decode_bytes<uint64>(array_item%43#0)
+        let tmp%126#0: bool = (== values%43#0 0u)
+        let tmp%127#0: bool = (&& tmp%125#0 tmp%126#0)
+        let array_item%44#0: Encoded(uint64) = extract_value(fArr2#0, 1u)
+        let values%44#0: uint64 = decode_bytes<uint64>(array_item%44#0)
+        let tmp%128#0: bool = (== values%44#0 0u)
+        let tmp%129#0: bool = (&& tmp%127#0 tmp%128#0)
+        let array_item%45#0: Encoded(uint64) = extract_value(fArr2#0, 2u)
+        let values%45#0: uint64 = decode_bytes<uint64>(array_item%45#0)
+        let tmp%130#0: bool = (== values%45#0 0u)
+        let tmp%131#0: bool = (&& tmp%129#0 tmp%130#0)
+        let array_item%46#0: Encoded(uint64) = extract_value(fArr2#0, 3u)
+        let values%46#0: uint64 = decode_bytes<uint64>(array_item%46#0)
+        let tmp%132#0: bool = (== values%46#0 0u)
+        let tmp%133#0: bool = (&& tmp%131#0 tmp%132#0)
+        let array_item%47#0: Encoded(uint64) = extract_value(fArr2#0, 4u)
+        let values%47#0: uint64 = decode_bytes<uint64>(array_item%47#0)
+        let tmp%134#0: bool = (== values%47#0 0u)
+        let tmp%135#0: bool = (&& tmp%133#0 tmp%134#0)
+        let array_item%48#0: Encoded(uint64) = extract_value(fArr2#0, 5u)
+        let values%48#0: uint64 = decode_bytes<uint64>(array_item%48#0)
+        let tmp%136#0: bool = (== values%48#0 0u)
+        let tmp%137#0: bool = (&& tmp%135#0 tmp%136#0)
+        let array_item%49#0: Encoded(uint64) = extract_value(fArr2#0, 6u)
+        let values%49#0: uint64 = decode_bytes<uint64>(array_item%49#0)
+        let tmp%138#0: bool = (== values%49#0 0u)
+        let tmp%139#0: bool = (&& tmp%137#0 tmp%138#0)
+        let array_item%50#0: Encoded(uint64) = extract_value(fArr2#0, 7u)
+        let values%50#0: uint64 = decode_bytes<uint64>(array_item%50#0)
+        let tmp%140#0: bool = (== values%50#0 0u)
+        let tmp%141#0: bool = (&& tmp%139#0 tmp%140#0)
+        (assert tmp%141#0) // assert target is match for conditions
+        let tmp%142#0: uint64 = array_len(rArr1#2)
+        let total_length%6#0: uint64 = (len fArr2#0)
+        let extract_to_end%6#0: bytes = (substring3 fArr2#0 2u total_length%6#0)
+        let concat%8#0: Encoded(len+uint64[]) = (concat rArr1#2 extract_to_end%6#0) // on error: max array length exceeded
+        let total_length%7#0: uint64 = (len concat%8#0)
+        let extract_to_end%7#0: bytes = (substring3 concat%8#0 2u total_length%7#0)
+        let len%4#0: uint64 = (len extract_to_end%7#0)
+        let div_floor%4#0: uint64 = (/ len%4#0 8u)
+        let as_bytes%9#0: bytes[8] = (itob div_floor%4#0)
+        let as_u16_bytes%9#0: bytes = ((extract 6 2) as_bytes%9#0)
+        let replace%8#0: bytes = (replace3 concat%8#0 0u as_u16_bytes%9#0)
+        let as_Encoded(len+uint64[])%8#0: Encoded(len+uint64[]) = replace%8#0
+        let arr3#0: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%8#0
+        let tmp%143#0: uint64 = array_len(arr3#0)
+        let tmp%144#0: bool = (== tmp%143#0 13u)
+        let array_item%51#0: Encoded(uint64) = extract_value(arr3#0, 0u)
+        let values%51#0: uint64 = decode_bytes<uint64>(array_item%51#0)
+        let tmp%145#0: bool = (== values%51#0 1u)
+        let tmp%146#0: bool = (&& tmp%144#0 tmp%145#0)
+        let array_item%52#0: Encoded(uint64) = extract_value(arr3#0, 1u)
+        let values%52#0: uint64 = decode_bytes<uint64>(array_item%52#0)
+        let tmp%147#0: bool = (== values%52#0 2u)
+        let tmp%148#0: bool = (&& tmp%146#0 tmp%147#0)
+        let array_item%53#0: Encoded(uint64) = extract_value(arr3#0, 2u)
+        let values%53#0: uint64 = decode_bytes<uint64>(array_item%53#0)
+        let tmp%149#0: bool = (== values%53#0 3u)
+        let tmp%150#0: bool = (&& tmp%148#0 tmp%149#0)
+        let array_item%54#0: Encoded(uint64) = extract_value(arr3#0, 3u)
+        let values%54#0: uint64 = decode_bytes<uint64>(array_item%54#0)
+        let tmp%151#0: bool = (== values%54#0 4u)
+        let tmp%152#0: bool = (&& tmp%150#0 tmp%151#0)
+        let array_item%55#0: Encoded(uint64) = extract_value(arr3#0, 4u)
+        let values%55#0: uint64 = decode_bytes<uint64>(array_item%55#0)
+        let tmp%153#0: bool = (== values%55#0 5u)
+        let tmp%154#0: bool = (&& tmp%152#0 tmp%153#0)
+        let array_item%56#0: Encoded(uint64) = extract_value(arr3#0, 5u)
+        let values%56#0: uint64 = decode_bytes<uint64>(array_item%56#0)
+        let tmp%155#0: bool = (== values%56#0 0u)
+        let tmp%156#0: bool = (&& tmp%154#0 tmp%155#0)
+        let array_item%57#0: Encoded(uint64) = extract_value(arr3#0, 6u)
+        let values%57#0: uint64 = decode_bytes<uint64>(array_item%57#0)
+        let tmp%157#0: bool = (== values%57#0 0u)
+        let tmp%158#0: bool = (&& tmp%156#0 tmp%157#0)
+        let array_item%58#0: Encoded(uint64) = extract_value(arr3#0, 7u)
+        let values%58#0: uint64 = decode_bytes<uint64>(array_item%58#0)
+        let tmp%159#0: bool = (== values%58#0 0u)
+        let tmp%160#0: bool = (&& tmp%158#0 tmp%159#0)
+        let array_item%59#0: Encoded(uint64) = extract_value(arr3#0, 8u)
+        let values%59#0: uint64 = decode_bytes<uint64>(array_item%59#0)
+        let tmp%161#0: bool = (== values%59#0 0u)
+        let tmp%162#0: bool = (&& tmp%160#0 tmp%161#0)
+        let array_item%60#0: Encoded(uint64) = extract_value(arr3#0, 9u)
+        let values%60#0: uint64 = decode_bytes<uint64>(array_item%60#0)
+        let tmp%163#0: bool = (== values%60#0 0u)
+        let tmp%164#0: bool = (&& tmp%162#0 tmp%163#0)
+        let array_item%61#0: Encoded(uint64) = extract_value(arr3#0, 10u)
+        let values%61#0: uint64 = decode_bytes<uint64>(array_item%61#0)
+        let tmp%165#0: bool = (== values%61#0 0u)
+        let tmp%166#0: bool = (&& tmp%164#0 tmp%165#0)
+        let array_item%62#0: Encoded(uint64) = extract_value(arr3#0, 11u)
+        let values%62#0: uint64 = decode_bytes<uint64>(array_item%62#0)
+        let tmp%167#0: bool = (== values%62#0 0u)
+        let tmp%168#0: bool = (&& tmp%166#0 tmp%167#0)
+        let array_item%63#0: Encoded(uint64) = extract_value(arr3#0, 12u)
+        let values%63#0: uint64 = decode_bytes<uint64>(array_item%63#0)
+        let tmp%169#0: bool = (== values%63#0 0u)
+        let tmp%170#0: bool = (&& tmp%168#0 tmp%169#0)
+        (assert tmp%170#0) // assert target is match for conditions
+        let tmp%171#0: uint64 = array_len(rArr1#2)
+        let total_length%8#0: uint64 = (len arr#6)
+        let extract_to_end%8#0: bytes = (substring3 arr#6 2u total_length%8#0)
+        let concat%9#0: Encoded(len+uint64[]) = (concat rArr1#2 extract_to_end%8#0) // on error: max array length exceeded
+        let total_length%9#0: uint64 = (len concat%9#0)
+        let extract_to_end%9#0: bytes = (substring3 concat%9#0 2u total_length%9#0)
+        let len%5#0: uint64 = (len extract_to_end%9#0)
+        let div_floor%5#0: uint64 = (/ len%5#0 8u)
+        let as_bytes%10#0: bytes[8] = (itob div_floor%5#0)
+        let as_u16_bytes%10#0: bytes = ((extract 6 2) as_bytes%10#0)
+        let replace%9#0: bytes = (replace3 concat%9#0 0u as_u16_bytes%10#0)
+        let as_Encoded(len+uint64[])%9#0: Encoded(len+uint64[]) = replace%9#0
+        let arr4#0: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%9#0
+        let tmp%172#0: uint64 = array_len(arr4#0)
+        let tmp%173#0: bool = (== tmp%172#0 16u)
+        let array_item%64#0: Encoded(uint64) = extract_value(arr4#0, 0u)
+        let values%64#0: uint64 = decode_bytes<uint64>(array_item%64#0)
+        let tmp%174#0: bool = (== values%64#0 1u)
+        let tmp%175#0: bool = (&& tmp%173#0 tmp%174#0)
+        let array_item%65#0: Encoded(uint64) = extract_value(arr4#0, 1u)
+        let values%65#0: uint64 = decode_bytes<uint64>(array_item%65#0)
+        let tmp%176#0: bool = (== values%65#0 2u)
+        let tmp%177#0: bool = (&& tmp%175#0 tmp%176#0)
+        let array_item%66#0: Encoded(uint64) = extract_value(arr4#0, 2u)
+        let values%66#0: uint64 = decode_bytes<uint64>(array_item%66#0)
+        let tmp%178#0: bool = (== values%66#0 3u)
+        let tmp%179#0: bool = (&& tmp%177#0 tmp%178#0)
+        let array_item%67#0: Encoded(uint64) = extract_value(arr4#0, 3u)
+        let values%67#0: uint64 = decode_bytes<uint64>(array_item%67#0)
+        let tmp%180#0: bool = (== values%67#0 4u)
+        let tmp%181#0: bool = (&& tmp%179#0 tmp%180#0)
+        let array_item%68#0: Encoded(uint64) = extract_value(arr4#0, 4u)
+        let values%68#0: uint64 = decode_bytes<uint64>(array_item%68#0)
+        let tmp%182#0: bool = (== values%68#0 5u)
+        let tmp%183#0: bool = (&& tmp%181#0 tmp%182#0)
+        let array_item%69#0: Encoded(uint64) = extract_value(arr4#0, 5u)
+        let values%69#0: uint64 = decode_bytes<uint64>(array_item%69#0)
+        let tmp%184#0: bool = (== values%69#0 1u)
+        let tmp%185#0: bool = (&& tmp%183#0 tmp%184#0)
+        let array_item%70#0: Encoded(uint64) = extract_value(arr4#0, 6u)
+        let values%70#0: uint64 = decode_bytes<uint64>(array_item%70#0)
+        let tmp%186#0: bool = (== values%70#0 10u)
+        let tmp%187#0: bool = (&& tmp%185#0 tmp%186#0)
+        let array_item%71#0: Encoded(uint64) = extract_value(arr4#0, 7u)
+        let values%71#0: uint64 = decode_bytes<uint64>(array_item%71#0)
+        let tmp%188#0: bool = (== values%71#0 3u)
+        let tmp%189#0: bool = (&& tmp%187#0 tmp%188#0)
+        let array_item%72#0: Encoded(uint64) = extract_value(arr4#0, 8u)
+        let values%72#0: uint64 = decode_bytes<uint64>(array_item%72#0)
+        let tmp%190#0: bool = (== values%72#0 4u)
+        let tmp%191#0: bool = (&& tmp%189#0 tmp%190#0)
+        let array_item%73#0: Encoded(uint64) = extract_value(arr4#0, 9u)
+        let values%73#0: uint64 = decode_bytes<uint64>(array_item%73#0)
+        let tmp%192#0: bool = (== values%73#0 1u)
+        let tmp%193#0: bool = (&& tmp%191#0 tmp%192#0)
+        let array_item%74#0: Encoded(uint64) = extract_value(arr4#0, 10u)
+        let values%74#0: uint64 = decode_bytes<uint64>(array_item%74#0)
+        let tmp%194#0: bool = (== values%74#0 10u)
+        let tmp%195#0: bool = (&& tmp%193#0 tmp%194#0)
+        let array_item%75#0: Encoded(uint64) = extract_value(arr4#0, 11u)
+        let values%75#0: uint64 = decode_bytes<uint64>(array_item%75#0)
+        let tmp%196#0: bool = (== values%75#0 3u)
+        let tmp%197#0: bool = (&& tmp%195#0 tmp%196#0)
+        let array_item%76#0: Encoded(uint64) = extract_value(arr4#0, 12u)
+        let values%76#0: uint64 = decode_bytes<uint64>(array_item%76#0)
+        let tmp%198#0: bool = (== values%76#0 4u)
+        let tmp%199#0: bool = (&& tmp%197#0 tmp%198#0)
+        let array_item%77#0: Encoded(uint64) = extract_value(arr4#0, 13u)
+        let values%77#0: uint64 = decode_bytes<uint64>(array_item%77#0)
+        let tmp%200#0: bool = (== values%77#0 11u)
+        let tmp%201#0: bool = (&& tmp%199#0 tmp%200#0)
+        let array_item%78#0: Encoded(uint64) = extract_value(arr4#0, 14u)
+        let values%78#0: uint64 = decode_bytes<uint64>(array_item%78#0)
+        let tmp%202#0: bool = (== values%78#0 12u)
+        let tmp%203#0: bool = (&& tmp%201#0 tmp%202#0)
+        let array_item%79#0: Encoded(uint64) = extract_value(arr4#0, 15u)
+        let values%79#0: uint64 = decode_bytes<uint64>(array_item%79#0)
+        let tmp%204#0: bool = (== values%79#0 13u)
+        let tmp%205#0: bool = (&& tmp%203#0 tmp%204#0)
+        (assert tmp%205#0) // assert target is match for conditions
+        let tmp%206#0: uint64 = array_len(fArr1#0)
+        let as_bytes%11#0: bytes[8] = (itob tmp%206#0)
+        let as_u16_bytes%11#0: bytes = ((extract 6 2) as_bytes%11#0)
+        let converted_array%1#0: Encoded(len+uint64[]) = (concat as_u16_bytes%11#0 fArr1#0)
+        let total_length%10#0: uint64 = (len rArr1#2)
+        let extract_to_end%10#0: bytes = (substring3 rArr1#2 2u total_length%10#0)
+        let concat%10#0: Encoded(len+uint64[]) = (concat converted_array%1#0 extract_to_end%10#0) // on error: max array length exceeded
+        let total_length%11#0: uint64 = (len concat%10#0)
+        let extract_to_end%11#0: bytes = (substring3 concat%10#0 2u total_length%11#0)
+        let len%6#0: uint64 = (len extract_to_end%11#0)
+        let div_floor%6#0: uint64 = (/ len%6#0 8u)
+        let as_bytes%12#0: bytes[8] = (itob div_floor%6#0)
+        let as_u16_bytes%12#0: bytes = ((extract 6 2) as_bytes%12#0)
+        let replace%10#0: bytes = (replace3 concat%10#0 0u as_u16_bytes%12#0)
+        let as_Encoded(len+uint64[])%10#0: Encoded(len+uint64[]) = replace%10#0
+        let arr5#0: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%10#0
+        let tmp%207#0: uint64 = array_len(arr5#0)
+        let tmp%208#0: bool = (== tmp%207#0 9u)
+        let array_item%80#0: Encoded(uint64) = extract_value(arr5#0, 0u)
+        let values%80#0: uint64 = decode_bytes<uint64>(array_item%80#0)
+        let tmp%209#0: bool = (== values%80#0 0u)
+        let tmp%210#0: bool = (&& tmp%208#0 tmp%209#0)
+        let array_item%81#0: Encoded(uint64) = extract_value(arr5#0, 1u)
+        let values%81#0: uint64 = decode_bytes<uint64>(array_item%81#0)
+        let tmp%211#0: bool = (== values%81#0 0u)
+        let tmp%212#0: bool = (&& tmp%210#0 tmp%211#0)
+        let array_item%82#0: Encoded(uint64) = extract_value(arr5#0, 2u)
+        let values%82#0: uint64 = decode_bytes<uint64>(array_item%82#0)
+        let tmp%213#0: bool = (== values%82#0 0u)
+        let tmp%214#0: bool = (&& tmp%212#0 tmp%213#0)
+        let array_item%83#0: Encoded(uint64) = extract_value(arr5#0, 3u)
+        let values%83#0: uint64 = decode_bytes<uint64>(array_item%83#0)
+        let tmp%215#0: bool = (== values%83#0 0u)
+        let tmp%216#0: bool = (&& tmp%214#0 tmp%215#0)
+        let array_item%84#0: Encoded(uint64) = extract_value(arr5#0, 4u)
+        let values%84#0: uint64 = decode_bytes<uint64>(array_item%84#0)
+        let tmp%217#0: bool = (== values%84#0 1u)
+        let tmp%218#0: bool = (&& tmp%216#0 tmp%217#0)
+        let array_item%85#0: Encoded(uint64) = extract_value(arr5#0, 5u)
+        let values%85#0: uint64 = decode_bytes<uint64>(array_item%85#0)
+        let tmp%219#0: bool = (== values%85#0 2u)
+        let tmp%220#0: bool = (&& tmp%218#0 tmp%219#0)
+        let array_item%86#0: Encoded(uint64) = extract_value(arr5#0, 6u)
+        let values%86#0: uint64 = decode_bytes<uint64>(array_item%86#0)
+        let tmp%221#0: bool = (== values%86#0 3u)
+        let tmp%222#0: bool = (&& tmp%220#0 tmp%221#0)
+        let array_item%87#0: Encoded(uint64) = extract_value(arr5#0, 7u)
+        let values%87#0: uint64 = decode_bytes<uint64>(array_item%87#0)
+        let tmp%223#0: bool = (== values%87#0 4u)
+        let tmp%224#0: bool = (&& tmp%222#0 tmp%223#0)
+        let array_item%88#0: Encoded(uint64) = extract_value(arr5#0, 8u)
+        let values%88#0: uint64 = decode_bytes<uint64>(array_item%88#0)
+        let tmp%225#0: bool = (== values%88#0 5u)
+        let tmp%226#0: bool = (&& tmp%224#0 tmp%225#0)
+        (assert tmp%226#0) // assert target is match for conditions
+        let tmp%227#0: uint64 = array_len(fArr1#0)
+        let as_bytes%13#0: bytes[8] = (itob tmp%227#0)
+        let as_u16_bytes%13#0: bytes = ((extract 6 2) as_bytes%13#0)
+        let converted_array%2#0: Encoded(len+uint64[]) = (concat as_u16_bytes%13#0 fArr1#0)
+        let total_length%12#0: uint64 = (len arr#6)
+        let extract_to_end%12#0: bytes = (substring3 arr#6 2u total_length%12#0)
+        let concat%11#0: Encoded(len+uint64[]) = (concat converted_array%2#0 extract_to_end%12#0) // on error: max array length exceeded
+        let total_length%13#0: uint64 = (len concat%11#0)
+        let extract_to_end%13#0: bytes = (substring3 concat%11#0 2u total_length%13#0)
+        let len%7#0: uint64 = (len extract_to_end%13#0)
+        let div_floor%7#0: uint64 = (/ len%7#0 8u)
+        let as_bytes%14#0: bytes[8] = (itob div_floor%7#0)
+        let as_u16_bytes%14#0: bytes = ((extract 6 2) as_bytes%14#0)
+        let replace%11#0: bytes = (replace3 concat%11#0 0u as_u16_bytes%14#0)
+        let as_Encoded(len+uint64[])%11#0: Encoded(len+uint64[]) = replace%11#0
+        let arr6#0: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%11#0
+        let tmp%228#0: uint64 = array_len(arr6#0)
+        let tmp%229#0: bool = (== tmp%228#0 15u)
+        let array_item%89#0: Encoded(uint64) = extract_value(arr6#0, 0u)
+        let values%89#0: uint64 = decode_bytes<uint64>(array_item%89#0)
+        let tmp%230#0: bool = (== values%89#0 0u)
+        let tmp%231#0: bool = (&& tmp%229#0 tmp%230#0)
+        let array_item%90#0: Encoded(uint64) = extract_value(arr6#0, 1u)
+        let values%90#0: uint64 = decode_bytes<uint64>(array_item%90#0)
+        let tmp%232#0: bool = (== values%90#0 0u)
+        let tmp%233#0: bool = (&& tmp%231#0 tmp%232#0)
+        let array_item%91#0: Encoded(uint64) = extract_value(arr6#0, 2u)
+        let values%91#0: uint64 = decode_bytes<uint64>(array_item%91#0)
+        let tmp%234#0: bool = (== values%91#0 0u)
+        let tmp%235#0: bool = (&& tmp%233#0 tmp%234#0)
+        let array_item%92#0: Encoded(uint64) = extract_value(arr6#0, 3u)
+        let values%92#0: uint64 = decode_bytes<uint64>(array_item%92#0)
+        let tmp%236#0: bool = (== values%92#0 0u)
+        let tmp%237#0: bool = (&& tmp%235#0 tmp%236#0)
+        let array_item%93#0: Encoded(uint64) = extract_value(arr6#0, 4u)
+        let values%93#0: uint64 = decode_bytes<uint64>(array_item%93#0)
+        let tmp%238#0: bool = (== values%93#0 1u)
+        let tmp%239#0: bool = (&& tmp%237#0 tmp%238#0)
+        let array_item%94#0: Encoded(uint64) = extract_value(arr6#0, 5u)
+        let values%94#0: uint64 = decode_bytes<uint64>(array_item%94#0)
+        let tmp%240#0: bool = (== values%94#0 10u)
+        let tmp%241#0: bool = (&& tmp%239#0 tmp%240#0)
+        let array_item%95#0: Encoded(uint64) = extract_value(arr6#0, 6u)
+        let values%95#0: uint64 = decode_bytes<uint64>(array_item%95#0)
+        let tmp%242#0: bool = (== values%95#0 3u)
+        let tmp%243#0: bool = (&& tmp%241#0 tmp%242#0)
+        let array_item%96#0: Encoded(uint64) = extract_value(arr6#0, 7u)
+        let values%96#0: uint64 = decode_bytes<uint64>(array_item%96#0)
+        let tmp%244#0: bool = (== values%96#0 4u)
+        let tmp%245#0: bool = (&& tmp%243#0 tmp%244#0)
+        let array_item%97#0: Encoded(uint64) = extract_value(arr6#0, 8u)
+        let values%97#0: uint64 = decode_bytes<uint64>(array_item%97#0)
+        let tmp%246#0: bool = (== values%97#0 1u)
+        let tmp%247#0: bool = (&& tmp%245#0 tmp%246#0)
+        let array_item%98#0: Encoded(uint64) = extract_value(arr6#0, 9u)
+        let values%98#0: uint64 = decode_bytes<uint64>(array_item%98#0)
+        let tmp%248#0: bool = (== values%98#0 10u)
+        let tmp%249#0: bool = (&& tmp%247#0 tmp%248#0)
+        let array_item%99#0: Encoded(uint64) = extract_value(arr6#0, 10u)
+        let values%99#0: uint64 = decode_bytes<uint64>(array_item%99#0)
+        let tmp%250#0: bool = (== values%99#0 3u)
+        let tmp%251#0: bool = (&& tmp%249#0 tmp%250#0)
+        let array_item%100#0: Encoded(uint64) = extract_value(arr6#0, 11u)
+        let values%100#0: uint64 = decode_bytes<uint64>(array_item%100#0)
+        let tmp%252#0: bool = (== values%100#0 4u)
+        let tmp%253#0: bool = (&& tmp%251#0 tmp%252#0)
+        let array_item%101#0: Encoded(uint64) = extract_value(arr6#0, 12u)
+        let values%101#0: uint64 = decode_bytes<uint64>(array_item%101#0)
+        let tmp%254#0: bool = (== values%101#0 11u)
+        let tmp%255#0: bool = (&& tmp%253#0 tmp%254#0)
+        let array_item%102#0: Encoded(uint64) = extract_value(arr6#0, 13u)
+        let values%102#0: uint64 = decode_bytes<uint64>(array_item%102#0)
+        let tmp%256#0: bool = (== values%102#0 12u)
+        let tmp%257#0: bool = (&& tmp%255#0 tmp%256#0)
+        let array_item%103#0: Encoded(uint64) = extract_value(arr6#0, 14u)
+        let values%103#0: uint64 = decode_bytes<uint64>(array_item%103#0)
+        let tmp%258#0: bool = (== values%103#0 13u)
+        let tmp%259#0: bool = (&& tmp%257#0 tmp%258#0)
+        (assert tmp%259#0) // assert target is match for conditions
+        let total_length%14#0: uint64 = (len rArr1#2)
+        let extract_to_end%14#0: bytes = (substring3 rArr1#2 2u total_length%14#0)
+        let concat%12#0: Encoded(len+uint64[]) = (concat arr#6 extract_to_end%14#0) // on error: max array length exceeded
+        let total_length%15#0: uint64 = (len concat%12#0)
+        let extract_to_end%15#0: bytes = (substring3 concat%12#0 2u total_length%15#0)
+        let len%8#0: uint64 = (len extract_to_end%15#0)
+        let div_floor%8#0: uint64 = (/ len%8#0 8u)
+        let as_bytes%15#0: bytes[8] = (itob div_floor%8#0)
+        let as_u16_bytes%15#0: bytes = ((extract 6 2) as_bytes%15#0)
+        let replace%12#0: bytes = (replace3 concat%12#0 0u as_u16_bytes%15#0)
+        let as_Encoded(len+uint64[])%12#0: Encoded(len+uint64[]) = replace%12#0
+        let arr7#0: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%12#0
+        let tmp%260#0: uint64 = array_len(arr7#0)
+        let tmp%261#0: bool = (== tmp%260#0 16u)
+        (assert tmp%261#0)
+        let tmp%262#0: uint64 = array_len(arr7#0)
+        let tmp%263#0: bool = (== tmp%262#0 16u)
+        let array_item%104#0: Encoded(uint64) = extract_value(arr7#0, 0u)
+        let values%104#0: uint64 = decode_bytes<uint64>(array_item%104#0)
+        let tmp%264#0: bool = (== values%104#0 1u)
+        let tmp%265#0: bool = (&& tmp%263#0 tmp%264#0)
+        let array_item%105#0: Encoded(uint64) = extract_value(arr7#0, 1u)
+        let values%105#0: uint64 = decode_bytes<uint64>(array_item%105#0)
+        let tmp%266#0: bool = (== values%105#0 10u)
+        let tmp%267#0: bool = (&& tmp%265#0 tmp%266#0)
+        let array_item%106#0: Encoded(uint64) = extract_value(arr7#0, 2u)
+        let values%106#0: uint64 = decode_bytes<uint64>(array_item%106#0)
+        let tmp%268#0: bool = (== values%106#0 3u)
+        let tmp%269#0: bool = (&& tmp%267#0 tmp%268#0)
+        let array_item%107#0: Encoded(uint64) = extract_value(arr7#0, 3u)
+        let values%107#0: uint64 = decode_bytes<uint64>(array_item%107#0)
+        let tmp%270#0: bool = (== values%107#0 4u)
+        let tmp%271#0: bool = (&& tmp%269#0 tmp%270#0)
+        let array_item%108#0: Encoded(uint64) = extract_value(arr7#0, 4u)
+        let values%108#0: uint64 = decode_bytes<uint64>(array_item%108#0)
+        let tmp%272#0: bool = (== values%108#0 1u)
+        let tmp%273#0: bool = (&& tmp%271#0 tmp%272#0)
+        let array_item%109#0: Encoded(uint64) = extract_value(arr7#0, 5u)
+        let values%109#0: uint64 = decode_bytes<uint64>(array_item%109#0)
+        let tmp%274#0: bool = (== values%109#0 10u)
+        let tmp%275#0: bool = (&& tmp%273#0 tmp%274#0)
+        let array_item%110#0: Encoded(uint64) = extract_value(arr7#0, 6u)
+        let values%110#0: uint64 = decode_bytes<uint64>(array_item%110#0)
+        let tmp%276#0: bool = (== values%110#0 3u)
+        let tmp%277#0: bool = (&& tmp%275#0 tmp%276#0)
+        let array_item%111#0: Encoded(uint64) = extract_value(arr7#0, 7u)
+        let values%111#0: uint64 = decode_bytes<uint64>(array_item%111#0)
+        let tmp%278#0: bool = (== values%111#0 4u)
+        let tmp%279#0: bool = (&& tmp%277#0 tmp%278#0)
+        let array_item%112#0: Encoded(uint64) = extract_value(arr7#0, 8u)
+        let values%112#0: uint64 = decode_bytes<uint64>(array_item%112#0)
+        let tmp%280#0: bool = (== values%112#0 11u)
+        let tmp%281#0: bool = (&& tmp%279#0 tmp%280#0)
+        let array_item%113#0: Encoded(uint64) = extract_value(arr7#0, 9u)
+        let values%113#0: uint64 = decode_bytes<uint64>(array_item%113#0)
+        let tmp%282#0: bool = (== values%113#0 12u)
+        let tmp%283#0: bool = (&& tmp%281#0 tmp%282#0)
+        let array_item%114#0: Encoded(uint64) = extract_value(arr7#0, 10u)
+        let values%114#0: uint64 = decode_bytes<uint64>(array_item%114#0)
+        let tmp%284#0: bool = (== values%114#0 13u)
+        let tmp%285#0: bool = (&& tmp%283#0 tmp%284#0)
+        let array_item%115#0: Encoded(uint64) = extract_value(arr7#0, 11u)
+        let values%115#0: uint64 = decode_bytes<uint64>(array_item%115#0)
+        let tmp%286#0: bool = (== values%115#0 1u)
+        let tmp%287#0: bool = (&& tmp%285#0 tmp%286#0)
+        let array_item%116#0: Encoded(uint64) = extract_value(arr7#0, 12u)
+        let values%116#0: uint64 = decode_bytes<uint64>(array_item%116#0)
+        let tmp%288#0: bool = (== values%116#0 2u)
+        let tmp%289#0: bool = (&& tmp%287#0 tmp%288#0)
+        let array_item%117#0: Encoded(uint64) = extract_value(arr7#0, 13u)
+        let values%117#0: uint64 = decode_bytes<uint64>(array_item%117#0)
+        let tmp%290#0: bool = (== values%117#0 3u)
+        let tmp%291#0: bool = (&& tmp%289#0 tmp%290#0)
+        let array_item%118#0: Encoded(uint64) = extract_value(arr7#0, 14u)
+        let values%118#0: uint64 = decode_bytes<uint64>(array_item%118#0)
+        let tmp%292#0: bool = (== values%118#0 4u)
+        let tmp%293#0: bool = (&& tmp%291#0 tmp%292#0)
+        let array_item%119#0: Encoded(uint64) = extract_value(arr7#0, 15u)
+        let values%119#0: uint64 = decode_bytes<uint64>(array_item%119#0)
+        let tmp%294#0: bool = (== values%119#0 5u)
+        let tmp%295#0: bool = (&& tmp%293#0 tmp%294#0)
+        (assert tmp%295#0) // assert target is match for conditions
+        let concat%13#0: Encoded(len+uint64[]) = (concat arr#6 fArr1#0) // on error: max array length exceeded
+        let total_length%16#0: uint64 = (len concat%13#0)
+        let extract_to_end%16#0: bytes = (substring3 concat%13#0 2u total_length%16#0)
+        let len%9#0: uint64 = (len extract_to_end%16#0)
+        let div_floor%9#0: uint64 = (/ len%9#0 8u)
+        let as_bytes%16#0: bytes[8] = (itob div_floor%9#0)
+        let as_u16_bytes%16#0: bytes = ((extract 6 2) as_bytes%16#0)
+        let replace%13#0: bytes = (replace3 concat%13#0 0u as_u16_bytes%16#0)
+        let as_Encoded(len+uint64[])%13#0: Encoded(len+uint64[]) = replace%13#0
+        let arr8#0: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%13#0
+        let tmp%296#0: uint64 = array_len(arr8#0)
+        let tmp%297#0: bool = (== tmp%296#0 15u)
+        (assert tmp%297#0)
+        let tmp%298#0: uint64 = array_len(arr8#0)
+        let tmp%299#0: bool = (== tmp%298#0 15u)
+        let array_item%120#0: Encoded(uint64) = extract_value(arr8#0, 0u)
+        let values%120#0: uint64 = decode_bytes<uint64>(array_item%120#0)
+        let tmp%300#0: bool = (== values%120#0 1u)
+        let tmp%301#0: bool = (&& tmp%299#0 tmp%300#0)
+        let array_item%121#0: Encoded(uint64) = extract_value(arr8#0, 1u)
+        let values%121#0: uint64 = decode_bytes<uint64>(array_item%121#0)
+        let tmp%302#0: bool = (== values%121#0 10u)
+        let tmp%303#0: bool = (&& tmp%301#0 tmp%302#0)
+        let array_item%122#0: Encoded(uint64) = extract_value(arr8#0, 2u)
+        let values%122#0: uint64 = decode_bytes<uint64>(array_item%122#0)
+        let tmp%304#0: bool = (== values%122#0 3u)
+        let tmp%305#0: bool = (&& tmp%303#0 tmp%304#0)
+        let array_item%123#0: Encoded(uint64) = extract_value(arr8#0, 3u)
+        let values%123#0: uint64 = decode_bytes<uint64>(array_item%123#0)
+        let tmp%306#0: bool = (== values%123#0 4u)
+        let tmp%307#0: bool = (&& tmp%305#0 tmp%306#0)
+        let array_item%124#0: Encoded(uint64) = extract_value(arr8#0, 4u)
+        let values%124#0: uint64 = decode_bytes<uint64>(array_item%124#0)
+        let tmp%308#0: bool = (== values%124#0 1u)
+        let tmp%309#0: bool = (&& tmp%307#0 tmp%308#0)
+        let array_item%125#0: Encoded(uint64) = extract_value(arr8#0, 5u)
+        let values%125#0: uint64 = decode_bytes<uint64>(array_item%125#0)
+        let tmp%310#0: bool = (== values%125#0 10u)
+        let tmp%311#0: bool = (&& tmp%309#0 tmp%310#0)
+        let array_item%126#0: Encoded(uint64) = extract_value(arr8#0, 6u)
+        let values%126#0: uint64 = decode_bytes<uint64>(array_item%126#0)
+        let tmp%312#0: bool = (== values%126#0 3u)
+        let tmp%313#0: bool = (&& tmp%311#0 tmp%312#0)
+        let array_item%127#0: Encoded(uint64) = extract_value(arr8#0, 7u)
+        let values%127#0: uint64 = decode_bytes<uint64>(array_item%127#0)
+        let tmp%314#0: bool = (== values%127#0 4u)
+        let tmp%315#0: bool = (&& tmp%313#0 tmp%314#0)
+        let array_item%128#0: Encoded(uint64) = extract_value(arr8#0, 8u)
+        let values%128#0: uint64 = decode_bytes<uint64>(array_item%128#0)
+        let tmp%316#0: bool = (== values%128#0 11u)
+        let tmp%317#0: bool = (&& tmp%315#0 tmp%316#0)
+        let array_item%129#0: Encoded(uint64) = extract_value(arr8#0, 9u)
+        let values%129#0: uint64 = decode_bytes<uint64>(array_item%129#0)
+        let tmp%318#0: bool = (== values%129#0 12u)
+        let tmp%319#0: bool = (&& tmp%317#0 tmp%318#0)
+        let array_item%130#0: Encoded(uint64) = extract_value(arr8#0, 10u)
+        let values%130#0: uint64 = decode_bytes<uint64>(array_item%130#0)
+        let tmp%320#0: bool = (== values%130#0 13u)
+        let tmp%321#0: bool = (&& tmp%319#0 tmp%320#0)
+        let array_item%131#0: Encoded(uint64) = extract_value(arr8#0, 11u)
+        let values%131#0: uint64 = decode_bytes<uint64>(array_item%131#0)
+        let tmp%322#0: bool = (== values%131#0 0u)
+        let tmp%323#0: bool = (&& tmp%321#0 tmp%322#0)
+        let array_item%132#0: Encoded(uint64) = extract_value(arr8#0, 12u)
+        let values%132#0: uint64 = decode_bytes<uint64>(array_item%132#0)
+        let tmp%324#0: bool = (== values%132#0 0u)
+        let tmp%325#0: bool = (&& tmp%323#0 tmp%324#0)
+        let array_item%133#0: Encoded(uint64) = extract_value(arr8#0, 13u)
+        let values%133#0: uint64 = decode_bytes<uint64>(array_item%133#0)
+        let tmp%326#0: bool = (== values%133#0 0u)
+        let tmp%327#0: bool = (&& tmp%325#0 tmp%326#0)
+        let array_item%134#0: Encoded(uint64) = extract_value(arr8#0, 14u)
+        let values%134#0: uint64 = decode_bytes<uint64>(array_item%134#0)
+        let tmp%328#0: bool = (== values%134#0 0u)
+        let tmp%329#0: bool = (&& tmp%327#0 tmp%328#0)
+        (assert tmp%329#0) // assert target is match for conditions
+        return 
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y: Encoded(uint64[50])) -> void:
+    block@0: // L109
+        let encoded_array%0#0: Encoded(uint64[4]) = bytes_encode<uint64[4]>(1u, 2u, 3u, 4u)
+        let x#0: Encoded(uint64[4]) = encoded_array%0#0
+        let encoded_value%0#0: Encoded(uint64) = bytes_encode<uint64>(0u)
+        let updated_array%0#0: Encoded(uint64[4]) = replace_value(x#0, 0u, encoded_value%0#0)
+        let x#1: Encoded(uint64[4]) = updated_array%0#0
+        let tmp%0#0: Encoded(uint64[50]) = (bzero 400u)
+        let x2#0: Encoded(uint64[50]) = tmp%0#0
+        let tmp%1#0: uint64 = array_len(x2#0)
+        let tmp%2#0: bool = (== tmp%1#0 50u)
+        (assert tmp%2#0)
+        let tmp%3#0: Encoded(uint8[32][12]) = (bzero 384u)
+        let x3#0: Encoded(uint8[32][12]) = tmp%3#0
+        let tmp%4#0: uint64 = array_len(x3#0)
+        let tmp%5#0: bool = (== tmp%4#0 12u)
+        (assert tmp%5#0)
+        let array_item%0#0: Encoded(uint64) = extract_value(x#1, 0u)
+        let values%0#0: uint64 = decode_bytes<uint64>(array_item%0#0)
+        let array_item%1#0: Encoded(uint64) = extract_value(y#0, 0u)
+        let values%1#0: uint64 = decode_bytes<uint64>(array_item%1#0)
+        let tmp%6#0: bool = (== values%0#0 values%1#0)
+        (assert tmp%6#0)
+        let tmp%7#0: uint64 = array_len(x#1)
+        let tmp%8#0: bool = (== tmp%7#0 4u)
+        let array_item%2#0: Encoded(uint64) = extract_value(x#1, 0u)
+        let values%2#0: uint64 = decode_bytes<uint64>(array_item%2#0)
+        let tmp%9#0: bool = (< values%2#0 1u)
+        let tmp%10#0: bool = (&& tmp%8#0 tmp%9#0)
+        let array_item%3#0: Encoded(uint64) = extract_value(x#1, 1u)
+        let values%3#0: uint64 = decode_bytes<uint64>(array_item%3#0)
+        let tmp%11#0: bool = (== values%3#0 2u)
+        let tmp%12#0: bool = (&& tmp%10#0 tmp%11#0)
+        let array_item%4#0: Encoded(uint64) = extract_value(x#1, 2u)
+        let values%4#0: uint64 = decode_bytes<uint64>(array_item%4#0)
+        let tmp%13#0: bool = (== values%4#0 3u)
+        let tmp%14#0: bool = (&& tmp%12#0 tmp%13#0)
+        let array_item%5#0: Encoded(uint64) = extract_value(x#1, 3u)
+        let values%5#0: uint64 = decode_bytes<uint64>(array_item%5#0)
+        let tmp%15#0: bool = (== values%5#0 4u)
+        let tmp%16#0: bool = (&& tmp%14#0 tmp%15#0)
+        (assert tmp%16#0) // assert target is match for conditions
+        let array_item%6#0: Encoded(uint64) = extract_value(y#0, 49u)
+        let values%6#0: uint64 = decode_bytes<uint64>(array_item%6#0)
+        let tmp%17#0: bool = (>= values%6#0 0u)
+        (assert tmp%17#0) // assert target is match for conditions
+        let tmp%18#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(1u, 2u)
+        let tmp%19#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(3u, 4u)
+        let encoded_array%1#0: Encoded((uint64,uint64)[2]) = bytes_encode<(uint64,uint64)[2]>(tmp%18#0, tmp%19#0)
+        let myVectors#0: Encoded((uint64,uint64)[2]) = encoded_array%1#0
+        let tmp%20#0: uint64 = array_len(myVectors#0)
+        let tmp%21#0: bool = (== tmp%20#0 2u)
+        let array_item%7#0: Encoded(uint64,uint64) = extract_value(myVectors#0, 0u)
+        let tuple_item%0#0: Encoded(uint64) = extract_value(array_item%7#0, 0)
+        let values%7#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let tmp%22#0: bool = (== values%7#0 1u)
+        let array_item%8#0: Encoded(uint64,uint64) = extract_value(myVectors#0, 0u)
+        let tuple_item%1#0: Encoded(uint64) = extract_value(array_item%8#0, 1)
+        let values%8#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
+        let tmp%23#0: bool = (== values%8#0 2u)
+        let tmp%24#0: bool = (&& tmp%22#0 tmp%23#0)
+        let tmp%25#0: bool = (&& tmp%21#0 tmp%24#0)
+        let array_item%9#0: Encoded(uint64,uint64) = extract_value(myVectors#0, 1u)
+        let tuple_item%2#0: Encoded(uint64) = extract_value(array_item%9#0, 0)
+        let values%9#0: uint64 = decode_bytes<uint64>(tuple_item%2#0)
+        let tmp%26#0: bool = (== values%9#0 3u)
+        let array_item%10#0: Encoded(uint64,uint64) = extract_value(myVectors#0, 1u)
+        let tuple_item%3#0: Encoded(uint64) = extract_value(array_item%10#0, 1)
+        let values%10#0: uint64 = decode_bytes<uint64>(tuple_item%3#0)
+        let tmp%27#0: bool = (== values%10#0 4u)
+        let tmp%28#0: bool = (&& tmp%26#0 tmp%27#0)
+        let tmp%29#0: bool = (&& tmp%25#0 tmp%28#0)
+        (assert tmp%29#0) // assert target is match for conditions
+        let tmp%30#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(5u, 6u)
+        let encoded_array%2#0: Encoded((uint64,uint64)[1]) = bytes_encode<(uint64,uint64)[1]>(tmp%30#0)
+        let tmp%31#0: Encoded((uint64,uint64)[1]) = bytes_encode<((uint64,uint64)[1])>(encoded_array%2#0)
+        let myObject#0: Encoded((uint64,uint64)[1]) = tmp%31#0
+        let tuple_item%4#0: Encoded((uint64,uint64)[1]) = extract_value(myObject#0, 0)
+        let tmp%32#0: uint64 = array_len(tuple_item%4#0)
+        let tmp%33#0: bool = (== tmp%32#0 1u)
+        let tuple_item%5#0: Encoded((uint64,uint64)[1]) = extract_value(myObject#0, 0)
+        let array_item%11#0: Encoded(uint64,uint64) = extract_value(tuple_item%5#0, 0u)
+        let tuple_item%6#0: Encoded(uint64) = extract_value(array_item%11#0, 0)
+        let values%11#0: uint64 = decode_bytes<uint64>(tuple_item%6#0)
+        let tmp%34#0: bool = (== values%11#0 5u)
+        let tuple_item%7#0: Encoded((uint64,uint64)[1]) = extract_value(myObject#0, 0)
+        let array_item%12#0: Encoded(uint64,uint64) = extract_value(tuple_item%7#0, 0u)
+        let tuple_item%8#0: Encoded(uint64) = extract_value(array_item%12#0, 1)
+        let values%12#0: uint64 = decode_bytes<uint64>(tuple_item%8#0)
+        let tmp%35#0: bool = (== values%12#0 6u)
+        let tmp%36#0: bool = (&& tmp%34#0 tmp%35#0)
+        let tmp%37#0: bool = (&& tmp%33#0 tmp%36#0)
+        (assert tmp%37#0) // assert target is match for conditions
+        let tmp%38#0: Encoded(uint64[4]) = (bzero 32u)
+        let z1#0: Encoded(uint64[4]) = tmp%38#0
+        let tmp%39#0: uint64 = array_len(z1#0)
+        let tmp%40#0: bool = (== tmp%39#0 4u)
+        (assert tmp%40#0)
+        let tmp%41#0: uint64 = array_len(z1#0)
+        let tmp%42#0: bool = (== tmp%41#0 4u)
+        let array_item%13#0: Encoded(uint64) = extract_value(z1#0, 0u)
+        let values%13#0: uint64 = decode_bytes<uint64>(array_item%13#0)
+        let tmp%43#0: bool = (== values%13#0 0u)
+        let tmp%44#0: bool = (&& tmp%42#0 tmp%43#0)
+        let array_item%14#0: Encoded(uint64) = extract_value(z1#0, 1u)
+        let values%14#0: uint64 = decode_bytes<uint64>(array_item%14#0)
+        let tmp%45#0: bool = (== values%14#0 0u)
+        let tmp%46#0: bool = (&& tmp%44#0 tmp%45#0)
+        let array_item%15#0: Encoded(uint64) = extract_value(z1#0, 2u)
+        let values%15#0: uint64 = decode_bytes<uint64>(array_item%15#0)
+        let tmp%47#0: bool = (== values%15#0 0u)
+        let tmp%48#0: bool = (&& tmp%46#0 tmp%47#0)
+        let array_item%16#0: Encoded(uint64) = extract_value(z1#0, 3u)
+        let values%16#0: uint64 = decode_bytes<uint64>(array_item%16#0)
+        let tmp%49#0: bool = (== values%16#0 0u)
+        let tmp%50#0: bool = (&& tmp%48#0 tmp%49#0)
+        (assert tmp%50#0) // assert target is match for conditions
+        let encoded_value%1#0: Encoded(uint64) = bytes_encode<uint64>(1u)
+        let updated_array%1#0: Encoded(uint64[4]) = replace_value(z1#0, 0u, encoded_value%1#0)
+        let z1#1: Encoded(uint64[4]) = updated_array%1#0
+        let encoded_value%2#0: Encoded(uint64) = bytes_encode<uint64>(2u)
+        let updated_array%2#0: Encoded(uint64[4]) = replace_value(z1#1, 1u, encoded_value%2#0)
+        let z1#2: Encoded(uint64[4]) = updated_array%2#0
+        let encoded_value%3#0: Encoded(uint64) = bytes_encode<uint64>(3u)
+        let updated_array%3#0: Encoded(uint64[4]) = replace_value(z1#2, 2u, encoded_value%3#0)
+        let z1#3: Encoded(uint64[4]) = updated_array%3#0
+        let encoded_value%4#0: Encoded(uint64) = bytes_encode<uint64>(4u)
+        let updated_array%4#0: Encoded(uint64[4]) = replace_value(z1#3, 3u, encoded_value%4#0)
+        let z1#4: Encoded(uint64[4]) = updated_array%4#0
+        let tmp%51#0: uint64 = array_len(z1#4)
+        let tmp%52#0: bool = (== tmp%51#0 4u)
+        let array_item%17#0: Encoded(uint64) = extract_value(z1#4, 0u)
+        let values%17#0: uint64 = decode_bytes<uint64>(array_item%17#0)
+        let tmp%53#0: bool = (<= values%17#0 1u)
+        let tmp%54#0: bool = (&& tmp%52#0 tmp%53#0)
+        let array_item%18#0: Encoded(uint64) = extract_value(z1#4, 1u)
+        let values%18#0: uint64 = decode_bytes<uint64>(array_item%18#0)
+        let tmp%55#0: bool = (== values%18#0 2u)
+        let tmp%56#0: bool = (&& tmp%54#0 tmp%55#0)
+        let array_item%19#0: Encoded(uint64) = extract_value(z1#4, 2u)
+        let values%19#0: uint64 = decode_bytes<uint64>(array_item%19#0)
+        let tmp%57#0: bool = (== values%19#0 3u)
+        let tmp%58#0: bool = (&& tmp%56#0 tmp%57#0)
+        let array_item%20#0: Encoded(uint64) = extract_value(z1#4, 3u)
+        let values%20#0: uint64 = decode_bytes<uint64>(array_item%20#0)
+        let tmp%59#0: bool = (== values%20#0 4u)
+        let tmp%60#0: bool = (&& tmp%58#0 tmp%59#0)
+        (assert tmp%60#0) // assert target is match for conditions
+        let tmp%61#0: Encoded(bool1[3]) = (bzero 1u)
+        let z2#0: Encoded(bool1[3]) = tmp%61#0
+        let array_item%21#0: bool = extract_value(z2#0, 0u)
+        let values%21#0: bool = decode_bytes<bool>(array_item%21#0)
+        let tmp%62#0: bool = (== values%21#0 0u)
+        (assert tmp%62#0)
+        let tmp%63#0: Encoded(uint64[2][4]) = (bzero 64u)
+        let z3#0: Encoded(uint64[2][4]) = tmp%63#0
+        let tmp%64#0: uint64 = array_len(z3#0)
+        let tmp%65#0: bool = (== tmp%64#0 4u)
+        (assert tmp%65#0)
+        let tmp%66#0: Encoded((uint64,uint64)[4]) = (bzero 64u)
+        let z4#0: Encoded((uint64,uint64)[4]) = tmp%66#0
+        let tmp%67#0: uint64 = array_len(z4#0)
+        let tmp%68#0: bool = (== tmp%67#0 4u)
+        (assert tmp%68#0)
+        let tmp%69#0: Encoded(uint64[4]) = (bzero 32u)
+        let z5#0: Encoded(uint64[4]) = tmp%69#0
+        let tmp%70#0: uint64 = array_len(z5#0)
+        let tmp%71#0: bool = (== tmp%70#0 4u)
+        (assert tmp%71#0)
+        let tmp%72#0: Encoded((uint64,bool1)[4]) = (bzero 36u)
+        let z6#0: Encoded((uint64,bool1)[4]) = tmp%72#0
+        let tmp%73#0: uint64 = array_len(z6#0)
+        let tmp%74#0: bool = (== tmp%73#0 4u)
+        (assert tmp%74#0)
+        return 
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop() -> void:
+    block@0: // L157
+        let encoded_array%0#0: Encoded(len+uint32[]) = bytes_encode<(len+uint32[])>(0x0000007b, 0x0000007b)
+        let da1#0: Encoded(len+uint32[]) = encoded_array%0#0
+        let encoded_array%1#0: Encoded(uint32[2]) = bytes_encode<uint32[2]>(0x0000007b, 0x0000007b)
+        let sa1#0: Encoded(uint32[2]) = encoded_array%1#0
+        let encoded_array%2#0: Encoded(len+uint32[]) = bytes_encode<(len+uint32[])>(0x0000007b, 0x0000007b)
+        let a1#0: Encoded(len+uint32[]) = encoded_array%2#0
+        let total_length%0#0: uint64 = (len da1#0)
+        let extract_to_end%0#0: bytes = (substring3 da1#0 2u total_length%0#0)
+        let concat%0#0: Encoded(len+uint32[]) = (concat a1#0 extract_to_end%0#0) // on error: max array length exceeded
+        let total_length%1#0: uint64 = (len concat%0#0)
+        let extract_to_end%1#0: bytes = (substring3 concat%0#0 2u total_length%1#0)
+        let len%0#0: uint64 = (len extract_to_end%1#0)
+        let div_floor%0#0: uint64 = (/ len%0#0 4u)
+        let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
+        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
+        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
+        let as_Encoded(len+uint32[])%0#0: Encoded(len+uint32[]) = replace%0#0
+        let concat%1#0: Encoded(len+uint32[]) = (concat as_Encoded(len+uint32[])%0#0 sa1#0) // on error: max array length exceeded
+        let total_length%2#0: uint64 = (len concat%1#0)
+        let extract_to_end%2#0: bytes = (substring3 concat%1#0 2u total_length%2#0)
+        let len%1#0: uint64 = (len extract_to_end%2#0)
+        let div_floor%1#0: uint64 = (/ len%1#0 4u)
+        let as_bytes%1#0: bytes[8] = (itob div_floor%1#0)
+        let as_u16_bytes%1#0: bytes = ((extract 6 2) as_bytes%1#0)
+        let replace%1#0: bytes = (replace3 concat%1#0 0u as_u16_bytes%1#0)
+        let as_Encoded(len+uint32[])%1#0: Encoded(len+uint32[]) = replace%1#0
+        let a1#1: Encoded(len+uint32[]) = as_Encoded(len+uint32[])%1#0
+        let tmp%0#0: uint64 = array_len(a1#1)
+        let tmp%1#0: bool = (== tmp%0#0 6u)
+        let array_item%0#0: Encoded(uint32) = extract_value(a1#1, 0u)
+        let tmp%2#0: bool = (== array_item%0#0 0x0000007b)
+        let tmp%3#0: bool = (&& tmp%1#0 tmp%2#0)
+        let array_item%1#0: Encoded(uint32) = extract_value(a1#1, 1u)
+        let tmp%4#0: bool = (== array_item%1#0 0x0000007b)
+        let tmp%5#0: bool = (&& tmp%3#0 tmp%4#0)
+        let array_item%2#0: Encoded(uint32) = extract_value(a1#1, 2u)
+        let tmp%6#0: bool = (== array_item%2#0 0x0000007b)
+        let tmp%7#0: bool = (&& tmp%5#0 tmp%6#0)
+        let array_item%3#0: Encoded(uint32) = extract_value(a1#1, 3u)
+        let tmp%8#0: bool = (== array_item%3#0 0x0000007b)
+        let tmp%9#0: bool = (&& tmp%7#0 tmp%8#0)
+        let array_item%4#0: Encoded(uint32) = extract_value(a1#1, 4u)
+        let tmp%10#0: bool = (== array_item%4#0 0x0000007b)
+        let tmp%11#0: bool = (&& tmp%9#0 tmp%10#0)
+        let array_item%5#0: Encoded(uint32) = extract_value(a1#1, 5u)
+        let tmp%12#0: bool = (== array_item%5#0 0x0000007b)
+        let tmp%13#0: bool = (&& tmp%11#0 tmp%12#0)
+        (assert tmp%13#0) // assert target is match for conditions
+        return 
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p: Encoded(uint64,uint64)) -> Encoded(len+(uint64,uint64)[]):
+    block@0: // L170
+        let tuple_item%0#0: Encoded(uint64) = extract_value(p#0, 0)
+        let values%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let tuple_item%1#0: Encoded(uint64) = extract_value(p#0, 1)
+        let values%1#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
+        let x#0: uint64 = values%0#0
+        let y#0: uint64 = values%1#0
+        let encoded_array%0#0: Encoded(len+(uint64,uint64)[]) = bytes_encode<(len+(uint64,uint64)[])>()
+        let myVectors#0: Encoded(len+(uint64,uint64)[]) = encoded_array%0#0
+        let tmp%0#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(x#0, y#0)
+        let encoded_array%1#0: Encoded(len+(uint64,uint64)[]) = bytes_encode<(len+(uint64,uint64)[])>(tmp%0#0)
+        let myVectors#1: Encoded(len+(uint64,uint64)[]) = encoded_array%1#0
+        let tmp%1#0: uint64 = array_len(myVectors#1)
+        let tmp%2#0: bool = (== tmp%1#0 1u)
+        let array_item%0#0: Encoded(uint64,uint64) = extract_value(myVectors#1, 0u)
+        let tuple_item%2#0: Encoded(uint64) = extract_value(array_item%0#0, 0)
+        let values%2#0: uint64 = decode_bytes<uint64>(tuple_item%2#0)
+        let tmp%3#0: bool = (== values%2#0 x#0)
+        let array_item%1#0: Encoded(uint64,uint64) = extract_value(myVectors#1, 0u)
+        let tuple_item%3#0: Encoded(uint64) = extract_value(array_item%1#0, 1)
+        let values%3#0: uint64 = decode_bytes<uint64>(tuple_item%3#0)
+        let tmp%4#0: bool = (== values%3#0 y#0)
+        let tmp%5#0: bool = (&& tmp%3#0 tmp%4#0)
+        let tmp%6#0: bool = (&& tmp%2#0 tmp%5#0)
+        (assert tmp%6#0) // assert target is match for conditions
+        return myVectors#1
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans() -> Encoded(len+bool1[]):
+    block@0: // L179
+        let encoded_array%0#0: Encoded(len+bool1[]) = bytes_encode<(len+bool1[])>(1u, 0u, 1u)
+        return encoded_array%0#0
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleansStatic() -> <bool, bool, bool>:
+    block@0: // L183
+        return 1u 0u 1u
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans() -> Encoded(len+bool1[]):
+    block@0: // L187
+        let tmp%0#0: Encoded(bool8) = bytes_encode<bool8>(1u)
+        let tmp%1#0: Encoded(bool8) = bytes_encode<bool8>(0u)
+        let tmp%2#0: Encoded(bool8) = bytes_encode<bool8>(1u)
+        let encoded_array%0#0: Encoded(len+bool1[]) = bytes_encode<(len+bool1[])>(tmp%0#0, tmp%1#0, tmp%2#0)
+        return encoded_array%0#0
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansStatic() -> <Encoded(bool8), Encoded(bool8), Encoded(bool8)>:
+    block@0: // L191
+        let tmp%0#0: Encoded(bool8) = bytes_encode<bool8>(1u)
+        let tmp%1#0: Encoded(bool8) = bytes_encode<bool8>(0u)
+        let tmp%2#0: Encoded(bool8) = bytes_encode<bool8>(1u)
+        return tmp%0#0 tmp%1#0 tmp%2#0
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.aliasing(mutable: Encoded(len+uint64[]), readOnly: Encoded(len+uint64[])) -> void:
+    block@0: // L195
+        let needClone#0: Encoded(len+uint64[]) = mutable#0
+        let encoded_value%0#0: Encoded(uint64) = bytes_encode<uint64>(5u)
+        let updated_array%0#0: Encoded(len+uint64[]) = replace_value(needClone#0, 0u, encoded_value%0#0)
+        let needClone#1: Encoded(len+uint64[]) = updated_array%0#0
+        let noNeedClone#0: Encoded(len+uint64[]) = readOnly#0
+        let tmp%0#0: uint64 = array_len(mutable#0)
+        let needClone2#0: Encoded(len+uint64[]) = mutable#0
+        let array_item%0#0: Encoded(uint64) = extract_value(mutable#0, 1u)
+        let values%0#0: uint64 = decode_bytes<uint64>(array_item%0#0)
+        let tmp%1#0: uint64 = (+ values%0#0 2u)
+        let encoded_value%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%1#0)
+        let updated_array%1#0: Encoded(len+uint64[]) = replace_value(mutable#0, 1u, encoded_value%1#0)
+        let mutable#1: Encoded(len+uint64[]) = updated_array%1#0
+        let array_item%1#0: Encoded(uint64) = extract_value(mutable#1, 1u)
+        let values%1#0: uint64 = decode_bytes<uint64>(array_item%1#0)
+        let array_item%2#0: Encoded(uint64) = extract_value(needClone2#0, 1u)
+        let values%2#0: uint64 = decode_bytes<uint64>(array_item%2#0)
+        let tmp%2#0: bool = (!= values%1#0 values%2#0)
+        (assert tmp%2#0) // These should not match
+        let receiveMutable%0#0: Encoded(len+uint64[]) = tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(mutable#1)
+        let mutable#2: Encoded(len+uint64[]) = receiveMutable%0#0
+        let tmp%3#0: uint64 = array_len(mutable#2)
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(mutable#2)
+        tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(readOnly#0)
+        return 
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveMutable(a: Encoded(len+uint64[])) -> Encoded(len+uint64[]):
+    block@0: // L221
+        let a%is_original#0: bool = 1u
+        let a%out#0: Encoded(len+uint64[]) = a#0
+        let encoded_value%0#0: Encoded(uint64) = bytes_encode<uint64>(1u)
+        let updated_array%0#0: Encoded(len+uint64[]) = replace_value(a#0, 0u, encoded_value%0#0)
+        let a#1: Encoded(len+uint64[]) = updated_array%0#0
+        goto a%is_original#0 ? block@1 : block@2
+    block@1: // if_body_L1
+        let a%out#1: Encoded(len+uint64[]) = a#1
+        goto block@2
+    block@2: // after_if_else_L1
+        let a%out#2: Encoded(len+uint64[]) = φ(a%out#0 <- block@0, a%out#1 <- block@1)
+        return a%out#2
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.receiveReadonly(a: Encoded(len+uint64[])) -> void:
+    block@0: // L225
+        return 
+
+subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__algots__.defaultCreate() -> void:
+    block@0: // L6
+        return 

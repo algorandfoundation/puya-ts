@@ -1,0 +1,102 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0 2
+    // tests/approvals/jsdoc.algo.ts:20
+    // export class JSDocDemo extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0x60d93beb 0x6618726a // method "test(uint64,byte[])(uint64)", method "test2(byte[])(byte[])"
+    txna ApplicationArgs 0
+    match main_test_route@4 main_test2_route@5
+    err
+
+main_test2_route@5:
+    // tests/approvals/jsdoc.algo.ts:39
+    // test2(a: bytes): DemoType {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // tests/approvals/jsdoc.algo.ts:40-42
+    // return {
+    //   a,
+    // }
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    // tests/approvals/jsdoc.algo.ts:39-42
+    // test2(a: bytes): DemoType {
+    //   return {
+    //     a,
+    //   }
+    pushbytes 0x151f7c750002
+    // tests/approvals/jsdoc.algo.ts:39
+    // test2(a: bytes): DemoType {
+    swap
+    // tests/approvals/jsdoc.algo.ts:39-42
+    // test2(a: bytes): DemoType {
+    //   return {
+    //     a,
+    //   }
+    concat
+    // tests/approvals/jsdoc.algo.ts:39
+    // test2(a: bytes): DemoType {
+    log
+    intc_0 // 1
+    return
+
+main_test_route@4:
+    // tests/approvals/jsdoc.algo.ts:30
+    // test(a: uint64, b: bytes): DemoStruct {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    txna ApplicationArgs 2
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/jsdoc.algo.ts:20
+    // export class JSDocDemo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return

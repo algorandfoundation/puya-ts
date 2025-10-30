@@ -1,0 +1,98 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 TMPL_AN_INT
+    bytecblock 0x151f7c75 TMPL_AN_ADDRESS TMPL_SOME_BYTES TMPL_A_STRING
+    // tests/approvals/template-var.algo.ts:7
+    // export class MyContract extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@11
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0xbe93200b 0xc1a13295 0xaf43db36 0x0559cac1 // method "getInt()uint64", method "getString()string", method "getBytes()byte[]", method "getAddress()address"
+    txna ApplicationArgs 0
+    match main_getInt_route@4 main_getString_route@5 main_getBytes_route@6 main_getAddress_route@7
+    err
+
+main_getAddress_route@7:
+    // tests/approvals/template-var.algo.ts:20
+    // getAddress() {
+    bytec_0 // 0x151f7c75
+    // tests/approvals/template-var.algo.ts:21
+    // return specialAddress
+    bytec_1 // TMPL_AN_ADDRESS
+    // tests/approvals/template-var.algo.ts:20
+    // getAddress() {
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_getBytes_route@6:
+    // tests/approvals/template-var.algo.ts:17
+    // return TemplateVar<bytes>('SOME_BYTES')
+    bytec_2 // TMPL_SOME_BYTES
+    // tests/approvals/template-var.algo.ts:16
+    // getBytes() {
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_getString_route@5:
+    // tests/approvals/template-var.algo.ts:13
+    // return TemplateVar<string>('A_STRING')
+    bytec_3 // TMPL_A_STRING
+    // tests/approvals/template-var.algo.ts:12
+    // getString() {
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_getInt_route@4:
+    // tests/approvals/template-var.algo.ts:9
+    // return TemplateVar<uint64>('AN_INT')
+    intc_1 // TMPL_AN_INT
+    // tests/approvals/template-var.algo.ts:8
+    // getInt() {
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@11:
+    // tests/approvals/template-var.algo.ts:7
+    // export class MyContract extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return

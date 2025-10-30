@@ -1,0 +1,97 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1
+    bytecblock "oca" "txn"
+    // tests/approvals/box-enum-contract.algo.ts:4
+    // export class BoxContract extends arc4.Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0xf26c6d42 0xef186cf7 // method "store_enums()void", method "read_enums()(uint64,uint64)"
+    txna ApplicationArgs 0
+    match main_store_enums_route@4 main_read_enums_route@5
+    err
+
+main_read_enums_route@5:
+    // tests/approvals/box-enum-contract.algo.ts:16
+    // assert(op.Box.get(Bytes('oca'))[0] === op.itob(this.oca.value))
+    bytec_0 // "oca"
+    box_get
+    assert // Box must have value
+    dup
+    btoi
+    itob
+    swap
+    dig 1
+    ==
+    assert
+    // tests/approvals/box-enum-contract.algo.ts:17
+    // assert(op.Box.get(Bytes('txn'))[0] === op.itob(this.txn.value))
+    bytec_1 // "txn"
+    box_get
+    assert // Box must have value
+    dup
+    btoi
+    itob
+    swap
+    dig 1
+    ==
+    assert
+    // tests/approvals/box-enum-contract.algo.ts:19
+    // return new Tuple(new Uint64(this.oca.value), new Uint64(this.txn.value))
+    concat
+    // tests/approvals/box-enum-contract.algo.ts:14
+    // @arc4.abimethod({ name: 'read_enums' })
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_store_enums_route@4:
+    // tests/approvals/box-enum-contract.algo.ts:10
+    // this.oca.value = OnCompleteAction.OptIn
+    intc_0 // 1
+    itob
+    // tests/approvals/box-enum-contract.algo.ts:5
+    // oca = Box<OnCompleteAction>({ key: Bytes('oca') })
+    bytec_0 // "oca"
+    // tests/approvals/box-enum-contract.algo.ts:10
+    // this.oca.value = OnCompleteAction.OptIn
+    swap
+    box_put
+    // tests/approvals/box-enum-contract.algo.ts:11
+    // this.txn.value = TransactionType.ApplicationCall
+    pushint 6 // 6
+    itob
+    // tests/approvals/box-enum-contract.algo.ts:6
+    // txn = Box<TransactionType>({ key: Bytes('txn') })
+    bytec_1 // "txn"
+    // tests/approvals/box-enum-contract.algo.ts:11
+    // this.txn.value = TransactionType.ApplicationCall
+    swap
+    box_put
+    // tests/approvals/box-enum-contract.algo.ts:8
+    // @arc4.abimethod({ name: 'store_enums' })
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/box-enum-contract.algo.ts:4
+    // export class BoxContract extends arc4.Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return

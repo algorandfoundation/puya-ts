@@ -1,0 +1,31 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/implicit-create.algo.ts:8
+    // export class NoNoOp extends Contract {
+    txn NumAppArgs
+    !
+    assert
+    pushints 0 4 // NoOp, UpdateApplication
+    txn OnCompletion
+    match main___algots__.defaultCreate@4 main_handleUpdate@5
+    err
+
+main_handleUpdate@5:
+    // tests/approvals/implicit-create.algo.ts:9
+    // @baremethod({ allowActions: 'UpdateApplication' })
+    txn ApplicationID
+    assert // can only call when not creating
+    pushint 1 // 1
+    return
+
+main___algots__.defaultCreate@4:
+    // tests/approvals/implicit-create.algo.ts:8
+    // export class NoNoOp extends Contract {
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    pushint 1 // 1
+    return

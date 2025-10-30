@@ -1,0 +1,18 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        let not%tmp%0#1: bool = (! tmp%0#1)
+        (assert not%tmp%0#1)
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        switch tmp%2#0 {NoOp => block@4, UpdateApplication => block@5, * => block@7}
+    block@4: // __algots__.defaultCreate_L8
+        let tmp%3#0: uint64 = (txn ApplicationID)
+        let tmp%4#0: bool = (! tmp%3#0)
+        (assert tmp%4#0) // can only call when creating
+        exit 1u
+    block@5: // handleUpdate_L9
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        (assert tmp%5#0) // can only call when not creating
+        exit 1u
+    block@7: // after_if_else_L8
+        fail

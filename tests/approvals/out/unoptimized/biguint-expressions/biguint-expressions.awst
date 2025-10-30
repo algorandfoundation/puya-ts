@@ -1,0 +1,40 @@
+subroutine testConstructor(a: uint64, a_b: biguint, b: bool, b_b: biguint, c: bytes, c_b: biguint): void
+{
+  assert(0 == 0)
+  assert(reinterpret_cast<biguint>(itob(True)) == 1)
+  assert(reinterpret_cast<biguint>(itob(False)) == 0)
+  assert(0 == 0)
+  assert(1 == 1)
+  assert(0 == 0)
+  assert(1 == 1)
+  assert(13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006084095 == 13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006084095)
+  assert(1231232134123123 == 1231232134123123)
+  assert(reinterpret_cast<biguint>(itob(a)) == a_b)
+  assert(reinterpret_cast<biguint>(itob(a * a)) == a_b * a_b)
+  assert(reinterpret_cast<biguint>(itob(b)) == b_b)
+  assert(reinterpret_cast<biguint>(c) == c_b)
+}
+subroutine testOps(smaller: biguint, larger: biguint): void
+{
+  assert(smaller < larger)
+  assert(smaller <= smaller)
+  assert(larger > smaller)
+  assert(larger >= larger)
+  assert(smaller == smaller)
+  assert(smaller == reinterpret_cast<biguint>(concat(reinterpret_cast<bytes>(bzero(4)), reinterpret_cast<bytes>(smaller))), comment=Leading zeros should be ignored in equality)
+}
+contract DemoContract
+{
+  approvalProgram(): bool
+  {
+    tests/approvals/biguint-expressions.algo.ts::testConstructor(12312312, 12312312, False, 0, reinterpret_cast<bytes>(itob(4)), 4)
+    tests/approvals/biguint-expressions.algo.ts::testOps(500, 1000)
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+}

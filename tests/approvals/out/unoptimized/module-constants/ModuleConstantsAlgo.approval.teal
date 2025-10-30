@@ -1,0 +1,391 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 64 0 1 2
+    bytecblock 0x 0x151f7c75 0x08 "ab"
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // tests/approvals/module-constants.algo.ts:42
+    // class ModuleConstantsAlgo extends Contract {
+    txn NumAppArgs
+    intc_1 // 0
+    !=
+    bz main___algots__.defaultCreate@11
+    b main_abi_routing@2
+
+main_abi_routing@2:
+    // tests/approvals/module-constants.algo.ts:42
+    // class ModuleConstantsAlgo extends Contract {
+    txn OnCompletion
+    intc_1 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_1 // 0
+    !=
+    bz main_create_NoOp@9
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
+    // tests/approvals/module-constants.algo.ts:42
+    // class ModuleConstantsAlgo extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x687a073d // method "getBoolConstants()(bool,bool)"
+    pushbytes 0x0a0c480e // method "getUintConstants()(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)"
+    pushbytes 0x0510a934 // method "getBigUintConstants()(uint512,uint512,uint512,uint512,uint512,uint512,uint512,uint512)"
+    pushbytes 0x773153a7 // method "getStringConstants()string[]"
+    uncover 4
+    match main_getBoolConstants_route@4 main_getUintConstants_route@5 main_getBigUintConstants_route@6 main_getStringConstants_route@7
+    b main_switch_case_next@8
+
+main_switch_case_next@8:
+    b main_after_if_else@10
+
+main_after_if_else@10:
+    b main_after_if_else@12
+
+main_after_if_else@12:
+    // tests/approvals/module-constants.algo.ts:42
+    // class ModuleConstantsAlgo extends Contract {
+    err
+
+main_getStringConstants_route@7:
+    // tests/approvals/module-constants.algo.ts:52
+    // getStringConstants() {
+    callsub getStringConstants
+    b main_switch_case_next@8
+
+main_getBigUintConstants_route@6:
+    // tests/approvals/module-constants.algo.ts:49
+    // getBigUintConstants() {
+    callsub getBigUintConstants
+    b main_switch_case_next@8
+
+main_getUintConstants_route@5:
+    // tests/approvals/module-constants.algo.ts:46
+    // getUintConstants() {
+    callsub getUintConstants
+    b main_switch_case_next@8
+
+main_getBoolConstants_route@4:
+    // tests/approvals/module-constants.algo.ts:43
+    // getBoolConstants() {
+    callsub getBoolConstants
+    b main_switch_case_next@8
+
+main_create_NoOp@9:
+    b main_after_if_else@10
+
+main___algots__.defaultCreate@11:
+    // tests/approvals/module-constants.algo.ts:42
+    // class ModuleConstantsAlgo extends Contract {
+    txn OnCompletion
+    intc_1 // NoOp
+    ==
+    txn ApplicationID
+    intc_1 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_2 // 1
+    return
+
+
+// tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBoolConstants[routing]() -> void:
+getBoolConstants:
+    b getBoolConstants_block@0
+
+getBoolConstants_block@0:
+    // tests/approvals/module-constants.algo.ts:43
+    // getBoolConstants() {
+    callsub tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBoolConstants
+    cover 1
+    pushbytes 0x00
+    intc_1 // 0
+    uncover 2
+    setbit
+    intc_2 // 1
+    uncover 2
+    setbit
+    bytec_0 // 0x
+    uncover 1
+    concat
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getUintConstants[routing]() -> void:
+getUintConstants:
+    b getUintConstants_block@0
+
+getUintConstants_block@0:
+    // tests/approvals/module-constants.algo.ts:46
+    // getUintConstants() {
+    callsub tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getUintConstants
+    cover 10
+    cover 9
+    cover 8
+    cover 7
+    cover 6
+    cover 5
+    cover 4
+    cover 3
+    cover 2
+    cover 1
+    itob
+    bytec_0 // 0x
+    uncover 1
+    concat
+    uncover 1
+    itob
+    concat
+    uncover 1
+    itob
+    concat
+    uncover 1
+    itob
+    concat
+    uncover 1
+    itob
+    concat
+    uncover 1
+    itob
+    concat
+    uncover 1
+    itob
+    concat
+    uncover 1
+    itob
+    concat
+    uncover 1
+    itob
+    concat
+    uncover 1
+    itob
+    concat
+    uncover 1
+    itob
+    concat
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBigUintConstants[routing]() -> void:
+getBigUintConstants:
+    b getBigUintConstants_block@0
+
+getBigUintConstants_block@0:
+    // tests/approvals/module-constants.algo.ts:49
+    // getBigUintConstants() {
+    callsub tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBigUintConstants
+    cover 7
+    cover 6
+    cover 5
+    cover 4
+    cover 3
+    cover 2
+    cover 1
+    dup
+    len
+    intc_0 // 64
+    <=
+    assert // overflow
+    intc_0 // 64
+    bzero
+    b|
+    bytec_0 // 0x
+    uncover 1
+    concat
+    dig 1
+    len
+    intc_0 // 64
+    <=
+    assert // overflow
+    intc_0 // 64
+    bzero
+    uncover 2
+    b|
+    concat
+    dig 1
+    len
+    intc_0 // 64
+    <=
+    assert // overflow
+    intc_0 // 64
+    bzero
+    uncover 2
+    b|
+    concat
+    dig 1
+    len
+    intc_0 // 64
+    <=
+    assert // overflow
+    intc_0 // 64
+    bzero
+    uncover 2
+    b|
+    concat
+    dig 1
+    len
+    intc_0 // 64
+    <=
+    assert // overflow
+    intc_0 // 64
+    bzero
+    uncover 2
+    b|
+    concat
+    dig 1
+    len
+    intc_0 // 64
+    <=
+    assert // overflow
+    intc_0 // 64
+    bzero
+    uncover 2
+    b|
+    concat
+    dig 1
+    len
+    intc_0 // 64
+    <=
+    assert // overflow
+    intc_0 // 64
+    bzero
+    uncover 2
+    b|
+    concat
+    dig 1
+    len
+    intc_0 // 64
+    <=
+    assert // overflow
+    intc_0 // 64
+    bzero
+    uncover 2
+    b|
+    concat
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getStringConstants[routing]() -> void:
+getStringConstants:
+    b getStringConstants_block@0
+
+getStringConstants_block@0:
+    // tests/approvals/module-constants.algo.ts:52
+    // getStringConstants() {
+    callsub tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getStringConstants
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBoolConstants() -> uint64, uint64:
+tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBoolConstants:
+    b tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBoolConstants_block@0
+
+tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBoolConstants_block@0:
+    // tests/approvals/module-constants.algo.ts:44
+    // return [b_and, b_or] as const
+    intc_1 // 0
+    intc_2 // 1
+    retsub
+
+
+// tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getUintConstants() -> uint64, uint64, uint64, uint64, uint64, uint64, uint64, uint64, uint64, uint64, uint64:
+tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getUintConstants:
+    b tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getUintConstants_block@0
+
+tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getUintConstants_block@0:
+    // tests/approvals/module-constants.algo.ts:47
+    // return [u_add, u_sub, u_mul, u_div, u_mod, u_pow, u_lshift, u_rshift, u_bitOr, u_bitXor, u_bitAnd] as const
+    pushint 12 // 12
+    pushint 8 // 8
+    pushint 20 // 20
+    pushint 5 // 5
+    intc_1 // 0
+    pushint 100 // 100
+    pushint 40 // 40
+    intc_3 // 2
+    pushint 10 // 10
+    pushint 8 // 8
+    intc_3 // 2
+    retsub
+
+
+// tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBigUintConstants() -> bytes, bytes, bytes, bytes, bytes, bytes, bytes, bytes:
+tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBigUintConstants:
+    b tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBigUintConstants_block@0
+
+tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getBigUintConstants_block@0:
+    // tests/approvals/module-constants.algo.ts:50
+    // return [bu_add, bu_sub, bu_mul, bu_div, bu_mod, bu_bitOr, bu_bitXor, bu_bitAnd] as const
+    pushbytes 0x0c
+    bytec_2 // 0x08
+    pushbytes 0x14
+    pushbytes 0x05
+    bytec_0 // 0x
+    pushbytes 0x0a
+    bytec_2 // 0x08
+    pushbytes 0x02
+    retsub
+
+
+// tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getStringConstants() -> bytes:
+tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getStringConstants:
+    b tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getStringConstants_block@0
+
+tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getStringConstants_block@0:
+    // tests/approvals/module-constants.algo.ts:53
+    // return [s_add]
+    intc_2 // 1
+    itob
+    extract 6 2
+    bytec_3 // "ab"
+    len
+    itob
+    extract 6 2
+    bytec_3 // "ab"
+    concat
+    intc_3 // 2
+    itob
+    extract 6 2
+    uncover 2
+    uncover 1
+    concat
+    uncover 1
+    concat
+    retsub
+
+
+// tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
+
+__algots__.defaultCreate_block@0:
+    retsub

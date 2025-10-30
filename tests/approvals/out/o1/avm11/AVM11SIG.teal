@@ -1,0 +1,12 @@
+#pragma version 11
+#pragma typetrack false
+
+// tests/approvals/avm11.algo.ts::program() -> uint64:
+main:
+    // tests/approvals/avm11.algo.ts:19
+    // return op.mimc(MimcConfigurations.BN254Mp110, a).length
+    pushbytes 0x00000000000000000000000000000000000000000000000000000000499602d2
+    mimc BN254Mp110
+    pop
+    pushint 32 // 32
+    return

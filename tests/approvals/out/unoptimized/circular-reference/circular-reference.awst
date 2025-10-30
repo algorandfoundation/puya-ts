@@ -1,0 +1,22 @@
+contract ContractOne
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(appId: application): void
+  {
+    #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, ApplicationArgs=#[Method("test(uint64)void")])) }
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

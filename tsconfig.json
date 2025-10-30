@@ -1,0 +1,27 @@
+{
+  "extends": "@tsconfig/node20/tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "noEmit": true,
+    "target": "ES2023",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "paths": {
+      "@algorandfoundation/algorand-typescript": ["./packages/algo-ts/src"],
+      "@algorandfoundation/algorand-typescript/*": ["./packages/algo-ts/src/*"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    ".tstoolkitrc.ts",
+    "scripts/**/*.ts",
+    "examples/**/*.ts",
+    "rollup.config.ts",
+    "tests/**/*.ts",
+    "vitest.config.mts",
+    "eslint.config.mjs"
+  ],
+  "exclude": ["packages/**/*.ts"]
+}

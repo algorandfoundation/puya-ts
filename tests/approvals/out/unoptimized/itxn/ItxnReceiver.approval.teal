@@ -1,0 +1,157 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // tests/approvals/itxn.algo.ts:226
+    // class ItxnReceiver extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main___algots__.defaultCreate@5
+    b main_abi_routing@2
+
+main_abi_routing@2:
+    // tests/approvals/itxn.algo.ts:226
+    // class ItxnReceiver extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x1971d197 // method "receivePay(uint64,pay,string)(uint64,uint64,string)"
+    uncover 1
+    match main_receivePay_route@3
+    b main_switch_case_next@4
+
+main_switch_case_next@4:
+    b main_after_if_else@6
+
+main_after_if_else@6:
+    // tests/approvals/itxn.algo.ts:226
+    // class ItxnReceiver extends Contract {
+    err
+
+main_receivePay_route@3:
+    // tests/approvals/itxn.algo.ts:227
+    // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    callsub receivePay
+    b main_switch_case_next@4
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/itxn.algo.ts:226
+    // class ItxnReceiver extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/itxn.algo.ts::ItxnReceiver.receivePay[routing]() -> void:
+receivePay:
+    b receivePay_block@0
+
+receivePay_block@0:
+    // tests/approvals/itxn.algo.ts:227
+    // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txn GroupIndex
+    intc_1 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_1 // pay
+    ==
+    assert // transaction type is pay
+    txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    uncover 2
+    uncover 2
+    uncover 2
+    callsub tests/approvals/itxn.algo.ts::ItxnReceiver.receivePay
+    pushbytes 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/itxn.algo.ts::ItxnReceiver.receivePay(a: uint64, b: uint64, c: bytes) -> bytes:
+tests/approvals/itxn.algo.ts::ItxnReceiver.receivePay:
+    // tests/approvals/itxn.algo.ts:227
+    // public receivePay(a: uint64, b: gtxn.PaymentTxn, c: string): [uint64, uint64, string] {
+    proto 3 1
+    b tests/approvals/itxn.algo.ts::ItxnReceiver.receivePay_block@0
+
+tests/approvals/itxn.algo.ts::ItxnReceiver.receivePay_block@0:
+    // tests/approvals/itxn.algo.ts:228
+    // return [a, b.amount, c]
+    frame_dig -2
+    gtxns Amount
+    frame_dig -3
+    itob
+    pushbytes 0x
+    uncover 1
+    concat
+    uncover 1
+    itob
+    concat
+    frame_dig -1
+    len
+    itob
+    extract 6 2
+    frame_dig -1
+    concat
+    pushint 18 // 18
+    itob
+    extract 6 2
+    uncover 2
+    uncover 1
+    concat
+    uncover 1
+    concat
+    retsub
+
+
+// tests/approvals/itxn.algo.ts::ItxnReceiver.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
+
+__algots__.defaultCreate_block@0:
+    retsub

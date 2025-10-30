@@ -11,20 +11,19 @@
 
 The AVM supports two integer types in its standard set of ops.
 
-* **uint64**: An unsigned 64-bit integer where the AVM will error on over or under flows
-* **biguint**: An unsigned variable bit, big-endian integer represented as an array of bytes with an indeterminate number of leading zeros which are truncated by several math ops. The max size of a biguint is 512-bits. Over and under flows will cause errors.
+- **uint64**: An unsigned 64-bit integer where the AVM will error on over or under flows
+- **biguint**: An unsigned variable bit, big-endian integer represented as an array of bytes with an indeterminate number of leading zeros which are truncated by several math ops. The max size of a biguint is 512-bits. Over and under flows will cause errors.
 
 EcmaScript supports two numeric types.
 
-* **number**: A floating point signed value with 64 bits of precision capable of a max safe integer value of 2^53 - 1. A number can be declared with a numeric literal, or with the `Number(...)` factory method.
-* **bigint**: A signed arbitrary-precision integer with an implementation defined limit based on the platform. In practice this is greater than 512-bit. A bigint can be declared with a numeric literal and `n` suffix, or with the `BigInt(...)` factory method.
+- **number**: A floating point signed value with 64 bits of precision capable of a max safe integer value of 2^53 - 1. A number can be declared with a numeric literal, or with the `Number(...)` factory method.
+- **bigint**: A signed arbitrary-precision integer with an implementation defined limit based on the platform. In practice this is greater than 512-bit. A bigint can be declared with a numeric literal and `n` suffix, or with the `BigInt(...)` factory method.
 
 EcmaScript and TypeScript both do not support operator overloading, despite some [previous](https://github.com/tc39/notes/blob/main/meetings/2023-11/november-28.md#withdrawing-operator-overloading) [attempts](https://github.com/microsoft/TypeScript/issues/2319) to do so.
 
 TealScript [makes use of branded `number` types](https://tealscript.netlify.app/guides/supported-types/numbers/) for all bit sizes from 8 => 512, although it doesn't allow `number` variables, you must specify the actual type you want (e.g. `uint64`). Since the source code is never executed, the safe limits of the `number` type are not a concern. Compiled code does not perform overflow checks on calculations until a return value is being encoded meaning a uint<8> is effectively a uint<64> until it's returned.
 
 Algorand Python has specific [UInt64 and BigUint types](https://algorandfoundation.github.io/puya/lg-types.html#avm-types) that have semantics that exactly match the AVM semantics. Python allows for operator overloading so these types also use native operators (where they align to functionality in the underlying AVM).
-
 
 ## Requirements
 
@@ -36,7 +35,7 @@ Algorand Python has specific [UInt64 and BigUint types](https://algorandfoundati
 
 - **[AlgoKit Guiding Principles](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/algokit.md#guiding-principles)** - specifically Seamless onramp, Leverage existing ecosystem, Meet devs where they are
 - **[Algorand Python Principles](https://algorandfoundation.github.io/puya/principles.html#principles)**
-- **[Algorand TypeScript Guiding Principles](../README.md#guiding-principals)**
+- **[Algorand TypeScript Guiding Principles](../guiding-principles)**
 
 ## Options
 
@@ -54,7 +53,6 @@ A `UInt64` and `BigUint` class could be defined which make use of `bigint` inter
 
 ```ts
 class UInt64 {
-
   private value: bigint
 
   constructor(value: bigint | number) {
@@ -67,7 +65,6 @@ class UInt64 {
 
   /* etc */
 }
-
 ```
 
 This solution provides the ultimate in type safety and semantic/syntactic compatibility, and requires no custom TypeScript transformer to run _correctly_ on Node.js. The semantics should be obvious to anyone familiar with Object Oriented Programming. The downside is that neither EcmaScript nor TypeScript support operator overloading which results in more verbose and unwieldy math expressions. The lack of idiomatic TypeScript mathematical operators is a deal breaker that rules this option out.
@@ -80,7 +77,6 @@ const b = Uint64(256)
 const c1 = a + b
 // Works, but is verbose and unwieldy for more complicated expressions and isn't idiomatic TypeScript
 const c2 = a.add(b)
-
 ```
 
 ### Option 3 - Branded `bigint`
@@ -95,7 +91,6 @@ declare function BigUint(v): uint64
 // Branded types
 type uint64 = bigint & { __type?: 'uint64' }
 type biguint = bigint & { __type?: 'biguint' }
-
 
 const a: uint64 = 323n // Declare with type annotation and raw `bigint` literal
 const b = UInt64(12n) // Declare with factory
@@ -114,18 +109,17 @@ test(a, b)
 function test(x: uint64, y: biguint) {
   // ...
 }
-
 ```
 
 This solution looks like normal TypeScript and results in math expressions that are much easier to read. The factory methods (e.g. `UInt64(4n)`) mimics native equivalents and should be familiar to existing developers.
 
 The drawbacks of this solution are:
- - Less implicit type safety for branded types as TypeScript will infer the type of any binary math expression to be the base numeric type (a type annotation will be required where ever an identifier is declared, and the compiler will need to enforce this)
- - In order to have TypeScript execution semantics of a `uint64` or `biguint` match the AVM, a custom TypeScript transformer will be required to wrap numeric operations in logic that checks for over and under flows line-by-line; this is straightforward to write though and has been successfully spiked out
- - Additional type checking will be required by the compiler to catch instances of assigning one numeric type to the other (accidental implicit assignment) e.g. assigning a `uint64` value to `biguint`.
- - Literals will require an `n` suffix
- - `bigint` cannot be used to index an object/array (only `number | string | symbol`)
 
+- Less implicit type safety for branded types as TypeScript will infer the type of any binary math expression to be the base numeric type (a type annotation will be required where ever an identifier is declared, and the compiler will need to enforce this)
+- In order to have TypeScript execution semantics of a `uint64` or `biguint` match the AVM, a custom TypeScript transformer will be required to wrap numeric operations in logic that checks for over and under flows line-by-line; this is straightforward to write though and has been successfully spiked out
+- Additional type checking will be required by the compiler to catch instances of assigning one numeric type to the other (accidental implicit assignment) e.g. assigning a `uint64` value to `biguint`.
+- Literals will require an `n` suffix
+- `bigint` cannot be used to index an object/array (only `number | string | symbol`)
 
 ### Option 4 Explicitly tagged brand types
 
@@ -152,7 +146,6 @@ c2 = (a + b) as uint64 // ok
 
 This introduces a degree of type safety with the in-built TypeScript type system at the significant expense of legibility and writability.
 
-
 ### Option 5 Branded `number` (TEALScript approach)
 
 TEALScript uses a similar approach to option 3, but uses `number` as the underlying type rather than `bigint`. This has the advantage of being directly compatible with casting raw numbers (e.g. `const x: uint64 = 3` rather than `const x: uint64 = 3n`).
@@ -163,8 +156,7 @@ If `number` is used as the base brand type for `uint64` and `bigint` is used as 
 
 A key issue with using `number` as the base type is that per option 1, it's semantically a floating point number, not an integer. It is possible for the compiler to check for and disallow non-integer constant literals though, which would prevent a non-integer value appearing outside of division. A custom TypeScript transformer will need to wrap division operations to allow the result to be truncated as an integer; this is a violation of the semantic compatibility principle, but given a branded type would be used rather than `number` (the fact the base type is `number` is largely hidden from the developer) it probably doesn't violate the principle of least surprise and may be considered an acceptable compromise.
 
-The other problem with use of `number` as the base brand type is that you will lose precision and get linting errors when representing a number greater than 53-bits as a constant literal e.g. `const x: uint64 = 9007199254740992`. It *may* be possible for a custom TypeScript transformer to get the value before precision is lost (needs investigation) and then disable that particular linting tool, but that is a fairly clear violation of semantic compatibility. The workaround would have to be that the compiler detects numbers > `Number.MAX_SAFE_INTEGER` and complains and instead you would have to use the factory syntax with a `bigint` constant literal e.g. `const x = UInt64(9007199254740992n)`.
-
+The other problem with use of `number` as the base brand type is that you will lose precision and get linting errors when representing a number greater than 53-bits as a constant literal e.g. `const x: uint64 = 9007199254740992`. It _may_ be possible for a custom TypeScript transformer to get the value before precision is lost (needs investigation) and then disable that particular linting tool, but that is a fairly clear violation of semantic compatibility. The workaround would have to be that the compiler detects numbers > `Number.MAX_SAFE_INTEGER` and complains and instead you would have to use the factory syntax with a `bigint` constant literal e.g. `const x = UInt64(9007199254740992n)`.
 
 ## Preferred option
 

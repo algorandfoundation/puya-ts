@@ -1,0 +1,176 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__() -> bool:
+    block@0: // L4
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@9
+    block@1: // abi_routing_L4
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@2 : block@7
+    block@2: // call_NoOp_L4
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "testSingleArg()uint64[]" => block@3, method "testTwoArg()uint64[]" => block@4, method "testThreeArg()uint64[]" => block@5, * => block@6}
+    block@3: // testSingleArg_route_L5
+        tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg[routing]()
+        goto block@6
+    block@4: // testTwoArg_route_L12
+        tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg[routing]()
+        goto block@6
+    block@5: // testThreeArg_route_L19
+        tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg[routing]()
+        goto block@6
+    block@6: // switch_case_next_L4
+        goto block@8
+    block@7: // create_NoOp_L4
+        goto block@8
+    block@8: // after_if_else_L4
+        goto block@10
+    block@9: // __algots__.defaultCreate_L4
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/urange.algo.ts::UrangeAlgo.__algots__.defaultCreate()
+        exit 1u
+    block@10: // after_if_else_L4
+        exit 0u
+
+subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg[routing]() -> void:
+    block@0: // L5
+        let tmp%0#0: Encoded(len+uint64[]) = tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg()
+        let tmp%1#0: bytes = (concat 0x151f7c75 tmp%0#0)
+        (log tmp%1#0)
+        exit 1u
+
+subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg[routing]() -> void:
+    block@0: // L12
+        let tmp%0#0: Encoded(len+uint64[]) = tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg()
+        let tmp%1#0: bytes = (concat 0x151f7c75 tmp%0#0)
+        (log tmp%1#0)
+        exit 1u
+
+subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg[routing]() -> void:
+    block@0: // L19
+        let tmp%0#0: Encoded(len+uint64[]) = tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg()
+        let tmp%1#0: bytes = (concat 0x151f7c75 tmp%0#0)
+        (log tmp%1#0)
+        exit 1u
+
+subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> Encoded(len+uint64[]):
+    block@0: // L5
+        let encoded_array%0#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>()
+        let results#0: Encoded(len+uint64[]) = encoded_array%0#0
+        (assert 1u) // Step cannot be zero
+        let value_internal%0#0: uint64 = 0u
+        goto block@1
+    block@1: // for_header_L7
+        let value_internal%0#1: uint64 = φ(value_internal%0#0 <- block@0, value_internal%0#2 <- block@3)
+        let results#1: Encoded(len+uint64[]) = φ(results#0 <- block@0, results#2 <- block@3)
+        let continue_looping%0#0: bool = (< value_internal%0#1 5u)
+        goto continue_looping%0#0 ? block@2 : block@4
+    block@2: // for_body_L7
+        let temp#0: uint64 = value_internal%0#1
+        let i#0: uint64 = temp#0
+        let encoded_array%1#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(i#0)
+        let total_length%0#0: uint64 = (len encoded_array%1#0)
+        let extract_to_end%0#0: bytes = (substring3 encoded_array%1#0 2u total_length%0#0)
+        let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
+        let total_length%1#0: uint64 = (len concat%0#0)
+        let extract_to_end%1#0: bytes = (substring3 concat%0#0 2u total_length%1#0)
+        let len%0#0: uint64 = (len extract_to_end%1#0)
+        let div_floor%0#0: uint64 = (/ len%0#0 8u)
+        let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
+        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
+        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = replace%0#0
+        let results#2: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
+        goto block@3
+    block@3: // for_footer_L7
+        let value_internal%0#2: uint64 = (+ value_internal%0#1 1u)
+        goto block@1
+    block@4: // after_for_L7
+        return results#1
+
+subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> Encoded(len+uint64[]):
+    block@0: // L12
+        let encoded_array%0#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>()
+        let results#0: Encoded(len+uint64[]) = encoded_array%0#0
+        (assert 1u) // Step cannot be zero
+        let value_internal%0#0: uint64 = 2u
+        goto block@1
+    block@1: // for_header_L14
+        let value_internal%0#1: uint64 = φ(value_internal%0#0 <- block@0, value_internal%0#2 <- block@3)
+        let results#1: Encoded(len+uint64[]) = φ(results#0 <- block@0, results#2 <- block@3)
+        let continue_looping%0#0: bool = (< value_internal%0#1 5u)
+        goto continue_looping%0#0 ? block@2 : block@4
+    block@2: // for_body_L14
+        let temp#0: uint64 = value_internal%0#1
+        let i#0: uint64 = temp#0
+        let encoded_array%1#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(i#0)
+        let total_length%0#0: uint64 = (len encoded_array%1#0)
+        let extract_to_end%0#0: bytes = (substring3 encoded_array%1#0 2u total_length%0#0)
+        let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
+        let total_length%1#0: uint64 = (len concat%0#0)
+        let extract_to_end%1#0: bytes = (substring3 concat%0#0 2u total_length%1#0)
+        let len%0#0: uint64 = (len extract_to_end%1#0)
+        let div_floor%0#0: uint64 = (/ len%0#0 8u)
+        let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
+        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
+        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = replace%0#0
+        let results#2: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
+        goto block@3
+    block@3: // for_footer_L14
+        let value_internal%0#2: uint64 = (+ value_internal%0#1 1u)
+        goto block@1
+    block@4: // after_for_L14
+        return results#1
+
+subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg() -> Encoded(len+uint64[]):
+    block@0: // L19
+        let encoded_array%0#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>()
+        let results#0: Encoded(len+uint64[]) = encoded_array%0#0
+        (assert 3u) // Step cannot be zero
+        let value_internal%0#0: uint64 = 2u
+        goto block@1
+    block@1: // for_header_L21
+        let value_internal%0#1: uint64 = φ(value_internal%0#0 <- block@0, value_internal%0#2 <- block@3)
+        let results#1: Encoded(len+uint64[]) = φ(results#0 <- block@0, results#2 <- block@3)
+        let continue_looping%0#0: bool = (< value_internal%0#1 10u)
+        goto continue_looping%0#0 ? block@2 : block@4
+    block@2: // for_body_L21
+        let temp#0: uint64 = value_internal%0#1
+        let i#0: uint64 = temp#0
+        let encoded_array%1#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(i#0)
+        let total_length%0#0: uint64 = (len encoded_array%1#0)
+        let extract_to_end%0#0: bytes = (substring3 encoded_array%1#0 2u total_length%0#0)
+        let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
+        let total_length%1#0: uint64 = (len concat%0#0)
+        let extract_to_end%1#0: bytes = (substring3 concat%0#0 2u total_length%1#0)
+        let len%0#0: uint64 = (len extract_to_end%1#0)
+        let div_floor%0#0: uint64 = (/ len%0#0 8u)
+        let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
+        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
+        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = replace%0#0
+        let results#2: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
+        goto block@3
+    block@3: // for_footer_L21
+        let value_internal%0#2: uint64 = (+ value_internal%0#1 3u)
+        goto block@1
+    block@4: // after_for_L21
+        return results#1
+
+subroutine tests/approvals/urange.algo.ts::UrangeAlgo.__algots__.defaultCreate() -> void:
+    block@0: // L4
+        return 

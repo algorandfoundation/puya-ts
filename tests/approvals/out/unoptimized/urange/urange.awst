@@ -1,0 +1,47 @@
+contract UrangeAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testSingleArg(): arc4.dynamic_array<uint64>
+  {
+    results: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>()
+    for (temp in urange(0, 5, 1)) {
+      i: uint64 = copy(temp)
+      results: arc4.dynamic_array<uint64> = copy(results).concat(new arc4.dynamic_array<uint64>(i))
+    }
+    return results
+  }
+  
+  testTwoArg(): arc4.dynamic_array<uint64>
+  {
+    results: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>()
+    for (temp in urange(2, 5, 1)) {
+      i: uint64 = copy(temp)
+      results: arc4.dynamic_array<uint64> = copy(results).concat(new arc4.dynamic_array<uint64>(i))
+    }
+    return results
+  }
+  
+  testThreeArg(): arc4.dynamic_array<uint64>
+  {
+    results: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>()
+    for (temp in urange(2, 10, 3)) {
+      i: uint64 = copy(temp)
+      results: arc4.dynamic_array<uint64> = copy(results).concat(new arc4.dynamic_array<uint64>(i))
+    }
+    return results
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

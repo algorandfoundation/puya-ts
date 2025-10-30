@@ -1,0 +1,149 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 5 1 0 4
+    // tests/approvals/match-expr.algo.ts:4
+    // class MatchExprAlgo extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0x937e729a // method "testMatches(uint64)void"
+    txna ApplicationArgs 0
+    match main_testMatches_route@3
+    err
+
+main_testMatches_route@3:
+    // tests/approvals/match-expr.algo.ts:5
+    // public testMatches(x: uint64) {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    b testMatches
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/match-expr.algo.ts:4
+    // class MatchExprAlgo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return
+
+
+// tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches[routing]() -> void:
+testMatches:
+    // tests/approvals/match-expr.algo.ts:5
+    // public testMatches(x: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/match-expr.algo.ts:6
+    // const xObj = { x }
+    itob
+    // tests/approvals/match-expr.algo.ts:7
+    // assertMatch(xObj, { x: 5 }, 'x should be 5')
+    dup
+    intc_2 // 0
+    extract_uint64
+    dup
+    intc_0 // 5
+    ==
+    assert // x should be 5
+    // tests/approvals/match-expr.algo.ts:8
+    // assertMatch(xObj, { x: { not: 3 } }, 'x should not be 3')
+    dup
+    pushint 3 // 3
+    !=
+    assert // x should not be 3
+    // tests/approvals/match-expr.algo.ts:9
+    // assertMatch(Txn, { sender: { not: Global.zeroAddress } })
+    txn Sender
+    global ZeroAddress
+    !=
+    assert // assert target is match for conditions
+    // tests/approvals/match-expr.algo.ts:10
+    // assert(match(xObj, { x: { greaterThan: 4 } }))
+    dup
+    intc_3 // 4
+    >
+    assert
+    // tests/approvals/match-expr.algo.ts:11
+    // assert(match(xObj, { x: { lessThan: 6 } }))
+    dup
+    pushint 6 // 6
+    <
+    assert
+    // tests/approvals/match-expr.algo.ts:12
+    // assert(match(xObj, { x: { greaterThanEq: 5 } }))
+    dup
+    intc_0 // 5
+    >=
+    assert
+    // tests/approvals/match-expr.algo.ts:13
+    // assert(match(xObj, { x: { lessThanEq: 5 } }))
+    intc_0 // 5
+    <=
+    assert
+    // tests/approvals/match-expr.algo.ts:15
+    // const xArray = [x]
+    pushbytes 0x0001
+    swap
+    concat
+    // tests/approvals/match-expr.algo.ts:17
+    // assert(match(xArray, [5]))
+    dup
+    intc_2 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    ==
+    swap
+    pushint 2 // 2
+    extract_uint64
+    dup
+    intc_0 // 5
+    ==
+    dig 2
+    &&
+    assert
+    // tests/approvals/match-expr.algo.ts:18
+    // assert(match(xArray, [{ greaterThan: 4 }]))
+    dup
+    intc_3 // 4
+    >
+    dig 2
+    &&
+    assert
+    // tests/approvals/match-expr.algo.ts:19
+    // assert(match(xArray, [{ lessThan: 6 }]))
+    dup
+    pushint 6 // 6
+    <
+    dig 2
+    &&
+    assert
+    // tests/approvals/match-expr.algo.ts:20
+    // assert(match(xArray, [{ greaterThanEq: 5 }]))
+    dup
+    intc_0 // 5
+    >=
+    dig 2
+    &&
+    assert
+    // tests/approvals/match-expr.algo.ts:21
+    // assert(match(xArray, [{ lessThanEq: 5 }]))
+    intc_0 // 5
+    <=
+    &&
+    // tests/approvals/match-expr.algo.ts:5
+    // public testMatches(x: uint64) {
+    return

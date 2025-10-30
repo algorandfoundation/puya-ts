@@ -1,0 +1,264 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine _puya_lib.arc4.dynamic_array_concat_dynamic_element(array_items_count: uint64, array_head_and_tail: bytes, new_items_count: uint64, new_head_and_tail: bytes) -> bytes:
+    block@0: // L200
+        let new_head#0: bytes = 0x
+        let tmp%0#0: uint64 = (* new_items_count#0 2u)
+        let item_offset_adjustment#0: uint64 = tmp%0#0
+        let tmp%1#0: uint64 = (* array_items_count#0 2u)
+        (assert 2u) // Step cannot be zero
+        let value_internal%0#0: uint64 = 0u
+        goto block@1
+    block@1: // for_header_L211
+        let value_internal%0#1: uint64 = φ(value_internal%0#0 <- block@0, value_internal%0#2 <- block@3)
+        let new_head#1: bytes = φ(new_head#0 <- block@0, new_head#2 <- block@3)
+        let continue_looping%0#0: bool = (< value_internal%0#1 tmp%1#0)
+        goto continue_looping%0#0 ? block@2 : block@4
+    block@2: // for_body_L212
+        let head_offset#0: uint64 = value_internal%0#1
+        let tmp%2#0: uint64 = (extract_uint16 array_head_and_tail#0 head_offset#0)
+        let item_offset#0: uint64 = tmp%2#0
+        let tmp%3#0: uint64 = (+ item_offset_adjustment#0 item_offset#0)
+        let tmp%4#0: bytes = (itob tmp%3#0)
+        let tmp%5#0: bytes = ((extract 6 2) tmp%4#0)
+        let tmp%6#0: bytes = (concat new_head#1 tmp%5#0)
+        let new_head#2: bytes = tmp%6#0
+        goto block@3
+    block@3: // for_footer_L211
+        let value_internal%0#2: uint64 = (+ value_internal%0#1 2u)
+        goto block@1
+    block@4: // after_for_L211
+        let tmp%7#0: uint64 = (len array_head_and_tail#0)
+        let head_and_tail_length#0: uint64 = tmp%7#0
+        let tmp%8#0: uint64 = (* new_items_count#0 2u)
+        (assert 2u) // Step cannot be zero
+        let value_internal%1#0: uint64 = 0u
+        goto block@5
+    block@5: // for_header_L216
+        let value_internal%1#1: uint64 = φ(value_internal%1#0 <- block@4, value_internal%1#2 <- block@7)
+        let new_head#3: bytes = φ(new_head#1 <- block@4, new_head#4 <- block@7)
+        let continue_looping%1#0: bool = (< value_internal%1#1 tmp%8#0)
+        goto continue_looping%1#0 ? block@6 : block@8
+    block@6: // for_body_L217
+        let head_offset#1: uint64 = value_internal%1#1
+        let tmp%9#0: uint64 = (extract_uint16 new_head_and_tail#0 head_offset#1)
+        let item_offset#1: uint64 = tmp%9#0
+        let tmp%10#0: uint64 = (+ head_and_tail_length#0 item_offset#1)
+        let tmp%11#0: bytes = (itob tmp%10#0)
+        let tmp%12#0: bytes = ((extract 6 2) tmp%11#0)
+        let tmp%13#0: bytes = (concat new_head#3 tmp%12#0)
+        let new_head#4: bytes = tmp%13#0
+        goto block@7
+    block@7: // for_footer_L216
+        let value_internal%1#2: uint64 = (+ value_internal%1#1 2u)
+        goto block@5
+    block@8: // after_for_L216
+        let tmp%14#0: uint64 = (+ array_items_count#0 new_items_count#0)
+        let tmp%15#0: bytes = (itob tmp%14#0)
+        let tmp%16#0: bytes = ((extract 6 2) tmp%15#0)
+        let tmp%17#0: bytes = (concat tmp%16#0 new_head#3)
+        let tmp%18#0: uint64 = (* array_items_count#0 2u)
+        let tmp%19#0: bytes = (substring3 array_head_and_tail#0 tmp%18#0 head_and_tail_length#0)
+        let tmp%20#0: bytes = (concat tmp%17#0 tmp%19#0)
+        let tmp%21#0: uint64 = (* new_items_count#0 2u)
+        let tmp%22#0: uint64 = (len new_head_and_tail#0)
+        let tmp%23#0: bytes = (substring3 new_head_and_tail#0 tmp%21#0 tmp%22#0)
+        let tmp%24#0: bytes = (concat tmp%20#0 tmp%23#0)
+        return tmp%24#0
+
+subroutine tests/approvals/arc4-clone.algo.ts::echo(s: Encoded((len+uint8[]),uint8)) -> <Encoded((len+uint8[]),uint8), Encoded((len+uint8[]),uint8)>:
+    block@0: // L60
+        let s%is_original#0: bool = 1u
+        let s%out#0: Encoded((len+uint8[]),uint8) = s#0
+        return s#0 s#0
+
+subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.__puya_arc4_router__() -> bool:
+    block@0: // L16
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@10
+    block@1: // abi_routing_L16
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@2 : block@8
+    block@2: // call_NoOp_L16
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "aliasing(uint64[])void" => block@3, method "receive(uint64[])void" => block@4, method "receiveReadonly(uint64[])void" => block@5, method "structReturn((uint64,string,(byte[],uint8)))(byte[],uint8)" => block@6, * => block@7}
+    block@3: // aliasing_route_L17
+        tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.aliasing[routing]()
+        goto block@7
+    block@4: // receive_route_L49
+        tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receive[routing]()
+        goto block@7
+    block@5: // receiveReadonly_route_L51
+        tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receiveReadonly[routing]()
+        goto block@7
+    block@6: // structReturn_route_L53
+        tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn[routing]()
+        goto block@7
+    block@7: // switch_case_next_L16
+        goto block@9
+    block@8: // create_NoOp_L16
+        goto block@9
+    block@9: // after_if_else_L16
+        goto block@11
+    block@10: // __algots__.defaultCreate_L16
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.__algots__.defaultCreate()
+        exit 1u
+    block@11: // after_if_else_L16
+        exit 0u
+
+subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.aliasing[routing]() -> void:
+    block@0: // L17
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<uint64>
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
+        tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.aliasing(as_Encoded(len+uint64[])%0#0)
+        exit 1u
+
+subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receive[routing]() -> void:
+    block@0: // L49
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<uint64>
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
+        let receive%0#0: Encoded(len+uint64[]) = tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receive(as_Encoded(len+uint64[])%0#0)
+        exit 1u
+
+subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receiveReadonly[routing]() -> void:
+    block@0: // L51
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<uint64>
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
+        tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receiveReadonly(as_Encoded(len+uint64[])%0#0)
+        exit 1u
+
+subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn[routing]() -> void:
+    block@0: // L53
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let tuple_len%0#0: uint64 = (len tmp%0#0)
+        let extract_uint16%0#0: uint64 = (extract_uint16 tmp%0#0 8u) // on error: invalid tuple encoding
+        let eq%0#0: bool = (== extract_uint16%0#0 12u)
+        (assert eq%0#0) // invalid tail pointer at index 1 of (uint64,(len+utf8[]),((len+uint8[]),uint8))
+        let substring3%0#0: bytes = (substring3 tmp%0#0 extract_uint16%0#0 tuple_len%0#0)
+        let length%0#0: uint64 = array_len(substring3%0#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let add%1#0: uint64 = (+ 12u add%0#0)
+        let extract_uint16%1#0: uint64 = (extract_uint16 tmp%0#0 10u) // on error: invalid tuple encoding
+        let eq%1#0: bool = (== extract_uint16%1#0 add%1#0)
+        (assert eq%1#0) // invalid tail pointer at index 2 of (uint64,(len+utf8[]),((len+uint8[]),uint8))
+        let substring3%1#0: bytes = (substring3 tmp%0#0 extract_uint16%1#0 tuple_len%0#0)
+        let tuple_len%1#0: uint64 = (len substring3%1#0)
+        let extract_uint16%2#0: uint64 = (extract_uint16 substring3%1#0 0u) // on error: invalid tuple encoding
+        let eq%2#0: bool = (== extract_uint16%2#0 3u)
+        (assert eq%2#0) // invalid tail pointer at index 0 of ((len+uint8[]),uint8)
+        let substring3%2#0: bytes = (substring3 substring3%1#0 extract_uint16%2#0 tuple_len%1#0)
+        let length%1#0: uint64 = array_len(substring3%2#0)
+        let mul%1#0: uint64 = (* length%1#0 1u)
+        let add%2#0: uint64 = (+ mul%1#0 2u)
+        let add%3#0: uint64 = (+ 3u add%2#0)
+        let add%4#0: uint64 = (+ add%1#0 add%3#0)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%3#0: bool = (== len%0#0 add%4#0)
+        (assert eq%3#0) // invalid number of bytes for TopLevelStruct
+        let as_Encoded(uint64,(len+utf8[]),((len+uint8[]),uint8))%0#0: Encoded(uint64,(len+utf8[]),((len+uint8[]),uint8)) = tmp%0#0
+        let tmp%1#0: Encoded((len+uint8[]),uint8) = tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn(as_Encoded(uint64,(len+utf8[]),((len+uint8[]),uint8))%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.aliasing(mutable: Encoded(len+uint64[])) -> void:
+    block@0: // L17
+        let needClone#0: Encoded(len+uint64[]) = mutable#0
+        let tmp%0#0: uint64 = array_len(mutable#0)
+        let needClone2#0: Encoded(len+uint64[]) = mutable#0
+        let (tupleOfMutable.0#0: Encoded(len+uint64[]), tupleOfMutable.1#0: uint64) = (mutable#0, 1u)
+        let x#0: Encoded(len+uint64[]) = tupleOfMutable.0#0
+        let encoded_array%0#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(1u, 2u, 3u)
+        let tmp%1#0: Encoded((len+uint64[])) = bytes_encode<((len+uint64[]))>(encoded_array%0#0)
+        let mutableTupleOfMutable#0: Encoded((len+uint64[])) = tmp%1#0
+        let tuple_item%0#0: Encoded(len+uint64[]) = extract_value(mutableTupleOfMutable#0, 0)
+        let y#0: Encoded(len+uint64[]) = tuple_item%0#0
+        let z#0: Encoded(len+uint64[]) = mutable#0
+        let receive%0#0: Encoded(len+uint64[]) = tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receive(z#0)
+        let tmp%2#0: uint64 = array_len(mutable#0)
+        tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receiveReadonly(mutable#0)
+        let m2#0: Encoded(len+uint64[]) = mutable#0
+        let encoded_array%1#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(1u)
+        let encoded_array%2#0: Encoded(len+(len+uint64[])[]) = bytes_encode<(len+(len+uint64[])[])>(encoded_array%1#0)
+        let nestedMutables#0: Encoded(len+(len+uint64[])[]) = encoded_array%2#0
+        let encoded_array%3#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(2u)
+        let encoded_array%4#0: Encoded(len+(len+uint64[])[]) = bytes_encode<(len+(len+uint64[])[])>(mutable#0, encoded_array%3#0)
+        let nestedMutables2#0: Encoded(len+(len+uint64[])[]) = encoded_array%4#0
+        let m3#0: Encoded(len+(len+uint64[])[]) = nestedMutables#0
+        let encoded_array%5#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(123u)
+        let extract_uint16%0#0: uint64 = (extract_uint16 nestedMutables#0 0u)
+        let total_length%0#0: uint64 = (len nestedMutables#0)
+        let extract_to_end%0#0: bytes = (substring3 nestedMutables#0 2u total_length%0#0)
+        let tmp%3#0: Encoded((len+uint64[])[]) = bytes_encode<(len+uint64[])[]>(encoded_array%5#0)
+        let as_Encoded(len+(len+uint64[])[])%0#0: Encoded(len+(len+uint64[])[]) = _puya_lib.arc4.dynamic_array_concat_dynamic_element(extract_uint16%0#0, extract_to_end%0#0, 1u, tmp%3#0)
+        let m4#0: Encoded(len+(len+uint64[])[]) = as_Encoded(len+(len+uint64[])[])%0#0
+        let total_length%1#0: uint64 = (len mutable#0)
+        let extract_to_end%1#0: bytes = (substring3 mutable#0 2u total_length%1#0)
+        let concat%0#0: Encoded(len+uint64[]) = (concat mutable#0 extract_to_end%1#0) // on error: max array length exceeded
+        let total_length%2#0: uint64 = (len concat%0#0)
+        let extract_to_end%2#0: bytes = (substring3 concat%0#0 2u total_length%2#0)
+        let len%0#0: uint64 = (len extract_to_end%2#0)
+        let div_floor%0#0: uint64 = (/ len%0#0 8u)
+        let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
+        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
+        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = replace%0#0
+        let m5#0: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
+        return 
+
+subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receive(mutable: Encoded(len+uint64[])) -> Encoded(len+uint64[]):
+    block@0: // L49
+        let mutable%is_original#0: bool = 1u
+        let mutable%out#0: Encoded(len+uint64[]) = mutable#0
+        return mutable%out#0
+
+subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receiveReadonly(a: Encoded(len+uint64[])) -> void:
+    block@0: // L51
+        return 
+
+subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn(arg: Encoded(uint64,(len+utf8[]),((len+uint8[]),uint8))) -> Encoded((len+uint8[]),uint8):
+    block@0: // L53
+        let tuple_item%0#0: Encoded((len+uint8[]),uint8) = extract_value(arg#0, 2)
+        let tuple_item%1#0: Encoded((len+uint8[]),uint8) = extract_value(arg#0, 2)
+        let (echo%0#0: Encoded((len+uint8[]),uint8), echo%1#0: Encoded((len+uint8[]),uint8)) = tests/approvals/arc4-clone.algo.ts::echo(tuple_item%1#0)
+        let tmp%0#0: bool = (== tuple_item%0#0 echo%0#0)
+        (assert tmp%0#0) // this won't error
+        let tuple_item%2#0: Encoded((len+uint8[]),uint8) = extract_value(arg#0, 2)
+        return tuple_item%2#0
+
+subroutine tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.__algots__.defaultCreate() -> void:
+    block@0: // L16
+        return 

@@ -1,0 +1,85 @@
+contract StructDemo
+{
+  boxes {
+    ["plugins"]: string => PluginInfo
+    ["main"]: PluginInfo
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testVectorCreationAndEquality(): void
+  {
+    v1: Vector = new Vector(x=($0 = #{ x: 0, y: 0 }).x, y=$0.y)
+    log(reinterpret_cast<bytes>(v1.x))
+    log(reinterpret_cast<bytes>(v1.y))
+    v2: Vector = new Vector(x=($1 = #{ x: ($2 = #{ x: ($3 = #[0, 0]).1, y: $3.0 }).x, y: $2.y }).x, y=$1.y)
+    assert(reinterpret_cast<bytes>(v1) == reinterpret_cast<bytes>(v2))
+  }
+  
+  addVectors(v1: Vector, v2: Vector): Vector
+  {
+    return new Vector(x=($4 = #{ x: ARC4_ENCODE(ARC4_DECODE(v1.x) + ARC4_DECODE(v2.x), wtype=arc4.uint64), y: ARC4_ENCODE(ARC4_DECODE(v1.y) + ARC4_DECODE(v2.y), wtype=arc4.uint64) }).x, y=$4.y)
+  }
+  
+  mutateVector(v1: Vector, newX: arc4.uint64, newY: arc4.uint64): Vector
+  {
+    v1.x: arc4.uint64 = newX
+    v1.y: arc4.uint64 = newY
+    return v1
+  }
+  
+  implicitCastingAndSpreading(v1: Vector): void
+  {
+    v2: Vector = new Vector(x=($5 = #{ x: v1.x, y: v1.y }).x, y=$5.y)
+    v3: Vector = new Vector(x=($6 = #{ x: v2.x, y: v2.y }).x, y=$6.y)
+    assert(reinterpret_cast<bytes>(v1) == reinterpret_cast<bytes>(v2))
+    assert(reinterpret_cast<bytes>(v3) == reinterpret_cast<bytes>(v1))
+  }
+  
+  toAndFromBytes(v1: Vector): Vector
+  {
+    v1_bytes: bytes = reinterpret_cast<bytes>(v1)
+    return ARC4_FROM_BYTES(v1_bytes, wtype=Vector, validate=false)
+  }
+  
+  toNative(v1: Vector): ObjectF8C529BB
+  {
+    return ARC4_DECODE(v1)
+  }
+  
+  getPlugin(key: string): PluginInfo
+  {
+    value: PluginInfo = copy(Box[BoxMapKey(prefix="plugins", key=key)].value)
+    assert(ARC4_DECODE(value.lastCalled) > 0, comment=Last called not zero)
+    return value
+  }
+  
+  getMain(): PluginInfo
+  {
+    value: PluginInfo = copy(Box["main"].value)
+    assert(ARC4_DECODE(value.lastCalled) > 0, comment=Last called not zero)
+    return value
+  }
+  
+  setLastCalled(key: string, index: uint64, lastCalled: uint64): void
+  {
+    Box[BoxMapKey(prefix="plugins", key=key)].value.methods[index].lastCalled: arc4.uint64 = ARC4_ENCODE(lastCalled, wtype=arc4.uint64)
+  }
+  
+  setPlugin(key: string): void
+  {
+    Box[BoxMapKey(prefix="plugins", key=key)].value: PluginInfo = new PluginInfo(lastValidRound=($7 = #{ lastValidRound: 1, cooldown: 0, lastCalled: 0, adminPrivileges: False, methods: new arc4.dynamic_array<MethodInfo>(new MethodInfo(selector=($8 = #{ selector: ARC4_ENCODE(reinterpret_cast<bytes>(Method("test()void")), wtype=arc4.static_array<arc4.byte>), cooldown: 1, lastCalled: 1 }).selector, cooldown=$8.cooldown, lastCalled=$8.lastCalled)) }).lastValidRound, cooldown=$7.cooldown, lastCalled=$7.lastCalled, adminPrivileges=$7.adminPrivileges, methods=$7.methods)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

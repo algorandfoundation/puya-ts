@@ -1,0 +1,32 @@
+subroutine test_immutable(): void
+{
+  items: readonly [ReadonlyObjectACED9E72{ a: uint64, b: uint64 }, ReadonlyObjectACED9E72{ a: uint64, b: uint64 }, ReadonlyObjectACED9E72{ a: uint64, b: uint64 }] = #[#{ a: 1, b: 2 }, #{ a: 2, b: 2 }, #{ a: 3, b: 2 }]
+  total: uint64 = 0
+  for (temp in items) {
+    #[a]: readonly [uint64] = #[($0 = copy(temp)).a]
+    total: uint64 = total + a
+  }
+  assert(total == 6)
+}
+contract DestructuringIterators
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(): void
+  {
+    tests/approvals/destructuring-iterators.algo.ts::test_immutable()
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

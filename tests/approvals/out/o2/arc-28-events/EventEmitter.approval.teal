@@ -1,0 +1,197 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0 2
+    bytecblock 0x0003
+    // tests/approvals/arc-28-events.algo.ts:13
+    // class EventEmitter extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@10
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0x8769b79a 0xf14889d7 0xd4c97c9c // method "emitSwapped(uint8,uint8)void", method "emitCustom(string,bool)void", method "emitDynamicBytes(byte[],byte[])void"
+    txna ApplicationArgs 0
+    match main_emitSwapped_route@4 main_emitCustom_route@5 main_emitDynamicBytes_route@6
+    err
+
+main_emitDynamicBytes_route@6:
+    // tests/approvals/arc-28-events.algo.ts:40
+    // emitDynamicBytes(x: bytes, y: DynamicBytes) {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    dup
+    uncover 2
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    txna ApplicationArgs 2
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    // tests/approvals/arc-28-events.algo.ts:42
+    // emit('DB(byte[],byte[])', x, y)
+    pushint 4 // 4
+    uncover 2
+    +
+    itob
+    extract 6 2
+    pushbytes 0x0004
+    swap
+    concat
+    uncover 2
+    concat
+    swap
+    concat
+    pushbytes 0x4524e1dd // method "DB(byte[],byte[])"
+    swap
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:40
+    // emitDynamicBytes(x: bytes, y: DynamicBytes) {
+    intc_0 // 1
+    return
+
+main_emitCustom_route@5:
+    // tests/approvals/arc-28-events.algo.ts:35
+    // emitCustom(arg0: string, arg1: boolean) {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.bool
+    // tests/approvals/arc-28-events.algo.ts:36
+    // emit('Custom', arg0, arg1)
+    bytec_0 // 0x0003
+    swap
+    concat
+    swap
+    concat
+    pushbytes 0xa313c066 // method "Custom(string,bool)"
+    swap
+    concat
+    dup
+    log
+    // tests/approvals/arc-28-events.algo.ts:37
+    // emit('Custom(string,bool)', arg0, arg1)
+    log
+    // tests/approvals/arc-28-events.algo.ts:35
+    // emitCustom(arg0: string, arg1: boolean) {
+    intc_0 // 1
+    return
+
+main_emitSwapped_route@4:
+    // tests/approvals/arc-28-events.algo.ts:14
+    // emitSwapped(a: Uint8, b: Uint8) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
+    // tests/approvals/arc-28-events.algo.ts:15
+    // emit<Swapped>({ a: b, b: a })
+    dup
+    dig 2
+    concat
+    pushbytes 0x0b6325ed // method "Swapped(uint8,uint8)"
+    dig 1
+    concat
+    dup
+    log
+    // tests/approvals/arc-28-events.algo.ts:18
+    // emit(x)
+    dup
+    log
+    // tests/approvals/arc-28-events.algo.ts:24
+    // emit(y)
+    pushbytes 0x441e2cd8 // method "SwappedArc4(uint8,uint8)"
+    uncover 2
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:26
+    // emit('Swapped', b, a)
+    dup
+    log
+    // tests/approvals/arc-28-events.algo.ts:28
+    // emit('Swapped(uint8,uint8)', b, a)
+    log
+    // tests/approvals/arc-28-events.algo.ts:29
+    // emit('Swapped((uint8,uint8),uint8)', [b, b] as const, a)
+    dup
+    dig 1
+    concat
+    dig 2
+    concat
+    pushbytes 0x388cc12d // method "Swapped((uint8,uint8),uint8)"
+    swap
+    concat
+    dup
+    log
+    // tests/approvals/arc-28-events.algo.ts:31
+    // emit('Swapped((uint8,uint8),uint8)', [b, b], a)
+    log
+    // tests/approvals/arc-28-events.algo.ts:32
+    // emit('Swapped(uint8[],uint8)', [b, b], a)
+    pushbytes 0x0002
+    dig 1
+    concat
+    swap
+    concat
+    bytec_0 // 0x0003
+    uncover 2
+    concat
+    swap
+    concat
+    pushbytes 0x08754e0c // method "Swapped(uint8[],uint8)"
+    swap
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:14
+    // emitSwapped(a: Uint8, b: Uint8) {
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@10:
+    // tests/approvals/arc-28-events.algo.ts:13
+    // class EventEmitter extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return

@@ -1,0 +1,78 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    pushbytes ""
+    dup
+    // tests/approvals/while-loops.algo.ts:4
+    // class DemoContract extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0x28a52d73 // method "testWhile(uint64)uint64"
+    txna ApplicationArgs 0
+    match main_testWhile_route@3
+    err
+
+main_testWhile_route@3:
+    // tests/approvals/while-loops.algo.ts:5
+    // public testWhile(stop: uint64) {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 1
+    // tests/approvals/while-loops.algo.ts:6
+    // let i = Uint64(0)
+    pushint 0 // 0
+    bury 2
+
+main_while_top@9:
+    // tests/approvals/while-loops.algo.ts:7
+    // while (i < stop) {
+    dup2
+    <
+    // tests/approvals/while-loops.algo.ts:7-9
+    // while (i < stop) {
+    //   i += 1
+    // }
+    bz main_after_while@11
+    // tests/approvals/while-loops.algo.ts:8
+    // i += 1
+    dig 1
+    pushint 1 // 1
+    +
+    bury 2
+    b main_while_top@9
+
+main_after_while@11:
+    // tests/approvals/while-loops.algo.ts:5
+    // public testWhile(stop: uint64) {
+    dig 1
+    itob
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    pushint 1 // 1
+    return
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/while-loops.algo.ts:4
+    // class DemoContract extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return

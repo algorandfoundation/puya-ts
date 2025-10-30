@@ -1,0 +1,51 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/arc4-method-selector.algo.ts:5
+    // class ContractOne extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@10
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0xf59e3cc4 0xc2e9596e 0xf1908524 // method "test()bool", method "someMethod()uint64", method "test2()void"
+    txna ApplicationArgs 0
+    match main_test_route@4 main_someMethod_route@5 main_test2_route@6
+    err
+
+main_test2_route@6:
+    // tests/approvals/arc4-method-selector.algo.ts:13
+    // test2() {
+    err
+
+main_someMethod_route@5:
+    // tests/approvals/arc4-method-selector.algo.ts:9
+    // someMethod() {
+    pushbytes 0x151f7c75000000000000007b
+    log
+    pushint 1 // 1
+    return
+
+main_test_route@4:
+    // tests/approvals/arc4-method-selector.algo.ts:6
+    // test() {
+    pushbytes 0x151f7c7580
+    log
+    pushint 1 // 1
+    return
+
+main___algots__.defaultCreate@10:
+    // tests/approvals/arc4-method-selector.algo.ts:5
+    // class ContractOne extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return

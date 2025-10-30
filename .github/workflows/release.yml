@@ -1,0 +1,102 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - alpha
+      - main
+      - release
+  workflow_dispatch:
+
+concurrency: release
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  checks: write
+
+jobs:
+  ci:
+    name: Build and test
+    uses: ./.github/workflows/ci-all.yml
+    with:
+      run-commit-lint: false
+
+  release:
+    name: Release
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate bot token
+        uses: actions/create-github-app-token@v1
+        id: app_token
+        with:
+          app-id: ${{ secrets.BOT_ID }}
+          private-key: ${{ secrets.BOT_SK }}
+
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app_token.outputs.token }}
+
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+
+      - run: npm ci --ignore-scripts
+
+      - name: Download package artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: '*-node-22.x'
+          path: artifacts
+
+      - name: Rename artifact folders to remove node version
+        run: |
+          mv artifacts/puya-ts-node-22.x artifacts/puya-ts
+          mv artifacts/algo-ts-node-22.x artifacts/algo-ts
+
+      - name: Generate semantic version for @algorandfoundation/puya-ts
+        if: github.ref_name != 'main'
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ steps.app_token.outputs.token }}
+
+  #     - name: Copy puya-ts version to algo-ts
+  #       run: |
+  #         cd artifacts/puya-ts
+  #         newVersion=$(npm view ./ version)
+  #         npm pkg set dependencies.@algorandfoundation/algorand-typescript=$newVersion
+  #         cd ../algo-ts
+  #         npm pkg set version=$newVersion
+
+  #     - name: Publish @algorandfoundation/algorand-typescript
+  #       uses: JS-DevTools/npm-publish@v3
+  #       id: publish-algo-ts
+  #       with:
+  #         token: ${{ secrets.NPM_TOKEN }}
+  #         package: artifacts/algo-ts/package.json
+  #         access: 'public'
+  #         tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'beta' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
+
+  #     - name: Publish @algorandfoundation/puya-ts
+  #       uses: JS-DevTools/npm-publish@v3
+  #       id: publish-puya-ts
+  #       with:
+  #         token: ${{ secrets.NPM_TOKEN }}
+  #         package: artifacts/puya-ts/package.json
+  #         access: 'public'
+  #         tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'beta' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
+
+  # publish-docs:
+  #   name: Publish docs
+  #   needs: release
+  #   if: github.ref_name == 'release'
+  #   uses: ./.github/workflows/gh-pages.yml
+  #   permissions:
+  #     contents: read
+  #     pages: write
+  #     id-token: write

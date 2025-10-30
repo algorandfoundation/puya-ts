@@ -1,0 +1,92 @@
+contract GtxnsAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(): void
+  {
+    assert(gtxns<Amount>(group_transaction(index=0, type=group_transaction_pay)) > 0)
+  }
+  
+  test2(): void
+  {
+    for (temp in urange(0, global<GroupSize>(), 1)) {
+      i: uint64 = copy(temp)
+      txn: group_transaction = group_transaction(index=i, type=group_transaction)
+      if (($0 = gtxns<TypeEnum>(txn)) == reinterpret_cast<uint64>(6)) {
+        #switch₁ᶜ₀:
+        log(itob(reinterpret_cast<uint64>(gtxns<ApplicationID>(txn))))
+        goto #switch₁ᵇ
+      }
+      if ($0 == reinterpret_cast<uint64>(4)) {
+        #switch₁ᶜ₁:
+        log(itob(reinterpret_cast<uint64>(gtxns<XferAsset>(txn))))
+        goto #switch₁ᵇ
+      }
+      if ($0 == reinterpret_cast<uint64>(3)) {
+        #switch₁ᶜ₂:
+        log(itob(reinterpret_cast<uint64>(gtxns<ConfigAsset>(txn))))
+        goto #switch₁ᵇ
+      }
+      if ($0 == reinterpret_cast<uint64>(1)) {
+        #switch₁ᶜ₃:
+        log(reinterpret_cast<bytes>(gtxns<Receiver>(txn)))
+        goto #switch₁ᵇ
+      }
+      if ($0 == reinterpret_cast<uint64>(2)) {
+        #switch₁ᶜ₄:
+        log(gtxns<VotePK>(txn))
+        goto #switch₁ᵇ
+      }
+      #switch₁ᶜ₅:
+      log(itob(reinterpret_cast<uint64>(gtxns<FreezeAsset>(txn))))
+      goto #switch₁ᵇ
+      #switch₁ᵇ:
+    }
+  }
+  
+  test3(): void
+  {
+    assert(txn<OnCompletion>() == reinterpret_cast<uint64>(0), comment=OCA must be NoOp)
+    assert(txn<TypeEnum>() == reinterpret_cast<uint64>(6))
+    log("Hello test4")
+  }
+  
+  test4(other: group_transaction_appl): void
+  {
+    assert(gtxns<OnCompletion>(other) == reinterpret_cast<uint64>(0), comment=Other txn must be NoOp)
+    assert(gtxns<TypeEnum>(other) == reinterpret_cast<uint64>(6))
+    assert(gtxns<LastLog>(other) == "Hello test4")
+    assert(gtxnsas<ApplicationArgs>(other, 0) == reinterpret_cast<bytes>(Method("test3()void")))
+    assert(gtxns<ApplicationID>(other) == global<CurrentApplicationID>())
+  }
+  
+  reflectAllPay(pay: group_transaction_pay): Object3488A93F
+  {
+    return new Object3488A93F(sender=reinterpret_cast<bytes[32]>(gtxns<Sender>(pay)), fee=gtxns<Fee>(pay), firstValid=gtxns<FirstValid>(pay), firstValidTime=gtxns<FirstValidTime>(pay), lastValid=gtxns<LastValid>(pay), note=gtxns<Note>(pay), lease=gtxns<Lease>(pay), typeBytes=gtxns<Type>(pay), groupIndex=gtxns<GroupIndex>(pay), txnId=gtxns<TxID>(pay), rekeyTo=reinterpret_cast<bytes[32]>(gtxns<RekeyTo>(pay)), receiver=reinterpret_cast<bytes[32]>(gtxns<Receiver>(pay)), amount=gtxns<Amount>(pay), closeRemainderTo=reinterpret_cast<bytes[32]>(gtxns<CloseRemainderTo>(pay)))
+  }
+  
+  test5(txn: group_transaction): uint64
+  {
+    if (gtxns<TypeEnum>(txn) == reinterpret_cast<uint64>(1)) {
+      return 1
+    } else {
+      if (gtxns<TypeEnum>(txn) == reinterpret_cast<uint64>(4)) {
+        return 0
+      }
+    }
+    return 0
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

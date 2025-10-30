@@ -1,0 +1,8 @@
+
+logicsig tests/approvals/pre-approved-sale.algo.ts::PreApprovedSale {
+  payTxn: group_transaction_pay = group_transaction(index=0, type=group_transaction_pay)
+  assetTxn: group_transaction_axfer = group_transaction(index=1, type=group_transaction_axfer)
+  assert(&&(gtxns<Receiver>(payTxn) == TemplateVar[account](TMPL_SELLER), gtxns<Amount>(payTxn) == TemplateVar[uint64](TMPL_PRICE)), comment=assert target is match for conditions)
+  assert(&&(&&(&&(&&(gtxns<AssetAmount>(assetTxn) == 1, gtxns<Sender>(assetTxn) == TemplateVar[account](TMPL_SELLER)), gtxns<XferAsset>(assetTxn) == TemplateVar[asset](TMPL_ASSET)), gtxns<AssetCloseTo>(assetTxn) == global<ZeroAddress>()), gtxns<RekeyTo>(assetTxn) == global<ZeroAddress>()), comment=assert target is match for conditions)
+  return True
+}

@@ -1,0 +1,75 @@
+import fs from 'fs'
+import { globSync } from 'glob'
+import { rimraf } from 'rimraf'
+import { describe, expect, it } from 'vitest'
+import { gatherOutputStats } from '../scripts/gather-output-stats'
+import { compile, CompileOptions, processInputPaths } from '../src'
+import { isErrorOrCritical, LoggingContext, LogLevel } from '../src/logger'
+import { AbsolutePath } from '../src/util/absolute-path'
+import { invokeCli } from '../src/util/invoke-cli'
+
+describe('Approvals', async () => {
+  await rimraf('tests/approvals/out')
+
+  const contractFiles = globSync('tests/approvals/*.algo.ts')
+    .map((p) => AbsolutePath.resolve({ path: p }))
+    .toSorted()
+  describe.each([
+    ['Unoptimized', 'out/unoptimized/[name]', { optimizationLevel: 0, outputAwstJson: true, outputAwst: true }],
+    ['O1', 'out/o1/[name]', { optimizationLevel: 1 }],
+    ['O2', 'out/o2/[name]', { optimizationLevel: 2 }],
+  ])('Compile %s', async (desc, outDir, puyaOptions) => {
+    const logCtx = LoggingContext.create()
+    const result = await logCtx.run(() => {
+      const filePaths = processInputPaths({ paths: ['tests/approvals'], outDir })
+      return compile(
+        new CompileOptions({
+          filePaths,
+          dryRun: false,
+          logLevel: LogLevel.Warning,
+          skipVersionCheck: true,
+          outputSourceMap: false,
+          outputAwstJson: false,
+          outputAwst: false,
+          outputTeal: true,
+          outputArc32: true,
+          outputArc56: true,
+          outputSsaIr: true,
+          ...puyaOptions,
+        }),
+      )
+    })
+    it.each(contractFiles)('%s', (contractFilePath) => {
+      const awst = result.awst?.filter((s) => s.sourceLocation.file?.equals(contractFilePath))
+
+      const errors = logCtx.logEvents.filter(
+        (l) => (!l.sourceLocation || l.sourceLocation.file?.equals(contractFilePath)) && isErrorOrCritical(l.level),
+      )
+      if (errors.length === 0) {
+        expect(errors.length).toBe(0)
+      } else {
+        expect.fail(`Errors: \n${errors.map((e) => e.message).join('\n')}`)
+      }
+
+      expect(awst, 'Contract file must produce awst').toBeDefined()
+    })
+
+    const stats = gatherOutputStats('tests/approvals')
+    fs.mkdirSync('tests/approvals/out', { recursive: true })
+    fs.writeFileSync('tests/approvals/out/stats.txt', stats, 'utf8')
+  })
+
+  it('There should be no differences to committed changes', async () => {
+    const result = await invokeCli({
+      command: 'git',
+      args: ['status', 'tests', '--porcelain'],
+    })
+    const diffs = result.lines
+
+    if (diffs.length) {
+      expect.fail(
+        `There are uncommitted changes: \n\n${diffs.slice(0, 5).join('\n')}${diffs.length > 5 ? `\n +${diffs.length - 5} more` : ''}`,
+      )
+    }
+  })
+})

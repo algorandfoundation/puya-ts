@@ -1,0 +1,36 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/implicit-create.algo.ts:4
+    // export class NoBare extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0xb8b5e4b9 // method "handleNoop()void"
+    txna ApplicationArgs 0
+    match main_handleNoop_route@3
+    err
+
+main_handleNoop_route@3:
+    // tests/approvals/implicit-create.algo.ts:5
+    // @abimethod({ allowActions: 'NoOp' })
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    pushint 1 // 1
+    return
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/implicit-create.algo.ts:4
+    // export class NoBare extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return

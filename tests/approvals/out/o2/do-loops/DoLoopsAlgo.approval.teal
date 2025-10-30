@@ -1,0 +1,226 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 8 0
+    bytecblock 0x151f7c75
+    pushbytes ""
+    dupn 4
+    // tests/approvals/do-loops.algo.ts:4
+    // export class DoLoopsAlgo extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@10
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0x39239792 0xace2eb21 0x78e8d516 // method "testDo(uint64)uint64", method "testDoBreak(uint64,uint64)uint64", method "testDoContinue(uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match main_testDo_route@4 main_testDoBreak_route@5 main_testDoContinue_route@6
+    err
+
+main_testDoContinue_route@6:
+    // tests/approvals/do-loops.algo.ts:23
+    // testDoContinue(stop: uint64, mod: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 2
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 3
+    // tests/approvals/do-loops.algo.ts:24
+    // let i = Uint64(0)
+    intc_2 // 0
+    bury 4
+    // tests/approvals/do-loops.algo.ts:25
+    // let total = Uint64(0)
+    intc_2 // 0
+    bury 1
+
+main_while_top@14:
+    // tests/approvals/do-loops.algo.ts:27
+    // if (i > 0 && i % mod === 0) {
+    dig 3
+    bz main_after_if_else@17
+    dig 3
+    dig 3
+    %
+    bnz main_after_if_else@17
+    // tests/approvals/do-loops.algo.ts:28
+    // total += 2
+    dup
+    pushint 2 // 2
+    +
+    bury 1
+    // tests/approvals/do-loops.algo.ts:29
+    // i += 1
+    dig 3
+    intc_0 // 1
+    +
+    bury 4
+
+main_block@18:
+    // tests/approvals/do-loops.algo.ts:34
+    // } while (i < stop)
+    dig 3
+    dig 2
+    <
+    bnz main_while_top@14
+    // tests/approvals/do-loops.algo.ts:23
+    // testDoContinue(stop: uint64, mod: uint64) {
+    dup
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_after_if_else@17:
+    // tests/approvals/do-loops.algo.ts:32
+    // total += 1
+    dup
+    intc_0 // 1
+    +
+    bury 1
+    // tests/approvals/do-loops.algo.ts:33
+    // i += 1
+    dig 3
+    intc_0 // 1
+    +
+    bury 4
+    b main_block@18
+
+main_testDoBreak_route@5:
+    // tests/approvals/do-loops.algo.ts:12
+    // testDoBreak(stop: uint64, breakMod: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 2
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 5
+    // tests/approvals/do-loops.algo.ts:13
+    // let total = Uint64(0)
+    intc_2 // 0
+    bury 1
+    // tests/approvals/do-loops.algo.ts:14
+    // let i = Uint64(0)
+    intc_2 // 0
+    bury 4
+
+main_while_top@24:
+    // tests/approvals/do-loops.algo.ts:16
+    // if (i > 0 && i % breakMod === 0) break
+    dig 3
+    bz main_after_if_else@27
+    dig 3
+    dig 5
+    %
+    bz main_block@30
+
+main_after_if_else@27:
+    // tests/approvals/do-loops.algo.ts:18
+    // i += 1
+    dig 3
+    intc_0 // 1
+    +
+    dup
+    bury 5
+    // tests/approvals/do-loops.algo.ts:19
+    // total += i
+    dup2
+    +
+    bury 2
+    // tests/approvals/do-loops.algo.ts:20
+    // } while (i < stop)
+    dig 2
+    <
+    bnz main_while_top@24
+
+main_block@30:
+    // tests/approvals/do-loops.algo.ts:12
+    // testDoBreak(stop: uint64, breakMod: uint64) {
+    dup
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_testDo_route@4:
+    // tests/approvals/do-loops.algo.ts:5
+    // testDo(stop: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 2
+    // tests/approvals/do-loops.algo.ts:6
+    // let i = Uint64(0)
+    intc_2 // 0
+    bury 4
+
+main_while_top@33:
+    // tests/approvals/do-loops.algo.ts:8
+    // i += 1
+    dig 3
+    intc_0 // 1
+    +
+    dup
+    bury 5
+    // tests/approvals/do-loops.algo.ts:9
+    // } while (i < stop)
+    dig 2
+    <
+    bnz main_while_top@33
+    // tests/approvals/do-loops.algo.ts:5
+    // testDo(stop: uint64) {
+    dig 3
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@10:
+    // tests/approvals/do-loops.algo.ts:4
+    // export class DoLoopsAlgo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return

@@ -1,0 +1,80 @@
+contract LocalStateDemo
+{
+  locals {
+    ["l1"]: uint64
+    ["localUint2"]: uint64
+    ["b1"]: bytes
+    ["localBytes2"]: bytes
+    ["localEncoded"]: arc4.static_array<arc4.uint64>
+    ["localTuple"]: readonly [uint64, bytes]
+    ["localObject"]: ReadonlyObjectEFF43F36{ a: uint64, b: bytes }
+    ["localMutableObject"]: tests/approvals/local-state.algo.ts::Data
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  optIn(): void
+  {
+  }
+  
+  setState(p: ObjectEFF43F36, c: arc4.static_array<arc4.uint64>): void
+  {
+    #[a, b]: readonly [uint64, bytes] = #[p.a, p.b]
+    LocalState[txn<Sender>()]["l1"]: uint64 = a
+    LocalState[txn<Sender>()]["localUint2"]: uint64 = a
+    LocalState[txn<Sender>()]["b1"]: bytes = b
+    LocalState[txn<Sender>()]["localBytes2"]: bytes = b
+    LocalState[txn<Sender>()]["localEncoded"]: arc4.static_array<arc4.uint64> = copy(c)
+    LocalState[txn<Sender>()]["localTuple"]: readonly [uint64, bytes] = #[($0 = #[a, b]).0, $0.1]
+    LocalState[txn<Sender>()]["localObject"]: ReadonlyObjectEFF43F36{ a: uint64, b: bytes } = #{ a: ($1 = #{ a: a, b: b }).a, b: $1.b }
+    LocalState[txn<Sender>()]["localMutableObject"]: tests/approvals/local-state.algo.ts::Data = new tests/approvals/local-state.algo.ts::Data(a=($2 = #{ a: a, b: b, c: True, d: "hello" }).a, b=$2.b, c=$2.c, d=$2.d)
+  }
+  
+  getState(): ObjectE4D9E83F
+  {
+    return new ObjectE4D9E83F(localUint=LocalState[txn<Sender>()]["l1"], localUint2=LocalState[txn<Sender>()]["localUint2"], localBytes=LocalState[txn<Sender>()]["b1"], localBytes2=LocalState[txn<Sender>()]["localBytes2"], localEncoded=copy(LocalState[txn<Sender>()]["localEncoded"]), localTuple=LocalState[txn<Sender>()]["localTuple"], localObject=LocalState[txn<Sender>()]["localObject"], localMutableObject=copy(LocalState[txn<Sender>()]["localMutableObject"]))
+  }
+  
+  clearState(): void
+  {
+    STATE_DELETE(LocalState[txn<Sender>()]["l1"])
+    STATE_DELETE(LocalState[txn<Sender>()]["localUint2"])
+    STATE_DELETE(LocalState[txn<Sender>()]["b1"])
+    STATE_DELETE(LocalState[txn<Sender>()]["localBytes2"])
+    STATE_DELETE(LocalState[txn<Sender>()]["localEncoded"])
+    STATE_DELETE(LocalState[txn<Sender>()]["localTuple"])
+    STATE_DELETE(LocalState[txn<Sender>()]["localObject"])
+    STATE_DELETE(LocalState[txn<Sender>()]["localMutableObject"])
+  }
+  
+  writeDynamicLocalState(key: string, value: string): string
+  {
+    sender: account = txn<Sender>()
+    assert(app_opted_in(sender, global<CurrentApplicationID>()), comment=Account must opt in to contract first)
+    localDynamicAccess: state_key = reinterpret_cast<state_key>(reinterpret_cast<bytes>(key))
+    LocalState[sender][localDynamicAccess]: string = value
+    assert(LocalState[sender][localDynamicAccess] == value)
+    return LocalState[sender][localDynamicAccess]
+  }
+  
+  readDynamicLocalState(key: string): string
+  {
+    sender: account = txn<Sender>()
+    assert(app_opted_in(sender, global<CurrentApplicationID>()), comment=Account must opt in to contract first)
+    localDynamicAccess: state_key = reinterpret_cast<state_key>(reinterpret_cast<bytes>(key))
+    assert(STATE_EXISTS(LocalState[sender][localDynamicAccess]), comment=Key not found)
+    return LocalState[sender][localDynamicAccess]
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

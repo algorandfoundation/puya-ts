@@ -1,0 +1,69 @@
+subroutine test_uint64(x: uint64, y: uint64): bool
+{
+  assert(x == 10, comment=x input must be 10)
+  assert(y == 5, comment=y input must be 5)
+  x++
+  assert(x == 11)
+  x--
+  assert(x == 10)
+  x: uint64 = x - (y = y - 1)
+  assert(x == 6)
+  assert(y == 4)
+  x: uint64 = x + y++
+  assert(x == 10)
+  assert(y == 5)
+  inverted: uint64 = ~y
+  assert(inverted == 18446744073709551615 - y)
+  assert(Boolean(y))
+  assert(!!Boolean(y))
+  return !Boolean(y)
+}
+subroutine test_biguint(x: biguint, y: biguint): bool
+{
+  assert(x == 10, comment=x input must be 10)
+  assert(y == 5, comment=y input must be 5)
+  x++
+  assert(x == 11)
+  x--
+  assert(x == 10)
+  x: biguint = x - (y = y - 1)
+  assert(y == 4)
+  assert(x == 6)
+  x: biguint = x + y++
+  assert(y == 5)
+  assert(x == 10)
+  assert(Boolean(bitlen(y)))
+  assert(!!Boolean(bitlen(y)))
+  return !Boolean(bitlen(y))
+}
+subroutine test_bytes(x: bytes): void
+{
+  assert(x == reinterpret_cast<bytes>(bzero(4)), comment=x must be 4 unset bytes)
+  y: bytes = ~x
+  assert(y == 0xffffffff)
+}
+contract DemoContract
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(): bool
+  {
+    tests/approvals/prefix-postfix-operators.algo.ts::test_uint64(10, 5)
+    tests/approvals/prefix-postfix-operators.algo.ts::test_biguint(10, 5)
+    tests/approvals/prefix-postfix-operators.algo.ts::test_bytes(reinterpret_cast<bytes>(bzero(4)))
+    return True
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

@@ -1,0 +1,176 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 8 0 2
+    bytecblock 0x0000 0x0001
+    intc_2 // 0
+    pushbytes ""
+    // tests/approvals/urange.algo.ts:4
+    // class UrangeAlgo extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@10
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0x01329a32 0xea63d4ac 0xad2e1f0e // method "testSingleArg()uint64[]", method "testTwoArg()uint64[]", method "testThreeArg()uint64[]"
+    txna ApplicationArgs 0
+    match main_testSingleArg_route@4 main_testTwoArg_route@5 main_testThreeArg_route@6
+    err
+
+main_testThreeArg_route@6:
+    // tests/approvals/urange.algo.ts:20
+    // let results: uint64[] = []
+    bytec_0 // 0x0000
+    bury 2
+    // tests/approvals/urange.algo.ts:21
+    // for (const i of urange(2, 10, 3)) {
+    intc_3 // 2
+    bury 1
+
+main_for_header@14:
+    // tests/approvals/urange.algo.ts:21
+    // for (const i of urange(2, 10, 3)) {
+    dup
+    pushint 10 // 10
+    <
+    bz main_after_for@26
+    // tests/approvals/urange.algo.ts:22
+    // results = [...results, i]
+    dupn 2
+    itob
+    bytec_1 // 0x0001
+    swap
+    concat
+    extract 2 0
+    dig 3
+    swap
+    concat // on error: max array length exceeded
+    dup
+    extract 2 0
+    len
+    intc_1 // 8
+    /
+    itob
+    extract 6 2
+    replace2 0
+    bury 3
+    // tests/approvals/urange.algo.ts:21
+    // for (const i of urange(2, 10, 3)) {
+    pushint 3 // 3
+    +
+    bury 1
+    b main_for_header@14
+
+main_after_for@26:
+    // tests/approvals/urange.algo.ts:5
+    // testSingleArg() {
+    pushbytes 0x151f7c75
+    dig 2
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_testTwoArg_route@5:
+    // tests/approvals/urange.algo.ts:13
+    // let results: uint64[] = []
+    bytec_0 // 0x0000
+    bury 2
+    // tests/approvals/urange.algo.ts:14
+    // for (const i of urange(2, 5)) {
+    intc_3 // 2
+    bury 1
+
+main_for_header@19:
+    // tests/approvals/urange.algo.ts:14
+    // for (const i of urange(2, 5)) {
+    dup
+    pushint 5 // 5
+    <
+    bz main_after_for@26
+    // tests/approvals/urange.algo.ts:15
+    // results = [...results, i]
+    dupn 2
+    itob
+    bytec_1 // 0x0001
+    swap
+    concat
+    extract 2 0
+    dig 3
+    swap
+    concat // on error: max array length exceeded
+    dup
+    extract 2 0
+    len
+    intc_1 // 8
+    /
+    itob
+    extract 6 2
+    replace2 0
+    bury 3
+    // tests/approvals/urange.algo.ts:14
+    // for (const i of urange(2, 5)) {
+    intc_0 // 1
+    +
+    bury 1
+    b main_for_header@19
+
+main_testSingleArg_route@4:
+    // tests/approvals/urange.algo.ts:6
+    // let results: uint64[] = []
+    bytec_0 // 0x0000
+    bury 2
+    // tests/approvals/urange.algo.ts:7
+    // for (const i of urange(5)) {
+    intc_2 // 0
+    bury 1
+
+main_for_header@24:
+    // tests/approvals/urange.algo.ts:7
+    // for (const i of urange(5)) {
+    dup
+    pushint 5 // 5
+    <
+    bz main_after_for@26
+    // tests/approvals/urange.algo.ts:8
+    // results = [...results, i]
+    dupn 2
+    itob
+    bytec_1 // 0x0001
+    swap
+    concat
+    extract 2 0
+    dig 3
+    swap
+    concat // on error: max array length exceeded
+    dup
+    extract 2 0
+    len
+    intc_1 // 8
+    /
+    itob
+    extract 6 2
+    replace2 0
+    bury 3
+    // tests/approvals/urange.algo.ts:7
+    // for (const i of urange(5)) {
+    intc_0 // 1
+    +
+    bury 1
+    b main_for_header@24
+
+main___algots__.defaultCreate@10:
+    // tests/approvals/urange.algo.ts:4
+    // class UrangeAlgo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return

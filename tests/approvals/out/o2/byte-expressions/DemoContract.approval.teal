@@ -1,0 +1,38 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/byte-expressions.algo.ts:38
+    // class DemoContract extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0xf59e3cc4 // method "test()bool"
+    txna ApplicationArgs 0
+    match main_test_route@3
+    err
+
+main_test_route@3:
+    // tests/approvals/byte-expressions.algo.ts:39
+    // public test() {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    pushbytes 0x151f7c7580
+    log
+    pushint 1 // 1
+    return
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/byte-expressions.algo.ts:38
+    // class DemoContract extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return

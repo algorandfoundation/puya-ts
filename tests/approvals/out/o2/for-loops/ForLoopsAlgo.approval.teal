@@ -1,0 +1,341 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 8 1 0
+    bytecblock 0x151f7c75
+    pushbytes ""
+    dupn 5
+    // tests/approvals/for-loops.algo.ts:4
+    // class ForLoopsAlgo extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@11
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0xf8654f73 0x287f4c02 0x4bd7778c 0x33675e06 // method "test_for_loop(uint64,uint64,uint64)uint64", method "test_for_loop_break(uint64,uint64,uint64)uint64", method "test_for_loop_continue(uint64,uint64,uint64)uint64", method "test_for_loop_labelled(uint64,uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match main_test_for_loop_route@4 main_test_for_loop_break_route@5 main_test_for_loop_continue_route@6 main_test_for_loop_labelled_route@7
+    err
+
+main_test_for_loop_labelled_route@7:
+    // tests/approvals/for-loops.algo.ts:32
+    // test_for_loop_labelled(start: uint64, stop: uint64, step: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    bury 5
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 3
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 4
+    // tests/approvals/for-loops.algo.ts:33
+    // let total = Uint64(0)
+    intc_2 // 0
+    bury 2
+    bury 6
+
+main_while_top@15:
+    // tests/approvals/for-loops.algo.ts:34
+    // outer: for (let i = start; i < stop; i += step) {
+    dig 5
+    dig 2
+    <
+    bz main_block@23
+    dig 3
+    bury 5
+
+main_while_top@17:
+    // tests/approvals/for-loops.algo.ts:35
+    // for (let j = start; j < stop; j += step) {
+    dig 4
+    dig 2
+    <
+    bz main_after_while@21
+    // tests/approvals/for-loops.algo.ts:36
+    // total += i + j
+    dig 5
+    dup
+    dig 6
+    dup
+    cover 3
+    +
+    dig 3
+    +
+    bury 3
+    // tests/approvals/for-loops.algo.ts:38
+    // if (i * j > stop) break outer
+    *
+    dig 2
+    >
+    bnz main_block@23
+    // tests/approvals/for-loops.algo.ts:35
+    // for (let j = start; j < stop; j += step) {
+    dig 4
+    dig 3
+    +
+    bury 5
+    b main_while_top@17
+
+main_block@23:
+    // tests/approvals/for-loops.algo.ts:32
+    // test_for_loop_labelled(start: uint64, stop: uint64, step: uint64) {
+    dup
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_after_while@21:
+    // tests/approvals/for-loops.algo.ts:34
+    // outer: for (let i = start; i < stop; i += step) {
+    dig 5
+    dig 3
+    +
+    bury 6
+    b main_while_top@15
+
+main_test_for_loop_continue_route@6:
+    // tests/approvals/for-loops.algo.ts:24
+    // test_for_loop_continue(start: uint64, stop: uint64, step: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 3
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 4
+    // tests/approvals/for-loops.algo.ts:25
+    // let total = Uint64(0)
+    intc_2 // 0
+    bury 2
+    bury 6
+
+main_while_top@26:
+    // tests/approvals/for-loops.algo.ts:26
+    // for (let i = start; i < stop; i += step) {
+    dig 5
+    dig 2
+    <
+    bz main_after_while@31
+    // tests/approvals/for-loops.algo.ts:27
+    // if (i % 5 === 0) continue
+    dig 5
+    pushint 5 // 5
+    %
+    bz main_block@30
+    // tests/approvals/for-loops.algo.ts:28
+    // total += i
+    dup
+    dig 6
+    +
+    bury 1
+
+main_block@30:
+    // tests/approvals/for-loops.algo.ts:26
+    // for (let i = start; i < stop; i += step) {
+    dig 5
+    dig 3
+    +
+    bury 6
+    b main_while_top@26
+
+main_after_while@31:
+    // tests/approvals/for-loops.algo.ts:24
+    // test_for_loop_continue(start: uint64, stop: uint64, step: uint64) {
+    dup
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_test_for_loop_break_route@5:
+    // tests/approvals/for-loops.algo.ts:13
+    // test_for_loop_break(start: uint64, stop: uint64, step: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 3
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 4
+    // tests/approvals/for-loops.algo.ts:14
+    // let total = Uint64(0)
+    intc_2 // 0
+    bury 2
+    bury 6
+
+main_while_top@34:
+    // tests/approvals/for-loops.algo.ts:15
+    // for (let i = start; i < stop; i += step) {
+    dig 5
+    dig 2
+    <
+    bz main_block@39
+    // tests/approvals/for-loops.algo.ts:16
+    // total += i
+    dup
+    dig 6
+    +
+    dup
+    bury 2
+    // tests/approvals/for-loops.algo.ts:17
+    // if (total > 10) {
+    pushint 10 // 10
+    >
+    bnz main_block@39
+    // tests/approvals/for-loops.algo.ts:15
+    // for (let i = start; i < stop; i += step) {
+    dig 5
+    dig 3
+    +
+    bury 6
+    b main_while_top@34
+
+main_block@39:
+    // tests/approvals/for-loops.algo.ts:13
+    // test_for_loop_break(start: uint64, stop: uint64, step: uint64) {
+    dup
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_test_for_loop_route@4:
+    // tests/approvals/for-loops.algo.ts:5
+    // test_for_loop(start: uint64, stop: uint64, step: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 3
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 4
+    // tests/approvals/for-loops.algo.ts:6
+    // let total = Uint64(0)
+    intc_2 // 0
+    bury 2
+    bury 6
+
+main_while_top@42:
+    // tests/approvals/for-loops.algo.ts:7
+    // for (let i = start; i < stop; i += step) {
+    dig 5
+    dig 2
+    <
+    bz main_after_while@44
+    // tests/approvals/for-loops.algo.ts:8
+    // total += i
+    dup
+    dig 6
+    dup
+    cover 2
+    +
+    bury 2
+    // tests/approvals/for-loops.algo.ts:7
+    // for (let i = start; i < stop; i += step) {
+    dig 3
+    +
+    bury 6
+    b main_while_top@42
+
+main_after_while@44:
+    // tests/approvals/for-loops.algo.ts:5
+    // test_for_loop(start: uint64, stop: uint64, step: uint64) {
+    dup
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main___algots__.defaultCreate@11:
+    // tests/approvals/for-loops.algo.ts:4
+    // class ForLoopsAlgo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return

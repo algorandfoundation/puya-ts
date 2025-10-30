@@ -1,0 +1,84 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    bytecblock 0xa78000de
+    // tests/approvals/ops.algo.ts:7
+    // class MyContract extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    bytec_0 // method "test()void"
+    pushbytes 0x0a4743a6 // method "test2(uint64)void"
+    txna ApplicationArgs 0
+    match test test2
+    err
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/ops.algo.ts:7
+    // class MyContract extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return
+
+
+// tests/approvals/ops.algo.ts::MyContract.test[routing]() -> void:
+test:
+    // tests/approvals/ops.algo.ts:17
+    // assert(GTxn.applicationId(Txn.groupIndex) === Txn.applicationId)
+    txn GroupIndex
+    gtxns ApplicationID
+    txn ApplicationID
+    ==
+    assert
+    // tests/approvals/ops.algo.ts:19
+    // assert(Txn.applicationArgs(0) === methodSelector('test()void'))
+    pushint 0 // 0
+    txnas ApplicationArgs
+    bytec_0 // method "test()void"
+    ==
+    assert
+    // tests/approvals/ops.algo.ts:20
+    // assert(GTxn.applicationArgs(Txn.groupIndex, 0) === methodSelector(MyContract.prototype.test))
+    txn GroupIndex
+    pushint 0 // 0
+    gtxnsas ApplicationArgs
+    bytec_0 // method "test()void"
+    ==
+    // tests/approvals/ops.algo.ts:8
+    // test() {
+    return
+
+
+// tests/approvals/ops.algo.ts::MyContract.test2[routing]() -> void:
+test2:
+    // tests/approvals/ops.algo.ts:23
+    // test2(size: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/ops.algo.ts:24
+    // const a = bzero(size)
+    dup
+    bzero
+    // tests/approvals/ops.algo.ts:25
+    // assert(a.length === size)
+    len
+    ==
+    // tests/approvals/ops.algo.ts:23
+    // test2(size: uint64) {
+    return

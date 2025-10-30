@@ -1,0 +1,32 @@
+contract Example
+{
+  approvalProgram(): bool
+  {
+    return tests/approvals/call-expressions.algo.ts::Example.localMethod() + super.baseMethod() == tests/approvals/call-expressions.algo.ts::freeMethod() - tests/approvals/call-expressions.algo.ts::Example.baseMethod()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  baseMethod(): uint64
+  {
+    return 1
+  }
+  
+  localMethod(): uint64
+  {
+    return 5
+  }
+  
+  ExampleBase::baseMethod(): uint64
+  {
+    return 2
+  }
+  
+}
+subroutine freeMethod(): uint64
+{
+  return 7
+}

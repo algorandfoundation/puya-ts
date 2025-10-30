@@ -1,0 +1,641 @@
+import ts from 'typescript'
+import { nodeFactory } from '../../awst/node-factory'
+import { type Expression, type MethodDocumentation } from '../../awst/nodes'
+import type { SourceLocation } from '../../awst/source-location'
+import { InvalidNonNullAssertion } from '../../code-fix/invalid-non-null-assertion'
+import { LooseEqualityOperator } from '../../code-fix/loose-equality-operator'
+import { CodeError, FixableCodeError, InternalError, NotSupported } from '../../errors'
+import { logger } from '../../logger'
+import { codeInvariant, invariant } from '../../util'
+import type { Expressions } from '../../visitor/syntax-names'
+import {
+  AugmentedAssignmentBinaryOp,
+  AugmentedAssignmentLogicalOpSyntaxes,
+  BinaryOpSyntaxes,
+  ComparisonOpSyntaxes,
+  getNodeName,
+  getSyntaxName,
+  isKeyOf,
+  LogicalOpSyntaxes,
+  UnaryExpressionUnaryOps,
+} from '../../visitor/syntax-names'
+import type { Visitor } from '../../visitor/visitor'
+import { accept } from '../../visitor/visitor'
+import { AwstBuildContext } from '../context/awst-build-context'
+import { InstanceBuilder, NodeBuilder } from '../eb'
+import { BooleanExpressionBuilder } from '../eb/boolean-expression-builder'
+import { CloneFunctionBuilder } from '../eb/clone-function-builder'
+import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
+import { BigIntLiteralExpressionBuilder } from '../eb/literal/big-int-literal-expression-builder'
+import { ConditionalExpressionBuilder } from '../eb/literal/conditional-expression-builder'
+import { NumericLiteralExpressionBuilder } from '../eb/literal/numeric-literal-expression-builder'
+import type { ObjectLiteralParts } from '../eb/literal/object-literal-expression-builder'
+import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
+import { NamespaceBuilder } from '../eb/namespace-builder'
+import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
+import { OptionalExpressionBuilder } from '../eb/optional-expression-builder'
+import { SpreadExpressionBuilder } from '../eb/spread-expression-builder'
+import { StringExpressionBuilder, stringFromTemplate } from '../eb/string-expression-builder'
+import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
+import { concatArrays } from '../eb/util/array/concat'
+import type { PType } from '../ptypes'
+import { BigIntLiteralPType, boolPType, NumericLiteralPType, TransientType } from '../ptypes'
+import { containsMutableType, isMutableType } from '../ptypes/visitors/contains-mutable-visitor'
+import { typeRegistry } from '../type-registry'
+import { handleAssignment } from './assignments'
+import { TextVisitor } from './text-visitor'
+
+export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
+  private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor, TNode>(this, node)
+  readonly textVisitor: TextVisitor
+  get context() {
+    return AwstBuildContext.current
+  }
+
+  protected constructor() {
+    this.textVisitor = new TextVisitor()
+  }
+
+  logNotSupported(node: ts.Node | undefined, message: string) {
+    if (!node) return
+    logger.error(new NotSupported(message, { sourceLocation: this.sourceLocation(node) }))
+  }
+
+  throwNotSupported(node: ts.Node, message: string): never {
+    throw new NotSupported(message, { sourceLocation: this.sourceLocation(node) })
+  }
+
+  visitBigIntLiteral(node: ts.BigIntLiteral): InstanceBuilder {
+    const literalValue = BigInt(node.text.slice(0, -1))
+    const ptype = this.context.getPTypeForNode(node)
+    invariant(ptype instanceof BigIntLiteralPType, 'ptype should be BigIntLiteralPType')
+    return new BigIntLiteralExpressionBuilder(literalValue, ptype, this.sourceLocation(node))
+  }
+
+  visitRegularExpressionLiteral(node: ts.RegularExpressionLiteral): InstanceBuilder {
+    this.throwNotSupported(node, 'Regular expressions')
+  }
+
+  visitFalseKeyword(node: ts.FalseLiteral): InstanceBuilder {
+    return new BooleanExpressionBuilder(nodeFactory.boolConstant({ value: false, sourceLocation: this.sourceLocation(node) }))
+  }
+
+  visitTrueKeyword(node: ts.TrueLiteral): InstanceBuilder {
+    return new BooleanExpressionBuilder(nodeFactory.boolConstant({ value: true, sourceLocation: this.sourceLocation(node) }))
+  }
+
+  sourceLocation<TNode extends ts.Node>(node: TNode): SourceLocation<TNode> {
+    return this.context.getSourceLocation(node)
+  }
+
+  visitStringLiteral(node: ts.StringLiteral): InstanceBuilder {
+    return new StringExpressionBuilder(nodeFactory.stringConstant({ value: node.text, sourceLocation: this.sourceLocation(node) }))
+  }
+
+  visitNoSubstitutionTemplateLiteral(node: ts.NoSubstitutionTemplateLiteral): InstanceBuilder {
+    return new StringExpressionBuilder(nodeFactory.stringConstant({ value: node.text, sourceLocation: this.sourceLocation(node) }))
+  }
+
+  visitNumericLiteral(node: ts.NumericLiteral): InstanceBuilder {
+    const sourceLocation = this.sourceLocation(node)
+    codeInvariant(
+      !node.text.includes('.'),
+      'Literals with decimal points are not supported. Use a string literal to capture decimal values',
+      sourceLocation,
+    )
+    const literalValue = BigInt(node.text)
+    if (literalValue > Number.MAX_SAFE_INTEGER || literalValue < Number.MIN_SAFE_INTEGER) {
+      logger.error(
+        sourceLocation,
+        `This number will lose precision at runtime. Use the Uint64 constructor with a bigint or string literal for very large integers.`,
+      )
+    }
+    const ptype = this.context.getPTypeForNode(node)
+    invariant(ptype instanceof NumericLiteralPType, 'ptype should be NumericLiteralPType')
+    return new NumericLiteralExpressionBuilder(literalValue, ptype, this.sourceLocation(node))
+  }
+
+  visitIdentifier(node: ts.Identifier): NodeBuilder {
+    return this.context.getBuilderForNode(node)
+  }
+
+  visitImportKeyword(node: ts.ImportExpression): NodeBuilder {
+    this.throwNotSupported(node, 'Dynamic imports')
+  }
+
+  visitNullKeyword(node: ts.NullLiteral): NodeBuilder {
+    this.throwNotSupported(node, 'Null values')
+  }
+
+  visitPrivateIdentifier(node: ts.PrivateIdentifier): NodeBuilder {
+    // Private identifiers will be wrapped in a property access expression which makes use of the TextVisitor
+    throw InternalError.shouldBeUnreachable()
+  }
+
+  visitSuperKeyword(node: ts.SuperExpression): NodeBuilder {
+    this.throwNotSupported(node, `'super' keyword outside of a contract type`)
+  }
+
+  visitThisKeyword(node: ts.ThisExpression): NodeBuilder {
+    this.throwNotSupported(node, `'this' keyword outside of a contract type`)
+  }
+
+  visitFunctionExpression(node: ts.FunctionExpression): NodeBuilder {
+    this.throwNotSupported(node, 'function expressions. Use a named function instead eg. `function myFunction(...) {...}`')
+  }
+
+  visitClassExpression(node: ts.ClassExpression): NodeBuilder {
+    this.throwNotSupported(node, 'class expressions')
+  }
+
+  visitObjectLiteralExpression(node: ts.ObjectLiteralExpression): NodeBuilder {
+    const sourceLocation = this.sourceLocation(node)
+    const parts: Array<ObjectLiteralParts> = node.properties.flatMap((p): ObjectLiteralParts[] => {
+      const propertySourceLocation = this.sourceLocation(p)
+      switch (p.kind) {
+        case ts.SyntaxKind.PropertyAssignment:
+          return [
+            {
+              type: 'properties',
+              properties: {
+                [this.textVisitor.accept(p.name)]: requireInstanceBuilder(this.baseAccept(p.initializer)),
+              },
+            },
+          ]
+        case ts.SyntaxKind.ShorthandPropertyAssignment:
+          codeInvariant(!p.objectAssignmentInitializer, 'Object assignment initializer not supported', propertySourceLocation)
+          this.logNotSupported(p.equalsToken, 'The equals token is not valid here')
+          return [
+            {
+              type: 'properties',
+              properties: { [this.textVisitor.accept(p.name)]: requireInstanceBuilder(this.baseAccept(p.name)) },
+            },
+          ]
+        case ts.SyntaxKind.SpreadAssignment:
+          return [
+            {
+              type: 'spread-object',
+              obj: requireInstanceBuilder(this.baseAccept(p.expression)),
+              spreadLocation: this.sourceLocation(p),
+            },
+          ]
+        default:
+          logger.error(propertySourceLocation, `Unsupported object literal property kind ${getNodeName(p)}`)
+          return []
+      }
+    })
+    return ObjectLiteralExpressionBuilder.fromParts(sourceLocation, parts)
+  }
+
+  visitArrayLiteralExpression(node: ts.ArrayLiteralExpression): NodeBuilder {
+    const sourceLocation = this.sourceLocation(node)
+
+    if (node.elements.length === 0) {
+      return new ArrayLiteralExpressionBuilder(sourceLocation, [])
+    }
+
+    const toConcat: Array<InstanceBuilder[] | InstanceBuilder> = []
+    let itemBuffer: InstanceBuilder[] = []
+    for (const element of node.elements) {
+      if (ts.isSpreadElement(element)) {
+        const spreadExpr = requireInstanceBuilder(this.baseAccept(element.expression))
+        if (itemBuffer.length !== 0) {
+          toConcat.push(itemBuffer)
+          itemBuffer = []
+        }
+        /*
+        If this is a mutable collection which does not contain nested mutable items, we can inject a
+        clone for the user since a spread is the same as a shallow clone.
+         */
+        if (isMutableType(spreadExpr.ptype) && !containsMutableType(spreadExpr.ptype)) {
+          toConcat.push(CloneFunctionBuilder.clone(spreadExpr, this.sourceLocation(element)))
+        } else {
+          if (spreadExpr.checkForUnclonedMutables('being spread into an array literal')) {
+            // Add a clone if one is required so we don't get cascading errors
+            toConcat.push(CloneFunctionBuilder.clone(spreadExpr, this.sourceLocation(element)))
+          } else {
+            toConcat.push(spreadExpr)
+          }
+        }
+      } else {
+        itemBuffer.push(requireInstanceBuilder(this.baseAccept(element)))
+      }
+    }
+    if (itemBuffer.length !== 0) {
+      toConcat.push(itemBuffer)
+    }
+
+    return toConcat
+      .map((i) => (Array.isArray(i) ? new ArrayLiteralExpressionBuilder(sourceLocation, i) : i))
+      .reduce((acc, cur) => concatArrays(acc, cur, sourceLocation))
+  }
+
+  visitSpreadElement(node: ts.SpreadElement): NodeBuilder {
+    const base = requireInstanceBuilder(this.baseAccept(node.expression))
+    return new SpreadExpressionBuilder(base, this.sourceLocation(node))
+  }
+
+  visitPropertyAccessExpression(node: ts.PropertyAccessExpression): NodeBuilder {
+    this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
+    const target = this.baseAccept(node.expression)
+    if (target instanceof NamespaceBuilder) {
+      codeInvariant(!ts.isPrivateIdentifier(node.name), 'Private identifiers are not supported here', this.sourceLocation(node.name))
+      return this.context.getBuilderForNode(node.name)
+    }
+    const property = this.textVisitor.accept(node.name)
+    return target.memberAccess(property, this.sourceLocation(node))
+  }
+
+  visitElementAccessExpression(node: ts.ElementAccessExpression): NodeBuilder {
+    this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
+
+    const sourceLocation = this.sourceLocation(node)
+    const target = this.baseAccept(node.expression)
+    const argument = this.baseAccept(node.argumentExpression)
+    return target.indexAccess(requireInstanceBuilder(argument), sourceLocation)
+  }
+
+  visitCallExpression(node: ts.CallExpression): NodeBuilder {
+    this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
+    const sourceLocation = this.sourceLocation(node)
+    const eb = this.baseAccept(node.expression)
+    const args = node.arguments
+      .map((a) => this.baseAccept(a))
+      .flatMap((a) => (a instanceof SpreadExpressionBuilder ? a.getSpreadItems() : a))
+    const typeArgs = this.context.getTypeParameters(node)
+    return eb.call(args, typeArgs, sourceLocation)
+  }
+
+  visitNewExpression(node: ts.NewExpression): NodeBuilder {
+    const sourceLocation = this.sourceLocation(node)
+    const eb = this.baseAccept(node.expression)
+    const args =
+      node.arguments?.map((a) => this.baseAccept(a)).flatMap((a) => (a instanceof SpreadExpressionBuilder ? a.getSpreadItems() : a)) ?? []
+    const typeArgs = this.context.getTypeParameters(node)
+    return eb.newCall(args, typeArgs, sourceLocation)
+  }
+
+  visitTaggedTemplateExpression(node: ts.TaggedTemplateExpression): NodeBuilder {
+    const sourceLocation = this.sourceLocation(node)
+    const target = this.baseAccept(node.tag)
+    const typeArgs = this.context.getTypeParameters(node)
+    if (ts.isNoSubstitutionTemplateLiteral(node.template)) {
+      return target.taggedTemplate(this.textVisitor.accept(node.template), [], typeArgs, sourceLocation)
+    } else {
+      const head = this.textVisitor.accept(node.template.head)
+      const spans = node.template.templateSpans.map(
+        (s) => [requireInstanceBuilder(this.baseAccept(s.expression)), this.textVisitor.accept(s.literal)] as const,
+      )
+      return target.taggedTemplate(head, spans, typeArgs, sourceLocation)
+    }
+  }
+
+  visitTypeAssertionExpression(node: ts.TypeAssertion): NodeBuilder {
+    // Unsure what code this node represents - it may have been superseded by the AsExpression
+    this.throwNotSupported(node, 'Type assertions')
+  }
+
+  visitParenthesizedExpression(node: ts.ParenthesizedExpression): NodeBuilder {
+    return this.baseAccept(node.expression)
+  }
+
+  /**
+   * `delete obj.prop`
+   *
+   * Not supported currently as typescript requires 'prop' to be optional and we don't support optional values
+   */
+  visitDeleteExpression(node: ts.DeleteExpression): NodeBuilder {
+    this.throwNotSupported(node, 'Delete expressions')
+  }
+
+  visitTypeOfExpression(node: ts.TypeOfExpression): NodeBuilder {
+    this.throwNotSupported(node, 'typeof expressions are only supported in type expressions')
+  }
+
+  visitVoidExpression(node: ts.VoidExpression): NodeBuilder {
+    this.throwNotSupported(node, 'void expression')
+  }
+
+  visitAwaitExpression(node: ts.AwaitExpression): NodeBuilder {
+    this.throwNotSupported(node, 'await keyword')
+  }
+
+  visitPrefixUnaryExpression(node: ts.PrefixUnaryExpression): NodeBuilder {
+    const sourceLocation = this.sourceLocation(node)
+    const target = requireInstanceBuilder(this.baseAccept(node.operand))
+    if (node.operator === ts.SyntaxKind.ExclamationToken) {
+      return new BooleanExpressionBuilder(target.boolEval(sourceLocation, true))
+    }
+    const op = UnaryExpressionUnaryOps[node.operator]
+    return target.prefixUnaryOp(op, sourceLocation)
+  }
+
+  visitPostfixUnaryExpression(node: ts.PostfixUnaryExpression): NodeBuilder {
+    const sourceLocation = this.sourceLocation(node)
+    const target = requireInstanceBuilder(this.baseAccept(node.operand))
+    const op = UnaryExpressionUnaryOps[node.operator]
+    return target.postfixUnaryOp(op, sourceLocation)
+  }
+
+  evaluateCondition(nodeOrBuilder: ts.Expression | NodeBuilder, negate = false): Expression {
+    using _ = this.context.evaluationCtx.enterBooleanContext()
+    if (nodeOrBuilder instanceof NodeBuilder) {
+      return requireInstanceBuilder(nodeOrBuilder).boolEval(nodeOrBuilder.sourceLocation, negate)
+    } else {
+      const sourceLocation = this.sourceLocation(nodeOrBuilder)
+      return requireInstanceBuilder(this.baseAccept(nodeOrBuilder)).boolEval(sourceLocation, negate)
+    }
+  }
+
+  private getBinaryOpKind(token: ts.BinaryOperatorToken): ts.SyntaxKind {
+    const sourceLocation = this.sourceLocation(token)
+    switch (token.kind) {
+      case ts.SyntaxKind.EqualsEqualsToken:
+        logger.addCodeFix(
+          new LooseEqualityOperator({
+            sourceLocation,
+            errorMessage: `Loose equality operator '==' is not supported. Please use strict equality operator '==='`,
+            operatorRequired: '===',
+          }),
+        )
+        return ts.SyntaxKind.EqualsEqualsEqualsToken
+      case ts.SyntaxKind.ExclamationEqualsToken:
+        logger.addCodeFix(
+          new LooseEqualityOperator({
+            sourceLocation,
+            errorMessage: `Loose inequality operator '!=' is not supported. Please use strict inequality operator '!=='`,
+            operatorRequired: '!==',
+          }),
+        )
+        return ts.SyntaxKind.ExclamationEqualsEqualsToken
+      default:
+        return token.kind
+    }
+  }
+
+  visitBinaryExpression(node: ts.BinaryExpression): NodeBuilder {
+    const sourceLocation = this.sourceLocation(node)
+    const binaryOpKind = this.getBinaryOpKind(node.operatorToken)
+    const isStatement = ts.isExpressionStatement(node.parent)
+
+    if (isKeyOf(binaryOpKind, BinaryOpSyntaxes)) {
+      const left = requireInstanceBuilder(this.baseAccept(node.left))
+      const right = requireInstanceBuilder(this.baseAccept(node.right))
+      return left.binaryOp(right, BinaryOpSyntaxes[binaryOpKind], sourceLocation)
+    } else if (isKeyOf(binaryOpKind, AugmentedAssignmentBinaryOp)) {
+      using _ = this.context.evaluationCtx.leaveBooleanContext()
+
+      const left = requireInstanceBuilder(this.baseAccept(node.left))
+      const right = requireInstanceBuilder(this.baseAccept(node.right))
+      return left.augmentedAssignment(right, AugmentedAssignmentBinaryOp[binaryOpKind], sourceLocation)
+    } else if (binaryOpKind === ts.SyntaxKind.EqualsToken) {
+      using _ = this.context.evaluationCtx.leaveBooleanContext()
+
+      const left = requireInstanceBuilder(this.baseAccept(node.left))
+      const right = requireInstanceBuilder(this.baseAccept(node.right))
+      return handleAssignment(this.context, left, right, sourceLocation, isStatement)
+    } else if (isKeyOf(binaryOpKind, ComparisonOpSyntaxes)) {
+      const left = requireInstanceBuilder(this.baseAccept(node.left))
+      const right = requireInstanceBuilder(this.baseAccept(node.right))
+      return left.compare(right, ComparisonOpSyntaxes[binaryOpKind], sourceLocation)
+    } else if (isKeyOf(binaryOpKind, LogicalOpSyntaxes)) {
+      const ptype = this.context.getPTypeForNode(node)
+      if (ptype.equals(boolPType)) {
+        const left = requireInstanceBuilder(this.baseAccept(node.left))
+        const right = requireInstanceBuilder(this.baseAccept(node.right))
+
+        return new BooleanExpressionBuilder(
+          nodeFactory.booleanBinaryOperation({
+            left: requireExpressionOfType(left, boolPType),
+            right: requireExpressionOfType(right, boolPType),
+            sourceLocation,
+            op: LogicalOpSyntaxes[binaryOpKind],
+          }),
+        )
+      } else if (this.context.evaluationCtx.isBoolean) {
+        const left = requireInstanceBuilder(this.baseAccept(node.left))
+        const right = requireInstanceBuilder(this.baseAccept(node.right))
+        return new BooleanExpressionBuilder(
+          nodeFactory.booleanBinaryOperation({
+            left: left.boolEval(sourceLocation),
+            right: right.boolEval(sourceLocation),
+            sourceLocation,
+            op: LogicalOpSyntaxes[binaryOpKind],
+          }),
+        )
+      } else {
+        const left = requireInstanceBuilder(this.baseAccept(node.left))
+        const right = requireInstanceBuilder(this.baseAccept(node.right))
+        const leftSingle = left.singleEvaluation()
+        const isOr = binaryOpKind === ts.SyntaxKind.BarBarToken
+        return this.createConditionalExpression({
+          sourceLocation,
+          condition: this.evaluateCondition(leftSingle),
+          whenTrue: isOr ? leftSingle : right,
+          whenFalse: isOr ? right : leftSingle,
+          ptype: ptype,
+        })
+      }
+    } else if (isKeyOf(binaryOpKind, AugmentedAssignmentLogicalOpSyntaxes)) {
+      using _ = this.context.evaluationCtx.leaveBooleanContext()
+      const left = requireInstanceBuilder(this.baseAccept(node.left))
+      const right = requireInstanceBuilder(this.baseAccept(node.right))
+      const expr = new BooleanExpressionBuilder(
+        nodeFactory.booleanBinaryOperation({
+          left: requireExpressionOfType(left, boolPType),
+          right: requireExpressionOfType(right, boolPType),
+          sourceLocation,
+          op: AugmentedAssignmentLogicalOpSyntaxes[binaryOpKind],
+        }),
+      )
+      return handleAssignment(this.context, left, expr, sourceLocation, isStatement)
+    }
+    throw new NotSupported(`Binary expression with op ${getSyntaxName(binaryOpKind)}`)
+  }
+
+  visitConditionalExpression(node: ts.ConditionalExpression): NodeBuilder {
+    const sourceLocation = this.sourceLocation(node)
+    const condition = this.evaluateCondition(node.condition)
+    const whenTrue = requireInstanceBuilder(this.baseAccept(node.whenTrue))
+    const whenFalse = requireInstanceBuilder(this.baseAccept(node.whenFalse))
+    const ptype = this.context.getPTypeForNode(node)
+    return this.createConditionalExpression({
+      condition,
+      sourceLocation,
+      whenFalse,
+      whenTrue,
+      ptype,
+    })
+  }
+
+  createConditionalExpression({
+    condition,
+    ptype,
+    whenFalse,
+    whenTrue,
+    sourceLocation,
+  }: {
+    ptype: PType
+    condition: Expression
+    whenTrue: InstanceBuilder
+    whenFalse: InstanceBuilder
+    sourceLocation: SourceLocation
+  }): InstanceBuilder {
+    // If the expression has a wtype, we can resolve it immediately - if not, we defer the resolution until we have more context
+    // (eg. the type of the assignment target)
+    if (!(ptype instanceof TransientType) && ptype.wtype) {
+      return typeRegistry.getInstanceEb(
+        nodeFactory.conditionalExpression({
+          sourceLocation: sourceLocation,
+          falseExpr: requireExpressionOfType(whenFalse, ptype),
+          trueExpr: requireExpressionOfType(whenTrue, ptype),
+          condition: condition,
+          wtype: ptype.wtypeOrThrow,
+        }),
+        ptype,
+      )
+    }
+    return new ConditionalExpressionBuilder({ sourceLocation, condition, whenTrue, whenFalse, ptype })
+  }
+
+  visitTemplateExpression(node: ts.TemplateExpression): NodeBuilder {
+    const sourceLocation = this.sourceLocation(node)
+    const head = this.textVisitor.accept(node.head)
+    const spans = node.templateSpans.map(
+      (s) => [requireInstanceBuilder(this.baseAccept(s.expression)), this.textVisitor.accept(s.literal)] as const,
+    )
+    return stringFromTemplate(head, spans, sourceLocation)
+  }
+
+  visitYieldExpression(node: ts.YieldExpression): NodeBuilder {
+    this.throwNotSupported(node, 'yield expressions')
+  }
+
+  visitOmittedExpression(node: ts.OmittedExpression): NodeBuilder {
+    return new OmittedExpressionBuilder(this.context.getSourceLocation(node))
+  }
+
+  visitExpressionWithTypeArguments(node: ts.ExpressionWithTypeArguments): NodeBuilder {
+    // Should be fine to ignore the type parameters as these can be inferred by the type checker
+    return this.baseAccept(node.expression)
+  }
+
+  visitAsExpression(node: ts.AsExpression): NodeBuilder {
+    const sourceLocation = this.sourceLocation(node)
+    const outerType = this.context.getPTypeForNode(node)
+
+    if (outerType instanceof TransientType) {
+      throw new CodeError(outerType.typeMessage, { sourceLocation })
+    }
+
+    const innerExpr = this.baseAccept(node.expression)
+    codeInvariant(
+      innerExpr instanceof InstanceBuilder,
+      `${innerExpr.typeDescription} is not a valid target for an as expression'`,
+      sourceLocation,
+    )
+
+    codeInvariant(
+      innerExpr.resolvableToPType(outerType),
+      `${innerExpr.typeDescription} cannot be resolved to type ${outerType}`,
+      sourceLocation,
+    )
+
+    return innerExpr.resolveToPType(outerType)
+  }
+
+  visitNonNullExpression(node: ts.NonNullExpression): NodeBuilder {
+    const target = this.baseAccept(node.expression)
+    if (target instanceof OptionalExpressionBuilder) {
+      return target.base
+    }
+
+    throw new FixableCodeError(new InvalidNonNullAssertion({ sourceLocation: this.sourceLocation(node) }))
+  }
+
+  visitSatisfiesExpression(node: ts.SatisfiesExpression): NodeBuilder {
+    return this.baseAccept(node.expression)
+  }
+
+  protected parseMemberModifiers(node: { modifiers?: readonly ts.ModifierLike[] }) {
+    let isPublic = true
+    let isStatic = false
+    if (node.modifiers)
+      for (const m of node.modifiers) {
+        switch (m.kind) {
+          case ts.SyntaxKind.StaticKeyword:
+            isStatic = true
+            continue
+          case ts.SyntaxKind.PublicKeyword:
+            isPublic = true
+            continue
+          case ts.SyntaxKind.ProtectedKeyword:
+            isPublic = false
+            continue
+          case ts.SyntaxKind.PrivateKeyword:
+            isPublic = false
+            continue
+          case ts.SyntaxKind.AbstractKeyword:
+            continue
+          case ts.SyntaxKind.AccessorKeyword:
+            logger.error(this.sourceLocation(m), 'properties are not supported')
+            continue
+          case ts.SyntaxKind.AsyncKeyword:
+            logger.error(this.sourceLocation(m), 'async keyword is not supported')
+            continue
+          case ts.SyntaxKind.DeclareKeyword:
+            logger.error(this.sourceLocation(m), 'declare keyword is not supported')
+            continue
+          case ts.SyntaxKind.ExportKeyword:
+          case ts.SyntaxKind.ConstKeyword:
+          case ts.SyntaxKind.DefaultKeyword:
+          case ts.SyntaxKind.ReadonlyKeyword:
+          case ts.SyntaxKind.OverrideKeyword:
+          case ts.SyntaxKind.InKeyword:
+          case ts.SyntaxKind.OutKeyword:
+          case ts.SyntaxKind.Decorator:
+            // Ignore for now
+            continue
+        }
+      }
+    return {
+      isStatic,
+      isPublic,
+    }
+  }
+
+  protected getNodeDescription(node: ts.Node): string | null {
+    const docs = ts.getJSDocCommentsAndTags(node)
+    for (const doc of docs) {
+      if (ts.isJSDoc(doc)) {
+        return ts.getTextOfJSDocComment(doc.comment) ?? null
+      }
+    }
+    return null
+  }
+
+  protected getMethodDocumentation(node: ts.FunctionDeclaration | ts.MethodDeclaration | ts.ConstructorDeclaration): MethodDocumentation {
+    const docs = Array.from(ts.getJSDocCommentsAndTags(node))
+    let description: string | null = null
+    const args = new Map<string, string>()
+    let returns: string | null = null
+    for (const doc of docs) {
+      if (ts.isJSDoc(doc)) {
+        description = ts.getTextOfJSDocComment(doc.comment) ?? null
+        if (doc.tags) docs.push(...doc.tags)
+      } else if (ts.isJSDocParameterTag(doc)) {
+        const paramName = this.textVisitor.accept(doc.name)
+        const paramComment = ts.getTextOfJSDocComment(doc.comment)
+
+        args.set(paramName, paramComment ?? '')
+      } else if (ts.isJSDocReturnTag(doc)) {
+        returns = ts.getTextOfJSDocComment(doc.comment) ?? null
+      }
+    }
+    return nodeFactory.methodDocumentation({
+      description,
+      args,
+      returns,
+    })
+  }
+}

@@ -1,0 +1,85 @@
+subroutine padTo32(b: bytes[16]): bytes[32]
+{
+  return reinterpret_cast<bytes[32]>(reinterpret_cast<bytes>(b) | reinterpret_cast<bytes>(bzero(32)))
+}
+contract StaticBytesAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  hashAddresses(a1: bytes[32], a2: bytes[32]): bytes[32]
+  {
+    return sha512_256(concat(reinterpret_cast<bytes>(a1), reinterpret_cast<bytes>(a2)))
+  }
+  
+  receiveB32(b: bytes[32]): bytes[32]
+  {
+    assert(len(b) == 32)
+    return sha512_256(reinterpret_cast<bytes>(b))
+  }
+  
+  receiveBytes(b: bytes, length: uint64): void
+  {
+    assert(len(b) == length)
+  }
+  
+  returnLength(b: bytes[32]): uint64
+  {
+    return len(b)
+  }
+  
+  test(): void
+  {
+    tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(reinterpret_cast<bytes[32]>(txn<Sender>()))
+    tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveBytes(reinterpret_cast<bytes>(reinterpret_cast<bytes[32]>(txn<Sender>())), 32)
+    tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32("abcdefghabcdefghabcdefghabcdefgh")
+    joined: bytes[71] = checked_maybe(#[reinterpret_cast<bytes[71]>(($0 = "" + bzero(16) + "abc" + 0xaaff + b32<AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ> + b64<SGVsbG8gQWxnb3JhbmQ=>)), len($0) == 71], comment=Length must be 71)
+    assert(len(joined) == 71)
+    padded: bytes[32] = tests/approvals/static-bytes.algo.ts::padTo32(checked_maybe(#[reinterpret_cast<bytes[16]>(($1 = reinterpret_cast<bytes[32]>(txn<Sender>()).slice(0, 16))), len($1) == 16], comment=Length must be 16))
+    assert(len(padded) == 32)
+  }
+  
+  testArray(): void
+  {
+    a: readonly [bytes[32], bytes[32]] = #[reinterpret_cast<bytes[32]>(txn<Sender>()), reinterpret_cast<bytes[32]>(txn<Sender>())]
+    b: ref_array<bytes[32]> = new ref_array<bytes[32]>(reinterpret_cast<bytes[32]>(txn<Sender>()))
+    b.push(...#[a.0, a.1])
+    bitAnd: bytes[32] = a.0 & b[0]
+    assert(bitAnd == reinterpret_cast<bytes[32]>(txn<Sender>()))
+  }
+  
+  test2(): bytes
+  {
+    result: bytes = 0x0000000000000000000000000000000000000000000000000000000000000000
+    i: uint64 = 0
+    while (i < 5) {
+      result: bytes = reinterpret_cast<bytes>(sha256(concat(result, result)))
+      i: uint64 = i + 1
+    }
+    return result
+  }
+  
+  test3(): void
+  {
+    x: bytes[32] = (y = reinterpret_cast<bytes>(($2 = reinterpret_cast<bytes[32]>(txn<Sender>())))), $2
+  }
+  
+  test4(): void
+  {
+    b: bytes = reinterpret_cast<bytes>(reinterpret_cast<bytes[32]>(txn<Sender>()))
+    addr: bytes[32] = checked_maybe(#[reinterpret_cast<bytes[32]>(b), len(b) == 32], comment=Length must be 32)
+    assert(len(addr) == 32)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

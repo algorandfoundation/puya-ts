@@ -1,0 +1,135 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.__puya_arc4_router__() -> bool:
+    block@0: // L14
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@11
+    block@1: // abi_routing_L14
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@2 : block@9
+    block@2: // call_NoOp_L14
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "getXY()(uint64,uint64)" => block@3, method "getYX()(uint64,uint64)" => block@4, method "getAnon()(uint64,uint64)" => block@5, method "test((uint64,uint64),(uint64,uint64))void" => block@6, method "testing()((uint64,uint64),(uint64,uint64),(uint64,uint64))" => block@7, * => block@8}
+    block@3: // getXY_route_L15
+        tests/approvals/named-types.algo.ts::MyContract.getXY[routing]()
+        goto block@8
+    block@4: // getYX_route_L22
+        tests/approvals/named-types.algo.ts::MyContract.getYX[routing]()
+        goto block@8
+    block@5: // getAnon_route_L29
+        tests/approvals/named-types.algo.ts::MyContract.getAnon[routing]()
+        goto block@8
+    block@6: // test_route_L36
+        tests/approvals/named-types.algo.ts::MyContract.test[routing]()
+        goto block@8
+    block@7: // testing_route_L40
+        tests/approvals/named-types.algo.ts::MyContract.testing[routing]()
+        goto block@8
+    block@8: // switch_case_next_L14
+        goto block@10
+    block@9: // create_NoOp_L14
+        goto block@10
+    block@10: // after_if_else_L14
+        goto block@12
+    block@11: // __algots__.defaultCreate_L14
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/named-types.algo.ts::MyContract.__algots__.defaultCreate()
+        exit 1u
+    block@12: // after_if_else_L14
+        exit 0u
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.getXY[routing]() -> void:
+    block@0: // L15
+        let (tmp%0#0: uint64, tmp%1#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getXY()
+        let tmp%2#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(tmp%0#0, tmp%1#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.getYX[routing]() -> void:
+    block@0: // L22
+        let (tmp%0#0: uint64, tmp%1#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getYX()
+        let tmp%2#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(tmp%0#0, tmp%1#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.getAnon[routing]() -> void:
+    block@0: // L29
+        let (tmp%0#0: uint64, tmp%1#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getAnon()
+        let tmp%2#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(tmp%0#0, tmp%1#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.test[routing]() -> void:
+    block@0: // L36
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for tests/approvals/named-types.algo.ts::XY
+        let as_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = tmp%0#0
+        let (tmp%1#0: uint64, tmp%2#0: uint64) = decode_bytes<(uint64,uint64,)>(as_Encoded(uint64,uint64)%0#0)
+        let tmp%3#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%3#0)
+        let eq%1#0: bool = (== len%1#0 16u)
+        (assert eq%1#0) // invalid number of bytes for tests/approvals/named-types.algo.ts::YX
+        let as_Encoded(uint64,uint64)%1#0: Encoded(uint64,uint64) = tmp%3#0
+        let (tmp%4#0: uint64, tmp%5#0: uint64) = decode_bytes<(uint64,uint64,)>(as_Encoded(uint64,uint64)%1#0)
+        tests/approvals/named-types.algo.ts::MyContract.test(tmp%1#0, tmp%2#0, tmp%4#0, tmp%5#0)
+        exit 1u
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.testing[routing]() -> void:
+    block@0: // L40
+        let (tmp%0#0: uint64, tmp%1#0: uint64, tmp%2#0: uint64, tmp%3#0: uint64, tmp%4#0: uint64, tmp%5#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.testing()
+        let tmp%6#0: Encoded((uint64,uint64),(uint64,uint64),(uint64,uint64)) = bytes_encode<((uint64,uint64),(uint64,uint64),(uint64,uint64))>(tmp%0#0, tmp%1#0, tmp%2#0, tmp%3#0, tmp%4#0, tmp%5#0)
+        let tmp%7#0: bytes = (concat 0x151f7c75 tmp%6#0)
+        (log tmp%7#0)
+        exit 1u
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.getXY() -> <uint64, uint64>:
+    block@0: // L15
+        return 1u 2u
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.getYX() -> <uint64, uint64>:
+    block@0: // L22
+        return 111u 222u
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.getAnon() -> <uint64, uint64>:
+    block@0: // L29
+        return 3u 4u
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.test(x.x: uint64, x.y: uint64, y.y: uint64, y.x: uint64) -> void:
+    block@0: // L36
+        let tmp%0#0: bool = (== x.y#0 y.y#0)
+        let tmp%1#0: bool = (== x.x#0 y.x#0)
+        let tmp%2#0: bool = (&& tmp%0#0 tmp%1#0)
+        (assert tmp%2#0) // assert target is match for conditions
+        return 
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.testing() -> <uint64, uint64, uint64, uint64, uint64, uint64>:
+    block@0: // L40
+        let (tmp%0#0: uint64, tmp%1#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getXY()
+        let (a.x#0: uint64, a.y#0: uint64) = (tmp%0#0, tmp%1#0)
+        let (tmp%2#0: uint64, tmp%3#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getYX()
+        let (b.y#0: uint64, b.x#0: uint64) = (tmp%2#0, tmp%3#0)
+        let (tmp%4#0: uint64, tmp%5#0: uint64) = tests/approvals/named-types.algo.ts::MyContract.getAnon()
+        let (c.x#0: uint64, c.y#0: uint64) = (tmp%4#0, tmp%5#0)
+        return a.x#0 a.y#0 b.y#0 b.x#0 c.x#0 c.y#0
+
+subroutine tests/approvals/named-types.algo.ts::MyContract.__algots__.defaultCreate() -> void:
+    block@0: // L14
+        return 

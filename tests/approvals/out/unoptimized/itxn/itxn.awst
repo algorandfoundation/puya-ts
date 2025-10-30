@@ -1,0 +1,170 @@
+contract ItxnDemoContract
+{
+  globals {
+    ["name"]: bytes
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test1(): void
+  {
+    GlobalState["name"]: bytes = "AST1"
+    assetParams: inner_transaction_fields_acfg = create_inner_transaction(Fee=0, TypeEnum=3, ConfigAssetTotal=1000, ConfigAssetName=GlobalState["name"], ConfigAssetUnitName="unit", ConfigAssetDecimals=3, ConfigAssetManager=global<CurrentApplicationAddress>(), ConfigAssetReserve=global<CurrentApplicationAddress>())
+    GlobalState["name"]: bytes = "AST2"
+    asset1_txn: inner_transaction_acfg = submit_txn(assetParams)
+    update_inner_transaction(assetParams, ConfigAssetName=GlobalState["name"])
+    asset2_txn: inner_transaction_acfg = submit_txn(assetParams)
+    assert(asset1_txn.ConfigAssetName == "AST1", comment=asset1_txn is correct)
+    assert(asset2_txn.ConfigAssetName == "AST2", comment=asset2_txn is correct)
+    assert(checked_maybe(asset_params_get<AssetName>(asset1_txn.CreatedAssetID), comment=asset exists) == "AST1", comment=created asset 1 is correct)
+    assert(checked_maybe(asset_params_get<AssetName>(asset2_txn.CreatedAssetID), comment=asset exists) == "AST2", comment=created asset 2 is correct)
+    appCreateParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=#[0x098101], ClearStateProgramPages=#[0x098101])
+    update_inner_transaction(assetParams, ConfigAssetName="AST3")
+    #[appCreateTxn, asset3_txn]: readonly [inner_transaction_appl, inner_transaction_acfg] = submit_txn(appCreateParams, assetParams)
+    assert(Boolean(appCreateTxn.CreatedApplicationID), comment=app is created)
+    assert(asset3_txn.ConfigAssetName == "AST3", comment=asset3_txn is correct)
+    update_inner_transaction(appCreateParams, Note="3rd")
+    update_inner_transaction(assetParams, Note="3rd")
+    submit_txn(appCreateParams, assetParams)
+  }
+  
+  test2(): void
+  {
+    if (Boolean(txn<NumAppArgs>())) {
+      args: readonly [bytes, bytes] = #["1", "2"]
+      createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=#[0x098101], ClearStateProgramPages=#[0x098101], ApplicationArgs=#[args.0, args.1], OnCompletion=0, Note="with args param set")
+    } else {
+      createAppParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=#[0x098101], ClearStateProgramPages=#[0x098101], ApplicationArgs=#["3", reinterpret_cast<bytes>("4"), "5"], Note="no args param set")
+    }
+    createAppTxn: inner_transaction_appl = submit_txn(createAppParams)
+    assert(createAppTxn.ApplicationArgs[0] == "1", comment=correct args used 1)
+    assert(createAppTxn.ApplicationArgs[1] == "2", comment=correct args used 2)
+    if (txn<NumAppArgs>() > 1) {
+      createAppTxn2: inner_transaction_appl = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=#[0x098101], ClearStateProgramPages=#[0x098101], OnCompletion=5, ApplicationArgs=#["42"]))
+      assert(createAppTxn2.ApplicationArgs[0] == "42", comment=correct args used 2)
+      assert(createAppTxn.Note == "with args param set")
+    }
+  }
+  
+  test3(): void
+  {
+    appTxn1: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=#[0x09361a00b08101], ClearStateProgramPages=#[0x098101], OnCompletion=5, ApplicationArgs=#["1"])
+    appTxn2: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn2, ApplicationArgs=#["2"])
+    appTxn3: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn3, ApplicationArgs=#["3"])
+    appTxn4: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn4, ApplicationArgs=#["4"])
+    appTxn5: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn5, ApplicationArgs=#["5"])
+    appTxn6: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn6, ApplicationArgs=#["6"])
+    appTxn7: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn7, ApplicationArgs=#["7"])
+    appTxn8: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn8, ApplicationArgs=#["8"])
+    appTxn9: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn9, ApplicationArgs=#["9"])
+    appTxn10: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn10, ApplicationArgs=#["10"])
+    appTxn11: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn11, ApplicationArgs=#["11"])
+    appTxn12: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn12, ApplicationArgs=#["12"])
+    appTxn13: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn13, ApplicationArgs=#["13"])
+    appTxn14: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn14, ApplicationArgs=#["14"])
+    appTxn15: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn15, ApplicationArgs=#["15"])
+    appTxn16: inner_transaction_fields_appl = copy(appTxn1)
+    update_inner_transaction(appTxn16, ApplicationArgs=#["16"])
+    #[app1, app2, app3, app4, app5, app6, app7, app8, app9, app10, app11, app12, app13, app14, app15, app16]: readonly [inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl, inner_transaction_appl] = submit_txn(appTxn1, appTxn2, appTxn3, appTxn4, appTxn5, appTxn6, appTxn7, appTxn8, appTxn9, appTxn10, appTxn11, appTxn12, appTxn13, appTxn14, appTxn15, appTxn16)
+    assert(app1.Logs[0] == "1")
+    assert(app2.Logs[0] == "2")
+    assert(app3.Logs[0] == "3")
+    assert(app4.Logs[0] == "4")
+    assert(app5.Logs[0] == "5")
+    assert(app6.Logs[0] == "6")
+    assert(app7.Logs[0] == "7")
+    assert(app8.Logs[0] == "8")
+    assert(app9.Logs[0] == "9")
+    assert(app10.Logs[0] == "10")
+    assert(app11.Logs[0] == "11")
+    assert(app12.Logs[0] == "12")
+    assert(app13.Logs[0] == "13")
+    assert(app14.Logs[0] == "14")
+    assert(app15.Logs[0] == "15")
+    assert(app16.Logs[0] == "16")
+  }
+  
+  test4(): void
+  {
+    lotsOfBytes: bytes[2044] = bzero(2044)
+    approval2: bytes = concat(concat(0x80fc0f, reinterpret_cast<bytes>(lotsOfBytes)), 0x48)
+    appTxn1: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=#[0x098101, approval2, approval2, approval2], ClearStateProgramPages=#[0x098101], OnCompletion=5, ApplicationArgs=#["1"], ExtraProgramPages=3)
+    app1: inner_transaction_appl = submit_txn(appTxn1)
+    assert(app1.ExtraProgramPages == 3, comment=extra pages = 3)
+    assert(app1.NumApprovalProgramPages == 2, comment=approval pages = 2)
+    assert(app1.ApprovalProgramPages[0] == concat(concat(0x098101, approval2), approval2.slice(0, -3)), comment=expected approval page 0)
+    assert(app1.ApprovalProgramPages[1] == concat(approval2.slice(-3), approval2), comment=expected approval page 1)
+    assert(app1.NumClearStateProgramPages == 1, comment=clear state pages = 1)
+    assert(app1.ClearStateProgramPages[0] == 0x098101, comment=expected clear state page)
+  }
+  
+  test5(appId: application): void
+  {
+    pay: inner_transaction_fields_pay = create_inner_transaction(Fee=0, TypeEnum=1, Receiver=checked_maybe(app_params_get<AppAddress>(appId), comment=application exists), Amount=1000)
+    app: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApplicationID=appId, ApplicationArgs=#[Method("receivePay(uint64,pay,string)(uint64,uint64,string)"), 0x0000000000000001, reinterpret_cast<bytes>("hello")])
+    #[_, appRes]: readonly [inner_transaction_pay, inner_transaction_appl] = submit_txn(pay, app)
+    returnValue: arc4.tuple<uint64,uint64,string> = ARC4_DECODE(reinterpret_cast<arc4.tuple<arc4.uint64,arc4.uint64,arc4.dynamic_array<arc4.byte>>>(checked_maybe(#[extract<4, 0>(($0 = appRes.LastLog)), extract<0, 4>($0) == 0x151f7c75], comment=Bytes has valid prefix)))
+    assert(&&(&&(&&(3 == 3, returnValue.0 == 1), returnValue.1 == 1000), returnValue.2 == "hello"), comment=assert target is match for conditions)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["name"]: bytes = 0x
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract ItxnReceiver
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  receivePay(a: uint64, b: group_transaction_pay, c: string): arc4.tuple<uint64,uint64,string>
+  {
+    return ARC4_ENCODE(#[a, gtxns<Amount>(b), c], wtype=arc4.tuple<uint64,uint64,string>)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

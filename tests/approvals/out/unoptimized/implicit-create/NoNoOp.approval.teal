@@ -1,0 +1,78 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // tests/approvals/implicit-create.algo.ts:8
+    // export class NoNoOp extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_bare_routing@3
+    b main_abi_routing@2
+
+main_abi_routing@2:
+    b main_after_if_else@7
+
+main_after_if_else@7:
+    // tests/approvals/implicit-create.algo.ts:8
+    // export class NoNoOp extends Contract {
+    err
+
+main_bare_routing@3:
+    // tests/approvals/implicit-create.algo.ts:8
+    // export class NoNoOp extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    pushint 4 // UpdateApplication
+    uncover 2
+    match main___algots__.defaultCreate@4 main_handleUpdate@5
+    b main_switch_case_next@6
+
+main_switch_case_next@6:
+    b main_after_if_else@7
+
+main_handleUpdate@5:
+    // tests/approvals/implicit-create.algo.ts:9
+    // @baremethod({ allowActions: 'UpdateApplication' })
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    assert // can only call when not creating
+    callsub handleUpdate
+    intc_1 // 1
+    return
+
+main___algots__.defaultCreate@4:
+    // tests/approvals/implicit-create.algo.ts:8
+    // export class NoNoOp extends Contract {
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    assert // can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/implicit-create.algo.ts::NoNoOp.handleUpdate() -> void:
+handleUpdate:
+    b handleUpdate_block@0
+
+handleUpdate_block@0:
+    retsub
+
+
+// tests/approvals/implicit-create.algo.ts::NoNoOp.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
+
+__algots__.defaultCreate_block@0:
+    retsub

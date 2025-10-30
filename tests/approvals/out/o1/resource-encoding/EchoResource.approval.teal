@@ -1,0 +1,184 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 2 3 8
+    bytecblock 0x151f7c75
+    // tests/approvals/resource-encoding.algo.ts:38
+    // class EchoResource extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0x77e28d74 0x4d370276 // method "echoResourceByIndex(asset,application,account)(uint64,uint64,address)", method "echoResourceByValue(uint64,uint64,address)(uint64,uint64,address)"
+    txna ApplicationArgs 0
+    match echoResourceByIndex echoResourceByValue
+    err
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/resource-encoding.algo.ts:38
+    // class EchoResource extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
+
+
+// tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByIndex[routing]() -> void:
+echoResourceByIndex:
+    // tests/approvals/resource-encoding.algo.ts:39
+    // @abimethod({ resourceEncoding: 'index' })
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
+    btoi
+    txnas Assets
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
+    btoi
+    txnas Applications
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
+    btoi
+    txnas Accounts
+    // tests/approvals/resource-encoding.algo.ts:41
+    // const assetIdx = op.btoi(Txn.applicationArgs(1))
+    intc_0 // 1
+    txnas ApplicationArgs
+    btoi
+    // tests/approvals/resource-encoding.algo.ts:42
+    // assert(asset === Txn.assets(assetIdx), 'expected asset to be passed by index')
+    txnas Assets
+    dig 3
+    ==
+    assert // expected asset to be passed by index
+    // tests/approvals/resource-encoding.algo.ts:43
+    // const appIdx = op.btoi(Txn.applicationArgs(2))
+    intc_1 // 2
+    txnas ApplicationArgs
+    btoi
+    // tests/approvals/resource-encoding.algo.ts:44
+    // assert(app === Txn.applications(appIdx), 'expected application to be passed by index')
+    txnas Applications
+    dig 2
+    ==
+    assert // expected application to be passed by index
+    // tests/approvals/resource-encoding.algo.ts:45
+    // const accIdx = op.btoi(Txn.applicationArgs(3))
+    intc_2 // 3
+    txnas ApplicationArgs
+    btoi
+    // tests/approvals/resource-encoding.algo.ts:46
+    // assert(acc === Txn.accounts(accIdx), 'expected account to be passed by index')
+    txnas Accounts
+    dig 1
+    ==
+    assert // expected account to be passed by index
+    // tests/approvals/resource-encoding.algo.ts:47
+    // return [asset, app, acc] as const
+    uncover 2
+    itob
+    uncover 2
+    itob
+    concat
+    swap
+    concat
+    // tests/approvals/resource-encoding.algo.ts:39
+    // @abimethod({ resourceEncoding: 'index' })
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceByValue[routing]() -> void:
+echoResourceByValue:
+    // tests/approvals/resource-encoding.algo.ts:50
+    // @abimethod({ resourceEncoding: 'value' })
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 3
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    // tests/approvals/resource-encoding.algo.ts:52
+    // const assetId = op.btoi(Txn.applicationArgs(1))
+    intc_0 // 1
+    txnas ApplicationArgs
+    btoi
+    // tests/approvals/resource-encoding.algo.ts:53
+    // assert(asset === Asset(assetId), 'expected asset to be passed by value')
+    dig 3
+    ==
+    assert // expected asset to be passed by value
+    // tests/approvals/resource-encoding.algo.ts:54
+    // const appId = op.btoi(Txn.applicationArgs(2))
+    intc_1 // 2
+    txnas ApplicationArgs
+    btoi
+    // tests/approvals/resource-encoding.algo.ts:55
+    // assert(app === Application(appId), 'expected application to be passed by value')
+    dig 2
+    ==
+    assert // expected application to be passed by value
+    // tests/approvals/resource-encoding.algo.ts:56
+    // const address = Txn.applicationArgs(3)
+    intc_2 // 3
+    txnas ApplicationArgs
+    // tests/approvals/resource-encoding.algo.ts:57
+    // assert(acc === Account(address), 'expected account to be passed by value')
+    dig 1
+    ==
+    assert // expected account to be passed by value
+    // tests/approvals/resource-encoding.algo.ts:58
+    // return [asset, app, acc]
+    uncover 2
+    itob
+    uncover 2
+    itob
+    concat
+    swap
+    concat
+    // tests/approvals/resource-encoding.algo.ts:50
+    // @abimethod({ resourceEncoding: 'value' })
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return

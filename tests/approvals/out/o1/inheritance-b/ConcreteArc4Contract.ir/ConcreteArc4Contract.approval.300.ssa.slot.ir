@@ -1,0 +1,52 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let reinterpret_bool%0#0: bool = (txn ApplicationID)
+        goto reinterpret_bool%0#0 ? block@2 : block@1
+    block@1: // if_body_L1
+        (app_global_put "concreteState" "testing")
+        goto block@2
+    block@2: // after_if_else_L1
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        goto tmp%0#1 ? block@4 : block@11
+    block@4: // abi_routing_L16
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        (assert tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "getVeryImportantValue()string" => block@6, method "simpleAbiMethod(uint64,uint64)uint64" => block@7, * => block@10}
+    block@6: // getVeryImportantValue_route_L18
+        (log 0x151f7c750007343268656c6c6f)
+        exit 1u
+    block@7: // simpleAbiMethod_route_L17
+        tests/approvals/inheritance-a.algo.ts::Arc4Contract.simpleAbiMethod[routing]()
+        goto block@10
+    block@10: // after_if_else_L16
+        fail
+    block@11: // __algots__.defaultCreate_L16
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (! tmp%9#0)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u
+
+subroutine tests/approvals/inheritance-a.algo.ts::Arc4Contract.simpleAbiMethod[routing]() -> void:
+    block@0: // L17
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let a#0: uint64 = (btoi tmp%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
+        let b#0: uint64 = (btoi tmp%2#0)
+        let tmp%0#1: uint64 = (+ a#0 b#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#1)
+        let tmp%6#0: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
+        (log tmp%6#0)
+        exit 1u

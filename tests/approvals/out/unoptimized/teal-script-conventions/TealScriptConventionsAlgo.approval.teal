@@ -1,0 +1,305 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 2
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // tests/approvals/teal-script-conventions.algo.ts:5
+    // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main_deleteApplication@9
+    b main_abi_routing@2
+
+main_abi_routing@2:
+    // tests/approvals/teal-script-conventions.algo.ts:5
+    // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
+    txna ApplicationArgs 0
+    pushbytes 0x766a657e // method "noMoreThanks(uint64)uint64"
+    pushbytes 0x2f2be517 // method "createApplication(byte[])void"
+    pushbytes 0x01a3a3ff // method "optInToApplication()void"
+    pushbytes 0x46f76533 // method "updateApplication()void"
+    pushbytes 0xdf7300bb // method "setLocal(string)void"
+    uncover 5
+    match main_noMoreThanks_route@3 main_createApplication_route@4 main_optInToApplication_route@5 main_updateApplication_route@6 main_setLocal_route@7
+    b main_switch_case_next@8
+
+main_switch_case_next@8:
+    b main_after_if_else@10
+
+main_after_if_else@10:
+    // tests/approvals/teal-script-conventions.algo.ts:5
+    // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
+    err
+
+main_setLocal_route@7:
+    // tests/approvals/teal-script-conventions.algo.ts:17
+    // setLocal(value: string) {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    callsub setLocal
+    b main_switch_case_next@8
+
+main_updateApplication_route@6:
+    // tests/approvals/teal-script-conventions.algo.ts:25
+    // updateApplication() {}
+    txn OnCompletion
+    pushint 4 // UpdateApplication
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    &&
+    assert // OnCompletion must be UpdateApplication && can only call when not creating
+    callsub updateApplication
+    b main_switch_case_next@8
+
+main_optInToApplication_route@5:
+    // tests/approvals/teal-script-conventions.algo.ts:23
+    // optInToApplication() {}
+    txn OnCompletion
+    intc_1 // OptIn
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    &&
+    assert // OnCompletion must be OptIn && can only call when not creating
+    callsub optInToApplication
+    b main_switch_case_next@8
+
+main_createApplication_route@4:
+    // tests/approvals/teal-script-conventions.algo.ts:12
+    // @abimethod({ allowActions: ['NoOp', 'DeleteApplication'] })
+    txn OnCompletion
+    intc_1 // 1
+    uncover 1
+    shl
+    pushint 33 // 33
+    &
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert // OnCompletion must be one of NoOp, DeleteApplication && can only call when creating
+    callsub createApplication
+    b main_switch_case_next@8
+
+main_noMoreThanks_route@3:
+    // tests/approvals/teal-script-conventions.algo.ts:8
+    // @abimethod({ name: 'noMoreThanks' })
+    txn OnCompletion
+    intc_2 // CloseOut
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    &&
+    assert // OnCompletion must be CloseOut && can only call when not creating
+    callsub closeOutOfApplication
+    b main_switch_case_next@8
+
+main_deleteApplication@9:
+    // tests/approvals/teal-script-conventions.algo.ts:20
+    // @baremethod()
+    txn OnCompletion
+    pushint 5 // DeleteApplication
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    &&
+    assert // OnCompletion must be DeleteApplication && can only call when not creating
+    callsub deleteApplication
+    intc_1 // 1
+    return
+
+
+// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.closeOutOfApplication[routing]() -> void:
+closeOutOfApplication:
+    b closeOutOfApplication_block@0
+
+closeOutOfApplication_block@0:
+    // tests/approvals/teal-script-conventions.algo.ts:8
+    // @abimethod({ name: 'noMoreThanks' })
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.closeOutOfApplication
+    itob
+    pushbytes 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.createApplication[routing]() -> void:
+createApplication:
+    b createApplication_block@0
+
+createApplication_block@0:
+    // tests/approvals/teal-script-conventions.algo.ts:12
+    // @abimethod({ allowActions: ['NoOp', 'DeleteApplication'] })
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.createApplication
+    intc_1 // 1
+    return
+
+
+// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.setLocal[routing]() -> void:
+setLocal:
+    b setLocal_block@0
+
+setLocal_block@0:
+    // tests/approvals/teal-script-conventions.algo.ts:17
+    // setLocal(value: string) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.setLocal
+    intc_1 // 1
+    return
+
+
+// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.optInToApplication[routing]() -> void:
+optInToApplication:
+    b optInToApplication_block@0
+
+optInToApplication_block@0:
+    // tests/approvals/teal-script-conventions.algo.ts:23
+    // optInToApplication() {}
+    callsub tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.optInToApplication
+    intc_1 // 1
+    return
+
+
+// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.updateApplication[routing]() -> void:
+updateApplication:
+    b updateApplication_block@0
+
+updateApplication_block@0:
+    // tests/approvals/teal-script-conventions.algo.ts:25
+    // updateApplication() {}
+    callsub tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.updateApplication
+    intc_1 // 1
+    return
+
+
+// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.closeOutOfApplication(arg: uint64) -> uint64:
+tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.closeOutOfApplication:
+    // tests/approvals/teal-script-conventions.algo.ts:8-9
+    // @abimethod({ name: 'noMoreThanks' })
+    // closeOutOfApplication(arg: uint64) {
+    proto 1 1
+    b tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.closeOutOfApplication_block@0
+
+tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.closeOutOfApplication_block@0:
+    // tests/approvals/teal-script-conventions.algo.ts:10
+    // return arg
+    frame_dig -1
+    retsub
+
+
+// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.createApplication(value: bytes) -> void:
+tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.createApplication:
+    // tests/approvals/teal-script-conventions.algo.ts:12-13
+    // @abimethod({ allowActions: ['NoOp', 'DeleteApplication'] })
+    // createApplication(value: bytes) {
+    proto 1 0
+    b tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.createApplication_block@0
+
+tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.createApplication_block@0:
+    // tests/approvals/teal-script-conventions.algo.ts:6
+    // global = GlobalState<bytes>()
+    pushbytes "global"
+    // tests/approvals/teal-script-conventions.algo.ts:14
+    // this.global.value = value
+    frame_dig -1
+    app_global_put
+    retsub
+
+
+// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.setLocal(value: bytes) -> void:
+tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.setLocal:
+    // tests/approvals/teal-script-conventions.algo.ts:17
+    // setLocal(value: string) {
+    proto 1 0
+    b tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.setLocal_block@0
+
+tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.setLocal_block@0:
+    // tests/approvals/teal-script-conventions.algo.ts:18
+    // this.local(Txn.sender).value = value
+    txn Sender
+    // tests/approvals/teal-script-conventions.algo.ts:7
+    // local = LocalState<string>()
+    pushbytes "local"
+    // tests/approvals/teal-script-conventions.algo.ts:18
+    // this.local(Txn.sender).value = value
+    frame_dig -1
+    app_local_put
+    retsub
+
+
+// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.deleteApplication() -> void:
+deleteApplication:
+    b deleteApplication_block@0
+
+deleteApplication_block@0:
+    retsub
+
+
+// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.optInToApplication() -> void:
+tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.optInToApplication:
+    b tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.optInToApplication_block@0
+
+tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.optInToApplication_block@0:
+    retsub
+
+
+// tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.updateApplication() -> void:
+tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.updateApplication:
+    b tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.updateApplication_block@0
+
+tests/approvals/teal-script-conventions.algo.ts::TealScriptConventionsAlgo.updateApplication_block@0:
+    retsub

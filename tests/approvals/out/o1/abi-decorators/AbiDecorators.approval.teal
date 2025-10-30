@@ -1,0 +1,126 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 8
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // tests/approvals/abi-decorators.algo.ts:16
+    // globalValue = GlobalState({ initialValue: Uint64(123) })
+    pushbytes "globalValue"
+    pushint 123 // 123
+    app_global_put
+
+main_after_if_else@2:
+    // tests/approvals/abi-decorators.algo.ts:4
+    // export default class AbiDecorators extends Contract {
+    pushbytes 0x63c27aba // method "allActions()void"
+    txna ApplicationArgs 0
+    match main_allActions_route@4
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    pushbytes 0x09b10ffd // method "readonlyAlt2()uint64"
+    txna ApplicationArgs 0
+    match main_readonlyAlt2_route@6
+    txn ApplicationID
+    bz main_create_NoOp@14
+    pushbytess 0xf9020d5a 0x14d1b6ea 0xc1367374 0xcd93cce2 // method "justNoop()void", method "overrideReadonlyName()uint64", method "methodWithDefaults(uint64,uint64,uint64)uint64", method "readonlyAlt()uint64"
+    txna ApplicationArgs 0
+    match main_justNoop_route@9 main_overrideReadonlyName_route@10 methodWithDefaults main_readonlyAlt_route@12
+    err
+
+main_readonlyAlt_route@12:
+    // tests/approvals/abi-decorators.algo.ts:23-24
+    // @readonly
+    // public readonlyAlt(): uint64 {
+    pushbytes 0x151f7c750000000000000001
+    log
+    intc_0 // 1
+    return
+
+main_overrideReadonlyName_route@10:
+    // tests/approvals/abi-decorators.algo.ts:11
+    // @abimethod({ readonly: true, name: 'overrideReadonlyName' })
+    pushbytes 0x151f7c750000000000000005
+    log
+    intc_0 // 1
+    return
+
+main_justNoop_route@9:
+    // tests/approvals/abi-decorators.algo.ts:5
+    // @abimethod({ allowActions: 'NoOp' })
+    intc_0 // 1
+    return
+
+main_create_NoOp@14:
+    // tests/approvals/abi-decorators.algo.ts:4
+    // export default class AbiDecorators extends Contract {
+    pushbytes 0xe179f9d4 // method "createMethod()void"
+    txna ApplicationArgs 0
+    match main_createMethod_route@15
+    err
+
+main_createMethod_route@15:
+    // tests/approvals/abi-decorators.algo.ts:7
+    // @abimethod({ onCreate: 'require' })
+    intc_0 // 1
+    return
+
+main_readonlyAlt2_route@6:
+    // tests/approvals/abi-decorators.algo.ts:29
+    // @abimethod({ onCreate: 'allow' })
+    pushbytes 0x151f7c750000000000000002
+    log
+    intc_0 // 1
+    return
+
+main_allActions_route@4:
+    // tests/approvals/abi-decorators.algo.ts:9
+    // @abimethod({ allowActions: ['NoOp', 'OptIn', 'CloseOut', 'DeleteApplication', 'UpdateApplication'] })
+    txn ApplicationID
+    assert // can only call when not creating
+    intc_0 // 1
+    return
+
+
+// tests/approvals/abi-decorators.algo.ts::AbiDecorators.methodWithDefaults[routing]() -> void:
+methodWithDefaults:
+    // tests/approvals/abi-decorators.algo.ts:18
+    // @abimethod({ defaultArguments: { a: { from: 'globalValue' }, b: { from: 'readonly' }, c: { constant: 145 } } })
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/abi-decorators.algo.ts:20
+    // return a * b + c
+    cover 2
+    *
+    +
+    // tests/approvals/abi-decorators.algo.ts:18
+    // @abimethod({ defaultArguments: { a: { from: 'globalValue' }, b: { from: 'readonly' }, c: { constant: 145 } } })
+    itob
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return

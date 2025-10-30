@@ -1,0 +1,59 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        goto tmp%0#1 ? block@2 : block@11
+    block@2: // abi_routing_L4
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        (assert tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "testNested((uint64,(uint512,uint512)))(uint64,(uint512,uint512),uint64,uint512)" => block@4, method "test()void" => block@5, method "testLiteralDestructuring()void" => block@6, method "produceFixed()uint64[3]" => block@7, * => block@10}
+    block@4: // testNested_route_L5
+        tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested[routing]()
+        goto block@10
+    block@5: // test_route_L11
+        exit 1u
+    block@6: // testLiteralDestructuring_route_L34
+        exit 1u
+    block@7: // produceFixed_route_L44
+        (log 0x151f7c75000000000000000100000000000000020000000000000003)
+        exit 1u
+    block@10: // after_if_else_L4
+        fail
+    block@11: // __algots__.defaultCreate_L4
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (! tmp%9#0)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u
+
+subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested[routing]() -> void:
+    block@0: // L5
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 136u)
+        (assert eq%0#0) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.tuple<arc4.uint512,arc4.uint512>>
+        let aggregate%extract%1#0: bytes = ((extract 8 128) tmp%0#0)
+        let arg.1.0#0: biguint = ((extract 0 64) aggregate%extract%1#0)
+        let arg.1.1#0: biguint = ((extract 64 64) aggregate%extract%1#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = ((extract 0 8) tmp%0#0)
+        let aggregate%value_len%0#0: uint64 = (len arg.1.0#0)
+        let aggregate%len_ok%0#0: bool = (<= aggregate%value_len%0#0 64u)
+        (assert aggregate%len_ok%0#0) // overflow
+        let aggregate%bzero%0#0: bytes = (bzero 64u)
+        let aggregate%arc4_encoded%0#0: bytes[64] = (b| arg.1.0#0 aggregate%bzero%0#0)
+        let aggregate%value_len%1#0: uint64 = (len arg.1.1#0)
+        let aggregate%len_ok%1#0: bool = (<= aggregate%value_len%1#0 64u)
+        (assert aggregate%len_ok%1#0) // overflow
+        let aggregate%arc4_encoded%1#0: bytes[64] = (b| arg.1.1#0 aggregate%bzero%0#0)
+        let aggregate%head%2#0: bytes = (concat aggregate%arc4_encoded%0#0 aggregate%arc4_encoded%1#0)
+        let aggregate%head%3#0: bytes = (concat aggregate%val_as_bytes%0#0 aggregate%head%2#0)
+        let aggregate%head%4#0: bytes = (concat aggregate%head%3#0 aggregate%val_as_bytes%0#0)
+        let aggregate%head%5#0: bytes = (concat aggregate%head%4#0 aggregate%arc4_encoded%0#0)
+        let tmp%10#0: bytes = (concat 0x151f7c75 aggregate%head%5#0)
+        (log tmp%10#0)
+        exit 1u

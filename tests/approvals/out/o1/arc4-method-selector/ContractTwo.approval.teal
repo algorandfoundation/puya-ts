@@ -1,0 +1,82 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 8
+    // tests/approvals/arc4-method-selector.algo.ts:20
+    // class ContractTwo extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@10
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0x438c64f3 0xf59e3cc4 0x523a6db2 // method "renamedSomeMethod()void", method "test()bool", method "referenceTypes(pay,uint64,address,uint64,appl)void"
+    txna ApplicationArgs 0
+    match main_renamedSomeMethod_route@4 main_test_route@5 referenceTypes
+    err
+
+main_test_route@5:
+    // tests/approvals/arc4-method-selector.algo.ts:24
+    // test() {
+    pushbytes 0x151f7c7580
+    log
+    intc_0 // 1
+    return
+
+main_renamedSomeMethod_route@4:
+    // tests/approvals/arc4-method-selector.algo.ts:21
+    // @abimethod({ name: 'renamedSomeMethod' })
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@10:
+    // tests/approvals/arc4-method-selector.algo.ts:20
+    // class ContractTwo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
+
+
+// tests/approvals/arc4-method-selector.algo.ts::ContractTwo.referenceTypes[routing]() -> void:
+referenceTypes:
+    // tests/approvals/arc4-method-selector.algo.ts:28
+    // referenceTypes(pay: gtxn.PaymentTxn, asset: Asset, account: Account, app: Application, appTxn: gtxn.ApplicationCallTxn) {}
+    txn GroupIndex
+    pushint 2 // 2
+    -
+    gtxns TypeEnum
+    intc_0 // pay
+    ==
+    assert // transaction type is pay
+    txna ApplicationArgs 1
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    txna ApplicationArgs 2
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    txna ApplicationArgs 3
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    txn GroupIndex
+    intc_0 // 1
+    -
+    gtxns TypeEnum
+    pushint 6 // appl
+    ==
+    assert // transaction type is appl
+    intc_0 // 1
+    return

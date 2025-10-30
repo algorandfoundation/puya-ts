@@ -1,0 +1,62 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/precompiled-apps.algo.ts:66
+    // export class LargeProgram extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@6
+    pushbytess 0x24378d3c 0x02bf30cf // method "delete()void", method "getBigBytesLength()uint64"
+    txna ApplicationArgs 0
+    match main_delete_route@3 main_getBigBytesLength_route@4
+    err
+
+main_getBigBytesLength_route@4:
+    // tests/approvals/precompiled-apps.algo.ts:67
+    // getBigBytesLength() {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    // tests/approvals/precompiled-apps.algo.ts:63
+    // return op.bzero(4096)
+    pushint 4096 // 4096
+    bzero
+    // tests/approvals/precompiled-apps.algo.ts:68
+    // return getBigBytes().length
+    len
+    // tests/approvals/precompiled-apps.algo.ts:67
+    // getBigBytesLength() {
+    itob
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    pushint 1 // 1
+    return
+
+main_delete_route@3:
+    // tests/approvals/precompiled-apps.algo.ts:71
+    // @abimethod({ allowActions: 'DeleteApplication' })
+    txn OnCompletion
+    pushint 5 // DeleteApplication
+    ==
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be DeleteApplication && can only call when not creating
+    pushint 1 // 1
+    return
+
+main___algots__.defaultCreate@6:
+    // tests/approvals/precompiled-apps.algo.ts:66
+    // export class LargeProgram extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return

@@ -1,0 +1,42 @@
+contract EventEmitter
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  emitSwapped(a: arc4.uint8, b: arc4.uint8): void
+  {
+    emit("Swapped(uint8,uint8)", ARC4_ENCODE(new tests/approvals/arc-28-events.algo.ts::Swapped(a=b, b=a), wtype=Swapped))
+    x: tests/approvals/arc-28-events.algo.ts::Swapped = new tests/approvals/arc-28-events.algo.ts::Swapped(a=($0 = #{ a: b, b: a }).a, b=$0.b)
+    emit("Swapped(uint8,uint8)", ARC4_ENCODE(x, wtype=Swapped))
+    y: SwappedArc4 = new SwappedArc4(a=($1 = #{ a: b, b: a }).a, b=$1.b)
+    emit("SwappedArc4(uint8,uint8)", y)
+    emit("Swapped(uint8,uint8)", new Swapped(0=b, 1=a))
+    emit("Swapped(uint8,uint8)", new Swapped(0=b, 1=a))
+    emit("Swapped((uint8,uint8),uint8)", new Swapped(0=ARC4_ENCODE(#[b, b], wtype=arc4.tuple<arc4.uint8,arc4.uint8>), 1=a))
+    emit("Swapped((uint8,uint8),uint8)", new Swapped(0=ARC4_ENCODE(#[b, b], wtype=arc4.tuple<arc4.uint8,arc4.uint8>), 1=a))
+    emit("Swapped(uint8[],uint8)", new Swapped(0=ARC4_ENCODE(#[b, b], wtype=arc4.dynamic_array<arc4.uint8>), 1=a))
+  }
+  
+  emitCustom(arg0: string, arg1: bool): void
+  {
+    emit("Custom(string,bool)", new Custom(0=ARC4_ENCODE(arg0, wtype=arc4.dynamic_array<arc4.byte>), 1=ARC4_ENCODE(arg1, wtype=arc4.bool)))
+    emit("Custom(string,bool)", new Custom(0=ARC4_ENCODE(arg0, wtype=arc4.dynamic_array<arc4.byte>), 1=ARC4_ENCODE(arg1, wtype=arc4.bool)))
+  }
+  
+  emitDynamicBytes(x: bytes, y: arc4.dynamic_array<arc4.byte>): void
+  {
+    emit("DB(byte[],byte[])", new DB(0=ARC4_ENCODE(x, wtype=arc4.dynamic_array<arc4.byte>), 1=y))
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

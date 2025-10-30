@@ -1,0 +1,26 @@
+#pragma version 11
+#pragma typetrack false
+
+// tests/approvals/inheritance-b.algo.ts::ConcreteSimpleContract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/inheritance-b.algo.ts:9
+    // const a = op.btoi(Txn.applicationArgs(0))
+    pushint 0 // 0
+    txnas ApplicationArgs
+    btoi
+    // tests/approvals/inheritance-b.algo.ts:10
+    // const b = op.btoi(Txn.applicationArgs(1))
+    pushint 1 // 1
+    txnas ApplicationArgs
+    btoi
+    // tests/approvals/inheritance-a.algo.ts:7
+    // return a * b
+    *
+    // tests/approvals/inheritance-b.algo.ts:11
+    // log(this.simpleMethod(a, b))
+    itob
+    log
+    // tests/approvals/inheritance-b.algo.ts:12
+    // return 1
+    pushint 1 // 1
+    return

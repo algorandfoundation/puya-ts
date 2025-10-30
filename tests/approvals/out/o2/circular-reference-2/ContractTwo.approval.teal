@@ -1,0 +1,57 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    bytecblock 0x2a337771
+    // tests/approvals/circular-reference-2.algo.ts:6
+    // export class ContractTwo extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    bytec_0 // method "test(uint64)void"
+    txna ApplicationArgs 0
+    match main_test_route@3
+    err
+
+main_test_route@3:
+    // tests/approvals/circular-reference-2.algo.ts:7
+    // test(appId: Application) {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/circular-reference-2.algo.ts:8
+    // abiCall<typeof ContractOne.prototype.test>({ appId })
+    itxn_begin
+    bytec_0 // method "test(uint64)void"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationID
+    pushint 6 // appl
+    itxn_field TypeEnum
+    pushint 0 // 0
+    itxn_field Fee
+    itxn_submit
+    // tests/approvals/circular-reference-2.algo.ts:7
+    // test(appId: Application) {
+    pushint 1 // 1
+    return
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/circular-reference-2.algo.ts:6
+    // export class ContractTwo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return

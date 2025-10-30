@@ -1,0 +1,78 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 8 1
+    bytecblock 0x151f7c75
+    // tests/approvals/abi-decorators.algo.ts:35
+    // export class OverloadedMethods extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0x7920dd57 0x1cefbc5a // method "doThing(uint64)uint64", method "doThing(uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match main_doThing_route@4 main_doThing_route@5
+    err
+
+main_doThing_route@5:
+    // tests/approvals/abi-decorators.algo.ts:41
+    // @abimethod({ name: 'doThing' })
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/abi-decorators.algo.ts:43
+    // return x * y
+    *
+    // tests/approvals/abi-decorators.algo.ts:41
+    // @abimethod({ name: 'doThing' })
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_doThing_route@4:
+    // tests/approvals/abi-decorators.algo.ts:36
+    // @abimethod({ name: 'doThing' })
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/abi-decorators.algo.ts:35
+    // export class OverloadedMethods extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return

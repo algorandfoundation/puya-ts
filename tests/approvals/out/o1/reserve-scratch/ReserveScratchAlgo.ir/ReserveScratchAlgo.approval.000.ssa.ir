@@ -1,0 +1,20 @@
+main tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.approvalProgram:
+    block@0: // L17
+        tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.setThings()
+        let tmp%0#0: uint64 = (loads 0u)
+        let tmp%1#0: bool = (== tmp%0#0 1u)
+        (assert tmp%1#0)
+        let tmp%2#0: bytes = (loads 1u)
+        let tmp%3#0: bool = (== tmp%2#0 "hello")
+        (assert tmp%3#0)
+        let tmp%4#0: uint64 = (loads 15u)
+        let tmp%5#0: bool = (== tmp%4#0 45u)
+        (assert tmp%5#0)
+        return 1u
+
+subroutine tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.setThings() -> void:
+    block@0: // L11
+        (stores 0u 1u)
+        (stores 1u "hello")
+        (stores 15u 45u)
+        return 

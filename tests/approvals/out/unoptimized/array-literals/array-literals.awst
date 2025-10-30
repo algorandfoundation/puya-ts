@@ -1,0 +1,34 @@
+contract ArrayLiteralsAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(a: uint64, b: uint64): void
+  {
+    inferTuple: readonly [uint64, uint64] = #[a, b]
+    explicitTuple: arc4.tuple<uint64,uint64> = ARC4_ENCODE(#[($0 = #[a, b]).0, $0.1], wtype=arc4.tuple<uint64,uint64>)
+    conditionalExplicitTuple: arc4.tuple<uint64,uint64> = (a < b ? ARC4_ENCODE(#[a, b], wtype=arc4.tuple<uint64,uint64>) : ARC4_ENCODE(#[b, a], wtype=arc4.tuple<uint64,uint64>))
+    #[c, d]: readonly [uint64, uint64] = #[($1 = #[a, b]).0, $1.1]
+    #[g]: readonly [uint64] = #[($2 = ARC4_ENCODE(#[a, b], wtype=arc4.tuple<uint64,uint64>)).1]
+    #[h]: readonly [uint64] = #[($3 = ARC4_ENCODE(#[a, b], wtype=arc4.tuple<uint64,uint64>)).0]
+  }
+  
+  test2(): uint64
+  {
+    x: tests/approvals/array-literals.algo.ts::SomeObj = new tests/approvals/array-literals.algo.ts::SomeObj(things=new arc4.dynamic_array<arc4.uint32>())
+    x.things.push(...#[123]), x.things.length
+    return x.things.length
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

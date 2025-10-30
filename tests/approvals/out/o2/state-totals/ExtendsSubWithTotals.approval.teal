@@ -1,0 +1,83 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1
+    bytecblock "oneGlobal"
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // tests/approvals/state-totals.algo.ts:5
+    // oneGlobal = GlobalState({ initialValue: Uint64(1) })
+    bytec_0 // "oneGlobal"
+    intc_0 // 1
+    app_global_put
+
+main_after_if_else@2:
+    // tests/approvals/state-totals.algo.ts:27-28
+    // @contract({ stateTotals: {} })
+    // export class ExtendsSubWithTotals extends SubClassWithExplicitTotals {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@7
+    pushbytes 0x2cd95aa1 // method "setState(uint64)void"
+    txna ApplicationArgs 0
+    match main_setState_route@5
+    err
+
+main_setState_route@5:
+    // tests/approvals/state-totals.algo.ts:31
+    // @abimethod({ allowActions: 'OptIn' })
+    txn OnCompletion
+    intc_0 // OptIn
+    ==
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be OptIn && can only call when not creating
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/state-totals.algo.ts:5
+    // oneGlobal = GlobalState({ initialValue: Uint64(1) })
+    bytec_0 // "oneGlobal"
+    // tests/approvals/state-totals.algo.ts:10
+    // this.oneGlobal.value = n
+    dig 1
+    app_global_put
+    // tests/approvals/state-totals.algo.ts:6
+    // twoGlobal = GlobalState<uint64>()
+    pushbytes "twoGlobal"
+    // tests/approvals/state-totals.algo.ts:11
+    // this.twoGlobal.value = n
+    dig 1
+    app_global_put
+    // tests/approvals/state-totals.algo.ts:35
+    // this.oneLocal(Txn.sender).value = n
+    txn Sender
+    // tests/approvals/state-totals.algo.ts:29
+    // oneLocal = LocalState<uint64>()
+    pushbytes "oneLocal"
+    // tests/approvals/state-totals.algo.ts:35
+    // this.oneLocal(Txn.sender).value = n
+    uncover 2
+    app_local_put
+    // tests/approvals/state-totals.algo.ts:31
+    // @abimethod({ allowActions: 'OptIn' })
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@7:
+    // tests/approvals/state-totals.algo.ts:27-28
+    // @contract({ stateTotals: {} })
+    // export class ExtendsSubWithTotals extends SubClassWithExplicitTotals {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return

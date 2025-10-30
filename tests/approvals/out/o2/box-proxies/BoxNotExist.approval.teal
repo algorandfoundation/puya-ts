@@ -1,0 +1,80 @@
+#pragma version 11
+#pragma typetrack false
+
+// tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram() -> uint64:
+main:
+    intcblock 1 0
+    bytecblock "abc"
+    intc_1 // 0
+    // tests/approvals/box-proxies.algo.ts:124
+    // if (Txn.applicationId.id !== 0) {
+    txn ApplicationID
+    bz main_after_if_else@11
+    // tests/approvals/box-proxies.algo.ts:125
+    // switch (Txn.applicationArgs(0).toString()) {
+    intc_1 // 0
+    txnas ApplicationArgs
+    dup
+    bury 2
+    // tests/approvals/box-proxies.algo.ts:126
+    // case 'box':
+    pushbytes "box"
+    ==
+    // tests/approvals/box-proxies.algo.ts:126-127
+    // case 'box':
+    //   return Box<boolean>({ key: 'abc' }).value
+    bz main_after_if_else@4
+    // tests/approvals/box-proxies.algo.ts:127
+    // return Box<boolean>({ key: 'abc' }).value
+    bytec_0 // "abc"
+    box_get
+    assert // Box must have value
+    btoi
+    return
+
+main_after_if_else@4:
+    // tests/approvals/box-proxies.algo.ts:128
+    // case 'boxmap':
+    dup
+    pushbytes "boxmap"
+    ==
+    // tests/approvals/box-proxies.algo.ts:128-129
+    // case 'boxmap':
+    //   return BoxMap<string, boolean>({ keyPrefix: 'a' })('bc').value
+    bz main_after_if_else@7
+    // tests/approvals/box-proxies.algo.ts:129
+    // return BoxMap<string, boolean>({ keyPrefix: 'a' })('bc').value
+    bytec_0 // "abc"
+    box_get
+    assert // Box must have value
+    btoi
+    return
+
+main_after_if_else@7:
+    // tests/approvals/box-proxies.algo.ts:130
+    // case 'createbox':
+    dup
+    pushbytes "createbox"
+    ==
+    // tests/approvals/box-proxies.algo.ts:130-132
+    // case 'createbox':
+    //   Box<boolean>({ key: 'abc' }).value = true
+    //   return true
+    bz main_after_if_else@11
+    // tests/approvals/box-proxies.algo.ts:131
+    // Box<boolean>({ key: 'abc' }).value = true
+    intc_0 // 1
+    itob
+    bytec_0 // "abc"
+    swap
+    box_put
+    // tests/approvals/box-proxies.algo.ts:132
+    // return true
+    intc_0 // 1
+    return
+
+main_after_if_else@11:
+    // tests/approvals/box-proxies.algo.ts:135
+    // return true
+    intc_0 // 1
+    return

@@ -1,0 +1,44 @@
+#pragma version 11
+#pragma typetrack false
+
+// tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram() -> uint64:
+main:
+    bytecblock 0x068101
+
+main_while_top@2:
+    pushint 1410 // 1410
+    global OpcodeBudget
+    >
+    bz main_after_while@7
+    itxn_begin
+    pushint 6 // appl
+    itxn_field TypeEnum
+    pushint 5 // DeleteApplication
+    itxn_field OnCompletion
+    bytec_0 // 0x068101
+    itxn_field ApprovalProgram
+    bytec_0 // 0x068101
+    itxn_field ClearStateProgram
+    pushint 0 // 0
+    itxn_field Fee
+    itxn_submit
+    b main_while_top@2
+
+main_after_while@7:
+    // tests/approvals/arc4-types.algo.ts:137
+    // const b = new Address(Txn.sender)
+    txn Sender
+    // tests/approvals/arc4-types.algo.ts:139
+    // assert(b.native === Txn.sender)
+    dupn 2
+    ==
+    assert
+    // tests/approvals/arc4-types.algo.ts:141
+    // assert(a !== b, 'Zero address should not match sender')
+    pushbytes base32(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
+    !=
+    assert // Zero address should not match sender
+    // tests/approvals/arc4-types.algo.ts:209
+    // return true
+    pushint 1 // 1
+    return

@@ -1,0 +1,335 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 6 8
+    bytecblock 0xd0a28200 0x0002686f
+    intc_0 // 0
+    pushbytes ""
+    dupn 6
+    // tests/approvals/itxn-compose.algo.ts:18
+    // class ItxnComposeAlgo extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0x1ecad34c 0x90d29762 // method "distribute(address[],pay,uint64)void", method "conditionalBegin(uint64)void"
+    txna ApplicationArgs 0
+    match main_distribute_route@4 main_conditionalBegin_route@5
+    err
+
+main_conditionalBegin_route@5:
+    // tests/approvals/itxn-compose.algo.ts:52
+    // conditionalBegin(count: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 5
+    // tests/approvals/itxn-compose.algo.ts:54
+    // const appId = hello.call.create({ args: ['Hi'] }).itxn.createdApp
+    itxn_begin
+    pushbytes 0x009225ae // method "helloCreate(string)void"
+    itxn_field ApplicationArgs
+    pushbytes 0x00024869
+    itxn_field ApplicationArgs
+    // tests/approvals/itxn-compose.algo.ts:53
+    // const hello = compileArc4(Hello)
+    intc_1 // 1
+    itxn_field GlobalNumByteSlice
+    pushbytes base64(C4EBQw==)
+    itxn_field ClearStateProgramPages
+    pushbytes base64(CyAEAAECBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CAMkAvzEZFEQxGEEAk4ICBNCiggAEUYC6IDYaAI4CAFgAAQA2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMkWUlLAhJESwRLAUsFUkkiWSQITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwI0M2GgFJIlkkCEsBFRJEVwIAIihlRClQTFBJFRZXBgJMUCpMULAjQ4AEAJIlrjYaAI4BAAEANhoBSSJZJAhLARUSRFcCAChMZyNDMRklEjEYEEQjQzEZgQUSMRgQRCND)
+    itxn_field ApprovalProgramPages
+    // tests/approvals/itxn-compose.algo.ts:54
+    // const appId = hello.call.create({ args: ['Hi'] }).itxn.createdApp
+    intc_0 // 0
+    itxn_field OnCompletion
+    intc_2 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    itxn_submit
+    gitxn 0 CreatedApplicationID
+    bury 6
+    // tests/approvals/itxn-compose.algo.ts:56
+    // for (const i of urange(count)) {
+    intc_0 // 0
+    bury 4
+
+main_for_header@13:
+    // tests/approvals/itxn-compose.algo.ts:56
+    // for (const i of urange(count)) {
+    dig 3
+    dig 5
+    <
+    bz main_after_for@18
+    // tests/approvals/itxn-compose.algo.ts:57
+    // if (i === 0) {
+    dig 3
+    bnz main_else_body@16
+    // tests/approvals/itxn-compose.algo.ts:58
+    // itxnCompose.begin(Hello.prototype.greet, { appId, args: ['ho'] })
+    itxn_begin
+    bytec_0 // method "greet(string)string"
+    itxn_field ApplicationArgs
+    bytec_1 // 0x0002686f
+    itxn_field ApplicationArgs
+    dig 5
+    itxn_field ApplicationID
+    intc_2 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+
+main_after_if_else@17:
+    // tests/approvals/itxn-compose.algo.ts:56
+    // for (const i of urange(count)) {
+    dig 3
+    intc_1 // 1
+    +
+    bury 4
+    b main_for_header@13
+
+main_else_body@16:
+    // tests/approvals/itxn-compose.algo.ts:60
+    // itxnCompose.next(Hello.prototype.greet, { appId, args: ['ho'] })
+    itxn_next
+    bytec_0 // method "greet(string)string"
+    itxn_field ApplicationArgs
+    bytec_1 // 0x0002686f
+    itxn_field ApplicationArgs
+    dig 5
+    itxn_field ApplicationID
+    intc_2 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b main_after_if_else@17
+
+main_after_for@18:
+    // tests/approvals/itxn-compose.algo.ts:63
+    // itxnCompose.submit()
+    itxn_submit
+    // tests/approvals/itxn-compose.algo.ts:52
+    // conditionalBegin(count: uint64) {
+    intc_1 // 1
+    return
+
+main_distribute_route@4:
+    // tests/approvals/itxn-compose.algo.ts:19
+    // distribute(addresses: Address[], funds: gtxn.PaymentTxn, verifier: Application) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    dup
+    bury 9
+    dup
+    pushint 32 // 32
+    *
+    pushint 2 // 2
+    +
+    dig 2
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.static_array<arc4.uint8, 32>>
+    txn GroupIndex
+    intc_1 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_1 // pay
+    ==
+    assert // transaction type is pay
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    bury 4
+    // tests/approvals/itxn-compose.algo.ts:20-22
+    // assertMatch(funds, {
+    //   receiver: Global.currentApplicationAddress,
+    // })
+    dup
+    gtxns Receiver
+    // tests/approvals/itxn-compose.algo.ts:21
+    // receiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // tests/approvals/itxn-compose.algo.ts:20-22
+    // assertMatch(funds, {
+    //   receiver: Global.currentApplicationAddress,
+    // })
+    ==
+    assert // assert target is match for conditions
+    // tests/approvals/itxn-compose.algo.ts:23
+    // assert(addresses.length, 'must provide some accounts')
+    dig 1
+    assert // must provide some accounts
+    // tests/approvals/itxn-compose.algo.ts:24
+    // const share: uint64 = funds.amount / addresses.length
+    gtxns Amount
+    swap
+    /
+    // tests/approvals/itxn-compose.algo.ts:29
+    // receiver: addresses[0].bytes,
+    dig 1
+    extract 2 0
+    bury 10
+    swap
+    extract 2 32
+    // tests/approvals/itxn-compose.algo.ts:27
+    // type: TransactionType.Payment,
+    intc_1 // 1
+    // tests/approvals/itxn-compose.algo.ts:26-30
+    // const payFields = {
+    //   type: TransactionType.Payment,
+    //   amount: share,
+    //   receiver: addresses[0].bytes,
+    // } satisfies PaymentComposeFields
+    itob
+    uncover 2
+    itob
+    concat
+    dig 1
+    len
+    itob
+    extract 6 2
+    uncover 2
+    concat
+    swap
+    pushbytes 0x0012
+    concat
+    swap
+    concat
+    // tests/approvals/itxn-compose.algo.ts:31
+    // itxnCompose.begin(payFields)
+    itxn_begin
+    dup
+    intc_0 // 0
+    extract_uint64
+    dup
+    cover 2
+    bury 5
+    dup
+    intc_3 // 8
+    extract_uint64
+    dup
+    cover 2
+    bury 5
+    dup
+    pushint 16 // 16
+    extract_uint16
+    dig 1
+    len
+    substring3
+    extract 2 0
+    itxn_field Receiver
+    itxn_field Amount
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    // tests/approvals/itxn-compose.algo.ts:32
+    // for (const i of urange(1, addresses.length)) {
+    intc_1 // 1
+    bury 4
+
+main_for_header@21:
+    // tests/approvals/itxn-compose.algo.ts:32
+    // for (const i of urange(1, addresses.length)) {
+    dig 3
+    dig 7
+    <
+    bz main_after_for@23
+    // tests/approvals/itxn-compose.algo.ts:33
+    // const addr = addresses[i]
+    dig 3
+    dup
+    pushint 32 // 32
+    *
+    dig 9
+    swap
+    pushint 32 // 32
+    extract3 // on error: index access is out of bounds
+    // tests/approvals/itxn-compose.algo.ts:34-37
+    // itxnCompose.next({
+    //   ...payFields,
+    //   receiver: addr.bytes,
+    // })
+    itxn_next
+    itxn_field Receiver
+    dig 2
+    itxn_field Amount
+    dig 3
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    // tests/approvals/itxn-compose.algo.ts:32
+    // for (const i of urange(1, addresses.length)) {
+    intc_1 // 1
+    +
+    bury 4
+    b main_for_header@21
+
+main_after_for@23:
+    // tests/approvals/itxn-compose.algo.ts:40-42
+    // itxnCompose.next(VerifierContract.prototype.verify, {
+    //   appId: verifier,
+    // })
+    itxn_next
+    pushbytes 0x65a9aecc // method "verify()void"
+    itxn_field ApplicationArgs
+    dup
+    itxn_field ApplicationID
+    intc_2 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    // tests/approvals/itxn-compose.algo.ts:44-48
+    // itxnCompose.next(
+    //   itxn.assetConfig({
+    //     assetName: 'abc',
+    //   }),
+    // )
+    itxn_next
+    // tests/approvals/itxn-compose.algo.ts:46
+    // assetName: 'abc',
+    pushbytes "abc"
+    itxn_field ConfigAssetName
+    // tests/approvals/itxn-compose.algo.ts:45-47
+    // itxn.assetConfig({
+    //   assetName: 'abc',
+    // }),
+    pushint 3 // 3
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    // tests/approvals/itxn-compose.algo.ts:50
+    // itxnCompose.submit()
+    itxn_submit
+    // tests/approvals/itxn-compose.algo.ts:19
+    // distribute(addresses: Address[], funds: gtxn.PaymentTxn, verifier: Application) {
+    intc_1 // 1
+    return
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/itxn-compose.algo.ts:18
+    // class ItxnComposeAlgo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return

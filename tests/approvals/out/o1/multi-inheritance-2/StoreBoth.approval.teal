@@ -1,0 +1,102 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0 2
+    bytecblock "stringStore"
+    // tests/approvals/multi-inheritance-2.algo.ts:21
+    // class StoreBoth extends classes(StoreString, StoreUint64) {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@11
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0xcf362d69 0x48f26e85 // method "test(string,uint64)void", method "setStore(string)void"
+    txna ApplicationArgs 0
+    match test setStore
+    err
+
+main___algots__.defaultCreate@11:
+    // tests/approvals/multi-inheritance-2.algo.ts:21
+    // class StoreBoth extends classes(StoreString, StoreUint64) {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
+
+
+// tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.test[routing]() -> void:
+test:
+    // tests/approvals/multi-inheritance-2.algo.ts:22
+    // test(theString: string, theUint: uint64) {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/multi-inheritance-2.algo.ts:6
+    // stringStore = GlobalState<string>()
+    bytec_0 // "stringStore"
+    // tests/approvals/multi-inheritance-2.algo.ts:9
+    // this.stringStore.value = value
+    uncover 2
+    app_global_put
+    // tests/approvals/multi-inheritance-2.algo.ts:14
+    // uint64Store = GlobalState<uint64>()
+    pushbytes "uint64Store"
+    // tests/approvals/multi-inheritance-2.algo.ts:17
+    // this.uint64Store.value = value
+    swap
+    app_global_put
+    // tests/approvals/multi-inheritance-2.algo.ts:22
+    // test(theString: string, theUint: uint64) {
+    intc_0 // 1
+    return
+
+
+// tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore[routing]() -> void:
+setStore:
+    // tests/approvals/multi-inheritance-2.algo.ts:8
+    // setStore(value: string) {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // tests/approvals/multi-inheritance-2.algo.ts:6
+    // stringStore = GlobalState<string>()
+    bytec_0 // "stringStore"
+    // tests/approvals/multi-inheritance-2.algo.ts:9
+    // this.stringStore.value = value
+    swap
+    app_global_put
+    // tests/approvals/multi-inheritance-2.algo.ts:8
+    // setStore(value: string) {
+    intc_0 // 1
+    return

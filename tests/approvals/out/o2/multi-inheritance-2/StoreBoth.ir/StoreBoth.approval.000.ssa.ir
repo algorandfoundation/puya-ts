@@ -1,0 +1,113 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let reinterpret_bool%0#0: bool = (txn ApplicationID)
+        goto reinterpret_bool%0#0 ? block@2 : block@1
+    block@1: // if_body_L1
+        polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance-2.algo.ts::StoreString,tests/approvals/multi-inheritance-2.algo.ts::StoreUint64>.constructor()
+        goto block@2
+    block@2: // after_if_else_L1
+        let tmp%0#0: bool = tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.__puya_arc4_router__() -> bool:
+    block@0: // L21
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@8
+    block@1: // abi_routing_L21
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@2 : block@6
+    block@2: // call_NoOp_L21
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "test(string,uint64)void" => block@3, method "setStore(string)void" => block@4, * => block@5}
+    block@3: // test_route_L22
+        tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.test[routing]()
+        goto block@5
+    block@4: // setStore_route_L8
+        tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore[routing]()
+        goto block@5
+    block@5: // switch_case_next_L21
+        goto block@7
+    block@6: // create_NoOp_L21
+        goto block@7
+    block@7: // after_if_else_L21
+        goto block@9
+    block@8: // __algots__.defaultCreate_L21
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.__algots__.defaultCreate()
+        exit 1u
+    block@9: // after_if_else_L21
+        exit 0u
+
+subroutine tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.test[routing]() -> void:
+    block@0: // L22
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
+        let tmp%1#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%2#0
+        let tmp%3#0: uint64 = decode_bytes<uint64>(as_Encoded(uint64)%0#0)
+        tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.test(tmp%1#0, tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore[routing]() -> void:
+    block@0: // L8
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
+        let tmp%1#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
+        tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore(tmp%1#0)
+        exit 1u
+
+subroutine tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.test(theString: string, theUint: uint64) -> void:
+    block@0: // L22
+        tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore(theString#0)
+        tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.setStore(theUint#0)
+        return 
+
+subroutine tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore(value: string) -> void:
+    block@0: // L8
+        (app_global_put "stringStore" value#0)
+        return 
+
+subroutine tests/approvals/multi-inheritance-2.algo.ts::StoreUint64.setStore(value: uint64) -> void:
+    block@0: // L16
+        (app_global_put "uint64Store" value#0)
+        return 
+
+subroutine tests/approvals/multi-inheritance-2.algo.ts::StoreBoth.__algots__.defaultCreate() -> void:
+    block@0: // L21
+        return 
+
+subroutine polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance-2.algo.ts::StoreString,tests/approvals/multi-inheritance-2.algo.ts::StoreUint64>.constructor() -> void:
+    block@0: // L1
+        @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
+        @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
+        return 
+
+subroutine @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor() -> void:
+    block@0: // L1
+        return 

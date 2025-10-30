@@ -1,0 +1,339 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 8 1 0
+    bytecblock 0x151f7c75
+    // tests/approvals/for-loops.algo.ts:4
+    // class ForLoopsAlgo extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@11
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0xf8654f73 0x287f4c02 0x4bd7778c 0x33675e06 // method "test_for_loop(uint64,uint64,uint64)uint64", method "test_for_loop_break(uint64,uint64,uint64)uint64", method "test_for_loop_continue(uint64,uint64,uint64)uint64", method "test_for_loop_labelled(uint64,uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match test_for_loop test_for_loop_break test_for_loop_continue test_for_loop_labelled
+    err
+
+main___algots__.defaultCreate@11:
+    // tests/approvals/for-loops.algo.ts:4
+    // class ForLoopsAlgo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return
+
+
+// tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop[routing]() -> void:
+test_for_loop:
+    // tests/approvals/for-loops.algo.ts:5
+    // test_for_loop(start: uint64, stop: uint64, step: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    swap
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    swap
+    // tests/approvals/for-loops.algo.ts:6
+    // let total = Uint64(0)
+    intc_2 // 0
+    swap
+
+test_for_loop_while_top@2:
+    // tests/approvals/for-loops.algo.ts:7
+    // for (let i = start; i < stop; i += step) {
+    dup
+    dig 4
+    <
+    bz test_for_loop_after_while@4
+    // tests/approvals/for-loops.algo.ts:8
+    // total += i
+    dup2
+    dup
+    cover 2
+    +
+    bury 3
+    // tests/approvals/for-loops.algo.ts:7
+    // for (let i = start; i < stop; i += step) {
+    dig 3
+    +
+    bury 1
+    b test_for_loop_while_top@2
+
+test_for_loop_after_while@4:
+    // tests/approvals/for-loops.algo.ts:5
+    // test_for_loop(start: uint64, stop: uint64, step: uint64) {
+    dig 1
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_break[routing]() -> void:
+test_for_loop_break:
+    // tests/approvals/for-loops.algo.ts:13
+    // test_for_loop_break(start: uint64, stop: uint64, step: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    swap
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    swap
+    // tests/approvals/for-loops.algo.ts:14
+    // let total = Uint64(0)
+    intc_2 // 0
+    swap
+
+test_for_loop_break_while_top@2:
+    // tests/approvals/for-loops.algo.ts:15
+    // for (let i = start; i < stop; i += step) {
+    dup
+    dig 4
+    <
+    bz test_for_loop_break_block@7
+    // tests/approvals/for-loops.algo.ts:16
+    // total += i
+    dup2
+    +
+    dup
+    bury 3
+    // tests/approvals/for-loops.algo.ts:17
+    // if (total > 10) {
+    pushint 10 // 10
+    >
+    bnz test_for_loop_break_block@7
+    // tests/approvals/for-loops.algo.ts:15
+    // for (let i = start; i < stop; i += step) {
+    dup
+    dig 3
+    +
+    bury 1
+    b test_for_loop_break_while_top@2
+
+test_for_loop_break_block@7:
+    // tests/approvals/for-loops.algo.ts:13
+    // test_for_loop_break(start: uint64, stop: uint64, step: uint64) {
+    dig 1
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_continue[routing]() -> void:
+test_for_loop_continue:
+    // tests/approvals/for-loops.algo.ts:24
+    // test_for_loop_continue(start: uint64, stop: uint64, step: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    swap
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    swap
+    // tests/approvals/for-loops.algo.ts:25
+    // let total = Uint64(0)
+    intc_2 // 0
+    swap
+
+test_for_loop_continue_while_top@2:
+    // tests/approvals/for-loops.algo.ts:26
+    // for (let i = start; i < stop; i += step) {
+    dup
+    dig 4
+    <
+    bz test_for_loop_continue_after_while@7
+    // tests/approvals/for-loops.algo.ts:27
+    // if (i % 5 === 0) continue
+    dup
+    pushint 5 // 5
+    %
+    bz test_for_loop_continue_block@6
+    // tests/approvals/for-loops.algo.ts:28
+    // total += i
+    dup2
+    +
+    bury 2
+
+test_for_loop_continue_block@6:
+    // tests/approvals/for-loops.algo.ts:26
+    // for (let i = start; i < stop; i += step) {
+    dup
+    dig 3
+    +
+    bury 1
+    b test_for_loop_continue_while_top@2
+
+test_for_loop_continue_after_while@7:
+    // tests/approvals/for-loops.algo.ts:24
+    // test_for_loop_continue(start: uint64, stop: uint64, step: uint64) {
+    dig 1
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/for-loops.algo.ts::ForLoopsAlgo.test_for_loop_labelled[routing]() -> void:
+test_for_loop_labelled:
+    pushbytes ""
+    // tests/approvals/for-loops.algo.ts:32
+    // test_for_loop_labelled(start: uint64, stop: uint64, step: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    swap
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    swap
+    // tests/approvals/for-loops.algo.ts:33
+    // let total = Uint64(0)
+    intc_2 // 0
+    swap
+
+test_for_loop_labelled_while_top@2:
+    // tests/approvals/for-loops.algo.ts:34
+    // outer: for (let i = start; i < stop; i += step) {
+    dup
+    dig 4
+    <
+    bz test_for_loop_labelled_block@10
+    dig 4
+    bury 6
+
+test_for_loop_labelled_while_top@4:
+    // tests/approvals/for-loops.algo.ts:35
+    // for (let j = start; j < stop; j += step) {
+    dig 5
+    dig 4
+    <
+    bz test_for_loop_labelled_after_while@8
+    // tests/approvals/for-loops.algo.ts:36
+    // total += i + j
+    dupn 2
+    dig 7
+    dup
+    cover 3
+    +
+    dig 4
+    +
+    bury 4
+    // tests/approvals/for-loops.algo.ts:38
+    // if (i * j > stop) break outer
+    *
+    dig 4
+    >
+    bnz test_for_loop_labelled_block@10
+    // tests/approvals/for-loops.algo.ts:35
+    // for (let j = start; j < stop; j += step) {
+    dig 5
+    dig 3
+    +
+    bury 6
+    b test_for_loop_labelled_while_top@4
+
+test_for_loop_labelled_block@10:
+    // tests/approvals/for-loops.algo.ts:32
+    // test_for_loop_labelled(start: uint64, stop: uint64, step: uint64) {
+    dig 1
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+test_for_loop_labelled_after_while@8:
+    // tests/approvals/for-loops.algo.ts:34
+    // outer: for (let i = start; i < stop; i += step) {
+    dup
+    dig 3
+    +
+    bury 1
+    b test_for_loop_labelled_while_top@2

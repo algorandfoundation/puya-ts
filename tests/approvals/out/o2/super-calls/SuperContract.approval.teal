@@ -1,0 +1,30 @@
+#pragma version 11
+#pragma typetrack false
+
+// tests/approvals/super-calls.algo.ts::SuperContract.approvalProgram() -> uint64:
+main:
+    bytecblock "g1"
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // tests/approvals/super-calls.algo.ts:5
+    // g1 = GlobalState({ initialValue: Uint64(1) })
+    bytec_0 // "g1"
+    pushint 1 // 1
+    app_global_put
+
+main_after_if_else@2:
+    // tests/approvals/super-calls.algo.ts:8
+    // assert(this.g1.value === 1)
+    pushint 0 // 0
+    // tests/approvals/super-calls.algo.ts:5
+    // g1 = GlobalState({ initialValue: Uint64(1) })
+    bytec_0 // "g1"
+    // tests/approvals/super-calls.algo.ts:8
+    // assert(this.g1.value === 1)
+    app_global_get_ex
+    assert // check GlobalState exists
+    pushint 1 // 1
+    ==
+    // tests/approvals/super-calls.algo.ts:9
+    // return true
+    return

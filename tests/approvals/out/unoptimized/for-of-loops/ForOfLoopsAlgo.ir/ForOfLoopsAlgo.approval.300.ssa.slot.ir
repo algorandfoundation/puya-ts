@@ -1,0 +1,618 @@
+slot_allocation(dynamic, reserved=[])
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        goto block@1
+    block@1: // L8
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#1 0u)
+        goto tmp%1#0 ? block@2 : block@15
+    block@2: // abi_routing_L8
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@3 : block@13
+    block@3: // call_NoOp_L8
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "test_for_of_loop_tuple((uint64,uint64,uint64))uint64" => block@4, method "test_for_of_loop_destructured_tuple(uint64[])uint64" => block@5, method "test_for_of_loop_destructured_object((uint64,uint64)[])uint64" => block@6, method "test_for_of_loop_arc4_dynamic_array(uint64[])uint64" => block@7, method "test_for_of_loop_arc4_static_array(uint64[5])uint64" => block@8, method "test_for_of_loop_native_immutable_array(uint64[])uint64" => block@9, method "test_for_of_loop_native_mutable_array((uint64,uint64,uint64))uint64" => block@10, method "test_iterable_props(uint64[3],uint64[3],uint64[])uint64" => block@11, * => block@12}
+    block@4: // test_for_of_loop_tuple_route_L9
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple[routing]()
+        goto block@12
+    block@5: // test_for_of_loop_destructured_tuple_route_L18
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple[routing]()
+        goto block@12
+    block@6: // test_for_of_loop_destructured_object_route_L27
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object[routing]()
+        goto block@12
+    block@7: // test_for_of_loop_arc4_dynamic_array_route_L36
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array[routing]()
+        goto block@12
+    block@8: // test_for_of_loop_arc4_static_array_route_L45
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array[routing]()
+        goto block@12
+    block@9: // test_for_of_loop_native_immutable_array_route_L54
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array[routing]()
+        goto block@12
+    block@10: // test_for_of_loop_native_mutable_array_route_L63
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array[routing]()
+        goto block@12
+    block@11: // test_iterable_props_route_L73
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props[routing]()
+        goto block@12
+    block@12: // switch_case_next_L8
+        goto block@14
+    block@13: // create_NoOp_L8
+        goto block@14
+    block@14: // after_if_else_L8
+        goto block@16
+    block@15: // __algots__.defaultCreate_L8
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__algots__.defaultCreate()
+        exit 1u
+    block@16: // after_if_else_L8
+        exit 0u
+    block@17: // after_inlined_tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
+        return tmp%0#0
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple[routing]() -> void:
+    block@0: // L9
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 24u)
+        (assert eq%0#0) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64>
+        let as_Encoded(uint64,uint64,uint64)%0#0: Encoded(uint64,uint64,uint64) = tmp%0#0
+        let aggregate%extract%0#0: bytes = (extract3 as_Encoded(uint64,uint64,uint64)%0#0 0u 8u)
+        let aggregate%item0%0#0: uint64 = (btoi aggregate%extract%0#0)
+        let aggregate%extract%1#0: bytes = (extract3 as_Encoded(uint64,uint64,uint64)%0#0 8u 8u)
+        let aggregate%item1%0#0: uint64 = (btoi aggregate%extract%1#0)
+        let aggregate%extract%2#0: bytes = (extract3 as_Encoded(uint64,uint64,uint64)%0#0 16u 8u)
+        let aggregate%item2%0#0: uint64 = (btoi aggregate%extract%2#0)
+        let tmp%1#0: uint64 = aggregate%item0%0#0
+        let tmp%2#0: uint64 = aggregate%item1%0#0
+        let tmp%3#0: uint64 = aggregate%item2%0#0
+        let tmp%4#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple(tmp%1#0, tmp%2#0, tmp%3#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%4#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%5#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%6#0: bytes = (concat 0x151f7c75 tmp%5#0)
+        (log tmp%6#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple[routing]() -> void:
+    block@0: // L18
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
+        let tmp%1#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple(as_Encoded(len+uint64[])%0#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%2#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object[routing]() -> void:
+    block@0: // L27
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 16u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<tests/approvals/for-of-loops.algo.ts::Point>
+        let as_Encoded(len+(uint64,uint64)[])%0#0: Encoded(len+(uint64,uint64)[]) = tmp%0#0
+        let tmp%1#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object(as_Encoded(len+(uint64,uint64)[])%0#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%2#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array[routing]() -> void:
+    block@0: // L36
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
+        let tmp%1#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array(as_Encoded(len+uint64[])%0#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%2#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array[routing]() -> void:
+    block@0: // L45
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 40u)
+        (assert eq%0#0) // invalid number of bytes for arc4.static_array<arc4.uint64, 5>
+        let as_Encoded(uint64[5])%0#0: Encoded(uint64[5]) = tmp%0#0
+        let tmp%1#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array(as_Encoded(uint64[5])%0#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%2#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array[routing]() -> void:
+    block@0: // L54
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<uint64>
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%0#0
+        let tmp%1#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array(as_Encoded(len+uint64[])%0#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%2#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array[routing]() -> void:
+    block@0: // L63
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 24u)
+        (assert eq%0#0) // invalid number of bytes for arc4.tuple<uint64,uint64,uint64>
+        let as_Encoded(uint64,uint64,uint64)%0#0: Encoded(uint64,uint64,uint64) = tmp%0#0
+        let tmp%1#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(as_Encoded(uint64,uint64,uint64)%0#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%2#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props[routing]() -> void:
+    block@0: // L73
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 24u)
+        (assert eq%0#0) // invalid number of bytes for arc4.static_array<arc4.uint64, 3>
+        let as_Encoded(uint64[3])%0#0: Encoded(uint64[3]) = tmp%0#0
+        let tmp%1#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%1#0)
+        let eq%1#0: bool = (== len%1#0 24u)
+        (assert eq%1#0) // invalid number of bytes for arc4.static_array<uint64, 3>
+        let as_Encoded(uint64[3])%1#0: Encoded(uint64[3]) = tmp%1#0
+        let tmp%2#0: bytes = (txna ApplicationArgs 3)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%2#0 0u) // on error: invalid array length header
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%2#0: uint64 = (len tmp%2#0)
+        let eq%2#0: bool = (== len%2#0 add%0#0)
+        (assert eq%2#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint64>
+        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = tmp%2#0
+        let tmp%3#0: uint64 = tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props(as_Encoded(uint64[3])%0#0, as_Encoded(uint64[3])%1#0, as_Encoded(len+uint64[])%0#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%3#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%4#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%5#0: bytes = (concat 0x151f7c75 tmp%4#0)
+        (log tmp%5#0)
+        exit 1u
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_tuple(items.0: uint64, items.1: uint64, items.2: uint64) -> uint64:
+    block@0: // L9
+        let total#0: uint64 = 0u
+        let loop_counter%0#0: uint64 = 0u
+        let temp#0: uint64 = items.0#0
+        goto block@1
+    block@1: // for_body_L11
+        let loop_counter%0#1: uint64 = φ(loop_counter%0#0 <- block@0, loop_counter%0#2 <- block@5, loop_counter%0#3 <- block@6)
+        let temp#1: uint64 = φ(temp#0 <- block@0, temp#2 <- block@5, temp#3 <- block@6)
+        let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5, total#2 <- block@6)
+        let item#0: uint64 = temp#1
+        let tmp%0#0: uint64 = (+ total#1 item#0)
+        let total#2: uint64 = tmp%0#0
+        let tmp%1#0: bool = (== item#0 42u)
+        goto tmp%1#0 ? block@2 : block@3
+    block@2: // if_body_L13
+        goto block@8
+    block@3: // after_if_else_L13
+        goto block@4
+    block@4: // for_footer_L11
+        goto_nth [block@5, block@6][loop_counter%0#1] else goto block@7
+    block@5: // for_header_1_L11
+        let loop_counter%0#2: uint64 = 1u
+        let temp#2: uint64 = items.1#0
+        goto block@1
+    block@6: // for_header_2_L11
+        let loop_counter%0#3: uint64 = 2u
+        let temp#3: uint64 = items.2#0
+        goto block@1
+    block@7: // after_for_L11
+        goto block@8
+    block@8: // L11
+        return total#2
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_tuple(items: Encoded(len+uint64[])) -> uint64:
+    block@0: // L18
+        let total#0: uint64 = 0u
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 items#0 0u) // on error: invalid array length header
+        let array_length%0#0: uint64 = aggregate%array_length%0#0
+        let item_index_internal%0#0: uint64 = 0u
+        goto block@1
+    block@1: // for_header_L20
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@5)
+        let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5)
+        let continue_looping%0#0: bool = (< item_index_internal%0#1 array_length%0#0)
+        goto continue_looping%0#0 ? block@2 : block@6
+    block@2: // for_body_L20
+        let aggregate%total_length%0#0: uint64 = (len items#0)
+        let aggregate%array_trimmed%0#0: bytes = (substring3 items#0 2u aggregate%total_length%0#0)
+        let aggregate%bytes_offset%0#0: uint64 = (* item_index_internal%0#1 8u)
+        let aggregate%encoded_element%0#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
+        let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#0
+        let temp.1#0: Encoded(uint64) = array_item%0#0
+        let v#0: Encoded(uint64) = temp.1#0
+        let tmp%0#0: uint64 = (btoi v#0)
+        let tmp%1#0: uint64 = (+ total#1 tmp%0#0)
+        let total#2: uint64 = tmp%1#0
+        let tmp%2#0: bool = (>= total#2 42u)
+        goto tmp%2#0 ? block@3 : block@4
+    block@3: // if_body_L22
+        goto block@7
+    block@4: // after_if_else_L22
+        goto block@5
+    block@5: // for_footer_L20
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@1
+    block@6: // after_for_L20
+        goto block@7
+    block@7: // L20
+        let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
+        return total#3
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_destructured_object(items: Encoded(len+(uint64,uint64)[])) -> uint64:
+    block@0: // L27
+        let total#0: uint64 = 0u
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 items#0 0u) // on error: invalid array length header
+        let array_length%0#0: uint64 = aggregate%array_length%0#0
+        let item_index_internal%0#0: uint64 = 0u
+        goto block@1
+    block@1: // for_header_L29
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@5)
+        let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5)
+        let continue_looping%0#0: bool = (< item_index_internal%0#1 array_length%0#0)
+        goto continue_looping%0#0 ? block@2 : block@6
+    block@2: // for_body_L29
+        let aggregate%total_length%0#0: uint64 = (len items#0)
+        let aggregate%array_trimmed%0#0: bytes = (substring3 items#0 2u aggregate%total_length%0#0)
+        let aggregate%bytes_offset%0#0: uint64 = (* item_index_internal%0#1 16u)
+        let aggregate%encoded_element%0#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%0#0 16u) // on error: index access is out of bounds
+        let array_item%0#0: Encoded(uint64,uint64) = aggregate%encoded_element%0#0
+        let temp#0: Encoded(uint64,uint64) = array_item%0#0
+        let aggregate%extract%0#0: bytes = (extract3 temp#0 0u 8u)
+        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
+        let values%0#0: uint64 = (btoi tuple_item%0#0)
+        let aggregate%extract%1#0: bytes = (extract3 temp#0 8u 8u)
+        let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#0
+        let values%1#0: uint64 = (btoi tuple_item%1#0)
+        let x#0: uint64 = values%0#0
+        let y#0: uint64 = values%1#0
+        let tmp%0#0: uint64 = (+ x#0 y#0)
+        let tmp%1#0: uint64 = (+ total#1 tmp%0#0)
+        let total#2: uint64 = tmp%1#0
+        let tmp%2#0: bool = (>= total#2 42u)
+        goto tmp%2#0 ? block@3 : block@4
+    block@3: // if_body_L31
+        goto block@7
+    block@4: // after_if_else_L31
+        goto block@5
+    block@5: // for_footer_L29
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@1
+    block@6: // after_for_L29
+        goto block@7
+    block@7: // L29
+        let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
+        return total#3
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_dynamic_array(items: Encoded(len+uint64[])) -> uint64:
+    block@0: // L36
+        let total#0: uint64 = 0u
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 items#0 0u) // on error: invalid array length header
+        let array_length%0#0: uint64 = aggregate%array_length%0#0
+        let item_index_internal%0#0: uint64 = 0u
+        goto block@1
+    block@1: // for_header_L38
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@5)
+        let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5)
+        let continue_looping%0#0: bool = (< item_index_internal%0#1 array_length%0#0)
+        goto continue_looping%0#0 ? block@2 : block@6
+    block@2: // for_body_L38
+        let aggregate%total_length%0#0: uint64 = (len items#0)
+        let aggregate%array_trimmed%0#0: bytes = (substring3 items#0 2u aggregate%total_length%0#0)
+        let aggregate%bytes_offset%0#0: uint64 = (* item_index_internal%0#1 8u)
+        let aggregate%encoded_element%0#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
+        let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#0
+        let temp#0: Encoded(uint64) = array_item%0#0
+        let item#0: Encoded(uint64) = temp#0
+        let tmp%0#0: uint64 = (btoi item#0)
+        let tmp%1#0: uint64 = (+ total#1 tmp%0#0)
+        let total#2: uint64 = tmp%1#0
+        let tmp%2#0: uint64 = (btoi item#0)
+        let tmp%3#0: bool = (== tmp%2#0 42u)
+        goto tmp%3#0 ? block@3 : block@4
+    block@3: // if_body_L40
+        goto block@7
+    block@4: // after_if_else_L40
+        goto block@5
+    block@5: // for_footer_L38
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@1
+    block@6: // after_for_L38
+        goto block@7
+    block@7: // L38
+        let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
+        return total#3
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_arc4_static_array(items: Encoded(uint64[5])) -> uint64:
+    block@0: // L45
+        let total#0: uint64 = 0u
+        let item_index_internal%0#0: uint64 = 0u
+        goto block@1
+    block@1: // for_header_L47
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@5)
+        let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5)
+        let continue_looping%0#0: bool = (< item_index_internal%0#1 5u)
+        goto continue_looping%0#0 ? block@2 : block@6
+    block@2: // for_body_L47
+        let aggregate%bytes_offset%0#0: uint64 = (* item_index_internal%0#1 8u)
+        let aggregate%encoded_element%0#0: bytes = (extract3 items#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
+        let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#0
+        let temp#0: Encoded(uint64) = array_item%0#0
+        let item#0: Encoded(uint64) = temp#0
+        let tmp%0#0: uint64 = (btoi item#0)
+        let tmp%1#0: uint64 = (+ total#1 tmp%0#0)
+        let total#2: uint64 = tmp%1#0
+        let tmp%2#0: uint64 = (btoi item#0)
+        let tmp%3#0: bool = (== tmp%2#0 42u)
+        goto tmp%3#0 ? block@3 : block@4
+    block@3: // if_body_L49
+        goto block@7
+    block@4: // after_if_else_L49
+        goto block@5
+    block@5: // for_footer_L47
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@1
+    block@6: // after_for_L47
+        goto block@7
+    block@7: // L47
+        let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
+        return total#3
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_immutable_array(items: Encoded(len+uint64[])) -> uint64:
+    block@0: // L54
+        let total#0: uint64 = 0u
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 items#0 0u) // on error: invalid array length header
+        let array_length%0#0: uint64 = aggregate%array_length%0#0
+        let item_index_internal%0#0: uint64 = 0u
+        goto block@1
+    block@1: // for_header_L56
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@5)
+        let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5)
+        let continue_looping%0#0: bool = (< item_index_internal%0#1 array_length%0#0)
+        goto continue_looping%0#0 ? block@2 : block@6
+    block@2: // for_body_L56
+        let aggregate%total_length%0#0: uint64 = (len items#0)
+        let aggregate%array_trimmed%0#0: bytes = (substring3 items#0 2u aggregate%total_length%0#0)
+        let aggregate%bytes_offset%0#0: uint64 = (* item_index_internal%0#1 8u)
+        let aggregate%encoded_element%0#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
+        let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#0
+        let values%0#0: uint64 = (btoi array_item%0#0)
+        let temp#0: uint64 = values%0#0
+        let item#0: uint64 = temp#0
+        let tmp%0#0: uint64 = (+ total#1 item#0)
+        let total#2: uint64 = tmp%0#0
+        let tmp%1#0: bool = (== item#0 42u)
+        goto tmp%1#0 ? block@3 : block@4
+    block@3: // if_body_L58
+        goto block@7
+    block@4: // after_if_else_L58
+        goto block@5
+    block@5: // for_footer_L56
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@1
+    block@6: // after_for_L56
+        goto block@7
+    block@7: // L56
+        let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
+        return total#3
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_for_of_loop_native_mutable_array(items: Encoded(uint64,uint64,uint64)) -> uint64:
+    block@0: // L63
+        let aggregate%extract%0#0: bytes = (extract3 items#0 0u 8u)
+        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
+        let values%0#0: uint64 = (btoi tuple_item%0#0)
+        let aggregate%extract%1#0: bytes = (extract3 items#0 8u 8u)
+        let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#0
+        let values%1#0: uint64 = (btoi tuple_item%1#0)
+        let aggregate%extract%2#0: bytes = (extract3 items#0 16u 8u)
+        let tuple_item%2#0: Encoded(uint64) = aggregate%extract%2#0
+        let values%2#0: uint64 = (btoi tuple_item%2#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob values%0#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let aggregate%head%0#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob values%1#0)
+        let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
+        let aggregate%head%1#0: bytes = (concat aggregate%head%0#0 aggregate%as_Encoded(uint64)%1#0)
+        let aggregate%val_as_bytes%2#0: bytes[8] = (itob values%2#0)
+        let aggregate%as_Encoded(uint64)%2#0: Encoded(uint64) = aggregate%val_as_bytes%2#0
+        let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 aggregate%as_Encoded(uint64)%2#0)
+        let aggregate%as_Encoded(uint64[])%0#0: Encoded(uint64[]) = aggregate%head%2#0
+        let encoded_array%0#0: Encoded(uint64[]) = aggregate%as_Encoded(uint64[])%0#0
+        let slot%0#0: Encoded(uint64[])* = new()
+        store(slot%0#0, encoded_array%0#0)
+        let mutable#0: Encoded(uint64[])* = slot%0#0
+        let total#0: uint64 = 0u
+        let aggregate%slot_contents%0#0: Encoded(uint64[]) = load(mutable#0)
+        let aggregate%bytes_len%0#0: uint64 = (len aggregate%slot_contents%0#0)
+        let aggregate%array_len%0#0: uint64 = (/ aggregate%bytes_len%0#0 8u)
+        let array_length%0#0: uint64 = aggregate%array_len%0#0
+        let item_index_internal%0#0: uint64 = 0u
+        goto block@1
+    block@1: // for_header_L66
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@0, item_index_internal%0#2 <- block@5)
+        let total#1: uint64 = φ(total#0 <- block@0, total#2 <- block@5)
+        let continue_looping%0#0: bool = (< item_index_internal%0#1 array_length%0#0)
+        goto continue_looping%0#0 ? block@2 : block@6
+    block@2: // for_body_L66
+        let slot_contents%0#0: Encoded(uint64[]) = load(mutable#0)
+        let aggregate%bytes_offset%0#0: uint64 = (* item_index_internal%0#1 8u)
+        let aggregate%encoded_element%0#0: bytes = (extract3 slot_contents%0#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
+        let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#0
+        let values%3#0: uint64 = (btoi array_item%0#0)
+        let temp#0: uint64 = values%3#0
+        let item#0: uint64 = temp#0
+        let tmp%0#0: uint64 = (+ total#1 item#0)
+        let total#2: uint64 = tmp%0#0
+        let tmp%1#0: bool = (== item#0 42u)
+        goto tmp%1#0 ? block@3 : block@4
+    block@3: // if_body_L68
+        goto block@7
+    block@4: // after_if_else_L68
+        goto block@5
+    block@5: // for_footer_L66
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@1
+    block@6: // after_for_L66
+        goto block@7
+    block@7: // L66
+        let total#3: uint64 = φ(total#2 <- block@3, total#1 <- block@6)
+        return total#3
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props(static_array: Encoded(uint64[3]), fixed_array: Encoded(uint64[3]), dyn_array: Encoded(len+uint64[])) -> uint64:
+    block@0: // L73
+        let i#0: uint64 = 0u
+        (assert 1u) // Step cannot be zero
+        let value_internal%0#0: uint64 = 0u
+        goto block@1
+    block@1: // for_header_L75
+        let value_internal%0#1: uint64 = φ(value_internal%0#0 <- block@0, value_internal%0#2 <- block@3)
+        let i#1: uint64 = φ(i#0 <- block@0, i#2 <- block@3)
+        let continue_looping%0#0: bool = (< value_internal%0#1 3u)
+        goto continue_looping%0#0 ? block@2 : block@4
+    block@2: // for_body_L75
+        let tmp%1#0: uint64 = (+ i#1 1u)
+        let i#2: uint64 = tmp%1#0
+        goto block@3
+    block@3: // for_footer_L75
+        let value_internal%0#2: uint64 = (+ value_internal%0#1 1u)
+        goto block@1
+    block@4: // after_for_L75
+        let item_index_internal%0#0: uint64 = 0u
+        goto block@5
+    block@5: // for_header_L78
+        let item_index_internal%0#1: uint64 = φ(item_index_internal%0#0 <- block@4, item_index_internal%0#2 <- block@7)
+        let i#3: uint64 = φ(i#1 <- block@4, i#4 <- block@7)
+        let continue_looping%1#0: bool = (< item_index_internal%0#1 3u)
+        goto continue_looping%1#0 ? block@6 : block@8
+    block@6: // for_body_L78
+        let tmp%2#0: uint64 = (+ i#3 1u)
+        let i#4: uint64 = tmp%2#0
+        goto block@7
+    block@7: // for_footer_L78
+        let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
+        goto block@5
+    block@8: // after_for_L78
+        (assert 1u) // Step cannot be zero
+        let value_internal%1#0: uint64 = 0u
+        goto block@9
+    block@9: // for_header_L81
+        let value_internal%1#1: uint64 = φ(value_internal%1#0 <- block@8, value_internal%1#2 <- block@11)
+        let i#5: uint64 = φ(i#3 <- block@8, i#6 <- block@11)
+        let continue_looping%2#0: bool = (< value_internal%1#1 3u)
+        goto continue_looping%2#0 ? block@10 : block@12
+    block@10: // for_body_L81
+        let tmp%4#0: uint64 = (+ i#5 1u)
+        let i#6: uint64 = tmp%4#0
+        goto block@11
+    block@11: // for_footer_L81
+        let value_internal%1#2: uint64 = (+ value_internal%1#1 1u)
+        goto block@9
+    block@12: // after_for_L81
+        let item_index_internal%1#0: uint64 = 0u
+        goto block@13
+    block@13: // for_header_L84
+        let item_index_internal%1#1: uint64 = φ(item_index_internal%1#0 <- block@12, item_index_internal%1#2 <- block@15)
+        let i#7: uint64 = φ(i#5 <- block@12, i#8 <- block@15)
+        let continue_looping%3#0: bool = (< item_index_internal%1#1 3u)
+        goto continue_looping%3#0 ? block@14 : block@16
+    block@14: // for_body_L84
+        let tmp%5#0: uint64 = (+ i#7 1u)
+        let i#8: uint64 = tmp%5#0
+        goto block@15
+    block@15: // for_footer_L84
+        let item_index_internal%1#2: uint64 = (+ item_index_internal%1#1 1u)
+        goto block@13
+    block@16: // after_for_L84
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 dyn_array#0 0u) // on error: invalid array length header
+        let tmp%6#0: uint64 = aggregate%array_length%0#0
+        (assert 1u) // Step cannot be zero
+        let value_internal%2#0: uint64 = 0u
+        goto block@17
+    block@17: // for_header_L87
+        let value_internal%2#1: uint64 = φ(value_internal%2#0 <- block@16, value_internal%2#2 <- block@19)
+        let i#9: uint64 = φ(i#7 <- block@16, i#10 <- block@19)
+        let continue_looping%4#0: bool = (< value_internal%2#1 tmp%6#0)
+        goto continue_looping%4#0 ? block@18 : block@20
+    block@18: // for_body_L87
+        let tmp%7#0: uint64 = (+ i#9 1u)
+        let i#10: uint64 = tmp%7#0
+        goto block@19
+    block@19: // for_footer_L87
+        let value_internal%2#2: uint64 = (+ value_internal%2#1 1u)
+        goto block@17
+    block@20: // after_for_L87
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 dyn_array#0 0u) // on error: invalid array length header
+        let array_length%2#0: uint64 = aggregate%array_length%1#0
+        let item_index_internal%2#0: uint64 = 0u
+        goto block@21
+    block@21: // for_header_L90
+        let item_index_internal%2#1: uint64 = φ(item_index_internal%2#0 <- block@20, item_index_internal%2#2 <- block@23)
+        let i#11: uint64 = φ(i#9 <- block@20, i#12 <- block@23)
+        let continue_looping%5#0: bool = (< item_index_internal%2#1 array_length%2#0)
+        goto continue_looping%5#0 ? block@22 : block@24
+    block@22: // for_body_L90
+        let tmp%8#0: uint64 = (+ i#11 1u)
+        let i#12: uint64 = tmp%8#0
+        goto block@23
+    block@23: // for_footer_L90
+        let item_index_internal%2#2: uint64 = (+ item_index_internal%2#1 1u)
+        goto block@21
+    block@24: // after_for_L90
+        return i#11
+
+subroutine tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.__algots__.defaultCreate() -> void:
+    block@0: // L8
+        return 

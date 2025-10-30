@@ -1,0 +1,23 @@
+subroutine test(): readonly [uint64, uint64, uint64, uint64, uint64]
+{
+  return #[0, 0, 1, 1, 1]
+}
+subroutine test2(): readonly [uint64, uint64]
+{
+  return #[123, 12300]
+}
+contract DemoContract
+{
+  approvalProgram(): bool
+  {
+    assert(&&(&&(2 == 2, tests/approvals/uint64-expressions.algo.ts::test2().0 == 123), tests/approvals/uint64-expressions.algo.ts::test2().1 == 12300), comment=assert target is match for conditions)
+    assert(&&(&&(&&(&&(&&(5 == 5, tests/approvals/uint64-expressions.algo.ts::test().0 == 0), tests/approvals/uint64-expressions.algo.ts::test().1 == 0), tests/approvals/uint64-expressions.algo.ts::test().2 == 1), tests/approvals/uint64-expressions.algo.ts::test().3 == 1), tests/approvals/uint64-expressions.algo.ts::test().4 == 1), comment=assert target is match for conditions)
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+}

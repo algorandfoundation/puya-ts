@@ -1,0 +1,271 @@
+contract Hello
+{
+  globals {
+    ["greeting"]: string
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  create(greeting: string): void
+  {
+    GlobalState["greeting"]: string = greeting
+  }
+  
+  HelloBase::delete(): void
+  {
+  }
+  
+  HelloBase::update(): void
+  {
+  }
+  
+  HelloBase::greet(name: string): string
+  {
+    return "" + GlobalState["greeting"] + " " + name
+  }
+  
+  HelloBase::sendGreetings(a: tests/approvals/precompiled-apps.algo.ts::Greeting): string
+  {
+    return "" + GlobalState["greeting"] + " " + a.name + ARC4_DECODE(a.termination)
+  }
+  
+  HelloBase::constructor(): void
+  {
+    super.constructor()
+    GlobalState["greeting"]: string = ""
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract HelloTemplate
+{
+  globals {
+    ["greeting"]: string
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  create(): void
+  {
+  }
+  
+  HelloBase::delete(): void
+  {
+  }
+  
+  HelloBase::update(): void
+  {
+  }
+  
+  HelloBase::greet(name: string): string
+  {
+    return "" + GlobalState["greeting"] + " " + name
+  }
+  
+  HelloBase::sendGreetings(a: tests/approvals/precompiled-apps.algo.ts::Greeting): string
+  {
+    return "" + GlobalState["greeting"] + " " + a.name + ARC4_DECODE(a.termination)
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["greeting"]: string = TemplateVar[string](TMPL_GREETING)
+  }
+  
+  HelloBase::constructor(): void
+  {
+    super.constructor()
+    GlobalState["greeting"]: string = ""
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract HelloTemplateCustomPrefix
+{
+  globals {
+    ["greeting"]: string
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  create(): void
+  {
+  }
+  
+  HelloBase::delete(): void
+  {
+  }
+  
+  HelloBase::update(): void
+  {
+  }
+  
+  HelloBase::greet(name: string): string
+  {
+    return "" + GlobalState["greeting"] + " " + name
+  }
+  
+  HelloBase::sendGreetings(a: tests/approvals/precompiled-apps.algo.ts::Greeting): string
+  {
+    return "" + GlobalState["greeting"] + " " + a.name + ARC4_DECODE(a.termination)
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["greeting"]: string = TemplateVar[string](PRFX_GREETING)
+  }
+  
+  HelloBase::constructor(): void
+  {
+    super.constructor()
+    GlobalState["greeting"]: string = ""
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+subroutine getBigBytes(): bytes[4096]
+{
+  return bzero(4096)
+}
+contract LargeProgram
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getBigBytesLength(): uint64
+  {
+    return len(tests/approvals/precompiled-apps.algo.ts::getBigBytes())
+  }
+  
+  delete(): void
+  {
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+
+logicsig tests/approvals/precompiled-apps.algo.ts::TerribleCustodialAccount {
+  return True
+}
+contract ReceivesTxns
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getOne(): uint64
+  {
+    return 1
+  }
+  
+  receivesAnyTxn(txn: group_transaction): uint64
+  {
+    if (($0 = gtxns<TypeEnum>(txn)) == reinterpret_cast<uint64>(3)) {
+      #switch₁ᶜ₀:
+      return (Boolean(($1 = reinterpret_cast<uint64>(gtxns<CreatedAssetID>(txn)))) ? $1 : reinterpret_cast<uint64>(gtxns<ConfigAsset>(txn)))
+    }
+    if ($0 == reinterpret_cast<uint64>(6)) {
+      #switch₁ᶜ₁:
+      return (Boolean(($2 = reinterpret_cast<uint64>(gtxns<CreatedApplicationID>(txn)))) ? $2 : reinterpret_cast<uint64>(gtxns<ApplicationID>(txn)))
+    }
+    #switch₁ᶜ₂:
+    return 0
+  }
+  
+  receivesAssetConfig(assetCfg: group_transaction_acfg): bytes
+  {
+    return reinterpret_cast<bytes>(gtxns<TxID>(assetCfg))
+  }
+  
+  receivesAssetConfigAndPay(assetCfg: group_transaction_acfg, payTxn: group_transaction_pay): void
+  {
+    assert(gtxns<TypeEnum>(assetCfg) == reinterpret_cast<uint64>(3))
+    assert(gtxns<TypeEnum>(payTxn) == reinterpret_cast<uint64>(1))
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract ReceivesReferenceTypes
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  receivesReferenceTypes(app: application, acc: account, asset: asset): void
+  {
+    log(reinterpret_cast<bytes>(checked_maybe(app_params_get<AppAddress>(app), comment=application exists)))
+    log(reinterpret_cast<bytes[32]>(acc))
+    log(checked_maybe(asset_params_get<AssetName>(asset), comment=asset exists))
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

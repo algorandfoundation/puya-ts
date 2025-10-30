@@ -1,0 +1,141 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 2 0
+    // tests/approvals/teal-script-conventions.algo.ts:5
+    // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
+    txn NumAppArgs
+    bz main_deleteApplication@9
+    pushbytess 0x766a657e 0x2f2be517 0x01a3a3ff 0x46f76533 0xdf7300bb // method "noMoreThanks(uint64)uint64", method "createApplication(byte[])void", method "optInToApplication()void", method "updateApplication()void", method "setLocal(string)void"
+    txna ApplicationArgs 0
+    match main_noMoreThanks_route@3 main_createApplication_route@4 main_optInToApplication_route@5 main_updateApplication_route@6 main_setLocal_route@7
+    err
+
+main_setLocal_route@7:
+    // tests/approvals/teal-script-conventions.algo.ts:17
+    // setLocal(value: string) {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    txna ApplicationArgs 1
+    dup
+    intc_2 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // tests/approvals/teal-script-conventions.algo.ts:18
+    // this.local(Txn.sender).value = value
+    txn Sender
+    // tests/approvals/teal-script-conventions.algo.ts:7
+    // local = LocalState<string>()
+    pushbytes "local"
+    // tests/approvals/teal-script-conventions.algo.ts:18
+    // this.local(Txn.sender).value = value
+    uncover 2
+    app_local_put
+    // tests/approvals/teal-script-conventions.algo.ts:17
+    // setLocal(value: string) {
+    intc_0 // 1
+    return
+
+main_updateApplication_route@6:
+    // tests/approvals/teal-script-conventions.algo.ts:25
+    // updateApplication() {}
+    txn OnCompletion
+    pushint 4 // UpdateApplication
+    ==
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be UpdateApplication && can only call when not creating
+    intc_0 // 1
+    return
+
+main_optInToApplication_route@5:
+    // tests/approvals/teal-script-conventions.algo.ts:23
+    // optInToApplication() {}
+    txn OnCompletion
+    intc_0 // OptIn
+    ==
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be OptIn && can only call when not creating
+    intc_0 // 1
+    return
+
+main_createApplication_route@4:
+    // tests/approvals/teal-script-conventions.algo.ts:12
+    // @abimethod({ allowActions: ['NoOp', 'DeleteApplication'] })
+    intc_0 // 1
+    txn OnCompletion
+    shl
+    pushint 33 // 33
+    &
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be one of NoOp, DeleteApplication && can only call when creating
+    txna ApplicationArgs 1
+    dup
+    intc_2 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // tests/approvals/teal-script-conventions.algo.ts:6
+    // global = GlobalState<bytes>()
+    pushbytes "global"
+    // tests/approvals/teal-script-conventions.algo.ts:14
+    // this.global.value = value
+    swap
+    app_global_put
+    // tests/approvals/teal-script-conventions.algo.ts:12
+    // @abimethod({ allowActions: ['NoOp', 'DeleteApplication'] })
+    intc_0 // 1
+    return
+
+main_noMoreThanks_route@3:
+    // tests/approvals/teal-script-conventions.algo.ts:8
+    // @abimethod({ name: 'noMoreThanks' })
+    txn OnCompletion
+    intc_1 // CloseOut
+    ==
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be CloseOut && can only call when not creating
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+main_deleteApplication@9:
+    // tests/approvals/teal-script-conventions.algo.ts:20
+    // @baremethod()
+    txn OnCompletion
+    pushint 5 // DeleteApplication
+    ==
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be DeleteApplication && can only call when not creating
+    intc_0 // 1
+    return

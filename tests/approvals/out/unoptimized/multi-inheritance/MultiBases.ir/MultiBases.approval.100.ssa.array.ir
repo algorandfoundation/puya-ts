@@ -1,0 +1,251 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let reinterpret_bool%0#0: bool = (txn ApplicationID)
+        goto reinterpret_bool%0#0 ? block@2 : block@1
+    block@1: // if_body_L1
+        tests/approvals/multi-inheritance.algo.ts::MultiBases.constructor()
+        goto block@2
+    block@2: // after_if_else_L1
+        goto block@3
+    block@3: // L45
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#1 0u)
+        goto tmp%1#0 ? block@4 : block@17
+    block@4: // abi_routing_L45
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@5 : block@15
+    block@5: // call_NoOp_L45
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "methodMulti()string" => block@6, method "methodCallsSuper()string" => block@7, method "callB2CantOverride()string" => block@8, method "callB2Common()string" => block@9, method "methodOne()string" => block@10, method "methodCommon()string" => block@11, method "b2CantOverride()string" => block@12, method "methodTwo()string" => block@13, * => block@14}
+    block@6: // methodMulti_route_L48
+        tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti[routing]()
+        goto block@14
+    block@7: // methodCallsSuper_route_L52
+        tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper[routing]()
+        goto block@14
+    block@8: // callB2CantOverride_route_L56
+        tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride[routing]()
+        goto block@14
+    block@9: // callB2Common_route_L60
+        tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common[routing]()
+        goto block@14
+    block@10: // methodOne_route_L24
+        tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne[routing]()
+        goto block@14
+    block@11: // methodCommon_route_L13
+        tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon[routing]()
+        goto block@14
+    block@12: // b2CantOverride_route_L17
+        tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride[routing]()
+        goto block@14
+    block@13: // methodTwo_route_L31
+        tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo[routing]()
+        goto block@14
+    block@14: // switch_case_next_L45
+        goto block@16
+    block@15: // create_NoOp_L45
+        goto block@16
+    block@16: // after_if_else_L45
+        goto block@18
+    block@17: // __algots__.defaultCreate_L45
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/multi-inheritance.algo.ts::MultiBases.__algots__.defaultCreate()
+        exit 1u
+    block@18: // after_if_else_L45
+        exit 0u
+    block@19: // after_inlined_tests/approvals/multi-inheritance.algo.ts::MultiBases.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
+        return tmp%0#0
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti[routing]() -> void:
+    block@0: // L48
+        let tmp%0#0: string = tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti()
+        let aggregate%length%0#0: uint64 = (len tmp%0#0)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%0#0)
+        let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%0#0
+        let tmp%1#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper[routing]() -> void:
+    block@0: // L52
+        let tmp%0#0: string = tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper()
+        let aggregate%length%0#0: uint64 = (len tmp%0#0)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%0#0)
+        let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%0#0
+        let tmp%1#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride[routing]() -> void:
+    block@0: // L56
+        let tmp%0#0: string = tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride()
+        let aggregate%length%0#0: uint64 = (len tmp%0#0)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%0#0)
+        let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%0#0
+        let tmp%1#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common[routing]() -> void:
+    block@0: // L60
+        let tmp%0#0: string = tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common()
+        let aggregate%length%0#0: uint64 = (len tmp%0#0)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%0#0)
+        let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%0#0
+        let tmp%1#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne[routing]() -> void:
+    block@0: // L24
+        let tmp%0#0: string = tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne()
+        let aggregate%length%0#0: uint64 = (len tmp%0#0)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%0#0)
+        let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%0#0
+        let tmp%1#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon[routing]() -> void:
+    block@0: // L13
+        let tmp%0#0: string = tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon()
+        let aggregate%length%0#0: uint64 = (len tmp%0#0)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%0#0)
+        let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%0#0
+        let tmp%1#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride[routing]() -> void:
+    block@0: // L17
+        let tmp%0#0: string = tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride()
+        let aggregate%length%0#0: uint64 = (len tmp%0#0)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%0#0)
+        let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%0#0
+        let tmp%1#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo[routing]() -> void:
+    block@0: // L31
+        let tmp%0#0: string = tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo()
+        let aggregate%length%0#0: uint64 = (len tmp%0#0)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%0#0)
+        let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%0#0
+        let tmp%1#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.methodMulti() -> string:
+    block@0: // L48
+        return "multi-bases"
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.methodCallsSuper() -> string:
+    block@0: // L52
+        let tmp%0#0: string = tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo()
+        return tmp%0#0
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2CantOverride() -> string:
+    block@0: // L56
+        let tmp%0#0: string = tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride()
+        return tmp%0#0
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.callB2Common() -> string:
+    block@0: // L60
+        let tmp%0#0: string = tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon()
+        return tmp%0#0
+
+subroutine tests/approvals/multi-inheritance.algo.ts::BaseOne.methodOne() -> string:
+    block@0: // L24
+        return "base-one"
+
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> string:
+    block@0: // L13
+        return "common"
+
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> string:
+    block@0: // L17
+        return "common"
+
+subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.methodTwo() -> string:
+    block@0: // L31
+        return "base-two"
+
+subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.b2CantOverride() -> string:
+    block@0: // L40
+        return "base-two"
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.__algots__.defaultCreate() -> void:
+    block@0: // L45
+        return 
+
+subroutine tests/approvals/multi-inheritance.algo.ts::MultiBases.constructor() -> void:
+    block@0: // L45
+        polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance.algo.ts::NameStore,tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>.constructor()
+        (app_global_put "stateMulti" "Hmmm")
+        return 
+
+subroutine polytype/lib/polytype-module.d.ts::ClusteredContract<tests/approvals/multi-inheritance.algo.ts::NameStore,tests/approvals/multi-inheritance.algo.ts::BaseOne,tests/approvals/multi-inheritance.algo.ts::BaseTwo>.constructor() -> void:
+    block@0: // L1
+        goto block@1
+    block@1: // L1
+        goto block@2
+    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L1
+        tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor()
+        tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor()
+        return 
+
+subroutine tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor() -> void:
+    block@0: // L22
+        tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor()
+        (app_global_put "stateOne" 45u)
+        return 
+
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
+    block@0: // L10
+        goto block@1
+    block@1: // L1
+        goto block@2
+    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L10
+        (app_global_put "stateCommon" 123u)
+        return 
+
+subroutine tests/approvals/multi-inheritance.algo.ts::BaseTwo.constructor() -> void:
+    block@0: // L29
+        tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor()
+        (app_global_put "stateTwo" "Hello")
+        return 

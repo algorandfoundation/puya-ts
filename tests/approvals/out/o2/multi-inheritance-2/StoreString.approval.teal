@@ -1,0 +1,56 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/multi-inheritance-2.algo.ts:5
+    // class StoreString extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0x48f26e85 // method "setStore(string)void"
+    txna ApplicationArgs 0
+    match main_setStore_route@3
+    err
+
+main_setStore_route@3:
+    // tests/approvals/multi-inheritance-2.algo.ts:8
+    // setStore(value: string) {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    txna ApplicationArgs 1
+    dup
+    pushint 0 // 0
+    extract_uint16 // on error: invalid array length header
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // tests/approvals/multi-inheritance-2.algo.ts:6
+    // stringStore = GlobalState<string>()
+    pushbytes "stringStore"
+    // tests/approvals/multi-inheritance-2.algo.ts:9
+    // this.stringStore.value = value
+    swap
+    app_global_put
+    // tests/approvals/multi-inheritance-2.algo.ts:8
+    // setStore(value: string) {
+    pushint 1 // 1
+    return
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/multi-inheritance-2.algo.ts:5
+    // class StoreString extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return

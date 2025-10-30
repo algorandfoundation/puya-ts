@@ -1,0 +1,207 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        goto tmp%0#1 ? block@2 : block@17
+    block@2: // abi_routing_L10
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        (assert tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "testVectorCreationAndEquality()void" => block@4, method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)" => block@5, method "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)" => block@6, method "implicitCastingAndSpreading((uint64,uint64))void" => block@7, method "toAndFromBytes((uint64,uint64))(uint64,uint64)" => block@8, method "toNative((uint64,uint64))(uint64,uint64)" => block@9, method "getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])" => block@10, method "getMain()(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])" => block@11, method "setLastCalled(string,uint64,uint64)void" => block@12, method "setPlugin(string)void" => block@13, * => block@16}
+    block@4: // testVectorCreationAndEquality_route_L11
+        tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality[routing]()
+        goto block@16
+    block@5: // addVectors_route_L19
+        tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors[routing]()
+        goto block@16
+    block@6: // mutateVector_route_L26
+        tests/approvals/arc4-struct.algo.ts::StructDemo.mutateVector[routing]()
+        goto block@16
+    block@7: // implicitCastingAndSpreading_route_L32
+        tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading[routing]()
+        goto block@16
+    block@8: // toAndFromBytes_route_L39
+        tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes[routing]()
+        goto block@16
+    block@9: // toNative_route_L44
+        tests/approvals/arc4-struct.algo.ts::StructDemo.toNative[routing]()
+        goto block@16
+    block@10: // getPlugin_route_L52
+        tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin[routing]()
+        goto block@16
+    block@11: // getMain_route_L58
+        tests/approvals/arc4-struct.algo.ts::StructDemo.getMain[routing]()
+        goto block@16
+    block@12: // setLastCalled_route_L64
+        tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled[routing]()
+        goto block@16
+    block@13: // setPlugin_route_L68
+        tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin[routing]()
+        goto block@16
+    block@16: // after_if_else_L10
+        fail
+    block@17: // __algots__.defaultCreate_L10
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (! tmp%9#0)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u
+
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality[routing]() -> void:
+    block@0: // L11
+        (log 0x0000000000000000)
+        (log 0x0000000000000000)
+        exit 1u
+
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors[routing]() -> void:
+    block@0: // L19
+        let v1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len v1#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for Vector
+        let v2#0: Encoded(uint64,uint64) = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len v2#0)
+        let eq%1#0: bool = (== len%1#0 16u)
+        (assert eq%1#0) // invalid number of bytes for Vector
+        let tmp%0#1: uint64 = (extract_uint64 v1#0 0u)
+        let tmp%1#1: uint64 = (extract_uint64 v2#0 0u)
+        let tmp%2#1: uint64 = (+ tmp%0#1 tmp%1#1)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%2#1)
+        let tmp%4#0: uint64 = (extract_uint64 v1#0 8u)
+        let tmp%5#0: uint64 = (extract_uint64 v2#0 8u)
+        let tmp%6#0: uint64 = (+ tmp%4#0 tmp%5#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%6#0)
+        let aggregate%head%1#0: bytes = (concat aggregate%val_as_bytes%0#0 aggregate%val_as_bytes%1#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 aggregate%head%1#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.mutateVector[routing]() -> void:
+    block@0: // L26
+        let v1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len v1#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for Vector
+        let newX#0: Encoded(uint64) = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len newX#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
+        let newY#0: Encoded(uint64) = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len newY#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for arc4.uint64
+        let v1#1: Encoded(uint64,uint64) = ((replace2 0) v1#0 newX#0)
+        let v1#2: Encoded(uint64,uint64) = ((replace2 8) v1#1 newY#0)
+        let tmp%4#0: bytes = (concat 0x151f7c75 v1#2)
+        (log tmp%4#0)
+        exit 1u
+
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading[routing]() -> void:
+    block@0: // L32
+        let v1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len v1#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for Vector
+        let aggregate%extract%0#0: bytes = ((extract 0 8) v1#0)
+        let aggregate%extract%1#0: bytes = ((extract 8 8) v1#0)
+        let v2#0: Encoded(uint64,uint64) = (concat aggregate%extract%0#0 aggregate%extract%1#0)
+        let aggregate%extract%2#0: bytes = ((extract 0 8) v2#0)
+        let aggregate%extract%3#0: bytes = ((extract 8 8) v2#0)
+        let v3#0: Encoded(uint64,uint64) = (concat aggregate%extract%2#0 aggregate%extract%3#0)
+        let tmp%2#0: bool = (== v1#0 v2#0)
+        (assert tmp%2#0)
+        let tmp%3#0: bool = (== v3#0 v1#0)
+        (assert tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes[routing]() -> void:
+    block@0: // L39
+        let v1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len v1#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for Vector
+        let tmp%2#0: bytes = (concat 0x151f7c75 v1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.toNative[routing]() -> void:
+    block@0: // L44
+        let v1#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len v1#0)
+        let eq%0#0: bool = (== len%0#0 16u)
+        (assert eq%0#0) // invalid number of bytes for Vector
+        let tmp%2#0: bytes = (concat 0x151f7c75 v1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin[routing]() -> void:
+    block@0: // L52
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
+        let add%0#0: uint64 = (+ aggregate%array_length%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#0: string = ((extract 2 0) tmp%0#0)
+        let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
+        let (value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])), aggregate%box_get%1#0: bool) = (box_get box_prefixed_key%0#0)
+        (assert aggregate%box_get%1#0) // Box must have value
+        let box%box_extract%0#0: Encoded(uint64) = (box_extract box_prefixed_key%0#0 16u 8u)
+        let tmp%0#1: uint64 = (btoi box%box_extract%0#0)
+        (assert tmp%0#1) // Last called not zero
+        let tmp%3#0: bytes = (concat 0x151f7c75 value#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getMain[routing]() -> void:
+    block@0: // L58
+        let (value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])), aggregate%box_get%1#0: bool) = (box_get "main")
+        (assert aggregate%box_get%1#0) // Box must have value
+        let box%box_extract%0#0: Encoded(uint64) = (box_extract "main" 16u 8u)
+        let tmp%0#1: uint64 = (btoi box%box_extract%0#0)
+        (assert tmp%0#1) // Last called not zero
+        let tmp%1#0: bytes = (concat 0x151f7c75 value#0)
+        (log tmp%1#0)
+        exit 1u
+
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled[routing]() -> void:
+    block@0: // L64
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
+        let add%0#0: uint64 = (+ aggregate%array_length%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#0: string = ((extract 2 0) tmp%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
+        let index#0: uint64 = (btoi tmp%2#0)
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for arc4.uint64
+        let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
+        let box%element_offset%0#0: uint64 = (* index#0 20u)
+        let box%offset%2#0: uint64 = (+ box%element_offset%0#0 41u)
+        (box_replace box_prefixed_key%0#0 box%offset%2#0 tmp%4#0)
+        exit 1u
+
+subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin[routing]() -> void:
+    block@0: // L68
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
+        let add%0#0: uint64 = (+ aggregate%array_length%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#0: string = ((extract 2 0) tmp%0#0)
+        let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
+        (box_del box_prefixed_key%0#0)
+        (box_put box_prefixed_key%0#0 0x00000000000000010000000000000000000000000000000000001b0001a78000de00000000000000010000000000000001)
+        exit 1u

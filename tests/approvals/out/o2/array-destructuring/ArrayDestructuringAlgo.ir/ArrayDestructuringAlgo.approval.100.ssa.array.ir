@@ -1,0 +1,104 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        goto tmp%0#1 ? block@2 : block@11
+    block@2: // abi_routing_L4
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        (assert tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "testNested((uint64,(uint512,uint512)))(uint64,(uint512,uint512),uint64,uint512)" => block@4, method "test()void" => block@5, method "testLiteralDestructuring()void" => block@6, method "produceFixed()uint64[3]" => block@7, * => block@10}
+    block@4: // testNested_route_L5
+        let tmp%0#4: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#4)
+        let eq%0#0: bool = (== len%0#0 136u)
+        (assert eq%0#0) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.tuple<arc4.uint512,arc4.uint512>>
+        let aggregate%extract%0#0: bytes = (extract3 tmp%0#4 0u 8u)
+        let aggregate%item0%0#0: uint64 = (btoi aggregate%extract%0#0)
+        let aggregate%extract%1#0: bytes = (extract3 tmp%0#4 8u 128u)
+        let aggregate%extract%2#0: bytes = (extract3 aggregate%extract%1#0 0u 64u)
+        let aggregate%extract%3#0: bytes = (extract3 aggregate%extract%1#0 64u 64u)
+        let (arg.0#0: uint64, arg.1.0#0: biguint, arg.1.1#0: biguint) = (aggregate%item0%0#0, aggregate%extract%2#0, aggregate%extract%3#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob arg.0#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let aggregate%head%0#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%0#0)
+        let aggregate%value_len%0#0: uint64 = (len arg.1.0#0)
+        let aggregate%len_ok%0#0: bool = (<= aggregate%value_len%0#0 64u)
+        (assert aggregate%len_ok%0#0) // overflow
+        let aggregate%bzero%0#0: bytes = (bzero 64u)
+        let aggregate%arc4_encoded%0#0: bytes[64] = (b| arg.1.0#0 aggregate%bzero%0#0)
+        let aggregate%as_Encoded(uint512)%0#0: Encoded(uint512) = aggregate%arc4_encoded%0#0
+        let aggregate%head%1#0: bytes = (concat 0x aggregate%as_Encoded(uint512)%0#0)
+        let aggregate%value_len%1#0: uint64 = (len arg.1.1#0)
+        let aggregate%len_ok%1#0: bool = (<= aggregate%value_len%1#0 64u)
+        (assert aggregate%len_ok%1#0) // overflow
+        let aggregate%bzero%1#0: bytes = (bzero 64u)
+        let aggregate%arc4_encoded%1#0: bytes[64] = (b| arg.1.1#0 aggregate%bzero%1#0)
+        let aggregate%as_Encoded(uint512)%1#0: Encoded(uint512) = aggregate%arc4_encoded%1#0
+        let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 aggregate%as_Encoded(uint512)%1#0)
+        let aggregate%as_Encoded(uint512,uint512)%0#0: Encoded(uint512,uint512) = aggregate%head%2#0
+        let aggregate%head%3#0: bytes = (concat aggregate%head%0#0 aggregate%as_Encoded(uint512,uint512)%0#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob arg.0#0)
+        let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
+        let aggregate%head%4#0: bytes = (concat aggregate%head%3#0 aggregate%as_Encoded(uint64)%1#0)
+        let aggregate%value_len%2#0: uint64 = (len arg.1.0#0)
+        let aggregate%len_ok%2#0: bool = (<= aggregate%value_len%2#0 64u)
+        (assert aggregate%len_ok%2#0) // overflow
+        let aggregate%bzero%2#0: bytes = (bzero 64u)
+        let aggregate%arc4_encoded%2#0: bytes[64] = (b| arg.1.0#0 aggregate%bzero%2#0)
+        let aggregate%as_Encoded(uint512)%2#0: Encoded(uint512) = aggregate%arc4_encoded%2#0
+        let aggregate%head%5#0: bytes = (concat aggregate%head%4#0 aggregate%as_Encoded(uint512)%2#0)
+        let aggregate%as_Encoded(uint64,(uint512,uint512),uint64,uint512)%0#0: Encoded(uint64,(uint512,uint512),uint64,uint512) = aggregate%head%5#0
+        let tmp%9#2: Encoded(uint64,(uint512,uint512),uint64,uint512) = aggregate%as_Encoded(uint64,(uint512,uint512),uint64,uint512)%0#0
+        let tmp%10#2: bytes = (concat 0x151f7c75 tmp%9#2)
+        (log tmp%10#2)
+        exit 1u
+    block@5: // test_route_L11
+        exit 1u
+    block@6: // testLiteralDestructuring_route_L34
+        let aggregate%val_as_bytes%2#0: bytes[8] = (itob 1u)
+        let aggregate%as_Encoded(uint64)%2#0: Encoded(uint64) = aggregate%val_as_bytes%2#0
+        let aggregate%head%6#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%2#0)
+        let aggregate%val_as_bytes%3#0: bytes[8] = (itob 2u)
+        let aggregate%as_Encoded(uint64)%3#0: Encoded(uint64) = aggregate%val_as_bytes%3#0
+        let aggregate%head%7#0: bytes = (concat aggregate%head%6#0 aggregate%as_Encoded(uint64)%3#0)
+        let aggregate%as_Encoded(uint64,uint64)%0#0: Encoded(uint64,uint64) = aggregate%head%7#0
+        let awst_tmp%0#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%0#0
+        let aggregate%extract%4#0: bytes = (extract3 awst_tmp%0#0 0u 8u)
+        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%4#0
+        let x#0: uint64 = (btoi tuple_item%0#0)
+        let aggregate%extract%5#0: bytes = (extract3 awst_tmp%0#0 8u 8u)
+        let tuple_item%1#0: Encoded(uint64) = aggregate%extract%5#0
+        let y#0: uint64 = (btoi tuple_item%1#0)
+        let tmp%0#2: bool = (== x#0 1u)
+        (assert tmp%0#2)
+        let tmp%1#2: bool = (== y#0 2u)
+        (assert tmp%1#2)
+        exit 1u
+    block@7: // produceFixed_route_L44
+        let aggregate%val_as_bytes%4#0: bytes[8] = (itob 1u)
+        let aggregate%as_Encoded(uint64)%4#0: Encoded(uint64) = aggregate%val_as_bytes%4#0
+        let aggregate%head%8#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%4#0)
+        let aggregate%val_as_bytes%5#0: bytes[8] = (itob 2u)
+        let aggregate%as_Encoded(uint64)%5#0: Encoded(uint64) = aggregate%val_as_bytes%5#0
+        let aggregate%head%9#0: bytes = (concat aggregate%head%8#0 aggregate%as_Encoded(uint64)%5#0)
+        let aggregate%val_as_bytes%6#0: bytes[8] = (itob 3u)
+        let aggregate%as_Encoded(uint64)%6#0: Encoded(uint64) = aggregate%val_as_bytes%6#0
+        let aggregate%head%10#0: bytes = (concat aggregate%head%9#0 aggregate%as_Encoded(uint64)%6#0)
+        let aggregate%as_Encoded(uint64[3])%0#0: Encoded(uint64[3]) = aggregate%head%10#0
+        let encoded_array%0#0: Encoded(uint64[3]) = aggregate%as_Encoded(uint64[3])%0#0
+        let tmp%1#1: bytes = (concat 0x151f7c75 encoded_array%0#0)
+        (log tmp%1#1)
+        exit 1u
+    block@10: // after_if_else_L4
+        fail
+    block@11: // __algots__.defaultCreate_L4
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (! tmp%9#0)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u

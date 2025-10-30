@@ -1,0 +1,32 @@
+main tests/approvals/super-calls.algo.ts::SubContract.approvalProgram:
+    block@0: // L20
+        let reinterpret_bool%0#0: bool = (txn ApplicationID)
+        goto reinterpret_bool%0#0 ? block@2 : block@1
+    block@1: // if_body_L1
+        tests/approvals/super-calls.algo.ts::SubContract.constructor()
+        goto block@2
+    block@2: // after_if_else_L1
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "g1")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let tmp%0#0: bool = (== maybe_value%0#0 1u)
+        (assert tmp%0#0)
+        let (maybe_value%1#0: uint64, maybe_exists%1#0: bool) = (app_global_get_ex 0u "g2")
+        (assert maybe_exists%1#0) // check GlobalState exists
+        let tmp%1#0: bool = (== maybe_value%1#0 2u)
+        (assert tmp%1#0)
+        return 1u
+
+subroutine tests/approvals/super-calls.algo.ts::SubContract.constructor() -> void:
+    block@0: // L17
+        tests/approvals/super-calls.algo.ts::SuperContract.constructor()
+        (app_global_put "g2" 2u)
+        return 
+
+subroutine tests/approvals/super-calls.algo.ts::SuperContract.constructor() -> void:
+    block@0: // L4
+        goto block@1
+    block@1: // L1
+        goto block@2
+    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L4
+        (app_global_put "g1" 1u)
+        return 

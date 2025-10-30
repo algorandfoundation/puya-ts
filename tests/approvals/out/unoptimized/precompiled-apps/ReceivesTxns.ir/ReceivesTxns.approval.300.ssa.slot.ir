@@ -1,0 +1,170 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        goto block@1
+    block@1: // L85
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#1 0u)
+        goto tmp%1#0 ? block@2 : block@11
+    block@2: // abi_routing_L85
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@3 : block@9
+    block@3: // call_NoOp_L85
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "getOne()uint64" => block@4, method "receivesAnyTxn(txn)uint64" => block@5, method "receivesAssetConfig(acfg)byte[]" => block@6, method "receivesAssetConfigAndPay(acfg,pay)void" => block@7, * => block@8}
+    block@4: // getOne_route_L86
+        tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.getOne[routing]()
+        goto block@8
+    block@5: // receivesAnyTxn_route_L90
+        tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn[routing]()
+        goto block@8
+    block@6: // receivesAssetConfig_route_L101
+        tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAssetConfig[routing]()
+        goto block@8
+    block@7: // receivesAssetConfigAndPay_route_L104
+        tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAssetConfigAndPay[routing]()
+        goto block@8
+    block@8: // switch_case_next_L85
+        goto block@10
+    block@9: // create_NoOp_L85
+        goto block@10
+    block@10: // after_if_else_L85
+        goto block@12
+    block@11: // __algots__.defaultCreate_L85
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__algots__.defaultCreate()
+        exit 1u
+    block@12: // after_if_else_L85
+        exit 0u
+    block@13: // after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
+        return tmp%0#0
+
+subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.getOne[routing]() -> void:
+    block@0: // L86
+        let tmp%0#0: uint64 = tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.getOne()
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%1#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn[routing]() -> void:
+    block@0: // L90
+        let tmp%0#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%0#0: uint64 = (- tmp%0#0 1u)
+        let tmp%1#0: uint64 = tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn(gtxn_idx%0#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%2#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAssetConfig[routing]() -> void:
+    block@0: // L101
+        let tmp%0#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%0#0: uint64 = (- tmp%0#0 1u)
+        let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) gtxn_idx%0#0)
+        let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 acfg)
+        (assert gtxn_type_matches%0#0) // transaction type is acfg
+        let tmp%1#0: bytes = tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAssetConfig(gtxn_idx%0#0)
+        let aggregate%length%0#0: uint64 = (len tmp%1#0)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%1#0)
+        let aggregate%as_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = aggregate%encoded_value%0#0
+        let tmp%2#0: Encoded(len+uint8[]) = aggregate%as_Encoded(len+uint8[])%0#0
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAssetConfigAndPay[routing]() -> void:
+    block@0: // L104
+        let tmp%0#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%0#0: uint64 = (- tmp%0#0 2u)
+        let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) gtxn_idx%0#0)
+        let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 acfg)
+        (assert gtxn_type_matches%0#0) // transaction type is acfg
+        let tmp%1#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%1#0: uint64 = (- tmp%1#0 1u)
+        let gtxn_type%1#0: uint64 = ((gtxns TypeEnum) gtxn_idx%1#0)
+        let gtxn_type_matches%1#0: bool = (== gtxn_type%1#0 pay)
+        (assert gtxn_type_matches%1#0) // transaction type is pay
+        tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAssetConfigAndPay(gtxn_idx%0#0, gtxn_idx%1#0)
+        exit 1u
+
+subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.getOne() -> uint64:
+    block@0: // L86
+        return 1u
+
+subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn(txn: uint64) -> uint64:
+    block@0: // L90
+        let awst_tmp%0#0: uint64 = ((gtxns TypeEnum) txn#0)
+        let tmp%0#0: bool = (== awst_tmp%0#0 3u)
+        goto tmp%0#0 ? block@1 : block@6
+    block@1: // if_body_L92
+        goto block@2
+    block@2: // L92
+        let awst_tmp%1#0: uint64 = ((gtxns CreatedAssetID) txn#0)
+        let reinterpret_bool%0#0: bool = awst_tmp%1#0
+        goto reinterpret_bool%0#0 ? block@3 : block@4
+    block@3: // ternary_true_L93
+        let ternary_result%0#0: uint64 = awst_tmp%1#0
+        goto block@5
+    block@4: // ternary_false_L93
+        let ternary_result%0#1: uint64 = ((gtxns ConfigAsset) txn#0)
+        goto block@5
+    block@5: // ternary_merge_L93
+        let ternary_result%0#2: uint64 = φ(ternary_result%0#0 <- block@3, ternary_result%0#1 <- block@4)
+        return ternary_result%0#2
+    block@6: // after_if_else_L92
+        let tmp%1#0: bool = (== awst_tmp%0#0 6u)
+        goto tmp%1#0 ? block@7 : block@12
+    block@7: // if_body_L94
+        goto block@8
+    block@8: // L94
+        let awst_tmp%2#0: uint64 = ((gtxns CreatedApplicationID) txn#0)
+        let reinterpret_bool%1#0: bool = awst_tmp%2#0
+        goto reinterpret_bool%1#0 ? block@9 : block@10
+    block@9: // ternary_true_L95
+        let ternary_result%1#0: uint64 = awst_tmp%2#0
+        goto block@11
+    block@10: // ternary_false_L95
+        let ternary_result%1#1: uint64 = ((gtxns ApplicationID) txn#0)
+        goto block@11
+    block@11: // ternary_merge_L95
+        let ternary_result%1#2: uint64 = φ(ternary_result%1#0 <- block@9, ternary_result%1#1 <- block@10)
+        return ternary_result%1#2
+    block@12: // after_if_else_L94
+        goto block@13
+    block@13: // L96
+        return 0u
+
+subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAssetConfig(assetCfg: uint64) -> bytes:
+    block@0: // L101
+        let tmp%0#0: bytes[32] = ((gtxns TxID) assetCfg#0)
+        return tmp%0#0
+
+subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAssetConfigAndPay(assetCfg: uint64, payTxn: uint64) -> void:
+    block@0: // L104
+        let tmp%0#0: uint64 = ((gtxns TypeEnum) assetCfg#0)
+        let tmp%1#0: bool = (== tmp%0#0 3u)
+        (assert tmp%1#0)
+        let tmp%2#0: uint64 = ((gtxns TypeEnum) payTxn#0)
+        let tmp%3#0: bool = (== tmp%2#0 1u)
+        (assert tmp%3#0)
+        return 
+
+subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.__algots__.defaultCreate() -> void:
+    block@0: // L85
+        return 
