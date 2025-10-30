@@ -60,7 +60,6 @@ jobs:
           mv artifacts/algo-ts-node-22.x artifacts/algo-ts
 
       - name: Generate semantic version for @algorandfoundation/puya-ts
-        if: github.ref_name != 'main'
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ steps.app_token.outputs.token }}
