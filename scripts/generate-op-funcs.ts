@@ -1,7 +1,7 @@
 import { camelCase } from 'change-case'
-import { distinct, enumerate, hasFlags } from '../src/util'
-import type { OpArg, OpModule, OpOverloadedFunction } from './build-op-module'
-import { AlgoTsType, ENUMS_TO_EXPOSE } from './build-op-module'
+import { distinct } from '../src/util'
+import type { AlgoTsType, OpArg, OpModule, OpOverloadedFunction } from './build-op-module'
+import { ENUMS_TO_EXPOSE, UnionAlgoTsType } from './build-op-module'
 
 export function* emitOpFuncTypes(module: OpModule) {
   function* emitHeader() {
@@ -51,58 +51,22 @@ import { TransactionType } from "./transactions";
     }
   }
 
-  function* emitReturnType(returnType: AlgoTsType) {
-    if (hasFlags(returnType, AlgoTsType.Application)) yield 'Application'
-    if (hasFlags(returnType, AlgoTsType.Account)) yield 'Account'
-    if (hasFlags(returnType, AlgoTsType.Asset)) yield 'Asset'
-    if (hasFlags(returnType, AlgoTsType.Uint64)) yield 'uint64'
-    if (hasFlags(returnType, AlgoTsType.Bytes)) yield 'bytes'
-    if (hasFlags(returnType, AlgoTsType.String)) yield 'string'
-    if (hasFlags(returnType, AlgoTsType.Boolean)) yield 'boolean'
-    if (hasFlags(returnType, AlgoTsType.BigUint)) yield 'biguint'
-    if (hasFlags(returnType, AlgoTsType.Void)) yield 'void'
-    if (hasFlags(returnType, AlgoTsType.TransactionType)) yield 'TransactionType'
-    if (hasFlags(returnType, AlgoTsType.OnCompletion)) yield 'OnCompleteAction'
-    if (hasFlags(returnType, AlgoTsType.Enum)) {
-      for (const enumDef of module.enums.filter((a) => hasFlags(a.typeFlag, returnType))) {
-        yield enumDef.tsName
-      }
-    }
-  }
   function* emitReturnTypes(returnTypes: AlgoTsType[]) {
     switch (returnTypes.length) {
       case 0:
         yield 'void'
         break
       case 1:
-        yield Array.from(emitReturnType(returnTypes[0])).join(' | ')
+        yield returnTypes[0].tsName
         break
       default:
         yield 'readonly ['
         for (const rt of returnTypes) {
-          yield Array.from(emitReturnType(rt)).join(' | ')
+          yield rt.tsName
           yield ','
         }
         yield ']'
         break
-    }
-  }
-  function* emitArgType(argType: AlgoTsType) {
-    if (hasFlags(argType, AlgoTsType.Application)) yield 'Application'
-    if (hasFlags(argType, AlgoTsType.Account)) yield 'Account'
-    if (hasFlags(argType, AlgoTsType.Asset)) yield 'Asset'
-    if (hasFlags(argType, AlgoTsType.Uint64)) yield 'uint64'
-    if (hasFlags(argType, AlgoTsType.Bytes)) yield 'bytes'
-    if (hasFlags(argType, AlgoTsType.String)) yield 'string'
-    if (hasFlags(argType, AlgoTsType.Boolean)) yield 'boolean'
-    if (hasFlags(argType, AlgoTsType.BigUint)) yield 'biguint'
-    if (hasFlags(argType, AlgoTsType.Void)) yield 'void'
-    if (hasFlags(argType, AlgoTsType.TransactionType)) yield 'TransactionType'
-    if (hasFlags(argType, AlgoTsType.OnCompletion)) yield 'OnCompleteAction'
-    if (hasFlags(argType, AlgoTsType.Enum)) {
-      for (const enumDef of module.enums.filter((a) => hasFlags(argType, a.typeFlag))) {
-        yield enumDef.tsName
-      }
     }
   }
   function* emitArg(arg: OpArg) {
@@ -111,7 +75,7 @@ import { TransactionType } from "./transactions";
       yield '?'
     }
     yield ':'
-    yield Array.from(emitArgType(arg.type)).join(' | ')
+    yield arg.type.tsName
     yield ','
   }
 
@@ -129,7 +93,7 @@ import { TransactionType } from "./transactions";
   for (const item of module.items) {
     if (item.type === 'op-function') {
       yield* emitDoc(item.docs, item.minAvmVersion)
-      yield `export function ${camelCase(item.name)}(`
+      yield `export function ${item.name}(`
       for (const arg of item.immediateArgs) {
         yield* emitArg(arg)
       }
@@ -164,7 +128,7 @@ import { TransactionType } from "./transactions";
               ? right
                 ? {
                     name: left.name,
-                    type: left.type | right.type,
+                    type: new UnionAlgoTsType(left.type, right.type),
                   }
                 : {
                     ...left,
@@ -194,7 +158,7 @@ import { TransactionType } from "./transactions";
           yield 'get '
         }
         yield `${ol.name}(`
-        for (const [index, arg] of enumerate(ol.immediateArgs)) {
+        for (const [index, arg] of ol.immediateArgs.entries()) {
           if (index === ol.enumArg?.pos) continue
 
           yield* emitArg(arg)

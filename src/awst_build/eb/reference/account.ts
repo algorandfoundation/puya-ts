@@ -1,9 +1,11 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import type { PType } from '../../ptypes'
-import { accountPType, applicationPType, assetPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
+import { accountPType, applicationPType, assetPType, BytesPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
+import { instanceEb } from '../../type-registry'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 import type { BuilderComparisonOp, InstanceBuilder, NodeBuilder } from '../index'
 import { FunctionBuilder } from '../index'
@@ -13,7 +15,7 @@ import { compareBytes } from '../util/compare-bytes'
 import { ReferenceTypeExpressionBuilder } from './base'
 
 export class AccountFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [addressOrKey],
     } = parseFunctionArgs({
@@ -59,7 +61,7 @@ export class AccountFunctionBuilder extends FunctionBuilder {
 export class AccountExpressionBuilder extends ReferenceTypeExpressionBuilder {
   constructor(expr: Expression) {
     super(expr, {
-      backingType: bytesPType,
+      backingType: new BytesPType({ length: 32n }),
       backingMember: 'bytes',
       fieldMapping: {
         balance: ['AcctBalance', uint64PType],
@@ -93,12 +95,15 @@ export class AccountExpressionBuilder extends ReferenceTypeExpressionBuilder {
     return super.memberAccess(name, sourceLocation)
   }
 
-  toBytes(sourceLocation: SourceLocation): Expression {
-    return nodeFactory.reinterpretCast({
-      expr: this._expr,
-      wtype: wtypes.bytesWType,
-      sourceLocation,
-    })
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
+    return instanceEb(
+      nodeFactory.reinterpretCast({
+        expr: this._expr,
+        wtype: wtypes.bytesWType,
+        sourceLocation,
+      }),
+      bytesPType,
+    )
   }
 }
 
@@ -110,7 +115,7 @@ class IsOptedInFunctionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [applicationOrAsset],
     } = parseFunctionArgs({
@@ -129,7 +134,7 @@ class IsOptedInFunctionBuilder extends FunctionBuilder {
             opCode: 'asset_holding_get',
             immediates: ['AssetBalance'],
             stackArgs: [this.expr, applicationOrAsset.resolve()],
-            wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType], immutable: true }),
+            wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType] }),
             sourceLocation,
           }),
           index: 1n,

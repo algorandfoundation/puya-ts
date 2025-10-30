@@ -1,4 +1,4 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
@@ -15,27 +15,42 @@ main_after_if_else@2:
     // tests/approvals/inheritance-b.algo.ts:16
     // export class ConcreteArc4Contract extends Arc4Contract {
     txn NumAppArgs
-    bz main_bare_routing@9
-    pushbytess 0xc73da9b9 0xf161dc37 // method "getVeryImportantValue()string", method "simpleAbiMethod(uint64,uint64)uint64"
-    txna ApplicationArgs 0
-    match main_getVeryImportantValue_route@5 main_simpleAbiMethod_route@6
-
-main_after_if_else@13:
-    // tests/approvals/inheritance-b.algo.ts:16
-    // export class ConcreteArc4Contract extends Arc4Contract {
-    pushint 0 // 0
-    return
-
-main_simpleAbiMethod_route@6:
-    // tests/approvals/inheritance-a.algo.ts:17
-    // public simpleAbiMethod(a: uint64, b: uint64): uint64 {
+    bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    assert
+    pushbytess 0xc73da9b9 0xf161dc37 // method "getVeryImportantValue()string", method "simpleAbiMethod(uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match main_getVeryImportantValue_route@6 simpleAbiMethod
+    err
+
+main_getVeryImportantValue_route@6:
+    // tests/approvals/inheritance-b.algo.ts:18
+    // public getVeryImportantValue() {
+    pushbytes 0x151f7c750007343268656c6c6f
+    log
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@11:
     // tests/approvals/inheritance-b.algo.ts:16
     // export class ConcreteArc4Contract extends Arc4Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
+
+
+// tests/approvals/inheritance-a.algo.ts::Arc4Contract.simpleAbiMethod[routing]() -> void:
+simpleAbiMethod:
+    // tests/approvals/inheritance-a.algo.ts:17
+    // public simpleAbiMethod(a: uint64, b: uint64): uint64 {
     txna ApplicationArgs 1
     dup
     len
@@ -50,9 +65,11 @@ main_simpleAbiMethod_route@6:
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
+    // tests/approvals/inheritance-a.algo.ts:18
+    // return a + b
+    +
     // tests/approvals/inheritance-a.algo.ts:17
     // public simpleAbiMethod(a: uint64, b: uint64): uint64 {
-    callsub simpleAbiMethod
     itob
     pushbytes 0x151f7c75
     swap
@@ -60,40 +77,3 @@ main_simpleAbiMethod_route@6:
     log
     intc_0 // 1
     return
-
-main_getVeryImportantValue_route@5:
-    // tests/approvals/inheritance-b.algo.ts:18
-    // public getVeryImportantValue() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    pushbytes 0x151f7c750007343268656c6c6f
-    log
-    intc_0 // 1
-    return
-
-main_bare_routing@9:
-    // tests/approvals/inheritance-b.algo.ts:16
-    // export class ConcreteArc4Contract extends Arc4Contract {
-    txn OnCompletion
-    bnz main_after_if_else@13
-    txn ApplicationID
-    !
-    assert // can only call when creating
-    intc_0 // 1
-    return
-
-
-// tests/approvals/inheritance-a.algo.ts::Arc4Contract.simpleAbiMethod(a: uint64, b: uint64) -> uint64:
-simpleAbiMethod:
-    // tests/approvals/inheritance-a.algo.ts:17
-    // public simpleAbiMethod(a: uint64, b: uint64): uint64 {
-    proto 2 1
-    // tests/approvals/inheritance-a.algo.ts:18
-    // return a + b
-    frame_dig -2
-    frame_dig -1
-    +
-    retsub

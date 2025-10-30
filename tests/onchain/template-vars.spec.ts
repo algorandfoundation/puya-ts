@@ -12,10 +12,13 @@ describe('template var', () => {
     SOME_BYTES: hexToUint8Array('FF0044'),
     AN_ADDRESS: address.publicKey,
   }
-  const test = createArc4TestFixture('tests/approvals/template-var.algo.ts', {
-    MyContract: {
-      deployParams: {
-        deployTimeParams: templateVars,
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/template-var.algo.ts',
+    contracts: {
+      MyContract: {
+        deployParams: {
+          deployTimeParams: templateVars,
+        },
       },
     },
   })
@@ -26,7 +29,7 @@ describe('template var', () => {
     const resultString = await appClientMyContract.send.call({ method: 'getString' })
     expect(resultString.return).toBe(templateVars.A_STRING)
     const resultBytes = await appClientMyContract.send.call({ method: 'getBytes' })
-    expect(resultBytes.return).toStrictEqual(Array.from(templateVars.SOME_BYTES))
+    expect(resultBytes.return).toStrictEqual(templateVars.SOME_BYTES)
     const resultAddress = await appClientMyContract.send.call({ method: 'getAddress' })
     expect(resultAddress.return).toStrictEqual(address.toString())
   })

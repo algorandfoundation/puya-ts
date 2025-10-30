@@ -1,13 +1,15 @@
+import type ts from 'typescript'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
 import { Expression, IntegerConstant, StringConstant, UInt64BinaryOperator } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError, InternalError } from '../../errors'
-import { codeInvariant, enumerate, invariant } from '../../util'
+import { codeInvariant, invariant } from '../../util'
 import type { IntrinsicOpGrouping, IntrinsicOpMapping } from '../op-metadata'
 import { OP_METADATA } from '../op-metadata'
 import type { PType } from '../ptypes'
 import {
+  BytesPType,
   bytesPType,
   IntrinsicEnumType,
   IntrinsicFunctionGroupType,
@@ -154,11 +156,11 @@ abstract class IntrinsicOpBuilderBase extends FunctionBuilder {
     }
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     if (this.opMapping.op === 'extract3') {
       return this.handleExtract(args, typeArgs, sourceLocation)
     }
-    signatureLoop: for (const [index, sig] of enumerate(this.opMapping.signatures)) {
+    signatureLoop: for (const [index, sig] of this.opMapping.signatures.entries()) {
       const isLastSig = index + 1 >= this.opMapping.signatures.length
       if (args.length !== sig.argNames.length) {
         if (isLastSig)
@@ -177,6 +179,13 @@ abstract class IntrinsicOpBuilderBase extends FunctionBuilder {
           continue
         }
         const thisArg = args[sig.argNames.indexOf(arg.name)]
+
+        const bytesParamLength = (arg.ptypes.find((ptype) => ptype instanceof BytesPType && ptype.length) as BytesPType)?.length
+        if (thisArg.ptype instanceof BytesPType && thisArg.ptype.length && bytesParamLength && bytesParamLength !== thisArg.ptype.length) {
+          throw new CodeError(`Argument ${arg.name} must be bytes<${bytesParamLength}>`, {
+            sourceLocation,
+          })
+        }
 
         for (const ptype of arg.ptypes) {
           const expr = requestExpressionOfType(thisArg, ptype)

@@ -1,33 +1,36 @@
 import { AsyncLocalStorage } from 'node:async_hooks'
 import ts from 'typescript'
-import type { awst } from '../../awst'
 import type { ContractReference, LogicSigReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import type { AppStorageDefinition, ARC4MethodConfig } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { logger } from '../../logger'
 import { invariant } from '../../util'
+import { AbsolutePath } from '../../util/absolute-path'
+import { DefaultMap } from '../../util/default-map'
 import { ConstantStore } from '../constant-store'
-import type { NodeBuilder } from '../eb'
+import type { InstanceBuilder, NodeBuilder } from '../eb'
 import type { AppStorageDeclaration } from '../models/app-storage-declaration'
 import type { ContractClassModel } from '../models/contract-class-model'
 import { CompilationSet } from '../models/contract-class-model'
 import type { LogicSigClassModel } from '../models/logic-sig-class-model'
 import type { ContractClassPType, PType } from '../ptypes'
-import { arc4BaseContractType, baseContractType } from '../ptypes'
+import { arc4BaseContractType, baseContractType, ClusteredContractClassType } from '../ptypes'
+import type { SymbolName } from '../symbol-name'
 import { typeRegistry } from '../type-registry'
 import { TypeResolver } from '../type-resolver'
 import { EvaluationContext } from './evaluation-context'
 import { SwitchLoopContext } from './switch-loop-context'
 import { UniqueNameResolver } from './unique-name-resolver'
 import type { CompileOptions } from '../../options'
+
 export type BuildAwstOptions = Pick<CompileOptions, 'filePaths' | 'outputAwst' | 'outputAwstJson' | 'validateAbiReturn'>
 export abstract class AwstBuildContext {
   /**
    * Get the source location of a node in the current source file
    * @param node
    */
-  abstract getSourceLocation(node: ts.Node): SourceLocation
+  abstract getSourceLocation<TNode extends ts.Node>(node: TNode): SourceLocation<TNode>
 
   /**
    * Get NodeBuilder instance for the given identifier.
@@ -45,7 +48,7 @@ export abstract class AwstBuildContext {
    * Reflect generic type parameters for a call expression
    * @param node
    */
-  abstract getTypeParameters(node: ts.CallExpression | ts.NewExpression): PType[]
+  abstract getTypeParameters(node: ts.CallExpression | ts.NewExpression | ts.TaggedTemplateExpression): PType[]
 
   /**
    * Resolve the given identifier to a unique variable name that accounts
@@ -62,16 +65,20 @@ export abstract class AwstBuildContext {
   abstract resolveDestructuredParamName(node: ts.ParameterDeclaration): string
 
   /**
-   * Generate a unique variable name for a discarded value.
+   * Generate a unique variable name.
+   *
+   * discard: Used to consume an RValue that is not required
+   * temp: Used to hold a temp assignment
+   * @param purpose The purpose of the variable.
    */
-  abstract generateDiscardedVarName(): string
+  abstract generateVarName(purpose: 'discard' | 'temp'): string
 
   /**
    * Add a named constant to the current context
    * @param identifier The identifier of the constant declaration in this source file
-   * @param value The compile time constant value
+   * @param builder The builder for the constant
    */
-  abstract addConstant(identifier: ts.Identifier, value: awst.Constant | awst.TemplateVar): void
+  abstract addConstant(identifier: ts.Identifier, builder: InstanceBuilder): void
 
   /**
    * Retrieve the evaluation context
@@ -91,6 +98,8 @@ export abstract class AwstBuildContext {
     arc4MethodConfig: ARC4MethodConfig
     memberName: string
   }): void
+  abstract registerContractType(contractType: ContractClassPType): void
+  abstract getContractTypeByName(contractName: SymbolName): ContractClassPType | undefined
   abstract getArc4Config(contractType: ContractClassPType, memberName: string): ARC4MethodConfig | undefined
   abstract getArc4Config(contractType: ContractClassPType): ARC4MethodConfig[]
 
@@ -143,14 +152,22 @@ class AwstBuildContextImpl extends AwstBuildContext {
     public readonly options: BuildAwstOptions,
     private readonly constants: ConstantStore,
     private readonly nameResolver: UniqueNameResolver,
-    private readonly storageDeclarations: Map<string, Map<string, AppStorageDeclaration>>,
-    private readonly arc4MethodConfig: Map<string, Map<string, ARC4MethodConfig>>,
+    private readonly storageDeclarations: DefaultMap<string, Map<string, AppStorageDeclaration>>,
+    private readonly arc4MethodConfig: DefaultMap<string, Map<string, ARC4MethodConfig>>,
+    private readonly contractTypes: Record<string, ContractClassPType>,
     compilationSet: CompilationSet,
   ) {
     super()
     this.typeChecker = program.getTypeChecker()
-    this.typeResolver = new TypeResolver(this.typeChecker, this.program.getCurrentDirectory())
+    this.typeResolver = new TypeResolver(this.typeChecker, AbsolutePath.resolve({ path: this.program.getCurrentDirectory() }))
     this.#compilationSet = compilationSet
+  }
+
+  registerContractType(contractType: ContractClassPType): void {
+    this.contractTypes[contractType.fullName] = contractType
+  }
+  getContractTypeByName(contractName: SymbolName): ContractClassPType | undefined {
+    return this.contractTypes[contractName.fullName]
   }
 
   addArc4Config({
@@ -164,11 +181,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
     arc4MethodConfig: ARC4MethodConfig
     memberName: string
   }): void {
-    const contractConfig = this.arc4MethodConfig.get(contractReference.id) ?? new Map<string, ARC4MethodConfig>()
-    if (contractConfig.size === 0) {
-      // Add to map if new
-      this.arc4MethodConfig.set(contractReference.id, contractConfig)
-    }
+    const contractConfig = this.arc4MethodConfig.getOrDefault(contractReference.id, () => new Map())
     if (contractConfig.has(memberName)) {
       logger.error(sourceLocation, `Duplicate declaration of member ${memberName} on ${contractReference}`)
     }
@@ -180,9 +193,10 @@ class AwstBuildContextImpl extends AwstBuildContext {
   getArc4Config(contractType: ContractClassPType, memberName?: string): ARC4MethodConfig | undefined | ARC4MethodConfig[] {
     if (memberName) {
       for (const ct of [contractType, ...contractType.allBases()]) {
-        if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType)) continue
+        if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType) || ct instanceof ClusteredContractClassType) continue
+
         const contractMethods = this.arc4MethodConfig.get(ct.fullName)
-        invariant(contractMethods, `${ct} has not been visited`)
+        if (!contractMethods) continue
         if (contractMethods.has(memberName)) {
           return contractMethods.get(memberName)
         }
@@ -193,10 +207,10 @@ class AwstBuildContextImpl extends AwstBuildContext {
         [contractType, ...contractType.allBases()]
           .toReversed()
           .reduce((acc, ct) => {
-            if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType)) return acc
+            if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType) || ct instanceof ClusteredContractClassType) return acc
 
             const contractMethods = this.arc4MethodConfig.get(ct.fullName)
-            invariant(contractMethods, `${ct} has not been visited`)
+            if (!contractMethods) return acc
 
             return new Map([...acc, ...contractMethods])
           }, new Map<string, ARC4MethodConfig>())
@@ -211,14 +225,15 @@ class AwstBuildContextImpl extends AwstBuildContext {
       options,
       new ConstantStore(program),
       new UniqueNameResolver(),
-      new Map(),
-      new Map(),
+      new DefaultMap(),
+      new DefaultMap(),
+      {},
       new CompilationSet(),
     )
   }
 
-  addConstant(identifier: ts.Identifier, value: awst.Constant | awst.TemplateVar) {
-    this.constants.addConstant(identifier, value, this.getSourceLocation(identifier))
+  addConstant(identifier: ts.Identifier, builder: InstanceBuilder) {
+    this.constants.addConstant(identifier, builder, this.getSourceLocation(identifier))
   }
 
   createChildContext(): AwstBuildContext {
@@ -229,6 +244,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
       this.nameResolver.createChild(),
       this.storageDeclarations,
       this.arc4MethodConfig,
+      this.contractTypes,
       this.#compilationSet,
     )
   }
@@ -238,8 +254,13 @@ class AwstBuildContextImpl extends AwstBuildContext {
     invariant(symbol, 'Param node must have symbol')
     return this.nameResolver.resolveUniqueName('p', symbol)
   }
-  generateDiscardedVarName() {
-    return this.nameResolver.resolveUniqueName('_', undefined)
+  generateVarName(purpose: 'temp' | 'discard'): string {
+    switch (purpose) {
+      case 'discard':
+        return this.nameResolver.resolveUniqueName('_', undefined)
+      case 'temp':
+        return this.nameResolver.resolveUniqueName('temp', undefined)
+    }
   }
   resolveVariableName(node: ts.Identifier) {
     const symbol = this.typeChecker.resolveName(node.text, node, ts.SymbolFlags.All, false)
@@ -265,9 +286,9 @@ class AwstBuildContextImpl extends AwstBuildContext {
     if (ptype.singleton) {
       return typeRegistry.getSingletonEb(ptype, sourceLocation)
     }
-    const constantValue = this.constants.tryResolveConstant(node)
-    if (constantValue) {
-      return typeRegistry.getInstanceEb(constantValue, ptype)
+    const constantBuilder = this.constants.tryResolveConstant(node, sourceLocation)
+    if (constantBuilder) {
+      return constantBuilder
     }
     const variableName = this.resolveVariableName(node)
     return typeRegistry.getInstanceEb(
@@ -280,16 +301,12 @@ class AwstBuildContextImpl extends AwstBuildContext {
     )
   }
 
-  getSourceLocation(node: ts.Node) {
-    return SourceLocation.fromNode(node, this.program.getCurrentDirectory())
+  getSourceLocation<TNode extends ts.Node>(node: TNode) {
+    return SourceLocation.fromNode(node, AbsolutePath.resolve({ path: this.program.getCurrentDirectory() }))
   }
 
   addStorageDeclaration(declaration: AppStorageDeclaration): void {
-    const contractDeclarations = this.storageDeclarations.get(declaration.definedIn.fullName) ?? new Map()
-    if (contractDeclarations.size === 0) {
-      // Add to map if new
-      this.storageDeclarations.set(declaration.definedIn.fullName, contractDeclarations)
-    }
+    const contractDeclarations = this.storageDeclarations.getOrDefault(declaration.definedIn.fullName, () => new Map())
     if (contractDeclarations.has(declaration.memberName)) {
       logger.error(declaration.sourceLocation, `Duplicate declaration of member ${declaration.memberName} on ${declaration.definedIn}`)
     }

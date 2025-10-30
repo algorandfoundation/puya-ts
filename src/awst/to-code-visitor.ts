@@ -159,6 +159,13 @@ export class ToCodeVisitor
   visitARC4FromBytes(expression: nodes.ARC4FromBytes): string {
     return `ARC4_FROM_BYTES(${expression.value.accept(this)}, wtype=${expression.wtype}, validate=${expression.validate})`
   }
+  visitNamedTupleExpression(expression: nodes.NamedTupleExpression): string {
+    return `#{ ${expression.values
+      .entries()
+      .map(([name, value]) => `${name}: ${value.accept(this)}`)
+      .toArray()
+      .join(', ')} }`
+  }
 
   visitIntrinsicCall(expression: nodes.IntrinsicCall): string {
     const immediates = expression.immediates.length ? `<${expression.immediates.map((i) => i).join(', ')}>` : ''
@@ -224,7 +231,7 @@ export class ToCodeVisitor
     return `LocalState[${expression.account.accept(this)}][${expression.key.accept(this)}]`
   }
   visitSingleEvaluation(expression: nodes.SingleEvaluation): string {
-    const [id, isNew] = this.#singleEval.forSymbol(expression.id)
+    const { id, isNew } = this.#singleEval.forSymbol(expression.id)
     if (!isNew) {
       return `$${id}`
     }
@@ -388,6 +395,10 @@ export class ToCodeVisitor
       expression.errorMessage ? `, comment=${expression.errorMessage}` : '',
       ')',
     ].join('')
+  }
+
+  visitConvertArray(expression: nodes.ConvertArray): string {
+    return `convert_array(${expression.expr.accept(this)}, wtype=${expression.wtype})`
   }
 
   private currentContract: ContractReference[] = []

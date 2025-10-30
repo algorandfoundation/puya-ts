@@ -2,10 +2,18 @@ import * as fs from 'fs'
 import { Constants } from '../constants'
 import { logger } from '../logger'
 import { createLockFile } from '../util/lock-file'
+import { checkPuyaVersion } from './check-puya-version'
 import { downloadPuyaBinary, getCachedPuyaBinaryPath, getPuyaStorageDir } from './puya-binary'
 import { parseSemVer } from './semver'
 
-export async function resolvePuyaPath(): Promise<string> {
+export async function resolvePuyaPath(options: { customPuyaPath?: string; skipVersionCheck?: boolean }): Promise<string> {
+  if (options.customPuyaPath) {
+    if (!options.skipVersionCheck) {
+      await checkPuyaVersion(options.customPuyaPath)
+    }
+    return options.customPuyaPath
+  }
+
   const version = parseSemVer(Constants.targetedPuyaVersion)
 
   const puyaStorageDir = getPuyaStorageDir()

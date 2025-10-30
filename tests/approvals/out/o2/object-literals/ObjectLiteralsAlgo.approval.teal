@@ -1,0 +1,36 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/object-literals.algo.ts:4
+    // class ObjectLiteralsAlgo extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0xa78000de // method "test()void"
+    txna ApplicationArgs 0
+    match main_test_route@3
+    err
+
+main_test_route@3:
+    // tests/approvals/object-literals.algo.ts:5
+    // test() {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    pushint 1 // 1
+    return
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/object-literals.algo.ts:4
+    // class ObjectLiteralsAlgo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return

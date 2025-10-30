@@ -186,7 +186,7 @@ export function addw(a: uint64, b: uint64): readonly [uint64, uint64] {
 export const AppGlobal = {
   /**
    * delete key A from the global state of the current application
-   * @param state key.
+   * @param a state key.
    * Deleting a key which is already absent has no effect on the application global state. (In particular, it does _not_ cause the program to fail.)
    * @see Native TEAL opcode: [`app_global_del`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_del)
    * Min AVM version: 2
@@ -197,8 +197,8 @@ export const AppGlobal = {
 
   /**
    * global state of the key A in the current application
-   * @param state key.
-   *  * @return value. The value is zero (of type uint64) if the key does not exist.
+   * @param a state key.
+   * @return value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_global_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get)
    * Min AVM version: 2
    */
@@ -208,8 +208,8 @@ export const AppGlobal = {
 
   /**
    * global state of the key A in the current application
-   * @param state key.
-   *  * @return value. The value is zero (of type uint64) if the key does not exist.
+   * @param a state key.
+   * @return value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_global_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get)
    * Min AVM version: 2
    */
@@ -219,8 +219,8 @@ export const AppGlobal = {
 
   /**
    * X is the global state of application A, key B. Y is 1 if key existed, else 0
-   * @param Txn.ForeignApps offset (or, since v4, an _available_ application id), state key.
-   *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
+   * @param a Txn.ForeignApps offset (or, since v4, an _available_ application id), state key.
+   * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_global_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get_ex)
    * Min AVM version: 2
    */
@@ -230,8 +230,8 @@ export const AppGlobal = {
 
   /**
    * X is the global state of application A, key B. Y is 1 if key existed, else 0
-   * @param Txn.ForeignApps offset (or, since v4, an _available_ application id), state key.
-   *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
+   * @param a Txn.ForeignApps offset (or, since v4, an _available_ application id), state key.
+   * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_global_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_get_ex)
    * Min AVM version: 2
    */
@@ -244,7 +244,7 @@ export const AppGlobal = {
    * @see Native TEAL opcode: [`app_global_put`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_global_put)
    * Min AVM version: 2
    */
-  put(a: bytes, b: uint64 | bytes): void {
+  put(a: bytes, b: bytes | uint64): void {
     throw new NoImplementation()
   },
 }
@@ -255,7 +255,7 @@ export const AppGlobal = {
 export const AppLocal = {
   /**
    * delete key B from account A's local state of the current application
-   * @param Txn.Accounts offset (or, since v4, an _available_ account address), state key.
+   * @param a Txn.Accounts offset (or, since v4, an _available_ account address), state key.
    * Deleting a key which is already absent has no effect on the application local state. (In particular, it does _not_ cause the program to fail.)
    * @see Native TEAL opcode: [`app_local_del`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_del)
    * Min AVM version: 2
@@ -266,8 +266,8 @@ export const AppLocal = {
 
   /**
    * local state of the key B in the current application in account A
-   * @param Txn.Accounts offset (or, since v4, an _available_ account address), state key.
-   *  * @return value. The value is zero (of type uint64) if the key does not exist.
+   * @param a Txn.Accounts offset (or, since v4, an _available_ account address), state key.
+   * @return value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_local_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get)
    * Min AVM version: 2
    */
@@ -277,8 +277,8 @@ export const AppLocal = {
 
   /**
    * local state of the key B in the current application in account A
-   * @param Txn.Accounts offset (or, since v4, an _available_ account address), state key.
-   *  * @return value. The value is zero (of type uint64) if the key does not exist.
+   * @param a Txn.Accounts offset (or, since v4, an _available_ account address), state key.
+   * @return value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_local_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get)
    * Min AVM version: 2
    */
@@ -288,8 +288,8 @@ export const AppLocal = {
 
   /**
    * X is the local state of application B, key C in account A. Y is 1 if key existed, else 0
-   * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset), state key.
-   *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
+   * @param a Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset), state key.
+   * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_local_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get_ex)
    * Min AVM version: 2
    */
@@ -299,8 +299,8 @@ export const AppLocal = {
 
   /**
    * X is the local state of application B, key C in account A. Y is 1 if key existed, else 0
-   * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset), state key.
-   *  * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
+   * @param a Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset), state key.
+   * @return did_exist flag (top of the stack, 1 if the application and key existed and 0 otherwise), value. The value is zero (of type uint64) if the key does not exist.
    * @see Native TEAL opcode: [`app_local_get_ex`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_get_ex)
    * Min AVM version: 2
    */
@@ -310,19 +310,19 @@ export const AppLocal = {
 
   /**
    * write C to key B in account A's local state of the current application
-   * @param Txn.Accounts offset (or, since v4, an _available_ account address), state key, value.
+   * @param a Txn.Accounts offset (or, since v4, an _available_ account address), state key, value.
    * @see Native TEAL opcode: [`app_local_put`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_local_put)
    * Min AVM version: 2
    */
-  put(a: Account | uint64, b: bytes, c: uint64 | bytes): void {
+  put(a: Account | uint64, b: bytes, c: bytes | uint64): void {
     throw new NoImplementation()
   },
 }
 
 /**
  * 1 if account A is opted in to application B, else 0
- * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
- *  * @return 1 if opted in and 0 otherwise.
+ * @param a Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
+ * @return 1 if opted in and 0 otherwise.
  * @see Native TEAL opcode: [`app_opted_in`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_opted_in)
  * Min AVM version: 2
  */
@@ -399,6 +399,14 @@ export const AppParams = {
    * Min AVM version: 5
    */
   appAddress(a: Application | uint64): readonly [Account, boolean] {
+    throw new NoImplementation()
+  },
+
+  /**
+   * Version of the app, incremented each time the approval or clear program changes
+   * Min AVM version: 12
+   */
+  appVersion(a: Application | uint64): readonly [uint64, boolean] {
     throw new NoImplementation()
   },
 }
@@ -482,7 +490,7 @@ export const AssetParams = {
    * Arbitrary commitment
    * Min AVM version: 2
    */
-  assetMetadataHash(a: Asset | uint64): readonly [bytes, boolean] {
+  assetMetadataHash(a: Asset | uint64): readonly [bytes<32>, boolean] {
     throw new NoImplementation()
   },
 
@@ -529,8 +537,8 @@ export const AssetParams = {
 
 /**
  * balance for account A, in microalgos. The balance is observed after the effects of previous transactions in the group, and after the fee for the current transaction is deducted. Changes caused by inner transactions are observable immediately following `itxn_submit`
- * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
- *  * @return value.
+ * @param a Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
+ * @return value.
  * @see Native TEAL opcode: [`balance`](https://dev.algorand.co/reference/algorand-teal/opcodes#balance)
  * Min AVM version: 2
  */
@@ -555,11 +563,11 @@ export function base64Decode(e: Base64, a: bytes): bytes {
  * @see Native TEAL opcode: [`bitlen`](https://dev.algorand.co/reference/algorand-teal/opcodes#bitlen)
  * Min AVM version: 4
  */
-export function bitLength(a: uint64 | bytes): uint64 {
+export function bitLength(a: bytes | uint64): uint64 {
   throw new NoImplementation()
 }
 export const Block = {
-  blkSeed(a: uint64): bytes {
+  blkSeed(a: uint64): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -579,7 +587,7 @@ export const Block = {
     throw new NoImplementation()
   },
 
-  blkBranch(a: uint64): bytes {
+  blkBranch(a: uint64): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -714,7 +722,7 @@ export function btoi(a: bytes): uint64 {
  * @see Native TEAL opcode: [`bzero`](https://dev.algorand.co/reference/algorand-teal/opcodes#bzero)
  * Min AVM version: 4
  */
-export function bzero(a: uint64): bytes {
+export function bzero<TLength extends uint64 = uint64>(a: TLength): bytes<TLength> {
   throw new NoImplementation()
 }
 
@@ -827,7 +835,7 @@ export const EllipticCurve = {
  * @see Native TEAL opcode: [`ecdsa_pk_decompress`](https://dev.algorand.co/reference/algorand-teal/opcodes#ecdsa_pk_decompress)
  * Min AVM version: 5
  */
-export function ecdsaPkDecompress(v: Ecdsa, a: bytes): readonly [bytes, bytes] {
+export function ecdsaPkDecompress(v: Ecdsa, a: bytes<33> | bytes): readonly [bytes<32>, bytes<32>] {
   throw new NoImplementation()
 }
 
@@ -837,7 +845,13 @@ export function ecdsaPkDecompress(v: Ecdsa, a: bytes): readonly [bytes, bytes] {
  * @see Native TEAL opcode: [`ecdsa_pk_recover`](https://dev.algorand.co/reference/algorand-teal/opcodes#ecdsa_pk_recover)
  * Min AVM version: 5
  */
-export function ecdsaPkRecover(v: Ecdsa, a: bytes, b: uint64, c: bytes, d: bytes): readonly [bytes, bytes] {
+export function ecdsaPkRecover(
+  v: Ecdsa,
+  a: bytes<32> | bytes,
+  b: uint64,
+  c: bytes<32> | bytes,
+  d: bytes<32> | bytes,
+): readonly [bytes<32>, bytes<32>] {
   throw new NoImplementation()
 }
 
@@ -847,7 +861,14 @@ export function ecdsaPkRecover(v: Ecdsa, a: bytes, b: uint64, c: bytes, d: bytes
  * @see Native TEAL opcode: [`ecdsa_verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#ecdsa_verify)
  * Min AVM version: 5
  */
-export function ecdsaVerify(v: Ecdsa, a: bytes, b: bytes, c: bytes, d: bytes, e: bytes): boolean {
+export function ecdsaVerify(
+  v: Ecdsa,
+  a: bytes<32> | bytes,
+  b: bytes<32> | bytes,
+  c: bytes<32> | bytes,
+  d: bytes<32> | bytes,
+  e: bytes<32> | bytes,
+): boolean {
   throw new NoImplementation()
 }
 
@@ -857,7 +878,7 @@ export function ecdsaVerify(v: Ecdsa, a: bytes, b: bytes, c: bytes, d: bytes, e:
  * @see Native TEAL opcode: [`ed25519verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#ed25519verify)
  * Min AVM version: 1
  */
-export function ed25519verify(a: bytes, b: bytes, c: bytes): boolean {
+export function ed25519verify(a: bytes, b: bytes<64> | bytes, c: bytes<32> | bytes): boolean {
   throw new NoImplementation()
 }
 
@@ -866,7 +887,7 @@ export function ed25519verify(a: bytes, b: bytes, c: bytes): boolean {
  * @see Native TEAL opcode: [`ed25519verify_bare`](https://dev.algorand.co/reference/algorand-teal/opcodes#ed25519verify_bare)
  * Min AVM version: 7
  */
-export function ed25519verifyBare(a: bytes, b: bytes, c: bytes): boolean {
+export function ed25519verifyBare(a: bytes, b: bytes<64> | bytes, c: bytes<32> | bytes): boolean {
   throw new NoImplementation()
 }
 
@@ -916,11 +937,11 @@ export function extractUint64(a: bytes, b: uint64): uint64 {
 }
 
 /**
- * for (data A, compressed-format signature B, pubkey C) verify the signature of data against the pubkey
+ * for (data A, compressed-format signature B, pubkey C) verify the signature of data against the pubkey => {0 or 1}
  * @see Native TEAL opcode: [`falcon_verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#falcon_verify)
  * Min AVM version: 12
  */
-export function falconVerify(a: bytes, b: bytes, c: bytes): boolean {
+export function falconVerify(a: bytes, b: bytes<1232> | bytes, c: bytes<1793> | bytes): boolean {
   throw new NoImplementation()
 }
 
@@ -940,7 +961,7 @@ export function gaid(a: uint64): uint64 {
  * @see Native TEAL opcode: [`getbit`](https://dev.algorand.co/reference/algorand-teal/opcodes#getbit)
  * Min AVM version: 3
  */
-export function getBit(a: uint64 | bytes, b: uint64): uint64 {
+export function getBit(a: bytes | uint64, b: uint64): boolean {
   throw new NoImplementation()
 }
 
@@ -1009,7 +1030,7 @@ export const GITxn = {
    * 32 byte lease value
    * Min AVM version: 6
    */
-  lease(t: uint64): bytes {
+  lease(t: uint64): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -1041,7 +1062,7 @@ export const GITxn = {
    * 32 byte address
    * Min AVM version: 6
    */
-  votePk(t: uint64): bytes {
+  votePk(t: uint64): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -1049,7 +1070,7 @@ export const GITxn = {
    * 32 byte address
    * Min AVM version: 6
    */
-  selectionPk(t: uint64): bytes {
+  selectionPk(t: uint64): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -1145,7 +1166,7 @@ export const GITxn = {
    * The computed ID for this transaction. 32 bytes.
    * Min AVM version: 6
    */
-  txId(t: uint64): bytes {
+  txId(t: uint64): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -1281,7 +1302,7 @@ export const GITxn = {
    * 32 byte commitment to unspecified asset metadata
    * Min AVM version: 2
    */
-  configAssetMetadataHash(t: uint64): bytes {
+  configAssetMetadataHash(t: uint64): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -1462,10 +1483,10 @@ export const GITxn = {
   },
 
   /**
-   * 64 byte state proof public key
+   * State proof public key
    * Min AVM version: 6
    */
-  stateProofPk(t: uint64): bytes {
+  stateProofPk(t: uint64): bytes<64> {
     throw new NoImplementation()
   },
 
@@ -1498,6 +1519,14 @@ export const GITxn = {
    * Min AVM version: 7
    */
   numClearStateProgramPages(t: uint64): uint64 {
+    throw new NoImplementation()
+  },
+
+  /**
+   * Application version for which the txn must reject
+   * Min AVM version: 12
+   */
+  rejectVersion(t: uint64): uint64 {
     throw new NoImplementation()
   },
 }
@@ -1612,7 +1641,7 @@ export const Global = {
    * ID of the transaction group. 32 zero bytes if the transaction is not part of a group.
    * Min AVM version: 5
    */
-  get groupId(): bytes {
+  get groupId(): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -1660,7 +1689,7 @@ export const Global = {
    * The Genesis Hash for the network.
    * Min AVM version: 10
    */
-  get genesisHash(): bytes {
+  get genesisHash(): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -1761,7 +1790,7 @@ export const GTxn = {
    * 32 byte lease value
    * Min AVM version: 3
    */
-  lease(a: uint64): bytes {
+  lease(a: uint64): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -1793,7 +1822,7 @@ export const GTxn = {
    * 32 byte address
    * Min AVM version: 3
    */
-  votePk(a: uint64): bytes {
+  votePk(a: uint64): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -1801,7 +1830,7 @@ export const GTxn = {
    * 32 byte address
    * Min AVM version: 3
    */
-  selectionPk(a: uint64): bytes {
+  selectionPk(a: uint64): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -1897,7 +1926,7 @@ export const GTxn = {
    * The computed ID for this transaction. 32 bytes.
    * Min AVM version: 3
    */
-  txId(a: uint64): bytes {
+  txId(a: uint64): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -2033,7 +2062,7 @@ export const GTxn = {
    * 32 byte commitment to unspecified asset metadata
    * Min AVM version: 2
    */
-  configAssetMetadataHash(a: uint64): bytes {
+  configAssetMetadataHash(a: uint64): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -2214,10 +2243,10 @@ export const GTxn = {
   },
 
   /**
-   * 64 byte state proof public key
+   * State proof public key
    * Min AVM version: 6
    */
-  stateProofPk(a: uint64): bytes {
+  stateProofPk(a: uint64): bytes<64> {
     throw new NoImplementation()
   },
 
@@ -2252,6 +2281,14 @@ export const GTxn = {
   numClearStateProgramPages(a: uint64): uint64 {
     throw new NoImplementation()
   },
+
+  /**
+   * Application version for which the txn must reject
+   * Min AVM version: 12
+   */
+  rejectVersion(a: uint64): uint64 {
+    throw new NoImplementation()
+  },
 }
 
 /**
@@ -2259,7 +2296,7 @@ export const GTxn = {
  * @see Native TEAL opcode: [`itob`](https://dev.algorand.co/reference/algorand-teal/opcodes#itob)
  * Min AVM version: 1
  */
-export function itob(a: uint64): bytes {
+export function itob(a: uint64): bytes<8> {
   throw new NoImplementation()
 }
 
@@ -2319,7 +2356,7 @@ export const ITxn = {
    * 32 byte lease value
    * Min AVM version: 5
    */
-  get lease(): bytes {
+  get lease(): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -2351,7 +2388,7 @@ export const ITxn = {
    * 32 byte address
    * Min AVM version: 5
    */
-  get votePk(): bytes {
+  get votePk(): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -2359,7 +2396,7 @@ export const ITxn = {
    * 32 byte address
    * Min AVM version: 5
    */
-  get selectionPk(): bytes {
+  get selectionPk(): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -2455,7 +2492,7 @@ export const ITxn = {
    * The computed ID for this transaction. 32 bytes.
    * Min AVM version: 5
    */
-  get txId(): bytes {
+  get txId(): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -2591,7 +2628,7 @@ export const ITxn = {
    * 32 byte commitment to unspecified asset metadata
    * Min AVM version: 2
    */
-  get configAssetMetadataHash(): bytes {
+  get configAssetMetadataHash(): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -2772,10 +2809,10 @@ export const ITxn = {
   },
 
   /**
-   * 64 byte state proof public key
+   * State proof public key
    * Min AVM version: 6
    */
-  get stateProofPk(): bytes {
+  get stateProofPk(): bytes<64> {
     throw new NoImplementation()
   },
 
@@ -2808,6 +2845,14 @@ export const ITxn = {
    * Min AVM version: 7
    */
   get numClearStateProgramPages(): uint64 {
+    throw new NoImplementation()
+  },
+
+  /**
+   * Application version for which the txn must reject
+   * Min AVM version: 12
+   */
+  get rejectVersion(): uint64 {
     throw new NoImplementation()
   },
 }
@@ -2878,7 +2923,7 @@ export const ITxnCreate = {
    * 32 byte address
    * Min AVM version: 5
    */
-  setVotePk(a: bytes): void {
+  setVotePk(a: bytes<32> | bytes): void {
     throw new NoImplementation()
   },
 
@@ -2886,7 +2931,7 @@ export const ITxnCreate = {
    * 32 byte address
    * Min AVM version: 5
    */
-  setSelectionPk(a: bytes): void {
+  setSelectionPk(a: bytes<32> | bytes): void {
     throw new NoImplementation()
   },
 
@@ -3086,7 +3131,7 @@ export const ITxnCreate = {
    * 32 byte commitment to unspecified asset metadata
    * Min AVM version: 2
    */
-  setConfigAssetMetadataHash(a: bytes): void {
+  setConfigAssetMetadataHash(a: bytes<32> | bytes): void {
     throw new NoImplementation()
   },
 
@@ -3211,10 +3256,10 @@ export const ITxnCreate = {
   },
 
   /**
-   * 64 byte state proof public key
+   * State proof public key
    * Min AVM version: 6
    */
-  setStateProofPk(a: bytes): void {
+  setStateProofPk(a: bytes<64> | bytes): void {
     throw new NoImplementation()
   },
 
@@ -3231,6 +3276,14 @@ export const ITxnCreate = {
    * Min AVM version: 7
    */
   setClearStateProgramPages(a: bytes): void {
+    throw new NoImplementation()
+  },
+
+  /**
+   * Application version for which the txn must reject
+   * Min AVM version: 12
+   */
+  setRejectVersion(a: uint64): void {
     throw new NoImplementation()
   },
 
@@ -3274,7 +3327,7 @@ export const JsonRef = {
  * @see Native TEAL opcode: [`keccak256`](https://dev.algorand.co/reference/algorand-teal/opcodes#keccak256)
  * Min AVM version: 1
  */
-export function keccak256(a: bytes): bytes {
+export function keccak256(a: bytes): bytes<32> {
   throw new NoImplementation()
 }
 
@@ -3314,7 +3367,7 @@ export const Scratch = {
    * @see Native TEAL opcode: [`stores`](https://dev.algorand.co/reference/algorand-teal/opcodes#stores)
    * Min AVM version: 5
    */
-  store(a: uint64, b: uint64 | bytes): void {
+  store(a: uint64, b: bytes | uint64): void {
     throw new NoImplementation()
   },
 }
@@ -3326,14 +3379,14 @@ export const Scratch = {
  * @see Native TEAL opcode: [`mimc`](https://dev.algorand.co/reference/algorand-teal/opcodes#mimc)
  * Min AVM version: 11
  */
-export function mimc(c: MimcConfigurations, a: bytes): bytes {
+export function mimc(c: MimcConfigurations, a: bytes): bytes<32> {
   throw new NoImplementation()
 }
 
 /**
  * minimum required balance for account A, in microalgos. Required balance is affected by ASA, App, and Box usage. When creating or opting into an app, the minimum balance grows before the app code runs, therefore the increase is visible there. When deleting or closing out, the minimum balance decreases after the app executes. Changes caused by inner transactions or box usage are observable immediately following the opcode effecting the change.
- * @param Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
- *  * @return value.
+ * @param a Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
+ * @return value.
  * @see Native TEAL opcode: [`min_balance`](https://dev.algorand.co/reference/algorand-teal/opcodes#min_balance)
  * Min AVM version: 3
  */
@@ -3383,7 +3436,7 @@ export function setByte(a: bytes, b: uint64, c: uint64): bytes {
  * @see Native TEAL opcode: [`sha256`](https://dev.algorand.co/reference/algorand-teal/opcodes#sha256)
  * Min AVM version: 1
  */
-export function sha256(a: bytes): bytes {
+export function sha256(a: bytes): bytes<32> {
   throw new NoImplementation()
 }
 
@@ -3392,7 +3445,7 @@ export function sha256(a: bytes): bytes {
  * @see Native TEAL opcode: [`sha3_256`](https://dev.algorand.co/reference/algorand-teal/opcodes#sha3_256)
  * Min AVM version: 7
  */
-export function sha3_256(a: bytes): bytes {
+export function sha3_256(a: bytes): bytes<32> {
   throw new NoImplementation()
 }
 
@@ -3401,7 +3454,7 @@ export function sha3_256(a: bytes): bytes {
  * @see Native TEAL opcode: [`sha512_256`](https://dev.algorand.co/reference/algorand-teal/opcodes#sha512_256)
  * Min AVM version: 1
  */
-export function sha512_256(a: bytes): bytes {
+export function sha512_256(a: bytes): bytes<32> {
   throw new NoImplementation()
 }
 
@@ -3444,9 +3497,9 @@ export function substring(a: bytes, b: uint64, c: uint64): bytes {
 /**
  * sumhash512 of value A, yields [64]byte
  * @see Native TEAL opcode: [`sumhash512`](https://dev.algorand.co/reference/algorand-teal/opcodes#sumhash512)
- * Min AVM version: 12
+ * Min AVM version: 13
  */
-export function sumhash512(a: bytes): bytes {
+export function sumhash512(a: bytes): bytes<64> {
   throw new NoImplementation()
 }
 
@@ -3506,7 +3559,7 @@ export const Txn = {
    * 32 byte lease value
    * Min AVM version: 1
    */
-  get lease(): bytes {
+  get lease(): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -3538,7 +3591,7 @@ export const Txn = {
    * 32 byte address
    * Min AVM version: 1
    */
-  get votePk(): bytes {
+  get votePk(): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -3546,7 +3599,7 @@ export const Txn = {
    * 32 byte address
    * Min AVM version: 1
    */
-  get selectionPk(): bytes {
+  get selectionPk(): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -3642,7 +3695,7 @@ export const Txn = {
    * The computed ID for this transaction. 32 bytes.
    * Min AVM version: 1
    */
-  get txId(): bytes {
+  get txId(): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -3778,7 +3831,7 @@ export const Txn = {
    * 32 byte commitment to unspecified asset metadata
    * Min AVM version: 2
    */
-  get configAssetMetadataHash(): bytes {
+  get configAssetMetadataHash(): bytes<32> {
     throw new NoImplementation()
   },
 
@@ -3959,10 +4012,10 @@ export const Txn = {
   },
 
   /**
-   * 64 byte state proof public key
+   * State proof public key
    * Min AVM version: 6
    */
-  get stateProofPk(): bytes {
+  get stateProofPk(): bytes<64> {
     throw new NoImplementation()
   },
 
@@ -3997,6 +4050,14 @@ export const Txn = {
   get numClearStateProgramPages(): uint64 {
     throw new NoImplementation()
   },
+
+  /**
+   * Application version for which the txn must reject
+   * Min AVM version: 12
+   */
+  get rejectVersion(): uint64 {
+    throw new NoImplementation()
+  },
 }
 
 export const VoterParams = {
@@ -4023,7 +4084,7 @@ export const VoterParams = {
  * @see Native TEAL opcode: [`vrf_verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#vrf_verify)
  * Min AVM version: 7
  */
-export function vrfVerify(s: VrfVerify, a: bytes, b: bytes, c: bytes): readonly [bytes, boolean] {
+export function vrfVerify(s: VrfVerify, a: bytes, b: bytes<80> | bytes, c: bytes<32> | bytes): readonly [bytes<64>, boolean] {
   throw new NoImplementation()
 }
 
@@ -4036,7 +4097,7 @@ export function extract(a: bytes, b: uint64): bytes
  * A range of bytes from A starting at B up to but not including B+C. If B+C is larger than the array length, the program fails
  */
 export function extract(a: bytes, b: uint64, c: uint64): bytes
-export function extract(a: bytes, b: uint64, c?: uint64): bytes {
+export function extract(a: bytes | bytes, b: uint64 | uint64, c?: uint64): bytes {
   throw new NoImplementation()
 }
 
@@ -4049,7 +4110,7 @@ export function select(a: bytes, b: bytes, c: uint64): bytes
  * selects one of two values based on top-of-stack: B if C != 0, else A
  */
 export function select(a: uint64, b: uint64, c: uint64): uint64
-export function select(a: uint64 | bytes, b: uint64 | bytes, c: uint64): bytes | uint64 {
+export function select(a: bytes | uint64, b: bytes | uint64, c: uint64 | uint64): bytes | uint64 {
   throw new NoImplementation()
 }
 
@@ -4062,6 +4123,6 @@ export function setBit(target: bytes, n: uint64, c: uint64): bytes
  * Set the nth bit of target to the value of c (1 or 0)
  */
 export function setBit(target: uint64, n: uint64, c: uint64): uint64
-export function setBit(target: uint64 | bytes, n: uint64, c: uint64): bytes | uint64 {
+export function setBit(target: bytes | uint64, n: uint64 | uint64, c: uint64 | uint64): bytes | uint64 {
   throw new NoImplementation()
 }

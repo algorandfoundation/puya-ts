@@ -1,0 +1,84 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1
+    bytecblock 0x151f7c75
+    // tests/approvals/resource-encoding.algo.ts:16
+    // class ByIndex extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0x34359fb6 0x129c3321 // method "testExplicitIndex(account)uint64", method "testImplicitValue(address)uint64"
+    txna ApplicationArgs 0
+    match testExplicitIndex testImplicitValue
+    err
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/resource-encoding.algo.ts:16
+    // class ByIndex extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
+
+
+// tests/approvals/resource-encoding.algo.ts::ByIndex.testExplicitIndex[routing]() -> void:
+testExplicitIndex:
+    // tests/approvals/resource-encoding.algo.ts:17
+    // @abimethod({ resourceEncoding: 'index' })
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
+    btoi
+    txnas Accounts
+    // tests/approvals/resource-encoding.algo.ts:19
+    // return account.balance
+    acct_params_get AcctBalance
+    assert // account funded
+    // tests/approvals/resource-encoding.algo.ts:17
+    // @abimethod({ resourceEncoding: 'index' })
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/resource-encoding.algo.ts::ByIndex.testImplicitValue[routing]() -> void:
+testImplicitValue:
+    // tests/approvals/resource-encoding.algo.ts:26
+    // testImplicitValue(account: Account) {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 32 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    // tests/approvals/resource-encoding.algo.ts:27
+    // return account.balance
+    acct_params_get AcctBalance
+    assert // account funded
+    // tests/approvals/resource-encoding.algo.ts:26
+    // testImplicitValue(account: Account) {
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return

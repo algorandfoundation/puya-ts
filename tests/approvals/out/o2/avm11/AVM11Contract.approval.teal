@@ -8,31 +8,23 @@ main:
     // @contract({ name: 'AVM11Contract', avmVersion: 11 })
     // export class Avm11Contract extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     pushbytes 0x52448a31 // method "testNewOps()void"
     txna ApplicationArgs 0
     match main_testNewOps_route@3
-
-main_after_if_else@10:
-    // tests/approvals/avm11.algo.ts:23-24
-    // @contract({ name: 'AVM11Contract', avmVersion: 11 })
-    // export class Avm11Contract extends Contract {
-    intc_0 // 0
-    return
+    err
 
 main_testNewOps_route@3:
     // tests/approvals/avm11.algo.ts:25
     // testNewOps() {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/avm11.algo.ts:27
-    // const x = Bytes.fromHex('00000000000000000000000000000000000000000000000000000000499602d2')
-    pushbytes 0x00000000000000000000000000000000000000000000000000000000499602d2
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     // tests/approvals/avm11.algo.ts:28
     // assert(op.mimc(MimcConfigurations.BLS12_381Mp111, x))
+    pushbytes 0x00000000000000000000000000000000000000000000000000000000499602d2
     mimc BLS12_381Mp111
     pop
     // tests/approvals/avm11.algo.ts:29
@@ -114,14 +106,15 @@ main_testNewOps_route@3:
     intc_1 // 1
     return
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/avm11.algo.ts:23-24
     // @contract({ name: 'AVM11Contract', avmVersion: 11 })
     // export class Avm11Contract extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     intc_1 // 1
     return

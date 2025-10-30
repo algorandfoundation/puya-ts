@@ -3,7 +3,7 @@ import { bigIntToUint8Array, invariant } from '../../src/util'
 import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
 
 describe('global state base', () => {
-  const test = createBaseTestFixture('tests/approvals/global-state.algo.ts', ['TestContract'])
+  const test = createBaseTestFixture({ path: 'tests/approvals/global-state.algo.ts', contracts: ['TestContract'] })
 
   test('test runs', async ({ TestContractInvoker, expect }) => {
     const result = await TestContractInvoker.send({
@@ -25,7 +25,7 @@ describe('global state base', () => {
   })
 })
 describe('global state arc4', () => {
-  const test = createArc4TestFixture('tests/approvals/global-state.algo.ts', { TestArc4: {} })
+  const test = createArc4TestFixture({ path: 'tests/approvals/global-state.algo.ts', contracts: { TestArc4: {} } })
 
   test('arc4 runs', async ({ appClientTestArc4, expect }) => {
     await appClientTestArc4.send.call({ method: 'setState', args: ['key1', 123] })
@@ -47,5 +47,13 @@ describe('global state arc4', () => {
 
     await appClientTestArc4.send.call({ method: 'deleteState', args: ['key5'] })
     await appClientTestArc4.send.call({ method: 'setState', args: ['key6', 6] })
+  })
+})
+
+describe('global state tuple', () => {
+  const test = createArc4TestFixture({ path: 'tests/approvals/global-state.algo.ts', contracts: { TestTuple: {} } })
+
+  test('tuple runs', async ({ appClientTestTuple }) => {
+    await appClientTestTuple.send.call({ method: 'testTuple' })
   })
 })

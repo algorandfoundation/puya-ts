@@ -1,26 +1,36 @@
 import type { bytes } from '@algorandfoundation/algorand-typescript'
 import { abimethod, Contract, validateEncoding } from '@algorandfoundation/algorand-typescript'
 import type { StaticBytes } from '@algorandfoundation/algorand-typescript/arc4'
-import { interpretAsArc4 } from '@algorandfoundation/algorand-typescript/arc4'
+import { convertBytes } from '@algorandfoundation/algorand-typescript/arc4'
 
 class AbiValidationAlgo extends Contract {
   @abimethod({ validateEncoding: 'args' })
-  withValidation(value: StaticBytes<32>) {
-    return value.bytes.length
+  withValidation(value: bytes<32>) {
+    return value.length
+  }
+  @abimethod({ validateEncoding: 'unsafe-disabled' })
+  withoutValidation(value: bytes<32>) {
+    return value.length
+  }
+
+  defaultValidation(value: bytes<32>) {
+    return value.length
   }
 
   @abimethod({ validateEncoding: 'unsafe-disabled' })
-  withoutValidation(value: StaticBytes<32>) {
-    return value.bytes.length
+  manualValidation(value: bytes<32>) {
+    validateEncoding(value)
+    return value.length
   }
 
-  defaultValidation(value: StaticBytes<32>) {
-    return value.bytes.length
+  manualValidationInConvert(rawBytes: bytes) {
+    const value = convertBytes<StaticBytes<32>>(rawBytes, { strategy: 'validate' })
+    return value.length
   }
 
   manualValidationAfterConvert(rawBytes: bytes) {
-    const value = interpretAsArc4<StaticBytes<32>>(rawBytes)
+    const value = convertBytes<StaticBytes<32>>(rawBytes, { strategy: 'unsafe-cast' })
     validateEncoding(value)
-    return value.bytes.length
+    return value.length
   }
 }

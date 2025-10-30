@@ -1,0 +1,40 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        goto tmp%0#1 ? block@2 : block@5
+    block@2: // abi_routing_L6
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "test(uint64)void" => block@3, * => block@4}
+    block@3: // test_route_L7
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (! tmp%3#0)
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%7#0: bool = (&& tmp%4#0 tmp%5#0)
+        (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
+        tests/approvals/circular-reference.algo.ts::ContractOne.test[routing]()
+        goto block@4
+    block@4: // switch_case_next_L6
+        fail
+    block@5: // __algots__.defaultCreate_L6
+        let tmp%8#0: uint64 = (txn OnCompletion)
+        let tmp%9#0: bool = (! tmp%8#0)
+        let tmp%10#0: uint64 = (txn ApplicationID)
+        let tmp%11#0: bool = (! tmp%10#0)
+        let tmp%12#0: bool = (&& tmp%9#0 tmp%11#0)
+        (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u
+
+subroutine tests/approvals/circular-reference.algo.ts::ContractOne.test[routing]() -> void:
+    block@0: // L7
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let appId#0: uint64 = (btoi tmp%0#0)
+        itxn_begin
+        ((itxn_field ApplicationArgs) method "test(uint64)void")
+        ((itxn_field ApplicationID) appId#0)
+        ((itxn_field TypeEnum) appl)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        exit 1u

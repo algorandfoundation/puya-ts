@@ -1,0 +1,57 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 8
+    // tests/approvals/array-literals.algo.ts:9
+    // class ArrayLiteralsAlgo extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0xe04ac19e 0x341a3794 // method "test(uint64,uint64)void", method "test2()uint64"
+    txna ApplicationArgs 0
+    match test main_test2_route@5
+    err
+
+main_test2_route@5:
+    // tests/approvals/array-literals.algo.ts:22
+    // test2(): uint64 {
+    pushbytes 0x151f7c750000000000000001
+    log
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/array-literals.algo.ts:9
+    // class ArrayLiteralsAlgo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
+
+
+// tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test[routing]() -> void:
+test:
+    // tests/approvals/array-literals.algo.ts:10
+    // test(a: uint64, b: uint64) {
+    txna ApplicationArgs 1
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    txna ApplicationArgs 2
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    intc_0 // 1
+    return

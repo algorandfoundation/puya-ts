@@ -1,0 +1,141 @@
+{
+    "hints": {
+        "aliasing(uint64[])void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "receive(uint64[])void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "receiveReadonly(uint64[])void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "structReturn((uint64,string,(byte[],uint8)))(byte[],uint8)": {
+            "call_config": {
+                "no_op": "CALL"
+            },
+            "structs": {
+                "arg": {
+                    "name": "TopLevelStruct",
+                    "elements": [
+                        [
+                            "a",
+                            "uint64"
+                        ],
+                        [
+                            "b",
+                            "string"
+                        ],
+                        [
+                            "shared",
+                            "(byte[],uint8)"
+                        ]
+                    ]
+                },
+                "output": {
+                    "name": "SharedStruct",
+                    "elements": [
+                        [
+                            "foo",
+                            "byte[]"
+                        ],
+                        [
+                            "bar",
+                            "uint8"
+                        ]
+                    ]
+                }
+            }
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYXJjNC9pbmRleC5kLnRzOjpDb250cmFjdC5hcHByb3ZhbFByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBpbnRjYmxvY2sgMCAxIDggMgogICAgLy8gdGVzdHMvYXBwcm92YWxzL2FyYzQtY2xvbmUuYWxnby50czoxNgogICAgLy8gZXhwb3J0IGNsYXNzIEFyYzRDbG9uZUFsZ28gZXh0ZW5kcyBDb250cmFjdCB7CiAgICB0eG4gTnVtQXBwQXJncwogICAgYnogbWFpbl9fX2FsZ290c19fLmRlZmF1bHRDcmVhdGVAMTEKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gbXVzdCBiZSBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0CiAgICBwdXNoYnl0ZXNzIDB4Mzk4ZTI3MGQgMHg4MGFjYmUxMCAweGUyMTNmNWI2IDB4NjNlNDBlOGQgLy8gbWV0aG9kICJhbGlhc2luZyh1aW50NjRbXSl2b2lkIiwgbWV0aG9kICJyZWNlaXZlKHVpbnQ2NFtdKXZvaWQiLCBtZXRob2QgInJlY2VpdmVSZWFkb25seSh1aW50NjRbXSl2b2lkIiwgbWV0aG9kICJzdHJ1Y3RSZXR1cm4oKHVpbnQ2NCxzdHJpbmcsKGJ5dGVbXSx1aW50OCkpKShieXRlW10sdWludDgpIgogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAogICAgbWF0Y2ggbWFpbl9hbGlhc2luZ19yb3V0ZUA0IG1haW5fcmVjZWl2ZV9yb3V0ZUA1IG1haW5fcmVjZWl2ZVJlYWRvbmx5X3JvdXRlQDYgbWFpbl9zdHJ1Y3RSZXR1cm5fcm91dGVANwogICAgZXJyCgptYWluX3N0cnVjdFJldHVybl9yb3V0ZUA3OgogICAgLy8gdGVzdHMvYXBwcm92YWxzL2FyYzQtY2xvbmUuYWxnby50czo1MwogICAgLy8gc3RydWN0UmV0dXJuKGFyZzogVG9wTGV2ZWxTdHJ1Y3QpOiBTaGFyZWRTdHJ1Y3QgewogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQogICAgZHVwCiAgICBsZW4KICAgIGRpZyAxCiAgICBpbnRjXzIgLy8gOAogICAgZXh0cmFjdF91aW50MTYgLy8gb24gZXJyb3I6IGludmFsaWQgdHVwbGUgZW5jb2RpbmcKICAgIGR1cAogICAgcHVzaGludCAxMiAvLyAxMgogICAgPT0KICAgIGFzc2VydCAvLyBpbnZhbGlkIHRhaWwgcG9pbnRlciBhdCBpbmRleCAxIG9mICh1aW50NjQsKGxlbit1dGY4W10pLCgobGVuK3VpbnQ4W10pLHVpbnQ4KSkKICAgIGRpZyAyCiAgICBzd2FwCiAgICBkaWcgMgogICAgc3Vic3RyaW5nMwogICAgaW50Y18wIC8vIDAKICAgIGV4dHJhY3RfdWludDE2IC8vIG9uIGVycm9yOiBpbnZhbGlkIGFycmF5IGxlbmd0aCBoZWFkZXIKICAgIHB1c2hpbnQgMTQgLy8gMTQKICAgICsKICAgIGRpZyAyCiAgICBwdXNoaW50IDEwIC8vIDEwCiAgICBleHRyYWN0X3VpbnQxNiAvLyBvbiBlcnJvcjogaW52YWxpZCB0dXBsZSBlbmNvZGluZwogICAgZHVwCiAgICBkaWcgMgogICAgPT0KICAgIGFzc2VydCAvLyBpbnZhbGlkIHRhaWwgcG9pbnRlciBhdCBpbmRleCAyIG9mICh1aW50NjQsKGxlbit1dGY4W10pLCgobGVuK3VpbnQ4W10pLHVpbnQ4KSkKICAgIHVuY292ZXIgMwogICAgc3dhcAogICAgZGlnIDMKICAgIHN1YnN0cmluZzMKICAgIGR1cAogICAgbGVuCiAgICBkaWcgMQogICAgaW50Y18wIC8vIDAKICAgIGV4dHJhY3RfdWludDE2IC8vIG9uIGVycm9yOiBpbnZhbGlkIHR1cGxlIGVuY29kaW5nCiAgICBkdXAKICAgIHB1c2hpbnQgMyAvLyAzCiAgICA9PQogICAgYXNzZXJ0IC8vIGludmFsaWQgdGFpbCBwb2ludGVyIGF0IGluZGV4IDAgb2YgKChsZW4rdWludDhbXSksdWludDgpCiAgICBkaWcgMgogICAgc3dhcAogICAgdW5jb3ZlciAyCiAgICBzdWJzdHJpbmczCiAgICBpbnRjXzAgLy8gMAogICAgZXh0cmFjdF91aW50MTYgLy8gb24gZXJyb3I6IGludmFsaWQgYXJyYXkgbGVuZ3RoIGhlYWRlcgogICAgcHVzaGludCA1IC8vIDUKICAgICsKICAgIHVuY292ZXIgMgogICAgKwogICAgdW5jb3ZlciAyCiAgICA9PQogICAgYXNzZXJ0IC8vIGludmFsaWQgbnVtYmVyIG9mIGJ5dGVzIGZvciBUb3BMZXZlbFN0cnVjdAogICAgcHVzaGJ5dGVzIDB4MTUxZjdjNzUKICAgIHN3YXAKICAgIGNvbmNhdAogICAgbG9nCiAgICBpbnRjXzEgLy8gMQogICAgcmV0dXJuCgptYWluX3JlY2VpdmVSZWFkb25seV9yb3V0ZUA2OgogICAgLy8gdGVzdHMvYXBwcm92YWxzL2FyYzQtY2xvbmUuYWxnby50czo1MQogICAgLy8gcmVjZWl2ZVJlYWRvbmx5KGE6IHJlYWRvbmx5IHVpbnQ2NFtdKSB7fQogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQogICAgZHVwCiAgICBpbnRjXzAgLy8gMAogICAgZXh0cmFjdF91aW50MTYgLy8gb24gZXJyb3I6IGludmFsaWQgYXJyYXkgbGVuZ3RoIGhlYWRlcgogICAgaW50Y18yIC8vIDgKICAgICoKICAgIGludGNfMyAvLyAyCiAgICArCiAgICBzd2FwCiAgICBsZW4KICAgID09CiAgICBhc3NlcnQgLy8gaW52YWxpZCBudW1iZXIgb2YgYnl0ZXMgZm9yIGFyYzQuZHluYW1pY19hcnJheTx1aW50NjQ+CiAgICBpbnRjXzEgLy8gMQogICAgcmV0dXJuCgptYWluX3JlY2VpdmVfcm91dGVANToKICAgIC8vIHRlc3RzL2FwcHJvdmFscy9hcmM0LWNsb25lLmFsZ28udHM6NDkKICAgIC8vIHJlY2VpdmUobXV0YWJsZTogdWludDY0W10pIHt9CiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAxCiAgICBkdXAKICAgIGludGNfMCAvLyAwCiAgICBleHRyYWN0X3VpbnQxNiAvLyBvbiBlcnJvcjogaW52YWxpZCBhcnJheSBsZW5ndGggaGVhZGVyCiAgICBpbnRjXzIgLy8gOAogICAgKgogICAgaW50Y18zIC8vIDIKICAgICsKICAgIHN3YXAKICAgIGxlbgogICAgPT0KICAgIGFzc2VydCAvLyBpbnZhbGlkIG51bWJlciBvZiBieXRlcyBmb3IgYXJjNC5keW5hbWljX2FycmF5PHVpbnQ2ND4KICAgIGludGNfMSAvLyAxCiAgICByZXR1cm4KCm1haW5fYWxpYXNpbmdfcm91dGVANDoKICAgIC8vIHRlc3RzL2FwcHJvdmFscy9hcmM0LWNsb25lLmFsZ28udHM6MTcKICAgIC8vIGFsaWFzaW5nKG11dGFibGU6IHVpbnQ2NFtdKSB7CiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAxCiAgICBkdXAKICAgIGludGNfMCAvLyAwCiAgICBleHRyYWN0X3VpbnQxNiAvLyBvbiBlcnJvcjogaW52YWxpZCBhcnJheSBsZW5ndGggaGVhZGVyCiAgICBpbnRjXzIgLy8gOAogICAgKgogICAgaW50Y18zIC8vIDIKICAgICsKICAgIHN3YXAKICAgIGxlbgogICAgPT0KICAgIGFzc2VydCAvLyBpbnZhbGlkIG51bWJlciBvZiBieXRlcyBmb3IgYXJjNC5keW5hbWljX2FycmF5PHVpbnQ2ND4KICAgIGludGNfMSAvLyAxCiAgICByZXR1cm4KCm1haW5fX19hbGdvdHNfXy5kZWZhdWx0Q3JlYXRlQDExOgogICAgLy8gdGVzdHMvYXBwcm92YWxzL2FyYzQtY2xvbmUuYWxnby50czoxNgogICAgLy8gZXhwb3J0IGNsYXNzIEFyYzRDbG9uZUFsZ28gZXh0ZW5kcyBDb250cmFjdCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgIQogICAgJiYKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gbXVzdCBiZSBOb09wICYmIGNhbiBvbmx5IGNhbGwgd2hlbiBjcmVhdGluZwogICAgaW50Y18xIC8vIDEKICAgIHJldHVybgo=",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYmFzZS1jb250cmFjdC5kLnRzOjpCYXNlQ29udHJhY3QuY2xlYXJTdGF0ZVByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBwdXNoaW50IDEgLy8gMQogICAgcmV0dXJuCg=="
+    },
+    "state": {
+        "global": {
+            "num_byte_slices": 0,
+            "num_uints": 0
+        },
+        "local": {
+            "num_byte_slices": 0,
+            "num_uints": 0
+        }
+    },
+    "schema": {
+        "global": {
+            "declared": {},
+            "reserved": {}
+        },
+        "local": {
+            "declared": {},
+            "reserved": {}
+        }
+    },
+    "contract": {
+        "name": "Arc4CloneAlgo",
+        "methods": [
+            {
+                "name": "aliasing",
+                "args": [
+                    {
+                        "type": "uint64[]",
+                        "name": "mutable"
+                    }
+                ],
+                "readonly": false,
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "receive",
+                "args": [
+                    {
+                        "type": "uint64[]",
+                        "name": "mutable"
+                    }
+                ],
+                "readonly": false,
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "receiveReadonly",
+                "args": [
+                    {
+                        "type": "uint64[]",
+                        "name": "a"
+                    }
+                ],
+                "readonly": false,
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "structReturn",
+                "args": [
+                    {
+                        "type": "(uint64,string,(byte[],uint8))",
+                        "name": "arg"
+                    }
+                ],
+                "readonly": false,
+                "returns": {
+                    "type": "(byte[],uint8)"
+                }
+            }
+        ],
+        "networks": {}
+    },
+    "bare_call_config": {
+        "no_op": "CREATE"
+    }
+}

@@ -41,9 +41,9 @@ export type StateTotals = {
 export type ContractOptions = {
   /**
    * Determines which AVM version to use, this affects what operations are supported.
-   * Defaults to value provided supplied on command line (which defaults to current mainnet version)
+   * Defaults to value provided on command line (which defaults to current mainnet version)
    */
-  avmVersion?: 10 | 11
+  avmVersion?: 10 | 11 | 12 | 13
 
   /**
    * Override the name of the logic signature when generating build artifacts.

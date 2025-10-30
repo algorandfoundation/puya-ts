@@ -1,3 +1,4 @@
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, Contract, op, Txn } from '@algorandfoundation/algorand-typescript'
 import { methodSelector } from '@algorandfoundation/algorand-typescript/arc4'
 import * as op2 from '@algorandfoundation/algorand-typescript/op'
@@ -17,5 +18,10 @@ class MyContract extends Contract {
 
     assert(Txn.applicationArgs(0) === methodSelector('test()void'))
     assert(GTxn.applicationArgs(Txn.groupIndex, 0) === methodSelector(MyContract.prototype.test))
+  }
+
+  test2(size: uint64) {
+    const a = bzero(size)
+    assert(a.length === size)
   }
 }

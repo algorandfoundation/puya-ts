@@ -4,15 +4,14 @@ import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
 import { codeInvariant } from '../../../../util'
 import { AppStorageDeclaration } from '../../../models/app-storage-declaration'
-import type { BoxPType, BoxRefPType } from '../../../ptypes'
-import { boolPType, BoxMapPType, type ContractClassPType, type PType, uint64PType } from '../../../ptypes'
+import type { BoxPType } from '../../../ptypes'
+import { boolPType, BoxMapPType, bytesPType, type ContractClassPType, type PType, uint64PType } from '../../../ptypes'
 import { instanceEb } from '../../../type-registry'
+import type { InstanceBuilder } from '../../index'
 import { InstanceExpressionBuilder } from '../../index'
 import { ValueProxy } from '../value-proxy'
 
-export abstract class BoxProxyExpressionBuilder<
-  TProxyType extends BoxMapPType | BoxRefPType | BoxPType,
-> extends InstanceExpressionBuilder<TProxyType> {
+export abstract class BoxProxyExpressionBuilder<TProxyType extends BoxMapPType | BoxPType> extends InstanceExpressionBuilder<TProxyType> {
   buildStorageDeclaration(
     memberName: string,
     memberLocation: SourceLocation,
@@ -33,12 +32,8 @@ export abstract class BoxProxyExpressionBuilder<
     })
   }
 
-  toBytes(sourceLocation: SourceLocation): Expression {
-    return nodeFactory.reinterpretCast({
-      expr: this.resolve(),
-      wtype: wtypes.bytesWType,
-      sourceLocation,
-    })
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
+    return instanceEb(nodeFactory.reinterpretCast({ expr: this.resolve(), wtype: wtypes.bytesWType, sourceLocation }), bytesPType)
   }
 }
 
@@ -78,7 +73,7 @@ export function boxLength(box: BoxValueExpression, sourceLocation: SourceLocatio
       expr: nodeFactory.intrinsicCall({
         opCode: 'box_len',
         stackArgs: [box.key],
-        wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType], immutable: true }),
+        wtype: new wtypes.WTuple({ types: [wtypes.uint64WType, wtypes.boolWType] }),
         immediates: [],
         sourceLocation,
       }),

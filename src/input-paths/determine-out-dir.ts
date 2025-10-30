@@ -1,19 +1,23 @@
 import { minimatch } from 'minimatch'
-import upath from 'upath'
+import pathe from 'pathe'
 
 export function determineOutDir(inputPath: string, sourceFile: string, outDir: string) {
-  const outDirBase = findMinimalMatch(upath.normalizeTrim(inputPath), sourceFile)
+  const outDirBase = findMinimalMatch(normalizeTrim(inputPath), sourceFile)
 
-  const subPath = upath.dirname(sourceFile.slice(outDirBase.length))
+  const subPath = pathe.dirname(sourceFile.slice(outDirBase.length))
 
-  if (upath.isAbsolute(outDir)) {
-    return upath.normalizeTrim(upath.join(outDir, subPath))
+  if (pathe.isAbsolute(outDir)) {
+    return normalizeTrim(pathe.join(outDir, subPath))
   }
-  return upath.normalizeTrim(upath.join(outDirBase, outDir, subPath))
+  return normalizeTrim(pathe.join(outDirBase, outDir, subPath))
 }
 
 function trimCurrentDir(path: string) {
   return path.startsWith('./') ? path.slice(2) : path
+}
+
+function normalizeTrim(path: string): string {
+  return pathe.normalize(path).replace(/\/$/, '')
 }
 
 function findMinimalMatch(inputPath: string, testPath: string): string {
@@ -23,9 +27,9 @@ function findMinimalMatch(inputPath: string, testPath: string): string {
   const [matchedPath] = minimatch.match([trimCurrentDir(testPath)], trimCurrentDir(inputPath))
   if (matchedPath) {
     if (matchedPath.endsWith('.algo.ts')) {
-      return upath.dirname(matchedPath)
+      return pathe.dirname(matchedPath)
     }
     return matchedPath
   }
-  return findMinimalMatch(inputPath, upath.dirname(testPath))
+  return findMinimalMatch(inputPath, pathe.dirname(testPath))
 }

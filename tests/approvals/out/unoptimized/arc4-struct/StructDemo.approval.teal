@@ -1,22 +1,38 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 8 1 16
+    intcblock 8 0 1 16
     bytecblock 0x 0x151f7c75 0x0000000000000000 "plugins" 0x0000000000000001 0xa78000de
+    b main_block@0
 
 main_block@0:
+    b main_block@1
 
 main_block@1:
     // tests/approvals/arc4-struct.algo.ts:10
     // class StructDemo extends Contract {
     txn NumAppArgs
-    intc_0 // 0
+    intc_1 // 0
     !=
-    bz main_bare_routing@15
+    bz main___algots__.defaultCreate@17
+    b main_abi_routing@2
 
 main_abi_routing@2:
+    // tests/approvals/arc4-struct.algo.ts:10
+    // class StructDemo extends Contract {
+    txn OnCompletion
+    intc_1 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_1 // 0
+    !=
+    bz main_create_NoOp@15
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
     // tests/approvals/arc4-struct.algo.ts:10
     // class StructDemo extends Contract {
     txna ApplicationArgs 0
@@ -31,258 +47,118 @@ main_abi_routing@2:
     pushbytes 0x4d21bca6 // method "setLastCalled(string,uint64,uint64)void"
     pushbytes 0xa9bc61f1 // method "setPlugin(string)void"
     uncover 10
-    match main_testVectorCreationAndEquality_route@3 main_addVectors_route@4 main_mutateVector_route@5 main_implicitCastingAndSpreading_route@6 main_toAndFromBytes_route@7 main_toNative_route@8 main_getPlugin_route@9 main_getMain_route@10 main_setLastCalled_route@11 main_setPlugin_route@12
-
-main_switch_case_default@13:
+    match main_testVectorCreationAndEquality_route@4 main_addVectors_route@5 main_mutateVector_route@6 main_implicitCastingAndSpreading_route@7 main_toAndFromBytes_route@8 main_toNative_route@9 main_getPlugin_route@10 main_getMain_route@11 main_setLastCalled_route@12 main_setPlugin_route@13
+    b main_switch_case_next@14
 
 main_switch_case_next@14:
+    b main_after_if_else@16
 
-main_after_if_else@19:
+main_after_if_else@16:
+    b main_after_if_else@18
+
+main_after_if_else@18:
     // tests/approvals/arc4-struct.algo.ts:10
     // class StructDemo extends Contract {
-    intc_0 // 0
+    err
 
-main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20:
-    return
-
-main_setPlugin_route@12:
-    // tests/approvals/arc4-struct.algo.ts:68
-    // public setPlugin(key: string) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/arc4-struct.algo.ts:10
-    // class StructDemo extends Contract {
-    txna ApplicationArgs 1
-    dup
-    intc_0 // 0
-    extract_uint16 // on error: invalid array length header
-    intc_2 // 1
-    *
-    pushint 2 // 2
-    +
-    dig 1
-    len
-    ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-    extract 2 0
+main_setPlugin_route@13:
     // tests/approvals/arc4-struct.algo.ts:68
     // public setPlugin(key: string) {
     callsub setPlugin
-    intc_2 // 1
-    b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_setLastCalled_route@11:
+main_setLastCalled_route@12:
     // tests/approvals/arc4-struct.algo.ts:64
     // public setLastCalled(key: string, index: uint64, lastCalled: uint64) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/arc4-struct.algo.ts:10
-    // class StructDemo extends Contract {
-    txna ApplicationArgs 1
-    dup
-    intc_0 // 0
-    extract_uint16 // on error: invalid array length header
-    intc_2 // 1
-    *
-    pushint 2 // 2
-    +
-    dig 1
-    len
-    ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-    extract 2 0
-    txna ApplicationArgs 2
-    dup
-    len
-    intc_1 // 8
-    ==
-    assert // invalid number of bytes for arc4.uint64
-    btoi
-    txna ApplicationArgs 3
-    dup
-    len
-    intc_1 // 8
-    ==
-    assert // invalid number of bytes for arc4.uint64
-    btoi
-    // tests/approvals/arc4-struct.algo.ts:64
-    // public setLastCalled(key: string, index: uint64, lastCalled: uint64) {
-    uncover 2
-    uncover 2
-    uncover 2
     callsub setLastCalled
-    intc_2 // 1
-    b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_getMain_route@10:
+main_getMain_route@11:
     // tests/approvals/arc4-struct.algo.ts:58
     // public getMain() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
     callsub getMain
-    bytec_1 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_2 // 1
-    b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_getPlugin_route@9:
-    // tests/approvals/arc4-struct.algo.ts:52
-    // public getPlugin(key: string): PluginInfo {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/arc4-struct.algo.ts:10
-    // class StructDemo extends Contract {
-    txna ApplicationArgs 1
-    dup
-    intc_0 // 0
-    extract_uint16 // on error: invalid array length header
-    intc_2 // 1
-    *
-    pushint 2 // 2
-    +
-    dig 1
-    len
-    ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-    extract 2 0
+main_getPlugin_route@10:
     // tests/approvals/arc4-struct.algo.ts:52
     // public getPlugin(key: string): PluginInfo {
     callsub getPlugin
-    bytec_1 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_2 // 1
-    b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_toNative_route@8:
-    // tests/approvals/arc4-struct.algo.ts:44
-    // public toNative(v1: Vector) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/arc4-struct.algo.ts:10
-    // class StructDemo extends Contract {
-    txna ApplicationArgs 1
-    dup
-    len
-    intc_3 // 16
-    ==
-    assert // invalid number of bytes for Vector
+main_toNative_route@9:
     // tests/approvals/arc4-struct.algo.ts:44
     // public toNative(v1: Vector) {
     callsub toNative
-    swap
-    bytec_0 // 0x
-    swap
-    concat
-    swap
-    concat
-    bytec_1 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_2 // 1
-    b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_toAndFromBytes_route@7:
-    // tests/approvals/arc4-struct.algo.ts:39
-    // public toAndFromBytes(v1: Vector): Vector {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/arc4-struct.algo.ts:10
-    // class StructDemo extends Contract {
-    txna ApplicationArgs 1
-    dup
-    len
-    intc_3 // 16
-    ==
-    assert // invalid number of bytes for Vector
+main_toAndFromBytes_route@8:
     // tests/approvals/arc4-struct.algo.ts:39
     // public toAndFromBytes(v1: Vector): Vector {
     callsub toAndFromBytes
-    bytec_1 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_2 // 1
-    b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_implicitCastingAndSpreading_route@6:
-    // tests/approvals/arc4-struct.algo.ts:32
-    // public implicitCastingAndSpreading(v1: Vector) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/arc4-struct.algo.ts:10
-    // class StructDemo extends Contract {
-    txna ApplicationArgs 1
-    dup
-    len
-    intc_3 // 16
-    ==
-    assert // invalid number of bytes for Vector
+main_implicitCastingAndSpreading_route@7:
     // tests/approvals/arc4-struct.algo.ts:32
     // public implicitCastingAndSpreading(v1: Vector) {
     callsub implicitCastingAndSpreading
-    intc_2 // 1
-    b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
+    b main_switch_case_next@14
 
-main_mutateVector_route@5:
+main_mutateVector_route@6:
     // tests/approvals/arc4-struct.algo.ts:26
     // public mutateVector(v1: Vector, newX: ARC4Uint64, newY: ARC4Uint64): Vector {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
+    callsub mutateVector
+    b main_switch_case_next@14
+
+main_addVectors_route@5:
+    // tests/approvals/arc4-struct.algo.ts:19
+    // public addVectors(v1: Vector, v2: Vector) {
+    callsub addVectors
+    b main_switch_case_next@14
+
+main_testVectorCreationAndEquality_route@4:
+    // tests/approvals/arc4-struct.algo.ts:11
+    // public testVectorCreationAndEquality() {
+    callsub testVectorCreationAndEquality
+    b main_switch_case_next@14
+
+main_create_NoOp@15:
+    b main_after_if_else@16
+
+main___algots__.defaultCreate@17:
     // tests/approvals/arc4-struct.algo.ts:10
     // class StructDemo extends Contract {
+    txn OnCompletion
+    intc_1 // NoOp
+    ==
+    txn ApplicationID
+    intc_1 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_2 // 1
+    return
+
+
+// tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality[routing]() -> void:
+testVectorCreationAndEquality:
+    b testVectorCreationAndEquality_block@0
+
+testVectorCreationAndEquality_block@0:
+    // tests/approvals/arc4-struct.algo.ts:11
+    // public testVectorCreationAndEquality() {
+    callsub tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality
+    intc_2 // 1
+    return
+
+
+// tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors[routing]() -> void:
+addVectors:
+    b addVectors_block@0
+
+addVectors_block@0:
+    // tests/approvals/arc4-struct.algo.ts:19
+    // public addVectors(v1: Vector, v2: Vector) {
     txna ApplicationArgs 1
     dup
     len
@@ -292,107 +168,234 @@ main_mutateVector_route@5:
     txna ApplicationArgs 2
     dup
     len
-    intc_1 // 8
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for Vector
+    callsub tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// tests/approvals/arc4-struct.algo.ts::StructDemo.mutateVector[routing]() -> void:
+mutateVector:
+    b mutateVector_block@0
+
+mutateVector_block@0:
+    // tests/approvals/arc4-struct.algo.ts:26
+    // public mutateVector(v1: Vector, newX: ARC4Uint64, newY: ARC4Uint64): Vector {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 16
+    ==
+    assert // invalid number of bytes for Vector
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     txna ApplicationArgs 3
     dup
     len
-    intc_1 // 8
+    intc_0 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
-    // tests/approvals/arc4-struct.algo.ts:26
-    // public mutateVector(v1: Vector, newX: ARC4Uint64, newY: ARC4Uint64): Vector {
     uncover 2
     uncover 2
     uncover 2
-    callsub mutateVector
+    callsub tests/approvals/arc4-struct.algo.ts::StructDemo.mutateVector
     bytec_1 // 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_2 // 1
-    b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
+    return
 
-main_addVectors_route@4:
-    // tests/approvals/arc4-struct.algo.ts:19
-    // public addVectors(v1: Vector, v2: Vector) {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    // tests/approvals/arc4-struct.algo.ts:10
-    // class StructDemo extends Contract {
+
+// tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading[routing]() -> void:
+implicitCastingAndSpreading:
+    b implicitCastingAndSpreading_block@0
+
+implicitCastingAndSpreading_block@0:
+    // tests/approvals/arc4-struct.algo.ts:32
+    // public implicitCastingAndSpreading(v1: Vector) {
     txna ApplicationArgs 1
     dup
     len
     intc_3 // 16
     ==
     assert // invalid number of bytes for Vector
-    txna ApplicationArgs 2
+    callsub tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading
+    intc_2 // 1
+    return
+
+
+// tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes[routing]() -> void:
+toAndFromBytes:
+    b toAndFromBytes_block@0
+
+toAndFromBytes_block@0:
+    // tests/approvals/arc4-struct.algo.ts:39
+    // public toAndFromBytes(v1: Vector): Vector {
+    txna ApplicationArgs 1
     dup
     len
     intc_3 // 16
     ==
     assert // invalid number of bytes for Vector
-    // tests/approvals/arc4-struct.algo.ts:19
-    // public addVectors(v1: Vector, v2: Vector) {
-    callsub addVectors
+    callsub tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes
     bytec_1 // 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_2 // 1
-    b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
+    return
 
-main_testVectorCreationAndEquality_route@3:
-    // tests/approvals/arc4-struct.algo.ts:11
-    // public testVectorCreationAndEquality() {
-    txn OnCompletion
-    intc_0 // NoOp
+
+// tests/approvals/arc4-struct.algo.ts::StructDemo.toNative[routing]() -> void:
+toNative:
+    b toNative_block@0
+
+toNative_block@0:
+    // tests/approvals/arc4-struct.algo.ts:44
+    // public toNative(v1: Vector) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 16
     ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub testVectorCreationAndEquality
+    assert // invalid number of bytes for Vector
+    callsub tests/approvals/arc4-struct.algo.ts::StructDemo.toNative
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
     intc_2 // 1
-    b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
+    return
 
-main_bare_routing@15:
-    // tests/approvals/arc4-struct.algo.ts:10
-    // class StructDemo extends Contract {
-    txn OnCompletion
-    intc_0 // 0
-    swap
-    match main___algots__.defaultCreate@16
 
-main_switch_case_default@17:
+// tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin[routing]() -> void:
+getPlugin:
+    b getPlugin_block@0
 
-main_switch_case_next@18:
-    b main_after_if_else@19
-
-main___algots__.defaultCreate@16:
-    // tests/approvals/arc4-struct.algo.ts:10
-    // class StructDemo extends Contract {
-    txn ApplicationID
-    intc_0 // 0
+getPlugin_block@0:
+    // tests/approvals/arc4-struct.algo.ts:52
+    // public getPlugin(key: string): PluginInfo {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 1
+    *
+    pushint 2 // 2
+    +
+    dig 1
+    len
     ==
-    assert // can only call when creating
-    callsub __algots__.defaultCreate
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
     intc_2 // 1
-    b main_after_inlined_tests/approvals/arc4-struct.algo.ts::StructDemo.__puya_arc4_router__@20
+    return
+
+
+// tests/approvals/arc4-struct.algo.ts::StructDemo.getMain[routing]() -> void:
+getMain:
+    b getMain_block@0
+
+getMain_block@0:
+    // tests/approvals/arc4-struct.algo.ts:58
+    // public getMain() {
+    callsub tests/approvals/arc4-struct.algo.ts::StructDemo.getMain
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled[routing]() -> void:
+setLastCalled:
+    b setLastCalled_block@0
+
+setLastCalled_block@0:
+    // tests/approvals/arc4-struct.algo.ts:64
+    // public setLastCalled(key: string, index: uint64, lastCalled: uint64) {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 1
+    *
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    uncover 2
+    uncover 2
+    uncover 2
+    callsub tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled
+    intc_2 // 1
+    return
+
+
+// tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin[routing]() -> void:
+setPlugin:
+    b setPlugin_block@0
+
+setPlugin_block@0:
+    // tests/approvals/arc4-struct.algo.ts:68
+    // public setPlugin(key: string) {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 1
+    *
+    pushint 2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin
+    intc_2 // 1
+    return
 
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality() -> void:
-testVectorCreationAndEquality:
+tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality:
+    b tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality_block@0
 
-testVectorCreationAndEquality_block@0:
+tests/approvals/arc4-struct.algo.ts::StructDemo.testVectorCreationAndEquality_block@0:
     // tests/approvals/arc4-struct.algo.ts:12
     // const v1 = new Vector({ x: new ARC4Uint64(0), y: new ARC4Uint64(0) })
     bytec_0 // 0x
@@ -403,16 +406,16 @@ testVectorCreationAndEquality_block@0:
     // tests/approvals/arc4-struct.algo.ts:13
     // log(v1.x)
     dup
-    intc_0 // 0
-    intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    intc_1 // 0
+    intc_0 // 8
+    extract3
     log
     // tests/approvals/arc4-struct.algo.ts:14
     // log(v1.y)
     dup
-    intc_1 // 8
-    dup
-    extract3 // on error: Index access is out of bounds
+    intc_0 // 8
+    intc_0 // 8
+    extract3
     log
     // tests/approvals/arc4-struct.algo.ts:15
     // const v2 = new Vector({ y: new ARC4Uint64(0), x: new ARC4Uint64(0) })
@@ -429,74 +432,74 @@ testVectorCreationAndEquality_block@0:
 
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors(v1: bytes, v2: bytes) -> bytes:
-addVectors:
+tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors:
     // tests/approvals/arc4-struct.algo.ts:19
     // public addVectors(v1: Vector, v2: Vector) {
     proto 2 1
+    b tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors_block@0
 
-addVectors_block@0:
+tests/approvals/arc4-struct.algo.ts::StructDemo.addVectors_block@0:
     // tests/approvals/arc4-struct.algo.ts:21
-    // x: new ARC4Uint64(v1.x.native + v2.x.native),
+    // x: new ARC4Uint64(v1.x.asUint64() + v2.x.asUint64()),
     frame_dig -2
-    intc_0 // 0
-    intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    intc_1 // 0
+    intc_0 // 8
+    extract3
     btoi
     frame_dig -1
-    intc_0 // 0
-    intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    intc_1 // 0
+    intc_0 // 8
+    extract3
     btoi
     +
     itob
     // tests/approvals/arc4-struct.algo.ts:22
-    // y: new ARC4Uint64(v1.y.native + v2.y.native),
+    // y: new ARC4Uint64(v1.y.asUint64() + v2.y.asUint64()),
     frame_dig -2
-    intc_1 // 8
-    dup
-    extract3 // on error: Index access is out of bounds
+    intc_0 // 8
+    intc_0 // 8
+    extract3
     btoi
     frame_dig -1
-    intc_1 // 8
-    dup
-    extract3 // on error: Index access is out of bounds
+    intc_0 // 8
+    intc_0 // 8
+    extract3
     btoi
     +
     itob
     // tests/approvals/arc4-struct.algo.ts:20-23
     // return new Vector({
-    //   x: new ARC4Uint64(v1.x.native + v2.x.native),
-    //   y: new ARC4Uint64(v1.y.native + v2.y.native),
+    //   x: new ARC4Uint64(v1.x.asUint64() + v2.x.asUint64()),
+    //   y: new ARC4Uint64(v1.y.asUint64() + v2.y.asUint64()),
     // })
     bytec_0 // 0x
     uncover 2
     concat
-    swap
+    uncover 1
     concat
     retsub
 
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.mutateVector(v1: bytes, newX: bytes, newY: bytes) -> bytes:
-mutateVector:
+tests/approvals/arc4-struct.algo.ts::StructDemo.mutateVector:
     // tests/approvals/arc4-struct.algo.ts:26
     // public mutateVector(v1: Vector, newX: ARC4Uint64, newY: ARC4Uint64): Vector {
     proto 3 1
+    b tests/approvals/arc4-struct.algo.ts::StructDemo.mutateVector_block@0
 
-mutateVector_block@0:
+tests/approvals/arc4-struct.algo.ts::StructDemo.mutateVector_block@0:
     // tests/approvals/arc4-struct.algo.ts:27
     // v1.x = newX
-    frame_dig -2
     frame_dig -3
-    intc_0 // 0
-    uncover 2
+    intc_1 // 0
+    frame_dig -2
     replace3
+    dup
     frame_bury -3
     // tests/approvals/arc4-struct.algo.ts:28
     // v1.y = newY
+    intc_0 // 8
     frame_dig -1
-    frame_dig -3
-    intc_1 // 8
-    uncover 2
     replace3
     dup
     frame_bury -3
@@ -506,42 +509,43 @@ mutateVector_block@0:
 
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading(v1: bytes) -> void:
-implicitCastingAndSpreading:
+tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading:
     // tests/approvals/arc4-struct.algo.ts:32
     // public implicitCastingAndSpreading(v1: Vector) {
     proto 1 0
+    b tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading_block@0
 
-implicitCastingAndSpreading_block@0:
+tests/approvals/arc4-struct.algo.ts::StructDemo.implicitCastingAndSpreading_block@0:
     // tests/approvals/arc4-struct.algo.ts:33
     // const v2 = new Vector(v1)
     frame_dig -1
-    intc_0 // 0
-    intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    intc_1 // 0
+    intc_0 // 8
+    extract3
     frame_dig -1
-    intc_1 // 8
-    dup
-    extract3 // on error: Index access is out of bounds
+    intc_0 // 8
+    intc_0 // 8
+    extract3
     bytec_0 // 0x
     uncover 2
     concat
-    swap
+    uncover 1
     concat
     // tests/approvals/arc4-struct.algo.ts:34
     // const v3 = new Vector({ ...v2 })
     dup
-    intc_0 // 0
-    intc_1 // 8
-    extract3 // on error: Index access is out of bounds
-    swap
+    intc_1 // 0
+    intc_0 // 8
+    extract3
+    cover 1
     dup
-    intc_1 // 8
-    dup
-    extract3 // on error: Index access is out of bounds
+    intc_0 // 8
+    intc_0 // 8
+    extract3
     bytec_0 // 0x
     uncover 3
     concat
-    swap
+    uncover 1
     concat
     // tests/approvals/arc4-struct.algo.ts:35
     // assert(v1.bytes === v2.bytes)
@@ -558,69 +562,60 @@ implicitCastingAndSpreading_block@0:
 
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes(v1: bytes) -> bytes:
-toAndFromBytes:
+tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes:
     // tests/approvals/arc4-struct.algo.ts:39
     // public toAndFromBytes(v1: Vector): Vector {
     proto 1 1
+    b tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes_block@0
 
-toAndFromBytes_block@0:
+tests/approvals/arc4-struct.algo.ts::StructDemo.toAndFromBytes_block@0:
     // tests/approvals/arc4-struct.algo.ts:40
     // const v1_bytes = v1.bytes
     frame_dig -1
     // tests/approvals/arc4-struct.algo.ts:41
-    // return interpretAsArc4<Vector>(v1_bytes)
-    dup
-    len
-    intc_3 // 16
-    ==
-    assert // invalid number of bytes for Vector
+    // return convertBytes<Vector>(v1_bytes, { strategy: 'unsafe-cast' })
     retsub
 
 
-// tests/approvals/arc4-struct.algo.ts::StructDemo.toNative(v1: bytes) -> bytes, bytes:
-toNative:
+// tests/approvals/arc4-struct.algo.ts::StructDemo.toNative(v1: bytes) -> bytes:
+tests/approvals/arc4-struct.algo.ts::StructDemo.toNative:
     // tests/approvals/arc4-struct.algo.ts:44
     // public toNative(v1: Vector) {
-    proto 1 2
+    proto 1 1
+    b tests/approvals/arc4-struct.algo.ts::StructDemo.toNative_block@0
 
-toNative_block@0:
+tests/approvals/arc4-struct.algo.ts::StructDemo.toNative_block@0:
     // tests/approvals/arc4-struct.algo.ts:45
     // return v1.native
     frame_dig -1
-    intc_0 // 0
-    intc_1 // 8
-    extract3 // on error: Index access is out of bounds
-    frame_dig -1
-    intc_1 // 8
-    dup
-    extract3 // on error: Index access is out of bounds
     retsub
 
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin(key: bytes) -> bytes:
-getPlugin:
+tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin:
     // tests/approvals/arc4-struct.algo.ts:52
     // public getPlugin(key: string): PluginInfo {
     proto 1 1
+    b tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin_block@0
 
-getPlugin_block@0:
+tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin_block@0:
     // tests/approvals/arc4-struct.algo.ts:48
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
     bytec_3 // "plugins"
     frame_dig -1
     concat
     // tests/approvals/arc4-struct.algo.ts:53
-    // const value = this.plugins(key).value.copy()
+    // const value = clone(this.plugins(key).value)
     box_get
     assert // Box must have value
     // tests/approvals/arc4-struct.algo.ts:54
-    // assert(value.lastCalled.native > 0, 'Last called not zero')
+    // assert(value.lastCalled.asUint64() > 0, 'Last called not zero')
     dup
     intc_3 // 16
-    intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    intc_0 // 8
+    extract3
     btoi
-    intc_0 // 0
+    intc_1 // 0
     >
     assert // Last called not zero
     // tests/approvals/arc4-struct.algo.ts:55
@@ -629,24 +624,25 @@ getPlugin_block@0:
 
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.getMain() -> bytes:
-getMain:
+tests/approvals/arc4-struct.algo.ts::StructDemo.getMain:
+    b tests/approvals/arc4-struct.algo.ts::StructDemo.getMain_block@0
 
-getMain_block@0:
+tests/approvals/arc4-struct.algo.ts::StructDemo.getMain_block@0:
     // tests/approvals/arc4-struct.algo.ts:50
     // plugin = Box<PluginInfo>({ key: 'main' })
     pushbytes "main"
     // tests/approvals/arc4-struct.algo.ts:59
-    // const value = this.plugin.value.copy()
+    // const value = clone(this.plugin.value)
     box_get
     assert // Box must have value
     // tests/approvals/arc4-struct.algo.ts:60
-    // assert(value.lastCalled.native > 0, 'Last called not zero')
+    // assert(value.lastCalled.asUint64() > 0, 'Last called not zero')
     dup
     intc_3 // 16
-    intc_1 // 8
-    extract3 // on error: Index access is out of bounds
+    intc_0 // 8
+    extract3
     btoi
-    intc_0 // 0
+    intc_1 // 0
     >
     assert // Last called not zero
     // tests/approvals/arc4-struct.algo.ts:61
@@ -655,14 +651,15 @@ getMain_block@0:
 
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled(key: bytes, index: uint64, lastCalled: uint64) -> void:
-setLastCalled:
+tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled:
     // tests/approvals/arc4-struct.algo.ts:64
     // public setLastCalled(key: string, index: uint64, lastCalled: uint64) {
     proto 3 0
+    b tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled_block@0
 
-setLastCalled_block@0:
+tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled_block@0:
     // tests/approvals/arc4-struct.algo.ts:65
-    // this.plugins(key).value.methods[index].lastCalled = new arc4.UintN64(lastCalled)
+    // this.plugins(key).value.methods[index].lastCalled = new arc4.Uint64(lastCalled)
     frame_dig -1
     itob
     // tests/approvals/arc4-struct.algo.ts:48
@@ -671,55 +668,53 @@ setLastCalled_block@0:
     frame_dig -3
     concat
     // tests/approvals/arc4-struct.algo.ts:65
-    // this.plugins(key).value.methods[index].lastCalled = new arc4.UintN64(lastCalled)
+    // this.plugins(key).value.methods[index].lastCalled = new arc4.Uint64(lastCalled)
     dup
     box_get
     assert // Box must have value
     dup
     pushint 25 // 25
     extract_uint16
-    swap
+    cover 1
     dup
     len
-    swap
+    cover 1
     dup
     uncover 3
     uncover 3
     substring3
     dup
-    extract 2 0
+    len
+    cover 1
+    dup
+    pushint 2 // 2
+    uncover 3
+    substring3
     frame_dig -2
     pushint 20 // 20
     *
     pushint 20 // 20
-    extract3 // on error: Index access is out of bounds
-    uncover 4
-    swap
+    extract3 // on error: index access is out of bounds
     pushint 12 // 12
-    uncover 2
+    uncover 5
     replace3
-    swap
-    dup
-    intc_0 // 0
-    extract_uint16
-    frame_dig -2
-    >
-    assert // Index access is out of bounds
     frame_dig -2
     pushint 20 // 20
     *
     pushint 2 // 2
     +
     uncover 2
-    replace3
+    uncover 1
+    uncover 2
+    replace3 // on error: index access is out of bounds
     dig 1
     pushint 25 // 25
     extract_uint16
     uncover 2
-    intc_0 // 0
+    intc_1 // 0
     uncover 2
     extract3
-    swap
+    uncover 1
     concat
     dig 1
     box_del
@@ -729,14 +724,21 @@ setLastCalled_block@0:
 
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin(key: bytes) -> void:
-setPlugin:
+tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin:
     // tests/approvals/arc4-struct.algo.ts:68
     // public setPlugin(key: string) {
     proto 1 0
+    b tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin_block@0
 
-setPlugin_block@0:
+tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin_block@0:
+    // tests/approvals/arc4-struct.algo.ts:73
+    // adminPrivileges: new arc4.Bool(false),
+    pushbytes 0x00
+    intc_1 // 0
+    intc_1 // 0
+    setbit
     // tests/approvals/arc4-struct.algo.ts:76
-    // selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
+    // selector: new arc4.StaticBytes(methodSelector('test()void')),
     bytec 5 // method "test()void"
     len
     pushint 4 // 4
@@ -744,147 +746,130 @@ setPlugin_block@0:
     assert // invalid size
     // tests/approvals/arc4-struct.algo.ts:75-79
     // new MethodInfo({
-    //   selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
-    //   cooldown: new arc4.UintN64(1),
-    //   lastCalled: new arc4.UintN64(1),
+    //   selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //   cooldown: new arc4.Uint64(1),
+    //   lastCalled: new arc4.Uint64(1),
     // }),
     bytec_0 // 0x
     // tests/approvals/arc4-struct.algo.ts:76
-    // selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
+    // selector: new arc4.StaticBytes(methodSelector('test()void')),
     bytec 5 // method "test()void"
     // tests/approvals/arc4-struct.algo.ts:75-79
     // new MethodInfo({
-    //   selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
-    //   cooldown: new arc4.UintN64(1),
-    //   lastCalled: new arc4.UintN64(1),
+    //   selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //   cooldown: new arc4.Uint64(1),
+    //   lastCalled: new arc4.Uint64(1),
     // }),
     concat
     // tests/approvals/arc4-struct.algo.ts:77
-    // cooldown: new arc4.UintN64(1),
+    // cooldown: new arc4.Uint64(1),
     bytec 4 // 0x0000000000000001
     // tests/approvals/arc4-struct.algo.ts:75-79
     // new MethodInfo({
-    //   selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
-    //   cooldown: new arc4.UintN64(1),
-    //   lastCalled: new arc4.UintN64(1),
+    //   selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //   cooldown: new arc4.Uint64(1),
+    //   lastCalled: new arc4.Uint64(1),
     // }),
     concat
     // tests/approvals/arc4-struct.algo.ts:78
-    // lastCalled: new arc4.UintN64(1),
+    // lastCalled: new arc4.Uint64(1),
     bytec 4 // 0x0000000000000001
     // tests/approvals/arc4-struct.algo.ts:75-79
     // new MethodInfo({
-    //   selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
-    //   cooldown: new arc4.UintN64(1),
-    //   lastCalled: new arc4.UintN64(1),
+    //   selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //   cooldown: new arc4.Uint64(1),
+    //   lastCalled: new arc4.Uint64(1),
     // }),
     concat
     // tests/approvals/arc4-struct.algo.ts:74-80
     // methods: new arc4.DynamicArray(
     //   new MethodInfo({
-    //     selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
-    //     cooldown: new arc4.UintN64(1),
-    //     lastCalled: new arc4.UintN64(1),
+    //     selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //     cooldown: new arc4.Uint64(1),
+    //     lastCalled: new arc4.Uint64(1),
     //   }),
     // ),
-    bytec_0 // 0x
-    swap
-    concat
-    pushbytes 0x0001
-    swap
+    intc_2 // 1
+    itob
+    extract 6 2
+    uncover 1
     concat
     // tests/approvals/arc4-struct.algo.ts:69-81
     // this.plugins(key).value = new PluginInfo({
-    //   lastValidRound: new arc4.UintN64(1),
-    //   cooldown: new arc4.UintN64(),
-    //   lastCalled: new arc4.UintN64(),
+    //   lastValidRound: new arc4.Uint64(1),
+    //   cooldown: new arc4.Uint64(),
+    //   lastCalled: new arc4.Uint64(),
     //   adminPrivileges: new arc4.Bool(false),
     //   methods: new arc4.DynamicArray(
     //     new MethodInfo({
-    //       selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
-    //       cooldown: new arc4.UintN64(1),
-    //       lastCalled: new arc4.UintN64(1),
+    //       selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //       cooldown: new arc4.Uint64(1),
+    //       lastCalled: new arc4.Uint64(1),
     //     }),
     //   ),
     // })
     bytec_0 // 0x
     // tests/approvals/arc4-struct.algo.ts:70
-    // lastValidRound: new arc4.UintN64(1),
+    // lastValidRound: new arc4.Uint64(1),
     bytec 4 // 0x0000000000000001
     // tests/approvals/arc4-struct.algo.ts:69-81
     // this.plugins(key).value = new PluginInfo({
-    //   lastValidRound: new arc4.UintN64(1),
-    //   cooldown: new arc4.UintN64(),
-    //   lastCalled: new arc4.UintN64(),
+    //   lastValidRound: new arc4.Uint64(1),
+    //   cooldown: new arc4.Uint64(),
+    //   lastCalled: new arc4.Uint64(),
     //   adminPrivileges: new arc4.Bool(false),
     //   methods: new arc4.DynamicArray(
     //     new MethodInfo({
-    //       selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
-    //       cooldown: new arc4.UintN64(1),
-    //       lastCalled: new arc4.UintN64(1),
+    //       selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //       cooldown: new arc4.Uint64(1),
+    //       lastCalled: new arc4.Uint64(1),
     //     }),
     //   ),
     // })
     concat
     // tests/approvals/arc4-struct.algo.ts:71
-    // cooldown: new arc4.UintN64(),
+    // cooldown: new arc4.Uint64(),
     bytec_2 // 0x0000000000000000
     // tests/approvals/arc4-struct.algo.ts:69-81
     // this.plugins(key).value = new PluginInfo({
-    //   lastValidRound: new arc4.UintN64(1),
-    //   cooldown: new arc4.UintN64(),
-    //   lastCalled: new arc4.UintN64(),
+    //   lastValidRound: new arc4.Uint64(1),
+    //   cooldown: new arc4.Uint64(),
+    //   lastCalled: new arc4.Uint64(),
     //   adminPrivileges: new arc4.Bool(false),
     //   methods: new arc4.DynamicArray(
     //     new MethodInfo({
-    //       selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
-    //       cooldown: new arc4.UintN64(1),
-    //       lastCalled: new arc4.UintN64(1),
+    //       selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //       cooldown: new arc4.Uint64(1),
+    //       lastCalled: new arc4.Uint64(1),
     //     }),
     //   ),
     // })
     concat
     // tests/approvals/arc4-struct.algo.ts:72
-    // lastCalled: new arc4.UintN64(),
+    // lastCalled: new arc4.Uint64(),
     bytec_2 // 0x0000000000000000
     // tests/approvals/arc4-struct.algo.ts:69-81
     // this.plugins(key).value = new PluginInfo({
-    //   lastValidRound: new arc4.UintN64(1),
-    //   cooldown: new arc4.UintN64(),
-    //   lastCalled: new arc4.UintN64(),
+    //   lastValidRound: new arc4.Uint64(1),
+    //   cooldown: new arc4.Uint64(),
+    //   lastCalled: new arc4.Uint64(),
     //   adminPrivileges: new arc4.Bool(false),
     //   methods: new arc4.DynamicArray(
     //     new MethodInfo({
-    //       selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
-    //       cooldown: new arc4.UintN64(1),
-    //       lastCalled: new arc4.UintN64(1),
+    //       selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //       cooldown: new arc4.Uint64(1),
+    //       lastCalled: new arc4.Uint64(1),
     //     }),
     //   ),
     // })
     concat
-    // tests/approvals/arc4-struct.algo.ts:73
-    // adminPrivileges: new arc4.Bool(false),
-    pushbytes 0x00
-    // tests/approvals/arc4-struct.algo.ts:69-81
-    // this.plugins(key).value = new PluginInfo({
-    //   lastValidRound: new arc4.UintN64(1),
-    //   cooldown: new arc4.UintN64(),
-    //   lastCalled: new arc4.UintN64(),
-    //   adminPrivileges: new arc4.Bool(false),
-    //   methods: new arc4.DynamicArray(
-    //     new MethodInfo({
-    //       selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
-    //       cooldown: new arc4.UintN64(1),
-    //       lastCalled: new arc4.UintN64(1),
-    //     }),
-    //   ),
-    // })
+    uncover 2
     concat
     pushint 27 // 27
     itob
     extract 6 2
     concat
-    swap
+    uncover 1
     concat
     // tests/approvals/arc4-struct.algo.ts:48
     // plugins = BoxMap<string, PluginInfo>({ keyPrefix: 'plugins' })
@@ -893,28 +878,29 @@ setPlugin_block@0:
     concat
     // tests/approvals/arc4-struct.algo.ts:69-81
     // this.plugins(key).value = new PluginInfo({
-    //   lastValidRound: new arc4.UintN64(1),
-    //   cooldown: new arc4.UintN64(),
-    //   lastCalled: new arc4.UintN64(),
+    //   lastValidRound: new arc4.Uint64(1),
+    //   cooldown: new arc4.Uint64(),
+    //   lastCalled: new arc4.Uint64(),
     //   adminPrivileges: new arc4.Bool(false),
     //   methods: new arc4.DynamicArray(
     //     new MethodInfo({
-    //       selector: new arc4.StaticBytes<4>(methodSelector('test()void')),
-    //       cooldown: new arc4.UintN64(1),
-    //       lastCalled: new arc4.UintN64(1),
+    //       selector: new arc4.StaticBytes(methodSelector('test()void')),
+    //       cooldown: new arc4.Uint64(1),
+    //       lastCalled: new arc4.Uint64(1),
     //     }),
     //   ),
     // })
     dup
     box_del
     pop
-    swap
+    uncover 1
     box_put
     retsub
 
 
 // tests/approvals/arc4-struct.algo.ts::StructDemo.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
 
 __algots__.defaultCreate_block@0:
     retsub

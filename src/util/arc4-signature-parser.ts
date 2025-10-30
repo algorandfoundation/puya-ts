@@ -1,4 +1,19 @@
+import type { Parser } from 'arcsecond'
 import * as A from 'arcsecond'
+import type { ABICompatiblePType, PType } from '../awst_build/ptypes'
+import {
+  accountPType,
+  anyGtxnType,
+  applicationCallGtxnType,
+  applicationPType,
+  assetConfigGtxnType,
+  assetFreezeGtxnType,
+  assetPType,
+  assetTransferGtxnType,
+  keyRegistrationGtxnType,
+  paymentGtxnType,
+  voidPType,
+} from '../awst_build/ptypes'
 import * as arc4Types from '../awst_build/ptypes/arc4-types'
 
 const peek = A.lookAhead(A.regex(/^./))
@@ -8,7 +23,9 @@ const integer = A.regex(/^\d+/).map((x) => BigInt(x))
 const uint = A.sequenceOf([A.str('uint'), integer]).map(([_, n]) => new arc4Types.UintNType({ n: n }))
 const ufixed = A.sequenceOf([A.str('ufixed'), integer, A.char('x'), integer]).map(([_, n, __, m]) => new arc4Types.UFixedNxMType({ n, m }))
 
-const simpleType = (name: string, ptype: arc4Types.ARC4EncodedType) => A.str(name).map(() => ptype)
+const simpleType = <T extends PType>(name: string, ptype: T) => A.str(name).map(() => ptype)
+
+const methodName = A.regex(/^[^ (]+/)
 
 const scalarType = A.choice([
   uint,
@@ -17,9 +34,21 @@ const scalarType = A.choice([
   simpleType('string', arc4Types.arc4StringType),
   simpleType('bool', arc4Types.arc4BooleanType),
   simpleType('address', arc4Types.arc4AddressAlias),
-  simpleType('account', new arc4Types.UintNType({ n: 8n })),
-  simpleType('asset', new arc4Types.UintNType({ n: 8n })),
-  simpleType('application', new arc4Types.UintNType({ n: 8n })),
+])
+
+const resourceTypes = A.choice([
+  simpleType('account', accountPType),
+  simpleType('asset', assetPType),
+  simpleType('application', applicationPType),
+])
+const txnTypes = A.choice([
+  simpleType('txn', anyGtxnType),
+  simpleType('appl', applicationCallGtxnType),
+  simpleType('acfg', assetConfigGtxnType),
+  simpleType('axfer', assetTransferGtxnType),
+  simpleType('afrz', assetFreezeGtxnType),
+  simpleType('keyreg', keyRegistrationGtxnType),
+  simpleType('pay', paymentGtxnType),
 ])
 
 class TypeBuilder {
@@ -45,11 +74,17 @@ class TypeBuilder {
     this.workingSet.push(tupleType)
   }
 
-  get result() {
+  get result(): arc4Types.ARC4EncodedType {
     if (this.#stack.length > 1) {
       throw new Error(`Tuple has not been closed`)
     }
-    return this.workingSet
+    if (this.workingSet.length === 0) {
+      throw new Error('Sequence contained no types')
+    }
+    if (this.workingSet.length !== 1) {
+      throw new Error(`Sequence contained more than one type`)
+    }
+    return this.workingSet[0]
   }
 
   push(ptype: arc4Types.ARC4EncodedType) {
@@ -65,7 +100,7 @@ class TypeBuilder {
   }
 }
 
-const arc4Type = A.coroutine((parse) => {
+const arc4Type = A.coroutine<arc4Types.ARC4EncodedType>((parse) => {
   try {
     enum States {
       BeginTuple,
@@ -124,24 +159,63 @@ const arc4Type = A.coroutine((parse) => {
         }
         case States.AfterType: {
           switch (next) {
-            case ',':
-              parse(A.char(','))
-              state = States.TypeOrBeginTuple
-              continue
             case '[':
               state = States.ArrayBrackets
               continue
             case ')':
-              state = States.EndTuple
-              continue
-            default:
-              // Parse the next char rather than just peeking at it so the fail below happens at the right position
-              parse(A.anyChar)
-              parse(A.fail(`Expecting ',', '[', or ')', but got ${next}`))
+              if (typeBuilder.hasOpenTuple) {
+                state = States.EndTuple
+                continue
+              }
+              break
+            case ',':
+              if (typeBuilder.hasOpenTuple) {
+                parse(A.char(','))
+                state = States.TypeOrBeginTuple
+                continue
+              }
+              break
           }
+          return typeBuilder.result
         }
       }
     }
+  } catch (e) {
+    if (e instanceof Error) {
+      return parse(A.fail(e.message))
+    } else {
+      throw e
+    }
+  }
+})
+const voidType = simpleType('void', voidPType)
+const abiReturn = A.choice([voidType, arc4Type]).errorMap(updateErrorMessage('ABI return type'))
+const abiParam = A.choice([resourceTypes, txnTypes, arc4Type]).errorMap(updateErrorMessage('ABI parameter type'))
+
+type ARC4MethodSignature = { name: string; parameters: ABICompatiblePType[]; returnType: ABICompatiblePType }
+
+const arc4Method = A.coroutine<ARC4MethodSignature>((parse) => {
+  try {
+    const name = parse(methodName)
+    parse(A.str('('))
+    const parameters: ABICompatiblePType[] = []
+    while (true) {
+      const peekNext = parse(A.possibly(peek))
+      if (peekNext !== ')') {
+        parameters.push(parse(abiParam))
+      }
+      const readNext = parse(A.choice([A.char(')'), A.char(',')]))
+      if (readNext === ')') {
+        break
+      }
+    }
+
+    const returnType = parse(abiReturn)
+    return {
+      name,
+      parameters,
+      returnType,
+    } satisfies ARC4MethodSignature
   } catch (e) {
     if (e instanceof Error) {
       return parse(A.fail(e.message))
@@ -159,18 +233,44 @@ export class Arc4ParseError extends Error {
     super(message)
   }
 }
-export const parseArc4Type = (signature: string): arc4Types.ARC4EncodedType => {
-  const parseResult = arc4Type.run(signature)
-  if (parseResult.isError) {
-    const maybeErrorMessage = /^ParseError \(position \d+\): (.*)/.exec(parseResult.error)
-    const message = maybeErrorMessage ? maybeErrorMessage[1] : parseResult.error
-    throw new Arc4ParseError(message, parseResult.index)
-  } else {
-    if (parseResult.result.length === 0) {
-      throw new Arc4ParseError('Signature contained no types', 0)
-    } else if (parseResult.result.length > 1) {
-      throw new Arc4ParseError('Signature contained more than one type. Wrap multiple types in parentheses to declare a tuple type', 0)
-    }
-    return parseResult.result[0]
+
+const parseError = A.sequenceOf([
+  A.str('ParseError '),
+  A.possibly(A.regex(/^'[^']+' /)),
+  A.sequenceOf([A.str('(position '), A.digits, A.str('): ')]),
+  A.many(A.anyCharExcept(A.char(','))).map((chars) => chars.join('')),
+  A.str(', '),
+  A.many(A.anyChar).map((chars) => chars.join('')),
+]).map((parts) => ({
+  expectedMessage: parts[3],
+  butGotMessage: parts[5],
+}))
+
+function updateErrorMessage(expectedEntity: string) {
+  return <D>(error: A.Err<string, D>) => {
+    // Error message will generally look like
+    // ParserError (position 5): Expected string 'example', but got ...
+    return parseError.fork(
+      error.error,
+      () => error.error,
+      (match) => `Expected ${expectedEntity}, ${match.butGotMessage}`,
+    )
   }
 }
+
+function createParserFunction<T>(parser: Parser<T>): (text: string) => T {
+  return (text) => {
+    const parseResult = parser.run(text)
+    if (parseResult.isError) {
+      const maybeErrorMessage = /^ParseError ('[^']+' )?\(position \d+\): (.*)/.exec(parseResult.error)
+      const message = maybeErrorMessage ? maybeErrorMessage[2] : parseResult.error
+      throw new Arc4ParseError(message, parseResult.index)
+    } else {
+      return parseResult.result
+    }
+  }
+}
+
+export const parseArc4Type = createParserFunction<arc4Types.ARC4EncodedType>(A.sequenceOf([arc4Type, A.endOfInput]).map(([t]) => t))
+
+export const parseArc4Method = createParserFunction<ARC4MethodSignature>(A.sequenceOf([arc4Method, A.endOfInput]).map(([t]) => t))

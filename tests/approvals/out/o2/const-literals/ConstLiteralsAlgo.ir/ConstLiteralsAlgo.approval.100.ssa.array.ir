@@ -1,0 +1,72 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        goto tmp%0#1 ? block@2 : block@13
+    block@2: // abi_routing_L15
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        (assert tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "test()uint64" => block@4, method "test2()uint64" => block@5, method "test3()uint64" => block@6, method "test4()uint64" => block@7, method "test5()uint512" => block@8, method "test6()uint512" => block@9, * => block@12}
+    block@4: // test_route_L16
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob 123u)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%1#6: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%2#6: bytes = (concat 0x151f7c75 tmp%1#6)
+        (log tmp%2#6)
+        exit 1u
+    block@5: // test2_route_L20
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob 4u)
+        let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
+        let tmp%1#5: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
+        let tmp%2#5: bytes = (concat 0x151f7c75 tmp%1#5)
+        (log tmp%2#5)
+        exit 1u
+    block@6: // test3_route_L25
+        let aggregate%val_as_bytes%2#0: bytes[8] = (itob 12u)
+        let aggregate%as_Encoded(uint64)%2#0: Encoded(uint64) = aggregate%val_as_bytes%2#0
+        let tmp%1#4: Encoded(uint64) = aggregate%as_Encoded(uint64)%2#0
+        let tmp%2#4: bytes = (concat 0x151f7c75 tmp%1#4)
+        (log tmp%2#4)
+        exit 1u
+    block@7: // test4_route_L32
+        let aggregate%val_as_bytes%3#0: bytes[8] = (itob 9223372036854775808u)
+        let aggregate%as_Encoded(uint64)%3#0: Encoded(uint64) = aggregate%val_as_bytes%3#0
+        let tmp%1#3: Encoded(uint64) = aggregate%as_Encoded(uint64)%3#0
+        let tmp%2#3: bytes = (concat 0x151f7c75 tmp%1#3)
+        (log tmp%2#3)
+        exit 1u
+    block@8: // test5_route_L37
+        let aggregate%value_len%0#0: uint64 = (len 340282366920938463463374607431768211456b)
+        let aggregate%len_ok%0#0: bool = (<= aggregate%value_len%0#0 64u)
+        (assert aggregate%len_ok%0#0) // overflow
+        let aggregate%bzero%0#0: bytes = (bzero 64u)
+        let aggregate%arc4_encoded%0#0: bytes[64] = (b| 340282366920938463463374607431768211456b aggregate%bzero%0#0)
+        let aggregate%as_Encoded(uint512)%0#0: Encoded(uint512) = aggregate%arc4_encoded%0#0
+        let tmp%1#2: Encoded(uint512) = aggregate%as_Encoded(uint512)%0#0
+        let tmp%2#2: bytes = (concat 0x151f7c75 tmp%1#2)
+        (log tmp%2#2)
+        exit 1u
+    block@9: // test6_route_L41
+        let aggregate%value_len%1#0: uint64 = (len 115792089237316195423570985008687907853269984665640564039457584007913129639936b)
+        let aggregate%len_ok%1#0: bool = (<= aggregate%value_len%1#0 64u)
+        (assert aggregate%len_ok%1#0) // overflow
+        let aggregate%bzero%1#0: bytes = (bzero 64u)
+        let aggregate%arc4_encoded%1#0: bytes[64] = (b| 115792089237316195423570985008687907853269984665640564039457584007913129639936b aggregate%bzero%1#0)
+        let aggregate%as_Encoded(uint512)%1#0: Encoded(uint512) = aggregate%arc4_encoded%1#0
+        let tmp%1#1: Encoded(uint512) = aggregate%as_Encoded(uint512)%1#0
+        let tmp%2#1: bytes = (concat 0x151f7c75 tmp%1#1)
+        (log tmp%2#1)
+        exit 1u
+    block@12: // after_if_else_L15
+        fail
+    block@13: // __algots__.defaultCreate_L15
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (! tmp%9#0)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u

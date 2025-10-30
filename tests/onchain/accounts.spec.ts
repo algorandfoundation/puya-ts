@@ -3,7 +3,7 @@ import { describe } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('accounts', () => {
-  const test = createArc4TestFixture('tests/approvals/accounts.algo.ts', { AccountsContract: {} })
+  const test = createArc4TestFixture({ path: 'tests/approvals/accounts.algo.ts', contracts: { AccountsContract: {} } })
 
   test('returns account data', async ({ appClientAccountsContract: appClient, expect, assetFactory, testAccount }) => {
     const asset = await assetFactory({ assetName: 'Asset 1', sender: testAccount.addr, total: 1n })
@@ -32,7 +32,7 @@ describe('accounts', () => {
       isOptInAsset: boolean
     }
 
-    expect(returnValue.authAddress).toStrictEqual(new Array(32).fill(0))
+    expect(returnValue.authAddress).toStrictEqual(new Uint8Array(32))
     expect(returnValue.totalAppsCreated).toBeGreaterThan(0n)
   })
 })

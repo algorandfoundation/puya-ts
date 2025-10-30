@@ -37,8 +37,6 @@
         },
         "wtype": {
           "_type": "BytesWType",
-          "name": "bytes",
-          "immutable": true,
           "length": null
         }
       }
@@ -173,8 +171,6 @@
             },
             "wtype": {
               "_type": "BytesWType",
-              "name": "bytes",
-              "immutable": true,
               "length": null
             },
             "name": "y"
@@ -190,8 +186,6 @@
             },
             "wtype": {
               "_type": "BytesWType",
-              "name": "bytes",
-              "immutable": true,
               "length": null
             },
             "op_code": "setbit",
@@ -208,8 +202,6 @@
                 },
                 "wtype": {
                   "_type": "BytesWType",
-                  "name": "bytes",
-                  "immutable": true,
                   "length": null
                 },
                 "name": "b"
@@ -271,9 +263,7 @@
             },
             "wtype": {
               "_type": "BytesWType",
-              "name": "bytes",
-              "immutable": true,
-              "length": null
+              "length": 8
             },
             "name": "z"
           },
@@ -288,9 +278,7 @@
             },
             "wtype": {
               "_type": "BytesWType",
-              "name": "bytes",
-              "immutable": true,
-              "length": null
+              "length": 8
             },
             "op_code": "itob",
             "immediates": [],
@@ -334,9 +322,7 @@
             },
             "wtype": {
               "_type": "BytesWType",
-              "name": "bytes",
-              "immutable": true,
-              "length": null
+              "length": 32
             },
             "name": "g"
           },
@@ -351,15 +337,13 @@
             },
             "wtype": {
               "_type": "BytesWType",
-              "name": "bytes",
-              "immutable": true,
-              "length": null
+              "length": 32
             },
             "op_code": "sha256",
             "immediates": [],
             "stack_args": [
               {
-                "_type": "VarExpression",
+                "_type": "ReinterpretCast",
                 "source_location": {
                   "file": "tests/approvals/intrinsic-calls.algo.ts",
                   "line": 10,
@@ -369,11 +353,23 @@
                 },
                 "wtype": {
                   "_type": "BytesWType",
-                  "name": "bytes",
-                  "immutable": true,
                   "length": null
                 },
-                "name": "z"
+                "expr": {
+                  "_type": "VarExpression",
+                  "source_location": {
+                    "file": "tests/approvals/intrinsic-calls.algo.ts",
+                    "line": 10,
+                    "end_line": 10,
+                    "column": 19,
+                    "end_column": 20
+                  },
+                  "wtype": {
+                    "_type": "BytesWType",
+                    "length": 8
+                  },
+                  "name": "z"
+                }
               }
             ]
           }
@@ -389,6 +385,7 @@
       "returns": null
     },
     "inline": null,
+    "pure": false,
     "id": "tests/approvals/intrinsic-calls.algo.ts::test",
     "name": "test"
   }

@@ -1,21 +1,32 @@
 import ts from 'typescript'
-import { invariant, normalisePath } from '../util'
+import { invariant } from '../util'
+import { AbsolutePath } from '../util/absolute-path'
 
-export class SourceLocation {
-  file: string | null
+export class SourceLocation<TNode extends ts.Node | undefined = ts.Node | undefined> {
+  file: AbsolutePath | null
   line: number
   endLine: number
   column: number
   endColumn: number
   scope: 'file' | 'range'
+  node: TNode
+
+  /**
+   * Asserts this source location has a node and returns source location with updated typing
+   */
+  withNode(): SourceLocation<ts.Node> {
+    invariant(this.node, 'Source location must have node', this)
+    return this as SourceLocation<ts.Node>
+  }
 
   constructor(props: {
-    file?: string | null
+    file?: AbsolutePath | null
     line: number
     endLine: number
     column: number
     endColumn: number
     scope: SourceLocation['scope']
+    node: TNode
   }) {
     invariant(props.line <= props.endLine, 'Start line must be before end line')
     if (props.line === props.endLine) invariant(props.column <= props.endColumn, 'Start column must be before end column')
@@ -25,9 +36,13 @@ export class SourceLocation {
     this.column = props.column
     this.endColumn = props.endColumn
     this.scope = props.scope
+    this.node = props.node
 
     // Exclude scope from enumerable properties so it doesn't end up being serialized
     Object.defineProperty(this, 'scope', {
+      enumerable: false,
+    })
+    Object.defineProperty(this, 'node', {
       enumerable: false,
     })
   }
@@ -52,7 +67,7 @@ export class SourceLocation {
     }
   }
 
-  static fromNode(node: ts.Node, programDirectory: string): SourceLocation {
+  static fromNode<TNode extends ts.Node>(node: TNode, programDirectory: AbsolutePath): SourceLocation<TNode> {
     const sourceFile = node.getSourceFile()
 
     const { start, end } = SourceLocation.getStartAndEnd(node)
@@ -61,74 +76,62 @@ export class SourceLocation {
     const endLoc = sourceFile.getLineAndCharacterOfPosition(end)
 
     return new SourceLocation({
-      file: normalisePath(sourceFile.fileName, programDirectory),
+      file: AbsolutePath.resolve({ path: sourceFile.fileName, workingDirectory: programDirectory }),
       line: startLoc.line + 1,
       endLine: endLoc.line + 1,
       column: startLoc.character,
       endColumn: endLoc.character,
       scope: 'range',
+      node,
     })
   }
 
-  static fromFile(sourceFile: ts.SourceFile, programDirectory: string): SourceLocation {
+  static fromFile(sourceFile: ts.SourceFile, programDirectory: AbsolutePath): SourceLocation {
     const endPos = sourceFile.getEnd()
     const endLoc = sourceFile.getLineAndCharacterOfPosition(endPos)
     return new SourceLocation({
-      file: normalisePath(sourceFile.fileName, programDirectory),
+      file: AbsolutePath.resolve({ path: sourceFile.fileName, workingDirectory: programDirectory }),
       line: 1,
       endLine: endLoc.line + 1,
       column: 0,
       endColumn: endLoc.character,
       scope: 'file',
+      node: undefined,
     })
   }
 
-  static fromTextRange(sourceFile: ts.SourceFile, textRange: ts.TextRange, programDirectory: string): SourceLocation {
+  static fromTextRange(sourceFile: ts.SourceFile, textRange: ts.TextRange, programDirectory: AbsolutePath): SourceLocation {
     const startLoc = sourceFile.getLineAndCharacterOfPosition(textRange.pos)
     const endLoc = sourceFile.getLineAndCharacterOfPosition(textRange.end)
 
     return new SourceLocation({
-      file: normalisePath(sourceFile.fileName, programDirectory),
+      file: AbsolutePath.resolve({ path: sourceFile.fileName, workingDirectory: programDirectory }),
       line: startLoc.line + 1,
       endLine: endLoc.line + 1,
       column: startLoc.character,
       endColumn: endLoc.character,
       scope: 'range',
+      node: undefined,
     })
   }
 
-  static fromDiagnostic(diagnostic: ts.DiagnosticWithLocation, programDirectory: string): SourceLocation {
+  static fromDiagnostic(diagnostic: ts.DiagnosticWithLocation, programDirectory: AbsolutePath): SourceLocation {
     const startLoc = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start)
 
     return new SourceLocation({
-      file: normalisePath(diagnostic.file.fileName, programDirectory),
+      file: AbsolutePath.resolve({ path: diagnostic.file.fileName, workingDirectory: programDirectory }),
       line: startLoc.line + 1,
       endLine: startLoc.line + 1,
       column: startLoc.character,
       endColumn: startLoc.character,
       scope: 'range',
+      node: undefined,
     })
   }
 
-  toString() {
-    return `${this.file}:${this.line}:${this.column + 1}`
-  }
-
-  static fromLocations(...sourceLocation: SourceLocation[]): SourceLocation {
-    const [first, ...rest] = sourceLocation
-    invariant(first && rest.every((r) => r.file === first.file), 'All locations must of the same file')
-    if (rest.length === 0) return first
-    return sourceLocation.reduce((acc, cur) => {
-      return new SourceLocation({
-        file: acc.file,
-        line: Math.min(acc.line, cur.line),
-        endLine: Math.max(acc.endLine, cur.endLine),
-        column: acc.line === cur.line ? Math.min(acc.column, cur.column) : acc.line < cur.line ? acc.column : cur.column,
-        endColumn:
-          acc.endLine === cur.endLine ? Math.max(acc.endColumn, cur.endColumn) : acc.endLine > cur.endLine ? acc.endColumn : cur.endColumn,
-        scope: 'range',
-      })
-    })
+  toString(options?: { pathsRelativeTo?: AbsolutePath }) {
+    const filePath = options?.pathsRelativeTo ? this.file?.relativeTo(options.pathsRelativeTo) : this.file?.toString()
+    return `${filePath}:${this.line}:${this.column + 1}`
   }
 
   static None = new SourceLocation({
@@ -137,6 +140,7 @@ export class SourceLocation {
     column: 0,
     endColumn: 1,
     scope: 'file',
+    node: undefined,
   })
 }
 

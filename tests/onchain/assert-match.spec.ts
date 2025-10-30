@@ -3,7 +3,7 @@ import { describe } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('assert match', () => {
-  const test = createArc4TestFixture('tests/approvals/assert-match.algo.ts', { AssertMatchContract: {} })
+  const test = createArc4TestFixture({ path: 'tests/approvals/assert-match.algo.ts', contracts: { AssertMatchContract: {} } })
 
   test('it can be called', async ({ appClientAssertMatchContract, algorand, testAccount }) => {
     const payment = algorand.createTransaction.payment({

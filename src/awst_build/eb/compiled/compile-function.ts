@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { ContractReference, LogicSigReference } from '../../../awst/models'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
@@ -10,8 +11,8 @@ import {
   compiledLogicSigType,
   compileFunctionType,
   ContractClassPType,
+  isObjectType,
   LogicSigPType,
-  ObjectPType,
   uint64PType,
 } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
@@ -23,7 +24,7 @@ import { parseFunctionArgs } from '../util/arg-parsing'
 export class CompileFunctionBuilder extends FunctionBuilder {
   readonly ptype = compileFunctionType
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [contractOrSig, options],
     } = parseFunctionArgs({
@@ -76,11 +77,7 @@ function parseTemplateVars(options: InstanceBuilder | undefined): { prefix: stri
 
   if (options?.hasProperty(optionsNames.templateVars)) {
     const templateVars = requireInstanceBuilder(options.memberAccess(optionsNames.templateVars, options.sourceLocation))
-    codeInvariant(
-      templateVars.ptype instanceof ObjectPType,
-      `${optionsNames.templateVars} must be an object type`,
-      templateVars.sourceLocation,
-    )
+    codeInvariant(isObjectType(templateVars.ptype), `${optionsNames.templateVars} must be an object type`, templateVars.sourceLocation)
 
     for (const [varName] of templateVars.ptype.orderedProperties()) {
       templateVariables.set(varName, requireInstanceBuilder(templateVars.memberAccess(varName, templateVars.sourceLocation)).resolve())

@@ -61,6 +61,14 @@ export interface ConventionalRouting {
 export type CreateOptions = 'allow' | 'disallow' | 'require'
 
 /**
+ * The possible options for the resource encoding to use for the method
+ *
+ * index: Application, Asset, and Account arguments are included in the transaction's relevant array. The argument value is the uint8 index of the resource in the that array.
+ * value: Application, Asset and Account arguments are passed by their uint64 id (Application and Asset) or bytes[32] address (Account).
+ */
+export type ResourceEncodingOptions = 'index' | 'value'
+
+/**
  * The possible options for validation behaviour for this method
  * args: ABI arguments are validated automatically to ensure they are encoded correctly.
  * unsafe-disabled: No automatic validation occurs. Arguments can instead be validated manually.
@@ -112,6 +120,15 @@ export type AbiMethodConfig<TContract extends Contract> = {
    * Override the name used to generate the abi method selector
    */
   name?: string
+  /**
+   * The resource encoding to use for this method. The default is 'value'
+   *
+   * index: Application, Asset, and Account arguments are included in the transaction's relevant array. The argument value is the uint8 index of the resource in the that array.
+   * value: Application, Asset and Account arguments are passed by their uint64 id (Application and Asset) or bytes[32] address (Account).
+   *
+   * The resource must still be 'available' to this transaction but can take advantage of resource sharing within the transaction group.
+   */
+  resourceEncoding?: ResourceEncodingOptions
 
   /**
    * Controls validation behaviour for this method.
@@ -142,6 +159,18 @@ export function abimethod<TContract extends Contract>(config?: AbiMethodConfig<T
   ): (this: TContract, ...args: TArgs) => TReturn {
     throw new NoImplementation()
   }
+}
+/**
+ * Declares this abi method does not mutate chain state and can be called using a simulate call to the same effect.
+ *
+ * Shorthand for `@abimethod({readonly: true})`
+ * @typeParam TContract the type of the contract this method is a part of
+ */
+export function readonly<TContract extends Contract, TArgs extends DeliberateAny[], TReturn>(
+  target: (this: TContract, ...args: TArgs) => TReturn,
+  ctx: ClassMethodDecoratorContext<TContract>,
+): (this: TContract, ...args: TArgs) => TReturn {
+  throw new NoImplementation()
 }
 
 /**
@@ -179,24 +208,31 @@ export function baremethod<TContract extends Contract>(config?: BareMethodConfig
  * @param methodSignature An ARC4 contract method reference. (Eg. `MyContract.prototype.myMethod`)
  * @returns The ARC4 method selector. Eg. `02BECE11`
  */
-export function methodSelector(methodSignature: InstanceMethod<Contract>): bytes
+export function methodSelector(methodSignature: InstanceMethod<Contract>): bytes<4>
 /**
  * Returns the ARC4 method selector for a given ARC4 method signature. The method selector is the first
  * 4 bytes of the SHA512/256 hash of the method signature.
  * @param methodSignature An ARC4 method signature string (Eg. `hello(string)string`.  Must be a compile time constant)
  * @returns The ARC4 method selector. Eg. `02BECE11`
  */
-export function methodSelector(methodSignature: string): bytes
-export function methodSelector(methodSignature: string | InstanceMethod<Contract>): bytes {
+export function methodSelector(methodSignature: string): bytes<4>
+export function methodSelector(methodSignature: string | InstanceMethod<Contract>): bytes<4> {
   throw new NoImplementation()
 }
 
 /**
- * Interpret the provided bytes as an ARC4 encoded type with no validation
+ * Interpret the provided bytes as an ARC4 encoded type
  * @param bytes An arc4 encoded bytes value
- * @param prefix The prefix (if any), present in the bytes value. This prefix will be validated and removed
+ * @param options Options for how the bytes should be converted
+ * @param options.prefix The prefix (if any), present in the bytes value. This prefix will be validated and removed
+ * @param options.strategy The strategy used for converting bytes.
+ *         `unsafe-cast`: Reinterpret the value as an ARC4 encoded type without validation
+ *         `validate`: Asserts the encoding of the raw bytes matches the expected type
  */
-export function interpretAsArc4<T extends ARC4Encoded>(bytes: BytesCompat, prefix: 'none' | 'log' = 'none'): T {
+export function convertBytes<T extends ARC4Encoded>(
+  bytes: BytesCompat,
+  options: { prefix?: 'none' | 'log'; strategy: 'unsafe-cast' | 'validate' },
+): T {
   throw new NoImplementation()
 }
 
@@ -218,11 +254,11 @@ export function encodeArc4<const T>(value: T): bytes {
 }
 
 /**
- * Return the total number of bytes required to store T as ARC4 bytes.
+ * Return the total number of bytes required to store T as bytes.
  *
  * T must represent a type with a fixed length encoding scheme.
  * @typeParam T Any native or arc4 type with a fixed encoding size.
  */
-export function arc4EncodedLength<T>(): uint64 {
+export function sizeOf<T>(): uint64 {
   throw new NoImplementation()
 }

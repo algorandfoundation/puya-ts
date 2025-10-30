@@ -12,7 +12,6 @@
     "return_type": {
       "_type": "WTuple",
       "name": "tuple",
-      "immutable": true,
       "types": [
         {
           "_type": "WType",
@@ -66,13 +65,12 @@
               "file": "tests/approvals/uint64-expressions.algo.ts",
               "line": 4,
               "end_line": 4,
-              "column": 10,
-              "end_column": 68
+              "column": 9,
+              "end_column": 69
             },
             "wtype": {
               "_type": "WTuple",
               "name": "tuple",
-              "immutable": true,
               "types": [
                 {
                   "_type": "WType",
@@ -159,8 +157,8 @@
                   "file": "tests/approvals/uint64-expressions.algo.ts",
                   "line": 4,
                   "end_line": 4,
-                  "column": 51,
-                  "end_column": 53
+                  "column": 44,
+                  "end_column": 54
                 },
                 "wtype": {
                   "_type": "WType",
@@ -201,6 +199,7 @@
       "returns": null
     },
     "inline": null,
+    "pure": false,
     "id": "tests/approvals/uint64-expressions.algo.ts::test",
     "name": "test"
   },
@@ -217,7 +216,6 @@
     "return_type": {
       "_type": "WTuple",
       "name": "tuple",
-      "immutable": true,
       "types": [
         {
           "_type": "WType",
@@ -254,15 +252,14 @@
             "_type": "TupleExpression",
             "source_location": {
               "file": "tests/approvals/uint64-expressions.algo.ts",
-              "line": 8,
-              "end_line": 9,
-              "column": 19,
-              "end_column": 26
+              "line": 10,
+              "end_line": 10,
+              "column": 9,
+              "end_column": 15
             },
             "wtype": {
               "_type": "WTuple",
               "name": "tuple",
-              "immutable": true,
               "types": [
                 {
                   "_type": "WType",
@@ -281,10 +278,10 @@
                 "_type": "IntegerConstant",
                 "source_location": {
                   "file": "tests/approvals/uint64-expressions.algo.ts",
-                  "line": 8,
-                  "end_line": 8,
-                  "column": 19,
-                  "end_column": 22
+                  "line": 10,
+                  "end_line": 10,
+                  "column": 10,
+                  "end_column": 11
                 },
                 "wtype": {
                   "_type": "WType",
@@ -298,10 +295,10 @@
                 "_type": "IntegerConstant",
                 "source_location": {
                   "file": "tests/approvals/uint64-expressions.algo.ts",
-                  "line": 9,
-                  "end_line": 9,
-                  "column": 19,
-                  "end_column": 26
+                  "line": 10,
+                  "end_line": 10,
+                  "column": 13,
+                  "end_column": 14
                 },
                 "wtype": {
                   "_type": "WType",
@@ -325,6 +322,7 @@
       "returns": null
     },
     "inline": null,
+    "pure": false,
     "id": "tests/approvals/uint64-expressions.algo.ts::test2",
     "name": "test2"
   },
@@ -386,13 +384,8 @@
                 "column": 4,
                 "end_column": 38
               },
-              "wtype": {
-                "_type": "WType",
-                "name": "void",
-                "immutable": true
-              },
               "condition": {
-                "_type": "BooleanBinaryOperation",
+                "_type": "IntrinsicCall",
                 "source_location": {
                   "file": "tests/approvals/uint64-expressions.algo.ts",
                   "line": 15,
@@ -405,22 +398,11 @@
                   "name": "bool",
                   "immutable": true
                 },
-                "left": {
-                  "_type": "BooleanBinaryOperation",
-                  "source_location": {
-                    "file": "tests/approvals/uint64-expressions.algo.ts",
-                    "line": 15,
-                    "end_line": 15,
-                    "column": 4,
-                    "end_column": 38
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true
-                  },
-                  "left": {
-                    "_type": "NumericComparisonExpression",
+                "op_code": "&&",
+                "immediates": [],
+                "stack_args": [
+                  {
+                    "_type": "IntrinsicCall",
                     "source_location": {
                       "file": "tests/approvals/uint64-expressions.algo.ts",
                       "line": 15,
@@ -433,44 +415,127 @@
                       "name": "bool",
                       "immutable": true
                     },
-                    "lhs": {
-                      "_type": "IntegerConstant",
-                      "source_location": {
-                        "file": "tests/approvals/uint64-expressions.algo.ts",
-                        "line": 15,
-                        "end_line": 15,
-                        "column": 4,
-                        "end_column": 38
+                    "op_code": "&&",
+                    "immediates": [],
+                    "stack_args": [
+                      {
+                        "_type": "NumericComparisonExpression",
+                        "source_location": {
+                          "file": "tests/approvals/uint64-expressions.algo.ts",
+                          "line": 15,
+                          "end_line": 15,
+                          "column": 4,
+                          "end_column": 38
+                        },
+                        "lhs": {
+                          "_type": "IntegerConstant",
+                          "source_location": {
+                            "file": "tests/approvals/uint64-expressions.algo.ts",
+                            "line": 15,
+                            "end_line": 15,
+                            "column": 4,
+                            "end_column": 38
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "value": 2,
+                          "teal_alias": null
+                        },
+                        "operator": "==",
+                        "rhs": {
+                          "_type": "IntegerConstant",
+                          "source_location": {
+                            "file": "tests/approvals/uint64-expressions.algo.ts",
+                            "line": 15,
+                            "end_line": 15,
+                            "column": 4,
+                            "end_column": 38
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "value": 2,
+                          "teal_alias": null
+                        }
                       },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "value": 2,
-                      "teal_alias": null
-                    },
-                    "operator": "==",
-                    "rhs": {
-                      "_type": "IntegerConstant",
-                      "source_location": {
-                        "file": "tests/approvals/uint64-expressions.algo.ts",
-                        "line": 15,
-                        "end_line": 15,
-                        "column": 4,
-                        "end_column": 38
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
-                      },
-                      "value": 2,
-                      "teal_alias": null
-                    }
+                      {
+                        "_type": "NumericComparisonExpression",
+                        "source_location": {
+                          "file": "tests/approvals/uint64-expressions.algo.ts",
+                          "line": 15,
+                          "end_line": 15,
+                          "column": 4,
+                          "end_column": 38
+                        },
+                        "lhs": {
+                          "_type": "TupleItemExpression",
+                          "source_location": {
+                            "file": "tests/approvals/uint64-expressions.algo.ts",
+                            "line": 15,
+                            "end_line": 15,
+                            "column": 4,
+                            "end_column": 38
+                          },
+                          "base": {
+                            "_type": "SubroutineCallExpression",
+                            "source_location": {
+                              "file": "tests/approvals/uint64-expressions.algo.ts",
+                              "line": 15,
+                              "end_line": 15,
+                              "column": 16,
+                              "end_column": 23
+                            },
+                            "wtype": {
+                              "_type": "WTuple",
+                              "name": "tuple",
+                              "types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                }
+                              ]
+                            },
+                            "target": {
+                              "_type": "SubroutineID",
+                              "target": "tests/approvals/uint64-expressions.algo.ts::test2"
+                            },
+                            "args": []
+                          },
+                          "index": 0
+                        },
+                        "operator": "==",
+                        "rhs": {
+                          "_type": "IntegerConstant",
+                          "source_location": {
+                            "file": "tests/approvals/uint64-expressions.algo.ts",
+                            "line": 15,
+                            "end_line": 15,
+                            "column": 26,
+                            "end_column": 29
+                          },
+                          "wtype": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "value": 123,
+                          "teal_alias": null
+                        }
+                      }
+                    ]
                   },
-                  "op": "and",
-                  "right": {
+                  {
                     "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/uint64-expressions.algo.ts",
@@ -478,11 +543,6 @@
                       "end_line": 15,
                       "column": 4,
                       "end_column": 38
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
                     },
                     "lhs": {
                       "_type": "TupleItemExpression",
@@ -492,11 +552,6 @@
                         "end_line": 15,
                         "column": 4,
                         "end_column": 38
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
                       },
                       "base": {
                         "_type": "SubroutineCallExpression",
@@ -510,7 +565,6 @@
                         "wtype": {
                           "_type": "WTuple",
                           "name": "tuple",
-                          "immutable": true,
                           "types": [
                             {
                               "_type": "WType",
@@ -530,7 +584,7 @@
                         },
                         "args": []
                       },
-                      "index": 0
+                      "index": 1
                     },
                     "operator": "==",
                     "rhs": {
@@ -539,101 +593,19 @@
                         "file": "tests/approvals/uint64-expressions.algo.ts",
                         "line": 15,
                         "end_line": 15,
-                        "column": 26,
-                        "end_column": 29
+                        "column": 31,
+                        "end_column": 36
                       },
                       "wtype": {
                         "_type": "WType",
                         "name": "uint64",
                         "immutable": true
                       },
-                      "value": 123,
+                      "value": 12300,
                       "teal_alias": null
                     }
                   }
-                },
-                "op": "and",
-                "right": {
-                  "_type": "NumericComparisonExpression",
-                  "source_location": {
-                    "file": "tests/approvals/uint64-expressions.algo.ts",
-                    "line": 15,
-                    "end_line": 15,
-                    "column": 4,
-                    "end_column": 38
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true
-                  },
-                  "lhs": {
-                    "_type": "TupleItemExpression",
-                    "source_location": {
-                      "file": "tests/approvals/uint64-expressions.algo.ts",
-                      "line": 15,
-                      "end_line": 15,
-                      "column": 4,
-                      "end_column": 38
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "base": {
-                      "_type": "SubroutineCallExpression",
-                      "source_location": {
-                        "file": "tests/approvals/uint64-expressions.algo.ts",
-                        "line": 15,
-                        "end_line": 15,
-                        "column": 16,
-                        "end_column": 23
-                      },
-                      "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
-                        "types": [
-                          {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true
-                          },
-                          {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true
-                          }
-                        ]
-                      },
-                      "target": {
-                        "_type": "SubroutineID",
-                        "target": "tests/approvals/uint64-expressions.algo.ts::test2"
-                      },
-                      "args": []
-                    },
-                    "index": 1
-                  },
-                  "operator": "==",
-                  "rhs": {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/uint64-expressions.algo.ts",
-                      "line": 15,
-                      "end_line": 15,
-                      "column": 31,
-                      "end_column": 36
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "value": 12300,
-                    "teal_alias": null
-                  }
-                }
+                ]
               },
               "error_message": "assert target is match for conditions"
             }
@@ -656,13 +628,8 @@
                 "column": 4,
                 "end_column": 40
               },
-              "wtype": {
-                "_type": "WType",
-                "name": "void",
-                "immutable": true
-              },
               "condition": {
-                "_type": "BooleanBinaryOperation",
+                "_type": "IntrinsicCall",
                 "source_location": {
                   "file": "tests/approvals/uint64-expressions.algo.ts",
                   "line": 16,
@@ -675,22 +642,11 @@
                   "name": "bool",
                   "immutable": true
                 },
-                "left": {
-                  "_type": "BooleanBinaryOperation",
-                  "source_location": {
-                    "file": "tests/approvals/uint64-expressions.algo.ts",
-                    "line": 16,
-                    "end_line": 16,
-                    "column": 4,
-                    "end_column": 40
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true
-                  },
-                  "left": {
-                    "_type": "BooleanBinaryOperation",
+                "op_code": "&&",
+                "immediates": [],
+                "stack_args": [
+                  {
+                    "_type": "IntrinsicCall",
                     "source_location": {
                       "file": "tests/approvals/uint64-expressions.algo.ts",
                       "line": 16,
@@ -703,22 +659,11 @@
                       "name": "bool",
                       "immutable": true
                     },
-                    "left": {
-                      "_type": "BooleanBinaryOperation",
-                      "source_location": {
-                        "file": "tests/approvals/uint64-expressions.algo.ts",
-                        "line": 16,
-                        "end_line": 16,
-                        "column": 4,
-                        "end_column": 40
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bool",
-                        "immutable": true
-                      },
-                      "left": {
-                        "_type": "BooleanBinaryOperation",
+                    "op_code": "&&",
+                    "immediates": [],
+                    "stack_args": [
+                      {
+                        "_type": "IntrinsicCall",
                         "source_location": {
                           "file": "tests/approvals/uint64-expressions.algo.ts",
                           "line": 16,
@@ -731,22 +676,11 @@
                           "name": "bool",
                           "immutable": true
                         },
-                        "left": {
-                          "_type": "NumericComparisonExpression",
-                          "source_location": {
-                            "file": "tests/approvals/uint64-expressions.algo.ts",
-                            "line": 16,
-                            "end_line": 16,
-                            "column": 4,
-                            "end_column": 40
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "bool",
-                            "immutable": true
-                          },
-                          "lhs": {
-                            "_type": "IntegerConstant",
+                        "op_code": "&&",
+                        "immediates": [],
+                        "stack_args": [
+                          {
+                            "_type": "IntrinsicCall",
                             "source_location": {
                               "file": "tests/approvals/uint64-expressions.algo.ts",
                               "line": 16,
@@ -756,15 +690,250 @@
                             },
                             "wtype": {
                               "_type": "WType",
-                              "name": "uint64",
+                              "name": "bool",
                               "immutable": true
                             },
-                            "value": 5,
-                            "teal_alias": null
+                            "op_code": "&&",
+                            "immediates": [],
+                            "stack_args": [
+                              {
+                                "_type": "IntrinsicCall",
+                                "source_location": {
+                                  "file": "tests/approvals/uint64-expressions.algo.ts",
+                                  "line": 16,
+                                  "end_line": 16,
+                                  "column": 4,
+                                  "end_column": 40
+                                },
+                                "wtype": {
+                                  "_type": "WType",
+                                  "name": "bool",
+                                  "immutable": true
+                                },
+                                "op_code": "&&",
+                                "immediates": [],
+                                "stack_args": [
+                                  {
+                                    "_type": "NumericComparisonExpression",
+                                    "source_location": {
+                                      "file": "tests/approvals/uint64-expressions.algo.ts",
+                                      "line": 16,
+                                      "end_line": 16,
+                                      "column": 4,
+                                      "end_column": 40
+                                    },
+                                    "lhs": {
+                                      "_type": "IntegerConstant",
+                                      "source_location": {
+                                        "file": "tests/approvals/uint64-expressions.algo.ts",
+                                        "line": 16,
+                                        "end_line": 16,
+                                        "column": 4,
+                                        "end_column": 40
+                                      },
+                                      "wtype": {
+                                        "_type": "WType",
+                                        "name": "uint64",
+                                        "immutable": true
+                                      },
+                                      "value": 5,
+                                      "teal_alias": null
+                                    },
+                                    "operator": "==",
+                                    "rhs": {
+                                      "_type": "IntegerConstant",
+                                      "source_location": {
+                                        "file": "tests/approvals/uint64-expressions.algo.ts",
+                                        "line": 16,
+                                        "end_line": 16,
+                                        "column": 4,
+                                        "end_column": 40
+                                      },
+                                      "wtype": {
+                                        "_type": "WType",
+                                        "name": "uint64",
+                                        "immutable": true
+                                      },
+                                      "value": 5,
+                                      "teal_alias": null
+                                    }
+                                  },
+                                  {
+                                    "_type": "NumericComparisonExpression",
+                                    "source_location": {
+                                      "file": "tests/approvals/uint64-expressions.algo.ts",
+                                      "line": 16,
+                                      "end_line": 16,
+                                      "column": 4,
+                                      "end_column": 40
+                                    },
+                                    "lhs": {
+                                      "_type": "TupleItemExpression",
+                                      "source_location": {
+                                        "file": "tests/approvals/uint64-expressions.algo.ts",
+                                        "line": 16,
+                                        "end_line": 16,
+                                        "column": 4,
+                                        "end_column": 40
+                                      },
+                                      "base": {
+                                        "_type": "SubroutineCallExpression",
+                                        "source_location": {
+                                          "file": "tests/approvals/uint64-expressions.algo.ts",
+                                          "line": 16,
+                                          "end_line": 16,
+                                          "column": 16,
+                                          "end_column": 22
+                                        },
+                                        "wtype": {
+                                          "_type": "WTuple",
+                                          "name": "tuple",
+                                          "types": [
+                                            {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            },
+                                            {
+                                              "_type": "WType",
+                                              "name": "uint64",
+                                              "immutable": true
+                                            }
+                                          ]
+                                        },
+                                        "target": {
+                                          "_type": "SubroutineID",
+                                          "target": "tests/approvals/uint64-expressions.algo.ts::test"
+                                        },
+                                        "args": []
+                                      },
+                                      "index": 0
+                                    },
+                                    "operator": "==",
+                                    "rhs": {
+                                      "_type": "IntegerConstant",
+                                      "source_location": {
+                                        "file": "tests/approvals/uint64-expressions.algo.ts",
+                                        "line": 16,
+                                        "end_line": 16,
+                                        "column": 25,
+                                        "end_column": 26
+                                      },
+                                      "wtype": {
+                                        "_type": "WType",
+                                        "name": "uint64",
+                                        "immutable": true
+                                      },
+                                      "value": 0,
+                                      "teal_alias": null
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "_type": "NumericComparisonExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/uint64-expressions.algo.ts",
+                                  "line": 16,
+                                  "end_line": 16,
+                                  "column": 4,
+                                  "end_column": 40
+                                },
+                                "lhs": {
+                                  "_type": "TupleItemExpression",
+                                  "source_location": {
+                                    "file": "tests/approvals/uint64-expressions.algo.ts",
+                                    "line": 16,
+                                    "end_line": 16,
+                                    "column": 4,
+                                    "end_column": 40
+                                  },
+                                  "base": {
+                                    "_type": "SubroutineCallExpression",
+                                    "source_location": {
+                                      "file": "tests/approvals/uint64-expressions.algo.ts",
+                                      "line": 16,
+                                      "end_line": 16,
+                                      "column": 16,
+                                      "end_column": 22
+                                    },
+                                    "wtype": {
+                                      "_type": "WTuple",
+                                      "name": "tuple",
+                                      "types": [
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        },
+                                        {
+                                          "_type": "WType",
+                                          "name": "uint64",
+                                          "immutable": true
+                                        }
+                                      ]
+                                    },
+                                    "target": {
+                                      "_type": "SubroutineID",
+                                      "target": "tests/approvals/uint64-expressions.algo.ts::test"
+                                    },
+                                    "args": []
+                                  },
+                                  "index": 1
+                                },
+                                "operator": "==",
+                                "rhs": {
+                                  "_type": "IntegerConstant",
+                                  "source_location": {
+                                    "file": "tests/approvals/uint64-expressions.algo.ts",
+                                    "line": 16,
+                                    "end_line": 16,
+                                    "column": 28,
+                                    "end_column": 29
+                                  },
+                                  "wtype": {
+                                    "_type": "WType",
+                                    "name": "uint64",
+                                    "immutable": true
+                                  },
+                                  "value": 0,
+                                  "teal_alias": null
+                                }
+                              }
+                            ]
                           },
-                          "operator": "==",
-                          "rhs": {
-                            "_type": "IntegerConstant",
+                          {
+                            "_type": "NumericComparisonExpression",
                             "source_location": {
                               "file": "tests/approvals/uint64-expressions.algo.ts",
                               "line": 16,
@@ -772,115 +941,85 @@
                               "column": 4,
                               "end_column": 40
                             },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "value": 5,
-                            "teal_alias": null
-                          }
-                        },
-                        "op": "and",
-                        "right": {
-                          "_type": "NumericComparisonExpression",
-                          "source_location": {
-                            "file": "tests/approvals/uint64-expressions.algo.ts",
-                            "line": 16,
-                            "end_line": 16,
-                            "column": 4,
-                            "end_column": 40
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "bool",
-                            "immutable": true
-                          },
-                          "lhs": {
-                            "_type": "TupleItemExpression",
-                            "source_location": {
-                              "file": "tests/approvals/uint64-expressions.algo.ts",
-                              "line": 16,
-                              "end_line": 16,
-                              "column": 4,
-                              "end_column": 40
-                            },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "base": {
-                              "_type": "SubroutineCallExpression",
+                            "lhs": {
+                              "_type": "TupleItemExpression",
                               "source_location": {
                                 "file": "tests/approvals/uint64-expressions.algo.ts",
                                 "line": 16,
                                 "end_line": 16,
-                                "column": 16,
-                                "end_column": 22
+                                "column": 4,
+                                "end_column": 40
+                              },
+                              "base": {
+                                "_type": "SubroutineCallExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/uint64-expressions.algo.ts",
+                                  "line": 16,
+                                  "end_line": 16,
+                                  "column": 16,
+                                  "end_column": 22
+                                },
+                                "wtype": {
+                                  "_type": "WTuple",
+                                  "name": "tuple",
+                                  "types": [
+                                    {
+                                      "_type": "WType",
+                                      "name": "uint64",
+                                      "immutable": true
+                                    },
+                                    {
+                                      "_type": "WType",
+                                      "name": "uint64",
+                                      "immutable": true
+                                    },
+                                    {
+                                      "_type": "WType",
+                                      "name": "uint64",
+                                      "immutable": true
+                                    },
+                                    {
+                                      "_type": "WType",
+                                      "name": "uint64",
+                                      "immutable": true
+                                    },
+                                    {
+                                      "_type": "WType",
+                                      "name": "uint64",
+                                      "immutable": true
+                                    }
+                                  ]
+                                },
+                                "target": {
+                                  "_type": "SubroutineID",
+                                  "target": "tests/approvals/uint64-expressions.algo.ts::test"
+                                },
+                                "args": []
+                              },
+                              "index": 2
+                            },
+                            "operator": "==",
+                            "rhs": {
+                              "_type": "IntegerConstant",
+                              "source_location": {
+                                "file": "tests/approvals/uint64-expressions.algo.ts",
+                                "line": 16,
+                                "end_line": 16,
+                                "column": 31,
+                                "end_column": 32
                               },
                               "wtype": {
-                                "_type": "WTuple",
-                                "name": "tuple",
-                                "immutable": true,
-                                "types": [
-                                  {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  },
-                                  {
-                                    "_type": "WType",
-                                    "name": "uint64",
-                                    "immutable": true
-                                  }
-                                ]
+                                "_type": "WType",
+                                "name": "uint64",
+                                "immutable": true
                               },
-                              "target": {
-                                "_type": "SubroutineID",
-                                "target": "tests/approvals/uint64-expressions.algo.ts::test"
-                              },
-                              "args": []
-                            },
-                            "index": 0
-                          },
-                          "operator": "==",
-                          "rhs": {
-                            "_type": "IntegerConstant",
-                            "source_location": {
-                              "file": "tests/approvals/uint64-expressions.algo.ts",
-                              "line": 16,
-                              "end_line": 16,
-                              "column": 25,
-                              "end_column": 26
-                            },
-                            "wtype": {
-                              "_type": "WType",
-                              "name": "uint64",
-                              "immutable": true
-                            },
-                            "value": 0,
-                            "teal_alias": null
+                              "value": 1,
+                              "teal_alias": null
+                            }
                           }
-                        }
+                        ]
                       },
-                      "op": "and",
-                      "right": {
+                      {
                         "_type": "NumericComparisonExpression",
                         "source_location": {
                           "file": "tests/approvals/uint64-expressions.algo.ts",
@@ -888,11 +1027,6 @@
                           "end_line": 16,
                           "column": 4,
                           "end_column": 40
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "bool",
-                          "immutable": true
                         },
                         "lhs": {
                           "_type": "TupleItemExpression",
@@ -902,11 +1036,6 @@
                             "end_line": 16,
                             "column": 4,
                             "end_column": 40
-                          },
-                          "wtype": {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true
                           },
                           "base": {
                             "_type": "SubroutineCallExpression",
@@ -920,7 +1049,6 @@
                             "wtype": {
                               "_type": "WTuple",
                               "name": "tuple",
-                              "immutable": true,
                               "types": [
                                 {
                                   "_type": "WType",
@@ -955,7 +1083,7 @@
                             },
                             "args": []
                           },
-                          "index": 1
+                          "index": 3
                         },
                         "operator": "==",
                         "rhs": {
@@ -964,119 +1092,21 @@
                             "file": "tests/approvals/uint64-expressions.algo.ts",
                             "line": 16,
                             "end_line": 16,
-                            "column": 28,
-                            "end_column": 29
+                            "column": 34,
+                            "end_column": 35
                           },
                           "wtype": {
                             "_type": "WType",
                             "name": "uint64",
                             "immutable": true
                           },
-                          "value": 0,
+                          "value": 1,
                           "teal_alias": null
                         }
                       }
-                    },
-                    "op": "and",
-                    "right": {
-                      "_type": "NumericComparisonExpression",
-                      "source_location": {
-                        "file": "tests/approvals/uint64-expressions.algo.ts",
-                        "line": 16,
-                        "end_line": 16,
-                        "column": 4,
-                        "end_column": 40
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "bool",
-                        "immutable": true
-                      },
-                      "lhs": {
-                        "_type": "TupleItemExpression",
-                        "source_location": {
-                          "file": "tests/approvals/uint64-expressions.algo.ts",
-                          "line": 16,
-                          "end_line": 16,
-                          "column": 4,
-                          "end_column": 40
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "base": {
-                          "_type": "SubroutineCallExpression",
-                          "source_location": {
-                            "file": "tests/approvals/uint64-expressions.algo.ts",
-                            "line": 16,
-                            "end_line": 16,
-                            "column": 16,
-                            "end_column": 22
-                          },
-                          "wtype": {
-                            "_type": "WTuple",
-                            "name": "tuple",
-                            "immutable": true,
-                            "types": [
-                              {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              },
-                              {
-                                "_type": "WType",
-                                "name": "uint64",
-                                "immutable": true
-                              }
-                            ]
-                          },
-                          "target": {
-                            "_type": "SubroutineID",
-                            "target": "tests/approvals/uint64-expressions.algo.ts::test"
-                          },
-                          "args": []
-                        },
-                        "index": 2
-                      },
-                      "operator": "==",
-                      "rhs": {
-                        "_type": "IntegerConstant",
-                        "source_location": {
-                          "file": "tests/approvals/uint64-expressions.algo.ts",
-                          "line": 16,
-                          "end_line": 16,
-                          "column": 31,
-                          "end_column": 32
-                        },
-                        "wtype": {
-                          "_type": "WType",
-                          "name": "uint64",
-                          "immutable": true
-                        },
-                        "value": 1,
-                        "teal_alias": null
-                      }
-                    }
+                    ]
                   },
-                  "op": "and",
-                  "right": {
+                  {
                     "_type": "NumericComparisonExpression",
                     "source_location": {
                       "file": "tests/approvals/uint64-expressions.algo.ts",
@@ -1084,11 +1114,6 @@
                       "end_line": 16,
                       "column": 4,
                       "end_column": 40
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "bool",
-                      "immutable": true
                     },
                     "lhs": {
                       "_type": "TupleItemExpression",
@@ -1098,11 +1123,6 @@
                         "end_line": 16,
                         "column": 4,
                         "end_column": 40
-                      },
-                      "wtype": {
-                        "_type": "WType",
-                        "name": "uint64",
-                        "immutable": true
                       },
                       "base": {
                         "_type": "SubroutineCallExpression",
@@ -1116,7 +1136,6 @@
                         "wtype": {
                           "_type": "WTuple",
                           "name": "tuple",
-                          "immutable": true,
                           "types": [
                             {
                               "_type": "WType",
@@ -1151,7 +1170,7 @@
                         },
                         "args": []
                       },
-                      "index": 3
+                      "index": 4
                     },
                     "operator": "==",
                     "rhs": {
@@ -1160,8 +1179,8 @@
                         "file": "tests/approvals/uint64-expressions.algo.ts",
                         "line": 16,
                         "end_line": 16,
-                        "column": 34,
-                        "end_column": 35
+                        "column": 37,
+                        "end_column": 38
                       },
                       "wtype": {
                         "_type": "WType",
@@ -1172,104 +1191,7 @@
                       "teal_alias": null
                     }
                   }
-                },
-                "op": "and",
-                "right": {
-                  "_type": "NumericComparisonExpression",
-                  "source_location": {
-                    "file": "tests/approvals/uint64-expressions.algo.ts",
-                    "line": 16,
-                    "end_line": 16,
-                    "column": 4,
-                    "end_column": 40
-                  },
-                  "wtype": {
-                    "_type": "WType",
-                    "name": "bool",
-                    "immutable": true
-                  },
-                  "lhs": {
-                    "_type": "TupleItemExpression",
-                    "source_location": {
-                      "file": "tests/approvals/uint64-expressions.algo.ts",
-                      "line": 16,
-                      "end_line": 16,
-                      "column": 4,
-                      "end_column": 40
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "base": {
-                      "_type": "SubroutineCallExpression",
-                      "source_location": {
-                        "file": "tests/approvals/uint64-expressions.algo.ts",
-                        "line": 16,
-                        "end_line": 16,
-                        "column": 16,
-                        "end_column": 22
-                      },
-                      "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "immutable": true,
-                        "types": [
-                          {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true
-                          },
-                          {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true
-                          },
-                          {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true
-                          },
-                          {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true
-                          },
-                          {
-                            "_type": "WType",
-                            "name": "uint64",
-                            "immutable": true
-                          }
-                        ]
-                      },
-                      "target": {
-                        "_type": "SubroutineID",
-                        "target": "tests/approvals/uint64-expressions.algo.ts::test"
-                      },
-                      "args": []
-                    },
-                    "index": 4
-                  },
-                  "operator": "==",
-                  "rhs": {
-                    "_type": "IntegerConstant",
-                    "source_location": {
-                      "file": "tests/approvals/uint64-expressions.algo.ts",
-                      "line": 16,
-                      "end_line": 16,
-                      "column": 37,
-                      "end_column": 38
-                    },
-                    "wtype": {
-                      "_type": "WType",
-                      "name": "uint64",
-                      "immutable": true
-                    },
-                    "value": 1,
-                    "teal_alias": null
-                  }
-                }
+                ]
               },
               "error_message": "assert target is match for conditions"
             }
@@ -1311,6 +1233,7 @@
         "returns": null
       },
       "inline": null,
+      "pure": false,
       "cref": "tests/approvals/uint64-expressions.algo.ts::DemoContract",
       "member_name": "approvalProgram",
       "arc4_method_config": null
@@ -1318,7 +1241,6 @@
     "clear_program": {
       "_type": "ContractMethod",
       "source_location": {
-        "_type": "SourceLocation",
         "file": null,
         "line": 1,
         "end_line": 1,
@@ -1334,7 +1256,6 @@
       "body": {
         "_type": "Block",
         "source_location": {
-          "_type": "SourceLocation",
           "file": null,
           "line": 1,
           "end_line": 1,
@@ -1345,7 +1266,6 @@
           {
             "_type": "ReturnStatement",
             "source_location": {
-              "_type": "SourceLocation",
               "file": null,
               "line": 1,
               "end_line": 1,
@@ -1355,7 +1275,6 @@
             "value": {
               "_type": "BoolConstant",
               "source_location": {
-                "_type": "SourceLocation",
                 "file": null,
                 "line": 1,
                 "end_line": 1,
@@ -1381,6 +1300,7 @@
         "returns": null
       },
       "inline": null,
+      "pure": false,
       "cref": "@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract",
       "member_name": "clearStateProgram",
       "arc4_method_config": null

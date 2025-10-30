@@ -1,103 +1,111 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1
+    b main_block@0
 
 main_block@0:
+    b main_block@1
 
 main_block@1:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:117
+    // tests/approvals/abi-validation-exhaustive.algo.ts:148
     // class InvalidContract extends Contract {
-    txn NumAppArgs
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
     intc_0 // 0
     !=
-    bz main_bare_routing@7
+    bz main_create_NoOp@5
+    b main_call_NoOp@2
 
-main_abi_routing@2:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:117
+main_call_NoOp@2:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:148
+    // class InvalidContract extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x45cf05ef // method "invalidValue()uint64[3]"
+    uncover 1
+    match main_invalidValue_route@3
+    b main_switch_case_next@4
+
+main_switch_case_next@4:
+    b main_after_if_else@8
+
+main_after_if_else@8:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:148
+    // class InvalidContract extends Contract {
+    err
+
+main_invalidValue_route@3:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:152
+    // invalidValue() {
+    callsub invalidValue
+    b main_switch_case_next@4
+
+main_create_NoOp@5:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:148
     // class InvalidContract extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x4c5c61ba // method "create()void"
-    pushbytes 0x45cf05ef // method "invalidValue()uint64[3]"
-    uncover 2
-    match main_create_route@3 main_invalidValue_route@4
+    uncover 1
+    match main_create_route@6
+    b main_switch_case_next@7
 
-main_switch_case_default@5:
+main_switch_case_next@7:
+    b main_after_if_else@8
 
-main_switch_case_next@6:
+main_create_route@6:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:149
+    // @arc4.abimethod({ onCreate: 'require' })
+    callsub create
+    b main_switch_case_next@7
 
-main_after_if_else@8:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:117
-    // class InvalidContract extends Contract {
-    intc_0 // 0
 
-main_after_inlined_tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.__puya_arc4_router__@9:
+// tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.create[routing]() -> void:
+create:
+    b create_block@0
+
+create_block@0:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:149
+    // @arc4.abimethod({ onCreate: 'require' })
+    callsub tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.create
+    intc_1 // 1
     return
 
-main_invalidValue_route@4:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:124
+
+// tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.invalidValue[routing]() -> void:
+invalidValue:
+    b invalidValue_block@0
+
+invalidValue_block@0:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:152
     // invalidValue() {
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    !=
-    assert // can only call when not creating
-    callsub invalidValue
+    callsub tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.invalidValue
     pushbytes 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_1 // 1
-    b main_after_inlined_tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.__puya_arc4_router__@9
-
-main_create_route@3:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:121
-    // @arc4.abimethod({ onCreate: 'require' })
-    txn OnCompletion
-    intc_0 // NoOp
-    ==
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    intc_0 // 0
-    ==
-    assert // can only call when creating
-    callsub create
-    intc_1 // 1
-    b main_after_inlined_tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.__puya_arc4_router__@9
-
-main_bare_routing@7:
-    b main_after_if_else@8
+    return
 
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.create() -> void:
-create:
+tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.create:
+    b tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.create_block@0
 
-create_block@0:
+tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.create_block@0:
     retsub
 
 
 // tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.invalidValue() -> bytes:
-invalidValue:
+tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.invalidValue:
+    b tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.invalidValue_block@0
 
-invalidValue_block@0:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:118
-    // g_bytes = GlobalState<bytes>({ key: 'g' })
-    pushbytes "g"
-    // tests/approvals/abi-validation-exhaustive.algo.ts:125
-    // this.g_bytes.value = Bytes('invalid')
+tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.invalidValue_block@0:
+    // tests/approvals/abi-validation-exhaustive.algo.ts:153
+    // return convertBytes<arc4.StaticArray<arc4.Uint64, 3>>(Bytes('invalid'), { strategy: 'unsafe-cast' })
     pushbytes "invalid"
-    app_global_put
-    // tests/approvals/abi-validation-exhaustive.algo.ts:119
-    // g_fixed = GlobalState<arc4.StaticArray<arc4.UintN64, 3>>({ key: 'g' })
-    intc_0 // 0
-    pushbytes "g"
-    app_global_get_ex
-    assert // check GlobalState exists
-    // tests/approvals/abi-validation-exhaustive.algo.ts:126
-    // return this.g_fixed.value
     retsub

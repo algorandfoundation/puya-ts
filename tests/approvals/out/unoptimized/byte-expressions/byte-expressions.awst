@@ -9,6 +9,24 @@ subroutine test(a: uint64, b: biguint, c: string): void
   assert("123" == "123")
   assert(0x01020304 == 0x01020304)
 }
+subroutine test2(a: bytes[8], b: bytes[8]): void
+{
+  assert(btoi(reinterpret_cast<bytes>(a)) == 5, comment=a must be bytes for 5)
+  assert(btoi(reinterpret_cast<bytes>(b)) == 12, comment=b must be bytes for 12)
+  assert(btoi(reinterpret_cast<bytes>(a & b)) == 4, comment=a & b is 4)
+  assert(btoi(reinterpret_cast<bytes>(a | b)) == 13, comment=a | b is 13)
+  assert(btoi(reinterpret_cast<bytes>(a ^ b)) == 9, comment=a ^ b is 9)
+  assert(btoi(reinterpret_cast<bytes>(~a)) == 18446744073709551610, comment=!a is MAX_VALUE - 5)
+  assert(btoi(reinterpret_cast<bytes>(~b)) == 18446744073709551603, comment=!b is MAX_VALUE - 12)
+  assert(a.slice(0, 4) == b.slice(0, 4), comment=first four bytes should match)
+  assert(concat(reinterpret_cast<bytes>(a), reinterpret_cast<bytes>(b)) == 0x0000000000000005000000000000000c)
+}
+subroutine test3(a: bytes[8], b: bytes[16], c: bytes[32]): void
+{
+  assert(len(a) == 8)
+  assert(len(b) == 16)
+  assert(len(c) == 32)
+}
 contract DemoContract
 {
   approvalProgram(): bool
@@ -24,6 +42,8 @@ contract DemoContract
   test(): bool
   {
     tests/approvals/byte-expressions.algo.ts::test(1, 50, "things")
+    tests/approvals/byte-expressions.algo.ts::test2(itob(5), itob(12))
+    tests/approvals/byte-expressions.algo.ts::test3(bzero(8), bzero(16), bzero(32))
     return True
   }
   

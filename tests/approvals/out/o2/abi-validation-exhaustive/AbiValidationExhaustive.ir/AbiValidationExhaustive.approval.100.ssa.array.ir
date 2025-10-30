@@ -1,388 +1,363 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
-        goto tmp%0#1 ? block@2 : block@29
-    block@2: // abi_routing_L12
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "validate_uint64(uint64)void" => block@3, method "validate_uint8(uint8)void" => block@4, method "validate_uint512(uint512)void" => block@5, method "validate_ufixed64(ufixed64x2)void" => block@6, method "validate_uint8_arr(uint8[])void" => block@7, method "validate_uint8_arr3(uint8[3])void" => block@8, method "validate_bool(bool)void" => block@9, method "validate_byte(byte)void" => block@10, method "validate_string(string)void" => block@11, method "validate_bytes(byte[])void" => block@12, method "validate_address(address)void" => block@13, method "validate_account(address)void" => block@14, method "validate_bool_arr(bool[])void" => block@15, method "validate_bool_arr3(bool[3])void" => block@16, method "validate_static_tuple((uint64,uint8))void" => block@17, method "validate_dynamic_tuple((uint64,uint8,string))void" => block@18, method "validate_static_struct((uint64,uint8))void" => block@19, method "validate_dynamic_struct((uint64,uint8,string))void" => block@20, method "validate_static_struct_arr((uint64,uint8)[])void" => block@21, method "validate_static_struct_arr3((uint64,uint8)[3])void" => block@22, method "validate_dynamic_struct_arr((uint64,uint8,string)[])void" => block@23, method "validate_dynamic_struct_arr3((uint64,uint8,string)[3])void" => block@24, method "validate_dynamic_struct_with_a_bool((uint8,byte[],bool))void" => block@25, method "validate_c2c()void" => block@26, * => block@33}
-    block@3: // validate_uint64_route_L13
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (! tmp%3#0)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        (assert tmp%5#0) // can only call when not creating
-        let value#22: bytes[8] = (txna ApplicationArgs 1)
-        let value_len%0#20: uint64 = (len value#22)
-        let size_is_correct%0#23: bool = (== value_len%0#20 8u)
-        (assert size_is_correct%0#23) // invalid number of bytes for arc4.uint64
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#0: bool = 1u
-        goto block@34
-    block@4: // validate_uint8_route_L17
-        let tmp%8#0: uint64 = (txn OnCompletion)
-        let tmp%9#0: bool = (! tmp%8#0)
-        (assert tmp%9#0) // OnCompletion is not NoOp
-        let tmp%10#0: uint64 = (txn ApplicationID)
-        (assert tmp%10#0) // can only call when not creating
-        let value#21: bytes[1] = (txna ApplicationArgs 1)
-        let value_len%0#19: uint64 = (len value#21)
-        let size_is_correct%0#22: bool = (== value_len%0#19 1u)
-        (assert size_is_correct%0#22) // invalid number of bytes for arc4.uint8
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#1: bool = 1u
-        goto block@34
-    block@5: // validate_uint512_route_L21
-        let tmp%13#0: uint64 = (txn OnCompletion)
-        let tmp%14#0: bool = (! tmp%13#0)
-        (assert tmp%14#0) // OnCompletion is not NoOp
-        let tmp%15#0: uint64 = (txn ApplicationID)
-        (assert tmp%15#0) // can only call when not creating
-        let value#20: bytes[64] = (txna ApplicationArgs 1)
-        let value_len%0#18: uint64 = (len value#20)
-        let size_is_correct%0#21: bool = (== value_len%0#18 64u)
-        (assert size_is_correct%0#21) // invalid number of bytes for arc4.uint512
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#2: bool = 1u
-        goto block@34
-    block@6: // validate_ufixed64_route_L25
-        let tmp%18#0: uint64 = (txn OnCompletion)
-        let tmp%19#0: bool = (! tmp%18#0)
-        (assert tmp%19#0) // OnCompletion is not NoOp
-        let tmp%20#0: uint64 = (txn ApplicationID)
-        (assert tmp%20#0) // can only call when not creating
-        let value#19: bytes[8] = (txna ApplicationArgs 1)
-        let value_len%0#17: uint64 = (len value#19)
-        let size_is_correct%0#20: bool = (== value_len%0#17 8u)
-        (assert size_is_correct%0#20) // invalid number of bytes for arc4.ufixed64x2
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#3: bool = 1u
-        goto block@34
-    block@7: // validate_uint8_arr_route_L29
-        let tmp%23#0: uint64 = (txn OnCompletion)
-        let tmp%24#0: bool = (! tmp%23#0)
-        (assert tmp%24#0) // OnCompletion is not NoOp
-        let tmp%25#0: uint64 = (txn ApplicationID)
-        (assert tmp%25#0) // can only call when not creating
-        let value#18: bytes = (txna ApplicationArgs 1)
-        let length%0#9: uint64 = (extract_uint16 value#18 0u) // on error: invalid array length header
-        let num_bytes_with_header%0#9: uint64 = (+ length%0#9 2u)
-        let value_len%0#16: uint64 = (len value#18)
-        let size_is_correct%0#19: bool = (== value_len%0#16 num_bytes_with_header%0#9)
-        (assert size_is_correct%0#19) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#4: bool = 1u
-        goto block@34
-    block@8: // validate_uint8_arr3_route_L33
-        let tmp%28#0: uint64 = (txn OnCompletion)
-        let tmp%29#0: bool = (! tmp%28#0)
-        (assert tmp%29#0) // OnCompletion is not NoOp
-        let tmp%30#0: uint64 = (txn ApplicationID)
-        (assert tmp%30#0) // can only call when not creating
-        let value#17: bytes[3] = (txna ApplicationArgs 1)
-        let value_len%0#15: uint64 = (len value#17)
-        let size_is_correct%0#18: bool = (== value_len%0#15 3u)
-        (assert size_is_correct%0#18) // invalid number of bytes for arc4.static_array<arc4.uint8, 3>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#5: bool = 1u
-        goto block@34
-    block@9: // validate_bool_route_L37
-        let tmp%33#0: uint64 = (txn OnCompletion)
-        let tmp%34#0: bool = (! tmp%33#0)
-        (assert tmp%34#0) // OnCompletion is not NoOp
-        let tmp%35#0: uint64 = (txn ApplicationID)
-        (assert tmp%35#0) // can only call when not creating
-        let value#16: bytes[1] = (txna ApplicationArgs 1)
-        let value_len%0#14: uint64 = (len value#16)
-        let size_is_correct%0#17: bool = (== value_len%0#14 1u)
-        (assert size_is_correct%0#17) // invalid number of bytes for arc4.bool
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#6: bool = 1u
-        goto block@34
-    block@10: // validate_byte_route_L41
-        let tmp%38#0: uint64 = (txn OnCompletion)
-        let tmp%39#0: bool = (! tmp%38#0)
-        (assert tmp%39#0) // OnCompletion is not NoOp
-        let tmp%40#0: uint64 = (txn ApplicationID)
-        (assert tmp%40#0) // can only call when not creating
-        let value#15: bytes[1] = (txna ApplicationArgs 1)
-        let value_len%0#13: uint64 = (len value#15)
-        let size_is_correct%0#16: bool = (== value_len%0#13 1u)
-        (assert size_is_correct%0#16) // invalid number of bytes for arc4.uint8
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#7: bool = 1u
-        goto block@34
-    block@11: // validate_string_route_L45
-        let tmp%43#0: uint64 = (txn OnCompletion)
-        let tmp%44#0: bool = (! tmp%43#0)
-        (assert tmp%44#0) // OnCompletion is not NoOp
-        let tmp%45#0: uint64 = (txn ApplicationID)
-        (assert tmp%45#0) // can only call when not creating
-        let value#14: bytes = (txna ApplicationArgs 1)
-        let length%0#8: uint64 = (extract_uint16 value#14 0u) // on error: invalid array length header
-        let num_bytes_with_header%0#8: uint64 = (+ length%0#8 2u)
-        let value_len%0#12: uint64 = (len value#14)
-        let size_is_correct%0#15: bool = (== value_len%0#12 num_bytes_with_header%0#8)
-        (assert size_is_correct%0#15) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#8: bool = 1u
-        goto block@34
-    block@12: // validate_bytes_route_L49
-        let tmp%48#0: uint64 = (txn OnCompletion)
-        let tmp%49#0: bool = (! tmp%48#0)
-        (assert tmp%49#0) // OnCompletion is not NoOp
-        let tmp%50#0: uint64 = (txn ApplicationID)
-        (assert tmp%50#0) // can only call when not creating
-        let value#13: bytes = (txna ApplicationArgs 1)
-        let length%0#7: uint64 = (extract_uint16 value#13 0u) // on error: invalid array length header
-        let num_bytes_with_header%0#7: uint64 = (+ length%0#7 2u)
-        let value_len%0#11: uint64 = (len value#13)
-        let size_is_correct%0#14: bool = (== value_len%0#11 num_bytes_with_header%0#7)
-        (assert size_is_correct%0#14) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#9: bool = 1u
-        goto block@34
-    block@13: // validate_address_route_L53
-        let tmp%53#0: uint64 = (txn OnCompletion)
-        let tmp%54#0: bool = (! tmp%53#0)
-        (assert tmp%54#0) // OnCompletion is not NoOp
-        let tmp%55#0: uint64 = (txn ApplicationID)
-        (assert tmp%55#0) // can only call when not creating
-        let value#12: bytes[32] = (txna ApplicationArgs 1)
-        let value_len%0#10: uint64 = (len value#12)
-        let size_is_correct%0#13: bool = (== value_len%0#10 32u)
-        (assert size_is_correct%0#13) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#10: bool = 1u
-        goto block@34
-    block@14: // validate_account_route_L57
-        let tmp%58#0: uint64 = (txn OnCompletion)
-        let tmp%59#0: bool = (! tmp%58#0)
-        (assert tmp%59#0) // OnCompletion is not NoOp
-        let tmp%60#0: uint64 = (txn ApplicationID)
-        (assert tmp%60#0) // can only call when not creating
-        let value#11: bytes[32] = (txna ApplicationArgs 1)
-        let value_len%0#9: uint64 = (len value#11)
-        let size_is_correct%0#12: bool = (== value_len%0#9 32u)
-        (assert size_is_correct%0#12) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#11: bool = 1u
-        goto block@34
-    block@15: // validate_bool_arr_route_L61
-        let tmp%63#0: uint64 = (txn OnCompletion)
-        let tmp%64#0: bool = (! tmp%63#0)
-        (assert tmp%64#0) // OnCompletion is not NoOp
-        let tmp%65#0: uint64 = (txn ApplicationID)
-        (assert tmp%65#0) // can only call when not creating
-        let value#10: bytes = (txna ApplicationArgs 1)
-        let length%0#6: uint64 = (extract_uint16 value#10 0u) // on error: invalid array length header
-        let num_bits_7%0#0: uint64 = (+ length%0#6 7u)
-        let num_bytes%0#7: uint64 = (/ num_bits_7%0#0 8u)
-        let num_bytes_with_header%0#6: uint64 = (+ num_bytes%0#7 2u)
-        let value_len%0#8: uint64 = (len value#10)
-        let size_is_correct%0#11: bool = (== value_len%0#8 num_bytes_with_header%0#6)
-        (assert size_is_correct%0#11) // invalid number of bytes for arc4.dynamic_array<arc4.bool>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#12: bool = 1u
-        goto block@34
-    block@16: // validate_bool_arr3_route_L65
-        let tmp%68#0: uint64 = (txn OnCompletion)
-        let tmp%69#0: bool = (! tmp%68#0)
-        (assert tmp%69#0) // OnCompletion is not NoOp
-        let tmp%70#0: uint64 = (txn ApplicationID)
-        (assert tmp%70#0) // can only call when not creating
-        let value#9: bytes[1] = (txna ApplicationArgs 1)
-        let value_len%0#7: uint64 = (len value#9)
-        let size_is_correct%0#10: bool = (== value_len%0#7 1u)
-        (assert size_is_correct%0#10) // invalid number of bytes for arc4.static_array<arc4.bool, 3>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#13: bool = 1u
-        goto block@34
-    block@17: // validate_static_tuple_route_L69
-        let tmp%73#0: uint64 = (txn OnCompletion)
-        let tmp%74#0: bool = (! tmp%73#0)
-        (assert tmp%74#0) // OnCompletion is not NoOp
-        let tmp%75#0: uint64 = (txn ApplicationID)
-        (assert tmp%75#0) // can only call when not creating
-        let value#8: bytes[9] = (txna ApplicationArgs 1)
-        let value_len%0#6: uint64 = (len value#8)
-        let size_is_correct%0#9: bool = (== value_len%0#6 9u)
-        (assert size_is_correct%0#9) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint8>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#14: bool = 1u
-        goto block@34
-    block@18: // validate_dynamic_tuple_route_L73
-        let tmp%78#0: uint64 = (txn OnCompletion)
-        let tmp%79#0: bool = (! tmp%78#0)
-        (assert tmp%79#0) // OnCompletion is not NoOp
-        let tmp%80#0: uint64 = (txn ApplicationID)
-        (assert tmp%80#0) // can only call when not creating
-        let value#7: bytes = (txna ApplicationArgs 1)
-        let tuple_len%0#4: uint64 = (len value#7)
-        let offset%0#4: uint64 = (extract_uint16 value#7 9u) // on error: invalid tuple encoding
-        let offset_is_correct%0#4: bool = (== offset%0#4 11u)
-        (assert offset_is_correct%0#4) // invalid tail pointer at index 2 of arc4.tuple<arc4.uint64,arc4.uint8,arc4.dynamic_array<arc4.uint8>>
-        let item%0#4: bytes = (substring3 value#7 offset%0#4 tuple_len%0#4)
-        let length%0#5: uint64 = (extract_uint16 item%0#4 0u) // on error: invalid array length header
-        let num_bytes_with_header%0#5: uint64 = (+ length%0#5 2u)
-        let num_bytes_value%0#4: uint64 = (+ 11u num_bytes_with_header%0#5)
-        let size_is_correct%0#8: bool = (== tuple_len%0#4 num_bytes_value%0#4)
-        (assert size_is_correct%0#8) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint8,arc4.dynamic_array<arc4.uint8>>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#15: bool = 1u
-        goto block@34
-    block@19: // validate_static_struct_route_L77
-        let tmp%83#0: uint64 = (txn OnCompletion)
-        let tmp%84#0: bool = (! tmp%83#0)
-        (assert tmp%84#0) // OnCompletion is not NoOp
-        let tmp%85#0: uint64 = (txn ApplicationID)
-        (assert tmp%85#0) // can only call when not creating
-        let value#6: bytes[9] = (txna ApplicationArgs 1)
-        let value_len%0#5: uint64 = (len value#6)
-        let size_is_correct%0#7: bool = (== value_len%0#5 9u)
-        (assert size_is_correct%0#7) // invalid number of bytes for ARC4StaticStruct
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#16: bool = 1u
-        goto block@34
-    block@20: // validate_dynamic_struct_route_L81
-        let tmp%88#0: uint64 = (txn OnCompletion)
-        let tmp%89#0: bool = (! tmp%88#0)
-        (assert tmp%89#0) // OnCompletion is not NoOp
-        let tmp%90#0: uint64 = (txn ApplicationID)
-        (assert tmp%90#0) // can only call when not creating
-        let value#5: bytes = (txna ApplicationArgs 1)
-        let tuple_len%0#3: uint64 = (len value#5)
-        let offset%0#3: uint64 = (extract_uint16 value#5 9u) // on error: invalid tuple encoding
-        let offset_is_correct%0#3: bool = (== offset%0#3 11u)
-        (assert offset_is_correct%0#3) // invalid tail pointer at index 2 of ARC4DynamicStruct
-        let item%0#3: bytes = (substring3 value#5 offset%0#3 tuple_len%0#3)
-        let length%0#4: uint64 = (extract_uint16 item%0#3 0u) // on error: invalid array length header
-        let num_bytes_with_header%0#4: uint64 = (+ length%0#4 2u)
-        let num_bytes_value%0#3: uint64 = (+ 11u num_bytes_with_header%0#4)
-        let size_is_correct%0#6: bool = (== tuple_len%0#3 num_bytes_value%0#3)
-        (assert size_is_correct%0#6) // invalid number of bytes for ARC4DynamicStruct
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#17: bool = 1u
-        goto block@34
-    block@21: // validate_static_struct_arr_route_L85
-        let tmp%93#0: uint64 = (txn OnCompletion)
-        let tmp%94#0: bool = (! tmp%93#0)
-        (assert tmp%94#0) // OnCompletion is not NoOp
-        let tmp%95#0: uint64 = (txn ApplicationID)
-        (assert tmp%95#0) // can only call when not creating
-        let value#4: bytes = (txna ApplicationArgs 1)
-        let length%0#3: uint64 = (extract_uint16 value#4 0u) // on error: invalid array length header
-        let num_bytes%0#6: uint64 = (* length%0#3 9u)
-        let num_bytes_with_header%0#3: uint64 = (+ num_bytes%0#6 2u)
-        let value_len%0#4: uint64 = (len value#4)
-        let size_is_correct%0#5: bool = (== value_len%0#4 num_bytes_with_header%0#3)
-        (assert size_is_correct%0#5) // invalid number of bytes for arc4.dynamic_array<ARC4StaticStruct>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#18: bool = 1u
-        goto block@34
-    block@22: // validate_static_struct_arr3_route_L89
-        let tmp%98#0: uint64 = (txn OnCompletion)
-        let tmp%99#0: bool = (! tmp%98#0)
-        (assert tmp%99#0) // OnCompletion is not NoOp
-        let tmp%100#0: uint64 = (txn ApplicationID)
-        (assert tmp%100#0) // can only call when not creating
-        let value#3: bytes[27] = (txna ApplicationArgs 1)
-        let value_len%0#3: uint64 = (len value#3)
-        let size_is_correct%0#4: bool = (== value_len%0#3 27u)
-        (assert size_is_correct%0#4) // invalid number of bytes for arc4.static_array<ARC4StaticStruct, 3>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#19: bool = 1u
-        goto block@34
-    block@23: // validate_dynamic_struct_arr_route_L93
-        let tmp%103#0: uint64 = (txn OnCompletion)
-        let tmp%104#0: bool = (! tmp%103#0)
-        (assert tmp%104#0) // OnCompletion is not NoOp
-        let tmp%105#0: uint64 = (txn ApplicationID)
-        (assert tmp%105#0) // can only call when not creating
-        let value#2: bytes = (txna ApplicationArgs 1)
-        let length%0#2: uint64 = (extract_uint16 value#2 0u) // on error: invalid array length header
-        let array_data%0#0: bytes = ((extract 2 0) value#2)
-        let num_bytes%0#3: uint64 = (* length%0#2 2u)
+        goto tmp%0#1 ? block@2 : block@37
+    block@2: // abi_routing_L18
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        (assert tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "validate_uint64(uint64)void" => block@4, method "validate_uint8(uint8)void" => block@5, method "validate_uint512(uint512)void" => block@6, method "validate_ufixed64(ufixed64x2)void" => block@7, method "validate_uint8_arr(uint8[])void" => block@8, method "validate_uint8_arr3(uint8[3])void" => block@9, method "validate_bool(bool)void" => block@10, method "validate_byte(byte)void" => block@11, method "validate_string(string)void" => block@12, method "validate_bytes(byte[])void" => block@13, method "validate_address(address)void" => block@14, method "validate_account(address)void" => block@15, method "validate_bool_arr(bool[])void" => block@16, method "validate_bool_arr3(bool[3])void" => block@17, method "validate_static_tuple((uint64,uint8))void" => block@18, method "validate_dynamic_tuple((uint64,uint8,string))void" => block@19, method "validate_static_struct((uint64,uint8))void" => block@20, method "validate_dynamic_struct((uint64,uint8,string))void" => block@21, method "validate_static_struct_arr((uint64,uint8)[])void" => block@22, method "validate_static_struct_arr3((uint64,uint8)[3])void" => block@23, method "validate_dynamic_struct_arr((uint64,uint8,string)[])void" => block@24, method "validate_dynamic_struct_arr3((uint64,uint8,string)[3])void" => block@25, method "validate_dynamic_struct_with_a_bool((uint8,byte[],bool))void" => block@26, method "validate_native_static_struct((uint64,uint8))void" => block@27, method "validate_native_dynamic_struct((uint64,uint8,string))void" => block@28, method "validate_native_static_struct_arr((uint64,uint8)[])void" => block@29, method "validate_native_static_struct_arr3((uint64,uint8)[3])void" => block@30, method "validate_native_dynamic_struct_arr((uint64,uint8,string)[])void" => block@31, method "validate_native_dynamic_struct_arr3((uint64,uint8,string)[3])void" => block@32, method "validate_c2c()void" => block@33, * => block@36}
+    block@4: // validate_uint64_route_L19
+        let value#28: Encoded(uint64) = (txna ApplicationArgs 1)
+        let len%0#23: uint64 = (len value#28)
+        let eq%0#29: bool = (== len%0#23 8u)
+        (assert eq%0#29) // invalid number of bytes for arc4.uint64
+        exit 1u
+    block@5: // validate_uint8_route_L23
+        let value#27: Encoded(uint8) = (txna ApplicationArgs 1)
+        let len%0#22: uint64 = (len value#27)
+        let eq%0#28: bool = (== len%0#22 1u)
+        (assert eq%0#28) // invalid number of bytes for arc4.uint8
+        exit 1u
+    block@6: // validate_uint512_route_L27
+        let value#26: Encoded(uint512) = (txna ApplicationArgs 1)
+        let len%0#21: uint64 = (len value#26)
+        let eq%0#27: bool = (== len%0#21 64u)
+        (assert eq%0#27) // invalid number of bytes for arc4.uint512
+        exit 1u
+    block@7: // validate_ufixed64_route_L31
+        let value#25: Encoded(uint64) = (txna ApplicationArgs 1)
+        let len%0#20: uint64 = (len value#25)
+        let eq%0#26: bool = (== len%0#20 8u)
+        (assert eq%0#26) // invalid number of bytes for arc4.ufixed64x2
+        exit 1u
+    block@8: // validate_uint8_arr_route_L35
+        let value#24: Encoded(len+uint8[]) = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 value#24 0u) // on error: invalid array length header
+        let length%0#13: uint64 = aggregate%array_length%0#0
+        let add%0#13: uint64 = (+ length%0#13 2u)
+        let len%0#19: uint64 = (len value#24)
+        let eq%0#25: bool = (== len%0#19 add%0#13)
+        (assert eq%0#25) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        exit 1u
+    block@9: // validate_uint8_arr3_route_L39
+        let value#23: Encoded(uint8[3]) = (txna ApplicationArgs 1)
+        let len%0#18: uint64 = (len value#23)
+        let eq%0#24: bool = (== len%0#18 3u)
+        (assert eq%0#24) // invalid number of bytes for arc4.static_array<arc4.uint8, 3>
+        exit 1u
+    block@10: // validate_bool_route_L43
+        let value#22: Encoded(bool8) = (txna ApplicationArgs 1)
+        let len%0#17: uint64 = (len value#22)
+        let eq%0#23: bool = (== len%0#17 1u)
+        (assert eq%0#23) // invalid number of bytes for arc4.bool
+        exit 1u
+    block@11: // validate_byte_route_L47
+        let value#21: Encoded(uint8) = (txna ApplicationArgs 1)
+        let len%0#16: uint64 = (len value#21)
+        let eq%0#22: bool = (== len%0#16 1u)
+        (assert eq%0#22) // invalid number of bytes for arc4.uint8
+        exit 1u
+    block@12: // validate_string_route_L51
+        let value#20: Encoded(len+utf8[]) = (txna ApplicationArgs 1)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 value#20 0u) // on error: invalid array length header
+        let length%0#12: uint64 = aggregate%array_length%1#0
+        let add%0#12: uint64 = (+ length%0#12 2u)
+        let len%0#15: uint64 = (len value#20)
+        let eq%0#21: bool = (== len%0#15 add%0#12)
+        (assert eq%0#21) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        exit 1u
+    block@13: // validate_bytes_route_L55
+        let value#19: Encoded(len+uint8[]) = (txna ApplicationArgs 1)
+        let aggregate%array_length%2#0: uint64 = (extract_uint16 value#19 0u) // on error: invalid array length header
+        let length%0#11: uint64 = aggregate%array_length%2#0
+        let add%0#11: uint64 = (+ length%0#11 2u)
+        let len%0#14: uint64 = (len value#19)
+        let eq%0#20: bool = (== len%0#14 add%0#11)
+        (assert eq%0#20) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        exit 1u
+    block@14: // validate_address_route_L59
+        let value#18: Encoded(uint8[32]) = (txna ApplicationArgs 1)
+        let len%0#13: uint64 = (len value#18)
+        let eq%0#19: bool = (== len%0#13 32u)
+        (assert eq%0#19) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        exit 1u
+    block@15: // validate_account_route_L63
+        let tmp%0#2: bytes = (txna ApplicationArgs 1)
+        let value#17: account = tmp%0#2
+        let len%0#12: uint64 = (len value#17)
+        let eq%0#18: bool = (== len%0#12 32u)
+        (assert eq%0#18) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        exit 1u
+    block@16: // validate_bool_arr_route_L67
+        let value#16: Encoded(len+bool1[]) = (txna ApplicationArgs 1)
+        let aggregate%array_length%3#0: uint64 = (extract_uint16 value#16 0u) // on error: invalid array length header
+        let length%0#10: uint64 = aggregate%array_length%3#0
+        let add%0#10: uint64 = (+ length%0#10 7u)
+        let div_floor%0#0: uint64 = (/ add%0#10 8u)
+        let add%1#8: uint64 = (+ div_floor%0#0 2u)
+        let len%0#11: uint64 = (len value#16)
+        let eq%0#17: bool = (== len%0#11 add%1#8)
+        (assert eq%0#17) // invalid number of bytes for arc4.dynamic_array<arc4.bool>
+        exit 1u
+    block@17: // validate_bool_arr3_route_L71
+        let value#15: Encoded(bool1[3]) = (txna ApplicationArgs 1)
+        let len%0#10: uint64 = (len value#15)
+        let eq%0#16: bool = (== len%0#10 1u)
+        (assert eq%0#16) // invalid number of bytes for arc4.static_array<arc4.bool, 3>
+        exit 1u
+    block@18: // validate_static_tuple_route_L75
+        let value#14: Encoded(uint64,uint8) = (txna ApplicationArgs 1)
+        let len%0#9: uint64 = (len value#14)
+        let eq%0#15: bool = (== len%0#9 9u)
+        (assert eq%0#15) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint8>
+        exit 1u
+    block@19: // validate_dynamic_tuple_route_L79
+        let value#13: Encoded(uint64,uint8,(len+utf8[])) = (txna ApplicationArgs 1)
+        let tuple_len%0#7: uint64 = (len value#13)
+        let extract_uint16%0#7: uint64 = (extract_uint16 value#13 9u) // on error: invalid tuple encoding
+        let eq%0#14: bool = (== extract_uint16%0#7 11u)
+        (assert eq%0#14) // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
+        let substring3%0#7: bytes = (substring3 value#13 extract_uint16%0#7 tuple_len%0#7)
+        let aggregate%array_length%4#0: uint64 = (extract_uint16 substring3%0#7 0u) // on error: invalid array length header
+        let length%0#9: uint64 = aggregate%array_length%4#0
+        let add%1#7: uint64 = (+ length%0#9 13u)
+        let eq%1#7: bool = (== tuple_len%0#7 add%1#7)
+        (assert eq%1#7) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint8,arc4.dynamic_array<arc4.uint8>>
+        exit 1u
+    block@20: // validate_static_struct_route_L83
+        let value#12: Encoded(uint64,uint8) = (txna ApplicationArgs 1)
+        let len%0#8: uint64 = (len value#12)
+        let eq%0#13: bool = (== len%0#8 9u)
+        (assert eq%0#13) // invalid number of bytes for ARC4StaticStruct
+        exit 1u
+    block@21: // validate_dynamic_struct_route_L87
+        let value#11: Encoded(uint64,uint8,(len+utf8[])) = (txna ApplicationArgs 1)
+        let tuple_len%0#6: uint64 = (len value#11)
+        let extract_uint16%0#6: uint64 = (extract_uint16 value#11 9u) // on error: invalid tuple encoding
+        let eq%0#12: bool = (== extract_uint16%0#6 11u)
+        (assert eq%0#12) // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
+        let substring3%0#6: bytes = (substring3 value#11 extract_uint16%0#6 tuple_len%0#6)
+        let aggregate%array_length%5#0: uint64 = (extract_uint16 substring3%0#6 0u) // on error: invalid array length header
+        let length%0#8: uint64 = aggregate%array_length%5#0
+        let add%1#6: uint64 = (+ length%0#8 13u)
+        let eq%1#6: bool = (== tuple_len%0#6 add%1#6)
+        (assert eq%1#6) // invalid number of bytes for ARC4DynamicStruct
+        exit 1u
+    block@22: // validate_static_struct_arr_route_L91
+        let value#10: Encoded(len+(uint64,uint8)[]) = (txna ApplicationArgs 1)
+        let aggregate%array_length%6#0: uint64 = (extract_uint16 value#10 0u) // on error: invalid array length header
+        let length%0#7: uint64 = aggregate%array_length%6#0
+        let mul%0#3: uint64 = (* length%0#7 9u)
+        let add%0#7: uint64 = (+ mul%0#3 2u)
+        let len%0#7: uint64 = (len value#10)
+        let eq%0#11: bool = (== len%0#7 add%0#7)
+        (assert eq%0#11) // invalid number of bytes for arc4.dynamic_array<ARC4StaticStruct>
+        exit 1u
+    block@23: // validate_static_struct_arr3_route_L95
+        let value#9: Encoded((uint64,uint8)[3]) = (txna ApplicationArgs 1)
+        let len%0#6: uint64 = (len value#9)
+        let eq%0#10: bool = (== len%0#6 27u)
+        (assert eq%0#10) // invalid number of bytes for arc4.static_array<ARC4StaticStruct, 3>
+        exit 1u
+    block@24: // validate_dynamic_struct_arr_route_L99
+        let value#8: Encoded(len+(uint64,uint8,(len+utf8[]))[]) = (txna ApplicationArgs 1)
+        let aggregate%array_length%7#0: uint64 = (extract_uint16 value#8 0u) // on error: invalid array length header
+        let length%0#6: uint64 = aggregate%array_length%7#0
+        let num_bytes%0#9: uint64 = (* length%0#6 2u)
+        let total_length%0#3: uint64 = (len value#8)
+        let array_data%0#1: bytes = ((extract 2 0) value#8)
+        let index%0#9: uint64 = 0u
+        goto block@68
+    block@68: // for_header_L101
+        let index%0#10: uint64 = φ(index%0#9 <- block@24, index%0#11 <- block@69)
+        let num_bytes%0#10: uint64 = φ(num_bytes%0#9 <- block@24, num_bytes%0#11 <- block@69)
+        let continue_looping%0#3: bool = (< index%0#10 length%0#6)
+        goto continue_looping%0#3 ? block@69 : block@70
+    block@69: // for_body_L101
+        let head_offset_bytes%0#3: uint64 = (* index%0#10 2u)
+        let item_offset%0#3: uint64 = (extract_uint16 array_data%0#1 head_offset_bytes%0#3) // on error: invalid array encoding
+        let offset_is_correct%0#3: bool = (== item_offset%0#3 num_bytes%0#10)
+        (assert offset_is_correct%0#3) // invalid tail pointer for (len+(uint64,uint8,(len+utf8[]))[])
+        let total_length%1#1: uint64 = (len array_data%0#1)
+        let extract_to_end%0#3: bytes = (substring3 array_data%0#1 item_offset%0#3 total_length%1#1)
+        let tuple_len%0#5: uint64 = (len extract_to_end%0#3)
+        let extract_uint16%0#5: uint64 = (extract_uint16 extract_to_end%0#3 9u) // on error: invalid tuple encoding
+        let eq%0#9: bool = (== extract_uint16%0#5 11u)
+        (assert eq%0#9) // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
+        let substring3%0#5: bytes = (substring3 extract_to_end%0#3 extract_uint16%0#5 tuple_len%0#5)
+        let aggregate%array_length%8#0: uint64 = (extract_uint16 substring3%0#5 0u) // on error: invalid array length header
+        let length%1#3: uint64 = aggregate%array_length%8#0
+        let add%1#5: uint64 = (+ length%1#3 13u)
+        let num_bytes%0#11: uint64 = (+ num_bytes%0#10 add%1#5)
+        let index%0#11: uint64 = (+ index%0#10 1u)
+        goto block@68
+    block@70: // after_for_L101
+        let num_bytes%1#1: uint64 = (+ num_bytes%0#10 2u)
+        let eq%1#5: bool = (== total_length%0#3 num_bytes%1#1)
+        (assert eq%1#5) // invalid number of bytes for arc4.dynamic_array<ARC4DynamicStruct>
+        exit 1u
+    block@25: // validate_dynamic_struct_arr3_route_L103
+        let value#7: Encoded((uint64,uint8,(len+utf8[]))[3]) = (txna ApplicationArgs 1)
+        let length%0#5: uint64 = 3u
+        let num_bytes%0#6: uint64 = (* length%0#5 2u)
+        let index%0#6: uint64 = 0u
+        goto block@63
+    block@63: // for_header_L105
+        let index%0#7: uint64 = φ(index%0#6 <- block@25, index%0#8 <- block@64)
+        let num_bytes%0#7: uint64 = φ(num_bytes%0#6 <- block@25, num_bytes%0#8 <- block@64)
+        let continue_looping%0#2: bool = (< index%0#7 length%0#5)
+        goto continue_looping%0#2 ? block@64 : block@65
+    block@64: // for_body_L105
+        let head_offset_bytes%0#2: uint64 = (* index%0#7 2u)
+        let item_offset%0#2: uint64 = (extract_uint16 value#7 head_offset_bytes%0#2) // on error: invalid array encoding
+        let offset_is_correct%0#2: bool = (== item_offset%0#2 num_bytes%0#7)
+        (assert offset_is_correct%0#2) // invalid tail pointer for (uint64,uint8,(len+utf8[]))[3]
+        let total_length%0#2: uint64 = (len value#7)
+        let extract_to_end%0#2: bytes = (substring3 value#7 item_offset%0#2 total_length%0#2)
+        let tuple_len%0#4: uint64 = (len extract_to_end%0#2)
+        let extract_uint16%0#4: uint64 = (extract_uint16 extract_to_end%0#2 9u) // on error: invalid tuple encoding
+        let eq%0#8: bool = (== extract_uint16%0#4 11u)
+        (assert eq%0#8) // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
+        let substring3%0#4: bytes = (substring3 extract_to_end%0#2 extract_uint16%0#4 tuple_len%0#4)
+        let aggregate%array_length%9#0: uint64 = (extract_uint16 substring3%0#4 0u) // on error: invalid array length header
+        let length%1#2: uint64 = aggregate%array_length%9#0
+        let add%1#4: uint64 = (+ length%1#2 13u)
+        let num_bytes%0#8: uint64 = (+ num_bytes%0#7 add%1#4)
+        let index%0#8: uint64 = (+ index%0#7 1u)
+        goto block@63
+    block@65: // after_for_L105
+        let len%0#5: uint64 = (len value#7)
+        let eq%1#4: bool = (== len%0#5 num_bytes%0#7)
+        (assert eq%1#4) // invalid number of bytes for arc4.static_array<ARC4DynamicStruct, 3>
+        exit 1u
+    block@26: // validate_dynamic_struct_with_a_bool_route_L107
+        let value#6: Encoded(uint8,(len+uint8[]),bool1) = (txna ApplicationArgs 1)
+        let tuple_len%0#3: uint64 = (len value#6)
+        let extract_uint16%0#3: uint64 = (extract_uint16 value#6 1u) // on error: invalid tuple encoding
+        let eq%0#7: bool = (== extract_uint16%0#3 4u)
+        (assert eq%0#7) // invalid tail pointer at index 1 of (uint8,(len+uint8[]),bool1)
+        let substring3%0#3: bytes = (substring3 value#6 extract_uint16%0#3 tuple_len%0#3)
+        let aggregate%array_length%10#0: uint64 = (extract_uint16 substring3%0#3 0u) // on error: invalid array length header
+        let length%0#4: uint64 = aggregate%array_length%10#0
+        let add%1#3: uint64 = (+ length%0#4 6u)
+        let eq%1#3: bool = (== tuple_len%0#3 add%1#3)
+        (assert eq%1#3) // invalid number of bytes for WithABool
+        exit 1u
+    block@27: // validate_native_static_struct_route_L111
+        let value#5: Encoded(uint64,uint8) = (txna ApplicationArgs 1)
+        let len%0#4: uint64 = (len value#5)
+        let eq%0#6: bool = (== len%0#4 9u)
+        (assert eq%0#6) // invalid number of bytes for tests/approvals/abi-validation-exhaustive.algo.ts::NativeStaticStruct
+        exit 1u
+    block@28: // validate_native_dynamic_struct_route_L115
+        let value#4: Encoded(uint64,uint8,(len+utf8[])) = (txna ApplicationArgs 1)
+        let tuple_len%0#2: uint64 = (len value#4)
+        let extract_uint16%0#2: uint64 = (extract_uint16 value#4 9u) // on error: invalid tuple encoding
+        let eq%0#5: bool = (== extract_uint16%0#2 11u)
+        (assert eq%0#5) // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
+        let substring3%0#2: bytes = (substring3 value#4 extract_uint16%0#2 tuple_len%0#2)
+        let aggregate%array_length%11#0: uint64 = (extract_uint16 substring3%0#2 0u) // on error: invalid array length header
+        let length%0#3: uint64 = aggregate%array_length%11#0
+        let add%1#2: uint64 = (+ length%0#3 13u)
+        let eq%1#2: bool = (== tuple_len%0#2 add%1#2)
+        (assert eq%1#2) // invalid number of bytes for tests/approvals/abi-validation-exhaustive.algo.ts::NativeDynamicStruct
+        exit 1u
+    block@29: // validate_native_static_struct_arr_route_L119
+        let value#3: Encoded(len+(uint64,uint8)[]) = (txna ApplicationArgs 1)
+        let aggregate%array_length%12#0: uint64 = (extract_uint16 value#3 0u) // on error: invalid array length header
+        let length%0#2: uint64 = aggregate%array_length%12#0
+        let mul%0#1: uint64 = (* length%0#2 9u)
+        let add%0#2: uint64 = (+ mul%0#1 2u)
+        let len%0#3: uint64 = (len value#3)
+        let eq%0#4: bool = (== len%0#3 add%0#2)
+        (assert eq%0#4) // invalid number of bytes for arc4.dynamic_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeStaticStruct>
+        exit 1u
+    block@30: // validate_native_static_struct_arr3_route_L123
+        let value#2: Encoded((uint64,uint8)[3]) = (txna ApplicationArgs 1)
+        let len%0#2: uint64 = (len value#2)
+        let eq%0#3: bool = (== len%0#2 27u)
+        (assert eq%0#3) // invalid number of bytes for arc4.static_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeStaticStruct, 3>
+        exit 1u
+    block@31: // validate_native_dynamic_struct_arr_route_L127
+        let value#1: Encoded(len+(uint64,uint8,(len+utf8[]))[]) = (txna ApplicationArgs 1)
+        let aggregate%array_length%13#0: uint64 = (extract_uint16 value#1 0u) // on error: invalid array length header
+        let length%0#1: uint64 = aggregate%array_length%13#0
+        let num_bytes%0#3: uint64 = (* length%0#1 2u)
+        let total_length%0#1: uint64 = (len value#1)
+        let array_data%0#0: bytes = ((extract 2 0) value#1)
         let index%0#3: uint64 = 0u
-        goto block@47
-    block@47: // for_header_L95
-        let index%0#4: uint64 = φ(index%0#3 <- block@23, index%0#5 <- block@48)
-        let num_bytes%0#4: uint64 = φ(num_bytes%0#3 <- block@23, num_bytes%0#5 <- block@48)
-        let continue_looping%0#1: bool = (< index%0#4 length%0#2)
-        goto continue_looping%0#1 ? block@48 : block@49
-    block@48: // for_body_L95
+        goto block@48
+    block@48: // for_header_L129
+        let index%0#4: uint64 = φ(index%0#3 <- block@31, index%0#5 <- block@49)
+        let num_bytes%0#4: uint64 = φ(num_bytes%0#3 <- block@31, num_bytes%0#5 <- block@49)
+        let continue_looping%0#1: bool = (< index%0#4 length%0#1)
+        goto continue_looping%0#1 ? block@49 : block@50
+    block@49: // for_body_L129
         let head_offset_bytes%0#1: uint64 = (* index%0#4 2u)
         let item_offset%0#1: uint64 = (extract_uint16 array_data%0#0 head_offset_bytes%0#1) // on error: invalid array encoding
-        let offset_is_correct%0#2: bool = (== item_offset%0#1 num_bytes%0#4)
-        (assert offset_is_correct%0#2) // invalid tail pointer for arc4.dynamic_array<ARC4DynamicStruct>
-        let total_length%0#1: uint64 = (len array_data%0#0)
-        let data%0#1: bytes = (substring3 array_data%0#0 item_offset%0#1 total_length%0#1)
-        let tuple_len%0#2: uint64 = (len data%0#1)
-        let offset%0#2: uint64 = (extract_uint16 data%0#1 9u) // on error: invalid tuple encoding
-        let offset_is_correct%1#1: bool = (== offset%0#2 11u)
-        (assert offset_is_correct%1#1) // invalid tail pointer at index 2 of ARC4DynamicStruct
-        let item%0#2: bytes = (substring3 data%0#1 offset%0#2 tuple_len%0#2)
-        let length%1#0: uint64 = (extract_uint16 item%0#2 0u) // on error: invalid array length header
-        let num_bytes_with_header%0#2: uint64 = (+ length%1#0 2u)
-        let num_bytes_value%0#2: uint64 = (+ 11u num_bytes_with_header%0#2)
-        let num_bytes%0#5: uint64 = (+ num_bytes%0#4 num_bytes_value%0#2)
+        let offset_is_correct%0#1: bool = (== item_offset%0#1 num_bytes%0#4)
+        (assert offset_is_correct%0#1) // invalid tail pointer for (len+(uint64,uint8,(len+utf8[]))[])
+        let total_length%1#0: uint64 = (len array_data%0#0)
+        let extract_to_end%0#1: bytes = (substring3 array_data%0#0 item_offset%0#1 total_length%1#0)
+        let tuple_len%0#1: uint64 = (len extract_to_end%0#1)
+        let extract_uint16%0#1: uint64 = (extract_uint16 extract_to_end%0#1 9u) // on error: invalid tuple encoding
+        let eq%0#2: bool = (== extract_uint16%0#1 11u)
+        (assert eq%0#2) // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
+        let substring3%0#1: bytes = (substring3 extract_to_end%0#1 extract_uint16%0#1 tuple_len%0#1)
+        let aggregate%array_length%14#0: uint64 = (extract_uint16 substring3%0#1 0u) // on error: invalid array length header
+        let length%1#1: uint64 = aggregate%array_length%14#0
+        let add%1#1: uint64 = (+ length%1#1 13u)
+        let num_bytes%0#5: uint64 = (+ num_bytes%0#4 add%1#1)
         let index%0#5: uint64 = (+ index%0#4 1u)
-        goto block@47
-    block@49: // after_for_L95
-        let num_bytes%2#0: uint64 = (+ num_bytes%0#4 2u)
-        let value_len%0#2: uint64 = (len value#2)
-        let size_is_correct%0#3: bool = (== value_len%0#2 num_bytes%2#0)
-        (assert size_is_correct%0#3) // invalid number of bytes for arc4.dynamic_array<ARC4DynamicStruct>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#20: bool = 1u
-        goto block@34
-    block@24: // validate_dynamic_struct_arr3_route_L97
-        let tmp%108#0: uint64 = (txn OnCompletion)
-        let tmp%109#0: bool = (! tmp%108#0)
-        (assert tmp%109#0) // OnCompletion is not NoOp
-        let tmp%110#0: uint64 = (txn ApplicationID)
-        (assert tmp%110#0) // can only call when not creating
-        let value#1: bytes = (txna ApplicationArgs 1)
-        let num_bytes%0#0: uint64 = 6u
+        goto block@48
+    block@50: // after_for_L129
+        let num_bytes%1#0: uint64 = (+ num_bytes%0#4 2u)
+        let eq%1#1: bool = (== total_length%0#1 num_bytes%1#0)
+        (assert eq%1#1) // invalid number of bytes for arc4.dynamic_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeDynamicStruct>
+        exit 1u
+    block@32: // validate_native_dynamic_struct_arr3_route_L131
+        let value#0: Encoded((uint64,uint8,(len+utf8[]))[3]) = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = 3u
+        let num_bytes%0#0: uint64 = (* length%0#0 2u)
         let index%0#0: uint64 = 0u
-        goto block@42
-    block@42: // for_header_L99
-        let index%0#1: uint64 = φ(index%0#0 <- block@24, index%0#2 <- block@43)
-        let num_bytes%0#1: uint64 = φ(num_bytes%0#0 <- block@24, num_bytes%0#2 <- block@43)
-        let continue_looping%0#0: bool = (< index%0#1 3u)
-        goto continue_looping%0#0 ? block@43 : block@44
-    block@43: // for_body_L99
+        goto block@43
+    block@43: // for_header_L133
+        let index%0#1: uint64 = φ(index%0#0 <- block@32, index%0#2 <- block@44)
+        let num_bytes%0#1: uint64 = φ(num_bytes%0#0 <- block@32, num_bytes%0#2 <- block@44)
+        let continue_looping%0#0: bool = (< index%0#1 length%0#0)
+        goto continue_looping%0#0 ? block@44 : block@45
+    block@44: // for_body_L133
         let head_offset_bytes%0#0: uint64 = (* index%0#1 2u)
-        let item_offset%0#0: uint64 = (extract_uint16 value#1 head_offset_bytes%0#0) // on error: invalid array encoding
-        let offset_is_correct%0#1: bool = (== item_offset%0#0 num_bytes%0#1)
-        (assert offset_is_correct%0#1) // invalid tail pointer for arc4.static_array<ARC4DynamicStruct, 3>
-        let total_length%0#0: uint64 = (len value#1)
-        let data%0#0: bytes = (substring3 value#1 item_offset%0#0 total_length%0#0)
-        let tuple_len%0#1: uint64 = (len data%0#0)
-        let offset%0#1: uint64 = (extract_uint16 data%0#0 9u) // on error: invalid tuple encoding
-        let offset_is_correct%1#0: bool = (== offset%0#1 11u)
-        (assert offset_is_correct%1#0) // invalid tail pointer at index 2 of ARC4DynamicStruct
-        let item%0#1: bytes = (substring3 data%0#0 offset%0#1 tuple_len%0#1)
-        let length%0#1: uint64 = (extract_uint16 item%0#1 0u) // on error: invalid array length header
-        let num_bytes_with_header%0#1: uint64 = (+ length%0#1 2u)
-        let num_bytes_value%0#1: uint64 = (+ 11u num_bytes_with_header%0#1)
-        let num_bytes%0#2: uint64 = (+ num_bytes%0#1 num_bytes_value%0#1)
+        let item_offset%0#0: uint64 = (extract_uint16 value#0 head_offset_bytes%0#0) // on error: invalid array encoding
+        let offset_is_correct%0#0: bool = (== item_offset%0#0 num_bytes%0#1)
+        (assert offset_is_correct%0#0) // invalid tail pointer for (uint64,uint8,(len+utf8[]))[3]
+        let total_length%0#0: uint64 = (len value#0)
+        let extract_to_end%0#0: bytes = (substring3 value#0 item_offset%0#0 total_length%0#0)
+        let tuple_len%0#0: uint64 = (len extract_to_end%0#0)
+        let extract_uint16%0#0: uint64 = (extract_uint16 extract_to_end%0#0 9u) // on error: invalid tuple encoding
+        let eq%0#1: bool = (== extract_uint16%0#0 11u)
+        (assert eq%0#1) // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
+        let substring3%0#0: bytes = (substring3 extract_to_end%0#0 extract_uint16%0#0 tuple_len%0#0)
+        let aggregate%array_length%15#0: uint64 = (extract_uint16 substring3%0#0 0u) // on error: invalid array length header
+        let length%1#0: uint64 = aggregate%array_length%15#0
+        let add%1#0: uint64 = (+ length%1#0 13u)
+        let num_bytes%0#2: uint64 = (+ num_bytes%0#1 add%1#0)
         let index%0#2: uint64 = (+ index%0#1 1u)
-        goto block@42
-    block@44: // after_for_L99
-        let value_len%0#1: uint64 = (len value#1)
-        let size_is_correct%0#2: bool = (== value_len%0#1 num_bytes%0#1)
-        (assert size_is_correct%0#2) // invalid number of bytes for arc4.static_array<ARC4DynamicStruct, 3>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#21: bool = 1u
-        goto block@34
-    block@25: // validate_dynamic_struct_with_a_bool_route_L101
-        let tmp%113#0: uint64 = (txn OnCompletion)
-        let tmp%114#0: bool = (! tmp%113#0)
-        (assert tmp%114#0) // OnCompletion is not NoOp
-        let tmp%115#0: uint64 = (txn ApplicationID)
-        (assert tmp%115#0) // can only call when not creating
-        let value#0: bytes = (txna ApplicationArgs 1)
-        let tuple_len%0#0: uint64 = (len value#0)
-        let offset%0#0: uint64 = (extract_uint16 value#0 1u) // on error: invalid tuple encoding
-        let offset_is_correct%0#0: bool = (== offset%0#0 4u)
-        (assert offset_is_correct%0#0) // invalid tail pointer at index 1 of WithABool
-        let item%0#0: bytes = (substring3 value#0 offset%0#0 tuple_len%0#0)
-        let length%0#0: uint64 = (extract_uint16 item%0#0 0u) // on error: invalid array length header
-        let num_bytes_with_header%0#0: uint64 = (+ length%0#0 2u)
-        let num_bytes_value%0#0: uint64 = (+ 4u num_bytes_with_header%0#0)
-        let size_is_correct%0#1: bool = (== tuple_len%0#0 num_bytes_value%0#0)
-        (assert size_is_correct%0#1) // invalid number of bytes for WithABool
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#22: bool = 1u
-        goto block@34
-    block@26: // validate_c2c_route_L106
-        let tmp%118#0: uint64 = (txn OnCompletion)
-        let tmp%119#0: bool = (! tmp%118#0)
-        (assert tmp%119#0) // OnCompletion is not NoOp
-        let tmp%120#0: uint64 = (txn ApplicationID)
-        (assert tmp%120#0) // can only call when not creating
+        goto block@43
+    block@45: // after_for_L133
+        let len%0#1: uint64 = (len value#0)
+        let eq%1#0: bool = (== len%0#1 num_bytes%0#1)
+        (assert eq%1#0) // invalid number of bytes for arc4.static_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeDynamicStruct, 3>
+        exit 1u
+    block@33: // validate_c2c_route_L136
         itxn_begin
         ((itxn_field ApplicationArgs) method "create()void")
-        ((itxn_field GlobalNumByteSlice) 2u)
-        ((itxn_field ClearStateProgramPages) CoEBQw==)
-        ((itxn_field ApprovalProgramPages) CjEbQQAVggIETFxhugRFzwXvNhoAjgIAKAADgQBDMRkURDEYRIICAWcHaW52YWxpZGeACxUffHVpbnZhbGlksIEBQzEZFEQxGBREgQFD)
+        ((itxn_field ClearStateProgramPages) C4EBQw==)
+        ((itxn_field ApprovalProgramPages) CzEZFEQxGEEAH4AERc8F7zYaAI4BAAEAgAsVH3x1aW52YWxpZLCBAUOABExcYbo2GgCOAQABAIEBQw==)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
@@ -395,27 +370,21 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         itxn_submit
         let awst_tmp%0#0: bytes = (itxn LastLog)
-        let tmp%0#2: bytes = ((extract 4 0) awst_tmp%0#0)
-        let tmp%1#1: bytes = ((extract 0 4) awst_tmp%0#0)
-        let tmp%2#1: bool = (== tmp%1#1 0x151f7c75)
-        (assert tmp%2#1) // Bytes has valid prefix
-        let value_len%0#0: uint64 = (len tmp%0#2)
-        let size_is_correct%0#0: bool = (== value_len%0#0 24u)
-        (assert size_is_correct%0#0) // invalid number of bytes for arc4.static_array<arc4.uint64, 3>
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#23: bool = 1u
-        goto block@34
-    block@29: // bare_routing_L12
-        let tmp%122#0: uint64 = (txn OnCompletion)
-        goto tmp%122#0 ? block@33 : block@30
-    block@30: // __algots__.defaultCreate_L12
-        let tmp%123#0: uint64 = (txn ApplicationID)
-        let tmp%124#0: bool = (! tmp%123#0)
-        (assert tmp%124#0) // can only call when creating
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#24: bool = 1u
-        goto block@34
-    block@33: // after_if_else_L12
-        let tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#25: bool = 0u
-        goto block@34
-    block@34: // after_inlined_tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#0 <- block@3, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#1 <- block@4, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#2 <- block@5, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#3 <- block@6, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#4 <- block@7, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#5 <- block@8, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#6 <- block@9, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#7 <- block@10, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#8 <- block@11, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#9 <- block@12, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#10 <- block@13, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#11 <- block@14, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#12 <- block@15, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#13 <- block@16, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#14 <- block@17, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#15 <- block@18, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#16 <- block@19, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#17 <- block@20, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#18 <- block@21, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#19 <- block@22, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#20 <- block@49, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#21 <- block@44, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#22 <- block@25, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#23 <- block@26, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#24 <- block@30, tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.__puya_arc4_router__%0#25 <- block@33)
-        return tmp%0#0
+        let tmp%1#1: bytes = ((extract 4 0) awst_tmp%0#0)
+        let tmp%2#1: bytes = ((extract 0 4) awst_tmp%0#0)
+        let tmp%3#1: bool = (== tmp%2#1 0x151f7c75)
+        (assert tmp%3#1) // Bytes has valid prefix
+        let len%0#0: uint64 = (len tmp%1#1)
+        let eq%0#0: bool = (== len%0#0 24u)
+        (assert eq%0#0) // invalid number of bytes for arc4.static_array<arc4.uint64, 3>
+        exit 1u
+    block@36: // after_if_else_L18
+        fail
+    block@37: // __algots__.defaultCreate_L18
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (! tmp%9#0)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u

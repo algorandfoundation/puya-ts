@@ -1,37 +1,43 @@
-import type { bytes } from '@algorandfoundation/algorand-typescript'
-import { Bytes, Contract, validateEncoding, GlobalState } from '@algorandfoundation/algorand-typescript'
+import type { Account, FixedArray, uint64 } from '@algorandfoundation/algorand-typescript'
+import { Bytes, Contract, validateEncoding } from '@algorandfoundation/algorand-typescript'
 import * as arc4 from '@algorandfoundation/algorand-typescript/arc4'
-import { abiCall, compileArc4 } from '@algorandfoundation/algorand-typescript/arc4'
+import { abiCall, compileArc4, convertBytes } from '@algorandfoundation/algorand-typescript/arc4'
 
-class ARC4StaticStruct extends arc4.Struct<{ foo: arc4.UintN64; bar: arc4.UintN8 }> {}
-class ARC4DynamicStruct extends arc4.Struct<{ foo: arc4.UintN64; bar: arc4.UintN8; baz: arc4.Str }> {}
-class WithABool extends arc4.Struct<{ foo: arc4.UintN8; bar: arc4.DynamicBytes; baz: arc4.Bool }> {}
-type ARC4StaticTuple = arc4.Tuple<[arc4.UintN64, arc4.UintN8]>
-type ARC4DynamicTuple = arc4.Tuple<[arc4.UintN64, arc4.UintN8, arc4.Str]>
+class ARC4StaticStruct extends arc4.Struct<{ foo: arc4.Uint64; bar: arc4.Uint8 }> {}
+class ARC4DynamicStruct extends arc4.Struct<{ foo: arc4.Uint64; bar: arc4.Uint8; baz: arc4.Str }> {}
+type NativeStaticStruct = { foo: uint64; bar: arc4.Uint8 }
+type NativeDynamicStruct = {
+  foo: uint64
+  bar: arc4.Uint8
+  baz: string
+}
+class WithABool extends arc4.Struct<{ foo: arc4.Uint8; bar: arc4.DynamicBytes; baz: arc4.Bool }> {}
+type ARC4StaticTuple = arc4.Tuple<[arc4.Uint64, arc4.Uint8]>
+type ARC4DynamicTuple = arc4.Tuple<[arc4.Uint64, arc4.Uint8, arc4.Str]>
 
 class AbiValidationExhaustive extends Contract {
   @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
-  validate_uint64(value: arc4.UintN64) {
+  validate_uint64(value: arc4.Uint64) {
     validateEncoding(value)
   }
   @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
-  validate_uint8(value: arc4.UintN8) {
+  validate_uint8(value: arc4.Uint8) {
     validateEncoding(value)
   }
   @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
-  validate_uint512(value: arc4.UintN<512>) {
+  validate_uint512(value: arc4.Uint<512>) {
     validateEncoding(value)
   }
   @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
-  validate_ufixed64(value: arc4.UFixedNxM<64, 2>) {
+  validate_ufixed64(value: arc4.UFixed<64, 2>) {
     validateEncoding(value)
   }
   @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
-  validate_uint8_arr(value: arc4.DynamicArray<arc4.UintN8>) {
+  validate_uint8_arr(value: arc4.DynamicArray<arc4.Uint8>) {
     validateEncoding(value)
   }
   @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
-  validate_uint8_arr3(value: arc4.StaticArray<arc4.UintN8, 3>) {
+  validate_uint8_arr3(value: arc4.StaticArray<arc4.Uint8, 3>) {
     validateEncoding(value)
   }
   @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
@@ -55,8 +61,8 @@ class AbiValidationExhaustive extends Contract {
     validateEncoding(value)
   }
   @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
-  validate_account(value: arc4.Address) {
-    validateEncoding(value.native)
+  validate_account(value: Account) {
+    validateEncoding(value)
   }
   @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
   validate_bool_arr(value: arc4.DynamicArray<arc4.Bool>) {
@@ -102,27 +108,48 @@ class AbiValidationExhaustive extends Contract {
   validate_dynamic_struct_with_a_bool(value: WithABool) {
     validateEncoding(value)
   }
+  @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
+  validate_native_static_struct(value: NativeStaticStruct) {
+    validateEncoding(value)
+  }
+  @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
+  validate_native_dynamic_struct(value: NativeDynamicStruct) {
+    validateEncoding(value)
+  }
+  @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
+  validate_native_static_struct_arr(value: Array<NativeStaticStruct>) {
+    validateEncoding(value)
+  }
+  @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
+  validate_native_static_struct_arr3(value: FixedArray<NativeStaticStruct, 3>) {
+    validateEncoding(value)
+  }
+  @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
+  validate_native_dynamic_struct_arr(value: NativeDynamicStruct[]) {
+    validateEncoding(value)
+  }
+  @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
+  validate_native_dynamic_struct_arr3(value: FixedArray<NativeDynamicStruct, 3>) {
+    validateEncoding(value)
+  }
 
   validate_c2c() {
     const compiled = compileArc4(InvalidContract)
 
     const app = compiled.call.create({}).itxn.createdApp
     // call should fail validation as invalidValue returns a malformed array
-    abiCall(InvalidContract.prototype.invalidValue, {
+    abiCall({
+      method: InvalidContract.prototype.invalidValue,
       appId: app,
     })
   }
 }
 
 class InvalidContract extends Contract {
-  g_bytes = GlobalState<bytes>({ key: 'g' })
-  g_fixed = GlobalState<arc4.StaticArray<arc4.UintN64, 3>>({ key: 'g' })
-
   @arc4.abimethod({ onCreate: 'require' })
   create() {}
 
   invalidValue() {
-    this.g_bytes.value = Bytes('invalid')
-    return this.g_fixed.value
+    return convertBytes<arc4.StaticArray<arc4.Uint64, 3>>(Bytes('invalid'), { strategy: 'unsafe-cast' })
   }
 }

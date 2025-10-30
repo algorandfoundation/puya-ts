@@ -2,12 +2,10 @@ import { describe } from 'vitest'
 import { createBaseTestFixture } from './util/test-fixture'
 
 describe('super calls', () => {
-  const test = createBaseTestFixture('tests/approvals/super-calls.algo.ts', [
-    'SuperContract',
-    'SubContract',
-    'SubSubContract',
-    'SubSubSubContract',
-  ])
+  const test = createBaseTestFixture({
+    path: 'tests/approvals/super-calls.algo.ts',
+    contracts: ['SuperContract', 'SubContract', 'SubSubContract', 'SubSubSubContract'],
+  })
 
   test('super contract runs', async ({ SuperContractInvoker }) => {
     await SuperContractInvoker.send({ schema: { globalInts: 1 } })

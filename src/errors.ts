@@ -1,5 +1,6 @@
 import type { SourceLocation } from './awst/source-location'
 import type { PType, PTypeOrClass } from './awst_build/ptypes'
+import type { CodeFix } from './code-fix/code-fix'
 
 type PuyaErrorOptions = {
   cause?: Error
@@ -52,8 +53,15 @@ export class CodeError extends UserError {
     sourceType: PType
     targetType: PTypeOrClass
   }) {
-    const targetName = targetType instanceof Function ? targetType.name : targetType.fullName
-    return new CodeError(`Cannot resolve ${sourceType} to ${targetName}`, { sourceLocation })
+    return new CodeError(`Cannot resolve expression of type ${sourceType} to ${targetType}`, { sourceLocation })
+  }
+}
+
+export class FixableCodeError extends CodeError {
+  readonly codeFix: CodeFix
+  constructor(codeFix: CodeFix) {
+    super(codeFix.errorMessage, { sourceLocation: codeFix.sourceLocation })
+    this.codeFix = codeFix
   }
 }
 

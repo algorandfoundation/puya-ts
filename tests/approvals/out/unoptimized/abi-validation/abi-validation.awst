@@ -10,26 +10,38 @@ contract AbiValidationAlgo
     return True
   }
   
-  withValidation(value: arc4.static_array<arc4.byte>): uint64
+  withValidation(value: bytes[32]): uint64
   {
-    return len(reinterpret_cast<bytes>(value))
+    return len(value)
   }
   
-  withoutValidation(value: arc4.static_array<arc4.byte>): uint64
+  withoutValidation(value: bytes[32]): uint64
   {
-    return len(reinterpret_cast<bytes>(value))
+    return len(value)
   }
   
-  defaultValidation(value: arc4.static_array<arc4.byte>): uint64
+  defaultValidation(value: bytes[32]): uint64
   {
-    return len(reinterpret_cast<bytes>(value))
+    return len(value)
+  }
+  
+  manualValidation(value: bytes[32]): uint64
+  {
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.byte>, validate=true), void
+    return len(value)
+  }
+  
+  manualValidationInConvert(rawBytes: bytes): uint64
+  {
+    value: arc4.static_array<arc4.byte> = ARC4_FROM_BYTES(rawBytes, wtype=arc4.static_array<arc4.byte>, validate=true)
+    return value.length
   }
   
   manualValidationAfterConvert(rawBytes: bytes): uint64
   {
-    value: arc4.static_array<arc4.byte> = ARC4_FROM_BYTES(rawBytes, wtype=arc4.static_array<arc4.byte>, validate=true)
+    value: arc4.static_array<arc4.byte> = ARC4_FROM_BYTES(rawBytes, wtype=arc4.static_array<arc4.byte>, validate=false)
     ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.byte>, validate=true), void
-    return len(reinterpret_cast<bytes>(value))
+    return value.length
   }
   
   __algots__.defaultCreate(): void

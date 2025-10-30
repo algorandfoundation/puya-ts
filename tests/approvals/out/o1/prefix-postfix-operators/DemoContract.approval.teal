@@ -1,4 +1,4 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
@@ -6,37 +6,33 @@ main:
     // tests/approvals/prefix-postfix-operators.algo.ts:57
     // export class DemoContract extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     pushbytes 0xf59e3cc4 // method "test()bool"
     txna ApplicationArgs 0
     match main_test_route@3
-
-main_after_if_else@10:
-    // tests/approvals/prefix-postfix-operators.algo.ts:57
-    // export class DemoContract extends Contract {
-    pushint 0 // 0
-    return
+    err
 
 main_test_route@3:
     // tests/approvals/prefix-postfix-operators.algo.ts:58
     // test() {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     pushbytes 0x151f7c7580
     log
     pushint 1 // 1
     return
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/prefix-postfix-operators.algo.ts:57
     // export class DemoContract extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     pushint 1 // 1
     return

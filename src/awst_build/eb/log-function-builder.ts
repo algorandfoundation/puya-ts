@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import type { awst } from '../../awst'
 
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
@@ -13,21 +14,21 @@ import { requireInstanceBuilder } from './util'
 import { VoidExpressionBuilder } from './void-expression-builder'
 
 export class LogFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const argsExps = args.map((a) => requireInstanceBuilder(a))
 
     let logBytes: awst.Expression
     if (argsExps.length === 0) {
       throw new CodeError(`log expects at least 1 argument`, { sourceLocation })
     } else if (argsExps.length === 1) {
-      logBytes = argsExps[0].toBytes(sourceLocation)
+      logBytes = argsExps[0].toBytes(sourceLocation).resolve()
     } else {
       logBytes =
         argsExps.reduce(
           (a: Expression | undefined, b): Expression | undefined =>
             a === undefined
-              ? b.toBytes(sourceLocation)
-              : intrinsicFactory.bytesConcat({ left: a, right: b.toBytes(sourceLocation), sourceLocation }),
+              ? b.toBytes(sourceLocation).resolve()
+              : intrinsicFactory.bytesConcat({ left: a, right: b.toBytes(sourceLocation).resolve(), sourceLocation }),
           undefined,
         ) ?? throwError(new InternalError('Should never get here given previous conditions', { sourceLocation }))
     }

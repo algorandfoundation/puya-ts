@@ -26,7 +26,14 @@ const config: RollupOptions = {
     moduleSideEffects: true,
     propertyReadSideEffects: false,
   },
-  external: [/node_modules/, /tslib/],
+  external: (module) => {
+    if (/tslib/.test(module)) return true
+    if (/node_modules/.test(module)) {
+      return !/vscode-/.test(module)
+    }
+    return false
+  },
+
   plugins: [
     typescript({
       tsconfig: './tsconfig.build.json',

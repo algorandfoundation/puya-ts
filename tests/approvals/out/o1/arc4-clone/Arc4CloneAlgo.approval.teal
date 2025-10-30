@@ -1,0 +1,154 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 8 2
+    // tests/approvals/arc4-clone.algo.ts:16
+    // export class Arc4CloneAlgo extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@11
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0x398e270d 0x80acbe10 0xe213f5b6 0x63e40e8d // method "aliasing(uint64[])void", method "receive(uint64[])void", method "receiveReadonly(uint64[])void", method "structReturn((uint64,string,(byte[],uint8)))(byte[],uint8)"
+    txna ApplicationArgs 0
+    match aliasing receive receiveReadonly structReturn
+    err
+
+main___algots__.defaultCreate@11:
+    // tests/approvals/arc4-clone.algo.ts:16
+    // export class Arc4CloneAlgo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return
+
+
+// tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.aliasing[routing]() -> void:
+aliasing:
+    // tests/approvals/arc4-clone.algo.ts:17
+    // aliasing(mutable: uint64[]) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 8
+    *
+    intc_3 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<uint64>
+    intc_1 // 1
+    return
+
+
+// tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receive[routing]() -> void:
+receive:
+    // tests/approvals/arc4-clone.algo.ts:49
+    // receive(mutable: uint64[]) {}
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 8
+    *
+    intc_3 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<uint64>
+    intc_1 // 1
+    return
+
+
+// tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.receiveReadonly[routing]() -> void:
+receiveReadonly:
+    // tests/approvals/arc4-clone.algo.ts:51
+    // receiveReadonly(a: readonly uint64[]) {}
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 8
+    *
+    intc_3 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<uint64>
+    intc_1 // 1
+    return
+
+
+// tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn[routing]() -> void:
+structReturn:
+    // tests/approvals/arc4-clone.algo.ts:53
+    // structReturn(arg: TopLevelStruct): SharedStruct {
+    txna ApplicationArgs 1
+    dup
+    len
+    dig 1
+    intc_2 // 8
+    extract_uint16 // on error: invalid tuple encoding
+    dup
+    pushint 12 // 12
+    ==
+    assert // invalid tail pointer at index 1 of (uint64,(len+utf8[]),((len+uint8[]),uint8))
+    dig 2
+    swap
+    dig 2
+    substring3
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    pushint 14 // 14
+    +
+    dig 2
+    pushint 10 // 10
+    extract_uint16 // on error: invalid tuple encoding
+    dup
+    dig 2
+    ==
+    assert // invalid tail pointer at index 2 of (uint64,(len+utf8[]),((len+uint8[]),uint8))
+    uncover 3
+    swap
+    dig 3
+    substring3
+    dup
+    len
+    dig 1
+    intc_0 // 0
+    extract_uint16 // on error: invalid tuple encoding
+    dup
+    pushint 3 // 3
+    ==
+    assert // invalid tail pointer at index 0 of ((len+uint8[]),uint8)
+    dig 2
+    swap
+    uncover 2
+    substring3
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    pushint 5 // 5
+    +
+    uncover 2
+    +
+    uncover 2
+    ==
+    assert // invalid number of bytes for TopLevelStruct
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return

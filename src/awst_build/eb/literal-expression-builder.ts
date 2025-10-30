@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import type { awst } from '../../awst'
 import type { Expression, LValue } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
@@ -37,15 +38,20 @@ export abstract class LiteralExpressionBuilder extends InstanceBuilder {
     this.throwInvalidExpression()
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     this.throwInvalidExpression()
   }
 
-  taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
+  taggedTemplate(
+    head: string,
+    spans: ReadonlyArray<readonly [InstanceBuilder, string]>,
+    typeArgs: readonly PType[],
+    sourceLocation: SourceLocation,
+  ): InstanceBuilder {
     this.throwInvalidExpression()
   }
 
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
     this.throwInvalidExpression()
   }
 
@@ -53,7 +59,7 @@ export abstract class LiteralExpressionBuilder extends InstanceBuilder {
     this.throwInvalidExpression()
   }
 
-  toBytes(sourceLocation: SourceLocation): awst.Expression {
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
     this.throwInvalidExpression()
   }
 

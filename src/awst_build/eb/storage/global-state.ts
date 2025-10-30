@@ -1,12 +1,15 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { AppStateExpression, Expression } from '../../../awst/nodes'
 import { BytesConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
+import { GlobalStateNumber } from '../../../code-fix/global-state-number'
+import { logger } from '../../../logger'
 import { codeInvariant, invariant } from '../../../util'
 import { AppStorageDeclaration } from '../../models/app-storage-declaration'
 import type { ContractClassPType, PType } from '../../ptypes'
-import { boolPType, bytesPType, GlobalStateType, stringPType } from '../../ptypes'
+import { boolPType, bytesPType, GlobalStateGeneric, GlobalStateType, numberPType, stringPType } from '../../ptypes'
 import { typeRegistry } from '../../type-registry'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 import type { NodeBuilder } from '../index'
@@ -20,8 +23,11 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    const [contentPType] = typeArgs
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
+    const ptype = GlobalStateGeneric.parameterise(typeArgs)
+    if (ptype.contentType.equals(numberPType)) {
+      logger.addCodeFix(new GlobalStateNumber({ sourceLocation }))
+    }
     const {
       args: [{ initialValue, key }],
     } = parseFunctionArgs({
@@ -30,19 +36,20 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 1,
       argSpec: (a) => [
         a.obj({
-          initialValue: a.optional(contentPType),
+          initialValue: a.optional(ptype.contentType),
           key: a.optional(stringPType, bytesPType),
         }),
       ],
       funcName: this.typeDescription,
       callLocation: sourceLocation,
     })
-    const ptype = new GlobalStateType({ content: contentPType })
 
-    return new GlobalStateFunctionResultBuilder(extractKey(key, wtypes.stateKeyWType), ptype, {
-      initialValue: initialValue?.resolve(),
+    return new GlobalStateFunctionResultBuilder(
+      extractKey(key, wtypes.stateKeyWType, sourceLocation),
+      ptype,
+      initialValue?.resolve(),
       sourceLocation,
-    })
+    )
   }
 }
 
@@ -54,7 +61,7 @@ class GlobalStateDeleteFunctionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     parseFunctionArgs({
       args,
       typeArgs,
@@ -82,13 +89,13 @@ export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<Glob
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'delete':
-        return new GlobalStateDeleteFunctionBuilder(this.buildField(), sourceLocation)
+        return new GlobalStateDeleteFunctionBuilder(this.buildField(this.sourceLocation), sourceLocation)
       case 'value':
-        return typeRegistry.getInstanceEb(this.buildField(), this.ptype.contentType)
+        return typeRegistry.getInstanceEb(this.buildField(sourceLocation), this.ptype.contentType)
       case 'hasValue':
         return new BooleanExpressionBuilder(
           nodeFactory.stateExists({
-            field: this.buildField(),
+            field: this.buildField(this.sourceLocation),
             wtype: boolPType.wtype,
             sourceLocation,
           }),
@@ -97,12 +104,12 @@ export class GlobalStateExpressionBuilder extends InstanceExpressionBuilder<Glob
     return super.memberAccess(name, sourceLocation)
   }
 
-  protected buildField(): AppStateExpression {
+  protected buildField(sourceLocation: SourceLocation): AppStateExpression {
     return nodeFactory.appStateExpression({
       key: this._expr,
       wtype: this.ptype.contentType.wtypeOrThrow,
       existsAssertionMessage: 'check GlobalState exists',
-      sourceLocation: this.sourceLocation,
+      sourceLocation,
     })
   }
 }
@@ -114,28 +121,30 @@ export class GlobalStateFunctionResultBuilder extends GlobalStateExpressionBuild
       'Global state must have explicit key provided if not being assigned to a contract property',
       this.sourceLocation,
     )
-    codeInvariant(!this.initialValue, 'Global state can only have an initial value specified if being assigned to a contract property')
+    codeInvariant(
+      !this.initialValue,
+      'Global state can only have an initial value specified if being assigned to a contract property',
+      this.initialValue?.sourceLocation,
+    )
     return this._expr
   }
   public readonly initialValue: Expression | undefined
 
   private readonly _keyExpr: Expression | undefined
 
-  constructor(expr: Expression | undefined, ptype: PType, config: { initialValue?: Expression; sourceLocation: SourceLocation }) {
-    const sourceLocation = expr?.sourceLocation ?? config?.sourceLocation
-    invariant(sourceLocation, 'Must have expression or config')
+  constructor(expr: Expression | undefined, ptype: PType, initialValue: Expression | undefined, sourceLocation: SourceLocation) {
     super(expr ?? nodeFactory.voidConstant({ sourceLocation }), ptype)
-    this.initialValue = config.initialValue
+    this.initialValue = initialValue
     this._keyExpr = expr
   }
 
-  protected buildField(): AppStateExpression {
+  protected buildField(sourceLocation: SourceLocation): AppStateExpression {
     codeInvariant(
       this._keyExpr,
       'Global state must have explicit key provided if not being assigned to a contract property',
       this.sourceLocation,
     )
-    return super.buildField()
+    return super.buildField(sourceLocation)
   }
 
   buildStorageDeclaration(

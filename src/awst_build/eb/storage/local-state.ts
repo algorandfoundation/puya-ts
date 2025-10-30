@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { AppAccountStateExpression, AppStateExpression, Expression, LValue } from '../../../awst/nodes'
 import { BytesConstant } from '../../../awst/nodes'
@@ -20,7 +21,7 @@ export class LocalStateFunctionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const [contentPType] = typeArgs
     const {
       args: [{ key }],
@@ -37,7 +38,7 @@ export class LocalStateFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
     })
     const ptype = new LocalStateType({ content: contentPType })
-    return new LocalStateFunctionResultBuilder(extractKey(key, wtypes.stateKeyWType), ptype, { sourceLocation })
+    return new LocalStateFunctionResultBuilder(extractKey(key, wtypes.stateKeyWType, sourceLocation), ptype, { sourceLocation })
   }
 }
 
@@ -47,7 +48,7 @@ export class LocalStateExpressionBuilder extends InstanceExpressionBuilder<Local
     super(expr, ptype)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [account],
     } = parseFunctionArgs({
@@ -117,7 +118,7 @@ class LocalStateDeleteFunctionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     parseFunctionArgs({
       args,
       typeArgs,
@@ -137,6 +138,17 @@ class LocalStateDeleteFunctionBuilder extends FunctionBuilder {
 }
 
 export class LocalStateFunctionResultBuilder extends InstanceBuilder<LocalStateType> {
+  readonly isConstant = false
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
+    codeInvariant(
+      this._expr,
+      'Local state must have explicit key provided if not being assigned to a contract property',
+      this.sourceLocation,
+    )
+    return new LocalStateExpressionBuilder(this._expr, this.ptype).call(args, typeArgs, sourceLocation)
+  }
+
   resolve(): Expression {
     codeInvariant(
       this._expr,
@@ -145,6 +157,7 @@ export class LocalStateFunctionResultBuilder extends InstanceBuilder<LocalStateT
     )
     return this._expr
   }
+
   resolveLValue(): LValue {
     throw CodeError.invalidAssignmentTarget({ name: this.typeDescription, sourceLocation: this.sourceLocation })
   }
@@ -179,5 +192,10 @@ export class LocalStateFunctionResultBuilder extends InstanceBuilder<LocalStateT
       description: memberDescription,
       definedIn: contractType,
     })
+  }
+
+  checkForUnclonedMutables(scenario: string) {
+    // Nothing to see here
+    return false
   }
 }

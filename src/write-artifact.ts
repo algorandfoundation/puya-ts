@@ -1,7 +1,8 @@
 import * as fs from 'node:fs'
-import upath from 'upath'
+import pathe from 'pathe'
 import { logger } from './logger'
 import { mkDirIfNotExists } from './util'
+import type { AbsolutePath } from './util/absolute-path'
 
 export enum ArtifactKind {
   Awst,
@@ -15,8 +16,8 @@ export function writeArtifact<TObj>({
   obj,
   buildArtifact,
 }: {
-  sourceFile: string
-  outDir: string
+  sourceFile: AbsolutePath
+  outDir: AbsolutePath
   kind: ArtifactKind
   artifactName?: string
   buildArtifact(obj: TObj): string
@@ -25,15 +26,15 @@ export function writeArtifact<TObj>({
   let outFilePath: string
   switch (kind) {
     case ArtifactKind.Awst:
-      outFilePath = upath.join(outDir, `${upath.basename(sourceFile, '.algo.ts')}.awst`)
+      outFilePath = outDir.join(`${sourceFile.basename('.algo.ts')}.awst`).toString()
       break
     case ArtifactKind.AwstJson:
-      outFilePath = upath.join(outDir, `${upath.basename(sourceFile, '.algo.ts')}.awst.json`)
+      outFilePath = outDir.join(`${sourceFile.basename('.algo.ts')}.awst.json`).toString()
       break
   }
 
   const content = buildArtifact(obj)
   logger.info(undefined, `Writing ${outFilePath}`)
-  mkDirIfNotExists(upath.dirname(outFilePath))
+  mkDirIfNotExists(pathe.dirname(outFilePath))
   fs.writeFileSync(outFilePath, content, 'utf-8')
 }

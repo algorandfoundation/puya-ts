@@ -1,4 +1,4 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
@@ -6,25 +6,20 @@ main:
     // tests/approvals/single-eval.algo.ts:4
     // class SingleEvalAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     pushbytes 0xa78000de // method "test()void"
     txna ApplicationArgs 0
     match main_test_route@3
-
-main_after_if_else@10:
-    // tests/approvals/single-eval.algo.ts:4
-    // class SingleEvalAlgo extends Contract {
-    pushint 0 // 0
-    return
+    err
 
 main_test_route@3:
     // tests/approvals/single-eval.algo.ts:16
     // test() {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     // tests/approvals/single-eval.algo.ts:5
     // myState = GlobalState<uint64>()
     pushbytes "myState"
@@ -37,13 +32,14 @@ main_test_route@3:
     pushint 1 // 1
     return
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/single-eval.algo.ts:4
     // class SingleEvalAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     pushint 1 // 1
     return

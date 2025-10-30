@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { BytesConstant, Expression } from '../../../awst/nodes'
 import { EqualityComparison } from '../../../awst/nodes'
@@ -9,14 +10,14 @@ import { logger } from '../../../logger'
 import { codeInvariant, hexToUint8Array } from '../../../util'
 import { isArc4EncodableType, ptypeToArc4EncodedType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
-import { bytesPType, stringPType, uint64PType } from '../../ptypes'
+import { BytesPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
 import {
-  arc4EncodedLengthFunction,
   ARC4EncodedType,
+  convertBytesFunction,
   decodeArc4Function,
   encodeArc4Function,
-  interpretAsArc4Function,
   methodSelectorFunction,
+  sizeOfFunction,
 } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import { ContractMethodExpressionBuilder, SubroutineExpressionBuilder } from '../free-subroutine-expression-builder'
@@ -25,29 +26,37 @@ import { FunctionBuilder } from '../index'
 import { requireStringConstant } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 
-export class InterpretAsArc4FunctionBuilder extends FunctionBuilder {
-  readonly ptype = interpretAsArc4Function
+export class ConvertBytesFunctionBuilder extends FunctionBuilder {
+  readonly ptype = convertBytesFunction
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       ptypes: [ptype],
-      args: [theBytes, prefixType],
+      args: [theBytes, { prefix, strategy }],
     } = parseFunctionArgs({
       args,
       typeArgs,
       genericTypeArgs: 1,
       funcName: this.typeDescription,
-      argSpec: (a) => [a.required(bytesPType), a.optional(stringPType)],
+      argSpec: (a) => [
+        a.required(bytesPType),
+        a.obj({
+          prefix: a.optional(stringPType),
+          strategy: a.required(stringPType),
+        }),
+      ],
+
       callLocation: sourceLocation,
     })
     codeInvariant(ptype instanceof ARC4EncodedType, 'Generic type must be an ARC4 encoded type')
 
-    const prefixBytes = getPrefixValue(prefixType)
+    const prefixBytes = getPrefixValue(prefix)
+    const validate = requireStringConstant(strategy).value === 'validate'
 
     return instanceEb(
       nodeFactory.aRC4FromBytes({
         value: validatePrefix(theBytes, prefixBytes, sourceLocation),
-        validate: true,
+        validate,
         wtype: ptype.wtype,
         sourceLocation,
       }),
@@ -55,10 +64,11 @@ export class InterpretAsArc4FunctionBuilder extends FunctionBuilder {
     )
   }
 }
+
 export class EncodeArc4FunctionBuilder extends FunctionBuilder {
   readonly ptype = encodeArc4Function
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [valueToEncode],
       ptypes: [valueType],
@@ -101,7 +111,7 @@ export class EncodeArc4FunctionBuilder extends FunctionBuilder {
 export class DecodeArc4FunctionBuilder extends FunctionBuilder {
   readonly ptype = decodeArc4Function
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       ptypes: [ptype],
       args: [theBytes, prefixType],
@@ -115,7 +125,7 @@ export class DecodeArc4FunctionBuilder extends FunctionBuilder {
     })
     codeInvariant(
       !(ptype instanceof ARC4EncodedType),
-      `Cannot decode to ${ptype} as it is an ARC4 type. Use \`interpretAsArc4<${ptype}>\` instead`,
+      `Cannot decode to ${ptype} as it is an ARC4 type. Use \`convertBytes<${ptype}>\` instead`,
       sourceLocation,
     )
 
@@ -191,7 +201,7 @@ function getPrefixValue(arg: InstanceBuilder | undefined): BytesConstant | undef
 export class MethodSelectorFunctionBuilder extends FunctionBuilder {
   readonly ptype = methodSelectorFunction
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [methodSignature],
     } = parseFunctionArgs({
@@ -202,13 +212,14 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
       funcName: this.typeDescription,
       argSpec: (a) => [a.passthrough()],
     })
-
+    const methodConstantType = new BytesPType({ length: 4n })
     if (methodSignature instanceof SubroutineExpressionBuilder) {
       codeInvariant(
         methodSignature instanceof ContractMethodExpressionBuilder,
         `Expected contract instance method, found ${methodSignature.typeDescription}`,
+        methodSignature.sourceLocation,
       )
-      return instanceEb(methodSignature.getMethodSelector(sourceLocation), bytesPType)
+      return instanceEb(methodSignature.getMethodSelector(sourceLocation), methodConstantType)
     } else {
       if (methodSignature === undefined) {
         throw new CodeError(
@@ -219,19 +230,19 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
       return instanceEb(
         nodeFactory.methodConstant({
           value: requireStringConstant(methodSignature).value,
-          wtype: wtypes.bytesWType,
+          wtype: methodConstantType.wtype,
           sourceLocation,
         }),
-        bytesPType,
+        methodConstantType,
       )
     }
   }
 }
 
-export class Arc4EncodedLengthFunctionBuilder extends FunctionBuilder {
-  readonly ptype = arc4EncodedLengthFunction
+export class SizeOfFunctionBuilder extends FunctionBuilder {
+  readonly ptype = sizeOfFunction
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       ptypes: [typeToEncode],
     } = parseFunctionArgs({
@@ -245,18 +256,6 @@ export class Arc4EncodedLengthFunctionBuilder extends FunctionBuilder {
 
     const arc4Type = ptypeToArc4EncodedType(typeToEncode, sourceLocation)
 
-    codeInvariant(
-      arc4Type.fixedByteSize !== null,
-      `Target type must encode to a fixed size. ${typeToEncode} encodes with a variable length`,
-      sourceLocation,
-    )
-
-    return instanceEb(
-      nodeFactory.uInt64Constant({
-        value: arc4Type.fixedByteSize,
-        sourceLocation,
-      }),
-      uint64PType,
-    )
+    return instanceEb(nodeFactory.sizeOf({ sizeWtype: arc4Type.wtype, wtype: wtypes.uint64WType, sourceLocation }), uint64PType)
   }
 }

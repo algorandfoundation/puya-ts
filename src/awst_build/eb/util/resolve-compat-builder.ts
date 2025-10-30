@@ -1,3 +1,4 @@
+import { nodeFactory } from '../../../awst/node-factory'
 import { CodeError } from '../../../errors'
 import { codeInvariant } from '../../../util'
 import type { PType } from '../../ptypes'
@@ -22,15 +23,15 @@ export function resolveCompatBuilder(builder: NodeBuilder, targetType: PType) {
   if (targetType.equals(accountPType)) {
     if (builder.resolvableToPType(bytesPType)) {
       // Account bytes should just be cast
-      return builder.resolveToPType(bytesPType).reinterpretCast(accountPType)
+      return reinterpretCast(builder.resolveToPType(bytesPType), accountPType)
     }
   } else if (targetType.equals(applicationPType) || targetType.equals(assetPType) || targetType.equals(onCompleteActionType)) {
     if (builder.resolvableToPType(uint64PType)) {
-      return builder.resolveToPType(uint64PType).reinterpretCast(targetType)
+      return reinterpretCast(builder.resolveToPType(uint64PType), targetType)
     }
   } else if (targetType.equals(bytesPType)) {
     if (builder.resolvableToPType(stringPType)) {
-      return instanceEb(builder.resolveToPType(stringPType).toBytes(builder.sourceLocation), bytesPType)
+      return builder.resolveToPType(stringPType).toBytes(builder.sourceLocation)
     }
   }
 
@@ -39,4 +40,15 @@ export function resolveCompatBuilder(builder: NodeBuilder, targetType: PType) {
 
 export function resolveCompatExpression(builder: NodeBuilder, targetType: PType) {
   return resolveCompatBuilder(builder, targetType).resolve()
+}
+
+function reinterpretCast(builder: InstanceBuilder, ptype: PType) {
+  return instanceEb(
+    nodeFactory.reinterpretCast({
+      expr: builder.resolve(),
+      sourceLocation: builder.sourceLocation,
+      wtype: ptype.wtypeOrThrow,
+    }),
+    ptype,
+  )
 }

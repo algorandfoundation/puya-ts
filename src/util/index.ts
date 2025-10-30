@@ -1,13 +1,15 @@
-import { Buffer } from 'node:buffer'
 import fs from 'node:fs'
 import { TextDecoder } from 'node:util'
-import upath from 'upath'
+import pathe from 'pathe'
 import type { SourceLocation } from '../awst/source-location'
 import { Constants } from '../constants'
 import { CodeError, InternalError } from '../errors'
 import type { DeliberateAny } from '../typescript-helpers'
+import type { AbsolutePath } from './absolute-path'
 
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
+export { base64ToUint8Array, uint8ArrayToBase64 } from './base-64'
+export { hexToUint8Array, uint8ArrayToHex } from './base-16'
 
 class InvariantError extends InternalError {}
 
@@ -92,17 +94,6 @@ export const expandMaybeArray = <T>(maybeArray: T | T[]): T[] => {
   return Array.isArray(maybeArray) ? maybeArray : [maybeArray]
 }
 
-export const uint8ArrayToBase64 = (value: Uint8Array): string => Buffer.from(value).toString('base64')
-
-export const hexToUint8Array = (value: string): Uint8Array => {
-  invariant(value.length % 2 === 0, 'Hex string must have even number of characters')
-  return Uint8Array.from(Buffer.from(value, 'hex'))
-}
-
-export const base64ToUint8Array = (value: string): Uint8Array => {
-  return Uint8Array.from(Buffer.from(value, 'base64'))
-}
-
 export const utf8ToUint8Array = (value: string): Uint8Array => {
   const encoder = new TextEncoder()
   return encoder.encode(value)
@@ -115,8 +106,6 @@ export const uint8ArrayToBigInt = (v: Uint8Array): bigint => {
     .map((byte_value, i): bigint => BigInt(byte_value) << BigInt(i * 8))
     .reduce((a, b) => a + b, 0n)
 }
-
-export const uint8ArrayToHex = (value: Uint8Array): string => Buffer.from(value).toString('hex')
 
 export const uint8ArrayToUtf8 = (value: Uint8Array): string => {
   const decoder = new TextDecoder()
@@ -151,14 +140,6 @@ export const bigIntToUint8Array = (val: bigint, fixedSize: number | 'dynamic' = 
 export const hasFlags = <T extends number>(value: T, flags: T): boolean => (value & flags) === flags
 export const intersectsFlags = <T extends number>(value: T, flags: T): boolean => Boolean(value & flags)
 
-export function* enumerate<T>(iterable: Iterable<T>): IterableIterator<readonly [number, T]> {
-  let i = 0
-  for (const item of iterable) {
-    yield [i, item]
-    i++
-  }
-}
-
 export function toSubScript(num: number) {
   const subNumbers = ['\u2080', '\u2081', '\u2082', '\u2083', '\u2084', '\u2085', '\u2086', '\u2087', '\u2088', '\u2089']
   return num
@@ -168,7 +149,7 @@ export function toSubScript(num: number) {
     .join('')
 }
 
-export function instanceOfAny<T extends Array<{ new (...args: DeliberateAny[]): DeliberateAny }>>(
+export function instanceOfAny<T extends Array<new (...args: DeliberateAny[]) => DeliberateAny>>(
   x: unknown,
   ...types: T
 ): x is InstanceType<T[number]> {
@@ -176,7 +157,7 @@ export function instanceOfAny<T extends Array<{ new (...args: DeliberateAny[]): 
 }
 
 /**
- * Normalise a file path to only include relevant segments.
+ * Extract a module name from a file path
  *
  *  - Anything in /node_modules/ is truncated to <package-name>/path.ext
  *  - Anything in workingDirectory is truncated relative to the workingDirectory
@@ -184,7 +165,7 @@ export function instanceOfAny<T extends Array<{ new (...args: DeliberateAny[]): 
  * @param filePath
  * @param workingDirectory
  */
-export function normalisePath(filePath: string, workingDirectory: string): string {
+export function extractModuleName(filePath: string, workingDirectory: AbsolutePath): string {
   const localPackageName = /packages\/algo-ts\/dist\/(.*)$/.exec(filePath)
   if (localPackageName) {
     return `${Constants.algoTsPackage}/${localPackageName[1]}`
@@ -193,11 +174,13 @@ export function normalisePath(filePath: string, workingDirectory: string): strin
   if (nodeModuleName) {
     return nodeModuleName[1]
   }
-  const cwd = upath.normalize(`${workingDirectory}/`)
-  const normalizedPath = upath.normalize(filePath)
+  const cwd = pathe.normalize(`${workingDirectory}/`)
+  const normalizedPath = pathe.normalize(filePath)
   const moduleName = normalizedPath.startsWith(cwd) ? normalizedPath.slice(cwd.length) : normalizedPath
   return moduleName.replaceAll('\\', '/')
 }
+
+type SortFn<T> = (a: T, b: T) => number
 
 type SortDir = 'asc' | 'desc'
 export const sortBy =
@@ -207,6 +190,34 @@ export const sortBy =
     const keyB = keySelector(b)
     return (dir === 'desc' ? -1 : 1) * (keyA < keyB ? -1 : keyA > keyB ? 1 : 0)
   }
+
+/**
+ * Combine multiple sort functions to construct a more advanced sort by _this_ then by _that_ function.
+ * @param sortFunctions one or more sort functions (the return type of sortBy, and sortByIgnoreCase)
+ *
+ * Usage:
+ * ```
+ * const users = allUsers.slice().sort(
+ *   combineSortFn(
+ *     sortByIgnoreCase(x => x.familyName),
+ *     sortByIgnoreCase(x => x.givenName),
+ *     sortBy(x => x.dateOfBirth)
+ *   )
+ * )
+ * ```
+ */
+export const combineSortFn =
+  <T>(...sortFunctions: SortFn<T>[]): SortFn<T> =>
+  (a, b) => {
+    for (const fn of sortFunctions) {
+      const res = fn(a, b)
+      if (res !== 0) {
+        return res
+      }
+    }
+    return 0
+  }
+
 /**
  * Can be used to filter a collection to a set of distinct items as determined by a specified key.
  * @param keySelector A lambda which when given an item, returns the items unique identifier

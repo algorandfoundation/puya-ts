@@ -1,5 +1,5 @@
 import { NoImplementation } from '../internal/errors'
-import { biguint, BigUintCompat, bytes, BytesBacked, NTuple, StringCompat, uint64, Uint64Compat } from '../primitives'
+import { biguint, BigUintCompat, bytes, BytesBacked, StringCompat, uint64, Uint64Compat } from '../primitives'
 import { Account } from '../reference'
 
 /**
@@ -67,13 +67,10 @@ type BigUintBitSize =
   | 504
   | 512
 /**
- * Defines supported bit sizes for the UintN and UFixedNxM types
+ * Defines supported bit sizes for the UintN and UFixed types
  */
 export type BitSize = UintBitSize | BigUintBitSize
-/**
- * Conditional type which returns the native equivalent type for a given UintN bit size
- */
-type NativeForArc4Int<N extends BitSize> = N extends UintBitSize ? uint64 : biguint
+
 /**
  * Conditional type which returns the compat type relevant to a given UintN bit size
  */
@@ -88,7 +85,15 @@ const TypeProperty = Symbol('ARC4Type')
  * A base type for ARC4 encoded values
  */
 export abstract class ARC4Encoded implements BytesBacked {
-  /** @hidden */
+  /**
+   * @hidden
+   *
+   * Since TypeScript is structurally typed, different ARC4Encodeds with compatible
+   * structures will often be assignable to one and another and this is generally
+   * not desirable. The TypeProperty property should be used to declare a literal value
+   * (usually the class name) on each distinct ARC4Encoded class to ensure they are
+   * structurally different.
+   */
   abstract [TypeProperty]?: string
 
   /**
@@ -125,9 +130,9 @@ export class Str extends ARC4Encoded {
 /**
  * A fixed bit size unsigned int
  */
-export class UintN<N extends BitSize> extends ARC4Encoded {
+export class Uint<N extends BitSize> extends ARC4Encoded {
   /** @hidden */
-  [TypeProperty]?: `arc4.UintN<${N}>`
+  [TypeProperty]?: `arc4.Uint<${N}>`
 
   /**
    * Create a new UintN instance
@@ -138,68 +143,68 @@ export class UintN<N extends BitSize> extends ARC4Encoded {
   }
 
   /**
-   * Retrieve the decoded native uint64 or biguint
+   * Retrieve the decoded native uint64
    */
-  get native(): NativeForArc4Int<N> {
+  asUint64(): uint64 {
+    throw new NoImplementation()
+  }
+
+  /**
+   * Retrieve the decoded native biguint
+   */
+  asBigUint(): biguint {
     throw new NoImplementation()
   }
 }
 
 /**
- * An alias for UintN<8>
+ * An alias for Uint<8>
  */
-export class Byte extends UintN<8> {}
+export class Byte extends Uint<8> {}
 
 /**
- * An alias for UintN<8>
+ * An alias for Uint<8>
  */
-export class UintN8 extends UintN<8> {}
+export class Uint8 extends Uint<8> {}
 
 /**
- * An alias for UintN<16>
+ * An alias for Uint<16>
  */
-export class UintN16 extends UintN<16> {}
+export class Uint16 extends Uint<16> {}
 
 /**
- * An alias for UintN<32>
+ * An alias for Uint<32>
  */
-export class UintN32 extends UintN<32> {}
+export class Uint32 extends Uint<32> {}
 
 /**
- * An alias for UintN<64>
+ * An alias for Uint<64>
  */
-export class UintN64 extends UintN<64> {}
+export class Uint64 extends Uint<64> {}
 
 /**
- * An alias for UintN<128>
+ * An alias for Uint<128>
  */
-export class UintN128 extends UintN<128> {}
+export class Uint128 extends Uint<128> {}
 
 /**
- * An alias for UintN<256>
+ * An alias for Uint<256>
  */
-export class UintN256 extends UintN<256> {}
+export class Uint256 extends Uint<256> {}
 
 /**
  * A fixed bit size, fixed decimal unsigned value
  */
-export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded {
+export class UFixed<N extends BitSize, M extends number> extends ARC4Encoded {
   /** @hidden */
-  [TypeProperty]?: `arc4.UFixedNxM<${N}x${M}>`
+  [TypeProperty]?: `arc4.UFixed<${N}x${M}>`
 
   /**
-   * Create a new UFixedNxM value
+   * Create a new UFixed value
    * @param v A string representing the integer and fractional portion of the number
    */
   constructor(v?: `${number}.${number}`) {
     super()
-  }
-
-  /**
-   * Retrieve the decoded native uint64 or biguint where the returned integer represents the fixed decimal value * (10 ^ M)
-   */
-  get native(): NativeForArc4Int<N> {
-    throw new NoImplementation()
   }
 }
 
@@ -208,7 +213,7 @@ export class UFixedNxM<N extends BitSize, M extends number> extends ARC4Encoded 
  */
 export class Bool extends ARC4Encoded {
   /** @hidden */
-  [TypeProperty]?: `arc4.Bool`
+  [TypeProperty]?: 'arc4.Bool'
 
   /**
    * Create a new Bool value
@@ -229,7 +234,7 @@ export class Bool extends ARC4Encoded {
 /**
  * A base type for arc4 array types
  */
-abstract class Arc4ArrayBase<TItem extends ARC4Encoded> extends ARC4Encoded {
+abstract class Arc4ArrayBase<TItem extends ARC4Encoded> extends ARC4Encoded implements ConcatArray<TItem> {
   protected constructor() {
     super()
   }
@@ -250,24 +255,34 @@ abstract class Arc4ArrayBase<TItem extends ARC4Encoded> extends ARC4Encoded {
     throw new NoImplementation()
   }
 
-  /** @internal
+  /** @deprecated Array slicing is not yet supported in Algorand TypeScript
    * Create a new Dynamic array with all items from this array
    */
-  slice(): DynamicArray<TItem>
-  /** @internal
+  slice(): Array<TItem>
+  /** @deprecated Array slicing is not yet supported in Algorand TypeScript
    * Create a new DynamicArray with all items up till `end`.
    * Negative indexes are taken from the end.
    * @param end An index in which to stop copying items.
    */
-  slice(end: Uint64Compat): DynamicArray<TItem>
-  /** @internal
+  slice(end: Uint64Compat): Array<TItem>
+  /** @deprecated Array slicing is not yet supported in Algorand TypeScript
    * Create a new DynamicArray with items from `start`, up until `end`
    * Negative indexes are taken from the end.
    * @param start An index in which to start copying items.
    * @param end An index in which to stop copying items
    */
-  slice(start: Uint64Compat, end: Uint64Compat): DynamicArray<TItem>
-  slice(start?: Uint64Compat, end?: Uint64Compat): DynamicArray<TItem> {
+  slice(start: Uint64Compat, end: Uint64Compat): Array<TItem>
+  slice(start?: Uint64Compat, end?: Uint64Compat): Array<TItem> {
+    throw new NoImplementation()
+  }
+
+  /**
+   * Creates a string by concatenating all the items in the array delimited by the
+   * specified separator (or ',' by default)
+   * @param separator
+   * @deprecated Join is not supported in Algorand TypeScript
+   */
+  join(separator?: string): string {
     throw new NoImplementation()
   }
 
@@ -322,13 +337,6 @@ export class StaticArray<TItem extends ARC4Encoded, TLength extends number> exte
   }
 
   /**
-   * Returns a copy of this array
-   */
-  copy(): StaticArray<TItem, TLength> {
-    throw new NoImplementation()
-  }
-
-  /**
    * Returns a new array containing all items from _this_ array, and _other_ array
    * @param other Another array to concat with this one
    */
@@ -337,14 +345,7 @@ export class StaticArray<TItem extends ARC4Encoded, TLength extends number> exte
   }
 
   /**
-   * Return the array items as a native tuple
-   */
-  get native(): NTuple<TItem, TLength> {
-    throw new NoImplementation()
-  }
-
-  /**
-   * Returns the (compile-time) length of this array
+   * Returns the statically declared length of this array
    */
   get length(): uint64 {
     throw new NoImplementation()
@@ -383,24 +384,10 @@ export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ArrayBase<TItem
   }
 
   /**
-   * Returns a copy of this array
-   */
-  copy(): DynamicArray<TItem> {
-    throw new NoImplementation()
-  }
-
-  /**
    * Returns a new array containing all items from _this_ array, and _other_ array
    * @param other Another array to concat with this one
    */
   concat(other: Arc4ArrayBase<TItem>): DynamicArray<TItem> {
-    throw new NoImplementation()
-  }
-
-  /**
-   * Return the array items as a native immutable array
-   */
-  get native(): TItem[] {
     throw new NoImplementation()
   }
 }
@@ -408,7 +395,7 @@ export class DynamicArray<TItem extends ARC4Encoded> extends Arc4ArrayBase<TItem
 /**
  * @hidden
  */
-type ExpandTupleType<T extends ARC4Encoded[]> = T extends [infer T1 extends ARC4Encoded, ...infer TRest extends ARC4Encoded[]]
+type ExpandTupleType<T extends readonly ARC4Encoded[]> = T extends [infer T1 extends ARC4Encoded, ...infer TRest extends ARC4Encoded[]]
   ? TRest extends []
     ? `${T1[typeof TypeProperty]}`
     : `${T1[typeof TypeProperty]},${ExpandTupleType<TRest>}`
@@ -418,7 +405,7 @@ type ExpandTupleType<T extends ARC4Encoded[]> = T extends [infer T1 extends ARC4
  * An arc4 encoded tuple of values
  * @typeParam TTuple A type representing the native tuple of item types
  */
-export class Tuple<TTuple extends [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4Encoded {
+export class Tuple<const TTuple extends readonly [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4Encoded {
   /** @hidden */
   [TypeProperty]?: `arc4.Tuple<${ExpandTupleType<TTuple>}>`
 
@@ -463,7 +450,7 @@ export class Tuple<TTuple extends [ARC4Encoded, ...ARC4Encoded[]]> extends ARC4E
  */
 export class Address extends Arc4ArrayBase<Byte> {
   /** @hidden */
-  [TypeProperty]?: `arc4.Address`
+  [TypeProperty]?: 'arc4.Address'
 
   /**
    * Create a new Address instance
@@ -486,16 +473,9 @@ export class Address extends Arc4ArrayBase<Byte> {
  */
 class StructBase<T> extends ARC4Encoded {
   /** @hidden */
-  [TypeProperty] = 'arc4.Struct'
+  [TypeProperty]?: 'arc4.Struct'
 
   get native(): T {
-    throw new NoImplementation()
-  }
-
-  /**
-   * Returns a deep copy of this struct
-   */
-  copy(): this {
     throw new NoImplementation()
   }
 }
@@ -513,7 +493,7 @@ type StructConstructor = {
  *
  * Usage:
  * ```
- * class MyStruct extends Struct<{ x: UintN8, y: Str, z: DynamicBytes }> {}
+ * class MyStruct extends Struct<{ x: Uint8, y: Str, z: DynamicBytes }> { }
  * ```
  */
 export const Struct = StructBase as unknown as StructConstructor
@@ -523,7 +503,7 @@ export const Struct = StructBase as unknown as StructConstructor
  */
 export class DynamicBytes extends Arc4ArrayBase<Byte> {
   /** @hidden */
-  [TypeProperty]?: `arc4.DynamicBytes`
+  [TypeProperty]?: 'arc4.DynamicBytes'
 
   /**
    * Create a new DynamicBytes instance
@@ -552,14 +532,29 @@ export class DynamicBytes extends Arc4ArrayBase<Byte> {
 /**
  * A fixed length sequence of bytes
  */
-export class StaticBytes<TLength extends number = 0> extends Arc4ArrayBase<Byte> {
+export class StaticBytes<TLength extends uint64 = 0> extends Arc4ArrayBase<Byte> {
   /** @hidden */
   [TypeProperty]?: `arc4.StaticBytes<${TLength}>`
 
   /**
-   * Create a new StaticBytes instance
-   * @param value THe bytes or utf8 interpreted string to initialize this type
+   * Create a new StaticBytes instance from native fixed sized bytes
+   * @param value The bytes
    */
+  constructor(value: bytes<TLength>)
+  /**
+   * Create a new StaticBytes instance from native bytes
+   * @param value The bytes
+   */
+  constructor(value: bytes)
+  /**
+   * Create a new StaticBytes instance from a utf8 string
+   * @param value A string
+   */
+  constructor(value: string)
+  /**
+   * Create a new StaticBytes instance of length 0
+   */
+  constructor()
   constructor(value?: bytes | string) {
     super()
   }
@@ -567,7 +562,7 @@ export class StaticBytes<TLength extends number = 0> extends Arc4ArrayBase<Byte>
   /**
    * Get the native bytes value
    */
-  get native(): bytes {
+  get native(): bytes<TLength> {
     throw new NoImplementation()
   }
 
@@ -580,7 +575,7 @@ export class StaticBytes<TLength extends number = 0> extends Arc4ArrayBase<Byte>
   }
 
   /**
-   * Returns the (compile-time) length of this array
+   * Returns the statically declared length of this byte array
    */
   get length(): uint64 {
     throw new NoImplementation()

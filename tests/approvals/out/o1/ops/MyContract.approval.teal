@@ -1,70 +1,84 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1
     bytecblock 0xa78000de
-    // tests/approvals/ops.algo.ts:6
+    // tests/approvals/ops.algo.ts:7
     // class MyContract extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
     bytec_0 // method "test()void"
+    pushbytes 0x0a4743a6 // method "test2(uint64)void"
     txna ApplicationArgs 0
-    match main_test_route@3
+    match test test2
+    err
 
-main_after_if_else@10:
-    // tests/approvals/ops.algo.ts:6
-    // class MyContract extends Contract {
-    intc_0 // 0
-    return
-
-main_test_route@3:
+main___algots__.defaultCreate@9:
     // tests/approvals/ops.algo.ts:7
-    // test() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    callsub test
-    intc_1 // 1
-    return
-
-main_bare_routing@6:
-    // tests/approvals/ops.algo.ts:6
     // class MyContract extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
-    intc_1 // 1
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
     return
 
 
-// tests/approvals/ops.algo.ts::MyContract.test() -> void:
+// tests/approvals/ops.algo.ts::MyContract.test[routing]() -> void:
 test:
-    // tests/approvals/ops.algo.ts:16
+    // tests/approvals/ops.algo.ts:17
     // assert(GTxn.applicationId(Txn.groupIndex) === Txn.applicationId)
     txn GroupIndex
     gtxns ApplicationID
     txn ApplicationID
     ==
     assert
-    // tests/approvals/ops.algo.ts:18
+    // tests/approvals/ops.algo.ts:19
     // assert(Txn.applicationArgs(0) === methodSelector('test()void'))
-    intc_0 // 0
+    pushint 0 // 0
     txnas ApplicationArgs
     bytec_0 // method "test()void"
     ==
     assert
-    // tests/approvals/ops.algo.ts:19
+    // tests/approvals/ops.algo.ts:20
     // assert(GTxn.applicationArgs(Txn.groupIndex, 0) === methodSelector(MyContract.prototype.test))
     txn GroupIndex
-    intc_0 // 0
+    pushint 0 // 0
     gtxnsas ApplicationArgs
     bytec_0 // method "test()void"
     ==
-    assert
-    retsub
+    // tests/approvals/ops.algo.ts:8
+    // test() {
+    return
+
+
+// tests/approvals/ops.algo.ts::MyContract.test2[routing]() -> void:
+test2:
+    // tests/approvals/ops.algo.ts:23
+    // test2(size: uint64) {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/ops.algo.ts:24
+    // const a = bzero(size)
+    dup
+    bzero
+    // tests/approvals/ops.algo.ts:25
+    // assert(a.length === size)
+    len
+    ==
+    // tests/approvals/ops.algo.ts:23
+    // test2(size: uint64) {
+    return

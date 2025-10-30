@@ -1,9 +1,18 @@
+import type ts from 'typescript'
 import { ContractReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
-import type { ContractMethodTarget, InstanceMethodTarget, InstanceSuperMethodTarget, MethodConstant, SubroutineID } from '../../awst/nodes'
+import type {
+  ContractMethodTarget,
+  Expression,
+  InstanceMethodTarget,
+  InstanceSuperMethodTarget,
+  LValue,
+  MethodConstant,
+  SubroutineID,
+} from '../../awst/nodes'
 import { ARC4ABIMethodConfig } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { InternalError } from '../../errors'
+import { CodeError, InternalError } from '../../errors'
 import { codeInvariant } from '../../util'
 import { buildArc4MethodConstant } from '../arc4-util'
 import { AwstBuildContext } from '../context/awst-build-context'
@@ -11,10 +20,19 @@ import type { ContractClassPType, PType } from '../ptypes'
 import { FunctionPType } from '../ptypes'
 import { typeRegistry } from '../type-registry'
 import type { NodeBuilder } from './index'
-import { FunctionBuilder } from './index'
+import { InstanceBuilder } from './index'
 import { parseFunctionArgs } from './util/arg-parsing'
 
-export abstract class SubroutineExpressionBuilder extends FunctionBuilder {
+export abstract class SubroutineExpressionBuilder extends InstanceBuilder {
+  public readonly isConstant = true
+  resolve(): Expression {
+    throw new CodeError('Function reference cannot be used as a value in this context', { sourceLocation: this.sourceLocation })
+  }
+
+  resolveLValue(): LValue {
+    throw CodeError.invalidAssignmentTarget({ sourceLocation: this.sourceLocation, name: 'Function reference' })
+  }
+
   protected constructor(
     sourceLocation: SourceLocation,
     public readonly ptype: FunctionPType,
@@ -23,7 +41,7 @@ export abstract class SubroutineExpressionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const { args: mappedArgs } = parseFunctionArgs({
       args,
       typeArgs,

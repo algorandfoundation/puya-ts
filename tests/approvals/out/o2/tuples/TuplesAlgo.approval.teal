@@ -1,0 +1,52 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 8 1
+    // tests/approvals/tuples.algo.ts:6
+    // class TuplesAlgo extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0x37e7ce87 // method "test(uint64,uint64,uint64)void"
+    txna ApplicationArgs 0
+    match main_test_route@3
+    err
+
+main_test_route@3:
+    // tests/approvals/tuples.algo.ts:7
+    // test(a: Uint64, b: Uint64, c: Uint64) {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    txna ApplicationArgs 1
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    txna ApplicationArgs 2
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    txna ApplicationArgs 3
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    intc_1 // 1
+    return
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/tuples.algo.ts:6
+    // class TuplesAlgo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return

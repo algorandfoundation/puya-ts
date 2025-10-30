@@ -1,69 +1,57 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
-        goto tmp%0#1 ? block@2 : block@7
-    block@2: // abi_routing_L33
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "setState(string,uint64)void" => block@3, method "deleteState(string)void" => block@4, * => block@11}
-    block@3: // setState_route_L35
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (! tmp%3#0)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        (assert tmp%5#0) // can only call when not creating
-        let tmp%7#0: bytes = (txna ApplicationArgs 1)
-        let length%0#0: uint64 = (extract_uint16 tmp%7#0 0u) // on error: invalid array length header
-        let num_bytes_with_header%0#0: uint64 = (+ length%0#0 2u)
-        let value_len%0#0: uint64 = (len tmp%7#0)
-        let size_is_correct%0#0: bool = (== value_len%0#0 num_bytes_with_header%0#0)
-        (assert size_is_correct%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-        let tmp%8#0: bytes = ((extract 2 0) tmp%7#0)
-        let tmp%9#0: bytes = (txna ApplicationArgs 2)
-        let value_len%1#0: uint64 = (len tmp%9#0)
-        let size_is_correct%1#0: bool = (== value_len%1#0 8u)
-        (assert size_is_correct%1#0) // invalid number of bytes for arc4.uint64
-        let tmp%10#0: uint64 = (btoi tmp%9#0)
-        tests/approvals/global-state.algo.ts::TestArc4.setState(tmp%8#0, tmp%10#0)
-        let tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#0: bool = 1u
-        goto block@12
-    block@4: // deleteState_route_L41
-        let tmp%11#0: uint64 = (txn OnCompletion)
-        let tmp%12#0: bool = (! tmp%11#0)
-        (assert tmp%12#0) // OnCompletion is not NoOp
-        let tmp%13#0: uint64 = (txn ApplicationID)
-        (assert tmp%13#0) // can only call when not creating
-        let tmp%15#0: bytes = (txna ApplicationArgs 1)
-        let length%1#0: uint64 = (extract_uint16 tmp%15#0 0u) // on error: invalid array length header
-        let num_bytes_with_header%1#0: uint64 = (+ length%1#0 2u)
-        let value_len%2#0: uint64 = (len tmp%15#0)
-        let size_is_correct%2#0: bool = (== value_len%2#0 num_bytes_with_header%1#0)
-        (assert size_is_correct%2#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-        let tmp%16#0: bytes = ((extract 2 0) tmp%15#0)
-        tests/approvals/global-state.algo.ts::TestArc4.deleteState(tmp%16#0)
-        let tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#1: bool = 1u
-        goto block@12
-    block@7: // bare_routing_L33
-        let tmp%17#0: uint64 = (txn OnCompletion)
-        goto tmp%17#0 ? block@11 : block@8
-    block@8: // __algots__.defaultCreate_L33
-        let tmp%18#0: uint64 = (txn ApplicationID)
-        let tmp%19#0: bool = (! tmp%18#0)
-        (assert tmp%19#0) // can only call when creating
-        let tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#2: bool = 1u
-        goto block@12
-    block@11: // after_if_else_L33
-        let tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#3: bool = 0u
-        goto block@12
-    block@12: // after_inlined_tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#0 <- block@3, tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#1 <- block@4, tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#2 <- block@8, tests/approvals/global-state.algo.ts::TestArc4.__puya_arc4_router__%0#3 <- block@11)
-        return tmp%0#0
+        goto tmp%0#1 ? block@2 : block@9
+    block@2: // abi_routing_L44
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        (assert tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "setState(string,uint64)void" => block@4, method "deleteState(string)void" => block@5, * => block@8}
+    block@4: // setState_route_L46
+        tests/approvals/global-state.algo.ts::TestArc4.setState[routing]()
+        goto block@8
+    block@5: // deleteState_route_L52
+        tests/approvals/global-state.algo.ts::TestArc4.deleteState[routing]()
+        goto block@8
+    block@8: // after_if_else_L44
+        fail
+    block@9: // __algots__.defaultCreate_L44
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (! tmp%9#0)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u
 
-subroutine tests/approvals/global-state.algo.ts::TestArc4.setState(key: bytes, value: uint64) -> void:
-    block@0: // L35
+subroutine tests/approvals/global-state.algo.ts::TestArc4.setState[routing]() -> void:
+    block@0: // L46
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
+        let add%0#0: uint64 = (+ aggregate%array_length%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#0: string = ((extract 2 0) tmp%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
+        let value#0: uint64 = (btoi tmp%2#0)
         (app_global_put key#0 value#0)
-        return 
+        exit 1u
 
-subroutine tests/approvals/global-state.algo.ts::TestArc4.deleteState(key: bytes) -> void:
-    block@0: // L41
+subroutine tests/approvals/global-state.algo.ts::TestArc4.deleteState[routing]() -> void:
+    block@0: // L52
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
+        let add%0#0: uint64 = (+ aggregate%array_length%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#0: string = ((extract 2 0) tmp%0#0)
         (app_global_del key#0)
-        return 
+        exit 1u

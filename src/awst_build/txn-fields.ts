@@ -7,11 +7,14 @@ import {
   applicationPType,
   assetPType,
   boolPType,
+  BytesPType,
   bytesPType,
   onCompleteActionType,
   transactionTypeType,
   uint64PType,
 } from './ptypes'
+
+const bytes32PType = new BytesPType({ length: 32n })
 
 export type TxnFieldMetaData = {
   /**
@@ -52,7 +55,7 @@ const baseTxnFields = {
   },
   lastValid: { field: TxnField.LastValid, ptype: uint64PType, comment: 'round number' },
   note: { field: TxnField.Note, ptype: bytesPType, comment: 'Any data up to 1024 bytes' },
-  lease: { field: TxnField.Lease, ptype: bytesPType, comment: '32 byte lease value' },
+  lease: { field: TxnField.Lease, ptype: bytes32PType, comment: '32 byte lease value' },
   typeBytes: { field: TxnField.Type, ptype: bytesPType, comment: 'Transaction type as bytes', computed: true },
   type: { field: TxnField.TypeEnum, ptype: transactionTypeType.memberType, comment: 'Transaction type', computed: true },
   groupIndex: {
@@ -61,7 +64,7 @@ const baseTxnFields = {
     comment: ['Position of this transaction within an atomic group', 'A stand-alone transaction is implicitly element 0 in a group of 1'],
     computed: true,
   },
-  txnId: { field: TxnField.TxID, ptype: bytesPType, comment: 'The computed ID for this transaction. 32 bytes.', computed: true },
+  txnId: { field: TxnField.TxID, ptype: bytes32PType, comment: 'The computed ID for this transaction. 32 bytes.', computed: true },
   rekeyTo: { field: TxnField.RekeyTo, ptype: accountPType, comment: "32 byte Sender's new AuthAddr" },
 } satisfies TxnFieldsMetaData
 
@@ -74,13 +77,13 @@ export const paymentTxnFields = {
 
 export const keyRegistrationTxnFields = {
   ...baseTxnFields,
-  voteKey: { field: TxnField.VotePK, ptype: bytesPType, comment: '32 byte address' },
-  selectionKey: { field: TxnField.SelectionPK, ptype: bytesPType, comment: '32 byte address' },
+  voteKey: { field: TxnField.VotePK, ptype: bytes32PType, comment: '32 byte address' },
+  selectionKey: { field: TxnField.SelectionPK, ptype: bytes32PType, comment: '32 byte address' },
   voteFirst: { field: TxnField.VoteFirst, ptype: uint64PType, comment: 'The first round that the participation key is valid.' },
   voteLast: { field: TxnField.VoteLast, ptype: uint64PType, comment: 'The last round that the participation key is valid.' },
   voteKeyDilution: { field: TxnField.VoteKeyDilution, ptype: uint64PType, comment: 'Dilution for the 2-level participation key' },
   nonparticipation: { field: TxnField.Nonparticipation, ptype: boolPType, comment: 'Marks an account nonparticipating for rewards' },
-  stateProofKey: { field: TxnField.StateProofPK, ptype: bytesPType, comment: '64 byte state proof public key' },
+  stateProofKey: { field: TxnField.StateProofPK, ptype: new BytesPType({ length: 64n }), comment: '64 byte state proof public key' },
 } satisfies TxnFieldsMetaData
 
 export const assetConfigTxnFields = {
@@ -101,7 +104,11 @@ export const assetConfigTxnFields = {
   unitName: { field: TxnField.ConfigAssetUnitName, ptype: bytesPType, comment: 'Unit name of the asset' },
   assetName: { field: TxnField.ConfigAssetName, ptype: bytesPType, comment: 'The asset name' },
   url: { field: TxnField.ConfigAssetURL, ptype: bytesPType, comment: 'URL' },
-  metadataHash: { field: TxnField.ConfigAssetMetadataHash, ptype: bytesPType, comment: '32 byte commitment to unspecified asset metadata' },
+  metadataHash: {
+    field: TxnField.ConfigAssetMetadataHash,
+    ptype: bytes32PType,
+    comment: '32 byte commitment to unspecified asset metadata',
+  },
   manager: { field: TxnField.ConfigAssetManager, ptype: accountPType, comment: '32 byte address' },
   reserve: { field: TxnField.ConfigAssetReserve, ptype: accountPType, comment: '32 byte address' },
   freeze: { field: TxnField.ConfigAssetFreeze, ptype: accountPType, comment: '32 byte address' },
@@ -143,13 +150,13 @@ export const applicationCallTxnFields = {
   numAppArgs: { field: TxnField.NumAppArgs, ptype: uint64PType, comment: 'Number of ApplicationArgs', computed: true },
   numAccounts: { field: TxnField.NumAccounts, ptype: uint64PType, comment: 'Number of ApplicationArgs', computed: true },
   approvalProgram: {
-    field: TxnField.ApprovalProgramPages,
+    field: TxnField.ApprovalProgram,
     ptype: bytesPType,
     comment: 'The first page of the Approval program',
     computed: true,
   },
   clearStateProgram: {
-    field: TxnField.ClearStateProgramPages,
+    field: TxnField.ClearStateProgram,
     ptype: bytesPType,
     comment: 'The first page of the Clear State program',
     computed: true,
@@ -255,9 +262,15 @@ export const applicationCallTxnFields = {
    * Number of logs
    */
   numLogs: { field: TxnField.NumLogs, ptype: uint64PType, comment: 'Number of logs', computed: true },
+
+  rejectVersion: {
+    field: TxnField.RejectVersion,
+    ptype: uint64PType,
+    comment: 'Application version for which the txn must reject',
+  },
 } satisfies TxnFieldsMetaData
 
-export const anyTxnFields = {
+const anyTxnFields = {
   ...paymentTxnFields,
   ...keyRegistrationTxnFields,
   ...assetConfigTxnFields,
@@ -266,15 +279,6 @@ export const anyTxnFields = {
   ...applicationCallTxnFields,
 } satisfies TxnFieldsMetaData
 
-export const txnKindToFields = {
-  [TransactionKind.pay]: paymentTxnFields,
-  [TransactionKind.keyreg]: keyRegistrationTxnFields,
-  [TransactionKind.acfg]: assetConfigTxnFields,
-  [TransactionKind.axfer]: assetTransferTxnFields,
-  [TransactionKind.afrz]: assetFreezeTxnFields,
-  [TransactionKind.appl]: applicationCallTxnFields,
-}
-
 type TxnFieldName = keyof typeof anyTxnFields
 export const txnFieldName = new Proxy<Record<TxnFieldName, TxnFieldName>>({} as DeliberateAny, {
   get(_, prop) {
@@ -282,3 +286,52 @@ export const txnFieldName = new Proxy<Record<TxnFieldName, TxnFieldName>>({} as 
     return Reflect.get(_, prop)
   },
 })
+
+export function getTxnFieldMetaData({
+  kind,
+  memberName,
+  direction = 'out',
+}: {
+  kind: TransactionKind | undefined
+  memberName: string
+  direction?: 'in' | 'out'
+}): TxnFieldMetaData | false {
+  let fields: TxnFieldsMetaData
+  switch (kind) {
+    case TransactionKind.pay:
+      fields = paymentTxnFields
+      break
+    case TransactionKind.keyreg:
+      fields = keyRegistrationTxnFields
+      break
+    case TransactionKind.acfg:
+      fields = assetConfigTxnFields
+      break
+    case TransactionKind.axfer:
+      fields = assetTransferTxnFields
+      break
+    case TransactionKind.afrz:
+      fields = assetFreezeTxnFields
+      break
+    case TransactionKind.appl:
+      fields = applicationCallTxnFields
+      break
+    default:
+      fields = anyTxnFields
+      break
+  }
+
+  if (memberName in fields) {
+    if (direction === 'in') {
+      // Allow program properties to be set as if they were their pages equivalent
+      switch (memberName) {
+        case txnFieldName.approvalProgram:
+          return applicationCallTxnFields.approvalProgramPages
+        case txnFieldName.clearStateProgram:
+          return applicationCallTxnFields.clearStateProgramPages
+      }
+    }
+    return fields[memberName]
+  }
+  return false
+}

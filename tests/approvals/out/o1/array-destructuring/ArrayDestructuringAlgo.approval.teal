@@ -1,55 +1,60 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 64 0
+    intcblock 1 64
     // tests/approvals/array-destructuring.algo.ts:4
     // export class ArrayDestructuringAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@8
-    pushbytess 0x74b7e8df 0xa78000de 0x2dafc6c6 // method "testNested((uint64,(uint512,uint512)))(uint64,(uint512,uint512),uint64,uint512)", method "test()void", method "testLiteralDestructuring()void"
-    txna ApplicationArgs 0
-    match main_testNested_route@3 main_test_route@4 main_testLiteralDestructuring_route@5
-
-main_after_if_else@12:
-    // tests/approvals/array-destructuring.algo.ts:4
-    // export class ArrayDestructuringAlgo extends Contract {
-    intc_2 // 0
-    return
-
-main_testLiteralDestructuring_route@5:
-    // tests/approvals/array-destructuring.algo.ts:32
-    // testLiteralDestructuring() {
+    bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    assert
+    pushbytess 0x74b7e8df 0xa78000de 0x2dafc6c6 0xd48b6983 // method "testNested((uint64,(uint512,uint512)))(uint64,(uint512,uint512),uint64,uint512)", method "test()void", method "testLiteralDestructuring()void", method "produceFixed()uint64[3]"
+    txna ApplicationArgs 0
+    match testNested main_test_route@5 main_testLiteralDestructuring_route@6 main_produceFixed_route@7
+    err
+
+main_produceFixed_route@7:
+    // tests/approvals/array-destructuring.algo.ts:44
+    // produceFixed(): FixedArray<uint64, 3> {
+    pushbytes 0x151f7c75000000000000000100000000000000020000000000000003
+    log
     intc_0 // 1
     return
 
-main_test_route@4:
+main_testLiteralDestructuring_route@6:
+    // tests/approvals/array-destructuring.algo.ts:34
+    // testLiteralDestructuring() {
+    intc_0 // 1
+    return
+
+main_test_route@5:
     // tests/approvals/array-destructuring.algo.ts:11
     // test() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     intc_0 // 1
     return
 
-main_testNested_route@3:
-    // tests/approvals/array-destructuring.algo.ts:5
-    // testNested(arg: [uint64, [biguint, biguint]]) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
+main___algots__.defaultCreate@11:
     // tests/approvals/array-destructuring.algo.ts:4
     // export class ArrayDestructuringAlgo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
+
+
+// tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested[routing]() -> void:
+testNested:
+    // tests/approvals/array-destructuring.algo.ts:5
+    // testNested(arg: readonly [uint64, readonly [biguint, biguint]]) {
     txna ApplicationArgs 1
     dup
     len
@@ -57,18 +62,13 @@ main_testNested_route@3:
     ==
     assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.tuple<arc4.uint512,arc4.uint512>>
     dup
-    intc_2 // 0
-    extract_uint64
-    swap
-    extract 8 128 // on error: Index access is out of bounds
+    extract 8 128
     dup
-    extract 0 64 // on error: Index access is out of bounds
+    extract 0 64
     swap
-    extract 64 64 // on error: Index access is out of bounds
-    // tests/approvals/array-destructuring.algo.ts:5
-    // testNested(arg: [uint64, [biguint, biguint]]) {
+    extract 64 64
     uncover 2
-    itob
+    extract 0 8
     dig 2
     len
     intc_1 // 64
@@ -101,16 +101,5 @@ main_testNested_route@3:
     swap
     concat
     log
-    intc_0 // 1
-    return
-
-main_bare_routing@8:
-    // tests/approvals/array-destructuring.algo.ts:4
-    // export class ArrayDestructuringAlgo extends Contract {
-    txn OnCompletion
-    bnz main_after_if_else@12
-    txn ApplicationID
-    !
-    assert // can only call when creating
     intc_0 // 1
     return

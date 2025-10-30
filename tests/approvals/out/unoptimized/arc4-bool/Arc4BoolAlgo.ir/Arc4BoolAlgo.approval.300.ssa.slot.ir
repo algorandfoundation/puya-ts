@@ -1,0 +1,101 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        goto block@1
+    block@1: // L4
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#1 0u)
+        goto tmp%1#0 ? block@2 : block@5
+    block@2: // abi_routing_L4
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "test((bool,uint64,uint64,uint64,bool,bool))(bool,bool,bool,bool,bool)" => block@3, * => block@4}
+    block@3: // test_route_L5
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 NoOp)
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (!= tmp%5#0 0u)
+        let tmp%7#0: bool = (&& tmp%4#0 tmp%6#0)
+        (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
+        tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.test[routing]()
+        goto block@4
+    block@4: // switch_case_next_L4
+        goto block@6
+    block@5: // __algots__.defaultCreate_L4
+        let tmp%8#0: uint64 = (txn OnCompletion)
+        let tmp%9#0: bool = (== tmp%8#0 NoOp)
+        let tmp%10#0: uint64 = (txn ApplicationID)
+        let tmp%11#0: bool = (== tmp%10#0 0u)
+        let tmp%12#0: bool = (&& tmp%9#0 tmp%11#0)
+        (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.__algots__.defaultCreate()
+        exit 1u
+    block@6: // after_if_else_L4
+        exit 0u
+    block@7: // after_inlined_tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
+        return tmp%0#0
+
+subroutine tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.test[routing]() -> void:
+    block@0: // L5
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 26u)
+        (assert eq%0#0) // invalid number of bytes for ObjectCB267EF3
+        let as_Encoded(bool1,uint64,uint64,uint64,bool1,bool1)%0#0: Encoded(bool1,uint64,uint64,uint64,bool1,bool1) = tmp%0#0
+        let tmp%1#0: Encoded(bool1,bool1,bool1,bool1,bool1) = tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.test(as_Encoded(bool1,uint64,uint64,uint64,bool1,bool1)%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.test(p: Encoded(bool1,uint64,uint64,uint64,bool1,bool1)) -> Encoded(bool1,bool1,bool1,bool1,bool1):
+    block@0: // L5
+        let aggregate%get_bit%0#0: bool = (getbit p#0 0u)
+        let tuple_item%0#0: bool = aggregate%get_bit%0#0
+        let values%0#0: bool = tuple_item%0#0
+        let aggregate%extract%0#0: bytes = (extract3 p#0 1u 8u)
+        let tuple_item%1#0: Encoded(uint64) = aggregate%extract%0#0
+        let values%1#0: uint64 = (btoi tuple_item%1#0)
+        let aggregate%extract%1#0: bytes = (extract3 p#0 9u 8u)
+        let tuple_item%2#0: Encoded(uint64) = aggregate%extract%1#0
+        let values%2#0: uint64 = (btoi tuple_item%2#0)
+        let aggregate%extract%2#0: bytes = (extract3 p#0 17u 8u)
+        let tuple_item%3#0: Encoded(uint64) = aggregate%extract%2#0
+        let values%3#0: uint64 = (btoi tuple_item%3#0)
+        let aggregate%get_bit%1#0: bool = (getbit p#0 200u)
+        let tuple_item%4#0: bool = aggregate%get_bit%1#0
+        let values%4#0: bool = tuple_item%4#0
+        let aggregate%get_bit%2#0: bool = (getbit p#0 201u)
+        let tuple_item%5#0: bool = aggregate%get_bit%2#0
+        let values%5#0: bool = tuple_item%5#0
+        let useRounds#0: bool = values%0#0
+        let lastValid#0: uint64 = values%1#0
+        let cooldown#0: uint64 = values%2#0
+        let lastCalled#0: uint64 = values%3#0
+        let exists#0: bool = values%4#0
+        let hasMethodRestrictions#0: bool = values%5#0
+        goto useRounds#0 ? block@1 : block@2
+    block@1: // ternary_true_L20
+        let ternary_result%0#0: uint64 = (global Round)
+        goto block@3
+    block@2: // ternary_false_L20
+        let ternary_result%0#1: uint64 = (global LatestTimestamp)
+        goto block@3
+    block@3: // ternary_merge_L20
+        let ternary_result%0#2: uint64 = φ(ternary_result%0#0 <- block@1, ternary_result%0#1 <- block@2)
+        let epochRef#0: uint64 = ternary_result%0#2
+        let tmp%0#0: bool = (> epochRef#0 lastValid#0)
+        let tmp%1#0: bool = (> cooldown#0 0u)
+        let tmp%2#0: uint64 = (- epochRef#0 lastCalled#0)
+        let tmp%3#0: bool = (< tmp%2#0 cooldown#0)
+        let aggregate%encoded_bool%0#0: bytes[1] = (setbit 0x00 0u exists#0)
+        let aggregate%set_bit%0#0: bytes[1] = (setbit aggregate%encoded_bool%0#0 1u tmp%0#0)
+        let aggregate%set_bit%1#0: bytes[1] = (setbit aggregate%set_bit%0#0 2u tmp%1#0)
+        let aggregate%set_bit%2#0: bytes[1] = (setbit aggregate%set_bit%1#0 3u tmp%3#0)
+        let aggregate%set_bit%3#0: bytes[1] = (setbit aggregate%set_bit%2#0 4u hasMethodRestrictions#0)
+        let aggregate%head%0#0: bytes = (concat 0x aggregate%set_bit%3#0)
+        let aggregate%as_Encoded(bool1,bool1,bool1,bool1,bool1)%0#0: Encoded(bool1,bool1,bool1,bool1,bool1) = aggregate%head%0#0
+        let tmp%4#0: Encoded(bool1,bool1,bool1,bool1,bool1) = aggregate%as_Encoded(bool1,bool1,bool1,bool1,bool1)%0#0
+        return tmp%4#0
+
+subroutine tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.__algots__.defaultCreate() -> void:
+    block@0: // L4
+        return 

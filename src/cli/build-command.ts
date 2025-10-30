@@ -8,6 +8,7 @@ import { CompileOptions, defaultPuyaOptions, LocalsCoalescingStrategy } from '..
 
 import { parseCliTemplateVar } from '../util/template-var-cli-parser'
 import { addEnumArg, convertInt } from './util'
+import { AbsolutePath } from '../util/absolute-path'
 
 export interface BuildCommandArgs {
   command: 'build'
@@ -132,7 +133,7 @@ export function addBuildCommand(parser: ArgumentParser) {
   })
   parser.add_argument('--target-avm-version', {
     default: defaultPuyaOptions.targetAvmVersion.toString(),
-    choices: ['10', '11'],
+    choices: ['10', '11', '12', '13'],
     help: 'Select the targeted AVM version for compilation output',
   })
 
@@ -140,6 +141,18 @@ export function addBuildCommand(parser: ArgumentParser) {
     metavar: 'VAR=VALUE',
     nargs: '+',
     help: 'Define template vars for use when assembling via --output-bytecode, should be specified without the prefix (see --template-vars-prefix)',
+  })
+
+  parser.add_argument('--validate-abi-args', {
+    action: BooleanOptionalAction,
+    default: defaultPuyaOptions.validateAbiArgs,
+    help: 'Validates ABI transaction arguments by ensuring they are encoded correctly',
+  })
+
+  parser.add_argument('--validate-abi-return', {
+    action: BooleanOptionalAction,
+    default: defaultPuyaOptions.validateAbiReturn,
+    help: "Validates encoding of ABI return values when using convertBytes with 'log' `prefix` option, arc4.abiCall, and strongly typed contract to contract calls",
   })
 
   parser.add_argument('--template-vars-prefix', {
@@ -152,18 +165,6 @@ export function addBuildCommand(parser: ArgumentParser) {
     enumType: LocalsCoalescingStrategy,
     help: 'Strategy choice for out-of-ssa local variable coalescing. The best choice for your app is best determined through experimentation',
     default: defaultPuyaOptions.localsCoalescingStrategy,
-  })
-
-  parser.add_argument('--validate-abi-args', {
-    action: BooleanOptionalAction,
-    default: defaultPuyaOptions.validateAbiArgs,
-    help: 'Validates ABI transaction arguments by ensuring they are encoded correctly',
-  })
-
-  parser.add_argument('--validate-abi-return', {
-    action: BooleanOptionalAction,
-    default: defaultPuyaOptions.validateAbiReturn,
-    help: "Validates encoding of ABI return values when using interpretAsArc4 with 'log' `prefix` option, arc4.abiCall, and strongly typed contract to contract calls",
   })
 
   parser.add_argument('paths', {
@@ -181,7 +182,7 @@ export function addBuildCommand(parser: ArgumentParser) {
 export async function buildCommand(args: BuildCommandArgs) {
   const logCtx = LoggingContext.create()
   return logCtx.run(async () => {
-    logger.configure([new ConsoleLogSink(args.log_level)])
+    logger.configure([new ConsoleLogSink(args.log_level, AbsolutePath.resolve({ path: '' }))])
     try {
       const filePaths = processInputPaths({ paths: args.paths, outDir: args.out_dir })
 

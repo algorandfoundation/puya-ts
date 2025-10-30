@@ -1,0 +1,155 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 8 1 0 6
+    bytecblock 0x151f7c75 0xfe6bdf69
+    // tests/approvals/multi-inheritance.algo.ts:65
+    // class AbiCallMultiInheritance extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytes 0x2a337771 // method "test(uint64)void"
+    bytec_1 // method "add(uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match test add
+    err
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/multi-inheritance.algo.ts:65
+    // class AbiCallMultiInheritance extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_1 // 1
+    return
+
+
+// tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.test[routing]() -> void:
+test:
+    // tests/approvals/multi-inheritance.algo.ts:66
+    // test(app: Application) {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/multi-inheritance.algo.ts:67-70
+    // abiCall<typeof MultiBases.prototype.methodTwo>({
+    //   args: [],
+    //   appId: app,
+    // })
+    itxn_begin
+    pushbytes 0x363b329e // method "methodTwo()string"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationID
+    intc_3 // appl
+    itxn_field TypeEnum
+    intc_2 // 0
+    itxn_field Fee
+    itxn_submit
+    itxn LastLog
+    dup
+    extract 4 0
+    swap
+    extract 0 4
+    bytec_0 // 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    dup
+    intc_2 // 0
+    extract_uint16 // on error: invalid array length header
+    pushint 2 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    // tests/approvals/multi-inheritance.algo.ts:72-74
+    // const result = abiCall<typeof AbiCallMultiInheritance.prototype.add>({
+    //   args: [1, 2],
+    // }).returnValue
+    itxn_begin
+    // tests/approvals/multi-inheritance.algo.ts:73
+    // args: [1, 2],
+    intc_1 // 1
+    itob
+    pushint 2 // 2
+    itob
+    // tests/approvals/multi-inheritance.algo.ts:72-74
+    // const result = abiCall<typeof AbiCallMultiInheritance.prototype.add>({
+    //   args: [1, 2],
+    // }).returnValue
+    bytec_1 // method "add(uint64,uint64)uint64"
+    itxn_field ApplicationArgs
+    swap
+    itxn_field ApplicationArgs
+    itxn_field ApplicationArgs
+    intc_3 // appl
+    itxn_field TypeEnum
+    intc_2 // 0
+    itxn_field Fee
+    itxn_submit
+    itxn LastLog
+    dup
+    extract 4 0
+    swap
+    extract 0 4
+    bytec_0 // 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/multi-inheritance.algo.ts:76
+    // assert(result === 3)
+    pushint 3 // 3
+    ==
+    // tests/approvals/multi-inheritance.algo.ts:66
+    // test(app: Application) {
+    return
+
+
+// tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.add[routing]() -> void:
+add:
+    // tests/approvals/multi-inheritance.algo.ts:79
+    // add(a: uint64, b: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/multi-inheritance.algo.ts:80
+    // return a + b
+    +
+    // tests/approvals/multi-inheritance.algo.ts:79
+    // add(a: uint64, b: uint64): uint64 {
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return

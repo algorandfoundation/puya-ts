@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { awst } from '../../awst'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
@@ -10,10 +11,21 @@ import { NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { tryConvertEnum } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
-import { BigUintFunction, biguintPType, boolPType, bytesPType, stringPType, uint64PType } from '../ptypes'
+import {
+  BigIntLiteralPType,
+  BigUintFunction,
+  biguintPType,
+  boolPType,
+  bytesPType,
+  NumericLiteralPType,
+  stringPType,
+  uint64PType,
+} from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { BuilderBinaryOp, BuilderComparisonOp, BuilderUnaryOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
+import { BigIntLiteralExpressionBuilder } from './literal/big-int-literal-expression-builder'
+import { NumericLiteralExpressionBuilder } from './literal/numeric-literal-expression-builder'
 import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { requireExpressionOfType } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
@@ -21,7 +33,7 @@ import { parseFunctionArgs } from './util/arg-parsing'
 export class BigUintFunctionBuilder extends FunctionBuilder {
   readonly ptype = BigUintFunction
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [initialValue],
     } = parseFunctionArgs({
@@ -30,7 +42,7 @@ export class BigUintFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 0,
       callLocation: sourceLocation,
       funcName: 'BigUInt',
-      argSpec: (a) => [a.optional(boolPType, stringPType, bytesPType, biguintPType, uint64PType)],
+      argSpec: (a) => [a.optional(boolPType, stringPType, bytesPType, uint64PType, biguintPType, BigIntLiteralPType, NumericLiteralPType)],
     })
     let biguint: Expression
 
@@ -41,7 +53,7 @@ export class BigUintFunctionBuilder extends FunctionBuilder {
       })
     } else if (initialValue.ptype.equals(boolPType)) {
       biguint = nodeFactory.reinterpretCast({
-        expr: initialValue.toBytes(sourceLocation),
+        expr: initialValue.toBytes(sourceLocation).resolve(),
         sourceLocation,
         wtype: biguintPType.wtype,
       })
@@ -71,13 +83,19 @@ export class BigUintFunctionBuilder extends FunctionBuilder {
         })
       } else {
         biguint = nodeFactory.reinterpretCast({
-          expr: initialValue.toBytes(sourceLocation),
+          expr: initialValue.toBytes(sourceLocation).resolve(),
           sourceLocation,
           wtype: biguintPType.wtype,
         })
       }
+    } else if (initialValue instanceof NumericLiteralExpressionBuilder || initialValue instanceof BigIntLiteralExpressionBuilder) {
+      biguint = nodeFactory.bigUIntConstant({
+        value: initialValue.value,
+        sourceLocation: sourceLocation,
+        errorLocation: initialValue.sourceLocation,
+      })
     } else {
-      return initialValue
+      return initialValue.resolveToPType(biguintPType)
     }
     return new BigUintExpressionBuilder(biguint)
   }
@@ -198,7 +216,7 @@ export class BigUintExpressionBuilder extends InstanceExpressionBuilder<Instance
     )
   }
 
-  toBytes(sourceLocation: SourceLocation): awst.Expression {
-    return nodeFactory.reinterpretCast({ expr: this.resolve(), sourceLocation, wtype: wtypes.bytesWType })
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
+    return instanceEb(nodeFactory.reinterpretCast({ expr: this.resolve(), sourceLocation, wtype: wtypes.bytesWType }), bytesPType)
   }
 }

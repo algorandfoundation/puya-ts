@@ -1,4 +1,5 @@
-import { intrinsicFactory } from '../../../../awst/intrinsic-factory'
+import type ts from 'typescript'
+import { nodeFactory } from '../../../../awst/node-factory'
 import type { Expression } from '../../../../awst/nodes'
 import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
@@ -6,7 +7,6 @@ import { wtypes } from '../../../../awst/wtypes'
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
 import { BoxMapPType, BoxPType, bytesPType, stringPType } from '../../../ptypes'
-import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { extractKey } from '../util'
@@ -14,7 +14,7 @@ import { BoxProxyExpressionBuilder } from './base'
 import { BoxExpressionBuilder } from './box'
 
 export class BoxMapFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       ptypes: [keySuffixType, contentPType],
       args: [{ keyPrefix }],
@@ -28,7 +28,7 @@ export class BoxMapFunctionBuilder extends FunctionBuilder {
     })
 
     const ptype = new BoxMapPType({ content: contentPType, keyType: keySuffixType })
-    return new BoxMapExpressionBuilder(extractKey(keyPrefix, wtypes.boxKeyWType), ptype)
+    return new BoxMapExpressionBuilder(extractKey(keyPrefix, wtypes.boxKeyWType, sourceLocation), ptype)
   }
 }
 
@@ -37,7 +37,8 @@ export class BoxMapExpressionBuilder extends BoxProxyExpressionBuilder<BoxMapPTy
     invariant(ptype instanceof BoxMapPType, 'BoxMapExpressionBuilder must be constructed with ptype of BoxMapPType')
     super(expr, ptype)
   }
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [key],
     } = parseFunctionArgs({
@@ -50,10 +51,11 @@ export class BoxMapExpressionBuilder extends BoxProxyExpressionBuilder<BoxMapPTy
     })
 
     return new BoxExpressionBuilder(
-      intrinsicFactory.bytesConcat({
-        left: this._expr,
-        right: key.toBytes(sourceLocation),
+      nodeFactory.boxPrefixedKeyExpression({
+        key: key.resolve(),
+        prefix: this._expr,
         sourceLocation: this.sourceLocation,
+        wtype: wtypes.boxKeyWType,
       }),
       new BoxPType({
         content: this.ptype.contentType,
@@ -64,7 +66,7 @@ export class BoxMapExpressionBuilder extends BoxProxyExpressionBuilder<BoxMapPTy
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     switch (name) {
       case 'keyPrefix':
-        return instanceEb(this.toBytes(sourceLocation), bytesPType)
+        return this.toBytes(sourceLocation)
     }
     return super.memberAccess(name, sourceLocation)
   }

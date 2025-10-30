@@ -1,0 +1,70 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1
+    // tests/approvals/itxn-compose.algo.ts:67
+    // class VerifierContract extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0x65a9aecc // method "verify()void"
+    txna ApplicationArgs 0
+    match main_verify_route@3
+    err
+
+main_verify_route@3:
+    // tests/approvals/itxn-compose.algo.ts:68
+    // verify() {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    b verify
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/itxn-compose.algo.ts:67
+    // class VerifierContract extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return
+
+
+// tests/approvals/itxn-compose.algo.ts::VerifierContract.verify[routing]() -> void:
+verify:
+    // tests/approvals/itxn-compose.algo.ts:69
+    // for (let i: uint64 = 0; i < Txn.groupIndex; i++) {
+    pushint 0 // 0
+
+verify_while_top@2:
+    // tests/approvals/itxn-compose.algo.ts:69
+    // for (let i: uint64 = 0; i < Txn.groupIndex; i++) {
+    dup
+    txn GroupIndex
+    <
+    bz verify_after_while@4
+    // tests/approvals/itxn-compose.algo.ts:71
+    // assert(txn.type === TransactionType.Payment, 'Txn must be pay')
+    dupn 2
+    gtxns TypeEnum
+    intc_0 // 1
+    ==
+    assert // Txn must be pay
+    // tests/approvals/itxn-compose.algo.ts:69
+    // for (let i: uint64 = 0; i < Txn.groupIndex; i++) {
+    intc_0 // 1
+    +
+    bury 1
+    b verify_while_top@2
+
+verify_after_while@4:
+    // tests/approvals/itxn-compose.algo.ts:68
+    // verify() {
+    intc_0 // 1
+    return

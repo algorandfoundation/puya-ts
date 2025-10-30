@@ -1,0 +1,52 @@
+#pragma version 12
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/avm12.algo.ts:57-58
+    // @contract({ avmVersion: 12 })
+    // class ContractV1 extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0x24378d3c // method "delete()void"
+    txna ApplicationArgs 0
+    match main_delete_route@3
+    err
+
+main_delete_route@3:
+    // tests/approvals/avm12.algo.ts:59
+    // @abimethod({ allowActions: 'DeleteApplication' })
+    txn OnCompletion
+    pushint 5 // DeleteApplication
+    ==
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be DeleteApplication && can only call when not creating
+    b delete
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/avm12.algo.ts:57-58
+    // @contract({ avmVersion: 12 })
+    // class ContractV1 extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    pushint 1 // 1
+    return
+
+
+// tests/approvals/avm12.algo.ts::ContractV1.delete[routing]() -> void:
+delete:
+    // tests/approvals/avm12.algo.ts:61
+    // assert(Txn.rejectVersion === 2, 'can only update if caller expects this to be currently be v1')
+    txn RejectVersion
+    pushint 2 // 2
+    ==
+    assert // can only update if caller expects this to be currently be v1
+    // tests/approvals/avm12.algo.ts:59
+    // @abimethod({ allowActions: 'DeleteApplication' })
+    pushint 1 // 1
+    return

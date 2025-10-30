@@ -1,9 +1,8 @@
 import { CompileContractOptions, CompiledContract } from '../compiled'
-import * as gtxn from '../gtxn'
+import { gtxn } from '../gtxn'
 import { NoImplementation } from '../internal/errors'
-import { AnyFunction, ConstructorFor, DeliberateAny, InstanceMethod } from '../internal/typescript-helpers'
-import * as itxn from '../itxn'
-import { ApplicationCallFields, ApplicationCallInnerTxn } from '../itxn'
+import { AnyFunction, ConstructorFor, InstanceMethod } from '../internal/typescript-helpers'
+import { itxn } from '../itxn'
 import { Contract } from './index'
 
 /**
@@ -13,7 +12,7 @@ import { Contract } from './index'
  *  - appId: because the appId is not known when creating an application
  *  - appArgs: because a bare call cannot have arguments
  */
-export type BareCreateApplicationCallFields = Omit<ApplicationCallFields, 'appId' | 'appArgs'>
+export type BareCreateApplicationCallFields = Omit<itxn.ApplicationCallFields, 'appId' | 'appArgs'>
 
 /**
  * Conditional type which given a group transaction type, returns the equivalent inner transaction
@@ -44,25 +43,27 @@ export type TypedApplicationArg<TArg> = TArg extends gtxn.Transaction ? GtxnToIt
 /**
  * Conditional type which maps a tuple of application arguments to a tuple of input types for specifying those arguments.
  */
-export type TypedApplicationArgs<TArgs> = TArgs extends []
-  ? []
-  : TArgs extends [infer TArg, ...infer TRest]
-    ? [TypedApplicationArg<TArg>, ...TypedApplicationArgs<TRest>]
-    : never
+export type TypedApplicationArgs<TArgs> = TArgs extends never
+  ? unknown[]
+  : TArgs extends []
+    ? []
+    : TArgs extends [infer TArg, ...infer TRest]
+      ? readonly [TypedApplicationArg<TArg>, ...TypedApplicationArgs<TRest>]
+      : never
 
 /**
  * Application call fields with `appArgs` replaced with an `args` property that is strongly typed to the actual arguments for the
  * given application call.
  */
-export type TypedApplicationCallFields<TArgs> = Omit<ApplicationCallFields, 'appArgs'> &
-  (TArgs extends [] ? { args?: TypedApplicationArgs<TArgs> } : { args: TypedApplicationArgs<TArgs> })
+export type TypedApplicationCallFields<TArgs> = Omit<itxn.ApplicationCallFields, 'appArgs'> &
+  (TArgs extends [] ? { readonly args?: TypedApplicationArgs<TArgs> } : { readonly args: TypedApplicationArgs<TArgs> })
 
 /**
  * The response type of a typed application call. Includes the raw itxn result object and the parsed ABI return value if applicable.
  */
 export type TypedApplicationCallResponse<TReturn> = TReturn extends void
-  ? { itxn: ApplicationCallInnerTxn }
-  : { itxn: ApplicationCallInnerTxn; returnValue: TReturn }
+  ? { readonly itxn: itxn.ApplicationCallInnerTxn }
+  : { readonly itxn: itxn.ApplicationCallInnerTxn; readonly returnValue: TReturn }
 
 /**
  * Conditional type which maps an ABI method to a factory method for constructing an application call transaction to call that method.
@@ -93,7 +94,7 @@ export type ContractProxy<TContract extends Contract> = CompiledContract & {
    * Create a bare application call itxn to create the contract.
    * @param fields Specify values for transaction fields which should override the default values.
    */
-  bareCreate(fields?: BareCreateApplicationCallFields): ApplicationCallInnerTxn
+  bareCreate(fields?: BareCreateApplicationCallFields): itxn.ApplicationCallInnerTxn
 }
 
 /**
@@ -108,14 +109,20 @@ export function compileArc4<TContract extends Contract>(
   throw new NoImplementation()
 }
 
+export interface AbiCallOptions<TMethod> extends Omit<itxn.ApplicationCallFields, 'appArgs'> {
+  readonly method?: TMethod
+  readonly args?: TMethod extends InstanceMethod<Contract, infer TParams> ? TypedApplicationArgs<TParams> : unknown[]
+}
+
+export type AbiCallResponse<TMethod> =
+  TMethod extends InstanceMethod<Contract, infer TParams, infer TResult>
+    ? TypedApplicationCallResponse<TResult>
+    : TypedApplicationCallResponse<unknown>
+
 /**
  * Invokes the target ABI method using a strongly typed fields object.
- * @param method An ABI method function reference.
- * @param fields Specify values for transaction fields.
+ * @param options Specify options for the abi call.
  */
-export function abiCall<TArgs extends DeliberateAny[], TReturn>(
-  method: InstanceMethod<Contract, TArgs, TReturn>,
-  fields: TypedApplicationCallFields<TArgs>,
-): TypedApplicationCallResponse<TReturn> {
+export function abiCall<TMethod>(options: AbiCallOptions<TMethod>): AbiCallResponse<TMethod> {
   throw new NoImplementation()
 }

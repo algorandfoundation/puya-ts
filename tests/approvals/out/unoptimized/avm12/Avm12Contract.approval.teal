@@ -1,0 +1,319 @@
+#pragma version 12
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 6
+    bytecblock 0x base64(DEIAAIEBQw==)
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // tests/approvals/avm12.algo.ts:14-15
+    // @contract({ avmVersion: 12 })
+    // class Avm12Contract extends Contract {
+    txn NumAppArgs
+    intc_0 // 0
+    !=
+    bz main___algots__.defaultCreate@9
+    b main_abi_routing@2
+
+main_abi_routing@2:
+    // tests/approvals/avm12.algo.ts:14-15
+    // @contract({ avmVersion: 12 })
+    // class Avm12Contract extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@7
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
+    // tests/approvals/avm12.algo.ts:14-15
+    // @contract({ avmVersion: 12 })
+    // class Avm12Contract extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x02f4a501 // method "testFalconVerify()void"
+    pushbytes 0xa453ba90 // method "testRejectVersion()void"
+    uncover 2
+    match main_testFalconVerify_route@4 main_testRejectVersion_route@5
+    b main_switch_case_next@6
+
+main_switch_case_next@6:
+    b main_after_if_else@8
+
+main_after_if_else@8:
+    b main_after_if_else@10
+
+main_after_if_else@10:
+    // tests/approvals/avm12.algo.ts:14-15
+    // @contract({ avmVersion: 12 })
+    // class Avm12Contract extends Contract {
+    err
+
+main_testRejectVersion_route@5:
+    // tests/approvals/avm12.algo.ts:20
+    // testRejectVersion() {
+    callsub testRejectVersion
+    b main_switch_case_next@6
+
+main_testFalconVerify_route@4:
+    // tests/approvals/avm12.algo.ts:16
+    // testFalconVerify() {
+    callsub testFalconVerify
+    b main_switch_case_next@6
+
+main_create_NoOp@7:
+    b main_after_if_else@8
+
+main___algots__.defaultCreate@9:
+    // tests/approvals/avm12.algo.ts:14-15
+    // @contract({ avmVersion: 12 })
+    // class Avm12Contract extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify[routing]() -> void:
+testFalconVerify:
+    b testFalconVerify_block@0
+
+testFalconVerify_block@0:
+    // tests/approvals/avm12.algo.ts:16
+    // testFalconVerify() {
+    callsub tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify
+    intc_1 // 1
+    return
+
+
+// tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion[routing]() -> void:
+testRejectVersion:
+    b testRejectVersion_block@0
+
+testRejectVersion_block@0:
+    // tests/approvals/avm12.algo.ts:20
+    // testRejectVersion() {
+    callsub tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion
+    intc_1 // 1
+    return
+
+
+// tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify() -> void:
+tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify:
+    b tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify_block@0
+
+tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify_block@0:
+    // tests/approvals/avm12.algo.ts:17
+    // assert(!op.falconVerify(Bytes(), Bytes(), op.bzero(1793)))
+    pushint 1793 // 1793
+    bzero
+    bytec_0 // 0x
+    bytec_0 // 0x
+    uncover 2
+    falcon_verify
+    !
+    assert
+    retsub
+
+
+// tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion() -> void:
+tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion:
+    // tests/approvals/avm12.algo.ts:20
+    // testRejectVersion() {
+    proto 0 0
+    bytec_0 // ""
+    b tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion_block@0
+
+tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion_block@0:
+    // tests/approvals/avm12.algo.ts:22
+    // const v0Txn = compiledV0.bareCreate()
+    itxn_begin
+    // tests/approvals/avm12.algo.ts:21
+    // const compiledV0 = arc4.compileArc4(ContractV0)
+    intc_0 // 0
+    itxn_field ExtraProgramPages
+    intc_0 // 0
+    itxn_field LocalNumUint
+    intc_0 // 0
+    itxn_field LocalNumByteSlice
+    intc_0 // 0
+    itxn_field GlobalNumByteSlice
+    intc_0 // 0
+    itxn_field GlobalNumUint
+    bytec_1 // base64(DEIAAIEBQw==)
+    itxn_field ClearStateProgramPages
+    bytec_0 // 0x
+    itxn_field ClearStateProgramPages
+    pushbytes base64(DCACAAFCAABCAAAxGyITQQAqQgAANhoAgASg6BhyTwGOAQAHQgAAQgAAADEZgQQSMRgiExBEiAASQv/rMRkiEjEYIhIQRIgAEyNDQgAAiAACI0NCAAAxRCMSRIlCAACJ)
+    itxn_field ApprovalProgramPages
+    bytec_0 // 0x
+    itxn_field ApprovalProgramPages
+    // tests/approvals/avm12.algo.ts:22
+    // const v0Txn = compiledV0.bareCreate()
+    intc_0 // 0
+    itxn_field OnCompletion
+    intc_2 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion_next_txn@1
+
+tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion_next_txn@1:
+    // tests/approvals/avm12.algo.ts:22
+    // const v0Txn = compiledV0.bareCreate()
+    itxn_submit
+    itxn CreatedApplicationID
+    // tests/approvals/avm12.algo.ts:23
+    // const app = v0Txn.createdApp
+    dup
+    frame_bury 0
+    // tests/approvals/avm12.algo.ts:24
+    // assert(app.version === 0, 'should be version 0')
+    dup
+    app_params_get AppVersion
+    assert // application exists
+    intc_0 // 0
+    ==
+    assert // should be version 0
+    // tests/approvals/avm12.algo.ts:28-35
+    // const v1Txn = compiledV0.call.update({
+    //   rejectVersion: 1,
+    //   appId: app,
+    //   onCompletion: OnCompleteAction.UpdateApplication,
+    //   approvalProgram: compiledV1.approvalProgram,
+    //   clearStateProgram: compiledV1.clearStateProgram,
+    //   extraProgramPages: compiledV1.extraProgramPages,
+    // })
+    itxn_begin
+    pushbytes 0xa0e81872 // method "update()void"
+    itxn_field ApplicationArgs
+    // tests/approvals/avm12.algo.ts:26
+    // const compiledV1 = arc4.compileArc4(ContractV1)
+    intc_0 // 0
+    itxn_field ExtraProgramPages
+    bytec_1 // base64(DEIAAIEBQw==)
+    itxn_field ClearStateProgramPages
+    bytec_0 // 0x
+    itxn_field ClearStateProgramPages
+    pushbytes base64(DCACAAFCAABCAAAxGyITQQAqQgAANhoAgAQkN408TwGOAQAHQgAAQgAAADEZgQUSMRgiExBEiAASQv/rMRkiEjEYIhIQRIgAFCNDQgAAiAACI0NCAAAxRIECEkSJQgAAiQ==)
+    itxn_field ApprovalProgramPages
+    bytec_0 // 0x
+    itxn_field ApprovalProgramPages
+    // tests/approvals/avm12.algo.ts:31
+    // onCompletion: OnCompleteAction.UpdateApplication,
+    pushint 4 // 4
+    itxn_field OnCompletion
+    itxn_field ApplicationID
+    // tests/approvals/avm12.algo.ts:29
+    // rejectVersion: 1,
+    intc_1 // 1
+    itxn_field RejectVersion
+    // tests/approvals/avm12.algo.ts:28-35
+    // const v1Txn = compiledV0.call.update({
+    //   rejectVersion: 1,
+    //   appId: app,
+    //   onCompletion: OnCompleteAction.UpdateApplication,
+    //   approvalProgram: compiledV1.approvalProgram,
+    //   clearStateProgram: compiledV1.clearStateProgram,
+    //   extraProgramPages: compiledV1.extraProgramPages,
+    // })
+    intc_2 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion_next_txn@2
+
+tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion_next_txn@2:
+    // tests/approvals/avm12.algo.ts:28-35
+    // const v1Txn = compiledV0.call.update({
+    //   rejectVersion: 1,
+    //   appId: app,
+    //   onCompletion: OnCompleteAction.UpdateApplication,
+    //   approvalProgram: compiledV1.approvalProgram,
+    //   clearStateProgram: compiledV1.clearStateProgram,
+    //   extraProgramPages: compiledV1.extraProgramPages,
+    // })
+    itxn_submit
+    itxn ApplicationID
+    // tests/approvals/avm12.algo.ts:36
+    // assert(v1Txn.itxn.appId.version === 1, 'should be version 1')
+    app_params_get AppVersion
+    assert // application exists
+    intc_1 // 1
+    ==
+    assert // should be version 1
+    // tests/approvals/avm12.algo.ts:38-45
+    // itxn
+    //   .applicationCall({
+    //     appArgs: [arc4.methodSelector(ContractV1.prototype.delete)],
+    //     onCompletion: OnCompleteAction.DeleteApplication,
+    //     appId: app,
+    //     rejectVersion: 2,
+    //   })
+    //   .submit()
+    itxn_begin
+    // tests/approvals/avm12.algo.ts:42
+    // appId: app,
+    frame_dig 0
+    // tests/approvals/avm12.algo.ts:43
+    // rejectVersion: 2,
+    pushint 2 // 2
+    itxn_field RejectVersion
+    itxn_field ApplicationID
+    // tests/approvals/avm12.algo.ts:41
+    // onCompletion: OnCompleteAction.DeleteApplication,
+    pushint 5 // 5
+    itxn_field OnCompletion
+    // tests/approvals/avm12.algo.ts:40
+    // appArgs: [arc4.methodSelector(ContractV1.prototype.delete)],
+    pushbytes 0x24378d3c // method "delete()void"
+    itxn_field ApplicationArgs
+    // tests/approvals/avm12.algo.ts:38-44
+    // itxn
+    //   .applicationCall({
+    //     appArgs: [arc4.methodSelector(ContractV1.prototype.delete)],
+    //     onCompletion: OnCompleteAction.DeleteApplication,
+    //     appId: app,
+    //     rejectVersion: 2,
+    //   })
+    intc_2 // 6
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion_next_txn@3
+
+tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion_next_txn@3:
+    // tests/approvals/avm12.algo.ts:38-45
+    // itxn
+    //   .applicationCall({
+    //     appArgs: [arc4.methodSelector(ContractV1.prototype.delete)],
+    //     onCompletion: OnCompleteAction.DeleteApplication,
+    //     appId: app,
+    //     rejectVersion: 2,
+    //   })
+    //   .submit()
+    itxn_submit
+    retsub
+
+
+// tests/approvals/avm12.algo.ts::Avm12Contract.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
+
+__algots__.defaultCreate_block@0:
+    retsub

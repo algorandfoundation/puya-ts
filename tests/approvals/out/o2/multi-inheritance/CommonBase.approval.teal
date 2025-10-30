@@ -1,65 +1,47 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    bytecblock 0x151f7c750006636f6d6d6f6e
     txn ApplicationID
     bnz main_after_if_else@2
-    // tests/approvals/multi-inheritance.algo.ts:6
+    // tests/approvals/multi-inheritance.algo.ts:11
     // stateCommon = GlobalState<uint64>({ initialValue: 123 })
     pushbytes "stateCommon"
     pushint 123 // 123
     app_global_put
 
 main_after_if_else@2:
-    // tests/approvals/multi-inheritance.algo.ts:5
+    // tests/approvals/multi-inheritance.algo.ts:10
     // export class CommonBase extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@9
+    bz main___algots__.defaultCreate@11
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
     pushbytess 0x455c8d09 0xf9f5142c // method "methodCommon()string", method "b2CantOverride()string"
     txna ApplicationArgs 0
-    match main_methodCommon_route@5 main_b2CantOverride_route@6
+    match main_methodCommon_route@6 main_methodCommon_route@6
+    err
 
-main_after_if_else@13:
-    // tests/approvals/multi-inheritance.algo.ts:5
-    // export class CommonBase extends Contract {
-    pushint 0 // 0
-    return
-
-main_b2CantOverride_route@6:
-    // tests/approvals/multi-inheritance.algo.ts:12
-    // b2CantOverride(): string {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    bytec_0 // 0x151f7c750006636f6d6d6f6e
-    log
-    pushint 1 // 1
-    return
-
-main_methodCommon_route@5:
-    // tests/approvals/multi-inheritance.algo.ts:8
+main_methodCommon_route@6:
+    // tests/approvals/multi-inheritance.algo.ts:13
     // methodCommon() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    bytec_0 // 0x151f7c750006636f6d6d6f6e
+    pushbytes 0x151f7c750006636f6d6d6f6e
     log
     pushint 1 // 1
     return
 
-main_bare_routing@9:
-    // tests/approvals/multi-inheritance.algo.ts:5
+main___algots__.defaultCreate@11:
+    // tests/approvals/multi-inheritance.algo.ts:10
     // export class CommonBase extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@13
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     pushint 1 // 1
     return

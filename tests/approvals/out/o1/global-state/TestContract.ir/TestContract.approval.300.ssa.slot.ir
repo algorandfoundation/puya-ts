@@ -1,5 +1,5 @@
 main tests/approvals/global-state.algo.ts::TestContract.approvalProgram:
-    block@0: // L21
+    block@0: // L32
         let reinterpret_bool%0#0: bool = (txn ApplicationID)
         goto reinterpret_bool%0#0 ? block@2 : block@1
     block@1: // if_body_L1
@@ -12,8 +12,8 @@ main tests/approvals/global-state.algo.ts::TestContract.approvalProgram:
         (assert tmp%0#1) // Base class state should be initialized after super call
         let (maybe_value%1#0: uint64, maybe_exists%1#1: bool) = (app_global_get_ex 0u "testState")
         (assert maybe_exists%1#1) // check GlobalState exists
-        let materialized_values%0#1: uint64 = (* 72057594037927936u maybe_value%1#0)
-        (app_global_put "noInitialInt" materialized_values%0#1)
+        let tmp%1#1: uint64 = (* 72057594037927936u maybe_value%1#0)
+        (app_global_put "noInitialInt" tmp%1#1)
         goto block@2
     block@2: // after_if_else_L1
         let (_%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "testState")
@@ -21,7 +21,7 @@ main tests/approvals/global-state.algo.ts::TestContract.approvalProgram:
         let tmp%0#0: bool = (== _%0#0 2u)
         (assert tmp%0#0) // Value should equal 2
         let tmp%1#0: bytes = ((txnas ApplicationArgs) 0u)
-        let materialized_values%0#0: uint64 = (btoi tmp%1#0)
-        (app_global_put "testState" materialized_values%0#0)
+        let tmp%2#0: uint64 = (btoi tmp%1#0)
+        (app_global_put "testState" tmp%2#0)
         (app_global_put "noInitial" "abc")
         return 1u

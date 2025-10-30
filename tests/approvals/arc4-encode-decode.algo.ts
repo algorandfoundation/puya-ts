@@ -2,58 +2,64 @@ import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typesc
 import { assert, assertMatch, Bytes, Contract, ensureBudget, log } from '@algorandfoundation/algorand-typescript'
 import type { Address } from '@algorandfoundation/algorand-typescript/arc4'
 import {
-  arc4EncodedLength,
   Bool,
   decodeArc4,
   DynamicArray,
   DynamicBytes,
   encodeArc4,
+  sizeOf,
   StaticArray,
+  StaticBytes,
   Str,
   Struct,
-  UintN,
-  UintN64,
+  Uint,
+  Uint64,
 } from '@algorandfoundation/algorand-typescript/arc4'
 import { itob } from '@algorandfoundation/algorand-typescript/op'
 
-class TestStruct extends Struct<{ a: UintN64; b: DynamicBytes }> {}
-type TestObj = { a: UintN64; b: DynamicBytes }
+class TestStruct extends Struct<{ a: Uint64; b: DynamicBytes }> {}
+type DynamicMutableObject = { a: uint64; b: DynamicBytes }
+type StaticMutableObject = { a: uint64; b: StaticBytes<12> }
+type TestObj = { a: Uint64; b: DynamicBytes }
 export class Arc4EncodeDecode extends Contract {
-  testEncoding(a: uint64, b: boolean, c: biguint, d: bytes, e: string, f: Address) {
+  testEncoding(a: uint64, b: boolean, c: biguint, d: bytes, e: string, f: Address, g: bytes<12>) {
     ensureBudget(1400)
-    assert(encodeArc4(a) === new UintN64(a).bytes)
+    assert(encodeArc4(a) === new Uint64(a).bytes)
     assert(encodeArc4(b) === new Bool(b).bytes)
-    assert(encodeArc4(c) === new UintN<512>(c).bytes)
+    assert(encodeArc4(c) === new Uint<512>(c).bytes)
     assert(encodeArc4(d) === new DynamicBytes(d).bytes)
     assert(encodeArc4(e) === new Str(e).bytes)
-    assert(encodeArc4({ a, b: d }) === new TestStruct({ a: new UintN64(a), b: new DynamicBytes(d) }).bytes)
+    assert(encodeArc4({ a, b: d }) === new TestStruct({ a: new Uint64(a), b: new DynamicBytes(d) }).bytes)
+    assert(encodeArc4({ a, b: d }) === encodeArc4({ a, b: new DynamicBytes(d) }))
+    assert(encodeArc4({ a, b: g }) === encodeArc4({ a, b: new StaticBytes<12>(g) }))
     assert(encodeArc4(f) === f.bytes)
+    assert(encodeArc4(g) === new StaticBytes(g).bytes)
 
-    assert(encodeArc4([a]) === new StaticArray(new UintN64(a)).bytes)
+    assert(encodeArc4([a]) === new StaticArray(new Uint64(a)).bytes)
     assert(encodeArc4([b]) === new StaticArray(new Bool(b)).bytes)
-    assert(encodeArc4([c]) === new StaticArray(new UintN<512>(c)).bytes)
+    assert(encodeArc4([c]) === new StaticArray(new Uint<512>(c)).bytes)
     assert(encodeArc4([d]) === new StaticArray(new DynamicBytes(d)).bytes)
     assert(encodeArc4([e]) === new StaticArray(new Str(e)).bytes)
     assert(encodeArc4([f]) === new StaticArray(f).bytes)
+    assert(encodeArc4([g]) === new StaticArray(new StaticBytes(g)).bytes)
 
-    assert(encodeArc4<uint64[]>([a]) === new DynamicArray(new UintN64(a)).bytes)
+    assert(encodeArc4<uint64[]>([a]) === new DynamicArray(new Uint64(a)).bytes)
     assert(encodeArc4<boolean[]>([b]) === new DynamicArray(new Bool(b)).bytes)
-    assert(encodeArc4<biguint[]>([c]) === new DynamicArray(new UintN<512>(c)).bytes)
+    assert(encodeArc4<biguint[]>([c]) === new DynamicArray(new Uint<512>(c)).bytes)
     assert(encodeArc4<bytes[]>([d]) === new DynamicArray(new DynamicBytes(d)).bytes)
     assert(encodeArc4<string[]>([e]) === new DynamicArray(new Str(e)).bytes)
     assert(encodeArc4<Address[]>([f]) === new DynamicArray(f).bytes)
+    assert(encodeArc4<bytes<12>[]>([g]) === new DynamicArray(new StaticBytes(g)).bytes)
 
-    assert(arc4EncodedLength<uint64>() === 8)
-    assert(arc4EncodedLength<boolean>() === 1)
-    assert(arc4EncodedLength<UintN<512>>() === 64)
-    assert(arc4EncodedLength<[uint64, uint64, boolean]>() === 17)
-    assert(arc4EncodedLength<[uint64, uint64, boolean, boolean]>() === 17)
-    assert(arc4EncodedLength<[StaticArray<Bool, 10>, boolean, boolean]>() === 3)
-    assert(
-      arc4EncodedLength<
-        [[boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean], boolean, boolean]
-      >() === 3,
-    )
+    assert(sizeOf<uint64>() === 8)
+    assert(sizeOf<boolean>() === 1)
+    assert(sizeOf<Uint<512>>() === 64)
+    assert(sizeOf<[uint64, uint64, boolean]>() === 17)
+    assert(sizeOf<[uint64, uint64, boolean, boolean]>() === 17)
+    assert(sizeOf<[StaticArray<Bool, 10>, boolean, boolean]>() === 3)
+    assert(sizeOf<[[boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean], boolean, boolean]>() === 3)
+    assert(sizeOf<typeof g>() === 12)
+    assert(sizeOf<StaticMutableObject>() === 20)
   }
 
   testDecoding(
@@ -69,6 +75,8 @@ export class Arc4EncodeDecode extends Contract {
     e_bytes: bytes,
     f: Address,
     f_bytes: bytes,
+    g: bytes<12>,
+    g_bytes: bytes,
   ) {
     assert(decodeArc4<uint64>(a_bytes) === a)
     assert(decodeArc4<boolean>(b_bytes) === b)
@@ -86,5 +94,7 @@ export class Arc4EncodeDecode extends Contract {
 
     assertMatch(decodeArc4<TestObj[]>(Bytes`${lenPrefix}${offsetHeader}${e_bytes}`), [e], 'Array of struct matches')
     assertMatch(decodeArc4<Address[]>(Bytes`${lenPrefix}${f_bytes}`), [f], 'Array of address matches')
+
+    assert(decodeArc4<bytes<12>>(g_bytes) === g)
   }
 }

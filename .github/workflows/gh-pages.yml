@@ -1,9 +1,9 @@
-name: "Run typedoc and publish to pages"
+name: 'Run typedoc and publish to pages'
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
+  workflow_dispatch:
+
 jobs:
   build-and-publish-docs:
     runs-on: ubuntu-latest
@@ -15,10 +15,10 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Use Node.js 21.x
+      - name: Use Node.js 22.x
         uses: actions/setup-node@v4
         with:
-          node-version: 21.x
+          node-version: 22.x
 
       - name: Npm install
         run: npm ci --ignore-scripts

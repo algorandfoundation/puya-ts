@@ -8,7 +8,7 @@ export type Account = {
   /**
    * Get the accounts address in bytes
    */
-  readonly bytes: bytes
+  readonly bytes: bytes<32>
 
   /**
    * Account balance in microalgos
@@ -115,7 +115,6 @@ export function Account(publicKey: bytes): Account
 /**
  * Create a new account object representing the provided address
  * @param address A 56 character base-32 encoded Algorand address
- * @constructor
  */
 export function Account(address: string): Account
 export function Account(publicKeyOrAddress?: bytes | string): Account {
@@ -176,7 +175,7 @@ export type Asset = {
   /**
    * Arbitrary commitment
    */
-  readonly metadataHash: bytes
+  readonly metadataHash: bytes<32>
 
   /**
    * Manager address
@@ -287,4 +286,9 @@ export type Application = {
    * Address for which this application has authority
    */
   readonly address: Account
+
+  /**
+   * Version of the app, incremented each time the approval or clear program changes
+   */
+  readonly version: uint64
 }

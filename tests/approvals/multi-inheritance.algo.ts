@@ -1,6 +1,11 @@
-import type { uint64 } from '@algorandfoundation/algorand-typescript'
-import { Contract, GlobalState, Uint64 } from '@algorandfoundation/algorand-typescript'
+import type { Application, uint64 } from '@algorandfoundation/algorand-typescript'
+import { assert, BaseContract, Contract, GlobalState, LocalState, Uint64 } from '@algorandfoundation/algorand-typescript'
+import { abiCall } from '@algorandfoundation/algorand-typescript/arc4'
 import { classes } from 'polytype'
+
+export abstract class NameStore extends BaseContract {
+  name = LocalState<string>()
+}
 
 export class CommonBase extends Contract {
   stateCommon = GlobalState<uint64>({ initialValue: 123 })
@@ -37,7 +42,7 @@ export class BaseTwo extends CommonBase {
   }
 }
 
-export class MultiBases extends classes(BaseOne, BaseTwo) {
+export class MultiBases extends classes(NameStore, BaseOne, BaseTwo) {
   stateMulti = GlobalState({ initialValue: 'Hmmm' })
 
   methodMulti() {
@@ -54,5 +59,24 @@ export class MultiBases extends classes(BaseOne, BaseTwo) {
 
   callB2Common() {
     return super.class(BaseTwo).methodCommon()
+  }
+}
+
+class AbiCallMultiInheritance extends Contract {
+  test(app: Application) {
+    abiCall<typeof MultiBases.prototype.methodTwo>({
+      args: [],
+      appId: app,
+    })
+
+    const result = abiCall<typeof AbiCallMultiInheritance.prototype.add>({
+      args: [1, 2],
+    }).returnValue
+
+    assert(result === 3)
+  }
+
+  add(a: uint64, b: uint64): uint64 {
+    return a + b
   }
 }

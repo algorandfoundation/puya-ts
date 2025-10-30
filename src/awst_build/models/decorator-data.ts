@@ -1,3 +1,4 @@
+import type { ResourceEncoding } from '../../awst'
 import type { OnCompletionAction } from '../../awst/models'
 import type { ARC4CreateOption } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
@@ -11,8 +12,9 @@ export type Arc4AbiDecoratorData = {
   allowedCompletionTypes?: OnCompletionAction[]
   allowedCompletionTypesLocation?: SourceLocation
   sourceLocation: SourceLocation
-  readonly: boolean
+  readonly: boolean | undefined
   nameOverride: string | undefined
+  resourceEncoding: ResourceEncoding | undefined
   validateEncoding: boolean | undefined
   defaultArguments: Record<
     string,
@@ -36,6 +38,12 @@ export type Arc4BareDecoratorData = {
   sourceLocation: SourceLocation
 }
 
+export type ReadonlyDecoratorData = {
+  type: typeof Constants.symbolNames.readonlyDecoratorName
+  sourceLocation: SourceLocation
+  readonly: true
+}
+
 export type LogicSigOptionsDecoratorData = {
   type: typeof Constants.symbolNames.logicSigOptionsDecoratorName
   sourceLocation: SourceLocation
@@ -57,8 +65,13 @@ export type ContractOptionsDecoratorData = {
   }
 }
 
-export type DecoratorData = Arc4BareDecoratorData | Arc4AbiDecoratorData | LogicSigOptionsDecoratorData | ContractOptionsDecoratorData
-export type RoutingDecoratorData = Arc4AbiDecoratorData | Arc4BareDecoratorData
+export type DecoratorData =
+  | Arc4BareDecoratorData
+  | Arc4AbiDecoratorData
+  | LogicSigOptionsDecoratorData
+  | ContractOptionsDecoratorData
+  | ReadonlyDecoratorData
+export type RoutingDecoratorData = Arc4AbiDecoratorData | Arc4BareDecoratorData | ReadonlyDecoratorData
 
 export type DecoratorType = DecoratorData['type']
 

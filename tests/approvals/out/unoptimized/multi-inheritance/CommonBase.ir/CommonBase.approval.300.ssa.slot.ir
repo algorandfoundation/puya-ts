@@ -7,87 +7,90 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto block@2
     block@2: // after_if_else_L1
         goto block@3
-    block@3: // L5
+    block@3: // L10
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
-        goto tmp%1#0 ? block@4 : block@9
-    block@4: // abi_routing_L5
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "methodCommon()string" => block@5, method "b2CantOverride()string" => block@6, * => block@7}
-    block@5: // methodCommon_route_L8
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (== tmp%3#0 NoOp)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        let tmp%6#0: bool = (!= tmp%5#0 0u)
-        (assert tmp%6#0) // can only call when not creating
-        let to_encode%0#0: bytes = tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon()
-        let length%0#0: uint64 = (len to_encode%0#0)
-        let as_bytes%0#0: bytes[8] = (itob length%0#0)
-        let length_uint16%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let encoded_value%0#0: bytes = (concat length_uint16%0#0 to_encode%0#0)
-        let tmp%7#0: bytes = (concat 0x151f7c75 encoded_value%0#0)
-        (log tmp%7#0)
-        let tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__%0#0: bool = 1u
-        goto block@14
-    block@6: // b2CantOverride_route_L12
-        let tmp%8#0: uint64 = (txn OnCompletion)
-        let tmp%9#0: bool = (== tmp%8#0 NoOp)
-        (assert tmp%9#0) // OnCompletion is not NoOp
-        let tmp%10#0: uint64 = (txn ApplicationID)
-        let tmp%11#0: bool = (!= tmp%10#0 0u)
-        (assert tmp%11#0) // can only call when not creating
-        let to_encode%1#0: bytes = tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride()
-        let length%1#0: uint64 = (len to_encode%1#0)
-        let as_bytes%1#0: bytes[8] = (itob length%1#0)
-        let length_uint16%1#0: bytes = ((extract 6 2) as_bytes%1#0)
-        let encoded_value%1#0: bytes = (concat length_uint16%1#0 to_encode%1#0)
-        let tmp%12#0: bytes = (concat 0x151f7c75 encoded_value%1#0)
-        (log tmp%12#0)
-        let tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__%0#1: bool = 1u
-        goto block@14
-    block@7: // switch_case_default_L5
+        goto tmp%1#0 ? block@4 : block@11
+    block@4: // abi_routing_L10
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@5 : block@9
+    block@5: // call_NoOp_L10
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "methodCommon()string" => block@6, method "b2CantOverride()string" => block@7, * => block@8}
+    block@6: // methodCommon_route_L13
+        tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon[routing]()
         goto block@8
-    block@8: // switch_case_next_L5
-        goto block@13
-    block@9: // bare_routing_L5
-        let tmp%13#0: uint64 = (txn OnCompletion)
-        switch tmp%13#0 {0u => block@10, * => block@11}
-    block@10: // __algots__.defaultCreate_L5
-        let tmp%14#0: uint64 = (txn ApplicationID)
-        let tmp%15#0: bool = (== tmp%14#0 0u)
-        (assert tmp%15#0) // can only call when creating
-        tests/approvals/multi-inheritance.algo.ts::CommonBase.__algots__.defaultCreate()
-        let tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__%0#2: bool = 1u
-        goto block@14
-    block@11: // switch_case_default_L5
+    block@7: // b2CantOverride_route_L17
+        tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride[routing]()
+        goto block@8
+    block@8: // switch_case_next_L10
+        goto block@10
+    block@9: // create_NoOp_L10
+        goto block@10
+    block@10: // after_if_else_L10
         goto block@12
-    block@12: // switch_case_next_L5
-        goto block@13
-    block@13: // after_if_else_L5
-        let tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__%0#3: bool = 0u
-        goto block@14
-    block@14: // after_inlined_tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__%0#0 <- block@5, tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__%0#1 <- block@6, tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__%0#2 <- block@10, tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router__%0#3 <- block@13)
+    block@11: // __algots__.defaultCreate_L10
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/multi-inheritance.algo.ts::CommonBase.__algots__.defaultCreate()
+        exit 1u
+    block@12: // after_if_else_L10
+        exit 0u
+    block@13: // after_inlined_tests/approvals/multi-inheritance.algo.ts::CommonBase.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
         return tmp%0#0
 
-subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> bytes:
-    block@0: // L8
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon[routing]() -> void:
+    block@0: // L13
+        let tmp%0#0: string = tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon()
+        let aggregate%length%0#0: uint64 = (len tmp%0#0)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%0#0)
+        let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%0#0
+        let tmp%1#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride[routing]() -> void:
+    block@0: // L17
+        let tmp%0#0: string = tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride()
+        let aggregate%length%0#0: uint64 = (len tmp%0#0)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%0#0)
+        let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%0#0
+        let tmp%1#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.methodCommon() -> string:
+    block@0: // L13
         return "common"
 
-subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> bytes:
-    block@0: // L12
+subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.b2CantOverride() -> string:
+    block@0: // L17
         return "common"
 
 subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.__algots__.defaultCreate() -> void:
-    block@0: // L5
+    block@0: // L10
         return 
 
 subroutine tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor() -> void:
-    block@0: // L5
+    block@0: // L10
         goto block@1
     block@1: // L1
         goto block@2
-    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L5
+    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L10
         (app_global_put "stateCommon" 123u)
         return 

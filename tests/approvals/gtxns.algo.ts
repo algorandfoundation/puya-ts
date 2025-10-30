@@ -1,3 +1,4 @@
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import {
   assert,
   Bytes,
@@ -55,5 +56,34 @@ export class GtxnsAlgo extends Contract {
     assert(other.lastLog === Bytes('Hello test4'))
     assert(other.appArgs(0) === methodSelector(GtxnsAlgo.prototype.test3))
     assert(other.appId === Global.currentApplicationId)
+  }
+
+  reflectAllPay(pay: gtxn.PaymentTxn) {
+    return {
+      sender: pay.sender.bytes,
+      fee: pay.fee,
+      firstValid: pay.firstValid,
+      firstValidTime: pay.firstValidTime,
+      lastValid: pay.lastValid,
+      note: pay.note,
+      lease: pay.lease,
+      typeBytes: pay.typeBytes,
+      groupIndex: pay.groupIndex,
+      txnId: pay.txnId,
+      rekeyTo: pay.rekeyTo.bytes,
+      receiver: pay.receiver.bytes,
+      amount: pay.amount,
+      closeRemainderTo: pay.closeRemainderTo.bytes,
+    }
+  }
+
+  test5(txn: gtxn.Transaction): uint64 {
+    if (txn.type === TransactionType.Payment) {
+      return 1
+    } else if (txn.type === TransactionType.AssetTransfer) {
+      // The compiler infers txn as a union of everything but payment here - which is a union type we can support
+      return 0
+    }
+    return 0
   }
 }

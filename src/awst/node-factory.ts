@@ -6,6 +6,8 @@ import { codeInvariant, instanceOfAny, invariant } from '../util'
 import { constantEvaluation } from './constant-evaluation'
 import type { Expression, Statement } from './nodes'
 import {
+  ARC4Decode,
+  ARC4Encode,
   ArrayLength,
   ArrayReplace,
   AssignmentExpression,
@@ -86,9 +88,17 @@ const explicitNodeFactory = {
       tealAlias: tealAlias ?? null,
     })
   },
-  bigUIntConstant({ value, sourceLocation }: { value: bigint; sourceLocation: SourceLocation }): IntegerConstant {
+  bigUIntConstant({
+    value,
+    sourceLocation,
+    errorLocation,
+  }: {
+    value: bigint
+    sourceLocation: SourceLocation
+    errorLocation?: SourceLocation
+  }): IntegerConstant {
     if (value < 0n || value >= 2n ** 512n) {
-      throw new CodeError(`biguint overflow or underflow: ${value}`, { sourceLocation })
+      throw new CodeError(`biguint overflow or underflow: ${value}`, { sourceLocation: errorLocation ?? sourceLocation })
     }
     return new IntegerConstant({
       value,
@@ -169,6 +179,7 @@ const explicitNodeFactory = {
   },
   expressionStatement({ expr }: { expr: Expression }) {
     if (expr instanceof AssignmentExpression) {
+      // Replace ExpressionStatement(AssignmentExpression) with AssignmentStatement
       return new AssignmentStatement({
         ...expr,
       })
@@ -239,7 +250,7 @@ const explicitNodeFactory = {
   tupleExpression(props: Omit<Props<TupleExpression>, 'wtype'> & { wtype?: wtypes.WTuple }) {
     return new TupleExpression({
       ...props,
-      wtype: props.wtype ?? new wtypes.WTuple({ types: props.items.map((i) => i.wtype), immutable: true }),
+      wtype: props.wtype ?? new wtypes.WTuple({ types: props.items.map((i) => i.wtype) }),
     })
   },
   methodDocumentation(props?: { description?: string | null; args?: Map<string, string>; returns?: string | null }) {
@@ -309,7 +320,7 @@ const explicitNodeFactory = {
     value: Expression
     sourceLocation: SourceLocation
   }) {
-    invariant(base.wtype instanceof wtypes.StackArray, 'base must have wtype of StackArray', base.sourceLocation)
+    invariant(base.wtype instanceof wtypes.ARC4DynamicArray, 'base must have wtype of ARC4DynamicArray', base.sourceLocation)
     return new ArrayReplace({
       base,
       index,
@@ -330,7 +341,7 @@ const explicitNodeFactory = {
     return new SubmitInnerTransaction({
       itxns,
       sourceLocation,
-      wtype: itxnWTypes.length === 1 ? itxnWTypes[0] : new WTuple({ types: itxnWTypes, immutable: true }),
+      wtype: itxnWTypes.length === 1 ? itxnWTypes[0] : new WTuple({ types: itxnWTypes }),
     })
   },
   commaExpression({ expressions, sourceLocation }: Omit<Props<CommaExpression>, 'wtype'>) {
@@ -342,6 +353,18 @@ const explicitNodeFactory = {
       expressions,
       sourceLocation,
       wtype,
+    })
+  },
+  aRC4Encode(props: Omit<Props<ARC4Encode>, 'errorMessage'>) {
+    return new ARC4Encode({
+      ...props,
+      errorMessage: null,
+    })
+  },
+  aRC4Decode(props: Omit<Props<ARC4Decode>, 'errorMessage'>) {
+    return new ARC4Decode({
+      ...props,
+      errorMessage: null,
     })
   },
 } satisfies { [key in keyof ConcreteNodes]?: (...args: DeliberateAny[]) => DeliberateAny }

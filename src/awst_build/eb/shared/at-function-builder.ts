@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
@@ -6,6 +7,7 @@ import { numberPType, uint64PType } from '../../ptypes'
 import { instanceEb } from '../../type-registry'
 import type { NodeBuilder } from '../index'
 import { FunctionBuilder } from '../index'
+import { OptionalExpressionBuilder } from '../optional-expression-builder'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { translateNegativeIndex } from '../util/translate-negative-index'
 
@@ -14,11 +16,13 @@ export class AtFunctionBuilder extends FunctionBuilder {
     private expr: Expression,
     private itemPType: PType,
     private exprLength: Expression | bigint,
+    sourceLocation: SourceLocation,
+    private returnsOptional = false,
   ) {
-    super(expr.sourceLocation)
+    super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [index],
     } = parseFunctionArgs({
@@ -30,7 +34,7 @@ export class AtFunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required(uint64PType, numberPType)],
     })
 
-    return instanceEb(
+    const result = instanceEb(
       nodeFactory.indexExpression({
         base: this.expr,
         sourceLocation: sourceLocation,
@@ -39,5 +43,6 @@ export class AtFunctionBuilder extends FunctionBuilder {
       }),
       this.itemPType,
     )
+    return this.returnsOptional ? new OptionalExpressionBuilder(result) : result
   }
 }

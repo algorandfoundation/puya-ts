@@ -1,5 +1,5 @@
 import { arc4, assert, Box, Bytes, OnCompleteAction, op, TransactionType } from '@algorandfoundation/algorand-typescript'
-import { Tuple, UintN64 } from '@algorandfoundation/algorand-typescript/arc4'
+import { Tuple, Uint64 } from '@algorandfoundation/algorand-typescript/arc4'
 
 export class BoxContract extends arc4.Contract {
   oca = Box<OnCompleteAction>({ key: Bytes('oca') })
@@ -12,10 +12,10 @@ export class BoxContract extends arc4.Contract {
   }
 
   @arc4.abimethod({ name: 'read_enums' })
-  public readEnums(): Tuple<[UintN64, UintN64]> {
+  public readEnums(): Tuple<readonly [Uint64, Uint64]> {
     assert(op.Box.get(Bytes('oca'))[0] === op.itob(this.oca.value))
     assert(op.Box.get(Bytes('txn'))[0] === op.itob(this.txn.value))
 
-    return new Tuple(new UintN64(this.oca.value), new UintN64(this.txn.value))
+    return new Tuple(new Uint64(this.oca.value), new Uint64(this.txn.value))
   }
 }

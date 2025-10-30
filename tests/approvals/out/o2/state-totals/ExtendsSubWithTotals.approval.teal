@@ -1,4 +1,4 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
@@ -18,17 +18,11 @@ main_after_if_else@2:
     // @contract({ stateTotals: {} })
     // export class ExtendsSubWithTotals extends SubClassWithExplicitTotals {
     txn NumAppArgs
-    bz main_bare_routing@8
+    bz main___algots__.defaultCreate@7
     pushbytes 0x2cd95aa1 // method "setState(uint64)void"
     txna ApplicationArgs 0
     match main_setState_route@5
-
-main_after_if_else@12:
-    // tests/approvals/state-totals.algo.ts:27-28
-    // @contract({ stateTotals: {} })
-    // export class ExtendsSubWithTotals extends SubClassWithExplicitTotals {
-    pushint 0 // 0
-    return
+    err
 
 main_setState_route@5:
     // tests/approvals/state-totals.algo.ts:31
@@ -36,12 +30,9 @@ main_setState_route@5:
     txn OnCompletion
     intc_0 // OptIn
     ==
-    assert // OnCompletion is not OptIn
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/state-totals.algo.ts:27-28
-    // @contract({ stateTotals: {} })
-    // export class ExtendsSubWithTotals extends SubClassWithExplicitTotals {
+    &&
+    assert // OnCompletion must be OptIn && can only call when not creating
     txna ApplicationArgs 1
     dup
     len
@@ -78,14 +69,15 @@ main_setState_route@5:
     intc_0 // 1
     return
 
-main_bare_routing@8:
+main___algots__.defaultCreate@7:
     // tests/approvals/state-totals.algo.ts:27-28
     // @contract({ stateTotals: {} })
     // export class ExtendsSubWithTotals extends SubClassWithExplicitTotals {
     txn OnCompletion
-    bnz main_after_if_else@12
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     intc_0 // 1
     return

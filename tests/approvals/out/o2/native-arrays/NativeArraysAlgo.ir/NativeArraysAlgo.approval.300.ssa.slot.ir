@@ -1,171 +1,138 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         let tmp%0#1: uint64 = (txn NumAppArgs)
-        goto tmp%0#1 ? block@2 : block@13
+        goto tmp%0#1 ? block@2 : block@23
     block@2: // abi_routing_L6
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "buildArray()uint64[]" => block@3, method "doThings()void" => block@4, method "arc4Interop()void" => block@5, method "structs((uint64,uint64))(uint64,uint64)[]" => block@6, method "booleans()bool[]" => block@7, method "booleansStatic()(bool,bool,bool)" => block@8, method "arc4Booleans()bool[]" => block@9, method "arc4BooleansStatic()(bool,bool,bool)" => block@10, * => block@17}
-    block@3: // buildArray_route_L7
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (! tmp%3#0)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        (assert tmp%5#0) // can only call when not creating
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        (assert tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "readonlyArray()void" => block@4, method "arrayInObject()void" => block@5, method "buildArray()uint64[]" => block@6, method "arrayFromCtor()uint64[]" => block@7, method "buildReadonly()uint64[]" => block@8, method "doThings()void" => block@29, method "fixedArray(uint64[50])void" => block@10, method "arc4Interop()void" => block@11, method "structs((uint64,uint64))(uint64,uint64)[]" => block@12, method "booleans()bool[]" => block@13, method "booleansStatic()(bool,bool,bool)" => block@14, method "arc4Booleans()bool[]" => block@15, method "arc4BooleansStatic()(bool,bool,bool)" => block@16, method "aliasing(uint64[],uint64[])void" => block@17, method "receiveMutable(uint64[])void" => block@18, method "receiveReadonly(uint64[])void" => block@19, * => block@22}
+    block@4: // readonlyArray_route_L7
+        exit 1u
+    block@5: // arrayInObject_route_L20
+        exit 1u
+    block@6: // buildArray_route_L30
         (log 0x151f7c7500040000000000000001000000000000000200000000000000030000000000000004)
-        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#0: bool = 1u
-        goto block@18
-    block@4: // doThings_route_L11
-        let tmp%9#0: uint64 = (txn OnCompletion)
+        exit 1u
+    block@7: // arrayFromCtor_route_L34
+        (log 0x151f7c750003000000000000000100000000000000020000000000000003)
+        exit 1u
+    block@8: // buildReadonly_route_L38
+        (log 0x151f7c7500040000000000000001000000000000000200000000000000030000000000000004)
+        exit 1u
+    block@29: // while_top_L20
+        let tmp%1#17: uint64 = (global OpcodeBudget)
+        let tmp%2#7: bool = (> 1410u tmp%1#17)
+        goto tmp%2#7 ? block@30 : block@34
+    block@30: // while_body_L21
+        itxn_begin
+        ((itxn_field TypeEnum) appl)
+        ((itxn_field OnCompletion) DeleteApplication)
+        ((itxn_field ApprovalProgram) 0x068101)
+        ((itxn_field ClearStateProgram) 0x068101)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        goto block@29
+    block@34: // after_while_L20
+        exit 1u
+    block@10: // fixedArray_route_L109
+        let y#1: Encoded(uint64[50]) = (txna ApplicationArgs 1)
+        let len%0#5: uint64 = (len y#1)
+        let eq%0#4: bool = (== len%0#5 400u)
+        (assert eq%0#4) // invalid number of bytes for arc4.static_array<uint64, 50>
+        let values%1#1: uint64 = (extract_uint64 y#1 0u)
+        let tmp%6#3: bool = (! values%1#1)
+        (assert tmp%6#3)
+        exit 1u
+    block@11: // arc4Interop_route_L157
+        exit 1u
+    block@12: // structs_route_L170
+        let p#0: Encoded(uint64,uint64) = (txna ApplicationArgs 1)
+        let len%0#3: uint64 = (len p#0)
+        let eq%0#3: bool = (== len%0#3 16u)
+        (assert eq%0#3) // invalid number of bytes for tests/approvals/native-arrays.algo.ts::Vector
+        let x#0: uint64 = (extract_uint64 p#0 0u)
+        let y#0: uint64 = (extract_uint64 p#0 8u)
+        let aggregate%val_as_bytes%49#0: bytes[8] = (itob x#0)
+        let aggregate%val_as_bytes%50#0: bytes[8] = (itob y#0)
+        let aggregate%head%50#0: bytes = (concat aggregate%val_as_bytes%49#0 aggregate%val_as_bytes%50#0)
+        let myVectors#1: Encoded(len+(uint64,uint64)[]) = (concat 0x0001 aggregate%head%50#0)
+        let aggregate%array_length%20#0: uint64 = (extract_uint16 myVectors#1 0u) // on error: invalid array length header
+        let tmp%2#3: bool = (== aggregate%array_length%20#0 1u)
+        let aggregate%encoded_element%172#0: bytes = ((extract 2 16) myVectors#1)
+        let values%2#0: uint64 = (extract_uint64 aggregate%encoded_element%172#0 0u)
+        let tmp%3#3: bool = (== values%2#0 x#0)
+        let values%3#0: uint64 = (extract_uint64 aggregate%encoded_element%172#0 8u)
+        let tmp%4#3: bool = (== values%3#0 y#0)
+        let tmp%5#1: bool = (&& tmp%3#3 tmp%4#3)
+        let tmp%6#1: bool = (&& tmp%2#3 tmp%5#1)
+        (assert tmp%6#1) // assert target is match for conditions
+        let tmp%2#2: bytes = (concat 0x151f7c75 myVectors#1)
+        (log tmp%2#2)
+        exit 1u
+    block@13: // booleans_route_L179
+        (log 0x151f7c750003a0)
+        exit 1u
+    block@14: // booleansStatic_route_L183
+        (log 0x151f7c75a0)
+        exit 1u
+    block@15: // arc4Booleans_route_L187
+        (log 0x151f7c750003a0)
+        exit 1u
+    block@16: // arc4BooleansStatic_route_L191
+        (log 0x151f7c75a0)
+        exit 1u
+    block@17: // aliasing_route_L195
+        let mutable#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
+        let aggregate%array_length%21#0: uint64 = (extract_uint16 mutable#0 0u) // on error: invalid array length header
+        let mul%0#2: uint64 = (* aggregate%array_length%21#0 8u)
+        let add%0#2: uint64 = (+ mul%0#2 2u)
+        let len%0#2: uint64 = (len mutable#0)
+        let eq%0#2: bool = (== len%0#2 add%0#2)
+        (assert eq%0#2) // invalid number of bytes for arc4.dynamic_array<uint64>
+        let readOnly#0: Encoded(len+uint64[]) = (txna ApplicationArgs 2)
+        let aggregate%array_length%22#0: uint64 = (extract_uint16 readOnly#0 0u) // on error: invalid array length header
+        let mul%1#0: uint64 = (* aggregate%array_length%22#0 8u)
+        let add%1#0: uint64 = (+ mul%1#0 2u)
+        let len%1#0: uint64 = (len readOnly#0)
+        let eq%1#0: bool = (== len%1#0 add%1#0)
+        (assert eq%1#0) // invalid number of bytes for arc4.dynamic_array<uint64>
+        let values%0#0: uint64 = (extract_uint64 mutable#0 10u)
+        let tmp%1#2: uint64 = (+ values%0#0 2u)
+        let aggregate%val_as_bytes%51#0: bytes[8] = (itob tmp%1#2)
+        let mutable#1: Encoded(len+uint64[]) = ((replace2 10) mutable#0 aggregate%val_as_bytes%51#0) // on error: index access is out of bounds
+        let values%1#0: uint64 = (extract_uint64 mutable#1 10u)
+        let tmp%2#1: bool = (!= values%1#0 values%0#0)
+        (assert tmp%2#1) // These should not match
+        exit 1u
+    block@18: // receiveMutable_route_L221
+        let a#1: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
+        let aggregate%array_length%23#0: uint64 = (extract_uint16 a#1 0u) // on error: invalid array length header
+        let mul%0#1: uint64 = (* aggregate%array_length%23#0 8u)
+        let add%0#1: uint64 = (+ mul%0#1 2u)
+        let len%0#1: uint64 = (len a#1)
+        let eq%0#1: bool = (== len%0#1 add%0#1)
+        (assert eq%0#1) // invalid number of bytes for arc4.dynamic_array<uint64>
+        exit 1u
+    block@19: // receiveReadonly_route_L225
+        let a#0: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
+        let aggregate%array_length%24#0: uint64 = (extract_uint16 a#0 0u) // on error: invalid array length header
+        let mul%0#0: uint64 = (* aggregate%array_length%24#0 8u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len a#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<uint64>
+        exit 1u
+    block@22: // after_if_else_L6
+        fail
+    block@23: // __algots__.defaultCreate_L6
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (! tmp%9#0)
-        (assert tmp%10#0) // OnCompletion is not NoOp
-        let tmp%11#0: uint64 = (txn ApplicationID)
-        (assert tmp%11#0) // can only call when not creating
-        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#1: bool = 1u
-        goto block@18
-    block@5: // arc4Interop_route_L42
-        let tmp%13#0: uint64 = (txn OnCompletion)
-        let tmp%14#0: bool = (! tmp%13#0)
-        (assert tmp%14#0) // OnCompletion is not NoOp
-        let tmp%15#0: uint64 = (txn ApplicationID)
-        (assert tmp%15#0) // can only call when not creating
-        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#2: bool = 1u
-        goto block@18
-    block@6: // structs_route_L54
-        let tmp%17#0: uint64 = (txn OnCompletion)
-        let tmp%18#0: bool = (! tmp%17#0)
-        (assert tmp%18#0) // OnCompletion is not NoOp
-        let tmp%19#0: uint64 = (txn ApplicationID)
-        (assert tmp%19#0) // can only call when not creating
-        let tmp%21#0: bytes = (txna ApplicationArgs 1)
-        let value_len%0#0: uint64 = (len tmp%21#0)
-        let size_is_correct%0#0: bool = (== value_len%0#0 16u)
-        (assert size_is_correct%0#0) // invalid number of bytes for tests/approvals/native-arrays.algo.ts::Vector
-        let p.x#0: uint64 = (extract_uint64 tmp%21#0 0u)
-        let p.y#0: uint64 = (extract_uint64 tmp%21#0 8u)
-        let array%sub_item%16#1: bytes[8] = (itob p.x#0)
-        let array%sub_item%17#1: bytes[8] = (itob p.y#0)
-        let array%encoded%19#1: (encoded_uint64,encoded_uint64)[] = (concat array%sub_item%16#1 array%sub_item%17#1)
-        let byte_len%0#0: uint64 = (len array%encoded%19#1)
-        let len_%0#0: uint64 = (/ byte_len%0#0 16u)
-        let as_bytes%0#0: bytes[8] = (itob len_%0#0)
-        let len_16_bit%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let myVectors#1: (encoded_uint64,encoded_uint64)[] = (concat len_16_bit%0#0 array%encoded%19#1)
-        let tmp%0#2: uint64 = (extract_uint16 myVectors#1 0u)
-        let tmp%1#1: bool = (== tmp%0#2 1u)
-        goto tmp%1#1 ? block@30 : block@33
-    block@30: // and_contd_L59
-        let arc4_item%0#0: bytes = ((extract 2 16) myVectors#1)
-        let item0%1#1: uint64 = (extract_uint64 arc4_item%0#0 0u)
-        let tmp%2#1: bool = (== item0%1#1 p.x#0)
-        goto tmp%2#1 ? block@31 : block@33
-    block@31: // and_contd_L59
-        let item1%3#0: uint64 = (extract_uint64 arc4_item%0#0 8u)
-        let tmp%3#1: bool = (== item1%3#0 p.y#0)
-        goto tmp%3#1 ? block@32 : block@33
-    block@32: // bool_true_L59
-        let and_result%0#0: bool = 1u
-        goto block@34
-    block@33: // bool_false_L59
-        let and_result%0#1: bool = 0u
-        goto block@34
-    block@34: // bool_merge_L59
-        let and_result%0#2: bool = φ(and_result%0#0 <- block@32, and_result%0#1 <- block@33)
-        (assert and_result%0#2) // assert target is match for conditions
-        let tmp%23#0: bytes = (concat 0x151f7c75 myVectors#1)
-        (log tmp%23#0)
-        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#3: bool = 1u
-        goto block@18
-    block@7: // booleans_route_L63
-        let tmp%24#0: uint64 = (txn OnCompletion)
-        let tmp%25#0: bool = (! tmp%24#0)
-        (assert tmp%25#0) // OnCompletion is not NoOp
-        let tmp%26#0: uint64 = (txn ApplicationID)
-        (assert tmp%26#0) // can only call when not creating
-        let concat_result%0#1: bytes = _puya_lib.arc4.dynamic_array_concat_bits(0x0000, 0x800080, 3u, 8u)
-        let tmp%29#0: bytes = (concat 0x151f7c75 concat_result%0#1)
-        (log tmp%29#0)
-        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#4: bool = 1u
-        goto block@18
-    block@8: // booleansStatic_route_L67
-        let tmp%30#0: uint64 = (txn OnCompletion)
-        let tmp%31#0: bool = (! tmp%30#0)
-        (assert tmp%31#0) // OnCompletion is not NoOp
-        let tmp%32#0: uint64 = (txn ApplicationID)
-        (assert tmp%32#0) // can only call when not creating
-        (log 0x151f7c75a0)
-        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#5: bool = 1u
-        goto block@18
-    block@9: // arc4Booleans_route_L71
-        let tmp%35#0: uint64 = (txn OnCompletion)
-        let tmp%36#0: bool = (! tmp%35#0)
-        (assert tmp%36#0) // OnCompletion is not NoOp
-        let tmp%37#0: uint64 = (txn ApplicationID)
-        (assert tmp%37#0) // can only call when not creating
-        let concat_result%0#0: bytes = _puya_lib.arc4.dynamic_array_concat_bits(0x0000, 0x800080, 3u, 8u)
-        let tmp%40#0: bytes = (concat 0x151f7c75 concat_result%0#0)
-        (log tmp%40#0)
-        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#6: bool = 1u
-        goto block@18
-    block@10: // arc4BooleansStatic_route_L75
-        let tmp%41#0: uint64 = (txn OnCompletion)
-        let tmp%42#0: bool = (! tmp%41#0)
-        (assert tmp%42#0) // OnCompletion is not NoOp
-        let tmp%43#0: uint64 = (txn ApplicationID)
-        (assert tmp%43#0) // can only call when not creating
-        (log 0x151f7c75a0)
-        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#7: bool = 1u
-        goto block@18
-    block@13: // bare_routing_L6
-        let tmp%46#0: uint64 = (txn OnCompletion)
-        goto tmp%46#0 ? block@17 : block@14
-    block@14: // __algots__.defaultCreate_L6
-        let tmp%47#0: uint64 = (txn ApplicationID)
-        let tmp%48#0: bool = (! tmp%47#0)
-        (assert tmp%48#0) // can only call when creating
-        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#8: bool = 1u
-        goto block@18
-    block@17: // after_if_else_L6
-        let tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#9: bool = 0u
-        goto block@18
-    block@18: // after_inlined_tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#0 <- block@3, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#1 <- block@4, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#2 <- block@5, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#3 <- block@34, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#4 <- block@7, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#5 <- block@8, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#6 <- block@9, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#7 <- block@10, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#8 <- block@14, tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__puya_arc4_router__%0#9 <- block@17)
-        return tmp%0#0
-
-subroutine _puya_lib.arc4.dynamic_array_concat_bits(array: bytes, new_items_bytes: bytes, new_items_count: uint64, read_step: uint64) -> bytes:
-    block@0: // L124
-        let array_length#0: uint64 = (extract_uint16 array#0 0u)
-        let new_array_length#0: uint64 = (+ array_length#0 new_items_count#0)
-        let tmp%0#0: bytes = (itob new_array_length#0)
-        let new_array_length_b#0: bytes = ((extract 6 0) tmp%0#0)
-        let result#0: bytes = ((replace2 0) array#0 new_array_length_b#0)
-        let tmp%1#0: uint64 = (+ array_length#0 7u)
-        let current_bytes#0: uint64 = (/ tmp%1#0 8u)
-        let tmp%2#0: uint64 = (+ new_array_length#0 7u)
-        let required_bytes#0: uint64 = (/ tmp%2#0 8u)
-        let tmp%3#0: bool = (< current_bytes#0 required_bytes#0)
-        goto tmp%3#0 ? block@1 : block@2
-    block@1: // if_body_L148
-        let tmp%4#0: uint64 = (- required_bytes#0 current_bytes#0)
-        let tmp%5#0: bytes = (bzero tmp%4#0)
-        let result#1: bytes = (concat result#0 tmp%5#0)
-        goto block@2
-    block@2: // after_if_else_L147
-        let result#4: bytes = φ(result#0 <- block@0, result#1 <- block@1)
-        let read_offset#0: uint64 = 0u
-        let write_offset#0: uint64 = (+ array_length#0 16u)
-        let write_end#0: uint64 = (+ write_offset#0 new_items_count#0)
-        goto block@3
-    block@3: // while_top_L153
-        let write_offset#1: uint64 = φ(write_offset#0 <- block@2, write_offset#2 <- block@4)
-        let result#2: bytes = φ(result#4 <- block@2, result#3 <- block@4)
-        let read_offset#1: uint64 = φ(read_offset#0 <- block@2, read_offset#2 <- block@4)
-        let tmp%6#0: bool = (< write_offset#1 write_end#0)
-        goto tmp%6#0 ? block@4 : block@5
-    block@4: // while_body_L154
-        let tmp%7#0: uint64 = (getbit new_items_bytes#0 read_offset#1)
-        let result#3: bytes = (setbit result#2 write_offset#1 tmp%7#0)
-        let write_offset#2: uint64 = (+ write_offset#1 1u)
-        let read_offset#2: uint64 = (+ read_offset#1 read_step#0)
-        goto block@3
-    block@5: // after_while_L153
-        return result#2
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        exit 1u

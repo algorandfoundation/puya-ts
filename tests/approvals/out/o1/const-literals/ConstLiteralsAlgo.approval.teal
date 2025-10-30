@@ -1,0 +1,79 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1
+    // tests/approvals/const-literals.algo.ts:15
+    // class ConstLiteralsAlgo extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@13
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
+    pushbytess 0xffbc3914 0x341a3794 0x73e5b0c7 0x5034266b 0xaada8eee 0x4e935b6e // method "test()uint64", method "test2()uint64", method "test3()uint64", method "test4()uint64", method "test5()uint512", method "test6()uint512"
+    txna ApplicationArgs 0
+    match main_test_route@4 main_test2_route@5 main_test3_route@6 main_test4_route@7 main_test5_route@8 main_test6_route@9
+    err
+
+main_test6_route@9:
+    // tests/approvals/const-literals.algo.ts:41
+    // test6(): biguint {
+    pushbytes 0x151f7c7500000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000
+    log
+    intc_0 // 1
+    return
+
+main_test5_route@8:
+    // tests/approvals/const-literals.algo.ts:37
+    // test5() {
+    pushbytes 0x151f7c7500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000
+    log
+    intc_0 // 1
+    return
+
+main_test4_route@7:
+    // tests/approvals/const-literals.algo.ts:32
+    // test4(): uint64 {
+    pushbytes 0x151f7c758000000000000000
+    log
+    intc_0 // 1
+    return
+
+main_test3_route@6:
+    // tests/approvals/const-literals.algo.ts:25
+    // test3(): uint64 {
+    pushbytes 0x151f7c75000000000000000c
+    log
+    intc_0 // 1
+    return
+
+main_test2_route@5:
+    // tests/approvals/const-literals.algo.ts:20
+    // test2() {
+    pushbytes 0x151f7c750000000000000004
+    log
+    intc_0 // 1
+    return
+
+main_test_route@4:
+    // tests/approvals/const-literals.algo.ts:16
+    // test(): uint64 {
+    pushbytes 0x151f7c75000000000000007b
+    log
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@13:
+    // tests/approvals/const-literals.algo.ts:15
+    // class ConstLiteralsAlgo extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
+    return

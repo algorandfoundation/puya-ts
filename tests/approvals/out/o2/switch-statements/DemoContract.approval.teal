@@ -1,40 +1,33 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 8 2
+    intcblock 1 8 0 2
     bytecblock "evalCount"
     pushbytes ""
     dup
     // tests/approvals/switch-statements.algo.ts:4
     // export class DemoContract extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@8
-    pushbytess 0xa6ff944a 0x97d4cf00 0xa81a47ab // method "run()void", method "test_side_effects(uint64)void", method "test_non_trivial_termination_of_clause(uint64,uint64)uint64"
-    txna ApplicationArgs 0
-    match main_run_route@3 main_test_side_effects_route@4 main_test_non_trivial_termination_of_clause_route@5
-
-main_after_if_else@12:
-    // tests/approvals/switch-statements.algo.ts:4
-    // export class DemoContract extends Contract {
-    intc_1 // 0
-    return
-
-main_test_non_trivial_termination_of_clause_route@5:
-    // tests/approvals/switch-statements.algo.ts:83
-    // public test_non_trivial_termination_of_clause(n: uint64, y: uint64): uint64 {
+    bz main___algots__.defaultCreate@10
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/switch-statements.algo.ts:4
-    // export class DemoContract extends Contract {
+    assert
+    pushbytess 0xa6ff944a 0x97d4cf00 0xa81a47ab // method "run()void", method "test_side_effects(uint64)void", method "test_non_trivial_termination_of_clause(uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match main_run_route@4 main_test_side_effects_route@5 main_test_non_trivial_termination_of_clause_route@6
+    err
+
+main_test_non_trivial_termination_of_clause_route@6:
+    // tests/approvals/switch-statements.algo.ts:83
+    // public test_non_trivial_termination_of_clause(n: uint64, y: uint64): uint64 {
     txna ApplicationArgs 1
     dup
     len
-    intc_2 // 8
+    intc_1 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -43,7 +36,7 @@ main_test_non_trivial_termination_of_clause_route@5:
     txna ApplicationArgs 2
     dup
     len
-    intc_2 // 8
+    intc_1 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -59,16 +52,16 @@ main_test_non_trivial_termination_of_clause_route@5:
     //   } else {
     //     return n
     //   }
-    bz main_after_if_else@20
+    bz main_after_if_else@17
     // tests/approvals/switch-statements.algo.ts:86
     // if (y % 2 === 0) {
     dup
     intc_3 // 2
     %
-    bnz main_else_body@19
+    bnz main_else_body@16
     dup
 
-main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_non_trivial_termination_of_clause@21:
+main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_non_trivial_termination_of_clause@18:
     // tests/approvals/switch-statements.algo.ts:83
     // public test_non_trivial_termination_of_clause(n: uint64, y: uint64): uint64 {
     itob
@@ -79,13 +72,13 @@ main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_
     intc_0 // 1
     return
 
-main_else_body@19:
+main_else_body@16:
     dig 1
     // tests/approvals/switch-statements.algo.ts:83
     // public test_non_trivial_termination_of_clause(n: uint64, y: uint64): uint64 {
-    b main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_non_trivial_termination_of_clause@21
+    b main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_non_trivial_termination_of_clause@18
 
-main_after_if_else@20:
+main_after_if_else@17:
     // tests/approvals/switch-statements.algo.ts:92
     // return y * n
     dup
@@ -93,22 +86,15 @@ main_after_if_else@20:
     *
     // tests/approvals/switch-statements.algo.ts:83
     // public test_non_trivial_termination_of_clause(n: uint64, y: uint64): uint64 {
-    b main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_non_trivial_termination_of_clause@21
+    b main_after_inlined_tests/approvals/switch-statements.algo.ts::DemoContract.test_non_trivial_termination_of_clause@18
 
-main_test_side_effects_route@4:
+main_test_side_effects_route@5:
     // tests/approvals/switch-statements.algo.ts:68
     // public test_side_effects(n: uint64) {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/switch-statements.algo.ts:4
-    // export class DemoContract extends Contract {
     txna ApplicationArgs 1
     dup
     len
-    intc_2 // 8
+    intc_1 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -119,7 +105,7 @@ main_test_side_effects_route@4:
     bytec_0 // "evalCount"
     // tests/approvals/switch-statements.algo.ts:69
     // this.evalCount.value = 0
-    intc_1 // 0
+    intc_2 // 0
     app_global_put
     // tests/approvals/switch-statements.algo.ts:72
     // case this.increaseEvalAndReturn(n - 1):
@@ -131,7 +117,7 @@ main_test_side_effects_route@4:
     // tests/approvals/switch-statements.algo.ts:72-73
     // case this.increaseEvalAndReturn(n - 1):
     //   break
-    bnz main_block@25
+    bnz main_block@23
     // tests/approvals/switch-statements.algo.ts:74
     // case this.increaseEvalAndReturn(n):
     dig 1
@@ -141,7 +127,7 @@ main_test_side_effects_route@4:
     // tests/approvals/switch-statements.algo.ts:74-75
     // case this.increaseEvalAndReturn(n):
     //   break
-    bnz main_block@25
+    bnz main_block@23
     // tests/approvals/switch-statements.algo.ts:76
     // case this.increaseEvalAndReturn(n + 1):
     dig 1
@@ -150,15 +136,17 @@ main_test_side_effects_route@4:
     callsub increaseEvalAndReturn
     pop
 
-main_block@25:
-    // tests/approvals/switch-statements.algo.ts:61
-    // evalCount = GlobalState<uint64>()
-    intc_1 // 0
-    bytec_0 // "evalCount"
-    app_global_get_ex
-    assert // check GlobalState exists
+main_block@23:
     // tests/approvals/switch-statements.algo.ts:80
     // assert(this.evalCount.value === 2, 'Only two functions should be evaluated')
+    intc_2 // 0
+    // tests/approvals/switch-statements.algo.ts:61
+    // evalCount = GlobalState<uint64>()
+    bytec_0 // "evalCount"
+    // tests/approvals/switch-statements.algo.ts:80
+    // assert(this.evalCount.value === 2, 'Only two functions should be evaluated')
+    app_global_get_ex
+    assert // check GlobalState exists
     intc_3 // 2
     ==
     assert // Only two functions should be evaluated
@@ -167,25 +155,21 @@ main_block@25:
     intc_0 // 1
     return
 
-main_run_route@3:
+main_run_route@4:
     // tests/approvals/switch-statements.algo.ts:5
     // run() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     intc_0 // 1
     return
 
-main_bare_routing@8:
+main___algots__.defaultCreate@10:
     // tests/approvals/switch-statements.algo.ts:4
     // export class DemoContract extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@12
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     intc_0 // 1
     return
 
@@ -195,14 +179,16 @@ increaseEvalAndReturn:
     // tests/approvals/switch-statements.algo.ts:63
     // private increaseEvalAndReturn(n: uint64) {
     proto 1 1
-    // tests/approvals/switch-statements.algo.ts:61
-    // evalCount = GlobalState<uint64>()
-    intc_1 // 0
-    bytec_0 // "evalCount"
-    app_global_get_ex
-    assert // check GlobalState exists
     // tests/approvals/switch-statements.algo.ts:64
     // this.evalCount.value++
+    intc_2 // 0
+    // tests/approvals/switch-statements.algo.ts:61
+    // evalCount = GlobalState<uint64>()
+    bytec_0 // "evalCount"
+    // tests/approvals/switch-statements.algo.ts:64
+    // this.evalCount.value++
+    app_global_get_ex
+    assert // check GlobalState exists
     intc_0 // 1
     +
     // tests/approvals/switch-statements.algo.ts:61

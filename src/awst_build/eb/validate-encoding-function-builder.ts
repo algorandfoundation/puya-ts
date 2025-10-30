@@ -2,8 +2,8 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { codeInvariant } from '../../util'
-import { accountPType, bytesPType, validateEncodingFunctionPType, voidPType, type PType } from '../ptypes'
-import { arc4AddressAlias } from '../ptypes/arc4-types'
+import { accountPType, BytesPType, validateEncodingFunctionPType, voidPType, type PType } from '../ptypes'
+import { arc4AddressAlias, StaticBytesType } from '../ptypes/arc4-types'
 import { instanceEb } from '../type-registry'
 import { FunctionBuilder, type NodeBuilder } from './index'
 import { parseFunctionArgs } from './util/arg-parsing'
@@ -24,9 +24,13 @@ export class ValidateEncodingFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
     })
 
-    codeInvariant(!ptype.equals(bytesPType), 'Cannot validate unbounded bytes')
+    codeInvariant(!(ptype instanceof BytesPType) || ptype.length !== null, 'Cannot validate unbounded bytes')
 
-    const validateType = ptype.equals(accountPType) ? arc4AddressAlias : ptype
+    const validateType = ptype.equals(accountPType)
+      ? arc4AddressAlias
+      : ptype instanceof BytesPType && ptype.length !== null
+        ? new StaticBytesType({ length: ptype.length })
+        : ptype
 
     codeInvariant(validateType.wtype instanceof wtypes.ARC4Type, 'Can only validate ARC4-encoded types')
 

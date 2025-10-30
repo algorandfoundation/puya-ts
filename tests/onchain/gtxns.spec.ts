@@ -4,7 +4,7 @@ import { bigIntToUint8Array } from '../../src/util'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('gtxns contract', () => {
-  const test = createArc4TestFixture('tests/approvals/gtxns.algo.ts', { GtxnsAlgo: {} })
+  const test = createArc4TestFixture({ path: 'tests/approvals/gtxns.algo.ts', contracts: { GtxnsAlgo: {} } })
   test('it verifies the txn type', async ({ appClientGtxnsAlgo, algorand, testAccount }) => {
     const call = await appClientGtxnsAlgo.createTransaction.call({ method: 'test', args: [] })
 
@@ -52,5 +52,49 @@ describe('gtxns contract', () => {
     const callTest3 = await appClientGtxnsAlgo.createTransaction.call({ method: 'test3', args: [] })
 
     await appClientGtxnsAlgo.send.call({ method: 'test4', args: [callTest3.transactions[0]] })
+  })
+
+  test('pay txn properties can be read', async ({ appClientGtxnsAlgo, algorand, testAccount, localnet }) => {
+    await localnet.newScope()
+    const result = await appClientGtxnsAlgo.send.call({
+      method: 'reflectAllPay',
+      args: [
+        algorand.createTransaction.payment({
+          amount: algos(1),
+          receiver: appClientGtxnsAlgo.appAddress,
+          sender: testAccount,
+        }),
+      ],
+    })
+    expect(Object.keys(result.return as object)).toEqual([
+      'sender',
+      'fee',
+      'firstValid',
+      'firstValidTime',
+      'lastValid',
+      'note',
+      'lease',
+      'typeBytes',
+      'groupIndex',
+      'txnId',
+      'rekeyTo',
+      'receiver',
+      'amount',
+      'closeRemainderTo',
+    ])
+  })
+
+  test('gtxn union types compile correctly ', async ({ appClientGtxnsAlgo, algorand, testAccount }) => {
+    const result = await appClientGtxnsAlgo.send.call({
+      method: 'test5',
+      args: [
+        algorand.createTransaction.payment({
+          amount: algos(1),
+          receiver: appClientGtxnsAlgo.appAddress,
+          sender: testAccount,
+        }),
+      ],
+    })
+    expect(result.return).toBe(1n)
   })
 })

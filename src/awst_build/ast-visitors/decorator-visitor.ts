@@ -4,7 +4,15 @@ import { invariant, isIn } from '../../util'
 import { accept } from '../../visitor/visitor'
 import { AwstBuildContext } from '../context/awst-build-context'
 import { DecoratorDataBuilder } from '../eb'
-import type { DecoratorData, DecoratorDataForType, DecoratorType } from '../models/decorator-data'
+import type {
+  Arc4AbiDecoratorData,
+  Arc4BareDecoratorData,
+  DecoratorData,
+  DecoratorDataForType,
+  DecoratorType,
+  ReadonlyDecoratorData,
+  RoutingDecoratorData,
+} from '../models/decorator-data'
 import { BaseVisitor } from './base-visitor'
 
 export class DecoratorVisitor extends BaseVisitor {
@@ -53,14 +61,68 @@ export class DecoratorVisitor extends BaseVisitor {
       'Only one decorator is allowed per logic signature.',
     )
   }
-  static buildContractMethodData(target: ts.MethodDeclaration) {
-    const data = DecoratorVisitor.buildDecoratorData(target)
-    return DecoratorVisitor.filterDecoratorData(
-      data,
-      ['arc4.abimethod', 'arc4.baremethod'],
-      (t) => `${t} is not supported on contract methods`,
-      'Only one decorator is allowed per method. Multiple on complete actions can be provided in a single decorator',
-    )
+  static buildContractMethodData(target: ts.MethodDeclaration): RoutingDecoratorData | undefined {
+    let abiDecorator: Arc4AbiDecoratorData | undefined = undefined
+    let bareDecorator: Arc4BareDecoratorData | undefined = undefined
+    let readonlyDecorator: ReadonlyDecoratorData | undefined = undefined
+    for (const data of DecoratorVisitor.buildDecoratorData(target)) {
+      switch (data.type) {
+        case 'arc4.abimethod':
+          if (abiDecorator) {
+            logger.error(
+              data.sourceLocation,
+              'Only one abimethod decorator is allowed per method. Multiple on complete actions can be provided in a single decorator',
+            )
+          } else if (bareDecorator) {
+            logger.error(data.sourceLocation, 'abimethod and baremethod decorators can not be combined on the one method')
+          } else {
+            abiDecorator = data
+          }
+          break
+        case 'arc4.baremethod':
+          if (bareDecorator) {
+            logger.error(
+              data.sourceLocation,
+              'Only one baremethod decorator is allowed per method. Multiple on complete actions can be provided in a single decorator',
+            )
+          } else if (abiDecorator) {
+            logger.error(data.sourceLocation, 'abimethod and baremethod decorators can not be combined on the one method')
+          } else {
+            bareDecorator = data
+          }
+          break
+        case 'arc4.readonly':
+          if (readonlyDecorator) {
+            logger.error(data.sourceLocation, 'Only one readonly decorator is allowed per method')
+          } else {
+            readonlyDecorator = data
+          }
+          break
+        default:
+          logger.error(data.sourceLocation, `${data.type} is not supported on contract methods`)
+      }
+    }
+    if (abiDecorator) {
+      if (readonlyDecorator) {
+        if (abiDecorator.readonly === false) {
+          logger.error(
+            readonlyDecorator.sourceLocation,
+            'abimethod decorator readonly config conflicts with presence of readonly decorator',
+          )
+        } else {
+          abiDecorator.readonly = true
+        }
+      }
+      return abiDecorator
+    } else if (bareDecorator) {
+      if (readonlyDecorator) {
+        logger.error(readonlyDecorator.sourceLocation, 'baremethod cannot be annotated with readonly decorator')
+      }
+      return bareDecorator
+    } else if (readonlyDecorator) {
+      return readonlyDecorator
+    }
+    return undefined
   }
 
   private static filterDecoratorData<TType extends DecoratorType>(

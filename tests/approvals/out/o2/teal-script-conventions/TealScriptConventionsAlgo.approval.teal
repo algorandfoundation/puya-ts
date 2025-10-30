@@ -1,62 +1,31 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 2
+    intcblock 1 2 0
     // tests/approvals/teal-script-conventions.algo.ts:5
     // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
     txn NumAppArgs
-    bz main_bare_routing@10
-    pushbytess 0x766a657e 0x2f2be517 0xdf7300bb 0x01a3a3ff 0x46f76533 // method "noMoreThanks(uint64)uint64", method "createApplication(byte[])void", method "setLocal(string)void", method "optInToApplication()void", method "updateApplication()void"
+    bz main_deleteApplication@9
+    pushbytess 0x766a657e 0x2f2be517 0x01a3a3ff 0x46f76533 0xdf7300bb // method "noMoreThanks(uint64)uint64", method "createApplication(byte[])void", method "optInToApplication()void", method "updateApplication()void", method "setLocal(string)void"
     txna ApplicationArgs 0
-    match main_noMoreThanks_route@3 main_createApplication_route@4 main_setLocal_route@5 main_optInToApplication_route@6 main_updateApplication_route@7
+    match main_noMoreThanks_route@3 main_createApplication_route@4 main_optInToApplication_route@5 main_updateApplication_route@6 main_setLocal_route@7
+    err
 
-main_after_if_else@14:
-    // tests/approvals/teal-script-conventions.algo.ts:5
-    // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
-    intc_1 // 0
-    return
-
-main_updateApplication_route@7:
-    // tests/approvals/teal-script-conventions.algo.ts:25
-    // updateApplication() {}
-    txn OnCompletion
-    pushint 4 // UpdateApplication
-    ==
-    assert // OnCompletion is not UpdateApplication
-    txn ApplicationID
-    assert // can only call when not creating
-    intc_0 // 1
-    return
-
-main_optInToApplication_route@6:
-    // tests/approvals/teal-script-conventions.algo.ts:23
-    // optInToApplication() {}
-    txn OnCompletion
-    intc_0 // OptIn
-    ==
-    assert // OnCompletion is not OptIn
-    txn ApplicationID
-    assert // can only call when not creating
-    intc_0 // 1
-    return
-
-main_setLocal_route@5:
+main_setLocal_route@7:
     // tests/approvals/teal-script-conventions.algo.ts:17
     // setLocal(value: string) {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/teal-script-conventions.algo.ts:5
-    // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     txna ApplicationArgs 1
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16 // on error: invalid array length header
-    intc_2 // 2
+    intc_1 // 2
     +
     dig 1
     len
@@ -78,6 +47,30 @@ main_setLocal_route@5:
     intc_0 // 1
     return
 
+main_updateApplication_route@6:
+    // tests/approvals/teal-script-conventions.algo.ts:25
+    // updateApplication() {}
+    txn OnCompletion
+    pushint 4 // UpdateApplication
+    ==
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be UpdateApplication && can only call when not creating
+    intc_0 // 1
+    return
+
+main_optInToApplication_route@5:
+    // tests/approvals/teal-script-conventions.algo.ts:23
+    // optInToApplication() {}
+    txn OnCompletion
+    intc_0 // OptIn
+    ==
+    txn ApplicationID
+    &&
+    assert // OnCompletion must be OptIn && can only call when not creating
+    intc_0 // 1
+    return
+
 main_createApplication_route@4:
     // tests/approvals/teal-script-conventions.algo.ts:12
     // @abimethod({ allowActions: ['NoOp', 'DeleteApplication'] })
@@ -86,17 +79,15 @@ main_createApplication_route@4:
     shl
     pushint 33 // 33
     &
-    assert // OnCompletion is not one of NoOp, DeleteApplication
     txn ApplicationID
     !
-    assert // can only call when creating
-    // tests/approvals/teal-script-conventions.algo.ts:5
-    // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
+    &&
+    assert // OnCompletion must be one of NoOp, DeleteApplication && can only call when creating
     txna ApplicationArgs 1
     dup
-    intc_1 // 0
+    intc_2 // 0
     extract_uint16 // on error: invalid array length header
-    intc_2 // 2
+    intc_1 // 2
     +
     dig 1
     len
@@ -119,23 +110,17 @@ main_noMoreThanks_route@3:
     // tests/approvals/teal-script-conventions.algo.ts:8
     // @abimethod({ name: 'noMoreThanks' })
     txn OnCompletion
-    intc_2 // CloseOut
+    intc_1 // CloseOut
     ==
-    assert // OnCompletion is not CloseOut
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/teal-script-conventions.algo.ts:5
-    // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
+    &&
+    assert // OnCompletion must be CloseOut && can only call when not creating
     txna ApplicationArgs 1
     dup
     len
     pushint 8 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
-    btoi
-    // tests/approvals/teal-script-conventions.algo.ts:8
-    // @abimethod({ name: 'noMoreThanks' })
-    itob
     pushbytes 0x151f7c75
     swap
     concat
@@ -143,18 +128,14 @@ main_noMoreThanks_route@3:
     intc_0 // 1
     return
 
-main_bare_routing@10:
-    // tests/approvals/teal-script-conventions.algo.ts:5
-    // export class TealScriptConventionsAlgo extends Contract implements ConventionalRouting {
-    pushint 5 // 5
-    txn OnCompletion
-    match main_deleteApplication@11
-    b main_after_if_else@14
-
-main_deleteApplication@11:
+main_deleteApplication@9:
     // tests/approvals/teal-script-conventions.algo.ts:20
     // @baremethod()
+    txn OnCompletion
+    pushint 5 // DeleteApplication
+    ==
     txn ApplicationID
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be DeleteApplication && can only call when not creating
     intc_0 // 1
     return

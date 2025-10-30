@@ -1,0 +1,133 @@
+{
+    "name": "ItxnReceiver",
+    "structs": {},
+    "methods": [
+        {
+            "name": "receivePay",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "a"
+                },
+                {
+                    "type": "pay",
+                    "name": "b"
+                },
+                {
+                    "type": "string",
+                    "name": "c"
+                }
+            ],
+            "returns": {
+                "type": "(uint64,uint64,string)"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        }
+    ],
+    "arcs": [
+        22,
+        28
+    ],
+    "networks": {},
+    "state": {
+        "schema": {
+            "global": {
+                "ints": 0,
+                "bytes": 0
+            },
+            "local": {
+                "ints": 0,
+                "bytes": 0
+            }
+        },
+        "keys": {
+            "global": {},
+            "local": {},
+            "box": {}
+        },
+        "maps": {
+            "global": {},
+            "local": {},
+            "box": {}
+        }
+    },
+    "bareActions": {
+        "create": [
+            "NoOp"
+        ],
+        "call": []
+    },
+    "sourceInfo": {
+        "approval": {
+            "sourceInfo": [
+                {
+                    "pc": [
+                        113
+                    ],
+                    "errorMessage": "OnCompletion must be NoOp && can only call when creating"
+                },
+                {
+                    "pc": [
+                        29
+                    ],
+                    "errorMessage": "OnCompletion must be NoOp && can only call when not creating"
+                },
+                {
+                    "pc": [
+                        56
+                    ],
+                    "errorMessage": "invalid array length header"
+                },
+                {
+                    "pc": [
+                        64
+                    ],
+                    "errorMessage": "invalid number of bytes for arc4.dynamic_array<arc4.uint8>"
+                },
+                {
+                    "pc": [
+                        38
+                    ],
+                    "errorMessage": "invalid number of bytes for arc4.uint64"
+                },
+                {
+                    "pc": [
+                        49
+                    ],
+                    "errorMessage": "transaction type is pay"
+                }
+            ],
+            "pcOffsetMethod": "none"
+        },
+        "clear": {
+            "sourceInfo": [],
+            "pcOffsetMethod": "none"
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYXJjNC9pbmRleC5kLnRzOjpDb250cmFjdC5hcHByb3ZhbFByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBpbnRjYmxvY2sgMQogICAgLy8gdGVzdHMvYXBwcm92YWxzL2l0eG4uYWxnby50czoyMjYKICAgIC8vIGNsYXNzIEl0eG5SZWNlaXZlciBleHRlbmRzIENvbnRyYWN0IHsKICAgIHR4biBOdW1BcHBBcmdzCiAgICBieiBtYWluX19fYWxnb3RzX18uZGVmYXVsdENyZWF0ZUA1CiAgICBwdXNoYnl0ZXMgMHgxOTcxZDE5NyAvLyBtZXRob2QgInJlY2VpdmVQYXkodWludDY0LHBheSxzdHJpbmcpKHVpbnQ2NCx1aW50NjQsc3RyaW5nKSIKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDAKICAgIG1hdGNoIG1haW5fcmVjZWl2ZVBheV9yb3V0ZUAzCiAgICBlcnIKCm1haW5fcmVjZWl2ZVBheV9yb3V0ZUAzOgogICAgLy8gdGVzdHMvYXBwcm92YWxzL2l0eG4uYWxnby50czoyMjcKICAgIC8vIHB1YmxpYyByZWNlaXZlUGF5KGE6IHVpbnQ2NCwgYjogZ3R4bi5QYXltZW50VHhuLCBjOiBzdHJpbmcpOiBbdWludDY0LCB1aW50NjQsIHN0cmluZ10gewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgICYmCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIG11c3QgYmUgTm9PcCAmJiBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAxCiAgICBkdXAKICAgIGxlbgogICAgcHVzaGludCA4IC8vIDgKICAgID09CiAgICBhc3NlcnQgLy8gaW52YWxpZCBudW1iZXIgb2YgYnl0ZXMgZm9yIGFyYzQudWludDY0CiAgICBidG9pCiAgICB0eG4gR3JvdXBJbmRleAogICAgaW50Y18wIC8vIDEKICAgIC0KICAgIGR1cAogICAgZ3R4bnMgVHlwZUVudW0KICAgIGludGNfMCAvLyBwYXkKICAgID09CiAgICBhc3NlcnQgLy8gdHJhbnNhY3Rpb24gdHlwZSBpcyBwYXkKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDIKICAgIGR1cAogICAgcHVzaGludCAwIC8vIDAKICAgIGV4dHJhY3RfdWludDE2IC8vIG9uIGVycm9yOiBpbnZhbGlkIGFycmF5IGxlbmd0aCBoZWFkZXIKICAgIHB1c2hpbnQgMiAvLyAyCiAgICArCiAgICBkaWcgMQogICAgbGVuCiAgICA9PQogICAgYXNzZXJ0IC8vIGludmFsaWQgbnVtYmVyIG9mIGJ5dGVzIGZvciBhcmM0LmR5bmFtaWNfYXJyYXk8YXJjNC51aW50OD4KICAgIGV4dHJhY3QgMiAwCiAgICAvLyB0ZXN0cy9hcHByb3ZhbHMvaXR4bi5hbGdvLnRzOjIyOAogICAgLy8gcmV0dXJuIFthLCBiLmFtb3VudCwgY10KICAgIHN3YXAKICAgIGd0eG5zIEFtb3VudAogICAgdW5jb3ZlciAyCiAgICBpdG9iCiAgICBzd2FwCiAgICBpdG9iCiAgICBjb25jYXQKICAgIGRpZyAxCiAgICBsZW4KICAgIGl0b2IKICAgIGV4dHJhY3QgNiAyCiAgICB1bmNvdmVyIDIKICAgIGNvbmNhdAogICAgc3dhcAogICAgcHVzaGJ5dGVzIDB4MDAxMgogICAgY29uY2F0CiAgICBzd2FwCiAgICBjb25jYXQKICAgIC8vIHRlc3RzL2FwcHJvdmFscy9pdHhuLmFsZ28udHM6MjI3CiAgICAvLyBwdWJsaWMgcmVjZWl2ZVBheShhOiB1aW50NjQsIGI6IGd0eG4uUGF5bWVudFR4biwgYzogc3RyaW5nKTogW3VpbnQ2NCwgdWludDY0LCBzdHJpbmddIHsKICAgIHB1c2hieXRlcyAweDE1MWY3Yzc1CiAgICBzd2FwCiAgICBjb25jYXQKICAgIGxvZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9fX2FsZ290c19fLmRlZmF1bHRDcmVhdGVANToKICAgIC8vIHRlc3RzL2FwcHJvdmFscy9pdHhuLmFsZ28udHM6MjI2CiAgICAvLyBjbGFzcyBJdHhuUmVjZWl2ZXIgZXh0ZW5kcyBDb250cmFjdCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgIQogICAgJiYKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gbXVzdCBiZSBOb09wICYmIGNhbiBvbmx5IGNhbGwgd2hlbiBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgo=",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYmFzZS1jb250cmFjdC5kLnRzOjpCYXNlQ29udHJhY3QuY2xlYXJTdGF0ZVByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBwdXNoaW50IDEgLy8gMQogICAgcmV0dXJuCg=="
+    },
+    "byteCode": {
+        "approval": "CyABATEbQQBhgAQZcdGXNhoAjgEAAQAxGRQxGBBENhoBSRWBCBJEFzEWIglJOBAiEkQ2GgJJgQBZgQIISwEVEkRXAgBMOAhPAhZMFlBLARUWVwYCTwJQTIACABJQTFCABBUffHVMULAiQzEZFDEYFBBEIkM=",
+        "clear": "C4EBQw=="
+    },
+    "compilerInfo": {
+        "compiler": "puya",
+        "compilerVersion": {
+            "major": 5,
+            "minor": 3,
+            "patch": 2
+        }
+    },
+    "events": [],
+    "templateVariables": {}
+}

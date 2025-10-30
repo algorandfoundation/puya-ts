@@ -1,12 +1,17 @@
-import { awst } from '../../awst'
+import type ts from 'typescript'
+import { awst, isConstant, isConstantOrTemplateVar } from '../../awst'
 import { nodeFactory } from '../../awst/node-factory'
-import type { Expression } from '../../awst/nodes'
 import { TupleItemExpression } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { CodeError, NotSupported } from '../../errors'
+import { RequiresArc4Clone } from '../../code-fix/requires-arc4-clone'
+import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
+import { instanceOfAny } from '../../util'
 import type { DecoratorData } from '../models/decorator-data'
-import type { LibClassType, PType, PTypeOrClass } from '../ptypes'
+import type { GenericPType, LibClassType, PType, PTypeOrClass } from '../ptypes'
+import { uint64PType } from '../ptypes'
+import type { ARC4StructClass } from '../ptypes/arc4-types'
+import { isOrContainsMutableType } from '../ptypes/visitors/contains-mutable-visitor'
 import { instanceEb } from '../type-registry'
 
 export enum BuilderComparisonOp {
@@ -59,7 +64,7 @@ export abstract class NodeBuilder {
     return this.constructor.name
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     throw new NotSupported(`Calling ${this.typeDescription}`, {
       sourceLocation,
     })
@@ -69,7 +74,12 @@ export abstract class NodeBuilder {
     throw new NotSupported(`Calling ${this.typeDescription} with the new keyword`, { sourceLocation })
   }
 
-  taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
+  taggedTemplate(
+    head: string,
+    spans: ReadonlyArray<readonly [InstanceBuilder, string]>,
+    typeArgs: ReadonlyArray<PType>,
+    sourceLocation: SourceLocation,
+  ): InstanceBuilder {
     throw new NotSupported(`Tagged templates on ${this.typeDescription}`, {
       sourceLocation,
     })
@@ -80,12 +90,16 @@ export abstract class NodeBuilder {
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
+    if (/^\d+$/.test(name)) {
+      const idx = instanceEb(nodeFactory.uInt64Constant({ value: BigInt(name), sourceLocation }), uint64PType)
+      return this.indexAccess(idx, sourceLocation)
+    }
     throw new NotSupported(`Accessing member ${name} on ${this.typeDescription}`, {
       sourceLocation,
     })
   }
 
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
     throw new NotSupported(`Indexing ${this.typeDescription}`, {
       sourceLocation,
     })
@@ -99,12 +113,16 @@ export abstract class NodeBuilder {
 }
 
 export abstract class InstanceBuilder<TPType extends PType = PType> extends NodeBuilder {
-  constructor(sourceLocation: SourceLocation) {
-    super(sourceLocation)
-  }
   abstract get ptype(): TPType
   abstract resolve(): awst.Expression
   abstract resolveLValue(): awst.LValue
+
+  abstract get isConstant(): boolean
+
+  // true if `expr` is an op code such as `bzero` which produces a constant value if all args are constant
+  get isConstantOp(): boolean | undefined {
+    return undefined
+  }
 
   /**
    * Returns a boolean indicating if the current builder can be resolved to the target type.
@@ -129,7 +147,7 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
 
   singleEvaluation(): InstanceBuilder {
     const expr = this.resolve()
-    if (expr instanceof awst.VarExpression) {
+    if (instanceOfAny(expr, awst.VarExpression, awst.SingleEvaluation) || isConstant(expr)) {
       return this
     }
     return instanceEb(
@@ -140,7 +158,7 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
     )
   }
 
-  toBytes(sourceLocation: SourceLocation): awst.Expression {
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
     throw new NotSupported(`Serializing ${this.typeDescription} to bytes`, {
       sourceLocation,
     })
@@ -188,24 +206,56 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
     })
   }
 
-  reinterpretCast(target: PType, sourceLocation?: SourceLocation) {
-    return instanceEb(
-      nodeFactory.reinterpretCast({
-        expr: this.resolve(),
-        sourceLocation: sourceLocation ?? this.sourceLocation,
-        wtype: target.wtypeOrThrow,
-      }),
-      target,
-    )
+  checkForUnclonedMutables(scenario: string): boolean {
+    throw new InternalError(`Method not implemented on ${this.constructor.name}`, { sourceLocation: this.sourceLocation })
   }
 }
 
+/**
+ * Base type for an instance builder that wraps another instance builder.
+ * All methods are abstract to ensure they are implemented in the extending class
+ */
+export abstract class WrappingInstanceBuilder<TPType extends PType = PType> extends InstanceBuilder<TPType> {
+  abstract get ptype(): TPType
+  abstract resolve(): awst.Expression
+  abstract resolveLValue(): awst.LValue
+
+  abstract get isConstant(): boolean
+  abstract resolvableToPType(ptype: PTypeOrClass): boolean
+  abstract resolveToPType(ptype: PTypeOrClass): InstanceBuilder
+  abstract singleEvaluation(): InstanceBuilder
+  abstract toBytes(sourceLocation: SourceLocation): InstanceBuilder
+  abstract toString(sourceLocation: SourceLocation): awst.Expression
+  abstract prefixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder
+  abstract postfixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder
+  abstract compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder
+  abstract binaryOp(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder
+  abstract iterate(sourceLocation: SourceLocation): awst.Expression
+  abstract augmentedAssignment(other: InstanceBuilder, op: BuilderBinaryOp, sourceLocation: SourceLocation): InstanceBuilder
+  abstract call(
+    args: ReadonlyArray<NodeBuilder>,
+    typeArgs: ReadonlyArray<PType>,
+    sourceLocation: SourceLocation<ts.CallExpression>,
+  ): NodeBuilder
+  abstract newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder
+  abstract taggedTemplate(
+    head: string,
+    spans: ReadonlyArray<readonly [InstanceBuilder, string]>,
+    typeArgs: ReadonlyArray<PType>,
+    sourceLocation: SourceLocation,
+  ): InstanceBuilder
+  abstract hasProperty(_name: string): boolean
+  abstract memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder
+  abstract indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder
+  abstract boolEval(sourceLocation: SourceLocation, negate: boolean): awst.Expression
+}
+
 export abstract class ClassBuilder extends NodeBuilder {
-  abstract readonly ptype: LibClassType
+  abstract readonly ptype: LibClassType | GenericPType | ARC4StructClass
 
   abstract newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     throw new CodeError(`${this.typeDescription} should be called with the \`new\` keyword`, { sourceLocation })
   }
 }
@@ -217,22 +267,11 @@ export abstract class FunctionBuilder extends NodeBuilder {
     super(location)
   }
 
-  abstract call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder
-}
-
-export abstract class ParameterlessFunctionBuilder extends FunctionBuilder {
-  constructor(
-    private readonly expression: Expression,
-    private readonly definition: (expr: Expression, sourceLocation: SourceLocation) => NodeBuilder,
-  ) {
-    super(expression.sourceLocation)
-  }
-
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
-    if (args.length) logger.error(sourceLocation, 'Function expects no arguments')
-    if (typeArgs.length) logger.error(sourceLocation, 'Function expects type arguments')
-    return this.definition(this.expression, sourceLocation)
-  }
+  abstract call(
+    args: ReadonlyArray<NodeBuilder>,
+    typeArgs: ReadonlyArray<PType>,
+    sourceLocation: SourceLocation<ts.CallExpression>,
+  ): NodeBuilder
 }
 
 export abstract class InstanceExpressionBuilder<TPType extends PType> extends InstanceBuilder<PType> {
@@ -240,6 +279,10 @@ export abstract class InstanceExpressionBuilder<TPType extends PType> extends In
 
   get ptype(): TPType {
     return this.#ptype
+  }
+
+  get isConstant() {
+    return isConstantOrTemplateVar(this._expr)
   }
 
   constructor(
@@ -257,6 +300,41 @@ export abstract class InstanceExpressionBuilder<TPType extends PType> extends In
   resolveLValue() {
     return requireLValue(this.resolve())
   }
+
+  checkForUnclonedMutables(scenario: string) {
+    if (isReferableExpression(this._expr)) {
+      if (isOrContainsMutableType(this.ptype)) {
+        logger.addCodeFix(
+          new RequiresArc4Clone({
+            sourceLocation: this.sourceLocation,
+            errorMessage: `cannot create multiple references to a mutable stack type, the value must be copied using clone(...) when ${scenario}`,
+          }),
+        )
+
+        return true
+      }
+    }
+    return false
+  }
+}
+
+export function isReferableExpression(expr: awst.Expression): boolean {
+  if (
+    instanceOfAny(
+      expr,
+      awst.VarExpression,
+      awst.AppStateExpression,
+      awst.AppAccountStateExpression,
+      awst.StateGet,
+      awst.StateGetEx,
+      awst.BoxValueExpression,
+    )
+  ) {
+    return true
+  } else if (instanceOfAny(expr, awst.IndexExpression, awst.TupleItemExpression, awst.FieldExpression)) {
+    return isReferableExpression(expr.base)
+  }
+  return false
 }
 
 export function requireLValue(expr: awst.Expression): awst.LValue {
@@ -270,7 +348,13 @@ export function requireLValue(expr: awst.Expression): awst.LValue {
     awst.BoxValueExpression,
   ]
   if (expr instanceof TupleItemExpression) {
-    throw new CodeError('Expression is not a valid assignment target - object is immutable', { sourceLocation: expr.sourceLocation })
+    if (expr.base.wtype.immutable) {
+      throw new CodeError('Expression is not a valid assignment target - object is immutable', { sourceLocation: expr.sourceLocation })
+    } else {
+      throw new CodeError('Mutating tuple items is not currently supported - use an object if mutability is required', {
+        sourceLocation: expr.sourceLocation,
+      })
+    }
   }
   if (!lValueNodes.some((l) => expr instanceof l)) {
     throw new CodeError(`Expression is not a valid assignment target`, {
@@ -296,9 +380,8 @@ export function requireLValue(expr: awst.Expression): awst.LValue {
 }
 
 export class DecoratorDataBuilder extends NodeBuilder {
-  get ptype(): PType | undefined {
-    return undefined
-  }
+  readonly ptype: PType | undefined = undefined
+
   constructor(
     sourceLocation: SourceLocation,
     private readonly data: DecoratorData,

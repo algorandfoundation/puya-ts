@@ -3,13 +3,12 @@ import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { invariant } from '../../../util'
 import type { PType, PTypeOrClass } from '../../ptypes'
-import { ObjectPType } from '../../ptypes'
+import { ImmutableObjectPType } from '../../ptypes'
 import { ARC4StructClass, ARC4StructType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
-import type { NodeBuilder } from '../index'
-import { ClassBuilder, InstanceBuilder } from '../index'
-import { Arc4CopyFunctionBuilder } from '../shared/arc4-copy-function-builder'
-import { requireExpressionOfType } from '../util'
+import type { InstanceBuilder, NodeBuilder } from '../index'
+import { ClassBuilder } from '../index'
+import { requestInstanceBuilder, requireExpressionOfType } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
@@ -31,7 +30,7 @@ export class StructClassBuilder extends ClassBuilder {
       genericTypeArgs: 1,
       callLocation: sourceLocation,
       funcName: this.typeDescription,
-      argSpec: (a) => [a.required(this.ptype.instanceType.nativeType)],
+      argSpec: (a) => [a.required(new ImmutableObjectPType({ properties: this.ptype.instanceType.fields }))],
     })
     const initialSingle = initialValues.singleEvaluation()
 
@@ -60,10 +59,6 @@ export class StructExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<AR
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    switch (name) {
-      case 'copy':
-        return new Arc4CopyFunctionBuilder(this)
-    }
     if (name in this.ptype.fields) {
       const fieldType = this.ptype.fields[name]
       return instanceEb(
@@ -82,23 +77,34 @@ export class StructExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<AR
   resolvableToPType(ptype: PTypeOrClass): boolean {
     if (ptype.equals(this.ptype)) return true
 
-    if (ptype instanceof ObjectPType) {
-      const native = this.memberAccess('native', this.sourceLocation)
-      if (native instanceof InstanceBuilder) {
-        return native.resolvableToPType(ptype)
-      }
+    if (ptype instanceof ImmutableObjectPType) {
+      return ptype
+        .orderedProperties()
+        .every(
+          ([prop, propType]) =>
+            this.hasProperty(prop) && requestInstanceBuilder(this.memberAccess(prop, this.sourceLocation))?.resolvableToPType(propType),
+        )
     }
     return false
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
-    if (ptype.equals(this.ptype)) return this
+    if (ptype.equals(this.ptype)) {
+      return this
+    }
 
-    if (ptype instanceof ObjectPType) {
-      const native = this.memberAccess('native', this.sourceLocation)
-      if (native instanceof InstanceBuilder) {
-        return native.resolveToPType(ptype)
-      }
+    if (ptype instanceof ImmutableObjectPType) {
+      const single = this.singleEvaluation()
+      return instanceEb(
+        nodeFactory.tupleExpression({
+          items: ptype
+            .orderedProperties()
+            .map(([prop, propType]) => requireExpressionOfType(single.memberAccess(prop, this.sourceLocation), propType)),
+          sourceLocation: this.sourceLocation,
+          wtype: ptype.wtype,
+        }),
+        ptype,
+      )
     }
     return super.resolveToPType(ptype)
   }

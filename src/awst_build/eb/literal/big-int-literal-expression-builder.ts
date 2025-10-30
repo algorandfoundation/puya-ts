@@ -3,17 +3,8 @@ import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import { codeInvariant } from '../../../util'
-import type { PTypeOrClass } from '../../ptypes'
-import {
-  BigIntLiteralPType,
-  bigIntPType,
-  biguintPType,
-  boolPType,
-  numberPType,
-  NumericLiteralPType,
-  TransientType,
-  uint64PType,
-} from '../../ptypes'
+import type { BigIntPType, PTypeOrClass } from '../../ptypes'
+import { BigIntLiteralPType, bigIntPType, biguintPType, boolPType } from '../../ptypes'
 import { instanceEb, typeRegistry } from '../../type-registry'
 import { foldBinaryOp, foldComparisonOp } from '../folding'
 import type { BuilderBinaryOp, BuilderComparisonOp, InstanceBuilder } from '../index'
@@ -22,33 +13,27 @@ import { LiteralExpressionBuilder } from '../literal-expression-builder'
 import { isValidLiteralForPType } from '../util/is-valid-literal-for-ptype'
 
 export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
+  readonly isConstant = true
+
   singleEvaluation(): InstanceBuilder {
     return this
   }
 
   constructor(
     public readonly value: bigint,
-    public readonly ptype: TransientType,
+    public readonly ptype: BigIntLiteralPType | BigIntPType,
     location: SourceLocation,
   ) {
     super(location)
   }
 
   resolvableToPType(ptype: PTypeOrClass): boolean {
-    const isUnsigned = ptype.equals(biguintPType) || ptype.equals(uint64PType)
-    if (this.ptype instanceof NumericLiteralPType || this.ptype.equals(numberPType)) {
-      if (isUnsigned) {
-        return this.value >= 0n
-      }
-      return ptype.equals(numberPType) || ptype.equals(this.ptype)
-    } else if (this.ptype instanceof BigIntLiteralPType || this.ptype.equals(bigIntPType)) {
-      if (isUnsigned) {
-        return this.value >= 0n
-      }
-      return ptype.equals(bigIntPType) || ptype.equals(this.ptype)
+    if (ptype.equals(biguintPType)) {
+      return this.value >= 0n
     }
-    return false
+    return ptype.equals(bigIntPType) || ptype.equals(this.ptype)
   }
+
   boolEval(sourceLocation: SourceLocation, negate: boolean = false): Expression {
     const value = negate ? !this.value : Boolean(this.value)
 
@@ -59,17 +44,11 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
 
   resolveToPType(ptype: PTypeOrClass): InstanceBuilder {
-    codeInvariant(this.resolvableToPType(ptype), `${this.value} cannot be converted to type ${ptype.name}`, this.sourceLocation)
-
     if (ptype.equals(this.ptype)) return this
-    if (ptype instanceof TransientType && (ptype.equals(numberPType) || ptype.equals(bigIntPType))) {
-      return new BigIntLiteralExpressionBuilder(this.value, ptype, this.sourceLocation)
-    }
+    if (ptype.equals(bigIntPType)) return new BigIntLiteralExpressionBuilder(this.value, bigIntPType, this.sourceLocation)
 
     codeInvariant(isValidLiteralForPType(this.value, ptype), `${ptype.name} overflow or underflow: ${this.value}`, this.sourceLocation)
-    if (ptype.equals(uint64PType)) {
-      return instanceEb(nodeFactory.uInt64Constant({ value: this.value, sourceLocation: this.sourceLocation }), uint64PType)
-    } else if (ptype.equals(biguintPType)) {
+    if (ptype.equals(biguintPType)) {
       return instanceEb(nodeFactory.bigUIntConstant({ value: this.value, sourceLocation: this.sourceLocation }), biguintPType)
     }
     throw new CodeError(`${this.value} cannot be converted to type ${ptype.name}`, { sourceLocation: this.sourceLocation })
@@ -85,6 +64,7 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
     }
     return super.binaryOp(other, op, sourceLocation)
   }
+
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
     if (other.ptype.wtype) {
       return this.resolveToPType(other.ptype).compare(other, op, sourceLocation)
@@ -105,12 +85,10 @@ export class BigIntLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
 
   private getUpdatedPType(value: bigint) {
-    if (this.ptype instanceof BigIntLiteralPType) {
-      return new BigIntLiteralPType({ literalValue: value })
-    }
-    if (this.ptype instanceof NumericLiteralPType) {
-      return new NumericLiteralPType({ literalValue: value })
-    }
-    return this.ptype
+    return new BigIntLiteralPType({ literalValue: value })
+  }
+
+  checkForUnclonedMutables(scenario: string): boolean {
+    return false
   }
 }

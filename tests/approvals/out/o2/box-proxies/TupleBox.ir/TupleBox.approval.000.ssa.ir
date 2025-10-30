@@ -1,0 +1,197 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/box-proxies.algo.ts::TupleBox.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine tests/approvals/box-proxies.algo.ts::TupleBox.__puya_arc4_router__() -> bool:
+    block@0: // L172
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@8
+    block@1: // abi_routing_L172
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0) // OnCompletion must be NoOp
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@2 : block@6
+    block@2: // call_NoOp_L172
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "testBox()void" => block@3, method "testBoxMap()void" => block@4, * => block@5}
+    block@3: // testBox_route_L178
+        tests/approvals/box-proxies.algo.ts::TupleBox.testBox[routing]()
+        goto block@5
+    block@4: // testBoxMap_route_L204
+        tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap[routing]()
+        goto block@5
+    block@5: // switch_case_next_L172
+        goto block@7
+    block@6: // create_NoOp_L172
+        goto block@7
+    block@7: // after_if_else_L172
+        goto block@9
+    block@8: // __algots__.defaultCreate_L172
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/box-proxies.algo.ts::TupleBox.__algots__.defaultCreate()
+        exit 1u
+    block@9: // after_if_else_L172
+        exit 0u
+
+subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBox[routing]() -> void:
+    block@0: // L178
+        tests/approvals/box-proxies.algo.ts::TupleBox.testBox()
+        exit 1u
+
+subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap[routing]() -> void:
+    block@0: // L204
+        tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap()
+        exit 1u
+
+subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBox() -> void:
+    block@0: // L178
+        (box_create "t1" 10u)
+        (box_create "t2" 20u)
+        let (value%0#0: uint64, check%0#0: bool) = (box_len "t1")
+        (assert check%0#0) // Box must have value
+        let tmp%0#0: bool = (== value%0#0 10u)
+        (assert tmp%0#0)
+        let (value%1#0: uint64, check%1#0: bool) = (box_len "t2")
+        (assert check%1#0) // Box must have value
+        let tmp%1#0: bool = (== value%1#0 20u)
+        (assert tmp%1#0)
+        let (_%0#0: uint64, maybe_exists%0#0: bool) = (box_len "t1")
+        (assert maybe_exists%0#0)
+        let (_%1#0: uint64, maybe_exists%1#0: bool) = (box_len "t2")
+        (assert maybe_exists%1#0)
+        let tmp%2#0: Encoded((len+utf8[]),(len+uint8[]),bool1) = bytes_encode<((len+utf8[]),(len+uint8[]),bool1)>("hello", "world", 1u)
+        box_write("t1", tmp%2#0)
+        let storage_value%0#0: bytes = box_read("t1")
+        let tuple_item%0#0: Encoded(len+utf8[]) = extract_value(storage_value%0#0, 0)
+        let values%0#0: string = decode_bytes<string>(tuple_item%0#0)
+        let tmp%3#0: bool = (== values%0#0 "hello")
+        (assert tmp%3#0)
+        let storage_value%1#0: bytes = box_read("t1")
+        let tuple_item%1#0: Encoded(len+uint8[]) = extract_value(storage_value%1#0, 1)
+        let values%1#0: bytes = decode_bytes<bytes>(tuple_item%1#0)
+        let tmp%4#0: bool = (== values%1#0 "world")
+        (assert tmp%4#0)
+        let storage_value%2#0: bytes = box_read("t1")
+        let tuple_item%2#0: bool = extract_value(storage_value%2#0, 2)
+        let values%2#0: bool = decode_bytes<bool>(tuple_item%2#0)
+        (assert values%2#0)
+        let tmp%5#0: Encoded((len+utf8[]),(len+uint8[]),bool1) = bytes_encode<((len+utf8[]),(len+uint8[]),bool1)>("hello", "world", 1u)
+        box_write("t2", tmp%5#0)
+        let storage_value%3#0: bytes = box_read("t2")
+        let tuple_item%3#0: Encoded(len+utf8[]) = extract_value(storage_value%3#0, 0)
+        let values%3#0: string = decode_bytes<string>(tuple_item%3#0)
+        let tmp%6#0: bool = (== values%3#0 "hello")
+        (assert tmp%6#0)
+        let storage_value%4#0: bytes = box_read("t2")
+        let tuple_item%4#0: Encoded(len+uint8[]) = extract_value(storage_value%4#0, 1)
+        let values%4#0: bytes = decode_bytes<bytes>(tuple_item%4#0)
+        let tmp%7#0: bool = (== values%4#0 "world")
+        (assert tmp%7#0)
+        let storage_value%5#0: bytes = box_read("t2")
+        let tuple_item%5#0: bool = extract_value(storage_value%5#0, 2)
+        let values%5#0: bool = decode_bytes<bool>(tuple_item%5#0)
+        (assert values%5#0)
+        (box_del "t1")
+        let (_%2#0: uint64, maybe_exists%2#0: bool) = (box_len "t1")
+        let tmp%8#0: bool = (! maybe_exists%2#0)
+        (assert tmp%8#0)
+        (box_del "t2")
+        let (_%3#0: uint64, maybe_exists%3#0: bool) = (box_len "t2")
+        let tmp%9#0: bool = (! maybe_exists%3#0)
+        (assert tmp%9#0)
+        return 
+
+subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap() -> void:
+    block@0: // L204
+        let box_prefixed_key%0#0: bytes = (concat "tm1" "a")
+        let (_%0#0: uint64, maybe_exists%0#0: bool) = (box_len box_prefixed_key%0#0)
+        let tmp%0#0: bool = (! maybe_exists%0#0)
+        (assert tmp%0#0)
+        let box_prefixed_key%1#0: bytes = (concat "tm2" "a")
+        let (_%1#0: uint64, maybe_exists%1#0: bool) = (box_len box_prefixed_key%1#0)
+        let tmp%1#0: bool = (! maybe_exists%1#0)
+        (assert tmp%1#0)
+        let tmp%2#0: Encoded((len+utf8[]),(len+uint8[]),bool1) = bytes_encode<((len+utf8[]),(len+uint8[]),bool1)>("hello", "world", 1u)
+        let box_prefixed_key%2#0: bytes = (concat "tm1" "a")
+        box_write(box_prefixed_key%2#0, tmp%2#0)
+        let tmp%3#0: Encoded((len+utf8[]),(len+uint8[]),bool1) = bytes_encode<((len+utf8[]),(len+uint8[]),bool1)>("hello", "world", 1u)
+        let box_prefixed_key%3#0: bytes = (concat "tm2" "a")
+        box_write(box_prefixed_key%3#0, tmp%3#0)
+        let box_prefixed_key%4#0: bytes = (concat "tm1" "a")
+        let (_%2#0: uint64, maybe_exists%2#0: bool) = (box_len box_prefixed_key%4#0)
+        (assert maybe_exists%2#0)
+        let box_prefixed_key%5#0: bytes = (concat "tm1" "a")
+        let storage_value%0#0: bytes = box_read(box_prefixed_key%5#0)
+        let tuple_item%0#0: Encoded(len+utf8[]) = extract_value(storage_value%0#0, 0)
+        let values%0#0: string = decode_bytes<string>(tuple_item%0#0)
+        let tmp%4#0: bool = (== values%0#0 "hello")
+        (assert tmp%4#0)
+        let box_prefixed_key%6#0: bytes = (concat "tm1" "a")
+        let storage_value%1#0: bytes = box_read(box_prefixed_key%6#0)
+        let tuple_item%1#0: Encoded(len+uint8[]) = extract_value(storage_value%1#0, 1)
+        let values%1#0: bytes = decode_bytes<bytes>(tuple_item%1#0)
+        let tmp%5#0: bool = (== values%1#0 "world")
+        (assert tmp%5#0)
+        let box_prefixed_key%7#0: bytes = (concat "tm1" "a")
+        let storage_value%2#0: bytes = box_read(box_prefixed_key%7#0)
+        let tuple_item%2#0: bool = extract_value(storage_value%2#0, 2)
+        let values%2#0: bool = decode_bytes<bool>(tuple_item%2#0)
+        (assert values%2#0)
+        let box_prefixed_key%8#0: bytes = (concat "tm2" "a")
+        let (_%3#0: uint64, maybe_exists%3#0: bool) = (box_len box_prefixed_key%8#0)
+        (assert maybe_exists%3#0)
+        let box_prefixed_key%9#0: bytes = (concat "tm2" "a")
+        let storage_value%3#0: bytes = box_read(box_prefixed_key%9#0)
+        let tuple_item%3#0: Encoded(len+utf8[]) = extract_value(storage_value%3#0, 0)
+        let values%3#0: string = decode_bytes<string>(tuple_item%3#0)
+        let tmp%6#0: bool = (== values%3#0 "hello")
+        (assert tmp%6#0)
+        let box_prefixed_key%10#0: bytes = (concat "tm2" "a")
+        let storage_value%4#0: bytes = box_read(box_prefixed_key%10#0)
+        let tuple_item%4#0: Encoded(len+uint8[]) = extract_value(storage_value%4#0, 1)
+        let values%4#0: bytes = decode_bytes<bytes>(tuple_item%4#0)
+        let tmp%7#0: bool = (== values%4#0 "world")
+        (assert tmp%7#0)
+        let box_prefixed_key%11#0: bytes = (concat "tm2" "a")
+        let storage_value%5#0: bytes = box_read(box_prefixed_key%11#0)
+        let tuple_item%5#0: bool = extract_value(storage_value%5#0, 2)
+        let values%5#0: bool = decode_bytes<bool>(tuple_item%5#0)
+        (assert values%5#0)
+        let tmp%8#0: Encoded((len+utf8[]),(len+uint8[]),bool1) = bytes_encode<((len+utf8[]),(len+uint8[]),bool1)>("abc", "def", 0u)
+        let box_prefixed_key%12#0: bytes = (concat "tm1" "b")
+        box_write(box_prefixed_key%12#0, tmp%8#0)
+        let box_prefixed_key%13#0: bytes = (concat "tm1" "b")
+        let (_%4#0: uint64, maybe_exists%4#0: bool) = (box_len box_prefixed_key%13#0)
+        (assert maybe_exists%4#0)
+        let tmp%9#0: Encoded((len+utf8[]),(len+uint8[]),bool1) = bytes_encode<((len+utf8[]),(len+uint8[]),bool1)>("abc", "def", 0u)
+        let box_prefixed_key%14#0: bytes = (concat "tm2" "b")
+        box_write(box_prefixed_key%14#0, tmp%9#0)
+        let box_prefixed_key%15#0: bytes = (concat "tm2" "b")
+        let (_%5#0: uint64, maybe_exists%5#0: bool) = (box_len box_prefixed_key%15#0)
+        (assert maybe_exists%5#0)
+        let box_prefixed_key%16#0: bytes = (concat "tm1" "a")
+        (box_del box_prefixed_key%16#0)
+        let box_prefixed_key%17#0: bytes = (concat "tm1" "a")
+        let (_%6#0: uint64, maybe_exists%6#0: bool) = (box_len box_prefixed_key%17#0)
+        let tmp%10#0: bool = (! maybe_exists%6#0)
+        (assert tmp%10#0)
+        let box_prefixed_key%18#0: bytes = (concat "tm2" "a")
+        (box_del box_prefixed_key%18#0)
+        let box_prefixed_key%19#0: bytes = (concat "tm2" "a")
+        let (_%7#0: uint64, maybe_exists%7#0: bool) = (box_len box_prefixed_key%19#0)
+        let tmp%11#0: bool = (! maybe_exists%7#0)
+        (assert tmp%11#0)
+        return 
+
+subroutine tests/approvals/box-proxies.algo.ts::TupleBox.__algots__.defaultCreate() -> void:
+    block@0: // L172
+        return 

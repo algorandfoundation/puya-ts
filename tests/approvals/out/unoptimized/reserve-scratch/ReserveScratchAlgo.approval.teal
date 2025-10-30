@@ -1,10 +1,11 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.approvalProgram() -> uint64:
 main:
     intcblock 1 0 15 45
     bytecblock "hello"
+    b main_block@0
 
 main_block@0:
     // tests/approvals/reserve-scratch.algo.ts:18
@@ -39,6 +40,7 @@ main_block@0:
 
 // tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.setThings() -> void:
 setThings:
+    b setThings_block@0
 
 setThings_block@0:
     // tests/approvals/reserve-scratch.algo.ts:12

@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import type { awst } from '../../awst'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
@@ -6,13 +7,14 @@ import { EqualityComparison, NumericComparison } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { codeInvariant, tryConvertEnum } from '../../util'
 import type { InstanceType, PType } from '../ptypes'
-import { boolPType, bytesPType, stringPType } from '../ptypes'
+import { boolPType, BytesPType, bytesPType, stringPType } from '../ptypes'
+import { instanceEb } from '../type-registry'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { BuilderComparisonOp, FunctionBuilder, InstanceExpressionBuilder } from './index'
 import { parseFunctionArgs } from './util/arg-parsing'
 
 export class BooleanFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [value],
     } = parseFunctionArgs({
@@ -44,7 +46,7 @@ export class BooleanFunctionBuilder extends FunctionBuilder {
         nodeFactory.bytesComparisonExpression({
           sourceLocation,
           operator: EqualityComparison.ne,
-          lhs: value.toBytes(sourceLocation),
+          lhs: value.toBytes(sourceLocation).resolve(),
           rhs: nodeFactory.bytesConstant({ value: new Uint8Array(), sourceLocation }),
         }),
       )
@@ -74,11 +76,14 @@ export class BooleanExpressionBuilder extends InstanceExpressionBuilder<Instance
     return this._expr
   }
 
-  toBytes(sourceLocation: SourceLocation): Expression {
-    return intrinsicFactory.itob({
-      value: this._expr,
-      sourceLocation,
-    })
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
+    return instanceEb(
+      intrinsicFactory.itob({
+        value: this._expr,
+        sourceLocation,
+      }),
+      new BytesPType({ length: 8n }),
+    )
   }
 
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {

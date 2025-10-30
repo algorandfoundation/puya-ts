@@ -1,15 +1,13 @@
 import ts from 'typescript'
-import { isConstant } from '../../awst'
 import type * as awst from '../../awst/nodes'
-import { TemplateVar } from '../../awst/nodes'
 import { CodeError } from '../../errors'
 import { logger, patchErrorLocation } from '../../logger'
 import { codeInvariant, expandMaybeArray, invariant } from '../../util'
 import type { ModuleStatements } from '../../visitor/syntax-names'
 import type { Visitor } from '../../visitor/visitor'
 import { accept } from '../../visitor/visitor'
-import { requireExpressionOfType } from '../eb/util'
-import { ContractClassPType, LibClassType, LogicSigPType } from '../ptypes'
+import { requireInstanceBuilder } from '../eb/util'
+import { ContractClassPType, LogicSigPType } from '../ptypes'
 import { ARC4StructType } from '../ptypes/arc4-types'
 import { BaseVisitor } from './base-visitor'
 import { ContractVisitor } from './contract-visitor'
@@ -25,7 +23,6 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
 
   constructor(sourceFile: ts.SourceFile) {
     super()
-
     for (const statement of sourceFile.statements) {
       try {
         this._moduleStatements.push(this.accept(statement))
@@ -91,21 +88,21 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
 
       const initializerBuilder = this.accept(dec.initializer)
 
-      if (ptype instanceof LibClassType) {
+      if (ptype.singleton) {
+        // Likely aliasing of an algo-ts type - eg const MyArray = FixedArray<uint64>
         invariant(initializerBuilder.ptype?.equals(ptype), 'Initializer type must match target type')
         return []
       }
+      const maybeConst = requireInstanceBuilder(initializerBuilder)
 
-      const value = requireExpressionOfType(initializerBuilder, ptype)
+      codeInvariant(maybeConst.isConstant || maybeConst.isConstantOp, 'Module level assignments must be compile time constants')
 
-      codeInvariant(isConstant(value) || value instanceof TemplateVar, 'Module level assignments must be compile time constants')
-
-      this.context.addConstant(dec.name, value)
+      this.context.addConstant(dec.name, maybeConst)
 
       return []
     })
   }
-  visitImportDeclaration(_node: ts.ImportDeclaration): NodeOrDeferred {
+  visitImportDeclaration(node: ts.ImportDeclaration): NodeOrDeferred {
     return []
   }
   visitClassDeclaration(node: ts.ClassDeclaration): NodeOrDeferred {

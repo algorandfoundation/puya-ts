@@ -1,5 +1,5 @@
-import { assert, Contract, Global, itxn, Txn } from '@algorandfoundation/algorand-typescript'
-import { abiCall, compileArc4, methodSelector } from '@algorandfoundation/algorand-typescript/arc4'
+import { arc4, assert, Bytes, Contract, Global, itxn, Txn } from '@algorandfoundation/algorand-typescript'
+import { abiCall, compileArc4, methodSelector, Str } from '@algorandfoundation/algorand-typescript/arc4'
 import {
   Hello,
   HelloStubbed,
@@ -18,24 +18,35 @@ class HelloFactory extends Contract {
       args: ['hello'],
     }).itxn.createdApp
 
-    const result = compiled.call.greet({
+    const { returnValue: result } = compiled.call.greet({
       args: ['world'],
       appId: app,
-    }).returnValue
+    })
     assert(result === 'hello world')
 
-    const result2 = abiCall(Hello.prototype.greet, {
+    const { returnValue: result2, itxn: greetItxn } = abiCall({
+      method: Hello.prototype.greet,
       appId: app,
       args: ['abi'],
-    }).returnValue
+    })
 
     assert(result2 === 'hello abi')
+    assert(greetItxn.lastLog === Bytes.fromHex('151f7c75').concat(new Str('hello abi').bytes))
 
-    const result3 = abiCall(HelloStubbed.prototype.greet, {
+    const result3 = abiCall({
+      method: HelloStubbed.prototype.greet,
       appId: app,
       args: ['stubbed'],
     }).returnValue
     assert(result3 === 'hello stubbed')
+
+    const result4 = abiCall({
+      method: Hello.prototype.sendGreetings,
+      appId: app,
+      args: [{ name: 'world', termination: new arc4.Str('!') }],
+    }).returnValue
+
+    assert(result4 === 'hello world!')
 
     compiled.call.delete({
       appId: app,
@@ -47,12 +58,20 @@ class HelloFactory extends Contract {
 
     const helloApp = compiled.call.create().itxn.createdApp
 
-    const txn = compiled.call.greet({
+    const txn1 = compiled.call.greet({
       args: ['world'],
       appId: helloApp,
     })
 
-    assert(txn.returnValue === 'hey world')
+    assert(txn1.returnValue === 'hey world')
+
+    const greeting = { name: 'world', termination: new arc4.Str('!') }
+    const txn2 = compiled.call.sendGreetings({
+      args: [greeting],
+      appId: helloApp,
+    })
+
+    assert(txn2.returnValue === 'hey world!')
 
     compiled.call.delete({
       appId: helloApp,

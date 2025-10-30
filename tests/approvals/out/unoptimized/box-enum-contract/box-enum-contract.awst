@@ -20,11 +20,11 @@ contract BoxContract
     Box["txn"].value: uint64 = 6
   }
   
-  readEnums(): arc4.tuple<uint64,uint64>
+  readEnums(): arc4.tuple<arc4.uint64,arc4.uint64>
   {
-    assert(box_get("oca").0 == itob(reinterpret_cast<uint64>(Box["oca"].value)))
-    assert(box_get("txn").0 == itob(reinterpret_cast<uint64>(Box["txn"].value)))
-    return ARC4_ENCODE(#[ARC4_ENCODE(reinterpret_cast<uint64>(Box["oca"].value), wtype=arc4.uint64), ARC4_ENCODE(reinterpret_cast<uint64>(Box["txn"].value), wtype=arc4.uint64)], wtype=arc4.tuple<uint64,uint64>)
+    assert(box_get("oca").0 == reinterpret_cast<bytes>(itob(reinterpret_cast<uint64>(Box["oca"].value))))
+    assert(box_get("txn").0 == reinterpret_cast<bytes>(itob(reinterpret_cast<uint64>(Box["txn"].value))))
+    return ARC4_ENCODE(#[ARC4_ENCODE(reinterpret_cast<uint64>(Box["oca"].value), wtype=arc4.uint64), ARC4_ENCODE(reinterpret_cast<uint64>(Box["txn"].value), wtype=arc4.uint64)], wtype=arc4.tuple<arc4.uint64,arc4.uint64>)
   }
   
   __algots__.defaultCreate(): void

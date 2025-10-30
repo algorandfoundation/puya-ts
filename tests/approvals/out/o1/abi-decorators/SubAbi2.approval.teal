@@ -1,42 +1,38 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    // tests/approvals/abi-decorators.algo.ts:50
+    // tests/approvals/abi-decorators.algo.ts:61
     // export class SubAbi2 extends BaseAbi {
     txn NumAppArgs
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
     pushbytes 0x1e29ffff // method "someMethod()string"
     txna ApplicationArgs 0
     match main_someMethod_route@3
-
-main_after_if_else@10:
-    // tests/approvals/abi-decorators.algo.ts:50
-    // export class SubAbi2 extends BaseAbi {
-    pushint 0 // 0
-    return
+    err
 
 main_someMethod_route@3:
-    // tests/approvals/abi-decorators.algo.ts:52
+    // tests/approvals/abi-decorators.algo.ts:63
     // someMethod(): string {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     pushbytes 0x151f7c75000e7375622d6162692d323a6e6f6f70
     log
     pushint 1 // 1
     return
 
-main_bare_routing@6:
-    // tests/approvals/abi-decorators.algo.ts:50
+main___algots__.defaultCreate@5:
+    // tests/approvals/abi-decorators.algo.ts:61
     // export class SubAbi2 extends BaseAbi {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     pushint 1 // 1
     return

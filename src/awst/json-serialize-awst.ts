@@ -1,30 +1,14 @@
 import { snakeCase } from 'change-case'
-import path from 'node:path'
-import { Constants } from '../constants'
 import { InternalError } from '../errors'
-import { invariant } from '../util'
+import { AbsolutePath } from '../util/absolute-path'
 import { buildBase85Encoder } from '../util/base-85'
 import { ContractReference, LogicSigReference } from './models'
-import type { RootNode } from './nodes'
 import { IntrinsicCall, SingleEvaluation } from './nodes'
+import { generateExcludedPropsObj } from './nodes-meta'
 import { SourceLocation } from './source-location'
 import { SymbolToNumber } from './util'
 
-type JSONWithRaw = typeof JSON & {
-  /**
-   * This method exists in Node 21+ and several browsers but hasn't made its way into the typescript lib
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/rawJSON
-   *
-   *
-   */
-  rawJSON?(value: string): string
-}
-
 function serializeBigInt(value: bigint): unknown {
-  const jsonWithRaw = JSON as unknown as JSONWithRaw
-  if (jsonWithRaw.rawJSON) {
-    return jsonWithRaw.rawJSON(`${value}`)
-  }
   if (value < 0n) {
     if (value < Number.MIN_SAFE_INTEGER) {
       throw new InternalError(`Cannot safely serialize ${value} to JSON`)
@@ -39,7 +23,7 @@ function serializeBigInt(value: bigint): unknown {
 }
 
 export class SnakeCaseSerializer<T> {
-  constructor(private readonly spaces = 2) {}
+  constructor(private readonly spaces = 0) {}
   public serialize(obj: T): string {
     return JSON.stringify(obj, (k, v) => this.serializerFunction(k, v), this.spaces)
   }
@@ -61,14 +45,14 @@ export class SnakeCaseSerializer<T> {
   }
 }
 
-export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
+export class AwstSerializer<T> extends SnakeCaseSerializer<T> {
   constructor(
     private options?: {
-      sourcePaths?: 'absolute' | 'relative'
-      programDirectory?: string
+      pathsRelativeTo?: AbsolutePath
+      spaces?: number
     },
   ) {
-    super()
+    super(options?.spaces ?? 0)
   }
   #singleEvals = new SymbolToNumber()
 
@@ -109,27 +93,24 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
         }),
       }
     }
-    if (value instanceof SourceLocation && value.file) {
-      let filePath: string = value.file
-      if (this.options?.sourcePaths === 'absolute' && !path.isAbsolute(value.file)) {
-        invariant(this.options.programDirectory, 'Program directory must be supplied for absolute paths')
-        if (value.file.startsWith(Constants.algoTsPackage)) {
-          filePath = path.join(this.options.programDirectory, 'node_modules', value.file)
-        } else {
-          filePath = path.join(this.options.programDirectory, value.file)
-        }
+    if (value instanceof AbsolutePath) {
+      if (this.options?.pathsRelativeTo === undefined) {
+        return value.toString()
       }
+      return value.relativeTo(this.options.pathsRelativeTo)
+    }
+    if (value instanceof SourceLocation) {
       return {
         ...(super.serializerFunction(key, value) as object),
         scope: undefined,
-        file: filePath,
       }
     }
     if (value instanceof SingleEvaluation) {
       return {
         _type: SingleEvaluation.name,
         ...(super.serializerFunction(key, value) as object),
-        _id: String(this.#singleEvals.forSymbol(value.id)[0]),
+        _id: String(this.#singleEvals.forSymbol(value.id).id),
+        ...generateExcludedPropsObj(SingleEvaluation),
       }
     }
 
@@ -137,12 +118,9 @@ export class AwstSerializer extends SnakeCaseSerializer<RootNode[]> {
       return {
         _type: value.constructor.name,
         ...(super.serializerFunction(key, value) as object),
+        ...generateExcludedPropsObj(value.constructor),
       }
     }
     return super.serializerFunction(key, value)
   }
-}
-
-export function jsonSerializeAwst(awst: RootNode[]): string {
-  return new AwstSerializer().serialize(awst)
 }

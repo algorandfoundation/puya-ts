@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { awst } from '../../awst'
 import { intrinsicFactory } from '../../awst/intrinsic-factory'
 import { nodeFactory } from '../../awst/node-factory'
@@ -6,7 +7,7 @@ import { BytesBinaryOperator, BytesEncoding, EqualityComparison } from '../../aw
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { NotSupported } from '../../errors'
-import { tryConvertEnum, utf8ToUint8Array } from '../../util'
+import { codeInvariant, tryConvertEnum, utf8ToUint8Array } from '../../util'
 import type { InstanceType, PType, PTypeOrClass } from '../ptypes'
 import { boolPType, bytesPType, stringPType } from '../ptypes'
 import { instanceEb } from '../type-registry'
@@ -16,38 +17,52 @@ import { UInt64ExpressionBuilder } from './uint64-expression-builder'
 import { requireExpressionOfType } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 
-export class StringFunctionBuilder extends FunctionBuilder {
-  taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
-    let result: awst.Expression = nodeFactory.stringConstant({
+export function stringFromTemplate(
+  head: string,
+  spans: ReadonlyArray<readonly [InstanceBuilder, string]>,
+  sourceLocation: SourceLocation,
+): StringExpressionBuilder {
+  let result: awst.Expression = nodeFactory.stringConstant({
+    sourceLocation,
+    value: head,
+  })
+  for (const [value, joiningText] of spans) {
+    const valueStr = value.toString(value.sourceLocation)
+    result = nodeFactory.bytesBinaryOperation({
+      left: result,
+      right: valueStr,
+      op: BytesBinaryOperator.add,
       sourceLocation,
-      value: head,
+      wtype: wtypes.stringWType,
     })
-    for (const [value, joiningText] of spans) {
-      const valueStr = value.toString(sourceLocation)
+    if (joiningText) {
       result = nodeFactory.bytesBinaryOperation({
         left: result,
-        right: valueStr,
+        right: nodeFactory.stringConstant({
+          sourceLocation,
+          value: joiningText,
+        }),
         op: BytesBinaryOperator.add,
         sourceLocation,
         wtype: wtypes.stringWType,
       })
-      if (joiningText) {
-        result = nodeFactory.bytesBinaryOperation({
-          left: result,
-          right: nodeFactory.stringConstant({
-            sourceLocation,
-            value: joiningText,
-          }),
-          op: BytesBinaryOperator.add,
-          sourceLocation,
-          wtype: wtypes.stringWType,
-        })
-      }
     }
-    return new StringExpressionBuilder(result)
+  }
+  return new StringExpressionBuilder(result)
+}
+
+export class StringFunctionBuilder extends FunctionBuilder {
+  taggedTemplate(
+    head: string,
+    spans: ReadonlyArray<readonly [InstanceBuilder, string]>,
+    typeArgs: readonly PType[],
+    sourceLocation: SourceLocation,
+  ): InstanceBuilder {
+    codeInvariant(typeArgs.length === 0, 'String type expects 0 type args', sourceLocation)
+    return stringFromTemplate(head, spans, sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [value],
     } = parseFunctionArgs({
@@ -152,19 +167,25 @@ export class StringExpressionBuilder extends InstanceExpressionBuilder<InstanceT
     )
   }
 
-  toBytes(sourceLocation: SourceLocation): awst.Expression {
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
     if (this._expr instanceof awst.StringConstant) {
-      return nodeFactory.bytesConstant({
-        value: utf8ToUint8Array(this._expr.value),
-        encoding: BytesEncoding.utf8,
-        sourceLocation: this._expr.sourceLocation,
-      })
+      return instanceEb(
+        nodeFactory.bytesConstant({
+          value: utf8ToUint8Array(this._expr.value),
+          encoding: BytesEncoding.utf8,
+          sourceLocation: this._expr.sourceLocation,
+        }),
+        bytesPType,
+      )
     }
-    return nodeFactory.reinterpretCast({
-      expr: this._expr,
-      sourceLocation,
-      wtype: wtypes.bytesWType,
-    })
+    return instanceEb(
+      nodeFactory.reinterpretCast({
+        expr: this._expr,
+        sourceLocation,
+        wtype: wtypes.bytesWType,
+      }),
+      bytesPType,
+    )
   }
 
   toString(): Expression {
@@ -177,7 +198,7 @@ export class ConcatExpressionBuilder extends FunctionBuilder {
     super(expr.sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const { args: others } = parseFunctionArgs({
       args,
       typeArgs,

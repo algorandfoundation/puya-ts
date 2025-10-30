@@ -1,7 +1,6 @@
 import { camelCase } from 'change-case'
-import { enumerate, hasFlags } from '../src/util'
 import type { OpFunction, OpGrouping, OpModule, OpOverloadedFunction } from './build-op-module'
-import { AlgoTsType } from './build-op-module'
+import { AlgoTsType, BytesAlgoTsType, EnumAlgoTsType, GenericAlgoTsType, UnionAlgoTsType } from './build-op-module'
 
 export function* emitOpMetaData(opModule: OpModule) {
   function* emitHeader() {
@@ -41,78 +40,62 @@ export type IntrinsicOpGrouping = {
 `
   }
 
-  function* algoTsToPType(t: AlgoTsType) {
-    if (hasFlags(t, AlgoTsType.Enum)) {
-      for (const enumDef of opModule.enums) {
-        if (hasFlags(t, enumDef.typeFlag)) {
-          yield `ptypes.${camelCase(enumDef.tsName)}PType`
-          t ^= enumDef.typeFlag ^ AlgoTsType.Enum
-        }
+  function* algoTsToPType(t: AlgoTsType): Generator<string> {
+    if (t instanceof UnionAlgoTsType) {
+      for (const _t of t.types) {
+        yield* algoTsToPType(_t)
       }
-      t ^= AlgoTsType.Enum
-    }
-    if (hasFlags(t, AlgoTsType.Asset)) {
-      t ^= AlgoTsType.Asset
-      yield 'ptypes.assetPType'
-    }
-    if (hasFlags(t, AlgoTsType.Account)) {
-      t ^= AlgoTsType.Account
-      yield 'ptypes.accountPType'
-    }
-    if (hasFlags(t, AlgoTsType.Application)) {
-      t ^= AlgoTsType.Application
-      yield 'ptypes.applicationPType'
-    }
-    if (hasFlags(t, AlgoTsType.Uint64)) {
-      t ^= AlgoTsType.Uint64
-      yield 'ptypes.uint64PType'
-    }
-    if (hasFlags(t, AlgoTsType.BigUint)) {
-      t ^= AlgoTsType.BigUint
-      yield 'ptypes.biguintPType'
-    }
-    if (hasFlags(t, AlgoTsType.Boolean)) {
-      t ^= AlgoTsType.Boolean
-      yield 'ptypes.boolPType'
-    }
-    if (hasFlags(t, AlgoTsType.Void)) {
-      t ^= AlgoTsType.Void
-      yield 'ptypes.voidPType'
-    }
-    if (hasFlags(t, AlgoTsType.Bytes)) {
-      t ^= AlgoTsType.Bytes
-      yield 'ptypes.bytesPType'
-    }
-    if (hasFlags(t, AlgoTsType.String)) {
-      t ^= AlgoTsType.String
-      yield 'ptypes.stringPType'
-    }
-    if (hasFlags(t, AlgoTsType.OnCompletion)) {
-      t ^= AlgoTsType.OnCompletion
-      yield 'ptypes.onCompleteActionType.memberType'
-    }
-    if (hasFlags(t, AlgoTsType.TransactionType)) {
-      t ^= AlgoTsType.TransactionType
-      yield 'ptypes.transactionTypeType.memberType'
-    }
-    if (Number(t) !== 0) throw new Error(`Unhandled flags ${t}`)
-  }
 
-  function* algoTsToLiteralPType(t: AlgoTsType) {
-    if (hasFlags(t, AlgoTsType.Enum)) {
-      for (const enumDef of opModule.enums) {
-        if (hasFlags(t, enumDef.typeFlag)) {
-          yield `ptypes.${camelCase(enumDef.tsName)}PType`
-          t ^= enumDef.typeFlag ^ AlgoTsType.Enum
-        }
-      }
-      t ^= AlgoTsType.Enum
+      return
     }
-    if (hasFlags(t, AlgoTsType.Uint64)) {
-      t ^= AlgoTsType.Uint64
-      yield 'ptypes.uint64PType'
+    if (t instanceof EnumAlgoTsType) {
+      yield `ptypes.${camelCase(t.tsName)}PType`
+      return
     }
-    if (Number(t) !== 0) throw new Error(`Unhandled flags ${t}`)
+    if (t instanceof BytesAlgoTsType) {
+      yield `new ptypes.BytesPType({length: ${t.size}n})`
+      return
+    }
+    if (t instanceof GenericAlgoTsType && t.baseAlgoTsType) {
+      yield algoTsToPType(t.baseAlgoTsType).next().value
+      return
+    }
+    switch (t) {
+      case AlgoTsType.Asset:
+        yield 'ptypes.assetPType'
+        return
+      case AlgoTsType.Account:
+        yield 'ptypes.accountPType'
+        return
+      case AlgoTsType.Application:
+        yield 'ptypes.applicationPType'
+        return
+      case AlgoTsType.Uint64:
+        yield 'ptypes.uint64PType'
+        return
+      case AlgoTsType.BigUint:
+        yield 'ptypes.biguintPType'
+        return
+      case AlgoTsType.Boolean:
+        yield 'ptypes.boolPType'
+        return
+      case AlgoTsType.Void:
+        yield 'ptypes.voidPType'
+        return
+      case AlgoTsType.Bytes:
+        yield 'ptypes.bytesPType'
+        return
+      case AlgoTsType.String:
+        yield 'ptypes.stringPType'
+        return
+      case AlgoTsType.OnCompletion:
+        yield 'ptypes.onCompleteActionType.memberType'
+        return
+      case AlgoTsType.TransactionType:
+        yield 'ptypes.transactionTypeType.memberType'
+        return
+    }
+    throw new Error(`Unhandled flags ${t}`)
   }
 
   function mapReturnType(returnTypes: AlgoTsType[]) {
@@ -124,12 +107,12 @@ export type IntrinsicOpGrouping = {
       if (mapped.length === 1) {
         return mapped[0]
       }
-      throw new Error(`Cannot have union return types: ${ptypes.join(' | ')}`)
+      throw new Error(`Cannot have union return types: ${t.name}`)
     })
     if (ptypes.length === 1) {
       return ptypes[0]
     }
-    return `new ptypes.TuplePType({items: [${ptypes.join(', ')}]})`
+    return `new ptypes.ReadonlyTuplePType({items: [${ptypes.join(', ')}] })`
   }
 
   function* emitTypes() {
@@ -140,18 +123,18 @@ export type IntrinsicOpGrouping = {
       yield `op: '${op.opCode}',`
       yield `signatures: [{`
       yield `argNames: [`
-      for (const [index, arg] of enumerate(op.immediateArgs)) {
+      for (const [index, arg] of op.immediateArgs.entries()) {
         if (index === op.enumArg?.pos) continue
         yield `'${arg.name}',`
       }
       yield op.stackArgs.map((a) => `'${a.name}'`).join(', ')
       yield '],'
       yield 'immediateArgs: ['
-      for (const [index, ia] of enumerate(op.immediateArgs)) {
+      for (const [index, ia] of op.immediateArgs.entries()) {
         if (op.enumArg?.pos === index) {
           yield `'${op.enumArg.member}',`
         } else {
-          yield `{ name: '${ia.name}', ptypes: [${Array.from(algoTsToLiteralPType(ia.type)).join(', ')}] },`
+          yield `{ name: '${ia.name}', ptypes: [${Array.from(algoTsToPType(ia.type)).join(', ')}] },`
         }
       }
       yield '],'
@@ -181,7 +164,7 @@ export type IntrinsicOpGrouping = {
         yield '],'
         yield 'immediateArgs: ['
         for (const ia of signature.immediateArgs) {
-          yield `{ name: '${ia.name}', ptypes: [${Array.from(algoTsToLiteralPType(ia.type)).join(', ')}] },`
+          yield `{ name: '${ia.name}', ptypes: [${Array.from(algoTsToPType(ia.type)).join(', ')}] },`
         }
         yield '],'
         yield 'stackArgs: ['
@@ -215,7 +198,9 @@ export type IntrinsicOpGrouping = {
     yield `export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGrouping> = {\n`
     for (const item of opModule.items) {
       if (item.type === 'op-function') {
-        yield* emitOpMapping(item)
+        if (item.name.search(/\W.*$/) < 0) {
+          yield* emitOpMapping(item)
+        }
       } else if (item.type === 'op-overloaded-function') {
         yield* emitOpOverloadedMapping(item)
       } else {

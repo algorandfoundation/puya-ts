@@ -1,11 +1,13 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1
+    b main_block@0
 
 main_block@0:
+    b main_block@1
 
 main_block@1:
     // tests/approvals/multi-inheritance-2.algo.ts:5
@@ -13,27 +15,25 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
+    b main_abi_routing@2
 
 main_abi_routing@2:
     // tests/approvals/multi-inheritance-2.algo.ts:5
     // class StoreString extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x48f26e85 // method "setStore(string)void"
-    swap
+    uncover 1
     match main_setStore_route@3
+    b main_switch_case_next@4
 
-main_switch_case_default@4:
+main_switch_case_next@4:
+    b main_after_if_else@6
 
-main_switch_case_next@5:
-
-main_after_if_else@10:
+main_after_if_else@6:
     // tests/approvals/multi-inheritance-2.algo.ts:5
     // class StoreString extends Contract {
-    intc_0 // 0
-
-main_after_inlined_tests/approvals/multi-inheritance-2.algo.ts::StoreString.__puya_arc4_router__@11:
-    return
+    err
 
 main_setStore_route@3:
     // tests/approvals/multi-inheritance-2.algo.ts:8
@@ -41,13 +41,37 @@ main_setStore_route@3:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
     txn ApplicationID
     intc_0 // 0
     !=
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    callsub setStore
+    b main_switch_case_next@4
+
+main___algots__.defaultCreate@5:
     // tests/approvals/multi-inheritance-2.algo.ts:5
     // class StoreString extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore[routing]() -> void:
+setStore:
+    b setStore_block@0
+
+setStore_block@0:
+    // tests/approvals/multi-inheritance-2.algo.ts:8
+    // setStore(value: string) {
     txna ApplicationArgs 1
     dup
     intc_0 // 0
@@ -61,44 +85,19 @@ main_setStore_route@3:
     ==
     assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
-    // tests/approvals/multi-inheritance-2.algo.ts:8
-    // setStore(value: string) {
-    callsub setStore
+    callsub tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore
     intc_1 // 1
-    b main_after_inlined_tests/approvals/multi-inheritance-2.algo.ts::StoreString.__puya_arc4_router__@11
-
-main_bare_routing@6:
-    // tests/approvals/multi-inheritance-2.algo.ts:5
-    // class StoreString extends Contract {
-    txn OnCompletion
-    intc_0 // 0
-    swap
-    match main___algots__.defaultCreate@7
-
-main_switch_case_default@8:
-
-main_switch_case_next@9:
-    b main_after_if_else@10
-
-main___algots__.defaultCreate@7:
-    // tests/approvals/multi-inheritance-2.algo.ts:5
-    // class StoreString extends Contract {
-    txn ApplicationID
-    intc_0 // 0
-    ==
-    assert // can only call when creating
-    callsub __algots__.defaultCreate
-    intc_1 // 1
-    b main_after_inlined_tests/approvals/multi-inheritance-2.algo.ts::StoreString.__puya_arc4_router__@11
+    return
 
 
 // tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore(value: bytes) -> void:
-setStore:
+tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore:
     // tests/approvals/multi-inheritance-2.algo.ts:8
     // setStore(value: string) {
     proto 1 0
+    b tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore_block@0
 
-setStore_block@0:
+tests/approvals/multi-inheritance-2.algo.ts::StoreString.setStore_block@0:
     // tests/approvals/multi-inheritance-2.algo.ts:6
     // stringStore = GlobalState<string>()
     pushbytes "stringStore"
@@ -111,6 +110,7 @@ setStore_block@0:
 
 // tests/approvals/multi-inheritance-2.algo.ts::StoreString.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
 
 __algots__.defaultCreate_block@0:
     retsub

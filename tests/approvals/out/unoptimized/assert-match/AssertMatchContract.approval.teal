@@ -1,11 +1,13 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1
+    b main_block@0
 
 main_block@0:
+    b main_block@1
 
 main_block@1:
     // tests/approvals/assert-match.algo.ts:4
@@ -13,27 +15,25 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
+    b main_abi_routing@2
 
 main_abi_routing@2:
     // tests/approvals/assert-match.algo.ts:4
     // export class AssertMatchContract extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x8fef7668 // method "testPay(pay)bool"
-    swap
+    uncover 1
     match main_testPay_route@3
+    b main_switch_case_next@4
 
-main_switch_case_default@4:
+main_switch_case_next@4:
+    b main_after_if_else@6
 
-main_switch_case_next@5:
-
-main_after_if_else@10:
+main_after_if_else@6:
     // tests/approvals/assert-match.algo.ts:4
     // export class AssertMatchContract extends Contract {
-    intc_0 // 0
-
-main_after_inlined_tests/approvals/assert-match.algo.ts::AssertMatchContract.__puya_arc4_router__@11:
-    return
+    err
 
 main_testPay_route@3:
     // tests/approvals/assert-match.algo.ts:5
@@ -41,13 +41,37 @@ main_testPay_route@3:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
     txn ApplicationID
     intc_0 // 0
     !=
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    callsub testPay
+    b main_switch_case_next@4
+
+main___algots__.defaultCreate@5:
     // tests/approvals/assert-match.algo.ts:4
     // export class AssertMatchContract extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    txn ApplicationID
+    intc_0 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_1 // 1
+    return
+
+
+// tests/approvals/assert-match.algo.ts::AssertMatchContract.testPay[routing]() -> void:
+testPay:
+    b testPay_block@0
+
+testPay_block@0:
+    // tests/approvals/assert-match.algo.ts:5
+    // public testPay(pay: gtxn.PaymentTxn): boolean {
     txn GroupIndex
     intc_1 // 1
     -
@@ -56,52 +80,27 @@ main_testPay_route@3:
     intc_1 // pay
     ==
     assert // transaction type is pay
-    // tests/approvals/assert-match.algo.ts:5
-    // public testPay(pay: gtxn.PaymentTxn): boolean {
-    callsub testPay
+    callsub tests/approvals/assert-match.algo.ts::AssertMatchContract.testPay
     pushbytes 0x00
     intc_0 // 0
     uncover 2
     setbit
     pushbytes 0x151f7c75
-    swap
+    uncover 1
     concat
     log
     intc_1 // 1
-    b main_after_inlined_tests/approvals/assert-match.algo.ts::AssertMatchContract.__puya_arc4_router__@11
-
-main_bare_routing@6:
-    // tests/approvals/assert-match.algo.ts:4
-    // export class AssertMatchContract extends Contract {
-    txn OnCompletion
-    intc_0 // 0
-    swap
-    match main___algots__.defaultCreate@7
-
-main_switch_case_default@8:
-
-main_switch_case_next@9:
-    b main_after_if_else@10
-
-main___algots__.defaultCreate@7:
-    // tests/approvals/assert-match.algo.ts:4
-    // export class AssertMatchContract extends Contract {
-    txn ApplicationID
-    intc_0 // 0
-    ==
-    assert // can only call when creating
-    callsub __algots__.defaultCreate
-    intc_1 // 1
-    b main_after_inlined_tests/approvals/assert-match.algo.ts::AssertMatchContract.__puya_arc4_router__@11
+    return
 
 
 // tests/approvals/assert-match.algo.ts::AssertMatchContract.testPay(pay: uint64) -> uint64:
-testPay:
+tests/approvals/assert-match.algo.ts::AssertMatchContract.testPay:
     // tests/approvals/assert-match.algo.ts:5
     // public testPay(pay: gtxn.PaymentTxn): boolean {
     proto 1 1
+    b tests/approvals/assert-match.algo.ts::AssertMatchContract.testPay_block@0
 
-testPay_block@0:
+tests/approvals/assert-match.algo.ts::AssertMatchContract.testPay_block@0:
     // tests/approvals/assert-match.algo.ts:6-8
     // assertMatch(Txn, {
     //   fee: { greaterThan: 0 },
@@ -140,18 +139,6 @@ testPay_block@0:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     <=
-    bz testPay_bool_false@8
-
-testPay_and_contd@1:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
     frame_dig -1
     gtxns Amount
     // tests/approvals/assert-match.algo.ts:11
@@ -167,18 +154,7 @@ testPay_and_contd@1:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     >=
-    bz testPay_bool_false@8
-
-testPay_and_contd@2:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
+    &&
     frame_dig -1
     gtxns Sender
     // tests/approvals/assert-match.algo.ts:12
@@ -194,18 +170,7 @@ testPay_and_contd@2:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     ==
-    bz testPay_bool_false@8
-
-testPay_and_contd@3:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
+    &&
     frame_dig -1
     gtxns Receiver
     // tests/approvals/assert-match.algo.ts:13
@@ -221,18 +186,7 @@ testPay_and_contd@3:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     ==
-    bz testPay_bool_false@8
-
-testPay_and_contd@4:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
+    &&
     frame_dig -1
     gtxns CloseRemainderTo
     // tests/approvals/assert-match.algo.ts:14
@@ -248,18 +202,7 @@ testPay_and_contd@4:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     ==
-    bz testPay_bool_false@8
-
-testPay_and_contd@5:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
+    &&
     frame_dig -1
     gtxns FirstValid
     // tests/approvals/assert-match.algo.ts:15
@@ -275,18 +218,7 @@ testPay_and_contd@5:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     >
-    bz testPay_bool_false@8
-
-testPay_and_contd@6:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
+    &&
     frame_dig -1
     gtxns LastValid
     // tests/approvals/assert-match.algo.ts:16
@@ -302,34 +234,17 @@ testPay_and_contd@6:
     //   lastValid: { lessThan: 2 ** 40 },
     // })
     <
-    bz testPay_bool_false@8
-
-testPay_bool_true@7:
-    intc_1 // 1
-
-testPay_bool_merge@9:
-    // tests/approvals/assert-match.algo.ts:10-17
-    // assertMatch(pay, {
-    //   amount: { between: [100_000, 105_000] },
-    //   sender: Txn.sender,
-    //   receiver: Global.currentApplicationAddress,
-    //   closeRemainderTo: Global.zeroAddress,
-    //   firstValid: { greaterThan: 1 },
-    //   lastValid: { lessThan: 2 ** 40 },
-    // })
+    &&
     assert // assert target is match for conditions
     // tests/approvals/assert-match.algo.ts:18
     // return true
     intc_1 // 1
     retsub
 
-testPay_bool_false@8:
-    intc_0 // 0
-    b testPay_bool_merge@9
-
 
 // tests/approvals/assert-match.algo.ts::AssertMatchContract.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
 
 __algots__.defaultCreate_block@0:
     retsub

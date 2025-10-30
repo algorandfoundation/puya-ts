@@ -1,10 +1,11 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // tests/approvals/boolean-conversions.algo.ts::BooleanConversionsAlgo.approvalProgram() -> uint64:
 main:
     intcblock 1 0
     bytecblock 0x "abc" 0x01 "abcdef"
+    b main_block@0
 
 main_block@0:
     // tests/approvals/boolean-conversions.algo.ts:34
@@ -21,6 +22,7 @@ main_block@0:
 
 // tests/approvals/boolean-conversions.algo.ts::test_truthyness() -> void:
 test_truthyness:
+    b test_truthyness_block@0
 
 test_truthyness_block@0:
     // tests/approvals/boolean-conversions.algo.ts:6
@@ -54,11 +56,9 @@ test_truthyness_block@0:
     bytec_1 // "abc"
     len
     assert // Non empty is truthy
-    // tests/approvals/boolean-conversions.algo.ts:12
-    // const empty = ''
-    bytec_0 // ""
     // tests/approvals/boolean-conversions.algo.ts:13
     // assert(!empty, 'Empty is falsy')
+    bytec_0 // ""
     len
     !
     assert // Empty is falsy
@@ -77,6 +77,7 @@ test_truthyness_block@0:
 
 // tests/approvals/boolean-conversions.algo.ts::test_booleans_are_equal() -> void:
 test_booleans_are_equal:
+    b test_booleans_are_equal_block@0
 
 test_booleans_are_equal_block@0:
     // tests/approvals/boolean-conversions.algo.ts:21
@@ -131,11 +132,9 @@ test_booleans_are_equal_block@0:
     !=
     ==
     assert
-    // tests/approvals/boolean-conversions.algo.ts:28
-    // const boolNoArgs = Boolean()
-    intc_1 // 0
     // tests/approvals/boolean-conversions.algo.ts:29
     // assert(!boolNoArgs)
+    intc_1 // 0
     !
     assert
     retsub

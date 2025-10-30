@@ -1,11 +1,13 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1
+    b main_block@0
 
 main_block@0:
+    b main_block@1
 
 main_block@1:
     // tests/approvals/asset-proxy.algo.ts:4
@@ -13,27 +15,25 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
+    b main_abi_routing@2
 
 main_abi_routing@2:
     // tests/approvals/asset-proxy.algo.ts:4
     // export class AssetProxyAlgo extends Contract {
     txna ApplicationArgs 0
-    pushbytes 0x5df11c28 // method "testAsset(asset)void"
-    swap
+    pushbytes 0xd303ec47 // method "testAsset(uint64)void"
+    uncover 1
     match main_testAsset_route@3
+    b main_switch_case_next@4
 
-main_switch_case_default@4:
+main_switch_case_next@4:
+    b main_after_if_else@6
 
-main_switch_case_next@5:
-
-main_after_if_else@10:
+main_after_if_else@6:
     // tests/approvals/asset-proxy.algo.ts:4
     // export class AssetProxyAlgo extends Contract {
-    intc_0 // 0
-
-main_after_inlined_tests/approvals/asset-proxy.algo.ts::AssetProxyAlgo.__puya_arc4_router__@11:
-    return
+    err
 
 main_testAsset_route@3:
     // tests/approvals/asset-proxy.algo.ts:5
@@ -41,59 +41,57 @@ main_testAsset_route@3:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
     txn ApplicationID
     intc_0 // 0
     !=
-    assert // can only call when not creating
-    // tests/approvals/asset-proxy.algo.ts:4
-    // export class AssetProxyAlgo extends Contract {
-    txna ApplicationArgs 1
-    dup
-    len
-    intc_1 // 1
-    ==
-    assert // invalid number of bytes for arc4.uint8
-    btoi
-    txnas Assets
-    // tests/approvals/asset-proxy.algo.ts:5
-    // testAsset(asset: Asset): void {
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     callsub testAsset
-    intc_1 // 1
-    b main_after_inlined_tests/approvals/asset-proxy.algo.ts::AssetProxyAlgo.__puya_arc4_router__@11
+    b main_switch_case_next@4
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/asset-proxy.algo.ts:4
     // export class AssetProxyAlgo extends Contract {
     txn OnCompletion
-    intc_0 // 0
-    swap
-    match main___algots__.defaultCreate@7
-
-main_switch_case_default@8:
-
-main_switch_case_next@9:
-    b main_after_if_else@10
-
-main___algots__.defaultCreate@7:
-    // tests/approvals/asset-proxy.algo.ts:4
-    // export class AssetProxyAlgo extends Contract {
+    intc_0 // NoOp
+    ==
     txn ApplicationID
     intc_0 // 0
     ==
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    b main_after_inlined_tests/approvals/asset-proxy.algo.ts::AssetProxyAlgo.__puya_arc4_router__@11
+    return
+
+
+// tests/approvals/asset-proxy.algo.ts::AssetProxyAlgo.testAsset[routing]() -> void:
+testAsset:
+    b testAsset_block@0
+
+testAsset_block@0:
+    // tests/approvals/asset-proxy.algo.ts:5
+    // testAsset(asset: Asset): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/asset-proxy.algo.ts::AssetProxyAlgo.testAsset
+    intc_1 // 1
+    return
 
 
 // tests/approvals/asset-proxy.algo.ts::AssetProxyAlgo.testAsset(asset: uint64) -> void:
-testAsset:
+tests/approvals/asset-proxy.algo.ts::AssetProxyAlgo.testAsset:
     // tests/approvals/asset-proxy.algo.ts:5
     // testAsset(asset: Asset): void {
     proto 1 0
+    b tests/approvals/asset-proxy.algo.ts::AssetProxyAlgo.testAsset_block@0
 
-testAsset_block@0:
+tests/approvals/asset-proxy.algo.ts::AssetProxyAlgo.testAsset_block@0:
     // tests/approvals/asset-proxy.algo.ts:6
     // log(asset.id)
     frame_dig -1
@@ -195,6 +193,7 @@ testAsset_block@0:
 
 // tests/approvals/asset-proxy.algo.ts::AssetProxyAlgo.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
 
 __algots__.defaultCreate_block@0:
     retsub

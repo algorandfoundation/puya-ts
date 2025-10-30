@@ -1,4 +1,4 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
@@ -8,27 +8,20 @@ main:
     // tests/approvals/strings.algo.ts:3
     // class StringContract extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
-    pushbytess 0x5049bd1b 0xdc882e2f // method "join(string,string)string", method "interpolate(string)string"
-    txna ApplicationArgs 0
-    match main_join_route@3 main_interpolate_route@4
-
-main_after_if_else@11:
-    // tests/approvals/strings.algo.ts:3
-    // class StringContract extends Contract {
-    intc_0 // 0
-    return
-
-main_interpolate_route@4:
-    // tests/approvals/strings.algo.ts:8
-    // interpolate(a: string): string {
+    bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/strings.algo.ts:3
-    // class StringContract extends Contract {
+    assert
+    pushbytess 0x5049bd1b 0xdc882e2f // method "join(string,string)string", method "interpolate(string)string"
+    txna ApplicationArgs 0
+    match main_join_route@4 main_interpolate_route@5
+    err
+
+main_interpolate_route@5:
+    // tests/approvals/strings.algo.ts:8
+    // interpolate(a: string): string {
     txna ApplicationArgs 1
     dup
     intc_0 // 0
@@ -60,16 +53,9 @@ main_interpolate_route@4:
     intc_2 // 1
     return
 
-main_join_route@3:
+main_join_route@4:
     // tests/approvals/strings.algo.ts:4
     // join(a: string, b: string): string {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/strings.algo.ts:3
-    // class StringContract extends Contract {
     txna ApplicationArgs 1
     dup
     intc_0 // 0
@@ -110,13 +96,14 @@ main_join_route@3:
     intc_2 // 1
     return
 
-main_bare_routing@7:
+main___algots__.defaultCreate@9:
     // tests/approvals/strings.algo.ts:3
     // class StringContract extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@11
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     intc_2 // 1
     return

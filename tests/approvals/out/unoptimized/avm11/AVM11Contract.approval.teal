@@ -4,8 +4,10 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 1
+    b main_block@0
 
 main_block@0:
+    b main_block@1
 
 main_block@1:
     // tests/approvals/avm11.algo.ts:23-24
@@ -14,7 +16,8 @@ main_block@1:
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main_bare_routing@6
+    bz main___algots__.defaultCreate@5
+    b main_abi_routing@2
 
 main_abi_routing@2:
     // tests/approvals/avm11.algo.ts:23-24
@@ -22,21 +25,18 @@ main_abi_routing@2:
     // export class Avm11Contract extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x52448a31 // method "testNewOps()void"
-    swap
+    uncover 1
     match main_testNewOps_route@3
+    b main_switch_case_next@4
 
-main_switch_case_default@4:
+main_switch_case_next@4:
+    b main_after_if_else@6
 
-main_switch_case_next@5:
-
-main_after_if_else@10:
+main_after_if_else@6:
     // tests/approvals/avm11.algo.ts:23-24
     // @contract({ name: 'AVM11Contract', avmVersion: 11 })
     // export class Avm11Contract extends Contract {
-    intc_0 // 0
-
-main_after_inlined_tests/approvals/avm11.algo.ts::Avm11Contract.__puya_arc4_router__@11:
-    return
+    err
 
 main_testNewOps_route@3:
     // tests/approvals/avm11.algo.ts:25
@@ -44,51 +44,54 @@ main_testNewOps_route@3:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion is not NoOp
     txn ApplicationID
     intc_0 // 0
     !=
-    assert // can only call when not creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     callsub testNewOps
-    intc_1 // 1
-    b main_after_inlined_tests/approvals/avm11.algo.ts::Avm11Contract.__puya_arc4_router__@11
+    b main_switch_case_next@4
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/avm11.algo.ts:23-24
     // @contract({ name: 'AVM11Contract', avmVersion: 11 })
     // export class Avm11Contract extends Contract {
     txn OnCompletion
-    intc_0 // 0
-    swap
-    match main___algots__.defaultCreate@7
-
-main_switch_case_default@8:
-
-main_switch_case_next@9:
-    b main_after_if_else@10
-
-main___algots__.defaultCreate@7:
-    // tests/approvals/avm11.algo.ts:23-24
-    // @contract({ name: 'AVM11Contract', avmVersion: 11 })
-    // export class Avm11Contract extends Contract {
+    intc_0 // NoOp
+    ==
     txn ApplicationID
     intc_0 // 0
     ==
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     callsub __algots__.defaultCreate
     intc_1 // 1
-    b main_after_inlined_tests/approvals/avm11.algo.ts::Avm11Contract.__puya_arc4_router__@11
+    return
+
+
+// tests/approvals/avm11.algo.ts::Avm11Contract.testNewOps[routing]() -> void:
+testNewOps:
+    b testNewOps_block@0
+
+testNewOps_block@0:
+    // tests/approvals/avm11.algo.ts:25
+    // testNewOps() {
+    callsub tests/approvals/avm11.algo.ts::Avm11Contract.testNewOps
+    intc_1 // 1
+    return
 
 
 // tests/approvals/avm11.algo.ts::Avm11Contract.testNewOps() -> void:
-testNewOps:
+tests/approvals/avm11.algo.ts::Avm11Contract.testNewOps:
+    // tests/approvals/avm11.algo.ts:25
+    // testNewOps() {
+    proto 0 0
+    b tests/approvals/avm11.algo.ts::Avm11Contract.testNewOps_block@0
 
-testNewOps_block@0:
-    // tests/approvals/avm11.algo.ts:27
-    // const x = Bytes.fromHex('00000000000000000000000000000000000000000000000000000000499602d2')
-    pushbytes 0x00000000000000000000000000000000000000000000000000000000499602d2
+tests/approvals/avm11.algo.ts::Avm11Contract.testNewOps_block@0:
     // tests/approvals/avm11.algo.ts:28
     // assert(op.mimc(MimcConfigurations.BLS12_381Mp111, x))
+    pushbytes 0x00000000000000000000000000000000000000000000000000000000499602d2
     mimc BLS12_381Mp111
     len
     assert
@@ -166,17 +169,18 @@ testNewOps_block@0:
     // const [g, h] = op.VoterParams.voterBalance(0)
     intc_0 // 0
     voter_params_get VoterBalance
-    popn 2
+    cover 1
     // tests/approvals/avm11.algo.ts:54
     // const [i, j] = op.VoterParams.voterIncentiveEligible(0)
     intc_0 // 0
     voter_params_get VoterIncentiveEligible
-    popn 2
+    cover 1
     retsub
 
 
 // tests/approvals/avm11.algo.ts::Avm11Contract.__algots__.defaultCreate() -> void:
 __algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
 
 __algots__.defaultCreate_block@0:
     retsub

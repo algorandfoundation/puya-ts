@@ -4,49 +4,49 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         return tmp%0#0
 
 subroutine tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.__puya_arc4_router__() -> bool:
-    block@0: // L117
-        let tmp%0#0: uint64 = (txn NumAppArgs)
-        let tmp%1#0: bool = (!= tmp%0#0 0u)
-        goto tmp%1#0 ? block@1 : block@6
-    block@1: // abi_routing_L117
-        let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "create()void" => block@2, method "invalidValue()uint64[3]" => block@3, * => block@4}
-    block@2: // create_route_L121
-        let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (== tmp%3#0 NoOp)
-        (assert tmp%4#0) // OnCompletion is not NoOp
-        let tmp%5#0: uint64 = (txn ApplicationID)
-        let tmp%6#0: bool = (== tmp%5#0 0u)
-        (assert tmp%6#0) // can only call when creating
+    block@0: // L148
+        let tmp%0#0: uint64 = (txn OnCompletion)
+        let tmp%1#0: bool = (== tmp%0#0 NoOp)
+        (assert tmp%1#0) // OnCompletion must be NoOp
+        let tmp%2#0: uint64 = (txn ApplicationID)
+        let tmp%3#0: bool = (!= tmp%2#0 0u)
+        goto tmp%3#0 ? block@1 : block@4
+    block@1: // call_NoOp_L148
+        let tmp%4#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%4#0 {method "invalidValue()uint64[3]" => block@2, * => block@3}
+    block@2: // invalidValue_route_L152
+        tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.invalidValue[routing]()
+        goto block@3
+    block@3: // switch_case_next_L148
+        goto block@7
+    block@4: // create_NoOp_L148
+        let tmp%5#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%5#0 {method "create()void" => block@5, * => block@6}
+    block@5: // create_route_L149
+        tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.create[routing]()
+        goto block@6
+    block@6: // switch_case_next_L148
+        goto block@7
+    block@7: // after_if_else_L148
+        exit 0u
+
+subroutine tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.create[routing]() -> void:
+    block@0: // L149
         tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.create()
-        return 1u
-    block@3: // invalidValue_route_L124
-        let tmp%7#0: uint64 = (txn OnCompletion)
-        let tmp%8#0: bool = (== tmp%7#0 NoOp)
-        (assert tmp%8#0) // OnCompletion is not NoOp
-        let tmp%9#0: uint64 = (txn ApplicationID)
-        let tmp%10#0: bool = (!= tmp%9#0 0u)
-        (assert tmp%10#0) // can only call when not creating
-        let tmp%11#0: bytes[24] = tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.invalidValue()
-        let tmp%12#0: bytes = (concat 0x151f7c75 tmp%11#0)
-        (log tmp%12#0)
-        return 1u
-    block@4: // switch_case_default_L117
-        goto block@5
-    block@5: // switch_case_next_L117
-        goto block@7
-    block@6: // bare_routing_L117
-        goto block@7
-    block@7: // after_if_else_L117
-        return 0u
+        exit 1u
+
+subroutine tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.invalidValue[routing]() -> void:
+    block@0: // L152
+        let tmp%0#0: Encoded(uint64[3]) = tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.invalidValue()
+        let tmp%1#0: bytes = (concat 0x151f7c75 tmp%0#0)
+        (log tmp%1#0)
+        exit 1u
 
 subroutine tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.create() -> void:
-    block@0: // L121
+    block@0: // L149
         return 
 
-subroutine tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.invalidValue() -> bytes[24]:
-    block@0: // L124
-        (app_global_put "g" "invalid")
-        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (app_global_get_ex 0u "g")
-        (assert maybe_exists%0#0) // check GlobalState exists
-        return maybe_value%0#0
+subroutine tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract.invalidValue() -> Encoded(uint64[3]):
+    block@0: // L152
+        let as_Encoded(uint64[3])%0#0: Encoded(uint64[3]) = "invalid"
+        return as_Encoded(uint64[3])%0#0

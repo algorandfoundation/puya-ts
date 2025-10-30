@@ -1,5 +1,5 @@
 import type { DeliberateAny } from '../typescript-helpers'
-import { bigIntToUint8Array } from '../util'
+import { bigIntToUint8Array, invariant } from '../util'
 import { nodeFactory } from './node-factory'
 import type { Expression } from './nodes'
 import * as awst from './nodes'
@@ -71,18 +71,20 @@ export const intrinsicFactory = {
     })
   },
   itob({ value, sourceLocation }: { value: awst.Expression; sourceLocation: SourceLocation }): awst.Expression {
+    const wtype = new wtypes.BytesWType({ length: 8n })
     if (value instanceof awst.IntegerConstant) {
       return nodeFactory.bytesConstant({
         sourceLocation,
-        value: bigIntToUint8Array(value.value, value.wtype.equals(wtypes.uint64WType) ? 8 : 'dynamic'),
+        value: bigIntToUint8Array(value.value, 8),
         encoding: BytesEncoding.base16,
+        wtype,
       })
     }
     return nodeFactory.intrinsicCall({
       sourceLocation,
       stackArgs: [value],
       immediates: [],
-      wtype: wtypes.bytesWType,
+      wtype,
       opCode: 'itob',
     })
   },
@@ -95,18 +97,26 @@ export const intrinsicFactory = {
       opCode: 'btoi',
     })
   },
-  bzero({ size, sourceLocation, wtype = wtypes.bytesWType }: { size: bigint; sourceLocation: SourceLocation; wtype: wtypes.WType }) {
+  bzero({ size, sourceLocation, wtype }: { size: bigint | Expression; sourceLocation: SourceLocation; wtype?: wtypes.WType }) {
+    // If the size is a bigint and the wtype is a BytesWType with a different length, that's an error
+    invariant(
+      typeof size !== 'bigint' || !wtype || !(wtype instanceof wtypes.BytesWType) || wtype.length === size,
+      'bzero wtype length must match size',
+    )
+
     return nodeFactory.intrinsicCall({
       opCode: 'bzero',
       immediates: [],
       stackArgs: [
-        nodeFactory.uInt64Constant({
-          value: size,
-          sourceLocation,
-        }),
+        typeof size === 'bigint'
+          ? nodeFactory.uInt64Constant({
+              value: size,
+              sourceLocation,
+            })
+          : size,
       ],
       sourceLocation,
-      wtype: wtype,
+      wtype: wtype ?? new wtypes.BytesWType({ length: typeof size === 'bigint' ? size : null }),
     })
   },
 } satisfies Record<string, (args: DeliberateAny) => awst.Expression>

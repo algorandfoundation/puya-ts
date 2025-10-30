@@ -2,11 +2,14 @@ import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('implicit-create', () => {
-  const test = createArc4TestFixture('tests/approvals/implicit-create.algo.ts', {
-    NoBare: {},
-    NoNoOp: {},
-    ExplicitBareCreateFromBase: {},
-    ExplicitAbiCreateFromBase: {},
+  const test = createArc4TestFixture({
+    path: 'tests/approvals/implicit-create.algo.ts',
+    contracts: {
+      NoBare: {},
+      NoNoOp: {},
+      ExplicitBareCreateFromBase: {},
+      ExplicitAbiCreateFromBase: {},
+    },
   })
   test('NoBare can be created', async ({ appFactoryNoBare }) => {
     await appFactoryNoBare.send.bare.create()

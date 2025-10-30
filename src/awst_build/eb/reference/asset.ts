@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
@@ -12,7 +13,7 @@ import type { FieldMapping } from './base'
 import { Uint64BackedReferenceTypeExpressionBuilder } from './base'
 
 export class AssetFunctionBuilder extends FunctionBuilder {
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [assetId],
     } = parseFunctionArgs({
@@ -47,7 +48,7 @@ class AssetHoldingExpressionBuilder extends FunctionBuilder {
     super(sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [holder],
     } = parseFunctionArgs({
@@ -63,7 +64,7 @@ class AssetHoldingExpressionBuilder extends FunctionBuilder {
       opCode: 'asset_holding_get',
       immediates: [immediate],
       stackArgs: [holder.resolve(), this.asset],
-      wtype: new wtypes.WTuple({ types: [resultType.wtypeOrThrow, wtypes.boolWType], immutable: true }),
+      wtype: new wtypes.WTuple({ types: [resultType.wtypeOrThrow, wtypes.boolWType] }),
       sourceLocation,
     })
     return instanceEb(nodeFactory.checkedMaybe({ expr: op, comment: `account opted into asset` }), resultType)

@@ -38,7 +38,7 @@ subroutine test_biguint(x: biguint, y: biguint): bool
 }
 subroutine test_bytes(x: bytes): void
 {
-  assert(x == bzero(4), comment=x must be 4 unset bytes)
+  assert(x == reinterpret_cast<bytes>(bzero(4)), comment=x must be 4 unset bytes)
   y: bytes = ~x
   assert(y == 0xffffffff)
 }
@@ -58,7 +58,7 @@ contract DemoContract
   {
     tests/approvals/prefix-postfix-operators.algo.ts::test_uint64(10, 5)
     tests/approvals/prefix-postfix-operators.algo.ts::test_biguint(10, 5)
-    tests/approvals/prefix-postfix-operators.algo.ts::test_bytes(bzero(4))
+    tests/approvals/prefix-postfix-operators.algo.ts::test_bytes(reinterpret_cast<bytes>(bzero(4)))
     return True
   }
   

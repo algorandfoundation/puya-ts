@@ -1,53 +1,41 @@
 import { globSync } from 'glob'
-import fs from 'node:fs'
-import upath from 'upath'
+import pathe, { normalize } from 'pathe'
+
 import { PuyaError } from '../errors'
 import { logger } from '../logger'
 import type { AlgoFile } from '../options'
-import { normalisePath } from '../util'
+import { AbsolutePath } from '../util/absolute-path'
 import { determineOutDir } from './determine-out-dir'
 
 export const processInputPaths = ({
   paths,
-  workingDirectory = process.cwd(),
+  ignoreUnmatchedPaths,
+  workingDirectory = AbsolutePath.resolve({ path: process.cwd() }),
   outDir = 'out',
 }: {
+  ignoreUnmatchedPaths?: boolean
   paths: string[]
   outDir?: string
-  workingDirectory?: string
+  workingDirectory?: AbsolutePath
 }): AlgoFile[] => {
   const filePaths: AlgoFile[] = []
 
-  for (const p of paths.map((p) => upath.normalizeTrim(p))) {
-    if (p.endsWith('.algo.ts')) {
-      if (fs.existsSync(p)) {
-        const sourceFile = normalisePath(p, workingDirectory)
-
+  for (const p of paths.map((p) => pathe.normalize(p))) {
+    const globPath = p.endsWith('.algo.ts') ? p : pathe.join(p, '**/*.algo.ts')
+    const matches = globSync(globPath)
+    if (matches.length) {
+      for (const match of matches) {
         filePaths.push({
-          sourceFile,
-          outDir: determineOutDir(p, sourceFile, outDir),
+          sourceFile: AbsolutePath.resolve({ path: match, workingDirectory }),
+          outDir: AbsolutePath.resolve({ path: determineOutDir(p, normalize(match), outDir), workingDirectory }),
         })
-      } else {
-        logger.warn(undefined, `File ${p} could not be found`)
       }
-    } else if (p.endsWith('.ts')) {
-      logger.warn(undefined, `Ignoring path ${p} as it does use the .algo.ts extension`)
     } else {
-      const matches = globSync(upath.join(p, '**/*.algo.ts'))
-      if (matches.length) {
-        for (const match of matches) {
-          const sourceFile = normalisePath(match, workingDirectory)
-          filePaths.push({
-            sourceFile,
-            outDir: determineOutDir(p, sourceFile, outDir),
-          })
-        }
-      } else {
-        logger.warn(undefined, `Path '${p}' did not match any .algo.ts files`)
-      }
+      logger.warn(undefined, `Path '${p}' did not match any .algo.ts files`)
     }
   }
-  if (filePaths.length === 0) {
+
+  if (filePaths.length === 0 && !ignoreUnmatchedPaths) {
     throw new PuyaError('Input paths did not match any .algo.ts files')
   }
 
@@ -56,7 +44,7 @@ export const processInputPaths = ({
 
 function replaceOutDirTokens(algoFile: AlgoFile): AlgoFile {
   const replacements = {
-    name: upath.basename(algoFile.sourceFile).replace('.algo.ts', ''),
+    name: algoFile.sourceFile.basename('.algo.ts'),
   }
 
   return {

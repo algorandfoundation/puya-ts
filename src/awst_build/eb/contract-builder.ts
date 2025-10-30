@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 
 import type { Expression, LValue } from '../../awst/nodes'
@@ -5,16 +6,19 @@ import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
-import { codeInvariant, invariant } from '../../util'
+import { codeInvariant, instanceOfAny, invariant } from '../../util'
 import { AwstBuildContext } from '../context/awst-build-context'
 import type { ContractOptionsDecoratorData } from '../models/decorator-data'
 import type { PType } from '../ptypes'
 import {
+  BoxMapPType,
+  BoxPType,
   ClusteredContractClassType,
   ContractClassPType,
   contractOptionsDecorator,
+  GlobalStateType,
+  LocalStateType,
   numberPType,
-  StorageProxyPType,
   stringPType,
 } from '../ptypes'
 
@@ -32,6 +36,7 @@ import { VoidExpressionBuilder } from './void-expression-builder'
  * Handles expressions using `this` in the context of a contract
  */
 export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
+  readonly isConstant = false
   resolve(): Expression {
     throw new CodeError('this keyword is not valid as a value', { sourceLocation: this.sourceLocation })
   }
@@ -52,7 +57,7 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
     const property = this.ptype.properties[name]
     if (property) {
       const storageDeclaration = AwstBuildContext.current.getStorageDeclaration(this.ptype, name)
-      if (property instanceof StorageProxyPType) {
+      if (instanceOfAny(property, GlobalStateType, LocalStateType, BoxPType, BoxMapPType)) {
         codeInvariant(storageDeclaration, `No declaration exists for property ${property}.`, sourceLocation)
         return instanceEb(storageDeclaration.key, property)
       }
@@ -74,11 +79,12 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
  * Handles expressions using `super` in the context of a contract
  */
 export class ContractSuperBuilder extends ContractThisBuilder {
+  readonly isConstant = false
   constructor(ptype: ContractClassPType, sourceLocation: SourceLocation) {
     super(ptype, sourceLocation)
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     codeInvariant(args.length === 0, 'Constructor arguments are not supported', sourceLocation)
     codeInvariant(typeArgs.length === 0, 'Super calls cannot be generic', sourceLocation)
     return new VoidExpressionBuilder(
@@ -116,7 +122,8 @@ class PolytypeClassSuperMethodBuilder extends FunctionBuilder {
   ) {
     super(sourceLocation)
   }
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [contract],
     } = parseFunctionArgs({
@@ -138,6 +145,7 @@ class PolytypeClassSuperMethodBuilder extends FunctionBuilder {
  * Matches polytype's super.class(SomeType) expression
  */
 export class PolytypeExplicitClassAccessExpressionBuilder extends InstanceBuilder {
+  readonly isConstant = false
   resolve(): Expression {
     throw new CodeError('Contract class cannot be used as a value')
   }
@@ -166,6 +174,8 @@ export class PolytypeExplicitClassAccessExpressionBuilder extends InstanceBuilde
 }
 
 export class ContractClassBuilder extends InstanceBuilder {
+  readonly isConstant = false
+
   resolve(): Expression {
     throw new CodeError('Contract class cannot be used as a value')
   }
@@ -183,7 +193,7 @@ export class ContractClassBuilder extends InstanceBuilder {
     throw new CodeError('Contract class cannot be constructed manually')
   }
 
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     throw new CodeError('Contract class cannot be called manually')
   }
 
@@ -215,7 +225,8 @@ class ContractClassPrototypeBuilder extends NodeBuilder {
 
 export class ContractOptionsDecoratorBuilder extends FunctionBuilder {
   readonly ptype = contractOptionsDecorator
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
       args: [{ avmVersion, name, stateTotals, scratchSlots }],
     } = parseFunctionArgs({

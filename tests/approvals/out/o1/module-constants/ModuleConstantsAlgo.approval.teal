@@ -1,132 +1,63 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 2 0
+    intcblock 1
     // tests/approvals/module-constants.algo.ts:42
     // class ModuleConstantsAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@9
-    pushbytess 0x687a073d 0x0a0c480e 0x0510a934 0x773153a7 // method "getBoolConstants()(bool,bool)", method "getUintConstants()(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)", method "getBigUintConstants()(uint512,uint512,uint512,uint512,uint512,uint512,uint512,uint512)", method "getStringConstants()string[]"
-    txna ApplicationArgs 0
-    match main_getBoolConstants_route@3 main_getUintConstants_route@4 main_getBigUintConstants_route@5 main_getStringConstants_route@6
-
-main_after_if_else@13:
-    // tests/approvals/module-constants.algo.ts:42
-    // class ModuleConstantsAlgo extends Contract {
-    intc_2 // 0
-    return
-
-main_getStringConstants_route@6:
-    // tests/approvals/module-constants.algo.ts:52
-    // getStringConstants() {
+    bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
+    assert // OnCompletion must be NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    callsub getStringConstants
-    pushbytes 0x151f7c75
-    swap
-    concat
+    assert
+    pushbytess 0x687a073d 0x0a0c480e 0x0510a934 0x773153a7 // method "getBoolConstants()(bool,bool)", method "getUintConstants()(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)", method "getBigUintConstants()(uint512,uint512,uint512,uint512,uint512,uint512,uint512,uint512)", method "getStringConstants()string[]"
+    txna ApplicationArgs 0
+    match main_getBoolConstants_route@4 main_getUintConstants_route@5 main_getBigUintConstants_route@6 main_getStringConstants_route@7
+    err
+
+main_getStringConstants_route@7:
+    // tests/approvals/module-constants.algo.ts:52
+    // getStringConstants() {
+    pushbytes 0x151f7c750001000200026162
     log
     intc_0 // 1
     return
 
-main_getBigUintConstants_route@5:
+main_getBigUintConstants_route@6:
     // tests/approvals/module-constants.algo.ts:49
     // getBigUintConstants() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     pushbytes 0x151f7c750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002
     log
     intc_0 // 1
     return
 
-main_getUintConstants_route@4:
+main_getUintConstants_route@5:
     // tests/approvals/module-constants.algo.ts:46
     // getUintConstants() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     pushbytes 0x151f7c75000000000000000c0000000000000008000000000000001400000000000000050000000000000000000000000000006400000000000000280000000000000002000000000000000a00000000000000080000000000000002
     log
     intc_0 // 1
     return
 
-main_getBoolConstants_route@3:
+main_getBoolConstants_route@4:
     // tests/approvals/module-constants.algo.ts:43
     // getBoolConstants() {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
     pushbytes 0x151f7c7540
     log
     intc_0 // 1
     return
 
-main_bare_routing@9:
+main___algots__.defaultCreate@11:
     // tests/approvals/module-constants.algo.ts:42
     // class ModuleConstantsAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@13
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     intc_0 // 1
     return
-
-
-// tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getStringConstants() -> bytes:
-getStringConstants:
-    // tests/approvals/module-constants.algo.ts:52
-    // getStringConstants() {
-    proto 0 1
-    pushbytes 0x000000026162
-    intc_1 // 2
-    intc_2 // 0
-
-getStringConstants_for_header@2:
-    frame_dig 2
-    intc_1 // 2
-    <
-    bz getStringConstants_after_for@4
-    frame_dig 1
-    dup
-    itob
-    extract 6 2
-    frame_dig 0
-    frame_dig 2
-    dup
-    cover 4
-    uncover 2
-    replace3
-    dup
-    frame_bury 0
-    dig 1
-    extract_uint16
-    intc_1 // 2
-    +
-    +
-    frame_bury 1
-    intc_1 // 2
-    +
-    frame_bury 2
-    b getStringConstants_for_header@2
-
-getStringConstants_after_for@4:
-    pushbytes 0x0001
-    frame_dig 0
-    concat
-    // tests/approvals/module-constants.algo.ts:53
-    // return [s_add]
-    frame_bury 0
-    retsub

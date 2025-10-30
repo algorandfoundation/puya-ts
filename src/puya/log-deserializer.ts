@@ -1,37 +1,75 @@
-import upath from 'upath'
-import { z } from 'zod'
 import { SourceLocation } from '../awst/source-location'
-import { logger, LogLevel } from '../logger'
+import { logger, LogLevel, LogSource } from '../logger'
+import { invariant } from '../util'
+import { AbsolutePath } from '../util/absolute-path'
 
-const puyaLog = z.object({
-  level: z.nativeEnum(LogLevel),
-  location: z
-    .object({
-      file: z.string(),
-      line: z.number(),
-      end_line: z.number().or(z.null()),
-      column: z.number(),
-      end_column: z.number().or(z.null()),
-    })
-    .or(z.null()),
-  message: z.string(),
-})
+function parseString(x: unknown) {
+  invariant(typeof x === 'string', `expected string, received ${typeof x}`)
+  return x
+}
+function parseNullOrString(x: unknown) {
+  if (x === null) return null
+  return parseString(x)
+}
+function parseNumber(x: unknown) {
+  invariant(typeof x === 'number', `expected number, received ${typeof x}`)
+  return x
+}
+function parseNullOrNumber(x: unknown) {
+  if (x === null) return null
+  return parseNumber(x)
+}
+function parseLogLevel(x: unknown) {
+  switch (x) {
+    case LogLevel.Error:
+    case LogLevel.Info:
+    case LogLevel.Warning:
+    case LogLevel.Debug:
+    case LogLevel.Critical:
+      return x
+    default:
+      invariant(false, `expected LogLevel, received ${x}`)
+  }
+}
+function parseSourceLocation(x: unknown) {
+  invariant(typeof x === 'object', `expected object, received ${typeof x}`)
+  if (x === null) return null
+  const obj = x as Record<string, unknown>
+  return {
+    file: parseNullOrString(obj.file),
+    line: parseNumber(obj.line),
+    end_line: parseNullOrNumber(obj.end_line),
+    column: parseNullOrNumber(obj.column),
+    end_column: parseNullOrNumber(obj.end_column),
+  }
+}
 
-export function deserializeAndLog(logText: string) {
+function parsePuyaLog(x: unknown) {
+  invariant(typeof x === 'object' && x !== null, `expected object, received ${typeof x}`)
+  const obj = x as Record<string, unknown>
+  return {
+    level: parseLogLevel(obj.level),
+    message: parseString(obj.message),
+    location: parseSourceLocation(obj.location),
+  }
+}
+
+export function deserializeAndLog(puyaLog: unknown) {
   try {
-    const log = puyaLog.parse(JSON.parse(logText))
+    const log = parsePuyaLog(puyaLog)
 
-    const sourceLocation = log.location
+    const sourceLocation = log.location?.file
       ? new SourceLocation({
-          file: upath.normalize(log.location.file),
+          file: AbsolutePath.resolve({ path: log.location.file }),
           line: log.location.line,
           endLine: log.location.end_line ?? log.location.line + 1,
-          column: log.location.column,
-          endColumn: log.location.end_column ?? log.location.column,
+          column: log.location.column ?? 0,
+          endColumn: log.location.end_column ?? log.location.column ?? 0,
           scope: 'range',
+          node: undefined,
         })
       : undefined
-    logger.addLog(log.level, sourceLocation, log.message)
+    logger.addLog({ ...log, sourceLocation, logSource: LogSource.Puya })
   } catch (e) {
     logger.error(undefined, `Could not parse log output from puya cli ${e}`)
   }

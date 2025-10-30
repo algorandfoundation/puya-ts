@@ -1,80 +1,74 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
         goto block@1
-    block@1: // L104
+    block@1: // L110
         let tmp%0#1: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#1 0u)
-        goto tmp%1#0 ? block@2 : block@6
-    block@2: // abi_routing_L104
+        goto tmp%1#0 ? block@2 : block@5
+    block@2: // abi_routing_L110
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "receivesReferenceTypes(application,account,asset)void" => block@3, * => block@4}
-    block@3: // receivesReferenceTypes_route_L105
+        switch tmp%2#0 {method "receivesReferenceTypes(uint64,address,uint64)void" => block@3, * => block@4}
+    block@3: // receivesReferenceTypes_route_L111
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
-        (assert tmp%4#0) // OnCompletion is not NoOp
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
-        (assert tmp%6#0) // can only call when not creating
-        let tmp%7#0: bytes = (txna ApplicationArgs 1)
-        let value_len%0#0: uint64 = (len tmp%7#0)
-        let size_is_correct%0#0: bool = (== value_len%0#0 1u)
-        (assert size_is_correct%0#0) // invalid number of bytes for arc4.uint8
-        let reinterpret_bytes[1]%0#0: bytes[1] = tmp%7#0
-        let tmp%8#0: uint64 = (btoi reinterpret_bytes[1]%0#0)
-        let tmp%9#0: uint64 = ((txnas Applications) tmp%8#0)
-        let tmp%10#0: bytes = (txna ApplicationArgs 2)
-        let value_len%1#0: uint64 = (len tmp%10#0)
-        let size_is_correct%1#0: bool = (== value_len%1#0 1u)
-        (assert size_is_correct%1#0) // invalid number of bytes for arc4.uint8
-        let reinterpret_bytes[1]%1#0: bytes[1] = tmp%10#0
-        let tmp%11#0: uint64 = (btoi reinterpret_bytes[1]%1#0)
-        let tmp%12#0: bytes[32] = ((txnas Accounts) tmp%11#0)
-        let tmp%13#0: bytes = (txna ApplicationArgs 3)
-        let value_len%2#0: uint64 = (len tmp%13#0)
-        let size_is_correct%2#0: bool = (== value_len%2#0 1u)
-        (assert size_is_correct%2#0) // invalid number of bytes for arc4.uint8
-        let reinterpret_bytes[1]%2#0: bytes[1] = tmp%13#0
-        let tmp%14#0: uint64 = (btoi reinterpret_bytes[1]%2#0)
-        let tmp%15#0: uint64 = ((txnas Assets) tmp%14#0)
-        tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes(tmp%9#0, tmp%12#0, tmp%15#0)
-        let tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.__puya_arc4_router__%0#0: bool = 1u
-        goto block@11
-    block@4: // switch_case_default_L104
-        goto block@5
-    block@5: // switch_case_next_L104
-        goto block@10
-    block@6: // bare_routing_L104
-        let tmp%16#0: uint64 = (txn OnCompletion)
-        switch tmp%16#0 {0u => block@7, * => block@8}
-    block@7: // __algots__.defaultCreate_L104
-        let tmp%17#0: uint64 = (txn ApplicationID)
-        let tmp%18#0: bool = (== tmp%17#0 0u)
-        (assert tmp%18#0) // can only call when creating
+        let tmp%7#0: bool = (&& tmp%4#0 tmp%6#0)
+        (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
+        tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes[routing]()
+        goto block@4
+    block@4: // switch_case_next_L110
+        goto block@6
+    block@5: // __algots__.defaultCreate_L110
+        let tmp%8#0: uint64 = (txn OnCompletion)
+        let tmp%9#0: bool = (== tmp%8#0 NoOp)
+        let tmp%10#0: uint64 = (txn ApplicationID)
+        let tmp%11#0: bool = (== tmp%10#0 0u)
+        let tmp%12#0: bool = (&& tmp%9#0 tmp%11#0)
+        (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
         tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.__algots__.defaultCreate()
-        let tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.__puya_arc4_router__%0#1: bool = 1u
-        goto block@11
-    block@8: // switch_case_default_L104
-        goto block@9
-    block@9: // switch_case_next_L104
-        goto block@10
-    block@10: // after_if_else_L104
-        let tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.__puya_arc4_router__%0#2: bool = 0u
-        goto block@11
-    block@11: // after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.__puya_arc4_router___L1
-        let tmp%0#0: bool = φ(tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.__puya_arc4_router__%0#0 <- block@3, tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.__puya_arc4_router__%0#1 <- block@7, tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.__puya_arc4_router__%0#2 <- block@10)
+        exit 1u
+    block@6: // after_if_else_L110
+        exit 0u
+    block@7: // after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
         return tmp%0#0
 
-subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes(app: uint64, acc: bytes[32], asset: uint64) -> void:
-    block@0: // L105
-        let (value%0#0: bytes[32], check%0#0: bool) = ((app_params_get AppAddress) app#0)
+subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes[routing]() -> void:
+    block@0: // L111
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 32u)
+        (assert eq%1#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%2#0
+        let tmp%3#0: account = as_Encoded(uint8[32])%0#0
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%1#0: Encoded(uint64) = tmp%4#0
+        let tmp%5#0: uint64 = (btoi as_Encoded(uint64)%1#0)
+        tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes(tmp%1#0, tmp%3#0, tmp%5#0)
+        exit 1u
+
+subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.receivesReferenceTypes(app: uint64, acc: account, asset: uint64) -> void:
+    block@0: // L111
+        let (value%0#0: account, check%0#0: bool) = ((app_params_get AppAddress) app#0)
         (assert check%0#0) // application exists
         (log value%0#0)
-        (log acc#0)
+        let reinterpret_bytes[32]%0#0: bytes[32] = acc#0
+        (log reinterpret_bytes[32]%0#0)
         let (value%1#0: bytes, check%1#0: bool) = ((asset_params_get AssetName) asset#0)
         (assert check%1#0) // asset exists
         (log value%1#0)
         return 
 
 subroutine tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes.__algots__.defaultCreate() -> void:
-    block@0: // L104
+    block@0: // L110
         return 

@@ -5,6 +5,7 @@ import type { ContractReference, LogicSigReference, OnCompletionAction } from '.
 import type { SourceLocation } from './source-location'
 import type { TxnField } from './txn-fields'
 import type { wtypes } from './wtypes'
+
 export abstract class Node {
   constructor(props: Props<Node>) {
     this.sourceLocation = props.sourceLocation
@@ -263,9 +264,11 @@ export class ARC4Encode extends Expression {
     super(props)
     this.value = props.value
     this.wtype = props.wtype
+    this.errorMessage = props.errorMessage
   }
   readonly value: Expression
   readonly wtype: wtypes.ARC4Type
+  readonly errorMessage: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4Encode(this)
   }
@@ -274,8 +277,10 @@ export class ARC4Decode extends Expression {
   constructor(props: Props<ARC4Decode>) {
     super(props)
     this.value = props.value
+    this.errorMessage = props.errorMessage
   }
   readonly value: Expression
+  readonly errorMessage: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4Decode(this)
   }
@@ -288,10 +293,22 @@ export class ARC4FromBytes extends Expression {
     this.validate = props.validate
   }
   readonly value: Expression
-  readonly wtype: wtypes.WType
+  readonly wtype: wtypes.ARC4Type
   readonly validate: boolean
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4FromBytes(this)
+  }
+}
+export class ConvertArray extends Expression {
+  constructor(props: Props<ConvertArray>) {
+    super(props)
+    this.expr = props.expr
+    this.wtype = props.wtype
+  }
+  readonly expr: Expression
+  readonly wtype: wtypes.ARC4DynamicArray | wtypes.ARC4StaticArray | wtypes.ReferenceArray
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitConvertArray(this)
   }
 }
 export class Copy extends Expression {
@@ -315,7 +332,7 @@ export class ArrayConcat extends Expression {
   }
   readonly left: Expression
   readonly right: Expression
-  readonly wtype: wtypes.ARC4DynamicArray | wtypes.StackArray
+  readonly wtype: wtypes.ARC4DynamicArray
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitArrayConcat(this)
   }
@@ -357,7 +374,7 @@ export class ArrayReplace extends Expression {
   readonly base: Expression
   readonly index: Expression
   readonly value: Expression
-  readonly wtype: wtypes.StackArray
+  readonly wtype: wtypes.ARC4Array
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitArrayReplace(this)
   }
@@ -466,6 +483,18 @@ export class TupleItemExpression extends Expression {
   readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitTupleItemExpression(this)
+  }
+}
+export class NamedTupleExpression extends Expression {
+  constructor(props: Props<NamedTupleExpression>) {
+    super(props)
+    this.wtype = props.wtype
+    this.values = props.values
+  }
+  readonly wtype: wtypes.WTuple
+  readonly values: Map<string, Expression>
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitNamedTupleExpression(this)
   }
 }
 export class VarExpression extends Expression {
@@ -667,7 +696,7 @@ export class NewArray extends Expression {
     this.wtype = props.wtype
     this.values = props.values
   }
-  readonly wtype: wtypes.ARC4DynamicArray | wtypes.ARC4StaticArray | wtypes.ReferenceArray | wtypes.StackArray
+  readonly wtype: wtypes.ARC4DynamicArray | wtypes.ARC4StaticArray | wtypes.ReferenceArray
   readonly values: Array<Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNewArray(this)
@@ -1258,7 +1287,7 @@ export class NewStruct extends Expression {
     this.wtype = props.wtype
     this.values = props.values
   }
-  readonly wtype: wtypes.WStructType | wtypes.ARC4Struct
+  readonly wtype: wtypes.ARC4Struct
   readonly values: Map<string, Expression>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitNewStruct(this)
@@ -1298,12 +1327,14 @@ export abstract class _Function extends Node {
     this.body = props.body
     this.documentation = props.documentation
     this.inline = props.inline
+    this.pure = props.pure
   }
   readonly args: Array<SubroutineArgument>
   readonly returnType: wtypes.WType
   readonly body: Block
   readonly documentation: MethodDocumentation
   readonly inline: boolean | null
+  readonly pure: boolean
 }
 export class Subroutine extends classes(_Function, RootNode) {
   constructor(props: Props<Subroutine>) {
@@ -1492,6 +1523,7 @@ export class ARC4ABIMethodConfig {
     this.allowedCompletionTypes = props.allowedCompletionTypes
     this.create = props.create
     this.name = props.name
+    this.resourceEncoding = props.resourceEncoding
     this.validateEncoding = props.validateEncoding
     this.readonly = props.readonly
     this.defaultArgs = props.defaultArgs
@@ -1500,6 +1532,7 @@ export class ARC4ABIMethodConfig {
   readonly allowedCompletionTypes: Array<OnCompletionAction>
   readonly create: ARC4CreateOption
   readonly name: string
+  readonly resourceEncoding: 'index' | 'value'
   readonly validateEncoding: boolean | null
   readonly readonly: boolean
   readonly defaultArgs: Map<string, ABIMethodArgMemberDefault | ABIMethodArgConstantDefault>
@@ -1538,6 +1571,7 @@ export const concreteNodes = {
   aRC4Encode: ARC4Encode,
   aRC4Decode: ARC4Decode,
   aRC4FromBytes: ARC4FromBytes,
+  convertArray: ConvertArray,
   copy: Copy,
   arrayConcat: ArrayConcat,
   arrayExtend: ArrayExtend,
@@ -1551,6 +1585,7 @@ export const concreteNodes = {
   checkedMaybe: CheckedMaybe,
   tupleExpression: TupleExpression,
   tupleItemExpression: TupleItemExpression,
+  namedTupleExpression: NamedTupleExpression,
   varExpression: VarExpression,
   innerTransactionField: InnerTransactionField,
   setInnerTransactionFields: SetInnerTransactionFields,
@@ -1651,6 +1686,7 @@ export interface ExpressionVisitor<T> {
   visitARC4Encode(expression: ARC4Encode): T
   visitARC4Decode(expression: ARC4Decode): T
   visitARC4FromBytes(expression: ARC4FromBytes): T
+  visitConvertArray(expression: ConvertArray): T
   visitCopy(expression: Copy): T
   visitArrayConcat(expression: ArrayConcat): T
   visitArrayExtend(expression: ArrayExtend): T
@@ -1664,6 +1700,7 @@ export interface ExpressionVisitor<T> {
   visitCheckedMaybe(expression: CheckedMaybe): T
   visitTupleExpression(expression: TupleExpression): T
   visitTupleItemExpression(expression: TupleItemExpression): T
+  visitNamedTupleExpression(expression: NamedTupleExpression): T
   visitVarExpression(expression: VarExpression): T
   visitInnerTransactionField(expression: InnerTransactionField): T
   visitSetInnerTransactionFields(expression: SetInnerTransactionFields): T

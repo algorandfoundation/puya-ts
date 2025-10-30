@@ -5,7 +5,7 @@ import { CodeError } from '../../../errors'
 import { codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { NumericLiteralPType, stringPType } from '../../ptypes'
-import { UFixedNxMClass, UFixedNxMType } from '../../ptypes/arc4-types'
+import { UFixedNxMGeneric, UFixedNxMType } from '../../ptypes/arc4-types'
 import { ClassBuilder, type InstanceBuilder, type NodeBuilder } from '../index'
 import { requireStringConstant } from '../util'
 import { parseFunctionArgs } from '../util/arg-parsing'
@@ -13,7 +13,7 @@ import { isValidLiteralForPType } from '../util/is-valid-literal-for-ptype'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
 export class UFixedNxMClassBuilder extends ClassBuilder {
-  readonly ptype = UFixedNxMClass
+  readonly ptype = UFixedNxMGeneric
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
@@ -37,7 +37,7 @@ export class UFixedNxMClassBuilder extends ClassBuilder {
       `Generic type M of ${this.typeDescription} must be a literal number. Inferred type is ${decimals.name}`,
       sourceLocation,
     )
-    const ptype = new UFixedNxMType({ n: size.literalValue, m: decimals.literalValue })
+    const ptype = this.ptype.parameterise([size, decimals])
 
     return newUFixedNxM(initialValueBuilder, ptype, sourceLocation)
   }

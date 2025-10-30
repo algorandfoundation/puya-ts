@@ -1,52 +1,53 @@
 import ts from 'typescript'
 import { SourceLocation } from '../awst/source-location'
-import { logger, LoggingContext } from '../logger'
-import type { AlgoFile, CompileOptions } from '../options'
+import { logger, LoggingContext, LogLevel, LogSource } from '../logger'
+import type { CompileOptions } from '../options'
 import type { DeliberateAny } from '../typescript-helpers'
-import { normalisePath } from '../util'
+import { AbsolutePath } from '../util/absolute-path'
 import { resolveModuleNameLiterals } from './resolve-module-name-literals'
 
 export type SourceFileMapping = Record<string, ts.SourceFile>
 export type CreateProgramResult = {
   sourceFiles: SourceFileMapping
   program: ts.Program
-  programDirectory: string
+  programDirectory: AbsolutePath
 }
 
-export function createTsProgram(options: Pick<CompileOptions, 'filePaths'>): CreateProgramResult {
+const ProgramCache: {
+  previousProgram?: undefined | ts.Program
+} = {}
+
+export function createTsProgram(options: Pick<CompileOptions, 'filePaths' | 'sourceFileProvider'>): CreateProgramResult {
   const compilerOptions: ts.CompilerOptions = {
     allowJs: false,
     strict: true,
     // Lib names need to be the full file name from the typescript package 'lib' folder.
-    lib: ['lib.es2023.d.ts'],
+    lib: ['lib.es2023.full.d.ts'],
     libReplacement: false,
     target: ts.ScriptTarget.ES2023,
     module: ts.ModuleKind.ESNext,
+    types: [],
     moduleResolution: ts.ModuleResolutionKind.Bundler,
   }
 
   const host = ts.createCompilerHost(compilerOptions)
+  if (options.sourceFileProvider) {
+    const { fileExists, readFile } = host
+    const overridden = options.sourceFileProvider({ fileExists, readFile })
+    host.fileExists = overridden.fileExists
+    host.readFile = overridden.readFile
+  }
 
-  const fileMap = options.filePaths.reduce((acc, cur) => acc.set(cur.sourceFile, cur), new Map<string, AlgoFile>())
-  const { fileExists, readFile } = host
-  host.fileExists = function (fileName): boolean {
-    return fileMap.has(fileName) || fileExists(fileName)
-  }
-  host.readFile = function (fileName): string | undefined {
-    const matchedFile = fileMap.get(fileName)
-    if (matchedFile?.fileContents) {
-      return matchedFile.fileContents
-    }
-    return readFile(fileName)
-  }
   host.resolveModuleNameLiterals = resolveModuleNameLiterals
 
   const program = ts.createProgram(
-    options.filePaths.map((p) => p.sourceFile),
+    options.filePaths.map((p) => p.sourceFile.toString()),
     compilerOptions,
     host,
+    ProgramCache.previousProgram,
   )
-  const programDirectory = program.getCurrentDirectory()
+  ProgramCache.previousProgram = program
+  const programDirectory = AbsolutePath.resolve({ path: program.getCurrentDirectory() })
 
   const sourceFiles = Object.fromEntries(
     program
@@ -59,35 +60,47 @@ export function createTsProgram(options: Pick<CompileOptions, 'filePaths'>): Cre
             'File is being interpreted as a script because it has no import or export statements. Containing statements will be evaluated in a global context.',
           )
         }
-        return [normalisePath(f.fileName, programDirectory), f]
+        return [AbsolutePath.resolve({ path: f.fileName, workingDirectory: programDirectory }).toString(), f]
       }),
   )
 
-  LoggingContext.current.sourcesByPath = Object.fromEntries(
-    Object.entries(sourceFiles).map(([path, file]) => {
-      return [path, file.getFullText().replace(/\r\n/g, '\n').split(/\n/g)]
-    }),
+  LoggingContext.current.setSourcesByPath(
+    Object.fromEntries(
+      Object.entries(sourceFiles).map(([path, file]) => {
+        return [path, file.getFullText().split(/\n/g)]
+      }),
+    ),
   )
 
   reportDiagnostics(program)
   return {
     sourceFiles,
     program,
-    programDirectory: program.getCurrentDirectory(),
+    programDirectory: AbsolutePath.resolve({ path: program.getCurrentDirectory() }),
   }
 }
 
 function reportDiagnostics(program: ts.Program) {
   function reportDiagnostic(diagnostic: ts.Diagnostic) {
     if (isDiagnosticWithLocation(diagnostic)) {
-      const sourceLocation = SourceLocation.fromDiagnostic(diagnostic, program.getCurrentDirectory())
+      const sourceLocation = SourceLocation.fromDiagnostic(diagnostic, AbsolutePath.resolve({ path: program.getCurrentDirectory() }))
       const text = typeof diagnostic.messageText === 'string' ? diagnostic.messageText : diagnostic.messageText.messageText
       switch (diagnostic.category) {
         case ts.DiagnosticCategory.Error:
-          logger.error(sourceLocation, text)
+          logger.addLog({
+            logSource: LogSource.TypeScript,
+            message: text,
+            sourceLocation,
+            level: LogLevel.Error,
+          })
           break
         case ts.DiagnosticCategory.Warning:
-          logger.warn(sourceLocation, text)
+          logger.addLog({
+            logSource: LogSource.TypeScript,
+            message: text,
+            sourceLocation,
+            level: LogLevel.Warning,
+          })
           break
       }
     }

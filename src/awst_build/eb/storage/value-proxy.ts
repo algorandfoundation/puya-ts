@@ -1,3 +1,4 @@
+import type ts from 'typescript'
 import type {
   AppAccountStateExpression,
   AppStateExpression,
@@ -33,7 +34,7 @@ export abstract class ValueProxy<TPType extends PType> extends InstanceExpressio
   iterate(sourceLocation: SourceLocation): Expression {
     return this.proxied.iterate(sourceLocation)
   }
-  indexAccess(index: InstanceBuilder, sourceLocation: SourceLocation): NodeBuilder {
+  indexAccess(index: InstanceBuilder | bigint, sourceLocation: SourceLocation): NodeBuilder {
     return this.proxied.indexAccess(index, sourceLocation)
   }
   boolEval(sourceLocation: SourceLocation, negate: boolean = false): Expression {
@@ -48,14 +49,20 @@ export abstract class ValueProxy<TPType extends PType> extends InstanceExpressio
   postfixUnaryOp(op: BuilderUnaryOp, sourceLocation: SourceLocation): InstanceBuilder {
     return this.proxied.postfixUnaryOp(op, sourceLocation)
   }
-  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
+
+  call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     return this.proxied.call(args, typeArgs, sourceLocation)
   }
   compare(other: InstanceBuilder, op: BuilderComparisonOp, sourceLocation: SourceLocation): InstanceBuilder {
     return this.proxied.compare(other, op, sourceLocation)
   }
-  taggedTemplate(head: string, spans: ReadonlyArray<readonly [InstanceBuilder, string]>, sourceLocation: SourceLocation): InstanceBuilder {
-    return this.proxied.taggedTemplate(head, spans, sourceLocation)
+  taggedTemplate(
+    head: string,
+    spans: ReadonlyArray<readonly [InstanceBuilder, string]>,
+    typeArgs: readonly PType[],
+    sourceLocation: SourceLocation,
+  ): InstanceBuilder {
+    return this.proxied.taggedTemplate(head, spans, typeArgs, sourceLocation)
   }
   singleEvaluation(): InstanceBuilder {
     return this.proxied.singleEvaluation()
@@ -63,7 +70,7 @@ export abstract class ValueProxy<TPType extends PType> extends InstanceExpressio
   hasProperty(_name: string): boolean {
     return this.proxied.hasProperty(_name)
   }
-  toBytes(sourceLocation: SourceLocation): Expression {
+  toBytes(sourceLocation: SourceLocation): InstanceBuilder {
     return this.proxied.toBytes(sourceLocation)
   }
   resolvableToPType(ptype: PTypeOrClass): boolean {

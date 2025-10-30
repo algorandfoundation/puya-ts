@@ -1,4 +1,4 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
@@ -6,35 +6,27 @@ main:
     // tests/approvals/asset-proxy.algo.ts:4
     // export class AssetProxyAlgo extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@6
-    pushbytes 0x5df11c28 // method "testAsset(asset)void"
+    bz main___algots__.defaultCreate@5
+    pushbytes 0xd303ec47 // method "testAsset(uint64)void"
     txna ApplicationArgs 0
     match main_testAsset_route@3
-
-main_after_if_else@10:
-    // tests/approvals/asset-proxy.algo.ts:4
-    // export class AssetProxyAlgo extends Contract {
-    pushint 0 // 0
-    return
+    err
 
 main_testAsset_route@3:
     // tests/approvals/asset-proxy.algo.ts:5
     // testAsset(asset: Asset): void {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/asset-proxy.algo.ts:4
-    // export class AssetProxyAlgo extends Contract {
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
     txna ApplicationArgs 1
     dup
     len
-    pushint 1 // 1
+    pushint 8 // 8
     ==
-    assert // invalid number of bytes for arc4.uint8
+    assert // invalid number of bytes for arc4.uint64
     btoi
-    txnas Assets
     // tests/approvals/asset-proxy.algo.ts:6
     // log(asset.id)
     dup
@@ -136,13 +128,14 @@ main_testAsset_route@3:
     pushint 1 // 1
     return
 
-main_bare_routing@6:
+main___algots__.defaultCreate@5:
     // tests/approvals/asset-proxy.algo.ts:4
     // export class AssetProxyAlgo extends Contract {
     txn OnCompletion
-    bnz main_after_if_else@10
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     pushint 1 // 1
     return

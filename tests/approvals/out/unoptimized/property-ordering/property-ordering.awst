@@ -1,17 +1,22 @@
-subroutine test_assign_from_var(x: object{ a: uint64, b: uint64 }): void
+subroutine test_assign_from_var(x: ReadonlyObjectACED9E72{ a: uint64, b: uint64 }): void
 {
-  obj: BthenA{ b: uint64, a: uint64 } = #{ b: x.b, a: x.a }
+  assert(x.a != x.b, comment=For the purpose of this test, a should not equal b)
+  obj: ReadonlyObject6F4980F1{ b: uint64, a: uint64 } = #{ b: x.b, a: x.a }
+  xEncoded: bytes = reinterpret_cast<bytes>(ARC4_ENCODE(x, wtype=ReadonlyObjectACED9E72))
+  objEncoded: bytes = reinterpret_cast<bytes>(ARC4_ENCODE(obj, wtype=ReadonlyObject6F4980F1))
+  assert(xEncoded == concat(objEncoded.slice(8), objEncoded.slice(0, 8)), comment=Encoded order should be swapped)
 }
 subroutine test_assign_from_literal(x: uint64): void
 {
-  obj: object{ a: uint64, z: uint64 } = #{ a: ($0 = #{ z: (b = x * 2), a: b }).a, z: $0.z }
+  obj: Object62C92B83 = new Object62C92B83(a=($0 = #{ z: (b = x * 2), a: b }).a, z=$0.z)
+  assert(&&(obj.z == x * 2, obj.a == x * 2), comment=assert target is match for conditions)
 }
 contract Demo
 {
   approvalProgram(): bool
   {
     tests/approvals/property-ordering.algo.ts::test_assign_from_literal(4)
-    tests/approvals/property-ordering.algo.ts::test_assign_from_var(#{ a: ($1 = #{ a: 3, b: 4 }).a, b: $1.b })
+    tests/approvals/property-ordering.algo.ts::test_assign_from_var(#{ a: ($1 = #{ a: ($2 = #[3, 4]).0, b: $2.1 }).a, b: $1.b })
     return True
   }
   

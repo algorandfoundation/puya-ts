@@ -1,8 +1,9 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // tests/approvals/non-arc4.algo.ts::HelloWorldContract.approvalProgram() -> uint64:
 main:
+    b main_block@0
 
 main_block@0:
     // tests/approvals/non-arc4.algo.ts:5
@@ -12,7 +13,7 @@ main_block@0:
     // tests/approvals/non-arc4.algo.ts:6
     // log(`Hello, ${name}`)
     pushbytes "Hello, "
-    swap
+    uncover 1
     concat
     log
     // tests/approvals/non-arc4.algo.ts:7

@@ -36,6 +36,7 @@ import type {
   Contract,
   ContractMemberNodeVisitor,
   ContractMethod,
+  ConvertArray,
   Copy,
   CreateInnerTransaction,
   DecimalConstant,
@@ -57,6 +58,7 @@ import type {
   LoopContinue,
   LoopExit,
   MethodConstant,
+  NamedTupleExpression,
   NewArray,
   NewStruct,
   Not,
@@ -104,6 +106,10 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
     for (const s of statement.body) {
       s.accept(this)
     }
+  }
+
+  visitConvertArray(expression: ConvertArray): void {
+    expression.expr.accept(this)
   }
 
   visitCommaExpression(expression: CommaExpression): void {
@@ -226,10 +232,6 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
     expression.value.accept(this)
   }
 
-  visitARC4FromBytes(expression: ARC4FromBytes): void {
-    expression.value.accept(this)
-  }
-
   visitIntrinsicCall(expression: IntrinsicCall): void {
     for (const a of expression.stackArgs) {
       a.accept(this)
@@ -264,6 +266,16 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
 
   visitTupleItemExpression(expression: TupleItemExpression): void {
     expression.base.accept(this)
+  }
+
+  visitARC4FromBytes(expression: ARC4FromBytes): void {
+    expression.value.accept(this)
+  }
+
+  visitNamedTupleExpression(expression: NamedTupleExpression): void {
+    for (const v of expression.values.values()) {
+      v.accept(this)
+    }
   }
 
   visitVarExpression(expression: VarExpression): void {}

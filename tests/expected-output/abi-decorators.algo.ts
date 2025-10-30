@@ -1,5 +1,5 @@
-import type { Account, Application, Asset, bytes, gtxn, itxn, uint64 } from '@algorandfoundation/algorand-typescript'
-import { abimethod, baremethod, Contract, err, GlobalState, Uint64 } from '@algorandfoundation/algorand-typescript'
+import type { bytes, gtxn, itxn, uint64 } from '@algorandfoundation/algorand-typescript'
+import { abimethod, baremethod, Contract, err, GlobalState, readonly, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 export default class AbiDecorators extends Contract {
   // @expect-warning Duplicate on completion actions
@@ -9,7 +9,7 @@ export default class AbiDecorators extends Contract {
   @abimethod({ onCreate: 'require' })
   private createMethod(): void {}
   @abimethod({ allowActions: ['NoOp'] })
-  // @expect-error Only one decorator is allowed per method. Multiple on complete actions can be provided in a single decorator
+  // @expect-error Only one abimethod decorator is allowed per method. Multiple on complete actions can be provided in a single decorator
   @abimethod({ allowActions: ['OptIn'] })
   public duplicateDecorators(): void {}
 
@@ -19,18 +19,6 @@ export default class AbiDecorators extends Contract {
   @abimethod({ defaultArguments: { a: { from: 'globalValue' } } })
   public methodWithDefaults(a: bytes): void {}
 
-  // @expect-error Asset cannot be used as an ABI return type
-  badReturnsAsset(): Asset {
-    err('No implementation')
-  }
-  // @expect-error Account cannot be used as an ABI return type
-  badReturnsAccount(): Account {
-    err('No implementation')
-  }
-  // @expect-error Application cannot be used as an ABI return type
-  badReturnsApplication(): Application {
-    err('No implementation')
-  }
   // @expect-error PaymentTxn cannot be used as an ABI return type
   badReturnsGtxn(): gtxn.PaymentTxn {
     err('No implementation')
@@ -47,6 +35,18 @@ export default class AbiDecorators extends Contract {
   // @expect-error Bare method return type must be void
   @baremethod()
   badBareReturn(): uint64 {
+    return 1
+  }
+
+  @baremethod({ allowActions: 'CloseOut' })
+  // @expect-error Only one baremethod decorator is allowed per method. Multiple on complete actions can be provided in a single decorator
+  @baremethod({ allowActions: 'OptIn' })
+  veryBare(): void {}
+
+  // @expect-error abimethod decorator readonly config conflicts with presence of readonly decorator
+  @readonly
+  @abimethod({ readonly: false })
+  readonlyConflict(): uint64 {
     return 1
   }
 }

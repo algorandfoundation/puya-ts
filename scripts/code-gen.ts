@@ -2,13 +2,59 @@
 import chalk from 'chalk'
 import { sync } from 'cross-spawn'
 import fs from 'fs'
-import upath from 'upath'
+import pathe from 'pathe'
 import type { OpModule } from './build-op-module'
 import { buildOpModule } from './build-op-module'
 import { emitOpFuncTypes } from './generate-op-funcs'
 import { emitOpMetaData } from './generate-op-metadata'
 import { emitOpPTypes } from './generate-op-ptypes'
 import { emitGTxnTypes, emitITxnTypes } from './generate-txn-types'
+
+export const files: Record<
+  string,
+  {
+    emitFn: (module: OpModule) => Generator<string, void>
+    projectRoot: string
+    outPath: string
+    disabled?: boolean
+    skipLint?: boolean
+  }
+> = {
+  'op-module': {
+    emitFn: function* (opModule) {
+      yield JSON.stringify(opModule, undefined, 2)
+    },
+    projectRoot: '',
+    outPath: 'scripts/temp/ops.json',
+    disabled: true,
+    skipLint: true,
+  },
+  'op function types': {
+    emitFn: emitOpFuncTypes,
+    projectRoot: 'packages/algo-ts',
+    outPath: 'src/op.ts',
+  },
+  'op builder metadata': {
+    emitFn: emitOpMetaData,
+    projectRoot: '',
+    outPath: 'src/awst_build/op-metadata.ts',
+  },
+  'op ptypes': {
+    emitFn: emitOpPTypes,
+    projectRoot: '',
+    outPath: 'src/awst_build/ptypes/op-ptypes.ts',
+  },
+  gtxn: {
+    emitFn: emitGTxnTypes,
+    projectRoot: 'packages/algo-ts',
+    outPath: 'src/gtxn.ts',
+  },
+  itxn: {
+    emitFn: emitITxnTypes,
+    projectRoot: 'packages/algo-ts',
+    outPath: 'src/itxn.ts',
+  },
+}
 
 /**
  * Generate several files from the langspec.puya.json. This file is created by a script in the puya project
@@ -20,52 +66,6 @@ function runCodeGen(puyaTsRootDir: string) {
 
   const opModule = buildOpModule()
 
-  const files: Record<
-    string,
-    {
-      emitFn: (module: OpModule) => Generator<string, void>
-      projectRoot: string
-      outPath: string
-      disabled?: boolean
-      skipLint?: boolean
-    }
-  > = {
-    'op-module': {
-      emitFn: function* (opModule) {
-        yield JSON.stringify(opModule, undefined, 2)
-      },
-      projectRoot: '',
-      outPath: 'scripts/temp/ops.json',
-      disabled: true,
-      skipLint: true,
-    },
-    'op function types': {
-      emitFn: emitOpFuncTypes,
-      projectRoot: 'packages/algo-ts',
-      outPath: 'src/op.ts',
-    },
-    'op builder metadata': {
-      emitFn: emitOpMetaData,
-      projectRoot: '',
-      outPath: 'src/awst_build/op-metadata.ts',
-    },
-    'op ptypes': {
-      emitFn: emitOpPTypes,
-      projectRoot: '',
-      outPath: 'src/awst_build/ptypes/op-ptypes.ts',
-    },
-    gtxn: {
-      emitFn: emitGTxnTypes,
-      projectRoot: 'packages/algo-ts',
-      outPath: 'src/gtxn.ts',
-    },
-    itxn: {
-      emitFn: emitITxnTypes,
-      projectRoot: 'packages/algo-ts',
-      outPath: 'src/itxn.ts',
-    },
-  }
-
   for (const [desc, { emitFn, projectRoot, outPath, skipLint, disabled }] of Object.entries(files)) {
     if (disabled) {
       console.log(chalk.gray(`Skipping disabled ${desc}`))
@@ -73,7 +73,7 @@ function runCodeGen(puyaTsRootDir: string) {
     }
     console.log(chalk.blueBright(`Generating ${desc}`))
 
-    const fullPath = upath.join(puyaTsRootDir, projectRoot, outPath)
+    const fullPath = pathe.join(puyaTsRootDir, projectRoot, outPath)
     console.log(chalk.blue(`Writing text to ${fullPath}`))
     fs.writeFileSync(fullPath, Array.from(emitFn(opModule)).join(''), 'utf8')
     if (skipLint) {
@@ -81,7 +81,7 @@ function runCodeGen(puyaTsRootDir: string) {
       continue
     }
     console.log(chalk.blue(`Linting ${fullPath}`))
-    lintFile(upath.join(puyaTsRootDir, projectRoot), outPath)
+    lintFile(pathe.join(puyaTsRootDir, projectRoot), outPath)
   }
   console.log(chalk.green('Done!'))
 }
@@ -101,9 +101,10 @@ function lintFile(cwd: string, path: string) {
 function resolveProjectRoot() {
   const cwd = process.cwd()
   if (cwd.endsWith('scripts')) {
-    return upath.join(cwd, '../')
+    return pathe.join(cwd, '../')
   }
   return cwd
 }
-
-runCodeGen(resolveProjectRoot())
+if (require.main === module) {
+  runCodeGen(resolveProjectRoot())
+}

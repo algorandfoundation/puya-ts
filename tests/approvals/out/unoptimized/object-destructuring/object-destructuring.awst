@@ -1,32 +1,87 @@
-subroutine testPartialDestructure(arg: object{ x: uint64, y: uint64, z: uint64 }): void
+subroutine testPartialDestructure(arg: ReadonlyObject6057C401{ x: uint64, y: uint64, z: biguint }): readonly [uint64, uint64]
 {
-  #{ x: x, y: _, z: _₁ }: object{ x: uint64, y: uint64, z: uint64 } = arg
-  #{ nested: #{ y: y, x: _₂, z: _₃ } }: object{ nested: object{ y: uint64, x: uint64, z: uint64 } } = #{ nested: ($0 = #{ nested: #{ y: arg.y, x: arg.x, z: arg.z } }).nested }
+  #[x]: readonly [uint64] = #[arg.x]
+  #[#[y]]: readonly [readonly [uint64]] = #[#[($0 = #{ nested: arg }).nested.y]]
+  return #[x, y]
+}
+subroutine testPartialDestructureMutableObject(arg: tests/approvals/object-destructuring.algo.ts::Vector): readonly [uint64, uint64]
+{
+  #[#[x]]: readonly [readonly [uint64]] = #[#[arg.c1.x]]
+  #[#[#[y]]]: readonly [readonly [readonly [uint64]]] = #[#[#[($1 = #{ nested: copy(arg) }).nested.c1.y]]]
+  return #[x, y]
 }
 subroutine test(): void
 {
-  #{ a: a, b: b, c: c, d: d }: object{ a: uint64, b: bytes, c: bool, d: biguint } = #{ a: ($1 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, b: $1.b, c: $1.c, d: $1.d }
-  #{ d: e, a: _, b: _₁, c: _₂ }: object{ d: biguint, a: uint64, b: bytes, c: bool } = #{ d: ($2 = tests/approvals/object-destructuring.algo.ts::produceItems()).d, a: $2.a, b: $2.b, c: $2.c }
-  f: object{ a: uint64, b: bytes, c: bool, d: biguint } = #{ a: ($3 = (#{ a: g, d: i, b: _₃, c: _₄ } = #{ a: ($4 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, d: $4.d, b: $4.b, c: $4.c })).a, b: $3.b, c: $3.c, d: $3.d }
-  tests/approvals/object-destructuring.algo.ts::receivePartial(#{ a: ($5 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, d: $5.d })
+  #[a, b, c, d]: readonly [uint64, bytes, bool, biguint] = #[($2 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, $2.b, $2.c, $2.d]
+  #[e]: readonly [biguint] = #[($3 = tests/approvals/object-destructuring.algo.ts::produceItems()).d]
+  f: ObjectB4218761 = (#[g, i] = #[($4 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, $4.d]), $4
+  tests/approvals/object-destructuring.algo.ts::receivePartial(new Object8B7906B5(a=($5 = tests/approvals/object-destructuring.algo.ts::produceItems()).a, d=$5.d))
 }
-subroutine produceItems(): produceItemsResult{ a: uint64, b: bytes, c: bool, d: biguint }
+subroutine testMutableObject(): void
 {
-  return #{ a: ($6 = #{ a: 1, b: "", c: False, d: 999 }).a, b: $6.b, c: $6.c, d: $6.d }
+  #[#[x, y], c2]: readonly [readonly [uint64, uint64], tests/approvals/object-destructuring.algo.ts::Coordinate] = #[#[($6 = tests/approvals/object-destructuring.algo.ts::produceVector()).c1.x, $6.c1.y], $6.c2]
+  #[#[b]]: readonly [readonly [uint64]] = #[#[($7 = tests/approvals/object-destructuring.algo.ts::produceVector()).c1.y]]
+  f: tests/approvals/object-destructuring.algo.ts::Vector = (#[#[g], i] = #[#[($8 = tests/approvals/object-destructuring.algo.ts::produceVector()).c1.x], $8.c2]), $8
+  tests/approvals/object-destructuring.algo.ts::receivePartialMutableObject(new Object2E6F7131(c1=new ObjectDC5110F2(x=($9 = ($10 = tests/approvals/object-destructuring.algo.ts::produceVector()).c1).x, y=$9.y)))
 }
-subroutine receivePartial(x: object{ a: uint64, d: biguint }): void
+subroutine produceItems(): ObjectB4218761
+{
+  return new ObjectB4218761(a=($11 = #{ a: ($12 = #[1, "", False, 999]).0, b: $12.1, c: $12.2, d: $12.3 }).a, b=$11.b, c=$11.c, d=$11.d)
+}
+subroutine produceVector(): tests/approvals/object-destructuring.algo.ts::Vector
+{
+  return new tests/approvals/object-destructuring.algo.ts::Vector(c1=($13 = #{ c1: ($14 = #[new tests/approvals/object-destructuring.algo.ts::Coordinate(x=($15 = #{ x: ($16 = #[1, 2]).0, y: $16.1 }).x, y=$15.y), new tests/approvals/object-destructuring.algo.ts::Coordinate(x=($17 = #{ x: ($18 = #[4, 1]).0, y: $18.1 }).x, y=$17.y)]).0, c2: $14.1 }).c1, c2=$13.c2)
+}
+subroutine receivePartial(x: Object8B7906B5): void
 {
 }
-subroutine testLiteralToLiteral(): void
+subroutine receivePartialMutableObject(a: Object2E6F7131): void
 {
-  #{ a: e, b: f }: object{ a: uint64, b: uint64 } = (#{ a: c, b: d } = #{ a: 4, b: 1 })
+}
+subroutine testLiteralToLiteral(): arc4.dynamic_array<uint64>
+{
+  #[f, e]: readonly [uint64, uint64] = #[($19 = (#[c, d] = #[($20 = #{ a: 4, b: 1 }).a, $20.b]), new ObjectACED9E72(a=$20.a, b=$20.b)).b, $19.a]
+  return new arc4.dynamic_array<uint64>(e, f, c, d)
 }
 subroutine testNumericResolution(): void
 {
-  x: object{ a: uint64 } = (y = #{ a: ($7 = #{ a: 434 }).a })
+  x: ObjectA59DA9E9 = (y = new ObjectA59DA9E9(a=($21 = #{ a: ($22 = #{ a: ($23 = #[434]).0 }).a }).a))
+  assert(&&(&&(2 == 2, x.a == 434), y.a == 434), comment=assert target is match for conditions)
 }
-subroutine test2(args: object{ x: bool, y: bool, z: readonlytuple[string, string] }): void
+subroutine test2(args: ReadonlyObjectC90AF4BD{ x: bool, y: bool, z: readonly [string, string] }): void
 {
-  #{ a: a, b: b, args: #{ x: x, y: y, z: _ } }: object{ a: bool, b: bool, args: object{ x: bool, y: bool, z: readonlytuple[string, string] } } = #{ a: True, b: False, args: args }
-  args2: object{ x: bool, y: bool, z: readonlytuple[string, string] } = #{ x: True, y: True, z: args.z }
+  #[a, b, #[x, y]]: readonly [bool, bool, readonly [bool, bool]] = #[($24 = #{ a: True, b: False, args: args }).a, $24.b, #[$24.args.x, $24.args.y]]
+  assert(a and !b)
+  args2: ObjectC90AF4BD = new ObjectC90AF4BD(x=($25 = #{ x: ($26 = #{ x: ($27 = #[args.x, args.y, args.z, True, True]).3, y: $27.4, z: $27.2 }).x, y: $26.y, z: $26.z }).x, y=$25.y, z=$25.z)
+  assert(args2.x and args2.y)
+}
+contract ObjectDestructuringAlgo
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  test(): void
+  {
+    res: readonly [uint64, uint64] = tests/approvals/object-destructuring.algo.ts::testPartialDestructure(#{ x: ($28 = #{ x: ($29 = #[1, 4, 123]).0, y: $29.1, z: $29.2 }).x, y: $28.y, z: $28.z })
+    assert(&&(&&(2 == 2, res.0 == 1), res.1 == 4), comment=assert target is match for conditions)
+    res2: readonly [uint64, uint64] = tests/approvals/object-destructuring.algo.ts::testPartialDestructureMutableObject(new tests/approvals/object-destructuring.algo.ts::Vector(c1=($30 = #{ c1: ($31 = #[new tests/approvals/object-destructuring.algo.ts::Coordinate(x=($32 = #{ x: ($33 = #[10, 20]).0, y: $33.1 }).x, y=$32.y), new tests/approvals/object-destructuring.algo.ts::Coordinate(x=($34 = #{ x: ($35 = #[20, 30]).0, y: $35.1 }).x, y=$34.y)]).0, c2: $31.1 }).c1, c2=$30.c2))
+    assert(&&(&&(2 == 2, res2.0 == 10), res2.1 == 20), comment=assert target is match for conditions)
+    tests/approvals/object-destructuring.algo.ts::testNumericResolution()
+    res3: arc4.dynamic_array<uint64> = tests/approvals/object-destructuring.algo.ts::testLiteralToLiteral()
+    assert(&&(&&(&&(&&(res3.length == 4, res3[0] == 4), res3[1] == 1), res3[2] == 4), res3[3] == 1), comment=assert target is match for conditions)
+    tests/approvals/object-destructuring.algo.ts::test()
+    tests/approvals/object-destructuring.algo.ts::testMutableObject()
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
 }

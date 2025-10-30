@@ -1,76 +1,46 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 2 1
+    intcblock 1 0 2
     bytecblock 0x151f7c75
     // tests/approvals/strings.algo.ts:3
     // class StringContract extends Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
     pushbytess 0x5049bd1b 0xdc882e2f // method "join(string,string)string", method "interpolate(string)string"
     txna ApplicationArgs 0
-    match main_join_route@3 main_interpolate_route@4
+    match join interpolate
+    err
 
-main_after_if_else@11:
+main___algots__.defaultCreate@9:
     // tests/approvals/strings.algo.ts:3
     // class StringContract extends Contract {
-    intc_0 // 0
-    return
-
-main_interpolate_route@4:
-    // tests/approvals/strings.algo.ts:8
-    // interpolate(a: string): string {
     txn OnCompletion
     !
-    assert // OnCompletion is not NoOp
     txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/strings.algo.ts:3
-    // class StringContract extends Contract {
-    txna ApplicationArgs 1
-    dup
-    intc_0 // 0
-    extract_uint16 // on error: invalid array length header
-    intc_1 // 2
-    +
-    dig 1
-    len
-    ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-    extract 2 0
-    // tests/approvals/strings.algo.ts:8
-    // interpolate(a: string): string {
-    callsub interpolate
-    dup
-    len
-    itob
-    extract 6 2
-    swap
-    concat
-    bytec_0 // 0x151f7c75
-    swap
-    concat
-    log
-    intc_2 // 1
+    !
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    intc_0 // 1
     return
 
-main_join_route@3:
+
+// tests/approvals/strings.algo.ts::StringContract.join[routing]() -> void:
+join:
     // tests/approvals/strings.algo.ts:4
     // join(a: string, b: string): string {
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    // tests/approvals/strings.algo.ts:3
-    // class StringContract extends Contract {
     txna ApplicationArgs 1
     dup
-    intc_0 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    intc_1 // 2
+    intc_2 // 2
     +
     dig 1
     len
@@ -79,18 +49,20 @@ main_join_route@3:
     extract 2 0
     txna ApplicationArgs 2
     dup
-    intc_0 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    intc_1 // 2
+    intc_2 // 2
     +
     dig 1
     len
     ==
     assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
     extract 2 0
+    // tests/approvals/strings.algo.ts:5
+    // return a + b
+    concat
     // tests/approvals/strings.algo.ts:4
     // join(a: string, b: string): string {
-    callsub join
     dup
     len
     itob
@@ -101,42 +73,41 @@ main_join_route@3:
     swap
     concat
     log
-    intc_2 // 1
-    return
-
-main_bare_routing@7:
-    // tests/approvals/strings.algo.ts:3
-    // class StringContract extends Contract {
-    txn OnCompletion
-    bnz main_after_if_else@11
-    txn ApplicationID
-    !
-    assert // can only call when creating
-    intc_2 // 1
+    intc_0 // 1
     return
 
 
-// tests/approvals/strings.algo.ts::StringContract.join(a: bytes, b: bytes) -> bytes:
-join:
-    // tests/approvals/strings.algo.ts:4
-    // join(a: string, b: string): string {
-    proto 2 1
-    // tests/approvals/strings.algo.ts:5
-    // return a + b
-    frame_dig -2
-    frame_dig -1
-    concat
-    retsub
-
-
-// tests/approvals/strings.algo.ts::StringContract.interpolate(a: bytes) -> bytes:
+// tests/approvals/strings.algo.ts::StringContract.interpolate[routing]() -> void:
 interpolate:
     // tests/approvals/strings.algo.ts:8
     // interpolate(a: string): string {
-    proto 1 1
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
     // tests/approvals/strings.algo.ts:9
     // return `You interpolated ${a}`
     pushbytes "You interpolated "
-    frame_dig -1
+    swap
     concat
-    retsub
+    // tests/approvals/strings.algo.ts:8
+    // interpolate(a: string): string {
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return

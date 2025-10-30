@@ -9,10 +9,11 @@ import { appVersion } from './cli/app-version'
 import { logger, LoggingContext } from './logger'
 import type { CompileOptions } from './options'
 import { createTsProgram } from './parser'
-import { invokePuya } from './puya'
+import { puyaCompile } from './puya'
+import type { AbsolutePath } from './util/absolute-path'
 
 export type CompileResult = {
-  programDirectory: string
+  programDirectory: AbsolutePath
   awst?: AWST[]
   ast?: Record<string, ts.SourceFile>
   compilationSet?: CompilationSet
@@ -30,7 +31,7 @@ export async function compile(options: CompileOptions): Promise<CompileResult> {
       ast: programResult.sourceFiles,
     }
   }
-  const [moduleAwst, compilationSet] = buildAwst(programResult, options)
+  const { moduleAwst, compilationSet } = buildAwst(programResult, options)
   validateAwst(moduleAwst)
 
   if (loggerCtx.hasErrors()) {
@@ -43,7 +44,7 @@ export async function compile(options: CompileOptions): Promise<CompileResult> {
     }
   }
   if (!options.dryRun) {
-    await invokePuya({
+    await puyaCompile({
       options,
       moduleAwst,
       programDirectory: programResult.programDirectory,

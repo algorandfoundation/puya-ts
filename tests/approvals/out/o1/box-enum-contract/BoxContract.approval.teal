@@ -1,4 +1,4 @@
-#pragma version 10
+#pragma version 11
 #pragma typetrack false
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
@@ -8,58 +8,31 @@ main:
     // tests/approvals/box-enum-contract.algo.ts:4
     // export class BoxContract extends arc4.Contract {
     txn NumAppArgs
-    bz main_bare_routing@7
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert // OnCompletion must be NoOp
+    txn ApplicationID
+    assert
     pushbytess 0xf26c6d42 0xef186cf7 // method "store_enums()void", method "read_enums()(uint64,uint64)"
     txna ApplicationArgs 0
-    match main_store_enums_route@3 main_read_enums_route@4
+    match storeEnums readEnums
+    err
 
-main_after_if_else@11:
-    // tests/approvals/box-enum-contract.algo.ts:4
-    // export class BoxContract extends arc4.Contract {
-    pushint 0 // 0
-    return
-
-main_read_enums_route@4:
-    // tests/approvals/box-enum-contract.algo.ts:14
-    // @arc4.abimethod({ name: 'read_enums' })
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    callsub readEnums
-    pushbytes 0x151f7c75
-    swap
-    concat
-    log
-    intc_0 // 1
-    return
-
-main_store_enums_route@3:
-    // tests/approvals/box-enum-contract.algo.ts:8
-    // @arc4.abimethod({ name: 'store_enums' })
-    txn OnCompletion
-    !
-    assert // OnCompletion is not NoOp
-    txn ApplicationID
-    assert // can only call when not creating
-    callsub storeEnums
-    intc_0 // 1
-    return
-
-main_bare_routing@7:
+main___algots__.defaultCreate@9:
     // tests/approvals/box-enum-contract.algo.ts:4
     // export class BoxContract extends arc4.Contract {
     txn OnCompletion
-    bnz main_after_if_else@11
+    !
     txn ApplicationID
     !
-    assert // can only call when creating
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
     intc_0 // 1
     return
 
 
-// tests/approvals/box-enum-contract.algo.ts::BoxContract.storeEnums() -> void:
+// tests/approvals/box-enum-contract.algo.ts::BoxContract.storeEnums[routing]() -> void:
 storeEnums:
     // tests/approvals/box-enum-contract.algo.ts:10
     // this.oca.value = OnCompleteAction.OptIn
@@ -83,10 +56,13 @@ storeEnums:
     // this.txn.value = TransactionType.ApplicationCall
     swap
     box_put
-    retsub
+    // tests/approvals/box-enum-contract.algo.ts:8
+    // @arc4.abimethod({ name: 'store_enums' })
+    intc_0 // 1
+    return
 
 
-// tests/approvals/box-enum-contract.algo.ts::BoxContract.readEnums() -> bytes:
+// tests/approvals/box-enum-contract.algo.ts::BoxContract.readEnums[routing]() -> void:
 readEnums:
     // tests/approvals/box-enum-contract.algo.ts:16
     // assert(op.Box.get(Bytes('oca'))[0] === op.itob(this.oca.value))
@@ -113,6 +89,13 @@ readEnums:
     ==
     assert
     // tests/approvals/box-enum-contract.algo.ts:19
-    // return new Tuple(new UintN64(this.oca.value), new UintN64(this.txn.value))
+    // return new Tuple(new Uint64(this.oca.value), new Uint64(this.txn.value))
     concat
-    retsub
+    // tests/approvals/box-enum-contract.algo.ts:14
+    // @arc4.abimethod({ name: 'read_enums' })
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
