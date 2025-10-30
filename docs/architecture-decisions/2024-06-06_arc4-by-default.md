@@ -11,9 +11,9 @@
 
 A smart contract on the Algorand Blockchain consists of an approval program and a clear state program. Smart signatures (also known as logic signatures) consist of only an approval program. For signatures the approval program is run to determine if a transaction signed by the program should be considered valid. For contracts the clear state program is invoked for Application Call (`appl`) transactions which have an on-completion action (`apan`) set to clear state (`3`). The transaction is committed to the chain regardless of the outcome of a clear state program. For all other on completion actions the approval program is invoked. It is up to the approval program to inspect the current transaction's properties to determine the outcome of this transaction.
 
-[ARC4](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md) introduces conventions for encoding data passed to a smart contract, and for routing execution to specific subroutines within the approval program based on key properties of the Application Call transaction (eg. The on completion action and application args). It is the current standard for developing smart contracts on Algorand, but may not always be. There are several other ARCs such as [ARC32](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0032.md), [ARC56](https://github.com/algorandfoundation/ARCs/blob/e540d921502f19c720b64d8df1f09563158ca348/ARCs/arc-0056.md), and [ARC28](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0028.md) which build on, expand, or complement ARC4. 
+[ARC4](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md) introduces conventions for encoding data passed to a smart contract, and for routing execution to specific subroutines within the approval program based on key properties of the Application Call transaction (eg. The on completion action and application args). It is the current standard for developing smart contracts on Algorand, but may not always be. There are several other ARCs such as [ARC32](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0032.md), [ARC56](https://github.com/algorandfoundation/ARCs/blob/e540d921502f19c720b64d8df1f09563158ca348/ARCs/arc-0056.md), and [ARC28](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0028.md) which build on, expand, or complement ARC4.
 
-The term ARC4 and ABI are sometimes used interchangeably however ABI refers to the generic concept of an Application Binary Interface (what ARC4 provides) and ARC4 being the specific implementation we have of an ABI on Algorand at this moment. 
+The term ARC4 and ABI are sometimes used interchangeably however ABI refers to the generic concept of an Application Binary Interface (what ARC4 provides) and ARC4 being the specific implementation we have of an ABI on Algorand at this moment.
 
 
 ## Requirements
@@ -31,7 +31,7 @@ The term ARC4 and ABI are sometimes used interchangeably however ABI refers to t
 
 ### Option 1 - ARC4 by default
 
-The approach taken by TealScript is that contracts are ARC4 by default. All public methods are exposed as ABI methods (callable from outside the contract) and one must explicitly decorate a method that should not be ABI routed. Only one non abi routed method can be defined per on completion action and this method is invoked only if no other ABI routed methods handle the call first. It is not necessary to decorate an ABI method unless an on completion action that is not `NoOp` is required. 
+The approach taken by TealScript is that contracts are ARC4 by default. All public methods are exposed as ABI methods (callable from outside the contract) and one must explicitly decorate a method that should not be ABI routed. Only one non abi routed method can be defined per on completion action and this method is invoked only if no other ABI routed methods handle the call first. It is not necessary to decorate an ABI method unless an on completion action that is not `NoOp` is required.
 
 ```ts
 class NonABIExample extends Contract {
@@ -93,7 +93,7 @@ export default class MVContract extends Contract {
 
 ```
 
-An ARC4 compliant contract would instead extend the `algopy.arc4.ARC4Contract` base class. In Algorand Python, each method must be decorated with either `@abimethod` or `@subroutine` to indicate a public or private method respectively. 
+An ARC4 compliant contract would instead extend the `algopy.arc4.ARC4Contract` base class. In Algorand Python, each method must be decorated with either `@abimethod` or `@subroutine` to indicate a public or private method respectively.
 
 ```python
 class HelloWorldContract(ARC4Contract):
@@ -148,24 +148,24 @@ export default class DemoContract extends arc4.Arc4Contract {
         super()
         // Constructor is called implicitly on application created before any other method
     }
-    
+
     @arc4.abimethod({ create: 'require' })
-    public createApplication(): void {        
-    }
-    
-    @arc4.baremethod({ create: 'require', allowActions: ['NoOp'] })
-    public createBare(): void {
-        // Called when Transaction.nummAppArgs is 0 
+    public createApplication(): void {
     }
 
-    // @arc4.abimethod({ allowActions: ['NoOp'] }) is implied 
+    @arc4.baremethod({ create: 'require', allowActions: ['NoOp'] })
+    public createBare(): void {
+        // Called when Transaction.nummAppArgs is 0
+    }
+
+    // @arc4.abimethod({ allowActions: ['NoOp'] }) is implied
     public generalNoOpMethod(): void {
     }
 
     @arc4.abimethod({allowActions: ['NoOp', 'OptIn']})
     public specificOnCompletion(): void {
     }
-    
+
     private privateSubroutine(): void {
     }
 }
@@ -207,22 +207,22 @@ export default class DemoContract extends Contract {
     }
 
     @arc4.abimethod({ create: 'require' })
-    public createApplication(): void {        
-    }
-    
-    @arc4.baremethod({ create: 'require', allowActions: ['NoOp'] })
-    public createBare(): void {
-        // Called when Transaction.nummAppArgs is 0 
+    public createApplication(): void {
     }
 
-    // @arc4.abimethod({ allowActions: ['NoOp'] }) is implied 
+    @arc4.baremethod({ create: 'require', allowActions: ['NoOp'] })
+    public createBare(): void {
+        // Called when Transaction.nummAppArgs is 0
+    }
+
+    // @arc4.abimethod({ allowActions: ['NoOp'] }) is implied
     public generalNoOpMethod(): void {
     }
 
     @arc4.abimethod({allowActions: ['NoOp', 'OptIn']})
     public specificOnCompletion(): void {
     }
-    
+
     // Force override keyword because it gives us an error if the method does not exist on the base type (eg. because there's a typo)
     //   'protected' because this method should not be directly callable (ie. not an abi method)
     // Having this as a single method rather than an attribute like in Option 1 let's the semantics of the language
@@ -250,4 +250,8 @@ Option 4 is the preferred option as it best balances all requirements, pros, and
 
 ## Selected option
 
-TBD
+Option 4 has been selected with some further additions
+
+ - `Contract.prototype.approvalProgram` is responsible for routing logic. User contracts can override this method to provide custom behaviour and call `super.approvalProgram()` in order to trigger routing.
+ - Added support for tealscript's conventional routing (ie. `optInToApplication` implicitly decorated with `@abimethod({ allowActions: 'OptIn' })`). This works alongside the decorator based routing.
+ - `public` keyword is not required as this proved too verbose
