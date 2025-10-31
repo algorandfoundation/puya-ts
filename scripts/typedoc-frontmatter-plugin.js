@@ -1,10 +1,23 @@
 // @ts-check
 
+const path = require('path');
+const fs = require('fs');
+
 /**
  * Custom TypeDoc plugin to add frontmatter to generated markdown files
  * @param {import('typedoc').Application} app
  */
 exports.load = function (app) {
+  // Read version from package.json once
+  const packageJsonPath = path.resolve(__dirname, '../package.json');
+  let version = '1.0.0'; // Default fallback
+  try {
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+    version = packageJson.version || '1.0.0';
+  } catch (/** @type {any} */ error) {
+    console.warn('Could not read version from package.json, using default:', error.message);
+  }
+
   // Hook into the page rendering event for markdown output
   app.renderer.on('endPage', (event) => {
     // Only process markdown files
@@ -49,6 +62,7 @@ exports.load = function (app) {
       '---',
       `title: ${title}`,
       `type: ${pageType}`,
+      `version: ${version}`,
       `generated: ${dateGenerated}`,
       `repo: puya-ts`,
       '---',

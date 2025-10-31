@@ -1,6 +1,7 @@
 ---
 title: KeyRegistrationTxn
 type: function
+version: 1.0.0
 generated: 2025-10-31
 repo: puya-ts
 ---
