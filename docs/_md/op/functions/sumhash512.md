@@ -1,3 +1,9 @@
+---
+title: sumhash512
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Function: sumhash512()
 
-> **sumhash512**(`a`): [`bytes`](../../index/type-aliases/bytes.md)
+> **sumhash512**(`a`): [`bytes`](../../index/type-aliases/bytes.md)\<`64`\>
 
-Defined in: [packages/algo-ts/src/op.ts:3449](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3449)
+Defined in: [op.ts:3502](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3502)
 
 sumhash512 of value A, yields [64]byte
 
@@ -20,9 +26,9 @@ sumhash512 of value A, yields [64]byte
 
 ## Returns
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`64`\>
 
 ## See
 
 Native TEAL opcode: [`sumhash512`](https://dev.algorand.co/reference/algorand-teal/opcodes#sumhash512)
-Min AVM version: 12
+Min AVM version: 13

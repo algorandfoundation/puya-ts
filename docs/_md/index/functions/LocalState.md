@@ -1,3 +1,9 @@
+---
+title: LocalState
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Function: LocalState()
 
-> **LocalState**\<`ValueType`\>(`options`?): [`LocalState`](../type-aliases/LocalState.md)\<`ValueType`\>
+> **LocalState**\<`ValueType`\>(`options?`): [`LocalState`](../type-aliases/LocalState.md)\<`ValueType`\>
 
-Defined in: [packages/algo-ts/src/state.ts:92](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L92)
+Defined in: [state.ts:92](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L92)
 
 Creates a new proxy for manipulating a local state field
 

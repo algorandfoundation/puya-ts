@@ -1,3 +1,9 @@
+---
+title: setByte
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **setByte**(`a`, `b`, `c`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3377](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3377)
+Defined in: [op.ts:3430](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3430)
 
 Copy of A with the Bth byte set to small integer (between 0..255) C. If B is greater than or equal to the array length, the program fails
 

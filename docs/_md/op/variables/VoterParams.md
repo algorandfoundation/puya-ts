@@ -1,3 +1,9 @@
+---
+title: VoterParams
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,11 +14,13 @@
 
 > `const` **VoterParams**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:4002](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4002)
+Defined in: [op.ts:4063](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4063)
 
 ## Type declaration
 
 ### voterBalance()
+
+> **voterBalance**(`a`): readonly \[[`uint64`](../../index/type-aliases/uint64.md), `boolean`\]
 
 Online stake in microalgos
 Min AVM version: 11
@@ -28,6 +36,8 @@ Min AVM version: 11
 readonly \[[`uint64`](../../index/type-aliases/uint64.md), `boolean`\]
 
 ### voterIncentiveEligible()
+
+> **voterIncentiveEligible**(`a`): readonly \[`boolean`, `boolean`\]
 
 Had this account opted into block payouts
 Min AVM version: 11

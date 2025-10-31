@@ -1,3 +1,9 @@
+---
+title: ecdsaPkRecover
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Function: ecdsaPkRecover()
 
-> **ecdsaPkRecover**(`v`, `a`, `b`, `c`, `d`): readonly \[[`bytes`](../../index/type-aliases/bytes.md), [`bytes`](../../index/type-aliases/bytes.md)\]
+> **ecdsaPkRecover**(`v`, `a`, `b`, `c`, `d`): readonly \[[`bytes`](../../index/type-aliases/bytes.md)\<`32`\>, [`bytes`](../../index/type-aliases/bytes.md)\<`32`\>\]
 
-Defined in: [packages/algo-ts/src/op.ts:840](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L840)
+Defined in: [op.ts:848](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L848)
 
 for (data A, recovery id B, signature C, D) recover a public key
 S (top) and R elements of a signature, recovery id and data (bottom) are expected on the stack and used to deriver a public key. All values are big-endian encoded. The signed data must be 32 bytes long.
@@ -21,7 +27,7 @@ S (top) and R elements of a signature, recovery id and data (bottom) are expecte
 
 ### a
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`32`\> | [`bytes`](../../index/type-aliases/bytes.md)
 
 ### b
 
@@ -29,15 +35,15 @@ S (top) and R elements of a signature, recovery id and data (bottom) are expecte
 
 ### c
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`32`\> | [`bytes`](../../index/type-aliases/bytes.md)
 
 ### d
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`32`\> | [`bytes`](../../index/type-aliases/bytes.md)
 
 ## Returns
 
-readonly \[[`bytes`](../../index/type-aliases/bytes.md), [`bytes`](../../index/type-aliases/bytes.md)\]
+readonly \[[`bytes`](../../index/type-aliases/bytes.md)\<`32`\>, [`bytes`](../../index/type-aliases/bytes.md)\<`32`\>\]
 
 ## See
 

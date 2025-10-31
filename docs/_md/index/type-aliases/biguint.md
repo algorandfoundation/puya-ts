@@ -1,3 +1,9 @@
+---
+title: biguint
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **biguint** = `object` & `bigint`
 
-Defined in: [packages/algo-ts/src/primitives.ts:59](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L59)
+Defined in: [primitives.ts:62](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L62)
 
 An unsigned integer of up to 512 bits
 

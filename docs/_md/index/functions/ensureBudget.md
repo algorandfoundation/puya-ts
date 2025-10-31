@@ -1,3 +1,9 @@
+---
+title: ensureBudget
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **ensureBudget**(`requiredBudget`, `feeSource`): `void`
 
-Defined in: [packages/algo-ts/src/util.ts:130](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L130)
+Defined in: [util.ts:153](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L153)
 
 Ensure the available op code budget is greater than or equal to requiredBudget.
 

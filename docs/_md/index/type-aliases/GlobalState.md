@@ -1,3 +1,9 @@
+---
+title: GlobalState
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,9 +14,13 @@
 
 > **GlobalState**\<`ValueType`\> = `object`
 
-Defined in: [packages/algo-ts/src/state.ts:44](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L44)
+Defined in: [state.ts:44](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L44)
 
-A proxy for manipulating a global state field
+Creates a new proxy for manipulating a global state field
+
+## Param
+
+Options for configuring this field
 
 ## Type Parameters
 
@@ -26,7 +36,7 @@ The type of the value being stored - must be a serializable type
 
 > `readonly` **hasValue**: `boolean`
 
-Defined in: [packages/algo-ts/src/state.ts:21](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L21)
+Defined in: [state.ts:21](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L21)
 
 Gets a boolean value indicating if global state field currently has a value
 
@@ -36,7 +46,7 @@ Gets a boolean value indicating if global state field currently has a value
 
 > **value**: `ValueType`
 
-Defined in: [packages/algo-ts/src/state.ts:13](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L13)
+Defined in: [state.ts:13](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L13)
 
 Get or set the value of this global state field
 
@@ -46,7 +56,7 @@ Get or set the value of this global state field
 
 > **delete**(): `void`
 
-Defined in: [packages/algo-ts/src/state.ts:17](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L17)
+Defined in: [state.ts:17](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L17)
 
 Delete the stored value of this global state field
 

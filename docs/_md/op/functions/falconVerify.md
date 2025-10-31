@@ -1,3 +1,9 @@
+---
+title: falconVerify
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,9 +14,9 @@
 
 > **falconVerify**(`a`, `b`, `c`): `boolean`
 
-Defined in: [packages/algo-ts/src/op.ts:923](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L923)
+Defined in: [op.ts:944](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L944)
 
-for (data A, compressed-format signature B, pubkey C) verify the signature of data against the pubkey
+for (data A, compressed-format signature B, pubkey C) verify the signature of data against the pubkey => {0 or 1}
 
 ## Parameters
 
@@ -20,11 +26,11 @@ for (data A, compressed-format signature B, pubkey C) verify the signature of da
 
 ### b
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md) | [`bytes`](../../index/type-aliases/bytes.md)\<`1232`\>
 
 ### c
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md) | [`bytes`](../../index/type-aliases/bytes.md)\<`1793`\>
 
 ## Returns
 

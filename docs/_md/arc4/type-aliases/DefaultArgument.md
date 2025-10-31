@@ -1,3 +1,9 @@
+---
+title: DefaultArgument
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **DefaultArgument**\<`TContract`\> = \{ `constant`: `string` \| `boolean` \| `number` \| `bigint`; \} \| \{ `from`: keyof `TContract`; \}
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:67](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L67)
+Defined in: [arc4/index.ts:82](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L82)
 
 Type alias for a default argument schema
 

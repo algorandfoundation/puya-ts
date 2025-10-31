@@ -1,3 +1,9 @@
+---
+title: Uint64
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -10,7 +16,7 @@
 
 > **Uint64**(): [`uint64`](../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:33](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L33)
+Defined in: [primitives.ts:33](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L33)
 
 Create a uint64 with the default value of 0
 
@@ -22,7 +28,7 @@ Create a uint64 with the default value of 0
 
 > **Uint64**(`v`): [`uint64`](../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:37](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L37)
+Defined in: [primitives.ts:37](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L37)
 
 Create a uint64 from a string literal
 
@@ -40,7 +46,7 @@ Create a uint64 from a string literal
 
 > **Uint64**(`v`): [`uint64`](../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:41](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L41)
+Defined in: [primitives.ts:41](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L41)
 
 Create a uint64 from a bigint literal
 
@@ -58,7 +64,7 @@ Create a uint64 from a bigint literal
 
 > **Uint64**(`v`): [`uint64`](../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:45](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L45)
+Defined in: [primitives.ts:45](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L45)
 
 Create a uint64 from a number literal
 
@@ -76,7 +82,7 @@ Create a uint64 from a number literal
 
 > **Uint64**(`v`): [`uint64`](../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:49](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L49)
+Defined in: [primitives.ts:49](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L49)
 
 Create a uint64 from a boolean value. True is 1, False is 0
 

@@ -1,3 +1,9 @@
+---
+title: emit
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -10,7 +16,7 @@
 
 > **emit**\<`TEvent`\>(`event`): `void`
 
-Defined in: [packages/algo-ts/src/arc-28.ts:22](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc-28.ts#L22)
+Defined in: [arc-28.ts:22](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc-28.ts#L22)
 
 Emit an arc28 event log using either an ARC4Struct type or a named object type.
 Object types must have an ARC4 equivalent type.
@@ -21,7 +27,7 @@ Anonymous types cannot be used as the type name is used to determine the event p
 
 #### TEvent
 
-`TEvent` *extends* [`Record`](../-internal-/type-aliases/Record.md)\<`string`, `any`\>
+`TEvent` *extends* `Record`\<`string`, `any`\>
 
 ### Parameters
 
@@ -38,8 +44,8 @@ An ARC4Struct instance, or a plain object with a named type
 ### Examples
 
 ```ts
-class Demo extends Struct<{ a: UintN64 }> {}
-emit(new Demo({ a: new UintN64(123) }))
+class Demo extends Struct<{ a: Uint64 }> {}
+emit(new Demo({ a: new Uint64(123) }))
 ```
 
 ```ts
@@ -54,7 +60,7 @@ emit(d)
 
 > **emit**\<`TProps`\>(`eventName`, ...`eventProps`): `void`
 
-Defined in: [packages/algo-ts/src/arc-28.ts:36](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc-28.ts#L36)
+Defined in: [arc-28.ts:36](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc-28.ts#L36)
 
 Emit an arc28 event log using an explicit name and inferred property/field types.
 Property types must be ARC4 or have an ARC4 equivalent type.
@@ -86,7 +92,7 @@ A set of event properties (order is significant)
 ### Examples
 
 ```ts
-emit("Demo", new UintN64(123))
+emit("Demo", new Uint64(123))
 ```
 
 ```ts

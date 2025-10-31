@@ -1,3 +1,9 @@
+---
+title: GlobalState
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Function: GlobalState()
 
-> **GlobalState**\<`ValueType`\>(`options`?): [`GlobalState`](../type-aliases/GlobalState.md)\<`ValueType`\>
+> **GlobalState**\<`ValueType`\>(`options?`): [`GlobalState`](../type-aliases/GlobalState.md)\<`ValueType`\>
 
-Defined in: [packages/algo-ts/src/state.ts:44](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L44)
+Defined in: [state.ts:44](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L44)
 
 Creates a new proxy for manipulating a global state field
 

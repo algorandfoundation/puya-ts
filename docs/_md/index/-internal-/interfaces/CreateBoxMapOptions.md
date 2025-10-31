@@ -1,3 +1,9 @@
+---
+title: CreateBoxMapOptions
+type: interface
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../../README.md)
 
 ***
@@ -6,7 +12,7 @@
 
 # Interface: CreateBoxMapOptions
 
-Defined in: [packages/algo-ts/src/box.ts:194](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L194)
+Defined in: [box.ts:138](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L138)
 
 Options for creating a BoxMap proxy
 
@@ -16,6 +22,6 @@ Options for creating a BoxMap proxy
 
 > **keyPrefix**: `string` \| [`bytes`](../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/box.ts:198](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L198)
+Defined in: [box.ts:142](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L142)
 
 The bytes which prefix each key of the box map

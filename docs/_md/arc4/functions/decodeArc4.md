@@ -1,3 +1,9 @@
+---
+title: decodeArc4
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **decodeArc4**\<`T`\>(`bytes`, `prefix`): `T`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:192](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L192)
+Defined in: [arc4/index.ts:244](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L244)
 
 Decode the provided bytes to a native Algorand TypeScript value
 

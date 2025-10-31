@@ -1,3 +1,9 @@
+---
+title: onlineStake
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **onlineStake**(): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3358](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3358)
+Defined in: [op.ts:3411](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3411)
 
 the total online stake in the agreement round
 

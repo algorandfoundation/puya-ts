@@ -1,3 +1,9 @@
+---
+title: divmodw
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **divmodw**(`a`, `b`, `c`, `d`): readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`uint64`](../../index/type-aliases/uint64.md), [`uint64`](../../index/type-aliases/uint64.md), [`uint64`](../../index/type-aliases/uint64.md)\]
 
-Defined in: [packages/algo-ts/src/op.ts:737](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L737)
+Defined in: [op.ts:745](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L745)
 
 W,X = (A,B / C,D); Y,Z = (A,B modulo C,D)
 The notation J,K indicates that two uint64 values J and K are interpreted as a uint128 value, with J as the high uint64 and K the low.

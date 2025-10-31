@@ -1,3 +1,9 @@
+---
+title: getByte
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **getByte**(`a`, `b`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:952](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L952)
+Defined in: [op.ts:973](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L973)
 
 Bth byte of A, as an integer. If B is greater than or equal to the array length, the program fails
 

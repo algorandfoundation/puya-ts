@@ -1,3 +1,9 @@
+---
+title: addw
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **addw**(`a`, `b`): readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`uint64`](../../index/type-aliases/uint64.md)\]
 
-Defined in: [packages/algo-ts/src/op.ts:179](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L179)
+Defined in: [op.ts:179](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L179)
 
 A plus B as a 128-bit result. X is the carry-bit, Y is the low-order 64 bits.
 

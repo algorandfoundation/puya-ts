@@ -1,3 +1,9 @@
+---
+title: ContractProxy
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **ContractProxy**\<`TContract`\> = [`CompiledContract`](../../index/type-aliases/CompiledContract.md) & `object`
 
-Defined in: [packages/algo-ts/src/arc4/c2c.ts:78](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/c2c.ts#L78)
+Defined in: [arc4/c2c.ts:79](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/c2c.ts#L79)
 
 Conditional type which maps an ARC4 compatible contract to a proxy object which allows for constructing application call transactions for
 all available ABI and bare methods. Also includes the compiled contract result data.
@@ -23,6 +29,8 @@ Get methods for calling ABI and bare methods on the target contract
 
 ### bareCreate()
 
+> **bareCreate**(`fields?`): [`ApplicationCallInnerTxn`](../../itxn/namespaces/itxn/interfaces/ApplicationCallInnerTxn.md)
+
 Create a bare application call itxn to create the contract.
 
 #### Parameters
@@ -35,7 +43,7 @@ Specify values for transaction fields which should override the default values.
 
 #### Returns
 
-[`ApplicationCallInnerTxn`](../../itxn/interfaces/ApplicationCallInnerTxn.md)
+[`ApplicationCallInnerTxn`](../../itxn/namespaces/itxn/interfaces/ApplicationCallInnerTxn.md)
 
 ## Type Parameters
 

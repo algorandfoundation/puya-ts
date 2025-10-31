@@ -1,3 +1,9 @@
+---
+title: LogicSig
+type: class
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,7 +12,7 @@
 
 # Class: `abstract` LogicSig
 
-Defined in: [packages/algo-ts/src/logic-sig.ts:7](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/logic-sig.ts#L7)
+Defined in: [logic-sig.ts:7](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/logic-sig.ts#L7)
 
 Base class for Algorand TypeScript Logic Signatures (also known as Smart Signatures)
 
@@ -26,7 +32,7 @@ Base class for Algorand TypeScript Logic Signatures (also known as Smart Signatu
 
 > `abstract` **program**(): `boolean` \| [`uint64`](../type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/logic-sig.ts:11](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/logic-sig.ts#L11)
+Defined in: [logic-sig.ts:11](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/logic-sig.ts#L11)
 
 The logic signature program logic
 

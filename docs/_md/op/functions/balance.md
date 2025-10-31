@@ -1,3 +1,9 @@
+---
+title: balance
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,13 +14,15 @@
 
 > **balance**(`a`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:537](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L537)
+Defined in: [op.ts:545](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L545)
 
 balance for account A, in microalgos. The balance is observed after the effects of previous transactions in the group, and after the fee for the current transaction is deducted. Changes caused by inner transactions are observable immediately following `itxn_submit`
 
 ## Parameters
 
 ### a
+
+Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
 
 [`uint64`](../../index/type-aliases/uint64.md) | [`Account`](../../index/type-aliases/Account.md)
 

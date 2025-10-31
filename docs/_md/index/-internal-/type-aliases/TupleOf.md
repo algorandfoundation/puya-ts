@@ -1,3 +1,9 @@
+---
+title: _TupleOf
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **\_TupleOf**\<`T`, `N`, `R`\> = `R`\[`"length"`\] *extends* `N` ? `R` : `_TupleOf`\<`T`, `N`, readonly \[`T`, `...R`\]\>
 
-Defined in: [packages/algo-ts/src/primitives.ts:265](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L265)
+Defined in: [primitives.ts:366](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L366)
 
 ## Type Parameters
 

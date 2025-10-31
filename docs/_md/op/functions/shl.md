@@ -1,3 +1,9 @@
+---
+title: shl
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **shl**(`a`, `b`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3413](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3413)
+Defined in: [op.ts:3466](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3466)
 
 A times 2^B, modulo 2^64
 

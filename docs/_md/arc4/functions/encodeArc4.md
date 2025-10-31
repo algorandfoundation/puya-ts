@@ -1,3 +1,9 @@
+---
+title: encodeArc4
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **encodeArc4**\<`T`\>(`value`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:200](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L200)
+Defined in: [arc4/index.ts:252](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L252)
 
 Encode the provided Algorand TypeScript value as ARC4 bytes
 

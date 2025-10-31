@@ -1,3 +1,9 @@
+---
+title: contract
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **contract**(`options`): \<`T`\>(`contract`, `ctx`) => `never`
 
-Defined in: [packages/algo-ts/src/base-contract.ts:86](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L86)
+Defined in: [base-contract.ts:86](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L86)
 
 The contract decorator can be used to specify additional configuration options for a smart contract
 
@@ -22,7 +28,7 @@ An object containing the configuration options
 
 ## Returns
 
-`Function`
+> \<`T`\>(`contract`, `ctx`): `never`
 
 ### Type Parameters
 
@@ -38,7 +44,7 @@ An object containing the configuration options
 
 #### ctx
 
-[`ClassDecoratorContext`](../-internal-/interfaces/ClassDecoratorContext.md)
+`ClassDecoratorContext`
 
 ### Returns
 

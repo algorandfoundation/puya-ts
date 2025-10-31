@@ -1,3 +1,9 @@
+---
+title: ARC4Encoded
+type: class
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,15 +12,15 @@
 
 # Class: `abstract` ARC4Encoded
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:90](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L90)
+Defined in: [arc4/encoded-types.ts:87](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L87)
 
 A base type for ARC4 encoded values
 
 ## Extended by
 
 - [`Str`](Str.md)
-- [`UintN`](UintN.md)
-- [`UFixedNxM`](UFixedNxM.md)
+- [`Uint`](Uint.md)
+- [`UFixed`](UFixed.md)
 - [`Bool`](Bool.md)
 - [`Tuple`](Tuple.md)
 - [`Arc4ArrayBase`](../-internal-/classes/Arc4ArrayBase.md)
@@ -42,7 +48,7 @@ A base type for ARC4 encoded values
 
 > **get** **bytes**(): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:97](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L97)
+Defined in: [arc4/encoded-types.ts:102](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L102)
 
 Retrieve the encoded bytes for this type
 

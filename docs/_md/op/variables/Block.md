@@ -1,3 +1,9 @@
+---
+title: Block
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,11 +14,13 @@
 
 > `const` **Block**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:561](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L561)
+Defined in: [op.ts:569](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L569)
 
 ## Type declaration
 
 ### blkBonus()
+
+> **blkBonus**(`a`): [`uint64`](../../index/type-aliases/uint64.md)
 
 #### Parameters
 
@@ -26,6 +34,8 @@ Defined in: [packages/algo-ts/src/op.ts:561](https://github.com/algorandfoundati
 
 ### blkBranch()
 
+> **blkBranch**(`a`): [`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
+
 #### Parameters
 
 ##### a
@@ -34,9 +44,11 @@ Defined in: [packages/algo-ts/src/op.ts:561](https://github.com/algorandfoundati
 
 #### Returns
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 ### blkFeesCollected()
+
+> **blkFeesCollected**(`a`): [`uint64`](../../index/type-aliases/uint64.md)
 
 #### Parameters
 
@@ -50,6 +62,8 @@ Defined in: [packages/algo-ts/src/op.ts:561](https://github.com/algorandfoundati
 
 ### blkFeeSink()
 
+> **blkFeeSink**(`a`): [`Account`](../../index/type-aliases/Account.md)
+
 #### Parameters
 
 ##### a
@@ -61,6 +75,8 @@ Defined in: [packages/algo-ts/src/op.ts:561](https://github.com/algorandfoundati
 [`Account`](../../index/type-aliases/Account.md)
 
 ### blkProposer()
+
+> **blkProposer**(`a`): [`Account`](../../index/type-aliases/Account.md)
 
 #### Parameters
 
@@ -74,6 +90,8 @@ Defined in: [packages/algo-ts/src/op.ts:561](https://github.com/algorandfoundati
 
 ### blkProposerPayout()
 
+> **blkProposerPayout**(`a`): [`uint64`](../../index/type-aliases/uint64.md)
+
 #### Parameters
 
 ##### a
@@ -85,6 +103,8 @@ Defined in: [packages/algo-ts/src/op.ts:561](https://github.com/algorandfoundati
 [`uint64`](../../index/type-aliases/uint64.md)
 
 ### blkProtocol()
+
+> **blkProtocol**(`a`): [`bytes`](../../index/type-aliases/bytes.md)
 
 #### Parameters
 
@@ -98,6 +118,8 @@ Defined in: [packages/algo-ts/src/op.ts:561](https://github.com/algorandfoundati
 
 ### blkSeed()
 
+> **blkSeed**(`a`): [`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
+
 #### Parameters
 
 ##### a
@@ -106,9 +128,11 @@ Defined in: [packages/algo-ts/src/op.ts:561](https://github.com/algorandfoundati
 
 #### Returns
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 ### blkTimestamp()
+
+> **blkTimestamp**(`a`): [`uint64`](../../index/type-aliases/uint64.md)
 
 #### Parameters
 
@@ -121,6 +145,8 @@ Defined in: [packages/algo-ts/src/op.ts:561](https://github.com/algorandfoundati
 [`uint64`](../../index/type-aliases/uint64.md)
 
 ### blkTxnCounter()
+
+> **blkTxnCounter**(`a`): [`uint64`](../../index/type-aliases/uint64.md)
 
 #### Parameters
 

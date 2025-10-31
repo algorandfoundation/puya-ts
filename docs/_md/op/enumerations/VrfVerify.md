@@ -1,3 +1,9 @@
+---
+title: VrfVerify
+type: enum
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,7 +12,7 @@
 
 # Enumeration: VrfVerify
 
-Defined in: [packages/algo-ts/src/op.ts:49](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L49)
+Defined in: [op.ts:49](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L49)
 
 ## Enumeration Members
 
@@ -14,4 +20,4 @@ Defined in: [packages/algo-ts/src/op.ts:49](https://github.com/algorandfoundatio
 
 > **VrfAlgorand**: `"VrfAlgorand"`
 
-Defined in: [packages/algo-ts/src/op.ts:50](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L50)
+Defined in: [op.ts:50](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L50)

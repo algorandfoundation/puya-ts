@@ -1,3 +1,9 @@
+---
+title: LocalState
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,9 +14,9 @@
 
 > **LocalState**\<`ValueType`\> = (`account`) => [`LocalStateForAccount`](LocalStateForAccount.md)\<`ValueType`\>
 
-Defined in: [packages/algo-ts/src/state.ts:92](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L92)
+Defined in: [state.ts:92](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/state.ts#L92)
 
-A proxy for manipulating a local state field for any account
+Creates a new proxy for manipulating a local state field
 
 ## Type Parameters
 
@@ -31,3 +37,7 @@ The account to read or write state for. This account must be opted into the cont
 ## Returns
 
 [`LocalStateForAccount`](LocalStateForAccount.md)\<`ValueType`\>
+
+## Param
+
+Options for configuring this field

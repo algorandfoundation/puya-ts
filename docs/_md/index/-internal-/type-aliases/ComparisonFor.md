@@ -1,3 +1,9 @@
+---
+title: ComparisonFor
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Type Alias: ComparisonFor\<T\>
 
-> **ComparisonFor**\<`T`\> = `T` *extends* [`uint64`](../../type-aliases/uint64.md) \| [`biguint`](../../type-aliases/biguint.md) ? [`NumericComparison`](NumericComparison.md)\<`T`\> : `T`
+> **ComparisonFor**\<`T`\> = `T` *extends* [`uint64`](../../type-aliases/uint64.md) \| [`biguint`](../../type-aliases/biguint.md) ? [`NumericComparison`](NumericComparison.md)\<`T`\> : [`NonNumericComparison`](NonNumericComparison.md)\<`T`\>
 
-Defined in: [packages/algo-ts/src/util.ts:71](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L71)
+Defined in: [util.ts:89](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L89)
 
 Returns compatible comparison expressions for a type `T`
 

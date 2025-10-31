@@ -1,3 +1,9 @@
+---
+title: StateTotals
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **StateTotals** = `object`
 
-Defined in: [packages/algo-ts/src/base-contract.ts:31](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L31)
+Defined in: [base-contract.ts:31](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L31)
 
 Options class to manually define the total amount of global and local state contract will use.
 
@@ -23,7 +29,7 @@ doesn't allow increasing them after creation.
 
 > `optional` **globalBytes**: `number`
 
-Defined in: [packages/algo-ts/src/base-contract.ts:33](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L33)
+Defined in: [base-contract.ts:33](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L33)
 
 ***
 
@@ -31,7 +37,7 @@ Defined in: [packages/algo-ts/src/base-contract.ts:33](https://github.com/algora
 
 > `optional` **globalUints**: `number`
 
-Defined in: [packages/algo-ts/src/base-contract.ts:32](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L32)
+Defined in: [base-contract.ts:32](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L32)
 
 ***
 
@@ -39,7 +45,7 @@ Defined in: [packages/algo-ts/src/base-contract.ts:32](https://github.com/algora
 
 > `optional` **localBytes**: `number`
 
-Defined in: [packages/algo-ts/src/base-contract.ts:35](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L35)
+Defined in: [base-contract.ts:35](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L35)
 
 ***
 
@@ -47,4 +53,4 @@ Defined in: [packages/algo-ts/src/base-contract.ts:35](https://github.com/algora
 
 > `optional` **localUints**: `number`
 
-Defined in: [packages/algo-ts/src/base-contract.ts:34](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L34)
+Defined in: [base-contract.ts:34](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L34)

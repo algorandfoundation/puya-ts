@@ -1,3 +1,9 @@
+---
+title: Contract
+type: class
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,7 +12,7 @@
 
 # Class: Contract
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:14](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L14)
+Defined in: [arc4/index.ts:14](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L14)
 
 The base type for all ARC4 contracts in Algorand TypeScript
 
@@ -34,7 +40,7 @@ The base type for all ARC4 contracts in Algorand TypeScript
 
 > **approvalProgram**(): `boolean`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:19](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L19)
+Defined in: [arc4/index.ts:19](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L19)
 
 Default implementation of an ARC4 approval program, routes transactions to ABI or bare methods based on application
 args and on completion actions
@@ -53,7 +59,7 @@ args and on completion actions
 
 > **clearStateProgram**(): `boolean` \| [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/base-contract.ts:18](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L18)
+Defined in: [base-contract.ts:18](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/base-contract.ts#L18)
 
 The program to be run when the On Completion Action is == ClearState (3)
 

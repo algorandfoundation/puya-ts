@@ -1,3 +1,9 @@
+---
+title: compileArc4
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Function: compileArc4()
 
-> **compileArc4**\<`TContract`\>(`contract`, `options`?): [`ContractProxy`](../type-aliases/ContractProxy.md)\<`TContract`\>
+> **compileArc4**\<`TContract`\>(`contract`, `options?`): [`ContractProxy`](../type-aliases/ContractProxy.md)\<`TContract`\>
 
-Defined in: [packages/algo-ts/src/arc4/c2c.ts:104](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/c2c.ts#L104)
+Defined in: [arc4/c2c.ts:105](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/c2c.ts#L105)
 
 Pre compile the target ARC4 contract and return a proxy object for constructing inner transactions to call an instance of that contract.
 

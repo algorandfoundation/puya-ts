@@ -1,3 +1,9 @@
+---
+title: CreateOptions
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **CreateOptions** = `"allow"` \| `"disallow"` \| `"require"`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:61](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L61)
+Defined in: [arc4/index.ts:61](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L61)
 
 The possible options for a method being available on application create
 

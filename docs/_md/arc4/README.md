@@ -1,3 +1,9 @@
+---
+title: arc4
+type: module
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../README.md)
 
 ***
@@ -23,21 +29,23 @@
 - [StaticBytes](classes/StaticBytes.md)
 - [Str](classes/Str.md)
 - [Tuple](classes/Tuple.md)
-- [UFixedNxM](classes/UFixedNxM.md)
-- [UintN](classes/UintN.md)
-- [UintN128](classes/UintN128.md)
-- [UintN16](classes/UintN16.md)
-- [UintN256](classes/UintN256.md)
-- [UintN32](classes/UintN32.md)
-- [UintN64](classes/UintN64.md)
-- [UintN8](classes/UintN8.md)
+- [UFixed](classes/UFixed.md)
+- [Uint](classes/Uint.md)
+- [Uint128](classes/Uint128.md)
+- [Uint16](classes/Uint16.md)
+- [Uint256](classes/Uint256.md)
+- [Uint32](classes/Uint32.md)
+- [Uint64](classes/Uint64.md)
+- [Uint8](classes/Uint8.md)
 
 ## Interfaces
 
+- [AbiCallOptions](interfaces/AbiCallOptions.md)
 - [ConventionalRouting](interfaces/ConventionalRouting.md)
 
 ## Type Aliases
 
+- [AbiCallResponse](type-aliases/AbiCallResponse.md)
 - [AbiMethodConfig](type-aliases/AbiMethodConfig.md)
 - [BareCreateApplicationCallFields](type-aliases/BareCreateApplicationCallFields.md)
 - [BareMethodConfig](type-aliases/BareMethodConfig.md)
@@ -47,10 +55,12 @@
 - [CreateOptions](type-aliases/CreateOptions.md)
 - [DefaultArgument](type-aliases/DefaultArgument.md)
 - [GtxnToItxnFields](type-aliases/GtxnToItxnFields.md)
+- [ResourceEncodingOptions](type-aliases/ResourceEncodingOptions.md)
 - [TypedApplicationArg](type-aliases/TypedApplicationArg.md)
 - [TypedApplicationArgs](type-aliases/TypedApplicationArgs.md)
 - [TypedApplicationCallFields](type-aliases/TypedApplicationCallFields.md)
 - [TypedApplicationCallResponse](type-aliases/TypedApplicationCallResponse.md)
+- [ValidateEncodingOptions](type-aliases/ValidateEncodingOptions.md)
 
 ## Variables
 
@@ -60,10 +70,11 @@
 
 - [abiCall](functions/abiCall.md)
 - [abimethod](functions/abimethod.md)
-- [arc4EncodedLength](functions/arc4EncodedLength.md)
 - [baremethod](functions/baremethod.md)
 - [compileArc4](functions/compileArc4.md)
+- [convertBytes](functions/convertBytes.md)
 - [decodeArc4](functions/decodeArc4.md)
 - [encodeArc4](functions/encodeArc4.md)
-- [interpretAsArc4](functions/interpretAsArc4.md)
 - [methodSelector](functions/methodSelector.md)
+- [readonly](functions/readonly.md)
+- [sizeOf](functions/sizeOf.md)

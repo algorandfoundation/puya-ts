@@ -1,3 +1,9 @@
+---
+title: Str
+type: class
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,7 +12,7 @@
 
 # Class: Str
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:105](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L105)
+Defined in: [arc4/encoded-types.ts:110](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L110)
 
 A utf8 encoded string prefixed with its length expressed as a 2 byte uint
 
@@ -18,9 +24,9 @@ A utf8 encoded string prefixed with its length expressed as a 2 byte uint
 
 ### Constructor
 
-> **new Str**(`s`?): `Str`
+> **new Str**(`s?`): `Str`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:113](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L113)
+Defined in: [arc4/encoded-types.ts:118](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L118)
 
 Create a new Str instance
 
@@ -48,7 +54,7 @@ The native string to initialize this Str from
 
 > **get** **bytes**(): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:97](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L97)
+Defined in: [arc4/encoded-types.ts:102](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L102)
 
 Retrieve the encoded bytes for this type
 
@@ -68,7 +74,7 @@ Retrieve the encoded bytes for this type
 
 > **get** **native**(): `string`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:120](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L120)
+Defined in: [arc4/encoded-types.ts:125](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L125)
 
 Retrieve the decoded native string
 

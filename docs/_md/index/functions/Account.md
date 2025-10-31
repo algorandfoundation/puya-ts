@@ -1,3 +1,9 @@
+---
+title: Account
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -10,7 +16,7 @@
 
 > **Account**(): [`Account`](../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:109](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L109)
+Defined in: [reference.ts:109](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L109)
 
 Create a new account object representing the zero address
 
@@ -22,7 +28,7 @@ Create a new account object representing the zero address
 
 > **Account**(`publicKey`): [`Account`](../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:114](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L114)
+Defined in: [reference.ts:114](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L114)
 
 Create a new account object representing the provided public key bytes
 
@@ -42,7 +48,7 @@ A 32-byte Algorand account public key
 
 > **Account**(`address`): [`Account`](../type-aliases/Account.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:120](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L120)
+Defined in: [reference.ts:119](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L119)
 
 Create a new account object representing the provided address
 

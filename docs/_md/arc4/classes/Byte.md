@@ -1,3 +1,9 @@
+---
+title: Byte
+type: class
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,21 +12,21 @@
 
 # Class: Byte
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:151](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L151)
+Defined in: [arc4/encoded-types.ts:163](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L163)
 
-An alias for UintN<8>
+An alias for Uint<8>
 
 ## Extends
 
-- [`UintN`](UintN.md)\<`8`\>
+- [`Uint`](Uint.md)\<`8`\>
 
 ## Constructors
 
 ### Constructor
 
-> **new Byte**(`v`?): `Byte`
+> **new Byte**(`v?`): `Byte`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:136](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L136)
+Defined in: [arc4/encoded-types.ts:141](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L141)
 
 Create a new UintN instance
 
@@ -38,7 +44,7 @@ The native uint64 or biguint value to initialize this UintN from
 
 #### Inherited from
 
-[`UintN`](UintN.md).[`constructor`](UintN.md#constructor)
+[`Uint`](Uint.md).[`constructor`](Uint.md#constructor)
 
 ## Accessors
 
@@ -48,7 +54,7 @@ The native uint64 or biguint value to initialize this UintN from
 
 > **get** **bytes**(): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:97](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L97)
+Defined in: [arc4/encoded-types.ts:102](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L102)
 
 Retrieve the encoded bytes for this type
 
@@ -58,24 +64,40 @@ Retrieve the encoded bytes for this type
 
 #### Inherited from
 
-[`UintN`](UintN.md).[`bytes`](UintN.md#bytes)
+[`Uint`](Uint.md).[`bytes`](Uint.md#bytes)
 
-***
+## Methods
 
-### native
+### asBigUint()
 
-#### Get Signature
+> **asBigUint**(): [`biguint`](../../index/type-aliases/biguint.md)
 
-> **get** **native**(): [`NativeForArc4Int`](../-internal-/type-aliases/NativeForArc4Int.md)\<`N`\>
+Defined in: [arc4/encoded-types.ts:155](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L155)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:143](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L143)
+Retrieve the decoded native biguint
 
-Retrieve the decoded native uint64 or biguint
+#### Returns
 
-##### Returns
-
-[`NativeForArc4Int`](../-internal-/type-aliases/NativeForArc4Int.md)\<`N`\>
+[`biguint`](../../index/type-aliases/biguint.md)
 
 #### Inherited from
 
-[`UintN`](UintN.md).[`native`](UintN.md#native)
+[`Uint`](Uint.md).[`asBigUint`](Uint.md#asbiguint)
+
+***
+
+### asUint64()
+
+> **asUint64**(): [`uint64`](../../index/type-aliases/uint64.md)
+
+Defined in: [arc4/encoded-types.ts:148](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L148)
+
+Retrieve the decoded native uint64
+
+#### Returns
+
+[`uint64`](../../index/type-aliases/uint64.md)
+
+#### Inherited from
+
+[`Uint`](Uint.md).[`asUint64`](Uint.md#asuint64)

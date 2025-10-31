@@ -1,3 +1,9 @@
+---
+title: Bool
+type: class
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,7 +12,7 @@
 
 # Class: Bool
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:209](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L209)
+Defined in: [arc4/encoded-types.ts:214](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L214)
 
 A boolean value
 
@@ -18,9 +24,9 @@ A boolean value
 
 ### Constructor
 
-> **new Bool**(`v`?): `Bool`
+> **new Bool**(`v?`): `Bool`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:217](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L217)
+Defined in: [arc4/encoded-types.ts:222](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L222)
 
 Create a new Bool value
 
@@ -48,7 +54,7 @@ The native boolean to initialize this value from
 
 > **get** **bytes**(): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:97](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L97)
+Defined in: [arc4/encoded-types.ts:102](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L102)
 
 Retrieve the encoded bytes for this type
 
@@ -68,7 +74,7 @@ Retrieve the encoded bytes for this type
 
 > **get** **native**(): `boolean`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:224](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L224)
+Defined in: [arc4/encoded-types.ts:229](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L229)
 
 Get the decoded native boolean for this value
 

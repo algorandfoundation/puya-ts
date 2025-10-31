@@ -1,3 +1,9 @@
+---
+title: err
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Function: err()
 
-> **err**(`message`?): `never`
+> **err**(`message?`): `never`
 
-Defined in: [packages/algo-ts/src/util.ts:27](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L27)
+Defined in: [util.ts:27](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L27)
 
 Raise an error and halt execution
 

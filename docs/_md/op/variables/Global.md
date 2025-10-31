@@ -1,3 +1,9 @@
+---
+title: Global
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > `const` **Global**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:1522](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L1522)
+Defined in: [op.ts:1551](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L1551)
 
 ## Type declaration
 
@@ -107,27 +113,27 @@ Min AVM version: 2
 
 #### Get Signature
 
-> **get** **genesisHash**(): [`bytes`](../../index/type-aliases/bytes.md)
+> **get** **genesisHash**(): [`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 The Genesis Hash for the network.
 Min AVM version: 10
 
 ##### Returns
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 ### groupId
 
 #### Get Signature
 
-> **get** **groupId**(): [`bytes`](../../index/type-aliases/bytes.md)
+> **get** **groupId**(): [`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 ID of the transaction group. 32 zero bytes if the transaction is not part of a group.
 Min AVM version: 5
 
 ##### Returns
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 ### groupSize
 

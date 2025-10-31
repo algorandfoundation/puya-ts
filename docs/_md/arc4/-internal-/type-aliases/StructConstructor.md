@@ -1,3 +1,9 @@
+---
+title: StructConstructor
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **StructConstructor** = \<`T`\>(`initial`) => [`StructBase`](../classes/StructBase.md)\<`T`\> & `T`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:500](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L500)
+Defined in: [arc4/encoded-types.ts:487](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L487)
 
 Type alias for the Struct constructor function
 

@@ -1,3 +1,9 @@
+---
+title: appOptedIn
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,13 +14,15 @@
 
 > **appOptedIn**(`a`, `b`): `boolean`
 
-Defined in: [packages/algo-ts/src/op.ts:329](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L329)
+Defined in: [op.ts:329](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L329)
 
 1 if account A is opted in to application B, else 0
 
 ## Parameters
 
 ### a
+
+Txn.Accounts offset (or, since v4, an _available_ account address), _available_ application id (or, since v4, a Txn.ForeignApps offset).
 
 [`uint64`](../../index/type-aliases/uint64.md) | [`Account`](../../index/type-aliases/Account.md)
 

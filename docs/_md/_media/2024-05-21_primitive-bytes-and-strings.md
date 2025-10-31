@@ -46,7 +46,7 @@ const b3 = b1 + b1
 
 Whilst binary data is often a representation of a utf-8 string, it is not always - so direct use of the string type is not a natural fit. It doesn't allow us to represent alternative encodings (b16/b64) and the existing api surface is very 'string' centric. Much of the api would also be expensive to implement on the AVM leading to a bunch of 'dead' methods hanging off the type (or a significant amount of work implementing all the methods). The signatures of these methods also use `number` which is [not a semantically relevant type](./2024-05-21_primitive-integer-types.md).
 
-Achieving semantic compatability with EcmaScript's `String` type would also be very expensive as it uses utf-16 encoding underneath whilst an ABI string is utf-8 encoded. A significant number of ops (and program size) would be required to convert between the two. If we were to ignore this and use utf-8 at runtime, apis such as `.length` would return different results. For example `"😄".length` in ES returns `2` whilst utf-8 encoding would yield `1` codepoint or `4` bytes, similarly indexing and slicing would yield different results.
+Achieving semantic compatibility with EcmaScript's `String` type would also be very expensive as it uses utf-16 encoding underneath whilst an ABI string is utf-8 encoded. A significant number of ops (and program size) would be required to convert between the two. If we were to ignore this and use utf-8 at runtime, apis such as `.length` would return different results. For example `"😄".length` in ES returns `2` whilst utf-8 encoding would yield `1` codepoint or `4` bytes, similarly indexing and slicing would yield different results.
 
 The Uint8Array type is fit for purpose as an encoding mechanism but the API is not as friendly as it could be for writing declarative contracts. The `new` keyword feels unnatural for something that is ostensibly a primitive type. The fact that it is mutable also complicates the implementation the compiler produces for the AVM.
 
@@ -155,7 +155,7 @@ Having `bytes` and `str` behave like a primitive value type (value equality) whi
 
 Option 3 can be excluded because the requirement for a `new` keyword feels unnatural for representing a primitive value type.
 
-Option 1 and 2 are not preferred as they make maintaining semantic compatability with EcmaScript impractical.
+Option 1 and 2 are not preferred as they make maintaining semantic compatibility with EcmaScript impractical.
 
 Option 4 gives us the most natural feeling api whilst still giving us full control over the api surface. It doesn't support the `+` operator, but supports interpolation and `.concat` which gives us most of what `+` provides other than augmented assignment (ie. `+=`).
 

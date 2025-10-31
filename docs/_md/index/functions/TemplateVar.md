@@ -1,3 +1,9 @@
+---
+title: TemplateVar
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **TemplateVar**\<`T`\>(`variableName`, `prefix`): `T`
 
-Defined in: [packages/algo-ts/src/template-var.ts:10](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/template-var.ts#L10)
+Defined in: [template-var.ts:10](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/template-var.ts#L10)
 
 Declare a template variable which can be replaced at compile time with an environment specific value.
 

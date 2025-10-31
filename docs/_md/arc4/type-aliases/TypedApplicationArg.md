@@ -1,3 +1,9 @@
+---
+title: TypedApplicationArg
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Type Alias: TypedApplicationArg\<TArg\>
 
-> **TypedApplicationArg**\<`TArg`\> = `TArg` *extends* [`Transaction`](../../gtxn/type-aliases/Transaction.md) ? [`GtxnToItxnFields`](GtxnToItxnFields.md)\<`TArg`\> : `TArg`
+> **TypedApplicationArg**\<`TArg`\> = `TArg` *extends* [`Transaction`](../../gtxn/namespaces/gtxn/type-aliases/Transaction.md) ? [`GtxnToItxnFields`](GtxnToItxnFields.md)\<`TArg`\> : `TArg`
 
-Defined in: [packages/algo-ts/src/arc4/c2c.ts:42](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/c2c.ts#L42)
+Defined in: [arc4/c2c.ts:41](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/c2c.ts#L41)
 
 Conditional type which given an application argument, returns the input type for that argument.
 

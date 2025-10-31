@@ -1,3 +1,9 @@
+---
+title: gloadBytes
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **gloadBytes**(`a`, `b`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:1510](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L1510)
+Defined in: [op.ts:1539](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L1539)
 
 Bth scratch space value of the Ath transaction in the current group
 

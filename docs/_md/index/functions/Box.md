@@ -1,3 +1,9 @@
+---
+title: Box
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **Box**\<`TValue`\>(`options`): [`Box`](../type-aliases/Box.md)\<`TValue`\>
 
-Defined in: [packages/algo-ts/src/box.ts:187](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L187)
+Defined in: [box.ts:131](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L131)
 
 Creates a Box proxy object offering methods of getting and setting the value stored in a single box.
 

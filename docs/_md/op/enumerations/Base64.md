@@ -1,3 +1,9 @@
+---
+title: Base64
+type: enum
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,7 +12,7 @@
 
 # Enumeration: Base64
 
-Defined in: [packages/algo-ts/src/op.ts:7](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L7)
+Defined in: [op.ts:7](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L7)
 
 ## Enumeration Members
 
@@ -14,7 +20,7 @@ Defined in: [packages/algo-ts/src/op.ts:7](https://github.com/algorandfoundation
 
 > **StdEncoding**: `"StdEncoding"`
 
-Defined in: [packages/algo-ts/src/op.ts:9](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L9)
+Defined in: [op.ts:9](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L9)
 
 ***
 
@@ -22,4 +28,4 @@ Defined in: [packages/algo-ts/src/op.ts:9](https://github.com/algorandfoundation
 
 > **URLEncoding**: `"URLEncoding"`
 
-Defined in: [packages/algo-ts/src/op.ts:8](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L8)
+Defined in: [op.ts:8](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L8)

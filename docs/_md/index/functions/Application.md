@@ -1,3 +1,9 @@
+---
+title: Application
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -10,7 +16,7 @@
 
 > **Application**(): [`Application`](../type-aliases/Application.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:228](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L228)
+Defined in: [reference.ts:227](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L227)
 
 Creates a new Application object represent the application id 0 (an invalid ID)
 
@@ -22,7 +28,7 @@ Creates a new Application object represent the application id 0 (an invalid ID)
 
 > **Application**(`applicationId`): [`Application`](../type-aliases/Application.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:233](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L233)
+Defined in: [reference.ts:232](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L232)
 
 Creates a new Application object representing the application with the specified id
 

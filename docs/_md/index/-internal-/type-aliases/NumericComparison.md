@@ -1,3 +1,9 @@
+---
+title: NumericComparison
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Type Alias: NumericComparison\<T\>
 
-> **NumericComparison**\<`T`\> = `T` \| \{ `lessThan`: `T`; \} \| \{ `greaterThan`: `T`; \} \| \{ `greaterThanEq`: `T`; \} \| \{ `lessThanEq`: `T`; \} \| \{ `between`: \[`T`, `T`\]; \}
+> **NumericComparison**\<`T`\> = `T` \| \{ `lessThan`: `T`; \} \| \{ `greaterThan`: `T`; \} \| \{ `greaterThanEq`: `T`; \} \| \{ `lessThanEq`: `T`; \} \| \{ `between`: readonly \[`T`, `T`\]; \} \| \{ `not`: `T`; \}
 
-Defined in: [packages/algo-ts/src/util.ts:34](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L34)
+Defined in: [util.ts:34](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L34)
 
 Defines possible comparison expressions for numeric types
 
@@ -54,10 +60,18 @@ Is the subject greater than or equal to the specified value
 
 Is the subject less than or equal to the specified value
 
-\{ `between`: \[`T`, `T`\]; \}
+\{ `between`: readonly \[`T`, `T`\]; \}
 
 ### between
 
-> **between**: \[`T`, `T`\]
+> **between**: readonly \[`T`, `T`\]
 
 Is the subject between the specified values (inclusive)
+
+\{ `not`: `T`; \}
+
+### not
+
+> **not**: `T`
+
+Is the subject not equal to the specified value

@@ -1,3 +1,9 @@
+---
+title: arg
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **arg**(`a`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:411](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L411)
+Defined in: [op.ts:419](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L419)
 
 Ath LogicSig argument
 

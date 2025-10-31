@@ -1,3 +1,9 @@
+---
+title: abiCall
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,36 +12,26 @@
 
 # Function: abiCall()
 
-> **abiCall**\<`TArgs`, `TReturn`\>(`method`, `fields`): [`TypedApplicationCallResponse`](../type-aliases/TypedApplicationCallResponse.md)\<`TReturn`\>
+> **abiCall**\<`TMethod`\>(`options`): [`AbiCallResponse`](../type-aliases/AbiCallResponse.md)\<`TMethod`\>
 
-Defined in: [packages/algo-ts/src/arc4/c2c.ts:116](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/c2c.ts#L116)
+Defined in: [arc4/c2c.ts:126](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/c2c.ts#L126)
 
 Invokes the target ABI method using a strongly typed fields object.
 
 ## Type Parameters
 
-### TArgs
+### TMethod
 
-`TArgs` *extends* `any`[]
-
-### TReturn
-
-`TReturn`
+`TMethod`
 
 ## Parameters
 
-### method
+### options
 
-[`InstanceMethod`](../-internal-/type-aliases/InstanceMethod.md)\<[`Contract`](../classes/Contract.md), `TArgs`, `TReturn`\>
+[`AbiCallOptions`](../interfaces/AbiCallOptions.md)\<`TMethod`\>
 
-An ABI method function reference.
-
-### fields
-
-[`TypedApplicationCallFields`](../type-aliases/TypedApplicationCallFields.md)\<`TArgs`\>
-
-Specify values for transaction fields.
+Specify options for the abi call.
 
 ## Returns
 
-[`TypedApplicationCallResponse`](../type-aliases/TypedApplicationCallResponse.md)\<`TReturn`\>
+[`AbiCallResponse`](../type-aliases/AbiCallResponse.md)\<`TMethod`\>

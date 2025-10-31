@@ -1,3 +1,9 @@
+---
+title: urange
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,9 +14,9 @@
 
 ## Call Signature
 
-> **urange**(`stop`): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
+> **urange**(`stop`): `IterableIterator`\<[`uint64`](../type-aliases/uint64.md)\>
 
-Defined in: [packages/algo-ts/src/util.ts:138](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L138)
+Defined in: [util.ts:161](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L161)
 
 Generates an iterable sequence from 0...stop inclusive
 
@@ -24,13 +30,13 @@ The stop number of the sequence
 
 ### Returns
 
-[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
+`IterableIterator`\<[`uint64`](../type-aliases/uint64.md)\>
 
 ## Call Signature
 
-> **urange**(`start`, `stop`): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
+> **urange**(`start`, `stop`): `IterableIterator`\<[`uint64`](../type-aliases/uint64.md)\>
 
-Defined in: [packages/algo-ts/src/util.ts:144](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L144)
+Defined in: [util.ts:167](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L167)
 
 Generates an iterable sequence from start...stop inclusive
 
@@ -50,13 +56,13 @@ The stop number of the sequence
 
 ### Returns
 
-[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
+`IterableIterator`\<[`uint64`](../type-aliases/uint64.md)\>
 
 ## Call Signature
 
-> **urange**(`start`, `stop`, `step`): [`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
+> **urange**(`start`, `stop`, `step`): `IterableIterator`\<[`uint64`](../type-aliases/uint64.md)\>
 
-Defined in: [packages/algo-ts/src/util.ts:151](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L151)
+Defined in: [util.ts:174](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L174)
 
 Generates an iterable sequence from start...stop inclusive with increments of size step
 
@@ -82,4 +88,4 @@ The step size of the sequence
 
 ### Returns
 
-[`IterableIterator`](../-internal-/interfaces/IterableIterator.md)\<[`uint64`](../type-aliases/uint64.md)\>
+`IterableIterator`\<[`uint64`](../type-aliases/uint64.md)\>

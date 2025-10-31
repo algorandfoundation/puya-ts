@@ -1,3 +1,9 @@
+---
+title: ConventionalRouting
+type: interface
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,7 +12,7 @@
 
 # Interface: ConventionalRouting
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:31](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L31)
+Defined in: [arc4/index.ts:31](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L31)
 
 Defines conventional routing method names. When used, methods with these names will be implicitly routed to the corresponding
 application lifecycle event.
@@ -22,7 +28,7 @@ the developer experience of using this feature.
 
 > `optional` **closeOutOfApplication**: [`AnyFunction`](../-internal-/type-aliases/AnyFunction.md)
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:35](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L35)
+Defined in: [arc4/index.ts:35](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L35)
 
 The function to invoke when closing out of this application
 
@@ -32,7 +38,7 @@ The function to invoke when closing out of this application
 
 > `optional` **createApplication**: [`AnyFunction`](../-internal-/type-aliases/AnyFunction.md)
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:39](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L39)
+Defined in: [arc4/index.ts:39](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L39)
 
 The function to invoke when creating this application
 
@@ -42,7 +48,7 @@ The function to invoke when creating this application
 
 > `optional` **deleteApplication**: [`AnyFunction`](../-internal-/type-aliases/AnyFunction.md)
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:43](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L43)
+Defined in: [arc4/index.ts:43](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L43)
 
 The function to invoke when deleting this application
 
@@ -52,7 +58,7 @@ The function to invoke when deleting this application
 
 > `optional` **optInToApplication**: [`AnyFunction`](../-internal-/type-aliases/AnyFunction.md)
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:47](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L47)
+Defined in: [arc4/index.ts:47](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L47)
 
 The function to invoke when opting in to this application
 
@@ -62,6 +68,6 @@ The function to invoke when opting in to this application
 
 > `optional` **updateApplication**: [`AnyFunction`](../-internal-/type-aliases/AnyFunction.md)
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:51](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L51)
+Defined in: [arc4/index.ts:51](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L51)
 
 The function to invoke when updating this application

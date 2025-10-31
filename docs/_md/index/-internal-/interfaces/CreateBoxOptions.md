@@ -1,3 +1,9 @@
+---
+title: CreateBoxOptions
+type: interface
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../../README.md)
 
 ***
@@ -6,7 +12,7 @@
 
 # Interface: CreateBoxOptions
 
-Defined in: [packages/algo-ts/src/box.ts:175](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L175)
+Defined in: [box.ts:119](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L119)
 
 Options for creating a Box proxy
 
@@ -16,6 +22,6 @@ Options for creating a Box proxy
 
 > **key**: `string` \| [`bytes`](../../type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/box.ts:179](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L179)
+Defined in: [box.ts:123](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L123)
 
 The bytes which make up the key of the box

@@ -1,3 +1,9 @@
+---
+title: match
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **match**\<`T`\>(`subject`, `test`): `boolean`
 
-Defined in: [packages/algo-ts/src/util.ts:88](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L88)
+Defined in: [util.ts:111](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L111)
 
 Applies all tests in `test` against `subject` and returns a boolean indicating if they all pass
 

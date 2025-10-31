@@ -1,3 +1,9 @@
+---
+title: CompileLogicSigOptions
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **CompileLogicSigOptions** = `object`
 
-Defined in: [packages/algo-ts/src/compiled.ts:90](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/compiled.ts#L90)
+Defined in: [compiled.ts:90](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/compiled.ts#L90)
 
 Options for compiling a logic signature
 
@@ -16,9 +22,9 @@ Options for compiling a logic signature
 
 ### templateVars?
 
-> `optional` **templateVars**: [`Record`](../-internal-/type-aliases/Record.md)\<`string`, [`DeliberateAny`](../-internal-/type-aliases/DeliberateAny.md)\>
+> `optional` **templateVars**: `Record`\<`string`, [`DeliberateAny`](../-internal-/type-aliases/DeliberateAny.md)\>
 
-Defined in: [packages/algo-ts/src/compiled.ts:95](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/compiled.ts#L95)
+Defined in: [compiled.ts:95](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/compiled.ts#L95)
 
 Template variables to substitute into the contract, key should be without the prefix, must evaluate to a compile time constant
 and match the type of the template var declaration
@@ -29,6 +35,6 @@ and match the type of the template var declaration
 
 > `optional` **templateVarsPrefix**: `string`
 
-Defined in: [packages/algo-ts/src/compiled.ts:99](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/compiled.ts#L99)
+Defined in: [compiled.ts:99](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/compiled.ts#L99)
 
 Prefix to add to provided template vars, defaults to the prefix supplied on command line (which defaults to TMPL_)

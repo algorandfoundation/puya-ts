@@ -1,3 +1,9 @@
+---
+title: Scratch
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,13 +14,15 @@
 
 > `const` **Scratch**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:3293](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3293)
+Defined in: [op.ts:3346](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3346)
 
 Load or store scratch values
 
 ## Type declaration
 
 ### loadBytes()
+
+> **loadBytes**(`a`): [`bytes`](../../index/type-aliases/bytes.md)
 
 Ath scratch space value.  All scratch spaces are 0 at program start.
 
@@ -35,6 +43,8 @@ Min AVM version: 5
 
 ### loadUint64()
 
+> **loadUint64**(`a`): [`uint64`](../../index/type-aliases/uint64.md)
+
 Ath scratch space value.  All scratch spaces are 0 at program start.
 
 #### Parameters
@@ -53,6 +63,8 @@ Native TEAL opcode: [`loads`](https://dev.algorand.co/reference/algorand-teal/op
 Min AVM version: 5
 
 ### store()
+
+> **store**(`a`, `b`): `void`
 
 store B to the Ath scratch space
 

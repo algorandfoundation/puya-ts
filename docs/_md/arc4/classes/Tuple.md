@@ -1,3 +1,9 @@
+---
+title: Tuple
+type: class
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,7 +12,7 @@
 
 # Class: Tuple\<TTuple\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:414](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L414)
+Defined in: [arc4/encoded-types.ts:408](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L408)
 
 An arc4 encoded tuple of values
 
@@ -18,7 +24,7 @@ An arc4 encoded tuple of values
 
 ### TTuple
 
-`TTuple` *extends* \[[`ARC4Encoded`](ARC4Encoded.md), `...ARC4Encoded[]`\]
+`TTuple` *extends* readonly \[[`ARC4Encoded`](ARC4Encoded.md), `...ARC4Encoded[]`\]
 
 A type representing the native tuple of item types
 
@@ -28,7 +34,7 @@ A type representing the native tuple of item types
 
 > **new Tuple**\<`TTuple`\>(): `Tuple`\<`TTuple`\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:421](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L421)
+Defined in: [arc4/encoded-types.ts:415](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L415)
 
 Create a new Tuple with the default zero values for items
 
@@ -44,7 +50,7 @@ Create a new Tuple with the default zero values for items
 
 > **new Tuple**\<`TTuple`\>(...`items`): `Tuple`\<`TTuple`\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:426](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L426)
+Defined in: [arc4/encoded-types.ts:420](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L420)
 
 Create a new Tuple with the specified items
 
@@ -72,7 +78,7 @@ The tuple items
 
 > **get** **bytes**(): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:97](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L97)
+Defined in: [arc4/encoded-types.ts:102](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L102)
 
 Retrieve the encoded bytes for this type
 
@@ -92,7 +98,7 @@ Retrieve the encoded bytes for this type
 
 > **get** **length**(): `TTuple`\[`"length"`\] & `object` & `number`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:442](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L442)
+Defined in: [arc4/encoded-types.ts:436](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L436)
 
 Returns the length of this tuple
 
@@ -108,7 +114,7 @@ Returns the length of this tuple
 
 > **get** **native**(): `TTuple`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:449](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L449)
+Defined in: [arc4/encoded-types.ts:443](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L443)
 
 Returns the decoded native tuple (with arc4 encoded items)
 
@@ -122,7 +128,7 @@ Returns the decoded native tuple (with arc4 encoded items)
 
 > **at**\<`TIndex`\>(`index`): `TTuple`\[`TIndex`\]
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:435](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L435)
+Defined in: [arc4/encoded-types.ts:429](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L429)
 
 Returns the item at the specified index
 

@@ -1,3 +1,9 @@
+---
+title: abimethod
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Function: abimethod()
 
-> **abimethod**\<`TContract`\>(`config`?): \<`TArgs`, `TReturn`\>(`target`, `ctx`) => (`this`, ...`args`) => `TReturn`
+> **abimethod**\<`TContract`\>(`config?`): \<`TArgs`, `TReturn`\>(`target`, `ctx`) => (`this`, ...`args`) => `TReturn`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:122](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L122)
+Defined in: [arc4/index.ts:155](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L155)
 
 Declares the decorated method as an abimethod that is called when the first transaction arg matches the method selector
 
@@ -30,7 +36,7 @@ The config for this abi method
 
 ## Returns
 
-`Function`
+> \<`TArgs`, `TReturn`\>(`target`, `ctx`): (`this`, ...`args`) => `TReturn`
 
 ### Type Parameters
 
@@ -50,11 +56,11 @@ The config for this abi method
 
 #### ctx
 
-[`ClassMethodDecoratorContext`](../-internal-/interfaces/ClassMethodDecoratorContext.md)\<`TContract`\>
+`ClassMethodDecoratorContext`\<`TContract`\>
 
 ### Returns
 
-`Function`
+> (`this`, ...`args`): `TReturn`
 
 #### Parameters
 

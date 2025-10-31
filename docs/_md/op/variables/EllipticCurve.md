@@ -1,3 +1,9 @@
+---
+title: EllipticCurve
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,13 +14,15 @@
 
 > `const` **EllipticCurve**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:754](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L754)
+Defined in: [op.ts:762](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L762)
 
 Elliptic Curve functions
 
 ## Type declaration
 
 ### add()
+
+> **add**(`g`, `a`, `b`): [`bytes`](../../index/type-aliases/bytes.md)
 
 for curve points A and B, return the curve point A + B
 A and B are curve points in affine representation: field element X concatenated with field element Y. Field element `Z` is encoded as follows.
@@ -51,6 +59,8 @@ Min AVM version: 10
 
 ### mapTo()
 
+> **mapTo**(`g`, `a`): [`bytes`](../../index/type-aliases/bytes.md)
+
 maps field element A to group G
 BN254 points are mapped by the SVDW map. BLS12-381 points are mapped by the SSWU map.
 G1 element inputs are base field elements and G2 element inputs are quadratic field elements, with nearly the same encoding rules (for field elements) as defined in `ec_add`. There is one difference of encoding rule: G1 element inputs do not need to be 0-padded if they fit in less than 32 bytes for BN254 and less than 48 bytes for BLS12-381. (As usual, the empty byte array represents 0.) G2 elements inputs need to be always have the required size.
@@ -75,6 +85,8 @@ Native TEAL opcode: [`ec_map_to`](https://dev.algorand.co/reference/algorand-tea
 Min AVM version: 10
 
 ### pairingCheck()
+
+> **pairingCheck**(`g`, `a`, `b`): `boolean`
 
 1 if the product of the pairing of each point in A with its respective point in B is equal to the identity element of the target group Gt, else 0
 A and B are concatenated points, encoded and checked as described in `ec_add`. A contains points of the group G, B contains points of the associated group (G2 if G is G1, and vice versa). Fails if A and B have a different number of points, or if any point is not in its described group or outside the main prime-order subgroup - a stronger condition than other opcodes. AVM values are limited to 4096 bytes, so `ec_pairing_check` is limited by the size of the points in the groups being operated upon.
@@ -104,6 +116,8 @@ Min AVM version: 10
 
 ### scalarMul()
 
+> **scalarMul**(`g`, `a`, `b`): [`bytes`](../../index/type-aliases/bytes.md)
+
 for curve point A and scalar B, return the curve point BA, the point A multiplied by the scalar B.
 A is a curve point encoded and checked as described in `ec_add`. Scalar B is interpreted as a big-endian unsigned integer. Fails if B exceeds 32 bytes.
 
@@ -131,6 +145,8 @@ Native TEAL opcode: [`ec_scalar_mul`](https://dev.algorand.co/reference/algorand
 Min AVM version: 10
 
 ### scalarMulMulti()
+
+> **scalarMulMulti**(`g`, `a`, `b`): [`bytes`](../../index/type-aliases/bytes.md)
 
 for curve points A and scalars B, return curve point B0A0 + B1A1 + B2A2 + ... + BnAn
 A is a list of concatenated points, encoded and checked as described in `ec_add`. B is a list of concatenated scalars which, unlike ec_scalar_mul, must all be exactly 32 bytes long.
@@ -160,6 +176,8 @@ Native TEAL opcode: [`ec_multi_scalar_mul`](https://dev.algorand.co/reference/al
 Min AVM version: 10
 
 ### subgroupCheck()
+
+> **subgroupCheck**(`g`, `a`): `boolean`
 
 1 if A is in the main prime-order subgroup of G (including the point at infinity) else 0. Program fails if A is not in G at all.
 

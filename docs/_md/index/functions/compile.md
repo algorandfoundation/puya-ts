@@ -1,3 +1,9 @@
+---
+title: compile
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,9 +14,9 @@
 
 ## Call Signature
 
-> **compile**(`contract`, `options`?): [`CompiledContract`](../type-aliases/CompiledContract.md)
+> **compile**(`contract`, `options?`): [`CompiledContract`](../type-aliases/CompiledContract.md)
 
-Defined in: [packages/algo-ts/src/compiled.ts:107](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/compiled.ts#L107)
+Defined in: [compiled.ts:107](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/compiled.ts#L107)
 
 Compile a contract and return the resulting byte code for approval and clear state programs.
 
@@ -34,9 +40,9 @@ Options for compiling the contract
 
 ## Call Signature
 
-> **compile**(`logicSig`, `options`?): [`CompiledLogicSig`](../type-aliases/CompiledLogicSig.md)
+> **compile**(`logicSig`, `options?`): [`CompiledLogicSig`](../type-aliases/CompiledLogicSig.md)
 
-Defined in: [packages/algo-ts/src/compiled.ts:113](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/compiled.ts#L113)
+Defined in: [compiled.ts:113](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/compiled.ts#L113)
 
 Compile a logic signature and return an account ready for signing transactions.
 

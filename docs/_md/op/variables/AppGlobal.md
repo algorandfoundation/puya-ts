@@ -1,3 +1,9 @@
+---
+title: AppGlobal
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,13 +14,15 @@
 
 > `const` **AppGlobal**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:186](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L186)
+Defined in: [op.ts:186](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L186)
 
 Get or modify Global app state
 
 ## Type declaration
 
 ### delete()
+
+> **delete**(`a`): `void`
 
 delete key A from the global state of the current application
 
@@ -23,6 +31,9 @@ delete key A from the global state of the current application
 ##### a
 
 [`bytes`](../../index/type-aliases/bytes.md)
+
+state key.
+Deleting a key which is already absent has no effect on the application global state. (In particular, it does _not_ cause the program to fail.)
 
 #### Returns
 
@@ -35,6 +46,8 @@ Min AVM version: 2
 
 ### getBytes()
 
+> **getBytes**(`a`): [`bytes`](../../index/type-aliases/bytes.md)
+
 global state of the key A in the current application
 
 #### Parameters
@@ -42,6 +55,8 @@ global state of the key A in the current application
 ##### a
 
 [`bytes`](../../index/type-aliases/bytes.md)
+
+state key.
 
 #### Returns
 
@@ -56,11 +71,15 @@ Min AVM version: 2
 
 ### getExBytes()
 
+> **getExBytes**(`a`, `b`): readonly \[[`bytes`](../../index/type-aliases/bytes.md), `boolean`\]
+
 X is the global state of application A, key B. Y is 1 if key existed, else 0
 
 #### Parameters
 
 ##### a
+
+Txn.ForeignApps offset (or, since v4, an _available_ application id), state key.
 
 [`uint64`](../../index/type-aliases/uint64.md) | [`Application`](../../index/type-aliases/Application.md)
 
@@ -81,11 +100,15 @@ Min AVM version: 2
 
 ### getExUint64()
 
+> **getExUint64**(`a`, `b`): readonly \[[`uint64`](../../index/type-aliases/uint64.md), `boolean`\]
+
 X is the global state of application A, key B. Y is 1 if key existed, else 0
 
 #### Parameters
 
 ##### a
+
+Txn.ForeignApps offset (or, since v4, an _available_ application id), state key.
 
 [`uint64`](../../index/type-aliases/uint64.md) | [`Application`](../../index/type-aliases/Application.md)
 
@@ -106,6 +129,8 @@ Min AVM version: 2
 
 ### getUint64()
 
+> **getUint64**(`a`): [`uint64`](../../index/type-aliases/uint64.md)
+
 global state of the key A in the current application
 
 #### Parameters
@@ -113,6 +138,8 @@ global state of the key A in the current application
 ##### a
 
 [`bytes`](../../index/type-aliases/bytes.md)
+
+state key.
 
 #### Returns
 
@@ -126,6 +153,8 @@ Native TEAL opcode: [`app_global_get`](https://dev.algorand.co/reference/algoran
 Min AVM version: 2
 
 ### put()
+
+> **put**(`a`, `b`): `void`
 
 write B to key A in the global state of the current application
 

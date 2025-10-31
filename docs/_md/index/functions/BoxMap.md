@@ -1,3 +1,9 @@
+---
+title: BoxMap
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **BoxMap**\<`TKey`, `TValue`\>(`options`): [`BoxMap`](../type-aliases/BoxMap.md)\<`TKey`, `TValue`\>
 
-Defined in: [packages/algo-ts/src/box.ts:207](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L207)
+Defined in: [box.ts:151](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/box.ts#L151)
 
 Creates a BoxMap proxy object offering methods of getting and setting a set of values stored in individual boxes indexed by a common key type
 

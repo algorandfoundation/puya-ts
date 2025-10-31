@@ -1,3 +1,9 @@
+---
+title: AssetHolding
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,11 +14,13 @@
 
 > `const` **AssetHolding**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:414](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L414)
+Defined in: [op.ts:422](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L422)
 
 ## Type declaration
 
 ### assetBalance()
+
+> **assetBalance**(`a`, `b`): readonly \[[`uint64`](../../index/type-aliases/uint64.md), `boolean`\]
 
 Amount of the asset unit held by this account
 Min AVM version: 2
@@ -32,6 +40,8 @@ Min AVM version: 2
 readonly \[[`uint64`](../../index/type-aliases/uint64.md), `boolean`\]
 
 ### assetFrozen()
+
+> **assetFrozen**(`a`, `b`): readonly \[`boolean`, `boolean`\]
 
 Is the asset frozen or not
 Min AVM version: 2

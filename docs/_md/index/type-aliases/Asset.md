@@ -1,3 +1,9 @@
+---
+title: Asset
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,9 +14,9 @@
 
 > **Asset** = `object`
 
-Defined in: [packages/algo-ts/src/reference.ts:128](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L128)
+Defined in: [reference.ts:127](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L127)
 
-An Asset on the Algorand network.
+Creates a new Asset object represent the asset id 0 (an invalid ID)
 
 ## Properties
 
@@ -18,7 +24,7 @@ An Asset on the Algorand network.
 
 > `readonly` **clawback**: [`Account`](Account.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:199](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L199)
+Defined in: [reference.ts:198](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L198)
 
 Clawback address
 
@@ -28,7 +34,7 @@ Clawback address
 
 > `readonly` **creator**: [`Account`](Account.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:204](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L204)
+Defined in: [reference.ts:203](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L203)
 
 Creator address
 
@@ -38,7 +44,7 @@ Creator address
 
 > `readonly` **decimals**: [`uint64`](uint64.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:154](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L154)
+Defined in: [reference.ts:153](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L153)
 
 #### See
 
@@ -50,7 +56,7 @@ AssetParams.decimals
 
 > `readonly` **defaultFrozen**: `boolean`
 
-Defined in: [packages/algo-ts/src/reference.ts:159](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L159)
+Defined in: [reference.ts:158](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L158)
 
 Frozen by default or not
 
@@ -60,7 +66,7 @@ Frozen by default or not
 
 > `readonly` **freeze**: [`Account`](Account.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:194](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L194)
+Defined in: [reference.ts:193](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L193)
 
 Freeze address
 
@@ -70,7 +76,7 @@ Freeze address
 
 > `readonly` **id**: [`uint64`](uint64.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:144](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L144)
+Defined in: [reference.ts:143](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L143)
 
 Returns the id of the Asset
 
@@ -80,7 +86,7 @@ Returns the id of the Asset
 
 > `readonly` **manager**: [`Account`](Account.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:184](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L184)
+Defined in: [reference.ts:183](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L183)
 
 Manager address
 
@@ -88,9 +94,9 @@ Manager address
 
 ### metadataHash
 
-> `readonly` **metadataHash**: [`bytes`](bytes.md)
+> `readonly` **metadataHash**: [`bytes`](bytes.md)\<`32`\>
 
-Defined in: [packages/algo-ts/src/reference.ts:179](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L179)
+Defined in: [reference.ts:178](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L178)
 
 Arbitrary commitment
 
@@ -100,7 +106,7 @@ Arbitrary commitment
 
 > `readonly` **name**: [`bytes`](bytes.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:169](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L169)
+Defined in: [reference.ts:168](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L168)
 
 Asset name
 
@@ -110,7 +116,7 @@ Asset name
 
 > `readonly` **reserve**: [`Account`](Account.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:189](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L189)
+Defined in: [reference.ts:188](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L188)
 
 Reserve address
 
@@ -120,7 +126,7 @@ Reserve address
 
 > `readonly` **total**: [`uint64`](uint64.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:149](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L149)
+Defined in: [reference.ts:148](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L148)
 
 Total number of units of this asset
 
@@ -130,7 +136,7 @@ Total number of units of this asset
 
 > `readonly` **unitName**: [`bytes`](bytes.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:164](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L164)
+Defined in: [reference.ts:163](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L163)
 
 Asset unit name
 
@@ -140,7 +146,7 @@ Asset unit name
 
 > `readonly` **url**: [`bytes`](bytes.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:174](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L174)
+Defined in: [reference.ts:173](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L173)
 
 URL with additional info about the asset
 
@@ -150,7 +156,7 @@ URL with additional info about the asset
 
 > **balance**(`account`): [`uint64`](uint64.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:213](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L213)
+Defined in: [reference.ts:212](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L212)
 
 Amount of the asset unit held by this account. Fails if the account has not
 opted in to the asset.
@@ -176,7 +182,7 @@ balance: uint64
 
 > **frozen**(`account`): `boolean`
 
-Defined in: [packages/algo-ts/src/reference.ts:222](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L222)
+Defined in: [reference.ts:221](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L221)
 
 Is the asset frozen or not. Fails if the account has not
 opted in to the asset.

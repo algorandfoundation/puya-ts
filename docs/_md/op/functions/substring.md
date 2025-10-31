@@ -1,3 +1,9 @@
+---
+title: substring
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **substring**(`a`, `b`, `c`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3440](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3440)
+Defined in: [op.ts:3493](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3493)
 
 A range of bytes from A starting at B up to but not including C. If C < B, or either is larger than the array length, the program fails
 

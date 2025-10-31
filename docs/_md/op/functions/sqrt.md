@@ -1,3 +1,9 @@
+---
+title: sqrt
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **sqrt**(`a`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:3431](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3431)
+Defined in: [op.ts:3484](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3484)
 
 The largest integer I such that I^2 <= A
 

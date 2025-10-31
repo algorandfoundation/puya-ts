@@ -1,3 +1,9 @@
+---
+title: Arc4ArrayBase
+type: class
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../../README.md)
 
 ***
@@ -6,7 +12,7 @@
 
 # Class: `abstract` Arc4ArrayBase\<TItem\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:232](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L232)
+Defined in: [arc4/encoded-types.ts:237](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L237)
 
 A base type for arc4 array types
 
@@ -28,9 +34,16 @@ A base type for arc4 array types
 
 `TItem` *extends* [`ARC4Encoded`](../../classes/ARC4Encoded.md)
 
+## Implements
+
+- `ConcatArray`\<`TItem`\>
+
 ## Indexable
 
 \[`index`: [`uint64`](../../../index/type-aliases/uint64.md)\]: `TItem`
+
+Get or set the item at the specified index.
+Negative indexes are not supported
 
 ## Constructors
 
@@ -38,7 +51,7 @@ A base type for arc4 array types
 
 > `protected` **new Arc4ArrayBase**\<`TItem`\>(): `Arc4ArrayBase`\<`TItem`\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:233](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L233)
+Defined in: [arc4/encoded-types.ts:238](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L238)
 
 #### Returns
 
@@ -56,7 +69,7 @@ Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:233](https://github.com/
 
 > **get** **bytes**(): [`bytes`](../../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:97](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L97)
+Defined in: [arc4/encoded-types.ts:102](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L102)
 
 Retrieve the encoded bytes for this type
 
@@ -76,7 +89,7 @@ Retrieve the encoded bytes for this type
 
 > **get** **length**(): [`uint64`](../../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:240](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L240)
+Defined in: [arc4/encoded-types.ts:245](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L245)
 
 Returns the current length of this array
 
@@ -84,19 +97,23 @@ Returns the current length of this array
 
 [`uint64`](../../../index/type-aliases/uint64.md)
 
+#### Implementation of
+
+`ConcatArray.length`
+
 ## Methods
 
 ### \[iterator\]()
 
-> **\[iterator\]**(): [`IterableIterator`](../../../index/-internal-/interfaces/IterableIterator.md)\<`TItem`\>
+> **\[iterator\]**(): `IterableIterator`\<`TItem`\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:277](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L277)
+Defined in: [arc4/encoded-types.ts:292](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L292)
 
 Returns an iterator for the items in this array
 
 #### Returns
 
-[`IterableIterator`](../../../index/-internal-/interfaces/IterableIterator.md)\<`TItem`\>
+`IterableIterator`\<`TItem`\>
 
 ***
 
@@ -104,7 +121,7 @@ Returns an iterator for the items in this array
 
 > **at**(`index`): `TItem`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:249](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L249)
+Defined in: [arc4/encoded-types.ts:254](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L254)
 
 Returns the item at the given index.
 Negative indexes are taken from the end.
@@ -125,58 +142,87 @@ The index of the item to retrieve
 
 ### entries()
 
-> **entries**(): [`IterableIterator`](../../../index/-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../../index/type-aliases/uint64.md), `TItem`\]\>
+> **entries**(): `IterableIterator`\<readonly \[[`uint64`](../../../index/type-aliases/uint64.md), `TItem`\]\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:284](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L284)
+Defined in: [arc4/encoded-types.ts:299](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L299)
 
 Returns an iterator for a tuple of the indexes and items in this array
 
 #### Returns
 
-[`IterableIterator`](../../../index/-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../../index/type-aliases/uint64.md), `TItem`\]\>
+`IterableIterator`\<readonly \[[`uint64`](../../../index/type-aliases/uint64.md), `TItem`\]\>
+
+***
+
+### ~~join()~~
+
+> **join**(`separator?`): `string`
+
+Defined in: [arc4/encoded-types.ts:285](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L285)
+
+Creates a string by concatenating all the items in the array delimited by the
+specified separator (or ',' by default)
+
+#### Parameters
+
+##### separator?
+
+`string`
+
+#### Returns
+
+`string`
+
+#### Deprecated
+
+Join is not supported in Algorand TypeScript
+
+#### Implementation of
+
+`ConcatArray.join`
 
 ***
 
 ### keys()
 
-> **keys**(): [`IterableIterator`](../../../index/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../../../index/type-aliases/uint64.md)\>
+> **keys**(): `IterableIterator`\<[`uint64`](../../../index/type-aliases/uint64.md)\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:291](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L291)
+Defined in: [arc4/encoded-types.ts:306](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L306)
 
 Returns an iterator for the indexes in this array
 
 #### Returns
 
-[`IterableIterator`](../../../index/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../../../index/type-aliases/uint64.md)\>
+`IterableIterator`\<[`uint64`](../../../index/type-aliases/uint64.md)\>
 
 ***
 
-### slice()
+### ~~slice()~~
 
 #### Call Signature
 
-> **slice**(): [`DynamicArray`](../../classes/DynamicArray.md)\<`TItem`\>
+> **slice**(): `TItem`[]
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:256](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L256)
-
-**`Internal`**
-
-Create a new Dynamic array with all items from this array
+Defined in: [arc4/encoded-types.ts:261](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L261)
 
 ##### Returns
 
-[`DynamicArray`](../../classes/DynamicArray.md)\<`TItem`\>
+`TItem`[]
+
+##### Deprecated
+
+Array slicing is not yet supported in Algorand TypeScript
+Create a new Dynamic array with all items from this array
+
+##### Implementation of
+
+`ConcatArray.slice`
 
 #### Call Signature
 
-> **slice**(`end`): [`DynamicArray`](../../classes/DynamicArray.md)\<`TItem`\>
+> **slice**(`end`): `TItem`[]
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:262](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L262)
-
-**`Internal`**
-
-Create a new DynamicArray with all items up till `end`.
-Negative indexes are taken from the end.
+Defined in: [arc4/encoded-types.ts:267](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L267)
 
 ##### Parameters
 
@@ -188,18 +234,23 @@ An index in which to stop copying items.
 
 ##### Returns
 
-[`DynamicArray`](../../classes/DynamicArray.md)\<`TItem`\>
+`TItem`[]
+
+##### Deprecated
+
+Array slicing is not yet supported in Algorand TypeScript
+Create a new DynamicArray with all items up till `end`.
+Negative indexes are taken from the end.
+
+##### Implementation of
+
+`ConcatArray.slice`
 
 #### Call Signature
 
-> **slice**(`start`, `end`): [`DynamicArray`](../../classes/DynamicArray.md)\<`TItem`\>
+> **slice**(`start`, `end`): `TItem`[]
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:269](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L269)
-
-**`Internal`**
-
-Create a new DynamicArray with items from `start`, up until `end`
-Negative indexes are taken from the end.
+Defined in: [arc4/encoded-types.ts:274](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L274)
 
 ##### Parameters
 
@@ -217,4 +268,14 @@ An index in which to stop copying items
 
 ##### Returns
 
-[`DynamicArray`](../../classes/DynamicArray.md)\<`TItem`\>
+`TItem`[]
+
+##### Deprecated
+
+Array slicing is not yet supported in Algorand TypeScript
+Create a new DynamicArray with items from `start`, up until `end`
+Negative indexes are taken from the end.
+
+##### Implementation of
+
+`ConcatArray.slice`

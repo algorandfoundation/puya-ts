@@ -1,3 +1,9 @@
+---
+title: BareMethodConfig
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **BareMethodConfig** = `object`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:134](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L134)
+Defined in: [arc4/index.ts:179](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L179)
 
 Configuration options for a bare method
 
@@ -18,7 +24,7 @@ Configuration options for a bare method
 
 > `optional` **allowActions**: [`OnCompleteActionStr`](../../index/type-aliases/OnCompleteActionStr.md) \| [`OnCompleteActionStr`](../../index/type-aliases/OnCompleteActionStr.md)[]
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:139](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L139)
+Defined in: [arc4/index.ts:184](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L184)
 
 Which on complete action(s) are allowed when invoking this method.
 
@@ -34,7 +40,7 @@ Which on complete action(s) are allowed when invoking this method.
 
 > `optional` **onCreate**: [`CreateOptions`](CreateOptions.md)
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:144](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L144)
+Defined in: [arc4/index.ts:189](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L189)
 
 Whether this method should be callable when creating the application.
 

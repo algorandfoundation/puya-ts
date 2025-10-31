@@ -1,3 +1,9 @@
+---
+title: BitSize
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,6 +14,6 @@
 
 > **BitSize** = [`UintBitSize`](../-internal-/type-aliases/UintBitSize.md) \| [`BigUintBitSize`](../-internal-/type-aliases/BigUintBitSize.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L72)
+Defined in: [arc4/encoded-types.ts:72](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L72)
 
-Defines supported bit sizes for the UintN and UFixedNxM types
+Defines supported bit sizes for the UintN and UFixed types

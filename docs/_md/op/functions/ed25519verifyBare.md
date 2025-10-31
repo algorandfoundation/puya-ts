@@ -1,3 +1,9 @@
+---
+title: ed25519verifyBare
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **ed25519verifyBare**(`a`, `b`, `c`): `boolean`
 
-Defined in: [packages/algo-ts/src/op.ts:869](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L869)
+Defined in: [op.ts:890](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L890)
 
 for (data A, signature B, pubkey C) verify the signature of the data against the pubkey => {0 or 1}
 
@@ -20,11 +26,11 @@ for (data A, signature B, pubkey C) verify the signature of the data against the
 
 ### b
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md) | [`bytes`](../../index/type-aliases/bytes.md)\<`64`\>
 
 ### c
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`32`\> | [`bytes`](../../index/type-aliases/bytes.md)
 
 ## Returns
 

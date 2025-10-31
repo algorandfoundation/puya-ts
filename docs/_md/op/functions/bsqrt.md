@@ -1,3 +1,9 @@
+---
+title: bsqrt
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **bsqrt**(`a`): [`biguint`](../../index/type-aliases/biguint.md)
 
-Defined in: [packages/algo-ts/src/op.ts:698](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L698)
+Defined in: [op.ts:706](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L706)
 
 The largest integer I such that I^2 <= A. A and I are interpreted as big-endian unsigned integers
 

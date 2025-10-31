@@ -1,3 +1,9 @@
+---
+title: gloadUint64
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **gloadUint64**(`a`, `b`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:1519](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L1519)
+Defined in: [op.ts:1548](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L1548)
 
 Bth scratch space value of the Ath transaction in the current group
 

@@ -1,3 +1,9 @@
+---
+title: baremethod
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Function: baremethod()
 
-> **baremethod**\<`TContract`\>(`config`?): \<`TArgs`, `TReturn`\>(`target`, `ctx`) => (`this`, ...`args`) => `TReturn`
+> **baremethod**\<`TContract`\>(`config?`): \<`TArgs`, `TReturn`\>(`target`, `ctx`) => (`this`, ...`args`) => `TReturn`
 
-Defined in: [packages/algo-ts/src/arc4/index.ts:152](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L152)
+Defined in: [arc4/index.ts:197](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/index.ts#L197)
 
 Declares the decorated method as a baremethod that can only be called with no transaction args
 
@@ -30,7 +36,7 @@ The config for this bare method
 
 ## Returns
 
-`Function`
+> \<`TArgs`, `TReturn`\>(`target`, `ctx`): (`this`, ...`args`) => `TReturn`
 
 ### Type Parameters
 
@@ -50,11 +56,11 @@ The config for this bare method
 
 #### ctx
 
-[`ClassMethodDecoratorContext`](../-internal-/interfaces/ClassMethodDecoratorContext.md)\<`TContract`\>
+`ClassMethodDecoratorContext`\<`TContract`\>
 
 ### Returns
 
-`Function`
+> (`this`, ...`args`): `TReturn`
 
 #### Parameters
 

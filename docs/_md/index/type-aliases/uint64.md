@@ -1,3 +1,9 @@
+---
+title: uint64
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,6 +14,6 @@
 
 > **uint64** = `object` & `number`
 
-Defined in: [packages/algo-ts/src/primitives.ts:23](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L23)
+Defined in: [primitives.ts:23](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L23)
 
 An unsigned integer of exactly 64 bits

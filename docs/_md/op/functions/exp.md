@@ -1,3 +1,9 @@
+---
+title: exp
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **exp**(`a`, `b`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:878](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L878)
+Defined in: [op.ts:899](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L899)
 
 A raised to the Bth power. Fail if A == B == 0 and on overflow
 

@@ -1,3 +1,9 @@
+---
+title: JsonRef
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,11 +14,13 @@
 
 > `const` **JsonRef**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:3258](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3258)
+Defined in: [op.ts:3311](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3311)
 
 ## Type declaration
 
 ### jsonObject()
+
+> **jsonObject**(`a`, `b`): [`bytes`](../../index/type-aliases/bytes.md)
 
 #### Parameters
 
@@ -30,6 +38,8 @@ Defined in: [packages/algo-ts/src/op.ts:3258](https://github.com/algorandfoundat
 
 ### jsonString()
 
+> **jsonString**(`a`, `b`): [`bytes`](../../index/type-aliases/bytes.md)
+
 #### Parameters
 
 ##### a
@@ -45,6 +55,8 @@ Defined in: [packages/algo-ts/src/op.ts:3258](https://github.com/algorandfoundat
 [`bytes`](../../index/type-aliases/bytes.md)
 
 ### jsonUint64()
+
+> **jsonUint64**(`a`, `b`): [`uint64`](../../index/type-aliases/uint64.md)
 
 #### Parameters
 

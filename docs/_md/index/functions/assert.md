@@ -1,3 +1,9 @@
+---
+title: assert
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Function: assert()
 
-> **assert**(`condition`, `message`?): `asserts condition`
+> **assert**(`condition`, `message?`): `asserts condition`
 
-Defined in: [packages/algo-ts/src/util.ts:19](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L19)
+Defined in: [util.ts:19](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L19)
 
 Asserts that `condition` is truthy, otherwise error and halt execution.
 

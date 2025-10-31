@@ -1,3 +1,9 @@
+---
+title: AnyFunction
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **AnyFunction** = (...`args`) => [`DeliberateAny`](../../../index/-internal-/type-aliases/DeliberateAny.md)
 
-Defined in: [packages/algo-ts/src/internal/typescript-helpers.ts:4](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/internal/typescript-helpers.ts#L4)
+Defined in: [internal/typescript-helpers.ts:4](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/internal/typescript-helpers.ts#L4)
 
 ## Parameters
 

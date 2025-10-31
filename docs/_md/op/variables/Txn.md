@@ -1,3 +1,9 @@
+---
+title: Txn
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > `const` **Txn**: `object`
 
-Defined in: [packages/algo-ts/src/op.ts:3456](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3456)
+Defined in: [op.ts:3509](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L3509)
 
 Get values for the current executing transaction
 
@@ -213,14 +219,14 @@ Min AVM version: 2
 
 #### Get Signature
 
-> **get** **configAssetMetadataHash**(): [`bytes`](../../index/type-aliases/bytes.md)
+> **get** **configAssetMetadataHash**(): [`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 32 byte commitment to unspecified asset metadata
 Min AVM version: 2
 
 ##### Returns
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 ### configAssetName
 
@@ -473,14 +479,14 @@ Min AVM version: 1
 
 #### Get Signature
 
-> **get** **lease**(): [`bytes`](../../index/type-aliases/bytes.md)
+> **get** **lease**(): [`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 32 byte lease value
 Min AVM version: 1
 
 ##### Returns
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 ### localNumByteSlice
 
@@ -651,6 +657,19 @@ Min AVM version: 1
 
 [`Account`](../../index/type-aliases/Account.md)
 
+### rejectVersion
+
+#### Get Signature
+
+> **get** **rejectVersion**(): [`uint64`](../../index/type-aliases/uint64.md)
+
+Application version for which the txn must reject
+Min AVM version: 12
+
+##### Returns
+
+[`uint64`](../../index/type-aliases/uint64.md)
+
 ### rekeyTo
 
 #### Get Signature
@@ -668,14 +687,14 @@ Min AVM version: 2
 
 #### Get Signature
 
-> **get** **selectionPk**(): [`bytes`](../../index/type-aliases/bytes.md)
+> **get** **selectionPk**(): [`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 32 byte address
 Min AVM version: 1
 
 ##### Returns
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 ### sender
 
@@ -694,27 +713,27 @@ Min AVM version: 1
 
 #### Get Signature
 
-> **get** **stateProofPk**(): [`bytes`](../../index/type-aliases/bytes.md)
+> **get** **stateProofPk**(): [`bytes`](../../index/type-aliases/bytes.md)\<`64`\>
 
-64 byte state proof public key
+State proof public key
 Min AVM version: 6
 
 ##### Returns
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`64`\>
 
 ### txId
 
 #### Get Signature
 
-> **get** **txId**(): [`bytes`](../../index/type-aliases/bytes.md)
+> **get** **txId**(): [`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 The computed ID for this transaction. 32 bytes.
 Min AVM version: 1
 
 ##### Returns
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 ### type
 
@@ -785,14 +804,14 @@ Min AVM version: 1
 
 #### Get Signature
 
-> **get** **votePk**(): [`bytes`](../../index/type-aliases/bytes.md)
+> **get** **votePk**(): [`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 32 byte address
 Min AVM version: 1
 
 ##### Returns
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`32`\>
 
 ### xferAsset
 
@@ -809,6 +828,8 @@ Min AVM version: 1
 
 ### accounts()
 
+> **accounts**(`a`): [`Account`](../../index/type-aliases/Account.md)
+
 Accounts listed in the ApplicationCall transaction
 Min AVM version: 2
 
@@ -823,6 +844,8 @@ Min AVM version: 2
 [`Account`](../../index/type-aliases/Account.md)
 
 ### applicationArgs()
+
+> **applicationArgs**(`a`): [`bytes`](../../index/type-aliases/bytes.md)
 
 Arguments passed to the application in the ApplicationCall transaction
 Min AVM version: 2
@@ -839,6 +862,8 @@ Min AVM version: 2
 
 ### applications()
 
+> **applications**(`a`): [`Application`](../../index/type-aliases/Application.md)
+
 Foreign Apps listed in the ApplicationCall transaction
 Min AVM version: 3
 
@@ -853,6 +878,8 @@ Min AVM version: 3
 [`Application`](../../index/type-aliases/Application.md)
 
 ### approvalProgramPages()
+
+> **approvalProgramPages**(`a`): [`bytes`](../../index/type-aliases/bytes.md)
 
 Approval Program as an array of pages
 Min AVM version: 7
@@ -869,6 +896,8 @@ Min AVM version: 7
 
 ### assets()
 
+> **assets**(`a`): [`Asset`](../../index/type-aliases/Asset.md)
+
 Foreign Assets listed in the ApplicationCall transaction
 Min AVM version: 3
 
@@ -884,6 +913,8 @@ Min AVM version: 3
 
 ### clearStateProgramPages()
 
+> **clearStateProgramPages**(`a`): [`bytes`](../../index/type-aliases/bytes.md)
+
 ClearState Program as an array of pages
 Min AVM version: 7
 
@@ -898,6 +929,8 @@ Min AVM version: 7
 [`bytes`](../../index/type-aliases/bytes.md)
 
 ### logs()
+
+> **logs**(`a`): [`bytes`](../../index/type-aliases/bytes.md)
 
 Log messages emitted by an application call (only with `itxn` in v5). Application mode only
 Min AVM version: 5

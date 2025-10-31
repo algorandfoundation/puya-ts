@@ -1,16 +1,30 @@
+---
+title: bytes
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
 
 [Algorand TypeScript](../../modules.md) / [index](../README.md) / bytes
 
-# Type Alias: bytes
+# Type Alias: bytes\<TLength\>
 
-> **bytes** = `object`
+> **bytes**\<`TLength`\> = `object`
 
-Defined in: [packages/algo-ts/src/primitives.ts:101](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L101)
+Defined in: [primitives.ts:121](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L121)
 
 A sequence of zero or more bytes (ie. byte[])
+
+## Type Parameters
+
+### TLength
+
+`TLength` *extends* [`uint64`](uint64.md) = [`uint64`](uint64.md)
+
+The static length of this byte array
 
 ## Properties
 
@@ -18,7 +32,7 @@ A sequence of zero or more bytes (ie. byte[])
 
 > `readonly` **length**: [`uint64`](uint64.md)
 
-Defined in: [packages/algo-ts/src/primitives.ts:105](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L105)
+Defined in: [primitives.ts:125](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L125)
 
 Retrieve the length of the byte sequence
 
@@ -28,7 +42,7 @@ Retrieve the length of the byte sequence
 
 > **at**(`i`): `bytes`
 
-Defined in: [packages/algo-ts/src/primitives.ts:112](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L112)
+Defined in: [primitives.ts:132](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L132)
 
 Retrieve the byte at the index i
 
@@ -50,23 +64,48 @@ The byte found at the index, or an empty bytes value
 
 ### bitwiseAnd()
 
+#### Call Signature
+
+> **bitwiseAnd**(`other`): `bytes`\<`TLength`\>
+
+Defined in: [primitives.ts:148](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L148)
+
+Perform a bitwise AND operation with this bytes value and another bytes value
+of the same length.
+
+##### Parameters
+
+###### other
+
+`bytes`\<`TLength`\>
+
+The other bytes value
+
+##### Returns
+
+`bytes`\<`TLength`\>
+
+The bitwise operation result
+
+#### Call Signature
+
 > **bitwiseAnd**(`other`): `bytes`
 
-Defined in: [packages/algo-ts/src/primitives.ts:128](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L128)
+Defined in: [primitives.ts:157](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L157)
 
 Perform a bitwise AND operation with this bytes value and another bytes value.
 
 The shorter of the two values will be zero-left extended to the larger length.
 
-#### Parameters
+##### Parameters
 
-##### other
+###### other
 
 [`BytesCompat`](BytesCompat.md)
 
 The other bytes value
 
-#### Returns
+##### Returns
 
 `bytes`
 
@@ -76,15 +115,15 @@ The bitwise operation result
 
 ### bitwiseInvert()
 
-> **bitwiseInvert**(): `bytes`
+> **bitwiseInvert**(): `bytes`\<`TLength`\>
 
-Defined in: [packages/algo-ts/src/primitives.ts:152](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L152)
+Defined in: [primitives.ts:199](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L199)
 
 Perform a bitwise INVERT operation with this bytes value
 
 #### Returns
 
-`bytes`
+`bytes`\<`TLength`\>
 
 The bitwise operation result
 
@@ -92,23 +131,48 @@ The bitwise operation result
 
 ### bitwiseOr()
 
+#### Call Signature
+
+> **bitwiseOr**(`other`): `bytes`\<`TLength`\>
+
+Defined in: [primitives.ts:166](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L166)
+
+Perform a bitwise OR operation with this bytes value and another bytes value
+of the same length.
+
+##### Parameters
+
+###### other
+
+`bytes`\<`TLength`\>
+
+The other bytes value
+
+##### Returns
+
+`bytes`\<`TLength`\>
+
+The bitwise operation result
+
+#### Call Signature
+
 > **bitwiseOr**(`other`): `bytes`
 
-Defined in: [packages/algo-ts/src/primitives.ts:137](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L137)
+Defined in: [primitives.ts:175](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L175)
 
 Perform a bitwise OR operation with this bytes value and another bytes value
 
 The shorter of the two values will be zero-left extended to the larger length.
 
-#### Parameters
+##### Parameters
 
-##### other
+###### other
 
 [`BytesCompat`](BytesCompat.md)
 
 The other bytes value
 
-#### Returns
+##### Returns
 
 `bytes`
 
@@ -118,23 +182,48 @@ The bitwise operation result
 
 ### bitwiseXor()
 
+#### Call Signature
+
+> **bitwiseXor**(`other`): `bytes`\<`TLength`\>
+
+Defined in: [primitives.ts:184](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L184)
+
+Perform a bitwise XOR operation with this bytes value and another bytes value
+of the same length.
+
+##### Parameters
+
+###### other
+
+`bytes`\<`TLength`\>
+
+The other bytes value
+
+##### Returns
+
+`bytes`\<`TLength`\>
+
+The bitwise operation result
+
+#### Call Signature
+
 > **bitwiseXor**(`other`): `bytes`
 
-Defined in: [packages/algo-ts/src/primitives.ts:146](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L146)
+Defined in: [primitives.ts:193](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L193)
 
 Perform a bitwise XOR operation with this bytes value and another bytes value.
 
 The shorter of the two values will be zero-left extended to the larger length.
 
-#### Parameters
+##### Parameters
 
-##### other
+###### other
 
 [`BytesCompat`](BytesCompat.md)
 
 The other bytes value
 
-#### Returns
+##### Returns
 
 `bytes`
 
@@ -146,7 +235,7 @@ The bitwise operation result
 
 > **concat**(`other`): `bytes`
 
-Defined in: [packages/algo-ts/src/primitives.ts:119](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L119)
+Defined in: [primitives.ts:139](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L139)
 
 Concatenate this bytes value with another bytes value
 
@@ -170,7 +259,7 @@ The concatenation result
 
 > **equals**(`other`): `boolean`
 
-Defined in: [packages/algo-ts/src/primitives.ts:159](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L159)
+Defined in: [primitives.ts:206](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L206)
 
 Compares this bytes value with another.
 
@@ -194,21 +283,21 @@ True if both values represent the same byte sequence
 
 #### Call Signature
 
-> **slice**(): `bytes`
+> **slice**(): `bytes`\<`TLength`\>
 
-Defined in: [packages/algo-ts/src/primitives.ts:164](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L164)
+Defined in: [primitives.ts:211](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L211)
 
 Returns a copy of this bytes sequence
 
 ##### Returns
 
-`bytes`
+`bytes`\<`TLength`\>
 
 #### Call Signature
 
 > **slice**(`start`): `bytes`
 
-Defined in: [packages/algo-ts/src/primitives.ts:169](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L169)
+Defined in: [primitives.ts:216](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L216)
 
 Returns a slice of this bytes sequence from the specified start to the end
 
@@ -228,7 +317,7 @@ The index to start slicing from. Can be negative to count from the end.
 
 > **slice**(`start`, `end`): `bytes`
 
-Defined in: [packages/algo-ts/src/primitives.ts:175](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L175)
+Defined in: [primitives.ts:222](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L222)
 
 Returns a slice of this bytes sequence from the specified start to the specified end
 
@@ -252,11 +341,39 @@ The index to end the slice. Can be negative to count from the end.
 
 ***
 
+### toFixed()
+
+> **toFixed**\<`TNewLength`\>(`options`): `bytes`\<`TNewLength`\>
+
+Defined in: [primitives.ts:237](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L237)
+
+Change this unbounded bytes instance into a bounded one
+
+#### Type Parameters
+
+##### TNewLength
+
+`TNewLength` *extends* [`uint64`](uint64.md)
+
+#### Parameters
+
+##### options
+
+[`ToFixedBytesOptions`](../-internal-/type-aliases/ToFixedBytesOptions.md)\<`TNewLength`\>
+
+Options for the conversion
+
+#### Returns
+
+`bytes`\<`TNewLength`\>
+
+***
+
 ### toString()
 
 > **toString**(): `string`
 
-Defined in: [packages/algo-ts/src/primitives.ts:184](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L184)
+Defined in: [primitives.ts:231](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L231)
 
 Interpret this byte sequence as a utf-8 string
 

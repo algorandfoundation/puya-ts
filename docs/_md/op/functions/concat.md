@@ -1,3 +1,9 @@
+---
+title: concat
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **concat**(`a`, `b`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:727](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L727)
+Defined in: [op.ts:735](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L735)
 
 join A and B
 `concat` fails if the result would be greater than 4096 bytes.

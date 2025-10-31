@@ -1,3 +1,9 @@
+---
+title: setBit
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -10,7 +16,7 @@
 
 > **setBit**(`target`, `n`, `c`): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/op.ts:4059](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4059)
+Defined in: [op.ts:4120](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4120)
 
 Set the nth bit of target to the value of c (1 or 0)
 
@@ -36,7 +42,7 @@ Set the nth bit of target to the value of c (1 or 0)
 
 > **setBit**(`target`, `n`, `c`): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/op.ts:4064](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4064)
+Defined in: [op.ts:4125](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L4125)
 
 Set the nth bit of target to the value of c (1 or 0)
 

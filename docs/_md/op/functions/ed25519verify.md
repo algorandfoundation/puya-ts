@@ -1,3 +1,9 @@
+---
+title: ed25519verify
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **ed25519verify**(`a`, `b`, `c`): `boolean`
 
-Defined in: [packages/algo-ts/src/op.ts:860](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L860)
+Defined in: [op.ts:881](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L881)
 
 for (data A, signature B, pubkey C) verify the signature of ("ProgData" || program_hash || data) against the pubkey => {0 or 1}
 The 32 byte public key is the last element on the stack, preceded by the 64 byte signature at the second-to-last element on the stack, preceded by the data which was signed at the third-to-last element on the stack.
@@ -21,11 +27,11 @@ The 32 byte public key is the last element on the stack, preceded by the 64 byte
 
 ### b
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md) | [`bytes`](../../index/type-aliases/bytes.md)\<`64`\>
 
 ### c
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`32`\> | [`bytes`](../../index/type-aliases/bytes.md)
 
 ## Returns
 

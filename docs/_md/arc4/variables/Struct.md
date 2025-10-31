@@ -1,3 +1,9 @@
+---
+title: Struct
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,11 +14,11 @@
 
 > `const` **Struct**: [`StructConstructor`](../-internal-/type-aliases/StructConstructor.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:512](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L512)
+Defined in: [arc4/encoded-types.ts:499](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L499)
 
 The base type of arc4 structs
 
 Usage:
 ```
-class MyStruct extends Struct<{ x: UintN8, y: Str, z: DynamicBytes }> {}
+class MyStruct extends Struct<{ x: Uint8, y: Str, z: DynamicBytes }> { }
 ```

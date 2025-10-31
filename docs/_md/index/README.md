@@ -1,3 +1,9 @@
+---
+title: index
+type: module
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../README.md)
 
 ***
@@ -10,6 +16,10 @@
 
 - [\<internal\>](-internal-/README.md)
 
+## Namespaces
+
+- [Bytes](namespaces/Bytes/README.md)
+
 ## Enumerations
 
 - [OnCompleteAction](enumerations/OnCompleteAction.md)
@@ -19,12 +29,20 @@
 ## Classes
 
 - [BaseContract](classes/BaseContract.md)
+- [FixedArray](classes/FixedArray.md)
 - [LogicSig](classes/LogicSig.md)
-- [MutableArray](classes/MutableArray.md)
+- [ReferenceArray](classes/ReferenceArray.md)
 
 ## Interfaces
 
+- [AnyTransactionComposeFields](interfaces/AnyTransactionComposeFields.md)
+- [ApplicationCallComposeFields](interfaces/ApplicationCallComposeFields.md)
+- [AssetConfigComposeFields](interfaces/AssetConfigComposeFields.md)
+- [AssetFreezeComposeFields](interfaces/AssetFreezeComposeFields.md)
+- [AssetTransferComposeFields](interfaces/AssetTransferComposeFields.md)
 - [BytesBacked](interfaces/BytesBacked.md)
+- [KeyRegistrationComposeFields](interfaces/KeyRegistrationComposeFields.md)
+- [PaymentComposeFields](interfaces/PaymentComposeFields.md)
 
 ## Type Aliases
 
@@ -35,15 +53,16 @@
 - [BigUintCompat](type-aliases/BigUintCompat.md)
 - [Box](type-aliases/Box.md)
 - [BoxMap](type-aliases/BoxMap.md)
-- [BoxRef](type-aliases/BoxRef.md)
 - [bytes](type-aliases/bytes.md)
 - [BytesCompat](type-aliases/BytesCompat.md)
 - [CompileContractOptions](type-aliases/CompileContractOptions.md)
 - [CompiledContract](type-aliases/CompiledContract.md)
 - [CompiledLogicSig](type-aliases/CompiledLogicSig.md)
 - [CompileLogicSigOptions](type-aliases/CompileLogicSigOptions.md)
+- [ComposeItxnParams](type-aliases/ComposeItxnParams.md)
 - [GlobalState](type-aliases/GlobalState.md)
 - [GlobalStateOptions](type-aliases/GlobalStateOptions.md)
+- [ItxnCompose](type-aliases/ItxnCompose.md)
 - [LocalState](type-aliases/LocalState.md)
 - [LocalStateForAccount](type-aliases/LocalStateForAccount.md)
 - [LocalStateOptions](type-aliases/LocalStateOptions.md)
@@ -52,6 +71,10 @@
 - [StringCompat](type-aliases/StringCompat.md)
 - [uint64](type-aliases/uint64.md)
 - [Uint64Compat](type-aliases/Uint64Compat.md)
+
+## Variables
+
+- [itxnCompose](variables/itxnCompose.md)
 
 ## Functions
 
@@ -63,8 +86,8 @@
 - [BigUint](functions/BigUint.md)
 - [Box](functions/Box.md)
 - [BoxMap](functions/BoxMap.md)
-- [BoxRef](functions/BoxRef.md)
 - [Bytes](functions/Bytes.md)
+- [clone](functions/clone.md)
 - [compile](functions/compile.md)
 - [contract](functions/contract.md)
 - [emit](functions/emit.md)
@@ -78,3 +101,4 @@
 - [TemplateVar](functions/TemplateVar.md)
 - [Uint64](functions/Uint64.md)
 - [urange](functions/urange.md)
+- [validateEncoding](functions/validateEncoding.md)

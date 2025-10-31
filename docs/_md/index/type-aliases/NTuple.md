@@ -1,3 +1,9 @@
+---
+title: NTuple
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **NTuple**\<`T`, `N`\> = `N` *extends* `N` ? `number` *extends* `N` ? `T`[] : [`_TupleOf`](../-internal-/type-aliases/TupleOf.md)\<`T`, `N`, readonly \[\]\> : `never`
 
-Defined in: [packages/algo-ts/src/primitives.ts:263](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L263)
+Defined in: [primitives.ts:364](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/primitives.ts#L364)
 
 Declare a homogeneous tuple with the item type T and length N.
 

@@ -1,3 +1,9 @@
+---
+title: MimcConfigurations
+type: enum
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,7 +12,7 @@
 
 # Enumeration: MimcConfigurations
 
-Defined in: [packages/algo-ts/src/op.ts:39](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L39)
+Defined in: [op.ts:39](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L39)
 
 ## Enumeration Members
 
@@ -14,7 +20,7 @@ Defined in: [packages/algo-ts/src/op.ts:39](https://github.com/algorandfoundatio
 
 > **BLS12\_381Mp111**: `"BLS12_381Mp111"`
 
-Defined in: [packages/algo-ts/src/op.ts:47](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L47)
+Defined in: [op.ts:47](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L47)
 
 MiMC configuration for the BLS12-381 curve with Miyaguchi-Preneel mode, 111 rounds, exponent 5, seed "seed"
 
@@ -24,6 +30,6 @@ MiMC configuration for the BLS12-381 curve with Miyaguchi-Preneel mode, 111 roun
 
 > **BN254Mp110**: `"BN254Mp110"`
 
-Defined in: [packages/algo-ts/src/op.ts:43](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L43)
+Defined in: [op.ts:43](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L43)
 
 MiMC configuration for the BN254 curve with Miyaguchi-Preneel mode, 110 rounds, exponent 5, seed "seed"

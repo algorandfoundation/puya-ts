@@ -1,3 +1,9 @@
+---
+title: itob
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Function: itob()
 
-> **itob**(`a`): [`bytes`](../../index/type-aliases/bytes.md)
+> **itob**(`a`): [`bytes`](../../index/type-aliases/bytes.md)\<`8`\>
 
-Defined in: [packages/algo-ts/src/op.ts:2262](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L2262)
+Defined in: [op.ts:2299](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L2299)
 
 converts uint64 A to big-endian byte array, always of length 8
 
@@ -20,7 +26,7 @@ converts uint64 A to big-endian byte array, always of length 8
 
 ## Returns
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`8`\>
 
 ## See
 

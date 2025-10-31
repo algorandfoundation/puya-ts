@@ -1,3 +1,9 @@
+---
+title: DynamicBytes
+type: class
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,7 +12,7 @@
 
 # Class: DynamicBytes
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:517](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L517)
+Defined in: [arc4/encoded-types.ts:504](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L504)
 
 A variable length sequence of bytes prefixed with its length expressed as a 2 byte uint
 
@@ -18,13 +24,16 @@ A variable length sequence of bytes prefixed with its length expressed as a 2 by
 
 \[`index`: [`uint64`](../../index/type-aliases/uint64.md)\]: [`Byte`](Byte.md)
 
+Get or set the item at the specified index.
+Negative indexes are not supported
+
 ## Constructors
 
 ### Constructor
 
-> **new DynamicBytes**(`value`?): `DynamicBytes`
+> **new DynamicBytes**(`value?`): `DynamicBytes`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:525](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L525)
+Defined in: [arc4/encoded-types.ts:512](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L512)
 
 Create a new DynamicBytes instance
 
@@ -52,7 +61,7 @@ The bytes or utf8 interpreted string to initialize this type
 
 > **get** **bytes**(): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:97](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L97)
+Defined in: [arc4/encoded-types.ts:102](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L102)
 
 Retrieve the encoded bytes for this type
 
@@ -72,7 +81,7 @@ Retrieve the encoded bytes for this type
 
 > **get** **length**(): [`uint64`](../../index/type-aliases/uint64.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:240](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L240)
+Defined in: [arc4/encoded-types.ts:245](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L245)
 
 Returns the current length of this array
 
@@ -92,7 +101,7 @@ Returns the current length of this array
 
 > **get** **native**(): [`bytes`](../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:532](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L532)
+Defined in: [arc4/encoded-types.ts:519](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L519)
 
 Get the native bytes value (excludes the length prefix)
 
@@ -104,15 +113,15 @@ Get the native bytes value (excludes the length prefix)
 
 ### \[iterator\]()
 
-> **\[iterator\]**(): [`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<[`Byte`](Byte.md)\>
+> **\[iterator\]**(): `IterableIterator`\<[`Byte`](Byte.md)\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:277](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L277)
+Defined in: [arc4/encoded-types.ts:292](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L292)
 
 Returns an iterator for the items in this array
 
 #### Returns
 
-[`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<[`Byte`](Byte.md)\>
+`IterableIterator`\<[`Byte`](Byte.md)\>
 
 #### Inherited from
 
@@ -124,7 +133,7 @@ Returns an iterator for the items in this array
 
 > **at**(`index`): [`Byte`](Byte.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:249](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L249)
+Defined in: [arc4/encoded-types.ts:254](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L254)
 
 Returns the item at the given index.
 Negative indexes are taken from the end.
@@ -151,7 +160,7 @@ The index of the item to retrieve
 
 > **concat**(`other`): `DynamicBytes`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:540](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L540)
+Defined in: [arc4/encoded-types.ts:527](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L527)
 
 Returns a dynamic bytes object containing all bytes from _this_ and _other_
 
@@ -171,15 +180,15 @@ Another array of bytes to concat with this one
 
 ### entries()
 
-> **entries**(): [`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`Byte`](Byte.md)\]\>
+> **entries**(): `IterableIterator`\<readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`Byte`](Byte.md)\]\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:284](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L284)
+Defined in: [arc4/encoded-types.ts:299](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L299)
 
 Returns an iterator for a tuple of the indexes and items in this array
 
 #### Returns
 
-[`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`Byte`](Byte.md)\]\>
+`IterableIterator`\<readonly \[[`uint64`](../../index/type-aliases/uint64.md), [`Byte`](Byte.md)\]\>
 
 #### Inherited from
 
@@ -187,17 +196,46 @@ Returns an iterator for a tuple of the indexes and items in this array
 
 ***
 
+### ~~join()~~
+
+> **join**(`separator?`): `string`
+
+Defined in: [arc4/encoded-types.ts:285](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L285)
+
+Creates a string by concatenating all the items in the array delimited by the
+specified separator (or ',' by default)
+
+#### Parameters
+
+##### separator?
+
+`string`
+
+#### Returns
+
+`string`
+
+#### Deprecated
+
+Join is not supported in Algorand TypeScript
+
+#### Inherited from
+
+[`Arc4ArrayBase`](../-internal-/classes/Arc4ArrayBase.md).[`join`](../-internal-/classes/Arc4ArrayBase.md#join)
+
+***
+
 ### keys()
 
-> **keys**(): [`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../../index/type-aliases/uint64.md)\>
+> **keys**(): `IterableIterator`\<[`uint64`](../../index/type-aliases/uint64.md)\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:291](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L291)
+Defined in: [arc4/encoded-types.ts:306](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L306)
 
 Returns an iterator for the indexes in this array
 
 #### Returns
 
-[`IterableIterator`](../../index/-internal-/interfaces/IterableIterator.md)\<[`uint64`](../../index/type-aliases/uint64.md)\>
+`IterableIterator`\<[`uint64`](../../index/type-aliases/uint64.md)\>
 
 #### Inherited from
 
@@ -205,21 +243,22 @@ Returns an iterator for the indexes in this array
 
 ***
 
-### slice()
+### ~~slice()~~
 
 #### Call Signature
 
-> **slice**(): [`DynamicArray`](DynamicArray.md)\<[`Byte`](Byte.md)\>
+> **slice**(): [`Byte`](Byte.md)[]
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:256](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L256)
-
-**`Internal`**
-
-Create a new Dynamic array with all items from this array
+Defined in: [arc4/encoded-types.ts:261](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L261)
 
 ##### Returns
 
-[`DynamicArray`](DynamicArray.md)\<[`Byte`](Byte.md)\>
+[`Byte`](Byte.md)[]
+
+##### Deprecated
+
+Array slicing is not yet supported in Algorand TypeScript
+Create a new Dynamic array with all items from this array
 
 ##### Inherited from
 
@@ -227,14 +266,9 @@ Create a new Dynamic array with all items from this array
 
 #### Call Signature
 
-> **slice**(`end`): [`DynamicArray`](DynamicArray.md)\<[`Byte`](Byte.md)\>
+> **slice**(`end`): [`Byte`](Byte.md)[]
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:262](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L262)
-
-**`Internal`**
-
-Create a new DynamicArray with all items up till `end`.
-Negative indexes are taken from the end.
+Defined in: [arc4/encoded-types.ts:267](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L267)
 
 ##### Parameters
 
@@ -246,7 +280,13 @@ An index in which to stop copying items.
 
 ##### Returns
 
-[`DynamicArray`](DynamicArray.md)\<[`Byte`](Byte.md)\>
+[`Byte`](Byte.md)[]
+
+##### Deprecated
+
+Array slicing is not yet supported in Algorand TypeScript
+Create a new DynamicArray with all items up till `end`.
+Negative indexes are taken from the end.
 
 ##### Inherited from
 
@@ -254,14 +294,9 @@ An index in which to stop copying items.
 
 #### Call Signature
 
-> **slice**(`start`, `end`): [`DynamicArray`](DynamicArray.md)\<[`Byte`](Byte.md)\>
+> **slice**(`start`, `end`): [`Byte`](Byte.md)[]
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:269](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L269)
-
-**`Internal`**
-
-Create a new DynamicArray with items from `start`, up until `end`
-Negative indexes are taken from the end.
+Defined in: [arc4/encoded-types.ts:274](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L274)
 
 ##### Parameters
 
@@ -279,7 +314,13 @@ An index in which to stop copying items
 
 ##### Returns
 
-[`DynamicArray`](DynamicArray.md)\<[`Byte`](Byte.md)\>
+[`Byte`](Byte.md)[]
+
+##### Deprecated
+
+Array slicing is not yet supported in Algorand TypeScript
+Create a new DynamicArray with items from `start`, up until `end`
+Negative indexes are taken from the end.
 
 ##### Inherited from
 

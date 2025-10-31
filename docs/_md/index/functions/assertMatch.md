@@ -1,3 +1,9 @@
+---
+title: assertMatch
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Function: assertMatch()
 
-> **assertMatch**\<`T`\>(`subject`, `test`, `message`?): `boolean`
+> **assertMatch**\<`T`\>(`subject`, `test`, `message?`): `void`
 
-Defined in: [packages/algo-ts/src/util.ts:100](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L100)
+Defined in: [util.ts:123](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L123)
 
 Applies all tests in `test` against `subject` and asserts they all pass
 
@@ -42,4 +48,4 @@ An optional message to show if the assertion fails
 
 ## Returns
 
-`boolean`
+`void`

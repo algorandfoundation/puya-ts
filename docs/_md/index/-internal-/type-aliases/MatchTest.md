@@ -1,3 +1,9 @@
+---
+title: MatchTest
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../../README.md)
 
 ***
@@ -6,9 +12,9 @@
 
 # Type Alias: MatchTest\<T\>
 
-> **MatchTest**\<`T`\> = `{ [key in keyof T]?: ComparisonFor<T[key]> }`
+> **MatchTest**\<`T`\> = `T` *extends* `ConcatArray`\<infer TItem\> ? `object` & `object` : `{ [key in keyof T]?: ComparisonFor<T[key]> }`
 
-Defined in: [packages/algo-ts/src/util.ts:77](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L77)
+Defined in: [util.ts:95](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L95)
 
 A set of tests to apply to the match subject
 

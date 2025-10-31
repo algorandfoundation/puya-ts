@@ -1,3 +1,9 @@
+---
+title: CompatForArc4Int
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **CompatForArc4Int**\<`N`\> = `N` *extends* [`UintBitSize`](UintBitSize.md) ? [`Uint64Compat`](../../../index/type-aliases/Uint64Compat.md) : [`BigUintCompat`](../../../index/type-aliases/BigUintCompat.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:80](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L80)
+Defined in: [arc4/encoded-types.ts:77](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L77)
 
 Conditional type which returns the compat type relevant to a given UintN bit size
 

@@ -1,3 +1,9 @@
+---
+title: bzero
+type: function
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -6,21 +12,27 @@
 
 # Function: bzero()
 
-> **bzero**(`a`): [`bytes`](../../index/type-aliases/bytes.md)
+> **bzero**\<`TLength`\>(`a`): [`bytes`](../../index/type-aliases/bytes.md)\<`TLength`\>
 
-Defined in: [packages/algo-ts/src/op.ts:717](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L717)
+Defined in: [op.ts:725](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/op.ts#L725)
 
 zero filled byte-array of length A
+
+## Type Parameters
+
+### TLength
+
+`TLength` *extends* [`uint64`](../../index/type-aliases/uint64.md) = [`uint64`](../../index/type-aliases/uint64.md)
 
 ## Parameters
 
 ### a
 
-[`uint64`](../../index/type-aliases/uint64.md)
+`TLength`
 
 ## Returns
 
-[`bytes`](../../index/type-aliases/bytes.md)
+[`bytes`](../../index/type-aliases/bytes.md)\<`TLength`\>
 
 ## See
 

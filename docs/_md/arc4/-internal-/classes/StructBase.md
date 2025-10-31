@@ -1,3 +1,9 @@
+---
+title: StructBase
+type: class
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../../README.md)
 
 ***
@@ -6,7 +12,7 @@
 
 # Class: StructBase\<T\>
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:480](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L480)
+Defined in: [arc4/encoded-types.ts:474](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L474)
 
 The base type for arc4 structs
 
@@ -42,7 +48,7 @@ The base type for arc4 structs
 
 > **get** **bytes**(): [`bytes`](../../../index/type-aliases/bytes.md)
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:97](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L97)
+Defined in: [arc4/encoded-types.ts:102](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L102)
 
 Retrieve the encoded bytes for this type
 
@@ -62,22 +68,8 @@ Retrieve the encoded bytes for this type
 
 > **get** **native**(): `T`
 
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:484](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L484)
+Defined in: [arc4/encoded-types.ts:478](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L478)
 
 ##### Returns
 
 `T`
-
-## Methods
-
-### copy()
-
-> **copy**(): `this`
-
-Defined in: [packages/algo-ts/src/arc4/encoded-types.ts:491](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/arc4/encoded-types.ts#L491)
-
-Returns a deep copy of this struct
-
-#### Returns
-
-`this`

@@ -1,3 +1,9 @@
+---
+title: NumberRange
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../../README.md)
 
 ***
@@ -8,7 +14,7 @@
 
 > **NumberRange** = `object`
 
-Defined in: [packages/algo-ts/src/util.ts:159](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L159)
+Defined in: [util.ts:182](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L182)
 
 Defines a numeric range including all numbers between from and to
 
@@ -18,7 +24,7 @@ Defines a numeric range including all numbers between from and to
 
 > **from**: `number`
 
-Defined in: [packages/algo-ts/src/util.ts:159](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L159)
+Defined in: [util.ts:182](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L182)
 
 ***
 
@@ -26,4 +32,4 @@ Defined in: [packages/algo-ts/src/util.ts:159](https://github.com/algorandfounda
 
 > **to**: `number`
 
-Defined in: [packages/algo-ts/src/util.ts:159](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L159)
+Defined in: [util.ts:182](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/util.ts#L182)

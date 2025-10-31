@@ -1,3 +1,9 @@
+---
+title: Application
+type: doc
+generated: 2025-10-31
+repo: puya-ts
+---
 [**Algorand TypeScript**](../../README.md)
 
 ***
@@ -8,9 +14,9 @@
 
 > **Application** = `object`
 
-Defined in: [packages/algo-ts/src/reference.ts:228](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L228)
+Defined in: [reference.ts:227](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L227)
 
-An Application on the Algorand network.
+Creates a new Application object represent the application id 0 (an invalid ID)
 
 ## Properties
 
@@ -18,7 +24,7 @@ An Application on the Algorand network.
 
 > `readonly` **address**: [`Account`](Account.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:289](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L289)
+Defined in: [reference.ts:288](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L288)
 
 Address for which this application has authority
 
@@ -28,7 +34,7 @@ Address for which this application has authority
 
 > `readonly` **approvalProgram**: [`bytes`](bytes.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:249](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L249)
+Defined in: [reference.ts:248](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L248)
 
 Bytecode of Approval Program
 
@@ -38,7 +44,7 @@ Bytecode of Approval Program
 
 > `readonly` **clearStateProgram**: [`bytes`](bytes.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:254](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L254)
+Defined in: [reference.ts:253](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L253)
 
 Bytecode of Clear State Program
 
@@ -48,7 +54,7 @@ Bytecode of Clear State Program
 
 > `readonly` **creator**: [`Account`](Account.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:284](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L284)
+Defined in: [reference.ts:283](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L283)
 
 Creator address
 
@@ -58,7 +64,7 @@ Creator address
 
 > `readonly` **extraProgramPages**: [`uint64`](uint64.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:279](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L279)
+Defined in: [reference.ts:278](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L278)
 
 Number of Extra Program Pages of code space
 
@@ -68,7 +74,7 @@ Number of Extra Program Pages of code space
 
 > `readonly` **globalNumBytes**: [`uint64`](uint64.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:264](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L264)
+Defined in: [reference.ts:263](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L263)
 
 Number of byte array values allowed in Global State
 
@@ -78,7 +84,7 @@ Number of byte array values allowed in Global State
 
 > `readonly` **globalNumUint**: [`uint64`](uint64.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:259](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L259)
+Defined in: [reference.ts:258](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L258)
 
 Number of uint64 values allowed in Global State
 
@@ -88,7 +94,7 @@ Number of uint64 values allowed in Global State
 
 > `readonly` **id**: [`uint64`](uint64.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:245](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L245)
+Defined in: [reference.ts:244](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L244)
 
 The id of this application on the current network
 
@@ -98,7 +104,7 @@ The id of this application on the current network
 
 > `readonly` **localNumBytes**: [`uint64`](uint64.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:274](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L274)
+Defined in: [reference.ts:273](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L273)
 
 Number of byte array values allowed in Local State
 
@@ -108,6 +114,16 @@ Number of byte array values allowed in Local State
 
 > `readonly` **localNumUint**: [`uint64`](uint64.md)
 
-Defined in: [packages/algo-ts/src/reference.ts:269](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L269)
+Defined in: [reference.ts:268](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L268)
 
 Number of uint64 values allowed in Local State
+
+***
+
+### version
+
+> `readonly` **version**: [`uint64`](uint64.md)
+
+Defined in: [reference.ts:293](https://github.com/algorandfoundation/puya-ts/blob/main/packages/algo-ts/src/reference.ts#L293)
+
+Version of the app, incremented each time the approval or clear program changes
