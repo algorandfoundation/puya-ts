@@ -19,6 +19,7 @@ import type { CompileTriggerQueue, WorkspaceCompileTrigger } from './compile-tri
 import type { DiagnosticsManager } from './diagnostics-manager'
 import { type LogEventWithSource, mapper } from './mapping'
 import { logCaughtExpression, LogExceptions } from './util/log-exceptions'
+import { normalisedUri } from './util/uris'
 
 export class CompileWorker {
   stopping: boolean = false
@@ -40,16 +41,15 @@ export class CompileWorker {
         try {
           const work = this.queue.tryDequeue()
           if (work) {
-            switch (work.type) {
-              case 'workspace':
-                this.activeBuild = new AbortController()
-                await this.compileWorkspaces(work, this.activeBuild.signal)
-                delete this.activeBuild
-                break
-            }
+            logger.debug(undefined, `[Compile Worker] Found work ${work.workspaces.join(', ')}`)
+            this.activeBuild = new AbortController()
+            await this.compileWorkspaces(work, this.activeBuild.signal)
+            delete this.activeBuild
           } else {
+            logger.debug(undefined, `[Compile Worker] No work, sleeping`)
             this.sleeping = Promise.withResolvers()
             await this.sleeping.promise
+            delete this.sleeping
           }
         } catch (e) {
           logCaughtExpression(e)
@@ -67,8 +67,13 @@ export class CompileWorker {
   }
 
   onCompileTriggerQueueItemQueued() {
-    this.activeBuild?.abort('Build has been superseded')
-    this.sleeping?.resolve()
+    if (this.activeBuild) {
+      logger.debug(undefined, `[Compile Worker] New work, aborting active build`)
+      this.activeBuild.abort('Build has been superseded')
+    } else if (this.sleeping) {
+      logger.debug(undefined, `[Compile Worker] New work, waking worker`)
+      this.sleeping.resolve()
+    }
   }
 
   @LogExceptions
@@ -101,7 +106,7 @@ export class CompileWorker {
         sourceFileProvider({ readFile, fileExists }) {
           return {
             readFile(fileName) {
-              const fileUri = URI.file(fileName).toString()
+              const fileUri = normalisedUri({ fsPath: fileName }).toString()
               const doc = documents.get(fileUri)
               if (doc) {
                 documentVersions[fileUri] = doc.version
@@ -110,7 +115,7 @@ export class CompileWorker {
               return readFile(fileName)
             },
             fileExists(fileName) {
-              const fileUri = URI.file(fileName).toString()
+              const fileUri = normalisedUri({ fsPath: fileName }).toString()
               return Boolean(documents.get(fileUri)) || fileExists(fileName)
             },
           }
