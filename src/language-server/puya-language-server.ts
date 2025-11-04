@@ -1,5 +1,6 @@
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import * as lsp from 'vscode-languageserver/node'
+import { appVersion } from '../cli/app-version'
 import { Constants } from '../constants'
 import { logger, LogLevel } from '../logger'
 import { LanguageServerLogSink } from '../logger/sinks/language-server-log-sink'
@@ -10,7 +11,7 @@ import type { FileDiagnosticsChanged } from './diagnostics-manager'
 import { DiagnosticsManager } from './diagnostics-manager'
 import { isCodeFixData } from './mapping'
 import { LogExceptions } from './util/log-exceptions'
-import { appVersion } from '../cli/app-version'
+import { createNormalisedTextDocumentConnection, normalisedUri } from './util/uris'
 
 interface LanguageServerConfiguration {
   // use LogLevel member names to maintain consistency with other extension settings
@@ -65,7 +66,7 @@ export class PuyaLanguageServer {
   }
 
   start() {
-    this.documents.listen(this.connection)
+    this.documents.listen(createNormalisedTextDocumentConnection(this.connection))
     this.connection.listen()
     this.compileWorker.start()
   }
@@ -78,7 +79,7 @@ export class PuyaLanguageServer {
   }
 
   initialize(params: lsp.InitializeParams): lsp.InitializeResult {
-    this.workspaceFolders.push(...(params.workspaceFolders?.map((f) => f.uri) ?? []))
+    this.workspaceFolders.push(...(params.workspaceFolders?.map((f) => normalisedUri({ uri: f.uri }).toString()) ?? []))
     this.triggers.enqueue({
       type: 'workspace',
       workspaces: this.workspaceFolders,
@@ -113,8 +114,9 @@ export class PuyaLanguageServer {
   @LogExceptions
   documentDidChangeContent(params: lsp.TextDocumentChangeEvent<TextDocument>) {
     if (this.stopping) return
-    logger.debug(undefined, `[Document Changed]: ${params.document.uri}`)
-    this.diagnosticsMgr.setDiagnostics({ fileUri: params.document.uri, version: params.document.version, diagnostics: 'pending' })
+    const normalizedDocumentUri = normalisedUri({ uri: params.document.uri }).toString()
+    logger.debug(undefined, `[Document Changed]: ${normalizedDocumentUri}`)
+    this.diagnosticsMgr.setDiagnostics({ fileUri: normalizedDocumentUri, version: params.document.version, diagnostics: 'pending' })
 
     this.triggers.enqueue({
       type: 'workspace',
