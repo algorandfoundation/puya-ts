@@ -8,9 +8,9 @@ import { Constants } from '../../../constants'
 import { CodeError } from '../../../errors'
 import { logger } from '../../../logger'
 import { codeInvariant, hexToUint8Array } from '../../../util'
-import { isArc4EncodableType, ptypeToArc4EncodedType } from '../../arc4-util'
+import { arc4ConfigFromType, isArc4EncodableType, ptypeToArc4EncodedType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
-import { BytesPType, bytesPType, stringPType, uint64PType } from '../../ptypes'
+import { BytesPType, bytesPType, FunctionPType, stringPType, uint64PType } from '../../ptypes'
 import {
   ARC4EncodedType,
   convertBytesFunction,
@@ -202,39 +202,52 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
   readonly ptype = methodSelectorFunction
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
-    const {
-      args: [methodSignature],
-    } = parseFunctionArgs({
-      args,
-      typeArgs,
-      genericTypeArgs: 0,
-      callLocation: sourceLocation,
-      funcName: this.typeDescription,
-      argSpec: (a) => [a.passthrough()],
-    })
     const methodConstantType = new BytesPType({ length: 4n })
-    if (methodSignature instanceof SubroutineExpressionBuilder) {
+
+    if (typeArgs.length === 1 && args.length === 0) {
+      const [functionType] = typeArgs
       codeInvariant(
-        methodSignature instanceof ContractMethodExpressionBuilder,
-        `Expected contract instance method, found ${methodSignature.typeDescription}`,
-        methodSignature.sourceLocation,
+        functionType instanceof FunctionPType,
+        'Generic type variable TMethod must be a contract method. eg. abiCall<typeof YourContract.prototype.yourMethod>',
+        sourceLocation,
       )
-      return instanceEb(methodSignature.getMethodSelector(sourceLocation), methodConstantType)
+      const { methodSelector } = arc4ConfigFromType(functionType, sourceLocation)
+      return instanceEb(methodSelector, methodConstantType)
     } else {
-      if (methodSignature === undefined) {
-        throw new CodeError(
-          `${this.typeDescription} expects exactly 1 argument that is either a string literal, or a contract function reference`,
-          { sourceLocation },
+      const {
+        args: [methodSignature],
+      } = parseFunctionArgs({
+        args,
+        typeArgs,
+        genericTypeArgs: 0,
+        callLocation: sourceLocation,
+        funcName: this.typeDescription,
+        argSpec: (a) => [a.passthrough()],
+      })
+
+      if (methodSignature instanceof SubroutineExpressionBuilder) {
+        codeInvariant(
+          methodSignature instanceof ContractMethodExpressionBuilder,
+          `Expected contract instance method, found ${methodSignature.typeDescription}`,
+          methodSignature.sourceLocation,
+        )
+        return instanceEb(methodSignature.getMethodSelector(sourceLocation), methodConstantType)
+      } else {
+        if (methodSignature === undefined) {
+          throw new CodeError(
+            `${this.typeDescription} expects exactly 1 argument that is either a string literal, or a contract function reference`,
+            { sourceLocation },
+          )
+        }
+        return instanceEb(
+          nodeFactory.methodConstant({
+            value: requireStringConstant(methodSignature).value,
+            wtype: methodConstantType.wtype,
+            sourceLocation,
+          }),
+          methodConstantType,
         )
       }
-      return instanceEb(
-        nodeFactory.methodConstant({
-          value: requireStringConstant(methodSignature).value,
-          wtype: methodConstantType.wtype,
-          sourceLocation,
-        }),
-        methodConstantType,
-      )
     }
   }
 }

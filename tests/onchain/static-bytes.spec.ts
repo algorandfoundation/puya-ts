@@ -4,7 +4,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('static bytes', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/static-bytes.algo.ts',
+    paths: 'tests/approvals/static-bytes.algo.ts',
     contracts: {
       StaticBytesAlgo: {},
     },

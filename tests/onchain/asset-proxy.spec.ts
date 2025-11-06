@@ -4,7 +4,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('asset proxy contract', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/asset-proxy.algo.ts',
+    paths: 'tests/approvals/asset-proxy.algo.ts',
     contracts: {
       AssetProxyAlgo: {},
     },

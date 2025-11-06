@@ -3,7 +3,7 @@ import { createBaseTestFixture } from './util/test-fixture'
 
 describe('reserve scratch', () => {
   const test = createBaseTestFixture({
-    path: 'tests/approvals/reserve-scratch.algo.ts',
+    paths: 'tests/approvals/reserve-scratch.algo.ts',
     contracts: ['ReserveScratchAlgo', 'SubReserveScratchAlgo'],
   })
 

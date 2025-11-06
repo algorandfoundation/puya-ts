@@ -3,7 +3,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('array destructuring', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/array-destructuring.algo.ts',
+    paths: 'tests/approvals/array-destructuring.algo.ts',
     contracts: {
       ArrayDestructuringAlgo: {},
     },

@@ -3,7 +3,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('match expr', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/match-expr.algo.ts',
+    paths: 'tests/approvals/match-expr.algo.ts',
     contracts: {
       MatchExprAlgo: {},
     },

@@ -2,7 +2,7 @@ import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('const literals', () => {
-  const test = createArc4TestFixture({ path: 'tests/approvals/const-literals.algo.ts', contracts: { ConstLiteralsAlgo: {} } })
+  const test = createArc4TestFixture({ paths: 'tests/approvals/const-literals.algo.ts', contracts: { ConstLiteralsAlgo: {} } })
   test('runs', async ({ appClientConstLiteralsAlgo }) => {
     const res1 = await appClientConstLiteralsAlgo.send.call({ method: 'test' })
     expect(res1.return).toBe(123n)

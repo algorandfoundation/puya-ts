@@ -4,7 +4,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('native arrays', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/native-arrays.algo.ts',
+    paths: 'tests/approvals/native-arrays.algo.ts',
     contracts: {
       NativeArraysAlgo: {},
     },
