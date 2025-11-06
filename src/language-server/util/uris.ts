@@ -16,7 +16,7 @@ import { URI } from 'vscode-uri'
 
 export function normalisedUri(args: { fsPath: string } | { uri: string }): URI {
   if ('fsPath' in args) {
-    const resolvedFileName = globSync(args.fsPath)[0]
+    const resolvedFileName = globSync(args.fsPath, { absolute: true })[0]
 
     return URI.file(resolvedFileName ?? args.fsPath)
   } else {

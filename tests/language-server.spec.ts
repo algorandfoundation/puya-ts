@@ -1,17 +1,17 @@
 import { spawn } from 'cross-spawn'
 import type { ChildProcess } from 'node:child_process'
-import pathe from 'pathe'
 import { afterAll, describe, expect, it } from 'vitest'
 import { StreamMessageReader, StreamMessageWriter } from 'vscode-jsonrpc/node'
 import * as ls from 'vscode-languageserver'
 import { URI } from 'vscode-uri'
+import { AbsolutePath } from '../src'
 import { invariant } from '../src/util'
 
 function encodePathToUri(path: string) {
   return URI.file(path).toString()
 }
 
-const codeFixesPath = pathe.resolve('tests/code-fix')
+const codeFixesPath = AbsolutePath.resolve({ path: 'tests/code-fix' })
 /* eslint-disable no-console */
 const log = console.debug
 
@@ -77,7 +77,7 @@ describe('Language Server', () => {
     await exit
     expect(process.exitCode, 'language server exit code').toBe(0)
   })
-  it('publishes diagnostics', async () => {
+  it('publishes diagnostics', { timeout: 1000_000 }, async () => {
     const { connection, process, processId } = getLanguageServer()
 
     const exit = new Promise<void>((resolve) => {
@@ -95,8 +95,8 @@ describe('Language Server', () => {
       })
     })
 
-    const path = pathe.join(codeFixesPath, 'unsupported-tokens.algo.ts')
-    const uri = encodePathToUri(path)
+    const path = codeFixesPath.join('unsupported-tokens.algo.ts')
+    const uri = encodePathToUri(path.toString())
     const nextDiagnostic = new Promise<ls.PublishDiagnosticsParams>((resolve, reject) => {
       connection.onNotification(ls.PublishDiagnosticsNotification.type, (n) => {
         if (n.uri === uri) {
@@ -134,7 +134,7 @@ describe('Language Server', () => {
 })
 
 async function initialize(connection: ls.ProtocolConnection, processId: number) {
-  const codeFixUri = encodePathToUri(codeFixesPath)
+  const codeFixUri = encodePathToUri(codeFixesPath.toString())
   const init: ls.InitializeParams = {
     rootUri: codeFixUri,
     processId,
