@@ -216,7 +216,16 @@ export function methodSelector(methodSignature: InstanceMethod<Contract>): bytes
  * @returns The ARC4 method selector. Eg. `02BECE11`
  */
 export function methodSelector(methodSignature: string): bytes<4>
-export function methodSelector(methodSignature: string | InstanceMethod<Contract>): bytes<4> {
+/**
+ * Returns the ARC4 method selector for a given ARC4 method signature. The method selector is the first
+ * 4 bytes of the SHA512/256 hash of the method signature.
+ * @typeParam TMethod The type of an ARC4 method signature (eg. `typeof MyContract.prototype.myMethod`)
+ * @returns The ARC4 method selector. Eg. `02BECE11`
+ * @remarks This overload can be used in conjunction with type only import (eg. `import type { MyContract } from './my-contract'`) to
+ * work around what would otherwise be a circular reference in the event two contracts need to call each other.
+ */
+export function methodSelector<TMethod>(): bytes<4>
+export function methodSelector<TMethod>(methodSignature?: string | InstanceMethod<Contract>): bytes<4> {
   throw new NoImplementation()
 }
 

@@ -1,14 +1,13 @@
 import type ts from 'typescript'
 import { TransactionKind } from '../../../awst/models'
 import { nodeFactory } from '../../../awst/node-factory'
-import { ARC4ABIMethodConfig, type Expression } from '../../../awst/nodes'
+import { type Expression } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { TxnField } from '../../../awst/txn-fields'
 import { codeInvariant, enumFromValue, invariant } from '../../../util'
-import { buildArc4MethodConstant } from '../../arc4-util'
-import { AwstBuildContext } from '../../context/awst-build-context'
+import { arc4ConfigFromType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
-import { anyItxnParamsType, itxnComposePType, ItxnParamsPType, Uint64EnumMemberLiteralType, voidPType } from '../../ptypes'
+import { anyItxnParamsType, FunctionPType, itxnComposePType, ItxnParamsPType, Uint64EnumMemberLiteralType, voidPType } from '../../ptypes'
 import { getPropertyType } from '../../ptypes/visitors/index-type-visitor'
 import { instanceEb } from '../../type-registry'
 import { buildApplicationCallTxnFields } from '../arc4/c2c'
@@ -51,7 +50,34 @@ class ItxnComposeBeginOrNextFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const itxns: Expression[] = []
 
-    if (args.length === 1) {
+    if (args.length === 2) {
+      // Deprecated overload, [method, fields]
+      const {
+        args: [functionRef, fields],
+      } = parseFunctionArgs({
+        args,
+        typeArgs,
+        genericTypeArgs: 1,
+        callLocation: sourceLocation,
+        funcName: this.typeDescription,
+        argSpec: (a) => [a.passthrough(), a.required()],
+      })
+      invariant(
+        functionRef instanceof ContractMethodExpressionBuilder,
+        `Arg 0 of ${this.typeDescription} should be an arc4 contract method`,
+      )
+      const { methodSelector, arc4Config } = arc4ConfigFromType(functionRef.ptype, sourceLocation)
+
+      itxns.push(
+        ...buildApplicationCallTxnFields({
+          arc4Config,
+          methodSelector,
+          fields,
+          sourceLocation,
+          functionType: functionRef.ptype,
+        }),
+      )
+    } else if (typeArgs.length === 0) {
       // fields or itxn
       const {
         args: [itxnOrFields],
@@ -92,28 +118,22 @@ class ItxnComposeBeginOrNextFunctionBuilder extends FunctionBuilder {
     } else {
       // abiCall
       const {
-        args: [functionRef, fields],
+        ptypes: [functionType],
+        args: [fields],
       } = parseFunctionArgs({
         args,
         typeArgs,
         genericTypeArgs: 1,
-        argSpec: (a) => [a.passthrough(), a.required()],
+        argSpec: (a) => [a.required()],
         callLocation: sourceLocation,
         funcName: this.typeDescription,
       })
-
-      invariant(
-        functionRef instanceof ContractMethodExpressionBuilder,
-        `Arg 0 of ${this.typeDescription} should be an arc4 contract method`,
+      codeInvariant(
+        functionType instanceof FunctionPType,
+        'Generic type variable TMethod must be a contract method. eg. abiCall<typeof YourContract.prototype.yourMethod>',
+        sourceLocation,
       )
-      const {
-        target: { memberName },
-        contractType,
-        ptype: functionType,
-      } = functionRef
-      const arc4Config = AwstBuildContext.current.getArc4Config(contractType, memberName)
-      codeInvariant(arc4Config instanceof ARC4ABIMethodConfig, `${memberName} is not an ABI method`, functionRef.sourceLocation)
-      const methodSelector = buildArc4MethodConstant(functionType, arc4Config, sourceLocation)
+      const { methodSelector, arc4Config } = arc4ConfigFromType(functionType, sourceLocation)
 
       itxns.push(
         ...buildApplicationCallTxnFields({

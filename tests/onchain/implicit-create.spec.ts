@@ -3,7 +3,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('implicit-create', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/implicit-create.algo.ts',
+    paths: 'tests/approvals/implicit-create.algo.ts',
     contracts: {
       NoBare: {},
       NoNoOp: {},

@@ -3,7 +3,7 @@ import { describe } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('avm12', () => {
-  const test = createArc4TestFixture({ path: 'tests/approvals/avm12.algo.ts', contracts: { Avm12Contract: {} } })
+  const test = createArc4TestFixture({ paths: 'tests/approvals/avm12.algo.ts', contracts: { Avm12Contract: {} } })
 
   test('reject wrong app version', async ({ appClientAvm12Contract }) => {
     await appClientAvm12Contract.fundAppAccount({ amount: algos(1) })

@@ -4,7 +4,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('local state', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/local-state.algo.ts',
+    paths: 'tests/approvals/local-state.algo.ts',
     contracts: { LocalStateDemo: {} },
     newScopeAt: beforeEach,
   })

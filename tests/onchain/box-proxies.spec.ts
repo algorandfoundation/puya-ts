@@ -5,7 +5,10 @@ import { bigIntToUint8Array, invariant, uint8ArrayToUtf8, utf8ToUint8Array } fro
 import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
 
 describe('BoxProxies', () => {
-  const test = createBaseTestFixture({ path: 'tests/approvals/box-proxies.algo.ts', contracts: ['BoxContract', 'BoxNotExist', 'LargeBox'] })
+  const test = createBaseTestFixture({
+    paths: 'tests/approvals/box-proxies.algo.ts',
+    contracts: ['BoxContract', 'BoxNotExist', 'LargeBox'],
+  })
 
   test('Should run', async ({ BoxContractInvoker, algorand, testAccount }) => {
     const created = await BoxContractInvoker.send()
@@ -73,7 +76,7 @@ describe('BoxProxies', () => {
   })
 
   const it = createArc4TestFixture({
-    path: 'tests/approvals/box-proxies.algo.ts',
+    paths: 'tests/approvals/box-proxies.algo.ts',
     contracts: {
       BoxCreate: { funding: algos(1) },
       Arc4BoxContract: { funding: algos(10) },
@@ -296,7 +299,7 @@ describe('BoxProxies', () => {
 const APPROVE = new Uint8Array([0x09, 0x81, 0x01])
 
 describe('LargeBox', () => {
-  const test = createArc4TestFixture({ path: 'tests/approvals/box-proxies.algo.ts', contracts: { LargeBox: { funding: algos(6) } } })
+  const test = createArc4TestFixture({ paths: 'tests/approvals/box-proxies.algo.ts', contracts: { LargeBox: { funding: algos(6) } } })
 
   test('should work with large boxes', async ({ appClientLargeBox, algorand, testAccount }) => {
     const call = await appClientLargeBox.createTransaction.call({

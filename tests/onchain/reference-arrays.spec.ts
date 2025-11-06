@@ -4,7 +4,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('reference arrays', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/reference-arrays.algo.ts',
+    paths: 'tests/approvals/reference-arrays.algo.ts',
     contracts: {
       ReferenceArraysAlgo: {},
     },

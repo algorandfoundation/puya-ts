@@ -10,7 +10,7 @@ import { Constants } from '../../../constants'
 import { logger } from '../../../logger'
 import { codeInvariant, enumFromValue, hexToUint8Array, invariant } from '../../../util'
 import { parseArc4Method } from '../../../util/arc4-signature-parser'
-import { buildArc4MethodConstant, ptypeToArc4EncodedType } from '../../arc4-util'
+import { arc4ConfigFromType, buildArc4MethodConstant, ptypeToArc4EncodedType } from '../../arc4-util'
 import { AwstBuildContext } from '../../context/awst-build-context'
 import type { PType } from '../../ptypes'
 import {
@@ -66,22 +66,7 @@ export class AbiCallFunctionBuilder extends FunctionBuilder {
       'Generic type variable TMethod must be a contract method. eg. abiCall<typeof YourContract.prototype.yourMethod>',
       sourceLocation,
     )
-    codeInvariant(
-      functionType.declaredIn,
-      `${functionType.name} does not appear to be a contract method. Ensure you are calling a function defined on a contract class eg. abiCall<typeof YourContract.prototype.yourMethod>`,
-      sourceLocation,
-    )
-
-    const contractType = AwstBuildContext.current.getContractTypeByName(functionType.declaredIn)
-    invariant(contractType, `${functionType.declaredIn} has not been visited`)
-
-    const arc4Config = AwstBuildContext.current.getArc4Config(contractType, functionType.name)
-    codeInvariant(
-      arc4Config instanceof ARC4ABIMethodConfig,
-      `${functionType.name} is not an ABI method. Only ABI compatible methods can be called with this helper.`,
-      sourceLocation,
-    )
-    const methodSelector = buildArc4MethodConstant(functionType, arc4Config, sourceLocation)
+    const { methodSelector, arc4Config } = arc4ConfigFromType(functionType, sourceLocation)
 
     const itxnResult = makeApplicationCall({
       fields: options,

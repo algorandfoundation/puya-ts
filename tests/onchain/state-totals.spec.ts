@@ -4,7 +4,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('State totals', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/state-totals.algo.ts',
+    paths: 'tests/approvals/state-totals.algo.ts',
     contracts: {
       ExtendsSubWithTotals: {},
       BaseWithState: {},

@@ -1,7 +1,7 @@
+import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount'
 import algosdk from 'algosdk'
 import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
-import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount'
 
 // Constants for test data
 const VALID_DYNAMIC_STRUCT_BYTES = new Uint8Array([...Array(9).fill(0), 0, 11, 0, 0])
@@ -42,7 +42,7 @@ function convertToBytes(sizeOrBytesValue: Uint8Array | number | (number | Uint8A
 
 describe('abi validation exhaustive', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/abi-validation-exhaustive.algo.ts',
+    paths: 'tests/approvals/abi-validation-exhaustive.algo.ts',
     contracts: { AbiValidationExhaustive: {} },
   })
   test.for<[string, number | Uint8Array | (number | Uint8Array)[]]>([

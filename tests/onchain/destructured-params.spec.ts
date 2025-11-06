@@ -4,7 +4,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('destructed params', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/destructured-params.algo.ts',
+    paths: 'tests/approvals/destructured-params.algo.ts',
     contracts: {
       DestructuredParamsAlgo: {},
     },

@@ -4,7 +4,7 @@ import { bigIntToUint8Array } from '../../src/util'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('gtxns contract', () => {
-  const test = createArc4TestFixture({ path: 'tests/approvals/gtxns.algo.ts', contracts: { GtxnsAlgo: {} } })
+  const test = createArc4TestFixture({ paths: 'tests/approvals/gtxns.algo.ts', contracts: { GtxnsAlgo: {} } })
   test('it verifies the txn type', async ({ appClientGtxnsAlgo, algorand, testAccount }) => {
     const call = await appClientGtxnsAlgo.createTransaction.call({ method: 'test', args: [] })
 

@@ -3,7 +3,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('for loops', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/for-of-loops.algo.ts',
+    paths: 'tests/approvals/for-of-loops.algo.ts',
     contracts: {
       ForOfLoopsAlgo: {},
     },

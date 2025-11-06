@@ -3,7 +3,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('arc4 method selector', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/arc4-method-selector.algo.ts',
+    paths: 'tests/approvals/arc4-method-selector.algo.ts',
     contracts: { ContractOne: {}, ContractTwo: {} },
   })
 

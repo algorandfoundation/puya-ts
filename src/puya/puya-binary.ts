@@ -77,6 +77,7 @@ function getPlatformDetails(): { os: string; arch: string } {
 
 /**
  * Downloads the Puya binary for a specific release version
+ * @param puyaStorageDir The directory where puya binaries should be stored once downloaded
  * @param version The release version to download (e.g., "1.0.0")
  * @returns Promise that resolves to the path of the extracted binary
  */

@@ -4,7 +4,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('abi-decorators', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/abi-decorators.algo.ts',
+    paths: 'tests/approvals/abi-decorators.algo.ts',
     contracts: {
       AbiDecorators: { deployParams: { createParams: { method: 'createMethod' } } },
       OverloadedMethods: {},

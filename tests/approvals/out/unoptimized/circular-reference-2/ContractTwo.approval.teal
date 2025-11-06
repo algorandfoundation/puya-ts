@@ -3,55 +3,80 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1
-    bytecblock 0x2a337771
+    intcblock 0 1 4 6
+    bytecblock 0x2a337771 0x601d46de 0x151f7c75
     b main_block@0
 
 main_block@0:
     b main_block@1
 
 main_block@1:
-    // tests/approvals/circular-reference-2.algo.ts:6
+    // tests/approvals/circular-reference-2.algo.ts:7
     // export class ContractTwo extends Contract {
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz main___algots__.defaultCreate@5
+    bz main___algots__.defaultCreate@10
     b main_abi_routing@2
 
 main_abi_routing@2:
-    // tests/approvals/circular-reference-2.algo.ts:6
-    // export class ContractTwo extends Contract {
-    txna ApplicationArgs 0
-    bytec_0 // method "test(uint64)void"
-    uncover 1
-    match main_test_route@3
-    b main_switch_case_next@4
-
-main_switch_case_next@4:
-    b main_after_if_else@6
-
-main_after_if_else@6:
-    // tests/approvals/circular-reference-2.algo.ts:6
-    // export class ContractTwo extends Contract {
-    err
-
-main_test_route@3:
     // tests/approvals/circular-reference-2.algo.ts:7
-    // test(appId: Application) {
+    // export class ContractTwo extends Contract {
     txn OnCompletion
     intc_0 // NoOp
     ==
+    assert // OnCompletion must be NoOp
     txn ApplicationID
     intc_0 // 0
     !=
-    &&
-    assert // OnCompletion must be NoOp && can only call when not creating
-    callsub test
-    b main_switch_case_next@4
+    bz main_create_NoOp@8
+    b main_call_NoOp@3
 
-main___algots__.defaultCreate@5:
-    // tests/approvals/circular-reference-2.algo.ts:6
+main_call_NoOp@3:
+    // tests/approvals/circular-reference-2.algo.ts:7
+    // export class ContractTwo extends Contract {
+    txna ApplicationArgs 0
+    bytec_0 // method "test(uint64)void"
+    bytec_1 // method "test2()byte[4]"
+    pushbytes 0x940b1de5 // method "test3(uint64)void"
+    uncover 3
+    match main_test_route@4 main_test2_route@5 main_test3_route@6
+    b main_switch_case_next@7
+
+main_switch_case_next@7:
+    b main_after_if_else@9
+
+main_after_if_else@9:
+    b main_after_if_else@11
+
+main_after_if_else@11:
+    // tests/approvals/circular-reference-2.algo.ts:7
+    // export class ContractTwo extends Contract {
+    err
+
+main_test3_route@6:
+    // tests/approvals/circular-reference-2.algo.ts:16
+    // test3(appId: Application) {
+    callsub test3
+    b main_switch_case_next@7
+
+main_test2_route@5:
+    // tests/approvals/circular-reference-2.algo.ts:12
+    // test2() {
+    callsub test2
+    b main_switch_case_next@7
+
+main_test_route@4:
+    // tests/approvals/circular-reference-2.algo.ts:8
+    // test(appId: Application) {
+    callsub test
+    b main_switch_case_next@7
+
+main_create_NoOp@8:
+    b main_after_if_else@9
+
+main___algots__.defaultCreate@10:
+    // tests/approvals/circular-reference-2.algo.ts:7
     // export class ContractTwo extends Contract {
     txn OnCompletion
     intc_0 // NoOp
@@ -71,7 +96,7 @@ test:
     b test_block@0
 
 test_block@0:
-    // tests/approvals/circular-reference-2.algo.ts:7
+    // tests/approvals/circular-reference-2.algo.ts:8
     // test(appId: Application) {
     txna ApplicationArgs 1
     dup
@@ -85,31 +110,175 @@ test_block@0:
     return
 
 
+// tests/approvals/circular-reference-2.algo.ts::ContractTwo.test2[routing]() -> void:
+test2:
+    b test2_block@0
+
+test2_block@0:
+    // tests/approvals/circular-reference-2.algo.ts:12
+    // test2() {
+    callsub tests/approvals/circular-reference-2.algo.ts::ContractTwo.test2
+    dup
+    len
+    intc_2 // 4
+    ==
+    assert // invalid size
+    bytec_2 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/circular-reference-2.algo.ts::ContractTwo.test3[routing]() -> void:
+test3:
+    b test3_block@0
+
+test3_block@0:
+    // tests/approvals/circular-reference-2.algo.ts:16
+    // test3(appId: Application) {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/circular-reference-2.algo.ts::ContractTwo.test3
+    intc_1 // 1
+    return
+
+
 // tests/approvals/circular-reference-2.algo.ts::ContractTwo.test(appId: uint64) -> void:
 tests/approvals/circular-reference-2.algo.ts::ContractTwo.test:
-    // tests/approvals/circular-reference-2.algo.ts:7
+    // tests/approvals/circular-reference-2.algo.ts:8
     // test(appId: Application) {
     proto 1 0
     b tests/approvals/circular-reference-2.algo.ts::ContractTwo.test_block@0
 
 tests/approvals/circular-reference-2.algo.ts::ContractTwo.test_block@0:
-    // tests/approvals/circular-reference-2.algo.ts:8
+    // tests/approvals/circular-reference-2.algo.ts:9
     // abiCall<typeof ContractOne.prototype.test>({ appId })
     itxn_begin
     frame_dig -1
     bytec_0 // method "test(uint64)void"
     itxn_field ApplicationArgs
     itxn_field ApplicationID
-    pushint 6 // appl
+    intc_3 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
     b tests/approvals/circular-reference-2.algo.ts::ContractTwo.test_next_txn@1
 
 tests/approvals/circular-reference-2.algo.ts::ContractTwo.test_next_txn@1:
-    // tests/approvals/circular-reference-2.algo.ts:8
+    // tests/approvals/circular-reference-2.algo.ts:9
     // abiCall<typeof ContractOne.prototype.test>({ appId })
     itxn_submit
+    retsub
+
+
+// tests/approvals/circular-reference-2.algo.ts::ContractTwo.test2() -> bytes:
+tests/approvals/circular-reference-2.algo.ts::ContractTwo.test2:
+    b tests/approvals/circular-reference-2.algo.ts::ContractTwo.test2_block@0
+
+tests/approvals/circular-reference-2.algo.ts::ContractTwo.test2_block@0:
+    // tests/approvals/circular-reference-2.algo.ts:13
+    // return methodSelector<typeof ContractOne.prototype.test>()
+    bytec_0 // method "test(uint64)void"
+    retsub
+
+
+// tests/approvals/circular-reference-2.algo.ts::ContractTwo.test3(appId: uint64) -> void:
+tests/approvals/circular-reference-2.algo.ts::ContractTwo.test3:
+    // tests/approvals/circular-reference-2.algo.ts:16
+    // test3(appId: Application) {
+    proto 1 0
+    b tests/approvals/circular-reference-2.algo.ts::ContractTwo.test3_block@0
+
+tests/approvals/circular-reference-2.algo.ts::ContractTwo.test3_block@0:
+    // tests/approvals/circular-reference-2.algo.ts:17-19
+    // itxnCompose.begin<typeof ContractOne.prototype.test2>({
+    //   appId,
+    // })
+    itxn_begin
+    // tests/approvals/circular-reference-2.algo.ts:18
+    // appId,
+    frame_dig -1
+    // tests/approvals/circular-reference-2.algo.ts:17-19
+    // itxnCompose.begin<typeof ContractOne.prototype.test2>({
+    //   appId,
+    // })
+    bytec_1 // method "test2()byte[4]"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationID
+    intc_3 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    // tests/approvals/circular-reference-2.algo.ts:20-22
+    // itxnCompose.next<typeof ContractOne.prototype.test2>({
+    //   appId,
+    // })
+    itxn_next
+    // tests/approvals/circular-reference-2.algo.ts:21
+    // appId,
+    frame_dig -1
+    // tests/approvals/circular-reference-2.algo.ts:20-22
+    // itxnCompose.next<typeof ContractOne.prototype.test2>({
+    //   appId,
+    // })
+    bytec_1 // method "test2()byte[4]"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationID
+    intc_3 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    // tests/approvals/circular-reference-2.algo.ts:23
+    // itxnCompose.submit()
+    itxn_submit
+    // tests/approvals/circular-reference-2.algo.ts:26
+    // const res1 = convertBytes<StaticBytes<4>>(op.GITxn.lastLog(1), { prefix: 'log', strategy: 'validate' }).bytes
+    gitxn 1 LastLog
+    dup
+    extract 4 0
+    cover 1
+    extract 0 4
+    bytec_2 // 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    dup
+    len
+    intc_2 // 4
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 4>
+    // tests/approvals/circular-reference-2.algo.ts:27
+    // const res2 = convertBytes<StaticBytes<4>>(op.GITxn.lastLog(0), { prefix: 'log', strategy: 'validate' }).bytes
+    gitxn 0 LastLog
+    dup
+    extract 4 0
+    cover 1
+    extract 0 4
+    bytec_2 // 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    dup
+    len
+    intc_2 // 4
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 4>
+    // tests/approvals/circular-reference-2.algo.ts:29
+    // assert(expected === res1)
+    bytec_0 // method "test(uint64)void"
+    uncover 2
+    ==
+    assert
+    // tests/approvals/circular-reference-2.algo.ts:30
+    // assert(expected === res2)
+    bytec_0 // method "test(uint64)void"
+    ==
+    assert
     retsub
 
 
