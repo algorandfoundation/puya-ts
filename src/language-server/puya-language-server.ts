@@ -1,6 +1,6 @@
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import * as lsp from 'vscode-languageserver/node'
-import { appVersion } from '../cli/app-version'
+import { appVersion, packageVersion } from '../cli/app-version'
 import { Constants } from '../constants'
 import { logger, LogLevel } from '../logger'
 import { LanguageServerLogSink } from '../logger/sinks/language-server-log-sink'
@@ -39,6 +39,8 @@ export type LanguageServerOptions = {
   port?: number
   customPuyaPath?: string
 }
+
+const PACKAGE_VERSION = packageVersion()
 
 export class PuyaLanguageServer {
   readonly documents = new lsp.TextDocuments(TextDocument)
@@ -85,6 +87,10 @@ export class PuyaLanguageServer {
       workspaces: this.workspaceFolders,
     })
     return {
+      serverInfo: {
+        name: 'Puya-TS Language Server',
+        version: PACKAGE_VERSION,
+      },
       capabilities: {
         textDocumentSync: lsp.TextDocumentSyncKind.Incremental,
         codeActionProvider: {
