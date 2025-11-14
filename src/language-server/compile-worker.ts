@@ -12,7 +12,7 @@ import type { AlgoFile } from '../options'
 import { CompileOptions } from '../options'
 import { createTsProgram } from '../parser'
 import { deserializeAndLog } from '../puya/log-deserializer'
-import { PuyaService } from '../puya/puya-service'
+import type { PuyaService } from '../puya/puya-service'
 import { isIn } from '../util'
 import { DefaultMap } from '../util/default-map'
 import type { CompileTriggerQueue, WorkspaceCompileTrigger } from './compile-trigger-queue'
@@ -30,7 +30,7 @@ export class CompileWorker {
     private readonly queue: CompileTriggerQueue,
     private readonly documents: TextDocuments<TextDocument>,
     private readonly diagnostics: DiagnosticsManager,
-    private readonly puyaPath: string,
+    private readonly puyaService: PuyaService,
   ) {
     this.queue.onItemEnqueued(this.onCompileTriggerQueueItemQueued.bind(this))
   }
@@ -100,7 +100,7 @@ export class CompileWorker {
     const logCtx = LoggingContext.create()
     await logCtx.run(() =>
       analyse({
-        puyaPath: this.puyaPath,
+        puyaService: this.puyaService,
         filePaths: algoFiles,
         abortSignal,
         sourceFileProvider({ readFile, fileExists }) {
@@ -148,9 +148,11 @@ export class CompileWorker {
   }
 }
 
-async function analyse(
-  options: Pick<CompileOptions, 'filePaths' | 'sourceFileProvider'> & { puyaPath: string; abortSignal: AbortSignal },
-): Promise<void> {
+async function analyse({
+  abortSignal,
+  puyaService,
+  ...options
+}: Pick<CompileOptions, 'filePaths' | 'sourceFileProvider'> & { abortSignal: AbortSignal; puyaService: PuyaService }): Promise<void> {
   const loggerCtx = LoggingContext.current
   registerPTypes(typeRegistry)
   const compileOptions = new CompileOptions(options)
@@ -161,11 +163,10 @@ async function analyse(
   const { moduleAwst } = buildAwst(programResult, compileOptions)
   validateAwst(moduleAwst)
 
-  if (loggerCtx.hasErrors() || options.abortSignal.aborted) {
+  if (loggerCtx.hasErrors() || abortSignal.aborted) {
     return
   }
 
-  const puyaService = PuyaService.getInstance(options)
   const response = await puyaService.analyse(programResult.programDirectory, moduleAwst)
   for (const log of response.logs) {
     deserializeAndLog(log)

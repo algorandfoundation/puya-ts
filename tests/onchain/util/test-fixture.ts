@@ -19,6 +19,7 @@ import { LoggingContext, LogLevel } from '../../../src/logger'
 import type { DeliberateAny } from '../../../src/typescript-helpers'
 import { invariant } from '../../../src/util'
 import { generateTempDir } from '../../../src/util/generate-temp-file'
+import { puyaService } from './puya-service'
 
 const algorandTestFixture = (localnetFixture: AlgorandFixture) =>
   test.extend<{
@@ -130,7 +131,7 @@ export function createBaseTestFixture<TContracts extends string = ''>(options: {
       invariant(approvalProgram, `No approval program found for ${contractName}`)
       invariant(clearStateProgram, `No clear state program found for ${contractName}`)
 
-      use({
+      await use({
         async globalState(appId: bigint) {
           return localnet.algorand.app.getGlobalState(appId)
         },
@@ -289,6 +290,7 @@ async function compilePath(
         optimizationLevel: 1,
         ...options,
       }),
+      await puyaService.instance(),
     )
     for (const log of logCtx.logEvents) {
       switch (log.level) {

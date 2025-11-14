@@ -4,6 +4,7 @@ import { appVersion } from '../cli/app-version'
 import { Constants } from '../constants'
 import { logger, LogLevel } from '../logger'
 import { LanguageServerLogSink } from '../logger/sinks/language-server-log-sink'
+import { PuyaService } from '../puya/puya-service'
 import { resolvePuyaPath } from '../puya/resolve-puya-path'
 import { CompileTriggerQueue } from './compile-trigger-queue'
 import { CompileWorker } from './compile-worker'
@@ -46,6 +47,7 @@ export class PuyaLanguageServer {
   readonly workspaceFolders: lsp.URI[] = []
   readonly diagnosticsMgr: DiagnosticsManager
   readonly compileWorker: CompileWorker
+  readonly puyaService: PuyaService
   stopping = false
 
   constructor(
@@ -54,7 +56,8 @@ export class PuyaLanguageServer {
     puyaPath: string,
   ) {
     this.diagnosticsMgr = new DiagnosticsManager()
-    this.compileWorker = new CompileWorker(this.triggers, this.documents, this.diagnosticsMgr, puyaPath)
+    this.puyaService = new PuyaService({ puyaPath })
+    this.compileWorker = new CompileWorker(this.triggers, this.documents, this.diagnosticsMgr, this.puyaService)
 
     connection.onInitialize(this.initialize.bind(this))
     connection.onInitialized(this.initialized.bind(this))
@@ -75,6 +78,7 @@ export class PuyaLanguageServer {
     logger.debug(undefined, '[PuyaLanguageServer] Shutting down')
     this.stopping = true
     await this.compileWorker.stop()
+    await this.puyaService.shutdown()
     logger.debug(undefined, '[PuyaLanguageServer] Shutdown')
   }
 
