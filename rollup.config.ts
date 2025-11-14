@@ -10,7 +10,6 @@ const config: RollupOptions = {
     cli: 'src/cli.ts',
     'bin/run-cli': 'src/bin/run-cli.ts',
     'bin/puyats-ls': 'src/bin/puyats-ls.ts',
-    'bin/download-puya-binary': 'src/bin/download-puya-binary.ts',
   },
   output: [
     {
