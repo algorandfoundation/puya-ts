@@ -10,6 +10,7 @@ import { logger, LoggingContext } from './logger'
 import type { CompileOptions } from './options'
 import { createTsProgram } from './parser'
 import { puyaCompile } from './puya'
+import type { PuyaService } from './puya/puya-service'
 import type { AbsolutePath } from './util/absolute-path'
 
 export type CompileResult = {
@@ -19,7 +20,7 @@ export type CompileResult = {
   compilationSet?: CompilationSet
 }
 
-export async function compile(options: CompileOptions): Promise<CompileResult> {
+export async function compile(options: CompileOptions, puyaService?: PuyaService): Promise<CompileResult> {
   const loggerCtx = LoggingContext.current
   registerPTypes(typeRegistry)
   logger.info(undefined, appVersion({ withAVMVersion: false }))
@@ -50,6 +51,7 @@ export async function compile(options: CompileOptions): Promise<CompileResult> {
       programDirectory: programResult.programDirectory,
       compilationSet,
       sourceFiles: programResult.sourceFiles,
+      puyaService,
     })
   }
 

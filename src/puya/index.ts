@@ -16,15 +16,17 @@ export async function puyaCompile({
   sourceFiles,
   options,
   compilationSet,
+  puyaService,
 }: {
   moduleAwst: AWST[]
   programDirectory: AbsolutePath
   sourceFiles: SourceFileMapping
   options: CompileOptions
   compilationSet: CompilationSet
+  puyaService?: PuyaService
 }) {
   const puyaPath = await resolvePuyaPath(options)
-  const puyaService = PuyaService.getInstance({ puyaPath })
+  const localPuyaService = puyaService ?? new PuyaService({ puyaPath })
   const puyaOptions = options.buildPuyaOptions(
     buildCompilationSetMapping({
       awst: moduleAwst,
@@ -33,15 +35,15 @@ export async function puyaCompile({
     }),
   )
 
-  const response = await puyaService.compile({
+  const response = await localPuyaService.compile({
     awst: moduleAwst,
     options: puyaOptions,
     base_path: programDirectory.toString(),
     log_level: getPuyaLogLevel(options.logLevel),
     source_annotations: getSourceFileContents(sourceFiles),
   })
-  // TODO: approval tests could be sped up by caching puyaService and only shutting down once tests are complete
-  await puyaService.shutdown()
+  // Shutdown service if we created it locally
+  if (puyaService === undefined) await localPuyaService.shutdown()
   for (const log of response.logs) {
     deserializeAndLog(log)
   }

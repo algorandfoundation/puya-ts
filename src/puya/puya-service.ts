@@ -33,13 +33,9 @@ export type PuyaServiceOptions = {
 }
 
 export class PuyaService {
-  private static _instance: PuyaService | null = null
   private readonly connection: rpc.MessageConnection
-  static getInstance(options: PuyaServiceOptions): PuyaService {
-    return this._instance ?? (this._instance = new PuyaService(options))
-  }
 
-  private constructor(options: PuyaServiceOptions) {
+  public constructor(options: PuyaServiceOptions) {
     this.connection = getPuyaServiceConnection(options.puyaPath)
   }
 
@@ -57,14 +53,13 @@ export class PuyaService {
     const type = new rpc.NotificationType('shutdown')
     await this.connection.sendNotification(type)
     this.connection.end()
-    PuyaService._instance = null
   }
 }
 
 function getPuyaServiceConnection(path: string) {
   logger.debug(undefined, `puya serve: using ${path}`)
   const childProcess = spawn(path, ['serve'], {
-    stdio: ['pipe', 'pipe', process.stderr],
+    stdio: ['pipe', 'pipe', 'pipe'],
     env: { ...process.env, NO_COLOR: '1' },
   })
   logger.debug(undefined, `puya serve: running`)
