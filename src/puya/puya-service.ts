@@ -33,14 +33,26 @@ export type PuyaServiceOptions = {
 }
 
 export class PuyaService {
-  private static _instance: PuyaService | null = null
+  private static _instances = new Map<string, PuyaService>()
   private readonly connection: rpc.MessageConnection
   static getInstance(options: PuyaServiceOptions): PuyaService {
-    return this._instance ?? (this._instance = new PuyaService(options))
+    const instance = this._instances.get(options.puyaPath)
+    if (instance) {
+      logger.debug(undefined, `puya serve: re-using instance`)
+      return instance
+    } else {
+      logger.debug(undefined, 'puya serve: creating new instance')
+      const newInstance = new PuyaService(options)
+      this._instances.set(options.puyaPath, newInstance)
+      return newInstance
+    }
   }
+
+  private key: string
 
   private constructor(options: PuyaServiceOptions) {
     this.connection = getPuyaServiceConnection(options.puyaPath)
+    this.key = options.puyaPath
   }
 
   async analyse(programDirectory: AbsolutePath, awst: RootNode[]): Promise<LogResult> {
@@ -57,14 +69,18 @@ export class PuyaService {
     const type = new rpc.NotificationType('shutdown')
     await this.connection.sendNotification(type)
     this.connection.end()
-    PuyaService._instance = null
+    PuyaService._instances.delete(this.key)
+  }
+
+  static async shutdownAll(): Promise<void> {
+    await Promise.all(this._instances.values().map((v) => v.shutdown()))
   }
 }
 
 function getPuyaServiceConnection(path: string) {
   logger.debug(undefined, `puya serve: using ${path}`)
   const childProcess = spawn(path, ['serve'], {
-    stdio: ['pipe', 'pipe', process.stderr],
+    stdio: ['pipe', 'pipe', 'pipe'],
     env: { ...process.env, NO_COLOR: '1' },
   })
   logger.debug(undefined, `puya serve: running`)
