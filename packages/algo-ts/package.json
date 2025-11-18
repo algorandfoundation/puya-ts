@@ -16,7 +16,7 @@
     "build:2-check-types": "tsc -p tsconfig.json",
     "build:3-build": "rollup -c --configPlugin typescript",
     "build:4-copy-pkg-json": "tstk copy-package-json -c",
-    "build:5-copy-readme": "copyfiles ./readme.md ./dist",
+    "build:5-copy-readme": "shx cp ./readme.md ./dist",
     "watch": "rollup -c -w --configPlugin typescript",
     "test": "echo 'No tests'"
   },
@@ -36,7 +36,6 @@
     "@typescript-eslint/parser": "8.33.0",
     "@vitest/coverage-v8": "3.1.4",
     "better-npm-audit": "3.11.0",
-    "copyfiles": "2.4.1",
     "eslint": "9.27.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.1",
@@ -45,15 +44,12 @@
     "prettier": "3.5.3",
     "rimraf": "6.0.1",
     "rollup": "4.41.1",
+    "shx": "^0.4.0",
     "tsx": "4.19.4",
     "typescript": "^5.8.3",
     "vitest": "3.1.4"
   },
-  "overrides": {
-    "cross-spawn": "7.0.5",
-    "npm": "10.9.1",
-    "esbuild": "0.25.0"
-  },
+  "overrides": {},
   "peerDependencies": {
     "tslib": "^2.6.2"
   }
