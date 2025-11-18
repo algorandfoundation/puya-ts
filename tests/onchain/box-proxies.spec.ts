@@ -1,16 +1,23 @@
 import { algos } from '@algorandfoundation/algokit-utils'
 import type { arc4, uint64 } from '@algorandfoundation/algorand-typescript'
-import { describe, expect } from 'vitest'
+import { afterAll, describe, expect } from 'vitest'
+import { PuyaService } from '../../src/puya/puya-service'
+import { resolvePuyaPath } from '../../src/puya/resolve-puya-path'
 import { bigIntToUint8Array, invariant, uint8ArrayToUtf8, utf8ToUint8Array } from '../../src/util'
 import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
 
-describe('BoxProxies', () => {
+const APPROVE = new Uint8Array([0x09, 0x81, 0x01])
+
+describe('BoxProxies', async () => {
+  const puyaService = new PuyaService({ puyaPath: await resolvePuyaPath({}) })
+
   const test = createBaseTestFixture({
     paths: 'tests/approvals/box-proxies.algo.ts',
-    contracts: ['BoxContract', 'BoxNotExist', 'LargeBox'],
+    contracts: ['BoxContract', 'BoxNotExist'],
+    puyaService,
   })
 
-  test('Should run', async ({ BoxContractInvoker, algorand, testAccount }) => {
+  test('BoxContract runs', async ({ BoxContractInvoker, algorand, testAccount }) => {
     const created = await BoxContractInvoker.send()
 
     invariant(created.confirmation.applicationIndex, 'There must be an application id')
@@ -83,7 +90,9 @@ describe('BoxProxies', () => {
       TupleBox: { funding: algos(1) },
       BoxToRefTest: { funding: algos(1) },
       CompositeKeyTest: { funding: algos(1) },
+      LargeBox: { funding: algos(6) },
     },
+    puyaService,
   })
   it('creates boxes of the min size', async ({ appClientBoxCreate }) => {
     await appClientBoxCreate.send.call({ method: 'createBoxes', boxReferences: ['bool', 'arc4b', 'a', 'b', 'c', 'd', 'e'] })
@@ -238,7 +247,7 @@ describe('BoxProxies', () => {
     })
   })
 
-  it('should work with large boolean array in boxes', async ({ appClientArc4BoxContract, algorand, testAccount }) => {
+  it('should work with large boolean array in boxes', async ({ appClientArc4BoxContract, algorand }) => {
     await appClientArc4BoxContract.send.call({
       method: 'createBools',
       boxReferences: ['tooManyBools', ...Array(7).fill('')],
@@ -294,14 +303,8 @@ describe('BoxProxies', () => {
 
     expect(boxResponse).toEqual(expectedBytes)
   })
-})
 
-const APPROVE = new Uint8Array([0x09, 0x81, 0x01])
-
-describe('LargeBox', () => {
-  const test = createArc4TestFixture({ paths: 'tests/approvals/box-proxies.algo.ts', contracts: { LargeBox: { funding: algos(6) } } })
-
-  test('should work with large boxes', async ({ appClientLargeBox, algorand, testAccount }) => {
+  it('should work with large boxes', async ({ appClientLargeBox, algorand, testAccount }) => {
     const call = await appClientLargeBox.createTransaction.call({
       method: 'test',
       boxReferences: ['large', ...Array(7).fill('')],
@@ -318,4 +321,6 @@ describe('LargeBox', () => {
       .addTransaction(call.transactions[0])
       .send()
   })
+
+  afterAll(() => puyaService.shutdown())
 })

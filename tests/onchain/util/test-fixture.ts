@@ -16,10 +16,10 @@ import type { beforeEach, ExpectStatic } from 'vitest'
 import { beforeAll, test } from 'vitest'
 import { compile, CompileOptions, processInputPaths } from '../../../src'
 import { LoggingContext, LogLevel } from '../../../src/logger'
+import type { PuyaService } from '../../../src/puya/puya-service'
 import type { DeliberateAny } from '../../../src/typescript-helpers'
 import { invariant } from '../../../src/util'
 import { generateTempDir } from '../../../src/util/generate-temp-file'
-import { puyaService } from './puya-service'
 
 const algorandTestFixture = (localnetFixture: AlgorandFixture) =>
   test.extend<{
@@ -45,11 +45,15 @@ const algorandTestFixture = (localnetFixture: AlgorandFixture) =>
     },
   })
 
-function createLazyCompiler(paths: string[], options: { outputBytecode: boolean; outputArc56: boolean }) {
+function createLazyCompiler(
+  paths: string[],
+  options: { outputBytecode: boolean; outputArc56: boolean },
+  puyaService: PuyaService | undefined,
+) {
   let result: CompilationArtifacts | undefined = undefined
   return {
     async getCompileResult(expect: ExpectStatic) {
-      if (!result) result = await compilePath(paths, expect, options)
+      if (!result) result = await compilePath(paths, expect, options, puyaService)
       return result
     },
   }
@@ -107,9 +111,13 @@ export function createBaseTestFixture<TContracts extends string = ''>(options: {
   contracts: TContracts[]
   /** When to create a new test scope. Defaults to `beforeAll`. Use `beforeEach` for fresh state per test. */
   newScopeAt?: typeof beforeAll | typeof beforeEach
+  /**
+   * Optionally provide a puya service to be used for compilation. If none provided a new instance will be created per compilation
+   */
+  puyaService?: PuyaService
 }) {
-  const { paths, contracts, newScopeAt = beforeAll } = options
-  const lazyCompile = createLazyCompiler(promoteToArray(paths), { outputArc56: false, outputBytecode: true })
+  const { paths, contracts, newScopeAt = beforeAll, puyaService } = options
+  const lazyCompile = createLazyCompiler(promoteToArray(paths), { outputArc56: false, outputBytecode: true }, puyaService)
   const localnet = algorandFixture({
     testAccountFunding: microAlgos(100_000_000_000),
   })
@@ -194,9 +202,13 @@ export function createArc4TestFixture<TContracts extends string = ''>(options: {
   contracts: Record<TContracts, ContractConfig> | TContracts[]
   /** When to create a new test scope. Defaults to `beforeAll`. Use `beforeEach` for fresh state per test. */
   newScopeAt?: typeof beforeAll | typeof beforeEach
+  /**
+   * Optionally provide a puya service to be used for compilation. If none provided a new instance will be created per compilation
+   */
+  puyaService?: PuyaService
 }) {
-  const { paths, contracts, newScopeAt = beforeAll } = options
-  const lazyCompile = createLazyCompiler(promoteToArray(paths), { outputArc56: true, outputBytecode: false })
+  const { paths, contracts, newScopeAt = beforeAll, puyaService } = options
+  const lazyCompile = createLazyCompiler(promoteToArray(paths), { outputArc56: true, outputBytecode: false }, puyaService)
   const localnet = algorandFixture({
     testAccountFunding: microAlgos(100_000_000_000),
   })
@@ -273,6 +285,7 @@ async function compilePath(
   paths: string[],
   expect: ExpectStatic,
   options: { outputBytecode: boolean; outputArc56: boolean },
+  puyaService: PuyaService | undefined,
 ): Promise<CompilationArtifacts> {
   using tempDir = generateTempDir()
   const logCtx = LoggingContext.create()
@@ -290,7 +303,7 @@ async function compilePath(
         optimizationLevel: 1,
         ...options,
       }),
-      await puyaService.instance(),
+      puyaService,
     )
     for (const log of logCtx.logEvents) {
       switch (log.level) {
