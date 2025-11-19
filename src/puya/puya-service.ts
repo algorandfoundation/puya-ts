@@ -72,8 +72,12 @@ function getPuyaServiceConnection(path: string) {
       },
     }),
   )
+  let stderr = ''
+  childProcess.stderr.on('data', (chunk) => {
+    stderr += typeof chunk === 'string' ? chunk : `${chunk}`
+  })
   childProcess.once('error', (e) => {
-    throw new InternalError(`puya server: exited prematurely ${e}`)
+    throw new InternalError(`puya server: exited prematurely ${e} - stderr: ${stderr}`)
   })
   connection.onError(([error]) => {
     throw new InternalError('puya server: connection error', { cause: error })
