@@ -18,4 +18,8 @@ describe('arc4 method selector', () => {
 
     expect(result.return).toBe(true)
   })
+
+  test('Reference types are treated correctly based on resourceEncoding setting', async ({ appClientContractOne }) => {
+    await appClientContractOne.send.call({ method: 'testReferenceTypes' })
+  })
 })

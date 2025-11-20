@@ -3,6 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
+    intcblock 1
     // tests/approvals/arc4-method-selector.algo.ts:5
     // class ContractOne extends Contract {
     txn NumAppArgs
@@ -12,22 +13,23 @@ main:
     assert // OnCompletion must be NoOp
     txn ApplicationID
     assert
-    pushbytess 0xf59e3cc4 0xc2e9596e 0xf1908524 // method "test()bool", method "someMethod()uint64", method "test2()void"
+    pushbytess 0xf59e3cc4 0xc2e9596e 0x6b48d522 // method "test()bool", method "someMethod()uint64", method "testReferenceTypes()void"
     txna ApplicationArgs 0
-    match main_test_route@4 main_someMethod_route@5 main_test2_route@6
+    match main_test_route@4 main_someMethod_route@5 main_testReferenceTypes_route@6
     err
 
-main_test2_route@6:
+main_testReferenceTypes_route@6:
     // tests/approvals/arc4-method-selector.algo.ts:13
-    // test2() {
-    err
+    // testReferenceTypes() {
+    intc_0 // 1
+    return
 
 main_someMethod_route@5:
     // tests/approvals/arc4-method-selector.algo.ts:9
     // someMethod() {
     pushbytes 0x151f7c75000000000000007b
     log
-    pushint 1 // 1
+    intc_0 // 1
     return
 
 main_test_route@4:
@@ -35,7 +37,7 @@ main_test_route@4:
     // test() {
     pushbytes 0x151f7c7580
     log
-    pushint 1 // 1
+    intc_0 // 1
     return
 
 main___algots__.defaultCreate@10:
@@ -47,5 +49,5 @@ main___algots__.defaultCreate@10:
     !
     &&
     assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
+    intc_0 // 1
     return

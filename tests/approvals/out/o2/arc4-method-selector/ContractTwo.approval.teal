@@ -3,26 +3,26 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 8
-    // tests/approvals/arc4-method-selector.algo.ts:20
+    intcblock 1 2 8 6
+    // tests/approvals/arc4-method-selector.algo.ts:25
     // class ContractTwo extends Contract {
     txn NumAppArgs
-    bz main___algots__.defaultCreate@10
+    bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
     assert // OnCompletion must be NoOp
     txn ApplicationID
     assert
-    pushbytess 0x438c64f3 0xf59e3cc4 0x523a6db2 // method "renamedSomeMethod()void", method "test()bool", method "referenceTypes(pay,uint64,address,uint64,appl)void"
+    pushbytess 0x438c64f3 0xf59e3cc4 0x6d620ac4 0x46961192 // method "renamedSomeMethod()void", method "test()bool", method "referenceTypesIndex(pay,asset,account,application,appl)void", method "referenceTypesValue(pay,uint64,address,uint64,appl)void"
     txna ApplicationArgs 0
-    match main_renamedSomeMethod_route@4 main_test_route@5 main_referenceTypes_route@6
+    match main_renamedSomeMethod_route@4 main_test_route@5 main_referenceTypesIndex_route@6 main_referenceTypesValue_route@7
     err
 
-main_referenceTypes_route@6:
-    // tests/approvals/arc4-method-selector.algo.ts:28
-    // referenceTypes(pay: gtxn.PaymentTxn, asset: Asset, account: Account, app: Application, appTxn: gtxn.ApplicationCallTxn) {}
+main_referenceTypesValue_route@7:
+    // tests/approvals/arc4-method-selector.algo.ts:36
+    // @abimethod({ resourceEncoding: 'value' })
     txn GroupIndex
-    pushint 2 // 2
+    intc_1 // 2
     -
     gtxns TypeEnum
     intc_0 // pay
@@ -30,7 +30,7 @@ main_referenceTypes_route@6:
     assert // transaction type is pay
     txna ApplicationArgs 1
     len
-    intc_1 // 8
+    intc_2 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     txna ApplicationArgs 2
@@ -40,21 +40,56 @@ main_referenceTypes_route@6:
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 3
     len
-    intc_1 // 8
+    intc_2 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     txn GroupIndex
     intc_0 // 1
     -
     gtxns TypeEnum
-    pushint 6 // appl
+    intc_3 // appl
+    ==
+    assert // transaction type is appl
+    intc_0 // 1
+    return
+
+main_referenceTypesIndex_route@6:
+    // tests/approvals/arc4-method-selector.algo.ts:33
+    // @abimethod({ resourceEncoding: 'index' })
+    txn GroupIndex
+    intc_1 // 2
+    -
+    gtxns TypeEnum
+    intc_0 // pay
+    ==
+    assert // transaction type is pay
+    txna ApplicationArgs 1
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
+    txna ApplicationArgs 2
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
+    txna ApplicationArgs 3
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
+    txn GroupIndex
+    intc_0 // 1
+    -
+    gtxns TypeEnum
+    intc_3 // appl
     ==
     assert // transaction type is appl
     intc_0 // 1
     return
 
 main_test_route@5:
-    // tests/approvals/arc4-method-selector.algo.ts:24
+    // tests/approvals/arc4-method-selector.algo.ts:29
     // test() {
     pushbytes 0x151f7c7580
     log
@@ -62,13 +97,13 @@ main_test_route@5:
     return
 
 main_renamedSomeMethod_route@4:
-    // tests/approvals/arc4-method-selector.algo.ts:21
+    // tests/approvals/arc4-method-selector.algo.ts:26
     // @abimethod({ name: 'renamedSomeMethod' })
     intc_0 // 1
     return
 
-main___algots__.defaultCreate@10:
-    // tests/approvals/arc4-method-selector.algo.ts:20
+main___algots__.defaultCreate@11:
+    // tests/approvals/arc4-method-selector.algo.ts:25
     // class ContractTwo extends Contract {
     txn OnCompletion
     !
