@@ -2,30 +2,34 @@ import type * as lsp from 'vscode-languageserver'
 import type { TextDocument } from 'vscode-languageserver-textdocument'
 import type { TextDocuments } from 'vscode-languageserver/node.js'
 import { URI } from 'vscode-uri'
-import { validateAwst } from '../awst/validation'
-import { buildAwst } from '../awst_build'
-import { registerPTypes } from '../awst_build/ptypes/register'
-import { typeRegistry } from '../awst_build/type-registry'
 import { processInputPaths } from '../input-paths/process-input-paths'
 import { logger, LoggingContext, LogLevel, LogSource } from '../logger'
 import type { AlgoFile } from '../options'
-import { CompileOptions } from '../options'
-import { createTsProgram } from '../parser'
-import { deserializeAndLog } from '../puya/log-deserializer'
+import { DependencyGraph } from '../parser/dependency-graph'
 import type { PuyaService } from '../puya/puya-service'
 import { isIn } from '../util'
+import { AbsolutePath } from '../util/absolute-path'
 import { DefaultMap } from '../util/default-map'
-import type { CompileTriggerQueue, WorkspaceCompileTrigger } from './compile-trigger-queue'
+import { sleep } from '../util/sleep'
+import { analyse } from './analyse'
+import type { CompileTrigger, CompileTriggerQueue, FileCompileTrigger, WorkspaceCompileTrigger } from './compile-trigger-queue'
 import type { DiagnosticsManager } from './diagnostics-manager'
 import { type LogEventWithSource, mapper } from './mapping'
 import { logCaughtExpression, LogExceptions } from './util/log-exceptions'
 import { normalisedUri } from './util/uris'
 
+type ActiveBuild = {
+  trigger: CompileTrigger
+  abort: AbortController
+}
+
 export class CompileWorker {
   stopping: boolean = false
+  private graph: DependencyGraph = new DependencyGraph()
   private stopped = Promise.withResolvers<void>()
   private sleeping: PromiseWithResolvers<void> | undefined = undefined
-  private activeBuild: AbortController | undefined = undefined
+  private activeBuild: ActiveBuild | undefined = undefined
+  private debounce = 250
   constructor(
     private readonly queue: CompileTriggerQueue,
     private readonly documents: TextDocuments<TextDocument>,
@@ -39,17 +43,25 @@ export class CompileWorker {
     setTimeout(async () => {
       while (!this.stopping) {
         try {
-          const work = this.queue.tryDequeue()
-          if (work) {
-            logger.debug(undefined, `[Compile Worker] Found work ${work.workspaces.join(', ')}`)
-            this.activeBuild = new AbortController()
-            await this.compileWorkspaces(work, this.activeBuild.signal)
-            delete this.activeBuild
+          const trigger = this.queue.tryDequeue()
+          if (trigger) {
+            if (trigger.type === 'workspace') {
+              logger.debug(undefined, `[Compile Worker] Found workspace compile ${trigger.uris.join(', ')}`)
+              this.activeBuild = { abort: new AbortController(), trigger }
+              await this.compileWorkspaces(trigger, this.activeBuild.abort.signal)
+              delete this.activeBuild
+            } else {
+              logger.debug(undefined, `[Compile Worker] Found file compile ${trigger.uris.join(', ')}`)
+              this.activeBuild = { abort: new AbortController(), trigger }
+              await this.compileFile(trigger, this.activeBuild.abort.signal)
+              delete this.activeBuild
+            }
           } else {
             logger.debug(undefined, `[Compile Worker] No work, sleeping`)
             this.sleeping = Promise.withResolvers()
             await this.sleeping.promise
             delete this.sleeping
+            await sleep(this.debounce)
           }
         } catch (e) {
           logCaughtExpression(e)
@@ -66,21 +78,49 @@ export class CompileWorker {
     await this.stopped.promise
   }
 
-  onCompileTriggerQueueItemQueued() {
+  configure(options: { debounce?: number }) {
+    if (options.debounce !== undefined) this.debounce = options.debounce
+  }
+
+  onCompileTriggerQueueItemQueued(trigger: CompileTrigger) {
     if (this.activeBuild) {
-      logger.debug(undefined, `[Compile Worker] New work, aborting active build`)
-      this.activeBuild.abort('Build has been superseded')
-    } else if (this.sleeping) {
+      if (this.activeBuild.trigger.type === trigger.type) {
+        if (new Set(this.activeBuild.trigger.uris).isSubsetOf(new Set(trigger.uris))) {
+          logger.debug(undefined, `[Compile Worker] Aborting build, newer version of file is available`)
+          this.activeBuild.abort.abort('Build superseded')
+        }
+      }
+    }
+    if (this.sleeping) {
       logger.debug(undefined, `[Compile Worker] New work, waking worker`)
       this.sleeping.resolve()
     }
   }
 
   @LogExceptions
-  private async compileWorkspaces(workspaceTrigger: WorkspaceCompileTrigger, abortSignal: AbortSignal) {
-    logger.debug(undefined, `[Workspace Compile] \n${workspaceTrigger.workspaces.join('\n')}`)
+  private async compileFile(fileTrigger: FileCompileTrigger, abortSignal: AbortSignal) {
+    logger.debug(undefined, `[File Compile] trigger uris:\n${fileTrigger.uris.join('\n')}`)
 
-    const workspacePaths = workspaceTrigger.workspaces.map((ws) => URI.parse(ws).fsPath)
+    const filePaths = fileTrigger.uris.map((ws) => AbsolutePath.resolve({ path: URI.parse(ws).fsPath }).toString())
+    logger.debug(undefined, `[File Compile] trigger files:\n${filePaths.join('\n')}`)
+
+    const dependantFiles = Array.from(this.graph.getDependants(filePaths))
+    logger.debug(undefined, `[File Compile] dependant files \n${dependantFiles.join('\n')}`)
+
+    const algoFiles = processInputPaths({ paths: dependantFiles, ignoreUnmatchedPaths: true })
+    if (algoFiles.length === 0) {
+      logger.debug(undefined, '[File Compile] Skipping compilation as there are no matched algo files')
+      return
+    }
+
+    await this.compileAlgoFiles(algoFiles, abortSignal)
+  }
+
+  @LogExceptions
+  private async compileWorkspaces(workspaceTrigger: WorkspaceCompileTrigger, abortSignal: AbortSignal) {
+    logger.debug(undefined, `[Workspace Compile] \n${workspaceTrigger.uris.join('\n')}`)
+
+    const workspacePaths = workspaceTrigger.uris.map((ws) => URI.parse(ws).fsPath)
     logger.debug(undefined, `[Workspace Compile] \n${workspacePaths.join('\n')}`)
 
     const algoFiles = processInputPaths({ paths: workspacePaths, ignoreUnmatchedPaths: true })
@@ -98,8 +138,8 @@ export class CompileWorker {
     logger.debug(undefined, `[Compiling Files]: \n${algoFiles.map((f) => f.sourceFile).join('\n')}`)
 
     const logCtx = LoggingContext.create()
-    await logCtx.run(() =>
-      analyse({
+    await logCtx.run(async () => {
+      const { graph } = await analyse({
         puyaService: this.puyaService,
         filePaths: algoFiles,
         abortSignal,
@@ -120,8 +160,11 @@ export class CompileWorker {
             },
           }
         },
-      }),
-    )
+      })
+      if (graph) {
+        this.graph.updateWith(graph)
+      }
+    })
 
     const results = new DefaultMap<string, lsp.Diagnostic[]>()
 
@@ -145,30 +188,5 @@ export class CompileWorker {
       const fileUri = URI.file(file).toString()
       this.diagnostics.setDiagnostics({ fileUri, diagnostics, version: documentVersions[fileUri] })
     }
-  }
-}
-
-async function analyse({
-  abortSignal,
-  puyaService,
-  ...options
-}: Pick<CompileOptions, 'filePaths' | 'sourceFileProvider'> & { abortSignal: AbortSignal; puyaService: PuyaService }): Promise<void> {
-  const loggerCtx = LoggingContext.current
-  registerPTypes(typeRegistry)
-  const compileOptions = new CompileOptions(options)
-  const programResult = createTsProgram(compileOptions)
-  if (loggerCtx.hasErrors()) {
-    return
-  }
-  const { moduleAwst } = buildAwst(programResult, compileOptions)
-  validateAwst(moduleAwst)
-
-  if (loggerCtx.hasErrors() || abortSignal.aborted) {
-    return
-  }
-
-  const response = await puyaService.analyse(programResult.programDirectory, moduleAwst)
-  for (const log of response.logs) {
-    deserializeAndLog(log)
   }
 }

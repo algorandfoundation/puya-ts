@@ -1,4 +1,5 @@
 import { SourceLocation } from '../awst/source-location'
+import type { LogEvent } from '../logger'
 import { logger, LogLevel, LogSource } from '../logger'
 import { invariant } from '../util'
 import { AbsolutePath } from '../util/absolute-path'
@@ -54,22 +55,26 @@ function parsePuyaLog(x: unknown) {
   }
 }
 
-export function deserializeAndLog(puyaLog: unknown) {
-  try {
-    const log = parsePuyaLog(puyaLog)
+export function deserializePuyaLog(puyaLog: unknown): LogEvent {
+  const log = parsePuyaLog(puyaLog)
 
-    const sourceLocation = log.location?.file
-      ? new SourceLocation({
-          file: AbsolutePath.resolve({ path: log.location.file }),
-          line: log.location.line,
-          endLine: log.location.end_line ?? log.location.line + 1,
-          column: log.location.column ?? 0,
-          endColumn: log.location.end_column ?? log.location.column ?? 0,
-          scope: 'range',
-          node: undefined,
-        })
-      : undefined
-    logger.addLog({ ...log, sourceLocation, logSource: LogSource.Puya })
+  const sourceLocation = log.location?.file
+    ? new SourceLocation({
+        file: AbsolutePath.resolve({ path: log.location.file }),
+        line: log.location.line,
+        endLine: log.location.end_line ?? log.location.line + 1,
+        column: log.location.column ?? 0,
+        endColumn: log.location.end_column ?? log.location.column ?? 0,
+        scope: 'range',
+        node: undefined,
+      })
+    : undefined
+  return { ...log, sourceLocation, logSource: LogSource.Puya }
+}
+
+export function deserializeAndLog(log: unknown) {
+  try {
+    logger.addLog(deserializePuyaLog(log))
   } catch (e) {
     logger.error(undefined, `Could not parse log output from puya cli ${e}`)
   }

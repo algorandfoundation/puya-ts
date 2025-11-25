@@ -17,6 +17,7 @@ import { createNormalisedTextDocumentConnection, normalisedUri } from './util/ur
 interface LanguageServerConfiguration {
   // use LogLevel member names to maintain consistency with other extension settings
   logLevel?: Omit<keyof typeof LogLevel, 'Critical'>
+  debounce?: number
 }
 
 const resolveConnection = async (lspPort: number | undefined) => {
@@ -88,7 +89,7 @@ export class PuyaLanguageServer {
     this.workspaceFolders.push(...(params.workspaceFolders?.map((f) => normalisedUri({ uri: f.uri }).toString()) ?? []))
     this.triggers.enqueue({
       type: 'workspace',
-      workspaces: this.workspaceFolders,
+      uris: this.workspaceFolders,
     })
     return {
       serverInfo: {
@@ -129,8 +130,8 @@ export class PuyaLanguageServer {
     this.diagnosticsMgr.setDiagnostics({ fileUri: normalizedDocumentUri, version: params.document.version, diagnostics: 'pending' })
 
     this.triggers.enqueue({
-      type: 'workspace',
-      workspaces: this.workspaceFolders,
+      type: 'file',
+      uris: [normalizedDocumentUri],
     })
   }
 
@@ -170,6 +171,9 @@ export class PuyaLanguageServer {
     if (logLevel !== undefined) {
       logger.debug(undefined, `setting log level to ${logLevel}`)
       this.loggingSink.minLogLevel = logLevel
+    }
+    if (settings.debounce !== undefined && settings.debounce > 0) {
+      this.compileWorker.configure({ debounce: settings.debounce })
     }
   }
 }
