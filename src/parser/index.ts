@@ -73,6 +73,7 @@ export function createTsProgram(options: Pick<CompileOptions, 'filePaths' | 'sou
   )
 
   reportDiagnostics(program)
+
   return {
     sourceFiles,
     program,
