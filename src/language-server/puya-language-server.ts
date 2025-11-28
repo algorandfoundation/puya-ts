@@ -4,11 +4,12 @@ import { appVersion, packageVersion } from '../cli/app-version'
 import { Constants } from '../constants'
 import { logger, LogLevel } from '../logger'
 import { LanguageServerLogSink } from '../logger/sinks/language-server-log-sink'
-import { PuyaService } from '../puya/puya-service'
 import { resolvePuyaPath } from '../puya/resolve-puya-path'
+import type { AnalyserService } from './analyser-service'
+import { createAnalyserService } from './analyser-service'
 import { CompileTriggerQueue } from './compile-trigger-queue'
 import { CompileWorker } from './compile-worker'
-import type { FileDiagnosticsChanged } from './diagnostics-manager'
+import type { FileWithDiagnostics } from './diagnostics-manager'
 import { DiagnosticsManager } from './diagnostics-manager'
 import { isCodeFixData } from './mapping'
 import { LogExceptions } from './util/log-exceptions'
@@ -50,7 +51,7 @@ export class PuyaLanguageServer {
   readonly workspaceFolders: lsp.URI[] = []
   readonly diagnosticsMgr: DiagnosticsManager
   readonly compileWorker: CompileWorker
-  readonly puyaService: PuyaService
+  readonly analyserService: AnalyserService
   stopping = false
 
   constructor(
@@ -59,8 +60,8 @@ export class PuyaLanguageServer {
     puyaPath: string,
   ) {
     this.diagnosticsMgr = new DiagnosticsManager()
-    this.puyaService = new PuyaService({ puyaPath })
-    this.compileWorker = new CompileWorker(this.triggers, this.documents, this.diagnosticsMgr, this.puyaService)
+    this.analyserService = createAnalyserService({ puyaPath })
+    this.compileWorker = new CompileWorker(this.triggers, this.analyserService, this.documents, this.diagnosticsMgr)
 
     connection.onInitialize(this.initialize.bind(this))
     connection.onInitialized(this.initialized.bind(this))
@@ -81,7 +82,7 @@ export class PuyaLanguageServer {
     logger.debug(undefined, '[PuyaLanguageServer] Shutting down')
     this.stopping = true
     await this.compileWorker.stop()
-    await this.puyaService.shutdown()
+    await this.analyserService.shutdown()
     logger.debug(undefined, '[PuyaLanguageServer] Shutdown')
   }
 
@@ -111,7 +112,7 @@ export class PuyaLanguageServer {
   }
 
   @LogExceptions
-  async fileDiagnosticsChanged(params: FileDiagnosticsChanged) {
+  async fileDiagnosticsChanged(params: FileWithDiagnostics) {
     if (this.stopping) {
       logger.debug(undefined, `[Diagnostics Ignored (shutting down)]: ${params.uri}`)
       return
@@ -127,7 +128,7 @@ export class PuyaLanguageServer {
     if (this.stopping) return
     const normalizedDocumentUri = normalisedUri({ uri: params.document.uri }).toString()
     logger.debug(undefined, `[Document Changed]: ${normalizedDocumentUri}`)
-    this.diagnosticsMgr.setDiagnostics({ fileUri: normalizedDocumentUri, version: params.document.version, diagnostics: 'pending' })
+    this.diagnosticsMgr.setDiagnostics({ uri: normalizedDocumentUri, version: params.document.version, diagnostics: 'pending' })
 
     this.triggers.enqueue({
       type: 'file',
@@ -171,9 +172,6 @@ export class PuyaLanguageServer {
     if (logLevel !== undefined) {
       logger.debug(undefined, `setting log level to ${logLevel}`)
       this.loggingSink.minLogLevel = logLevel
-    }
-    if (settings.debounce !== undefined && settings.debounce > 0) {
-      this.compileWorker.configure({ debounce: settings.debounce })
     }
   }
 }

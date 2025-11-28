@@ -18,26 +18,33 @@ export async function analyse({
 }: Pick<CompileOptions, 'filePaths' | 'sourceFileProvider'> & {
   abortSignal?: AbortSignal
   puyaService: PuyaService
-}): Promise<{ graph?: DependencyGraph }> {
+}): Promise<{ graph?: DependencyGraph; outcome: 'invalid-typescript' | 'invalid-puya-ts' | 'invalid-puya' | 'valid' }> {
   const loggerCtx = LoggingContext.current
   registerPTypes(typeRegistry)
   const compileOptions = new CompileOptions(options)
   const programResult = createTsProgram(compileOptions)
   await relinquishThread()
-  if (loggerCtx.hasErrors() || abortSignal?.aborted) {
-    return {}
+  if (abortSignal?.aborted) {
+    throw 'aborted'
+  }
+  if (loggerCtx.hasErrors()) {
+    return { outcome: 'invalid-typescript' }
   }
   const graph = buildDependencyGraph(programResult.program)
   const { moduleAwst } = buildAwst(programResult, compileOptions)
   validateAwst(moduleAwst)
   await relinquishThread()
-  if (loggerCtx.hasErrors() || abortSignal?.aborted) {
-    return { graph }
+
+  if (abortSignal?.aborted) {
+    throw 'aborted'
+  }
+  if (loggerCtx.hasErrors()) {
+    return { graph, outcome: 'invalid-puya-ts' }
   }
 
   const response = await puyaService.analyse(programResult.programDirectory, moduleAwst)
   for (const log of response.logs) {
     deserializeAndLog(log)
   }
-  return { graph }
+  return { graph, outcome: loggerCtx.hasErrors() ? 'invalid-puya' : 'valid' }
 }
