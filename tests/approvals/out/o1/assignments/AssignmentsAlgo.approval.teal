@@ -12,7 +12,7 @@ main:
     bz main___algots__.defaultCreate@16
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x702ea108 0xedda85e9 0x5b2f7713 0x90cccb3d 0xd8be93bf 0x5a3fec5a 0x27a4f367 0xd6c9f486 0x6e03ad0c // method "testPrimitives(uint64)void", method "testAccountDestructure()(uint64,uint64)", method "testArrayDestructure(uint64[],uint64,uint64[])void", method "testArrayNarrowing(uint64[],uint64)void", method "testTupleToArray((uint64,uint64),(uint64,uint64))void", method "testNested(uint64[][])void", method "testDestructureObj((uint64,string),(uint64,string))void", method "testObjLiteralNarrowing(uint64,uint64)void", method "testMixed(((uint64))[])void"
@@ -29,8 +29,6 @@ main___algots__.defaultCreate@16:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -158,7 +156,7 @@ testArrayDestructure:
     load 0
     // tests/approvals/assignments.algo.ts:40
     // assert(getCount() === 3, 'logAndReturn called 3 times')
-    pushint 3 // 3
+    pushint 3
     ==
     assert // logAndReturn called 3 times
     // tests/approvals/assignments.algo.ts:43
@@ -177,7 +175,7 @@ testArrayDestructure:
     ==
     &&
     swap
-    pushint 16 // 16
+    pushint 16
     extract_uint64
     uncover 3
     ==
@@ -269,8 +267,10 @@ testArrayNarrowing:
     intc_1 // 2
     extract_uint64
     !=
+    assert
     // tests/approvals/assignments.algo.ts:54
     // testArrayNarrowing(m_a: uint64[], u: uint64) {
+    intc_0 // 1
     return
 
 
@@ -281,13 +281,13 @@ testTupleToArray:
     txna ApplicationArgs 1
     dup
     len
-    pushint 16 // 16
+    pushint 16
     ==
     assert // invalid number of bytes for arc4.tuple<uint64,uint64>
     txna ApplicationArgs 2
     dup
     len
-    pushint 16 // 16
+    pushint 16
     ==
     assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64>
     dup
@@ -326,7 +326,7 @@ testTupleToArray:
     ==
     &&
     swap
-    pushint 10 // 10
+    pushint 10
     extract_uint64
     uncover 2
     ==
@@ -356,7 +356,7 @@ testTupleToArray:
     ==
     &&
     swap
-    pushint 10 // 10
+    pushint 10
     extract_uint64
     uncover 2
     ==
@@ -447,7 +447,7 @@ testDestructureObj:
     intc_3 // 8
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 10 // 10
+    pushint 10
     ==
     assert // invalid tail pointer at index 1 of (uint64,(len+utf8[]))
     uncover 2
@@ -456,7 +456,7 @@ testDestructureObj:
     substring3
     intc_2 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 12 // 12
+    pushint 12
     +
     ==
     assert // invalid number of bytes for Object3EB715E7
@@ -467,7 +467,7 @@ testDestructureObj:
     intc_3 // 8
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 10 // 10
+    pushint 10
     ==
     assert // invalid tail pointer at index 1 of (uint64,(len+utf8[]))
     uncover 2
@@ -476,7 +476,7 @@ testDestructureObj:
     substring3
     intc_2 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 12 // 12
+    pushint 12
     +
     ==
     assert // invalid number of bytes for ReadonlyObject3EB715E7

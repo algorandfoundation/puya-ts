@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 5 1 0 4
+    intcblock 5 0 4 6
     // tests/approvals/match-expr.algo.ts:4
     // class MatchExprAlgo extends Contract {
     txn NumAppArgs
@@ -20,7 +20,7 @@ main_testMatches_route@3:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     b testMatches
 
 main___algots__.defaultCreate@5:
@@ -31,8 +31,6 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_1 // 1
     return
 
 
@@ -43,7 +41,7 @@ testMatches:
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -53,7 +51,7 @@ testMatches:
     // tests/approvals/match-expr.algo.ts:7
     // assertMatch(xObj, { x: 5 }, 'x should be 5')
     dup
-    intc_2 // 0
+    intc_1 // 0
     extract_uint64
     dup
     intc_0 // 5
@@ -62,7 +60,7 @@ testMatches:
     // tests/approvals/match-expr.algo.ts:8
     // assertMatch(xObj, { x: { not: 3 } }, 'x should not be 3')
     dup
-    pushint 3 // 3
+    pushint 3
     !=
     assert // x should not be 3
     // tests/approvals/match-expr.algo.ts:9
@@ -74,13 +72,13 @@ testMatches:
     // tests/approvals/match-expr.algo.ts:10
     // assert(match(xObj, { x: { greaterThan: 4 } }))
     dup
-    intc_3 // 4
+    intc_2 // 4
     >
     assert
     // tests/approvals/match-expr.algo.ts:11
     // assert(match(xObj, { x: { lessThan: 6 } }))
     dup
-    pushint 6 // 6
+    intc_3 // 6
     <
     assert
     // tests/approvals/match-expr.algo.ts:12
@@ -102,12 +100,12 @@ testMatches:
     // tests/approvals/match-expr.algo.ts:17
     // assert(match(xArray, [5]))
     dup
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    intc_1 // 1
+    pushint 1
     ==
     swap
-    pushint 2 // 2
+    pushint 2
     extract_uint64
     dup
     intc_0 // 5
@@ -118,7 +116,7 @@ testMatches:
     // tests/approvals/match-expr.algo.ts:18
     // assert(match(xArray, [{ greaterThan: 4 }]))
     dup
-    intc_3 // 4
+    intc_2 // 4
     >
     dig 2
     &&
@@ -126,7 +124,7 @@ testMatches:
     // tests/approvals/match-expr.algo.ts:19
     // assert(match(xArray, [{ lessThan: 6 }]))
     dup
-    pushint 6 // 6
+    intc_3 // 6
     <
     dig 2
     &&
@@ -144,6 +142,8 @@ testMatches:
     intc_0 // 5
     <=
     &&
+    assert
     // tests/approvals/match-expr.algo.ts:5
     // public testMatches(x: uint64) {
+    pushint 1
     return

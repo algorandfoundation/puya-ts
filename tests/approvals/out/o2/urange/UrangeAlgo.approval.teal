@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 8 0 2
+    intcblock 8 1 0 2
     bytecblock 0x0000 0x0001
     intc_2 // 0
     pushbytes ""
@@ -13,7 +13,7 @@ main:
     bz main___algots__.defaultCreate@10
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x01329a32 0xea63d4ac 0xad2e1f0e // method "testSingleArg()uint64[]", method "testTwoArg()uint64[]", method "testThreeArg()uint64[]"
@@ -35,7 +35,7 @@ main_for_header@14:
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {
     dup
-    pushint 10 // 10
+    pushint 10
     <
     bz main_after_for@26
     // tests/approvals/urange.algo.ts:22
@@ -52,7 +52,7 @@ main_for_header@14:
     dup
     extract 2 0
     len
-    intc_1 // 8
+    intc_0 // 8
     /
     itob
     extract 6 2
@@ -60,7 +60,7 @@ main_for_header@14:
     bury 3
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {
-    pushint 3 // 3
+    pushint 3
     +
     bury 1
     b main_for_header@14
@@ -72,7 +72,7 @@ main_after_for@26:
     dig 2
     concat
     log
-    intc_0 // 1
+    intc_1 // 1
     return
 
 main_testTwoArg_route@5:
@@ -89,7 +89,7 @@ main_for_header@19:
     // tests/approvals/urange.algo.ts:14
     // for (const i of urange(2, 5)) {
     dup
-    pushint 5 // 5
+    pushint 5
     <
     bz main_after_for@26
     // tests/approvals/urange.algo.ts:15
@@ -106,7 +106,7 @@ main_for_header@19:
     dup
     extract 2 0
     len
-    intc_1 // 8
+    intc_0 // 8
     /
     itob
     extract 6 2
@@ -114,7 +114,7 @@ main_for_header@19:
     bury 3
     // tests/approvals/urange.algo.ts:14
     // for (const i of urange(2, 5)) {
-    intc_0 // 1
+    intc_1 // 1
     +
     bury 1
     b main_for_header@19
@@ -133,7 +133,7 @@ main_for_header@24:
     // tests/approvals/urange.algo.ts:7
     // for (const i of urange(5)) {
     dup
-    pushint 5 // 5
+    pushint 5
     <
     bz main_after_for@26
     // tests/approvals/urange.algo.ts:8
@@ -150,7 +150,7 @@ main_for_header@24:
     dup
     extract 2 0
     len
-    intc_1 // 8
+    intc_0 // 8
     /
     itob
     extract 6 2
@@ -158,7 +158,7 @@ main_for_header@24:
     bury 3
     // tests/approvals/urange.algo.ts:7
     // for (const i of urange(5)) {
-    intc_0 // 1
+    intc_1 // 1
     +
     bury 1
     b main_for_header@24
@@ -171,6 +171,4 @@ main___algots__.defaultCreate@10:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return

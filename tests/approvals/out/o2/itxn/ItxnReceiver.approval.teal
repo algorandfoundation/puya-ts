@@ -3,7 +3,6 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1
     // tests/approvals/itxn.algo.ts:226
     // class ItxnReceiver extends Contract {
     txn NumAppArgs
@@ -20,27 +19,27 @@ main_receivePay_route@3:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
     txn GroupIndex
-    intc_0 // 1
+    pushint 1
     -
     dup
     gtxns TypeEnum
-    intc_0 // pay
+    pushint 1 // pay
     ==
     assert // transaction type is pay
     txna ApplicationArgs 2
     dup
-    pushint 0 // 0
+    pushint 0
     extract_uint16 // on error: invalid array length header
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len
@@ -73,7 +72,7 @@ main_receivePay_route@3:
     swap
     concat
     log
-    intc_0 // 1
+    pushint 1
     return
 
 main___algots__.defaultCreate@5:
@@ -84,6 +83,4 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return

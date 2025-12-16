@@ -12,7 +12,7 @@ main:
     bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x02f4a501 0xa453ba90 // method "testFalconVerify()void", method "testRejectVersion()void"
@@ -28,7 +28,7 @@ main_testRejectVersion_route@5:
     // const compiledV0 = arc4.compileArc4(ContractV0)
     bytec_0 // base64(DIEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(DDEbQQAggASg6BhyNhoAjgEAAQAxGYEEEjEYEEQxRIEBEkSBAUMxGRQxGBQQRIEBQw==)
+    pushbytes base64(DDEbQQAggASg6BhyNhoAjgEAAQAxGYEEEjEYEEQxRIEBEkSBAUMxGRQxGBQQQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/avm12.algo.ts:22
     // const v0Txn = compiledV0.bareCreate()
@@ -63,11 +63,11 @@ main_testRejectVersion_route@5:
     // const compiledV1 = arc4.compileArc4(ContractV1)
     bytec_0 // base64(DIEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(DDEbQQAggAQkN408NhoAjgEAAQAxGYEFEjEYEEQxRIECEkSBAUMxGRQxGBQQRIEBQw==)
+    pushbytes base64(DDEbQQAggAQkN408NhoAjgEAAQAxGYEFEjEYEEQxRIECEkSBAUMxGRQxGBQQQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/avm12.algo.ts:31
     // onCompletion: OnCompleteAction.UpdateApplication,
-    pushint 4 // 4
+    pushint 4
     itxn_field OnCompletion
     dup
     itxn_field ApplicationID
@@ -109,12 +109,12 @@ main_testRejectVersion_route@5:
     itxn_begin
     // tests/approvals/avm12.algo.ts:43
     // rejectVersion: 2,
-    pushint 2 // 2
+    pushint 2
     itxn_field RejectVersion
     itxn_field ApplicationID
     // tests/approvals/avm12.algo.ts:41
     // onCompletion: OnCompleteAction.DeleteApplication,
-    pushint 5 // 5
+    pushint 5
     itxn_field OnCompletion
     // tests/approvals/avm12.algo.ts:40
     // appArgs: [arc4.methodSelector(ContractV1.prototype.delete)],
@@ -150,15 +150,17 @@ main_testRejectVersion_route@5:
 main_testFalconVerify_route@4:
     // tests/approvals/avm12.algo.ts:17
     // assert(!op.falconVerify(Bytes(), Bytes(), op.bzero(1793)))
-    pushint 1793 // 1793
+    pushint 1793
     bzero
     pushbytes 0x
     dup
     uncover 2
     falcon_verify
     !
+    assert
     // tests/approvals/avm12.algo.ts:16
     // testFalconVerify() {
+    intc_1 // 1
     return
 
 main___algots__.defaultCreate@9:
@@ -170,6 +172,4 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_1 // 1
     return

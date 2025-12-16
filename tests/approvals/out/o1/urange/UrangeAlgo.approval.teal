@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@10
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x01329a32 0xea63d4ac 0xad2e1f0e // method "testSingleArg()uint64[]", method "testTwoArg()uint64[]", method "testThreeArg()uint64[]"
@@ -27,8 +27,6 @@ main___algots__.defaultCreate@10:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -39,7 +37,7 @@ testSingleArg:
     bytec_0 // 0x0000
     // tests/approvals/urange.algo.ts:7
     // for (const i of urange(5)) {
-    pushint 0 // 0
+    pushint 0
 
 testSingleArg_for_header@2:
     // tests/approvals/urange.algo.ts:7
@@ -153,7 +151,7 @@ testThreeArg_for_header@2:
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {
     dup
-    pushint 10 // 10
+    pushint 10
     <
     bz testThreeArg_after_for@5
     // tests/approvals/urange.algo.ts:22
@@ -178,7 +176,7 @@ testThreeArg_for_header@2:
     bury 3
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {
-    pushint 3 // 3
+    pushint 3
     +
     bury 1
     b testThreeArg_for_header@2

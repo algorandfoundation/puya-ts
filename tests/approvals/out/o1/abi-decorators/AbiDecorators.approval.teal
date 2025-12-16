@@ -9,7 +9,7 @@ main:
     // tests/approvals/abi-decorators.algo.ts:16
     // globalValue = GlobalState({ initialValue: Uint64(123) })
     pushbytes "globalValue"
-    pushint 123 // 123
+    pushint 123
     app_global_put
 
 main_after_if_else@2:
@@ -20,7 +20,7 @@ main_after_if_else@2:
     match main_allActions_route@4
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     pushbytes 0x09b10ffd // method "readonlyAlt2()uint64"
     txna ApplicationArgs 0
     match main_readonlyAlt2_route@6
@@ -80,8 +80,6 @@ main_allActions_route@4:
     // tests/approvals/abi-decorators.algo.ts:9
     // @abimethod({ allowActions: ['NoOp', 'OptIn', 'CloseOut', 'DeleteApplication', 'UpdateApplication'] })
     txn ApplicationID
-    assert // can only call when not creating
-    intc_0 // 1
     return
 
 

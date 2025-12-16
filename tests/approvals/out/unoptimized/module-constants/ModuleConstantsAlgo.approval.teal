@@ -25,7 +25,7 @@ main_abi_routing@2:
     txn OnCompletion
     intc_1 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_1 // 0
     !=
@@ -92,7 +92,7 @@ main___algots__.defaultCreate@11:
     intc_1 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_2 // 1
     return
@@ -324,16 +324,16 @@ tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getUintConstants:
 tests/approvals/module-constants.algo.ts::ModuleConstantsAlgo.getUintConstants_block@0:
     // tests/approvals/module-constants.algo.ts:47
     // return [u_add, u_sub, u_mul, u_div, u_mod, u_pow, u_lshift, u_rshift, u_bitOr, u_bitXor, u_bitAnd] as const
-    pushint 12 // 12
-    pushint 8 // 8
-    pushint 20 // 20
-    pushint 5 // 5
+    pushint 12
+    pushint 8
+    pushint 20
+    pushint 5
     intc_1 // 0
-    pushint 100 // 100
-    pushint 40 // 40
+    pushint 100
+    pushint 40
     intc_3 // 2
-    pushint 10 // 10
-    pushint 8 // 8
+    pushint 10
+    pushint 8
     intc_3 // 2
     retsub
 

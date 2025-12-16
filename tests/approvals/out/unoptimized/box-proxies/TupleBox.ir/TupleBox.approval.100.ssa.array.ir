@@ -8,7 +8,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L172
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
         goto tmp%5#0 ? block@3 : block@7
@@ -33,7 +33,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (== tmp%9#0 0u)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         tests/approvals/box-proxies.algo.ts::TupleBox.__algots__.defaultCreate()
         exit 1u
     block@10: // after_if_else_L172
@@ -116,10 +116,13 @@ subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBox() -> void:
         let values%1#0: bytes = ((extract 2 0) tuple_item%1#0)
         let tmp%4#0: bool = (== values%1#0 "world")
         (assert tmp%4#0)
-        let (aggregate%box_get%4#0: bytes, aggregate%box_get%5#0: bool) = (box_get "t1")
-        (assert aggregate%box_get%5#0) // Box must have value
-        let storage_value%2#0: bytes = aggregate%box_get%4#0
-        let aggregate%get_bit%0#0: bool = (getbit storage_value%2#0 32u)
+        let box%element_byte_offset%0#0: uint64 = (/ 32u 8u)
+        let box%byte_containing_bit_offset%0#0: uint64 = (+ 0u box%element_byte_offset%0#0)
+        let box%element_bit_offset%0#0: uint64 = (% 32u 8u)
+        let box%box_extract%0#0: Encoded(bool1[8]) = (box_extract "t1" box%byte_containing_bit_offset%0#0 1u)
+        let aggregate%lt%0#0: bool = (< box%element_bit_offset%0#0 8u)
+        (assert aggregate%lt%0#0) // index access is out of bounds
+        let aggregate%get_bit%0#0: bool = (getbit box%box_extract%0#0 box%element_bit_offset%0#0)
         let tuple_item%2#0: bool = aggregate%get_bit%0#0
         let values%2#0: bool = tuple_item%2#0
         (assert values%2#0)
@@ -151,9 +154,9 @@ subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBox() -> void:
         let tmp%5#0: Encoded((len+utf8[]),(len+uint8[]),bool1) = aggregate%as_Encoded((len+utf8[]),(len+uint8[]),bool1)%1#0
         (box_del "t2")
         (box_put "t2" tmp%5#0)
-        let (aggregate%box_get%6#0: bytes, aggregate%box_get%7#0: bool) = (box_get "t2")
-        (assert aggregate%box_get%7#0) // Box must have value
-        let storage_value%3#0: bytes = aggregate%box_get%6#0
+        let (aggregate%box_get%4#0: bytes, aggregate%box_get%5#0: bool) = (box_get "t2")
+        (assert aggregate%box_get%5#0) // Box must have value
+        let storage_value%3#0: bytes = aggregate%box_get%4#0
         let aggregate%extract_uint16%3#0: uint64 = (extract_uint16 storage_value%3#0 0u)
         let aggregate%extract_uint16%4#0: uint64 = (extract_uint16 storage_value%3#0 2u)
         let aggregate%substring3%2#0: bytes = (substring3 storage_value%3#0 aggregate%extract_uint16%3#0 aggregate%extract_uint16%4#0)
@@ -161,9 +164,9 @@ subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBox() -> void:
         let values%3#0: string = ((extract 2 0) tuple_item%3#0)
         let tmp%6#0: bool = (== values%3#0 "hello")
         (assert tmp%6#0)
-        let (aggregate%box_get%8#0: bytes, aggregate%box_get%9#0: bool) = (box_get "t2")
-        (assert aggregate%box_get%9#0) // Box must have value
-        let storage_value%4#0: bytes = aggregate%box_get%8#0
+        let (aggregate%box_get%6#0: bytes, aggregate%box_get%7#0: bool) = (box_get "t2")
+        (assert aggregate%box_get%7#0) // Box must have value
+        let storage_value%4#0: bytes = aggregate%box_get%6#0
         let aggregate%extract_uint16%5#0: uint64 = (extract_uint16 storage_value%4#0 2u)
         let aggregate%len%1#0: uint64 = (len storage_value%4#0)
         let aggregate%substring3%3#0: bytes = (substring3 storage_value%4#0 aggregate%extract_uint16%5#0 aggregate%len%1#0)
@@ -171,10 +174,13 @@ subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBox() -> void:
         let values%4#0: bytes = ((extract 2 0) tuple_item%4#0)
         let tmp%7#0: bool = (== values%4#0 "world")
         (assert tmp%7#0)
-        let (aggregate%box_get%10#0: bytes, aggregate%box_get%11#0: bool) = (box_get "t2")
-        (assert aggregate%box_get%11#0) // Box must have value
-        let storage_value%5#0: bytes = aggregate%box_get%10#0
-        let aggregate%get_bit%1#0: bool = (getbit storage_value%5#0 32u)
+        let box%element_byte_offset%1#0: uint64 = (/ 32u 8u)
+        let box%byte_containing_bit_offset%1#0: uint64 = (+ 0u box%element_byte_offset%1#0)
+        let box%element_bit_offset%1#0: uint64 = (% 32u 8u)
+        let box%box_extract%1#0: Encoded(bool1[8]) = (box_extract "t2" box%byte_containing_bit_offset%1#0 1u)
+        let aggregate%lt%1#0: bool = (< box%element_bit_offset%1#0 8u)
+        (assert aggregate%lt%1#0) // index access is out of bounds
+        let aggregate%get_bit%1#0: bool = (getbit box%box_extract%1#0 box%element_bit_offset%1#0)
         let tuple_item%5#0: bool = aggregate%get_bit%1#0
         let values%5#0: bool = tuple_item%5#0
         (assert values%5#0)
@@ -282,10 +288,13 @@ subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap() -> void:
         let tmp%5#0: bool = (== values%1#0 "world")
         (assert tmp%5#0)
         let box_prefixed_key%7#0: bytes = (concat "tm1" "a")
-        let (aggregate%box_get%4#0: bytes, aggregate%box_get%5#0: bool) = (box_get box_prefixed_key%7#0)
-        (assert aggregate%box_get%5#0) // Box must have value
-        let storage_value%2#0: bytes = aggregate%box_get%4#0
-        let aggregate%get_bit%0#0: bool = (getbit storage_value%2#0 32u)
+        let box%element_byte_offset%0#0: uint64 = (/ 32u 8u)
+        let box%byte_containing_bit_offset%0#0: uint64 = (+ 0u box%element_byte_offset%0#0)
+        let box%element_bit_offset%0#0: uint64 = (% 32u 8u)
+        let box%box_extract%0#0: Encoded(bool1[8]) = (box_extract box_prefixed_key%7#0 box%byte_containing_bit_offset%0#0 1u)
+        let aggregate%lt%0#0: bool = (< box%element_bit_offset%0#0 8u)
+        (assert aggregate%lt%0#0) // index access is out of bounds
+        let aggregate%get_bit%0#0: bool = (getbit box%box_extract%0#0 box%element_bit_offset%0#0)
         let tuple_item%2#0: bool = aggregate%get_bit%0#0
         let values%2#0: bool = tuple_item%2#0
         (assert values%2#0)
@@ -293,9 +302,9 @@ subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap() -> void:
         let (_%3#0: uint64, maybe_exists%3#0: bool) = (box_len box_prefixed_key%8#0)
         (assert maybe_exists%3#0)
         let box_prefixed_key%9#0: bytes = (concat "tm2" "a")
-        let (aggregate%box_get%6#0: bytes, aggregate%box_get%7#0: bool) = (box_get box_prefixed_key%9#0)
-        (assert aggregate%box_get%7#0) // Box must have value
-        let storage_value%3#0: bytes = aggregate%box_get%6#0
+        let (aggregate%box_get%4#0: bytes, aggregate%box_get%5#0: bool) = (box_get box_prefixed_key%9#0)
+        (assert aggregate%box_get%5#0) // Box must have value
+        let storage_value%3#0: bytes = aggregate%box_get%4#0
         let aggregate%extract_uint16%3#0: uint64 = (extract_uint16 storage_value%3#0 0u)
         let aggregate%extract_uint16%4#0: uint64 = (extract_uint16 storage_value%3#0 2u)
         let aggregate%substring3%2#0: bytes = (substring3 storage_value%3#0 aggregate%extract_uint16%3#0 aggregate%extract_uint16%4#0)
@@ -304,9 +313,9 @@ subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap() -> void:
         let tmp%6#0: bool = (== values%3#0 "hello")
         (assert tmp%6#0)
         let box_prefixed_key%10#0: bytes = (concat "tm2" "a")
-        let (aggregate%box_get%8#0: bytes, aggregate%box_get%9#0: bool) = (box_get box_prefixed_key%10#0)
-        (assert aggregate%box_get%9#0) // Box must have value
-        let storage_value%4#0: bytes = aggregate%box_get%8#0
+        let (aggregate%box_get%6#0: bytes, aggregate%box_get%7#0: bool) = (box_get box_prefixed_key%10#0)
+        (assert aggregate%box_get%7#0) // Box must have value
+        let storage_value%4#0: bytes = aggregate%box_get%6#0
         let aggregate%extract_uint16%5#0: uint64 = (extract_uint16 storage_value%4#0 2u)
         let aggregate%len%1#0: uint64 = (len storage_value%4#0)
         let aggregate%substring3%3#0: bytes = (substring3 storage_value%4#0 aggregate%extract_uint16%5#0 aggregate%len%1#0)
@@ -315,10 +324,13 @@ subroutine tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap() -> void:
         let tmp%7#0: bool = (== values%4#0 "world")
         (assert tmp%7#0)
         let box_prefixed_key%11#0: bytes = (concat "tm2" "a")
-        let (aggregate%box_get%10#0: bytes, aggregate%box_get%11#0: bool) = (box_get box_prefixed_key%11#0)
-        (assert aggregate%box_get%11#0) // Box must have value
-        let storage_value%5#0: bytes = aggregate%box_get%10#0
-        let aggregate%get_bit%1#0: bool = (getbit storage_value%5#0 32u)
+        let box%element_byte_offset%1#0: uint64 = (/ 32u 8u)
+        let box%byte_containing_bit_offset%1#0: uint64 = (+ 0u box%element_byte_offset%1#0)
+        let box%element_bit_offset%1#0: uint64 = (% 32u 8u)
+        let box%box_extract%1#0: Encoded(bool1[8]) = (box_extract box_prefixed_key%11#0 box%byte_containing_bit_offset%1#0 1u)
+        let aggregate%lt%1#0: bool = (< box%element_bit_offset%1#0 8u)
+        (assert aggregate%lt%1#0) // index access is out of bounds
+        let aggregate%get_bit%1#0: bool = (getbit box%box_extract%1#0 box%element_bit_offset%1#0)
         let tuple_item%5#0: bool = aggregate%get_bit%1#0
         let values%5#0: bool = tuple_item%5#0
         (assert values%5#0)

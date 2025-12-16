@@ -10,6 +10,7 @@ import {
   ARC4Encode,
   ArrayLength,
   ArrayReplace,
+  AssertExpression,
   AssignmentExpression,
   AssignmentStatement,
   BigUIntBinaryOperation,
@@ -45,6 +46,18 @@ import WTuple = wtypes.WTuple
 type ConcreteNodes = typeof concreteNodes
 
 const explicitNodeFactory = {
+  assertExpression(props: {
+    condition: Expression | null
+    sourceLocation: SourceLocation
+    wtype: wtypes.WType
+    errorMessage: string | null
+  }) {
+    return new AssertExpression({
+      ...props,
+      wtype: wtypes.voidWType,
+      explicit: true,
+    })
+  },
   voidConstant(props: { sourceLocation: SourceLocation }): VoidConstant {
     return new VoidConstant({
       ...props,

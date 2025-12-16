@@ -118,7 +118,7 @@ contract BoxCreate
     ["arc4b"]: arc4.bool
     ["a"]: string
     ["b"]: uint64
-    ["c"]: arc4.static_array<arc4.uint32>
+    ["c"]: arc4.static_array<arc4.uint32,10>
     ["d"]: arc4.dynamic_array<arc4.uint8>
     ["e"]: arc4.tuple<arc4.uint8,arc4.uint8,arc4.bool,arc4.bool>
   }
@@ -138,7 +138,7 @@ contract BoxCreate
     assert(checked_maybe(box_len("a"), comment=Box must have value) == 10)
     box_create("b", size_of(uint64))
     assert(checked_maybe(box_len("b"), comment=Box must have value) == 8)
-    box_create("c", size_of(arc4.static_array<arc4.uint32>))
+    box_create("c", size_of(arc4.static_array<arc4.uint32,10>))
     assert(checked_maybe(box_len("c"), comment=Box must have value) == 40)
     box_create("d", 2)
     assert(checked_maybe(box_len("d"), comment=Box must have value) == 2)
@@ -247,7 +247,7 @@ contract TupleBox
 contract BoxToRefTest
 {
   boxes {
-    [""]: account => arc4.static_array<arc4.uint8>
+    [""]: account => arc4.static_array<arc4.uint8,4>
   }
   approvalProgram(): bool
   {
@@ -262,7 +262,7 @@ contract BoxToRefTest
   test(): void
   {
     boxForCaller: box_key = BoxMapKey(prefix="", key=txn<Sender>())
-    box_create(boxForCaller, size_of(arc4.static_array<arc4.uint8>))
+    box_create(boxForCaller, size_of(arc4.static_array<arc4.uint8,4>))
     boxRef: box_key = boxForCaller
     box_replace(boxRef, 0, reinterpret_cast<bytes>(123))
     assert(ARC4_DECODE(Box[boxForCaller].value[0]) == 123, comment=First array item in box should be 123)
@@ -301,7 +301,7 @@ contract CompositeKeyTest
 contract LargeBox
 {
   boxes {
-    ["large"]: arc4.static_array<tests/approvals/box-proxies.algo.ts::Info>
+    ["large"]: arc4.static_array<tests/approvals/box-proxies.algo.ts::Info,200>
   }
   approvalProgram(): bool
   {
@@ -316,7 +316,7 @@ contract LargeBox
   test(): void
   {
     ensure_budget(7000, 0)
-    box_create("large", size_of(arc4.static_array<tests/approvals/box-proxies.algo.ts::Info>))
+    box_create("large", size_of(arc4.static_array<tests/approvals/box-proxies.algo.ts::Info,200>))
     assert(checked_maybe(box_len("large"), comment=Box must have value) == 12800, comment=Box should be created with the correct size)
     assert(Box["large"].value.length == 200, comment=Box value should be an array of 200 items)
     for (temp in enumerate(Box["large"].value)) {
@@ -343,10 +343,10 @@ contract Arc4BoxContract
     [""]: uint64 => string
     ["boxRef"]: bytes
     ["boxLarge"]: tests/approvals/box-proxies.algo.ts::LargeStruct
-    ["manyInts"]: arc4.static_array<uint64>
+    ["manyInts"]: arc4.static_array<uint64,513>
     ["dynamicBox"]: arc4.dynamic_array<uint64>
     ["dynamicArrStruct"]: tests/approvals/box-proxies.algo.ts::DynamicArrayInAStruct
-    ["tooManyBools"]: arc4.static_array<bool>
+    ["tooManyBools"]: arc4.static_array<bool,33000>
   }
   approvalProgram(): bool
   {
@@ -370,7 +370,7 @@ contract Arc4BoxContract
     Box["boxD"].value: bytes = ARC4_DECODE(dynamicBytes)
     box_create("boxLarge", size_of(tests/approvals/box-proxies.algo.ts::LargeStruct))
     Box["boxLarge"].value.e: uint64 = 42
-    box_replace("boxLarge", size_of(arc4.static_array<arc4.byte>) * 4, reinterpret_cast<bytes>(42))
+    box_replace("boxLarge", size_of(arc4.static_array<arc4.byte,1024>) * 4, reinterpret_cast<bytes>(42))
     bValue: arc4.dynamic_array<arc4.byte> = copy(Box["b"].value)
     assert(Box["b"].value.length == bValue.length, comment=direct reference should match copy)
     Box["boxA"].value: uint64 = Box["boxA"].value + 3
@@ -400,7 +400,7 @@ contract Arc4BoxContract
   
   createManyInts(): void
   {
-    box_create("manyInts", size_of(arc4.static_array<uint64>))
+    box_create("manyInts", size_of(arc4.static_array<uint64,513>))
   }
   
   setManyInts(index: uint64, value: uint64): void
@@ -460,7 +460,7 @@ contract Arc4BoxContract
   
   arc4Box(): void
   {
-    Box["d"].value: arc4.static_array<arc4.uint8> = new arc4.static_array<arc4.uint8>(0, 1, 2, 3)
+    Box["d"].value: arc4.static_array<arc4.uint8,4> = new arc4.static_array<arc4.uint8,4>(0, 1, 2, 3)
     assert(ARC4_DECODE(Box["d"].value[0]) == 0)
     assert(ARC4_DECODE(Box["d"].value[1]) == 1)
     assert(ARC4_DECODE(Box["d"].value[2]) == 2)
@@ -498,7 +498,7 @@ contract Arc4BoxContract
   
   createBools(): void
   {
-    box_create("tooManyBools", size_of(arc4.static_array<bool>))
+    box_create("tooManyBools", size_of(arc4.static_array<bool,33000>))
   }
   
   setBool(index: uint64, value: bool): void
@@ -530,7 +530,7 @@ contract Arc4BoxContract
   constructor(): void
   {
     super.constructor()
-    assert(size_of(arc4.static_array<arc4.uint64>) > 4096, comment=expected ManyInts to exceed max bytes size)
+    assert(size_of(arc4.static_array<arc4.uint64,513>) > 4096, comment=expected ManyInts to exceed max bytes size)
   }
   
   BaseContract::constructor(): void

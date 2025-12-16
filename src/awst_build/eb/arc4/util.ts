@@ -241,7 +241,7 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
         }
         return instanceEb(
           nodeFactory.methodConstant({
-            value: requireStringConstant(methodSignature).value,
+            value: nodeFactory.methodSignatureString({ value: requireStringConstant(methodSignature).value, sourceLocation }),
             wtype: methodConstantType.wtype,
             sourceLocation,
           }),

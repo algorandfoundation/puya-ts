@@ -12,7 +12,7 @@ main:
     bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x8f6892ef 0x9cd87de3 0xd366c869 0x81b67352 // method "getOne()uint64", method "receivesAnyTxn(txn)uint64", method "receivesAssetConfig(acfg)byte[]", method "receivesAssetConfigAndPay(acfg,pay)void"
@@ -24,7 +24,7 @@ main_receivesAssetConfigAndPay_route@7:
     // tests/approvals/precompiled-apps.algo.ts:104
     // receivesAssetConfigAndPay(assetCfg: gtxn.AssetConfigTxn, payTxn: gtxn.PaymentTxn): void {
     txn GroupIndex
-    pushint 2 // 2
+    pushint 2
     -
     gtxns TypeEnum
     dup
@@ -49,8 +49,10 @@ main_receivesAssetConfigAndPay_route@7:
     // assert(payTxn.type === TransactionType.Payment)
     intc_0 // 1
     ==
+    assert
     // tests/approvals/precompiled-apps.algo.ts:104
     // receivesAssetConfigAndPay(assetCfg: gtxn.AssetConfigTxn, payTxn: gtxn.PaymentTxn): void {
+    intc_0 // 1
     return
 
 main_receivesAssetConfig_route@6:
@@ -130,7 +132,7 @@ main_after_if_else@23:
     // tests/approvals/precompiled-apps.algo.ts:94
     // case TransactionType.ApplicationCall:
     dig 3
-    pushint 6 // 6
+    pushint 6
     ==
     // tests/approvals/precompiled-apps.algo.ts:94-95
     // case TransactionType.ApplicationCall:
@@ -160,7 +162,7 @@ main_ternary_false@26:
 main_after_if_else@28:
     // tests/approvals/precompiled-apps.algo.ts:97
     // return 0
-    pushint 0 // 0
+    pushint 0
     // tests/approvals/precompiled-apps.algo.ts:90
     // receivesAnyTxn(txn: gtxn.Transaction): uint64 {
     b main_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@29
@@ -181,6 +183,4 @@ main___algots__.defaultCreate@11:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return

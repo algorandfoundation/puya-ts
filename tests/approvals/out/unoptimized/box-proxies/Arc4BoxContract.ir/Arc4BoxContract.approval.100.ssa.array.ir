@@ -14,7 +14,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@4: // abi_routing_L340
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
         goto tmp%5#0 ? block@5 : block@22
@@ -78,7 +78,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (== tmp%9#0 0u)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         tests/approvals/box-proxies.algo.ts::Arc4BoxContract.__algots__.defaultCreate()
         exit 1u
     block@25: // after_if_else_L340
@@ -461,34 +461,27 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes(a: uint
         (box_del "boxD")
         (box_put "boxD" tmp%1#0)
         (box_create "boxLarge" 6160u)
-        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get "boxLarge")
-        (assert aggregate%box_get%1#0) // Box must have value
-        let storage_value%0#0: bytes = aggregate%box_get%0#0
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob 42u)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
         let encoded_value%1#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let aggregate%extract%0#0: bytes = (extract3 storage_value%0#0 4096u 8u)
-        let aggregate%updated_data%0#0: bytes = (replace3 storage_value%0#0 4096u encoded_value%1#0)
-        let updated_tuple%0#0: Encoded(uint8[1024],uint8[1024],uint8[1024],uint8[1024],uint64,uint8[1024],uint8[1024],uint64) = aggregate%updated_data%0#0
-        (box_put "boxLarge" updated_tuple%0#0)
+        let box%offset%0#0: uint64 = (+ 0u 4096u)
+        (box_replace "boxLarge" box%offset%0#0 encoded_value%1#0)
         let tmp%2#0: uint64 = (* 1024u 4u)
         (box_replace "boxLarge" tmp%2#0 0x000000000000002a)
-        let (aggregate%box_get%2#0: bytes, aggregate%box_get%3#0: bool) = (box_get "b")
-        (assert aggregate%box_get%3#0) // Box must have value
-        let storage_value%1#0: bytes = aggregate%box_get%2#0
+        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get "b")
+        (assert aggregate%box_get%1#0) // Box must have value
+        let storage_value%1#0: bytes = aggregate%box_get%0#0
         let bValue#0: Encoded(len+uint8[]) = storage_value%1#0
-        let (aggregate%box_get%4#0: bytes, aggregate%box_get%5#0: bool) = (box_get "b")
-        (assert aggregate%box_get%5#0) // Box must have value
-        let storage_value%2#0: bytes = aggregate%box_get%4#0
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 storage_value%2#0 0u) // on error: invalid array length header
-        let tmp%3#0: uint64 = aggregate%array_length%0#0
-        let aggregate%array_length%1#0: uint64 = (extract_uint16 bValue#0 0u) // on error: invalid array length header
-        let tmp%4#0: uint64 = aggregate%array_length%1#0
+        let box%box_extract%0#0: bytes = (box_extract "b" 0u 2u)
+        let box%array_length%0#0: uint64 = (btoi box%box_extract%0#0)
+        let tmp%3#0: uint64 = box%array_length%0#0
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 bValue#0 0u) // on error: invalid array length header
+        let tmp%4#0: uint64 = aggregate%array_length%0#0
         let tmp%5#0: bool = (== tmp%3#0 tmp%4#0)
         (assert tmp%5#0) // direct reference should match copy
-        let (aggregate%box_get%6#0: bytes, aggregate%box_get%7#0: bool) = (box_get "boxA")
-        (assert aggregate%box_get%7#0) // Box must have value
-        let storage_value%3#0: bytes = aggregate%box_get%6#0
+        let (aggregate%box_get%2#0: bytes, aggregate%box_get%3#0: bool) = (box_get "boxA")
+        (assert aggregate%box_get%3#0) // Box must have value
+        let storage_value%3#0: bytes = aggregate%box_get%2#0
         let maybe_value_converted%0#0: uint64 = (btoi storage_value%3#0)
         let tmp%6#0: uint64 = (+ maybe_value_converted%0#0 3u)
         let encoded_value%2#0: bytes[8] = (itob tmp%6#0)
@@ -513,31 +506,23 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes(a: uint
         let tmp%13#0: uint64 = (len tmp%12#0)
         let tmp%14#0: bool = (== value%3#0 tmp%13#0)
         (assert tmp%14#0)
-        let (aggregate%box_get%8#0: bytes, aggregate%box_get%9#0: bool) = (box_get "BOX_C")
-        (assert aggregate%box_get%9#0) // Box must have value
-        let storage_value%4#0: bytes = aggregate%box_get%8#0
-        let extract%0#0: bytes = (extract3 storage_value%4#0 0u 1u)
+        let box%box_extract%1#0: bytes = (box_extract "BOX_C" 0u 1u)
+        let extract%0#0: bytes = box%box_extract%1#0
         let extract%1#0: bytes = (extract3 c#0 0u 1u)
         let tmp%15#0: bool = (== extract%0#0 extract%1#0)
         (assert tmp%15#0)
-        let (aggregate%box_get%10#0: bytes, aggregate%box_get%11#0: bool) = (box_get "BOX_C")
-        (assert aggregate%box_get%11#0) // Box must have value
-        let storage_value%5#0: bytes = aggregate%box_get%10#0
-        let (aggregate%box_get%12#0: bytes, aggregate%box_get%13#0: bool) = (box_get "BOX_C")
-        (assert aggregate%box_get%13#0) // Box must have value
-        let storage_value%6#0: bytes = aggregate%box_get%12#0
-        let tmp%16#0: uint64 = (len storage_value%6#0)
+        let (box%box_len%0#0: uint64, box%_%0#0: bool) = (box_len "BOX_C")
+        let tmp%16#0: uint64 = box%box_len%0#0
         let tmp%17#0: uint64 = (- tmp%16#0 1u)
-        let extract%2#0: bytes = (extract3 storage_value%5#0 tmp%17#0 1u)
+        let box%box_extract%2#0: bytes = (box_extract "BOX_C" tmp%17#0 1u)
+        let extract%2#0: bytes = box%box_extract%2#0
         let tmp%18#0: uint64 = (len c#0)
         let tmp%19#0: uint64 = (- tmp%18#0 1u)
         let extract%3#0: bytes = (extract3 c#0 tmp%19#0 1u)
         let tmp%20#0: bool = (== extract%2#0 extract%3#0)
         (assert tmp%20#0)
-        let (aggregate%box_get%14#0: bytes, aggregate%box_get%15#0: bool) = (box_get "BOX_C")
-        (assert aggregate%box_get%15#0) // Box must have value
-        let storage_value%7#0: bytes = aggregate%box_get%14#0
-        let length%0#0: uint64 = (len storage_value%7#0)
+        let (box%box_len%1#0: uint64, box%_%1#0: bool) = (box_len "BOX_C")
+        let length%0#0: uint64 = box%box_len%1#0
         let is_out_of_bounds%0#0: bool = (>= 0u length%0#0)
         let bounded_index%0#0: uint64 = (select 0u length%0#0 is_out_of_bounds%0#0)
         let is_out_of_bounds%1#0: bool = (>= 1u length%0#0)
@@ -545,7 +530,9 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes(a: uint
         let bounded_index%1#0: uint64 = (- length%0#0 bounded_offset%0#0)
         let end_before_start%0#0: bool = (< bounded_index%1#0 bounded_index%0#0)
         let end%0#0: uint64 = (select bounded_index%1#0 bounded_index%0#0 end_before_start%0#0)
-        let tmp%21#0: bytes = (substring3 storage_value%7#0 bounded_index%0#0 end%0#0)
+        let box%substring3_length%0#0: uint64 = (- end%0#0 bounded_index%0#0)
+        let box%box_extract%3#0: bytes = (box_extract "BOX_C" bounded_index%0#0 box%substring3_length%0#0)
+        let tmp%21#0: bytes = box%box_extract%3#0
         let length%1#0: uint64 = (len c#0)
         let is_out_of_bounds%2#0: bool = (>= 0u length%1#0)
         let bounded_index%2#0: uint64 = (select 0u length%1#0 is_out_of_bounds%2#0)
@@ -557,15 +544,15 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes(a: uint
         let tmp%22#0: bytes = (substring3 c#0 bounded_index%2#0 end%1#0)
         let tmp%23#0: bool = (== tmp%21#0 tmp%22#0)
         (assert tmp%23#0)
-        let (aggregate%box_get%16#0: bytes, aggregate%box_get%17#0: bool) = (box_get "BOX_C")
-        (assert aggregate%box_get%17#0) // Box must have value
-        let storage_value%8#0: bytes = aggregate%box_get%16#0
-        let length%2#0: uint64 = (len storage_value%8#0)
+        let (box%box_len%2#0: uint64, box%_%2#0: bool) = (box_len "BOX_C")
+        let length%2#0: uint64 = box%box_len%2#0
         let is_out_of_bounds%4#0: bool = (>= 0u length%2#0)
         let bounded_index%4#0: uint64 = (select 0u length%2#0 is_out_of_bounds%4#0)
         let is_out_of_bounds%5#0: bool = (>= 2u length%2#0)
         let bounded_index%5#0: uint64 = (select 2u length%2#0 is_out_of_bounds%5#0)
-        let tmp%24#0: bytes = (substring3 storage_value%8#0 bounded_index%4#0 bounded_index%5#0)
+        let box%substring3_length%1#0: uint64 = (- bounded_index%5#0 bounded_index%4#0)
+        let box%box_extract%4#0: bytes = (box_extract "BOX_C" bounded_index%4#0 box%substring3_length%1#0)
+        let tmp%24#0: bytes = box%box_extract%4#0
         let length%3#0: uint64 = (len c#0)
         let is_out_of_bounds%6#0: bool = (>= 0u length%3#0)
         let bounded_index%6#0: uint64 = (select 0u length%3#0 is_out_of_bounds%6#0)
@@ -574,23 +561,17 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes(a: uint
         let tmp%25#0: bytes = (substring3 c#0 bounded_index%6#0 bounded_index%7#0)
         let tmp%26#0: bool = (== tmp%24#0 tmp%25#0)
         (assert tmp%26#0)
-        let (aggregate%box_get%18#0: bytes, aggregate%box_get%19#0: bool) = (box_get "boxD")
-        (assert aggregate%box_get%19#0) // Box must have value
-        let storage_value%9#0: bytes = aggregate%box_get%18#0
-        let extract%4#0: bytes = (extract3 storage_value%9#0 0u 1u)
+        let box%box_extract%5#0: bytes = (box_extract "boxD" 0u 1u)
+        let extract%4#0: bytes = box%box_extract%5#0
         let tmp%27#0: bytes = ((extract 2 0) dynamicBytes#0)
         let extract%5#0: bytes = (extract3 tmp%27#0 0u 1u)
         let tmp%28#0: bool = (== extract%4#0 extract%5#0)
         (assert tmp%28#0)
-        let (aggregate%box_get%20#0: bytes, aggregate%box_get%21#0: bool) = (box_get "boxD")
-        (assert aggregate%box_get%21#0) // Box must have value
-        let storage_value%10#0: bytes = aggregate%box_get%20#0
-        let (aggregate%box_get%22#0: bytes, aggregate%box_get%23#0: bool) = (box_get "boxD")
-        (assert aggregate%box_get%23#0) // Box must have value
-        let storage_value%11#0: bytes = aggregate%box_get%22#0
-        let tmp%29#0: uint64 = (len storage_value%11#0)
+        let (box%box_len%3#0: uint64, box%_%3#0: bool) = (box_len "boxD")
+        let tmp%29#0: uint64 = box%box_len%3#0
         let tmp%30#0: uint64 = (- tmp%29#0 1u)
-        let extract%6#0: bytes = (extract3 storage_value%10#0 tmp%30#0 1u)
+        let box%box_extract%6#0: bytes = (box_extract "boxD" tmp%30#0 1u)
+        let extract%6#0: bytes = box%box_extract%6#0
         let tmp%31#0: bytes = ((extract 2 0) dynamicBytes#0)
         let tmp%32#0: bytes = ((extract 2 0) dynamicBytes#0)
         let tmp%33#0: uint64 = (len tmp%32#0)
@@ -598,10 +579,8 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes(a: uint
         let extract%7#0: bytes = (extract3 tmp%31#0 tmp%34#0 1u)
         let tmp%35#0: bool = (== extract%6#0 extract%7#0)
         (assert tmp%35#0)
-        let (aggregate%box_get%24#0: bytes, aggregate%box_get%25#0: bool) = (box_get "boxD")
-        (assert aggregate%box_get%25#0) // Box must have value
-        let storage_value%12#0: bytes = aggregate%box_get%24#0
-        let length%4#0: uint64 = (len storage_value%12#0)
+        let (box%box_len%4#0: uint64, box%_%4#0: bool) = (box_len "boxD")
+        let length%4#0: uint64 = box%box_len%4#0
         let is_out_of_bounds%8#0: bool = (>= 0u length%4#0)
         let bounded_index%8#0: uint64 = (select 0u length%4#0 is_out_of_bounds%8#0)
         let is_out_of_bounds%9#0: bool = (>= 1u length%4#0)
@@ -609,7 +588,9 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes(a: uint
         let bounded_index%9#0: uint64 = (- length%4#0 bounded_offset%2#0)
         let end_before_start%2#0: bool = (< bounded_index%9#0 bounded_index%8#0)
         let end%2#0: uint64 = (select bounded_index%9#0 bounded_index%8#0 end_before_start%2#0)
-        let tmp%36#0: bytes = (substring3 storage_value%12#0 bounded_index%8#0 end%2#0)
+        let box%substring3_length%2#0: uint64 = (- end%2#0 bounded_index%8#0)
+        let box%box_extract%7#0: bytes = (box_extract "boxD" bounded_index%8#0 box%substring3_length%2#0)
+        let tmp%36#0: bytes = box%box_extract%7#0
         let tmp%37#0: bytes = ((extract 2 0) dynamicBytes#0)
         let length%5#0: uint64 = (len tmp%37#0)
         let is_out_of_bounds%10#0: bool = (>= 0u length%5#0)
@@ -622,15 +603,15 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes(a: uint
         let tmp%38#0: bytes = (substring3 tmp%37#0 bounded_index%10#0 end%3#0)
         let tmp%39#0: bool = (== tmp%36#0 tmp%38#0)
         (assert tmp%39#0)
-        let (aggregate%box_get%26#0: bytes, aggregate%box_get%27#0: bool) = (box_get "boxD")
-        (assert aggregate%box_get%27#0) // Box must have value
-        let storage_value%13#0: bytes = aggregate%box_get%26#0
-        let length%6#0: uint64 = (len storage_value%13#0)
+        let (box%box_len%5#0: uint64, box%_%5#0: bool) = (box_len "boxD")
+        let length%6#0: uint64 = box%box_len%5#0
         let is_out_of_bounds%12#0: bool = (>= 0u length%6#0)
         let bounded_index%12#0: uint64 = (select 0u length%6#0 is_out_of_bounds%12#0)
         let is_out_of_bounds%13#0: bool = (>= 5u length%6#0)
         let bounded_index%13#0: uint64 = (select 5u length%6#0 is_out_of_bounds%13#0)
-        let tmp%40#0: bytes = (substring3 storage_value%13#0 bounded_index%12#0 bounded_index%13#0)
+        let box%substring3_length%3#0: uint64 = (- bounded_index%13#0 bounded_index%12#0)
+        let box%box_extract%8#0: bytes = (box_extract "boxD" bounded_index%12#0 box%substring3_length%3#0)
+        let tmp%40#0: bytes = box%box_extract%8#0
         let tmp%41#0: bytes = ((extract 2 0) dynamicBytes#0)
         let length%7#0: uint64 = (len tmp%41#0)
         let is_out_of_bounds%14#0: bool = (>= 0u length%7#0)
@@ -640,15 +621,15 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes(a: uint
         let tmp%42#0: bytes = (substring3 tmp%41#0 bounded_index%14#0 bounded_index%15#0)
         let tmp%43#0: bool = (== tmp%40#0 tmp%42#0)
         (assert tmp%43#0)
-        let (aggregate%box_get%28#0: bytes, aggregate%box_get%29#0: bool) = (box_get "boxD")
-        (assert aggregate%box_get%29#0) // Box must have value
-        let storage_value%14#0: bytes = aggregate%box_get%28#0
-        let length%8#0: uint64 = (len storage_value%14#0)
+        let (box%box_len%6#0: uint64, box%_%6#0: bool) = (box_len "boxD")
+        let length%8#0: uint64 = box%box_len%6#0
         let is_out_of_bounds%16#0: bool = (>= 0u length%8#0)
         let bounded_index%16#0: uint64 = (select 0u length%8#0 is_out_of_bounds%16#0)
         let is_out_of_bounds%17#0: bool = (>= 2u length%8#0)
         let bounded_index%17#0: uint64 = (select 2u length%8#0 is_out_of_bounds%17#0)
-        let tmp%44#0: bytes = (substring3 storage_value%14#0 bounded_index%16#0 bounded_index%17#0)
+        let box%substring3_length%4#0: uint64 = (- bounded_index%17#0 bounded_index%16#0)
+        let box%box_extract%9#0: bytes = (box_extract "boxD" bounded_index%16#0 box%substring3_length%4#0)
+        let tmp%44#0: bytes = box%box_extract%9#0
         let tmp%45#0: bytes = ((extract 2 0) dynamicBytes#0)
         let length%9#0: uint64 = (len tmp%45#0)
         let is_out_of_bounds%18#0: bool = (>= 0u length%9#0)
@@ -683,18 +664,12 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.createManyInts()
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setManyInts(index: uint64, value: uint64) -> void:
     block@0: // L405
-        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get "manyInts")
-        (assert aggregate%box_get%1#0) // Box must have value
-        let storage_value%0#0: bytes = aggregate%box_get%0#0
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob value#0)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
         let encoded_value%0#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let aggregate%bytes_offset%0#0: uint64 = (* index#0 8u)
-        let aggregate%encoded_element%0#0: bytes = (extract3 storage_value%0#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
-        let aggregate%write_offset%0#0: uint64 = (* index#0 8u)
-        let aggregate%updated_array%0#0: bytes = (replace3 storage_value%0#0 aggregate%write_offset%0#0 encoded_value%0#0) // on error: index access is out of bounds
-        let updated_array%0#0: Encoded(uint64[513]) = aggregate%updated_array%0#0
-        (box_put "manyInts" updated_array%0#0)
+        let box%element_offset%0#0: uint64 = (* index#0 8u)
+        let box%offset%0#0: uint64 = (+ 0u box%element_offset%0#0)
+        (box_replace "manyInts" box%offset%0#0 encoded_value%0#0)
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumManyInts() -> uint64:
@@ -713,9 +688,10 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumManyInts() ->
         let continue_looping%0#0: bool = (< item_index_internal%0#1 array_length%0#0)
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L412
-        let aggregate%bytes_offset%0#0: uint64 = (* item_index_internal%0#1 8u)
-        let aggregate%encoded_element%0#0: bytes = (extract3 storage_value%0#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
-        let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#0
+        let box%element_offset%0#0: uint64 = (* item_index_internal%0#1 8u)
+        let box%offset%0#0: uint64 = (+ 0u box%element_offset%0#0)
+        let box%box_extract%0#0: Encoded(uint64) = (box_extract "manyInts" box%offset%0#0 8u)
+        let array_item%0#0: Encoded(uint64) = box%box_extract%0#0
         let values%0#0: uint64 = (btoi array_item%0#0)
         let temp#0: uint64 = values%0#0
         let val#0: uint64 = temp#0
@@ -796,11 +772,9 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.readBoxes() -> <
         let (aggregate%box_get%2#0: bytes, aggregate%box_get%3#0: bool) = (box_get "BOX_C")
         (assert aggregate%box_get%3#0) // Box must have value
         let storage_value%1#0: bytes = aggregate%box_get%2#0
-        let (aggregate%box_get%4#0: bytes, aggregate%box_get%5#0: bool) = (box_get "boxLarge")
-        (assert aggregate%box_get%5#0) // Box must have value
-        let storage_value%2#0: bytes = aggregate%box_get%4#0
-        let aggregate%extract%0#0: bytes = (extract3 storage_value%2#0 4096u 8u)
-        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
+        let box%offset%0#0: uint64 = (+ 0u 4096u)
+        let box%box_extract%0#0: Encoded(uint64) = (box_extract "boxLarge" box%offset%0#0 8u)
+        let tuple_item%0#0: Encoded(uint64) = box%box_extract%0#0
         let values%0#0: uint64 = (btoi tuple_item%0#0)
         return tmp%1#0 tmp%2#0 storage_value%1#0 values%0#0
 
@@ -816,15 +790,15 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sliceBox() -> vo
     block@0: // L445
         (box_del "0")
         (box_put "0" "Testing testing 123")
-        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get "0")
-        (assert aggregate%box_get%1#0) // Box must have value
-        let storage_value%0#0: bytes = aggregate%box_get%0#0
-        let length%0#0: uint64 = (len storage_value%0#0)
+        let (box%box_len%0#0: uint64, box%_%0#0: bool) = (box_len "0")
+        let length%0#0: uint64 = box%box_len%0#0
         let is_out_of_bounds%0#0: bool = (>= 0u length%0#0)
         let bounded_index%0#0: uint64 = (select 0u length%0#0 is_out_of_bounds%0#0)
         let is_out_of_bounds%1#0: bool = (>= 7u length%0#0)
         let bounded_index%1#0: uint64 = (select 7u length%0#0 is_out_of_bounds%1#0)
-        let tmp%0#0: bytes = (substring3 storage_value%0#0 bounded_index%0#0 bounded_index%1#0)
+        let box%substring3_length%0#0: uint64 = (- bounded_index%1#0 bounded_index%0#0)
+        let box%box_extract%0#0: bytes = (box_extract "0" bounded_index%0#0 box%substring3_length%0#0)
+        let tmp%0#0: bytes = box%box_extract%0#0
         let tmp%1#0: bool = (== tmp%0#0 "Testing")
         (assert tmp%1#0)
         let aggregate%length%0#0: uint64 = (len "Hello")
@@ -835,15 +809,15 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sliceBox() -> vo
         let tmp%2#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
         (box_del "BOX_C")
         (box_put "BOX_C" tmp%2#0)
-        let (aggregate%box_get%2#0: bytes, aggregate%box_get%3#0: bool) = (box_get "BOX_C")
-        (assert aggregate%box_get%3#0) // Box must have value
-        let storage_value%1#0: bytes = aggregate%box_get%2#0
-        let length%1#0: uint64 = (len storage_value%1#0)
+        let (box%box_len%1#0: uint64, box%_%1#0: bool) = (box_len "BOX_C")
+        let length%1#0: uint64 = box%box_len%1#0
         let is_out_of_bounds%2#0: bool = (>= 2u length%1#0)
         let bounded_index%2#0: uint64 = (select 2u length%1#0 is_out_of_bounds%2#0)
         let is_out_of_bounds%3#0: bool = (>= 10u length%1#0)
         let bounded_index%3#0: uint64 = (select 10u length%1#0 is_out_of_bounds%3#0)
-        let tmp%3#0: bytes = (substring3 storage_value%1#0 bounded_index%2#0 bounded_index%3#0)
+        let box%substring3_length%1#0: uint64 = (- bounded_index%3#0 bounded_index%2#0)
+        let box%box_extract%1#0: bytes = (box_extract "BOX_C" bounded_index%2#0 box%substring3_length%1#0)
+        let tmp%3#0: bytes = box%box_extract%1#0
         let tmp%4#0: bool = (== tmp%3#0 "Hello")
         (assert tmp%4#0)
         return 
@@ -962,19 +936,20 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.createBools() ->
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBool(index: uint64, value: bool) -> void:
     block@0: // L506
-        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get "tooManyBools")
-        (assert aggregate%box_get%1#0) // Box must have value
-        let storage_value%0#0: bytes = aggregate%box_get%0#0
         let aggregate%as_Encoded(bool1)%0#0: Encoded(bool1) = value#0
         let encoded_value%0#0: Encoded(bool1) = aggregate%as_Encoded(bool1)%0#0
-        let aggregate%lt%0#0: bool = (< index#0 33000u)
+        let box%element_byte_offset%0#0: uint64 = (/ index#0 8u)
+        let box%byte_containing_bit_offset%0#0: uint64 = (+ 0u box%element_byte_offset%0#0)
+        let box%element_bit_offset%0#0: uint64 = (% index#0 8u)
+        let box%box_extract%0#0: Encoded(bool1[8]) = (box_extract "tooManyBools" box%byte_containing_bit_offset%0#0 1u)
+        let aggregate%lt%0#0: bool = (< box%element_bit_offset%0#0 8u)
         (assert aggregate%lt%0#0) // index access is out of bounds
-        let aggregate%get_bit%0#0: bool = (getbit storage_value%0#0 index#0)
-        let aggregate%lt%1#0: bool = (< index#0 33000u)
+        let aggregate%get_bit%0#0: bool = (getbit box%box_extract%0#0 box%element_bit_offset%0#0)
+        let aggregate%lt%1#0: bool = (< box%element_bit_offset%0#0 8u)
         (assert aggregate%lt%1#0) // index access is out of bounds
-        let aggregate%updated_target%0#0: bytes = (setbit storage_value%0#0 index#0 encoded_value%0#0)
-        let updated_array%0#0: Encoded(bool1[33000]) = aggregate%updated_target%0#0
-        (box_put "tooManyBools" updated_array%0#0)
+        let aggregate%updated_target%0#0: Encoded(bool1[8]) = (setbit box%box_extract%0#0 box%element_bit_offset%0#0 encoded_value%0#0)
+        let box%tmp%0#0: Encoded(bool1[8]) = aggregate%updated_target%0#0
+        (box_replace "tooManyBools" box%byte_containing_bit_offset%0#0 box%tmp%0#0)
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools(stopAtTotal: uint64) -> uint64:
@@ -993,7 +968,11 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools(stopAtT
         let continue_looping%0#0: bool = (< item_index_internal%0#1 array_length%0#0)
         goto continue_looping%0#0 ? block@2 : block@8
     block@2: // for_body_L513
-        let aggregate%get_bit%0#0: bool = (getbit storage_value%0#0 item_index_internal%0#1)
+        let box%element_byte_offset%0#0: uint64 = (/ item_index_internal%0#1 8u)
+        let box%byte_containing_bit_offset%0#0: uint64 = (+ 0u box%element_byte_offset%0#0)
+        let box%element_bit_offset%0#0: uint64 = (% item_index_internal%0#1 8u)
+        let box%box_extract%0#0: Encoded(bool1[8]) = (box_extract "tooManyBools" box%byte_containing_bit_offset%0#0 1u)
+        let aggregate%get_bit%0#0: bool = (getbit box%box_extract%0#0 box%element_bit_offset%0#0)
         let array_item%0#0: bool = aggregate%get_bit%0#0
         let values%0#0: bool = array_item%0#0
         let temp#0: bool = values%0#0

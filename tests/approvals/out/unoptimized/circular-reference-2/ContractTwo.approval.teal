@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 4 6
+    intcblock 0 1 6 8
     bytecblock 0x2a337771 0x601d46de 0x151f7c75
     b main_block@0
 
@@ -25,7 +25,7 @@ main_abi_routing@2:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_0 // 0
     !=
@@ -85,7 +85,7 @@ main___algots__.defaultCreate@10:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -101,7 +101,7 @@ test_block@0:
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    intc_3 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -118,11 +118,6 @@ test2_block@0:
     // tests/approvals/circular-reference-2.algo.ts:12
     // test2() {
     callsub tests/approvals/circular-reference-2.algo.ts::ContractTwo.test2
-    dup
-    len
-    intc_2 // 4
-    ==
-    assert // invalid size
     bytec_2 // 0x151f7c75
     uncover 1
     concat
@@ -141,7 +136,7 @@ test3_block@0:
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    intc_3 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -165,7 +160,7 @@ tests/approvals/circular-reference-2.algo.ts::ContractTwo.test_block@0:
     bytec_0 // method "test(uint64)void"
     itxn_field ApplicationArgs
     itxn_field ApplicationID
-    intc_3 // appl
+    intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -212,7 +207,7 @@ tests/approvals/circular-reference-2.algo.ts::ContractTwo.test3_block@0:
     bytec_1 // method "test2()byte[4]"
     itxn_field ApplicationArgs
     itxn_field ApplicationID
-    intc_3 // appl
+    intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -231,7 +226,7 @@ tests/approvals/circular-reference-2.algo.ts::ContractTwo.test3_block@0:
     bytec_1 // method "test2()byte[4]"
     itxn_field ApplicationArgs
     itxn_field ApplicationID
-    intc_3 // appl
+    intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -250,7 +245,7 @@ tests/approvals/circular-reference-2.algo.ts::ContractTwo.test3_block@0:
     assert // Bytes has valid prefix
     dup
     len
-    intc_2 // 4
+    pushint 4
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 4>
     // tests/approvals/circular-reference-2.algo.ts:27
@@ -265,7 +260,7 @@ tests/approvals/circular-reference-2.algo.ts::ContractTwo.test3_block@0:
     assert // Bytes has valid prefix
     dup
     len
-    intc_2 // 4
+    pushint 4
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 4>
     // tests/approvals/circular-reference-2.algo.ts:29

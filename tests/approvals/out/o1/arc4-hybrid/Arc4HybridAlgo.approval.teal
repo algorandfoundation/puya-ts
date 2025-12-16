@@ -9,7 +9,7 @@ main:
     log
     // tests/approvals/arc4-hybrid.algo.ts:3
     // class Arc4HybridAlgo extends Contract {
-    pushint 0 // 0
+    pushint 0
     txn NumAppArgs
     bz main___algots__.defaultCreate@5
     pushbytes 0xc258469e // method "someMethod()void"
@@ -35,14 +35,14 @@ main_someMethod_route@3:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     // tests/approvals/arc4-hybrid.algo.ts:17
     // log('some method')
     pushbytes "some method"
     log
     // tests/approvals/arc4-hybrid.algo.ts:16
     // someMethod() {
-    pushint 1 // 1
+    pushint 1
     bury 1
     b main_switch_case_next@4
 
@@ -54,6 +54,6 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
+    assert
+    pushint 1
     b main_after_if_else@6

@@ -34,7 +34,7 @@ main_abi_routing@4:
     txn OnCompletion
     intc_1 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_1 // 0
     !=
@@ -129,7 +129,7 @@ main___algots__.defaultCreate@17:
     intc_1 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_0 // 1
     return
@@ -461,7 +461,7 @@ tests/approvals/multi-inheritance.algo.ts::BaseOne.constructor_block@0:
     // tests/approvals/multi-inheritance.algo.ts:23
     // stateOne = GlobalState({ initialValue: Uint64(45) })
     pushbytes "stateOne"
-    pushint 45 // 45
+    pushint 45
     app_global_put
     retsub
 
@@ -484,7 +484,7 @@ tests/approvals/multi-inheritance.algo.ts::CommonBase.constructor_after_inlined_
     // tests/approvals/multi-inheritance.algo.ts:11
     // stateCommon = GlobalState<uint64>({ initialValue: 123 })
     pushbytes "stateCommon"
-    pushint 123 // 123
+    pushint 123
     app_global_put
     retsub
 

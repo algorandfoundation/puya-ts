@@ -8,7 +8,7 @@ main:
     // tests/approvals/multi-inheritance.algo.ts:11
     // stateCommon = GlobalState<uint64>({ initialValue: 123 })
     pushbytes "stateCommon"
-    pushint 123 // 123
+    pushint 123
     app_global_put
 
 main_after_if_else@2:
@@ -18,7 +18,7 @@ main_after_if_else@2:
     bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x455c8d09 0xf9f5142c // method "methodCommon()string", method "b2CantOverride()string"
@@ -31,7 +31,7 @@ main_methodCommon_route@6:
     // methodCommon() {
     pushbytes 0x151f7c750006636f6d6d6f6e
     log
-    pushint 1 // 1
+    pushint 1
     return
 
 main___algots__.defaultCreate@11:
@@ -42,6 +42,4 @@ main___algots__.defaultCreate@11:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
     return

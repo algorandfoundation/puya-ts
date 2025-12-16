@@ -15,7 +15,7 @@ main:
     bz main___algots__.defaultCreate@15
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0xcf1f20b8 0xc2a2bd6b 0xf3b4fec8 0x8c16ee87 0xb2c753bf 0xd1b5beee 0xa1cc0d94 0x961846c6 // method "test_for_of_loop_tuple((uint64,uint64,uint64))uint64", method "test_for_of_loop_destructured_tuple(uint64[])uint64", method "test_for_of_loop_destructured_object((uint64,uint64)[])uint64", method "test_for_of_loop_arc4_dynamic_array(uint64[])uint64", method "test_for_of_loop_arc4_static_array(uint64[5])uint64", method "test_for_of_loop_native_immutable_array(uint64[])uint64", method "test_for_of_loop_native_mutable_array((uint64,uint64,uint64))uint64", method "test_iterable_props(uint64[3],uint64[3],uint64[])uint64"
@@ -28,12 +28,12 @@ main_test_iterable_props_route@11:
     // test_iterable_props(static_array: StaticArray<Uint64, 3>, fixed_array: FixedArray<uint64, 3>, dyn_array: DynamicArray<Uint64>) {
     txna ApplicationArgs 1
     len
-    pushint 24 // 24
+    pushint 24
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint64, 3>
     txna ApplicationArgs 2
     len
-    pushint 24 // 24
+    pushint 24
     ==
     assert // invalid number of bytes for arc4.static_array<uint64, 3>
     txna ApplicationArgs 3
@@ -44,7 +44,7 @@ main_test_iterable_props_route@11:
     bury 16
     intc_2 // 8
     *
-    pushint 2 // 2
+    pushint 2
     +
     swap
     len
@@ -63,7 +63,7 @@ main_for_header@19:
     // tests/approvals/for-of-loops.algo.ts:75
     // for (const a of static_array.keys()) {
     dig 7
-    pushint 3 // 3
+    pushint 3
     <
     bz main_after_for@21
     // tests/approvals/for-of-loops.algo.ts:76
@@ -88,7 +88,7 @@ main_for_header@22:
     // tests/approvals/for-of-loops.algo.ts:78
     // for (const a of static_array.entries()) {
     dig 5
-    pushint 3 // 3
+    pushint 3
     <
     bz main_after_for@24
     // tests/approvals/for-of-loops.algo.ts:79
@@ -113,7 +113,7 @@ main_for_header@25:
     // tests/approvals/for-of-loops.algo.ts:81
     // for (const a of fixed_array.keys()) {
     dig 4
-    pushint 3 // 3
+    pushint 3
     <
     bz main_after_for@27
     // tests/approvals/for-of-loops.algo.ts:82
@@ -138,7 +138,7 @@ main_for_header@28:
     // tests/approvals/for-of-loops.algo.ts:84
     // for (const a of fixed_array.entries()) {
     dig 3
-    pushint 3 // 3
+    pushint 3
     <
     bz main_after_for@30
     // tests/approvals/for-of-loops.algo.ts:85
@@ -221,7 +221,7 @@ main_test_for_of_loop_native_mutable_array_route@10:
     txna ApplicationArgs 1
     dup
     len
-    pushint 24 // 24
+    pushint 24
     ==
     assert // invalid number of bytes for arc4.tuple<uint64,uint64,uint64>
     // tests/approvals/for-of-loops.algo.ts:64
@@ -304,7 +304,7 @@ main_test_for_of_loop_native_immutable_array_route@9:
     bury 17
     intc_2 // 8
     *
-    pushint 2 // 2
+    pushint 2
     +
     swap
     len
@@ -365,7 +365,7 @@ main_test_for_of_loop_arc4_static_array_route@8:
     dup
     bury 22
     len
-    pushint 40 // 40
+    pushint 40
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint64, 5>
     // tests/approvals/for-of-loops.algo.ts:46
@@ -379,7 +379,7 @@ main_for_header@55:
     // tests/approvals/for-of-loops.algo.ts:47
     // for (const item of items) {
     dig 11
-    pushint 5 // 5
+    pushint 5
     <
     bz main_block@60
     dig 11
@@ -429,7 +429,7 @@ main_test_for_of_loop_arc4_dynamic_array_route@7:
     bury 18
     intc_2 // 8
     *
-    pushint 2 // 2
+    pushint 2
     +
     swap
     len
@@ -494,9 +494,9 @@ main_test_for_of_loop_destructured_object_route@6:
     extract_uint16 // on error: invalid array length header
     dup
     bury 19
-    pushint 16 // 16
+    pushint 16
     *
-    pushint 2 // 2
+    pushint 2
     +
     swap
     len
@@ -519,9 +519,9 @@ main_for_header@71:
     dig 20
     extract 2 0
     dig 12
-    pushint 16 // 16
+    pushint 16
     *
-    pushint 16 // 16
+    pushint 16
     extract3 // on error: index access is out of bounds
     dup
     intc_0 // 0
@@ -572,7 +572,7 @@ main_test_for_of_loop_destructured_tuple_route@5:
     bury 20
     intc_2 // 8
     *
-    pushint 2 // 2
+    pushint 2
     +
     swap
     len
@@ -633,7 +633,7 @@ main_test_for_of_loop_tuple_route@4:
     txna ApplicationArgs 1
     dup
     len
-    pushint 24 // 24
+    pushint 24
     ==
     assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64>
     dup
@@ -644,7 +644,7 @@ main_test_for_of_loop_tuple_route@4:
     extract_uint64
     bury 13
     swap
-    pushint 16 // 16
+    pushint 16
     extract_uint64
     bury 11
     // tests/approvals/for-of-loops.algo.ts:10
@@ -687,7 +687,7 @@ main_block@91:
     return
 
 main_for_header_2@90:
-    pushint 2 // 2
+    pushint 2
     bury 9
     dig 9
     bury 8
@@ -708,6 +708,4 @@ main___algots__.defaultCreate@15:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_1 // 1
     return

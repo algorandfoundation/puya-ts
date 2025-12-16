@@ -3,14 +3,14 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 8 2
+    intcblock 0 8 1 2
     // tests/approvals/arc4-clone.algo.ts:16
     // export class Arc4CloneAlgo extends Contract {
     txn NumAppArgs
     bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x398e270d 0x80acbe10 0xe213f5b6 0x63e40e8d // method "aliasing(uint64[])void", method "receive(uint64[])void", method "receiveReadonly(uint64[])void", method "structReturn((uint64,string,(byte[],uint8)))(byte[],uint8)"
@@ -25,10 +25,10 @@ main_structReturn_route@7:
     dup
     len
     dig 1
-    intc_2 // 8
+    intc_1 // 8
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 12 // 12
+    pushint 12
     ==
     assert // invalid tail pointer at index 1 of (uint64,(len+utf8[]),((len+uint8[]),uint8))
     dig 2
@@ -37,10 +37,10 @@ main_structReturn_route@7:
     substring3
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 14 // 14
+    pushint 14
     +
     dig 2
-    pushint 10 // 10
+    pushint 10
     extract_uint16 // on error: invalid tuple encoding
     dup
     dig 2
@@ -56,7 +56,7 @@ main_structReturn_route@7:
     intc_0 // 0
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 3 // 3
+    pushint 3
     ==
     assert // invalid tail pointer at index 0 of ((len+uint8[]),uint8)
     dig 2
@@ -65,7 +65,7 @@ main_structReturn_route@7:
     substring3
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 5 // 5
+    pushint 5
     +
     uncover 2
     +
@@ -76,7 +76,7 @@ main_structReturn_route@7:
     swap
     concat
     log
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_receiveReadonly_route@6:
@@ -86,7 +86,7 @@ main_receiveReadonly_route@6:
     dup
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    intc_2 // 8
+    intc_1 // 8
     *
     intc_3 // 2
     +
@@ -94,7 +94,7 @@ main_receiveReadonly_route@6:
     len
     ==
     assert // invalid number of bytes for arc4.dynamic_array<uint64>
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_receive_route@5:
@@ -104,7 +104,7 @@ main_receive_route@5:
     dup
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    intc_2 // 8
+    intc_1 // 8
     *
     intc_3 // 2
     +
@@ -112,7 +112,7 @@ main_receive_route@5:
     len
     ==
     assert // invalid number of bytes for arc4.dynamic_array<uint64>
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main_aliasing_route@4:
@@ -122,7 +122,7 @@ main_aliasing_route@4:
     dup
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    intc_2 // 8
+    intc_1 // 8
     *
     intc_3 // 2
     +
@@ -130,7 +130,7 @@ main_aliasing_route@4:
     len
     ==
     assert // invalid number of bytes for arc4.dynamic_array<uint64>
-    intc_1 // 1
+    intc_2 // 1
     return
 
 main___algots__.defaultCreate@11:
@@ -141,6 +141,4 @@ main___algots__.defaultCreate@11:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_1 // 1
     return

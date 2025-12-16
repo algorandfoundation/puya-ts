@@ -27,7 +27,7 @@ main_abi_routing@2:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_0 // 0
     !=
@@ -83,7 +83,7 @@ main___algots__.defaultCreate@9:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -120,7 +120,7 @@ tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify:
 tests/approvals/avm12.algo.ts::Avm12Contract.testFalconVerify_block@0:
     // tests/approvals/avm12.algo.ts:17
     // assert(!op.falconVerify(Bytes(), Bytes(), op.bzero(1793)))
-    pushint 1793 // 1793
+    pushint 1793
     bzero
     bytec_0 // 0x
     bytec_0 // 0x
@@ -216,7 +216,7 @@ tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion_next_txn@1:
     itxn_field ApprovalProgramPages
     // tests/approvals/avm12.algo.ts:31
     // onCompletion: OnCompleteAction.UpdateApplication,
-    pushint 4 // 4
+    pushint 4
     itxn_field OnCompletion
     itxn_field ApplicationID
     // tests/approvals/avm12.algo.ts:29
@@ -272,12 +272,12 @@ tests/approvals/avm12.algo.ts::Avm12Contract.testRejectVersion_next_txn@2:
     frame_dig 0
     // tests/approvals/avm12.algo.ts:43
     // rejectVersion: 2,
-    pushint 2 // 2
+    pushint 2
     itxn_field RejectVersion
     itxn_field ApplicationID
     // tests/approvals/avm12.algo.ts:41
     // onCompletion: OnCompleteAction.DeleteApplication,
-    pushint 5 // 5
+    pushint 5
     itxn_field OnCompletion
     // tests/approvals/avm12.algo.ts:40
     // appArgs: [arc4.methodSelector(ContractV1.prototype.delete)],

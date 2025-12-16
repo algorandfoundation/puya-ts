@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 32 6
+    intcblock 1 0 6 4
     bytecblock 0x 0xdf920f37 0x151f7c75 "Hello test4"
     b main_block@0
 
@@ -25,7 +25,7 @@ main_abi_routing@2:
     txn OnCompletion
     intc_1 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_1 // 0
     !=
@@ -106,7 +106,7 @@ main___algots__.defaultCreate@13:
     intc_1 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_0 // 1
     return
@@ -160,7 +160,7 @@ test4_block@0:
     -
     dup
     gtxns TypeEnum
-    intc_3 // appl
+    intc_2 // appl
     ==
     assert // transaction type is appl
     callsub tests/approvals/gtxns.algo.ts::GtxnsAlgo.test4
@@ -274,7 +274,7 @@ tests/approvals/gtxns.algo.ts::GtxnsAlgo.test2_for_body@2:
     frame_bury 0
     // tests/approvals/gtxns.algo.ts:25
     // case TransactionType.ApplicationCall:
-    intc_3 // 6
+    intc_2 // 6
     ==
     // tests/approvals/gtxns.algo.ts:25-27
     // case TransactionType.ApplicationCall:
@@ -313,7 +313,7 @@ tests/approvals/gtxns.algo.ts::GtxnsAlgo.test2_after_if_else@5:
     // tests/approvals/gtxns.algo.ts:28
     // case TransactionType.AssetTransfer:
     frame_dig 0
-    pushint 4 // 4
+    intc_3 // 4
     ==
     // tests/approvals/gtxns.algo.ts:28-30
     // case TransactionType.AssetTransfer:
@@ -340,7 +340,7 @@ tests/approvals/gtxns.algo.ts::GtxnsAlgo.test2_after_if_else@8:
     // tests/approvals/gtxns.algo.ts:31
     // case TransactionType.AssetConfig:
     frame_dig 0
-    pushint 3 // 3
+    pushint 3
     ==
     // tests/approvals/gtxns.algo.ts:31-33
     // case TransactionType.AssetConfig:
@@ -393,7 +393,7 @@ tests/approvals/gtxns.algo.ts::GtxnsAlgo.test2_after_if_else@14:
     // tests/approvals/gtxns.algo.ts:37
     // case TransactionType.KeyRegistration:
     frame_dig 0
-    pushint 2 // 2
+    pushint 2
     ==
     // tests/approvals/gtxns.algo.ts:37-39
     // case TransactionType.KeyRegistration:
@@ -447,7 +447,7 @@ tests/approvals/gtxns.algo.ts::GtxnsAlgo.test3_block@0:
     // tests/approvals/gtxns.algo.ts:49
     // assert(Txn.typeEnum === TransactionType.ApplicationCall)
     txn TypeEnum
-    intc_3 // 6
+    intc_2 // 6
     ==
     assert
     // tests/approvals/gtxns.algo.ts:50
@@ -476,7 +476,7 @@ tests/approvals/gtxns.algo.ts::GtxnsAlgo.test4_block@0:
     // assert(other.type === TransactionType.ApplicationCall)
     frame_dig -1
     gtxns TypeEnum
-    intc_3 // 6
+    intc_2 // 6
     ==
     assert
     // tests/approvals/gtxns.algo.ts:56
@@ -598,11 +598,6 @@ tests/approvals/gtxns.algo.ts::GtxnsAlgo.reflectAllPay_block@0:
     //   amount: pay.amount,
     //   closeRemainderTo: pay.closeRemainderTo.bytes,
     // }
-    dup
-    len
-    intc_2 // 32
-    ==
-    assert // invalid size
     bytec_0 // 0x
     uncover 1
     concat
@@ -624,27 +619,20 @@ tests/approvals/gtxns.algo.ts::GtxnsAlgo.reflectAllPay_block@0:
     extract 6 2
     uncover 2
     concat
-    pushint 244 // 244
+    pushint 244
     itob
     extract 6 2
     uncover 2
     uncover 1
     concat
-    cover 1
-    dup
+    dig 1
     len
-    pushint 244 // 244
+    pushint 244
     +
     cover 1
-    dig 3
-    len
-    intc_2 // 32
-    ==
-    assert // invalid size
     uncover 3
-    uncover 3
-    uncover 1
     concat
+    cover 1
     dig 3
     len
     itob
@@ -652,45 +640,24 @@ tests/approvals/gtxns.algo.ts::GtxnsAlgo.reflectAllPay_block@0:
     uncover 4
     concat
     cover 2
-    uncover 3
     itob
     extract 6 2
     concat
     uncover 3
     itob
     concat
-    dig 3
-    len
-    intc_2 // 32
-    ==
-    assert // invalid size
     uncover 3
     concat
-    dig 3
-    len
-    intc_2 // 32
-    ==
-    assert // invalid size
     uncover 3
     concat
-    dig 3
-    len
-    intc_2 // 32
-    ==
-    assert // invalid size
     uncover 3
     concat
     uncover 3
     itob
     concat
-    dig 3
-    len
-    intc_2 // 32
-    ==
-    assert // invalid size
     uncover 3
     concat
-    uncover 1
+    uncover 2
     concat
     uncover 1
     concat
@@ -725,7 +692,7 @@ tests/approvals/gtxns.algo.ts::GtxnsAlgo.test5_else_body@2:
     // } else if (txn.type === TransactionType.AssetTransfer) {
     frame_dig -1
     gtxns TypeEnum
-    pushint 4 // 4
+    intc_3 // 4
     ==
     bz tests/approvals/gtxns.algo.ts::GtxnsAlgo.test5_after_if_else@4
     b tests/approvals/gtxns.algo.ts::GtxnsAlgo.test5_if_body@3

@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@15
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0xcf1f20b8 0xc2a2bd6b 0xf3b4fec8 0x8c16ee87 0xb2c753bf 0xd1b5beee 0xa1cc0d94 0x961846c6 // method "test_for_of_loop_tuple((uint64,uint64,uint64))uint64", method "test_for_of_loop_destructured_tuple(uint64[])uint64", method "test_for_of_loop_destructured_object((uint64,uint64)[])uint64", method "test_for_of_loop_arc4_dynamic_array(uint64[])uint64", method "test_for_of_loop_arc4_static_array(uint64[5])uint64", method "test_for_of_loop_native_immutable_array(uint64[])uint64", method "test_for_of_loop_native_mutable_array((uint64,uint64,uint64))uint64", method "test_iterable_props(uint64[3],uint64[3],uint64[])uint64"
@@ -27,8 +27,6 @@ main___algots__.defaultCreate@15:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -39,7 +37,7 @@ test_for_of_loop_tuple:
     txna ApplicationArgs 1
     dup
     len
-    pushint 24 // 24
+    pushint 24
     ==
     assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.uint64>
     dup
@@ -50,7 +48,7 @@ test_for_of_loop_tuple:
     extract_uint64
     cover 2
     swap
-    pushint 16 // 16
+    pushint 16
     extract_uint64
     swap
     // tests/approvals/for-of-loops.algo.ts:10
@@ -90,7 +88,7 @@ test_for_of_loop_tuple_block@9:
     return
 
 test_for_of_loop_tuple_for_header_2@7:
-    pushint 2 // 2
+    pushint 2
     bury 1
     dig 2
     b test_for_of_loop_tuple_for_body@2
@@ -114,7 +112,7 @@ test_for_of_loop_destructured_tuple:
     cover 2
     intc_2 // 8
     *
-    pushint 2 // 2
+    pushint 2
     +
     swap
     len
@@ -178,9 +176,9 @@ test_for_of_loop_destructured_object:
     extract_uint16 // on error: invalid array length header
     dup
     cover 2
-    pushint 16 // 16
+    pushint 16
     *
-    pushint 2 // 2
+    pushint 2
     +
     swap
     len
@@ -201,9 +199,9 @@ test_for_of_loop_destructured_object_for_header@2:
     dig 3
     extract 2 0
     dig 1
-    pushint 16 // 16
+    pushint 16
     *
-    pushint 16 // 16
+    pushint 16
     extract3 // on error: index access is out of bounds
     dup
     intc_1 // 0
@@ -254,7 +252,7 @@ test_for_of_loop_arc4_dynamic_array:
     cover 2
     intc_2 // 8
     *
-    pushint 2 // 2
+    pushint 2
     +
     swap
     len
@@ -315,7 +313,7 @@ test_for_of_loop_arc4_static_array:
     txna ApplicationArgs 1
     dup
     len
-    pushint 40 // 40
+    pushint 40
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint64, 5>
     // tests/approvals/for-of-loops.algo.ts:46
@@ -327,7 +325,7 @@ test_for_of_loop_arc4_static_array_for_header@2:
     // tests/approvals/for-of-loops.algo.ts:47
     // for (const item of items) {
     dup
-    pushint 5 // 5
+    pushint 5
     <
     bz test_for_of_loop_arc4_static_array_block@8
     dup
@@ -378,7 +376,7 @@ test_for_of_loop_native_immutable_array:
     cover 2
     intc_2 // 8
     *
-    pushint 2 // 2
+    pushint 2
     +
     swap
     len
@@ -439,7 +437,7 @@ test_for_of_loop_native_mutable_array:
     txna ApplicationArgs 1
     dup
     len
-    pushint 24 // 24
+    pushint 24
     ==
     assert // invalid number of bytes for arc4.tuple<uint64,uint64,uint64>
     // tests/approvals/for-of-loops.algo.ts:64
@@ -516,12 +514,12 @@ test_iterable_props:
     // test_iterable_props(static_array: StaticArray<Uint64, 3>, fixed_array: FixedArray<uint64, 3>, dyn_array: DynamicArray<Uint64>) {
     txna ApplicationArgs 1
     len
-    pushint 24 // 24
+    pushint 24
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint64, 3>
     txna ApplicationArgs 2
     len
-    pushint 24 // 24
+    pushint 24
     ==
     assert // invalid number of bytes for arc4.static_array<uint64, 3>
     txna ApplicationArgs 3
@@ -532,7 +530,7 @@ test_iterable_props:
     cover 2
     intc_2 // 8
     *
-    pushint 2 // 2
+    pushint 2
     +
     swap
     len
@@ -549,7 +547,7 @@ test_iterable_props_for_header@2:
     // tests/approvals/for-of-loops.algo.ts:75
     // for (const a of static_array.keys()) {
     dup
-    pushint 3 // 3
+    pushint 3
     <
     bz test_iterable_props_after_for@5
     // tests/approvals/for-of-loops.algo.ts:76
@@ -574,7 +572,7 @@ test_iterable_props_for_header@6:
     // tests/approvals/for-of-loops.algo.ts:78
     // for (const a of static_array.entries()) {
     dig 7
-    pushint 3 // 3
+    pushint 3
     <
     bz test_iterable_props_after_for@9
     // tests/approvals/for-of-loops.algo.ts:79
@@ -599,7 +597,7 @@ test_iterable_props_for_header@10:
     // tests/approvals/for-of-loops.algo.ts:81
     // for (const a of fixed_array.keys()) {
     dig 6
-    pushint 3 // 3
+    pushint 3
     <
     bz test_iterable_props_after_for@13
     // tests/approvals/for-of-loops.algo.ts:82
@@ -624,7 +622,7 @@ test_iterable_props_for_header@14:
     // tests/approvals/for-of-loops.algo.ts:84
     // for (const a of fixed_array.entries()) {
     dig 5
-    pushint 3 // 3
+    pushint 3
     <
     bz test_iterable_props_after_for@17
     // tests/approvals/for-of-loops.algo.ts:85

@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 4 1 5
+    intcblock 0 8 4 1
     bytecblock 0x0000000000000001 0x0100 "123" 0x01020304
     b main_block@0
 
@@ -46,7 +46,7 @@ main_test_route@3:
     intc_0 // 0
     !=
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     callsub tests/approvals/byte-expressions.algo.ts::DemoContract.test[routing]
     b main_switch_case_next@4
 
@@ -60,9 +60,9 @@ main___algots__.defaultCreate@5:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
-    intc_2 // 1
+    intc_3 // 1
     return
 
 
@@ -140,14 +140,14 @@ test2_block@0:
     // assert(btoi(a) === 5, 'a must be bytes for 5')
     frame_dig -2
     btoi
-    intc_3 // 5
+    pushint 5
     ==
     assert // a must be bytes for 5
     // tests/approvals/byte-expressions.algo.ts:18
     // assert(btoi(b) === 12, 'b must be bytes for 12')
     frame_dig -1
     btoi
-    pushint 12 // 12
+    pushint 12
     ==
     assert // b must be bytes for 12
     // tests/approvals/byte-expressions.algo.ts:20
@@ -156,7 +156,7 @@ test2_block@0:
     frame_dig -1
     b&
     btoi
-    intc_1 // 4
+    intc_2 // 4
     ==
     assert // a & b is 4
     // tests/approvals/byte-expressions.algo.ts:21
@@ -165,7 +165,7 @@ test2_block@0:
     frame_dig -1
     b|
     btoi
-    pushint 13 // 13
+    pushint 13
     ==
     assert // a | b is 13
     // tests/approvals/byte-expressions.algo.ts:22
@@ -174,7 +174,7 @@ test2_block@0:
     frame_dig -1
     b^
     btoi
-    pushint 9 // 9
+    pushint 9
     ==
     assert // a ^ b is 9
     // tests/approvals/byte-expressions.algo.ts:24
@@ -182,7 +182,7 @@ test2_block@0:
     frame_dig -2
     b~
     btoi
-    pushint 18446744073709551610 // 18446744073709551610
+    pushint 18446744073709551610
     ==
     assert // !a is MAX_VALUE - 5
     // tests/approvals/byte-expressions.algo.ts:25
@@ -190,47 +190,41 @@ test2_block@0:
     frame_dig -1
     b~
     btoi
-    pushint 18446744073709551603 // 18446744073709551603
+    pushint 18446744073709551603
     ==
     assert // !b is MAX_VALUE - 12
     // tests/approvals/byte-expressions.algo.ts:27
     // assert(a.slice(0, 4) === b.slice(0, 4), 'first four bytes should match')
-    frame_dig -2
-    len
     intc_0 // 0
-    dig 1
+    intc_1 // 8
     >=
     intc_0 // 0
-    dig 2
+    intc_1 // 8
     uncover 2
     select
-    cover 1
-    intc_1 // 4
-    dig 1
+    intc_2 // 4
+    intc_1 // 8
     >=
-    intc_1 // 4
-    uncover 2
+    intc_2 // 4
+    intc_1 // 8
     uncover 2
     select
     frame_dig -2
     uncover 2
     uncover 2
     substring3
-    frame_dig -1
-    len
     intc_0 // 0
-    dig 1
+    intc_1 // 8
     >=
     intc_0 // 0
-    dig 2
+    intc_1 // 8
     uncover 2
     select
-    cover 1
-    intc_1 // 4
-    dig 1
+    intc_2 // 4
+    intc_1 // 8
     >=
-    intc_1 // 4
-    uncover 2
+    intc_2 // 4
+    intc_1 // 8
     uncover 2
     select
     frame_dig -1
@@ -262,21 +256,21 @@ test3_block@0:
     // assert(a.length === 8)
     frame_dig -3
     len
-    pushint 8 // 8
+    intc_1 // 8
     ==
     assert
     // tests/approvals/byte-expressions.algo.ts:34
     // assert(b.length === 16)
     frame_dig -2
     len
-    pushint 16 // 16
+    pushint 16
     ==
     assert
     // tests/approvals/byte-expressions.algo.ts:35
     // assert(c.length === 32)
     frame_dig -1
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert
     retsub
@@ -298,7 +292,7 @@ tests/approvals/byte-expressions.algo.ts::DemoContract.test[routing]_block@0:
     uncover 1
     concat
     log
-    intc_2 // 1
+    intc_3 // 1
     return
 
 
@@ -309,24 +303,24 @@ tests/approvals/byte-expressions.algo.ts::DemoContract.test:
 tests/approvals/byte-expressions.algo.ts::DemoContract.test_block@0:
     // tests/approvals/byte-expressions.algo.ts:40
     // test(1, 50n, 'things')
-    intc_2 // 1
+    intc_3 // 1
     pushbytes 0x32
     pushbytes "things"
     callsub test
     // tests/approvals/byte-expressions.algo.ts:41
     // test2(itob(5), itob(12))
-    intc_3 // 5
+    pushint 5
     itob
-    pushint 12 // 12
+    pushint 12
     itob
     callsub test2
     // tests/approvals/byte-expressions.algo.ts:42
     // test3(op.bzero(8), op.bzero(16), op.bzero(32))
-    pushint 8 // 8
+    intc_1 // 8
     bzero
-    pushint 16 // 16
+    pushint 16
     bzero
-    pushint 32 // 32
+    pushint 32
     bzero
     uncover 2
     uncover 2
@@ -334,7 +328,7 @@ tests/approvals/byte-expressions.algo.ts::DemoContract.test_block@0:
     callsub test3
     // tests/approvals/byte-expressions.algo.ts:43
     // return true
-    intc_2 // 1
+    intc_3 // 1
     retsub
 
 

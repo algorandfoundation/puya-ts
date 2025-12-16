@@ -5,7 +5,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L24
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (! tmp%2#0)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         (assert tmp%4#0)
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
@@ -24,7 +24,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (! tmp%9#0)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         exit 1u
 
 subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding[routing]() -> void:
@@ -135,16 +135,13 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         let aggregate%val_as_bytes%2#0: bytes[8] = (itob a#0)
         let aggregate%as_Encoded(uint64)%2#0: Encoded(uint64) = aggregate%val_as_bytes%2#0
         let aggregate%head%6#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%2#0)
-        let aggregate%length%1#0: uint64 = (len g#0)
-        let aggregate%lengths_equal%0#0: bool = (== aggregate%length%1#0 12u)
-        (assert aggregate%lengths_equal%0#0) // invalid size
         let aggregate%as_Encoded(uint8[12])%0#0: Encoded(uint8[12]) = g#0
         let aggregate%head%7#0: bytes = (concat aggregate%head%6#0 aggregate%as_Encoded(uint8[12])%0#0)
         let aggregate%as_Encoded(uint64,uint8[12])%0#0: Encoded(uint64,uint8[12]) = aggregate%head%7#0
         let tmp%24#0: Encoded(uint64,uint8[12]) = aggregate%as_Encoded(uint64,uint8[12])%0#0
-        let aggregate%length%2#0: uint64 = (len g#0)
-        let aggregate%lengths_equal%1#0: bool = (== aggregate%length%2#0 12u)
-        (assert aggregate%lengths_equal%1#0) // invalid size
+        let aggregate%length%1#0: uint64 = (len g#0)
+        let aggregate%lengths_equal%0#0: bool = (== aggregate%length%1#0 12u)
+        (assert aggregate%lengths_equal%0#0) // invalid size
         let aggregate%as_Encoded(uint8[12])%1#0: Encoded(uint8[12]) = g#0
         let tmp%25#0: Encoded(uint8[12]) = aggregate%as_Encoded(uint8[12])%1#0
         let aggregate%val_as_bytes%3#0: bytes[8] = (itob a#0)
@@ -155,9 +152,6 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         let tmp%26#0: Encoded(uint64,uint8[12]) = aggregate%as_Encoded(uint64,uint8[12])%1#0
         let tmp%27#0: bool = (== tmp%24#0 tmp%26#0)
         (assert tmp%27#0)
-        let aggregate%length%3#0: uint64 = (len g#0)
-        let aggregate%lengths_equal%2#0: bool = (== aggregate%length%3#0 12u)
-        (assert aggregate%lengths_equal%2#0) // invalid size
         let aggregate%as_Encoded(uint8[12])%2#0: Encoded(uint8[12]) = g#0
         let tmp%29#0: Encoded(uint8[12]) = aggregate%as_Encoded(uint8[12])%2#0
         let tmp%31#0: bool = (== tmp%29#0 tmp%25#0)
@@ -195,8 +189,8 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         let encoded_array%2#0: Encoded(uint512[1]) = aggregate%as_Encoded(uint512[1])%0#0
         let tmp%40#0: bool = (== tmp%38#0 encoded_array%2#0)
         (assert tmp%40#0)
-        let aggregate%length%4#0: uint64 = (len d#0)
-        let aggregate%as_bytes%4#0: bytes[8] = (itob aggregate%length%4#0)
+        let aggregate%length%2#0: uint64 = (len d#0)
+        let aggregate%as_bytes%4#0: bytes[8] = (itob aggregate%length%2#0)
         let aggregate%length_uint16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%4#0)
         let aggregate%encoded_value%1#0: bytes = (concat aggregate%length_uint16%1#0 d#0)
         let aggregate%as_Encoded(len+uint8[])%1#0: Encoded(len+uint8[]) = aggregate%encoded_value%1#0
@@ -218,8 +212,8 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         let encoded_array%3#0: Encoded((len+uint8[])[1]) = aggregate%as_Encoded((len+uint8[])[1])%0#0
         let tmp%43#0: bool = (== tmp%41#0 encoded_array%3#0)
         (assert tmp%43#0)
-        let aggregate%length%5#0: uint64 = (len e#0)
-        let aggregate%as_bytes%7#0: bytes[8] = (itob aggregate%length%5#0)
+        let aggregate%length%3#0: uint64 = (len e#0)
+        let aggregate%as_bytes%7#0: bytes[8] = (itob aggregate%length%3#0)
         let aggregate%length_uint16%2#0: bytes = ((extract 6 2) aggregate%as_bytes%7#0)
         let aggregate%encoded_value%2#0: bytes = (concat aggregate%length_uint16%2#0 e#0)
         let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%2#0
@@ -249,9 +243,6 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         let encoded_array%5#0: Encoded(uint8[32][1]) = aggregate%as_Encoded(uint8[32][1])%0#0
         let tmp%48#0: bool = (== tmp%47#0 encoded_array%5#0)
         (assert tmp%48#0)
-        let aggregate%length%6#0: uint64 = (len g#0)
-        let aggregate%lengths_equal%3#0: bool = (== aggregate%length%6#0 12u)
-        (assert aggregate%lengths_equal%3#0) // invalid size
         let aggregate%as_Encoded(uint8[12])%3#0: Encoded(uint8[12]) = g#0
         let aggregate%head%22#0: bytes = (concat 0x aggregate%as_Encoded(uint8[12])%3#0)
         let aggregate%as_Encoded(uint8[12])%4#0: Encoded(uint8[12]) = aggregate%head%22#0
@@ -308,8 +299,8 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         (assert tmp%57#0)
         let aggregate%as_bytes%16#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%6#0: bytes = ((extract 6 2) aggregate%as_bytes%16#0)
-        let aggregate%length%7#0: uint64 = (len d#0)
-        let aggregate%as_bytes%17#0: bytes[8] = (itob aggregate%length%7#0)
+        let aggregate%length%4#0: uint64 = (len d#0)
+        let aggregate%as_bytes%17#0: bytes[8] = (itob aggregate%length%4#0)
         let aggregate%length_uint16%3#0: bytes = ((extract 6 2) aggregate%as_bytes%17#0)
         let aggregate%encoded_value%3#0: bytes = (concat aggregate%length_uint16%3#0 d#0)
         let aggregate%as_Encoded(len+uint8[])%2#0: Encoded(len+uint8[]) = aggregate%encoded_value%3#0
@@ -335,8 +326,8 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         (assert tmp%59#0)
         let aggregate%as_bytes%21#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%8#0: bytes = ((extract 6 2) aggregate%as_bytes%21#0)
-        let aggregate%length%8#0: uint64 = (len e#0)
-        let aggregate%as_bytes%22#0: bytes[8] = (itob aggregate%length%8#0)
+        let aggregate%length%5#0: uint64 = (len e#0)
+        let aggregate%as_bytes%22#0: bytes[8] = (itob aggregate%length%5#0)
         let aggregate%length_uint16%4#0: bytes = ((extract 6 2) aggregate%as_bytes%22#0)
         let aggregate%encoded_value%4#0: bytes = (concat aggregate%length_uint16%4#0 e#0)
         let aggregate%as_Encoded(len+utf8[])%1#0: Encoded(len+utf8[]) = aggregate%encoded_value%4#0
@@ -362,9 +353,6 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         (assert tmp%61#0)
         let aggregate%as_bytes%26#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%10#0: bytes = ((extract 6 2) aggregate%as_bytes%26#0)
-        let aggregate%length%9#0: uint64 = (len g#0)
-        let aggregate%lengths_equal%4#0: bool = (== aggregate%length%9#0 12u)
-        (assert aggregate%lengths_equal%4#0) // invalid size
         let aggregate%as_Encoded(uint8[12])%5#0: Encoded(uint8[12]) = g#0
         let aggregate%head%34#0: bytes = (concat aggregate%len_u16%10#0 aggregate%as_Encoded(uint8[12])%5#0)
         let aggregate%as_Encoded(len+uint8[12][])%0#0: Encoded(len+uint8[12][]) = aggregate%head%34#0

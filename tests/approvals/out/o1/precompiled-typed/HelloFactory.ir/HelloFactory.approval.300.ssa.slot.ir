@@ -5,7 +5,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L13
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (! tmp%2#0)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         (assert tmp%4#0)
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
@@ -36,7 +36,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (! tmp%9#0)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         exit 1u
 
 subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract[routing]() -> void:
@@ -46,7 +46,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         ((itxn_field ApplicationArgs) 0x000568656c6c6f)
         ((itxn_field GlobalNumByteSlice) 1u)
         ((itxn_field ClearStateProgramPages) C4EBQw==)
-        ((itxn_field ApprovalProgramPages) CyAEAAECBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CADcALTEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CADkAXwCABACSJa42GgCOAQAWADEZJRIxGBBEI0MxGYEFEjEYEEQjQzYaAUkiWSQISwEVEkRXAgAoTGcjQzYaAUkiWSQISwEVEkRXAgAiKGVEKVBMUEkVFlcGAkxQKkxQsCNDNhoBSRVLASJZSSUSREsCSwFLA1IiWYEGCEsDJFlJSwISREsESwFLBVJJIlkkCE8DCE8EEkQiKGVEKVBOBE4EUlcCAFBMVwIAUEkVFlcGAkxQKkxQsCND)
+        ((itxn_field ApprovalProgramPages) CyAEAAIBBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CADUALTEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CADUAWwCABACSJa42GgCOAQASADEZJRIxGBBDMRmBBRIxGBBDNhoBSSJZIwhLARUSRFcCAChMZyRDNhoBSSJZIwhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwJEM2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMjWUlLAhJESwRLAUsFUkkiWSMITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwJEM=)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
@@ -151,7 +151,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         ((itxn_field ApplicationArgs) method "create()void")
         ((itxn_field GlobalNumByteSlice) 1u)
         ((itxn_field ClearStateProgramPages) C4EBQw==)
-        ((itxn_field ApprovalProgramPages) CyAEAAECBCYECGdyZWV0aW5nASAEFR98dQNoZXkxGEAAAygrZ4ICBCQ3jTwEoOgYcjYaAI4CADkALzEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CACYATACABExcYbo2GgCOAQABACNDMRklEjEYEEQjQzEZgQUSMRgQRCNDNhoBSSJZJAhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwI0M2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMkWUlLAhJESwRLAUsFUkkiWSQITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwI0M=)
+        ((itxn_field ApprovalProgramPages) CyAEAAECBCYECGdyZWV0aW5nASAEFR98dQNoZXkxGEAAAygrZ4ICBCQ3jTwEoOgYcjYaAI4CADcALzEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CACIASACABExcYbo2GgCOAQABACNDMRklEjEYEEMxGYEFEjEYEEM2GgFJIlkkCEsBFRJEVwIAIihlRClQTFBJFRZXBgJMUCpMULAjQzYaAUkVSwEiWUklEkRLAksBSwNSIlmBBghLAyRZSUsCEkRLBEsBSwVSSSJZJAhPAwhPBBJEIihlRClQTgROBFJXAgBQTFcCAFBJFRZXBgJMUCpMULAjQw==)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
@@ -214,7 +214,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         ((itxn_field ApplicationArgs) method "create()void")
         ((itxn_field GlobalNumByteSlice) 1u)
         ((itxn_field ClearStateProgramPages) C4EBQw==)
-        ((itxn_field ApprovalProgramPages) CyAEAAECBCYECGdyZWV0aW5nASAEFR98dQdib25qb3VyMRhAAAMoK2eCAgQkN408BKDoGHI2GgCOAgA5AC8xGRREMRhBABaCAgTQooIABFGAuiA2GgCOAgAmAEwAgARMXGG6NhoAjgEAAQAjQzEZJRIxGBBEI0MxGYEFEjEYEEQjQzYaAUkiWSQISwEVEkRXAgAiKGVEKVBMUEkVFlcGAkxQKkxQsCNDNhoBSRVLASJZSSUSREsCSwFLA1IiWYEGCEsDJFlJSwISREsESwFLBVJJIlkkCE8DCE8EEkQiKGVEKVBOBE4EUlcCAFBMVwIAUEkVFlcGAkxQKkxQsCND)
+        ((itxn_field ApprovalProgramPages) CyAEAAECBCYECGdyZWV0aW5nASAEFR98dQdib25qb3VyMRhAAAMoK2eCAgQkN408BKDoGHI2GgCOAgA3AC8xGRREMRhBABaCAgTQooIABFGAuiA2GgCOAgAiAEgAgARMXGG6NhoAjgEAAQAjQzEZJRIxGBBDMRmBBRIxGBBDNhoBSSJZJAhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwI0M2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMkWUlLAhJESwRLAUsFUkkiWSQITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwI0M=)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
@@ -254,7 +254,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
     block@0: // L98
         itxn_begin
         ((itxn_field ClearStateProgramPages) C4EBQw==)
-        ((itxn_field ApprovalProgramPages) CzEbQQAsggIEJDeNPAQCvzDPNhoAjgIACwABADEZFDEYEERCABcxGYEFEjEYEESBAUMxGRQxGBQQRIEBQ4GAIK8VFoAEFR98dUxQsIEBQw==)
+        ((itxn_field ApprovalProgramPages) CzEbQQApggIEJDeNPAQCvzDPNhoAjgIACwABADEZFDEYEERCABExGYEFEjEYEEMxGRQxGBQQQ4GAIK8VFoAEFR98dUxQsIEBQw==)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
@@ -291,7 +291,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_con
     block@0: // L114
         itxn_begin
         ((itxn_field ClearStateProgramPages) C4EBQw==)
-        ((itxn_field ApprovalProgramPages) CyACAQMxG0EAPDEZFEQxGESCBASPaJLvBJzYfeME02bIaQSBtnNSNhoAjgQAAQAcAG0AhgCADBUffHUAAAAAAAAAAbAiQzEZFDEYFBBEIkOAAEkxFiIJSTgQSSMSQQAfSwE4PElFBUEADksDFoAEFR98dUxQsCJDSwE4IUL/7UmBBhJBABZLATg9SUUEQQAFSwJC/9dLATgYQv/QgQBC/8sxFiIJSTgQIxJEOBeABhUffHUAIExQsCJDMRaBAgk4EEkjEkQxFiIJOBBJIhJETCMSRCISQw==)
+        ((itxn_field ApprovalProgramPages) CyACAQMxG0EAPDEZFEQxGESCBASPaJLvBJzYfeME02bIaQSBtnNSNhoAjgQAAQAaAGsAhACADBUffHUAAAAAAAAAAbAiQzEZFDEYFBBDgABJMRYiCUk4EEkjEkEAH0sBODxJRQVBAA5LAxaABBUffHVMULAiQ0sBOCFC/+1JgQYSQQAWSwE4PUlFBEEABUsCQv/XSwE4GEL/0IEAQv/LMRYiCUk4ECMSRDgXgAYVH3x1ACBMULAiQzEWgQIJOBBJIxJEMRYiCTgQSSISREwjEkQiEkQiQw==)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
@@ -391,7 +391,7 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_con
     block@0: // L157
         itxn_begin
         ((itxn_field ClearStateProgramPages) C4EBQw==)
-        ((itxn_field ApprovalProgramPages) CyACAQgxG0EAGIAEZmmNGDYaAI4BAAEAMRkUMRgQREIACjEZFDEYFBBEIkM2GgFJFSMSRBc2GgJJFYEgEkQ2GgNJFSMSRBdPAnIIRLBMsHEERLAiQw==)
+        ((itxn_field ApprovalProgramPages) CzEbQQAYgARmaY0YNhoAjgEAAQAxGRQxGBBEQgAIMRkUMRgUEEM2GgFJFYEIEkQXNhoCSRWBIBJENhoDSRWBCBJEF08CcghEsEywcQREsIEBQw==)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)

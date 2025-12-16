@@ -305,7 +305,7 @@ export namespace wtypes {
     }) {
       super({
         elementType,
-        name: `arc4.static_array<${elementType.name}>`,
+        name: `arc4.static_array<${elementType.name},${arraySize}>`,
         arc4Alias: arc4Alias ?? null,
         immutable,
       })

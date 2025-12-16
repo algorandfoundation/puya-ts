@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@17
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x89388ddd 0xef322d6d 0x02458807 0xcb81deb8 0xf79d6c46 0x91915545 0x3814f92a 0x007a4cb0 0x4d21bca6 0xa9bc61f1 // method "testVectorCreationAndEquality()void", method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)", method "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)", method "implicitCastingAndSpreading((uint64,uint64))void", method "toAndFromBytes((uint64,uint64))(uint64,uint64)", method "toNative((uint64,uint64))(uint64,uint64)", method "getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])", method "getMain()(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])", method "setLastCalled(string,uint64,uint64)void", method "setPlugin(string)void"
@@ -27,8 +27,6 @@ main___algots__.defaultCreate@17:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -173,8 +171,10 @@ implicitCastingAndSpreading:
     // tests/approvals/arc4-struct.algo.ts:36
     // assert(v3.bytes === v1.bytes)
     ==
+    assert
     // tests/approvals/arc4-struct.algo.ts:32
     // public implicitCastingAndSpreading(v1: Vector) {
+    intc_0 // 1
     return
 
 
@@ -222,7 +222,7 @@ getPlugin:
     dup
     intc_3 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len
@@ -300,7 +300,7 @@ setLastCalled:
     dup
     intc_3 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len
@@ -328,9 +328,9 @@ setLastCalled:
     // tests/approvals/arc4-struct.algo.ts:65
     // this.plugins(key).value.methods[index].lastCalled = new arc4.Uint64(lastCalled)
     uncover 2
-    pushint 20 // 20
+    pushint 20
     *
-    pushint 41 // 41
+    pushint 41
     +
     uncover 2
     box_replace
@@ -348,7 +348,7 @@ setPlugin:
     dup
     intc_3 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len
