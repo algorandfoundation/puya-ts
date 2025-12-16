@@ -20,8 +20,8 @@ describe('BoxProxies', async () => {
   test('BoxContract runs', async ({ BoxContractInvoker, algorand, testAccount }) => {
     const created = await BoxContractInvoker.send()
 
-    invariant(created.confirmation.applicationIndex, 'There must be an application id')
-    const appInfo = await algorand.app.getById(created.confirmation.applicationIndex)
+    invariant(created.confirmation.appId, 'There must be an application id')
+    const appInfo = await algorand.app.getById(created.confirmation.appId)
     // Fund the app account
     await algorand.send.payment({
       receiver: appInfo.appAddress,
@@ -29,7 +29,7 @@ describe('BoxProxies', async () => {
       amount: algos(1),
     })
     await BoxContractInvoker.send({
-      appId: created.confirmation.applicationIndex,
+      appId: created.confirmation.appId,
       boxReferences: ['A', 'one', 'abc', 'what?', 'twowhat?', 'three', 'what?x', 'twowhat?x'],
     })
   })
@@ -37,8 +37,8 @@ describe('BoxProxies', async () => {
   test('Box that does not exist should fail when accessed', async ({ BoxNotExistInvoker, algorand, testAccount }) => {
     const created = await BoxNotExistInvoker.send()
 
-    invariant(created.confirmation.applicationIndex, 'There must be an application id')
-    const appInfo = await algorand.app.getById(created.confirmation.applicationIndex)
+    invariant(created.confirmation.appId, 'There must be an application id')
+    const appInfo = await algorand.app.getById(created.confirmation.appId)
     // Fund the app account
     await algorand.send.payment({
       receiver: appInfo.appAddress,
@@ -49,14 +49,14 @@ describe('BoxProxies', async () => {
     // Accessing box.value when the box doesn't exist fails
     await expect(
       BoxNotExistInvoker.send({
-        appId: created.confirmation.applicationIndex,
+        appId: created.confirmation.appId,
         boxReferences: ['abc'],
         args: [utf8ToUint8Array('box')],
       }),
     ).rejects.toThrow(/assert failed/)
     await expect(
       BoxNotExistInvoker.send({
-        appId: created.confirmation.applicationIndex,
+        appId: created.confirmation.appId,
         boxReferences: ['abc'],
         args: [utf8ToUint8Array('boxmap')],
       }),
@@ -64,19 +64,19 @@ describe('BoxProxies', async () => {
 
     // Create the box
     await BoxNotExistInvoker.send({
-      appId: created.confirmation.applicationIndex,
+      appId: created.confirmation.appId,
       boxReferences: ['abc'],
       args: [utf8ToUint8Array('createbox')],
     })
 
     // Should work fine now the box exists
     await BoxNotExistInvoker.send({
-      appId: created.confirmation.applicationIndex,
+      appId: created.confirmation.appId,
       boxReferences: ['abc'],
       args: [utf8ToUint8Array('box')],
     })
     await BoxNotExistInvoker.send({
-      appId: created.confirmation.applicationIndex,
+      appId: created.confirmation.appId,
       boxReferences: ['abc'],
       args: [utf8ToUint8Array('boxmap')],
     })

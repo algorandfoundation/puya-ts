@@ -1,4 +1,4 @@
-import { Address } from 'algosdk'
+import { Address } from '@algorandfoundation/algokit-utils'
 import { describe, expect } from 'vitest'
 import { hexToUint8Array } from '../../src/util'
 import { createArc4TestFixture } from './util/test-fixture'
@@ -31,6 +31,6 @@ describe('template var', () => {
     const resultBytes = await appClientMyContract.send.call({ method: 'getBytes' })
     expect(resultBytes.return).toStrictEqual(templateVars.SOME_BYTES)
     const resultAddress = await appClientMyContract.send.call({ method: 'getAddress' })
-    expect(resultAddress.return).toStrictEqual(address.toString())
+    expect(resultAddress.return).toStrictEqual(address)
   })
 })
