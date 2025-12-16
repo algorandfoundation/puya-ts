@@ -14,7 +14,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         let tmp%7#0: bool = (&& tmp%4#0 tmp%6#0)
-        (assert tmp%7#0) // OnCompletion must be DeleteApplication && can only call when not creating
+        (assert tmp%7#0)
         tests/approvals/precompiled-apps.algo.ts::LargeProgram.delete[routing]()
         goto block@5
     block@4: // getBigBytesLength_route_L67
@@ -23,7 +23,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%10#0: uint64 = (txn ApplicationID)
         let tmp%11#0: bool = (!= tmp%10#0 0u)
         let tmp%12#0: bool = (&& tmp%9#0 tmp%11#0)
-        (assert tmp%12#0) // OnCompletion must be NoOp && can only call when not creating
+        (assert tmp%12#0)
         tests/approvals/precompiled-apps.algo.ts::LargeProgram.getBigBytesLength[routing]()
         goto block@5
     block@5: // switch_case_next_L66
@@ -34,7 +34,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%15#0: uint64 = (txn ApplicationID)
         let tmp%16#0: bool = (== tmp%15#0 0u)
         let tmp%17#0: bool = (&& tmp%14#0 tmp%16#0)
-        (assert tmp%17#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%17#0)
         tests/approvals/precompiled-apps.algo.ts::LargeProgram.__algots__.defaultCreate()
         exit 1u
     block@7: // after_if_else_L66

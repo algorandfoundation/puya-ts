@@ -2712,7 +2712,8 @@
                     }
                   ]
                 },
-                "error_message": "assert target is match for conditions"
+                "error_message": "assert target is match for conditions",
+                "explicit": true
               }
             }
           ],
@@ -2744,9 +2745,9 @@
           "create": 3,
           "name": "testVectorCreationAndEquality",
           "resource_encoding": "value",
-          "validate_encoding": null,
           "readonly": false,
-          "default_args": {}
+          "default_args": {},
+          "validate_encoding": null
         }
       },
       {
@@ -3113,9 +3114,9 @@
           "create": 3,
           "name": "addVectors",
           "resource_encoding": "value",
-          "validate_encoding": null,
           "readonly": false,
-          "default_args": {}
+          "default_args": {},
+          "validate_encoding": null
         }
       },
       {
@@ -3428,9 +3429,9 @@
           "create": 3,
           "name": "mutateVector",
           "resource_encoding": "value",
-          "validate_encoding": null,
           "readonly": false,
-          "default_args": {}
+          "default_args": {},
+          "validate_encoding": null
         }
       },
       {
@@ -4054,7 +4055,8 @@
                     "name": "x"
                   }
                 },
-                "error_message": null
+                "error_message": null,
+                "explicit": true
               }
             },
             {
@@ -4170,7 +4172,8 @@
                     "name": "y"
                   }
                 },
-                "error_message": null
+                "error_message": null,
+                "explicit": true
               }
             },
             {
@@ -4400,7 +4403,8 @@
                     }
                   ]
                 },
-                "error_message": "assert target is match for conditions"
+                "error_message": "assert target is match for conditions",
+                "explicit": true
               }
             },
             {
@@ -4516,7 +4520,8 @@
                     "name": "x"
                   }
                 },
-                "error_message": null
+                "error_message": null,
+                "explicit": true
               }
             },
             {
@@ -4632,7 +4637,8 @@
                     "name": "y"
                   }
                 },
-                "error_message": null
+                "error_message": null,
+                "explicit": true
               }
             },
             {
@@ -4862,7 +4868,8 @@
                     }
                   ]
                 },
-                "error_message": "assert target is match for conditions"
+                "error_message": "assert target is match for conditions",
+                "explicit": true
               }
             },
             {
@@ -5134,7 +5141,8 @@
                     "name": "x"
                   }
                 },
-                "error_message": null
+                "error_message": null,
+                "explicit": true
               }
             },
             {
@@ -5224,7 +5232,8 @@
                     "name": "y"
                   }
                 },
-                "error_message": null
+                "error_message": null,
+                "explicit": true
               }
             }
           ],
@@ -5256,9 +5265,9 @@
           "create": 3,
           "name": "implicitCastingAndSpreading",
           "resource_encoding": "value",
-          "validate_encoding": null,
           "readonly": false,
-          "default_args": {}
+          "default_args": {},
+          "validate_encoding": null
         }
       },
       {
@@ -8222,7 +8231,8 @@
                     }
                   ]
                 },
-                "error_message": "assert target is match for conditions"
+                "error_message": "assert target is match for conditions",
+                "explicit": true
               }
             }
           ],
@@ -8254,9 +8264,9 @@
           "create": 3,
           "name": "testNestedObjects",
           "resource_encoding": "value",
-          "validate_encoding": null,
           "readonly": false,
-          "default_args": {}
+          "default_args": {},
+          "validate_encoding": null
         }
       },
       {
@@ -8324,7 +8334,70 @@
                       "_type": "BytesWType",
                       "length": 4
                     },
-                    "value": "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)"
+                    "value": {
+                      "_type": "MethodSignature",
+                      "source_location": {
+                        "file": "tests/approvals/mutable-object.algo.ts",
+                        "line": 62,
+                        "end_line": 62,
+                        "column": 6,
+                        "end_column": 62
+                      },
+                      "name": "mutateVector",
+                      "arg_types": [
+                        {
+                          "_type": "ARC4Struct",
+                          "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                          "arc4_alias": null,
+                          "fields": {
+                            "x": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            },
+                            "y": {
+                              "_type": "WType",
+                              "name": "uint64",
+                              "immutable": true
+                            }
+                          },
+                          "source_location": null,
+                          "frozen": false,
+                          "desc": null
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "uint64",
+                          "immutable": true
+                        }
+                      ],
+                      "return_type": {
+                        "_type": "ARC4Struct",
+                        "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                        "arc4_alias": null,
+                        "fields": {
+                          "x": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          },
+                          "y": {
+                            "_type": "WType",
+                            "name": "uint64",
+                            "immutable": true
+                          }
+                        },
+                        "source_location": null,
+                        "frozen": false,
+                        "desc": null
+                      },
+                      "resource_encoding": "value"
+                    }
                   },
                   "operator": "==",
                   "rhs": {
@@ -8340,10 +8413,21 @@
                       "_type": "BytesWType",
                       "length": 4
                     },
-                    "value": "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)"
+                    "value": {
+                      "_type": "MethodSignatureString",
+                      "source_location": {
+                        "file": "tests/approvals/mutable-object.algo.ts",
+                        "line": 63,
+                        "end_line": 63,
+                        "column": 8,
+                        "end_column": 84
+                      },
+                      "value": "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)"
+                    }
                   }
                 },
-                "error_message": null
+                "error_message": null,
+                "explicit": true
               }
             },
             {
@@ -8386,7 +8470,94 @@
                       "_type": "BytesWType",
                       "length": 4
                     },
-                    "value": "getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])"
+                    "value": {
+                      "_type": "MethodSignature",
+                      "source_location": {
+                        "file": "tests/approvals/mutable-object.algo.ts",
+                        "line": 66,
+                        "end_line": 66,
+                        "column": 6,
+                        "end_column": 59
+                      },
+                      "name": "getPlugin",
+                      "arg_types": [
+                        {
+                          "_type": "WType",
+                          "name": "string",
+                          "immutable": true
+                        }
+                      ],
+                      "return_type": {
+                        "_type": "ARC4Struct",
+                        "name": "tests/approvals/mutable-object.algo.ts::PluginInfo",
+                        "arc4_alias": null,
+                        "fields": {
+                          "lastValidRound": {
+                            "_type": "ARC4UIntN",
+                            "arc4_alias": null,
+                            "n": 64
+                          },
+                          "cooldown": {
+                            "_type": "ARC4UIntN",
+                            "arc4_alias": null,
+                            "n": 64
+                          },
+                          "lastCalled": {
+                            "_type": "ARC4UIntN",
+                            "arc4_alias": null,
+                            "n": 64
+                          },
+                          "adminPrivileges": {
+                            "_type": "ARC4Type",
+                            "name": "arc4.bool",
+                            "immutable": true,
+                            "arc4_alias": null
+                          },
+                          "methods": {
+                            "_type": "ARC4DynamicArray",
+                            "immutable": false,
+                            "arc4_alias": null,
+                            "element_type": {
+                              "_type": "ARC4Struct",
+                              "name": "tests/approvals/mutable-object.algo.ts::MethodInfo",
+                              "arc4_alias": null,
+                              "fields": {
+                                "selector": {
+                                  "_type": "ARC4StaticArray",
+                                  "immutable": true,
+                                  "arc4_alias": null,
+                                  "element_type": {
+                                    "_type": "ARC4UIntN",
+                                    "arc4_alias": "byte",
+                                    "n": 8
+                                  },
+                                  "source_location": null,
+                                  "array_size": 4
+                                },
+                                "cooldown": {
+                                  "_type": "ARC4UIntN",
+                                  "arc4_alias": null,
+                                  "n": 64
+                                },
+                                "lastCalled": {
+                                  "_type": "ARC4UIntN",
+                                  "arc4_alias": null,
+                                  "n": 64
+                                }
+                              },
+                              "source_location": null,
+                              "frozen": false,
+                              "desc": null
+                            },
+                            "source_location": null
+                          }
+                        },
+                        "source_location": null,
+                        "frozen": false,
+                        "desc": null
+                      },
+                      "resource_encoding": "value"
+                    }
                   },
                   "operator": "==",
                   "rhs": {
@@ -8402,10 +8573,21 @@
                       "_type": "BytesWType",
                       "length": 4
                     },
-                    "value": "getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])"
+                    "value": {
+                      "_type": "MethodSignatureString",
+                      "source_location": {
+                        "file": "tests/approvals/mutable-object.algo.ts",
+                        "line": 67,
+                        "end_line": 67,
+                        "column": 8,
+                        "end_column": 96
+                      },
+                      "value": "getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])"
+                    }
                   }
                 },
-                "error_message": null
+                "error_message": null,
+                "explicit": true
               }
             },
             {
@@ -8448,7 +8630,75 @@
                       "_type": "BytesWType",
                       "length": 4
                     },
-                    "value": "testNestedObjects(((uint64,uint64),(uint64,uint64)))void"
+                    "value": {
+                      "_type": "MethodSignature",
+                      "source_location": {
+                        "file": "tests/approvals/mutable-object.algo.ts",
+                        "line": 70,
+                        "end_line": 70,
+                        "column": 6,
+                        "end_column": 67
+                      },
+                      "name": "testNestedObjects",
+                      "arg_types": [
+                        {
+                          "_type": "ARC4Struct",
+                          "name": "tests/approvals/mutable-object.algo.ts::VectorPoint",
+                          "arc4_alias": null,
+                          "fields": {
+                            "v": {
+                              "_type": "ARC4Struct",
+                              "name": "tests/approvals/mutable-object.algo.ts::Vector",
+                              "arc4_alias": null,
+                              "fields": {
+                                "x": {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                "y": {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                }
+                              },
+                              "source_location": null,
+                              "frozen": false,
+                              "desc": null
+                            },
+                            "p": {
+                              "_type": "ARC4Struct",
+                              "name": "tests/approvals/mutable-object.algo.ts::Point",
+                              "arc4_alias": null,
+                              "fields": {
+                                "y": {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                },
+                                "x": {
+                                  "_type": "WType",
+                                  "name": "uint64",
+                                  "immutable": true
+                                }
+                              },
+                              "source_location": null,
+                              "frozen": false,
+                              "desc": null
+                            }
+                          },
+                          "source_location": null,
+                          "frozen": false,
+                          "desc": null
+                        }
+                      ],
+                      "return_type": {
+                        "_type": "WType",
+                        "name": "void",
+                        "immutable": true
+                      },
+                      "resource_encoding": "value"
+                    }
                   },
                   "operator": "==",
                   "rhs": {
@@ -8464,10 +8714,21 @@
                       "_type": "BytesWType",
                       "length": 4
                     },
-                    "value": "testNestedObjects(((uint64,uint64),(uint64,uint64)))void"
+                    "value": {
+                      "_type": "MethodSignatureString",
+                      "source_location": {
+                        "file": "tests/approvals/mutable-object.algo.ts",
+                        "line": 71,
+                        "end_line": 71,
+                        "column": 8,
+                        "end_column": 82
+                      },
+                      "value": "testNestedObjects(((uint64,uint64),(uint64,uint64)))void"
+                    }
                   }
                 },
-                "error_message": null
+                "error_message": null,
+                "explicit": true
               }
             }
           ],
@@ -8499,9 +8760,9 @@
           "create": 3,
           "name": "testMethodSelector",
           "resource_encoding": "value",
-          "validate_encoding": null,
           "readonly": false,
-          "default_args": {}
+          "default_args": {},
+          "validate_encoding": null
         }
       },
       {
@@ -9130,7 +9391,8 @@
                     }
                   ]
                 },
-                "error_message": "assert target is match for conditions"
+                "error_message": "assert target is match for conditions",
+                "explicit": true
               }
             },
             {
@@ -9709,7 +9971,8 @@
                     }
                   ]
                 },
-                "error_message": "assert target is match for conditions"
+                "error_message": "assert target is match for conditions",
+                "explicit": true
               }
             },
             {
@@ -9799,7 +10062,8 @@
                     "name": "x"
                   }
                 },
-                "error_message": "assert target is match for conditions"
+                "error_message": "assert target is match for conditions",
+                "explicit": true
               }
             },
             {
@@ -9889,7 +10153,8 @@
                     "name": "x"
                   }
                 },
-                "error_message": "assert target is match for conditions"
+                "error_message": "assert target is match for conditions",
+                "explicit": true
               }
             }
           ],
@@ -9921,9 +10186,9 @@
           "create": 3,
           "name": "testAssertMatch",
           "resource_encoding": "value",
-          "validate_encoding": null,
           "readonly": false,
-          "default_args": {}
+          "default_args": {},
+          "validate_encoding": null
         }
       },
       {
@@ -10096,7 +10361,8 @@
                     "name": "y"
                   }
                 },
-                "error_message": "For the purpose of this test, a should not equal b"
+                "error_message": "For the purpose of this test, a should not equal b",
+                "explicit": true
               }
             },
             {
@@ -10822,7 +11088,8 @@
                     ]
                   }
                 },
-                "error_message": "Encoded order should be swapped"
+                "error_message": "Encoded order should be swapped",
+                "explicit": true
               }
             }
           ],
@@ -10854,9 +11121,9 @@
           "create": 3,
           "name": "testArc4Encoding",
           "resource_encoding": "value",
-          "validate_encoding": null,
           "readonly": false,
-          "default_args": {}
+          "default_args": {},
+          "validate_encoding": null
         }
       },
       {
@@ -11410,7 +11677,8 @@
                     "teal_alias": null
                   }
                 },
-                "error_message": "Last called not zero"
+                "error_message": "Last called not zero",
+                "explicit": true
               }
             },
             {
@@ -11532,9 +11800,9 @@
           "create": 3,
           "name": "getPlugin",
           "resource_encoding": "value",
-          "validate_encoding": null,
           "readonly": false,
-          "default_args": {}
+          "default_args": {},
+          "validate_encoding": null
         }
       },
       {
@@ -12045,7 +12313,8 @@
                     "teal_alias": null
                   }
                 },
-                "error_message": "Last called not zero"
+                "error_message": "Last called not zero",
+                "explicit": true
               }
             },
             {
@@ -12167,9 +12436,9 @@
           "create": 3,
           "name": "getMain",
           "resource_encoding": "value",
-          "validate_encoding": null,
           "readonly": false,
-          "default_args": {}
+          "default_args": {},
+          "validate_encoding": null
         }
       },
       {
@@ -12733,7 +13002,17 @@
                                           "_type": "BytesWType",
                                           "length": 4
                                         },
-                                        "value": "test()void"
+                                        "value": {
+                                          "_type": "MethodSignatureString",
+                                          "source_location": {
+                                            "file": "tests/approvals/mutable-object.algo.ts",
+                                            "line": 131,
+                                            "end_line": 131,
+                                            "column": 41,
+                                            "end_column": 69
+                                          },
+                                          "value": "test()void"
+                                        }
                                       }
                                     },
                                     "error_message": null
@@ -13090,7 +13369,17 @@
                                           "_type": "BytesWType",
                                           "length": 4
                                         },
-                                        "value": "test()void"
+                                        "value": {
+                                          "_type": "MethodSignatureString",
+                                          "source_location": {
+                                            "file": "tests/approvals/mutable-object.algo.ts",
+                                            "line": 131,
+                                            "end_line": 131,
+                                            "column": 41,
+                                            "end_column": 69
+                                          },
+                                          "value": "test()void"
+                                        }
                                       }
                                     },
                                     "error_message": null
@@ -13447,7 +13736,17 @@
                                           "_type": "BytesWType",
                                           "length": 4
                                         },
-                                        "value": "test()void"
+                                        "value": {
+                                          "_type": "MethodSignatureString",
+                                          "source_location": {
+                                            "file": "tests/approvals/mutable-object.algo.ts",
+                                            "line": 131,
+                                            "end_line": 131,
+                                            "column": 41,
+                                            "end_column": 69
+                                          },
+                                          "value": "test()void"
+                                        }
                                       }
                                     },
                                     "error_message": null
@@ -13804,7 +14103,17 @@
                                           "_type": "BytesWType",
                                           "length": 4
                                         },
-                                        "value": "test()void"
+                                        "value": {
+                                          "_type": "MethodSignatureString",
+                                          "source_location": {
+                                            "file": "tests/approvals/mutable-object.algo.ts",
+                                            "line": 131,
+                                            "end_line": 131,
+                                            "column": 41,
+                                            "end_column": 69
+                                          },
+                                          "value": "test()void"
+                                        }
                                       }
                                     },
                                     "error_message": null
@@ -14287,7 +14596,17 @@
                                                           "_type": "BytesWType",
                                                           "length": 4
                                                         },
-                                                        "value": "test()void"
+                                                        "value": {
+                                                          "_type": "MethodSignatureString",
+                                                          "source_location": {
+                                                            "file": "tests/approvals/mutable-object.algo.ts",
+                                                            "line": 131,
+                                                            "end_line": 131,
+                                                            "column": 41,
+                                                            "end_column": 69
+                                                          },
+                                                          "value": "test()void"
+                                                        }
                                                       }
                                                     },
                                                     "error_message": null
@@ -14688,7 +15007,17 @@
                                                           "_type": "BytesWType",
                                                           "length": 4
                                                         },
-                                                        "value": "test()void"
+                                                        "value": {
+                                                          "_type": "MethodSignatureString",
+                                                          "source_location": {
+                                                            "file": "tests/approvals/mutable-object.algo.ts",
+                                                            "line": 131,
+                                                            "end_line": 131,
+                                                            "column": 41,
+                                                            "end_column": 69
+                                                          },
+                                                          "value": "test()void"
+                                                        }
                                                       }
                                                     },
                                                     "error_message": null
@@ -15089,7 +15418,17 @@
                                                           "_type": "BytesWType",
                                                           "length": 4
                                                         },
-                                                        "value": "test()void"
+                                                        "value": {
+                                                          "_type": "MethodSignatureString",
+                                                          "source_location": {
+                                                            "file": "tests/approvals/mutable-object.algo.ts",
+                                                            "line": 131,
+                                                            "end_line": 131,
+                                                            "column": 41,
+                                                            "end_column": 69
+                                                          },
+                                                          "value": "test()void"
+                                                        }
                                                       }
                                                     },
                                                     "error_message": null
@@ -15182,9 +15521,9 @@
           "create": 3,
           "name": "setPlugin",
           "resource_encoding": "value",
-          "validate_encoding": null,
           "readonly": false,
-          "default_args": {}
+          "default_args": {},
+          "validate_encoding": null
         }
       },
       {

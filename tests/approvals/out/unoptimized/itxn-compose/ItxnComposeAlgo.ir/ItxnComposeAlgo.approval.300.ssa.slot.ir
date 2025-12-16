@@ -8,7 +8,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L18
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
         goto tmp%5#0 ? block@3 : block@7
@@ -18,7 +18,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@4: // distribute_route_L19
         tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.distribute[routing]()
         goto block@6
-    block@5: // conditionalBegin_route_L52
+    block@5: // conditionalBegin_route_L54
         tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegin[routing]()
         goto block@6
     block@6: // switch_case_next_L18
@@ -33,7 +33,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (== tmp%9#0 0u)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.__algots__.defaultCreate()
         exit 1u
     block@10: // after_if_else_L18
@@ -68,7 +68,7 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.distribute[rout
         exit 1u
 
 subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegin[routing]() -> void:
-    block@0: // L52
+    block@0: // L54
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 8u)
@@ -175,9 +175,9 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.distribute(addr
     block@4: // after_for_L32
         itxn_next
         let inner_txn_params%2%%param_ApplicationID_idx_0#0: uint64 = verifier#0
-        ((itxn_field ApplicationArgs) method "verify()void")
         ((itxn_field ApplicationID) inner_txn_params%2%%param_ApplicationID_idx_0#0)
-        ((itxn_field TypeEnum) appl)
+        ((itxn_field ApplicationArgs) method "verify()void")
+        ((itxn_field TypeEnum) 6u)
         ((itxn_field Fee) 0u)
         itxn_next
         ((itxn_field ConfigAssetName) "abc")
@@ -187,7 +187,7 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.distribute(addr
         return 
 
 subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegin(count: uint64) -> void:
-    block@0: // L52
+    block@0: // L54
         itxn_begin
         let aggregate%length%0#0: uint64 = (len "Hi")
         let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
@@ -211,23 +211,23 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegi
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@1
-    block@1: // next_txn_L54
+    block@1: // next_txn_L56
         itxn_submit
         let tmp%1#0: uint64 = (gitxn 0 CreatedApplicationID)
         let appId#0: uint64 = tmp%1#0
         (assert 1u) // Step cannot be zero
         let value_internal%0#0: uint64 = 0u
         goto block@2
-    block@2: // for_header_L56
+    block@2: // for_header_L58
         let value_internal%0#1: uint64 = φ(value_internal%0#0 <- block@1, value_internal%0#2 <- block@7)
         let continue_looping%0#0: bool = (< value_internal%0#1 count#0)
         goto continue_looping%0#0 ? block@3 : block@8
-    block@3: // for_body_L56
+    block@3: // for_body_L58
         let temp#0: uint64 = value_internal%0#1
         let i#0: uint64 = temp#0
         let tmp%2#0: bool = (== i#0 0u)
         goto tmp%2#0 ? block@4 : block@5
-    block@4: // if_body_L57
+    block@4: // if_body_L59
         itxn_begin
         let inner_txn_params%1%%param_ApplicationID_idx_0#0: uint64 = appId#0
         let aggregate%length%1#0: uint64 = (len "ho")
@@ -243,7 +243,7 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegi
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@6
-    block@5: // else_body_L59
+    block@5: // else_body_L61
         itxn_next
         let inner_txn_params%2%%param_ApplicationID_idx_0#0: uint64 = appId#0
         let aggregate%length%2#0: uint64 = (len "ho")
@@ -259,12 +259,12 @@ subroutine tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegi
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@6
-    block@6: // after_if_else_L57
+    block@6: // after_if_else_L59
         goto block@7
-    block@7: // for_footer_L56
+    block@7: // for_footer_L58
         let value_internal%0#2: uint64 = (+ value_internal%0#1 1u)
         goto block@2
-    block@8: // after_for_L56
+    block@8: // after_for_L58
         itxn_submit
         return 
 

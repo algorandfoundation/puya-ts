@@ -20,7 +20,7 @@ main_testPay_route@3:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     txn GroupIndex
     intc_0 // 1
     -
@@ -49,7 +49,7 @@ main_testPay_route@3:
     dup
     // tests/approvals/assert-match.algo.ts:11
     // amount: { between: [100_000, 105_000] },
-    pushint 105000 // 105000
+    pushint 105000
     // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
@@ -63,7 +63,7 @@ main_testPay_route@3:
     swap
     // tests/approvals/assert-match.algo.ts:11
     // amount: { between: [100_000, 105_000] },
-    pushint 100000 // 100000
+    pushint 100000
     // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
@@ -143,7 +143,7 @@ main_testPay_route@3:
     gtxns LastValid
     // tests/approvals/assert-match.algo.ts:16
     // lastValid: { lessThan: 2 ** 40 },
-    pushint 1099511627776 // 1099511627776
+    pushint 1099511627776
     // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
@@ -171,6 +171,4 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return

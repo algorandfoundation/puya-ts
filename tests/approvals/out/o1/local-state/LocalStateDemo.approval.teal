@@ -14,7 +14,7 @@ main:
     match main_optIn_route@3
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0xaaefcb43 0x0ea2c469 0x11170534 0x2793c249 0x213631f5 // method "setState((uint64,byte[]),uint64[10])void", method "getState()(uint64,uint64,byte[],byte[],uint64[10],(uint64,byte[]),(uint64,byte[]),(uint64,byte[],bool,string))", method "clearState()void", method "writeDynamicLocalState(string,string)string", method "readDynamicLocalState(string)string"
@@ -30,8 +30,6 @@ main_optIn_route@3:
     ==
     txn ApplicationID
     &&
-    assert // OnCompletion must be OptIn && can only call when not creating
-    intc_1 // 1
     return
 
 main___algots__.defaultCreate@14:
@@ -42,8 +40,6 @@ main___algots__.defaultCreate@14:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_1 // 1
     return
 
 
@@ -58,7 +54,7 @@ setState:
     intc_2 // 8
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 10 // 10
+    pushint 10
     ==
     assert // invalid tail pointer at index 1 of (uint64,(len+uint8[]))
     dig 2
@@ -68,7 +64,7 @@ setState:
     dup
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 12 // 12
+    pushint 12
     +
     uncover 2
     ==
@@ -76,7 +72,7 @@ setState:
     txna ApplicationArgs 2
     dup
     len
-    pushint 80 // 80
+    pushint 80
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint64, 10>
     uncover 2
@@ -172,7 +168,7 @@ setState:
     // this.localMutableObject(Txn.sender).value = { a, b, c: true, d: new arc4.Str('hello') }
     dup
     len
-    pushint 13 // 13
+    pushint 13
     +
     uncover 2
     pushbytes 0x000d80
@@ -338,7 +334,7 @@ getState:
     concat
     dig 1
     len
-    pushint 106 // 106
+    pushint 106
     +
     dig 9
     len

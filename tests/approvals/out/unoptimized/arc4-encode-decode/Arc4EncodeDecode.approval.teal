@@ -25,7 +25,7 @@ main_abi_routing@2:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_0 // 0
     !=
@@ -93,7 +93,7 @@ main___algots__.defaultCreate@9:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -106,7 +106,7 @@ ensure_budget:
 
 ensure_budget_block@0:
     frame_dig -2
-    pushint 10 // 10
+    pushint 10
     +
     b ensure_budget_while_top@1
 
@@ -176,7 +176,7 @@ testEncoding_block@0:
     txna ApplicationArgs 3
     dup
     len
-    pushint 64 // 64
+    pushint 64
     ==
     assert // invalid number of bytes for arc4.uint512
     txna ApplicationArgs 4
@@ -208,13 +208,13 @@ testEncoding_block@0:
     txna ApplicationArgs 6
     dup
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 7
     dup
     len
-    pushint 12 // 12
+    pushint 12
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 12>
     uncover 6
@@ -295,7 +295,7 @@ testDecoding_block@0:
     txna ApplicationArgs 5
     dup
     len
-    pushint 64 // 64
+    pushint 64
     ==
     assert // invalid number of bytes for arc4.uint512
     txna ApplicationArgs 6
@@ -345,7 +345,7 @@ testDecoding_block@0:
     intc_3 // 8
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 10 // 10
+    pushint 10
     ==
     assert // invalid tail pointer at index 1 of (uint64,(len+uint8[]))
     dig 1
@@ -358,7 +358,7 @@ testDecoding_block@0:
     *
     intc_2 // 2
     +
-    pushint 10 // 10
+    pushint 10
     +
     dig 1
     len
@@ -380,7 +380,7 @@ testDecoding_block@0:
     txna ApplicationArgs 11
     dup
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 12
@@ -399,7 +399,7 @@ testDecoding_block@0:
     txna ApplicationArgs 13
     dup
     len
-    pushint 12 // 12
+    pushint 12
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 12>
     txna ApplicationArgs 14
@@ -444,7 +444,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding:
 tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@0:
     // tests/approvals/arc4-encode-decode.algo.ts:26
     // ensureBudget(1400)
-    pushint 1400 // 1400
+    pushint 1400
     intc_0 // 0
     callsub ensure_budget
     // tests/approvals/arc4-encode-decode.algo.ts:27
@@ -471,19 +471,19 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     // assert(encodeArc4(c) === new Uint<512>(c).bytes)
     frame_dig -5
     len
-    pushint 64 // 64
+    pushint 64
     <=
     assert // overflow
-    pushint 64 // 64
+    pushint 64
     bzero
     frame_dig -5
     b|
     frame_dig -5
     len
-    pushint 64 // 64
+    pushint 64
     <=
     assert // overflow
-    pushint 64 // 64
+    pushint 64
     bzero
     frame_dig -5
     b|
@@ -534,7 +534,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     extract 6 2
     frame_dig -4
     concat
-    pushint 10 // 10
+    pushint 10
     itob
     extract 6 2
     uncover 2
@@ -553,7 +553,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     bytec_0 // 0x
     uncover 2
     concat
-    pushint 10 // 10
+    pushint 10
     itob
     extract 6 2
     concat
@@ -574,7 +574,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     extract 6 2
     frame_dig -4
     concat
-    pushint 10 // 10
+    pushint 10
     itob
     extract 6 2
     uncover 2
@@ -593,7 +593,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     bytec_0 // 0x
     uncover 1
     concat
-    pushint 10 // 10
+    pushint 10
     itob
     extract 6 2
     concat
@@ -609,15 +609,10 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     uncover 1
     concat
     frame_dig -1
-    len
-    pushint 12 // 12
-    ==
-    assert // invalid size
-    frame_dig -1
     concat
     frame_dig -1
     len
-    pushint 12 // 12
+    pushint 12
     ==
     assert // invalid size
     frame_dig -1
@@ -639,14 +634,9 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     // tests/approvals/arc4-encode-decode.algo.ts:36
     // assert(encodeArc4(g) === new StaticBytes(g).bytes)
     frame_dig -1
-    len
-    pushint 12 // 12
-    ==
-    assert // invalid size
-    frame_dig -1
     frame_dig -1
     len
-    pushint 12 // 12
+    pushint 12
     ==
     assert // invalid size
     frame_dig -1
@@ -688,10 +678,10 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     // assert(encodeArc4([c]) === new StaticArray(new Uint<512>(c)).bytes)
     frame_dig -5
     len
-    pushint 64 // 64
+    pushint 64
     <=
     assert // overflow
-    pushint 64 // 64
+    pushint 64
     bzero
     frame_dig -5
     b|
@@ -700,10 +690,10 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     concat
     frame_dig -5
     len
-    pushint 64 // 64
+    pushint 64
     <=
     assert // overflow
-    pushint 64 // 64
+    pushint 64
     bzero
     frame_dig -5
     b|
@@ -789,17 +779,12 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     // tests/approvals/arc4-encode-decode.algo.ts:44
     // assert(encodeArc4([g]) === new StaticArray(new StaticBytes(g)).bytes)
     frame_dig -1
-    len
-    pushint 12 // 12
-    ==
-    assert // invalid size
-    frame_dig -1
     bytec_0 // 0x
     uncover 1
     concat
     frame_dig -1
     len
-    pushint 12 // 12
+    pushint 12
     ==
     assert // invalid size
     frame_dig -1
@@ -853,20 +838,20 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     extract 6 2
     frame_dig -5
     len
-    pushint 64 // 64
+    pushint 64
     <=
     assert // overflow
-    pushint 64 // 64
+    pushint 64
     bzero
     frame_dig -5
     b|
     concat
     frame_dig -5
     len
-    pushint 64 // 64
+    pushint 64
     <=
     assert // overflow
-    pushint 64 // 64
+    pushint 64
     bzero
     frame_dig -5
     b|
@@ -969,15 +954,10 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     itob
     extract 6 2
     frame_dig -1
-    len
-    pushint 12 // 12
-    ==
-    assert // invalid size
-    frame_dig -1
     concat
     frame_dig -1
     len
-    pushint 12 // 12
+    pushint 12
     ==
     assert // invalid size
     frame_dig -1
@@ -1002,44 +982,44 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     assert
     // tests/approvals/arc4-encode-decode.algo.ts:56
     // assert(sizeOf<Uint<512>>() === 64)
-    pushint 64 // 64
-    pushint 64 // 64
+    pushint 64
+    pushint 64
     ==
     assert
     // tests/approvals/arc4-encode-decode.algo.ts:57
     // assert(sizeOf<[uint64, uint64, boolean]>() === 17)
-    pushint 17 // 17
-    pushint 17 // 17
+    pushint 17
+    pushint 17
     ==
     assert
     // tests/approvals/arc4-encode-decode.algo.ts:58
     // assert(sizeOf<[uint64, uint64, boolean, boolean]>() === 17)
-    pushint 17 // 17
-    pushint 17 // 17
+    pushint 17
+    pushint 17
     ==
     assert
     // tests/approvals/arc4-encode-decode.algo.ts:59
     // assert(sizeOf<[StaticArray<Bool, 10>, boolean, boolean]>() === 3)
-    pushint 3 // 3
-    pushint 3 // 3
+    pushint 3
+    pushint 3
     ==
     assert
     // tests/approvals/arc4-encode-decode.algo.ts:60
     // assert(sizeOf<[[boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean], boolean, boolean]>() === 3)
-    pushint 3 // 3
-    pushint 3 // 3
+    pushint 3
+    pushint 3
     ==
     assert
     // tests/approvals/arc4-encode-decode.algo.ts:61
     // assert(sizeOf<typeof g>() === 12)
-    pushint 12 // 12
-    pushint 12 // 12
+    pushint 12
+    pushint 12
     ==
     assert
     // tests/approvals/arc4-encode-decode.algo.ts:62
     // assert(sizeOf<StaticMutableObject>() === 20)
-    pushint 20 // 20
-    pushint 20 // 20
+    pushint 20
+    pushint 20
     ==
     assert
     retsub
@@ -1134,21 +1114,18 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     // const lenPrefix = itob(1).slice(6, 8)
     intc_1 // 1
     itob
-    dup
-    len
-    pushint 6 // 6
-    dig 1
+    pushint 6
+    intc_3 // 8
     >=
-    pushint 6 // 6
-    dig 2
+    pushint 6
+    intc_3 // 8
     uncover 2
     select
-    cover 1
     intc_3 // 8
-    dig 1
+    intc_3 // 8
     >=
     intc_3 // 8
-    uncover 2
+    intc_3 // 8
     uncover 2
     select
     uncover 2
@@ -1159,21 +1136,18 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     // const offsetHeader = itob(2).slice(6, 8)
     intc_2 // 2
     itob
-    dup
-    len
-    pushint 6 // 6
-    dig 1
+    pushint 6
+    intc_3 // 8
     >=
-    pushint 6 // 6
-    dig 2
+    pushint 6
+    intc_3 // 8
     uncover 2
     select
-    cover 1
     intc_3 // 8
-    dig 1
+    intc_3 // 8
     >=
     intc_3 // 8
-    uncover 2
+    intc_3 // 8
     uncover 2
     select
     uncover 2
@@ -1231,7 +1205,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     >
     assert // index access is out of bounds
     intc_0 // 0
-    pushint 16 // 16
+    pushint 16
     +
     getbit
     frame_dig -12
@@ -1265,9 +1239,9 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     uncover 2
     substring3
     intc_0 // 0
-    pushint 64 // 64
+    pushint 64
     *
-    pushint 64 // 64
+    pushint 64
     extract3 // on error: index access is out of bounds
     frame_dig -10
     b==
@@ -1498,9 +1472,9 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     uncover 2
     substring3
     intc_0 // 0
-    pushint 32 // 32
+    pushint 32
     *
-    pushint 32 // 32
+    pushint 32
     extract3 // on error: index access is out of bounds
     frame_dig -4
     ==

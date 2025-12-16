@@ -21,18 +21,18 @@ main_testWhile_route@3:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
     bury 1
     // tests/approvals/while-loops.algo.ts:6
     // let i = Uint64(0)
-    pushint 0 // 0
+    pushint 0
     bury 2
 
 main_while_top@9:
@@ -48,7 +48,7 @@ main_while_top@9:
     // tests/approvals/while-loops.algo.ts:8
     // i += 1
     dig 1
-    pushint 1 // 1
+    pushint 1
     +
     bury 2
     b main_while_top@9
@@ -62,7 +62,7 @@ main_after_while@11:
     swap
     concat
     log
-    pushint 1 // 1
+    pushint 1
     return
 
 main___algots__.defaultCreate@5:
@@ -73,6 +73,4 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
     return

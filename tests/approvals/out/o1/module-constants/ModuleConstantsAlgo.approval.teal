@@ -10,7 +10,7 @@ main:
     bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x687a073d 0x0a0c480e 0x0510a934 0x773153a7 // method "getBoolConstants()(bool,bool)", method "getUintConstants()(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)", method "getBigUintConstants()(uint512,uint512,uint512,uint512,uint512,uint512,uint512,uint512)", method "getStringConstants()string[]"
@@ -58,6 +58,4 @@ main___algots__.defaultCreate@11:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return

@@ -10,7 +10,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%4#0: bool = (! tmp%3#0)
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%7#0: bool = (&& tmp%4#0 tmp%5#0)
-        (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
+        (assert tmp%7#0)
         let aggregate%encoded_bool%0#0: bytes[1] = (setbit 0x00 0u 1u)
         let aggregate%as_Encoded(bool8)%0#0: Encoded(bool8) = aggregate%encoded_bool%0#0
         let tmp%1#1: Encoded(bool8) = aggregate%as_Encoded(bool8)%0#0
@@ -25,5 +25,5 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%10#0: uint64 = (txn ApplicationID)
         let tmp%11#0: bool = (! tmp%10#0)
         let tmp%12#0: bool = (&& tmp%9#0 tmp%11#0)
-        (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%12#0)
         exit 1u

@@ -21,7 +21,7 @@ main_test_route@3:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     b test
 
 main___algots__.defaultCreate@5:
@@ -32,8 +32,6 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_1 // 1
     return
 
 
@@ -52,7 +50,7 @@ test:
     btoi
 
 test_while_top@6:
-    pushint 2010 // 2010
+    pushint 2010
     global OpcodeBudget
     >
     bz test_after_while@11
@@ -157,7 +155,7 @@ test_after_while@4:
     swap
     extract_uint64
     uncover 2
-    pushint 2 // 2
+    pushint 2
     -
     ==
     assert
@@ -167,6 +165,8 @@ test_after_while@4:
     extract_uint64
     intc_1 // 1
     ==
+    assert
     // tests/approvals/reference-arrays.algo.ts:5
     // test(length: uint64) {
+    intc_1 // 1
     return

@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@18
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x89388ddd 0xef322d6d 0x02458807 0xcb81deb8 0xba27a9ba 0x2f670a55 0xd4c81f5b 0xf4835c23 0x3814f92a 0x007a4cb0 0xa9bc61f1 // method "testVectorCreationAndEquality()void", method "addVectors((uint64,uint64),(uint64,uint64))(uint64,uint64)", method "mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)", method "implicitCastingAndSpreading((uint64,uint64))void", method "testNestedObjects(((uint64,uint64),(uint64,uint64)))void", method "testMethodSelector()void", method "testAssertMatch(uint64)void", method "testArc4Encoding((uint64,uint64))void", method "getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])", method "getMain()(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])", method "setPlugin(string)void"
@@ -26,7 +26,7 @@ main_setPlugin_route@14:
     dup
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len
@@ -99,7 +99,7 @@ main_getPlugin_route@12:
     dup
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len
@@ -212,7 +212,7 @@ main_testAssertMatch_route@10:
     // tests/approvals/mutable-object.algo.ts:78
     // y: (b = x * 2),
     dup
-    pushint 2 // 2
+    pushint 2
     *
     // tests/approvals/mutable-object.algo.ts:77-80
     // const obj: Vector = {
@@ -291,7 +291,7 @@ main_testNestedObjects_route@8:
     txna ApplicationArgs 1
     dup
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert // invalid number of bytes for tests/approvals/mutable-object.algo.ts::VectorPoint
     // tests/approvals/mutable-object.algo.ts:50
@@ -564,6 +564,4 @@ main___algots__.defaultCreate@18:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_2 // 1
     return

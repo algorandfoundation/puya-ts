@@ -12,7 +12,7 @@ main_block@1:
     // tests/approvals/box-proxies.algo.ts:166
     // class BoxMapTest extends Contract {
     txn NumAppArgs
-    pushint 0 // 0
+    pushint 0
     !=
     bz main___algots__.defaultCreate@3
     b main_abi_routing@2
@@ -32,12 +32,12 @@ main___algots__.defaultCreate@3:
     pushint 0 // NoOp
     ==
     txn ApplicationID
-    pushint 0 // 0
+    pushint 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
-    pushint 1 // 1
+    pushint 1
     return
 
 

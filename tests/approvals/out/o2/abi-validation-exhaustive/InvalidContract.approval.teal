@@ -7,7 +7,7 @@ main:
     // class InvalidContract extends Contract {
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     bz main_create_NoOp@5
     pushbytes 0x45cf05ef // method "invalidValue()uint64[3]"
@@ -20,7 +20,7 @@ main_invalidValue_route@3:
     // invalidValue() {
     pushbytes 0x151f7c75696e76616c6964
     log
-    pushint 1 // 1
+    pushint 1
     return
 
 main_create_NoOp@5:
@@ -34,5 +34,5 @@ main_create_NoOp@5:
 main_create_route@6:
     // tests/approvals/abi-validation-exhaustive.algo.ts:149
     // @arc4.abimethod({ onCreate: 'require' })
-    pushint 1 // 1
+    pushint 1
     return

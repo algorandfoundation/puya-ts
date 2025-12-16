@@ -6,7 +6,7 @@ main:
     bytecblock 0x068101
 
 main_while_top@2:
-    pushint 1410 // 1410
+    pushint 1410
     global OpcodeBudget
     >
     bz main_after_while@7
@@ -19,7 +19,7 @@ main_while_top@2:
     itxn_field ApprovalProgram
     bytec_0 // 0x068101
     itxn_field ClearStateProgram
-    pushint 0 // 0
+    pushint 0
     itxn_field Fee
     itxn_submit
     b main_while_top@2
@@ -40,5 +40,5 @@ main_after_while@7:
     assert // Zero address should not match sender
     // tests/approvals/arc4-types.algo.ts:209
     // return true
-    pushint 1 // 1
+    pushint 1
     return

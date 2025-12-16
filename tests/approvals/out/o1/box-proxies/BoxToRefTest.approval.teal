@@ -3,7 +3,6 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0
     // tests/approvals/box-proxies.algo.ts:235
     // class BoxToRefTest extends Contract {
     txn NumAppArgs
@@ -20,7 +19,7 @@ main_test_route@3:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     b test
 
 main___algots__.defaultCreate@5:
@@ -31,8 +30,6 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -44,25 +41,25 @@ test:
     // tests/approvals/box-proxies.algo.ts:241
     // boxForCaller.create()
     dup
-    pushint 4 // 4
+    pushint 4
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:245
     // boxRef.replace(0, new arc4.Uint8(123).bytes)
     dup
-    intc_1 // 0
+    pushint 0
     pushbytes 0x7b
     box_replace
     // tests/approvals/box-proxies.algo.ts:247
     // assert(boxForCaller.value[0].asUint64() === 123, 'First array item in box should be 123')
     box_get
     pop
-    intc_1 // 0
+    pushint 0
     getbyte
-    pushint 123 // 123
+    pushint 123
     ==
     assert // First array item in box should be 123
     // tests/approvals/box-proxies.algo.ts:238
     // test() {
-    intc_0 // 1
+    pushint 1
     return

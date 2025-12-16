@@ -64,9 +64,9 @@ contract MutableObjectDemo
   
   testMethodSelector(): void
   {
-    assert(Method("mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)") == Method("mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)"))
-    assert(Method("getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])") == Method("getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])"))
-    assert(Method("testNestedObjects(((uint64,uint64),(uint64,uint64)))void") == Method("testNestedObjects(((uint64,uint64),(uint64,uint64)))void"))
+    assert(Method(signature="mutateVector(tests/approvals/mutable-object.algo.ts::Vector,uint64,uint64)tests/approvals/mutable-object.algo.ts::Vector", resource_encoding="value") == Method("mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)"))
+    assert(Method(signature="getPlugin(string)tests/approvals/mutable-object.algo.ts::PluginInfo", resource_encoding="value") == Method("getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])"))
+    assert(Method(signature="testNestedObjects(tests/approvals/mutable-object.algo.ts::VectorPoint)void", resource_encoding="value") == Method("testNestedObjects(((uint64,uint64),(uint64,uint64)))void"))
   }
   
   testAssertMatch(x: uint64): void
@@ -104,7 +104,7 @@ contract MutableObjectDemo
   
   setPlugin(key: string): void
   {
-    Box[BoxMapKey(prefix="plugins", key=key)].value: tests/approvals/mutable-object.algo.ts::PluginInfo = new tests/approvals/mutable-object.algo.ts::PluginInfo(lastValidRound=($13 = #{ lastValidRound: 1, cooldown: 0, lastCalled: 0, adminPrivileges: False, methods: #[#{ selector: ARC4_ENCODE(reinterpret_cast<bytes>(Method("test()void")), wtype=arc4.static_array<arc4.byte>), cooldown: 1, lastCalled: 1 }] }).lastValidRound, cooldown=$13.cooldown, lastCalled=$13.lastCalled, adminPrivileges=$13.adminPrivileges, methods=new arc4.dynamic_array<tests/approvals/mutable-object.algo.ts::MethodInfo>(new tests/approvals/mutable-object.algo.ts::MethodInfo(selector=($14 = ($15 = $13.methods).0).selector, cooldown=$14.cooldown, lastCalled=$14.lastCalled)))
+    Box[BoxMapKey(prefix="plugins", key=key)].value: tests/approvals/mutable-object.algo.ts::PluginInfo = new tests/approvals/mutable-object.algo.ts::PluginInfo(lastValidRound=($13 = #{ lastValidRound: 1, cooldown: 0, lastCalled: 0, adminPrivileges: False, methods: #[#{ selector: ARC4_ENCODE(reinterpret_cast<bytes>(Method("test()void")), wtype=arc4.static_array<arc4.byte,4>), cooldown: 1, lastCalled: 1 }] }).lastValidRound, cooldown=$13.cooldown, lastCalled=$13.lastCalled, adminPrivileges=$13.adminPrivileges, methods=new arc4.dynamic_array<tests/approvals/mutable-object.algo.ts::MethodInfo>(new tests/approvals/mutable-object.algo.ts::MethodInfo(selector=($14 = ($15 = $13.methods).0).selector, cooldown=$14.cooldown, lastCalled=$14.lastCalled)))
   }
   
   __algots__.defaultCreate(): void

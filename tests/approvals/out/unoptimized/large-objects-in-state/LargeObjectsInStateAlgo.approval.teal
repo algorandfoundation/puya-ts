@@ -25,7 +25,7 @@ main_abi_routing@2:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_0 // 0
     !=
@@ -92,7 +92,7 @@ main___algots__.defaultCreate@11:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -237,7 +237,7 @@ tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.bootstra
     bytec_0 // "x"
     // tests/approvals/large-objects-in-state.algo.ts:26
     // this.storage.create()
-    pushint 7200 // 7200
+    pushint 7200
     box_create
     pop
     retsub
@@ -251,58 +251,43 @@ tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increase
     b tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount_block@0
 
 tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount_block@0:
-    // tests/approvals/large-objects-in-state.algo.ts:15
-    // storage = Box<FixedArray<Counts, typeof MAX_ITEMS>>({ key: 'x' })
-    bytec_0 // "x"
     // tests/approvals/large-objects-in-state.algo.ts:30
     // this.storage.value[index].x += xCount
-    box_get
-    assert // Box must have value
     frame_dig -2
     intc_2 // 9
     *
-    intc_2 // 9
-    extract3 // on error: index access is out of bounds
     intc_0 // 0
-    intc_3 // 8
-    extract3
-    btoi
-    frame_dig -1
     +
     // tests/approvals/large-objects-in-state.algo.ts:15
     // storage = Box<FixedArray<Counts, typeof MAX_ITEMS>>({ key: 'x' })
     bytec_0 // "x"
     // tests/approvals/large-objects-in-state.algo.ts:30
     // this.storage.value[index].x += xCount
-    box_get
-    assert // Box must have value
-    cover 1
-    itob
-    cover 1
-    frame_dig -2
-    intc_2 // 9
-    *
-    dig 1
     uncover 1
     intc_2 // 9
-    extract3 // on error: index access is out of bounds
+    box_extract
     intc_0 // 0
-    uncover 3
-    replace3
+    intc_3 // 8
+    extract3
+    btoi
+    frame_dig -1
+    +
+    itob
     frame_dig -2
     intc_2 // 9
     *
-    uncover 2
-    uncover 1
-    uncover 2
-    replace3 // on error: index access is out of bounds
+    intc_0 // 0
+    +
+    intc_0 // 0
+    +
     // tests/approvals/large-objects-in-state.algo.ts:15
     // storage = Box<FixedArray<Counts, typeof MAX_ITEMS>>({ key: 'x' })
     bytec_0 // "x"
     // tests/approvals/large-objects-in-state.algo.ts:30
     // this.storage.value[index].x += xCount
     uncover 1
-    box_put
+    uncover 2
+    box_replace
     retsub
 
 
@@ -314,18 +299,21 @@ tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCount
     b tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts_block@0
 
 tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts_block@0:
+    // tests/approvals/large-objects-in-state.algo.ts:34
+    // return this.storage.value[index]
+    frame_dig -1
+    intc_2 // 9
+    *
+    intc_0 // 0
+    +
     // tests/approvals/large-objects-in-state.algo.ts:15
     // storage = Box<FixedArray<Counts, typeof MAX_ITEMS>>({ key: 'x' })
     bytec_0 // "x"
     // tests/approvals/large-objects-in-state.algo.ts:34
     // return this.storage.value[index]
-    box_get
-    assert // Box must have value
-    frame_dig -1
+    uncover 1
     intc_2 // 9
-    *
-    intc_2 // 9
-    extract3 // on error: index access is out of bounds
+    box_extract
     retsub
 
 

@@ -73,6 +73,7 @@ import type {
   SingleEvaluation,
   SizeOf,
   SliceExpression,
+  StageInnerTransactions,
   StateDelete,
   StateExists,
   StateGet,
@@ -247,6 +248,13 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
   visitUpdateInnerTransaction(expression: UpdateInnerTransaction): void {
     for (const v of expression.fields.values()) {
       v.accept(this)
+    }
+  }
+
+  visitStageInnerTransactions(expression: StageInnerTransactions): void {
+    expression.startNewGroup.accept(this)
+    for (const expr of expression.itxns) {
+      expr.accept(this)
     }
   }
 

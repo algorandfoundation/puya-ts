@@ -59,7 +59,7 @@ main_test_route@3:
     intc_0 // 0
     !=
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     callsub test
     b main_switch_case_next@4
 
@@ -73,7 +73,7 @@ main___algots__.defaultCreate@5:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -103,7 +103,7 @@ test_block@0:
     txna ApplicationArgs 1
     dup
     len
-    pushint 26 // 26
+    pushint 26
     ==
     assert // invalid number of bytes for ObjectCB267EF3
     callsub tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.test
@@ -163,20 +163,20 @@ tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.test_block@0:
     extract3
     btoi
     frame_dig -1
-    pushint 9 // 9
+    pushint 9
     intc_2 // 8
     extract3
     btoi
     frame_dig -1
-    pushint 17 // 17
+    pushint 17
     intc_2 // 8
     extract3
     btoi
     frame_dig -1
-    pushint 200 // 200
+    pushint 200
     getbit
     frame_dig -1
-    pushint 201 // 201
+    pushint 201
     getbit
     uncover 5
     // tests/approvals/arc4-bool.algo.ts:20
@@ -229,13 +229,13 @@ tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.test_ternary_merge@3:
     intc_1 // 1
     uncover 3
     setbit
-    pushint 2 // 2
+    pushint 2
     uncover 3
     setbit
-    pushint 3 // 3
+    pushint 3
     uncover 2
     setbit
-    pushint 4 // 4
+    pushint 4
     frame_dig 5
     setbit
     pushbytes 0x

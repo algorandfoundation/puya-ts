@@ -25,7 +25,7 @@ main_abi_routing@2:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_0 // 0
     !=
@@ -85,7 +85,7 @@ main___algots__.defaultCreate@10:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_2 // 1
     return
@@ -101,7 +101,7 @@ testCallToIndex_block@0:
     txna ApplicationArgs 1
     dup
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 2
@@ -126,7 +126,7 @@ testCallToValue_block@0:
     txna ApplicationArgs 1
     dup
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 2
@@ -373,7 +373,7 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource_next_txn@1
     //     unitName: 'T',
     //     assetName: 'TEST',
     //   })
-    pushint 3 // 3
+    pushint 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -454,13 +454,13 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource_next_txn@3
     assert // Bytes has valid prefix
     dup
     len
-    pushint 48 // 48
+    pushint 48
     ==
     assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
     // tests/approvals/resource-encoding.algo.ts:97
     // assertMatch(indexes, [asset, Global.currentApplicationId, Txn.sender])
-    pushint 3 // 3
-    pushint 3 // 3
+    pushint 3
+    pushint 3
     ==
     cover 1
     dup
@@ -483,8 +483,8 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource_next_txn@3
     ==
     &&
     uncover 1
-    pushint 16 // 16
-    pushint 32 // 32
+    pushint 16
+    pushint 32
     extract3
     txn Sender
     ==
@@ -545,13 +545,13 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource_next_txn@4
     assert // Bytes has valid prefix
     dup
     len
-    pushint 48 // 48
+    pushint 48
     ==
     assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
     // tests/approvals/resource-encoding.algo.ts:104
     // assertMatch(resources, [asset, Global.currentApplicationId, Txn.sender])
-    pushint 3 // 3
-    pushint 3 // 3
+    pushint 3
+    pushint 3
     ==
     cover 1
     dup
@@ -572,8 +572,8 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource_next_txn@4
     ==
     &&
     uncover 1
-    pushint 16 // 16
-    pushint 32 // 32
+    pushint 16
+    pushint 32
     extract3
     txn Sender
     ==

@@ -3,14 +3,14 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 2
+    intcblock 0 2 1
     // tests/approvals/jsdoc.algo.ts:20
     // export class JSDocDemo extends Contract {
     txn NumAppArgs
     bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x60d93beb 0x6618726a // method "test(uint64,byte[])(uint64)", method "test2(byte[])(byte[])"
@@ -26,8 +26,6 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -38,14 +36,14 @@ test:
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     txna ApplicationArgs 2
     dup
-    intc_1 // 0
+    intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    intc_2 // 2
+    intc_1 // 2
     +
     swap
     len
@@ -55,7 +53,7 @@ test:
     swap
     concat
     log
-    intc_0 // 1
+    intc_2 // 1
     return
 
 
@@ -65,9 +63,9 @@ test2:
     // test2(a: bytes): DemoType {
     txna ApplicationArgs 1
     dup
-    intc_1 // 0
+    intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    intc_2 // 2
+    intc_1 // 2
     +
     dig 1
     len
@@ -102,5 +100,5 @@ test2:
     // tests/approvals/jsdoc.algo.ts:39
     // test2(a: bytes): DemoType {
     log
-    intc_0 // 1
+    intc_2 // 1
     return

@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@13
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x2a17995c 0xe3254bc9 0xe2b7c692 0x02947ca2 0x495e0010 0x27519e7b // method "test_compile_contract()void", method "test_compile_contract_with_template()void", method "test_compile_contract_with_template_and_custom_prefix()void", method "test_compile_contract_large()void", method "test_call_contract_with_transactions()void", method "test_call_contract_with_reference_types()void"
@@ -27,7 +27,7 @@ main_test_call_contract_with_reference_types_route@9:
     // const compiled = compileArc4(ReceivesReferenceTypes)
     bytec_1 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyACCAExG0EAPoAEZmmNGDYaAI4BAAEAMRkUMRgQRDYaAUkVIhJEFzYaAkkVgSASRDYaA0kVIhJEF08CcghEsEywcQREsCNDMRkUMRgUEEQjQw==)
+    pushbytes base64(CzEbQQBBgARmaY0YNhoAjgEAAQAxGRQxGBBENhoBSRWBCBJEFzYaAkkVgSASRDYaA0kVgQgSRBdPAnIIRLBMsHEERLCBAUMxGRQxGBQQQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:160
     // const appId = compiled.bareCreate().createdApp
@@ -67,7 +67,7 @@ main_test_call_contract_with_reference_types_route@9:
     //     unitName: 'T',
     //     assetName: 'TEST',
     //   })
-    pushint 3 // 3
+    pushint 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -134,8 +134,10 @@ main_test_call_contract_with_reference_types_route@9:
     asset_params_get AssetName
     assert // asset exists
     ==
+    assert
     // tests/approvals/precompiled-typed.algo.ts:157
     // test_call_contract_with_reference_types() {
+    intc_2 // 1
     return
 
 main_test_call_contract_with_transactions_route@8:
@@ -146,7 +148,7 @@ main_test_call_contract_with_transactions_route@8:
     // const compiled = compileArc4(ReceivesTxns)
     bytec_1 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyACAQOAAEcDMRtBAMAxGRREMRhEggQEj2iS7wSc2H3jBNNmyGkEgbZzUjYaAI4EAIUANgAdAAEAMRaBAgk4EEkjEkQxFiIJOBBJIhJETCMSRCISQzEWIglJOBAjEkQ4F4AGFR98dQAgTFCwIkMxFiIJSUUCOBBJRQUjEkEAHUk4PElFBEEADksCFoAEFR98dUxQsCJDSTghQv/uSwOBBhJBABRJOD1JRQNBAAVLAUL/2Ek4GEL/0oEAQv/NgAwVH3x1AAAAAAAAAAGwIkMxGRQxGBQQRCJD)
+    pushbytes base64(CyACAQOAAEcDMRtBAMIxGRREMRhEggQEj2iS7wSc2H3jBNNmyGkEgbZzUjYaAI4EAIcAOAAfAAEAMRaBAgk4EEkjEkQxFiIJOBBJIhJETCMSRCISRCJDMRYiCUk4ECMSRDgXgAYVH3x1ACBMULAiQzEWIglJRQI4EElFBSMSQQAdSTg8SUUEQQAOSwIWgAQVH3x1TFCwIkNJOCFC/+5LA4EGEkEAFEk4PUlFA0EABUsBQv/YSTgYQv/SgQBC/82ADBUffHUAAAAAAAAAAbAiQzEZFDEYFBBD)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:117
     // const appId = compiled.bareCreate().createdApp
@@ -182,7 +184,7 @@ main_test_call_contract_with_transactions_route@8:
     //   unitName: 'T',
     //   assetName: 'TEST',
     // })
-    pushint 3 // 3
+    pushint 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -212,7 +214,7 @@ main_test_call_contract_with_transactions_route@8:
     ==
     assert // Bytes has valid prefix
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     // tests/approvals/precompiled-typed.algo.ts:135-138
@@ -262,7 +264,7 @@ main_test_call_contract_with_transactions_route@8:
     ==
     assert // Bytes has valid prefix
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     // tests/approvals/precompiled-typed.algo.ts:140-143
@@ -289,7 +291,7 @@ main_test_call_contract_with_transactions_route@8:
     //   unitName: 'T',
     //   assetName: 'TEST',
     // })
-    pushint 3 // 3
+    pushint 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -361,7 +363,7 @@ main_test_call_contract_with_transactions_route@8:
     //   unitName: 'T',
     //   assetName: 'TEST',
     // })
-    pushint 3 // 3
+    pushint 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -371,7 +373,7 @@ main_test_call_contract_with_transactions_route@8:
     itxn_field Sender
     // tests/approvals/precompiled-typed.algo.ts:147
     // amount: 100000,
-    pushint 100000 // 100000
+    pushint 100000
     itxn_field Amount
     itxn_field Receiver
     // tests/approvals/precompiled-typed.algo.ts:145-149
@@ -413,7 +415,7 @@ main_test_compile_contract_large_route@7:
     // const compiled = compileArc4(LargeProgram)
     bytec_1 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CzEbQQA7ggIEJDeNPAQCvzDPNhoAjgIAGgABADEZFDEYEESBgCCvFRaABBUffHVMULCBAUMxGYEFEjEYEESBAUMxGRQxGBQQRIEBQw==)
+    pushbytes base64(CzEbQQA4ggIEJDeNPAQCvzDPNhoAjgIAGgABADEZFDEYEESBgCCvFRaABBUffHVMULCBAUMxGYEFEjEYEEMxGRQxGBQQQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:101
     // const largeApp = compiled.bareCreate().createdApp
@@ -451,13 +453,13 @@ main_test_compile_contract_large_route@7:
     assert // Bytes has valid prefix
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
     // tests/approvals/precompiled-typed.algo.ts:107
     // assert(result === 4096)
-    pushint 4096 // 4096
+    pushint 4096
     ==
     assert
     // tests/approvals/precompiled-typed.algo.ts:109-111
@@ -467,7 +469,7 @@ main_test_compile_contract_large_route@7:
     itxn_begin
     bytec 5 // method "delete()void"
     itxn_field ApplicationArgs
-    pushint 5 // 5
+    pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
     intc_1 // appl
@@ -492,7 +494,7 @@ main_test_compile_contract_with_template_and_custom_prefix_route@6:
     itxn_field GlobalNumByteSlice
     bytec_1 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyAEAAECBCYECGdyZWV0aW5nASAEFR98dQdib25qb3VyMRhAAAMoK2eCAgQkN408BKDoGHI2GgCOAgC2AKwxGRREMRhBAJOCAgTQooIABFGAuiA2GgCOAgBYAAEANhoBSRVLASJZSSUSREsCSwFLA1IiWYEGCEsDJFlJSwISREsESwFLBVJJIlkkCE8DCE8EEkQiKGVEKVBOBE4EUlcCAFBMVwIAUEkVFlcGAkxQKkxQsCNDNhoBSSJZJAhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwI0OABExcYbo2GgCOAQABACNDMRklEjEYEEQjQzEZgQUSMRgQRCND)
+    pushbytes base64(CyAEAAIBBCYECGdyZWV0aW5nASAEFR98dQdib25qb3VyMRhAAAMoK2eCAgQkN408BKDoGHI2GgCOAgC0AKwxGRREMRhBAJOCAgTQooIABFGAuiA2GgCOAgBYAAEANhoBSRVLASJZSSUSREsCSwFLA1IiWYEGCEsDI1lJSwISREsESwFLBVJJIlkjCE8DCE8EEkQiKGVEKVBOBE4EUlcCAFBMVwIAUEkVFlcGAkxQKkxQsCRDNhoBSSJZIwhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwJEOABExcYbo2GgCOAQABACRDMRklEjEYEEMxGYEFEjEYEEM=)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:84
     // const helloApp = compiled.call.create().itxn.createdApp
@@ -560,7 +562,7 @@ main_test_compile_contract_with_template_and_custom_prefix_route@6:
     itxn_begin
     bytec 5 // method "delete()void"
     itxn_field ApplicationArgs
-    pushint 5 // 5
+    pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
     intc_1 // appl
@@ -585,7 +587,7 @@ main_test_compile_contract_with_template_route@5:
     itxn_field GlobalNumByteSlice
     bytec_1 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyAEAAECBCYECGdyZWV0aW5nASAEFR98dQNoZXkxGEAAAygrZ4ICBCQ3jTwEoOgYcjYaAI4CALYArDEZFEQxGEEAk4ICBNCiggAEUYC6IDYaAI4CAFgAAQA2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMkWUlLAhJESwRLAUsFUkkiWSQITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwI0M2GgFJIlkkCEsBFRJEVwIAIihlRClQTFBJFRZXBgJMUCpMULAjQ4AETFxhujYaAI4BAAEAI0MxGSUSMRgQRCNDMRmBBRIxGBBEI0M=)
+    pushbytes base64(CyAEAAIBBCYECGdyZWV0aW5nASAEFR98dQNoZXkxGEAAAygrZ4ICBCQ3jTwEoOgYcjYaAI4CALQArDEZFEQxGEEAk4ICBNCiggAEUYC6IDYaAI4CAFgAAQA2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMjWUlLAhJESwRLAUsFUkkiWSMITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwJEM2GgFJIlkjCEsBFRJEVwIAIihlRClQTFBJFRZXBgJMUCpMULAkQ4AETFxhujYaAI4BAAEAJEMxGSUSMRgQQzEZgQUSMRgQQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:59
     // const helloApp = compiled.call.create().itxn.createdApp
@@ -702,7 +704,7 @@ main_test_compile_contract_with_template_route@5:
     itxn_begin
     bytec 5 // method "delete()void"
     itxn_field ApplicationArgs
-    pushint 5 // 5
+    pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
     intc_1 // appl
@@ -733,7 +735,7 @@ main_test_compile_contract_route@4:
     itxn_field GlobalNumByteSlice
     bytec_1 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyAEAAECBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CAMkAvzEZFEQxGEEAk4ICBNCiggAEUYC6IDYaAI4CAFgAAQA2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMkWUlLAhJESwRLAUsFUkkiWSQITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwI0M2GgFJIlkkCEsBFRJEVwIAIihlRClQTFBJFRZXBgJMUCpMULAjQ4AEAJIlrjYaAI4BAAEANhoBSSJZJAhLARUSRFcCAChMZyNDMRklEjEYEEQjQzEZgQUSMRgQRCND)
+    pushbytes base64(CyAEAAIBBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CAMcAvzEZFEQxGEEAk4ICBNCiggAEUYC6IDYaAI4CAFgAAQA2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMjWUlLAhJESwRLAUsFUkkiWSMITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwJEM2GgFJIlkjCEsBFRJEVwIAIihlRClQTFBJFRZXBgJMUCpMULAkQ4AEAJIlrjYaAI4BAAEANhoBSSJZIwhLARUSRFcCAChMZyRDMRklEjEYEEMxGYEFEjEYEEM=)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:17-19
     // const app = compiled.call.create({
@@ -957,7 +959,7 @@ main_test_compile_contract_route@4:
     itxn_begin
     bytec 5 // method "delete()void"
     itxn_field ApplicationArgs
-    pushint 5 // 5
+    pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
     intc_1 // appl
@@ -978,6 +980,4 @@ main___algots__.defaultCreate@13:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_2 // 1
     return

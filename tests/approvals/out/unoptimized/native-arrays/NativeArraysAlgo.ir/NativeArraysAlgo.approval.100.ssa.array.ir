@@ -8,7 +8,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L6
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
         goto tmp%5#0 ? block@3 : block@21
@@ -75,7 +75,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (== tmp%9#0 0u)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.__algots__.defaultCreate()
         exit 1u
     block@24: // after_if_else_L6
@@ -2110,15 +2110,13 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
         let tmp%21#0: bool = (== tmp%20#0 2u)
         let aggregate%bytes_offset%8#0: uint64 = (* 0u 16u)
         let aggregate%encoded_element%8#0: bytes = (extract3 myVectors#0 aggregate%bytes_offset%8#0 16u) // on error: index access is out of bounds
-        let array_item%7#0: Encoded(uint64,uint64) = aggregate%encoded_element%8#0
-        let aggregate%extract%0#0: bytes = (extract3 array_item%7#0 0u 8u)
+        let aggregate%extract%0#0: bytes = (extract3 aggregate%encoded_element%8#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
         let values%7#0: uint64 = (btoi tuple_item%0#0)
         let tmp%22#0: bool = (== values%7#0 1u)
         let aggregate%bytes_offset%9#0: uint64 = (* 0u 16u)
         let aggregate%encoded_element%9#0: bytes = (extract3 myVectors#0 aggregate%bytes_offset%9#0 16u) // on error: index access is out of bounds
-        let array_item%8#0: Encoded(uint64,uint64) = aggregate%encoded_element%9#0
-        let aggregate%extract%1#0: bytes = (extract3 array_item%8#0 8u 8u)
+        let aggregate%extract%1#0: bytes = (extract3 aggregate%encoded_element%9#0 8u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#0
         let values%8#0: uint64 = (btoi tuple_item%1#0)
         let tmp%23#0: bool = (== values%8#0 2u)
@@ -2126,15 +2124,13 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
         let tmp%25#0: bool = (&& tmp%21#0 tmp%24#0)
         let aggregate%bytes_offset%10#0: uint64 = (* 1u 16u)
         let aggregate%encoded_element%10#0: bytes = (extract3 myVectors#0 aggregate%bytes_offset%10#0 16u) // on error: index access is out of bounds
-        let array_item%9#0: Encoded(uint64,uint64) = aggregate%encoded_element%10#0
-        let aggregate%extract%2#0: bytes = (extract3 array_item%9#0 0u 8u)
+        let aggregate%extract%2#0: bytes = (extract3 aggregate%encoded_element%10#0 0u 8u)
         let tuple_item%2#0: Encoded(uint64) = aggregate%extract%2#0
         let values%9#0: uint64 = (btoi tuple_item%2#0)
         let tmp%26#0: bool = (== values%9#0 3u)
         let aggregate%bytes_offset%11#0: uint64 = (* 1u 16u)
         let aggregate%encoded_element%11#0: bytes = (extract3 myVectors#0 aggregate%bytes_offset%11#0 16u) // on error: index access is out of bounds
-        let array_item%10#0: Encoded(uint64,uint64) = aggregate%encoded_element%11#0
-        let aggregate%extract%3#0: bytes = (extract3 array_item%10#0 8u 8u)
+        let aggregate%extract%3#0: bytes = (extract3 aggregate%encoded_element%11#0 8u 8u)
         let tuple_item%3#0: Encoded(uint64) = aggregate%extract%3#0
         let values%10#0: uint64 = (btoi tuple_item%3#0)
         let tmp%27#0: bool = (== values%10#0 4u)
@@ -2161,20 +2157,16 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray(y:
         let tmp%32#0: uint64 = 1u
         let tmp%33#0: bool = (== tmp%32#0 1u)
         let aggregate%extract%5#0: bytes = (extract3 myObject#0 0u 16u)
-        let tuple_item%5#0: Encoded((uint64,uint64)[1]) = aggregate%extract%5#0
         let aggregate%bytes_offset%12#0: uint64 = (* 0u 16u)
-        let aggregate%encoded_element%12#0: bytes = (extract3 tuple_item%5#0 aggregate%bytes_offset%12#0 16u) // on error: index access is out of bounds
-        let array_item%11#0: Encoded(uint64,uint64) = aggregate%encoded_element%12#0
-        let aggregate%extract%6#0: bytes = (extract3 array_item%11#0 0u 8u)
+        let aggregate%encoded_element%12#0: bytes = (extract3 aggregate%extract%5#0 aggregate%bytes_offset%12#0 16u) // on error: index access is out of bounds
+        let aggregate%extract%6#0: bytes = (extract3 aggregate%encoded_element%12#0 0u 8u)
         let tuple_item%6#0: Encoded(uint64) = aggregate%extract%6#0
         let values%11#0: uint64 = (btoi tuple_item%6#0)
         let tmp%34#0: bool = (== values%11#0 5u)
         let aggregate%extract%7#0: bytes = (extract3 myObject#0 0u 16u)
-        let tuple_item%7#0: Encoded((uint64,uint64)[1]) = aggregate%extract%7#0
         let aggregate%bytes_offset%13#0: uint64 = (* 0u 16u)
-        let aggregate%encoded_element%13#0: bytes = (extract3 tuple_item%7#0 aggregate%bytes_offset%13#0 16u) // on error: index access is out of bounds
-        let array_item%12#0: Encoded(uint64,uint64) = aggregate%encoded_element%13#0
-        let aggregate%extract%8#0: bytes = (extract3 array_item%12#0 8u 8u)
+        let aggregate%encoded_element%13#0: bytes = (extract3 aggregate%extract%7#0 aggregate%bytes_offset%13#0 16u) // on error: index access is out of bounds
+        let aggregate%extract%8#0: bytes = (extract3 aggregate%encoded_element%13#0 8u 8u)
         let tuple_item%8#0: Encoded(uint64) = aggregate%extract%8#0
         let values%12#0: uint64 = (btoi tuple_item%8#0)
         let tmp%35#0: bool = (== values%12#0 6u)
@@ -2428,8 +2420,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p: En
         let aggregate%array_trimmed%0#0: bytes = (substring3 myVectors#1 2u aggregate%total_length%0#0)
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 16u)
         let aggregate%encoded_element%0#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%0#0 16u) // on error: index access is out of bounds
-        let array_item%0#0: Encoded(uint64,uint64) = aggregate%encoded_element%0#0
-        let aggregate%extract%2#0: bytes = (extract3 array_item%0#0 0u 8u)
+        let aggregate%extract%2#0: bytes = (extract3 aggregate%encoded_element%0#0 0u 8u)
         let tuple_item%2#0: Encoded(uint64) = aggregate%extract%2#0
         let values%2#0: uint64 = (btoi tuple_item%2#0)
         let tmp%3#0: bool = (== values%2#0 x#0)
@@ -2437,8 +2428,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs(p: En
         let aggregate%array_trimmed%1#0: bytes = (substring3 myVectors#1 2u aggregate%total_length%1#0)
         let aggregate%bytes_offset%1#0: uint64 = (* 0u 16u)
         let aggregate%encoded_element%1#0: bytes = (extract3 aggregate%array_trimmed%1#0 aggregate%bytes_offset%1#0 16u) // on error: index access is out of bounds
-        let array_item%1#0: Encoded(uint64,uint64) = aggregate%encoded_element%1#0
-        let aggregate%extract%3#0: bytes = (extract3 array_item%1#0 8u 8u)
+        let aggregate%extract%3#0: bytes = (extract3 aggregate%encoded_element%1#0 8u 8u)
         let tuple_item%3#0: Encoded(uint64) = aggregate%extract%3#0
         let values%3#0: uint64 = (btoi tuple_item%3#0)
         let tmp%4#0: bool = (== values%3#0 y#0)

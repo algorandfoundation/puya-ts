@@ -14,7 +14,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         let tmp%7#0: bool = (&& tmp%4#0 tmp%6#0)
-        (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
+        (assert tmp%7#0)
         tests/approvals/box-proxies.algo.ts::LargeBox.test[routing]()
         goto block@4
     block@4: // switch_case_next_L267
@@ -25,7 +25,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%10#0: uint64 = (txn ApplicationID)
         let tmp%11#0: bool = (== tmp%10#0 0u)
         let tmp%12#0: bool = (&& tmp%9#0 tmp%11#0)
-        (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%12#0)
         tests/approvals/box-proxies.algo.ts::LargeBox.__algots__.defaultCreate()
         exit 1u
     block@6: // after_if_else_L267
@@ -82,7 +82,6 @@ subroutine tests/approvals/box-proxies.algo.ts::LargeBox.test() -> void:
         (assert tmp%2#0) // Box value should be an array of 200 items
         let (aggregate%box_get%2#0: bytes, aggregate%box_get%3#0: bool) = (box_get "large")
         (assert aggregate%box_get%3#0) // Box must have value
-        let storage_value%1#0: bytes = aggregate%box_get%2#0
         let item_index_internal%0#0: uint64 = 0u
         goto block@1
     block@1: // for_header_L275
@@ -90,9 +89,10 @@ subroutine tests/approvals/box-proxies.algo.ts::LargeBox.test() -> void:
         let continue_looping%0#0: bool = (< item_index_internal%0#1 200u)
         goto continue_looping%0#0 ? block@2 : block@4
     block@2: // for_body_L275
-        let aggregate%bytes_offset%0#0: uint64 = (* item_index_internal%0#1 64u)
-        let aggregate%encoded_element%0#0: bytes = (extract3 storage_value%1#0 aggregate%bytes_offset%0#0 64u) // on error: index access is out of bounds
-        let array_item%0#0: Encoded(uint8[32],uint64,uint64,uint64,uint64) = aggregate%encoded_element%0#0
+        let box%element_offset%0#0: uint64 = (* item_index_internal%0#1 64u)
+        let box%offset%0#0: uint64 = (+ 0u box%element_offset%0#0)
+        let box%box_extract%0#0: Encoded(uint8[32],uint64,uint64,uint64,uint64) = (box_extract "large" box%offset%0#0 64u)
+        let array_item%0#0: Encoded(uint8[32],uint64,uint64,uint64,uint64) = box%box_extract%0#0
         let temp.1#0: Encoded(uint8[32],uint64,uint64,uint64,uint64) = array_item%0#0
         let temp.0#0: uint64 = item_index_internal%0#1
         let index#0: uint64 = temp.0#0
@@ -105,20 +105,13 @@ subroutine tests/approvals/box-proxies.algo.ts::LargeBox.test() -> void:
         let aggregate%updated_data%0#0: bytes = (replace3 x#0 32u encoded_value%0#0)
         let updated_tuple%0#0: Encoded(uint8[32],uint64,uint64,uint64,uint64) = aggregate%updated_data%0#0
         let x#1: Encoded(uint8[32],uint64,uint64,uint64,uint64) = updated_tuple%0#0
-        let (aggregate%box_get%4#0: bytes, aggregate%box_get%5#0: bool) = (box_get "large")
-        (assert aggregate%box_get%5#0) // Box must have value
-        let storage_value%2#0: bytes = aggregate%box_get%4#0
-        let aggregate%write_offset%0#0: uint64 = (* index#0 64u)
-        let aggregate%updated_array%0#0: bytes = (replace3 storage_value%2#0 aggregate%write_offset%0#0 x#1) // on error: index access is out of bounds
-        let updated_array%0#0: Encoded((uint8[32],uint64,uint64,uint64,uint64)[200]) = aggregate%updated_array%0#0
-        (box_put "large" updated_array%0#0)
-        let (aggregate%box_get%6#0: bytes, aggregate%box_get%7#0: bool) = (box_get "large")
-        (assert aggregate%box_get%7#0) // Box must have value
-        let storage_value%3#0: bytes = aggregate%box_get%6#0
-        let aggregate%bytes_offset%2#0: uint64 = (* index#0 64u)
-        let aggregate%encoded_element%2#0: bytes = (extract3 storage_value%3#0 aggregate%bytes_offset%2#0 64u) // on error: index access is out of bounds
-        let array_item%1#0: Encoded(uint8[32],uint64,uint64,uint64,uint64) = aggregate%encoded_element%2#0
-        let aggregate%extract%1#0: bytes = (extract3 array_item%1#0 32u 8u)
+        let box%element_offset%1#0: uint64 = (* index#0 64u)
+        let box%offset%1#0: uint64 = (+ 0u box%element_offset%1#0)
+        (box_replace "large" box%offset%1#0 x#1)
+        let box%element_offset%3#0: uint64 = (* index#0 64u)
+        let box%offset%3#0: uint64 = (+ 0u box%element_offset%3#0)
+        let box%box_extract%2#0: Encoded(uint8[32],uint64,uint64,uint64,uint64) = (box_extract "large" box%offset%3#0 64u)
+        let aggregate%extract%1#0: bytes = (extract3 box%box_extract%2#0 32u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%1#0
         let values%0#0: uint64 = (btoi tuple_item%0#0)
         let tmp%4#0: uint64 = (+ index#0 10u)

@@ -48,7 +48,7 @@ main_test_route@3:
     intc_0 // 0
     !=
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     callsub test
     b main_switch_case_next@4
 
@@ -62,7 +62,7 @@ main___algots__.defaultCreate@5:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -75,7 +75,7 @@ ensure_budget:
 
 ensure_budget_block@0:
     frame_dig -2
-    pushint 10 // 10
+    pushint 10
     +
     b ensure_budget_while_top@1
 
@@ -149,7 +149,7 @@ tests/approvals/reference-arrays.algo.ts::ReferenceArraysAlgo.test:
 tests/approvals/reference-arrays.algo.ts::ReferenceArraysAlgo.test_block@0:
     // tests/approvals/reference-arrays.algo.ts:6
     // ensureBudget(2000)
-    pushint 2000 // 2000
+    pushint 2000
     intc_0 // 0
     callsub ensure_budget
     // tests/approvals/reference-arrays.algo.ts:7
@@ -259,7 +259,7 @@ tests/approvals/reference-arrays.algo.ts::ReferenceArraysAlgo.test_after_while@3
     extract3 // on error: index access is out of bounds
     btoi
     frame_dig -1
-    pushint 2 // 2
+    pushint 2
     -
     ==
     assert
@@ -294,7 +294,7 @@ _puya_lib.mem.new_slot@entry:
     load 0
     bitlen
     load 0
-    pushint 256 // 256
+    pushint 256
     dig 2
     -
     intc_0 // 0

@@ -5,7 +5,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L4
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (! tmp%2#0)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         (assert tmp%4#0)
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
@@ -28,7 +28,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (! tmp%9#0)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         exit 1u
 
 subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.testNested[routing]() -> void:
@@ -41,14 +41,8 @@ subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.t
         let arg.1.0#0: biguint = ((extract 0 64) aggregate%extract%1#0)
         let arg.1.1#0: biguint = ((extract 64 64) aggregate%extract%1#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = ((extract 0 8) tmp%0#0)
-        let aggregate%value_len%0#0: uint64 = (len arg.1.0#0)
-        let aggregate%len_ok%0#0: bool = (<= aggregate%value_len%0#0 64u)
-        (assert aggregate%len_ok%0#0) // overflow
         let aggregate%bzero%0#0: bytes = (bzero 64u)
         let aggregate%arc4_encoded%0#0: bytes[64] = (b| arg.1.0#0 aggregate%bzero%0#0)
-        let aggregate%value_len%1#0: uint64 = (len arg.1.1#0)
-        let aggregate%len_ok%1#0: bool = (<= aggregate%value_len%1#0 64u)
-        (assert aggregate%len_ok%1#0) // overflow
         let aggregate%arc4_encoded%1#0: bytes[64] = (b| arg.1.1#0 aggregate%bzero%0#0)
         let aggregate%head%2#0: bytes = (concat aggregate%arc4_encoded%0#0 aggregate%arc4_encoded%1#0)
         let aggregate%head%3#0: bytes = (concat aggregate%val_as_bytes%0#0 aggregate%head%2#0)

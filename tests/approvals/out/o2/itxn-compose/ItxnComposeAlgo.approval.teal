@@ -14,7 +14,7 @@ main:
     bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x1ecad34c 0x90d29762 // method "distribute(address[],pay,uint64)void", method "conditionalBegin(uint64)void"
@@ -23,7 +23,7 @@ main:
     err
 
 main_conditionalBegin_route@5:
-    // tests/approvals/itxn-compose.algo.ts:52
+    // tests/approvals/itxn-compose.algo.ts:54
     // conditionalBegin(count: uint64) {
     txna ApplicationArgs 1
     dup
@@ -33,22 +33,22 @@ main_conditionalBegin_route@5:
     assert // invalid number of bytes for arc4.uint64
     btoi
     bury 5
-    // tests/approvals/itxn-compose.algo.ts:54
+    // tests/approvals/itxn-compose.algo.ts:56
     // const appId = hello.call.create({ args: ['Hi'] }).itxn.createdApp
     itxn_begin
     pushbytes 0x009225ae // method "helloCreate(string)void"
     itxn_field ApplicationArgs
     pushbytes 0x00024869
     itxn_field ApplicationArgs
-    // tests/approvals/itxn-compose.algo.ts:53
+    // tests/approvals/itxn-compose.algo.ts:55
     // const hello = compileArc4(Hello)
     intc_1 // 1
     itxn_field GlobalNumByteSlice
     pushbytes base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyAEAAECBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CAMkAvzEZFEQxGEEAk4ICBNCiggAEUYC6IDYaAI4CAFgAAQA2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMkWUlLAhJESwRLAUsFUkkiWSQITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwI0M2GgFJIlkkCEsBFRJEVwIAIihlRClQTFBJFRZXBgJMUCpMULAjQ4AEAJIlrjYaAI4BAAEANhoBSSJZJAhLARUSRFcCAChMZyNDMRklEjEYEEQjQzEZgQUSMRgQRCND)
+    pushbytes base64(CyAEAAIBBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CAMcAvzEZFEQxGEEAk4ICBNCiggAEUYC6IDYaAI4CAFgAAQA2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMjWUlLAhJESwRLAUsFUkkiWSMITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwJEM2GgFJIlkjCEsBFRJEVwIAIihlRClQTFBJFRZXBgJMUCpMULAkQ4AEAJIlrjYaAI4BAAEANhoBSSJZIwhLARUSRFcCAChMZyRDMRklEjEYEEMxGYEFEjEYEEM=)
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn-compose.algo.ts:54
+    // tests/approvals/itxn-compose.algo.ts:56
     // const appId = hello.call.create({ args: ['Hi'] }).itxn.createdApp
     intc_0 // 0
     itxn_field OnCompletion
@@ -59,23 +59,23 @@ main_conditionalBegin_route@5:
     itxn_submit
     gitxn 0 CreatedApplicationID
     bury 6
-    // tests/approvals/itxn-compose.algo.ts:56
+    // tests/approvals/itxn-compose.algo.ts:58
     // for (const i of urange(count)) {
     intc_0 // 0
     bury 4
 
 main_for_header@13:
-    // tests/approvals/itxn-compose.algo.ts:56
+    // tests/approvals/itxn-compose.algo.ts:58
     // for (const i of urange(count)) {
     dig 3
     dig 5
     <
     bz main_after_for@18
-    // tests/approvals/itxn-compose.algo.ts:57
+    // tests/approvals/itxn-compose.algo.ts:59
     // if (i === 0) {
     dig 3
     bnz main_else_body@16
-    // tests/approvals/itxn-compose.algo.ts:58
+    // tests/approvals/itxn-compose.algo.ts:60
     // itxnCompose.begin({ method: Hello.prototype.greet, appId, args: ['ho'] })
     itxn_begin
     bytec_0 // method "greet(string)string"
@@ -90,7 +90,7 @@ main_for_header@13:
     itxn_field Fee
 
 main_after_if_else@17:
-    // tests/approvals/itxn-compose.algo.ts:56
+    // tests/approvals/itxn-compose.algo.ts:58
     // for (const i of urange(count)) {
     dig 3
     intc_1 // 1
@@ -99,7 +99,7 @@ main_after_if_else@17:
     b main_for_header@13
 
 main_else_body@16:
-    // tests/approvals/itxn-compose.algo.ts:60
+    // tests/approvals/itxn-compose.algo.ts:62
     // itxnCompose.next({ method: Hello.prototype.greet, appId, args: ['ho'] })
     itxn_next
     bytec_0 // method "greet(string)string"
@@ -115,10 +115,10 @@ main_else_body@16:
     b main_after_if_else@17
 
 main_after_for@18:
-    // tests/approvals/itxn-compose.algo.ts:63
+    // tests/approvals/itxn-compose.algo.ts:65
     // itxnCompose.submit()
     itxn_submit
-    // tests/approvals/itxn-compose.algo.ts:52
+    // tests/approvals/itxn-compose.algo.ts:54
     // conditionalBegin(count: uint64) {
     intc_1 // 1
     return
@@ -133,9 +133,9 @@ main_distribute_route@4:
     dup
     bury 9
     dup
-    pushint 32 // 32
+    pushint 32
     *
-    pushint 2 // 2
+    pushint 2
     +
     dig 2
     len
@@ -201,10 +201,7 @@ main_distribute_route@4:
     uncover 2
     itob
     concat
-    dig 1
-    len
-    itob
-    extract 6 2
+    pushbytes 0x0020
     uncover 2
     concat
     swap
@@ -228,7 +225,7 @@ main_distribute_route@4:
     cover 2
     bury 5
     dup
-    pushint 16 // 16
+    pushint 16
     extract_uint16
     dig 1
     len
@@ -255,11 +252,11 @@ main_for_header@21:
     // const addr = addresses[i]
     dig 3
     dup
-    pushint 32 // 32
+    pushint 32
     *
     dig 9
     swap
-    pushint 32 // 32
+    pushint 32
     extract3 // on error: index access is out of bounds
     // tests/approvals/itxn-compose.algo.ts:34-37
     // itxnCompose.next({
@@ -282,39 +279,51 @@ main_for_header@21:
     b main_for_header@21
 
 main_after_for@23:
-    // tests/approvals/itxn-compose.algo.ts:40-42
-    // itxnCompose.next(VerifierContract.prototype.verify, {
+    // tests/approvals/itxn-compose.algo.ts:40-44
+    // itxnCompose.next({
+    //   type: TransactionType.ApplicationCall,
+    //   appArgs: [methodSelector('verify()void')],
     //   appId: verifier,
     // })
     itxn_next
-    pushbytes 0x65a9aecc // method "verify()void"
-    itxn_field ApplicationArgs
     dup
     itxn_field ApplicationID
-    intc_2 // appl
+    // tests/approvals/itxn-compose.algo.ts:42
+    // appArgs: [methodSelector('verify()void')],
+    pushbytes 0x65a9aecc // method "verify()void"
+    itxn_field ApplicationArgs
+    // tests/approvals/itxn-compose.algo.ts:41
+    // type: TransactionType.ApplicationCall,
+    intc_2 // 6
     itxn_field TypeEnum
+    // tests/approvals/itxn-compose.algo.ts:40-44
+    // itxnCompose.next({
+    //   type: TransactionType.ApplicationCall,
+    //   appArgs: [methodSelector('verify()void')],
+    //   appId: verifier,
+    // })
     intc_0 // 0
     itxn_field Fee
-    // tests/approvals/itxn-compose.algo.ts:44-48
+    // tests/approvals/itxn-compose.algo.ts:46-50
     // itxnCompose.next(
     //   itxn.assetConfig({
     //     assetName: 'abc',
     //   }),
     // )
     itxn_next
-    // tests/approvals/itxn-compose.algo.ts:46
+    // tests/approvals/itxn-compose.algo.ts:48
     // assetName: 'abc',
     pushbytes "abc"
     itxn_field ConfigAssetName
-    // tests/approvals/itxn-compose.algo.ts:45-47
+    // tests/approvals/itxn-compose.algo.ts:47-49
     // itxn.assetConfig({
     //   assetName: 'abc',
     // }),
-    pushint 3 // 3
+    pushint 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    // tests/approvals/itxn-compose.algo.ts:50
+    // tests/approvals/itxn-compose.algo.ts:52
     // itxnCompose.submit()
     itxn_submit
     // tests/approvals/itxn-compose.algo.ts:19
@@ -330,6 +339,4 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_1 // 1
     return

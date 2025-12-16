@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 64 0 12800
+    intcblock 64 0 1
     bytecblock "large" 0x068101
     // tests/approvals/box-proxies.algo.ts:267
     // export class LargeBox extends Contract {
@@ -21,7 +21,7 @@ main_test_route@3:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     b test
 
 main___algots__.defaultCreate@5:
@@ -32,8 +32,6 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -42,7 +40,7 @@ test:
     pushbytes ""
 
 test_while_top@7:
-    pushint 7010 // 7010
+    pushint 7010
     global OpcodeBudget
     >
     bz test_after_while@12
@@ -55,7 +53,7 @@ test_while_top@7:
     itxn_field ApprovalProgram
     bytec_1 // 0x068101
     itxn_field ClearStateProgram
-    intc_2 // 0
+    intc_1 // 0
     itxn_field Fee
     itxn_submit
     b test_while_top@7
@@ -66,31 +64,21 @@ test_after_while@12:
     bytec_0 // "large"
     // tests/approvals/box-proxies.algo.ts:272
     // this.box.create()
-    intc_3 // 12800
+    pushint 12800
     box_create
     pop
-    // tests/approvals/box-proxies.algo.ts:268
-    // box = Box<FixedArray<Info, 200>>({ key: 'large' })
-    bytec_0 // "large"
-    // tests/approvals/box-proxies.algo.ts:273
-    // assert(this.box.length === 200 * 64, 'Box should be created with the correct size')
-    box_len
-    pop
-    intc_3 // 12800
-    ==
-    assert // Box should be created with the correct size
-    intc_2 // 0
+    intc_1 // 0
     bury 1
 
 test_for_header@2:
     // tests/approvals/box-proxies.algo.ts:275
     // for (const [index, v] of this.box.value.entries()) {
     dup
-    pushint 200 // 200
+    pushint 200
     <
     bz test_after_for@5
     dupn 2
-    intc_1 // 64
+    intc_0 // 64
     *
     // tests/approvals/box-proxies.algo.ts:268
     // box = Box<FixedArray<Info, 200>>({ key: 'large' })
@@ -98,12 +86,12 @@ test_for_header@2:
     // tests/approvals/box-proxies.algo.ts:275
     // for (const [index, v] of this.box.value.entries()) {
     dig 1
-    intc_1 // 64
+    intc_0 // 64
     box_extract
     // tests/approvals/box-proxies.algo.ts:278
     // x.balance = index + 10
     dig 2
-    pushint 10 // 10
+    pushint 10
     +
     dup
     itob
@@ -124,13 +112,13 @@ test_for_header@2:
     // tests/approvals/box-proxies.algo.ts:282
     // assert(this.box.value[index].balance === index + 10)
     uncover 2
-    intc_1 // 64
+    intc_0 // 64
     box_extract
-    pushint 32 // 32
+    pushint 32
     extract_uint64
     ==
     assert
-    intc_0 // 1
+    intc_2 // 1
     +
     bury 1
     b test_for_header@2
@@ -138,5 +126,5 @@ test_for_header@2:
 test_after_for@5:
     // tests/approvals/box-proxies.algo.ts:270
     // test() {
-    intc_0 // 1
+    intc_2 // 1
     return

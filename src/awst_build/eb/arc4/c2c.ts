@@ -2,11 +2,20 @@ import type ts from 'typescript'
 import { OnCompletionAction, TransactionKind } from '../../../awst/models'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { ARC4MethodConfig, Expression, MethodConstant } from '../../../awst/nodes'
-import { ARC4ABIMethodConfig, ARC4BareMethodConfig, ARC4CreateOption, CompiledContract, IntegerConstant } from '../../../awst/nodes'
+import {
+  ARC4ABIMethodConfig,
+  ARC4BareMethodConfig,
+  ARC4CreateOption,
+  CompiledContract,
+  IntegerConstant,
+  MethodSignature,
+  MethodSignatureString,
+} from '../../../awst/nodes'
 import { SourceLocation } from '../../../awst/source-location'
 import { TxnField } from '../../../awst/txn-fields'
 import { wtypes } from '../../../awst/wtypes'
 import { Constants } from '../../../constants'
+import { InternalError } from '../../../errors'
 import { logger } from '../../../logger'
 import { codeInvariant, enumFromValue, hexToUint8Array, invariant } from '../../../util'
 import { parseArc4Method } from '../../../util/arc4-signature-parser'
@@ -478,7 +487,28 @@ function parseAppArgs({
   }
 
   const appArgsBuilder = fields && fields.hasProperty('args') && fields.memberAccess('args', sourceLocation)
-  const parsedSignature = parseArc4Method(methodSelector.value)
+
+  let parsedSignature = null
+  if (methodSelector.value instanceof MethodSignature) {
+    parsedSignature = {
+      name: methodSelector.value.name,
+      parameters: methodSelector.value.argTypes,
+      returnType: methodSelector.value.returnType,
+      resourceEncoding: methodSelector.value.resourceEncoding,
+    }
+  } else if (methodSelector.value instanceof MethodSignatureString) {
+    const parsedArc4Method = parseArc4Method(methodSelector.value.value)
+    parsedSignature = {
+      name: parsedArc4Method.name,
+      parameters: parsedArc4Method.parameters.map((ptype) => ptype.wtypeOrThrow),
+      returnType: parsedArc4Method.returnType.wtypeOrThrow,
+    }
+  }
+
+  if (!parsedSignature) {
+    throw new InternalError('Unable to parse method signature from method selector')
+  }
+
   const appArgs: Expression[] = [methodSelector]
   if (appArgsBuilder) {
     codeInvariant(isStaticallyIterable(appArgsBuilder), 'Unsupported expression for args', appArgsBuilder.sourceLocation)
@@ -500,12 +530,14 @@ function parseAppArgs({
           return []
         }
 
-        if (publicParamType.equals(assetPType)) {
-          return handleForeignRef(results.foreignAssets, 0n, paramType, arg)
-        } else if (publicParamType.equals(applicationPType)) {
-          return handleForeignRef(results.foreignApps, 1n, paramType, arg)
-        } else if (publicParamType.equals(accountPType)) {
-          return handleForeignRef(results.foreignAccounts, 1n, paramType, arg)
+        if (parsedSignature.resourceEncoding === 'index') {
+          if (publicParamType.equals(wtypes.assetWType)) {
+            return handleForeignRef(results.foreignAssets, 0n, paramType, arg)
+          } else if (publicParamType.equals(wtypes.applicationWType)) {
+            return handleForeignRef(results.foreignApps, 1n, paramType, arg)
+          } else if (publicParamType.equals(wtypes.accountWType)) {
+            return handleForeignRef(results.foreignAccounts, 1n, paramType, arg)
+          }
         }
 
         let encodedType

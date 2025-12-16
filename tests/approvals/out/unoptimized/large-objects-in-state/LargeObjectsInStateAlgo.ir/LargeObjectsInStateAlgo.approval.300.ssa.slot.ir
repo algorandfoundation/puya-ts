@@ -8,7 +8,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L14
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
         goto tmp%5#0 ? block@3 : block@9
@@ -39,7 +39,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (== tmp%9#0 0u)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__algots__.defaultCreate()
         exit 1u
     block@12: // after_if_else_L14
@@ -116,39 +116,28 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increaseXCount(index: uint64, xCount: uint64) -> void:
     block@0: // L29
-        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get "x")
-        (assert aggregate%box_get%1#0) // Box must have value
-        let storage_value%0#0: bytes = aggregate%box_get%0#0
-        let aggregate%bytes_offset%0#0: uint64 = (* index#0 9u)
-        let aggregate%encoded_element%0#0: bytes = (extract3 storage_value%0#0 aggregate%bytes_offset%0#0 9u) // on error: index access is out of bounds
-        let array_item%0#0: Encoded(uint64,uint8) = aggregate%encoded_element%0#0
-        let aggregate%extract%0#0: bytes = (extract3 array_item%0#0 0u 8u)
+        let box%element_offset%1#0: uint64 = (* index#0 9u)
+        let box%offset%1#0: uint64 = (+ 0u box%element_offset%1#0)
+        let box%box_extract%1#0: Encoded(uint64,uint8) = (box_extract "x" box%offset%1#0 9u)
+        let aggregate%extract%0#0: bytes = (extract3 box%box_extract%1#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
         let values%0#0: uint64 = (btoi tuple_item%0#0)
         let tmp%0#0: uint64 = (+ values%0#0 xCount#0)
-        let (aggregate%box_get%2#0: bytes, aggregate%box_get%3#0: bool) = (box_get "x")
-        (assert aggregate%box_get%3#0) // Box must have value
-        let storage_value%1#0: bytes = aggregate%box_get%2#0
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#0)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
         let encoded_value%0#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let aggregate%bytes_offset%1#0: uint64 = (* index#0 9u)
-        let aggregate%encoded_element%1#0: bytes = (extract3 storage_value%1#0 aggregate%bytes_offset%1#0 9u) // on error: index access is out of bounds
-        let aggregate%updated_data%0#0: bytes = (replace3 aggregate%encoded_element%1#0 0u encoded_value%0#0)
-        let aggregate%write_offset%0#0: uint64 = (* index#0 9u)
-        let aggregate%updated_array%0#0: bytes = (replace3 storage_value%1#0 aggregate%write_offset%0#0 aggregate%updated_data%0#0) // on error: index access is out of bounds
-        let updated_array%0#0: Encoded((uint64,uint8)[800]) = aggregate%updated_array%0#0
-        (box_put "x" updated_array%0#0)
+        let box%element_offset%2#0: uint64 = (* index#0 9u)
+        let box%offset%2#0: uint64 = (+ 0u box%element_offset%2#0)
+        let box%offset%3#0: uint64 = (+ box%offset%2#0 0u)
+        (box_replace "x" box%offset%3#0 encoded_value%0#0)
         return 
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCounts(index: uint64) -> Encoded(uint64,uint8):
     block@0: // L33
-        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get "x")
-        (assert aggregate%box_get%1#0) // Box must have value
-        let storage_value%0#0: bytes = aggregate%box_get%0#0
-        let aggregate%bytes_offset%0#0: uint64 = (* index#0 9u)
-        let aggregate%encoded_element%0#0: bytes = (extract3 storage_value%0#0 aggregate%bytes_offset%0#0 9u) // on error: index access is out of bounds
-        let array_item%0#0: Encoded(uint64,uint8) = aggregate%encoded_element%0#0
+        let box%element_offset%0#0: uint64 = (* index#0 9u)
+        let box%offset%0#0: uint64 = (+ 0u box%element_offset%0#0)
+        let box%box_extract%0#0: Encoded(uint64,uint8) = (box_extract "x" box%offset%0#0 9u)
+        let array_item%0#0: Encoded(uint64,uint8) = box%box_extract%0#0
         return array_item%0#0
 
 subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.__algots__.defaultCreate() -> void:

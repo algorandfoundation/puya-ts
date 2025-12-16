@@ -45,7 +45,7 @@ main_testPay_route@3:
     intc_0 // 0
     !=
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     callsub testPay
     b main_switch_case_next@4
 
@@ -59,7 +59,7 @@ main___algots__.defaultCreate@5:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -128,7 +128,7 @@ tests/approvals/assert-match.algo.ts::AssertMatchContract.testPay_block@0:
     gtxns Amount
     // tests/approvals/assert-match.algo.ts:11
     // amount: { between: [100_000, 105_000] },
-    pushint 105000 // 105000
+    pushint 105000
     // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
@@ -143,7 +143,7 @@ tests/approvals/assert-match.algo.ts::AssertMatchContract.testPay_block@0:
     gtxns Amount
     // tests/approvals/assert-match.algo.ts:11
     // amount: { between: [100_000, 105_000] },
-    pushint 100000 // 100000
+    pushint 100000
     // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },
@@ -223,7 +223,7 @@ tests/approvals/assert-match.algo.ts::AssertMatchContract.testPay_block@0:
     gtxns LastValid
     // tests/approvals/assert-match.algo.ts:16
     // lastValid: { lessThan: 2 ** 40 },
-    pushint 1099511627776 // 1099511627776
+    pushint 1099511627776
     // tests/approvals/assert-match.algo.ts:10-17
     // assertMatch(pay, {
     //   amount: { between: [100_000, 105_000] },

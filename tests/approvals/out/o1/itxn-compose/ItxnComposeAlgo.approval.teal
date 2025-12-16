@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x1ecad34c 0x90d29762 // method "distribute(address[],pay,uint64)void", method "conditionalBegin(uint64)void"
@@ -27,8 +27,6 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_1 // 1
     return
 
 
@@ -45,7 +43,7 @@ distribute:
     dup
     intc_3 // 32
     *
-    pushint 2 // 2
+    pushint 2
     +
     dig 2
     len
@@ -62,7 +60,7 @@ distribute:
     txna ApplicationArgs 2
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -111,10 +109,7 @@ distribute:
     uncover 2
     itob
     concat
-    dig 1
-    len
-    itob
-    extract 6 2
+    pushbytes 0x0020
     uncover 2
     concat
     swap
@@ -131,13 +126,13 @@ distribute:
     dup
     uncover 2
     dup
-    pushint 8 // 8
+    pushint 8
     extract_uint64
     dup
     cover 2
     cover 3
     dup
-    pushint 16 // 16
+    pushint 16
     extract_uint16
     dig 1
     len
@@ -189,39 +184,51 @@ distribute_for_header@2:
     b distribute_for_header@2
 
 distribute_after_for@5:
-    // tests/approvals/itxn-compose.algo.ts:40-42
-    // itxnCompose.next(VerifierContract.prototype.verify, {
+    // tests/approvals/itxn-compose.algo.ts:40-44
+    // itxnCompose.next({
+    //   type: TransactionType.ApplicationCall,
+    //   appArgs: [methodSelector('verify()void')],
     //   appId: verifier,
     // })
     itxn_next
-    pushbytes 0x65a9aecc // method "verify()void"
-    itxn_field ApplicationArgs
     dig 4
     itxn_field ApplicationID
-    intc_2 // appl
+    // tests/approvals/itxn-compose.algo.ts:42
+    // appArgs: [methodSelector('verify()void')],
+    pushbytes 0x65a9aecc // method "verify()void"
+    itxn_field ApplicationArgs
+    // tests/approvals/itxn-compose.algo.ts:41
+    // type: TransactionType.ApplicationCall,
+    intc_2 // 6
     itxn_field TypeEnum
+    // tests/approvals/itxn-compose.algo.ts:40-44
+    // itxnCompose.next({
+    //   type: TransactionType.ApplicationCall,
+    //   appArgs: [methodSelector('verify()void')],
+    //   appId: verifier,
+    // })
     intc_0 // 0
     itxn_field Fee
-    // tests/approvals/itxn-compose.algo.ts:44-48
+    // tests/approvals/itxn-compose.algo.ts:46-50
     // itxnCompose.next(
     //   itxn.assetConfig({
     //     assetName: 'abc',
     //   }),
     // )
     itxn_next
-    // tests/approvals/itxn-compose.algo.ts:46
+    // tests/approvals/itxn-compose.algo.ts:48
     // assetName: 'abc',
     pushbytes "abc"
     itxn_field ConfigAssetName
-    // tests/approvals/itxn-compose.algo.ts:45-47
+    // tests/approvals/itxn-compose.algo.ts:47-49
     // itxn.assetConfig({
     //   assetName: 'abc',
     // }),
-    pushint 3 // 3
+    pushint 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
-    // tests/approvals/itxn-compose.algo.ts:50
+    // tests/approvals/itxn-compose.algo.ts:52
     // itxnCompose.submit()
     itxn_submit
     // tests/approvals/itxn-compose.algo.ts:19
@@ -232,31 +239,31 @@ distribute_after_for@5:
 
 // tests/approvals/itxn-compose.algo.ts::ItxnComposeAlgo.conditionalBegin[routing]() -> void:
 conditionalBegin:
-    // tests/approvals/itxn-compose.algo.ts:52
+    // tests/approvals/itxn-compose.algo.ts:54
     // conditionalBegin(count: uint64) {
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
-    // tests/approvals/itxn-compose.algo.ts:54
+    // tests/approvals/itxn-compose.algo.ts:56
     // const appId = hello.call.create({ args: ['Hi'] }).itxn.createdApp
     itxn_begin
     pushbytes 0x009225ae // method "helloCreate(string)void"
     itxn_field ApplicationArgs
     pushbytes 0x00024869
     itxn_field ApplicationArgs
-    // tests/approvals/itxn-compose.algo.ts:53
+    // tests/approvals/itxn-compose.algo.ts:55
     // const hello = compileArc4(Hello)
     intc_1 // 1
     itxn_field GlobalNumByteSlice
     pushbytes base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyAEAAECBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CADcALTEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CADkAXwCABACSJa42GgCOAQAWADEZJRIxGBBEI0MxGYEFEjEYEEQjQzYaAUkiWSQISwEVEkRXAgAoTGcjQzYaAUkiWSQISwEVEkRXAgAiKGVEKVBMUEkVFlcGAkxQKkxQsCNDNhoBSRVLASJZSSUSREsCSwFLA1IiWYEGCEsDJFlJSwISREsESwFLBVJJIlkkCE8DCE8EEkQiKGVEKVBOBE4EUlcCAFBMVwIAUEkVFlcGAkxQKkxQsCND)
+    pushbytes base64(CyAEAAIBBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CADUALTEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CADUAWwCABACSJa42GgCOAQASADEZJRIxGBBDMRmBBRIxGBBDNhoBSSJZIwhLARUSRFcCAChMZyRDNhoBSSJZIwhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwJEM2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMjWUlLAhJESwRLAUsFUkkiWSMITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwJEM=)
     itxn_field ApprovalProgramPages
-    // tests/approvals/itxn-compose.algo.ts:54
+    // tests/approvals/itxn-compose.algo.ts:56
     // const appId = hello.call.create({ args: ['Hi'] }).itxn.createdApp
     intc_0 // 0
     itxn_field OnCompletion
@@ -266,22 +273,22 @@ conditionalBegin:
     itxn_field Fee
     itxn_submit
     gitxn 0 CreatedApplicationID
-    // tests/approvals/itxn-compose.algo.ts:56
+    // tests/approvals/itxn-compose.algo.ts:58
     // for (const i of urange(count)) {
     intc_0 // 0
 
 conditionalBegin_for_header@3:
-    // tests/approvals/itxn-compose.algo.ts:56
+    // tests/approvals/itxn-compose.algo.ts:58
     // for (const i of urange(count)) {
     dup
     dig 3
     <
     bz conditionalBegin_after_for@9
-    // tests/approvals/itxn-compose.algo.ts:57
+    // tests/approvals/itxn-compose.algo.ts:59
     // if (i === 0) {
     dup
     bnz conditionalBegin_else_body@6
-    // tests/approvals/itxn-compose.algo.ts:58
+    // tests/approvals/itxn-compose.algo.ts:60
     // itxnCompose.begin({ method: Hello.prototype.greet, appId, args: ['ho'] })
     itxn_begin
     bytec_0 // method "greet(string)string"
@@ -296,7 +303,7 @@ conditionalBegin_for_header@3:
     itxn_field Fee
 
 conditionalBegin_after_if_else@7:
-    // tests/approvals/itxn-compose.algo.ts:56
+    // tests/approvals/itxn-compose.algo.ts:58
     // for (const i of urange(count)) {
     dup
     intc_1 // 1
@@ -305,7 +312,7 @@ conditionalBegin_after_if_else@7:
     b conditionalBegin_for_header@3
 
 conditionalBegin_else_body@6:
-    // tests/approvals/itxn-compose.algo.ts:60
+    // tests/approvals/itxn-compose.algo.ts:62
     // itxnCompose.next({ method: Hello.prototype.greet, appId, args: ['ho'] })
     itxn_next
     bytec_0 // method "greet(string)string"
@@ -321,10 +328,10 @@ conditionalBegin_else_body@6:
     b conditionalBegin_after_if_else@7
 
 conditionalBegin_after_for@9:
-    // tests/approvals/itxn-compose.algo.ts:63
+    // tests/approvals/itxn-compose.algo.ts:65
     // itxnCompose.submit()
     itxn_submit
-    // tests/approvals/itxn-compose.algo.ts:52
+    // tests/approvals/itxn-compose.algo.ts:54
     // conditionalBegin(count: uint64) {
     intc_1 // 1
     return

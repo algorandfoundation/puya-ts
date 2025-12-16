@@ -5,7 +5,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L8
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (! tmp%2#0)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         (assert tmp%4#0)
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
@@ -63,9 +63,6 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#3: uint64 = (global CurrentApplicationID)
         let tmp%1#2: bool = (app_opted_in account#0 tmp%0#3)
         let (tmp%2#2: uint64, tmp%3#2: bool) = ((asset_holding_get AssetBalance) account#0 asset#0)
-        let aggregate%length%0#0: uint64 = (len account#0)
-        let aggregate%lengths_equal%0#0: bool = (== aggregate%length%0#0 32u)
-        (assert aggregate%lengths_equal%0#0) // invalid size
         let aggregate%as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = account#0
         let aggregate%head%0#0: bytes = (concat 0x aggregate%as_Encoded(uint8[32])%0#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob value%0#0)
@@ -74,9 +71,6 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob value%1#0)
         let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
         let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 aggregate%as_Encoded(uint64)%1#0)
-        let aggregate%length%1#0: uint64 = (len value%2#0)
-        let aggregate%lengths_equal%1#0: bool = (== aggregate%length%1#0 32u)
-        (assert aggregate%lengths_equal%1#0) // invalid size
         let aggregate%as_Encoded(uint8[32])%1#0: Encoded(uint8[32]) = value%2#0
         let aggregate%head%3#0: bytes = (concat aggregate%head%2#0 aggregate%as_Encoded(uint8[32])%1#0)
         let aggregate%val_as_bytes%2#0: bytes[8] = (itob value%3#0)
@@ -124,5 +118,5 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (! tmp%9#0)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         exit 1u

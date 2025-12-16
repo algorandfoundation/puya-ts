@@ -25,7 +25,7 @@ main_abi_routing@2:
     txn OnCompletion
     intc_1 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_1 // 0
     !=
@@ -134,7 +134,7 @@ main___algots__.defaultCreate@17:
     intc_1 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_2 // 1
     return
@@ -292,7 +292,7 @@ getPlugin_block@0:
     extract_uint16 // on error: invalid array length header
     intc_2 // 1
     *
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len
@@ -337,7 +337,7 @@ setLastCalled_block@0:
     extract_uint16 // on error: invalid array length header
     intc_2 // 1
     *
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len
@@ -379,7 +379,7 @@ setPlugin_block@0:
     extract_uint16 // on error: invalid array length header
     intc_2 // 1
     *
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len
@@ -669,57 +669,19 @@ tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled_block@0:
     concat
     // tests/approvals/arc4-struct.algo.ts:65
     // this.plugins(key).value.methods[index].lastCalled = new arc4.Uint64(lastCalled)
-    dup
-    box_get
-    assert // Box must have value
-    dup
-    pushint 25 // 25
-    extract_uint16
-    cover 1
-    dup
-    len
-    cover 1
-    dup
-    uncover 3
-    uncover 3
-    substring3
-    dup
-    len
-    cover 1
-    dup
-    pushint 2 // 2
-    uncover 3
-    substring3
+    intc_1 // 0
+    pushint 27
+    +
+    pushint 2
+    +
     frame_dig -2
-    pushint 20 // 20
+    pushint 20
     *
-    pushint 20 // 20
-    extract3 // on error: index access is out of bounds
-    pushint 12 // 12
-    uncover 5
-    replace3
-    frame_dig -2
-    pushint 20 // 20
-    *
-    pushint 2 // 2
+    +
+    pushint 12
     +
     uncover 2
-    uncover 1
-    uncover 2
-    replace3 // on error: index access is out of bounds
-    dig 1
-    pushint 25 // 25
-    extract_uint16
-    uncover 2
-    intc_1 // 0
-    uncover 2
-    extract3
-    uncover 1
-    concat
-    dig 1
-    box_del
-    pop
-    box_put
+    box_replace
     retsub
 
 
@@ -741,7 +703,7 @@ tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin_block@0:
     // selector: new arc4.StaticBytes(methodSelector('test()void')),
     bytec 5 // method "test()void"
     len
-    pushint 4 // 4
+    pushint 4
     ==
     assert // invalid size
     // tests/approvals/arc4-struct.algo.ts:75-79
@@ -865,7 +827,7 @@ tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin_block@0:
     concat
     uncover 2
     concat
-    pushint 27 // 27
+    pushint 27
     itob
     extract 6 2
     concat

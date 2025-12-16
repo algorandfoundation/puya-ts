@@ -19,7 +19,7 @@ main_setStore_route@3:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     b setStore
 
 main___algots__.defaultCreate@5:
@@ -30,8 +30,6 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
     return
 
 
@@ -41,9 +39,9 @@ setStore:
     // setStore(value: string) {
     txna ApplicationArgs 1
     dup
-    pushint 0 // 0
+    pushint 0
     extract_uint16 // on error: invalid array length header
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len
@@ -59,5 +57,5 @@ setStore:
     app_global_put
     // tests/approvals/multi-inheritance-2.algo.ts:8
     // setStore(value: string) {
-    pushint 1 // 1
+    pushint 1
     return

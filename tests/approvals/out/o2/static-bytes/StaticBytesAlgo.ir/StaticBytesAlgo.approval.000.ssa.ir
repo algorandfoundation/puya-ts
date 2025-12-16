@@ -17,7 +17,7 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_rou
     block@1: // abi_routing_L17
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
         goto tmp%5#0 ? block@2 : block@13
@@ -63,7 +63,7 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_rou
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (== tmp%9#0 0u)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__algots__.defaultCreate()
         exit 1u
     block@16: // after_if_else_L17
@@ -213,11 +213,10 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test() -> void:
         let tmp%8#0: bool = (== tmp%7#0 71u)
         (assert tmp%8#0)
         let reinterpret_bytes[32]%2#0: bytes[32] = (txn Sender)
-        let length%0#0: uint64 = (len reinterpret_bytes[32]%2#0)
-        let is_out_of_bounds%0#0: bool = (>= 0u length%0#0)
-        let bounded_index%0#0: uint64 = (select 0u length%0#0 is_out_of_bounds%0#0)
-        let is_out_of_bounds%1#0: bool = (>= 16u length%0#0)
-        let bounded_index%1#0: uint64 = (select 16u length%0#0 is_out_of_bounds%1#0)
+        let is_out_of_bounds%0#0: bool = (>= 0u 32u)
+        let bounded_index%0#0: uint64 = (select 0u 32u is_out_of_bounds%0#0)
+        let is_out_of_bounds%1#0: bool = (>= 16u 32u)
+        let bounded_index%1#0: uint64 = (select 16u 32u is_out_of_bounds%1#0)
         let awst_tmp%1#0: bytes = (substring3 reinterpret_bytes[32]%2#0 bounded_index%0#0 bounded_index%1#0)
         let reinterpret_bytes[16]%0#0: bytes[16] = awst_tmp%1#0
         let tmp%9#0: uint64 = (len awst_tmp%1#0)

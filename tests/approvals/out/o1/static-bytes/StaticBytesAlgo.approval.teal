@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@16
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x25bb3465 0x63fbedbe 0x5c6f499c 0xd71280ea 0xa78000de 0xb976788f 0x9d52c38f 0xdf920f37 0x3d46345c // method "hashAddresses(byte[32],byte[32])byte[32]", method "receiveB32(byte[32])byte[32]", method "receiveBytes(byte[],uint64)void", method "returnLength(byte[32])uint64", method "test()void", method "testArray()void", method "test2()byte[]", method "test3()void", method "test4()void"
@@ -39,8 +39,6 @@ main___algots__.defaultCreate@16:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -85,11 +83,6 @@ receiveB32:
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     callsub tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32
-    dup
-    len
-    intc_1 // 32
-    ==
-    assert // invalid size
     bytec_0 // 0x151f7c75
     swap
     concat
@@ -106,7 +99,7 @@ receiveBytes:
     dup
     intc_2 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len
@@ -116,7 +109,7 @@ receiveBytes:
     txna ApplicationArgs 2
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -125,8 +118,10 @@ receiveBytes:
     swap
     len
     ==
+    assert
     // tests/approvals/static-bytes.algo.ts:26
     // receiveBytes(b: bytes, length: uint64) {
+    intc_0 // 1
     return
 
 
@@ -167,7 +162,7 @@ test:
     substring 0 16
     dup
     len
-    pushint 16 // 16
+    pushint 16
     ==
     assert // Length must be 16
     // tests/approvals/static-bytes.algo.ts:14
@@ -180,8 +175,10 @@ test:
     len
     intc_1 // 32
     ==
+    assert
     // tests/approvals/static-bytes.algo.ts:34
     // test() {
+    intc_0 // 1
     return
 
 
@@ -208,8 +205,10 @@ testArray:
     // assert(bitAnd === Txn.sender.bytes)
     txn Sender
     ==
+    assert
     // tests/approvals/static-bytes.algo.ts:48
     // testArray() {
+    intc_0 // 1
     return
 
 
@@ -226,7 +225,7 @@ test2_while_top@2:
     // tests/approvals/static-bytes.algo.ts:60
     // for (let i: uint64 = 0; i < 5; i = i + 1) {
     dup
-    pushint 5 // 5
+    pushint 5
     <
     bz test2_after_while@4
     // tests/approvals/static-bytes.algo.ts:61

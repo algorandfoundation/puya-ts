@@ -10,7 +10,7 @@ main:
 main_block@0:
     // tests/approvals/arc4-types.algo.ts:192
     // ensureBudget(1400)
-    pushint 1400 // 1400
+    pushint 1400
     intc_0 // 0
     callsub ensure_budget
     // tests/approvals/arc4-types.algo.ts:194
@@ -82,7 +82,7 @@ ensure_budget:
 
 ensure_budget_block@0:
     frame_dig -2
-    pushint 10 // 10
+    pushint 10
     +
     b ensure_budget_while_top@1
 
@@ -209,7 +209,7 @@ testUintN_block@0:
     intc_1 // 8
     <=
     assert // overflow
-    pushint 7 // 7
+    pushint 7
     intc_3 // 1
     extract3
     // tests/approvals/arc4-types.algo.ts:39
@@ -224,10 +224,10 @@ testUintN_block@0:
     // const a = new Uint<128>(b)
     frame_dig -2
     len
-    pushint 16 // 16
+    pushint 16
     <=
     assert // overflow
-    pushint 16 // 16
+    pushint 16
     bzero
     frame_dig -2
     b|
@@ -243,7 +243,7 @@ testUintN_block@0:
     // assert(c.bytes.length === 256 / 8)
     frame_dig -1
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:49
@@ -252,7 +252,7 @@ testUintN_block@0:
     // tests/approvals/arc4-types.algo.ts:50
     // const a_from_bytes = convertBytes<Uint<128>>(a_bytes, { strategy: 'validate' })
     len
-    pushint 16 // 16
+    pushint 16
     ==
     assert // invalid number of bytes for arc4.uint128
     // tests/approvals/arc4-types.algo.ts:52
@@ -263,7 +263,7 @@ testUintN_block@0:
     // assert(aliased64.asUint64() === 12)
     pushbytes 0x000000000000000c
     btoi
-    pushint 12 // 12
+    pushint 12
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:58
@@ -435,9 +435,9 @@ testStaticBytes_block@0:
     // tests/approvals/arc4-types.algo.ts:98
     // assert(s5[0].native === Bytes.fromHex('AABBCCDDEE'))
     intc_0 // 0
-    pushint 5 // 5
+    pushint 5
     *
-    pushint 5 // 5
+    pushint 5
     extract3 // on error: index access is out of bounds
     bytec 7 // 0xaabbccddee
     ==
@@ -482,7 +482,7 @@ testArrays:
 testArrays_block@0:
     // tests/approvals/arc4-types.algo.ts:108
     // const myArray = new DynamicArray(n, n, n)
-    pushint 3 // 3
+    pushint 3
     itob
     extract 6 2
     frame_dig -1
@@ -593,8 +593,8 @@ testArrays_block@0:
     concat
     // tests/approvals/arc4-types.algo.ts:124
     // assertMatch(myStatic2, [n, n, n])
-    pushint 3 // 3
-    pushint 3 // 3
+    pushint 3
+    pushint 3
     ==
     cover 1
     intc_0 // 0
@@ -695,7 +695,7 @@ testArrays_block@0:
     intc_2 // 2
     uncover 3
     substring3
-    pushint 3 // 3
+    pushint 3
     intc_1 // 8
     *
     intc_1 // 8
@@ -712,7 +712,7 @@ testArrays_block@0:
     intc_2 // 2
     uncover 3
     substring3
-    pushint 4 // 4
+    pushint 4
     intc_1 // 8
     *
     intc_1 // 8
@@ -729,7 +729,7 @@ testArrays_block@0:
     intc_2 // 2
     uncover 3
     substring3
-    pushint 5 // 5
+    pushint 5
     intc_1 // 8
     *
     intc_1 // 8
@@ -746,7 +746,7 @@ testArrays_block@0:
     intc_2 // 2
     uncover 3
     substring3
-    pushint 6 // 6
+    pushint 6
     intc_1 // 8
     *
     intc_1 // 8
@@ -762,7 +762,7 @@ testArrays_block@0:
     intc_2 // 2
     uncover 2
     substring3
-    pushint 7 // 7
+    pushint 7
     intc_1 // 8
     *
     intc_1 // 8
@@ -872,7 +872,7 @@ testAsUint64_block@0:
     // assert(u8.asUint64() === 42)
     bytec 8 // 0x2a
     btoi
-    pushint 42 // 42
+    pushint 42
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:161
@@ -886,7 +886,7 @@ testAsUint64_block@0:
     // assert(uint128.asUint64() === 1)
     bytec 5 // 0x00000000000000000000000000000001
     bitlen
-    pushint 64 // 64
+    pushint 64
     <=
     assert // overflow
     bytec 5 // 0x00000000000000000000000000000001
@@ -903,7 +903,7 @@ testAsUint64_block@0:
     // assert(uint256.asUint64() === Uint64(MAX_UINT64))
     bytec 10 // 0x000000000000000000000000000000000000000000000000ffffffffffffffff
     bitlen
-    pushint 64 // 64
+    pushint 64
     <=
     assert // overflow
     bytec 10 // 0x000000000000000000000000000000000000000000000000ffffffffffffffff
@@ -958,7 +958,7 @@ testZeroValues:
 testZeroValues_block@0:
     // tests/approvals/arc4-types.algo.ts:214
     // assert(new StaticArray<Uint8, 4>().bytes === new StaticArray(new Uint8(0), new Uint8(0), new Uint8(0), new Uint8(0)).bytes)
-    pushint 4 // 4
+    pushint 4
     bzero
     bytec_1 // 0x
     bytec_0 // 0x00
@@ -1010,7 +1010,7 @@ testZeroValues_block@0:
     intc_0 // 0
     getbit
     uncover 1
-    pushint 3 // 3
+    pushint 3
     uncover 2
     setbit
     bytec_1 // 0x
@@ -1112,35 +1112,35 @@ testZeroValues_block@0:
     intc_0 // 0
     getbit
     uncover 1
-    pushint 3 // 3
+    pushint 3
     uncover 2
     setbit
     uncover 1
     intc_0 // 0
     getbit
     uncover 1
-    pushint 4 // 4
+    pushint 4
     uncover 2
     setbit
     uncover 1
     intc_0 // 0
     getbit
     uncover 1
-    pushint 5 // 5
+    pushint 5
     uncover 2
     setbit
     uncover 1
     intc_0 // 0
     getbit
     uncover 1
-    pushint 6 // 6
+    pushint 6
     uncover 2
     setbit
     uncover 1
     intc_0 // 0
     getbit
     uncover 1
-    pushint 7 // 7
+    pushint 7
     uncover 2
     setbit
     bytec_1 // 0x
@@ -1203,19 +1203,19 @@ testZeroValues_block@0:
     intc_2 // 2
     intc_0 // 0
     setbit
-    pushint 3 // 3
+    pushint 3
     intc_0 // 0
     setbit
-    pushint 4 // 4
+    pushint 4
     intc_0 // 0
     setbit
-    pushint 5 // 5
+    pushint 5
     intc_0 // 0
     setbit
-    pushint 6 // 6
+    pushint 6
     intc_0 // 0
     setbit
-    pushint 7 // 7
+    pushint 7
     intc_0 // 0
     setbit
     bytec_1 // 0x
@@ -1257,21 +1257,21 @@ testZeroValues_block@0:
     assert
     // tests/approvals/arc4-types.algo.ts:237
     // assert(new StaticBytes<5>().bytes === bzero(5))
-    pushint 5 // 5
+    pushint 5
     bzero
     pushbytes 0x0000000000
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:238
     // assert(new Address().bytes === bzero(32))
-    pushint 32 // 32
+    pushint 32
     bzero
     bytec 4 // addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
     ==
     assert
     // tests/approvals/arc4-types.algo.ts:239
     // assert(new UFixed<32, 4>().bytes === bzero(32 / 8))
-    pushint 4 // 4
+    pushint 4
     bzero
     bytec 16 // 0x00000000
     ==
@@ -1288,7 +1288,7 @@ testZeroValues_block@0:
     assert
     // tests/approvals/arc4-types.algo.ts:241
     // assert(new Uint32().bytes === bzero(32 / 8))
-    pushint 4 // 4
+    pushint 4
     bzero
     bytec 16 // 0x00000000
     ==

@@ -19,7 +19,7 @@ main_setStore_route@3:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     b setStore
 
 main___algots__.defaultCreate@5:
@@ -30,8 +30,6 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
     return
 
 
@@ -42,7 +40,7 @@ setStore:
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -55,5 +53,5 @@ setStore:
     app_global_put
     // tests/approvals/multi-inheritance-2.algo.ts:16
     // setStore(value: uint64) {
-    pushint 1 // 1
+    pushint 1
     return

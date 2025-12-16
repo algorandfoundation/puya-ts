@@ -23,7 +23,7 @@ main_after_if_else@2:
     match main_delete_route@4 main_update_route@5
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     bz main_create_NoOp@11
     pushbytess 0xd0a28200 0x5180ba20 // method "greet(string)string", method "sendGreetings((string,string))string"
@@ -53,8 +53,6 @@ main_update_route@5:
     ==
     txn ApplicationID
     &&
-    assert // OnCompletion must be UpdateApplication && can only call when not creating
-    intc_1 // 1
     return
 
 main_delete_route@4:
@@ -65,8 +63,6 @@ main_delete_route@4:
     ==
     txn ApplicationID
     &&
-    assert // OnCompletion must be DeleteApplication && can only call when not creating
-    intc_1 // 1
     return
 
 
@@ -135,7 +131,7 @@ sendGreetings:
     substring3
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 6 // 6
+    pushint 6
     +
     dig 3
     intc_2 // 2

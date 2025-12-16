@@ -10,7 +10,7 @@ main:
     bz main___algots__.defaultCreate@13
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0xffbc3914 0x341a3794 0x73e5b0c7 0x5034266b 0xaada8eee 0x4e935b6e // method "test()uint64", method "test2()uint64", method "test3()uint64", method "test4()uint64", method "test5()uint512", method "test6()uint512"
@@ -74,6 +74,4 @@ main___algots__.defaultCreate@13:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return

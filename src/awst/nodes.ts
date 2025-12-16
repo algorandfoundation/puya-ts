@@ -5,7 +5,6 @@ import type { ContractReference, LogicSigReference, OnCompletionAction } from '.
 import type { SourceLocation } from './source-location'
 import type { TxnField } from './txn-fields'
 import type { wtypes } from './wtypes'
-
 export abstract class Node {
   constructor(props: Props<Node>) {
     this.sourceLocation = props.sourceLocation
@@ -134,10 +133,12 @@ export class AssertExpression extends Expression {
     this.condition = props.condition
     this.errorMessage = props.errorMessage
     this.wtype = props.wtype
+    this.explicit = props.explicit
   }
   readonly condition: Expression | null
   readonly errorMessage: string | null
   readonly wtype: wtypes.WType
+  readonly explicit: boolean
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAssertExpression(this)
   }
@@ -235,6 +236,26 @@ export class TemplateVar extends Expression {
     return visitor.visitTemplateVar(this)
   }
 }
+export class MethodSignatureString extends Node {
+  constructor(props: Props<MethodSignatureString>) {
+    super(props)
+    this.value = props.value
+  }
+  readonly value: string
+}
+export class MethodSignature extends Node {
+  constructor(props: Props<MethodSignature>) {
+    super(props)
+    this.name = props.name
+    this.argTypes = props.argTypes
+    this.returnType = props.returnType
+    this.resourceEncoding = props.resourceEncoding
+  }
+  readonly name: string
+  readonly argTypes: Array<wtypes.WType>
+  readonly returnType: wtypes.WType
+  readonly resourceEncoding: 'index' | 'value'
+}
 export class MethodConstant extends Expression {
   constructor(props: Props<MethodConstant>) {
     super(props)
@@ -242,7 +263,7 @@ export class MethodConstant extends Expression {
     this.value = props.value
   }
   readonly wtype: wtypes.WType
-  readonly value: string
+  readonly value: MethodSignature | MethodSignatureString
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitMethodConstant(this)
   }
@@ -293,7 +314,7 @@ export class ARC4FromBytes extends Expression {
     this.validate = props.validate
   }
   readonly value: Expression
-  readonly wtype: wtypes.ARC4Type
+  readonly wtype: wtypes.WType
   readonly validate: boolean
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4FromBytes(this)
@@ -429,6 +450,20 @@ export class UpdateInnerTransaction extends Expression {
   readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitUpdateInnerTransaction(this)
+  }
+}
+export class StageInnerTransactions extends Expression {
+  constructor(props: Props<StageInnerTransactions>) {
+    super(props)
+    this.itxns = props.itxns
+    this.startNewGroup = props.startNewGroup
+    this.wtype = props.wtype
+  }
+  readonly itxns: Array<Expression>
+  readonly startNewGroup: Expression
+  readonly wtype: wtypes.WType
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitStageInnerTransactions(this)
   }
 }
 export class GroupTransactionReference extends Expression {
@@ -1524,18 +1559,18 @@ export class ARC4ABIMethodConfig {
     this.create = props.create
     this.name = props.name
     this.resourceEncoding = props.resourceEncoding
-    this.validateEncoding = props.validateEncoding
     this.readonly = props.readonly
     this.defaultArgs = props.defaultArgs
+    this.validateEncoding = props.validateEncoding
   }
   readonly sourceLocation: SourceLocation
   readonly allowedCompletionTypes: Array<OnCompletionAction>
   readonly create: ARC4CreateOption
   readonly name: string
   readonly resourceEncoding: 'index' | 'value'
-  readonly validateEncoding: boolean | null
   readonly readonly: boolean
   readonly defaultArgs: Map<string, ABIMethodArgMemberDefault | ABIMethodArgConstantDefault>
+  readonly validateEncoding: boolean | null
 }
 export type Constant = IntegerConstant | DecimalConstant | BoolConstant | BytesConstant | AddressConstant | MethodConstant
 export type LValue =
@@ -1566,6 +1601,8 @@ export const concreteNodes = {
   stringConstant: StringConstant,
   voidConstant: VoidConstant,
   templateVar: TemplateVar,
+  methodSignatureString: MethodSignatureString,
+  methodSignature: MethodSignature,
   methodConstant: MethodConstant,
   addressConstant: AddressConstant,
   aRC4Encode: ARC4Encode,
@@ -1581,6 +1618,7 @@ export const concreteNodes = {
   intrinsicCall: IntrinsicCall,
   createInnerTransaction: CreateInnerTransaction,
   updateInnerTransaction: UpdateInnerTransaction,
+  stageInnerTransactions: StageInnerTransactions,
   groupTransactionReference: GroupTransactionReference,
   checkedMaybe: CheckedMaybe,
   tupleExpression: TupleExpression,
@@ -1696,6 +1734,7 @@ export interface ExpressionVisitor<T> {
   visitIntrinsicCall(expression: IntrinsicCall): T
   visitCreateInnerTransaction(expression: CreateInnerTransaction): T
   visitUpdateInnerTransaction(expression: UpdateInnerTransaction): T
+  visitStageInnerTransactions(expression: StageInnerTransactions): T
   visitGroupTransactionReference(expression: GroupTransactionReference): T
   visitCheckedMaybe(expression: CheckedMaybe): T
   visitTupleExpression(expression: TupleExpression): T

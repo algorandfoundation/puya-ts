@@ -5,7 +5,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L14
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (! tmp%2#0)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         (assert tmp%4#0)
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
@@ -19,7 +19,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@5: // testRejectVersion_route_L20
         itxn_begin
         ((itxn_field ClearStateProgramPages) DIEBQw==)
-        ((itxn_field ApprovalProgramPages) DDEbQQAggASg6BhyNhoAjgEAAQAxGYEEEjEYEEQxRIEBEkSBAUMxGRQxGBQQRIEBQw==)
+        ((itxn_field ApprovalProgramPages) DDEbQQAggASg6BhyNhoAjgEAAQAxGYEEEjEYEEQxRIEBEkSBAUMxGRQxGBQQQw==)
         ((itxn_field OnCompletion) 0u)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
@@ -32,7 +32,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_begin
         ((itxn_field ApplicationArgs) method "update()void")
         ((itxn_field ClearStateProgramPages) DIEBQw==)
-        ((itxn_field ApprovalProgramPages) DDEbQQAggAQkN408NhoAjgEAAQAxGYEFEjEYEEQxRIECEkSBAUMxGRQxGBQQRIEBQw==)
+        ((itxn_field ApprovalProgramPages) DDEbQQAggAQkN408NhoAjgEAAQAxGYEFEjEYEEQxRIECEkSBAUMxGRQxGBQQQw==)
         ((itxn_field OnCompletion) 4u)
         ((itxn_field ApplicationID) v0Txn.CreatedApplicationID#0)
         ((itxn_field RejectVersion) 1u)
@@ -61,5 +61,5 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (! tmp%9#0)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         exit 1u

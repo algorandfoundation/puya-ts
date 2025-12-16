@@ -3,15 +3,15 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 4 10
-    bytecblock "tm1a" "t1" "t2" "tm2a" 0x0005000c80000568656c6c6f0005776f726c64 "tm1b" 0x0005000a0000036162630003646566 "tm2b"
+    intcblock 1 0 4
+    bytecblock "tm1a" "tm2a" "t1" "t2" 0x0005000c80000568656c6c6f0005776f726c64 "tm1b" 0x0005000a0000036162630003646566 "tm2b"
     // tests/approvals/box-proxies.algo.ts:172
     // class TupleBox extends Contract {
     txn NumAppArgs
     bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0xfc19c46e 0x9f1f18e5 // method "testBox()void", method "testBoxMap()void"
@@ -31,7 +31,7 @@ main_testBoxMap_route@5:
     assert
     // tests/approvals/box-proxies.algo.ts:176
     // boxMap2 = BoxMap<string, BoxMap2>({ keyPrefix: 'tm2' })
-    bytec_3 // "tm2a"
+    bytec_1 // "tm2a"
     // tests/approvals/box-proxies.algo.ts:206
     // assert(!this.boxMap2('a').exists)
     box_len
@@ -54,14 +54,14 @@ main_testBoxMap_route@5:
     box_put
     // tests/approvals/box-proxies.algo.ts:176
     // boxMap2 = BoxMap<string, BoxMap2>({ keyPrefix: 'tm2' })
-    bytec_3 // "tm2a"
+    bytec_1 // "tm2a"
     // tests/approvals/box-proxies.algo.ts:209
     // this.boxMap2('a').value = { a: 'hello', b: Bytes('world'), c: true }
     box_del
     pop
     // tests/approvals/box-proxies.algo.ts:176
     // boxMap2 = BoxMap<string, BoxMap2>({ keyPrefix: 'tm2' })
-    bytec_3 // "tm2a"
+    bytec_1 // "tm2a"
     // tests/approvals/box-proxies.algo.ts:208
     // this.boxMap1('a').value = ['hello', Bytes('world'), true]
     bytec 4 // 0x0005000c80000568656c6c6f0005776f726c64
@@ -84,10 +84,10 @@ main_testBoxMap_route@5:
     box_get
     pop
     dup
-    intc_0 // 0
+    intc_1 // 0
     extract_uint16
     dig 1
-    pushint 2 // 2
+    pushint 2
     extract_uint16
     dig 2
     uncover 2
@@ -112,20 +112,20 @@ main_testBoxMap_route@5:
     // tests/approvals/box-proxies.algo.ts:214
     // assert(this.boxMap1('a').value[2])
     intc_2 // 4
-    intc_1 // 1
+    intc_0 // 1
     box_extract
-    intc_0 // 0
+    intc_1 // 0
     getbit
     assert
     // tests/approvals/box-proxies.algo.ts:176
     // boxMap2 = BoxMap<string, BoxMap2>({ keyPrefix: 'tm2' })
-    bytec_3 // "tm2a"
+    bytec_1 // "tm2a"
     // tests/approvals/box-proxies.algo.ts:219
     // assert(this.boxMap2('a').value.c)
     intc_2 // 4
-    intc_1 // 1
+    intc_0 // 1
     box_extract
-    intc_0 // 0
+    intc_1 // 0
     getbit
     assert
     // tests/approvals/box-proxies.algo.ts:175
@@ -176,95 +176,77 @@ main_testBoxMap_route@5:
     assert
     // tests/approvals/box-proxies.algo.ts:176
     // boxMap2 = BoxMap<string, BoxMap2>({ keyPrefix: 'tm2' })
-    bytec_3 // "tm2a"
+    bytec_1 // "tm2a"
     // tests/approvals/box-proxies.algo.ts:230
     // this.boxMap2('a').delete()
     box_del
     pop
     // tests/approvals/box-proxies.algo.ts:176
     // boxMap2 = BoxMap<string, BoxMap2>({ keyPrefix: 'tm2' })
-    bytec_3 // "tm2a"
+    bytec_1 // "tm2a"
     // tests/approvals/box-proxies.algo.ts:231
     // assert(!this.boxMap2('a').exists)
     box_len
     bury 1
     !
+    assert
     // tests/approvals/box-proxies.algo.ts:204
     // testBoxMap() {
+    intc_0 // 1
     return
 
 main_testBox_route@4:
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_1 // "t1"
+    bytec_2 // "t1"
     // tests/approvals/box-proxies.algo.ts:179
     // this.box1.create({ size: 10 })
-    intc_3 // 10
+    pushint 10
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec_2 // "t2"
+    bytec_3 // "t2"
     // tests/approvals/box-proxies.algo.ts:180
     // this.box2.create({ size: 20 })
-    pushint 20 // 20
+    pushint 20
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_1 // "t1"
-    // tests/approvals/box-proxies.algo.ts:181
-    // assert(this.box1.length === 10)
-    box_len
-    pop
-    intc_3 // 10
-    ==
-    assert
-    // tests/approvals/box-proxies.algo.ts:174
-    // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec_2 // "t2"
-    // tests/approvals/box-proxies.algo.ts:182
-    // assert(this.box2.length === 20)
-    box_len
-    pop
-    pushint 20 // 20
-    ==
-    assert
-    // tests/approvals/box-proxies.algo.ts:173
-    // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_1 // "t1"
+    bytec_2 // "t1"
     // tests/approvals/box-proxies.algo.ts:187
     // this.box1.value = ['hello', Bytes('world'), true]
     box_del
     pop
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_1 // "t1"
+    bytec_2 // "t1"
     // tests/approvals/box-proxies.algo.ts:187
     // this.box1.value = ['hello', Bytes('world'), true]
     bytec 4 // 0x0005000c80000568656c6c6f0005776f726c64
     box_put
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_1 // "t1"
+    bytec_2 // "t1"
     // tests/approvals/box-proxies.algo.ts:190
     // assert(this.box1.value[2])
     intc_2 // 4
-    intc_1 // 1
+    intc_0 // 1
     box_extract
-    intc_0 // 0
+    intc_1 // 0
     getbit
     assert
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec_2 // "t2"
+    bytec_3 // "t2"
     // tests/approvals/box-proxies.algo.ts:192
     // this.box2.value = { a: 'hello', b: Bytes('world'), c: true }
     box_del
     pop
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec_2 // "t2"
+    bytec_3 // "t2"
     // tests/approvals/box-proxies.algo.ts:187
     // this.box1.value = ['hello', Bytes('world'), true]
     bytec 4 // 0x0005000c80000568656c6c6f0005776f726c64
@@ -273,25 +255,25 @@ main_testBox_route@4:
     box_put
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec_2 // "t2"
+    bytec_3 // "t2"
     // tests/approvals/box-proxies.algo.ts:195
     // assert(this.box2.value.c)
     intc_2 // 4
-    intc_1 // 1
+    intc_0 // 1
     box_extract
-    intc_0 // 0
+    intc_1 // 0
     getbit
     assert
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_1 // "t1"
+    bytec_2 // "t1"
     // tests/approvals/box-proxies.algo.ts:197
     // this.box1.delete()
     box_del
     pop
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_1 // "t1"
+    bytec_2 // "t1"
     // tests/approvals/box-proxies.algo.ts:198
     // assert(!this.box1.exists)
     box_len
@@ -300,21 +282,23 @@ main_testBox_route@4:
     assert
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec_2 // "t2"
+    bytec_3 // "t2"
     // tests/approvals/box-proxies.algo.ts:200
     // this.box2.delete()
     box_del
     pop
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec_2 // "t2"
+    bytec_3 // "t2"
     // tests/approvals/box-proxies.algo.ts:201
     // assert(!this.box2.exists)
     box_len
     bury 1
     !
+    assert
     // tests/approvals/box-proxies.algo.ts:178
     // testBox() {
+    intc_0 // 1
     return
 
 main___algots__.defaultCreate@9:
@@ -325,6 +309,4 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_1 // 1
     return
