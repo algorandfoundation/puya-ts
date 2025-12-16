@@ -1,4 +1,4 @@
-import algosdk from 'algosdk'
+import { OnApplicationComplete } from '@algorandfoundation/algokit-utils/transact'
 import { describe, expect } from 'vitest'
 import { utf8ToUint8Array } from '../../src/util'
 import { createArc4TestFixture } from './util/test-fixture'
@@ -35,10 +35,10 @@ describe('teal-script conventions', () => {
       await appFactoryTealScriptConventionsAlgo.send.create({
         method: 'createApplication',
         args: [utf8ToUint8Array('Hello')],
-        onComplete: algosdk.OnApplicationComplete.DeleteApplicationOC,
+        onComplete: OnApplicationComplete.DeleteApplication,
       })
     ).appClient
 
-    await expect(app2.getGlobalState()).rejects.toThrow('application does not exist')
+    await expect(app2.getGlobalState()).rejects.toThrow(/Request to \/v2\/applications\/\d+ failed with status 404/)
   })
 })

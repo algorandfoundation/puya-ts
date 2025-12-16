@@ -1,4 +1,4 @@
-import { OnApplicationComplete } from 'algosdk'
+import { OnApplicationComplete } from '@algorandfoundation/algokit-utils/transact'
 import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
@@ -48,7 +48,7 @@ describe('State totals', () => {
     expect(appSpecExtendsSubWithTotals.state.schema.local.bytes).toBe(1)
   })
   test('ExtendsSubWithTotals runs', async ({ appClientExtendsSubWithTotals, testAccount }) => {
-    await appClientExtendsSubWithTotals.send.call({ method: 'setState', args: [789], onComplete: OnApplicationComplete.OptInOC })
+    await appClientExtendsSubWithTotals.send.call({ method: 'setState', args: [789], onComplete: OnApplicationComplete.OptIn })
 
     const state = await appClientExtendsSubWithTotals.getGlobalState()
     expect(state['oneGlobal'].value).toBe(789n)

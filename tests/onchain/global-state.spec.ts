@@ -13,7 +13,7 @@ describe('global state base', () => {
       },
       args: [bigIntToUint8Array(123n, 8)],
     })
-    const appId = result.confirmations[0].applicationIndex
+    const appId = result.confirmations[0].appId
     invariant(appId !== undefined, 'must have appId')
     const state = await TestContractInvoker.globalState(appId)
 

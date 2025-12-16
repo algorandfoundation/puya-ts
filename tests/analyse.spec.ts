@@ -3,11 +3,14 @@ import { AbsolutePath, processInputPaths } from '../src'
 import { analyse } from '../src/language-server/analyse'
 import { createAnalyserService } from '../src/language-server/analyser-service'
 import { normalisedUri } from '../src/language-server/util/uris'
+import { logger, LogLevel } from '../src/logger'
+import { ConsoleLogSink } from '../src/logger/sinks/console-log-sink'
 import { PuyaService } from '../src/puya/puya-service'
 import { resolvePuyaPath } from '../src/puya/resolve-puya-path'
 import { testInvariant } from './util'
 
 describe('analyse', async () => {
+  logger.configure([new ConsoleLogSink(LogLevel.Error)])
   const puyaService = new PuyaService({ puyaPath: await resolvePuyaPath({}) })
   const dir = AbsolutePath.resolve({ path: 'tests/other/analyse' })
   const dirUri = normalisedUri({ fsPath: dir.toString() }).toString()
