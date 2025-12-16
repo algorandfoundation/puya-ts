@@ -66,7 +66,7 @@ contract ForOfLoopsAlgo
     return total
   }
   
-  test_for_of_loop_arc4_static_array(items: arc4.static_array<arc4.uint64>): uint64
+  test_for_of_loop_arc4_static_array(items: arc4.static_array<arc4.uint64,5>): uint64
   {
     total: uint64 = 0
     for (temp in items) {
@@ -109,7 +109,7 @@ contract ForOfLoopsAlgo
     return total
   }
   
-  test_iterable_props(static_array: arc4.static_array<arc4.uint64>, fixed_array: arc4.static_array<uint64>, dyn_array: arc4.dynamic_array<arc4.uint64>): uint64
+  test_iterable_props(static_array: arc4.static_array<arc4.uint64,3>, fixed_array: arc4.static_array<uint64,3>, dyn_array: arc4.dynamic_array<arc4.uint64>): uint64
   {
     i: uint64 = 0
     for (temp in urange(0, static_array.length, 1)) {

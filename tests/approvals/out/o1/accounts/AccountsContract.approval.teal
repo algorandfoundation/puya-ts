@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 32 0
+    intcblock 1 0
     bytecblock 0x068101
     // tests/approvals/accounts.algo.ts:8
     // export class AccountsContract extends Contract {
@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x0adee59f 0xf62943d1 // method "getAccountInfo(address,uint64)(byte[32],uint64,uint64,byte[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,bool)", method "otherAccount()void"
@@ -33,8 +33,6 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -45,19 +43,19 @@ getAccountInfo:
     txna ApplicationArgs 1
     dup
     len
-    intc_1 // 32
+    pushint 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 2
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
 
 getAccountInfo_while_top@2:
-    pushint 1410 // 1410
+    pushint 1410
     global OpcodeBudget
     >
     bz getAccountInfo_after_while@7
@@ -70,7 +68,7 @@ getAccountInfo_while_top@2:
     itxn_field ApprovalProgram
     bytec_0 // 0x068101
     itxn_field ClearStateProgram
-    intc_2 // 0
+    intc_1 // 0
     itxn_field Fee
     itxn_submit
     b getAccountInfo_while_top@2
@@ -175,11 +173,6 @@ getAccountInfo_after_while@7:
     uncover 12
     itob
     concat
-    dig 11
-    len
-    intc_1 // 32
-    ==
-    assert // invalid size
     uncover 11
     concat
     uncover 10
@@ -210,7 +203,7 @@ getAccountInfo_after_while@7:
     itob
     concat
     pushbytes 0x00
-    intc_2 // 0
+    intc_1 // 0
     uncover 3
     setbit
     intc_0 // 1

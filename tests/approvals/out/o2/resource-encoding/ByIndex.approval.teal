@@ -3,7 +3,6 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1
     bytecblock 0x151f7c75
     // tests/approvals/resource-encoding.algo.ts:16
     // class ByIndex extends Contract {
@@ -11,7 +10,7 @@ main:
     bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x34359fb6 0x129c3321 // method "testExplicitIndex(account)uint64", method "testImplicitValue(address)uint64"
@@ -25,7 +24,7 @@ main_testImplicitValue_route@5:
     txna ApplicationArgs 1
     dup
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     // tests/approvals/resource-encoding.algo.ts:27
@@ -39,7 +38,7 @@ main_testImplicitValue_route@5:
     swap
     concat
     log
-    intc_0 // 1
+    pushint 1
     return
 
 main_testExplicitIndex_route@4:
@@ -48,7 +47,7 @@ main_testExplicitIndex_route@4:
     txna ApplicationArgs 1
     dup
     len
-    intc_0 // 1
+    pushint 1
     ==
     assert // invalid number of bytes for arc4.uint8
     btoi
@@ -64,7 +63,7 @@ main_testExplicitIndex_route@4:
     swap
     concat
     log
-    intc_0 // 1
+    pushint 1
     return
 
 main___algots__.defaultCreate@9:
@@ -75,6 +74,4 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return

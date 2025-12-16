@@ -5,7 +5,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L8
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (! tmp%2#0)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         (assert tmp%4#0)
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
@@ -23,7 +23,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (! tmp%9#0)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         exit 1u
 
 subroutine tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo[routing]() -> void:
@@ -83,9 +83,6 @@ subroutine tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo[rou
         let aggregate%head%1#0: bytes = (concat account#0 aggregate%val_as_bytes%0#0)
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob value%1#0)
         let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 aggregate%val_as_bytes%1#0)
-        let aggregate%length%1#0: uint64 = (len value%2#0)
-        let aggregate%lengths_equal%1#0: bool = (== aggregate%length%1#0 32u)
-        (assert aggregate%lengths_equal%1#0) // invalid size
         let aggregate%head%3#0: bytes = (concat aggregate%head%2#0 value%2#0)
         let aggregate%val_as_bytes%2#0: bytes[8] = (itob value%3#0)
         let aggregate%head%4#0: bytes = (concat aggregate%head%3#0 aggregate%val_as_bytes%2#0)

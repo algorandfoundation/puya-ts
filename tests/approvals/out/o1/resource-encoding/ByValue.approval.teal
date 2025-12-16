@@ -19,7 +19,7 @@ main_testExplicitValue_route@3:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     b testExplicitValue
 
 main___algots__.defaultCreate@5:
@@ -30,8 +30,6 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
     return
 
 
@@ -42,7 +40,7 @@ testExplicitValue:
     txna ApplicationArgs 1
     dup
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     // tests/approvals/resource-encoding.algo.ts:34
@@ -56,5 +54,5 @@ testExplicitValue:
     swap
     concat
     log
-    pushint 1 // 1
+    pushint 1
     return

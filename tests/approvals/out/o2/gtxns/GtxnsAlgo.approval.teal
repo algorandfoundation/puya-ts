@@ -13,7 +13,7 @@ main:
     bz main___algots__.defaultCreate@13
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0xa78000de 0xf1908524 // method "test()void", method "test2()void"
@@ -175,7 +175,7 @@ main_reflectAllPay_route@8:
     concat
     dig 1
     len
-    pushint 244 // 244
+    pushint 244
     +
     swap
     uncover 10
@@ -262,8 +262,10 @@ main_test4_route@7:
     gtxns ApplicationID
     global CurrentApplicationID
     ==
+    assert
     // tests/approvals/gtxns.algo.ts:53
     // test4(other: gtxn.ApplicationCallTxn) {
+    intc_0 // 1
     return
 
 main_test3_route@6:
@@ -357,7 +359,7 @@ main_after_if_else@35:
     // tests/approvals/gtxns.algo.ts:31
     // case TransactionType.AssetConfig:
     dig 2
-    pushint 3 // 3
+    pushint 3
     ==
     // tests/approvals/gtxns.algo.ts:31-33
     // case TransactionType.AssetConfig:
@@ -398,7 +400,7 @@ main_after_if_else@39:
     // tests/approvals/gtxns.algo.ts:37
     // case TransactionType.KeyRegistration:
     dig 2
-    pushint 2 // 2
+    pushint 2
     ==
     // tests/approvals/gtxns.algo.ts:37-39
     // case TransactionType.KeyRegistration:
@@ -441,8 +443,10 @@ main_test_route@4:
     assert // transaction type is pay
     intc_1 // 0
     gtxns Amount
+    assert
     // tests/approvals/gtxns.algo.ts:17
     // test() {
+    intc_0 // 1
     return
 
 main___algots__.defaultCreate@13:
@@ -453,6 +457,4 @@ main___algots__.defaultCreate@13:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return

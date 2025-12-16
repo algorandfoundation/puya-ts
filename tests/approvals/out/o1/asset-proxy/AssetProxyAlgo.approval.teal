@@ -19,7 +19,7 @@ main_testAsset_route@3:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     b testAsset
 
 main___algots__.defaultCreate@5:
@@ -30,8 +30,6 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
     return
 
 
@@ -42,7 +40,7 @@ testAsset:
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -144,5 +142,5 @@ testAsset:
     log
     // tests/approvals/asset-proxy.algo.ts:5
     // testAsset(asset: Asset): void {
-    pushint 1 // 1
+    pushint 1
     return

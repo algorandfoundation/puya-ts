@@ -29,10 +29,10 @@ main_create_route@2:
     pushint 0 // NoOp
     ==
     txn ApplicationID
-    pushint 0 // 0
+    pushint 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub create
     b main_switch_case_next@3
 
@@ -45,7 +45,7 @@ create_block@0:
     // tests/approvals/implicit-create.algo.ts:18
     // @abimethod({ onCreate: 'require' })
     callsub tests/approvals/implicit-create.algo.ts::BaseWithAbiCreate.create
-    pushint 1 // 1
+    pushint 1
     return
 
 

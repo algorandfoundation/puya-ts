@@ -14,7 +14,7 @@ main:
     bz main___algots__.defaultCreate@37
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x4d758c59 0x6bb7b963 0x18852cd6 0x5b2efbe1 0xecca7a98 0x94da73c0 0x26230de1 0x3ec77fac 0xf111c07e 0x3f68b7d1 0x674c0e87 0x091ab848 0xf3289fb8 0x91acee51 0x4e641e99 0x6536e3c2 0x93522cb8 0xbf888825 0x22aa90d6 0x6eecb49d 0x28388829 0x7e804bbf 0xce26c72c 0xec56126f 0xc3674b56 0xfb7b0528 0xba5195fd 0xe36b3224 0x574e9479 0xd0b582f1 // method "validate_uint64(uint64)void", method "validate_uint8(uint8)void", method "validate_uint512(uint512)void", method "validate_ufixed64(ufixed64x2)void", method "validate_uint8_arr(uint8[])void", method "validate_uint8_arr3(uint8[3])void", method "validate_bool(bool)void", method "validate_byte(byte)void", method "validate_string(string)void", method "validate_bytes(byte[])void", method "validate_address(address)void", method "validate_account(address)void", method "validate_bool_arr(bool[])void", method "validate_bool_arr3(bool[3])void", method "validate_static_tuple((uint64,uint8))void", method "validate_dynamic_tuple((uint64,uint8,string))void", method "validate_static_struct((uint64,uint8))void", method "validate_dynamic_struct((uint64,uint8,string))void", method "validate_static_struct_arr((uint64,uint8)[])void", method "validate_static_struct_arr3((uint64,uint8)[3])void", method "validate_dynamic_struct_arr((uint64,uint8,string)[])void", method "validate_dynamic_struct_arr3((uint64,uint8,string)[3])void", method "validate_dynamic_struct_with_a_bool((uint8,byte[],bool))void", method "validate_native_static_struct((uint64,uint8))void", method "validate_native_dynamic_struct((uint64,uint8,string))void", method "validate_native_static_struct_arr((uint64,uint8)[])void", method "validate_native_static_struct_arr3((uint64,uint8)[3])void", method "validate_native_dynamic_struct_arr((uint64,uint8,string)[])void", method "validate_native_dynamic_struct_arr3((uint64,uint8,string)[3])void", method "validate_c2c()void"
@@ -67,7 +67,7 @@ main_validate_c2c_route@33:
     ==
     assert // Bytes has valid prefix
     len
-    pushint 24 // 24
+    pushint 24
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint64, 3>
     // tests/approvals/abi-validation-exhaustive.algo.ts:136
@@ -82,7 +82,7 @@ main_validate_native_dynamic_struct_arr3_route@32:
     bury 6
     // tests/approvals/abi-validation-exhaustive.algo.ts:133
     // validateEncoding(value)
-    pushint 6 // 6
+    pushint 6
     bury 2
     intc_1 // 0
     bury 3
@@ -91,7 +91,7 @@ main_for_header@43:
     // tests/approvals/abi-validation-exhaustive.algo.ts:133
     // validateEncoding(value)
     dig 2
-    pushint 3 // 3
+    pushint 3
     <
     bz main_after_for@45
     dig 2
@@ -117,14 +117,14 @@ main_for_header@43:
     intc_3 // 9
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 11 // 11
+    pushint 11
     ==
     assert // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
     swap
     substring3
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 13 // 13
+    pushint 13
     +
     +
     bury 3
@@ -198,14 +198,14 @@ main_for_header@48:
     intc_3 // 9
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 11 // 11
+    pushint 11
     ==
     assert // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
     swap
     substring3
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 13 // 13
+    pushint 13
     +
     +
     bury 3
@@ -235,7 +235,7 @@ main_validate_native_static_struct_arr3_route@30:
     // tests/approvals/abi-validation-exhaustive.algo.ts:125
     // validateEncoding(value)
     len
-    pushint 27 // 27
+    pushint 27
     ==
     assert // invalid number of bytes for arc4.static_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeStaticStruct, 3>
     // tests/approvals/abi-validation-exhaustive.algo.ts:123
@@ -277,7 +277,7 @@ main_validate_native_dynamic_struct_route@28:
     intc_3 // 9
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 11 // 11
+    pushint 11
     ==
     assert // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
     uncover 2
@@ -286,7 +286,7 @@ main_validate_native_dynamic_struct_route@28:
     substring3
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 13 // 13
+    pushint 13
     +
     ==
     assert // invalid number of bytes for tests/approvals/abi-validation-exhaustive.algo.ts::NativeDynamicStruct
@@ -322,7 +322,7 @@ main_validate_dynamic_struct_with_a_bool_route@26:
     intc_0 // 1
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 4 // 4
+    pushint 4
     ==
     assert // invalid tail pointer at index 1 of (uint8,(len+uint8[]),bool1)
     uncover 2
@@ -331,7 +331,7 @@ main_validate_dynamic_struct_with_a_bool_route@26:
     substring3
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 6 // 6
+    pushint 6
     +
     ==
     assert // invalid number of bytes for WithABool
@@ -347,7 +347,7 @@ main_validate_dynamic_struct_arr3_route@25:
     bury 6
     // tests/approvals/abi-validation-exhaustive.algo.ts:105
     // validateEncoding(value)
-    pushint 6 // 6
+    pushint 6
     bury 2
     intc_1 // 0
     bury 3
@@ -356,7 +356,7 @@ main_for_header@63:
     // tests/approvals/abi-validation-exhaustive.algo.ts:105
     // validateEncoding(value)
     dig 2
-    pushint 3 // 3
+    pushint 3
     <
     bz main_after_for@65
     dig 2
@@ -382,14 +382,14 @@ main_for_header@63:
     intc_3 // 9
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 11 // 11
+    pushint 11
     ==
     assert // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
     swap
     substring3
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 13 // 13
+    pushint 13
     +
     +
     bury 3
@@ -463,14 +463,14 @@ main_for_header@68:
     intc_3 // 9
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 11 // 11
+    pushint 11
     ==
     assert // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
     swap
     substring3
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 13 // 13
+    pushint 13
     +
     +
     bury 3
@@ -500,7 +500,7 @@ main_validate_static_struct_arr3_route@23:
     // tests/approvals/abi-validation-exhaustive.algo.ts:97
     // validateEncoding(value)
     len
-    pushint 27 // 27
+    pushint 27
     ==
     assert // invalid number of bytes for arc4.static_array<ARC4StaticStruct, 3>
     // tests/approvals/abi-validation-exhaustive.algo.ts:95
@@ -542,7 +542,7 @@ main_validate_dynamic_struct_route@21:
     intc_3 // 9
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 11 // 11
+    pushint 11
     ==
     assert // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
     uncover 2
@@ -551,7 +551,7 @@ main_validate_dynamic_struct_route@21:
     substring3
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 13 // 13
+    pushint 13
     +
     ==
     assert // invalid number of bytes for ARC4DynamicStruct
@@ -587,7 +587,7 @@ main_validate_dynamic_tuple_route@19:
     intc_3 // 9
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 11 // 11
+    pushint 11
     ==
     assert // invalid tail pointer at index 2 of (uint64,uint8,(len+utf8[]))
     uncover 2
@@ -596,7 +596,7 @@ main_validate_dynamic_tuple_route@19:
     substring3
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 13 // 13
+    pushint 13
     +
     ==
     assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint8,arc4.dynamic_array<arc4.uint8>>
@@ -644,9 +644,9 @@ main_validate_bool_arr_route@16:
     dup
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 7 // 7
+    pushint 7
     +
-    pushint 8 // 8
+    pushint 8
     /
     intc_2 // 2
     +
@@ -666,7 +666,7 @@ main_validate_account_route@15:
     // tests/approvals/abi-validation-exhaustive.algo.ts:65
     // validateEncoding(value)
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     // tests/approvals/abi-validation-exhaustive.algo.ts:63
@@ -681,7 +681,7 @@ main_validate_address_route@14:
     // tests/approvals/abi-validation-exhaustive.algo.ts:61
     // validateEncoding(value)
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     // tests/approvals/abi-validation-exhaustive.algo.ts:59
@@ -766,7 +766,7 @@ main_validate_uint8_arr3_route@9:
     // tests/approvals/abi-validation-exhaustive.algo.ts:41
     // validateEncoding(value)
     len
-    pushint 3 // 3
+    pushint 3
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 3>
     // tests/approvals/abi-validation-exhaustive.algo.ts:39
@@ -801,7 +801,7 @@ main_validate_ufixed64_route@7:
     // tests/approvals/abi-validation-exhaustive.algo.ts:33
     // validateEncoding(value)
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.ufixed64x2
     // tests/approvals/abi-validation-exhaustive.algo.ts:31
@@ -816,7 +816,7 @@ main_validate_uint512_route@6:
     // tests/approvals/abi-validation-exhaustive.algo.ts:29
     // validateEncoding(value)
     len
-    pushint 64 // 64
+    pushint 64
     ==
     assert // invalid number of bytes for arc4.uint512
     // tests/approvals/abi-validation-exhaustive.algo.ts:27
@@ -831,7 +831,7 @@ main_validate_uint64_route@4:
     // tests/approvals/abi-validation-exhaustive.algo.ts:21
     // validateEncoding(value)
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     // tests/approvals/abi-validation-exhaustive.algo.ts:19
@@ -847,6 +847,4 @@ main___algots__.defaultCreate@37:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return

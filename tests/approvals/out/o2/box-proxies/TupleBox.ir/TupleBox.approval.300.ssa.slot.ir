@@ -5,7 +5,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L172
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (! tmp%2#0)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         (assert tmp%4#0)
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
@@ -13,12 +13,6 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@4: // testBox_route_L178
         (box_create "t1" 10u)
         (box_create "t2" 20u)
-        let (value%0#0: uint64, check%0#0: bool) = (box_len "t1")
-        let tmp%0#3: bool = (== value%0#0 10u)
-        (assert tmp%0#3)
-        let (value%1#0: uint64, check%1#0: bool) = (box_len "t2")
-        let tmp%1#2: bool = (== value%1#0 20u)
-        (assert tmp%1#2)
         (box_del "t1")
         (box_put "t1" 0x0005000c80000568656c6c6f0005776f726c64)
         let box%box_extract%0#1: Encoded(bool1[8]) = (box_extract "t1" 4u 1u)
@@ -90,5 +84,5 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (! tmp%9#0)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         exit 1u

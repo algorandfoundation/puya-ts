@@ -14,7 +14,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         let tmp%7#0: bool = (&& tmp%4#0 tmp%6#0)
-        (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
+        (assert tmp%7#0)
         tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test[routing]()
         goto block@4
     block@4: // switch_case_next_L96
@@ -25,7 +25,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%10#0: uint64 = (txn ApplicationID)
         let tmp%11#0: bool = (== tmp%10#0 0u)
         let tmp%12#0: bool = (&& tmp%9#0 tmp%11#0)
-        (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%12#0)
         tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.__algots__.defaultCreate()
         exit 1u
     block@6: // after_if_else_L96
@@ -43,14 +43,12 @@ subroutine tests/approvals/object-destructuring.algo.ts::testPartialDestructure(
 subroutine tests/approvals/object-destructuring.algo.ts::testPartialDestructureMutableObject(arg: Encoded((uint64,uint64),(uint64,uint64))) -> <uint64, uint64, Encoded((uint64,uint64),(uint64,uint64))>:
     block@0: // L15
         let aggregate%extract%0#0: bytes = (extract3 arg#0 0u 16u)
-        let tuple_item%0#0: Encoded(uint64,uint64) = aggregate%extract%0#0
-        let aggregate%extract%1#0: bytes = (extract3 tuple_item%0#0 0u 8u)
+        let aggregate%extract%1#0: bytes = (extract3 aggregate%extract%0#0 0u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#0
         let values%0#0: uint64 = (btoi tuple_item%1#0)
         let x#0: uint64 = values%0#0
         let aggregate%extract%2#0: bytes = (extract3 arg#0 0u 16u)
-        let tuple_item%2#0: Encoded(uint64,uint64) = aggregate%extract%2#0
-        let aggregate%extract%3#0: bytes = (extract3 tuple_item%2#0 8u 8u)
+        let aggregate%extract%3#0: bytes = (extract3 aggregate%extract%2#0 8u 8u)
         let tuple_item%3#0: Encoded(uint64) = aggregate%extract%3#0
         let values%1#0: uint64 = (btoi tuple_item%3#0)
         let y#0: uint64 = values%1#0
@@ -90,12 +88,12 @@ subroutine tests/approvals/object-destructuring.algo.ts::testMutableObject() -> 
         let awst_tmp%2#0: Encoded((uint64,uint64),(uint64,uint64)) = tests/approvals/object-destructuring.algo.ts::produceVector()
         let awst_tmp%3#0: Encoded((uint64,uint64),(uint64,uint64)) = tests/approvals/object-destructuring.algo.ts::produceVector()
         let aggregate%extract%0#0: bytes = (extract3 awst_tmp%3#0 0u 16u)
-        let tuple_item%10#0: Encoded(uint64,uint64) = aggregate%extract%0#0
-        let aggregate%extract%1#0: bytes = (extract3 tuple_item%10#0 0u 8u)
+        let aggregate%extract%1#0: bytes = (extract3 aggregate%extract%0#0 0u 8u)
         let tuple_item%11#0: Encoded(uint64) = aggregate%extract%1#0
         let values%4#0: uint64 = (btoi tuple_item%11#0)
-        let aggregate%extract%2#0: bytes = (extract3 tuple_item%10#0 8u 8u)
-        let tuple_item%12#0: Encoded(uint64) = aggregate%extract%2#0
+        let aggregate%extract%2#0: bytes = (extract3 awst_tmp%3#0 0u 16u)
+        let aggregate%extract%3#0: bytes = (extract3 aggregate%extract%2#0 8u 8u)
+        let tuple_item%12#0: Encoded(uint64) = aggregate%extract%3#0
         let values%5#0: uint64 = (btoi tuple_item%12#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob values%4#0)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0

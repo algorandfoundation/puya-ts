@@ -20,11 +20,11 @@ main_testMatches_route@3:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -43,7 +43,7 @@ main_testMatches_route@3:
     // tests/approvals/match-expr.algo.ts:8
     // assertMatch(xObj, { x: { not: 3 } }, 'x should not be 3')
     dup
-    pushint 3 // 3
+    pushint 3
     !=
     assert // x should not be 3
     // tests/approvals/match-expr.algo.ts:9
@@ -85,10 +85,10 @@ main_testMatches_route@3:
     dup
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 1 // 1
+    pushint 1
     ==
     swap
-    pushint 2 // 2
+    pushint 2
     extract_uint64
     dup
     intc_0 // 5
@@ -125,8 +125,10 @@ main_testMatches_route@3:
     intc_0 // 5
     <=
     &&
+    assert
     // tests/approvals/match-expr.algo.ts:5
     // public testMatches(x: uint64) {
+    pushint 1
     return
 
 main___algots__.defaultCreate@5:
@@ -137,6 +139,4 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
     return

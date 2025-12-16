@@ -15,7 +15,7 @@ main:
     // tests/approvals/multi-inheritance.algo.ts:23
     // stateOne = GlobalState({ initialValue: Uint64(45) })
     pushbytes "stateOne"
-    pushint 45 // 45
+    pushint 45
     app_global_put
     // tests/approvals/multi-inheritance.algo.ts:11
     // stateCommon = GlobalState<uint64>({ initialValue: 123 })
@@ -24,11 +24,11 @@ main:
     app_global_put
     // tests/approvals/multi-inheritance.algo.ts:30
     // stateTwo = GlobalState({ initialValue: 'Hello' })
-    pushbytess "stateTwo" "Hello" // "stateTwo", "Hello"
+    pushbytess "stateTwo" "Hello"
     app_global_put
     // tests/approvals/multi-inheritance.algo.ts:46
     // stateMulti = GlobalState({ initialValue: 'Hmmm' })
-    pushbytess "stateMulti" "Hmmm" // "stateMulti", "Hmmm"
+    pushbytess "stateMulti" "Hmmm"
     app_global_put
 
 main_after_if_else@2:
@@ -38,7 +38,7 @@ main_after_if_else@2:
     bz main___algots__.defaultCreate@17
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x290eba9f 0x839d96ff 0xa978ca56 0x88547eb8 0xc32533e3 0x455c8d09 0xf9f5142c 0x363b329e // method "methodMulti()string", method "methodCallsSuper()string", method "callB2CantOverride()string", method "callB2Common()string", method "methodOne()string", method "methodCommon()string", method "b2CantOverride()string", method "methodTwo()string"
@@ -118,6 +118,4 @@ main___algots__.defaultCreate@17:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return

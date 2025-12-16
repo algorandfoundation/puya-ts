@@ -3,6 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
+    intcblock 0 1
     bytecblock 0xa78000de
     // tests/approvals/ops.algo.ts:7
     // class MyContract extends Contract {
@@ -10,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     bytec_0 // method "test()void"
@@ -27,8 +28,6 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
     return
 
 
@@ -43,7 +42,7 @@ test:
     assert
     // tests/approvals/ops.algo.ts:19
     // assert(Txn.applicationArgs(0) === methodSelector('test()void'))
-    pushint 0 // 0
+    intc_0 // 0
     txnas ApplicationArgs
     bytec_0 // method "test()void"
     ==
@@ -51,12 +50,14 @@ test:
     // tests/approvals/ops.algo.ts:20
     // assert(GTxn.applicationArgs(Txn.groupIndex, 0) === methodSelector(MyContract.prototype.test))
     txn GroupIndex
-    pushint 0 // 0
+    intc_0 // 0
     gtxnsas ApplicationArgs
     bytec_0 // method "test()void"
     ==
+    assert
     // tests/approvals/ops.algo.ts:8
     // test() {
+    intc_1 // 1
     return
 
 
@@ -67,7 +68,7 @@ test2:
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -79,6 +80,8 @@ test2:
     // assert(a.length === size)
     len
     ==
+    assert
     // tests/approvals/ops.algo.ts:23
     // test2(size: uint64) {
+    intc_1 // 1
     return

@@ -34,7 +34,7 @@ main_switch_case_next@4:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_0 // 0
     !=
@@ -108,7 +108,7 @@ main_optIn_route@3:
     intc_0 // 0
     !=
     &&
-    assert // OnCompletion must be OptIn && can only call when not creating
+    assert
     callsub optIn
     b main_switch_case_next@4
 
@@ -122,7 +122,7 @@ main___algots__.defaultCreate@14:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -166,7 +166,7 @@ setState_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    pushint 2 // 2
+    pushint 2
     +
     intc_3 // 10
     +
@@ -177,7 +177,7 @@ setState_block@0:
     txna ApplicationArgs 2
     dup
     len
-    pushint 80 // 80
+    pushint 80
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint64, 10>
     callsub tests/approvals/local-state.algo.ts::LocalStateDemo.setState
@@ -226,7 +226,7 @@ writeDynamicLocalState_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len
@@ -239,7 +239,7 @@ writeDynamicLocalState_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len
@@ -274,7 +274,7 @@ readDynamicLocalState_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len
@@ -462,7 +462,7 @@ tests/approvals/local-state.algo.ts::LocalStateDemo.setState_block@0:
     extract 6 2
     uncover 2
     concat
-    pushint 13 // 13
+    pushint 13
     itob
     extract 6 2
     uncover 2
@@ -471,7 +471,7 @@ tests/approvals/local-state.algo.ts::LocalStateDemo.setState_block@0:
     cover 1
     dup
     len
-    pushint 13 // 13
+    pushint 13
     +
     pushbytes 0x00
     intc_0 // 0
@@ -663,7 +663,7 @@ tests/approvals/local-state.algo.ts::LocalStateDemo.getState_block@0:
     extract 6 2
     uncover 2
     concat
-    pushint 106 // 106
+    pushint 106
     itob
     extract 6 2
     uncover 2
@@ -672,7 +672,7 @@ tests/approvals/local-state.algo.ts::LocalStateDemo.getState_block@0:
     cover 1
     dup
     len
-    pushint 106 // 106
+    pushint 106
     +
     dig 5
     len

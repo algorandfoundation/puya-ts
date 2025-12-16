@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 4 10
+    intcblock 1 0 4
     bytecblock "tm1a" "t1" "t2" "tm2a" 0x0005000c80000568656c6c6f0005776f726c64 "tm1b" 0x0005000a0000036162630003646566 "tm2b"
     // tests/approvals/box-proxies.algo.ts:172
     // class TupleBox extends Contract {
@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0xfc19c46e 0x9f1f18e5 // method "testBox()void", method "testBoxMap()void"
@@ -27,8 +27,6 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -39,7 +37,7 @@ testBox:
     bytec_1 // "t1"
     // tests/approvals/box-proxies.algo.ts:179
     // this.box1.create({ size: 10 })
-    intc_3 // 10
+    pushint 10
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:174
@@ -47,29 +45,9 @@ testBox:
     bytec_2 // "t2"
     // tests/approvals/box-proxies.algo.ts:180
     // this.box2.create({ size: 20 })
-    pushint 20 // 20
+    pushint 20
     box_create
     pop
-    // tests/approvals/box-proxies.algo.ts:173
-    // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_1 // "t1"
-    // tests/approvals/box-proxies.algo.ts:181
-    // assert(this.box1.length === 10)
-    box_len
-    pop
-    intc_3 // 10
-    ==
-    assert
-    // tests/approvals/box-proxies.algo.ts:174
-    // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec_2 // "t2"
-    // tests/approvals/box-proxies.algo.ts:182
-    // assert(this.box2.length === 20)
-    box_len
-    pop
-    pushint 20 // 20
-    ==
-    assert
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
     bytec_1 // "t1"
@@ -153,8 +131,10 @@ testBox:
     box_len
     bury 1
     !
+    assert
     // tests/approvals/box-proxies.algo.ts:178
     // testBox() {
+    intc_0 // 1
     return
 
 
@@ -227,7 +207,7 @@ testBoxMap:
     intc_1 // 0
     extract_uint16
     dig 1
-    pushint 2 // 2
+    pushint 2
     extract_uint16
     dig 2
     uncover 2
@@ -329,6 +309,8 @@ testBoxMap:
     box_len
     bury 1
     !
+    assert
     // tests/approvals/box-proxies.algo.ts:204
     // testBoxMap() {
+    intc_0 // 1
     return

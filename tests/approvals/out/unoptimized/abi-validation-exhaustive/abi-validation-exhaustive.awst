@@ -35,9 +35,9 @@ contract AbiValidationExhaustive
     ARC4_FROM_BYTES(value, wtype=arc4.dynamic_array<arc4.uint8>, validate=true), void
   }
   
-  validate_uint8_arr3(value: arc4.static_array<arc4.uint8>): void
+  validate_uint8_arr3(value: arc4.static_array<arc4.uint8,3>): void
   {
-    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.uint8>, validate=true), void
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.uint8,3>, validate=true), void
   }
   
   validate_bool(value: arc4.bool): void
@@ -60,14 +60,14 @@ contract AbiValidationExhaustive
     ARC4_FROM_BYTES(value, wtype=arc4.dynamic_array<arc4.byte>, validate=true), void
   }
   
-  validate_address(value: arc4.static_array<arc4.byte>): void
+  validate_address(value: arc4.static_array<arc4.byte,32>): void
   {
-    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.byte>, validate=true), void
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.byte,32>, validate=true), void
   }
   
   validate_account(value: account): void
   {
-    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.byte>, validate=true), void
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.byte,32>, validate=true), void
   }
   
   validate_bool_arr(value: arc4.dynamic_array<arc4.bool>): void
@@ -75,9 +75,9 @@ contract AbiValidationExhaustive
     ARC4_FROM_BYTES(value, wtype=arc4.dynamic_array<arc4.bool>, validate=true), void
   }
   
-  validate_bool_arr3(value: arc4.static_array<arc4.bool>): void
+  validate_bool_arr3(value: arc4.static_array<arc4.bool,3>): void
   {
-    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.bool>, validate=true), void
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.bool,3>, validate=true), void
   }
   
   validate_static_tuple(value: arc4.tuple<arc4.uint64,arc4.uint8>): void
@@ -105,9 +105,9 @@ contract AbiValidationExhaustive
     ARC4_FROM_BYTES(value, wtype=arc4.dynamic_array<ARC4StaticStruct>, validate=true), void
   }
   
-  validate_static_struct_arr3(value: arc4.static_array<ARC4StaticStruct>): void
+  validate_static_struct_arr3(value: arc4.static_array<ARC4StaticStruct,3>): void
   {
-    ARC4_FROM_BYTES(value, wtype=arc4.static_array<ARC4StaticStruct>, validate=true), void
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<ARC4StaticStruct,3>, validate=true), void
   }
   
   validate_dynamic_struct_arr(value: arc4.dynamic_array<ARC4DynamicStruct>): void
@@ -115,9 +115,9 @@ contract AbiValidationExhaustive
     ARC4_FROM_BYTES(value, wtype=arc4.dynamic_array<ARC4DynamicStruct>, validate=true), void
   }
   
-  validate_dynamic_struct_arr3(value: arc4.static_array<ARC4DynamicStruct>): void
+  validate_dynamic_struct_arr3(value: arc4.static_array<ARC4DynamicStruct,3>): void
   {
-    ARC4_FROM_BYTES(value, wtype=arc4.static_array<ARC4DynamicStruct>, validate=true), void
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<ARC4DynamicStruct,3>, validate=true), void
   }
   
   validate_dynamic_struct_with_a_bool(value: WithABool): void
@@ -140,9 +140,9 @@ contract AbiValidationExhaustive
     ARC4_FROM_BYTES(value, wtype=arc4.dynamic_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeStaticStruct>, validate=true), void
   }
   
-  validate_native_static_struct_arr3(value: arc4.static_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeStaticStruct>): void
+  validate_native_static_struct_arr3(value: arc4.static_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeStaticStruct,3>): void
   {
-    ARC4_FROM_BYTES(value, wtype=arc4.static_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeStaticStruct>, validate=true), void
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeStaticStruct,3>, validate=true), void
   }
   
   validate_native_dynamic_struct_arr(value: arc4.dynamic_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeDynamicStruct>): void
@@ -150,16 +150,16 @@ contract AbiValidationExhaustive
     ARC4_FROM_BYTES(value, wtype=arc4.dynamic_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeDynamicStruct>, validate=true), void
   }
   
-  validate_native_dynamic_struct_arr3(value: arc4.static_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeDynamicStruct>): void
+  validate_native_dynamic_struct_arr3(value: arc4.static_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeDynamicStruct,3>): void
   {
-    ARC4_FROM_BYTES(value, wtype=arc4.static_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeDynamicStruct>, validate=true), void
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeDynamicStruct,3>, validate=true), void
   }
   
   validate_c2c(): void
   {
     compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract
-    app: application = #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages, ApplicationArgs=#[Method("create()void")])) }.itxn.CreatedApplicationID
-    #{ itxn: ($0 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=app, ApplicationArgs=#[Method("invalidValue()uint64[3]")]))), returnValue: ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($1 = $0.LastLog)), extract<0, 4>($1) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.static_array<arc4.uint64>, validate=true) }
+    app: application = #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages, ApplicationArgs=#[Method(signature="create()void", resource_encoding="value")])) }.itxn.CreatedApplicationID
+    #{ itxn: ($0 = submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=app, ApplicationArgs=#[Method(signature="invalidValue()arc4.static_array<arc4.uint64,3>", resource_encoding="value")]))), returnValue: ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($1 = $0.LastLog)), extract<0, 4>($1) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.static_array<arc4.uint64,3>, validate=true) }
   }
   
   __algots__.defaultCreate(): void
@@ -183,9 +183,9 @@ contract InvalidContract
   {
   }
   
-  invalidValue(): arc4.static_array<arc4.uint64>
+  invalidValue(): arc4.static_array<arc4.uint64,3>
   {
-    return ARC4_FROM_BYTES("invalid", wtype=arc4.static_array<arc4.uint64>, validate=false)
+    return ARC4_FROM_BYTES("invalid", wtype=arc4.static_array<arc4.uint64,3>, validate=false)
   }
   
 }

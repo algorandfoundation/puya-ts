@@ -25,7 +25,7 @@ main_abi_routing@2:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_0 // 0
     !=
@@ -85,7 +85,7 @@ main___algots__.defaultCreate@10:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -163,7 +163,7 @@ tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg_for_header@1:
     // tests/approvals/urange.algo.ts:7
     // for (const i of urange(5)) {
     frame_dig 1
-    pushint 5 // 5
+    pushint 5
     <
     bz tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg_after_for@4
     b tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg_for_body@2
@@ -247,7 +247,7 @@ tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg_for_header@1:
     // tests/approvals/urange.algo.ts:14
     // for (const i of urange(2, 5)) {
     frame_dig 1
-    pushint 5 // 5
+    pushint 5
     <
     bz tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg_after_for@4
     b tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg_for_body@2
@@ -322,7 +322,7 @@ tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg_block@0:
     extract 6 2
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {
-    pushint 3 // 3
+    pushint 3
     assert // Step cannot be zero
     intc_2 // 2
     b tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg_for_header@1
@@ -331,7 +331,7 @@ tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg_for_header@1:
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {
     frame_dig 1
-    pushint 10 // 10
+    pushint 10
     <
     bz tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg_after_for@4
     b tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg_for_body@2
@@ -380,7 +380,7 @@ tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg_for_footer@3:
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {
     frame_dig 1
-    pushint 3 // 3
+    pushint 3
     +
     frame_bury 1
     b tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg_for_header@1

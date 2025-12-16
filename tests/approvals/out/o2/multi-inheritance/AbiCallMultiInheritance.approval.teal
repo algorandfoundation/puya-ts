@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytes 0x2a337771 // method "test(uint64)void"
@@ -85,7 +85,7 @@ main_test_route@4:
     dup
     intc_2 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 2 // 2
+    pushint 2
     +
     swap
     len
@@ -100,7 +100,7 @@ main_test_route@4:
     // args: [1, 2],
     intc_1 // 1
     itob
-    pushint 2 // 2
+    pushint 2
     itob
     // tests/approvals/multi-inheritance.algo.ts:72-74
     // const result = abiCall<typeof AbiCallMultiInheritance.prototype.add>({
@@ -132,10 +132,12 @@ main_test_route@4:
     btoi
     // tests/approvals/multi-inheritance.algo.ts:76
     // assert(result === 3)
-    pushint 3 // 3
+    pushint 3
     ==
+    assert
     // tests/approvals/multi-inheritance.algo.ts:66
     // test(app: Application) {
+    intc_1 // 1
     return
 
 main___algots__.defaultCreate@9:
@@ -146,6 +148,4 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_1 // 1
     return

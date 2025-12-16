@@ -5,7 +5,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L7
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (! tmp%2#0)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         (assert tmp%4#0)
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
@@ -27,7 +27,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (! tmp%9#0)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         exit 1u
 
 subroutine tests/approvals/circular-reference-2.algo.ts::ContractTwo.test[routing]() -> void:
@@ -47,9 +47,6 @@ subroutine tests/approvals/circular-reference-2.algo.ts::ContractTwo.test[routin
 
 subroutine tests/approvals/circular-reference-2.algo.ts::ContractTwo.test2[routing]() -> void:
     block@0: // L12
-        let aggregate%length%0#0: uint64 = (len method "test(uint64)void")
-        let aggregate%lengths_equal%0#0: bool = (== aggregate%length%0#0 4u)
-        (assert aggregate%lengths_equal%0#0) // invalid size
         let aggregate%as_Encoded(uint8[4])%0#0: Encoded(uint8[4]) = method "test(uint64)void"
         let tmp%1#0: Encoded(uint8[4]) = aggregate%as_Encoded(uint8[4])%0#0
         let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)

@@ -25,7 +25,7 @@ main_abi_routing@2:
     txn OnCompletion
     intc_1 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_1 // 0
     !=
@@ -85,7 +85,7 @@ main___algots__.defaultCreate@10:
     intc_1 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_0 // 1
     return
@@ -113,7 +113,7 @@ test_side_effects_block@0:
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -132,14 +132,14 @@ test_non_trivial_termination_of_clause_block@0:
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -181,7 +181,7 @@ tests/approvals/switch-statements.algo.ts::DemoContract.run_block@0:
     assert
     // tests/approvals/switch-statements.algo.ts:9
     // assert(this.test_uint64(4) === 3)
-    pushint 4 // 4
+    pushint 4
     callsub test_uint64
     intc_2 // 3
     ==
@@ -190,35 +190,35 @@ tests/approvals/switch-statements.algo.ts::DemoContract.run_block@0:
     // assert(this.test_break(1) === 11)
     intc_0 // 1
     callsub test_break
-    pushint 11 // 11
+    pushint 11
     ==
     assert
     // tests/approvals/switch-statements.algo.ts:12
     // assert(this.test_break(2) === 12)
     intc_3 // 2
     callsub test_break
-    pushint 12 // 12
+    pushint 12
     ==
     assert
     // tests/approvals/switch-statements.algo.ts:13
     // assert(this.test_break(3) === 10)
     intc_2 // 3
     callsub test_break
-    pushint 10 // 10
+    pushint 10
     ==
     assert
     // tests/approvals/switch-statements.algo.ts:14
     // assert(this.test_break(4) === 14)
-    pushint 4 // 4
+    pushint 4
     callsub test_break
-    pushint 14 // 14
+    pushint 14
     ==
     assert
     // tests/approvals/switch-statements.algo.ts:15
     // assert(this.test_break(5) === 50)
-    pushint 5 // 5
+    pushint 5
     callsub test_break
-    pushint 50 // 50
+    pushint 50
     ==
     assert
     // tests/approvals/switch-statements.algo.ts:17
@@ -301,7 +301,7 @@ test_uint64_after_if_else@6:
     // tests/approvals/switch-statements.algo.ts:28
     // case Uint64(4):
     frame_dig -1
-    pushint 4 // 4
+    pushint 4
     ==
     // tests/approvals/switch-statements.algo.ts:28-29
     // case Uint64(4):
@@ -335,7 +335,7 @@ test_break:
 test_break_block@0:
     // tests/approvals/switch-statements.algo.ts:37
     // let i: uint64 = 10
-    pushint 10 // 10
+    pushint 10
     // tests/approvals/switch-statements.algo.ts:39
     // case 1:
     frame_dig -1
@@ -360,7 +360,7 @@ test_break_block@5:
 test_break_block@8:
     // tests/approvals/switch-statements.algo.ts:37
     // let i: uint64 = 10
-    pushint 10 // 10
+    pushint 10
     // tests/approvals/switch-statements.algo.ts:42
     // i += x
     frame_dig -1
@@ -393,7 +393,7 @@ test_break_after_if_else@6:
     // tests/approvals/switch-statements.algo.ts:41
     // case Uint64(4):
     frame_dig -1
-    pushint 4 // 4
+    pushint 4
     ==
     // tests/approvals/switch-statements.algo.ts:41-43
     // case Uint64(4):
@@ -409,7 +409,7 @@ test_break_after_if_else@9:
     // tests/approvals/switch-statements.algo.ts:44
     // case 5:
     frame_dig -1
-    pushint 5 // 5
+    pushint 5
     ==
     // tests/approvals/switch-statements.algo.ts:44-45
     // case 5:
@@ -423,7 +423,7 @@ test_break_if_body@10:
 test_break_block@11:
     // tests/approvals/switch-statements.algo.ts:37
     // let i: uint64 = 10
-    pushint 10 // 10
+    pushint 10
     // tests/approvals/switch-statements.algo.ts:45
     // i *= x
     frame_dig -1

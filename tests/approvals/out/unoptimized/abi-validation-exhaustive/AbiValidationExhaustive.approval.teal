@@ -24,7 +24,7 @@ main_abi_routing@2:
     txn OnCompletion
     intc_1 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_1 // 0
     !=
@@ -273,7 +273,7 @@ main___algots__.defaultCreate@37:
     intc_1 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_0 // 1
     return
@@ -681,7 +681,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // validateEncoding(value)
     frame_dig -1
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     retsub
@@ -719,7 +719,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // validateEncoding(value)
     frame_dig -1
     len
-    pushint 64 // 64
+    pushint 64
     ==
     assert // invalid number of bytes for arc4.uint512
     retsub
@@ -738,7 +738,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // validateEncoding(value)
     frame_dig -1
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.ufixed64x2
     retsub
@@ -782,7 +782,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // validateEncoding(value)
     frame_dig -1
     len
-    pushint 3 // 3
+    pushint 3
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 3>
     retsub
@@ -889,7 +889,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // validateEncoding(value)
     frame_dig -1
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     retsub
@@ -908,7 +908,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // validateEncoding(value)
     frame_dig -1
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     retsub
@@ -930,9 +930,9 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     extract_uint16 // on error: invalid array length header
     intc_0 // 1
     *
-    pushint 7 // 7
+    pushint 7
     +
-    pushint 8 // 8
+    pushint 8
     /
     intc_2 // 2
     +
@@ -975,7 +975,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // validateEncoding(value)
     frame_dig -1
     len
-    pushint 9 // 9
+    pushint 9
     ==
     assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint8>
     retsub
@@ -995,7 +995,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     frame_dig -1
     len
     frame_dig -1
-    pushint 9 // 9
+    pushint 9
     extract_uint16 // on error: invalid tuple encoding
     dup
     intc_3 // 11
@@ -1033,7 +1033,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // validateEncoding(value)
     frame_dig -1
     len
-    pushint 9 // 9
+    pushint 9
     ==
     assert // invalid number of bytes for ARC4StaticStruct
     retsub
@@ -1053,7 +1053,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     frame_dig -1
     len
     frame_dig -1
-    pushint 9 // 9
+    pushint 9
     extract_uint16 // on error: invalid tuple encoding
     dup
     intc_3 // 11
@@ -1092,7 +1092,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     frame_dig -1
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 9 // 9
+    pushint 9
     *
     intc_2 // 2
     +
@@ -1116,7 +1116,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // validateEncoding(value)
     frame_dig -1
     len
-    pushint 27 // 27
+    pushint 27
     ==
     assert // invalid number of bytes for arc4.static_array<ARC4StaticStruct, 3>
     retsub
@@ -1185,7 +1185,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     len
     cover 1
     dup
-    pushint 9 // 9
+    pushint 9
     extract_uint16 // on error: invalid tuple encoding
     dup
     intc_3 // 11
@@ -1236,7 +1236,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr3_block@0:
     // tests/approvals/abi-validation-exhaustive.algo.ts:105
     // validateEncoding(value)
-    pushint 3 // 3
+    pushint 3
     intc_2 // 2
     *
     intc_1 // 0
@@ -1246,7 +1246,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // tests/approvals/abi-validation-exhaustive.algo.ts:105
     // validateEncoding(value)
     frame_dig 1
-    pushint 3 // 3
+    pushint 3
     <
     bz tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr3_after_for@4
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_dynamic_struct_arr3_for_body@2
@@ -1276,7 +1276,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     len
     cover 1
     dup
-    pushint 9 // 9
+    pushint 9
     extract_uint16 // on error: invalid tuple encoding
     dup
     intc_3 // 11
@@ -1331,7 +1331,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     intc_0 // 1
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 4 // 4
+    pushint 4
     ==
     assert // invalid tail pointer at index 1 of (uint8,(len+uint8[]),bool1)
     frame_dig -1
@@ -1344,7 +1344,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     *
     intc_2 // 2
     +
-    pushint 4 // 4
+    pushint 4
     +
     frame_dig -1
     len
@@ -1366,7 +1366,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // validateEncoding(value)
     frame_dig -1
     len
-    pushint 9 // 9
+    pushint 9
     ==
     assert // invalid number of bytes for tests/approvals/abi-validation-exhaustive.algo.ts::NativeStaticStruct
     retsub
@@ -1386,7 +1386,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     frame_dig -1
     len
     frame_dig -1
-    pushint 9 // 9
+    pushint 9
     extract_uint16 // on error: invalid tuple encoding
     dup
     intc_3 // 11
@@ -1425,7 +1425,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     frame_dig -1
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 9 // 9
+    pushint 9
     *
     intc_2 // 2
     +
@@ -1449,7 +1449,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // validateEncoding(value)
     frame_dig -1
     len
-    pushint 27 // 27
+    pushint 27
     ==
     assert // invalid number of bytes for arc4.static_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeStaticStruct, 3>
     retsub
@@ -1518,7 +1518,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     len
     cover 1
     dup
-    pushint 9 // 9
+    pushint 9
     extract_uint16 // on error: invalid tuple encoding
     dup
     intc_3 // 11
@@ -1569,7 +1569,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
 tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr3_block@0:
     // tests/approvals/abi-validation-exhaustive.algo.ts:133
     // validateEncoding(value)
-    pushint 3 // 3
+    pushint 3
     intc_2 // 2
     *
     intc_1 // 0
@@ -1579,7 +1579,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // tests/approvals/abi-validation-exhaustive.algo.ts:133
     // validateEncoding(value)
     frame_dig 1
-    pushint 3 // 3
+    pushint 3
     <
     bz tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr3_after_for@4
     b tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_native_dynamic_struct_arr3_for_body@2
@@ -1609,7 +1609,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     len
     cover 1
     dup
-    pushint 9 // 9
+    pushint 9
     extract_uint16 // on error: invalid tuple encoding
     dup
     intc_3 // 11
@@ -1723,7 +1723,7 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     ==
     assert // Bytes has valid prefix
     len
-    pushint 24 // 24
+    pushint 24
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint64, 3>
     retsub

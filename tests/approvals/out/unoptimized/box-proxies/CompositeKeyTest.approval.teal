@@ -45,7 +45,7 @@ main_test_route@3:
     intc_0 // 0
     !=
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     callsub test
     b main_switch_case_next@4
 
@@ -59,7 +59,7 @@ main___algots__.defaultCreate@5:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -75,7 +75,7 @@ test_block@0:
     txna ApplicationArgs 1
     dup
     len
-    pushint 16 // 16
+    pushint 16
     ==
     assert // invalid number of bytes for ObjectACED9E72
     txna ApplicationArgs 2
@@ -84,7 +84,7 @@ test_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    pushint 2 // 2
+    pushint 2
     +
     dig 1
     len

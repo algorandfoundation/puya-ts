@@ -127,7 +127,16 @@ export class ToCodeVisitor
     return `TemplateVar[${expression.wtype}](${expression.name})`
   }
   visitMethodConstant(expression: nodes.MethodConstant): string {
-    return `Method("${expression.value}")`
+    if (expression.value instanceof nodes.MethodSignatureString) {
+      return `Method("${expression.value.value}")`
+    }
+
+    const name = expression.value.name
+    const args = (expression.value.argTypes || []).map((t) => t.toString()).join(',')
+    const return_ = expression.value.returnType.toString()
+    const signature = `${name}(${args})${return_}`
+
+    return `Method(signature="${signature}", resource_encoding="${expression.value.resourceEncoding}")`
   }
   visitAddressConstant(expression: nodes.AddressConstant): string {
     return `Address("${expression.value}")`
@@ -183,6 +192,12 @@ export class ToCodeVisitor
       .map(([f, v]) => `${f}=${v.accept(this)}`)
       .join(', ')
     return `update_inner_transaction(${expression.itxn.accept(this)}, ${fields})`
+  }
+  visitStageInnerTransactions(expression: nodes.StageInnerTransactions): string {
+    const startNewGroup = expression.startNewGroup.accept(this)
+    const itxns = expression.itxns.map((itxn) => itxn.accept(this)).join(', ')
+
+    return `stage_itxns=([${itxns}], start_new_group=${startNewGroup})`
   }
   visitCheckedMaybe(expression: nodes.CheckedMaybe): string {
     return `checked_maybe(${expression.expr.accept(this)}, comment=${expression.comment})`

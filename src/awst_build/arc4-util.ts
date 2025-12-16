@@ -115,12 +115,15 @@ export function arc4ConfigFromType(functionType: FunctionPType, sourceLocation: 
  * @param sourceLocation The source location of the code generating the constant,
  */
 export function buildArc4MethodConstant(functionType: FunctionPType, arc4Config: ARC4ABIMethodConfig, sourceLocation: SourceLocation) {
-  const params = functionType.parameters
-    .map(([_, ptype]) => getABITypeName(ptype, 'in', arc4Config.resourceEncoding, sourceLocation))
-    .join(',')
-  const returnType = getABITypeName(functionType.returnType, 'out', arc4Config.resourceEncoding, sourceLocation)
+  const methodSignature = nodeFactory.methodSignature({
+    name: arc4Config.name,
+    argTypes: functionType.parameters.map(([_, ptype]) => ptype.wtypeOrThrow),
+    returnType: functionType.returnType.wtypeOrThrow,
+    resourceEncoding: arc4Config.resourceEncoding,
+    sourceLocation,
+  })
   return nodeFactory.methodConstant({
-    value: `${arc4Config.name}(${params})${returnType}`,
+    value: methodSignature,
     wtype: new wtypes.BytesWType({ length: 4n }),
     sourceLocation,
   })

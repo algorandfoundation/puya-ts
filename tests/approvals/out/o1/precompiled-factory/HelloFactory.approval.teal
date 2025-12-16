@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x2a17995c 0xe3254bc9 0xe2b7c692 0x02947ca2 // method "test_compile_contract()void", method "test_compile_contract_with_template()void", method "test_compile_contract_with_template_and_custom_prefix()void", method "test_compile_contract_large()void"
@@ -27,8 +27,6 @@ main___algots__.defaultCreate@11:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_2 // 1
     return
 
 
@@ -50,7 +48,7 @@ test_compile_contract:
     itxn_field GlobalNumByteSlice
     bytec_0 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyAEAAECBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CADcALTEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CADkAXwCABACSJa42GgCOAQAWADEZJRIxGBBEI0MxGYEFEjEYEEQjQzYaAUkiWSQISwEVEkRXAgAoTGcjQzYaAUkiWSQISwEVEkRXAgAiKGVEKVBMUEkVFlcGAkxQKkxQsCNDNhoBSRVLASJZSSUSREsCSwFLA1IiWYEGCEsDJFlJSwISREsESwFLBVJJIlkkCE8DCE8EEkQiKGVEKVBOBE4EUlcCAFBMVwIAUEkVFlcGAkxQKkxQsCND)
+    pushbytes base64(CyAEAAIBBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CADUALTEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CADUAWwCABACSJa42GgCOAQASADEZJRIxGBBDMRmBBRIxGBBDNhoBSSJZIwhLARUSRFcCAChMZyRDNhoBSSJZIwhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwJEM2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMjWUlLAhJESwRLAUsFUkkiWSMITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwJEM=)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-factory.algo.ts:12
     // appArgs: [methodSelector(Hello.prototype.create), encodeArc4('hello')],
@@ -193,7 +191,7 @@ test_compile_contract_with_template:
     // const compiled = compile(HelloTemplate, { templateVars: { GREETING: 'hey' } })
     bytec_0 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyAEAAECBCYECGdyZWV0aW5nASAEFR98dQNoZXkxGEAAAygrZ4ICBCQ3jTwEoOgYcjYaAI4CADkALzEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CACYATACABExcYbo2GgCOAQABACNDMRklEjEYEEQjQzEZgQUSMRgQRCNDNhoBSSJZJAhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwI0M2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMkWUlLAhJESwRLAUsFUkkiWSQITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwI0M=)
+    pushbytes base64(CyAEAAECBCYECGdyZWV0aW5nASAEFR98dQNoZXkxGEAAAygrZ4ICBCQ3jTwEoOgYcjYaAI4CADcALzEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CACIASACABExcYbo2GgCOAQABACNDMRklEjEYEEMxGYEFEjEYEEM2GgFJIlkkCEsBFRJEVwIAIihlRClQTFBJFRZXBgJMUCpMULAjQzYaAUkVSwEiWUklEkRLAksBSwNSIlmBBghLAyRZSUsCEkRLBEsBSwVSSSJZJAhPAwhPBBJEIihlRClQTgROBFJXAgBQTFcCAFBJFRZXBgJMUCpMULAjQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-factory.algo.ts:43
     // appArgs: [methodSelector('create()void')],
@@ -334,7 +332,7 @@ test_compile_contract_with_template_and_custom_prefix:
     // const compiled = compile(HelloTemplateCustomPrefix, { templateVars: { GREETING: 'bonjour' }, templateVarsPrefix: 'PRFX_' })
     bytec_0 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyAEAAECBCYECGdyZWV0aW5nASAEFR98dQdib25qb3VyMRhAAAMoK2eCAgQkN408BKDoGHI2GgCOAgA5AC8xGRREMRhBABaCAgTQooIABFGAuiA2GgCOAgAmAEwAgARMXGG6NhoAjgEAAQAjQzEZJRIxGBBEI0MxGYEFEjEYEEQjQzYaAUkiWSQISwEVEkRXAgAiKGVEKVBMUEkVFlcGAkxQKkxQsCNDNhoBSRVLASJZSSUSREsCSwFLA1IiWYEGCEsDJFlJSwISREsESwFLBVJJIlkkCE8DCE8EEkQiKGVEKVBOBE4EUlcCAFBMVwIAUEkVFlcGAkxQKkxQsCND)
+    pushbytes base64(CyAEAAECBCYECGdyZWV0aW5nASAEFR98dQdib25qb3VyMRhAAAMoK2eCAgQkN408BKDoGHI2GgCOAgA3AC8xGRREMRhBABaCAgTQooIABFGAuiA2GgCOAgAiAEgAgARMXGG6NhoAjgEAAQAjQzEZJRIxGBBDMRmBBRIxGBBDNhoBSSJZJAhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwI0M2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMkWUlLAhJESwRLAUsFUkkiWSQITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwI0M=)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-factory.algo.ts:74
     // appArgs: [methodSelector('create()void')],
@@ -471,7 +469,7 @@ test_compile_contract_large:
     // const compiled = compile(LargeProgram)
     bytec_0 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CzEbQQAsggIEJDeNPAQCvzDPNhoAjgIACwABADEZFDEYEERCABcxGYEFEjEYEESBAUMxGRQxGBQQRIEBQ4GAIK8VFoAEFR98dUxQsIEBQw==)
+    pushbytes base64(CzEbQQApggIEJDeNPAQCvzDPNhoAjgIACwABADEZFDEYEERCABExGYEFEjEYEEMxGRQxGBQQQ4GAIK8VFoAEFR98dUxQsIEBQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-factory.algo.ts:103-109
     // const largeApp = itxn
@@ -541,7 +539,7 @@ test_compile_contract_large:
     btoi
     // tests/approvals/precompiled-factory.algo.ts:120
     // assert(result === 4096)
-    pushint 4096 // 4096
+    pushint 4096
     ==
     assert
     // tests/approvals/precompiled-factory.algo.ts:122-128

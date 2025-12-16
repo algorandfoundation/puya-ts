@@ -12,7 +12,7 @@ main:
     bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x02f4a501 0xa453ba90 // method "testFalconVerify()void", method "testRejectVersion()void"
@@ -29,8 +29,6 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -38,15 +36,17 @@ main___algots__.defaultCreate@9:
 testFalconVerify:
     // tests/approvals/avm12.algo.ts:17
     // assert(!op.falconVerify(Bytes(), Bytes(), op.bzero(1793)))
-    pushint 1793 // 1793
+    pushint 1793
     bzero
     pushbytes 0x
     dup
     uncover 2
     falcon_verify
     !
+    assert
     // tests/approvals/avm12.algo.ts:16
     // testFalconVerify() {
+    intc_0 // 1
     return
 
 
@@ -59,7 +59,7 @@ testRejectVersion:
     // const compiledV0 = arc4.compileArc4(ContractV0)
     bytec_0 // base64(DIEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(DDEbQQAagASg6BhyNhoAjgEAAQAxGYEEEjEYEERCAAsxGRQxGBQQRIEBQzFEgQESRIEBQw==)
+    pushbytes base64(DDEbQQAagASg6BhyNhoAjgEAAQAxGYEEEjEYEERCAAgxGRQxGBQQQzFEgQESRIEBQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/avm12.algo.ts:22
     // const v0Txn = compiledV0.bareCreate()
@@ -94,11 +94,11 @@ testRejectVersion:
     // const compiledV1 = arc4.compileArc4(ContractV1)
     bytec_0 // base64(DIEBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(DDEbQQAagAQkN408NhoAjgEAAQAxGYEFEjEYEERCAAsxGRQxGBQQRIEBQzFEgQISRIEBQw==)
+    pushbytes base64(DDEbQQAagAQkN408NhoAjgEAAQAxGYEFEjEYEERCAAgxGRQxGBQQQzFEgQISRIEBQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/avm12.algo.ts:31
     // onCompletion: OnCompleteAction.UpdateApplication,
-    pushint 4 // 4
+    pushint 4
     itxn_field OnCompletion
     dup
     itxn_field ApplicationID
@@ -140,12 +140,12 @@ testRejectVersion:
     itxn_begin
     // tests/approvals/avm12.algo.ts:43
     // rejectVersion: 2,
-    pushint 2 // 2
+    pushint 2
     itxn_field RejectVersion
     itxn_field ApplicationID
     // tests/approvals/avm12.algo.ts:41
     // onCompletion: OnCompleteAction.DeleteApplication,
-    pushint 5 // 5
+    pushint 5
     itxn_field OnCompletion
     // tests/approvals/avm12.algo.ts:40
     // appArgs: [arc4.methodSelector(ContractV1.prototype.delete)],

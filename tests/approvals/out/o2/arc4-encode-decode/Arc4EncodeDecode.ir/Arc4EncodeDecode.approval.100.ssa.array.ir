@@ -5,7 +5,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L24
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (! tmp%2#0)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         (assert tmp%4#0)
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
@@ -29,16 +29,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let c#1: biguint = tmp%4#3
         let tmp%6#3: bytes = (txna ApplicationArgs 4)
         let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%6#3 0u) // on error: invalid array length header
-        let length%0#2: uint64 = aggregate%array_length%0#0
-        let add%0#1: uint64 = (+ length%0#2 2u)
+        let length%0#1: uint64 = aggregate%array_length%0#0
+        let add%0#1: uint64 = (+ length%0#1 2u)
         let len%3#1: uint64 = (len tmp%6#3)
         let eq%3#1: bool = (== len%3#1 add%0#1)
         (assert eq%3#1) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
         let d#1: bytes = ((extract 2 0) tmp%6#3)
         let tmp%8#3: bytes = (txna ApplicationArgs 5)
         let aggregate%array_length%1#0: uint64 = (extract_uint16 tmp%8#3 0u) // on error: invalid array length header
-        let length%1#2: uint64 = aggregate%array_length%1#0
-        let add%1#1: uint64 = (+ length%1#2 2u)
+        let length%1#1: uint64 = aggregate%array_length%1#0
+        let add%1#1: uint64 = (+ length%1#1 2u)
         let len%4#1: uint64 = (len tmp%8#3)
         let eq%4#1: bool = (== len%4#1 add%1#1)
         (assert eq%4#1) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
@@ -117,16 +117,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%val_as_bytes%2#0: bytes[8] = (itob a#1)
         let aggregate%as_Encoded(uint64)%2#0: Encoded(uint64) = aggregate%val_as_bytes%2#0
         let aggregate%head%6#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%2#0)
-        let aggregate%length%1#0: uint64 = (len g#1)
-        let aggregate%lengths_equal%0#0: bool = (== aggregate%length%1#0 12u)
-        (assert aggregate%lengths_equal%0#0) // invalid size
         let aggregate%as_Encoded(uint8[12])%0#0: Encoded(uint8[12]) = g#1
         let aggregate%head%7#0: bytes = (concat aggregate%head%6#0 aggregate%as_Encoded(uint8[12])%0#0)
         let aggregate%as_Encoded(uint64,uint8[12])%0#0: Encoded(uint64,uint8[12]) = aggregate%head%7#0
         let tmp%24#2: Encoded(uint64,uint8[12]) = aggregate%as_Encoded(uint64,uint8[12])%0#0
-        let aggregate%length%2#0: uint64 = (len g#1)
-        let aggregate%lengths_equal%1#0: bool = (== aggregate%length%2#0 12u)
-        (assert aggregate%lengths_equal%1#0) // invalid size
+        let aggregate%length%1#0: uint64 = (len g#1)
+        let aggregate%lengths_equal%0#0: bool = (== aggregate%length%1#0 12u)
+        (assert aggregate%lengths_equal%0#0) // invalid size
         let aggregate%as_Encoded(uint8[12])%1#0: Encoded(uint8[12]) = g#1
         let tmp%25#2: Encoded(uint8[12]) = aggregate%as_Encoded(uint8[12])%1#0
         let aggregate%val_as_bytes%3#0: bytes[8] = (itob a#1)
@@ -137,9 +134,6 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%26#1: Encoded(uint64,uint8[12]) = aggregate%as_Encoded(uint64,uint8[12])%1#0
         let tmp%27#1: bool = (== tmp%24#2 tmp%26#1)
         (assert tmp%27#1)
-        let aggregate%length%3#0: uint64 = (len g#1)
-        let aggregate%lengths_equal%2#0: bool = (== aggregate%length%3#0 12u)
-        (assert aggregate%lengths_equal%2#0) // invalid size
         let aggregate%as_Encoded(uint8[12])%2#0: Encoded(uint8[12]) = g#1
         let tmp%29#1: Encoded(uint8[12]) = aggregate%as_Encoded(uint8[12])%2#0
         let tmp%31#1: bool = (== tmp%29#1 tmp%25#2)
@@ -177,8 +171,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let encoded_array%2#0: Encoded(uint512[1]) = aggregate%as_Encoded(uint512[1])%0#0
         let tmp%40#1: bool = (== tmp%38#1 encoded_array%2#0)
         (assert tmp%40#1)
-        let aggregate%length%4#0: uint64 = (len d#1)
-        let aggregate%as_bytes%4#0: bytes[8] = (itob aggregate%length%4#0)
+        let aggregate%length%2#0: uint64 = (len d#1)
+        let aggregate%as_bytes%4#0: bytes[8] = (itob aggregate%length%2#0)
         let aggregate%length_uint16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%4#0)
         let aggregate%encoded_value%1#0: bytes = (concat aggregate%length_uint16%1#0 d#1)
         let aggregate%as_Encoded(len+uint8[])%1#0: Encoded(len+uint8[]) = aggregate%encoded_value%1#0
@@ -200,8 +194,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let encoded_array%3#0: Encoded((len+uint8[])[1]) = aggregate%as_Encoded((len+uint8[])[1])%0#0
         let tmp%43#1: bool = (== tmp%41#1 encoded_array%3#0)
         (assert tmp%43#1)
-        let aggregate%length%5#0: uint64 = (len e#1)
-        let aggregate%as_bytes%7#0: bytes[8] = (itob aggregate%length%5#0)
+        let aggregate%length%3#0: uint64 = (len e#1)
+        let aggregate%as_bytes%7#0: bytes[8] = (itob aggregate%length%3#0)
         let aggregate%length_uint16%2#0: bytes = ((extract 6 2) aggregate%as_bytes%7#0)
         let aggregate%encoded_value%2#0: bytes = (concat aggregate%length_uint16%2#0 e#1)
         let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%2#0
@@ -231,9 +225,6 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let encoded_array%5#0: Encoded(uint8[32][1]) = aggregate%as_Encoded(uint8[32][1])%0#0
         let tmp%48#1: bool = (== tmp%47#1 encoded_array%5#0)
         (assert tmp%48#1)
-        let aggregate%length%6#0: uint64 = (len g#1)
-        let aggregate%lengths_equal%3#0: bool = (== aggregate%length%6#0 12u)
-        (assert aggregate%lengths_equal%3#0) // invalid size
         let aggregate%as_Encoded(uint8[12])%3#0: Encoded(uint8[12]) = g#1
         let aggregate%head%22#0: bytes = (concat 0x aggregate%as_Encoded(uint8[12])%3#0)
         let aggregate%as_Encoded(uint8[12])%4#0: Encoded(uint8[12]) = aggregate%head%22#0
@@ -290,8 +281,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%57#0)
         let aggregate%as_bytes%16#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%6#0: bytes = ((extract 6 2) aggregate%as_bytes%16#0)
-        let aggregate%length%7#0: uint64 = (len d#1)
-        let aggregate%as_bytes%17#0: bytes[8] = (itob aggregate%length%7#0)
+        let aggregate%length%4#0: uint64 = (len d#1)
+        let aggregate%as_bytes%17#0: bytes[8] = (itob aggregate%length%4#0)
         let aggregate%length_uint16%3#0: bytes = ((extract 6 2) aggregate%as_bytes%17#0)
         let aggregate%encoded_value%3#0: bytes = (concat aggregate%length_uint16%3#0 d#1)
         let aggregate%as_Encoded(len+uint8[])%2#0: Encoded(len+uint8[]) = aggregate%encoded_value%3#0
@@ -317,8 +308,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%59#0)
         let aggregate%as_bytes%21#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%8#0: bytes = ((extract 6 2) aggregate%as_bytes%21#0)
-        let aggregate%length%8#0: uint64 = (len e#1)
-        let aggregate%as_bytes%22#0: bytes[8] = (itob aggregate%length%8#0)
+        let aggregate%length%5#0: uint64 = (len e#1)
+        let aggregate%as_bytes%22#0: bytes[8] = (itob aggregate%length%5#0)
         let aggregate%length_uint16%4#0: bytes = ((extract 6 2) aggregate%as_bytes%22#0)
         let aggregate%encoded_value%4#0: bytes = (concat aggregate%length_uint16%4#0 e#1)
         let aggregate%as_Encoded(len+utf8[])%1#0: Encoded(len+utf8[]) = aggregate%encoded_value%4#0
@@ -344,9 +335,6 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%61#0)
         let aggregate%as_bytes%26#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%10#0: bytes = ((extract 6 2) aggregate%as_bytes%26#0)
-        let aggregate%length%9#0: uint64 = (len g#1)
-        let aggregate%lengths_equal%4#0: bool = (== aggregate%length%9#0 12u)
-        (assert aggregate%lengths_equal%4#0) // invalid size
         let aggregate%as_Encoded(uint8[12])%5#0: Encoded(uint8[12]) = g#1
         let aggregate%head%34#0: bytes = (concat aggregate%len_u16%10#0 aggregate%as_Encoded(uint8[12])%5#0)
         let aggregate%as_Encoded(len+uint8[12][])%0#0: Encoded(len+uint8[12][]) = aggregate%head%34#0
@@ -613,5 +601,5 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (! tmp%9#0)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         exit 1u

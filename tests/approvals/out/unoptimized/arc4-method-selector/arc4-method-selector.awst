@@ -12,7 +12,7 @@ contract ContractOne
   
   test(): bool
   {
-    return Method("renamedSomeMethod()void") == Method("renamedSomeMethod()void")
+    return Method(signature="renamedSomeMethod()void", resource_encoding="value") == Method("renamedSomeMethod()void")
   }
   
   someMethod(): uint64
@@ -22,8 +22,8 @@ contract ContractOne
   
   testReferenceTypes(): void
   {
-    assert(Method("referenceTypesIndex(pay,asset,account,application,appl)void") == Method("referenceTypesIndex(pay,asset,account,application,appl)void"))
-    assert(Method("referenceTypesValue(pay,uint64,address,uint64,appl)void") == Method("referenceTypesValue(pay,uint64,address,uint64,appl)void"))
+    assert(Method(signature="referenceTypesIndex(group_transaction_pay,asset,account,application,group_transaction_appl)void", resource_encoding="index") == Method("referenceTypesIndex(pay,asset,account,application,appl)void"))
+    assert(Method(signature="referenceTypesValue(group_transaction_pay,asset,account,application,group_transaction_appl)void", resource_encoding="value") == Method("referenceTypesValue(pay,uint64,address,uint64,appl)void"))
   }
   
   __algots__.defaultCreate(): void
@@ -49,7 +49,7 @@ contract ContractTwo
   
   test(): bool
   {
-    return Method("someMethod()uint64") == Method("someMethod()uint64")
+    return Method(signature="someMethod()uint64", resource_encoding="value") == Method("someMethod()uint64")
   }
   
   referenceTypesIndex(pay: group_transaction_pay, asset: asset, account: account, app: application, appTxn: group_transaction_appl): void

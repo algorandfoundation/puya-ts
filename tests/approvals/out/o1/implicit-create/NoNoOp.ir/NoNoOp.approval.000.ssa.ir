@@ -16,13 +16,13 @@ subroutine tests/approvals/implicit-create.algo.ts::NoNoOp.__puya_arc4_router__(
     block@3: // __algots__.defaultCreate_L8
         let tmp%3#0: uint64 = (txn ApplicationID)
         let tmp%4#0: bool = (== tmp%3#0 0u)
-        (assert tmp%4#0) // can only call when creating
+        (assert tmp%4#0)
         tests/approvals/implicit-create.algo.ts::NoNoOp.__algots__.defaultCreate()
         exit 1u
     block@4: // handleUpdate_L9
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
-        (assert tmp%6#0) // can only call when not creating
+        (assert tmp%6#0)
         tests/approvals/implicit-create.algo.ts::NoNoOp.handleUpdate()
         exit 1u
     block@5: // switch_case_next_L8
