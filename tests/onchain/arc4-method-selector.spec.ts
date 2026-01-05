@@ -3,7 +3,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('arc4 method selector', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/arc4-method-selector.algo.ts',
+    paths: 'tests/approvals/arc4-method-selector.algo.ts',
     contracts: { ContractOne: {}, ContractTwo: {} },
   })
 
@@ -17,5 +17,9 @@ describe('arc4 method selector', () => {
     const result = await appClientContractOne.send.call({ method: 'test', args: [] })
 
     expect(result.return).toBe(true)
+  })
+
+  test('Reference types are treated correctly based on resourceEncoding setting', async ({ appClientContractOne }) => {
+    await appClientContractOne.send.call({ method: 'testReferenceTypes' })
   })
 })

@@ -15,3 +15,4 @@ Algorand TypeScript is compiled for execution on the AVM by PuyaTs, a TypeScript
 - [CLI Guide](https://algorandfoundation.github.io/puya-ts/documents/Compiler_CLI_Guide.html)
 - [Contribution Guide](CONTRIBUTING.md)
 - [Releases Notes](https://github.com/algorandfoundation/puya-ts/releases)
+- [Migration Guides to 1.0.1](https://algorandfoundation.github.io/puya-ts/documents/Algorand_TypeScript_Migration_Guides.html)

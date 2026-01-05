@@ -2,7 +2,7 @@ import { describe } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('mutable-object', () => {
-  const test = createArc4TestFixture({ path: 'tests/approvals/mutable-object.algo.ts', contracts: { MutableObjectDemo: {} } })
+  const test = createArc4TestFixture({ paths: 'tests/approvals/mutable-object.algo.ts', contracts: { MutableObjectDemo: {} } })
 
   test('testVectorCreationAndEquality', async ({ appClientMutableObjectDemo }) => {
     await appClientMutableObjectDemo.send.call({ method: 'testVectorCreationAndEquality' })

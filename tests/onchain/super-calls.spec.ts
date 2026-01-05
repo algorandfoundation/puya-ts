@@ -3,7 +3,7 @@ import { createBaseTestFixture } from './util/test-fixture'
 
 describe('super calls', () => {
   const test = createBaseTestFixture({
-    path: 'tests/approvals/super-calls.algo.ts',
+    paths: 'tests/approvals/super-calls.algo.ts',
     contracts: ['SuperContract', 'SubContract', 'SubSubContract', 'SubSubSubContract'],
   })
 

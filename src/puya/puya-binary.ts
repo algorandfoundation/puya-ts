@@ -8,6 +8,7 @@ import { Constants } from '../constants'
 import { InternalError } from '../errors'
 import { logger } from '../logger'
 import { generateTempDir } from '../util/generate-temp-file'
+import { runPuya } from './run-puya'
 import type { SemVer } from './semver'
 
 /**
@@ -77,6 +78,7 @@ function getPlatformDetails(): { os: string; arch: string } {
 
 /**
  * Downloads the Puya binary for a specific release version
+ * @param puyaStorageDir The directory where puya binaries should be stored once downloaded
  * @param version The release version to download (e.g., "1.0.0")
  * @returns Promise that resolves to the path of the extracted binary
  */
@@ -122,8 +124,24 @@ export async function downloadPuyaBinary(puyaStorageDir: string, version: SemVer
     throw new InternalError(`Binary file ${binaryFileName} not found in the extracted archive`)
   }
 
+  await smokeTestBinary(extractedBinaryPath)
+
   logger.debug(undefined, `Successfully downloaded and extracted Puya binary to ${extractedBinaryPath}`)
   return extractedBinaryPath
+}
+
+async function smokeTestBinary(path: string) {
+  logger.debug(undefined, `Smoke testing downloaded binary @ ${path}`)
+
+  let output = ''
+  await runPuya({
+    command: path,
+    args: ['--version'],
+    onOutput: (line) => (output += line),
+  })
+  if (!/^puya ((\d+)\.(\d+)\.(\d+)(-.*)?)$/.test(output)) {
+    throw new InternalError(`Unexpected output from puya --version : ${output}`)
+  }
 }
 
 /**

@@ -14,15 +14,15 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto tmp%5#0 ? block@3 : block@8
     block@3: // call_NoOp_L5
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%6#0 {method "test()bool" => block@4, method "someMethod()uint64" => block@5, method "test2()void" => block@6, * => block@7}
+        switch tmp%6#0 {method "test()bool" => block@4, method "someMethod()uint64" => block@5, method "testReferenceTypes()void" => block@6, * => block@7}
     block@4: // test_route_L6
         tests/approvals/arc4-method-selector.algo.ts::ContractOne.test[routing]()
         goto block@7
     block@5: // someMethod_route_L9
         tests/approvals/arc4-method-selector.algo.ts::ContractOne.someMethod[routing]()
         goto block@7
-    block@6: // test2_route_L13
-        tests/approvals/arc4-method-selector.algo.ts::ContractOne.test2[routing]()
+    block@6: // testReferenceTypes_route_L13
+        tests/approvals/arc4-method-selector.algo.ts::ContractOne.testReferenceTypes[routing]()
         goto block@7
     block@7: // switch_case_next_L5
         goto block@9
@@ -65,9 +65,9 @@ subroutine tests/approvals/arc4-method-selector.algo.ts::ContractOne.someMethod[
         (log tmp%2#0)
         exit 1u
 
-subroutine tests/approvals/arc4-method-selector.algo.ts::ContractOne.test2[routing]() -> void:
+subroutine tests/approvals/arc4-method-selector.algo.ts::ContractOne.testReferenceTypes[routing]() -> void:
     block@0: // L13
-        tests/approvals/arc4-method-selector.algo.ts::ContractOne.test2()
+        tests/approvals/arc4-method-selector.algo.ts::ContractOne.testReferenceTypes()
         exit 1u
 
 subroutine tests/approvals/arc4-method-selector.algo.ts::ContractOne.test() -> bool:
@@ -79,10 +79,12 @@ subroutine tests/approvals/arc4-method-selector.algo.ts::ContractOne.someMethod(
     block@0: // L9
         return 123u
 
-subroutine tests/approvals/arc4-method-selector.algo.ts::ContractOne.test2() -> void:
+subroutine tests/approvals/arc4-method-selector.algo.ts::ContractOne.testReferenceTypes() -> void:
     block@0: // L13
-        let tmp%0#0: bool = (== method "referenceTypes(pay,uint64,address,uint64,appl)void" method "referenceTypes(pay,asset,account,application,appl)void")
+        let tmp%0#0: bool = (== method "referenceTypesIndex(pay,asset,account,application,appl)void" method "referenceTypesIndex(pay,asset,account,application,appl)void")
         (assert tmp%0#0)
+        let tmp%1#0: bool = (== method "referenceTypesValue(pay,uint64,address,uint64,appl)void" method "referenceTypesValue(pay,uint64,address,uint64,appl)void")
+        (assert tmp%1#0)
         return 
 
 subroutine tests/approvals/arc4-method-selector.algo.ts::ContractOne.__algots__.defaultCreate() -> void:

@@ -31,6 +31,7 @@ export const processInputPaths = ({
         })
       }
     } else {
+      if (ignoreUnmatchedPaths) continue
       logger.warn(undefined, `Path '${p}' did not match any .algo.ts files`)
     }
   }

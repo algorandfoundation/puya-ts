@@ -1,20 +1,24 @@
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import * as lsp from 'vscode-languageserver/node'
+import { appVersion, packageVersion } from '../cli/app-version'
 import { Constants } from '../constants'
 import { logger, LogLevel } from '../logger'
 import { LanguageServerLogSink } from '../logger/sinks/language-server-log-sink'
 import { resolvePuyaPath } from '../puya/resolve-puya-path'
+import type { AnalyserService } from './analyser-service'
+import { createAnalyserService } from './analyser-service'
 import { CompileTriggerQueue } from './compile-trigger-queue'
 import { CompileWorker } from './compile-worker'
-import type { FileDiagnosticsChanged } from './diagnostics-manager'
+import type { FileWithDiagnostics } from './diagnostics-manager'
 import { DiagnosticsManager } from './diagnostics-manager'
 import { isCodeFixData } from './mapping'
 import { LogExceptions } from './util/log-exceptions'
-import { appVersion } from '../cli/app-version'
+import { createNormalisedTextDocumentConnection, normalisedUri } from './util/uris'
 
 interface LanguageServerConfiguration {
   // use LogLevel member names to maintain consistency with other extension settings
   logLevel?: Omit<keyof typeof LogLevel, 'Critical'>
+  debounce?: number
 }
 
 const resolveConnection = async (lspPort: number | undefined) => {
@@ -39,12 +43,15 @@ export type LanguageServerOptions = {
   customPuyaPath?: string
 }
 
+const PACKAGE_VERSION = packageVersion()
+
 export class PuyaLanguageServer {
   readonly documents = new lsp.TextDocuments(TextDocument)
   readonly triggers = new CompileTriggerQueue()
   readonly workspaceFolders: lsp.URI[] = []
   readonly diagnosticsMgr: DiagnosticsManager
   readonly compileWorker: CompileWorker
+  readonly analyserService: AnalyserService
   stopping = false
 
   constructor(
@@ -53,7 +60,8 @@ export class PuyaLanguageServer {
     puyaPath: string,
   ) {
     this.diagnosticsMgr = new DiagnosticsManager()
-    this.compileWorker = new CompileWorker(this.triggers, this.documents, this.diagnosticsMgr, puyaPath)
+    this.analyserService = createAnalyserService({ puyaPath })
+    this.compileWorker = new CompileWorker(this.triggers, this.analyserService, this.documents, this.diagnosticsMgr)
 
     connection.onInitialize(this.initialize.bind(this))
     connection.onInitialized(this.initialized.bind(this))
@@ -65,7 +73,7 @@ export class PuyaLanguageServer {
   }
 
   start() {
-    this.documents.listen(this.connection)
+    this.documents.listen(createNormalisedTextDocumentConnection(this.connection))
     this.connection.listen()
     this.compileWorker.start()
   }
@@ -74,16 +82,21 @@ export class PuyaLanguageServer {
     logger.debug(undefined, '[PuyaLanguageServer] Shutting down')
     this.stopping = true
     await this.compileWorker.stop()
+    await this.analyserService.shutdown()
     logger.debug(undefined, '[PuyaLanguageServer] Shutdown')
   }
 
   initialize(params: lsp.InitializeParams): lsp.InitializeResult {
-    this.workspaceFolders.push(...(params.workspaceFolders?.map((f) => f.uri) ?? []))
+    this.workspaceFolders.push(...(params.workspaceFolders?.map((f) => normalisedUri({ uri: f.uri }).toString()) ?? []))
     this.triggers.enqueue({
       type: 'workspace',
-      workspaces: this.workspaceFolders,
+      uris: this.workspaceFolders,
     })
     return {
+      serverInfo: {
+        name: 'Puya-TS Language Server',
+        version: PACKAGE_VERSION,
+      },
       capabilities: {
         textDocumentSync: lsp.TextDocumentSyncKind.Incremental,
         codeActionProvider: {
@@ -99,7 +112,7 @@ export class PuyaLanguageServer {
   }
 
   @LogExceptions
-  async fileDiagnosticsChanged(params: FileDiagnosticsChanged) {
+  async fileDiagnosticsChanged(params: FileWithDiagnostics) {
     if (this.stopping) {
       logger.debug(undefined, `[Diagnostics Ignored (shutting down)]: ${params.uri}`)
       return
@@ -113,12 +126,13 @@ export class PuyaLanguageServer {
   @LogExceptions
   documentDidChangeContent(params: lsp.TextDocumentChangeEvent<TextDocument>) {
     if (this.stopping) return
-    logger.debug(undefined, `[Document Changed]: ${params.document.uri}`)
-    this.diagnosticsMgr.setDiagnostics({ fileUri: params.document.uri, version: params.document.version, diagnostics: 'pending' })
+    const normalizedDocumentUri = normalisedUri({ uri: params.document.uri }).toString()
+    logger.debug(undefined, `[Document Changed]: ${normalizedDocumentUri}`)
+    this.diagnosticsMgr.setDiagnostics({ uri: normalizedDocumentUri, version: params.document.version, diagnostics: 'pending' })
 
     this.triggers.enqueue({
-      type: 'workspace',
-      workspaces: this.workspaceFolders,
+      type: 'file',
+      uris: [normalizedDocumentUri],
     })
   }
 

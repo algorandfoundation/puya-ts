@@ -1,8 +1,8 @@
 import EventEmitter from 'node:events'
 import type * as lsp from 'vscode-languageserver'
+import { logger } from '../logger'
 import { zipStrict } from '../util'
 import { DefaultMap } from '../util/default-map'
-import { logger } from '../logger'
 
 function diagnosticsAreSame(a: lsp.Diagnostic, b: lsp.Diagnostic) {
   return (
@@ -43,14 +43,14 @@ export class SourceFileDiagnostics {
     return true
   }
 }
-export type FileDiagnosticsChanged = {
+export type FileWithDiagnostics = {
   uri: lsp.DocumentUri
   version: number | undefined
   diagnostics: lsp.Diagnostic[]
 }
 
 type DiagnosticEvents = {
-  fileDiagnosticsChanged: [event: FileDiagnosticsChanged]
+  fileDiagnosticsChanged: [event: FileWithDiagnostics]
 }
 
 export class DiagnosticsManager {
@@ -58,22 +58,22 @@ export class DiagnosticsManager {
   private readonly events = new EventEmitter<DiagnosticEvents>()
 
   setDiagnostics({
-    fileUri,
+    uri,
     diagnostics,
     version,
   }: {
-    fileUri: lsp.DocumentUri
+    uri: lsp.DocumentUri
     diagnostics: lsp.Diagnostic[] | 'pending'
     version: number | undefined
   }) {
     logger.debug(
       undefined,
-      `[DiagMgr] Setting diagnostics for ${fileUri} ${version ?? '<no version>'} (${diagnostics === 'pending' ? 'pending' : diagnostics.length})`,
+      `[DiagMgr] Setting diagnostics for ${uri} ${version ?? '<no version>'} (${diagnostics === 'pending' ? 'pending' : diagnostics.length})`,
     )
-    const fileDiagnostics = this.sourceFiles.getOrDefault(fileUri, () => new SourceFileDiagnostics())
+    const fileDiagnostics = this.sourceFiles.getOrDefault(uri, () => new SourceFileDiagnostics())
     if (fileDiagnostics.setDiagnostics({ diagnostics, version })) {
       if (diagnostics === 'pending') return
-      this.events.emit('fileDiagnosticsChanged', { uri: fileUri, diagnostics, version })
+      this.events.emit('fileDiagnosticsChanged', { uri, diagnostics, version })
     }
   }
 

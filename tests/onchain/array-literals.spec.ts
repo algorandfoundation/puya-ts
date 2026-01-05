@@ -3,7 +3,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('array literals', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/array-literals.algo.ts',
+    paths: 'tests/approvals/array-literals.algo.ts',
     contracts: {
       ArrayLiteralsAlgo: {},
     },

@@ -3,7 +3,7 @@ import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('assignments', () => {
-  const test = createArc4TestFixture({ path: 'tests/approvals/assignments.algo.ts', contracts: { AssignmentsAlgo: {} } })
+  const test = createArc4TestFixture({ paths: 'tests/approvals/assignments.algo.ts', contracts: { AssignmentsAlgo: {} } })
 
   test('testPrimitives', async ({ appClientAssignmentsAlgo }) => {
     await appClientAssignmentsAlgo.send.call({ method: 'testPrimitives', args: [123] })

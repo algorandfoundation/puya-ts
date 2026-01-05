@@ -32,6 +32,14 @@ export class AbsolutePath {
   relativeTo(other: AbsolutePath | string) {
     return pathe.relative(getAbsolutePath(other).value, this.value)
   }
+
+  /**
+   * Resolve the specified relative path relative to this absolute path
+   * @param relativePath
+   */
+  resolve(relativePath: string) {
+    return new AbsolutePath(pathe.resolve(this.value, relativePath))
+  }
 }
 
 function getAbsolutePath(path: AbsolutePath | string) {

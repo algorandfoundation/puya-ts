@@ -13,7 +13,7 @@ describe('template var', () => {
     AN_ADDRESS: address.publicKey,
   }
   const test = createArc4TestFixture({
-    path: 'tests/approvals/template-var.algo.ts',
+    paths: 'tests/approvals/template-var.algo.ts',
     contracts: {
       MyContract: {
         deployParams: {

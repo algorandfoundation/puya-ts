@@ -3,7 +3,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('arc4 bool', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/arc4-bool.algo.ts',
+    paths: 'tests/approvals/arc4-bool.algo.ts',
     contracts: {
       Arc4BoolAlgo: {},
     },

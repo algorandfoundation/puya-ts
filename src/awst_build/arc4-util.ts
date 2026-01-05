@@ -1,10 +1,11 @@
 import type { ResourceEncoding } from '../awst'
 import { nodeFactory } from '../awst/node-factory'
-import type { ARC4ABIMethodConfig } from '../awst/nodes'
+import { ARC4ABIMethodConfig } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
 import { wtypes } from '../awst/wtypes'
 import { CodeError } from '../errors'
 import { codeInvariant, invariant } from '../util'
+import { AwstBuildContext } from './context/awst-build-context'
 import type { ABICompatiblePType, FunctionPType, PType } from './ptypes'
 import {
   ABICompatibleInstanceType,
@@ -82,6 +83,29 @@ export function ptypeToAbiPType(
     return ptypeToArc4EncodedType(ptype, sourceLocation)
   }
   throw new CodeError(`${ptype} cannot be used as an ABI ${direction === 'in' ? 'param' : 'return'} type`, { sourceLocation })
+}
+
+export function arc4ConfigFromType(functionType: FunctionPType, sourceLocation: SourceLocation) {
+  codeInvariant(
+    functionType.declaredIn,
+    `${functionType.name} does not appear to be a contract method. Ensure you are calling a function defined on a contract class eg. abiCall<typeof YourContract.prototype.yourMethod>`,
+    sourceLocation,
+  )
+
+  const contractType = AwstBuildContext.current.getContractTypeByName(functionType.declaredIn)
+  invariant(contractType, `${functionType.declaredIn} has not been visited`)
+
+  const arc4Config = AwstBuildContext.current.getArc4Config(contractType, functionType.name)
+  codeInvariant(
+    arc4Config instanceof ARC4ABIMethodConfig,
+    `${functionType.name} is not an ABI method. Only ABI compatible methods can be called with this helper.`,
+    sourceLocation,
+  )
+  const methodSelector = buildArc4MethodConstant(functionType, arc4Config, sourceLocation)
+  return {
+    arc4Config,
+    methodSelector,
+  }
 }
 
 /**

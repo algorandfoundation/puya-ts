@@ -14,7 +14,6 @@ const config: TsToolkitConfig = {
       'puya-ts': 'bin/run-cli.ts',
       puyats: 'bin/run-cli.ts',
       'puyats-ls': 'bin/puyats-ls.ts',
-      'download-puya-binary': 'bin/download-puya-binary.ts',
     },
     customSections: ['bundledDependencies'],
   },

@@ -16,6 +16,7 @@ import type { beforeEach, ExpectStatic } from 'vitest'
 import { beforeAll, test } from 'vitest'
 import { compile, CompileOptions, processInputPaths } from '../../../src'
 import { LoggingContext, LogLevel } from '../../../src/logger'
+import type { PuyaService } from '../../../src/puya/puya-service'
 import type { DeliberateAny } from '../../../src/typescript-helpers'
 import { invariant } from '../../../src/util'
 import { generateTempDir } from '../../../src/util/generate-temp-file'
@@ -44,11 +45,15 @@ const algorandTestFixture = (localnetFixture: AlgorandFixture) =>
     },
   })
 
-function createLazyCompiler(path: string, options: { outputBytecode: boolean; outputArc56: boolean }) {
+function createLazyCompiler(
+  paths: string[],
+  options: { outputBytecode: boolean; outputArc56: boolean },
+  puyaService: PuyaService | undefined,
+) {
   let result: CompilationArtifacts | undefined = undefined
   return {
     async getCompileResult(expect: ExpectStatic) {
-      if (!result) result = await compilePath(path, expect, options)
+      if (!result) result = await compilePath(paths, expect, options, puyaService)
       return result
     },
   }
@@ -85,6 +90,10 @@ type ProgramInvoker = {
   send(options?: ProgramInvokeOptions): Promise<SendAppTransactionResult>
 }
 
+function promoteToArray<T>(arg: T | T[]) {
+  return Array.isArray(arg) ? arg : [arg]
+}
+
 type BaseFixtureContextFor<T extends string> = {
   [key in T as `${key}Invoker`]: ProgramInvoker
 }
@@ -98,13 +107,17 @@ type BaseFixtureContextFor<T extends string> = {
  *                              Use `beforeEach` to create a fresh state for each test.
  */
 export function createBaseTestFixture<TContracts extends string = ''>(options: {
-  path: string
+  paths: string[] | string
   contracts: TContracts[]
   /** When to create a new test scope. Defaults to `beforeAll`. Use `beforeEach` for fresh state per test. */
   newScopeAt?: typeof beforeAll | typeof beforeEach
+  /**
+   * Optionally provide a puya service to be used for compilation. If none provided a new instance will be created per compilation
+   */
+  puyaService?: PuyaService
 }) {
-  const { path, contracts, newScopeAt = beforeAll } = options
-  const lazyCompile = createLazyCompiler(path, { outputArc56: false, outputBytecode: true })
+  const { paths, contracts, newScopeAt = beforeAll, puyaService } = options
+  const lazyCompile = createLazyCompiler(promoteToArray(paths), { outputArc56: false, outputBytecode: true }, puyaService)
   const localnet = algorandFixture({
     testAccountFunding: microAlgos(100_000_000_000),
   })
@@ -126,7 +139,7 @@ export function createBaseTestFixture<TContracts extends string = ''>(options: {
       invariant(approvalProgram, `No approval program found for ${contractName}`)
       invariant(clearStateProgram, `No clear state program found for ${contractName}`)
 
-      use({
+      await use({
         async globalState(appId: bigint) {
           return localnet.algorand.app.getGlobalState(appId)
         },
@@ -185,13 +198,17 @@ type ContractConfig = {
  *                              Use `beforeEach` to create a fresh state for each test.
  */
 export function createArc4TestFixture<TContracts extends string = ''>(options: {
-  path: string
+  paths: string | string[]
   contracts: Record<TContracts, ContractConfig> | TContracts[]
   /** When to create a new test scope. Defaults to `beforeAll`. Use `beforeEach` for fresh state per test. */
   newScopeAt?: typeof beforeAll | typeof beforeEach
+  /**
+   * Optionally provide a puya service to be used for compilation. If none provided a new instance will be created per compilation
+   */
+  puyaService?: PuyaService
 }) {
-  const { path, contracts, newScopeAt = beforeAll } = options
-  const lazyCompile = createLazyCompiler(path, { outputArc56: true, outputBytecode: false })
+  const { paths, contracts, newScopeAt = beforeAll, puyaService } = options
+  const lazyCompile = createLazyCompiler(promoteToArray(paths), { outputArc56: true, outputBytecode: false }, puyaService)
   const localnet = algorandFixture({
     testAccountFunding: microAlgos(100_000_000_000),
   })
@@ -203,7 +220,7 @@ export function createArc4TestFixture<TContracts extends string = ''>(options: {
   async function getAppSpec(expect: ExpectStatic, contractName: string) {
     const appSpec = (await lazyCompile.getCompileResult(expect)).appSpecs.find((s) => s.name === contractName)
     if (appSpec === undefined) {
-      expect.fail(`${path} does not contain an ARC4 contract "${contractName}"`)
+      expect.fail(`${paths} does not contain an ARC4 contract "${contractName}"`)
     } else {
       return appSpec
     }
@@ -265,15 +282,16 @@ type CompilationArtifacts = {
 }
 
 async function compilePath(
-  path: string,
+  paths: string[],
   expect: ExpectStatic,
   options: { outputBytecode: boolean; outputArc56: boolean },
+  puyaService: PuyaService | undefined,
 ): Promise<CompilationArtifacts> {
   using tempDir = generateTempDir()
   const logCtx = LoggingContext.create()
 
   return await logCtx.run(async () => {
-    const filePaths = processInputPaths({ paths: [path], outDir: tempDir.dirPath })
+    const filePaths = processInputPaths({ paths, outDir: tempDir.dirPath })
     await compile(
       new CompileOptions({
         filePaths,
@@ -285,6 +303,7 @@ async function compilePath(
         optimizationLevel: 1,
         ...options,
       }),
+      puyaService,
     )
     for (const log of logCtx.logEvents) {
       switch (log.level) {

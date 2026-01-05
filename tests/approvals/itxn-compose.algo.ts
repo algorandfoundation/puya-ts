@@ -55,9 +55,9 @@ class ItxnComposeAlgo extends Contract {
 
     for (const i of urange(count)) {
       if (i === 0) {
-        itxnCompose.begin(Hello.prototype.greet, { appId, args: ['ho'] })
+        itxnCompose.begin({ method: Hello.prototype.greet, appId, args: ['ho'] })
       } else {
-        itxnCompose.next(Hello.prototype.greet, { appId, args: ['ho'] })
+        itxnCompose.next({ method: Hello.prototype.greet, appId, args: ['ho'] })
       }
     }
     itxnCompose.submit()

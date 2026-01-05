@@ -2,7 +2,7 @@ import { describe } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('do loops', () => {
-  const test = createArc4TestFixture({ path: 'tests/approvals/do-loops.algo.ts', contracts: { DoLoopsAlgo: {} } })
+  const test = createArc4TestFixture({ paths: 'tests/approvals/do-loops.algo.ts', contracts: { DoLoopsAlgo: {} } })
 
   test('testDo runs', async ({ appClientDoLoopsAlgo, expect }) => {
     const result = await appClientDoLoopsAlgo.send.call({ method: 'testDo', args: [10] })

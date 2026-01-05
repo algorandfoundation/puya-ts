@@ -1,16 +1,20 @@
+import EventEmitter from 'node:events'
 import type * as lsp from 'vscode-languageserver/node'
 import { distinct } from '../util'
-import EventEmitter from 'node:events'
 
 export type WorkspaceCompileTrigger = {
   type: 'workspace'
-  workspaces: lsp.URI[]
+  uris: lsp.URI[]
+}
+export type FileCompileTrigger = {
+  type: 'file'
+  uris: lsp.URI[]
 }
 
-export type CompileTrigger = WorkspaceCompileTrigger
+export type CompileTrigger = WorkspaceCompileTrigger | FileCompileTrigger
 
 type CompileTriggerQueueEvents = {
-  itemEnqueued: []
+  itemEnqueued: [CompileTrigger]
 }
 
 export class CompileTriggerQueue {
@@ -18,19 +22,16 @@ export class CompileTriggerQueue {
   private readonly events = new EventEmitter<CompileTriggerQueueEvents>()
 
   enqueue(trigger: CompileTrigger) {
-    if (this.queue.length === 0) {
-      this.queue.push(trigger)
+    const lastInQueue = this.queue.at(-1)
+    if (trigger.type === lastInQueue?.type) {
+      this.queue.splice(-1, 1, {
+        type: trigger.type,
+        uris: lastInQueue.uris.concat(trigger.uris).filter(distinct()),
+      })
     } else {
-      const aggregated: WorkspaceCompileTrigger = {
-        type: 'workspace',
-        workspaces: this.queue
-          .flatMap((q) => q.workspaces)
-          .concat(trigger.workspaces)
-          .filter(distinct()),
-      }
-      this.queue.splice(0, this.queue.length, aggregated)
+      this.queue.push(trigger)
     }
-    this.events.emit('itemEnqueued')
+    this.events.emit('itemEnqueued', this.queue.at(-1)!)
   }
 
   tryDequeue(): CompileTrigger | undefined {

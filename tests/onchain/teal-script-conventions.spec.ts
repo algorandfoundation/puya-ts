@@ -5,7 +5,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('teal-script conventions', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/teal-script-conventions.algo.ts',
+    paths: 'tests/approvals/teal-script-conventions.algo.ts',
     contracts: {
       TealScriptConventionsAlgo: {},
     },

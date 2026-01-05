@@ -2,7 +2,7 @@ import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('urange', () => {
-  const test = createArc4TestFixture({ path: 'tests/approvals/urange.algo.ts', contracts: { UrangeAlgo: {} } })
+  const test = createArc4TestFixture({ paths: 'tests/approvals/urange.algo.ts', contracts: { UrangeAlgo: {} } })
 
   test('works with single arg', async ({ appClientUrangeAlgo }) => {
     const result = await appClientUrangeAlgo.send.call({ method: 'testSingleArg' })

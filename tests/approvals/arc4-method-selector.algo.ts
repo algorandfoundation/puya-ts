@@ -10,9 +10,14 @@ class ContractOne extends Contract {
     return someConst
   }
 
-  test2() {
+  testReferenceTypes() {
     assert(
-      methodSelector(ContractTwo.prototype.referenceTypes) === methodSelector('referenceTypes(pay,asset,account,application,appl)void'),
+      methodSelector(ContractTwo.prototype.referenceTypesIndex) ===
+        methodSelector('referenceTypesIndex(pay,asset,account,application,appl)void'),
+    )
+    assert(
+      methodSelector(ContractTwo.prototype.referenceTypesValue) ===
+        methodSelector('referenceTypesValue(pay,uint64,address,uint64,appl)void'),
     )
   }
 }
@@ -25,7 +30,11 @@ class ContractTwo extends Contract {
     return methodSelector(ContractOne.prototype.someMethod) === methodSelector('someMethod()uint64')
   }
 
-  referenceTypes(pay: gtxn.PaymentTxn, asset: Asset, account: Account, app: Application, appTxn: gtxn.ApplicationCallTxn) {}
+  @abimethod({ resourceEncoding: 'index' })
+  referenceTypesIndex(pay: gtxn.PaymentTxn, asset: Asset, account: Account, app: Application, appTxn: gtxn.ApplicationCallTxn) {}
+
+  @abimethod({ resourceEncoding: 'value' })
+  referenceTypesValue(pay: gtxn.PaymentTxn, asset: Asset, account: Account, app: Application, appTxn: gtxn.ApplicationCallTxn) {}
 }
 
 const someConst = Uint64(123)

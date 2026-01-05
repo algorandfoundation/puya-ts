@@ -3,7 +3,7 @@ import { createArc4TestFixture } from './util/test-fixture'
 
 describe('multi-inheritance', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/multi-inheritance.algo.ts',
+    paths: 'tests/approvals/multi-inheritance.algo.ts',
     contracts: {
       CommonBase: {},
       BaseOne: {},
@@ -68,7 +68,7 @@ describe('multi-inheritance', () => {
 
 describe('multi-inheritance 2', () => {
   const test = createArc4TestFixture({
-    path: 'tests/approvals/multi-inheritance-2.algo.ts',
+    paths: 'tests/approvals/multi-inheritance-2.algo.ts',
     contracts: {
       StoreBoth: {},
     },
