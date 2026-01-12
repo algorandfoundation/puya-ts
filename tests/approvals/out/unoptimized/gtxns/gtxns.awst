@@ -64,7 +64,7 @@ contract GtxnsAlgo
     assert(gtxns<OnCompletion>(other) == reinterpret_cast<uint64>(0), comment=Other txn must be NoOp)
     assert(gtxns<TypeEnum>(other) == reinterpret_cast<uint64>(6))
     assert(gtxns<LastLog>(other) == "Hello test4")
-    assert(gtxnsas<ApplicationArgs>(other, 0) == reinterpret_cast<bytes>(Method(signature="test3()void", resource_encoding="value")))
+    assert(gtxnsas<ApplicationArgs>(other, 0) == reinterpret_cast<bytes>(Method(name="test3",args=(),result=void,resource_encoding="value")))
     assert(gtxns<ApplicationID>(other) == global<CurrentApplicationID>())
   }
   
