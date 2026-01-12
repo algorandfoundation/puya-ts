@@ -13,15 +13,15 @@ main tests/approvals/casting.algo.ts::CastingAlgo.approvalProgram:
         let y#0: Encoded(uint64,uint64,uint64) = aggregate%as_Encoded(uint64,uint64,uint64)%0#0
         let aggregate%extract%0#0: bytes = (extract3 y#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
-        let values%0#0: uint64 = (btoi tuple_item%0#0)
+        let tmp%1#0: uint64 = (btoi tuple_item%0#0)
         let aggregate%extract%1#0: bytes = (extract3 y#0 8u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#0
-        let values%1#0: uint64 = (btoi tuple_item%1#0)
-        let tmp%1#0: uint64 = (* values%0#0 values%1#0)
+        let tmp%2#0: uint64 = (btoi tuple_item%1#0)
+        let tmp%3#0: uint64 = (* tmp%1#0 tmp%2#0)
         let aggregate%extract%2#0: bytes = (extract3 y#0 16u 8u)
         let tuple_item%2#0: Encoded(uint64) = aggregate%extract%2#0
-        let values%2#0: uint64 = (btoi tuple_item%2#0)
-        let tmp%2#0: uint64 = (* tmp%1#0 values%2#0)
-        let tmp%5#0: uint64 = (* tmp%2#0 6u)
-        let tmp%6#0: bool = (> 123u tmp%5#0)
-        return tmp%6#0
+        let tmp%4#0: uint64 = (btoi tuple_item%2#0)
+        let tmp%5#0: uint64 = (* tmp%3#0 tmp%4#0)
+        let tmp%8#0: uint64 = (* tmp%5#0 6u)
+        let tmp%9#0: bool = (> 123u tmp%8#0)
+        return tmp%9#0

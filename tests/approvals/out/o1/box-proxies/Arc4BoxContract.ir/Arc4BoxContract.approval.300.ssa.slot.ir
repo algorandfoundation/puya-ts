@@ -123,7 +123,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes[routing
         (box_put "boxD" b#0)
         (box_create "boxLarge" 6160u)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob 42u)
-        (box_replace "boxLarge" 4096u aggregate%val_as_bytes%0#0)
+        (box_replace "boxLarge" 4096u aggregate%val_as_bytes%0#0) // on error: index out of bounds
         (box_replace "boxLarge" 4096u 0x000000000000002a)
         let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get "boxA")
         (assert aggregate%box_get%1#0) // Box must have value
@@ -247,7 +247,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setManyInts[rout
         let eq%1#0: bool = (== len%1#0 8u)
         (assert eq%1#0) // invalid number of bytes for arc4.uint64
         let box%element_offset%0#0: uint64 = (* index#0 8u)
-        (box_replace "manyInts" box%element_offset%0#0 tmp%2#0)
+        (box_replace "manyInts" box%element_offset%0#0 tmp%2#0) // on error: index out of bounds
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumManyInts[routing]() -> void:
@@ -265,7 +265,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumManyInts[rout
         goto continue_looping%0#0 ? block@3 : block@5
     block@3: // for_body_L412
         let box%element_offset%0#0: uint64 = (* item_index_internal%0#1 8u)
-        let box%box_extract%0#0: Encoded(uint64) = (box_extract "manyInts" box%element_offset%0#0 8u)
+        let box%box_extract%0#0: Encoded(uint64) = (box_extract "manyInts" box%element_offset%0#0 8u) // on error: index out of bounds
         let temp#0: uint64 = (btoi box%box_extract%0#0)
         let total#2: uint64 = (+ total#1 temp#0)
         let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
@@ -305,11 +305,11 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.deleteBoxes[rout
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.indirectExtractAndReplace[routing]() -> void:
     block@0: // L431
-        let box%box_extract%0#0: Encoded(uint64) = (box_extract "boxLarge" 4096u 8u)
-        let values%0#0: uint64 = (btoi box%box_extract%0#0)
-        let tmp%0#0: uint64 = (+ values%0#0 1u)
-        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#0)
-        (box_replace "boxLarge" 4096u aggregate%val_as_bytes%0#0)
+        let box%box_extract%0#0: Encoded(uint64) = (box_extract "boxLarge" 4096u 8u) // on error: index out of bounds
+        let tmp%0#0: uint64 = (btoi box%box_extract%0#0)
+        let tmp%1#0: uint64 = (+ tmp%0#0 1u)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#0)
+        (box_replace "boxLarge" 4096u aggregate%val_as_bytes%0#0) // on error: index out of bounds
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.readBoxes[routing]() -> void:
@@ -324,8 +324,8 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.readBoxes[routin
         let tmp%2#1: bytes = ((extract 2 0) aggregate%box_get%2#0)
         let (aggregate%box_get%4#0: bytes, aggregate%box_get%5#0: bool) = (box_get "BOX_C")
         (assert aggregate%box_get%5#0) // Box must have value
-        let box%box_extract%0#0: Encoded(uint64) = (box_extract "boxLarge" 4096u 8u)
-        let values%0#0: uint64 = (btoi box%box_extract%0#0)
+        let box%box_extract%0#0: Encoded(uint64) = (box_extract "boxLarge" 4096u 8u) // on error: index out of bounds
+        let tmp%3#1: uint64 = (btoi box%box_extract%0#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#1)
         let aggregate%length%0#0: uint64 = (len tmp%2#1)
         let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
@@ -337,7 +337,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.readBoxes[routin
         let aggregate%as_bytes%2#0: bytes[8] = (itob aggregate%current_tail_offset%0#0)
         let aggregate%offset_as_uint16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%2#0)
         let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 aggregate%offset_as_uint16%1#0)
-        let aggregate%val_as_bytes%1#0: bytes[8] = (itob values%0#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%3#1)
         let aggregate%head%3#0: bytes = (concat aggregate%head%2#0 aggregate%val_as_bytes%1#0)
         let aggregate%concat%0#0: bytes = (concat aggregate%head%3#0 aggregate%encoded_value%0#0)
         let aggregate%concat%1#0: bytes = (concat aggregate%concat%0#0 aggregate%box_get%4#0)
@@ -445,7 +445,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBool[routing]
         let aggregate%lt%0#0: bool = (< box%element_bit_offset%0#0 8u)
         (assert aggregate%lt%0#0) // index access is out of bounds
         let aggregate%updated_target%0#0: Encoded(bool1[8]) = (setbit box%box_extract%0#0 box%element_bit_offset%0#0 value#0)
-        (box_replace "tooManyBools" box%element_byte_offset%0#0 aggregate%updated_target%0#0)
+        (box_replace "tooManyBools" box%element_byte_offset%0#0 aggregate%updated_target%0#0) // on error: index out of bounds
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools[routing]() -> void:
@@ -469,7 +469,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools[routing
     block@3: // for_body_L513
         let box%element_byte_offset%0#0: uint64 = (/ item_index_internal%0#1 8u)
         let box%element_bit_offset%0#0: uint64 = (% item_index_internal%0#1 8u)
-        let box%box_extract%0#0: Encoded(bool1[8]) = (box_extract "tooManyBools" box%element_byte_offset%0#0 1u)
+        let box%box_extract%0#0: Encoded(bool1[8]) = (box_extract "tooManyBools" box%element_byte_offset%0#0 1u) // on error: index out of bounds
         let temp#0: bool = (getbit box%box_extract%0#0 box%element_bit_offset%0#0)
         goto temp#0 ? block@4 : block@5
     block@4: // if_body_L514
@@ -477,8 +477,8 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools[routing
         goto block@5
     block@5: // after_if_else_L514
         let total#3: uint64 = φ(total#1 <- block@3, total#2 <- block@4)
-        let tmp%1#1: bool = (== total#3 stopAtTotal#0)
-        goto tmp%1#1 ? block@6 : block@7
+        let tmp%2#1: bool = (== total#3 stopAtTotal#0)
+        goto tmp%2#1 ? block@6 : block@7
     block@6: // if_body_L517
         goto block@10
     block@7: // after_if_else_L517

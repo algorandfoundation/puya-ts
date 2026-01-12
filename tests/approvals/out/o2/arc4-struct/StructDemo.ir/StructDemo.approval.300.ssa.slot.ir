@@ -96,7 +96,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let box_prefixed_key%0#2: bytes = (concat "plugins" key#2)
         let (value#1: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])), aggregate%box_get%1#0: bool) = (box_get box_prefixed_key%0#2)
         (assert aggregate%box_get%1#0) // Box must have value
-        let box%box_extract%0#1: Encoded(uint64) = (box_extract box_prefixed_key%0#2 16u 8u)
+        let box%box_extract%0#1: Encoded(uint64) = (box_extract box_prefixed_key%0#2 16u 8u) // on error: index out of bounds
         let tmp%0#9: uint64 = (btoi box%box_extract%0#1)
         (assert tmp%0#9) // Last called not zero
         let tmp%3#2: bytes = (concat 0x151f7c75 value#1)
@@ -105,7 +105,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@11: // getMain_route_L58
         let (value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])), aggregate%box_get%3#0: bool) = (box_get "main")
         (assert aggregate%box_get%3#0) // Box must have value
-        let box%box_extract%0#0: Encoded(uint64) = (box_extract "main" 16u 8u)
+        let box%box_extract%0#0: Encoded(uint64) = (box_extract "main" 16u 8u) // on error: index out of bounds
         let tmp%0#7: uint64 = (btoi box%box_extract%0#0)
         (assert tmp%0#7) // Last called not zero
         let tmp%1#3: bytes = (concat 0x151f7c75 value#0)
@@ -131,7 +131,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let box_prefixed_key%0#1: bytes = (concat "plugins" key#1)
         let box%element_offset%0#0: uint64 = (* index#0 20u)
         let box%offset%2#0: uint64 = (+ box%element_offset%0#0 41u)
-        (box_replace box_prefixed_key%0#1 box%offset%2#0 tmp%4#1)
+        (box_replace box_prefixed_key%0#1 box%offset%2#0 tmp%4#1) // on error: index out of bounds
         exit 1u
     block@13: // setPlugin_route_L68
         let tmp%0#2: bytes = (txna ApplicationArgs 1)

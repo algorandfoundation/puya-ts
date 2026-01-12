@@ -55,38 +55,38 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
         let xObj#0: Encoded(uint64) = tmp%0#0
         let aggregate%extract%0#0: bytes = (extract3 xObj#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
-        let values%0#0: uint64 = (btoi tuple_item%0#0)
-        let tmp%1#0: bool = (== values%0#0 5u)
-        (assert tmp%1#0) // x should be 5
+        let tmp%1#0: uint64 = (btoi tuple_item%0#0)
+        let tmp%2#0: bool = (== tmp%1#0 5u)
+        (assert tmp%2#0) // x should be 5
         let aggregate%extract%1#0: bytes = (extract3 xObj#0 0u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#0
-        let values%1#0: uint64 = (btoi tuple_item%1#0)
-        let tmp%2#0: bool = (!= values%1#0 3u)
-        (assert tmp%2#0) // x should not be 3
-        let tmp%3#0: account = (txn Sender)
-        let tmp%4#0: account = (global ZeroAddress)
-        let tmp%5#0: bool = (!= tmp%3#0 tmp%4#0)
-        (assert tmp%5#0) // assert target is match for conditions
+        let tmp%3#0: uint64 = (btoi tuple_item%1#0)
+        let tmp%4#0: bool = (!= tmp%3#0 3u)
+        (assert tmp%4#0) // x should not be 3
+        let tmp%5#0: account = (txn Sender)
+        let tmp%6#0: account = (global ZeroAddress)
+        let tmp%7#0: bool = (!= tmp%5#0 tmp%6#0)
+        (assert tmp%7#0) // assert target is match for conditions
         let aggregate%extract%2#0: bytes = (extract3 xObj#0 0u 8u)
         let tuple_item%2#0: Encoded(uint64) = aggregate%extract%2#0
-        let values%2#0: uint64 = (btoi tuple_item%2#0)
-        let tmp%6#0: bool = (> values%2#0 4u)
-        (assert tmp%6#0)
+        let tmp%8#0: uint64 = (btoi tuple_item%2#0)
+        let tmp%9#0: bool = (> tmp%8#0 4u)
+        (assert tmp%9#0)
         let aggregate%extract%3#0: bytes = (extract3 xObj#0 0u 8u)
         let tuple_item%3#0: Encoded(uint64) = aggregate%extract%3#0
-        let values%3#0: uint64 = (btoi tuple_item%3#0)
-        let tmp%7#0: bool = (< values%3#0 6u)
-        (assert tmp%7#0)
+        let tmp%10#0: uint64 = (btoi tuple_item%3#0)
+        let tmp%11#0: bool = (< tmp%10#0 6u)
+        (assert tmp%11#0)
         let aggregate%extract%4#0: bytes = (extract3 xObj#0 0u 8u)
         let tuple_item%4#0: Encoded(uint64) = aggregate%extract%4#0
-        let values%4#0: uint64 = (btoi tuple_item%4#0)
-        let tmp%8#0: bool = (>= values%4#0 5u)
-        (assert tmp%8#0)
+        let tmp%12#0: uint64 = (btoi tuple_item%4#0)
+        let tmp%13#0: bool = (>= tmp%12#0 5u)
+        (assert tmp%13#0)
         let aggregate%extract%5#0: bytes = (extract3 xObj#0 0u 8u)
         let tuple_item%5#0: Encoded(uint64) = aggregate%extract%5#0
-        let values%5#0: uint64 = (btoi tuple_item%5#0)
-        let tmp%9#0: bool = (<= values%5#0 5u)
-        (assert tmp%9#0)
+        let tmp%14#0: uint64 = (btoi tuple_item%5#0)
+        let tmp%15#0: bool = (<= tmp%14#0 5u)
+        (assert tmp%15#0)
         let aggregate%as_bytes%0#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob x#0)
@@ -96,65 +96,65 @@ subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.testMatches(x: uint
         let encoded_array%0#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#0
         let xArray#0: Encoded(len+uint64[]) = encoded_array%0#0
         let aggregate%array_length%0#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
-        let tmp%10#0: uint64 = aggregate%array_length%0#0
-        let tmp%11#0: bool = (== tmp%10#0 1u)
+        let tmp%16#0: uint64 = aggregate%array_length%0#0
+        let tmp%17#0: bool = (== tmp%16#0 1u)
         let aggregate%total_length%0#0: uint64 = (len xArray#0)
         let aggregate%array_trimmed%0#0: bytes = (substring3 xArray#0 2u aggregate%total_length%0#0)
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 8u)
         let aggregate%encoded_element%0#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#0
-        let values%6#0: uint64 = (btoi array_item%0#0)
-        let tmp%12#0: bool = (== values%6#0 5u)
-        let tmp%13#0: bool = (&& tmp%11#0 tmp%12#0)
-        (assert tmp%13#0)
+        let tmp%18#0: uint64 = (btoi array_item%0#0)
+        let tmp%19#0: bool = (== tmp%18#0 5u)
+        let tmp%20#0: bool = (&& tmp%17#0 tmp%19#0)
+        (assert tmp%20#0)
         let aggregate%array_length%1#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
-        let tmp%14#0: uint64 = aggregate%array_length%1#0
-        let tmp%15#0: bool = (== tmp%14#0 1u)
+        let tmp%21#0: uint64 = aggregate%array_length%1#0
+        let tmp%22#0: bool = (== tmp%21#0 1u)
         let aggregate%total_length%1#0: uint64 = (len xArray#0)
         let aggregate%array_trimmed%1#0: bytes = (substring3 xArray#0 2u aggregate%total_length%1#0)
         let aggregate%bytes_offset%1#0: uint64 = (* 0u 8u)
         let aggregate%encoded_element%1#0: bytes = (extract3 aggregate%array_trimmed%1#0 aggregate%bytes_offset%1#0 8u) // on error: index access is out of bounds
         let array_item%1#0: Encoded(uint64) = aggregate%encoded_element%1#0
-        let values%7#0: uint64 = (btoi array_item%1#0)
-        let tmp%16#0: bool = (> values%7#0 4u)
-        let tmp%17#0: bool = (&& tmp%15#0 tmp%16#0)
-        (assert tmp%17#0)
+        let tmp%23#0: uint64 = (btoi array_item%1#0)
+        let tmp%24#0: bool = (> tmp%23#0 4u)
+        let tmp%25#0: bool = (&& tmp%22#0 tmp%24#0)
+        (assert tmp%25#0)
         let aggregate%array_length%2#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
-        let tmp%18#0: uint64 = aggregate%array_length%2#0
-        let tmp%19#0: bool = (== tmp%18#0 1u)
+        let tmp%26#0: uint64 = aggregate%array_length%2#0
+        let tmp%27#0: bool = (== tmp%26#0 1u)
         let aggregate%total_length%2#0: uint64 = (len xArray#0)
         let aggregate%array_trimmed%2#0: bytes = (substring3 xArray#0 2u aggregate%total_length%2#0)
         let aggregate%bytes_offset%2#0: uint64 = (* 0u 8u)
         let aggregate%encoded_element%2#0: bytes = (extract3 aggregate%array_trimmed%2#0 aggregate%bytes_offset%2#0 8u) // on error: index access is out of bounds
         let array_item%2#0: Encoded(uint64) = aggregate%encoded_element%2#0
-        let values%8#0: uint64 = (btoi array_item%2#0)
-        let tmp%20#0: bool = (< values%8#0 6u)
-        let tmp%21#0: bool = (&& tmp%19#0 tmp%20#0)
-        (assert tmp%21#0)
+        let tmp%28#0: uint64 = (btoi array_item%2#0)
+        let tmp%29#0: bool = (< tmp%28#0 6u)
+        let tmp%30#0: bool = (&& tmp%27#0 tmp%29#0)
+        (assert tmp%30#0)
         let aggregate%array_length%3#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
-        let tmp%22#0: uint64 = aggregate%array_length%3#0
-        let tmp%23#0: bool = (== tmp%22#0 1u)
+        let tmp%31#0: uint64 = aggregate%array_length%3#0
+        let tmp%32#0: bool = (== tmp%31#0 1u)
         let aggregate%total_length%3#0: uint64 = (len xArray#0)
         let aggregate%array_trimmed%3#0: bytes = (substring3 xArray#0 2u aggregate%total_length%3#0)
         let aggregate%bytes_offset%3#0: uint64 = (* 0u 8u)
         let aggregate%encoded_element%3#0: bytes = (extract3 aggregate%array_trimmed%3#0 aggregate%bytes_offset%3#0 8u) // on error: index access is out of bounds
         let array_item%3#0: Encoded(uint64) = aggregate%encoded_element%3#0
-        let values%9#0: uint64 = (btoi array_item%3#0)
-        let tmp%24#0: bool = (>= values%9#0 5u)
-        let tmp%25#0: bool = (&& tmp%23#0 tmp%24#0)
-        (assert tmp%25#0)
+        let tmp%33#0: uint64 = (btoi array_item%3#0)
+        let tmp%34#0: bool = (>= tmp%33#0 5u)
+        let tmp%35#0: bool = (&& tmp%32#0 tmp%34#0)
+        (assert tmp%35#0)
         let aggregate%array_length%4#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
-        let tmp%26#0: uint64 = aggregate%array_length%4#0
-        let tmp%27#0: bool = (== tmp%26#0 1u)
+        let tmp%36#0: uint64 = aggregate%array_length%4#0
+        let tmp%37#0: bool = (== tmp%36#0 1u)
         let aggregate%total_length%4#0: uint64 = (len xArray#0)
         let aggregate%array_trimmed%4#0: bytes = (substring3 xArray#0 2u aggregate%total_length%4#0)
         let aggregate%bytes_offset%4#0: uint64 = (* 0u 8u)
         let aggregate%encoded_element%4#0: bytes = (extract3 aggregate%array_trimmed%4#0 aggregate%bytes_offset%4#0 8u) // on error: index access is out of bounds
         let array_item%4#0: Encoded(uint64) = aggregate%encoded_element%4#0
-        let values%10#0: uint64 = (btoi array_item%4#0)
-        let tmp%28#0: bool = (<= values%10#0 5u)
-        let tmp%29#0: bool = (&& tmp%27#0 tmp%28#0)
-        (assert tmp%29#0)
+        let tmp%38#0: uint64 = (btoi array_item%4#0)
+        let tmp%39#0: bool = (<= tmp%38#0 5u)
+        let tmp%40#0: bool = (&& tmp%37#0 tmp%39#0)
+        (assert tmp%40#0)
         return 
 
 subroutine tests/approvals/match-expr.algo.ts::MatchExprAlgo.__algots__.defaultCreate() -> void:
