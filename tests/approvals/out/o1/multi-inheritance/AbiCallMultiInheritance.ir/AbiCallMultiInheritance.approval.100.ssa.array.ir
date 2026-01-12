@@ -35,8 +35,8 @@ subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.te
         (assert eq%0#0) // invalid number of bytes for arc4.uint64
         let app#0: uint64 = (btoi tmp%0#0)
         itxn_begin
-        ((itxn_field ApplicationArgs) method "methodTwo()string")
         ((itxn_field ApplicationID) app#0)
+        ((itxn_field ApplicationArgs) method "methodTwo()string")
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
@@ -50,7 +50,7 @@ subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.te
         let add%0#0: uint64 = (+ length%0#0 2u)
         let len%0#1: uint64 = (len tmp%0#1)
         let eq%0#1: bool = (== len%0#1 add%0#0)
-        (assert eq%0#1) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        (assert eq%0#1) // invalid number of bytes for string
         itxn_begin
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob 1u)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
@@ -71,7 +71,7 @@ subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.te
         (assert tmp%8#0) // Bytes has valid prefix
         let len%1#0: uint64 = (len tmp%6#0)
         let eq%1#0: bool = (== len%1#0 8u)
-        (assert eq%1#0) // invalid number of bytes for arc4.uint64
+        (assert eq%1#0) // invalid number of bytes for uint64
         let result#0: uint64 = (btoi tmp%6#0)
         let tmp%10#0: bool = (== result#0 3u)
         (assert tmp%10#0)
