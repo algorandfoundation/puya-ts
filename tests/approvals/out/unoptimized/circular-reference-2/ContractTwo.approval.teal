@@ -157,9 +157,12 @@ tests/approvals/circular-reference-2.algo.ts::ContractTwo.test_block@0:
     // abiCall<typeof ContractOne.prototype.test>({ appId })
     itxn_begin
     frame_dig -1
+    itob
+    frame_dig -1
+    itxn_field ApplicationID
     bytec_0 // method "test(uint64)void"
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -200,13 +203,13 @@ tests/approvals/circular-reference-2.algo.ts::ContractTwo.test3_block@0:
     // tests/approvals/circular-reference-2.algo.ts:18
     // appId,
     frame_dig -1
+    itxn_field ApplicationID
     // tests/approvals/circular-reference-2.algo.ts:17-19
     // itxnCompose.begin<typeof ContractOne.prototype.test2>({
     //   appId,
     // })
     bytec_1 // method "test2()byte[4]"
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -219,13 +222,13 @@ tests/approvals/circular-reference-2.algo.ts::ContractTwo.test3_block@0:
     // tests/approvals/circular-reference-2.algo.ts:21
     // appId,
     frame_dig -1
+    itxn_field ApplicationID
     // tests/approvals/circular-reference-2.algo.ts:20-22
     // itxnCompose.next<typeof ContractOne.prototype.test2>({
     //   appId,
     // })
     bytec_1 // method "test2()byte[4]"
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0

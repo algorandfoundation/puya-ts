@@ -251,10 +251,6 @@ conditionalBegin:
     // tests/approvals/itxn-compose.algo.ts:56
     // const appId = hello.call.create({ args: ['Hi'] }).itxn.createdApp
     itxn_begin
-    pushbytes 0x009225ae // method "helloCreate(string)void"
-    itxn_field ApplicationArgs
-    pushbytes 0x00024869
-    itxn_field ApplicationArgs
     // tests/approvals/itxn-compose.algo.ts:55
     // const hello = compileArc4(Hello)
     intc_1 // 1
@@ -267,6 +263,10 @@ conditionalBegin:
     // const appId = hello.call.create({ args: ['Hi'] }).itxn.createdApp
     intc_0 // 0
     itxn_field OnCompletion
+    pushbytes 0x009225ae // method "helloCreate(string)void"
+    itxn_field ApplicationArgs
+    pushbytes 0x00024869
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -291,12 +291,12 @@ conditionalBegin_for_header@3:
     // tests/approvals/itxn-compose.algo.ts:60
     // itxnCompose.begin({ method: Hello.prototype.greet, appId, args: ['ho'] })
     itxn_begin
+    dig 1
+    itxn_field ApplicationID
     bytec_0 // method "greet(string)string"
     itxn_field ApplicationArgs
     bytec_1 // 0x0002686f
     itxn_field ApplicationArgs
-    dig 1
-    itxn_field ApplicationID
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -315,12 +315,12 @@ conditionalBegin_else_body@6:
     // tests/approvals/itxn-compose.algo.ts:62
     // itxnCompose.next({ method: Hello.prototype.greet, appId, args: ['ho'] })
     itxn_next
+    dig 1
+    itxn_field ApplicationID
     bytec_0 // method "greet(string)string"
     itxn_field ApplicationArgs
     bytec_1 // 0x0002686f
     itxn_field ApplicationArgs
-    dig 1
-    itxn_field ApplicationID
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0

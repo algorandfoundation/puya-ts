@@ -206,13 +206,6 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_bl
     extract 6 2
     bytec 10 // "hello"
     concat
-    // tests/approvals/precompiled-typed.algo.ts:17-19
-    // const app = compiled.call.create({
-    //   args: ['hello'],
-    // }).itxn.createdApp
-    pushbytes 0x009225ae // method "helloCreate(string)void"
-    itxn_field ApplicationArgs
-    itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:15
     // const compiled = compileArc4(Hello)
     intc_0 // 0
@@ -239,6 +232,9 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_bl
     // }).itxn.createdApp
     intc_0 // 0
     itxn_field OnCompletion
+    pushbytes 0x009225ae // method "helloCreate(string)void"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -268,17 +264,20 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     extract 6 2
     bytec_2 // "world"
     concat
+    // tests/approvals/precompiled-typed.algo.ts:23
+    // appId: app,
+    uncover 1
     // tests/approvals/precompiled-typed.algo.ts:21-24
     // const { returnValue: result } = compiled.call.greet({
     //   args: ['world'],
     //   appId: app,
     // })
-    bytec 4 // method "greet(string)string"
-    itxn_field ApplicationArgs
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec 4 // method "greet(string)string"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -310,7 +309,7 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     dig 1
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 2 0
     // tests/approvals/precompiled-typed.algo.ts:25
     // assert(result === 'hello world')
@@ -324,9 +323,6 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     //   args: ['abi'],
     // })
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:29
-    // appId: app,
-    frame_dig 0
     // tests/approvals/precompiled-typed.algo.ts:30
     // args: ['abi'],
     bytec 11 // "abi"
@@ -335,6 +331,10 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     extract 6 2
     bytec 11 // "abi"
     concat
+    // tests/approvals/precompiled-typed.algo.ts:29
+    // appId: app,
+    frame_dig 0
+    itxn_field ApplicationID
     // tests/approvals/precompiled-typed.algo.ts:27-31
     // const { returnValue: result2, itxn: greetItxn } = abiCall({
     //   method: Hello.prototype.greet,
@@ -344,7 +344,6 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     bytec 4 // method "greet(string)string"
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -377,7 +376,7 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     dig 1
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 2 0
     itxn LastLog
     cover 1
@@ -406,9 +405,6 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     //   args: ['stubbed'],
     // }).returnValue
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:38
-    // appId: app,
-    frame_dig 0
     // tests/approvals/precompiled-typed.algo.ts:39
     // args: ['stubbed'],
     bytec 12 // "stubbed"
@@ -417,6 +413,10 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     extract 6 2
     bytec 12 // "stubbed"
     concat
+    // tests/approvals/precompiled-typed.algo.ts:38
+    // appId: app,
+    frame_dig 0
+    itxn_field ApplicationID
     // tests/approvals/precompiled-typed.algo.ts:36-40
     // const result3 = abiCall({
     //   method: HelloStubbed.prototype.greet,
@@ -426,7 +426,6 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     bytec 4 // method "greet(string)string"
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -459,7 +458,7 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     dig 1
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 2 0
     // tests/approvals/precompiled-typed.algo.ts:41
     // assert(result3 === 'hello stubbed')
@@ -473,9 +472,6 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     //   args: [{ name: 'world', termination: new arc4.Str('!') }],
     // }).returnValue
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:45
-    // appId: app,
-    frame_dig 0
     // tests/approvals/precompiled-typed.algo.ts:46
     // args: [{ name: 'world', termination: new arc4.Str('!') }],
     bytec 5 // "!"
@@ -510,6 +506,10 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     concat
     uncover 1
     concat
+    // tests/approvals/precompiled-typed.algo.ts:45
+    // appId: app,
+    frame_dig 0
+    itxn_field ApplicationID
     // tests/approvals/precompiled-typed.algo.ts:43-47
     // const result4 = abiCall({
     //   method: Hello.prototype.sendGreetings,
@@ -519,7 +519,6 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     bytec 13 // method "sendGreetings((string,string))string"
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -552,7 +551,7 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     dig 1
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 2 0
     // tests/approvals/precompiled-typed.algo.ts:49
     // assert(result4 === 'hello world!')
@@ -571,11 +570,11 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_ne
     // compiled.call.delete({
     //   appId: app,
     // })
-    bytec 6 // method "delete()void"
-    itxn_field ApplicationArgs
     pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec 6 // method "delete()void"
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -603,8 +602,6 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_wi
     // tests/approvals/precompiled-typed.algo.ts:59
     // const helloApp = compiled.call.create().itxn.createdApp
     itxn_begin
-    bytec 14 // method "create()void"
-    itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:57
     // const compiled = compileArc4(HelloTemplate, { templateVars: { GREETING: 'hey' } })
     intc_0 // 0
@@ -629,6 +626,8 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_wi
     // const helloApp = compiled.call.create().itxn.createdApp
     intc_0 // 0
     itxn_field OnCompletion
+    bytec 14 // method "create()void"
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -656,17 +655,20 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_wi
     extract 6 2
     bytec_2 // "world"
     concat
+    // tests/approvals/precompiled-typed.algo.ts:63
+    // appId: helloApp,
+    uncover 1
     // tests/approvals/precompiled-typed.algo.ts:61-64
     // const txn1 = compiled.call.greet({
     //   args: ['world'],
     //   appId: helloApp,
     // })
-    bytec 4 // method "greet(string)string"
-    itxn_field ApplicationArgs
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec 4 // method "greet(string)string"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -698,7 +700,7 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_wi
     dig 1
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 2 0
     // tests/approvals/precompiled-typed.algo.ts:66
     // assert(txn1.returnValue === 'hey world')
@@ -745,10 +747,6 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_wi
     //   appId: helloApp,
     // })
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:71
-    // appId: helloApp,
-    frame_dig 0
-    cover 1
     // tests/approvals/precompiled-typed.algo.ts:70
     // args: [greeting],
     dup
@@ -801,17 +799,20 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_wi
     concat
     uncover 1
     concat
+    // tests/approvals/precompiled-typed.algo.ts:71
+    // appId: helloApp,
+    frame_dig 0
     // tests/approvals/precompiled-typed.algo.ts:69-72
     // const txn2 = compiled.call.sendGreetings({
     //   args: [greeting],
     //   appId: helloApp,
     // })
-    bytec 13 // method "sendGreetings((string,string))string"
-    itxn_field ApplicationArgs
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec 13 // method "sendGreetings((string,string))string"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -843,7 +844,7 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_wi
     dig 1
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 2 0
     // tests/approvals/precompiled-typed.algo.ts:74
     // assert(txn2.returnValue === 'hey world!')
@@ -862,11 +863,11 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_wi
     // compiled.call.delete({
     //   appId: helloApp,
     // })
-    bytec 6 // method "delete()void"
-    itxn_field ApplicationArgs
     pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec 6 // method "delete()void"
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -894,8 +895,6 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_wi
     // tests/approvals/precompiled-typed.algo.ts:84
     // const helloApp = compiled.call.create().itxn.createdApp
     itxn_begin
-    bytec 14 // method "create()void"
-    itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:82
     // const compiled = compileArc4(HelloTemplateCustomPrefix, { templateVars: { GREETING: 'bonjour' }, templateVarsPrefix: 'PRFX_' })
     intc_0 // 0
@@ -920,6 +919,8 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_wi
     // const helloApp = compiled.call.create().itxn.createdApp
     intc_0 // 0
     itxn_field OnCompletion
+    bytec 14 // method "create()void"
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -947,17 +948,20 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_wi
     extract 6 2
     bytec_2 // "world"
     concat
+    // tests/approvals/precompiled-typed.algo.ts:88
+    // appId: helloApp,
+    uncover 1
     // tests/approvals/precompiled-typed.algo.ts:86-89
     // const { returnValue: result } = compiled.call.greet({
     //   args: ['world'],
     //   appId: helloApp,
     // })
-    bytec 4 // method "greet(string)string"
-    itxn_field ApplicationArgs
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec 4 // method "greet(string)string"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -989,7 +993,7 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_wi
     dig 1
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 2 0
     // tests/approvals/precompiled-typed.algo.ts:91
     // assert(result === 'bonjour world')
@@ -1008,11 +1012,11 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_wi
     // compiled.call.delete({
     //   appId: helloApp,
     // })
-    bytec 6 // method "delete()void"
-    itxn_field ApplicationArgs
     pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec 6 // method "delete()void"
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -1082,11 +1086,11 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_la
     //   appId: largeApp,
     // })
     itxn_begin
-    pushbytes 0x02bf30cf // method "getBigBytesLength()uint64"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     itxn_field ApplicationID
+    pushbytes 0x02bf30cf // method "getBigBytesLength()uint64"
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -1111,7 +1115,7 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_la
     len
     pushint 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/precompiled-typed.algo.ts:107
     // assert(result === 4096)
@@ -1130,11 +1134,11 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_contract_la
     // compiled.call.delete({
     //   appId: largeApp,
     // })
-    bytec 6 // method "delete()void"
-    itxn_field ApplicationArgs
     pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec 6 // method "delete()void"
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -1245,11 +1249,11 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_
     //   args: [assetCreate],
     //   appId,
     // })
-    bytec 15 // method "receivesAnyTxn(txn)uint64"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec 15 // method "receivesAnyTxn(txn)uint64"
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -1263,7 +1267,7 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_
     //   appId,
     // })
     itxn_submit
-    gitxn 1 LastLog
+    itxn LastLog
     dup
     extract 4 0
     cover 1
@@ -1274,7 +1278,7 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_
     len
     pushint 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     // tests/approvals/precompiled-typed.algo.ts:131
     // appId,
     frame_dig 2
@@ -1315,11 +1319,11 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_
     //   appId,
     //   args: [appCall],
     // })
-    bytec 15 // method "receivesAnyTxn(txn)uint64"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec 15 // method "receivesAnyTxn(txn)uint64"
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -1333,7 +1337,7 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_
     //   args: [appCall],
     // })
     itxn_submit
-    gitxn 1 LastLog
+    itxn LastLog
     dup
     extract 4 0
     cover 1
@@ -1344,7 +1348,7 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_
     len
     pushint 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     // tests/approvals/precompiled-typed.algo.ts:140-143
     // compiled.call.receivesAssetConfig({
     //   appId,
@@ -1390,11 +1394,11 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_
     //   appId,
     //   args: [assetCreate],
     // })
-    pushbytes 0xd366c869 // method "receivesAssetConfig(acfg)byte[]"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     itxn_field ApplicationID
+    pushbytes 0xd366c869 // method "receivesAssetConfig(acfg)byte[]"
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -1408,7 +1412,7 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_
     //   args: [assetCreate],
     // })
     itxn_submit
-    gitxn 1 LastLog
+    itxn LastLog
     dup
     extract 4 0
     cover 1
@@ -1426,7 +1430,7 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_
     uncover 1
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for bytes
     // tests/approvals/precompiled-typed.algo.ts:146
     // receiver: appId.address,
     frame_dig 2
@@ -1508,11 +1512,11 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_
     //   appId,
     //   args: [assetCreate, pay],
     // })
-    pushbytes 0x81b67352 // method "receivesAssetConfigAndPay(acfg,pay)void"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     itxn_field ApplicationID
+    pushbytes 0x81b67352 // method "receivesAssetConfigAndPay(acfg,pay)void"
+    itxn_field ApplicationArgs
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -1631,10 +1635,6 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_
     //   appId,
     // })
     itxn_begin
-    // tests/approvals/precompiled-typed.algo.ts:172
-    // appId,
-    frame_dig 0
-    cover 1
     // tests/approvals/precompiled-typed.algo.ts:171
     // args: [Global.currentApplicationId, Txn.sender, asset],
     global CurrentApplicationID
@@ -1642,22 +1642,25 @@ tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_call_contract_with_
     txn Sender
     uncover 2
     itob
-    uncover 2
-    cover 1
+    uncover 1
     cover 2
+    cover 2
+    // tests/approvals/precompiled-typed.algo.ts:172
+    // appId,
+    frame_dig 0
     // tests/approvals/precompiled-typed.algo.ts:170-173
     // const result = compiled.call.receivesReferenceTypes({
     //   args: [Global.currentApplicationId, Txn.sender, asset],
     //   appId,
     // })
+    intc_0 // 0
+    itxn_field OnCompletion
+    itxn_field ApplicationID
     pushbytes 0x66698d18 // method "receivesReferenceTypes(uint64,address,uint64)void"
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
-    intc_0 // 0
-    itxn_field OnCompletion
-    itxn_field ApplicationID
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0

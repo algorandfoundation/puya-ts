@@ -743,7 +743,6 @@ subroutine tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhau
 subroutine tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_c2c() -> void:
     block@0: // L136
         itxn_begin
-        ((itxn_field ApplicationArgs) method "create()void")
         ((itxn_field ExtraProgramPages) 0u)
         ((itxn_field LocalNumUint) 0u)
         ((itxn_field LocalNumByteSlice) 0u)
@@ -754,6 +753,7 @@ subroutine tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhau
         ((itxn_field ApprovalProgramPages) CyACAAFCAABCAAAxGSISRDEYIhNBAB9CAAA2GgCABEXPBe9PAY4BAAdCAABCAAAAiAAmQv/2NhoAgARMXGG6TwGOAQAGQgAAQv/kiAADQv/3QgAAiAAUI0NCAACIABCABBUffHVPAVCwI0NCAACJQgAAgAdpbnZhbGlkiQ==)
         (itxn_field ApprovalProgramPages)
         ((itxn_field OnCompletion) 0u)
+        ((itxn_field ApplicationArgs) method "create()void")
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@1
@@ -762,9 +762,9 @@ subroutine tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhau
         let tmp%0#0: uint64 = (gitxn 0 CreatedApplicationID)
         let app#0: uint64 = tmp%0#0
         itxn_begin
-        let inner_txn_params%1%%param_ApplicationID_idx_0#0: uint64 = app#0
+        let abi_call_inner_txn_params%3%%param_ApplicationID_idx_0#0: uint64 = app#0
+        ((itxn_field ApplicationID) abi_call_inner_txn_params%3%%param_ApplicationID_idx_0#0)
         ((itxn_field ApplicationArgs) method "invalidValue()uint64[3]")
-        ((itxn_field ApplicationID) inner_txn_params%1%%param_ApplicationID_idx_0#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@2

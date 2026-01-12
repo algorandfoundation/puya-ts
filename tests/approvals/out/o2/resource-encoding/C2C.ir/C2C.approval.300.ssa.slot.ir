@@ -21,10 +21,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert eq%1#2) // invalid number of bytes for arc4.uint64
         let appId#2: uint64 = (btoi tmp%2#4)
         itxn_begin
+        ((itxn_field ApplicationID) appId#2)
         ((itxn_field Accounts) account#1)
         ((itxn_field ApplicationArgs) method "testExplicitIndex(account)uint64")
         ((itxn_field ApplicationArgs) 0x01)
-        ((itxn_field ApplicationID) appId#2)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
@@ -35,7 +35,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%2#5) // Bytes has valid prefix
         let len%0#4: uint64 = (len tmp%0#5)
         let eq%0#4: bool = (== len%0#4 8u)
-        (assert eq%0#4) // invalid number of bytes for arc4.uint64
+        (assert eq%0#4) // invalid number of bytes for uint64
         let res1#1: uint64 = (btoi tmp%0#5)
         let (value%0#1: uint64, check%0#1: bool) = ((acct_params_get AcctBalance) account#1)
         (assert check%0#1) // account funded
@@ -53,9 +53,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert eq%1#1) // invalid number of bytes for arc4.uint64
         let appId#1: uint64 = (btoi tmp%2#2)
         itxn_begin
+        ((itxn_field ApplicationID) appId#1)
         ((itxn_field ApplicationArgs) method "testExplicitValue(address)uint64")
         ((itxn_field ApplicationArgs) account#0)
-        ((itxn_field ApplicationID) appId#1)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
@@ -66,7 +66,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%3#3) // Bytes has valid prefix
         let len%0#2: uint64 = (len tmp%1#2)
         let eq%0#2: bool = (== len%0#2 8u)
-        (assert eq%0#2) // invalid number of bytes for arc4.uint64
+        (assert eq%0#2) // invalid number of bytes for uint64
         let res1#0: uint64 = (btoi tmp%1#2)
         let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
         (assert check%0#0) // account funded
@@ -91,17 +91,17 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_submit
         let asset#0: uint64 = (itxn CreatedAssetID)
         itxn_begin
-        let tmp%2#1: uint64 = (global CurrentApplicationID)
-        let tmp%3#1: account = (txn Sender)
-        ((itxn_field Accounts) tmp%3#1)
+        let tmp%2#1: account = (txn Sender)
+        let tmp%3#1: uint64 = (global CurrentApplicationID)
+        ((itxn_field OnCompletion) 0u)
+        ((itxn_field ApplicationID) appId#0)
         ((itxn_field Assets) asset#0)
-        ((itxn_field Applications) tmp%2#1)
+        ((itxn_field Applications) tmp%3#1)
+        ((itxn_field Accounts) tmp%2#1)
         ((itxn_field ApplicationArgs) method "echoResourceByIndex(asset,application,account)(uint64,uint64,address)")
         ((itxn_field ApplicationArgs) 0x00)
         ((itxn_field ApplicationArgs) 0x01)
         ((itxn_field ApplicationArgs) 0x01)
-        ((itxn_field OnCompletion) 0u)
-        ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
@@ -112,7 +112,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%6#1) // Bytes has valid prefix
         let len%0#0: uint64 = (len indexes#0)
         let eq%0#0: bool = (== len%0#0 48u)
-        (assert eq%0#0) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
+        (assert eq%0#0) // invalid number of bytes for arc4.tuple<asset,application,account>
         let tmp%8#1: uint64 = (extract_uint64 awst_tmp%0#0 4u)
         let tmp%9#1: bool = (== tmp%8#1 asset#0)
         let tmp%10#1: bool = (&& 1u tmp%9#1)
@@ -130,12 +130,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%20#0: uint64 = (global CurrentApplicationID)
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%20#0)
         let tmp%22#0: account = (txn Sender)
+        ((itxn_field OnCompletion) 0u)
+        ((itxn_field ApplicationID) appId#0)
         ((itxn_field ApplicationArgs) method "echoResourceByValue(uint64,uint64,address)(uint64,uint64,address)")
         ((itxn_field ApplicationArgs) aggregate%val_as_bytes%0#0)
         ((itxn_field ApplicationArgs) aggregate%val_as_bytes%1#0)
         ((itxn_field ApplicationArgs) tmp%22#0)
-        ((itxn_field OnCompletion) 0u)
-        ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
@@ -146,7 +146,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert tmp%26#0) // Bytes has valid prefix
         let len%1#0: uint64 = (len resources#0)
         let eq%1#0: bool = (== len%1#0 48u)
-        (assert eq%1#0) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
+        (assert eq%1#0) // invalid number of bytes for arc4.tuple<asset,application,account>
         let tmp%28#0: uint64 = (extract_uint64 awst_tmp%1#0 4u)
         let tmp%29#0: bool = (== tmp%28#0 asset#0)
         let tmp%30#0: bool = (&& 1u tmp%29#0)

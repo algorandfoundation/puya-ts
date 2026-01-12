@@ -5790,7 +5790,7 @@
                         },
                         "itxns": [
                           {
-                            "_type": "CreateInnerTransaction",
+                            "_type": "ABICall",
                             "source_location": {
                               "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
                               "line": 139,
@@ -5799,11 +5799,35 @@
                               "end_column": 40
                             },
                             "wtype": {
-                              "_type": "WInnerTransactionFields",
+                              "_type": "WABICallInnerTransactionFields",
                               "name": "inner_transaction_fields_appl",
                               "immutable": true,
-                              "transaction_type": 6
+                              "transaction_type": 6,
+                              "result_type": {
+                                "_type": "WType",
+                                "name": "void",
+                                "immutable": true
+                              }
                             },
+                            "target": {
+                              "_type": "MethodSignature",
+                              "source_location": {
+                                "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
+                                "line": 139,
+                                "end_line": 139,
+                                "column": 16,
+                                "end_column": 40
+                              },
+                              "name": "create",
+                              "arg_types": [],
+                              "return_type": {
+                                "_type": "WType",
+                                "name": "void",
+                                "immutable": true
+                              },
+                              "resource_encoding": "value"
+                            },
+                            "args": [],
                             "fields": {
                               "Fee": {
                                 "_type": "IntegerConstant",
@@ -6485,60 +6509,6 @@
                                   "name": "compiled"
                                 },
                                 "name": "extraProgramPages"
-                              },
-                              "ApplicationArgs": {
-                                "_type": "TupleExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
-                                  "line": 139,
-                                  "end_line": 139,
-                                  "column": 16,
-                                  "end_column": 40
-                                },
-                                "wtype": {
-                                  "_type": "WTuple",
-                                  "name": "tuple",
-                                  "types": [
-                                    {
-                                      "_type": "BytesWType",
-                                      "length": 4
-                                    }
-                                  ]
-                                },
-                                "items": [
-                                  {
-                                    "_type": "MethodConstant",
-                                    "source_location": {
-                                      "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
-                                      "line": 139,
-                                      "end_line": 139,
-                                      "column": 16,
-                                      "end_column": 40
-                                    },
-                                    "wtype": {
-                                      "_type": "BytesWType",
-                                      "length": 4
-                                    },
-                                    "value": {
-                                      "_type": "MethodSignature",
-                                      "source_location": {
-                                        "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
-                                        "line": 139,
-                                        "end_line": 139,
-                                        "column": 16,
-                                        "end_column": 40
-                                      },
-                                      "name": "create",
-                                      "arg_types": [],
-                                      "return_type": {
-                                        "_type": "WType",
-                                        "name": "void",
-                                        "immutable": true
-                                      },
-                                      "resource_encoding": "value"
-                                    }
-                                  }
-                                ]
                               }
                             }
                           }
@@ -6619,7 +6589,7 @@
                       },
                       "itxns": [
                         {
-                          "_type": "CreateInnerTransaction",
+                          "_type": "ABICall",
                           "source_location": {
                             "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
                             "line": 141,
@@ -6628,11 +6598,49 @@
                             "end_column": 6
                           },
                           "wtype": {
-                            "_type": "WInnerTransactionFields",
+                            "_type": "WABICallInnerTransactionFields",
                             "name": "inner_transaction_fields_appl",
                             "immutable": true,
-                            "transaction_type": 6
+                            "transaction_type": 6,
+                            "result_type": {
+                              "_type": "ARC4StaticArray",
+                              "immutable": false,
+                              "arc4_alias": null,
+                              "element_type": {
+                                "_type": "ARC4UIntN",
+                                "arc4_alias": null,
+                                "n": 64
+                              },
+                              "source_location": null,
+                              "array_size": 3
+                            }
                           },
+                          "target": {
+                            "_type": "MethodSignature",
+                            "source_location": {
+                              "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
+                              "line": 141,
+                              "end_line": 144,
+                              "column": 4,
+                              "end_column": 6
+                            },
+                            "name": "invalidValue",
+                            "arg_types": [],
+                            "return_type": {
+                              "_type": "ARC4StaticArray",
+                              "immutable": false,
+                              "arc4_alias": null,
+                              "element_type": {
+                                "_type": "ARC4UIntN",
+                                "arc4_alias": null,
+                                "n": 64
+                              },
+                              "source_location": null,
+                              "array_size": 3
+                            },
+                            "resource_encoding": "value"
+                          },
+                          "args": [],
                           "fields": {
                             "Fee": {
                               "_type": "IntegerConstant",
@@ -6683,67 +6691,6 @@
                                 "immutable": true
                               },
                               "name": "app"
-                            },
-                            "ApplicationArgs": {
-                              "_type": "TupleExpression",
-                              "source_location": {
-                                "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
-                                "line": 141,
-                                "end_line": 144,
-                                "column": 4,
-                                "end_column": 6
-                              },
-                              "wtype": {
-                                "_type": "WTuple",
-                                "name": "tuple",
-                                "types": [
-                                  {
-                                    "_type": "BytesWType",
-                                    "length": 4
-                                  }
-                                ]
-                              },
-                              "items": [
-                                {
-                                  "_type": "MethodConstant",
-                                  "source_location": {
-                                    "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
-                                    "line": 141,
-                                    "end_line": 144,
-                                    "column": 4,
-                                    "end_column": 6
-                                  },
-                                  "wtype": {
-                                    "_type": "BytesWType",
-                                    "length": 4
-                                  },
-                                  "value": {
-                                    "_type": "MethodSignature",
-                                    "source_location": {
-                                      "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
-                                      "line": 141,
-                                      "end_line": 144,
-                                      "column": 4,
-                                      "end_column": 6
-                                    },
-                                    "name": "invalidValue",
-                                    "arg_types": [],
-                                    "return_type": {
-                                      "_type": "ARC4StaticArray",
-                                      "immutable": false,
-                                      "arc4_alias": null,
-                                      "element_type": {
-                                        "_type": "ARC4UIntN",
-                                        "arc4_alias": null,
-                                        "n": 64
-                                      },
-                                      "source_location": null,
-                                      "array_size": 3
-                                    },
-                                    "resource_encoding": "value"
-                                  }
-                                }
-                              ]
                             }
                           }
                         }
@@ -6867,7 +6814,7 @@
                                       },
                                       "itxns": [
                                         {
-                                          "_type": "CreateInnerTransaction",
+                                          "_type": "ABICall",
                                           "source_location": {
                                             "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
                                             "line": 141,
@@ -6876,11 +6823,49 @@
                                             "end_column": 6
                                           },
                                           "wtype": {
-                                            "_type": "WInnerTransactionFields",
+                                            "_type": "WABICallInnerTransactionFields",
                                             "name": "inner_transaction_fields_appl",
                                             "immutable": true,
-                                            "transaction_type": 6
+                                            "transaction_type": 6,
+                                            "result_type": {
+                                              "_type": "ARC4StaticArray",
+                                              "immutable": false,
+                                              "arc4_alias": null,
+                                              "element_type": {
+                                                "_type": "ARC4UIntN",
+                                                "arc4_alias": null,
+                                                "n": 64
+                                              },
+                                              "source_location": null,
+                                              "array_size": 3
+                                            }
                                           },
+                                          "target": {
+                                            "_type": "MethodSignature",
+                                            "source_location": {
+                                              "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
+                                              "line": 141,
+                                              "end_line": 144,
+                                              "column": 4,
+                                              "end_column": 6
+                                            },
+                                            "name": "invalidValue",
+                                            "arg_types": [],
+                                            "return_type": {
+                                              "_type": "ARC4StaticArray",
+                                              "immutable": false,
+                                              "arc4_alias": null,
+                                              "element_type": {
+                                                "_type": "ARC4UIntN",
+                                                "arc4_alias": null,
+                                                "n": 64
+                                              },
+                                              "source_location": null,
+                                              "array_size": 3
+                                            },
+                                            "resource_encoding": "value"
+                                          },
+                                          "args": [],
                                           "fields": {
                                             "Fee": {
                                               "_type": "IntegerConstant",
@@ -6931,67 +6916,6 @@
                                                 "immutable": true
                                               },
                                               "name": "app"
-                                            },
-                                            "ApplicationArgs": {
-                                              "_type": "TupleExpression",
-                                              "source_location": {
-                                                "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
-                                                "line": 141,
-                                                "end_line": 144,
-                                                "column": 4,
-                                                "end_column": 6
-                                              },
-                                              "wtype": {
-                                                "_type": "WTuple",
-                                                "name": "tuple",
-                                                "types": [
-                                                  {
-                                                    "_type": "BytesWType",
-                                                    "length": 4
-                                                  }
-                                                ]
-                                              },
-                                              "items": [
-                                                {
-                                                  "_type": "MethodConstant",
-                                                  "source_location": {
-                                                    "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
-                                                    "line": 141,
-                                                    "end_line": 144,
-                                                    "column": 4,
-                                                    "end_column": 6
-                                                  },
-                                                  "wtype": {
-                                                    "_type": "BytesWType",
-                                                    "length": 4
-                                                  },
-                                                  "value": {
-                                                    "_type": "MethodSignature",
-                                                    "source_location": {
-                                                      "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
-                                                      "line": 141,
-                                                      "end_line": 144,
-                                                      "column": 4,
-                                                      "end_column": 6
-                                                    },
-                                                    "name": "invalidValue",
-                                                    "arg_types": [],
-                                                    "return_type": {
-                                                      "_type": "ARC4StaticArray",
-                                                      "immutable": false,
-                                                      "arc4_alias": null,
-                                                      "element_type": {
-                                                        "_type": "ARC4UIntN",
-                                                        "arc4_alias": null,
-                                                        "n": 64
-                                                      },
-                                                      "source_location": null,
-                                                      "array_size": 3
-                                                    },
-                                                    "resource_encoding": "value"
-                                                  }
-                                                }
-                                              ]
                                             }
                                           }
                                         }
@@ -7076,7 +7000,7 @@
                                         },
                                         "itxns": [
                                           {
-                                            "_type": "CreateInnerTransaction",
+                                            "_type": "ABICall",
                                             "source_location": {
                                               "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
                                               "line": 141,
@@ -7085,11 +7009,49 @@
                                               "end_column": 6
                                             },
                                             "wtype": {
-                                              "_type": "WInnerTransactionFields",
+                                              "_type": "WABICallInnerTransactionFields",
                                               "name": "inner_transaction_fields_appl",
                                               "immutable": true,
-                                              "transaction_type": 6
+                                              "transaction_type": 6,
+                                              "result_type": {
+                                                "_type": "ARC4StaticArray",
+                                                "immutable": false,
+                                                "arc4_alias": null,
+                                                "element_type": {
+                                                  "_type": "ARC4UIntN",
+                                                  "arc4_alias": null,
+                                                  "n": 64
+                                                },
+                                                "source_location": null,
+                                                "array_size": 3
+                                              }
                                             },
+                                            "target": {
+                                              "_type": "MethodSignature",
+                                              "source_location": {
+                                                "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
+                                                "line": 141,
+                                                "end_line": 144,
+                                                "column": 4,
+                                                "end_column": 6
+                                              },
+                                              "name": "invalidValue",
+                                              "arg_types": [],
+                                              "return_type": {
+                                                "_type": "ARC4StaticArray",
+                                                "immutable": false,
+                                                "arc4_alias": null,
+                                                "element_type": {
+                                                  "_type": "ARC4UIntN",
+                                                  "arc4_alias": null,
+                                                  "n": 64
+                                                },
+                                                "source_location": null,
+                                                "array_size": 3
+                                              },
+                                              "resource_encoding": "value"
+                                            },
+                                            "args": [],
                                             "fields": {
                                               "Fee": {
                                                 "_type": "IntegerConstant",
@@ -7140,67 +7102,6 @@
                                                   "immutable": true
                                                 },
                                                 "name": "app"
-                                              },
-                                              "ApplicationArgs": {
-                                                "_type": "TupleExpression",
-                                                "source_location": {
-                                                  "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
-                                                  "line": 141,
-                                                  "end_line": 144,
-                                                  "column": 4,
-                                                  "end_column": 6
-                                                },
-                                                "wtype": {
-                                                  "_type": "WTuple",
-                                                  "name": "tuple",
-                                                  "types": [
-                                                    {
-                                                      "_type": "BytesWType",
-                                                      "length": 4
-                                                    }
-                                                  ]
-                                                },
-                                                "items": [
-                                                  {
-                                                    "_type": "MethodConstant",
-                                                    "source_location": {
-                                                      "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
-                                                      "line": 141,
-                                                      "end_line": 144,
-                                                      "column": 4,
-                                                      "end_column": 6
-                                                    },
-                                                    "wtype": {
-                                                      "_type": "BytesWType",
-                                                      "length": 4
-                                                    },
-                                                    "value": {
-                                                      "_type": "MethodSignature",
-                                                      "source_location": {
-                                                        "file": "tests/approvals/abi-validation-exhaustive.algo.ts",
-                                                        "line": 141,
-                                                        "end_line": 144,
-                                                        "column": 4,
-                                                        "end_column": 6
-                                                      },
-                                                      "name": "invalidValue",
-                                                      "arg_types": [],
-                                                      "return_type": {
-                                                        "_type": "ARC4StaticArray",
-                                                        "immutable": false,
-                                                        "arc4_alias": null,
-                                                        "element_type": {
-                                                          "_type": "ARC4UIntN",
-                                                          "arc4_alias": null,
-                                                          "n": 64
-                                                        },
-                                                        "source_location": null,
-                                                        "array_size": 3
-                                                      },
-                                                      "resource_encoding": "value"
-                                                    }
-                                                  }
-                                                ]
                                               }
                                             }
                                           }

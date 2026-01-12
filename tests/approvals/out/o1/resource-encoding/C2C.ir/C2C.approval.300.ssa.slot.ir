@@ -42,10 +42,10 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToIndex[routin
         (assert eq%1#0) // invalid number of bytes for arc4.uint64
         let appId#0: uint64 = (btoi tmp%2#0)
         itxn_begin
+        ((itxn_field ApplicationID) appId#0)
         ((itxn_field Accounts) account#0)
         ((itxn_field ApplicationArgs) method "testExplicitIndex(account)uint64")
         ((itxn_field ApplicationArgs) 0x01)
-        ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
@@ -56,7 +56,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToIndex[routin
         (assert tmp%2#1) // Bytes has valid prefix
         let len%0#1: uint64 = (len tmp%0#1)
         let eq%0#1: bool = (== len%0#1 8u)
-        (assert eq%0#1) // invalid number of bytes for arc4.uint64
+        (assert eq%0#1) // invalid number of bytes for uint64
         let res1#0: uint64 = (btoi tmp%0#1)
         let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
         (assert check%0#0) // account funded
@@ -76,9 +76,9 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue[routin
         (assert eq%1#0) // invalid number of bytes for arc4.uint64
         let appId#0: uint64 = (btoi tmp%2#0)
         itxn_begin
+        ((itxn_field ApplicationID) appId#0)
         ((itxn_field ApplicationArgs) method "testExplicitValue(address)uint64")
         ((itxn_field ApplicationArgs) account#0)
-        ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
@@ -89,7 +89,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue[routin
         (assert tmp%3#1) // Bytes has valid prefix
         let len%0#1: uint64 = (len tmp%1#1)
         let eq%0#1: bool = (== len%0#1 8u)
-        (assert eq%0#1) // invalid number of bytes for arc4.uint64
+        (assert eq%0#1) // invalid number of bytes for uint64
         let res1#0: uint64 = (btoi tmp%1#1)
         let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
         (assert check%0#0) // account funded
@@ -116,17 +116,17 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         itxn_submit
         let asset#0: uint64 = (itxn CreatedAssetID)
         itxn_begin
-        let tmp%2#0: uint64 = (global CurrentApplicationID)
-        let tmp%3#0: account = (txn Sender)
-        ((itxn_field Accounts) tmp%3#0)
+        let tmp%2#0: account = (txn Sender)
+        let tmp%3#0: uint64 = (global CurrentApplicationID)
+        ((itxn_field OnCompletion) 0u)
+        ((itxn_field ApplicationID) appId#0)
         ((itxn_field Assets) asset#0)
-        ((itxn_field Applications) tmp%2#0)
+        ((itxn_field Applications) tmp%3#0)
+        ((itxn_field Accounts) tmp%2#0)
         ((itxn_field ApplicationArgs) method "echoResourceByIndex(asset,application,account)(uint64,uint64,address)")
         ((itxn_field ApplicationArgs) 0x00)
         ((itxn_field ApplicationArgs) 0x01)
         ((itxn_field ApplicationArgs) 0x01)
-        ((itxn_field OnCompletion) 0u)
-        ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
@@ -137,7 +137,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         (assert tmp%6#0) // Bytes has valid prefix
         let len%0#0: uint64 = (len indexes#0)
         let eq%0#0: bool = (== len%0#0 48u)
-        (assert eq%0#0) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
+        (assert eq%0#0) // invalid number of bytes for arc4.tuple<asset,application,account>
         let tmp%8#0: uint64 = (extract_uint64 awst_tmp%0#0 4u)
         let tmp%9#0: bool = (== tmp%8#0 asset#0)
         let tmp%10#0: bool = (&& 1u tmp%9#0)
@@ -155,12 +155,12 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         let tmp%20#0: uint64 = (global CurrentApplicationID)
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%20#0)
         let tmp%22#0: account = (txn Sender)
+        ((itxn_field OnCompletion) 0u)
+        ((itxn_field ApplicationID) appId#0)
         ((itxn_field ApplicationArgs) method "echoResourceByValue(uint64,uint64,address)(uint64,uint64,address)")
         ((itxn_field ApplicationArgs) aggregate%val_as_bytes%0#0)
         ((itxn_field ApplicationArgs) aggregate%val_as_bytes%1#0)
         ((itxn_field ApplicationArgs) tmp%22#0)
-        ((itxn_field OnCompletion) 0u)
-        ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
@@ -171,7 +171,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource
         (assert tmp%26#0) // Bytes has valid prefix
         let len%1#0: uint64 = (len resources#0)
         let eq%1#0: bool = (== len%1#0 48u)
-        (assert eq%1#0) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
+        (assert eq%1#0) // invalid number of bytes for arc4.tuple<asset,application,account>
         let tmp%28#0: uint64 = (extract_uint64 awst_tmp%1#0 4u)
         let tmp%29#0: bool = (== tmp%28#0 asset#0)
         let tmp%30#0: bool = (&& 1u tmp%29#0)

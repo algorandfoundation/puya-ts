@@ -48,9 +48,9 @@ test:
     //   appId: app,
     // })
     itxn_begin
+    itxn_field ApplicationID
     pushbytes 0x363b329e // method "methodTwo()string"
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     intc_3 // appl
     itxn_field TypeEnum
     intc_1 // 0
@@ -72,7 +72,7 @@ test:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     // tests/approvals/multi-inheritance.algo.ts:72-74
     // const result = abiCall<typeof AbiCallMultiInheritance.prototype.add>({
     //   args: [1, 2],
@@ -110,7 +110,7 @@ test:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/multi-inheritance.algo.ts:76
     // assert(result === 3)

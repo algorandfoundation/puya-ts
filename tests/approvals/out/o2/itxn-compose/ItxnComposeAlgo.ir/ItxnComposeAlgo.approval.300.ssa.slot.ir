@@ -89,12 +89,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert eq%0#0) // invalid number of bytes for arc4.uint64
         let count#0: uint64 = (btoi tmp%0#2)
         itxn_begin
-        ((itxn_field ApplicationArgs) method "helloCreate(string)void")
-        ((itxn_field ApplicationArgs) 0x00024869)
         ((itxn_field GlobalNumByteSlice) 1u)
         ((itxn_field ClearStateProgramPages) C4EBQw==)
         ((itxn_field ApprovalProgramPages) CyAEAAIBBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CAMcAvzEZFEQxGEEAk4ICBNCiggAEUYC6IDYaAI4CAFgAAQA2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMjWUlLAhJESwRLAUsFUkkiWSMITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwJEM2GgFJIlkjCEsBFRJEVwIAIihlRClQTFBJFRZXBgJMUCpMULAkQ4AEAJIlrjYaAI4BAAEANhoBSSJZIwhLARUSRFcCAChMZyRDMRklEjEYEEMxGYEFEjEYEEM=)
         ((itxn_field OnCompletion) 0u)
+        ((itxn_field ApplicationArgs) method "helloCreate(string)void")
+        ((itxn_field ApplicationArgs) 0x00024869)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
@@ -109,17 +109,17 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto temp#0 ? block@16 : block@15
     block@15: // if_body_L59
         itxn_begin
+        ((itxn_field ApplicationID) appId#0)
         ((itxn_field ApplicationArgs) method "greet(string)string")
         ((itxn_field ApplicationArgs) 0x0002686f)
-        ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@17
     block@16: // else_body_L61
         itxn_next
+        ((itxn_field ApplicationID) appId#0)
         ((itxn_field ApplicationArgs) method "greet(string)string")
         ((itxn_field ApplicationArgs) 0x0002686f)
-        ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@17

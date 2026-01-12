@@ -7174,7 +7174,7 @@
                         },
                         "itxns": [
                           {
-                            "_type": "CreateInnerTransaction",
+                            "_type": "ABICall",
                             "source_location": {
                               "file": "tests/approvals/itxn-compose.algo.ts",
                               "line": 56,
@@ -7183,11 +7183,58 @@
                               "end_column": 53
                             },
                             "wtype": {
-                              "_type": "WInnerTransactionFields",
+                              "_type": "WABICallInnerTransactionFields",
                               "name": "inner_transaction_fields_appl",
                               "immutable": true,
-                              "transaction_type": 6
+                              "transaction_type": 6,
+                              "result_type": {
+                                "_type": "WType",
+                                "name": "void",
+                                "immutable": true
+                              }
                             },
+                            "target": {
+                              "_type": "MethodSignature",
+                              "source_location": {
+                                "file": "tests/approvals/itxn-compose.algo.ts",
+                                "line": 56,
+                                "end_line": 56,
+                                "column": 18,
+                                "end_column": 53
+                              },
+                              "name": "helloCreate",
+                              "arg_types": [
+                                {
+                                  "_type": "WType",
+                                  "name": "string",
+                                  "immutable": true
+                                }
+                              ],
+                              "return_type": {
+                                "_type": "WType",
+                                "name": "void",
+                                "immutable": true
+                              },
+                              "resource_encoding": "value"
+                            },
+                            "args": [
+                              {
+                                "_type": "StringConstant",
+                                "source_location": {
+                                  "file": "tests/approvals/itxn-compose.algo.ts",
+                                  "line": 56,
+                                  "end_line": 56,
+                                  "column": 45,
+                                  "end_column": 49
+                                },
+                                "wtype": {
+                                  "_type": "WType",
+                                  "name": "string",
+                                  "immutable": true
+                                },
+                                "value": "Hi"
+                              }
+                            ],
                             "fields": {
                               "Fee": {
                                 "_type": "IntegerConstant",
@@ -7869,115 +7916,6 @@
                                   "name": "hello"
                                 },
                                 "name": "extraProgramPages"
-                              },
-                              "ApplicationArgs": {
-                                "_type": "TupleExpression",
-                                "source_location": {
-                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                  "line": 56,
-                                  "end_line": 56,
-                                  "column": 18,
-                                  "end_column": 53
-                                },
-                                "wtype": {
-                                  "_type": "WTuple",
-                                  "name": "tuple",
-                                  "types": [
-                                    {
-                                      "_type": "BytesWType",
-                                      "length": 4
-                                    },
-                                    {
-                                      "_type": "ARC4DynamicArray",
-                                      "immutable": true,
-                                      "arc4_alias": "string",
-                                      "element_type": {
-                                        "_type": "ARC4UIntN",
-                                        "arc4_alias": "byte",
-                                        "n": 8
-                                      },
-                                      "source_location": null
-                                    }
-                                  ]
-                                },
-                                "items": [
-                                  {
-                                    "_type": "MethodConstant",
-                                    "source_location": {
-                                      "file": "tests/approvals/itxn-compose.algo.ts",
-                                      "line": 56,
-                                      "end_line": 56,
-                                      "column": 18,
-                                      "end_column": 53
-                                    },
-                                    "wtype": {
-                                      "_type": "BytesWType",
-                                      "length": 4
-                                    },
-                                    "value": {
-                                      "_type": "MethodSignature",
-                                      "source_location": {
-                                        "file": "tests/approvals/itxn-compose.algo.ts",
-                                        "line": 56,
-                                        "end_line": 56,
-                                        "column": 18,
-                                        "end_column": 53
-                                      },
-                                      "name": "helloCreate",
-                                      "arg_types": [
-                                        {
-                                          "_type": "WType",
-                                          "name": "string",
-                                          "immutable": true
-                                        }
-                                      ],
-                                      "return_type": {
-                                        "_type": "WType",
-                                        "name": "void",
-                                        "immutable": true
-                                      },
-                                      "resource_encoding": "value"
-                                    }
-                                  },
-                                  {
-                                    "_type": "ARC4Encode",
-                                    "source_location": {
-                                      "file": "tests/approvals/itxn-compose.algo.ts",
-                                      "line": 56,
-                                      "end_line": 56,
-                                      "column": 45,
-                                      "end_column": 49
-                                    },
-                                    "wtype": {
-                                      "_type": "ARC4DynamicArray",
-                                      "immutable": true,
-                                      "arc4_alias": "string",
-                                      "element_type": {
-                                        "_type": "ARC4UIntN",
-                                        "arc4_alias": "byte",
-                                        "n": 8
-                                      },
-                                      "source_location": null
-                                    },
-                                    "value": {
-                                      "_type": "StringConstant",
-                                      "source_location": {
-                                        "file": "tests/approvals/itxn-compose.algo.ts",
-                                        "line": 56,
-                                        "end_line": 56,
-                                        "column": 45,
-                                        "end_column": 49
-                                      },
-                                      "wtype": {
-                                        "_type": "WType",
-                                        "name": "string",
-                                        "immutable": true
-                                      },
-                                      "value": "Hi"
-                                    },
-                                    "error_message": null
-                                  }
-                                ]
                               }
                             }
                           }
@@ -8256,7 +8194,7 @@
                                         },
                                         "itxns": [
                                           {
-                                            "_type": "CreateInnerTransaction",
+                                            "_type": "ABICall",
                                             "source_location": {
                                               "file": "tests/approvals/itxn-compose.algo.ts",
                                               "line": 60,
@@ -8265,11 +8203,58 @@
                                               "end_column": 81
                                             },
                                             "wtype": {
-                                              "_type": "WInnerTransactionFields",
+                                              "_type": "WABICallInnerTransactionFields",
                                               "name": "inner_transaction_fields_appl",
                                               "immutable": true,
-                                              "transaction_type": 6
+                                              "transaction_type": 6,
+                                              "result_type": {
+                                                "_type": "WType",
+                                                "name": "string",
+                                                "immutable": true
+                                              }
                                             },
+                                            "target": {
+                                              "_type": "MethodSignature",
+                                              "source_location": {
+                                                "file": "tests/approvals/itxn-compose.algo.ts",
+                                                "line": 60,
+                                                "end_line": 60,
+                                                "column": 8,
+                                                "end_column": 81
+                                              },
+                                              "name": "greet",
+                                              "arg_types": [
+                                                {
+                                                  "_type": "WType",
+                                                  "name": "string",
+                                                  "immutable": true
+                                                }
+                                              ],
+                                              "return_type": {
+                                                "_type": "WType",
+                                                "name": "string",
+                                                "immutable": true
+                                              },
+                                              "resource_encoding": "value"
+                                            },
+                                            "args": [
+                                              {
+                                                "_type": "StringConstant",
+                                                "source_location": {
+                                                  "file": "tests/approvals/itxn-compose.algo.ts",
+                                                  "line": 60,
+                                                  "end_line": 60,
+                                                  "column": 73,
+                                                  "end_column": 77
+                                                },
+                                                "wtype": {
+                                                  "_type": "WType",
+                                                  "name": "string",
+                                                  "immutable": true
+                                                },
+                                                "value": "ho"
+                                              }
+                                            ],
                                             "fields": {
                                               "Fee": {
                                                 "_type": "IntegerConstant",
@@ -8320,115 +8305,6 @@
                                                   "immutable": true
                                                 },
                                                 "name": "appId"
-                                              },
-                                              "ApplicationArgs": {
-                                                "_type": "TupleExpression",
-                                                "source_location": {
-                                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                                  "line": 60,
-                                                  "end_line": 60,
-                                                  "column": 8,
-                                                  "end_column": 81
-                                                },
-                                                "wtype": {
-                                                  "_type": "WTuple",
-                                                  "name": "tuple",
-                                                  "types": [
-                                                    {
-                                                      "_type": "BytesWType",
-                                                      "length": 4
-                                                    },
-                                                    {
-                                                      "_type": "ARC4DynamicArray",
-                                                      "immutable": true,
-                                                      "arc4_alias": "string",
-                                                      "element_type": {
-                                                        "_type": "ARC4UIntN",
-                                                        "arc4_alias": "byte",
-                                                        "n": 8
-                                                      },
-                                                      "source_location": null
-                                                    }
-                                                  ]
-                                                },
-                                                "items": [
-                                                  {
-                                                    "_type": "MethodConstant",
-                                                    "source_location": {
-                                                      "file": "tests/approvals/itxn-compose.algo.ts",
-                                                      "line": 60,
-                                                      "end_line": 60,
-                                                      "column": 8,
-                                                      "end_column": 81
-                                                    },
-                                                    "wtype": {
-                                                      "_type": "BytesWType",
-                                                      "length": 4
-                                                    },
-                                                    "value": {
-                                                      "_type": "MethodSignature",
-                                                      "source_location": {
-                                                        "file": "tests/approvals/itxn-compose.algo.ts",
-                                                        "line": 60,
-                                                        "end_line": 60,
-                                                        "column": 8,
-                                                        "end_column": 81
-                                                      },
-                                                      "name": "greet",
-                                                      "arg_types": [
-                                                        {
-                                                          "_type": "WType",
-                                                          "name": "string",
-                                                          "immutable": true
-                                                        }
-                                                      ],
-                                                      "return_type": {
-                                                        "_type": "WType",
-                                                        "name": "string",
-                                                        "immutable": true
-                                                      },
-                                                      "resource_encoding": "value"
-                                                    }
-                                                  },
-                                                  {
-                                                    "_type": "ARC4Encode",
-                                                    "source_location": {
-                                                      "file": "tests/approvals/itxn-compose.algo.ts",
-                                                      "line": 60,
-                                                      "end_line": 60,
-                                                      "column": 73,
-                                                      "end_column": 77
-                                                    },
-                                                    "wtype": {
-                                                      "_type": "ARC4DynamicArray",
-                                                      "immutable": true,
-                                                      "arc4_alias": "string",
-                                                      "element_type": {
-                                                        "_type": "ARC4UIntN",
-                                                        "arc4_alias": "byte",
-                                                        "n": 8
-                                                      },
-                                                      "source_location": null
-                                                    },
-                                                    "value": {
-                                                      "_type": "StringConstant",
-                                                      "source_location": {
-                                                        "file": "tests/approvals/itxn-compose.algo.ts",
-                                                        "line": 60,
-                                                        "end_line": 60,
-                                                        "column": 73,
-                                                        "end_column": 77
-                                                      },
-                                                      "wtype": {
-                                                        "_type": "WType",
-                                                        "name": "string",
-                                                        "immutable": true
-                                                      },
-                                                      "value": "ho"
-                                                    },
-                                                    "error_message": null
-                                                  }
-                                                ]
                                               }
                                             }
                                           }
@@ -8484,7 +8360,7 @@
                                         },
                                         "itxns": [
                                           {
-                                            "_type": "CreateInnerTransaction",
+                                            "_type": "ABICall",
                                             "source_location": {
                                               "file": "tests/approvals/itxn-compose.algo.ts",
                                               "line": 62,
@@ -8493,11 +8369,58 @@
                                               "end_column": 80
                                             },
                                             "wtype": {
-                                              "_type": "WInnerTransactionFields",
+                                              "_type": "WABICallInnerTransactionFields",
                                               "name": "inner_transaction_fields_appl",
                                               "immutable": true,
-                                              "transaction_type": 6
+                                              "transaction_type": 6,
+                                              "result_type": {
+                                                "_type": "WType",
+                                                "name": "string",
+                                                "immutable": true
+                                              }
                                             },
+                                            "target": {
+                                              "_type": "MethodSignature",
+                                              "source_location": {
+                                                "file": "tests/approvals/itxn-compose.algo.ts",
+                                                "line": 62,
+                                                "end_line": 62,
+                                                "column": 8,
+                                                "end_column": 80
+                                              },
+                                              "name": "greet",
+                                              "arg_types": [
+                                                {
+                                                  "_type": "WType",
+                                                  "name": "string",
+                                                  "immutable": true
+                                                }
+                                              ],
+                                              "return_type": {
+                                                "_type": "WType",
+                                                "name": "string",
+                                                "immutable": true
+                                              },
+                                              "resource_encoding": "value"
+                                            },
+                                            "args": [
+                                              {
+                                                "_type": "StringConstant",
+                                                "source_location": {
+                                                  "file": "tests/approvals/itxn-compose.algo.ts",
+                                                  "line": 62,
+                                                  "end_line": 62,
+                                                  "column": 72,
+                                                  "end_column": 76
+                                                },
+                                                "wtype": {
+                                                  "_type": "WType",
+                                                  "name": "string",
+                                                  "immutable": true
+                                                },
+                                                "value": "ho"
+                                              }
+                                            ],
                                             "fields": {
                                               "Fee": {
                                                 "_type": "IntegerConstant",
@@ -8548,115 +8471,6 @@
                                                   "immutable": true
                                                 },
                                                 "name": "appId"
-                                              },
-                                              "ApplicationArgs": {
-                                                "_type": "TupleExpression",
-                                                "source_location": {
-                                                  "file": "tests/approvals/itxn-compose.algo.ts",
-                                                  "line": 62,
-                                                  "end_line": 62,
-                                                  "column": 8,
-                                                  "end_column": 80
-                                                },
-                                                "wtype": {
-                                                  "_type": "WTuple",
-                                                  "name": "tuple",
-                                                  "types": [
-                                                    {
-                                                      "_type": "BytesWType",
-                                                      "length": 4
-                                                    },
-                                                    {
-                                                      "_type": "ARC4DynamicArray",
-                                                      "immutable": true,
-                                                      "arc4_alias": "string",
-                                                      "element_type": {
-                                                        "_type": "ARC4UIntN",
-                                                        "arc4_alias": "byte",
-                                                        "n": 8
-                                                      },
-                                                      "source_location": null
-                                                    }
-                                                  ]
-                                                },
-                                                "items": [
-                                                  {
-                                                    "_type": "MethodConstant",
-                                                    "source_location": {
-                                                      "file": "tests/approvals/itxn-compose.algo.ts",
-                                                      "line": 62,
-                                                      "end_line": 62,
-                                                      "column": 8,
-                                                      "end_column": 80
-                                                    },
-                                                    "wtype": {
-                                                      "_type": "BytesWType",
-                                                      "length": 4
-                                                    },
-                                                    "value": {
-                                                      "_type": "MethodSignature",
-                                                      "source_location": {
-                                                        "file": "tests/approvals/itxn-compose.algo.ts",
-                                                        "line": 62,
-                                                        "end_line": 62,
-                                                        "column": 8,
-                                                        "end_column": 80
-                                                      },
-                                                      "name": "greet",
-                                                      "arg_types": [
-                                                        {
-                                                          "_type": "WType",
-                                                          "name": "string",
-                                                          "immutable": true
-                                                        }
-                                                      ],
-                                                      "return_type": {
-                                                        "_type": "WType",
-                                                        "name": "string",
-                                                        "immutable": true
-                                                      },
-                                                      "resource_encoding": "value"
-                                                    }
-                                                  },
-                                                  {
-                                                    "_type": "ARC4Encode",
-                                                    "source_location": {
-                                                      "file": "tests/approvals/itxn-compose.algo.ts",
-                                                      "line": 62,
-                                                      "end_line": 62,
-                                                      "column": 72,
-                                                      "end_column": 76
-                                                    },
-                                                    "wtype": {
-                                                      "_type": "ARC4DynamicArray",
-                                                      "immutable": true,
-                                                      "arc4_alias": "string",
-                                                      "element_type": {
-                                                        "_type": "ARC4UIntN",
-                                                        "arc4_alias": "byte",
-                                                        "n": 8
-                                                      },
-                                                      "source_location": null
-                                                    },
-                                                    "value": {
-                                                      "_type": "StringConstant",
-                                                      "source_location": {
-                                                        "file": "tests/approvals/itxn-compose.algo.ts",
-                                                        "line": 62,
-                                                        "end_line": 62,
-                                                        "column": 72,
-                                                        "end_column": 76
-                                                      },
-                                                      "wtype": {
-                                                        "_type": "WType",
-                                                        "name": "string",
-                                                        "immutable": true
-                                                      },
-                                                      "value": "ho"
-                                                    },
-                                                    "error_message": null
-                                                  }
-                                                ]
                                               }
                                             }
                                           }
