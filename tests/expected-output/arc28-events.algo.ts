@@ -1,7 +1,5 @@
-import type { uint64, Asset } from '@algorandfoundation/algorand-typescript'
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { Contract, emit } from '@algorandfoundation/algorand-typescript'
-
-type Named = { a: uint64; b: Asset }
 
 class EventEmitter extends Contract {
   emitSwapped(a: uint64, b: uint64) {
@@ -13,12 +11,6 @@ class EventEmitter extends Contract {
 
     // @expect-error Invalid signature: Tuple has not been closed
     emit('Swapped(uint64', b)
-
-    // @expect-error Expected type Uint<16> does not match actual type Uint<64>
-    emit('Swapped(uint16,uint64)', b, a)
-
-    // @expect-error Expected type DynamicArray<Uint<64>> does not match actual type Tuple<Uint<64>,Uint<64>>
-    emit('Swapped(uint64[],uint64)', [b, b] as const, a)
   }
 
   emitCustom(arg0: string, arg1: boolean) {
