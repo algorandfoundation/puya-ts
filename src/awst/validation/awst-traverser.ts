@@ -1,4 +1,5 @@
 import type {
+  ABICall,
   AddressConstant,
   AppAccountStateExpression,
   AppStateExpression,
@@ -291,6 +292,15 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
   visitInnerTransactionField(expression: InnerTransactionField): void {
     expression.itxn.accept(this)
     expression.arrayIndex?.accept(this)
+  }
+
+  visitABICall(expression: ABICall): void {
+    for (const a of expression.args) {
+      a.accept(this)
+    }
+    for (const f of expression.fields.values()) {
+      f.accept(this)
+    }
   }
 
   visitSetInnerTransactionFields(expression: SetInnerTransactionFields): void {

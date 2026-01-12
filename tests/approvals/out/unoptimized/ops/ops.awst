@@ -19,7 +19,7 @@ contract MyContract
     assert(c == 4294967295)
     assert(gtxns<ApplicationID>(txn<GroupIndex>()) == txn<ApplicationID>())
     assert(txnas<ApplicationArgs>(0) == reinterpret_cast<bytes>(Method("test()void")))
-    assert(gtxnsas<ApplicationArgs>(txn<GroupIndex>(), 0) == reinterpret_cast<bytes>(Method(signature="test()void", resource_encoding="value")))
+    assert(gtxnsas<ApplicationArgs>(txn<GroupIndex>(), 0) == reinterpret_cast<bytes>(Method(name="test",args=(),result=void,resource_encoding="value")))
   }
   
   test2(size: uint64): void

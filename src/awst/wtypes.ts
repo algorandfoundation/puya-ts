@@ -172,11 +172,22 @@ export namespace wtypes {
   }
   export class WInnerTransactionFields extends WType {
     transactionType: TransactionKind | null
-    constructor({ transactionType }: { transactionType?: TransactionKind }) {
+    constructor({ transactionType, name }: { transactionType?: TransactionKind; name?: string }) {
       super({
         name: transactionType === undefined ? 'inner_transaction_fields' : `inner_transaction_fields_${TransactionKind[transactionType]}`,
       })
       this.transactionType = transactionType ?? null
+    }
+  }
+
+  export class WABICallInnerTransactionFields extends WInnerTransactionFields {
+    resultType: WType
+    constructor({ returnType }: { returnType?: WType }) {
+      super({
+        transactionType: TransactionKind.appl,
+        name: 'abi_call_inner_transaction_fields',
+      })
+      this.resultType = returnType ?? voidWType
     }
   }
 

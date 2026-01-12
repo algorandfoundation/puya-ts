@@ -907,6 +907,22 @@ export class SubroutineCallExpression extends Expression {
     return visitor.visitSubroutineCallExpression(this)
   }
 }
+export class ABICall extends Expression {
+  constructor(props: Props<ABICall>) {
+    super(props)
+    this.target = props.target
+    this.args = props.args
+    this.fields = props.fields
+    this.wtype = props.wtype
+  }
+  readonly target: MethodSignature | MethodSignatureString | null
+  readonly args: Array<Expression>
+  readonly fields: Map<TxnField, Expression>
+  readonly wtype: wtypes.WABICallInnerTransactionFields
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitABICall(this)
+  }
+}
 export class PuyaLibData {
   constructor(props: Props<PuyaLibData>) {
     this.id = props.id
@@ -1652,6 +1668,7 @@ export const concreteNodes = {
   contractMethodTarget: ContractMethodTarget,
   callArg: CallArg,
   subroutineCallExpression: SubroutineCallExpression,
+  aBICall: ABICall,
   puyaLibData: PuyaLibData,
   puyaLibCall: PuyaLibCall,
   uInt64UnaryOperation: UInt64UnaryOperation,
@@ -1762,6 +1779,7 @@ export interface ExpressionVisitor<T> {
   visitNumericComparisonExpression(expression: NumericComparisonExpression): T
   visitBytesComparisonExpression(expression: BytesComparisonExpression): T
   visitSubroutineCallExpression(expression: SubroutineCallExpression): T
+  visitABICall(expression: ABICall): T
   visitPuyaLibCall(expression: PuyaLibCall): T
   visitUInt64UnaryOperation(expression: UInt64UnaryOperation): T
   visitUInt64PostfixUnaryOperation(expression: UInt64PostfixUnaryOperation): T
