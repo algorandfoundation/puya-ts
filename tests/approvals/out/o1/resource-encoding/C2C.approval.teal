@@ -54,13 +54,15 @@ testCallToIndex:
     //   args: [account],
     // })
     itxn_begin
-    dig 1
+    itxn_field ApplicationID
+    dup
     itxn_field Accounts
     pushbytes 0x34359fb6 // method "testExplicitIndex(account)uint64"
     itxn_field ApplicationArgs
+    // tests/approvals/resource-encoding.algo.ts:67
+    // args: [account],
     bytec_1 // 0x01
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     // tests/approvals/resource-encoding.algo.ts:64-68
     // const { returnValue: res1 } = abiCall({
     //   method: ByIndex.prototype.testExplicitIndex,
@@ -84,7 +86,7 @@ testCallToIndex:
     len
     intc_3 // 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:70
     // assert(res1 === account.balance)
@@ -122,11 +124,11 @@ testCallToValue:
     //   args: [account],
     // })
     itxn_begin
+    itxn_field ApplicationID
     pushbytes 0xd7308a13 // method "testExplicitValue(address)uint64"
     itxn_field ApplicationArgs
-    dig 1
+    dup
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -144,7 +146,7 @@ testCallToValue:
     len
     intc_3 // 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:78
     // assert(res1 === account.balance)
@@ -230,19 +232,25 @@ testCallToEchoResource:
     itxn_begin
     // tests/approvals/resource-encoding.algo.ts:94
     // args: [asset, Global.currentApplicationId, Txn.sender],
-    global CurrentApplicationID
     txn Sender
-    itxn_field Accounts
-    dig 1
-    itxn_field Assets
-    itxn_field Applications
+    global CurrentApplicationID
     // tests/approvals/resource-encoding.algo.ts:93-96
     // const { returnValue: indexes } = compiled.call.echoResourceByIndex({
     //   args: [asset, Global.currentApplicationId, Txn.sender],
     //   appId,
     // })
+    intc_0 // 0
+    itxn_field OnCompletion
+    dig 3
+    itxn_field ApplicationID
+    dig 2
+    itxn_field Assets
+    itxn_field Applications
+    itxn_field Accounts
     pushbytes 0x77e28d74 // method "echoResourceByIndex(asset,application,account)(uint64,uint64,address)"
     itxn_field ApplicationArgs
+    // tests/approvals/resource-encoding.algo.ts:94
+    // args: [asset, Global.currentApplicationId, Txn.sender],
     pushbytes 0x00
     itxn_field ApplicationArgs
     bytec_1 // 0x01
@@ -254,10 +262,6 @@ testCallToEchoResource:
     //   args: [asset, Global.currentApplicationId, Txn.sender],
     //   appId,
     // })
-    intc_0 // 0
-    itxn_field OnCompletion
-    dig 1
-    itxn_field ApplicationID
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -274,7 +278,7 @@ testCallToEchoResource:
     len
     pushint 48
     ==
-    assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
+    assert // invalid number of bytes for arc4.tuple<asset,application,account>
     // tests/approvals/resource-encoding.algo.ts:97
     // assertMatch(indexes, [asset, Global.currentApplicationId, Txn.sender])
     dup
@@ -314,6 +318,10 @@ testCallToEchoResource:
     //   args: [asset, Global.currentApplicationId, Txn.sender],
     //   appId,
     // })
+    intc_0 // 0
+    itxn_field OnCompletion
+    uncover 4
+    itxn_field ApplicationID
     pushbytes 0x4d370276 // method "echoResourceByValue(uint64,uint64,address)(uint64,uint64,address)"
     itxn_field ApplicationArgs
     uncover 2
@@ -321,10 +329,6 @@ testCallToEchoResource:
     swap
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
-    intc_0 // 0
-    itxn_field OnCompletion
-    swap
-    itxn_field ApplicationID
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -341,7 +345,7 @@ testCallToEchoResource:
     len
     pushint 48
     ==
-    assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
+    assert // invalid number of bytes for arc4.tuple<asset,application,account>
     // tests/approvals/resource-encoding.algo.ts:104
     // assertMatch(resources, [asset, Global.currentApplicationId, Txn.sender])
     dup
