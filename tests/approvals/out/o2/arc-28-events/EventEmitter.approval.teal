@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 1 0 2
-    bytecblock 0x0003
+    bytecblock 0x0002 0x0003
     // tests/approvals/arc-28-events.algo.ts:13
     // class EventEmitter extends Contract {
     txn NumAppArgs
@@ -20,7 +20,7 @@ main:
     err
 
 main_emitDynamicBytes_route@6:
-    // tests/approvals/arc-28-events.algo.ts:40
+    // tests/approvals/arc-28-events.algo.ts:50
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     txna ApplicationArgs 1
     dup
@@ -44,7 +44,7 @@ main_emitDynamicBytes_route@6:
     len
     ==
     assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-    // tests/approvals/arc-28-events.algo.ts:42
+    // tests/approvals/arc-28-events.algo.ts:52
     // emit('DB(byte[],byte[])', x, y)
     pushint 4
     uncover 2
@@ -62,13 +62,13 @@ main_emitDynamicBytes_route@6:
     swap
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:40
+    // tests/approvals/arc-28-events.algo.ts:50
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     intc_0 // 1
     return
 
 main_emitCustom_route@5:
-    // tests/approvals/arc-28-events.algo.ts:35
+    // tests/approvals/arc-28-events.algo.ts:45
     // emitCustom(arg0: string, arg1: boolean) {
     txna ApplicationArgs 1
     dup
@@ -86,9 +86,9 @@ main_emitCustom_route@5:
     intc_0 // 1
     ==
     assert // invalid number of bytes for arc4.bool
-    // tests/approvals/arc-28-events.algo.ts:36
+    // tests/approvals/arc-28-events.algo.ts:46
     // emit('Custom', arg0, arg1)
-    bytec_0 // 0x0003
+    bytec_1 // 0x0003
     swap
     concat
     swap
@@ -98,10 +98,10 @@ main_emitCustom_route@5:
     concat
     dup
     log
-    // tests/approvals/arc-28-events.algo.ts:37
+    // tests/approvals/arc-28-events.algo.ts:47
     // emit('Custom(string,bool)', arg0, arg1)
     log
-    // tests/approvals/arc-28-events.algo.ts:35
+    // tests/approvals/arc-28-events.algo.ts:45
     // emitCustom(arg0: string, arg1: boolean) {
     intc_0 // 1
     return
@@ -153,10 +153,11 @@ main_emitSwapped_route@4:
     dup
     dig 1
     concat
-    dig 2
+    dup
+    dig 3
     concat
     pushbytes 0x388cc12d // method "Swapped((uint8,uint8),uint8)"
-    swap
+    dig 1
     concat
     dup
     log
@@ -165,17 +166,85 @@ main_emitSwapped_route@4:
     log
     // tests/approvals/arc-28-events.algo.ts:32
     // emit('Swapped(uint8[],uint8)', [b, b], a)
-    pushbytes 0x0002
+    bytec_0 // 0x0002
+    dig 3
+    concat
+    dig 3
+    concat
+    bytec_1 // 0x0003
+    dig 5
+    concat
+    dup
+    dig 2
+    concat
+    pushbytes 0x08754e0c // method "Swapped(uint8[],uint8)"
+    swap
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:34
+    // emit('Swapped(((uint8,uint8)),uint8)', [[b, b]], a)
+    pushbytes 0x8d44bf68 // method "Swapped(((uint8,uint8)),uint8)"
+    uncover 3
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:35
+    // emit('Swapped(uint8[][],uint8)', [[b, b]], a)
+    pushbytes 0x00010002
+    dig 2
+    concat
+    dig 1
+    swap
+    concat
+    pushbytes 0xd8991c5c // method "Swapped(uint8[][],uint8)"
+    swap
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:37
+    // emit('Swapped((uint8,uint8)[],uint8)', [[b, b]], a)
+    pushbytes 0x0001
+    uncover 3
+    concat
+    dig 1
+    swap
+    concat
+    pushbytes 0x9047648f // method "Swapped((uint8,uint8)[],uint8)"
+    swap
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:38
+    // emit('Swapped((uint8[]),uint8)', [[b, b]], a)
+    bytec_0 // 0x0002
+    uncover 2
+    concat
+    concat
+    pushbytes 0x194abeb4 // method "Swapped((uint8[]),uint8)"
+    swap
+    concat
+    log
+    // tests/approvals/arc-28-events.algo.ts:40
+    // const aUint64 = a.asUint64()
+    swap
+    btoi
+    // tests/approvals/arc-28-events.algo.ts:41
+    // const bUint64 = b.asUint64()
+    swap
+    btoi
+    // tests/approvals/arc-28-events.algo.ts:42
+    // emit('Swapped(uint64[],uint64)', [bUint64, bUint64], aUint64)
+    itob
+    bytec_0 // 0x0002
     dig 1
     concat
     swap
     concat
-    bytec_0 // 0x0003
-    uncover 2
+    swap
+    itob
+    pushbytes 0x000a
+    swap
     concat
     swap
     concat
-    pushbytes 0x08754e0c // method "Swapped(uint8[],uint8)"
+    pushbytes 0x4e707717 // method "Swapped(uint64[],uint64)"
     swap
     concat
     log

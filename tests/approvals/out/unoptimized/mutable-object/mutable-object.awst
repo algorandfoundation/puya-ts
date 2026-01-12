@@ -64,9 +64,9 @@ contract MutableObjectDemo
   
   testMethodSelector(): void
   {
-    assert(Method(signature="mutateVector(tests/approvals/mutable-object.algo.ts::Vector,uint64,uint64)tests/approvals/mutable-object.algo.ts::Vector", resource_encoding="value") == Method("mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)"))
-    assert(Method(signature="getPlugin(string)tests/approvals/mutable-object.algo.ts::PluginInfo", resource_encoding="value") == Method("getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])"))
-    assert(Method(signature="testNestedObjects(tests/approvals/mutable-object.algo.ts::VectorPoint)void", resource_encoding="value") == Method("testNestedObjects(((uint64,uint64),(uint64,uint64)))void"))
+    assert(Method(name="mutateVector",args=(tests/approvals/mutable-object.algo.ts::Vector,uint64,uint64),result=tests/approvals/mutable-object.algo.ts::Vector,resource_encoding="value") == Method("mutateVector((uint64,uint64),uint64,uint64)(uint64,uint64)"))
+    assert(Method(name="getPlugin",args=(string),result=tests/approvals/mutable-object.algo.ts::PluginInfo,resource_encoding="value") == Method("getPlugin(string)(uint64,uint64,uint64,bool,(byte[4],uint64,uint64)[])"))
+    assert(Method(name="testNestedObjects",args=(tests/approvals/mutable-object.algo.ts::VectorPoint),result=void,resource_encoding="value") == Method("testNestedObjects(((uint64,uint64),(uint64,uint64)))void"))
   }
   
   testAssertMatch(x: uint64): void

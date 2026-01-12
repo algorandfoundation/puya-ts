@@ -13,10 +13,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@4: // emitSwapped_route_L14
         tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped[routing]()
         goto block@9
-    block@5: // emitCustom_route_L35
+    block@5: // emitCustom_route_L45
         tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom[routing]()
         goto block@9
-    block@6: // emitDynamicBytes_route_L40
+    block@6: // emitDynamicBytes_route_L50
         tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes[routing]()
         goto block@9
     block@9: // after_if_else_L13
@@ -79,10 +79,117 @@ subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped[routi
         let tmp%10#0: Encoded((len+uint8[]),uint8) = aggregate%as_Encoded((len+uint8[]),uint8)%0#0
         let event%7#0: bytes = (concat method "Swapped(uint8[],uint8)" tmp%10#0)
         (log event%7#0)
+        let aggregate%head%10#0: bytes = (concat 0x b#0)
+        let aggregate%head%11#0: bytes = (concat aggregate%head%10#0 b#0)
+        let aggregate%as_Encoded(uint8,uint8)%2#0: Encoded(uint8,uint8) = aggregate%head%11#0
+        let aggregate%head%12#0: bytes = (concat 0x aggregate%as_Encoded(uint8,uint8)%2#0)
+        let aggregate%as_Encoded((uint8,uint8))%0#0: Encoded((uint8,uint8)) = aggregate%head%12#0
+        let tmp%11#0: Encoded((uint8,uint8)) = aggregate%as_Encoded((uint8,uint8))%0#0
+        let aggregate%head%13#0: bytes = (concat 0x tmp%11#0)
+        let aggregate%head%14#0: bytes = (concat aggregate%head%13#0 a#0)
+        let aggregate%as_Encoded(((uint8,uint8)),uint8)%0#0: Encoded(((uint8,uint8)),uint8) = aggregate%head%14#0
+        let tmp%12#0: Encoded(((uint8,uint8)),uint8) = aggregate%as_Encoded(((uint8,uint8)),uint8)%0#0
+        let event%8#0: bytes = (concat method "Swapped(((uint8,uint8)),uint8)" tmp%12#0)
+        (log event%8#0)
+        let aggregate%as_bytes%2#0: bytes[8] = (itob 1u)
+        let aggregate%len_u16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%2#0)
+        let aggregate%as_bytes%3#0: bytes[8] = (itob 2u)
+        let aggregate%len_u16%2#0: bytes = ((extract 6 2) aggregate%as_bytes%3#0)
+        let aggregate%head%15#0: bytes = (concat aggregate%len_u16%2#0 b#0)
+        let aggregate%head%16#0: bytes = (concat aggregate%head%15#0 b#0)
+        let aggregate%as_Encoded(len+uint8[])%1#0: Encoded(len+uint8[]) = aggregate%head%16#0
+        let aggregate%as_bytes%4#0: bytes[8] = (itob 2u)
+        let aggregate%offset_as_uint16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%4#0)
+        let aggregate%head%17#0: bytes = (concat aggregate%len_u16%1#0 aggregate%offset_as_uint16%1#0)
+        let aggregate%data_length%1#0: uint64 = (len aggregate%as_Encoded(len+uint8[])%1#0)
+        let aggregate%current_tail_offset%1#0: uint64 = (+ 2u aggregate%data_length%1#0)
+        let aggregate%concat%1#0: bytes = (concat aggregate%head%17#0 aggregate%as_Encoded(len+uint8[])%1#0)
+        let aggregate%as_Encoded(len+(len+uint8[])[])%0#0: Encoded(len+(len+uint8[])[]) = aggregate%concat%1#0
+        let tmp%13#0: Encoded(len+(len+uint8[])[]) = aggregate%as_Encoded(len+(len+uint8[])[])%0#0
+        let aggregate%as_bytes%5#0: bytes[8] = (itob 3u)
+        let aggregate%offset_as_uint16%2#0: bytes = ((extract 6 2) aggregate%as_bytes%5#0)
+        let aggregate%head%18#0: bytes = (concat 0x aggregate%offset_as_uint16%2#0)
+        let aggregate%data_length%2#0: uint64 = (len tmp%13#0)
+        let aggregate%current_tail_offset%2#0: uint64 = (+ 3u aggregate%data_length%2#0)
+        let aggregate%head%19#0: bytes = (concat aggregate%head%18#0 a#0)
+        let aggregate%concat%2#0: bytes = (concat aggregate%head%19#0 tmp%13#0)
+        let aggregate%as_Encoded((len+(len+uint8[])[]),uint8)%0#0: Encoded((len+(len+uint8[])[]),uint8) = aggregate%concat%2#0
+        let tmp%14#0: Encoded((len+(len+uint8[])[]),uint8) = aggregate%as_Encoded((len+(len+uint8[])[]),uint8)%0#0
+        let event%9#0: bytes = (concat method "Swapped(uint8[][],uint8)" tmp%14#0)
+        (log event%9#0)
+        let aggregate%as_bytes%6#0: bytes[8] = (itob 1u)
+        let aggregate%len_u16%3#0: bytes = ((extract 6 2) aggregate%as_bytes%6#0)
+        let aggregate%head%20#0: bytes = (concat 0x b#0)
+        let aggregate%head%21#0: bytes = (concat aggregate%head%20#0 b#0)
+        let aggregate%as_Encoded(uint8,uint8)%3#0: Encoded(uint8,uint8) = aggregate%head%21#0
+        let aggregate%head%22#0: bytes = (concat aggregate%len_u16%3#0 aggregate%as_Encoded(uint8,uint8)%3#0)
+        let aggregate%as_Encoded(len+(uint8,uint8)[])%0#0: Encoded(len+(uint8,uint8)[]) = aggregate%head%22#0
+        let tmp%15#0: Encoded(len+(uint8,uint8)[]) = aggregate%as_Encoded(len+(uint8,uint8)[])%0#0
+        let aggregate%as_bytes%7#0: bytes[8] = (itob 3u)
+        let aggregate%offset_as_uint16%3#0: bytes = ((extract 6 2) aggregate%as_bytes%7#0)
+        let aggregate%head%23#0: bytes = (concat 0x aggregate%offset_as_uint16%3#0)
+        let aggregate%data_length%3#0: uint64 = (len tmp%15#0)
+        let aggregate%current_tail_offset%3#0: uint64 = (+ 3u aggregate%data_length%3#0)
+        let aggregate%head%24#0: bytes = (concat aggregate%head%23#0 a#0)
+        let aggregate%concat%3#0: bytes = (concat aggregate%head%24#0 tmp%15#0)
+        let aggregate%as_Encoded((len+(uint8,uint8)[]),uint8)%0#0: Encoded((len+(uint8,uint8)[]),uint8) = aggregate%concat%3#0
+        let tmp%16#0: Encoded((len+(uint8,uint8)[]),uint8) = aggregate%as_Encoded((len+(uint8,uint8)[]),uint8)%0#0
+        let event%10#0: bytes = (concat method "Swapped((uint8,uint8)[],uint8)" tmp%16#0)
+        (log event%10#0)
+        let aggregate%as_bytes%8#0: bytes[8] = (itob 2u)
+        let aggregate%len_u16%4#0: bytes = ((extract 6 2) aggregate%as_bytes%8#0)
+        let aggregate%head%25#0: bytes = (concat aggregate%len_u16%4#0 b#0)
+        let aggregate%head%26#0: bytes = (concat aggregate%head%25#0 b#0)
+        let aggregate%as_Encoded(len+uint8[])%2#0: Encoded(len+uint8[]) = aggregate%head%26#0
+        let aggregate%as_bytes%9#0: bytes[8] = (itob 2u)
+        let aggregate%offset_as_uint16%4#0: bytes = ((extract 6 2) aggregate%as_bytes%9#0)
+        let aggregate%head%27#0: bytes = (concat 0x aggregate%offset_as_uint16%4#0)
+        let aggregate%data_length%4#0: uint64 = (len aggregate%as_Encoded(len+uint8[])%2#0)
+        let aggregate%current_tail_offset%4#0: uint64 = (+ 2u aggregate%data_length%4#0)
+        let aggregate%concat%4#0: bytes = (concat aggregate%head%27#0 aggregate%as_Encoded(len+uint8[])%2#0)
+        let aggregate%as_Encoded((len+uint8[]))%0#0: Encoded((len+uint8[])) = aggregate%concat%4#0
+        let tmp%17#0: Encoded((len+uint8[])) = aggregate%as_Encoded((len+uint8[]))%0#0
+        let aggregate%as_bytes%10#0: bytes[8] = (itob 3u)
+        let aggregate%offset_as_uint16%5#0: bytes = ((extract 6 2) aggregate%as_bytes%10#0)
+        let aggregate%head%28#0: bytes = (concat 0x aggregate%offset_as_uint16%5#0)
+        let aggregate%data_length%5#0: uint64 = (len tmp%17#0)
+        let aggregate%current_tail_offset%5#0: uint64 = (+ 3u aggregate%data_length%5#0)
+        let aggregate%head%29#0: bytes = (concat aggregate%head%28#0 a#0)
+        let aggregate%concat%5#0: bytes = (concat aggregate%head%29#0 tmp%17#0)
+        let aggregate%as_Encoded(((len+uint8[])),uint8)%0#0: Encoded(((len+uint8[])),uint8) = aggregate%concat%5#0
+        let tmp%18#0: Encoded(((len+uint8[])),uint8) = aggregate%as_Encoded(((len+uint8[])),uint8)%0#0
+        let event%11#0: bytes = (concat method "Swapped((uint8[]),uint8)" tmp%18#0)
+        (log event%11#0)
+        let aUint64#0: uint64 = (btoi a#0)
+        let bUint64#0: uint64 = (btoi b#0)
+        let aggregate%as_bytes%11#0: bytes[8] = (itob 2u)
+        let aggregate%len_u16%5#0: bytes = ((extract 6 2) aggregate%as_bytes%11#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob bUint64#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let aggregate%head%30#0: bytes = (concat aggregate%len_u16%5#0 aggregate%as_Encoded(uint64)%0#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob bUint64#0)
+        let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
+        let aggregate%head%31#0: bytes = (concat aggregate%head%30#0 aggregate%as_Encoded(uint64)%1#0)
+        let aggregate%as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = aggregate%head%31#0
+        let tmp%21#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#0
+        let aggregate%val_as_bytes%2#0: bytes[8] = (itob aUint64#0)
+        let aggregate%as_Encoded(uint64)%2#0: Encoded(uint64) = aggregate%val_as_bytes%2#0
+        let tmp%22#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%2#0
+        let aggregate%as_bytes%12#0: bytes[8] = (itob 10u)
+        let aggregate%offset_as_uint16%6#0: bytes = ((extract 6 2) aggregate%as_bytes%12#0)
+        let aggregate%head%32#0: bytes = (concat 0x aggregate%offset_as_uint16%6#0)
+        let aggregate%data_length%6#0: uint64 = (len tmp%21#0)
+        let aggregate%current_tail_offset%6#0: uint64 = (+ 10u aggregate%data_length%6#0)
+        let aggregate%head%33#0: bytes = (concat aggregate%head%32#0 tmp%22#0)
+        let aggregate%concat%6#0: bytes = (concat aggregate%head%33#0 tmp%21#0)
+        let aggregate%as_Encoded((len+uint64[]),uint64)%0#0: Encoded((len+uint64[]),uint64) = aggregate%concat%6#0
+        let tmp%23#0: Encoded((len+uint64[]),uint64) = aggregate%as_Encoded((len+uint64[]),uint64)%0#0
+        let event%12#0: bytes = (concat method "Swapped(uint64[],uint64)" tmp%23#0)
+        (log event%12#0)
         exit 1u
 
 subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom[routing]() -> void:
-    block@0: // L35
+    block@0: // L45
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
         let length%0#0: uint64 = aggregate%array_length%0#0
@@ -101,15 +208,15 @@ subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom[routin
         let aggregate%current_tail_offset%0#0: uint64 = (+ 3u aggregate%data_length%0#0)
         let aggregate%head%1#0: bytes = (concat aggregate%head%0#0 tmp%2#0)
         let aggregate%concat%0#0: bytes = (concat aggregate%head%1#0 tmp%0#0)
-        let aggregate%as_Encoded((len+utf8[]),bool1)%0#0: Encoded((len+utf8[]),bool1) = aggregate%concat%0#0
-        let tmp%2#1: Encoded((len+utf8[]),bool1) = aggregate%as_Encoded((len+utf8[]),bool1)%0#0
+        let aggregate%as_Encoded((len+utf8[]),bool8)%0#0: Encoded((len+utf8[]),bool8) = aggregate%concat%0#0
+        let tmp%2#1: Encoded((len+utf8[]),bool8) = aggregate%as_Encoded((len+utf8[]),bool8)%0#0
         let event%0#0: bytes = (concat method "Custom(string,bool)" tmp%2#1)
         (log event%0#0)
         (log event%0#0)
         exit 1u
 
 subroutine tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes[routing]() -> void:
-    block@0: // L40
+    block@0: // L50
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
         let length%0#0: uint64 = aggregate%array_length%0#0
