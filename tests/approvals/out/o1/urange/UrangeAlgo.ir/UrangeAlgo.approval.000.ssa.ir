@@ -3,6 +3,20 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#0: bool = tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__()
         return tmp%0#0
 
+subroutine _puya_lib.arc4.dynamic_array_concat_fixed(array: bytes, new_items_bytes: bytes, new_items_count: uint64) -> bytes:
+    block@0: // L133
+        let tmp%0#0: uint64 = (extract_uint16 array#0 0u)
+        let array_length#0: uint64 = tmp%0#0
+        let tmp%1#0: uint64 = (+ array_length#0 new_items_count#0)
+        let new_array_length#0: uint64 = tmp%1#0
+        let tmp%2#0: bytes = (itob new_array_length#0)
+        let tmp%3#0: bytes = ((extract 6 0) tmp%2#0)
+        let new_len_u16#0: bytes = tmp%3#0
+        let tmp%4#0: bytes = ((replace2 0) array#0 new_len_u16#0)
+        let result#0: bytes = tmp%4#0
+        let tmp%5#0: bytes = (concat result#0 new_items_bytes#0)
+        return tmp%5#0
+
 subroutine tests/approvals/urange.algo.ts::UrangeAlgo.__puya_arc4_router__() -> bool:
     block@0: // L4
         let tmp%0#0: uint64 = (txn NumAppArgs)
@@ -84,16 +98,9 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> Encoded
         let encoded_array%1#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(i#0)
         let total_length%0#0: uint64 = (len encoded_array%1#0)
         let extract_to_end%0#0: bytes = (substring3 encoded_array%1#0 2u total_length%0#0)
-        let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
-        let total_length%1#0: uint64 = (len concat%0#0)
-        let extract_to_end%1#0: bytes = (substring3 concat%0#0 2u total_length%1#0)
-        let len%0#0: uint64 = (len extract_to_end%1#0)
-        let div_floor%0#0: uint64 = (/ len%0#0 8u)
-        let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
-        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
-        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = replace%0#0
-        let results#2: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
+        let tmp%0#0: uint64 = array_len(encoded_array%1#0)
+        let tmp%1#0: Encoded(len+uint64[]) = array_concat(results#1, extract_to_end%0#0, tmp%0#0)
+        let results#2: Encoded(len+uint64[]) = tmp%1#0
         goto block@3
     block@3: // for_footer_L7
         let value_internal%0#2: uint64 = (+ value_internal%0#1 1u)
@@ -119,16 +126,9 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> Encoded(le
         let encoded_array%1#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(i#0)
         let total_length%0#0: uint64 = (len encoded_array%1#0)
         let extract_to_end%0#0: bytes = (substring3 encoded_array%1#0 2u total_length%0#0)
-        let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
-        let total_length%1#0: uint64 = (len concat%0#0)
-        let extract_to_end%1#0: bytes = (substring3 concat%0#0 2u total_length%1#0)
-        let len%0#0: uint64 = (len extract_to_end%1#0)
-        let div_floor%0#0: uint64 = (/ len%0#0 8u)
-        let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
-        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
-        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = replace%0#0
-        let results#2: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
+        let tmp%0#0: uint64 = array_len(encoded_array%1#0)
+        let tmp%1#0: Encoded(len+uint64[]) = array_concat(results#1, extract_to_end%0#0, tmp%0#0)
+        let results#2: Encoded(len+uint64[]) = tmp%1#0
         goto block@3
     block@3: // for_footer_L14
         let value_internal%0#2: uint64 = (+ value_internal%0#1 1u)
@@ -154,16 +154,9 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg() -> Encoded(
         let encoded_array%1#0: Encoded(len+uint64[]) = bytes_encode<(len+uint64[])>(i#0)
         let total_length%0#0: uint64 = (len encoded_array%1#0)
         let extract_to_end%0#0: bytes = (substring3 encoded_array%1#0 2u total_length%0#0)
-        let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
-        let total_length%1#0: uint64 = (len concat%0#0)
-        let extract_to_end%1#0: bytes = (substring3 concat%0#0 2u total_length%1#0)
-        let len%0#0: uint64 = (len extract_to_end%1#0)
-        let div_floor%0#0: uint64 = (/ len%0#0 8u)
-        let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
-        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
-        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = replace%0#0
-        let results#2: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
+        let tmp%0#0: uint64 = array_len(encoded_array%1#0)
+        let tmp%1#0: Encoded(len+uint64[]) = array_concat(results#1, extract_to_end%0#0, tmp%0#0)
+        let results#2: Encoded(len+uint64[]) = tmp%1#0
         goto block@3
     block@3: // for_footer_L21
         let value_internal%0#2: uint64 = (+ value_internal%0#1 3u)

@@ -10,14 +10,14 @@ main tests/approvals/property-ordering.algo.ts::Demo.approvalProgram:
         let obj#0: Encoded(uint64,uint64) = aggregate%as_Encoded(uint64,uint64)%0#0
         let aggregate%extract%0#0: bytes = (extract3 obj#0 8u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
-        let values%0#0: uint64 = (btoi tuple_item%0#0)
-        let tmp%3#0: bool = (== values%0#0 8u)
+        let tmp%2#0: uint64 = (btoi tuple_item%0#0)
+        let tmp%4#0: bool = (== tmp%2#0 8u)
         let aggregate%extract%1#0: bytes = (extract3 obj#0 0u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#0
-        let values%1#0: uint64 = (btoi tuple_item%1#0)
-        let tmp%5#0: bool = (== values%1#0 8u)
-        let tmp%6#0: bool = (&& tmp%3#0 tmp%5#0)
-        (assert tmp%6#0) // assert target is match for conditions
+        let tmp%5#0: uint64 = (btoi tuple_item%1#0)
+        let tmp%7#0: bool = (== tmp%5#0 8u)
+        let tmp%8#0: bool = (&& tmp%4#0 tmp%7#0)
+        (assert tmp%8#0) // assert target is match for conditions
         let aggregate%val_as_bytes%2#0: bytes[8] = (itob 3u)
         let aggregate%as_Encoded(uint64)%2#0: Encoded(uint64) = aggregate%val_as_bytes%2#0
         let aggregate%head%2#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%2#0)

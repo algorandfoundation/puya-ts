@@ -30,8 +30,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let temp#7: uint64 = φ(items.0#0 <- block@4, items.1#0 <- block@89, items.2#0 <- block@90)
         let total#25: uint64 = φ(total#24 <- block@4, total#26 <- block@89, total#26 <- block@90)
         let total#26: uint64 = (+ total#25 temp#7)
-        let tmp%1#6: bool = (== temp#7 42u)
-        goto tmp%1#6 ? block@91 : block@88
+        let tmp%1#4: bool = (== temp#7 42u)
+        goto tmp%1#4 ? block@91 : block@88
     block@88: // after_if_else_L13
         goto_nth [block@89, block@90][loop_counter%0#1] else goto block@91
     block@89: // for_header_1_L11
@@ -43,9 +43,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@91: // L11
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob total#26)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
-        let tmp%5#2: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%6#2: bytes = (concat 0x151f7c75 tmp%5#2)
-        (log tmp%6#2)
+        let tmp%5#3: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%6#1: bytes = (concat 0x151f7c75 tmp%5#3)
+        (log tmp%6#1)
         exit 1u
     block@5: // test_for_of_loop_destructured_tuple_route_L18
         let items#5: Encoded(len+uint64[]) = (txna ApplicationArgs 1)
@@ -74,8 +74,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let temp.1#0: Encoded(uint64) = aggregate%encoded_element%0#0
         let tmp%0#11: uint64 = (btoi temp.1#0)
         let total#22: uint64 = (+ total#21 tmp%0#11)
-        let tmp%2#8: bool = (>= total#22 42u)
-        goto tmp%2#8 ? block@81 : block@82
+        let tmp%2#10: bool = (>= total#22 42u)
+        goto tmp%2#10 ? block@81 : block@82
     block@81: // if_body_L22
         goto block@84
     block@82: // after_if_else_L22
@@ -87,8 +87,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let total#23: uint64 = φ(total#22 <- block@81, total#21 <- block@83)
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob total#23)
         let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
-        let tmp%2#7: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
-        let tmp%3#10: bytes = (concat 0x151f7c75 tmp%2#7)
+        let tmp%2#9: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
+        let tmp%3#10: bytes = (concat 0x151f7c75 tmp%2#9)
         (log tmp%3#10)
         exit 1u
     block@6: // test_for_of_loop_destructured_object_route_L27
@@ -125,10 +125,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%extract%4#0: bytes = (extract3 aggregate%encoded_element%2#0 8u 8u)
         let tuple_item%1#1: Encoded(uint64) = aggregate%extract%4#0
         let y#0: uint64 = (btoi tuple_item%1#1)
-        let tmp%0#9: uint64 = (+ x#0 y#0)
-        let total#18: uint64 = (+ total#17 tmp%0#9)
-        let tmp%2#6: bool = (>= total#18 42u)
-        goto tmp%2#6 ? block@73 : block@74
+        let tmp%2#8: uint64 = (+ x#0 y#0)
+        let total#18: uint64 = (+ total#17 tmp%2#8)
+        let tmp%4#2: bool = (>= total#18 42u)
+        goto tmp%4#2 ? block@73 : block@74
     block@73: // if_body_L31
         goto block@76
     block@74: // after_if_else_L31
@@ -140,8 +140,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let total#19: uint64 = φ(total#18 <- block@73, total#17 <- block@75)
         let aggregate%val_as_bytes%2#0: bytes[8] = (itob total#19)
         let aggregate%as_Encoded(uint64)%2#0: Encoded(uint64) = aggregate%val_as_bytes%2#0
-        let tmp%2#5: Encoded(uint64) = aggregate%as_Encoded(uint64)%2#0
-        let tmp%3#9: bytes = (concat 0x151f7c75 tmp%2#5)
+        let tmp%2#7: Encoded(uint64) = aggregate%as_Encoded(uint64)%2#0
+        let tmp%3#9: bytes = (concat 0x151f7c75 tmp%2#7)
         (log tmp%3#9)
         exit 1u
     block@7: // test_for_of_loop_arc4_dynamic_array_route_L36
@@ -169,9 +169,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%bytes_offset%3#0: uint64 = (* item_index_internal%0#13 8u)
         let aggregate%encoded_element%3#0: bytes = (extract3 aggregate%array_trimmed%3#0 aggregate%bytes_offset%3#0 8u) // on error: index access is out of bounds
         let temp#4: Encoded(uint64) = aggregate%encoded_element%3#0
-        let tmp%0#7: uint64 = (btoi temp#4)
-        let total#14: uint64 = (+ total#13 tmp%0#7)
-        let tmp%3#8: bool = (== tmp%0#7 42u)
+        let tmp%0#9: uint64 = (btoi temp#4)
+        let total#14: uint64 = (+ total#13 tmp%0#9)
+        let tmp%3#8: bool = (== tmp%0#9 42u)
         goto tmp%3#8 ? block@65 : block@66
     block@65: // if_body_L40
         goto block@68
@@ -184,8 +184,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let total#15: uint64 = φ(total#14 <- block@65, total#13 <- block@67)
         let aggregate%val_as_bytes%3#0: bytes[8] = (itob total#15)
         let aggregate%as_Encoded(uint64)%3#0: Encoded(uint64) = aggregate%val_as_bytes%3#0
-        let tmp%2#4: Encoded(uint64) = aggregate%as_Encoded(uint64)%3#0
-        let tmp%3#7: bytes = (concat 0x151f7c75 tmp%2#4)
+        let tmp%2#6: Encoded(uint64) = aggregate%as_Encoded(uint64)%3#0
+        let tmp%3#7: bytes = (concat 0x151f7c75 tmp%2#6)
         (log tmp%3#7)
         exit 1u
     block@8: // test_for_of_loop_arc4_static_array_route_L45
@@ -206,9 +206,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%bytes_offset%4#0: uint64 = (* item_index_internal%0#10 8u)
         let aggregate%encoded_element%4#0: bytes = (extract3 items#2 aggregate%bytes_offset%4#0 8u) // on error: index access is out of bounds
         let temp#3: Encoded(uint64) = aggregate%encoded_element%4#0
-        let tmp%0#5: uint64 = (btoi temp#3)
-        let total#10: uint64 = (+ total#9 tmp%0#5)
-        let tmp%3#6: bool = (== tmp%0#5 42u)
+        let tmp%0#7: uint64 = (btoi temp#3)
+        let total#10: uint64 = (+ total#9 tmp%0#7)
+        let tmp%3#6: bool = (== tmp%0#7 42u)
         goto tmp%3#6 ? block@57 : block@58
     block@57: // if_body_L49
         goto block@60
@@ -221,8 +221,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let total#11: uint64 = φ(total#10 <- block@57, total#9 <- block@59)
         let aggregate%val_as_bytes%4#0: bytes[8] = (itob total#11)
         let aggregate%as_Encoded(uint64)%4#0: Encoded(uint64) = aggregate%val_as_bytes%4#0
-        let tmp%2#3: Encoded(uint64) = aggregate%as_Encoded(uint64)%4#0
-        let tmp%3#5: bytes = (concat 0x151f7c75 tmp%2#3)
+        let tmp%2#5: Encoded(uint64) = aggregate%as_Encoded(uint64)%4#0
+        let tmp%3#5: bytes = (concat 0x151f7c75 tmp%2#5)
         (log tmp%3#5)
         exit 1u
     block@9: // test_for_of_loop_native_immutable_array_route_L54
@@ -252,8 +252,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let array_item%0#1: Encoded(uint64) = aggregate%encoded_element%5#0
         let temp#2: uint64 = (btoi array_item%0#1)
         let total#6: uint64 = (+ total#5 temp#2)
-        let tmp%1#4: bool = (== temp#2 42u)
-        goto tmp%1#4 ? block@49 : block@50
+        let tmp%2#4: bool = (== temp#2 42u)
+        goto tmp%2#4 ? block@49 : block@50
     block@49: // if_body_L58
         goto block@52
     block@50: // after_if_else_L58
@@ -265,8 +265,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let total#7: uint64 = φ(total#6 <- block@49, total#5 <- block@51)
         let aggregate%val_as_bytes%5#0: bytes[8] = (itob total#7)
         let aggregate%as_Encoded(uint64)%5#0: Encoded(uint64) = aggregate%val_as_bytes%5#0
-        let tmp%2#2: Encoded(uint64) = aggregate%as_Encoded(uint64)%5#0
-        let tmp%3#4: bytes = (concat 0x151f7c75 tmp%2#2)
+        let tmp%2#3: Encoded(uint64) = aggregate%as_Encoded(uint64)%5#0
+        let tmp%3#4: bytes = (concat 0x151f7c75 tmp%2#3)
         (log tmp%3#4)
         exit 1u
     block@10: // test_for_of_loop_native_mutable_array_route_L63
@@ -276,20 +276,20 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert eq%0#1) // invalid number of bytes for arc4.tuple<uint64,uint64,uint64>
         let aggregate%extract%5#0: bytes = (extract3 items#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%5#0
-        let values%0#0: uint64 = (btoi tuple_item%0#0)
+        let tmp%0#5: uint64 = (btoi tuple_item%0#0)
         let aggregate%extract%6#0: bytes = (extract3 items#0 8u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%6#0
-        let values%1#0: uint64 = (btoi tuple_item%1#0)
+        let tmp%1#2: uint64 = (btoi tuple_item%1#0)
         let aggregate%extract%7#0: bytes = (extract3 items#0 16u 8u)
         let tuple_item%2#0: Encoded(uint64) = aggregate%extract%7#0
-        let values%2#0: uint64 = (btoi tuple_item%2#0)
-        let aggregate%val_as_bytes%6#0: bytes[8] = (itob values%0#0)
+        let tmp%2#2: uint64 = (btoi tuple_item%2#0)
+        let aggregate%val_as_bytes%6#0: bytes[8] = (itob tmp%0#5)
         let aggregate%as_Encoded(uint64)%6#0: Encoded(uint64) = aggregate%val_as_bytes%6#0
         let aggregate%head%0#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%6#0)
-        let aggregate%val_as_bytes%7#0: bytes[8] = (itob values%1#0)
+        let aggregate%val_as_bytes%7#0: bytes[8] = (itob tmp%1#2)
         let aggregate%as_Encoded(uint64)%7#0: Encoded(uint64) = aggregate%val_as_bytes%7#0
         let aggregate%head%1#0: bytes = (concat aggregate%head%0#0 aggregate%as_Encoded(uint64)%7#0)
-        let aggregate%val_as_bytes%8#0: bytes[8] = (itob values%2#0)
+        let aggregate%val_as_bytes%8#0: bytes[8] = (itob tmp%2#2)
         let aggregate%as_Encoded(uint64)%8#0: Encoded(uint64) = aggregate%val_as_bytes%8#0
         let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 aggregate%as_Encoded(uint64)%8#0)
         let aggregate%as_Encoded(uint64[])%0#0: Encoded(uint64[]) = aggregate%head%2#0
@@ -315,8 +315,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%6#0
         let temp#1: uint64 = (btoi array_item%0#0)
         let total#2: uint64 = (+ total#1 temp#1)
-        let tmp%1#2: bool = (== temp#1 42u)
-        goto tmp%1#2 ? block@41 : block@42
+        let tmp%5#2: bool = (== temp#1 42u)
+        goto tmp%5#2 ? block@41 : block@42
     block@41: // if_body_L68
         goto block@44
     block@42: // after_if_else_L68
@@ -403,13 +403,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         goto block@28
     block@30: // after_for_L84
         let aggregate%array_length%9#0: uint64 = (extract_uint16 dyn_array#0 0u) // on error: invalid array length header
-        let tmp%6#1: uint64 = aggregate%array_length%9#0
+        let tmp%7#1: uint64 = aggregate%array_length%9#0
         let value_internal%2#0: uint64 = 0u
         goto block@31
     block@31: // for_header_L87
         let temp₄#0: uint64 = φ(value_internal%2#0 <- block@30, value_internal%2#2 <- block@32)
         let i#9: uint64 = φ(i#7 <- block@30, i#10 <- block@32)
-        let continue_looping%4#0: bool = (< temp₄#0 tmp%6#1)
+        let continue_looping%4#0: bool = (< temp₄#0 tmp%7#1)
         goto continue_looping%4#0 ? block@32 : block@33
     block@32: // for_body_L87
         let i#10: uint64 = (+ i#9 1u)

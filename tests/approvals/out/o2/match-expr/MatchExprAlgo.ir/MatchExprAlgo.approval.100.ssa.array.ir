@@ -23,23 +23,23 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let xObj#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
         let aggregate%extract%0#0: bytes = (extract3 xObj#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
-        let values%0#0: uint64 = (btoi tuple_item%0#0)
-        let tmp%1#2: bool = (== values%0#0 5u)
-        (assert tmp%1#2) // x should be 5
-        let tmp%2#1: bool = (!= values%0#0 3u)
-        (assert tmp%2#1) // x should not be 3
-        let tmp%3#1: account = (txn Sender)
-        let tmp%4#1: account = (global ZeroAddress)
-        let tmp%5#1: bool = (!= tmp%3#1 tmp%4#1)
-        (assert tmp%5#1) // assert target is match for conditions
-        let tmp%6#1: bool = (> values%0#0 4u)
-        (assert tmp%6#1)
-        let tmp%7#1: bool = (< values%0#0 6u)
-        (assert tmp%7#1)
-        let tmp%8#1: bool = (>= values%0#0 5u)
-        (assert tmp%8#1)
-        let tmp%9#1: bool = (<= values%0#0 5u)
+        let tmp%1#2: uint64 = (btoi tuple_item%0#0)
+        let tmp%2#1: bool = (== tmp%1#2 5u)
+        (assert tmp%2#1) // x should be 5
+        let tmp%4#1: bool = (!= tmp%1#2 3u)
+        (assert tmp%4#1) // x should not be 3
+        let tmp%5#1: account = (txn Sender)
+        let tmp%6#1: account = (global ZeroAddress)
+        let tmp%7#1: bool = (!= tmp%5#1 tmp%6#1)
+        (assert tmp%7#1) // assert target is match for conditions
+        let tmp%9#1: bool = (> tmp%1#2 4u)
         (assert tmp%9#1)
+        let tmp%11#1: bool = (< tmp%1#2 6u)
+        (assert tmp%11#1)
+        let tmp%13#0: bool = (>= tmp%1#2 5u)
+        (assert tmp%13#0)
+        let tmp%15#0: bool = (<= tmp%1#2 5u)
+        (assert tmp%15#0)
         let aggregate%as_bytes%0#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob x#0)
@@ -48,41 +48,41 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = aggregate%head%1#0
         let xArray#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%0#0
         let aggregate%array_length%0#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
-        let tmp%10#1: uint64 = aggregate%array_length%0#0
-        let tmp%11#1: bool = (== tmp%10#1 1u)
+        let tmp%16#0: uint64 = aggregate%array_length%0#0
+        let tmp%17#0: bool = (== tmp%16#0 1u)
         let aggregate%total_length%0#0: uint64 = (len xArray#0)
         let aggregate%array_trimmed%0#0: bytes = (substring3 xArray#0 2u aggregate%total_length%0#0)
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 8u)
         let aggregate%encoded_element%0#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#0
-        let values%6#0: uint64 = (btoi array_item%0#0)
-        let tmp%12#1: bool = (== values%6#0 5u)
-        let tmp%13#0: bool = (&& tmp%11#1 tmp%12#1)
-        (assert tmp%13#0)
+        let tmp%18#0: uint64 = (btoi array_item%0#0)
+        let tmp%19#0: bool = (== tmp%18#0 5u)
+        let tmp%20#0: bool = (&& tmp%17#0 tmp%19#0)
+        (assert tmp%20#0)
         let aggregate%array_length%1#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
-        let tmp%14#0: uint64 = aggregate%array_length%1#0
-        let tmp%15#0: bool = (== tmp%14#0 1u)
-        let tmp%16#0: bool = (> values%6#0 4u)
-        let tmp%17#0: bool = (&& tmp%15#0 tmp%16#0)
-        (assert tmp%17#0)
-        let aggregate%array_length%2#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
-        let tmp%18#0: uint64 = aggregate%array_length%2#0
-        let tmp%19#0: bool = (== tmp%18#0 1u)
-        let tmp%20#0: bool = (< values%6#0 6u)
-        let tmp%21#0: bool = (&& tmp%19#0 tmp%20#0)
-        (assert tmp%21#0)
-        let aggregate%array_length%3#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
-        let tmp%22#0: uint64 = aggregate%array_length%3#0
-        let tmp%23#0: bool = (== tmp%22#0 1u)
-        let tmp%24#0: bool = (>= values%6#0 5u)
-        let tmp%25#0: bool = (&& tmp%23#0 tmp%24#0)
+        let tmp%21#0: uint64 = aggregate%array_length%1#0
+        let tmp%22#0: bool = (== tmp%21#0 1u)
+        let tmp%24#0: bool = (> tmp%18#0 4u)
+        let tmp%25#0: bool = (&& tmp%22#0 tmp%24#0)
         (assert tmp%25#0)
-        let aggregate%array_length%4#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
-        let tmp%26#0: uint64 = aggregate%array_length%4#0
+        let aggregate%array_length%2#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
+        let tmp%26#0: uint64 = aggregate%array_length%2#0
         let tmp%27#0: bool = (== tmp%26#0 1u)
-        let tmp%28#0: bool = (<= values%6#0 5u)
-        let tmp%29#0: bool = (&& tmp%27#0 tmp%28#0)
-        (assert tmp%29#0)
+        let tmp%29#0: bool = (< tmp%18#0 6u)
+        let tmp%30#0: bool = (&& tmp%27#0 tmp%29#0)
+        (assert tmp%30#0)
+        let aggregate%array_length%3#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
+        let tmp%31#0: uint64 = aggregate%array_length%3#0
+        let tmp%32#0: bool = (== tmp%31#0 1u)
+        let tmp%34#0: bool = (>= tmp%18#0 5u)
+        let tmp%35#0: bool = (&& tmp%32#0 tmp%34#0)
+        (assert tmp%35#0)
+        let aggregate%array_length%4#0: uint64 = (extract_uint16 xArray#0 0u) // on error: invalid array length header
+        let tmp%36#0: uint64 = aggregate%array_length%4#0
+        let tmp%37#0: bool = (== tmp%36#0 1u)
+        let tmp%39#0: bool = (<= tmp%18#0 5u)
+        let tmp%40#0: bool = (&& tmp%37#0 tmp%39#0)
+        (assert tmp%40#0)
         exit 1u
     block@4: // switch_case_next_L4
         fail

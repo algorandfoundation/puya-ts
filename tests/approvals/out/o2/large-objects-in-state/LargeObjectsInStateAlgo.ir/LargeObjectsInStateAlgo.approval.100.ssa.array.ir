@@ -13,8 +13,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@4: // getMbr_route_L17
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob 2982900u)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
-        let tmp%1#2: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%2#3: bytes = (concat 0x151f7c75 tmp%1#2)
+        let tmp%1#4: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%2#3: bytes = (concat 0x151f7c75 tmp%1#4)
         (log tmp%2#3)
         exit 1u
     block@5: // bootstrap_route_L21
@@ -24,11 +24,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 pay)
         (assert gtxn_type_matches%0#0) // transaction type is pay
         let tmp%0#6: uint64 = ((gtxns Amount) pay#0)
-        let tmp%1#1: bool = (== tmp%0#6 2982900u)
+        let tmp%1#3: bool = (== tmp%0#6 2982900u)
         let tmp%2#2: account = ((gtxns Receiver) pay#0)
         let tmp%3#2: account = (global CurrentApplicationAddress)
         let tmp%4#1: bool = (== tmp%2#2 tmp%3#2)
-        let tmp%5#1: bool = (&& tmp%1#1 tmp%4#1)
+        let tmp%5#1: bool = (&& tmp%1#3 tmp%4#1)
         (assert tmp%5#1) // assert target is match for conditions
         (box_create "x" 7200u)
         exit 1u
@@ -47,9 +47,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let box%box_extract%1#0: Encoded(uint64,uint8) = (box_extract "x" box%element_offset%1#0 9u)
         let aggregate%extract%0#0: bytes = (extract3 box%box_extract%1#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
-        let values%0#0: uint64 = (btoi tuple_item%0#0)
-        let tmp%0#4: uint64 = (+ values%0#0 xCount#0)
-        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%0#4)
+        let tmp%0#4: uint64 = (btoi tuple_item%0#0)
+        let tmp%1#2: uint64 = (+ tmp%0#4 xCount#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%1#2)
         let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
         let encoded_value%0#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
         (box_replace "x" box%element_offset%1#0 encoded_value%0#0)

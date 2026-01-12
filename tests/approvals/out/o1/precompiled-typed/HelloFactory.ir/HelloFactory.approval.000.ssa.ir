@@ -902,11 +902,11 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         let inner_txn_params%2%%param_OnCompletion_idx_0#0: uint64 = 0u
         let inner_txn_params%2%%OnCompletion_length#0: uint64 = 1u
         let tuple_item%0#0: Encoded(len+utf8[]) = extract_value(greeting#0, 0)
-        let values%0#0: string = decode_bytes<string>(tuple_item%0#0)
+        let tmp%9#0: string = decode_bytes<string>(tuple_item%0#0)
         let tuple_item%1#0: Encoded(len+utf8[]) = extract_value(greeting#0, 1)
-        let tmp%9#0: Encoded((len+utf8[]),(len+utf8[])) = bytes_encode<((len+utf8[]),(len+utf8[]))>(values%0#0, tuple_item%1#0)
+        let tmp%10#0: Encoded((len+utf8[]),(len+utf8[])) = bytes_encode<((len+utf8[]),(len+utf8[]))>(tmp%9#0, tuple_item%1#0)
         let inner_txn_params%2%%param_ApplicationArgs_idx_0#0: bytes[4] = method "sendGreetings((string,string))string"
-        let inner_txn_params%2%%param_ApplicationArgs_idx_1#0: Encoded((len+utf8[]),(len+utf8[])) = tmp%9#0
+        let inner_txn_params%2%%param_ApplicationArgs_idx_1#0: Encoded((len+utf8[]),(len+utf8[])) = tmp%10#0
         let inner_txn_params%2%%ApplicationArgs_length#0: uint64 = 2u
         let inner_txn_params%2%%Sender_length#0: uint64 = 0u
         let inner_txn_params%2%%Note_length#0: uint64 = 0u
@@ -965,19 +965,19 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
     block@3: // next_txn_L69
         itxn_submit
         let awst_tmp%1#0: bytes = itxn[itxn_group_idx(0)].LastLog
-        let tmp%10#0: bytes = ((extract 4 0) awst_tmp%1#0)
-        let tmp%11#0: bytes = ((extract 0 4) awst_tmp%1#0)
-        let tmp%12#0: bool = (== tmp%11#0 0x151f7c75)
-        (assert tmp%12#0) // Bytes has valid prefix
-        let length%1#0: uint64 = array_len(tmp%10#0)
+        let tmp%11#0: bytes = ((extract 4 0) awst_tmp%1#0)
+        let tmp%12#0: bytes = ((extract 0 4) awst_tmp%1#0)
+        let tmp%13#0: bool = (== tmp%12#0 0x151f7c75)
+        (assert tmp%13#0) // Bytes has valid prefix
+        let length%1#0: uint64 = array_len(tmp%11#0)
         let mul%1#0: uint64 = (* length%1#0 1u)
         let add%1#0: uint64 = (+ mul%1#0 2u)
-        let len%1#0: uint64 = (len tmp%10#0)
+        let len%1#0: uint64 = (len tmp%11#0)
         let eq%1#0: bool = (== len%1#0 add%1#0)
         (assert eq%1#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-        let as_Encoded(len+utf8[])%1#0: Encoded(len+utf8[]) = tmp%10#0
-        let tmp%13#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%1#0)
-        let (txn2.itxn#0: itxn_group_idx, txn2.returnValue#0: string) = (itxn_group_idx(0), tmp%13#0)
+        let as_Encoded(len+utf8[])%1#0: Encoded(len+utf8[]) = tmp%11#0
+        let tmp%14#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%1#0)
+        let (txn2.itxn#0: itxn_group_idx, txn2.returnValue#0: string) = (itxn_group_idx(0), tmp%14#0)
         let txn2.itxn._is_last#0: bool = 1u
         let txn2.itxn.Sender#0: account = itxn[txn2.itxn#0].Sender
         let txn2.itxn.Fee#0: uint64 = itxn[txn2.itxn#0].Fee
@@ -1041,8 +1041,8 @@ subroutine tests/approvals/precompiled-typed.algo.ts::HelloFactory.test_compile_
         let txn2.itxn.NumApprovalProgramPages#0: uint64 = itxn[txn2.itxn#0].NumApprovalProgramPages
         let txn2.itxn.NumClearStateProgramPages#0: uint64 = itxn[txn2.itxn#0].NumClearStateProgramPages
         let txn2.itxn.RejectVersion#0: uint64 = itxn[txn2.itxn#0].RejectVersion
-        let tmp%14#0: bool = (== txn2.returnValue#0 "hey world!")
-        (assert tmp%14#0)
+        let tmp%15#0: bool = (== txn2.returnValue#0 "hey world!")
+        (assert tmp%15#0)
         itxn_begin
         let inner_txn_params%3#0: itxn_field_set = itxn_field_set(3)
         let inner_txn_params%3%%param_Fee_idx_0#0: uint64 = 0u

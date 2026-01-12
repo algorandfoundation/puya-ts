@@ -126,14 +126,14 @@ subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.t
         (assert tmp%15#0) // assert target is match for conditions
         let awst_tmp%12#0: Encoded(uint64[3]) = tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceFixed()
         let array_item%0#0: Encoded(uint64) = extract_value(awst_tmp%12#0, 0u)
-        let values%0#0: uint64 = decode_bytes<uint64>(array_item%0#0)
+        let tmp%16#0: uint64 = decode_bytes<uint64>(array_item%0#0)
         let array_item%1#0: Encoded(uint64) = extract_value(awst_tmp%12#0, 1u)
-        let values%1#0: uint64 = decode_bytes<uint64>(array_item%1#0)
+        let tmp%17#0: uint64 = decode_bytes<uint64>(array_item%1#0)
         let array_item%2#0: Encoded(uint64) = extract_value(awst_tmp%12#0, 2u)
-        let values%2#0: uint64 = decode_bytes<uint64>(array_item%2#0)
-        let x#0: uint64 = values%0#0
-        let y#0: uint64 = values%1#0
-        let z#0: uint64 = values%2#0
+        let tmp%18#0: uint64 = decode_bytes<uint64>(array_item%2#0)
+        let x#0: uint64 = tmp%16#0
+        let y#0: uint64 = tmp%17#0
+        let z#0: uint64 = tmp%18#0
         return 
 
 subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceItems() -> <uint64, bytes, bool, biguint>:
@@ -148,15 +148,15 @@ subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.t
         let a#1: uint64 = b#0
         let awst_tmp%0#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(a#0, b#0)
         let tuple_item%0#0: Encoded(uint64) = extract_value(awst_tmp%0#0, 0)
-        let values%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let tmp%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
         let tuple_item%1#0: Encoded(uint64) = extract_value(awst_tmp%0#0, 1)
-        let values%1#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
-        let x#0: uint64 = values%0#0
-        let y#0: uint64 = values%1#0
-        let tmp%0#0: bool = (== x#0 b#1)
-        (assert tmp%0#0)
-        let tmp%1#0: bool = (== y#0 a#1)
-        (assert tmp%1#0)
+        let tmp%1#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
+        let x#0: uint64 = tmp%0#0
+        let y#0: uint64 = tmp%1#0
+        let tmp%2#0: bool = (== x#0 b#1)
+        (assert tmp%2#0)
+        let tmp%3#0: bool = (== y#0 a#1)
+        (assert tmp%3#0)
         return 
 
 subroutine tests/approvals/array-destructuring.algo.ts::ArrayDestructuringAlgo.produceFixed() -> Encoded(uint64[3]):

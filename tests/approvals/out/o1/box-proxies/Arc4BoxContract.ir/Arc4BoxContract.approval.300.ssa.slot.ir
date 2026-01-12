@@ -306,9 +306,9 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.deleteBoxes[rout
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.indirectExtractAndReplace[routing]() -> void:
     block@0: // L431
         let box%box_extract%0#0: Encoded(uint64) = (box_extract "boxLarge" 4096u 8u)
-        let values%0#0: uint64 = (btoi box%box_extract%0#0)
-        let tmp%0#0: uint64 = (+ values%0#0 1u)
-        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#0)
+        let tmp%0#0: uint64 = (btoi box%box_extract%0#0)
+        let tmp%1#0: uint64 = (+ tmp%0#0 1u)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#0)
         (box_replace "boxLarge" 4096u aggregate%val_as_bytes%0#0)
         exit 1u
 
@@ -325,7 +325,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.readBoxes[routin
         let (aggregate%box_get%4#0: bytes, aggregate%box_get%5#0: bool) = (box_get "BOX_C")
         (assert aggregate%box_get%5#0) // Box must have value
         let box%box_extract%0#0: Encoded(uint64) = (box_extract "boxLarge" 4096u 8u)
-        let values%0#0: uint64 = (btoi box%box_extract%0#0)
+        let tmp%3#1: uint64 = (btoi box%box_extract%0#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#1)
         let aggregate%length%0#0: uint64 = (len tmp%2#1)
         let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
@@ -337,7 +337,7 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.readBoxes[routin
         let aggregate%as_bytes%2#0: bytes[8] = (itob aggregate%current_tail_offset%0#0)
         let aggregate%offset_as_uint16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%2#0)
         let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 aggregate%offset_as_uint16%1#0)
-        let aggregate%val_as_bytes%1#0: bytes[8] = (itob values%0#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%3#1)
         let aggregate%head%3#0: bytes = (concat aggregate%head%2#0 aggregate%val_as_bytes%1#0)
         let aggregate%concat%0#0: bytes = (concat aggregate%head%3#0 aggregate%encoded_value%0#0)
         let aggregate%concat%1#0: bytes = (concat aggregate%concat%0#0 aggregate%box_get%4#0)
@@ -477,8 +477,8 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools[routing
         goto block@5
     block@5: // after_if_else_L514
         let total#3: uint64 = φ(total#1 <- block@3, total#2 <- block@4)
-        let tmp%1#1: bool = (== total#3 stopAtTotal#0)
-        goto tmp%1#1 ? block@6 : block@7
+        let tmp%2#1: bool = (== total#3 stopAtTotal#0)
+        goto tmp%2#1 ? block@6 : block@7
     block@6: // if_body_L517
         goto block@10
     block@7: // after_if_else_L517

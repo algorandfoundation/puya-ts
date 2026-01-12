@@ -54,24 +54,19 @@ subroutine _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uin
     block@6: // after_while_L20
         return 
 
-subroutine _puya_lib.arc4.dynamic_array_pop_fixed_size(array: bytes, fixed_byte_size: uint64) -> <bytes, bytes>:
-    block@0: // L46
+subroutine _puya_lib.arc4.dynamic_array_concat_fixed(array: bytes, new_items_bytes: bytes, new_items_count: uint64) -> bytes:
+    block@0: // L133
         let tmp%0#0: uint64 = (extract_uint16 array#0 0u)
         let array_length#0: uint64 = tmp%0#0
-        let tmp%1#0: uint64 = (- array_length#0 1u)
-        let length_minus_1#0: uint64 = tmp%1#0
-        let tmp%2#0: bytes = (itob length_minus_1#0)
+        let tmp%1#0: uint64 = (+ array_length#0 new_items_count#0)
+        let new_array_length#0: uint64 = tmp%1#0
+        let tmp%2#0: bytes = (itob new_array_length#0)
         let tmp%3#0: bytes = ((extract 6 0) tmp%2#0)
-        let tmp%4#0: bytes = ((replace2 0) array#0 tmp%3#0)
+        let new_len_u16#0: bytes = tmp%3#0
+        let tmp%4#0: bytes = ((replace2 0) array#0 new_len_u16#0)
         let result#0: bytes = tmp%4#0
-        let tmp%5#0: uint64 = (len result#0)
-        let tmp%6#0: uint64 = (- tmp%5#0 fixed_byte_size#0)
-        let item_location#0: uint64 = tmp%6#0
-        let tmp%7#0: bytes = (extract3 result#0 item_location#0 fixed_byte_size#0)
-        let popped#0: bytes = tmp%7#0
-        let tmp%8#0: bytes = (substring3 result#0 0u item_location#0)
-        let result#1: bytes = tmp%8#0
-        return popped#0 result#1
+        let tmp%5#0: bytes = (concat result#0 new_items_bytes#0)
+        return tmp%5#0
 
 subroutine tests/approvals/arc4-types.algo.ts::testUFixed() -> void:
     block@0: // L23
@@ -201,19 +196,14 @@ subroutine tests/approvals/arc4-types.algo.ts::testDynamicBytes(someBytes: bytes
         (assert tmp%7#0)
         let total_length%0#0: uint64 = (len 0x000620776f726c64)
         let extract_to_end%0#0: bytes = (substring3 0x000620776f726c64 2u total_length%0#0)
-        let concat%0#0: Encoded(len+uint8[]) = (concat 0x000568656c6c6f extract_to_end%0#0) // on error: max array length exceeded
-        let total_length%1#0: uint64 = (len concat%0#0)
-        let extract_to_end%1#0: bytes = (substring3 concat%0#0 2u total_length%1#0)
-        let len%0#0: uint64 = (len extract_to_end%1#0)
-        let div_floor%0#0: uint64 = (/ len%0#0 1u)
-        let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
-        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
-        let as_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = replace%0#0
-        let db4#0: Encoded(len+uint8[]) = as_Encoded(len+uint8[])%0#0
-        let tmp%8#0: bytes = ((extract 2 0) db4#0)
-        let tmp%9#0: bool = (== tmp%8#0 "hello world")
-        (assert tmp%9#0)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 0x000620776f726c64 0u) // on error: invalid array length header
+        let tmp%8#0: uint64 = aggregate%array_length%0#0
+        let aggregate%as_Encoded(len+uint8[])%1#0: Encoded(len+uint8[]) = _puya_lib.arc4.dynamic_array_concat_fixed(0x000568656c6c6f, extract_to_end%0#0, tmp%8#0)
+        let tmp%9#0: Encoded(len+uint8[]) = aggregate%as_Encoded(len+uint8[])%1#0
+        let db4#0: Encoded(len+uint8[]) = tmp%9#0
+        let tmp%10#0: bytes = ((extract 2 0) db4#0)
+        let tmp%11#0: bool = (== tmp%10#0 "hello world")
+        (assert tmp%11#0)
         return 
 
 subroutine tests/approvals/arc4-types.algo.ts::testStaticBytes() -> void:
@@ -228,19 +218,13 @@ subroutine tests/approvals/arc4-types.algo.ts::testStaticBytes() -> void:
         let tmp%0#0: bytes = array_item%0#0
         let tmp%1#0: bool = (== tmp%0#0 0xaabbccddee)
         (assert tmp%1#0)
-        let concat%0#0: Encoded(len+uint8[]) = (concat 0x000400000000 0xaabbccddee) // on error: max array length exceeded
-        let total_length%0#0: uint64 = (len concat%0#0)
-        let extract_to_end%0#0: bytes = (substring3 concat%0#0 2u total_length%0#0)
-        let len%0#0: uint64 = (len extract_to_end%0#0)
-        let div_floor%0#0: uint64 = (/ len%0#0 1u)
-        let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
-        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
-        let as_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = replace%0#0
-        let s4#0: Encoded(len+uint8[]) = as_Encoded(len+uint8[])%0#0
-        let tmp%2#0: bytes = ((extract 2 0) s4#0)
-        let tmp%3#0: bool = (== tmp%2#0 0x00000000aabbccddee)
-        (assert tmp%3#0)
+        let tmp%2#0: uint64 = 5u
+        let aggregate%as_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = _puya_lib.arc4.dynamic_array_concat_fixed(0x000400000000, 0xaabbccddee, tmp%2#0)
+        let tmp%3#0: Encoded(len+uint8[]) = aggregate%as_Encoded(len+uint8[])%0#0
+        let s4#0: Encoded(len+uint8[]) = tmp%3#0
+        let tmp%4#0: bytes = ((extract 2 0) s4#0)
+        let tmp%5#0: bool = (== tmp%4#0 0x00000000aabbccddee)
+        (assert tmp%5#0)
         return 
 
 subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: Encoded(uint64)) -> void:
@@ -256,26 +240,16 @@ subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: Encoded(uint64)) ->
         let aggregate%head%3#0: bytes = (concat 0x n#0)
         let aggregate%as_Encoded(uint64[])%0#0: Encoded(uint64[]) = aggregate%head%3#0
         let tmp%0#0: Encoded(uint64[]) = aggregate%as_Encoded(uint64[])%0#0
-        let concat%0#0: Encoded(len+uint64[]) = (concat myArray#0 tmp%0#0) // on error: max array length exceeded
-        let extract_uint16%0#0: uint64 = (extract_uint16 myArray#0 0u)
-        let add%0#0: uint64 = (+ extract_uint16%0#0 1u)
-        let as_bytes%0#0: bytes[8] = (itob add%0#0)
-        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
-        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = replace%0#0
-        let myArray#1: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
+        let aggregate%as_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = _puya_lib.arc4.dynamic_array_concat_fixed(myArray#0, tmp%0#0, 1u)
+        let tmp%1#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%1#0
+        let myArray#1: Encoded(len+uint64[]) = tmp%1#0
         let total_length%0#0: uint64 = (len myArray#1)
         let extract_to_end%0#0: bytes = (substring3 myArray#1 2u total_length%0#0)
-        let concat%1#0: Encoded(len+uint64[]) = (concat myArray#1 extract_to_end%0#0) // on error: max array length exceeded
-        let total_length%1#0: uint64 = (len concat%1#0)
-        let extract_to_end%1#0: bytes = (substring3 concat%1#0 2u total_length%1#0)
-        let len%0#0: uint64 = (len extract_to_end%1#0)
-        let div_floor%0#0: uint64 = (/ len%0#0 8u)
-        let as_bytes%1#0: bytes[8] = (itob div_floor%0#0)
-        let as_u16_bytes%1#0: bytes = ((extract 6 2) as_bytes%1#0)
-        let replace%1#0: bytes = (replace3 concat%1#0 0u as_u16_bytes%1#0)
-        let as_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = replace%1#0
-        let doubleArray#0: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%1#0
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 myArray#1 0u) // on error: invalid array length header
+        let tmp%2#0: uint64 = aggregate%array_length%0#0
+        let aggregate%as_Encoded(len+uint64[])%2#0: Encoded(len+uint64[]) = _puya_lib.arc4.dynamic_array_concat_fixed(myArray#1, extract_to_end%0#0, tmp%2#0)
+        let tmp%3#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%2#0
+        let doubleArray#0: Encoded(len+uint64[]) = tmp%3#0
         let aggregate%as_bytes%1#0: bytes[8] = (itob 8u)
         let aggregate%len_u16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%1#0)
         let aggregate%head%4#0: bytes = (concat aggregate%len_u16%1#0 n#0)
@@ -286,10 +260,10 @@ subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: Encoded(uint64)) ->
         let aggregate%head%9#0: bytes = (concat aggregate%head%8#0 n#0)
         let aggregate%head%10#0: bytes = (concat aggregate%head%9#0 n#0)
         let aggregate%head%11#0: bytes = (concat aggregate%head%10#0 n#0)
-        let aggregate%as_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = aggregate%head%11#0
-        let encoded_array%1#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%1#0
-        let tmp%1#0: bool = (== doubleArray#0 encoded_array%1#0)
-        (assert tmp%1#0)
+        let aggregate%as_Encoded(len+uint64[])%3#0: Encoded(len+uint64[]) = aggregate%head%11#0
+        let encoded_array%1#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%3#0
+        let tmp%4#0: bool = (== doubleArray#0 encoded_array%1#0)
+        (assert tmp%4#0)
         let aggregate%head%12#0: bytes = (concat 0x n#0)
         let aggregate%head%13#0: bytes = (concat aggregate%head%12#0 n#0)
         let aggregate%as_Encoded(uint64[2])%0#0: Encoded(uint64[2]) = aggregate%head%13#0
@@ -298,93 +272,100 @@ subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: Encoded(uint64)) ->
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 8u)
         let aggregate%encoded_element%0#0: bytes = (extract3 myStatic#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#0
-        let (tmp%2#0: bytes, tmp%3#0: bytes) = _puya_lib.arc4.dynamic_array_pop_fixed_size(myArray#1, 8u)
-        let tmp%4#0: bool = (== array_item%0#0 tmp%2#0)
-        (assert tmp%4#0)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 myArray#1 0u) // on error: invalid array length header
+        let tmp%5#0: uint64 = aggregate%array_length%1#0
+        let sub%0#0: uint64 = (- tmp%5#0 1u)
+        let aggregate%total_length%0#0: uint64 = (len myArray#1)
+        let aggregate%array_trimmed%0#0: bytes = (substring3 myArray#1 2u aggregate%total_length%0#0)
+        let aggregate%bytes_offset%1#0: uint64 = (* sub%0#0 8u)
+        let aggregate%encoded_element%1#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%1#0 8u) // on error: index access is out of bounds
+        let tmp%6#0: Encoded(uint64) = aggregate%encoded_element%1#0
+        let tmp%8#0: bool = (== array_item%0#0 tmp%6#0)
+        (assert tmp%8#0)
         let aggregate%head%14#0: bytes = (concat 0x n#0)
         let aggregate%head%15#0: bytes = (concat aggregate%head%14#0 n#0)
         let aggregate%head%16#0: bytes = (concat aggregate%head%15#0 n#0)
         let aggregate%as_Encoded(uint64[3])%0#0: Encoded(uint64[3]) = aggregate%head%16#0
         let encoded_array%3#0: Encoded(uint64[3]) = aggregate%as_Encoded(uint64[3])%0#0
         let myStatic2#0: Encoded(uint64[3]) = encoded_array%3#0
-        let tmp%5#0: uint64 = 3u
-        let tmp%6#0: bool = (== tmp%5#0 3u)
-        let aggregate%bytes_offset%1#0: uint64 = (* 0u 8u)
-        let aggregate%encoded_element%1#0: bytes = (extract3 myStatic2#0 aggregate%bytes_offset%1#0 8u) // on error: index access is out of bounds
-        let array_item%1#0: Encoded(uint64) = aggregate%encoded_element%1#0
-        let tmp%7#0: bool = (== array_item%1#0 n#0)
-        let tmp%8#0: bool = (&& tmp%6#0 tmp%7#0)
-        let aggregate%bytes_offset%2#0: uint64 = (* 1u 8u)
+        let tmp%9#0: uint64 = 3u
+        let tmp%10#0: bool = (== tmp%9#0 3u)
+        let aggregate%bytes_offset%2#0: uint64 = (* 0u 8u)
         let aggregate%encoded_element%2#0: bytes = (extract3 myStatic2#0 aggregate%bytes_offset%2#0 8u) // on error: index access is out of bounds
-        let array_item%2#0: Encoded(uint64) = aggregate%encoded_element%2#0
-        let tmp%9#0: bool = (== array_item%2#0 n#0)
-        let tmp%10#0: bool = (&& tmp%8#0 tmp%9#0)
-        let aggregate%bytes_offset%3#0: uint64 = (* 2u 8u)
-        let aggregate%encoded_element%3#0: bytes = (extract3 myStatic2#0 aggregate%bytes_offset%3#0 8u) // on error: index access is out of bounds
-        let array_item%3#0: Encoded(uint64) = aggregate%encoded_element%3#0
-        let tmp%11#0: bool = (== array_item%3#0 n#0)
+        let array_item%1#0: Encoded(uint64) = aggregate%encoded_element%2#0
+        let tmp%11#0: bool = (== array_item%1#0 n#0)
         let tmp%12#0: bool = (&& tmp%10#0 tmp%11#0)
-        (assert tmp%12#0) // assert target is match for conditions
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 doubleArray#0 0u) // on error: invalid array length header
-        let tmp%13#0: uint64 = aggregate%array_length%0#0
-        let tmp%14#0: bool = (== tmp%13#0 8u)
-        let aggregate%total_length%0#0: uint64 = (len doubleArray#0)
-        let aggregate%array_trimmed%0#0: bytes = (substring3 doubleArray#0 2u aggregate%total_length%0#0)
-        let aggregate%bytes_offset%4#0: uint64 = (* 0u 8u)
-        let aggregate%encoded_element%4#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%4#0 8u) // on error: index access is out of bounds
-        let array_item%4#0: Encoded(uint64) = aggregate%encoded_element%4#0
-        let tmp%15#0: bool = (== array_item%4#0 n#0)
+        let aggregate%bytes_offset%3#0: uint64 = (* 1u 8u)
+        let aggregate%encoded_element%3#0: bytes = (extract3 myStatic2#0 aggregate%bytes_offset%3#0 8u) // on error: index access is out of bounds
+        let array_item%2#0: Encoded(uint64) = aggregate%encoded_element%3#0
+        let tmp%13#0: bool = (== array_item%2#0 n#0)
+        let tmp%14#0: bool = (&& tmp%12#0 tmp%13#0)
+        let aggregate%bytes_offset%4#0: uint64 = (* 2u 8u)
+        let aggregate%encoded_element%4#0: bytes = (extract3 myStatic2#0 aggregate%bytes_offset%4#0 8u) // on error: index access is out of bounds
+        let array_item%3#0: Encoded(uint64) = aggregate%encoded_element%4#0
+        let tmp%15#0: bool = (== array_item%3#0 n#0)
         let tmp%16#0: bool = (&& tmp%14#0 tmp%15#0)
+        (assert tmp%16#0) // assert target is match for conditions
+        let aggregate%array_length%2#0: uint64 = (extract_uint16 doubleArray#0 0u) // on error: invalid array length header
+        let tmp%17#0: uint64 = aggregate%array_length%2#0
+        let tmp%18#0: bool = (== tmp%17#0 8u)
         let aggregate%total_length%1#0: uint64 = (len doubleArray#0)
         let aggregate%array_trimmed%1#0: bytes = (substring3 doubleArray#0 2u aggregate%total_length%1#0)
-        let aggregate%bytes_offset%5#0: uint64 = (* 1u 8u)
+        let aggregate%bytes_offset%5#0: uint64 = (* 0u 8u)
         let aggregate%encoded_element%5#0: bytes = (extract3 aggregate%array_trimmed%1#0 aggregate%bytes_offset%5#0 8u) // on error: index access is out of bounds
-        let array_item%5#0: Encoded(uint64) = aggregate%encoded_element%5#0
-        let tmp%17#0: bool = (== array_item%5#0 n#0)
-        let tmp%18#0: bool = (&& tmp%16#0 tmp%17#0)
+        let array_item%4#0: Encoded(uint64) = aggregate%encoded_element%5#0
+        let tmp%19#0: bool = (== array_item%4#0 n#0)
+        let tmp%20#0: bool = (&& tmp%18#0 tmp%19#0)
         let aggregate%total_length%2#0: uint64 = (len doubleArray#0)
         let aggregate%array_trimmed%2#0: bytes = (substring3 doubleArray#0 2u aggregate%total_length%2#0)
-        let aggregate%bytes_offset%6#0: uint64 = (* 2u 8u)
+        let aggregate%bytes_offset%6#0: uint64 = (* 1u 8u)
         let aggregate%encoded_element%6#0: bytes = (extract3 aggregate%array_trimmed%2#0 aggregate%bytes_offset%6#0 8u) // on error: index access is out of bounds
-        let array_item%6#0: Encoded(uint64) = aggregate%encoded_element%6#0
-        let tmp%19#0: bool = (== array_item%6#0 n#0)
-        let tmp%20#0: bool = (&& tmp%18#0 tmp%19#0)
+        let array_item%5#0: Encoded(uint64) = aggregate%encoded_element%6#0
+        let tmp%21#0: bool = (== array_item%5#0 n#0)
+        let tmp%22#0: bool = (&& tmp%20#0 tmp%21#0)
         let aggregate%total_length%3#0: uint64 = (len doubleArray#0)
         let aggregate%array_trimmed%3#0: bytes = (substring3 doubleArray#0 2u aggregate%total_length%3#0)
-        let aggregate%bytes_offset%7#0: uint64 = (* 3u 8u)
+        let aggregate%bytes_offset%7#0: uint64 = (* 2u 8u)
         let aggregate%encoded_element%7#0: bytes = (extract3 aggregate%array_trimmed%3#0 aggregate%bytes_offset%7#0 8u) // on error: index access is out of bounds
-        let array_item%7#0: Encoded(uint64) = aggregate%encoded_element%7#0
-        let tmp%21#0: bool = (== array_item%7#0 n#0)
-        let tmp%22#0: bool = (&& tmp%20#0 tmp%21#0)
+        let array_item%6#0: Encoded(uint64) = aggregate%encoded_element%7#0
+        let tmp%23#0: bool = (== array_item%6#0 n#0)
+        let tmp%24#0: bool = (&& tmp%22#0 tmp%23#0)
         let aggregate%total_length%4#0: uint64 = (len doubleArray#0)
         let aggregate%array_trimmed%4#0: bytes = (substring3 doubleArray#0 2u aggregate%total_length%4#0)
-        let aggregate%bytes_offset%8#0: uint64 = (* 4u 8u)
+        let aggregate%bytes_offset%8#0: uint64 = (* 3u 8u)
         let aggregate%encoded_element%8#0: bytes = (extract3 aggregate%array_trimmed%4#0 aggregate%bytes_offset%8#0 8u) // on error: index access is out of bounds
-        let array_item%8#0: Encoded(uint64) = aggregate%encoded_element%8#0
-        let tmp%23#0: bool = (== array_item%8#0 n#0)
-        let tmp%24#0: bool = (&& tmp%22#0 tmp%23#0)
+        let array_item%7#0: Encoded(uint64) = aggregate%encoded_element%8#0
+        let tmp%25#0: bool = (== array_item%7#0 n#0)
+        let tmp%26#0: bool = (&& tmp%24#0 tmp%25#0)
         let aggregate%total_length%5#0: uint64 = (len doubleArray#0)
         let aggregate%array_trimmed%5#0: bytes = (substring3 doubleArray#0 2u aggregate%total_length%5#0)
-        let aggregate%bytes_offset%9#0: uint64 = (* 5u 8u)
+        let aggregate%bytes_offset%9#0: uint64 = (* 4u 8u)
         let aggregate%encoded_element%9#0: bytes = (extract3 aggregate%array_trimmed%5#0 aggregate%bytes_offset%9#0 8u) // on error: index access is out of bounds
-        let array_item%9#0: Encoded(uint64) = aggregate%encoded_element%9#0
-        let tmp%25#0: bool = (== array_item%9#0 n#0)
-        let tmp%26#0: bool = (&& tmp%24#0 tmp%25#0)
+        let array_item%8#0: Encoded(uint64) = aggregate%encoded_element%9#0
+        let tmp%27#0: bool = (== array_item%8#0 n#0)
+        let tmp%28#0: bool = (&& tmp%26#0 tmp%27#0)
         let aggregate%total_length%6#0: uint64 = (len doubleArray#0)
         let aggregate%array_trimmed%6#0: bytes = (substring3 doubleArray#0 2u aggregate%total_length%6#0)
-        let aggregate%bytes_offset%10#0: uint64 = (* 6u 8u)
+        let aggregate%bytes_offset%10#0: uint64 = (* 5u 8u)
         let aggregate%encoded_element%10#0: bytes = (extract3 aggregate%array_trimmed%6#0 aggregate%bytes_offset%10#0 8u) // on error: index access is out of bounds
-        let array_item%10#0: Encoded(uint64) = aggregate%encoded_element%10#0
-        let tmp%27#0: bool = (== array_item%10#0 n#0)
-        let tmp%28#0: bool = (&& tmp%26#0 tmp%27#0)
+        let array_item%9#0: Encoded(uint64) = aggregate%encoded_element%10#0
+        let tmp%29#0: bool = (== array_item%9#0 n#0)
+        let tmp%30#0: bool = (&& tmp%28#0 tmp%29#0)
         let aggregate%total_length%7#0: uint64 = (len doubleArray#0)
         let aggregate%array_trimmed%7#0: bytes = (substring3 doubleArray#0 2u aggregate%total_length%7#0)
-        let aggregate%bytes_offset%11#0: uint64 = (* 7u 8u)
+        let aggregate%bytes_offset%11#0: uint64 = (* 6u 8u)
         let aggregate%encoded_element%11#0: bytes = (extract3 aggregate%array_trimmed%7#0 aggregate%bytes_offset%11#0 8u) // on error: index access is out of bounds
-        let array_item%11#0: Encoded(uint64) = aggregate%encoded_element%11#0
-        let tmp%29#0: bool = (== array_item%11#0 n#0)
-        let tmp%30#0: bool = (&& tmp%28#0 tmp%29#0)
-        (assert tmp%30#0) // assert target is match for conditions
+        let array_item%10#0: Encoded(uint64) = aggregate%encoded_element%11#0
+        let tmp%31#0: bool = (== array_item%10#0 n#0)
+        let tmp%32#0: bool = (&& tmp%30#0 tmp%31#0)
+        let aggregate%total_length%8#0: uint64 = (len doubleArray#0)
+        let aggregate%array_trimmed%8#0: bytes = (substring3 doubleArray#0 2u aggregate%total_length%8#0)
+        let aggregate%bytes_offset%12#0: uint64 = (* 7u 8u)
+        let aggregate%encoded_element%12#0: bytes = (extract3 aggregate%array_trimmed%8#0 aggregate%bytes_offset%12#0 8u) // on error: index access is out of bounds
+        let array_item%11#0: Encoded(uint64) = aggregate%encoded_element%12#0
+        let tmp%33#0: bool = (== array_item%11#0 n#0)
+        let tmp%34#0: bool = (&& tmp%32#0 tmp%33#0)
+        (assert tmp%34#0) // assert target is match for conditions
         return 
 
 subroutine tests/approvals/arc4-types.algo.ts::testByte() -> void:
