@@ -1,0 +1,181 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0 8 7
+    bytecblock 0x 0xd8df8271
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // tests/approvals/comma-operator.algo.ts:7
+    // class CommaOperatorTest extends Contract {
+    txn NumAppArgs
+    intc_1 // 0
+    !=
+    bz main___algots__.defaultCreate@5
+    b main_abi_routing@2
+
+main_abi_routing@2:
+    // tests/approvals/comma-operator.algo.ts:7
+    // class CommaOperatorTest extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x97f2cdbd // method "emitEmitAdd(uint8,uint8)uint8"
+    uncover 1
+    match main_emitEmitAdd_route@3
+    b main_switch_case_next@4
+
+main_switch_case_next@4:
+    b main_after_if_else@6
+
+main_after_if_else@6:
+    // tests/approvals/comma-operator.algo.ts:7
+    // class CommaOperatorTest extends Contract {
+    err
+
+main_emitEmitAdd_route@3:
+    // tests/approvals/comma-operator.algo.ts:8
+    // emitEmitAdd(a: Uint8, b: Uint8): Uint8 {
+    txn OnCompletion
+    intc_1 // NoOp
+    ==
+    txn ApplicationID
+    intc_1 // 0
+    !=
+    &&
+    assert // OnCompletion must be NoOp && can only call when not creating
+    callsub emitEmitAdd
+    b main_switch_case_next@4
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/comma-operator.algo.ts:7
+    // class CommaOperatorTest extends Contract {
+    txn OnCompletion
+    intc_1 // NoOp
+    ==
+    txn ApplicationID
+    intc_1 // 0
+    ==
+    &&
+    assert // OnCompletion must be NoOp && can only call when creating
+    callsub __algots__.defaultCreate
+    intc_0 // 1
+    return
+
+
+// tests/approvals/comma-operator.algo.ts::CommaOperatorTest.emitEmitAdd[routing]() -> void:
+emitEmitAdd:
+    b emitEmitAdd_block@0
+
+emitEmitAdd_block@0:
+    // tests/approvals/comma-operator.algo.ts:8
+    // emitEmitAdd(a: Uint8, b: Uint8): Uint8 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 1
+    ==
+    assert // invalid number of bytes for arc4.uint8
+    callsub tests/approvals/comma-operator.algo.ts::CommaOperatorTest.emitEmitAdd
+    pushbytes 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// tests/approvals/comma-operator.algo.ts::CommaOperatorTest.emitEmitAdd(a: bytes, b: bytes) -> bytes:
+tests/approvals/comma-operator.algo.ts::CommaOperatorTest.emitEmitAdd:
+    // tests/approvals/comma-operator.algo.ts:8
+    // emitEmitAdd(a: Uint8, b: Uint8): Uint8 {
+    proto 2 1
+    b tests/approvals/comma-operator.algo.ts::CommaOperatorTest.emitEmitAdd_block@0
+
+tests/approvals/comma-operator.algo.ts::CommaOperatorTest.emitEmitAdd_block@0:
+    // tests/approvals/comma-operator.algo.ts:12
+    // emit<Event>({ acc: new Uint8((res += a.asUint64())), v: a }),
+    frame_dig -2
+    btoi
+    // tests/approvals/comma-operator.algo.ts:9
+    // let res: uint64 = 0
+    intc_1 // 0
+    // tests/approvals/comma-operator.algo.ts:12
+    // emit<Event>({ acc: new Uint8((res += a.asUint64())), v: a }),
+    +
+    dup
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    intc_3 // 7
+    intc_0 // 1
+    extract3
+    bytec_0 // 0x
+    frame_dig -2
+    concat
+    uncover 1
+    concat
+    bytec_1 // method "Event(uint8,uint8)"
+    uncover 1
+    concat
+    log
+    // tests/approvals/comma-operator.algo.ts:13
+    // emit<Event>({ acc: new Uint8((res += b.asUint64())), v: b }),
+    frame_dig -1
+    btoi
+    +
+    dup
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    intc_3 // 7
+    intc_0 // 1
+    extract3
+    bytec_0 // 0x
+    frame_dig -1
+    concat
+    uncover 1
+    concat
+    bytec_1 // method "Event(uint8,uint8)"
+    uncover 1
+    concat
+    log
+    // tests/approvals/comma-operator.algo.ts:11-15
+    // return new Uint8((
+    //   emit<Event>({ acc: new Uint8((res += a.asUint64())), v: a }),
+    //   emit<Event>({ acc: new Uint8((res += b.asUint64())), v: b }),
+    //   res
+    // ))
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    intc_3 // 7
+    intc_0 // 1
+    extract3
+    retsub
+
+
+// tests/approvals/comma-operator.algo.ts::CommaOperatorTest.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
+
+__algots__.defaultCreate_block@0:
+    retsub
