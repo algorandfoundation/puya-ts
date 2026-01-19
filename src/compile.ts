@@ -22,6 +22,8 @@ export type CompileResult = {
 
 export async function compile(options: CompileOptions, puyaService?: PuyaService): Promise<CompileResult> {
   const loggerCtx = LoggingContext.current
+  if (options.treatWarningsAsErrors) loggerCtx.treatWarningsAsErrors = true
+
   registerPTypes(typeRegistry)
   logger.info(undefined, appVersion({ withAVMVersion: false }))
   const programResult = createTsProgram(options)

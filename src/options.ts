@@ -32,6 +32,7 @@ export class CompileOptions {
   public readonly outputSourceMap: boolean
   public readonly debugLevel: number
   public readonly optimizationLevel: number
+  public readonly treatWarningsAsErrors: boolean
   public readonly targetAvmVersion: number
   public readonly cliTemplateDefinitions: Record<string, Uint8Array | bigint>
   public readonly templateVarsPrefix: string
@@ -60,6 +61,7 @@ export class CompileOptions {
     this.outputSourceMap = options.outputSourceMap ?? false
     this.debugLevel = options.debugLevel ?? defaultPuyaOptions.debugLevel
     this.optimizationLevel = options.optimizationLevel ?? defaultPuyaOptions.optimizationLevel
+    this.treatWarningsAsErrors = options.treatWarningsAsErrors ?? defaultPuyaOptions.treatWarningsAsErrors
     this.targetAvmVersion = options.targetAvmVersion ?? defaultPuyaOptions.targetAvmVersion
     this.cliTemplateDefinitions = options.cliTemplateDefinitions ?? defaultPuyaOptions.cliTemplateDefinitions
     this.templateVarsPrefix = options.templateVarsPrefix ?? defaultPuyaOptions.templateVarsPrefix
@@ -98,6 +100,7 @@ export const defaultPuyaOptions: PuyaPassThroughOptions = {
   outputBytecode: false,
   debugLevel: 1,
   optimizationLevel: 1,
+  treatWarningsAsErrors: false,
   targetAvmVersion: 11,
   cliTemplateDefinitions: {},
   templateVarsPrefix: 'TMPL_',
@@ -119,6 +122,7 @@ export class PuyaOptions {
   outputSourceMap: boolean
   debugLevel: number
   optimizationLevel: number
+  treatWarningsAsErrors: boolean
   targetAvmVersion: number
   cliTemplateDefinitions: Record<string, Uint8Array | bigint>
   templateVarsPrefix: string
@@ -139,6 +143,7 @@ export class PuyaOptions {
     this.outputBytecode = options.outputBytecode
     this.debugLevel = options.debugLevel
     this.optimizationLevel = options.optimizationLevel
+    this.treatWarningsAsErrors = options.treatWarningsAsErrors
     this.targetAvmVersion = options.targetAvmVersion
     this.cliTemplateDefinitions = options.cliTemplateDefinitions
     this.templateVarsPrefix = options.templateVarsPrefix

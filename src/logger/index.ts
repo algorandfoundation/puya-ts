@@ -142,6 +142,7 @@ export class LoggingContext {
   #logEvents: LogEvent[] = []
   #sourcesByPath: Record<string, string[]> = {}
   #logEventsByPath: Record<string, LogEvent[]> = {}
+  treatWarningsAsErrors = false
 
   get logEvents(): readonly LogEvent[] {
     return this.#logEvents
@@ -164,6 +165,9 @@ export class LoggingContext {
   }
 
   addLog(log: LogEvent) {
+    if (this.treatWarningsAsErrors && log.level === LogLevel.Warning) {
+      log.level = LogLevel.Error
+    }
     this.#logEvents.push(log)
     const filePath = log.sourceLocation?.file?.toString()
     if (filePath) {
