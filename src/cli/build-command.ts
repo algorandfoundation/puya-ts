@@ -6,9 +6,9 @@ import { logger, LoggingContext, LogLevel } from '../logger'
 import { ConsoleLogSink } from '../logger/sinks/console-log-sink'
 import { CompileOptions, defaultPuyaOptions, LocalsCoalescingStrategy } from '../options'
 
+import { AbsolutePath } from '../util/absolute-path'
 import { parseCliTemplateVar } from '../util/template-var-cli-parser'
 import { addEnumArg, convertInt } from './util'
-import { AbsolutePath } from '../util/absolute-path'
 
 export interface BuildCommandArgs {
   command: 'build'
@@ -29,6 +29,7 @@ export interface BuildCommandArgs {
   out_dir: string
   debug_level: string
   optimization_level: string
+  treat_warnings_as_errors: boolean
   target_avm_version: string
   cli_template_definitions: string[]
   validate_abi_args: boolean
@@ -131,6 +132,11 @@ export function addBuildCommand(parser: ArgumentParser) {
     choices: ['0', '1', '2'],
     help: 'Set optimization level of output TEAL / AVM bytecode, 0 = none, 1 = normal, 2 = intensive',
   })
+  parser.add_argument('--treat-warnings-as-errors', {
+    action: BooleanOptionalAction,
+    default: defaultPuyaOptions.treatWarningsAsErrors,
+    help: 'Report and treat all warnings emitted by the compiler as errors',
+  })
   parser.add_argument('--target-avm-version', {
     default: defaultPuyaOptions.targetAvmVersion.toString(),
     choices: ['10', '11', '12', '13'],
@@ -207,6 +213,7 @@ export async function buildCommand(args: BuildCommandArgs) {
           outputSourceMap: args.output_source_map,
           debugLevel: convertInt(args.debug_level),
           optimizationLevel: convertInt(args.optimization_level),
+          treatWarningsAsErrors: args.treat_warnings_as_errors,
           targetAvmVersion: convertInt(args.target_avm_version),
           cliTemplateDefinitions: Object.fromEntries(args.cli_template_definitions?.map(parseCliTemplateVar) ?? []),
           templateVarsPrefix: args.template_vars_prefix,
