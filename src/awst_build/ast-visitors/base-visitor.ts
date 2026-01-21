@@ -41,7 +41,7 @@ import { concatArrays } from '../eb/util/array/concat'
 import type { PType } from '../ptypes'
 import { BigIntLiteralPType, boolPType, NumericLiteralPType, TransientType } from '../ptypes'
 import { containsMutableType, isMutableType } from '../ptypes/visitors/contains-mutable-visitor'
-import { typeRegistry } from '../type-registry'
+import { instanceEb, typeRegistry } from '../type-registry'
 import { handleAssignment } from './assignments'
 import { TextVisitor } from './text-visitor'
 
@@ -449,6 +449,16 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         }),
       )
       return handleAssignment(this.context, left, expr, sourceLocation, isStatement)
+    } else if (binaryOpKind === ts.SyntaxKind.CommaToken) {
+      const left = requireInstanceBuilder(this.baseAccept(node.left))
+      const right = requireInstanceBuilder(this.baseAccept(node.right))
+      return instanceEb(
+        nodeFactory.commaExpression({
+          expressions: [left.resolve(), right.resolve()],
+          sourceLocation,
+        }),
+        right.ptype,
+      )
     }
     throw new NotSupported(`Binary expression with op ${getSyntaxName(binaryOpKind)}`)
   }

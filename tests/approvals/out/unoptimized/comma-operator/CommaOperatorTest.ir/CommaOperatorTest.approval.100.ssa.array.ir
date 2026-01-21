@@ -1,0 +1,99 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        goto block@1
+    block@1: // L7
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#1 0u)
+        goto tmp%1#0 ? block@2 : block@5
+    block@2: // abi_routing_L7
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "emitEmitAdd(uint8,uint8)uint8" => block@3, * => block@4}
+    block@3: // emitEmitAdd_route_L8
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 NoOp)
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (!= tmp%5#0 0u)
+        let tmp%7#0: bool = (&& tmp%4#0 tmp%6#0)
+        (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
+        tests/approvals/comma-operator.algo.ts::CommaOperatorTest.emitEmitAdd[routing]()
+        goto block@4
+    block@4: // switch_case_next_L7
+        goto block@6
+    block@5: // __algots__.defaultCreate_L7
+        let tmp%8#0: uint64 = (txn OnCompletion)
+        let tmp%9#0: bool = (== tmp%8#0 NoOp)
+        let tmp%10#0: uint64 = (txn ApplicationID)
+        let tmp%11#0: bool = (== tmp%10#0 0u)
+        let tmp%12#0: bool = (&& tmp%9#0 tmp%11#0)
+        (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
+        tests/approvals/comma-operator.algo.ts::CommaOperatorTest.__algots__.defaultCreate()
+        exit 1u
+    block@6: // after_if_else_L7
+        exit 0u
+    block@7: // after_inlined_tests/approvals/comma-operator.algo.ts::CommaOperatorTest.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
+        return tmp%0#0
+
+subroutine tests/approvals/comma-operator.algo.ts::CommaOperatorTest.emitEmitAdd[routing]() -> void:
+    block@0: // L8
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 1u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint8
+        let as_Encoded(uint8)%0#0: Encoded(uint8) = tmp%0#0
+        let tmp%1#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%1#0)
+        let eq%1#0: bool = (== len%1#0 1u)
+        (assert eq%1#0) // invalid number of bytes for arc4.uint8
+        let as_Encoded(uint8)%1#0: Encoded(uint8) = tmp%1#0
+        let tmp%2#0: Encoded(uint8) = tests/approvals/comma-operator.algo.ts::CommaOperatorTest.emitEmitAdd(as_Encoded(uint8)%0#0, as_Encoded(uint8)%1#0)
+        let tmp%3#0: bytes = (concat 0x151f7c75 tmp%2#0)
+        (log tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/comma-operator.algo.ts::CommaOperatorTest.emitEmitAdd(a: Encoded(uint8), b: Encoded(uint8)) -> Encoded(uint8):
+    block@0: // L8
+        let tmp%0#0: uint64 = (btoi a#0)
+        let tmp%1#0: uint64 = (+ 0u tmp%0#0)
+        let res#1: uint64 = tmp%1#0
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob res#1)
+        let aggregate%bitlen%0#0: uint64 = (bitlen aggregate%val_as_bytes%0#0)
+        let aggregate%no_overflow%0#0: bool = (<= aggregate%bitlen%0#0 8u)
+        (assert aggregate%no_overflow%0#0) // overflow
+        let aggregate%uint8%0#0: bytes = (extract3 aggregate%val_as_bytes%0#0 7u 1u)
+        let aggregate%as_Encoded(uint8)%0#0: Encoded(uint8) = aggregate%uint8%0#0
+        let tmp%2#0: Encoded(uint8) = aggregate%as_Encoded(uint8)%0#0
+        let aggregate%head%0#0: bytes = (concat 0x a#0)
+        let aggregate%head%1#0: bytes = (concat aggregate%head%0#0 tmp%2#0)
+        let aggregate%as_Encoded(uint8,uint8)%0#0: Encoded(uint8,uint8) = aggregate%head%1#0
+        let tmp%3#0: Encoded(uint8,uint8) = aggregate%as_Encoded(uint8,uint8)%0#0
+        let event%0#0: bytes = (concat method "Event(uint8,uint8)" tmp%3#0)
+        (log event%0#0)
+        let tmp%4#0: uint64 = (btoi b#0)
+        let tmp%5#0: uint64 = (+ res#1 tmp%4#0)
+        let res#2: uint64 = tmp%5#0
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob res#2)
+        let aggregate%bitlen%1#0: uint64 = (bitlen aggregate%val_as_bytes%1#0)
+        let aggregate%no_overflow%1#0: bool = (<= aggregate%bitlen%1#0 8u)
+        (assert aggregate%no_overflow%1#0) // overflow
+        let aggregate%uint8%1#0: bytes = (extract3 aggregate%val_as_bytes%1#0 7u 1u)
+        let aggregate%as_Encoded(uint8)%1#0: Encoded(uint8) = aggregate%uint8%1#0
+        let tmp%6#0: Encoded(uint8) = aggregate%as_Encoded(uint8)%1#0
+        let aggregate%head%2#0: bytes = (concat 0x b#0)
+        let aggregate%head%3#0: bytes = (concat aggregate%head%2#0 tmp%6#0)
+        let aggregate%as_Encoded(uint8,uint8)%1#0: Encoded(uint8,uint8) = aggregate%head%3#0
+        let tmp%7#0: Encoded(uint8,uint8) = aggregate%as_Encoded(uint8,uint8)%1#0
+        let event%1#0: bytes = (concat method "Event(uint8,uint8)" tmp%7#0)
+        (log event%1#0)
+        let aggregate%val_as_bytes%2#0: bytes[8] = (itob res#2)
+        let aggregate%bitlen%2#0: uint64 = (bitlen aggregate%val_as_bytes%2#0)
+        let aggregate%no_overflow%2#0: bool = (<= aggregate%bitlen%2#0 8u)
+        (assert aggregate%no_overflow%2#0) // overflow
+        let aggregate%uint8%2#0: bytes = (extract3 aggregate%val_as_bytes%2#0 7u 1u)
+        let aggregate%as_Encoded(uint8)%2#0: Encoded(uint8) = aggregate%uint8%2#0
+        let tmp%8#0: Encoded(uint8) = aggregate%as_Encoded(uint8)%2#0
+        return tmp%8#0
+
+subroutine tests/approvals/comma-operator.algo.ts::CommaOperatorTest.__algots__.defaultCreate() -> void:
+    block@0: // L7
+        return 
