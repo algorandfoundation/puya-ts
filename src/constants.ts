@@ -66,7 +66,7 @@ export const Constants = {
   },
 
   supportedAvmVersions: [10n, 11n, 12n, 13n],
-  targetedPuyaVersion: '5.6.0',
+  targetedPuyaVersion: '5.7.1',
   puyaGithubRepo: 'algorandfoundation/puya',
   minNodeVersion: '20.11.1',
   languageServerSource: 'puyats',
