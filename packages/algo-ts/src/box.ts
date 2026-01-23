@@ -104,7 +104,7 @@ export type BoxMap<TKey, TValue> = {
   /**
    * Get the bytes used to prefix each key
    */
-  readonly keyPrefix: bytes
+  readonly keyPrefix: bytes;
 
   /**
    * Get a Box proxy for a single item in the BoxMap
