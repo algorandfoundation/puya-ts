@@ -1,5 +1,5 @@
+import { arc56MethodToABIMethod } from '@algorandfoundation/algokit-utils/abi'
 import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount'
-import algosdk from 'algosdk'
 import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
@@ -97,8 +97,8 @@ describe('abi validation exhaustive', () => {
     const bytesValue = convertToBytes(sizeOrBytesValue)
     const methodName = `validate_${typeName}`
     const method = appClientAbiValidationExhaustive.appSpec.methods.find((m) => m.name === methodName)
-    expect(method).toBeDefined()
-    const selector = new algosdk.ABIMethod(method!).getSelector()
+    expect.assert(method, 'must be defined')
+    const selector = arc56MethodToABIMethod(method, appClientAbiValidationExhaustive.appSpec).getSelector()
     await appClientAbiValidationExhaustive.send.bare.call({
       args: [selector, bytesValue],
     })
@@ -160,8 +160,8 @@ describe('abi validation exhaustive', () => {
     const bytesValue = convertToBytes(sizeOrBytesValue)
     const methodName = `validate_${typeName}`
     const method = appClientAbiValidationExhaustive.appSpec.methods.find((m) => m.name === methodName)
-    expect(method).toBeDefined()
-    const selector = new algosdk.ABIMethod(method!).getSelector()
+    expect.assert(method, 'must be defined')
+    const selector = arc56MethodToABIMethod(method, appClientAbiValidationExhaustive.appSpec).getSelector()
     await expect(
       appClientAbiValidationExhaustive.send.bare.call({
         args: [selector, bytesValue],
@@ -200,8 +200,8 @@ describe('abi validation exhaustive', () => {
     const bytesValue = convertToBytes(sizeOrBytesValue)
     const methodName = `validate_native_${typeName}`
     const method = appClientAbiValidationExhaustive.appSpec.methods.find((m) => m.name === methodName)
-    expect(method).toBeDefined()
-    const selector = new algosdk.ABIMethod(method!).getSelector()
+    expect.assert(method, 'must be defined')
+    const selector = arc56MethodToABIMethod(method, appClientAbiValidationExhaustive.appSpec).getSelector()
     await appClientAbiValidationExhaustive.send.bare.call({
       args: [selector, bytesValue],
     })
@@ -240,8 +240,8 @@ describe('abi validation exhaustive', () => {
     const bytesValue = convertToBytes(sizeOrBytesValue)
     const methodName = `validate_native_${typeName}`
     const method = appClientAbiValidationExhaustive.appSpec.methods.find((m) => m.name === methodName)
-    expect(method).toBeDefined()
-    const selector = new algosdk.ABIMethod(method!).getSelector()
+    expect.assert(method, 'must be defined')
+    const selector = arc56MethodToABIMethod(method, appClientAbiValidationExhaustive.appSpec).getSelector()
     await expect(
       appClientAbiValidationExhaustive.send.bare.call({
         args: [selector, bytesValue],

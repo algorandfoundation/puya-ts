@@ -26,7 +26,7 @@ describe('itxn compose', () => {
 
     await appClientItxnComposeAlgo.send.call({
       method: 'distribute',
-      args: [testAccounts.map((a) => a.addr.publicKey), pay, appClientVerifierContract.appId],
+      args: [testAccounts.map((a) => a.addr), pay, appClientVerifierContract.appId],
       extraFee: algos(1),
     })
   })

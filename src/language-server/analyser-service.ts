@@ -18,6 +18,7 @@ import { createTypedMessagePort } from '../util/typed-message-port'
 import { analyse } from './analyse'
 import type { FileWithDiagnostics } from './diagnostics-manager'
 import { type LogEventWithSource, mapper } from './mapping'
+import { logCaughtExpression } from './util/log-exceptions'
 import { normalisedUri } from './util/uris'
 import '../util/polyfills'
 
@@ -211,11 +212,19 @@ if (parentPort) {
   new AnalyseWorker(typedPort, workerData)
 }
 
+function resolveTsxModulePath() {
+  const resolve = import.meta.resolve ?? require.resolve
+  const tsx = resolve('tsx')
+  if (tsx.startsWith('file://')) {
+    return URI.parse(tsx).fsPath
+  }
+  return tsx
+}
+
 function buildWorker({ workerData }: { workerData: AnalyseServiceOptions }) {
   const workerFile = import.meta.filename ?? __filename
   if (workerFile.endsWith('.ts')) {
-    const resolve = import.meta.resolve ?? require.resolve
-    const tsx = resolve('tsx')
+    const tsx = resolveTsxModulePath()
     return new Worker(workerFile, {
       execArgv: ['--require', tsx],
       workerData,
@@ -229,7 +238,9 @@ function buildWorker({ workerData }: { workerData: AnalyseServiceOptions }) {
 
 export function createAnalyserService(options: AnalyseServiceOptions): AnalyserService {
   const worker = buildWorker({ workerData: options })
-  worker.on('error', (err) => logger.error(err))
+  worker.on('error', (err) => {
+    logCaughtExpression(err)
+  })
   const typedWorker = createTypedMessagePort<Commands, Notifications>(worker)
 
   const responses = new Map<string, PromiseWithResolvers<DeliberateAny>>()
