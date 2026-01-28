@@ -1,4 +1,4 @@
-import type { SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app'
+import type { SendAppTransactionResult } from '@algorandfoundation/algokit-utils/app'
 import { uint8ArrayToBigInt, uint8ArrayToUtf8 } from '../../../src/util'
 
 export type LogDecoding = 'i' | 's' | 'b'

@@ -1,5 +1,5 @@
 import { arc56MethodToABIMethod } from '@algorandfoundation/algokit-utils/abi'
-import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount'
+import { AlgoAmount } from '@algorandfoundation/algokit-utils/amount'
 import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
