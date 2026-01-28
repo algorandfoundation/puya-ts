@@ -302,8 +302,8 @@ export class TypeResolver {
       return this.reflectObjectType(tsType, sourceLocation)
     }
     if (isIntersectionType(tsType)) {
-      const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
-      return IntersectionPType.fromTypes(parts)
+      // FIXME: Check that all parts are object types
+      return this.reflectObjectType(tsType, sourceLocation)
     }
     throw new InternalError(`Cannot determine type of ${typeName}`, { sourceLocation })
   }
@@ -625,7 +625,7 @@ function isReadonlyPropertySymbol(prop: ts.Symbol): boolean {
 }
 
 function tryGetTypeDescription(tsType: ts.Type): string | undefined {
-  const dec = tsType.aliasSymbol?.valueDeclaration ?? tsType.symbol.valueDeclaration
+  const dec = tsType.aliasSymbol?.valueDeclaration ?? tsType.symbol?.valueDeclaration
   if (!dec) return undefined
   const docs = ts.getJSDocCommentsAndTags(dec)
   for (const doc of docs) {
