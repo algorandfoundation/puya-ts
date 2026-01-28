@@ -253,6 +253,8 @@ export class TypeResolver {
       const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
       if (parts.some((p) => p.equals(arc4StructBaseType))) {
         return arc4StructBaseType
+      } else if (parts.every((p) => instanceOfAny(p, ImmutableObjectPType, MutableObjectPType))) {
+        return this.reflectObjectType(tsType, sourceLocation)
       } else {
         return IntersectionPType.fromTypes(parts)
       }
@@ -621,7 +623,7 @@ function isReadonlyPropertySymbol(prop: ts.Symbol): boolean {
 }
 
 function tryGetTypeDescription(tsType: ts.Type): string | undefined {
-  const dec = tsType.aliasSymbol?.valueDeclaration ?? tsType.symbol.valueDeclaration
+  const dec = tsType.aliasSymbol?.valueDeclaration ?? tsType.symbol?.valueDeclaration
   if (!dec) return undefined
   const docs = ts.getJSDocCommentsAndTags(dec)
   for (const doc of docs) {
