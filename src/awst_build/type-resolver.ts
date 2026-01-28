@@ -301,6 +301,10 @@ export class TypeResolver {
     if (isObjectType(tsType)) {
       return this.reflectObjectType(tsType, sourceLocation)
     }
+    if (isIntersectionType(tsType)) {
+      const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
+      return IntersectionPType.fromTypes(parts)
+    }
     throw new InternalError(`Cannot determine type of ${typeName}`, { sourceLocation })
   }
 
@@ -535,7 +539,7 @@ export class TypeResolver {
         }
       }
     }
-    return typeName
+    return typeName || aliasName
   }
 
   private getLocationOfSymbol(symbol: ts.Symbol): SourceLocation | undefined {
