@@ -92,17 +92,11 @@ export class EncodeArc4FunctionBuilder extends FunctionBuilder {
       )
     }
 
-    const encodedType = ptypeToArc4EncodedType(valueType, sourceLocation)
-
     return instanceEb(
-      nodeFactory.reinterpretCast({
-        expr: nodeFactory.aRC4Encode({
-          value: valueToEncode.resolveToPType(valueType).resolve(),
-          wtype: encodedType.wtype,
-          sourceLocation,
-        }),
+      nodeFactory.aRC4Encode({
+        value: valueToEncode.resolveToPType(valueType).resolve(),
+        wtype: wtypes.bytesWType,
         sourceLocation,
-        wtype: bytesPType.wtype,
       }),
       bytesPType,
     )

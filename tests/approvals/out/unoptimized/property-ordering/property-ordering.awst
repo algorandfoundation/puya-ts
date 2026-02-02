@@ -2,8 +2,8 @@ subroutine test_assign_from_var(x: ReadonlyObjectACED9E72{ a: uint64, b: uint64 
 {
   assert(x.a != x.b, comment=For the purpose of this test, a should not equal b)
   obj: ReadonlyObject6F4980F1{ b: uint64, a: uint64 } = #{ b: x.b, a: x.a }
-  xEncoded: bytes = reinterpret_cast<bytes>(ARC4_ENCODE(x, wtype=ReadonlyObjectACED9E72))
-  objEncoded: bytes = reinterpret_cast<bytes>(ARC4_ENCODE(obj, wtype=ReadonlyObject6F4980F1))
+  xEncoded: bytes = ARC4_ENCODE(x, wtype=bytes)
+  objEncoded: bytes = ARC4_ENCODE(obj, wtype=bytes)
   assert(xEncoded == concat(objEncoded.slice(8), objEncoded.slice(0, 8)), comment=Encoded order should be swapped)
 }
 subroutine test_assign_from_literal(x: uint64): void
