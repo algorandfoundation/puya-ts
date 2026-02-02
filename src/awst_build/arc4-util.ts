@@ -1,4 +1,3 @@
-import type { ResourceEncoding } from '../awst'
 import { nodeFactory } from '../awst/node-factory'
 import { ARC4ABIMethodConfig } from '../awst/nodes'
 import type { SourceLocation } from '../awst/source-location'
@@ -6,9 +5,8 @@ import { wtypes } from '../awst/wtypes'
 import { CodeError } from '../errors'
 import { codeInvariant, invariant } from '../util'
 import { AwstBuildContext } from './context/awst-build-context'
-import type { ABICompatiblePType, FunctionPType, PType } from './ptypes'
+import type { FunctionPType, PType } from './ptypes'
 import {
-  ABICompatibleInstanceType,
   accountPType,
   applicationPType,
   ArrayPType,
@@ -17,7 +15,6 @@ import {
   boolPType,
   BytesPType,
   FixedArrayPType,
-  GroupTransactionPType,
   ImmutableObjectPType,
   MutableObjectPType,
   MutableTuplePType,
@@ -26,7 +23,6 @@ import {
   stringPType,
   TransientType,
   uint64PType,
-  voidPType,
 } from './ptypes'
 import {
   arc4AddressAlias,
@@ -42,48 +38,6 @@ import {
   StaticBytesType,
   UintNType,
 } from './ptypes/arc4-types'
-
-/**
- * For a given ptype, return the equivalent ABI compatible type - or error if there is no compatible type
- * @param ptype The type of the parameter
- * @param direction The direction of the parameter (in for method args, out for method returns)
- * @param resourceEncoding The encoding strategy for the foreign resource types (App, Asset, Account)
- * @param sourceLocation The location of the method or parameter, for use in error metadata
- */
-export function ptypeToAbiPType(
-  ptype: PType,
-  direction: 'in' | 'out',
-  resourceEncoding: ResourceEncoding,
-  sourceLocation: SourceLocation,
-): ABICompatiblePType {
-  if (ptype instanceof ARC4EncodedType) return ptype
-  if (ptype instanceof GroupTransactionPType) {
-    codeInvariant(direction === 'in', `${ptype.name} cannot be used as an ABI return type`, sourceLocation)
-    return ptype
-  }
-  if (ptype.equalsOneOf(applicationPType, assetPType)) {
-    invariant(ptype instanceof ABICompatibleInstanceType, 'application and asset are all ABICompatibleInstanceType')
-    if (resourceEncoding === 'index' && direction === 'in') {
-      return ptype
-    }
-    return arc4Uint64
-  }
-  if (ptype.equals(accountPType)) {
-    invariant(ptype instanceof ABICompatibleInstanceType, 'account is ABICompatibleInstanceType')
-    if (resourceEncoding === 'index' && direction === 'in') {
-      return ptype
-    }
-    return arc4AddressAlias
-  }
-  if (ptype.equals(voidPType)) {
-    codeInvariant(direction === 'out', `${ptype.name} cannot be used as an ABI param type`, sourceLocation)
-    return voidPType
-  }
-  if (isArc4EncodableType(ptype)) {
-    return ptypeToArc4EncodedType(ptype, sourceLocation)
-  }
-  throw new CodeError(`${ptype} cannot be used as an ABI ${direction === 'in' ? 'param' : 'return'} type`, { sourceLocation })
-}
 
 export function arc4ConfigFromType(functionType: FunctionPType, sourceLocation: SourceLocation) {
   codeInvariant(
