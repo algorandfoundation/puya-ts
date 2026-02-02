@@ -83,8 +83,8 @@ contract MutableObjectDemo
   {
     assert(p.x != p.y, comment=For the purpose of this test, a should not equal b)
     obj: tests/approvals/mutable-object.algo.ts::Vector = new tests/approvals/mutable-object.algo.ts::Vector(x=($12 = #{ x: p.x, y: p.y }).x, y=$12.y)
-    pEncoded: bytes = reinterpret_cast<bytes>(ARC4_ENCODE(p, wtype=Point))
-    objEncoded: bytes = reinterpret_cast<bytes>(ARC4_ENCODE(obj, wtype=Vector))
+    pEncoded: bytes = ARC4_ENCODE(p, wtype=bytes)
+    objEncoded: bytes = ARC4_ENCODE(obj, wtype=bytes)
     assert(pEncoded == concat(objEncoded.slice(8), objEncoded.slice(0, 8)), comment=Encoded order should be swapped)
   }
   
