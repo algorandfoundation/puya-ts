@@ -11,7 +11,8 @@ import { testInvariant } from './util'
 
 describe('analyse', async () => {
   logger.configure([new ConsoleLogSink(LogLevel.Error)])
-  const puyaService = new PuyaService({ puyaPath: await resolvePuyaPath({}) })
+  const puyaPath = process.env.PUYA_PATH || (await resolvePuyaPath({}))
+  const puyaService = new PuyaService({ puyaPath })
   const dir = AbsolutePath.resolve({ path: 'tests/other/analyse' })
   const dirUri = normalisedUri({ fsPath: dir.toString() }).toString()
 
@@ -38,7 +39,7 @@ describe('analyse', async () => {
   })
   describe('when called as a service', () => {
     it('returns diagnostics', async () => {
-      const service = createAnalyserService({ puyaPath: await resolvePuyaPath({}) })
+      const service = createAnalyserService({ puyaPath })
       const ab = new AbortController()
       const result = await service.analyse({ uris: [dirUri], openDocuments: {} }, ab.signal)
 
@@ -51,7 +52,7 @@ describe('analyse', async () => {
       expect(bDiag).toBeDefined()
     })
     it('returns diagnostics for open files', async () => {
-      const service = createAnalyserService({ puyaPath: await resolvePuyaPath({}) })
+      const service = createAnalyserService({ puyaPath })
       const ab = new AbortController()
 
       const result = await service.analyse(
@@ -59,11 +60,14 @@ describe('analyse', async () => {
           uris: [dirUri],
           openDocuments: {
             [bUri]: {
-              contents: `import { Contract } from '@algorandfoundation/algorand-typescript'
+              contents: `import { Box, Contract, err, uint64 } from '@algorandfoundation/algorand-typescript'
 
 export class ContractB extends Contract {
-  helloFromB(): any {
+  helloFromB() {
     return 'Hello from b'
+  }
+  hiFromB(): Box<uint64> {
+    err('No implementation')
   }
 }`,
               version: 1,
@@ -79,7 +83,7 @@ export class ContractB extends Contract {
 
       expect(aDiag).toBeDefined()
       expect(bDiag).toBeDefined()
-      expect(bDiag?.diagnostics[0].message).toBe('any cannot be used as an ABI return type')
+      expect(bDiag?.diagnostics[0].message).toBe('unsupported return type for an ARC-4 method')
       expect(bDiag?.version).toBe(1)
     })
   })
