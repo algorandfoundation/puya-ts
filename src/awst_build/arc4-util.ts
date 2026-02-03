@@ -161,8 +161,8 @@ export function isArc4EncodableType(ptype: PType): boolean {
   if (ptype.equals(accountPType)) return true
   if (ptype instanceof ReadonlyTuplePType) return ptype.items.every((i) => isArc4EncodableType(i))
   if (ptype instanceof MutableTuplePType) return ptype.items.every((i) => isArc4EncodableType(i))
-  if (ptype instanceof ImmutableObjectPType) return ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
-  if (ptype instanceof MutableObjectPType) return ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
+  if (ptype instanceof ImmutableObjectPType) return ptype.abiSafe && ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
+  if (ptype instanceof MutableObjectPType) return ptype.abiSafe && ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
   if (ptype instanceof ArrayPType || ptype instanceof FixedArrayPType || ptype instanceof ReadonlyArrayPType)
     return isArc4EncodableType(ptype.elementType)
   return false

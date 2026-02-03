@@ -30,7 +30,7 @@ export class StructClassBuilder extends ClassBuilder {
       genericTypeArgs: 1,
       callLocation: sourceLocation,
       funcName: this.typeDescription,
-      argSpec: (a) => [a.required(new ImmutableObjectPType({ properties: this.ptype.instanceType.fields }))],
+      argSpec: (a) => [a.required(new ImmutableObjectPType({ properties: this.ptype.instanceType.fields, abiSafe: true }))],
     })
     const initialSingle = initialValues.singleEvaluation()
 
