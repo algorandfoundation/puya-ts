@@ -254,6 +254,7 @@ export class TypeResolver {
       if (parts.some((p) => p.equals(arc4StructBaseType))) {
         return arc4StructBaseType
       } else if (parts.every((p) => instanceOfAny(p, ImmutableObjectPType, MutableObjectPType))) {
+        validateNoConflictingIntersectionFields(parts, sourceLocation)
         return this.reflectObjectType(tsType, false, sourceLocation)
       } else {
         return IntersectionPType.fromTypes(parts)
@@ -643,5 +644,24 @@ function CacheResolvedType(resolveType: (this: TypeResolver, tsType: ts.Type, so
     const res = resolveType.call(this, tsType, sourceLocation)
     resolvedTypes.set(tsType, res)
     return res
+  }
+}
+
+function validateNoConflictingIntersectionFields(parts: (ImmutableObjectPType | MutableObjectPType)[], sourceLocation: SourceLocation) {
+  const repeatedFields = new Set<string>()
+  const fields = new Set<string>()
+  const allProperties = parts.flatMap((part) => part.orderedProperties())
+  for (const [propName, _propType] of allProperties) {
+    if (fields.has(propName)) {
+      repeatedFields.add(propName)
+    } else {
+      fields.add(propName)
+    }
+  }
+  if (repeatedFields.size !== 0) {
+    const fieldsInQuestion = [...repeatedFields.values()].join(', ')
+    throw new CodeError(`Intersection types with overlapping fields are not yet supported (fields in question: ${fieldsInQuestion})`, {
+      sourceLocation,
+    })
   }
 }
