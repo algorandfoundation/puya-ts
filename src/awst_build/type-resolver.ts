@@ -138,18 +138,6 @@ export class TypeResolver {
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
     const typeName = this.getTypeName(tsType, sourceLocation)
 
-    intersect: if (isIntersectionType(tsType)) {
-      if (tsType.aliasSymbol) {
-        break intersect
-      }
-      // Special handling of struct and mutable object base types which are an intersection of `StructBase` or `MutableObjectBase` and the generic `T` type
-      const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
-      if (parts.some((p) => p.equals(arc4StructBaseType))) {
-        return arc4StructBaseType
-      } else {
-        return IntersectionPType.fromTypes(parts)
-      }
-    }
     if (isUnionType(tsType)) {
       const ut = UnionPType.fromTypes(tsType.types.map((t) => this.resolveType(t, sourceLocation)))
       if (ut instanceof UnionPType) {
@@ -229,36 +217,48 @@ export class TypeResolver {
       return this.resolve(tsType.node.expression, sourceLocation)
     }
 
-    invariant(typeName, 'Non builtin type must have a name', sourceLocation)
+    if (typeName) {
+      if (typeName.name === '__type' && typeName.module.startsWith(Constants.algoTsPackage)) {
+        // We are likely dealing with `typeof X` where X is a singleton exported by algo-ts
+        const declarationNode = tsType.symbol.getDeclarations()?.[0]?.parent
 
-    if (typeName.name === '__type' && typeName.module.startsWith(Constants.algoTsPackage)) {
-      // We are likely dealing with `typeof X` where X is a singleton exported by algo-ts
-      const declarationNode = tsType.symbol.getDeclarations()?.[0]?.parent
+        if (declarationNode && ts.isVariableDeclaration(declarationNode)) {
+          return this.resolve(declarationNode.name, sourceLocation)
+        }
+      }
 
-      if (declarationNode && ts.isVariableDeclaration(declarationNode)) {
-        return this.resolve(declarationNode.name, sourceLocation)
+      switch (typeName.fullName) {
+        case arc4StructBaseType.fullName:
+          return arc4StructBaseType
+        case ClusteredPrototype.fullName:
+          return this.resolveClusteredPrototype(tsType, sourceLocation)
+      }
+
+      const typeArgs = this.tryResolveGenericTypeArgs(tsType, sourceLocation)
+      if (typeArgs?.length) {
+        const gt = typeRegistry.tryResolveGenericPType(typeName, typeArgs)
+        if (gt) return gt
+      } else {
+        const it = typeRegistry.tryResolveInstancePType(typeName)
+        if (it) return it
+      }
+
+      if (typeName.module.startsWith('typescript/lib')) {
+        throw new CodeError(`${typeName.name} is not supported`, { sourceLocation })
       }
     }
 
-    switch (typeName.fullName) {
-      case arc4StructBaseType.fullName:
+    if (isIntersectionType(tsType)) {
+      // Special handling of struct and mutable object base types which are an intersection of `StructBase` or `MutableObjectBase` and the generic `T` type
+      const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
+      if (parts.some((p) => p.equals(arc4StructBaseType))) {
         return arc4StructBaseType
-      case ClusteredPrototype.fullName:
-        return this.resolveClusteredPrototype(tsType, sourceLocation)
+      } else {
+        return IntersectionPType.fromTypes(parts)
+      }
     }
 
-    const typeArgs = this.tryResolveGenericTypeArgs(tsType, sourceLocation)
-    if (typeArgs?.length) {
-      const gt = typeRegistry.tryResolveGenericPType(typeName, typeArgs)
-      if (gt) return gt
-    } else {
-      const it = typeRegistry.tryResolveInstancePType(typeName)
-      if (it) return it
-    }
-
-    if (typeName.module.startsWith('typescript/lib')) {
-      throw new CodeError(`${typeName.name} is not supported`, { sourceLocation })
-    }
+    invariant(typeName, 'Non builtin type must have a name', sourceLocation)
 
     if (tsType.getConstructSignatures().length) {
       return this.reflectConstructorType(tsType, sourceLocation)
