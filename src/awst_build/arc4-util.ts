@@ -216,7 +216,7 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
   if (ptype instanceof MutableTuplePType)
     return new ARC4TupleType({ types: ptype.items.map((i) => ptypeToArc4EncodedType(i, sourceLocation)) })
 
-  if (ptype instanceof ImmutableObjectPType)
+  if (ptype instanceof ImmutableObjectPType && ptype.abiSafe)
     return new ARC4StructType({
       name: ptype.alias?.name ?? ptype.name,
       module: ptype.module,
@@ -224,7 +224,7 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
       fields: Object.fromEntries(ptype.orderedProperties().map(([p, pt]) => [p, ptypeToArc4EncodedType(pt, sourceLocation)])),
       frozen: true,
     })
-  if (ptype instanceof MutableObjectPType)
+  if (ptype instanceof MutableObjectPType && ptype.abiSafe)
     return new ARC4StructType({
       name: ptype.alias?.name ?? ptype.name,
       module: ptype.module,

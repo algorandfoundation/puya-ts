@@ -1,22 +1,36 @@
-import { type Account, Contract, Txn } from '@algorandfoundation/algorand-typescript'
+import { type Account, Box, BoxMap, Bytes, Contract, emit, GlobalState, LocalState, Txn } from '@algorandfoundation/algorand-typescript'
 import { Uint32 } from '@algorandfoundation/algorand-typescript/arc4'
 
-type MyAccount = {
-  account: Account
-}
-
+type WithAccount = { account: Account }
 type WithId = { id: Uint32 }
 
-type MyAccountWithId = MyAccount & WithId
+type IntersectionType = WithAccount & WithId
 
 export class HelloWorld extends Contract {
-  // FIXME: Use a better error message!
+  // @expect-error Type {account:Account,id:Uint<32>} cannot be used for storage
+  globalVar = GlobalState<IntersectionType>()
+  // @expect-error Type {account:Account,id:Uint<32>} cannot be used for storage
+  localVar = LocalState<IntersectionType>()
+  // @expect-error Type {account:Account,id:Uint<32>} cannot be used for storage
+  boxVar = Box<IntersectionType>({ key: Bytes('box') })
+  // @expect-error Type {account:Account,id:Uint<32>} cannot be used for storage
+  boxMapVar = BoxMap<Account, IntersectionType>({ keyPrefix: Bytes('map') })
   // @expect-error {account:Account,id:Uint<32>} cannot be used as an ABI return type
-  hello(name: string): MyAccountWithId {
-    const account: MyAccountWithId = {
+  cannotUseAsReturn(): IntersectionType {
+    const account: IntersectionType = {
       account: Txn.sender,
       id: new Uint32(13),
     }
     return account
+  }
+  // @expect-error {account:Account,id:Uint<32>} cannot be used as an ABI param type
+  cannotUseAsParameter(param: IntersectionType): void {}
+  cannotBeLogged(): void {
+    const account: IntersectionType = {
+      account: Txn.sender,
+      id: new Uint32(13),
+    }
+    // @expect-error {account:Account,id:Uint<32>} cannot be encoded to an ARC4 type
+    emit(account)
   }
 }

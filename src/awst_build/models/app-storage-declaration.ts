@@ -5,7 +5,16 @@ import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
 import { invariant, utf8ToUint8Array } from '../../util'
 import type { AppStorageType, ContractClassPType } from '../ptypes'
-import { BoxMapPType, BoxPType, GlobalStateType, LocalStateType, TransientType, UnsupportedType } from '../ptypes'
+import {
+  BoxMapPType,
+  BoxPType,
+  GlobalStateType,
+  ImmutableObjectPType,
+  LocalStateType,
+  MutableObjectPType,
+  TransientType,
+  UnsupportedType,
+} from '../ptypes'
 
 export class AppStorageDeclaration {
   readonly memberName: string
@@ -56,7 +65,12 @@ export class AppStorageDeclaration {
   }
 
   get definition(): AppStorageDefinition {
-    if (this.ptype.contentType instanceof UnsupportedType || this.ptype.contentType instanceof TransientType) {
+    if (
+      this.ptype.contentType instanceof UnsupportedType ||
+      this.ptype.contentType instanceof TransientType ||
+      ((this.ptype.contentType instanceof MutableObjectPType || this.ptype.contentType instanceof ImmutableObjectPType) &&
+        !this.ptype.contentType.abiSafe)
+    ) {
       throw new CodeError(`Type ${this.ptype.contentType} cannot be used for storage`, { sourceLocation: this.sourceLocation })
     }
     return nodeFactory.appStorageDefinition({
