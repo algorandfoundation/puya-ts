@@ -34,28 +34,28 @@ export class HelloWorld extends Contract {
     emit(account)
   }
   cannotStoreToAGlobal() {
-    // !expect-error {account:Account,id:Uint<32>} cannot be serialized
+    // @expect-error Type {account:Account,id:Uint<32>} cannot be used for storage
     GlobalState<IntersectionType>({ key: 'globalVar' }).value = {
       account: Txn.sender,
       id: new Uint32(13),
     }
   }
   cannotStoreToALocal() {
-    // !expect-error {account:Account,id:Uint<32>} cannot be serialized
+    // @expect-error Type {account:Account,id:Uint<32>} cannot be used for storage
     LocalState<IntersectionType>({ key: 'localVar' })(Txn.sender).value = {
       account: Txn.sender,
       id: new Uint32(13),
     }
   }
   cannotStoreToABox() {
-    // !expect-error {account:Account,id:Uint<32>} cannot be serialized
+    // @expect-error Type {account:Account,id:Uint<32>} cannot be used for storage
     Box<IntersectionType>({ key: 'box' }).value = {
       account: Txn.sender,
       id: new Uint32(13),
     }
   }
   cannotStoreToABoxMap() {
-    // !expect-error {account:Account,id:Uint<32>} cannot be serialized
+    // @expect-error Type {account:Account,id:Uint<32>} cannot be used for storage
     BoxMap<Account, IntersectionType>({ keyPrefix: 'map' })(Txn.sender).value = {
       account: Txn.sender,
       id: new Uint32(13),

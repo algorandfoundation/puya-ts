@@ -5,7 +5,7 @@ import { BytesConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { CodeError } from '../../../errors'
-import { codeInvariant, invariant } from '../../../util'
+import { canBeUsedForStorage, codeInvariant, invariant } from '../../../util'
 import { AppStorageDeclaration } from '../../models/app-storage-declaration'
 
 import type { ContractClassPType, PType } from '../../ptypes'
@@ -23,6 +23,9 @@ export class LocalStateFunctionBuilder extends FunctionBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const [contentPType] = typeArgs
+    if (!canBeUsedForStorage(contentPType)) {
+      throw new CodeError(`Type ${contentPType} cannot be used for storage`, { sourceLocation })
+    }
     const {
       args: [{ key }],
     } = parseFunctionArgs({
