@@ -4,10 +4,10 @@ import type { Expression } from '../../../../awst/nodes'
 import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
 
-import { CodeError } from '../../../../errors'
-import { canBeUsedForStorage, invariant } from '../../../../util'
+import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
 import { BoxMapPType, BoxPType, bytesPType, stringPType } from '../../../ptypes'
+import { assertCanBeUsedForStorage } from '../../../ptypes/util'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
 import { extractKey } from '../util'
@@ -27,9 +27,7 @@ export class BoxMapFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 2,
       argSpec: (a) => [a.obj({ keyPrefix: a.required(bytesPType, stringPType) })],
     })
-    if (!canBeUsedForStorage(contentPType)) {
-      throw new CodeError(`Type ${contentPType} cannot be used for storage`, { sourceLocation })
-    }
+    assertCanBeUsedForStorage(contentPType, sourceLocation)
 
     const ptype = new BoxMapPType({ content: contentPType, keyType: keySuffixType })
     return new BoxMapExpressionBuilder(extractKey(keyPrefix, wtypes.boxKeyWType, sourceLocation), ptype)

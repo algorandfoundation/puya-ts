@@ -2,8 +2,6 @@ import fs from 'node:fs'
 import { TextDecoder } from 'node:util'
 import pathe from 'pathe'
 import type { SourceLocation } from '../awst/source-location'
-import type { PType } from '../awst_build/ptypes'
-import { ImmutableObjectPType, MutableObjectPType, TransientType, UnsupportedType } from '../awst_build/ptypes'
 import { Constants } from '../constants'
 import { CodeError, InternalError } from '../errors'
 import type { DeliberateAny } from '../typescript-helpers'
@@ -156,16 +154,6 @@ export function instanceOfAny<T extends Array<new (...args: DeliberateAny[]) => 
   ...types: T
 ): x is InstanceType<T[number]> {
   return types.some((t) => x instanceof t)
-}
-
-export function canBeUsedForStorage(ptype: PType): boolean {
-  if (ptype instanceof UnsupportedType || ptype instanceof TransientType) {
-    return false
-  }
-  if (ptype instanceof MutableObjectPType || ptype instanceof ImmutableObjectPType) {
-    return ptype.abiSafe
-  }
-  return true
 }
 
 /**

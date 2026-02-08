@@ -956,7 +956,7 @@ abstract class ObjectPType extends PType {
   }
 
   toString(): string {
-    return `{${this.orderedProperties()
+    return `${this.abiSafe ? '' : '@runtimeOnly'}{${this.orderedProperties()
       .map((p) => `${this.immutable ? 'readonly ' : ''}${p[0]}:${p[1].name}`)
       .join(',')}}`
   }

@@ -5,12 +5,12 @@ import { BytesConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { GlobalStateNumber } from '../../../code-fix/global-state-number'
-import { CodeError } from '../../../errors'
 import { logger } from '../../../logger'
-import { canBeUsedForStorage, codeInvariant, invariant } from '../../../util'
+import { codeInvariant, invariant } from '../../../util'
 import { AppStorageDeclaration } from '../../models/app-storage-declaration'
 import type { ContractClassPType, PType } from '../../ptypes'
 import { boolPType, bytesPType, GlobalStateGeneric, GlobalStateType, numberPType, stringPType } from '../../ptypes'
+import { assertCanBeUsedForStorage } from '../../ptypes/util'
 import { typeRegistry } from '../../type-registry'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 import type { NodeBuilder } from '../index'
@@ -29,9 +29,7 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
     if (ptype.contentType.equals(numberPType)) {
       logger.addCodeFix(new GlobalStateNumber({ sourceLocation }))
     }
-    if (!canBeUsedForStorage(ptype.contentType)) {
-      throw new CodeError(`Type ${ptype.contentType} cannot be used for storage`, { sourceLocation })
-    }
+    assertCanBeUsedForStorage(ptype.contentType, sourceLocation)
     const {
       args: [{ initialValue, key }],
     } = parseFunctionArgs({

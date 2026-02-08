@@ -5,11 +5,12 @@ import { BytesConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { wtypes } from '../../../awst/wtypes'
 import { CodeError } from '../../../errors'
-import { canBeUsedForStorage, codeInvariant, invariant } from '../../../util'
+import { codeInvariant, invariant } from '../../../util'
 import { AppStorageDeclaration } from '../../models/app-storage-declaration'
 
 import type { ContractClassPType, PType } from '../../ptypes'
 import { accountPType, boolPType, bytesPType, LocalStateType, stringPType } from '../../ptypes'
+import { assertCanBeUsedForStorage } from '../../ptypes/util'
 import { instanceEb } from '../../type-registry'
 import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
@@ -23,9 +24,7 @@ export class LocalStateFunctionBuilder extends FunctionBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const [contentPType] = typeArgs
-    if (!canBeUsedForStorage(contentPType)) {
-      throw new CodeError(`Type ${contentPType} cannot be used for storage`, { sourceLocation })
-    }
+    assertCanBeUsedForStorage(contentPType, sourceLocation)
     const {
       args: [{ key }],
     } = parseFunctionArgs({

@@ -3,10 +3,10 @@ import { nodeFactory } from '../../../../awst/node-factory'
 import type { BoxValueExpression, Expression } from '../../../../awst/nodes'
 import type { SourceLocation } from '../../../../awst/source-location'
 import { wtypes } from '../../../../awst/wtypes'
-import { CodeError } from '../../../../errors'
-import { canBeUsedForStorage, invariant } from '../../../../util'
+import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
 import { boolPType, BoxPType, bytesPType, ReadonlyTuplePType, stringPType, uint64PType, voidPType } from '../../../ptypes'
+import { assertCanBeUsedForStorage } from '../../../ptypes/util'
 import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
@@ -26,9 +26,7 @@ export class BoxFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 1,
       argSpec: (a) => [a.obj({ key: a.required(bytesPType, stringPType) })],
     })
-    if (!canBeUsedForStorage(contentPType)) {
-      throw new CodeError(`Type ${contentPType} cannot be used for storage`, { sourceLocation })
-    }
+    assertCanBeUsedForStorage(contentPType, sourceLocation)
 
     const ptype = new BoxPType({ content: contentPType })
     return new BoxExpressionBuilder(extractKey(key, wtypes.boxKeyWType, sourceLocation), ptype)
