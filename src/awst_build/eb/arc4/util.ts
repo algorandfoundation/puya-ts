@@ -8,7 +8,7 @@ import { Constants } from '../../../constants'
 import { CodeError } from '../../../errors'
 import { logger } from '../../../logger'
 import { codeInvariant, hexToUint8Array } from '../../../util'
-import { arc4ConfigFromType, ptypeToArc4EncodedType } from '../../arc4-util'
+import { arc4ConfigFromType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
 import { BytesPType, bytesPType, FunctionPType, stringPType, uint64PType } from '../../ptypes'
 import {
@@ -250,12 +250,10 @@ export class SizeOfFunctionBuilder extends FunctionBuilder {
       typeArgs,
       genericTypeArgs: 1,
       funcName: this.typeDescription,
-      argSpec: (a) => [],
+      argSpec: () => [],
       callLocation: sourceLocation,
     })
 
-    const arc4Type = ptypeToArc4EncodedType(typeToEncode, sourceLocation)
-
-    return instanceEb(nodeFactory.sizeOf({ sizeWtype: arc4Type.wtype, wtype: wtypes.uint64WType, sourceLocation }), uint64PType)
+    return instanceEb(nodeFactory.sizeOf({ sizeWtype: typeToEncode.wtypeOrThrow, wtype: wtypes.uint64WType, sourceLocation }), uint64PType)
   }
 }

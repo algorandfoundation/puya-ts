@@ -52,7 +52,7 @@ export class Arc4EncodeDecode extends Contract {
     assert(encodeArc4<bytes<12>[]>([g]) === new DynamicArray(new StaticBytes(g)).bytes)
 
     assert(sizeOf<uint64>() === 8)
-    assert(sizeOf<boolean>() === 1)
+    assert(sizeOf<boolean>() === 8)
     assert(sizeOf<Uint<512>>() === 64)
     assert(sizeOf<[uint64, uint64, boolean]>() === 17)
     assert(sizeOf<[uint64, uint64, boolean, boolean]>() === 17)
