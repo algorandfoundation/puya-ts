@@ -84,29 +84,6 @@ export function buildArc4MethodConstant(functionType: FunctionPType, arc4Config:
 }
 
 /**
- * Is the given type an ARC4 encoded type, or can it be encoded to one
- * @param ptype The type to check
- */
-export function isArc4EncodableType(ptype: PType): boolean {
-  if (ptype instanceof ARC4EncodedType) return true
-  if (ptype.equals(boolPType)) return true
-  if (ptype.equals(uint64PType)) return true
-  if (ptype.equals(biguintPType)) return true
-  if (ptype instanceof BytesPType) return true
-  if (ptype.equals(stringPType)) return true
-  if (ptype.equals(assetPType)) return true
-  if (ptype.equals(applicationPType)) return true
-  if (ptype.equals(accountPType)) return true
-  if (ptype instanceof ReadonlyTuplePType) return ptype.items.every((i) => isArc4EncodableType(i))
-  if (ptype instanceof MutableTuplePType) return ptype.items.every((i) => isArc4EncodableType(i))
-  if (ptype instanceof ImmutableObjectPType) return ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
-  if (ptype instanceof MutableObjectPType) return ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
-  if (ptype instanceof ArrayPType || ptype instanceof FixedArrayPType || ptype instanceof ReadonlyArrayPType)
-    return isArc4EncodableType(ptype.elementType)
-  return false
-}
-
-/**
  * For a given type, return the arc4 encoded version of that type
  * @param ptype The type to be encoded
  * @param sourceLocation The source location triggering the conversion
