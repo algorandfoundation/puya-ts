@@ -24,8 +24,7 @@ export interface ApplicationCallComposeFields extends itxn.ApplicationCallFields
 }
 
 export interface AnyTransactionComposeFields
-  extends
-    itxn.PaymentFields,
+  extends itxn.PaymentFields,
     itxn.KeyRegistrationFields,
     itxn.AssetConfigFields,
     itxn.AssetTransferFields,
