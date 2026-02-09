@@ -1,16 +1,16 @@
 import type { AlgorandClient } from '@algorandfoundation/algokit-utils'
 import { Config, microAlgos } from '@algorandfoundation/algokit-utils'
+import type { Arc56Contract } from '@algorandfoundation/algokit-utils/abi'
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing'
+import { OnApplicationComplete } from '@algorandfoundation/algokit-utils/transact'
 import type { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount'
 import type { AppState, SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app'
-import type { Arc56Contract } from '@algorandfoundation/algokit-utils/types/app-arc56'
 import type { AppClient } from '@algorandfoundation/algokit-utils/types/app-client'
 import type { AppFactory, AppFactoryDeployParams } from '@algorandfoundation/algokit-utils/types/app-factory'
-import type { AssetCreateParams } from '@algorandfoundation/algokit-utils/types/composer'
+import type { AppCallParams, AssetCreateParams } from '@algorandfoundation/algokit-utils/types/composer'
 import { nullLogger } from '@algorandfoundation/algokit-utils/types/logging'
 import type { AlgorandFixture } from '@algorandfoundation/algokit-utils/types/testing'
 import type { Use } from '@vitest/runner/types'
-import { OnApplicationComplete } from 'algosdk'
 import fs from 'fs'
 import type { beforeEach, ExpectStatic } from 'vitest'
 import { beforeAll, test } from 'vitest'
@@ -58,21 +58,20 @@ function createLazyCompiler(
     },
   }
 }
-type AlgoClientAppCallParams = Parameters<AlgorandClient['send']['appCall']>[0]
 
 type ProgramInvokeOptions = {
   appId?: bigint
-  sender?: AlgoClientAppCallParams['sender']
+  sender?: AppCallParams['sender']
   approvalProgram?: Uint8Array
 
   clearStateProgram?: Uint8Array
   onComplete?:
-    | OnApplicationComplete.NoOpOC
-    | OnApplicationComplete.OptInOC
-    | OnApplicationComplete.CloseOutOC
-    | OnApplicationComplete.ClearStateOC
-    | OnApplicationComplete.UpdateApplicationOC
-    | OnApplicationComplete.DeleteApplicationOC
+    | OnApplicationComplete.NoOp
+    | OnApplicationComplete.OptIn
+    | OnApplicationComplete.CloseOut
+    | OnApplicationComplete.ClearState
+    | OnApplicationComplete.UpdateApplication
+    | OnApplicationComplete.DeleteApplication
   schema?: {
     /** The number of integers saved in global state. */
     globalInts?: number
@@ -83,7 +82,7 @@ type ProgramInvokeOptions = {
     /** The number of byte slices saved in local state. */
     localByteSlices?: number
   }
-} & Omit<AlgoClientAppCallParams, 'onComplete' | 'sender' | 'appId'>
+} & Omit<AppCallParams, 'onComplete' | 'sender' | 'appId'>
 
 type ProgramInvoker = {
   globalState(appId: bigint): Promise<AppState>
@@ -147,18 +146,41 @@ export function createBaseTestFixture<TContracts extends string = ''>(options: {
         async send(options?: ProgramInvokeOptions) {
           const common = {
             ...options,
+            schema: undefined,
             appId: options?.appId ?? 0n,
-            onComplete: options?.onComplete ?? OnApplicationComplete.NoOpOC,
             sender: options?.sender ?? localnet.context.testAccount.addr,
           }
-          if (common.appId === 0n || common.onComplete === OnApplicationComplete.UpdateApplicationOC) {
-            common.approvalProgram = approvalProgram
-            common.clearStateProgram = clearStateProgram
-          }
           const group = localnet.algorand.send.newGroup()
-          group.addAppCall(common as DeliberateAny)
 
-          // TODO: Add simulate call to gather trace
+          if (common.appId === 0n) {
+            invariant(common.onComplete !== OnApplicationComplete.UpdateApplication, 'Cannot update appId 0')
+            invariant(common.onComplete !== OnApplicationComplete.ClearState, 'Cannot clear state of appId 0')
+            const { appId, ...rest } = common
+            group.addAppCreate({
+              ...rest,
+              onComplete: common?.onComplete ?? OnApplicationComplete.NoOp,
+              approvalProgram,
+              clearStateProgram,
+              schema: {
+                localInts: options?.schema?.localInts ?? 0,
+                localByteSlices: options?.schema?.localByteSlices ?? 0,
+                globalInts: options?.schema?.globalInts ?? 0,
+                globalByteSlices: options?.schema?.globalByteSlices ?? 0,
+              },
+            })
+          } else if (common.onComplete === OnApplicationComplete.UpdateApplication) {
+            group.addAppUpdate({
+              ...common,
+              onComplete: OnApplicationComplete.UpdateApplication,
+              approvalProgram,
+              clearStateProgram,
+            })
+          } else {
+            group.addAppCall({
+              ...common,
+              onComplete: common?.onComplete ?? OnApplicationComplete.NoOp,
+            })
+          }
 
           const result = await group.send()
           return {

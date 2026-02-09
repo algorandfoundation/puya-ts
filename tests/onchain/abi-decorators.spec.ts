@@ -1,4 +1,4 @@
-import { OnApplicationComplete } from 'algosdk'
+import { OnApplicationComplete } from '@algorandfoundation/algokit-utils/transact'
 import { describe } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
@@ -30,14 +30,14 @@ describe('abi-decorators', () => {
     expect(retVal2).toBe(200n * 100n)
   })
 
-  test('overrided methods work as expected', async ({ appClientBaseAbi, appClientSubAbi, appClientSubAbi2, expect }) => {
-    expect((await appClientBaseAbi.send.call({ method: 'someMethod', onComplete: OnApplicationComplete.OptInOC })).return).toBe(
+  test('overridden methods work as expected', async ({ appClientBaseAbi, appClientSubAbi, appClientSubAbi2, expect }) => {
+    expect((await appClientBaseAbi.send.call({ method: 'someMethod', onComplete: OnApplicationComplete.OptIn })).return).toBe(
       'base-abi:optin',
     )
-    expect((await appClientSubAbi.send.call({ method: 'someMethod', onComplete: OnApplicationComplete.OptInOC })).return).toBe(
+    expect((await appClientSubAbi.send.call({ method: 'someMethod', onComplete: OnApplicationComplete.OptIn })).return).toBe(
       'sub-abi:optin',
     )
-    expect((await appClientSubAbi2.send.call({ method: 'someMethod', onComplete: OnApplicationComplete.NoOpOC })).return).toBe(
+    expect((await appClientSubAbi2.send.call({ method: 'someMethod', onComplete: OnApplicationComplete.NoOp })).return).toBe(
       'sub-abi-2:noop',
     )
   })

@@ -1,4 +1,4 @@
-import { Address } from 'algosdk'
+import { Address } from '@algorandfoundation/algokit-utils'
 import { describe, expect } from 'vitest'
 import { hexToUint8Array } from '../../src/util'
 import { createArc4TestFixture } from './util/test-fixture'

@@ -10,7 +10,7 @@ describe('accounts', () => {
 
     const result = await appClient.send.call({
       method: 'getAccountInfo',
-      args: [testAccount.addr.publicKey, asset],
+      args: [testAccount.addr, asset],
       extraFee: microAlgo(2000),
     })
 
