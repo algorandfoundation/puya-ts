@@ -127,7 +127,7 @@ contract ItxnDemoContract
     pay: inner_transaction_fields_pay = create_inner_transaction(Fee=0, TypeEnum=1, Receiver=checked_maybe(app_params_get<AppAddress>(appId), comment=application exists), Amount=1000)
     app: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApplicationID=appId, ApplicationArgs=#[Method(name="receivePay",args=(uint64,group_transaction_pay,string),result=arc4.tuple<uint64,uint64,string>,resource_encoding="value"), 0x0000000000000001, reinterpret_cast<bytes>("hello")])
     #[_, appRes]: readonly [inner_transaction_pay, inner_transaction_appl] = submit_txn(pay, app)
-    returnValue: arc4.tuple<uint64,uint64,string> = ARC4_DECODE(reinterpret_cast<arc4.tuple<arc4.uint64,arc4.uint64,arc4.dynamic_array<arc4.byte>>>(checked_maybe(#[extract<4, 0>(($0 = appRes.LastLog)), extract<0, 4>($0) == 0x151f7c75], comment=Bytes has valid prefix)))
+    returnValue: arc4.tuple<uint64,uint64,string> = ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($0 = appRes.LastLog)), extract<0, 4>($0) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.tuple<uint64,uint64,string>, validate=false)
     assert(&&(&&(&&(3 == 3, returnValue.0 == 1), returnValue.1 == 1000), returnValue.2 == "hello"), comment=assert target is match for conditions)
   }
   

@@ -8,7 +8,7 @@ import { Constants } from '../../../constants'
 import { CodeError } from '../../../errors'
 import { logger } from '../../../logger'
 import { codeInvariant, hexToUint8Array } from '../../../util'
-import { arc4ConfigFromType, isArc4EncodableType, ptypeToArc4EncodedType } from '../../arc4-util'
+import { arc4ConfigFromType, ptypeToArc4EncodedType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
 import { BytesPType, bytesPType, FunctionPType, stringPType, uint64PType } from '../../ptypes'
 import {
@@ -123,19 +123,12 @@ export class DecodeArc4FunctionBuilder extends FunctionBuilder {
       sourceLocation,
     )
 
-    codeInvariant(isArc4EncodableType(ptype), `Cannot determine ARC4 encoding for ${ptype}`, sourceLocation)
-
-    const arc4Encoded = ptypeToArc4EncodedType(ptype, sourceLocation)
-
     const prefixBytes = getPrefixValue(prefixType)
 
     return instanceEb(
-      nodeFactory.aRC4Decode({
-        value: nodeFactory.reinterpretCast({
-          expr: validatePrefix(theBytes, prefixBytes, sourceLocation),
-          sourceLocation,
-          wtype: arc4Encoded.wtype,
-        }),
+      nodeFactory.aRC4FromBytes({
+        value: validatePrefix(theBytes, prefixBytes, sourceLocation),
+        validate: false,
         wtype: ptype.wtypeOrThrow,
         sourceLocation,
       }),
