@@ -10,12 +10,11 @@ import { AppStorageDeclaration } from '../../models/app-storage-declaration'
 
 import type { ContractClassPType, PType } from '../../ptypes'
 import { accountPType, boolPType, bytesPType, LocalStateType, stringPType } from '../../ptypes'
-import { assertCanBeUsedForStorage } from '../../ptypes/util'
 import { instanceEb } from '../../type-registry'
 import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { VoidExpressionBuilder } from '../void-expression-builder'
-import { extractKey } from './util'
+import { assertCanBeUsedForStorage, extractKey } from './util'
 
 export class LocalStateFunctionBuilder extends FunctionBuilder {
   constructor(sourceLocation: SourceLocation) {

@@ -6,11 +6,10 @@ import { wtypes } from '../../../../awst/wtypes'
 import { invariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
 import { boolPType, BoxPType, bytesPType, ReadonlyTuplePType, stringPType, uint64PType, voidPType } from '../../../ptypes'
-import { assertCanBeUsedForStorage } from '../../../ptypes/util'
 import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
-import { extractKey } from '../util'
+import { assertCanBeUsedForStorage, extractKey } from '../util'
 import { boxExists, boxLength, BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
 
 export class BoxFunctionBuilder extends FunctionBuilder {

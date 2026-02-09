@@ -10,14 +10,13 @@ import { codeInvariant, invariant } from '../../../util'
 import { AppStorageDeclaration } from '../../models/app-storage-declaration'
 import type { ContractClassPType, PType } from '../../ptypes'
 import { boolPType, bytesPType, GlobalStateGeneric, GlobalStateType, numberPType, stringPType } from '../../ptypes'
-import { assertCanBeUsedForStorage } from '../../ptypes/util'
 import { typeRegistry } from '../../type-registry'
 import { BooleanExpressionBuilder } from '../boolean-expression-builder'
 import type { NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { VoidExpressionBuilder } from '../void-expression-builder'
-import { extractKey } from './util'
+import { assertCanBeUsedForStorage, extractKey } from './util'
 
 export class GlobalStateFunctionBuilder extends FunctionBuilder {
   constructor(sourceLocation: SourceLocation) {
