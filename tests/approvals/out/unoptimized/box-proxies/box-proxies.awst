@@ -387,7 +387,7 @@ contract Arc4BoxContract
     assert(Box["boxD"].value.slice(0, -1) == ARC4_DECODE(dynamicBytes).slice(0, -1))
     assert(Box["boxD"].value.slice(0, 5) == ARC4_DECODE(dynamicBytes).slice(0, 5))
     assert(Box["boxD"].value.slice(0, 2) == ARC4_DECODE(dynamicBytes).slice(0, 2))
-    assert(checked_maybe(box_len("boxLarge"), comment=Box must have value) == size_of(LargeStruct))
+    assert(checked_maybe(box_len("boxLarge"), comment=Box must have value) == size_of(tests/approvals/box-proxies.algo.ts::LargeStruct))
   }
   
   checkKeys(): void
@@ -530,7 +530,7 @@ contract Arc4BoxContract
   constructor(): void
   {
     super.constructor()
-    assert(size_of(arc4.static_array<arc4.uint64,513>) > 4096, comment=expected ManyInts to exceed max bytes size)
+    assert(size_of(arc4.static_array<uint64,513>) > 4096, comment=expected ManyInts to exceed max bytes size)
   }
   
   BaseContract::constructor(): void

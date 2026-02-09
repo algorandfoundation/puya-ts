@@ -37,15 +37,15 @@ contract Arc4EncodeDecode
     assert(ARC4_ENCODE(new arc4.dynamic_array<string>(e), wtype=bytes) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.dynamic_array<arc4.byte>>(ARC4_ENCODE(e, wtype=arc4.dynamic_array<arc4.byte>))))
     assert(ARC4_ENCODE(new arc4.dynamic_array<arc4.static_array<arc4.byte,32>>(f), wtype=bytes) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.static_array<arc4.byte,32>>(f)))
     assert(ARC4_ENCODE(new arc4.dynamic_array<bytes[12]>(g), wtype=bytes) == reinterpret_cast<bytes>(new arc4.dynamic_array<arc4.static_array<arc4.byte,12>>(ARC4_ENCODE(reinterpret_cast<bytes>(g), wtype=arc4.static_array<arc4.byte,12>))))
-    assert(size_of(arc4.uint64) == 8)
-    assert(size_of(arc4.bool) == 1)
+    assert(size_of(uint64) == 8)
+    assert(size_of(bool) == 8)
     assert(size_of(arc4.uint512) == 64)
-    assert(size_of(arc4.tuple<arc4.uint64,arc4.uint64,arc4.bool>) == 17)
-    assert(size_of(arc4.tuple<arc4.uint64,arc4.uint64,arc4.bool,arc4.bool>) == 17)
-    assert(size_of(arc4.tuple<arc4.static_array<arc4.bool,10>,arc4.bool,arc4.bool>) == 3)
-    assert(size_of(arc4.tuple<arc4.tuple<arc4.bool,arc4.bool,arc4.bool,arc4.bool,arc4.bool,arc4.bool,arc4.bool,arc4.bool,arc4.bool,arc4.bool>,arc4.bool,arc4.bool>) == 3)
-    assert(size_of(arc4.static_array<arc4.byte,12>) == 12)
-    assert(size_of(StaticMutableObject) == 20)
+    assert(size_of(arc4.tuple<uint64,uint64,bool>) == 17)
+    assert(size_of(arc4.tuple<uint64,uint64,bool,bool>) == 17)
+    assert(size_of(arc4.tuple<arc4.static_array<arc4.bool,10>,bool,bool>) == 3)
+    assert(size_of(arc4.tuple<arc4.tuple<bool,bool,bool,bool,bool,bool,bool,bool,bool,bool>,bool,bool>) == 3)
+    assert(size_of(bytes[12]) == 12)
+    assert(size_of(tests/approvals/arc4-encode-decode.algo.ts::StaticMutableObject) == 20)
   }
   
   testDecoding(a: uint64, a_bytes: bytes, b: bool, b_bytes: bytes, c: biguint, c_bytes: bytes, d: string, d_bytes: bytes, e: tests/approvals/arc4-encode-decode.algo.ts::TestObj, e_bytes: bytes, f: arc4.static_array<arc4.byte,32>, f_bytes: bytes, g: bytes[12], g_bytes: bytes): void
