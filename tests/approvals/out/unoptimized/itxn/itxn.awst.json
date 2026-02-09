@@ -9877,7 +9877,7 @@
                 "name": "returnValue"
               },
               "value": {
-                "_type": "ARC4Decode",
+                "_type": "ARC4FromBytes",
                 "source_location": {
                   "file": "tests/approvals/itxn.algo.ts",
                   "line": 220,
@@ -9908,7 +9908,7 @@
                   "source_location": null
                 },
                 "value": {
-                  "_type": "ReinterpretCast",
+                  "_type": "CheckedMaybe",
                   "source_location": {
                     "file": "tests/approvals/itxn.algo.ts",
                     "line": 220,
@@ -9916,36 +9916,8 @@
                     "column": 24,
                     "end_column": 83
                   },
-                  "wtype": {
-                    "_type": "ARC4Tuple",
-                    "arc4_alias": null,
-                    "types": [
-                      {
-                        "_type": "ARC4UIntN",
-                        "arc4_alias": null,
-                        "n": 64
-                      },
-                      {
-                        "_type": "ARC4UIntN",
-                        "arc4_alias": null,
-                        "n": 64
-                      },
-                      {
-                        "_type": "ARC4DynamicArray",
-                        "immutable": true,
-                        "arc4_alias": "string",
-                        "element_type": {
-                          "_type": "ARC4UIntN",
-                          "arc4_alias": "byte",
-                          "n": 8
-                        },
-                        "source_location": null
-                      }
-                    ],
-                    "source_location": null
-                  },
                   "expr": {
-                    "_type": "CheckedMaybe",
+                    "_type": "TupleExpression",
                     "source_location": {
                       "file": "tests/approvals/itxn.algo.ts",
                       "line": 220,
@@ -9953,32 +9925,97 @@
                       "column": 24,
                       "end_column": 83
                     },
-                    "expr": {
-                      "_type": "TupleExpression",
-                      "source_location": {
-                        "file": "tests/approvals/itxn.algo.ts",
-                        "line": 220,
-                        "end_line": 220,
-                        "column": 24,
-                        "end_column": 83
-                      },
-                      "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "types": [
+                    "wtype": {
+                      "_type": "WTuple",
+                      "name": "tuple",
+                      "types": [
+                        {
+                          "_type": "BytesWType",
+                          "length": null
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "bool",
+                          "immutable": true
+                        }
+                      ]
+                    },
+                    "items": [
+                      {
+                        "_type": "IntrinsicCall",
+                        "source_location": {
+                          "file": "tests/approvals/itxn.algo.ts",
+                          "line": 220,
+                          "end_line": 220,
+                          "column": 24,
+                          "end_column": 83
+                        },
+                        "wtype": {
+                          "_type": "BytesWType",
+                          "length": null
+                        },
+                        "op_code": "extract",
+                        "immediates": [
+                          4,
+                          0
+                        ],
+                        "stack_args": [
                           {
-                            "_type": "BytesWType",
-                            "length": null
-                          },
-                          {
-                            "_type": "WType",
-                            "name": "bool",
-                            "immutable": true
+                            "_type": "SingleEvaluation",
+                            "source_location": {
+                              "file": "tests/approvals/itxn.algo.ts",
+                              "line": 220,
+                              "end_line": 220,
+                              "column": 61,
+                              "end_column": 75
+                            },
+                            "source": {
+                              "_type": "InnerTransactionField",
+                              "source_location": {
+                                "file": "tests/approvals/itxn.algo.ts",
+                                "line": 220,
+                                "end_line": 220,
+                                "column": 61,
+                                "end_column": 75
+                              },
+                              "wtype": {
+                                "_type": "BytesWType",
+                                "length": null
+                              },
+                              "itxn": {
+                                "_type": "VarExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/itxn.algo.ts",
+                                  "line": 220,
+                                  "end_line": 220,
+                                  "column": 61,
+                                  "end_column": 67
+                                },
+                                "wtype": {
+                                  "_type": "WInnerTransaction",
+                                  "name": "inner_transaction_appl",
+                                  "immutable": true,
+                                  "transaction_type": 6
+                                },
+                                "name": "appRes"
+                              },
+                              "field": "LastLog",
+                              "array_index": null
+                            },
+                            "_id": "0"
                           }
                         ]
                       },
-                      "items": [
-                        {
+                      {
+                        "_type": "BytesComparisonExpression",
+                        "source_location": {
+                          "file": "tests/approvals/itxn.algo.ts",
+                          "line": 220,
+                          "end_line": 220,
+                          "column": 24,
+                          "end_column": 83
+                        },
+                        "lhs": {
                           "_type": "IntrinsicCall",
                           "source_location": {
                             "file": "tests/approvals/itxn.algo.ts",
@@ -9993,8 +10030,8 @@
                           },
                           "op_code": "extract",
                           "immediates": [
-                            4,
-                            0
+                            0,
+                            4
                           ],
                           "stack_args": [
                             {
@@ -10043,104 +10080,29 @@
                             }
                           ]
                         },
-                        {
-                          "_type": "BytesComparisonExpression",
+                        "operator": "==",
+                        "rhs": {
+                          "_type": "BytesConstant",
                           "source_location": {
                             "file": "tests/approvals/itxn.algo.ts",
                             "line": 220,
                             "end_line": 220,
-                            "column": 24,
-                            "end_column": 83
+                            "column": 77,
+                            "end_column": 82
                           },
-                          "lhs": {
-                            "_type": "IntrinsicCall",
-                            "source_location": {
-                              "file": "tests/approvals/itxn.algo.ts",
-                              "line": 220,
-                              "end_line": 220,
-                              "column": 24,
-                              "end_column": 83
-                            },
-                            "wtype": {
-                              "_type": "BytesWType",
-                              "length": null
-                            },
-                            "op_code": "extract",
-                            "immediates": [
-                              0,
-                              4
-                            ],
-                            "stack_args": [
-                              {
-                                "_type": "SingleEvaluation",
-                                "source_location": {
-                                  "file": "tests/approvals/itxn.algo.ts",
-                                  "line": 220,
-                                  "end_line": 220,
-                                  "column": 61,
-                                  "end_column": 75
-                                },
-                                "source": {
-                                  "_type": "InnerTransactionField",
-                                  "source_location": {
-                                    "file": "tests/approvals/itxn.algo.ts",
-                                    "line": 220,
-                                    "end_line": 220,
-                                    "column": 61,
-                                    "end_column": 75
-                                  },
-                                  "wtype": {
-                                    "_type": "BytesWType",
-                                    "length": null
-                                  },
-                                  "itxn": {
-                                    "_type": "VarExpression",
-                                    "source_location": {
-                                      "file": "tests/approvals/itxn.algo.ts",
-                                      "line": 220,
-                                      "end_line": 220,
-                                      "column": 61,
-                                      "end_column": 67
-                                    },
-                                    "wtype": {
-                                      "_type": "WInnerTransaction",
-                                      "name": "inner_transaction_appl",
-                                      "immutable": true,
-                                      "transaction_type": 6
-                                    },
-                                    "name": "appRes"
-                                  },
-                                  "field": "LastLog",
-                                  "array_index": null
-                                },
-                                "_id": "0"
-                              }
-                            ]
+                          "wtype": {
+                            "_type": "BytesWType",
+                            "length": null
                           },
-                          "operator": "==",
-                          "rhs": {
-                            "_type": "BytesConstant",
-                            "source_location": {
-                              "file": "tests/approvals/itxn.algo.ts",
-                              "line": 220,
-                              "end_line": 220,
-                              "column": 77,
-                              "end_column": 82
-                            },
-                            "wtype": {
-                              "_type": "BytesWType",
-                              "length": null
-                            },
-                            "value": "6(4+c",
-                            "encoding": "unknown"
-                          }
+                          "value": "6(4+c",
+                          "encoding": "unknown"
                         }
-                      ]
-                    },
-                    "comment": "Bytes has valid prefix"
-                  }
+                      }
+                    ]
+                  },
+                  "comment": "Bytes has valid prefix"
                 },
-                "error_message": null
+                "validate": false
               }
             },
             {

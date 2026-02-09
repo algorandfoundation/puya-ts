@@ -98,8 +98,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%current_tail_offset%1#0: uint64 = (+ 10u aggregate%data_length%1#0)
         let aggregate%concat%1#0: bytes = (concat aggregate%head%3#0 tmp%6#3)
         let aggregate%as_Encoded(uint64,(len+uint8[]))%1#0: Encoded(uint64,(len+uint8[])) = aggregate%concat%1#0
-        let tmp%18#2: Encoded(uint64,(len+uint8[])) = aggregate%as_Encoded(uint64,(len+uint8[]))%1#0
-        let tmp%19#2: bool = (== tmp%15#2 tmp%18#2)
+        let tmp%18#0: Encoded(uint64,(len+uint8[])) = aggregate%as_Encoded(uint64,(len+uint8[]))%1#0
+        let tmp%19#2: bool = (== tmp%15#2 tmp%18#0)
         (assert tmp%19#2)
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob a#1)
         let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
@@ -125,18 +125,18 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%lengths_equal%0#0: bool = (== aggregate%length%1#0 12u)
         (assert aggregate%lengths_equal%0#0) // invalid size
         let aggregate%as_Encoded(uint8[12])%1#0: Encoded(uint8[12]) = g#1
-        let tmp%25#2: Encoded(uint8[12]) = aggregate%as_Encoded(uint8[12])%1#0
+        let tmp%25#0: Encoded(uint8[12]) = aggregate%as_Encoded(uint8[12])%1#0
         let aggregate%val_as_bytes%3#0: bytes[8] = (itob a#1)
         let aggregate%as_Encoded(uint64)%3#0: Encoded(uint64) = aggregate%val_as_bytes%3#0
         let aggregate%head%8#0: bytes = (concat 0x aggregate%as_Encoded(uint64)%3#0)
-        let aggregate%head%9#0: bytes = (concat aggregate%head%8#0 tmp%25#2)
+        let aggregate%head%9#0: bytes = (concat aggregate%head%8#0 tmp%25#0)
         let aggregate%as_Encoded(uint64,uint8[12])%1#0: Encoded(uint64,uint8[12]) = aggregate%head%9#0
         let tmp%26#1: Encoded(uint64,uint8[12]) = aggregate%as_Encoded(uint64,uint8[12])%1#0
         let tmp%27#1: bool = (== tmp%24#2 tmp%26#1)
         (assert tmp%27#1)
         let aggregate%as_Encoded(uint8[12])%2#0: Encoded(uint8[12]) = g#1
         let tmp%29#1: Encoded(uint8[12]) = aggregate%as_Encoded(uint8[12])%2#0
-        let tmp%31#1: bool = (== tmp%29#1 tmp%25#2)
+        let tmp%31#1: bool = (== tmp%29#1 tmp%25#0)
         (assert tmp%31#1)
         let aggregate%val_as_bytes%4#0: bytes[8] = (itob a#1)
         let aggregate%as_Encoded(uint64)%4#0: Encoded(uint64) = aggregate%val_as_bytes%4#0
@@ -206,7 +206,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%current_tail_offset%5#0: uint64 = (+ 2u aggregate%data_length%5#0)
         let aggregate%concat%5#0: bytes = (concat aggregate%head%18#0 aggregate%as_Encoded(len+utf8[])%0#0)
         let aggregate%as_Encoded((len+utf8[]))%0#0: Encoded((len+utf8[])) = aggregate%concat%5#0
-        let tmp%44#1: Encoded((len+utf8[])) = aggregate%as_Encoded((len+utf8[]))%0#0
+        let tmp%44#0: Encoded((len+utf8[])) = aggregate%as_Encoded((len+utf8[]))%0#0
         let aggregate%as_bytes%9#0: bytes[8] = (itob 2u)
         let aggregate%offset_as_uint16%6#0: bytes = ((extract 6 2) aggregate%as_bytes%9#0)
         let aggregate%head%19#0: bytes = (concat 0x aggregate%offset_as_uint16%6#0)
@@ -215,7 +215,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%concat%6#0: bytes = (concat aggregate%head%19#0 tmp%8#3)
         let aggregate%as_Encoded((len+utf8[])[1])%0#0: Encoded((len+utf8[])[1]) = aggregate%concat%6#0
         let encoded_array%4#0: Encoded((len+utf8[])[1]) = aggregate%as_Encoded((len+utf8[])[1])%0#0
-        let tmp%46#1: bool = (== tmp%44#1 encoded_array%4#0)
+        let tmp%46#1: bool = (== tmp%44#0 encoded_array%4#0)
         (assert tmp%46#1)
         let aggregate%head%20#0: bytes = (concat 0x f#1)
         let aggregate%as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = aggregate%head%20#0
@@ -229,7 +229,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%head%22#0: bytes = (concat 0x aggregate%as_Encoded(uint8[12])%3#0)
         let aggregate%as_Encoded(uint8[12])%4#0: Encoded(uint8[12]) = aggregate%head%22#0
         let tmp%49#1: Encoded(uint8[12]) = aggregate%as_Encoded(uint8[12])%4#0
-        let aggregate%head%23#0: bytes = (concat 0x tmp%25#2)
+        let aggregate%head%23#0: bytes = (concat 0x tmp%25#0)
         let aggregate%as_Encoded(uint8[12][1])%0#0: Encoded(uint8[12][1]) = aggregate%head%23#0
         let encoded_array%6#0: Encoded(uint8[12][1]) = aggregate%as_Encoded(uint8[12][1])%0#0
         let tmp%51#1: bool = (== tmp%49#1 encoded_array%6#0)
@@ -259,8 +259,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%head%27#0: bytes = (concat aggregate%len_u16%3#0 tmp%2#3)
         let aggregate%as_Encoded(len+bool1[])%1#0: Encoded(len+bool1[]) = aggregate%head%27#0
         let encoded_array%10#0: Encoded(len+bool1[]) = aggregate%as_Encoded(len+bool1[])%1#0
-        let tmp%55#1: bool = (== encoded_array%9#0 encoded_array%10#0)
-        (assert tmp%55#1)
+        let tmp%55#0: bool = (== encoded_array%9#0 encoded_array%10#0)
+        (assert tmp%55#0)
         let aggregate%as_bytes%14#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%4#0: bytes = ((extract 6 2) aggregate%as_bytes%14#0)
         let aggregate%value_len%2#0: uint64 = (len c#1)
@@ -304,8 +304,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%concat%8#0: bytes = (concat aggregate%head%31#0 tmp%6#3)
         let aggregate%as_Encoded(len+(len+uint8[])[])%1#0: Encoded(len+(len+uint8[])[]) = aggregate%concat%8#0
         let encoded_array%14#0: Encoded(len+(len+uint8[])[]) = aggregate%as_Encoded(len+(len+uint8[])[])%1#0
-        let tmp%59#1: bool = (== encoded_array%13#0 encoded_array%14#0)
-        (assert tmp%59#1)
+        let tmp%59#0: bool = (== encoded_array%13#0 encoded_array%14#0)
+        (assert tmp%59#0)
         let aggregate%as_bytes%21#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%8#0: bytes = ((extract 6 2) aggregate%as_bytes%21#0)
         let aggregate%length%5#0: uint64 = (len e#1)
@@ -331,8 +331,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%concat%10#0: bytes = (concat aggregate%head%33#0 tmp%8#3)
         let aggregate%as_Encoded(len+(len+utf8[])[])%1#0: Encoded(len+(len+utf8[])[]) = aggregate%concat%10#0
         let encoded_array%16#0: Encoded(len+(len+utf8[])[]) = aggregate%as_Encoded(len+(len+utf8[])[])%1#0
-        let tmp%61#0: bool = (== encoded_array%15#0 encoded_array%16#0)
-        (assert tmp%61#0)
+        let tmp%61#1: bool = (== encoded_array%15#0 encoded_array%16#0)
+        (assert tmp%61#1)
         let aggregate%as_bytes%26#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%10#0: bytes = ((extract 6 2) aggregate%as_bytes%26#0)
         let aggregate%as_Encoded(uint8[12])%5#0: Encoded(uint8[12]) = g#1
@@ -341,11 +341,11 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let encoded_array%19#0: Encoded(len+uint8[12][]) = aggregate%as_Encoded(len+uint8[12][])%0#0
         let aggregate%as_bytes%27#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%11#0: bytes = ((extract 6 2) aggregate%as_bytes%27#0)
-        let aggregate%head%35#0: bytes = (concat aggregate%len_u16%11#0 tmp%25#2)
+        let aggregate%head%35#0: bytes = (concat aggregate%len_u16%11#0 tmp%25#0)
         let aggregate%as_Encoded(len+uint8[12][])%1#0: Encoded(len+uint8[12][]) = aggregate%head%35#0
         let encoded_array%20#0: Encoded(len+uint8[12][]) = aggregate%as_Encoded(len+uint8[12][])%1#0
-        let tmp%64#0: bool = (== encoded_array%19#0 encoded_array%20#0)
-        (assert tmp%64#0)
+        let tmp%64#1: bool = (== encoded_array%19#0 encoded_array%20#0)
+        (assert tmp%64#1)
         exit 1u
     block@5: // testDecoding_route_L65
         let tmp%0#2: bytes = (txna ApplicationArgs 1)
@@ -477,54 +477,54 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#2: bool = (== tuple_item%2#0 tuple_item%3#0)
         let tmp%10#2: bool = (&& tmp%8#2 tmp%9#2)
         (assert tmp%10#2) // assert target is match for conditions
-        let reinterpret_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = (concat 0x0001 a_bytes#0)
-        let aggregate%array_length%11#0: uint64 = (extract_uint16 reinterpret_Encoded(len+uint64[])%0#0 0u) // on error: invalid array length header
-        let tmp%15#1: uint64 = aggregate%array_length%11#0
-        let tmp%16#1: bool = (== tmp%15#1 1u)
-        let aggregate%total_length%0#0: uint64 = (len reinterpret_Encoded(len+uint64[])%0#0)
-        let aggregate%array_trimmed%0#0: bytes = (substring3 reinterpret_Encoded(len+uint64[])%0#0 2u aggregate%total_length%0#0)
+        let tmp%15#1: bytes = (concat 0x0001 a_bytes#0)
+        let aggregate%array_length%11#0: uint64 = (extract_uint16 tmp%15#1 0u) // on error: invalid array length header
+        let tmp%16#1: uint64 = aggregate%array_length%11#0
+        let tmp%17#1: bool = (== tmp%16#1 1u)
+        let aggregate%total_length%0#0: uint64 = (len tmp%15#1)
+        let aggregate%array_trimmed%0#0: bytes = (substring3 tmp%15#1 2u aggregate%total_length%0#0)
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 8u)
         let aggregate%encoded_element%0#0: bytes = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%0#0 8u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint64) = aggregate%encoded_element%0#0
-        let tmp%17#1: uint64 = (btoi array_item%0#0)
-        let tmp%18#1: bool = (== tmp%17#1 a#0)
-        let tmp%19#1: bool = (&& tmp%16#1 tmp%18#1)
-        (assert tmp%19#1) // Array of uint64 matches
-        let reinterpret_Encoded(len+bool1[])%0#0: Encoded(len+bool1[]) = (concat 0x0001 b_bytes#0)
-        let aggregate%array_length%12#0: uint64 = (extract_uint16 reinterpret_Encoded(len+bool1[])%0#0 0u) // on error: invalid array length header
-        let tmp%20#1: uint64 = aggregate%array_length%12#0
-        let tmp%21#1: bool = (== tmp%20#1 1u)
-        let aggregate%array_length%13#0: uint64 = (extract_uint16 reinterpret_Encoded(len+bool1[])%0#0 0u) // on error: invalid array length header
+        let tmp%19#1: uint64 = (btoi array_item%0#0)
+        let tmp%20#1: bool = (== tmp%19#1 a#0)
+        let tmp%21#1: bool = (&& tmp%17#1 tmp%20#1)
+        (assert tmp%21#1) // Array of uint64 matches
+        let tmp%22#1: bytes = (concat 0x0001 b_bytes#0)
+        let aggregate%array_length%12#0: uint64 = (extract_uint16 tmp%22#1 0u) // on error: invalid array length header
+        let tmp%23#1: uint64 = aggregate%array_length%12#0
+        let tmp%24#1: bool = (== tmp%23#1 1u)
+        let aggregate%array_length%13#0: uint64 = (extract_uint16 tmp%22#1 0u) // on error: invalid array length header
         let aggregate%lt%0#0: bool = (< 0u aggregate%array_length%13#0)
         (assert aggregate%lt%0#0) // index access is out of bounds
         let aggregate%add%0#0: uint64 = (+ 0u 16u)
-        let aggregate%get_bit%3#0: bool = (getbit reinterpret_Encoded(len+bool1[])%0#0 aggregate%add%0#0)
+        let aggregate%get_bit%3#0: bool = (getbit tmp%22#1 aggregate%add%0#0)
         let array_item%1#0: bool = aggregate%get_bit%3#0
-        let tmp%22#1: bool = array_item%1#0
-        let tmp%23#1: bool = (== tmp%22#1 b#0)
-        let tmp%24#1: bool = (&& tmp%21#1 tmp%23#1)
-        (assert tmp%24#1) // Array of boolean matches
-        let tmp%25#1: bytes = (concat 0x0001 c_bytes#0)
-        (log tmp%25#1)
-        let aggregate%array_length%14#0: uint64 = (extract_uint16 tmp%25#1 0u) // on error: invalid array length header
-        let tmp%26#0: uint64 = aggregate%array_length%14#0
-        let tmp%27#0: bool = (== tmp%26#0 1u)
-        let aggregate%total_length%1#0: uint64 = (len tmp%25#1)
-        let aggregate%array_trimmed%1#0: bytes = (substring3 tmp%25#1 2u aggregate%total_length%1#0)
+        let tmp%26#0: bool = array_item%1#0
+        let tmp%27#0: bool = (== tmp%26#0 b#0)
+        let tmp%28#0: bool = (&& tmp%24#1 tmp%27#0)
+        (assert tmp%28#0) // Array of boolean matches
+        let tmp%29#0: bytes = (concat 0x0001 c_bytes#0)
+        (log tmp%29#0)
+        let aggregate%array_length%14#0: uint64 = (extract_uint16 tmp%29#0 0u) // on error: invalid array length header
+        let tmp%31#0: uint64 = aggregate%array_length%14#0
+        let tmp%32#0: bool = (== tmp%31#0 1u)
+        let aggregate%total_length%1#0: uint64 = (len tmp%29#0)
+        let aggregate%array_trimmed%1#0: bytes = (substring3 tmp%29#0 2u aggregate%total_length%1#0)
         let aggregate%bytes_offset%1#0: uint64 = (* 0u 64u)
         let aggregate%encoded_element%1#0: bytes = (extract3 aggregate%array_trimmed%1#0 aggregate%bytes_offset%1#0 64u) // on error: index access is out of bounds
         let array_item%2#0: Encoded(uint512) = aggregate%encoded_element%1#0
-        let tmp%28#0: biguint = array_item%2#0
-        let tmp%29#0: bool = (b== tmp%28#0 c#0)
-        let tmp%30#0: bool = (&& tmp%27#0 tmp%29#0)
-        (assert tmp%30#0) // Array of biguint matches
-        let reinterpret_Encoded(len+(len+utf8[])[])%0#0: Encoded(len+(len+utf8[])[]) = (concat 0x00010002 d_bytes#0)
-        let aggregate%array_length%15#0: uint64 = (extract_uint16 reinterpret_Encoded(len+(len+utf8[])[])%0#0 0u) // on error: invalid array length header
-        let tmp%33#0: uint64 = aggregate%array_length%15#0
-        let tmp%34#0: bool = (== tmp%33#0 1u)
-        let aggregate%total_length%2#0: uint64 = (len reinterpret_Encoded(len+(len+utf8[])[])%0#0)
-        let aggregate%array_head_and_tail%0#0: bytes = (substring3 reinterpret_Encoded(len+(len+utf8[])[])%0#0 2u aggregate%total_length%2#0)
-        let aggregate%array_length%16#0: uint64 = (extract_uint16 reinterpret_Encoded(len+(len+utf8[])[])%0#0 0u) // on error: invalid array length header
+        let tmp%34#0: biguint = array_item%2#0
+        let tmp%35#0: bool = (b== tmp%34#0 c#0)
+        let tmp%36#0: bool = (&& tmp%32#0 tmp%35#0)
+        (assert tmp%36#0) // Array of biguint matches
+        let tmp%39#0: bytes = (concat 0x00010002 d_bytes#0)
+        let aggregate%array_length%15#0: uint64 = (extract_uint16 tmp%39#0 0u) // on error: invalid array length header
+        let tmp%40#0: uint64 = aggregate%array_length%15#0
+        let tmp%41#0: bool = (== tmp%40#0 1u)
+        let aggregate%total_length%2#0: uint64 = (len tmp%39#0)
+        let aggregate%array_head_and_tail%0#0: bytes = (substring3 tmp%39#0 2u aggregate%total_length%2#0)
+        let aggregate%array_length%16#0: uint64 = (extract_uint16 tmp%39#0 0u) // on error: invalid array length header
         let aggregate%lt%1#0: bool = (< 0u aggregate%array_length%16#0)
         (assert aggregate%lt%1#0) // index access is out of bounds
         let aggregate%item_offset_offset%0#0: uint64 = (* 0u 2u)
@@ -534,17 +534,17 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%item_head_tail_length%0#0: uint64 = (+ aggregate%item_length_in_bytes%0#0 2u)
         let aggregate%item%0#0: bytes = (extract3 aggregate%array_head_and_tail%0#0 aggregate%item_offset%0#0 aggregate%item_head_tail_length%0#0)
         let array_item%3#0: Encoded(len+utf8[]) = aggregate%item%0#0
-        let tmp%37#0: string = ((extract 2 0) array_item%3#0)
-        let tmp%38#0: bool = (== tmp%37#0 d#0)
-        let tmp%39#0: bool = (&& tmp%34#0 tmp%38#0)
-        (assert tmp%39#0) // Array of string matches
-        let reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0: Encoded(len+(uint64,(len+uint8[]))[]) = (concat 0x00010002 e_bytes#0)
-        let aggregate%array_length%17#0: uint64 = (extract_uint16 reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0 0u) // on error: invalid array length header
-        let tmp%42#0: uint64 = aggregate%array_length%17#0
-        let tmp%43#0: bool = (== tmp%42#0 1u)
-        let aggregate%total_length%3#0: uint64 = (len reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0)
-        let aggregate%array_head_and_tail%1#0: bytes = (substring3 reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0 2u aggregate%total_length%3#0)
-        let aggregate%array_length%18#0: uint64 = (extract_uint16 reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0 0u) // on error: invalid array length header
+        let tmp%45#0: string = ((extract 2 0) array_item%3#0)
+        let tmp%46#0: bool = (== tmp%45#0 d#0)
+        let tmp%47#0: bool = (&& tmp%41#0 tmp%46#0)
+        (assert tmp%47#0) // Array of string matches
+        let tmp%50#0: bytes = (concat 0x00010002 e_bytes#0)
+        let aggregate%array_length%17#0: uint64 = (extract_uint16 tmp%50#0 0u) // on error: invalid array length header
+        let tmp%51#0: uint64 = aggregate%array_length%17#0
+        let tmp%52#0: bool = (== tmp%51#0 1u)
+        let aggregate%total_length%3#0: uint64 = (len tmp%50#0)
+        let aggregate%array_head_and_tail%1#0: bytes = (substring3 tmp%50#0 2u aggregate%total_length%3#0)
+        let aggregate%array_length%18#0: uint64 = (extract_uint16 tmp%50#0 0u) // on error: invalid array length header
         let aggregate%item_offset_offset%1#0: uint64 = (* 0u 2u)
         let aggregate%item_offset%1#0: uint64 = (extract_uint16 aggregate%array_head_and_tail%1#0 aggregate%item_offset_offset%1#0)
         let aggregate%next_index%0#0: uint64 = (+ 0u 1u)
@@ -556,10 +556,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%substring3%2#0: bytes = (substring3 aggregate%array_head_and_tail%1#0 aggregate%item_offset%1#0 aggregate%end_offset%0#0)
         let aggregate%extract%2#0: bytes = (extract3 aggregate%substring3%2#0 0u 8u)
         let tuple_item%4#0: Encoded(uint64) = aggregate%extract%2#0
-        let tmp%46#0: bool = (== tuple_item%4#0 tuple_item%1#0)
-        let aggregate%total_length%4#0: uint64 = (len reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0)
-        let aggregate%array_head_and_tail%2#0: bytes = (substring3 reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0 2u aggregate%total_length%4#0)
-        let aggregate%array_length%19#0: uint64 = (extract_uint16 reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0 0u) // on error: invalid array length header
+        let tmp%56#0: bool = (== tuple_item%4#0 tuple_item%1#0)
+        let aggregate%total_length%4#0: uint64 = (len tmp%50#0)
+        let aggregate%array_head_and_tail%2#0: bytes = (substring3 tmp%50#0 2u aggregate%total_length%4#0)
+        let aggregate%array_length%19#0: uint64 = (extract_uint16 tmp%50#0 0u) // on error: invalid array length header
         let aggregate%item_offset_offset%2#0: uint64 = (* 0u 2u)
         let aggregate%item_offset%2#0: uint64 = (extract_uint16 aggregate%array_head_and_tail%2#0 aggregate%item_offset_offset%2#0)
         let aggregate%next_index%1#0: uint64 = (+ 0u 1u)
@@ -573,25 +573,25 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%len%2#0: uint64 = (len aggregate%substring3%3#0)
         let aggregate%substring3%4#0: bytes = (substring3 aggregate%substring3%3#0 aggregate%extract_uint16%2#0 aggregate%len%2#0)
         let tuple_item%6#0: Encoded(len+uint8[]) = aggregate%substring3%4#0
-        let tmp%49#0: bool = (== tuple_item%6#0 tuple_item%3#0)
-        let tmp%50#0: bool = (&& tmp%46#0 tmp%49#0)
-        let tmp%51#0: bool = (&& tmp%43#0 tmp%50#0)
-        (assert tmp%51#0) // Array of struct matches
-        let reinterpret_Encoded(len+uint8[32][])%0#0: Encoded(len+uint8[32][]) = (concat 0x0001 f_bytes#0)
-        let aggregate%array_length%20#0: uint64 = (extract_uint16 reinterpret_Encoded(len+uint8[32][])%0#0 0u) // on error: invalid array length header
-        let tmp%53#0: uint64 = aggregate%array_length%20#0
-        let tmp%54#0: bool = (== tmp%53#0 1u)
-        let aggregate%total_length%5#0: uint64 = (len reinterpret_Encoded(len+uint8[32][])%0#0)
-        let aggregate%array_trimmed%2#0: bytes = (substring3 reinterpret_Encoded(len+uint8[32][])%0#0 2u aggregate%total_length%5#0)
+        let tmp%60#0: bool = (== tuple_item%6#0 tuple_item%3#0)
+        let tmp%61#0: bool = (&& tmp%56#0 tmp%60#0)
+        let tmp%62#0: bool = (&& tmp%52#0 tmp%61#0)
+        (assert tmp%62#0) // Array of struct matches
+        let tmp%64#0: bytes = (concat 0x0001 f_bytes#0)
+        let aggregate%array_length%20#0: uint64 = (extract_uint16 tmp%64#0 0u) // on error: invalid array length header
+        let tmp%65#0: uint64 = aggregate%array_length%20#0
+        let tmp%66#0: bool = (== tmp%65#0 1u)
+        let aggregate%total_length%5#0: uint64 = (len tmp%64#0)
+        let aggregate%array_trimmed%2#0: bytes = (substring3 tmp%64#0 2u aggregate%total_length%5#0)
         let aggregate%bytes_offset%2#0: uint64 = (* 0u 32u)
         let aggregate%encoded_element%2#0: bytes = (extract3 aggregate%array_trimmed%2#0 aggregate%bytes_offset%2#0 32u) // on error: index access is out of bounds
         let array_item%6#0: Encoded(uint8[32]) = aggregate%encoded_element%2#0
-        let tmp%56#0: bool = (== array_item%6#0 f#0)
-        let tmp%57#0: bool = (&& tmp%54#0 tmp%56#0)
-        (assert tmp%57#0) // Array of address matches
-        let tmp%58#0: bytes[12] = g_bytes#0
-        let tmp%59#0: bool = (== tmp%58#0 g#0)
-        (assert tmp%59#0)
+        let tmp%69#0: bool = (== array_item%6#0 f#0)
+        let tmp%70#0: bool = (&& tmp%66#0 tmp%69#0)
+        (assert tmp%70#0) // Array of address matches
+        let tmp%71#0: bytes[12] = g_bytes#0
+        let tmp%72#0: bool = (== tmp%71#0 g#0)
+        (assert tmp%72#0)
         exit 1u
     block@8: // after_if_else_L24
         fail
