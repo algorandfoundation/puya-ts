@@ -254,7 +254,8 @@ export class TypeResolver {
       if (parts.some((p) => p.equals(arc4StructBaseType))) {
         return arc4StructBaseType
       } else {
-        return IntersectionPType.fromTypes(parts)
+        const alias = tsType.aliasSymbol ? this.getSymbolFullName(tsType.aliasSymbol, sourceLocation) : undefined
+        return IntersectionPType.fromTypes(parts, sourceLocation, tryGetTypeDescription(tsType), alias)
       }
     }
 
@@ -381,9 +382,9 @@ export class TypeResolver {
       }
     }
     if (expectReadonly) {
-      return new ImmutableObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType) })
+      return new ImmutableObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType), runtimeOnly: false })
     } else {
-      return new MutableObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType) })
+      return new MutableObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType), runtimeOnly: false })
     }
   }
 
@@ -621,7 +622,7 @@ function isReadonlyPropertySymbol(prop: ts.Symbol): boolean {
 }
 
 function tryGetTypeDescription(tsType: ts.Type): string | undefined {
-  const dec = tsType.aliasSymbol?.valueDeclaration ?? tsType.symbol.valueDeclaration
+  const dec = tsType.aliasSymbol?.valueDeclaration ?? tsType.symbol?.valueDeclaration
   if (!dec) return undefined
   const docs = ts.getJSDocCommentsAndTags(dec)
   for (const doc of docs) {

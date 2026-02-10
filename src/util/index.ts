@@ -7,9 +7,9 @@ import { CodeError, InternalError } from '../errors'
 import type { DeliberateAny } from '../typescript-helpers'
 import type { AbsolutePath } from './absolute-path'
 
+export { hexToUint8Array, uint8ArrayToHex } from './base-16'
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
 export { base64ToUint8Array, uint8ArrayToBase64 } from './base-64'
-export { hexToUint8Array, uint8ArrayToHex } from './base-16'
 
 class InvariantError extends InternalError {}
 

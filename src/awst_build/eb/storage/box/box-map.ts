@@ -9,7 +9,7 @@ import type { PType } from '../../../ptypes'
 import { BoxMapPType, BoxPType, bytesPType, stringPType } from '../../../ptypes'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
-import { extractKey } from '../util'
+import { assertCanBeUsedForStorage, extractKey } from '../util'
 import { BoxProxyExpressionBuilder } from './base'
 import { BoxExpressionBuilder } from './box'
 
@@ -26,6 +26,7 @@ export class BoxMapFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 2,
       argSpec: (a) => [a.obj({ keyPrefix: a.required(bytesPType, stringPType) })],
     })
+    assertCanBeUsedForStorage(contentPType, sourceLocation)
 
     const ptype = new BoxMapPType({ content: contentPType, keyType: keySuffixType })
     return new BoxMapExpressionBuilder(extractKey(keyPrefix, wtypes.boxKeyWType, sourceLocation), ptype)

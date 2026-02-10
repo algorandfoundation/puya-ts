@@ -194,7 +194,7 @@ export class ARC4StructType extends ARC4EncodedType {
   }
 
   get nativeType(): MutableObjectPType {
-    return new MutableObjectPType({ properties: this.fields })
+    return new MutableObjectPType({ properties: this.fields, runtimeOnly: false })
   }
 
   get wtype(): wtypes.ARC4Struct {
@@ -639,6 +639,7 @@ export class TypedApplicationCallResponseType extends ImmutableObjectPType {
             itxn: applicationItxnType,
             returnValue,
           },
+      runtimeOnly: false,
     })
     this.name = `TypedApplicationCallResponseType<${returnValue.name}>`
     this.returnValue = returnValue

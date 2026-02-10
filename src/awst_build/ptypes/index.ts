@@ -224,18 +224,24 @@ export class IntersectionPType extends TransientType {
       module: 'lib.d.ts',
       singleton: false,
       typeMessage: transientTypeErrors.intersectionTypes(name).usedAsType,
-      expressionMessage: transientTypeErrors.unionTypes(name).usedInExpression,
+      expressionMessage: transientTypeErrors.intersectionTypes(name).usedInExpression,
     })
     this.types = types
   }
 
-  static fromTypes(types: PType[]) {
+  static fromTypes(types: PType[], sourceLocation: SourceLocation, description?: string, alias?: SymbolName) {
     if (types.length === 0) {
       throw new InternalError('Cannot create intersection of zero types')
     }
     const distinctTypes = types.filter(distinctByEquality((a, b) => a.equals(b))).toSorted(sortBy((t) => t.fullName))
     if (distinctTypes.length === 1) {
       return distinctTypes[0]
+    }
+    if (types.every((p) => p instanceof ImmutableObjectPType)) {
+      return objectTypeFromIntersectionParts(ImmutableObjectPType, types, sourceLocation, description, alias)
+    }
+    if (types.every((p) => p instanceof MutableObjectPType)) {
+      return objectTypeFromIntersectionParts(MutableObjectPType, types, sourceLocation, description, alias)
     }
     return new IntersectionPType({
       types: distinctTypes,
@@ -932,6 +938,7 @@ abstract class ObjectPType extends PType {
   readonly properties: Record<string, PType>
   readonly singleton = false
   readonly immutable: boolean
+  readonly runtimeOnly: boolean
 
   constructor(props: {
     alias?: SymbolName | null
@@ -939,6 +946,7 @@ abstract class ObjectPType extends PType {
     description?: string
     namePrefix: string
     immutable: boolean
+    runtimeOnly: boolean
   }) {
     super()
     this.name = `${props.namePrefix}${generateObjectHash(props.properties)}`
@@ -946,6 +954,7 @@ abstract class ObjectPType extends PType {
     this.description = props.description
     this.alias = props.alias ?? null
     this.immutable = props.immutable
+    this.runtimeOnly = props.runtimeOnly
   }
 
   orderedProperties() {
@@ -953,7 +962,7 @@ abstract class ObjectPType extends PType {
   }
 
   toString(): string {
-    return `{${this.orderedProperties()
+    return `${this.runtimeOnly ? '@runtimeOnly' : ''}{${this.orderedProperties()
       .map((p) => `${this.immutable ? 'readonly ' : ''}${p[0]}:${p[1].name}`)
       .join(',')}}`
   }
@@ -973,6 +982,7 @@ export class ObjectLiteralPType extends ObjectPType {
       ...props,
       namePrefix: `ObjectLiteral`,
       immutable: false,
+      runtimeOnly: false,
     })
   }
 
@@ -985,6 +995,7 @@ export class ObjectLiteralPType extends ObjectPType {
       alias: this.alias,
       properties: this.properties,
       description: this.description,
+      runtimeOnly: this.runtimeOnly,
     })
   }
   getMutable(): MutableObjectPType {
@@ -992,6 +1003,7 @@ export class ObjectLiteralPType extends ObjectPType {
       alias: this.alias,
       properties: this.properties,
       description: this.description,
+      runtimeOnly: this.runtimeOnly,
     })
   }
 
@@ -1016,7 +1028,7 @@ export class ObjectLiteralPType extends ObjectPType {
 export class ImmutableObjectPType extends ObjectPType {
   readonly [PType.IdSymbol] = 'ImmutableObjectPType'
 
-  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string }) {
+  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string; runtimeOnly: boolean }) {
     super({
       ...props,
       namePrefix: `ReadonlyObject`,
@@ -1049,7 +1061,7 @@ export class ImmutableObjectPType extends ObjectPType {
 export class MutableObjectPType extends ObjectPType {
   readonly [PType.IdSymbol] = 'MutableObjectPType'
 
-  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string }) {
+  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string; runtimeOnly: boolean }) {
     super({
       ...props,
       namePrefix: `Object`,
@@ -1071,6 +1083,7 @@ export class MutableObjectPType extends ObjectPType {
       alias: this.alias,
       properties: this.properties,
       description: this.description,
+      runtimeOnly: this.runtimeOnly,
     })
   }
 
@@ -1859,6 +1872,7 @@ export const compiledContractType = new ImmutableObjectPType({
     localUints: uint64PType,
     localBytes: uint64PType,
   },
+  runtimeOnly: false,
 })
 export const compiledLogicSigType = new ImmutableObjectPType({
   alias: new SymbolName({
@@ -1869,6 +1883,7 @@ export const compiledLogicSigType = new ImmutableObjectPType({
   properties: {
     account: accountPType,
   },
+  runtimeOnly: false,
 })
 
 export const arc28EmitFunction = new LibFunctionType({
@@ -1967,3 +1982,36 @@ export const validateEncodingFunctionPType = new LibFunctionType({
   name: 'validateEncoding',
   module: Constants.moduleNames.algoTs.util,
 })
+
+function objectTypeFromIntersectionParts(
+  constructor: typeof ImmutableObjectPType | typeof MutableObjectPType,
+  types: ObjectPType[],
+  sourceLocation: SourceLocation,
+  description?: string,
+  alias?: SymbolName,
+) {
+  const allProperties = new Map<string, PType[]>()
+  for (const type of types) {
+    for (const [propName, propType] of type.orderedProperties()) {
+      let propTypes = allProperties.get(propName)
+      if (propTypes === undefined) {
+        propTypes = []
+        allProperties.set(propName, propTypes)
+      }
+      propTypes.push(propType)
+    }
+  }
+
+  const properties: Record<string, PType> = {}
+  for (const [propName, propTypes] of allProperties.entries()) {
+    if (propName.startsWith('__@')) {
+      // Symbol property - ignore
+      // TODO: Check AST nodes to confirm?
+      continue
+    }
+    const ptype = propTypes.length === 1 ? propTypes[0] : IntersectionPType.fromTypes(propTypes, sourceLocation, undefined)
+    properties[propName] = ptype
+  }
+
+  return new constructor({ alias, properties, description, runtimeOnly: true })
+}

@@ -16,7 +16,7 @@ import type { NodeBuilder } from '../index'
 import { FunctionBuilder, InstanceExpressionBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { VoidExpressionBuilder } from '../void-expression-builder'
-import { extractKey } from './util'
+import { assertCanBeUsedForStorage, extractKey } from './util'
 
 export class GlobalStateFunctionBuilder extends FunctionBuilder {
   constructor(sourceLocation: SourceLocation) {
@@ -28,6 +28,7 @@ export class GlobalStateFunctionBuilder extends FunctionBuilder {
     if (ptype.contentType.equals(numberPType)) {
       logger.addCodeFix(new GlobalStateNumber({ sourceLocation }))
     }
+    assertCanBeUsedForStorage(ptype.contentType, sourceLocation)
     const {
       args: [{ initialValue, key }],
     } = parseFunctionArgs({
