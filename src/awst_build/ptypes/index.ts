@@ -229,13 +229,19 @@ export class IntersectionPType extends TransientType {
     this.types = types
   }
 
-  static fromTypes(types: PType[]) {
+  static fromTypes(types: PType[], sourceLocation: SourceLocation, description?: string, alias?: SymbolName) {
     if (types.length === 0) {
       throw new InternalError('Cannot create intersection of zero types')
     }
     const distinctTypes = types.filter(distinctByEquality((a, b) => a.equals(b))).toSorted(sortBy((t) => t.fullName))
     if (distinctTypes.length === 1) {
       return distinctTypes[0]
+    }
+    if (types.every((p) => p instanceof ImmutableObjectPType)) {
+      return objectTypeFromIntersectionParts(ImmutableObjectPType, types, sourceLocation, description, alias)
+    }
+    if (types.every((p) => p instanceof MutableObjectPType)) {
+      return objectTypeFromIntersectionParts(MutableObjectPType, types, sourceLocation, description, alias)
     }
     return new IntersectionPType({
       types: distinctTypes,
@@ -1976,3 +1982,36 @@ export const validateEncodingFunctionPType = new LibFunctionType({
   name: 'validateEncoding',
   module: Constants.moduleNames.algoTs.util,
 })
+
+function objectTypeFromIntersectionParts(
+  constructor: typeof ImmutableObjectPType | typeof MutableObjectPType,
+  types: ObjectPType[],
+  sourceLocation: SourceLocation,
+  description?: string,
+  alias?: SymbolName,
+) {
+  const allProperties = new Map<string, PType[]>()
+  for (const type of types) {
+    for (const [propName, propType] of type.orderedProperties()) {
+      let propTypes = allProperties.get(propName)
+      if (propTypes === undefined) {
+        propTypes = []
+        allProperties.set(propName, propTypes)
+      }
+      propTypes.push(propType)
+    }
+  }
+
+  const properties: Record<string, PType> = {}
+  for (const [propName, propTypes] of allProperties.entries()) {
+    if (propName.startsWith('__@')) {
+      // Symbol property - ignore
+      // TODO: Check AST nodes to confirm?
+      continue
+    }
+    const ptype = propTypes.length === 1 ? propTypes[0] : IntersectionPType.fromTypes(propTypes, sourceLocation, undefined)
+    properties[propName] = ptype
+  }
+
+  return new constructor({ alias, properties, description, runtimeOnly: true })
+}
