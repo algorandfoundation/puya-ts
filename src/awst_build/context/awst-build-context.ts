@@ -343,6 +343,8 @@ class AwstBuildContextImpl extends AwstBuildContext {
         } catch (e) {
           if (e instanceof PuyaError) {
             logger.error(e)
+          } else {
+            throw e
           }
         }
       }
