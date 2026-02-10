@@ -254,7 +254,7 @@ export class TypeResolver {
       if (parts.some((p) => p.equals(arc4StructBaseType))) {
         return arc4StructBaseType
       } else if (parts.every((p) => instanceOfAny(p, ImmutableObjectPType, MutableObjectPType))) {
-        return this.reflectObjectType(tsType, false, sourceLocation)
+        return this.reflectObjectType(tsType, true, sourceLocation)
       } else {
         return IntersectionPType.fromTypes(parts)
       }
@@ -301,7 +301,7 @@ export class TypeResolver {
       return this.reflectFunctionType(typeName, callSignatures, sourceLocation)
     }
     if (isObjectType(tsType)) {
-      return this.reflectObjectType(tsType, true, sourceLocation)
+      return this.reflectObjectType(tsType, false, sourceLocation)
     }
     throw new InternalError(`Cannot determine type of ${typeName}`, { sourceLocation })
   }
@@ -352,7 +352,11 @@ export class TypeResolver {
     }
   }
 
-  private reflectObjectType(tsType: ts.Type, abiSafe: boolean, sourceLocation: SourceLocation): ImmutableObjectPType | MutableObjectPType {
+  private reflectObjectType(
+    tsType: ts.Type,
+    runtimeOnly: boolean,
+    sourceLocation: SourceLocation,
+  ): ImmutableObjectPType | MutableObjectPType {
     const typeAlias = tsType.aliasSymbol ? this.getSymbolFullName(tsType.aliasSymbol, sourceLocation) : undefined
     const properties: Record<string, PType> = {}
 
@@ -383,9 +387,9 @@ export class TypeResolver {
       }
     }
     if (expectReadonly) {
-      return new ImmutableObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType), abiSafe })
+      return new ImmutableObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType), runtimeOnly })
     } else {
-      return new MutableObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType), abiSafe })
+      return new MutableObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType), runtimeOnly })
     }
   }
 

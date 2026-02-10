@@ -161,8 +161,9 @@ export function isArc4EncodableType(ptype: PType): boolean {
   if (ptype.equals(accountPType)) return true
   if (ptype instanceof ReadonlyTuplePType) return ptype.items.every((i) => isArc4EncodableType(i))
   if (ptype instanceof MutableTuplePType) return ptype.items.every((i) => isArc4EncodableType(i))
-  if (ptype instanceof ImmutableObjectPType) return ptype.abiSafe && ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
-  if (ptype instanceof MutableObjectPType) return ptype.abiSafe && ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
+  if (ptype instanceof ImmutableObjectPType)
+    return !ptype.runtimeOnly && ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
+  if (ptype instanceof MutableObjectPType) return !ptype.runtimeOnly && ptype.orderedProperties().every(([, pt]) => isArc4EncodableType(pt))
   if (ptype instanceof ArrayPType || ptype instanceof FixedArrayPType || ptype instanceof ReadonlyArrayPType)
     return isArc4EncodableType(ptype.elementType)
   return false
@@ -216,7 +217,7 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
   if (ptype instanceof MutableTuplePType)
     return new ARC4TupleType({ types: ptype.items.map((i) => ptypeToArc4EncodedType(i, sourceLocation)) })
 
-  if (ptype instanceof ImmutableObjectPType && ptype.abiSafe)
+  if (ptype instanceof ImmutableObjectPType && !ptype.runtimeOnly)
     return new ARC4StructType({
       name: ptype.alias?.name ?? ptype.name,
       module: ptype.module,
@@ -224,7 +225,7 @@ export function ptypeToArc4EncodedType(ptype: PType, sourceLocation: SourceLocat
       fields: Object.fromEntries(ptype.orderedProperties().map(([p, pt]) => [p, ptypeToArc4EncodedType(pt, sourceLocation)])),
       frozen: true,
     })
-  if (ptype instanceof MutableObjectPType && ptype.abiSafe)
+  if (ptype instanceof MutableObjectPType && !ptype.runtimeOnly)
     return new ARC4StructType({
       name: ptype.alias?.name ?? ptype.name,
       module: ptype.module,

@@ -37,7 +37,7 @@ export function assertCanBeUsedForStorage(ptype: PType, sourceLocation?: SourceL
   if (ptype instanceof UnsupportedType || ptype instanceof TransientType) {
     throw new CodeError(`Type ${ptype} cannot be used for storage`, { sourceLocation })
   }
-  if ((ptype instanceof MutableObjectPType || ptype instanceof ImmutableObjectPType) && !ptype.abiSafe) {
+  if ((ptype instanceof MutableObjectPType || ptype instanceof ImmutableObjectPType) && ptype.runtimeOnly) {
     const ptypeName = ptype.alias?.fullName || ptype.toString()
     throw new CodeError(`Type ${ptypeName} cannot be used for storage`, { sourceLocation })
   }

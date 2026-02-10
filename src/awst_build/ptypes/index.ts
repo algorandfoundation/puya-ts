@@ -932,7 +932,7 @@ abstract class ObjectPType extends PType {
   readonly properties: Record<string, PType>
   readonly singleton = false
   readonly immutable: boolean
-  readonly abiSafe: boolean
+  readonly runtimeOnly: boolean
 
   constructor(props: {
     alias?: SymbolName | null
@@ -940,7 +940,7 @@ abstract class ObjectPType extends PType {
     description?: string
     namePrefix: string
     immutable: boolean
-    abiSafe: boolean
+    runtimeOnly: boolean
   }) {
     super()
     this.name = `${props.namePrefix}${generateObjectHash(props.properties)}`
@@ -948,7 +948,7 @@ abstract class ObjectPType extends PType {
     this.description = props.description
     this.alias = props.alias ?? null
     this.immutable = props.immutable
-    this.abiSafe = props.abiSafe
+    this.runtimeOnly = props.runtimeOnly
   }
 
   orderedProperties() {
@@ -956,7 +956,7 @@ abstract class ObjectPType extends PType {
   }
 
   toString(): string {
-    return `${this.abiSafe ? '' : '@runtimeOnly'}{${this.orderedProperties()
+    return `${this.runtimeOnly ? '@runtimeOnly' : ''}{${this.orderedProperties()
       .map((p) => `${this.immutable ? 'readonly ' : ''}${p[0]}:${p[1].name}`)
       .join(',')}}`
   }
@@ -976,7 +976,7 @@ export class ObjectLiteralPType extends ObjectPType {
       ...props,
       namePrefix: `ObjectLiteral`,
       immutable: false,
-      abiSafe: true,
+      runtimeOnly: false,
     })
   }
 
@@ -989,7 +989,7 @@ export class ObjectLiteralPType extends ObjectPType {
       alias: this.alias,
       properties: this.properties,
       description: this.description,
-      abiSafe: this.abiSafe,
+      runtimeOnly: this.runtimeOnly,
     })
   }
   getMutable(): MutableObjectPType {
@@ -997,7 +997,7 @@ export class ObjectLiteralPType extends ObjectPType {
       alias: this.alias,
       properties: this.properties,
       description: this.description,
-      abiSafe: this.abiSafe,
+      runtimeOnly: this.runtimeOnly,
     })
   }
 
@@ -1022,7 +1022,7 @@ export class ObjectLiteralPType extends ObjectPType {
 export class ImmutableObjectPType extends ObjectPType {
   readonly [PType.IdSymbol] = 'ImmutableObjectPType'
 
-  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string; abiSafe: boolean }) {
+  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string; runtimeOnly: boolean }) {
     super({
       ...props,
       namePrefix: `ReadonlyObject`,
@@ -1055,7 +1055,7 @@ export class ImmutableObjectPType extends ObjectPType {
 export class MutableObjectPType extends ObjectPType {
   readonly [PType.IdSymbol] = 'MutableObjectPType'
 
-  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string; abiSafe: boolean }) {
+  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string; runtimeOnly: boolean }) {
     super({
       ...props,
       namePrefix: `Object`,
@@ -1077,7 +1077,7 @@ export class MutableObjectPType extends ObjectPType {
       alias: this.alias,
       properties: this.properties,
       description: this.description,
-      abiSafe: this.abiSafe,
+      runtimeOnly: this.runtimeOnly,
     })
   }
 
@@ -1866,7 +1866,7 @@ export const compiledContractType = new ImmutableObjectPType({
     localUints: uint64PType,
     localBytes: uint64PType,
   },
-  abiSafe: true,
+  runtimeOnly: false,
 })
 export const compiledLogicSigType = new ImmutableObjectPType({
   alias: new SymbolName({
@@ -1877,7 +1877,7 @@ export const compiledLogicSigType = new ImmutableObjectPType({
   properties: {
     account: accountPType,
   },
-  abiSafe: true,
+  runtimeOnly: false,
 })
 
 export const arc28EmitFunction = new LibFunctionType({
