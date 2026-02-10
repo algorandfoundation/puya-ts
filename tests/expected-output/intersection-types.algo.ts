@@ -10,7 +10,7 @@ type WithId = { id: Uint32 }
 type MyAccountWithId = MyAccount & WithId
 
 export class HelloWorld extends Contract {
-  // @expect-error {account:Account} & {id:Uint<32>} cannot be used as an ABI return type
+  // @expect-error unsupported type intersection
   hello(name: string): MyAccountWithId {
     const account: MyAccountWithId = {
       account: Txn.sender,

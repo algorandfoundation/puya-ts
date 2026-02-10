@@ -209,40 +209,6 @@ export class BaseContractClassType extends ContractClassPType {
   }
 }
 
-export class IntersectionPType extends TransientType {
-  readonly [PType.IdSymbol] = 'IntersectionPType'
-  get fullName() {
-    return this.types.map((t) => t).join(' & ')
-  }
-  readonly singleton = false
-  readonly types: PType[]
-
-  private constructor({ types }: { types: PType[] }) {
-    const name = types.map((t) => t).join(' & ')
-    super({
-      name,
-      module: 'lib.d.ts',
-      singleton: false,
-      typeMessage: transientTypeErrors.intersectionTypes(name).usedAsType,
-      expressionMessage: transientTypeErrors.unionTypes(name).usedInExpression,
-    })
-    this.types = types
-  }
-
-  static fromTypes(types: PType[]) {
-    if (types.length === 0) {
-      throw new InternalError('Cannot create intersection of zero types')
-    }
-    const distinctTypes = types.filter(distinctByEquality((a, b) => a.equals(b))).toSorted(sortBy((t) => t.fullName))
-    if (distinctTypes.length === 1) {
-      return distinctTypes[0]
-    }
-    return new IntersectionPType({
-      types: distinctTypes,
-    })
-  }
-}
-
 export class UnionPType extends TransientType {
   readonly [PType.IdSymbol] = 'UnionPType'
   get fullName() {

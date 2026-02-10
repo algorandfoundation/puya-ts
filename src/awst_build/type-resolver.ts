@@ -28,7 +28,6 @@ import {
   GlobalStateType,
   GroupTransactionPType,
   ImmutableObjectPType,
-  IntersectionPType,
   LocalStateType,
   logicSigBaseType,
   LogicSigPType,
@@ -253,9 +252,8 @@ export class TypeResolver {
       const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
       if (parts.some((p) => p.equals(arc4StructBaseType))) {
         return arc4StructBaseType
-      } else {
-        return IntersectionPType.fromTypes(parts)
       }
+      throw new CodeError('unsupported type intersection', { sourceLocation })
     }
 
     invariant(typeName, 'Non builtin type must have a name', sourceLocation)
@@ -473,11 +471,14 @@ export class TypeResolver {
 
     for (const prop of tsType.getProperties()) {
       const type = this.checker.getTypeOfSymbol(prop)
-      const ptype = this.resolveType(type, this.getLocationOfSymbol(prop) ?? sourceLocation)
-      if (instanceOfAny(ptype, GlobalStateType, LocalStateType, BoxPType, BoxMapPType)) {
-        properties[prop.name] = ptype
-      } else if (ptype instanceof FunctionPType) {
-        methods[prop.name] = ptype
+      // ignore stuff from multiple base classes... this is a simpler implementation of current behaviour, but not sure it's desirable dawg
+      if (!type.isIntersection()) {
+        const ptype = this.resolveType(type, this.getLocationOfSymbol(prop) ?? sourceLocation)
+        if (instanceOfAny(ptype, GlobalStateType, LocalStateType, BoxPType, BoxMapPType)) {
+          properties[prop.name] = ptype
+        } else if (ptype instanceof FunctionPType) {
+          methods[prop.name] = ptype
+        }
       }
     }
     return new ContractClassPType({
