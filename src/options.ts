@@ -24,6 +24,7 @@ export class CompileOptions {
   public readonly outputTeal: boolean
   public readonly outputArc32: boolean
   public readonly outputArc56: boolean
+  public readonly outputClient: boolean
   public readonly outputSsaIr: boolean
   public readonly outputOptimizationIr: boolean
   public readonly outputDestructuredIr: boolean
@@ -52,7 +53,8 @@ export class CompileOptions {
     this.dryRun = options.dryRun ?? false
     this.outputTeal = options.outputTeal ?? false
     this.outputArc32 = options.outputArc32 ?? false
-    this.outputArc56 = options.outputArc56 ?? false
+    this.outputArc56 = options.outputArc56 ?? options.outputClient ?? false
+    this.outputClient = options.outputClient ?? false
     this.outputSsaIr = options.outputSsaIr ?? false
     this.outputOptimizationIr = options.outputOptimizationIr ?? false
     this.outputDestructuredIr = options.outputDestructuredIr ?? false
@@ -92,6 +94,7 @@ export const defaultPuyaOptions: PuyaPassThroughOptions = {
   outputTeal: true,
   outputArc32: true,
   outputArc56: true,
+  outputClient: false,
   outputSsaIr: false,
   outputSourceMap: true,
   outputOptimizationIr: false,
@@ -114,6 +117,7 @@ export class PuyaOptions {
   outputTeal: boolean
   outputArc32: boolean
   outputArc56: boolean
+  outputClient: boolean
   outputSsaIr: boolean
   outputOptimizationIr: boolean
   outputDestructuredIr: boolean
@@ -136,6 +140,7 @@ export class PuyaOptions {
     this.outputTeal = options.outputTeal
     this.outputArc32 = options.outputArc32
     this.outputArc56 = options.outputArc56
+    this.outputClient = options.outputClient
     this.outputSsaIr = options.outputSsaIr
     this.outputOptimizationIr = options.outputOptimizationIr
     this.outputDestructuredIr = options.outputDestructuredIr

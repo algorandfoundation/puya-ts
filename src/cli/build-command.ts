@@ -21,6 +21,7 @@ export interface BuildCommandArgs {
   output_source_map: boolean
   output_arc32: boolean
   output_arc56: boolean
+  output_client: boolean
   output_ssa_ir: boolean
   output_optimization_ir: boolean
   output_destructured_ir: boolean
@@ -89,6 +90,11 @@ export function addBuildCommand(parser: ArgumentParser) {
     action: BooleanOptionalAction,
     help: 'Output {contract}.arc56.json ARC-56 app spec file. Only applicable to ARC4 contracts ',
     default: defaultPuyaOptions.outputArc56,
+  })
+  parser.add_argument('--output-client', {
+    action: BooleanOptionalAction,
+    help: 'Output {contract}.client.ts Algorand TypeScript contract client for typed ARC-4 ABI calls. Only applicable to ARC4 contracts ',
+    default: defaultPuyaOptions.outputClient,
   })
   parser.add_argument('--output-ssa-ir', {
     action: BooleanOptionalAction,
@@ -205,6 +211,7 @@ export async function buildCommand(args: BuildCommandArgs) {
           outputTeal: args.output_teal,
           outputArc32: args.output_arc32,
           outputArc56: args.output_arc56,
+          outputClient: args.output_client,
           outputSsaIr: args.output_ssa_ir,
           outputOptimizationIr: args.output_optimization_ir,
           outputDestructuredIr: args.output_destructured_ir,
