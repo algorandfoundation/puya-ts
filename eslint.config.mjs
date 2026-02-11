@@ -55,4 +55,10 @@ export default [
       '@typescript-eslint/no-unused-vars': 'off',
     },
   },
+  {
+    files: ['tests/**/*.client.ts'],
+    rules: {
+      'prettier/prettier': 'off',
+    },
+  },
 ]
