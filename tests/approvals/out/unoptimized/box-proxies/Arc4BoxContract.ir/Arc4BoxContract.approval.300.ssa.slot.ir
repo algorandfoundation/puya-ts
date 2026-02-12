@@ -554,11 +554,11 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumManyInts() ->
         let box%offset%0#0: uint64 = (+ 0u box%element_offset%0#0)
         let box%box_extract%0#0: Encoded(uint64) = (box_extract "manyInts" box%offset%0#0 8u)
         let array_item%0#0: Encoded(uint64) = box%box_extract%0#0
-        let values%0#0: uint64 = (btoi array_item%0#0)
-        let temp#0: uint64 = values%0#0
+        let tmp%0#0: uint64 = (btoi array_item%0#0)
+        let temp#0: uint64 = tmp%0#0
         let val#0: uint64 = temp#0
-        let tmp%0#0: uint64 = (+ total#1 val#0)
-        let total#2: uint64 = tmp%0#0
+        let tmp%1#0: uint64 = (+ total#1 val#0)
+        let total#2: uint64 = tmp%1#0
         goto block@3
     block@3: // for_footer_L412
         let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)
@@ -611,9 +611,9 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.indirectExtractA
         let large#0: Encoded(uint8[1024],uint8[1024],uint8[1024],uint8[1024],uint64,uint8[1024],uint8[1024],uint64) = storage_value%0#0
         let aggregate%extract%0#0: bytes = (extract3 large#0 4096u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
-        let values%0#0: uint64 = (btoi tuple_item%0#0)
-        let tmp%0#0: uint64 = (+ values%0#0 1u)
-        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#0)
+        let tmp%0#0: uint64 = (btoi tuple_item%0#0)
+        let tmp%1#0: uint64 = (+ tmp%0#0 1u)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#0)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
         let encoded_value%0#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
         let aggregate%updated_data%0#0: bytes = (replace3 large#0 4096u encoded_value%0#0)
@@ -636,8 +636,8 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.readBoxes() -> <
         let box%offset%0#0: uint64 = (+ 0u 4096u)
         let box%box_extract%0#0: Encoded(uint64) = (box_extract "boxLarge" box%offset%0#0 8u)
         let tuple_item%0#0: Encoded(uint64) = box%box_extract%0#0
-        let values%0#0: uint64 = (btoi tuple_item%0#0)
-        return tmp%1#0 tmp%2#0 storage_value%1#0 values%0#0
+        let tmp%3#0: uint64 = (btoi tuple_item%0#0)
+        return tmp%1#0 tmp%2#0 storage_value%1#0 tmp%3#0
 
 subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.boxesExist() -> <bool, bool, bool, bool>:
     block@0: // L441
@@ -832,18 +832,18 @@ subroutine tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sumBools(stopAtT
         let box%box_extract%0#0: Encoded(bool1[8]) = (box_extract "tooManyBools" box%byte_containing_bit_offset%0#0 1u)
         let aggregate%get_bit%0#0: bool = (getbit box%box_extract%0#0 box%element_bit_offset%0#0)
         let array_item%0#0: bool = aggregate%get_bit%0#0
-        let values%0#0: bool = array_item%0#0
-        let temp#0: bool = values%0#0
+        let tmp%0#0: bool = array_item%0#0
+        let temp#0: bool = tmp%0#0
         let value#0: bool = temp#0
         goto value#0 ? block@3 : block@4
     block@3: // if_body_L514
-        let tmp%0#0: uint64 = (+ total#1 1u)
-        let total#2: uint64 = tmp%0#0
+        let tmp%1#0: uint64 = (+ total#1 1u)
+        let total#2: uint64 = tmp%1#0
         goto block@4
     block@4: // after_if_else_L514
         let total#3: uint64 = φ(total#1 <- block@2, total#2 <- block@3)
-        let tmp%1#0: bool = (== total#3 stopAtTotal#0)
-        goto tmp%1#0 ? block@5 : block@6
+        let tmp%2#0: bool = (== total#3 stopAtTotal#0)
+        goto tmp%2#0 ? block@5 : block@6
     block@5: // if_body_L517
         goto block@9
     block@6: // after_if_else_L517

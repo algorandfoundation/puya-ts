@@ -168,12 +168,13 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToIndex_block@0:
     //   args: [account],
     // })
     itxn_begin
-    // tests/approvals/resource-encoding.algo.ts:66
-    // appId,
-    frame_dig -1
     // tests/approvals/resource-encoding.algo.ts:67
     // args: [account],
     frame_dig -2
+    // tests/approvals/resource-encoding.algo.ts:66
+    // appId,
+    frame_dig -1
+    itxn_field ApplicationID
     itxn_field Accounts
     // tests/approvals/resource-encoding.algo.ts:64-68
     // const { returnValue: res1 } = abiCall({
@@ -183,9 +184,10 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToIndex_block@0:
     // })
     pushbytes 0x34359fb6 // method "testExplicitIndex(account)uint64"
     itxn_field ApplicationArgs
+    // tests/approvals/resource-encoding.algo.ts:67
+    // args: [account],
     bytec_2 // 0x01
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     // tests/approvals/resource-encoding.algo.ts:64-68
     // const { returnValue: res1 } = abiCall({
     //   method: ByIndex.prototype.testExplicitIndex,
@@ -218,7 +220,7 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToIndex_next_txn@1:
     len
     intc_1 // 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:70
     // assert(res1 === account.balance)
@@ -244,12 +246,13 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue_block@0:
     //   args: [account],
     // })
     itxn_begin
-    // tests/approvals/resource-encoding.algo.ts:74
-    // appId,
-    frame_dig -1
     // tests/approvals/resource-encoding.algo.ts:75
     // args: [account],
     frame_dig -2
+    // tests/approvals/resource-encoding.algo.ts:74
+    // appId,
+    frame_dig -1
+    itxn_field ApplicationID
     // tests/approvals/resource-encoding.algo.ts:73-76
     // const { returnValue: res1 } = abiCall<typeof ByValue.prototype.testExplicitValue>({
     //   appId,
@@ -258,7 +261,6 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue_block@0:
     pushbytes 0xd7308a13 // method "testExplicitValue(address)uint64"
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     intc_3 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -284,7 +286,7 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToValue_next_txn@1:
     len
     intc_1 // 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:78
     // assert(res1 === account.balance)
@@ -398,25 +400,30 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource_next_txn@2
     //   appId,
     // })
     itxn_begin
+    // tests/approvals/resource-encoding.algo.ts:94
+    // args: [asset, Global.currentApplicationId, Txn.sender],
+    txn Sender
+    cover 1
+    global CurrentApplicationID
+    cover 1
     // tests/approvals/resource-encoding.algo.ts:95
     // appId,
     frame_dig 0
-    cover 1
-    // tests/approvals/resource-encoding.algo.ts:94
-    // args: [asset, Global.currentApplicationId, Txn.sender],
-    global CurrentApplicationID
-    cover 1
-    txn Sender
-    itxn_field Accounts
-    itxn_field Assets
-    itxn_field Applications
     // tests/approvals/resource-encoding.algo.ts:93-96
     // const { returnValue: indexes } = compiled.call.echoResourceByIndex({
     //   args: [asset, Global.currentApplicationId, Txn.sender],
     //   appId,
     // })
+    intc_0 // 0
+    itxn_field OnCompletion
+    itxn_field ApplicationID
+    itxn_field Assets
+    itxn_field Applications
+    itxn_field Accounts
     pushbytes 0x77e28d74 // method "echoResourceByIndex(asset,application,account)(uint64,uint64,address)"
     itxn_field ApplicationArgs
+    // tests/approvals/resource-encoding.algo.ts:94
+    // args: [asset, Global.currentApplicationId, Txn.sender],
     pushbytes 0x00
     itxn_field ApplicationArgs
     bytec_2 // 0x01
@@ -428,9 +435,6 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource_next_txn@2
     //   args: [asset, Global.currentApplicationId, Txn.sender],
     //   appId,
     // })
-    intc_0 // 0
-    itxn_field OnCompletion
-    itxn_field ApplicationID
     intc_3 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -456,7 +460,7 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource_next_txn@3
     len
     pushint 48
     ==
-    assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
+    assert // invalid number of bytes for arc4.tuple<asset,application,account>
     // tests/approvals/resource-encoding.algo.ts:97
     // assertMatch(indexes, [asset, Global.currentApplicationId, Txn.sender])
     pushint 3
@@ -496,32 +500,31 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource_next_txn@3
     //   appId,
     // })
     itxn_begin
-    // tests/approvals/resource-encoding.algo.ts:101
-    // appId,
-    frame_dig 0
     // tests/approvals/resource-encoding.algo.ts:100
     // args: [asset, Global.currentApplicationId, Txn.sender],
-    uncover 1
     itob
     global CurrentApplicationID
     itob
     txn Sender
-    uncover 2
-    cover 1
+    uncover 1
     cover 2
+    cover 2
+    // tests/approvals/resource-encoding.algo.ts:101
+    // appId,
+    frame_dig 0
     // tests/approvals/resource-encoding.algo.ts:99-102
     // const { returnValue: resources } = compiled.call.echoResourceByValue({
     //   args: [asset, Global.currentApplicationId, Txn.sender],
     //   appId,
     // })
+    intc_0 // 0
+    itxn_field OnCompletion
+    itxn_field ApplicationID
     pushbytes 0x4d370276 // method "echoResourceByValue(uint64,uint64,address)(uint64,uint64,address)"
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
-    intc_0 // 0
-    itxn_field OnCompletion
-    itxn_field ApplicationID
     intc_3 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -547,7 +550,7 @@ tests/approvals/resource-encoding.algo.ts::C2C.testCallToEchoResource_next_txn@4
     len
     pushint 48
     ==
-    assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
+    assert // invalid number of bytes for arc4.tuple<asset,application,account>
     // tests/approvals/resource-encoding.algo.ts:104
     // assertMatch(resources, [asset, Global.currentApplicationId, Txn.sender])
     pushint 3

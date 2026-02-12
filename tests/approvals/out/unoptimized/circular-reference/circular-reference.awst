@@ -12,23 +12,23 @@ contract ContractOne
   
   test(appId: application): void
   {
-    #{ itxn: submit_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, ApplicationArgs=#[Method(signature="test(application)void", resource_encoding="value")])) }
+    #{ itxn: submit_txn(abi_call(signature={name="test",args=(application),result=void}, args=(appId), fields={Fee=0, TypeEnum=appl, ApplicationID=appId})) }
   }
   
   test2(): bytes[4]
   {
-    return Method(signature="test(application)void", resource_encoding="value")
+    return Method(name="test",args=(application),result=void,resource_encoding="value")
   }
   
   test3(appId: application): void
   {
-    begin_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, ApplicationArgs=#[Method(signature="test2()bytes[4]", resource_encoding="value")]))
-    next_txn(create_inner_transaction(Fee=0, TypeEnum=appl, ApplicationID=appId, ApplicationArgs=#[Method(signature="test2()bytes[4]", resource_encoding="value")]))
+    begin_txn(abi_call(signature={name="test2",args=(),result=bytes[4]}, args=(), fields={Fee=0, TypeEnum=appl, ApplicationID=appId}))
+    next_txn(abi_call(signature={name="test2",args=(),result=bytes[4]}, args=(), fields={Fee=0, TypeEnum=appl, ApplicationID=appId}))
     itxn_submit()
     res1: bytes = reinterpret_cast<bytes>(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($0 = gitxn<1, LastLog>())), extract<0, 4>($0) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.static_array<arc4.byte,4>, validate=true))
     res2: bytes = reinterpret_cast<bytes>(ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($1 = gitxn<0, LastLog>())), extract<0, 4>($1) == 0x151f7c75], comment=Bytes has valid prefix), wtype=arc4.static_array<arc4.byte,4>, validate=true))
-    assert(reinterpret_cast<bytes>(Method(signature="test(application)void", resource_encoding="value")) == res1)
-    assert(reinterpret_cast<bytes>(Method(signature="test(application)void", resource_encoding="value")) == res2)
+    assert(reinterpret_cast<bytes>(Method(name="test",args=(application),result=void,resource_encoding="value")) == res1)
+    assert(reinterpret_cast<bytes>(Method(name="test",args=(application),result=void,resource_encoding="value")) == res2)
   }
   
   __algots__.defaultCreate(): void

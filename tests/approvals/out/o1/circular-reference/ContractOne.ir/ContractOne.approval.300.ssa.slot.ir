@@ -38,8 +38,9 @@ subroutine tests/approvals/circular-reference.algo.ts::ContractOne.test[routing]
         (assert eq%0#0) // invalid number of bytes for arc4.uint64
         let appId#0: uint64 = (btoi tmp%0#0)
         itxn_begin
-        ((itxn_field ApplicationArgs) method "test(uint64)void")
         ((itxn_field ApplicationID) appId#0)
+        ((itxn_field ApplicationArgs) method "test(uint64)void")
+        ((itxn_field ApplicationArgs) tmp%0#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
@@ -53,13 +54,13 @@ subroutine tests/approvals/circular-reference.algo.ts::ContractOne.test3[routing
         (assert eq%0#0) // invalid number of bytes for arc4.uint64
         let appId#0: uint64 = (btoi tmp%0#0)
         itxn_begin
-        ((itxn_field ApplicationArgs) method "test2()byte[4]")
         ((itxn_field ApplicationID) appId#0)
+        ((itxn_field ApplicationArgs) method "test2()byte[4]")
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_next
-        ((itxn_field ApplicationArgs) method "test2()byte[4]")
         ((itxn_field ApplicationID) appId#0)
+        ((itxn_field ApplicationArgs) method "test2()byte[4]")
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit

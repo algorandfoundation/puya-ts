@@ -3,6 +3,20 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#0: bool = tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.__puya_arc4_router__()
         return tmp%0#0
 
+subroutine _puya_lib.arc4.dynamic_array_concat_fixed(array: bytes, new_items_bytes: bytes, new_items_count: uint64) -> bytes:
+    block@0: // L133
+        let tmp%0#0: uint64 = (extract_uint16 array#0 0u)
+        let array_length#0: uint64 = tmp%0#0
+        let tmp%1#0: uint64 = (+ array_length#0 new_items_count#0)
+        let new_array_length#0: uint64 = tmp%1#0
+        let tmp%2#0: bytes = (itob new_array_length#0)
+        let tmp%3#0: bytes = ((extract 6 0) tmp%2#0)
+        let new_len_u16#0: bytes = tmp%3#0
+        let tmp%4#0: bytes = ((replace2 0) array#0 new_len_u16#0)
+        let result#0: bytes = tmp%4#0
+        let tmp%5#0: bytes = (concat result#0 new_items_bytes#0)
+        return tmp%5#0
+
 subroutine tests/approvals/static-bytes.algo.ts::padTo32(b: bytes[16]) -> bytes[32]:
     block@0: // L13
         let tmp%0#0: bytes[32] = (bzero 32u)
@@ -241,16 +255,16 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray() -> 
         let b#0: Encoded(uint8[32][])* = slot%0#0
         let slot_contents%0#0: Encoded(uint8[32][]) = load(b#0)
         let tmp%0#0: Encoded(uint8[32][]) = bytes_encode<uint8[32][]>(a.0#0, a.1#0)
-        let concat%0#0: Encoded(uint8[32][]) = (concat slot_contents%0#0 tmp%0#0) // on error: max array length exceeded
-        store(b#0, concat%0#0)
+        let tmp%1#0: Encoded(uint8[32][]) = array_concat(slot_contents%0#0, tmp%0#0, 2u)
+        store(b#0, tmp%1#0)
         let slot_contents%1#0: Encoded(uint8[32][]) = load(b#0)
         let array_item%0#0: Encoded(uint8[32]) = extract_value(slot_contents%1#0, 0u)
-        let values%0#0: bytes[32] = decode_bytes<bytes[32]>(array_item%0#0)
-        let tmp%1#0: bytes = (b& a.0#0 values%0#0)
-        let bitAnd#0: bytes[32] = tmp%1#0
+        let tmp%2#0: bytes[32] = decode_bytes<bytes[32]>(array_item%0#0)
+        let tmp%3#0: bytes = (b& a.0#0 tmp%2#0)
+        let bitAnd#0: bytes[32] = tmp%3#0
         let reinterpret_bytes[32]%3#0: bytes[32] = (txn Sender)
-        let tmp%2#0: bool = (== bitAnd#0 reinterpret_bytes[32]%3#0)
-        (assert tmp%2#0)
+        let tmp%4#0: bool = (== bitAnd#0 reinterpret_bytes[32]%3#0)
+        (assert tmp%4#0)
         return 
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2() -> bytes:

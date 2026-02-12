@@ -49,23 +49,23 @@ subroutine tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.test[routing]() -> vo
 subroutine tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.test(p: Encoded(bool1,uint64,uint64,uint64,bool1,bool1)) -> Encoded(bool1,bool1,bool1,bool1,bool1):
     block@0: // L5
         let tuple_item%0#0: bool = extract_value(p#0, 0)
-        let values%0#0: bool = decode_bytes<bool>(tuple_item%0#0)
+        let tmp%0#0: bool = decode_bytes<bool>(tuple_item%0#0)
         let tuple_item%1#0: Encoded(uint64) = extract_value(p#0, 1)
-        let values%1#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
+        let tmp%1#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
         let tuple_item%2#0: Encoded(uint64) = extract_value(p#0, 2)
-        let values%2#0: uint64 = decode_bytes<uint64>(tuple_item%2#0)
+        let tmp%2#0: uint64 = decode_bytes<uint64>(tuple_item%2#0)
         let tuple_item%3#0: Encoded(uint64) = extract_value(p#0, 3)
-        let values%3#0: uint64 = decode_bytes<uint64>(tuple_item%3#0)
+        let tmp%3#0: uint64 = decode_bytes<uint64>(tuple_item%3#0)
         let tuple_item%4#0: bool = extract_value(p#0, 4)
-        let values%4#0: bool = decode_bytes<bool>(tuple_item%4#0)
+        let tmp%4#0: bool = decode_bytes<bool>(tuple_item%4#0)
         let tuple_item%5#0: bool = extract_value(p#0, 5)
-        let values%5#0: bool = decode_bytes<bool>(tuple_item%5#0)
-        let useRounds#0: bool = values%0#0
-        let lastValid#0: uint64 = values%1#0
-        let cooldown#0: uint64 = values%2#0
-        let lastCalled#0: uint64 = values%3#0
-        let exists#0: bool = values%4#0
-        let hasMethodRestrictions#0: bool = values%5#0
+        let tmp%5#0: bool = decode_bytes<bool>(tuple_item%5#0)
+        let useRounds#0: bool = tmp%0#0
+        let lastValid#0: uint64 = tmp%1#0
+        let cooldown#0: uint64 = tmp%2#0
+        let lastCalled#0: uint64 = tmp%3#0
+        let exists#0: bool = tmp%4#0
+        let hasMethodRestrictions#0: bool = tmp%5#0
         goto useRounds#0 ? block@1 : block@2
     block@1: // ternary_true_L20
         let ternary_result%0#0: uint64 = (global Round)
@@ -76,12 +76,12 @@ subroutine tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.test(p: Encoded(bool1
     block@3: // ternary_merge_L20
         let ternary_result%0#2: uint64 = φ(ternary_result%0#0 <- block@1, ternary_result%0#1 <- block@2)
         let epochRef#0: uint64 = ternary_result%0#2
-        let tmp%0#0: bool = (> epochRef#0 lastValid#0)
-        let tmp%1#0: bool = (> cooldown#0 0u)
-        let tmp%2#0: uint64 = (- epochRef#0 lastCalled#0)
-        let tmp%3#0: bool = (< tmp%2#0 cooldown#0)
-        let tmp%4#0: Encoded(bool1,bool1,bool1,bool1,bool1) = bytes_encode<(bool1,bool1,bool1,bool1,bool1)>(exists#0, tmp%0#0, tmp%1#0, tmp%3#0, hasMethodRestrictions#0)
-        return tmp%4#0
+        let tmp%6#0: bool = (> epochRef#0 lastValid#0)
+        let tmp%7#0: bool = (> cooldown#0 0u)
+        let tmp%8#0: uint64 = (- epochRef#0 lastCalled#0)
+        let tmp%9#0: bool = (< tmp%8#0 cooldown#0)
+        let tmp%10#0: Encoded(bool1,bool1,bool1,bool1,bool1) = bytes_encode<(bool1,bool1,bool1,bool1,bool1)>(exists#0, tmp%6#0, tmp%7#0, tmp%9#0, hasMethodRestrictions#0)
+        return tmp%10#0
 
 subroutine tests/approvals/arc4-bool.algo.ts::Arc4BoolAlgo.__algots__.defaultCreate() -> void:
     block@0: // L4

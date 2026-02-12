@@ -113,10 +113,10 @@ subroutine tests/approvals/box-proxies.algo.ts::LargeBox.test() -> void:
         let box%box_extract%2#0: Encoded(uint8[32],uint64,uint64,uint64,uint64) = (box_extract "large" box%offset%3#0 64u)
         let aggregate%extract%1#0: bytes = (extract3 box%box_extract%2#0 32u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%1#0
-        let values%0#0: uint64 = (btoi tuple_item%0#0)
-        let tmp%4#0: uint64 = (+ index#0 10u)
-        let tmp%5#0: bool = (== values%0#0 tmp%4#0)
-        (assert tmp%5#0)
+        let tmp%4#0: uint64 = (btoi tuple_item%0#0)
+        let tmp%5#0: uint64 = (+ index#0 10u)
+        let tmp%6#0: bool = (== tmp%4#0 tmp%5#0)
+        (assert tmp%6#0)
         goto block@3
     block@3: // for_footer_L275
         let item_index_internal%0#2: uint64 = (+ item_index_internal%0#1 1u)

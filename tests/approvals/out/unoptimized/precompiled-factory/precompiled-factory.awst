@@ -13,11 +13,11 @@ contract HelloFactory
   test_compile_contract(): void
   {
     compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = #{ approvalProgram: ($0 = compile(tests/approvals/precompiled-apps.algo.ts::Hello).approvalProgram, clearStateProgram: $0.clearStateProgram, extraProgramPages: $0.extraProgramPages, globalUints: $0.globalUints, globalBytes: $0.globalBytes, localUints: $0.localUints, localBytes: $0.localBytes }
-    helloApp: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method(signature="helloCreate(string)void", resource_encoding="value"), reinterpret_cast<bytes>(ARC4_ENCODE("hello", wtype=arc4.dynamic_array<arc4.byte>))], ApprovalProgramPages=#[compiled.approvalProgram.0, compiled.approvalProgram.1], ClearStateProgramPages=#[compiled.clearStateProgram.0, compiled.clearStateProgram.1], GlobalNumByteSlice=compiled.globalBytes)).CreatedApplicationID
-    txn: inner_transaction_appl = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method(signature="greet(string)string", resource_encoding="value"), reinterpret_cast<bytes>(ARC4_ENCODE("world", wtype=arc4.dynamic_array<arc4.byte>))], ApplicationID=helloApp))
+    helloApp: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method(name="helloCreate",args=(string),result=void,resource_encoding="value"), reinterpret_cast<bytes>(ARC4_ENCODE("hello", wtype=arc4.dynamic_array<arc4.byte>))], ApprovalProgramPages=#[compiled.approvalProgram.0, compiled.approvalProgram.1], ClearStateProgramPages=#[compiled.clearStateProgram.0, compiled.clearStateProgram.1], GlobalNumByteSlice=compiled.globalBytes)).CreatedApplicationID
+    txn: inner_transaction_appl = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method(name="greet",args=(string),result=string,resource_encoding="value"), reinterpret_cast<bytes>(ARC4_ENCODE("world", wtype=arc4.dynamic_array<arc4.byte>))], ApplicationID=helloApp))
     result: string = ARC4_DECODE(reinterpret_cast<arc4.dynamic_array<arc4.byte>>(checked_maybe(#[extract<4, 0>(($1 = txn.LastLog)), extract<0, 4>($1) == 0x151f7c75], comment=Bytes has valid prefix)))
     assert(result == "hello world")
-    submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationID=helloApp, ApplicationArgs=#[Method(signature="delete()void", resource_encoding="value")], OnCompletion=5))
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationID=helloApp, ApplicationArgs=#[Method(name="delete",args=(),result=void,resource_encoding="value")], OnCompletion=5))
   }
   
   test_compile_contract_with_template(): void

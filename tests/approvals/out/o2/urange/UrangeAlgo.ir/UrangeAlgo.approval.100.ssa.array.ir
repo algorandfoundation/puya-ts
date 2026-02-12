@@ -31,13 +31,10 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%as_Encoded(len+uint64[])%1#0: Encoded(len+uint64[]) = aggregate%head%0#0
         let encoded_array%1#2: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%1#0
         let extract_to_end%0#2: bytes = ((extract 2 0) encoded_array%1#2)
-        let concat%0#2: Encoded(len+uint64[]) = (concat results#7 extract_to_end%0#2) // on error: max array length exceeded
-        let extract_to_end%1#2: bytes = ((extract 2 0) concat%0#2)
-        let len%0#2: uint64 = (len extract_to_end%1#2)
-        let div_floor%0#2: uint64 = (/ len%0#2 8u)
-        let as_bytes%0#2: bytes[8] = (itob div_floor%0#2)
-        let as_u16_bytes%0#2: bytes = ((extract 6 2) as_bytes%0#2)
-        let results#8: Encoded(len+uint64[]) = ((replace2 0) concat%0#2 as_u16_bytes%0#2)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 encoded_array%1#2 0u) // on error: invalid array length header
+        let tmp%0#7: uint64 = aggregate%array_length%0#0
+        let aggregate%as_Encoded(len+uint64[])%2#0: Encoded(len+uint64[]) = _puya_lib.arc4.dynamic_array_concat_fixed(results#7, extract_to_end%0#2, tmp%0#7)
+        let results#8: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%2#0
         let value_internal%0#8: uint64 = (+ temp#2 1u)
         goto block@24
     block@26: // after_for_L7
@@ -47,8 +44,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@5: // testTwoArg_route_L12
         let aggregate%as_bytes%2#0: bytes[8] = (itob 0u)
         let aggregate%len_u16%2#0: bytes = ((extract 6 2) aggregate%as_bytes%2#0)
-        let aggregate%as_Encoded(len+uint64[])%2#0: Encoded(len+uint64[]) = aggregate%len_u16%2#0
-        let results#3: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%2#0
+        let aggregate%as_Encoded(len+uint64[])%3#0: Encoded(len+uint64[]) = aggregate%len_u16%2#0
+        let results#3: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%3#0
         let value_internal%0#3: uint64 = 2u
         goto block@19
     block@19: // for_header_L14
@@ -62,16 +59,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob temp#1)
         let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
         let aggregate%head%1#0: bytes = (concat aggregate%len_u16%3#0 aggregate%as_Encoded(uint64)%1#0)
-        let aggregate%as_Encoded(len+uint64[])%3#0: Encoded(len+uint64[]) = aggregate%head%1#0
-        let encoded_array%1#1: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%3#0
+        let aggregate%as_Encoded(len+uint64[])%4#0: Encoded(len+uint64[]) = aggregate%head%1#0
+        let encoded_array%1#1: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%4#0
         let extract_to_end%0#1: bytes = ((extract 2 0) encoded_array%1#1)
-        let concat%0#1: Encoded(len+uint64[]) = (concat results#4 extract_to_end%0#1) // on error: max array length exceeded
-        let extract_to_end%1#1: bytes = ((extract 2 0) concat%0#1)
-        let len%0#1: uint64 = (len extract_to_end%1#1)
-        let div_floor%0#1: uint64 = (/ len%0#1 8u)
-        let as_bytes%0#1: bytes[8] = (itob div_floor%0#1)
-        let as_u16_bytes%0#1: bytes = ((extract 6 2) as_bytes%0#1)
-        let results#5: Encoded(len+uint64[]) = ((replace2 0) concat%0#1 as_u16_bytes%0#1)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 encoded_array%1#1 0u) // on error: invalid array length header
+        let tmp%0#5: uint64 = aggregate%array_length%1#0
+        let aggregate%as_Encoded(len+uint64[])%5#0: Encoded(len+uint64[]) = _puya_lib.arc4.dynamic_array_concat_fixed(results#4, extract_to_end%0#1, tmp%0#5)
+        let results#5: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%5#0
         let value_internal%0#5: uint64 = (+ temp#1 1u)
         goto block@19
     block@21: // after_for_L14
@@ -81,8 +75,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@6: // testThreeArg_route_L19
         let aggregate%as_bytes%4#0: bytes[8] = (itob 0u)
         let aggregate%len_u16%4#0: bytes = ((extract 6 2) aggregate%as_bytes%4#0)
-        let aggregate%as_Encoded(len+uint64[])%4#0: Encoded(len+uint64[]) = aggregate%len_u16%4#0
-        let results#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%4#0
+        let aggregate%as_Encoded(len+uint64[])%6#0: Encoded(len+uint64[]) = aggregate%len_u16%4#0
+        let results#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%6#0
         let value_internal%0#0: uint64 = 2u
         goto block@14
     block@14: // for_header_L21
@@ -96,16 +90,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%val_as_bytes%2#0: bytes[8] = (itob temp#0)
         let aggregate%as_Encoded(uint64)%2#0: Encoded(uint64) = aggregate%val_as_bytes%2#0
         let aggregate%head%2#0: bytes = (concat aggregate%len_u16%5#0 aggregate%as_Encoded(uint64)%2#0)
-        let aggregate%as_Encoded(len+uint64[])%5#0: Encoded(len+uint64[]) = aggregate%head%2#0
-        let encoded_array%1#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%5#0
+        let aggregate%as_Encoded(len+uint64[])%7#0: Encoded(len+uint64[]) = aggregate%head%2#0
+        let encoded_array%1#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%7#0
         let extract_to_end%0#0: bytes = ((extract 2 0) encoded_array%1#0)
-        let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
-        let extract_to_end%1#0: bytes = ((extract 2 0) concat%0#0)
-        let len%0#0: uint64 = (len extract_to_end%1#0)
-        let div_floor%0#0: uint64 = (/ len%0#0 8u)
-        let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
-        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let results#2: Encoded(len+uint64[]) = ((replace2 0) concat%0#0 as_u16_bytes%0#0)
+        let aggregate%array_length%2#0: uint64 = (extract_uint16 encoded_array%1#0 0u) // on error: invalid array length header
+        let tmp%0#3: uint64 = aggregate%array_length%2#0
+        let aggregate%as_Encoded(len+uint64[])%8#0: Encoded(len+uint64[]) = _puya_lib.arc4.dynamic_array_concat_fixed(results#1, extract_to_end%0#0, tmp%0#3)
+        let results#2: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%8#0
         let value_internal%0#2: uint64 = (+ temp#0 3u)
         goto block@14
     block@16: // after_for_L21
@@ -122,3 +113,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
         (assert tmp%11#0)
         exit 1u
+
+subroutine _puya_lib.arc4.dynamic_array_concat_fixed(array: bytes, new_items_bytes: bytes, new_items_count: uint64) -> bytes:
+    block@0: // L133
+        let array_length#0: uint64 = (extract_uint16 array#0 0u)
+        let new_array_length#0: uint64 = (+ array_length#0 new_items_count#0)
+        let tmp%2#0: bytes = (itob new_array_length#0)
+        let new_len_u16#0: bytes = ((extract 6 0) tmp%2#0)
+        let result#0: bytes = ((replace2 0) array#0 new_len_u16#0)
+        let tmp%5#0: bytes = (concat result#0 new_items_bytes#0)
+        return tmp%5#0

@@ -64,9 +64,9 @@ subroutine tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAl
         let xCount#0: uint64 = (btoi tmp%2#0)
         let box%element_offset%1#0: uint64 = (* index#0 9u)
         let box%box_extract%1#0: Encoded(uint64,uint8) = (box_extract "x" box%element_offset%1#0 9u)
-        let values%0#0: uint64 = (extract_uint64 box%box_extract%1#0 0u)
-        let tmp%0#1: uint64 = (+ values%0#0 xCount#0)
-        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#1)
+        let tmp%0#1: uint64 = (extract_uint64 box%box_extract%1#0 0u)
+        let tmp%1#1: uint64 = (+ tmp%0#1 xCount#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#1)
         (box_replace "x" box%element_offset%1#0 aggregate%val_as_bytes%0#0)
         exit 1u
 

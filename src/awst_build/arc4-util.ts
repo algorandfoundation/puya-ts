@@ -130,22 +130,6 @@ export function buildArc4MethodConstant(functionType: FunctionPType, arc4Config:
 }
 
 /**
- * Get the ARC4 type name for a ptype, or throw if the ptype is not usable in an ABI method.
- * @param ptype The ptype of the parameter
- * @param direction The direction of the parameter (in for method args, out for method returns)
- * @param resourceEncoding The encoding strategy for the foreign resource types (App, Asset, Account)
- * @param sourceLocation The location of the method or parameter, for use in error metadata
- */
-export function getABITypeName(
-  ptype: PType,
-  direction: 'in' | 'out',
-  resourceEncoding: ResourceEncoding,
-  sourceLocation: SourceLocation,
-): string {
-  return ptypeToAbiPType(ptype, direction, resourceEncoding, sourceLocation).abiTypeSignature
-}
-
-/**
  * Is the given type an ARC4 encoded type, or can it be encoded to one
  * @param ptype The type to check
  */

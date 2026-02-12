@@ -99,6 +99,10 @@ main_test_call_contract_with_reference_types_route@9:
     //   args: [Global.currentApplicationId, Txn.sender, asset],
     //   appId,
     // })
+    intc_0 // 0
+    itxn_field OnCompletion
+    uncover 4
+    itxn_field ApplicationID
     pushbytes 0x66698d18 // method "receivesReferenceTypes(uint64,address,uint64)void"
     itxn_field ApplicationArgs
     uncover 2
@@ -106,10 +110,6 @@ main_test_call_contract_with_reference_types_route@9:
     swap
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
-    intc_0 // 0
-    itxn_field OnCompletion
-    swap
-    itxn_field ApplicationID
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -194,18 +194,18 @@ main_test_call_contract_with_transactions_route@8:
     //   appId,
     // })
     itxn_next
-    bytec 7 // method "receivesAnyTxn(txn)uint64"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     dup
     itxn_field ApplicationID
+    bytec 7 // method "receivesAnyTxn(txn)uint64"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
     itxn_submit
-    gitxn 1 LastLog
+    itxn LastLog
     dup
     extract 4 0
     swap
@@ -216,7 +216,7 @@ main_test_call_contract_with_transactions_route@8:
     len
     pushint 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     // tests/approvals/precompiled-typed.algo.ts:135-138
     // compiled.call.receivesAnyTxn({
     //   appId,
@@ -244,18 +244,18 @@ main_test_call_contract_with_transactions_route@8:
     //   args: [appCall],
     // })
     itxn_next
-    bytec 7 // method "receivesAnyTxn(txn)uint64"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     dup
     itxn_field ApplicationID
+    bytec 7 // method "receivesAnyTxn(txn)uint64"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
     itxn_submit
-    gitxn 1 LastLog
+    itxn LastLog
     dup
     extract 4 0
     swap
@@ -266,7 +266,7 @@ main_test_call_contract_with_transactions_route@8:
     len
     pushint 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     // tests/approvals/precompiled-typed.algo.ts:140-143
     // compiled.call.receivesAssetConfig({
     //   appId,
@@ -301,18 +301,18 @@ main_test_call_contract_with_transactions_route@8:
     //   args: [assetCreate],
     // })
     itxn_next
-    pushbytes 0xd366c869 // method "receivesAssetConfig(acfg)byte[]"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     dup
     itxn_field ApplicationID
+    pushbytes 0xd366c869 // method "receivesAssetConfig(acfg)byte[]"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
     itxn_submit
-    gitxn 1 LastLog
+    itxn LastLog
     dup
     extract 4 0
     swap
@@ -328,7 +328,7 @@ main_test_call_contract_with_transactions_route@8:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for bytes
     // tests/approvals/precompiled-typed.algo.ts:146
     // receiver: appId.address,
     dup
@@ -392,11 +392,11 @@ main_test_call_contract_with_transactions_route@8:
     //   args: [assetCreate, pay],
     // })
     itxn_next
-    pushbytes 0x81b67352 // method "receivesAssetConfigAndPay(acfg,pay)void"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     itxn_field ApplicationID
+    pushbytes 0x81b67352 // method "receivesAssetConfigAndPay(acfg,pay)void"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -432,12 +432,12 @@ main_test_compile_contract_large_route@7:
     //   appId: largeApp,
     // })
     itxn_begin
-    pushbytes 0x02bf30cf // method "getBigBytesLength()uint64"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     dup
     itxn_field ApplicationID
+    pushbytes 0x02bf30cf // method "getBigBytesLength()uint64"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -455,7 +455,7 @@ main_test_compile_contract_large_route@7:
     len
     pushint 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/precompiled-typed.algo.ts:107
     // assert(result === 4096)
@@ -467,11 +467,11 @@ main_test_compile_contract_large_route@7:
     //   appId: largeApp,
     // })
     itxn_begin
-    bytec 5 // method "delete()void"
-    itxn_field ApplicationArgs
     pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec 5 // method "delete()void"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -486,8 +486,6 @@ main_test_compile_contract_with_template_and_custom_prefix_route@6:
     // tests/approvals/precompiled-typed.algo.ts:84
     // const helloApp = compiled.call.create().itxn.createdApp
     itxn_begin
-    bytec 8 // method "create()void"
-    itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:82
     // const compiled = compileArc4(HelloTemplateCustomPrefix, { templateVars: { GREETING: 'bonjour' }, templateVarsPrefix: 'PRFX_' })
     intc_2 // 1
@@ -500,6 +498,8 @@ main_test_compile_contract_with_template_and_custom_prefix_route@6:
     // const helloApp = compiled.call.create().itxn.createdApp
     intc_0 // 0
     itxn_field OnCompletion
+    bytec 8 // method "create()void"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -512,6 +512,10 @@ main_test_compile_contract_with_template_and_custom_prefix_route@6:
     //   appId: helloApp,
     // })
     itxn_begin
+    intc_0 // 0
+    itxn_field OnCompletion
+    dup
+    itxn_field ApplicationID
     bytec_2 // method "greet(string)string"
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:87
@@ -523,10 +527,6 @@ main_test_compile_contract_with_template_and_custom_prefix_route@6:
     //   args: ['world'],
     //   appId: helloApp,
     // })
-    intc_0 // 0
-    itxn_field OnCompletion
-    dup
-    itxn_field ApplicationID
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -548,7 +548,7 @@ main_test_compile_contract_with_template_and_custom_prefix_route@6:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:91
     // assert(result === 'bonjour world')
@@ -560,11 +560,11 @@ main_test_compile_contract_with_template_and_custom_prefix_route@6:
     //   appId: helloApp,
     // })
     itxn_begin
-    bytec 5 // method "delete()void"
-    itxn_field ApplicationArgs
     pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec 5 // method "delete()void"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -579,8 +579,6 @@ main_test_compile_contract_with_template_route@5:
     // tests/approvals/precompiled-typed.algo.ts:59
     // const helloApp = compiled.call.create().itxn.createdApp
     itxn_begin
-    bytec 8 // method "create()void"
-    itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:57
     // const compiled = compileArc4(HelloTemplate, { templateVars: { GREETING: 'hey' } })
     intc_2 // 1
@@ -593,6 +591,8 @@ main_test_compile_contract_with_template_route@5:
     // const helloApp = compiled.call.create().itxn.createdApp
     intc_0 // 0
     itxn_field OnCompletion
+    bytec 8 // method "create()void"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -605,6 +605,10 @@ main_test_compile_contract_with_template_route@5:
     //   appId: helloApp,
     // })
     itxn_begin
+    intc_0 // 0
+    itxn_field OnCompletion
+    dup
+    itxn_field ApplicationID
     bytec_2 // method "greet(string)string"
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:62
@@ -616,10 +620,6 @@ main_test_compile_contract_with_template_route@5:
     //   args: ['world'],
     //   appId: helloApp,
     // })
-    intc_0 // 0
-    itxn_field OnCompletion
-    dup
-    itxn_field ApplicationID
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -641,7 +641,7 @@ main_test_compile_contract_with_template_route@5:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:66
     // assert(txn1.returnValue === 'hey world')
@@ -654,6 +654,10 @@ main_test_compile_contract_with_template_route@5:
     //   appId: helloApp,
     // })
     itxn_begin
+    intc_0 // 0
+    itxn_field OnCompletion
+    dup
+    itxn_field ApplicationID
     bytec 9 // method "sendGreetings((string,string))string"
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:70
@@ -665,10 +669,6 @@ main_test_compile_contract_with_template_route@5:
     //   args: [greeting],
     //   appId: helloApp,
     // })
-    intc_0 // 0
-    itxn_field OnCompletion
-    dup
-    itxn_field ApplicationID
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -690,7 +690,7 @@ main_test_compile_contract_with_template_route@5:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:74
     // assert(txn2.returnValue === 'hey world!')
@@ -702,11 +702,11 @@ main_test_compile_contract_with_template_route@5:
     //   appId: helloApp,
     // })
     itxn_begin
-    bytec 5 // method "delete()void"
-    itxn_field ApplicationArgs
     pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec 5 // method "delete()void"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -723,12 +723,6 @@ main_test_compile_contract_route@4:
     //   args: ['hello'],
     // }).itxn.createdApp
     itxn_begin
-    pushbytes 0x009225ae // method "helloCreate(string)void"
-    itxn_field ApplicationArgs
-    // tests/approvals/precompiled-typed.algo.ts:18
-    // args: ['hello'],
-    pushbytes 0x000568656c6c6f
-    itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:15
     // const compiled = compileArc4(Hello)
     intc_2 // 1
@@ -743,6 +737,16 @@ main_test_compile_contract_route@4:
     // }).itxn.createdApp
     intc_0 // 0
     itxn_field OnCompletion
+    pushbytes 0x009225ae // method "helloCreate(string)void"
+    itxn_field ApplicationArgs
+    // tests/approvals/precompiled-typed.algo.ts:18
+    // args: ['hello'],
+    pushbytes 0x000568656c6c6f
+    itxn_field ApplicationArgs
+    // tests/approvals/precompiled-typed.algo.ts:17-19
+    // const app = compiled.call.create({
+    //   args: ['hello'],
+    // }).itxn.createdApp
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -755,6 +759,10 @@ main_test_compile_contract_route@4:
     //   appId: app,
     // })
     itxn_begin
+    intc_0 // 0
+    itxn_field OnCompletion
+    dup
+    itxn_field ApplicationID
     bytec_2 // method "greet(string)string"
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:22
@@ -766,10 +774,6 @@ main_test_compile_contract_route@4:
     //   args: ['world'],
     //   appId: app,
     // })
-    intc_0 // 0
-    itxn_field OnCompletion
-    dup
-    itxn_field ApplicationID
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -791,7 +795,7 @@ main_test_compile_contract_route@4:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:25
     // assert(result === 'hello world')
@@ -805,14 +809,14 @@ main_test_compile_contract_route@4:
     //   args: ['abi'],
     // })
     itxn_begin
+    dup
+    itxn_field ApplicationID
     bytec_2 // method "greet(string)string"
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:30
     // args: ['abi'],
     pushbytes 0x0003616269
     itxn_field ApplicationArgs
-    dup
-    itxn_field ApplicationID
     // tests/approvals/precompiled-typed.algo.ts:27-31
     // const { returnValue: result2, itxn: greetItxn } = abiCall({
     //   method: Hello.prototype.greet,
@@ -840,7 +844,7 @@ main_test_compile_contract_route@4:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 6 0
     itxn LastLog
     // tests/approvals/precompiled-typed.algo.ts:33
@@ -861,14 +865,14 @@ main_test_compile_contract_route@4:
     //   args: ['stubbed'],
     // }).returnValue
     itxn_begin
+    dup
+    itxn_field ApplicationID
     bytec_2 // method "greet(string)string"
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:39
     // args: ['stubbed'],
     pushbytes 0x000773747562626564
     itxn_field ApplicationArgs
-    dup
-    itxn_field ApplicationID
     // tests/approvals/precompiled-typed.algo.ts:36-40
     // const result3 = abiCall({
     //   method: HelloStubbed.prototype.greet,
@@ -896,7 +900,7 @@ main_test_compile_contract_route@4:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:41
     // assert(result3 === 'hello stubbed')
@@ -910,14 +914,14 @@ main_test_compile_contract_route@4:
     //   args: [{ name: 'world', termination: new arc4.Str('!') }],
     // }).returnValue
     itxn_begin
+    dup
+    itxn_field ApplicationID
     bytec 9 // method "sendGreetings((string,string))string"
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:46
     // args: [{ name: 'world', termination: new arc4.Str('!') }],
     bytec 10 // 0x0004000b0005776f726c64000121
     itxn_field ApplicationArgs
-    dup
-    itxn_field ApplicationID
     // tests/approvals/precompiled-typed.algo.ts:43-47
     // const result4 = abiCall({
     //   method: Hello.prototype.sendGreetings,
@@ -945,7 +949,7 @@ main_test_compile_contract_route@4:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:49
     // assert(result4 === 'hello world!')
@@ -957,11 +961,11 @@ main_test_compile_contract_route@4:
     //   appId: app,
     // })
     itxn_begin
-    bytec 5 // method "delete()void"
-    itxn_field ApplicationArgs
     pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec 5 // method "delete()void"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0

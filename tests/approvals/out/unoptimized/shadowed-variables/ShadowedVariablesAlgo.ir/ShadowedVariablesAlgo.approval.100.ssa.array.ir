@@ -5,32 +5,32 @@ main tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.approvalP
         let aggregate%len%0#0: uint64 = (len awst_tmp%0#0)
         let aggregate%substring3%0#0: bytes = (substring3 awst_tmp%0#0 aggregate%extract_uint16%0#0 aggregate%len%0#0)
         let tuple_item%0#0: Encoded(len+uint8[]) = aggregate%substring3%0#0
-        let values%0#0: bytes = ((extract 2 0) tuple_item%0#0)
+        let tmp%0#0: bytes = ((extract 2 0) tuple_item%0#0)
         let aggregate%extract%0#0: bytes = (extract3 awst_tmp%0#0 2u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%0#0
-        let values%1#0: uint64 = (btoi tuple_item%1#0)
+        let tmp%1#0: uint64 = (btoi tuple_item%1#0)
         let aggregate%get_bit%0#0: bool = (getbit awst_tmp%0#0 80u)
         let tuple_item%2#0: bool = aggregate%get_bit%0#0
-        let values%2#0: bool = tuple_item%2#0
-        let b#0: bytes = values%0#0
-        let u#0: uint64 = values%1#0
-        let f#0: bool = values%2#0
-        let tmp%0#0: bool = (== "123" b#0)
-        (assert tmp%0#0) // a should be module const (bytes)
+        let tmp%2#0: bool = tuple_item%2#0
+        let b#0: bytes = tmp%0#0
+        let u#0: uint64 = tmp%1#0
+        let f#0: bool = tmp%2#0
+        let tmp%3#0: bool = (== "123" b#0)
+        (assert tmp%3#0) // a should be module const (bytes)
         let a#0: uint64 = u#0
-        let tmp%1#0: bool = (== a#0 123u)
-        (assert tmp%1#0) // a should be local const (uint)
-        let a₁#0: bool = f#0
-        let tmp%2#0: bool = (! a₁#0)
-        (assert tmp%2#0) // a should be local let (bool)
-        let tmp%3#0: bool = (! a₁#0)
-        let a₁#1: bool = tmp%3#0
-        (assert a₁#1) // a should be modified local let (bool)
-        (assert a₁#1) // a should still be modified local let (bool)
         let tmp%4#0: bool = (== a#0 123u)
         (assert tmp%4#0) // a should be local const (uint)
-        let tmp%5#0: bool = (== "123" "123")
-        (assert tmp%5#0) // a should be module const (bytes)
+        let a₁#0: bool = f#0
+        let tmp%5#0: bool = (! a₁#0)
+        (assert tmp%5#0) // a should be local let (bool)
+        let tmp%6#0: bool = (! a₁#0)
+        let a₁#1: bool = tmp%6#0
+        (assert a₁#1) // a should be modified local let (bool)
+        (assert a₁#1) // a should still be modified local let (bool)
+        let tmp%7#0: bool = (== a#0 123u)
+        (assert tmp%7#0) // a should be local const (uint)
+        let tmp%8#0: bool = (== "123" "123")
+        (assert tmp%8#0) // a should be module const (bytes)
         return 1u
 
 subroutine tests/approvals/shadowed-variables.algo.ts::ShadowedVariablesAlgo.getValues() -> Encoded((len+uint8[]),uint64,bool1):

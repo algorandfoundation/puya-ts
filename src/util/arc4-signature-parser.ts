@@ -1,19 +1,6 @@
 import type { Parser } from 'arcsecond'
 import * as A from 'arcsecond'
-import type { ABICompatiblePType, PType } from '../awst_build/ptypes'
-import {
-  accountPType,
-  anyGtxnType,
-  applicationCallGtxnType,
-  applicationPType,
-  assetConfigGtxnType,
-  assetFreezeGtxnType,
-  assetPType,
-  assetTransferGtxnType,
-  keyRegistrationGtxnType,
-  paymentGtxnType,
-  voidPType,
-} from '../awst_build/ptypes'
+import type { PType } from '../awst_build/ptypes'
 import * as arc4Types from '../awst_build/ptypes/arc4-types'
 
 const peek = A.lookAhead(A.regex(/^./))
@@ -25,8 +12,6 @@ const ufixed = A.sequenceOf([A.str('ufixed'), integer, A.char('x'), integer]).ma
 
 const simpleType = <T extends PType>(name: string, ptype: T) => A.str(name).map(() => ptype)
 
-const methodName = A.regex(/^[^ (]+/)
-
 const scalarType = A.choice([
   uint,
   ufixed,
@@ -34,21 +19,6 @@ const scalarType = A.choice([
   simpleType('string', arc4Types.arc4StringType),
   simpleType('bool', arc4Types.arc4BooleanType),
   simpleType('address', arc4Types.arc4AddressAlias),
-])
-
-const resourceTypes = A.choice([
-  simpleType('account', accountPType),
-  simpleType('asset', assetPType),
-  simpleType('application', applicationPType),
-])
-const txnTypes = A.choice([
-  simpleType('txn', anyGtxnType),
-  simpleType('appl', applicationCallGtxnType),
-  simpleType('acfg', assetConfigGtxnType),
-  simpleType('axfer', assetTransferGtxnType),
-  simpleType('afrz', assetFreezeGtxnType),
-  simpleType('keyreg', keyRegistrationGtxnType),
-  simpleType('pay', paymentGtxnType),
 ])
 
 class TypeBuilder {
@@ -188,42 +158,6 @@ const arc4Type = A.coroutine<arc4Types.ARC4EncodedType>((parse) => {
     }
   }
 })
-const voidType = simpleType('void', voidPType)
-const abiReturn = A.choice([voidType, arc4Type]).errorMap(updateErrorMessage('ABI return type'))
-const abiParam = A.choice([resourceTypes, txnTypes, arc4Type]).errorMap(updateErrorMessage('ABI parameter type'))
-
-type ARC4MethodSignature = { name: string; parameters: ABICompatiblePType[]; returnType: ABICompatiblePType }
-
-const arc4Method = A.coroutine<ARC4MethodSignature>((parse) => {
-  try {
-    const name = parse(methodName)
-    parse(A.str('('))
-    const parameters: ABICompatiblePType[] = []
-    while (true) {
-      const peekNext = parse(A.possibly(peek))
-      if (peekNext !== ')') {
-        parameters.push(parse(abiParam))
-      }
-      const readNext = parse(A.choice([A.char(')'), A.char(',')]))
-      if (readNext === ')') {
-        break
-      }
-    }
-
-    const returnType = parse(abiReturn)
-    return {
-      name,
-      parameters,
-      returnType,
-    } satisfies ARC4MethodSignature
-  } catch (e) {
-    if (e instanceof Error) {
-      return parse(A.fail(e.message))
-    } else {
-      throw e
-    }
-  }
-})
 
 export class Arc4ParseError extends Error {
   constructor(
@@ -231,30 +165,6 @@ export class Arc4ParseError extends Error {
     public index: number,
   ) {
     super(message)
-  }
-}
-
-const parseError = A.sequenceOf([
-  A.str('ParseError '),
-  A.possibly(A.regex(/^'[^']+' /)),
-  A.sequenceOf([A.str('(position '), A.digits, A.str('): ')]),
-  A.many(A.anyCharExcept(A.char(','))).map((chars) => chars.join('')),
-  A.str(', '),
-  A.many(A.anyChar).map((chars) => chars.join('')),
-]).map((parts) => ({
-  expectedMessage: parts[3],
-  butGotMessage: parts[5],
-}))
-
-function updateErrorMessage(expectedEntity: string) {
-  return <D>(error: A.Err<string, D>) => {
-    // Error message will generally look like
-    // ParserError (position 5): Expected string 'example', but got ...
-    return parseError.fork(
-      error.error,
-      () => error.error,
-      (match) => `Expected ${expectedEntity}, ${match.butGotMessage}`,
-    )
   }
 }
 
@@ -272,5 +182,3 @@ function createParserFunction<T>(parser: Parser<T>): (text: string) => T {
 }
 
 export const parseArc4Type = createParserFunction<arc4Types.ARC4EncodedType>(A.sequenceOf([arc4Type, A.endOfInput]).map(([t]) => t))
-
-export const parseArc4Method = createParserFunction<ARC4MethodSignature>(A.sequenceOf([arc4Method, A.endOfInput]).map(([t]) => t))

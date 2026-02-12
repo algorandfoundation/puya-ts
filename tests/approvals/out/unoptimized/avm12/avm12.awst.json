@@ -554,7 +554,7 @@
                 },
                 "itxns": [
                   {
-                    "_type": "CreateInnerTransaction",
+                    "_type": "ABICall",
                     "source_location": {
                       "file": "tests/approvals/avm12.algo.ts",
                       "line": 22,
@@ -563,11 +563,18 @@
                       "end_column": 41
                     },
                     "wtype": {
-                      "_type": "WInnerTransactionFields",
+                      "_type": "WABICallInnerTransactionFields",
                       "name": "inner_transaction_fields_appl",
                       "immutable": true,
-                      "transaction_type": 6
+                      "transaction_type": 6,
+                      "result_type": {
+                        "_type": "WType",
+                        "name": "void",
+                        "immutable": true
+                      }
                     },
+                    "target": null,
+                    "args": [],
                     "fields": {
                       "Fee": {
                         "_type": "IntegerConstant",
@@ -1709,7 +1716,7 @@
                             },
                             "itxns": [
                               {
-                                "_type": "CreateInnerTransaction",
+                                "_type": "ABICall",
                                 "source_location": {
                                   "file": "tests/approvals/avm12.algo.ts",
                                   "line": 28,
@@ -1718,11 +1725,35 @@
                                   "end_column": 6
                                 },
                                 "wtype": {
-                                  "_type": "WInnerTransactionFields",
+                                  "_type": "WABICallInnerTransactionFields",
                                   "name": "inner_transaction_fields_appl",
                                   "immutable": true,
-                                  "transaction_type": 6
+                                  "transaction_type": 6,
+                                  "result_type": {
+                                    "_type": "WType",
+                                    "name": "void",
+                                    "immutable": true
+                                  }
                                 },
+                                "target": {
+                                  "_type": "MethodSignature",
+                                  "source_location": {
+                                    "file": "tests/approvals/avm12.algo.ts",
+                                    "line": 28,
+                                    "end_line": 35,
+                                    "column": 18,
+                                    "end_column": 6
+                                  },
+                                  "name": "update",
+                                  "arg_types": [],
+                                  "return_type": {
+                                    "_type": "WType",
+                                    "name": "void",
+                                    "immutable": true
+                                  },
+                                  "resource_encoding": "value"
+                                },
+                                "args": [],
                                 "fields": {
                                   "Fee": {
                                     "_type": "IntegerConstant",
@@ -2353,60 +2384,6 @@
                                       "name": "compiledV1"
                                     },
                                     "name": "extraProgramPages"
-                                  },
-                                  "ApplicationArgs": {
-                                    "_type": "TupleExpression",
-                                    "source_location": {
-                                      "file": "tests/approvals/avm12.algo.ts",
-                                      "line": 28,
-                                      "end_line": 35,
-                                      "column": 18,
-                                      "end_column": 6
-                                    },
-                                    "wtype": {
-                                      "_type": "WTuple",
-                                      "name": "tuple",
-                                      "types": [
-                                        {
-                                          "_type": "BytesWType",
-                                          "length": 4
-                                        }
-                                      ]
-                                    },
-                                    "items": [
-                                      {
-                                        "_type": "MethodConstant",
-                                        "source_location": {
-                                          "file": "tests/approvals/avm12.algo.ts",
-                                          "line": 28,
-                                          "end_line": 35,
-                                          "column": 18,
-                                          "end_column": 6
-                                        },
-                                        "wtype": {
-                                          "_type": "BytesWType",
-                                          "length": 4
-                                        },
-                                        "value": {
-                                          "_type": "MethodSignature",
-                                          "source_location": {
-                                            "file": "tests/approvals/avm12.algo.ts",
-                                            "line": 28,
-                                            "end_line": 35,
-                                            "column": 18,
-                                            "end_column": 6
-                                          },
-                                          "name": "update",
-                                          "arg_types": [],
-                                          "return_type": {
-                                            "_type": "WType",
-                                            "name": "void",
-                                            "immutable": true
-                                          },
-                                          "resource_encoding": "value"
-                                        }
-                                      }
-                                    ]
                                   }
                                 }
                               }

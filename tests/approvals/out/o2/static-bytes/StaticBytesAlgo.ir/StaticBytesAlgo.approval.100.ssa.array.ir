@@ -22,8 +22,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert eq%1#1) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
         let a2#0: bytes[32] = tmp%2#7
         let tmp%0#12: bytes = (concat a1#0 a2#0)
-        let tmp%1#8: bytes[32] = (sha512_256 tmp%0#12)
-        let aggregate%as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%1#8
+        let tmp%1#9: bytes[32] = (sha512_256 tmp%0#12)
+        let aggregate%as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%1#9
         let tmp%5#2: Encoded(uint8[32]) = aggregate%as_Encoded(uint8[32])%0#0
         let tmp%6#2: bytes = (concat 0x151f7c75 tmp%5#2)
         (log tmp%6#2)
@@ -33,12 +33,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let len%0#2: uint64 = (len tmp%0#10)
         let eq%0#2: bool = (== len%0#2 32u)
         (assert eq%0#2) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
-        let tmp%1#6: bytes[32] = tmp%0#10
-        let tmp%2#6: bytes[32] = tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(tmp%1#6)
+        let tmp%1#7: bytes[32] = tmp%0#10
+        let tmp%2#6: bytes[32] = tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(tmp%1#7)
         let aggregate%as_Encoded(uint8[32])%1#0: Encoded(uint8[32]) = tmp%2#6
         let tmp%3#5: Encoded(uint8[32]) = aggregate%as_Encoded(uint8[32])%1#0
-        let tmp%4#3: bytes = (concat 0x151f7c75 tmp%3#5)
-        (log tmp%4#3)
+        let tmp%4#4: bytes = (concat 0x151f7c75 tmp%3#5)
+        (log tmp%4#4)
         exit 1u
     block@6: // receiveBytes_route_L26
         let tmp%0#9: bytes = (txna ApplicationArgs 1)
@@ -55,8 +55,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert eq%1#0) // invalid number of bytes for arc4.uint64
         let length#1: uint64 = (btoi tmp%2#5)
         let tmp%0#16: uint64 = (len b#6)
-        let tmp%1#11: bool = (== tmp%0#16 length#1)
-        (assert tmp%1#11)
+        let tmp%1#12: bool = (== tmp%0#16 length#1)
+        (assert tmp%1#12)
         exit 1u
     block@7: // returnLength_route_L30
         let tmp%0#7: bytes = (txna ApplicationArgs 1)
@@ -68,8 +68,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#8)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
         let tmp%3#3: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
-        let tmp%4#2: bytes = (concat 0x151f7c75 tmp%3#3)
-        (log tmp%4#2)
+        let tmp%4#3: bytes = (concat 0x151f7c75 tmp%3#3)
+        (log tmp%4#3)
         exit 1u
     block@8: // test_route_L34
         let reinterpret_bytes[32]%0#0: bytes[32] = (txn Sender)
@@ -102,17 +102,18 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 aggregate%as_Encoded(uint8[32])%4#0)
         let aggregate%as_Encoded(uint8[32][])%1#0: Encoded(uint8[32][]) = aggregate%head%2#0
         let tmp%0#5: Encoded(uint8[32][]) = aggregate%as_Encoded(uint8[32][])%1#0
-        let concat%0#0: Encoded(uint8[32][]) = (concat slot_contents%0#0 tmp%0#5) // on error: max array length exceeded
-        store(b#1, concat%0#0)
+        let aggregate%concat%0#0: Encoded(uint8[32][]) = (concat slot_contents%0#0 tmp%0#5) // on error: max array length exceeded
+        let tmp%1#4: Encoded(uint8[32][]) = aggregate%concat%0#0
+        store(b#1, tmp%1#4)
         let slot_contents%1#0: Encoded(uint8[32][]) = load(b#1)
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 32u)
         let aggregate%encoded_element%0#0: bytes = (extract3 slot_contents%1#0 aggregate%bytes_offset%0#0 32u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint8[32]) = aggregate%encoded_element%0#0
-        let values%0#0: bytes[32] = array_item%0#0
-        let bitAnd#0: bytes[32] = (b& a.0#0 values%0#0)
+        let tmp%2#3: bytes[32] = array_item%0#0
+        let bitAnd#0: bytes[32] = (b& a.0#0 tmp%2#3)
         let reinterpret_bytes[32]%3#0: bytes[32] = (txn Sender)
-        let tmp%2#3: bool = (== bitAnd#0 reinterpret_bytes[32]%3#0)
-        (assert tmp%2#3)
+        let tmp%4#1: bool = (== bitAnd#0 reinterpret_bytes[32]%3#0)
+        (assert tmp%4#1)
         exit 1u
     block@10: // test2_route_L57
         let result#0: bytes = 0x0000000000000000000000000000000000000000000000000000000000000000
@@ -152,6 +153,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
         (assert tmp%11#0)
         exit 1u
+
+subroutine _puya_lib.arc4.dynamic_array_concat_fixed(array: bytes, new_items_bytes: bytes, new_items_count: uint64) -> bytes:
+    block@0: // L133
+        let array_length#0: uint64 = (extract_uint16 array#0 0u)
+        let new_array_length#0: uint64 = (+ array_length#0 new_items_count#0)
+        let tmp%2#0: bytes = (itob new_array_length#0)
+        let new_len_u16#0: bytes = ((extract 6 0) tmp%2#0)
+        let result#0: bytes = ((replace2 0) array#0 new_len_u16#0)
+        let tmp%5#0: bytes = (concat result#0 new_items_bytes#0)
+        return tmp%5#0
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(b: bytes[32]) -> bytes[32]:
     block@0: // L22
