@@ -63,8 +63,7 @@ export async function compile(options: CompileOptions, puyaService?: PuyaService
   }
 
   if (options.outputClient) {
-    const clientFiles = resolveClientFiles(compilationSet, options.filePaths)
-    await writeARC4Clients(options.templateVarsPrefix, clientFiles)
+    await writeARC4Clients(resolveClientFiles(compilationSet, options.filePaths))
   }
 
   return {
@@ -113,11 +112,11 @@ function resolveClientFiles(compilationSet: CompilationSet, filePaths: AlgoFile[
   return arc56Files
 }
 
-function writeARC4Clients(templateVarsPrefix: string, clientFiles: ClientFile[]) {
-  return Promise.all(clientFiles.map((clientFile) => writeARC4Client(clientFile.sourceFile, clientFile.outFile, templateVarsPrefix)))
+function writeARC4Clients(clientFiles: ClientFile[]) {
+  return Promise.all(clientFiles.map((clientFile) => writeARC4Client(clientFile.sourceFile, clientFile.outFile)))
 }
 
-async function writeARC4Client(sourceFile: AbsolutePath, outFile: AbsolutePath, templateVarsPrefix: string) {
+async function writeARC4Client(sourceFile: AbsolutePath, outFile: AbsolutePath) {
   const spec: Arc56Contract = JSON.parse(await readFile(sourceFile.toString(), { encoding: 'utf-8' }))
 
   if (await shouldWriteFile(outFile)) {
