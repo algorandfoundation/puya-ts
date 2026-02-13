@@ -30,6 +30,16 @@ class EventEmitter extends Contract {
 
     emit('Swapped((uint8,uint8),uint8)', [b, b], a)
     emit('Swapped(uint8[],uint8)', [b, b], a)
+
+    emit('Swapped(((uint8,uint8)),uint8)', [[b, b]], a)
+    emit('Swapped(uint8[][],uint8)', [[b, b]], a)
+
+    emit('Swapped((uint8,uint8)[],uint8)', [[b, b]], a)
+    emit('Swapped((uint8[]),uint8)', [[b, b]], a)
+
+    const aUint64 = a.asUint64()
+    const bUint64 = b.asUint64()
+    emit('Swapped(uint64[],uint64)', [bUint64, bUint64], aUint64)
   }
 
   emitCustom(arg0: string, arg1: boolean) {

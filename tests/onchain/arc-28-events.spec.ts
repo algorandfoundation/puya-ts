@@ -8,9 +8,10 @@ describe('arc 28 events', () => {
   test('It works with struct types', async ({ appClientEventEmitter, expect }) => {
     const result = await appClientEventEmitter.send.call({ method: 'emitSwapped', args: [0, 255] })
 
-    expect(result.confirmation.logs?.length).toBe(8)
+    expect(result.confirmation.logs?.length).toBe(13)
 
-    const [first, second, third, fourth, fifth, sixth, seventh, eighth] = result.confirmation.logs!.map(uint8ArrayToHex)
+    const [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth] =
+      result.confirmation.logs!.map(uint8ArrayToHex)
 
     // sha_512_256("Swapped(uint8,uint8)").slice(0, 4)
     const eventPrefixHex = '0B6325ED'
@@ -30,6 +31,21 @@ describe('arc 28 events', () => {
 
     // sha_512_256("Swapped(uint8[],uint8)").slice(0, 4) => 08754e0c
     expect(eighth).toEqual('08754E0C0003000002FFFF')
+
+    // sha_512_256("Swapped(((uint8,uint8)),uint8)").slice(0, 4) => 8d44bf68
+    expect(ninth).toEqual('8D44BF68FFFF00')
+
+    // sha_512_256("Swapped(uint8[][],uint8)").slice(0, 4) => d8991c5c
+    expect(tenth).toEqual('D8991C5C000300000100020002FFFF')
+
+    // sha_512_256("Swapped((uint8,uint8)[],uint8)").slice(0, 4) => 9047648f
+    expect(eleventh).toEqual('9047648F0003000001FFFF')
+
+    // sha_512_256("Swapped((uint8[]),uint8)").slice(0, 4) => 194abeb4
+    expect(twelfth).toEqual('194ABEB400030000020002FFFF')
+
+    // sha_512_256("Swapped(uint64[],uint64)").slice(0, 4) => 4e707717
+    expect(thirteenth).toEqual('4E707717000A0000000000000000000200000000000000FF00000000000000FF')
   })
 
   test('It works with dynamic bytes', async ({ appClientEventEmitter, expect }) => {
