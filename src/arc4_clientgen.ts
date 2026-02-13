@@ -260,7 +260,7 @@ function generateClientFor(contract: Arc56Contract): string {
     // create is also in call
     const createSet = new Set(create)
     const callSet = new Set(call)
-    return createSet.symmetricDifference(callSet).size === 0
+    return createSet.difference(callSet).union(callSet.difference(createSet)).size === 0
   }
 
   function ARC4MethodToTSDecorator(name: string, method: Arc56Method): string {
