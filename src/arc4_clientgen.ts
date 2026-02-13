@@ -68,9 +68,10 @@ export function resolveClientFiles(compilationSet: CompilationSet, filePaths: Al
       throw new InternalError(`Could not find a source file for the contract ${ref.className} at ${ref.moduleName}`)
     }
 
+    const name = model.options?.name || model.name
     arc56Files.push({
-      sourceFile: outDir.join(`${ref.className}.arc56.json`),
-      outFile: outDir.join(`${ref.className}.client.ts`),
+      sourceFile: outDir.join(`${name}.arc56.json`),
+      outFile: outDir.join(`${name}.client.ts`),
     })
   }
   return arc56Files
