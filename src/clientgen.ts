@@ -1,0 +1,296 @@
+/* import json
+import typing
+from collections.abc import Iterable, Sequence
+from pathlib import Path
+
+import attrs
+import cyclopts
+from cattrs.preconf.json import make_converter
+
+from puya import (
+    arc56_models as arc56,
+    log,
+)
+from puya.arc32 import OCA_ARC32_MAPPING
+from puya.arc56 import allowed_call_oca, allowed_create_oca
+from puya.artifact_metadata import ARC4MethodArg, ARC4Returns
+from puya.errors import PuyaError
+from puyapy.awst_build.arc4_client_gen import write_arc4_client
+
+logger = log.get_logger(__name__)
+ARC32_OCA_MAPPING = {v: k for k, v in OCA_ARC32_MAPPING.items()}
+
+
+app = cyclopts.App(name="puyapy-clientgen", help_on_error=True)
+
+
+
+
+def _convert_arc32_to_arc56(app_spec_json: str) -> arc56.Contract:
+    name, structs, methods = _parse_arc32_app_spec_methods(app_spec_json)
+    return arc56.Contract(
+        name=name,
+        structs=structs,
+        methods=methods,
+    )
+
+
+def resolve_app_specs(paths: Sequence[Path]) -> Sequence[Path]:
+    app_specs = list[Path]()
+    for path in paths:
+        if not path.is_dir():
+            app_specs.append(path)
+        else:
+            patterns = ["application.json", "*.arc32.json"]
+
+            app_specs = []
+            for pattern in patterns:
+                app_specs.extend(path.rglob(pattern))
+
+    app_specs = sorted(set(app_specs))
+    if not app_specs:
+        raise PuyaError("No app specs found")
+    return app_specs
+
+
+def parse_arc56(app_spec_json: str) -> arc56.Contract:
+    converter = make_converter(omit_if_default=True)
+    return converter.loads(app_spec_json, arc56.Contract)
+
+
+def _parse_arc32_app_spec_methods(
+    app_spec_json: str,
+) -> tuple[str, dict[str, Sequence[arc56.StructField]], Sequence[arc56.Method]]:
+    # only need to parse a limited subset of ARC-32 for client generation
+    # i.e. ABI methods, their OCA parameters, and any struct info
+    # default args are ignored as they aren't supported for on chain calls currently
+
+    app_spec = json.loads(app_spec_json)
+    contract = app_spec["contract"]
+    hints = app_spec["hints"]
+    contract_name = contract["name"]
+    methods = list[arc56.Method]()
+    arc4_methods = {m.signature: m for m in _parse_methods(contract["methods"])}
+    known_structs = dict[str, Sequence[arc56.StructField]]()
+    for arc4_method in arc4_methods.values():
+        method_hints = hints[str(arc4_method.signature)]
+        arg_to_struct = dict[str, str]()
+        for param, struct_name, struct in _parse_structs(method_hints.get("structs", {})):
+            for known_struct_name, known_struct in known_structs.items():
+                if known_struct == struct:
+                    arg_to_struct[param] = known_struct_name
+                    break
+            else:
+                known_structs[struct_name] = struct
+                arg_to_struct[param] = struct_name
+        methods.append(
+            arc56.Method(
+                name=arc4_method.signature.name,
+                desc=arc4_method.desc,
+                args=[
+                    arc56.MethodArg(
+                        name=a.name,
+                        type=a.type_,
+                        struct=arg_to_struct.get(a.name),
+                    )
+                    for a in arc4_method.signature.args
+                ],
+                returns=arc56.MethodReturns(
+                    type=arc4_method.signature.returns.type_,
+                    desc=arc4_method.desc,
+                    struct=arg_to_struct.get("output"),
+                ),
+                readonly=bool(method_hints.get("read_only") or arc4_method.readonly),
+                actions=_parse_call_config(method_hints["call_config"]),
+            )
+        )
+    return contract_name, known_structs, methods
+
+
+@attrs.frozen(kw_only=True)
+class _MethodSignature:
+    name: str
+    args: tuple[ARC4MethodArg, ...]
+    returns: ARC4Returns
+
+    def __str__(self) -> str:
+        return f"{self.name}({','.join(a.type_ for a in self.args)}){self.returns.type_}"
+
+
+@attrs.frozen(kw_only=True)
+class _Method:
+    signature: _MethodSignature
+    desc: str | None
+    readonly: bool | None
+
+
+def _parse_methods(methods: list[dict[str, typing.Any]]) -> Iterable[_Method]:
+    for method in methods:
+        signature = _parse_signature(method)
+        yield _Method(
+            signature=signature,
+            desc=method.get("desc"),
+            readonly=method.get("readonly"),
+        )
+
+
+def _parse_signature(method: dict[str, typing.Any]) -> _MethodSignature:
+    returns = method["returns"]
+    return _MethodSignature(
+        name=method["name"],
+        args=tuple(
+            ARC4MethodArg(
+                name=arg["name"],
+                type_=arg["type"],
+                desc=arg.get("desc"),
+                struct=arg.get("struct"),
+                client_default=None,  # not supported on chain
+            )
+            for arg in method["args"]
+        ),
+        returns=ARC4Returns(
+            type_=returns["type"],
+            desc=returns.get("desc"),
+            struct=returns.get("struct"),
+        ),
+    )
+
+
+def _parse_call_config(method_call_config: dict[str, str]) -> arc56.MethodActions:
+    create = []
+    call = []
+    for oca, call_config in method_call_config.items():
+        action = ARC32_OCA_MAPPING[oca].name
+        match call_config:
+            case "CREATE" if allowed_create_oca(action):
+                create.append(action)
+            case "CALL" if allowed_call_oca(action):
+                call.append(action)
+            # allowed creates is narrower than calls so only need to check that
+            case "ALL" if allowed_create_oca(action):
+                create.append(action)
+                call.append(action)
+            case invalid:
+                raise PuyaError(f"invalid call config option: {invalid}")
+
+    return arc56.MethodActions(
+        create=create,
+        call=call,
+    )
+
+
+def _parse_structs(
+    structs: dict[str, dict[str, typing.Any]],
+) -> Iterable[tuple[str, str, Sequence[arc56.StructField]]]:
+    for param, struct_config in structs.items():
+        yield (
+            param,
+            struct_config["name"],
+            [arc56.StructField(name=f[0], type=f[1]) for f in struct_config["elements"]],
+        )
+*/
+
+import type { Arc56Contract } from '@algorandfoundation/algokit-utils/abi'
+import { arc32ToArc56 } from '@algorandfoundation/algokit-utils/app-spec'
+import { ArgumentParser } from 'argparse'
+import { readFile } from 'fs/promises'
+import { writeARC4Client } from './arc4_clientgen'
+import { appVersion } from './cli/app-version'
+import { checkNodeVersion } from './cli/check-node-version'
+import { addEnumArg } from './cli/util'
+import { PuyaError } from './errors'
+import { logger, LoggingContext, LogLevel } from './logger'
+import { ConsoleLogSink } from './logger/sinks/console-log-sink'
+import { AbsolutePath } from './util/absolute-path'
+
+interface ClientgenCommandArgs {
+  command: 'clientgen'
+  specs: string[]
+  out_dir: string
+  log_level: LogLevel
+}
+
+interface VersionCommand {
+  command: 'version'
+}
+
+type PuyaTsClientgenCommand = ClientgenCommandArgs | VersionCommand
+
+async function parseCliArguments() {
+  checkNodeVersion()
+  const parser = new ArgumentParser({
+    prog: 'puya-ts-clientgen',
+  })
+
+  addEnumArg(parser, {
+    name: '--log-level',
+    default: LogLevel.Info,
+    enumType: LogLevel,
+    help: 'The minimum log level to output',
+  })
+  parser.add_argument('--version', {
+    action: 'store_const',
+    help: 'Show application version',
+    const: 'version',
+    dest: 'command',
+  })
+  parser.add_argument('specs', {
+    metavar: 'SPECS',
+    nargs: '+',
+    help: 'The path, or paths to the .arc32.json or .arc56.json files',
+  })
+  parser.add_argument('--out-dir', {
+    action: 'store',
+    help: 'Where to output clientgen artifacts',
+    default: 'out',
+  })
+  parser.set_defaults({
+    command: 'clientgen',
+  })
+  const result: PuyaTsClientgenCommand = parser.parse_args()
+  switch (result.command) {
+    case 'clientgen':
+      await outputStubs(result.specs, result.out_dir, result.log_level)
+      break
+    case 'version':
+      /* eslint-disable-next-line no-console */
+      console.log(appVersion())
+      break
+    default:
+      parser.print_help()
+      break
+  }
+}
+
+async function outputStubs(paths: string[], outDir: string, logLevel: LogLevel) {
+  const logCtx = LoggingContext.create()
+  return logCtx.run(async () => {
+    logger.configure([new ConsoleLogSink(logLevel, AbsolutePath.resolve({ path: '' }))])
+    for (const appSpecPath of paths) {
+      try {
+        const appSpecJSON = JSON.parse(await readFile(appSpecPath, { encoding: 'utf-8' }))
+        let appSpec: Arc56Contract
+        if (appSpecPath.endsWith('.arc56.json')) {
+          appSpec = appSpecJSON
+        } else {
+          appSpec = arc32ToArc56(appSpecJSON)
+        }
+        const sourceFile = AbsolutePath.resolve({ path: appSpecPath })
+        const outFile = AbsolutePath.resolve({ path: outDir, workingDirectory: sourceFile.resolve('..') }).join(`${appSpec.name}.client.ts`)
+        await writeARC4Client(appSpec, outFile)
+      } catch (e) {
+        if (e instanceof PuyaError) {
+          logger.error(e)
+        } else if (e instanceof Error) {
+          logger.error
+          throw e
+        } else {
+          throw e
+        }
+      }
+    }
+    logCtx.exitIfErrors()
+  })
+}
+
+parseCliArguments()
