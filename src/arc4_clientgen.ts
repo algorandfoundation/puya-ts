@@ -79,12 +79,15 @@ export function resolveClientFiles(compilationSet: CompilationSet, filePaths: Al
 
 export function writeARC4Clients(compilationSet: CompilationSet, filePaths: AlgoFile[]) {
   const clientFiles = resolveClientFiles(compilationSet, filePaths)
-  return Promise.all(clientFiles.map((clientFile) => writeARC4Client(clientFile.sourceFile, clientFile.outFile)))
+  return Promise.all(
+    clientFiles.map(async (clientFile) => {
+      const spec = JSON.parse(await readFile(clientFile.sourceFile.toString(), { encoding: 'utf-8' }))
+      await writeARC4Client(spec, clientFile.outFile)
+    }),
+  )
 }
 
-async function writeARC4Client(sourceFile: AbsolutePath, outFile: AbsolutePath) {
-  const spec: Arc56Contract = JSON.parse(await readFile(sourceFile.toString(), { encoding: 'utf-8' }))
-
+export async function writeARC4Client(spec: Arc56Contract, outFile: AbsolutePath) {
   if (await shouldWriteFile(outFile)) {
     logger.info(undefined, `Writing ${outFile.relativeTo('.')}`)
     const typescriptClient = generateClientFor(spec)
