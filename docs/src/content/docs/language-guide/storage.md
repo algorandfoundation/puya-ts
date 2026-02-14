@@ -10,7 +10,7 @@ Algorand smart contracts can utilise [three different types of on-chain storage]
 
 Global or Application storage is a key/value store of `bytes` or `uint64` values stored against a smart contract application. The number of values used must be declared when the application is first created and will affect the [minimum balance requirement](https://dev.algorand.co/concepts/smart-contracts/costs-constraints/#mbr) for the application. For ARC4 contracts, this information is captured in the ARC32 and ARC56 specification files and automatically included in deployments.
 
-Global storage values are declared using the [GlobalState](../../api/) function to create a [GlobalState](../../api/) proxy object.
+Global storage values are declared using the [GlobalState](../../api/index/functions/globalstate/) function to create a [GlobalState](../../api/index/type-aliases/globalstate/) proxy object.
 
 ```ts
 import { GlobalState, Contract, uint64, bytes, Uint64, contract } from '@algorandfoundation/algorand-typescript'
