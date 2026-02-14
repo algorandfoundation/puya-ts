@@ -36,6 +36,7 @@ export default defineConfig({
           typeDoc: {
             excludeReferences: true,
             gitRevision: 'main',
+            entryFileName: 'index',
           },
         }),
       ],
