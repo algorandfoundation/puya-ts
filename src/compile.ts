@@ -1,8 +1,9 @@
 import type ts from 'typescript'
+import { writeARC4Clients } from './arc4_clientgen'
 import type { AWST } from './awst/nodes'
 import { validateAwst } from './awst/validation'
 import { buildAwst } from './awst_build'
-import type { CompilationSet } from './awst_build/models/contract-class-model'
+import { type CompilationSet } from './awst_build/models/contract-class-model'
 import { registerPTypes } from './awst_build/ptypes/register'
 import { typeRegistry } from './awst_build/type-registry'
 import { appVersion } from './cli/app-version'
@@ -55,6 +56,10 @@ export async function compile(options: CompileOptions, puyaService?: PuyaService
       sourceFiles: programResult.sourceFiles,
       puyaService,
     })
+  }
+
+  if (options.outputClient) {
+    await writeARC4Clients(compilationSet, options.filePaths)
   }
 
   return {
