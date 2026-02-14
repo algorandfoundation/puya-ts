@@ -1,14 +1,49 @@
-# Algorand TypeScript
+# Starlight Starter Kit: Basics
 
-Algorand TypeScript is a partial implementation of the TypeScript programming language that runs on the Algorand Virtual Machine (AVM). It includes a statically typed framework for the development of Algorand smart contracts and logic signatures, with TypeScript interfaces to underlying AVM functionality that work with standard TypeScript tooling.
+[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
 
-It maintains the syntax and semantics of TypeScript such that a developer who knows TypeScript can make safe assumptions
-about the behaviour of the compiled code when running on the AVM. Algorand TypeScript is also executable TypeScript that can be run
-and debugged on a Node.js virtual machine with transpilation to ECMAScript and run from automated tests.
+```
+npm create astro@latest -- --template starlight
+```
 
-Algorand TypeScript is compiled for execution on the AVM by PuyaTs, a TypeScript front end for the [Puya](https://github.com/algorandfoundation/puya) optimising compiler that ensures the resulting AVM bytecode has execution semantics that match the given TypeScript code. PuyaTs produces output that is directly compatible with AlgoKit typed clients to make deployment and calling easy.
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-- [Language Guide](./language-guide.md)
-- [CLI Guide](./cli.md)
-- [Reference Docs](./reference.md)
-- [Migration Guides to 1.0.1](./migration-guides.md)
+## 🚀 Project Structure
+
+Inside of your Astro + Starlight project, you'll see the following folders and files:
+
+```
+.
+├── public/
+├── src/
+│   ├── assets/
+│   ├── content/
+│   │   └── docs/
+│   └── content.config.ts
+├── astro.config.mjs
+├── package.json
+└── tsconfig.json
+```
+
+Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+
+Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+
+Static assets, like favicons, can be placed in the `public/` directory.
+
+## 🧞 Commands
+
+All commands are run from the root of the project, from a terminal:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
