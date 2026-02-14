@@ -1,8 +1,8 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
-import starlight from '@astrojs/starlight';
-import starlightTypeDoc, { typeDocSidebarGroup } from 'starlight-typedoc';
-import remarkGithubAlerts from 'remark-github-alerts';
+import starlight from '@astrojs/starlight'
+import { defineConfig } from 'astro/config'
+import remarkGithubAlerts from 'remark-github-alerts'
+import starlightTypeDoc, { typeDocSidebarGroup } from 'starlight-typedoc'
 
 // https://astro.build/config
 export default defineConfig({
@@ -40,7 +40,6 @@ export default defineConfig({
         }),
       ],
       sidebar: [
-        { label: 'Home', link: '/' },
         {
           label: 'Language Guide',
           items: [
@@ -55,11 +54,7 @@ export default defineConfig({
         { label: 'CLI Guide', slug: 'cli' },
         {
           label: 'Reference',
-          items: [
-            { slug: 'reference' },
-            { slug: 'reference/abi-routing' },
-            { slug: 'reference/guiding-principles' },
-          ],
+          items: [{ slug: 'reference/abi-routing' }, { slug: 'reference/guiding-principles' }],
         },
         { label: 'Migration Guides', slug: 'migration-guides' },
         {
@@ -71,4 +66,4 @@ export default defineConfig({
       ],
     }),
   ],
-});
+})
