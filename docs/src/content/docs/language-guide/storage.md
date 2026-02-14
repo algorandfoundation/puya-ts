@@ -84,7 +84,7 @@ export class LocalStateDemo extends Contract {
 
 ## Box storage
 
-We provide two different types for accessing box storage: [Box](../../api/) and [BoxMap](../../api/). We also expose raw operations via the [AVM ops](./ops) module.
+We provide two different types for accessing box storage: [Box](../../api/) and [BoxMap](../../api/). We also expose raw operations via the [AVM ops](../ops) module.
 
 Before using box storage, be sure to familiarise yourself with the [requirements and restrictions](https://dev.algorand.co/concepts/smart-contracts/storage/box/) of the underlying API.
 
