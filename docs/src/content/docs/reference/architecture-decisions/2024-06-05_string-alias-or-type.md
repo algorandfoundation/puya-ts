@@ -1,3 +1,7 @@
+---
+title: "String as alias or type"
+---
+
 # Architecture Decision Record - String as alias or type
 
 - **Status**: Draft

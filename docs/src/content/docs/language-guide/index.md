@@ -1,11 +1,5 @@
 ---
 title: Algorand TypeScript Language Guide
-children:
-  - ./lg-program-structure.md
-  - ./lg-types.md
-  - ./lg-storage.md
-  - ./lg-ops.md
-  - ./lg-itxns.md
 ---
 
 # Algorand TypeScript Language Guide
@@ -24,12 +18,12 @@ Another example is the equality operator `===`. In ECMAScript, this always opera
 
 ECMAScript has an extremely liberal type system, especially regarding type coercion when comparing different types. Algorand TypeScript aims to be more restrictive in this regard, as this behaviour can often lead to unintended bugs. For example, the comparison between unrelated types in ECMAScript will simply return `false` (or something [barely predictable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality) if using the `==` operator). Algorand TypeScript will instead error, as the comparison is likely a bug.
 
-If you are interested in learning about the design of Algorand TypeScript, you can see our [Guiding Principles](./guiding-principles.md) for more detail, including the Architectural Decision Records (ADRs) which got us here.
+If you are interested in learning about the design of Algorand TypeScript, you can see our [Guiding Principles](../reference/guiding-principles) for more detail, including the Architectural Decision Records (ADRs) which got us here.
 
 ## Table of Contents
 
-- [Program Structure](lg-program-structure.md)
-- [Basic Types](lg-types.md)
-- [Storage](lg-storage.md)
-- [Ops](lg-ops.md)
-- [Inner Transactions](lg-itxns.md)
+- [Program Structure](./program-structure)
+- [Basic Types](./types)
+- [Storage](./storage)
+- [Ops](./ops)
+- [Inner Transactions](./itxns)

@@ -1,3 +1,7 @@
+---
+title: "Imports or ambient types"
+---
+
 # Architecture Decision Record - Imports or ambient types
 
 - **Status**: Draft

@@ -1,3 +1,7 @@
+---
+title: "Primitive integer types"
+---
+
 # Architecture Decision Record - Primitive integer types
 
 - **Status**: Draft
@@ -150,7 +154,7 @@ This introduces a degree of type safety with the in-built TypeScript type system
 
 TEALScript uses a similar approach to option 3, but uses `number` as the underlying type rather than `bigint`. This has the advantage of being directly compatible with casting raw numbers (e.g. `const x: uint64 = 3` rather than `const x: uint64 = 3n`).
 
-Furthermore, any JavaScript prototype methods that return `number` like `array.length` will be similarly able to be directly used and casted to `uint64` rather than wrapping in a factory method (e.g. `const x: uint64 = [1, 2, 3].length` rather than `const x = UInt64([1, 2, 3].length)`). It's not currently clear if any such methods will be exposed within the stub types that emerge in Algorand TypeScript though; if option 1 isn't chosen then ideally we would want to avoid exposing `number` within Algorand TypeScript altogether. Key prototypes that have `number` include `string` (see [Primitive bytes and strings](./2024-05-21_primitive-bytes-and-strings.md)) and array (but TypeScript allows you to define wrapper classes that support [iteration](https://www.typescriptlang.org/docs/handbook/iterators-and-generators.html) [and](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) [spreading](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/isConcatSpreadable) so we can likely avoid `Array<T>` prototype).
+Furthermore, any JavaScript prototype methods that return `number` like `array.length` will be similarly able to be directly used and casted to `uint64` rather than wrapping in a factory method (e.g. `const x: uint64 = [1, 2, 3].length` rather than `const x = UInt64([1, 2, 3].length)`). It's not currently clear if any such methods will be exposed within the stub types that emerge in Algorand TypeScript though; if option 1 isn't chosen then ideally we would want to avoid exposing `number` within Algorand TypeScript altogether. Key prototypes that have `number` include `string` (see [Primitive bytes and strings](./2024-05-21_primitive-bytes)) and array (but TypeScript allows you to define wrapper classes that support [iteration](https://www.typescriptlang.org/docs/handbook/iterators-and-generators.html) [and](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) [spreading](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/isConcatSpreadable) so we can likely avoid `Array<T>` prototype).
 
 If `number` is used as the base brand type for `uint64` and `bigint` is used as the base brand type for `biguint` (a type that TEALScript doesn't implement, so not a breaking change) then accidental implicit assignment errors are prevented by the TypeScript type system.
 

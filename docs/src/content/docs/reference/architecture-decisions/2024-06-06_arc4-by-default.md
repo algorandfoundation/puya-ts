@@ -1,3 +1,7 @@
+---
+title: "ARC4 by default"
+---
+
 # Architecture Decision Record - ARC4 by default
 
 - **Status**: Draft
