@@ -1,4 +1,16 @@
 import type { Arc56Contract, Arc56Method, StructField } from '@algorandfoundation/algokit-utils/abi'
+import {
+  ABIAddressType,
+  ABIArrayDynamicType,
+  ABIArrayStaticType,
+  ABIBoolType,
+  ABIByteType,
+  ABIStringType,
+  ABITupleType,
+  ABIType,
+  ABIUfixedType,
+  ABIUintType,
+} from '@algorandfoundation/algokit-utils/abi'
 import { existsSync } from 'fs'
 import { readFile, writeFile } from 'fs/promises'
 import { ContractReference, OnCompletionAction } from './awst/models'
@@ -18,15 +30,8 @@ type ClientFile = {
 
 const AUTO_GENERATED_COMMENT = '// This file is auto-generated, do not modify'
 
-const UINT_REGEX = /^uint(?<n>[0-9]+)$/
-const UFIXED_REGEX = /^ufixed(?<n>[0-9]+)x(?<m>[0-9]+)$/
-const FIXED_ARRAY_REGEX = /^(?<type>.+)\[(?<size>[0-9]+)]$/
-const DYNAMIC_ARRAY_REGEX = /^(?<type>.+)\[]$/
-const _TUPLE_REGEX = /^\((?<types>.+)\)$/
 const ARC4_PYTYPE_MAPPING = new Map<string, [string, string | undefined]>([
-  // [arc4, [codeToAdd, elementToImport]]
-  ['bool', ['arc4.Bool', 'arc4']],
-  ['string', ['arc4.Str', 'arc4']],
+  // [name, [codeToAdd, elementToImport]]
   ['account', ['Account', 'Account']],
   ['application', ['Application', 'Application']],
   ['asset', ['Asset', 'Asset']],
@@ -38,9 +43,6 @@ const ARC4_PYTYPE_MAPPING = new Map<string, [string, string | undefined]>([
   ['axfer', ['gtxn.AssetTransferTxn', 'gtxn']],
   ['afrz', ['gtxn.AssetFreezeTxn', 'gtxn']],
   ['appl', ['gtxn.ApplicationCallTxn', 'gtxn']],
-  ['address', ['arc4.Address', 'arc4']],
-  ['byte', ['arc4.Byte', 'arc4']],
-  ['byte[]', ['arc4.DynamicBytes', 'arc4']],
 ])
 
 export function resolveClientFiles(compilationSet: CompilationSet, filePaths: AlgoFile[]): ClientFile[] {
@@ -143,30 +145,8 @@ function generateClientFor(contract: Arc56Contract): string {
     return name
   }
 
-  /**
-   * Splits inner tuple types into individual elements.
-   *
-   * e.g. "uint64,(uint8,string),bool" becomes ["uint64", "(uint8,string)", "bool"]
-   */
-  function* splitTupleTypes(types: string): Iterable<string> {
-    let tupleLevel = 0
-    let lastIdx = 0
-    for (let idx = 0; idx < types.length; idx++) {
-      const tok = types[idx]
-      if (tok === '(') {
-        tupleLevel++
-      } else if (tok === ')') {
-        tupleLevel--
-      } else if (tok === ',' && tupleLevel === 0) {
-        yield types.slice(lastIdx, idx)
-        lastIdx = idx + 1
-      }
-    }
-    yield types.slice(lastIdx)
-  }
-
-  function ARC4ToAlgoTSName(type: string): string {
-    const knownMapping = ARC4_PYTYPE_MAPPING.get(type)
+  function typeNameToAlgoTSName(typeName: string): string {
+    const knownMapping = ARC4_PYTYPE_MAPPING.get(typeName)
     if (knownMapping !== undefined) {
       const [type, importElement] = knownMapping
       if (importElement !== undefined) {
@@ -174,36 +154,29 @@ function generateClientFor(contract: Arc56Contract): string {
       }
       return type
     }
+    return ARC4ToAlgoTSName(ABIType.from(typeName))
+  }
 
+  function ARC4ToAlgoTSName(type: ABIType): string {
     imports.add('type arc4')
-    const uint = UINT_REGEX.exec(type)
-    if (uint !== null) {
-      const n = Number.parseInt(uint.groups!.n)
-      return `arc4.Uint<${n}>`
+    if (type instanceof ABIBoolType) return 'arc4.Bool'
+    if (type instanceof ABIStringType) return 'arc4.Str'
+    if (type instanceof ABIAddressType) return 'arc4.Address'
+    if (type instanceof ABIByteType) return 'arc4.Byte'
+    if (type instanceof ABIUintType) return `arc4.Uint<${type.bitSize}>`
+    if (type instanceof ABIUfixedType) return `arc4.UFixed<${type.bitSize}, ${type.precision}>`
+    if (type instanceof ABIArrayStaticType) {
+      const elementType = ARC4ToAlgoTSName(type.childType)
+      return `arc4.StaticArray<${elementType}, ${type.length}>`
     }
-    const ufixed = UFIXED_REGEX.exec(type)
-    if (ufixed !== null) {
-      const n = Number.parseInt(ufixed.groups!.n)
-      const m = Number.parseInt(ufixed.groups!.m)
-      return `arc4.UFixed<${n}, ${m}>`
-    }
-    const fixedArray = FIXED_ARRAY_REGEX.exec(type)
-    if (fixedArray !== null) {
-      const arrayType = fixedArray.groups!.type
-      const sizeString = fixedArray.groups!.size
-      const size = Number.parseInt(sizeString)
-      const elementType = ARC4ToAlgoTSName(arrayType)
-      return `arc4.StaticArray<${elementType}, ${size}>`
-    }
-    const dynamicArray = DYNAMIC_ARRAY_REGEX.exec(type)
-    if (dynamicArray !== null) {
-      const arrayType = dynamicArray.groups!.type
-      const elementType = ARC4ToAlgoTSName(arrayType)
+    if (type instanceof ABIArrayDynamicType) {
+      if (type.childType instanceof ABIByteType) return 'arc4.DynamicBytes'
+
+      const elementType = ARC4ToAlgoTSName(type.childType)
       return `arc4.DynamicArray<${elementType}>`
     }
-    const tupleMatch = _TUPLE_REGEX.exec(type)
-    if (tupleMatch !== null) {
-      const tupleTypes = [...splitTupleTypes(tupleMatch.groups!.types)].map(ARC4ToAlgoTSName)
+    if (type instanceof ABITupleType) {
+      const tupleTypes = type.childTypes.map(ARC4ToAlgoTSName)
       return `arc4.Tuple<readonly [${tupleTypes.join(', ')}]>`
     }
     throw new CodeError(`unknown ARC-4 type '${type}'`)
@@ -220,7 +193,7 @@ function generateClientFor(contract: Arc56Contract): string {
     } else if (type in contract.structs) {
       return structToClass.get(type) || prepareStructClass(type, contract.structs[type])
     } else {
-      return ARC4ToAlgoTSName(type)
+      return typeNameToAlgoTSName(type)
     }
   }
 
