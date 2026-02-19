@@ -2,9 +2,9 @@ import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import { type Expression, type MethodDocumentation } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { InvalidNonNullAssertion } from '../../code-fix/invalid-non-null-assertion'
+import { NoOpNonNullAssertion } from '../../code-fix/no-op-non-null-assertion'
 import { LooseEqualityOperator } from '../../code-fix/loose-equality-operator'
-import { CodeError, FixableCodeError, InternalError, NotSupported } from '../../errors'
+import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
 import type { Expressions } from '../../visitor/syntax-names'
@@ -559,8 +559,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     if (target instanceof OptionalExpressionBuilder) {
       return target.base
     }
-
-    throw new FixableCodeError(new InvalidNonNullAssertion({ sourceLocation: this.sourceLocation(node) }))
+    logger.addCodeFix(new NoOpNonNullAssertion({ sourceLocation: this.sourceLocation(node) }))
+    return target
   }
 
   visitSatisfiesExpression(node: ts.SatisfiesExpression): NodeBuilder {
