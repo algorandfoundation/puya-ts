@@ -10,6 +10,7 @@ import { PuyaError } from './errors'
 import { logger, LoggingContext, LogLevel } from './logger'
 import { ConsoleLogSink } from './logger/sinks/console-log-sink'
 import { AbsolutePath } from './util/absolute-path'
+import './util/polyfills'
 
 interface ClientgenCommandArgs {
   command: 'clientgen'
