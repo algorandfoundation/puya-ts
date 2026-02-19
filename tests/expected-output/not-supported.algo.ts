@@ -66,7 +66,7 @@ function notNull(): uint64 {
   // @expect-error Union types are not valid as a variable, parameter, return, or property type. Expression type is uint64 | undefined
   const x: uint64 | undefined = 123
 
-  // @expect-error The non-null assertion operator "!" is not valid here...
+  // @expect-warning The non-null assertion operator "!" has no effect (no-op) on non-optional types
   return x!
 }
 
