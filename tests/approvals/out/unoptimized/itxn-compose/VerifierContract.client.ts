@@ -2,7 +2,7 @@
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class VerifierContract extends Contract {
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   verify(): void {
     err('stub only')
   }

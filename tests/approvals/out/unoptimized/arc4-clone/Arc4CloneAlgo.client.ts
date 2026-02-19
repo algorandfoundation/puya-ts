@@ -13,22 +13,22 @@ export class TopLevelStruct extends arc4.Struct<{
 }> {}
 
 export abstract class Arc4CloneAlgo extends Contract {
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   aliasing(mutable: arc4.DynamicArray<arc4.Uint<64>>): void {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   receive(mutable: arc4.DynamicArray<arc4.Uint<64>>): void {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   receiveReadonly(a: arc4.DynamicArray<arc4.Uint<64>>): void {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   structReturn(arg: TopLevelStruct): SharedStruct {
     err('stub only')
   }

@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class DemoContract extends Contract {
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   testWhile(stop: arc4.Uint<64>): arc4.Uint<64> {
     err('stub only')
   }

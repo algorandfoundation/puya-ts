@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type Account, type Application, type Asset, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class EchoResource extends Contract {
-  @abimethod({ resourceEncoding: 'index', allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ resourceEncoding: 'index', onCreate: 'require' })
   echoResourceByIndex(
     asset: Asset,
     app: Application,
@@ -11,7 +11,7 @@ export abstract class EchoResource extends Contract {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   echoResourceByValue(
     asset: arc4.Uint<64>,
     app: arc4.Uint<64>,

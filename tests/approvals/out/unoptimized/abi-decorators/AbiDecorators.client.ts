@@ -2,27 +2,27 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class AbiDecorators extends Contract {
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   justNoop(): void {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   createMethod(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod({ allowActions: ['NoOp', 'OptIn', 'CloseOut', 'UpdateApplication', 'DeleteApplication'], onCreate: 'require' })
   allActions(): void {
     err('stub only')
   }
 
-  @abimethod({ readonly: true, allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ readonly: true, onCreate: 'require' })
   overrideReadonlyName(): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   methodWithDefaults(
     a: arc4.Uint<64>,
     b: arc4.Uint<64>,
@@ -31,12 +31,12 @@ export abstract class AbiDecorators extends Contract {
     err('stub only')
   }
 
-  @abimethod({ readonly: true, allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ readonly: true, onCreate: 'require' })
   readonlyAlt(): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod({ readonly: true, allowActions: ['NoOp', 'NoOp'], onCreate: 'allow' })
+  @abimethod({ readonly: true, onCreate: 'allow' })
   readonlyAlt2(): arc4.Uint<64> {
     err('stub only')
   }

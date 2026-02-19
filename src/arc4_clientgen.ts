@@ -264,7 +264,7 @@ function generateClientFor(contract: Arc56Contract): string {
     actions.sort((a, b) => OnCompletionAction[a] - OnCompletionAction[b])
     const uniqueActions = new Set(actions)
 
-    if (uniqueActions.size === 1 && uniqueActions.has('NoOp')) {
+    if (!(uniqueActions.size === 1 && uniqueActions.has('NoOp'))) {
       abimethodArgs.push(`allowActions: [${actions.map((v) => `'${v}'`).join(', ')}]`)
     }
     if (method.actions.create.length !== 0 && method.actions.call.length !== 0) {

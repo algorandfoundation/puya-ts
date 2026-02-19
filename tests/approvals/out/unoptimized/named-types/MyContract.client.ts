@@ -17,22 +17,22 @@ export class ReadonlyObjectDC5110F2 extends arc4.Struct<{
 }> {}
 
 export abstract class MyContract extends Contract {
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   getXY(): XY {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   getYX(): YX {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   getAnon(): ReadonlyObjectDC5110F2 {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   test(
     x: XY,
     y: YX,
@@ -40,7 +40,7 @@ export abstract class MyContract extends Contract {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   testing(): arc4.Tuple<readonly [arc4.Tuple<readonly [arc4.Uint<64>, arc4.Uint<64>]>, arc4.Tuple<readonly [arc4.Uint<64>, arc4.Uint<64>]>, arc4.Tuple<readonly [arc4.Uint<64>, arc4.Uint<64>]>]> {
     err('stub only')
   }

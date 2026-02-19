@@ -16,7 +16,7 @@ export abstract class JSDocDemo extends Contract {
   /**
    * This is the description of the method
    */
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   test(
     a: arc4.Uint<64>,
     b: arc4.DynamicBytes,
@@ -27,7 +27,7 @@ export abstract class JSDocDemo extends Contract {
   /**
    * This is the description of the method
    */
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   test2(a: arc4.DynamicBytes): DemoType {
     err('stub only')
   }

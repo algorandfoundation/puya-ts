@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class EventEmitter extends Contract {
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   emitSwapped(
     a: arc4.Uint<8>,
     b: arc4.Uint<8>,
@@ -10,7 +10,7 @@ export abstract class EventEmitter extends Contract {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   emitCustom(
     arg0: arc4.Str,
     arg1: arc4.Bool,
@@ -18,7 +18,7 @@ export abstract class EventEmitter extends Contract {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   emitDynamicBytes(
     x: arc4.DynamicBytes,
     y: arc4.DynamicBytes,

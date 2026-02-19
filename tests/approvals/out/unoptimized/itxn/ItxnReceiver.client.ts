@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type arc4, type gtxn } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ItxnReceiver extends Contract {
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   receivePay(
     a: arc4.Uint<64>,
     b: gtxn.PaymentTxn,

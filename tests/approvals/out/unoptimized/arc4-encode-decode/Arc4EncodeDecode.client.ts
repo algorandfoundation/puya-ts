@@ -7,7 +7,7 @@ export class TestObj extends arc4.Struct<{
 }> {}
 
 export abstract class Arc4EncodeDecode extends Contract {
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   testEncoding(
     a: arc4.Uint<64>,
     b: arc4.Bool,
@@ -20,7 +20,7 @@ export abstract class Arc4EncodeDecode extends Contract {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   testDecoding(
     a: arc4.Uint<64>,
     a_bytes: arc4.DynamicBytes,

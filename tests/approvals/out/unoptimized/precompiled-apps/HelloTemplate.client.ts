@@ -7,27 +7,27 @@ export class Greeting extends arc4.Struct<{
 }> {}
 
 export abstract class HelloTemplate extends Contract {
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   create(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod({ allowActions: ['DeleteApplication'], onCreate: 'require' })
   delete(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod({ allowActions: ['UpdateApplication'], onCreate: 'require' })
   update(): void {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   greet(name: arc4.Str): arc4.Str {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   sendGreetings(a: Greeting): arc4.Str {
     err('stub only')
   }

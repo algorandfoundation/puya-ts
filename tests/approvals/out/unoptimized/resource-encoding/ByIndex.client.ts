@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type Account, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ByIndex extends Contract {
-  @abimethod({ resourceEncoding: 'index', allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ resourceEncoding: 'index', onCreate: 'require' })
   testExplicitIndex(account: Account): arc4.Uint<64> {
     err('stub only')
   }
@@ -10,7 +10,7 @@ export abstract class ByIndex extends Contract {
   /**
    * Should implicitly use default 'value'
    */
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   testImplicitValue(account: arc4.Address): arc4.Uint<64> {
     err('stub only')
   }

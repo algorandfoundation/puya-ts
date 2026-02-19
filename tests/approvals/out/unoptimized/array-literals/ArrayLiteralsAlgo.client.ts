@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ArrayLiteralsAlgo extends Contract {
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   test(
     a: arc4.Uint<64>,
     b: arc4.Uint<64>,
@@ -10,7 +10,7 @@ export abstract class ArrayLiteralsAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   test2(): arc4.Uint<64> {
     err('stub only')
   }

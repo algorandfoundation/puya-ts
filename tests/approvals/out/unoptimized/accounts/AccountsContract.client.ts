@@ -20,7 +20,7 @@ export class Object3B1036D9 extends arc4.Struct<{
 }> {}
 
 export abstract class AccountsContract extends Contract {
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   getAccountInfo(
     account: arc4.Address,
     asset: arc4.Uint<64>,
@@ -28,7 +28,7 @@ export abstract class AccountsContract extends Contract {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp'], onCreate: 'require' })
+  @abimethod({ onCreate: 'require' })
   otherAccount(): void {
     err('stub only')
   }
