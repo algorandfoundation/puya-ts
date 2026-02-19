@@ -91,7 +91,7 @@ async function outputStubs(paths: string[], outDir: string, logLevel: LogLevel) 
         if (e instanceof PuyaError) {
           logger.error(e)
         } else if (e instanceof Error) {
-          logger.error
+          logger.error(e)
           throw e
         } else {
           throw e
