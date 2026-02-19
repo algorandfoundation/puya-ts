@@ -7,72 +7,72 @@ export class Vector extends arc4.Struct<{
 }> {}
 
 export abstract class NativeArraysAlgo extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   readonlyArray(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   arrayInObject(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   buildArray(): arc4.DynamicArray<arc4.Uint<64>> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   arrayFromCtor(): arc4.DynamicArray<arc4.Uint<64>> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   buildReadonly(): arc4.DynamicArray<arc4.Uint<64>> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   doThings(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   fixedArray(y: arc4.StaticArray<arc4.Uint<64>, 50>): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   arc4Interop(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   structs(p: Vector): arc4.DynamicArray<arc4.Tuple<readonly [arc4.Uint<64>, arc4.Uint<64>]>> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   booleans(): arc4.DynamicArray<arc4.Bool> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   booleansStatic(): arc4.Tuple<readonly [arc4.Bool, arc4.Bool, arc4.Bool]> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   arc4Booleans(): arc4.DynamicArray<arc4.Bool> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   arc4BooleansStatic(): arc4.Tuple<readonly [arc4.Bool, arc4.Bool, arc4.Bool]> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   aliasing(
     mutable: arc4.DynamicArray<arc4.Uint<64>>,
     readOnly: arc4.DynamicArray<arc4.Uint<64>>,
@@ -80,12 +80,12 @@ export abstract class NativeArraysAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   receiveMutable(a: arc4.DynamicArray<arc4.Uint<64>>): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   receiveReadonly(a: arc4.DynamicArray<arc4.Uint<64>>): void {
     err('stub only')
   }

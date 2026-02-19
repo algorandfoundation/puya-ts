@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class TealScriptConventionsAlgo extends Contract {
-  @abimethod({ allowActions: ['CloseOut'], onCreate: 'require' })
+  @abimethod({ allowActions: ['CloseOut'] })
   noMoreThanks(arg: arc4.Uint<64>): arc4.Uint<64> {
     err('stub only')
   }
@@ -12,17 +12,17 @@ export abstract class TealScriptConventionsAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   setLocal(value: arc4.Str): void {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['OptIn'], onCreate: 'require' })
+  @abimethod({ allowActions: ['OptIn'] })
   optInToApplication(): void {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['UpdateApplication'], onCreate: 'require' })
+  @abimethod({ allowActions: ['UpdateApplication'] })
   updateApplication(): void {
     err('stub only')
   }

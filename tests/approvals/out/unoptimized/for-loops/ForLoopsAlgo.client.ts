@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ForLoopsAlgo extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   test_for_loop(
     start: arc4.Uint<64>,
     stop: arc4.Uint<64>,
@@ -11,7 +11,7 @@ export abstract class ForLoopsAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   test_for_loop_break(
     start: arc4.Uint<64>,
     stop: arc4.Uint<64>,
@@ -20,7 +20,7 @@ export abstract class ForLoopsAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   test_for_loop_continue(
     start: arc4.Uint<64>,
     stop: arc4.Uint<64>,
@@ -29,7 +29,7 @@ export abstract class ForLoopsAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   test_for_loop_labelled(
     start: arc4.Uint<64>,
     stop: arc4.Uint<64>,

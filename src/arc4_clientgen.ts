@@ -269,7 +269,7 @@ function generateClientFor(contract: Arc56Contract): string {
     }
     if (method.actions.create.length !== 0 && method.actions.call.length !== 0) {
       abimethodArgs.push("onCreate: 'allow'")
-    } else if (method.actions.create) {
+    } else if (method.actions.create.length !== 0) {
       abimethodArgs.push("onCreate: 'require'")
     } else {
       // disallow is default

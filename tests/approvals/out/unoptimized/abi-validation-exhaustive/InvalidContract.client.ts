@@ -7,7 +7,7 @@ export abstract class InvalidContract extends Contract {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   invalidValue(): arc4.StaticArray<arc4.Uint<64>, 3> {
     err('stub only')
   }

@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class AbiDecorators extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   justNoop(): void {
     err('stub only')
   }
@@ -12,17 +12,17 @@ export abstract class AbiDecorators extends Contract {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['NoOp', 'OptIn', 'CloseOut', 'UpdateApplication', 'DeleteApplication'], onCreate: 'require' })
+  @abimethod({ allowActions: ['NoOp', 'OptIn', 'CloseOut', 'UpdateApplication', 'DeleteApplication'] })
   allActions(): void {
     err('stub only')
   }
 
-  @abimethod({ readonly: true, onCreate: 'require' })
+  @abimethod({ readonly: true })
   overrideReadonlyName(): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   methodWithDefaults(
     a: arc4.Uint<64>,
     b: arc4.Uint<64>,
@@ -31,7 +31,7 @@ export abstract class AbiDecorators extends Contract {
     err('stub only')
   }
 
-  @abimethod({ readonly: true, onCreate: 'require' })
+  @abimethod({ readonly: true })
   readonlyAlt(): arc4.Uint<64> {
     err('stub only')
   }

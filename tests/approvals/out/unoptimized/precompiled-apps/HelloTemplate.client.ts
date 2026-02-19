@@ -12,22 +12,22 @@ export abstract class HelloTemplate extends Contract {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['DeleteApplication'], onCreate: 'require' })
+  @abimethod({ allowActions: ['DeleteApplication'] })
   delete(): void {
     err('stub only')
   }
 
-  @abimethod({ allowActions: ['UpdateApplication'], onCreate: 'require' })
+  @abimethod({ allowActions: ['UpdateApplication'] })
   update(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   greet(name: arc4.Str): arc4.Str {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   sendGreetings(a: Greeting): arc4.Str {
     err('stub only')
   }

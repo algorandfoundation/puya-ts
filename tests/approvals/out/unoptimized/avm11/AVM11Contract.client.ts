@@ -2,7 +2,7 @@
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class AVM11Contract extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   testNewOps(): void {
     err('stub only')
   }

@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class Arc4BoxContract extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   setBoxes(
     a: arc4.Uint<64>,
     b: arc4.DynamicBytes,
@@ -11,17 +11,17 @@ export abstract class Arc4BoxContract extends Contract {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   checkKeys(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   createManyInts(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   setManyInts(
     index: arc4.Uint<64>,
     value: arc4.Uint<64>,
@@ -29,52 +29,52 @@ export abstract class Arc4BoxContract extends Contract {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   sumManyInts(): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   deleteBoxes(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   indirectExtractAndReplace(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   readBoxes(): arc4.Tuple<readonly [arc4.Uint<64>, arc4.DynamicBytes, arc4.Str, arc4.Uint<64>]> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   boxesExist(): arc4.Tuple<readonly [arc4.Bool, arc4.Bool, arc4.Bool, arc4.Bool]> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   sliceBox(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   arc4Box(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   testBoxRef(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   createBools(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   setBool(
     index: arc4.Uint<64>,
     value: arc4.Bool,
@@ -82,7 +82,7 @@ export abstract class Arc4BoxContract extends Contract {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   sumBools(stopAtTotal: arc4.Uint<64>): arc4.Uint<64> {
     err('stub only')
   }

@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class SubAbi2 extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   someMethod(): arc4.Str {
     err('stub only')
   }

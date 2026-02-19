@@ -2,7 +2,7 @@
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ContractV0 extends Contract {
-  @abimethod({ allowActions: ['UpdateApplication'], onCreate: 'require' })
+  @abimethod({ allowActions: ['UpdateApplication'] })
   update(): void {
     err('stub only')
   }

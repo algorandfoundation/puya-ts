@@ -2,12 +2,12 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class AbiCallMultiInheritance extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   test(app: arc4.Uint<64>): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   add(
     a: arc4.Uint<64>,
     b: arc4.Uint<64>,

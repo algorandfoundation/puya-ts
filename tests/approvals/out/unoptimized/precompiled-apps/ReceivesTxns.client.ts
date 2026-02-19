@@ -2,22 +2,22 @@
 import { Contract, abimethod, err, type arc4, type gtxn } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ReceivesTxns extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   getOne(): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   receivesAnyTxn(txn: gtxn.Transaction): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   receivesAssetConfig(assetCfg: gtxn.AssetConfigTxn): arc4.DynamicBytes {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   receivesAssetConfigAndPay(
     assetCfg: gtxn.AssetConfigTxn,
     payTxn: gtxn.PaymentTxn,

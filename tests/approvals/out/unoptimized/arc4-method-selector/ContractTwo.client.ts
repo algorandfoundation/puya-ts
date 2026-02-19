@@ -2,17 +2,17 @@
 import { Contract, abimethod, err, type Account, type Application, type Asset, type arc4, type gtxn } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ContractTwo extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   renamedSomeMethod(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   test(): arc4.Bool {
     err('stub only')
   }
 
-  @abimethod({ resourceEncoding: 'index', onCreate: 'require' })
+  @abimethod({ resourceEncoding: 'index' })
   referenceTypesIndex(
     pay: gtxn.PaymentTxn,
     asset: Asset,
@@ -23,7 +23,7 @@ export abstract class ContractTwo extends Contract {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   referenceTypesValue(
     pay: gtxn.PaymentTxn,
     asset: arc4.Uint<64>,

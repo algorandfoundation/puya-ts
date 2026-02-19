@@ -2,12 +2,12 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class CommonBase extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   methodCommon(): arc4.Str {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   b2CantOverride(): arc4.Str {
     err('stub only')
   }

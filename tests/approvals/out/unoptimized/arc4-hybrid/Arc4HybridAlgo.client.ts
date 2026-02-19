@@ -2,7 +2,7 @@
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class Arc4HybridAlgo extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   someMethod(): void {
     err('stub only')
   }

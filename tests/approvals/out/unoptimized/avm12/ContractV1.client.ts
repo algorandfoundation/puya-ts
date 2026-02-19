@@ -2,7 +2,7 @@
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ContractV1 extends Contract {
-  @abimethod({ allowActions: ['DeleteApplication'], onCreate: 'require' })
+  @abimethod({ allowActions: ['DeleteApplication'] })
   delete(): void {
     err('stub only')
   }

@@ -2,32 +2,32 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class AbiValidationAlgo extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   withValidation(value: arc4.StaticArray<arc4.Byte, 32>): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   withoutValidation(value: arc4.StaticArray<arc4.Byte, 32>): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   defaultValidation(value: arc4.StaticArray<arc4.Byte, 32>): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   manualValidation(value: arc4.StaticArray<arc4.Byte, 32>): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   manualValidationInConvert(rawBytes: arc4.DynamicBytes): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   manualValidationAfterConvert(rawBytes: arc4.DynamicBytes): arc4.Uint<64> {
     err('stub only')
   }

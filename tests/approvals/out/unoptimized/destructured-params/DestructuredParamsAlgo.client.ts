@@ -14,17 +14,17 @@ export class Arc4 extends arc4.Struct<{
 }> {}
 
 export abstract class DestructuredParamsAlgo extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   test(p: Object4B7314A9): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   testMutable(p: Arc4): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   init(): void {
     err('stub only')
   }

@@ -2,22 +2,22 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class MyContract extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   getInt(): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   getString(): arc4.Str {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   getBytes(): arc4.DynamicBytes {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   getAddress(): arc4.Address {
     err('stub only')
   }

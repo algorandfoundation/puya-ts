@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class BaseWithState extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   setState(n: arc4.Uint<64>): void {
     err('stub only')
   }

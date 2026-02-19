@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class StoreString extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   setStore(value: arc4.Str): void {
     err('stub only')
   }

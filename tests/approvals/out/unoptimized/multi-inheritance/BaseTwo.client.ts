@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class BaseTwo extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   methodTwo(): arc4.Str {
     err('stub only')
   }
@@ -12,12 +12,12 @@ export abstract class BaseTwo extends Contract {
    * should not be accessible from MultiBases as the MRO should be `BaseOne => CommonBase => BaseTwo => CommonBase`
    * and since CommonBase provides an implementation, this one should not be used
    */
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   b2CantOverride(): arc4.Str {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   methodCommon(): arc4.Str {
     err('stub only')
   }

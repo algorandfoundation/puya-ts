@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class StaticBytesAlgo extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   hashAddresses(
     a1: arc4.StaticArray<arc4.Byte, 32>,
     a2: arc4.StaticArray<arc4.Byte, 32>,
@@ -10,12 +10,12 @@ export abstract class StaticBytesAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   receiveB32(b: arc4.StaticArray<arc4.Byte, 32>): arc4.StaticArray<arc4.Byte, 32> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   receiveBytes(
     b: arc4.DynamicBytes,
     length: arc4.Uint<64>,
@@ -23,32 +23,32 @@ export abstract class StaticBytesAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   returnLength(b: arc4.StaticArray<arc4.Byte, 32>): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   test(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   testArray(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   test2(): arc4.DynamicBytes {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   test3(): void {
     err('stub only')
   }
 
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   test4(): void {
     err('stub only')
   }

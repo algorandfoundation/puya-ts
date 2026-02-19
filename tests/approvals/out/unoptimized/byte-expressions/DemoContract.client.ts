@@ -2,7 +2,7 @@
 import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
 
 export abstract class DemoContract extends Contract {
-  @abimethod({ onCreate: 'require' })
+  @abimethod
   test(): arc4.Bool {
     err('stub only')
   }
