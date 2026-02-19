@@ -16,6 +16,21 @@ import { readFile, writeFile } from 'fs/promises'
 import { ContractReference, OnCompletionAction } from './awst/models'
 import type { CompilationSet } from './awst_build/models/contract-class-model'
 import { ContractClassModel } from './awst_build/models/contract-class-model'
+import type { ABICompatiblePType } from './awst_build/ptypes'
+import {
+  accountPType,
+  anyGtxnType,
+  applicationCallGtxnType,
+  applicationPType,
+  assetConfigGtxnType,
+  assetFreezeGtxnType,
+  assetPType,
+  assetTransferGtxnType,
+  keyRegistrationGtxnType,
+  paymentGtxnType,
+  voidPType,
+} from './awst_build/ptypes'
+import { Constants } from './constants'
 import { CodeError, InternalError } from './errors'
 import { logger } from './logger'
 import type { AlgoFile } from './options'
@@ -30,19 +45,18 @@ type ClientFile = {
 
 const AUTO_GENERATED_COMMENT = '// This file is auto-generated, do not modify'
 
-const ARC4_PYTYPE_MAPPING = new Map<string, [string, string | undefined]>([
-  // [name, [codeToAdd, elementToImport]]
-  ['account', ['Account', 'Account']],
-  ['application', ['Application', 'Application']],
-  ['asset', ['Asset', 'Asset']],
-  ['void', ['void', undefined]],
-  ['txn', ['gtxn.Transaction', 'gtxn']],
-  ['pay', ['gtxn.PaymentTxn', 'gtxn']],
-  ['keyreg', ['gtxn.KeyRegistrationTxn', 'gtxn']],
-  ['acfg', ['gtxn.AssetConfigTxn', 'gtxn']],
-  ['axfer', ['gtxn.AssetTransferTxn', 'gtxn']],
-  ['afrz', ['gtxn.AssetFreezeTxn', 'gtxn']],
-  ['appl', ['gtxn.ApplicationCallTxn', 'gtxn']],
+const ARC4_PYTYPE_MAPPING = new Map<string, ABICompatiblePType>([
+  ['account', accountPType],
+  ['application', applicationPType],
+  ['asset', assetPType],
+  ['void', voidPType],
+  ['txn', anyGtxnType],
+  ['pay', paymentGtxnType],
+  ['keyreg', keyRegistrationGtxnType],
+  ['acfg', assetConfigGtxnType],
+  ['axfer', assetTransferGtxnType],
+  ['afrz', assetFreezeGtxnType],
+  ['appl', applicationCallGtxnType],
 ])
 
 export function resolveClientFiles(compilationSet: CompilationSet, filePaths: AlgoFile[]): ClientFile[] {
@@ -148,11 +162,19 @@ function generateClientFor(contract: Arc56Contract): string {
   function typeNameToAlgoTSName(typeName: string): string {
     const knownMapping = ARC4_PYTYPE_MAPPING.get(typeName)
     if (knownMapping !== undefined) {
-      const [type, importElement] = knownMapping
-      if (importElement !== undefined) {
-        imports.add(`type ${importElement}`)
+      const { name, module } = knownMapping
+      if (module === Constants.moduleNames.algoTs.gtxn) {
+        imports.add('type gtxn')
+        return `gtxn.${name}`
+      } else if (module === Constants.moduleNames.algoTs.reference) {
+        imports.add(`type ${name}`)
+        return name
+      } else if (module === 'lib.d.ts') {
+        // The TypeScript prelude is always imported
+        return name
       }
-      return type
+
+      throw new InternalError(`Cannot import ${name}: The module ${module} is unsupported`)
     }
     return ARC4ToAlgoTSName(ABIType.from(typeName))
   }
