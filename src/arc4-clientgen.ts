@@ -1,42 +1,18 @@
-import type { Arc56Contract, Arc56Method, StructField } from '@algorandfoundation/algokit-utils/abi'
-import {
-  ABIAddressType,
-  ABIArrayDynamicType,
-  ABIArrayStaticType,
-  ABIBoolType,
-  ABIByteType,
-  ABIStringType,
-  ABITupleType,
-  ABIType,
-  ABIUfixedType,
-  ABIUintType,
-} from '@algorandfoundation/algokit-utils/abi'
+import * as abi from '@algorandfoundation/algokit-utils/abi'
 import { existsSync } from 'fs'
 import { readFile, writeFile } from 'fs/promises'
 import { ContractReference, OnCompletionAction } from './awst/models'
 import type { CompilationSet } from './awst_build/models/contract-class-model'
 import { ContractClassModel } from './awst_build/models/contract-class-model'
 import type { ABICompatiblePType } from './awst_build/ptypes'
-import {
-  accountPType,
-  anyGtxnType,
-  applicationCallGtxnType,
-  applicationPType,
-  assetConfigGtxnType,
-  assetFreezeGtxnType,
-  assetPType,
-  assetTransferGtxnType,
-  keyRegistrationGtxnType,
-  paymentGtxnType,
-  voidPType,
-} from './awst_build/ptypes'
+import * as ptype from './awst_build/ptypes'
 import { Constants } from './constants'
 import { CodeError, InternalError } from './errors'
 import { logger } from './logger'
 import type { AlgoFile } from './options'
 import { AbsolutePath } from './util/absolute-path'
 
-type Arc56Arg = Arc56Method['args'][number]
+type Arc56Arg = abi.Arc56Method['args'][number]
 
 type ClientFile = {
   sourceFile: AbsolutePath
@@ -46,17 +22,17 @@ type ClientFile = {
 const AUTO_GENERATED_COMMENT = '// This file is auto-generated, do not modify'
 
 const ARC4_PYTYPE_MAPPING = new Map<string, ABICompatiblePType>([
-  ['account', accountPType],
-  ['application', applicationPType],
-  ['asset', assetPType],
-  ['void', voidPType],
-  ['txn', anyGtxnType],
-  ['pay', paymentGtxnType],
-  ['keyreg', keyRegistrationGtxnType],
-  ['acfg', assetConfigGtxnType],
-  ['axfer', assetTransferGtxnType],
-  ['afrz', assetFreezeGtxnType],
-  ['appl', applicationCallGtxnType],
+  ['account', ptype.accountPType],
+  ['application', ptype.applicationPType],
+  ['asset', ptype.assetPType],
+  ['void', ptype.voidPType],
+  ['txn', ptype.anyGtxnType],
+  ['pay', ptype.paymentGtxnType],
+  ['keyreg', ptype.keyRegistrationGtxnType],
+  ['acfg', ptype.assetConfigGtxnType],
+  ['axfer', ptype.assetTransferGtxnType],
+  ['afrz', ptype.assetFreezeGtxnType],
+  ['appl', ptype.applicationCallGtxnType],
 ])
 
 export function resolveClientFiles(compilationSet: CompilationSet, filePaths: AlgoFile[]): ClientFile[] {
@@ -103,7 +79,7 @@ export function writeARC4Clients(compilationSet: CompilationSet, filePaths: Algo
   )
 }
 
-export async function writeARC4Client(spec: Arc56Contract, outFile: AbsolutePath) {
+export async function writeARC4Client(spec: abi.Arc56Contract, outFile: AbsolutePath) {
   if (await shouldWriteFile(outFile)) {
     logger.info(undefined, `Writing ${outFile.relativeTo('.')}`)
     const typescriptClient = generateClientFor(spec)
@@ -123,7 +99,7 @@ async function shouldWriteFile(outFile: AbsolutePath): Promise<boolean> {
   return contents.startsWith(AUTO_GENERATED_COMMENT)
 }
 
-function generateClientFor(contract: Arc56Contract): string {
+function generateClientFor(contract: abi.Arc56Contract): string {
   const imports = new Set<string>(['Contract'])
   const structToClass = new Map<string, string>()
   const reservedClassNames = new Set<string>()
@@ -176,28 +152,28 @@ function generateClientFor(contract: Arc56Contract): string {
 
       throw new InternalError(`Cannot import ${name}: The module ${module} is unsupported`)
     }
-    return ARC4ToAlgoTSName(ABIType.from(typeName))
+    return ARC4ToAlgoTSName(abi.ABIType.from(typeName))
   }
 
-  function ARC4ToAlgoTSName(type: ABIType): string {
+  function ARC4ToAlgoTSName(type: abi.ABIType): string {
     imports.add('type arc4')
-    if (type instanceof ABIBoolType) return 'arc4.Bool'
-    if (type instanceof ABIStringType) return 'arc4.Str'
-    if (type instanceof ABIAddressType) return 'arc4.Address'
-    if (type instanceof ABIByteType) return 'arc4.Byte'
-    if (type instanceof ABIUintType) return `arc4.Uint<${type.bitSize}>`
-    if (type instanceof ABIUfixedType) return `arc4.UFixed<${type.bitSize}, ${type.precision}>`
-    if (type instanceof ABIArrayStaticType) {
+    if (type instanceof abi.ABIBoolType) return 'arc4.Bool'
+    if (type instanceof abi.ABIStringType) return 'arc4.Str'
+    if (type instanceof abi.ABIAddressType) return 'arc4.Address'
+    if (type instanceof abi.ABIByteType) return 'arc4.Byte'
+    if (type instanceof abi.ABIUintType) return `arc4.Uint<${type.bitSize}>`
+    if (type instanceof abi.ABIUfixedType) return `arc4.UFixed<${type.bitSize}, ${type.precision}>`
+    if (type instanceof abi.ABIArrayStaticType) {
       const elementType = ARC4ToAlgoTSName(type.childType)
       return `arc4.StaticArray<${elementType}, ${type.length}>`
     }
-    if (type instanceof ABIArrayDynamicType) {
-      if (type.childType instanceof ABIByteType) return 'arc4.DynamicBytes'
+    if (type instanceof abi.ABIArrayDynamicType) {
+      if (type.childType instanceof abi.ABIByteType) return 'arc4.DynamicBytes'
 
       const elementType = ARC4ToAlgoTSName(type.childType)
       return `arc4.DynamicArray<${elementType}>`
     }
-    if (type instanceof ABITupleType) {
+    if (type instanceof abi.ABITupleType) {
       const tupleTypes = type.childTypes.map(ARC4ToAlgoTSName)
       return `arc4.Tuple<readonly [${tupleTypes.join(', ')}]>`
     }
@@ -219,7 +195,7 @@ function generateClientFor(contract: Arc56Contract): string {
     }
   }
 
-  function prepareStructClass(name: string, fields: StructField[]) {
+  function prepareStructClass(name: string, fields: abi.StructField[]) {
     imports.add('arc4')
 
     const className = classNameFor(name)
@@ -262,7 +238,7 @@ function generateClientFor(contract: Arc56Contract): string {
     return createSet.symmetricDifference(callSet).size === 0
   }
 
-  function ARC4MethodToTSDecorator(name: string, method: Arc56Method): string {
+  function ARC4MethodToTSDecorator(name: string, method: abi.Arc56Method): string {
     imports.add('abimethod')
 
     const abimethodArgs: string[] = []
@@ -308,7 +284,7 @@ function generateClientFor(contract: Arc56Contract): string {
     return `${arg.name}: ${argType},`
   }
 
-  function genMethod(method: Arc56Method): string {
+  function genMethod(method: abi.Arc56Method): string {
     imports.add('err')
 
     const return_type = getClientType(method.returns.struct || method.returns.type)
