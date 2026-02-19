@@ -1,5 +1,6 @@
 // This file is auto-generated, do not modify
-import { Contract, abimethod, err, type Account, type Application, type Asset, type arc4 } from '@algorandfoundation/algorand-typescript'
+import type { Account, Application, Asset, arc4 } from '@algorandfoundation/algorand-typescript'
+import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class EchoResource extends Contract {
   @abimethod({ resourceEncoding: 'index' })

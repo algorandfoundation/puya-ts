@@ -100,12 +100,21 @@ async function shouldWriteFile(outFile: AbsolutePath): Promise<boolean> {
 }
 
 function generateClientFor(contract: abi.Arc56Contract): string {
-  const imports = new Set<string>(['Contract'])
+  const typeImports = new Set<string>()
+  const imports = new Set<string>()
   const structToClass = new Map<string, string>()
   const reservedClassNames = new Set<string>()
   const reservedMethodNames = new Set<string>()
   const classDecls: string[] = []
 
+  function useImport(name: string, asValue: boolean) {
+    if (asValue) {
+      if (typeImports.has(name)) typeImports.delete(name)
+      imports.add(name)
+    } else if (!imports.has(name)) {
+      typeImports.add(name)
+    }
+  }
   function indent(...texts: string[]): string {
     const INDENT = '  '
     return INDENT + texts.join('\n').replaceAll(/\n+/g, `$&${INDENT}`)
@@ -140,10 +149,10 @@ function generateClientFor(contract: abi.Arc56Contract): string {
     if (knownMapping !== undefined) {
       const { name, module } = knownMapping
       if (module === Constants.moduleNames.algoTs.gtxn) {
-        imports.add('type gtxn')
+        useImport('gtxn', false)
         return `gtxn.${name}`
       } else if (module === Constants.moduleNames.algoTs.reference) {
-        imports.add(`type ${name}`)
+        useImport(name, false)
         return name
       } else if (module === 'lib.d.ts') {
         // The TypeScript prelude is always imported
@@ -156,7 +165,7 @@ function generateClientFor(contract: abi.Arc56Contract): string {
   }
 
   function ARC4ToAlgoTSName(type: abi.ABIType): string {
-    imports.add('type arc4')
+    useImport('arc4', false)
     if (type instanceof abi.ABIBoolType) return 'arc4.Bool'
     if (type instanceof abi.ABIStringType) return 'arc4.Str'
     if (type instanceof abi.ABIAddressType) return 'arc4.Address'
@@ -183,10 +192,10 @@ function generateClientFor(contract: abi.Arc56Contract): string {
   function getClientType(type: string): string {
     // map ABI / AVM type to algots type
     if (type === 'AVMUint64') {
-      imports.add('type uint64')
+      useImport('uint64', false)
       return 'uint64'
     } else if (type === 'AVMBytes') {
-      imports.add('type bytes')
+      useImport('bytes', false)
       return 'bytes'
     } else if (type in contract.structs) {
       return structToClass.get(type) || prepareStructClass(type, contract.structs[type])
@@ -196,7 +205,7 @@ function generateClientFor(contract: abi.Arc56Contract): string {
   }
 
   function prepareStructClass(name: string, fields: abi.StructField[]) {
-    imports.add('arc4')
+    useImport('arc4', true)
 
     const className = classNameFor(name)
     structToClass.set(name, className)
@@ -239,7 +248,7 @@ function generateClientFor(contract: abi.Arc56Contract): string {
   }
 
   function ARC4MethodToTSDecorator(name: string, method: abi.Arc56Method): string {
-    imports.add('abimethod')
+    useImport('abimethod', true)
 
     const abimethodArgs: string[] = []
     if (method.name !== name) {
@@ -285,7 +294,7 @@ function generateClientFor(contract: abi.Arc56Contract): string {
   }
 
   function genMethod(method: abi.Arc56Method): string {
-    imports.add('err')
+    useImport('err', true)
 
     const return_type = getClientType(method.returns.struct || method.returns.type)
     const method_name = methodNameFor(method.name)
@@ -327,22 +336,26 @@ function generateClientFor(contract: abi.Arc56Contract): string {
   const clientClass = classNameFor(contract.name)
   const docs = tsdoc(contract.desc)
   const methods = genMethods()
+  useImport('Contract', true)
 
-  // If it uses arc4 as a value we don't need the type import!
-  if (imports.has('arc4')) {
-    imports.delete('type arc4')
-  }
-
+  const sortedTypeImports = [...typeImports].toSorted().join(', ')
   const sortedImports = [...imports].toSorted().join(', ')
-  return [
-    AUTO_GENERATED_COMMENT,
-    `import { ${sortedImports} } from '@algorandfoundation/algorand-typescript'`,
+  const lines = []
+  // Header
+  lines.push(AUTO_GENERATED_COMMENT)
+  if (sortedTypeImports.length !== 0) lines.push(`import type { ${sortedTypeImports} } from '@algorandfoundation/algorand-typescript'`)
+  if (sortedImports.length !== 0) lines.push(`import { ${sortedImports} } from '@algorandfoundation/algorand-typescript'`)
+
+  lines.push(
+    // Struct declarations
     ...classDecls,
     '',
+    // Contract definition
     ...docs,
     `export abstract class ${clientClass} extends Contract {`,
     ...methods,
     '}',
     '',
-  ].join('\n')
+  )
+  return lines.join('\n')
 }

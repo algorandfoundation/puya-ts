@@ -1,5 +1,6 @@
 // This file is auto-generated, do not modify
-import { Contract, abimethod, err, type arc4 } from '@algorandfoundation/algorand-typescript'
+import type { arc4 } from '@algorandfoundation/algorand-typescript'
+import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class StoreBoth extends Contract {
   @abimethod

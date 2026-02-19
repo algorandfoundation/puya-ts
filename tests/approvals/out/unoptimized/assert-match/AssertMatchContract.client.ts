@@ -1,5 +1,6 @@
 // This file is auto-generated, do not modify
-import { Contract, abimethod, err, type arc4, type gtxn } from '@algorandfoundation/algorand-typescript'
+import type { arc4, gtxn } from '@algorandfoundation/algorand-typescript'
+import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class AssertMatchContract extends Contract {
   @abimethod

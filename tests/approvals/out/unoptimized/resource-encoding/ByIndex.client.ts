@@ -1,5 +1,6 @@
 // This file is auto-generated, do not modify
-import { Contract, abimethod, err, type Account, type arc4 } from '@algorandfoundation/algorand-typescript'
+import type { Account, arc4 } from '@algorandfoundation/algorand-typescript'
+import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ByIndex extends Contract {
   @abimethod({ resourceEncoding: 'index' })

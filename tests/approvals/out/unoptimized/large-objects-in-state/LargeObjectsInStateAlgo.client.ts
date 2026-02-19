@@ -1,5 +1,6 @@
 // This file is auto-generated, do not modify
-import { Contract, abimethod, arc4, err, type gtxn } from '@algorandfoundation/algorand-typescript'
+import type { gtxn } from '@algorandfoundation/algorand-typescript'
+import { Contract, abimethod, arc4, err } from '@algorandfoundation/algorand-typescript'
 
 export class Counts extends arc4.Struct<{
   x: arc4.Uint<64>
