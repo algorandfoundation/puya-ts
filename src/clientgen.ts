@@ -2,7 +2,7 @@ import type { Arc56Contract } from '@algorandfoundation/algokit-utils/abi'
 import { arc32ToArc56 } from '@algorandfoundation/algokit-utils/app-spec'
 import { ArgumentParser } from 'argparse'
 import { readFile } from 'fs/promises'
-import { writeARC4Client } from './arc4_clientgen'
+import { writeARC4Client } from './arc4-clientgen'
 import { appVersion } from './cli/app-version'
 import { checkNodeVersion } from './cli/check-node-version'
 import { addEnumArg } from './cli/util'
@@ -102,4 +102,4 @@ async function outputStubs(paths: string[], outDir: string, logLevel: LogLevel) 
   })
 }
 
-parseCliArguments()
+void parseCliArguments()

@@ -21,7 +21,7 @@ import { logger } from './logger'
 import type { AlgoFile } from './options'
 import { AbsolutePath } from './util/absolute-path'
 
-type Arc56Arg = Arc56Method['args'] extends (infer Content)[] ? Content : never
+type Arc56Arg = Arc56Method['args'][number]
 
 type ClientFile = {
   sourceFile: AbsolutePath

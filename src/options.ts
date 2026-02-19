@@ -53,7 +53,7 @@ export class CompileOptions {
     this.dryRun = options.dryRun ?? false
     this.outputTeal = options.outputTeal ?? false
     this.outputArc32 = options.outputArc32 ?? false
-    this.outputArc56 = options.outputArc56 ?? options.outputClient ?? false
+    this.outputArc56 = (options.outputArc56 || options.outputClient) ?? false
     this.outputClient = options.outputClient ?? false
     this.outputSsaIr = options.outputSsaIr ?? false
     this.outputOptimizationIr = options.outputOptimizationIr ?? false

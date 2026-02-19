@@ -1,5 +1,5 @@
 import type ts from 'typescript'
-import { writeARC4Clients } from './arc4_clientgen'
+import { writeARC4Clients } from './arc4-clientgen'
 import type { AWST } from './awst/nodes'
 import { validateAwst } from './awst/validation'
 import { buildAwst } from './awst_build'
@@ -56,10 +56,10 @@ export async function compile(options: CompileOptions, puyaService?: PuyaService
       sourceFiles: programResult.sourceFiles,
       puyaService,
     })
-  }
 
-  if (options.outputClient) {
-    await writeARC4Clients(compilationSet, options.filePaths)
+    if (options.outputClient) {
+      await writeARC4Clients(compilationSet, options.filePaths)
+    }
   }
 
   return {
