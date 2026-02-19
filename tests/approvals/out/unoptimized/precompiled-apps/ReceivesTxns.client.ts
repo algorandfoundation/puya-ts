@@ -3,22 +3,22 @@ import type { arc4, gtxn } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ReceivesTxns extends Contract {
-  @abimethod
+  @abimethod()
   getOne(): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   receivesAnyTxn(txn: gtxn.Transaction): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   receivesAssetConfig(assetCfg: gtxn.AssetConfigTxn): arc4.DynamicBytes {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   receivesAssetConfigAndPay(
     assetCfg: gtxn.AssetConfigTxn,
     payTxn: gtxn.PaymentTxn,

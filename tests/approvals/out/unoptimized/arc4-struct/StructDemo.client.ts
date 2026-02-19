@@ -20,12 +20,12 @@ export class PluginInfo extends arc4.Struct<{
 }> {}
 
 export abstract class StructDemo extends Contract {
-  @abimethod
+  @abimethod()
   testVectorCreationAndEquality(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   addVectors(
     v1: Vector,
     v2: Vector,
@@ -33,7 +33,7 @@ export abstract class StructDemo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   mutateVector(
     v1: Vector,
     newX: arc4.Uint<64>,
@@ -42,32 +42,32 @@ export abstract class StructDemo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   implicitCastingAndSpreading(v1: Vector): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   toAndFromBytes(v1: Vector): Vector {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   toNative(v1: Vector): ObjectF8C529BB {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   getPlugin(key: arc4.Str): PluginInfo {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   getMain(): PluginInfo {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   setLastCalled(
     key: arc4.Str,
     index: arc4.Uint<64>,
@@ -76,7 +76,7 @@ export abstract class StructDemo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   setPlugin(key: arc4.Str): void {
     err('stub only')
   }

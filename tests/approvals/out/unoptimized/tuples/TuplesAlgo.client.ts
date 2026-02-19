@@ -3,7 +3,7 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class TuplesAlgo extends Contract {
-  @abimethod
+  @abimethod()
   test(
     a: arc4.Uint<64>,
     b: arc4.Uint<64>,

@@ -7,7 +7,7 @@ export class ObjectACED9E72 extends arc4.Struct<{
 }> {}
 
 export abstract class CompositeKeyTest extends Contract {
-  @abimethod
+  @abimethod()
   test(
     key: ObjectACED9E72,
     val: arc4.Str,

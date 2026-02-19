@@ -3,17 +3,17 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class BaseOne extends Contract {
-  @abimethod
+  @abimethod()
   methodOne(): arc4.Str {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   methodCommon(): arc4.Str {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   b2CantOverride(): arc4.Str {
     err('stub only')
   }

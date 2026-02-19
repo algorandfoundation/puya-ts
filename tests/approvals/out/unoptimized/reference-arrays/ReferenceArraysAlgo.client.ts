@@ -3,7 +3,7 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ReferenceArraysAlgo extends Contract {
-  @abimethod
+  @abimethod()
   test(length: arc4.Uint<64>): void {
     err('stub only')
   }

@@ -281,11 +281,8 @@ function generateClientFor(contract: abi.Arc56Contract): string {
     } else {
       // disallow is default
     }
-    let decorator = '@abimethod'
-    if (abimethodArgs.length !== 0) {
-      decorator += `({ ${abimethodArgs.join(', ')} })`
-    }
-    return decorator
+    const args = abimethodArgs.length === 0 ? '' : `{ ${abimethodArgs.join(', ')} }`
+    return `@abimethod(${args})`
   }
 
   function genArg(arg: Arc56Arg): string {

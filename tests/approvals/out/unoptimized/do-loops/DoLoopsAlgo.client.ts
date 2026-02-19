@@ -3,12 +3,12 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class DoLoopsAlgo extends Contract {
-  @abimethod
+  @abimethod()
   testDo(stop: arc4.Uint<64>): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   testDoBreak(
     stop: arc4.Uint<64>,
     breakMod: arc4.Uint<64>,
@@ -16,7 +16,7 @@ export abstract class DoLoopsAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   testDoContinue(
     stop: arc4.Uint<64>,
     mod: arc4.Uint<64>,

@@ -3,7 +3,7 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class Arc4BoxContract extends Contract {
-  @abimethod
+  @abimethod()
   setBoxes(
     a: arc4.Uint<64>,
     b: arc4.DynamicBytes,
@@ -12,17 +12,17 @@ export abstract class Arc4BoxContract extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   checkKeys(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   createManyInts(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   setManyInts(
     index: arc4.Uint<64>,
     value: arc4.Uint<64>,
@@ -30,52 +30,52 @@ export abstract class Arc4BoxContract extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   sumManyInts(): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   deleteBoxes(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   indirectExtractAndReplace(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   readBoxes(): arc4.Tuple<readonly [arc4.Uint<64>, arc4.DynamicBytes, arc4.Str, arc4.Uint<64>]> {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   boxesExist(): arc4.Tuple<readonly [arc4.Bool, arc4.Bool, arc4.Bool, arc4.Bool]> {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   sliceBox(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   arc4Box(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   testBoxRef(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   createBools(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   setBool(
     index: arc4.Uint<64>,
     value: arc4.Bool,
@@ -83,7 +83,7 @@ export abstract class Arc4BoxContract extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   sumBools(stopAtTotal: arc4.Uint<64>): arc4.Uint<64> {
     err('stub only')
   }

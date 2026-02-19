@@ -3,7 +3,7 @@ import type { arc4, gtxn } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ItxnReceiver extends Contract {
-  @abimethod
+  @abimethod()
   receivePay(
     a: arc4.Uint<64>,
     b: gtxn.PaymentTxn,

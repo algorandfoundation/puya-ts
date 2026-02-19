@@ -11,7 +11,7 @@ export abstract class ByIndex extends Contract {
   /**
    * Should implicitly use default 'value'
    */
-  @abimethod
+  @abimethod()
   testImplicitValue(account: arc4.Address): arc4.Uint<64> {
     err('stub only')
   }

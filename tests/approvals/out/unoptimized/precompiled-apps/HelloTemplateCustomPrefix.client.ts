@@ -22,12 +22,12 @@ export abstract class HelloTemplateCustomPrefix extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   greet(name: arc4.Str): arc4.Str {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   sendGreetings(a: Greeting): arc4.Str {
     err('stub only')
   }

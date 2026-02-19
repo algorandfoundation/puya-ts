@@ -2,7 +2,7 @@
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class TestTuple extends Contract {
-  @abimethod
+  @abimethod()
   testTuple(): void {
     err('stub only')
   }

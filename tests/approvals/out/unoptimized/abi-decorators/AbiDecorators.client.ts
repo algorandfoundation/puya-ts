@@ -3,7 +3,7 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class AbiDecorators extends Contract {
-  @abimethod
+  @abimethod()
   justNoop(): void {
     err('stub only')
   }
@@ -23,7 +23,7 @@ export abstract class AbiDecorators extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   methodWithDefaults(
     a: arc4.Uint<64>,
     b: arc4.Uint<64>,

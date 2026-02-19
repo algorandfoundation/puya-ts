@@ -13,7 +13,7 @@ export abstract class TealScriptConventionsAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   setLocal(value: arc4.Str): void {
     err('stub only')
   }

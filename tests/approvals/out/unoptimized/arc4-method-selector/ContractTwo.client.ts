@@ -3,12 +3,12 @@ import type { Account, Application, Asset, arc4, gtxn } from '@algorandfoundatio
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ContractTwo extends Contract {
-  @abimethod
+  @abimethod()
   renamedSomeMethod(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   test(): arc4.Bool {
     err('stub only')
   }
@@ -24,7 +24,7 @@ export abstract class ContractTwo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   referenceTypesValue(
     pay: gtxn.PaymentTxn,
     asset: arc4.Uint<64>,

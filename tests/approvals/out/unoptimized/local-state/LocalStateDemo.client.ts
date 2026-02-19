@@ -35,7 +35,7 @@ export abstract class LocalStateDemo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   setState(
     p: ObjectEFF43F36,
     c: arc4.StaticArray<arc4.Uint<64>, 10>,
@@ -43,12 +43,12 @@ export abstract class LocalStateDemo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   getState(): ObjectE4D9E83F {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   clearState(): void {
     err('stub only')
   }
@@ -57,7 +57,7 @@ export abstract class LocalStateDemo extends Contract {
    * Writes a value to local state using a dynamic key.
    * Demonstrates dynamic key-value storage in local state.
    */
-  @abimethod
+  @abimethod()
   writeDynamicLocalState(
     key: arc4.Str,
     value: arc4.Str,
@@ -68,7 +68,7 @@ export abstract class LocalStateDemo extends Contract {
   /**
    * Reads a value from local state using a dynamic key.
    */
-  @abimethod
+  @abimethod()
   readDynamicLocalState(key: arc4.Str): arc4.Str {
     err('stub only')
   }

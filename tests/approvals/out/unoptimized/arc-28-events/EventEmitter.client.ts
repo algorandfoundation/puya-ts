@@ -3,7 +3,7 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class EventEmitter extends Contract {
-  @abimethod
+  @abimethod()
   emitSwapped(
     a: arc4.Uint<8>,
     b: arc4.Uint<8>,
@@ -11,7 +11,7 @@ export abstract class EventEmitter extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   emitCustom(
     arg0: arc4.Str,
     arg1: arc4.Bool,
@@ -19,7 +19,7 @@ export abstract class EventEmitter extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   emitDynamicBytes(
     x: arc4.DynamicBytes,
     y: arc4.DynamicBytes,

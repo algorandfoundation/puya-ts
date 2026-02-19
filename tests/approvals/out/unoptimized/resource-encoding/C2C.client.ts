@@ -3,7 +3,7 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class C2C extends Contract {
-  @abimethod
+  @abimethod()
   testCallToIndex(
     account: arc4.Address,
     appId: arc4.Uint<64>,
@@ -11,7 +11,7 @@ export abstract class C2C extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   testCallToValue(
     account: arc4.Address,
     appId: arc4.Uint<64>,
@@ -19,7 +19,7 @@ export abstract class C2C extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   testCallToEchoResource(): void {
     err('stub only')
   }

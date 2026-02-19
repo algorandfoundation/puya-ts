@@ -3,42 +3,42 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class MultiBases extends Contract {
-  @abimethod
+  @abimethod()
   methodMulti(): arc4.Str {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   methodCallsSuper(): arc4.Str {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   callB2CantOverride(): arc4.Str {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   callB2Common(): arc4.Str {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   methodOne(): arc4.Str {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   methodCommon(): arc4.Str {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   b2CantOverride(): arc4.Str {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   methodTwo(): arc4.Str {
     err('stub only')
   }

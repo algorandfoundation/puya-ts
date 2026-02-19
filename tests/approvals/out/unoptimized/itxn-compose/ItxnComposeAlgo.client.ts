@@ -3,7 +3,7 @@ import type { arc4, gtxn } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ItxnComposeAlgo extends Contract {
-  @abimethod
+  @abimethod()
   distribute(
     addresses: arc4.DynamicArray<arc4.Address>,
     funds: gtxn.PaymentTxn,
@@ -12,7 +12,7 @@ export abstract class ItxnComposeAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   conditionalBegin(count: arc4.Uint<64>): void {
     err('stub only')
   }

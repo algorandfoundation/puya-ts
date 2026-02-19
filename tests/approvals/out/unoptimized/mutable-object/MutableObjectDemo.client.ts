@@ -25,12 +25,12 @@ export class PluginInfo extends arc4.Struct<{
 }> {}
 
 export abstract class MutableObjectDemo extends Contract {
-  @abimethod
+  @abimethod()
   testVectorCreationAndEquality(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   addVectors(
     v1: Vector,
     v2: Vector,
@@ -38,7 +38,7 @@ export abstract class MutableObjectDemo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   mutateVector(
     v1: Vector,
     newX: arc4.Uint<64>,
@@ -47,42 +47,42 @@ export abstract class MutableObjectDemo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   implicitCastingAndSpreading(v1: Vector): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   testNestedObjects(vp: VectorPoint): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   testMethodSelector(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   testAssertMatch(x: arc4.Uint<64>): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   testArc4Encoding(p: Point): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   getPlugin(key: arc4.Str): PluginInfo {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   getMain(): PluginInfo {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   setPlugin(key: arc4.Str): void {
     err('stub only')
   }

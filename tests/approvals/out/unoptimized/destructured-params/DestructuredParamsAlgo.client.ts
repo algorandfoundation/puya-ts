@@ -14,17 +14,17 @@ export class Arc4 extends arc4.Struct<{
 }> {}
 
 export abstract class DestructuredParamsAlgo extends Contract {
-  @abimethod
+  @abimethod()
   test(p: Object4B7314A9): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   testMutable(p: Arc4): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   init(): void {
     err('stub only')
   }

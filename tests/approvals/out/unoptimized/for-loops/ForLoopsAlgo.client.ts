@@ -3,7 +3,7 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ForLoopsAlgo extends Contract {
-  @abimethod
+  @abimethod()
   test_for_loop(
     start: arc4.Uint<64>,
     stop: arc4.Uint<64>,
@@ -12,7 +12,7 @@ export abstract class ForLoopsAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   test_for_loop_break(
     start: arc4.Uint<64>,
     stop: arc4.Uint<64>,
@@ -21,7 +21,7 @@ export abstract class ForLoopsAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   test_for_loop_continue(
     start: arc4.Uint<64>,
     stop: arc4.Uint<64>,
@@ -30,7 +30,7 @@ export abstract class ForLoopsAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   test_for_loop_labelled(
     start: arc4.Uint<64>,
     stop: arc4.Uint<64>,

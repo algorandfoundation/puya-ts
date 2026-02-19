@@ -2,7 +2,7 @@
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class NoBare extends Contract {
-  @abimethod
+  @abimethod()
   handleNoop(): void {
     err('stub only')
   }

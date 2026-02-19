@@ -3,7 +3,7 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class DemoContract extends Contract {
-  @abimethod
+  @abimethod()
   test(): arc4.Bool {
     err('stub only')
   }

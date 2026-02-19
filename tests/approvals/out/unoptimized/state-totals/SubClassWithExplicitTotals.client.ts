@@ -3,7 +3,7 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class SubClassWithExplicitTotals extends Contract {
-  @abimethod
+  @abimethod()
   setState(n: arc4.Uint<64>): void {
     err('stub only')
   }

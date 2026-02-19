@@ -2,7 +2,7 @@
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class DestructuringIterators extends Contract {
-  @abimethod
+  @abimethod()
   test(): void {
     err('stub only')
   }

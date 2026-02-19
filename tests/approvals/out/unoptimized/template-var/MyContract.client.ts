@@ -3,22 +3,22 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class MyContract extends Contract {
-  @abimethod
+  @abimethod()
   getInt(): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   getString(): arc4.Str {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   getBytes(): arc4.DynamicBytes {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   getAddress(): arc4.Address {
     err('stub only')
   }

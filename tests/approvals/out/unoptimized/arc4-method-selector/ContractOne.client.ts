@@ -3,17 +3,17 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ContractOne extends Contract {
-  @abimethod
+  @abimethod()
   test(): arc4.Bool {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   someMethod(): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   testReferenceTypes(): void {
     err('stub only')
   }

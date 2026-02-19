@@ -20,32 +20,32 @@ export class Object3488A93F extends arc4.Struct<{
 }> {}
 
 export abstract class GtxnsAlgo extends Contract {
-  @abimethod
+  @abimethod()
   test(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   test2(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   test3(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   test4(other: gtxn.ApplicationCallTxn): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   reflectAllPay(pay: gtxn.PaymentTxn): Object3488A93F {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   test5(txn: gtxn.Transaction): arc4.Uint<64> {
     err('stub only')
   }

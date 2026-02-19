@@ -3,7 +3,7 @@ import type { arc4 } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class MatchExprAlgo extends Contract {
-  @abimethod
+  @abimethod()
   testMatches(x: arc4.Uint<64>): void {
     err('stub only')
   }

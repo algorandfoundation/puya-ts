@@ -12,7 +12,7 @@ export abstract class EchoResource extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   echoResourceByValue(
     asset: arc4.Uint<64>,
     app: arc4.Uint<64>,

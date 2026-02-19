@@ -8,17 +8,17 @@ export class Counts extends arc4.Struct<{
 }> {}
 
 export abstract class LargeObjectsInStateAlgo extends Contract {
-  @abimethod
+  @abimethod()
   getMbr(): arc4.Uint<64> {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   bootstrap(pay: gtxn.PaymentTxn): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   increaseXCount(
     index: arc4.Uint<64>,
     xCount: arc4.Uint<64>,
@@ -26,7 +26,7 @@ export abstract class LargeObjectsInStateAlgo extends Contract {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   getCounts(index: arc4.Uint<64>): Counts {
     err('stub only')
   }

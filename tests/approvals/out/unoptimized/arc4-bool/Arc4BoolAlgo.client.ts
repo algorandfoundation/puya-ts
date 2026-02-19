@@ -19,7 +19,7 @@ export class ObjectCB267EF3 extends arc4.Struct<{
 }> {}
 
 export abstract class Arc4BoolAlgo extends Contract {
-  @abimethod
+  @abimethod()
   test(p: ObjectCB267EF3): Object7D615236 {
     err('stub only')
   }

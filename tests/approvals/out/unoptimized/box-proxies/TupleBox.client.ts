@@ -2,12 +2,12 @@
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 
 export abstract class TupleBox extends Contract {
-  @abimethod
+  @abimethod()
   testBox(): void {
     err('stub only')
   }
 
-  @abimethod
+  @abimethod()
   testBoxMap(): void {
     err('stub only')
   }
