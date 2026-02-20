@@ -224,7 +224,7 @@ export class IntersectionPType extends TransientType {
       module: 'lib.d.ts',
       singleton: false,
       typeMessage: transientTypeErrors.intersectionTypes(name).usedAsType,
-      expressionMessage: transientTypeErrors.unionTypes(name).usedInExpression,
+      expressionMessage: transientTypeErrors.intersectionTypes(name).usedInExpression,
     })
     this.types = types
   }
