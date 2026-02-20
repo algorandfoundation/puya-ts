@@ -1,4 +1,5 @@
 // This file is auto-generated, do not modify
+/* eslint-disable */
 import { Contract, abimethod, arc4, err } from '@algorandfoundation/algorand-typescript'
 
 export class Object3B1036D9 extends arc4.Struct<{

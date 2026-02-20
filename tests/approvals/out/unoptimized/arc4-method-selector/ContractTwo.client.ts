@@ -1,4 +1,5 @@
 // This file is auto-generated, do not modify
+/* eslint-disable */
 import type { Account, Application, Asset, arc4, gtxn } from '@algorandfoundation/algorand-typescript'
 import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
 

@@ -20,6 +20,7 @@ type ClientFile = {
 }
 
 const AUTO_GENERATED_COMMENT = '// This file is auto-generated, do not modify'
+const DISABLE_ESLINT_PRAGMA = '/* eslint-disable */'
 
 const ARC4_PYTYPE_MAPPING = new Map<string, ABICompatiblePType>([
   ['account', ptype.accountPType],
@@ -340,6 +341,7 @@ function generateClientFor(contract: abi.Arc56Contract): string {
   const lines = []
   // Header
   lines.push(AUTO_GENERATED_COMMENT)
+  lines.push(DISABLE_ESLINT_PRAGMA)
   if (sortedTypeImports.length !== 0) lines.push(`import type { ${sortedTypeImports} } from '@algorandfoundation/algorand-typescript'`)
   if (sortedImports.length !== 0) lines.push(`import { ${sortedImports} } from '@algorandfoundation/algorand-typescript'`)
 

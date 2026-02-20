@@ -1,4 +1,5 @@
 // This file is auto-generated, do not modify
+/* eslint-disable */
 import { Contract } from '@algorandfoundation/algorand-typescript'
 
 export abstract class ExplicitBareCreateFromBase extends Contract {
