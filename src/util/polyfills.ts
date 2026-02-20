@@ -39,7 +39,11 @@ if (!Set.prototype.difference) {
 // Node < 22
 if (!Set.prototype.symmetricDifference) {
   Set.prototype.symmetricDifference = function (other) {
-    return new Set([...this].filter((e) => this.has(e) && other.has(e)))
+    const result = this.difference(other)
+    for (let it = other.keys(), { value, done } = it.next(); !done; { value, done } = it.next()) {
+      if (!this.has(value)) result.add(value)
+    }
+    return result
   }
 }
 
