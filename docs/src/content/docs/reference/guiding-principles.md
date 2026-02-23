@@ -23,13 +23,13 @@ feedback loop and nudge users into the [pit of success](https://blog.codinghorro
 
 [Algorand Python](https://algorandfoundation.github.io/puya/) is the Python equivalent of Algorand TypeScript. Whilst there is a primary goal to produce an API which makes sense in the TypeScript ecosystem, a secondary goal is to minimise the disparity between the two APIs such that users who choose to, or are required to, develop on both platforms are not facing a completely unfamiliar API.
 
-# Architecture decisions
+# Architecture Decision Records
 
 As part of developing Algorand TypeScript we are documenting key architecture decisions using [Architecture Decision Records (ADRs)](https://adr.github.io/). The following are the key decisions that have been made thus far:
 
-- [2024-05-21: Primitive integer types](../architecture-decisions/2024-05-21_primitive-integer-types)
-- [2024-05-21: Primitive bytes](../architecture-decisions/2024-05-21_primitive-bytes)
-- [2024-06-05: Imports or ambient types](../architecture-decisions/2024-06-05_imports-or-ambient-types)
-- [2024-06-05: String as alias or type](../architecture-decisions/2024-06-05_string-alias-or-type)
-- [2024-06-06: ARC4 by default](../architecture-decisions/2024-06-06_arc4-by-default)
-- [2024-06-06: ARC4 types](../architecture-decisions/2024-06-06_arc4-types)
+- [2024-05-21: Primitive integer types](../architecture-decision-records/2024-05-21_primitive-integer-types)
+- [2024-05-21: Primitive bytes](../architecture-decision-records/2024-05-21_primitive-bytes)
+- [2024-06-05: Imports or ambient types](../architecture-decision-records/2024-06-05_imports-or-ambient-types)
+- [2024-06-05: String as alias or type](../architecture-decision-records/2024-06-05_string-alias-or-type)
+- [2024-06-06: ARC4 by default](../architecture-decision-records/2024-06-06_arc4-by-default)
+- [2024-06-06: ARC4 types](../architecture-decision-records/2024-06-06_arc4-types)

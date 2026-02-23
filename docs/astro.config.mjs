@@ -59,9 +59,9 @@ export default defineConfig({
         },
         { label: 'Migration Guides', slug: 'migration-guides' },
         {
-          label: 'Architecture Decisions',
+          label: 'Architecture Decision Records',
           collapsed: true,
-          autogenerate: { directory: 'reference/architecture-decisions' },
+          autogenerate: { directory: 'reference/architecture-decision-records' },
         },
         typeDocSidebarGroup,
       ],
