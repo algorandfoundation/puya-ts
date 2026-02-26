@@ -1,14 +1,17 @@
 /**
- * Example 11 — Token Manager
- * Tier: 3 — Transactions & Interactions
+ * Example 11: Token Manager
  *
- * Features demonstrated:
- *   - itxn.assetConfig (create ASA with full address configuration)
- *   - itxn.assetTransfer (opt-in, transfer, clawback)
- *   - itxn.assetFreeze (freeze / unfreeze accounts)
- *   - Asset reference properties (total, decimals, name, url, creator, manager, freeze, clawback)
- *   - Full ASA lifecycle: create → opt-in → transfer → freeze → clawback → destroy
- *   - GlobalState<Asset> for storing created asset reference
+ * This example demonstrates inner transactions for full ASA lifecycle management.
+ *
+ * Features:
+ * - itxn.assetConfig (create ASA with full address configuration)
+ * - itxn.assetTransfer (opt-in, transfer, clawback)
+ * - itxn.assetFreeze (freeze / unfreeze accounts)
+ * - Asset reference properties (total, decimals, name, url, creator, manager, freeze, clawback)
+ * - Full ASA lifecycle: create → opt-in → transfer → freeze → clawback → destroy
+ * - GlobalState<Asset> for storing created asset reference
+ *
+ * Prerequisites: LocalNet
  */
 
 import type { Account, Asset, uint64 } from '@algorandfoundation/algorand-typescript'
@@ -30,14 +33,7 @@ export class TokenManager extends Contract {
    * Create a new ASA via inner transaction.
    * The contract becomes manager, reserve, freeze, and clawback authority.
    */
-  public createToken(
-    name: string,
-    unitName: string,
-    total: uint64,
-    decimals: uint64,
-    url: string,
-    defaultFrozen: boolean,
-  ): uint64 {
+  public createToken(name: string, unitName: string, total: uint64, decimals: uint64, url: string, defaultFrozen: boolean): uint64 {
     // itxn.assetConfig — issue an inner transaction to create a new asset
     const result = itxn
       .assetConfig({

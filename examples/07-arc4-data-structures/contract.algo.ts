@@ -1,26 +1,30 @@
 /**
- * Example 07 — ARC-4 Data Structures
- * Tier: 2 — State & Data
+ * Example 07: ARC-4 Data Structures
  *
- * Features demonstrated:
- *   - arc4.Struct definition and field access
- *   - arc4.StaticArray — fixed-length typed array
- *   - arc4.DynamicArray — variable-length typed array with push/pop
- *   - arc4.Tuple — heterogeneous fixed tuple
- *   - arc4.Address — 32-byte Algorand address
- *   - arc4.Str — ARC-4 encoded UTF-8 string
- *   - arc4.Bool — ARC-4 encoded boolean
- *   - arc4.Uint<N> variants (Uint8, Uint16, Uint32, Uint64, Uint128, Uint<256>)
- *   - arc4.DynamicBytes — variable-length byte sequence
- *   - encodeArc4 / decodeArc4 — native ↔ ARC-4 encoding round-trips
- *   - sizeOf — compile-time byte size of fixed-length ARC-4 types
+ * This example demonstrates arc4 structs, arrays, tuples, and encoding round-trips.
+ *
+ * Features:
+ * - arc4.Struct definition and field access
+ * - arc4.StaticArray — fixed-length typed array
+ * - arc4.DynamicArray — variable-length typed array with push/pop
+ * - arc4.Tuple — heterogeneous fixed tuple
+ * - arc4.Address — 32-byte Algorand address
+ * - arc4.Str — ARC-4 encoded UTF-8 string
+ * - arc4.Bool — ARC-4 encoded boolean
+ * - arc4.Uint<N> variants (Uint8, Uint16, Uint32, Uint64, Uint128, Uint<256>)
+ * - arc4.DynamicBytes — variable-length byte sequence
+ * - encodeArc4 / decodeArc4 — native ↔ ARC-4 encoding round-trips
+ * - sizeOf — compile-time byte size of fixed-length ARC-4 types
+ *
+ * Prerequisites: LocalNet
  */
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 // Contract: ABI-routed base; assert: runtime assertion; Bytes: bytes factory; log: txn logging; Uint64: uint64 factory
 import { arc4, assert, Bytes, Contract, log, Uint64 } from '@algorandfoundation/algorand-typescript'
 // arc4 types imported from the arc4 sub-module
+import type { Address } from '@algorandfoundation/algorand-typescript/arc4'
 import {
-  Address,
+  Uint64 as Arc4Uint64,
   Bool,
   decodeArc4,
   DynamicArray,
@@ -31,11 +35,10 @@ import {
   Str,
   Tuple,
   Uint,
-  Uint8,
+  Uint128,
   Uint16,
   Uint32,
-  Uint64 as Arc4Uint64,
-  Uint128,
+  Uint8,
 } from '@algorandfoundation/algorand-typescript/arc4'
 
 // --- arc4.Struct definitions (must be at module scope) ---
@@ -140,20 +143,13 @@ export class Arc4DataStructures extends Contract {
   // Demonstrate StaticArray and DynamicArray
   public exploreArrays(a: uint64, b: uint64, c: uint64): uint64 {
     // StaticArray: fixed-length array — length known at compile time
-    const fixed = new StaticArray(
-      new Arc4Uint64(a),
-      new Arc4Uint64(b),
-      new Arc4Uint64(c),
-    )
+    const fixed = new StaticArray(new Arc4Uint64(a), new Arc4Uint64(b), new Arc4Uint64(c))
     // Index access on StaticArray
     assert(fixed[0].asUint64() === a)
     assert(fixed[1].asUint64() === b)
 
     // DynamicArray: variable-length array — supports push/pop
-    const dynamic = new DynamicArray(
-      new Arc4Uint64(a),
-      new Arc4Uint64(b),
-    )
+    const dynamic = new DynamicArray(new Arc4Uint64(a), new Arc4Uint64(b))
     // .push(): append an element to the dynamic array
     dynamic.push(new Arc4Uint64(c))
     // .length: current number of elements
@@ -165,9 +161,7 @@ export class Arc4DataStructures extends Contract {
     assert(dynamic.length === 2)
 
     // .concat(): merge two dynamic arrays
-    const merged = new DynamicArray(new Arc4Uint64(a)).concat(
-      new DynamicArray(new Arc4Uint64(b)),
-    )
+    const merged = new DynamicArray(new Arc4Uint64(a)).concat(new DynamicArray(new Arc4Uint64(b)))
     assert(merged.length === 2)
 
     return fixed[2].asUint64()
@@ -176,11 +170,7 @@ export class Arc4DataStructures extends Contract {
   // Demonstrate Tuple with heterogeneous arc4 types
   public exploreTuple(value: uint64): uint64 {
     // Tuple: fixed heterogeneous collection of arc4 types
-    const t = new Tuple(
-      new Arc4Uint64(value),
-      new Bool(true),
-      new Str('hello'),
-    )
+    const t = new Tuple(new Arc4Uint64(value), new Bool(true), new Str('hello'))
 
     // .at(): access element by index (type-safe)
     const first = t.at(0)

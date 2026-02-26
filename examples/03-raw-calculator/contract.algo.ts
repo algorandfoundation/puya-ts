@@ -1,15 +1,18 @@
 /**
- * Example 03 — Raw Calculator
- * Tier: 1 — Fundamentals
+ * Example 03: Raw Calculator
  *
- * Features demonstrated:
- *   - BaseContract (raw approval/clear program, no ABI routing)
- *   - Custom approvalProgram() override
- *   - Txn.applicationArgs (reading raw transaction arguments)
- *   - Txn.numAppArgs (checking argument count)
- *   - switch statement (dispatching on opcode)
- *   - Free subroutines (module-level helper functions)
- *   - op.btoi (converting bytes to uint64)
+ * This example demonstrates BaseContract with raw approval program and no ABI routing.
+ *
+ * Features:
+ * - BaseContract (raw approval/clear program, no ABI routing)
+ * - Custom approvalProgram() override
+ * - Txn.applicationArgs (reading raw transaction arguments)
+ * - Txn.numAppArgs (checking argument count)
+ * - switch statement (dispatching on opcode)
+ * - Free subroutines (module-level helper functions)
+ * - op.btoi (converting bytes to uint64)
+ *
+ * Prerequisites: LocalNet
  */
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
 // BaseContract: raw base class (no ABI routing); op: namespace for AVM opcodes; Txn: current transaction fields

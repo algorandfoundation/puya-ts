@@ -1,12 +1,15 @@
 /**
- * Example 02 — Greeter
- * Tier: 1 — Fundamentals
+ * Example 02: Greeter
  *
- * Features demonstrated:
- *   - string params & returns
- *   - @readonly decorator
- *   - JSDoc comments on methods
- *   - Template literals
+ * This example demonstrates string handling and @readonly methods.
+ *
+ * Features:
+ * - string params & returns
+ * - @readonly decorator
+ * - JSDoc comments on methods
+ * - Template literals
+ *
+ * Prerequisites: LocalNet
  */
 // Contract: ABI-routed base class; abimethod: decorator for ABI methods; readonly: marks method as non-mutating
 import { abimethod, Contract, readonly } from '@algorandfoundation/algorand-typescript'

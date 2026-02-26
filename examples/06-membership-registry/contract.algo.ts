@@ -1,16 +1,18 @@
 /**
- * Example 06 — Membership Registry
- * Tier: 2 — State & Data
+ * Example 06: Membership Registry
  *
- * Features demonstrated:
- *   - GlobalState<uint64>
- *   - LocalState<uint64>
- *   - Opt-in lifecycle (@abimethod({ allowActions: 'OptIn' }))
- *   - Close-out lifecycle (@abimethod({ allowActions: 'CloseOut' }))
- *   - Account properties (.balance, .minBalance)
- *   - assertMatch
- *   - Txn.sender
- *   - Global.round
+ * This example demonstrates local state management with opt-in and close-out lifecycle.
+ *
+ * Features:
+ * - GlobalState<uint64> for tracking member counts
+ * - LocalState<uint64> for per-member registration data
+ * - Opt-in lifecycle (@abimethod({ allowActions: 'OptIn' }))
+ * - Close-out lifecycle (@abimethod({ allowActions: 'CloseOut' }))
+ * - Account properties (.balance, .minBalance)
+ * - assertMatch for structured assertions
+ * - Txn.sender and Global.round
+ *
+ * Prerequisites: LocalNet
  */
 import type { Account, uint64 } from '@algorandfoundation/algorand-typescript'
 // Contract: ABI-routed base class; GlobalState/LocalState: typed storage proxies

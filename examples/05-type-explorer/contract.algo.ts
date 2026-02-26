@@ -1,19 +1,21 @@
 /**
- * Example 05 — Type Explorer
- * Tier: 1 — Fundamentals
+ * Example 05: Type Explorer
  *
- * Features demonstrated:
- *   - uint64 / biguint / bytes primitive types and conversions
- *   - Uint64() factory function
- *   - BigUint() factory function
- *   - Bytes() factory function
- *   - Bytes.fromHex() hex decoding
- *   - op.sha256() hashing
- *   - op.addw() 128-bit addition
- *   - op.itob() uint64 → bytes conversion
- *   - op.btoi() bytes → uint64 conversion
- *   - op.bsqrt() big-integer square root
- *   - log() transaction logging
+ * This example demonstrates uint64, biguint, and bytes primitive types
+ * with AVM opcodes for type conversions and wide math.
+ *
+ * Features:
+ * - uint64 / biguint / bytes primitive types and conversions
+ * - Uint64(), BigUint(), Bytes() factory functions
+ * - Bytes.fromHex() hex decoding
+ * - op.sha256() hashing
+ * - op.addw() 128-bit addition
+ * - op.itob() uint64 → bytes conversion
+ * - op.btoi() bytes → uint64 conversion
+ * - op.bsqrt() big-integer square root
+ * - log() transaction logging
+ *
+ * Prerequisites: LocalNet
  */
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 // Contract: ABI-routed base; op: AVM opcodes; factories: Uint64, BigUint, Bytes; log: txn logging

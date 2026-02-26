@@ -1,16 +1,19 @@
 /**
- * Example 10 — Object Tuples
- * Tier: 2 — State & Data
+ * Example 10: Object Tuples
  *
- * Features demonstrated:
- *   - Named type aliases for object shapes
- *   - Object destructuring (in assignments and parameters)
- *   - Objects as method params and return values
- *   - Objects in GlobalState
- *   - Returning objects from @readonly methods
- *   - Nested object types
- *   - Spread operator for object copying
- *   - clone() for deep copies
+ * This example demonstrates objects as method params, return values, and state.
+ *
+ * Features:
+ * - Named type aliases for object shapes
+ * - Object destructuring (in assignments and parameters)
+ * - Objects as method params and return values
+ * - Objects in GlobalState
+ * - Returning objects from @readonly methods
+ * - Nested object types
+ * - Spread operator for object copying
+ * - clone() for deep copies
+ *
+ * Prerequisites: LocalNet
  */
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
 // Contract: ABI-routed base; abimethod: decorator for create; readonly: non-mutating methods;

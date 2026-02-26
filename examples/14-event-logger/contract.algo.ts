@@ -1,17 +1,20 @@
 /**
- * Example 14 — Event Logger
- * Tier: 3 — Transactions & Interactions
+ * Example 14: Event Logger
  *
- * Features demonstrated:
- *   - emit() with arc4.Struct events — emit an instance of an arc4.Struct subclass
- *   - emit('Name', ...positionalArgs) — emit using explicit event name + positional values
- *   - Typed named events (type X = { ... }) — emit using a named type alias with arc4 fields
- *   - ARC-28 event prefix — event signature follows ARC-28 format: "Name(type1,type2,...)"
+ * This example demonstrates ARC-28 event emission with structs and positional args.
+ *
+ * Features:
+ * - emit() with arc4.Struct events — emit an instance of an arc4.Struct subclass
+ * - emit('Name', ...positionalArgs) — emit using explicit event name + positional values
+ * - Typed named events (type X = { ... }) — emit using a named type alias with arc4 fields
+ * - ARC-28 event prefix — event signature follows ARC-28 format: "Name(type1,type2,...)"
+ *
+ * Prerequisites: LocalNet
  */
 
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
 import { abimethod, Contract, emit, GlobalState, Uint64 } from '@algorandfoundation/algorand-typescript'
-import { Str, Struct, Uint8, Uint64 as Arc4Uint64 } from '@algorandfoundation/algorand-typescript/arc4'
+import { Uint64 as Arc4Uint64, Str, Struct, Uint8 } from '@algorandfoundation/algorand-typescript/arc4'
 
 // ═══════════════════════════════════════════════════════════════════
 // arc4.Struct event — class-based ARC-28 event definition
@@ -54,8 +57,8 @@ export class EventLogger extends Contract {
   public logTransfer(from: uint64, to: uint64, amount: uint64): void {
     // emit() with arc4.Struct — create a Struct instance and pass to emit()
     const event = new Transfer({
-      from: new Arc4Uint64(from),   // Wrap native uint64 in arc4.Uint64
-      to: new Arc4Uint64(to),       // Wrap native uint64 in arc4.Uint64
+      from: new Arc4Uint64(from), // Wrap native uint64 in arc4.Uint64
+      to: new Arc4Uint64(to), // Wrap native uint64 in arc4.Uint64
       amount: new Arc4Uint64(amount), // Wrap native uint64 in arc4.Uint64
     })
     emit(event) // Emits ARC-28 event: "Transfer(uint64,uint64,uint64)" + ABI-encoded data
@@ -72,9 +75,9 @@ export class EventLogger extends Contract {
   public logApproval(owner: uint64, spender: uint64, value: uint64): void {
     // emit<T>() with typed named event — generic type parameter specifies the event name
     emit<Approval>({
-      owner: new Arc4Uint64(owner),     // Wrap native value in arc4 type
+      owner: new Arc4Uint64(owner), // Wrap native value in arc4 type
       spender: new Arc4Uint64(spender), // Wrap native value in arc4 type
-      value: new Arc4Uint64(value),     // Wrap native value in arc4 type
+      value: new Arc4Uint64(value), // Wrap native value in arc4 type
     })
 
     // Increment event counter
@@ -116,7 +119,7 @@ export class EventLogger extends Contract {
     // Typed variable — emit() infers event name "StatusChanged" from the variable's type annotation
     const event: StatusChanged = {
       message: new Str(message), // Wrap native string in arc4.Str
-      code: new Uint8(code),     // Wrap native uint64 in arc4.Uint8
+      code: new Uint8(code), // Wrap native uint64 in arc4.Uint8
     }
     emit(event) // Emits ARC-28 event: "StatusChanged(string,uint8)" + ABI-encoded data
 

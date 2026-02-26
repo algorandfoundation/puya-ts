@@ -1,15 +1,18 @@
 /**
- * Example 13 — Contract Factory
- * Tier: 3 — Transactions & Interactions
+ * Example 13: Contract Factory
  *
- * Features demonstrated:
- *   - compile() — compile a child contract class, get CompiledContract properties
- *   - compileArc4() — typed compilation returning a ContractProxy for typed c2c calls
- *   - abiCall() — contract-to-contract ABI method invocation with return values
- *   - methodSelector() — get 4-byte ARC4 method selector (method reference + string overloads)
- *   - TemplateVar — compile-time template variable substitution in child contract
- *   - CompiledContract properties (approvalProgram, clearStateProgram, extraProgramPages, globalUints, globalBytes, localUints, localBytes)
- *   - Contract-to-contract calls via inner transactions
+ * This example demonstrates compile, compileArc4, and contract-to-contract calls.
+ *
+ * Features:
+ * - compile() — compile a child contract class, get CompiledContract properties
+ * - compileArc4() — typed compilation returning a ContractProxy for typed c2c calls
+ * - abiCall() — contract-to-contract ABI method invocation with return values
+ * - methodSelector() — get 4-byte ARC4 method selector (method reference + string overloads)
+ * - TemplateVar — compile-time template variable substitution in child contract
+ * - CompiledContract properties (approvalProgram, clearStateProgram, extraProgramPages, etc.)
+ * - Contract-to-contract calls via inner transactions
+ *
+ * Prerequisites: LocalNet
  */
 
 import type { Application, uint64 } from '@algorandfoundation/algorand-typescript'
@@ -76,13 +79,13 @@ export class GreeterFactory extends Contract {
     })
 
     // CompiledContract properties — access compiled program bytecode and state schema
-    const approval = compiled.approvalProgram       // Approval program pages (readonly [bytes, bytes])
-    const clear = compiled.clearStateProgram         // Clear state program pages (readonly [bytes, bytes])
-    const extras = compiled.extraProgramPages         // Extra program pages needed (uint64)
-    const gUints = compiled.globalUints               // Global uint64 slots reserved (uint64)
-    const gBytes = compiled.globalBytes               // Global bytes slots reserved (uint64)
-    const lUints = compiled.localUints                // Local uint64 slots reserved (uint64)
-    const lBytes = compiled.localBytes                // Local bytes slots reserved (uint64)
+    const approval = compiled.approvalProgram // Approval program pages (readonly [bytes, bytes])
+    const clear = compiled.clearStateProgram // Clear state program pages (readonly [bytes, bytes])
+    const extras = compiled.extraProgramPages // Extra program pages needed (uint64)
+    const gUints = compiled.globalUints // Global uint64 slots reserved (uint64)
+    const gBytes = compiled.globalBytes // Global bytes slots reserved (uint64)
+    const lUints = compiled.localUints // Local uint64 slots reserved (uint64)
+    const lBytes = compiled.localBytes // Local bytes slots reserved (uint64)
 
     // methodSelector() with method reference — type-safe 4-byte ARC4 selector
     const createSelector = methodSelector(GreeterChild.prototype.create)
@@ -90,16 +93,16 @@ export class GreeterFactory extends Contract {
     // Deploy child via inner transaction using compiled programs and state schema
     const childApp = itxn
       .applicationCall({
-        appArgs: [createSelector],             // ARC4 method selector as first arg
-        approvalProgram: approval,             // Compiled approval program
-        clearStateProgram: clear,              // Compiled clear state program
-        extraProgramPages: extras,             // Additional program pages if needed
-        globalNumUint: gUints,                 // Reserve global uint64 state slots
-        globalNumBytes: gBytes,                // Reserve global bytes state slots
-        localNumUint: lUints,                  // Reserve local uint64 state slots
-        localNumBytes: lBytes,                 // Reserve local bytes state slots
+        appArgs: [createSelector], // ARC4 method selector as first arg
+        approvalProgram: approval, // Compiled approval program
+        clearStateProgram: clear, // Compiled clear state program
+        extraProgramPages: extras, // Additional program pages if needed
+        globalNumUint: gUints, // Reserve global uint64 state slots
+        globalNumBytes: gBytes, // Reserve global bytes state slots
+        localNumUint: lUints, // Reserve local uint64 state slots
+        localNumBytes: lBytes, // Reserve local bytes state slots
       })
-      .submit().createdApp                           // Get the created Application reference
+      .submit().createdApp // Get the created Application reference
 
     // Store reference to the deployed child
     this.lastChild.value = childApp
@@ -134,8 +137,8 @@ export class GreeterFactory extends Contract {
     // abiCall() — invoke an ABI method on another contract, returns typed result
     const { returnValue } = abiCall({
       method: GreeterChild.prototype.greet, // Method reference for type-safe c2c call
-      appId: app,                           // Target application to call
-      args: [name],                         // ABI method arguments
+      appId: app, // Target application to call
+      args: [name], // ABI method arguments
     })
 
     return returnValue
@@ -158,8 +161,8 @@ export class GreeterFactory extends Contract {
     // Manual c2c call: build inner txn with methodSelector + encodeArc4
     const txn = itxn
       .applicationCall({
-        appId: app,                                          // Target app
-        appArgs: [selectorFromRef, encodeArc4(name)],        // Selector + ABI-encoded argument
+        appId: app, // Target app
+        appArgs: [selectorFromRef, encodeArc4(name)], // Selector + ABI-encoded argument
       })
       .submit()
 
@@ -175,9 +178,9 @@ export class GreeterFactory extends Contract {
   public deleteChild(app: Application): void {
     // abiCall() with onCompletion — invoke delete with DeleteApplication action
     abiCall({
-      method: GreeterChild.prototype.delete,              // Method reference to child's delete()
-      appId: app,                                         // Target application
-      onCompletion: OnCompleteAction.DeleteApplication,   // Required on-completion action for delete
+      method: GreeterChild.prototype.delete, // Method reference to child's delete()
+      appId: app, // Target application
+      onCompletion: OnCompleteAction.DeleteApplication, // Required on-completion action for delete
     })
   }
 
@@ -193,13 +196,13 @@ export class GreeterFactory extends Contract {
     })
 
     // Access every CompiledContract property for demonstration
-    const _approval = compiled.approvalProgram    // readonly [bytes, bytes] — two program pages
-    const _clear = compiled.clearStateProgram      // readonly [bytes, bytes] — two program pages
-    const extras = compiled.extraProgramPages       // uint64 — extra pages for large programs
-    const _gUints = compiled.globalUints            // uint64 — global uint64 state slots
-    const _gBytes = compiled.globalBytes            // uint64 — global bytes state slots
-    const _lUints = compiled.localUints             // uint64 — local uint64 state slots
-    const _lBytes = compiled.localBytes             // uint64 — local bytes state slots
+    const _approval = compiled.approvalProgram // readonly [bytes, bytes] — two program pages
+    const _clear = compiled.clearStateProgram // readonly [bytes, bytes] — two program pages
+    const extras = compiled.extraProgramPages // uint64 — extra pages for large programs
+    const _gUints = compiled.globalUints // uint64 — global uint64 state slots
+    const _gBytes = compiled.globalBytes // uint64 — global bytes state slots
+    const _lUints = compiled.localUints // uint64 — local uint64 state slots
+    const _lBytes = compiled.localBytes // uint64 — local bytes state slots
 
     return extras
   }

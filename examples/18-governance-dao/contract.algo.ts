@@ -1,18 +1,21 @@
 /**
- * Example 18 — Governance DAO
- * Tier: 4 — Advanced
+ * Example 18: Governance DAO
  *
- * Features demonstrated:
- *   - Box<Proposal> — single named box holding an arc4.Struct
- *   - BoxMap<uint64, Proposal> — proposals keyed by numeric ID
- *   - BoxMap<bytes, uint64> — vote deduplication with composite byte keys
- *   - arc4.Struct — Proposal record and ARC-28 event structs (module scope)
- *   - arc4.DynamicArray<arc4.Uint64> — dynamically built list of passing proposals
- *   - emit() — ARC-28 events via struct instances and positional args
- *   - ensureBudget() / OpUpFeeSource — opcode budget management before loops
- *   - urange() — iterate over proposal ID range
- *   - clone() — deep copy proposals read from BoxMap
- *   - Full app lifecycle: create → bootstrap → propose → vote → execute → tally → close
+ * This example demonstrates a full DAO proposal lifecycle using Box/BoxMap storage and ARC-28 events.
+ *
+ * Features:
+ * - Box<Proposal> — single named box holding an arc4.Struct
+ * - BoxMap<uint64, Proposal> — proposals keyed by numeric ID
+ * - BoxMap<bytes, uint64> — vote deduplication with composite byte keys
+ * - arc4.Struct — Proposal record and ARC-28 event structs (module scope)
+ * - arc4.DynamicArray<arc4.Uint64> — dynamically built list of passing proposals
+ * - emit() — ARC-28 events via struct instances and positional args
+ * - ensureBudget() / OpUpFeeSource — opcode budget management before loops
+ * - urange() — iterate over proposal ID range
+ * - clone() — deep copy proposals read from BoxMap
+ * - Full app lifecycle: create → bootstrap → propose → vote → execute → tally → close
+ *
+ * Prerequisites: LocalNet
  */
 import type { Account, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 // Contract: ABI-routed base; Box/BoxMap: box storage proxies; GlobalState: global state proxy;
@@ -37,14 +40,7 @@ import {
 } from '@algorandfoundation/algorand-typescript'
 // arc4 types: Address (32-byte account), Bool, DynamicArray (variable-length),
 // Str (ABI string), Struct (base class), Uint64 as Arc4Uint64 (ABI-encoded uint64)
-import {
-  Address,
-  Bool,
-  DynamicArray,
-  Str,
-  Struct,
-  Uint64 as Arc4Uint64,
-} from '@algorandfoundation/algorand-typescript/arc4'
+import { Address, Uint64 as Arc4Uint64, Bool, DynamicArray, Str, Struct } from '@algorandfoundation/algorand-typescript/arc4'
 
 // ═══════════════════════════════════════════════════════════════════
 // arc4.Struct definitions — must be at module scope (outside class)
@@ -52,12 +48,12 @@ import {
 
 // Proposal: on-chain record stored in BoxMap — fields in generic parameter
 class Proposal extends Struct<{
-  proposer: Address       // Who submitted the proposal
-  description: Str        // Human-readable description (dynamic-length ABI string)
-  yesVotes: Arc4Uint64    // Number of yes votes
-  noVotes: Arc4Uint64     // Number of no votes
-  endRound: Arc4Uint64    // Consensus round when voting closes
-  executed: Bool           // Whether the proposal has been executed
+  proposer: Address // Who submitted the proposal
+  description: Str // Human-readable description (dynamic-length ABI string)
+  yesVotes: Arc4Uint64 // Number of yes votes
+  noVotes: Arc4Uint64 // Number of no votes
+  endRound: Arc4Uint64 // Consensus round when voting closes
+  executed: Bool // Whether the proposal has been executed
 }> {}
 
 // ARC-28 event: emitted when a new proposal is submitted
@@ -163,12 +159,12 @@ export class GovernanceDao extends Contract {
 
     // BoxMap write: store the new Proposal arc4.Struct keyed by uint64 ID
     this.proposals(id).value = new Proposal({
-      proposer: new Address(Txn.sender),       // arc4.Address from transaction sender
-      description: new Str(description),        // arc4.Str from native string param
-      yesVotes: new Arc4Uint64(0),              // Initialize vote counts to zero
+      proposer: new Address(Txn.sender), // arc4.Address from transaction sender
+      description: new Str(description), // arc4.Str from native string param
+      yesVotes: new Arc4Uint64(0), // Initialize vote counts to zero
       noVotes: new Arc4Uint64(0),
-      endRound: new Arc4Uint64(endRound),       // Voting deadline round
-      executed: new Bool(false),                 // Not yet executed
+      endRound: new Arc4Uint64(endRound), // Voting deadline round
+      executed: new Bool(false), // Not yet executed
     })
 
     // Increment the proposal counter
@@ -176,10 +172,12 @@ export class GovernanceDao extends Contract {
     this.nextProposalId.value = next
 
     // emit() with arc4.Struct instance — ARC-28 event "ProposalCreated(uint64,address)"
-    emit(new ProposalCreated({
-      id: new Arc4Uint64(id),
-      proposer: new Address(Txn.sender),
-    }))
+    emit(
+      new ProposalCreated({
+        id: new Arc4Uint64(id),
+        proposer: new Address(Txn.sender),
+      }),
+    )
 
     return id
   }
@@ -219,11 +217,13 @@ export class GovernanceDao extends Contract {
     this.votes(key).value = Uint64(1)
 
     // emit() with arc4.Struct instance — ARC-28 event "VoteCast(uint64,address,bool)"
-    emit(new VoteCast({
-      proposalId: new Arc4Uint64(proposalId),
-      voter: new Address(Txn.sender),
-      inFavor: new Bool(inFavor),
-    }))
+    emit(
+      new VoteCast({
+        proposalId: new Arc4Uint64(proposalId),
+        voter: new Address(Txn.sender),
+        inFavor: new Bool(inFavor),
+      }),
+    )
   }
 
   // ═══════════════════════════════════════════════════════════════
@@ -254,9 +254,11 @@ export class GovernanceDao extends Contract {
     this.latestExecuted.value = clone(this.proposals(proposalId).value)
 
     // emit() with arc4.Struct instance — ARC-28 event "ProposalExecuted(uint64)"
-    emit(new ProposalExecuted({
-      id: new Arc4Uint64(proposalId),
-    }))
+    emit(
+      new ProposalExecuted({
+        id: new Arc4Uint64(proposalId),
+      }),
+    )
   }
 
   // ═══════════════════════════════════════════════════════════════

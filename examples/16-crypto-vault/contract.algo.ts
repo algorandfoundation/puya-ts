@@ -1,17 +1,29 @@
 /**
- * Example 16 — Crypto Vault
- * Tier: 4 — Advanced
+ * Example 16: Crypto Vault
  *
- * Features demonstrated:
- *   - Hash functions (op.sha256, op.sha3_256, op.sha512_256, op.keccak256)
- *   - Signature verification (op.ed25519verifyBare)
- *   - Opcode budget management (ensureBudget, OpUpFeeSource)
- *   - Scratch space (op.Scratch.store, op.Scratch.loadBytes, op.Scratch.loadUint64)
- *   - Contract decorator options (@contract with avmVersion and scratchSlots)
+ * This example demonstrates hash functions, signature verification, and scratch space.
+ *
+ * Features:
+ * - Hash functions (op.sha256, op.sha3_256, op.sha512_256, op.keccak256)
+ * - Signature verification (op.ed25519verifyBare)
+ * - Opcode budget management (ensureBudget, OpUpFeeSource)
+ * - Scratch space (op.Scratch.store, op.Scratch.loadBytes, op.Scratch.loadUint64)
+ * - Contract decorator options (@contract with avmVersion and scratchSlots)
+ *
+ * Prerequisites: LocalNet
  */
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 // Contract: ABI-routed base; ensureBudget/OpUpFeeSource: budget management; contract: decorator
-import { abimethod, assert, Bytes, Contract, contract, ensureBudget, GlobalState, OpUpFeeSource, Uint64 } from '@algorandfoundation/algorand-typescript'
+import {
+  abimethod,
+  assert,
+  Contract,
+  contract,
+  ensureBudget,
+  GlobalState,
+  OpUpFeeSource,
+  Uint64,
+} from '@algorandfoundation/algorand-typescript'
 // op namespace: hash functions, signature verification, scratch space
 import { ed25519verifyBare, keccak256, Scratch, sha256, sha3_256, sha512_256 } from '@algorandfoundation/algorand-typescript/op'
 

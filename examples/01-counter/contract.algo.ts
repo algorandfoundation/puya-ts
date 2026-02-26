@@ -1,13 +1,16 @@
 /**
- * Example 01 — Counter
- * Tier: 1 — Fundamentals
+ * Example 01: Counter
  *
- * Features demonstrated:
- *   - GlobalState<uint64>
- *   - @abimethod
- *   - uint64 arithmetic (+, -, *, /)
- *   - createApplication conventional routing
- *   - Uint64() factory
+ * This example demonstrates GlobalState and uint64 arithmetic.
+ *
+ * Features:
+ * - GlobalState<uint64>
+ * - @abimethod decorator
+ * - uint64 arithmetic (+, -, *, /)
+ * - createApplication conventional routing
+ * - Uint64() factory
+ *
+ * Prerequisites: LocalNet
  */
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
 // Contract: ABI-routed base class; GlobalState: typed global storage; abimethod: decorator for ABI methods; Uint64: factory for uint64 constants

@@ -26,6 +26,9 @@ export default [
       'docs/_html/',
       '**/.puya',
       'tests/code-fix/fixed/**',
+      'examples/scripts/**.mjs',
+      'examples/*/index.ts',
+      'examples/shared/utils.ts',
     ],
   },
   ...compat.extends('@makerx/eslint-config'),
@@ -49,7 +52,7 @@ export default [
     },
   },
   {
-    files: ['tests/**/*.algo.ts'],
+    files: ['tests/**/*.algo.ts', 'examples/**/*.algo.ts'],
     rules: {
       '@typescript-eslint/no-unused-vars': 'off',
     },

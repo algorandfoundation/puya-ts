@@ -1,18 +1,17 @@
 /**
- * Example 09 — Array Playground
- * Tier: 2 — State & Data
+ * Example 09: Array Playground
  *
- * Features demonstrated:
- *   - Native uint64[] (mutable array literal)
- *   - FixedArray<T, N> (fixed-length array)
- *   - ReferenceArray<T> (mutable, in-memory reference array)
- *   - clone() (deep copy of arrays)
- *   - urange() (uint64 range iterator)
- *   - for...of iteration
- *   - .entries() (index + value iteration)
- *   - .push() / .pop() (ReferenceArray mutation)
- *   - .at() (index access, supports negatives)
- *   - .length (array length as uint64)
+ * This example demonstrates native arrays, FixedArray, ReferenceArray, and iteration patterns.
+ *
+ * Features:
+ * - Native uint64[] — mutable array literal with .push(), .pop(), .at(), .length
+ * - FixedArray<T, N> — fixed-length array with index access and .entries()
+ * - ReferenceArray<T> — mutable, resizable in-memory reference array
+ * - clone() — deep copy to prevent aliasing
+ * - urange() — uint64 range iterator (1, 2, and 3 argument forms)
+ * - for...of iteration and .entries() index+value iteration
+ *
+ * Prerequisites: LocalNet
  */
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
 // Contract: ABI-routed base; assert: runtime check; clone: deep copy; FixedArray: fixed-length array;
@@ -181,8 +180,8 @@ export class ArrayPlayground extends Contract {
     let indexSum: uint64 = 0
     let valueSum: uint64 = 0
     for (const [idx, val] of arr.entries()) {
-      indexSum += idx   // 0 + 1 + 2 = 3
-      valueSum += val   // a + b + c
+      indexSum += idx // 0 + 1 + 2 = 3
+      valueSum += val // a + b + c
     }
     assert(indexSum === 3)
 

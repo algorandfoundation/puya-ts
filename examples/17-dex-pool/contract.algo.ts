@@ -1,18 +1,21 @@
 /**
- * Example 17 — DEX Pool
- * Tier: 4 — Advanced
+ * Example 17: DEX Pool
  *
- * Features demonstrated:
- *   - Full constant-product AMM (x·y=k) with reserves in GlobalState
- *   - Asset management (create pool token, opt-in to trading pair)
- *   - biguint math for overflow-safe invariant verification
- *   - op.sqrt (uint64 square root for initial liquidity)
- *   - op.bsqrt (biguint square root for invariant checks)
- *   - assertMatch comparisons (greaterThan, between)
- *   - itxn payments + asset transfers (pool token mint, swap output, withdrawals)
- *   - itxn.submitGroup for grouped inner transactions
- *   - op.mulw / op.divmodw wide math for swap output calculation
- *   - Min-balance calculations via free subroutine and Account.minBalance
+ * This example demonstrates a constant-product AMM (x·y=k) with inner transactions and wide math.
+ *
+ * Features:
+ * - Full constant-product AMM (x·y=k) with reserves in GlobalState
+ * - Asset management (create pool token, opt-in to trading pair)
+ * - biguint math for overflow-safe invariant verification
+ * - op.sqrt (uint64 square root for initial liquidity)
+ * - op.bsqrt (biguint square root for invariant checks)
+ * - assertMatch comparisons (greaterThan, between)
+ * - itxn payments + asset transfers (pool token mint, swap output, withdrawals)
+ * - itxn.submitGroup for grouped inner transactions
+ * - op.mulw / op.divmodw wide math for swap output calculation
+ * - Min-balance calculations via free subroutine and Account.minBalance
+ *
+ * Prerequisites: LocalNet
  */
 
 import type { Asset, biguint, gtxn, uint64 } from '@algorandfoundation/algorand-typescript'
@@ -186,10 +189,7 @@ export class DexPool extends Contract {
    * First deposit: liquidity = sqrt(amountA) × sqrt(amountB) − MIN_LOCKED.
    * Subsequent deposits: liquidity proportional to existing reserves.
    */
-  public addLiquidity(
-    depositA: gtxn.AssetTransferTxn,
-    depositB: gtxn.AssetTransferTxn,
-  ): uint64 {
+  public addLiquidity(depositA: gtxn.AssetTransferTxn, depositB: gtxn.AssetTransferTxn): uint64 {
     // assertMatch — verify deposit A: correct asset, correct receiver, positive amount
     assertMatch(depositA, {
       assetReceiver: Global.currentApplicationAddress,

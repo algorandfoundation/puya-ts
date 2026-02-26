@@ -1,15 +1,18 @@
 /**
- * Example 04 — Logic Signature Gate
- * Tier: 1 — Fundamentals
+ * Example 04: Logic Signature Gate
  *
- * Features demonstrated:
- *   - LogicSig (base class for smart signatures)
- *   - @logicsig (decorator for LogicSig configuration)
- *   - TemplateVar<bytes> (compile-time byte constant substitution)
- *   - TemplateVar<uint64> (compile-time uint64 constant substitution)
- *   - assert (runtime assertion with error message)
- *   - Txn field checks (fee, typeEnum, rekeyTo, closeRemainderTo)
- *   - op.ed25519verifyBare (Ed25519 signature verification)
+ * This example demonstrates a LogicSig with template variables and Ed25519 signature verification.
+ *
+ * Features:
+ * - LogicSig (base class for smart signatures)
+ * - @logicsig (decorator for LogicSig configuration)
+ * - TemplateVar<bytes> (compile-time byte constant substitution)
+ * - TemplateVar<uint64> (compile-time uint64 constant substitution)
+ * - assert (runtime assertion with error message)
+ * - Txn field checks (fee, typeEnum, rekeyTo, closeRemainderTo)
+ * - op.ed25519verifyBare (Ed25519 signature verification)
+ *
+ * Prerequisites: LocalNet
  */
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 // LogicSig: base class for smart signatures; logicsig: config decorator

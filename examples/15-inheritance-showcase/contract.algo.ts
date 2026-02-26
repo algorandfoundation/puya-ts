@@ -1,15 +1,18 @@
 /**
- * Example 15 — Inheritance Showcase
- * Tier: 4 — Advanced
+ * Example 15: Inheritance Showcase
  *
- * Features demonstrated:
- *   - Single inheritance (extending a base class)
- *   - Multi-level inheritance (three levels deep)
- *   - Abstract classes (abstract keyword prevents direct instantiation)
- *   - Method overrides (replacing parent behaviour in subclasses)
- *   - Super calls (super.method() and super() in constructors)
- *   - Constructor patterns (state initialization via constructors)
- *   - Mixing Contract and BaseContract hierarchies (both in one file + hybrid approvalProgram override)
+ * This example demonstrates single and multi-level inheritance with abstract classes.
+ *
+ * Features:
+ * - Single inheritance (extending a base class)
+ * - Multi-level inheritance (three levels deep)
+ * - Abstract classes (abstract keyword prevents direct instantiation)
+ * - Method overrides (replacing parent behaviour in subclasses)
+ * - Super calls (super.method() and super() in constructors)
+ * - Constructor patterns (state initialization via constructors)
+ * - Mixing Contract and BaseContract hierarchies (both in one file + hybrid approvalProgram override)
+ *
+ * Prerequisites: LocalNet
  */
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
 // Contract: ABI-routed base; BaseContract: raw approval/clear; GlobalState: typed global storage

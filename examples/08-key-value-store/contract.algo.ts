@@ -1,31 +1,24 @@
 /**
- * Example 08 — Key-Value Store
- * Tier: 2 — State & Data
+ * Example 08: Key-Value Store
  *
- * Features demonstrated:
- *   - Box<bytes> — single named box for raw byte storage
- *   - BoxMap<string, bytes> — key-prefixed map of boxes
- *   - Box CRUD — .create(), .delete(), .exists, .value
- *   - Box slicing — .extract(), .replace(), .splice()
- *   - Box utilities — .length, .get() with default, .maybe(), .resize()
- *   - @contract({ stateTotals: {...} }) — explicit state allocation
- *   - GlobalState with dynamic key access
+ * This example demonstrates Box and BoxMap storage with CRUD operations.
+ *
+ * Features:
+ * - Box<bytes> — single named box for raw byte storage
+ * - BoxMap<string, bytes> — key-prefixed map of boxes
+ * - Box CRUD — .create(), .delete(), .exists, .value
+ * - Box slicing — .extract(), .replace(), .splice()
+ * - Box utilities — .length, .get() with default, .maybe(), .resize()
+ * - @contract({ stateTotals: {...} }) — explicit state allocation
+ * - GlobalState with dynamic key access
+ *
+ * Prerequisites: LocalNet
  */
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 // Contract: ABI-routed base; contract: class decorator for stateTotals;
 // Box/BoxMap: box storage proxies; GlobalState: global state proxy;
 // Bytes: bytes factory; Uint64: uint64 factory; assert: runtime assertion; abimethod: method decorator
-import {
-  abimethod,
-  assert,
-  Box,
-  BoxMap,
-  Bytes,
-  Contract,
-  contract,
-  GlobalState,
-  Uint64,
-} from '@algorandfoundation/algorand-typescript'
+import { abimethod, assert, Box, BoxMap, Bytes, Contract, contract, GlobalState, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 // @contract decorator with stateTotals: reserves extra global uint slots
 // for dynamic GlobalState access (keys not known at compile time)

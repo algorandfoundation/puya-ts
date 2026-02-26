@@ -1,14 +1,17 @@
 /**
- * Example 12 — Multi-Txn Distributor
- * Tier: 3 — Transactions & Interactions
+ * Example 12: Multi-Txn Distributor
  *
- * Features demonstrated:
- *   - itxn.submitGroup(...) with typed tuple return (fixed-size grouped inner transactions)
- *   - itxnCompose .begin() / .next() / .submit() (dynamic-size grouped inner transactions)
- *   - gtxn.PaymentTxn params (reading fields from outer group transactions)
- *   - TransactionType enum checks (verifying transaction types in groups)
- *   - itxn.payment / itxn.assetTransfer (building inner transaction params)
- *   - .copy() and .set() for reusable inner transaction params
+ * This example demonstrates grouped inner transactions and outer group transaction access.
+ *
+ * Features:
+ * - itxn.submitGroup(...) with typed tuple return (fixed-size grouped inner transactions)
+ * - itxnCompose .begin() / .next() / .submit() (dynamic-size grouped inner transactions)
+ * - gtxn.PaymentTxn params (reading fields from outer group transactions)
+ * - TransactionType enum checks (verifying transaction types in groups)
+ * - itxn.payment / itxn.assetTransfer (building inner transaction params)
+ * - .copy() and .set() for reusable inner transaction params
+ *
+ * Prerequisites: LocalNet
  */
 
 import type { Account, Asset, PaymentComposeFields, uint64 } from '@algorandfoundation/algorand-typescript'
@@ -73,12 +76,7 @@ export class MultiTxnDistributor extends Contract {
    * Distribute funding plus opt-in to an asset for two recipients.
    * Demonstrates mixed-type submitGroup (payment + asset transfer).
    */
-  public distributeWithOptIn(
-    funding: gtxn.PaymentTxn,
-    asset: Asset,
-    recipientA: Account,
-    recipientB: Account,
-  ): void {
+  public distributeWithOptIn(funding: gtxn.PaymentTxn, asset: Asset, recipientA: Account, recipientB: Account): void {
     // gtxn.PaymentTxn — verify the funding transaction targets this contract
     assertMatch(funding, {
       receiver: Global.currentApplicationAddress,
