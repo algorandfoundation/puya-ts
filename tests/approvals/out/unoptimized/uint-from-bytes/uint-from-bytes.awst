@@ -1,0 +1,34 @@
+contract UintFromBytes
+{
+  approvalProgram(): bool
+  {
+    u8: arc4.uint8 = reinterpret_cast<arc4.uint8>(reinterpret_cast<bytes>(bzero(1)))
+    assert(ARC4_DECODE(u8) == 0)
+    assert(ARC4_DECODE(0x11) == 17)
+    u16: arc4.uint16 = reinterpret_cast<arc4.uint16>(reinterpret_cast<bytes>(bzero(2)))
+    assert(ARC4_DECODE(u16) == 0)
+    assert(ARC4_DECODE(0x0011) == 17)
+    u32: arc4.uint32 = reinterpret_cast<arc4.uint32>(reinterpret_cast<bytes>(bzero(4)))
+    assert(ARC4_DECODE(u32) == 0)
+    assert(ARC4_DECODE(0x00000011) == 17)
+    u64: arc4.uint64 = reinterpret_cast<arc4.uint64>(reinterpret_cast<bytes>(bzero(8)))
+    assert(ARC4_DECODE(u64) == 0)
+    assert(ARC4_DECODE(0x0000000000000011) == 17)
+    u128: arc4.uint128 = reinterpret_cast<arc4.uint128>(reinterpret_cast<bytes>(bzero(16)))
+    assert(ARC4_DECODE(u128) == 0)
+    assert(ARC4_DECODE(0x00000000000000000000000000000011) == 17)
+    u256: arc4.uint256 = reinterpret_cast<arc4.uint256>(reinterpret_cast<bytes>(bzero(32)))
+    assert(ARC4_DECODE(u256) == 0)
+    assert(ARC4_DECODE(0x0000000000000000000000000000000000000000000000000000000000000011) == 17)
+    u512: arc4.uint512 = reinterpret_cast<arc4.uint512>(reinterpret_cast<bytes>(bzero(64)))
+    assert(ARC4_DECODE(u512) == 0)
+    assert(ARC4_DECODE(0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011) == 17)
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+}

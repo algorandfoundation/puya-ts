@@ -1,0 +1,52 @@
+main tests/approvals/uint-from-bytes.algo.ts::UintFromBytes.approvalProgram:
+    block@0: // L6
+        let u8#0: Encoded(uint8) = (bzero 1u)
+        let tmp%0#0: uint64 = (btoi u8#0)
+        let tmp%1#0: bool = (! tmp%0#0)
+        (assert tmp%1#0)
+        let tmp%2#0: uint64 = (btoi 0x11)
+        let tmp%3#0: bool = (== tmp%2#0 17u)
+        (assert tmp%3#0)
+        let u16#0: Encoded(uint16) = (bzero 2u)
+        let tmp%4#0: uint64 = (btoi u16#0)
+        let tmp%5#0: bool = (! tmp%4#0)
+        (assert tmp%5#0)
+        let tmp%6#0: uint64 = (btoi 0x0011)
+        let tmp%7#0: bool = (== tmp%6#0 17u)
+        (assert tmp%7#0)
+        let u32#0: Encoded(uint32) = (bzero 4u)
+        let tmp%8#0: uint64 = (btoi u32#0)
+        let tmp%9#0: bool = (! tmp%8#0)
+        (assert tmp%9#0)
+        let tmp%10#0: uint64 = (btoi 0x00000011)
+        let tmp%11#0: bool = (== tmp%10#0 17u)
+        (assert tmp%11#0)
+        let u64#0: Encoded(uint64) = (bzero 8u)
+        let tmp%12#0: uint64 = (btoi u64#0)
+        let tmp%13#0: bool = (! tmp%12#0)
+        (assert tmp%13#0)
+        let tmp%14#0: uint64 = (btoi 0x0000000000000011)
+        let tmp%15#0: bool = (== tmp%14#0 17u)
+        (assert tmp%15#0)
+        let u128#0: Encoded(uint128) = (bzero 16u)
+        let tmp%16#0: biguint = u128#0
+        let tmp%17#0: bool = (b== tmp%16#0 0b)
+        (assert tmp%17#0)
+        let tmp%18#0: biguint = 0x00000000000000000000000000000011
+        let tmp%19#0: bool = (b== tmp%18#0 17b)
+        (assert tmp%19#0)
+        let u256#0: Encoded(uint256) = (bzero 32u)
+        let tmp%20#0: biguint = u256#0
+        let tmp%21#0: bool = (b== tmp%20#0 0b)
+        (assert tmp%21#0)
+        let tmp%22#0: biguint = 0x0000000000000000000000000000000000000000000000000000000000000011
+        let tmp%23#0: bool = (b== tmp%22#0 17b)
+        (assert tmp%23#0)
+        let u512#0: Encoded(uint512) = (bzero 64u)
+        let tmp%24#0: biguint = u512#0
+        let tmp%25#0: bool = (b== tmp%24#0 0b)
+        (assert tmp%25#0)
+        let tmp%26#0: biguint = 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011
+        let tmp%27#0: bool = (b== tmp%26#0 17b)
+        (assert tmp%27#0)
+        return 1u
