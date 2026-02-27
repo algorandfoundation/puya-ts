@@ -1,11 +1,11 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
-import { IntegerConstant } from '../../../awst/nodes'
+import { BytesConstant, IntegerConstant } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError } from '../../../errors'
 import { codeInvariant, invariant } from '../../../util'
 import type { LibClassType, PType } from '../../ptypes'
-import { biguintPType, NumericLiteralPType, uint64PType } from '../../ptypes'
+import { biguintPType, BytesPType, bytesPType, NumericLiteralPType, uint64PType } from '../../ptypes'
 import { UintNGeneric, UintNType } from '../../ptypes/arc4-types'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder } from '../index'
@@ -120,6 +120,40 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
       )
     }
   }
+
+  if (initialValueBuilder.resolvableToPType(bytesPType)) {
+    const originalType = initialValueBuilder.ptype
+    const initialValue = initialValueBuilder.resolveToPType(bytesPType).resolve()
+    const expectedLength = ptype.n / 8n
+
+    // If byte length is compile-time knowable (initialValue is a constant or a fixed size bytes)
+    // then construct using reinterpret cast.
+    // Otherwise throw error
+    let constructFromFixedSizeBytes: boolean = false
+    if (initialValue instanceof BytesConstant) {
+      // Constant bytes: compile-time length check via value
+      codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)
+      constructFromFixedSizeBytes = true
+    } else if (originalType instanceof BytesPType && originalType.length !== null) {
+      // Fixed-size bytes type: compile-time length check via type
+      codeInvariant(originalType.length === expectedLength, `${originalType} cannot be converted to ${ptype}`)
+      constructFromFixedSizeBytes = true
+    }
+
+    if (constructFromFixedSizeBytes) {
+      return new UintNExpressionBuilder(
+        nodeFactory.reinterpretCast({
+          expr: initialValue,
+          wtype: ptype.wtype,
+          sourceLocation,
+        }),
+        ptype,
+      )
+    } else {
+      throw new CodeError(`Constructing ${ptype} from dynamic length bytes is currently not supported`, { sourceLocation })
+    }
+  }
+
   throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
 }
 
