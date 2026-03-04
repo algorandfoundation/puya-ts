@@ -1,5 +1,7 @@
 import type { bytes } from '@algorandfoundation/algorand-typescript'
-import { Uint, Uint8, Uint16, Uint32, Uint64, Uint128, Uint256 } from '@algorandfoundation/algorand-typescript/arc4'
+import { Bytes } from '@algorandfoundation/algorand-typescript'
+import { Uint, Uint128, Uint16, Uint256, Uint32, Uint64, Uint8 } from '@algorandfoundation/algorand-typescript/arc4'
+import { bzero } from '@algorandfoundation/algorand-typescript/op'
 
 function testDynamicBytes(b: bytes) {
   // @expect-error Constructing Uint<8> from dynamic length bytes is currently not supported
@@ -16,4 +18,22 @@ function testDynamicBytes(b: bytes) {
   const u256 = new Uint256(b)
   // @expect-error Constructing Uint<512> from dynamic length bytes is currently not supported
   const u512 = new Uint<512>(b)
+}
+
+function testIncompatibleConstantBytesLength() {
+  // @expect-error 0,17 cannot be converted to Uint<8>
+  const u8 = new Uint8(Bytes.fromHex('0011'))
+  // @expect-error 0,0,0,17 cannot be converted to Uint<16>
+  const u16 = new Uint16(Bytes.fromHex('00000011'))
+  // @expect-error 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17 cannot be converted to Uint<64>
+  const u64 = new Uint64(Bytes.fromHex('00000000000000000000000000000011'))
+}
+
+function testIncompatibleFixedBytesLength() {
+  // @expect-error bytes<2> cannot be converted to Uint<8>
+  const u8 = new Uint8(bzero(2))
+  // @expect-error bytes<4> cannot be converted to Uint<16>
+  const u16 = new Uint16(bzero(4))
+  // @expect-error bytes<16> cannot be converted to Uint<64>
+  const u64 = new Uint64(bzero(16))
 }
