@@ -50,6 +50,34 @@ export class UintFromBytes extends BaseContract {
     )
     assert(u512FromHex.asBigUint() === 17n)
 
+    // Smaller constant bytes (zero-padded)
+    const u16FromSmallConst = new Uint16(Bytes.fromHex('11'))
+    assert(u16FromSmallConst.asUint64() === 17)
+    const u32FromSmallConst = new Uint32(Bytes.fromHex('11'))
+    assert(u32FromSmallConst.asUint64() === 17)
+    const u64FromSmallConst = new Uint64(Bytes.fromHex('11'))
+    assert(u64FromSmallConst.asUint64() === 17)
+    const u128FromSmallConst = new Uint128(Bytes.fromHex('11'))
+    assert(u128FromSmallConst.asBigUint() === 17n)
+    const u256FromSmallConst = new Uint256(Bytes.fromHex('11'))
+    assert(u256FromSmallConst.asBigUint() === 17n)
+    const u512FromSmallConst = new Uint<512>(Bytes.fromHex('11'))
+    assert(u512FromSmallConst.asBigUint() === 17n)
+
+    // Smaller fixed-size bytes (zero-padded)
+    const u16FromSmallFixed = new Uint16(bzero(1))
+    assert(u16FromSmallFixed.asUint64() === 0)
+    const u32FromSmallFixed = new Uint32(bzero(1))
+    assert(u32FromSmallFixed.asUint64() === 0)
+    const u64FromSmallFixed = new Uint64(bzero(1))
+    assert(u64FromSmallFixed.asUint64() === 0)
+    const u128FromSmallFixed = new Uint128(bzero(1))
+    assert(u128FromSmallFixed.asBigUint() === 0n)
+    const u256FromSmallFixed = new Uint256(bzero(1))
+    assert(u256FromSmallFixed.asBigUint() === 0n)
+    const u512FromSmallFixed = new Uint<512>(bzero(1))
+    assert(u512FromSmallFixed.asBigUint() === 0n)
+
     return true
   }
 }
