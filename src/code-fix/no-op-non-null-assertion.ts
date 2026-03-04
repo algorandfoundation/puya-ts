@@ -5,15 +5,14 @@ import type { TextEdit } from '../text-edit'
 import { getNodeRange } from '../text-edit'
 import { CodeFix } from './code-fix'
 
-export class InvalidNonNullAssertion extends CodeFix {
+export class NoOpNonNullAssertion extends CodeFix {
   constructor({ sourceLocation }: { sourceLocation: SourceLocation<ts.NonNullExpression> }) {
     super({
       sourceLocation,
-      errorMessage:
-        'The non-null assertion operator "!" is not valid here. It is only valid in limited scenarios where built in types require it. Eg. Array.prototype.pop',
+      errorMessage: 'The non-null assertion operator "!" has no effect (no-op) on non-optional types',
       fixMessage: "Remove '!'",
-      logLevel: LogLevel.Error,
-      edits: InvalidNonNullAssertion.buildEdits(sourceLocation.node),
+      logLevel: LogLevel.Warning,
+      edits: NoOpNonNullAssertion.buildEdits(sourceLocation.node),
     })
   }
 
