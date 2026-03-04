@@ -10,14 +10,16 @@
  * - Template literals
  *
  * Prerequisites: LocalNet
+ *
+ * @note Educational only — not audited for production use.
  */
-// Contract: ABI-routed base class; abimethod: decorator for ABI methods; readonly: marks method as non-mutating
-import { abimethod, Contract, readonly } from '@algorandfoundation/algorand-typescript'
+// Contract: ABI-routed base class; readonly: marks method as non-mutating
+import { Contract, readonly } from '@algorandfoundation/algorand-typescript'
 
 // Simple greeter contract demonstrating string handling and @readonly methods
+// example: GREETER
 export class Greeter extends Contract {
-  // createApplication: called once when the app is first deployed (onCreate: 'require')
-  @abimethod({ allowActions: 'NoOp', onCreate: 'require' })
+  /** Called once when the app is first deployed. */
   public createApplication(): void {}
 
   /**
@@ -43,3 +45,4 @@ export class Greeter extends Contract {
     return `Hello, ${firstName} and ${lastName}!`
   }
 }
+// example: GREETER
