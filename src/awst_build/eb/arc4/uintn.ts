@@ -1,3 +1,4 @@
+import { intrinsicFactory } from '../../../awst/intrinsic-factory'
 import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression } from '../../../awst/nodes'
 import { BytesConstant, IntegerConstant } from '../../../awst/nodes'
@@ -127,23 +128,23 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
     const expectedLength = ptype.n / 8n
 
     // If byte length is compile-time knowable (initialValue is a constant or a fixed size bytes)
-    // then construct using reinterpret cast.
+    // then construct using reinterpret cast (with zero-padding if shorter).
     // Otherwise throw error
-    let constructFromFixedSizeBytes: boolean = false
+    let sourceLength: bigint | undefined
     if (initialValue instanceof BytesConstant) {
       // Constant bytes: compile-time length check via value
       codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)
-      constructFromFixedSizeBytes = true
+      sourceLength = BigInt(initialValue.value.byteLength)
     } else if (originalType instanceof BytesPType && originalType.length !== null) {
       // Fixed-size bytes type: compile-time length check via type
-      codeInvariant(originalType.length === expectedLength, `${originalType} cannot be converted to ${ptype}`)
-      constructFromFixedSizeBytes = true
+      codeInvariant(originalType.length <= expectedLength, `${originalType} cannot be converted to ${ptype}`)
+      sourceLength = originalType.length
     }
 
-    if (constructFromFixedSizeBytes) {
+    if (sourceLength !== undefined) {
       return new UintNExpressionBuilder(
         nodeFactory.reinterpretCast({
-          expr: initialValue,
+          expr: padFixedBytesLeft(initialValue, sourceLength, expectedLength, sourceLocation),
           wtype: ptype.wtype,
           sourceLocation,
         }),
@@ -155,6 +156,22 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
   }
 
   throw CodeError.unexpectedUnhandledArgs({ sourceLocation })
+}
+
+function padFixedBytesLeft(expr: Expression, currentLength: bigint, targetLength: bigint, sourceLocation: SourceLocation): Expression {
+  if (currentLength === targetLength) return expr
+  if (expr instanceof BytesConstant) {
+    const padded = new Uint8Array(Number(targetLength))
+    padded.set(expr.value, Number(targetLength - currentLength))
+    return nodeFactory.bytesConstant({
+      value: padded,
+      wtype: expr.wtype,
+      encoding: expr.encoding,
+      sourceLocation,
+    })
+  }
+  const padding = intrinsicFactory.bzero({ size: targetLength - currentLength, sourceLocation })
+  return intrinsicFactory.bytesConcat({ left: padding, right: expr, sourceLocation })
 }
 
 export class UintNExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<UintNType> {

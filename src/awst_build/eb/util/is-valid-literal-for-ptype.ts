@@ -24,7 +24,7 @@ export function isValidLiteralForPType(literalValue: ConstantValue, ptype: PType
   if (ptype instanceof UintNType) {
     return (
       (typeof literalValue === 'bigint' && 0 <= literalValue && literalValue < 2n ** ptype.n) ||
-      (literalValue instanceof Uint8Array && BigInt(literalValue.byteLength) === ptype.n / 8n)
+      (literalValue instanceof Uint8Array && BigInt(literalValue.byteLength) <= ptype.n / 8n)
     )
   }
   if (ptype instanceof UFixedNxMType) {
