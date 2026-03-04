@@ -56,4 +56,64 @@ main tests/approvals/uint-from-bytes.algo.ts::UintFromBytes.approvalProgram:
         let tmp%26#0: biguint = 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011
         let tmp%27#0: bool = (b== tmp%26#0 17b)
         (assert tmp%27#0)
+        let tmp%28#0: uint64 = (btoi 0x0011)
+        let tmp%29#0: bool = (== tmp%28#0 17u)
+        (assert tmp%29#0)
+        let tmp%30#0: uint64 = (btoi 0x00000011)
+        let tmp%31#0: bool = (== tmp%30#0 17u)
+        (assert tmp%31#0)
+        let tmp%32#0: uint64 = (btoi 0x0000000000000011)
+        let tmp%33#0: bool = (== tmp%32#0 17u)
+        (assert tmp%33#0)
+        let tmp%34#0: biguint = 0x00000000000000000000000000000011
+        let tmp%35#0: bool = (b== tmp%34#0 17b)
+        (assert tmp%35#0)
+        let tmp%36#0: biguint = 0x0000000000000000000000000000000000000000000000000000000000000011
+        let tmp%37#0: bool = (b== tmp%36#0 17b)
+        (assert tmp%37#0)
+        let tmp%38#0: biguint = 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011
+        let tmp%39#0: bool = (b== tmp%38#0 17b)
+        (assert tmp%39#0)
+        let tmp%40#0: bytes[1] = (bzero 1u)
+        let tmp%41#0: bytes[1] = (bzero 1u)
+        let reinterpret_Encoded(uint16)%1#0: Encoded(uint16) = (concat tmp%40#0 tmp%41#0)
+        let u16FromSmallFixed#0: Encoded(uint16) = reinterpret_Encoded(uint16)%1#0
+        let tmp%42#0: uint64 = (btoi u16FromSmallFixed#0)
+        let tmp%43#0: bool = (== tmp%42#0 0u)
+        (assert tmp%43#0)
+        let tmp%44#0: bytes[3] = (bzero 3u)
+        let tmp%45#0: bytes[1] = (bzero 1u)
+        let reinterpret_Encoded(uint32)%1#0: Encoded(uint32) = (concat tmp%44#0 tmp%45#0)
+        let u32FromSmallFixed#0: Encoded(uint32) = reinterpret_Encoded(uint32)%1#0
+        let tmp%46#0: uint64 = (btoi u32FromSmallFixed#0)
+        let tmp%47#0: bool = (== tmp%46#0 0u)
+        (assert tmp%47#0)
+        let tmp%48#0: bytes[7] = (bzero 7u)
+        let tmp%49#0: bytes[1] = (bzero 1u)
+        let reinterpret_Encoded(uint64)%1#0: Encoded(uint64) = (concat tmp%48#0 tmp%49#0)
+        let u64FromSmallFixed#0: Encoded(uint64) = reinterpret_Encoded(uint64)%1#0
+        let tmp%50#0: uint64 = (btoi u64FromSmallFixed#0)
+        let tmp%51#0: bool = (== tmp%50#0 0u)
+        (assert tmp%51#0)
+        let tmp%52#0: bytes[15] = (bzero 15u)
+        let tmp%53#0: bytes[1] = (bzero 1u)
+        let reinterpret_Encoded(uint128)%1#0: Encoded(uint128) = (concat tmp%52#0 tmp%53#0)
+        let u128FromSmallFixed#0: Encoded(uint128) = reinterpret_Encoded(uint128)%1#0
+        let tmp%54#0: biguint = u128FromSmallFixed#0
+        let tmp%55#0: bool = (b== tmp%54#0 0b)
+        (assert tmp%55#0)
+        let tmp%56#0: bytes[31] = (bzero 31u)
+        let tmp%57#0: bytes[1] = (bzero 1u)
+        let reinterpret_Encoded(uint256)%1#0: Encoded(uint256) = (concat tmp%56#0 tmp%57#0)
+        let u256FromSmallFixed#0: Encoded(uint256) = reinterpret_Encoded(uint256)%1#0
+        let tmp%58#0: biguint = u256FromSmallFixed#0
+        let tmp%59#0: bool = (b== tmp%58#0 0b)
+        (assert tmp%59#0)
+        let tmp%60#0: bytes[63] = (bzero 63u)
+        let tmp%61#0: bytes[1] = (bzero 1u)
+        let reinterpret_Encoded(uint512)%1#0: Encoded(uint512) = (concat tmp%60#0 tmp%61#0)
+        let u512FromSmallFixed#0: Encoded(uint512) = reinterpret_Encoded(uint512)%1#0
+        let tmp%62#0: biguint = u512FromSmallFixed#0
+        let tmp%63#0: bool = (b== tmp%62#0 0b)
+        (assert tmp%63#0)
         return 1u
