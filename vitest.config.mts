@@ -18,6 +18,6 @@ export default defineConfig({
     setupFiles: 'test.setup.ts',
     globals: true,
     testTimeout: 30_000,
-    exclude: ['packages/**', 'node_modules/**'],
+    exclude: ['packages/**', 'node_modules/**', 'examples/**'],
   },
 })
