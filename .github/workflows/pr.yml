@@ -39,22 +39,19 @@ jobs:
           path: ./dist
           merge-multiple: true
 
-      - name: Install root dependencies
-        run: npm ci --ignore-scripts
-
       - name: Install examples dependencies
         working-directory: examples/puya-ts
         run: npm ci
+
+      - name: Run examples unit tests
+        working-directory: examples/puya-ts
+        run: npm test
 
       - name: Start LocalNet
         run: |
           pipx install algokit --python 3.12.6
           algokit localnet start
           npx --yes wait-on tcp:4001 -t 30000
-
-      - name: Run examples unit tests
-        working-directory: examples/puya-ts
-        run: npm test
 
       - name: Verify all examples
         working-directory: examples/puya-ts
