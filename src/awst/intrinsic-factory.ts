@@ -14,10 +14,14 @@ export const intrinsicFactory = {
         const concatValue = new Uint8Array(left.value.length + right.value.length)
         concatValue.set(left.value, 0)
         concatValue.set(right.value, left.value.length)
+        let encoding = awst.BytesEncoding.unknown
+        if (left.encoding === right.encoding) {
+          encoding = left.encoding
+        }
         return nodeFactory.bytesConstant({
           value: concatValue,
           wtype: left.wtype,
-          encoding: left.encoding,
+          encoding,
           sourceLocation,
         })
       } else if (left instanceof StringConstant && right instanceof StringConstant) {

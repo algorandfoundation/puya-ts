@@ -4,14 +4,14 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 0 8 4 1
-    bytecblock 0x0000000000000001 0x0100 "123" 0x01020304
+    bytecblock 0x1901cd27 0x0000000000000001 0x0100 "123" 0x01020304
     b main_block@0
 
 main_block@0:
     b main_block@1
 
 main_block@1:
-    // tests/approvals/byte-expressions.algo.ts:38
+    // tests/approvals/byte-expressions.algo.ts:39
     // class DemoContract extends Contract {
     txn NumAppArgs
     intc_0 // 0
@@ -20,7 +20,7 @@ main_block@1:
     b main_abi_routing@2
 
 main_abi_routing@2:
-    // tests/approvals/byte-expressions.algo.ts:38
+    // tests/approvals/byte-expressions.algo.ts:39
     // class DemoContract extends Contract {
     txna ApplicationArgs 0
     pushbytes 0xf59e3cc4 // method "test()bool"
@@ -32,12 +32,12 @@ main_switch_case_next@4:
     b main_after_if_else@6
 
 main_after_if_else@6:
-    // tests/approvals/byte-expressions.algo.ts:38
+    // tests/approvals/byte-expressions.algo.ts:39
     // class DemoContract extends Contract {
     err
 
 main_test_route@3:
-    // tests/approvals/byte-expressions.algo.ts:39
+    // tests/approvals/byte-expressions.algo.ts:40
     // public test() {
     txn OnCompletion
     intc_0 // NoOp
@@ -51,7 +51,7 @@ main_test_route@3:
     b main_switch_case_next@4
 
 main___algots__.defaultCreate@5:
-    // tests/approvals/byte-expressions.algo.ts:38
+    // tests/approvals/byte-expressions.algo.ts:39
     // class DemoContract extends Contract {
     txn OnCompletion
     intc_0 // NoOp
@@ -75,13 +75,19 @@ test:
 
 test_block@0:
     // tests/approvals/byte-expressions.algo.ts:6
+    // assert(Bytes('\x19\x01').concat(Bytes.fromHex('cd27')) === Bytes.fromHex('1901cd27'), 'Concatenation of UTF8 + bytes works')
+    bytec_0 // 0x1901cd27
+    bytec_0 // 0x1901cd27
+    ==
+    assert // Concatenation of UTF8 + bytes works
+    // tests/approvals/byte-expressions.algo.ts:7
     // assert(Bytes().length === 0, 'Empty bytes has length of 0')
     pushbytes 0x
     len
     intc_0 // 0
     ==
     assert // Empty bytes has length of 0
-    // tests/approvals/byte-expressions.algo.ts:7
+    // tests/approvals/byte-expressions.algo.ts:8
     // assert(Bytes(a) === op.itob(a), 'Bytes(uint64) is equivalent to itob')
     frame_dig -3
     itob
@@ -89,40 +95,40 @@ test_block@0:
     itob
     ==
     assert // Bytes(uint64) is equivalent to itob
-    // tests/approvals/byte-expressions.algo.ts:8
+    // tests/approvals/byte-expressions.algo.ts:9
     // assert(Bytes(Uint64(1)) === Bytes.fromHex('0000000000000001'), 'Bytes(uint64) returns an 8 byte encoding')
-    bytec_0 // 0x0000000000000001
-    bytec_0 // 0x0000000000000001
+    bytec_1 // 0x0000000000000001
+    bytec_1 // 0x0000000000000001
     ==
     assert // Bytes(uint64) returns an 8 byte encoding
-    // tests/approvals/byte-expressions.algo.ts:9
+    // tests/approvals/byte-expressions.algo.ts:10
     // assert(Bytes(BigUint(256)) === Bytes.fromHex('0100'))
-    bytec_1 // 0x0100
-    bytec_1 // 0x0100
+    bytec_2 // 0x0100
+    bytec_2 // 0x0100
     ==
     assert
-    // tests/approvals/byte-expressions.algo.ts:10
+    // tests/approvals/byte-expressions.algo.ts:11
     // assert(BigUint(Bytes(b)) === b, 'Round trip of biguint to bytes and back results in the same value')
     frame_dig -2
     frame_dig -2
     b==
     assert // Round trip of biguint to bytes and back results in the same value
-    // tests/approvals/byte-expressions.algo.ts:11
+    // tests/approvals/byte-expressions.algo.ts:12
     // assert(String(Bytes(c)) === c)
     frame_dig -1
     frame_dig -1
     ==
     assert
-    // tests/approvals/byte-expressions.algo.ts:12
+    // tests/approvals/byte-expressions.algo.ts:13
     // assert(Bytes(Bytes('123')) === Bytes('123'))
-    bytec_2 // "123"
-    bytec_2 // "123"
+    bytec_3 // "123"
+    bytec_3 // "123"
     ==
     assert
-    // tests/approvals/byte-expressions.algo.ts:13
+    // tests/approvals/byte-expressions.algo.ts:14
     // assert(Bytes([1, 2, 3, 4]) === Bytes.fromHex('01020304'))
-    bytec_3 // 0x01020304
-    bytec_3 // 0x01020304
+    bytec 4 // 0x01020304
+    bytec 4 // 0x01020304
     ==
     assert
     retsub
@@ -130,27 +136,27 @@ test_block@0:
 
 // tests/approvals/byte-expressions.algo.ts::test2(a: bytes, b: bytes) -> void:
 test2:
-    // tests/approvals/byte-expressions.algo.ts:16
+    // tests/approvals/byte-expressions.algo.ts:17
     // function test2(a: bytes<8>, b: bytes<8>) {
     proto 2 0
     b test2_block@0
 
 test2_block@0:
-    // tests/approvals/byte-expressions.algo.ts:17
+    // tests/approvals/byte-expressions.algo.ts:18
     // assert(btoi(a) === 5, 'a must be bytes for 5')
     frame_dig -2
     btoi
     pushint 5
     ==
     assert // a must be bytes for 5
-    // tests/approvals/byte-expressions.algo.ts:18
+    // tests/approvals/byte-expressions.algo.ts:19
     // assert(btoi(b) === 12, 'b must be bytes for 12')
     frame_dig -1
     btoi
     pushint 12
     ==
     assert // b must be bytes for 12
-    // tests/approvals/byte-expressions.algo.ts:20
+    // tests/approvals/byte-expressions.algo.ts:21
     // assert(btoi(a.bitwiseAnd(b)) === 4, 'a & b is 4')
     frame_dig -2
     frame_dig -1
@@ -159,7 +165,7 @@ test2_block@0:
     intc_2 // 4
     ==
     assert // a & b is 4
-    // tests/approvals/byte-expressions.algo.ts:21
+    // tests/approvals/byte-expressions.algo.ts:22
     // assert(btoi(a.bitwiseOr(b)) === 13, 'a | b is 13')
     frame_dig -2
     frame_dig -1
@@ -168,7 +174,7 @@ test2_block@0:
     pushint 13
     ==
     assert // a | b is 13
-    // tests/approvals/byte-expressions.algo.ts:22
+    // tests/approvals/byte-expressions.algo.ts:23
     // assert(btoi(a.bitwiseXor(b)) === 9, 'a ^ b is 9')
     frame_dig -2
     frame_dig -1
@@ -177,7 +183,7 @@ test2_block@0:
     pushint 9
     ==
     assert // a ^ b is 9
-    // tests/approvals/byte-expressions.algo.ts:24
+    // tests/approvals/byte-expressions.algo.ts:25
     // assert(btoi(a.bitwiseInvert()) === Uint64.MAX_VALUE - 5, '!a is MAX_VALUE - 5')
     frame_dig -2
     b~
@@ -185,7 +191,7 @@ test2_block@0:
     pushint 18446744073709551610
     ==
     assert // !a is MAX_VALUE - 5
-    // tests/approvals/byte-expressions.algo.ts:25
+    // tests/approvals/byte-expressions.algo.ts:26
     // assert(btoi(b.bitwiseInvert()) === Uint64.MAX_VALUE - 12, '!b is MAX_VALUE - 12')
     frame_dig -1
     b~
@@ -193,7 +199,7 @@ test2_block@0:
     pushint 18446744073709551603
     ==
     assert // !b is MAX_VALUE - 12
-    // tests/approvals/byte-expressions.algo.ts:27
+    // tests/approvals/byte-expressions.algo.ts:28
     // assert(a.slice(0, 4) === b.slice(0, 4), 'first four bytes should match')
     intc_0 // 0
     intc_1 // 8
@@ -233,7 +239,7 @@ test2_block@0:
     substring3
     ==
     assert // first four bytes should match
-    // tests/approvals/byte-expressions.algo.ts:29
+    // tests/approvals/byte-expressions.algo.ts:30
     // assert(a.concat(b) === Bytes.fromHex('0000000000000005000000000000000C'))
     frame_dig -2
     frame_dig -1
@@ -246,27 +252,27 @@ test2_block@0:
 
 // tests/approvals/byte-expressions.algo.ts::test3(a: bytes, b: bytes, c: bytes) -> void:
 test3:
-    // tests/approvals/byte-expressions.algo.ts:32
+    // tests/approvals/byte-expressions.algo.ts:33
     // function test3(a: bytes<8>, b: bytes<16>, c: bytes<32>) {
     proto 3 0
     b test3_block@0
 
 test3_block@0:
-    // tests/approvals/byte-expressions.algo.ts:33
+    // tests/approvals/byte-expressions.algo.ts:34
     // assert(a.length === 8)
     frame_dig -3
     len
     intc_1 // 8
     ==
     assert
-    // tests/approvals/byte-expressions.algo.ts:34
+    // tests/approvals/byte-expressions.algo.ts:35
     // assert(b.length === 16)
     frame_dig -2
     len
     pushint 16
     ==
     assert
-    // tests/approvals/byte-expressions.algo.ts:35
+    // tests/approvals/byte-expressions.algo.ts:36
     // assert(c.length === 32)
     frame_dig -1
     len
@@ -281,7 +287,7 @@ tests/approvals/byte-expressions.algo.ts::DemoContract.test[routing]:
     b tests/approvals/byte-expressions.algo.ts::DemoContract.test[routing]_block@0
 
 tests/approvals/byte-expressions.algo.ts::DemoContract.test[routing]_block@0:
-    // tests/approvals/byte-expressions.algo.ts:39
+    // tests/approvals/byte-expressions.algo.ts:40
     // public test() {
     callsub tests/approvals/byte-expressions.algo.ts::DemoContract.test
     pushbytes 0x00
@@ -301,20 +307,20 @@ tests/approvals/byte-expressions.algo.ts::DemoContract.test:
     b tests/approvals/byte-expressions.algo.ts::DemoContract.test_block@0
 
 tests/approvals/byte-expressions.algo.ts::DemoContract.test_block@0:
-    // tests/approvals/byte-expressions.algo.ts:40
+    // tests/approvals/byte-expressions.algo.ts:41
     // test(1, 50n, 'things')
     intc_3 // 1
     pushbytes 0x32
     pushbytes "things"
     callsub test
-    // tests/approvals/byte-expressions.algo.ts:41
+    // tests/approvals/byte-expressions.algo.ts:42
     // test2(itob(5), itob(12))
     pushint 5
     itob
     pushint 12
     itob
     callsub test2
-    // tests/approvals/byte-expressions.algo.ts:42
+    // tests/approvals/byte-expressions.algo.ts:43
     // test3(op.bzero(8), op.bzero(16), op.bzero(32))
     intc_1 // 8
     bzero
@@ -326,7 +332,7 @@ tests/approvals/byte-expressions.algo.ts::DemoContract.test_block@0:
     uncover 2
     uncover 2
     callsub test3
-    // tests/approvals/byte-expressions.algo.ts:43
+    // tests/approvals/byte-expressions.algo.ts:44
     // return true
     intc_3 // 1
     retsub

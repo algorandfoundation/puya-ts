@@ -21,7 +21,13 @@ export function isValidLiteralForPType(literalValue: ConstantValue, ptype: PType
   if (ptype.equals(biguintPType)) {
     return typeof literalValue === 'bigint' && 0 <= literalValue && literalValue < 2n ** 512n
   }
-  if (ptype instanceof UintNType || ptype instanceof UFixedNxMType) {
+  if (ptype instanceof UintNType) {
+    return (
+      (typeof literalValue === 'bigint' && 0 <= literalValue && literalValue < 2n ** ptype.n) ||
+      (literalValue instanceof Uint8Array && BigInt(literalValue.byteLength) <= ptype.n / 8n)
+    )
+  }
+  if (ptype instanceof UFixedNxMType) {
     return typeof literalValue === 'bigint' && 0 <= literalValue && literalValue < 2n ** ptype.n
   }
   if (ptype.equals(boolPType)) {
