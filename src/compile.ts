@@ -48,7 +48,7 @@ export async function compile(options: CompileOptions, puyaService?: PuyaService
     }
   }
   if (!options.dryRun) {
-    await puyaCompile({
+    const compileResult = await puyaCompile({
       options,
       moduleAwst,
       programDirectory: programResult.programDirectory,
@@ -58,7 +58,7 @@ export async function compile(options: CompileOptions, puyaService?: PuyaService
     })
 
     if (options.outputClient) {
-      await writeARC4Clients(compilationSet, options.filePaths)
+      await writeARC4Clients(compilationSet, options.filePaths, compileResult.arc56)
     }
   }
 

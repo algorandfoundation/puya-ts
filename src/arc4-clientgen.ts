@@ -14,8 +14,8 @@ import { AbsolutePath } from './util/absolute-path'
 
 type Arc56Arg = abi.Arc56Method['args'][number]
 
-type ClientFile = {
-  sourceFile: AbsolutePath
+type ClientTask = {
+  spec: abi.Arc56Contract
   outFile: AbsolutePath
 }
 
@@ -36,7 +36,11 @@ const ARC4_PYTYPE_MAPPING = new Map<string, ABICompatiblePType>([
   ['appl', ptype.applicationCallGtxnType],
 ])
 
-export function resolveClientFiles(compilationSet: CompilationSet, filePaths: AlgoFile[]): ClientFile[] {
+function resolveClients(
+  compilationSet: CompilationSet,
+  filePaths: AlgoFile[],
+  arc56Contracts: Record<string, abi.Arc56Contract>,
+): ClientTask[] {
   const sourceFileToOutDir = new Map<string, AbsolutePath>()
   for (const { sourceFile, outDir } of filePaths) {
     sourceFileToOutDir.set(sourceFile.toString(), outDir)
@@ -58,24 +62,30 @@ export function resolveClientFiles(compilationSet: CompilationSet, filePaths: Al
     const sourceFile = AbsolutePath.resolve({ path: ref.moduleName })
     const outDir = sourceFileToOutDir.get(sourceFile.toString())
     if (outDir === undefined) {
-      throw new InternalError(`Could not find a source file for the contract ${ref.className} at ${ref.moduleName}`)
+      logger.error(undefined, `Could not find a source file for the contract ${ref.className} at ${ref.moduleName}`)
+      continue
+    }
+
+    const spec = arc56Contracts[ref.id]
+    if (spec === undefined) {
+      logger.error(undefined, `Could not find a generated spec for the contract ${ref.className} at ${ref.moduleName}`)
+      continue
     }
 
     const name = model.options?.name || model.name
     arc56Files.push({
-      sourceFile: outDir.join(`${name}.arc56.json`),
+      spec,
       outFile: outDir.join(`${name}.client.ts`),
     })
   }
   return arc56Files
 }
 
-export function writeARC4Clients(compilationSet: CompilationSet, filePaths: AlgoFile[]) {
-  const clientFiles = resolveClientFiles(compilationSet, filePaths)
+export function writeARC4Clients(compilationSet: CompilationSet, filePaths: AlgoFile[], arc56Contracts: Record<string, abi.Arc56Contract>) {
+  const clientFiles = resolveClients(compilationSet, filePaths, arc56Contracts)
   return Promise.all(
-    clientFiles.map(async (clientFile) => {
-      const spec = JSON.parse(await readFile(clientFile.sourceFile.toString(), { encoding: 'utf-8' }))
-      await writeARC4Client(spec, clientFile.outFile)
+    clientFiles.map(async (clientTask) => {
+      await writeARC4Client(clientTask.spec, clientTask.outFile)
     }),
   )
 }
@@ -227,8 +237,8 @@ function generateClientFor(contract: abi.Arc56Contract): string {
     return className
   }
 
-  function tsdoc(description: string | undefined): string[] {
-    if (description === undefined) {
+  function tsdoc(description: string | undefined | null): string[] {
+    if (description === undefined || description === null) {
       return []
     }
     return ['/**', ` * ${description.replaceAll(/\n+/g, '$& * ')}`, ' */']
