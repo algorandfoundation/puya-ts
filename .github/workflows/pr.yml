@@ -16,3 +16,46 @@ jobs:
     uses: ./.github/workflows/ci-all.yml
     with:
       run-commit-lint: true
+
+  verify-examples:
+    name: 'Verify examples'
+    runs-on: ubuntu-latest
+    needs:
+      - ci-all
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+
+      - name: Download puya-ts artifact
+        uses: actions/download-artifact@v4
+        with:
+          pattern: puya-ts-node-*
+          path: ./dist
+          merge-multiple: true
+
+      - name: Install root dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Install examples dependencies
+        working-directory: examples/puya-ts
+        run: npm ci
+
+      - name: Start LocalNet
+        run: |
+          pipx install algokit --python 3.12.6
+          algokit localnet start
+          npx --yes wait-on tcp:4001 -t 30000
+
+      - name: Run examples unit tests
+        working-directory: examples/puya-ts
+        run: npm test
+
+      - name: Verify all examples
+        working-directory: examples/puya-ts
+        run: bash verify-all.sh

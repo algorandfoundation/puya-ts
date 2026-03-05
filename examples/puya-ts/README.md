@@ -15,7 +15,7 @@ npm ci
 npm run build
 
 # Install example dependencies
-cd examples
+cd examples/puya-ts
 npm ci
 
 # Run a single example (compiles, deploys, and exercises the contract)

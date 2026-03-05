@@ -5,7 +5,7 @@ import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const repoRoot = resolve(__dirname, '..', '..')
+const repoRoot = resolve(__dirname, '..', '..', '..')
 const examplesDir = resolve(__dirname, '..')
 
 // ─── Console Helpers ────────────────────────────────────────
@@ -66,7 +66,7 @@ export interface CompileContractOptions {
 }
 
 export function compileContract(exampleDir: string, options?: CompileContractOptions): void {
-  const contractPath = `examples/${exampleDir}/contract.algo.ts`
+  const contractPath = `examples/puya-ts/${exampleDir}/contract.algo.ts`
   const outDir = 'out'
 
   const flags = [

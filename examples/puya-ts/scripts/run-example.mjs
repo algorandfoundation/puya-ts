@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const examplesDir = resolve(__dirname, '..')
-const distDir = resolve(examplesDir, '..', 'dist')
+const distDir = resolve(examplesDir, '..', '..', 'dist')
 
 if (!existsSync(distDir)) {
   console.error(`Error: ${distDir} does not exist. Run 'npm run build' from the repo root first.`)
