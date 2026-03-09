@@ -1304,6 +1304,16 @@ export const errFunction = new LibFunctionType({
   module: Constants.moduleNames.algoTs.util,
 })
 
+export const loggedAssertFunction = new LibFunctionType({
+  name: 'loggedAssert',
+  module: Constants.moduleNames.algoTs.util,
+})
+
+export const loggedErrFunction = new LibFunctionType({
+  name: 'loggedErr',
+  module: Constants.moduleNames.algoTs.util,
+})
+
 export const assetPType = new ABICompatibleInstanceType({
   name: 'Asset',
   wtype: wtypes.assetWType,

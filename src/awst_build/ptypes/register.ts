@@ -50,6 +50,7 @@ import { CloneFunctionBuilder } from '../eb/clone-function-builder'
 import { CompileFunctionBuilder } from '../eb/compiled/compile-function'
 import { ContractClassBuilder, ContractOptionsDecoratorBuilder } from '../eb/contract-builder'
 import { EnsureBudgetFunctionBuilder } from '../eb/ensure-budget'
+import { LoggedAssertFunctionBuilder, LoggedErrFunctionBuilder } from '../eb/logged-error-builder'
 
 import { FreeSubroutineExpressionBuilder } from '../eb/free-subroutine-expression-builder'
 import { IntrinsicEnumBuilder } from '../eb/intrinsic-enum-builder'
@@ -210,6 +211,8 @@ import {
   LocalStateGeneric,
   LocalStateType,
   logFunction,
+  loggedAssertFunction,
+  loggedErrFunction,
   logicSigOptionsDecorator,
   LogicSigPType,
   matchFunction,
@@ -316,6 +319,8 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: logFunction, singletonEb: LogFunctionBuilder })
   typeRegistry.register({ ptype: assertFunction, singletonEb: AssertFunctionBuilder })
   typeRegistry.register({ ptype: errFunction, singletonEb: ErrFunctionBuilder })
+  typeRegistry.register({ ptype: loggedAssertFunction, singletonEb: LoggedAssertFunctionBuilder })
+  typeRegistry.register({ ptype: loggedErrFunction, singletonEb: LoggedErrFunctionBuilder })
   typeRegistry.register({ ptype: matchFunction, singletonEb: MatchFunctionBuilder })
   typeRegistry.register({ ptype: assertMatchFunction, singletonEb: AssertMatchFunctionBuilder })
   typeRegistry.register({ ptype: ensureBudgetFunction, singletonEb: EnsureBudgetFunctionBuilder })
