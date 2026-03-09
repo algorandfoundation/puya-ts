@@ -20,7 +20,7 @@ main:
     err
 
 main_emitDynamicBytes_route@6:
-    // tests/approvals/arc-28-events.algo.ts:50
+    // tests/approvals/arc-28-events.algo.ts:51
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     txna ApplicationArgs 1
     dup
@@ -44,7 +44,7 @@ main_emitDynamicBytes_route@6:
     len
     ==
     assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-    // tests/approvals/arc-28-events.algo.ts:52
+    // tests/approvals/arc-28-events.algo.ts:53
     // emit('DB(byte[],byte[])', x, y)
     pushint 4
     uncover 2
@@ -62,13 +62,13 @@ main_emitDynamicBytes_route@6:
     swap
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:50
+    // tests/approvals/arc-28-events.algo.ts:51
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     intc_0 // 1
     return
 
 main_emitCustom_route@5:
-    // tests/approvals/arc-28-events.algo.ts:45
+    // tests/approvals/arc-28-events.algo.ts:46
     // emitCustom(arg0: string, arg1: boolean) {
     txna ApplicationArgs 1
     dup
@@ -86,7 +86,7 @@ main_emitCustom_route@5:
     intc_0 // 1
     ==
     assert // invalid number of bytes for arc4.bool
-    // tests/approvals/arc-28-events.algo.ts:46
+    // tests/approvals/arc-28-events.algo.ts:47
     // emit('Custom', arg0, arg1)
     bytec_1 // 0x0003
     swap
@@ -98,10 +98,10 @@ main_emitCustom_route@5:
     concat
     dup
     log
-    // tests/approvals/arc-28-events.algo.ts:47
+    // tests/approvals/arc-28-events.algo.ts:48
     // emit('Custom(string,bool)', arg0, arg1)
     log
-    // tests/approvals/arc-28-events.algo.ts:45
+    // tests/approvals/arc-28-events.algo.ts:46
     // emitCustom(arg0: string, arg1: boolean) {
     intc_0 // 1
     return
@@ -133,39 +133,43 @@ main_emitSwapped_route@4:
     log
     // tests/approvals/arc-28-events.algo.ts:18
     // emit(x)
-    dup
     log
     // tests/approvals/arc-28-events.algo.ts:24
     // emit(y)
     pushbytes 0x441e2cd8 // method "SwappedArc4(uint8,uint8)"
-    uncover 2
+    dig 1
     concat
     log
     // tests/approvals/arc-28-events.algo.ts:26
-    // emit('Swapped', b, a)
-    dup
+    // emit('Swapped4', b, a)
+    pushbytes 0x0e72193a // method "Swapped4(uint8,uint8)"
+    dig 1
+    concat
     log
     // tests/approvals/arc-28-events.algo.ts:28
-    // emit('Swapped(uint8,uint8)', b, a)
+    // emit('Swapped5(uint8,uint8)', b, a)
+    pushbytes 0xca59edb2 // method "Swapped5(uint8,uint8)"
+    swap
+    concat
     log
-    // tests/approvals/arc-28-events.algo.ts:29
-    // emit('Swapped((uint8,uint8),uint8)', [b, b] as const, a)
+    // tests/approvals/arc-28-events.algo.ts:30
+    // emit('Swapped6((uint8,uint8),uint8)', [b, b] as const, a)
     dup
     dig 1
     concat
     dup
     dig 3
     concat
-    pushbytes 0x388cc12d // method "Swapped((uint8,uint8),uint8)"
+    pushbytes 0xd4a6bd33 // method "Swapped6((uint8,uint8),uint8)"
     dig 1
     concat
     dup
     log
     // tests/approvals/arc-28-events.algo.ts:31
-    // emit('Swapped((uint8,uint8),uint8)', [b, b], a)
+    // emit('Swapped6((uint8,uint8),uint8)', [b, b], a)
     log
-    // tests/approvals/arc-28-events.algo.ts:32
-    // emit('Swapped(uint8[],uint8)', [b, b], a)
+    // tests/approvals/arc-28-events.algo.ts:33
+    // emit('Swapped7(uint8[],uint8)', [b, b], a)
     bytec_0 // 0x0002
     dig 3
     concat
@@ -177,60 +181,60 @@ main_emitSwapped_route@4:
     dup
     dig 2
     concat
-    pushbytes 0x08754e0c // method "Swapped(uint8[],uint8)"
+    pushbytes 0x25b5f91a // method "Swapped7(uint8[],uint8)"
     swap
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:34
-    // emit('Swapped(((uint8,uint8)),uint8)', [[b, b]], a)
-    pushbytes 0x8d44bf68 // method "Swapped(((uint8,uint8)),uint8)"
+    // tests/approvals/arc-28-events.algo.ts:35
+    // emit('Swapped8(((uint8,uint8)),uint8)', [[b, b]], a)
+    pushbytes 0x331f84f2 // method "Swapped8(((uint8,uint8)),uint8)"
     uncover 3
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:35
-    // emit('Swapped(uint8[][],uint8)', [[b, b]], a)
+    // tests/approvals/arc-28-events.algo.ts:36
+    // emit('Swapped9(uint8[][],uint8)', [[b, b]], a)
     pushbytes 0x00010002
     dig 2
     concat
     dig 1
     swap
     concat
-    pushbytes 0xd8991c5c // method "Swapped(uint8[][],uint8)"
+    pushbytes 0xdcc0f6fb // method "Swapped9(uint8[][],uint8)"
     swap
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:37
-    // emit('Swapped((uint8,uint8)[],uint8)', [[b, b]], a)
+    // tests/approvals/arc-28-events.algo.ts:38
+    // emit('Swapped10((uint8,uint8)[],uint8)', [[b, b]], a)
     pushbytes 0x0001
     uncover 3
     concat
     dig 1
     swap
     concat
-    pushbytes 0x9047648f // method "Swapped((uint8,uint8)[],uint8)"
+    pushbytes 0x9bb72837 // method "Swapped10((uint8,uint8)[],uint8)"
     swap
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:38
-    // emit('Swapped((uint8[]),uint8)', [[b, b]], a)
+    // tests/approvals/arc-28-events.algo.ts:39
+    // emit('Swapped11((uint8[]),uint8)', [[b, b]], a)
     bytec_0 // 0x0002
     uncover 2
     concat
     concat
-    pushbytes 0x194abeb4 // method "Swapped((uint8[]),uint8)"
+    pushbytes 0xf3b666de // method "Swapped11((uint8[]),uint8)"
     swap
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:40
+    // tests/approvals/arc-28-events.algo.ts:41
     // const aUint64 = a.asUint64()
     swap
     btoi
-    // tests/approvals/arc-28-events.algo.ts:41
+    // tests/approvals/arc-28-events.algo.ts:42
     // const bUint64 = b.asUint64()
     swap
     btoi
-    // tests/approvals/arc-28-events.algo.ts:42
-    // emit('Swapped(uint64[],uint64)', [bUint64, bUint64], aUint64)
+    // tests/approvals/arc-28-events.algo.ts:43
+    // emit('Swapped12(uint64[],uint64)', [bUint64, bUint64], aUint64)
     itob
     bytec_0 // 0x0002
     dig 1
@@ -244,7 +248,7 @@ main_emitSwapped_route@4:
     concat
     swap
     concat
-    pushbytes 0x4e707717 // method "Swapped(uint64[],uint64)"
+    pushbytes 0x5bf09e07 // method "Swapped12(uint64[],uint64)"
     swap
     concat
     log

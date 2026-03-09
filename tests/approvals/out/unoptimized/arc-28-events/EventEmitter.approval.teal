@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 1 0 2 3
-    bytecblock 0x 0x0b6325ed 0x388cc12d 0x00 0xa313c066
+    bytecblock 0x 0x0b6325ed 0xd4a6bd33 0x00 0xa313c066
     b main_block@0
 
 main_block@0:
@@ -55,13 +55,13 @@ main_after_if_else@11:
     err
 
 main_emitDynamicBytes_route@6:
-    // tests/approvals/arc-28-events.algo.ts:50
+    // tests/approvals/arc-28-events.algo.ts:51
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     callsub emitDynamicBytes
     b main_switch_case_next@7
 
 main_emitCustom_route@5:
-    // tests/approvals/arc-28-events.algo.ts:45
+    // tests/approvals/arc-28-events.algo.ts:46
     // emitCustom(arg0: string, arg1: boolean) {
     callsub emitCustom
     b main_switch_case_next@7
@@ -120,7 +120,7 @@ emitCustom:
     b emitCustom_block@0
 
 emitCustom_block@0:
-    // tests/approvals/arc-28-events.algo.ts:45
+    // tests/approvals/arc-28-events.algo.ts:46
     // emitCustom(arg0: string, arg1: boolean) {
     txna ApplicationArgs 1
     dup
@@ -153,7 +153,7 @@ emitDynamicBytes:
     b emitDynamicBytes_block@0
 
 emitDynamicBytes_block@0:
-    // tests/approvals/arc-28-events.algo.ts:50
+    // tests/approvals/arc-28-events.algo.ts:51
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     txna ApplicationArgs 1
     dup
@@ -234,29 +234,29 @@ tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped_block@0:
     concat
     log
     // tests/approvals/arc-28-events.algo.ts:26
-    // emit('Swapped', b, a)
+    // emit('Swapped4', b, a)
     bytec_0 // 0x
     frame_dig -1
     concat
     frame_dig -2
     concat
-    bytec_1 // method "Swapped(uint8,uint8)"
+    pushbytes 0x0e72193a // method "Swapped4(uint8,uint8)"
     uncover 1
     concat
     log
     // tests/approvals/arc-28-events.algo.ts:28
-    // emit('Swapped(uint8,uint8)', b, a)
+    // emit('Swapped5(uint8,uint8)', b, a)
     bytec_0 // 0x
     frame_dig -1
     concat
     frame_dig -2
     concat
-    bytec_1 // method "Swapped(uint8,uint8)"
+    pushbytes 0xca59edb2 // method "Swapped5(uint8,uint8)"
     uncover 1
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:29
-    // emit('Swapped((uint8,uint8),uint8)', [b, b] as const, a)
+    // tests/approvals/arc-28-events.algo.ts:30
+    // emit('Swapped6((uint8,uint8),uint8)', [b, b] as const, a)
     bytec_0 // 0x
     frame_dig -1
     concat
@@ -267,12 +267,12 @@ tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped_block@0:
     concat
     frame_dig -2
     concat
-    bytec_2 // method "Swapped((uint8,uint8),uint8)"
+    bytec_2 // method "Swapped6((uint8,uint8),uint8)"
     uncover 1
     concat
     log
     // tests/approvals/arc-28-events.algo.ts:31
-    // emit('Swapped((uint8,uint8),uint8)', [b, b], a)
+    // emit('Swapped6((uint8,uint8),uint8)', [b, b], a)
     bytec_0 // 0x
     frame_dig -1
     concat
@@ -283,12 +283,12 @@ tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped_block@0:
     concat
     frame_dig -2
     concat
-    bytec_2 // method "Swapped((uint8,uint8),uint8)"
+    bytec_2 // method "Swapped6((uint8,uint8),uint8)"
     uncover 1
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:32
-    // emit('Swapped(uint8[],uint8)', [b, b], a)
+    // tests/approvals/arc-28-events.algo.ts:33
+    // emit('Swapped7(uint8[],uint8)', [b, b], a)
     intc_2 // 2
     itob
     extract 6 2
@@ -306,12 +306,12 @@ tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped_block@0:
     concat
     uncover 1
     concat
-    pushbytes 0x08754e0c // method "Swapped(uint8[],uint8)"
+    pushbytes 0x25b5f91a // method "Swapped7(uint8[],uint8)"
     uncover 1
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:34
-    // emit('Swapped(((uint8,uint8)),uint8)', [[b, b]], a)
+    // tests/approvals/arc-28-events.algo.ts:35
+    // emit('Swapped8(((uint8,uint8)),uint8)', [[b, b]], a)
     bytec_0 // 0x
     frame_dig -1
     concat
@@ -325,12 +325,12 @@ tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped_block@0:
     concat
     frame_dig -2
     concat
-    pushbytes 0x8d44bf68 // method "Swapped(((uint8,uint8)),uint8)"
+    pushbytes 0x331f84f2 // method "Swapped8(((uint8,uint8)),uint8)"
     uncover 1
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:35
-    // emit('Swapped(uint8[][],uint8)', [[b, b]], a)
+    // tests/approvals/arc-28-events.algo.ts:36
+    // emit('Swapped9(uint8[][],uint8)', [[b, b]], a)
     intc_0 // 1
     itob
     extract 6 2
@@ -359,12 +359,12 @@ tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped_block@0:
     concat
     uncover 1
     concat
-    pushbytes 0xd8991c5c // method "Swapped(uint8[][],uint8)"
+    pushbytes 0xdcc0f6fb // method "Swapped9(uint8[][],uint8)"
     uncover 1
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:37
-    // emit('Swapped((uint8,uint8)[],uint8)', [[b, b]], a)
+    // tests/approvals/arc-28-events.algo.ts:38
+    // emit('Swapped10((uint8,uint8)[],uint8)', [[b, b]], a)
     intc_0 // 1
     itob
     extract 6 2
@@ -384,12 +384,12 @@ tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped_block@0:
     concat
     uncover 1
     concat
-    pushbytes 0x9047648f // method "Swapped((uint8,uint8)[],uint8)"
+    pushbytes 0x9bb72837 // method "Swapped10((uint8,uint8)[],uint8)"
     uncover 1
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:38
-    // emit('Swapped((uint8[]),uint8)', [[b, b]], a)
+    // tests/approvals/arc-28-events.algo.ts:39
+    // emit('Swapped11((uint8[]),uint8)', [[b, b]], a)
     intc_2 // 2
     itob
     extract 6 2
@@ -415,20 +415,20 @@ tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped_block@0:
     concat
     uncover 1
     concat
-    pushbytes 0x194abeb4 // method "Swapped((uint8[]),uint8)"
+    pushbytes 0xf3b666de // method "Swapped11((uint8[]),uint8)"
     uncover 1
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:40
+    // tests/approvals/arc-28-events.algo.ts:41
     // const aUint64 = a.asUint64()
     frame_dig -2
     btoi
-    // tests/approvals/arc-28-events.algo.ts:41
+    // tests/approvals/arc-28-events.algo.ts:42
     // const bUint64 = b.asUint64()
     frame_dig -1
     btoi
-    // tests/approvals/arc-28-events.algo.ts:42
-    // emit('Swapped(uint64[],uint64)', [bUint64, bUint64], aUint64)
+    // tests/approvals/arc-28-events.algo.ts:43
+    // emit('Swapped12(uint64[],uint64)', [bUint64, bUint64], aUint64)
     intc_2 // 2
     itob
     extract 6 2
@@ -450,7 +450,7 @@ tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped_block@0:
     concat
     uncover 1
     concat
-    pushbytes 0x4e707717 // method "Swapped(uint64[],uint64)"
+    pushbytes 0x5bf09e07 // method "Swapped12(uint64[],uint64)"
     uncover 1
     concat
     log
@@ -459,13 +459,13 @@ tests/approvals/arc-28-events.algo.ts::EventEmitter.emitSwapped_block@0:
 
 // tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom(arg0: bytes, arg1: uint64) -> void:
 tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom:
-    // tests/approvals/arc-28-events.algo.ts:45
+    // tests/approvals/arc-28-events.algo.ts:46
     // emitCustom(arg0: string, arg1: boolean) {
     proto 2 0
     b tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom_block@0
 
 tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom_block@0:
-    // tests/approvals/arc-28-events.algo.ts:46
+    // tests/approvals/arc-28-events.algo.ts:47
     // emit('Custom', arg0, arg1)
     frame_dig -2
     len
@@ -491,7 +491,7 @@ tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom_block@0:
     uncover 1
     concat
     log
-    // tests/approvals/arc-28-events.algo.ts:47
+    // tests/approvals/arc-28-events.algo.ts:48
     // emit('Custom(string,bool)', arg0, arg1)
     frame_dig -2
     len
@@ -522,13 +522,13 @@ tests/approvals/arc-28-events.algo.ts::EventEmitter.emitCustom_block@0:
 
 // tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes(x: bytes, y: bytes) -> void:
 tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes:
-    // tests/approvals/arc-28-events.algo.ts:50
+    // tests/approvals/arc-28-events.algo.ts:51
     // emitDynamicBytes(x: bytes, y: DynamicBytes) {
     proto 2 0
     b tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes_block@0
 
 tests/approvals/arc-28-events.algo.ts::EventEmitter.emitDynamicBytes_block@0:
-    // tests/approvals/arc-28-events.algo.ts:52
+    // tests/approvals/arc-28-events.algo.ts:53
     // emit('DB(byte[],byte[])', x, y)
     frame_dig -2
     len
