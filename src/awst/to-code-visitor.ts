@@ -404,12 +404,12 @@ export class ToCodeVisitor
     return ['', `logicsig ${moduleStatement.id} {`, ...indent(moduleStatement.program.body.accept(this)), '}']
   }
   visitAssertExpression(expression: nodes.AssertExpression): string {
-    return [
-      expression.condition ? 'assert(' : 'err(',
-      expression.condition?.accept(this) ?? '',
-      expression.errorMessage ? `, comment=${expression.errorMessage}` : '',
-      ')',
-    ].join('')
+    if (!expression.condition) {
+      const func = expression.logError ? 'logged_err(' : 'err('
+      return `${func}${expression.errorMessage ?? ''})`
+    }
+    const func = expression.logError ? 'logged_assert(' : 'assert('
+    return `${func}${expression.condition.accept(this)}${expression.errorMessage ? `, comment=${expression.errorMessage}` : ''})`
   }
 
   visitConvertArray(expression: nodes.ConvertArray): string {
