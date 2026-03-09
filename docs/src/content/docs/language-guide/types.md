@@ -179,7 +179,7 @@ They can also be used in ABI method parameters where they will be created refere
 
 ### Group Transactions
 
-The group transaction types expose properties and methods for reading attributes of other transactions in the group. They can be created explicitly by calling `gtxn.Transaction(n)` where `n` is the index of the desired transaction in the group, or they can be used in ABI method signatures where the ARC4 router will take care of providing the relevant transaction specified by the client. They should not be confused with the [itxn](lg-itxns.md) namespace which contains types for composing inner transactions
+The group transaction types expose properties and methods for reading attributes of other transactions in the group. They can be created explicitly by calling `gtxn.Transaction(n)` where `n` is the index of the desired transaction in the group, or they can be used in ABI method signatures where the ARC4 router will take care of providing the relevant transaction specified by the client. They should not be confused with the [itxn](./itxns) namespace which contains types for composing inner transactions
 
 ```ts
 import { gtxn, Contract } from '@algorandfoundation/algorand-typescript'
@@ -288,7 +288,7 @@ function addToArray(x: ReferenceArray<uint64>) {
 }
 ```
 
-Reference arrays can be declared using the [ReferenceArray](../classes/index.ReferenceArray.html) type. This type makes use of [scratch space](https://dev.algorand.co/concepts/smart-contracts/languages/teal/#scratch-space-usage) as a heap in order to provide an array type with 'pass by reference' semantics. It is currently limited to fixed size item types.
+Reference arrays can be declared using the [ReferenceArray](../../api/) type. This type makes use of [scratch space](https://dev.algorand.co/concepts/smart-contracts/languages/teal/#scratch-space-usage) as a heap in order to provide an array type with 'pass by reference' semantics. It is currently limited to fixed size item types.
 
 ### Tuples
 

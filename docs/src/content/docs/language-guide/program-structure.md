@@ -34,7 +34,7 @@ function add(a: uint64, b: uint64): uint64 {
 
 ## Contracts
 
-A contract in Algorand TypeScript is defined by declaring a class that extends the `Contract` or `BaseContract` types exported by `@algorandfoundation/algorand-typescript`. See [ABI routing](./abi-routing.md) docs for more on the differences between these two options.
+A contract in Algorand TypeScript is defined by declaring a class that extends the `Contract` or `BaseContract` types exported by `@algorandfoundation/algorand-typescript`. See [ABI routing](../reference/abi-routing) docs for more on the differences between these two options.
 
 ### ARC4 Contract
 
@@ -120,7 +120,7 @@ export class TealScriptConventionsAlgo extends Contract implements ConventionalR
 
 #### Decorator-based
 
-The default `OnCompletionAction` (OCA) for public methods is `NoOp`. To change this, a method should be decorated with the `abimethod` or `baremethod` decorators. These decorators can also be used to change the exported name of the method, determine if a method should be available on application create or not, and specify default values for arguments. See the [ABI Routing guide](./abi-routing.md) for more details on how these various options work together.
+The default `OnCompletionAction` (OCA) for public methods is `NoOp`. To change this, a method should be decorated with the `abimethod` or `baremethod` decorators. These decorators can also be used to change the exported name of the method, determine if a method should be available on application create or not, and specify default values for arguments. See the [ABI Routing guide](../reference/abi-routing) for more details on how these various options work together.
 
 ```ts
 import type { uint64 } from '@algorandfoundation/algorand-typescript'

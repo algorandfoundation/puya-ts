@@ -1,3 +1,7 @@
+---
+title: "Primitive bytes"
+---
+
 # Architecture Decision Record - Primitive bytes
 
 - **Status**: Draft
@@ -9,7 +13,7 @@
 
 ## Context
 
-See [Architecture Decision Record - Primitive integer types](./2024-05-21_primitive-integer-types.md) for related decision and context.
+See [Architecture Decision Record - Primitive integer types](./2024-05-21_primitive-integer-types) for related decision and context.
 
 The AVM's only non-integer type is a variable length byte array. When _not_ being interpreted as a `biguint`, leading zeros are significant and length is constant unless explicitly manipulated. Strings can only be represented in the AVM if they are encoded as bytes. The AVM supports byte literals in the form of base16, base64, and UTF-8 encoded strings. Once a literal has been parsed, the AVM has no concept of the original encoding or of UTF-8 characters. As a result, whilst a byte array can be indexed to receive a single byte (or a slice of bytes); it cannot be indexed to return a single UTF-8 _character_ - unless one assumes all characters in the original string were ASCII (i.e. single byte) characters.
 
@@ -43,7 +47,7 @@ const b2 = new Uint8Array([1, 2, 3, 4])
 const b3 = b1 + b1
 ```
 
-Whilst binary data is often a representation of a utf-8 string, it is not always - so direct use of the string type is not a natural fit. It doesn't allow us to represent alternative encodings (b16/b64) and the existing api surface is very 'string' centric. Much of the api would also be expensive to implement on the AVM leading to a bunch of 'dead' methods hanging off the type (or a significant amount of work implementing all the methods). The signatures of these methods also use `number` which is [not a semantically relevant type](./2024-05-21_primitive-integer-types.md).
+Whilst binary data is often a representation of a utf-8 string, it is not always - so direct use of the string type is not a natural fit. It doesn't allow us to represent alternative encodings (b16/b64) and the existing api surface is very 'string' centric. Much of the api would also be expensive to implement on the AVM leading to a bunch of 'dead' methods hanging off the type (or a significant amount of work implementing all the methods). The signatures of these methods also use `number` which is [not a semantically relevant type](./2024-05-21_primitive-integer-types).
 
 Achieving semantic compatability with EcmaScript's `String` type would also be very expensive as it uses utf-16 encoding underneath whilst an ABI string is utf-8 encoded. A significant number of ops (and program size) would be required to convert between the two. If we were to ignore this and use utf-8 at runtime, apis such as `.length` would return different results. For example `"😄".length` in ES returns `2` whilst utf-8 encoding would yield `1` codepoint or `4` bytes, similarly indexing and slicing would yield different results. We would also need a way to specify non-utf-8 bytes values. Eg. from base16 or base64.
 

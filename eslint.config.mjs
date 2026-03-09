@@ -24,6 +24,7 @@ export default [
       'packages/**',
       'packages-temp/**',
       'docs/_html/',
+      '**/.astro/',
       '**/.puya',
       'tests/code-fix/fixed/**',
     ],
