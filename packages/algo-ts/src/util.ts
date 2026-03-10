@@ -35,7 +35,11 @@ export function assert(condition: unknown, message?: string): asserts condition 
  * @param message Optional message appended after the code. Must not contain `:`.
  * @param prefix Error prefix, either `"ERR"` or `"AER"`. Defaults to `"ERR"`.
  */
-export function loggedAssert(condition: unknown, code: string, message?: string, prefix?: 'ERR' | 'AER'): asserts condition {
+export function loggedAssert(condition: unknown, code: string): asserts condition
+export function loggedAssert(condition: unknown, code: string, message: string): asserts condition
+export function loggedAssert(condition: unknown, code: string, prefix: 'ERR' | 'AER'): asserts condition
+export function loggedAssert(condition: unknown, code: string, message: string, prefix: 'ERR' | 'AER'): asserts condition
+export function loggedAssert(condition: unknown, code: string, messageOrPrefix?: string, prefix?: 'ERR' | 'AER'): asserts condition {
   throw new NoImplementation()
 }
 
@@ -54,7 +58,11 @@ export function loggedAssert(condition: unknown, code: string, message?: string,
  * @param message Optional message appended after the code. Must not contain `:`.
  * @param prefix Error prefix, either `"ERR"` or `"AER"`. Defaults to `"ERR"`.
  */
-export function loggedErr(code: string, message?: string, prefix?: 'ERR' | 'AER'): never {
+export function loggedErr(code: string): never
+export function loggedErr(code: string, message: string): never
+export function loggedErr(code: string, prefix: 'ERR' | 'AER'): never
+export function loggedErr(code: string, message: string, prefix: 'ERR' | 'AER'): never
+export function loggedErr(code: string, messageOrPrefix?: string, prefix?: 'ERR' | 'AER'): never {
   throw new NoImplementation()
 }
 
