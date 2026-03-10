@@ -8,7 +8,7 @@ import { Constants } from '../../../constants'
 import { CodeError } from '../../../errors'
 import { logger } from '../../../logger'
 import { codeInvariant, hexToUint8Array } from '../../../util'
-import { arc4ConfigFromType, isArc4EncodableType, ptypeToArc4EncodedType } from '../../arc4-util'
+import { arc4ConfigFromType } from '../../arc4-util'
 import type { PType } from '../../ptypes'
 import { BytesPType, bytesPType, FunctionPType, stringPType, uint64PType } from '../../ptypes'
 import {
@@ -92,17 +92,11 @@ export class EncodeArc4FunctionBuilder extends FunctionBuilder {
       )
     }
 
-    const encodedType = ptypeToArc4EncodedType(valueType, sourceLocation)
-
     return instanceEb(
-      nodeFactory.reinterpretCast({
-        expr: nodeFactory.aRC4Encode({
-          value: valueToEncode.resolveToPType(valueType).resolve(),
-          wtype: encodedType.wtype,
-          sourceLocation,
-        }),
+      nodeFactory.aRC4Encode({
+        value: valueToEncode.resolveToPType(valueType).resolve(),
+        wtype: wtypes.bytesWType,
         sourceLocation,
-        wtype: bytesPType.wtype,
       }),
       bytesPType,
     )
@@ -129,19 +123,12 @@ export class DecodeArc4FunctionBuilder extends FunctionBuilder {
       sourceLocation,
     )
 
-    codeInvariant(isArc4EncodableType(ptype), `Cannot determine ARC4 encoding for ${ptype}`, sourceLocation)
-
-    const arc4Encoded = ptypeToArc4EncodedType(ptype, sourceLocation)
-
     const prefixBytes = getPrefixValue(prefixType)
 
     return instanceEb(
-      nodeFactory.aRC4Decode({
-        value: nodeFactory.reinterpretCast({
-          expr: validatePrefix(theBytes, prefixBytes, sourceLocation),
-          sourceLocation,
-          wtype: arc4Encoded.wtype,
-        }),
+      nodeFactory.aRC4FromBytes({
+        value: validatePrefix(theBytes, prefixBytes, sourceLocation),
+        validate: false,
         wtype: ptype.wtypeOrThrow,
         sourceLocation,
       }),
@@ -263,12 +250,10 @@ export class SizeOfFunctionBuilder extends FunctionBuilder {
       typeArgs,
       genericTypeArgs: 1,
       funcName: this.typeDescription,
-      argSpec: (a) => [],
+      argSpec: () => [],
       callLocation: sourceLocation,
     })
 
-    const arc4Type = ptypeToArc4EncodedType(typeToEncode, sourceLocation)
-
-    return instanceEb(nodeFactory.sizeOf({ sizeWtype: arc4Type.wtype, wtype: wtypes.uint64WType, sourceLocation }), uint64PType)
+    return instanceEb(nodeFactory.sizeOf({ sizeWtype: typeToEncode.wtypeOrThrow, wtype: wtypes.uint64WType, sourceLocation }), uint64PType)
   }
 }
