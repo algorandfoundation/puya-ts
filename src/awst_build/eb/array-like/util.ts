@@ -1,7 +1,7 @@
 import { nodeFactory } from '../../../awst/node-factory'
 import { invariant } from '../../../util'
 import type { ArrayLiteralPType, ArrayPType, ReadonlyArrayPType, ReadonlyTuplePType } from '../../ptypes'
-import { isArrayType, MutableTuplePType } from '../../ptypes'
+import { MutableTuplePType } from '../../ptypes'
 import type { InstanceBuilder } from '../index'
 import { isStaticallyIterable, StaticIterator } from '../traits/static-iterator'
 import { requireExpressionOfType } from '../util'
@@ -34,16 +34,5 @@ export function newTuple(ptype: MutableTuplePType | ReadonlyTuplePType | ArrayLi
     })
   } else {
     return tupleExpr
-  }
-}
-
-export function newArrayOrTuple(
-  ptype: ArrayPType | ReadonlyArrayPType | MutableTuplePType | ReadonlyTuplePType | ArrayLiteralPType,
-  valueProvider: InstanceBuilder,
-) {
-  if (isArrayType(ptype)) {
-    return newArray(ptype, valueProvider)
-  } else {
-    return newTuple(ptype, valueProvider)
   }
 }
