@@ -13,8 +13,8 @@ export class LoggedErrorsWarningsContract extends Contract {
   }
 
   public testAERPrefix(arg: uint64): void {
-    loggedAssert(arg !== 1, '01', undefined, 'AER')
-    loggedErr('01', undefined, 'AER')
+    loggedAssert(arg !== 1, '01', 'AER')
+    loggedErr('01', 'AER')
   }
 
   public testLongMessage(arg: uint64): void {
