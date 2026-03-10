@@ -36,7 +36,8 @@ const resourceEncodingMap: Record<string, 'index' | 'value'> = {
   value: 'value',
 }
 
-const validateEncodingMap: Record<string, boolean> = {
+//TODO: maybe refactor this somewhere else and import it from both here and logicsig builder
+export const validateEncodingMap: Record<string, boolean> = {
   'unsafe-disabled': false,
   args: true,
 }

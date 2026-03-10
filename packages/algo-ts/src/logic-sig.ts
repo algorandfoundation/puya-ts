@@ -1,3 +1,4 @@
+import type { ValidateEncodingOptions } from './arc4'
 import { ConstructorFor } from './internal/typescript-helpers'
 import { uint64 } from './primitives'
 
@@ -8,7 +9,9 @@ export abstract class LogicSig {
   /**
    * The logic signature program logic
    */
-  abstract program(): boolean | uint64
+  //TODO: better way of doing this...
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  abstract program(...args: any[]): boolean | uint64
 }
 
 /**
@@ -47,6 +50,14 @@ type LogicSigOptions = {
    * that occurs earlier in the transaction group.
    */
   scratchSlots?: Array<number | NumberRange>
+  /**
+   * Controls validation behaviour for this logic signature.
+   *
+   * If "args", then ABI arguments are validated automatically to ensure they are encoded correctly.
+   * If "unsafe-disabled", then no automatic validation occurs. Arguments can instead be validated using the validateEncoding(...) function.
+   * The default behaviour of this option can be controlled with the --validate-abi-args CLI flag.
+   */
+  validateEncoding?: ValidateEncodingOptions
 }
 
 /**
