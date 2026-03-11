@@ -154,31 +154,31 @@ subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.optIn() -> void:
 subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.setState(p: Encoded(uint64,(len+uint8[])), c: Encoded(uint64[10])) -> void:
     block@0: // L21
         let tuple_item%0#0: Encoded(uint64) = extract_value(p#0, 0)
-        let values%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let tmp%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
         let tuple_item%1#0: Encoded(len+uint8[]) = extract_value(p#0, 1)
-        let values%1#0: bytes = decode_bytes<bytes>(tuple_item%1#0)
-        let a#0: uint64 = values%0#0
-        let b#0: bytes = values%1#0
-        let tmp%0#0: account = (txn Sender)
-        (app_local_put tmp%0#0 "l1" a#0)
-        let tmp%1#0: account = (txn Sender)
-        (app_local_put tmp%1#0 "localUint2" a#0)
+        let tmp%1#0: bytes = decode_bytes<bytes>(tuple_item%1#0)
+        let a#0: uint64 = tmp%0#0
+        let b#0: bytes = tmp%1#0
         let tmp%2#0: account = (txn Sender)
-        (app_local_put tmp%2#0 "b1" b#0)
+        (app_local_put tmp%2#0 "l1" a#0)
         let tmp%3#0: account = (txn Sender)
-        (app_local_put tmp%3#0 "localBytes2" b#0)
+        (app_local_put tmp%3#0 "localUint2" a#0)
         let tmp%4#0: account = (txn Sender)
-        (app_local_put tmp%4#0 "localEncoded" c#0)
+        (app_local_put tmp%4#0 "b1" b#0)
         let tmp%5#0: account = (txn Sender)
-        let encoded_for_storage%0#0: Encoded(uint64,(len+uint8[])) = bytes_encode<(uint64,(len+uint8[]))>(a#0, b#0)
-        (app_local_put tmp%5#0 "localTuple" encoded_for_storage%0#0)
+        (app_local_put tmp%5#0 "localBytes2" b#0)
         let tmp%6#0: account = (txn Sender)
+        (app_local_put tmp%6#0 "localEncoded" c#0)
+        let tmp%7#0: account = (txn Sender)
+        let encoded_for_storage%0#0: Encoded(uint64,(len+uint8[])) = bytes_encode<(uint64,(len+uint8[]))>(a#0, b#0)
+        (app_local_put tmp%7#0 "localTuple" encoded_for_storage%0#0)
+        let tmp%8#0: account = (txn Sender)
         let encoded_for_storage%1#0: Encoded(uint64,(len+uint8[])) = bytes_encode<(uint64,(len+uint8[]))>(a#0, b#0)
-        (app_local_put tmp%6#0 "localObject" encoded_for_storage%1#0)
-        let tmp%7#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>("hello")
-        let tmp%8#0: Encoded(uint64,(len+uint8[]),bool1,(len+utf8[])) = bytes_encode<(uint64,(len+uint8[]),bool1,(len+utf8[]))>(a#0, b#0, 1u, tmp%7#0)
-        let tmp%9#0: account = (txn Sender)
-        (app_local_put tmp%9#0 "localMutableObject" tmp%8#0)
+        (app_local_put tmp%8#0 "localObject" encoded_for_storage%1#0)
+        let tmp%9#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>("hello")
+        let tmp%10#0: Encoded(uint64,(len+uint8[]),bool1,(len+utf8[])) = bytes_encode<(uint64,(len+uint8[]),bool1,(len+utf8[]))>(a#0, b#0, 1u, tmp%9#0)
+        let tmp%11#0: account = (txn Sender)
+        (app_local_put tmp%11#0 "localMutableObject" tmp%10#0)
         return 
 
 subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.getState() -> Encoded(uint64,uint64,(len+uint8[]),(len+uint8[]),uint64[10],(uint64,(len+uint8[])),(uint64,(len+uint8[])),(uint64,(len+uint8[]),bool1,(len+utf8[]))):

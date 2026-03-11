@@ -265,7 +265,7 @@ tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increase
     // this.storage.value[index].x += xCount
     uncover 1
     intc_2 // 9
-    box_extract
+    box_extract // on error: index out of bounds
     intc_0 // 0
     intc_3 // 8
     extract3
@@ -287,7 +287,7 @@ tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.increase
     // this.storage.value[index].x += xCount
     uncover 1
     uncover 2
-    box_replace
+    box_replace // on error: index out of bounds
     retsub
 
 
@@ -313,7 +313,7 @@ tests/approvals/large-objects-in-state.algo.ts::LargeObjectsInStateAlgo.getCount
     // return this.storage.value[index]
     uncover 1
     intc_2 // 9
-    box_extract
+    box_extract // on error: index out of bounds
     retsub
 
 

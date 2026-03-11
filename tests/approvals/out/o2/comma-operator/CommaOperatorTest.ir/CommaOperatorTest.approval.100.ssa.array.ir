@@ -20,28 +20,21 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let eq%1#0: bool = (== len%1#0 1u)
         (assert eq%1#0) // invalid number of bytes for arc4.uint8
         let res#1: uint64 = (btoi a#0)
-        let aggregate%val_as_bytes%0#0: bytes[8] = (itob res#1)
-        let aggregate%bitlen%0#0: uint64 = (bitlen aggregate%val_as_bytes%0#0)
-        let aggregate%no_overflow%0#0: bool = (<= aggregate%bitlen%0#0 8u)
-        (assert aggregate%no_overflow%0#0) // overflow
-        let aggregate%uint8%0#0: bytes = (extract3 aggregate%val_as_bytes%0#0 7u 1u)
-        let aggregate%as_Encoded(uint8)%0#0: Encoded(uint8) = aggregate%uint8%0#0
-        let tmp%2#2: Encoded(uint8) = aggregate%as_Encoded(uint8)%0#0
         let aggregate%head%0#0: bytes = (concat 0x a#0)
-        let aggregate%head%1#0: bytes = (concat aggregate%head%0#0 tmp%2#2)
+        let aggregate%head%1#0: bytes = (concat aggregate%head%0#0 a#0)
         let aggregate%as_Encoded(uint8,uint8)%0#0: Encoded(uint8,uint8) = aggregate%head%1#0
         let tmp%3#2: Encoded(uint8,uint8) = aggregate%as_Encoded(uint8,uint8)%0#0
         let event%0#0: bytes = (concat method "Event(uint8,uint8)" tmp%3#2)
         (log event%0#0)
         let tmp%4#1: uint64 = (btoi b#0)
         let res#2: uint64 = (+ res#1 tmp%4#1)
-        let aggregate%val_as_bytes%1#0: bytes[8] = (itob res#2)
-        let aggregate%bitlen%1#0: uint64 = (bitlen aggregate%val_as_bytes%1#0)
-        let aggregate%no_overflow%1#0: bool = (<= aggregate%bitlen%1#0 8u)
-        (assert aggregate%no_overflow%1#0) // overflow
-        let aggregate%uint8%1#0: bytes = (extract3 aggregate%val_as_bytes%1#0 7u 1u)
-        let aggregate%as_Encoded(uint8)%1#0: Encoded(uint8) = aggregate%uint8%1#0
-        let tmp%6#1: Encoded(uint8) = aggregate%as_Encoded(uint8)%1#0
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob res#2)
+        let aggregate%bitlen%0#0: uint64 = (bitlen aggregate%val_as_bytes%0#0)
+        let aggregate%no_overflow%0#0: bool = (<= aggregate%bitlen%0#0 8u)
+        (assert aggregate%no_overflow%0#0) // overflow
+        let aggregate%uint8%0#0: bytes = (extract3 aggregate%val_as_bytes%0#0 7u 1u)
+        let aggregate%as_Encoded(uint8)%0#0: Encoded(uint8) = aggregate%uint8%0#0
+        let tmp%6#1: Encoded(uint8) = aggregate%as_Encoded(uint8)%0#0
         let aggregate%head%2#0: bytes = (concat 0x b#0)
         let aggregate%head%3#0: bytes = (concat aggregate%head%2#0 tmp%6#1)
         let aggregate%as_Encoded(uint8,uint8)%1#0: Encoded(uint8,uint8) = aggregate%head%3#0

@@ -234,34 +234,41 @@ ensure_budget_after_while@6:
     retsub
 
 
-// _puya_lib.arc4.dynamic_array_pop_fixed_size(array: bytes, fixed_byte_size: uint64) -> bytes, bytes:
+// _puya_lib.arc4.dynamic_array_pop_fixed_size(array: bytes, fixed_byte_size: uint64) -> bytes:
 dynamic_array_pop_fixed_size:
-    proto 2 2
+    proto 2 1
+    intc_2 // 0
     b dynamic_array_pop_fixed_size_block@0
 
 dynamic_array_pop_fixed_size_block@0:
     frame_dig -2
+    frame_dig -1
+    b dynamic_array_pop_fixed_size_block@1
+
+dynamic_array_pop_fixed_size_block@1:
+    frame_dig 1
+    dup
+    len
+    frame_dig 2
+    -
+    uncover 1
+    intc_2 // 0
+    uncover 2
+    substring3
+    frame_bury 0
+    b dynamic_array_pop_fixed_size_after_inlined__puya_lib.arc4.r_trim@2
+
+dynamic_array_pop_fixed_size_after_inlined__puya_lib.arc4.r_trim@2:
+    frame_dig 0
+    dup
     intc_2 // 0
     extract_uint16
     intc_3 // 1
     -
     itob
     extract 6 0
-    frame_dig -2
-    uncover 1
     replace2 0
-    dup
-    len
-    frame_dig -1
-    -
-    dup2
-    frame_dig -1
-    extract3
-    cover 2
-    uncover 1
-    intc_2 // 0
-    uncover 2
-    substring3
+    frame_bury 0
     retsub
 
 
@@ -583,6 +590,12 @@ receiveReadonly_block@0:
 
 // tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray() -> void:
 tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray:
+    // tests/approvals/native-arrays.algo.ts:7
+    // readonlyArray() {
+    proto 0 0
+    intc_2 // 0
+    intc_2 // 0
+    bytec_0 // ""
     b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray_block@0
 
 tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray_block@0:
@@ -607,20 +620,31 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray_block@0:
     bytec_0 // 0x
     uncover 1
     concat
-    dig 1
-    uncover 1
-    concat // on error: max array length exceeded
-    cover 1
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray_block@1
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray_block@1:
+    frame_dig 3
+    dup
     intc_2 // 0
     extract_uint16
+    // tests/approvals/native-arrays.algo.ts:10
+    // myArray = myArray.concat(Uint64(5))
     intc_3 // 1
     +
     itob
-    extract 6 2
-    uncover 1
-    intc_2 // 0
-    uncover 2
-    replace3
+    extract 6 0
+    replace2 0
+    frame_dig 4
+    concat
+    frame_bury 0
+    // tests/approvals/native-arrays.algo.ts:10
+    // myArray = myArray.concat(Uint64(5))
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2:
+    // tests/approvals/native-arrays.algo.ts:10
+    // myArray = myArray.concat(Uint64(5))
+    frame_dig 0
     // tests/approvals/native-arrays.algo.ts:12
     // myArray = [...myArray, Uint64(4)]
     intc_3 // 1
@@ -632,26 +656,41 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray_block@0:
     dup
     len
     cover 1
-    intc_1 // 2
-    uncover 2
-    substring3
-    concat // on error: max array length exceeded
-    dup
-    len
-    cover 1
     dup
     intc_1 // 2
     uncover 3
     substring3
-    len
-    intc_0 // 8
-    /
-    itob
-    extract 6 2
-    uncover 1
+    cover 1
     intc_2 // 0
+    extract_uint16 // on error: invalid array length header
     uncover 2
-    replace3
+    frame_bury 3
+    uncover 1
+    frame_bury 4
+    frame_bury 2
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray_block@3
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray_block@3:
+    frame_dig 3
+    dup
+    intc_2 // 0
+    extract_uint16
+    frame_dig 2
+    +
+    itob
+    extract 6 0
+    replace2 0
+    frame_dig 4
+    concat
+    frame_bury 1
+    // tests/approvals/native-arrays.algo.ts:12
+    // myArray = [...myArray, Uint64(4)]
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4:
+    // tests/approvals/native-arrays.algo.ts:12
+    // myArray = [...myArray, Uint64(4)]
+    frame_dig 1
     // tests/approvals/native-arrays.algo.ts:15
     // myArray = myArray.with(2, 3)
     pushint 3
@@ -766,6 +805,10 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray_block@0:
 
 // tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject() -> void:
 tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject:
+    // tests/approvals/native-arrays.algo.ts:20
+    // arrayInObject() {
+    proto 0 0
+    intc_2 // 0
     b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject_block@0
 
 tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject_block@0:
@@ -794,20 +837,31 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject_block@0:
     bytec_0 // 0x
     uncover 1
     concat
-    dig 1
-    uncover 1
-    concat // on error: max array length exceeded
-    cover 1
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject_block@1
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject_block@1:
+    frame_dig 1
+    dup
     intc_2 // 0
     extract_uint16
+    // tests/approvals/native-arrays.algo.ts:26
+    // const length: uint64 = person.favouriteNumbers.push(42)
     intc_3 // 1
     +
     itob
-    extract 6 2
-    uncover 1
-    intc_2 // 0
-    uncover 2
-    replace3
+    extract 6 0
+    replace2 0
+    frame_dig 2
+    concat
+    frame_bury 0
+    // tests/approvals/native-arrays.algo.ts:26
+    // const length: uint64 = person.favouriteNumbers.push(42)
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2:
+    // tests/approvals/native-arrays.algo.ts:26
+    // const length: uint64 = person.favouriteNumbers.push(42)
+    frame_dig 0
     intc_2 // 0
     extract_uint16 // on error: invalid array length header
     // tests/approvals/native-arrays.algo.ts:27
@@ -892,6 +946,28 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildReadonly_block@0:
 
 // tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() -> void:
 tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings:
+    // tests/approvals/native-arrays.algo.ts:42
+    // doThings() {
+    proto 0 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    intc_2 // 0
+    bytec_0 // ""
     b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0
 
 tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
@@ -910,26 +986,55 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     bytec_0 // 0x
     uncover 1
     concat
-    dig 1
-    uncover 1
-    concat // on error: max array length exceeded
-    cover 1
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@1
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@1:
+    frame_dig 19
+    dup
     intc_2 // 0
     extract_uint16
+    // tests/approvals/native-arrays.algo.ts:46
+    // arr.push(5)
     intc_3 // 1
     +
     itob
-    extract 6 2
-    uncover 1
-    intc_2 // 0
-    uncover 2
-    replace3
+    extract 6 0
+    replace2 0
+    frame_dig 20
+    concat
+    frame_bury 0
+    // tests/approvals/native-arrays.algo.ts:46
+    // arr.push(5)
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2:
+    // tests/approvals/native-arrays.algo.ts:46
+    // arr.push(5)
+    frame_dig 0
     // tests/approvals/native-arrays.algo.ts:47
     // assert(arr.pop()! === 5)
+    dup
+    intc_2 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_3 // 1
+    -
+    dig 1
+    len
+    cover 1
+    dig 2
+    intc_1 // 2
+    uncover 3
+    substring3
+    uncover 1
+    intc_0 // 8
+    *
+    intc_0 // 8
+    extract3 // on error: index access is out of bounds
+    btoi
+    uncover 1
     intc_0 // 8
     callsub dynamic_array_pop_fixed_size
     cover 1
-    btoi
     pushint 5
     ==
     assert
@@ -1061,20 +1166,34 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     bytec_0 // 0x
     uncover 1
     concat
-    dig 1
     uncover 1
-    concat // on error: max array length exceeded
-    cover 1
+    frame_bury 19
+    frame_bury 20
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@3
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@3:
+    frame_dig 19
+    dup
     intc_2 // 0
     extract_uint16
+    // tests/approvals/native-arrays.algo.ts:55
+    // arr.push(Uint64(5))
     intc_3 // 1
     +
     itob
-    extract 6 2
-    uncover 1
-    intc_2 // 0
-    uncover 2
-    replace3
+    extract 6 0
+    replace2 0
+    frame_dig 20
+    concat
+    frame_bury 1
+    // tests/approvals/native-arrays.algo.ts:55
+    // arr.push(Uint64(5))
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4:
+    // tests/approvals/native-arrays.algo.ts:55
+    // arr.push(Uint64(5))
+    frame_dig 1
     // tests/approvals/native-arrays.algo.ts:57
     // assertMatch(arr, [1, 2, 3, 4, 5])
     dup
@@ -1175,10 +1294,28 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:60
     // const top = arr.pop()!
+    dup
+    intc_2 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_3 // 1
+    -
+    dig 1
+    len
+    cover 1
+    dig 2
+    intc_1 // 2
+    uncover 3
+    substring3
+    uncover 1
+    intc_0 // 8
+    *
+    intc_0 // 8
+    extract3 // on error: index access is out of bounds
+    btoi
+    uncover 1
     intc_0 // 8
     callsub dynamic_array_pop_fixed_size
     cover 1
-    btoi
     // tests/approvals/native-arrays.algo.ts:61
     // assert(top === 5)
     pushint 5
@@ -1461,18 +1598,9 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     pushint 13
     itob
     concat
+    frame_bury 17
     // tests/approvals/native-arrays.algo.ts:75
     // arr = arr.concat(arr).concat(11).concat(t1)
-    dig 1
-    len
-    cover 1
-    dig 2
-    intc_1 // 2
-    uncover 3
-    substring3
-    uncover 2
-    uncover 1
-    concat // on error: max array length exceeded
     dup
     len
     cover 1
@@ -1480,52 +1608,101 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     intc_1 // 2
     uncover 3
     substring3
-    len
-    intc_0 // 8
-    /
-    itob
-    extract 6 2
-    uncover 1
+    cover 1
+    dup
     intc_2 // 0
-    uncover 2
-    replace3
+    extract_uint16 // on error: invalid array length header
+    uncover 1
+    frame_bury 19
+    uncover 1
+    frame_bury 20
+    frame_bury 18
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@5
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@5:
+    frame_dig 19
+    dup
+    intc_2 // 0
+    extract_uint16
+    frame_dig 18
+    +
+    itob
+    extract 6 0
+    replace2 0
+    frame_dig 20
+    concat
+    frame_bury 8
+    // tests/approvals/native-arrays.algo.ts:75
+    // arr = arr.concat(arr).concat(11).concat(t1)
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@6
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@6:
+    // tests/approvals/native-arrays.algo.ts:75
+    // arr = arr.concat(arr).concat(11).concat(t1)
+    frame_dig 8
     pushint 11
     itob
     bytec_0 // 0x
     uncover 1
     concat
-    dig 1
     uncover 1
-    concat // on error: max array length exceeded
-    cover 1
+    frame_bury 19
+    frame_bury 20
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@7
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@7:
+    frame_dig 19
+    dup
     intc_2 // 0
     extract_uint16
+    // tests/approvals/native-arrays.algo.ts:75
+    // arr = arr.concat(arr).concat(11).concat(t1)
     intc_3 // 1
     +
     itob
-    extract 6 2
-    uncover 1
+    extract 6 0
+    replace2 0
+    frame_dig 20
+    concat
+    frame_bury 9
+    // tests/approvals/native-arrays.algo.ts:75
+    // arr = arr.concat(arr).concat(11).concat(t1)
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@8
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@8:
+    // tests/approvals/native-arrays.algo.ts:75
+    // arr = arr.concat(arr).concat(11).concat(t1)
+    frame_dig 9
+    frame_bury 19
+    frame_dig 17
+    frame_bury 20
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@9
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@9:
+    frame_dig 19
+    dup
     intc_2 // 0
-    uncover 2
-    replace3
-    uncover 1
-    concat // on error: max array length exceeded
-    dup
-    len
-    cover 1
-    dup
+    extract_uint16
+    // tests/approvals/native-arrays.algo.ts:75
+    // arr = arr.concat(arr).concat(11).concat(t1)
     intc_1 // 2
-    uncover 3
-    substring3
-    len
-    intc_0 // 8
-    /
+    +
     itob
-    extract 6 2
-    uncover 1
-    intc_2 // 0
-    uncover 2
-    replace3
+    extract 6 0
+    replace2 0
+    frame_dig 20
+    concat
+    frame_bury 10
+    // tests/approvals/native-arrays.algo.ts:75
+    // arr = arr.concat(arr).concat(11).concat(t1)
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@10
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@10:
+    // tests/approvals/native-arrays.algo.ts:75
+    // arr = arr.concat(arr).concat(11).concat(t1)
+    frame_dig 10
+    dup
+    frame_bury 14
     // tests/approvals/native-arrays.algo.ts:76
     // assertMatch(arr, [1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     dup
@@ -1717,9 +1894,8 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     dup
     len
     cover 1
-    dup
     intc_1 // 2
-    uncover 3
+    uncover 2
     substring3
     pushint 10
     intc_0 // 8
@@ -1729,7 +1905,6 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     btoi
     pushint 13
     ==
-    uncover 2
     &&
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:78
@@ -1753,20 +1928,34 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     bytec_0 // 0x
     uncover 1
     concat
-    dig 1
     uncover 1
-    concat // on error: max array length exceeded
-    cover 1
+    frame_bury 19
+    frame_bury 20
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@11
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@11:
+    frame_dig 19
+    dup
     intc_2 // 0
     extract_uint16
+    // tests/approvals/native-arrays.algo.ts:79
+    // rArr1 = rArr1.concat(Uint64(4))
     intc_3 // 1
     +
     itob
-    extract 6 2
-    uncover 1
-    intc_2 // 0
-    uncover 2
-    replace3
+    extract 6 0
+    replace2 0
+    frame_dig 20
+    concat
+    frame_bury 11
+    // tests/approvals/native-arrays.algo.ts:79
+    // rArr1 = rArr1.concat(Uint64(4))
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@12
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@12:
+    // tests/approvals/native-arrays.algo.ts:79
+    // rArr1 = rArr1.concat(Uint64(4))
+    frame_dig 11
     // tests/approvals/native-arrays.algo.ts:80
     // rArr1 = [...rArr1, Uint64(5)]
     intc_3 // 1
@@ -1778,26 +1967,43 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     dup
     len
     cover 1
-    intc_1 // 2
-    uncover 2
-    substring3
-    concat // on error: max array length exceeded
-    dup
-    len
-    cover 1
     dup
     intc_1 // 2
     uncover 3
     substring3
-    len
-    intc_0 // 8
-    /
-    itob
-    extract 6 2
-    uncover 1
+    cover 1
     intc_2 // 0
+    extract_uint16 // on error: invalid array length header
     uncover 2
-    replace3
+    frame_bury 19
+    uncover 1
+    frame_bury 20
+    frame_bury 18
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@13
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@13:
+    frame_dig 19
+    dup
+    intc_2 // 0
+    extract_uint16
+    frame_dig 18
+    +
+    itob
+    extract 6 0
+    replace2 0
+    frame_dig 20
+    concat
+    frame_bury 12
+    // tests/approvals/native-arrays.algo.ts:80
+    // rArr1 = [...rArr1, Uint64(5)]
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@14
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@14:
+    // tests/approvals/native-arrays.algo.ts:80
+    // rArr1 = [...rArr1, Uint64(5)]
+    frame_dig 12
+    dup
+    frame_bury 16
     // tests/approvals/native-arrays.algo.ts:81
     // assertMatch(rArr1, [1, 2, 3, 4, 5])
     dup
@@ -1881,9 +2087,8 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     dup
     len
     cover 1
-    dup
     intc_1 // 2
-    uncover 3
+    uncover 2
     substring3
     pushint 4
     intc_0 // 8
@@ -1893,13 +2098,14 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     btoi
     pushint 5
     ==
-    uncover 2
     &&
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:83
     // const fArr1 = new FixedArray<uint64, 4>()
     pushint 32
     bzero
+    dup
+    frame_bury 15
     // tests/approvals/native-arrays.algo.ts:84
     // const fArr2 = fArr1.concat(fArr1)
     pushint 4
@@ -1907,25 +2113,33 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     extract 6 2
     dig 1
     concat
-    dig 1
-    concat // on error: max array length exceeded
+    frame_bury 19
+    frame_bury 20
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@15
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@15:
+    frame_dig 19
     dup
-    len
-    cover 1
-    dup
-    intc_1 // 2
-    uncover 3
-    substring3
-    len
-    intc_0 // 8
-    /
-    itob
-    extract 6 2
-    uncover 1
     intc_2 // 0
-    uncover 2
-    replace3
-    cover 1
+    extract_uint16
+    // tests/approvals/native-arrays.algo.ts:84
+    // const fArr2 = fArr1.concat(fArr1)
+    pushint 4
+    +
+    itob
+    extract 6 0
+    replace2 0
+    frame_dig 20
+    concat
+    frame_bury 13
+    // tests/approvals/native-arrays.algo.ts:84
+    // const fArr2 = fArr1.concat(fArr1)
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@16
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@16:
+    // tests/approvals/native-arrays.algo.ts:84
+    // const fArr2 = fArr1.concat(fArr1)
+    frame_dig 13
     // tests/approvals/native-arrays.algo.ts:85
     // assertMatch(fArr1, [0, 0, 0, 0])
     pushint 4
@@ -1934,7 +2148,9 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     intc_2 // 0
     intc_0 // 8
     *
-    dig 2
+    frame_dig 15
+    dup
+    cover 3
     uncover 1
     intc_0 // 8
     extract3 // on error: index access is out of bounds
@@ -1967,7 +2183,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     pushint 3
     intc_0 // 8
     *
-    dig 2
+    uncover 2
     uncover 1
     intc_0 // 8
     extract3 // on error: index access is out of bounds
@@ -1978,16 +2194,16 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:86
     // assertMatch(fArr2, [0, 0, 0, 0, 0, 0, 0, 0])
-    dig 1
+    dup
     intc_2 // 0
     extract_uint16 // on error: invalid array length header
     intc_0 // 8
     ==
     cover 1
-    dig 2
+    dup
     len
     cover 1
-    dig 3
+    dup
     intc_1 // 2
     uncover 3
     substring3
@@ -2002,10 +2218,10 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     uncover 2
     &&
     cover 1
-    dig 2
+    dup
     len
     cover 1
-    dig 3
+    dup
     intc_1 // 2
     uncover 3
     substring3
@@ -2020,10 +2236,10 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     uncover 2
     &&
     cover 1
-    dig 2
+    dup
     len
     cover 1
-    dig 3
+    dup
     intc_1 // 2
     uncover 3
     substring3
@@ -2038,10 +2254,10 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     uncover 2
     &&
     cover 1
-    dig 2
+    dup
     len
     cover 1
-    dig 3
+    dup
     intc_1 // 2
     uncover 3
     substring3
@@ -2056,10 +2272,10 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     uncover 2
     &&
     cover 1
-    dig 2
+    dup
     len
     cover 1
-    dig 3
+    dup
     intc_1 // 2
     uncover 3
     substring3
@@ -2074,10 +2290,10 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     uncover 2
     &&
     cover 1
-    dig 2
+    dup
     len
     cover 1
-    dig 3
+    dup
     intc_1 // 2
     uncover 3
     substring3
@@ -2092,10 +2308,10 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     uncover 2
     &&
     cover 1
-    dig 2
+    dup
     len
     cover 1
-    dig 3
+    dup
     intc_1 // 2
     uncover 3
     substring3
@@ -2110,10 +2326,10 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     uncover 2
     &&
     cover 1
-    dig 2
+    dup
     len
     cover 1
-    dig 3
+    dup
     intc_1 // 2
     uncover 3
     substring3
@@ -2130,16 +2346,6 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:88
     // const arr3 = rArr1.concat(fArr2)
-    dig 1
-    len
-    cover 1
-    uncover 2
-    intc_1 // 2
-    uncover 3
-    substring3
-    dig 2
-    uncover 1
-    concat // on error: max array length exceeded
     dup
     len
     cover 1
@@ -2147,15 +2353,37 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     intc_1 // 2
     uncover 3
     substring3
-    len
-    intc_0 // 8
-    /
-    itob
-    extract 6 2
-    uncover 1
+    cover 1
     intc_2 // 0
-    uncover 2
-    replace3
+    extract_uint16 // on error: invalid array length header
+    frame_dig 16
+    frame_bury 19
+    uncover 1
+    frame_bury 20
+    frame_bury 18
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@17
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@17:
+    frame_dig 19
+    dup
+    intc_2 // 0
+    extract_uint16
+    frame_dig 18
+    +
+    itob
+    extract 6 0
+    replace2 0
+    frame_dig 20
+    concat
+    frame_bury 2
+    // tests/approvals/native-arrays.algo.ts:88
+    // const arr3 = rArr1.concat(fArr2)
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@18
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@18:
+    // tests/approvals/native-arrays.algo.ts:88
+    // const arr3 = rArr1.concat(fArr2)
+    frame_dig 2
     // tests/approvals/native-arrays.algo.ts:89
     // assertMatch(arr3, [1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0])
     dup
@@ -2398,16 +2626,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:91
     // const arr4 = rArr1.concat(arr)
-    dig 2
-    len
-    cover 1
-    dig 3
-    intc_1 // 2
-    uncover 3
-    substring3
-    dig 2
-    uncover 1
-    concat // on error: max array length exceeded
+    frame_dig 14
     dup
     len
     cover 1
@@ -2415,15 +2634,37 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     intc_1 // 2
     uncover 3
     substring3
-    len
-    intc_0 // 8
-    /
-    itob
-    extract 6 2
-    uncover 1
+    cover 1
     intc_2 // 0
-    uncover 2
-    replace3
+    extract_uint16 // on error: invalid array length header
+    frame_dig 16
+    frame_bury 19
+    uncover 1
+    frame_bury 20
+    frame_bury 18
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@19
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@19:
+    frame_dig 19
+    dup
+    intc_2 // 0
+    extract_uint16
+    frame_dig 18
+    +
+    itob
+    extract 6 0
+    replace2 0
+    frame_dig 20
+    concat
+    frame_bury 3
+    // tests/approvals/native-arrays.algo.ts:91
+    // const arr4 = rArr1.concat(arr)
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@20
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@20:
+    // tests/approvals/native-arrays.algo.ts:91
+    // const arr4 = rArr1.concat(arr)
+    frame_dig 3
     // tests/approvals/native-arrays.algo.ts:92
     // assertMatch(arr4, [1, 2, 3, 4, 5, 1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     dup
@@ -2723,16 +2964,9 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     pushint 4
     itob
     extract 6 2
-    dig 1
+    frame_dig 15
     concat
-    dig 2
-    len
-    cover 1
-    dig 3
-    intc_1 // 2
-    uncover 3
-    substring3
-    concat // on error: max array length exceeded
+    frame_dig 16
     dup
     len
     cover 1
@@ -2740,15 +2974,37 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     intc_1 // 2
     uncover 3
     substring3
-    len
-    intc_0 // 8
-    /
-    itob
-    extract 6 2
-    uncover 1
+    cover 1
     intc_2 // 0
+    extract_uint16 // on error: invalid array length header
     uncover 2
-    replace3
+    frame_bury 19
+    uncover 1
+    frame_bury 20
+    frame_bury 18
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@21
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@21:
+    frame_dig 19
+    dup
+    intc_2 // 0
+    extract_uint16
+    frame_dig 18
+    +
+    itob
+    extract 6 0
+    replace2 0
+    frame_dig 20
+    concat
+    frame_bury 4
+    // tests/approvals/native-arrays.algo.ts:94
+    // const arr5 = fArr1.concat(rArr1)
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@22
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@22:
+    // tests/approvals/native-arrays.algo.ts:94
+    // const arr5 = fArr1.concat(rArr1)
+    frame_dig 4
     // tests/approvals/native-arrays.algo.ts:95
     // assertMatch(arr5, [0, 0, 0, 0, 1, 2, 3, 4, 5])
     dup
@@ -2922,16 +3178,9 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     pushint 4
     itob
     extract 6 2
-    dig 1
+    frame_dig 15
     concat
-    dig 3
-    len
-    cover 1
-    dig 4
-    intc_1 // 2
-    uncover 3
-    substring3
-    concat // on error: max array length exceeded
+    frame_dig 14
     dup
     len
     cover 1
@@ -2939,15 +3188,37 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     intc_1 // 2
     uncover 3
     substring3
-    len
-    intc_0 // 8
-    /
-    itob
-    extract 6 2
-    uncover 1
+    cover 1
     intc_2 // 0
+    extract_uint16 // on error: invalid array length header
     uncover 2
-    replace3
+    frame_bury 19
+    uncover 1
+    frame_bury 20
+    frame_bury 18
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@23
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@23:
+    frame_dig 19
+    dup
+    intc_2 // 0
+    extract_uint16
+    frame_dig 18
+    +
+    itob
+    extract 6 0
+    replace2 0
+    frame_dig 20
+    concat
+    frame_bury 5
+    // tests/approvals/native-arrays.algo.ts:97
+    // const arr6 = fArr1.concat(arr)
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@24
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@24:
+    // tests/approvals/native-arrays.algo.ts:97
+    // const arr6 = fArr1.concat(arr)
+    frame_dig 5
     // tests/approvals/native-arrays.algo.ts:98
     // assertMatch(arr6, [0, 0, 0, 0, 1, 10, 3, 4, 1, 10, 3, 4, 11, 12, 13])
     dup
@@ -3226,16 +3497,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:100
     // const arr7 = arr.concat(rArr1)
-    dig 1
-    len
-    cover 1
-    uncover 2
-    intc_1 // 2
-    uncover 3
-    substring3
-    dig 2
-    uncover 1
-    concat // on error: max array length exceeded
+    frame_dig 16
     dup
     len
     cover 1
@@ -3243,15 +3505,37 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     intc_1 // 2
     uncover 3
     substring3
-    len
-    intc_0 // 8
-    /
-    itob
-    extract 6 2
-    uncover 1
+    cover 1
     intc_2 // 0
-    uncover 2
-    replace3
+    extract_uint16 // on error: invalid array length header
+    frame_dig 14
+    frame_bury 19
+    uncover 1
+    frame_bury 20
+    frame_bury 18
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@25
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@25:
+    frame_dig 19
+    dup
+    intc_2 // 0
+    extract_uint16
+    frame_dig 18
+    +
+    itob
+    extract 6 0
+    replace2 0
+    frame_dig 20
+    concat
+    frame_bury 6
+    // tests/approvals/native-arrays.algo.ts:100
+    // const arr7 = arr.concat(rArr1)
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@26
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@26:
+    // tests/approvals/native-arrays.algo.ts:100
+    // const arr7 = arr.concat(rArr1)
+    frame_dig 6
     // tests/approvals/native-arrays.algo.ts:101
     // assert(arr7.length === 16)
     dup
@@ -3556,23 +3840,35 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@0:
     assert // assert target is match for conditions
     // tests/approvals/native-arrays.algo.ts:104
     // const arr8 = arr.concat(fArr1)
-    concat // on error: max array length exceeded
+    frame_dig 14
+    frame_bury 19
+    frame_dig 15
+    frame_bury 20
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@27
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_block@27:
+    frame_dig 19
     dup
-    len
-    cover 1
-    dup
-    intc_1 // 2
-    uncover 3
-    substring3
-    len
-    intc_0 // 8
-    /
-    itob
-    extract 6 2
-    uncover 1
     intc_2 // 0
-    uncover 2
-    replace3
+    extract_uint16
+    // tests/approvals/native-arrays.algo.ts:104
+    // const arr8 = arr.concat(fArr1)
+    pushint 4
+    +
+    itob
+    extract 6 0
+    replace2 0
+    frame_dig 20
+    concat
+    frame_bury 7
+    // tests/approvals/native-arrays.algo.ts:104
+    // const arr8 = arr.concat(fArr1)
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@28
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@28:
+    // tests/approvals/native-arrays.algo.ts:104
+    // const arr8 = arr.concat(fArr1)
+    frame_dig 7
     // tests/approvals/native-arrays.algo.ts:105
     // assert(arr8.length === 15)
     dup
@@ -4367,6 +4663,11 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.fixedArray_block@0:
 
 // tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop() -> void:
 tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop:
+    // tests/approvals/native-arrays.algo.ts:157
+    // arc4Interop() {
+    proto 0 0
+    intc_2 // 0
+    intc_2 // 0
     b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_block@0
 
 tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_block@0:
@@ -4401,45 +4702,67 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_block@0:
     dig 1
     len
     cover 1
-    uncover 2
+    dig 2
     intc_1 // 2
     uncover 3
     substring3
-    concat // on error: max array length exceeded
-    dup
-    len
     cover 1
-    dup
-    intc_1 // 2
-    uncover 3
-    substring3
-    len
-    pushint 4
-    /
-    itob
-    extract 6 2
-    uncover 1
-    intc_2 // 0
     uncover 2
-    replace3
-    uncover 1
-    concat // on error: max array length exceeded
-    dup
-    len
-    cover 1
-    dup
-    intc_1 // 2
-    uncover 3
-    substring3
-    len
-    pushint 4
-    /
-    itob
-    extract 6 2
-    uncover 1
     intc_2 // 0
-    uncover 2
-    replace3
+    extract_uint16 // on error: invalid array length header
+    uncover 1
+    cover 2
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_block@1
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_block@1:
+    frame_dig 3
+    dup
+    intc_2 // 0
+    extract_uint16
+    frame_dig 5
+    +
+    itob
+    extract 6 0
+    replace2 0
+    frame_dig 4
+    concat
+    frame_bury 0
+    // tests/approvals/native-arrays.algo.ts:165
+    // a1 = [...a1, ...da1, ...sa1]
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2:
+    // tests/approvals/native-arrays.algo.ts:165
+    // a1 = [...a1, ...da1, ...sa1]
+    frame_dig 0
+    frame_bury 3
+    frame_dig 2
+    frame_bury 4
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_block@3
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_block@3:
+    frame_dig 3
+    dup
+    intc_2 // 0
+    extract_uint16
+    // tests/approvals/native-arrays.algo.ts:165
+    // a1 = [...a1, ...da1, ...sa1]
+    intc_1 // 2
+    +
+    itob
+    extract 6 0
+    replace2 0
+    frame_dig 4
+    concat
+    frame_bury 1
+    // tests/approvals/native-arrays.algo.ts:165
+    // a1 = [...a1, ...da1, ...sa1]
+    b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4
+
+tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4:
+    // tests/approvals/native-arrays.algo.ts:165
+    // a1 = [...a1, ...da1, ...sa1]
+    frame_dig 1
     // tests/approvals/native-arrays.algo.ts:167
     // assertMatch(a1, [u1, u1, u1, u1, u1, u1])
     dup
