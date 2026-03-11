@@ -35,13 +35,13 @@ subroutine tests/approvals/property-ordering.algo.ts::test_assign_from_literal(x
         let tmp%1#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(b#0, b#0)
         let obj#0: Encoded(uint64,uint64) = tmp%1#0
         let tuple_item%0#0: Encoded(uint64) = extract_value(obj#0, 1)
-        let values%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
-        let tmp%2#0: uint64 = (* x#0 2u)
-        let tmp%3#0: bool = (== values%0#0 tmp%2#0)
+        let tmp%2#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let tmp%3#0: uint64 = (* x#0 2u)
+        let tmp%4#0: bool = (== tmp%2#0 tmp%3#0)
         let tuple_item%1#0: Encoded(uint64) = extract_value(obj#0, 0)
-        let values%1#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
-        let tmp%4#0: uint64 = (* x#0 2u)
-        let tmp%5#0: bool = (== values%1#0 tmp%4#0)
-        let tmp%6#0: bool = (&& tmp%3#0 tmp%5#0)
-        (assert tmp%6#0) // assert target is match for conditions
+        let tmp%5#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
+        let tmp%6#0: uint64 = (* x#0 2u)
+        let tmp%7#0: bool = (== tmp%5#0 tmp%6#0)
+        let tmp%8#0: bool = (&& tmp%4#0 tmp%7#0)
+        (assert tmp%8#0) // assert target is match for conditions
         return 
