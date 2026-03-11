@@ -146,9 +146,9 @@ class ItxnComposeBeginOrNextFunctionBuilder extends FunctionBuilder {
       )
     }
     return instanceEb(
-      nodeFactory.setInnerTransactionFields({
+      nodeFactory.stageInnerTransactions({
         itxns,
-        startWithBegin: this.startWithBegin,
+        startNewGroup: nodeFactory.boolConstant({ value: this.startWithBegin, sourceLocation }),
         sourceLocation,
         wtype: voidPType.wtype,
       }),

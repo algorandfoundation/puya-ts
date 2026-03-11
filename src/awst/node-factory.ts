@@ -51,11 +51,13 @@ const explicitNodeFactory = {
     sourceLocation: SourceLocation
     wtype: wtypes.WType
     errorMessage: string | null
+    logError?: boolean
   }) {
     return new AssertExpression({
       ...props,
       wtype: wtypes.voidWType,
       explicit: true,
+      logError: props.logError ?? false,
     })
   },
   voidConstant(props: { sourceLocation: SourceLocation }): VoidConstant {

@@ -134,11 +134,13 @@ export class AssertExpression extends Expression {
     this.errorMessage = props.errorMessage
     this.wtype = props.wtype
     this.explicit = props.explicit
+    this.logError = props.logError
   }
   readonly condition: Expression | null
   readonly errorMessage: string | null
   readonly wtype: wtypes.WType
   readonly explicit: boolean
+  readonly logError: boolean
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAssertExpression(this)
   }
@@ -288,7 +290,7 @@ export class ARC4Encode extends Expression {
     this.errorMessage = props.errorMessage
   }
   readonly value: Expression
-  readonly wtype: wtypes.ARC4Type
+  readonly wtype: wtypes.ARC4Type | wtypes.BytesWType
   readonly errorMessage: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4Encode(this)
@@ -907,6 +909,22 @@ export class SubroutineCallExpression extends Expression {
     return visitor.visitSubroutineCallExpression(this)
   }
 }
+export class ABICall extends Expression {
+  constructor(props: Props<ABICall>) {
+    super(props)
+    this.target = props.target
+    this.args = props.args
+    this.fields = props.fields
+    this.wtype = props.wtype
+  }
+  readonly target: MethodSignature | MethodSignatureString | null
+  readonly args: Array<Expression>
+  readonly fields: Map<TxnField, Expression>
+  readonly wtype: wtypes.WABICallInnerTransactionFields
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitABICall(this)
+  }
+}
 export class PuyaLibData {
   constructor(props: Props<PuyaLibData>) {
     this.id = props.id
@@ -1191,14 +1209,26 @@ export class BytesAugmentedAssignment extends Statement {
     return visitor.visitBytesAugmentedAssignment(this)
   }
 }
-export class Emit extends Expression {
-  constructor(props: Props<Emit>) {
+export class EmitFields extends Expression {
+  constructor(props: Props<EmitFields>) {
     super(props)
     this.signature = props.signature
-    this.value = props.value
+    this.values = props.values
     this.wtype = props.wtype
   }
   readonly signature: string
+  readonly values: Array<Expression>
+  readonly wtype: wtypes.WType
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitEmitFields(this)
+  }
+}
+export class Emit extends Expression {
+  constructor(props: Props<Emit>) {
+    super(props)
+    this.value = props.value
+    this.wtype = props.wtype
+  }
   readonly value: Expression
   readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
@@ -1432,6 +1462,7 @@ export class LogicSignature extends RootNode {
     this.docstring = props.docstring
     this.reservedScratchSpace = props.reservedScratchSpace
     this.avmVersion = props.avmVersion
+    this.validateEncoding = props.validateEncoding
   }
   readonly id: LogicSigReference
   readonly shortName: string
@@ -1439,6 +1470,7 @@ export class LogicSignature extends RootNode {
   readonly docstring: string | null
   readonly reservedScratchSpace: Set<bigint>
   readonly avmVersion: bigint | null
+  readonly validateEncoding: boolean | null
   accept<T>(visitor: RootNodeVisitor<T>): T {
     return visitor.visitLogicSignature(this)
   }
@@ -1652,6 +1684,7 @@ export const concreteNodes = {
   contractMethodTarget: ContractMethodTarget,
   callArg: CallArg,
   subroutineCallExpression: SubroutineCallExpression,
+  aBICall: ABICall,
   puyaLibData: PuyaLibData,
   puyaLibCall: PuyaLibCall,
   uInt64UnaryOperation: UInt64UnaryOperation,
@@ -1666,6 +1699,7 @@ export const concreteNodes = {
   uInt64AugmentedAssignment: UInt64AugmentedAssignment,
   bigUIntAugmentedAssignment: BigUIntAugmentedAssignment,
   bytesAugmentedAssignment: BytesAugmentedAssignment,
+  emitFields: EmitFields,
   emit: Emit,
   range: Range,
   enumeration: Enumeration,
@@ -1762,6 +1796,7 @@ export interface ExpressionVisitor<T> {
   visitNumericComparisonExpression(expression: NumericComparisonExpression): T
   visitBytesComparisonExpression(expression: BytesComparisonExpression): T
   visitSubroutineCallExpression(expression: SubroutineCallExpression): T
+  visitABICall(expression: ABICall): T
   visitPuyaLibCall(expression: PuyaLibCall): T
   visitUInt64UnaryOperation(expression: UInt64UnaryOperation): T
   visitUInt64PostfixUnaryOperation(expression: UInt64PostfixUnaryOperation): T
@@ -1772,6 +1807,7 @@ export interface ExpressionVisitor<T> {
   visitBytesBinaryOperation(expression: BytesBinaryOperation): T
   visitBooleanBinaryOperation(expression: BooleanBinaryOperation): T
   visitNot(expression: Not): T
+  visitEmitFields(expression: EmitFields): T
   visitEmit(expression: Emit): T
   visitRange(expression: Range): T
   visitEnumeration(expression: Enumeration): T

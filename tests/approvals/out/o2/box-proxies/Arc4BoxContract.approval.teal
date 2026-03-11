@@ -73,7 +73,7 @@ main_for_header@28:
     // for (const value of this.tooManyBools.value) {
     uncover 2
     intc_0 // 1
-    box_extract
+    box_extract // on error: index out of bounds
     swap
     getbit
     // tests/approvals/box-proxies.algo.ts:514
@@ -158,7 +158,7 @@ main_setBool_route@19:
     // tests/approvals/box-proxies.algo.ts:507
     // this.tooManyBools.value[index] = value
     cover 2
-    box_replace
+    box_replace // on error: index out of bounds
     // tests/approvals/box-proxies.algo.ts:506
     // setBool(index: uint64, value: boolean) {
     intc_0 // 1
@@ -491,7 +491,7 @@ main_readBoxes_route@13:
     // return [Uint64(getBoxValuePlus1(this.boxA) - 1), this.boxB.value.native, this.boxC.value, this.boxLarge.value.e] as const
     intc 4 // 4096
     intc_2 // 8
-    box_extract
+    box_extract // on error: index out of bounds
     btoi
     // tests/approvals/box-proxies.algo.ts:437
     // readBoxes(): readonly [uint64, bytes, arc4.Str, uint64] {
@@ -536,7 +536,7 @@ main_indirectExtractAndReplace_route@12:
     // large.e += 1
     intc 4 // 4096
     intc_2 // 8
-    box_extract
+    box_extract // on error: index out of bounds
     // tests/approvals/box-proxies.algo.ts:433
     // large.e += 1
     btoi
@@ -546,13 +546,12 @@ main_indirectExtractAndReplace_route@12:
     // tests/approvals/box-proxies.algo.ts:347
     // boxLarge = Box<LargeStruct>({ key: 'boxLarge' })
     bytec_2 // "boxLarge"
-    // tests/approvals/box-proxies.algo.ts:432-434
-    // const large = clone(this.boxLarge.value)
+    // tests/approvals/box-proxies.algo.ts:433-434
     // large.e += 1
     // this.boxLarge.value = clone(large)
     intc 4 // 4096
     uncover 2
-    box_replace
+    box_replace // on error: index out of bounds
     // tests/approvals/box-proxies.algo.ts:431
     // indirectExtractAndReplace() {
     intc_0 // 1
@@ -681,7 +680,7 @@ main_for_header@56:
     // for (const val of this.manyInts.value) {
     swap
     intc_2 // 8
-    box_extract
+    box_extract // on error: index out of bounds
     btoi
     // tests/approvals/box-proxies.algo.ts:413
     // total = total + val
@@ -733,7 +732,7 @@ main_setManyInts_route@9:
     // this.manyInts.value[index] = value
     swap
     uncover 2
-    box_replace
+    box_replace // on error: index out of bounds
     // tests/approvals/box-proxies.algo.ts:405
     // setManyInts(index: uint64, value: uint64) {
     intc_0 // 1
@@ -867,7 +866,7 @@ main_setBoxes_route@6:
     // this.boxLarge.value.e = 42
     intc 4 // 4096
     uncover 2
-    box_replace
+    box_replace // on error: index out of bounds
     // tests/approvals/box-proxies.algo.ts:347
     // boxLarge = Box<LargeStruct>({ key: 'boxLarge' })
     bytec_2 // "boxLarge"

@@ -1655,8 +1655,6 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // tests/approvals/abi-validation-exhaustive.algo.ts:139
     // const app = compiled.call.create({}).itxn.createdApp
     itxn_begin
-    pushbytes 0x4c5c61ba // method "create()void"
-    itxn_field ApplicationArgs
     // tests/approvals/abi-validation-exhaustive.algo.ts:137
     // const compiled = compileArc4(InvalidContract)
     intc_1 // 0
@@ -1681,6 +1679,8 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     // const app = compiled.call.create({}).itxn.createdApp
     intc_1 // 0
     itxn_field OnCompletion
+    pushbytes 0x4c5c61ba // method "create()void"
+    itxn_field ApplicationArgs
     pushint 6 // appl
     itxn_field TypeEnum
     intc_1 // 0
@@ -1698,9 +1698,9 @@ tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.valid
     //   appId: app,
     // })
     itxn_begin
+    itxn_field ApplicationID
     pushbytes 0x45cf05ef // method "invalidValue()uint64[3]"
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     pushint 6 // appl
     itxn_field TypeEnum
     intc_1 // 0
