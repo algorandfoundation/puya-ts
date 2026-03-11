@@ -35,6 +35,18 @@ if (!Set.prototype.difference) {
     return new Set([...this].filter((e) => !other.has(e)))
   }
 }
+
+// Node < 22
+if (!Set.prototype.symmetricDifference) {
+  Set.prototype.symmetricDifference = function (other) {
+    const result = this.difference(other)
+    for (let it = other.keys(), { value, done } = it.next(); !done; { value, done } = it.next()) {
+      if (!this.has(value)) result.add(value)
+    }
+    return result
+  }
+}
+
 // Node < 22.11
 if (!Promise.withResolvers) {
   Promise.withResolvers = function <T>() {
