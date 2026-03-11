@@ -11,14 +11,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
         switch tmp%6#0 {method "testNested((uint64,(uint512,uint512)))(uint64,(uint512,uint512),uint64,uint512)" => block@4, method "test()void" => block@5, method "testLiteralDestructuring()void" => block@6, method "produceFixed()uint64[3]" => block@7, * => block@10}
     block@4: // testNested_route_L5
-        let tmp%0#4: bytes = (txna ApplicationArgs 1)
-        let len%0#0: uint64 = (len tmp%0#4)
+        let tmp%0#3: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#3)
         let eq%0#0: bool = (== len%0#0 136u)
         (assert eq%0#0) // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.tuple<arc4.uint512,arc4.uint512>>
-        let aggregate%extract%1#0: bytes = ((extract 8 128) tmp%0#4)
+        let aggregate%extract%1#0: bytes = ((extract 8 128) tmp%0#3)
         let arg.1.0#0: biguint = ((extract 0 64) aggregate%extract%1#0)
         let arg.1.1#0: biguint = ((extract 64 64) aggregate%extract%1#0)
-        let aggregate%val_as_bytes%0#0: bytes[8] = ((extract 0 8) tmp%0#4)
+        let aggregate%val_as_bytes%0#0: bytes[8] = ((extract 0 8) tmp%0#3)
         let aggregate%bzero%0#0: bytes = (bzero 64u)
         let aggregate%arc4_encoded%0#0: bytes[64] = (b| arg.1.0#0 aggregate%bzero%0#0)
         let aggregate%arc4_encoded%1#0: bytes[64] = (b| arg.1.1#0 aggregate%bzero%0#0)
