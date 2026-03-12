@@ -38,6 +38,7 @@ export class LogicSigClassModel {
       docstring: this.description,
       avmVersion: this.options?.avmVersion ?? null,
       reservedScratchSpace: this.options?.scratchSlots ?? new Set(),
+      validateEncoding: this.options?.validateEncoding ?? null,
     })
   }
 }
