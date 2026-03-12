@@ -4,6 +4,7 @@ import type { ContractReference, LogicSigReference } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import type { AppStorageDefinition, ARC4MethodConfig } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
+import { PuyaError } from '../../errors'
 import { logger } from '../../logger'
 import { invariant } from '../../util'
 import { AbsolutePath } from '../../util/absolute-path'
@@ -337,7 +338,15 @@ class AwstBuildContextImpl extends AwstBuildContext {
             `Redefinition of app storage member, original declared in ${declaration.sourceLocation}`,
           )
         }
-        result.set(memberName, declaration.definition)
+        try {
+          result.set(memberName, declaration.definition)
+        } catch (e) {
+          if (e instanceof PuyaError) {
+            logger.error(e)
+          } else {
+            throw e
+          }
+        }
       }
     }
     return Array.from(result.values())
