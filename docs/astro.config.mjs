@@ -2,7 +2,8 @@
 import starlight from '@astrojs/starlight'
 import { defineConfig } from 'astro/config'
 import remarkGithubAlerts from 'remark-github-alerts'
-import starlightTypeDoc, { typeDocSidebarGroup } from 'starlight-typedoc'
+import starlightTypeDoc from 'starlight-typedoc'
+import sidebarConfig from './sidebar.config.json'
 
 // https://astro.build/config
 export default defineConfig({
@@ -40,31 +41,7 @@ export default defineConfig({
           },
         }),
       ],
-      sidebar: [
-        {
-          label: 'Language Guide',
-          items: [
-            { slug: 'language-guide' },
-            { slug: 'language-guide/program-structure' },
-            { slug: 'language-guide/types' },
-            { slug: 'language-guide/storage' },
-            { slug: 'language-guide/ops' },
-            { slug: 'language-guide/itxns' },
-          ],
-        },
-        { label: 'CLI Guide', slug: 'cli' },
-        {
-          label: 'Reference',
-          items: [{ slug: 'reference/abi-routing' }, { slug: 'reference/guiding-principles' }],
-        },
-        { label: 'Migration Guides', slug: 'migration-guides' },
-        {
-          label: 'Architecture Decision Records',
-          collapsed: true,
-          autogenerate: { directory: 'reference/architecture-decision-records' },
-        },
-        typeDocSidebarGroup,
-      ],
+      sidebar: sidebarConfig,
     }),
   ],
 })
