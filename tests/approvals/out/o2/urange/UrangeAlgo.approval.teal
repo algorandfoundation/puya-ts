@@ -3,9 +3,9 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 8 1 0 2
+    intcblock 0 1 2 5
     bytecblock 0x0000 0x0001
-    intc_2 // 0
+    intc_0 // 0
     pushbytes ""
     // tests/approvals/urange.algo.ts:4
     // class UrangeAlgo extends Contract {
@@ -28,7 +28,7 @@ main_testThreeArg_route@6:
     bury 2
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {
-    intc_3 // 2
+    intc_2 // 2
     bury 1
 
 main_for_header@14:
@@ -45,18 +45,22 @@ main_for_header@14:
     bytec_1 // 0x0001
     swap
     concat
-    extract 2 0
-    dig 3
-    swap
-    concat // on error: max array length exceeded
     dup
     extract 2 0
-    len
-    intc_0 // 8
-    /
+    swap
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    dig 4
+    dup
+    cover 2
+    intc_0 // 0
+    extract_uint16
+    +
     itob
-    extract 6 2
+    extract 6 0
     replace2 0
+    swap
+    concat
     bury 3
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {
@@ -82,14 +86,14 @@ main_testTwoArg_route@5:
     bury 2
     // tests/approvals/urange.algo.ts:14
     // for (const i of urange(2, 5)) {
-    intc_3 // 2
+    intc_2 // 2
     bury 1
 
 main_for_header@19:
     // tests/approvals/urange.algo.ts:14
     // for (const i of urange(2, 5)) {
     dup
-    pushint 5
+    intc_3 // 5
     <
     bz main_after_for@26
     // tests/approvals/urange.algo.ts:15
@@ -99,18 +103,22 @@ main_for_header@19:
     bytec_1 // 0x0001
     swap
     concat
-    extract 2 0
-    dig 3
-    swap
-    concat // on error: max array length exceeded
     dup
     extract 2 0
-    len
-    intc_0 // 8
-    /
+    swap
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    dig 4
+    dup
+    cover 2
+    intc_0 // 0
+    extract_uint16
+    +
     itob
-    extract 6 2
+    extract 6 0
     replace2 0
+    swap
+    concat
     bury 3
     // tests/approvals/urange.algo.ts:14
     // for (const i of urange(2, 5)) {
@@ -126,14 +134,14 @@ main_testSingleArg_route@4:
     bury 2
     // tests/approvals/urange.algo.ts:7
     // for (const i of urange(5)) {
-    intc_2 // 0
+    intc_0 // 0
     bury 1
 
 main_for_header@24:
     // tests/approvals/urange.algo.ts:7
     // for (const i of urange(5)) {
     dup
-    pushint 5
+    intc_3 // 5
     <
     bz main_after_for@26
     // tests/approvals/urange.algo.ts:8
@@ -143,18 +151,22 @@ main_for_header@24:
     bytec_1 // 0x0001
     swap
     concat
-    extract 2 0
-    dig 3
-    swap
-    concat // on error: max array length exceeded
     dup
     extract 2 0
-    len
-    intc_0 // 8
-    /
+    swap
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    dig 4
+    dup
+    cover 2
+    intc_0 // 0
+    extract_uint16
+    +
     itob
-    extract 6 2
+    extract 6 0
     replace2 0
+    swap
+    concat
     bury 3
     // tests/approvals/urange.algo.ts:7
     // for (const i of urange(5)) {

@@ -150,7 +150,7 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getPlugin[routing]() 
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         let (value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])), aggregate%box_get%1#0: bool) = (box_get box_prefixed_key%0#0)
         (assert aggregate%box_get%1#0) // Box must have value
-        let box%box_extract%0#0: Encoded(uint64) = (box_extract box_prefixed_key%0#0 16u 8u)
+        let box%box_extract%0#0: Encoded(uint64) = (box_extract box_prefixed_key%0#0 16u 8u) // on error: index out of bounds
         let tmp%0#1: uint64 = (btoi box%box_extract%0#0)
         (assert tmp%0#1) // Last called not zero
         let tmp%3#0: bytes = (concat 0x151f7c75 value#0)
@@ -161,7 +161,7 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.getMain[routing]() ->
     block@0: // L58
         let (value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])), aggregate%box_get%1#0: bool) = (box_get "main")
         (assert aggregate%box_get%1#0) // Box must have value
-        let box%box_extract%0#0: Encoded(uint64) = (box_extract "main" 16u 8u)
+        let box%box_extract%0#0: Encoded(uint64) = (box_extract "main" 16u 8u) // on error: index out of bounds
         let tmp%0#1: uint64 = (btoi box%box_extract%0#0)
         (assert tmp%0#1) // Last called not zero
         let tmp%1#0: bytes = (concat 0x151f7c75 value#0)
@@ -189,7 +189,7 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled[routing
         let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
         let box%element_offset%0#0: uint64 = (* index#0 20u)
         let box%offset%2#0: uint64 = (+ box%element_offset%0#0 41u)
-        (box_replace box_prefixed_key%0#0 box%offset%2#0 tmp%4#0)
+        (box_replace box_prefixed_key%0#0 box%offset%2#0 tmp%4#0) // on error: index out of bounds
         exit 1u
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin[routing]() -> void:
