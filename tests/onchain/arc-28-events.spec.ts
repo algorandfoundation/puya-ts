@@ -19,33 +19,38 @@ describe('arc 28 events', () => {
     const arc4EventPrefixHex = '441E2CD8'
 
     const swappedUint8 = 'FF00'
-    expect(first).toEqual(`${eventPrefixHex}${swappedUint8}`)
-    expect(second).toEqual(`${eventPrefixHex}${swappedUint8}`)
-    expect(third).toEqual(`${arc4EventPrefixHex}${swappedUint8}`)
-    expect(fourth).toEqual(`0E72193A${swappedUint8}`)
-    expect(fifth).toEqual(`CA59EDB2${swappedUint8}`)
+
+    assertLog(first, { eventPrefix: eventPrefixHex, data: swappedUint8 })
+    assertLog(second, { eventPrefix: eventPrefixHex, data: swappedUint8 })
+    assertLog(third, { eventPrefix: arc4EventPrefixHex, data: swappedUint8 })
+    assertLog(fourth, { eventPrefix: '0E72193A', data: swappedUint8 })
+    assertLog(fifth, { eventPrefix: 'CA59EDB2', data: swappedUint8 })
 
     // sha_512_256("Swapped6((uint8,uint8),uint8)").slice(0, 4) => d4a6bd33
-    expect(sixth).toEqual(`D4A6BD33FFFF00`)
-    expect(seventh).toEqual(`D4A6BD33FFFF00`)
+    assertLog(sixth, { eventPrefix: 'D4A6BD33', data: 'FFFF00' })
+    assertLog(seventh, { eventPrefix: 'D4A6BD33', data: 'FFFF00' })
 
     // sha_512_256("Swapped7(uint8[],uint8)").slice(0, 4) => 25b5f91a
-    expect(eighth).toEqual('25B5F91A0003000002FFFF')
+    assertLog(eighth, { eventPrefix: '25B5F91A', data: '0003000002FFFF' })
 
     // sha_512_256("Swapped8(((uint8,uint8)),uint8)").slice(0, 4) => 331f84f2
-    expect(ninth).toEqual('331F84F2FFFF00')
+    assertLog(ninth, { eventPrefix: '331F84F2', data: 'FFFF00' })
 
     // sha_512_256("Swapped9(uint8[][],uint8)").slice(0, 4) => dcc0f6fb
-    expect(tenth).toEqual('DCC0F6FB000300000100020002FFFF')
+    assertLog(tenth, { eventPrefix: 'DCC0F6FB', data: '000300000100020002FFFF' })
 
     // sha_512_256("Swapped10((uint8,uint8)[],uint8)").slice(0, 4) => 9bb72837
-    expect(eleventh).toEqual('9BB728370003000001FFFF')
+    assertLog(eleventh, { eventPrefix: '9BB72837', data: '0003000001FFFF' })
 
     // sha_512_256("Swapped11((uint8[]),uint8)").slice(0, 4) => f3b666de
-    expect(twelfth).toEqual('F3B666DE00030000020002FFFF')
+    assertLog(twelfth, { eventPrefix: 'F3B666DE', data: '00030000020002FFFF' })
 
     // sha_512_256("Swapped12(uint64[],uint64)").slice(0, 4) => 5bf09e07
-    expect(thirteenth).toEqual('5BF09E07000A0000000000000000000200000000000000FF00000000000000FF')
+    assertLog(thirteenth, { eventPrefix: '5BF09E07', data: '000A0000000000000000000200000000000000FF00000000000000FF' })
+
+    function assertLog(log: string, obj: Record<string, string>) {
+      return expect(log).toEqual(Object.values(obj).join(''))
+    }
   })
 
   test('It works with dynamic bytes', async ({ appClientEventEmitter, expect }) => {
