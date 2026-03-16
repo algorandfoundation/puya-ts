@@ -32,14 +32,14 @@ export function assert(condition: unknown, message?: string): asserts condition 
  *
  * @param condition The condition to assert; if false, logs an error and fails.
  * @param code An error code. Must not contain `:`. Should be alphanumeric.
- * @param message Optional message appended after the code. Must not contain `:`.
+ * @param message Message appended after the code. Must not contain `:`. Default to `undefined`.
  * @param prefix Error prefix, either `"ERR"` or `"AER"`. Defaults to `"ERR"`.
  */
-export function loggedAssert(condition: unknown, code: string): asserts condition
-export function loggedAssert(condition: unknown, code: string, message: string): asserts condition
-export function loggedAssert(condition: unknown, code: string, prefix: 'ERR' | 'AER'): asserts condition
-export function loggedAssert(condition: unknown, code: string, message: string, prefix: 'ERR' | 'AER'): asserts condition
-export function loggedAssert(condition: unknown, code: string, messageOrPrefix?: string, prefix?: 'ERR' | 'AER'): asserts condition {
+export function loggedAssert(
+  condition: unknown,
+  code: string,
+  options?: { message?: string | undefined; prefix?: 'ERR' | 'AER' },
+): asserts condition {
   throw new NoImplementation()
 }
 
@@ -55,14 +55,10 @@ export function loggedAssert(condition: unknown, code: string, messageOrPrefix?:
  * messages and error codes short.
  *
  * @param code An error code. Must not contain `:`. Should be alphanumeric.
- * @param message Optional message appended after the code. Must not contain `:`.
+ * @param message Message appended after the code. Must not contain `:`. Defaults to `undefined`.
  * @param prefix Error prefix, either `"ERR"` or `"AER"`. Defaults to `"ERR"`.
  */
-export function loggedErr(code: string): never
-export function loggedErr(code: string, message: string): never
-export function loggedErr(code: string, prefix: 'ERR' | 'AER'): never
-export function loggedErr(code: string, message: string, prefix: 'ERR' | 'AER'): never
-export function loggedErr(code: string, messageOrPrefix?: string, prefix?: 'ERR' | 'AER'): never {
+export function loggedErr(code: string, options?: { message?: string | undefined; prefix?: 'ERR' | 'AER' }): never {
   throw new NoImplementation()
 }
 

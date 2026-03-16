@@ -6,18 +6,13 @@ import type { PType } from '../ptypes'
 import { stringPType } from '../ptypes'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { FunctionBuilder } from './index'
-import { requireStringConstant } from './util'
+import { requireInstanceBuilder, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { VoidExpressionBuilder } from './void-expression-builder'
 
 const VALID_PREFIXES = new Set(['ERR', 'AER'])
 
-function resolveErrorMessage(
-  code: InstanceBuilder,
-  message: InstanceBuilder | undefined,
-  prefix: InstanceBuilder | undefined,
-  sourceLocation: SourceLocation,
-): string {
+function resolveErrorMessage(code: InstanceBuilder, message: InstanceBuilder | undefined, prefix: InstanceBuilder | undefined): string {
   const codeStr = requireStringConstant(code).value
 
   if (codeStr.includes(':')) {
@@ -44,44 +39,41 @@ function resolveErrorMessage(
 }
 
 /**
- * Handling of overloaded functions. The resulting patterns are:
- *   (code), when args is empty
- *   (code, message), when len(args) is 1 and it is a non-prefix value
- *   (code, prefix), when len(args) is 1 and the value is 'ERR' or 'AER'
- *   (code, message, prefix) when len(args) is 2
+ * Possible patterns are:
+ * - `undefined`: No argument was given.
+ * - {}: Empty options.
+ * - { message: string }: Message was provided.
+ * - { prefix: string }: Prefix was provided.
+ * - { message: string, prefix: string }: Both message and prefix were provided.
  */
-function resolveMessageAndPrefix(
-  args: ReadonlyArray<InstanceBuilder | undefined>,
-): { message: InstanceBuilder | undefined; prefix: InstanceBuilder | undefined } {
-  const [first, second] = args
-  if (first && second) {
-    return { message: first, prefix: second }
+function resolveMessageAndPrefix(options: InstanceBuilder | undefined): {
+  message: InstanceBuilder | undefined
+  prefix: InstanceBuilder | undefined
+} {
+  function get(field: string) {
+    return options?.hasProperty(field) ? requireInstanceBuilder(options.memberAccess(field, options.sourceLocation)) : undefined
   }
-  if (first) {
-    const value = requireStringConstant(first).value
-    if (VALID_PREFIXES.has(value)) {
-      return { message: undefined, prefix: first }
-    }
-    return { message: first, prefix: undefined }
-  }
-  return { message: undefined, prefix: undefined }
+
+  const message = get('message')
+  const prefix = get('prefix')
+  return { message: message, prefix: prefix }
 }
 
 export class LoggedAssertFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
-      args: [condition, code, messageOrPrefix, maybePrefix],
+      args: [condition, code, maybeOptions],
     } = parseFunctionArgs({
       args,
       typeArgs,
       genericTypeArgs: 0,
       callLocation: sourceLocation,
       funcName: 'loggedAssert',
-      argSpec: (a) => [a.passthrough(), a.required(stringPType), a.optional(stringPType), a.optional(stringPType)],
+      argSpec: (a) => [a.passthrough(), a.required(stringPType), a.optional()],
     })
 
-    const { message, prefix } = resolveMessageAndPrefix([messageOrPrefix, maybePrefix])
-    const errorMessage = resolveErrorMessage(code, message, prefix, sourceLocation)
+    const { message, prefix } = resolveMessageAndPrefix(maybeOptions)
+    const errorMessage = resolveErrorMessage(code, message, prefix)
 
     return new VoidExpressionBuilder(
       intrinsicFactory.assert({
@@ -97,18 +89,18 @@ export class LoggedAssertFunctionBuilder extends FunctionBuilder {
 export class LoggedErrFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
-      args: [code, messageOrPrefix, maybePrefix],
+      args: [code, maybeOptions],
     } = parseFunctionArgs({
       args,
       typeArgs,
       genericTypeArgs: 0,
       callLocation: sourceLocation,
       funcName: 'loggedErr',
-      argSpec: (a) => [a.required(stringPType), a.optional(stringPType), a.optional(stringPType)],
+      argSpec: (a) => [a.required(stringPType), a.optional()],
     })
 
-    const { message, prefix } = resolveMessageAndPrefix([messageOrPrefix, maybePrefix])
-    const errorMessage = resolveErrorMessage(code, message, prefix, sourceLocation)
+    const { message, prefix } = resolveMessageAndPrefix(maybeOptions)
+    const errorMessage = resolveErrorMessage(code, message, prefix)
 
     return new VoidExpressionBuilder(
       intrinsicFactory.err({

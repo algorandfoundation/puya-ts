@@ -9,12 +9,12 @@ class LoggedErrorsInvalidContract extends Contract {
 
   public testColonInMessage(arg: uint64): void {
     // @expect-error error message must not contain domain separator ':'
-    loggedAssert(arg !== 1, '01', 'bad:msg')
+    loggedAssert(arg !== 1, '01', { message: 'bad:msg' })
   }
 
   public testInvalidPrefix(arg: uint64): void {
     // @expect-error error prefix must be one of AER, ERR
-    loggedAssert(arg !== 1, '01', undefined, 'BAD' as 'ERR')
+    loggedAssert(arg !== 1, '01', { prefix: 'BAD' as 'ERR' })
   }
 
   public testErrColonInCode(arg: uint64): void {
@@ -24,11 +24,11 @@ class LoggedErrorsInvalidContract extends Contract {
 
   public testErrColonInMessage(arg: uint64): void {
     // @expect-error error message must not contain domain separator ':'
-    loggedErr('01', 'bad:msg')
+    loggedErr('01', { message: 'bad:msg' })
   }
 
   public testErrInvalidPrefix(arg: uint64): void {
     // @expect-error error prefix must be one of AER, ERR
-    loggedErr('01', undefined, 'BAD' as 'ERR')
+    loggedErr('01', { prefix: 'BAD' as 'ERR' })
   }
 }
