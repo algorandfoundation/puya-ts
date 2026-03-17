@@ -1,18 +1,17 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, BigUint, Bytes, clone, LogicSig, logicsig, op, Uint64 } from '@algorandfoundation/algorand-typescript'
+import type { DynamicArray, StaticArray } from '@algorandfoundation/algorand-typescript/arc4'
 import {
   Address,
+  Uint64 as ARC4Uint64,
   Bool,
   Byte,
   convertBytes,
-  DynamicArray,
   DynamicBytes,
-  StaticArray,
   Str,
   Struct,
   Tuple,
   Uint128,
-  Uint64 as ARC4Uint64,
   Uint8,
 } from '@algorandfoundation/algorand-typescript/arc4'
 
@@ -83,14 +82,14 @@ export class ArgsComplexNoValidation extends LogicSig {
     const mutableArg0: uint64 = arg0 + Uint64(1)
     const mutableArg1 = arg1.concat(Bytes('!'))
     const mutableArg2: biguint = arg2 + BigUint(1)
-    const mutableArg3 = 'hello_' + arg3
+    const mutableArg3 = `hello_${arg3}`
     const mutableArg4 = !arg4
     const mutableArg5 = new Uint8(arg5.asUint64() + Uint64(1))
     const mutableArg6 = new ARC4Uint64(arg6.asUint64() + Uint64(1))
     const mutableArg7 = new Uint128(arg7.asBigUint() + BigUint(1))
     const mutableArg8 = new Address(op.Global.zeroAddress)
     const mutableArg9 = new Bool(!arg9.native)
-    const mutableArg10 = new Str(arg10.native + ' world')
+    const mutableArg10 = new Str(`${arg10.native} world`)
     const mutableArg11 = new DynamicBytes(arg11.native.concat(Bytes.fromHex('00')))
     arg12[0] = new Byte(0xff)
     const mutableArg13 = new SimpleStruct({ x: new ARC4Uint64(arg13.x.asUint64() + Uint64(1)), y: arg13.y })

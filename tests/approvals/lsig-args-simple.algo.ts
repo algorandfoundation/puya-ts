@@ -1,6 +1,7 @@
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, Bytes, LogicSig, op, Uint64 } from '@algorandfoundation/algorand-typescript'
-import { convertBytes, DynamicBytes } from '@algorandfoundation/algorand-typescript/arc4'
+import type { DynamicBytes } from '@algorandfoundation/algorand-typescript/arc4'
+import { convertBytes } from '@algorandfoundation/algorand-typescript/arc4'
 
 export class ArgsSimple extends LogicSig {
   program(arg0: uint64, arg1: bytes, arg2: boolean): uint64 {
