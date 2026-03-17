@@ -9,7 +9,7 @@ import { boolPType, BoxPType, bytesPType, ReadonlyTuplePType, stringPType, uint6
 import { instanceEb } from '../../../type-registry'
 import { FunctionBuilder, type NodeBuilder } from '../../index'
 import { parseFunctionArgs } from '../../util/arg-parsing'
-import { extractKey } from '../util'
+import { assertCanBeUsedForStorage, extractKey } from '../util'
 import { boxExists, boxLength, BoxProxyExpressionBuilder, boxValue, BoxValueExpressionBuilder } from './base'
 
 export class BoxFunctionBuilder extends FunctionBuilder {
@@ -25,6 +25,7 @@ export class BoxFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 1,
       argSpec: (a) => [a.obj({ key: a.required(bytesPType, stringPType) })],
     })
+    assertCanBeUsedForStorage(contentPType, sourceLocation)
 
     const ptype = new BoxPType({ content: contentPType })
     return new BoxExpressionBuilder(extractKey(key, wtypes.boxKeyWType, sourceLocation), ptype)

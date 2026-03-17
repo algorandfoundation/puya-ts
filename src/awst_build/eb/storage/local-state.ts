@@ -14,7 +14,7 @@ import { instanceEb } from '../../type-registry'
 import { FunctionBuilder, InstanceBuilder, InstanceExpressionBuilder, NodeBuilder } from '../index'
 import { parseFunctionArgs } from '../util/arg-parsing'
 import { VoidExpressionBuilder } from '../void-expression-builder'
-import { extractKey } from './util'
+import { assertCanBeUsedForStorage, extractKey } from './util'
 
 export class LocalStateFunctionBuilder extends FunctionBuilder {
   constructor(sourceLocation: SourceLocation) {
@@ -23,6 +23,7 @@ export class LocalStateFunctionBuilder extends FunctionBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const [contentPType] = typeArgs
+    assertCanBeUsedForStorage(contentPType, sourceLocation)
     const {
       args: [{ key }],
     } = parseFunctionArgs({

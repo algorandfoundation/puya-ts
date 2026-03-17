@@ -13,8 +13,8 @@ export const transientTypeErrors = {
     usedInExpression: `Union types are only valid in boolean expressions. Expression type is ${typeName}`,
   }),
   intersectionTypes: (typeName) => ({
-    usedAsType: `Intersection types are not valid as a variable, parameter, return, or property type. Expression type is ${typeName}`,
-    usedInExpression: `Intersection types not valid here. Expression type is ${typeName}`,
+    usedAsType: `Some intersection types are not valid as a variable, parameter, return, or property type. Expression type is ${typeName}`,
+    usedInExpression: `Some intersection types not valid here. Expression type is ${typeName}`,
   }),
   optionalFields: (typeName) => ({
     usedAsType: `${typeName} type should not be used explicitly as it contains optional fields which cannot be interrogated at runtime. Either remove the type annotation or use \`EXPRESSION satisfies ${typeName}\``,
