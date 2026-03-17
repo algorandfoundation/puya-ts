@@ -9,9 +9,7 @@ export abstract class LogicSig {
   /**
    * The logic signature program logic
    */
-  //TODO: better way of doing this...
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  abstract program(...args: any[]): boolean | uint64
+  abstract program(...args: unknown[]): boolean | uint64
 }
 
 /**
