@@ -1,12 +1,12 @@
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, Bytes, LogicSig, op, Uint64 } from '@algorandfoundation/algorand-typescript'
-import { DynamicBytes, Uint64 as ARC4Uint64 } from '@algorandfoundation/algorand-typescript/arc4'
+import { convertBytes, DynamicBytes } from '@algorandfoundation/algorand-typescript/arc4'
 
 export class ArgsSimple extends LogicSig {
   program(arg0: uint64, arg1: bytes, arg2: boolean): uint64 {
     // verify args match raw op.arg values
-    assert(arg0 === ARC4Uint64.fromBytes(op.arg(0)).native)
-    assert(arg1 === DynamicBytes.fromBytes(op.arg(1)).native)
+    assert(arg0 === op.btoi(op.arg(0)))
+    assert(arg1 === convertBytes<DynamicBytes>(op.arg(1), { strategy: 'unsafe-cast' }).native)
     assert(arg2 === (op.btoi(op.arg(2)) !== 0))
 
     // mutate all
