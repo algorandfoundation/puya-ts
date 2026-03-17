@@ -1,0 +1,45 @@
+contract LoggedErrorsValidContract
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testValid(arg: uint64): void
+  {
+    logged_assert(arg != 1, comment=ERR:01)
+    logged_assert(arg != 2, comment=ERR:02)
+    logged_assert(arg != 3, comment=ERR:03:arg is 3)
+    logged_assert(arg != 4, comment=AER:04)
+    logged_assert(arg != 5, comment=AER:05:arg is 5)
+    logged_assert(arg != 6, comment=ERR:06:arg is 6)
+    if (arg == 7) {
+      logged_err(ERR:07)
+    }
+    if (arg == 8) {
+      logged_err(ERR:08)
+    }
+    if (arg == 9) {
+      logged_err(ERR:09:arg is 9)
+    }
+    if (arg == 10) {
+      logged_err(AER:10)
+    }
+    if (arg == 11) {
+      logged_err(AER:11:arg is 11)
+    }
+    if (arg == 12) {
+      logged_err(ERR:12:arg is 12)
+    }
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
