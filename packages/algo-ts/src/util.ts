@@ -46,7 +46,7 @@ export function loggedAssert(
  * Asserts that `condition` is truthy, logging a formatted error message before failing
  * if the condition is false.
  *
- * The logged output follows the format `{prefix}:ERR:{message}` and is compatible with
+ * The logged output follows the format `ERR:{code}:{message}` and is compatible with
  * ARC-56 and ARC-32 clients.
  *
  * Note that this will generate extra bytecode, so it is strongly advised to keep your
@@ -68,7 +68,7 @@ export function loggedAssert(
 /**
  * Logs a formatted ARC-65 error message and immediately fails the transaction.
  *
- * Equivalent to `loggedAssert(false, code, message, prefix)`.
+ * Equivalent to `loggedAssert(false, code, {message, prefix})`.
  *
  * The logged output follows the format `{prefix}:{code}` or `{prefix}:{code}:{message}`
  * and is compatible with ARC-56 and ARC-32 clients.
@@ -86,9 +86,9 @@ export function loggedErr(code: string, options?: { message?: string; prefix?: '
 /**
  * Logs a formatted ARC-65 error message and immediately fails the transaction.
  *
- * Equivalent to `loggedAssert(false, code, message, prefix)`.
+ * Equivalent to `loggedAssert(false, code, {message, prefix})`.
  *
- * The logged output follows the format `{prefix}:ERR:{message}` and is compatible with
+ * The logged output follows the format `ERR:{code}:{message}` and is compatible with
  * ARC-56 and ARC-32 clients.
  *
  * Note that this will generate extra bytecode, so it is strongly advised to keep your
