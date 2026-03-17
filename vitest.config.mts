@@ -12,6 +12,7 @@ export default defineConfig({
       compilerOptions: {
         lib: ['ESNext'],
       },
+      exclude: ['tests/**/*.client.ts'],
     }),
   ],
   test: {
