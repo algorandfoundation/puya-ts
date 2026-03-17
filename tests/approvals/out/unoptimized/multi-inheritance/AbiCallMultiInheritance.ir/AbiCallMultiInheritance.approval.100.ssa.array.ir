@@ -78,9 +78,9 @@ subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.ad
 subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.test(app: uint64) -> void:
     block@0: // L66
         itxn_begin
-        let inner_txn_params%0%%param_ApplicationID_idx_0#0: uint64 = app#0
+        let abi_call_inner_txn_params%1%%param_ApplicationID_idx_0#0: uint64 = app#0
+        ((itxn_field ApplicationID) abi_call_inner_txn_params%1%%param_ApplicationID_idx_0#0)
         ((itxn_field ApplicationArgs) method "methodTwo()string")
-        ((itxn_field ApplicationID) inner_txn_params%0%%param_ApplicationID_idx_0#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@1
@@ -97,7 +97,7 @@ subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.te
         let add%0#0: uint64 = (+ mul%0#0 2u)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 add%0#0)
-        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        (assert eq%0#0) // invalid number of bytes for string
         itxn_begin
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob 1u)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
@@ -105,11 +105,11 @@ subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.te
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob 2u)
         let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
         let tmp%5#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
-        let inner_txn_params%1%%param_ApplicationArgs_idx_1#0: Encoded(uint64) = tmp%4#0
-        let inner_txn_params%1%%param_ApplicationArgs_idx_2#0: Encoded(uint64) = tmp%5#0
+        let abi_call_inner_txn_params%3%%param_ApplicationArgs_idx_1#0: Encoded(uint64) = tmp%4#0
+        let abi_call_inner_txn_params%3%%param_ApplicationArgs_idx_2#0: Encoded(uint64) = tmp%5#0
         ((itxn_field ApplicationArgs) method "add(uint64,uint64)uint64")
-        ((itxn_field ApplicationArgs) inner_txn_params%1%%param_ApplicationArgs_idx_1#0)
-        ((itxn_field ApplicationArgs) inner_txn_params%1%%param_ApplicationArgs_idx_2#0)
+        ((itxn_field ApplicationArgs) abi_call_inner_txn_params%3%%param_ApplicationArgs_idx_1#0)
+        ((itxn_field ApplicationArgs) abi_call_inner_txn_params%3%%param_ApplicationArgs_idx_2#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@2
@@ -122,7 +122,7 @@ subroutine tests/approvals/multi-inheritance.algo.ts::AbiCallMultiInheritance.te
         (assert tmp%8#0) // Bytes has valid prefix
         let len%1#0: uint64 = (len tmp%6#0)
         let eq%1#0: bool = (== len%1#0 8u)
-        (assert eq%1#0) // invalid number of bytes for arc4.uint64
+        (assert eq%1#0) // invalid number of bytes for uint64
         let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%6#0
         let tmp%9#0: uint64 = (btoi as_Encoded(uint64)%0#0)
         let result#0: uint64 = tmp%9#0

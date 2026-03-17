@@ -1,4 +1,5 @@
 import type {
+  ABICall,
   AddressConstant,
   AppAccountStateExpression,
   AppStateExpression,
@@ -41,6 +42,7 @@ import type {
   CreateInnerTransaction,
   DecimalConstant,
   Emit,
+  EmitFields,
   Enumeration,
   ExpressionStatement,
   ExpressionVisitor,
@@ -293,6 +295,15 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
     expression.arrayIndex?.accept(this)
   }
 
+  visitABICall(expression: ABICall): void {
+    for (const a of expression.args) {
+      a.accept(this)
+    }
+    for (const f of expression.fields.values()) {
+      f.accept(this)
+    }
+  }
+
   visitSetInnerTransactionFields(expression: SetInnerTransactionFields): void {
     for (const itxn of expression.itxns) {
       itxn.accept(this)
@@ -435,6 +446,12 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
 
   visitEmit(expression: Emit): void {
     expression.value.accept(this)
+  }
+
+  visitEmitFields(expression: EmitFields): void {
+    for (const v of expression.values) {
+      v.accept(this)
+    }
   }
 
   visitRange(expression: Range): void {
