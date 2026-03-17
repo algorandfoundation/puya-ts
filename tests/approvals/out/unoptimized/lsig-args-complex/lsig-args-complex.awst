@@ -31,14 +31,14 @@ logicsig tests/approvals/lsig-args-complex.algo.ts::ArgsComplex {
   mutableArg0: uint64 = arg0 + 1
   mutableArg1: bytes = concat(arg1, "!")
   mutableArg2: biguint = arg2 + 1
-  mutableArg3: string = concat("hello_", arg3)
+  mutableArg3: string = "hello_" + arg3
   mutableArg4: bool = !arg4
   mutableArg5: arc4.uint8 = ARC4_ENCODE(ARC4_DECODE(arg5) + 1, wtype=arc4.uint8)
   mutableArg6: arc4.uint64 = ARC4_ENCODE(ARC4_DECODE(arg6) + 1, wtype=arc4.uint64)
   mutableArg7: arc4.uint128 = ARC4_ENCODE(ARC4_DECODE(arg7) + 1, wtype=arc4.uint128)
   mutableArg8: arc4.static_array<arc4.byte,32> = reinterpret_cast<arc4.static_array<arc4.byte,32>>(global<ZeroAddress>())
   mutableArg9: arc4.bool = ARC4_ENCODE(!ARC4_DECODE(arg9), wtype=arc4.bool)
-  mutableArg10: arc4.dynamic_array<arc4.byte> = ARC4_ENCODE(concat(ARC4_DECODE(arg10), " world"), wtype=arc4.dynamic_array<arc4.byte>)
+  mutableArg10: arc4.dynamic_array<arc4.byte> = ARC4_ENCODE("" + ARC4_DECODE(arg10) + " world", wtype=arc4.dynamic_array<arc4.byte>)
   mutableArg11: arc4.dynamic_array<arc4.byte> = ARC4_ENCODE(concat(ARC4_DECODE(arg11), 0x00), wtype=arc4.dynamic_array<arc4.byte>)
   arg12[0]: arc4.byte = 255
   mutableArg13: SimpleStruct = new SimpleStruct(x=($0 = #{ x: ARC4_ENCODE(ARC4_DECODE(arg13.x) + 1, wtype=arc4.uint64), y: arg13.y }).x, y=$0.y)
