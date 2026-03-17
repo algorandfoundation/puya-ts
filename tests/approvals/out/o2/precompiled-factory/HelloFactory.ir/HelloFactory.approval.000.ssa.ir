@@ -285,8 +285,8 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
         let tmp%4#0: bytes = ((extract 0 4) txn.LastLog#0)
         let tmp%5#0: bool = (== tmp%4#0 0x151f7c75)
         (assert tmp%5#0) // Bytes has valid prefix
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%3#0
-        let tmp%6#0: string = decode_bytes<string>(reinterpret_Encoded(len+utf8[])%0#0)
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%3#0
+        let tmp%6#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
         let result#0: string = tmp%6#0
         let tmp%7#0: bool = (== result#0 "hello world")
         (assert tmp%7#0)
@@ -573,8 +573,8 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
         let tmp%3#0: bytes = ((extract 0 4) txn.LastLog#0)
         let tmp%4#0: bool = (== tmp%3#0 0x151f7c75)
         (assert tmp%4#0) // Bytes has valid prefix
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%2#0
-        let tmp%5#0: string = decode_bytes<string>(reinterpret_Encoded(len+utf8[])%0#0)
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%2#0
+        let tmp%5#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
         let result#0: string = tmp%5#0
         let tmp%6#0: bool = (== result#0 "hey world")
         (assert tmp%6#0)
@@ -861,8 +861,8 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
         let tmp%3#0: bytes = ((extract 0 4) txn.LastLog#0)
         let tmp%4#0: bool = (== tmp%3#0 0x151f7c75)
         (assert tmp%4#0) // Bytes has valid prefix
-        let reinterpret_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%2#0
-        let tmp%5#0: string = decode_bytes<string>(reinterpret_Encoded(len+utf8[])%0#0)
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%2#0
+        let tmp%5#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
         let result#0: string = tmp%5#0
         let tmp%6#0: bool = (== result#0 "bonjour world")
         (assert tmp%6#0)
@@ -1146,8 +1146,8 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
         let tmp%2#0: bytes = ((extract 0 4) txn.LastLog#0)
         let tmp%3#0: bool = (== tmp%2#0 0x151f7c75)
         (assert tmp%3#0) // Bytes has valid prefix
-        let reinterpret_Encoded(uint64)%0#0: Encoded(uint64) = tmp%1#0
-        let tmp%4#0: uint64 = decode_bytes<uint64>(reinterpret_Encoded(uint64)%0#0)
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%1#0
+        let tmp%4#0: uint64 = decode_bytes<uint64>(as_Encoded(uint64)%0#0)
         let result#0: uint64 = tmp%4#0
         let tmp%5#0: bool = (== result#0 4096u)
         (assert tmp%5#0)
