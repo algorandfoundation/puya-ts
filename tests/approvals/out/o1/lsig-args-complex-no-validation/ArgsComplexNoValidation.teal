@@ -1,0 +1,796 @@
+#pragma version 11
+#pragma typetrack false
+
+// tests/approvals/lsig-args-complex-no-validation.algo.ts::program() -> uint64:
+main:
+    intcblock 0 1 8 2
+    bytecblock "!" 0x00 0xff 0x000a
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:30
+    // arg0: uint64,
+    arg_0
+    btoi
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:31
+    // arg1: bytes,
+    arg_1
+    extract 2 0
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:32
+    // arg2: biguint,
+    arg_2
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:33
+    // arg3: string,
+    arg_3
+    extract 2 0
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:34
+    // arg4: boolean,
+    arg 4
+    intc_0 // 0
+    getbit
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:35
+    // arg5: Uint8,
+    arg 5
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:36
+    // arg6: ARC4Uint64,
+    arg 6
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:37
+    // arg7: Uint128,
+    arg 7
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:38
+    // arg8: Address,
+    arg 8
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:39
+    // arg9: Bool,
+    arg 9
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:40
+    // arg10: Str,
+    arg 10
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:41
+    // arg11: DynamicBytes,
+    arg 11
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:42
+    // arg12: StaticArray<Byte, 4>,
+    arg 12
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:43
+    // arg13: SimpleStruct,
+    arg 13
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:44
+    // arg14: NestedStruct,
+    arg 14
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:45
+    // arg15: Tuple<[Uint8, ARC4Uint64]>,
+    arg 15
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:46
+    // arg16: SimpleNamedTuple,
+    arg 16
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:47
+    // arg17: [uint64, bytes],
+    arg 17
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:48
+    // arg18: [uint64, [bytes, uint64]],
+    arg 18
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:49
+    // arg19: OverwriteStruct,
+    arg 19
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:50
+    // arg20: DynamicArray<Uint8>,
+    arg 20
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:53
+    // assert(arg0 === op.btoi(op.arg(0)))
+    arg_0
+    btoi
+    dig 21
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:54
+    // assert(arg1 === convertBytes<DynamicBytes>(op.arg(1), { strategy: 'unsafe-cast' }).native)
+    arg_1
+    extract 2 0
+    dig 20
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:55
+    // assert(Bytes(arg2) === op.arg(2))
+    dig 18
+    arg_2
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:56
+    // assert(arg3 === convertBytes<Str>(op.arg(3), { strategy: 'unsafe-cast' }).native)
+    arg_3
+    extract 2 0
+    dig 18
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:57
+    // assert(arg4 === (op.btoi(op.arg(4)) !== 0))
+    arg 4
+    btoi
+    intc_0 // 0
+    !=
+    dig 17
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:58
+    // assert(arg5.bytes === op.arg(5))
+    dig 15
+    arg 5
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:59
+    // assert(arg6.bytes === op.arg(6))
+    dig 14
+    arg 6
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:60
+    // assert(arg7.bytes === op.arg(7))
+    dig 13
+    arg 7
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:61
+    // assert(arg8.bytes === op.arg(8))
+    arg 8
+    uncover 13
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:62
+    // assert(arg9.bytes === op.arg(9))
+    dig 11
+    arg 9
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:63
+    // assert(arg10.bytes === op.arg(10))
+    dig 10
+    arg 10
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:64
+    // assert(arg11.bytes === op.arg(11))
+    dig 9
+    arg 11
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:65
+    // assert(arg12.bytes === op.arg(12))
+    dig 8
+    arg 12
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:66
+    // assert(arg13.bytes === op.arg(13))
+    dig 7
+    arg 13
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:67
+    // assert(arg14.bytes === op.arg(14))
+    dig 6
+    arg 14
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:68
+    // assert(arg15.bytes === op.arg(15))
+    dig 5
+    arg 15
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:69
+    // const _raw16 = convertBytes<Tuple<[Uint8, ARC4Uint64]>>(op.arg(16), { strategy: 'unsafe-cast' })
+    arg 16
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:70
+    // assert(arg16.a === _raw16.at(0))
+    dig 5
+    extract 0 1
+    dig 1
+    extract 0 1
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:71
+    // assert(arg16.b === _raw16.at(1))
+    dig 5
+    extract 1 8
+    swap
+    extract 1 8
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:72
+    // const _raw17 = convertBytes<Tuple<[ARC4Uint64, DynamicBytes]>>(op.arg(17), { strategy: 'unsafe-cast' })
+    arg 17
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:73
+    // assert(arg17[0] === _raw17.at(0).asUint64())
+    dig 4
+    intc_0 // 0
+    extract_uint64
+    dig 1
+    intc_0 // 0
+    extract_uint64
+    dig 1
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:74
+    // assert(arg17[1] === _raw17.at(1).native)
+    dig 5
+    intc_2 // 8
+    extract_uint16
+    dig 6
+    len
+    uncover 7
+    cover 2
+    substring3
+    extract 2 0
+    dig 2
+    intc_2 // 8
+    extract_uint16
+    dig 3
+    len
+    uncover 4
+    cover 2
+    substring3
+    extract 2 0
+    dig 1
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:75
+    // const _raw18 = convertBytes<Tuple<[ARC4Uint64, Tuple<[DynamicBytes, ARC4Uint64]>]>>(op.arg(18), { strategy: 'unsafe-cast' })
+    arg 18
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:76
+    // assert(arg18[0] === _raw18.at(0).asUint64())
+    dig 5
+    intc_0 // 0
+    extract_uint64
+    dig 1
+    intc_0 // 0
+    extract_uint64
+    dig 1
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:77
+    // assert(arg18[1][0] === _raw18.at(1).at(0).native)
+    dig 6
+    intc_2 // 8
+    extract_uint16
+    dig 7
+    len
+    uncover 8
+    cover 2
+    substring3
+    dup
+    intc_0 // 0
+    extract_uint16
+    dig 1
+    len
+    dig 2
+    cover 2
+    substring3
+    extract 2 0
+    dig 3
+    intc_2 // 8
+    extract_uint16
+    dig 4
+    len
+    uncover 5
+    cover 2
+    substring3
+    dup
+    intc_0 // 0
+    extract_uint16
+    dig 1
+    len
+    dig 2
+    cover 2
+    substring3
+    extract 2 0
+    dig 2
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:78
+    // assert(arg18[1][1] === _raw18.at(1).at(1).asUint64())
+    uncover 2
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:77-78
+    // assert(arg18[1][0] === _raw18.at(1).at(0).native)
+    // assert(arg18[1][1] === _raw18.at(1).at(1).asUint64())
+    intc_3 // 2
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:78
+    // assert(arg18[1][1] === _raw18.at(1).at(1).asUint64())
+    extract_uint64
+    swap
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:77-78
+    // assert(arg18[1][0] === _raw18.at(1).at(0).native)
+    // assert(arg18[1][1] === _raw18.at(1).at(1).asUint64())
+    intc_3 // 2
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:78
+    // assert(arg18[1][1] === _raw18.at(1).at(1).asUint64())
+    extract_uint64
+    dig 1
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:79
+    // assert(arg19.bytes === op.arg(19))
+    dig 6
+    arg 19
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:80
+    // assert(arg20.bytes === op.arg(20))
+    dig 5
+    arg 20
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:83
+    // const mutableArg0: uint64 = arg0 + Uint64(1)
+    uncover 22
+    intc_1 // 1
+    +
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:84
+    // const mutableArg1 = arg1.concat(Bytes('!'))
+    uncover 22
+    bytec_0 // "!"
+    concat
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:85
+    // const mutableArg2: biguint = arg2 + BigUint(1)
+    uncover 22
+    pushbytes 0x01
+    b+
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:86
+    // const mutableArg3 = 'hello_' + arg3
+    pushbytes "hello_"
+    uncover 23
+    concat
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:88
+    // const mutableArg5 = new Uint8(arg5.asUint64() + Uint64(1))
+    uncover 21
+    btoi
+    intc_1 // 1
+    +
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:89
+    // const mutableArg6 = new ARC4Uint64(arg6.asUint64() + Uint64(1))
+    uncover 21
+    btoi
+    intc_1 // 1
+    +
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:90
+    // const mutableArg7 = new Uint128(arg7.asBigUint() + BigUint(1))
+    uncover 21
+    pushbytes 0x01
+    b+
+    dup
+    len
+    pushint 16
+    <=
+    assert // overflow
+    pushint 16
+    bzero
+    b|
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:92
+    // const mutableArg9 = new Bool(!arg9.native)
+    uncover 21
+    intc_0 // 0
+    getbit
+    !
+    cover 22
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:93
+    // const mutableArg10 = new Str(arg10.native + ' world')
+    uncover 20
+    extract 2 0
+    pushbytes " world"
+    concat
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:94
+    // const mutableArg11 = new DynamicBytes(arg11.native.concat(Bytes.fromHex('00')))
+    uncover 20
+    extract 2 0
+    bytec_1 // 0x00
+    concat
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:95
+    // arg12[0] = new Byte(0xff)
+    uncover 20
+    bytec_2 // 0xff
+    replace2 0 // on error: index access is out of bounds
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:96
+    // const mutableArg13 = new SimpleStruct({ x: new ARC4Uint64(arg13.x.asUint64() + Uint64(1)), y: arg13.y })
+    dig 20
+    intc_0 // 0
+    extract_uint64
+    intc_1 // 1
+    +
+    itob
+    uncover 21
+    extract 8 8
+    concat
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:98
+    // header: new Uint8(arg14.header.asUint64() + Uint64(1)),
+    dig 20
+    intc_0 // 0
+    getbyte
+    intc_1 // 1
+    +
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    extract 7 1
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:99
+    // data: clone(arg14.data),
+    uncover 21
+    extract 1 16
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:97-100
+    // const mutableArg14 = new NestedStruct({
+    //   header: new Uint8(arg14.header.asUint64() + Uint64(1)),
+    //   data: clone(arg14.data),
+    // })
+    concat
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:102
+    // new Uint8(arg15.at(0).asUint64() + Uint64(1)),
+    dig 20
+    intc_0 // 0
+    getbyte
+    intc_1 // 1
+    +
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    extract 7 1
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:103
+    // new ARC4Uint64(arg15.at(1).asUint64() + Uint64(1)),
+    uncover 21
+    intc_1 // 1
+    extract_uint64
+    intc_1 // 1
+    +
+    itob
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:101-104
+    // const mutableArg15 = new Tuple<[Uint8, ARC4Uint64]>(
+    //   new Uint8(arg15.at(0).asUint64() + Uint64(1)),
+    //   new ARC4Uint64(arg15.at(1).asUint64() + Uint64(1)),
+    // )
+    concat
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:106
+    // a: new Uint8(arg16.a.asUint64() + Uint64(1)),
+    dig 20
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:70
+    // assert(arg16.a === _raw16.at(0))
+    intc_0 // 0
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:106
+    // a: new Uint8(arg16.a.asUint64() + Uint64(1)),
+    getbyte
+    intc_1 // 1
+    +
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    extract 7 1
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:107
+    // b: new ARC4Uint64(arg16.b.asUint64() + Uint64(1)),
+    uncover 21
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:71
+    // assert(arg16.b === _raw16.at(1))
+    intc_1 // 1
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:107
+    // b: new ARC4Uint64(arg16.b.asUint64() + Uint64(1)),
+    extract_uint64
+    intc_1 // 1
+    +
+    itob
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:105-108
+    // const mutableArg16 = new SimpleNamedTuple({
+    //   a: new Uint8(arg16.a.asUint64() + Uint64(1)),
+    //   b: new ARC4Uint64(arg16.b.asUint64() + Uint64(1)),
+    // })
+    concat
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:109
+    // const mutableArg17: [uint64, bytes] = [arg17[0] + Uint64(1), arg17[1].concat(Bytes('!'))]
+    uncover 18
+    intc_1 // 1
+    +
+    uncover 18
+    bytec_0 // "!"
+    concat
+    swap
+    itob
+    dig 1
+    len
+    itob
+    extract 6 2
+    uncover 2
+    concat
+    swap
+    bytec_3 // 0x000a
+    concat
+    swap
+    concat
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:110
+    // const mutableArg18: [uint64, [bytes, uint64]] = [arg18[0] + Uint64(1), [arg18[1][0].concat(Bytes('!')), arg18[1][1] + Uint64(1)]]
+    uncover 17
+    intc_1 // 1
+    +
+    uncover 17
+    bytec_0 // "!"
+    concat
+    uncover 17
+    intc_1 // 1
+    +
+    dig 1
+    len
+    itob
+    extract 6 2
+    uncover 2
+    concat
+    swap
+    itob
+    bytec_3 // 0x000a
+    swap
+    concat
+    swap
+    concat
+    swap
+    itob
+    bytec_3 // 0x000a
+    concat
+    swap
+    concat
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:112
+    // value: new Uint8(arg19.value.asUint64() + Uint64(1)),
+    dig 17
+    intc_0 // 0
+    getbyte
+    intc_1 // 1
+    +
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    extract 7 1
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:113
+    // dontOverwriteMe: new Bool(!arg19.dontOverwriteMe.native),
+    uncover 18
+    intc_2 // 8
+    getbit
+    bytec_1 // 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
+    intc_0 // 0
+    getbit
+    !
+    bytec_1 // 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:111-114
+    // const mutableArg19 = new OverwriteStruct({
+    //   value: new Uint8(arg19.value.asUint64() + Uint64(1)),
+    //   dontOverwriteMe: new Bool(!arg19.dontOverwriteMe.native),
+    // })
+    concat
+    dig 17
+    intc_0 // 0
+    extract_uint16
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:115
+    // arg20.push(new Uint8(0xff))
+    intc_1 // 1
+    +
+    itob
+    extract 6 0
+    uncover 18
+    swap
+    replace2 0
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:115
+    // arg20.push(new Uint8(0xff))
+    bytec_2 // 0xff
+    concat
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:118
+    // assert(mutableArg0 > 0)
+    dig 17
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:119
+    // assert(mutableArg1.length > 0)
+    uncover 16
+    len
+    dup
+    cover 19
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:120
+    // assert(mutableArg2 > BigUint(0))
+    uncover 15
+    pushbytes 0x
+    b>
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:121
+    // assert(Bytes(mutableArg3).length > 0)
+    uncover 14
+    len
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:122
+    // assert(mutableArg5.asUint64() > 0)
+    uncover 13
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:88
+    // const mutableArg5 = new Uint8(arg5.asUint64() + Uint64(1))
+    pushint 7
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:122
+    // assert(mutableArg5.asUint64() > 0)
+    getbyte
+    dup
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:123
+    // assert(mutableArg6.asUint64() > 0)
+    dig 13
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:124
+    // assert(mutableArg7.asBigUint() > BigUint(0))
+    uncover 12
+    pushbytes 0x
+    b>
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:126
+    // assert(Bytes(mutableArg10.native).length > 0)
+    uncover 11
+    len
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:127
+    // assert(mutableArg11.length > 0)
+    uncover 10
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:128
+    // assert(arg12[0] === new Byte(0xff))
+    uncover 9
+    extract 0 1 // on error: index access is out of bounds
+    bytec_2 // 0xff
+    ==
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:129
+    // assert(mutableArg13.x.asUint64() > 0)
+    uncover 8
+    intc_0 // 0
+    extract_uint64
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:130
+    // assert(mutableArg14.header.asUint64() > 0)
+    uncover 7
+    intc_0 // 0
+    getbyte
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:131
+    // assert(mutableArg15.at(0).asUint64() > 0)
+    dig 6
+    intc_0 // 0
+    getbyte
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:132
+    // assert(mutableArg16.a.asUint64() > 0)
+    dig 5
+    intc_0 // 0
+    getbyte
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:133
+    // assert(mutableArg17[0] > 0)
+    dig 4
+    intc_0 // 0
+    extract_uint64
+    dup
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:134
+    // assert(mutableArg17[1].length > 0)
+    dig 5
+    intc_2 // 8
+    extract_uint16
+    dig 6
+    len
+    uncover 7
+    cover 2
+    substring3
+    extract 2 0
+    len
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:135
+    // assert(mutableArg18[0] > 0)
+    dig 4
+    intc_0 // 0
+    extract_uint64
+    dup
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:136
+    // assert(mutableArg18[1][0].length > 0)
+    dig 5
+    intc_2 // 8
+    extract_uint16
+    dig 6
+    len
+    uncover 7
+    cover 2
+    substring3
+    dup
+    intc_0 // 0
+    extract_uint16
+    dig 1
+    len
+    dig 2
+    cover 2
+    substring3
+    extract 2 0
+    len
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:136-137
+    // assert(mutableArg18[1][0].length > 0)
+    // assert(mutableArg18[1][1] > 0)
+    intc_3 // 2
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:137
+    // assert(mutableArg18[1][1] > 0)
+    extract_uint64
+    dup
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:138
+    // assert(mutableArg19.value.asUint64() > 0)
+    uncover 5
+    intc_0 // 0
+    getbyte
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:139
+    // assert(arg20.length > 0)
+    uncover 4
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:142
+    // let total: uint64 = mutableArg0 + mutableArg5.asUint64() + mutableArg6.asUint64() + mutableArg15.at(1).asUint64()
+    uncover 7
+    uncover 4
+    +
+    uncover 6
+    +
+    uncover 5
+    intc_1 // 1
+    extract_uint64
+    +
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:143
+    // total += mutableArg16.b.asUint64() + mutableArg17[0] + mutableArg18[0] + mutableArg18[1][1]
+    uncover 4
+    intc_1 // 1
+    extract_uint64
+    uncover 4
+    +
+    uncover 3
+    +
+    uncover 2
+    +
+    +
+    swap
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:144
+    // if (mutableArg4) {
+    bnz main_after_if_else@2
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:145
+    // total += mutableArg1.length
+    dig 1
+    +
+
+main_after_if_else@2:
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:147
+    // assert(total > 0)
+    assert
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:148
+    // return mutableArg9.native
+    dig 1
+    return
