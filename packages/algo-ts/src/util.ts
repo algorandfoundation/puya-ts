@@ -21,6 +21,88 @@ export function assert(condition: unknown, message?: string): asserts condition 
 }
 
 /**
+ * Asserts that `condition` is truthy, logging a formatted error message before failing
+ * if the condition is false.
+ *
+ * The logged output follows the format `{prefix}:{code}` or `{prefix}:{code}:{message}`
+ * and is compatible with ARC-56 and ARC-32 clients.
+ *
+ * Note that this will generate extra bytecode, so it is strongly advised to keep your
+ * messages and error codes short.
+ *
+ * @param condition The condition to assert; if false, logs an error and fails.
+ * @param code An error code. Must not contain `:`. Should be alphanumeric.
+ * @param options An optional object containing the message and prefix for the error.
+ * @param options.message Message appended after the code. Must not contain `:`.
+ *                        Defaults to no message.
+ * @param options.prefix Error prefix, either `"ERR"` or `"AER"`. Defaults to `"ERR"`.
+ */
+export function loggedAssert(
+  condition: unknown,
+  code: string,
+  options?: { message?: string | undefined; prefix?: 'ERR' | 'AER' },
+): asserts condition
+/**
+ * Asserts that `condition` is truthy, logging a formatted error message before failing
+ * if the condition is false.
+ *
+ * The logged output follows the format `ERR:{code}:{message}` and is compatible with
+ * ARC-56 and ARC-32 clients.
+ *
+ * Note that this will generate extra bytecode, so it is strongly advised to keep your
+ * messages and error codes short.
+ *
+ * @param condition The condition to assert; if false, logs an error and fails.
+ * @param code An error code. Must not contain `:`. Should be alphanumeric.
+ * @param message Message appended after the code. Must not contain `:`.
+ */
+export function loggedAssert(condition: unknown, code: string, message: string): asserts condition
+export function loggedAssert(
+  condition: unknown,
+  code: string,
+  messageOrOptions?: string | { message?: string | undefined; prefix?: 'ERR' | 'AER' },
+): asserts condition {
+  throw new NoImplementation()
+}
+
+/**
+ * Logs a formatted ARC-65 error message and immediately fails the transaction.
+ *
+ * Equivalent to `loggedAssert(false, code, {message, prefix})`.
+ *
+ * The logged output follows the format `{prefix}:{code}` or `{prefix}:{code}:{message}`
+ * and is compatible with ARC-56 and ARC-32 clients.
+ *
+ * Note that this will generate extra bytecode, so it is strongly advised to keep your
+ * messages and error codes short.
+ *
+ * @param code An error code. Must not contain `:`. Should be alphanumeric.
+ * @param options An optional object containing the message and prefix for the error.
+ * @param options.message Message appended after the code. Must not contain `:`.
+ *                        Defaults to no message.
+ * @param options.prefix Error prefix, either `"ERR"` or `"AER"`. Defaults to `"ERR"`.
+ */
+export function loggedErr(code: string, options?: { message?: string; prefix?: 'ERR' | 'AER' }): never
+/**
+ * Logs a formatted ARC-65 error message and immediately fails the transaction.
+ *
+ * Equivalent to `loggedAssert(false, code, {message, prefix})`.
+ *
+ * The logged output follows the format `ERR:{code}:{message}` and is compatible with
+ * ARC-56 and ARC-32 clients.
+ *
+ * Note that this will generate extra bytecode, so it is strongly advised to keep your
+ * messages and error codes short.
+ *
+ * @param code An error code. Must not contain `:`. Should be alphanumeric.
+ * @param message Message appended after the code. Must not contain `:`.
+ */
+export function loggedErr(code: string, message: string): never
+export function loggedErr(code: string, messageOrOptions?: string | { message?: string; prefix?: 'ERR' | 'AER' }): never {
+  throw new NoImplementation()
+}
+
+/**
  * Raise an error and halt execution
  * @param message The message to accompany the error
  */

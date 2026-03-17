@@ -1228,7 +1228,7 @@
                               }
                             },
                             {
-                              "_type": "ReinterpretCast",
+                              "_type": "ARC4Encode",
                               "source_location": {
                                 "file": "tests/approvals/precompiled-factory.algo.ts",
                                 "line": 12,
@@ -1240,44 +1240,23 @@
                                 "_type": "BytesWType",
                                 "length": null
                               },
-                              "expr": {
-                                "_type": "ARC4Encode",
+                              "value": {
+                                "_type": "StringConstant",
                                 "source_location": {
                                   "file": "tests/approvals/precompiled-factory.algo.ts",
                                   "line": 12,
                                   "end_line": 12,
-                                  "column": 58,
-                                  "end_column": 77
+                                  "column": 69,
+                                  "end_column": 76
                                 },
                                 "wtype": {
-                                  "_type": "ARC4DynamicArray",
-                                  "immutable": true,
-                                  "arc4_alias": "string",
-                                  "element_type": {
-                                    "_type": "ARC4UIntN",
-                                    "arc4_alias": "byte",
-                                    "n": 8
-                                  },
-                                  "source_location": null
+                                  "_type": "WType",
+                                  "name": "string",
+                                  "immutable": true
                                 },
-                                "value": {
-                                  "_type": "StringConstant",
-                                  "source_location": {
-                                    "file": "tests/approvals/precompiled-factory.algo.ts",
-                                    "line": 12,
-                                    "end_line": 12,
-                                    "column": 69,
-                                    "end_column": 76
-                                  },
-                                  "wtype": {
-                                    "_type": "WType",
-                                    "name": "string",
-                                    "immutable": true
-                                  },
-                                  "value": "hello"
-                                },
-                                "error_message": null
-                              }
+                                "value": "hello"
+                              },
+                              "error_message": null
                             }
                           ]
                         },
@@ -1984,7 +1963,7 @@
                             }
                           },
                           {
-                            "_type": "ReinterpretCast",
+                            "_type": "ARC4Encode",
                             "source_location": {
                               "file": "tests/approvals/precompiled-factory.algo.ts",
                               "line": 21,
@@ -1996,44 +1975,23 @@
                               "_type": "BytesWType",
                               "length": null
                             },
-                            "expr": {
-                              "_type": "ARC4Encode",
+                            "value": {
+                              "_type": "StringConstant",
                               "source_location": {
                                 "file": "tests/approvals/precompiled-factory.algo.ts",
                                 "line": 21,
                                 "end_line": 21,
-                                "column": 57,
-                                "end_column": 76
+                                "column": 68,
+                                "end_column": 75
                               },
                               "wtype": {
-                                "_type": "ARC4DynamicArray",
-                                "immutable": true,
-                                "arc4_alias": "string",
-                                "element_type": {
-                                  "_type": "ARC4UIntN",
-                                  "arc4_alias": "byte",
-                                  "n": 8
-                                },
-                                "source_location": null
+                                "_type": "WType",
+                                "name": "string",
+                                "immutable": true
                               },
-                              "value": {
-                                "_type": "StringConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/precompiled-factory.algo.ts",
-                                  "line": 21,
-                                  "end_line": 21,
-                                  "column": 68,
-                                  "end_column": 75
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "string",
-                                  "immutable": true
-                                },
-                                "value": "world"
-                              },
-                              "error_message": null
-                            }
+                              "value": "world"
+                            },
+                            "error_message": null
                           }
                         ]
                       },
@@ -2084,7 +2042,7 @@
                 "name": "result"
               },
               "value": {
-                "_type": "ARC4Decode",
+                "_type": "ARC4FromBytes",
                 "source_location": {
                   "file": "tests/approvals/precompiled-factory.algo.ts",
                   "line": 25,
@@ -2098,7 +2056,7 @@
                   "immutable": true
                 },
                 "value": {
-                  "_type": "ReinterpretCast",
+                  "_type": "CheckedMaybe",
                   "source_location": {
                     "file": "tests/approvals/precompiled-factory.algo.ts",
                     "line": 25,
@@ -2106,19 +2064,8 @@
                     "column": 19,
                     "end_column": 57
                   },
-                  "wtype": {
-                    "_type": "ARC4DynamicArray",
-                    "immutable": true,
-                    "arc4_alias": "string",
-                    "element_type": {
-                      "_type": "ARC4UIntN",
-                      "arc4_alias": "byte",
-                      "n": 8
-                    },
-                    "source_location": null
-                  },
                   "expr": {
-                    "_type": "CheckedMaybe",
+                    "_type": "TupleExpression",
                     "source_location": {
                       "file": "tests/approvals/precompiled-factory.algo.ts",
                       "line": 25,
@@ -2126,32 +2073,97 @@
                       "column": 19,
                       "end_column": 57
                     },
-                    "expr": {
-                      "_type": "TupleExpression",
-                      "source_location": {
-                        "file": "tests/approvals/precompiled-factory.algo.ts",
-                        "line": 25,
-                        "end_line": 25,
-                        "column": 19,
-                        "end_column": 57
-                      },
-                      "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "types": [
+                    "wtype": {
+                      "_type": "WTuple",
+                      "name": "tuple",
+                      "types": [
+                        {
+                          "_type": "BytesWType",
+                          "length": null
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "bool",
+                          "immutable": true
+                        }
+                      ]
+                    },
+                    "items": [
+                      {
+                        "_type": "IntrinsicCall",
+                        "source_location": {
+                          "file": "tests/approvals/precompiled-factory.algo.ts",
+                          "line": 25,
+                          "end_line": 25,
+                          "column": 19,
+                          "end_column": 57
+                        },
+                        "wtype": {
+                          "_type": "BytesWType",
+                          "length": null
+                        },
+                        "op_code": "extract",
+                        "immediates": [
+                          4,
+                          0
+                        ],
+                        "stack_args": [
                           {
-                            "_type": "BytesWType",
-                            "length": null
-                          },
-                          {
-                            "_type": "WType",
-                            "name": "bool",
-                            "immutable": true
+                            "_type": "SingleEvaluation",
+                            "source_location": {
+                              "file": "tests/approvals/precompiled-factory.algo.ts",
+                              "line": 25,
+                              "end_line": 25,
+                              "column": 38,
+                              "end_column": 49
+                            },
+                            "source": {
+                              "_type": "InnerTransactionField",
+                              "source_location": {
+                                "file": "tests/approvals/precompiled-factory.algo.ts",
+                                "line": 25,
+                                "end_line": 25,
+                                "column": 38,
+                                "end_column": 49
+                              },
+                              "wtype": {
+                                "_type": "BytesWType",
+                                "length": null
+                              },
+                              "itxn": {
+                                "_type": "VarExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/precompiled-factory.algo.ts",
+                                  "line": 25,
+                                  "end_line": 25,
+                                  "column": 38,
+                                  "end_column": 41
+                                },
+                                "wtype": {
+                                  "_type": "WInnerTransaction",
+                                  "name": "inner_transaction_appl",
+                                  "immutable": true,
+                                  "transaction_type": 6
+                                },
+                                "name": "txn"
+                              },
+                              "field": "LastLog",
+                              "array_index": null
+                            },
+                            "_id": "1"
                           }
                         ]
                       },
-                      "items": [
-                        {
+                      {
+                        "_type": "BytesComparisonExpression",
+                        "source_location": {
+                          "file": "tests/approvals/precompiled-factory.algo.ts",
+                          "line": 25,
+                          "end_line": 25,
+                          "column": 19,
+                          "end_column": 57
+                        },
+                        "lhs": {
                           "_type": "IntrinsicCall",
                           "source_location": {
                             "file": "tests/approvals/precompiled-factory.algo.ts",
@@ -2166,8 +2178,8 @@
                           },
                           "op_code": "extract",
                           "immediates": [
-                            4,
-                            0
+                            0,
+                            4
                           ],
                           "stack_args": [
                             {
@@ -2216,104 +2228,29 @@
                             }
                           ]
                         },
-                        {
-                          "_type": "BytesComparisonExpression",
+                        "operator": "==",
+                        "rhs": {
+                          "_type": "BytesConstant",
                           "source_location": {
                             "file": "tests/approvals/precompiled-factory.algo.ts",
                             "line": 25,
                             "end_line": 25,
-                            "column": 19,
-                            "end_column": 57
+                            "column": 51,
+                            "end_column": 56
                           },
-                          "lhs": {
-                            "_type": "IntrinsicCall",
-                            "source_location": {
-                              "file": "tests/approvals/precompiled-factory.algo.ts",
-                              "line": 25,
-                              "end_line": 25,
-                              "column": 19,
-                              "end_column": 57
-                            },
-                            "wtype": {
-                              "_type": "BytesWType",
-                              "length": null
-                            },
-                            "op_code": "extract",
-                            "immediates": [
-                              0,
-                              4
-                            ],
-                            "stack_args": [
-                              {
-                                "_type": "SingleEvaluation",
-                                "source_location": {
-                                  "file": "tests/approvals/precompiled-factory.algo.ts",
-                                  "line": 25,
-                                  "end_line": 25,
-                                  "column": 38,
-                                  "end_column": 49
-                                },
-                                "source": {
-                                  "_type": "InnerTransactionField",
-                                  "source_location": {
-                                    "file": "tests/approvals/precompiled-factory.algo.ts",
-                                    "line": 25,
-                                    "end_line": 25,
-                                    "column": 38,
-                                    "end_column": 49
-                                  },
-                                  "wtype": {
-                                    "_type": "BytesWType",
-                                    "length": null
-                                  },
-                                  "itxn": {
-                                    "_type": "VarExpression",
-                                    "source_location": {
-                                      "file": "tests/approvals/precompiled-factory.algo.ts",
-                                      "line": 25,
-                                      "end_line": 25,
-                                      "column": 38,
-                                      "end_column": 41
-                                    },
-                                    "wtype": {
-                                      "_type": "WInnerTransaction",
-                                      "name": "inner_transaction_appl",
-                                      "immutable": true,
-                                      "transaction_type": 6
-                                    },
-                                    "name": "txn"
-                                  },
-                                  "field": "LastLog",
-                                  "array_index": null
-                                },
-                                "_id": "1"
-                              }
-                            ]
+                          "wtype": {
+                            "_type": "BytesWType",
+                            "length": null
                           },
-                          "operator": "==",
-                          "rhs": {
-                            "_type": "BytesConstant",
-                            "source_location": {
-                              "file": "tests/approvals/precompiled-factory.algo.ts",
-                              "line": 25,
-                              "end_line": 25,
-                              "column": 51,
-                              "end_column": 56
-                            },
-                            "wtype": {
-                              "_type": "BytesWType",
-                              "length": null
-                            },
-                            "value": "6(4+c",
-                            "encoding": "unknown"
-                          }
+                          "value": "6(4+c",
+                          "encoding": "unknown"
                         }
-                      ]
-                    },
-                    "comment": "Bytes has valid prefix"
-                  }
+                      }
+                    ]
+                  },
+                  "comment": "Bytes has valid prefix"
                 },
-                "error_message": null
+                "validate": false
               }
             },
             {
@@ -2378,7 +2315,8 @@
                   }
                 },
                 "error_message": null,
-                "explicit": true
+                "explicit": true,
+                "log_error": false
               }
             },
             {
@@ -4380,7 +4318,7 @@
                             }
                           },
                           {
-                            "_type": "ReinterpretCast",
+                            "_type": "ARC4Encode",
                             "source_location": {
                               "file": "tests/approvals/precompiled-factory.algo.ts",
                               "line": 52,
@@ -4392,44 +4330,23 @@
                               "_type": "BytesWType",
                               "length": null
                             },
-                            "expr": {
-                              "_type": "ARC4Encode",
+                            "value": {
+                              "_type": "StringConstant",
                               "source_location": {
                                 "file": "tests/approvals/precompiled-factory.algo.ts",
                                 "line": 52,
                                 "end_line": 52,
-                                "column": 57,
-                                "end_column": 76
+                                "column": 68,
+                                "end_column": 75
                               },
                               "wtype": {
-                                "_type": "ARC4DynamicArray",
-                                "immutable": true,
-                                "arc4_alias": "string",
-                                "element_type": {
-                                  "_type": "ARC4UIntN",
-                                  "arc4_alias": "byte",
-                                  "n": 8
-                                },
-                                "source_location": null
+                                "_type": "WType",
+                                "name": "string",
+                                "immutable": true
                               },
-                              "value": {
-                                "_type": "StringConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/precompiled-factory.algo.ts",
-                                  "line": 52,
-                                  "end_line": 52,
-                                  "column": 68,
-                                  "end_column": 75
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "string",
-                                  "immutable": true
-                                },
-                                "value": "world"
-                              },
-                              "error_message": null
-                            }
+                              "value": "world"
+                            },
+                            "error_message": null
                           }
                         ]
                       },
@@ -4480,7 +4397,7 @@
                 "name": "result"
               },
               "value": {
-                "_type": "ARC4Decode",
+                "_type": "ARC4FromBytes",
                 "source_location": {
                   "file": "tests/approvals/precompiled-factory.algo.ts",
                   "line": 56,
@@ -4494,7 +4411,7 @@
                   "immutable": true
                 },
                 "value": {
-                  "_type": "ReinterpretCast",
+                  "_type": "CheckedMaybe",
                   "source_location": {
                     "file": "tests/approvals/precompiled-factory.algo.ts",
                     "line": 56,
@@ -4502,19 +4419,8 @@
                     "column": 19,
                     "end_column": 57
                   },
-                  "wtype": {
-                    "_type": "ARC4DynamicArray",
-                    "immutable": true,
-                    "arc4_alias": "string",
-                    "element_type": {
-                      "_type": "ARC4UIntN",
-                      "arc4_alias": "byte",
-                      "n": 8
-                    },
-                    "source_location": null
-                  },
                   "expr": {
-                    "_type": "CheckedMaybe",
+                    "_type": "TupleExpression",
                     "source_location": {
                       "file": "tests/approvals/precompiled-factory.algo.ts",
                       "line": 56,
@@ -4522,32 +4428,97 @@
                       "column": 19,
                       "end_column": 57
                     },
-                    "expr": {
-                      "_type": "TupleExpression",
-                      "source_location": {
-                        "file": "tests/approvals/precompiled-factory.algo.ts",
-                        "line": 56,
-                        "end_line": 56,
-                        "column": 19,
-                        "end_column": 57
-                      },
-                      "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "types": [
+                    "wtype": {
+                      "_type": "WTuple",
+                      "name": "tuple",
+                      "types": [
+                        {
+                          "_type": "BytesWType",
+                          "length": null
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "bool",
+                          "immutable": true
+                        }
+                      ]
+                    },
+                    "items": [
+                      {
+                        "_type": "IntrinsicCall",
+                        "source_location": {
+                          "file": "tests/approvals/precompiled-factory.algo.ts",
+                          "line": 56,
+                          "end_line": 56,
+                          "column": 19,
+                          "end_column": 57
+                        },
+                        "wtype": {
+                          "_type": "BytesWType",
+                          "length": null
+                        },
+                        "op_code": "extract",
+                        "immediates": [
+                          4,
+                          0
+                        ],
+                        "stack_args": [
                           {
-                            "_type": "BytesWType",
-                            "length": null
-                          },
-                          {
-                            "_type": "WType",
-                            "name": "bool",
-                            "immutable": true
+                            "_type": "SingleEvaluation",
+                            "source_location": {
+                              "file": "tests/approvals/precompiled-factory.algo.ts",
+                              "line": 56,
+                              "end_line": 56,
+                              "column": 38,
+                              "end_column": 49
+                            },
+                            "source": {
+                              "_type": "InnerTransactionField",
+                              "source_location": {
+                                "file": "tests/approvals/precompiled-factory.algo.ts",
+                                "line": 56,
+                                "end_line": 56,
+                                "column": 38,
+                                "end_column": 49
+                              },
+                              "wtype": {
+                                "_type": "BytesWType",
+                                "length": null
+                              },
+                              "itxn": {
+                                "_type": "VarExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/precompiled-factory.algo.ts",
+                                  "line": 56,
+                                  "end_line": 56,
+                                  "column": 38,
+                                  "end_column": 41
+                                },
+                                "wtype": {
+                                  "_type": "WInnerTransaction",
+                                  "name": "inner_transaction_appl",
+                                  "immutable": true,
+                                  "transaction_type": 6
+                                },
+                                "name": "txn"
+                              },
+                              "field": "LastLog",
+                              "array_index": null
+                            },
+                            "_id": "3"
                           }
                         ]
                       },
-                      "items": [
-                        {
+                      {
+                        "_type": "BytesComparisonExpression",
+                        "source_location": {
+                          "file": "tests/approvals/precompiled-factory.algo.ts",
+                          "line": 56,
+                          "end_line": 56,
+                          "column": 19,
+                          "end_column": 57
+                        },
+                        "lhs": {
                           "_type": "IntrinsicCall",
                           "source_location": {
                             "file": "tests/approvals/precompiled-factory.algo.ts",
@@ -4562,8 +4533,8 @@
                           },
                           "op_code": "extract",
                           "immediates": [
-                            4,
-                            0
+                            0,
+                            4
                           ],
                           "stack_args": [
                             {
@@ -4612,104 +4583,29 @@
                             }
                           ]
                         },
-                        {
-                          "_type": "BytesComparisonExpression",
+                        "operator": "==",
+                        "rhs": {
+                          "_type": "BytesConstant",
                           "source_location": {
                             "file": "tests/approvals/precompiled-factory.algo.ts",
                             "line": 56,
                             "end_line": 56,
-                            "column": 19,
-                            "end_column": 57
+                            "column": 51,
+                            "end_column": 56
                           },
-                          "lhs": {
-                            "_type": "IntrinsicCall",
-                            "source_location": {
-                              "file": "tests/approvals/precompiled-factory.algo.ts",
-                              "line": 56,
-                              "end_line": 56,
-                              "column": 19,
-                              "end_column": 57
-                            },
-                            "wtype": {
-                              "_type": "BytesWType",
-                              "length": null
-                            },
-                            "op_code": "extract",
-                            "immediates": [
-                              0,
-                              4
-                            ],
-                            "stack_args": [
-                              {
-                                "_type": "SingleEvaluation",
-                                "source_location": {
-                                  "file": "tests/approvals/precompiled-factory.algo.ts",
-                                  "line": 56,
-                                  "end_line": 56,
-                                  "column": 38,
-                                  "end_column": 49
-                                },
-                                "source": {
-                                  "_type": "InnerTransactionField",
-                                  "source_location": {
-                                    "file": "tests/approvals/precompiled-factory.algo.ts",
-                                    "line": 56,
-                                    "end_line": 56,
-                                    "column": 38,
-                                    "end_column": 49
-                                  },
-                                  "wtype": {
-                                    "_type": "BytesWType",
-                                    "length": null
-                                  },
-                                  "itxn": {
-                                    "_type": "VarExpression",
-                                    "source_location": {
-                                      "file": "tests/approvals/precompiled-factory.algo.ts",
-                                      "line": 56,
-                                      "end_line": 56,
-                                      "column": 38,
-                                      "end_column": 41
-                                    },
-                                    "wtype": {
-                                      "_type": "WInnerTransaction",
-                                      "name": "inner_transaction_appl",
-                                      "immutable": true,
-                                      "transaction_type": 6
-                                    },
-                                    "name": "txn"
-                                  },
-                                  "field": "LastLog",
-                                  "array_index": null
-                                },
-                                "_id": "3"
-                              }
-                            ]
+                          "wtype": {
+                            "_type": "BytesWType",
+                            "length": null
                           },
-                          "operator": "==",
-                          "rhs": {
-                            "_type": "BytesConstant",
-                            "source_location": {
-                              "file": "tests/approvals/precompiled-factory.algo.ts",
-                              "line": 56,
-                              "end_line": 56,
-                              "column": 51,
-                              "end_column": 56
-                            },
-                            "wtype": {
-                              "_type": "BytesWType",
-                              "length": null
-                            },
-                            "value": "6(4+c",
-                            "encoding": "unknown"
-                          }
+                          "value": "6(4+c",
+                          "encoding": "unknown"
                         }
-                      ]
-                    },
-                    "comment": "Bytes has valid prefix"
-                  }
+                      }
+                    ]
+                  },
+                  "comment": "Bytes has valid prefix"
                 },
-                "error_message": null
+                "validate": false
               }
             },
             {
@@ -4774,7 +4670,8 @@
                   }
                 },
                 "error_message": null,
-                "explicit": true
+                "explicit": true,
+                "log_error": false
               }
             },
             {
@@ -6769,7 +6666,7 @@
                             }
                           },
                           {
-                            "_type": "ReinterpretCast",
+                            "_type": "ARC4Encode",
                             "source_location": {
                               "file": "tests/approvals/precompiled-factory.algo.ts",
                               "line": 83,
@@ -6781,44 +6678,23 @@
                               "_type": "BytesWType",
                               "length": null
                             },
-                            "expr": {
-                              "_type": "ARC4Encode",
+                            "value": {
+                              "_type": "StringConstant",
                               "source_location": {
                                 "file": "tests/approvals/precompiled-factory.algo.ts",
                                 "line": 83,
                                 "end_line": 83,
-                                "column": 57,
-                                "end_column": 76
+                                "column": 68,
+                                "end_column": 75
                               },
                               "wtype": {
-                                "_type": "ARC4DynamicArray",
-                                "immutable": true,
-                                "arc4_alias": "string",
-                                "element_type": {
-                                  "_type": "ARC4UIntN",
-                                  "arc4_alias": "byte",
-                                  "n": 8
-                                },
-                                "source_location": null
+                                "_type": "WType",
+                                "name": "string",
+                                "immutable": true
                               },
-                              "value": {
-                                "_type": "StringConstant",
-                                "source_location": {
-                                  "file": "tests/approvals/precompiled-factory.algo.ts",
-                                  "line": 83,
-                                  "end_line": 83,
-                                  "column": 68,
-                                  "end_column": 75
-                                },
-                                "wtype": {
-                                  "_type": "WType",
-                                  "name": "string",
-                                  "immutable": true
-                                },
-                                "value": "world"
-                              },
-                              "error_message": null
-                            }
+                              "value": "world"
+                            },
+                            "error_message": null
                           }
                         ]
                       },
@@ -6869,7 +6745,7 @@
                 "name": "result"
               },
               "value": {
-                "_type": "ARC4Decode",
+                "_type": "ARC4FromBytes",
                 "source_location": {
                   "file": "tests/approvals/precompiled-factory.algo.ts",
                   "line": 87,
@@ -6883,7 +6759,7 @@
                   "immutable": true
                 },
                 "value": {
-                  "_type": "ReinterpretCast",
+                  "_type": "CheckedMaybe",
                   "source_location": {
                     "file": "tests/approvals/precompiled-factory.algo.ts",
                     "line": 87,
@@ -6891,19 +6767,8 @@
                     "column": 19,
                     "end_column": 57
                   },
-                  "wtype": {
-                    "_type": "ARC4DynamicArray",
-                    "immutable": true,
-                    "arc4_alias": "string",
-                    "element_type": {
-                      "_type": "ARC4UIntN",
-                      "arc4_alias": "byte",
-                      "n": 8
-                    },
-                    "source_location": null
-                  },
                   "expr": {
-                    "_type": "CheckedMaybe",
+                    "_type": "TupleExpression",
                     "source_location": {
                       "file": "tests/approvals/precompiled-factory.algo.ts",
                       "line": 87,
@@ -6911,32 +6776,97 @@
                       "column": 19,
                       "end_column": 57
                     },
-                    "expr": {
-                      "_type": "TupleExpression",
-                      "source_location": {
-                        "file": "tests/approvals/precompiled-factory.algo.ts",
-                        "line": 87,
-                        "end_line": 87,
-                        "column": 19,
-                        "end_column": 57
-                      },
-                      "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "types": [
+                    "wtype": {
+                      "_type": "WTuple",
+                      "name": "tuple",
+                      "types": [
+                        {
+                          "_type": "BytesWType",
+                          "length": null
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "bool",
+                          "immutable": true
+                        }
+                      ]
+                    },
+                    "items": [
+                      {
+                        "_type": "IntrinsicCall",
+                        "source_location": {
+                          "file": "tests/approvals/precompiled-factory.algo.ts",
+                          "line": 87,
+                          "end_line": 87,
+                          "column": 19,
+                          "end_column": 57
+                        },
+                        "wtype": {
+                          "_type": "BytesWType",
+                          "length": null
+                        },
+                        "op_code": "extract",
+                        "immediates": [
+                          4,
+                          0
+                        ],
+                        "stack_args": [
                           {
-                            "_type": "BytesWType",
-                            "length": null
-                          },
-                          {
-                            "_type": "WType",
-                            "name": "bool",
-                            "immutable": true
+                            "_type": "SingleEvaluation",
+                            "source_location": {
+                              "file": "tests/approvals/precompiled-factory.algo.ts",
+                              "line": 87,
+                              "end_line": 87,
+                              "column": 38,
+                              "end_column": 49
+                            },
+                            "source": {
+                              "_type": "InnerTransactionField",
+                              "source_location": {
+                                "file": "tests/approvals/precompiled-factory.algo.ts",
+                                "line": 87,
+                                "end_line": 87,
+                                "column": 38,
+                                "end_column": 49
+                              },
+                              "wtype": {
+                                "_type": "BytesWType",
+                                "length": null
+                              },
+                              "itxn": {
+                                "_type": "VarExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/precompiled-factory.algo.ts",
+                                  "line": 87,
+                                  "end_line": 87,
+                                  "column": 38,
+                                  "end_column": 41
+                                },
+                                "wtype": {
+                                  "_type": "WInnerTransaction",
+                                  "name": "inner_transaction_appl",
+                                  "immutable": true,
+                                  "transaction_type": 6
+                                },
+                                "name": "txn"
+                              },
+                              "field": "LastLog",
+                              "array_index": null
+                            },
+                            "_id": "5"
                           }
                         ]
                       },
-                      "items": [
-                        {
+                      {
+                        "_type": "BytesComparisonExpression",
+                        "source_location": {
+                          "file": "tests/approvals/precompiled-factory.algo.ts",
+                          "line": 87,
+                          "end_line": 87,
+                          "column": 19,
+                          "end_column": 57
+                        },
+                        "lhs": {
                           "_type": "IntrinsicCall",
                           "source_location": {
                             "file": "tests/approvals/precompiled-factory.algo.ts",
@@ -6951,8 +6881,8 @@
                           },
                           "op_code": "extract",
                           "immediates": [
-                            4,
-                            0
+                            0,
+                            4
                           ],
                           "stack_args": [
                             {
@@ -7001,104 +6931,29 @@
                             }
                           ]
                         },
-                        {
-                          "_type": "BytesComparisonExpression",
+                        "operator": "==",
+                        "rhs": {
+                          "_type": "BytesConstant",
                           "source_location": {
                             "file": "tests/approvals/precompiled-factory.algo.ts",
                             "line": 87,
                             "end_line": 87,
-                            "column": 19,
-                            "end_column": 57
+                            "column": 51,
+                            "end_column": 56
                           },
-                          "lhs": {
-                            "_type": "IntrinsicCall",
-                            "source_location": {
-                              "file": "tests/approvals/precompiled-factory.algo.ts",
-                              "line": 87,
-                              "end_line": 87,
-                              "column": 19,
-                              "end_column": 57
-                            },
-                            "wtype": {
-                              "_type": "BytesWType",
-                              "length": null
-                            },
-                            "op_code": "extract",
-                            "immediates": [
-                              0,
-                              4
-                            ],
-                            "stack_args": [
-                              {
-                                "_type": "SingleEvaluation",
-                                "source_location": {
-                                  "file": "tests/approvals/precompiled-factory.algo.ts",
-                                  "line": 87,
-                                  "end_line": 87,
-                                  "column": 38,
-                                  "end_column": 49
-                                },
-                                "source": {
-                                  "_type": "InnerTransactionField",
-                                  "source_location": {
-                                    "file": "tests/approvals/precompiled-factory.algo.ts",
-                                    "line": 87,
-                                    "end_line": 87,
-                                    "column": 38,
-                                    "end_column": 49
-                                  },
-                                  "wtype": {
-                                    "_type": "BytesWType",
-                                    "length": null
-                                  },
-                                  "itxn": {
-                                    "_type": "VarExpression",
-                                    "source_location": {
-                                      "file": "tests/approvals/precompiled-factory.algo.ts",
-                                      "line": 87,
-                                      "end_line": 87,
-                                      "column": 38,
-                                      "end_column": 41
-                                    },
-                                    "wtype": {
-                                      "_type": "WInnerTransaction",
-                                      "name": "inner_transaction_appl",
-                                      "immutable": true,
-                                      "transaction_type": 6
-                                    },
-                                    "name": "txn"
-                                  },
-                                  "field": "LastLog",
-                                  "array_index": null
-                                },
-                                "_id": "5"
-                              }
-                            ]
+                          "wtype": {
+                            "_type": "BytesWType",
+                            "length": null
                           },
-                          "operator": "==",
-                          "rhs": {
-                            "_type": "BytesConstant",
-                            "source_location": {
-                              "file": "tests/approvals/precompiled-factory.algo.ts",
-                              "line": 87,
-                              "end_line": 87,
-                              "column": 51,
-                              "end_column": 56
-                            },
-                            "wtype": {
-                              "_type": "BytesWType",
-                              "length": null
-                            },
-                            "value": "6(4+c",
-                            "encoding": "unknown"
-                          }
+                          "value": "6(4+c",
+                          "encoding": "unknown"
                         }
-                      ]
-                    },
-                    "comment": "Bytes has valid prefix"
-                  }
+                      }
+                    ]
+                  },
+                  "comment": "Bytes has valid prefix"
                 },
-                "error_message": null
+                "validate": false
               }
             },
             {
@@ -7163,7 +7018,8 @@
                   }
                 },
                 "error_message": null,
-                "explicit": true
+                "explicit": true,
+                "log_error": false
               }
             },
             {
@@ -9199,7 +9055,7 @@
                 "name": "result"
               },
               "value": {
-                "_type": "ARC4Decode",
+                "_type": "ARC4FromBytes",
                 "source_location": {
                   "file": "tests/approvals/precompiled-factory.algo.ts",
                   "line": 118,
@@ -9213,7 +9069,7 @@
                   "immutable": true
                 },
                 "value": {
-                  "_type": "ReinterpretCast",
+                  "_type": "CheckedMaybe",
                   "source_location": {
                     "file": "tests/approvals/precompiled-factory.algo.ts",
                     "line": 118,
@@ -9221,13 +9077,8 @@
                     "column": 19,
                     "end_column": 57
                   },
-                  "wtype": {
-                    "_type": "ARC4UIntN",
-                    "arc4_alias": null,
-                    "n": 64
-                  },
                   "expr": {
-                    "_type": "CheckedMaybe",
+                    "_type": "TupleExpression",
                     "source_location": {
                       "file": "tests/approvals/precompiled-factory.algo.ts",
                       "line": 118,
@@ -9235,32 +9086,97 @@
                       "column": 19,
                       "end_column": 57
                     },
-                    "expr": {
-                      "_type": "TupleExpression",
-                      "source_location": {
-                        "file": "tests/approvals/precompiled-factory.algo.ts",
-                        "line": 118,
-                        "end_line": 118,
-                        "column": 19,
-                        "end_column": 57
-                      },
-                      "wtype": {
-                        "_type": "WTuple",
-                        "name": "tuple",
-                        "types": [
+                    "wtype": {
+                      "_type": "WTuple",
+                      "name": "tuple",
+                      "types": [
+                        {
+                          "_type": "BytesWType",
+                          "length": null
+                        },
+                        {
+                          "_type": "WType",
+                          "name": "bool",
+                          "immutable": true
+                        }
+                      ]
+                    },
+                    "items": [
+                      {
+                        "_type": "IntrinsicCall",
+                        "source_location": {
+                          "file": "tests/approvals/precompiled-factory.algo.ts",
+                          "line": 118,
+                          "end_line": 118,
+                          "column": 19,
+                          "end_column": 57
+                        },
+                        "wtype": {
+                          "_type": "BytesWType",
+                          "length": null
+                        },
+                        "op_code": "extract",
+                        "immediates": [
+                          4,
+                          0
+                        ],
+                        "stack_args": [
                           {
-                            "_type": "BytesWType",
-                            "length": null
-                          },
-                          {
-                            "_type": "WType",
-                            "name": "bool",
-                            "immutable": true
+                            "_type": "SingleEvaluation",
+                            "source_location": {
+                              "file": "tests/approvals/precompiled-factory.algo.ts",
+                              "line": 118,
+                              "end_line": 118,
+                              "column": 38,
+                              "end_column": 49
+                            },
+                            "source": {
+                              "_type": "InnerTransactionField",
+                              "source_location": {
+                                "file": "tests/approvals/precompiled-factory.algo.ts",
+                                "line": 118,
+                                "end_line": 118,
+                                "column": 38,
+                                "end_column": 49
+                              },
+                              "wtype": {
+                                "_type": "BytesWType",
+                                "length": null
+                              },
+                              "itxn": {
+                                "_type": "VarExpression",
+                                "source_location": {
+                                  "file": "tests/approvals/precompiled-factory.algo.ts",
+                                  "line": 118,
+                                  "end_line": 118,
+                                  "column": 38,
+                                  "end_column": 41
+                                },
+                                "wtype": {
+                                  "_type": "WInnerTransaction",
+                                  "name": "inner_transaction_appl",
+                                  "immutable": true,
+                                  "transaction_type": 6
+                                },
+                                "name": "txn"
+                              },
+                              "field": "LastLog",
+                              "array_index": null
+                            },
+                            "_id": "7"
                           }
                         ]
                       },
-                      "items": [
-                        {
+                      {
+                        "_type": "BytesComparisonExpression",
+                        "source_location": {
+                          "file": "tests/approvals/precompiled-factory.algo.ts",
+                          "line": 118,
+                          "end_line": 118,
+                          "column": 19,
+                          "end_column": 57
+                        },
+                        "lhs": {
                           "_type": "IntrinsicCall",
                           "source_location": {
                             "file": "tests/approvals/precompiled-factory.algo.ts",
@@ -9275,8 +9191,8 @@
                           },
                           "op_code": "extract",
                           "immediates": [
-                            4,
-                            0
+                            0,
+                            4
                           ],
                           "stack_args": [
                             {
@@ -9325,104 +9241,29 @@
                             }
                           ]
                         },
-                        {
-                          "_type": "BytesComparisonExpression",
+                        "operator": "==",
+                        "rhs": {
+                          "_type": "BytesConstant",
                           "source_location": {
                             "file": "tests/approvals/precompiled-factory.algo.ts",
                             "line": 118,
                             "end_line": 118,
-                            "column": 19,
-                            "end_column": 57
+                            "column": 51,
+                            "end_column": 56
                           },
-                          "lhs": {
-                            "_type": "IntrinsicCall",
-                            "source_location": {
-                              "file": "tests/approvals/precompiled-factory.algo.ts",
-                              "line": 118,
-                              "end_line": 118,
-                              "column": 19,
-                              "end_column": 57
-                            },
-                            "wtype": {
-                              "_type": "BytesWType",
-                              "length": null
-                            },
-                            "op_code": "extract",
-                            "immediates": [
-                              0,
-                              4
-                            ],
-                            "stack_args": [
-                              {
-                                "_type": "SingleEvaluation",
-                                "source_location": {
-                                  "file": "tests/approvals/precompiled-factory.algo.ts",
-                                  "line": 118,
-                                  "end_line": 118,
-                                  "column": 38,
-                                  "end_column": 49
-                                },
-                                "source": {
-                                  "_type": "InnerTransactionField",
-                                  "source_location": {
-                                    "file": "tests/approvals/precompiled-factory.algo.ts",
-                                    "line": 118,
-                                    "end_line": 118,
-                                    "column": 38,
-                                    "end_column": 49
-                                  },
-                                  "wtype": {
-                                    "_type": "BytesWType",
-                                    "length": null
-                                  },
-                                  "itxn": {
-                                    "_type": "VarExpression",
-                                    "source_location": {
-                                      "file": "tests/approvals/precompiled-factory.algo.ts",
-                                      "line": 118,
-                                      "end_line": 118,
-                                      "column": 38,
-                                      "end_column": 41
-                                    },
-                                    "wtype": {
-                                      "_type": "WInnerTransaction",
-                                      "name": "inner_transaction_appl",
-                                      "immutable": true,
-                                      "transaction_type": 6
-                                    },
-                                    "name": "txn"
-                                  },
-                                  "field": "LastLog",
-                                  "array_index": null
-                                },
-                                "_id": "7"
-                              }
-                            ]
+                          "wtype": {
+                            "_type": "BytesWType",
+                            "length": null
                           },
-                          "operator": "==",
-                          "rhs": {
-                            "_type": "BytesConstant",
-                            "source_location": {
-                              "file": "tests/approvals/precompiled-factory.algo.ts",
-                              "line": 118,
-                              "end_line": 118,
-                              "column": 51,
-                              "end_column": 56
-                            },
-                            "wtype": {
-                              "_type": "BytesWType",
-                              "length": null
-                            },
-                            "value": "6(4+c",
-                            "encoding": "unknown"
-                          }
+                          "value": "6(4+c",
+                          "encoding": "unknown"
                         }
-                      ]
-                    },
-                    "comment": "Bytes has valid prefix"
-                  }
+                      }
+                    ]
+                  },
+                  "comment": "Bytes has valid prefix"
                 },
-                "error_message": null
+                "validate": false
               }
             },
             {
@@ -9488,7 +9329,8 @@
                   }
                 },
                 "error_message": null,
-                "explicit": true
+                "explicit": true,
+                "log_error": false
               }
             },
             {

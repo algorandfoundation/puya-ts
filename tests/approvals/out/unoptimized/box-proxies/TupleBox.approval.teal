@@ -3,8 +3,8 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 5 8 1
-    bytecblock "a" "hello" "world" "t1" "t2" "tm1" "tm2" 0x00 "abc" "def" "b"
+    intcblock 0 2 1 5
+    bytecblock "a" "t1" "t2" "hello" "world" "tm1" "tm2" 0x00 "abc" "def" "b"
     b main_block@0
 
 main_block@0:
@@ -80,7 +80,7 @@ main___algots__.defaultCreate@9:
     &&
     assert
     callsub __algots__.defaultCreate
-    intc_3 // 1
+    intc_2 // 1
     return
 
 
@@ -92,7 +92,7 @@ testBox_block@0:
     // tests/approvals/box-proxies.algo.ts:178
     // testBox() {
     callsub tests/approvals/box-proxies.algo.ts::TupleBox.testBox
-    intc_3 // 1
+    intc_2 // 1
     return
 
 
@@ -104,7 +104,7 @@ testBoxMap_block@0:
     // tests/approvals/box-proxies.algo.ts:204
     // testBoxMap() {
     callsub tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap
-    intc_3 // 1
+    intc_2 // 1
     return
 
 
@@ -118,7 +118,7 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBox:
 tests/approvals/box-proxies.algo.ts::TupleBox.testBox_block@0:
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_3 // "t1"
+    bytec_1 // "t1"
     // tests/approvals/box-proxies.algo.ts:179
     // this.box1.create({ size: 10 })
     pushint 10
@@ -126,7 +126,7 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBox_block@0:
     pop
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec 4 // "t2"
+    bytec_2 // "t2"
     // tests/approvals/box-proxies.algo.ts:180
     // this.box2.create({ size: 20 })
     pushint 20
@@ -134,7 +134,7 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBox_block@0:
     pop
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_3 // "t1"
+    bytec_1 // "t1"
     // tests/approvals/box-proxies.algo.ts:181
     // assert(this.box1.length === 10)
     box_len
@@ -144,7 +144,7 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBox_block@0:
     assert
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec 4 // "t2"
+    bytec_2 // "t2"
     // tests/approvals/box-proxies.algo.ts:182
     // assert(this.box2.length === 20)
     box_len
@@ -154,27 +154,27 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBox_block@0:
     assert
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_3 // "t1"
+    bytec_1 // "t1"
     // tests/approvals/box-proxies.algo.ts:184
     // assert(this.box1.exists)
     box_len
     assert
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec 4 // "t2"
+    bytec_2 // "t2"
     // tests/approvals/box-proxies.algo.ts:185
     // assert(this.box2.exists)
     box_len
     assert
     // tests/approvals/box-proxies.algo.ts:187
     // this.box1.value = ['hello', Bytes('world'), true]
-    bytec_1 // "hello"
+    bytec_3 // "hello"
     len
     itob
     extract 6 2
-    bytec_1 // "hello"
+    bytec_3 // "hello"
     concat
-    intc_1 // 5
+    intc_3 // 5
     itob
     extract 6 2
     pushbytes 0x
@@ -183,13 +183,13 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBox_block@0:
     cover 1
     dup
     len
-    intc_1 // 5
+    intc_3 // 5
     +
-    bytec_2 // "world"
+    bytec 4 // "world"
     len
     itob
     extract 6 2
-    bytec_2 // "world"
+    bytec 4 // "world"
     concat
     cover 1
     itob
@@ -199,7 +199,7 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBox_block@0:
     concat
     bytec 7 // 0x00
     intc_0 // 0
-    intc_3 // 1
+    intc_2 // 1
     setbit
     concat
     uncover 2
@@ -208,96 +208,124 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBox_block@0:
     concat
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_3 // "t1"
+    bytec_1 // "t1"
     // tests/approvals/box-proxies.algo.ts:187
     // this.box1.value = ['hello', Bytes('world'), true]
     box_del
     pop
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_3 // "t1"
+    bytec_1 // "t1"
     // tests/approvals/box-proxies.algo.ts:187
     // this.box1.value = ['hello', Bytes('world'), true]
     uncover 1
     box_put
-    // tests/approvals/box-proxies.algo.ts:173
-    // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_3 // "t1"
     // tests/approvals/box-proxies.algo.ts:188
     // assert(this.box1.value[0] === 'hello')
-    box_get
-    assert // Box must have value
-    dup
     intc_0 // 0
-    extract_uint16
-    cover 1
-    dup
-    pushint 2
-    extract_uint16
-    uncover 1
-    uncover 2
-    uncover 2
-    substring3
-    extract 2 0
-    bytec_1 // "hello"
-    ==
-    assert
+    intc_3 // 5
+    +
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_3 // "t1"
+    bytec_1 // "t1"
+    // tests/approvals/box-proxies.algo.ts:188
+    // assert(this.box1.value[0] === 'hello')
+    dig 1
+    intc_1 // 2
+    box_extract
+    btoi
+    intc_2 // 1
+    *
+    intc_1 // 2
+    +
+    // tests/approvals/box-proxies.algo.ts:173
+    // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
+    bytec_1 // "t1"
+    // tests/approvals/box-proxies.algo.ts:188
+    // assert(this.box1.value[0] === 'hello')
+    uncover 2
+    uncover 2
+    box_extract
+    extract 2 0
+    bytec_3 // "hello"
+    ==
+    assert
     // tests/approvals/box-proxies.algo.ts:189
     // assert(this.box1.value[1].equals(Bytes('world')))
-    box_get
-    assert // Box must have value
-    dup
-    pushint 2
-    extract_uint16
-    cover 1
-    dup
-    len
-    cover 1
+    intc_0 // 0
+    intc_1 // 2
+    +
+    // tests/approvals/box-proxies.algo.ts:173
+    // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
+    bytec_1 // "t1"
+    // tests/approvals/box-proxies.algo.ts:189
+    // assert(this.box1.value[1].equals(Bytes('world')))
+    uncover 1
+    intc_1 // 2
+    box_extract
+    btoi
+    intc_0 // 0
+    +
+    // tests/approvals/box-proxies.algo.ts:173
+    // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
+    bytec_1 // "t1"
+    // tests/approvals/box-proxies.algo.ts:189
+    // assert(this.box1.value[1].equals(Bytes('world')))
+    dig 1
+    intc_1 // 2
+    box_extract
+    btoi
+    intc_2 // 1
+    *
+    intc_1 // 2
+    +
+    // tests/approvals/box-proxies.algo.ts:173
+    // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
+    bytec_1 // "t1"
+    // tests/approvals/box-proxies.algo.ts:189
+    // assert(this.box1.value[1].equals(Bytes('world')))
     uncover 2
     uncover 2
-    substring3
+    box_extract
     extract 2 0
-    bytec_2 // "world"
+    bytec 4 // "world"
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:190
     // assert(this.box1.value[2])
     pushint 32
-    intc_2 // 8
+    pushint 8
     /
     intc_0 // 0
     +
     pushint 32
-    intc_2 // 8
+    pushint 8
     %
     cover 1
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_3 // "t1"
+    bytec_1 // "t1"
     // tests/approvals/box-proxies.algo.ts:190
     // assert(this.box1.value[2])
     uncover 1
-    intc_3 // 1
-    box_extract
+    intc_2 // 1
+    box_extract // on error: index out of bounds
     cover 1
     dup
-    intc_2 // 8
+    pushint 8
     <
     assert // index access is out of bounds
     getbit
     assert
     // tests/approvals/box-proxies.algo.ts:192
     // this.box2.value = { a: 'hello', b: Bytes('world'), c: true }
-    bytec_1 // "hello"
+    bytec_3 // "hello"
     len
     itob
     extract 6 2
-    bytec_1 // "hello"
+    bytec_3 // "hello"
     concat
-    intc_1 // 5
+    intc_3 // 5
     itob
     extract 6 2
     pushbytes 0x
@@ -306,13 +334,13 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBox_block@0:
     cover 1
     dup
     len
-    intc_1 // 5
+    intc_3 // 5
     +
-    bytec_2 // "world"
+    bytec 4 // "world"
     len
     itob
     extract 6 2
-    bytec_2 // "world"
+    bytec 4 // "world"
     concat
     cover 1
     itob
@@ -322,7 +350,7 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBox_block@0:
     concat
     bytec 7 // 0x00
     intc_0 // 0
-    intc_3 // 1
+    intc_2 // 1
     setbit
     concat
     uncover 2
@@ -331,97 +359,125 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBox_block@0:
     concat
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec 4 // "t2"
+    bytec_2 // "t2"
     // tests/approvals/box-proxies.algo.ts:192
     // this.box2.value = { a: 'hello', b: Bytes('world'), c: true }
     box_del
     pop
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec 4 // "t2"
+    bytec_2 // "t2"
     // tests/approvals/box-proxies.algo.ts:192
     // this.box2.value = { a: 'hello', b: Bytes('world'), c: true }
     uncover 1
     box_put
-    // tests/approvals/box-proxies.algo.ts:174
-    // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec 4 // "t2"
     // tests/approvals/box-proxies.algo.ts:193
     // assert(this.box2.value.a === 'hello')
-    box_get
-    assert // Box must have value
-    dup
     intc_0 // 0
-    extract_uint16
-    cover 1
-    dup
-    pushint 2
-    extract_uint16
-    uncover 1
-    uncover 2
-    uncover 2
-    substring3
-    extract 2 0
-    bytec_1 // "hello"
-    ==
-    assert
+    intc_3 // 5
+    +
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec 4 // "t2"
+    bytec_2 // "t2"
+    // tests/approvals/box-proxies.algo.ts:193
+    // assert(this.box2.value.a === 'hello')
+    dig 1
+    intc_1 // 2
+    box_extract
+    btoi
+    intc_2 // 1
+    *
+    intc_1 // 2
+    +
+    // tests/approvals/box-proxies.algo.ts:174
+    // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
+    bytec_2 // "t2"
+    // tests/approvals/box-proxies.algo.ts:193
+    // assert(this.box2.value.a === 'hello')
+    uncover 2
+    uncover 2
+    box_extract
+    extract 2 0
+    bytec_3 // "hello"
+    ==
+    assert
     // tests/approvals/box-proxies.algo.ts:194
     // assert(this.box2.value.b.equals(Bytes('world')))
-    box_get
-    assert // Box must have value
-    dup
-    pushint 2
-    extract_uint16
-    cover 1
-    dup
-    len
-    cover 1
+    intc_0 // 0
+    intc_1 // 2
+    +
+    // tests/approvals/box-proxies.algo.ts:174
+    // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
+    bytec_2 // "t2"
+    // tests/approvals/box-proxies.algo.ts:194
+    // assert(this.box2.value.b.equals(Bytes('world')))
+    uncover 1
+    intc_1 // 2
+    box_extract
+    btoi
+    intc_0 // 0
+    +
+    // tests/approvals/box-proxies.algo.ts:174
+    // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
+    bytec_2 // "t2"
+    // tests/approvals/box-proxies.algo.ts:194
+    // assert(this.box2.value.b.equals(Bytes('world')))
+    dig 1
+    intc_1 // 2
+    box_extract
+    btoi
+    intc_2 // 1
+    *
+    intc_1 // 2
+    +
+    // tests/approvals/box-proxies.algo.ts:174
+    // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
+    bytec_2 // "t2"
+    // tests/approvals/box-proxies.algo.ts:194
+    // assert(this.box2.value.b.equals(Bytes('world')))
     uncover 2
     uncover 2
-    substring3
+    box_extract
     extract 2 0
-    bytec_2 // "world"
+    bytec 4 // "world"
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:195
     // assert(this.box2.value.c)
     pushint 32
-    intc_2 // 8
+    pushint 8
     /
     intc_0 // 0
     +
     pushint 32
-    intc_2 // 8
+    pushint 8
     %
     cover 1
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec 4 // "t2"
+    bytec_2 // "t2"
     // tests/approvals/box-proxies.algo.ts:195
     // assert(this.box2.value.c)
     uncover 1
-    intc_3 // 1
-    box_extract
+    intc_2 // 1
+    box_extract // on error: index out of bounds
     cover 1
     dup
-    intc_2 // 8
+    pushint 8
     <
     assert // index access is out of bounds
     getbit
     assert
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_3 // "t1"
+    bytec_1 // "t1"
     // tests/approvals/box-proxies.algo.ts:197
     // this.box1.delete()
     box_del
     pop
     // tests/approvals/box-proxies.algo.ts:173
     // box1 = Box<[string, bytes, boolean]>({ key: 't1' })
-    bytec_3 // "t1"
+    bytec_1 // "t1"
     // tests/approvals/box-proxies.algo.ts:198
     // assert(!this.box1.exists)
     box_len
@@ -429,14 +485,14 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBox_block@0:
     assert
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec 4 // "t2"
+    bytec_2 // "t2"
     // tests/approvals/box-proxies.algo.ts:200
     // this.box2.delete()
     box_del
     pop
     // tests/approvals/box-proxies.algo.ts:174
     // box2 = Box<{ a: string; b: bytes; c: boolean }>({ key: 't2' })
-    bytec 4 // "t2"
+    bytec_2 // "t2"
     // tests/approvals/box-proxies.algo.ts:201
     // assert(!this.box2.exists)
     box_len
@@ -483,13 +539,13 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     assert
     // tests/approvals/box-proxies.algo.ts:208
     // this.boxMap1('a').value = ['hello', Bytes('world'), true]
-    bytec_1 // "hello"
+    bytec_3 // "hello"
     len
     itob
     extract 6 2
-    bytec_1 // "hello"
+    bytec_3 // "hello"
     concat
-    intc_1 // 5
+    intc_3 // 5
     itob
     extract 6 2
     pushbytes 0x
@@ -498,13 +554,13 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     cover 1
     dup
     len
-    intc_1 // 5
+    intc_3 // 5
     +
-    bytec_2 // "world"
+    bytec 4 // "world"
     len
     itob
     extract 6 2
-    bytec_2 // "world"
+    bytec 4 // "world"
     concat
     cover 1
     itob
@@ -514,7 +570,7 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     concat
     bytec 7 // 0x00
     intc_0 // 0
-    intc_3 // 1
+    intc_2 // 1
     setbit
     concat
     uncover 2
@@ -539,13 +595,13 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     box_put
     // tests/approvals/box-proxies.algo.ts:209
     // this.boxMap2('a').value = { a: 'hello', b: Bytes('world'), c: true }
-    bytec_1 // "hello"
+    bytec_3 // "hello"
     len
     itob
     extract 6 2
-    bytec_1 // "hello"
+    bytec_3 // "hello"
     concat
-    intc_1 // 5
+    intc_3 // 5
     itob
     extract 6 2
     pushbytes 0x
@@ -554,13 +610,13 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     cover 1
     dup
     len
-    intc_1 // 5
+    intc_3 // 5
     +
-    bytec_2 // "world"
+    bytec 4 // "world"
     len
     itob
     extract 6 2
-    bytec_2 // "world"
+    bytec 4 // "world"
     concat
     cover 1
     itob
@@ -570,7 +626,7 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     concat
     bytec 7 // 0x00
     intc_0 // 0
-    intc_3 // 1
+    intc_2 // 1
     setbit
     concat
     uncover 2
@@ -617,21 +673,23 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     concat
     // tests/approvals/box-proxies.algo.ts:212
     // assert(this.boxMap1('a').value[0] === 'hello')
-    box_get
-    assert // Box must have value
-    dup
     intc_0 // 0
-    extract_uint16
-    cover 1
-    dup
-    pushint 2
-    extract_uint16
-    uncover 1
+    intc_3 // 5
+    +
+    dup2
+    intc_1 // 2
+    box_extract
+    btoi
+    intc_2 // 1
+    *
+    intc_1 // 2
+    +
     uncover 2
     uncover 2
-    substring3
+    uncover 2
+    box_extract
     extract 2 0
-    bytec_1 // "hello"
+    bytec_3 // "hello"
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:175
@@ -645,20 +703,30 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     concat
     // tests/approvals/box-proxies.algo.ts:213
     // assert(this.boxMap1('a').value[1].equals(Bytes('world')))
-    box_get
-    assert // Box must have value
-    dup
-    pushint 2
-    extract_uint16
-    cover 1
-    dup
-    len
-    cover 1
+    intc_0 // 0
+    intc_1 // 2
+    +
+    dig 1
+    uncover 1
+    intc_1 // 2
+    box_extract
+    btoi
+    intc_0 // 0
+    +
+    dup2
+    intc_1 // 2
+    box_extract
+    btoi
+    intc_2 // 1
+    *
+    intc_1 // 2
+    +
     uncover 2
     uncover 2
-    substring3
+    uncover 2
+    box_extract
     extract 2 0
-    bytec_2 // "world"
+    bytec 4 // "world"
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:175
@@ -673,21 +741,21 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     // tests/approvals/box-proxies.algo.ts:214
     // assert(this.boxMap1('a').value[2])
     pushint 32
-    intc_2 // 8
+    pushint 8
     /
     intc_0 // 0
     +
     pushint 32
-    intc_2 // 8
+    pushint 8
     %
     cover 1
     uncover 2
     uncover 1
-    intc_3 // 1
-    box_extract
+    intc_2 // 1
+    box_extract // on error: index out of bounds
     cover 1
     dup
-    intc_2 // 8
+    pushint 8
     <
     assert // index access is out of bounds
     getbit
@@ -716,21 +784,23 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     concat
     // tests/approvals/box-proxies.algo.ts:217
     // assert(this.boxMap2('a').value.a === 'hello')
-    box_get
-    assert // Box must have value
-    dup
     intc_0 // 0
-    extract_uint16
-    cover 1
-    dup
-    pushint 2
-    extract_uint16
-    uncover 1
+    intc_3 // 5
+    +
+    dup2
+    intc_1 // 2
+    box_extract
+    btoi
+    intc_2 // 1
+    *
+    intc_1 // 2
+    +
     uncover 2
     uncover 2
-    substring3
+    uncover 2
+    box_extract
     extract 2 0
-    bytec_1 // "hello"
+    bytec_3 // "hello"
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:176
@@ -744,20 +814,30 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     concat
     // tests/approvals/box-proxies.algo.ts:218
     // assert(this.boxMap2('a').value.b.equals(Bytes('world')))
-    box_get
-    assert // Box must have value
-    dup
-    pushint 2
-    extract_uint16
-    cover 1
-    dup
-    len
-    cover 1
+    intc_0 // 0
+    intc_1 // 2
+    +
+    dig 1
+    uncover 1
+    intc_1 // 2
+    box_extract
+    btoi
+    intc_0 // 0
+    +
+    dup2
+    intc_1 // 2
+    box_extract
+    btoi
+    intc_2 // 1
+    *
+    intc_1 // 2
+    +
     uncover 2
     uncover 2
-    substring3
+    uncover 2
+    box_extract
     extract 2 0
-    bytec_2 // "world"
+    bytec 4 // "world"
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:176
@@ -772,21 +852,21 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     // tests/approvals/box-proxies.algo.ts:219
     // assert(this.boxMap2('a').value.c)
     pushint 32
-    intc_2 // 8
+    pushint 8
     /
     intc_0 // 0
     +
     pushint 32
-    intc_2 // 8
+    pushint 8
     %
     cover 1
     uncover 2
     uncover 1
-    intc_3 // 1
-    box_extract
+    intc_2 // 1
+    box_extract // on error: index out of bounds
     cover 1
     dup
-    intc_2 // 8
+    pushint 8
     <
     assert // index access is out of bounds
     getbit
@@ -799,7 +879,7 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     extract 6 2
     bytec 8 // "abc"
     concat
-    intc_1 // 5
+    intc_3 // 5
     itob
     extract 6 2
     pushbytes 0x
@@ -808,7 +888,7 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     cover 1
     dup
     len
-    intc_1 // 5
+    intc_3 // 5
     +
     bytec 9 // "def"
     len
@@ -868,7 +948,7 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     extract 6 2
     bytec 8 // "abc"
     concat
-    intc_1 // 5
+    intc_3 // 5
     itob
     extract 6 2
     pushbytes 0x
@@ -877,7 +957,7 @@ tests/approvals/box-proxies.algo.ts::TupleBox.testBoxMap_block@0:
     cover 1
     dup
     len
-    intc_1 // 5
+    intc_3 // 5
     +
     bytec 9 // "def"
     len

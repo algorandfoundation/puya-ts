@@ -36,10 +36,10 @@ main_test3_route@6:
     //   appId,
     // })
     itxn_begin
-    bytec_1 // method "test2()byte[4]"
-    itxn_field ApplicationArgs
     dup
     itxn_field ApplicationID
+    bytec_1 // method "test2()byte[4]"
+    itxn_field ApplicationArgs
     intc_0 // appl
     itxn_field TypeEnum
     intc_1 // 0
@@ -49,9 +49,9 @@ main_test3_route@6:
     //   appId,
     // })
     itxn_next
+    itxn_field ApplicationID
     bytec_1 // method "test2()byte[4]"
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     intc_0 // appl
     itxn_field TypeEnum
     intc_1 // 0
@@ -122,13 +122,15 @@ main_test_route@4:
     intc_3 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
+    dup
     btoi
     // tests/approvals/circular-reference-2.algo.ts:9
     // abiCall<typeof ContractOne.prototype.test>({ appId })
     itxn_begin
+    itxn_field ApplicationID
     bytec_0 // method "test(uint64)void"
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
+    itxn_field ApplicationArgs
     intc_0 // appl
     itxn_field TypeEnum
     intc_1 // 0

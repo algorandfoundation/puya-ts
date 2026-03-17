@@ -1,0 +1,190 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 8 1
+    pushbytes ""
+    // tests/approvals/logged-errors.algo.ts:4
+    // class LoggedErrorsValidContract extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0xa4994245 // method "testValid(uint64)void"
+    txna ApplicationArgs 0
+    match main_testValid_route@3
+    err
+
+main_testValid_route@3:
+    // tests/approvals/logged-errors.algo.ts:5
+    // public testValid(arg: uint64): void {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    bury 2
+    // tests/approvals/logged-errors.algo.ts:6
+    // loggedAssert(arg !== 1, '01')
+    intc_1 // 1
+    !=
+    bnz main_after_assert@10
+    pushbytes "ERR:01"
+    log
+    err // ERR:01
+
+main_after_assert@10:
+    // tests/approvals/logged-errors.algo.ts:7
+    // loggedAssert(arg !== 2, '02', {})
+    dup
+    pushint 2
+    !=
+    bnz main_after_assert@12
+    pushbytes "ERR:02"
+    log
+    err // ERR:02
+
+main_after_assert@12:
+    // tests/approvals/logged-errors.algo.ts:8
+    // loggedAssert(arg !== 3, '03', { message: 'arg is 3' })
+    dup
+    pushint 3
+    !=
+    bnz main_after_assert@14
+    pushbytes "ERR:03:arg is 3"
+    log
+    err // ERR:03:arg is 3
+
+main_after_assert@14:
+    // tests/approvals/logged-errors.algo.ts:9
+    // loggedAssert(arg !== 4, '04', { prefix: 'AER' })
+    dup
+    pushint 4
+    !=
+    bnz main_after_assert@16
+    pushbytes "AER:04"
+    log
+    err // AER:04
+
+main_after_assert@16:
+    // tests/approvals/logged-errors.algo.ts:10
+    // loggedAssert(arg !== 5, '05', { message: 'arg is 5', prefix: 'AER' })
+    dup
+    pushint 5
+    !=
+    bnz main_after_assert@18
+    pushbytes "AER:05:arg is 5"
+    log
+    err // AER:05:arg is 5
+
+main_after_assert@18:
+    // tests/approvals/logged-errors.algo.ts:11
+    // loggedAssert(arg !== 6, '06', 'arg is 6')
+    dup
+    pushint 6
+    !=
+    bnz main_after_assert@20
+    pushbytes "ERR:06:arg is 6"
+    log
+    err // ERR:06:arg is 6
+
+main_after_assert@20:
+    // tests/approvals/logged-errors.algo.ts:12
+    // if (arg === 7) {
+    dup
+    pushint 7
+    ==
+    bz main_after_if_else@22
+    // tests/approvals/logged-errors.algo.ts:13
+    // loggedErr('07')
+    pushbytes "ERR:07"
+    log
+    err // ERR:07
+
+main_after_if_else@22:
+    // tests/approvals/logged-errors.algo.ts:15
+    // if (arg === 8) {
+    dup
+    intc_0 // 8
+    ==
+    bz main_after_if_else@24
+    // tests/approvals/logged-errors.algo.ts:16
+    // loggedErr('08', {})
+    pushbytes "ERR:08"
+    log
+    err // ERR:08
+
+main_after_if_else@24:
+    // tests/approvals/logged-errors.algo.ts:18
+    // if (arg === 9) {
+    dup
+    pushint 9
+    ==
+    bz main_after_if_else@26
+    // tests/approvals/logged-errors.algo.ts:19
+    // loggedErr('09', { message: 'arg is 9' })
+    pushbytes "ERR:09:arg is 9"
+    log
+    err // ERR:09:arg is 9
+
+main_after_if_else@26:
+    // tests/approvals/logged-errors.algo.ts:21
+    // if (arg === 10) {
+    dup
+    pushint 10
+    ==
+    bz main_after_if_else@28
+    // tests/approvals/logged-errors.algo.ts:22
+    // loggedErr('10', { prefix: 'AER' })
+    pushbytes "AER:10"
+    log
+    err // AER:10
+
+main_after_if_else@28:
+    // tests/approvals/logged-errors.algo.ts:24
+    // if (arg === 11) {
+    dup
+    pushint 11
+    ==
+    bz main_after_if_else@30
+    // tests/approvals/logged-errors.algo.ts:25
+    // loggedErr('11', { message: 'arg is 11', prefix: 'AER' })
+    pushbytes "AER:11:arg is 11"
+    log
+    err // AER:11:arg is 11
+
+main_after_if_else@30:
+    // tests/approvals/logged-errors.algo.ts:27
+    // if (arg === 12) {
+    dup
+    pushint 12
+    ==
+    bz main_after_if_else@32
+    // tests/approvals/logged-errors.algo.ts:28
+    // loggedErr('12', 'arg is 12')
+    pushbytes "ERR:12:arg is 12"
+    log
+    err // ERR:12:arg is 12
+
+main_after_if_else@32:
+    // tests/approvals/logged-errors.algo.ts:5
+    // public testValid(arg: uint64): void {
+    intc_1 // 1
+    return
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/logged-errors.algo.ts:4
+    // class LoggedErrorsValidContract extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return

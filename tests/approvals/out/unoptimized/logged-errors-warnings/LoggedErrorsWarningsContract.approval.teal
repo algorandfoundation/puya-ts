@@ -1,0 +1,426 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 8 0
+    bytecblock "ERR:not-alnum!" "ERR:MyCode" "AER:01" "ERR:01:I will now provide a succint description of the error. I guess it all started when I was 5..." "ERR:abcd" "ERR:01:aaaaaaaaaaaaaaaaaaaaaaaaa"
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // tests/approvals/logged-errors-warnings.algo.ts:4
+    // export class LoggedErrorsWarningsContract extends Contract {
+    txn NumAppArgs
+    intc_2 // 0
+    !=
+    bz main___algots__.defaultCreate@13
+    b main_abi_routing@2
+
+main_abi_routing@2:
+    // tests/approvals/logged-errors-warnings.algo.ts:4
+    // export class LoggedErrorsWarningsContract extends Contract {
+    txn OnCompletion
+    intc_2 // NoOp
+    ==
+    assert
+    txn ApplicationID
+    intc_2 // 0
+    !=
+    bz main_create_NoOp@11
+    b main_call_NoOp@3
+
+main_call_NoOp@3:
+    // tests/approvals/logged-errors-warnings.algo.ts:4
+    // export class LoggedErrorsWarningsContract extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0xbe0bc255 // method "testInvalidCode(uint64)void"
+    pushbytes 0x73dcfc84 // method "testCamelCaseCode(uint64)void"
+    pushbytes 0x60d426c4 // method "testAERPrefix(uint64)void"
+    pushbytes 0xf4855369 // method "testLongMessage(uint64)void"
+    pushbytes 0x0e3b1b7e // method "test8ByteMessage(uint64)void"
+    pushbytes 0x22a6d067 // method "test32ByteMessage(uint64)void"
+    uncover 6
+    match main_testInvalidCode_route@4 main_testCamelCaseCode_route@5 main_testAERPrefix_route@6 main_testLongMessage_route@7 main_test8ByteMessage_route@8 main_test32ByteMessage_route@9
+    b main_switch_case_next@10
+
+main_switch_case_next@10:
+    b main_after_if_else@12
+
+main_after_if_else@12:
+    b main_after_if_else@14
+
+main_after_if_else@14:
+    // tests/approvals/logged-errors-warnings.algo.ts:4
+    // export class LoggedErrorsWarningsContract extends Contract {
+    err
+
+main_test32ByteMessage_route@9:
+    // tests/approvals/logged-errors-warnings.algo.ts:32
+    // public test32ByteMessage(arg: uint64): void {
+    callsub test32ByteMessage
+    b main_switch_case_next@10
+
+main_test8ByteMessage_route@8:
+    // tests/approvals/logged-errors-warnings.algo.ts:27
+    // public test8ByteMessage(arg: uint64): void {
+    callsub test8ByteMessage
+    b main_switch_case_next@10
+
+main_testLongMessage_route@7:
+    // tests/approvals/logged-errors-warnings.algo.ts:20
+    // public testLongMessage(arg: uint64): void {
+    callsub testLongMessage
+    b main_switch_case_next@10
+
+main_testAERPrefix_route@6:
+    // tests/approvals/logged-errors-warnings.algo.ts:15
+    // public testAERPrefix(arg: uint64): void {
+    callsub testAERPrefix
+    b main_switch_case_next@10
+
+main_testCamelCaseCode_route@5:
+    // tests/approvals/logged-errors-warnings.algo.ts:10
+    // public testCamelCaseCode(arg: uint64): void {
+    callsub testCamelCaseCode
+    b main_switch_case_next@10
+
+main_testInvalidCode_route@4:
+    // tests/approvals/logged-errors-warnings.algo.ts:5
+    // public testInvalidCode(arg: uint64): void {
+    callsub testInvalidCode
+    b main_switch_case_next@10
+
+main_create_NoOp@11:
+    b main_after_if_else@12
+
+main___algots__.defaultCreate@13:
+    // tests/approvals/logged-errors-warnings.algo.ts:4
+    // export class LoggedErrorsWarningsContract extends Contract {
+    txn OnCompletion
+    intc_2 // NoOp
+    ==
+    txn ApplicationID
+    intc_2 // 0
+    ==
+    &&
+    assert
+    callsub __algots__.defaultCreate
+    intc_0 // 1
+    return
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testInvalidCode[routing]() -> void:
+testInvalidCode:
+    b testInvalidCode_block@0
+
+testInvalidCode_block@0:
+    // tests/approvals/logged-errors-warnings.algo.ts:5
+    // public testInvalidCode(arg: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testInvalidCode
+    intc_0 // 1
+    return
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testCamelCaseCode[routing]() -> void:
+testCamelCaseCode:
+    b testCamelCaseCode_block@0
+
+testCamelCaseCode_block@0:
+    // tests/approvals/logged-errors-warnings.algo.ts:10
+    // public testCamelCaseCode(arg: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testCamelCaseCode
+    intc_0 // 1
+    return
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testAERPrefix[routing]() -> void:
+testAERPrefix:
+    b testAERPrefix_block@0
+
+testAERPrefix_block@0:
+    // tests/approvals/logged-errors-warnings.algo.ts:15
+    // public testAERPrefix(arg: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testAERPrefix
+    intc_0 // 1
+    return
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testLongMessage[routing]() -> void:
+testLongMessage:
+    b testLongMessage_block@0
+
+testLongMessage_block@0:
+    // tests/approvals/logged-errors-warnings.algo.ts:20
+    // public testLongMessage(arg: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testLongMessage
+    intc_0 // 1
+    return
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test8ByteMessage[routing]() -> void:
+test8ByteMessage:
+    b test8ByteMessage_block@0
+
+test8ByteMessage_block@0:
+    // tests/approvals/logged-errors-warnings.algo.ts:27
+    // public test8ByteMessage(arg: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test8ByteMessage
+    intc_0 // 1
+    return
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test32ByteMessage[routing]() -> void:
+test32ByteMessage:
+    b test32ByteMessage_block@0
+
+test32ByteMessage_block@0:
+    // tests/approvals/logged-errors-warnings.algo.ts:32
+    // public test32ByteMessage(arg: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test32ByteMessage
+    intc_0 // 1
+    return
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testInvalidCode(arg: uint64) -> void:
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testInvalidCode:
+    // tests/approvals/logged-errors-warnings.algo.ts:5
+    // public testInvalidCode(arg: uint64): void {
+    proto 1 0
+    b tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testInvalidCode_block@0
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testInvalidCode_block@0:
+    // tests/approvals/logged-errors-warnings.algo.ts:6
+    // loggedAssert(arg !== 1, 'not-alnum!')
+    frame_dig -1
+    intc_0 // 1
+    !=
+    bnz tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testInvalidCode_after_assert@2
+    b tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testInvalidCode_logged_error_handling@1
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testInvalidCode_logged_error_handling@1:
+    // tests/approvals/logged-errors-warnings.algo.ts:6
+    // loggedAssert(arg !== 1, 'not-alnum!')
+    bytec_0 // "ERR:not-alnum!"
+    log
+    err // ERR:not-alnum!
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testInvalidCode_after_assert@2:
+    // tests/approvals/logged-errors-warnings.algo.ts:7
+    // loggedErr('not-alnum!')
+    bytec_0 // "ERR:not-alnum!"
+    log
+    err // ERR:not-alnum!
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testCamelCaseCode(arg: uint64) -> void:
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testCamelCaseCode:
+    // tests/approvals/logged-errors-warnings.algo.ts:10
+    // public testCamelCaseCode(arg: uint64): void {
+    proto 1 0
+    b tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testCamelCaseCode_block@0
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testCamelCaseCode_block@0:
+    // tests/approvals/logged-errors-warnings.algo.ts:11
+    // loggedAssert(arg !== 1, 'MyCode')
+    frame_dig -1
+    intc_0 // 1
+    !=
+    bnz tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testCamelCaseCode_after_assert@2
+    b tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testCamelCaseCode_logged_error_handling@1
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testCamelCaseCode_logged_error_handling@1:
+    // tests/approvals/logged-errors-warnings.algo.ts:11
+    // loggedAssert(arg !== 1, 'MyCode')
+    bytec_1 // "ERR:MyCode"
+    log
+    err // ERR:MyCode
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testCamelCaseCode_after_assert@2:
+    // tests/approvals/logged-errors-warnings.algo.ts:12
+    // loggedErr('MyCode')
+    bytec_1 // "ERR:MyCode"
+    log
+    err // ERR:MyCode
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testAERPrefix(arg: uint64) -> void:
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testAERPrefix:
+    // tests/approvals/logged-errors-warnings.algo.ts:15
+    // public testAERPrefix(arg: uint64): void {
+    proto 1 0
+    b tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testAERPrefix_block@0
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testAERPrefix_block@0:
+    // tests/approvals/logged-errors-warnings.algo.ts:16
+    // loggedAssert(arg !== 1, '01', { prefix: 'AER' })
+    frame_dig -1
+    intc_0 // 1
+    !=
+    bnz tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testAERPrefix_after_assert@2
+    b tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testAERPrefix_logged_error_handling@1
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testAERPrefix_logged_error_handling@1:
+    // tests/approvals/logged-errors-warnings.algo.ts:16
+    // loggedAssert(arg !== 1, '01', { prefix: 'AER' })
+    bytec_2 // "AER:01"
+    log
+    err // AER:01
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testAERPrefix_after_assert@2:
+    // tests/approvals/logged-errors-warnings.algo.ts:17
+    // loggedErr('01', { prefix: 'AER' })
+    bytec_2 // "AER:01"
+    log
+    err // AER:01
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testLongMessage(arg: uint64) -> void:
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testLongMessage:
+    // tests/approvals/logged-errors-warnings.algo.ts:20
+    // public testLongMessage(arg: uint64): void {
+    proto 1 0
+    b tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testLongMessage_block@0
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testLongMessage_block@0:
+    // tests/approvals/logged-errors-warnings.algo.ts:21
+    // loggedAssert(arg !== 1, '01', {
+    frame_dig -1
+    intc_0 // 1
+    !=
+    // tests/approvals/logged-errors-warnings.algo.ts:21-23
+    // loggedAssert(arg !== 1, '01', {
+    //   message: 'I will now provide a succint description of the error. I guess it all started when I was 5...',
+    // })
+    bnz tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testLongMessage_after_assert@2
+    b tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testLongMessage_logged_error_handling@1
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testLongMessage_logged_error_handling@1:
+    // tests/approvals/logged-errors-warnings.algo.ts:21-23
+    // loggedAssert(arg !== 1, '01', {
+    //   message: 'I will now provide a succint description of the error. I guess it all started when I was 5...',
+    // })
+    bytec_3 // "ERR:01:I will now provide a succint description of the error. I guess it all started when I was 5..."
+    log
+    err // ERR:01:I will now provide a succint description of the error. I guess it all started when I was 5...
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testLongMessage_after_assert@2:
+    // tests/approvals/logged-errors-warnings.algo.ts:24
+    // loggedErr('01', { message: 'I will now provide a succint description of the error. I guess it all started when I was 5...' })
+    bytec_3 // "ERR:01:I will now provide a succint description of the error. I guess it all started when I was 5..."
+    log
+    err // ERR:01:I will now provide a succint description of the error. I guess it all started when I was 5...
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test8ByteMessage(arg: uint64) -> void:
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test8ByteMessage:
+    // tests/approvals/logged-errors-warnings.algo.ts:27
+    // public test8ByteMessage(arg: uint64): void {
+    proto 1 0
+    b tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test8ByteMessage_block@0
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test8ByteMessage_block@0:
+    // tests/approvals/logged-errors-warnings.algo.ts:28
+    // loggedAssert(arg !== 1, 'abcd')
+    frame_dig -1
+    intc_0 // 1
+    !=
+    bnz tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test8ByteMessage_after_assert@2
+    b tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test8ByteMessage_logged_error_handling@1
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test8ByteMessage_logged_error_handling@1:
+    // tests/approvals/logged-errors-warnings.algo.ts:28
+    // loggedAssert(arg !== 1, 'abcd')
+    bytec 4 // "ERR:abcd"
+    log
+    err // ERR:abcd
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test8ByteMessage_after_assert@2:
+    // tests/approvals/logged-errors-warnings.algo.ts:29
+    // loggedErr('abcd')
+    bytec 4 // "ERR:abcd"
+    log
+    err // ERR:abcd
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test32ByteMessage(arg: uint64) -> void:
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test32ByteMessage:
+    // tests/approvals/logged-errors-warnings.algo.ts:32
+    // public test32ByteMessage(arg: uint64): void {
+    proto 1 0
+    b tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test32ByteMessage_block@0
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test32ByteMessage_block@0:
+    // tests/approvals/logged-errors-warnings.algo.ts:33
+    // loggedAssert(arg !== 1, '01', { message: 'aaaaaaaaaaaaaaaaaaaaaaaaa' })
+    frame_dig -1
+    intc_0 // 1
+    !=
+    bnz tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test32ByteMessage_after_assert@2
+    b tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test32ByteMessage_logged_error_handling@1
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test32ByteMessage_logged_error_handling@1:
+    // tests/approvals/logged-errors-warnings.algo.ts:33
+    // loggedAssert(arg !== 1, '01', { message: 'aaaaaaaaaaaaaaaaaaaaaaaaa' })
+    bytec 5 // "ERR:01:aaaaaaaaaaaaaaaaaaaaaaaaa"
+    log
+    err // ERR:01:aaaaaaaaaaaaaaaaaaaaaaaaa
+
+tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test32ByteMessage_after_assert@2:
+    // tests/approvals/logged-errors-warnings.algo.ts:34
+    // loggedErr('01', { message: 'aaaaaaaaaaaaaaaaaaaaaaaaa' })
+    bytec 5 // "ERR:01:aaaaaaaaaaaaaaaaaaaaaaaaa"
+    log
+    err // ERR:01:aaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.__algots__.defaultCreate() -> void:
+__algots__.defaultCreate:
+    b __algots__.defaultCreate_block@0
+
+__algots__.defaultCreate_block@0:
+    retsub

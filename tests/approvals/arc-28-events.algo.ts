@@ -23,13 +23,24 @@ class EventEmitter extends Contract {
     })
     emit(y)
 
-    emit('Swapped', b, a)
+    emit('Swapped4', b, a)
 
-    emit('Swapped(uint8,uint8)', b, a)
-    emit('Swapped((uint8,uint8),uint8)', [b, b] as const, a)
+    emit('Swapped5(uint8,uint8)', b, a)
 
-    emit('Swapped((uint8,uint8),uint8)', [b, b], a)
-    emit('Swapped(uint8[],uint8)', [b, b], a)
+    emit('Swapped6((uint8,uint8),uint8)', [b, b] as const, a)
+    emit('Swapped6((uint8,uint8),uint8)', [b, b], a)
+
+    emit('Swapped7(uint8[],uint8)', [b, b], a)
+
+    emit('Swapped8(((uint8,uint8)),uint8)', [[b, b]], a)
+    emit('Swapped9(uint8[][],uint8)', [[b, b]], a)
+
+    emit('Swapped10((uint8,uint8)[],uint8)', [[b, b]], a)
+    emit('Swapped11((uint8[]),uint8)', [[b, b]], a)
+
+    const aUint64 = a.asUint64()
+    const bUint64 = b.asUint64()
+    emit('Swapped12(uint64[],uint64)', [bUint64, bUint64], aUint64)
   }
 
   emitCustom(arg0: string, arg1: boolean) {

@@ -344,7 +344,7 @@ subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setLastCalled(key: st
         let box%element_offset%0#0: uint64 = (* index#0 20u)
         let box%offset%1#0: uint64 = (+ box%add%0#0 box%element_offset%0#0)
         let box%offset%2#0: uint64 = (+ box%offset%1#0 12u)
-        (box_replace box_prefixed_key%0#0 box%offset%2#0 tmp%0#0)
+        (box_replace box_prefixed_key%0#0 box%offset%2#0 tmp%0#0) // on error: index out of bounds
         return 
 
 subroutine tests/approvals/arc4-struct.algo.ts::StructDemo.setPlugin(key: string) -> void:
