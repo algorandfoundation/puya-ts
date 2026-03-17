@@ -1,3 +1,4 @@
+import type { Arc56Contract } from '@algorandfoundation/algokit-utils/abi'
 import { spawn } from 'cross-spawn'
 import * as rpc from 'vscode-jsonrpc/node'
 import { AwstSerializer, SnakeCaseSerializer } from '../awst/json-serialize-awst'
@@ -28,6 +29,10 @@ interface LogResult {
   logs: Log[]
 }
 
+interface CompileResult extends LogResult {
+  arc56: Record<string, Arc56Contract>
+}
+
 export type PuyaServiceOptions = {
   puyaPath: string
 }
@@ -44,9 +49,9 @@ export class PuyaService {
     const type = new rpc.RequestType<AnalyseParams, LogResult, void>('analyse')
     return await this.connection.sendRequest(type, { awst, base_path: programDirectory.toString() })
   }
-  async compile(params: CompileParams): Promise<LogResult> {
+  async compile(params: CompileParams): Promise<CompileResult> {
     logger.debug(undefined, `puya serve: compile ${params.base_path}`)
-    const type = new rpc.RequestType<CompileParams, LogResult, void>('compile')
+    const type = new rpc.RequestType<CompileParams, CompileResult, void>('compile')
     return await this.connection.sendRequest(type, params)
   }
   async shutdown(): Promise<void> {
