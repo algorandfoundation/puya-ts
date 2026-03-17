@@ -69,7 +69,7 @@ export class LoggedAssertFunctionBuilder extends FunctionBuilder {
       genericTypeArgs: 0,
       callLocation: sourceLocation,
       funcName: 'loggedAssert',
-      argSpec: (a) => [a.passthrough(), a.required(stringPType), a.optional()],
+      argSpec: (a) => [a.required(), a.required(stringPType), a.optional()],
     })
 
     const { message, prefix } = resolveMessageAndPrefix(maybeOptions)
