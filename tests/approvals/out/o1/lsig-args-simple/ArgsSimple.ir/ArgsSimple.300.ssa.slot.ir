@@ -1,5 +1,5 @@
 main tests/approvals/lsig-args-simple.algo.ts::program:
-    block@0: // L6
+    block@0: // L7
         let tmp%0#0: bytes = (arg 0)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 8u)
@@ -32,10 +32,10 @@ main tests/approvals/lsig-args-simple.algo.ts::program:
         (assert tmp%15#0)
         let tmp%16#0: bool = (< arg0#0 10u)
         goto tmp%16#0 ? block@1 : block@2
-    block@1: // if_body_L16
+    block@1: // if_body_L17
         let mutableArg0#1: uint64 = 10u
         goto block@2
-    block@2: // after_if_else_L16
+    block@2: // after_if_else_L17
         let mutableArg0#2: uint64 = φ(arg0#0 <- block@0, mutableArg0#1 <- block@1)
         let mutableArg1#2: bytes = (concat arg1#0 "suffix")
         let tmp%19#0: bool = (>= mutableArg0#2 10u)
@@ -43,9 +43,9 @@ main tests/approvals/lsig-args-simple.algo.ts::program:
         let tmp%20#0: uint64 = (len mutableArg1#2)
         (assert tmp%20#0)
         goto arg2#0 ? block@4 : block@3
-    block@3: // if_body_L27
+    block@3: // if_body_L28
         let mutableArg0#3: uint64 = (+ mutableArg0#2 tmp%20#0)
         goto block@4
-    block@4: // after_if_else_L27
+    block@4: // after_if_else_L28
         let mutableArg0#4: uint64 = φ(mutableArg0#2 <- block@2, mutableArg0#3 <- block@3)
         return mutableArg0#4

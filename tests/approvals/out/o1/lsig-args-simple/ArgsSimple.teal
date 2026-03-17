@@ -6,7 +6,7 @@ main:
     intcblock 0 10
     pushbytes ""
     dup
-    // tests/approvals/lsig-args-simple.algo.ts:6
+    // tests/approvals/lsig-args-simple.algo.ts:7
     // program(arg0: uint64, arg1: bytes, arg2: boolean): uint64 {
     arg_0
     dup
@@ -40,20 +40,20 @@ main:
     dup
     cover 2
     cover 3
-    // tests/approvals/lsig-args-simple.algo.ts:8
+    // tests/approvals/lsig-args-simple.algo.ts:9
     // assert(arg0 === op.btoi(op.arg(0)))
     arg_0
     btoi
     dig 3
     ==
     assert
-    // tests/approvals/lsig-args-simple.algo.ts:9
+    // tests/approvals/lsig-args-simple.algo.ts:10
     // assert(arg1 === convertBytes<DynamicBytes>(op.arg(1), { strategy: 'unsafe-cast' }).native)
     arg_1
     extract 2 0
     ==
     assert
-    // tests/approvals/lsig-args-simple.algo.ts:10
+    // tests/approvals/lsig-args-simple.algo.ts:11
     // assert(arg2 === (op.btoi(op.arg(2)) !== 0))
     arg_2
     btoi
@@ -61,7 +61,7 @@ main:
     !=
     ==
     assert
-    // tests/approvals/lsig-args-simple.algo.ts:16
+    // tests/approvals/lsig-args-simple.algo.ts:17
     // if (mutableArg0 < 10) {
     intc_1 // 10
     <
@@ -70,28 +70,28 @@ main:
     bury 5
 
 main_after_if_else@2:
-    // tests/approvals/lsig-args-simple.algo.ts:19
+    // tests/approvals/lsig-args-simple.algo.ts:20
     // mutableArg1 = mutableArg1.concat(Bytes('suffix'))
     dig 1
     pushbytes "suffix"
     concat
-    // tests/approvals/lsig-args-simple.algo.ts:23
+    // tests/approvals/lsig-args-simple.algo.ts:24
     // assert(mutableArg0 >= 10)
     dig 5
     intc_1 // 10
     >=
     assert
-    // tests/approvals/lsig-args-simple.algo.ts:24
+    // tests/approvals/lsig-args-simple.algo.ts:25
     // assert(mutableArg1.length > 0)
     len
     dup
     bury 5
     assert
-    // tests/approvals/lsig-args-simple.algo.ts:27
+    // tests/approvals/lsig-args-simple.algo.ts:28
     // if (mutableArg2) {
     dup
     bnz main_after_if_else@4
-    // tests/approvals/lsig-args-simple.algo.ts:28
+    // tests/approvals/lsig-args-simple.algo.ts:29
     // mutableArg0 += mutableArg1.length
     dig 4
     dig 4
@@ -99,13 +99,13 @@ main_after_if_else@2:
     bury 5
 
 main_after_if_else@4:
-    // tests/approvals/lsig-args-simple.algo.ts:30
+    // tests/approvals/lsig-args-simple.algo.ts:31
     // return mutableArg0
     dig 4
     return
 
 main_if_body@1:
-    // tests/approvals/lsig-args-simple.algo.ts:17
+    // tests/approvals/lsig-args-simple.algo.ts:18
     // mutableArg0 = Uint64(10)
     intc_1 // 10
     bury 5
