@@ -82,6 +82,8 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
     block@7: // after_while_L20
         let aggregate%len_ok%0#0: bool = (<= len%2#0 64u)
         (assert aggregate%len_ok%0#0) // overflow
+        let aggregate%bzero%0#0: bytes = (bzero 64u)
+        let aggregate%arc4_encoded%0#0: bytes[64] = (b| c#0 aggregate%bzero%0#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob a#0)
         let aggregate%length%0#0: uint64 = (len d#0)
         let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
@@ -96,11 +98,16 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         let aggregate%concat%2#0: bytes = (concat aggregate%head%1#0 tmp%6#0)
         let tmp%23#0: bool = (== aggregate%concat%0#0 aggregate%concat%2#0)
         (assert tmp%23#0)
+        let aggregate%head%7#0: bytes = (concat aggregate%val_as_bytes%0#0 g#0)
+        let tmp%27#0: bool = (== aggregate%head%7#0 aggregate%head%7#0)
+        (assert tmp%27#0)
         let tmp%34#0: bool = (== aggregate%val_as_bytes%0#0 tmp%0#0)
         (assert tmp%34#0)
         let aggregate%encoded_bool%0#0: bytes[1] = (setbit 0x00 0u b#0)
         let tmp%37#0: bool = (== aggregate%encoded_bool%0#0 tmp%2#0)
         (assert tmp%37#0)
+        let tmp%40#0: bool = (== aggregate%arc4_encoded%0#0 aggregate%arc4_encoded%0#0)
+        (assert tmp%40#0)
         let aggregate%concat%3#0: bytes = (concat 0x0002 aggregate%encoded_value%0#0)
         let aggregate%concat%4#0: bytes = (concat 0x0002 tmp%6#0)
         let tmp%43#0: bool = (== aggregate%concat%3#0 aggregate%concat%4#0)
@@ -121,6 +128,9 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         let aggregate%head%27#0: bytes = (concat 0x0001 tmp%2#0)
         let tmp%55#0: bool = (== aggregate%head%26#0 aggregate%head%27#0)
         (assert tmp%55#0)
+        let aggregate%head%28#0: bytes = (concat 0x0001 aggregate%arc4_encoded%0#0)
+        let tmp%57#0: bool = (== aggregate%head%28#0 aggregate%head%28#0)
+        (assert tmp%57#0)
         let aggregate%concat%7#0: bytes = (concat 0x00010002 aggregate%encoded_value%0#0)
         let aggregate%concat%8#0: bytes = (concat 0x00010002 tmp%6#0)
         let tmp%59#0: bool = (== aggregate%concat%7#0 aggregate%concat%8#0)
@@ -129,6 +139,9 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         let aggregate%concat%10#0: bytes = (concat 0x00010002 tmp%8#0)
         let tmp%61#0: bool = (== aggregate%concat%9#0 aggregate%concat%10#0)
         (assert tmp%61#0)
+        let aggregate%head%34#0: bytes = (concat 0x0001 g#0)
+        let tmp%64#0: bool = (== aggregate%head%34#0 aggregate%head%34#0)
+        (assert tmp%64#0)
         exit 1u
 
 subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding[routing]() -> void:
@@ -244,6 +257,10 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         let reinterpret_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = (concat 0x0001 a_bytes#0)
         let aggregate%array_length%9#0: uint64 = (extract_uint16 reinterpret_Encoded(len+uint64[])%0#0 0u) // on error: invalid array length header
         let tmp%16#1: bool = (== aggregate%array_length%9#0 1u)
+        let aggregate%total_length%0#0: uint64 = (len reinterpret_Encoded(len+uint64[])%0#0)
+        let aggregate%array_trimmed%0#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint64[])%0#0)
+        let aggregate%bytes_offset%0#0: uint64 = 0u
+        let aggregate%encoded_element%0#0: bytes = ((extract 2 8) reinterpret_Encoded(len+uint64[])%0#0)
         let tmp%17#1: uint64 = (extract_uint64 reinterpret_Encoded(len+uint64[])%0#0 2u)
         let tmp%18#1: bool = (== tmp%17#1 a#0)
         let tmp%19#1: bool = (&& tmp%16#1 tmp%18#1)
@@ -251,7 +268,9 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         let reinterpret_Encoded(len+bool1[])%0#0: Encoded(len+bool1[]) = (concat 0x0001 b_bytes#0)
         let aggregate%array_length%10#0: uint64 = (extract_uint16 reinterpret_Encoded(len+bool1[])%0#0 0u) // on error: invalid array length header
         let tmp%21#1: bool = (== aggregate%array_length%10#0 1u)
+        let aggregate%lt%0#0: bool = (< 0u aggregate%array_length%10#0)
         (assert aggregate%array_length%10#0) // index access is out of bounds
+        let aggregate%add%0#0: uint64 = 16u
         let aggregate%get_bit%2#0: bool = (getbit reinterpret_Encoded(len+bool1[])%0#0 16u)
         let tmp%23#1: bool = (== aggregate%get_bit%2#0 b#0)
         let tmp%24#1: bool = (&& tmp%21#1 tmp%23#1)
@@ -260,6 +279,9 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         (log tmp%25#1)
         let aggregate%array_length%12#0: uint64 = (extract_uint16 tmp%25#1 0u) // on error: invalid array length header
         let tmp%27#0: bool = (== aggregate%array_length%12#0 1u)
+        let aggregate%total_length%1#0: uint64 = (len tmp%25#1)
+        let aggregate%array_trimmed%1#0: bytes = ((extract 2 0) tmp%25#1)
+        let aggregate%bytes_offset%1#0: uint64 = 0u
         let aggregate%encoded_element%1#0: bytes = ((extract 2 64) tmp%25#1)
         let tmp%29#0: bool = (b== aggregate%encoded_element%1#0 c#0)
         let tmp%30#0: bool = (&& tmp%27#0 tmp%29#0)
@@ -267,8 +289,11 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         let reinterpret_Encoded(len+(len+utf8[])[])%0#0: Encoded(len+(len+utf8[])[]) = (concat 0x00010002 d_bytes#0)
         let aggregate%array_length%13#0: uint64 = (extract_uint16 reinterpret_Encoded(len+(len+utf8[])[])%0#0 0u) // on error: invalid array length header
         let tmp%34#0: bool = (== aggregate%array_length%13#0 1u)
+        let aggregate%total_length%2#0: uint64 = (len reinterpret_Encoded(len+(len+utf8[])[])%0#0)
         let aggregate%array_head_and_tail%0#0: bytes = ((extract 2 0) reinterpret_Encoded(len+(len+utf8[])[])%0#0)
+        let aggregate%lt%1#0: bool = (< 0u aggregate%array_length%13#0)
         (assert aggregate%array_length%13#0) // index access is out of bounds
+        let aggregate%item_offset_offset%0#0: uint64 = 0u
         let aggregate%item_offset%0#0: uint64 = (extract_uint16 aggregate%array_head_and_tail%0#0 0u)
         let aggregate%item_length%0#0: uint64 = (extract_uint16 aggregate%array_head_and_tail%0#0 aggregate%item_offset%0#0)
         let aggregate%item_head_tail_length%0#0: uint64 = (+ aggregate%item_length%0#0 2u)
@@ -280,15 +305,22 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         let reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0: Encoded(len+(uint64,(len+uint8[]))[]) = (concat 0x00010002 e_bytes#0)
         let aggregate%array_length%15#0: uint64 = (extract_uint16 reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0 0u) // on error: invalid array length header
         let tmp%43#0: bool = (== aggregate%array_length%15#0 1u)
+        let aggregate%total_length%3#0: uint64 = (len reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0)
         let aggregate%array_head_and_tail%1#0: bytes = ((extract 2 0) reinterpret_Encoded(len+(uint64,(len+uint8[]))[])%0#0)
+        let aggregate%item_offset_offset%1#0: uint64 = 0u
         let aggregate%item_offset%1#0: uint64 = (extract_uint16 aggregate%array_head_and_tail%1#0 0u)
+        let aggregate%next_index%0#0: uint64 = 1u
         let aggregate%has_next%0#0: uint64 = (- aggregate%array_length%15#0 1u) // on error: index access is out of bounds
         let aggregate%end_of_array%0#0: uint64 = (len aggregate%array_head_and_tail%1#0)
+        let aggregate%next_item_offset_offset%0#0: uint64 = 2u
         let aggregate%next_item_offset%0#0: uint64 = (extract_uint16 aggregate%array_head_and_tail%1#0 2u)
         let aggregate%end_offset%0#0: uint64 = (select aggregate%end_of_array%0#0 aggregate%next_item_offset%0#0 aggregate%has_next%0#0)
         let aggregate%substring3%2#0: bytes = (substring3 aggregate%array_head_and_tail%1#0 aggregate%item_offset%1#0 aggregate%end_offset%0#0)
         let aggregate%extract%2#0: bytes = ((extract 0 8) aggregate%substring3%2#0)
         let tmp%46#0: bool = (== aggregate%extract%2#0 aggregate%extract%1#0)
+        let aggregate%item_offset_offset%2#0: uint64 = 0u
+        let aggregate%next_index%1#0: uint64 = 1u
+        let aggregate%next_item_offset_offset%1#0: uint64 = 2u
         let aggregate%extract_uint16%2#0: uint64 = (extract_uint16 aggregate%substring3%2#0 8u)
         let aggregate%len%2#0: uint64 = (len aggregate%substring3%2#0)
         let aggregate%substring3%4#0: bytes = (substring3 aggregate%substring3%2#0 aggregate%extract_uint16%2#0 aggregate%len%2#0)
@@ -299,6 +331,9 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDeco
         let reinterpret_Encoded(len+uint8[32][])%0#0: Encoded(len+uint8[32][]) = (concat 0x0001 f_bytes#0)
         let aggregate%array_length%18#0: uint64 = (extract_uint16 reinterpret_Encoded(len+uint8[32][])%0#0 0u) // on error: invalid array length header
         let tmp%54#0: bool = (== aggregate%array_length%18#0 1u)
+        let aggregate%total_length%5#0: uint64 = (len reinterpret_Encoded(len+uint8[32][])%0#0)
+        let aggregate%array_trimmed%2#0: bytes = ((extract 2 0) reinterpret_Encoded(len+uint8[32][])%0#0)
+        let aggregate%bytes_offset%2#0: uint64 = 0u
         let aggregate%encoded_element%2#0: bytes = ((extract 2 32) reinterpret_Encoded(len+uint8[32][])%0#0)
         let tmp%56#0: bool = (== aggregate%encoded_element%2#0 f#0)
         let tmp%57#0: bool = (&& tmp%54#0 tmp%56#0)
