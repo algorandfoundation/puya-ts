@@ -6,7 +6,7 @@ import type { PType } from '../ptypes'
 import { stringPType } from '../ptypes'
 import type { InstanceBuilder, NodeBuilder } from './index'
 import { FunctionBuilder } from './index'
-import { requireInstanceBuilder, requireStringConstant } from './util'
+import { requestBuilderOfType, requireInstanceBuilder, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { VoidExpressionBuilder } from './void-expression-builder'
 
@@ -38,31 +38,38 @@ function resolveErrorMessage(code: InstanceBuilder, message: InstanceBuilder | u
   return messageStr ? `${prefixStr}:${codeStr}:${messageStr}` : `${prefixStr}:${codeStr}`
 }
 
-/**
- * Possible patterns are:
- * - `undefined`: No argument was given.
- * - {}: Empty options.
- * - { message: string }: Message was provided.
- * - { prefix: string }: Prefix was provided.
- * - { message: string, prefix: string }: Both message and prefix were provided.
- */
-function resolveMessageAndPrefix(options: InstanceBuilder | undefined): {
+function resolveMessageAndPrefix(maybeMessageOrOptions: InstanceBuilder | undefined): {
   message: InstanceBuilder | undefined
   prefix: InstanceBuilder | undefined
 } {
+  /**
+   * Tries to get a field from the optional options object.
+   *
+   * Returns `undefined` if the field does not exist or no options object was passed.
+   */
   function get(field: string) {
-    return options?.hasProperty(field) ? requireInstanceBuilder(options.memberAccess(field, options.sourceLocation)) : undefined
+    return maybeMessageOrOptions?.hasProperty(field)
+      ? requireInstanceBuilder(maybeMessageOrOptions.memberAccess(field, maybeMessageOrOptions.sourceLocation))
+      : undefined
+  }
+
+  // Desugar string-only overload (passing `"the message"` instead of `{ message: "the message" }`)
+  if (maybeMessageOrOptions) {
+    const message = requestBuilderOfType(maybeMessageOrOptions, stringPType)
+    if (message) {
+      return { message: message, prefix: undefined }
+    }
   }
 
   const message = get('message')
   const prefix = get('prefix')
-  return { message: message, prefix: prefix }
+  return { message, prefix }
 }
 
 export class LoggedAssertFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
-      args: [condition, code, maybeOptions],
+      args: [condition, code, maybeMessageOrOptions],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -72,7 +79,7 @@ export class LoggedAssertFunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required(), a.required(stringPType), a.optional()],
     })
 
-    const { message, prefix } = resolveMessageAndPrefix(maybeOptions)
+    const { message, prefix } = resolveMessageAndPrefix(maybeMessageOrOptions)
     const errorMessage = resolveErrorMessage(code, message, prefix)
 
     return new VoidExpressionBuilder(
@@ -89,7 +96,7 @@ export class LoggedAssertFunctionBuilder extends FunctionBuilder {
 export class LoggedErrFunctionBuilder extends FunctionBuilder {
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
-      args: [code, maybeOptions],
+      args: [code, maybeMessageOrOptions],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -99,7 +106,7 @@ export class LoggedErrFunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required(stringPType), a.optional()],
     })
 
-    const { message, prefix } = resolveMessageAndPrefix(maybeOptions)
+    const { message, prefix } = resolveMessageAndPrefix(maybeMessageOrOptions)
     const errorMessage = resolveErrorMessage(code, message, prefix)
 
     return new VoidExpressionBuilder(

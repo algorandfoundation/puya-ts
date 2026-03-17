@@ -16,11 +16,13 @@ describe('logged errors and asserts', () => {
     { arg: 3, expectedError: 'ERR:03:arg is 3' },
     { arg: 4, expectedError: 'AER:04' },
     { arg: 5, expectedError: 'AER:05:arg is 5' },
-    { arg: 6, expectedError: 'ERR:06' },
+    { arg: 6, expectedError: 'ERR:06:arg is 6' },
     { arg: 7, expectedError: 'ERR:07' },
-    { arg: 8, expectedError: 'ERR:08:arg is 8' },
-    { arg: 9, expectedError: 'AER:09' },
-    { arg: 10, expectedError: 'AER:10:arg is 10' },
+    { arg: 8, expectedError: 'ERR:08' },
+    { arg: 9, expectedError: 'ERR:09:arg is 9' },
+    { arg: 10, expectedError: 'AER:10' },
+    { arg: 11, expectedError: 'AER:11:arg is 11' },
+    { arg: 12, expectedError: 'ERR:12:arg is 12' },
   ]
 
   for (const { arg, expectedError } of testCases) {

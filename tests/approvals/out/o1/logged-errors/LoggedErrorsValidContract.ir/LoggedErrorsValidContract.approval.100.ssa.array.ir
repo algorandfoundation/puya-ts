@@ -61,34 +61,46 @@ subroutine tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.test
         (log "AER:05:arg is 5")
         fail // AER:05:arg is 5
     block@11: // after_assert_L10
-        let tmp%5#0: bool = (== arg#0 6u)
-        goto tmp%5#0 ? block@12 : block@13
-    block@12: // if_body_L11
-        (log "ERR:06")
-        fail // ERR:06
-    block@13: // after_if_else_L11
+        let tmp%5#0: bool = (!= arg#0 6u)
+        goto tmp%5#0 ? block@13 : block@12
+    block@12: // logged_error_handling_L11
+        (log "ERR:06:arg is 6")
+        fail // ERR:06:arg is 6
+    block@13: // after_assert_L11
         let tmp%6#0: bool = (== arg#0 7u)
         goto tmp%6#0 ? block@14 : block@15
-    block@14: // if_body_L14
+    block@14: // if_body_L12
         (log "ERR:07")
         fail // ERR:07
-    block@15: // after_if_else_L14
+    block@15: // after_if_else_L12
         let tmp%7#0: bool = (== arg#0 8u)
         goto tmp%7#0 ? block@16 : block@17
-    block@16: // if_body_L17
-        (log "ERR:08:arg is 8")
-        fail // ERR:08:arg is 8
-    block@17: // after_if_else_L17
+    block@16: // if_body_L15
+        (log "ERR:08")
+        fail // ERR:08
+    block@17: // after_if_else_L15
         let tmp%8#0: bool = (== arg#0 9u)
         goto tmp%8#0 ? block@18 : block@19
-    block@18: // if_body_L20
-        (log "AER:09")
-        fail // AER:09
-    block@19: // after_if_else_L20
+    block@18: // if_body_L18
+        (log "ERR:09:arg is 9")
+        fail // ERR:09:arg is 9
+    block@19: // after_if_else_L18
         let tmp%9#0: bool = (== arg#0 10u)
         goto tmp%9#0 ? block@20 : block@21
-    block@20: // if_body_L23
-        (log "AER:10:arg is 10")
-        fail // AER:10:arg is 10
-    block@21: // after_if_else_L23
+    block@20: // if_body_L21
+        (log "AER:10")
+        fail // AER:10
+    block@21: // after_if_else_L21
+        let tmp%10#0: bool = (== arg#0 11u)
+        goto tmp%10#0 ? block@22 : block@23
+    block@22: // if_body_L24
+        (log "AER:11:arg is 11")
+        fail // AER:11:arg is 11
+    block@23: // after_if_else_L24
+        let tmp%11#0: bool = (== arg#0 12u)
+        goto tmp%11#0 ? block@24 : block@25
+    block@24: // if_body_L27
+        (log "ERR:12:arg is 12")
+        fail // ERR:12:arg is 12
+    block@25: // after_if_else_L27
         exit 1u

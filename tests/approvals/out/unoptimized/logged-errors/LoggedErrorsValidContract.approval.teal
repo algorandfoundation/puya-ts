@@ -173,22 +173,22 @@ tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_logge
 
 tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after_assert@10:
     // tests/approvals/logged-errors.algo.ts:11
-    // if (arg === 6) {
+    // loggedAssert(arg !== 6, '06', 'arg is 6')
     frame_dig -1
     pushint 6
-    ==
-    bz tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after_if_else@12
-    b tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_if_body@11
+    !=
+    bnz tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after_assert@12
+    b tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_logged_error_handling@11
 
-tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_if_body@11:
-    // tests/approvals/logged-errors.algo.ts:12
-    // loggedErr('06')
-    pushbytes "ERR:06"
+tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_logged_error_handling@11:
+    // tests/approvals/logged-errors.algo.ts:11
+    // loggedAssert(arg !== 6, '06', 'arg is 6')
+    pushbytes "ERR:06:arg is 6"
     log
-    err // ERR:06
+    err // ERR:06:arg is 6
 
-tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after_if_else@12:
-    // tests/approvals/logged-errors.algo.ts:14
+tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after_assert@12:
+    // tests/approvals/logged-errors.algo.ts:12
     // if (arg === 7) {
     frame_dig -1
     pushint 7
@@ -197,14 +197,14 @@ tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after
     b tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_if_body@13
 
 tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_if_body@13:
-    // tests/approvals/logged-errors.algo.ts:15
-    // loggedErr('07', {})
+    // tests/approvals/logged-errors.algo.ts:13
+    // loggedErr('07')
     pushbytes "ERR:07"
     log
     err // ERR:07
 
 tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after_if_else@14:
-    // tests/approvals/logged-errors.algo.ts:17
+    // tests/approvals/logged-errors.algo.ts:15
     // if (arg === 8) {
     frame_dig -1
     intc_2 // 8
@@ -213,14 +213,14 @@ tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after
     b tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_if_body@15
 
 tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_if_body@15:
-    // tests/approvals/logged-errors.algo.ts:18
-    // loggedErr('08', { message: 'arg is 8' })
-    pushbytes "ERR:08:arg is 8"
+    // tests/approvals/logged-errors.algo.ts:16
+    // loggedErr('08', {})
+    pushbytes "ERR:08"
     log
-    err // ERR:08:arg is 8
+    err // ERR:08
 
 tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after_if_else@16:
-    // tests/approvals/logged-errors.algo.ts:20
+    // tests/approvals/logged-errors.algo.ts:18
     // if (arg === 9) {
     frame_dig -1
     pushint 9
@@ -229,14 +229,14 @@ tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after
     b tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_if_body@17
 
 tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_if_body@17:
-    // tests/approvals/logged-errors.algo.ts:21
-    // loggedErr('09', { prefix: 'AER' })
-    pushbytes "AER:09"
+    // tests/approvals/logged-errors.algo.ts:19
+    // loggedErr('09', { message: 'arg is 9' })
+    pushbytes "ERR:09:arg is 9"
     log
-    err // AER:09
+    err // ERR:09:arg is 9
 
 tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after_if_else@18:
-    // tests/approvals/logged-errors.algo.ts:23
+    // tests/approvals/logged-errors.algo.ts:21
     // if (arg === 10) {
     frame_dig -1
     pushint 10
@@ -245,13 +245,45 @@ tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after
     b tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_if_body@19
 
 tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_if_body@19:
-    // tests/approvals/logged-errors.algo.ts:24
-    // loggedErr('10', { message: 'arg is 10', prefix: 'AER' })
-    pushbytes "AER:10:arg is 10"
+    // tests/approvals/logged-errors.algo.ts:22
+    // loggedErr('10', { prefix: 'AER' })
+    pushbytes "AER:10"
     log
-    err // AER:10:arg is 10
+    err // AER:10
 
 tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after_if_else@20:
+    // tests/approvals/logged-errors.algo.ts:24
+    // if (arg === 11) {
+    frame_dig -1
+    pushint 11
+    ==
+    bz tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after_if_else@22
+    b tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_if_body@21
+
+tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_if_body@21:
+    // tests/approvals/logged-errors.algo.ts:25
+    // loggedErr('11', { message: 'arg is 11', prefix: 'AER' })
+    pushbytes "AER:11:arg is 11"
+    log
+    err // AER:11:arg is 11
+
+tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after_if_else@22:
+    // tests/approvals/logged-errors.algo.ts:27
+    // if (arg === 12) {
+    frame_dig -1
+    pushint 12
+    ==
+    bz tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after_if_else@24
+    b tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_if_body@23
+
+tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_if_body@23:
+    // tests/approvals/logged-errors.algo.ts:28
+    // loggedErr('12', 'arg is 12')
+    pushbytes "ERR:12:arg is 12"
+    log
+    err // ERR:12:arg is 12
+
+tests/approvals/logged-errors.algo.ts::LoggedErrorsValidContract.testValid_after_if_else@24:
     retsub
 
 

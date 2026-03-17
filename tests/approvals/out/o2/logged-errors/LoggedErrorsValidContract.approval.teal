@@ -86,70 +86,94 @@ main_after_assert@16:
 
 main_after_assert@18:
     // tests/approvals/logged-errors.algo.ts:11
-    // if (arg === 6) {
+    // loggedAssert(arg !== 6, '06', 'arg is 6')
     dup
     pushint 6
-    ==
-    bz main_after_if_else@20
-    // tests/approvals/logged-errors.algo.ts:12
-    // loggedErr('06')
-    pushbytes "ERR:06"
+    !=
+    bnz main_after_assert@20
+    pushbytes "ERR:06:arg is 6"
     log
-    err // ERR:06
+    err // ERR:06:arg is 6
 
-main_after_if_else@20:
-    // tests/approvals/logged-errors.algo.ts:14
+main_after_assert@20:
+    // tests/approvals/logged-errors.algo.ts:12
     // if (arg === 7) {
     dup
     pushint 7
     ==
     bz main_after_if_else@22
-    // tests/approvals/logged-errors.algo.ts:15
-    // loggedErr('07', {})
+    // tests/approvals/logged-errors.algo.ts:13
+    // loggedErr('07')
     pushbytes "ERR:07"
     log
     err // ERR:07
 
 main_after_if_else@22:
-    // tests/approvals/logged-errors.algo.ts:17
+    // tests/approvals/logged-errors.algo.ts:15
     // if (arg === 8) {
     dup
     intc_0 // 8
     ==
     bz main_after_if_else@24
-    // tests/approvals/logged-errors.algo.ts:18
-    // loggedErr('08', { message: 'arg is 8' })
-    pushbytes "ERR:08:arg is 8"
+    // tests/approvals/logged-errors.algo.ts:16
+    // loggedErr('08', {})
+    pushbytes "ERR:08"
     log
-    err // ERR:08:arg is 8
+    err // ERR:08
 
 main_after_if_else@24:
-    // tests/approvals/logged-errors.algo.ts:20
+    // tests/approvals/logged-errors.algo.ts:18
     // if (arg === 9) {
     dup
     pushint 9
     ==
     bz main_after_if_else@26
-    // tests/approvals/logged-errors.algo.ts:21
-    // loggedErr('09', { prefix: 'AER' })
-    pushbytes "AER:09"
+    // tests/approvals/logged-errors.algo.ts:19
+    // loggedErr('09', { message: 'arg is 9' })
+    pushbytes "ERR:09:arg is 9"
     log
-    err // AER:09
+    err // ERR:09:arg is 9
 
 main_after_if_else@26:
-    // tests/approvals/logged-errors.algo.ts:23
+    // tests/approvals/logged-errors.algo.ts:21
     // if (arg === 10) {
     dup
     pushint 10
     ==
     bz main_after_if_else@28
-    // tests/approvals/logged-errors.algo.ts:24
-    // loggedErr('10', { message: 'arg is 10', prefix: 'AER' })
-    pushbytes "AER:10:arg is 10"
+    // tests/approvals/logged-errors.algo.ts:22
+    // loggedErr('10', { prefix: 'AER' })
+    pushbytes "AER:10"
     log
-    err // AER:10:arg is 10
+    err // AER:10
 
 main_after_if_else@28:
+    // tests/approvals/logged-errors.algo.ts:24
+    // if (arg === 11) {
+    dup
+    pushint 11
+    ==
+    bz main_after_if_else@30
+    // tests/approvals/logged-errors.algo.ts:25
+    // loggedErr('11', { message: 'arg is 11', prefix: 'AER' })
+    pushbytes "AER:11:arg is 11"
+    log
+    err // AER:11:arg is 11
+
+main_after_if_else@30:
+    // tests/approvals/logged-errors.algo.ts:27
+    // if (arg === 12) {
+    dup
+    pushint 12
+    ==
+    bz main_after_if_else@32
+    // tests/approvals/logged-errors.algo.ts:28
+    // loggedErr('12', 'arg is 12')
+    pushbytes "ERR:12:arg is 12"
+    log
+    err // ERR:12:arg is 12
+
+main_after_if_else@32:
     // tests/approvals/logged-errors.algo.ts:5
     // public testValid(arg: uint64): void {
     intc_1 // 1
