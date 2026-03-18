@@ -10,6 +10,7 @@ import { codeInvariant } from '../../util'
 import type { Arc4AbiDecoratorData } from '../models/decorator-data'
 import type { PType } from '../ptypes'
 import { arc4AbiMethodDecorator, arc4BareMethodDecorator, boolPType, ReadonlyArrayPType, readonlyDecorator, stringPType } from '../ptypes'
+import { validateEncodingMap } from './arc4/util'
 import type { InstanceBuilder } from './index'
 import { DecoratorDataBuilder, NodeBuilder } from './index'
 import { ObjectLiteralExpressionBuilder } from './literal/object-literal-expression-builder'
@@ -36,11 +37,6 @@ const resourceEncodingMap: Record<string, 'index' | 'value'> = {
   value: 'value',
 }
 
-//TODO: maybe refactor this somewhere else and import it from both here and logicsig builder
-export const validateEncodingMap: Record<string, boolean> = {
-  'unsafe-disabled': false,
-  args: true,
-}
 export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
   readonly ptype = arc4BareMethodDecorator
 
