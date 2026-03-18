@@ -239,6 +239,12 @@ export class MethodSelectorFunctionBuilder extends FunctionBuilder {
   }
 }
 
+// ABI encoding validation options (used by both lsig and methods)
+export const validateEncodingMap: Record<string, boolean> = {
+  'unsafe-disabled': false,
+  args: true,
+}
+
 export class SizeOfFunctionBuilder extends FunctionBuilder {
   readonly ptype = sizeOfFunction
 
