@@ -80,8 +80,6 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         itxn_submit
         goto block@2
     block@7: // after_while_L20
-        let aggregate%len_ok%0#0: bool = (<= len%2#0 64u)
-        (assert aggregate%len_ok%0#0) // overflow
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob a#0)
         let aggregate%length%0#0: uint64 = (len d#0)
         let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
@@ -101,6 +99,12 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         let aggregate%encoded_bool%0#0: bytes[1] = (setbit 0x00 0u b#0)
         let tmp%37#0: bool = (== aggregate%encoded_bool%0#0 tmp%2#0)
         (assert tmp%37#0)
+        let aggregate%len_ok%0#0: bool = (<= len%2#0 64u)
+        (assert aggregate%len_ok%0#0) // overflow
+        let aggregate%bzero%0#0: bytes = (bzero 64u)
+        let aggregate%arc4_encoded%0#0: bytes[64] = (b| c#0 aggregate%bzero%0#0)
+        let tmp%40#0: bool = (== aggregate%arc4_encoded%0#0 c#0)
+        (assert tmp%40#0)
         let aggregate%concat%3#0: bytes = (concat 0x0002 aggregate%encoded_value%0#0)
         let aggregate%concat%4#0: bytes = (concat 0x0002 tmp%6#0)
         let tmp%43#0: bool = (== aggregate%concat%3#0 aggregate%concat%4#0)
@@ -121,6 +125,10 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         let aggregate%head%27#0: bytes = (concat 0x0001 tmp%2#0)
         let tmp%55#0: bool = (== aggregate%head%26#0 aggregate%head%27#0)
         (assert tmp%55#0)
+        let aggregate%head%28#0: bytes = (concat 0x0001 aggregate%arc4_encoded%0#0)
+        let aggregate%head%29#0: bytes = (concat 0x0001 c#0)
+        let tmp%57#0: bool = (== aggregate%head%28#0 aggregate%head%29#0)
+        (assert tmp%57#0)
         let aggregate%concat%7#0: bytes = (concat 0x00010002 aggregate%encoded_value%0#0)
         let aggregate%concat%8#0: bytes = (concat 0x00010002 tmp%6#0)
         let tmp%59#0: bool = (== aggregate%concat%7#0 aggregate%concat%8#0)

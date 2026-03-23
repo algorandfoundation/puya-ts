@@ -82,7 +82,6 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         itxn_submit
         goto block@2
     block@7: // after_while_L20
-        let tmp%6#1: Encoded(uint512) = bytes_encode<uint512>(c#0)
         let tmp%15#0: Encoded(uint64,(len+uint8[])) = bytes_encode<(uint64,(len+uint8[]))>(a#0, d#0)
         let tmp%18#0: Encoded(uint64,(len+uint8[])) = bytes_encode<(uint64,(len+uint8[]))>(tmp%0#0, tmp%6#0)
         let tmp%19#0: bool = (== tmp%15#0 tmp%18#0)
@@ -107,7 +106,7 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         let tmp%37#0: bool = (== tmp%35#0 encoded_array%1#0)
         (assert tmp%37#0)
         let tmp%38#0: Encoded(uint512) = bytes_encode<(uint512)>(c#0)
-        let encoded_array%2#0: Encoded(uint512[1]) = bytes_encode<uint512[1]>(tmp%6#1)
+        let encoded_array%2#0: Encoded(uint512[1]) = bytes_encode<uint512[1]>(tmp%4#0)
         let tmp%40#0: bool = (== tmp%38#0 encoded_array%2#0)
         (assert tmp%40#0)
         let tmp%41#0: Encoded((len+uint8[])) = bytes_encode<((len+uint8[]))>(d#0)
@@ -135,7 +134,7 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         let tmp%55#0: bool = (== encoded_array%9#0 encoded_array%10#0)
         (assert tmp%55#0)
         let encoded_array%11#0: Encoded(len+uint512[]) = bytes_encode<(len+uint512[])>(c#0)
-        let encoded_array%12#0: Encoded(len+uint512[]) = bytes_encode<(len+uint512[])>(tmp%6#1)
+        let encoded_array%12#0: Encoded(len+uint512[]) = bytes_encode<(len+uint512[])>(tmp%4#0)
         let tmp%57#0: bool = (== encoded_array%11#0 encoded_array%12#0)
         (assert tmp%57#0)
         let encoded_array%13#0: Encoded(len+(len+uint8[])[]) = bytes_encode<(len+(len+uint8[])[])>(d#0)

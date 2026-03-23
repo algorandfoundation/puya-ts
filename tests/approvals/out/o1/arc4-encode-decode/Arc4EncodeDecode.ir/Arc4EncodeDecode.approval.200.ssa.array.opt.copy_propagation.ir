@@ -80,11 +80,6 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         itxn_submit
         goto block@2
     block@7: // after_while_L20
-        let aggregate%value_len%0#0: uint64 = (len c#0)
-        let aggregate%len_ok%0#0: bool = (<= aggregate%value_len%0#0 64u)
-        (assert aggregate%len_ok%0#0) // overflow
-        let aggregate%bzero%0#0: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%0#0: bytes[64] = (b| c#0 aggregate%bzero%0#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob a#0)
         let aggregate%head%0#0: bytes = (concat 0x aggregate%val_as_bytes%0#0)
         let aggregate%length%0#0: uint64 = (len d#0)
@@ -139,13 +134,13 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         let aggregate%head%13#0: bytes = (concat 0x tmp%2#0)
         let tmp%37#0: bool = (== aggregate%head%12#0 aggregate%head%13#0)
         (assert tmp%37#0)
-        let aggregate%value_len%1#0: uint64 = (len c#0)
-        let aggregate%len_ok%1#0: bool = (<= aggregate%value_len%1#0 64u)
-        (assert aggregate%len_ok%1#0) // overflow
-        let aggregate%bzero%1#0: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%1#0: bytes[64] = (b| c#0 aggregate%bzero%1#0)
-        let aggregate%head%14#0: bytes = (concat 0x aggregate%arc4_encoded%1#0)
-        let aggregate%head%15#0: bytes = (concat 0x aggregate%arc4_encoded%0#0)
+        let aggregate%value_len%0#0: uint64 = (len c#0)
+        let aggregate%len_ok%0#0: bool = (<= aggregate%value_len%0#0 64u)
+        (assert aggregate%len_ok%0#0) // overflow
+        let aggregate%bzero%0#0: bytes = (bzero 64u)
+        let aggregate%arc4_encoded%0#0: bytes[64] = (b| c#0 aggregate%bzero%0#0)
+        let aggregate%head%14#0: bytes = (concat 0x aggregate%arc4_encoded%0#0)
+        let aggregate%head%15#0: bytes = (concat 0x c#0)
         let tmp%40#0: bool = (== aggregate%head%14#0 aggregate%head%15#0)
         (assert tmp%40#0)
         let aggregate%length%2#0: uint64 = (len d#0)
@@ -212,15 +207,15 @@ subroutine tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEnco
         (assert tmp%55#0)
         let aggregate%as_bytes%14#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%4#0: bytes = ((extract 6 2) aggregate%as_bytes%14#0)
-        let aggregate%value_len%2#0: uint64 = (len c#0)
-        let aggregate%len_ok%2#0: bool = (<= aggregate%value_len%2#0 64u)
-        (assert aggregate%len_ok%2#0) // overflow
-        let aggregate%bzero%2#0: bytes = (bzero 64u)
-        let aggregate%arc4_encoded%2#0: bytes[64] = (b| c#0 aggregate%bzero%2#0)
-        let aggregate%head%28#0: bytes = (concat aggregate%len_u16%4#0 aggregate%arc4_encoded%2#0)
+        let aggregate%value_len%1#0: uint64 = (len c#0)
+        let aggregate%len_ok%1#0: bool = (<= aggregate%value_len%1#0 64u)
+        (assert aggregate%len_ok%1#0) // overflow
+        let aggregate%bzero%1#0: bytes = (bzero 64u)
+        let aggregate%arc4_encoded%1#0: bytes[64] = (b| c#0 aggregate%bzero%1#0)
+        let aggregate%head%28#0: bytes = (concat aggregate%len_u16%4#0 aggregate%arc4_encoded%1#0)
         let aggregate%as_bytes%15#0: bytes[8] = (itob 1u)
         let aggregate%len_u16%5#0: bytes = ((extract 6 2) aggregate%as_bytes%15#0)
-        let aggregate%head%29#0: bytes = (concat aggregate%len_u16%5#0 aggregate%arc4_encoded%0#0)
+        let aggregate%head%29#0: bytes = (concat aggregate%len_u16%5#0 c#0)
         let tmp%57#0: bool = (== aggregate%head%28#0 aggregate%head%29#0)
         (assert tmp%57#0)
         let aggregate%as_bytes%16#0: bytes[8] = (itob 1u)
