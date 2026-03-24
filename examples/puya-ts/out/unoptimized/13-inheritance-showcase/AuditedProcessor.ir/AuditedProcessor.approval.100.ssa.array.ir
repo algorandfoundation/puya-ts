@@ -1,0 +1,38 @@
+main examples/puya-ts/13-inheritance-showcase/contract.algo.ts::AuditedProcessor.approvalProgram:
+    block@0: // L59
+        let reinterpret_bool%0#0: bool = (txn ApplicationID)
+        goto reinterpret_bool%0#0 ? block@2 : block@1
+    block@1: // if_body_L1
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::AuditedProcessor.constructor()
+        goto block@2
+    block@2: // after_if_else_L1
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Auditable.recordAudit()
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "auditCount")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let tmp%0#0: bytes[8] = (itob maybe_value%0#0)
+        (log tmp%0#0)
+        return 1u
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Auditable.recordAudit() -> void:
+    block@0: // L37
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "auditCount")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let tmp%0#0: uint64 = (+ maybe_value%0#0 1u)
+        let next#0: uint64 = tmp%0#0
+        (app_global_put "auditCount" next#0)
+        return 
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::AuditedProcessor.constructor() -> void:
+    block@0: // L50
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Auditable.constructor()
+        (app_global_put "callTag" 42u)
+        return 
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Auditable.constructor() -> void:
+    block@0: // L32
+        goto block@1
+    block@1: // L1
+        goto block@2
+    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L32
+        (app_global_put "auditCount" 0u)
+        return 

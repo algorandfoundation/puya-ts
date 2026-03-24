@@ -1,0 +1,85 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1
+    bytecblock "paused"
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:185
+    // paused = GlobalState({ initialValue: false })
+    bytec_0 // "paused"
+    intc_0 // 0
+    app_global_put
+
+main_after_if_else@2:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:184
+    // class Pausable extends Contract {
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    bz main_create_NoOp@9
+    pushbytess 0x0178f94b 0x1b529de8 0x9b4c07da // method "pause()void", method "unpause()void", method "isPaused()bool"
+    txna ApplicationArgs 0
+    match main_pause_route@5 main_unpause_route@6 main_isPaused_route@7
+    err
+
+main_isPaused_route@7:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:207
+    // return this.paused.value
+    intc_0 // 0
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:185
+    // paused = GlobalState({ initialValue: false })
+    bytec_0 // "paused"
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:207
+    // return this.paused.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:206
+    // public isPaused(): boolean {
+    pushbytes 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_unpause_route@6:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:185
+    // paused = GlobalState({ initialValue: false })
+    bytec_0 // "paused"
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:199
+    // this.paused.value = false
+    intc_0 // 0
+    app_global_put
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:198
+    // public unpause(): void {
+    intc_1 // 1
+    return
+
+main_pause_route@5:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:185
+    // paused = GlobalState({ initialValue: false })
+    bytec_0 // "paused"
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:194
+    // this.paused.value = true
+    intc_1 // 1
+    app_global_put
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:193
+    // public pause(): void {
+    intc_1 // 1
+    return
+
+main_create_NoOp@9:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:184
+    // class Pausable extends Contract {
+    pushbytes 0xb8447b36 // method "createApplication()void"
+    txna ApplicationArgs 0
+    match main_unpause_route@6
+    err

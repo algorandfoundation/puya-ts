@@ -1,0 +1,193 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 8
+    bytecblock "counter" 0x151f7c75
+    // examples/puya-ts/01-counter/contract.algo.ts:25
+    // export class Counter extends Contract {
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    bz main_create_NoOp@8
+    pushbytess 0x289e7621 0xb31ac5f8 0x08f1b064 0x8dec4436 // method "increment(uint64)uint64", method "decrement(uint64)uint64", method "multiply(uint64)uint64", method "divide(uint64)uint64"
+    txna ApplicationArgs 0
+    match main_increment_route@3 main_decrement_route@4 main_multiply_route@5 main_divide_route@6
+    err
+
+main_divide_route@6:
+    // examples/puya-ts/01-counter/contract.algo.ts:70
+    // public divide(value: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/puya-ts/01-counter/contract.algo.ts:71
+    // this.counter.value = this.counter.value / value
+    intc_0 // 0
+    // examples/puya-ts/01-counter/contract.algo.ts:27
+    // counter = GlobalState<uint64>()
+    bytec_0 // "counter"
+    // examples/puya-ts/01-counter/contract.algo.ts:71
+    // this.counter.value = this.counter.value / value
+    app_global_get_ex
+    assert // check GlobalState exists
+    swap
+    /
+    // examples/puya-ts/01-counter/contract.algo.ts:27
+    // counter = GlobalState<uint64>()
+    bytec_0 // "counter"
+    // examples/puya-ts/01-counter/contract.algo.ts:71
+    // this.counter.value = this.counter.value / value
+    dig 1
+    app_global_put
+    // examples/puya-ts/01-counter/contract.algo.ts:70
+    // public divide(value: uint64): uint64 {
+    itob
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_multiply_route@5:
+    // examples/puya-ts/01-counter/contract.algo.ts:60
+    // public multiply(value: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/puya-ts/01-counter/contract.algo.ts:61
+    // this.counter.value = this.counter.value * value
+    intc_0 // 0
+    // examples/puya-ts/01-counter/contract.algo.ts:27
+    // counter = GlobalState<uint64>()
+    bytec_0 // "counter"
+    // examples/puya-ts/01-counter/contract.algo.ts:61
+    // this.counter.value = this.counter.value * value
+    app_global_get_ex
+    assert // check GlobalState exists
+    *
+    // examples/puya-ts/01-counter/contract.algo.ts:27
+    // counter = GlobalState<uint64>()
+    bytec_0 // "counter"
+    // examples/puya-ts/01-counter/contract.algo.ts:61
+    // this.counter.value = this.counter.value * value
+    dig 1
+    app_global_put
+    // examples/puya-ts/01-counter/contract.algo.ts:60
+    // public multiply(value: uint64): uint64 {
+    itob
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_decrement_route@4:
+    // examples/puya-ts/01-counter/contract.algo.ts:50
+    // public decrement(value: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/puya-ts/01-counter/contract.algo.ts:51
+    // this.counter.value -= value
+    intc_0 // 0
+    // examples/puya-ts/01-counter/contract.algo.ts:27
+    // counter = GlobalState<uint64>()
+    bytec_0 // "counter"
+    // examples/puya-ts/01-counter/contract.algo.ts:51
+    // this.counter.value -= value
+    app_global_get_ex
+    assert // check GlobalState exists
+    swap
+    -
+    // examples/puya-ts/01-counter/contract.algo.ts:27
+    // counter = GlobalState<uint64>()
+    bytec_0 // "counter"
+    // examples/puya-ts/01-counter/contract.algo.ts:51
+    // this.counter.value -= value
+    dig 1
+    app_global_put
+    // examples/puya-ts/01-counter/contract.algo.ts:50
+    // public decrement(value: uint64): uint64 {
+    itob
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_increment_route@3:
+    // examples/puya-ts/01-counter/contract.algo.ts:40
+    // public increment(value: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/puya-ts/01-counter/contract.algo.ts:41
+    // this.counter.value += value
+    intc_0 // 0
+    // examples/puya-ts/01-counter/contract.algo.ts:27
+    // counter = GlobalState<uint64>()
+    bytec_0 // "counter"
+    // examples/puya-ts/01-counter/contract.algo.ts:41
+    // this.counter.value += value
+    app_global_get_ex
+    assert // check GlobalState exists
+    +
+    // examples/puya-ts/01-counter/contract.algo.ts:27
+    // counter = GlobalState<uint64>()
+    bytec_0 // "counter"
+    // examples/puya-ts/01-counter/contract.algo.ts:41
+    // this.counter.value += value
+    dig 1
+    app_global_put
+    // examples/puya-ts/01-counter/contract.algo.ts:40
+    // public increment(value: uint64): uint64 {
+    itob
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_create_NoOp@8:
+    // examples/puya-ts/01-counter/contract.algo.ts:25
+    // export class Counter extends Contract {
+    pushbytes 0xb8447b36 // method "createApplication()void"
+    txna ApplicationArgs 0
+    match main_createApplication_route@9
+    err
+
+main_createApplication_route@9:
+    // examples/puya-ts/01-counter/contract.algo.ts:27
+    // counter = GlobalState<uint64>()
+    bytec_0 // "counter"
+    // examples/puya-ts/01-counter/contract.algo.ts:32
+    // this.counter.value = INITIAL_VALUE
+    intc_0 // 0
+    app_global_put
+    // examples/puya-ts/01-counter/contract.algo.ts:30
+    // public createApplication(): void {
+    intc_1 // 1
+    return

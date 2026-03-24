@@ -1,0 +1,45 @@
+contract Counter
+{
+  globals {
+    ["counter"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+    GlobalState["counter"]: uint64 = 0
+  }
+  
+  increment(value: uint64): uint64
+  {
+    GlobalState["counter"]: uint64 = GlobalState["counter"] + value
+    return GlobalState["counter"]
+  }
+  
+  decrement(value: uint64): uint64
+  {
+    GlobalState["counter"]: uint64 = GlobalState["counter"] - value
+    return GlobalState["counter"]
+  }
+  
+  multiply(value: uint64): uint64
+  {
+    GlobalState["counter"]: uint64 = GlobalState["counter"] * value
+    return GlobalState["counter"]
+  }
+  
+  divide(value: uint64): uint64
+  {
+    GlobalState["counter"]: uint64 = GlobalState["counter"] // value
+    return GlobalState["counter"]
+  }
+  
+}

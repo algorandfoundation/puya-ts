@@ -1,0 +1,98 @@
+contract TokenManager
+{
+  globals {
+    ["managedAsset"]: asset
+    ["totalMinted"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+  }
+  
+  createToken(name: string, unitName: string, total: uint64, decimals: uint64, url: string, defaultFrozen: bool): uint64
+  {
+    assert(!STATE_EXISTS(GlobalState["managedAsset"]), comment=Token already created)
+    result: inner_transaction_acfg = submit_txn(create_inner_transaction(Fee=0, TypeEnum=3, ConfigAssetTotal=total, ConfigAssetDecimals=decimals, ConfigAssetDefaultFrozen=defaultFrozen, ConfigAssetName=reinterpret_cast<bytes>(name), ConfigAssetUnitName=reinterpret_cast<bytes>(unitName), ConfigAssetURL=reinterpret_cast<bytes>(url), ConfigAssetManager=global<CurrentApplicationAddress>(), ConfigAssetReserve=global<CurrentApplicationAddress>(), ConfigAssetFreeze=global<CurrentApplicationAddress>(), ConfigAssetClawback=global<CurrentApplicationAddress>()))
+    GlobalState["managedAsset"]: asset = result.CreatedAssetID
+    GlobalState["totalMinted"]: uint64 = total
+    return reinterpret_cast<uint64>(result.CreatedAssetID)
+  }
+  
+  optInToAsset(asset: asset): void
+  {
+    assert(asset == GlobalState["managedAsset"], comment=Wrong asset)
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=global<CurrentApplicationAddress>(), XferAsset=asset, AssetAmount=0))
+  }
+  
+  transfer(asset: asset, receiver: account, amount: uint64): void
+  {
+    assert(asset == GlobalState["managedAsset"], comment=Wrong asset)
+    assert(amount > 0, comment=Amount must be positive)
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=receiver, XferAsset=asset, AssetAmount=amount))
+  }
+  
+  clawback(asset: asset, target: account, amount: uint64): void
+  {
+    assert(asset == GlobalState["managedAsset"], comment=Wrong asset)
+    assert(txn<Sender>() == global<CreatorAddress>(), comment=Only creator can clawback)
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=4, AssetSender=target, AssetReceiver=global<CurrentApplicationAddress>(), XferAsset=asset, AssetAmount=amount))
+  }
+  
+  freezeAccount(asset: asset, target: account, frozen: bool): void
+  {
+    assert(asset == GlobalState["managedAsset"], comment=Wrong asset)
+    assert(txn<Sender>() == global<CreatorAddress>(), comment=Only creator can freeze)
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=5, FreezeAsset=asset, FreezeAssetAccount=target, FreezeAssetFrozen=frozen))
+  }
+  
+  verifyAssetConfig(asset: asset): uint64
+  {
+    assert(asset == GlobalState["managedAsset"], comment=Wrong asset)
+    total: uint64 = checked_maybe(asset_params_get<AssetTotal>(asset), comment=asset exists)
+    decimals: uint64 = checked_maybe(asset_params_get<AssetDecimals>(asset), comment=asset exists)
+    defaultFrozen: bool = checked_maybe(asset_params_get<AssetDefaultFrozen>(asset), comment=asset exists)
+    creator: account = checked_maybe(asset_params_get<AssetCreator>(asset), comment=asset exists)
+    manager: account = checked_maybe(asset_params_get<AssetManager>(asset), comment=asset exists)
+    freezeAddr: account = checked_maybe(asset_params_get<AssetFreeze>(asset), comment=asset exists)
+    clawbackAddr: account = checked_maybe(asset_params_get<AssetClawback>(asset), comment=asset exists)
+    log(checked_maybe(asset_params_get<AssetName>(asset), comment=asset exists))
+    log(checked_maybe(asset_params_get<AssetURL>(asset), comment=asset exists))
+    assert(manager == global<CurrentApplicationAddress>(), comment=Manager mismatch)
+    assert(freezeAddr == global<CurrentApplicationAddress>(), comment=Freeze mismatch)
+    assert(clawbackAddr == global<CurrentApplicationAddress>(), comment=Clawback mismatch)
+    assert(creator != global<ZeroAddress>(), comment=No creator)
+    assert(decimals < 20, comment=Invalid decimals)
+    assert(!defaultFrozen or defaultFrozen, comment=Tautology check)
+    return total
+  }
+  
+  destroyToken(asset: asset): void
+  {
+    assert(asset == GlobalState["managedAsset"], comment=Wrong asset)
+    assert(txn<Sender>() == global<CreatorAddress>(), comment=Only creator can destroy)
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=3, ConfigAsset=asset))
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["totalMinted"]: uint64 = 0
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}

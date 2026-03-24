@@ -1,0 +1,439 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let reinterpret_bool%0#0: bool = (txn ApplicationID)
+        goto reinterpret_bool%0#0 ? block@2 : block@1
+    block@1: // if_body_L1
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.constructor()
+        goto block@2
+    block@2: // after_if_else_L1
+        goto block@3
+    block@3: // L25
+        let tmp%0#1: uint64 = (txn OnCompletion)
+        let tmp%1#0: bool = (== tmp%0#1 NoOp)
+        (assert tmp%1#0)
+        let tmp%2#0: uint64 = (txn ApplicationID)
+        let tmp%3#0: bool = (!= tmp%2#0 0u)
+        goto tmp%3#0 ? block@4 : block@13
+    block@4: // call_NoOp_L25
+        let tmp%4#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%4#0 {method "createToken(string,string,uint64,uint64,string,bool)uint64" => block@5, method "optInToAsset(uint64)void" => block@6, method "transfer(uint64,address,uint64)void" => block@7, method "clawback(uint64,address,uint64)void" => block@8, method "freezeAccount(uint64,address,bool)void" => block@9, method "verifyAssetConfig(uint64)uint64" => block@10, method "destroyToken(uint64)void" => block@11, * => block@12}
+    block@5: // createToken_route_L46
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.createToken[routing]()
+        goto block@12
+    block@6: // optInToAsset_route_L81
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.optInToAsset[routing]()
+        goto block@12
+    block@7: // transfer_route_L101
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.transfer[routing]()
+        goto block@12
+    block@8: // clawback_route_L122
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.clawback[routing]()
+        goto block@12
+    block@9: // freezeAccount_route_L144
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.freezeAccount[routing]()
+        goto block@12
+    block@10: // verifyAssetConfig_route_L165
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.verifyAssetConfig[routing]()
+        goto block@12
+    block@11: // destroyToken_route_L202
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.destroyToken[routing]()
+        goto block@12
+    block@12: // switch_case_next_L25
+        goto block@16
+    block@13: // create_NoOp_L25
+        let tmp%5#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%5#0 {method "createApplication()void" => block@14, * => block@15}
+    block@14: // createApplication_route_L33
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.createApplication[routing]()
+        goto block@15
+    block@15: // switch_case_next_L25
+        goto block@16
+    block@16: // after_if_else_L25
+        exit 0u
+    block@17: // after_inlined_examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
+        return tmp%0#0
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.createApplication[routing]() -> void:
+    block@0: // L33
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.createApplication()
+        exit 1u
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.createToken[routing]() -> void:
+    block@0: // L46
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
+        let tmp%1#0: string = ((extract 2 0) as_Encoded(len+utf8[])%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 tmp%2#0 0u) // on error: invalid array length header
+        let length%1#0: uint64 = aggregate%array_length%1#0
+        let mul%1#0: uint64 = (* length%1#0 1u)
+        let add%1#0: uint64 = (+ mul%1#0 2u)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 add%1#0)
+        (assert eq%1#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%1#0: Encoded(len+utf8[]) = tmp%2#0
+        let tmp%3#0: string = ((extract 2 0) as_Encoded(len+utf8[])%1#0)
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%4#0
+        let tmp%5#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 4)
+        let len%3#0: uint64 = (len tmp%6#0)
+        let eq%3#0: bool = (== len%3#0 8u)
+        (assert eq%3#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%1#0: Encoded(uint64) = tmp%6#0
+        let tmp%7#0: uint64 = (btoi as_Encoded(uint64)%1#0)
+        let tmp%8#0: bytes = (txna ApplicationArgs 5)
+        let aggregate%array_length%2#0: uint64 = (extract_uint16 tmp%8#0 0u) // on error: invalid array length header
+        let length%2#0: uint64 = aggregate%array_length%2#0
+        let mul%2#0: uint64 = (* length%2#0 1u)
+        let add%2#0: uint64 = (+ mul%2#0 2u)
+        let len%4#0: uint64 = (len tmp%8#0)
+        let eq%4#0: bool = (== len%4#0 add%2#0)
+        (assert eq%4#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%2#0: Encoded(len+utf8[]) = tmp%8#0
+        let tmp%9#0: string = ((extract 2 0) as_Encoded(len+utf8[])%2#0)
+        let tmp%10#0: bytes = (txna ApplicationArgs 6)
+        let len%5#0: uint64 = (len tmp%10#0)
+        let eq%5#0: bool = (== len%5#0 1u)
+        (assert eq%5#0) // invalid number of bytes for arc4.bool
+        let as_Encoded(bool8)%0#0: Encoded(bool8) = tmp%10#0
+        let aggregate%get_bit%0#0: bool = (getbit as_Encoded(bool8)%0#0 0u)
+        let tmp%11#0: bool = aggregate%get_bit%0#0
+        let tmp%12#0: uint64 = examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.createToken(tmp%1#0, tmp%3#0, tmp%5#0, tmp%7#0, tmp%9#0, tmp%11#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%12#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%13#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%14#0: bytes = (concat 0x151f7c75 tmp%13#0)
+        (log tmp%14#0)
+        exit 1u
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.optInToAsset[routing]() -> void:
+    block@0: // L81
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.optInToAsset(tmp%1#0)
+        exit 1u
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.transfer[routing]() -> void:
+    block@0: // L101
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 32u)
+        (assert eq%1#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%2#0
+        let tmp%3#0: account = as_Encoded(uint8[32])%0#0
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%1#0: Encoded(uint64) = tmp%4#0
+        let tmp%5#0: uint64 = (btoi as_Encoded(uint64)%1#0)
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.transfer(tmp%1#0, tmp%3#0, tmp%5#0)
+        exit 1u
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.clawback[routing]() -> void:
+    block@0: // L122
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 32u)
+        (assert eq%1#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%2#0
+        let tmp%3#0: account = as_Encoded(uint8[32])%0#0
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 8u)
+        (assert eq%2#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%1#0: Encoded(uint64) = tmp%4#0
+        let tmp%5#0: uint64 = (btoi as_Encoded(uint64)%1#0)
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.clawback(tmp%1#0, tmp%3#0, tmp%5#0)
+        exit 1u
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.freezeAccount[routing]() -> void:
+    block@0: // L144
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 32u)
+        (assert eq%1#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%2#0
+        let tmp%3#0: account = as_Encoded(uint8[32])%0#0
+        let tmp%4#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%4#0)
+        let eq%2#0: bool = (== len%2#0 1u)
+        (assert eq%2#0) // invalid number of bytes for arc4.bool
+        let as_Encoded(bool8)%0#0: Encoded(bool8) = tmp%4#0
+        let aggregate%get_bit%0#0: bool = (getbit as_Encoded(bool8)%0#0 0u)
+        let tmp%5#0: bool = aggregate%get_bit%0#0
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.freezeAccount(tmp%1#0, tmp%3#0, tmp%5#0)
+        exit 1u
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.verifyAssetConfig[routing]() -> void:
+    block@0: // L165
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        let tmp%2#0: uint64 = examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.verifyAssetConfig(tmp%1#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%2#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%3#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
+        (log tmp%4#0)
+        exit 1u
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.destroyToken[routing]() -> void:
+    block@0: // L202
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = (btoi as_Encoded(uint64)%0#0)
+        examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.destroyToken(tmp%1#0)
+        exit 1u
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.createApplication() -> void:
+    block@0: // L33
+        return 
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.createToken(name: string, unitName: string, total: uint64, decimals: uint64, url: string, defaultFrozen: bool) -> uint64:
+    block@0: // L46
+        let (_%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "managedAsset")
+        let tmp%0#0: bool = (! maybe_exists%0#0)
+        (assert tmp%0#0) // Token already created
+        itxn_begin
+        let inner_txn_params%0%%param_ConfigAssetTotal_idx_0#0: uint64 = total#0
+        let inner_txn_params%0%%param_ConfigAssetDecimals_idx_0#0: uint64 = decimals#0
+        let inner_txn_params%0%%param_ConfigAssetDefaultFrozen_idx_0#0: bool = defaultFrozen#0
+        let inner_txn_params%0%%param_ConfigAssetName_idx_0#0: string = name#0
+        let inner_txn_params%0%%param_ConfigAssetUnitName_idx_0#0: string = unitName#0
+        let inner_txn_params%0%%param_ConfigAssetURL_idx_0#0: string = url#0
+        let inner_txn_params%0%%param_ConfigAssetManager_idx_0#0: account = (global CurrentApplicationAddress)
+        let inner_txn_params%0%%param_ConfigAssetReserve_idx_0#0: account = (global CurrentApplicationAddress)
+        let inner_txn_params%0%%param_ConfigAssetFreeze_idx_0#0: account = (global CurrentApplicationAddress)
+        let inner_txn_params%0%%param_ConfigAssetClawback_idx_0#0: account = (global CurrentApplicationAddress)
+        ((itxn_field ConfigAssetClawback) inner_txn_params%0%%param_ConfigAssetClawback_idx_0#0)
+        ((itxn_field ConfigAssetFreeze) inner_txn_params%0%%param_ConfigAssetFreeze_idx_0#0)
+        ((itxn_field ConfigAssetReserve) inner_txn_params%0%%param_ConfigAssetReserve_idx_0#0)
+        ((itxn_field ConfigAssetManager) inner_txn_params%0%%param_ConfigAssetManager_idx_0#0)
+        ((itxn_field ConfigAssetURL) inner_txn_params%0%%param_ConfigAssetURL_idx_0#0)
+        ((itxn_field ConfigAssetUnitName) inner_txn_params%0%%param_ConfigAssetUnitName_idx_0#0)
+        ((itxn_field ConfigAssetName) inner_txn_params%0%%param_ConfigAssetName_idx_0#0)
+        ((itxn_field ConfigAssetDefaultFrozen) inner_txn_params%0%%param_ConfigAssetDefaultFrozen_idx_0#0)
+        ((itxn_field ConfigAssetDecimals) inner_txn_params%0%%param_ConfigAssetDecimals_idx_0#0)
+        ((itxn_field ConfigAssetTotal) inner_txn_params%0%%param_ConfigAssetTotal_idx_0#0)
+        ((itxn_field TypeEnum) 3u)
+        ((itxn_field Fee) 0u)
+        goto block@1
+    block@1: // next_txn_L51
+        itxn_submit
+        let result.CreatedAssetID#0: uint64 = (itxn CreatedAssetID)
+        (app_global_put "managedAsset" result.CreatedAssetID#0)
+        (app_global_put "totalMinted" total#0)
+        return result.CreatedAssetID#0
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.optInToAsset(asset: uint64) -> void:
+    block@0: // L81
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "managedAsset")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let tmp%0#0: bool = (== asset#0 maybe_value%0#0)
+        (assert tmp%0#0) // Wrong asset
+        itxn_begin
+        let inner_txn_params%0%%param_AssetReceiver_idx_0#0: account = (global CurrentApplicationAddress)
+        let inner_txn_params%0%%param_XferAsset_idx_0#0: uint64 = asset#0
+        ((itxn_field AssetAmount) 0u)
+        ((itxn_field XferAsset) inner_txn_params%0%%param_XferAsset_idx_0#0)
+        ((itxn_field AssetReceiver) inner_txn_params%0%%param_AssetReceiver_idx_0#0)
+        ((itxn_field TypeEnum) 4u)
+        ((itxn_field Fee) 0u)
+        goto block@1
+    block@1: // next_txn_L86
+        itxn_submit
+        return 
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.transfer(asset: uint64, receiver: account, amount: uint64) -> void:
+    block@0: // L101
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "managedAsset")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let tmp%0#0: bool = (== asset#0 maybe_value%0#0)
+        (assert tmp%0#0) // Wrong asset
+        let tmp%1#0: bool = (> amount#0 0u)
+        (assert tmp%1#0) // Amount must be positive
+        itxn_begin
+        let inner_txn_params%0%%param_AssetReceiver_idx_0#0: account = receiver#0
+        let inner_txn_params%0%%param_XferAsset_idx_0#0: uint64 = asset#0
+        let inner_txn_params%0%%param_AssetAmount_idx_0#0: uint64 = amount#0
+        ((itxn_field AssetAmount) inner_txn_params%0%%param_AssetAmount_idx_0#0)
+        ((itxn_field XferAsset) inner_txn_params%0%%param_XferAsset_idx_0#0)
+        ((itxn_field AssetReceiver) inner_txn_params%0%%param_AssetReceiver_idx_0#0)
+        ((itxn_field TypeEnum) 4u)
+        ((itxn_field Fee) 0u)
+        goto block@1
+    block@1: // next_txn_L106
+        itxn_submit
+        return 
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.clawback(asset: uint64, target: account, amount: uint64) -> void:
+    block@0: // L122
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "managedAsset")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let tmp%0#0: bool = (== asset#0 maybe_value%0#0)
+        (assert tmp%0#0) // Wrong asset
+        let tmp%1#0: account = (txn Sender)
+        let tmp%2#0: account = (global CreatorAddress)
+        let tmp%3#0: bool = (== tmp%1#0 tmp%2#0)
+        (assert tmp%3#0) // Only creator can clawback
+        itxn_begin
+        let inner_txn_params%0%%param_AssetSender_idx_0#0: account = target#0
+        let inner_txn_params%0%%param_AssetReceiver_idx_0#0: account = (global CurrentApplicationAddress)
+        let inner_txn_params%0%%param_XferAsset_idx_0#0: uint64 = asset#0
+        let inner_txn_params%0%%param_AssetAmount_idx_0#0: uint64 = amount#0
+        ((itxn_field AssetAmount) inner_txn_params%0%%param_AssetAmount_idx_0#0)
+        ((itxn_field XferAsset) inner_txn_params%0%%param_XferAsset_idx_0#0)
+        ((itxn_field AssetReceiver) inner_txn_params%0%%param_AssetReceiver_idx_0#0)
+        ((itxn_field AssetSender) inner_txn_params%0%%param_AssetSender_idx_0#0)
+        ((itxn_field TypeEnum) 4u)
+        ((itxn_field Fee) 0u)
+        goto block@1
+    block@1: // next_txn_L128
+        itxn_submit
+        return 
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.freezeAccount(asset: uint64, target: account, frozen: bool) -> void:
+    block@0: // L144
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "managedAsset")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let tmp%0#0: bool = (== asset#0 maybe_value%0#0)
+        (assert tmp%0#0) // Wrong asset
+        let tmp%1#0: account = (txn Sender)
+        let tmp%2#0: account = (global CreatorAddress)
+        let tmp%3#0: bool = (== tmp%1#0 tmp%2#0)
+        (assert tmp%3#0) // Only creator can freeze
+        itxn_begin
+        let inner_txn_params%0%%param_FreezeAsset_idx_0#0: uint64 = asset#0
+        let inner_txn_params%0%%param_FreezeAssetAccount_idx_0#0: account = target#0
+        let inner_txn_params%0%%param_FreezeAssetFrozen_idx_0#0: bool = frozen#0
+        ((itxn_field FreezeAssetFrozen) inner_txn_params%0%%param_FreezeAssetFrozen_idx_0#0)
+        ((itxn_field FreezeAssetAccount) inner_txn_params%0%%param_FreezeAssetAccount_idx_0#0)
+        ((itxn_field FreezeAsset) inner_txn_params%0%%param_FreezeAsset_idx_0#0)
+        ((itxn_field TypeEnum) 5u)
+        ((itxn_field Fee) 0u)
+        goto block@1
+    block@1: // next_txn_L150
+        itxn_submit
+        return 
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.verifyAssetConfig(asset: uint64) -> uint64:
+    block@0: // L165
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "managedAsset")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let tmp%0#0: bool = (== asset#0 maybe_value%0#0)
+        (assert tmp%0#0) // Wrong asset
+        let (value%0#0: uint64, check%0#0: bool) = ((asset_params_get AssetTotal) asset#0)
+        (assert check%0#0) // asset exists
+        let total#0: uint64 = value%0#0
+        let (value%1#0: uint64, check%1#0: bool) = ((asset_params_get AssetDecimals) asset#0)
+        (assert check%1#0) // asset exists
+        let decimals#0: uint64 = value%1#0
+        let (value%2#0: bool, check%2#0: bool) = ((asset_params_get AssetDefaultFrozen) asset#0)
+        (assert check%2#0) // asset exists
+        let defaultFrozen#0: bool = value%2#0
+        let (value%3#0: account, check%3#0: bool) = ((asset_params_get AssetCreator) asset#0)
+        (assert check%3#0) // asset exists
+        let creator#0: account = value%3#0
+        let (value%4#0: account, check%4#0: bool) = ((asset_params_get AssetManager) asset#0)
+        (assert check%4#0) // asset exists
+        let manager#0: account = value%4#0
+        let (value%5#0: account, check%5#0: bool) = ((asset_params_get AssetFreeze) asset#0)
+        (assert check%5#0) // asset exists
+        let freezeAddr#0: account = value%5#0
+        let (value%6#0: account, check%6#0: bool) = ((asset_params_get AssetClawback) asset#0)
+        (assert check%6#0) // asset exists
+        let clawbackAddr#0: account = value%6#0
+        let (value%7#0: bytes, check%7#0: bool) = ((asset_params_get AssetName) asset#0)
+        (assert check%7#0) // asset exists
+        (log value%7#0)
+        let (value%8#0: bytes, check%8#0: bool) = ((asset_params_get AssetURL) asset#0)
+        (assert check%8#0) // asset exists
+        (log value%8#0)
+        let tmp%1#0: account = (global CurrentApplicationAddress)
+        let tmp%2#0: bool = (== manager#0 tmp%1#0)
+        (assert tmp%2#0) // Manager mismatch
+        let tmp%3#0: account = (global CurrentApplicationAddress)
+        let tmp%4#0: bool = (== freezeAddr#0 tmp%3#0)
+        (assert tmp%4#0) // Freeze mismatch
+        let tmp%5#0: account = (global CurrentApplicationAddress)
+        let tmp%6#0: bool = (== clawbackAddr#0 tmp%5#0)
+        (assert tmp%6#0) // Clawback mismatch
+        let tmp%7#0: account = (global ZeroAddress)
+        let tmp%8#0: bool = (!= creator#0 tmp%7#0)
+        (assert tmp%8#0) // No creator
+        let tmp%9#0: bool = (< decimals#0 20u)
+        (assert tmp%9#0) // Invalid decimals
+        let tmp%10#0: bool = (! defaultFrozen#0)
+        let tmp%11#0: bool = (|| tmp%10#0 defaultFrozen#0)
+        (assert tmp%11#0) // Tautology check
+        return total#0
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.destroyToken(asset: uint64) -> void:
+    block@0: // L202
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "managedAsset")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let tmp%0#0: bool = (== asset#0 maybe_value%0#0)
+        (assert tmp%0#0) // Wrong asset
+        let tmp%1#0: account = (txn Sender)
+        let tmp%2#0: account = (global CreatorAddress)
+        let tmp%3#0: bool = (== tmp%1#0 tmp%2#0)
+        (assert tmp%3#0) // Only creator can destroy
+        itxn_begin
+        let inner_txn_params%0%%param_ConfigAsset_idx_0#0: uint64 = asset#0
+        ((itxn_field ConfigAsset) inner_txn_params%0%%param_ConfigAsset_idx_0#0)
+        ((itxn_field TypeEnum) 3u)
+        ((itxn_field Fee) 0u)
+        goto block@1
+    block@1: // next_txn_L208
+        itxn_submit
+        return 
+
+subroutine examples/puya-ts/09-token-manager/contract.algo.ts::TokenManager.constructor() -> void:
+    block@0: // L25
+        goto block@1
+    block@1: // L1
+        goto block@2
+    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L25
+        (app_global_put "totalMinted" 0u)
+        return 

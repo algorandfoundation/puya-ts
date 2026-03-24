@@ -1,0 +1,118 @@
+contract GreeterChild
+{
+  globals {
+    ["greeting"]: string
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  create(): void
+  {
+  }
+  
+  greet(name: string): string
+  {
+    return "" + GlobalState["greeting"] + " " + name
+  }
+  
+  delete(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["greeting"]: string = ""
+    GlobalState["greeting"]: string = TemplateVar[string](TMPL_GREETING)
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract GreeterFactory
+{
+  globals {
+    ["lastChild"]: application
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+  }
+  
+  deployManual(): application
+  {
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = #{ approvalProgram: ($0 = compile(examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterChild, GREETING="hello").approvalProgram, clearStateProgram: $0.clearStateProgram, extraProgramPages: $0.extraProgramPages, globalUints: $0.globalUints, globalBytes: $0.globalBytes, localUints: $0.localUints, localBytes: $0.localBytes }
+    approval: readonly [bytes, bytes] = compiled.approvalProgram
+    clear: readonly [bytes, bytes] = compiled.clearStateProgram
+    extras: uint64 = compiled.extraProgramPages
+    gUints: uint64 = compiled.globalUints
+    gBytes: uint64 = compiled.globalBytes
+    lUints: uint64 = compiled.localUints
+    lBytes: uint64 = compiled.localBytes
+    childApp: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method(name="create",args=(),result=void,resource_encoding="value")], ApprovalProgramPages=#[approval.0, approval.1], ClearStateProgramPages=#[clear.0, clear.1], ExtraProgramPages=extras, GlobalNumUint=gUints, GlobalNumByteSlice=gBytes, LocalNumUint=lUints, LocalNumByteSlice=lBytes)).CreatedApplicationID
+    GlobalState["lastChild"]: application = childApp
+    return childApp
+  }
+  
+  deployTyped(): application
+  {
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterChild, GREETING="hi"
+    childApp: application = #{ itxn: submit_txn(abi_call(signature={name="create",args=(),result=void}, args=(), fields={Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages})) }.itxn.CreatedApplicationID
+    GlobalState["lastChild"]: application = childApp
+    return childApp
+  }
+  
+  callChildGreet(app: application, name: string): string
+  {
+    #[returnValue]: readonly [string] = #[($1 = #{ itxn: ($2 = submit_txn(abi_call(signature={name="greet",args=(string),result=string}, args=(name), fields={Fee=0, TypeEnum=appl, ApplicationID=app}))), returnValue: ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($3 = $2.LastLog)), extract<0, 4>($3) == 0x151f7c75], comment=Bytes has valid prefix), wtype=string, validate=true) }).returnValue]
+    return returnValue
+  }
+  
+  callChildManual(app: application, name: string): string
+  {
+    assert(Method(name="greet",args=(string),result=string,resource_encoding="value") == Method("greet(string)string"), comment=Selectors must match)
+    txn: inner_transaction_appl = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationID=app, ApplicationArgs=#[Method(name="greet",args=(string),result=string,resource_encoding="value"), ARC4_ENCODE(name, wtype=bytes)]))
+    result: string = ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($4 = txn.LastLog)), extract<0, 4>($4) == 0x151f7c75], comment=Bytes has valid prefix), wtype=string, validate=false)
+    return result
+  }
+  
+  deleteChild(app: application): void
+  {
+    #{ itxn: submit_txn(abi_call(signature={name="delete",args=(),result=void}, args=(), fields={Fee=0, TypeEnum=appl, ApplicationID=app, OnCompletion=5})) }
+  }
+  
+  inspectCompiled(): uint64
+  {
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = #{ approvalProgram: ($5 = compile(examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterChild, GREETING="test").approvalProgram, clearStateProgram: $5.clearStateProgram, extraProgramPages: $5.extraProgramPages, globalUints: $5.globalUints, globalBytes: $5.globalBytes, localUints: $5.localUints, localBytes: $5.localBytes }
+    _approval: readonly [bytes, bytes] = compiled.approvalProgram
+    _clear: readonly [bytes, bytes] = compiled.clearStateProgram
+    extras: uint64 = compiled.extraProgramPages
+    _gUints: uint64 = compiled.globalUints
+    _gBytes: uint64 = compiled.globalBytes
+    _lUints: uint64 = compiled.localUints
+    _lBytes: uint64 = compiled.localBytes
+    return extras
+  }
+  
+}

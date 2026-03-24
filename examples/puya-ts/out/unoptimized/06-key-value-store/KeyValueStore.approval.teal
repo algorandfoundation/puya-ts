@@ -1,0 +1,1309 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0 2 8
+    bytecblock "single" 0x151f7c75 0x00 "kv/" "entryCount"
+    b main_block@0
+
+main_block@0:
+    txn ApplicationID
+    bnz main_after_if_else@2
+    b main_if_body@1
+
+main_if_body@1:
+    callsub constructor
+    b main_after_if_else@2
+
+main_after_if_else@2:
+    b main_block@3
+
+main_block@3:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:28-29
+    // @contract({ stateTotals: { globalUints: 4, globalBytes: 0, localUints: 0, localBytes: 0 } })
+    // export class KeyValueStore extends Contract {
+    txn OnCompletion
+    intc_1 // NoOp
+    ==
+    assert
+    txn ApplicationID
+    intc_1 // 0
+    !=
+    bz main_create_NoOp@25
+    b main_call_NoOp@4
+
+main_call_NoOp@4:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:28-29
+    // @contract({ stateTotals: { globalUints: 4, globalBytes: 0, localUints: 0, localBytes: 0 } })
+    // export class KeyValueStore extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x5b19cad0 // method "createSingleBox(uint64)bool"
+    pushbytes 0x1dc7bfec // method "setSingleBox(byte[])void"
+    pushbytes 0xd9b3ad61 // method "getSingleBox()byte[]"
+    pushbytes 0x1e10206e // method "deleteSingleBox()bool"
+    pushbytes 0x41fb517e // method "checkSingleBox()bool"
+    pushbytes 0x2daf01fb // method "extractFromBox(uint64,uint64)byte[]"
+    pushbytes 0xd172d32c // method "replaceInBox(uint64,byte[])void"
+    pushbytes 0x232ada17 // method "spliceBox(uint64,uint64,byte[])void"
+    pushbytes 0xbb38dacb // method "resizeBox(uint64)void"
+    pushbytes 0xf41d047a // method "getBoxLength()uint64"
+    pushbytes 0x47f869f9 // method "setEntry(string,byte[])void"
+    pushbytes 0x41cd9e01 // method "getEntry(string)byte[]"
+    pushbytes 0x5112aec7 // method "hasEntry(string)bool"
+    pushbytes 0x7afac2c3 // method "deleteEntry(string)bool"
+    pushbytes 0x24b98c90 // method "getEntryLength(string)uint64"
+    pushbytes 0xb5b31c69 // method "setDynamicState(string,uint64)void"
+    pushbytes 0xa9e62410 // method "getDynamicState(string)uint64"
+    pushbytes 0xcc4ad128 // method "deleteDynamicState(string)void"
+    pushbytes 0x7bc392ed // method "testBoxRoundTrip(byte[])bool"
+    uncover 19
+    match main_createSingleBox_route@5 main_setSingleBox_route@6 main_getSingleBox_route@7 main_deleteSingleBox_route@8 main_checkSingleBox_route@9 main_extractFromBox_route@10 main_replaceInBox_route@11 main_spliceBox_route@12 main_resizeBox_route@13 main_getBoxLength_route@14 main_setEntry_route@15 main_getEntry_route@16 main_hasEntry_route@17 main_deleteEntry_route@18 main_getEntryLength_route@19 main_setDynamicState_route@20 main_getDynamicState_route@21 main_deleteDynamicState_route@22 main_testBoxRoundTrip_route@23
+    b main_switch_case_next@24
+
+main_switch_case_next@24:
+    b main_after_if_else@28
+
+main_after_if_else@28:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:28-29
+    // @contract({ stateTotals: { globalUints: 4, globalBytes: 0, localUints: 0, localBytes: 0 } })
+    // export class KeyValueStore extends Contract {
+    err
+
+main_testBoxRoundTrip_route@23:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:253
+    // public testBoxRoundTrip(data: bytes): boolean {
+    callsub testBoxRoundTrip
+    b main_switch_case_next@24
+
+main_deleteDynamicState_route@22:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:241
+    // public deleteDynamicState(key: string): void {
+    callsub deleteDynamicState
+    b main_switch_case_next@24
+
+main_getDynamicState_route@21:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:231
+    // public getDynamicState(key: string): uint64 {
+    callsub getDynamicState
+    b main_switch_case_next@24
+
+main_setDynamicState_route@20:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:219
+    // public setDynamicState(key: string, value: uint64): void {
+    callsub setDynamicState
+    b main_switch_case_next@24
+
+main_getEntryLength_route@19:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:207
+    // public getEntryLength(key: string): uint64 {
+    callsub getEntryLength
+    b main_switch_case_next@24
+
+main_deleteEntry_route@18:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:191
+    // public deleteEntry(key: string): boolean {
+    callsub deleteEntry
+    b main_switch_case_next@24
+
+main_hasEntry_route@17:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:181
+    // public hasEntry(key: string): boolean {
+    callsub hasEntry
+    b main_switch_case_next@24
+
+main_getEntry_route@16:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:171
+    // public getEntry(key: string): bytes {
+    callsub getEntry
+    b main_switch_case_next@24
+
+main_setEntry_route@15:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:158
+    // public setEntry(key: string, value: bytes): void {
+    callsub setEntry
+    b main_switch_case_next@24
+
+main_getBoxLength_route@14:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:146
+    // public getBoxLength(): uint64 {
+    callsub getBoxLength
+    b main_switch_case_next@24
+
+main_resizeBox_route@13:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:137
+    // public resizeBox(newSize: uint64): void {
+    callsub resizeBox
+    b main_switch_case_next@24
+
+main_spliceBox_route@12:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:128
+    // public spliceBox(start: uint64, length: uint64, data: bytes): void {
+    callsub spliceBox
+    b main_switch_case_next@24
+
+main_replaceInBox_route@11:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:117
+    // public replaceInBox(start: uint64, data: bytes): void {
+    callsub replaceInBox
+    b main_switch_case_next@24
+
+main_extractFromBox_route@10:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:107
+    // public extractFromBox(start: uint64, length: uint64): bytes {
+    callsub extractFromBox
+    b main_switch_case_next@24
+
+main_checkSingleBox_route@9:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:93
+    // public checkSingleBox(): boolean {
+    callsub checkSingleBox
+    b main_switch_case_next@24
+
+main_deleteSingleBox_route@8:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:84
+    // public deleteSingleBox(): boolean {
+    callsub deleteSingleBox
+    b main_switch_case_next@24
+
+main_getSingleBox_route@7:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:75
+    // public getSingleBox(): bytes {
+    callsub getSingleBox
+    b main_switch_case_next@24
+
+main_setSingleBox_route@6:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:61
+    // public setSingleBox(data: bytes): void {
+    callsub setSingleBox
+    b main_switch_case_next@24
+
+main_createSingleBox_route@5:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:51
+    // public createSingleBox(size: uint64): boolean {
+    callsub createSingleBox
+    b main_switch_case_next@24
+
+main_create_NoOp@25:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:28-29
+    // @contract({ stateTotals: { globalUints: 4, globalBytes: 0, localUints: 0, localBytes: 0 } })
+    // export class KeyValueStore extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0xb8447b36 // method "createApplication()void"
+    uncover 1
+    match main_createApplication_route@26
+    b main_switch_case_next@27
+
+main_switch_case_next@27:
+    b main_after_if_else@28
+
+main_createApplication_route@26:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:40
+    // public createApplication(): void {
+    callsub createApplication
+    b main_switch_case_next@27
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.createApplication[routing]() -> void:
+createApplication:
+    b createApplication_block@0
+
+createApplication_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:40
+    // public createApplication(): void {
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.createApplication
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.createSingleBox[routing]() -> void:
+createSingleBox:
+    b createSingleBox_block@0
+
+createSingleBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:51
+    // public createSingleBox(size: uint64): boolean {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.createSingleBox
+    bytec_2 // 0x00
+    intc_1 // 0
+    uncover 2
+    setbit
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setSingleBox[routing]() -> void:
+setSingleBox:
+    b setSingleBox_block@0
+
+setSingleBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:61
+    // public setSingleBox(data: bytes): void {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setSingleBox
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getSingleBox[routing]() -> void:
+getSingleBox:
+    b getSingleBox_block@0
+
+getSingleBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:75
+    // public getSingleBox(): bytes {
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getSingleBox
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteSingleBox[routing]() -> void:
+deleteSingleBox:
+    b deleteSingleBox_block@0
+
+deleteSingleBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:84
+    // public deleteSingleBox(): boolean {
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteSingleBox
+    bytec_2 // 0x00
+    intc_1 // 0
+    uncover 2
+    setbit
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.checkSingleBox[routing]() -> void:
+checkSingleBox:
+    b checkSingleBox_block@0
+
+checkSingleBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:93
+    // public checkSingleBox(): boolean {
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.checkSingleBox
+    bytec_2 // 0x00
+    intc_1 // 0
+    uncover 2
+    setbit
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.extractFromBox[routing]() -> void:
+extractFromBox:
+    b extractFromBox_block@0
+
+extractFromBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:107
+    // public extractFromBox(start: uint64, length: uint64): bytes {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.extractFromBox
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.replaceInBox[routing]() -> void:
+replaceInBox:
+    b replaceInBox_block@0
+
+replaceInBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:117
+    // public replaceInBox(start: uint64, data: bytes): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.replaceInBox
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.spliceBox[routing]() -> void:
+spliceBox:
+    b spliceBox_block@0
+
+spliceBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:128
+    // public spliceBox(start: uint64, length: uint64, data: bytes): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 3
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    uncover 2
+    uncover 2
+    uncover 2
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.spliceBox
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.resizeBox[routing]() -> void:
+resizeBox:
+    b resizeBox_block@0
+
+resizeBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:137
+    // public resizeBox(newSize: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.resizeBox
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getBoxLength[routing]() -> void:
+getBoxLength:
+    b getBoxLength_block@0
+
+getBoxLength_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:146
+    // public getBoxLength(): uint64 {
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getBoxLength
+    itob
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setEntry[routing]() -> void:
+setEntry:
+    b setEntry_block@0
+
+setEntry_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:158
+    // public setEntry(key: string, value: bytes): void {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setEntry
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getEntry[routing]() -> void:
+getEntry:
+    b getEntry_block@0
+
+getEntry_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:171
+    // public getEntry(key: string): bytes {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getEntry
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.hasEntry[routing]() -> void:
+hasEntry:
+    b hasEntry_block@0
+
+hasEntry_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:181
+    // public hasEntry(key: string): boolean {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.hasEntry
+    bytec_2 // 0x00
+    intc_1 // 0
+    uncover 2
+    setbit
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteEntry[routing]() -> void:
+deleteEntry:
+    b deleteEntry_block@0
+
+deleteEntry_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:191
+    // public deleteEntry(key: string): boolean {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteEntry
+    bytec_2 // 0x00
+    intc_1 // 0
+    uncover 2
+    setbit
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getEntryLength[routing]() -> void:
+getEntryLength:
+    b getEntryLength_block@0
+
+getEntryLength_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:207
+    // public getEntryLength(key: string): uint64 {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getEntryLength
+    itob
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setDynamicState[routing]() -> void:
+setDynamicState:
+    b setDynamicState_block@0
+
+setDynamicState_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:219
+    // public setDynamicState(key: string, value: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setDynamicState
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getDynamicState[routing]() -> void:
+getDynamicState:
+    b getDynamicState_block@0
+
+getDynamicState_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:231
+    // public getDynamicState(key: string): uint64 {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getDynamicState
+    itob
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteDynamicState[routing]() -> void:
+deleteDynamicState:
+    b deleteDynamicState_block@0
+
+deleteDynamicState_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:241
+    // public deleteDynamicState(key: string): void {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteDynamicState
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.testBoxRoundTrip[routing]() -> void:
+testBoxRoundTrip:
+    b testBoxRoundTrip_block@0
+
+testBoxRoundTrip_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:253
+    // public testBoxRoundTrip(data: bytes): boolean {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.testBoxRoundTrip
+    bytec_2 // 0x00
+    intc_1 // 0
+    uncover 2
+    setbit
+    bytec_1 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.createApplication() -> void:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.createApplication:
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.createApplication_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.createApplication_block@0:
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.createSingleBox(size: uint64) -> uint64:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.createSingleBox:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:51
+    // public createSingleBox(size: uint64): boolean {
+    proto 1 1
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.createSingleBox_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.createSingleBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:53
+    // const created = this.singleBox.create({ size })
+    frame_dig -1
+    box_create
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:54
+    // return created
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setSingleBox(data: bytes) -> void:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setSingleBox:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:61
+    // public setSingleBox(data: bytes): void {
+    proto 1 0
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setSingleBox_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setSingleBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:63
+    // if (!this.singleBox.exists) {
+    box_len
+    bnz examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setSingleBox_after_if_else@2
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setSingleBox_if_body@1
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setSingleBox_if_body@1:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:65
+    // this.singleBox.create({ size: Uint64(data.length) })
+    frame_dig -1
+    len
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:65
+    // this.singleBox.create({ size: Uint64(data.length) })
+    uncover 1
+    box_create
+    pop
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setSingleBox_after_if_else@2
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setSingleBox_after_if_else@2:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:68
+    // this.singleBox.value = data
+    box_del
+    pop
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:68
+    // this.singleBox.value = data
+    frame_dig -1
+    box_put
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getSingleBox() -> bytes:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getSingleBox:
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getSingleBox_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getSingleBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:77
+    // return this.singleBox.get({ default: Bytes('') })
+    box_get
+    cover 1
+    pushbytes ""
+    uncover 1
+    uncover 2
+    select
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteSingleBox() -> uint64:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteSingleBox:
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteSingleBox_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteSingleBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:86
+    // return this.singleBox.delete()
+    box_del
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.checkSingleBox() -> uint64:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.checkSingleBox:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:93
+    // public checkSingleBox(): boolean {
+    proto 0 1
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.checkSingleBox_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.checkSingleBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:95
+    // const [, exists] = this.singleBox.maybe()
+    box_get
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:96
+    // return exists
+    uncover 1
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.extractFromBox(start: uint64, length: uint64) -> bytes:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.extractFromBox:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:107
+    // public extractFromBox(start: uint64, length: uint64): bytes {
+    proto 2 1
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.extractFromBox_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.extractFromBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:109
+    // return this.singleBox.extract(start, length)
+    frame_dig -2
+    frame_dig -1
+    box_extract
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.replaceInBox(start: uint64, data: bytes) -> void:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.replaceInBox:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:117
+    // public replaceInBox(start: uint64, data: bytes): void {
+    proto 2 0
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.replaceInBox_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.replaceInBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:119
+    // this.singleBox.replace(start, data)
+    frame_dig -2
+    frame_dig -1
+    box_replace
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.spliceBox(start: uint64, length: uint64, data: bytes) -> void:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.spliceBox:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:128
+    // public spliceBox(start: uint64, length: uint64, data: bytes): void {
+    proto 3 0
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.spliceBox_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.spliceBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:130
+    // this.singleBox.splice(start, length, data)
+    frame_dig -3
+    frame_dig -2
+    frame_dig -1
+    box_splice
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.resizeBox(newSize: uint64) -> void:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.resizeBox:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:137
+    // public resizeBox(newSize: uint64): void {
+    proto 1 0
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.resizeBox_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.resizeBox_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:139
+    // this.singleBox.resize(newSize)
+    frame_dig -1
+    box_resize
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getBoxLength() -> uint64:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getBoxLength:
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getBoxLength_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getBoxLength_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:148
+    // return this.singleBox.length
+    box_len
+    assert // Box must have value
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setEntry(key: bytes, value: bytes) -> void:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setEntry:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:158
+    // public setEntry(key: string, value: bytes): void {
+    proto 2 0
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setEntry_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setEntry_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:34
+    // kvMap = BoxMap<string, bytes>({ keyPrefix: 'kv/' })
+    bytec_3 // "kv/"
+    frame_dig -2
+    concat
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:160
+    // this.kvMap(key).value = value
+    dup
+    box_del
+    pop
+    frame_dig -1
+    box_put
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:162
+    // const count: uint64 = this.entryCount.value + 1
+    intc_1 // 0
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:37
+    // entryCount = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 4 // "entryCount"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:162
+    // const count: uint64 = this.entryCount.value + 1
+    app_global_get_ex
+    assert // check GlobalState exists
+    intc_0 // 1
+    +
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:37
+    // entryCount = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 4 // "entryCount"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:163
+    // this.entryCount.value = count
+    uncover 1
+    app_global_put
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getEntry(key: bytes) -> bytes:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getEntry:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:171
+    // public getEntry(key: string): bytes {
+    proto 1 1
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getEntry_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getEntry_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:34
+    // kvMap = BoxMap<string, bytes>({ keyPrefix: 'kv/' })
+    bytec_3 // "kv/"
+    frame_dig -1
+    concat
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:173
+    // return this.kvMap(key).get({ default: Bytes('') })
+    box_get
+    cover 1
+    pushbytes ""
+    uncover 1
+    uncover 2
+    select
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.hasEntry(key: bytes) -> uint64:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.hasEntry:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:181
+    // public hasEntry(key: string): boolean {
+    proto 1 1
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.hasEntry_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.hasEntry_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:34
+    // kvMap = BoxMap<string, bytes>({ keyPrefix: 'kv/' })
+    bytec_3 // "kv/"
+    frame_dig -1
+    concat
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:183
+    // return this.kvMap(key).exists
+    box_len
+    uncover 1
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteEntry(key: bytes) -> uint64:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteEntry:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:191
+    // public deleteEntry(key: string): boolean {
+    proto 1 1
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteEntry_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteEntry_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:34
+    // kvMap = BoxMap<string, bytes>({ keyPrefix: 'kv/' })
+    bytec_3 // "kv/"
+    frame_dig -1
+    concat
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:193
+    // const deleted = this.kvMap(key).delete()
+    box_del
+    dup
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:194
+    // if (deleted) {
+    bz examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteEntry_after_if_else@2
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteEntry_if_body@1
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteEntry_if_body@1:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:196
+    // const count: uint64 = this.entryCount.value - 1
+    intc_1 // 0
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:37
+    // entryCount = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 4 // "entryCount"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:196
+    // const count: uint64 = this.entryCount.value - 1
+    app_global_get_ex
+    assert // check GlobalState exists
+    intc_0 // 1
+    -
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:37
+    // entryCount = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 4 // "entryCount"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:197
+    // this.entryCount.value = count
+    uncover 1
+    app_global_put
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteEntry_after_if_else@2
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteEntry_after_if_else@2:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:199
+    // return deleted
+    frame_dig 0
+    uncover 1
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getEntryLength(key: bytes) -> uint64:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getEntryLength:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:207
+    // public getEntryLength(key: string): uint64 {
+    proto 1 1
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getEntryLength_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getEntryLength_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:34
+    // kvMap = BoxMap<string, bytes>({ keyPrefix: 'kv/' })
+    bytec_3 // "kv/"
+    frame_dig -1
+    concat
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:209
+    // return this.kvMap(key).length
+    box_len
+    assert // Box must have value
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setDynamicState(key: bytes, value: uint64) -> void:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setDynamicState:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:219
+    // public setDynamicState(key: string, value: uint64): void {
+    proto 2 0
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setDynamicState_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.setDynamicState_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:221
+    // const proxy = GlobalState<uint64>({ key })
+    frame_dig -2
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:223
+    // proxy.value = value
+    frame_dig -1
+    app_global_put
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getDynamicState(key: bytes) -> uint64:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getDynamicState:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:231
+    // public getDynamicState(key: string): uint64 {
+    proto 1 1
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getDynamicState_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.getDynamicState_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:233
+    // const proxy = GlobalState<uint64>({ key })
+    frame_dig -1
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:234
+    // return proxy.value
+    intc_1 // 0
+    uncover 1
+    app_global_get_ex
+    assert // check GlobalState exists
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteDynamicState(key: bytes) -> void:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteDynamicState:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:241
+    // public deleteDynamicState(key: string): void {
+    proto 1 0
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteDynamicState_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.deleteDynamicState_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:243
+    // GlobalState<uint64>({ key }).delete()
+    frame_dig -1
+    app_global_del
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.testBoxRoundTrip(data: bytes) -> uint64:
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.testBoxRoundTrip:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:253
+    // public testBoxRoundTrip(data: bytes): boolean {
+    proto 1 1
+    b examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.testBoxRoundTrip_block@0
+
+examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.testBoxRoundTrip_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:255
+    // this.singleBox.create({ size: Uint64(data.length) })
+    frame_dig -1
+    len
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:255
+    // this.singleBox.create({ size: Uint64(data.length) })
+    uncover 1
+    box_create
+    pop
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:257
+    // this.singleBox.value = data
+    box_del
+    pop
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:257
+    // this.singleBox.value = data
+    frame_dig -1
+    box_put
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:259
+    // assert(this.singleBox.exists)
+    box_len
+    assert
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:261
+    // assert(this.singleBox.value === data)
+    box_get
+    assert // Box must have value
+    frame_dig -1
+    ==
+    assert
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:263
+    // assert(this.singleBox.length === data.length)
+    box_len
+    assert // Box must have value
+    frame_dig -1
+    len
+    ==
+    assert
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:265
+    // const deleted = this.singleBox.delete()
+    box_del
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:267
+    // assert(deleted)
+    assert
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:31
+    // singleBox = Box<bytes>({ key: 'single' })
+    bytec_0 // "single"
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:269
+    // assert(!this.singleBox.exists)
+    box_len
+    !
+    assert
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:270
+    // return true
+    intc_0 // 1
+    frame_bury 0
+    retsub
+
+
+// examples/puya-ts/06-key-value-store/contract.algo.ts::KeyValueStore.constructor() -> void:
+constructor:
+    b constructor_block@0
+
+constructor_block@0:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:28-29
+    // @contract({ stateTotals: { globalUints: 4, globalBytes: 0, localUints: 0, localBytes: 0 } })
+    // export class KeyValueStore extends Contract {
+    b constructor_block@1
+
+constructor_block@1:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:28-29
+    // @contract({ stateTotals: { globalUints: 4, globalBytes: 0, localUints: 0, localBytes: 0 } })
+    // export class KeyValueStore extends Contract {
+    b constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2
+
+constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
+    // examples/puya-ts/06-key-value-store/contract.algo.ts:37
+    // entryCount = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 4 // "entryCount"
+    intc_1 // 0
+    app_global_put
+    retsub

@@ -1,0 +1,70 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn OnCompletion)
+        let tmp%1#0: bool = (! tmp%0#1)
+        (assert tmp%1#0)
+        let tmp%2#0: uint64 = (txn ApplicationID)
+        goto tmp%2#0 ? block@2 : block@6
+    block@2: // call_NoOp_L21
+        let tmp%4#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%4#0 {method "greet(string)string" => block@3, method "greetTwo(string,string)string" => block@4, * => block@9}
+    block@3: // greet_route_L30
+        examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greet[routing]()
+        goto block@9
+    block@4: // greetTwo_route_L42
+        examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greetTwo[routing]()
+        goto block@9
+    block@6: // create_NoOp_L21
+        let tmp%5#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%5#0 {method "createApplication()void" => block@7, * => block@9}
+    block@7: // createApplication_route_L23
+        exit 1u
+    block@9: // after_if_else_L21
+        fail
+
+subroutine examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greet[routing]() -> void:
+    block@0: // L30
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
+        let add%0#0: uint64 = (+ aggregate%array_length%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let name#0: string = ((extract 2 0) tmp%0#0)
+        let tmp%0#1: bytes = (concat "Hello, " name#0)
+        let tmp%1#1: bytes = (concat tmp%0#1 "!")
+        let aggregate%length%0#0: uint64 = (len tmp%1#1)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%1#1)
+        let tmp%4#0: bytes = (concat 0x151f7c75 aggregate%encoded_value%0#0)
+        (log tmp%4#0)
+        exit 1u
+
+subroutine examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greetTwo[routing]() -> void:
+    block@0: // L42
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#0 0u) // on error: invalid array length header
+        let add%0#0: uint64 = (+ aggregate%array_length%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let firstName#0: string = ((extract 2 0) tmp%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 tmp%2#0 0u) // on error: invalid array length header
+        let add%1#0: uint64 = (+ aggregate%array_length%1#0 2u)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 add%1#0)
+        (assert eq%1#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let lastName#0: string = ((extract 2 0) tmp%2#0)
+        let tmp%0#1: bytes = (concat "Hello, " firstName#0)
+        let tmp%1#1: bytes = (concat tmp%0#1 " and ")
+        let tmp%2#1: bytes = (concat tmp%1#1 lastName#0)
+        let tmp%3#1: bytes = (concat tmp%2#1 "!")
+        let aggregate%length%0#0: uint64 = (len tmp%3#1)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%3#1)
+        let tmp%6#0: bytes = (concat 0x151f7c75 aggregate%encoded_value%0#0)
+        (log tmp%6#0)
+        exit 1u

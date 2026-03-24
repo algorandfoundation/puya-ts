@@ -1,0 +1,1719 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 4 1000 100000
+    bytecblock "totalLiquidity" "reserveA" "reserveB" 0x "assetA" "assetB" 0x151f7c75 "poolToken" "DPT"
+    b main_block@0
+
+main_block@0:
+    txn ApplicationID
+    bnz main_after_if_else@2
+    b main_if_body@1
+
+main_if_body@1:
+    callsub constructor
+    b main_after_if_else@2
+
+main_after_if_else@2:
+    b main_block@3
+
+main_block@3:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:109
+    // export class DexPool extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@12
+    b main_call_NoOp@4
+
+main_call_NoOp@4:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:109
+    // export class DexPool extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x9f45fe18 // method "bootstrap(uint64,uint64,pay)uint64"
+    pushbytes 0x0c5cbb5d // method "addLiquidity(axfer,axfer)uint64"
+    pushbytes 0x906afbc3 // method "removeLiquidity(axfer)void"
+    pushbytes 0x0fdb9491 // method "swap(axfer)uint64"
+    pushbytes 0x31d1a36e // method "withdrawAlgoExcess()void"
+    pushbytes 0x5e09fc6c // method "getPoolState()(uint64,uint64,uint64)"
+    uncover 6
+    match main_bootstrap_route@5 main_addLiquidity_route@6 main_removeLiquidity_route@7 main_swap_route@8 main_withdrawAlgoExcess_route@9 main_getPoolState_route@10
+    b main_switch_case_next@11
+
+main_switch_case_next@11:
+    b main_after_if_else@15
+
+main_after_if_else@15:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:109
+    // export class DexPool extends Contract {
+    err
+
+main_getPoolState_route@10:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:434-435
+    // @readonly
+    // public getPoolState(): PoolState {
+    callsub getPoolState
+    b main_switch_case_next@11
+
+main_withdrawAlgoExcess_route@9:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:407
+    // public withdrawAlgoExcess(): void {
+    callsub withdrawAlgoExcess
+    b main_switch_case_next@11
+
+main_swap_route@8:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:332
+    // public swap(deposit: gtxn.AssetTransferTxn): uint64 {
+    callsub swap
+    b main_switch_case_next@11
+
+main_removeLiquidity_route@7:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:279
+    // public removeLiquidity(poolDeposit: gtxn.AssetTransferTxn): void {
+    callsub removeLiquidity
+    b main_switch_case_next@11
+
+main_addLiquidity_route@6:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:201
+    // public addLiquidity(depositA: gtxn.AssetTransferTxn, depositB: gtxn.AssetTransferTxn): uint64 {
+    callsub addLiquidity
+    b main_switch_case_next@11
+
+main_bootstrap_route@5:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:133
+    // public bootstrap(assetA: Asset, assetB: Asset, seed: gtxn.PaymentTxn): uint64 {
+    callsub bootstrap
+    b main_switch_case_next@11
+
+main_create_NoOp@12:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:109
+    // export class DexPool extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0xb8447b36 // method "createApplication()void"
+    uncover 1
+    match main_createApplication_route@13
+    b main_switch_case_next@14
+
+main_switch_case_next@14:
+    b main_after_if_else@15
+
+main_createApplication_route@13:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:123
+    // public createApplication(): void {}
+    callsub createApplication
+    b main_switch_case_next@14
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::calculateMinBalance(numAssets: uint64) -> uint64:
+calculateMinBalance:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:64
+    // function calculateMinBalance(numAssets: uint64): uint64 {
+    proto 1 1
+    b calculateMinBalance_block@0
+
+calculateMinBalance_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:66
+    // const assetCost: uint64 = numAssets * MIN_BAL_PER_ASSET
+    frame_dig -1
+    intc 4 // 100000
+    *
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:67
+    // const total: uint64 = BASE_MIN_BAL + assetCost
+    intc 4 // 100000
+    +
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:68
+    // return total
+    retsub
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::minOf(a: uint64, b: uint64) -> uint64:
+minOf:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:72
+    // function minOf(a: uint64, b: uint64): uint64 {
+    proto 2 1
+    b minOf_block@0
+
+minOf_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:73
+    // if (a < b) {
+    frame_dig -2
+    frame_dig -1
+    <
+    bz minOf_after_if_else@2
+    b minOf_if_body@1
+
+minOf_if_body@1:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:74
+    // return a
+    frame_dig -2
+    retsub
+
+minOf_after_if_else@2:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:76
+    // return b
+    frame_dig -1
+    retsub
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::computeSwapOutput(amountIn: uint64, reserveIn: uint64, reserveOut: uint64) -> uint64:
+computeSwapOutput:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:83
+    // function computeSwapOutput(amountIn: uint64, reserveIn: uint64, reserveOut: uint64): uint64 {
+    proto 3 1
+    b computeSwapOutput_block@0
+
+computeSwapOutput_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:85
+    // const adjustedIn: uint64 = amountIn * SWAP_FEE_NUM
+    frame_dig -3
+    pushint 997
+    *
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:88
+    // const denominator: uint64 = reserveIn * SWAP_FEE_SCALE + adjustedIn
+    frame_dig -2
+    intc_3 // 1000
+    *
+    dig 1
+    +
+    cover 1
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:92
+    // const [numHi, numLo] = op.mulw(reserveOut, adjustedIn)
+    frame_dig -1
+    mulw
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:97
+    // const [quotientHi, quotientLo] = op.divmodw(numHi, numLo, Uint64(0), denominator)
+    intc_0 // 0
+    uncover 3
+    divmodw
+    cover 3
+    cover 2
+    cover 1
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:100
+    // assert(quotientHi === 0, 'Swap output overflow')
+    intc_0 // 0
+    ==
+    assert // Swap output overflow
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:102
+    // return quotientLo
+    frame_bury 0
+    retsub
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.createApplication[routing]() -> void:
+createApplication:
+    b createApplication_block@0
+
+createApplication_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:123
+    // public createApplication(): void {}
+    callsub examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.createApplication
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.bootstrap[routing]() -> void:
+bootstrap:
+    b bootstrap_block@0
+
+bootstrap_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:133
+    // public bootstrap(assetA: Asset, assetB: Asset, seed: gtxn.PaymentTxn): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    pushint 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txn GroupIndex
+    intc_1 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_1 // pay
+    ==
+    assert // transaction type is pay
+    uncover 2
+    uncover 2
+    uncover 2
+    callsub examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.bootstrap
+    itob
+    bytec 6 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity[routing]() -> void:
+addLiquidity:
+    b addLiquidity_block@0
+
+addLiquidity_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:201
+    // public addLiquidity(depositA: gtxn.AssetTransferTxn, depositB: gtxn.AssetTransferTxn): uint64 {
+    txn GroupIndex
+    pushint 2
+    -
+    dup
+    gtxns TypeEnum
+    intc_2 // axfer
+    ==
+    assert // transaction type is axfer
+    txn GroupIndex
+    intc_1 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_2 // axfer
+    ==
+    assert // transaction type is axfer
+    callsub examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity
+    itob
+    bytec 6 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.removeLiquidity[routing]() -> void:
+removeLiquidity:
+    b removeLiquidity_block@0
+
+removeLiquidity_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:279
+    // public removeLiquidity(poolDeposit: gtxn.AssetTransferTxn): void {
+    txn GroupIndex
+    intc_1 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_2 // axfer
+    ==
+    assert // transaction type is axfer
+    callsub examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.removeLiquidity
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap[routing]() -> void:
+swap:
+    b swap_block@0
+
+swap_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:332
+    // public swap(deposit: gtxn.AssetTransferTxn): uint64 {
+    txn GroupIndex
+    intc_1 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_2 // axfer
+    ==
+    assert // transaction type is axfer
+    callsub examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap
+    itob
+    bytec 6 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.withdrawAlgoExcess[routing]() -> void:
+withdrawAlgoExcess:
+    b withdrawAlgoExcess_block@0
+
+withdrawAlgoExcess_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:407
+    // public withdrawAlgoExcess(): void {
+    callsub examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.withdrawAlgoExcess
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.getPoolState[routing]() -> void:
+getPoolState:
+    b getPoolState_block@0
+
+getPoolState_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:434-435
+    // @readonly
+    // public getPoolState(): PoolState {
+    callsub examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.getPoolState
+    bytec 6 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.createApplication() -> void:
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.createApplication:
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.createApplication_block@0
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.createApplication_block@0:
+    retsub
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.bootstrap(assetA: uint64, assetB: uint64, seed: uint64) -> uint64:
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.bootstrap:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:133
+    // public bootstrap(assetA: Asset, assetB: Asset, seed: gtxn.PaymentTxn): uint64 {
+    proto 3 1
+    bytec_3 // ""
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.bootstrap_block@0
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.bootstrap_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:135
+    // assert(Txn.sender === Global.creatorAddress, 'Only creator')
+    txn Sender
+    global CreatorAddress
+    ==
+    assert // Only creator
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:138
+    // assert(this.totalLiquidity.value === 0, 'Already bootstrapped')
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:120
+    // totalLiquidity = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_0 // "totalLiquidity"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:138
+    // assert(this.totalLiquidity.value === 0, 'Already bootstrapped')
+    app_global_get_ex
+    assert // check GlobalState exists
+    intc_0 // 0
+    ==
+    assert // Already bootstrapped
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:141
+    // assert(assetA.id < assetB.id, 'Assets must be ordered by ID')
+    frame_dig -3
+    frame_dig -2
+    <
+    assert // Assets must be ordered by ID
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:144
+    // const requiredMinBal: uint64 = calculateMinBalance(Uint64(3))
+    pushint 3
+    callsub calculateMinBalance
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:147-150
+    // assertMatch(seed, {
+    //   receiver: Global.currentApplicationAddress,
+    //   amount: { between: [requiredMinBal, MAX_SEED_AMOUNT] },
+    // })
+    frame_dig -1
+    gtxns Receiver
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:148
+    // receiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:147-150
+    // assertMatch(seed, {
+    //   receiver: Global.currentApplicationAddress,
+    //   amount: { between: [requiredMinBal, MAX_SEED_AMOUNT] },
+    // })
+    ==
+    frame_dig -1
+    gtxns Amount
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:149
+    // amount: { between: [requiredMinBal, MAX_SEED_AMOUNT] },
+    pushint 10000000
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:147-150
+    // assertMatch(seed, {
+    //   receiver: Global.currentApplicationAddress,
+    //   amount: { between: [requiredMinBal, MAX_SEED_AMOUNT] },
+    // })
+    <=
+    frame_dig -1
+    gtxns Amount
+    uncover 3
+    >=
+    &&
+    &&
+    assert // assert target is match for conditions
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:111
+    // assetA = GlobalState<Asset>()
+    bytec 4 // "assetA"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:153
+    // this.assetA.value = assetA
+    frame_dig -3
+    app_global_put
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:112
+    // assetB = GlobalState<Asset>()
+    bytec 5 // "assetB"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:154
+    // this.assetB.value = assetB
+    frame_dig -2
+    app_global_put
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:157-166
+    // const createResult = itxn
+    //   .assetConfig({
+    //     total: POOL_TOKEN_TOTAL, // Large supply for fractional ownership
+    //     decimals: 6, // 6 decimal places
+    //     assetName: 'DPT', // "DEX Pool Token"
+    //     unitName: 'DPT', // Short unit name
+    //     manager: Global.currentApplicationAddress, // Contract manages the token
+    //     reserve: Global.currentApplicationAddress, // Reserve address
+    //   })
+    //   .submit()
+    itxn_begin
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:163
+    // manager: Global.currentApplicationAddress, // Contract manages the token
+    global CurrentApplicationAddress
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:164
+    // reserve: Global.currentApplicationAddress, // Reserve address
+    global CurrentApplicationAddress
+    itxn_field ConfigAssetReserve
+    itxn_field ConfigAssetManager
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:162
+    // unitName: 'DPT', // Short unit name
+    bytec 8 // "DPT"
+    itxn_field ConfigAssetUnitName
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:161
+    // assetName: 'DPT', // "DEX Pool Token"
+    bytec 8 // "DPT"
+    itxn_field ConfigAssetName
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:160
+    // decimals: 6, // 6 decimal places
+    pushint 6
+    itxn_field ConfigAssetDecimals
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:159
+    // total: POOL_TOKEN_TOTAL, // Large supply for fractional ownership
+    pushint 10000000000
+    itxn_field ConfigAssetTotal
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:157-165
+    // const createResult = itxn
+    //   .assetConfig({
+    //     total: POOL_TOKEN_TOTAL, // Large supply for fractional ownership
+    //     decimals: 6, // 6 decimal places
+    //     assetName: 'DPT', // "DEX Pool Token"
+    //     unitName: 'DPT', // Short unit name
+    //     manager: Global.currentApplicationAddress, // Contract manages the token
+    //     reserve: Global.currentApplicationAddress, // Reserve address
+    //   })
+    pushint 3
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.bootstrap_next_txn@1
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.bootstrap_next_txn@1:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:157-166
+    // const createResult = itxn
+    //   .assetConfig({
+    //     total: POOL_TOKEN_TOTAL, // Large supply for fractional ownership
+    //     decimals: 6, // 6 decimal places
+    //     assetName: 'DPT', // "DEX Pool Token"
+    //     unitName: 'DPT', // Short unit name
+    //     manager: Global.currentApplicationAddress, // Contract manages the token
+    //     reserve: Global.currentApplicationAddress, // Reserve address
+    //   })
+    //   .submit()
+    itxn_submit
+    itxn CreatedAssetID
+    dup
+    frame_bury 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:113
+    // poolToken = GlobalState<Asset>()
+    bytec 7 // "poolToken"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:169
+    // this.poolToken.value = createResult.createdAsset
+    uncover 1
+    app_global_put
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:172-178
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Global.currentApplicationAddress,
+    //     xferAsset: assetA,
+    //     assetAmount: 0,
+    //   })
+    //   .submit()
+    itxn_begin
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:174
+    // assetReceiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:175
+    // xferAsset: assetA,
+    frame_dig -3
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:176
+    // assetAmount: 0,
+    intc_0 // 0
+    itxn_field AssetAmount
+    itxn_field XferAsset
+    itxn_field AssetReceiver
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:172-177
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Global.currentApplicationAddress,
+    //     xferAsset: assetA,
+    //     assetAmount: 0,
+    //   })
+    intc_2 // 4
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.bootstrap_next_txn@2
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.bootstrap_next_txn@2:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:172-178
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Global.currentApplicationAddress,
+    //     xferAsset: assetA,
+    //     assetAmount: 0,
+    //   })
+    //   .submit()
+    itxn_submit
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:181-187
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Global.currentApplicationAddress,
+    //     xferAsset: assetB,
+    //     assetAmount: 0,
+    //   })
+    //   .submit()
+    itxn_begin
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:183
+    // assetReceiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:184
+    // xferAsset: assetB,
+    frame_dig -2
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:185
+    // assetAmount: 0,
+    intc_0 // 0
+    itxn_field AssetAmount
+    itxn_field XferAsset
+    itxn_field AssetReceiver
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:181-186
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Global.currentApplicationAddress,
+    //     xferAsset: assetB,
+    //     assetAmount: 0,
+    //   })
+    intc_2 // 4
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.bootstrap_next_txn@3
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.bootstrap_next_txn@3:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:181-187
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Global.currentApplicationAddress,
+    //     xferAsset: assetB,
+    //     assetAmount: 0,
+    //   })
+    //   .submit()
+    itxn_submit
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:190
+    // return createResult.createdAsset.id
+    frame_dig 0
+    uncover 1
+    retsub
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity(depositA: uint64, depositB: uint64) -> uint64:
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:201
+    // public addLiquidity(depositA: gtxn.AssetTransferTxn, depositB: gtxn.AssetTransferTxn): uint64 {
+    proto 2 1
+    bytec_3 // ""
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity_block@0
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:203-207
+    // assertMatch(depositA, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   xferAsset: this.assetA.value,
+    //   assetAmount: { greaterThan: Uint64(0) }, // assertMatch greaterThan comparison
+    // })
+    frame_dig -2
+    gtxns AssetReceiver
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:204
+    // assetReceiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:203-207
+    // assertMatch(depositA, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   xferAsset: this.assetA.value,
+    //   assetAmount: { greaterThan: Uint64(0) }, // assertMatch greaterThan comparison
+    // })
+    ==
+    frame_dig -2
+    gtxns XferAsset
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:205
+    // xferAsset: this.assetA.value,
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:111
+    // assetA = GlobalState<Asset>()
+    bytec 4 // "assetA"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:205
+    // xferAsset: this.assetA.value,
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:203-207
+    // assertMatch(depositA, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   xferAsset: this.assetA.value,
+    //   assetAmount: { greaterThan: Uint64(0) }, // assertMatch greaterThan comparison
+    // })
+    ==
+    &&
+    frame_dig -2
+    gtxns AssetAmount
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:206
+    // assetAmount: { greaterThan: Uint64(0) }, // assertMatch greaterThan comparison
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:203-207
+    // assertMatch(depositA, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   xferAsset: this.assetA.value,
+    //   assetAmount: { greaterThan: Uint64(0) }, // assertMatch greaterThan comparison
+    // })
+    >
+    &&
+    assert // assert target is match for conditions
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:210-214
+    // assertMatch(depositB, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   xferAsset: this.assetB.value,
+    //   assetAmount: { greaterThan: Uint64(0) }, // assertMatch greaterThan comparison
+    // })
+    frame_dig -1
+    gtxns AssetReceiver
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:211
+    // assetReceiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:210-214
+    // assertMatch(depositB, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   xferAsset: this.assetB.value,
+    //   assetAmount: { greaterThan: Uint64(0) }, // assertMatch greaterThan comparison
+    // })
+    ==
+    frame_dig -1
+    gtxns XferAsset
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:212
+    // xferAsset: this.assetB.value,
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:112
+    // assetB = GlobalState<Asset>()
+    bytec 5 // "assetB"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:212
+    // xferAsset: this.assetB.value,
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:210-214
+    // assertMatch(depositB, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   xferAsset: this.assetB.value,
+    //   assetAmount: { greaterThan: Uint64(0) }, // assertMatch greaterThan comparison
+    // })
+    ==
+    &&
+    frame_dig -1
+    gtxns AssetAmount
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:213
+    // assetAmount: { greaterThan: Uint64(0) }, // assertMatch greaterThan comparison
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:210-214
+    // assertMatch(depositB, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   xferAsset: this.assetB.value,
+    //   assetAmount: { greaterThan: Uint64(0) }, // assertMatch greaterThan comparison
+    // })
+    >
+    &&
+    assert // assert target is match for conditions
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:216
+    // const amountA = depositA.assetAmount
+    frame_dig -2
+    gtxns AssetAmount
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:217
+    // const amountB = depositB.assetAmount
+    frame_dig -1
+    gtxns AssetAmount
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:220
+    // if (this.totalLiquidity.value === 0) {
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:120
+    // totalLiquidity = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_0 // "totalLiquidity"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:220
+    // if (this.totalLiquidity.value === 0) {
+    app_global_get_ex
+    assert // check GlobalState exists
+    intc_0 // 0
+    ==
+    bz examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity_else_body@2
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity_if_body@1
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity_if_body@1:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:223
+    // const sqrtA: uint64 = op.sqrt(amountA)
+    frame_dig 1
+    dup
+    sqrt
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:224
+    // const sqrtB: uint64 = op.sqrt(amountB)
+    frame_dig 2
+    dup
+    cover 2
+    sqrt
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:227
+    // const rawLiquidity: uint64 = sqrtA * sqrtB
+    *
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:230
+    // assert(rawLiquidity > MIN_LOCKED_LIQUIDITY, 'Initial deposit too small')
+    dup
+    intc_3 // 1000
+    >
+    assert // Initial deposit too small
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:231
+    // liquidity = rawLiquidity - MIN_LOCKED_LIQUIDITY
+    dup
+    intc_3 // 1000
+    -
+    frame_bury 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:234
+    // const bigProduct: biguint = BigUint(amountA) * BigUint(amountB)
+    uncover 2
+    itob
+    uncover 2
+    itob
+    b*
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:236
+    // const exactSqrt: biguint = op.bsqrt(bigProduct)
+    bsqrt
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:238
+    // assert(BigUint(rawLiquidity) <= exactSqrt, 'Sqrt approximation overflow')
+    uncover 1
+    itob
+    b>=
+    assert // Sqrt approximation overflow
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity_after_if_else@3
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity_after_if_else@3:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:250
+    // assert(liquidity > 0, 'Zero liquidity')
+    frame_dig 0
+    dup
+    intc_0 // 0
+    >
+    assert // Zero liquidity
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:253
+    // const newReserveA: uint64 = this.reserveA.value + amountA
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:116
+    // reserveA = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_1 // "reserveA"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:253
+    // const newReserveA: uint64 = this.reserveA.value + amountA
+    app_global_get_ex
+    assert // check GlobalState exists
+    frame_dig 1
+    +
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:116
+    // reserveA = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_1 // "reserveA"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:254
+    // this.reserveA.value = newReserveA
+    uncover 1
+    app_global_put
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:255
+    // const newReserveB: uint64 = this.reserveB.value + amountB
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:117
+    // reserveB = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_2 // "reserveB"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:255
+    // const newReserveB: uint64 = this.reserveB.value + amountB
+    app_global_get_ex
+    assert // check GlobalState exists
+    frame_dig 2
+    +
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:117
+    // reserveB = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_2 // "reserveB"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:256
+    // this.reserveB.value = newReserveB
+    uncover 1
+    app_global_put
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:259
+    // const newLiquidity: uint64 = this.totalLiquidity.value + liquidity
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:120
+    // totalLiquidity = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_0 // "totalLiquidity"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:259
+    // const newLiquidity: uint64 = this.totalLiquidity.value + liquidity
+    app_global_get_ex
+    assert // check GlobalState exists
+    dig 1
+    +
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:120
+    // totalLiquidity = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_0 // "totalLiquidity"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:260
+    // this.totalLiquidity.value = newLiquidity
+    uncover 1
+    app_global_put
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:263-269
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Txn.sender, // Send pool tokens to the depositor
+    //     xferAsset: this.poolToken.value, // The pool's liquidity token
+    //     assetAmount: liquidity, // Minted amount
+    //   })
+    //   .submit()
+    itxn_begin
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:265
+    // assetReceiver: Txn.sender, // Send pool tokens to the depositor
+    txn Sender
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:266
+    // xferAsset: this.poolToken.value, // The pool's liquidity token
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:113
+    // poolToken = GlobalState<Asset>()
+    bytec 7 // "poolToken"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:266
+    // xferAsset: this.poolToken.value, // The pool's liquidity token
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:267
+    // assetAmount: liquidity, // Minted amount
+    uncover 2
+    itxn_field AssetAmount
+    itxn_field XferAsset
+    itxn_field AssetReceiver
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:263-268
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Txn.sender, // Send pool tokens to the depositor
+    //     xferAsset: this.poolToken.value, // The pool's liquidity token
+    //     assetAmount: liquidity, // Minted amount
+    //   })
+    intc_2 // 4
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity_next_txn@4
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity_next_txn@4:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:263-269
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Txn.sender, // Send pool tokens to the depositor
+    //     xferAsset: this.poolToken.value, // The pool's liquidity token
+    //     assetAmount: liquidity, // Minted amount
+    //   })
+    //   .submit()
+    itxn_submit
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:271
+    // return liquidity
+    retsub
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity_else_body@2:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:242
+    // const liquidityA: uint64 = (amountA * this.totalLiquidity.value) / this.reserveA.value
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:120
+    // totalLiquidity = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_0 // "totalLiquidity"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:242
+    // const liquidityA: uint64 = (amountA * this.totalLiquidity.value) / this.reserveA.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    frame_dig 1
+    *
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:116
+    // reserveA = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_1 // "reserveA"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:242
+    // const liquidityA: uint64 = (amountA * this.totalLiquidity.value) / this.reserveA.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    /
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:244
+    // const liquidityB: uint64 = (amountB * this.totalLiquidity.value) / this.reserveB.value
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:120
+    // totalLiquidity = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_0 // "totalLiquidity"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:244
+    // const liquidityB: uint64 = (amountB * this.totalLiquidity.value) / this.reserveB.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    frame_dig 2
+    *
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:117
+    // reserveB = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_2 // "reserveB"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:244
+    // const liquidityB: uint64 = (amountB * this.totalLiquidity.value) / this.reserveB.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    /
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:247
+    // liquidity = minOf(liquidityA, liquidityB)
+    callsub minOf
+    frame_bury 0
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.addLiquidity_after_if_else@3
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.removeLiquidity(poolDeposit: uint64) -> void:
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.removeLiquidity:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:279
+    // public removeLiquidity(poolDeposit: gtxn.AssetTransferTxn): void {
+    proto 1 0
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.removeLiquidity_block@0
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.removeLiquidity_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:281-285
+    // assertMatch(poolDeposit, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   xferAsset: this.poolToken.value,
+    //   assetAmount: { greaterThan: Uint64(0) },
+    // })
+    frame_dig -1
+    gtxns AssetReceiver
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:282
+    // assetReceiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:281-285
+    // assertMatch(poolDeposit, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   xferAsset: this.poolToken.value,
+    //   assetAmount: { greaterThan: Uint64(0) },
+    // })
+    ==
+    frame_dig -1
+    gtxns XferAsset
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:283
+    // xferAsset: this.poolToken.value,
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:113
+    // poolToken = GlobalState<Asset>()
+    bytec 7 // "poolToken"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:283
+    // xferAsset: this.poolToken.value,
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:281-285
+    // assertMatch(poolDeposit, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   xferAsset: this.poolToken.value,
+    //   assetAmount: { greaterThan: Uint64(0) },
+    // })
+    ==
+    &&
+    frame_dig -1
+    gtxns AssetAmount
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:284
+    // assetAmount: { greaterThan: Uint64(0) },
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:281-285
+    // assertMatch(poolDeposit, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   xferAsset: this.poolToken.value,
+    //   assetAmount: { greaterThan: Uint64(0) },
+    // })
+    >
+    &&
+    assert // assert target is match for conditions
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:287
+    // const burnAmount = poolDeposit.assetAmount
+    frame_dig -1
+    gtxns AssetAmount
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:288
+    // const totalLiq = this.totalLiquidity.value
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:120
+    // totalLiquidity = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_0 // "totalLiquidity"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:288
+    // const totalLiq = this.totalLiquidity.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:292
+    // const amountA: uint64 = (burnAmount * this.reserveA.value) / totalLiq
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:116
+    // reserveA = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_1 // "reserveA"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:292
+    // const amountA: uint64 = (burnAmount * this.reserveA.value) / totalLiq
+    app_global_get_ex
+    assert // check GlobalState exists
+    dig 2
+    *
+    dig 1
+    /
+    cover 2
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:294
+    // const amountB: uint64 = (burnAmount * this.reserveB.value) / totalLiq
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:117
+    // reserveB = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_2 // "reserveB"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:294
+    // const amountB: uint64 = (burnAmount * this.reserveB.value) / totalLiq
+    app_global_get_ex
+    assert // check GlobalState exists
+    dig 2
+    *
+    dig 1
+    /
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:296
+    // assert(amountA > 0, 'Zero withdrawal A')
+    dig 3
+    intc_0 // 0
+    >
+    assert // Zero withdrawal A
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:297
+    // assert(amountB > 0, 'Zero withdrawal B')
+    dup
+    intc_0 // 0
+    >
+    assert // Zero withdrawal B
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:300
+    // const newResA: uint64 = this.reserveA.value - amountA
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:116
+    // reserveA = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_1 // "reserveA"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:300
+    // const newResA: uint64 = this.reserveA.value - amountA
+    app_global_get_ex
+    assert // check GlobalState exists
+    dig 4
+    -
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:116
+    // reserveA = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_1 // "reserveA"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:301
+    // this.reserveA.value = newResA
+    uncover 1
+    app_global_put
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:302
+    // const newResB: uint64 = this.reserveB.value - amountB
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:117
+    // reserveB = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_2 // "reserveB"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:302
+    // const newResB: uint64 = this.reserveB.value - amountB
+    app_global_get_ex
+    assert // check GlobalState exists
+    dig 1
+    -
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:117
+    // reserveB = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_2 // "reserveB"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:303
+    // this.reserveB.value = newResB
+    uncover 1
+    app_global_put
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:306
+    // const newLiq: uint64 = totalLiq - burnAmount
+    uncover 1
+    uncover 2
+    -
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:120
+    // totalLiquidity = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_0 // "totalLiquidity"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:307
+    // this.totalLiquidity.value = newLiq
+    uncover 1
+    app_global_put
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:311
+    // assetReceiver: Txn.sender, // Send asset A to the provider
+    txn Sender
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:312
+    // xferAsset: this.assetA.value,
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:111
+    // assetA = GlobalState<Asset>()
+    bytec 4 // "assetA"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:312
+    // xferAsset: this.assetA.value,
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:313
+    // assetAmount: amountA,
+    uncover 3
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:316
+    // assetReceiver: Txn.sender, // Send asset B to the provider
+    txn Sender
+    cover 4
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:317
+    // xferAsset: this.assetB.value,
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:112
+    // assetB = GlobalState<Asset>()
+    bytec 5 // "assetB"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:317
+    // xferAsset: this.assetB.value,
+    app_global_get_ex
+    assert // check GlobalState exists
+    cover 4
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:322
+    // itxn.submitGroup(sendA, sendB)
+    itxn_begin
+    itxn_field AssetAmount
+    itxn_field XferAsset
+    itxn_field AssetReceiver
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:310-314
+    // const sendA = itxn.assetTransfer({
+    //   assetReceiver: Txn.sender, // Send asset A to the provider
+    //   xferAsset: this.assetA.value,
+    //   assetAmount: amountA,
+    // })
+    intc_2 // 4
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.removeLiquidity_next_txn@1
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.removeLiquidity_next_txn@1:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:322
+    // itxn.submitGroup(sendA, sendB)
+    itxn_next
+    frame_dig 2
+    itxn_field AssetAmount
+    frame_dig 1
+    itxn_field XferAsset
+    frame_dig 0
+    itxn_field AssetReceiver
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:315-319
+    // const sendB = itxn.assetTransfer({
+    //   assetReceiver: Txn.sender, // Send asset B to the provider
+    //   xferAsset: this.assetB.value,
+    //   assetAmount: amountB,
+    // })
+    intc_2 // 4
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.removeLiquidity_next_txn@2
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.removeLiquidity_next_txn@2:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:322
+    // itxn.submitGroup(sendA, sendB)
+    itxn_submit
+    retsub
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap(deposit: uint64) -> uint64:
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:332
+    // public swap(deposit: gtxn.AssetTransferTxn): uint64 {
+    proto 1 1
+    bytec_3 // ""
+    bytec_3 // ""
+    bytec_3 // ""
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap_block@0
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:334-337
+    // assertMatch(deposit, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   assetAmount: { greaterThan: Uint64(0) },
+    // })
+    frame_dig -1
+    gtxns AssetReceiver
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:335
+    // assetReceiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:334-337
+    // assertMatch(deposit, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   assetAmount: { greaterThan: Uint64(0) },
+    // })
+    ==
+    frame_dig -1
+    gtxns AssetAmount
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:336
+    // assetAmount: { greaterThan: Uint64(0) },
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:334-337
+    // assertMatch(deposit, {
+    //   assetReceiver: Global.currentApplicationAddress,
+    //   assetAmount: { greaterThan: Uint64(0) },
+    // })
+    >
+    &&
+    assert // assert target is match for conditions
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:339
+    // const depositAsset = deposit.xferAsset
+    frame_dig -1
+    gtxns XferAsset
+    dup
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:340
+    // const amountIn = deposit.assetAmount
+    frame_dig -1
+    gtxns AssetAmount
+    cover 1
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:343
+    // const oldResA = this.reserveA.value
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:116
+    // reserveA = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_1 // "reserveA"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:343
+    // const oldResA = this.reserveA.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    cover 1
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:344
+    // const oldResB = this.reserveB.value
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:117
+    // reserveB = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_2 // "reserveB"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:344
+    // const oldResB = this.reserveB.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    cover 1
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:350
+    // if (depositAsset === this.assetA.value) {
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:111
+    // assetA = GlobalState<Asset>()
+    bytec 4 // "assetA"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:350
+    // if (depositAsset === this.assetA.value) {
+    app_global_get_ex
+    assert // check GlobalState exists
+    ==
+    bz examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap_else_body@3
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap_if_body@1
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap_if_body@1:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:353
+    // amountOut = computeSwapOutput(amountIn, oldResA, oldResB)
+    frame_dig 4
+    dup
+    frame_dig 5
+    dup
+    cover 2
+    frame_dig 6
+    dup
+    cover 3
+    callsub computeSwapOutput
+    dup
+    frame_bury 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:354
+    // assert(amountOut > 0, 'Zero output')
+    dup
+    intc_0 // 0
+    >
+    assert // Zero output
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:355
+    // assert(amountOut < oldResB, 'Insufficient reserve B')
+    dup
+    dig 2
+    <
+    assert // Insufficient reserve B
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:358
+    // newReserveA = oldResA + amountIn
+    uncover 2
+    uncover 3
+    +
+    frame_bury 1
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:359
+    // newReserveB = oldResB - amountOut
+    uncover 1
+    dig 1
+    -
+    frame_bury 2
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:362-368
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Txn.sender,
+    //     xferAsset: this.assetB.value,
+    //     assetAmount: amountOut,
+    //   })
+    //   .submit()
+    itxn_begin
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:364
+    // assetReceiver: Txn.sender,
+    txn Sender
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:365
+    // xferAsset: this.assetB.value,
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:112
+    // assetB = GlobalState<Asset>()
+    bytec 5 // "assetB"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:365
+    // xferAsset: this.assetB.value,
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:366
+    // assetAmount: amountOut,
+    uncover 2
+    itxn_field AssetAmount
+    itxn_field XferAsset
+    itxn_field AssetReceiver
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:362-367
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Txn.sender,
+    //     xferAsset: this.assetB.value,
+    //     assetAmount: amountOut,
+    //   })
+    intc_2 // 4
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap_next_txn@2
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap_next_txn@2:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:362-368
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Txn.sender,
+    //     xferAsset: this.assetB.value,
+    //     assetAmount: amountOut,
+    //   })
+    //   .submit()
+    itxn_submit
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap_after_if_else@5
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap_after_if_else@5:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:392
+    // const oldK: biguint = BigUint(oldResA) * BigUint(oldResB)
+    frame_dig 5
+    itob
+    frame_dig 6
+    itob
+    b*
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:393
+    // const newK: biguint = BigUint(newReserveA) * BigUint(newReserveB)
+    frame_dig 1
+    dup
+    cover 2
+    itob
+    frame_dig 2
+    dup
+    cover 4
+    itob
+    b*
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:394
+    // assert(newK >= oldK, 'Invariant violated: k decreased')
+    b<=
+    assert // Invariant violated: k decreased
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:116
+    // reserveA = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_1 // "reserveA"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:397
+    // this.reserveA.value = newReserveA
+    uncover 1
+    app_global_put
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:117
+    // reserveB = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_2 // "reserveB"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:398
+    // this.reserveB.value = newReserveB
+    uncover 1
+    app_global_put
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:400
+    // return amountOut
+    retsub
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap_else_body@3:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:371
+    // assert(depositAsset === this.assetB.value, 'Unknown asset')
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:112
+    // assetB = GlobalState<Asset>()
+    bytec 5 // "assetB"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:371
+    // assert(depositAsset === this.assetB.value, 'Unknown asset')
+    app_global_get_ex
+    assert // check GlobalState exists
+    frame_dig 3
+    ==
+    assert // Unknown asset
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:372
+    // amountOut = computeSwapOutput(amountIn, oldResB, oldResA)
+    frame_dig 4
+    dup
+    frame_dig 6
+    dup
+    cover 2
+    frame_dig 5
+    dup
+    cover 3
+    callsub computeSwapOutput
+    dup
+    frame_bury 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:373
+    // assert(amountOut > 0, 'Zero output')
+    dup
+    intc_0 // 0
+    >
+    assert // Zero output
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:374
+    // assert(amountOut < oldResA, 'Insufficient reserve A')
+    dup
+    dig 2
+    <
+    assert // Insufficient reserve A
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:377
+    // newReserveA = oldResA - amountOut
+    uncover 1
+    dig 1
+    -
+    frame_bury 1
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:378
+    // newReserveB = oldResB + amountIn
+    uncover 1
+    uncover 2
+    +
+    frame_bury 2
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:381-387
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Txn.sender,
+    //     xferAsset: this.assetA.value,
+    //     assetAmount: amountOut,
+    //   })
+    //   .submit()
+    itxn_begin
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:383
+    // assetReceiver: Txn.sender,
+    txn Sender
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:384
+    // xferAsset: this.assetA.value,
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:111
+    // assetA = GlobalState<Asset>()
+    bytec 4 // "assetA"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:384
+    // xferAsset: this.assetA.value,
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:385
+    // assetAmount: amountOut,
+    uncover 2
+    itxn_field AssetAmount
+    itxn_field XferAsset
+    itxn_field AssetReceiver
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:381-386
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Txn.sender,
+    //     xferAsset: this.assetA.value,
+    //     assetAmount: amountOut,
+    //   })
+    intc_2 // 4
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap_next_txn@4
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap_next_txn@4:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:381-387
+    // itxn
+    //   .assetTransfer({
+    //     assetReceiver: Txn.sender,
+    //     xferAsset: this.assetA.value,
+    //     assetAmount: amountOut,
+    //   })
+    //   .submit()
+    itxn_submit
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.swap_after_if_else@5
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.withdrawAlgoExcess() -> void:
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.withdrawAlgoExcess:
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.withdrawAlgoExcess_block@0
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.withdrawAlgoExcess_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:409
+    // assert(Txn.sender === Global.creatorAddress, 'Only creator')
+    txn Sender
+    global CreatorAddress
+    ==
+    assert // Only creator
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:412
+    // const minBal: uint64 = Global.currentApplicationAddress.minBalance
+    global CurrentApplicationAddress
+    acct_params_get AcctMinBalance
+    assert // account funded
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:414
+    // const contractBal: uint64 = Global.currentApplicationAddress.balance
+    global CurrentApplicationAddress
+    acct_params_get AcctBalance
+    assert // account funded
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:417
+    // assert(contractBal > minBal, 'No excess balance')
+    dup
+    dig 2
+    >
+    assert // No excess balance
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:418
+    // const excess: uint64 = contractBal - minBal
+    uncover 1
+    -
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:421-426
+    // itxn
+    //   .payment({
+    //     receiver: Global.creatorAddress,
+    //     amount: excess,
+    //   })
+    //   .submit()
+    itxn_begin
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:423
+    // receiver: Global.creatorAddress,
+    global CreatorAddress
+    cover 1
+    itxn_field Amount
+    itxn_field Receiver
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:421-425
+    // itxn
+    //   .payment({
+    //     receiver: Global.creatorAddress,
+    //     amount: excess,
+    //   })
+    intc_1 // 1
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.withdrawAlgoExcess_next_txn@1
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.withdrawAlgoExcess_next_txn@1:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:421-426
+    // itxn
+    //   .payment({
+    //     receiver: Global.creatorAddress,
+    //     amount: excess,
+    //   })
+    //   .submit()
+    itxn_submit
+    retsub
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.getPoolState() -> bytes:
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.getPoolState:
+    b examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.getPoolState_block@0
+
+examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.getPoolState_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:436
+    // const resA = this.reserveA.value
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:116
+    // reserveA = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_1 // "reserveA"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:436
+    // const resA = this.reserveA.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:437
+    // const resB = this.reserveB.value
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:117
+    // reserveB = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_2 // "reserveB"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:437
+    // const resB = this.reserveB.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:440
+    // const k: biguint = BigUint(resA) * BigUint(resB)
+    dig 1
+    itob
+    cover 1
+    dup
+    itob
+    uncover 2
+    b*
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:443
+    // const sqrtK: biguint = op.bsqrt(k)
+    bsqrt
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:446
+    // log(sqrtK)
+    log
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:451
+    // totalLiquidity: this.totalLiquidity.value,
+    intc_0 // 0
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:120
+    // totalLiquidity = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_0 // "totalLiquidity"
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:451
+    // totalLiquidity: this.totalLiquidity.value,
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:448-452
+    // return {
+    //   reserveA: resA,
+    //   reserveB: resB,
+    //   totalLiquidity: this.totalLiquidity.value,
+    // }
+    uncover 2
+    itob
+    bytec_3 // 0x
+    uncover 1
+    concat
+    uncover 2
+    itob
+    concat
+    uncover 1
+    itob
+    concat
+    retsub
+
+
+// examples/puya-ts/15-dex-pool/contract.algo.ts::DexPool.constructor() -> void:
+constructor:
+    b constructor_block@0
+
+constructor_block@0:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:109
+    // export class DexPool extends Contract {
+    b constructor_block@1
+
+constructor_block@1:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:109
+    // export class DexPool extends Contract {
+    b constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2
+
+constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:116
+    // reserveA = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_1 // "reserveA"
+    intc_0 // 0
+    app_global_put
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:117
+    // reserveB = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_2 // "reserveB"
+    intc_0 // 0
+    app_global_put
+    // examples/puya-ts/15-dex-pool/contract.algo.ts:120
+    // totalLiquidity = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec_0 // "totalLiquidity"
+    intc_0 // 0
+    app_global_put
+    retsub

@@ -1,0 +1,116 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let reinterpret_bool%0#0: bool = (txn ApplicationID)
+        goto reinterpret_bool%0#0 ? block@2 : block@1
+    block@1: // if_body_L1
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.constructor()
+        goto block@2
+    block@2: // after_if_else_L1
+        goto block@3
+    block@3: // L106
+        let tmp%0#1: uint64 = (txn OnCompletion)
+        let tmp%1#0: bool = (== tmp%0#1 NoOp)
+        (assert tmp%1#0)
+        let tmp%2#0: uint64 = (txn ApplicationID)
+        let tmp%3#0: bool = (!= tmp%2#0 0u)
+        goto tmp%3#0 ? block@4 : block@9
+    block@4: // call_NoOp_L106
+        let tmp%4#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%4#0 {method "getVersion()uint64" => block@5, method "bumpVersion()uint64" => block@6, method "getOwner()string" => block@7, * => block@8}
+    block@5: // getVersion_route_L114
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.getVersion[routing]()
+        goto block@8
+    block@6: // bumpVersion_route_L122
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.bumpVersion[routing]()
+        goto block@8
+    block@7: // getOwner_route_L100
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.getOwner[routing]()
+        goto block@8
+    block@8: // switch_case_next_L106
+        goto block@12
+    block@9: // create_NoOp_L106
+        let tmp%5#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%5#0 {method "createApplication()void" => block@10, * => block@11}
+    block@10: // createApplication_route_L84
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.createApplication[routing]()
+        goto block@11
+    block@11: // switch_case_next_L106
+        goto block@12
+    block@12: // after_if_else_L106
+        exit 0u
+    block@13: // after_inlined_examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.__puya_arc4_router___L1
+        let tmp%0#0: bool = undefined
+        return tmp%0#0
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.getVersion[routing]() -> void:
+    block@0: // L114
+        let tmp%0#0: uint64 = examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.getVersion()
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%1#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.bumpVersion[routing]() -> void:
+    block@0: // L122
+        let tmp%0#0: uint64 = examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.bumpVersion()
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%0#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%1#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.createApplication[routing]() -> void:
+    block@0: // L84
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.createApplication()
+        exit 1u
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.getOwner[routing]() -> void:
+    block@0: // L100
+        let tmp%0#0: string = examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.getOwner()
+        let aggregate%length%0#0: uint64 = (len tmp%0#0)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%0#0)
+        let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%0#0
+        let tmp%1#0: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.getVersion() -> uint64:
+    block@0: // L114
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "version")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        return maybe_value%0#0
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.bumpVersion() -> uint64:
+    block@0: // L122
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "version")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let tmp%0#0: uint64 = (+ maybe_value%0#0 1u)
+        let next#0: uint64 = tmp%0#0
+        (app_global_put "version" next#0)
+        return next#0
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.createApplication() -> void:
+    block@0: // L84
+        (app_global_put "owner" "creator")
+        return 
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.getOwner() -> string:
+    block@0: // L100
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (app_global_get_ex 0u "owner")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        return maybe_value%0#0
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.constructor() -> void:
+    block@0: // L106
+        goto block@1
+    block@1: // L1
+        goto block@2
+    block@2: // after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor_L106
+        (app_global_put "version" 1u)
+        return 

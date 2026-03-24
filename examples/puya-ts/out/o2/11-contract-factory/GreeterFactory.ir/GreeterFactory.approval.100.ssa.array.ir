@@ -1,0 +1,135 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn OnCompletion)
+        let tmp%1#0: bool = (! tmp%0#1)
+        (assert tmp%1#0)
+        let tmp%2#0: uint64 = (txn ApplicationID)
+        goto tmp%2#0 ? block@2 : block@10
+    block@2: // call_NoOp_L71
+        let tmp%4#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%4#0 {method "deployManual()uint64" => block@3, method "deployTyped()uint64" => block@4, method "callChildGreet(uint64,string)string" => block@5, method "callChildManual(uint64,string)string" => block@6, method "deleteChild(uint64)void" => block@7, method "inspectCompiled()uint64" => block@8, * => block@13}
+    block@3: // deployManual_route_L84
+        itxn_begin
+        ((itxn_field GlobalNumByteSlice) 1u)
+        ((itxn_field ClearStateProgramPages) C4EBQw==)
+        ((itxn_field ApprovalProgramPages) CyACAAEmAghncmVldGluZwVoZWxsbzEYQAADKClngAQkN408NhoAjgEAVTEZFEQxGEEAPIAE0KKCADYaAI4BAAEANhoBSSJZgQIISwEVEkRXAgAiKGVEgAEgUExQSRUWVwYCTFCABBUffHVMULAjQ4AETFxhujYaAI4BAAEAI0MxGYEFEjEYEEM=)
+        ((itxn_field ApplicationArgs) method "create()void")
+        ((itxn_field TypeEnum) 6u)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        let childApp#1: uint64 = (itxn CreatedApplicationID)
+        (app_global_put "lastChild" childApp#1)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob childApp#1)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%1#7: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let tmp%2#7: bytes = (concat 0x151f7c75 tmp%1#7)
+        (log tmp%2#7)
+        exit 1u
+    block@4: // deployTyped_route_L127
+        itxn_begin
+        ((itxn_field GlobalNumByteSlice) 1u)
+        ((itxn_field ClearStateProgramPages) C4EBQw==)
+        ((itxn_field ApprovalProgramPages) CyACAAEmAghncmVldGluZwJoaTEYQAADKClngAQkN408NhoAjgEAVTEZFEQxGEEAPIAE0KKCADYaAI4BAAEANhoBSSJZgQIISwEVEkRXAgAiKGVEgAEgUExQSRUWVwYCTFCABBUffHVMULAjQ4AETFxhujYaAI4BAAEAI0MxGYEFEjEYEEM=)
+        ((itxn_field OnCompletion) 0u)
+        ((itxn_field ApplicationArgs) method "create()void")
+        ((itxn_field TypeEnum) appl)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        let childApp#0: uint64 = (gitxn 0 CreatedApplicationID)
+        (app_global_put "lastChild" childApp#0)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob childApp#0)
+        let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
+        let tmp%1#6: Encoded(uint64) = aggregate%as_Encoded(uint64)%1#0
+        let tmp%2#6: bytes = (concat 0x151f7c75 tmp%1#6)
+        (log tmp%2#6)
+        exit 1u
+    block@5: // callChildGreet_route_L149
+        let tmp%0#5: bytes = (txna ApplicationArgs 1)
+        let len%0#2: uint64 = (len tmp%0#5)
+        let eq%0#2: bool = (== len%0#2 8u)
+        (assert eq%0#2) // invalid number of bytes for arc4.uint64
+        let app#2: uint64 = (btoi tmp%0#5)
+        let tmp%2#4: bytes = (txna ApplicationArgs 2)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%2#4 0u) // on error: invalid array length header
+        let length%0#1: uint64 = aggregate%array_length%0#0
+        let add%0#1: uint64 = (+ length%0#1 2u)
+        let len%1#1: uint64 = (len tmp%2#4)
+        let eq%1#1: bool = (== len%1#1 add%0#1)
+        (assert eq%1#1) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        itxn_begin
+        ((itxn_field ApplicationID) app#2)
+        ((itxn_field ApplicationArgs) method "greet(string)string")
+        ((itxn_field ApplicationArgs) tmp%2#4)
+        ((itxn_field TypeEnum) appl)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        let awst_tmp%0#0: bytes = (itxn LastLog)
+        let tmp%1#5: bytes = ((extract 4 0) awst_tmp%0#0)
+        let tmp%2#5: bytes = ((extract 0 4) awst_tmp%0#0)
+        let tmp%3#4: bool = (== tmp%2#5 0x151f7c75)
+        (assert tmp%3#4) // Bytes has valid prefix
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 tmp%1#5 0u) // on error: invalid array length header
+        let length%0#2: uint64 = aggregate%array_length%1#0
+        let add%0#2: uint64 = (+ length%0#2 2u)
+        let len%0#3: uint64 = (len tmp%1#5)
+        let eq%0#3: bool = (== len%0#3 add%0#2)
+        (assert eq%0#3) // invalid number of bytes for string
+        let tmp%6#1: bytes = (concat 0x151f7c75 tmp%1#5)
+        (log tmp%6#1)
+        exit 1u
+    block@6: // callChildManual_route_L167
+        let tmp%0#3: bytes = (txna ApplicationArgs 1)
+        let len%0#1: uint64 = (len tmp%0#3)
+        let eq%0#1: bool = (== len%0#1 8u)
+        (assert eq%0#1) // invalid number of bytes for arc4.uint64
+        let app#1: uint64 = (btoi tmp%0#3)
+        let tmp%2#2: bytes = (txna ApplicationArgs 2)
+        let aggregate%array_length%2#0: uint64 = (extract_uint16 tmp%2#2 0u) // on error: invalid array length header
+        let length%0#0: uint64 = aggregate%array_length%2#0
+        let add%0#0: uint64 = (+ length%0#0 2u)
+        let len%1#0: uint64 = (len tmp%2#2)
+        let eq%1#0: bool = (== len%1#0 add%0#0)
+        (assert eq%1#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        itxn_begin
+        ((itxn_field ApplicationArgs) method "greet(string)string")
+        ((itxn_field ApplicationArgs) tmp%2#2)
+        ((itxn_field ApplicationID) app#1)
+        ((itxn_field TypeEnum) 6u)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        let txn.LastLog#0: bytes = (itxn LastLog)
+        let tmp%2#3: bytes = ((extract 4 0) txn.LastLog#0)
+        let tmp%3#2: bytes = ((extract 0 4) txn.LastLog#0)
+        let tmp%4#2: bool = (== tmp%3#2 0x151f7c75)
+        (assert tmp%4#2) // Bytes has valid prefix
+        let tmp%6#0: bytes = (concat 0x151f7c75 tmp%2#3)
+        (log tmp%6#0)
+        exit 1u
+    block@7: // deleteChild_route_L195
+        let tmp%0#2: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#2)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let app#0: uint64 = (btoi tmp%0#2)
+        itxn_begin
+        ((itxn_field OnCompletion) 5u)
+        ((itxn_field ApplicationID) app#0)
+        ((itxn_field ApplicationArgs) method "delete()void")
+        ((itxn_field TypeEnum) appl)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        exit 1u
+    block@8: // inspectCompiled_route_L209
+        let aggregate%val_as_bytes%2#0: bytes[8] = (itob 0u)
+        let aggregate%as_Encoded(uint64)%2#0: Encoded(uint64) = aggregate%val_as_bytes%2#0
+        let tmp%1#1: Encoded(uint64) = aggregate%as_Encoded(uint64)%2#0
+        let tmp%2#1: bytes = (concat 0x151f7c75 tmp%1#1)
+        (log tmp%2#1)
+        exit 1u
+    block@10: // create_NoOp_L71
+        let tmp%5#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%5#0 {method "createApplication()void" => block@11, * => block@13}
+    block@11: // createApplication_route_L76
+        exit 1u
+    block@13: // after_if_else_L71
+        fail

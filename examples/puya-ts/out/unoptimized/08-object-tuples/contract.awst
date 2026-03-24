@@ -1,0 +1,112 @@
+subroutine addVectors(a: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector, b: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector): examples/puya-ts/08-object-tuples/contract.algo.ts::Vector
+{
+  x: uint64 = a.x + b.x
+  y: uint64 = a.y + b.y
+  return new examples/puya-ts/08-object-tuples/contract.algo.ts::Vector(x=x, y=y)
+}
+subroutine vectorMagnitudeSquared(p: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector): uint64
+{
+  #[x, y]: readonly [uint64, uint64] = #[p.x, p.y]
+  result: uint64 = x * x + y * y
+  return result
+}
+contract ObjectTuples
+{
+  globals {
+    ["savedVector"]: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector
+    ["savedSegment"]: examples/puya-ts/08-object-tuples/contract.algo.ts::Segment
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+    GlobalState["savedVector"]: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector = new examples/puya-ts/08-object-tuples/contract.algo.ts::Vector(x=($0 = #{ x: ($1 = #{ x: ($2 = #[0, 0]).0, y: $2.1 }).x, y: $1.y }).x, y=$0.y)
+    GlobalState["savedSegment"]: examples/puya-ts/08-object-tuples/contract.algo.ts::Segment = new examples/puya-ts/08-object-tuples/contract.algo.ts::Segment(start=new examples/puya-ts/08-object-tuples/contract.algo.ts::Vector(x=($3 = ($4 = #{ start: ($5 = #{ start: ($6 = #[#{ x: ($7 = #{ x: ($8 = #[0, 0]).0, y: $8.1 }).x, y: $7.y }, #{ x: ($9 = #{ x: ($10 = #[0, 0]).0, y: $10.1 }).x, y: $9.y }]).0, end: $6.1 }).start, end: $5.end }).start).x, y=$3.y), end=new examples/puya-ts/08-object-tuples/contract.algo.ts::Vector(x=($11 = $4.end).x, y=$11.y))
+  }
+  
+  add(v1: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector, v2: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector): examples/puya-ts/08-object-tuples/contract.algo.ts::Vector
+  {
+    return examples/puya-ts/08-object-tuples/contract.algo.ts::addVectors(v1, v2)
+  }
+  
+  destructureExample(v: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector): uint64
+  {
+    #[x, y]: readonly [uint64, uint64] = #[v.x, v.y]
+    sum: uint64 = x + y
+    return sum
+  }
+  
+  destructuredParam(p: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector): uint64
+  {
+    #[x, y]: readonly [uint64, uint64] = #[p.x, p.y]
+    product: uint64 = x * y
+    return product
+  }
+  
+  segmentLength(seg: examples/puya-ts/08-object-tuples/contract.algo.ts::Segment): uint64
+  {
+    dx: uint64 = seg.end.x - seg.start.x
+    dy: uint64 = seg.end.y - seg.start.y
+    distSq: uint64 = dx * dx + dy * dy
+    return distSq
+  }
+  
+  saveVector(v: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector): void
+  {
+    GlobalState["savedVector"]: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector = copy(v)
+  }
+  
+  saveSegment(s: examples/puya-ts/08-object-tuples/contract.algo.ts::Segment): void
+  {
+    GlobalState["savedSegment"]: examples/puya-ts/08-object-tuples/contract.algo.ts::Segment = copy(s)
+  }
+  
+  getSavedVector(): examples/puya-ts/08-object-tuples/contract.algo.ts::Vector
+  {
+    return copy(GlobalState["savedVector"])
+  }
+  
+  getSavedSegment(): examples/puya-ts/08-object-tuples/contract.algo.ts::Segment
+  {
+    return copy(GlobalState["savedSegment"])
+  }
+  
+  testCopyAndMutate(v: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector, newX: uint64): examples/puya-ts/08-object-tuples/contract.algo.ts::Vector
+  {
+    copy: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector = copy(v)
+    copy.x: uint64 = newX
+    assert(v.x != newX, comment=original should be unchanged)
+    return copy
+  }
+  
+  testSpread(v: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector): examples/puya-ts/08-object-tuples/contract.algo.ts::Vector
+  {
+    copy: ObjectDC5110F2 = new ObjectDC5110F2(x=($12 = #{ x: v.x, y: v.y }).x, y=$12.y)
+    assert(&&(copy.x == v.x, copy.y == v.y), comment=assert target is match for conditions)
+    return new examples/puya-ts/08-object-tuples/contract.algo.ts::Vector(x=copy.x, y=copy.y)
+  }
+  
+  magnitudeSquared(v: examples/puya-ts/08-object-tuples/contract.algo.ts::Vector): uint64
+  {
+    return examples/puya-ts/08-object-tuples/contract.algo.ts::vectorMagnitudeSquared(v)
+  }
+  
+  createLabeledPoint(label: string, x: uint64, y: uint64): examples/puya-ts/08-object-tuples/contract.algo.ts::LabeledPoint
+  {
+    return new examples/puya-ts/08-object-tuples/contract.algo.ts::LabeledPoint(label=label, x=x, y=y)
+  }
+  
+  getLabel(p: examples/puya-ts/08-object-tuples/contract.algo.ts::LabeledPoint): string
+  {
+    return p.label
+  }
+  
+}

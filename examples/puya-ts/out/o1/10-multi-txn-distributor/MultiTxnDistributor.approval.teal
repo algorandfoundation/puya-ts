@@ -1,0 +1,489 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0 32 2
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:37
+    // export class MultiTxnDistributor extends Contract {
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    bz main_create_NoOp@8
+    pushbytess 0x93e9e263 0x5d2916b0 0x29191953 0xbd47a18c // method "distributePair(pay,address,address)void", method "distributeWithOptIn(pay,uint64,address,address)void", method "distributeDynamic(pay,address[])void", method "verifyGroupPayments()void"
+    txna ApplicationArgs 0
+    match distributePair distributeWithOptIn distributeDynamic verifyGroupPayments
+    err
+
+main_create_NoOp@8:
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:37
+    // export class MultiTxnDistributor extends Contract {
+    pushbytes 0xb8447b36 // method "createApplication()void"
+    txna ApplicationArgs 0
+    match main_createApplication_route@9
+    err
+
+main_createApplication_route@9:
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:39
+    // public createApplication(): void {}
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributePair[routing]() -> void:
+distributePair:
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:48
+    // public distributePair(funding: gtxn.PaymentTxn, recipientA: Account, recipientB: Account): void {
+    txn GroupIndex
+    intc_0 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_0 // pay
+    ==
+    assert // transaction type is pay
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_2 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:51-58
+    // assertMatch(
+    //   funding,
+    //   {
+    //     receiver: Global.currentApplicationAddress,
+    //     amount: { greaterThan: Uint64(0) },
+    //   },
+    //   'Funds must be sent to this contract',
+    // )
+    dig 2
+    gtxns Receiver
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:54
+    // receiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:51-58
+    // assertMatch(
+    //   funding,
+    //   {
+    //     receiver: Global.currentApplicationAddress,
+    //     amount: { greaterThan: Uint64(0) },
+    //   },
+    //   'Funds must be sent to this contract',
+    // )
+    ==
+    uncover 3
+    gtxns Amount
+    swap
+    dig 1
+    &&
+    assert // Funds must be sent to this contract
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:61
+    // const share: uint64 = funding.amount / 2
+    intc_3 // 2
+    /
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:76
+    // const [txnA, txnB] = itxn.submitGroup(payA, payB)
+    itxn_begin
+    dup
+    itxn_field Amount
+    dig 2
+    itxn_field Receiver
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:64-67
+    // const payA = itxn.payment({
+    //   receiver: recipientA, // First recipient
+    //   amount: share, // Equal share
+    // })
+    intc_0 // 1
+    itxn_field TypeEnum
+    intc_1 // 0
+    itxn_field Fee
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:76
+    // const [txnA, txnB] = itxn.submitGroup(payA, payB)
+    itxn_next
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:64-67
+    // const payA = itxn.payment({
+    //   receiver: recipientA, // First recipient
+    //   amount: share, // Equal share
+    // })
+    intc_0 // 1
+    itxn_field TypeEnum
+    dup
+    itxn_field Amount
+    dig 1
+    itxn_field Receiver
+    intc_1 // 0
+    itxn_field Fee
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:76
+    // const [txnA, txnB] = itxn.submitGroup(payA, payB)
+    itxn_submit
+    gitxn 0 Amount
+    itxn Receiver
+    itxn Amount
+    gitxn 0 Receiver
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:79
+    // assert(txnA.receiver === recipientA, 'txnA receiver correct')
+    uncover 6
+    ==
+    assert // txnA receiver correct
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:80
+    // assert(txnB.receiver === recipientB, 'txnB receiver correct')
+    swap
+    uncover 4
+    ==
+    assert // txnB receiver correct
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:81
+    // assert(txnA.amount === share, 'txnA amount correct')
+    swap
+    dig 2
+    ==
+    assert // txnA amount correct
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:82
+    // assert(txnB.amount === share, 'txnB amount correct')
+    ==
+    assert // txnB amount correct
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:48
+    // public distributePair(funding: gtxn.PaymentTxn, recipientA: Account, recipientB: Account): void {
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributeWithOptIn[routing]() -> void:
+distributeWithOptIn:
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:93
+    // public distributeWithOptIn(funding: gtxn.PaymentTxn, asset: Asset, recipientA: Account, recipientB: Account): void {
+    txn GroupIndex
+    intc_0 // 1
+    -
+    dup
+    gtxns TypeEnum
+    dup
+    intc_0 // pay
+    ==
+    assert // transaction type is pay
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_2 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    txna ApplicationArgs 3
+    len
+    intc_2 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:95-102
+    // assertMatch(
+    //   funding,
+    //   {
+    //     receiver: Global.currentApplicationAddress,
+    //     type: TransactionType.Payment,
+    //   },
+    //   'Funding must be a payment to this contract',
+    // )
+    dig 3
+    gtxns Receiver
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:98
+    // receiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:95-102
+    // assertMatch(
+    //   funding,
+    //   {
+    //     receiver: Global.currentApplicationAddress,
+    //     type: TransactionType.Payment,
+    //   },
+    //   'Funding must be a payment to this contract',
+    // )
+    ==
+    uncover 3
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:99
+    // type: TransactionType.Payment,
+    intc_0 // 1
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:95-102
+    // assertMatch(
+    //   funding,
+    //   {
+    //     receiver: Global.currentApplicationAddress,
+    //     type: TransactionType.Payment,
+    //   },
+    //   'Funding must be a payment to this contract',
+    // )
+    ==
+    &&
+    assert // Funding must be a payment to this contract
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:104
+    // const share: uint64 = funding.amount / 2
+    uncover 2
+    gtxns Amount
+    intc_3 // 2
+    /
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:114
+    // assetReceiver: Global.currentApplicationAddress, // Send to self = opt-in
+    global CurrentApplicationAddress
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:120
+    // const [payResult, optInResult] = itxn.submitGroup(pay, optIn)
+    itxn_begin
+    dig 1
+    itxn_field Amount
+    uncover 2
+    itxn_field Receiver
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:107-110
+    // const pay = itxn.payment({
+    //   receiver: recipientA,
+    //   amount: share,
+    // })
+    intc_0 // 1
+    itxn_field TypeEnum
+    intc_1 // 0
+    itxn_field Fee
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:120
+    // const [payResult, optInResult] = itxn.submitGroup(pay, optIn)
+    itxn_next
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:116
+    // assetAmount: 0, // Zero amount signals opt-in
+    intc_1 // 0
+    itxn_field AssetAmount
+    dig 2
+    itxn_field XferAsset
+    itxn_field AssetReceiver
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:113-117
+    // const optIn = itxn.assetTransfer({
+    //   assetReceiver: Global.currentApplicationAddress, // Send to self = opt-in
+    //   xferAsset: asset, // Asset to opt into
+    //   assetAmount: 0, // Zero amount signals opt-in
+    // })
+    pushint 4
+    itxn_field TypeEnum
+    intc_1 // 0
+    itxn_field Fee
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:120
+    // const [payResult, optInResult] = itxn.submitGroup(pay, optIn)
+    itxn_submit
+    itxn XferAsset
+    gitxn 0 Amount
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:123
+    // assert(payResult.amount === share, 'Payment amount correct')
+    uncover 2
+    ==
+    assert // Payment amount correct
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:124
+    // assert(optInResult.xferAsset === asset, 'Opted into correct asset')
+    ==
+    assert // Opted into correct asset
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:93
+    // public distributeWithOptIn(funding: gtxn.PaymentTxn, asset: Asset, recipientA: Account, recipientB: Account): void {
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributeDynamic[routing]() -> void:
+distributeDynamic:
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:133
+    // public distributeDynamic(funding: gtxn.PaymentTxn, recipients: Address[]): void {
+    txn GroupIndex
+    intc_0 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_0 // pay
+    ==
+    assert // transaction type is pay
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    dup
+    cover 3
+    dup
+    intc_2 // 32
+    *
+    intc_3 // 2
+    +
+    dig 2
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.static_array<arc4.uint8, 32>>
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:135-141
+    // assertMatch(
+    //   funding,
+    //   {
+    //     receiver: Global.currentApplicationAddress,
+    //   },
+    //   'Funds must be sent to this contract',
+    // )
+    dig 2
+    gtxns Receiver
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:138
+    // receiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:135-141
+    // assertMatch(
+    //   funding,
+    //   {
+    //     receiver: Global.currentApplicationAddress,
+    //   },
+    //   'Funds must be sent to this contract',
+    // )
+    ==
+    assert // Funds must be sent to this contract
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:142
+    // assert(recipients.length > 0, 'Must have recipients')
+    dup
+    assert // Must have recipients
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:145
+    // const share: uint64 = funding.amount / recipients.length
+    uncover 2
+    gtxns Amount
+    swap
+    /
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:151
+    // receiver: recipients[0].bytes, // Address.bytes gives the raw 32-byte address
+    dig 1
+    extract 2 0
+    cover 2
+    swap
+    extract 2 32
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:149
+    // type: TransactionType.Payment, // TransactionType enum — required for compose fields
+    intc_0 // 1
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:148-152
+    // const payFields = {
+    //   type: TransactionType.Payment, // TransactionType enum — required for compose fields
+    //   amount: share,
+    //   receiver: recipients[0].bytes, // Address.bytes gives the raw 32-byte address
+    // } satisfies PaymentComposeFields
+    itob
+    uncover 2
+    itob
+    concat
+    pushbytes 0x0020
+    uncover 2
+    concat
+    swap
+    pushbytes 0x0012
+    concat
+    swap
+    concat
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:155
+    // itxnCompose.begin(payFields)
+    itxn_begin
+    dup
+    intc_1 // 0
+    extract_uint64
+    dup
+    uncover 2
+    dup
+    pushint 8
+    extract_uint64
+    dup
+    cover 2
+    cover 3
+    dup
+    pushint 16
+    extract_uint16
+    dig 1
+    len
+    substring3
+    extract 2 0
+    itxn_field Receiver
+    itxn_field Amount
+    itxn_field TypeEnum
+    intc_1 // 0
+    itxn_field Fee
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:158
+    // for (const i of urange(1, recipients.length)) {
+    intc_0 // 1
+
+distributeDynamic_for_header@2:
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:158
+    // for (const i of urange(1, recipients.length)) {
+    dup
+    dig 5
+    <
+    bz distributeDynamic_after_for@5
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:159
+    // const addr = recipients[i]
+    dupn 2
+    intc_2 // 32
+    *
+    dig 5
+    swap
+    intc_2 // 32
+    extract3 // on error: index access is out of bounds
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:160-163
+    // itxnCompose.next({
+    //   ...payFields,
+    //   receiver: addr.bytes, // Override receiver for each subsequent recipient
+    // })
+    itxn_next
+    itxn_field Receiver
+    dig 2
+    itxn_field Amount
+    dig 3
+    itxn_field TypeEnum
+    intc_1 // 0
+    itxn_field Fee
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:158
+    // for (const i of urange(1, recipients.length)) {
+    intc_0 // 1
+    +
+    bury 1
+    b distributeDynamic_for_header@2
+
+distributeDynamic_after_for@5:
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:167
+    // itxnCompose.submit()
+    itxn_submit
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:133
+    // public distributeDynamic(funding: gtxn.PaymentTxn, recipients: Address[]): void {
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.verifyGroupPayments[routing]() -> void:
+verifyGroupPayments:
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:176
+    // for (let i: uint64 = 0; i < Txn.groupIndex; i++) {
+    intc_1 // 0
+
+verifyGroupPayments_while_top@2:
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:176
+    // for (let i: uint64 = 0; i < Txn.groupIndex; i++) {
+    dup
+    txn GroupIndex
+    <
+    bz verifyGroupPayments_after_while@4
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:181
+    // assert(txn.type === TransactionType.Payment, 'All preceding txns must be payments')
+    dupn 2
+    gtxns TypeEnum
+    intc_0 // 1
+    ==
+    assert // All preceding txns must be payments
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:176
+    // for (let i: uint64 = 0; i < Txn.groupIndex; i++) {
+    intc_0 // 1
+    +
+    bury 1
+    b verifyGroupPayments_while_top@2
+
+verifyGroupPayments_after_while@4:
+    // examples/puya-ts/10-multi-txn-distributor/contract.algo.ts:174
+    // public verifyGroupPayments(): void {
+    intc_0 // 1
+    return

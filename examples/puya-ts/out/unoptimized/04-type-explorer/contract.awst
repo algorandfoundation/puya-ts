@@ -1,0 +1,67 @@
+subroutine uint64RoundTrip(value: uint64): uint64
+{
+  asBytes: bytes[8] = itob(value)
+  return btoi(reinterpret_cast<bytes>(asBytes))
+}
+subroutine uint64ToBigUint(value: uint64): biguint
+{
+  return reinterpret_cast<biguint>(itob(value))
+}
+subroutine bytesToBigUint(value: bytes): biguint
+{
+  return reinterpret_cast<biguint>(value)
+}
+contract TypeExplorer
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  exploreUint64(a: uint64, b: uint64): uint64
+  {
+    sum: uint64 = a + b + 0
+    log(itob(sum))
+    return examples/puya-ts/04-type-explorer/contract.algo.ts::uint64RoundTrip(sum)
+  }
+  
+  exploreBigUint(value: uint64): biguint
+  {
+    big: biguint = examples/puya-ts/04-type-explorer/contract.algo.ts::uint64ToBigUint(value)
+    squared: biguint = big * big
+    root: biguint = bsqrt(squared)
+    log(reinterpret_cast<bytes>(root))
+    return root
+  }
+  
+  exploreBytes(input: bytes): bytes
+  {
+    combined: bytes = concat(concat(0x, input), 0xdeadbeef)
+    hash: bytes[32] = sha256(combined)
+    hashAsBigUint: biguint = examples/puya-ts/04-type-explorer/contract.algo.ts::bytesToBigUint(reinterpret_cast<bytes>(hash))
+    log(reinterpret_cast<bytes>(hashAsBigUint))
+    return reinterpret_cast<bytes>(hash)
+  }
+  
+  exploreWideMath(a: uint64, b: uint64): uint64
+  {
+    #[carry, low]: readonly [uint64, uint64] = #[($0 = addw(a, b)).0, $0.1]
+    carryBytes: bytes[8] = itob(carry)
+    lowBytes: bytes[8] = itob(low)
+    log(concat(carryBytes, lowBytes))
+    aBytes: bytes = reinterpret_cast<bytes>(itob(a))
+    aRecovered: uint64 = btoi(aBytes)
+    log(itob(aRecovered))
+    return low
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

@@ -1,0 +1,156 @@
+{
+    "name": "Versioned",
+    "structs": {},
+    "methods": [
+        {
+            "name": "getVersion",
+            "args": [],
+            "returns": {
+                "type": "uint64",
+                "desc": "the current version from state"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "desc": "Override Ownable.getVersion with state-backed version.",
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "bumpVersion",
+            "args": [],
+            "returns": {
+                "type": "uint64",
+                "desc": "the new version number after incrementing"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "desc": "Increment the version and return the new value.",
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "createApplication",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [
+                    "NoOp"
+                ],
+                "call": []
+            },
+            "readonly": false,
+            "desc": "Set the initial owner.",
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "getOwner",
+            "args": [],
+            "returns": {
+                "type": "string",
+                "desc": "the current owner"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "desc": "Return the owner \u2014 inherited as-is by all subclasses.",
+            "events": [],
+            "recommendations": {}
+        }
+    ],
+    "arcs": [
+        22,
+        28
+    ],
+    "networks": {},
+    "state": {
+        "schema": {
+            "global": {
+                "ints": 1,
+                "bytes": 1
+            },
+            "local": {
+                "ints": 0,
+                "bytes": 0
+            }
+        },
+        "keys": {
+            "global": {
+                "version": {
+                    "keyType": "AVMString",
+                    "valueType": "AVMUint64",
+                    "key": "dmVyc2lvbg=="
+                },
+                "owner": {
+                    "keyType": "AVMString",
+                    "valueType": "AVMString",
+                    "key": "b3duZXI="
+                }
+            },
+            "local": {},
+            "box": {}
+        },
+        "maps": {
+            "global": {},
+            "local": {},
+            "box": {}
+        }
+    },
+    "bareActions": {
+        "create": [],
+        "call": []
+    },
+    "sourceInfo": {
+        "approval": {
+            "sourceInfo": [
+                {
+                    "pc": [
+                        75,
+                        93,
+                        110
+                    ],
+                    "errorMessage": "check GlobalState exists"
+                }
+            ],
+            "pcOffsetMethod": "none"
+        },
+        "clear": {
+            "sourceInfo": [],
+            "pcOffsetMethod": "none"
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYXJjNC9pbmRleC5kLnRzOjpDb250cmFjdC5hcHByb3ZhbFByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBpbnRjYmxvY2sgMSAwCiAgICBieXRlY2Jsb2NrICJ2ZXJzaW9uIiAweDE1MWY3Yzc1ICJvd25lciIKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBibnogbWFpbl9hZnRlcl9pZl9lbHNlQDIKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTMtaW5oZXJpdGFuY2Utc2hvd2Nhc2UvY29udHJhY3QuYWxnby50czoxMDgKICAgIC8vIHZlcnNpb24gPSBHbG9iYWxTdGF0ZSh7IGluaXRpYWxWYWx1ZTogVWludDY0KDEpIH0pCiAgICBieXRlY18wIC8vICJ2ZXJzaW9uIgogICAgaW50Y18wIC8vIDEKICAgIGFwcF9nbG9iYWxfcHV0CgptYWluX2FmdGVyX2lmX2Vsc2VAMjoKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTMtaW5oZXJpdGFuY2Utc2hvd2Nhc2UvY29udHJhY3QuYWxnby50czoxMDYKICAgIC8vIGNsYXNzIFZlcnNpb25lZCBleHRlbmRzIE93bmFibGUgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0CiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYnogbWFpbl9jcmVhdGVfTm9PcEA5CiAgICBwdXNoYnl0ZXNzIDB4YmJlOTI4YjcgMHgzOTk3NmMxNyAweDBiYzkzMGQ4IC8vIG1ldGhvZCAiZ2V0VmVyc2lvbigpdWludDY0IiwgbWV0aG9kICJidW1wVmVyc2lvbigpdWludDY0IiwgbWV0aG9kICJnZXRPd25lcigpc3RyaW5nIgogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAogICAgbWF0Y2ggbWFpbl9nZXRWZXJzaW9uX3JvdXRlQDUgbWFpbl9idW1wVmVyc2lvbl9yb3V0ZUA2IG1haW5fZ2V0T3duZXJfcm91dGVANwogICAgZXJyCgptYWluX2dldE93bmVyX3JvdXRlQDc6CiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEzLWluaGVyaXRhbmNlLXNob3djYXNlL2NvbnRyYWN0LmFsZ28udHM6MTAxCiAgICAvLyByZXR1cm4gdGhpcy5vd25lci52YWx1ZSAvLyBSZWFkIGxldmVsLTEgc3RhdGUKICAgIGludGNfMSAvLyAwCiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEzLWluaGVyaXRhbmNlLXNob3djYXNlL2NvbnRyYWN0LmFsZ28udHM6ODEKICAgIC8vIG93bmVyID0gR2xvYmFsU3RhdGU8c3RyaW5nPigpCiAgICBieXRlY18yIC8vICJvd25lciIKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTMtaW5oZXJpdGFuY2Utc2hvd2Nhc2UvY29udHJhY3QuYWxnby50czoxMDEKICAgIC8vIHJldHVybiB0aGlzLm93bmVyLnZhbHVlIC8vIFJlYWQgbGV2ZWwtMSBzdGF0ZQogICAgYXBwX2dsb2JhbF9nZXRfZXgKICAgIGFzc2VydCAvLyBjaGVjayBHbG9iYWxTdGF0ZSBleGlzdHMKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTMtaW5oZXJpdGFuY2Utc2hvd2Nhc2UvY29udHJhY3QuYWxnby50czoxMDAKICAgIC8vIHB1YmxpYyBnZXRPd25lcigpOiBzdHJpbmcgewogICAgZHVwCiAgICBsZW4KICAgIGl0b2IKICAgIGV4dHJhY3QgNiAyCiAgICBzd2FwCiAgICBjb25jYXQKICAgIGJ5dGVjXzEgLy8gMHgxNTFmN2M3NQogICAgc3dhcAogICAgY29uY2F0CiAgICBsb2cKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fYnVtcFZlcnNpb25fcm91dGVANjoKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTMtaW5oZXJpdGFuY2Utc2hvd2Nhc2UvY29udHJhY3QuYWxnby50czoxMjMKICAgIC8vIGNvbnN0IG5leHQ6IHVpbnQ2NCA9IHRoaXMudmVyc2lvbi52YWx1ZSArIDEgLy8gdWludDY0IGFyaXRobWV0aWMgYW5ub3RhdGlvbgogICAgaW50Y18xIC8vIDAKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTMtaW5oZXJpdGFuY2Utc2hvd2Nhc2UvY29udHJhY3QuYWxnby50czoxMDgKICAgIC8vIHZlcnNpb24gPSBHbG9iYWxTdGF0ZSh7IGluaXRpYWxWYWx1ZTogVWludDY0KDEpIH0pCiAgICBieXRlY18wIC8vICJ2ZXJzaW9uIgogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMy1pbmhlcml0YW5jZS1zaG93Y2FzZS9jb250cmFjdC5hbGdvLnRzOjEyMwogICAgLy8gY29uc3QgbmV4dDogdWludDY0ID0gdGhpcy52ZXJzaW9uLnZhbHVlICsgMSAvLyB1aW50NjQgYXJpdGhtZXRpYyBhbm5vdGF0aW9uCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIEdsb2JhbFN0YXRlIGV4aXN0cwogICAgaW50Y18wIC8vIDEKICAgICsKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTMtaW5oZXJpdGFuY2Utc2hvd2Nhc2UvY29udHJhY3QuYWxnby50czoxMDgKICAgIC8vIHZlcnNpb24gPSBHbG9iYWxTdGF0ZSh7IGluaXRpYWxWYWx1ZTogVWludDY0KDEpIH0pCiAgICBieXRlY18wIC8vICJ2ZXJzaW9uIgogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMy1pbmhlcml0YW5jZS1zaG93Y2FzZS9jb250cmFjdC5hbGdvLnRzOjEyNAogICAgLy8gdGhpcy52ZXJzaW9uLnZhbHVlID0gbmV4dAogICAgZGlnIDEKICAgIGFwcF9nbG9iYWxfcHV0CiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEzLWluaGVyaXRhbmNlLXNob3djYXNlL2NvbnRyYWN0LmFsZ28udHM6MTIyCiAgICAvLyBwdWJsaWMgYnVtcFZlcnNpb24oKTogdWludDY0IHsKICAgIGl0b2IKICAgIGJ5dGVjXzEgLy8gMHgxNTFmN2M3NQogICAgc3dhcAogICAgY29uY2F0CiAgICBsb2cKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fZ2V0VmVyc2lvbl9yb3V0ZUA1OgogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMy1pbmhlcml0YW5jZS1zaG93Y2FzZS9jb250cmFjdC5hbGdvLnRzOjExNQogICAgLy8gcmV0dXJuIHRoaXMudmVyc2lvbi52YWx1ZSAvLyBSZWFkIGZyb20gc3RhdGUgaW5zdGVhZCBvZiBoYXJkY29kZWQKICAgIGludGNfMSAvLyAwCiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEzLWluaGVyaXRhbmNlLXNob3djYXNlL2NvbnRyYWN0LmFsZ28udHM6MTA4CiAgICAvLyB2ZXJzaW9uID0gR2xvYmFsU3RhdGUoeyBpbml0aWFsVmFsdWU6IFVpbnQ2NCgxKSB9KQogICAgYnl0ZWNfMCAvLyAidmVyc2lvbiIKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTMtaW5oZXJpdGFuY2Utc2hvd2Nhc2UvY29udHJhY3QuYWxnby50czoxMTUKICAgIC8vIHJldHVybiB0aGlzLnZlcnNpb24udmFsdWUgLy8gUmVhZCBmcm9tIHN0YXRlIGluc3RlYWQgb2YgaGFyZGNvZGVkCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIEdsb2JhbFN0YXRlIGV4aXN0cwogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMy1pbmhlcml0YW5jZS1zaG93Y2FzZS9jb250cmFjdC5hbGdvLnRzOjExNAogICAgLy8gcHVibGljIGdldFZlcnNpb24oKTogdWludDY0IHsKICAgIGl0b2IKICAgIGJ5dGVjXzEgLy8gMHgxNTFmN2M3NQogICAgc3dhcAogICAgY29uY2F0CiAgICBsb2cKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fY3JlYXRlX05vT3BAOToKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTMtaW5oZXJpdGFuY2Utc2hvd2Nhc2UvY29udHJhY3QuYWxnby50czoxMDYKICAgIC8vIGNsYXNzIFZlcnNpb25lZCBleHRlbmRzIE93bmFibGUgewogICAgcHVzaGJ5dGVzIDB4Yjg0NDdiMzYgLy8gbWV0aG9kICJjcmVhdGVBcHBsaWNhdGlvbigpdm9pZCIKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDAKICAgIG1hdGNoIG1haW5fY3JlYXRlQXBwbGljYXRpb25fcm91dGVAMTAKICAgIGVycgoKbWFpbl9jcmVhdGVBcHBsaWNhdGlvbl9yb3V0ZUAxMDoKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTMtaW5oZXJpdGFuY2Utc2hvd2Nhc2UvY29udHJhY3QuYWxnby50czo4MQogICAgLy8gb3duZXIgPSBHbG9iYWxTdGF0ZTxzdHJpbmc+KCkKICAgIGJ5dGVjXzIgLy8gIm93bmVyIgogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMy1pbmhlcml0YW5jZS1zaG93Y2FzZS9jb250cmFjdC5hbGdvLnRzOjg1CiAgICAvLyB0aGlzLm93bmVyLnZhbHVlID0gJ2NyZWF0b3InIC8vIERlZmF1bHQgb3duZXIgdmFsdWUKICAgIHB1c2hieXRlcyAiY3JlYXRvciIKICAgIGFwcF9nbG9iYWxfcHV0CiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEzLWluaGVyaXRhbmNlLXNob3djYXNlL2NvbnRyYWN0LmFsZ28udHM6ODQKICAgIC8vIHB1YmxpYyBjcmVhdGVBcHBsaWNhdGlvbigpOiB2b2lkIHsKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4K",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYmFzZS1jb250cmFjdC5kLnRzOjpCYXNlQ29udHJhY3QuY2xlYXJTdGF0ZVByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBwdXNoaW50IDEKICAgIHJldHVybgo="
+    },
+    "byteCode": {
+        "approval": "CyACAQAmAwd2ZXJzaW9uBBUffHUFb3duZXIxGEAAAygiZzEZFEQxGEEAS4IDBLvpKLcEOZdsFwQLyTDYNhoAjgMAJAATAAEAIyplREkVFlcGAkxQKUxQsCJDIyhlRCIIKEsBZxYpTFCwIkMjKGVEFilMULAiQ4AEuER7NjYaAI4BAAEAKoAHY3JlYXRvcmciQw==",
+        "clear": "C4EBQw=="
+    },
+    "compilerInfo": {
+        "compiler": "puya",
+        "compilerVersion": {
+            "major": 5,
+            "minor": 8,
+            "patch": 0
+        }
+    },
+    "events": [],
+    "templateVariables": {}
+}

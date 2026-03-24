@@ -1,0 +1,221 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0 2
+    bytecblock 0x151f7c75 "Hello, " "!"
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // examples/puya-ts/02-greeter/contract.algo.ts:21
+    // export class Greeter extends Contract {
+    txn OnCompletion
+    intc_1 // NoOp
+    ==
+    assert
+    txn ApplicationID
+    intc_1 // 0
+    !=
+    bz main_create_NoOp@6
+    b main_call_NoOp@2
+
+main_call_NoOp@2:
+    // examples/puya-ts/02-greeter/contract.algo.ts:21
+    // export class Greeter extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0xd0a28200 // method "greet(string)string"
+    pushbytes 0x297caf09 // method "greetTwo(string,string)string"
+    uncover 2
+    match main_greet_route@3 main_greetTwo_route@4
+    b main_switch_case_next@5
+
+main_switch_case_next@5:
+    b main_after_if_else@9
+
+main_after_if_else@9:
+    // examples/puya-ts/02-greeter/contract.algo.ts:21
+    // export class Greeter extends Contract {
+    err
+
+main_greetTwo_route@4:
+    // examples/puya-ts/02-greeter/contract.algo.ts:42-43
+    // @readonly // @readonly is shorthand for @abimethod({ readonly: true })
+    // public greetTwo(firstName: string, lastName: string): string {
+    callsub greetTwo
+    b main_switch_case_next@5
+
+main_greet_route@3:
+    // examples/puya-ts/02-greeter/contract.algo.ts:30-31
+    // @readonly // Marks this method as non-mutating (can be called via simulate)
+    // public greet(name: string): string {
+    callsub greet
+    b main_switch_case_next@5
+
+main_create_NoOp@6:
+    // examples/puya-ts/02-greeter/contract.algo.ts:21
+    // export class Greeter extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0xb8447b36 // method "createApplication()void"
+    uncover 1
+    match main_createApplication_route@7
+    b main_switch_case_next@8
+
+main_switch_case_next@8:
+    b main_after_if_else@9
+
+main_createApplication_route@7:
+    // examples/puya-ts/02-greeter/contract.algo.ts:23
+    // public createApplication(): void {}
+    callsub createApplication
+    b main_switch_case_next@8
+
+
+// examples/puya-ts/02-greeter/contract.algo.ts::Greeter.createApplication[routing]() -> void:
+createApplication:
+    b createApplication_block@0
+
+createApplication_block@0:
+    // examples/puya-ts/02-greeter/contract.algo.ts:23
+    // public createApplication(): void {}
+    callsub examples/puya-ts/02-greeter/contract.algo.ts::Greeter.createApplication
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greet[routing]() -> void:
+greet:
+    b greet_block@0
+
+greet_block@0:
+    // examples/puya-ts/02-greeter/contract.algo.ts:30-31
+    // @readonly // Marks this method as non-mutating (can be called via simulate)
+    // public greet(name: string): string {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greet
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greetTwo[routing]() -> void:
+greetTwo:
+    b greetTwo_block@0
+
+greetTwo_block@0:
+    // examples/puya-ts/02-greeter/contract.algo.ts:42-43
+    // @readonly // @readonly is shorthand for @abimethod({ readonly: true })
+    // public greetTwo(firstName: string, lastName: string): string {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 1
+    *
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greetTwo
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/02-greeter/contract.algo.ts::Greeter.createApplication() -> void:
+examples/puya-ts/02-greeter/contract.algo.ts::Greeter.createApplication:
+    b examples/puya-ts/02-greeter/contract.algo.ts::Greeter.createApplication_block@0
+
+examples/puya-ts/02-greeter/contract.algo.ts::Greeter.createApplication_block@0:
+    retsub
+
+
+// examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greet(name: bytes) -> bytes:
+examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greet:
+    // examples/puya-ts/02-greeter/contract.algo.ts:30-31
+    // @readonly // Marks this method as non-mutating (can be called via simulate)
+    // public greet(name: string): string {
+    proto 1 1
+    b examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greet_block@0
+
+examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greet_block@0:
+    // examples/puya-ts/02-greeter/contract.algo.ts:33
+    // return `Hello, ${name}!`
+    bytec_1 // "Hello, "
+    frame_dig -1
+    concat
+    bytec_2 // "!"
+    concat
+    retsub
+
+
+// examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greetTwo(firstName: bytes, lastName: bytes) -> bytes:
+examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greetTwo:
+    // examples/puya-ts/02-greeter/contract.algo.ts:42-43
+    // @readonly // @readonly is shorthand for @abimethod({ readonly: true })
+    // public greetTwo(firstName: string, lastName: string): string {
+    proto 2 1
+    b examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greetTwo_block@0
+
+examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greetTwo_block@0:
+    // examples/puya-ts/02-greeter/contract.algo.ts:45
+    // return `Hello, ${firstName} and ${lastName}!`
+    bytec_1 // "Hello, "
+    frame_dig -2
+    concat
+    pushbytes " and "
+    concat
+    frame_dig -1
+    concat
+    bytec_2 // "!"
+    concat
+    retsub

@@ -1,0 +1,10 @@
+
+logicsig examples/puya-ts/03-logic-sig-gate/contract.algo.ts::LogicSigGate {
+  assert(txn<Fee>() <= TemplateVar[uint64](TMPL_MAX_FEE), comment=Fee exceeds maximum)
+  assert(txn<TypeEnum>() == reinterpret_cast<uint64>(1), comment=Must be a payment transaction)
+  assert(txn<RekeyTo>() == global<ZeroAddress>(), comment=Rekey not allowed)
+  assert(txn<CloseRemainderTo>() == global<ZeroAddress>(), comment=Close remainder not allowed)
+  signature: bytes = args(0)
+  assert(ed25519verify_bare(txn<Note>(), signature, TemplateVar[bytes](TMPL_AUTHORITY_KEY)), comment=Invalid signature)
+  return True
+}

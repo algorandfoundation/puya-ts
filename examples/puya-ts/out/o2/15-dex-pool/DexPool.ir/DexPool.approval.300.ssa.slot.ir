@@ -1,0 +1,383 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let reinterpret_bool%0#0: bool = (txn ApplicationID)
+        goto reinterpret_bool%0#0 ? block@2 : block@1
+    block@1: // if_body_L1
+        (app_global_put "reserveA" 0u)
+        (app_global_put "reserveB" 0u)
+        (app_global_put "totalLiquidity" 0u)
+        goto block@2
+    block@2: // after_if_else_L1
+        let tmp%0#1: uint64 = (txn OnCompletion)
+        let tmp%1#0: bool = (! tmp%0#1)
+        (assert tmp%1#0)
+        let tmp%2#0: uint64 = (txn ApplicationID)
+        goto tmp%2#0 ? block@4 : block@12
+    block@4: // call_NoOp_L109
+        let tmp%4#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%4#0 {method "bootstrap(uint64,uint64,pay)uint64" => block@5, method "addLiquidity(axfer,axfer)uint64" => block@6, method "removeLiquidity(axfer)void" => block@7, method "swap(axfer)uint64" => block@8, method "withdrawAlgoExcess()void" => block@9, method "getPoolState()(uint64,uint64,uint64)" => block@10, * => block@15}
+    block@5: // bootstrap_route_L133
+        let tmp%0#9: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#9)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let assetA#0: uint64 = (btoi tmp%0#9)
+        let tmp%2#8: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#8)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
+        let assetB#0: uint64 = (btoi tmp%2#8)
+        let tmp%4#6: uint64 = (txn GroupIndex)
+        let seed#0: uint64 = (- tmp%4#6 1u)
+        let gtxn_type%0#3: uint64 = ((gtxns TypeEnum) seed#0)
+        let gtxn_type_matches%0#3: bool = (== gtxn_type%0#3 pay)
+        (assert gtxn_type_matches%0#3) // transaction type is pay
+        let tmp%0#10: account = (txn Sender)
+        let tmp%1#9: account = (global CreatorAddress)
+        let tmp%2#9: bool = (== tmp%0#10 tmp%1#9)
+        (assert tmp%2#9) // Only creator
+        let (maybe_value%0#2: uint64, maybe_exists%0#4: bool) = (app_global_get_ex 0u "totalLiquidity")
+        (assert maybe_exists%0#4) // check GlobalState exists
+        let tmp%3#7: bool = (! maybe_value%0#2)
+        (assert tmp%3#7) // Already bootstrapped
+        let tmp%4#7: bool = (< assetA#0 assetB#0)
+        (assert tmp%4#7) // Assets must be ordered by ID
+        let tmp%6#1: account = ((gtxns Receiver) seed#0)
+        let tmp%7#3: account = (global CurrentApplicationAddress)
+        let tmp%8#3: bool = (== tmp%6#1 tmp%7#3)
+        let tmp%9#1: uint64 = ((gtxns Amount) seed#0)
+        let tmp%10#3: bool = (<= tmp%9#1 10000000u)
+        let tmp%12#2: bool = (>= tmp%9#1 400000u)
+        let tmp%13#1: bool = (&& tmp%10#3 tmp%12#2)
+        let tmp%14#3: bool = (&& tmp%8#3 tmp%13#1)
+        (assert tmp%14#3) // assert target is match for conditions
+        (app_global_put "assetA" assetA#0)
+        (app_global_put "assetB" assetB#0)
+        itxn_begin
+        let inner_txn_params%0%%param_ConfigAssetManager_idx_0#0: account = (global CurrentApplicationAddress)
+        let inner_txn_params%0%%param_ConfigAssetReserve_idx_0#0: account = (global CurrentApplicationAddress)
+        ((itxn_field ConfigAssetReserve) inner_txn_params%0%%param_ConfigAssetReserve_idx_0#0)
+        ((itxn_field ConfigAssetManager) inner_txn_params%0%%param_ConfigAssetManager_idx_0#0)
+        ((itxn_field ConfigAssetUnitName) "DPT")
+        ((itxn_field ConfigAssetName) "DPT")
+        ((itxn_field ConfigAssetDecimals) 6u)
+        ((itxn_field ConfigAssetTotal) 10000000000u)
+        ((itxn_field TypeEnum) 3u)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        let createResult.CreatedAssetID#0: uint64 = (itxn CreatedAssetID)
+        (app_global_put "poolToken" createResult.CreatedAssetID#0)
+        itxn_begin
+        let inner_txn_params%1%%param_AssetReceiver_idx_0#1: account = (global CurrentApplicationAddress)
+        ((itxn_field AssetAmount) 0u)
+        ((itxn_field XferAsset) assetA#0)
+        ((itxn_field AssetReceiver) inner_txn_params%1%%param_AssetReceiver_idx_0#1)
+        ((itxn_field TypeEnum) 4u)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        itxn_begin
+        let inner_txn_params%2%%param_AssetReceiver_idx_0#0: account = (global CurrentApplicationAddress)
+        ((itxn_field AssetAmount) 0u)
+        ((itxn_field XferAsset) assetB#0)
+        ((itxn_field AssetReceiver) inner_txn_params%2%%param_AssetReceiver_idx_0#0)
+        ((itxn_field TypeEnum) 4u)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob createResult.CreatedAssetID#0)
+        let tmp%7#2: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%0#0)
+        (log tmp%7#2)
+        exit 1u
+    block@6: // addLiquidity_route_L201
+        let tmp%0#7: uint64 = (txn GroupIndex)
+        let depositA#0: uint64 = (- tmp%0#7 2u)
+        let gtxn_type%0#2: uint64 = ((gtxns TypeEnum) depositA#0)
+        let gtxn_type_matches%0#2: bool = (== gtxn_type%0#2 axfer)
+        (assert gtxn_type_matches%0#2) // transaction type is axfer
+        let tmp%1#6: uint64 = (txn GroupIndex)
+        let depositB#0: uint64 = (- tmp%1#6 1u)
+        let gtxn_type%1#0: uint64 = ((gtxns TypeEnum) depositB#0)
+        let gtxn_type_matches%1#0: bool = (== gtxn_type%1#0 axfer)
+        (assert gtxn_type_matches%1#0) // transaction type is axfer
+        let tmp%0#8: account = ((gtxns AssetReceiver) depositA#0)
+        let tmp%1#7: account = (global CurrentApplicationAddress)
+        let tmp%2#7: bool = (== tmp%0#8 tmp%1#7)
+        let tmp%3#5: uint64 = ((gtxns XferAsset) depositA#0)
+        let (maybe_value%0#1: uint64, maybe_exists%0#3: bool) = (app_global_get_ex 0u "assetA")
+        (assert maybe_exists%0#3) // check GlobalState exists
+        let tmp%4#5: bool = (== tmp%3#5 maybe_value%0#1)
+        let tmp%5#4: bool = (&& tmp%2#7 tmp%4#5)
+        let amountA#1: uint64 = ((gtxns AssetAmount) depositA#0)
+        let tmp%8#2: bool = (&& tmp%5#4 amountA#1)
+        (assert tmp%8#2) // assert target is match for conditions
+        let tmp%9#0: account = ((gtxns AssetReceiver) depositB#0)
+        let tmp%10#2: account = (global CurrentApplicationAddress)
+        let tmp%11#1: bool = (== tmp%9#0 tmp%10#2)
+        let tmp%12#1: uint64 = ((gtxns XferAsset) depositB#0)
+        let (maybe_value%1#0: uint64, maybe_exists%1#3: bool) = (app_global_get_ex 0u "assetB")
+        (assert maybe_exists%1#3) // check GlobalState exists
+        let tmp%13#0: bool = (== tmp%12#1 maybe_value%1#0)
+        let tmp%14#2: bool = (&& tmp%11#1 tmp%13#0)
+        let amountB#1: uint64 = ((gtxns AssetAmount) depositB#0)
+        let tmp%17#1: bool = (&& tmp%14#2 amountB#1)
+        (assert tmp%17#1) // assert target is match for conditions
+        let (maybe_value%2#3: uint64, maybe_exists%2#3: bool) = (app_global_get_ex 0u "totalLiquidity")
+        (assert maybe_exists%2#3) // check GlobalState exists
+        goto maybe_value%2#3 ? block@31 : block@30
+    block@30: // if_body_L220
+        let sqrtA#0: uint64 = (sqrt amountA#1)
+        let sqrtB#0: uint64 = (sqrt amountB#1)
+        let rawLiquidity#0: uint64 = (* sqrtA#0 sqrtB#0)
+        let tmp%24#0: bool = (> rawLiquidity#0 1000u)
+        (assert tmp%24#0) // Initial deposit too small
+        let liquidity#1: uint64 = (- rawLiquidity#0 1000u)
+        let reinterpret_biguint%0#2: biguint = (itob amountA#1)
+        let reinterpret_biguint%1#2: biguint = (itob amountB#1)
+        let bigProduct#0: biguint = (b* reinterpret_biguint%0#2 reinterpret_biguint%1#2)
+        let exactSqrt#0: biguint = (bsqrt bigProduct#0)
+        let reinterpret_biguint%2#1: biguint = (itob rawLiquidity#0)
+        let tmp%28#0: bool = (b<= reinterpret_biguint%2#1 exactSqrt#0)
+        (assert tmp%28#0) // Sqrt approximation overflow
+        goto block@32
+    block@31: // else_body_L239
+        let (maybe_value%3#2: uint64, maybe_exists%3#2: bool) = (app_global_get_ex 0u "totalLiquidity")
+        (assert maybe_exists%3#2) // check GlobalState exists
+        let tmp%29#0: uint64 = (* amountA#1 maybe_value%3#2)
+        let (maybe_value%4#2: uint64, maybe_exists%4#2: bool) = (app_global_get_ex 0u "reserveA")
+        (assert maybe_exists%4#2) // check GlobalState exists
+        let liquidityA#0: uint64 = (/ tmp%29#0 maybe_value%4#2)
+        let tmp%31#0: uint64 = (* amountB#1 maybe_value%3#2)
+        let (maybe_value%6#1: uint64, maybe_exists%6#1: bool) = (app_global_get_ex 0u "reserveB")
+        (assert maybe_exists%6#1) // check GlobalState exists
+        let liquidityB#0: uint64 = (/ tmp%31#0 maybe_value%6#1)
+        let tmp%0#11: bool = (< liquidityA#0 liquidityB#0)
+        goto tmp%0#11 ? block@34 : block@35
+    block@34: // if_body_L73
+        goto block@36
+    block@35: // after_if_else_L73
+        goto block@36
+    block@36: // after_inlined_examples/puya-ts/15-dex-pool/contract.algo.ts::minOf_L239
+        let liquidity#2: uint64 = φ(liquidityA#0 <- block@34, liquidityB#0 <- block@35)
+        goto block@32
+    block@32: // after_if_else_L220
+        let liquidity#3: uint64 = φ(liquidity#1 <- block@30, liquidity#2 <- block@36)
+        (assert liquidity#3) // Zero liquidity
+        let (maybe_value%7#1: uint64, maybe_exists%7#1: bool) = (app_global_get_ex 0u "reserveA")
+        (assert maybe_exists%7#1) // check GlobalState exists
+        let newReserveA#4: uint64 = (+ maybe_value%7#1 amountA#1)
+        (app_global_put "reserveA" newReserveA#4)
+        let (maybe_value%8#0: uint64, maybe_exists%8#0: bool) = (app_global_get_ex 0u "reserveB")
+        (assert maybe_exists%8#0) // check GlobalState exists
+        let newReserveB#4: uint64 = (+ maybe_value%8#0 amountB#1)
+        (app_global_put "reserveB" newReserveB#4)
+        let (maybe_value%9#0: uint64, maybe_exists%9#0: bool) = (app_global_get_ex 0u "totalLiquidity")
+        (assert maybe_exists%9#0) // check GlobalState exists
+        let newLiquidity#0: uint64 = (+ maybe_value%9#0 liquidity#3)
+        (app_global_put "totalLiquidity" newLiquidity#0)
+        itxn_begin
+        let inner_txn_params%0%%param_AssetReceiver_idx_0#1: account = (txn Sender)
+        let (maybe_value%10#0: uint64, maybe_exists%10#0: bool) = (app_global_get_ex 0u "poolToken")
+        (assert maybe_exists%10#0) // check GlobalState exists
+        ((itxn_field AssetAmount) liquidity#3)
+        ((itxn_field XferAsset) maybe_value%10#0)
+        ((itxn_field AssetReceiver) inner_txn_params%0%%param_AssetReceiver_idx_0#1)
+        ((itxn_field TypeEnum) 4u)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob liquidity#3)
+        let tmp%4#4: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%1#0)
+        (log tmp%4#4)
+        exit 1u
+    block@7: // removeLiquidity_route_L279
+        let tmp%0#5: uint64 = (txn GroupIndex)
+        let poolDeposit#0: uint64 = (- tmp%0#5 1u)
+        let gtxn_type%0#1: uint64 = ((gtxns TypeEnum) poolDeposit#0)
+        let gtxn_type_matches%0#1: bool = (== gtxn_type%0#1 axfer)
+        (assert gtxn_type_matches%0#1) // transaction type is axfer
+        let tmp%0#6: account = ((gtxns AssetReceiver) poolDeposit#0)
+        let tmp%1#5: account = (global CurrentApplicationAddress)
+        let tmp%2#5: bool = (== tmp%0#6 tmp%1#5)
+        let tmp%3#3: uint64 = ((gtxns XferAsset) poolDeposit#0)
+        let (maybe_value%0#0: uint64, maybe_exists%0#2: bool) = (app_global_get_ex 0u "poolToken")
+        (assert maybe_exists%0#2) // check GlobalState exists
+        let tmp%4#3: bool = (== tmp%3#3 maybe_value%0#0)
+        let tmp%5#3: bool = (&& tmp%2#5 tmp%4#3)
+        let burnAmount#0: uint64 = ((gtxns AssetAmount) poolDeposit#0)
+        let tmp%8#1: bool = (&& tmp%5#3 burnAmount#0)
+        (assert tmp%8#1) // assert target is match for conditions
+        let (totalLiq#0: uint64, maybe_exists%1#2: bool) = (app_global_get_ex 0u "totalLiquidity")
+        (assert maybe_exists%1#2) // check GlobalState exists
+        let (maybe_value%2#2: uint64, maybe_exists%2#2: bool) = (app_global_get_ex 0u "reserveA")
+        (assert maybe_exists%2#2) // check GlobalState exists
+        let tmp%10#1: uint64 = (* burnAmount#0 maybe_value%2#2)
+        let amountA#0: uint64 = (/ tmp%10#1 totalLiq#0)
+        let (maybe_value%3#1: uint64, maybe_exists%3#1: bool) = (app_global_get_ex 0u "reserveB")
+        (assert maybe_exists%3#1) // check GlobalState exists
+        let tmp%12#0: uint64 = (* burnAmount#0 maybe_value%3#1)
+        let amountB#0: uint64 = (/ tmp%12#0 totalLiq#0)
+        (assert amountA#0) // Zero withdrawal A
+        (assert amountB#0) // Zero withdrawal B
+        let newResA#0: uint64 = (- maybe_value%2#2 amountA#0)
+        (app_global_put "reserveA" newResA#0)
+        let (maybe_value%5#1: uint64, maybe_exists%5#1: bool) = (app_global_get_ex 0u "reserveB")
+        (assert maybe_exists%5#1) // check GlobalState exists
+        let newResB#0: uint64 = (- maybe_value%5#1 amountB#0)
+        (app_global_put "reserveB" newResB#0)
+        let newLiq#0: uint64 = (- totalLiq#0 burnAmount#0)
+        (app_global_put "totalLiquidity" newLiq#0)
+        let sendA%%param_AssetReceiver_idx_0#0: account = (txn Sender)
+        let (maybe_value%6#0: uint64, maybe_exists%6#0: bool) = (app_global_get_ex 0u "assetA")
+        (assert maybe_exists%6#0) // check GlobalState exists
+        let sendB%%param_AssetReceiver_idx_0#0: account = (txn Sender)
+        let (maybe_value%7#0: uint64, maybe_exists%7#0: bool) = (app_global_get_ex 0u "assetB")
+        (assert maybe_exists%7#0) // check GlobalState exists
+        itxn_begin
+        ((itxn_field AssetAmount) amountA#0)
+        ((itxn_field XferAsset) maybe_value%6#0)
+        ((itxn_field AssetReceiver) sendA%%param_AssetReceiver_idx_0#0)
+        ((itxn_field TypeEnum) 4u)
+        ((itxn_field Fee) 0u)
+        itxn_next
+        ((itxn_field AssetAmount) amountB#0)
+        ((itxn_field XferAsset) maybe_value%7#0)
+        ((itxn_field AssetReceiver) sendB%%param_AssetReceiver_idx_0#0)
+        ((itxn_field TypeEnum) 4u)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        exit 1u
+    block@8: // swap_route_L332
+        let tmp%0#3: uint64 = (txn GroupIndex)
+        let deposit#0: uint64 = (- tmp%0#3 1u)
+        let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) deposit#0)
+        let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 axfer)
+        (assert gtxn_type_matches%0#0) // transaction type is axfer
+        let tmp%0#4: account = ((gtxns AssetReceiver) deposit#0)
+        let tmp%1#4: account = (global CurrentApplicationAddress)
+        let tmp%2#4: bool = (== tmp%0#4 tmp%1#4)
+        let amountIn#0: uint64 = ((gtxns AssetAmount) deposit#0)
+        let tmp%5#2: bool = (&& tmp%2#4 amountIn#0)
+        (assert tmp%5#2) // assert target is match for conditions
+        let depositAsset#0: uint64 = ((gtxns XferAsset) deposit#0)
+        let (oldResA#0: uint64, maybe_exists%0#1: bool) = (app_global_get_ex 0u "reserveA")
+        (assert maybe_exists%0#1) // check GlobalState exists
+        let (oldResB#0: uint64, maybe_exists%1#1: bool) = (app_global_get_ex 0u "reserveB")
+        (assert maybe_exists%1#1) // check GlobalState exists
+        let (maybe_value%2#1: uint64, maybe_exists%2#1: bool) = (app_global_get_ex 0u "assetA")
+        (assert maybe_exists%2#1) // check GlobalState exists
+        let tmp%8#0: bool = (== depositAsset#0 maybe_value%2#1)
+        goto tmp%8#0 ? block@23 : block@24
+    block@23: // if_body_L350
+        let amountOut#1: uint64 = examples/puya-ts/15-dex-pool/contract.algo.ts::computeSwapOutput(amountIn#0, oldResA#0, oldResB#0)
+        (assert amountOut#1) // Zero output
+        let tmp%11#0: bool = (< amountOut#1 oldResB#0)
+        (assert tmp%11#0) // Insufficient reserve B
+        let newReserveA#1: uint64 = (+ oldResA#0 amountIn#0)
+        let newReserveB#1: uint64 = (- oldResB#0 amountOut#1)
+        itxn_begin
+        let inner_txn_params%0%%param_AssetReceiver_idx_0#0: account = (txn Sender)
+        let (maybe_value%3#0: uint64, maybe_exists%3#0: bool) = (app_global_get_ex 0u "assetB")
+        (assert maybe_exists%3#0) // check GlobalState exists
+        ((itxn_field AssetAmount) amountOut#1)
+        ((itxn_field XferAsset) maybe_value%3#0)
+        ((itxn_field AssetReceiver) inner_txn_params%0%%param_AssetReceiver_idx_0#0)
+        ((itxn_field TypeEnum) 4u)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        goto block@25
+    block@24: // else_body_L369
+        let (maybe_value%4#0: uint64, maybe_exists%4#0: bool) = (app_global_get_ex 0u "assetB")
+        (assert maybe_exists%4#0) // check GlobalState exists
+        let tmp%14#0: bool = (== depositAsset#0 maybe_value%4#0)
+        (assert tmp%14#0) // Unknown asset
+        let amountOut#2: uint64 = examples/puya-ts/15-dex-pool/contract.algo.ts::computeSwapOutput(amountIn#0, oldResB#0, oldResA#0)
+        (assert amountOut#2) // Zero output
+        let tmp%17#0: bool = (< amountOut#2 oldResA#0)
+        (assert tmp%17#0) // Insufficient reserve A
+        let newReserveA#2: uint64 = (- oldResA#0 amountOut#2)
+        let newReserveB#2: uint64 = (+ oldResB#0 amountIn#0)
+        itxn_begin
+        let inner_txn_params%1%%param_AssetReceiver_idx_0#0: account = (txn Sender)
+        let (maybe_value%5#0: uint64, maybe_exists%5#0: bool) = (app_global_get_ex 0u "assetA")
+        (assert maybe_exists%5#0) // check GlobalState exists
+        ((itxn_field AssetAmount) amountOut#2)
+        ((itxn_field XferAsset) maybe_value%5#0)
+        ((itxn_field AssetReceiver) inner_txn_params%1%%param_AssetReceiver_idx_0#0)
+        ((itxn_field TypeEnum) 4u)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        goto block@25
+    block@25: // after_if_else_L350
+        let newReserveA#3: uint64 = φ(newReserveA#1 <- block@23, newReserveA#2 <- block@24)
+        let newReserveB#3: uint64 = φ(newReserveB#1 <- block@23, newReserveB#2 <- block@24)
+        let amountOut#3: uint64 = φ(amountOut#1 <- block@23, amountOut#2 <- block@24)
+        let reinterpret_biguint%0#1: biguint = (itob oldResA#0)
+        let reinterpret_biguint%1#1: biguint = (itob oldResB#0)
+        let oldK#0: biguint = (b* reinterpret_biguint%0#1 reinterpret_biguint%1#1)
+        let reinterpret_biguint%2#0: biguint = (itob newReserveA#3)
+        let reinterpret_biguint%3#0: biguint = (itob newReserveB#3)
+        let newK#0: biguint = (b* reinterpret_biguint%2#0 reinterpret_biguint%3#0)
+        let tmp%22#0: bool = (b>= newK#0 oldK#0)
+        (assert tmp%22#0) // Invariant violated: k decreased
+        (app_global_put "reserveA" newReserveA#3)
+        (app_global_put "reserveB" newReserveB#3)
+        let aggregate%val_as_bytes%2#0: bytes[8] = (itob amountOut#3)
+        let tmp%3#2: bytes = (concat 0x151f7c75 aggregate%val_as_bytes%2#0)
+        (log tmp%3#2)
+        exit 1u
+    block@9: // withdrawAlgoExcess_route_L407
+        let tmp%0#2: account = (txn Sender)
+        let tmp%1#2: account = (global CreatorAddress)
+        let tmp%2#2: bool = (== tmp%0#2 tmp%1#2)
+        (assert tmp%2#2) // Only creator
+        let tmp%3#1: account = (global CurrentApplicationAddress)
+        let (minBal#0: uint64, check%0#0: bool) = ((acct_params_get AcctMinBalance) tmp%3#1)
+        (assert check%0#0) // account funded
+        let tmp%4#1: account = (global CurrentApplicationAddress)
+        let (contractBal#0: uint64, check%1#0: bool) = ((acct_params_get AcctBalance) tmp%4#1)
+        (assert check%1#0) // account funded
+        let tmp%5#1: bool = (> contractBal#0 minBal#0)
+        (assert tmp%5#1) // No excess balance
+        let excess#0: uint64 = (- contractBal#0 minBal#0)
+        itxn_begin
+        let inner_txn_params%0%%param_Receiver_idx_0#0: account = (global CreatorAddress)
+        ((itxn_field Amount) excess#0)
+        ((itxn_field Receiver) inner_txn_params%0%%param_Receiver_idx_0#0)
+        ((itxn_field TypeEnum) 1u)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        exit 1u
+    block@10: // getPoolState_route_L434
+        let (resA#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "reserveA")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let (resB#0: uint64, maybe_exists%1#0: bool) = (app_global_get_ex 0u "reserveB")
+        (assert maybe_exists%1#0) // check GlobalState exists
+        let reinterpret_biguint%0#0: biguint = (itob resA#0)
+        let reinterpret_biguint%1#0: biguint = (itob resB#0)
+        let k#0: biguint = (b* reinterpret_biguint%0#0 reinterpret_biguint%1#0)
+        let sqrtK#0: biguint = (bsqrt k#0)
+        (log sqrtK#0)
+        let (maybe_value%2#0: uint64, maybe_exists%2#0: bool) = (app_global_get_ex 0u "totalLiquidity")
+        (assert maybe_exists%2#0) // check GlobalState exists
+        let aggregate%head%1#0: bytes = (concat reinterpret_biguint%0#0 reinterpret_biguint%1#0)
+        let aggregate%val_as_bytes%5#0: bytes[8] = (itob maybe_value%2#0)
+        let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 aggregate%val_as_bytes%5#0)
+        let tmp%1#1: bytes = (concat 0x151f7c75 aggregate%head%2#0)
+        (log tmp%1#1)
+        exit 1u
+    block@12: // create_NoOp_L109
+        let tmp%5#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%5#0 {method "createApplication()void" => block@13, * => block@15}
+    block@13: // createApplication_route_L123
+        exit 1u
+    block@15: // after_if_else_L109
+        fail
+
+subroutine examples/puya-ts/15-dex-pool/contract.algo.ts::computeSwapOutput(amountIn: uint64, reserveIn: uint64, reserveOut: uint64) -> uint64:
+    block@0: // L83
+        let adjustedIn#0: uint64 = (* amountIn#0 997u)
+        let tmp%1#0: uint64 = (* reserveIn#0 1000u)
+        let denominator#0: uint64 = (+ tmp%1#0 adjustedIn#0)
+        let (numHi#0: uint64, numLo#0: uint64) = (mulw reserveOut#0 adjustedIn#0)
+        let (quotientHi#0: uint64, quotientLo#0: uint64, awst_tmp%4#0: uint64, awst_tmp%5#0: uint64) = (divmodw numHi#0 numLo#0 0u denominator#0)
+        let tmp%3#0: bool = (! quotientHi#0)
+        (assert tmp%3#0) // Swap output overflow
+        return quotientLo#0

@@ -1,0 +1,67 @@
+contract MultiTxnDistributor
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+  }
+  
+  distributePair(funding: group_transaction_pay, recipientA: account, recipientB: account): void
+  {
+    assert(&&(gtxns<Receiver>(funding) == global<CurrentApplicationAddress>(), gtxns<Amount>(funding) > 0), comment=Funds must be sent to this contract)
+    share: uint64 = gtxns<Amount>(funding) // 2
+    payA: inner_transaction_fields_pay = create_inner_transaction(Fee=0, TypeEnum=1, Receiver=recipientA, Amount=share)
+    payB: inner_transaction_fields_pay = copy(payA)
+    update_inner_transaction(payB, Receiver=recipientB)
+    #[txnA, txnB]: readonly [inner_transaction_pay, inner_transaction_pay] = submit_txn(payA, payB)
+    assert(txnA.Receiver == recipientA, comment=txnA receiver correct)
+    assert(txnB.Receiver == recipientB, comment=txnB receiver correct)
+    assert(txnA.Amount == share, comment=txnA amount correct)
+    assert(txnB.Amount == share, comment=txnB amount correct)
+  }
+  
+  distributeWithOptIn(funding: group_transaction_pay, asset: asset, recipientA: account, recipientB: account): void
+  {
+    assert(&&(gtxns<Receiver>(funding) == global<CurrentApplicationAddress>(), gtxns<TypeEnum>(funding) == reinterpret_cast<uint64>(1)), comment=Funding must be a payment to this contract)
+    share: uint64 = gtxns<Amount>(funding) // 2
+    pay: inner_transaction_fields_pay = create_inner_transaction(Fee=0, TypeEnum=1, Receiver=recipientA, Amount=share)
+    optIn: inner_transaction_fields_axfer = create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=global<CurrentApplicationAddress>(), XferAsset=asset, AssetAmount=0)
+    #[payResult, optInResult]: readonly [inner_transaction_pay, inner_transaction_axfer] = submit_txn(pay, optIn)
+    assert(payResult.Amount == share, comment=Payment amount correct)
+    assert(optInResult.XferAsset == asset, comment=Opted into correct asset)
+  }
+  
+  distributeDynamic(funding: group_transaction_pay, recipients: arc4.dynamic_array<arc4.static_array<arc4.byte,32>>): void
+  {
+    assert(gtxns<Receiver>(funding) == global<CurrentApplicationAddress>(), comment=Funds must be sent to this contract)
+    assert(recipients.length > 0, comment=Must have recipients)
+    share: uint64 = gtxns<Amount>(funding) // recipients.length
+    payFields: Object3BB2638B = new Object3BB2638B(type=($0 = #{ type: ($1 = #{ type: ($2 = #[1, share, reinterpret_cast<bytes>(recipients[0])]).0, amount: $2.1, receiver: $2.2 }).type, amount: $1.amount, receiver: $1.receiver }).type, amount=$0.amount, receiver=$0.receiver)
+    stage_itxns=([create_inner_transaction(Fee=0, TypeEnum=payFields.type, Amount=payFields.amount, Receiver=reinterpret_cast<account>(payFields.receiver))], start_new_group=True)
+    for (temp in urange(1, recipients.length, 1)) {
+      i: uint64 = copy(temp)
+      addr: arc4.static_array<arc4.byte,32> = recipients[i]
+      stage_itxns=([create_inner_transaction(Fee=0, TypeEnum=payFields.type, Amount=payFields.amount, Receiver=reinterpret_cast<account>(reinterpret_cast<bytes>(addr)))], start_new_group=False)
+    }
+    itxn_submit()
+  }
+  
+  verifyGroupPayments(): void
+  {
+    i: uint64 = 0
+    while (i < txn<GroupIndex>()) {
+      txn: group_transaction = group_transaction(index=i, type=group_transaction)
+      assert(gtxns<TypeEnum>(txn) == reinterpret_cast<uint64>(1), comment=All preceding txns must be payments)
+      i++
+    }
+  }
+  
+}

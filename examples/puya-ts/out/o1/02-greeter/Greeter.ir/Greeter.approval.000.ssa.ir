@@ -1,0 +1,100 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = examples/puya-ts/02-greeter/contract.algo.ts::Greeter.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine examples/puya-ts/02-greeter/contract.algo.ts::Greeter.__puya_arc4_router__() -> bool:
+    block@0: // L21
+        let tmp%0#0: uint64 = (txn OnCompletion)
+        let tmp%1#0: bool = (== tmp%0#0 NoOp)
+        (assert tmp%1#0)
+        let tmp%2#0: uint64 = (txn ApplicationID)
+        let tmp%3#0: bool = (!= tmp%2#0 0u)
+        goto tmp%3#0 ? block@1 : block@5
+    block@1: // call_NoOp_L21
+        let tmp%4#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%4#0 {method "greet(string)string" => block@2, method "greetTwo(string,string)string" => block@3, * => block@4}
+    block@2: // greet_route_L30
+        examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greet[routing]()
+        goto block@4
+    block@3: // greetTwo_route_L42
+        examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greetTwo[routing]()
+        goto block@4
+    block@4: // switch_case_next_L21
+        goto block@8
+    block@5: // create_NoOp_L21
+        let tmp%5#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%5#0 {method "createApplication()void" => block@6, * => block@7}
+    block@6: // createApplication_route_L23
+        examples/puya-ts/02-greeter/contract.algo.ts::Greeter.createApplication[routing]()
+        goto block@7
+    block@7: // switch_case_next_L21
+        goto block@8
+    block@8: // after_if_else_L21
+        exit 0u
+
+subroutine examples/puya-ts/02-greeter/contract.algo.ts::Greeter.createApplication[routing]() -> void:
+    block@0: // L23
+        examples/puya-ts/02-greeter/contract.algo.ts::Greeter.createApplication()
+        exit 1u
+
+subroutine examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greet[routing]() -> void:
+    block@0: // L30
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
+        let tmp%1#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
+        let tmp%2#0: string = examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greet(tmp%1#0)
+        let tmp%3#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>(tmp%2#0)
+        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
+        (log tmp%4#0)
+        exit 1u
+
+subroutine examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greetTwo[routing]() -> void:
+    block@0: // L42
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
+        let tmp%1#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let length%1#0: uint64 = array_len(tmp%2#0)
+        let mul%1#0: uint64 = (* length%1#0 1u)
+        let add%1#0: uint64 = (+ mul%1#0 2u)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 add%1#0)
+        (assert eq%1#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%1#0: Encoded(len+utf8[]) = tmp%2#0
+        let tmp%3#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%1#0)
+        let tmp%4#0: string = examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greetTwo(tmp%1#0, tmp%3#0)
+        let tmp%5#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>(tmp%4#0)
+        let tmp%6#0: bytes = (concat 0x151f7c75 tmp%5#0)
+        (log tmp%6#0)
+        exit 1u
+
+subroutine examples/puya-ts/02-greeter/contract.algo.ts::Greeter.createApplication() -> void:
+    block@0: // L23
+        return 
+
+subroutine examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greet(name: string) -> string:
+    block@0: // L30
+        let tmp%0#0: bytes = (concat "Hello, " name#0)
+        let tmp%1#0: bytes = (concat tmp%0#0 "!")
+        return tmp%1#0
+
+subroutine examples/puya-ts/02-greeter/contract.algo.ts::Greeter.greetTwo(firstName: string, lastName: string) -> string:
+    block@0: // L42
+        let tmp%0#0: bytes = (concat "Hello, " firstName#0)
+        let tmp%1#0: bytes = (concat tmp%0#0 " and ")
+        let tmp%2#0: bytes = (concat tmp%1#0 lastName#0)
+        let tmp%3#0: bytes = (concat tmp%2#0 "!")
+        return tmp%3#0

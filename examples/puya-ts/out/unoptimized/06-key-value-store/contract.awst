@@ -1,0 +1,154 @@
+contract KeyValueStore
+{
+  globals {
+    ["entryCount"]: uint64
+  }
+  boxes {
+    ["single"]: bytes
+    ["kv/"]: string => bytes
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+  }
+  
+  createSingleBox(size: uint64): bool
+  {
+    created: bool = box_create("single", size)
+    return created
+  }
+  
+  setSingleBox(data: bytes): void
+  {
+    if (!STATE_EXISTS(Box["single"].value)) {
+      box_create("single", len(data))
+    }
+    Box["single"].value: bytes = data
+  }
+  
+  getSingleBox(): bytes
+  {
+    return STATE_GET(Box["single"].value, default="")
+  }
+  
+  deleteSingleBox(): bool
+  {
+    return STATE_DELETE(Box["single"].value)
+  }
+  
+  checkSingleBox(): bool
+  {
+    #[exists]: readonly [bool] = #[($0 = STATE_GET_EX(Box["single"].value)).1]
+    return exists
+  }
+  
+  extractFromBox(start: uint64, length: uint64): bytes
+  {
+    return box_extract("single", start, length)
+  }
+  
+  replaceInBox(start: uint64, data: bytes): void
+  {
+    box_replace("single", start, data)
+  }
+  
+  spliceBox(start: uint64, length: uint64, data: bytes): void
+  {
+    box_splice("single", start, length, data)
+  }
+  
+  resizeBox(newSize: uint64): void
+  {
+    box_resize("single", newSize)
+  }
+  
+  getBoxLength(): uint64
+  {
+    return checked_maybe(box_len("single"), comment=Box must have value)
+  }
+  
+  setEntry(key: string, value: bytes): void
+  {
+    Box[BoxMapKey(prefix="kv/", key=key)].value: bytes = value
+    count: uint64 = GlobalState["entryCount"] + 1
+    GlobalState["entryCount"]: uint64 = count
+  }
+  
+  getEntry(key: string): bytes
+  {
+    return STATE_GET(Box[BoxMapKey(prefix="kv/", key=key)].value, default="")
+  }
+  
+  hasEntry(key: string): bool
+  {
+    return STATE_EXISTS(Box[BoxMapKey(prefix="kv/", key=key)].value)
+  }
+  
+  deleteEntry(key: string): bool
+  {
+    deleted: bool = STATE_DELETE(Box[BoxMapKey(prefix="kv/", key=key)].value)
+    if (deleted) {
+      count: uint64 = GlobalState["entryCount"] - 1
+      GlobalState["entryCount"]: uint64 = count
+    }
+    return deleted
+  }
+  
+  getEntryLength(key: string): uint64
+  {
+    return checked_maybe(box_len(BoxMapKey(prefix="kv/", key=key)), comment=Box must have value)
+  }
+  
+  setDynamicState(key: string, value: uint64): void
+  {
+    proxy: state_key = reinterpret_cast<state_key>(reinterpret_cast<bytes>(key))
+    GlobalState[proxy]: uint64 = value
+  }
+  
+  getDynamicState(key: string): uint64
+  {
+    proxy: state_key = reinterpret_cast<state_key>(reinterpret_cast<bytes>(key))
+    return GlobalState[proxy]
+  }
+  
+  deleteDynamicState(key: string): void
+  {
+    STATE_DELETE(GlobalState[reinterpret_cast<state_key>(reinterpret_cast<bytes>(key))])
+  }
+  
+  testBoxRoundTrip(data: bytes): bool
+  {
+    box_create("single", len(data))
+    Box["single"].value: bytes = data
+    assert(STATE_EXISTS(Box["single"].value))
+    assert(Box["single"].value == data)
+    assert(checked_maybe(box_len("single"), comment=Box must have value) == len(data))
+    deleted: bool = STATE_DELETE(Box["single"].value)
+    assert(deleted)
+    assert(!STATE_EXISTS(Box["single"].value))
+    return True
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["entryCount"]: uint64 = 0
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}

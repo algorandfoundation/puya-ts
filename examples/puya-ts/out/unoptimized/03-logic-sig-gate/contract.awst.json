@@ -1,0 +1,539 @@
+[
+  {
+    "_type": "LogicSignature",
+    "source_location": {
+      "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+      "line": 28,
+      "end_line": 29,
+      "column": 0,
+      "end_column": 44
+    },
+    "id": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts::LogicSigGate",
+    "short_name": "LogicSigGate",
+    "program": {
+      "_type": "Subroutine",
+      "source_location": {
+        "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+        "line": 34,
+        "end_line": 34,
+        "column": 2,
+        "end_column": 20
+      },
+      "args": [],
+      "return_type": {
+        "_type": "WType",
+        "name": "bool",
+        "immutable": true
+      },
+      "body": {
+        "_type": "Block",
+        "source_location": {
+          "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+          "line": 34,
+          "end_line": 60,
+          "column": 21,
+          "end_column": 3
+        },
+        "body": [
+          {
+            "_type": "ExpressionStatement",
+            "source_location": {
+              "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+              "line": 41,
+              "end_line": 41,
+              "column": 4,
+              "end_column": 52
+            },
+            "expr": {
+              "_type": "AssertExpression",
+              "source_location": {
+                "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                "line": 41,
+                "end_line": 41,
+                "column": 4,
+                "end_column": 52
+              },
+              "condition": {
+                "_type": "NumericComparisonExpression",
+                "source_location": {
+                  "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                  "line": 41,
+                  "end_line": 41,
+                  "column": 11,
+                  "end_column": 28
+                },
+                "lhs": {
+                  "_type": "IntrinsicCall",
+                  "source_location": {
+                    "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                    "line": 41,
+                    "end_line": 41,
+                    "column": 11,
+                    "end_column": 18
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true
+                  },
+                  "op_code": "txn",
+                  "immediates": [
+                    "Fee"
+                  ],
+                  "stack_args": []
+                },
+                "operator": "<=",
+                "rhs": {
+                  "_type": "TemplateVar",
+                  "source_location": {
+                    "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                    "line": 41,
+                    "end_line": 41,
+                    "column": 22,
+                    "end_column": 28
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true
+                  },
+                  "name": "TMPL_MAX_FEE"
+                }
+              },
+              "error_message": "Fee exceeds maximum",
+              "explicit": true,
+              "log_error": false
+            }
+          },
+          {
+            "_type": "ExpressionStatement",
+            "source_location": {
+              "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+              "line": 44,
+              "end_line": 44,
+              "column": 4,
+              "end_column": 85
+            },
+            "expr": {
+              "_type": "AssertExpression",
+              "source_location": {
+                "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                "line": 44,
+                "end_line": 44,
+                "column": 4,
+                "end_column": 85
+              },
+              "condition": {
+                "_type": "NumericComparisonExpression",
+                "source_location": {
+                  "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                  "line": 44,
+                  "end_line": 44,
+                  "column": 11,
+                  "end_column": 51
+                },
+                "lhs": {
+                  "_type": "IntrinsicCall",
+                  "source_location": {
+                    "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                    "line": 44,
+                    "end_line": 44,
+                    "column": 11,
+                    "end_column": 23
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true
+                  },
+                  "op_code": "txn",
+                  "immediates": [
+                    "TypeEnum"
+                  ],
+                  "stack_args": []
+                },
+                "operator": "==",
+                "rhs": {
+                  "_type": "ReinterpretCast",
+                  "source_location": {
+                    "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                    "line": 44,
+                    "end_line": 44,
+                    "column": 28,
+                    "end_column": 51
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true
+                  },
+                  "expr": {
+                    "_type": "IntegerConstant",
+                    "source_location": {
+                      "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                      "line": 44,
+                      "end_line": 44,
+                      "column": 28,
+                      "end_column": 51
+                    },
+                    "wtype": {
+                      "_type": "WType",
+                      "name": "uint64",
+                      "immutable": true
+                    },
+                    "value": 1,
+                    "teal_alias": null
+                  }
+                }
+              },
+              "error_message": "Must be a payment transaction",
+              "explicit": true,
+              "log_error": false
+            }
+          },
+          {
+            "_type": "ExpressionStatement",
+            "source_location": {
+              "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+              "line": 47,
+              "end_line": 47,
+              "column": 4,
+              "end_column": 67
+            },
+            "expr": {
+              "_type": "AssertExpression",
+              "source_location": {
+                "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                "line": 47,
+                "end_line": 47,
+                "column": 4,
+                "end_column": 67
+              },
+              "condition": {
+                "_type": "BytesComparisonExpression",
+                "source_location": {
+                  "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                  "line": 47,
+                  "end_line": 47,
+                  "column": 11,
+                  "end_column": 45
+                },
+                "lhs": {
+                  "_type": "IntrinsicCall",
+                  "source_location": {
+                    "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                    "line": 47,
+                    "end_line": 47,
+                    "column": 11,
+                    "end_column": 22
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "account",
+                    "immutable": true
+                  },
+                  "op_code": "txn",
+                  "immediates": [
+                    "RekeyTo"
+                  ],
+                  "stack_args": []
+                },
+                "operator": "==",
+                "rhs": {
+                  "_type": "IntrinsicCall",
+                  "source_location": {
+                    "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                    "line": 47,
+                    "end_line": 47,
+                    "column": 27,
+                    "end_column": 45
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "account",
+                    "immutable": true
+                  },
+                  "op_code": "global",
+                  "immediates": [
+                    "ZeroAddress"
+                  ],
+                  "stack_args": []
+                }
+              },
+              "error_message": "Rekey not allowed",
+              "explicit": true,
+              "log_error": false
+            }
+          },
+          {
+            "_type": "ExpressionStatement",
+            "source_location": {
+              "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+              "line": 50,
+              "end_line": 50,
+              "column": 4,
+              "end_column": 86
+            },
+            "expr": {
+              "_type": "AssertExpression",
+              "source_location": {
+                "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                "line": 50,
+                "end_line": 50,
+                "column": 4,
+                "end_column": 86
+              },
+              "condition": {
+                "_type": "BytesComparisonExpression",
+                "source_location": {
+                  "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                  "line": 50,
+                  "end_line": 50,
+                  "column": 11,
+                  "end_column": 54
+                },
+                "lhs": {
+                  "_type": "IntrinsicCall",
+                  "source_location": {
+                    "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                    "line": 50,
+                    "end_line": 50,
+                    "column": 11,
+                    "end_column": 31
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "account",
+                    "immutable": true
+                  },
+                  "op_code": "txn",
+                  "immediates": [
+                    "CloseRemainderTo"
+                  ],
+                  "stack_args": []
+                },
+                "operator": "==",
+                "rhs": {
+                  "_type": "IntrinsicCall",
+                  "source_location": {
+                    "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                    "line": 50,
+                    "end_line": 50,
+                    "column": 36,
+                    "end_column": 54
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "account",
+                    "immutable": true
+                  },
+                  "op_code": "global",
+                  "immediates": [
+                    "ZeroAddress"
+                  ],
+                  "stack_args": []
+                }
+              },
+              "error_message": "Close remainder not allowed",
+              "explicit": true,
+              "log_error": false
+            }
+          },
+          {
+            "_type": "AssignmentStatement",
+            "source_location": {
+              "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+              "line": 53,
+              "end_line": 53,
+              "column": 10,
+              "end_column": 31
+            },
+            "target": {
+              "_type": "VarExpression",
+              "source_location": {
+                "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                "line": 53,
+                "end_line": 53,
+                "column": 10,
+                "end_column": 19
+              },
+              "wtype": {
+                "_type": "BytesWType",
+                "length": null
+              },
+              "name": "signature"
+            },
+            "value": {
+              "_type": "IntrinsicCall",
+              "source_location": {
+                "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                "line": 53,
+                "end_line": 53,
+                "column": 22,
+                "end_column": 31
+              },
+              "wtype": {
+                "_type": "BytesWType",
+                "length": null
+              },
+              "op_code": "args",
+              "immediates": [],
+              "stack_args": [
+                {
+                  "_type": "IntegerConstant",
+                  "source_location": {
+                    "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                    "line": 53,
+                    "end_line": 53,
+                    "column": 29,
+                    "end_column": 30
+                  },
+                  "wtype": {
+                    "_type": "WType",
+                    "name": "uint64",
+                    "immutable": true
+                  },
+                  "value": 0,
+                  "teal_alias": null
+                }
+              ]
+            }
+          },
+          {
+            "_type": "ExpressionStatement",
+            "source_location": {
+              "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+              "line": 57,
+              "end_line": 57,
+              "column": 4,
+              "end_column": 88
+            },
+            "expr": {
+              "_type": "AssertExpression",
+              "source_location": {
+                "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                "line": 57,
+                "end_line": 57,
+                "column": 4,
+                "end_column": 88
+              },
+              "condition": {
+                "_type": "IntrinsicCall",
+                "source_location": {
+                  "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                  "line": 57,
+                  "end_line": 57,
+                  "column": 11,
+                  "end_column": 66
+                },
+                "wtype": {
+                  "_type": "WType",
+                  "name": "bool",
+                  "immutable": true
+                },
+                "op_code": "ed25519verify_bare",
+                "immediates": [],
+                "stack_args": [
+                  {
+                    "_type": "IntrinsicCall",
+                    "source_location": {
+                      "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                      "line": 57,
+                      "end_line": 57,
+                      "column": 32,
+                      "end_column": 40
+                    },
+                    "wtype": {
+                      "_type": "BytesWType",
+                      "length": null
+                    },
+                    "op_code": "txn",
+                    "immediates": [
+                      "Note"
+                    ],
+                    "stack_args": []
+                  },
+                  {
+                    "_type": "VarExpression",
+                    "source_location": {
+                      "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                      "line": 57,
+                      "end_line": 57,
+                      "column": 42,
+                      "end_column": 51
+                    },
+                    "wtype": {
+                      "_type": "BytesWType",
+                      "length": null
+                    },
+                    "name": "signature"
+                  },
+                  {
+                    "_type": "TemplateVar",
+                    "source_location": {
+                      "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                      "line": 57,
+                      "end_line": 57,
+                      "column": 53,
+                      "end_column": 65
+                    },
+                    "wtype": {
+                      "_type": "BytesWType",
+                      "length": null
+                    },
+                    "name": "TMPL_AUTHORITY_KEY"
+                  }
+                ]
+              },
+              "error_message": "Invalid signature",
+              "explicit": true,
+              "log_error": false
+            }
+          },
+          {
+            "_type": "ReturnStatement",
+            "source_location": {
+              "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+              "line": 59,
+              "end_line": 59,
+              "column": 4,
+              "end_column": 15
+            },
+            "value": {
+              "_type": "BoolConstant",
+              "source_location": {
+                "file": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts",
+                "line": 59,
+                "end_line": 59,
+                "column": 11,
+                "end_column": 15
+              },
+              "wtype": {
+                "_type": "WType",
+                "name": "bool",
+                "immutable": true
+              },
+              "value": true
+            }
+          }
+        ],
+        "label": null,
+        "comment": null
+      },
+      "documentation": {
+        "_type": "MethodDocumentation",
+        "description": "The single entry point — returns true to approve the transaction.",
+        "args": {},
+        "returns": "true if all security checks pass"
+      },
+      "inline": null,
+      "pure": false,
+      "id": "examples/puya-ts/03-logic-sig-gate/contract.algo.ts::program",
+      "name": "program"
+    },
+    "docstring": null,
+    "reserved_scratch_space": [],
+    "avm_version": null,
+    "validate_encoding": null
+  }
+]

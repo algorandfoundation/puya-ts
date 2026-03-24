@@ -1,0 +1,65 @@
+contract CryptoVault
+{
+  globals {
+    ["secretHash"]: bytes
+  }
+  reservedScratchSpace: [0, 1, 2, 3]
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(commitment: bytes): void
+  {
+    GlobalState["secretHash"]: bytes = reinterpret_cast<bytes>(sha256(commitment))
+  }
+  
+  hashShowcase(data: bytes): bytes
+  {
+    ensure_budget(2000, 0)
+    h1: bytes[32] = sha256(data)
+    h2: bytes[32] = sha3_256(data)
+    h3: bytes[32] = sha512_256(data)
+    h4: bytes[32] = keccak256(data)
+    stores(0, reinterpret_cast<bytes>(h1))
+    stores(1, reinterpret_cast<bytes>(h2))
+    stores(2, reinterpret_cast<bytes>(h3))
+    stores(3, reinterpret_cast<bytes>(h4))
+    loaded0: bytes = loads(0)
+    loaded1: bytes = loads(1)
+    assert(loaded0 == reinterpret_cast<bytes>(h1), comment=scratch 0 mismatch)
+    assert(loaded1 == reinterpret_cast<bytes>(h2), comment=scratch 1 mismatch)
+    return concat(concat(concat(reinterpret_cast<bytes>(h1), reinterpret_cast<bytes>(h2)), reinterpret_cast<bytes>(h3)), reinterpret_cast<bytes>(h4))
+  }
+  
+  verifyAndUnlock(data: bytes, signature: bytes, publicKey: bytes): bool
+  {
+    ensure_budget(2500, 1)
+    valid: bool = ed25519verify_bare(data, signature, publicKey)
+    assert(valid, comment=Invalid Ed25519 signature)
+    return valid
+  }
+  
+  scratchCounter(iterations: uint64): uint64
+  {
+    stores(0, iterations)
+    loaded: uint64 = loads(0)
+    assert(loaded == iterations, comment=uint64 scratch mismatch)
+    ensure_budget(1000, 2)
+    doubled: uint64 = loaded + loaded
+    stores(1, doubled)
+    return loads(1)
+  }
+  
+  checkPreimage(preimage: bytes): bool
+  {
+    computed: bytes[32] = sha256(preimage)
+    return reinterpret_cast<bytes>(computed) == GlobalState["secretHash"]
+  }
+  
+}

@@ -1,0 +1,873 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.__puya_arc4_router__() -> bool:
+    block@0: // L37
+        let tmp%0#0: uint64 = (txn OnCompletion)
+        let tmp%1#0: bool = (== tmp%0#0 NoOp)
+        (assert tmp%1#0)
+        let tmp%2#0: uint64 = (txn ApplicationID)
+        let tmp%3#0: bool = (!= tmp%2#0 0u)
+        goto tmp%3#0 ? block@1 : block@7
+    block@1: // call_NoOp_L37
+        let tmp%4#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%4#0 {method "distributePair(pay,address,address)void" => block@2, method "distributeWithOptIn(pay,uint64,address,address)void" => block@3, method "distributeDynamic(pay,address[])void" => block@4, method "verifyGroupPayments()void" => block@5, * => block@6}
+    block@2: // distributePair_route_L48
+        examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributePair[routing]()
+        goto block@6
+    block@3: // distributeWithOptIn_route_L93
+        examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributeWithOptIn[routing]()
+        goto block@6
+    block@4: // distributeDynamic_route_L133
+        examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributeDynamic[routing]()
+        goto block@6
+    block@5: // verifyGroupPayments_route_L174
+        examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.verifyGroupPayments[routing]()
+        goto block@6
+    block@6: // switch_case_next_L37
+        goto block@10
+    block@7: // create_NoOp_L37
+        let tmp%5#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%5#0 {method "createApplication()void" => block@8, * => block@9}
+    block@8: // createApplication_route_L39
+        examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.createApplication[routing]()
+        goto block@9
+    block@9: // switch_case_next_L37
+        goto block@10
+    block@10: // after_if_else_L37
+        exit 0u
+
+subroutine examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.createApplication[routing]() -> void:
+    block@0: // L39
+        examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.createApplication()
+        exit 1u
+
+subroutine examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributePair[routing]() -> void:
+    block@0: // L48
+        let tmp%0#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%0#0: uint64 = (- tmp%0#0 1u)
+        let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) gtxn_idx%0#0)
+        let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 pay)
+        (assert gtxn_type_matches%0#0) // transaction type is pay
+        let tmp%1#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%1#0)
+        let eq%0#0: bool = (== len%0#0 32u)
+        (assert eq%0#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%1#0
+        let tmp%2#0: account = decode_bytes<account>(as_Encoded(uint8[32])%0#0)
+        let tmp%3#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%3#0)
+        let eq%1#0: bool = (== len%1#0 32u)
+        (assert eq%1#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        let as_Encoded(uint8[32])%1#0: Encoded(uint8[32]) = tmp%3#0
+        let tmp%4#0: account = decode_bytes<account>(as_Encoded(uint8[32])%1#0)
+        examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributePair(gtxn_idx%0#0, tmp%2#0, tmp%4#0)
+        exit 1u
+
+subroutine examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributeWithOptIn[routing]() -> void:
+    block@0: // L93
+        let tmp%0#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%0#0: uint64 = (- tmp%0#0 1u)
+        let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) gtxn_idx%0#0)
+        let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 pay)
+        (assert gtxn_type_matches%0#0) // transaction type is pay
+        let tmp%1#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%1#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%1#0
+        let tmp%2#0: uint64 = decode_bytes<uint64>(as_Encoded(uint64)%0#0)
+        let tmp%3#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%3#0)
+        let eq%1#0: bool = (== len%1#0 32u)
+        (assert eq%1#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        let as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%3#0
+        let tmp%4#0: account = decode_bytes<account>(as_Encoded(uint8[32])%0#0)
+        let tmp%5#0: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%5#0)
+        let eq%2#0: bool = (== len%2#0 32u)
+        (assert eq%2#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        let as_Encoded(uint8[32])%1#0: Encoded(uint8[32]) = tmp%5#0
+        let tmp%6#0: account = decode_bytes<account>(as_Encoded(uint8[32])%1#0)
+        examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributeWithOptIn(gtxn_idx%0#0, tmp%2#0, tmp%4#0, tmp%6#0)
+        exit 1u
+
+subroutine examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributeDynamic[routing]() -> void:
+    block@0: // L133
+        let tmp%0#0: uint64 = (txn GroupIndex)
+        let gtxn_idx%0#0: uint64 = (- tmp%0#0 1u)
+        let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) gtxn_idx%0#0)
+        let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 pay)
+        (assert gtxn_type_matches%0#0) // transaction type is pay
+        let tmp%1#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%1#0)
+        let mul%0#0: uint64 = (* length%0#0 32u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%1#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.static_array<arc4.uint8, 32>>
+        let as_Encoded(len+uint8[32][])%0#0: Encoded(len+uint8[32][]) = tmp%1#0
+        examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributeDynamic(gtxn_idx%0#0, as_Encoded(len+uint8[32][])%0#0)
+        exit 1u
+
+subroutine examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.verifyGroupPayments[routing]() -> void:
+    block@0: // L174
+        examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.verifyGroupPayments()
+        exit 1u
+
+subroutine examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.createApplication() -> void:
+    block@0: // L39
+        return 
+
+subroutine examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributePair(funding: uint64, recipientA: account, recipientB: account) -> void:
+    block@0: // L48
+        let tmp%0#0: account = ((gtxns Receiver) funding#0)
+        let tmp%1#0: account = (global CurrentApplicationAddress)
+        let tmp%2#0: bool = (== tmp%0#0 tmp%1#0)
+        let tmp%3#0: uint64 = ((gtxns Amount) funding#0)
+        let tmp%4#0: bool = (> tmp%3#0 0u)
+        let tmp%5#0: bool = (&& tmp%2#0 tmp%4#0)
+        (assert tmp%5#0) // Funds must be sent to this contract
+        let tmp%6#0: uint64 = ((gtxns Amount) funding#0)
+        let tmp%7#0: uint64 = (/ tmp%6#0 2u)
+        let share#0: uint64 = tmp%7#0
+        let payA#0: itxn_field_set = itxn_field_set(0)
+        let payA%%param_Fee_idx_0#0: uint64 = 0u
+        let payA%%Fee_length#0: uint64 = 1u
+        let payA%%param_TypeEnum_idx_0#0: uint64 = 1u
+        let payA%%TypeEnum_length#0: uint64 = 1u
+        let payA%%param_Receiver_idx_0#0: account = recipientA#0
+        let payA%%Receiver_length#0: uint64 = 1u
+        let payA%%param_Amount_idx_0#0: uint64 = share#0
+        let payA%%Amount_length#0: uint64 = 1u
+        let payA%%Sender_length#0: uint64 = 0u
+        let payA%%Note_length#0: uint64 = 0u
+        let payA%%CloseRemainderTo_length#0: uint64 = 0u
+        let payA%%VotePK_length#0: uint64 = 0u
+        let payA%%SelectionPK_length#0: uint64 = 0u
+        let payA%%VoteFirst_length#0: uint64 = 0u
+        let payA%%VoteLast_length#0: uint64 = 0u
+        let payA%%VoteKeyDilution_length#0: uint64 = 0u
+        let payA%%Type_length#0: uint64 = 0u
+        let payA%%XferAsset_length#0: uint64 = 0u
+        let payA%%AssetAmount_length#0: uint64 = 0u
+        let payA%%AssetSender_length#0: uint64 = 0u
+        let payA%%AssetReceiver_length#0: uint64 = 0u
+        let payA%%AssetCloseTo_length#0: uint64 = 0u
+        let payA%%ApplicationID_length#0: uint64 = 0u
+        let payA%%OnCompletion_length#0: uint64 = 0u
+        let payA%%ApprovalProgram_length#0: uint64 = 0u
+        let payA%%ClearStateProgram_length#0: uint64 = 0u
+        let payA%%RekeyTo_length#0: uint64 = 0u
+        let payA%%ConfigAsset_length#0: uint64 = 0u
+        let payA%%ConfigAssetTotal_length#0: uint64 = 0u
+        let payA%%ConfigAssetDecimals_length#0: uint64 = 0u
+        let payA%%ConfigAssetDefaultFrozen_length#0: uint64 = 0u
+        let payA%%ConfigAssetUnitName_length#0: uint64 = 0u
+        let payA%%ConfigAssetName_length#0: uint64 = 0u
+        let payA%%ConfigAssetURL_length#0: uint64 = 0u
+        let payA%%ConfigAssetMetadataHash_length#0: uint64 = 0u
+        let payA%%ConfigAssetManager_length#0: uint64 = 0u
+        let payA%%ConfigAssetReserve_length#0: uint64 = 0u
+        let payA%%ConfigAssetFreeze_length#0: uint64 = 0u
+        let payA%%ConfigAssetClawback_length#0: uint64 = 0u
+        let payA%%FreezeAsset_length#0: uint64 = 0u
+        let payA%%FreezeAssetAccount_length#0: uint64 = 0u
+        let payA%%FreezeAssetFrozen_length#0: uint64 = 0u
+        let payA%%GlobalNumUint_length#0: uint64 = 0u
+        let payA%%GlobalNumByteSlice_length#0: uint64 = 0u
+        let payA%%LocalNumUint_length#0: uint64 = 0u
+        let payA%%LocalNumByteSlice_length#0: uint64 = 0u
+        let payA%%ExtraProgramPages_length#0: uint64 = 0u
+        let payA%%Nonparticipation_length#0: uint64 = 0u
+        let payA%%StateProofPK_length#0: uint64 = 0u
+        let payA%%ApplicationArgs_length#0: uint64 = 0u
+        let payA%%Accounts_length#0: uint64 = 0u
+        let payA%%Assets_length#0: uint64 = 0u
+        let payA%%Applications_length#0: uint64 = 0u
+        let payA%%ApprovalProgramPages_length#0: uint64 = 0u
+        let payA%%ClearStateProgramPages_length#0: uint64 = 0u
+        let payA%%RejectVersion_length#0: uint64 = 0u
+        let payB%%Sender_length#0: uint64 = payA%%Sender_length#0
+        let payB%%param_Fee_idx_0#0: uint64 = payA%%param_Fee_idx_0#0
+        let payB%%Fee_length#0: uint64 = payA%%Fee_length#0
+        let payB%%Note_length#0: uint64 = payA%%Note_length#0
+        let payB%%param_Receiver_idx_0#0: account = payA%%param_Receiver_idx_0#0
+        let payB%%Receiver_length#0: uint64 = payA%%Receiver_length#0
+        let payB%%param_Amount_idx_0#0: uint64 = payA%%param_Amount_idx_0#0
+        let payB%%Amount_length#0: uint64 = payA%%Amount_length#0
+        let payB%%CloseRemainderTo_length#0: uint64 = payA%%CloseRemainderTo_length#0
+        let payB%%VotePK_length#0: uint64 = payA%%VotePK_length#0
+        let payB%%SelectionPK_length#0: uint64 = payA%%SelectionPK_length#0
+        let payB%%VoteFirst_length#0: uint64 = payA%%VoteFirst_length#0
+        let payB%%VoteLast_length#0: uint64 = payA%%VoteLast_length#0
+        let payB%%VoteKeyDilution_length#0: uint64 = payA%%VoteKeyDilution_length#0
+        let payB%%Type_length#0: uint64 = payA%%Type_length#0
+        let payB%%param_TypeEnum_idx_0#0: uint64 = payA%%param_TypeEnum_idx_0#0
+        let payB%%TypeEnum_length#0: uint64 = payA%%TypeEnum_length#0
+        let payB%%XferAsset_length#0: uint64 = payA%%XferAsset_length#0
+        let payB%%AssetAmount_length#0: uint64 = payA%%AssetAmount_length#0
+        let payB%%AssetSender_length#0: uint64 = payA%%AssetSender_length#0
+        let payB%%AssetReceiver_length#0: uint64 = payA%%AssetReceiver_length#0
+        let payB%%AssetCloseTo_length#0: uint64 = payA%%AssetCloseTo_length#0
+        let payB%%ApplicationID_length#0: uint64 = payA%%ApplicationID_length#0
+        let payB%%OnCompletion_length#0: uint64 = payA%%OnCompletion_length#0
+        let payB%%ApprovalProgram_length#0: uint64 = payA%%ApprovalProgram_length#0
+        let payB%%ClearStateProgram_length#0: uint64 = payA%%ClearStateProgram_length#0
+        let payB%%RekeyTo_length#0: uint64 = payA%%RekeyTo_length#0
+        let payB%%ConfigAsset_length#0: uint64 = payA%%ConfigAsset_length#0
+        let payB%%ConfigAssetTotal_length#0: uint64 = payA%%ConfigAssetTotal_length#0
+        let payB%%ConfigAssetDecimals_length#0: uint64 = payA%%ConfigAssetDecimals_length#0
+        let payB%%ConfigAssetDefaultFrozen_length#0: uint64 = payA%%ConfigAssetDefaultFrozen_length#0
+        let payB%%ConfigAssetUnitName_length#0: uint64 = payA%%ConfigAssetUnitName_length#0
+        let payB%%ConfigAssetName_length#0: uint64 = payA%%ConfigAssetName_length#0
+        let payB%%ConfigAssetURL_length#0: uint64 = payA%%ConfigAssetURL_length#0
+        let payB%%ConfigAssetMetadataHash_length#0: uint64 = payA%%ConfigAssetMetadataHash_length#0
+        let payB%%ConfigAssetManager_length#0: uint64 = payA%%ConfigAssetManager_length#0
+        let payB%%ConfigAssetReserve_length#0: uint64 = payA%%ConfigAssetReserve_length#0
+        let payB%%ConfigAssetFreeze_length#0: uint64 = payA%%ConfigAssetFreeze_length#0
+        let payB%%ConfigAssetClawback_length#0: uint64 = payA%%ConfigAssetClawback_length#0
+        let payB%%FreezeAsset_length#0: uint64 = payA%%FreezeAsset_length#0
+        let payB%%FreezeAssetAccount_length#0: uint64 = payA%%FreezeAssetAccount_length#0
+        let payB%%FreezeAssetFrozen_length#0: uint64 = payA%%FreezeAssetFrozen_length#0
+        let payB%%GlobalNumUint_length#0: uint64 = payA%%GlobalNumUint_length#0
+        let payB%%GlobalNumByteSlice_length#0: uint64 = payA%%GlobalNumByteSlice_length#0
+        let payB%%LocalNumUint_length#0: uint64 = payA%%LocalNumUint_length#0
+        let payB%%LocalNumByteSlice_length#0: uint64 = payA%%LocalNumByteSlice_length#0
+        let payB%%ExtraProgramPages_length#0: uint64 = payA%%ExtraProgramPages_length#0
+        let payB%%Nonparticipation_length#0: uint64 = payA%%Nonparticipation_length#0
+        let payB%%StateProofPK_length#0: uint64 = payA%%StateProofPK_length#0
+        let payB%%ApplicationArgs_length#0: uint64 = payA%%ApplicationArgs_length#0
+        let payB%%Accounts_length#0: uint64 = payA%%Accounts_length#0
+        let payB%%Assets_length#0: uint64 = payA%%Assets_length#0
+        let payB%%Applications_length#0: uint64 = payA%%Applications_length#0
+        let payB%%ApprovalProgramPages_length#0: uint64 = payA%%ApprovalProgramPages_length#0
+        let payB%%ClearStateProgramPages_length#0: uint64 = payA%%ClearStateProgramPages_length#0
+        let payB%%RejectVersion_length#0: uint64 = payA%%RejectVersion_length#0
+        let payB#0: itxn_field_set = itxn_field_set(1)
+        let payB%%param_Receiver_idx_0#1: account = recipientB#0
+        let payB%%Receiver_length#1: uint64 = 1u
+        itxn_begin
+        ((itxn_field Amount) payA%%param_Amount_idx_0#0)
+        ((itxn_field Receiver) payA%%param_Receiver_idx_0#0)
+        ((itxn_field TypeEnum) payA%%param_TypeEnum_idx_0#0)
+        ((itxn_field Fee) payA%%param_Fee_idx_0#0)
+        goto block@1
+    block@1: // next_txn_L76
+        itxn_next
+        ((itxn_field TypeEnum) payB%%param_TypeEnum_idx_0#0)
+        ((itxn_field Amount) payB%%param_Amount_idx_0#0)
+        ((itxn_field Receiver) payB%%param_Receiver_idx_0#1)
+        ((itxn_field Fee) payB%%param_Fee_idx_0#0)
+        goto block@2
+    block@2: // next_txn_L76
+        itxn_submit
+        let txnA#0: itxn_group_idx = itxn_group_idx(0)
+        let txnB#0: itxn_group_idx = itxn_group_idx(1)
+        let txnA._is_last#0: bool = 0u
+        let txnA.Sender#0: account = itxn[txnA#0].Sender
+        let txnA.Fee#0: uint64 = itxn[txnA#0].Fee
+        let txnA.FirstValid#0: uint64 = itxn[txnA#0].FirstValid
+        let txnA.FirstValidTime#0: uint64 = itxn[txnA#0].FirstValidTime
+        let txnA.LastValid#0: uint64 = itxn[txnA#0].LastValid
+        let txnA.Note#0: bytes = itxn[txnA#0].Note
+        let txnA.Lease#0: bytes[32] = itxn[txnA#0].Lease
+        let txnA.Receiver#0: account = itxn[txnA#0].Receiver
+        let txnA.Amount#0: uint64 = itxn[txnA#0].Amount
+        let txnA.CloseRemainderTo#0: account = itxn[txnA#0].CloseRemainderTo
+        let txnA.VotePK#0: bytes[32] = itxn[txnA#0].VotePK
+        let txnA.SelectionPK#0: bytes[32] = itxn[txnA#0].SelectionPK
+        let txnA.VoteFirst#0: uint64 = itxn[txnA#0].VoteFirst
+        let txnA.VoteLast#0: uint64 = itxn[txnA#0].VoteLast
+        let txnA.VoteKeyDilution#0: uint64 = itxn[txnA#0].VoteKeyDilution
+        let txnA.Type#0: bytes = itxn[txnA#0].Type
+        let txnA.TypeEnum#0: uint64 = itxn[txnA#0].TypeEnum
+        let txnA.XferAsset#0: uint64 = itxn[txnA#0].XferAsset
+        let txnA.AssetAmount#0: uint64 = itxn[txnA#0].AssetAmount
+        let txnA.AssetSender#0: account = itxn[txnA#0].AssetSender
+        let txnA.AssetReceiver#0: account = itxn[txnA#0].AssetReceiver
+        let txnA.AssetCloseTo#0: account = itxn[txnA#0].AssetCloseTo
+        let txnA.GroupIndex#0: uint64 = itxn[txnA#0].GroupIndex
+        let txnA.TxID#0: bytes[32] = itxn[txnA#0].TxID
+        let txnA.ApplicationID#0: uint64 = itxn[txnA#0].ApplicationID
+        let txnA.OnCompletion#0: uint64 = itxn[txnA#0].OnCompletion
+        let txnA.NumAppArgs#0: uint64 = itxn[txnA#0].NumAppArgs
+        let txnA.NumAccounts#0: uint64 = itxn[txnA#0].NumAccounts
+        let txnA.ApprovalProgram#0: bytes = itxn[txnA#0].ApprovalProgram
+        let txnA.ClearStateProgram#0: bytes = itxn[txnA#0].ClearStateProgram
+        let txnA.RekeyTo#0: account = itxn[txnA#0].RekeyTo
+        let txnA.ConfigAsset#0: uint64 = itxn[txnA#0].ConfigAsset
+        let txnA.ConfigAssetTotal#0: uint64 = itxn[txnA#0].ConfigAssetTotal
+        let txnA.ConfigAssetDecimals#0: uint64 = itxn[txnA#0].ConfigAssetDecimals
+        let txnA.ConfigAssetDefaultFrozen#0: bool = itxn[txnA#0].ConfigAssetDefaultFrozen
+        let txnA.ConfigAssetUnitName#0: bytes = itxn[txnA#0].ConfigAssetUnitName
+        let txnA.ConfigAssetName#0: bytes = itxn[txnA#0].ConfigAssetName
+        let txnA.ConfigAssetURL#0: bytes = itxn[txnA#0].ConfigAssetURL
+        let txnA.ConfigAssetMetadataHash#0: bytes[32] = itxn[txnA#0].ConfigAssetMetadataHash
+        let txnA.ConfigAssetManager#0: account = itxn[txnA#0].ConfigAssetManager
+        let txnA.ConfigAssetReserve#0: account = itxn[txnA#0].ConfigAssetReserve
+        let txnA.ConfigAssetFreeze#0: account = itxn[txnA#0].ConfigAssetFreeze
+        let txnA.ConfigAssetClawback#0: account = itxn[txnA#0].ConfigAssetClawback
+        let txnA.FreezeAsset#0: uint64 = itxn[txnA#0].FreezeAsset
+        let txnA.FreezeAssetAccount#0: account = itxn[txnA#0].FreezeAssetAccount
+        let txnA.FreezeAssetFrozen#0: bool = itxn[txnA#0].FreezeAssetFrozen
+        let txnA.NumAssets#0: uint64 = itxn[txnA#0].NumAssets
+        let txnA.NumApplications#0: uint64 = itxn[txnA#0].NumApplications
+        let txnA.GlobalNumUint#0: uint64 = itxn[txnA#0].GlobalNumUint
+        let txnA.GlobalNumByteSlice#0: uint64 = itxn[txnA#0].GlobalNumByteSlice
+        let txnA.LocalNumUint#0: uint64 = itxn[txnA#0].LocalNumUint
+        let txnA.LocalNumByteSlice#0: uint64 = itxn[txnA#0].LocalNumByteSlice
+        let txnA.ExtraProgramPages#0: uint64 = itxn[txnA#0].ExtraProgramPages
+        let txnA.Nonparticipation#0: bool = itxn[txnA#0].Nonparticipation
+        let txnA.NumLogs#0: uint64 = itxn[txnA#0].NumLogs
+        let txnA.CreatedAssetID#0: uint64 = itxn[txnA#0].CreatedAssetID
+        let txnA.CreatedApplicationID#0: uint64 = itxn[txnA#0].CreatedApplicationID
+        let txnA.LastLog#0: bytes = itxn[txnA#0].LastLog
+        let txnA.StateProofPK#0: bytes = itxn[txnA#0].StateProofPK
+        let txnA.NumApprovalProgramPages#0: uint64 = itxn[txnA#0].NumApprovalProgramPages
+        let txnA.NumClearStateProgramPages#0: uint64 = itxn[txnA#0].NumClearStateProgramPages
+        let txnA.RejectVersion#0: uint64 = itxn[txnA#0].RejectVersion
+        let txnB._is_last#0: bool = 1u
+        let txnB.Sender#0: account = itxn[txnB#0].Sender
+        let txnB.Fee#0: uint64 = itxn[txnB#0].Fee
+        let txnB.FirstValid#0: uint64 = itxn[txnB#0].FirstValid
+        let txnB.FirstValidTime#0: uint64 = itxn[txnB#0].FirstValidTime
+        let txnB.LastValid#0: uint64 = itxn[txnB#0].LastValid
+        let txnB.Note#0: bytes = itxn[txnB#0].Note
+        let txnB.Lease#0: bytes[32] = itxn[txnB#0].Lease
+        let txnB.Receiver#0: account = itxn[txnB#0].Receiver
+        let txnB.Amount#0: uint64 = itxn[txnB#0].Amount
+        let txnB.CloseRemainderTo#0: account = itxn[txnB#0].CloseRemainderTo
+        let txnB.VotePK#0: bytes[32] = itxn[txnB#0].VotePK
+        let txnB.SelectionPK#0: bytes[32] = itxn[txnB#0].SelectionPK
+        let txnB.VoteFirst#0: uint64 = itxn[txnB#0].VoteFirst
+        let txnB.VoteLast#0: uint64 = itxn[txnB#0].VoteLast
+        let txnB.VoteKeyDilution#0: uint64 = itxn[txnB#0].VoteKeyDilution
+        let txnB.Type#0: bytes = itxn[txnB#0].Type
+        let txnB.TypeEnum#0: uint64 = itxn[txnB#0].TypeEnum
+        let txnB.XferAsset#0: uint64 = itxn[txnB#0].XferAsset
+        let txnB.AssetAmount#0: uint64 = itxn[txnB#0].AssetAmount
+        let txnB.AssetSender#0: account = itxn[txnB#0].AssetSender
+        let txnB.AssetReceiver#0: account = itxn[txnB#0].AssetReceiver
+        let txnB.AssetCloseTo#0: account = itxn[txnB#0].AssetCloseTo
+        let txnB.GroupIndex#0: uint64 = itxn[txnB#0].GroupIndex
+        let txnB.TxID#0: bytes[32] = itxn[txnB#0].TxID
+        let txnB.ApplicationID#0: uint64 = itxn[txnB#0].ApplicationID
+        let txnB.OnCompletion#0: uint64 = itxn[txnB#0].OnCompletion
+        let txnB.NumAppArgs#0: uint64 = itxn[txnB#0].NumAppArgs
+        let txnB.NumAccounts#0: uint64 = itxn[txnB#0].NumAccounts
+        let txnB.ApprovalProgram#0: bytes = itxn[txnB#0].ApprovalProgram
+        let txnB.ClearStateProgram#0: bytes = itxn[txnB#0].ClearStateProgram
+        let txnB.RekeyTo#0: account = itxn[txnB#0].RekeyTo
+        let txnB.ConfigAsset#0: uint64 = itxn[txnB#0].ConfigAsset
+        let txnB.ConfigAssetTotal#0: uint64 = itxn[txnB#0].ConfigAssetTotal
+        let txnB.ConfigAssetDecimals#0: uint64 = itxn[txnB#0].ConfigAssetDecimals
+        let txnB.ConfigAssetDefaultFrozen#0: bool = itxn[txnB#0].ConfigAssetDefaultFrozen
+        let txnB.ConfigAssetUnitName#0: bytes = itxn[txnB#0].ConfigAssetUnitName
+        let txnB.ConfigAssetName#0: bytes = itxn[txnB#0].ConfigAssetName
+        let txnB.ConfigAssetURL#0: bytes = itxn[txnB#0].ConfigAssetURL
+        let txnB.ConfigAssetMetadataHash#0: bytes[32] = itxn[txnB#0].ConfigAssetMetadataHash
+        let txnB.ConfigAssetManager#0: account = itxn[txnB#0].ConfigAssetManager
+        let txnB.ConfigAssetReserve#0: account = itxn[txnB#0].ConfigAssetReserve
+        let txnB.ConfigAssetFreeze#0: account = itxn[txnB#0].ConfigAssetFreeze
+        let txnB.ConfigAssetClawback#0: account = itxn[txnB#0].ConfigAssetClawback
+        let txnB.FreezeAsset#0: uint64 = itxn[txnB#0].FreezeAsset
+        let txnB.FreezeAssetAccount#0: account = itxn[txnB#0].FreezeAssetAccount
+        let txnB.FreezeAssetFrozen#0: bool = itxn[txnB#0].FreezeAssetFrozen
+        let txnB.NumAssets#0: uint64 = itxn[txnB#0].NumAssets
+        let txnB.NumApplications#0: uint64 = itxn[txnB#0].NumApplications
+        let txnB.GlobalNumUint#0: uint64 = itxn[txnB#0].GlobalNumUint
+        let txnB.GlobalNumByteSlice#0: uint64 = itxn[txnB#0].GlobalNumByteSlice
+        let txnB.LocalNumUint#0: uint64 = itxn[txnB#0].LocalNumUint
+        let txnB.LocalNumByteSlice#0: uint64 = itxn[txnB#0].LocalNumByteSlice
+        let txnB.ExtraProgramPages#0: uint64 = itxn[txnB#0].ExtraProgramPages
+        let txnB.Nonparticipation#0: bool = itxn[txnB#0].Nonparticipation
+        let txnB.NumLogs#0: uint64 = itxn[txnB#0].NumLogs
+        let txnB.CreatedAssetID#0: uint64 = itxn[txnB#0].CreatedAssetID
+        let txnB.CreatedApplicationID#0: uint64 = itxn[txnB#0].CreatedApplicationID
+        let txnB.LastLog#0: bytes = itxn[txnB#0].LastLog
+        let txnB.StateProofPK#0: bytes = itxn[txnB#0].StateProofPK
+        let txnB.NumApprovalProgramPages#0: uint64 = itxn[txnB#0].NumApprovalProgramPages
+        let txnB.NumClearStateProgramPages#0: uint64 = itxn[txnB#0].NumClearStateProgramPages
+        let txnB.RejectVersion#0: uint64 = itxn[txnB#0].RejectVersion
+        let tmp%8#0: bool = (== txnA.Receiver#0 recipientA#0)
+        (assert tmp%8#0) // txnA receiver correct
+        let tmp%9#0: bool = (== txnB.Receiver#0 recipientB#0)
+        (assert tmp%9#0) // txnB receiver correct
+        let tmp%10#0: bool = (== txnA.Amount#0 share#0)
+        (assert tmp%10#0) // txnA amount correct
+        let tmp%11#0: bool = (== txnB.Amount#0 share#0)
+        (assert tmp%11#0) // txnB amount correct
+        return 
+
+subroutine examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributeWithOptIn(funding: uint64, asset: uint64, recipientA: account, recipientB: account) -> void:
+    block@0: // L93
+        let tmp%0#0: account = ((gtxns Receiver) funding#0)
+        let tmp%1#0: account = (global CurrentApplicationAddress)
+        let tmp%2#0: bool = (== tmp%0#0 tmp%1#0)
+        let tmp%3#0: uint64 = ((gtxns TypeEnum) funding#0)
+        let tmp%4#0: bool = (== tmp%3#0 1u)
+        let tmp%5#0: bool = (&& tmp%2#0 tmp%4#0)
+        (assert tmp%5#0) // Funding must be a payment to this contract
+        let tmp%6#0: uint64 = ((gtxns Amount) funding#0)
+        let tmp%7#0: uint64 = (/ tmp%6#0 2u)
+        let share#0: uint64 = tmp%7#0
+        let pay#0: itxn_field_set = itxn_field_set(0)
+        let pay%%param_Fee_idx_0#0: uint64 = 0u
+        let pay%%Fee_length#0: uint64 = 1u
+        let pay%%param_TypeEnum_idx_0#0: uint64 = 1u
+        let pay%%TypeEnum_length#0: uint64 = 1u
+        let pay%%param_Receiver_idx_0#0: account = recipientA#0
+        let pay%%Receiver_length#0: uint64 = 1u
+        let pay%%param_Amount_idx_0#0: uint64 = share#0
+        let pay%%Amount_length#0: uint64 = 1u
+        let pay%%Sender_length#0: uint64 = 0u
+        let pay%%Note_length#0: uint64 = 0u
+        let pay%%CloseRemainderTo_length#0: uint64 = 0u
+        let pay%%VotePK_length#0: uint64 = 0u
+        let pay%%SelectionPK_length#0: uint64 = 0u
+        let pay%%VoteFirst_length#0: uint64 = 0u
+        let pay%%VoteLast_length#0: uint64 = 0u
+        let pay%%VoteKeyDilution_length#0: uint64 = 0u
+        let pay%%Type_length#0: uint64 = 0u
+        let pay%%XferAsset_length#0: uint64 = 0u
+        let pay%%AssetAmount_length#0: uint64 = 0u
+        let pay%%AssetSender_length#0: uint64 = 0u
+        let pay%%AssetReceiver_length#0: uint64 = 0u
+        let pay%%AssetCloseTo_length#0: uint64 = 0u
+        let pay%%ApplicationID_length#0: uint64 = 0u
+        let pay%%OnCompletion_length#0: uint64 = 0u
+        let pay%%ApprovalProgram_length#0: uint64 = 0u
+        let pay%%ClearStateProgram_length#0: uint64 = 0u
+        let pay%%RekeyTo_length#0: uint64 = 0u
+        let pay%%ConfigAsset_length#0: uint64 = 0u
+        let pay%%ConfigAssetTotal_length#0: uint64 = 0u
+        let pay%%ConfigAssetDecimals_length#0: uint64 = 0u
+        let pay%%ConfigAssetDefaultFrozen_length#0: uint64 = 0u
+        let pay%%ConfigAssetUnitName_length#0: uint64 = 0u
+        let pay%%ConfigAssetName_length#0: uint64 = 0u
+        let pay%%ConfigAssetURL_length#0: uint64 = 0u
+        let pay%%ConfigAssetMetadataHash_length#0: uint64 = 0u
+        let pay%%ConfigAssetManager_length#0: uint64 = 0u
+        let pay%%ConfigAssetReserve_length#0: uint64 = 0u
+        let pay%%ConfigAssetFreeze_length#0: uint64 = 0u
+        let pay%%ConfigAssetClawback_length#0: uint64 = 0u
+        let pay%%FreezeAsset_length#0: uint64 = 0u
+        let pay%%FreezeAssetAccount_length#0: uint64 = 0u
+        let pay%%FreezeAssetFrozen_length#0: uint64 = 0u
+        let pay%%GlobalNumUint_length#0: uint64 = 0u
+        let pay%%GlobalNumByteSlice_length#0: uint64 = 0u
+        let pay%%LocalNumUint_length#0: uint64 = 0u
+        let pay%%LocalNumByteSlice_length#0: uint64 = 0u
+        let pay%%ExtraProgramPages_length#0: uint64 = 0u
+        let pay%%Nonparticipation_length#0: uint64 = 0u
+        let pay%%StateProofPK_length#0: uint64 = 0u
+        let pay%%ApplicationArgs_length#0: uint64 = 0u
+        let pay%%Accounts_length#0: uint64 = 0u
+        let pay%%Assets_length#0: uint64 = 0u
+        let pay%%Applications_length#0: uint64 = 0u
+        let pay%%ApprovalProgramPages_length#0: uint64 = 0u
+        let pay%%ClearStateProgramPages_length#0: uint64 = 0u
+        let pay%%RejectVersion_length#0: uint64 = 0u
+        let optIn#0: itxn_field_set = itxn_field_set(1)
+        let optIn%%param_Fee_idx_0#0: uint64 = 0u
+        let optIn%%Fee_length#0: uint64 = 1u
+        let optIn%%param_TypeEnum_idx_0#0: uint64 = 4u
+        let optIn%%TypeEnum_length#0: uint64 = 1u
+        let optIn%%param_AssetReceiver_idx_0#0: account = (global CurrentApplicationAddress)
+        let optIn%%AssetReceiver_length#0: uint64 = 1u
+        let optIn%%param_XferAsset_idx_0#0: uint64 = asset#0
+        let optIn%%XferAsset_length#0: uint64 = 1u
+        let optIn%%param_AssetAmount_idx_0#0: uint64 = 0u
+        let optIn%%AssetAmount_length#0: uint64 = 1u
+        let optIn%%Sender_length#0: uint64 = 0u
+        let optIn%%Note_length#0: uint64 = 0u
+        let optIn%%Receiver_length#0: uint64 = 0u
+        let optIn%%Amount_length#0: uint64 = 0u
+        let optIn%%CloseRemainderTo_length#0: uint64 = 0u
+        let optIn%%VotePK_length#0: uint64 = 0u
+        let optIn%%SelectionPK_length#0: uint64 = 0u
+        let optIn%%VoteFirst_length#0: uint64 = 0u
+        let optIn%%VoteLast_length#0: uint64 = 0u
+        let optIn%%VoteKeyDilution_length#0: uint64 = 0u
+        let optIn%%Type_length#0: uint64 = 0u
+        let optIn%%AssetSender_length#0: uint64 = 0u
+        let optIn%%AssetCloseTo_length#0: uint64 = 0u
+        let optIn%%ApplicationID_length#0: uint64 = 0u
+        let optIn%%OnCompletion_length#0: uint64 = 0u
+        let optIn%%ApprovalProgram_length#0: uint64 = 0u
+        let optIn%%ClearStateProgram_length#0: uint64 = 0u
+        let optIn%%RekeyTo_length#0: uint64 = 0u
+        let optIn%%ConfigAsset_length#0: uint64 = 0u
+        let optIn%%ConfigAssetTotal_length#0: uint64 = 0u
+        let optIn%%ConfigAssetDecimals_length#0: uint64 = 0u
+        let optIn%%ConfigAssetDefaultFrozen_length#0: uint64 = 0u
+        let optIn%%ConfigAssetUnitName_length#0: uint64 = 0u
+        let optIn%%ConfigAssetName_length#0: uint64 = 0u
+        let optIn%%ConfigAssetURL_length#0: uint64 = 0u
+        let optIn%%ConfigAssetMetadataHash_length#0: uint64 = 0u
+        let optIn%%ConfigAssetManager_length#0: uint64 = 0u
+        let optIn%%ConfigAssetReserve_length#0: uint64 = 0u
+        let optIn%%ConfigAssetFreeze_length#0: uint64 = 0u
+        let optIn%%ConfigAssetClawback_length#0: uint64 = 0u
+        let optIn%%FreezeAsset_length#0: uint64 = 0u
+        let optIn%%FreezeAssetAccount_length#0: uint64 = 0u
+        let optIn%%FreezeAssetFrozen_length#0: uint64 = 0u
+        let optIn%%GlobalNumUint_length#0: uint64 = 0u
+        let optIn%%GlobalNumByteSlice_length#0: uint64 = 0u
+        let optIn%%LocalNumUint_length#0: uint64 = 0u
+        let optIn%%LocalNumByteSlice_length#0: uint64 = 0u
+        let optIn%%ExtraProgramPages_length#0: uint64 = 0u
+        let optIn%%Nonparticipation_length#0: uint64 = 0u
+        let optIn%%StateProofPK_length#0: uint64 = 0u
+        let optIn%%ApplicationArgs_length#0: uint64 = 0u
+        let optIn%%Accounts_length#0: uint64 = 0u
+        let optIn%%Assets_length#0: uint64 = 0u
+        let optIn%%Applications_length#0: uint64 = 0u
+        let optIn%%ApprovalProgramPages_length#0: uint64 = 0u
+        let optIn%%ClearStateProgramPages_length#0: uint64 = 0u
+        let optIn%%RejectVersion_length#0: uint64 = 0u
+        itxn_begin
+        ((itxn_field Amount) pay%%param_Amount_idx_0#0)
+        ((itxn_field Receiver) pay%%param_Receiver_idx_0#0)
+        ((itxn_field TypeEnum) pay%%param_TypeEnum_idx_0#0)
+        ((itxn_field Fee) pay%%param_Fee_idx_0#0)
+        goto block@1
+    block@1: // next_txn_L120
+        itxn_next
+        ((itxn_field AssetAmount) optIn%%param_AssetAmount_idx_0#0)
+        ((itxn_field XferAsset) optIn%%param_XferAsset_idx_0#0)
+        ((itxn_field AssetReceiver) optIn%%param_AssetReceiver_idx_0#0)
+        ((itxn_field TypeEnum) optIn%%param_TypeEnum_idx_0#0)
+        ((itxn_field Fee) optIn%%param_Fee_idx_0#0)
+        goto block@2
+    block@2: // next_txn_L120
+        itxn_submit
+        let payResult#0: itxn_group_idx = itxn_group_idx(0)
+        let optInResult#0: itxn_group_idx = itxn_group_idx(1)
+        let payResult._is_last#0: bool = 0u
+        let payResult.Sender#0: account = itxn[payResult#0].Sender
+        let payResult.Fee#0: uint64 = itxn[payResult#0].Fee
+        let payResult.FirstValid#0: uint64 = itxn[payResult#0].FirstValid
+        let payResult.FirstValidTime#0: uint64 = itxn[payResult#0].FirstValidTime
+        let payResult.LastValid#0: uint64 = itxn[payResult#0].LastValid
+        let payResult.Note#0: bytes = itxn[payResult#0].Note
+        let payResult.Lease#0: bytes[32] = itxn[payResult#0].Lease
+        let payResult.Receiver#0: account = itxn[payResult#0].Receiver
+        let payResult.Amount#0: uint64 = itxn[payResult#0].Amount
+        let payResult.CloseRemainderTo#0: account = itxn[payResult#0].CloseRemainderTo
+        let payResult.VotePK#0: bytes[32] = itxn[payResult#0].VotePK
+        let payResult.SelectionPK#0: bytes[32] = itxn[payResult#0].SelectionPK
+        let payResult.VoteFirst#0: uint64 = itxn[payResult#0].VoteFirst
+        let payResult.VoteLast#0: uint64 = itxn[payResult#0].VoteLast
+        let payResult.VoteKeyDilution#0: uint64 = itxn[payResult#0].VoteKeyDilution
+        let payResult.Type#0: bytes = itxn[payResult#0].Type
+        let payResult.TypeEnum#0: uint64 = itxn[payResult#0].TypeEnum
+        let payResult.XferAsset#0: uint64 = itxn[payResult#0].XferAsset
+        let payResult.AssetAmount#0: uint64 = itxn[payResult#0].AssetAmount
+        let payResult.AssetSender#0: account = itxn[payResult#0].AssetSender
+        let payResult.AssetReceiver#0: account = itxn[payResult#0].AssetReceiver
+        let payResult.AssetCloseTo#0: account = itxn[payResult#0].AssetCloseTo
+        let payResult.GroupIndex#0: uint64 = itxn[payResult#0].GroupIndex
+        let payResult.TxID#0: bytes[32] = itxn[payResult#0].TxID
+        let payResult.ApplicationID#0: uint64 = itxn[payResult#0].ApplicationID
+        let payResult.OnCompletion#0: uint64 = itxn[payResult#0].OnCompletion
+        let payResult.NumAppArgs#0: uint64 = itxn[payResult#0].NumAppArgs
+        let payResult.NumAccounts#0: uint64 = itxn[payResult#0].NumAccounts
+        let payResult.ApprovalProgram#0: bytes = itxn[payResult#0].ApprovalProgram
+        let payResult.ClearStateProgram#0: bytes = itxn[payResult#0].ClearStateProgram
+        let payResult.RekeyTo#0: account = itxn[payResult#0].RekeyTo
+        let payResult.ConfigAsset#0: uint64 = itxn[payResult#0].ConfigAsset
+        let payResult.ConfigAssetTotal#0: uint64 = itxn[payResult#0].ConfigAssetTotal
+        let payResult.ConfigAssetDecimals#0: uint64 = itxn[payResult#0].ConfigAssetDecimals
+        let payResult.ConfigAssetDefaultFrozen#0: bool = itxn[payResult#0].ConfigAssetDefaultFrozen
+        let payResult.ConfigAssetUnitName#0: bytes = itxn[payResult#0].ConfigAssetUnitName
+        let payResult.ConfigAssetName#0: bytes = itxn[payResult#0].ConfigAssetName
+        let payResult.ConfigAssetURL#0: bytes = itxn[payResult#0].ConfigAssetURL
+        let payResult.ConfigAssetMetadataHash#0: bytes[32] = itxn[payResult#0].ConfigAssetMetadataHash
+        let payResult.ConfigAssetManager#0: account = itxn[payResult#0].ConfigAssetManager
+        let payResult.ConfigAssetReserve#0: account = itxn[payResult#0].ConfigAssetReserve
+        let payResult.ConfigAssetFreeze#0: account = itxn[payResult#0].ConfigAssetFreeze
+        let payResult.ConfigAssetClawback#0: account = itxn[payResult#0].ConfigAssetClawback
+        let payResult.FreezeAsset#0: uint64 = itxn[payResult#0].FreezeAsset
+        let payResult.FreezeAssetAccount#0: account = itxn[payResult#0].FreezeAssetAccount
+        let payResult.FreezeAssetFrozen#0: bool = itxn[payResult#0].FreezeAssetFrozen
+        let payResult.NumAssets#0: uint64 = itxn[payResult#0].NumAssets
+        let payResult.NumApplications#0: uint64 = itxn[payResult#0].NumApplications
+        let payResult.GlobalNumUint#0: uint64 = itxn[payResult#0].GlobalNumUint
+        let payResult.GlobalNumByteSlice#0: uint64 = itxn[payResult#0].GlobalNumByteSlice
+        let payResult.LocalNumUint#0: uint64 = itxn[payResult#0].LocalNumUint
+        let payResult.LocalNumByteSlice#0: uint64 = itxn[payResult#0].LocalNumByteSlice
+        let payResult.ExtraProgramPages#0: uint64 = itxn[payResult#0].ExtraProgramPages
+        let payResult.Nonparticipation#0: bool = itxn[payResult#0].Nonparticipation
+        let payResult.NumLogs#0: uint64 = itxn[payResult#0].NumLogs
+        let payResult.CreatedAssetID#0: uint64 = itxn[payResult#0].CreatedAssetID
+        let payResult.CreatedApplicationID#0: uint64 = itxn[payResult#0].CreatedApplicationID
+        let payResult.LastLog#0: bytes = itxn[payResult#0].LastLog
+        let payResult.StateProofPK#0: bytes = itxn[payResult#0].StateProofPK
+        let payResult.NumApprovalProgramPages#0: uint64 = itxn[payResult#0].NumApprovalProgramPages
+        let payResult.NumClearStateProgramPages#0: uint64 = itxn[payResult#0].NumClearStateProgramPages
+        let payResult.RejectVersion#0: uint64 = itxn[payResult#0].RejectVersion
+        let optInResult._is_last#0: bool = 1u
+        let optInResult.Sender#0: account = itxn[optInResult#0].Sender
+        let optInResult.Fee#0: uint64 = itxn[optInResult#0].Fee
+        let optInResult.FirstValid#0: uint64 = itxn[optInResult#0].FirstValid
+        let optInResult.FirstValidTime#0: uint64 = itxn[optInResult#0].FirstValidTime
+        let optInResult.LastValid#0: uint64 = itxn[optInResult#0].LastValid
+        let optInResult.Note#0: bytes = itxn[optInResult#0].Note
+        let optInResult.Lease#0: bytes[32] = itxn[optInResult#0].Lease
+        let optInResult.Receiver#0: account = itxn[optInResult#0].Receiver
+        let optInResult.Amount#0: uint64 = itxn[optInResult#0].Amount
+        let optInResult.CloseRemainderTo#0: account = itxn[optInResult#0].CloseRemainderTo
+        let optInResult.VotePK#0: bytes[32] = itxn[optInResult#0].VotePK
+        let optInResult.SelectionPK#0: bytes[32] = itxn[optInResult#0].SelectionPK
+        let optInResult.VoteFirst#0: uint64 = itxn[optInResult#0].VoteFirst
+        let optInResult.VoteLast#0: uint64 = itxn[optInResult#0].VoteLast
+        let optInResult.VoteKeyDilution#0: uint64 = itxn[optInResult#0].VoteKeyDilution
+        let optInResult.Type#0: bytes = itxn[optInResult#0].Type
+        let optInResult.TypeEnum#0: uint64 = itxn[optInResult#0].TypeEnum
+        let optInResult.XferAsset#0: uint64 = itxn[optInResult#0].XferAsset
+        let optInResult.AssetAmount#0: uint64 = itxn[optInResult#0].AssetAmount
+        let optInResult.AssetSender#0: account = itxn[optInResult#0].AssetSender
+        let optInResult.AssetReceiver#0: account = itxn[optInResult#0].AssetReceiver
+        let optInResult.AssetCloseTo#0: account = itxn[optInResult#0].AssetCloseTo
+        let optInResult.GroupIndex#0: uint64 = itxn[optInResult#0].GroupIndex
+        let optInResult.TxID#0: bytes[32] = itxn[optInResult#0].TxID
+        let optInResult.ApplicationID#0: uint64 = itxn[optInResult#0].ApplicationID
+        let optInResult.OnCompletion#0: uint64 = itxn[optInResult#0].OnCompletion
+        let optInResult.NumAppArgs#0: uint64 = itxn[optInResult#0].NumAppArgs
+        let optInResult.NumAccounts#0: uint64 = itxn[optInResult#0].NumAccounts
+        let optInResult.ApprovalProgram#0: bytes = itxn[optInResult#0].ApprovalProgram
+        let optInResult.ClearStateProgram#0: bytes = itxn[optInResult#0].ClearStateProgram
+        let optInResult.RekeyTo#0: account = itxn[optInResult#0].RekeyTo
+        let optInResult.ConfigAsset#0: uint64 = itxn[optInResult#0].ConfigAsset
+        let optInResult.ConfigAssetTotal#0: uint64 = itxn[optInResult#0].ConfigAssetTotal
+        let optInResult.ConfigAssetDecimals#0: uint64 = itxn[optInResult#0].ConfigAssetDecimals
+        let optInResult.ConfigAssetDefaultFrozen#0: bool = itxn[optInResult#0].ConfigAssetDefaultFrozen
+        let optInResult.ConfigAssetUnitName#0: bytes = itxn[optInResult#0].ConfigAssetUnitName
+        let optInResult.ConfigAssetName#0: bytes = itxn[optInResult#0].ConfigAssetName
+        let optInResult.ConfigAssetURL#0: bytes = itxn[optInResult#0].ConfigAssetURL
+        let optInResult.ConfigAssetMetadataHash#0: bytes[32] = itxn[optInResult#0].ConfigAssetMetadataHash
+        let optInResult.ConfigAssetManager#0: account = itxn[optInResult#0].ConfigAssetManager
+        let optInResult.ConfigAssetReserve#0: account = itxn[optInResult#0].ConfigAssetReserve
+        let optInResult.ConfigAssetFreeze#0: account = itxn[optInResult#0].ConfigAssetFreeze
+        let optInResult.ConfigAssetClawback#0: account = itxn[optInResult#0].ConfigAssetClawback
+        let optInResult.FreezeAsset#0: uint64 = itxn[optInResult#0].FreezeAsset
+        let optInResult.FreezeAssetAccount#0: account = itxn[optInResult#0].FreezeAssetAccount
+        let optInResult.FreezeAssetFrozen#0: bool = itxn[optInResult#0].FreezeAssetFrozen
+        let optInResult.NumAssets#0: uint64 = itxn[optInResult#0].NumAssets
+        let optInResult.NumApplications#0: uint64 = itxn[optInResult#0].NumApplications
+        let optInResult.GlobalNumUint#0: uint64 = itxn[optInResult#0].GlobalNumUint
+        let optInResult.GlobalNumByteSlice#0: uint64 = itxn[optInResult#0].GlobalNumByteSlice
+        let optInResult.LocalNumUint#0: uint64 = itxn[optInResult#0].LocalNumUint
+        let optInResult.LocalNumByteSlice#0: uint64 = itxn[optInResult#0].LocalNumByteSlice
+        let optInResult.ExtraProgramPages#0: uint64 = itxn[optInResult#0].ExtraProgramPages
+        let optInResult.Nonparticipation#0: bool = itxn[optInResult#0].Nonparticipation
+        let optInResult.NumLogs#0: uint64 = itxn[optInResult#0].NumLogs
+        let optInResult.CreatedAssetID#0: uint64 = itxn[optInResult#0].CreatedAssetID
+        let optInResult.CreatedApplicationID#0: uint64 = itxn[optInResult#0].CreatedApplicationID
+        let optInResult.LastLog#0: bytes = itxn[optInResult#0].LastLog
+        let optInResult.StateProofPK#0: bytes = itxn[optInResult#0].StateProofPK
+        let optInResult.NumApprovalProgramPages#0: uint64 = itxn[optInResult#0].NumApprovalProgramPages
+        let optInResult.NumClearStateProgramPages#0: uint64 = itxn[optInResult#0].NumClearStateProgramPages
+        let optInResult.RejectVersion#0: uint64 = itxn[optInResult#0].RejectVersion
+        let tmp%8#0: bool = (== payResult.Amount#0 share#0)
+        (assert tmp%8#0) // Payment amount correct
+        let tmp%9#0: bool = (== optInResult.XferAsset#0 asset#0)
+        (assert tmp%9#0) // Opted into correct asset
+        return 
+
+subroutine examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.distributeDynamic(funding: uint64, recipients: Encoded(len+uint8[32][])) -> void:
+    block@0: // L133
+        let tmp%0#0: account = ((gtxns Receiver) funding#0)
+        let tmp%1#0: account = (global CurrentApplicationAddress)
+        let tmp%2#0: bool = (== tmp%0#0 tmp%1#0)
+        (assert tmp%2#0) // Funds must be sent to this contract
+        let tmp%3#0: uint64 = array_len(recipients#0)
+        let tmp%4#0: bool = (> tmp%3#0 0u)
+        (assert tmp%4#0) // Must have recipients
+        let tmp%5#0: uint64 = ((gtxns Amount) funding#0)
+        let tmp%6#0: uint64 = array_len(recipients#0)
+        let tmp%7#0: uint64 = (/ tmp%5#0 tmp%6#0)
+        let share#0: uint64 = tmp%7#0
+        let array_item%0#0: Encoded(uint8[32]) = extract_value(recipients#0, 0u)
+        let tmp%8#0: Encoded(uint64,uint64,(len+uint8[])) = bytes_encode<(uint64,uint64,(len+uint8[]))>(1u, share#0, array_item%0#0)
+        let payFields#0: Encoded(uint64,uint64,(len+uint8[])) = tmp%8#0
+        itxn_begin
+        let inner_txn_params%0#0: itxn_field_set = itxn_field_set(0)
+        let inner_txn_params%0%%param_Fee_idx_0#0: uint64 = 0u
+        let inner_txn_params%0%%Fee_length#0: uint64 = 1u
+        let tuple_item%0#0: Encoded(uint64) = extract_value(payFields#0, 0)
+        let tmp%9#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let inner_txn_params%0%%param_TypeEnum_idx_0#0: uint64 = tmp%9#0
+        let inner_txn_params%0%%TypeEnum_length#0: uint64 = 1u
+        let tuple_item%1#0: Encoded(uint64) = extract_value(payFields#0, 1)
+        let tmp%10#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
+        let inner_txn_params%0%%param_Amount_idx_0#0: uint64 = tmp%10#0
+        let inner_txn_params%0%%Amount_length#0: uint64 = 1u
+        let tuple_item%2#0: Encoded(len+uint8[]) = extract_value(payFields#0, 2)
+        let tmp%11#0: bytes = decode_bytes<bytes>(tuple_item%2#0)
+        let reinterpret_account%0#0: account = tmp%11#0
+        let inner_txn_params%0%%param_Receiver_idx_0#0: account = reinterpret_account%0#0
+        let inner_txn_params%0%%Receiver_length#0: uint64 = 1u
+        let inner_txn_params%0%%Sender_length#0: uint64 = 0u
+        let inner_txn_params%0%%Note_length#0: uint64 = 0u
+        let inner_txn_params%0%%CloseRemainderTo_length#0: uint64 = 0u
+        let inner_txn_params%0%%VotePK_length#0: uint64 = 0u
+        let inner_txn_params%0%%SelectionPK_length#0: uint64 = 0u
+        let inner_txn_params%0%%VoteFirst_length#0: uint64 = 0u
+        let inner_txn_params%0%%VoteLast_length#0: uint64 = 0u
+        let inner_txn_params%0%%VoteKeyDilution_length#0: uint64 = 0u
+        let inner_txn_params%0%%Type_length#0: uint64 = 0u
+        let inner_txn_params%0%%XferAsset_length#0: uint64 = 0u
+        let inner_txn_params%0%%AssetAmount_length#0: uint64 = 0u
+        let inner_txn_params%0%%AssetSender_length#0: uint64 = 0u
+        let inner_txn_params%0%%AssetReceiver_length#0: uint64 = 0u
+        let inner_txn_params%0%%AssetCloseTo_length#0: uint64 = 0u
+        let inner_txn_params%0%%ApplicationID_length#0: uint64 = 0u
+        let inner_txn_params%0%%OnCompletion_length#0: uint64 = 0u
+        let inner_txn_params%0%%ApprovalProgram_length#0: uint64 = 0u
+        let inner_txn_params%0%%ClearStateProgram_length#0: uint64 = 0u
+        let inner_txn_params%0%%RekeyTo_length#0: uint64 = 0u
+        let inner_txn_params%0%%ConfigAsset_length#0: uint64 = 0u
+        let inner_txn_params%0%%ConfigAssetTotal_length#0: uint64 = 0u
+        let inner_txn_params%0%%ConfigAssetDecimals_length#0: uint64 = 0u
+        let inner_txn_params%0%%ConfigAssetDefaultFrozen_length#0: uint64 = 0u
+        let inner_txn_params%0%%ConfigAssetUnitName_length#0: uint64 = 0u
+        let inner_txn_params%0%%ConfigAssetName_length#0: uint64 = 0u
+        let inner_txn_params%0%%ConfigAssetURL_length#0: uint64 = 0u
+        let inner_txn_params%0%%ConfigAssetMetadataHash_length#0: uint64 = 0u
+        let inner_txn_params%0%%ConfigAssetManager_length#0: uint64 = 0u
+        let inner_txn_params%0%%ConfigAssetReserve_length#0: uint64 = 0u
+        let inner_txn_params%0%%ConfigAssetFreeze_length#0: uint64 = 0u
+        let inner_txn_params%0%%ConfigAssetClawback_length#0: uint64 = 0u
+        let inner_txn_params%0%%FreezeAsset_length#0: uint64 = 0u
+        let inner_txn_params%0%%FreezeAssetAccount_length#0: uint64 = 0u
+        let inner_txn_params%0%%FreezeAssetFrozen_length#0: uint64 = 0u
+        let inner_txn_params%0%%GlobalNumUint_length#0: uint64 = 0u
+        let inner_txn_params%0%%GlobalNumByteSlice_length#0: uint64 = 0u
+        let inner_txn_params%0%%LocalNumUint_length#0: uint64 = 0u
+        let inner_txn_params%0%%LocalNumByteSlice_length#0: uint64 = 0u
+        let inner_txn_params%0%%ExtraProgramPages_length#0: uint64 = 0u
+        let inner_txn_params%0%%Nonparticipation_length#0: uint64 = 0u
+        let inner_txn_params%0%%StateProofPK_length#0: uint64 = 0u
+        let inner_txn_params%0%%ApplicationArgs_length#0: uint64 = 0u
+        let inner_txn_params%0%%Accounts_length#0: uint64 = 0u
+        let inner_txn_params%0%%Assets_length#0: uint64 = 0u
+        let inner_txn_params%0%%Applications_length#0: uint64 = 0u
+        let inner_txn_params%0%%ApprovalProgramPages_length#0: uint64 = 0u
+        let inner_txn_params%0%%ClearStateProgramPages_length#0: uint64 = 0u
+        let inner_txn_params%0%%RejectVersion_length#0: uint64 = 0u
+        ((itxn_field Receiver) inner_txn_params%0%%param_Receiver_idx_0#0)
+        ((itxn_field Amount) inner_txn_params%0%%param_Amount_idx_0#0)
+        ((itxn_field TypeEnum) inner_txn_params%0%%param_TypeEnum_idx_0#0)
+        ((itxn_field Fee) inner_txn_params%0%%param_Fee_idx_0#0)
+        let tmp%12#0: uint64 = array_len(recipients#0)
+        (assert 1u) // Step cannot be zero
+        let value_internal%0#0: uint64 = 1u
+        goto block@1
+    block@1: // for_header_L158
+        let value_internal%0#1: uint64 = φ(value_internal%0#0 <- block@0, value_internal%0#2 <- block@3)
+        let continue_looping%0#0: bool = (< value_internal%0#1 tmp%12#0)
+        goto continue_looping%0#0 ? block@2 : block@4
+    block@2: // for_body_L158
+        let temp#0: uint64 = value_internal%0#1
+        let i#0: uint64 = temp#0
+        let array_item%1#0: Encoded(uint8[32]) = extract_value(recipients#0, i#0)
+        let addr#0: Encoded(uint8[32]) = array_item%1#0
+        itxn_next
+        let inner_txn_params%1#0: itxn_field_set = itxn_field_set(1)
+        let inner_txn_params%1%%param_Fee_idx_0#0: uint64 = 0u
+        let inner_txn_params%1%%Fee_length#0: uint64 = 1u
+        let tuple_item%3#0: Encoded(uint64) = extract_value(payFields#0, 0)
+        let tmp%13#0: uint64 = decode_bytes<uint64>(tuple_item%3#0)
+        let inner_txn_params%1%%param_TypeEnum_idx_0#0: uint64 = tmp%13#0
+        let inner_txn_params%1%%TypeEnum_length#0: uint64 = 1u
+        let tuple_item%4#0: Encoded(uint64) = extract_value(payFields#0, 1)
+        let tmp%14#0: uint64 = decode_bytes<uint64>(tuple_item%4#0)
+        let inner_txn_params%1%%param_Amount_idx_0#0: uint64 = tmp%14#0
+        let inner_txn_params%1%%Amount_length#0: uint64 = 1u
+        let reinterpret_account%1#0: account = addr#0
+        let inner_txn_params%1%%param_Receiver_idx_0#0: account = reinterpret_account%1#0
+        let inner_txn_params%1%%Receiver_length#0: uint64 = 1u
+        let inner_txn_params%1%%Sender_length#0: uint64 = 0u
+        let inner_txn_params%1%%Note_length#0: uint64 = 0u
+        let inner_txn_params%1%%CloseRemainderTo_length#0: uint64 = 0u
+        let inner_txn_params%1%%VotePK_length#0: uint64 = 0u
+        let inner_txn_params%1%%SelectionPK_length#0: uint64 = 0u
+        let inner_txn_params%1%%VoteFirst_length#0: uint64 = 0u
+        let inner_txn_params%1%%VoteLast_length#0: uint64 = 0u
+        let inner_txn_params%1%%VoteKeyDilution_length#0: uint64 = 0u
+        let inner_txn_params%1%%Type_length#0: uint64 = 0u
+        let inner_txn_params%1%%XferAsset_length#0: uint64 = 0u
+        let inner_txn_params%1%%AssetAmount_length#0: uint64 = 0u
+        let inner_txn_params%1%%AssetSender_length#0: uint64 = 0u
+        let inner_txn_params%1%%AssetReceiver_length#0: uint64 = 0u
+        let inner_txn_params%1%%AssetCloseTo_length#0: uint64 = 0u
+        let inner_txn_params%1%%ApplicationID_length#0: uint64 = 0u
+        let inner_txn_params%1%%OnCompletion_length#0: uint64 = 0u
+        let inner_txn_params%1%%ApprovalProgram_length#0: uint64 = 0u
+        let inner_txn_params%1%%ClearStateProgram_length#0: uint64 = 0u
+        let inner_txn_params%1%%RekeyTo_length#0: uint64 = 0u
+        let inner_txn_params%1%%ConfigAsset_length#0: uint64 = 0u
+        let inner_txn_params%1%%ConfigAssetTotal_length#0: uint64 = 0u
+        let inner_txn_params%1%%ConfigAssetDecimals_length#0: uint64 = 0u
+        let inner_txn_params%1%%ConfigAssetDefaultFrozen_length#0: uint64 = 0u
+        let inner_txn_params%1%%ConfigAssetUnitName_length#0: uint64 = 0u
+        let inner_txn_params%1%%ConfigAssetName_length#0: uint64 = 0u
+        let inner_txn_params%1%%ConfigAssetURL_length#0: uint64 = 0u
+        let inner_txn_params%1%%ConfigAssetMetadataHash_length#0: uint64 = 0u
+        let inner_txn_params%1%%ConfigAssetManager_length#0: uint64 = 0u
+        let inner_txn_params%1%%ConfigAssetReserve_length#0: uint64 = 0u
+        let inner_txn_params%1%%ConfigAssetFreeze_length#0: uint64 = 0u
+        let inner_txn_params%1%%ConfigAssetClawback_length#0: uint64 = 0u
+        let inner_txn_params%1%%FreezeAsset_length#0: uint64 = 0u
+        let inner_txn_params%1%%FreezeAssetAccount_length#0: uint64 = 0u
+        let inner_txn_params%1%%FreezeAssetFrozen_length#0: uint64 = 0u
+        let inner_txn_params%1%%GlobalNumUint_length#0: uint64 = 0u
+        let inner_txn_params%1%%GlobalNumByteSlice_length#0: uint64 = 0u
+        let inner_txn_params%1%%LocalNumUint_length#0: uint64 = 0u
+        let inner_txn_params%1%%LocalNumByteSlice_length#0: uint64 = 0u
+        let inner_txn_params%1%%ExtraProgramPages_length#0: uint64 = 0u
+        let inner_txn_params%1%%Nonparticipation_length#0: uint64 = 0u
+        let inner_txn_params%1%%StateProofPK_length#0: uint64 = 0u
+        let inner_txn_params%1%%ApplicationArgs_length#0: uint64 = 0u
+        let inner_txn_params%1%%Accounts_length#0: uint64 = 0u
+        let inner_txn_params%1%%Assets_length#0: uint64 = 0u
+        let inner_txn_params%1%%Applications_length#0: uint64 = 0u
+        let inner_txn_params%1%%ApprovalProgramPages_length#0: uint64 = 0u
+        let inner_txn_params%1%%ClearStateProgramPages_length#0: uint64 = 0u
+        let inner_txn_params%1%%RejectVersion_length#0: uint64 = 0u
+        ((itxn_field Receiver) inner_txn_params%1%%param_Receiver_idx_0#0)
+        ((itxn_field Amount) inner_txn_params%1%%param_Amount_idx_0#0)
+        ((itxn_field TypeEnum) inner_txn_params%1%%param_TypeEnum_idx_0#0)
+        ((itxn_field Fee) inner_txn_params%1%%param_Fee_idx_0#0)
+        goto block@3
+    block@3: // for_footer_L158
+        let value_internal%0#2: uint64 = (+ value_internal%0#1 1u)
+        goto block@1
+    block@4: // after_for_L158
+        itxn_submit
+        return 
+
+subroutine examples/puya-ts/10-multi-txn-distributor/contract.algo.ts::MultiTxnDistributor.verifyGroupPayments() -> void:
+    block@0: // L174
+        let i#0: uint64 = 0u
+        goto block@1
+    block@1: // while_top_L176
+        let i#1: uint64 = φ(i#0 <- block@0, i#2 <- block@2)
+        let tmp%0#0: uint64 = (txn GroupIndex)
+        let tmp%1#0: bool = (< i#1 tmp%0#0)
+        goto tmp%1#0 ? block@2 : block@3
+    block@2: // while_body_L176
+        let txn#0: uint64 = i#1
+        let tmp%2#0: uint64 = ((gtxns TypeEnum) txn#0)
+        let tmp%3#0: bool = (== tmp%2#0 1u)
+        (assert tmp%3#0) // All preceding txns must be payments
+        let tmp%4#0: uint64 = (+ i#1 1u)
+        let i#2: uint64 = tmp%4#0
+        goto block@1
+    block@3: // after_while_L176
+        return 

@@ -1,0 +1,166 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let reinterpret_bool%0#0: bool = (txn ApplicationID)
+        goto reinterpret_bool%0#0 ? block@2 : block@1
+    block@1: // if_body_L1
+        polytype/lib/polytype-module.d.ts::ClusteredContract<examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable,examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Describable>.constructor()
+        goto block@2
+    block@2: // after_if_else_L1
+        let tmp%0#0: bool = examples/puya-ts/13-inheritance-showcase/contract.algo.ts::MultiInheritanceShowcase.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::MultiInheritanceShowcase.__puya_arc4_router__() -> bool:
+    block@0: // L239
+        let tmp%0#0: uint64 = (txn OnCompletion)
+        let tmp%1#0: bool = (== tmp%0#0 NoOp)
+        (assert tmp%1#0)
+        let tmp%2#0: uint64 = (txn ApplicationID)
+        let tmp%3#0: bool = (!= tmp%2#0 0u)
+        goto tmp%3#0 ? block@1 : block@9
+    block@1: // call_NoOp_L239
+        let tmp%4#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%4#0 {method "getStatus()string" => block@2, method "pause()void" => block@3, method "unpause()void" => block@4, method "isPaused()bool" => block@5, method "setDescription(string)void" => block@6, method "getDescription()string" => block@7, * => block@8}
+    block@2: // getStatus_route_L250
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::MultiInheritanceShowcase.getStatus[routing]()
+        goto block@8
+    block@3: // pause_route_L193
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.pause[routing]()
+        goto block@8
+    block@4: // unpause_route_L198
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.unpause[routing]()
+        goto block@8
+    block@5: // isPaused_route_L206
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.isPaused[routing]()
+        goto block@8
+    block@6: // setDescription_route_L224
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Describable.setDescription[routing]()
+        goto block@8
+    block@7: // getDescription_route_L232
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Describable.getDescription[routing]()
+        goto block@8
+    block@8: // switch_case_next_L239
+        goto block@12
+    block@9: // create_NoOp_L239
+        let tmp%5#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%5#0 {method "createApplication()void" => block@10, * => block@11}
+    block@10: // createApplication_route_L241
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::MultiInheritanceShowcase.createApplication[routing]()
+        goto block@11
+    block@11: // switch_case_next_L239
+        goto block@12
+    block@12: // after_if_else_L239
+        exit 0u
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::MultiInheritanceShowcase.createApplication[routing]() -> void:
+    block@0: // L241
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::MultiInheritanceShowcase.createApplication()
+        exit 1u
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::MultiInheritanceShowcase.getStatus[routing]() -> void:
+    block@0: // L250
+        let tmp%0#0: string = examples/puya-ts/13-inheritance-showcase/contract.algo.ts::MultiInheritanceShowcase.getStatus()
+        let tmp%1#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.pause[routing]() -> void:
+    block@0: // L193
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.pause()
+        exit 1u
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.unpause[routing]() -> void:
+    block@0: // L198
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.unpause()
+        exit 1u
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.isPaused[routing]() -> void:
+    block@0: // L206
+        let tmp%0#0: bool = examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.isPaused()
+        let tmp%1#0: Encoded(bool8) = bytes_encode<bool8>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Describable.setDescription[routing]() -> void:
+    block@0: // L224
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
+        let tmp%1#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Describable.setDescription(tmp%1#0)
+        exit 1u
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Describable.getDescription[routing]() -> void:
+    block@0: // L232
+        let tmp%0#0: string = examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Describable.getDescription()
+        let tmp%1#0: Encoded(len+utf8[]) = bytes_encode<(len+utf8[])>(tmp%0#0)
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::MultiInheritanceShowcase.createApplication() -> void:
+    block@0: // L241
+        (app_global_put "paused" 0u)
+        (app_global_put "description" "multi-inherited")
+        return 
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::MultiInheritanceShowcase.getStatus() -> string:
+    block@0: // L250
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "paused")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        goto maybe_value%0#0 ? block@1 : block@2
+    block@1: // if_body_L251
+        return "paused"
+    block@2: // after_if_else_L251
+        let (maybe_value%1#0: bytes, maybe_exists%1#0: bool) = (app_global_get_ex 0u "description")
+        (assert maybe_exists%1#0) // check GlobalState exists
+        return maybe_value%1#0
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.pause() -> void:
+    block@0: // L193
+        (app_global_put "paused" 1u)
+        return 
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.unpause() -> void:
+    block@0: // L198
+        (app_global_put "paused" 0u)
+        return 
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.isPaused() -> bool:
+    block@0: // L206
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "paused")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        return maybe_value%0#0
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Describable.setDescription(desc: string) -> void:
+    block@0: // L224
+        (app_global_put "description" desc#0)
+        return 
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Describable.getDescription() -> string:
+    block@0: // L232
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (app_global_get_ex 0u "description")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        return maybe_value%0#0
+
+subroutine polytype/lib/polytype-module.d.ts::ClusteredContract<examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable,examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Describable>.constructor() -> void:
+    block@0: // L1
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.constructor()
+        @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
+        return 
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.constructor() -> void:
+    block@0: // L184
+        @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
+        (app_global_put "paused" 0u)
+        return 
+
+subroutine @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor() -> void:
+    block@0: // L1
+        return 

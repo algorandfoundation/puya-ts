@@ -1,0 +1,55 @@
+contract MembershipRegistry
+{
+  globals {
+    ["totalMembers"]: uint64
+    ["totalRegistrations"]: uint64
+  }
+  locals {
+    ["joinedAtRound"]: uint64
+    ["balanceAtJoin"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+    GlobalState["totalMembers"]: uint64 = 0
+    GlobalState["totalRegistrations"]: uint64 = 0
+  }
+  
+  register(): void
+  {
+    assert(checked_maybe(acct_params_get<AcctBalance>(txn<Sender>()), comment=account funded) >= 100000)
+    LocalState[txn<Sender>()]["joinedAtRound"]: uint64 = global<Round>()
+    LocalState[txn<Sender>()]["balanceAtJoin"]: uint64 = checked_maybe(acct_params_get<AcctBalance>(txn<Sender>()), comment=account funded)
+    newTotal: uint64 = GlobalState["totalMembers"] + 1
+    GlobalState["totalMembers"]: uint64 = newTotal
+    newRegistrations: uint64 = GlobalState["totalRegistrations"] + 1
+    GlobalState["totalRegistrations"]: uint64 = newRegistrations
+  }
+  
+  deregister(): void
+  {
+    newTotal: uint64 = GlobalState["totalMembers"] - 1
+    GlobalState["totalMembers"]: uint64 = newTotal
+  }
+  
+  getMemberInfo(member: account): examples/puya-ts/05-membership-registry/contract.algo.ts::MemberInfo
+  {
+    return new examples/puya-ts/05-membership-registry/contract.algo.ts::MemberInfo(joinedAtRound=LocalState[member]["joinedAtRound"], balanceAtJoin=LocalState[member]["balanceAtJoin"], currentBalance=checked_maybe(acct_params_get<AcctBalance>(member), comment=account funded), currentMinBalance=checked_maybe(acct_params_get<AcctMinBalance>(member), comment=account funded))
+  }
+  
+  isMemberInGoodStanding(member: account): bool
+  {
+    assert(checked_maybe(acct_params_get<AcctBalance>(member), comment=account funded) >= 100000)
+    return True
+  }
+  
+}

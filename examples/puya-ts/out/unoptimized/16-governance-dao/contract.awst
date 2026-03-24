@@ -1,0 +1,144 @@
+subroutine voteBoxKey(proposalId: uint64, voter: account): bytes
+{
+  return concat(reinterpret_cast<bytes>(itob(proposalId)), reinterpret_cast<bytes>(reinterpret_cast<bytes[32]>(voter)))
+}
+contract GovernanceDao
+{
+  globals {
+    ["quorum"]: uint64
+    ["votingPeriod"]: uint64
+    ["nextProposalId"]: uint64
+    ["bootstrapped"]: bool
+  }
+  boxes {
+    ["p"]: uint64 => Proposal
+    ["v"]: bytes => uint64
+    ["latest"]: Proposal
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+  }
+  
+  bootstrap(quorum: uint64, votingPeriod: uint64): void
+  {
+    assert(txn<Sender>() == global<CreatorAddress>(), comment=Only creator can bootstrap)
+    assert(!GlobalState["bootstrapped"], comment=Already bootstrapped)
+    assert(quorum > 0, comment=Quorum must be positive)
+    assert(votingPeriod > 0, comment=Voting period must be positive)
+    GlobalState["quorum"]: uint64 = quorum
+    GlobalState["votingPeriod"]: uint64 = votingPeriod
+    GlobalState["bootstrapped"]: bool = True
+    emit_fields(DaoBootstrapped, (ARC4_ENCODE(quorum, wtype=arc4.uint64), ARC4_ENCODE(votingPeriod, wtype=arc4.uint64)))
+  }
+  
+  propose(description: string): uint64
+  {
+    assert(GlobalState["bootstrapped"], comment=Not bootstrapped)
+    id: uint64 = GlobalState["nextProposalId"]
+    endRound: uint64 = global<Round>() + GlobalState["votingPeriod"]
+    Box[BoxMapKey(prefix="p", key=id)].value: Proposal = new Proposal(proposer=($0 = #{ proposer: reinterpret_cast<arc4.static_array<arc4.byte,32>>(txn<Sender>()), description: ARC4_ENCODE(description, wtype=arc4.dynamic_array<arc4.byte>), yesVotes: 0, noVotes: 0, endRound: ARC4_ENCODE(endRound, wtype=arc4.uint64), executed: False }).proposer, description=$0.description, yesVotes=$0.yesVotes, noVotes=$0.noVotes, endRound=$0.endRound, executed=$0.executed)
+    next: uint64 = id + 1
+    GlobalState["nextProposalId"]: uint64 = next
+    emit("ProposalCreated", new ProposalCreated(id=($1 = #{ id: ARC4_ENCODE(id, wtype=arc4.uint64), proposer: reinterpret_cast<arc4.static_array<arc4.byte,32>>(txn<Sender>()) }).id, proposer=$1.proposer))
+    return id
+  }
+  
+  vote(proposalId: uint64, inFavor: bool): void
+  {
+    assert(GlobalState["bootstrapped"], comment=Not bootstrapped)
+    assert(STATE_EXISTS(Box[BoxMapKey(prefix="p", key=proposalId)].value), comment=Proposal not found)
+    key: bytes = examples/puya-ts/16-governance-dao/contract.algo.ts::voteBoxKey(proposalId, txn<Sender>())
+    assert(!STATE_EXISTS(Box[BoxMapKey(prefix="v", key=key)].value), comment=Already voted)
+    proposal: Proposal = copy(Box[BoxMapKey(prefix="p", key=proposalId)].value)
+    assert(global<Round>() <= ARC4_DECODE(proposal.endRound), comment=Voting ended)
+    assert(!ARC4_DECODE(proposal.executed), comment=Already executed)
+    if (inFavor) {
+      newYes: uint64 = ARC4_DECODE(proposal.yesVotes) + 1
+      Box[BoxMapKey(prefix="p", key=proposalId)].value.yesVotes: arc4.uint64 = ARC4_ENCODE(newYes, wtype=arc4.uint64)
+    } else {
+      newNo: uint64 = ARC4_DECODE(proposal.noVotes) + 1
+      Box[BoxMapKey(prefix="p", key=proposalId)].value.noVotes: arc4.uint64 = ARC4_ENCODE(newNo, wtype=arc4.uint64)
+    }
+    Box[BoxMapKey(prefix="v", key=key)].value: uint64 = 1
+    emit("VoteCast", new VoteCast(proposalId=($2 = #{ proposalId: ARC4_ENCODE(proposalId, wtype=arc4.uint64), voter: reinterpret_cast<arc4.static_array<arc4.byte,32>>(txn<Sender>()), inFavor: ARC4_ENCODE(inFavor, wtype=arc4.bool) }).proposalId, voter=$2.voter, inFavor=$2.inFavor))
+  }
+  
+  execute(proposalId: uint64): void
+  {
+    assert(GlobalState["bootstrapped"], comment=Not bootstrapped)
+    assert(STATE_EXISTS(Box[BoxMapKey(prefix="p", key=proposalId)].value), comment=Proposal not found)
+    proposal: Proposal = copy(Box[BoxMapKey(prefix="p", key=proposalId)].value)
+    assert(global<Round>() > ARC4_DECODE(proposal.endRound), comment=Voting not ended)
+    assert(!ARC4_DECODE(proposal.executed), comment=Already executed)
+    assert(ARC4_DECODE(proposal.yesVotes) >= GlobalState["quorum"], comment=Quorum not met)
+    Box[BoxMapKey(prefix="p", key=proposalId)].value.executed: arc4.bool = True
+    if (STATE_EXISTS(Box["latest"].value)) {
+      STATE_DELETE(Box["latest"].value)
+    }
+    Box["latest"].value: Proposal = copy(Box[BoxMapKey(prefix="p", key=proposalId)].value)
+    emit("ProposalExecuted", new ProposalExecuted(id=($3 = #{ id: ARC4_ENCODE(proposalId, wtype=arc4.uint64) }).id))
+  }
+  
+  tally(): uint64
+  {
+    count: uint64 = GlobalState["nextProposalId"]
+    budget: uint64 = 700 * count
+    ensure_budget(budget, 0)
+    passing: arc4.dynamic_array<arc4.uint64> = new arc4.dynamic_array<arc4.uint64>()
+    for (temp in urange(0, count, 1)) {
+      id: uint64 = copy(temp)
+      if (STATE_EXISTS(Box[BoxMapKey(prefix="p", key=id)].value)) {
+        proposal: Proposal = copy(Box[BoxMapKey(prefix="p", key=id)].value)
+        if (ARC4_DECODE(proposal.yesVotes) >= GlobalState["quorum"]) {
+          passing.push(...#[ARC4_ENCODE(id, wtype=arc4.uint64)])
+        }
+      }
+    }
+    return passing.length
+  }
+  
+  close(): void
+  {
+    assert(txn<Sender>() == global<CreatorAddress>(), comment=Only creator can close)
+    count: uint64 = GlobalState["nextProposalId"]
+    budget: uint64 = 700 * count
+    ensure_budget(budget, 0)
+    for (temp in urange(0, count, 1)) {
+      id: uint64 = copy(temp)
+      if (STATE_EXISTS(Box[BoxMapKey(prefix="p", key=id)].value)) {
+        STATE_DELETE(Box[BoxMapKey(prefix="p", key=id)].value)
+      }
+    }
+    if (STATE_EXISTS(Box["latest"].value)) {
+      STATE_DELETE(Box["latest"].value)
+    }
+    emit_fields(DaoClosed, (ARC4_ENCODE(count, wtype=arc4.uint64)))
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["quorum"]: uint64 = 0
+    GlobalState["votingPeriod"]: uint64 = 0
+    GlobalState["nextProposalId"]: uint64 = 0
+    GlobalState["bootstrapped"]: bool = False
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}

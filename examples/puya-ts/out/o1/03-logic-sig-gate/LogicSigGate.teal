@@ -1,0 +1,46 @@
+#pragma version 11
+#pragma typetrack false
+
+// examples/puya-ts/03-logic-sig-gate/contract.algo.ts::program() -> uint64:
+main:
+    intcblock 1 TMPL_MAX_FEE
+    bytecblock TMPL_AUTHORITY_KEY
+    // examples/puya-ts/03-logic-sig-gate/contract.algo.ts:41
+    // assert(Txn.fee <= maxFee, 'Fee exceeds maximum')
+    txn Fee
+    intc_1 // TMPL_MAX_FEE
+    <=
+    assert // Fee exceeds maximum
+    // examples/puya-ts/03-logic-sig-gate/contract.algo.ts:44
+    // assert(Txn.typeEnum === TransactionType.Payment, 'Must be a payment transaction')
+    txn TypeEnum
+    intc_0 // 1
+    ==
+    assert // Must be a payment transaction
+    // examples/puya-ts/03-logic-sig-gate/contract.algo.ts:47
+    // assert(Txn.rekeyTo === Global.zeroAddress, 'Rekey not allowed')
+    txn RekeyTo
+    global ZeroAddress
+    ==
+    assert // Rekey not allowed
+    // examples/puya-ts/03-logic-sig-gate/contract.algo.ts:50
+    // assert(Txn.closeRemainderTo === Global.zeroAddress, 'Close remainder not allowed')
+    txn CloseRemainderTo
+    global ZeroAddress
+    ==
+    assert // Close remainder not allowed
+    // examples/puya-ts/03-logic-sig-gate/contract.algo.ts:57
+    // assert(op.ed25519verifyBare(Txn.note, signature, authorityKey), 'Invalid signature')
+    txn Note
+    // examples/puya-ts/03-logic-sig-gate/contract.algo.ts:53
+    // const signature = op.arg(0)
+    arg_0
+    // examples/puya-ts/03-logic-sig-gate/contract.algo.ts:57
+    // assert(op.ed25519verifyBare(Txn.note, signature, authorityKey), 'Invalid signature')
+    bytec_0 // TMPL_AUTHORITY_KEY
+    ed25519verify_bare
+    assert // Invalid signature
+    // examples/puya-ts/03-logic-sig-gate/contract.algo.ts:59
+    // return true
+    intc_0 // 1
+    return

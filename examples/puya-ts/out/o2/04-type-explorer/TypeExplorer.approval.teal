@@ -1,0 +1,190 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 8 1 64
+    bytecblock 0x151f7c75
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:50
+    // export class TypeExplorer extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@11
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0x725a7a2a 0x83f8362b 0x0a1ffb51 0x2702fff3 // method "exploreUint64(uint64,uint64)uint64", method "exploreBigUint(uint64)uint512", method "exploreBytes(byte[])byte[]", method "exploreWideMath(uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match main_exploreUint64_route@4 main_exploreBigUint_route@5 main_exploreBytes_route@6 main_exploreWideMath_route@7
+    err
+
+main_exploreWideMath_route@7:
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:124
+    // public exploreWideMath(a: uint64, b: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:126
+    // const [carry, low] = op.addw(a, b)
+    dig 1
+    addw
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:129
+    // const carryBytes = op.itob(carry)
+    swap
+    itob
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:130
+    // const lowBytes = op.itob(low)
+    swap
+    itob
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:133
+    // log(carryBytes, lowBytes)
+    swap
+    dig 1
+    concat
+    log
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:136
+    // const aBytes = Bytes(a)
+    swap
+    itob
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:141
+    // log(aRecovered)
+    log
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:124
+    // public exploreWideMath(a: uint64, b: uint64): uint64 {
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_exploreBytes_route@6:
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:96
+    // public exploreBytes(input: bytes): bytes {
+    txna ApplicationArgs 1
+    dup
+    pushint 0
+    extract_uint16 // on error: invalid array length header
+    pushint 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:104
+    // const combined = empty.concat(input).concat(deadbeef)
+    pushbytes 0xdeadbeef
+    concat
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:107
+    // const hash = op.sha256(combined)
+    sha256
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:113
+    // log(hashAsBigUint)
+    dup
+    log
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:96
+    // public exploreBytes(input: bytes): bytes {
+    pushbytes 0x151f7c750020
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_exploreBigUint_route@5:
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:75
+    // public exploreBigUint(value: uint64): biguint {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:39
+    // return BigUint(value)
+    itob
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:80
+    // const squared: biguint = big * big
+    dup
+    b*
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:83
+    // const root = op.bsqrt(squared)
+    bsqrt
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:86
+    // log(root)
+    dup
+    log
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:75
+    // public exploreBigUint(value: uint64): biguint {
+    dup
+    len
+    intc_2 // 64
+    <=
+    assert // overflow
+    intc_2 // 64
+    bzero
+    b|
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main_exploreUint64_route@4:
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:57
+    // public exploreUint64(a: uint64, b: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:61
+    // const sum: uint64 = a + b + zero
+    +
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:64
+    // log(sum)
+    itob
+    dup
+    log
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:57
+    // public exploreUint64(a: uint64, b: uint64): uint64 {
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+main___algots__.defaultCreate@11:
+    // examples/puya-ts/04-type-explorer/contract.algo.ts:50
+    // export class TypeExplorer extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return

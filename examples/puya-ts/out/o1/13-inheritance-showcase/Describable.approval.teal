@@ -1,0 +1,95 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0
+    bytecblock "description"
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:212
+    // class Describable extends Contract {
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    bz main_create_NoOp@6
+    pushbytess 0x7da6d31b 0xf6d532b6 // method "setDescription(string)void", method "getDescription()string"
+    txna ApplicationArgs 0
+    match setDescription getDescription
+    err
+
+main_create_NoOp@6:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:212
+    // class Describable extends Contract {
+    pushbytes 0xb8447b36 // method "createApplication()void"
+    txna ApplicationArgs 0
+    match main_createApplication_route@7
+    err
+
+main_createApplication_route@7:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:213
+    // description = GlobalState<string>()
+    bytec_0 // "description"
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:217
+    // this.description.value = 'none'
+    pushbytes "none"
+    app_global_put
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:216
+    // public createApplication(): void {
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Describable.setDescription[routing]() -> void:
+setDescription:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:224
+    // public setDescription(desc: string): void {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    pushint 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:213
+    // description = GlobalState<string>()
+    bytec_0 // "description"
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:225
+    // this.description.value = desc
+    swap
+    app_global_put
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:224
+    // public setDescription(desc: string): void {
+    intc_0 // 1
+    return
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Describable.getDescription[routing]() -> void:
+getDescription:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:233
+    // return this.description.value
+    intc_1 // 0
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:213
+    // description = GlobalState<string>()
+    bytec_0 // "description"
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:233
+    // return this.description.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:232
+    // public getDescription(): string {
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return

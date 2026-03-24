@@ -1,0 +1,350 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 2 1
+    bytecblock 0x151f7c75 0x068101 "secretHash" 0x00
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:25-26
+    // @contract({ avmVersion: 11, scratchSlots: [{ from: 0, to: 3 }] })
+    // export class CryptoVault extends Contract {
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    bz main_create_NoOp@8
+    pushbytess 0x923828f3 0x555c8af2 0xe6638340 0x839e0f36 // method "hashShowcase(byte[])byte[]", method "verifyAndUnlock(byte[],byte[],byte[])bool", method "scratchCounter(uint64)uint64", method "checkPreimage(byte[])bool"
+    txna ApplicationArgs 0
+    match hashShowcase verifyAndUnlock scratchCounter checkPreimage
+    err
+
+main_create_NoOp@8:
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:25-26
+    // @contract({ avmVersion: 11, scratchSlots: [{ from: 0, to: 3 }] })
+    // export class CryptoVault extends Contract {
+    pushbytes 0x2f2be517 // method "createApplication(byte[])void"
+    txna ApplicationArgs 0
+    match createApplication
+    err
+
+
+// _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
+ensure_budget:
+    proto 2 0
+    frame_dig -2
+    pushint 10
+    +
+
+ensure_budget_while_top@1:
+    frame_dig 0
+    global OpcodeBudget
+    >
+    bz ensure_budget_after_while@6
+    itxn_begin
+    pushint 6 // appl
+    itxn_field TypeEnum
+    pushint 5 // DeleteApplication
+    itxn_field OnCompletion
+    bytec_1 // 0x068101
+    itxn_field ApprovalProgram
+    bytec_1 // 0x068101
+    itxn_field ClearStateProgram
+    frame_dig -1
+    switch ensure_budget_switch_case_0@3 ensure_budget_switch_case_1@4
+
+ensure_budget_switch_case_next@5:
+    itxn_submit
+    b ensure_budget_while_top@1
+
+ensure_budget_switch_case_1@4:
+    global MinTxnFee
+    itxn_field Fee
+    b ensure_budget_switch_case_next@5
+
+ensure_budget_switch_case_0@3:
+    intc_0 // 0
+    itxn_field Fee
+    b ensure_budget_switch_case_next@5
+
+ensure_budget_after_while@6:
+    retsub
+
+
+// examples/puya-ts/14-crypto-vault/contract.algo.ts::CryptoVault.createApplication[routing]() -> void:
+createApplication:
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:34
+    // public createApplication(commitment: bytes): void {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:36
+    // this.secretHash.value = sha256(commitment)
+    sha256
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:28
+    // secretHash = GlobalState<bytes>()
+    bytec_2 // "secretHash"
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:36
+    // this.secretHash.value = sha256(commitment)
+    swap
+    app_global_put
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:34
+    // public createApplication(commitment: bytes): void {
+    intc_2 // 1
+    return
+
+
+// examples/puya-ts/14-crypto-vault/contract.algo.ts::CryptoVault.hashShowcase[routing]() -> void:
+hashShowcase:
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:44
+    // public hashShowcase(data: bytes): bytes {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:46
+    // ensureBudget(Uint64(2000), OpUpFeeSource.GroupCredit)
+    pushint 2000
+    intc_0 // 0
+    callsub ensure_budget
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:49
+    // const h1 = sha256(data)
+    dup
+    sha256
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:51
+    // const h2 = sha3_256(data)
+    dig 1
+    sha3_256
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:53
+    // const h3 = sha512_256(data)
+    dig 2
+    sha512_256
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:55
+    // const h4 = keccak256(data)
+    uncover 3
+    keccak256
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:58
+    // Scratch.store(0, h1) // Scratch slot 0 ← SHA-256 result
+    dig 3
+    store 0
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:59
+    // Scratch.store(1, h2) // Scratch slot 1 ← SHA3-256 result
+    dig 2
+    store 1
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:60
+    // Scratch.store(2, h3) // Scratch slot 2 ← SHA-512/256 result
+    dig 1
+    store 2
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:61
+    // Scratch.store(3, h4) // Scratch slot 3 ← Keccak-256 result
+    dup
+    store 3
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:65
+    // const loaded1 = Scratch.loadBytes(1) // Load SHA3-256 from slot 1
+    load 1
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:64
+    // const loaded0 = Scratch.loadBytes(0) // Load SHA-256 from slot 0
+    load 0
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:66
+    // assert(loaded0 === h1, 'scratch 0 mismatch') // Verify scratch read matches original
+    dig 5
+    ==
+    assert // scratch 0 mismatch
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:67
+    // assert(loaded1 === h2, 'scratch 1 mismatch') // Verify scratch read matches original
+    dig 3
+    ==
+    assert // scratch 1 mismatch
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:70
+    // return h1.concat(h2).concat(h3).concat(h4)
+    uncover 3
+    uncover 3
+    concat
+    uncover 2
+    concat
+    swap
+    concat
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:44
+    // public hashShowcase(data: bytes): bytes {
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// examples/puya-ts/14-crypto-vault/contract.algo.ts::CryptoVault.verifyAndUnlock[routing]() -> void:
+verifyAndUnlock:
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:80
+    // public verifyAndUnlock(data: bytes, signature: bytes, publicKey: bytes): boolean {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 3
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:82
+    // ensureBudget(Uint64(2500), OpUpFeeSource.AppAccount)
+    pushint 2500
+    intc_2 // 1
+    callsub ensure_budget
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:85
+    // const valid = ed25519verifyBare(data, signature, publicKey)
+    ed25519verify_bare
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:86
+    // assert(valid, 'Invalid Ed25519 signature')
+    dup
+    assert // Invalid Ed25519 signature
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:80
+    // public verifyAndUnlock(data: bytes, signature: bytes, publicKey: bytes): boolean {
+    bytec_3 // 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// examples/puya-ts/14-crypto-vault/contract.algo.ts::CryptoVault.scratchCounter[routing]() -> void:
+scratchCounter:
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:95
+    // public scratchCounter(iterations: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:97
+    // Scratch.store(0, iterations)
+    dup
+    store 0
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:100
+    // const loaded: uint64 = Scratch.loadUint64(0)
+    load 0
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:101
+    // assert(loaded === iterations, 'uint64 scratch mismatch') // Verify round-trip
+    dup
+    uncover 2
+    ==
+    assert // uint64 scratch mismatch
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:104
+    // ensureBudget(Uint64(1000), OpUpFeeSource.Any)
+    pushint 1000
+    intc_1 // 2
+    callsub ensure_budget
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:107
+    // const doubled: uint64 = loaded + loaded // uint64 arithmetic — explicit annotation
+    dup
+    +
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:108
+    // Scratch.store(1, doubled) // Write doubled value to slot 1
+    store 1
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:111
+    // return Scratch.loadUint64(1) // Read and return doubled value from slot 1
+    load 1
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:95
+    // public scratchCounter(iterations: uint64): uint64 {
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// examples/puya-ts/14-crypto-vault/contract.algo.ts::CryptoVault.checkPreimage[routing]() -> void:
+checkPreimage:
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:119
+    // public checkPreimage(preimage: bytes): boolean {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:121
+    // const computed = sha256(preimage)
+    sha256
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:123
+    // return computed === this.secretHash.value
+    intc_0 // 0
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:28
+    // secretHash = GlobalState<bytes>()
+    bytec_2 // "secretHash"
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:123
+    // return computed === this.secretHash.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    ==
+    // examples/puya-ts/14-crypto-vault/contract.algo.ts:119
+    // public checkPreimage(preimage: bytes): boolean {
+    bytec_3 // 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return

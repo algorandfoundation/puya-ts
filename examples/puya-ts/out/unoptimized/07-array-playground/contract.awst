@@ -1,0 +1,135 @@
+subroutine sumArray(arr: arc4.dynamic_array<uint64>): uint64
+{
+  total: uint64 = 0
+  for (temp in arr) {
+    val: uint64 = copy(temp)
+    total: uint64 = total + val
+  }
+  return total
+}
+subroutine sumFixedWithEntries(arr: arc4.static_array<uint64,4>): uint64
+{
+  total: uint64 = 0
+  for (temp in enumerate(arr)) {
+    #[_idx, val]: readonly [uint64, uint64] = #[($0 = copy(temp)).0, $0.1]
+    total: uint64 = total + val
+  }
+  return total
+}
+contract ArrayPlayground
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  exploreNativeArray(a: uint64, b: uint64, c: uint64): uint64
+  {
+    arr: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(($1 = #[a, b, c]).0, $1.1, $1.2)
+    assert(arr.length == 3)
+    newLen: uint64 = arr.push(...#[99]), arr.length
+    assert(newLen == 4)
+    assert(arr[0] == a)
+    assert(arr[3] == 99)
+    arr[0]: uint64 = 0
+    assert(arr[0] == 0)
+    popped: uint64 = arr.pop()
+    assert(popped == 99)
+    assert(arr.length == 3)
+    assert(arr[arr.length - 1] == c)
+    total: uint64 = examples/puya-ts/07-array-playground/contract.algo.ts::sumArray(arr)
+    assert(total == b + c)
+    return total
+  }
+  
+  exploreFixedArray(x: uint64, y: uint64): uint64
+  {
+    fixed: arc4.static_array<uint64,4> = new arc4.static_array<uint64,4>(x, y, 10, 20)
+    assert(fixed.length == 4)
+    assert(fixed[0] == x)
+    fixed[2]: uint64 = 100
+    assert(fixed[2] == 100)
+    assert(fixed[fixed.length - 1] == 20)
+    total: uint64 = examples/puya-ts/07-array-playground/contract.algo.ts::sumFixedWithEntries(fixed)
+    return total
+  }
+  
+  exploreReferenceArray(n: uint64): uint64
+  {
+    ra: ref_array<uint64> = new ref_array<uint64>()
+    i: uint64 = 0
+    while (i < n) {
+      ra.push(...#[i])
+      i++
+    }
+    assert(ra.length == n)
+    assert(ra[0] == 0)
+    assert(ra[ra.length - 1] == n - 1)
+    last: uint64 = ra.pop()
+    assert(last == n - 1)
+    assert(ra.length == n - 1)
+    total: uint64 = 0
+    for (temp in ra) {
+      val: uint64 = copy(temp)
+      total: uint64 = total + val
+    }
+    return total
+  }
+  
+  exploreClone(a: uint64, b: uint64): uint64
+  {
+    original: arc4.dynamic_array<uint64> = new arc4.dynamic_array<uint64>(($2 = #[a, b]).0, $2.1)
+    copied: arc4.dynamic_array<uint64> = copy(original)
+    copied[0]: uint64 = 999
+    assert(original[0] == a, comment=original unchanged after clone mutation)
+    assert(copied[0] == 999)
+    return original[0]
+  }
+  
+  exploreUrange(): uint64
+  {
+    count: uint64 = 0
+    for (temp in urange(0, 5, 1)) {
+      _i: uint64 = copy(temp)
+      count: uint64 = count + 1
+    }
+    assert(count == 5)
+    sum: uint64 = 0
+    for (temp₁ in urange(2, 5, 1)) {
+      i: uint64 = copy(temp₁)
+      sum: uint64 = sum + i
+    }
+    assert(sum == 9)
+    stepped: uint64 = 0
+    for (temp₂ in urange(0, 10, 3)) {
+      i₁: uint64 = copy(temp₂)
+      stepped: uint64 = stepped + i₁
+    }
+    assert(stepped == 18)
+    return stepped
+  }
+  
+  exploreEntries(a: uint64, b: uint64, c: uint64): uint64
+  {
+    arr: arc4.static_array<uint64,3> = new arc4.static_array<uint64,3>(a, b, c)
+    indexSum: uint64 = 0
+    valueSum: uint64 = 0
+    for (temp in enumerate(arr)) {
+      #[idx, val]: readonly [uint64, uint64] = #[($3 = copy(temp)).0, $3.1]
+      indexSum: uint64 = indexSum + idx
+      valueSum: uint64 = valueSum + val
+    }
+    assert(indexSum == 3)
+    return valueSum
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

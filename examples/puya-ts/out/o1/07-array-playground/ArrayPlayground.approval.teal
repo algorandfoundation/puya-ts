@@ -1,0 +1,773 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 8 0 1 3
+    bytecblock 0x151f7c75 0x
+    // examples/puya-ts/07-array-playground/contract.algo.ts:45
+    // export class ArrayPlayground extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@13
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0x927c398f 0x30d95d82 0xa446b754 0x3312e27f 0x17bc180f 0x4aba16fa // method "exploreNativeArray(uint64,uint64,uint64)uint64", method "exploreFixedArray(uint64,uint64)uint64", method "exploreReferenceArray(uint64)uint64", method "exploreClone(uint64,uint64)uint64", method "exploreUrange()uint64", method "exploreEntries(uint64,uint64,uint64)uint64"
+    txna ApplicationArgs 0
+    match exploreNativeArray exploreFixedArray exploreReferenceArray exploreClone exploreUrange exploreEntries
+    err
+
+main___algots__.defaultCreate@13:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:45
+    // export class ArrayPlayground extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// examples/puya-ts/07-array-playground/contract.algo.ts::ArrayPlayground.exploreNativeArray[routing]() -> void:
+exploreNativeArray:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:53
+    // public exploreNativeArray(a: uint64, b: uint64, c: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    cover 2
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    cover 3
+    // examples/puya-ts/07-array-playground/contract.algo.ts:55
+    // const arr: uint64[] = [a, b, c]
+    dig 2
+    itob
+    pushbytes 0x0003
+    swap
+    concat
+    uncover 2
+    itob
+    concat
+    dig 1
+    itob
+    concat
+    // examples/puya-ts/07-array-playground/contract.algo.ts:58
+    // assert(arr.length === 3)
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    dup
+    intc_3 // 3
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:61
+    // const newLen: uint64 = arr.push(Uint64(99))
+    pushint 99
+    itob
+    swap
+    // examples/puya-ts/07-array-playground/contract.algo.ts:61
+    // const newLen: uint64 = arr.push(Uint64(99))
+    intc_2 // 1
+    +
+    itob
+    extract 6 0
+    uncover 2
+    swap
+    replace2 0
+    swap
+    concat
+    // examples/puya-ts/07-array-playground/contract.algo.ts:61
+    // const newLen: uint64 = arr.push(Uint64(99))
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    // examples/puya-ts/07-array-playground/contract.algo.ts:62
+    // assert(newLen === 4)
+    pushint 4
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:65
+    // assert(arr[0] === a)
+    dup
+    pushint 2
+    extract_uint64
+    uncover 3
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:66
+    // assert(arr[3] === 99)
+    dup
+    pushint 26
+    extract_uint64
+    pushint 99
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:69
+    // arr[0] = Uint64(0)
+    intc_1 // 0
+    itob
+    replace2 2 // on error: index access is out of bounds
+    // examples/puya-ts/07-array-playground/contract.algo.ts:70
+    // assert(arr[0] === 0)
+    dup
+    len
+    dig 1
+    extract 2 0
+    dig 2
+    pushint 2
+    extract_uint64
+    !
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:73
+    // const popped: uint64 = arr.pop()!
+    dig 2
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 1
+    -
+    intc_0 // 8
+    *
+    extract_uint64
+    swap
+    // examples/puya-ts/07-array-playground/contract.algo.ts:73
+    // const popped: uint64 = arr.pop()!
+    intc_0 // 8
+    -
+    uncover 2
+    intc_1 // 0
+    uncover 2
+    substring3
+    dup
+    intc_1 // 0
+    extract_uint16
+    intc_2 // 1
+    -
+    itob
+    extract 6 0
+    replace2 0
+    // examples/puya-ts/07-array-playground/contract.algo.ts:74
+    // assert(popped === 99)
+    swap
+    pushint 99
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:75
+    // assert(arr.length === 3)
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    dup
+    cover 3
+    dup
+    intc_3 // 3
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:78
+    // assert(arr.at(-1)! === c)
+    intc_2 // 1
+    -
+    swap
+    extract 2 0
+    dup
+    cover 2
+    cover 3
+    intc_0 // 8
+    *
+    extract_uint64
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:25
+    // let total: uint64 = 0
+    intc_1 // 0
+    dup
+
+exploreNativeArray_for_header@2:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:27
+    // for (const val of arr) {
+    dup
+    dig 4
+    <
+    bz exploreNativeArray_after_for@4
+    dupn 2
+    intc_0 // 8
+    *
+    dig 4
+    swap
+    extract_uint64
+    // examples/puya-ts/07-array-playground/contract.algo.ts:28
+    // total += val
+    dig 3
+    +
+    bury 3
+    intc_2 // 1
+    +
+    bury 1
+    b exploreNativeArray_for_header@2
+
+exploreNativeArray_after_for@4:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:83
+    // assert(total === b + c)
+    dig 5
+    dig 5
+    +
+    dig 2
+    dup
+    uncover 2
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:53
+    // public exploreNativeArray(a: uint64, b: uint64, c: uint64): uint64 {
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// examples/puya-ts/07-array-playground/contract.algo.ts::ArrayPlayground.exploreFixedArray[routing]() -> void:
+exploreFixedArray:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:94
+    // public exploreFixedArray(x: uint64, y: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/puya-ts/07-array-playground/contract.algo.ts:96
+    // const fixed = new FixedArray<uint64, 4>(x, y, Uint64(10), Uint64(20))
+    dig 1
+    itob
+    swap
+    itob
+    concat
+    pushint 10
+    itob
+    concat
+    pushint 20
+    itob
+    concat
+    // examples/puya-ts/07-array-playground/contract.algo.ts:102
+    // assert(fixed[0] === x)
+    dup
+    intc_1 // 0
+    extract_uint64
+    uncover 2
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:103
+    // fixed[2] = Uint64(100)
+    pushint 100
+    itob
+    replace2 16 // on error: index access is out of bounds
+    dupn 2
+    // examples/puya-ts/07-array-playground/contract.algo.ts:104
+    // assert(fixed[2] === 100)
+    pushint 16
+    extract_uint64
+    pushint 100
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:107
+    // assert(fixed.at(-1)! === 20)
+    pushint 24
+    extract_uint64
+    pushint 20
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:35
+    // let total: uint64 = 0
+    intc_1 // 0
+    dup
+
+exploreFixedArray_for_header@2:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:37
+    // for (const [_idx, val] of arr.entries()) {
+    dup
+    pushint 4
+    <
+    bz exploreFixedArray_after_for@4
+    dupn 2
+    intc_0 // 8
+    *
+    dig 4
+    swap
+    extract_uint64
+    // examples/puya-ts/07-array-playground/contract.algo.ts:38
+    // total += val
+    dig 3
+    +
+    bury 3
+    intc_2 // 1
+    +
+    bury 1
+    b exploreFixedArray_for_header@2
+
+exploreFixedArray_after_for@4:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:94
+    // public exploreFixedArray(x: uint64, y: uint64): uint64 {
+    dig 1
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// examples/puya-ts/07-array-playground/contract.algo.ts::ArrayPlayground.exploreReferenceArray[routing]() -> void:
+exploreReferenceArray:
+    bytec_1 // ""
+    dupn 2
+    // examples/puya-ts/07-array-playground/contract.algo.ts:119
+    // public exploreReferenceArray(n: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/puya-ts/07-array-playground/contract.algo.ts:121
+    // const ra = new ReferenceArray<uint64>()
+    bytec_1 // 0x
+    // examples/puya-ts/07-array-playground/contract.algo.ts:124
+    // for (let i: uint64 = 0; i < n; i++) {
+    intc_1 // 0
+
+exploreReferenceArray_while_top@2:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:124
+    // for (let i: uint64 = 0; i < n; i++) {
+    dup
+    dig 3
+    <
+    bz exploreReferenceArray_after_while@4
+    // examples/puya-ts/07-array-playground/contract.algo.ts:125
+    // ra.push(i)
+    dup2
+    dup
+    cover 2
+    itob
+    concat // on error: max array length exceeded
+    bury 3
+    // examples/puya-ts/07-array-playground/contract.algo.ts:124
+    // for (let i: uint64 = 0; i < n; i++) {
+    intc_2 // 1
+    +
+    bury 1
+    b exploreReferenceArray_while_top@2
+
+exploreReferenceArray_after_while@4:
+    dig 1
+    // examples/puya-ts/07-array-playground/contract.algo.ts:129
+    // assert(ra.length === n)
+    dup
+    len
+    dup
+    intc_0 // 8
+    /
+    dup
+    dig 6
+    dup
+    cover 4
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:132
+    // assert(ra.at(0) === 0)
+    dig 3
+    intc_1 // 0
+    extract_uint64
+    !
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:133
+    // assert(ra.at(-1) === n - 1)
+    intc_2 // 1
+    -
+    intc_0 // 8
+    *
+    dig 3
+    swap
+    extract_uint64
+    uncover 2
+    intc_2 // 1
+    -
+    swap
+    dig 1
+    ==
+    assert
+    swap
+    // examples/puya-ts/07-array-playground/contract.algo.ts:136
+    // const last: uint64 = ra.pop()
+    intc_0 // 8
+    -
+    uncover 2
+    intc_1 // 0
+    uncover 2
+    substring3
+    // examples/puya-ts/07-array-playground/contract.algo.ts:136
+    // const last: uint64 = ra.pop()
+    dup
+    bury 4
+    // examples/puya-ts/07-array-playground/contract.algo.ts:138
+    // assert(ra.length === n - 1)
+    len
+    intc_0 // 8
+    /
+    dup
+    bury 8
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:141
+    // let total: uint64 = 0
+    intc_1 // 0
+    bury 4
+    intc_1 // 0
+    bury 5
+
+exploreReferenceArray_for_header@5:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:142
+    // for (const val of ra) {
+    dig 4
+    dig 6
+    <
+    bz exploreReferenceArray_after_for@8
+    dig 1
+    dig 5
+    dup
+    cover 2
+    intc_0 // 8
+    *
+    extract_uint64
+    // examples/puya-ts/07-array-playground/contract.algo.ts:143
+    // total += val
+    dig 5
+    +
+    bury 5
+    intc_2 // 1
+    +
+    bury 5
+    b exploreReferenceArray_for_header@5
+
+exploreReferenceArray_after_for@8:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:119
+    // public exploreReferenceArray(n: uint64): uint64 {
+    dig 3
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// examples/puya-ts/07-array-playground/contract.algo.ts::ArrayPlayground.exploreClone[routing]() -> void:
+exploreClone:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:155
+    // public exploreClone(a: uint64, b: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/puya-ts/07-array-playground/contract.algo.ts:157
+    // const original: uint64[] = [a, b]
+    dig 1
+    itob
+    pushbytes 0x0002
+    swap
+    concat
+    swap
+    itob
+    concat
+    // examples/puya-ts/07-array-playground/contract.algo.ts:163
+    // copied[0] = Uint64(999)
+    pushint 999
+    itob
+    dig 1
+    swap
+    replace2 2 // on error: index access is out of bounds
+    // examples/puya-ts/07-array-playground/contract.algo.ts:164
+    // assert(original[0] === a, 'original unchanged after clone mutation')
+    dig 1
+    extract 2 8
+    uncover 2
+    pushint 2
+    extract_uint64
+    uncover 3
+    ==
+    assert // original unchanged after clone mutation
+    // examples/puya-ts/07-array-playground/contract.algo.ts:165
+    // assert(copied[0] === 999)
+    swap
+    pushint 2
+    extract_uint64
+    pushint 999
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:155
+    // public exploreClone(a: uint64, b: uint64): uint64 {
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// examples/puya-ts/07-array-playground/contract.algo.ts::ArrayPlayground.exploreUrange[routing]() -> void:
+exploreUrange:
+    bytec_1 // ""
+    dupn 3
+    // examples/puya-ts/07-array-playground/contract.algo.ts:175
+    // let count: uint64 = 0
+    intc_1 // 0
+    // examples/puya-ts/07-array-playground/contract.algo.ts:178
+    // for (const _i of urange(5)) {
+    dup
+
+exploreUrange_for_header@2:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:178
+    // for (const _i of urange(5)) {
+    dup
+    pushint 5
+    <
+    bz exploreUrange_after_for@5
+    // examples/puya-ts/07-array-playground/contract.algo.ts:179
+    // count += 1
+    dig 1
+    intc_2 // 1
+    +
+    bury 2
+    // examples/puya-ts/07-array-playground/contract.algo.ts:178
+    // for (const _i of urange(5)) {
+    dup
+    intc_2 // 1
+    +
+    bury 1
+    b exploreUrange_for_header@2
+
+exploreUrange_after_for@5:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:181
+    // assert(count === 5)
+    dig 1
+    pushint 5
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:184
+    // let sum: uint64 = 0
+    intc_1 // 0
+    bury 5
+    // examples/puya-ts/07-array-playground/contract.algo.ts:185
+    // for (const i of urange(2, 5)) {
+    pushint 2
+    bury 4
+
+exploreUrange_for_header@6:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:185
+    // for (const i of urange(2, 5)) {
+    dig 3
+    pushint 5
+    <
+    bz exploreUrange_after_for@9
+    // examples/puya-ts/07-array-playground/contract.algo.ts:186
+    // sum += i
+    dig 4
+    dig 4
+    dup
+    cover 2
+    +
+    bury 6
+    // examples/puya-ts/07-array-playground/contract.algo.ts:185
+    // for (const i of urange(2, 5)) {
+    intc_2 // 1
+    +
+    bury 4
+    b exploreUrange_for_header@6
+
+exploreUrange_after_for@9:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:188
+    // assert(sum === 9) // 2 + 3 + 4
+    dig 4
+    pushint 9
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:191
+    // let stepped: uint64 = 0
+    intc_1 // 0
+    bury 6
+    // examples/puya-ts/07-array-playground/contract.algo.ts:192
+    // for (const i of urange(0, 10, 3)) {
+    intc_1 // 0
+    bury 3
+
+exploreUrange_for_header@10:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:192
+    // for (const i of urange(0, 10, 3)) {
+    dig 2
+    pushint 10
+    <
+    bz exploreUrange_after_for@13
+    // examples/puya-ts/07-array-playground/contract.algo.ts:193
+    // stepped += i
+    dig 5
+    dig 3
+    dup
+    cover 2
+    +
+    bury 7
+    // examples/puya-ts/07-array-playground/contract.algo.ts:192
+    // for (const i of urange(0, 10, 3)) {
+    intc_3 // 3
+    +
+    bury 3
+    b exploreUrange_for_header@10
+
+exploreUrange_after_for@13:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:195
+    // assert(stepped === 18) // 0 + 3 + 6 + 9
+    dig 5
+    dup
+    pushint 18
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:174
+    // public exploreUrange(): uint64 {
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// examples/puya-ts/07-array-playground/contract.algo.ts::ArrayPlayground.exploreEntries[routing]() -> void:
+exploreEntries:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:207
+    // public exploreEntries(a: uint64, b: uint64, c: uint64): uint64 {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/puya-ts/07-array-playground/contract.algo.ts:209
+    // const arr = new FixedArray<uint64, 3>(a, b, c)
+    uncover 2
+    itob
+    uncover 2
+    itob
+    concat
+    swap
+    itob
+    concat
+    // examples/puya-ts/07-array-playground/contract.algo.ts:212
+    // let indexSum: uint64 = 0
+    intc_1 // 0
+    // examples/puya-ts/07-array-playground/contract.algo.ts:213
+    // let valueSum: uint64 = 0
+    dupn 2
+
+exploreEntries_for_header@2:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:214
+    // for (const [idx, val] of arr.entries()) {
+    dup
+    intc_3 // 3
+    <
+    bz exploreEntries_after_for@5
+    dupn 2
+    intc_0 // 8
+    *
+    dig 5
+    swap
+    extract_uint64
+    // examples/puya-ts/07-array-playground/contract.algo.ts:215
+    // indexSum += idx // 0 + 1 + 2 = 3
+    dig 4
+    dig 2
+    +
+    bury 5
+    // examples/puya-ts/07-array-playground/contract.algo.ts:216
+    // valueSum += val // a + b + c
+    dig 3
+    +
+    bury 3
+    intc_2 // 1
+    +
+    bury 1
+    b exploreEntries_for_header@2
+
+exploreEntries_after_for@5:
+    // examples/puya-ts/07-array-playground/contract.algo.ts:218
+    // assert(indexSum === 3)
+    dig 2
+    intc_3 // 3
+    ==
+    assert
+    // examples/puya-ts/07-array-playground/contract.algo.ts:207
+    // public exploreEntries(a: uint64, b: uint64, c: uint64): uint64 {
+    dig 1
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return

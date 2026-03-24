@@ -1,0 +1,85 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let reinterpret_bool%0#0: bool = (txn ApplicationID)
+        goto reinterpret_bool%0#0 ? block@2 : block@1
+    block@1: // if_body_L1
+        (app_global_put "paused" 0u)
+        goto block@2
+    block@2: // after_if_else_L1
+        let tmp%0#1: uint64 = (txn OnCompletion)
+        let tmp%1#0: bool = (! tmp%0#1)
+        (assert tmp%1#0)
+        let tmp%2#0: uint64 = (txn ApplicationID)
+        goto tmp%2#0 ? block@4 : block@12
+    block@4: // call_NoOp_L239
+        let tmp%4#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%4#0 {method "getStatus()string" => block@5, method "pause()void" => block@6, method "unpause()void" => block@7, method "isPaused()bool" => block@8, method "setDescription(string)void" => block@9, method "getDescription()string" => block@10, * => block@15}
+    block@5: // getStatus_route_L250
+        let (maybe_value%0#2: uint64, maybe_exists%0#2: bool) = (app_global_get_ex 0u "paused")
+        (assert maybe_exists%0#2) // check GlobalState exists
+        goto maybe_value%0#2 ? block@29 : block@30
+    block@29: // if_body_L251
+        let examples/puya-ts/13-inheritance-showcase/contract.algo.ts::MultiInheritanceShowcase.getStatus%0#0: string = "paused"
+        goto block@31
+    block@30: // after_if_else_L251
+        let (maybe_value%1#0: bytes, maybe_exists%1#0: bool) = (app_global_get_ex 0u "description")
+        (assert maybe_exists%1#0) // check GlobalState exists
+        goto block@31
+    block@31: // after_inlined_examples/puya-ts/13-inheritance-showcase/contract.algo.ts::MultiInheritanceShowcase.getStatus_L250
+        let tmp%0#3: string = φ(examples/puya-ts/13-inheritance-showcase/contract.algo.ts::MultiInheritanceShowcase.getStatus%0#0 <- block@29, maybe_value%1#0 <- block@30)
+        let aggregate%length%0#0: uint64 = (len tmp%0#3)
+        let aggregate%as_bytes%0#0: bytes[8] = (itob aggregate%length%0#0)
+        let aggregate%length_uint16%0#0: bytes = ((extract 6 2) aggregate%as_bytes%0#0)
+        let aggregate%encoded_value%0#0: bytes = (concat aggregate%length_uint16%0#0 tmp%0#3)
+        let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%0#0
+        let tmp%1#3: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
+        let tmp%2#3: bytes = (concat 0x151f7c75 tmp%1#3)
+        (log tmp%2#3)
+        exit 1u
+    block@6: // pause_route_L193
+        (app_global_put "paused" 1u)
+        exit 1u
+    block@7: // unpause_route_L198
+        (app_global_put "paused" 0u)
+        exit 1u
+    block@8: // isPaused_route_L206
+        let (maybe_value%0#1: uint64, maybe_exists%0#1: bool) = (app_global_get_ex 0u "paused")
+        (assert maybe_exists%0#1) // check GlobalState exists
+        let aggregate%encoded_bool%0#0: bytes[1] = (setbit 0x00 0u maybe_value%0#1)
+        let aggregate%as_Encoded(bool8)%0#0: Encoded(bool8) = aggregate%encoded_bool%0#0
+        let tmp%1#2: Encoded(bool8) = aggregate%as_Encoded(bool8)%0#0
+        let tmp%2#2: bytes = (concat 0x151f7c75 tmp%1#2)
+        (log tmp%2#2)
+        exit 1u
+    block@9: // setDescription_route_L224
+        let tmp%0#2: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#2 0u) // on error: invalid array length header
+        let length%0#0: uint64 = aggregate%array_length%0#0
+        let add%0#0: uint64 = (+ length%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#2)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let desc#0: string = ((extract 2 0) tmp%0#2)
+        (app_global_put "description" desc#0)
+        exit 1u
+    block@10: // getDescription_route_L232
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (app_global_get_ex 0u "description")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let aggregate%length%1#0: uint64 = (len maybe_value%0#0)
+        let aggregate%as_bytes%1#0: bytes[8] = (itob aggregate%length%1#0)
+        let aggregate%length_uint16%1#0: bytes = ((extract 6 2) aggregate%as_bytes%1#0)
+        let aggregate%encoded_value%1#0: bytes = (concat aggregate%length_uint16%1#0 maybe_value%0#0)
+        let aggregate%as_Encoded(len+utf8[])%1#0: Encoded(len+utf8[]) = aggregate%encoded_value%1#0
+        let tmp%1#1: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%1#0
+        let tmp%2#1: bytes = (concat 0x151f7c75 tmp%1#1)
+        (log tmp%2#1)
+        exit 1u
+    block@12: // create_NoOp_L239
+        let tmp%5#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%5#0 {method "createApplication()void" => block@13, * => block@15}
+    block@13: // createApplication_route_L241
+        (app_global_put "paused" 0u)
+        (app_global_put "description" "multi-inherited")
+        exit 1u
+    block@15: // after_if_else_L239
+        fail

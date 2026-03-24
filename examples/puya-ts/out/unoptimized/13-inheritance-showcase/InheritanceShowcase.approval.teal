@@ -1,0 +1,413 @@
+#pragma version 11
+#pragma typetrack false
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.approvalProgram() -> uint64:
+main:
+    intcblock 1 0
+    bytecblock 0x151f7c75 "version" "label" "owner"
+    b main_block@0
+
+main_block@0:
+    txn ApplicationID
+    bnz main_after_if_else@2
+    b main_if_body@1
+
+main_if_body@1:
+    callsub constructor
+    b main_after_if_else@2
+
+main_after_if_else@2:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:173
+    // log('routing') // Custom pre-routing logic (BaseContract-style pattern)
+    pushbytes "routing"
+    log
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:174
+    // const result = super.approvalProgram() // Delegate to Contract's ABI router
+    callsub approvalProgram
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:175
+    // return result // Return routing result
+    return
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.createApplication[routing]() -> void:
+createApplication:
+    b createApplication_block@0
+
+createApplication_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:136
+    // public createApplication(): void {
+    callsub examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.createApplication
+    retsub
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.getVersion[routing]() -> void:
+getVersion:
+    b getVersion_block@0
+
+getVersion_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:145
+    // public getVersion(): uint64 {
+    callsub examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.getVersion
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    retsub
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.getLabel[routing]() -> void:
+getLabel:
+    b getLabel_block@0
+
+getLabel_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:155
+    // public getLabel(): string {
+    callsub examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.getLabel
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    retsub
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.bumpAndGetVersion[routing]() -> void:
+bumpAndGetVersion:
+    b bumpAndGetVersion_block@0
+
+bumpAndGetVersion_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:163
+    // public bumpAndGetVersion(): uint64 {
+    callsub examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.bumpAndGetVersion
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    retsub
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.bumpVersion[routing]() -> void:
+bumpVersion:
+    b bumpVersion_block@0
+
+bumpVersion_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:122
+    // public bumpVersion(): uint64 {
+    callsub examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.bumpVersion
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    retsub
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.getOwner[routing]() -> void:
+getOwner:
+    b getOwner_block@0
+
+getOwner_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:100
+    // public getOwner(): string {
+    callsub examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.getOwner
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    retsub
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.createApplication() -> void:
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.createApplication:
+    b examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.createApplication_block@0
+
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.createApplication_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:137
+    // super.createApplication() // Super call: sets owner from level 1
+    callsub examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.createApplication
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:133
+    // label = GlobalState<string>()
+    bytec_2 // "label"
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:138
+    // this.label.value = 'initialized' // Additional initialization at level 3
+    pushbytes "initialized"
+    app_global_put
+    retsub
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.getVersion() -> uint64:
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.getVersion:
+    b examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.getVersion_block@0
+
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.getVersion_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:146
+    // const base: uint64 = super.getVersion() // Super call to level 2
+    callsub examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.getVersion
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:147
+    // const enhanced: uint64 = base + 100 // Offset to show override is active
+    pushint 100
+    +
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:148
+    // return enhanced
+    retsub
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.getLabel() -> bytes:
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.getLabel:
+    b examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.getLabel_block@0
+
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.getLabel_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:156
+    // return this.label.value
+    intc_1 // 0
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:133
+    // label = GlobalState<string>()
+    bytec_2 // "label"
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:156
+    // return this.label.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    retsub
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.bumpAndGetVersion() -> uint64:
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.bumpAndGetVersion:
+    b examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.bumpAndGetVersion_block@0
+
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.bumpAndGetVersion_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:164
+    // this.bumpVersion() // Inherited from Versioned (level 2)
+    callsub examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.bumpVersion
+    pop
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:165
+    // return this.getVersion() // Calls this class's override (level 3)
+    callsub examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.getVersion
+    retsub
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.getVersion() -> uint64:
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.getVersion:
+    b examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.getVersion_block@0
+
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.getVersion_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:115
+    // return this.version.value // Read from state instead of hardcoded
+    intc_1 // 0
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:108
+    // version = GlobalState({ initialValue: Uint64(1) })
+    bytec_1 // "version"
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:115
+    // return this.version.value // Read from state instead of hardcoded
+    app_global_get_ex
+    assert // check GlobalState exists
+    retsub
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.bumpVersion() -> uint64:
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.bumpVersion:
+    b examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.bumpVersion_block@0
+
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.bumpVersion_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:123
+    // const next: uint64 = this.version.value + 1 // uint64 arithmetic annotation
+    intc_1 // 0
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:108
+    // version = GlobalState({ initialValue: Uint64(1) })
+    bytec_1 // "version"
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:123
+    // const next: uint64 = this.version.value + 1 // uint64 arithmetic annotation
+    app_global_get_ex
+    assert // check GlobalState exists
+    intc_0 // 1
+    +
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:108
+    // version = GlobalState({ initialValue: Uint64(1) })
+    bytec_1 // "version"
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:124
+    // this.version.value = next
+    dig 1
+    app_global_put
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:125
+    // return next
+    retsub
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.createApplication() -> void:
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.createApplication:
+    b examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.createApplication_block@0
+
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.createApplication_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:81
+    // owner = GlobalState<string>()
+    bytec_3 // "owner"
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:85
+    // this.owner.value = 'creator' // Default owner value
+    pushbytes "creator"
+    app_global_put
+    retsub
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.getOwner() -> bytes:
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.getOwner:
+    b examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.getOwner_block@0
+
+examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Ownable.getOwner_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:101
+    // return this.owner.value // Read level-1 state
+    intc_1 // 0
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:81
+    // owner = GlobalState<string>()
+    bytec_3 // "owner"
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:101
+    // return this.owner.value // Read level-1 state
+    app_global_get_ex
+    assert // check GlobalState exists
+    retsub
+
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+approvalProgram:
+    proto 0 1
+    pushbytes ""
+    pushbytes ""
+    b approvalProgram_block@0
+
+approvalProgram_block@0:
+    b approvalProgram_block@1
+
+approvalProgram_block@1:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:131
+    // export class InheritanceShowcase extends Versioned {
+    intc_1 // 0
+    frame_bury 0
+    txn OnCompletion
+    intc_1 // NoOp
+    ==
+    assert
+    txn ApplicationID
+    intc_1 // 0
+    !=
+    bz approvalProgram_create_NoOp@9
+    b approvalProgram_call_NoOp@2
+
+approvalProgram_call_NoOp@2:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:131
+    // export class InheritanceShowcase extends Versioned {
+    txna ApplicationArgs 0
+    pushbytes 0xbbe928b7 // method "getVersion()uint64"
+    pushbytes 0x113f6367 // method "getLabel()string"
+    pushbytes 0x8b59d094 // method "bumpAndGetVersion()uint64"
+    pushbytes 0x39976c17 // method "bumpVersion()uint64"
+    pushbytes 0x0bc930d8 // method "getOwner()string"
+    uncover 5
+    match approvalProgram_getVersion_route@3 approvalProgram_getLabel_route@4 approvalProgram_bumpAndGetVersion_route@5 approvalProgram_bumpVersion_route@6 approvalProgram_getOwner_route@7
+    b approvalProgram_switch_case_next@8
+
+approvalProgram_switch_case_next@8:
+    b approvalProgram_after_if_else@12
+
+approvalProgram_after_if_else@12:
+    frame_dig 0
+    frame_bury 1
+    b approvalProgram_after_inlined_examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.__puya_arc4_router__@13
+
+approvalProgram_after_inlined_examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.__puya_arc4_router__@13:
+    frame_dig 1
+    frame_bury 0
+    retsub
+
+approvalProgram_getOwner_route@7:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:100
+    // public getOwner(): string {
+    callsub getOwner
+    intc_0 // 1
+    frame_bury 0
+    b approvalProgram_switch_case_next@8
+
+approvalProgram_bumpVersion_route@6:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:122
+    // public bumpVersion(): uint64 {
+    callsub bumpVersion
+    intc_0 // 1
+    frame_bury 0
+    b approvalProgram_switch_case_next@8
+
+approvalProgram_bumpAndGetVersion_route@5:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:163
+    // public bumpAndGetVersion(): uint64 {
+    callsub bumpAndGetVersion
+    intc_0 // 1
+    frame_bury 0
+    b approvalProgram_switch_case_next@8
+
+approvalProgram_getLabel_route@4:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:155
+    // public getLabel(): string {
+    callsub getLabel
+    intc_0 // 1
+    frame_bury 0
+    b approvalProgram_switch_case_next@8
+
+approvalProgram_getVersion_route@3:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:145
+    // public getVersion(): uint64 {
+    callsub getVersion
+    intc_0 // 1
+    frame_bury 0
+    b approvalProgram_switch_case_next@8
+
+approvalProgram_create_NoOp@9:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:131
+    // export class InheritanceShowcase extends Versioned {
+    txna ApplicationArgs 0
+    pushbytes 0xb8447b36 // method "createApplication()void"
+    uncover 1
+    match approvalProgram_createApplication_route@10
+    b approvalProgram_switch_case_next@11
+
+approvalProgram_switch_case_next@11:
+    b approvalProgram_after_if_else@12
+
+approvalProgram_createApplication_route@10:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:136
+    // public createApplication(): void {
+    callsub createApplication
+    intc_0 // 1
+    frame_bury 0
+    b approvalProgram_switch_case_next@11
+
+
+// examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Versioned.constructor() -> void:
+constructor:
+    b constructor_block@0
+
+constructor_block@0:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:106
+    // class Versioned extends Ownable {
+    b constructor_block@1
+
+constructor_block@1:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:106
+    // class Versioned extends Ownable {
+    b constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2
+
+constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
+    // examples/puya-ts/13-inheritance-showcase/contract.algo.ts:108
+    // version = GlobalState({ initialValue: Uint64(1) })
+    bytec_1 // "version"
+    intc_0 // 1
+    app_global_put
+    retsub

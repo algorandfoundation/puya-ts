@@ -1,0 +1,22 @@
+main examples/puya-ts/03-logic-sig-gate/contract.algo.ts::program:
+    block@0: // L34
+        let tmp%0#0: uint64 = (txn Fee)
+        let tmp%1#0: bool = (<= tmp%0#0 TemplateVar[uint64](TMPL_MAX_FEE))
+        (assert tmp%1#0) // Fee exceeds maximum
+        let tmp%2#0: uint64 = (txn TypeEnum)
+        let tmp%3#0: bool = (== tmp%2#0 1u)
+        (assert tmp%3#0) // Must be a payment transaction
+        let tmp%4#0: account = (txn RekeyTo)
+        let tmp%5#0: account = (global ZeroAddress)
+        let tmp%6#0: bool = (== tmp%4#0 tmp%5#0)
+        (assert tmp%6#0) // Rekey not allowed
+        let tmp%7#0: account = (txn CloseRemainderTo)
+        let tmp%8#0: account = (global ZeroAddress)
+        let tmp%9#0: bool = (== tmp%7#0 tmp%8#0)
+        (assert tmp%9#0) // Close remainder not allowed
+        let tmp%10#0: bytes = (args 0u)
+        let signature#0: bytes = tmp%10#0
+        let tmp%11#0: bytes = (txn Note)
+        let tmp%12#0: bool = (ed25519verify_bare tmp%11#0 signature#0 TemplateVar[bytes](TMPL_AUTHORITY_KEY))
+        (assert tmp%12#0) // Invalid signature
+        return 1u

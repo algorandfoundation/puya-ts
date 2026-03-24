@@ -1,0 +1,360 @@
+contract AuditedProcessor
+{
+  globals {
+    ["callTag"]: uint64
+    ["auditCount"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    examples/puya-ts/13-inheritance-showcase/contract.algo.ts::AuditedProcessor.recordAudit()
+    log(itob(GlobalState["auditCount"]))
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  Auditable::recordAudit(): void
+  {
+    next: uint64 = GlobalState["auditCount"] + 1
+    GlobalState["auditCount"]: uint64 = next
+  }
+  
+  BaseContract::clearStateProgram(): bool
+  {
+    return True
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["callTag"]: uint64 = 42
+  }
+  
+  Auditable::constructor(): void
+  {
+    super.constructor()
+    GlobalState["auditCount"]: uint64 = 0
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract Versioned
+{
+  globals {
+    ["version"]: uint64
+    ["owner"]: string
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getVersion(): uint64
+  {
+    return GlobalState["version"]
+  }
+  
+  bumpVersion(): uint64
+  {
+    next: uint64 = GlobalState["version"] + 1
+    GlobalState["version"]: uint64 = next
+    return next
+  }
+  
+  Ownable::createApplication(): void
+  {
+    GlobalState["owner"]: string = "creator"
+  }
+  
+  Ownable::getVersion(): uint64
+  {
+    return 1
+  }
+  
+  Ownable::getOwner(): string
+  {
+    return GlobalState["owner"]
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["version"]: uint64 = 1
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract InheritanceShowcase
+{
+  globals {
+    ["label"]: string
+    ["version"]: uint64
+    ["owner"]: string
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    log("routing")
+    result: bool = super.approvalProgram()
+    return result
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+    super.createApplication()
+    GlobalState["label"]: string = "initialized"
+  }
+  
+  getVersion(): uint64
+  {
+    base: uint64 = super.getVersion()
+    enhanced: uint64 = base + 100
+    return enhanced
+  }
+  
+  getLabel(): string
+  {
+    return GlobalState["label"]
+  }
+  
+  bumpAndGetVersion(): uint64
+  {
+    examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.bumpVersion()
+    return examples/puya-ts/13-inheritance-showcase/contract.algo.ts::InheritanceShowcase.getVersion()
+  }
+  
+  Versioned::getVersion(): uint64
+  {
+    return GlobalState["version"]
+  }
+  
+  Versioned::bumpVersion(): uint64
+  {
+    next: uint64 = GlobalState["version"] + 1
+    GlobalState["version"]: uint64 = next
+    return next
+  }
+  
+  Ownable::createApplication(): void
+  {
+    GlobalState["owner"]: string = "creator"
+  }
+  
+  Ownable::getVersion(): uint64
+  {
+    return 1
+  }
+  
+  Ownable::getOwner(): string
+  {
+    return GlobalState["owner"]
+  }
+  
+  Contract::approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  Versioned::constructor(): void
+  {
+    super.constructor()
+    GlobalState["version"]: uint64 = 1
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract Pausable
+{
+  globals {
+    ["paused"]: bool
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+    GlobalState["paused"]: bool = False
+  }
+  
+  pause(): void
+  {
+    GlobalState["paused"]: bool = True
+  }
+  
+  unpause(): void
+  {
+    GlobalState["paused"]: bool = False
+  }
+  
+  isPaused(): bool
+  {
+    return GlobalState["paused"]
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["paused"]: bool = False
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+contract Describable
+{
+  globals {
+    ["description"]: string
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+    GlobalState["description"]: string = "none"
+  }
+  
+  setDescription(desc: string): void
+  {
+    GlobalState["description"]: string = desc
+  }
+  
+  getDescription(): string
+  {
+    return GlobalState["description"]
+  }
+  
+}
+contract MultiInheritanceShowcase
+{
+  globals {
+    ["paused"]: bool
+    ["description"]: string
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+    GlobalState["paused"]: bool = False
+    GlobalState["description"]: string = "multi-inherited"
+  }
+  
+  getStatus(): string
+  {
+    if (GlobalState["paused"]) {
+      return "paused"
+    }
+    return GlobalState["description"]
+  }
+  
+  Pausable::createApplication(): void
+  {
+    GlobalState["paused"]: bool = False
+  }
+  
+  Pausable::pause(): void
+  {
+    GlobalState["paused"]: bool = True
+  }
+  
+  Pausable::unpause(): void
+  {
+    GlobalState["paused"]: bool = False
+  }
+  
+  Pausable::isPaused(): bool
+  {
+    return GlobalState["paused"]
+  }
+  
+  Describable::createApplication(): void
+  {
+    GlobalState["description"]: string = "none"
+  }
+  
+  Describable::setDescription(desc: string): void
+  {
+    GlobalState["description"]: string = desc
+  }
+  
+  Describable::getDescription(): string
+  {
+    return GlobalState["description"]
+  }
+  
+  ClusteredContract<examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable,examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Describable>::constructor(): void
+  {
+    examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.constructor()
+    @algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor()
+  }
+  
+  Pausable::constructor(): void
+  {
+    super.constructor()
+    GlobalState["paused"]: bool = False
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}

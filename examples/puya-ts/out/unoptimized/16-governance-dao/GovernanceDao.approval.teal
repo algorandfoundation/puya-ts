@@ -1,0 +1,1351 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 8 464
+    bytecblock "p" 0x "bootstrapped" "latest" "nextProposalId" 0x00 "quorum" "votingPeriod" 0x068101 0x151f7c75 0x0000000000000000
+    b main_block@0
+
+main_block@0:
+    txn ApplicationID
+    bnz main_after_if_else@2
+    b main_if_body@1
+
+main_if_body@1:
+    callsub constructor
+    b main_after_if_else@2
+
+main_after_if_else@2:
+    b main_block@3
+
+main_block@3:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:94
+    // export class GovernanceDao extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@12
+    b main_call_NoOp@4
+
+main_call_NoOp@4:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:94
+    // export class GovernanceDao extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x8bef050e // method "bootstrap(uint64,uint64)void"
+    pushbytes 0xb84dd672 // method "propose(string)uint64"
+    pushbytes 0xf7f4481f // method "vote(uint64,bool)void"
+    pushbytes 0xea38f846 // method "execute(uint64)void"
+    pushbytes 0x02235cea // method "tally()uint64"
+    pushbytes 0x9656047a // method "close()void"
+    uncover 6
+    match main_bootstrap_route@5 main_propose_route@6 main_vote_route@7 main_execute_route@8 main_tally_route@9 main_close_route@10
+    b main_switch_case_next@11
+
+main_switch_case_next@11:
+    b main_after_if_else@15
+
+main_after_if_else@15:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:94
+    // export class GovernanceDao extends Contract {
+    err
+
+main_close_route@10:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:325
+    // public close(): void {
+    callsub close
+    b main_switch_case_next@11
+
+main_tally_route@9:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:293
+    // public tally(): uint64 {
+    callsub tally
+    b main_switch_case_next@11
+
+main_execute_route@8:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:254
+    // public execute(proposalId: uint64): void {
+    callsub execute
+    b main_switch_case_next@11
+
+main_vote_route@7:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:206
+    // public vote(proposalId: uint64, inFavor: boolean): void {
+    callsub vote
+    b main_switch_case_next@11
+
+main_propose_route@6:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:164
+    // public propose(description: string): uint64 {
+    callsub propose
+    b main_switch_case_next@11
+
+main_bootstrap_route@5:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:138
+    // public bootstrap(quorum: uint64, votingPeriod: uint64): void {
+    callsub bootstrap
+    b main_switch_case_next@11
+
+main_create_NoOp@12:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:94
+    // export class GovernanceDao extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0xb8447b36 // method "createApplication()void"
+    uncover 1
+    match main_createApplication_route@13
+    b main_switch_case_next@14
+
+main_switch_case_next@14:
+    b main_after_if_else@15
+
+main_createApplication_route@13:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:125
+    // public createApplication(): void {
+    callsub createApplication
+    b main_switch_case_next@14
+
+
+// _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
+ensure_budget:
+    proto 2 0
+    b ensure_budget_block@0
+
+ensure_budget_block@0:
+    frame_dig -2
+    pushint 10
+    +
+    b ensure_budget_while_top@1
+
+ensure_budget_while_top@1:
+    global OpcodeBudget
+    frame_dig 0
+    <
+    bz ensure_budget_after_while@6
+    b ensure_budget_while_body@2
+
+ensure_budget_while_body@2:
+    itxn_begin
+    pushint 6 // appl
+    itxn_field TypeEnum
+    pushint 5 // DeleteApplication
+    itxn_field OnCompletion
+    bytec 8 // 0x068101
+    itxn_field ApprovalProgram
+    bytec 8 // 0x068101
+    itxn_field ClearStateProgram
+    intc_0 // 0
+    intc_1 // 1
+    frame_dig -1
+    match ensure_budget_switch_case_0@3 ensure_budget_switch_case_1@4
+    b ensure_budget_switch_case_next@5
+
+ensure_budget_switch_case_next@5:
+    itxn_submit
+    b ensure_budget_while_top@1
+
+ensure_budget_switch_case_1@4:
+    global MinTxnFee
+    itxn_field Fee
+    b ensure_budget_switch_case_next@5
+
+ensure_budget_switch_case_0@3:
+    intc_0 // 0
+    itxn_field Fee
+    b ensure_budget_switch_case_next@5
+
+ensure_budget_after_while@6:
+    retsub
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::voteBoxKey(proposalId: uint64, voter: bytes) -> bytes:
+voteBoxKey:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:83
+    // function voteBoxKey(proposalId: uint64, voter: Account): bytes {
+    proto 2 1
+    b voteBoxKey_block@0
+
+voteBoxKey_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:86
+    // return op.itob(proposalId).concat(voter.bytes)
+    frame_dig -2
+    itob
+    frame_dig -1
+    concat
+    retsub
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.createApplication[routing]() -> void:
+createApplication:
+    b createApplication_block@0
+
+createApplication_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:125
+    // public createApplication(): void {
+    callsub examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.createApplication
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.bootstrap[routing]() -> void:
+bootstrap:
+    b bootstrap_block@0
+
+bootstrap_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:138
+    // public bootstrap(quorum: uint64, votingPeriod: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.bootstrap
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.propose[routing]() -> void:
+propose:
+    b propose_block@0
+
+propose_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:164
+    // public propose(description: string): uint64 {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    pushint 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.propose
+    itob
+    bytec 9 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.vote[routing]() -> void:
+vote:
+    b vote_block@0
+
+vote_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:206
+    // public vote(proposalId: uint64, inFavor: boolean): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 1
+    ==
+    assert // invalid number of bytes for arc4.bool
+    intc_0 // 0
+    getbit
+    callsub examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.vote
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.execute[routing]() -> void:
+execute:
+    b execute_block@0
+
+execute_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:254
+    // public execute(proposalId: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.execute
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally[routing]() -> void:
+tally:
+    b tally_block@0
+
+tally_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:293
+    // public tally(): uint64 {
+    callsub examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally
+    itob
+    bytec 9 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close[routing]() -> void:
+close:
+    b close_block@0
+
+close_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:325
+    // public close(): void {
+    callsub examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.createApplication() -> void:
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.createApplication:
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.createApplication_block@0
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.createApplication_block@0:
+    retsub
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.bootstrap(quorum: uint64, votingPeriod: uint64) -> void:
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.bootstrap:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:138
+    // public bootstrap(quorum: uint64, votingPeriod: uint64): void {
+    proto 2 0
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.bootstrap_block@0
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.bootstrap_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:140
+    // assert(Txn.sender === Global.creatorAddress, 'Only creator can bootstrap')
+    txn Sender
+    global CreatorAddress
+    ==
+    assert // Only creator can bootstrap
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:142
+    // assert(!this.bootstrapped.value, 'Already bootstrapped')
+    intc_0 // 0
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:107
+    // bootstrapped = GlobalState<boolean>({ initialValue: false })
+    bytec_2 // "bootstrapped"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:142
+    // assert(!this.bootstrapped.value, 'Already bootstrapped')
+    app_global_get_ex
+    assert // check GlobalState exists
+    !
+    assert // Already bootstrapped
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:143
+    // assert(quorum > 0, 'Quorum must be positive')
+    frame_dig -2
+    intc_0 // 0
+    >
+    assert // Quorum must be positive
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:144
+    // assert(votingPeriod > 0, 'Voting period must be positive')
+    frame_dig -1
+    intc_0 // 0
+    >
+    assert // Voting period must be positive
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:98
+    // quorum = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 6 // "quorum"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:147
+    // this.quorum.value = quorum
+    frame_dig -2
+    app_global_put
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:101
+    // votingPeriod = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 7 // "votingPeriod"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:148
+    // this.votingPeriod.value = votingPeriod
+    frame_dig -1
+    app_global_put
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:107
+    // bootstrapped = GlobalState<boolean>({ initialValue: false })
+    bytec_2 // "bootstrapped"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:149
+    // this.bootstrapped.value = true
+    intc_1 // 1
+    app_global_put
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:152
+    // emit('DaoBootstrapped', new Arc4Uint64(quorum), new Arc4Uint64(votingPeriod))
+    frame_dig -2
+    itob
+    frame_dig -1
+    itob
+    bytec_1 // 0x
+    uncover 2
+    concat
+    uncover 1
+    concat
+    pushbytes 0x681527dd // method "DaoBootstrapped(uint64,uint64)"
+    uncover 1
+    concat
+    log
+    retsub
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.propose(description: bytes) -> uint64:
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.propose:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:164
+    // public propose(description: string): uint64 {
+    proto 1 1
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.propose_block@0
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.propose_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:165
+    // assert(this.bootstrapped.value, 'Not bootstrapped')
+    intc_0 // 0
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:107
+    // bootstrapped = GlobalState<boolean>({ initialValue: false })
+    bytec_2 // "bootstrapped"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:165
+    // assert(this.bootstrapped.value, 'Not bootstrapped')
+    app_global_get_ex
+    assert // check GlobalState exists
+    assert // Not bootstrapped
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:168
+    // const id: uint64 = this.nextProposalId.value
+    intc_0 // 0
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:104
+    // nextProposalId = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 4 // "nextProposalId"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:168
+    // const id: uint64 = this.nextProposalId.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:170
+    // const endRound: uint64 = Global.round + this.votingPeriod.value
+    global Round
+    intc_0 // 0
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:101
+    // votingPeriod = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 7 // "votingPeriod"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:170
+    // const endRound: uint64 = Global.round + this.votingPeriod.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    +
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:174
+    // proposer: new Address(Txn.sender), // arc4.Address from transaction sender
+    txn Sender
+    cover 1
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:175
+    // description: new Str(description), // arc4.Str from native string param
+    frame_dig -1
+    len
+    itob
+    extract 6 2
+    frame_dig -1
+    concat
+    cover 2
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:178
+    // endRound: new Arc4Uint64(endRound), // Voting deadline round
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:179
+    // executed: new Bool(false), // Not yet executed
+    bytec 5 // 0x00
+    intc_0 // 0
+    intc_0 // 0
+    setbit
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:173-180
+    // this.proposals(id).value = new Proposal({
+    //   proposer: new Address(Txn.sender), // arc4.Address from transaction sender
+    //   description: new Str(description), // arc4.Str from native string param
+    //   yesVotes: new Arc4Uint64(0), // Initialize vote counts to zero
+    //   noVotes: new Arc4Uint64(0),
+    //   endRound: new Arc4Uint64(endRound), // Voting deadline round
+    //   executed: new Bool(false), // Not yet executed
+    // })
+    bytec_1 // 0x
+    uncover 3
+    concat
+    pushint 59
+    itob
+    extract 6 2
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:176
+    // yesVotes: new Arc4Uint64(0), // Initialize vote counts to zero
+    bytec 10 // 0x0000000000000000
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:173-180
+    // this.proposals(id).value = new Proposal({
+    //   proposer: new Address(Txn.sender), // arc4.Address from transaction sender
+    //   description: new Str(description), // arc4.Str from native string param
+    //   yesVotes: new Arc4Uint64(0), // Initialize vote counts to zero
+    //   noVotes: new Arc4Uint64(0),
+    //   endRound: new Arc4Uint64(endRound), // Voting deadline round
+    //   executed: new Bool(false), // Not yet executed
+    // })
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:177
+    // noVotes: new Arc4Uint64(0),
+    bytec 10 // 0x0000000000000000
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:173-180
+    // this.proposals(id).value = new Proposal({
+    //   proposer: new Address(Txn.sender), // arc4.Address from transaction sender
+    //   description: new Str(description), // arc4.Str from native string param
+    //   yesVotes: new Arc4Uint64(0), // Initialize vote counts to zero
+    //   noVotes: new Arc4Uint64(0),
+    //   endRound: new Arc4Uint64(endRound), // Voting deadline round
+    //   executed: new Bool(false), // Not yet executed
+    // })
+    concat
+    uncover 2
+    concat
+    uncover 1
+    concat
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:173
+    // this.proposals(id).value = new Proposal({
+    dig 1
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:112
+    // proposals = BoxMap<uint64, Proposal>({ keyPrefix: 'p' })
+    bytec_0 // "p"
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:173-180
+    // this.proposals(id).value = new Proposal({
+    //   proposer: new Address(Txn.sender), // arc4.Address from transaction sender
+    //   description: new Str(description), // arc4.Str from native string param
+    //   yesVotes: new Arc4Uint64(0), // Initialize vote counts to zero
+    //   noVotes: new Arc4Uint64(0),
+    //   endRound: new Arc4Uint64(endRound), // Voting deadline round
+    //   executed: new Bool(false), // Not yet executed
+    // })
+    dup
+    box_del
+    pop
+    uncover 1
+    box_put
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:183
+    // const next: uint64 = id + 1
+    dup
+    intc_1 // 1
+    +
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:104
+    // nextProposalId = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 4 // "nextProposalId"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:184
+    // this.nextProposalId.value = next
+    uncover 1
+    app_global_put
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:189
+    // id: new Arc4Uint64(id),
+    dup
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:190
+    // proposer: new Address(Txn.sender),
+    txn Sender
+    cover 1
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:188-191
+    // new ProposalCreated({
+    //   id: new Arc4Uint64(id),
+    //   proposer: new Address(Txn.sender),
+    // }),
+    bytec_1 // 0x
+    uncover 1
+    concat
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:187-192
+    // emit(
+    //   new ProposalCreated({
+    //     id: new Arc4Uint64(id),
+    //     proposer: new Address(Txn.sender),
+    //   }),
+    // )
+    pushbytes 0x69bc4b12 // method "ProposalCreated(uint64,address)"
+    uncover 1
+    concat
+    log
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:194
+    // return id
+    retsub
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.vote(proposalId: uint64, inFavor: uint64) -> void:
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.vote:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:206
+    // public vote(proposalId: uint64, inFavor: boolean): void {
+    proto 2 0
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.vote_block@0
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.vote_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:207
+    // assert(this.bootstrapped.value, 'Not bootstrapped')
+    intc_0 // 0
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:107
+    // bootstrapped = GlobalState<boolean>({ initialValue: false })
+    bytec_2 // "bootstrapped"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:207
+    // assert(this.bootstrapped.value, 'Not bootstrapped')
+    app_global_get_ex
+    assert // check GlobalState exists
+    assert // Not bootstrapped
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:209
+    // assert(this.proposals(proposalId).exists, 'Proposal not found')
+    frame_dig -2
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:112
+    // proposals = BoxMap<uint64, Proposal>({ keyPrefix: 'p' })
+    bytec_0 // "p"
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:209
+    // assert(this.proposals(proposalId).exists, 'Proposal not found')
+    box_len
+    assert // Proposal not found
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:212
+    // const key: bytes = voteBoxKey(proposalId, Txn.sender)
+    txn Sender
+    frame_dig -2
+    uncover 1
+    callsub voteBoxKey
+    dup
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:115
+    // votes = BoxMap<bytes, uint64>({ keyPrefix: 'v' })
+    pushbytes "v"
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:214
+    // assert(!this.votes(key).exists, 'Already voted')
+    box_len
+    !
+    assert // Already voted
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:217
+    // const proposal: Proposal = clone(this.proposals(proposalId).value)
+    frame_dig -2
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:112
+    // proposals = BoxMap<uint64, Proposal>({ keyPrefix: 'p' })
+    bytec_0 // "p"
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:217
+    // const proposal: Proposal = clone(this.proposals(proposalId).value)
+    box_get
+    assert // Box must have value
+    dup
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:219
+    // assert(Global.round <= proposal.endRound.asUint64(), 'Voting ended')
+    global Round
+    cover 1
+    dup
+    pushint 50
+    intc_2 // 8
+    extract3
+    btoi
+    uncover 2
+    >=
+    assert // Voting ended
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:221
+    // assert(!proposal.executed.native, 'Already executed')
+    intc_3 // 464
+    getbit
+    bytec 5 // 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
+    intc_0 // 0
+    getbit
+    !
+    assert // Already executed
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:224
+    // if (inFavor) {
+    frame_dig -1
+    bz examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.vote_else_body@2
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.vote_if_body@1
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.vote_if_body@1:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:225
+    // const newYes: uint64 = proposal.yesVotes.asUint64() + 1
+    frame_dig 3
+    pushint 34
+    intc_2 // 8
+    extract3
+    btoi
+    intc_1 // 1
+    +
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:227
+    // this.proposals(proposalId).value.yesVotes = new Arc4Uint64(newYes)
+    itob
+    frame_dig -2
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:112
+    // proposals = BoxMap<uint64, Proposal>({ keyPrefix: 'p' })
+    bytec_0 // "p"
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:227
+    // this.proposals(proposalId).value.yesVotes = new Arc4Uint64(newYes)
+    intc_0 // 0
+    pushint 34
+    +
+    uncover 2
+    box_replace // on error: index out of bounds
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.vote_after_if_else@3
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.vote_after_if_else@3:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:115
+    // votes = BoxMap<bytes, uint64>({ keyPrefix: 'v' })
+    pushbytes "v"
+    frame_dig 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:234
+    // this.votes(key).value = Uint64(1)
+    intc_1 // 1
+    itob
+    box_put
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:239
+    // proposalId: new Arc4Uint64(proposalId),
+    frame_dig -2
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:240
+    // voter: new Address(Txn.sender),
+    txn Sender
+    cover 1
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:241
+    // inFavor: new Bool(inFavor),
+    bytec 5 // 0x00
+    intc_0 // 0
+    frame_dig -1
+    setbit
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:238-242
+    // new VoteCast({
+    //   proposalId: new Arc4Uint64(proposalId),
+    //   voter: new Address(Txn.sender),
+    //   inFavor: new Bool(inFavor),
+    // }),
+    bytec_1 // 0x
+    uncover 2
+    concat
+    uncover 2
+    concat
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:237-243
+    // emit(
+    //   new VoteCast({
+    //     proposalId: new Arc4Uint64(proposalId),
+    //     voter: new Address(Txn.sender),
+    //     inFavor: new Bool(inFavor),
+    //   }),
+    // )
+    pushbytes 0x2cc19a44 // method "VoteCast(uint64,address,bool)"
+    uncover 1
+    concat
+    log
+    retsub
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.vote_else_body@2:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:229
+    // const newNo: uint64 = proposal.noVotes.asUint64() + 1
+    frame_dig 3
+    pushint 42
+    intc_2 // 8
+    extract3
+    btoi
+    intc_1 // 1
+    +
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:230
+    // this.proposals(proposalId).value.noVotes = new Arc4Uint64(newNo)
+    itob
+    frame_dig -2
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:112
+    // proposals = BoxMap<uint64, Proposal>({ keyPrefix: 'p' })
+    bytec_0 // "p"
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:230
+    // this.proposals(proposalId).value.noVotes = new Arc4Uint64(newNo)
+    intc_0 // 0
+    pushint 42
+    +
+    uncover 2
+    box_replace // on error: index out of bounds
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.vote_after_if_else@3
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.execute(proposalId: uint64) -> void:
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.execute:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:254
+    // public execute(proposalId: uint64): void {
+    proto 1 0
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.execute_block@0
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.execute_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:255
+    // assert(this.bootstrapped.value, 'Not bootstrapped')
+    intc_0 // 0
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:107
+    // bootstrapped = GlobalState<boolean>({ initialValue: false })
+    bytec_2 // "bootstrapped"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:255
+    // assert(this.bootstrapped.value, 'Not bootstrapped')
+    app_global_get_ex
+    assert // check GlobalState exists
+    assert // Not bootstrapped
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:256
+    // assert(this.proposals(proposalId).exists, 'Proposal not found')
+    frame_dig -1
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:112
+    // proposals = BoxMap<uint64, Proposal>({ keyPrefix: 'p' })
+    bytec_0 // "p"
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:256
+    // assert(this.proposals(proposalId).exists, 'Proposal not found')
+    box_len
+    assert // Proposal not found
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:259
+    // const proposal: Proposal = clone(this.proposals(proposalId).value)
+    frame_dig -1
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:112
+    // proposals = BoxMap<uint64, Proposal>({ keyPrefix: 'p' })
+    bytec_0 // "p"
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:259
+    // const proposal: Proposal = clone(this.proposals(proposalId).value)
+    box_get
+    assert // Box must have value
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:261
+    // assert(Global.round > proposal.endRound.asUint64(), 'Voting not ended')
+    global Round
+    cover 1
+    dup
+    pushint 50
+    intc_2 // 8
+    extract3
+    btoi
+    uncover 2
+    <
+    assert // Voting not ended
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:263
+    // assert(!proposal.executed.native, 'Already executed')
+    dup
+    intc_3 // 464
+    getbit
+    bytec 5 // 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
+    intc_0 // 0
+    getbit
+    !
+    assert // Already executed
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:265
+    // assert(proposal.yesVotes.asUint64() >= this.quorum.value, 'Quorum not met')
+    pushint 34
+    intc_2 // 8
+    extract3
+    btoi
+    intc_0 // 0
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:98
+    // quorum = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 6 // "quorum"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:265
+    // assert(proposal.yesVotes.asUint64() >= this.quorum.value, 'Quorum not met')
+    app_global_get_ex
+    assert // check GlobalState exists
+    >=
+    assert // Quorum not met
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:268
+    // this.proposals(proposalId).value.executed = new Bool(true)
+    bytec 5 // 0x00
+    intc_0 // 0
+    intc_1 // 1
+    setbit
+    frame_dig -1
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:112
+    // proposals = BoxMap<uint64, Proposal>({ keyPrefix: 'p' })
+    bytec_0 // "p"
+    uncover 1
+    concat
+    cover 1
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:268
+    // this.proposals(proposalId).value.executed = new Bool(true)
+    intc_0 // 0
+    getbit
+    cover 1
+    intc_3 // 464
+    intc_2 // 8
+    /
+    intc_0 // 0
+    +
+    intc_3 // 464
+    intc_2 // 8
+    %
+    cover 1
+    dig 2
+    dig 1
+    intc_1 // 1
+    box_extract
+    cover 1
+    dig 2
+    intc_2 // 8
+    <
+    assert // index access is out of bounds
+    dig 2
+    intc_2 // 8
+    <
+    assert // index access is out of bounds
+    uncover 1
+    uncover 2
+    uncover 4
+    setbit
+    uncover 2
+    uncover 2
+    uncover 2
+    box_replace // on error: index out of bounds
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:118
+    // latestExecuted = Box<Proposal>({ key: 'latest' })
+    bytec_3 // "latest"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:272
+    // if (this.latestExecuted.exists) {
+    box_len
+    bz examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.execute_after_if_else@2
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.execute_if_body@1
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.execute_if_body@1:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:118
+    // latestExecuted = Box<Proposal>({ key: 'latest' })
+    bytec_3 // "latest"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:273
+    // this.latestExecuted.delete()
+    box_del
+    pop
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.execute_after_if_else@2
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.execute_after_if_else@2:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:275
+    // this.latestExecuted.value = clone(this.proposals(proposalId).value)
+    frame_dig -1
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:112
+    // proposals = BoxMap<uint64, Proposal>({ keyPrefix: 'p' })
+    bytec_0 // "p"
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:275
+    // this.latestExecuted.value = clone(this.proposals(proposalId).value)
+    box_get
+    assert // Box must have value
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:118
+    // latestExecuted = Box<Proposal>({ key: 'latest' })
+    bytec_3 // "latest"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:275
+    // this.latestExecuted.value = clone(this.proposals(proposalId).value)
+    box_del
+    pop
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:118
+    // latestExecuted = Box<Proposal>({ key: 'latest' })
+    bytec_3 // "latest"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:275
+    // this.latestExecuted.value = clone(this.proposals(proposalId).value)
+    uncover 1
+    box_put
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:280
+    // id: new Arc4Uint64(proposalId),
+    frame_dig -1
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:279-281
+    // new ProposalExecuted({
+    //   id: new Arc4Uint64(proposalId),
+    // }),
+    bytec_1 // 0x
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:278-282
+    // emit(
+    //   new ProposalExecuted({
+    //     id: new Arc4Uint64(proposalId),
+    //   }),
+    // )
+    pushbytes 0x35c67efd // method "ProposalExecuted(uint64)"
+    uncover 1
+    concat
+    log
+    retsub
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally() -> uint64:
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:293
+    // public tally(): uint64 {
+    proto 0 1
+    intc_0 // 0
+    intc_0 // 0
+    intc_0 // 0
+    intc_0 // 0
+    bytec_1 // ""
+    bytec_1 // ""
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_block@0
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:294
+    // const count: uint64 = this.nextProposalId.value
+    intc_0 // 0
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:104
+    // nextProposalId = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 4 // "nextProposalId"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:294
+    // const count: uint64 = this.nextProposalId.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    dup
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:297
+    // const budget: uint64 = Uint64(700) * count
+    pushint 700
+    *
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:298
+    // ensureBudget(budget, OpUpFeeSource.GroupCredit)
+    intc_0 // 0
+    callsub ensure_budget
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:301
+    // const passing = new DynamicArray<Arc4Uint64>()
+    intc_0 // 0
+    itob
+    extract 6 2
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:304
+    // for (const id of urange(count)) {
+    intc_1 // 1
+    assert // Step cannot be zero
+    intc_0 // 0
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_for_header@1
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_for_header@1:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:304
+    // for (const id of urange(count)) {
+    frame_dig 8
+    frame_dig 6
+    <
+    bz examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_after_for@8
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_for_body@2
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_for_body@2:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:304
+    // for (const id of urange(count)) {
+    frame_dig 8
+    dup
+    frame_bury 5
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:305
+    // if (this.proposals(id).exists) {
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:112
+    // proposals = BoxMap<uint64, Proposal>({ keyPrefix: 'p' })
+    bytec_0 // "p"
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:305
+    // if (this.proposals(id).exists) {
+    box_len
+    cover 1
+    frame_bury 4
+    frame_dig 7
+    frame_bury 3
+    bz examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_after_if_else@6
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_if_body@3
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_if_body@3:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:307
+    // const proposal: Proposal = clone(this.proposals(id).value)
+    frame_dig 5
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:112
+    // proposals = BoxMap<uint64, Proposal>({ keyPrefix: 'p' })
+    bytec_0 // "p"
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:307
+    // const proposal: Proposal = clone(this.proposals(id).value)
+    box_get
+    assert // Box must have value
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:309
+    // if (proposal.yesVotes.asUint64() >= this.quorum.value) {
+    pushint 34
+    intc_2 // 8
+    extract3
+    btoi
+    intc_0 // 0
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:98
+    // quorum = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 6 // "quorum"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:309
+    // if (proposal.yesVotes.asUint64() >= this.quorum.value) {
+    app_global_get_ex
+    assert // check GlobalState exists
+    >=
+    frame_dig 7
+    frame_bury 3
+    bz examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_after_if_else@5
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_if_body@4
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_if_body@4:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:311
+    // passing.push(new Arc4Uint64(id))
+    frame_dig 5
+    itob
+    bytec_1 // 0x
+    uncover 1
+    concat
+    frame_dig 7
+    frame_bury 1
+    frame_bury 2
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_block@9
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_block@9:
+    frame_dig 1
+    dup
+    intc_0 // 0
+    extract_uint16
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:311
+    // passing.push(new Arc4Uint64(id))
+    intc_1 // 1
+    +
+    itob
+    extract 6 0
+    replace2 0
+    frame_dig 2
+    concat
+    frame_bury 0
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:311
+    // passing.push(new Arc4Uint64(id))
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@10
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@10:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:311
+    // passing.push(new Arc4Uint64(id))
+    frame_dig 0
+    frame_bury 3
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_after_if_else@5
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_after_if_else@5:
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_after_if_else@6
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_after_if_else@6:
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_for_footer@7
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_for_footer@7:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:304
+    // for (const id of urange(count)) {
+    frame_dig 8
+    intc_1 // 1
+    +
+    frame_bury 8
+    frame_dig 3
+    frame_bury 7
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_for_header@1
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.tally_after_for@8:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:317
+    // return passing.length
+    frame_dig 7
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    frame_bury 0
+    retsub
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close() -> void:
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:325
+    // public close(): void {
+    proto 0 0
+    bytec_1 // ""
+    bytec_1 // ""
+    bytec_1 // ""
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_block@0
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:327
+    // assert(Txn.sender === Global.creatorAddress, 'Only creator can close')
+    txn Sender
+    global CreatorAddress
+    ==
+    assert // Only creator can close
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:329
+    // const count: uint64 = this.nextProposalId.value
+    intc_0 // 0
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:104
+    // nextProposalId = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 4 // "nextProposalId"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:329
+    // const count: uint64 = this.nextProposalId.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    dup
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:332
+    // const budget: uint64 = Uint64(700) * count
+    pushint 700
+    *
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:333
+    // ensureBudget(budget, OpUpFeeSource.GroupCredit)
+    intc_0 // 0
+    callsub ensure_budget
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:336
+    // for (const id of urange(count)) {
+    intc_1 // 1
+    assert // Step cannot be zero
+    intc_0 // 0
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_for_header@1
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_for_header@1:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:336
+    // for (const id of urange(count)) {
+    frame_dig 4
+    frame_dig 3
+    <
+    bz examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_after_for@6
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_for_body@2
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_for_body@2:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:336
+    // for (const id of urange(count)) {
+    frame_dig 4
+    dup
+    frame_bury 2
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:338
+    // if (this.proposals(id).exists) {
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:112
+    // proposals = BoxMap<uint64, Proposal>({ keyPrefix: 'p' })
+    bytec_0 // "p"
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:338
+    // if (this.proposals(id).exists) {
+    box_len
+    cover 1
+    frame_bury 0
+    bz examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_after_if_else@4
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_if_body@3
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_if_body@3:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:339
+    // this.proposals(id).delete()
+    frame_dig 2
+    itob
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:112
+    // proposals = BoxMap<uint64, Proposal>({ keyPrefix: 'p' })
+    bytec_0 // "p"
+    uncover 1
+    concat
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:339
+    // this.proposals(id).delete()
+    box_del
+    pop
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_after_if_else@4
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_after_if_else@4:
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_for_footer@5
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_for_footer@5:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:336
+    // for (const id of urange(count)) {
+    frame_dig 4
+    intc_1 // 1
+    +
+    frame_bury 4
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_for_header@1
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_after_for@6:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:118
+    // latestExecuted = Box<Proposal>({ key: 'latest' })
+    bytec_3 // "latest"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:344
+    // if (this.latestExecuted.exists) {
+    box_len
+    cover 1
+    frame_bury 1
+    bz examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_after_if_else@8
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_if_body@7
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_if_body@7:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:118
+    // latestExecuted = Box<Proposal>({ key: 'latest' })
+    bytec_3 // "latest"
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:345
+    // this.latestExecuted.delete()
+    box_del
+    pop
+    b examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_after_if_else@8
+
+examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.close_after_if_else@8:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:349
+    // emit('DaoClosed', new Arc4Uint64(count))
+    frame_dig 3
+    itob
+    bytec_1 // 0x
+    uncover 1
+    concat
+    pushbytes 0x901dfe9f // method "DaoClosed(uint64)"
+    uncover 1
+    concat
+    log
+    retsub
+
+
+// examples/puya-ts/16-governance-dao/contract.algo.ts::GovernanceDao.constructor() -> void:
+constructor:
+    b constructor_block@0
+
+constructor_block@0:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:94
+    // export class GovernanceDao extends Contract {
+    b constructor_block@1
+
+constructor_block@1:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:94
+    // export class GovernanceDao extends Contract {
+    b constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2
+
+constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.d.ts::BaseContract.constructor@2:
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:98
+    // quorum = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 6 // "quorum"
+    intc_0 // 0
+    app_global_put
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:101
+    // votingPeriod = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 7 // "votingPeriod"
+    intc_0 // 0
+    app_global_put
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:104
+    // nextProposalId = GlobalState<uint64>({ initialValue: Uint64(0) })
+    bytec 4 // "nextProposalId"
+    intc_0 // 0
+    app_global_put
+    // examples/puya-ts/16-governance-dao/contract.algo.ts:107
+    // bootstrapped = GlobalState<boolean>({ initialValue: false })
+    bytec_2 // "bootstrapped"
+    intc_0 // 0
+    app_global_put
+    retsub

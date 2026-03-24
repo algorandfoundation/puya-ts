@@ -1,0 +1,44 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let reinterpret_bool%0#0: bool = (txn ApplicationID)
+        goto reinterpret_bool%0#0 ? block@2 : block@1
+    block@1: // if_body_L1
+        (app_global_put "paused" 0u)
+        goto block@2
+    block@2: // after_if_else_L1
+        let tmp%0#1: uint64 = (txn OnCompletion)
+        let tmp%1#0: bool = (! tmp%0#1)
+        (assert tmp%1#0)
+        let tmp%2#0: uint64 = (txn ApplicationID)
+        goto tmp%2#0 ? block@4 : block@9
+    block@4: // call_NoOp_L184
+        let tmp%4#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%4#0 {method "pause()void" => block@5, method "unpause()void" => block@6, method "isPaused()bool" => block@7, * => block@12}
+    block@5: // pause_route_L193
+        (app_global_put "paused" 1u)
+        exit 1u
+    block@6: // unpause_route_L198
+        (app_global_put "paused" 0u)
+        exit 1u
+    block@7: // isPaused_route_L206
+        examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.isPaused[routing]()
+        goto block@12
+    block@9: // create_NoOp_L184
+        let tmp%5#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%5#0 {method "createApplication()void" => block@10, * => block@12}
+    block@10: // createApplication_route_L188
+        (app_global_put "paused" 0u)
+        exit 1u
+    block@12: // after_if_else_L184
+        fail
+
+subroutine examples/puya-ts/13-inheritance-showcase/contract.algo.ts::Pausable.isPaused[routing]() -> void:
+    block@0: // L206
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "paused")
+        (assert maybe_exists%0#0) // check GlobalState exists
+        let aggregate%encoded_bool%0#0: bytes[1] = (setbit 0x00 0u maybe_value%0#0)
+        let aggregate%as_Encoded(bool8)%0#0: Encoded(bool8) = aggregate%encoded_bool%0#0
+        let tmp%1#0: Encoded(bool8) = aggregate%as_Encoded(bool8)%0#0
+        let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
+        (log tmp%2#0)
+        exit 1u

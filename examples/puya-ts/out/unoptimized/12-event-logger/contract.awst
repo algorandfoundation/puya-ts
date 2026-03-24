@@ -1,0 +1,71 @@
+contract EventLogger
+{
+  globals {
+    ["eventCount"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+  }
+  
+  logTransfer(from: uint64, to: uint64, amount: uint64): void
+  {
+    emit("examples/puya-ts/12-event-logger/contract.algo.ts::Transfer", new examples/puya-ts/12-event-logger/contract.algo.ts::Transfer(from=from, to=to, amount=amount))
+    GlobalState["eventCount"]: uint64 = GlobalState["eventCount"] + 1
+  }
+  
+  logApproval(owner: uint64, spender: uint64, value: uint64): void
+  {
+    emit("examples/puya-ts/12-event-logger/contract.algo.ts::Approval", new examples/puya-ts/12-event-logger/contract.algo.ts::Approval(owner=owner, spender=spender, value=value))
+    GlobalState["eventCount"]: uint64 = GlobalState["eventCount"] + 1
+  }
+  
+  logDeposit(account: uint64, amount: uint64): void
+  {
+    emit_fields(Deposit, (account, amount))
+    GlobalState["eventCount"]: uint64 = GlobalState["eventCount"] + 1
+  }
+  
+  logWithdrawal(account: uint64, amount: uint64): void
+  {
+    emit_fields(Withdrawal(uint64,uint64), (account, amount))
+    GlobalState["eventCount"]: uint64 = GlobalState["eventCount"] + 1
+  }
+  
+  logStatusChange(message: string, code: uint64): void
+  {
+    event: examples/puya-ts/12-event-logger/contract.algo.ts::StatusChanged = new examples/puya-ts/12-event-logger/contract.algo.ts::StatusChanged(message=($0 = #{ message: message, code: code }).message, code=$0.code)
+    emit("examples/puya-ts/12-event-logger/contract.algo.ts::StatusChanged", event)
+    GlobalState["eventCount"]: uint64 = GlobalState["eventCount"] + 1
+  }
+  
+  logBatch(from: uint64, to: uint64, amount: uint64): void
+  {
+    emit("examples/puya-ts/12-event-logger/contract.algo.ts::Transfer", new examples/puya-ts/12-event-logger/contract.algo.ts::Transfer(from=from, to=to, amount=amount))
+    emit_fields(BatchProcessed, (from))
+    GlobalState["eventCount"]: uint64 = GlobalState["eventCount"] + 2
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["eventCount"]: uint64 = 0
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}

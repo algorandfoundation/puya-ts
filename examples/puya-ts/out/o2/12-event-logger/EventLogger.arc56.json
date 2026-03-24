@@ -1,0 +1,502 @@
+{
+    "name": "EventLogger",
+    "structs": {},
+    "methods": [
+        {
+            "name": "createApplication",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [
+                    "NoOp"
+                ],
+                "call": []
+            },
+            "readonly": false,
+            "desc": "Initialize the application.",
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "logTransfer",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "from",
+                    "desc": "- sender account identifier"
+                },
+                {
+                    "type": "uint64",
+                    "name": "to",
+                    "desc": "- receiver account identifier"
+                },
+                {
+                    "type": "uint64",
+                    "name": "amount",
+                    "desc": "- transfer amount"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "desc": "Emit a Transfer event using a typed named event (type alias) with native values.\nARC-28 prefix: \"Transfer(uint64,uint64,uint64)\"",
+            "events": [
+                {
+                    "name": "Transfer",
+                    "args": [
+                        {
+                            "type": "uint64",
+                            "name": "from"
+                        },
+                        {
+                            "type": "uint64",
+                            "name": "to"
+                        },
+                        {
+                            "type": "uint64",
+                            "name": "amount"
+                        }
+                    ]
+                }
+            ],
+            "recommendations": {}
+        },
+        {
+            "name": "logApproval",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "owner",
+                    "desc": "- asset owner identifier"
+                },
+                {
+                    "type": "uint64",
+                    "name": "spender",
+                    "desc": "- approved spender identifier"
+                },
+                {
+                    "type": "uint64",
+                    "name": "value",
+                    "desc": "- approved spending amount"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "desc": "Emit an Approval event using a typed named event (type alias).\nARC-28 prefix: \"Approval(uint64,uint64,uint64)\"",
+            "events": [
+                {
+                    "name": "Approval",
+                    "args": [
+                        {
+                            "type": "uint64",
+                            "name": "owner"
+                        },
+                        {
+                            "type": "uint64",
+                            "name": "spender"
+                        },
+                        {
+                            "type": "uint64",
+                            "name": "value"
+                        }
+                    ]
+                }
+            ],
+            "recommendations": {}
+        },
+        {
+            "name": "logDeposit",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "account",
+                    "desc": "- depositing account identifier"
+                },
+                {
+                    "type": "uint64",
+                    "name": "amount",
+                    "desc": "- deposit amount"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "desc": "Emit events using explicit event name with positional native arguments.\nARC-28 prefix: \"Deposit(uint64,uint64)\"",
+            "events": [
+                {
+                    "name": "Deposit",
+                    "args": [
+                        {
+                            "type": "uint64",
+                            "name": "field1"
+                        },
+                        {
+                            "type": "uint64",
+                            "name": "field2"
+                        }
+                    ]
+                }
+            ],
+            "recommendations": {}
+        },
+        {
+            "name": "logWithdrawal",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "account",
+                    "desc": "- withdrawing account identifier"
+                },
+                {
+                    "type": "uint64",
+                    "name": "amount",
+                    "desc": "- withdrawal amount"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "desc": "Emit an event with explicit ARC-28 signature in the name string.\nARC-28 prefix provided directly: \"Withdrawal(uint64,uint64)\"",
+            "events": [
+                {
+                    "name": "Withdrawal",
+                    "args": [
+                        {
+                            "type": "uint64",
+                            "name": "field1"
+                        },
+                        {
+                            "type": "uint64",
+                            "name": "field2"
+                        }
+                    ]
+                }
+            ],
+            "recommendations": {}
+        },
+        {
+            "name": "logStatusChange",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "message",
+                    "desc": "- status message text"
+                },
+                {
+                    "type": "uint64",
+                    "name": "code",
+                    "desc": "- numeric status code"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "desc": "Emit a StatusChanged event via typed variable inference.\nARC-28 prefix: \"StatusChanged(string,uint64)\"",
+            "events": [
+                {
+                    "name": "StatusChanged",
+                    "args": [
+                        {
+                            "type": "string",
+                            "name": "message"
+                        },
+                        {
+                            "type": "uint64",
+                            "name": "code"
+                        }
+                    ]
+                }
+            ],
+            "recommendations": {}
+        },
+        {
+            "name": "logBatch",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "from",
+                    "desc": "- sender account identifier"
+                },
+                {
+                    "type": "uint64",
+                    "name": "to",
+                    "desc": "- receiver account identifier"
+                },
+                {
+                    "type": "uint64",
+                    "name": "amount",
+                    "desc": "- transfer amount"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "desc": "Emit multiple events in a single call \u2014 demonstrates batching pattern.",
+            "events": [
+                {
+                    "name": "Transfer",
+                    "args": [
+                        {
+                            "type": "uint64",
+                            "name": "from"
+                        },
+                        {
+                            "type": "uint64",
+                            "name": "to"
+                        },
+                        {
+                            "type": "uint64",
+                            "name": "amount"
+                        }
+                    ]
+                },
+                {
+                    "name": "BatchProcessed",
+                    "args": [
+                        {
+                            "type": "uint64",
+                            "name": "field1"
+                        }
+                    ]
+                }
+            ],
+            "recommendations": {}
+        }
+    ],
+    "arcs": [
+        22,
+        28
+    ],
+    "networks": {},
+    "state": {
+        "schema": {
+            "global": {
+                "ints": 1,
+                "bytes": 0
+            },
+            "local": {
+                "ints": 0,
+                "bytes": 0
+            }
+        },
+        "keys": {
+            "global": {
+                "eventCount": {
+                    "keyType": "AVMString",
+                    "valueType": "AVMUint64",
+                    "key": "ZXZlbnRDb3VudA=="
+                }
+            },
+            "local": {},
+            "box": {}
+        },
+        "maps": {
+            "global": {},
+            "local": {},
+            "box": {}
+        }
+    },
+    "bareActions": {
+        "create": [],
+        "call": []
+    },
+    "sourceInfo": {
+        "approval": {
+            "sourceInfo": [
+                {
+                    "pc": [
+                        146,
+                        211,
+                        248,
+                        285,
+                        342,
+                        394
+                    ],
+                    "errorMessage": "check GlobalState exists"
+                },
+                {
+                    "pc": [
+                        159
+                    ],
+                    "errorMessage": "invalid array length header"
+                },
+                {
+                    "pc": [
+                        166
+                    ],
+                    "errorMessage": "invalid number of bytes for arc4.dynamic_array<arc4.uint8>"
+                },
+                {
+                    "pc": [
+                        99,
+                        109,
+                        118,
+                        177,
+                        226,
+                        234,
+                        263,
+                        271,
+                        300,
+                        309,
+                        318,
+                        357,
+                        366,
+                        375
+                    ],
+                    "errorMessage": "invalid number of bytes for arc4.uint64"
+                }
+            ],
+            "pcOffsetMethod": "none"
+        },
+        "clear": {
+            "sourceInfo": [],
+            "pcOffsetMethod": "none"
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYXJjNC9pbmRleC5kLnRzOjpDb250cmFjdC5hcHByb3ZhbFByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBpbnRjYmxvY2sgOCAxIDAgMgogICAgYnl0ZWNibG9jayAiZXZlbnRDb3VudCIgMHg1ZGJhYTVkYQogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGJueiBtYWluX2FmdGVyX2lmX2Vsc2VAMgogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo1MAogICAgLy8gZXZlbnRDb3VudCA9IEdsb2JhbFN0YXRlKHsgaW5pdGlhbFZhbHVlOiBVaW50NjQoMCkgfSkKICAgIGJ5dGVjXzAgLy8gImV2ZW50Q291bnQiCiAgICBpbnRjXzIgLy8gMAogICAgYXBwX2dsb2JhbF9wdXQKCm1haW5fYWZ0ZXJfaWZfZWxzZUAyOgogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo0OAogICAgLy8gZXhwb3J0IGNsYXNzIEV2ZW50TG9nZ2VyIGV4dGVuZHMgQ29udHJhY3QgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0CiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYnogbWFpbl9jcmVhdGVfTm9PcEAxMgogICAgcHVzaGJ5dGVzcyAweGEwNTljNzc2IDB4YjQzMzZmYjMgMHhmYWI2YzUyYSAweDc4OGUyMzU2IDB4YWQ0N2VjMzIgMHg3ZjYzZmE2NyAvLyBtZXRob2QgImxvZ1RyYW5zZmVyKHVpbnQ2NCx1aW50NjQsdWludDY0KXZvaWQiLCBtZXRob2QgImxvZ0FwcHJvdmFsKHVpbnQ2NCx1aW50NjQsdWludDY0KXZvaWQiLCBtZXRob2QgImxvZ0RlcG9zaXQodWludDY0LHVpbnQ2NCl2b2lkIiwgbWV0aG9kICJsb2dXaXRoZHJhd2FsKHVpbnQ2NCx1aW50NjQpdm9pZCIsIG1ldGhvZCAibG9nU3RhdHVzQ2hhbmdlKHN0cmluZyx1aW50NjQpdm9pZCIsIG1ldGhvZCAibG9nQmF0Y2godWludDY0LHVpbnQ2NCx1aW50NjQpdm9pZCIKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDAKICAgIG1hdGNoIG1haW5fbG9nVHJhbnNmZXJfcm91dGVANSBtYWluX2xvZ0FwcHJvdmFsX3JvdXRlQDYgbWFpbl9sb2dEZXBvc2l0X3JvdXRlQDcgbWFpbl9sb2dXaXRoZHJhd2FsX3JvdXRlQDggbWFpbl9sb2dTdGF0dXNDaGFuZ2Vfcm91dGVAOSBtYWluX2xvZ0JhdGNoX3JvdXRlQDEwCiAgICBlcnIKCm1haW5fbG9nQmF0Y2hfcm91dGVAMTA6CiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjEzNAogICAgLy8gcHVibGljIGxvZ0JhdGNoKGZyb206IHVpbnQ2NCwgdG86IHVpbnQ2NCwgYW1vdW50OiB1aW50NjQpOiB2b2lkIHsKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDEKICAgIGR1cAogICAgbGVuCiAgICBpbnRjXzAgLy8gOAogICAgPT0KICAgIGFzc2VydCAvLyBpbnZhbGlkIG51bWJlciBvZiBieXRlcyBmb3IgYXJjNC51aW50NjQKICAgIGR1cAogICAgYnRvaQogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgogICAgZHVwCiAgICBsZW4KICAgIGludGNfMCAvLyA4CiAgICA9PQogICAgYXNzZXJ0IC8vIGludmFsaWQgbnVtYmVyIG9mIGJ5dGVzIGZvciBhcmM0LnVpbnQ2NAogICAgYnRvaQogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMwogICAgZHVwCiAgICBsZW4KICAgIGludGNfMCAvLyA4CiAgICA9PQogICAgYXNzZXJ0IC8vIGludmFsaWQgbnVtYmVyIG9mIGJ5dGVzIGZvciBhcmM0LnVpbnQ2NAogICAgYnRvaQogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czoxMzYKICAgIC8vIGVtaXQ8VHJhbnNmZXI+KHsgZnJvbSwgdG8sIGFtb3VudCB9KQogICAgdW5jb3ZlciAyCiAgICBpdG9iCiAgICB1bmNvdmVyIDIKICAgIGl0b2IKICAgIGNvbmNhdAogICAgc3dhcAogICAgaXRvYgogICAgY29uY2F0CiAgICBieXRlY18xIC8vIG1ldGhvZCAiVHJhbnNmZXIodWludDY0LHVpbnQ2NCx1aW50NjQpIgogICAgc3dhcAogICAgY29uY2F0CiAgICBsb2cKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6MTM5CiAgICAvLyBlbWl0KCdCYXRjaFByb2Nlc3NlZCcsIGZyb20pCiAgICBwdXNoYnl0ZXMgMHg4ZDdlYmUzNiAvLyBtZXRob2QgIkJhdGNoUHJvY2Vzc2VkKHVpbnQ2NCkiCiAgICBzd2FwCiAgICBjb25jYXQKICAgIGxvZwogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czoxNDIKICAgIC8vIHRoaXMuZXZlbnRDb3VudC52YWx1ZSArPSAyCiAgICBpbnRjXzIgLy8gMAogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo1MAogICAgLy8gZXZlbnRDb3VudCA9IEdsb2JhbFN0YXRlKHsgaW5pdGlhbFZhbHVlOiBVaW50NjQoMCkgfSkKICAgIGJ5dGVjXzAgLy8gImV2ZW50Q291bnQiCiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjE0MgogICAgLy8gdGhpcy5ldmVudENvdW50LnZhbHVlICs9IDIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgR2xvYmFsU3RhdGUgZXhpc3RzCiAgICBpbnRjXzMgLy8gMgogICAgKwogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo1MAogICAgLy8gZXZlbnRDb3VudCA9IEdsb2JhbFN0YXRlKHsgaW5pdGlhbFZhbHVlOiBVaW50NjQoMCkgfSkKICAgIGJ5dGVjXzAgLy8gImV2ZW50Q291bnQiCiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjE0MgogICAgLy8gdGhpcy5ldmVudENvdW50LnZhbHVlICs9IDIKICAgIHN3YXAKICAgIGFwcF9nbG9iYWxfcHV0CiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjEzNAogICAgLy8gcHVibGljIGxvZ0JhdGNoKGZyb206IHVpbnQ2NCwgdG86IHVpbnQ2NCwgYW1vdW50OiB1aW50NjQpOiB2b2lkIHsKICAgIGludGNfMSAvLyAxCiAgICByZXR1cm4KCm1haW5fbG9nU3RhdHVzQ2hhbmdlX3JvdXRlQDk6CiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjExOQogICAgLy8gcHVibGljIGxvZ1N0YXR1c0NoYW5nZShtZXNzYWdlOiBzdHJpbmcsIGNvZGU6IHVpbnQ2NCk6IHZvaWQgewogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQogICAgZHVwCiAgICBpbnRjXzIgLy8gMAogICAgZXh0cmFjdF91aW50MTYgLy8gb24gZXJyb3I6IGludmFsaWQgYXJyYXkgbGVuZ3RoIGhlYWRlcgogICAgaW50Y18zIC8vIDIKICAgICsKICAgIGRpZyAxCiAgICBsZW4KICAgID09CiAgICBhc3NlcnQgLy8gaW52YWxpZCBudW1iZXIgb2YgYnl0ZXMgZm9yIGFyYzQuZHluYW1pY19hcnJheTxhcmM0LnVpbnQ4PgogICAgZXh0cmFjdCAyIDAKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDIKICAgIGR1cAogICAgbGVuCiAgICBpbnRjXzAgLy8gOAogICAgPT0KICAgIGFzc2VydCAvLyBpbnZhbGlkIG51bWJlciBvZiBieXRlcyBmb3IgYXJjNC51aW50NjQKICAgIGJ0b2kKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6MTIxCiAgICAvLyBjb25zdCBldmVudDogU3RhdHVzQ2hhbmdlZCA9IHsgbWVzc2FnZSwgY29kZSB9CiAgICBkaWcgMQogICAgbGVuCiAgICBpdG9iCiAgICBleHRyYWN0IDYgMgogICAgdW5jb3ZlciAyCiAgICBjb25jYXQKICAgIHN3YXAKICAgIGl0b2IKICAgIHB1c2hieXRlcyAweDAwMGEKICAgIHN3YXAKICAgIGNvbmNhdAogICAgc3dhcAogICAgY29uY2F0CiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjEyMgogICAgLy8gZW1pdChldmVudCkKICAgIHB1c2hieXRlcyAweDg4NTk4NjEyIC8vIG1ldGhvZCAiU3RhdHVzQ2hhbmdlZChzdHJpbmcsdWludDY0KSIKICAgIHN3YXAKICAgIGNvbmNhdAogICAgbG9nCiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjEyNQogICAgLy8gdGhpcy5ldmVudENvdW50LnZhbHVlICs9IDEKICAgIGludGNfMiAvLyAwCiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjUwCiAgICAvLyBldmVudENvdW50ID0gR2xvYmFsU3RhdGUoeyBpbml0aWFsVmFsdWU6IFVpbnQ2NCgwKSB9KQogICAgYnl0ZWNfMCAvLyAiZXZlbnRDb3VudCIKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6MTI1CiAgICAvLyB0aGlzLmV2ZW50Q291bnQudmFsdWUgKz0gMQogICAgYXBwX2dsb2JhbF9nZXRfZXgKICAgIGFzc2VydCAvLyBjaGVjayBHbG9iYWxTdGF0ZSBleGlzdHMKICAgIGludGNfMSAvLyAxCiAgICArCiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjUwCiAgICAvLyBldmVudENvdW50ID0gR2xvYmFsU3RhdGUoeyBpbml0aWFsVmFsdWU6IFVpbnQ2NCgwKSB9KQogICAgYnl0ZWNfMCAvLyAiZXZlbnRDb3VudCIKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6MTI1CiAgICAvLyB0aGlzLmV2ZW50Q291bnQudmFsdWUgKz0gMQogICAgc3dhcAogICAgYXBwX2dsb2JhbF9wdXQKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6MTE5CiAgICAvLyBwdWJsaWMgbG9nU3RhdHVzQ2hhbmdlKG1lc3NhZ2U6IHN0cmluZywgY29kZTogdWludDY0KTogdm9pZCB7CiAgICBpbnRjXzEgLy8gMQogICAgcmV0dXJuCgptYWluX2xvZ1dpdGhkcmF3YWxfcm91dGVAODoKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6MTA1CiAgICAvLyBwdWJsaWMgbG9nV2l0aGRyYXdhbChhY2NvdW50OiB1aW50NjQsIGFtb3VudDogdWludDY0KTogdm9pZCB7CiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAxCiAgICBkdXAKICAgIGxlbgogICAgaW50Y18wIC8vIDgKICAgID09CiAgICBhc3NlcnQgLy8gaW52YWxpZCBudW1iZXIgb2YgYnl0ZXMgZm9yIGFyYzQudWludDY0CiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAyCiAgICBkdXAKICAgIGxlbgogICAgaW50Y18wIC8vIDgKICAgID09CiAgICBhc3NlcnQgLy8gaW52YWxpZCBudW1iZXIgb2YgYnl0ZXMgZm9yIGFyYzQudWludDY0CiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjEwNwogICAgLy8gZW1pdCgnV2l0aGRyYXdhbCh1aW50NjQsdWludDY0KScsIGFjY291bnQsIGFtb3VudCkKICAgIGNvbmNhdAogICAgcHVzaGJ5dGVzIDB4MmI4MDEwMzUgLy8gbWV0aG9kICJXaXRoZHJhd2FsKHVpbnQ2NCx1aW50NjQpIgogICAgc3dhcAogICAgY29uY2F0CiAgICBsb2cKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6MTEwCiAgICAvLyB0aGlzLmV2ZW50Q291bnQudmFsdWUgKz0gMQogICAgaW50Y18yIC8vIDAKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6NTAKICAgIC8vIGV2ZW50Q291bnQgPSBHbG9iYWxTdGF0ZSh7IGluaXRpYWxWYWx1ZTogVWludDY0KDApIH0pCiAgICBieXRlY18wIC8vICJldmVudENvdW50IgogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czoxMTAKICAgIC8vIHRoaXMuZXZlbnRDb3VudC52YWx1ZSArPSAxCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIEdsb2JhbFN0YXRlIGV4aXN0cwogICAgaW50Y18xIC8vIDEKICAgICsKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6NTAKICAgIC8vIGV2ZW50Q291bnQgPSBHbG9iYWxTdGF0ZSh7IGluaXRpYWxWYWx1ZTogVWludDY0KDApIH0pCiAgICBieXRlY18wIC8vICJldmVudENvdW50IgogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czoxMTAKICAgIC8vIHRoaXMuZXZlbnRDb3VudC52YWx1ZSArPSAxCiAgICBzd2FwCiAgICBhcHBfZ2xvYmFsX3B1dAogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czoxMDUKICAgIC8vIHB1YmxpYyBsb2dXaXRoZHJhd2FsKGFjY291bnQ6IHVpbnQ2NCwgYW1vdW50OiB1aW50NjQpOiB2b2lkIHsKICAgIGludGNfMSAvLyAxCiAgICByZXR1cm4KCm1haW5fbG9nRGVwb3NpdF9yb3V0ZUA3OgogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo5MQogICAgLy8gcHVibGljIGxvZ0RlcG9zaXQoYWNjb3VudDogdWludDY0LCBhbW91bnQ6IHVpbnQ2NCk6IHZvaWQgewogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQogICAgZHVwCiAgICBsZW4KICAgIGludGNfMCAvLyA4CiAgICA9PQogICAgYXNzZXJ0IC8vIGludmFsaWQgbnVtYmVyIG9mIGJ5dGVzIGZvciBhcmM0LnVpbnQ2NAogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgogICAgZHVwCiAgICBsZW4KICAgIGludGNfMCAvLyA4CiAgICA9PQogICAgYXNzZXJ0IC8vIGludmFsaWQgbnVtYmVyIG9mIGJ5dGVzIGZvciBhcmM0LnVpbnQ2NAogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo5MwogICAgLy8gZW1pdCgnRGVwb3NpdCcsIGFjY291bnQsIGFtb3VudCkKICAgIGNvbmNhdAogICAgcHVzaGJ5dGVzIDB4YTEzZjlhZjkgLy8gbWV0aG9kICJEZXBvc2l0KHVpbnQ2NCx1aW50NjQpIgogICAgc3dhcAogICAgY29uY2F0CiAgICBsb2cKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6OTYKICAgIC8vIHRoaXMuZXZlbnRDb3VudC52YWx1ZSArPSAxCiAgICBpbnRjXzIgLy8gMAogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo1MAogICAgLy8gZXZlbnRDb3VudCA9IEdsb2JhbFN0YXRlKHsgaW5pdGlhbFZhbHVlOiBVaW50NjQoMCkgfSkKICAgIGJ5dGVjXzAgLy8gImV2ZW50Q291bnQiCiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjk2CiAgICAvLyB0aGlzLmV2ZW50Q291bnQudmFsdWUgKz0gMQogICAgYXBwX2dsb2JhbF9nZXRfZXgKICAgIGFzc2VydCAvLyBjaGVjayBHbG9iYWxTdGF0ZSBleGlzdHMKICAgIGludGNfMSAvLyAxCiAgICArCiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjUwCiAgICAvLyBldmVudENvdW50ID0gR2xvYmFsU3RhdGUoeyBpbml0aWFsVmFsdWU6IFVpbnQ2NCgwKSB9KQogICAgYnl0ZWNfMCAvLyAiZXZlbnRDb3VudCIKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6OTYKICAgIC8vIHRoaXMuZXZlbnRDb3VudC52YWx1ZSArPSAxCiAgICBzd2FwCiAgICBhcHBfZ2xvYmFsX3B1dAogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo5MQogICAgLy8gcHVibGljIGxvZ0RlcG9zaXQoYWNjb3VudDogdWludDY0LCBhbW91bnQ6IHVpbnQ2NCk6IHZvaWQgewogICAgaW50Y18xIC8vIDEKICAgIHJldHVybgoKbWFpbl9sb2dBcHByb3ZhbF9yb3V0ZUA2OgogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo3NwogICAgLy8gcHVibGljIGxvZ0FwcHJvdmFsKG93bmVyOiB1aW50NjQsIHNwZW5kZXI6IHVpbnQ2NCwgdmFsdWU6IHVpbnQ2NCk6IHZvaWQgewogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQogICAgZHVwCiAgICBsZW4KICAgIGludGNfMCAvLyA4CiAgICA9PQogICAgYXNzZXJ0IC8vIGludmFsaWQgbnVtYmVyIG9mIGJ5dGVzIGZvciBhcmM0LnVpbnQ2NAogICAgYnRvaQogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgogICAgZHVwCiAgICBsZW4KICAgIGludGNfMCAvLyA4CiAgICA9PQogICAgYXNzZXJ0IC8vIGludmFsaWQgbnVtYmVyIG9mIGJ5dGVzIGZvciBhcmM0LnVpbnQ2NAogICAgYnRvaQogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMwogICAgZHVwCiAgICBsZW4KICAgIGludGNfMCAvLyA4CiAgICA9PQogICAgYXNzZXJ0IC8vIGludmFsaWQgbnVtYmVyIG9mIGJ5dGVzIGZvciBhcmM0LnVpbnQ2NAogICAgYnRvaQogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo3OQogICAgLy8gZW1pdDxBcHByb3ZhbD4oeyBvd25lciwgc3BlbmRlciwgdmFsdWUgfSkKICAgIHVuY292ZXIgMgogICAgaXRvYgogICAgdW5jb3ZlciAyCiAgICBpdG9iCiAgICBjb25jYXQKICAgIHN3YXAKICAgIGl0b2IKICAgIGNvbmNhdAogICAgcHVzaGJ5dGVzIDB4OTlmY2E1Y2YgLy8gbWV0aG9kICJBcHByb3ZhbCh1aW50NjQsdWludDY0LHVpbnQ2NCkiCiAgICBzd2FwCiAgICBjb25jYXQKICAgIGxvZwogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo4MgogICAgLy8gdGhpcy5ldmVudENvdW50LnZhbHVlICs9IDEKICAgIGludGNfMiAvLyAwCiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjUwCiAgICAvLyBldmVudENvdW50ID0gR2xvYmFsU3RhdGUoeyBpbml0aWFsVmFsdWU6IFVpbnQ2NCgwKSB9KQogICAgYnl0ZWNfMCAvLyAiZXZlbnRDb3VudCIKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6ODIKICAgIC8vIHRoaXMuZXZlbnRDb3VudC52YWx1ZSArPSAxCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIEdsb2JhbFN0YXRlIGV4aXN0cwogICAgaW50Y18xIC8vIDEKICAgICsKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6NTAKICAgIC8vIGV2ZW50Q291bnQgPSBHbG9iYWxTdGF0ZSh7IGluaXRpYWxWYWx1ZTogVWludDY0KDApIH0pCiAgICBieXRlY18wIC8vICJldmVudENvdW50IgogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo4MgogICAgLy8gdGhpcy5ldmVudENvdW50LnZhbHVlICs9IDEKICAgIHN3YXAKICAgIGFwcF9nbG9iYWxfcHV0CiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjc3CiAgICAvLyBwdWJsaWMgbG9nQXBwcm92YWwob3duZXI6IHVpbnQ2NCwgc3BlbmRlcjogdWludDY0LCB2YWx1ZTogdWludDY0KTogdm9pZCB7CiAgICBpbnRjXzEgLy8gMQogICAgcmV0dXJuCgptYWluX2xvZ1RyYW5zZmVyX3JvdXRlQDU6CiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjYyCiAgICAvLyBwdWJsaWMgbG9nVHJhbnNmZXIoZnJvbTogdWludDY0LCB0bzogdWludDY0LCBhbW91bnQ6IHVpbnQ2NCk6IHZvaWQgewogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQogICAgZHVwCiAgICBsZW4KICAgIGludGNfMCAvLyA4CiAgICA9PQogICAgYXNzZXJ0IC8vIGludmFsaWQgbnVtYmVyIG9mIGJ5dGVzIGZvciBhcmM0LnVpbnQ2NAogICAgYnRvaQogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgogICAgZHVwCiAgICBsZW4KICAgIGludGNfMCAvLyA4CiAgICA9PQogICAgYXNzZXJ0IC8vIGludmFsaWQgbnVtYmVyIG9mIGJ5dGVzIGZvciBhcmM0LnVpbnQ2NAogICAgYnRvaQogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMwogICAgZHVwCiAgICBsZW4KICAgIGludGNfMCAvLyA4CiAgICA9PQogICAgYXNzZXJ0IC8vIGludmFsaWQgbnVtYmVyIG9mIGJ5dGVzIGZvciBhcmM0LnVpbnQ2NAogICAgYnRvaQogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo2NAogICAgLy8gZW1pdDxUcmFuc2Zlcj4oeyBmcm9tLCB0bywgYW1vdW50IH0pCiAgICB1bmNvdmVyIDIKICAgIGl0b2IKICAgIHVuY292ZXIgMgogICAgaXRvYgogICAgY29uY2F0CiAgICBzd2FwCiAgICBpdG9iCiAgICBjb25jYXQKICAgIGJ5dGVjXzEgLy8gbWV0aG9kICJUcmFuc2Zlcih1aW50NjQsdWludDY0LHVpbnQ2NCkiCiAgICBzd2FwCiAgICBjb25jYXQKICAgIGxvZwogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo2NwogICAgLy8gdGhpcy5ldmVudENvdW50LnZhbHVlICs9IDEKICAgIGludGNfMiAvLyAwCiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjUwCiAgICAvLyBldmVudENvdW50ID0gR2xvYmFsU3RhdGUoeyBpbml0aWFsVmFsdWU6IFVpbnQ2NCgwKSB9KQogICAgYnl0ZWNfMCAvLyAiZXZlbnRDb3VudCIKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6NjcKICAgIC8vIHRoaXMuZXZlbnRDb3VudC52YWx1ZSArPSAxCiAgICBhcHBfZ2xvYmFsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIEdsb2JhbFN0YXRlIGV4aXN0cwogICAgaW50Y18xIC8vIDEKICAgICsKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6NTAKICAgIC8vIGV2ZW50Q291bnQgPSBHbG9iYWxTdGF0ZSh7IGluaXRpYWxWYWx1ZTogVWludDY0KDApIH0pCiAgICBieXRlY18wIC8vICJldmVudENvdW50IgogICAgLy8gZXhhbXBsZXMvcHV5YS10cy8xMi1ldmVudC1sb2dnZXIvY29udHJhY3QuYWxnby50czo2NwogICAgLy8gdGhpcy5ldmVudENvdW50LnZhbHVlICs9IDEKICAgIHN3YXAKICAgIGFwcF9nbG9iYWxfcHV0CiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjYyCiAgICAvLyBwdWJsaWMgbG9nVHJhbnNmZXIoZnJvbTogdWludDY0LCB0bzogdWludDY0LCBhbW91bnQ6IHVpbnQ2NCk6IHZvaWQgewogICAgaW50Y18xIC8vIDEKICAgIHJldHVybgoKbWFpbl9jcmVhdGVfTm9PcEAxMjoKICAgIC8vIGV4YW1wbGVzL3B1eWEtdHMvMTItZXZlbnQtbG9nZ2VyL2NvbnRyYWN0LmFsZ28udHM6NDgKICAgIC8vIGV4cG9ydCBjbGFzcyBFdmVudExvZ2dlciBleHRlbmRzIENvbnRyYWN0IHsKICAgIHB1c2hieXRlcyAweGI4NDQ3YjM2IC8vIG1ldGhvZCAiY3JlYXRlQXBwbGljYXRpb24oKXZvaWQiCiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAwCiAgICBtYXRjaCBtYWluX2NyZWF0ZUFwcGxpY2F0aW9uX3JvdXRlQDEzCiAgICBlcnIKCm1haW5fY3JlYXRlQXBwbGljYXRpb25fcm91dGVAMTM6CiAgICAvLyBleGFtcGxlcy9wdXlhLXRzLzEyLWV2ZW50LWxvZ2dlci9jb250cmFjdC5hbGdvLnRzOjUzCiAgICAvLyBwdWJsaWMgY3JlYXRlQXBwbGljYXRpb24oKTogdm9pZCB7fQogICAgaW50Y18xIC8vIDEKICAgIHJldHVybgo=",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYmFzZS1jb250cmFjdC5kLnRzOjpCYXNlQ29udHJhY3QuY2xlYXJTdGF0ZVByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBwdXNoaW50IDEKICAgIHJldHVybgo="
+    },
+    "byteCode": {
+        "approval": "CyAECAEAAiYCCmV2ZW50Q291bnQEXbql2jEYQAADKCRnMRkURDEYQQFoggYEoFnHdgS0M2+zBPq2xSoEeI4jVgStR+wyBH9j+mc2GgCOBgEDAMoApQCAAD8AAQA2GgFJFSISREkXNhoCSRUiEkQXNhoDSRUiEkQXTwIWTwIWUEwWUClMULCABI1+vjZMULAkKGVEJQgoTGcjQzYaAUkkWSUISwEVEkRXAgA2GgJJFSISRBdLARUWVwYCTwJQTBaAAgAKTFBMUIAEiFmGEkxQsCQoZUQjCChMZyNDNhoBSRUiEkQ2GgJJFSISRFCABCuAEDVMULAkKGVEIwgoTGcjQzYaAUkVIhJENhoCSRUiEkRQgAShP5r5TFCwJChlRCMIKExnI0M2GgFJFSISRBc2GgJJFSISRBc2GgNJFSISRBdPAhZPAhZQTBZQgASZ/KXPTFCwJChlRCMIKExnI0M2GgFJFSISRBc2GgJJFSISRBc2GgNJFSISRBdPAhZPAhZQTBZQKUxQsCQoZUQjCChMZyNDgAS4RHs2NhoAjgEAAQAjQw==",
+        "clear": "C4EBQw=="
+    },
+    "compilerInfo": {
+        "compiler": "puya",
+        "compilerVersion": {
+            "major": 5,
+            "minor": 8,
+            "patch": 0
+        }
+    },
+    "events": [
+        {
+            "name": "Transfer",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "from"
+                },
+                {
+                    "type": "uint64",
+                    "name": "to"
+                },
+                {
+                    "type": "uint64",
+                    "name": "amount"
+                }
+            ]
+        },
+        {
+            "name": "Approval",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "owner"
+                },
+                {
+                    "type": "uint64",
+                    "name": "spender"
+                },
+                {
+                    "type": "uint64",
+                    "name": "value"
+                }
+            ]
+        },
+        {
+            "name": "Deposit",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "field1"
+                },
+                {
+                    "type": "uint64",
+                    "name": "field2"
+                }
+            ]
+        },
+        {
+            "name": "Withdrawal",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "field1"
+                },
+                {
+                    "type": "uint64",
+                    "name": "field2"
+                }
+            ]
+        },
+        {
+            "name": "StatusChanged",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "message"
+                },
+                {
+                    "type": "uint64",
+                    "name": "code"
+                }
+            ]
+        },
+        {
+            "name": "BatchProcessed",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "field1"
+                }
+            ]
+        }
+    ],
+    "templateVariables": {}
+}

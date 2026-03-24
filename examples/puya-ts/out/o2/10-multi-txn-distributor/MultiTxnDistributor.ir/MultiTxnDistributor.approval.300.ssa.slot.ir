@@ -1,0 +1,183 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn OnCompletion)
+        let tmp%1#0: bool = (! tmp%0#1)
+        (assert tmp%1#0)
+        let tmp%2#0: uint64 = (txn ApplicationID)
+        goto tmp%2#0 ? block@2 : block@8
+    block@2: // call_NoOp_L37
+        let tmp%4#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%4#0 {method "distributePair(pay,address,address)void" => block@3, method "distributeWithOptIn(pay,uint64,address,address)void" => block@4, method "distributeDynamic(pay,address[])void" => block@5, method "verifyGroupPayments()void" => block@6, * => block@11}
+    block@3: // distributePair_route_L48
+        let tmp%0#7: uint64 = (txn GroupIndex)
+        let funding#2: uint64 = (- tmp%0#7 1u)
+        let gtxn_type%0#2: uint64 = ((gtxns TypeEnum) funding#2)
+        let gtxn_type_matches%0#2: bool = (== gtxn_type%0#2 pay)
+        (assert gtxn_type_matches%0#2) // transaction type is pay
+        let recipientA#1: account = (txna ApplicationArgs 1)
+        let len%0#2: uint64 = (len recipientA#1)
+        let eq%0#2: bool = (== len%0#2 32u)
+        (assert eq%0#2) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        let recipientB#0: account = (txna ApplicationArgs 2)
+        let len%1#1: uint64 = (len recipientB#0)
+        let eq%1#1: bool = (== len%1#1 32u)
+        (assert eq%1#1) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        let tmp%0#8: account = ((gtxns Receiver) funding#2)
+        let tmp%1#7: account = (global CurrentApplicationAddress)
+        let tmp%2#6: bool = (== tmp%0#8 tmp%1#7)
+        let tmp%3#5: uint64 = ((gtxns Amount) funding#2)
+        let tmp%5#4: bool = (&& tmp%2#6 tmp%3#5)
+        (assert tmp%5#4) // Funds must be sent to this contract
+        let share#2: uint64 = (/ tmp%3#5 2u)
+        itxn_begin
+        ((itxn_field Amount) share#2)
+        ((itxn_field Receiver) recipientA#1)
+        ((itxn_field TypeEnum) 1u)
+        ((itxn_field Fee) 0u)
+        itxn_next
+        ((itxn_field TypeEnum) 1u)
+        ((itxn_field Amount) share#2)
+        ((itxn_field Receiver) recipientB#0)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        let txnA.Receiver#0: account = (gitxn 0 Receiver)
+        let txnA.Amount#0: uint64 = (gitxn 0 Amount)
+        let txnB.Receiver#0: account = (itxn Receiver)
+        let txnB.Amount#0: uint64 = (itxn Amount)
+        let tmp%8#1: bool = (== txnA.Receiver#0 recipientA#1)
+        (assert tmp%8#1) // txnA receiver correct
+        let tmp%9#2: bool = (== txnB.Receiver#0 recipientB#0)
+        (assert tmp%9#2) // txnB receiver correct
+        let tmp%10#1: bool = (== txnA.Amount#0 share#2)
+        (assert tmp%10#1) // txnA amount correct
+        let tmp%11#1: bool = (== txnB.Amount#0 share#2)
+        (assert tmp%11#1) // txnB amount correct
+        exit 1u
+    block@4: // distributeWithOptIn_route_L93
+        let tmp%0#5: uint64 = (txn GroupIndex)
+        let funding#1: uint64 = (- tmp%0#5 1u)
+        let gtxn_type%0#1: uint64 = ((gtxns TypeEnum) funding#1)
+        let gtxn_type_matches%0#1: bool = (== gtxn_type%0#1 pay)
+        (assert gtxn_type_matches%0#1) // transaction type is pay
+        let tmp%1#4: bytes = (txna ApplicationArgs 1)
+        let len%0#1: uint64 = (len tmp%1#4)
+        let eq%0#1: bool = (== len%0#1 8u)
+        (assert eq%0#1) // invalid number of bytes for arc4.uint64
+        let asset#0: uint64 = (btoi tmp%1#4)
+        let recipientA#0: account = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len recipientA#0)
+        let eq%1#0: bool = (== len%1#0 32u)
+        (assert eq%1#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        let tmp%5#2: bytes = (txna ApplicationArgs 3)
+        let len%2#0: uint64 = (len tmp%5#2)
+        let eq%2#0: bool = (== len%2#0 32u)
+        (assert eq%2#0) // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+        let tmp%0#6: account = ((gtxns Receiver) funding#1)
+        let tmp%1#5: account = (global CurrentApplicationAddress)
+        let tmp%2#4: bool = (== tmp%0#6 tmp%1#5)
+        let tmp%4#3: bool = (== gtxn_type%0#1 1u)
+        let tmp%5#3: bool = (&& tmp%2#4 tmp%4#3)
+        (assert tmp%5#3) // Funding must be a payment to this contract
+        let tmp%6#2: uint64 = ((gtxns Amount) funding#1)
+        let share#1: uint64 = (/ tmp%6#2 2u)
+        let optIn%%param_AssetReceiver_idx_0#0: account = (global CurrentApplicationAddress)
+        itxn_begin
+        ((itxn_field Amount) share#1)
+        ((itxn_field Receiver) recipientA#0)
+        ((itxn_field TypeEnum) 1u)
+        ((itxn_field Fee) 0u)
+        itxn_next
+        ((itxn_field AssetAmount) 0u)
+        ((itxn_field XferAsset) asset#0)
+        ((itxn_field AssetReceiver) optIn%%param_AssetReceiver_idx_0#0)
+        ((itxn_field TypeEnum) 4u)
+        ((itxn_field Fee) 0u)
+        itxn_submit
+        let payResult.Amount#0: uint64 = (gitxn 0 Amount)
+        let optInResult.XferAsset#0: uint64 = (itxn XferAsset)
+        let tmp%8#0: bool = (== payResult.Amount#0 share#1)
+        (assert tmp%8#0) // Payment amount correct
+        let tmp%9#1: bool = (== optInResult.XferAsset#0 asset#0)
+        (assert tmp%9#1) // Opted into correct asset
+        exit 1u
+    block@5: // distributeDynamic_route_L133
+        let tmp%0#3: uint64 = (txn GroupIndex)
+        let funding#0: uint64 = (- tmp%0#3 1u)
+        let gtxn_type%0#0: uint64 = ((gtxns TypeEnum) funding#0)
+        let gtxn_type_matches%0#0: bool = (== gtxn_type%0#0 pay)
+        (assert gtxn_type_matches%0#0) // transaction type is pay
+        let recipients#0: Encoded(len+uint8[32][]) = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 recipients#0 0u) // on error: invalid array length header
+        let mul%0#0: uint64 = (* aggregate%array_length%0#0 32u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len recipients#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.static_array<arc4.uint8, 32>>
+        let tmp%0#4: account = ((gtxns Receiver) funding#0)
+        let tmp%1#3: account = (global CurrentApplicationAddress)
+        let tmp%2#2: bool = (== tmp%0#4 tmp%1#3)
+        (assert tmp%2#2) // Funds must be sent to this contract
+        (assert aggregate%array_length%0#0) // Must have recipients
+        let tmp%5#1: uint64 = ((gtxns Amount) funding#0)
+        let share#0: uint64 = (/ tmp%5#1 aggregate%array_length%0#0)
+        let aggregate%array_trimmed%0#0: bytes = ((extract 2 0) recipients#0)
+        let aggregate%encoded_element%0#0: bytes = ((extract 2 32) recipients#0)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob 1u)
+        let aggregate%val_as_bytes%1#0: bytes[8] = (itob share#0)
+        let aggregate%head%1#0: bytes = (concat aggregate%val_as_bytes%0#0 aggregate%val_as_bytes%1#0)
+        let aggregate%encoded_value%0#0: bytes = (concat 0x0020 aggregate%encoded_element%0#0)
+        let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 0x0012)
+        let payFields#0: Encoded(uint64,uint64,(len+uint8[])) = (concat aggregate%head%2#0 aggregate%encoded_value%0#0)
+        itxn_begin
+        let tmp%9#0: uint64 = (extract_uint64 payFields#0 0u)
+        let tmp%10#0: uint64 = (extract_uint64 payFields#0 8u)
+        let aggregate%extract_uint16%0#0: uint64 = (extract_uint16 payFields#0 16u)
+        let aggregate%len%0#0: uint64 = (len payFields#0)
+        let aggregate%substring3%0#0: bytes = (substring3 payFields#0 aggregate%extract_uint16%0#0 aggregate%len%0#0)
+        let tmp%11#0: bytes = ((extract 2 0) aggregate%substring3%0#0)
+        ((itxn_field Receiver) tmp%11#0)
+        ((itxn_field Amount) tmp%10#0)
+        ((itxn_field TypeEnum) tmp%9#0)
+        ((itxn_field Fee) 0u)
+        let value_internal%0#0: uint64 = 1u
+        goto block@20
+    block@20: // for_header_L158
+        let temp#0: uint64 = φ(value_internal%0#0 <- block@5, value_internal%0#2 <- block@21)
+        let continue_looping%0#0: bool = (< temp#0 aggregate%array_length%0#0)
+        goto continue_looping%0#0 ? block@21 : block@22
+    block@21: // for_body_L158
+        let aggregate%bytes_offset%1#0: uint64 = (* temp#0 32u)
+        let addr#0: Encoded(uint8[32]) = (extract3 aggregate%array_trimmed%0#0 aggregate%bytes_offset%1#0 32u) // on error: index access is out of bounds
+        itxn_next
+        ((itxn_field Receiver) addr#0)
+        ((itxn_field Amount) tmp%10#0)
+        ((itxn_field TypeEnum) tmp%9#0)
+        ((itxn_field Fee) 0u)
+        let value_internal%0#2: uint64 = (+ temp#0 1u)
+        goto block@20
+    block@22: // after_for_L158
+        itxn_submit
+        exit 1u
+    block@6: // verifyGroupPayments_route_L174
+        let i#0: uint64 = 0u
+        goto block@15
+    block@15: // while_top_L176
+        let i#1: uint64 = φ(i#0 <- block@6, i#2 <- block@16)
+        let tmp%0#2: uint64 = (txn GroupIndex)
+        let tmp%1#1: bool = (< i#1 tmp%0#2)
+        goto tmp%1#1 ? block@16 : block@17
+    block@16: // while_body_L176
+        let tmp%2#1: uint64 = ((gtxns TypeEnum) i#1)
+        let tmp%3#1: bool = (== tmp%2#1 1u)
+        (assert tmp%3#1) // All preceding txns must be payments
+        let i#2: uint64 = (+ i#1 1u)
+        goto block@15
+    block@17: // after_while_L176
+        exit 1u
+    block@8: // create_NoOp_L37
+        let tmp%5#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%5#0 {method "createApplication()void" => block@9, * => block@11}
+    block@9: // createApplication_route_L39
+        exit 1u
+    block@11: // after_if_else_L37
+        fail

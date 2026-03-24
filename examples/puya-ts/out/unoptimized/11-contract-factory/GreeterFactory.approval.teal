@@ -1,0 +1,638 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 6 8
+    bytecblock 0x151f7c75 0x 0xd0a28200 base64(C0IAAIEBQw==) 0x4c5c61ba "lastChild"
+    b main_block@0
+
+main_block@0:
+    b main_block@1
+
+main_block@1:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:71
+    // export class GreeterFactory extends Contract {
+    txn OnCompletion
+    intc_0 // NoOp
+    ==
+    assert
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz main_create_NoOp@10
+    b main_call_NoOp@2
+
+main_call_NoOp@2:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:71
+    // export class GreeterFactory extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0x276c2ded // method "deployManual()uint64"
+    pushbytes 0xc9d87d32 // method "deployTyped()uint64"
+    pushbytes 0x36e3ef08 // method "callChildGreet(uint64,string)string"
+    pushbytes 0xc32d7efb // method "callChildManual(uint64,string)string"
+    pushbytes 0xa73f9f40 // method "deleteChild(uint64)void"
+    pushbytes 0x387914a2 // method "inspectCompiled()uint64"
+    uncover 6
+    match main_deployManual_route@3 main_deployTyped_route@4 main_callChildGreet_route@5 main_callChildManual_route@6 main_deleteChild_route@7 main_inspectCompiled_route@8
+    b main_switch_case_next@9
+
+main_switch_case_next@9:
+    b main_after_if_else@13
+
+main_after_if_else@13:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:71
+    // export class GreeterFactory extends Contract {
+    err
+
+main_inspectCompiled_route@8:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:209-210
+    // @readonly
+    // public inspectCompiled(): uint64 {
+    callsub inspectCompiled
+    b main_switch_case_next@9
+
+main_deleteChild_route@7:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:195
+    // public deleteChild(app: Application): void {
+    callsub deleteChild
+    b main_switch_case_next@9
+
+main_callChildManual_route@6:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:167
+    // public callChildManual(app: Application, name: string): string {
+    callsub callChildManual
+    b main_switch_case_next@9
+
+main_callChildGreet_route@5:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:149
+    // public callChildGreet(app: Application, name: string): string {
+    callsub callChildGreet
+    b main_switch_case_next@9
+
+main_deployTyped_route@4:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:127
+    // public deployTyped(): Application {
+    callsub deployTyped
+    b main_switch_case_next@9
+
+main_deployManual_route@3:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:84
+    // public deployManual(): Application {
+    callsub deployManual
+    b main_switch_case_next@9
+
+main_create_NoOp@10:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:71
+    // export class GreeterFactory extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0xb8447b36 // method "createApplication()void"
+    uncover 1
+    match main_createApplication_route@11
+    b main_switch_case_next@12
+
+main_switch_case_next@12:
+    b main_after_if_else@13
+
+main_createApplication_route@11:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:76
+    // public createApplication(): void {}
+    callsub createApplication
+    b main_switch_case_next@12
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.createApplication[routing]() -> void:
+createApplication:
+    b createApplication_block@0
+
+createApplication_block@0:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:76
+    // public createApplication(): void {}
+    callsub examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.createApplication
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployManual[routing]() -> void:
+deployManual:
+    b deployManual_block@0
+
+deployManual_block@0:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:84
+    // public deployManual(): Application {
+    callsub examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployManual
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployTyped[routing]() -> void:
+deployTyped:
+    b deployTyped_block@0
+
+deployTyped_block@0:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:127
+    // public deployTyped(): Application {
+    callsub examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployTyped
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildGreet[routing]() -> void:
+callChildGreet:
+    b callChildGreet_block@0
+
+callChildGreet_block@0:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:149
+    // public callChildGreet(app: Application, name: string): string {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    pushint 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildGreet
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildManual[routing]() -> void:
+callChildManual:
+    b callChildManual_block@0
+
+callChildManual_block@0:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:167
+    // public callChildManual(app: Application, name: string): string {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    pushint 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    callsub examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildManual
+    dup
+    len
+    itob
+    extract 6 2
+    uncover 1
+    concat
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deleteChild[routing]() -> void:
+deleteChild:
+    b deleteChild_block@0
+
+deleteChild_block@0:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:195
+    // public deleteChild(app: Application): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    callsub examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deleteChild
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.inspectCompiled[routing]() -> void:
+inspectCompiled:
+    b inspectCompiled_block@0
+
+inspectCompiled_block@0:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:209-210
+    // @readonly
+    // public inspectCompiled(): uint64 {
+    callsub examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.inspectCompiled
+    itob
+    bytec_0 // 0x151f7c75
+    uncover 1
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.createApplication() -> void:
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.createApplication:
+    b examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.createApplication_block@0
+
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.createApplication_block@0:
+    retsub
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployManual() -> uint64:
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployManual:
+    b examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployManual_block@0
+
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployManual_block@0:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:103-114
+    // const childApp = itxn
+    //   .applicationCall({
+    //     appArgs: [createSelector], // ARC4 method selector as first arg
+    //     approvalProgram: approval, // Compiled approval program
+    //     clearStateProgram: clear, // Compiled clear state program
+    //     extraProgramPages: extras, // Additional program pages if needed
+    //     globalNumUint: gUints, // Reserve global uint64 state slots
+    //     globalNumBytes: gBytes, // Reserve global bytes state slots
+    //     localNumUint: lUints, // Reserve local uint64 state slots
+    //     localNumBytes: lBytes, // Reserve local bytes state slots
+    //   })
+    //   .submit().createdApp // Get the created Application reference
+    itxn_begin
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:86-88
+    // const compiled = compile(GreeterChild, {
+    //   templateVars: { GREETING: 'hello' }, // TemplateVar values must be compile-time constants
+    // })
+    intc_0 // 0
+    itxn_field LocalNumByteSlice
+    intc_0 // 0
+    itxn_field LocalNumUint
+    intc_1 // 1
+    itxn_field GlobalNumByteSlice
+    intc_0 // 0
+    itxn_field GlobalNumUint
+    intc_0 // 0
+    itxn_field ExtraProgramPages
+    bytec_3 // base64(C0IAAIEBQw==)
+    itxn_field ClearStateProgramPages
+    bytec_1 // 0x
+    itxn_field ClearStateProgramPages
+    pushbytes base64(CyACAAEmAwhncmVldGluZwAFaGVsbG9CAAAxGEAACUIAAIgAy0IAAEIAADYaAIAEJDeNPE8BjgEASUIAADEZIhJEMRgiE0EAH0IAADYaAIAE0KKCAE8BjgEAB0IAAEIAAACIADdC//Y2GgCABExcYbpPAY4BAAZCAABC/+SIABRC//cxGYEFEjEYIhMQRIgAOUL/qUIAAIgAOCNDQgAANhoBSSJZIwuBAghLARUSRFcCAIgAIUkVFlcGAk8BUIAEFR98dU8BULAjQ0IAAIgAHCNDQgAAiYoBAUIAACIoZUQpTwFQgAEgUIv/UIlCAACJQgAAQgAAQgAAKClnKCpniQ==)
+    itxn_field ApprovalProgramPages
+    bytec_1 // 0x
+    itxn_field ApprovalProgramPages
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:105
+    // appArgs: [createSelector], // ARC4 method selector as first arg
+    bytec 4 // method "create()void"
+    itxn_field ApplicationArgs
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:103-113
+    // const childApp = itxn
+    //   .applicationCall({
+    //     appArgs: [createSelector], // ARC4 method selector as first arg
+    //     approvalProgram: approval, // Compiled approval program
+    //     clearStateProgram: clear, // Compiled clear state program
+    //     extraProgramPages: extras, // Additional program pages if needed
+    //     globalNumUint: gUints, // Reserve global uint64 state slots
+    //     globalNumBytes: gBytes, // Reserve global bytes state slots
+    //     localNumUint: lUints, // Reserve local uint64 state slots
+    //     localNumBytes: lBytes, // Reserve local bytes state slots
+    //   })
+    intc_2 // 6
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployManual_next_txn@1
+
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployManual_next_txn@1:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:103-114
+    // const childApp = itxn
+    //   .applicationCall({
+    //     appArgs: [createSelector], // ARC4 method selector as first arg
+    //     approvalProgram: approval, // Compiled approval program
+    //     clearStateProgram: clear, // Compiled clear state program
+    //     extraProgramPages: extras, // Additional program pages if needed
+    //     globalNumUint: gUints, // Reserve global uint64 state slots
+    //     globalNumBytes: gBytes, // Reserve global bytes state slots
+    //     localNumUint: lUints, // Reserve local uint64 state slots
+    //     localNumBytes: lBytes, // Reserve local bytes state slots
+    //   })
+    //   .submit().createdApp // Get the created Application reference
+    itxn_submit
+    itxn CreatedApplicationID
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:73
+    // lastChild = GlobalState<Application>()
+    bytec 5 // "lastChild"
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:117
+    // this.lastChild.value = childApp
+    dig 1
+    app_global_put
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:119
+    // return childApp
+    retsub
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployTyped() -> uint64:
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployTyped:
+    b examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployTyped_block@0
+
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployTyped_block@0:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:134
+    // const childApp = compiled.call.create().itxn.createdApp
+    itxn_begin
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:129-131
+    // const compiled = compileArc4(GreeterChild, {
+    //   templateVars: { GREETING: 'hi' }, // Different constant greeting for this deployment
+    // })
+    intc_0 // 0
+    itxn_field ExtraProgramPages
+    intc_0 // 0
+    itxn_field LocalNumUint
+    intc_0 // 0
+    itxn_field LocalNumByteSlice
+    intc_1 // 1
+    itxn_field GlobalNumByteSlice
+    intc_0 // 0
+    itxn_field GlobalNumUint
+    bytec_3 // base64(C0IAAIEBQw==)
+    itxn_field ClearStateProgramPages
+    bytec_1 // 0x
+    itxn_field ClearStateProgramPages
+    pushbytes base64(CyACAAEmAwhncmVldGluZwACaGlCAAAxGEAACUIAAIgAy0IAAEIAADYaAIAEJDeNPE8BjgEASUIAADEZIhJEMRgiE0EAH0IAADYaAIAE0KKCAE8BjgEAB0IAAEIAAACIADdC//Y2GgCABExcYbpPAY4BAAZCAABC/+SIABRC//cxGYEFEjEYIhMQRIgAOUL/qUIAAIgAOCNDQgAANhoBSSJZIwuBAghLARUSRFcCAIgAIUkVFlcGAk8BUIAEFR98dU8BULAjQ0IAAIgAHCNDQgAAiYoBAUIAACIoZUQpTwFQgAEgUIv/UIlCAACJQgAAQgAAQgAAKClnKCpniQ==)
+    itxn_field ApprovalProgramPages
+    bytec_1 // 0x
+    itxn_field ApprovalProgramPages
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:134
+    // const childApp = compiled.call.create().itxn.createdApp
+    intc_0 // 0
+    itxn_field OnCompletion
+    bytec 4 // method "create()void"
+    itxn_field ApplicationArgs
+    intc_2 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployTyped_next_txn@1
+
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deployTyped_next_txn@1:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:134
+    // const childApp = compiled.call.create().itxn.createdApp
+    itxn_submit
+    gitxn 0 CreatedApplicationID
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:73
+    // lastChild = GlobalState<Application>()
+    bytec 5 // "lastChild"
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:137
+    // this.lastChild.value = childApp
+    dig 1
+    app_global_put
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:139
+    // return childApp
+    retsub
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildGreet(app: uint64, name: bytes) -> bytes:
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildGreet:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:149
+    // public callChildGreet(app: Application, name: string): string {
+    proto 2 1
+    b examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildGreet_block@0
+
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildGreet_block@0:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:151-155
+    // const { returnValue } = abiCall({
+    //   method: GreeterChild.prototype.greet, // Method reference for type-safe c2c call
+    //   appId: app, // Target application to call
+    //   args: [name], // ABI method arguments
+    // })
+    itxn_begin
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:154
+    // args: [name], // ABI method arguments
+    frame_dig -1
+    len
+    itob
+    extract 6 2
+    frame_dig -1
+    concat
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:153
+    // appId: app, // Target application to call
+    frame_dig -2
+    itxn_field ApplicationID
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:151-155
+    // const { returnValue } = abiCall({
+    //   method: GreeterChild.prototype.greet, // Method reference for type-safe c2c call
+    //   appId: app, // Target application to call
+    //   args: [name], // ABI method arguments
+    // })
+    bytec_2 // method "greet(string)string"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationArgs
+    intc_2 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildGreet_next_txn@1
+
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildGreet_next_txn@1:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:151-155
+    // const { returnValue } = abiCall({
+    //   method: GreeterChild.prototype.greet, // Method reference for type-safe c2c call
+    //   appId: app, // Target application to call
+    //   args: [name], // ABI method arguments
+    // })
+    itxn_submit
+    itxn LastLog
+    dup
+    extract 4 0
+    cover 1
+    extract 0 4
+    bytec_0 // 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 1
+    *
+    pushint 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for string
+    extract 2 0
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:157
+    // return returnValue
+    retsub
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildManual(app: uint64, name: bytes) -> bytes:
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildManual:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:167
+    // public callChildManual(app: Application, name: string): string {
+    proto 2 1
+    b examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildManual_block@0
+
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildManual_block@0:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:175
+    // assert(selectorFromRef === selectorFromStr, 'Selectors must match')
+    bytec_2 // method "greet(string)string"
+    bytec_2 // method "greet(string)string"
+    ==
+    assert // Selectors must match
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:178-183
+    // const txn = itxn
+    //   .applicationCall({
+    //     appId: app, // Target app
+    //     appArgs: [selectorFromRef, encodeArc4(name)], // Selector + ABI-encoded argument
+    //   })
+    //   .submit()
+    itxn_begin
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:180
+    // appId: app, // Target app
+    frame_dig -2
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:181
+    // appArgs: [selectorFromRef, encodeArc4(name)], // Selector + ABI-encoded argument
+    frame_dig -1
+    len
+    itob
+    extract 6 2
+    frame_dig -1
+    concat
+    bytec_2 // method "greet(string)string"
+    itxn_field ApplicationArgs
+    itxn_field ApplicationArgs
+    itxn_field ApplicationID
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:178-182
+    // const txn = itxn
+    //   .applicationCall({
+    //     appId: app, // Target app
+    //     appArgs: [selectorFromRef, encodeArc4(name)], // Selector + ABI-encoded argument
+    //   })
+    intc_2 // 6
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildManual_next_txn@1
+
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.callChildManual_next_txn@1:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:178-183
+    // const txn = itxn
+    //   .applicationCall({
+    //     appId: app, // Target app
+    //     appArgs: [selectorFromRef, encodeArc4(name)], // Selector + ABI-encoded argument
+    //   })
+    //   .submit()
+    itxn_submit
+    itxn LastLog
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:186
+    // const result = decodeArc4<string>(txn.lastLog, 'log')
+    dup
+    extract 4 0
+    cover 1
+    extract 0 4
+    bytec_0 // 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    extract 2 0
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:188
+    // return result
+    retsub
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deleteChild(app: uint64) -> void:
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deleteChild:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:195
+    // public deleteChild(app: Application): void {
+    proto 1 0
+    b examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deleteChild_block@0
+
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deleteChild_block@0:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:197-201
+    // abiCall({
+    //   method: GreeterChild.prototype.delete, // Method reference to child's delete()
+    //   appId: app, // Target application
+    //   onCompletion: OnCompleteAction.DeleteApplication, // Required on-completion action for delete
+    // })
+    itxn_begin
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:199
+    // appId: app, // Target application
+    frame_dig -1
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:200
+    // onCompletion: OnCompleteAction.DeleteApplication, // Required on-completion action for delete
+    pushint 5
+    itxn_field OnCompletion
+    itxn_field ApplicationID
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:197-201
+    // abiCall({
+    //   method: GreeterChild.prototype.delete, // Method reference to child's delete()
+    //   appId: app, // Target application
+    //   onCompletion: OnCompleteAction.DeleteApplication, // Required on-completion action for delete
+    // })
+    pushbytes 0x24378d3c // method "delete()void"
+    itxn_field ApplicationArgs
+    intc_2 // appl
+    itxn_field TypeEnum
+    intc_0 // 0
+    itxn_field Fee
+    b examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deleteChild_next_txn@1
+
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.deleteChild_next_txn@1:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:197-201
+    // abiCall({
+    //   method: GreeterChild.prototype.delete, // Method reference to child's delete()
+    //   appId: app, // Target application
+    //   onCompletion: OnCompleteAction.DeleteApplication, // Required on-completion action for delete
+    // })
+    itxn_submit
+    retsub
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.inspectCompiled() -> uint64:
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.inspectCompiled:
+    b examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.inspectCompiled_block@0
+
+examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterFactory.inspectCompiled_block@0:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:212-214
+    // const compiled = compile(GreeterChild, {
+    //   templateVars: { GREETING: 'test' }, // Constant value for inspection
+    // })
+    intc_0 // 0
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:225
+    // return extras
+    retsub

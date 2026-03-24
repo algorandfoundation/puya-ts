@@ -1,0 +1,101 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0
+    bytecblock "greeting" TMPL_GREETING
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:41
+    // greeting = GlobalState({ initialValue: '' })
+    bytec_0 // "greeting"
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:46
+    // this.greeting.value = TemplateVar<string>('GREETING')
+    bytec_1 // TMPL_GREETING
+    app_global_put
+
+main_after_if_else@2:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:39
+    // export class GreeterChild extends Contract {
+    pushbytes 0x24378d3c // method "delete()void"
+    txna ApplicationArgs 0
+    match main_delete_route@4
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    bz main_create_NoOp@9
+    pushbytes 0xd0a28200 // method "greet(string)string"
+    txna ApplicationArgs 0
+    match greet
+    err
+
+main_create_NoOp@9:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:39
+    // export class GreeterChild extends Contract {
+    pushbytes 0x4c5c61ba // method "create()void"
+    txna ApplicationArgs 0
+    match main_create_route@10
+    err
+
+main_create_route@10:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:50
+    // @abimethod({ onCreate: 'require' })
+    intc_0 // 1
+    return
+
+main_delete_route@4:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:63
+    // @abimethod({ allowActions: 'DeleteApplication' })
+    txn OnCompletion
+    pushint 5 // DeleteApplication
+    ==
+    txn ApplicationID
+    &&
+    return
+
+
+// examples/puya-ts/11-contract-factory/contract.algo.ts::GreeterChild.greet[routing]() -> void:
+greet:
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:58
+    // public greet(name: string): string {
+    txna ApplicationArgs 1
+    dup
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    pushint 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:59
+    // return `${this.greeting.value} ${name}`
+    intc_1 // 0
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:41
+    // greeting = GlobalState({ initialValue: '' })
+    bytec_0 // "greeting"
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:59
+    // return `${this.greeting.value} ${name}`
+    app_global_get_ex
+    assert // check GlobalState exists
+    pushbytes " "
+    concat
+    swap
+    concat
+    // examples/puya-ts/11-contract-factory/contract.algo.ts:58
+    // public greet(name: string): string {
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return

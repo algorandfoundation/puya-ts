@@ -1,0 +1,184 @@
+subroutine calculateMinBalance(numAssets: uint64): uint64
+{
+  assetCost: uint64 = numAssets * 100000
+  total: uint64 = 100000 + assetCost
+  return total
+}
+subroutine minOf(a: uint64, b: uint64): uint64
+{
+  if (a < b) {
+    return a
+  }
+  return b
+}
+subroutine computeSwapOutput(amountIn: uint64, reserveIn: uint64, reserveOut: uint64): uint64
+{
+  adjustedIn: uint64 = amountIn * 997
+  denominator: uint64 = reserveIn * 1000 + adjustedIn
+  #[numHi, numLo]: readonly [uint64, uint64] = #[($0 = mulw(reserveOut, adjustedIn)).0, $0.1]
+  #[quotientHi, quotientLo]: readonly [uint64, uint64] = #[($1 = divmodw(numHi, numLo, 0, denominator)).0, $1.1]
+  assert(quotientHi == 0, comment=Swap output overflow)
+  return quotientLo
+}
+contract DexPool
+{
+  globals {
+    ["assetA"]: asset
+    ["assetB"]: asset
+    ["poolToken"]: asset
+    ["reserveA"]: uint64
+    ["reserveB"]: uint64
+    ["totalLiquidity"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  createApplication(): void
+  {
+  }
+  
+  bootstrap(assetA: asset, assetB: asset, seed: group_transaction_pay): uint64
+  {
+    assert(txn<Sender>() == global<CreatorAddress>(), comment=Only creator)
+    assert(GlobalState["totalLiquidity"] == 0, comment=Already bootstrapped)
+    assert(reinterpret_cast<uint64>(assetA) < reinterpret_cast<uint64>(assetB), comment=Assets must be ordered by ID)
+    requiredMinBal: uint64 = examples/puya-ts/15-dex-pool/contract.algo.ts::calculateMinBalance(3)
+    assert(&&(gtxns<Receiver>(seed) == global<CurrentApplicationAddress>(), &&(gtxns<Amount>(seed) <= ($2 = #[requiredMinBal, 10000000]).1, gtxns<Amount>(seed) >= $2.0)), comment=assert target is match for conditions)
+    GlobalState["assetA"]: asset = assetA
+    GlobalState["assetB"]: asset = assetB
+    createResult: inner_transaction_acfg = submit_txn(create_inner_transaction(Fee=0, TypeEnum=3, ConfigAssetTotal=10000000000, ConfigAssetDecimals=6, ConfigAssetName="DPT", ConfigAssetUnitName="DPT", ConfigAssetManager=global<CurrentApplicationAddress>(), ConfigAssetReserve=global<CurrentApplicationAddress>()))
+    GlobalState["poolToken"]: asset = createResult.CreatedAssetID
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=global<CurrentApplicationAddress>(), XferAsset=assetA, AssetAmount=0))
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=global<CurrentApplicationAddress>(), XferAsset=assetB, AssetAmount=0))
+    return reinterpret_cast<uint64>(createResult.CreatedAssetID)
+  }
+  
+  addLiquidity(depositA: group_transaction_axfer, depositB: group_transaction_axfer): uint64
+  {
+    assert(&&(&&(gtxns<AssetReceiver>(depositA) == global<CurrentApplicationAddress>(), gtxns<XferAsset>(depositA) == GlobalState["assetA"]), gtxns<AssetAmount>(depositA) > 0), comment=assert target is match for conditions)
+    assert(&&(&&(gtxns<AssetReceiver>(depositB) == global<CurrentApplicationAddress>(), gtxns<XferAsset>(depositB) == GlobalState["assetB"]), gtxns<AssetAmount>(depositB) > 0), comment=assert target is match for conditions)
+    amountA: uint64 = gtxns<AssetAmount>(depositA)
+    amountB: uint64 = gtxns<AssetAmount>(depositB)
+    liquidity: uint64 = 0
+    if (GlobalState["totalLiquidity"] == 0) {
+      sqrtA: uint64 = sqrt(amountA)
+      sqrtB: uint64 = sqrt(amountB)
+      rawLiquidity: uint64 = sqrtA * sqrtB
+      assert(rawLiquidity > 1000, comment=Initial deposit too small)
+      liquidity: uint64 = rawLiquidity - 1000
+      bigProduct: biguint = reinterpret_cast<biguint>(itob(amountA)) * reinterpret_cast<biguint>(itob(amountB))
+      exactSqrt: biguint = bsqrt(bigProduct)
+      assert(reinterpret_cast<biguint>(itob(rawLiquidity)) <= exactSqrt, comment=Sqrt approximation overflow)
+    } else {
+      liquidityA: uint64 = amountA * GlobalState["totalLiquidity"] // GlobalState["reserveA"]
+      liquidityB: uint64 = amountB * GlobalState["totalLiquidity"] // GlobalState["reserveB"]
+      liquidity: uint64 = examples/puya-ts/15-dex-pool/contract.algo.ts::minOf(liquidityA, liquidityB)
+    }
+    assert(liquidity > 0, comment=Zero liquidity)
+    newReserveA: uint64 = GlobalState["reserveA"] + amountA
+    GlobalState["reserveA"]: uint64 = newReserveA
+    newReserveB: uint64 = GlobalState["reserveB"] + amountB
+    GlobalState["reserveB"]: uint64 = newReserveB
+    newLiquidity: uint64 = GlobalState["totalLiquidity"] + liquidity
+    GlobalState["totalLiquidity"]: uint64 = newLiquidity
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=txn<Sender>(), XferAsset=GlobalState["poolToken"], AssetAmount=liquidity))
+    return liquidity
+  }
+  
+  removeLiquidity(poolDeposit: group_transaction_axfer): void
+  {
+    assert(&&(&&(gtxns<AssetReceiver>(poolDeposit) == global<CurrentApplicationAddress>(), gtxns<XferAsset>(poolDeposit) == GlobalState["poolToken"]), gtxns<AssetAmount>(poolDeposit) > 0), comment=assert target is match for conditions)
+    burnAmount: uint64 = gtxns<AssetAmount>(poolDeposit)
+    totalLiq: uint64 = GlobalState["totalLiquidity"]
+    amountA: uint64 = burnAmount * GlobalState["reserveA"] // totalLiq
+    amountB: uint64 = burnAmount * GlobalState["reserveB"] // totalLiq
+    assert(amountA > 0, comment=Zero withdrawal A)
+    assert(amountB > 0, comment=Zero withdrawal B)
+    newResA: uint64 = GlobalState["reserveA"] - amountA
+    GlobalState["reserveA"]: uint64 = newResA
+    newResB: uint64 = GlobalState["reserveB"] - amountB
+    GlobalState["reserveB"]: uint64 = newResB
+    newLiq: uint64 = totalLiq - burnAmount
+    GlobalState["totalLiquidity"]: uint64 = newLiq
+    sendA: inner_transaction_fields_axfer = create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=txn<Sender>(), XferAsset=GlobalState["assetA"], AssetAmount=amountA)
+    sendB: inner_transaction_fields_axfer = create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=txn<Sender>(), XferAsset=GlobalState["assetB"], AssetAmount=amountB)
+    submit_txn(sendA, sendB)
+  }
+  
+  swap(deposit: group_transaction_axfer): uint64
+  {
+    assert(&&(gtxns<AssetReceiver>(deposit) == global<CurrentApplicationAddress>(), gtxns<AssetAmount>(deposit) > 0), comment=assert target is match for conditions)
+    depositAsset: asset = gtxns<XferAsset>(deposit)
+    amountIn: uint64 = gtxns<AssetAmount>(deposit)
+    oldResA: uint64 = GlobalState["reserveA"]
+    oldResB: uint64 = GlobalState["reserveB"]
+    amountOut: uint64 = 0
+    newReserveA: uint64 = 0
+    newReserveB: uint64 = 0
+    if (depositAsset == GlobalState["assetA"]) {
+      amountOut: uint64 = examples/puya-ts/15-dex-pool/contract.algo.ts::computeSwapOutput(amountIn, oldResA, oldResB)
+      assert(amountOut > 0, comment=Zero output)
+      assert(amountOut < oldResB, comment=Insufficient reserve B)
+      newReserveA: uint64 = oldResA + amountIn
+      newReserveB: uint64 = oldResB - amountOut
+      submit_txn(create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=txn<Sender>(), XferAsset=GlobalState["assetB"], AssetAmount=amountOut))
+    } else {
+      assert(depositAsset == GlobalState["assetB"], comment=Unknown asset)
+      amountOut: uint64 = examples/puya-ts/15-dex-pool/contract.algo.ts::computeSwapOutput(amountIn, oldResB, oldResA)
+      assert(amountOut > 0, comment=Zero output)
+      assert(amountOut < oldResA, comment=Insufficient reserve A)
+      newReserveA: uint64 = oldResA - amountOut
+      newReserveB: uint64 = oldResB + amountIn
+      submit_txn(create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=txn<Sender>(), XferAsset=GlobalState["assetA"], AssetAmount=amountOut))
+    }
+    oldK: biguint = reinterpret_cast<biguint>(itob(oldResA)) * reinterpret_cast<biguint>(itob(oldResB))
+    newK: biguint = reinterpret_cast<biguint>(itob(newReserveA)) * reinterpret_cast<biguint>(itob(newReserveB))
+    assert(newK >= oldK, comment=Invariant violated: k decreased)
+    GlobalState["reserveA"]: uint64 = newReserveA
+    GlobalState["reserveB"]: uint64 = newReserveB
+    return amountOut
+  }
+  
+  withdrawAlgoExcess(): void
+  {
+    assert(txn<Sender>() == global<CreatorAddress>(), comment=Only creator)
+    minBal: uint64 = checked_maybe(acct_params_get<AcctMinBalance>(global<CurrentApplicationAddress>()), comment=account funded)
+    contractBal: uint64 = checked_maybe(acct_params_get<AcctBalance>(global<CurrentApplicationAddress>()), comment=account funded)
+    assert(contractBal > minBal, comment=No excess balance)
+    excess: uint64 = contractBal - minBal
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=1, Receiver=global<CreatorAddress>(), Amount=excess))
+  }
+  
+  getPoolState(): examples/puya-ts/15-dex-pool/contract.algo.ts::PoolState
+  {
+    resA: uint64 = GlobalState["reserveA"]
+    resB: uint64 = GlobalState["reserveB"]
+    k: biguint = reinterpret_cast<biguint>(itob(resA)) * reinterpret_cast<biguint>(itob(resB))
+    sqrtK: biguint = bsqrt(k)
+    log(reinterpret_cast<bytes>(sqrtK))
+    return new examples/puya-ts/15-dex-pool/contract.algo.ts::PoolState(reserveA=resA, reserveB=resB, totalLiquidity=GlobalState["totalLiquidity"])
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["reserveA"]: uint64 = 0
+    GlobalState["reserveB"]: uint64 = 0
+    GlobalState["totalLiquidity"]: uint64 = 0
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
