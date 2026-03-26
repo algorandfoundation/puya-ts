@@ -51,7 +51,7 @@ export class BoxMapExpressionBuilder extends BoxProxyExpressionBuilder<BoxMapPTy
     })
 
     return new BoxExpressionBuilder(
-      nodeFactory.boxPrefixedKeyExpression({
+      nodeFactory.mapPrefixedKeyExpression({
         key: key.resolve(),
         prefix: this._expr,
         sourceLocation: this.sourceLocation,

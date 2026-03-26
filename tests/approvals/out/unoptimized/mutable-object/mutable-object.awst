@@ -90,7 +90,7 @@ contract MutableObjectDemo
   
   getPlugin(key: string): tests/approvals/mutable-object.algo.ts::PluginInfo
   {
-    value: tests/approvals/mutable-object.algo.ts::PluginInfo = copy(Box[BoxMapKey(prefix="plugins", key=key)].value)
+    value: tests/approvals/mutable-object.algo.ts::PluginInfo = copy(Box[MapKey(prefix="plugins", key=key)].value)
     assert(ARC4_DECODE(value.lastCalled) > 0, comment=Last called not zero)
     return value
   }
@@ -104,7 +104,7 @@ contract MutableObjectDemo
   
   setPlugin(key: string): void
   {
-    Box[BoxMapKey(prefix="plugins", key=key)].value: tests/approvals/mutable-object.algo.ts::PluginInfo = new tests/approvals/mutable-object.algo.ts::PluginInfo(lastValidRound=($13 = #{ lastValidRound: 1, cooldown: 0, lastCalled: 0, adminPrivileges: False, methods: #[#{ selector: ARC4_ENCODE(reinterpret_cast<bytes>(Method("test()void")), wtype=arc4.static_array<arc4.byte,4>), cooldown: 1, lastCalled: 1 }] }).lastValidRound, cooldown=$13.cooldown, lastCalled=$13.lastCalled, adminPrivileges=$13.adminPrivileges, methods=new arc4.dynamic_array<tests/approvals/mutable-object.algo.ts::MethodInfo>(new tests/approvals/mutable-object.algo.ts::MethodInfo(selector=($14 = ($15 = $13.methods).0).selector, cooldown=$14.cooldown, lastCalled=$14.lastCalled)))
+    Box[MapKey(prefix="plugins", key=key)].value: tests/approvals/mutable-object.algo.ts::PluginInfo = new tests/approvals/mutable-object.algo.ts::PluginInfo(lastValidRound=($13 = #{ lastValidRound: 1, cooldown: 0, lastCalled: 0, adminPrivileges: False, methods: #[#{ selector: ARC4_ENCODE(reinterpret_cast<bytes>(Method("test()void")), wtype=arc4.static_array<arc4.byte,4>), cooldown: 1, lastCalled: 1 }] }).lastValidRound, cooldown=$13.cooldown, lastCalled=$13.lastCalled, adminPrivileges=$13.adminPrivileges, methods=new arc4.dynamic_array<tests/approvals/mutable-object.algo.ts::MethodInfo>(new tests/approvals/mutable-object.algo.ts::MethodInfo(selector=($14 = ($15 = $13.methods).0).selector, cooldown=$14.cooldown, lastCalled=$14.lastCalled)))
   }
   
   __algots__.defaultCreate(): void

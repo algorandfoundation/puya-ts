@@ -59,6 +59,7 @@ import type {
   LogicSignature,
   LoopContinue,
   LoopExit,
+  MapPrefixedKeyExpression,
   MethodConstant,
   NamedTupleExpression,
   NewArray,
@@ -346,6 +347,11 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
   visitAppAccountStateExpression(expression: AppAccountStateExpression): void {
     expression.key.accept(this)
     expression.account.accept(this)
+  }
+
+  visitMapPrefixedKeyExpression(expression: MapPrefixedKeyExpression): void {
+    expression.key.accept(this)
+    expression.prefix.accept(this)
   }
 
   visitBoxPrefixedKeyExpression(expression: BoxPrefixedKeyExpression): void {

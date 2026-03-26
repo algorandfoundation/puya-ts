@@ -20,18 +20,18 @@ subroutine testBox(box: box_key, value: string): void
 }
 subroutine testBoxMap(box: box_key, key: string, value: bytes): void
 {
-  Box[BoxMapKey(prefix=box, key=key)].value: bytes = value
-  Box[BoxMapKey(prefix="", key=key)].value: bytes = value
-  boxMapItem: box_key = BoxMapKey(prefix="", key=key)
+  Box[MapKey(prefix=box, key=key)].value: bytes = value
+  Box[MapKey(prefix="", key=key)].value: bytes = value
+  boxMapItem: box_key = MapKey(prefix="", key=key)
   assert(STATE_EXISTS(Box[boxMapItem].value))
   assert(reinterpret_cast<bytes>(box) == "two")
   assert("" == "")
-  assert(Boolean(checked_maybe(box_len(BoxMapKey(prefix=box, key=key)), comment=Box must have value)))
-  assert(STATE_GET_EX(Box[BoxMapKey(prefix=box, key=key)].value).1)
-  assert(Box[BoxMapKey(prefix=box, key=key)].value == Box[BoxMapKey(prefix="", key=key)].value)
-  isBoxDeleted: bool = STATE_DELETE(Box[BoxMapKey(prefix=box, key=key)].value)
+  assert(Boolean(checked_maybe(box_len(MapKey(prefix=box, key=key)), comment=Box must have value)))
+  assert(STATE_GET_EX(Box[MapKey(prefix=box, key=key)].value).1)
+  assert(Box[MapKey(prefix=box, key=key)].value == Box[MapKey(prefix="", key=key)].value)
+  isBoxDeleted: bool = STATE_DELETE(Box[MapKey(prefix=box, key=key)].value)
   assert(isBoxDeleted, comment=delete failed)
-  assert(STATE_GET(Box[BoxMapKey(prefix=box, key="" + key + "x")].value, default="b") == STATE_GET(Box[BoxMapKey(prefix="", key="" + key + "x")].value, default="b"))
+  assert(STATE_GET(Box[MapKey(prefix=box, key="" + key + "x")].value, default="b") == STATE_GET(Box[MapKey(prefix="", key="" + key + "x")].value, default="b"))
 }
 subroutine testBoxRef(box: box_key, length: uint64): void
 {
@@ -94,7 +94,7 @@ contract BoxNotExist
       }
       if ($2 == "boxmap") {
         #switch₁ᶜ₁:
-        return Box[BoxMapKey(prefix="a", key="bc")].value
+        return Box[MapKey(prefix="a", key="bc")].value
       }
       if ($2 == "createbox") {
         #switch₁ᶜ₂:
@@ -217,26 +217,26 @@ contract TupleBox
   
   testBoxMap(): void
   {
-    assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
-    assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="a")].value))
-    Box[BoxMapKey(prefix="tm1", key="a")].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(#[($5 = #["hello", "world", True]).0, $5.1, $5.2], wtype=arc4.tuple<string,bytes,bool>)
-    Box[BoxMapKey(prefix="tm2", key="a")].value: tests/approvals/box-proxies.algo.ts::BoxMap2 = new tests/approvals/box-proxies.algo.ts::BoxMap2(a=($6 = #{ a: "hello", b: "world", c: True }).a, b=$6.b, c=$6.c)
-    assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
-    assert(Box[BoxMapKey(prefix="tm1", key="a")].value.0 == "hello")
-    assert(Box[BoxMapKey(prefix="tm1", key="a")].value.1 == "world")
-    assert(Box[BoxMapKey(prefix="tm1", key="a")].value.2)
-    assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="a")].value))
-    assert(Box[BoxMapKey(prefix="tm2", key="a")].value.a == "hello")
-    assert(Box[BoxMapKey(prefix="tm2", key="a")].value.b == "world")
-    assert(Box[BoxMapKey(prefix="tm2", key="a")].value.c)
-    Box[BoxMapKey(prefix="tm1", key="b")].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(#[($7 = #["abc", "def", False]).0, $7.1, $7.2], wtype=arc4.tuple<string,bytes,bool>)
-    assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="b")].value))
-    Box[BoxMapKey(prefix="tm2", key="b")].value: tests/approvals/box-proxies.algo.ts::BoxMap2 = new tests/approvals/box-proxies.algo.ts::BoxMap2(a=($8 = #{ a: "abc", b: "def", c: False }).a, b=$8.b, c=$8.c)
-    assert(STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="b")].value))
-    STATE_DELETE(Box[BoxMapKey(prefix="tm1", key="a")].value)
-    assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm1", key="a")].value))
-    STATE_DELETE(Box[BoxMapKey(prefix="tm2", key="a")].value)
-    assert(!STATE_EXISTS(Box[BoxMapKey(prefix="tm2", key="a")].value))
+    assert(!STATE_EXISTS(Box[MapKey(prefix="tm1", key="a")].value))
+    assert(!STATE_EXISTS(Box[MapKey(prefix="tm2", key="a")].value))
+    Box[MapKey(prefix="tm1", key="a")].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(#[($5 = #["hello", "world", True]).0, $5.1, $5.2], wtype=arc4.tuple<string,bytes,bool>)
+    Box[MapKey(prefix="tm2", key="a")].value: tests/approvals/box-proxies.algo.ts::BoxMap2 = new tests/approvals/box-proxies.algo.ts::BoxMap2(a=($6 = #{ a: "hello", b: "world", c: True }).a, b=$6.b, c=$6.c)
+    assert(STATE_EXISTS(Box[MapKey(prefix="tm1", key="a")].value))
+    assert(Box[MapKey(prefix="tm1", key="a")].value.0 == "hello")
+    assert(Box[MapKey(prefix="tm1", key="a")].value.1 == "world")
+    assert(Box[MapKey(prefix="tm1", key="a")].value.2)
+    assert(STATE_EXISTS(Box[MapKey(prefix="tm2", key="a")].value))
+    assert(Box[MapKey(prefix="tm2", key="a")].value.a == "hello")
+    assert(Box[MapKey(prefix="tm2", key="a")].value.b == "world")
+    assert(Box[MapKey(prefix="tm2", key="a")].value.c)
+    Box[MapKey(prefix="tm1", key="b")].value: arc4.tuple<string,bytes,bool> = ARC4_ENCODE(#[($7 = #["abc", "def", False]).0, $7.1, $7.2], wtype=arc4.tuple<string,bytes,bool>)
+    assert(STATE_EXISTS(Box[MapKey(prefix="tm1", key="b")].value))
+    Box[MapKey(prefix="tm2", key="b")].value: tests/approvals/box-proxies.algo.ts::BoxMap2 = new tests/approvals/box-proxies.algo.ts::BoxMap2(a=($8 = #{ a: "abc", b: "def", c: False }).a, b=$8.b, c=$8.c)
+    assert(STATE_EXISTS(Box[MapKey(prefix="tm2", key="b")].value))
+    STATE_DELETE(Box[MapKey(prefix="tm1", key="a")].value)
+    assert(!STATE_EXISTS(Box[MapKey(prefix="tm1", key="a")].value))
+    STATE_DELETE(Box[MapKey(prefix="tm2", key="a")].value)
+    assert(!STATE_EXISTS(Box[MapKey(prefix="tm2", key="a")].value))
   }
   
   __algots__.defaultCreate(): void
@@ -261,7 +261,7 @@ contract BoxToRefTest
   
   test(): void
   {
-    boxForCaller: box_key = BoxMapKey(prefix="", key=txn<Sender>())
+    boxForCaller: box_key = MapKey(prefix="", key=txn<Sender>())
     box_create(boxForCaller, size_of(arc4.static_array<arc4.uint8,4>))
     boxRef: box_key = boxForCaller
     box_replace(boxRef, 0, reinterpret_cast<bytes>(123))
@@ -290,7 +290,7 @@ contract CompositeKeyTest
   
   test(key: ObjectACED9E72, val: string): void
   {
-    Box[BoxMapKey(prefix="", key=key)].value: string = val
+    Box[MapKey(prefix="", key=key)].value: string = val
   }
   
   __algots__.defaultCreate(): void
