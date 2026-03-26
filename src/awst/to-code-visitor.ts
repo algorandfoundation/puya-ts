@@ -100,6 +100,9 @@ export class ToCodeVisitor
       .join(', ')
     return `${expression.base.accept(this)}.slice(${args})`
   }
+  visitMapPrefixedKeyExpression(expression: nodes.MapPrefixedKeyExpression): string {
+    return `MapKey(prefix=${expression.prefix.accept(this)}, key=${expression.key.accept(this)})`
+  }
   visitBoxPrefixedKeyExpression(expression: nodes.BoxPrefixedKeyExpression): string {
     return `BoxMapKey(prefix=${expression.prefix.accept(this)}, key=${expression.key.accept(this)})`
   }
