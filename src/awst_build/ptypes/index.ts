@@ -332,6 +332,36 @@ export class GlobalStateType extends StorageProxyPType {
     return visitor.visitGlobalStateType(this)
   }
 }
+export const GlobalMapGeneric = new GenericPType({
+  name: 'GlobalMap',
+  module: Constants.moduleNames.algoTs.state,
+  parameterise(typeArgs: readonly PType[]): GlobalMapType {
+    codeInvariant(typeArgs.length === 2, `${this.name} type expects exactly two type parameters`)
+    return new GlobalMapType({
+      keyType: typeArgs[0],
+      content: typeArgs[1],
+    })
+  },
+})
+export class GlobalMapType extends StorageProxyPType {
+  readonly [PType.IdSymbol] = 'GlobalMapType'
+  readonly module: string = Constants.moduleNames.algoTs.state
+  get name() {
+    return `GlobalMap<${this.keyType.name}, ${this.contentType.name}>`
+  }
+  get fullName() {
+    return `${this.module}::${this.name}<${this.keyType.name}, ${this.contentType.fullName}>`
+  }
+  readonly keyType: PType
+  constructor(props: { content: PType; keyType: PType }) {
+    super({ ...props, keyWType: wtypes.stateKeyWType })
+    this.keyType = props.keyType
+  }
+
+  accept<T>(visitor: PTypeVisitor<T>): T {
+    return visitor.visitGlobalMapType(this)
+  }
+}
 export const LocalStateGeneric = new GenericPType({
   name: 'LocalState',
   module: Constants.moduleNames.algoTs.state,
@@ -424,7 +454,7 @@ export class BoxMapPType extends StorageProxyPType {
     return visitor.visitBoxMapPType(this)
   }
 }
-export type AppStorageType = GlobalStateType | LocalStateType | BoxPType | BoxMapPType
+export type AppStorageType = GlobalStateType | LocalStateType | BoxPType | BoxMapPType | GlobalMapType
 
 /**
  * An open generic type parameter

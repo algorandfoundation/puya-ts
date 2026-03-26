@@ -1,0 +1,265 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 2 1 8
+    bytecblock "uintMap"
+    // tests/approvals/global-map.algo.ts:4-5
+    // @contract({ stateTotals: { globalUints: 10, globalBytes: 10 } })
+    // export class TestGlobalMap extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@14
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0x01124b73 0xaec441b8 0xa2d20392 0x7bc1269d 0x7d44ac96 0x3764b1ed 0xb36cbe2a // method "setAndGetUint(string,uint64)void", method "setAndGetBytes(string,byte[])void", method "setAndGetString(string,string)void", method "deleteValue(string)void", method "hasValue(string)bool", method "testKeyPrefix()void", method "testPrefixedMap(string,uint64)void"
+    txna ApplicationArgs 0
+    match main_setAndGetUint_route@4 main_setAndGetBytes_route@5 main_setAndGetString_route@6 main_deleteValue_route@7 main_hasValue_route@8 main_testKeyPrefix_route@9 main_testPrefixedMap_route@10
+    err
+
+main_testPrefixedMap_route@10:
+    // tests/approvals/global-map.algo.ts:42
+    // testPrefixedMap(key: string, value: uint64) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/global-map.algo.ts:9
+    // prefixedMap = GlobalMap<string, uint64>({ keyPrefix: 'p/' })
+    pushbytes "p/"
+    uncover 2
+    concat
+    // tests/approvals/global-map.algo.ts:43
+    // this.prefixedMap(key).value = value
+    swap
+    app_global_put
+    // tests/approvals/global-map.algo.ts:42
+    // testPrefixedMap(key: string, value: uint64) {
+    intc_2 // 1
+    return
+
+main_testKeyPrefix_route@9:
+    // tests/approvals/global-map.algo.ts:37
+    // testKeyPrefix() {
+    intc_2 // 1
+    return
+
+main_hasValue_route@8:
+    // tests/approvals/global-map.algo.ts:33
+    // hasValue(key: string): boolean {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // tests/approvals/global-map.algo.ts:6
+    // uintMap = GlobalMap<string, uint64>()
+    bytec_0 // "uintMap"
+    swap
+    concat
+    // tests/approvals/global-map.algo.ts:34
+    // return this.uintMap(key).hasValue
+    intc_0 // 0
+    swap
+    app_global_get_ex
+    bury 1
+    // tests/approvals/global-map.algo.ts:33
+    // hasValue(key: string): boolean {
+    pushbytes 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return
+
+main_deleteValue_route@7:
+    // tests/approvals/global-map.algo.ts:26
+    // deleteValue(key: string) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // tests/approvals/global-map.algo.ts:6
+    // uintMap = GlobalMap<string, uint64>()
+    bytec_0 // "uintMap"
+    swap
+    concat
+    // tests/approvals/global-map.algo.ts:27
+    // this.uintMap(key).value = 123
+    dup
+    pushint 123
+    app_global_put
+    // tests/approvals/global-map.algo.ts:29
+    // this.uintMap(key).delete()
+    dup
+    app_global_del
+    // tests/approvals/global-map.algo.ts:30
+    // assert(!this.uintMap(key).hasValue, 'should not have value after delete')
+    intc_0 // 0
+    swap
+    app_global_get_ex
+    bury 1
+    !
+    assert // should not have value after delete
+    // tests/approvals/global-map.algo.ts:26
+    // deleteValue(key: string) {
+    intc_2 // 1
+    return
+
+main_setAndGetString_route@6:
+    // tests/approvals/global-map.algo.ts:21
+    // setAndGetString(key: string, value: string) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // tests/approvals/global-map.algo.ts:8
+    // stringMap = GlobalMap<string, string>()
+    pushbytes "stringMap"
+    uncover 2
+    concat
+    // tests/approvals/global-map.algo.ts:22
+    // this.stringMap(key).value = value
+    swap
+    app_global_put
+    // tests/approvals/global-map.algo.ts:21
+    // setAndGetString(key: string, value: string) {
+    intc_2 // 1
+    return
+
+main_setAndGetBytes_route@5:
+    // tests/approvals/global-map.algo.ts:16
+    // setAndGetBytes(key: string, value: bytes) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // tests/approvals/global-map.algo.ts:7
+    // bytesMap = GlobalMap<string, bytes>()
+    pushbytes "bytesMap"
+    uncover 2
+    concat
+    // tests/approvals/global-map.algo.ts:17
+    // this.bytesMap(key).value = value
+    swap
+    app_global_put
+    // tests/approvals/global-map.algo.ts:16
+    // setAndGetBytes(key: string, value: bytes) {
+    intc_2 // 1
+    return
+
+main_setAndGetUint_route@4:
+    // tests/approvals/global-map.algo.ts:11
+    // setAndGetUint(key: string, value: uint64) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/global-map.algo.ts:6
+    // uintMap = GlobalMap<string, uint64>()
+    bytec_0 // "uintMap"
+    uncover 2
+    concat
+    // tests/approvals/global-map.algo.ts:12
+    // this.uintMap(key).value = value
+    swap
+    app_global_put
+    // tests/approvals/global-map.algo.ts:11
+    // setAndGetUint(key: string, value: uint64) {
+    intc_2 // 1
+    return
+
+main___algots__.defaultCreate@14:
+    // tests/approvals/global-map.algo.ts:4-5
+    // @contract({ stateTotals: { globalUints: 10, globalBytes: 10 } })
+    // export class TestGlobalMap extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return

@@ -3,9 +3,9 @@ import type { AppStorageDefinition, BytesConstant } from '../../awst/nodes'
 import { AppStorageKind, BytesEncoding } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
-import { invariant, utf8ToUint8Array } from '../../util'
+import { instanceOfAny, invariant, utf8ToUint8Array } from '../../util'
 import type { AppStorageType, ContractClassPType } from '../ptypes'
-import { BoxMapPType, BoxPType, GlobalStateType, LocalStateType, TransientType, UnsupportedType } from '../ptypes'
+import { BoxMapPType, BoxPType, GlobalMapType, GlobalStateType, LocalStateType, TransientType, UnsupportedType } from '../ptypes'
 
 export class AppStorageDeclaration {
   readonly memberName: string
@@ -31,13 +31,13 @@ export class AppStorageDeclaration {
   }
 
   get kind(): AppStorageKind {
-    if (this.ptype instanceof GlobalStateType) {
+    if (instanceOfAny(this.ptype, GlobalStateType, GlobalMapType)) {
       return AppStorageKind.appGlobal
     }
     if (this.ptype instanceof LocalStateType) {
       return AppStorageKind.accountLocal
     }
-    invariant(this.ptype instanceof BoxPType || this.ptype instanceof BoxMapPType, 'Must be exhaustive check on ptype')
+    invariant(instanceOfAny(this.ptype, BoxPType, BoxMapPType), 'Must be exhaustive check on ptype')
     return AppStorageKind.box
   }
 
@@ -63,7 +63,7 @@ export class AppStorageDeclaration {
       ...this,
       kind: this.kind,
       key: this.key,
-      keyWtype: this.ptype instanceof BoxMapPType ? this.ptype.keyType.wtypeOrThrow : null,
+      keyWtype: instanceOfAny(this.ptype, BoxMapPType, GlobalMapType) ? this.ptype.keyType.wtypeOrThrow : null,
       storageWtype: this.ptype.contentType.wtypeOrThrow,
     })
   }
