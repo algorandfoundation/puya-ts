@@ -20,6 +20,7 @@ import type {
   FixedArrayPType,
   FunctionPType,
   GenericPType,
+  GlobalMapType,
   GlobalStateType,
   GroupTransactionPType,
   ImmutableObjectPType,
@@ -104,6 +105,7 @@ export interface PTypeVisitor<T> {
   visitContractClassPType(ptype: ContractClassPType): T
 
   visitGlobalStateType(ptype: GlobalStateType): T
+  visitGlobalMapType(ptype: GlobalMapType): T
   visitLocalStateType(ptype: LocalStateType): T
   visitBoxPType(ptype: BoxPType): T
   visitBoxMapPType(ptype: BoxMapPType): T

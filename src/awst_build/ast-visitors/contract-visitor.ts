@@ -10,6 +10,7 @@ import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
 import { BoxProxyExpressionBuilder } from '../eb/storage/box'
+import { GlobalMapFunctionResultBuilder } from '../eb/storage/global-map'
 import { GlobalStateFunctionResultBuilder } from '../eb/storage/global-state'
 import { LocalStateFunctionResultBuilder } from '../eb/storage/local-state'
 import { ContractClassModel } from '../models/contract-class-model'
@@ -176,7 +177,12 @@ export class ContractVisitor extends ClassDefinitionVisitor {
     }
     const initializer = this.accept(node.initializer)
 
-    if (initializer instanceof GlobalStateFunctionResultBuilder) {
+    if (
+      initializer instanceof BoxProxyExpressionBuilder ||
+      initializer instanceof LocalStateFunctionResultBuilder ||
+      initializer instanceof GlobalStateFunctionResultBuilder ||
+      initializer instanceof GlobalMapFunctionResultBuilder
+    ) {
       const storageDeclaration = initializer.buildStorageDeclaration(
         propertyName,
         this.sourceLocation(node.name),
@@ -184,7 +190,8 @@ export class ContractVisitor extends ClassDefinitionVisitor {
         this._contractPType,
       )
       this.context.addStorageDeclaration(storageDeclaration)
-      if (initializer.initialValue) {
+
+      if (initializer instanceof GlobalStateFunctionResultBuilder && initializer.initialValue) {
         this._propertyInitialization.push(
           nodeFactory.assignmentStatement({
             target: nodeFactory.appStateExpression({
@@ -198,15 +205,6 @@ export class ContractVisitor extends ClassDefinitionVisitor {
           }),
         )
       }
-    } else if (initializer instanceof BoxProxyExpressionBuilder || initializer instanceof LocalStateFunctionResultBuilder) {
-      this.context.addStorageDeclaration(
-        initializer.buildStorageDeclaration(
-          propertyName,
-          this.sourceLocation(node.name),
-          this.getNodeDescription(node),
-          this._contractPType,
-        ),
-      )
     } else {
       logger.error(
         initializer.sourceLocation,
