@@ -10,7 +10,7 @@ Algorand smart contracts can utilise [three different types of on-chain storage]
 
 Global or Application storage is a key/value store of `bytes` or `uint64` values stored against a smart contract application. The number of values used must be declared when the application is first created and will affect the [minimum balance requirement](https://dev.algorand.co/concepts/smart-contracts/costs-constraints/#mbr) for the application. For ARC4 contracts, this information is captured in the ARC32 and ARC56 specification files and automatically included in deployments.
 
-Global storage values are declared using the [GlobalState](../../api/index/functions/globalstate/) function to create a [GlobalState](../../api/index/type-aliases/globalstate/) proxy object.
+Global storage values are declared using the [GlobalState](../../api/index/functions/globalstate/) function to create a [GlobalState](../../api/index/type-aliases/globalstate/) proxy object. For grouping multiple values under a common key and content type, see [GlobalMap](#globalmap).
 
 ```ts
 import { GlobalState, Contract, uint64, bytes, Uint64, contract } from '@algorandfoundation/algorand-typescript'
@@ -33,18 +33,49 @@ class DynamicAccessContract extends Contract {
 }
 ```
 
-## Local storage
+### GlobalMap
 
-Local or Account storage is a key/value store of `bytes` or `uint64` stored against a smart contract application _and_ a single account which has opted into that contract. The number of values used must be declared when the application is first created and will affect the minimum balance requirement of an account which opts into the contract. For ARC4 contracts, this information is captured in the ARC32 and ARC56 specification files and automatically included in deployments.
+`GlobalMap` is similar to `GlobalState`, but allows for grouping a set of global state values with a common key and content type. An optional `keyPrefix` can be specified when the `GlobalMap` is created; if not provided, the member variable name is used as the prefix. The item key can be any type that can be encoded to bytes. The final state key is the combination of `keyPrefix + key`. The `GlobalMap` proxy is a function which takes a `key` argument and returns a `GlobalState` proxy object for that item.
 
 ```ts
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { abimethod, Contract, LocalState, Txn } from '@algorandfoundation/algorand-typescript'
-import type { StaticArray, UintN } from '@algorandfoundation/algorand-typescript/arc4'
+import { assert, Bytes, contract, Contract, GlobalMap } from '@algorandfoundation/algorand-typescript'
 
-type SampleArray = StaticArray<UintN<64>, 10>
+@contract({ stateTotals: { globalUints: 10, globalBytes: 10 } })
+class GlobalMapDemo extends Contract {
+  // The property name 'uintMap' will be used as the key prefix
+  uintMap = GlobalMap<string, uint64>()
+  // Explicitly override the key prefix
+  prefixedMap = GlobalMap<string, uint64>({ keyPrefix: 'p/' })
 
-export class LocalStateDemo extends Contract {
+  test(key: string, value: uint64) {
+    // Set a value
+    this.uintMap(key).value = value
+    // Read a value
+    assert(this.uintMap(key).value === value)
+    // Check if a value exists
+    assert(this.uintMap(key).hasValue)
+    // Delete a value
+    this.uintMap(key).delete()
+    // Access the key prefix
+    assert(this.uintMap.keyPrefix === Bytes('uintMap'))
+    assert(this.prefixedMap.keyPrefix === Bytes('p/'))
+  }
+}
+```
+
+## Local storage
+
+Local or Account storage is a key/value store of `bytes` or `uint64` stored against a smart contract application _and_ a single account which has opted into that contract. The number of values used must be declared when the application is first created and will affect the minimum balance requirement of an account which opts into the contract. For ARC4 contracts, this information is captured in the ARC32 and ARC56 specification files and automatically included in deployments. For grouping multiple values under a common key and content type, see [LocalMap](#localmap).
+
+```ts
+import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
+import { abimethod, clone, Contract, LocalState, Txn } from '@algorandfoundation/algorand-typescript'
+import type { StaticArray, Uint64 } from '@algorandfoundation/algorand-typescript/arc4'
+
+type SampleArray = StaticArray<Uint64, 10>
+
+class LocalStateDemo extends Contract {
   localUint = LocalState<uint64>({ key: 'l1' })
   localUint2 = LocalState<uint64>()
   localBytes = LocalState<bytes>({ key: 'b1' })
@@ -59,7 +90,7 @@ export class LocalStateDemo extends Contract {
     this.localUint2(Txn.sender).value = a
     this.localBytes(Txn.sender).value = b
     this.localBytes2(Txn.sender).value = b
-    this.localEncoded(Txn.sender).value = c.copy()
+    this.localEncoded(Txn.sender).value = clone(c)
   }
 
   public getState() {
@@ -68,7 +99,7 @@ export class LocalStateDemo extends Contract {
       localUint2: this.localUint2(Txn.sender).value,
       localBytes: this.localBytes(Txn.sender).value,
       localBytes2: this.localBytes2(Txn.sender).value,
-      localEncoded: this.localEncoded(Txn.sender).value.copy(),
+      localEncoded: clone(this.localEncoded(Txn.sender).value),
     }
   }
 
@@ -78,6 +109,47 @@ export class LocalStateDemo extends Contract {
     this.localBytes(Txn.sender).delete()
     this.localBytes2(Txn.sender).delete()
     this.localEncoded(Txn.sender).delete()
+  }
+}
+```
+
+### LocalMap
+
+`LocalMap` is similar to `LocalState`, but allows for grouping a set of local state values with a common key and content type. An optional `keyPrefix` can be specified when the `LocalMap` is created; if not provided, the member variable name is used as the prefix. The item key can be any type that can be encoded to bytes. The final state key is the combination of `keyPrefix + key`.
+
+The `LocalMap` proxy supports two call signatures:
+
+- `map(key)` returns a `LocalState` proxy which can then be called with an account: `map(key)(account).value`
+- `map(key, account)` returns a `LocalStateForAccount` proxy directly: `map(key, account).value`
+
+```ts
+import type { uint64 } from '@algorandfoundation/algorand-typescript'
+import { abimethod, assert, Bytes, contract, Contract, LocalMap, Txn } from '@algorandfoundation/algorand-typescript'
+
+@contract({ stateTotals: { localUints: 8, localBytes: 8 } })
+class LocalMapDemo extends Contract {
+  // The property name 'uintMap' will be used as the key prefix
+  uintMap = LocalMap<string, uint64>()
+  // Explicitly override the key prefix
+  prefixedMap = LocalMap<string, uint64>({ keyPrefix: 'p/' })
+
+  @abimethod({ allowActions: 'OptIn' })
+  optIn() {}
+
+  test(key: string, value: uint64) {
+    // Set a value (two-arg shorthand)
+    this.uintMap(key, Txn.sender).value = value
+    // Read a value
+    assert(this.uintMap(key, Txn.sender).value === value)
+    // Equivalent using the one-arg overload
+    assert(this.uintMap(key)(Txn.sender).value === value)
+    // Check if a value exists
+    assert(this.uintMap(key, Txn.sender).hasValue)
+    // Delete a value
+    this.uintMap(key, Txn.sender).delete()
+    // Access the key prefix
+    assert(this.uintMap.keyPrefix === Bytes('uintMap'))
+    assert(this.prefixedMap.keyPrefix === Bytes('p/'))
   }
 }
 ```
