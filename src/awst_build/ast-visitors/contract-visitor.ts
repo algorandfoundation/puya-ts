@@ -12,6 +12,7 @@ import { codeInvariant, invariant } from '../../util'
 import { BoxProxyExpressionBuilder } from '../eb/storage/box'
 import { GlobalMapFunctionResultBuilder } from '../eb/storage/global-map'
 import { GlobalStateFunctionResultBuilder } from '../eb/storage/global-state'
+import { LocalMapFunctionResultBuilder } from '../eb/storage/local-map'
 import { LocalStateFunctionResultBuilder } from '../eb/storage/local-state'
 import { ContractClassModel } from '../models/contract-class-model'
 import type { ContractOptionsDecoratorData } from '../models/decorator-data'
@@ -180,6 +181,7 @@ export class ContractVisitor extends ClassDefinitionVisitor {
     if (
       initializer instanceof BoxProxyExpressionBuilder ||
       initializer instanceof LocalStateFunctionResultBuilder ||
+      initializer instanceof LocalMapFunctionResultBuilder ||
       initializer instanceof GlobalStateFunctionResultBuilder ||
       initializer instanceof GlobalMapFunctionResultBuilder
     ) {

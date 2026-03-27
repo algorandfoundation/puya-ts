@@ -30,6 +30,7 @@ import {
   GroupTransactionPType,
   ImmutableObjectPType,
   IntersectionPType,
+  LocalMapType,
   LocalStateType,
   logicSigBaseType,
   LogicSigPType,
@@ -475,7 +476,7 @@ export class TypeResolver {
     for (const prop of tsType.getProperties()) {
       const type = this.checker.getTypeOfSymbol(prop)
       const ptype = this.resolveType(type, this.getLocationOfSymbol(prop) ?? sourceLocation)
-      if (instanceOfAny(ptype, GlobalStateType, GlobalMapType, LocalStateType, BoxPType, BoxMapPType)) {
+      if (instanceOfAny(ptype, GlobalStateType, GlobalMapType, LocalStateType, LocalMapType, BoxPType, BoxMapPType)) {
         properties[prop.name] = ptype
       } else if (ptype instanceof FunctionPType) {
         methods[prop.name] = ptype

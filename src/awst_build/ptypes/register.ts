@@ -72,6 +72,7 @@ import { AssetExpressionBuilder, AssetFunctionBuilder } from '../eb/reference/as
 import { BoxExpressionBuilder, BoxFunctionBuilder, BoxMapExpressionBuilder, BoxMapFunctionBuilder } from '../eb/storage/box'
 import { GlobalMapExpressionBuilder, GlobalMapFunctionBuilder } from '../eb/storage/global-map'
 import { GlobalStateExpressionBuilder, GlobalStateFunctionBuilder } from '../eb/storage/global-state'
+import { LocalMapExpressionBuilder, LocalMapFunctionBuilder } from '../eb/storage/local-map'
 import { LocalStateExpressionBuilder, LocalStateFunctionBuilder } from '../eb/storage/local-state'
 import { StringExpressionBuilder, StringFunctionBuilder } from '../eb/string-expression-builder'
 import { TemplateVarFunctionBuilder } from '../eb/template-var'
@@ -211,6 +212,8 @@ import {
   keyRegistrationItxnParamsType,
   keyRegistrationItxnType,
   KeyRegistrationTxnFunction,
+  LocalMapGeneric,
+  LocalMapType,
   LocalStateGeneric,
   LocalStateType,
   logFunction,
@@ -414,6 +417,12 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
     ptype: LocalStateType,
     instanceEb: LocalStateExpressionBuilder,
     singletonEb: LocalStateFunctionBuilder,
+  })
+  typeRegistry.registerGeneric({
+    generic: LocalMapGeneric,
+    ptype: LocalMapType,
+    instanceEb: LocalMapExpressionBuilder,
+    singletonEb: LocalMapFunctionBuilder,
   })
   typeRegistry.registerGeneric({ generic: BoxGeneric, ptype: BoxPType, instanceEb: BoxExpressionBuilder, singletonEb: BoxFunctionBuilder })
   typeRegistry.registerGeneric({

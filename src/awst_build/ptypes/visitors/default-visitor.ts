@@ -24,6 +24,7 @@ import type {
   LibClassType,
   LibFunctionType,
   LibObjType,
+  LocalMapType,
   LocalStateType,
   LogicSigPType,
   MutableObjectPType,
@@ -197,6 +198,9 @@ export abstract class DefaultVisitor<T> implements PTypeVisitor<T> {
     return this.defaultReturn(ptype)
   }
   visitLocalStateType(ptype: LocalStateType): T {
+    return this.defaultReturn(ptype)
+  }
+  visitLocalMapType(ptype: LocalMapType): T {
     return this.defaultReturn(ptype)
   }
   visitBoxPType(ptype: BoxPType): T {
