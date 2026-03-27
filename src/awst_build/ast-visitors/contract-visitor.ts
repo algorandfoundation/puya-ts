@@ -210,7 +210,7 @@ export class ContractVisitor extends ClassDefinitionVisitor {
     } else {
       logger.error(
         initializer.sourceLocation,
-        `Unsupported property type ${initializer.typeDescription}. Only GlobalState, LocalState, and Box proxies can be stored on a contract.`,
+        `Unsupported property type ${initializer.typeDescription}. Only GlobalState, GlobalMap, LocalState, LocalMap, and Box proxies can be stored on a contract.`,
       )
     }
   }

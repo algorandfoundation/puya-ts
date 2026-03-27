@@ -37,7 +37,7 @@ function testDelete() {
 }
 
 class BadContract extends Contract {
-  // @expect-error Unsupported property type uint64. Only GlobalState, LocalState, and Box proxies can be stored on a contract.
+  // @expect-error Unsupported property type uint64. Only GlobalState, GlobalMap, LocalState, LocalMap, and Box proxies can be stored on a contract.
   #myState = Uint64(123)
 
   // @expect-error Static properties are not supported

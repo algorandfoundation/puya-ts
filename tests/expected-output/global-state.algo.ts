@@ -10,7 +10,7 @@ export class TestContract extends Contract {
   // @expect-error Global state must have explicit key provided if not being assigned to a contract property
   incorrect = GlobalState<string>().hasValue
 
-  // @expect-error Unsupported property type boolean. Only GlobalState, LocalState, and Box proxies can be stored on a contract.
+  // @expect-error Unsupported property type boolean. Only GlobalState, GlobalMap, LocalState, LocalMap, and Box proxies can be stored on a contract.
   incorrect2 = GlobalState<string>({ key: 'abc' }).hasValue
 
   test() {
