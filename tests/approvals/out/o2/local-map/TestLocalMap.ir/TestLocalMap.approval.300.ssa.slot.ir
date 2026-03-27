@@ -1,0 +1,184 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        goto tmp%0#1 ? block@2 : block@17
+    block@2: // abi_routing_L4
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "optIn()void" => block@3, * => block@4}
+    block@3: // optIn_route_L11
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 OptIn)
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%7#0: bool = (&& tmp%4#0 tmp%5#0)
+        (assert tmp%7#0)
+        exit 1u
+    block@4: // switch_case_next_L4
+        let tmp%8#0: uint64 = (txn OnCompletion)
+        let tmp%9#0: bool = (! tmp%8#0)
+        (assert tmp%9#0)
+        let tmp%10#0: uint64 = (txn ApplicationID)
+        (assert tmp%10#0)
+        let tmp%12#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%12#0 {method "setAndGetUint(string,uint64)void" => block@6, method "setAndGetBytes(string,byte[])void" => block@7, method "setAndGetString(string,string)void" => block@8, method "deleteValue(string)void" => block@9, method "hasValue(string)bool" => block@10, method "testKeyPrefix()void" => block@11, method "testPrefixedMap(string,uint64)void" => block@12, method "setAndGetUintViaLocalState(string,uint64)void" => block@13, * => block@16}
+    block@6: // setAndGetUint_route_L14
+        let tmp%0#15: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 tmp%0#15 0u) // on error: invalid array length header
+        let add%0#6: uint64 = (+ aggregate%array_length%0#0 2u)
+        let len%0#6: uint64 = (len tmp%0#15)
+        let eq%0#6: bool = (== len%0#6 add%0#6)
+        (assert eq%0#6) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#6: string = ((extract 2 0) tmp%0#15)
+        let tmp%2#10: bytes = (txna ApplicationArgs 2)
+        let len%1#4: uint64 = (len tmp%2#10)
+        let eq%1#4: bool = (== len%1#4 8u)
+        (assert eq%1#4) // invalid number of bytes for arc4.uint64
+        let value#4: uint64 = (btoi tmp%2#10)
+        let map_prefixed_key%0#6: bytes = (concat "uintMap" key#6)
+        let tmp%0#16: account = (txn Sender)
+        (app_local_put tmp%0#16 map_prefixed_key%0#6 value#4)
+        let tmp%1#13: account = (txn Sender)
+        let (maybe_value%0#4: uint64, maybe_exists%0#6: bool) = (app_local_get_ex tmp%1#13 0u map_prefixed_key%0#6)
+        (assert maybe_exists%0#6) // check LocalState exists
+        let tmp%2#11: bool = (== maybe_value%0#4 value#4)
+        (assert tmp%2#11) // uint value should match
+        exit 1u
+    block@7: // setAndGetBytes_route_L19
+        let tmp%0#13: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%1#0: uint64 = (extract_uint16 tmp%0#13 0u) // on error: invalid array length header
+        let add%0#5: uint64 = (+ aggregate%array_length%1#0 2u)
+        let len%0#5: uint64 = (len tmp%0#13)
+        let eq%0#5: bool = (== len%0#5 add%0#5)
+        (assert eq%0#5) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#5: string = ((extract 2 0) tmp%0#13)
+        let tmp%2#8: bytes = (txna ApplicationArgs 2)
+        let aggregate%array_length%2#0: uint64 = (extract_uint16 tmp%2#8 0u) // on error: invalid array length header
+        let add%1#1: uint64 = (+ aggregate%array_length%2#0 2u)
+        let len%1#3: uint64 = (len tmp%2#8)
+        let eq%1#3: bool = (== len%1#3 add%1#1)
+        (assert eq%1#3) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let value#3: bytes = ((extract 2 0) tmp%2#8)
+        let map_prefixed_key%0#5: bytes = (concat "bytesMap" key#5)
+        let tmp%0#14: account = (txn Sender)
+        (app_local_put tmp%0#14 map_prefixed_key%0#5 value#3)
+        let tmp%1#11: account = (txn Sender)
+        let (maybe_value%0#3: bytes, maybe_exists%0#5: bool) = (app_local_get_ex tmp%1#11 0u map_prefixed_key%0#5)
+        (assert maybe_exists%0#5) // check LocalState exists
+        let tmp%2#9: bool = (== maybe_value%0#3 value#3)
+        (assert tmp%2#9) // bytes value should match
+        exit 1u
+    block@8: // setAndGetString_route_L24
+        let tmp%0#11: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%3#0: uint64 = (extract_uint16 tmp%0#11 0u) // on error: invalid array length header
+        let add%0#4: uint64 = (+ aggregate%array_length%3#0 2u)
+        let len%0#4: uint64 = (len tmp%0#11)
+        let eq%0#4: bool = (== len%0#4 add%0#4)
+        (assert eq%0#4) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#4: string = ((extract 2 0) tmp%0#11)
+        let tmp%2#6: bytes = (txna ApplicationArgs 2)
+        let aggregate%array_length%4#0: uint64 = (extract_uint16 tmp%2#6 0u) // on error: invalid array length header
+        let add%1#0: uint64 = (+ aggregate%array_length%4#0 2u)
+        let len%1#2: uint64 = (len tmp%2#6)
+        let eq%1#2: bool = (== len%1#2 add%1#0)
+        (assert eq%1#2) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let value#2: string = ((extract 2 0) tmp%2#6)
+        let map_prefixed_key%0#4: bytes = (concat "stringMap" key#4)
+        let tmp%0#12: account = (txn Sender)
+        (app_local_put tmp%0#12 map_prefixed_key%0#4 value#2)
+        let tmp%1#9: account = (txn Sender)
+        let (maybe_value%0#2: bytes, maybe_exists%0#4: bool) = (app_local_get_ex tmp%1#9 0u map_prefixed_key%0#4)
+        (assert maybe_exists%0#4) // check LocalState exists
+        let tmp%2#7: bool = (== maybe_value%0#2 value#2)
+        (assert tmp%2#7) // string value should match
+        exit 1u
+    block@9: // deleteValue_route_L29
+        let tmp%0#9: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%5#0: uint64 = (extract_uint16 tmp%0#9 0u) // on error: invalid array length header
+        let add%0#3: uint64 = (+ aggregate%array_length%5#0 2u)
+        let len%0#3: uint64 = (len tmp%0#9)
+        let eq%0#3: bool = (== len%0#3 add%0#3)
+        (assert eq%0#3) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#3: string = ((extract 2 0) tmp%0#9)
+        let map_prefixed_key%0#3: bytes = (concat "uintMap" key#3)
+        let tmp%0#10: account = (txn Sender)
+        (app_local_put tmp%0#10 map_prefixed_key%0#3 123u)
+        let tmp%1#7: account = (txn Sender)
+        let (_%0#1: uint64, maybe_exists%0#3: bool) = (app_local_get_ex tmp%1#7 0u map_prefixed_key%0#3)
+        (assert maybe_exists%0#3) // should have value before delete
+        let tmp%2#5: account = (txn Sender)
+        (app_local_del tmp%2#5 map_prefixed_key%0#3)
+        let tmp%3#2: account = (txn Sender)
+        let (_%1#0: uint64, maybe_exists%1#0: bool) = (app_local_get_ex tmp%3#2 0u map_prefixed_key%0#3)
+        let tmp%4#2: bool = (! maybe_exists%1#0)
+        (assert tmp%4#2) // should not have value after delete
+        exit 1u
+    block@10: // hasValue_route_L36
+        let tmp%0#7: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%6#0: uint64 = (extract_uint16 tmp%0#7 0u) // on error: invalid array length header
+        let add%0#2: uint64 = (+ aggregate%array_length%6#0 2u)
+        let len%0#2: uint64 = (len tmp%0#7)
+        let eq%0#2: bool = (== len%0#2 add%0#2)
+        (assert eq%0#2) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#2: string = ((extract 2 0) tmp%0#7)
+        let map_prefixed_key%0#2: bytes = (concat "uintMap" key#2)
+        let tmp%0#8: account = (txn Sender)
+        let (_%0#0: uint64, maybe_exists%0#2: bool) = (app_local_get_ex tmp%0#8 0u map_prefixed_key%0#2)
+        let aggregate%encoded_bool%0#0: bytes[1] = (setbit 0x00 0u maybe_exists%0#2)
+        let tmp%4#1: bytes = (concat 0x151f7c75 aggregate%encoded_bool%0#0)
+        (log tmp%4#1)
+        exit 1u
+    block@11: // testKeyPrefix_route_L40
+        exit 1u
+    block@12: // testPrefixedMap_route_L45
+        let tmp%0#4: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%7#0: uint64 = (extract_uint16 tmp%0#4 0u) // on error: invalid array length header
+        let add%0#1: uint64 = (+ aggregate%array_length%7#0 2u)
+        let len%0#1: uint64 = (len tmp%0#4)
+        let eq%0#1: bool = (== len%0#1 add%0#1)
+        (assert eq%0#1) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#1: string = ((extract 2 0) tmp%0#4)
+        let tmp%2#3: bytes = (txna ApplicationArgs 2)
+        let len%1#1: uint64 = (len tmp%2#3)
+        let eq%1#1: bool = (== len%1#1 8u)
+        (assert eq%1#1) // invalid number of bytes for arc4.uint64
+        let value#1: uint64 = (btoi tmp%2#3)
+        let map_prefixed_key%0#1: bytes = (concat "p/" key#1)
+        let tmp%0#5: account = (txn Sender)
+        (app_local_put tmp%0#5 map_prefixed_key%0#1 value#1)
+        let tmp%1#4: account = (txn Sender)
+        let (maybe_value%0#1: uint64, maybe_exists%0#1: bool) = (app_local_get_ex tmp%1#4 0u map_prefixed_key%0#1)
+        (assert maybe_exists%0#1) // check LocalState exists
+        let tmp%2#4: bool = (== maybe_value%0#1 value#1)
+        (assert tmp%2#4) // prefixed map value should match
+        exit 1u
+    block@13: // setAndGetUintViaLocalState_route_L50
+        let tmp%0#2: bytes = (txna ApplicationArgs 1)
+        let aggregate%array_length%8#0: uint64 = (extract_uint16 tmp%0#2 0u) // on error: invalid array length header
+        let add%0#0: uint64 = (+ aggregate%array_length%8#0 2u)
+        let len%0#0: uint64 = (len tmp%0#2)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let key#0: string = ((extract 2 0) tmp%0#2)
+        let tmp%2#1: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#1)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
+        let value#0: uint64 = (btoi tmp%2#1)
+        let map_prefixed_key%0#0: bytes = (concat "uintMap" key#0)
+        let tmp%0#3: account = (txn Sender)
+        (app_local_put tmp%0#3 map_prefixed_key%0#0 value#0)
+        let tmp%1#2: account = (txn Sender)
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_local_get_ex tmp%1#2 0u map_prefixed_key%0#0)
+        (assert maybe_exists%0#0) // check LocalState exists
+        let tmp%2#2: bool = (== maybe_value%0#0 value#0)
+        (assert tmp%2#2) // uint value via LocalState should match
+        exit 1u
+    block@16: // after_if_else_L4
+        fail
+    block@17: // __algots__.defaultCreate_L4
+        let tmp%13#0: uint64 = (txn OnCompletion)
+        let tmp%14#0: bool = (! tmp%13#0)
+        let tmp%15#0: uint64 = (txn ApplicationID)
+        let tmp%16#0: bool = (! tmp%15#0)
+        let tmp%17#0: bool = (&& tmp%14#0 tmp%16#0)
+        (assert tmp%17#0)
+        exit 1u

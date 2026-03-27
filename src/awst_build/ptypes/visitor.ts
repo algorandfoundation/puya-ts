@@ -37,6 +37,7 @@ import type {
   LibClassType,
   LibFunctionType,
   LibObjType,
+  LocalMapType,
   LocalStateType,
   LogicSigPType,
   MutableObjectPType,
@@ -107,6 +108,7 @@ export interface PTypeVisitor<T> {
   visitGlobalStateType(ptype: GlobalStateType): T
   visitGlobalMapType(ptype: GlobalMapType): T
   visitLocalStateType(ptype: LocalStateType): T
+  visitLocalMapType(ptype: LocalMapType): T
   visitBoxPType(ptype: BoxPType): T
   visitBoxMapPType(ptype: BoxMapPType): T
 

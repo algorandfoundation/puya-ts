@@ -18,6 +18,7 @@ import {
   contractOptionsDecorator,
   GlobalMapType,
   GlobalStateType,
+  LocalMapType,
   LocalStateType,
   numberPType,
   stringPType,
@@ -58,7 +59,7 @@ export class ContractThisBuilder extends InstanceBuilder<ContractClassPType> {
     const property = this.ptype.properties[name]
     if (property) {
       const storageDeclaration = AwstBuildContext.current.getStorageDeclaration(this.ptype, name)
-      if (instanceOfAny(property, GlobalStateType, GlobalMapType, LocalStateType, BoxPType, BoxMapPType)) {
+      if (instanceOfAny(property, GlobalStateType, GlobalMapType, LocalStateType, LocalMapType, BoxPType, BoxMapPType)) {
         codeInvariant(storageDeclaration, `No declaration exists for property ${property}.`, sourceLocation)
         return instanceEb(storageDeclaration.key, property)
       }

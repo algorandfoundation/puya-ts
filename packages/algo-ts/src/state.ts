@@ -133,3 +133,51 @@ export type LocalStateOptions = {
 export function LocalState<ValueType>(options?: LocalStateOptions): LocalState<ValueType> {
   throw new NoImplementation()
 }
+
+/**
+ * A LocalMap proxy
+ * @typeParam TKey The type of the value used to key each local state value.
+ * @typeParam TValue The type of the data stored in the local state.
+ */
+export type LocalMap<TKey, TValue> = {
+  /**
+   * Get the bytes used to prefix each key
+   */
+  readonly keyPrefix: bytes
+
+  /**
+   * Get a LocalState proxy for a single item in the LocalMap
+   * @param key The key of the local state value to retrieve a proxy for
+   */
+  (key: TKey): LocalState<TValue>
+
+  /**
+   * Get a LocalState proxy for a specific account of an entry in the LocalMap
+   * @param key The key of the local state value to retrieve a proxy for
+   * @param account The account to read or write state for. This account must be opted into the contract
+   */
+  (key: TKey, account: Account): LocalStateForAccount<TValue>
+}
+
+/**
+ * Options for creating a LocalMap proxy
+ */
+interface CreateLocalMapOptions {
+  /**
+   * The bytes which prefix each key of the local map.
+   *
+   * Defaults to the name of the property this proxy is assigned to
+   */
+  keyPrefix?: bytes | string
+}
+
+/**
+ * Creates a LocalMap proxy object offering methods of getting and setting a set of values stored in individual local state fields indexed by a common key type
+ * Adequate space must be allocated for the application on creation (see options parameter of contract decorator).
+ * @param options Options for creating the LocalMap proxy
+ * @typeParam TKey The type of the value used to key each local state value. This key will be encoded to bytes and prefixed with `keyPrefix`
+ * @typeParam TValue The type of the data stored in the local state. This value will be encoded to bytes when stored and decoded on retrieval.
+ */
+export function LocalMap<TKey, TValue>(options?: CreateLocalMapOptions): LocalMap<TKey, TValue> {
+  throw new NoImplementation()
+}

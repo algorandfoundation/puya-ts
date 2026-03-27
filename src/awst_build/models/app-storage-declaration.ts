@@ -5,7 +5,16 @@ import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
 import { instanceOfAny, invariant, utf8ToUint8Array } from '../../util'
 import type { AppStorageType, ContractClassPType } from '../ptypes'
-import { BoxMapPType, BoxPType, GlobalMapType, GlobalStateType, LocalStateType, TransientType, UnsupportedType } from '../ptypes'
+import {
+  BoxMapPType,
+  BoxPType,
+  GlobalMapType,
+  GlobalStateType,
+  LocalMapType,
+  LocalStateType,
+  TransientType,
+  UnsupportedType,
+} from '../ptypes'
 
 export class AppStorageDeclaration {
   readonly memberName: string
@@ -34,7 +43,7 @@ export class AppStorageDeclaration {
     if (instanceOfAny(this.ptype, GlobalStateType, GlobalMapType)) {
       return AppStorageKind.appGlobal
     }
-    if (this.ptype instanceof LocalStateType) {
+    if (instanceOfAny(this.ptype, LocalStateType, LocalMapType)) {
       return AppStorageKind.accountLocal
     }
     invariant(instanceOfAny(this.ptype, BoxPType, BoxMapPType), 'Must be exhaustive check on ptype')
@@ -63,7 +72,7 @@ export class AppStorageDeclaration {
       ...this,
       kind: this.kind,
       key: this.key,
-      keyWtype: instanceOfAny(this.ptype, BoxMapPType, GlobalMapType) ? this.ptype.keyType.wtypeOrThrow : null,
+      keyWtype: instanceOfAny(this.ptype, BoxMapPType, GlobalMapType, LocalMapType) ? this.ptype.keyType.wtypeOrThrow : null,
       storageWtype: this.ptype.contentType.wtypeOrThrow,
     })
   }
