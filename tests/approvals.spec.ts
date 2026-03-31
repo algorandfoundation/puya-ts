@@ -62,15 +62,18 @@ describe('Approvals', async () => {
   it('There should be no differences between the generated string client and the cached one', async () => {
     const result = await invokeCli({
       command: 'git',
-      args: ['diff', '--no-index', 'tests/approvals/out/unoptimized/strings/StringContract.client.ts', 'tests/other/c2c-client/StringContract.client.ts'],
-      dontThrowOnNonzeroCode: true
+      args: [
+        'diff',
+        '--no-index',
+        'tests/approvals/out/unoptimized/strings/StringContract.client.ts',
+        'tests/other/c2c-client/StringContract.client.ts',
+      ],
+      dontThrowOnNonzeroCode: true,
     })
     const diffs = result.lines
 
     if (diffs.length) {
-      expect.fail(
-        'The StringContractClient changed. Please update the cached copy at tests/other/c2c-client/ if necessary.',
-      )
+      expect.fail('The StringContractClient changed. Please update the cached copy at tests/other/c2c-client/ if necessary.')
     }
   })
 

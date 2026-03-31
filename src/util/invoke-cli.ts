@@ -14,7 +14,7 @@ type InvokeCliResponse = {
 }
 
 type CliExit = {
-  code?: number | null;
+  code?: number | null
   signal?: NodeJS.Signals | null
 }
 
