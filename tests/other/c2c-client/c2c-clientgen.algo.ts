@@ -1,5 +1,5 @@
 import { type Application, arc4, assert, Contract } from '@algorandfoundation/algorand-typescript'
-import { StringContract as StringContractClient } from '../../approvals/out/unoptimized/strings/StringContract.client'
+import { StringContract as StringContractClient } from './StringContract.client'
 
 export class C2CClientgenTest extends Contract {
   testContractClient(stringApp: Application) {
