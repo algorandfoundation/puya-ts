@@ -15,7 +15,7 @@ describe('Approvals', async () => {
     .map((p) => AbsolutePath.resolve({ path: p }))
     .toSorted()
   describe.each([
-    ['Unoptimized', 'out/unoptimized/[name]', { optimizationLevel: 0, outputAwstJson: true, outputAwst: true }],
+    ['Unoptimized', 'out/unoptimized/[name]', { optimizationLevel: 0, outputAwstJson: true, outputAwst: true, outputClient: true }],
     ['O1', 'out/o1/[name]', { optimizationLevel: 1 }],
     ['O2', 'out/o2/[name]', { optimizationLevel: 2 }],
   ])('Compile %s', async (desc, outDir, puyaOptions) => {
@@ -57,6 +57,24 @@ describe('Approvals', async () => {
     const stats = gatherOutputStats('tests/approvals')
     fs.mkdirSync('tests/approvals/out', { recursive: true })
     fs.writeFileSync('tests/approvals/out/stats.txt', stats, 'utf8')
+  })
+
+  it('There should be no differences between the generated string client and the cached one', async () => {
+    const result = await invokeCli({
+      command: 'git',
+      args: [
+        'diff',
+        '--no-index',
+        'tests/approvals/out/unoptimized/strings/StringContract.client.ts',
+        'tests/other/c2c-client/StringContract.client.ts',
+      ],
+      dontThrowOnNonzeroCode: true,
+    })
+    const diffs = result.lines
+
+    if (diffs.length) {
+      expect.fail('The StringContractClient changed. Please update the cached copy at tests/other/c2c-client/ if necessary.')
+    }
   })
 
   it('There should be no differences to committed changes', async () => {

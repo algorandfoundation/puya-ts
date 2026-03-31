@@ -13,8 +13,15 @@ type InvokeCliResponse = {
   code: number
 }
 
+type CliExit = {
+  code?: number | null
+  signal?: NodeJS.Signals | null
+}
+
 class InvokeCliError extends Error {
-  constructor(public exit: { code?: number | null; signal?: NodeJS.Signals | null }) {
+  exit: CliExit
+
+  constructor(exit: CliExit) {
     if (exit.code) {
       super(`Exited with code ${exit.code}`)
     } else if (exit.signal) {
@@ -22,6 +29,8 @@ class InvokeCliError extends Error {
     } else {
       super('Exited with unknown cause')
     }
+
+    this.exit = exit
   }
 }
 
