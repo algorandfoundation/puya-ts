@@ -1,14 +1,19 @@
 // @ts-check
+import { env } from 'node:process'
+
 import starlight from '@astrojs/starlight'
 import { defineConfig } from 'astro/config'
 import remarkGithubAlerts from 'remark-github-alerts'
 import starlightTypeDoc from 'starlight-typedoc'
 import sidebarConfig from './sidebar.config.json'
 
+const site = env.ASTRO_SITE || 'https://algorandfoundation.github.io'
+const base = env.ASTRO_BASE || '/puya-ts/'
+
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://algorandfoundation.github.io',
-  base: '/algorand-typescript/',
+  site,
+  base,
   markdown: {
     remarkPlugins: [remarkGithubAlerts],
   },
