@@ -27,6 +27,7 @@ export interface BuildCommandArgs {
   output_destructured_ir: boolean
   output_memory_ir: boolean
   output_bytecode: boolean
+  output_assembly_report: boolean
   out_dir: string
   debug_level: string
   optimization_level: string
@@ -120,6 +121,11 @@ export function addBuildCommand(parser: ArgumentParser) {
     action: BooleanOptionalAction,
     help: 'Output AVM bytecode',
     default: defaultPuyaOptions.outputBytecode,
+  })
+  parser.add_argument('--output-assembly-report', {
+    action: BooleanOptionalAction,
+    help: 'Output "human-readable" source map for advanced debugging purposes.',
+    default: defaultPuyaOptions.outputAssemblyReport,
   })
 
   parser.add_argument('--out-dir', {
@@ -218,6 +224,7 @@ export async function buildCommand(args: BuildCommandArgs) {
           outputMemoryIr: args.output_memory_ir,
           outputBytecode: args.output_bytecode,
           outputSourceMap: args.output_source_map,
+          outputAssemblyReport: args.output_assembly_report,
           debugLevel: convertInt(args.debug_level),
           optimizationLevel: convertInt(args.optimization_level),
           treatWarningsAsErrors: args.treat_warnings_as_errors,
