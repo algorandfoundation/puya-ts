@@ -319,6 +319,8 @@ testDynamicBytes:
     // function testDynamicBytes(someBytes: bytes) {
     proto 1 0
     intc_0 // 0
+    intc_0 // 0
+    bytec_1 // ""
     b testDynamicBytes_block@0
 
 testDynamicBytes_block@0:
@@ -375,26 +377,36 @@ testDynamicBytes_block@1:
     bytec 7 // 0x000568656c6c6f
     intc_0 // 0
     extract_uint16
-    frame_dig 2
+    frame_dig 4
     +
+    frame_bury 2
+    b testDynamicBytes_block@2
+
+testDynamicBytes_block@2:
+    frame_dig 2
     itob
     extract 6 0
+    frame_bury 0
+    b testDynamicBytes_after_inlined__puya_lib.arc4._itob16@3
+
+testDynamicBytes_after_inlined__puya_lib.arc4._itob16@3:
+    frame_dig 0
     // tests/approvals/arc4-types.algo.ts:88
     // const db4 = db3.concat(new DynamicBytes(' world'))
     bytec 7 // 0x000568656c6c6f
     uncover 1
     replace2 0
-    frame_dig 1
+    frame_dig 3
     concat
-    frame_bury 0
+    frame_bury 1
     // tests/approvals/arc4-types.algo.ts:88
     // const db4 = db3.concat(new DynamicBytes(' world'))
-    b testDynamicBytes_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2
+    b testDynamicBytes_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4
 
-testDynamicBytes_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2:
+testDynamicBytes_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4:
     // tests/approvals/arc4-types.algo.ts:88
     // const db4 = db3.concat(new DynamicBytes(' world'))
-    frame_dig 0
+    frame_dig 1
     // tests/approvals/arc4-types.algo.ts:89
     // assert(db4.native === Bytes('hello world'))
     extract 2 0
@@ -410,6 +422,8 @@ testStaticBytes:
     // function testStaticBytes() {
     proto 0 0
     intc_0 // 0
+    intc_0 // 0
+    bytec_1 // ""
     b testStaticBytes_block@0
 
 testStaticBytes_block@0:
@@ -442,8 +456,18 @@ testStaticBytes_block@1:
     // const s4 = s2.concat(s3)
     pushint 5
     +
+    frame_bury 2
+    b testStaticBytes_block@2
+
+testStaticBytes_block@2:
+    frame_dig 2
     itob
     extract 6 0
+    frame_bury 0
+    b testStaticBytes_after_inlined__puya_lib.arc4._itob16@3
+
+testStaticBytes_after_inlined__puya_lib.arc4._itob16@3:
+    frame_dig 0
     // tests/approvals/arc4-types.algo.ts:100
     // const s4 = s2.concat(s3)
     bytec 15 // 0x000400000000
@@ -453,15 +477,15 @@ testStaticBytes_block@1:
     // const s4 = s2.concat(s3)
     bytec 9 // 0xaabbccddee
     concat
-    frame_bury 0
+    frame_bury 1
     // tests/approvals/arc4-types.algo.ts:100
     // const s4 = s2.concat(s3)
-    b testStaticBytes_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2
+    b testStaticBytes_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4
 
-testStaticBytes_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2:
+testStaticBytes_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4:
     // tests/approvals/arc4-types.algo.ts:100
     // const s4 = s2.concat(s3)
-    frame_dig 0
+    frame_dig 1
     // tests/approvals/arc4-types.algo.ts:101
     // assert(s4.native === Bytes.fromHex('00000000AABBCCDDEE'))
     extract 2 0
@@ -479,6 +503,8 @@ testArrays:
     intc_0 // 0
     intc_0 // 0
     intc_0 // 0
+    intc_0 // 0
+    bytec_1 // ""
     bytec_1 // ""
     b testArrays_block@0
 
@@ -502,30 +528,41 @@ testArrays_block@0:
     b testArrays_block@1
 
 testArrays_block@1:
-    frame_dig 4
-    dup
+    frame_dig 6
     intc_0 // 0
     extract_uint16
     // tests/approvals/arc4-types.algo.ts:110
     // myArray.push(n)
     intc_3 // 1
     +
+    frame_bury 4
+    b testArrays_block@2
+
+testArrays_block@2:
+    frame_dig 4
     itob
     extract 6 0
-    replace2 0
-    frame_dig 5
-    concat
-    frame_bury 0
-    // tests/approvals/arc4-types.algo.ts:110
-    // myArray.push(n)
-    b testArrays_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2
-
-testArrays_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2:
-    // tests/approvals/arc4-types.algo.ts:110
-    // myArray.push(n)
-    frame_dig 0
-    dup
     frame_bury 2
+    b testArrays_after_inlined__puya_lib.arc4._itob16@3
+
+testArrays_after_inlined__puya_lib.arc4._itob16@3:
+    frame_dig 2
+    frame_dig 6
+    uncover 1
+    replace2 0
+    frame_dig 7
+    concat
+    frame_bury 1
+    // tests/approvals/arc4-types.algo.ts:110
+    // myArray.push(n)
+    b testArrays_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4
+
+testArrays_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4:
+    // tests/approvals/arc4-types.algo.ts:110
+    // myArray.push(n)
+    frame_dig 1
+    dup
+    frame_bury 0
     // tests/approvals/arc4-types.algo.ts:112
     // const doubleArray = myArray.concat(myArray)
     dup
@@ -540,33 +577,44 @@ testArrays_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@2:
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
     uncover 1
-    frame_bury 4
+    frame_bury 6
     uncover 1
+    frame_bury 7
     frame_bury 5
-    frame_bury 3
-    b testArrays_block@3
+    b testArrays_block@5
 
-testArrays_block@3:
-    frame_dig 4
-    dup
+testArrays_block@5:
+    frame_dig 6
     intc_0 // 0
     extract_uint16
-    frame_dig 3
+    frame_dig 5
     +
+    frame_bury 4
+    b testArrays_block@6
+
+testArrays_block@6:
+    frame_dig 4
     itob
     extract 6 0
-    replace2 0
-    frame_dig 5
-    concat
-    frame_bury 1
-    // tests/approvals/arc4-types.algo.ts:112
-    // const doubleArray = myArray.concat(myArray)
-    b testArrays_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4
+    frame_bury 2
+    b testArrays_after_inlined__puya_lib.arc4._itob16@7
 
-testArrays_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4:
+testArrays_after_inlined__puya_lib.arc4._itob16@7:
+    frame_dig 2
+    frame_dig 6
+    uncover 1
+    replace2 0
+    frame_dig 7
+    concat
+    frame_bury 3
     // tests/approvals/arc4-types.algo.ts:112
     // const doubleArray = myArray.concat(myArray)
-    frame_dig 1
+    b testArrays_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@8
+
+testArrays_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@8:
+    // tests/approvals/arc4-types.algo.ts:112
+    // const doubleArray = myArray.concat(myArray)
+    frame_dig 3
     // tests/approvals/arc4-types.algo.ts:114
     // assert(doubleArray === new DynamicArray(n, n, n, n, n, n, n, n))
     intc_1 // 8
@@ -605,12 +653,12 @@ testArrays_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4:
     *
     intc_1 // 8
     extract3 // on error: index access is out of bounds
-    frame_dig 2
+    frame_dig 0
     dup
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
     intc_3 // 1
-    -
+    - // on error: cannot pop from empty array
     dig 1
     len
     cover 1

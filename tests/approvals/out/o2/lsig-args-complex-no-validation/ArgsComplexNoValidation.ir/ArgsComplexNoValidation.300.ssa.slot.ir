@@ -235,8 +235,8 @@ main tests/approvals/lsig-args-complex-no-validation.algo.ts::program:
         let mutableArg19#0: Encoded(uint8,bool1) = (concat aggregate%uint8%4#0 aggregate%encoded_bool%1#0)
         let array_length#0: uint64 = (extract_uint16 arg20#0 0u)
         let new_array_length#0: uint64 = (+ array_length#0 1u)
-        let tmp%2#1: bytes = (itob new_array_length#0)
-        let new_len_u16#0: bytes = ((extract 6 0) tmp%2#1)
+        let tmp%0#2: bytes = (itob new_array_length#0)
+        let new_len_u16#0: bytes = ((extract 6 0) tmp%0#2)
         let result#0: bytes = ((replace2 0) arg20#0 new_len_u16#0)
         let arg20#1: Encoded(len+uint8[]) = (concat result#0 0xff)
         (assert mutableArg0#0)
@@ -255,8 +255,8 @@ main tests/approvals/lsig-args-complex-no-validation.algo.ts::program:
         (assert tmp%172#0)
         let aggregate%array_length%0#0: uint64 = (extract_uint16 mutableArg11#0 0u) // on error: invalid array length header
         (assert aggregate%array_length%0#0)
-        let aggregate%encoded_element%1#0: bytes = ((extract 0 1) arg12#1) // on error: index access is out of bounds
-        let tmp%176#0: bool = (== aggregate%encoded_element%1#0 0xff)
+        let aggregate%encoded_element%0#0: bytes = ((extract 0 1) arg12#1) // on error: index access is out of bounds
+        let tmp%176#0: bool = (== aggregate%encoded_element%0#0 0xff)
         (assert tmp%176#0)
         let tmp%177#0: uint64 = (extract_uint64 mutableArg13#0 0u)
         (assert tmp%177#0)

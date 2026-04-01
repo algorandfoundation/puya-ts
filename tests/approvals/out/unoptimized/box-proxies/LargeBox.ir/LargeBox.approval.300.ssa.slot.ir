@@ -111,8 +111,8 @@ subroutine tests/approvals/box-proxies.algo.ts::LargeBox.test() -> void:
         let box%element_offset%3#0: uint64 = (* index#0 64u)
         let box%offset%3#0: uint64 = (+ 0u box%element_offset%3#0)
         let box%box_extract%2#0: Encoded(uint8[32],uint64,uint64,uint64,uint64) = (box_extract "large" box%offset%3#0 64u) // on error: index out of bounds
-        let aggregate%extract%1#0: bytes = (extract3 box%box_extract%2#0 32u 8u)
-        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%1#0
+        let aggregate%extract%0#0: bytes = (extract3 box%box_extract%2#0 32u 8u)
+        let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
         let tmp%4#0: uint64 = (btoi tuple_item%0#0)
         let tmp%5#0: uint64 = (+ index#0 10u)
         let tmp%6#0: bool = (== tmp%4#0 tmp%5#0)
