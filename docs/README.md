@@ -29,7 +29,7 @@ npm run preview
 ```
 
 By default the build targets deployment on `https://algorandfoundation.github.io/puya-ts/`.
-If a build for a different site if needed the environment variables `ASTRO_SITE` and `ASTRO_BASE` can be set accordingly.
+If a build for a different site is needed the environment variables `ASTRO_SITE` and `ASTRO_BASE` can be set accordingly.
 
 > [!NOTE]
 > Root workspace dependencies must be installed first because the `starlight-typedoc` plugin references TypeScript source files in `../packages/algo-ts/src/`.
