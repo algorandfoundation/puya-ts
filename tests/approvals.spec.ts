@@ -15,7 +15,11 @@ describe('Approvals', async () => {
     .map((p) => AbsolutePath.resolve({ path: p }))
     .toSorted()
   describe.each([
-    ['Unoptimized', 'out/unoptimized/[name]', { optimizationLevel: 0, outputAwstJson: true, outputAwst: true, outputClient: true }],
+    [
+      'Unoptimized',
+      'out/unoptimized/[name]',
+      { optimizationLevel: 0, outputAwstJson: true, outputAwst: true, outputClient: true, outputAssemblyReport: true },
+    ],
     ['O1', 'out/o1/[name]', { optimizationLevel: 1 }],
     ['O2', 'out/o2/[name]', { optimizationLevel: 2 }],
   ])('Compile %s', async (desc, outDir, puyaOptions) => {
