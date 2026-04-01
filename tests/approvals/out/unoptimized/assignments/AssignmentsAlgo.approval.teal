@@ -137,6 +137,21 @@ main___algots__.defaultCreate@16:
     return
 
 
+// _puya_lib.arc4.dynamic_assert_index(array: bytes, index: uint64) -> void:
+dynamic_assert_index:
+    proto 2 0
+    b dynamic_assert_index_block@0
+
+dynamic_assert_index_block@0:
+    frame_dig -2
+    intc_2 // 0
+    extract_uint16
+    frame_dig -1
+    >
+    assert // index out of bounds
+    retsub
+
+
 // tests/approvals/assignments.algo.ts::resetCount() -> void:
 resetCount:
     b resetCount_block@0
@@ -1186,17 +1201,14 @@ tests/approvals/assignments.algo.ts::AssignmentsAlgo.testNested_block@0:
     // tests/approvals/assignments.algo.ts:79
     // const [[a]] = i_a
     frame_dig -1
+    intc_2 // 0
+    callsub dynamic_assert_index
+    frame_dig -1
     len
     frame_dig -1
     intc_1 // 2
     uncover 2
     substring3
-    frame_dig -1
-    intc_2 // 0
-    extract_uint16 // on error: invalid array length header
-    intc_2 // 0
-    >
-    assert // index access is out of bounds
     intc_2 // 0
     intc_1 // 2
     *
@@ -1228,17 +1240,14 @@ tests/approvals/assignments.algo.ts::AssignmentsAlgo.testNested_block@0:
     // tests/approvals/assignments.algo.ts:80
     // assert(a === i_a[0][0])
     frame_dig -1
+    intc_2 // 0
+    callsub dynamic_assert_index
+    frame_dig -1
     len
     frame_dig -1
     intc_1 // 2
     uncover 2
     substring3
-    frame_dig -1
-    intc_2 // 0
-    extract_uint16 // on error: invalid array length header
-    intc_2 // 0
-    >
-    assert // index access is out of bounds
     intc_2 // 0
     intc_1 // 2
     *

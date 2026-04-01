@@ -42,8 +42,8 @@ subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test[routing]() -> 
 subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test() -> void:
     block@0: // L238
         let materialized_values%0#0: account = (txn Sender)
-        let box_prefixed_key%0#0: bytes = (concat "" materialized_values%0#0)
-        let boxForCaller#0: bytes = box_prefixed_key%0#0
+        let map_prefixed_key%0#0: bytes = (concat "" materialized_values%0#0)
+        let boxForCaller#0: bytes = map_prefixed_key%0#0
         (box_create boxForCaller#0 4u)
         let boxRef#0: bytes = boxForCaller#0
         (box_replace boxRef#0 0u 0x7b)

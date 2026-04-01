@@ -63,6 +63,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#0: bool = undefined
         return tmp%0#0
 
+subroutine _puya_lib.arc4.dynamic_assert_index(array: bytes, index: uint64) -> void:
+    block@0: // L419
+        let tmp%0#0: uint64 = (extract_uint16 array#0 0u)
+        let length#0: uint64 = tmp%0#0
+        let tmp%1#0: bool = (< index#0 length#0)
+        (assert tmp%1#0) // index out of bounds
+        return 
+
 subroutine tests/approvals/assignments.algo.ts::resetCount() -> void:
     block@0: // L8
         (stores 0u 0u)
@@ -448,11 +456,11 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayNarrowi
         let aggregate%updated_array%0#0: bytes = (replace3 m_a#0 aggregate%write_offset_with_length_header%0#0 encoded_value%0#0) // on error: index access is out of bounds
         let updated_array%0#0: Encoded(len+uint64[]) = aggregate%updated_array%0#0
         let m_a#1: Encoded(len+uint64[]) = updated_array%0#0
-        let aggregate%total_length%2#0: uint64 = (len direct#0)
-        let aggregate%array_trimmed%2#0: bytes = (substring3 direct#0 2u aggregate%total_length%2#0)
-        let aggregate%bytes_offset%2#0: uint64 = (* 0u 8u)
-        let aggregate%encoded_element%2#0: bytes = (extract3 aggregate%array_trimmed%2#0 aggregate%bytes_offset%2#0 8u) // on error: index access is out of bounds
-        let array_item%1#0: Encoded(uint64) = aggregate%encoded_element%2#0
+        let aggregate%total_length%1#0: uint64 = (len direct#0)
+        let aggregate%array_trimmed%1#0: bytes = (substring3 direct#0 2u aggregate%total_length%1#0)
+        let aggregate%bytes_offset%1#0: uint64 = (* 0u 8u)
+        let aggregate%encoded_element%1#0: bytes = (extract3 aggregate%array_trimmed%1#0 aggregate%bytes_offset%1#0 8u) // on error: index access is out of bounds
+        let array_item%1#0: Encoded(uint64) = aggregate%encoded_element%1#0
         let tmp%2#0: uint64 = (btoi array_item%1#0)
         let tmp%3#0: uint64 = (+ tmp%2#0 2u)
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob tmp%3#0)
@@ -463,17 +471,17 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testArrayNarrowi
         let aggregate%updated_array%1#0: bytes = (replace3 direct#0 aggregate%write_offset_with_length_header%1#0 encoded_value%1#0) // on error: index access is out of bounds
         let updated_array%1#0: Encoded(len+uint64[]) = aggregate%updated_array%1#0
         let direct#1: Encoded(len+uint64[]) = updated_array%1#0
-        let aggregate%total_length%4#0: uint64 = (len m_a#1)
-        let aggregate%array_trimmed%4#0: bytes = (substring3 m_a#1 2u aggregate%total_length%4#0)
-        let aggregate%bytes_offset%4#0: uint64 = (* 0u 8u)
-        let aggregate%encoded_element%4#0: bytes = (extract3 aggregate%array_trimmed%4#0 aggregate%bytes_offset%4#0 8u) // on error: index access is out of bounds
-        let array_item%2#0: Encoded(uint64) = aggregate%encoded_element%4#0
+        let aggregate%total_length%2#0: uint64 = (len m_a#1)
+        let aggregate%array_trimmed%2#0: bytes = (substring3 m_a#1 2u aggregate%total_length%2#0)
+        let aggregate%bytes_offset%2#0: uint64 = (* 0u 8u)
+        let aggregate%encoded_element%2#0: bytes = (extract3 aggregate%array_trimmed%2#0 aggregate%bytes_offset%2#0 8u) // on error: index access is out of bounds
+        let array_item%2#0: Encoded(uint64) = aggregate%encoded_element%2#0
         let tmp%4#0: uint64 = (btoi array_item%2#0)
-        let aggregate%total_length%5#0: uint64 = (len direct#1)
-        let aggregate%array_trimmed%5#0: bytes = (substring3 direct#1 2u aggregate%total_length%5#0)
-        let aggregate%bytes_offset%5#0: uint64 = (* 0u 8u)
-        let aggregate%encoded_element%5#0: bytes = (extract3 aggregate%array_trimmed%5#0 aggregate%bytes_offset%5#0 8u) // on error: index access is out of bounds
-        let array_item%3#0: Encoded(uint64) = aggregate%encoded_element%5#0
+        let aggregate%total_length%3#0: uint64 = (len direct#1)
+        let aggregate%array_trimmed%3#0: bytes = (substring3 direct#1 2u aggregate%total_length%3#0)
+        let aggregate%bytes_offset%3#0: uint64 = (* 0u 8u)
+        let aggregate%encoded_element%3#0: bytes = (extract3 aggregate%array_trimmed%3#0 aggregate%bytes_offset%3#0 8u) // on error: index access is out of bounds
+        let array_item%3#0: Encoded(uint64) = aggregate%encoded_element%3#0
         let tmp%5#0: uint64 = (btoi array_item%3#0)
         let tmp%6#0: bool = (!= tmp%4#0 tmp%5#0)
         (assert tmp%6#0)
@@ -602,11 +610,9 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testTupleToArray
 
 subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testNested(i_a: Encoded(len+(len+uint64[])[])) -> void:
     block@0: // L78
+        _puya_lib.arc4.dynamic_assert_index(i_a#0, 0u)
         let aggregate%total_length%0#0: uint64 = (len i_a#0)
         let aggregate%array_head_and_tail%0#0: bytes = (substring3 i_a#0 2u aggregate%total_length%0#0)
-        let aggregate%array_length%0#0: uint64 = (extract_uint16 i_a#0 0u) // on error: invalid array length header
-        let aggregate%lt%0#0: bool = (< 0u aggregate%array_length%0#0)
-        (assert aggregate%lt%0#0) // index access is out of bounds
         let aggregate%item_offset_offset%0#0: uint64 = (* 0u 2u)
         let aggregate%item_offset%0#0: uint64 = (extract_uint16 aggregate%array_head_and_tail%0#0 aggregate%item_offset_offset%0#0)
         let aggregate%item_length%0#0: uint64 = (extract_uint16 aggregate%array_head_and_tail%0#0 aggregate%item_offset%0#0)
@@ -620,11 +626,9 @@ subroutine tests/approvals/assignments.algo.ts::AssignmentsAlgo.testNested(i_a: 
         let array_item%1#0: Encoded(uint64) = aggregate%encoded_element%0#0
         let tmp%0#0: uint64 = (btoi array_item%1#0)
         let a#0: uint64 = tmp%0#0
+        _puya_lib.arc4.dynamic_assert_index(i_a#0, 0u)
         let aggregate%total_length%2#0: uint64 = (len i_a#0)
         let aggregate%array_head_and_tail%1#0: bytes = (substring3 i_a#0 2u aggregate%total_length%2#0)
-        let aggregate%array_length%1#0: uint64 = (extract_uint16 i_a#0 0u) // on error: invalid array length header
-        let aggregate%lt%1#0: bool = (< 0u aggregate%array_length%1#0)
-        (assert aggregate%lt%1#0) // index access is out of bounds
         let aggregate%item_offset_offset%1#0: uint64 = (* 0u 2u)
         let aggregate%item_offset%1#0: uint64 = (extract_uint16 aggregate%array_head_and_tail%1#0 aggregate%item_offset_offset%1#0)
         let aggregate%item_length%1#0: uint64 = (extract_uint16 aggregate%array_head_and_tail%1#0 aggregate%item_offset%1#0)

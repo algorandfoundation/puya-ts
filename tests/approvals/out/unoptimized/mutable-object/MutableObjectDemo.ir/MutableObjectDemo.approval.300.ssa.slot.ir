@@ -621,8 +621,8 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.testArc4Enc
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.getPlugin(key: string) -> Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])):
     block@0: // L107
-        let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
-        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get box_prefixed_key%0#0)
+        let map_prefixed_key%0#0: bytes = (concat "plugins" key#0)
+        let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get map_prefixed_key%0#0)
         (assert aggregate%box_get%1#0) // Box must have value
         let storage_value%0#0: bytes = aggregate%box_get%0#0
         let value#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = storage_value%0#0
@@ -674,9 +674,9 @@ subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.setPlugin(k
         let aggregate%concat%0#0: bytes = (concat aggregate%head%8#0 encoded_array%0#0)
         let aggregate%as_Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[]))%0#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = aggregate%concat%0#0
         let tmp%3#0: Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[])) = aggregate%as_Encoded(uint64,uint64,uint64,bool1,(len+(uint8[4],uint64,uint64)[]))%0#0
-        let box_prefixed_key%0#0: bytes = (concat "plugins" key#0)
-        (box_del box_prefixed_key%0#0)
-        (box_put box_prefixed_key%0#0 tmp%3#0)
+        let map_prefixed_key%0#0: bytes = (concat "plugins" key#0)
+        (box_del map_prefixed_key%0#0)
+        (box_put map_prefixed_key%0#0 tmp%3#0)
         return 
 
 subroutine tests/approvals/mutable-object.algo.ts::MutableObjectDemo.__algots__.defaultCreate() -> void:

@@ -236,57 +236,52 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%20#1: bool = (== tmp%19#1 a#0)
         let tmp%21#1: bool = (&& tmp%17#1 tmp%20#1)
         (assert tmp%21#1) // Array of uint64 matches
-        let tmp%22#1: bytes = (concat 0x0001 b_bytes#0)
-        let aggregate%array_length%12#0: uint64 = (extract_uint16 tmp%22#1 0u) // on error: invalid array length header
-        let tmp%24#1: bool = (== aggregate%array_length%12#0 1u)
-        (assert aggregate%array_length%12#0) // index access is out of bounds
-        let aggregate%get_bit%3#0: bool = (getbit tmp%22#1 16u)
+        let array#1: bytes = (concat 0x0001 b_bytes#0)
+        let length#0: uint64 = (extract_uint16 array#1 0u) // on error: invalid array length header
+        let tmp%24#1: bool = (== length#0 1u)
+        (assert length#0) // index out of bounds
+        let aggregate%get_bit%3#0: bool = (getbit array#1 16u)
         let tmp%27#0: bool = (== aggregate%get_bit%3#0 b#0)
         let tmp%28#0: bool = (&& tmp%24#1 tmp%27#0)
         (assert tmp%28#0) // Array of boolean matches
         let tmp%29#0: bytes = (concat 0x0001 c_bytes#0)
         (log tmp%29#0)
-        let aggregate%array_length%14#0: uint64 = (extract_uint16 tmp%29#0 0u) // on error: invalid array length header
-        let tmp%32#0: bool = (== aggregate%array_length%14#0 1u)
+        let aggregate%array_length%13#0: uint64 = (extract_uint16 tmp%29#0 0u) // on error: invalid array length header
+        let tmp%32#0: bool = (== aggregate%array_length%13#0 1u)
         let aggregate%encoded_element%1#0: bytes = ((extract 2 64) tmp%29#0)
         let tmp%35#0: bool = (b== aggregate%encoded_element%1#0 c#0)
         let tmp%36#0: bool = (&& tmp%32#0 tmp%35#0)
         (assert tmp%36#0) // Array of biguint matches
-        let tmp%39#0: bytes = (concat 0x00010002 d_bytes#0)
-        let aggregate%array_length%15#0: uint64 = (extract_uint16 tmp%39#0 0u) // on error: invalid array length header
-        let tmp%41#0: bool = (== aggregate%array_length%15#0 1u)
-        let aggregate%array_head_and_tail%0#0: bytes = ((extract 2 0) tmp%39#0)
-        (assert aggregate%array_length%15#0) // index access is out of bounds
-        let aggregate%item_offset%0#0: uint64 = (extract_uint16 aggregate%array_head_and_tail%0#0 0u)
-        let aggregate%item_length%0#0: uint64 = (extract_uint16 aggregate%array_head_and_tail%0#0 aggregate%item_offset%0#0)
-        let aggregate%item_head_tail_length%0#0: uint64 = (+ aggregate%item_length%0#0 2u)
-        let aggregate%item%0#0: bytes = (extract3 aggregate%array_head_and_tail%0#0 aggregate%item_offset%0#0 aggregate%item_head_tail_length%0#0)
-        let tmp%45#0: string = ((extract 2 0) aggregate%item%0#0)
+        let array#0: bytes = (concat 0x00010002 d_bytes#0)
+        let length#1: uint64 = (extract_uint16 array#0 0u) // on error: invalid array length header
+        let tmp%41#0: bool = (== length#1 1u)
+        (assert length#1) // index out of bounds
+        let array_head_and_tail#0: bytes = ((extract 2 0) array#0)
+        let item_start_offset#0: uint64 = (extract_uint16 array_head_and_tail#0 0u)
+        let item_length#0: uint64 = (extract_uint16 array_head_and_tail#0 item_start_offset#0)
+        let tmp%4#4: uint64 = (+ item_length#0 2u)
+        let tmp%5#3: bytes = (extract3 array_head_and_tail#0 item_start_offset#0 tmp%4#4)
+        let tmp%45#0: string = ((extract 2 0) tmp%5#3)
         let tmp%46#0: bool = (== tmp%45#0 d#0)
         let tmp%47#0: bool = (&& tmp%41#0 tmp%46#0)
         (assert tmp%47#0) // Array of string matches
         let tmp%50#0: bytes = (concat 0x00010002 e_bytes#0)
-        let aggregate%array_length%17#0: uint64 = (extract_uint16 tmp%50#0 0u) // on error: invalid array length header
-        let tmp%52#0: bool = (== aggregate%array_length%17#0 1u)
-        let aggregate%array_head_and_tail%1#0: bytes = ((extract 2 0) tmp%50#0)
-        let aggregate%item_offset%1#0: uint64 = (extract_uint16 aggregate%array_head_and_tail%1#0 0u)
-        let aggregate%has_next%0#0: uint64 = (- aggregate%array_length%17#0 1u) // on error: index access is out of bounds
-        let aggregate%end_of_array%0#0: uint64 = (len aggregate%array_head_and_tail%1#0)
-        let aggregate%next_item_offset%0#0: uint64 = (extract_uint16 aggregate%array_head_and_tail%1#0 2u)
-        let aggregate%end_offset%0#0: uint64 = (select aggregate%end_of_array%0#0 aggregate%next_item_offset%0#0 aggregate%has_next%0#0)
-        let aggregate%substring3%2#0: bytes = (substring3 aggregate%array_head_and_tail%1#0 aggregate%item_offset%1#0 aggregate%end_offset%0#0)
-        let aggregate%extract%2#0: bytes = ((extract 0 8) aggregate%substring3%2#0)
+        let aggregate%array_length%15#0: uint64 = (extract_uint16 tmp%50#0 0u) // on error: invalid array length header
+        let tmp%52#0: bool = (== aggregate%array_length%15#0 1u)
+        let aggregate%item%1#0: bytes = _puya_lib.arc4.dynamic_array_read_dynamic_element(tmp%50#0, 0u)
+        let aggregate%extract%2#0: bytes = ((extract 0 8) aggregate%item%1#0)
         let tmp%56#0: bool = (== aggregate%extract%2#0 aggregate%extract%1#0)
-        let aggregate%extract_uint16%2#0: uint64 = (extract_uint16 aggregate%substring3%2#0 8u)
-        let aggregate%len%2#0: uint64 = (len aggregate%substring3%2#0)
-        let aggregate%substring3%4#0: bytes = (substring3 aggregate%substring3%2#0 aggregate%extract_uint16%2#0 aggregate%len%2#0)
-        let tmp%60#0: bool = (== aggregate%substring3%4#0 substring3%0#0)
+        let aggregate%item%2#0: bytes = _puya_lib.arc4.dynamic_array_read_dynamic_element(tmp%50#0, 0u)
+        let aggregate%extract_uint16%2#0: uint64 = (extract_uint16 aggregate%item%2#0 8u)
+        let aggregate%len%2#0: uint64 = (len aggregate%item%2#0)
+        let aggregate%substring3%2#0: bytes = (substring3 aggregate%item%2#0 aggregate%extract_uint16%2#0 aggregate%len%2#0)
+        let tmp%60#0: bool = (== aggregate%substring3%2#0 substring3%0#0)
         let tmp%61#0: bool = (&& tmp%56#0 tmp%60#0)
         let tmp%62#0: bool = (&& tmp%52#0 tmp%61#0)
         (assert tmp%62#0) // Array of struct matches
         let tmp%64#0: bytes = (concat 0x0001 f_bytes#0)
-        let aggregate%array_length%20#0: uint64 = (extract_uint16 tmp%64#0 0u) // on error: invalid array length header
-        let tmp%66#0: bool = (== aggregate%array_length%20#0 1u)
+        let aggregate%array_length%16#0: uint64 = (extract_uint16 tmp%64#0 0u) // on error: invalid array length header
+        let tmp%66#0: bool = (== aggregate%array_length%16#0 1u)
         let aggregate%encoded_element%2#0: bytes = ((extract 2 32) tmp%64#0)
         let tmp%69#0: bool = (== aggregate%encoded_element%2#0 f#0)
         let tmp%70#0: bool = (&& tmp%66#0 tmp%69#0)
@@ -304,3 +299,18 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
         (assert tmp%11#0)
         exit 1u
+
+subroutine _puya_lib.arc4.dynamic_array_read_dynamic_element(array: bytes, index: uint64) -> bytes:
+    block@0: // L134
+        let array_head_and_tail#0: bytes = ((extract 2 0) array#0)
+        let array_length#0: uint64 = (extract_uint16 array#0 0u)
+        let tmp%0#1: uint64 = (* index#0 2u)
+        let item_start_offset#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%0#1)
+        let end_of_tail#0: uint64 = (len array_head_and_tail#0)
+        let next_index#0: uint64 = (+ index#0 1u)
+        let tmp%4#0: uint64 = (* next_index#0 2u)
+        let next_item_offset#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%4#0)
+        let is_before_end#0: uint64 = (- array_length#0 next_index#0)
+        let item_end_offset#0: uint64 = (select end_of_tail#0 next_item_offset#0 is_before_end#0)
+        let tmp%8#0: bytes = (substring3 array_head_and_tail#0 item_start_offset#0 item_end_offset#0)
+        return tmp%8#0

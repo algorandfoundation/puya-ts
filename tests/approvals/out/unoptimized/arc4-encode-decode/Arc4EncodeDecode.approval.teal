@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 2 8
+    intcblock 0 1 8 2
     bytecblock 0x 0x00 0x068101
     b main_block@0
 
@@ -151,6 +151,101 @@ ensure_budget_after_while@6:
     retsub
 
 
+// _puya_lib.arc4.dynamic_array_read_dynamic_element(array: bytes, index: uint64) -> bytes:
+dynamic_array_read_dynamic_element:
+    proto 2 1
+    b dynamic_array_read_dynamic_element_block@0
+
+dynamic_array_read_dynamic_element_block@0:
+    frame_dig -2
+    extract 2 0
+    frame_dig -2
+    intc_0 // 0
+    extract_uint16
+    uncover 1
+    frame_dig -1
+    uncover 2
+    callsub static_array_read_dynamic_element
+    retsub
+
+
+// _puya_lib.arc4.static_array_read_dynamic_element(array_head_and_tail: bytes, index: uint64, array_length: uint64) -> bytes:
+static_array_read_dynamic_element:
+    proto 3 1
+    b static_array_read_dynamic_element_block@0
+
+static_array_read_dynamic_element_block@0:
+    frame_dig -2
+    intc_3 // 2
+    *
+    frame_dig -3
+    uncover 1
+    extract_uint16
+    frame_dig -3
+    len
+    frame_dig -2
+    intc_1 // 1
+    +
+    dup
+    intc_3 // 2
+    *
+    frame_dig -3
+    uncover 1
+    extract_uint16
+    frame_dig -1
+    uncover 2
+    -
+    uncover 2
+    uncover 2
+    uncover 2
+    select
+    frame_dig -3
+    uncover 2
+    uncover 2
+    substring3
+    retsub
+
+
+// _puya_lib.arc4.dynamic_array_read_byte_length_element(array: bytes, index: uint64) -> bytes:
+dynamic_array_read_byte_length_element:
+    proto 2 1
+    b dynamic_array_read_byte_length_element_block@0
+
+dynamic_array_read_byte_length_element_block@0:
+    frame_dig -2
+    extract 2 0
+    frame_dig -1
+    intc_3 // 2
+    *
+    dig 1
+    uncover 1
+    extract_uint16
+    dup2
+    extract_uint16
+    intc_3 // 2
+    +
+    uncover 2
+    uncover 2
+    uncover 2
+    extract3
+    retsub
+
+
+// _puya_lib.arc4.dynamic_assert_index(array: bytes, index: uint64) -> void:
+dynamic_assert_index:
+    proto 2 0
+    b dynamic_assert_index_block@0
+
+dynamic_assert_index_block@0:
+    frame_dig -2
+    intc_0 // 0
+    extract_uint16
+    frame_dig -1
+    >
+    assert // index out of bounds
+    retsub
+
+
 // tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding[routing]() -> void:
 testEncoding:
     b testEncoding_block@0
@@ -161,7 +256,7 @@ testEncoding_block@0:
     txna ApplicationArgs 1
     dup
     len
-    intc_3 // 8
+    intc_2 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -185,7 +280,7 @@ testEncoding_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    intc_2 // 2
+    intc_3 // 2
     +
     dig 1
     len
@@ -198,7 +293,7 @@ testEncoding_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    intc_2 // 2
+    intc_3 // 2
     +
     dig 1
     len
@@ -254,7 +349,7 @@ testDecoding_block@0:
     txna ApplicationArgs 1
     dup
     len
-    intc_3 // 8
+    intc_2 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -264,7 +359,7 @@ testDecoding_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    intc_2 // 2
+    intc_3 // 2
     +
     dig 1
     len
@@ -285,7 +380,7 @@ testDecoding_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    intc_2 // 2
+    intc_3 // 2
     +
     dig 1
     len
@@ -304,7 +399,7 @@ testDecoding_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    intc_2 // 2
+    intc_3 // 2
     +
     dig 1
     len
@@ -317,7 +412,7 @@ testDecoding_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    intc_2 // 2
+    intc_3 // 2
     +
     dig 1
     len
@@ -330,7 +425,7 @@ testDecoding_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    intc_2 // 2
+    intc_3 // 2
     +
     dig 1
     len
@@ -342,7 +437,7 @@ testDecoding_block@0:
     len
     cover 1
     dup
-    intc_3 // 8
+    intc_2 // 8
     extract_uint16 // on error: invalid tuple encoding
     dup
     pushint 10
@@ -356,7 +451,7 @@ testDecoding_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    intc_2 // 2
+    intc_3 // 2
     +
     pushint 10
     +
@@ -370,7 +465,7 @@ testDecoding_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    intc_2 // 2
+    intc_3 // 2
     +
     dig 1
     len
@@ -389,7 +484,7 @@ testDecoding_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    intc_2 // 2
+    intc_3 // 2
     +
     dig 1
     len
@@ -408,7 +503,7 @@ testDecoding_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    intc_2 // 2
+    intc_3 // 2
     +
     dig 1
     len
@@ -710,7 +805,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     extract 6 2
     frame_dig -4
     concat
-    intc_2 // 2
+    intc_3 // 2
     itob
     extract 6 2
     bytec_0 // 0x
@@ -724,7 +819,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     extract 6 2
     frame_dig -4
     concat
-    intc_2 // 2
+    intc_3 // 2
     itob
     extract 6 2
     bytec_0 // 0x
@@ -742,7 +837,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     extract 6 2
     frame_dig -3
     concat
-    intc_2 // 2
+    intc_3 // 2
     itob
     extract 6 2
     bytec_0 // 0x
@@ -756,7 +851,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     extract 6 2
     frame_dig -3
     concat
-    intc_2 // 2
+    intc_3 // 2
     itob
     extract 6 2
     bytec_0 // 0x
@@ -873,7 +968,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     extract 6 2
     frame_dig -4
     concat
-    intc_2 // 2
+    intc_3 // 2
     itob
     extract 6 2
     uncover 2
@@ -890,7 +985,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     intc_1 // 1
     itob
     extract 6 2
-    intc_2 // 2
+    intc_3 // 2
     itob
     extract 6 2
     concat
@@ -909,7 +1004,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     extract 6 2
     frame_dig -3
     concat
-    intc_2 // 2
+    intc_3 // 2
     itob
     extract 6 2
     uncover 2
@@ -926,7 +1021,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     intc_1 // 1
     itob
     extract 6 2
-    intc_2 // 2
+    intc_3 // 2
     itob
     extract 6 2
     concat
@@ -970,14 +1065,14 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testEncoding_block@
     assert
     // tests/approvals/arc4-encode-decode.algo.ts:54
     // assert(sizeOf<uint64>() === 8)
-    intc_3 // 8
-    intc_3 // 8
+    intc_2 // 8
+    intc_2 // 8
     ==
     assert
     // tests/approvals/arc4-encode-decode.algo.ts:55
     // assert(sizeOf<boolean>() === 8)
-    intc_3 // 8
-    intc_3 // 8
+    intc_2 // 8
+    intc_2 // 8
     ==
     assert
     // tests/approvals/arc4-encode-decode.algo.ts:56
@@ -1080,16 +1175,16 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     // assertMatch(decodeArc4<TestObj>(e_bytes), e)
     frame_dig -5
     intc_0 // 0
-    intc_3 // 8
+    intc_2 // 8
     extract3
     frame_dig -6
     intc_0 // 0
-    intc_3 // 8
+    intc_2 // 8
     extract3
     ==
     frame_dig -5
     dup
-    intc_3 // 8
+    intc_2 // 8
     extract_uint16
     cover 1
     dup
@@ -1099,7 +1194,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     uncover 2
     substring3
     frame_dig -6
-    intc_3 // 8
+    intc_2 // 8
     extract_uint16
     frame_dig -6
     len
@@ -1115,17 +1210,17 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     intc_1 // 1
     itob
     pushint 6
-    intc_3 // 8
+    intc_2 // 8
     >=
     pushint 6
-    intc_3 // 8
+    intc_2 // 8
     uncover 2
     select
-    intc_3 // 8
-    intc_3 // 8
+    intc_2 // 8
+    intc_2 // 8
     >=
-    intc_3 // 8
-    intc_3 // 8
+    intc_2 // 8
+    intc_2 // 8
     uncover 2
     select
     uncover 2
@@ -1134,20 +1229,20 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     substring3
     // tests/approvals/arc4-encode-decode.algo.ts:88
     // const offsetHeader = itob(2).slice(6, 8)
-    intc_2 // 2
+    intc_3 // 2
     itob
     pushint 6
-    intc_3 // 8
+    intc_2 // 8
     >=
     pushint 6
-    intc_3 // 8
+    intc_2 // 8
     uncover 2
     select
-    intc_3 // 8
-    intc_3 // 8
+    intc_2 // 8
+    intc_2 // 8
     >=
-    intc_3 // 8
-    intc_3 // 8
+    intc_2 // 8
+    intc_2 // 8
     uncover 2
     select
     uncover 2
@@ -1171,13 +1266,13 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     dup
     len
     cover 1
-    intc_2 // 2
+    intc_3 // 2
     uncover 2
     substring3
     intc_0 // 0
-    intc_3 // 8
+    intc_2 // 8
     *
-    intc_3 // 8
+    intc_2 // 8
     extract3 // on error: index access is out of bounds
     btoi
     frame_dig -14
@@ -1200,10 +1295,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     concat
     dup
     intc_0 // 0
-    extract_uint16 // on error: invalid array length header
-    intc_0 // 0
-    >
-    assert // index access is out of bounds
+    callsub dynamic_assert_index
     intc_0 // 0
     pushint 16
     +
@@ -1235,7 +1327,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     dup
     len
     cover 1
-    intc_2 // 2
+    intc_3 // 2
     uncover 2
     substring3
     intc_0 // 0
@@ -1270,34 +1362,10 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     frame_dig -7
     concat
     dup
-    len
-    cover 1
-    dup
-    intc_2 // 2
-    uncover 3
-    substring3
-    cover 1
     intc_0 // 0
-    extract_uint16 // on error: invalid array length header
+    callsub dynamic_assert_index
     intc_0 // 0
-    >
-    assert // index access is out of bounds
-    intc_0 // 0
-    intc_2 // 2
-    *
-    dig 1
-    uncover 1
-    extract_uint16
-    dup2
-    extract_uint16
-    intc_1 // 1
-    *
-    intc_2 // 2
-    +
-    uncover 2
-    uncover 2
-    uncover 2
-    extract3
+    callsub dynamic_array_read_byte_length_element
     extract 2 0
     frame_dig -8
     ==
@@ -1325,53 +1393,14 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     concat
     frame_dig -5
     concat
-    dup
-    len
-    cover 1
-    dup
-    intc_2 // 2
-    uncover 3
-    substring3
-    cover 1
     intc_0 // 0
-    extract_uint16 // on error: invalid array length header
-    cover 1
+    callsub dynamic_array_read_dynamic_element
     intc_0 // 0
-    intc_2 // 2
-    *
-    dig 1
-    uncover 1
-    extract_uint16
-    cover 2
-    intc_0 // 0
-    intc_1 // 1
-    +
-    uncover 2
-    dig 1
-    - // on error: index access is out of bounds
-    cover 2
-    dig 1
-    len
-    cover 2
-    intc_2 // 2
-    *
-    dig 1
-    uncover 1
-    extract_uint16
-    uncover 2
-    uncover 1
-    uncover 3
-    select
-    uncover 1
-    uncover 2
-    uncover 2
-    substring3
-    intc_0 // 0
-    intc_3 // 8
+    intc_2 // 8
     extract3
     frame_dig -6
     intc_0 // 0
-    intc_3 // 8
+    intc_2 // 8
     extract3
     ==
     cover 2
@@ -1382,49 +1411,10 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     concat
     frame_dig -5
     concat
-    dup
-    len
-    cover 1
-    dup
-    intc_2 // 2
-    uncover 3
-    substring3
-    cover 1
     intc_0 // 0
-    extract_uint16 // on error: invalid array length header
-    cover 1
-    intc_0 // 0
-    intc_2 // 2
-    *
-    dig 1
-    uncover 1
-    extract_uint16
-    cover 2
-    intc_0 // 0
-    intc_1 // 1
-    +
-    uncover 2
-    dig 1
-    - // on error: index access is out of bounds
-    cover 2
-    dig 1
-    len
-    cover 2
-    intc_2 // 2
-    *
-    dig 1
-    uncover 1
-    extract_uint16
-    uncover 2
-    uncover 1
-    uncover 3
-    select
-    uncover 1
-    uncover 2
-    uncover 2
-    substring3
+    callsub dynamic_array_read_dynamic_element
     dup
-    intc_3 // 8
+    intc_2 // 8
     extract_uint16
     cover 1
     dup
@@ -1434,7 +1424,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     uncover 2
     substring3
     frame_dig -6
-    intc_3 // 8
+    intc_2 // 8
     extract_uint16
     frame_dig -6
     len
@@ -1468,7 +1458,7 @@ tests/approvals/arc4-encode-decode.algo.ts::Arc4EncodeDecode.testDecoding_block@
     dup
     len
     cover 1
-    intc_2 // 2
+    intc_3 // 2
     uncover 2
     substring3
     intc_0 // 0
