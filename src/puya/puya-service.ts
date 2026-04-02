@@ -29,7 +29,7 @@ interface LogResult {
   logs: Log[]
 }
 
-interface CompileResult extends LogResult {
+export interface CompileResult extends LogResult {
   arc56: Record<string, Arc56Contract>
 }
 
