@@ -1,0 +1,20 @@
+| PC | TEAL Bytes          | TEAL                           | Source                                    | Location                                                |
+|--: | :-------------------| :------------------------------| :-----------------------------------------| :-------------------------------------------------------|
+|  0 | 0b                  | #pragma version 11             |                                           |                                                         |
+|    | # main              | main:                          |                                           | tests/approvals/logic-sig.algo.ts::program() -> uint64: |
+|  1 | 42 00 00            |     b main_block@0             |                                           |                                                         |
+|    | # main_block@0      | main_block@0:                  |                                           |                                                         |
+|    |                     |                                | feeIsZero()                               | tests/approvals/logic-sig.algo.ts:15                    |
+|  4 | 88 00 03            |     callsub feeIsZero          | -----------                               | tests/approvals/logic-sig.algo.ts:15:4-15               |
+|    |                     |                                | return Uint64(1)                          | tests/approvals/logic-sig.algo.ts:16                    |
+|  7 | 81 01               |     pushint 1                  |               -                           | tests/approvals/logic-sig.algo.ts:16:18-19              |
+|  9 | 43                  |     return                     | ----------------                          | tests/approvals/logic-sig.algo.ts:16:4-20               |
+|    | # feeIsZero         | feeIsZero:                     |                                           | tests/approvals/logic-sig.algo.ts::feeIsZero() -> void: |
+| 10 | 42 00 00            |     b feeIsZero_block@0        |                                           |                                                         |
+|    | # feeIsZero_block@0 | feeIsZero_block@0:             |                                           |                                                         |
+|    |                     |                                | assert(Txn.fee === 0, 'Fee must be zero') | tests/approvals/logic-sig.algo.ts:10                    |
+| 13 | 31 01               |     txn Fee                    |        -------                            | tests/approvals/logic-sig.algo.ts:10:9-16               |
+| 15 | 81 00               |     pushint 0                  |                    -                      | tests/approvals/logic-sig.algo.ts:10:21-22              |
+| 17 | 12                  |     ==                         |        -------------                      | tests/approvals/logic-sig.algo.ts:10:9-22               |
+| 18 | 44                  |     assert // Fee must be zero | ----------------------------------------- | tests/approvals/logic-sig.algo.ts:10:2-43               |
+| 19 | 89                  |     retsub                     |                                           |                                                         |

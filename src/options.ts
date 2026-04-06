@@ -31,6 +31,7 @@ export class CompileOptions {
   public readonly outputMemoryIr: boolean
   public readonly outputBytecode: boolean
   public readonly outputSourceMap: boolean
+  public readonly outputAssemblyReport: boolean
   public readonly debugLevel: number
   public readonly optimizationLevel: number
   public readonly treatWarningsAsErrors: boolean
@@ -61,6 +62,7 @@ export class CompileOptions {
     this.outputMemoryIr = options.outputMemoryIr ?? false
     this.outputBytecode = options.outputBytecode ?? false
     this.outputSourceMap = options.outputSourceMap ?? false
+    this.outputAssemblyReport = options.outputAssemblyReport ?? defaultPuyaOptions.outputAssemblyReport
     this.debugLevel = options.debugLevel ?? defaultPuyaOptions.debugLevel
     this.optimizationLevel = options.optimizationLevel ?? defaultPuyaOptions.optimizationLevel
     this.treatWarningsAsErrors = options.treatWarningsAsErrors ?? defaultPuyaOptions.treatWarningsAsErrors
@@ -101,6 +103,7 @@ export const defaultPuyaOptions: PuyaPassThroughOptions = {
   outputDestructuredIr: false,
   outputMemoryIr: false,
   outputBytecode: false,
+  outputAssemblyReport: false,
   debugLevel: 1,
   optimizationLevel: 1,
   treatWarningsAsErrors: false,
@@ -124,6 +127,7 @@ export class PuyaOptions {
   outputMemoryIr: boolean
   outputBytecode: boolean
   outputSourceMap: boolean
+  outputAssemblyReport: boolean
   debugLevel: number
   optimizationLevel: number
   treatWarningsAsErrors: boolean
@@ -146,6 +150,7 @@ export class PuyaOptions {
     this.outputDestructuredIr = options.outputDestructuredIr
     this.outputMemoryIr = options.outputMemoryIr
     this.outputBytecode = options.outputBytecode
+    this.outputAssemblyReport = options.outputAssemblyReport
     this.debugLevel = options.debugLevel
     this.optimizationLevel = options.optimizationLevel
     this.treatWarningsAsErrors = options.treatWarningsAsErrors

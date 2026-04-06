@@ -1,0 +1,54 @@
+| PC | TEAL Bytes        | TEAL                  | Source                                                     | Location                                                                  |
+|--: | :-----------------| :---------------------| :----------------------------------------------------------| :-------------------------------------------------------------------------|
+|  0 | 0b                | #pragma version 11    |                                                            |                                                                           |
+|    | # main            | main:                 |                                                            | tests/approvals/casting.algo.ts::CastingAlgo.approvalProgram() -> uint64: |
+|  1 | 20 04 08 01 02 03 |     intcblock 8 1 2 3 |                                                            |                                                                           |
+|  7 | 42 00 00          |     b main_block@0    |                                                            |                                                                           |
+|    | # main_block@0    | main_block@0:         |                                                            |                                                                           |
+|    |                   |                       | const y = [1, 2, 3] as [uint64, uint64, uint64]            | tests/approvals/casting.algo.ts:8                                         |
+| 10 | 23                |     intc_1 // 1       |            -                                               | tests/approvals/casting.algo.ts:8:15-16                                   |
+| 11 | 16                |     itob              |           ---------                                        | tests/approvals/casting.algo.ts:8:14-23                                   |
+| 12 | 80 00             |     pushbytes 0x      |           ---------                                        | tests/approvals/casting.algo.ts:8:14-23                                   |
+| 14 | 4f 01             |     uncover 1         |           ---------                                        | tests/approvals/casting.algo.ts:8:14-23                                   |
+| 16 | 50                |     concat            |           ---------                                        | tests/approvals/casting.algo.ts:8:14-23                                   |
+| 17 | 24                |     intc_2 // 2       |               -                                            | tests/approvals/casting.algo.ts:8:18-19                                   |
+| 18 | 16                |     itob              |           ---------                                        | tests/approvals/casting.algo.ts:8:14-23                                   |
+| 19 | 50                |     concat            |           ---------                                        | tests/approvals/casting.algo.ts:8:14-23                                   |
+| 20 | 25                |     intc_3 // 3       |                  -                                         | tests/approvals/casting.algo.ts:8:21-22                                   |
+| 21 | 16                |     itob              |           ---------                                        | tests/approvals/casting.algo.ts:8:14-23                                   |
+| 22 | 50                |     concat            |           ---------                                        | tests/approvals/casting.algo.ts:8:14-23                                   |
+|    |                   |                       | return x > y[0] * y[1] * y[2] * z[0] * z[1] * z[2]         | tests/approvals/casting.algo.ts:12                                        |
+| 23 | 49                |     dup               |            ----                                            | tests/approvals/casting.algo.ts:12:15-19                                  |
+| 24 | 81 00             |     pushint 0         |            ----                                            | tests/approvals/casting.algo.ts:12:15-19                                  |
+| 26 | 22                |     intc_0 // 8       |            ----                                            | tests/approvals/casting.algo.ts:12:15-19                                  |
+| 27 | 58                |     extract3          |            ----                                            | tests/approvals/casting.algo.ts:12:15-19                                  |
+| 28 | 17                |     btoi              |            ----                                            | tests/approvals/casting.algo.ts:12:15-19                                  |
+| 29 | 4e 01             |     cover 1           |            ----                                            | tests/approvals/casting.algo.ts:12:15-19                                  |
+| 31 | 49                |     dup               |                   ----                                     | tests/approvals/casting.algo.ts:12:22-26                                  |
+| 32 | 22                |     intc_0 // 8       |                   ----                                     | tests/approvals/casting.algo.ts:12:22-26                                  |
+| 33 | 22                |     intc_0 // 8       |                   ----                                     | tests/approvals/casting.algo.ts:12:22-26                                  |
+| 34 | 58                |     extract3          |                   ----                                     | tests/approvals/casting.algo.ts:12:22-26                                  |
+| 35 | 17                |     btoi              |                   ----                                     | tests/approvals/casting.algo.ts:12:22-26                                  |
+| 36 | 4f 02             |     uncover 2         |            -----------                                     | tests/approvals/casting.algo.ts:12:15-26                                  |
+| 38 | 0b                |     *                 |            -----------                                     | tests/approvals/casting.algo.ts:12:15-26                                  |
+| 39 | 4f 01             |     uncover 1         |                          ----                              | tests/approvals/casting.algo.ts:12:29-33                                  |
+| 41 | 81 10             |     pushint 16        |                          ----                              | tests/approvals/casting.algo.ts:12:29-33                                  |
+| 43 | 22                |     intc_0 // 8       |                          ----                              | tests/approvals/casting.algo.ts:12:29-33                                  |
+| 44 | 58                |     extract3          |                          ----                              | tests/approvals/casting.algo.ts:12:29-33                                  |
+| 45 | 17                |     btoi              |                          ----                              | tests/approvals/casting.algo.ts:12:29-33                                  |
+| 46 | 0b                |     *                 |            ------------------                              | tests/approvals/casting.algo.ts:12:15-33                                  |
+|    |                   |                       | const z = [1 as uint64, 2 as uint64, 3 as uint64] as const | tests/approvals/casting.algo.ts:10                                        |
+| 47 | 23                |     intc_1 // 1       |            -                                               | tests/approvals/casting.algo.ts:10:15-16                                  |
+|    |                   |                       | return x > y[0] * y[1] * y[2] * z[0] * z[1] * z[2]         | tests/approvals/casting.algo.ts:12                                        |
+| 48 | 0b                |     *                 |            -------------------------                       | tests/approvals/casting.algo.ts:12:15-40                                  |
+|    |                   |                       | const z = [1 as uint64, 2 as uint64, 3 as uint64] as const | tests/approvals/casting.algo.ts:10                                        |
+| 49 | 24                |     intc_2 // 2       |                         -                                  | tests/approvals/casting.algo.ts:10:28-29                                  |
+|    |                   |                       | return x > y[0] * y[1] * y[2] * z[0] * z[1] * z[2]         | tests/approvals/casting.algo.ts:12                                        |
+| 50 | 0b                |     *                 |            --------------------------------                | tests/approvals/casting.algo.ts:12:15-47                                  |
+|    |                   |                       | const z = [1 as uint64, 2 as uint64, 3 as uint64] as const | tests/approvals/casting.algo.ts:10                                        |
+| 51 | 25                |     intc_3 // 3       |                                      -                     | tests/approvals/casting.algo.ts:10:41-42                                  |
+|    |                   |                       | return x > y[0] * y[1] * y[2] * z[0] * z[1] * z[2]         | tests/approvals/casting.algo.ts:12                                        |
+| 52 | 0b                |     *                 |            ---------------------------------------         | tests/approvals/casting.algo.ts:12:15-54                                  |
+| 53 | 81 7b             |     pushint 123       |        -                                                   | tests/approvals/casting.algo.ts:12:11-12                                  |
+| 55 | 0c                |     <                 |        -------------------------------------------         | tests/approvals/casting.algo.ts:12:11-54                                  |
+| 56 | 43                |     return            | --------------------------------------------------         | tests/approvals/casting.algo.ts:12:4-54                                   |
