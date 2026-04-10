@@ -37,6 +37,8 @@ class DynamicAccessContract extends Contract {
 
 `GlobalMap` is similar to `GlobalState`, but allows for grouping a set of global state values with a common key and content type. An optional `keyPrefix` can be specified when the `GlobalMap` is created; if not provided, the member variable name is used as the prefix. The item key can be any type that can be encoded to bytes. The final state key is the combination of `keyPrefix + key`. The `GlobalMap` proxy is a function which takes a `key` argument and returns a `GlobalState` proxy object for that item.
 
+**Note**: _Contracts using `GlobalMap` must specify adequate [`stateTotals`](https://algorandfoundation.github.io/puya-ts/language-guide/program-structure/#contract-options) to allocate enough global storage slots for the application on creation._
+
 ```ts
 import type { bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import { assert, Bytes, contract, Contract, GlobalMap } from '@algorandfoundation/algorand-typescript'
@@ -121,6 +123,8 @@ The `LocalMap` proxy supports two call signatures:
 
 - `map(key)` returns a `LocalState` proxy which can then be called with an account: `map(key)(account).value`
 - `map(key, account)` returns a `LocalStateForAccount` proxy directly: `map(key, account).value`
+
+**Note**: _Contracts using `LocalMap` must specify adequate [`stateTotals`](https://algorandfoundation.github.io/puya-ts/language-guide/program-structure/#contract-options) to allocate enough local storage slots for the application on creation._
 
 ```ts
 import type { uint64 } from '@algorandfoundation/algorand-typescript'
