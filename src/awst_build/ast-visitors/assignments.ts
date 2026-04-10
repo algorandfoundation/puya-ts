@@ -106,10 +106,10 @@ function buildAssignmentValues(
     // // Destructured object
     const targets: LValue[] = []
     const sources: Expression[] = []
-    for (const [propName] of target.ptype.orderedProperties()) {
+    for (const { name } of target.ptype.properties) {
       const values = buildAssignmentValues(
-        requireInstanceBuilder(target.memberAccess(propName, sourceLocation)),
-        requireInstanceBuilder(source.memberAccess(propName, source.sourceLocation)),
+        requireInstanceBuilder(target.memberAccess(name, sourceLocation)),
+        requireInstanceBuilder(source.memberAccess(name, source.sourceLocation)),
         sourceLocation,
       )
       targets.push(values.target)
@@ -209,14 +209,11 @@ function narrowSourceType(targetType: PType | undefined, sourceType: PType, sour
   }
   if (sourceType instanceof ObjectLiteralPType) {
     return new ObjectLiteralPType({
-      properties: Object.fromEntries(
-        sourceType
-          .orderedProperties()
-          .map(([prop, propType]): [string, PType] => [
-            prop,
-            narrowSourceType(getIndexType(targetType, prop, sourceLocation), propType, sourceLocation),
-          ]),
-      ),
+      properties: sourceType.properties.map(({ name, ptype, description }) => ({
+        name,
+        ptype: narrowSourceType(getIndexType(targetType, name, sourceLocation), ptype, sourceLocation),
+        description,
+      })),
     })
   }
   return sourceType
@@ -279,10 +276,10 @@ function checkForUnclonedMutables(target: InstanceBuilder, source: InstanceBuild
       checkForUnclonedMutables(item, requireInstanceBuilder(source.indexAccess(BigInt(index), source.sourceLocation)), sourceLocation)
     }
   } else if (target instanceof ObjectLiteralExpressionBuilder) {
-    for (const [propName] of target.ptype.orderedProperties()) {
+    for (const { name } of target.ptype.properties) {
       checkForUnclonedMutables(
-        requireInstanceBuilder(target.memberAccess(propName, sourceLocation)),
-        requireInstanceBuilder(source.memberAccess(propName, source.sourceLocation)),
+        requireInstanceBuilder(target.memberAccess(name, sourceLocation)),
+        requireInstanceBuilder(source.memberAccess(name, source.sourceLocation)),
         sourceLocation,
       )
     }

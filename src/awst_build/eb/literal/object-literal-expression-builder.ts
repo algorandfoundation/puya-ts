@@ -2,7 +2,7 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression, LValue } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError, InternalError } from '../../../errors'
-import type { ImmutableObjectPType, MutableObjectPType, PType, PTypeOrClass } from '../../ptypes'
+import type { ImmutableObjectPType, MutableObjectPType, PTypeField, PTypeOrClass } from '../../ptypes'
 import { isObjectType, ObjectLiteralPType } from '../../ptypes'
 import { getIndexType } from '../../ptypes/visitors/index-type-visitor'
 import { spreadableProperties } from '../../ptypes/visitors/spreadable-properties'
@@ -28,24 +28,27 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
   readonly isConstant = false
 
   static fromParts(sourceLocation: SourceLocation, parts: ObjectLiteralParts[]): ObjectLiteralExpressionBuilder {
-    const types: Record<string, PType> = {}
     const propertyToItemMap: Record<string, number> = {}
     const items: InstanceBuilder[] = []
     for (const part of parts) {
       if (part.type === 'properties') {
-        for (const [prop, propBuilder] of Object.entries(part.properties)) {
-          types[prop] = propBuilder.ptype
-          propertyToItemMap[prop] = items.length
+        for (const [name, propBuilder] of Object.entries(part.properties)) {
+          propertyToItemMap[name] = items.length
           items.push(propBuilder)
         }
       } else {
         const obj = part.obj.singleEvaluation()
-        for (const [prop, propType] of spreadableProperties(part.obj.ptype, part.spreadLocation)) {
-          types[prop] = propType
-          propertyToItemMap[prop] = items.length
-          items.push(requireInstanceBuilder(obj.memberAccess(prop, part.spreadLocation)))
+        for (const [name] of spreadableProperties(part.obj.ptype, part.spreadLocation)) {
+          propertyToItemMap[name] = items.length
+          items.push(requireInstanceBuilder(obj.memberAccess(name, part.spreadLocation)))
         }
       }
+    }
+
+    const types: PTypeField[] = []
+    for (const [name, idx] of Object.entries(propertyToItemMap)) {
+      const builder = items[idx]
+      types.push({ name, ptype: builder.ptype, description: null })
     }
     return new ObjectLiteralExpressionBuilder(sourceLocation, new ObjectLiteralPType({ properties: types }), propertyToItemMap, items)
   }
@@ -93,9 +96,7 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
   }
   resolveLValue(): LValue {
     return nodeFactory.tupleExpression({
-      items: this.ptype
-        .orderedProperties()
-        .map(([p, propPType]) => requireInstanceBuilder(this.memberAccess(p, this.sourceLocation)).resolveLValue()),
+      items: this.ptype.properties.map(({ name }) => requireInstanceBuilder(this.memberAccess(name, this.sourceLocation)).resolveLValue()),
       sourceLocation: this.sourceLocation,
       wtype: this.ptype.getImmutable().wtype,
     })
@@ -136,8 +137,8 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
 
       base = new ResolvedObjectLiteralExpressionBuilder(
         nodeFactory.tupleExpression({
-          items: ptype.orderedProperties().map(([p]) => {
-            const index = this.propertyToItemMap[p]
+          items: ptype.properties.map(({ name }) => {
+            const index = this.propertyToItemMap[name]
             return nodeFactory.tupleItemExpression({ base: tuple, index: BigInt(index), sourceLocation: this.items[index].sourceLocation })
           }),
           sourceLocation: this.sourceLocation,
@@ -153,9 +154,9 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     if (ptype.equals(this.ptype)) return true
 
     if (!isObjectType(ptype)) return false
-    for (const [prop, propPType] of ptype.orderedProperties()) {
-      if (!this.hasProperty(prop)) return false
-      const propValue = requestExpressionOfType(this.memberAccess(prop, this.sourceLocation), propPType)
+    for (const { name, ptype: propPType } of ptype.properties) {
+      if (!this.hasProperty(name)) return false
+      const propValue = requestExpressionOfType(this.memberAccess(name, this.sourceLocation), propPType)
       if (propValue === undefined) return false
     }
     return true

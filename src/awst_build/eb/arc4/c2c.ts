@@ -103,15 +103,16 @@ export class ContractProxyExpressionBuilder extends InstanceExpressionBuilder<Co
       case 'bareCreate':
         return new ContractProxyBareCreateFunctionBuilder(this, sourceLocation)
     }
-    if (name in compiledContractType.properties) {
+    const property = compiledContractType.properties.find(({ name: propName }) => propName === name)
+    if (property !== undefined) {
       return instanceEb(
         nodeFactory.fieldExpression({
           base: this._expr,
           name,
-          wtype: compiledContractType.properties[name].wtypeOrThrow,
+          wtype: property.ptype.wtypeOrThrow,
           sourceLocation,
         }),
-        compiledContractType.properties[name],
+        property.ptype,
       )
     }
 

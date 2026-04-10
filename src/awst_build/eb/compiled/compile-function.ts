@@ -79,8 +79,8 @@ function parseTemplateVars(options: InstanceBuilder | undefined): { prefix: stri
     const templateVars = requireInstanceBuilder(options.memberAccess(optionsNames.templateVars, options.sourceLocation))
     codeInvariant(isObjectType(templateVars.ptype), `${optionsNames.templateVars} must be an object type`, templateVars.sourceLocation)
 
-    for (const [varName] of templateVars.ptype.orderedProperties()) {
-      templateVariables.set(varName, requireInstanceBuilder(templateVars.memberAccess(varName, templateVars.sourceLocation)).resolve())
+    for (const { name } of templateVars.ptype.properties) {
+      templateVariables.set(name, requireInstanceBuilder(templateVars.memberAccess(name, templateVars.sourceLocation)).resolve())
     }
   }
 
