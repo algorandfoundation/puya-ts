@@ -60,7 +60,7 @@ export class IndexTypeVisitor extends DefaultVisitor<PType | undefined> {
 
   visitARC4StructType(ptype: ARC4StructType): PType | undefined {
     if (typeof this.index === 'string') {
-      const field = ptype.fields.find(({ name }) => name === this.index)
+      const field = ptype.getProperty(this.index)
       if (field !== undefined) {
         return field.ptype
       }
@@ -70,7 +70,7 @@ export class IndexTypeVisitor extends DefaultVisitor<PType | undefined> {
 
   visitImmutableObjectPType(ptype: ImmutableObjectPType): PType | undefined {
     if (typeof this.index === 'string') {
-      const field = ptype.properties.find(({ name }) => name === this.index)
+      const field = ptype.getProperty(this.index)
       if (field !== undefined) {
         return field.ptype
       }
@@ -80,7 +80,7 @@ export class IndexTypeVisitor extends DefaultVisitor<PType | undefined> {
 
   visitMutableObjectPType(ptype: MutableObjectPType): PType | undefined {
     if (typeof this.index === 'string') {
-      const field = ptype.properties.find(({ name }) => name === this.index)
+      const field = ptype.getProperty(this.index)
       if (field !== undefined) {
         return field.ptype
       }
@@ -90,7 +90,7 @@ export class IndexTypeVisitor extends DefaultVisitor<PType | undefined> {
 
   visitObjectLiteralPType(ptype: ObjectLiteralPType): PType | undefined {
     if (typeof this.index === 'string') {
-      const field = ptype.properties.find(({ name }) => name === this.index)
+      const field = ptype.getProperty(this.index)
       if (field !== undefined) {
         return field.ptype
       }

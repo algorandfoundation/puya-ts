@@ -59,7 +59,7 @@ export class StructExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<AR
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    const field = this.ptype.fields.find(({ name: propName }) => propName === name)
+    const field = this.ptype.getProperty(name)
     if (field !== undefined) {
       return instanceEb(
         nodeFactory.fieldExpression({

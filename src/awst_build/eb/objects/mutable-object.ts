@@ -20,7 +20,7 @@ export class MutableObjectExpressionBuilder extends InstanceExpressionBuilder<Mu
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    const field = this.ptype.properties.find((field) => field.name === name)
+    const field = this.ptype.getProperty(name)
     if (field !== undefined) {
       return instanceEb(
         nodeFactory.fieldExpression({

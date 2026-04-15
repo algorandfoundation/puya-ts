@@ -210,6 +210,10 @@ export class ARC4StructType extends ARC4EncodedType {
     })
   }
 
+  getProperty(name: string): ARC4StructField | undefined {
+    return this.fields.find(({ name: fieldName }) => fieldName === name)
+  }
+
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitARC4StructType(this)
   }

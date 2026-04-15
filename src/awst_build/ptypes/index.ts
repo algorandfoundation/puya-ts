@@ -1012,6 +1012,10 @@ abstract class ObjectPType extends PType {
     return `{${this.properties.map(({ name, ptype }) => `${this.immutable ? 'readonly ' : ''}${name}:${ptype}`).join(',')}}`
   }
 
+  getProperty(name: string): PTypeField | undefined {
+    return this.properties.find(({ name: propName }) => propName === name)
+  }
+
   hasSameStructure(other: ObjectPType): boolean {
     return zipStrict(this.properties, other.properties).every(([left, right]) => left.name === right.name && left.ptype.equals(right.ptype))
   }
