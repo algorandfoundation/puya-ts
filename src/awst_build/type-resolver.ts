@@ -642,12 +642,23 @@ function tryGetDeclarationDescription(tsDecl: ts.Declaration): string | undefine
 
 function CacheResolvedType(resolveType: (this: TypeResolver, tsType: ts.Type, sourceLocation: SourceLocation) => PType) {
   const resolvedTypes = new WeakMap<ts.Type, PType>()
+  const currentlyVisiting = new WeakSet<ts.Type>()
   return function (this: TypeResolver, tsType: ts.Type, sourceLocation: SourceLocation): PType {
     const existing = resolvedTypes.get(tsType)
     if (existing) return existing
 
-    const res = resolveType.call(this, tsType, sourceLocation)
-    resolvedTypes.set(tsType, res)
-    return res
+    if (currentlyVisiting.has(tsType)) {
+      throw new CodeError(`type is part of a cyclic reference`, { sourceLocation })
+    }
+
+    try {
+      currentlyVisiting.add(tsType)
+
+      const res = resolveType.call(this, tsType, sourceLocation)
+      resolvedTypes.set(tsType, res)
+      return res
+    } finally {
+      currentlyVisiting.delete(tsType)
+    }
   }
 }
