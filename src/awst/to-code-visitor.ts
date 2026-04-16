@@ -103,10 +103,6 @@ export class ToCodeVisitor
   visitMapPrefixedKeyExpression(expression: nodes.MapPrefixedKeyExpression): string {
     return `MapKey(prefix=${expression.prefix.accept(this)}, key=${expression.key.accept(this)})`
   }
-  visitBoxPrefixedKeyExpression(expression: nodes.BoxPrefixedKeyExpression): string {
-    return `BoxMapKey(prefix=${expression.prefix.accept(this)}, key=${expression.key.accept(this)})`
-  }
-
   visitBoxValueExpression(expression: nodes.BoxValueExpression): string {
     return `Box[${expression.key.accept(this)}].value`
   }
@@ -233,9 +229,6 @@ export class ToCodeVisitor
       .map(([name, expr]) => `${name}=${expr.accept(this)}`)
       .join(', ')
     return `abi_call(${method}, args=(${args}), fields={${fields}})`
-  }
-  visitSetInnerTransactionFields(expression: nodes.SetInnerTransactionFields): string {
-    return `${expression.startWithBegin ? 'begin' : 'next'}_txn(${expression.itxns.map((i) => i.accept(this)).join(', ')})`
   }
   visitSizeOf(expression: nodes.SizeOf): string {
     return `size_of(${expression.sizeWtype})`
