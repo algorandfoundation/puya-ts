@@ -18,7 +18,7 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder<Immutable
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    if (name in this.ptype.properties) {
+    if (this.hasProperty(name)) {
       const propertyPtype = getPropertyType(this.ptype, name, sourceLocation)
       return instanceEb(
         nodeFactory.fieldExpression({
@@ -34,12 +34,12 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder<Immutable
   }
 
   hasProperty(name: string): boolean {
-    return name in this.ptype.properties
+    return this.ptype.properties.some(({ name: propName }) => propName === name)
   }
 
   resolvableToPType(ptype: PTypeOrClass): ptype is ImmutableObjectPType {
     if (ptype instanceof ImmutableObjectPType) {
-      return ptype.orderedProperties().every(([prop, propType]) => hasPropertyOfType(this.ptype, prop, propType, this.sourceLocation))
+      return ptype.properties.every(({ name, ptype }) => hasPropertyOfType(this.ptype, name, ptype, this.sourceLocation))
     }
     return false
   }
@@ -53,9 +53,7 @@ export class ObjectExpressionBuilder extends InstanceExpressionBuilder<Immutable
       return instanceEb(
         nodeFactory.tupleExpression({
           sourceLocation: this.sourceLocation,
-          items: ptype
-            .orderedProperties()
-            .map(([prop, propType]) => requireExpressionOfType(base.memberAccess(prop, this.sourceLocation), propType)),
+          items: ptype.properties.map(({ name, ptype }) => requireExpressionOfType(base.memberAccess(name, this.sourceLocation), ptype)),
           wtype: ptype.wtype,
         }),
         ptype,

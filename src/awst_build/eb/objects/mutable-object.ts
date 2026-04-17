@@ -16,20 +16,20 @@ export class MutableObjectExpressionBuilder extends InstanceExpressionBuilder<Mu
   }
 
   hasProperty(name: string): boolean {
-    return name in this.ptype.properties || super.hasProperty(name)
+    return this.ptype.properties.some(({ name: propName }) => propName === name) || super.hasProperty(name)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    if (name in this.ptype.properties) {
-      const fieldType = this.ptype.properties[name]
+    const field = this.ptype.getProperty(name)
+    if (field !== undefined) {
       return instanceEb(
         nodeFactory.fieldExpression({
           name,
           sourceLocation,
-          wtype: fieldType.wtypeOrThrow,
+          wtype: field.ptype.wtypeOrThrow,
           base: this._expr,
         }),
-        fieldType,
+        field.ptype,
       )
     }
     return super.memberAccess(name, sourceLocation)
@@ -39,12 +39,10 @@ export class MutableObjectExpressionBuilder extends InstanceExpressionBuilder<Mu
     if (ptype.equals(this.ptype)) return true
 
     if (instanceOfAny(ptype, ImmutableObjectPType, MutableObjectPType)) {
-      return ptype
-        .orderedProperties()
-        .every(
-          ([prop, propType]) =>
-            this.hasProperty(prop) && requestInstanceBuilder(this.memberAccess(prop, this.sourceLocation))?.resolvableToPType(propType),
-        )
+      return ptype.properties.every(
+        ({ name, ptype }) =>
+          this.hasProperty(name) && requestInstanceBuilder(this.memberAccess(name, this.sourceLocation))?.resolvableToPType(ptype),
+      )
     }
     return false
   }
@@ -58,9 +56,10 @@ export class MutableObjectExpressionBuilder extends InstanceExpressionBuilder<Mu
       return instanceEb(
         nodeFactory.newStruct({
           values: new Map(
-            ptype
-              .orderedProperties()
-              .map(([prop, propType]) => [prop, requireExpressionOfType(single.memberAccess(prop, this.sourceLocation), propType)]),
+            ptype.properties.map(({ name, ptype }) => [
+              name,
+              requireExpressionOfType(single.memberAccess(name, this.sourceLocation), ptype),
+            ]),
           ),
           sourceLocation: this.sourceLocation,
           wtype: ptype.wtype,
@@ -73,9 +72,7 @@ export class MutableObjectExpressionBuilder extends InstanceExpressionBuilder<Mu
       const single = this.singleEvaluation()
       return instanceEb(
         nodeFactory.tupleExpression({
-          items: ptype
-            .orderedProperties()
-            .map(([prop, propType]) => requireExpressionOfType(single.memberAccess(prop, this.sourceLocation), propType)),
+          items: ptype.properties.map(({ name, ptype }) => requireExpressionOfType(single.memberAccess(name, this.sourceLocation), ptype)),
           sourceLocation: this.sourceLocation,
           wtype: ptype.wtype,
         }),

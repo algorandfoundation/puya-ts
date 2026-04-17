@@ -72,12 +72,12 @@ export function mapTransactionFields(
   ignoreProps?: Set<string>,
 ) {
   codeInvariant(isObjectType(fields.ptype), 'fields argument must be an object type')
-  for (const [prop] of fields.ptype.orderedProperties()) {
-    if (ignoreProps?.has(prop)) continue
+  for (const { name } of fields.ptype.properties) {
+    if (ignoreProps?.has(name)) continue
 
-    const data = getTxnFieldMetaData({ kind, memberName: prop, direction: 'in' })
+    const data = getTxnFieldMetaData({ kind, memberName: name, direction: 'in' })
     if (data) {
-      const propValue = fields.memberAccess(prop, sourceLocation)
+      const propValue = fields.memberAccess(name, sourceLocation)
       if (data.field === TxnField.ApplicationArgs) {
         codeInvariant(isStaticallyIterable(propValue), 'Unsupported expression for appArgs', propValue.sourceLocation)
         mappedFields.set(
@@ -120,13 +120,13 @@ export function mapTransactionFields(
             }),
           )
         } else {
-          logger.error(propValue.sourceLocation, `Unsupported expression for ${prop}`)
+          logger.error(propValue.sourceLocation, `Unsupported expression for ${name}`)
         }
       } else {
         mappedFields.set(data.field, resolveCompatExpression(propValue, data.ptype))
       }
     } else {
-      logger.warn(sourceLocation, `Ignoring additional property: ${prop}`)
+      logger.warn(sourceLocation, `Ignoring additional property: ${name}`)
     }
   }
 }

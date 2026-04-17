@@ -220,8 +220,14 @@ export namespace wtypes {
     }
   }
 
+  type WTypeField = {
+    name: string
+    wtype: WType
+    description: string | null
+  }
+
   export class ARC4Struct extends ARC4Type {
-    fields: Record<string, WType>
+    fields: WTypeField[]
     sourceLocation: SourceLocation | null
     frozen: boolean
     desc: string | null
@@ -236,12 +242,12 @@ export namespace wtypes {
       frozen: boolean
       name: string
       desc: string | null
-      fields: Record<string, WType>
+      fields: WTypeField[]
       sourceLocation?: SourceLocation
     }) {
       super({
         name,
-        immutable: frozen && Object.values(fields).every((t) => t.immutable),
+        immutable: frozen && fields.every((f) => f.wtype.immutable),
       })
       this.sourceLocation = sourceLocation ?? null
       this.fields = fields

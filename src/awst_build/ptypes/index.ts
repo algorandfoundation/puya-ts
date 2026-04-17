@@ -6,7 +6,7 @@ import { Constants } from '../../constants'
 import { CodeError, InternalError, NotSupported, throwError } from '../../errors'
 import { codeInvariant, distinctByEquality, instanceOfAny, invariant, sortBy, zipStrict } from '../../util'
 import { SymbolName } from '../symbol-name'
-import type { ABICompatiblePType, PTypeOrClass } from './base'
+import type { ABICompatiblePType, PTypeField, PTypeOrClass } from './base'
 import { GenericPType, PType } from './base'
 
 import { transientTypeErrors } from './transient-type-errors'
@@ -989,13 +989,13 @@ abstract class ObjectPType extends PType {
   readonly module: string = 'lib.d.ts'
   readonly alias: SymbolName | null
   readonly description: string | undefined
-  readonly properties: Record<string, PType>
+  readonly properties: PTypeField[]
   readonly singleton = false
   readonly immutable: boolean
 
   constructor(props: {
     alias?: SymbolName | null
-    properties: Record<string, PType>
+    properties: PTypeField[]
     description?: string
     namePrefix: string
     immutable: boolean
@@ -1008,27 +1008,23 @@ abstract class ObjectPType extends PType {
     this.immutable = props.immutable
   }
 
-  orderedProperties() {
-    return Object.entries(this.properties)
+  toString(): string {
+    return `{${this.properties.map(({ name, ptype }) => `${this.immutable ? 'readonly ' : ''}${name}:${ptype}`).join(',')}}`
   }
 
-  toString(): string {
-    return `{${this.orderedProperties()
-      .map((p) => `${this.immutable ? 'readonly ' : ''}${p[0]}:${p[1].name}`)
-      .join(',')}}`
+  getProperty(name: string): PTypeField | undefined {
+    return this.properties.find(({ name: propName }) => propName === name)
   }
 
   hasSameStructure(other: ObjectPType): boolean {
-    return zipStrict(this.orderedProperties(), other.orderedProperties()).every(
-      ([[leftProp, leftType], [rightProp, rightType]]) => leftProp === rightProp && leftType.equals(rightType),
-    )
+    return zipStrict(this.properties, other.properties).every(([left, right]) => left.name === right.name && left.ptype.equals(right.ptype))
   }
 }
 
 export class ObjectLiteralPType extends ObjectPType {
   readonly [PType.IdSymbol] = 'ObjectLiteralPType'
 
-  constructor(props: { properties: Record<string, PType> }) {
+  constructor(props: { properties: PTypeField[] }) {
     super({
       ...props,
       namePrefix: `ObjectLiteral`,
@@ -1058,12 +1054,12 @@ export class ObjectLiteralPType extends ObjectPType {
   get wtype(): wtypes.WTuple {
     const tupleTypes: wtypes.WType[] = []
     const tupleNames: string[] = []
-    for (const [propName, propType] of this.orderedProperties()) {
-      if (propType instanceof TransientType) {
-        throw new CodeError(`Property '${propName}' of ${this.name} has an unsupported type: ${propType.typeMessage}`)
+    for (const { name, ptype } of this.properties) {
+      if (ptype instanceof TransientType) {
+        throw new CodeError(`Property '${name}' of ${this.name} has an unsupported type: ${ptype.typeMessage}`)
       }
-      tupleTypes.push(propType.wtypeOrThrow)
-      tupleNames.push(propName)
+      tupleTypes.push(ptype.wtypeOrThrow)
+      tupleNames.push(name)
     }
     return new wtypes.WTuple({
       name: this.alias?.fullName ?? this.toString(),
@@ -1076,7 +1072,7 @@ export class ObjectLiteralPType extends ObjectPType {
 export class ImmutableObjectPType extends ObjectPType {
   readonly [PType.IdSymbol] = 'ImmutableObjectPType'
 
-  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string }) {
+  constructor(props: { alias?: SymbolName | null; properties: PTypeField[]; description?: string }) {
     super({
       ...props,
       namePrefix: `ReadonlyObject`,
@@ -1087,12 +1083,12 @@ export class ImmutableObjectPType extends ObjectPType {
   get wtype(): wtypes.WTuple {
     const tupleTypes: wtypes.WType[] = []
     const tupleNames: string[] = []
-    for (const [propName, propType] of this.orderedProperties()) {
-      if (propType instanceof TransientType) {
-        throw new CodeError(`Property '${propName}' of ${this.name} has an unsupported type: ${propType.typeMessage}`)
+    for (const { name, ptype } of this.properties) {
+      if (ptype instanceof TransientType) {
+        throw new CodeError(`Property '${name}' of ${this.name} has an unsupported type: ${ptype.typeMessage}`)
       }
-      tupleTypes.push(propType.wtypeOrThrow)
-      tupleNames.push(propName)
+      tupleTypes.push(ptype.wtypeOrThrow)
+      tupleNames.push(name)
     }
     return new wtypes.WTuple({
       name: this.alias?.fullName ?? this.name,
@@ -1109,7 +1105,7 @@ export class ImmutableObjectPType extends ObjectPType {
 export class MutableObjectPType extends ObjectPType {
   readonly [PType.IdSymbol] = 'MutableObjectPType'
 
-  constructor(props: { alias?: SymbolName | null; properties: Record<string, PType>; description?: string }) {
+  constructor(props: { alias?: SymbolName | null; properties: PTypeField[]; description?: string }) {
     super({
       ...props,
       namePrefix: `Object`,
@@ -1120,7 +1116,7 @@ export class MutableObjectPType extends ObjectPType {
   get wtype(): wtypes.ARC4Struct {
     return new wtypes.ARC4Struct({
       name: this.alias?.fullName ?? this.name,
-      fields: Object.fromEntries(Object.entries(this.properties).map(([f, t]) => [f, t.wtypeOrThrow])),
+      fields: this.properties.map(({ name, ptype, description }) => ({ name, wtype: ptype.wtypeOrThrow, description })),
       desc: this.description ?? null,
       frozen: false,
     })
@@ -1920,15 +1916,15 @@ export const compiledContractType = new ImmutableObjectPType({
     module: Constants.moduleNames.algoTs.compiled,
   }),
   description: 'Provides compiled programs and state allocation values for a Contract. Created by calling `compile(ExampleContractType)`',
-  properties: {
-    approvalProgram: new ReadonlyTuplePType({ items: [bytesPType, bytesPType] }),
-    clearStateProgram: new ReadonlyTuplePType({ items: [bytesPType, bytesPType] }),
-    extraProgramPages: uint64PType,
-    globalUints: uint64PType,
-    globalBytes: uint64PType,
-    localUints: uint64PType,
-    localBytes: uint64PType,
-  },
+  properties: [
+    { name: 'approvalProgram', ptype: new ReadonlyTuplePType({ items: [bytesPType, bytesPType] }), description: null },
+    { name: 'clearStateProgram', ptype: new ReadonlyTuplePType({ items: [bytesPType, bytesPType] }), description: null },
+    { name: 'extraProgramPages', ptype: uint64PType, description: null },
+    { name: 'globalUints', ptype: uint64PType, description: null },
+    { name: 'globalBytes', ptype: uint64PType, description: null },
+    { name: 'localUints', ptype: uint64PType, description: null },
+    { name: 'localBytes', ptype: uint64PType, description: null },
+  ],
 })
 export const compiledLogicSigType = new ImmutableObjectPType({
   alias: new SymbolName({
@@ -1936,9 +1932,7 @@ export const compiledLogicSigType = new ImmutableObjectPType({
     module: Constants.moduleNames.algoTs.compiled,
   }),
   description: 'Provides account for a Logic Signature. Created by calling `compile(LogicSigType)``',
-  properties: {
-    account: accountPType,
-  },
+  properties: [{ name: 'account', ptype: accountPType, description: null }],
 })
 
 export const arc28EmitFunction = new LibFunctionType({

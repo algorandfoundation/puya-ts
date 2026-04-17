@@ -2,6 +2,7 @@ import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
 import { codeInvariant, invariant } from '../../util'
+import type { PTypeField } from './base'
 import { GenericPType, PType } from './base'
 import {
   accountPType,
@@ -156,13 +157,15 @@ export class ARC4StructClass extends PType {
   }
 }
 
+export type ARC4StructField = PTypeField & { ptype: ARC4EncodedType }
+
 export class ARC4StructType extends ARC4EncodedType {
   readonly [PType.IdSymbol] = 'ARC4StructType'
   readonly name: string
   readonly module: string
   readonly description: string | undefined
   readonly singleton = false
-  readonly fields: Record<string, ARC4EncodedType>
+  readonly fields: ARC4StructField[]
   readonly sourceLocation: SourceLocation | undefined
   readonly frozen: boolean
 
@@ -179,7 +182,7 @@ export class ARC4StructType extends ARC4EncodedType {
     module: string
     frozen: boolean
     description: string | undefined
-    fields: Record<string, ARC4EncodedType>
+    fields: ARC4StructField[]
     sourceLocation?: SourceLocation
   }) {
     super()
@@ -190,7 +193,7 @@ export class ARC4StructType extends ARC4EncodedType {
     this.description = description
     this.sourceLocation = sourceLocation
 
-    this.abiTypeSignature = ARC4EncodedType.buildAbiTupleSignature(Object.values(fields))
+    this.abiTypeSignature = ARC4EncodedType.buildAbiTupleSignature(fields.map((f) => f.ptype))
   }
 
   get nativeType(): MutableObjectPType {
@@ -200,11 +203,15 @@ export class ARC4StructType extends ARC4EncodedType {
   get wtype(): wtypes.ARC4Struct {
     return new wtypes.ARC4Struct({
       name: this.name,
-      fields: Object.fromEntries(Object.entries(this.fields).map(([f, t]) => [f, t.wtype])),
+      fields: this.fields.map(({ name, ptype, description }) => ({ name, wtype: ptype.wtypeOrThrow, description })),
       sourceLocation: this.sourceLocation,
       desc: this.description ?? null,
       frozen: this.frozen,
     })
+  }
+
+  getProperty(name: string): ARC4StructField | undefined {
+    return this.fields.find(({ name: fieldName }) => fieldName === name)
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
@@ -215,7 +222,7 @@ export class ARC4StructType extends ARC4EncodedType {
 export const arc4StructBaseType = new ARC4StructType({
   name: 'StructBase',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
-  fields: {},
+  fields: [],
   description: undefined,
   frozen: false,
 })
@@ -634,11 +641,19 @@ export class TypedApplicationCallResponseType extends ImmutableObjectPType {
   constructor({ returnValue }: { returnValue: PType }) {
     super({
       properties: returnValue.equals(voidPType)
-        ? { itxn: applicationItxnType }
-        : {
-            itxn: applicationItxnType,
-            returnValue,
-          },
+        ? [{ name: 'itxn', ptype: applicationItxnType, description: null }]
+        : [
+            {
+              name: 'itxn',
+              ptype: applicationItxnType,
+              description: null,
+            },
+            {
+              name: 'returnValue',
+              ptype: returnValue,
+              description: null,
+            },
+          ],
     })
     this.name = `TypedApplicationCallResponseType<${returnValue.name}>`
     this.returnValue = returnValue
