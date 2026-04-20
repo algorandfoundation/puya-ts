@@ -22,7 +22,6 @@ import type {
   Block,
   BoolConstant,
   BooleanBinaryOperation,
-  BoxPrefixedKeyExpression,
   BoxValueExpression,
   BytesAugmentedAssignment,
   BytesBinaryOperation,
@@ -72,7 +71,6 @@ import type {
   ReturnStatement,
   Reversed,
   RootNodeVisitor,
-  SetInnerTransactionFields,
   SingleEvaluation,
   SizeOf,
   SliceExpression,
@@ -305,12 +303,6 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
     }
   }
 
-  visitSetInnerTransactionFields(expression: SetInnerTransactionFields): void {
-    for (const itxn of expression.itxns) {
-      itxn.accept(this)
-    }
-  }
-
   visitSubmitInnerTransaction(expression: SubmitInnerTransaction): void {
     for (const itxn of expression.itxns) {
       itxn.accept(this)
@@ -350,11 +342,6 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
   }
 
   visitMapPrefixedKeyExpression(expression: MapPrefixedKeyExpression): void {
-    expression.key.accept(this)
-    expression.prefix.accept(this)
-  }
-
-  visitBoxPrefixedKeyExpression(expression: BoxPrefixedKeyExpression): void {
     expression.key.accept(this)
     expression.prefix.accept(this)
   }

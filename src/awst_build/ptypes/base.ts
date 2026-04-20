@@ -104,6 +104,12 @@ export class GenericPType<T extends PType = PType> extends PType {
 
 export type PTypeOrClass = PType | { new (...args: DeliberateAny[]): PType; equals(other: PType): boolean }
 
+export type PTypeField = {
+  name: string
+  ptype: PType
+  description: string | null
+}
+
 function ptypesAreEqual(left: PType, right: PType): boolean {
   if (right.constructor !== left.constructor) {
     return false

@@ -22,7 +22,7 @@ export class ResolvedObjectLiteralExpressionBuilder extends InstanceExpressionBu
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    if (name in this.ptype.properties) {
+    if (this.hasProperty(name)) {
       const propertyPtype = getPropertyType(this.ptype, name, sourceLocation)
       return instanceEb(
         nodeFactory.fieldExpression({
@@ -38,14 +38,14 @@ export class ResolvedObjectLiteralExpressionBuilder extends InstanceExpressionBu
   }
 
   hasProperty(name: string): boolean {
-    return name in this.ptype.properties
+    return this.ptype.properties.some(({ name: propName }) => propName === name)
   }
 
   resolvableToPType(ptype: PTypeOrClass): ptype is ObjectLiteralPType | ImmutableObjectPType | MutableObjectPType {
     if (isObjectType(ptype)) {
-      return ptype
-        .orderedProperties()
-        .every(([prop, propType]) => requestInstanceBuilder(this.memberAccess(prop, this.sourceLocation))?.resolvableToPType(propType))
+      return ptype.properties.every(({ name, ptype }) =>
+        requestInstanceBuilder(this.memberAccess(name, this.sourceLocation))?.resolvableToPType(ptype),
+      )
     }
     return false
   }

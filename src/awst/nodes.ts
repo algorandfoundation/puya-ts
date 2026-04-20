@@ -558,20 +558,6 @@ export class InnerTransactionField extends Expression {
     return visitor.visitInnerTransactionField(this)
   }
 }
-export class SetInnerTransactionFields extends Expression {
-  constructor(props: Props<SetInnerTransactionFields>) {
-    super(props)
-    this.itxns = props.itxns
-    this.startWithBegin = props.startWithBegin
-    this.wtype = props.wtype
-  }
-  readonly itxns: Array<Expression>
-  readonly startWithBegin: boolean
-  readonly wtype: wtypes.WType
-  accept<T>(visitor: ExpressionVisitor<T>): T {
-    return visitor.visitSetInnerTransactionFields(this)
-  }
-}
 export class SubmitInnerTransaction extends Expression {
   constructor(props: Props<SubmitInnerTransaction>) {
     super(props)
@@ -687,16 +673,6 @@ export class MapPrefixedKeyExpression extends Expression {
   readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitMapPrefixedKeyExpression(this)
-  }
-}
-export class BoxPrefixedKeyExpression extends MapPrefixedKeyExpression {
-  constructor(props: Props<BoxPrefixedKeyExpression>) {
-    super(props)
-    this.wtype = props.wtype
-  }
-  readonly wtype: wtypes.WType
-  accept<T>(visitor: ExpressionVisitor<T>): T {
-    return visitor.visitBoxPrefixedKeyExpression(this)
   }
 }
 export class BoxValueExpression extends Expression {
@@ -1668,7 +1644,6 @@ export const concreteNodes = {
   namedTupleExpression: NamedTupleExpression,
   varExpression: VarExpression,
   innerTransactionField: InnerTransactionField,
-  setInnerTransactionFields: SetInnerTransactionFields,
   submitInnerTransaction: SubmitInnerTransaction,
   fieldExpression: FieldExpression,
   indexExpression: IndexExpression,
@@ -1677,7 +1652,6 @@ export const concreteNodes = {
   appStateExpression: AppStateExpression,
   appAccountStateExpression: AppAccountStateExpression,
   mapPrefixedKeyExpression: MapPrefixedKeyExpression,
-  boxPrefixedKeyExpression: BoxPrefixedKeyExpression,
   boxValueExpression: BoxValueExpression,
   singleEvaluation: SingleEvaluation,
   reinterpretCast: ReinterpretCast,
@@ -1787,7 +1761,6 @@ export interface ExpressionVisitor<T> {
   visitNamedTupleExpression(expression: NamedTupleExpression): T
   visitVarExpression(expression: VarExpression): T
   visitInnerTransactionField(expression: InnerTransactionField): T
-  visitSetInnerTransactionFields(expression: SetInnerTransactionFields): T
   visitSubmitInnerTransaction(expression: SubmitInnerTransaction): T
   visitFieldExpression(expression: FieldExpression): T
   visitIndexExpression(expression: IndexExpression): T
@@ -1796,7 +1769,6 @@ export interface ExpressionVisitor<T> {
   visitAppStateExpression(expression: AppStateExpression): T
   visitAppAccountStateExpression(expression: AppAccountStateExpression): T
   visitMapPrefixedKeyExpression(expression: MapPrefixedKeyExpression): T
-  visitBoxPrefixedKeyExpression(expression: BoxPrefixedKeyExpression): T
   visitBoxValueExpression(expression: BoxValueExpression): T
   visitSingleEvaluation(expression: SingleEvaluation): T
   visitReinterpretCast(expression: ReinterpretCast): T

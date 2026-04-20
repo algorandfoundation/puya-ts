@@ -19,18 +19,18 @@ class SpreadablePropertiesVisitor extends DefaultVisitor<ReadonlyArray<[string, 
   }
 
   visitImmutableObjectPType(ptype: ImmutableObjectPType): ReadonlyArray<[string, PType]> {
-    return ptype.orderedProperties()
+    return ptype.properties.map(({ name, ptype }) => [name, ptype])
   }
 
   visitObjectLiteralPType(ptype: ObjectLiteralPType): ReadonlyArray<[string, PType]> {
-    return ptype.orderedProperties()
+    return ptype.properties.map(({ name, ptype }) => [name, ptype])
   }
 
   visitARC4StructType(ptype: ARC4StructType): ReadonlyArray<[string, PType]> {
-    return Object.entries(ptype.fields)
+    return ptype.fields.map(({ name, ptype }) => [name, ptype])
   }
 
   visitMutableObjectPType(ptype: MutableObjectPType): ReadonlyArray<[string, PType]> {
-    return ptype.orderedProperties()
+    return ptype.properties.map(({ name, ptype }) => [name, ptype])
   }
 }

@@ -60,28 +60,40 @@ export class IndexTypeVisitor extends DefaultVisitor<PType | undefined> {
 
   visitARC4StructType(ptype: ARC4StructType): PType | undefined {
     if (typeof this.index === 'string') {
-      return ptype.fields[this.index]
+      const field = ptype.getProperty(this.index)
+      if (field !== undefined) {
+        return field.ptype
+      }
     }
     return super.visitARC4StructType(ptype)
   }
 
   visitImmutableObjectPType(ptype: ImmutableObjectPType): PType | undefined {
     if (typeof this.index === 'string') {
-      return ptype.properties[this.index]
+      const field = ptype.getProperty(this.index)
+      if (field !== undefined) {
+        return field.ptype
+      }
     }
     return super.visitImmutableObjectPType(ptype)
   }
 
   visitMutableObjectPType(ptype: MutableObjectPType): PType | undefined {
     if (typeof this.index === 'string') {
-      return ptype.properties[this.index]
+      const field = ptype.getProperty(this.index)
+      if (field !== undefined) {
+        return field.ptype
+      }
     }
     return super.visitMutableObjectPType(ptype)
   }
 
   visitObjectLiteralPType(ptype: ObjectLiteralPType): PType | undefined {
     if (typeof this.index === 'string') {
-      return ptype.properties[this.index]
+      const field = ptype.getProperty(this.index)
+      if (field !== undefined) {
+        return field.ptype
+      }
     }
     return super.visitObjectLiteralPType(ptype)
   }

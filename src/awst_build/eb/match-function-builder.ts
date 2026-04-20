@@ -46,15 +46,13 @@ export class MatchFunctionBuilder extends NodeBuilder {
 
 export function buildComparisons(subject: NodeBuilder, tests: InstanceBuilder, functionName: string, sourceLocation: SourceLocation) {
   if (instanceOfAny(tests.ptype, ImmutableObjectPType, MutableObjectPType, ObjectLiteralPType)) {
-    const condition = tests.ptype
-      .orderedProperties()
-      .reduce((acc: Expression | undefined, [propName, propType]): Expression | undefined => {
-        const subjectProperty = requireInstanceBuilder(subject.memberAccess(propName, sourceLocation))
-        const testProperty = requireInstanceBuilder(tests.memberAccess(propName, sourceLocation))
+    const condition = tests.ptype.properties.reduce((acc: Expression | undefined, { name }): Expression | undefined => {
+      const subjectProperty = requireInstanceBuilder(subject.memberAccess(name, sourceLocation))
+      const testProperty = requireInstanceBuilder(tests.memberAccess(name, sourceLocation))
 
-        const comparison = buildComparison(subjectProperty, testProperty, functionName, sourceLocation)
-        return combineConditions(acc, comparison.resolve(), sourceLocation)
-      }, undefined)
+      const comparison = buildComparison(subjectProperty, testProperty, functionName, sourceLocation)
+      return combineConditions(acc, comparison.resolve(), sourceLocation)
+    }, undefined)
     codeInvariant(condition, `${functionName} must have at least 1 condition`, sourceLocation)
     return instanceEb(condition, boolPType)
   } else if (isStaticallyIterable(tests)) {

@@ -34,8 +34,8 @@ export class StructClassBuilder extends ClassBuilder {
     })
     const initialSingle = initialValues.singleEvaluation()
 
-    const structFields = Object.entries(this.ptype.instanceType.fields).map(
-      ([p, t]) => [p, requireExpressionOfType(initialSingle.memberAccess(p, sourceLocation), t)] as const,
+    const structFields = this.ptype.instanceType.fields.map(
+      ({ name, ptype }) => [name, requireExpressionOfType(initialSingle.memberAccess(name, sourceLocation), ptype)] as const,
     )
     return new StructExpressionBuilder(
       nodeFactory.newStruct({
@@ -55,20 +55,20 @@ export class StructExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<AR
   }
 
   hasProperty(name: string): boolean {
-    return name in this.ptype.fields || super.hasProperty(name)
+    return this.ptype.fields.some(({ name: propName }) => propName === name) || super.hasProperty(name)
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
-    if (name in this.ptype.fields) {
-      const fieldType = this.ptype.fields[name]
+    const field = this.ptype.getProperty(name)
+    if (field !== undefined) {
       return instanceEb(
         nodeFactory.fieldExpression({
           name,
           sourceLocation,
-          wtype: fieldType.wtype,
+          wtype: field.ptype.wtype,
           base: this._expr,
         }),
-        fieldType,
+        field.ptype,
       )
     }
     return super.memberAccess(name, sourceLocation)
@@ -78,12 +78,10 @@ export class StructExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<AR
     if (ptype.equals(this.ptype)) return true
 
     if (ptype instanceof ImmutableObjectPType) {
-      return ptype
-        .orderedProperties()
-        .every(
-          ([prop, propType]) =>
-            this.hasProperty(prop) && requestInstanceBuilder(this.memberAccess(prop, this.sourceLocation))?.resolvableToPType(propType),
-        )
+      return ptype.properties.every(
+        ({ name, ptype }) =>
+          this.hasProperty(name) && requestInstanceBuilder(this.memberAccess(name, this.sourceLocation))?.resolvableToPType(ptype),
+      )
     }
     return false
   }
@@ -97,9 +95,7 @@ export class StructExpressionBuilder extends Arc4EncodedBaseExpressionBuilder<AR
       const single = this.singleEvaluation()
       return instanceEb(
         nodeFactory.tupleExpression({
-          items: ptype
-            .orderedProperties()
-            .map(([prop, propType]) => requireExpressionOfType(single.memberAccess(prop, this.sourceLocation), propType)),
+          items: ptype.properties.map(({ name, ptype }) => requireExpressionOfType(single.memberAccess(name, this.sourceLocation), ptype)),
           sourceLocation: this.sourceLocation,
           wtype: ptype.wtype,
         }),

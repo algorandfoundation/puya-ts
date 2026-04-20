@@ -7,7 +7,7 @@ import type { DeliberateAny } from '../typescript-helpers'
 import { codeInvariant, extractModuleName, hasFlags, instanceOfAny, intersectsFlags, invariant, isIn } from '../util'
 import type { AbsolutePath } from '../util/absolute-path'
 import { getNodeName } from '../visitor/syntax-names'
-import type { AppStorageType, PType } from './ptypes'
+import type { AppStorageType, PType, PTypeField } from './ptypes'
 import {
   anyGtxnType,
   anyPType,
@@ -52,6 +52,7 @@ import {
   unknownPType,
   voidPType,
 } from './ptypes'
+import type { ARC4StructField } from './ptypes/arc4-types'
 import { ARC4EncodedType, arc4StructBaseType, ARC4StructClass, ARC4StructType, UintNType } from './ptypes/arc4-types'
 import { SymbolName } from './symbol-name'
 import { typeRegistry } from './type-registry'
@@ -354,7 +355,7 @@ export class TypeResolver {
 
   private reflectObjectType(tsType: ts.Type, sourceLocation: SourceLocation): ImmutableObjectPType | MutableObjectPType {
     const typeAlias = tsType.aliasSymbol ? this.getSymbolFullName(tsType.aliasSymbol, sourceLocation) : undefined
-    const properties: Record<string, PType> = {}
+    const properties: PTypeField[] = []
 
     let expectReadonly: boolean | undefined = undefined
     for (const prop of tsType.getProperties()) {
@@ -363,6 +364,7 @@ export class TypeResolver {
         // TODO: Check AST nodes to confirm?
         continue
       }
+      const description = (prop.valueDeclaration && tryGetDeclarationDescription(prop.valueDeclaration)) || null
       const type = this.checker.getTypeOfSymbol(prop)
       const propLocation = this.getLocationOfSymbol(prop) ?? sourceLocation
       const readonly = isReadonlyPropertySymbol(prop)
@@ -379,7 +381,7 @@ export class TypeResolver {
       } else if (ptype.singleton) {
         logger.error(propLocation, `Invalid object property type. ${ptype} is not supported`)
       } else {
-        properties[prop.name] = ptype
+        properties.push({ name: prop.name, ptype, description })
       }
     }
     if (expectReadonly) {
@@ -443,14 +445,15 @@ export class TypeResolver {
     sourceLocation: SourceLocation,
   ): ARC4StructType {
     const ignoredProps = ['bytes', 'equals', 'native', 'copy', Constants.symbolNames.constructorMethodName]
-    const fields: Record<string, ARC4EncodedType> = {}
+    const fields: ARC4StructField[] = []
     for (const prop of tsType.getProperties()) {
       if (isIn(prop.name, ignoredProps)) continue
       const type = this.checker.getTypeOfSymbol(prop)
       const propLocation = this.getLocationOfSymbol(prop) ?? sourceLocation
       const ptype = this.resolveType(type, propLocation)
       if (ptype instanceof ARC4EncodedType) {
-        fields[prop.name] = ptype
+        const description = (prop.valueDeclaration && tryGetDeclarationDescription(prop.valueDeclaration)) || null
+        fields.push({ name: prop.name, ptype, description })
       } else {
         // Ignore
       }
@@ -624,8 +627,11 @@ function isReadonlyPropertySymbol(prop: ts.Symbol): boolean {
 
 function tryGetTypeDescription(tsType: ts.Type): string | undefined {
   const dec = tsType.aliasSymbol?.valueDeclaration ?? tsType.symbol.valueDeclaration
-  if (!dec) return undefined
-  const docs = ts.getJSDocCommentsAndTags(dec)
+  return dec ? tryGetDeclarationDescription(dec) : undefined
+}
+
+function tryGetDeclarationDescription(tsDecl: ts.Declaration): string | undefined {
+  const docs = ts.getJSDocCommentsAndTags(tsDecl)
   for (const doc of docs) {
     if (ts.isJSDoc(doc)) {
       return ts.getTextOfJSDocComment(doc.comment)

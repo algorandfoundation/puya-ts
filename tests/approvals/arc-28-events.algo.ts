@@ -4,11 +4,18 @@ import type { DynamicBytes, Uint8 } from '@algorandfoundation/algorand-typescrip
 import { Struct } from '@algorandfoundation/algorand-typescript/arc4'
 
 type Swapped = {
+  /** The `a` field (native) */
   a: Uint8
+  /** The `b` field (native) */
   b: Uint8
 }
 
-class SwappedArc4 extends Struct<{ a: Uint8; b: Uint8 }> {}
+class SwappedArc4 extends Struct<{
+  /** The `a` field (ARC4) */
+  a: Uint8
+  /** The `b` field (ARC4) */
+  b: Uint8
+}> {}
 
 class EventEmitter extends Contract {
   emitSwapped(a: Uint8, b: Uint8) {
