@@ -15,6 +15,7 @@ permissions:
   issues: write
   pull-requests: write
   checks: write
+  id-token: write
 
 jobs:
   ci:
@@ -29,27 +30,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate bot token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v3
         id: app_token
         with:
           app-id: ${{ secrets.BOT_ID }}
           private-key: ${{ secrets.BOT_SK }}
 
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ steps.app_token.outputs.token }}
 
-      - name: Use Node.js 22.x
-        uses: actions/setup-node@v4
+      - name: Use Node.js 24.x
+        uses: actions/setup-node@v6
         with:
-          node-version: 22.x
+          node-version: 24.x
 
       - run: npm ci --ignore-scripts
 
       - name: Download package artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: '*-node-22.x'
           path: artifacts
@@ -73,21 +74,21 @@ jobs:
           npm pkg set version=$newVersion
 
       - name: Publish @algorandfoundation/algorand-typescript
-        uses: JS-DevTools/npm-publish@v3
+        uses: JS-DevTools/npm-publish@v4
         id: publish-algo-ts
         with:
-          token: ${{ secrets.NPM_TOKEN }}
           package: artifacts/algo-ts/package.json
           access: 'public'
+          provenance: true
           tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'beta' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
 
       - name: Publish @algorandfoundation/puya-ts
-        uses: JS-DevTools/npm-publish@v3
+        uses: JS-DevTools/npm-publish@v4
         id: publish-puya-ts
         with:
-          token: ${{ secrets.NPM_TOKEN }}
           package: artifacts/puya-ts/package.json
           access: 'public'
+          provenance: true
           tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'beta' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
 
   publish-docs:
