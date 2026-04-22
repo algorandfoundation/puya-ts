@@ -12,10 +12,38 @@ permissions:
 
 jobs:
   ci-all:
-    name: "Build and test all packages"
+    name: 'Build and test all packages'
     uses: ./.github/workflows/ci-all.yml
     with:
       run-commit-lint: true
+
+  check-puya:
+    name: 'Check puya dependency'
+    needs: ci-all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Use Node.js 24.x
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+
+      - run: npm ci --ignore-scripts
+
+      - name: Download puya-ts artifact
+        uses: actions/download-artifact@v8
+        with:
+          pattern: 'puya-ts-node-22.x'
+          path: artifacts/puya-ts
+
+      - name: Check puya
+        run: |
+          cd artifacts/puya-ts
+          node cli.mjs --version | grep -E "^puya [0-9]+\.[0-9]+\.[0-9]+$" || exit 1
 
   check-docs:
     runs-on: ubuntu-latest
