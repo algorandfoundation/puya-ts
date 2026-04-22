@@ -18,8 +18,26 @@ permissions:
   id-token: write
 
 jobs:
+  check-puya:
+    name: 'Check puya dependency'
+    if: github.ref_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with: { fetch-depth: 1 }
+      - name: Ensure targeted puya is a production release
+        run: |
+          version=$(grep -oP "targetedPuyaVersion\s*:\s*['\"]\K[^'\"]+" src/constants.ts)
+          echo "Targeted puya version: $version"
+          if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::targetedPuyaVersion '$version' is a pre-release; production releases require a stable puya version."
+            exit 1
+          fi
+
   ci:
     name: Build and test
+    needs: check-puya
+    if: ${{ !failure() && !cancelled() }}
     uses: ./.github/workflows/ci-all.yml
     with:
       run-commit-lint: false
