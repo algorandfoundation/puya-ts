@@ -71,7 +71,7 @@ export class ToCodeVisitor
 
     const prefix = expression.prefix ? `, prefix=${expression.prefix}` : ''
 
-    return `compile(${expression.contract.id}${overrides}${prefix}${templateVars}`
+    return `compile(${expression.contract.id}${overrides}${prefix}${templateVars})`
   }
   visitCompiledLogicSig(expression: nodes.CompiledLogicSig): string {
     let templateVars = Array.from(expression.templateVariables.entries())
@@ -83,7 +83,7 @@ export class ToCodeVisitor
 
     const prefix = expression.prefix ? `, prefix=${expression.prefix}` : ''
 
-    return `compile(${expression.logicSig.id}${prefix}${templateVars}`
+    return `compile(${expression.logicSig.id}${prefix}${templateVars})`
   }
   visitLoopExit(statement: nodes.LoopExit): string[] {
     return ['break']
