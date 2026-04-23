@@ -117,7 +117,7 @@ function ptypesAreEqual(left: PType, right: PType): boolean {
   return compareProperties(left, right)
 }
 
-const ignoredProperties = new Set(['sourceLocation', 'wtype'])
+const ignoredProperties = new Set(['sourceLocation', 'wtype', 'description'])
 
 function notIgnored(key: string): boolean {
   return !ignoredProperties.has(key)
