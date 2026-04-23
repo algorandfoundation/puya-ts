@@ -12,7 +12,7 @@ contract HelloFactory
   
   test_compile_contract(): void
   {
-    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::Hello
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::Hello)
     app: application = #{ itxn: submit_txn(abi_call(signature={name="helloCreate",args=(string),result=void}, args=("hello"), fields={Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages})) }.itxn.CreatedApplicationID
     #[result]: readonly [string] = #[($0 = #{ itxn: ($1 = submit_txn(abi_call(signature={name="greet",args=(string),result=string}, args=("world"), fields={Fee=0, TypeEnum=appl, ApplicationID=app, OnCompletion=0}))), returnValue: ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($2 = $1.LastLog)), extract<0, 4>($2) == 0x151f7c75], comment=Bytes has valid prefix), wtype=string, validate=true) }).returnValue]
     assert(result == "hello world")
@@ -28,7 +28,7 @@ contract HelloFactory
   
   test_compile_contract_with_template(): void
   {
-    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::HelloTemplate, GREETING="hey"
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::HelloTemplate, GREETING="hey")
     helloApp: application = #{ itxn: submit_txn(abi_call(signature={name="create",args=(),result=void}, args=(), fields={Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages})) }.itxn.CreatedApplicationID
     txn1: ReadonlyObjectA16C4F1D{ itxn: inner_transaction_appl, returnValue: string } = #{ itxn: ($10 = #{ itxn: ($11 = submit_txn(abi_call(signature={name="greet",args=(string),result=string}, args=("world"), fields={Fee=0, TypeEnum=appl, ApplicationID=helloApp, OnCompletion=0}))), returnValue: ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($12 = $11.LastLog)), extract<0, 4>($12) == 0x151f7c75], comment=Bytes has valid prefix), wtype=string, validate=true) }).itxn, returnValue: $10.returnValue }
     assert(txn1.returnValue == "hey world")
@@ -40,7 +40,7 @@ contract HelloFactory
   
   test_compile_contract_with_template_and_custom_prefix(): void
   {
-    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix, prefix=PRFX_, GREETING="bonjour"
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix, prefix=PRFX_, GREETING="bonjour")
     helloApp: application = #{ itxn: submit_txn(abi_call(signature={name="create",args=(),result=void}, args=(), fields={Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages})) }.itxn.CreatedApplicationID
     #[result]: readonly [string] = #[($17 = #{ itxn: ($18 = submit_txn(abi_call(signature={name="greet",args=(string),result=string}, args=("world"), fields={Fee=0, TypeEnum=appl, ApplicationID=helloApp, OnCompletion=0}))), returnValue: ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($19 = $18.LastLog)), extract<0, 4>($19) == 0x151f7c75], comment=Bytes has valid prefix), wtype=string, validate=true) }).returnValue]
     assert(result == "bonjour world")
@@ -49,7 +49,7 @@ contract HelloFactory
   
   test_compile_contract_large(): void
   {
-    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::LargeProgram
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::LargeProgram)
     largeApp: application = submit_txn(abi_call(signature=null, args=(), fields={Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages})).CreatedApplicationID
     #[result]: readonly [uint64] = #[($20 = #{ itxn: ($21 = submit_txn(abi_call(signature={name="getBigBytesLength",args=(),result=uint64}, args=(), fields={Fee=0, TypeEnum=appl, ApplicationID=largeApp, OnCompletion=0}))), returnValue: ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($22 = $21.LastLog)), extract<0, 4>($22) == 0x151f7c75], comment=Bytes has valid prefix), wtype=uint64, validate=true) }).returnValue]
     assert(result == 4096)
@@ -58,7 +58,7 @@ contract HelloFactory
   
   test_call_contract_with_transactions(): void
   {
-    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::ReceivesTxns
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::ReceivesTxns)
     appId: application = submit_txn(abi_call(signature=null, args=(), fields={Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages})).CreatedApplicationID
     assetCreate: inner_transaction_fields_acfg = create_inner_transaction(Fee=0, TypeEnum=3, ConfigAssetTotal=1, ConfigAssetUnitName="T", ConfigAssetName="TEST")
     #{ itxn: ($23 = submit_txn(abi_call(signature={name="receivesAnyTxn",args=(group_transaction),result=uint64}, args=(assetCreate), fields={Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0}))), returnValue: ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($24 = $23.LastLog)), extract<0, 4>($24) == 0x151f7c75], comment=Bytes has valid prefix), wtype=uint64, validate=true) }
@@ -71,7 +71,7 @@ contract HelloFactory
   
   test_call_contract_with_reference_types(): void
   {
-    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::ReceivesReferenceTypes)
     appId: application = submit_txn(abi_call(signature=null, args=(), fields={Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compiled.approvalProgram, ClearStateProgramPages=compiled.clearStateProgram, GlobalNumUint=compiled.globalUints, GlobalNumByteSlice=compiled.globalBytes, LocalNumByteSlice=compiled.localBytes, LocalNumUint=compiled.localUints, ExtraProgramPages=compiled.extraProgramPages})).CreatedApplicationID
     asset: asset = submit_txn(create_inner_transaction(Fee=0, TypeEnum=3, ConfigAssetTotal=1, ConfigAssetUnitName="T", ConfigAssetName="TEST")).CreatedAssetID
     result: ReadonlyObject90CBA08A{ itxn: inner_transaction_appl } = #{ itxn: ($29 = #{ itxn: submit_txn(abi_call(signature={name="receivesReferenceTypes",args=(application,account,asset),result=void}, args=(global<CurrentApplicationID>(), txn<Sender>(), asset), fields={Fee=0, TypeEnum=appl, ApplicationID=appId, OnCompletion=0})) }).itxn }

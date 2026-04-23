@@ -29,7 +29,7 @@ contract ItxnComposeAlgo
   
   conditionalBegin(count: uint64): void
   {
-    hello: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::Hello
+    hello: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::Hello)
     appId: application = #{ itxn: submit_txn(abi_call(signature={name="helloCreate",args=(string),result=void}, args=("Hi"), fields={Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=hello.approvalProgram, ClearStateProgramPages=hello.clearStateProgram, GlobalNumUint=hello.globalUints, GlobalNumByteSlice=hello.globalBytes, LocalNumByteSlice=hello.localBytes, LocalNumUint=hello.localUints, ExtraProgramPages=hello.extraProgramPages})) }.itxn.CreatedApplicationID
     for (temp in urange(0, count, 1)) {
       i: uint64 = copy(temp)

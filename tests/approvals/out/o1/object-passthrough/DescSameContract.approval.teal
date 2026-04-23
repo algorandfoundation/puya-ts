@@ -1,0 +1,45 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/object-passthrough.algo.ts:25
+    // export class DescSameContract extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0x0ac07198 // method "forward((uint64))(uint64)"
+    txna ApplicationArgs 0
+    match main_forward_route@3
+    err
+
+main_forward_route@3:
+    // tests/approvals/object-passthrough.algo.ts:26
+    // @abimethod({ validateEncoding: 'unsafe-disabled' })
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert
+    b forward
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/object-passthrough.algo.ts:25
+    // export class DescSameContract extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// tests/approvals/object-passthrough.algo.ts::DescSameContract.forward[routing]() -> void:
+forward:
+    // tests/approvals/object-passthrough.algo.ts:26
+    // @abimethod({ validateEncoding: 'unsafe-disabled' })
+    pushbytes 0x151f7c75
+    txna ApplicationArgs 1
+    concat
+    log
+    pushint 1
+    return
