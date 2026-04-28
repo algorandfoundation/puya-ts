@@ -1,17 +1,8 @@
-import { FlatCompat } from '@eslint/eslintrc'
-import js from '@eslint/js'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+import eslint from '@eslint/js'
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
+import tseslint from 'typescript-eslint'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-})
-
-export default [
+export default tseslint.config(
   {
     ignores: [
       '*.cjs',
@@ -29,13 +20,19 @@ export default [
       'tests/code-fix/fixed/**',
     ],
   },
-  ...compat.extends('@makerx/eslint-config'),
+  eslint.configs.recommended,
+  tseslint.configs.eslintRecommended,
+  tseslint.configs.recommended,
+  eslintPluginPrettierRecommended,
   {
     rules: {
+      'prettier/prettier': 'warn',
+      'no-console': 'warn',
+      '@typescript-eslint/no-unused-expressions': 'off',
+      'prefer-template': 'error',
       '@typescript-eslint/no-for-in-array': 'error',
       eqeqeq: 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
-
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
@@ -61,4 +58,4 @@ export default [
       reportUnusedDisableDirectives: 'off',
     },
   },
-]
+)
