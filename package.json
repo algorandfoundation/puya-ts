@@ -28,7 +28,7 @@
     "build:1-lint": "eslint --max-warnings 0",
     "build:2-check-types": "tsc -p tsconfig.json",
     "build:3-build": "rollup -c --configPlugin typescript",
-    "build:4-copy-pkg-json": "tstk copy-package-json -c",
+    "build:4-copy-pkg-json": "tsx scripts/copy-package-json.ts",
     "build:5-copy-readme": "shx cp ./README.md ./dist",
     "test": "vitest run",
     "test:approvals": "vitest run tests/approvals.spec.ts",
@@ -53,9 +53,7 @@
     "@commitlint/cli": "^20.2.0",
     "@commitlint/config-conventional": "^20.2.0",
     "@dotenvx/dotenvx": "^1.51.2",
-    "@makerx/eslint-config": "4.2.0",
-    "@makerx/prettier-config": "2.0.1",
-    "@makerx/ts-toolkit": "^4.0.0-beta.24",
+    "@eslint/js": "^9.39.1",
     "@rollup/plugin-commonjs": "29.0.0",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-node-resolve": "16.0.3",
@@ -81,6 +79,7 @@
     "semantic-release": "^25.0.3",
     "shx": "^0.4.0",
     "tsx": "4.21.0",
+    "typescript-eslint": "^8.49.0",
     "vitest": "4.0.15"
   },
   "dependencies": {
