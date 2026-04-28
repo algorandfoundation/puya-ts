@@ -16,6 +16,7 @@ permissions:
   pull-requests: write
   checks: write
   id-token: write
+  pages: write
 
 jobs:
   ci:
@@ -36,7 +37,7 @@ jobs:
           app-id: ${{ secrets.BOT_ID }}
           private-key: ${{ secrets.BOT_SK }}
 
-      - name: Clone repository
+      - name: Checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
@@ -95,8 +96,4 @@ jobs:
     name: Publish docs
     needs: release
     if: github.ref_name == 'release'
-    uses: ./.github/workflows/gh-pages.yml
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
+    uses: algorandfoundation/algokit-shared-config/.github/workflows/publish-docs.yml@chore/node-npm
