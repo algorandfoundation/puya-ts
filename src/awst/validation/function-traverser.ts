@@ -3,7 +3,6 @@ import type {
   AddressConstant,
   AppAccountStateExpression,
   AppStateExpression,
-  AppStorageDefinition,
   ARC4Decode,
   ARC4Encode,
   ARC4FromBytes,
@@ -33,9 +32,6 @@ import type {
   CompiledContract,
   CompiledLogicSig,
   ConditionalExpression,
-  Contract,
-  ContractMemberNodeVisitor,
-  ContractMethod,
   ConvertArray,
   Copy,
   CreateInnerTransaction,
@@ -55,7 +51,6 @@ import type {
   IntegerConstant,
   IntersectionSliceExpression,
   IntrinsicCall,
-  LogicSignature,
   LoopContinue,
   LoopExit,
   MapPrefixedKeyExpression,
@@ -70,7 +65,6 @@ import type {
   ReinterpretCast,
   ReturnStatement,
   Reversed,
-  RootNodeVisitor,
   SingleEvaluation,
   SizeOf,
   SliceExpression,
@@ -82,7 +76,6 @@ import type {
   StatementVisitor,
   StringConstant,
   SubmitInnerTransaction,
-  Subroutine,
   SubroutineCallExpression,
   Switch,
   TemplateVar,
@@ -500,27 +493,4 @@ export class FunctionTraverser implements ExpressionVisitor<void>, StatementVisi
   }
 
   visitARC4Router(expression: ARC4Router): void {}
-}
-
-export class AwstTraverser extends FunctionTraverser implements RootNodeVisitor<void>, ContractMemberNodeVisitor<void> {
-  visitContractMethod(contractMemberNode: ContractMethod): void {
-    contractMemberNode.body.accept(this)
-  }
-  visitAppStorageDefinition(contractMemberNode: AppStorageDefinition): void {
-    contractMemberNode.key.accept(this)
-  }
-  visitSubroutine(rootNode: Subroutine): void {
-    rootNode.body.accept(this)
-  }
-  visitLogicSignature(rootNode: LogicSignature): void {
-    rootNode.program.accept(this)
-  }
-  visitContract(rootNode: Contract): void {
-    for (const s of rootNode.appState) {
-      s.accept(this)
-    }
-    for (const m of rootNode.methods) {
-      m.accept(this)
-    }
-  }
 }

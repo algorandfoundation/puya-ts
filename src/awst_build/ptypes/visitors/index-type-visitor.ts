@@ -16,9 +16,6 @@ import type {
 } from '../index'
 import { DefaultVisitor } from './default-visitor'
 
-export function hasProperty(ptype: PType, property: string, sourceLocation: SourceLocation) {
-  return Boolean(getIndexType(ptype, property, sourceLocation))
-}
 export function hasPropertyOfType(ptype: PType, property: string, propType: PType, sourceLocation: SourceLocation) {
   return Boolean(getIndexType(ptype, property, sourceLocation)?.equals(propType))
 }
