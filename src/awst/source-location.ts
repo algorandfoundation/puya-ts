@@ -100,21 +100,6 @@ export class SourceLocation<TNode extends ts.Node | undefined = ts.Node | undefi
     })
   }
 
-  static fromTextRange(sourceFile: ts.SourceFile, textRange: ts.TextRange, programDirectory: AbsolutePath): SourceLocation {
-    const startLoc = sourceFile.getLineAndCharacterOfPosition(textRange.pos)
-    const endLoc = sourceFile.getLineAndCharacterOfPosition(textRange.end)
-
-    return new SourceLocation({
-      file: AbsolutePath.resolve({ path: sourceFile.fileName, workingDirectory: programDirectory }),
-      line: startLoc.line + 1,
-      endLine: endLoc.line + 1,
-      column: startLoc.character,
-      endColumn: endLoc.character,
-      scope: 'range',
-      node: undefined,
-    })
-  }
-
   static fromDiagnostic(diagnostic: ts.DiagnosticWithLocation, programDirectory: AbsolutePath): SourceLocation {
     const startLoc = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start)
 
