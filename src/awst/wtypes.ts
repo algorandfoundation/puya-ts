@@ -120,25 +120,16 @@ export namespace wtypes {
     }
   }
 
-  export abstract class NativeArray extends WType {
+  export class ReferenceArray extends WType {
     readonly elementType: WType
     readonly sourceLocation: SourceLocation | null
-    protected constructor(props: { name: string; itemType: WType; sourceLocation?: SourceLocation }) {
-      super({
-        name: props.name,
-      })
-      this.elementType = props.itemType
-      this.sourceLocation = props.sourceLocation ?? null
-    }
-  }
-
-  export class ReferenceArray extends NativeArray {
     readonly immutable = false
     constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
       super({
         name: `ref_array<${props.itemType.name}>`,
-        ...props,
       })
+      this.elementType = props.itemType
+      this.sourceLocation = props.sourceLocation ?? null
     }
   }
 

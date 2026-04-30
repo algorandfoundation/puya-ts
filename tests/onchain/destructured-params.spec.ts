@@ -1,5 +1,6 @@
 import { describe, expect } from 'vitest'
-import { bigIntToUint8Array, hexToUint8Array, joinUint8Arrays, utf8ToUint8Array } from '../../src/util'
+import { bigIntToUint8Array, hexToUint8Array, utf8ToUint8Array } from '../../src/util'
+import { joinUint8Arrays } from '../util'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('destructed params', () => {
