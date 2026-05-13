@@ -251,7 +251,7 @@ export class FreeIntrinsicOpBuilder extends IntrinsicOpBuilderBase {
   }
 }
 
-export class GroupedIntrinsicOpBuilder extends IntrinsicOpBuilderBase {
+class GroupedIntrinsicOpBuilder extends IntrinsicOpBuilderBase {
   constructor(sourceLocation: SourceLocation, opMapping: IntrinsicOpMapping) {
     super(sourceLocation, opMapping)
   }

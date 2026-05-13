@@ -45,7 +45,7 @@ export type LanguageServerOptions = {
 
 const PACKAGE_VERSION = packageVersion()
 
-export class PuyaLanguageServer {
+class PuyaLanguageServer {
   readonly documents = new lsp.TextDocuments(TextDocument)
   readonly triggers = new CompileTriggerQueue()
   readonly workspaceFolders: lsp.URI[] = []

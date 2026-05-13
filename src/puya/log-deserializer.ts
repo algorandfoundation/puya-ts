@@ -55,7 +55,7 @@ function parsePuyaLog(x: unknown) {
   }
 }
 
-export function deserializePuyaLog(puyaLog: unknown): LogEvent {
+function deserializePuyaLog(puyaLog: unknown): LogEvent {
   const log = parsePuyaLog(puyaLog)
 
   const sourceLocation = log.location?.file

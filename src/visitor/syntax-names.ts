@@ -381,7 +381,7 @@ export type ModuleStatements =
   | ts.TypeAliasDeclaration
   | ts.InterfaceDeclaration
 
-export type PrimaryExpressions =
+type PrimaryExpressions =
   | LiteralExpressions
   | ts.TrueLiteral
   | ts.FalseLiteral
@@ -399,14 +399,14 @@ export type PrimaryExpressions =
   | ts.TemplateExpression
   | ts.ThisExpression
 
-export type MemberExpressions =
+type MemberExpressions =
   | PrimaryExpressions
   | ts.ElementAccessExpression
   | ts.ExpressionWithTypeArguments
   | ts.PropertyAccessExpression
   | ts.TaggedTemplateExpression
 
-export type LeftHandSideExpression = ts.CallExpression | MemberExpressions | ts.NonNullExpression
+type LeftHandSideExpression = ts.CallExpression | MemberExpressions | ts.NonNullExpression
 
 /**
  * All concrete types which extends ts.ClassElement
@@ -450,7 +450,7 @@ export type Statements =
 /**
  * All concrete types which extends ts.LiteralExpression
  */
-export type LiteralExpressions =
+type LiteralExpressions =
   | ts.NumericLiteral
   | ts.BigIntLiteral
   | ts.StringLiteral

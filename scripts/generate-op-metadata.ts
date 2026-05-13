@@ -9,18 +9,18 @@ export function* emitOpMetaData(opModule: OpModule) {
 import * as ptypes from './ptypes'
 import { Expression } from '../awst/nodes'
 
-export type ImmediateArgMapping = {
+type ImmediateArgMapping = {
   name: string
   ptypes: ptypes.PType[]
 }
 
 
-export type StackArg = {
+type StackArg = {
   name: string
   ptypes: ptypes.PType[]
 }
 
-export type Signature = {
+type Signature = {
   argNames: string[]
   immediateArgs: Array<ImmediateArgMapping | bigint | string>
   stackArgs: Array<StackArg | Expression>

@@ -337,7 +337,7 @@ export function isReferableExpression(expr: awst.Expression): boolean {
   return false
 }
 
-export function requireLValue(expr: awst.Expression): awst.LValue {
+function requireLValue(expr: awst.Expression): awst.LValue {
   const lValueNodes = [
     awst.VarExpression,
     awst.FieldExpression,

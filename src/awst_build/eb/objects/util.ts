@@ -5,7 +5,7 @@ import { MutableObjectPType } from '../../ptypes'
 import type { InstanceBuilder } from '../index'
 import { requireExpressionOfType } from '../util'
 
-export function createStruct(ptype: MutableObjectPType, valueProvider: InstanceBuilder) {
+function createStruct(ptype: MutableObjectPType, valueProvider: InstanceBuilder) {
   return nodeFactory.newStruct({
     wtype: ptype.wtype,
     sourceLocation: valueProvider.sourceLocation,
@@ -18,7 +18,7 @@ export function createStruct(ptype: MutableObjectPType, valueProvider: InstanceB
   })
 }
 
-export function createNamedTuple(ptype: ImmutableObjectPType | ObjectLiteralPType, valueProvider: InstanceBuilder) {
+function createNamedTuple(ptype: ImmutableObjectPType | ObjectLiteralPType, valueProvider: InstanceBuilder) {
   return nodeFactory.tupleExpression({
     sourceLocation: valueProvider.sourceLocation,
     items: ptype.properties.map(({ name, ptype }) =>

@@ -275,7 +275,7 @@ export class DynamicBytesClassBuilder extends ClassBuilder {
   }
 }
 
-export abstract class ArrayExpressionBuilder<
+abstract class ArrayExpressionBuilder<
   TArrayType extends DynamicArrayType | StaticArrayType,
 > extends Arc4EncodedBaseExpressionBuilder<TArrayType> {
   iterate(): Expression {

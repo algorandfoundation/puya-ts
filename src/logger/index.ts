@@ -14,7 +14,7 @@ export enum LogLevel {
   Debug = 'debug',
   Critical = 'critical',
 }
-export const logLevelToInt = {
+const logLevelToInt = {
   // values match puya values
   [LogLevel.Critical]: 50,
   [LogLevel.Error]: 40,
