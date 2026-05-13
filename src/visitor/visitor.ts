@@ -22,17 +22,17 @@ export type Visitor<T extends { kind: ts.SyntaxKind }, TReturn> = UnionToInterse
  * will return `typeof SyntaxKind` instead of `typeof SyntaxKind.someValue` and that will break the rest of the
  * generic types here. `MapBaseType<TNode>` exists to convert these base types into a union of their concrete implementors
  */
-export type KindForNode<T extends ts.Node> = T extends { kind: infer TKind } ? TKind : never
+type KindForNode<T extends ts.Node> = T extends { kind: infer TKind } ? TKind : never
 
-export type VisitorMethod<TKind> = TKind extends keyof SyntaxKindNameType ? `visit${SyntaxKindNameType[TKind]}` : never
+type VisitorMethod<TKind> = TKind extends keyof SyntaxKindNameType ? `visit${SyntaxKindNameType[TKind]}` : never
 
-export type MethodReturnType<TMethod, TVisitor> = TMethod extends keyof TVisitor
+type MethodReturnType<TMethod, TVisitor> = TMethod extends keyof TVisitor
   ? TVisitor[TMethod] extends (...args: DeliberateAny[]) => infer TReturn
     ? TReturn
     : never
   : never
 
-export type ReturnTypeForNode<T extends ts.Node, TVisitor> = MethodReturnType<VisitorMethod<KindForNode<T>>, TVisitor>
+type ReturnTypeForNode<T extends ts.Node, TVisitor> = MethodReturnType<VisitorMethod<KindForNode<T>>, TVisitor>
 
 export const accept = <TSelf extends { context: AwstBuildContext }, T extends ts.Node>(
   visitor: TSelf,

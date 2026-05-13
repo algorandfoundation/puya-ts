@@ -216,7 +216,7 @@ class BoxMaybeFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export class BoxResizeFunctionBuilder extends FunctionBuilder {
+class BoxResizeFunctionBuilder extends FunctionBuilder {
   constructor(
     private boxValue: BoxValueExpression,
     sourceLocation: SourceLocation,
@@ -247,7 +247,7 @@ export class BoxResizeFunctionBuilder extends FunctionBuilder {
     )
   }
 }
-export class BoxExtractFunctionBuilder extends FunctionBuilder {
+class BoxExtractFunctionBuilder extends FunctionBuilder {
   constructor(
     private boxValue: BoxValueExpression,
     sourceLocation: SourceLocation,
@@ -278,7 +278,7 @@ export class BoxExtractFunctionBuilder extends FunctionBuilder {
     )
   }
 }
-export class BoxReplaceFunctionBuilder extends FunctionBuilder {
+class BoxReplaceFunctionBuilder extends FunctionBuilder {
   constructor(
     private boxValue: BoxValueExpression,
     sourceLocation: SourceLocation,
@@ -310,7 +310,7 @@ export class BoxReplaceFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export class BoxSpliceFunctionBuilder extends FunctionBuilder {
+class BoxSpliceFunctionBuilder extends FunctionBuilder {
   constructor(
     private boxValue: BoxValueExpression,
     sourceLocation: SourceLocation,

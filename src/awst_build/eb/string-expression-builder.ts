@@ -193,7 +193,7 @@ export class StringExpressionBuilder extends InstanceExpressionBuilder<InstanceT
   }
 }
 
-export class ConcatExpressionBuilder extends FunctionBuilder {
+class ConcatExpressionBuilder extends FunctionBuilder {
   constructor(private expr: awst.Expression) {
     super(expr.sourceLocation)
   }

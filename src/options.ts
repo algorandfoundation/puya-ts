@@ -7,9 +7,9 @@ export interface AlgoFile {
   outDir: AbsolutePath
 }
 
-export type FileExistsMethod = (fileName: string) => boolean
-export type ReadFileMethod = (fileName: string) => string | undefined
-export type SourceFileProvider = { fileExists: FileExistsMethod; readFile: ReadFileMethod }
+type FileExistsMethod = (fileName: string) => boolean
+type ReadFileMethod = (fileName: string) => string | undefined
+type SourceFileProvider = { fileExists: FileExistsMethod; readFile: ReadFileMethod }
 
 export class CompileOptions {
   public readonly filePaths: AlgoFile[]

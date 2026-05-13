@@ -146,7 +146,7 @@ class PolytypeClassSuperMethodBuilder extends FunctionBuilder {
 /**
  * Matches polytype's super.class(SomeType) expression
  */
-export class PolytypeExplicitClassAccessExpressionBuilder extends InstanceBuilder {
+class PolytypeExplicitClassAccessExpressionBuilder extends InstanceBuilder {
   readonly isConstant = false
   resolve(): Expression {
     throw new CodeError('Contract class cannot be used as a value')

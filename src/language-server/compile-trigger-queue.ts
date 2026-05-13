@@ -2,11 +2,11 @@ import EventEmitter from 'node:events'
 import type * as lsp from 'vscode-languageserver/node'
 import { distinct } from '../util'
 
-export type WorkspaceCompileTrigger = {
+type WorkspaceCompileTrigger = {
   type: 'workspace'
   uris: lsp.URI[]
 }
-export type FileCompileTrigger = {
+type FileCompileTrigger = {
   type: 'file'
   uris: lsp.URI[]
 }

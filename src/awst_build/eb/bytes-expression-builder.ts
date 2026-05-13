@@ -372,7 +372,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<BytesPType
   }
 }
 
-export class ConcatFunctionBuilder extends FunctionBuilder {
+class ConcatFunctionBuilder extends FunctionBuilder {
   constructor(private builder: BytesExpressionBuilder) {
     super(builder.sourceLocation)
   }
@@ -405,7 +405,7 @@ export class ConcatFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export function bytesToFixed(
+function bytesToFixed(
   builder: InstanceBuilder,
   fixedType: BytesPType,
   sourceLocation: SourceLocation,
@@ -475,7 +475,7 @@ const fixedConversionStrategyMap: Record<string, 'assert-length' | 'unsafe-cast'
   'unsafe-cast': 'unsafe-cast',
 }
 
-export class ToFixedLengthFunctionBuilder extends FunctionBuilder {
+class ToFixedLengthFunctionBuilder extends FunctionBuilder {
   constructor(private builder: BytesExpressionBuilder) {
     super(builder.sourceLocation)
   }
@@ -515,7 +515,7 @@ export class ToFixedLengthFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export class BytesInvertBuilder extends FunctionBuilder {
+class BytesInvertBuilder extends FunctionBuilder {
   constructor(private builder: BytesExpressionBuilder) {
     super(builder.sourceLocation)
   }
@@ -534,7 +534,7 @@ export class BytesInvertBuilder extends FunctionBuilder {
   }
 }
 
-export class BitwiseOpFunctionBuilder extends FunctionBuilder {
+class BitwiseOpFunctionBuilder extends FunctionBuilder {
   constructor(
     private left: BytesExpressionBuilder,
     private op: BytesBinaryOperator,
@@ -570,7 +570,7 @@ export class BitwiseOpFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export class ToStringBuilder extends FunctionBuilder {
+class ToStringBuilder extends FunctionBuilder {
   constructor(private builder: BytesExpressionBuilder) {
     super(builder.sourceLocation)
   }

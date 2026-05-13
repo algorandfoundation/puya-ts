@@ -116,7 +116,7 @@ const OPERATOR_OPCODES = new Set([
 
 export type AlgoTsType = SimpleAlgoTsType | BytesAlgoTsType | EnumAlgoTsType | UnionAlgoTsType | GenericAlgoTsType
 
-export class SimpleAlgoTsType {
+class SimpleAlgoTsType {
   constructor(
     public readonly name: string,
     public readonly tsName: string,
@@ -196,7 +196,7 @@ function getInputTypes(typ: AlgoTsType): AlgoTsType {
   }
 }
 
-export type EnumValue = {
+type EnumValue = {
   name: string
   value: string
   doc: string
@@ -389,7 +389,7 @@ export type OpArg = {
   optional?: boolean
 }
 
-export type EnumArgMeta = {
+type EnumArgMeta = {
   member: string
   pos: number
 }

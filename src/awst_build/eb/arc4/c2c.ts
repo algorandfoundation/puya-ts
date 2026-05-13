@@ -120,7 +120,7 @@ export class ContractProxyExpressionBuilder extends InstanceExpressionBuilder<Co
   }
 }
 
-export class ContractProxyBareCreateFunctionBuilder extends FunctionBuilder {
+class ContractProxyBareCreateFunctionBuilder extends FunctionBuilder {
   constructor(
     private readonly proxy: ContractProxyExpressionBuilder,
     sourceLocation: SourceLocation,
@@ -164,7 +164,7 @@ export class ContractProxyBareCreateFunctionBuilder extends FunctionBuilder {
     return instanceEb(itxnResult, applicationItxnType)
   }
 }
-export class ContractProxyCallBuilder extends NodeBuilder {
+class ContractProxyCallBuilder extends NodeBuilder {
   readonly ptype = undefined
 
   constructor(
@@ -183,7 +183,7 @@ export class ContractProxyCallBuilder extends NodeBuilder {
   }
 }
 
-export class ContractProxyCallFunctionBuilder extends FunctionBuilder {
+class ContractProxyCallFunctionBuilder extends FunctionBuilder {
   constructor(
     private readonly proxy: ContractProxyExpressionBuilder,
     private readonly functionType: FunctionPType,

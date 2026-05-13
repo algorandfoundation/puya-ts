@@ -30,7 +30,7 @@ export function getIndexType(ptype: PType, index: bigint | string, sourceLocatio
   return IndexTypeVisitor.accept(ptype, index, sourceLocation)
 }
 
-export class IndexTypeVisitor extends DefaultVisitor<PType | undefined> {
+class IndexTypeVisitor extends DefaultVisitor<PType | undefined> {
   constructor(
     private readonly index: string | bigint,
     private readonly sourceLocation: SourceLocation,
