@@ -505,7 +505,8 @@ export class TypeResolver {
         // Ignore for now
       } else {
         throw new CodeError(
-          `Unexpected type: ${t}. Polytype can only be used to support multiple inheritance in contracts for now. All base types must extend the Contract or BaseContract class.}`,
+          `Unexpected type: ${t}. Polytype can only be used to support multiple inheritance in contracts for now. All base types must extend the Contract or BaseContract class.`,
+          { sourceLocation },
         )
       }
     }

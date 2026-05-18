@@ -15,10 +15,10 @@ export class LogicSigClassBuilder extends InstanceBuilder {
   readonly isConstant = false
 
   resolve(): Expression {
-    throw new CodeError('LogicSig class cannot be used as a value')
+    throw new CodeError('LogicSig class cannot be used as a value', { sourceLocation: this.sourceLocation })
   }
   resolveLValue(): LValue {
-    throw new CodeError('LogicSig class cannot be used as a value')
+    throw new CodeError('LogicSig class cannot be used as a value', { sourceLocation: this.sourceLocation })
   }
   readonly ptype: LogicSigPType
   constructor(sourceLocation: SourceLocation, ptype: PType) {
@@ -28,11 +28,11 @@ export class LogicSigClassBuilder extends InstanceBuilder {
   }
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    throw new CodeError('LogicSig class cannot be constructed manually')
+    throw new CodeError('LogicSig class cannot be constructed manually', { sourceLocation })
   }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
-    throw new CodeError('LogicSig class cannot be called manually')
+    throw new CodeError('LogicSig class cannot be called manually', { sourceLocation })
   }
 }
 

@@ -138,7 +138,7 @@ class PolytypeClassSuperMethodBuilder extends FunctionBuilder {
     })
     const matchedBaseType = this.ptype.baseTypes.find((b) => b.equals(contract.ptype))
 
-    codeInvariant(matchedBaseType, `${contract.ptype} must be a direct base type of this class`)
+    codeInvariant(matchedBaseType, `${contract.ptype} must be a direct base type of this class`, sourceLocation)
     return new PolytypeExplicitClassAccessExpressionBuilder(matchedBaseType, sourceLocation)
   }
 }
@@ -149,10 +149,10 @@ class PolytypeClassSuperMethodBuilder extends FunctionBuilder {
 export class PolytypeExplicitClassAccessExpressionBuilder extends InstanceBuilder {
   readonly isConstant = false
   resolve(): Expression {
-    throw new CodeError('Contract class cannot be used as a value')
+    throw new CodeError('Contract class cannot be used as a value', { sourceLocation: this.sourceLocation })
   }
   resolveLValue(): LValue {
-    throw new CodeError('Contract class cannot be used as a value')
+    throw new CodeError('Contract class cannot be used as a value', { sourceLocation: this.sourceLocation })
   }
   constructor(
     public readonly ptype: ContractClassPType,
@@ -179,10 +179,10 @@ export class ContractClassBuilder extends InstanceBuilder {
   readonly isConstant = false
 
   resolve(): Expression {
-    throw new CodeError('Contract class cannot be used as a value')
+    throw new CodeError('Contract class cannot be used as a value', { sourceLocation: this.sourceLocation })
   }
   resolveLValue(): LValue {
-    throw new CodeError('Contract class cannot be used as a value')
+    throw new CodeError('Contract class cannot be used as a value', { sourceLocation: this.sourceLocation })
   }
   readonly ptype: ContractClassPType
   constructor(sourceLocation: SourceLocation, ptype: PType) {
@@ -192,11 +192,11 @@ export class ContractClassBuilder extends InstanceBuilder {
   }
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
-    throw new CodeError('Contract class cannot be constructed manually')
+    throw new CodeError('Contract class cannot be constructed manually', { sourceLocation })
   }
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
-    throw new CodeError('Contract class cannot be called manually')
+    throw new CodeError('Contract class cannot be called manually', { sourceLocation })
   }
 
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {

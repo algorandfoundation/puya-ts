@@ -95,7 +95,11 @@ export class SourceFileVisitor extends BaseVisitor implements Visitor<ModuleStat
       }
       const maybeConst = requireInstanceBuilder(initializerBuilder)
 
-      codeInvariant(maybeConst.isConstant || maybeConst.isConstantOp, 'Module level assignments must be compile time constants')
+      codeInvariant(
+        maybeConst.isConstant || maybeConst.isConstantOp,
+        'Module level assignments must be compile time constants',
+        sourceLocation,
+      )
 
       this.context.addConstant(dec.name, maybeConst)
 

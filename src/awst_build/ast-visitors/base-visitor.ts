@@ -461,7 +461,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         right.ptype,
       )
     }
-    throw new NotSupported(`Binary expression with op ${getSyntaxName(binaryOpKind)}`)
+    this.throwNotSupported(node, `Binary expression with op ${getSyntaxName(binaryOpKind)}`)
   }
 
   visitConditionalExpression(node: ts.ConditionalExpression): NodeBuilder {

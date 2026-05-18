@@ -169,7 +169,11 @@ export class ContractVisitor extends ClassDefinitionVisitor {
     const sourceLocation = this.sourceLocation(node)
     codeInvariant(!node.questionToken, 'Optional properties are not supported', sourceLocation)
     codeInvariant(!node.exclamationToken, 'Non-null assertion operators on properties are not supported', sourceLocation)
-    codeInvariant(!node.modifiers?.some((m) => m.kind === ts.SyntaxKind.StaticKeyword), 'Static properties are not supported')
+    codeInvariant(
+      !node.modifiers?.some((m) => m.kind === ts.SyntaxKind.StaticKeyword),
+      'Static properties are not supported',
+      sourceLocation,
+    )
 
     const propertyName = this.textVisitor.accept(node.name)
     codeInvariant(node.initializer, 'Properties must have an initializer', sourceLocation)
