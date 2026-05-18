@@ -45,6 +45,8 @@ import { instanceEb, typeRegistry } from '../type-registry'
 import { handleAssignment } from './assignments'
 import { TextVisitor } from './text-visitor'
 
+const OPTIONAL_CHAINING_MESSAGE = 'The optional chaining (?.) operator is not supported'
+
 export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor, TNode>(this, node)
   readonly textVisitor: TextVisitor
@@ -236,7 +238,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitPropertyAccessExpression(node: ts.PropertyAccessExpression): NodeBuilder {
-    this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
+    this.logNotSupported(node.questionDotToken, OPTIONAL_CHAINING_MESSAGE)
     const target = this.baseAccept(node.expression)
     if (target instanceof NamespaceBuilder) {
       codeInvariant(!ts.isPrivateIdentifier(node.name), 'Private identifiers are not supported here', this.sourceLocation(node.name))
@@ -247,7 +249,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitElementAccessExpression(node: ts.ElementAccessExpression): NodeBuilder {
-    this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
+    this.logNotSupported(node.questionDotToken, OPTIONAL_CHAINING_MESSAGE)
 
     const sourceLocation = this.sourceLocation(node)
     const target = this.baseAccept(node.expression)
@@ -256,7 +258,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitCallExpression(node: ts.CallExpression): NodeBuilder {
-    this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
+    this.logNotSupported(node.questionDotToken, OPTIONAL_CHAINING_MESSAGE)
     const sourceLocation = this.sourceLocation(node)
     const eb = this.baseAccept(node.expression)
     const args = node.arguments

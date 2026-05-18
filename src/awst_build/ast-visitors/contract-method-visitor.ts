@@ -45,6 +45,12 @@ type RoutingProps = {
   create?: ARC4CreateOption
 }
 
+// Default routing properties used when these values aren't specified explicitly.
+const unspecifiedDefaults = {
+  allowedCompletionTypes: [OnCompletionAction.NoOp],
+  create: ARC4CreateOption.disallow,
+}
+
 export class ContractMethodVisitor extends ContractMethodBaseVisitor {
   private readonly metaData: {
     cref: ContractReference
@@ -138,12 +144,6 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     const conventionalDefaults = this.getConventionalRoutingConfig(functionType.name)
 
     this.validateDecoratorRoutingData(functionType, decorator, conventionalDefaults)
-
-    // Default routing properties used when these values aren't specified explicitly.
-    const unspecifiedDefaults = {
-      allowedCompletionTypes: [OnCompletionAction.NoOp],
-      create: ARC4CreateOption.disallow,
-    }
 
     if (decorator?.type === 'arc4.baremethod') {
       this.checkBareMethodTypes(functionType, methodLocation)

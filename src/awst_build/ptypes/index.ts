@@ -303,6 +303,24 @@ abstract class StorageProxyPType extends PType {
     this.contentType = props.content
   }
 }
+
+abstract class StateProxyPType extends StorageProxyPType {
+  readonly module: string
+  readonly kind: string
+
+  protected constructor(props: { content: PType; kind: string }) {
+    super({ content: props.content, keyWType: wtypes.stateKeyWType })
+    this.module = Constants.moduleNames.algoTs.state
+    this.kind = props.kind
+  }
+
+  get name() {
+    return `${this.kind}<${this.contentType.name}>`
+  }
+  get fullName() {
+    return `${this.module}::${this.kind}<${this.contentType.fullName}>`
+  }
+}
 export const GlobalStateGeneric = new GenericPType({
   name: 'GlobalState',
   module: Constants.moduleNames.algoTs.state,
@@ -313,23 +331,33 @@ export const GlobalStateGeneric = new GenericPType({
     })
   },
 })
-export class GlobalStateType extends StorageProxyPType {
+export class GlobalStateType extends StateProxyPType {
   readonly [PType.IdSymbol] = 'GlobalStateType'
-  static readonly baseName = 'GlobalState'
-  static readonly baseFullName = `${Constants.moduleNames.algoTs.state}::${GlobalStateType.baseName}`
-  readonly module: string = Constants.moduleNames.algoTs.state
-  get name() {
-    return `${GlobalStateType.baseName}<${this.contentType.name}>`
-  }
-  get fullName() {
-    return `${GlobalStateType.baseFullName}<${this.contentType.fullName}>`
-  }
   constructor(props: { content: PType }) {
-    super({ ...props, keyWType: wtypes.stateKeyWType })
+    super({ ...props, kind: 'GlobalState' })
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitGlobalStateType(this)
+  }
+}
+abstract class StateMapProxyPType extends StorageProxyPType {
+  readonly module: string
+  readonly kind: string
+  readonly keyType: PType
+
+  protected constructor(props: { content: PType; keyType: PType; kind: string }) {
+    super({ content: props.content, keyWType: wtypes.stateKeyWType })
+    this.module = Constants.moduleNames.algoTs.state
+    this.kind = props.kind
+    this.keyType = props.keyType
+  }
+
+  get name() {
+    return `${this.kind}<${this.keyType.name}, ${this.contentType.name}>`
+  }
+  get fullName() {
+    return `${this.module}::${this.name}<${this.keyType.name}, ${this.contentType.fullName}>`
   }
 }
 export const GlobalMapGeneric = new GenericPType({
@@ -343,19 +371,10 @@ export const GlobalMapGeneric = new GenericPType({
     })
   },
 })
-export class GlobalMapType extends StorageProxyPType {
+export class GlobalMapType extends StateMapProxyPType {
   readonly [PType.IdSymbol] = 'GlobalMapType'
-  readonly module: string = Constants.moduleNames.algoTs.state
-  get name() {
-    return `GlobalMap<${this.keyType.name}, ${this.contentType.name}>`
-  }
-  get fullName() {
-    return `${this.module}::${this.name}<${this.keyType.name}, ${this.contentType.fullName}>`
-  }
-  readonly keyType: PType
   constructor(props: { content: PType; keyType: PType }) {
-    super({ ...props, keyWType: wtypes.stateKeyWType })
-    this.keyType = props.keyType
+    super({ ...props, kind: 'GlobalMap' })
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
@@ -372,25 +391,10 @@ export const LocalStateGeneric = new GenericPType({
     })
   },
 })
-export class LocalStateType extends StorageProxyPType {
+export class LocalStateType extends StateProxyPType {
   readonly [PType.IdSymbol] = 'LocalStateType'
-  static readonly baseName = 'LocalState'
-  static readonly baseFullName = `${Constants.moduleNames.algoTs.state}::${LocalStateType.baseName}`
-  readonly module: string = Constants.moduleNames.algoTs.state
-  get name() {
-    return `${LocalStateType.baseName}<${this.contentType.name}>`
-  }
-  get fullName() {
-    return `${LocalStateType.baseFullName}<${this.contentType.fullName}>`
-  }
   constructor(props: { content: PType }) {
-    super({ ...props, keyWType: wtypes.stateKeyWType })
-  }
-  static parameterise(typeArgs: PType[]): LocalStateType {
-    codeInvariant(typeArgs.length === 1, 'LocalState type expects exactly one type parameter')
-    return new LocalStateType({
-      content: typeArgs[0],
-    })
+    super({ ...props, kind: 'LocalState' })
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
@@ -408,19 +412,10 @@ export const LocalMapGeneric = new GenericPType({
     })
   },
 })
-export class LocalMapType extends StorageProxyPType {
+export class LocalMapType extends StateMapProxyPType {
   readonly [PType.IdSymbol] = 'LocalMapType'
-  readonly module: string = Constants.moduleNames.algoTs.state
-  get name() {
-    return `LocalMap<${this.keyType.name}, ${this.contentType.name}>`
-  }
-  get fullName() {
-    return `${this.module}::${this.name}<${this.keyType.name}, ${this.contentType.fullName}>`
-  }
-  readonly keyType: PType
   constructor(props: { content: PType; keyType: PType }) {
-    super({ ...props, keyWType: wtypes.stateKeyWType })
-    this.keyType = props.keyType
+    super({ ...props, kind: 'LocalMap' })
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
@@ -572,8 +567,7 @@ export class ABICompatibleInstanceType extends InstanceType implements ABICompat
   }
 }
 
-export class LibFunctionType extends PType {
-  readonly [PType.IdSymbol] = 'LibFunctionType'
+abstract class LibPType extends PType {
   readonly wtype: undefined
   readonly name: string
   readonly module: string
@@ -584,106 +578,61 @@ export class LibFunctionType extends PType {
     this.name = name
     this.module = module
   }
-
+}
+export class LibFunctionType extends LibPType {
+  readonly [PType.IdSymbol] = 'LibFunctionType'
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitLibFunctionType(this)
   }
 }
-export class LibClassType extends PType {
+export class LibClassType extends LibPType {
   readonly [PType.IdSymbol] = 'LibClassType'
-  readonly wtype: undefined
-  readonly name: string
-  readonly module: string
-  readonly singleton = true
-
-  constructor({ name, module }: { name: string; module: string }) {
-    super()
-    this.name = name
-    this.module = module
-  }
-
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitLibClassType(this)
   }
 }
-export class LibObjType extends PType {
+export class LibObjType extends LibPType {
   readonly [PType.IdSymbol] = 'LibObjType'
-  readonly wtype: undefined
-  readonly name: string
-  readonly module: string
-  readonly singleton = true
-
-  constructor({ name, module }: { name: string; module: string }) {
-    super()
-    this.name = name
-    this.module = module
-  }
-
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitLibObjType(this)
   }
 }
 
-export class IntrinsicFunctionGroupType extends PType {
-  readonly [PType.IdSymbol] = 'IntrinsicFunctionGroupType'
+abstract class IntrinsicOpPType extends PType {
   readonly wtype: undefined
   readonly name: string
   readonly module: string = Constants.moduleNames.algoTs.op
-  readonly singleton = true
+  abstract readonly singleton: boolean
 
   constructor({ name }: { name: string }) {
     super()
     this.name = name
   }
-
+}
+export class IntrinsicFunctionGroupType extends IntrinsicOpPType {
+  readonly [PType.IdSymbol] = 'IntrinsicFunctionGroupType'
+  readonly singleton = true
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitIntrinsicFunctionGroupType(this)
   }
 }
-export class IntrinsicFunctionGroupTypeType extends PType {
+export class IntrinsicFunctionGroupTypeType extends IntrinsicOpPType {
   readonly [PType.IdSymbol] = 'IntrinsicFunctionGroupTypeType'
-  readonly wtype: undefined
-  readonly name: string
-  readonly module: string = Constants.moduleNames.algoTs.op
   readonly singleton = false
-
-  constructor({ name }: { name: string }) {
-    super()
-    this.name = name
-  }
-
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitIntrinsicFunctionGroupTypeType(this)
   }
 }
-export class IntrinsicFunctionType extends PType {
+export class IntrinsicFunctionType extends IntrinsicOpPType {
   readonly [PType.IdSymbol] = 'IntrinsicFunctionType'
-  readonly wtype: undefined
-  readonly name: string
-  readonly module: string = Constants.moduleNames.algoTs.op
   readonly singleton = true
-
-  constructor({ name }: { name: string }) {
-    super()
-    this.name = name
-  }
-
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitIntrinsicFunctionType(this)
   }
 }
-export class IntrinsicFunctionTypeType extends PType {
+export class IntrinsicFunctionTypeType extends IntrinsicOpPType {
   readonly [PType.IdSymbol] = 'IntrinsicFunctionTypeType'
-  readonly wtype: undefined
-  readonly name: string
-  readonly module: string = Constants.moduleNames.algoTs.op
   readonly singleton = false
-
-  constructor({ name }: { name: string }) {
-    super()
-    this.name = name
-  }
-
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitIntrinsicFunctionTypeType(this)
   }
@@ -800,22 +749,30 @@ export class ArrayLiteralPType extends PType {
   }
 }
 
-export class MutableTuplePType extends PType {
-  readonly [PType.IdSymbol] = 'MutableTuplePType'
-  readonly module: string = 'lib.d.ts'
-
-  get name() {
-    return `[${this.items.map((i) => i.name).join(', ')}]`
-  }
-  get fullName() {
-    return `${this.module}::[${this.items.map((i) => i.fullName).join(', ')}]`
-  }
-
+abstract class TupleBasePType extends PType {
   readonly items: PType[]
   readonly singleton = false
-  constructor(props: { items: PType[] }) {
+  readonly module: string = Constants.moduleNames.tslib
+  readonly namePrefix: '' | 'readonly '
+
+  protected constructor(props: { items: PType[]; namePrefix?: 'readonly ' }) {
     super()
     this.items = props.items
+    this.namePrefix = props.namePrefix ?? ''
+  }
+
+  get name() {
+    return `${this.namePrefix}[${this.items.map((i) => i.name).join(', ')}]`
+  }
+  get fullName() {
+    return `${this.module}::${this.namePrefix}[${this.items.map((i) => i.fullName).join(', ')}]`
+  }
+}
+
+export class MutableTuplePType extends TupleBasePType {
+  readonly [PType.IdSymbol] = 'MutableTuplePType'
+  constructor(props: { items: PType[] }) {
+    super(props)
   }
 
   get wtype(): wtypes.ARC4Tuple {
@@ -829,22 +786,10 @@ export class MutableTuplePType extends PType {
     return visitor.visitMutableTuplePType(this)
   }
 }
-export class ReadonlyTuplePType extends PType {
+export class ReadonlyTuplePType extends TupleBasePType {
   readonly [PType.IdSymbol] = 'ReadonlyTuplePType'
-  readonly module: string = 'lib.d.ts'
-
-  get name() {
-    return `readonly [${this.items.map((i) => i.name).join(', ')}]`
-  }
-  get fullName() {
-    return `${this.module}::readonly [${this.items.map((i) => i.fullName).join(', ')}]`
-  }
-
-  readonly items: PType[]
-  readonly singleton = false
   constructor(props: { items: PType[] }) {
-    super()
-    this.items = props.items
+    super({ ...props, namePrefix: 'readonly ' })
   }
 
   get wtype(): wtypes.WTuple {
@@ -865,20 +810,24 @@ export const ArrayGeneric = new GenericPType({
     return new ArrayPType({ elementType: typeArgs[0] })
   },
 })
-export class ArrayPType extends PType {
-  readonly [PType.IdSymbol] = 'ArrayPType'
+abstract class DynamicArrayBasePType extends PType {
   readonly elementType: PType
-  readonly immutable = false
+  readonly immutable: boolean
   readonly singleton = false
   readonly name: string
   readonly module: string = Constants.moduleNames.typescript.es5
-  get fullName() {
-    return `${this.module}::Array<${this.elementType.fullName}>`
-  }
-  constructor(props: { elementType: PType }) {
+  readonly kind: 'Array' | 'ReadonlyArray'
+
+  protected constructor(props: { elementType: PType; kind: 'Array' | 'ReadonlyArray'; immutable: boolean }) {
     super()
-    this.name = `Array<${props.elementType.name}>`
     this.elementType = props.elementType
+    this.immutable = props.immutable
+    this.kind = props.kind
+    this.name = `${props.kind}<${props.elementType.name}>`
+  }
+
+  get fullName() {
+    return `${this.module}::${this.kind}<${this.elementType.fullName}>`
   }
 
   get wtype() {
@@ -886,6 +835,12 @@ export class ArrayPType extends PType {
       elementType: this.elementType.wtypeOrThrow,
       immutable: this.immutable,
     })
+  }
+}
+export class ArrayPType extends DynamicArrayBasePType {
+  readonly [PType.IdSymbol] = 'ArrayPType'
+  constructor(props: { elementType: PType }) {
+    super({ ...props, kind: 'Array', immutable: false })
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
@@ -900,27 +855,10 @@ export const ReadonlyArrayGeneric = new GenericPType({
     return new ReadonlyArrayPType({ elementType: typeArgs[0] })
   },
 })
-export class ReadonlyArrayPType extends PType {
+export class ReadonlyArrayPType extends DynamicArrayBasePType {
   readonly [PType.IdSymbol] = 'ReadonlyArrayPType'
-  readonly elementType: PType
-  readonly singleton = false
-  readonly immutable = true
-  readonly name: string
-  readonly module: string = Constants.moduleNames.typescript.es5
-  get fullName() {
-    return `${this.module}::ReadonlyArray<${this.elementType.fullName}>`
-  }
   constructor(props: { elementType: PType }) {
-    super()
-    this.elementType = props.elementType
-    this.name = `ReadonlyArray<${props.elementType.name}>`
-  }
-
-  get wtype() {
-    return new wtypes.ARC4DynamicArray({
-      elementType: this.elementType.wtypeOrThrow,
-      immutable: this.immutable,
-    })
+    super({ ...props, kind: 'ReadonlyArray', immutable: true })
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
@@ -1019,6 +957,23 @@ abstract class ObjectPType extends PType {
   hasSameStructure(other: ObjectPType): boolean {
     return zipStrict(this.properties, other.properties).every(([left, right]) => left.name === right.name && left.ptype.equals(right.ptype))
   }
+
+  protected toWTuple(fallbackName: string): wtypes.WTuple {
+    const tupleTypes: wtypes.WType[] = []
+    const tupleNames: string[] = []
+    for (const { name, ptype } of this.properties) {
+      if (ptype instanceof TransientType) {
+        throw new CodeError(`Property '${name}' of ${this.name} has an unsupported type: ${ptype.typeMessage}`)
+      }
+      tupleTypes.push(ptype.wtypeOrThrow)
+      tupleNames.push(name)
+    }
+    return new wtypes.WTuple({
+      name: this.alias?.fullName ?? fallbackName,
+      names: tupleNames,
+      types: tupleTypes,
+    })
+  }
 }
 
 export class ObjectLiteralPType extends ObjectPType {
@@ -1052,20 +1007,7 @@ export class ObjectLiteralPType extends ObjectPType {
   }
 
   get wtype(): wtypes.WTuple {
-    const tupleTypes: wtypes.WType[] = []
-    const tupleNames: string[] = []
-    for (const { name, ptype } of this.properties) {
-      if (ptype instanceof TransientType) {
-        throw new CodeError(`Property '${name}' of ${this.name} has an unsupported type: ${ptype.typeMessage}`)
-      }
-      tupleTypes.push(ptype.wtypeOrThrow)
-      tupleNames.push(name)
-    }
-    return new wtypes.WTuple({
-      name: this.alias?.fullName ?? this.toString(),
-      names: tupleNames,
-      types: tupleTypes,
-    })
+    return this.toWTuple(this.toString())
   }
 }
 
@@ -1081,20 +1023,7 @@ export class ImmutableObjectPType extends ObjectPType {
   }
 
   get wtype(): wtypes.WTuple {
-    const tupleTypes: wtypes.WType[] = []
-    const tupleNames: string[] = []
-    for (const { name, ptype } of this.properties) {
-      if (ptype instanceof TransientType) {
-        throw new CodeError(`Property '${name}' of ${this.name} has an unsupported type: ${ptype.typeMessage}`)
-      }
-      tupleTypes.push(ptype.wtypeOrThrow)
-      tupleNames.push(name)
-    }
-    return new wtypes.WTuple({
-      name: this.alias?.fullName ?? this.name,
-      names: tupleNames,
-      types: tupleTypes,
-    })
+    return this.toWTuple(this.name)
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
