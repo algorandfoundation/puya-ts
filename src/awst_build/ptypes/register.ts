@@ -114,7 +114,7 @@ import {
   DynamicArrayGeneric,
   DynamicArrayType,
   DynamicBytesConstructor,
-  DynamicBytesType,
+  dynamicBytesType,
   encodeArc4Function,
   methodSelectorFunction,
   sizeOfFunction,
@@ -140,7 +140,7 @@ import {
   applicationCallGtxnType,
   applicationCallItxnFn,
   applicationCallItxnParamsType,
-  ApplicationFunctionType,
+  ApplicationFunction,
   applicationItxnType,
   applicationPType,
   ApplicationTxnFunction,
@@ -433,7 +433,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   })
 
   // Reference types
-  typeRegistry.register({ ptype: ApplicationFunctionType, singletonEb: ApplicationFunctionBuilder })
+  typeRegistry.register({ ptype: ApplicationFunction, singletonEb: ApplicationFunctionBuilder })
   typeRegistry.register({ ptype: applicationPType, instanceEb: ApplicationExpressionBuilder })
   typeRegistry.register({ ptype: AccountFunction, singletonEb: AccountFunctionBuilder })
   typeRegistry.register({ ptype: accountPType, instanceEb: AccountExpressionBuilder })
@@ -469,7 +469,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   // This ensures the specific type is selected during type resolution
   // For example, StaticBytesExpressionBuilder should be selected over general StaticArrayExpressionBuilder for StaticBytesType
   typeRegistry.register({ ptype: DynamicBytesConstructor, singletonEb: DynamicBytesClassBuilder })
-  typeRegistry.register({ ptype: DynamicBytesType, instanceEb: DynamicBytesExpressionBuilder })
+  typeRegistry.register({ ptype: dynamicBytesType, instanceEb: DynamicBytesExpressionBuilder })
   typeRegistry.registerGeneric({
     generic: StaticBytesGeneric,
     ptype: StaticBytesType,

@@ -67,7 +67,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     const modifiers = this.parseMemberModifiers(node)
 
     const arc4MethodConfig = this.buildArc4Config({
-      functionType: this._functionType,
+      functionType: this.functionType,
       decorator,
       modifiers,
       methodLocation: sourceLocation,
@@ -78,7 +78,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
         contractReference: cref,
         sourceLocation,
         arc4MethodConfig,
-        memberName: this._functionType.name,
+        memberName: this.functionType.name,
       })
     this.metaData = {
       arc4MethodConfig,
@@ -92,10 +92,10 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
 
     return new ContractMethod({
       arc4MethodConfig: this.metaData.arc4MethodConfig,
-      memberName: this._functionType.name,
+      memberName: this.functionType.name,
       sourceLocation: this.metaData.sourceLocation,
       args,
-      returnType: this._functionType.returnType.wtypeOrThrow,
+      returnType: this.functionType.returnType.wtypeOrThrow,
       body,
       cref: this.metaData.cref,
       documentation,

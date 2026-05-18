@@ -7,7 +7,7 @@ import { CodeError } from '../../../../errors'
 import { bigIntToUint8Array, codeInvariant } from '../../../../util'
 import type { PType } from '../../../ptypes'
 import { ArrayLiteralPType, ArrayPType, FixedArrayPType, MutableTuplePType, ReadonlyArrayPType, ReadonlyTuplePType } from '../../../ptypes'
-import { ARC4ArrayType, DynamicArrayType, DynamicBytesType, StaticArrayType, StaticBytesType } from '../../../ptypes/arc4-types'
+import { ARC4ArrayType, DynamicArrayType, dynamicBytesType, StaticArrayType, StaticBytesType } from '../../../ptypes/arc4-types'
 import { containsMutableType } from '../../../ptypes/visitors/contains-mutable-visitor'
 import { instanceEb } from '../../../type-registry'
 import type { InstanceBuilder } from '../../index'
@@ -24,7 +24,7 @@ export function concatArrays(left: InstanceBuilder, right: InstanceBuilder, sour
       TODO: This is only required because puya doesn't support staticarray + other => dynamic array
       To work around this, we convert arc4 static bytes and static array to dynamic bytes and dynamic array
      */
-    const dynamicType = left.ptype instanceof StaticBytesType ? DynamicBytesType : new DynamicArrayType({ ...left.ptype })
+    const dynamicType = left.ptype instanceof StaticBytesType ? dynamicBytesType : new DynamicArrayType({ ...left.ptype })
     return concatArrays(toArc4Dynamic(left.ptype.arraySize, left.resolve(), dynamicType), right, sourceLocation)
   } else if (left.ptype instanceof FixedArrayPType || left.ptype instanceof ReadonlyArrayPType) {
     /*
@@ -59,8 +59,8 @@ function getArrayConcatType(left: PType, right: PType, sourceLocation: SourceLoc
   if (left instanceof ARC4ArrayType) {
     if (right instanceof ARC4ArrayType) {
       sameElementType(left.elementType, right.elementType, sourceLocation)
-      if (left.equals(DynamicBytesType) || left instanceof StaticBytesType) {
-        return DynamicBytesType
+      if (left.equals(dynamicBytesType) || left instanceof StaticBytesType) {
+        return dynamicBytesType
       }
       return new DynamicArrayType({
         elementType: left.elementType,

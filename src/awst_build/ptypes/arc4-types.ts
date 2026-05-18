@@ -241,7 +241,7 @@ export const Arc4TupleGeneric = new GenericPType({
       return itemType
     })
     return new ARC4TupleType({
-      types: encodedTypes,
+      items: encodedTypes,
     })
   },
 })
@@ -257,14 +257,14 @@ export class ARC4TupleType extends ARC4EncodedType {
   readonly nativeType: ReadonlyTuplePType
   readonly abiTypeSignature: string
 
-  constructor({ types, sourceLocation }: { types: ARC4EncodedType[]; sourceLocation?: SourceLocation }) {
+  constructor({ items, sourceLocation }: { items: ARC4EncodedType[]; sourceLocation?: SourceLocation }) {
     super()
-    this.items = types
+    this.items = items
     this.name = `Tuple<${this.items.map((i) => i.name).join(',')}>`
     this.sourceLocation = sourceLocation
     this.nativeType = new ReadonlyTuplePType({ items: this.items })
 
-    this.abiTypeSignature = ARC4EncodedType.buildAbiTupleSignature(types)
+    this.abiTypeSignature = ARC4EncodedType.buildAbiTupleSignature(this.items)
   }
 
   get wtype(): wtypes.ARC4Tuple {
@@ -551,7 +551,7 @@ export const DynamicBytesConstructor = new LibClassType({
   name: 'DynamicBytes',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
-export const DynamicBytesType = new DynamicArrayType({
+export const dynamicBytesType = new DynamicArrayType({
   name: 'DynamicBytes',
   immutable: true,
   elementType: arc4ByteAlias,

@@ -29,7 +29,7 @@ export class ConstructorVisitor extends ContractMethodBaseVisitor {
     const { args, body, documentation } = this.buildFunctionAwst()
     return new awst.ContractMethod({
       arc4MethodConfig: null,
-      memberName: this._functionType.name,
+      memberName: this.functionType.name,
       sourceLocation,
       args,
       returnType: voidPType.wtype,

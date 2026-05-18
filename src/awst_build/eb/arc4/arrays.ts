@@ -18,7 +18,7 @@ import {
   DynamicArrayGeneric,
   DynamicArrayType,
   DynamicBytesConstructor,
-  DynamicBytesType,
+  dynamicBytesType,
   StaticArrayGeneric,
   StaticArrayType,
   StaticBytesGeneric,
@@ -239,7 +239,7 @@ export class DynamicBytesClassBuilder extends ClassBuilder {
       genericTypeArgs: 0,
       argSpec: (a) => [a.optional(bytesPType, stringPType)],
     })
-    const resultPType = DynamicBytesType
+    const resultPType = dynamicBytesType
 
     if (!initialValue) {
       return instanceEb(

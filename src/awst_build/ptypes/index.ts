@@ -1328,7 +1328,7 @@ export const applicationPType = new ABICompatibleInstanceType({
   module: Constants.moduleNames.algoTs.reference,
   abiTypeSignature: 'application',
 })
-export const ApplicationFunctionType = new LibFunctionType({
+export const ApplicationFunction = new LibFunctionType({
   name: 'Application',
   module: Constants.moduleNames.algoTs.reference,
 })

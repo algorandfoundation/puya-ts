@@ -12,11 +12,11 @@ export class LogicSigProgramVisitor extends FunctionVisitor {
     const sourceLocation = this.sourceLocation(this.node)
     const { args, body, documentation } = this.buildFunctionAwst()
     return new awst.Subroutine({
-      id: this._functionType.fullName,
-      name: this._functionType.name,
+      id: this.functionType.fullName,
+      name: this.functionType.name,
       sourceLocation,
       args,
-      returnType: this._functionType.returnType.wtypeOrThrow,
+      returnType: this.functionType.returnType.wtypeOrThrow,
       body,
       documentation,
       inline: null,

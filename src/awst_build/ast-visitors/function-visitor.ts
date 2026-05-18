@@ -36,13 +36,13 @@ export abstract class FunctionVisitor
 {
   protected accept = <TNode extends ts.Node>(node: TNode) => accept<FunctionVisitor, TNode>(this, node)
 
-  protected readonly _functionType: FunctionPType
+  protected readonly functionType: FunctionPType
 
   constructor(protected readonly node: ts.MethodDeclaration | ts.FunctionDeclaration | ts.ConstructorDeclaration) {
     super()
     const type = this.context.getPTypeForNode(node)
     invariant(type instanceof FunctionPType, 'type of function must be FunctionPType')
-    this._functionType = type
+    this.functionType = type
   }
 
   protected buildFunctionAwst(): {
@@ -384,7 +384,7 @@ export abstract class FunctionVisitor
     const returnValue = this.accept(node.expression)
     return nodeFactory.returnStatement({
       sourceLocation: sourceLocation,
-      value: requireExpressionOfType(returnValue, this._functionType.returnType),
+      value: requireExpressionOfType(returnValue, this.functionType.returnType),
     })
   }
   visitWithStatement(node: ts.WithStatement): awst.Statement | awst.Statement[] {
