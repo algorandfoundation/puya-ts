@@ -90,7 +90,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
       typeArgs,
       genericTypeArgs: 1,
       callLocation: sourceLocation,
-      funcName: 'arc4.abimethod',
+      funcName: Constants.symbolNames.arc4AbiDecoratorName,
       argSpec: (a) => [
         a.obj({
           allowActions: a.optional(stringPType, new ReadonlyArrayPType({ elementType: stringPType })),

@@ -165,7 +165,7 @@ function generateClientFor(contract: abi.Arc56Contract): string {
       } else if (module === Constants.moduleNames.algoTs.reference) {
         useImport(name, false)
         return name
-      } else if (module === 'lib.d.ts') {
+      } else if (module === Constants.moduleNames.tslib) {
         // The TypeScript prelude is always imported
         return name
       }

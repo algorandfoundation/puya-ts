@@ -145,7 +145,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       create: ARC4CreateOption.disallow,
     }
 
-    if (decorator?.type === 'arc4.baremethod') {
+    if (decorator?.type === Constants.symbolNames.arc4BareDecoratorName) {
       this.checkBareMethodTypes(functionType, methodLocation)
       return new ARC4BareMethodConfig({
         sourceLocation: decorator.sourceLocation,
@@ -155,7 +155,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       })
     }
 
-    if (decorator?.type === 'arc4.abimethod') {
+    if (decorator?.type === Constants.symbolNames.arc4AbiDecoratorName) {
       return new ARC4ABIMethodConfig({
         readonly: decorator.readonly ?? false,
         sourceLocation: decorator.sourceLocation,
@@ -197,7 +197,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     decorator: RoutingDecoratorData | undefined,
     impliedByConvention: RoutingProps | undefined,
   ) {
-    if (!decorator || !impliedByConvention || decorator.type === 'arc4.readonly') return
+    if (!decorator || !impliedByConvention || decorator.type === Constants.symbolNames.readonlyDecoratorName) return
 
     if (
       decorator.allowedCompletionTypes !== undefined &&
