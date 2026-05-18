@@ -103,12 +103,12 @@ function buildAssignmentValues(
       source: nodeFactory.tupleExpression({ items: sources, sourceLocation: source.sourceLocation }),
     }
   } else if (target instanceof ObjectLiteralExpressionBuilder) {
-    // // Destructured object
+    // Destructured object
     const targets: LValue[] = []
     const sources: Expression[] = []
-    for (const { name } of target.ptype.properties) {
+    for (const { name, target: targetBuilder } of target.bindings) {
       const values = buildAssignmentValues(
-        requireInstanceBuilder(target.memberAccess(name, sourceLocation)),
+        targetBuilder,
         requireInstanceBuilder(source.memberAccess(name, source.sourceLocation)),
         sourceLocation,
       )
@@ -276,12 +276,8 @@ function checkForUnclonedMutables(target: InstanceBuilder, source: InstanceBuild
       checkForUnclonedMutables(item, requireInstanceBuilder(source.indexAccess(BigInt(index), source.sourceLocation)), sourceLocation)
     }
   } else if (target instanceof ObjectLiteralExpressionBuilder) {
-    for (const { name } of target.ptype.properties) {
-      checkForUnclonedMutables(
-        requireInstanceBuilder(target.memberAccess(name, sourceLocation)),
-        requireInstanceBuilder(source.memberAccess(name, source.sourceLocation)),
-        sourceLocation,
-      )
+    for (const { name, target: targetBuilder } of target.bindings) {
+      checkForUnclonedMutables(targetBuilder, requireInstanceBuilder(source.memberAccess(name, source.sourceLocation)), sourceLocation)
     }
   } else {
     source.checkForUnclonedMutables('being assigned to another variable')
