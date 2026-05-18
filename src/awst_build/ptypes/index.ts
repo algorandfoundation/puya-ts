@@ -221,7 +221,7 @@ export class IntersectionPType extends TransientType {
     const name = types.map((t) => t).join(' & ')
     super({
       name,
-      module: 'lib.d.ts',
+      module: Constants.moduleNames.tslib,
       singleton: false,
       typeMessage: transientTypeErrors.intersectionTypes(name).usedAsType,
       expressionMessage: transientTypeErrors.intersectionTypes(name).usedInExpression,
@@ -270,7 +270,7 @@ export class UnionPType extends TransientType {
     }
     super({
       name,
-      module: 'lib.d.ts',
+      module: Constants.moduleNames.tslib,
       singleton: false,
       typeMessage,
       expressionMessage,
@@ -527,7 +527,7 @@ export class InternalType extends PType {
   }
 }
 export const ClassMethodDecoratorContext = new InternalType({
-  module: 'typescript/lib/lib.decorators.d.ts',
+  module: Constants.moduleNames.typescript.decorators,
   name: 'ClassMethodDecoratorContext',
 })
 
@@ -537,7 +537,7 @@ export class AnyPType extends PType {
     throw new CodeError('`any` is not valid as a variable, parameter, return, or property type.')
   }
   readonly name = 'any'
-  readonly module = 'lib.d.ts'
+  readonly module = Constants.moduleNames.tslib
   readonly singleton = false
 
   accept<T>(visitor: PTypeVisitor<T>): T {
@@ -802,7 +802,7 @@ export class ArrayLiteralPType extends PType {
 
 export class MutableTuplePType extends PType {
   readonly [PType.IdSymbol] = 'MutableTuplePType'
-  readonly module: string = 'lib.d.ts'
+  readonly module: string = Constants.moduleNames.tslib
 
   get name() {
     return `[${this.items.map((i) => i.name).join(', ')}]`
@@ -831,7 +831,7 @@ export class MutableTuplePType extends PType {
 }
 export class ReadonlyTuplePType extends PType {
   readonly [PType.IdSymbol] = 'ReadonlyTuplePType'
-  readonly module: string = 'lib.d.ts'
+  readonly module: string = Constants.moduleNames.tslib
 
   get name() {
     return `readonly [${this.items.map((i) => i.name).join(', ')}]`
@@ -986,7 +986,7 @@ export const ReadonlyGeneric = new GenericPType({
 
 abstract class ObjectPType extends PType {
   readonly name: string
-  readonly module: string = 'lib.d.ts'
+  readonly module: string = Constants.moduleNames.tslib
   readonly alias: SymbolName | null
   readonly description: string | undefined
   readonly properties: PTypeField[]
@@ -1149,40 +1149,40 @@ export function isTupleLike(ptype: PTypeOrClass): ptype is MutableTuplePType | R
 
 export const voidPType = new ABICompatibleInstanceType({
   name: 'void',
-  module: 'lib.d.ts',
+  module: Constants.moduleNames.tslib,
   wtype: wtypes.voidWType,
   abiTypeSignature: 'void',
 })
 export const neverPType = new InstanceType({
   name: 'never',
-  module: 'lib.d.ts',
+  module: Constants.moduleNames.tslib,
   wtype: wtypes.voidWType,
 })
 export const unknownPType = new UnsupportedType({
   name: 'unknown',
-  module: 'lib.d.ts',
+  module: Constants.moduleNames.tslib,
   fullName: 'unknown',
 })
 
 export const esSymbol = new UnsupportedType({
   name: 'symbol',
-  module: 'lib.d.ts',
+  module: Constants.moduleNames.tslib,
   fullName: 'symbol',
 })
 
 export const nullPType = new UnsupportedType({
   name: 'null',
-  module: 'lib.d.ts',
+  module: Constants.moduleNames.tslib,
   fullName: 'null',
 })
 export const undefinedPType = new UnsupportedType({
   name: 'undefined',
-  module: 'lib.d.ts',
+  module: Constants.moduleNames.tslib,
   fullName: 'undefined',
 })
 export const PromiseGeneric = new GenericPType({
   name: 'Promise',
-  module: 'typescript/lib/lib.es5.d.ts',
+  module: Constants.moduleNames.typescript.es5,
   parameterise(ptypes: readonly PType[]) {
     codeInvariant(ptypes.length === 1, 'Promise expects exactly 1 generic parameter')
     return new PromiseType({ resolveType: ptypes[0] })
@@ -1193,7 +1193,7 @@ export class PromiseType extends UnsupportedType {
   constructor({ resolveType }: { resolveType: PType }) {
     super({
       name: 'Promise',
-      module: 'typescript/lib/lib.es5.d.ts',
+      module: Constants.moduleNames.typescript.es5,
     })
     this.resolveType = resolveType
   }
@@ -1202,13 +1202,13 @@ export const anyPType = new AnyPType()
 
 export const boolPType = new InstanceType({
   name: 'boolean',
-  module: 'lib.d.ts',
+  module: Constants.moduleNames.tslib,
   wtype: wtypes.boolWType,
 })
 
 export const BooleanFunction = new LibFunctionType({
   name: 'Boolean',
-  module: 'typescript/lib/lib.es5.d.ts',
+  module: Constants.moduleNames.typescript.es5,
 })
 
 export class BigIntPType extends TransientType {
@@ -1221,7 +1221,7 @@ export class NumberPType extends TransientType {
 
 export const bigIntPType = new BigIntPType({
   name: 'bigint',
-  module: 'lib.d.ts',
+  module: Constants.moduleNames.tslib,
   singleton: false,
   typeMessage: transientTypeErrors.nativeNumeric('bigint').usedAsType,
   expressionMessage: transientTypeErrors.nativeNumeric('bigint').usedInExpression,
@@ -1229,12 +1229,12 @@ export const bigIntPType = new BigIntPType({
 
 export const stringPType = new InstanceType({
   name: 'string',
-  module: 'lib.d.ts',
+  module: Constants.moduleNames.tslib,
   wtype: wtypes.stringWType,
 })
 export const StringFunction = new LibFunctionType({
   name: 'String',
-  module: 'typescript/lib/lib.es5.d.ts',
+  module: Constants.moduleNames.typescript.es5,
 })
 
 export const uint64PType = new InstanceType({
@@ -1253,7 +1253,7 @@ export class NumericLiteralPType extends TransientType {
   constructor({ literalValue }: { literalValue: bigint }) {
     super({
       name: `${literalValue}`,
-      module: 'lib.d.ts',
+      module: Constants.moduleNames.tslib,
       singleton: false,
       typeMessage: transientTypeErrors.nativeNumeric(literalValue.toString()).usedAsType,
       expressionMessage: transientTypeErrors.nativeNumeric(literalValue.toString()).usedInExpression,
@@ -1269,7 +1269,7 @@ export class BigIntLiteralPType extends TransientType {
   constructor({ literalValue }: { literalValue: bigint }) {
     super({
       name: `${literalValue}n`,
-      module: 'lib.d.ts',
+      module: Constants.moduleNames.tslib,
       singleton: false,
       typeMessage: transientTypeErrors.nativeNumeric(`${literalValue}n`).usedAsType,
       expressionMessage: transientTypeErrors.nativeNumeric(`${literalValue}n`).usedInExpression,
@@ -1281,7 +1281,7 @@ export class BigIntLiteralPType extends TransientType {
 }
 export const numberPType = new NumberPType({
   name: 'number',
-  module: 'lib.d.ts',
+  module: Constants.moduleNames.tslib,
   singleton: false,
   typeMessage: transientTypeErrors.nativeNumeric('number').usedAsType,
   expressionMessage: transientTypeErrors.nativeNumeric('number').usedInExpression,
@@ -1441,7 +1441,7 @@ export const arc4BaseContractType = new BaseContractClassType({
   sourceLocation: SourceLocation.None,
 })
 export const itoaMethod = new LibFunctionType({
-  module: 'puya-ts',
+  module: Constants.moduleNames.puyaTs,
   name: 'itoa',
 })
 export const arc4BareMethodDecorator = new LibFunctionType({
@@ -1688,7 +1688,7 @@ export const urangeFunction = new LibFunctionType({
 })
 export const IterableIteratorGeneric = new GenericPType({
   name: 'IterableIterator',
-  module: 'typescript/lib/lib.es2015.iterable.d.ts',
+  module: Constants.moduleNames.typescript.iterable,
   parameterise(typeArgs: readonly PType[]): IterableIteratorType {
     codeInvariant(typeArgs.length >= 1 && typeArgs.length <= 3, 'IterableIterator type expects 1-3 type parameters')
     // Currently ignoring return and next types
@@ -1704,7 +1704,7 @@ export class IterableIteratorType extends TransientType {
   constructor({ itemType }: { itemType: PType }) {
     super({
       name: `IterableIterator<${itemType.name}>`,
-      module: 'typescript/lib/lib.es2015.iterable.d.ts',
+      module: Constants.moduleNames.typescript.iterable,
       typeMessage: '`IterableIterator` is not valid as a variable, parameter, return, or property type. ',
       expressionMessage: 'IterableIterator expressions can only be used in for loops',
       singleton: false,
@@ -1723,7 +1723,7 @@ export class IterableIteratorType extends TransientType {
 
 export const GeneratorGeneric = new GenericPType({
   name: 'Generator',
-  module: 'typescript/lib/lib.es2015.generator.d.ts',
+  module: Constants.moduleNames.typescript.generator,
   parameterise(ptypes) {
     codeInvariant(ptypes.length === 3, 'Generator type expects exactly 3 type params')
 
@@ -1743,7 +1743,7 @@ export class GeneratorType extends UnsupportedType {
   constructor({ itemType, returnType, nextType }: { itemType: PType; returnType: PType; nextType: PType }) {
     super({
       name: 'Generator',
-      module: 'typescript/lib/lib.es2015.generator.d.ts',
+      module: Constants.moduleNames.typescript.generator,
     })
     this.itemType = itemType
     this.returnType = returnType
