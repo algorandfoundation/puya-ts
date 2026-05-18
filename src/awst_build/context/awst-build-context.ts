@@ -5,6 +5,7 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { AppStorageDefinition, ARC4MethodConfig } from '../../awst/nodes'
 import { SourceLocation } from '../../awst/source-location'
 import { logger } from '../../logger'
+import type { CompileOptions } from '../../options'
 import { invariant } from '../../util'
 import { AbsolutePath } from '../../util/absolute-path'
 import { DefaultMap } from '../../util/default-map'
@@ -22,7 +23,6 @@ import { TypeResolver } from '../type-resolver'
 import { EvaluationContext } from './evaluation-context'
 import { SwitchLoopContext } from './switch-loop-context'
 import { UniqueNameResolver } from './unique-name-resolver'
-import type { CompileOptions } from '../../options'
 
 export type BuildAwstOptions = Pick<CompileOptions, 'filePaths' | 'outputAwst' | 'outputAwstJson' | 'validateAbiReturn'>
 export abstract class AwstBuildContext {
@@ -147,6 +147,8 @@ class AwstBuildContextImpl extends AwstBuildContext {
   readonly typeResolver: TypeResolver
   readonly typeChecker: ts.TypeChecker
   readonly #compilationSet: CompilationSet
+
+  private readonly programRoot: AbsolutePath
   private constructor(
     public readonly program: ts.Program,
     public readonly options: BuildAwstOptions,
@@ -158,8 +160,9 @@ class AwstBuildContextImpl extends AwstBuildContext {
     compilationSet: CompilationSet,
   ) {
     super()
+    this.programRoot = AbsolutePath.resolve({ path: this.program.getCurrentDirectory() })
     this.typeChecker = program.getTypeChecker()
-    this.typeResolver = new TypeResolver(this.typeChecker, AbsolutePath.resolve({ path: this.program.getCurrentDirectory() }))
+    this.typeResolver = new TypeResolver(this.typeChecker, this.programRoot)
     this.#compilationSet = compilationSet
   }
 
@@ -306,7 +309,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
   }
 
   getSourceLocation<TNode extends ts.Node>(node: TNode) {
-    return SourceLocation.fromNode(node, AbsolutePath.resolve({ path: this.program.getCurrentDirectory() }))
+    return SourceLocation.fromNode(node, this.programRoot)
   }
 
   addStorageDeclaration(declaration: AppStorageDeclaration): void {
