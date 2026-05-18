@@ -145,7 +145,7 @@ export abstract class FunctionVisitor
     ]
   }
 
-  visitTypeAliasDeclaration(node: ts.TypeAliasDeclaration): awst.Statement[] {
+  visitTypeAliasDeclaration(_node: ts.TypeAliasDeclaration): awst.Statement[] {
     return []
   }
 

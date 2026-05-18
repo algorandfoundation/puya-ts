@@ -57,7 +57,7 @@ export const UintN256Class = new LibClassType({
 })
 export abstract class ARC4EncodedType extends PType {
   abstract readonly wtype: wtypes.ARC4Type
-  abstract readonly nativeType: PType | undefined
+  abstract readonly nativeType: PType
   abstract readonly abiTypeSignature: string
 
   protected static buildAbiTupleSignature(types: ARC4EncodedType[]): string {

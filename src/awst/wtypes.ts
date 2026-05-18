@@ -123,10 +123,10 @@ export namespace wtypes {
   export class ReferenceArray extends WType {
     readonly elementType: WType
     readonly sourceLocation: SourceLocation | null
-    readonly immutable = false
-    constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
+    constructor(props: { itemType: WType; sourceLocation?: SourceLocation }) {
       super({
         name: `ref_array<${props.itemType.name}>`,
+        immutable: false,
       })
       this.elementType = props.itemType
       this.sourceLocation = props.sourceLocation ?? null

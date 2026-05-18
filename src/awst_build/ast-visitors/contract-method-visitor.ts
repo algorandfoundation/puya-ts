@@ -2,8 +2,7 @@ import type ts from 'typescript'
 import { ContractReference, OnCompletionAction } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import type { ABIMethodArgConstantDefault, ABIMethodArgMemberDefault, ARC4MethodConfig } from '../../awst/nodes'
-import * as awst from '../../awst/nodes'
-import { ARC4ABIMethodConfig, ARC4BareMethodConfig, ARC4CreateOption } from '../../awst/nodes'
+import { ARC4ABIMethodConfig, ARC4BareMethodConfig, ARC4CreateOption, ContractMethod } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
@@ -91,7 +90,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
   get result() {
     const { args, body, documentation } = this.buildFunctionAwst()
 
-    return new awst.ContractMethod({
+    return new ContractMethod({
       arc4MethodConfig: this.metaData.arc4MethodConfig,
       memberName: this._functionType.name,
       sourceLocation: this.metaData.sourceLocation,
@@ -105,7 +104,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     })
   }
 
-  public static buildContractMethod(node: ts.MethodDeclaration, contractType: ContractClassPType): () => awst.ContractMethod {
+  public static buildContractMethod(node: ts.MethodDeclaration, contractType: ContractClassPType): () => ContractMethod {
     return visitInChildContext(this, node, contractType)
   }
 
@@ -119,7 +118,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     decorator: RoutingDecoratorData | undefined
     modifiers: { isPublic: boolean; isStatic: boolean }
     methodLocation: SourceLocation
-  }): awst.ARC4MethodConfig | null {
+  }): ARC4MethodConfig | null {
     const isProgramMethod = isIn(functionType.name, [
       Constants.symbolNames.approvalProgramMethodName,
       Constants.symbolNames.clearStateProgramMethodName,
@@ -177,7 +176,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
           ]),
         ),
       })
-    } else if (isPublic && this._contractType.isARC4) {
+    } else if (this._contractType.isARC4) {
       return new ARC4ABIMethodConfig({
         allowedCompletionTypes: conventionalDefaults?.allowedCompletionTypes ?? unspecifiedDefaults.allowedCompletionTypes,
         create: conventionalDefaults?.create ?? unspecifiedDefaults.create,

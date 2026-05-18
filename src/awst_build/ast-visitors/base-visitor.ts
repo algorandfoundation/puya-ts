@@ -49,13 +49,9 @@ const OPTIONAL_CHAINING_MESSAGE = 'The optional chaining (?.) operator is not su
 
 export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor, TNode>(this, node)
-  readonly textVisitor: TextVisitor
+  readonly textVisitor = new TextVisitor()
   get context() {
     return AwstBuildContext.current
-  }
-
-  protected constructor() {
-    this.textVisitor = new TextVisitor()
   }
 
   logNotSupported(node: ts.Node | undefined, message: string) {
@@ -129,7 +125,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     this.throwNotSupported(node, 'Null values')
   }
 
-  visitPrivateIdentifier(node: ts.PrivateIdentifier): NodeBuilder {
+  visitPrivateIdentifier(_node: ts.PrivateIdentifier): NodeBuilder {
     // Private identifiers will be wrapped in a property access expression which makes use of the TextVisitor
     throw InternalError.shouldBeUnreachable()
   }
