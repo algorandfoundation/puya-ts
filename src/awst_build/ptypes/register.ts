@@ -446,11 +446,11 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: arc4BareMethodDecorator, singletonEb: Arc4BareMethodDecoratorBuilder })
   typeRegistry.register({ ptype: ByteClass, singletonEb: classBuilderForUintNAlias(ByteClass, arc4ByteAlias) })
   typeRegistry.register({ ptype: UintN8Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 8n })) })
-  typeRegistry.register({ ptype: UintN16Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 16n })) })
-  typeRegistry.register({ ptype: UintN32Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 32n })) })
-  typeRegistry.register({ ptype: UintN64Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 64n })) })
-  typeRegistry.register({ ptype: UintN128Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 128n })) })
-  typeRegistry.register({ ptype: UintN256Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 256n })) })
+  typeRegistry.register({ ptype: UintN16Class, singletonEb: classBuilderForUintNAlias(UintN16Class, new UintNType({ n: 16n })) })
+  typeRegistry.register({ ptype: UintN32Class, singletonEb: classBuilderForUintNAlias(UintN32Class, new UintNType({ n: 32n })) })
+  typeRegistry.register({ ptype: UintN64Class, singletonEb: classBuilderForUintNAlias(UintN64Class, new UintNType({ n: 64n })) })
+  typeRegistry.register({ ptype: UintN128Class, singletonEb: classBuilderForUintNAlias(UintN128Class, new UintNType({ n: 128n })) })
+  typeRegistry.register({ ptype: UintN256Class, singletonEb: classBuilderForUintNAlias(UintN256Class, new UintNType({ n: 256n })) })
   typeRegistry.registerGeneric({
     generic: UintNGeneric,
     ptype: UintNType,
