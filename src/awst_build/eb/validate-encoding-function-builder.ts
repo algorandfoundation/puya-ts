@@ -24,7 +24,7 @@ export class ValidateEncodingFunctionBuilder extends FunctionBuilder {
       callLocation: sourceLocation,
     })
 
-    codeInvariant(!(ptype instanceof BytesPType) || ptype.length !== null, 'Cannot validate unbounded bytes')
+    codeInvariant(!(ptype instanceof BytesPType) || ptype.length !== null, 'Cannot validate unbounded bytes', sourceLocation)
 
     const validateType = ptype.equals(accountPType)
       ? arc4AddressAlias
@@ -32,7 +32,7 @@ export class ValidateEncodingFunctionBuilder extends FunctionBuilder {
         ? new StaticBytesType({ length: ptype.length })
         : ptype
 
-    codeInvariant(validateType.wtype instanceof wtypes.ARC4Type, 'Can only validate ARC4-encoded types')
+    codeInvariant(validateType.wtype instanceof wtypes.ARC4Type, 'Can only validate ARC4-encoded types', sourceLocation)
 
     const expr = nodeFactory.aRC4FromBytes({
       value: theValue.resolve(),

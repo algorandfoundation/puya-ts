@@ -50,7 +50,7 @@ export function handleAssignment(
   checkForUnclonedMutables(target, source, sourceLocation)
 
   if (isSpecialItxnType(source)) {
-    codeInvariant(isStatement, 'inner transaction results can not be used in assignment expressions')
+    codeInvariant(isStatement, 'inner transaction results can not be used in assignment expressions', sourceLocation)
     return handleItxnAssignment(context, target, source, sourceLocation)
   }
   const narrowedSourceType = narrowSourceType(target.ptype, source.ptype, sourceLocation)

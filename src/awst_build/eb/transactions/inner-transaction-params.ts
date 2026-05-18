@@ -71,7 +71,7 @@ export function mapTransactionFields(
   sourceLocation: SourceLocation,
   ignoreProps?: Set<string>,
 ) {
-  codeInvariant(isObjectType(fields.ptype), 'fields argument must be an object type')
+  codeInvariant(isObjectType(fields.ptype), 'fields argument must be an object type', sourceLocation)
   for (const { name } of fields.ptype.properties) {
     if (ignoreProps?.has(name)) continue
 

@@ -183,6 +183,7 @@ export class LocalStateFunctionResultBuilder extends InstanceBuilder<LocalStateT
       codeInvariant(
         this._expr instanceof BytesConstant,
         `key is must be a compile time constant value if ${this.typeDescription} is assigned to a contract member`,
+        memberLocation,
       )
     return new AppStorageDeclaration({
       sourceLocation: memberLocation,

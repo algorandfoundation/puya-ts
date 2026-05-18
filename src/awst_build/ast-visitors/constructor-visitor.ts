@@ -59,7 +59,7 @@ export class ConstructorVisitor extends ContractMethodBaseVisitor {
           const statement = this.accept(s)
           if (isSuperCall(s)) {
             // Property initializer statements should be injected immediately after the super() call
-            codeInvariant(!this._foundSuperCall, 'A constructor can only contain one call to super()')
+            codeInvariant(!this._foundSuperCall, 'A constructor can only contain one call to super()', this.sourceLocation(s))
             this._foundSuperCall = true
             return nodeFactory.block(
               {

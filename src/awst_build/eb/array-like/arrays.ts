@@ -188,7 +188,7 @@ class PushFunctionBuilder extends FunctionBuilder {
 
     const target = this.arrayBuilder.resolve()
 
-    codeInvariant(isReferableExpression(target), 'target of Array.push method must be a variable or state expression')
+    codeInvariant(isReferableExpression(target), 'target of Array.push method must be a variable or state expression', sourceLocation)
 
     return instanceEb(
       nodeFactory.commaExpression({

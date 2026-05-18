@@ -56,7 +56,7 @@ export abstract class FunctionVisitor
 
     const args = node.parameters.map((p) => this.accept(p))
     const assignDestructuredParams = this.evaluateParameterBindingExpressions(node.parameters, sourceLocation)
-    codeInvariant(node.body, 'Functions must have a body')
+    codeInvariant(node.body, 'Functions must have a body', sourceLocation)
     const body = assignDestructuredParams.length
       ? nodeFactory.block({ sourceLocation }, assignDestructuredParams, this.accept(node.body))
       : this.accept(node.body)
@@ -76,7 +76,7 @@ export abstract class FunctionVisitor
           const sourceLocation = this.sourceLocation(element)
 
           const sourcePropertyNameIdentifier = element.propertyName ?? element.name
-          invariant(ts.isIdentifier(sourcePropertyNameIdentifier), 'propertyName must be an identifier')
+          codeInvariant(ts.isIdentifier(sourcePropertyNameIdentifier), 'propertyName must be an identifier', sourceLocation)
           codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported here', sourceLocation)
           codeInvariant(!element.initializer, 'Initializer on object binding pattern is not supported', sourceLocation)
 
@@ -169,7 +169,7 @@ export abstract class FunctionVisitor
         // Typescript will already error if a destructuring expression is used without an initializer
         if (ts.isIdentifier(d.name)) {
           const ptype = this.context.getPTypeForNode(d.name)
-          codeInvariant(ptype.wtype, `${ptype.fullName} is not a valid variable type`)
+          codeInvariant(ptype.wtype, `${ptype.fullName} is not a valid variable type`, sourceLocation)
         }
         return []
       }
@@ -457,7 +457,9 @@ export abstract class FunctionVisitor
     return []
   }
   visitImportDeclaration(node: ts.ImportDeclaration): awst.Statement | awst.Statement[] {
-    throw new NotSupported('Non-top-level import declarations')
+    throw new NotSupported('Non-top-level import declarations', {
+      sourceLocation: this.sourceLocation(node),
+    })
   }
 
   visitBlock(node: ts.Block): awst.Block {

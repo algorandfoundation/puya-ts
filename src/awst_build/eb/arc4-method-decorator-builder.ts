@@ -148,10 +148,18 @@ function resolveDefaultArguments(
 ): Arc4AbiDecoratorData['defaultArguments'] {
   const result: Arc4AbiDecoratorData['defaultArguments'] = {}
   if (!defaultArguments) return result
-  codeInvariant(defaultArguments instanceof ObjectLiteralExpressionBuilder, `Default argument specification should be an object literal`)
+  codeInvariant(
+    defaultArguments instanceof ObjectLiteralExpressionBuilder,
+    `Default argument specification should be an object literal`,
+    sourceLocation,
+  )
   for (const { name } of defaultArguments.ptype.properties) {
     const paramConfig = defaultArguments.memberAccess(name, sourceLocation)
-    codeInvariant(paramConfig instanceof ObjectLiteralExpressionBuilder, 'Default argument specification should be an object literal')
+    codeInvariant(
+      paramConfig instanceof ObjectLiteralExpressionBuilder,
+      'Default argument specification should be an object literal',
+      sourceLocation,
+    )
 
     if (paramConfig.hasProperty('constant')) {
       result[name] = {

@@ -452,7 +452,11 @@ function getOca(
       ocaField.sourceLocation,
     )
     const oca = enumFromValue(Number(ocaField.value), OnCompletionAction)
-    codeInvariant(allowedCompletionTypes.includes(oca), `${txnFieldName.onCompletion} should be one of ${allowedCompletionTypes}`)
+    codeInvariant(
+      allowedCompletionTypes.includes(oca),
+      `${txnFieldName.onCompletion} should be one of ${allowedCompletionTypes}`,
+      ocaField.sourceLocation,
+    )
     return oca
   } else {
     const oca = allowedCompletionTypes[0]

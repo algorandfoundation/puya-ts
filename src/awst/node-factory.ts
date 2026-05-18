@@ -238,7 +238,11 @@ const explicitNodeFactory = {
     value: Expression
     sourceLocation: SourceLocation
   }) {
-    codeInvariant(target.wtype.equals(value.wtype), `Assignment target type ${target.wtype} must match assigned value type ${value.wtype}`)
+    codeInvariant(
+      target.wtype.equals(value.wtype),
+      `Assignment target type ${target.wtype} must match assigned value type ${value.wtype}`,
+      sourceLocation,
+    )
     return new AssignmentExpression({
       target,
       value,
@@ -255,7 +259,11 @@ const explicitNodeFactory = {
     value: Expression
     sourceLocation: SourceLocation
   }) {
-    codeInvariant(target.wtype.equals(value.wtype), `Assignment target type ${target.wtype} must match assigned value type ${value.wtype}`)
+    codeInvariant(
+      target.wtype.equals(value.wtype),
+      `Assignment target type ${target.wtype} must match assigned value type ${value.wtype}`,
+      sourceLocation,
+    )
     return new AssignmentStatement({
       target,
       value,

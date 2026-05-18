@@ -81,12 +81,12 @@ export function requireStringConstant(builder: NodeBuilder): awst.StringConstant
 }
 export function requireIntegerConstant(builder: NodeBuilder): awst.IntegerConstant {
   const constant = requestConstantOfType(builder, uint64PType) ?? requestConstantOfType(builder, biguintPType)
-  codeInvariant(constant instanceof IntegerConstant, 'Expected integer literal')
+  codeInvariant(constant instanceof IntegerConstant, 'Expected integer literal', builder.sourceLocation)
   return constant
 }
 export function requireBooleanConstant(builder: NodeBuilder): awst.BoolConstant {
   const constant = requireConstantOfType(builder, boolPType)
-  codeInvariant(constant instanceof BoolConstant, 'Expected boolean literal')
+  codeInvariant(constant instanceof BoolConstant, 'Expected boolean literal', builder.sourceLocation)
   return constant
 }
 

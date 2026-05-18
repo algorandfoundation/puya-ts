@@ -75,7 +75,11 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
   if (initialValueBuilder.resolvableToPType(uint64PType)) {
     const initialValue = initialValueBuilder.resolveToPType(uint64PType).resolve()
     if (initialValue instanceof IntegerConstant) {
-      codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)
+      codeInvariant(
+        isValidLiteralForPType(initialValue.value, ptype),
+        `${initialValue.value} cannot be converted to ${ptype}`,
+        sourceLocation,
+      )
       return new UintNExpressionBuilder(
         nodeFactory.integerConstant({
           value: initialValue.value,
@@ -100,7 +104,11 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
   if (initialValueBuilder.resolvableToPType(biguintPType)) {
     const initialValue = initialValueBuilder.resolveToPType(biguintPType).resolve()
     if (initialValue instanceof IntegerConstant) {
-      codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)
+      codeInvariant(
+        isValidLiteralForPType(initialValue.value, ptype),
+        `${initialValue.value} cannot be converted to ${ptype}`,
+        sourceLocation,
+      )
       return new UintNExpressionBuilder(
         nodeFactory.integerConstant({
           value: initialValue.value,
@@ -133,11 +141,15 @@ function newUintN(initialValueBuilder: InstanceBuilder | undefined, ptype: UintN
     let sourceLength: bigint | undefined
     if (initialValue instanceof BytesConstant) {
       // Constant bytes: compile-time length check via value
-      codeInvariant(isValidLiteralForPType(initialValue.value, ptype), `${initialValue.value} cannot be converted to ${ptype}`)
+      codeInvariant(
+        isValidLiteralForPType(initialValue.value, ptype),
+        `${initialValue.value} cannot be converted to ${ptype}`,
+        sourceLocation,
+      )
       sourceLength = BigInt(initialValue.value.byteLength)
     } else if (originalType instanceof BytesPType && originalType.length !== null) {
       // Fixed-size bytes type: compile-time length check via type
-      codeInvariant(originalType.length <= expectedLength, `${originalType} cannot be converted to ${ptype}`)
+      codeInvariant(originalType.length <= expectedLength, `${originalType} cannot be converted to ${ptype}`, sourceLocation)
       sourceLength = originalType.length
     }
 

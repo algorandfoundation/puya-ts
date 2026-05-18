@@ -48,7 +48,7 @@ export class ConvertBytesFunctionBuilder extends FunctionBuilder {
 
       callLocation: sourceLocation,
     })
-    codeInvariant(ptype instanceof ARC4EncodedType, 'Generic type must be an ARC4 encoded type')
+    codeInvariant(ptype instanceof ARC4EncodedType, 'Generic type must be an ARC4 encoded type', sourceLocation)
 
     const prefixBytes = getPrefixValue(prefix)
     const validate = requireStringConstant(strategy).value === 'validate'
