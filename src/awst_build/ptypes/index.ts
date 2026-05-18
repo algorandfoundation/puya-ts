@@ -325,7 +325,7 @@ export const GlobalStateGeneric = new GenericPType({
   name: 'GlobalState',
   module: Constants.moduleNames.algoTs.state,
   parameterise(typeArgs: readonly PType[]): GlobalStateType {
-    codeInvariant(typeArgs.length === 1, 'GlobalState type expects exactly one type parameter')
+    codeInvariant(typeArgs.length === 1, `${this.name} type expects exactly one type parameter`)
     return new GlobalStateType({
       content: typeArgs[0],
     })
@@ -385,7 +385,7 @@ export const LocalStateGeneric = new GenericPType({
   name: 'LocalState',
   module: Constants.moduleNames.algoTs.state,
   parameterise(typeArgs: readonly PType[]): LocalStateType {
-    codeInvariant(typeArgs.length === 1, 'LocalState type expects exactly one type parameter')
+    codeInvariant(typeArgs.length === 1, `${this.name} type expects exactly one type parameter`)
     return new LocalStateType({
       content: typeArgs[0],
     })
@@ -806,7 +806,7 @@ export const ArrayGeneric = new GenericPType({
   name: 'Array',
   module: Constants.moduleNames.typescript.es5,
   parameterise(typeArgs) {
-    codeInvariant(typeArgs.length === 1, 'Array expects exactly 1 type argument')
+    codeInvariant(typeArgs.length === 1, `${this.name} expects exactly 1 type argument`)
     return new ArrayPType({ elementType: typeArgs[0] })
   },
 })
@@ -851,7 +851,7 @@ export const ReadonlyArrayGeneric = new GenericPType({
   name: 'ReadonlyArray',
   module: Constants.moduleNames.typescript.es5,
   parameterise(typeArgs) {
-    codeInvariant(typeArgs.length === 1, 'ReadonlyArray expects exactly 1 type argument')
+    codeInvariant(typeArgs.length === 1, `${this.name} expects exactly 1 type argument`)
     return new ReadonlyArrayPType({ elementType: typeArgs[0] })
   },
 })
@@ -870,11 +870,11 @@ export const FixedArrayGeneric = new GenericPType({
   name: 'FixedArray',
   module: Constants.moduleNames.algoTs.arrays,
   parameterise(typeArgs) {
-    codeInvariant(typeArgs.length === 2, 'FixedArray type expects exactly one type parameters')
+    codeInvariant(typeArgs.length === 2, `${this.name} type expects exactly two type parameters`)
     const [elementType, arraySize] = typeArgs
     codeInvariant(
       arraySize instanceof NumericLiteralPType,
-      `Array size generic type param for FixedArray must be a literal number. Inferred type is ${arraySize.name}`,
+      `Array size generic type param for ${this.name} must be a literal number. Inferred type is ${arraySize.name}`,
     )
     if (elementType instanceof TransientType) {
       throw new CodeError(elementType.typeMessage)
@@ -916,7 +916,10 @@ export const ReadonlyGeneric = new GenericPType({
   name: 'Readonly',
   module: Constants.moduleNames.typescript.es5,
   parameterise([obj, ...rest]) {
-    codeInvariant(obj instanceof MutableObjectPType && !rest.length, 'Readonly expects exactly 1 generic type arg that is an object type')
+    codeInvariant(
+      obj instanceof MutableObjectPType && !rest.length,
+      `${this.name} expects exactly 1 generic type arg that is an object type`,
+    )
 
     return obj.toImmutable()
   },
@@ -1113,7 +1116,7 @@ export const PromiseGeneric = new GenericPType({
   name: 'Promise',
   module: Constants.moduleNames.typescript.es5,
   parameterise(ptypes: readonly PType[]) {
-    codeInvariant(ptypes.length === 1, 'Promise expects exactly 1 generic parameter')
+    codeInvariant(ptypes.length === 1, `${this.name} expects exactly 1 generic parameter`)
     return new PromiseType({ resolveType: ptypes[0] })
   },
 })
@@ -1634,7 +1637,7 @@ export class IterableIteratorType extends TransientType {
     super({
       name: `IterableIterator<${itemType.name}>`,
       module: Constants.moduleNames.typescript.iterable,
-      typeMessage: '`IterableIterator` is not valid as a variable, parameter, return, or property type. ',
+      typeMessage: '`IterableIterator` is not valid as a variable, parameter, return, or property type',
       expressionMessage: 'IterableIterator expressions can only be used in for loops',
       singleton: false,
     })
@@ -1654,7 +1657,7 @@ export const GeneratorGeneric = new GenericPType({
   name: 'Generator',
   module: Constants.moduleNames.typescript.generator,
   parameterise(ptypes) {
-    codeInvariant(ptypes.length === 3, 'Generator type expects exactly 3 type params')
+    codeInvariant(ptypes.length === 3, `${this.name} type expects exactly 3 type params`)
 
     const [itemType, returnType, nextType] = ptypes
     return new GeneratorType({
@@ -1860,7 +1863,7 @@ export const compiledLogicSigType = new ImmutableObjectPType({
     name: 'CompiledLogicSig',
     module: Constants.moduleNames.algoTs.compiled,
   }),
-  description: 'Provides account for a Logic Signature. Created by calling `compile(LogicSigType)``',
+  description: 'Provides account for a Logic Signature. Created by calling `compile(LogicSigType)`',
   properties: [{ name: 'account', ptype: accountPType, description: null }],
 })
 
@@ -1903,8 +1906,8 @@ export const PolytypeClassMethodHelper = new LibFunctionType({
 export const ReferenceArrayGeneric = new GenericPType({
   name: 'ReferenceArray',
   module: Constants.moduleNames.algoTs.referenceArray,
-  parameterise: (typeArgs: readonly PType[]): ReferenceArrayType => {
-    codeInvariant(typeArgs.length === 1, 'ReferenceArray type expects exactly one type parameter')
+  parameterise(typeArgs: readonly PType[]): ReferenceArrayType {
+    codeInvariant(typeArgs.length === 1, `${this.name} type expects exactly one type parameter`)
     const [elementType] = typeArgs
 
     return new ReferenceArrayType({ elementType: elementType })

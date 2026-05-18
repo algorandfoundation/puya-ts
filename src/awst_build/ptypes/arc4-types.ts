@@ -1,7 +1,7 @@
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
-import { codeInvariant, invariant } from '../../util'
+import { codeInvariant } from '../../util'
 import type { PTypeField } from './base'
 import { GenericPType, PType } from './base'
 import {
@@ -237,7 +237,7 @@ export const Arc4TupleGeneric = new GenericPType({
       `${this.name} generic parameter must be a native tuple type`,
     )
     const encodedTypes = tupleType.items.map((itemType, index) => {
-      codeInvariant(itemType instanceof ARC4EncodedType, `Item ${index} of ARC4 Tuple must be an ARC4 encoded type`)
+      codeInvariant(itemType instanceof ARC4EncodedType, `Item ${index} of ${this.name} must be an ARC4 encoded type`)
       return itemType
     })
     return new ARC4TupleType({
@@ -283,11 +283,11 @@ export const UintNGeneric = new GenericPType({
   name: 'Uint',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
   parameterise(typeArgs: readonly PType[]): UintNType {
-    codeInvariant(typeArgs.length === 1, 'UintNType type expects exactly one type parameter')
+    codeInvariant(typeArgs.length === 1, `${this.name} type expects exactly one type parameter`)
     const [size] = typeArgs
     codeInvariant(
       size instanceof NumericLiteralPType && size.literalValue,
-      `Generic type param for UintNType must be a literal number. Inferred type is ${size.name}`,
+      `Generic type param for ${this.name} must be a literal number. Inferred type is ${size.name}`,
     )
 
     return new UintNType({ n: size.literalValue })
@@ -329,11 +329,11 @@ export const UFixedNxMGeneric = new GenericPType({
     const [n, m] = typeArgs
     codeInvariant(
       n instanceof NumericLiteralPType && n.literalValue,
-      `Generic type param 'N' for ${this.name}  must be a literal number. Inferred type is ${n.name}`,
+      `Generic type param 'N' for ${this.name} must be a literal number. Inferred type is ${n.name}`,
     )
     codeInvariant(
       m instanceof NumericLiteralPType && m.literalValue,
-      `Generic type param 'M' for UintNType must be a literal number. Inferred type is ${m.name}`,
+      `Generic type param 'M' for ${this.name} must be a literal number. Inferred type is ${m.name}`,
     )
     return new UFixedNxMType({
       n: n.literalValue,
@@ -362,7 +362,7 @@ export class UFixedNxMType extends ARC4EncodedType {
     this.n = n
     this.m = m
 
-    this.name = `${UFixedNxMGeneric.name}<${n}, ${m}>`
+    this.name = `UFixed<${n}, ${m}>`
     this.wtype = new wtypes.ARC4UFixedNxM({ n: this.n, m: this.m })
     this.abiTypeSignature = `ufixed${n}x${m}`
   }
@@ -377,12 +377,12 @@ export const arc4ByteAlias = new UintNType({ n: 8n, wtype: wtypes.arc4ByteAliasW
 export const DynamicArrayGeneric = new GenericPType({
   name: 'DynamicArray',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
-  parameterise: (typeArgs: readonly PType[]): DynamicArrayType => {
-    codeInvariant(typeArgs.length === 1, 'DynamicArray type expects exactly one type parameter')
+  parameterise(typeArgs: readonly PType[]): DynamicArrayType {
+    codeInvariant(typeArgs.length === 1, `${this.name} type expects exactly one type parameter`)
     const [elementType] = typeArgs
     codeInvariant(
       elementType instanceof ARC4EncodedType,
-      `Generic type param for DynamicArray must be an ARC4 encoded type. Inferred type is ${elementType.name}`,
+      `Generic type param for ${this.name} must be an ARC4 encoded type. Inferred type is ${elementType.name}`,
     )
 
     return new DynamicArrayType({ elementType: elementType })
@@ -436,16 +436,16 @@ export class DynamicArrayType extends ARC4ArrayType {
 export const StaticArrayGeneric = new GenericPType({
   name: 'StaticArray',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
-  parameterise: (typeArgs: readonly PType[]): StaticArrayType => {
-    codeInvariant(typeArgs.length === 2, 'StaticArray type expects exactly one type parameters')
+  parameterise(typeArgs: readonly PType[]): StaticArrayType {
+    codeInvariant(typeArgs.length === 2, `${this.name} type expects exactly two type parameters`)
     const [elementType, arraySize] = typeArgs
     codeInvariant(
       elementType instanceof ARC4EncodedType,
-      `Element type generic type param for StaticArray must be an ARC4 encoded type. Inferred type is ${elementType.name}`,
+      `Element type generic type param for ${this.name} must be an ARC4 encoded type. Inferred type is ${elementType.name}`,
     )
     codeInvariant(
       arraySize instanceof NumericLiteralPType,
-      `Array size generic type param for StaticArray must be a literal number. Inferred type is ${arraySize.name}`,
+      `Array size generic type param for ${this.name} must be a literal number. Inferred type is ${arraySize.name}`,
     )
 
     return new StaticArrayType({ arraySize: arraySize.literalValue, elementType })
@@ -522,13 +522,13 @@ export const AddressClass = new LibClassType({
 export const StaticBytesGeneric = new GenericPType({
   name: 'StaticBytes',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
-  parameterise: (typeArgs: readonly PType[]): StaticBytesType => {
-    codeInvariant(typeArgs.length === 1, 'StaticBytes type expects exactly one type parameter')
+  parameterise(typeArgs: readonly PType[]): StaticBytesType {
+    codeInvariant(typeArgs.length === 1, `${this.name} type expects exactly one type parameter`)
     const [length] = typeArgs
 
     codeInvariant(
       length instanceof NumericLiteralPType,
-      `Length generic type param for StaticBytes must be a literal number. Inferred type is ${length.name}`,
+      `Length generic type param for ${this.name} must be a literal number. Inferred type is ${length.name}`,
     )
     return new StaticBytesType({
       length: length.literalValue,
@@ -552,7 +552,7 @@ export const DynamicBytesConstructor = new LibClassType({
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const DynamicBytesType = new DynamicArrayType({
-  name: `DynamicBytes`,
+  name: 'DynamicBytes',
   immutable: true,
   elementType: arc4ByteAlias,
   nativeType: bytesPType,
@@ -595,9 +595,9 @@ export const ContractProxyGeneric = new GenericPType({
   name: 'ContractProxy',
   module: Constants.moduleNames.algoTs.arc4.c2c,
   parameterise(args: readonly PType[]) {
-    invariant(args.length === 1, 'ContractProxy expects exactly 1 type arg')
+    codeInvariant(args.length === 1, `${this.name} expects exactly 1 type arg`)
     const [typeArg] = args
-    invariant(typeArg instanceof ContractClassPType && typeArg.isARC4, 'Contract Proxy generic type arg must extend arc4 Contract type')
+    codeInvariant(typeArg instanceof ContractClassPType && typeArg.isARC4, `${this.name} generic type arg must extend arc4 Contract type`)
     return new ContractProxyType({ contractType: typeArg })
   },
 })
@@ -626,7 +626,7 @@ export const TypedApplicationCallResponseGeneric = new GenericPType({
   name: 'TypedApplicationCallResponse',
   module: Constants.moduleNames.algoTs.arc4.c2c,
   parameterise(args: readonly PType[]) {
-    invariant(args.length === 1, 'TypedApplicationCallResponse expects exactly 1 type arg')
+    codeInvariant(args.length === 1, `${this.name} expects exactly 1 type arg`)
     const [typeArg] = args
     return new TypedApplicationCallResponseType({ returnValue: typeArg })
   },
