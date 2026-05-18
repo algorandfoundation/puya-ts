@@ -2,8 +2,8 @@ import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import { type Expression, type MethodDocumentation } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { NoOpNonNullAssertion } from '../../code-fix/no-op-non-null-assertion'
 import { LooseEqualityOperator } from '../../code-fix/loose-equality-operator'
+import { NoOpNonNullAssertion } from '../../code-fix/no-op-non-null-assertion'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
@@ -29,7 +29,7 @@ import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expre
 import { BigIntLiteralExpressionBuilder } from '../eb/literal/big-int-literal-expression-builder'
 import { ConditionalExpressionBuilder } from '../eb/literal/conditional-expression-builder'
 import { NumericLiteralExpressionBuilder } from '../eb/literal/numeric-literal-expression-builder'
-import type { ObjectLiteralParts } from '../eb/literal/object-literal-expression-builder'
+import type { ObjectLiteralPart } from '../eb/literal/object-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
@@ -150,15 +150,16 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
   visitObjectLiteralExpression(node: ts.ObjectLiteralExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const parts: Array<ObjectLiteralParts> = node.properties.flatMap((p): ObjectLiteralParts[] => {
+    const parts: Array<ObjectLiteralPart> = node.properties.flatMap((p): ObjectLiteralPart[] => {
       const propertySourceLocation = this.sourceLocation(p)
       switch (p.kind) {
         case ts.SyntaxKind.PropertyAssignment:
           return [
             {
               type: 'properties',
-              properties: {
-                [this.textVisitor.accept(p.name)]: requireInstanceBuilder(this.baseAccept(p.initializer)),
+              property: {
+                name: this.textVisitor.accept(p.name),
+                target: requireInstanceBuilder(this.baseAccept(p.initializer)),
               },
             },
           ]
@@ -168,7 +169,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           return [
             {
               type: 'properties',
-              properties: { [this.textVisitor.accept(p.name)]: requireInstanceBuilder(this.baseAccept(p.name)) },
+              property: { name: this.textVisitor.accept(p.name), target: requireInstanceBuilder(this.baseAccept(p.name)) },
             },
           ]
         case ts.SyntaxKind.SpreadAssignment:

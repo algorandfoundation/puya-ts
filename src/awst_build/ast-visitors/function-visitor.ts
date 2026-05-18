@@ -15,6 +15,7 @@ import type { InstanceBuilder } from '../eb'
 import { BuilderComparisonOp } from '../eb'
 import { CloneFunctionBuilder } from '../eb/clone-function-builder'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
+import type { ObjectLiteralPart } from '../eb/literal/object-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
@@ -70,20 +71,25 @@ export abstract class FunctionVisitor
   visitBindingName(bindingName: ts.BindingName, sourceLocation: SourceLocation): InstanceBuilder {
     switch (bindingName.kind) {
       case ts.SyntaxKind.ObjectBindingPattern: {
-        const props = Array<[string, InstanceBuilder]>()
+        const parts: ObjectLiteralPart[] = []
         for (const element of bindingName.elements) {
           const sourceLocation = this.sourceLocation(element)
 
-          const propertyNameIdentifier = element.propertyName ?? element.name
-          invariant(ts.isIdentifier(propertyNameIdentifier), 'propertyName must be an identifier')
-
-          const propertyName = this.textVisitor.accept(propertyNameIdentifier)
+          const sourcePropertyNameIdentifier = element.propertyName ?? element.name
+          invariant(ts.isIdentifier(sourcePropertyNameIdentifier), 'propertyName must be an identifier')
           codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported here', sourceLocation)
           codeInvariant(!element.initializer, 'Initializer on object binding pattern is not supported', sourceLocation)
 
-          props.push([propertyName, this.visitBindingName(element.name, sourceLocation)])
+          const sourcePropertyName = this.textVisitor.accept(sourcePropertyNameIdentifier)
+          parts.push({
+            type: 'properties',
+            property: {
+              name: sourcePropertyName,
+              target: this.visitBindingName(element.name, sourceLocation),
+            },
+          })
         }
-        return ObjectLiteralExpressionBuilder.fromParts(sourceLocation, [{ type: 'properties', properties: Object.fromEntries(props) }])
+        return ObjectLiteralExpressionBuilder.fromParts(sourceLocation, parts)
       }
       case ts.SyntaxKind.ArrayBindingPattern: {
         const items: InstanceBuilder[] = []

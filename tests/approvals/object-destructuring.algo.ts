@@ -1,5 +1,5 @@
 import type { biguint, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { assert, assertMatch, Bytes, clone, Contract } from '@algorandfoundation/algorand-typescript'
+import { assert, assertMatch, Bytes, clone, Contract, Uint64 } from '@algorandfoundation/algorand-typescript'
 
 type Coordinate = { x: uint64; y: uint64 }
 type Vector = { c1: Coordinate; c2: Coordinate }
@@ -29,7 +29,20 @@ function test() {
   const { d: e } = produceItems()
   let g: uint64, i: biguint
   const f = ({ a: g, d: i } = produceItems())
+  assertMatch([g, i], [1, 999n])
   receivePartial(produceItems())
+}
+
+function testDuplicateSourceKey() {
+  const { a, a: aCopy } = produceItems()
+  assertMatch([a, aCopy], [1, 1])
+
+  const { a: x } = { a: Uint64(7) }
+  assertMatch([x], [7])
+
+  let p: uint64, q: uint64
+  const _ = ({ a: p, a: q } = { a: Uint64(3) })
+  assertMatch([p, q], [3, 3])
 }
 
 function testMutableObject() {
@@ -109,5 +122,7 @@ class ObjectDestructuringAlgo extends Contract {
     test()
 
     testMutableObject()
+
+    testDuplicateSourceKey()
   }
 }

@@ -108,17 +108,55 @@ subroutine tests/approvals/object-destructuring.algo.ts::test() -> void:
         let g#0: uint64 = tmp%5#0
         let i#0: biguint = tmp%6#0
         let f#0: Encoded(uint64,(len+uint8[]),bool1,uint512) = awst_tmp%2#0
+        let tmp%7#0: bool = (== 2u 2u)
+        let tmp%8#0: bool = (== g#0 1u)
+        let tmp%9#0: bool = (&& tmp%7#0 tmp%8#0)
+        let tmp%10#0: bool = (b== i#0 999b)
+        let tmp%11#0: bool = (&& tmp%9#0 tmp%10#0)
+        (assert tmp%11#0) // assert target is match for conditions
         let awst_tmp%3#0: Encoded(uint64,(len+uint8[]),bool1,uint512) = tests/approvals/object-destructuring.algo.ts::produceItems()
         let tuple_item%7#0: Encoded(uint64) = extract_value(awst_tmp%3#0, 0)
-        let tmp%7#0: uint64 = decode_bytes<uint64>(tuple_item%7#0)
+        let tmp%12#0: uint64 = decode_bytes<uint64>(tuple_item%7#0)
         let tuple_item%8#0: Encoded(uint512) = extract_value(awst_tmp%3#0, 3)
-        let tmp%8#0: biguint = decode_bytes<biguint>(tuple_item%8#0)
-        let tmp%9#0: Encoded(uint64,uint512) = bytes_encode<(uint64,uint512)>(tmp%7#0, tmp%8#0)
-        let receivePartial%0#0: Encoded(uint64,uint512) = tests/approvals/object-destructuring.algo.ts::receivePartial(tmp%9#0)
+        let tmp%13#0: biguint = decode_bytes<biguint>(tuple_item%8#0)
+        let tmp%14#0: Encoded(uint64,uint512) = bytes_encode<(uint64,uint512)>(tmp%12#0, tmp%13#0)
+        let receivePartial%0#0: Encoded(uint64,uint512) = tests/approvals/object-destructuring.algo.ts::receivePartial(tmp%14#0)
+        return 
+
+subroutine tests/approvals/object-destructuring.algo.ts::testDuplicateSourceKey() -> void:
+    block@0: // L36
+        let awst_tmp%0#0: Encoded(uint64,(len+uint8[]),bool1,uint512) = tests/approvals/object-destructuring.algo.ts::produceItems()
+        let tuple_item%0#0: Encoded(uint64) = extract_value(awst_tmp%0#0, 0)
+        let tmp%0#0: uint64 = decode_bytes<uint64>(tuple_item%0#0)
+        let tuple_item%1#0: Encoded(uint64) = extract_value(awst_tmp%0#0, 0)
+        let tmp%1#0: uint64 = decode_bytes<uint64>(tuple_item%1#0)
+        let a#0: uint64 = tmp%0#0
+        let aCopy#0: uint64 = tmp%1#0
+        let tmp%2#0: bool = (== 2u 2u)
+        let tmp%3#0: bool = (== a#0 1u)
+        let tmp%4#0: bool = (&& tmp%2#0 tmp%3#0)
+        let tmp%5#0: bool = (== aCopy#0 1u)
+        let tmp%6#0: bool = (&& tmp%4#0 tmp%5#0)
+        (assert tmp%6#0) // assert target is match for conditions
+        let x#0: uint64 = 7u
+        let tmp%7#0: bool = (== 1u 1u)
+        let tmp%8#0: bool = (== x#0 7u)
+        let tmp%9#0: bool = (&& tmp%7#0 tmp%8#0)
+        (assert tmp%9#0) // assert target is match for conditions
+        let p#0: uint64 = 3u
+        let q#0: uint64 = 3u
+        let tmp%10#0: Encoded(uint64) = bytes_encode<(uint64)>(3u)
+        let _#0: Encoded(uint64) = tmp%10#0
+        let tmp%11#0: bool = (== 2u 2u)
+        let tmp%12#0: bool = (== p#0 3u)
+        let tmp%13#0: bool = (&& tmp%11#0 tmp%12#0)
+        let tmp%14#0: bool = (== q#0 3u)
+        let tmp%15#0: bool = (&& tmp%13#0 tmp%14#0)
+        (assert tmp%15#0) // assert target is match for conditions
         return 
 
 subroutine tests/approvals/object-destructuring.algo.ts::testMutableObject() -> void:
-    block@0: // L35
+    block@0: // L48
         let awst_tmp%0#0: Encoded((uint64,uint64),(uint64,uint64)) = tests/approvals/object-destructuring.algo.ts::produceVector()
         let tuple_item%0#0: Encoded(uint64,uint64) = extract_value(awst_tmp%0#0, 0)
         let tuple_item%1#0: Encoded(uint64) = extract_value(tuple_item%0#0, 0)
@@ -155,31 +193,31 @@ subroutine tests/approvals/object-destructuring.algo.ts::testMutableObject() -> 
         return 
 
 subroutine tests/approvals/object-destructuring.algo.ts::produceItems() -> Encoded(uint64,(len+uint8[]),bool1,uint512):
-    block@0: // L51
+    block@0: // L64
         let tmp%0#0: Encoded(uint64,(len+uint8[]),bool1,uint512) = bytes_encode<(uint64,(len+uint8[]),bool1,uint512)>(1u, "", 0u, 999b)
         return tmp%0#0
 
 subroutine tests/approvals/object-destructuring.algo.ts::produceVector() -> Encoded((uint64,uint64),(uint64,uint64)):
-    block@0: // L60
+    block@0: // L73
         let tmp%0#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(1u, 2u)
         let tmp%1#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(4u, 1u)
         let tmp%2#0: Encoded((uint64,uint64),(uint64,uint64)) = bytes_encode<((uint64,uint64),(uint64,uint64))>(tmp%0#0, tmp%1#0)
         return tmp%2#0
 
 subroutine tests/approvals/object-destructuring.algo.ts::receivePartial(x: Encoded(uint64,uint512)) -> Encoded(uint64,uint512):
-    block@0: // L64
+    block@0: // L77
         let x%is_original#0: bool = 1u
         let x%out#0: Encoded(uint64,uint512) = x#0
         return x%out#0
 
 subroutine tests/approvals/object-destructuring.algo.ts::receivePartialMutableObject(a: Encoded((uint64,uint64))) -> Encoded((uint64,uint64)):
-    block@0: // L66
+    block@0: // L79
         let a%is_original#0: bool = 1u
         let a%out#0: Encoded((uint64,uint64)) = a#0
         return a%out#0
 
 subroutine tests/approvals/object-destructuring.algo.ts::testLiteralToLiteral() -> Encoded(len+uint64[]):
-    block@0: // L68
+    block@0: // L81
         let c#0: uint64 = 4u
         let d#0: uint64 = 1u
         let awst_tmp%0#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(4u, 1u)
@@ -193,7 +231,7 @@ subroutine tests/approvals/object-destructuring.algo.ts::testLiteralToLiteral() 
         return encoded_array%0#0
 
 subroutine tests/approvals/object-destructuring.algo.ts::testNumericResolution() -> void:
-    block@0: // L78
+    block@0: // L91
         let tmp%0#0: Encoded(uint64) = bytes_encode<(uint64)>(434u)
         let y#0: Encoded(uint64) = tmp%0#0
         let x#0: Encoded(uint64) = y#0
@@ -210,14 +248,14 @@ subroutine tests/approvals/object-destructuring.algo.ts::testNumericResolution()
         return 
 
 subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.__puya_arc4_router__() -> bool:
-    block@0: // L96
+    block@0: // L109
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
         goto tmp%1#0 ? block@1 : block@4
-    block@1: // abi_routing_L96
+    block@1: // abi_routing_L109
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
         switch tmp%2#0 {method "test()void" => block@2, * => block@3}
-    block@2: // test_route_L97
+    block@2: // test_route_L110
         let tmp%3#0: uint64 = (txn OnCompletion)
         let tmp%4#0: bool = (== tmp%3#0 NoOp)
         let tmp%5#0: uint64 = (txn ApplicationID)
@@ -226,9 +264,9 @@ subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo
         (assert tmp%7#0)
         tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test[routing]()
         goto block@3
-    block@3: // switch_case_next_L96
+    block@3: // switch_case_next_L109
         goto block@5
-    block@4: // __algots__.defaultCreate_L96
+    block@4: // __algots__.defaultCreate_L109
         let tmp%8#0: uint64 = (txn OnCompletion)
         let tmp%9#0: bool = (== tmp%8#0 NoOp)
         let tmp%10#0: uint64 = (txn ApplicationID)
@@ -237,16 +275,16 @@ subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo
         (assert tmp%12#0)
         tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.__algots__.defaultCreate()
         exit 1u
-    block@5: // after_if_else_L96
+    block@5: // after_if_else_L109
         exit 0u
 
 subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test[routing]() -> void:
-    block@0: // L97
+    block@0: // L110
         tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test()
         exit 1u
 
 subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.test() -> void:
-    block@0: // L97
+    block@0: // L110
         let (tmp%0#0: uint64, tmp%1#0: uint64) = tests/approvals/object-destructuring.algo.ts::testPartialDestructure(1u, 4u, 123b)
         let (res.0#0: uint64, res.1#0: uint64) = (tmp%0#0, tmp%1#0)
         let tmp%2#0: bool = (== 2u 2u)
@@ -290,8 +328,9 @@ subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo
         (assert tmp%29#0) // assert target is match for conditions
         tests/approvals/object-destructuring.algo.ts::test()
         tests/approvals/object-destructuring.algo.ts::testMutableObject()
+        tests/approvals/object-destructuring.algo.ts::testDuplicateSourceKey()
         return 
 
 subroutine tests/approvals/object-destructuring.algo.ts::ObjectDestructuringAlgo.__algots__.defaultCreate() -> void:
-    block@0: // L96
+    block@0: // L109
         return 
