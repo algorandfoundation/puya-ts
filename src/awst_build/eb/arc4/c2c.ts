@@ -284,8 +284,8 @@ export function buildApplicationCallTxnFields({
   // Build itxn and submit
   itxnGroup.push(
     nodeFactory.aBICall({
-      target: target,
-      args: args,
+      target,
+      args,
       fields: mappedFields,
       sourceLocation,
       wtype: new wtypes.WABICallInnerTransactionFields({

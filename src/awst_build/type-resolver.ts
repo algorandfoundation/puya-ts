@@ -65,13 +65,12 @@ export class TypeResolver {
 
   private getUnaliasedSymbolForNode(node: ts.Node) {
     const symbol = this.checker.getSymbolAtLocation(node)
-    if (symbol) {
-      if (hasFlags(symbol.flags, ts.SymbolFlags.Alias)) {
-        return this.checker.getAliasedSymbol(symbol)
-      }
-      return symbol
+    if (!symbol) return undefined
+
+    if (hasFlags(symbol.flags, ts.SymbolFlags.Alias)) {
+      return this.checker.getAliasedSymbol(symbol)
     }
-    return undefined
+    return symbol
   }
 
   resolveTypeParameters(node: ts.CallExpression | ts.NewExpression | ts.TaggedTemplateExpression, sourceLocation: SourceLocation) {

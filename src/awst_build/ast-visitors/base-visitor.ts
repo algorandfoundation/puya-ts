@@ -2,8 +2,8 @@ import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import { type Expression, type MethodDocumentation } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { NoOpNonNullAssertion } from '../../code-fix/no-op-non-null-assertion'
 import { LooseEqualityOperator } from '../../code-fix/loose-equality-operator'
+import { NoOpNonNullAssertion } from '../../code-fix/no-op-non-null-assertion'
 import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
@@ -110,7 +110,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     }
     const ptype = this.context.getPTypeForNode(node)
     invariant(ptype instanceof NumericLiteralPType, 'ptype should be NumericLiteralPType')
-    return new NumericLiteralExpressionBuilder(literalValue, ptype, this.sourceLocation(node))
+    return new NumericLiteralExpressionBuilder(literalValue, ptype, sourceLocation)
   }
 
   visitIdentifier(node: ts.Identifier): NodeBuilder {
@@ -207,13 +207,11 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
          */
         if (isMutableType(spreadExpr.ptype) && !containsMutableType(spreadExpr.ptype)) {
           toConcat.push(CloneFunctionBuilder.clone(spreadExpr, this.sourceLocation(element)))
+        } else if (spreadExpr.checkForUnclonedMutables('being spread into an array literal')) {
+          // Add a clone if one is required so we don't get cascading errors
+          toConcat.push(CloneFunctionBuilder.clone(spreadExpr, this.sourceLocation(element)))
         } else {
-          if (spreadExpr.checkForUnclonedMutables('being spread into an array literal')) {
-            // Add a clone if one is required so we don't get cascading errors
-            toConcat.push(CloneFunctionBuilder.clone(spreadExpr, this.sourceLocation(element)))
-          } else {
-            toConcat.push(spreadExpr)
-          }
+          toConcat.push(spreadExpr)
         }
       } else {
         itemBuffer.push(requireInstanceBuilder(this.baseAccept(element)))
@@ -613,13 +611,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   protected getNodeDescription(node: ts.Node): string | null {
-    const docs = ts.getJSDocCommentsAndTags(node)
-    for (const doc of docs) {
-      if (ts.isJSDoc(doc)) {
-        return ts.getTextOfJSDocComment(doc.comment) ?? null
-      }
-    }
-    return null
+    const jsdoc = ts.getJSDocCommentsAndTags(node).find(ts.isJSDoc)
+    return jsdoc ? (ts.getTextOfJSDocComment(jsdoc.comment) ?? null) : null
   }
 
   protected getMethodDocumentation(node: ts.FunctionDeclaration | ts.MethodDeclaration | ts.ConstructorDeclaration): MethodDocumentation {

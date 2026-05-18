@@ -268,7 +268,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     config: Arc4AbiDecoratorData['defaultArguments'][string]
     decoratorLocation: SourceLocation
   }): ABIMethodArgMemberDefault | ABIMethodArgConstantDefault {
-    const [, paramType] = this._contractType.methods[methodName].parameters.find(([p]) => p === parameterName) ?? [undefined, undefined]
+    const paramType = this._contractType.methods[methodName].parameters.find(([p]) => p === parameterName)?.[1]
     codeInvariant(
       paramType,
       `Default argument specification '${parameterName}' does not match any parameters on the target method`,
