@@ -516,7 +516,7 @@ export class TypeResolver {
     })
   }
 
-  getTypeName(type: ts.Type): SymbolName | undefined {
+  private getTypeName(type: ts.Type): SymbolName | undefined {
     const typeName = type.symbol ? this.getSymbolFullName(type.symbol) : undefined
     const aliasName = type.aliasSymbol ? this.getSymbolFullName(type.aliasSymbol) : undefined
 

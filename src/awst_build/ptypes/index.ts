@@ -675,7 +675,7 @@ export class FunctionPType extends PType {
   readonly name: string
   readonly module: string
   readonly returnType: PType
-  readonly parameters: Array<readonly [string, PType]>
+  readonly parameters: ReadonlyArray<readonly [string, PType]>
   readonly singleton = true
   readonly sourceLocation: SourceLocation | undefined
   readonly declaredIn: SymbolName | undefined
@@ -684,7 +684,7 @@ export class FunctionPType extends PType {
     name: string
     module: string
     returnType: PType
-    parameters: Array<readonly [string, PType]>
+    parameters: ReadonlyArray<readonly [string, PType]>
     sourceLocation: SourceLocation | undefined
     declaredIn?: SymbolName
   }) {

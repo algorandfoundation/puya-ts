@@ -86,8 +86,8 @@ export namespace wtypes {
   }
 
   export class WTuple extends WType {
-    types: WType[]
-    names: string[] | undefined
+    readonly types: WType[]
+    readonly names: string[] | undefined
     constructor(props: { names?: string[]; types: WType[]; name?: string }) {
       super({
         name: props.name ?? 'tuple',
@@ -144,7 +144,7 @@ export namespace wtypes {
     }
   }
   export class WGroupTransaction extends WType {
-    transactionType: TransactionKind | null
+    readonly transactionType: TransactionKind | null
     constructor({ transactionType }: { transactionType?: TransactionKind }) {
       super({
         name: transactionType === undefined ? 'group_transaction' : `group_transaction_${TransactionKind[transactionType]}`,
@@ -153,7 +153,7 @@ export namespace wtypes {
     }
   }
   export class WInnerTransaction extends WType {
-    transactionType: TransactionKind | null
+    readonly transactionType: TransactionKind | null
     constructor({ transactionType }: { transactionType?: TransactionKind }) {
       super({
         name: transactionType === undefined ? 'inner_transaction' : `inner_transaction_${TransactionKind[transactionType]}`,
@@ -162,7 +162,7 @@ export namespace wtypes {
     }
   }
   export class WInnerTransactionFields extends WType {
-    transactionType: TransactionKind | null
+    readonly transactionType: TransactionKind | null
     constructor({ transactionType, name }: { transactionType?: TransactionKind; name?: string }) {
       super({
         name: transactionType === undefined ? 'inner_transaction_fields' : `inner_transaction_fields_${TransactionKind[transactionType]}`,
@@ -172,7 +172,7 @@ export namespace wtypes {
   }
 
   export class WABICallInnerTransactionFields extends WInnerTransactionFields {
-    resultType: WType
+    readonly resultType: WType
     constructor({ returnType }: { returnType?: WType }) {
       super({
         transactionType: TransactionKind.appl,
@@ -218,10 +218,10 @@ export namespace wtypes {
   }
 
   export class ARC4Struct extends ARC4Type {
-    fields: WTypeField[]
-    sourceLocation: SourceLocation | null
-    frozen: boolean
-    desc: string | null
+    readonly fields: WTypeField[]
+    readonly sourceLocation: SourceLocation | null
+    readonly frozen: boolean
+    readonly desc: string | null
 
     constructor({
       fields,

@@ -100,8 +100,8 @@ export abstract class AwstBuildContext {
   }): void
   abstract registerContractType(contractType: ContractClassPType): void
   abstract getContractTypeByName(contractName: SymbolName): ContractClassPType | undefined
-  abstract getArc4Config(contractType: ContractClassPType, memberName: string): ARC4MethodConfig | undefined
   abstract getArc4Config(contractType: ContractClassPType): ARC4MethodConfig[]
+  abstract getArc4Config(contractType: ContractClassPType, memberName: string): ARC4MethodConfig | undefined
 
   abstract getStorageDeclaration(contractType: ContractClassPType, memberName: string): AppStorageDeclaration | undefined
 
@@ -272,7 +272,7 @@ class AwstBuildContextImpl extends AwstBuildContext {
     return this.nameResolver.resolveUniqueName(node.text, symbol)
   }
 
-  getTypeParameters(node: ts.CallExpression | ts.NewExpression): PType[] {
+  getTypeParameters(node: ts.CallExpression | ts.NewExpression | ts.TaggedTemplateExpression): PType[] {
     return this.typeResolver.resolveTypeParameters(node, this.getSourceLocation(node))
   }
 

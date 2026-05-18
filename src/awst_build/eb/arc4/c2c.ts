@@ -374,7 +374,7 @@ function getImplicitFields({
   sourceLocation,
 }: {
   applicationProxy: InstanceBuilder
-  methodConfig: ARC4ABIMethodConfig | ARC4BareMethodConfig
+  methodConfig: ARC4MethodConfig
   mappedFields: ReadonlyMap<TxnField, Expression>
   sourceLocation: SourceLocation
 }) {

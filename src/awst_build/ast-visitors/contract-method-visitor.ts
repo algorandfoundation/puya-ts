@@ -252,7 +252,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     }
   }
 
-  checkBareMethodTypes(functionType: FunctionPType, sourceLocation: SourceLocation) {
+  private checkBareMethodTypes(functionType: FunctionPType, sourceLocation: SourceLocation) {
     codeInvariant(functionType.parameters.length === 0, 'Bare methods cannot have any parameters', sourceLocation)
     codeInvariant(functionType.returnType.equals(voidPType), 'Bare method return type must be void', sourceLocation)
   }

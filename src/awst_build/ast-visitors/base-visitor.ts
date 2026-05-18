@@ -476,7 +476,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     })
   }
 
-  createConditionalExpression({
+  private createConditionalExpression({
     condition,
     ptype,
     whenFalse,

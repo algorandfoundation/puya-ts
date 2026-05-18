@@ -110,7 +110,10 @@ export abstract class FunctionVisitor
         throw new InternalError('Unhandled binding name', { sourceLocation })
     }
   }
-  evaluateParameterBindingExpressions(parameters: Iterable<ts.ParameterDeclaration>, sourceLocation: SourceLocation): awst.Statement[] {
+  private evaluateParameterBindingExpressions(
+    parameters: Iterable<ts.ParameterDeclaration>,
+    sourceLocation: SourceLocation,
+  ): awst.Statement[] {
     const assignments: awst.Statement[] = []
     for (const p of parameters) {
       const sourceLocation = this.sourceLocation(p)
