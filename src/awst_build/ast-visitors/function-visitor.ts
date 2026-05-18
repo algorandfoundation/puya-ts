@@ -75,7 +75,7 @@ export abstract class FunctionVisitor
           const sourceLocation = this.sourceLocation(element)
 
           const propertyNameIdentifier = element.propertyName ?? element.name
-          invariant(ts.isIdentifier(propertyNameIdentifier), 'propertyName must be an identifier')
+          codeInvariant(ts.isIdentifier(propertyNameIdentifier), 'propertyName must be an identifier', sourceLocation)
 
           const propertyName = this.textVisitor.accept(propertyNameIdentifier)
           codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported here', sourceLocation)
@@ -163,7 +163,7 @@ export abstract class FunctionVisitor
         // Typescript will already error if a destructuring expression is used without an initializer
         if (ts.isIdentifier(d.name)) {
           const ptype = this.context.getPTypeForNode(d.name)
-          codeInvariant(ptype.wtype, `${ptype.fullName} is not a valid variable type`)
+          codeInvariant(ptype.wtype, `${ptype.fullName} is not a valid variable type`, sourceLocation)
         }
         return []
       }
@@ -451,7 +451,9 @@ export abstract class FunctionVisitor
     return []
   }
   visitImportDeclaration(node: ts.ImportDeclaration): awst.Statement | awst.Statement[] {
-    throw new NotSupported('Non-top-level import declarations')
+    throw new NotSupported('Non-top-level import declarations', {
+      sourceLocation: this.sourceLocation(node),
+    })
   }
 
   visitBlock(node: ts.Block): awst.Block {
