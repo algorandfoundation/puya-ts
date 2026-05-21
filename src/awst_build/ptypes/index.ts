@@ -567,8 +567,7 @@ export class ABICompatibleInstanceType extends InstanceType implements ABICompat
   }
 }
 
-export class LibFunctionType extends PType {
-  readonly [PType.IdSymbol] = 'LibFunctionType'
+abstract class LibPType extends PType {
   readonly wtype: undefined
   readonly name: string
   readonly module: string
@@ -579,41 +578,21 @@ export class LibFunctionType extends PType {
     this.name = name
     this.module = module
   }
-
+}
+export class LibFunctionType extends LibPType {
+  readonly [PType.IdSymbol] = 'LibFunctionType'
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitLibFunctionType(this)
   }
 }
-export class LibClassType extends PType {
+export class LibClassType extends LibPType {
   readonly [PType.IdSymbol] = 'LibClassType'
-  readonly wtype: undefined
-  readonly name: string
-  readonly module: string
-  readonly singleton = true
-
-  constructor({ name, module }: { name: string; module: string }) {
-    super()
-    this.name = name
-    this.module = module
-  }
-
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitLibClassType(this)
   }
 }
-export class LibObjType extends PType {
+export class LibObjType extends LibPType {
   readonly [PType.IdSymbol] = 'LibObjType'
-  readonly wtype: undefined
-  readonly name: string
-  readonly module: string
-  readonly singleton = true
-
-  constructor({ name, module }: { name: string; module: string }) {
-    super()
-    this.name = name
-    this.module = module
-  }
-
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitLibObjType(this)
   }
