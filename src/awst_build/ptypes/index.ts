@@ -956,6 +956,23 @@ abstract class ObjectPType extends PType {
   hasSameStructure(other: ObjectPType): boolean {
     return zipStrict(this.properties, other.properties).every(([left, right]) => left.name === right.name && left.ptype.equals(right.ptype))
   }
+
+  protected toWTuple(fallbackName: string): wtypes.WTuple {
+    const tupleTypes: wtypes.WType[] = []
+    const tupleNames: string[] = []
+    for (const { name, ptype } of this.properties) {
+      if (ptype instanceof TransientType) {
+        throw new CodeError(`Property '${name}' of ${this.name} has an unsupported type: ${ptype.typeMessage}`)
+      }
+      tupleTypes.push(ptype.wtypeOrThrow)
+      tupleNames.push(name)
+    }
+    return new wtypes.WTuple({
+      name: this.alias?.fullName ?? fallbackName,
+      names: tupleNames,
+      types: tupleTypes,
+    })
+  }
 }
 
 export class ObjectLiteralPType extends ObjectPType {
@@ -989,20 +1006,7 @@ export class ObjectLiteralPType extends ObjectPType {
   }
 
   get wtype(): wtypes.WTuple {
-    const tupleTypes: wtypes.WType[] = []
-    const tupleNames: string[] = []
-    for (const { name, ptype } of this.properties) {
-      if (ptype instanceof TransientType) {
-        throw new CodeError(`Property '${name}' of ${this.name} has an unsupported type: ${ptype.typeMessage}`)
-      }
-      tupleTypes.push(ptype.wtypeOrThrow)
-      tupleNames.push(name)
-    }
-    return new wtypes.WTuple({
-      name: this.alias?.fullName ?? this.toString(),
-      names: tupleNames,
-      types: tupleTypes,
-    })
+    return this.toWTuple(this.toString())
   }
 }
 
@@ -1018,20 +1022,7 @@ export class ImmutableObjectPType extends ObjectPType {
   }
 
   get wtype(): wtypes.WTuple {
-    const tupleTypes: wtypes.WType[] = []
-    const tupleNames: string[] = []
-    for (const { name, ptype } of this.properties) {
-      if (ptype instanceof TransientType) {
-        throw new CodeError(`Property '${name}' of ${this.name} has an unsupported type: ${ptype.typeMessage}`)
-      }
-      tupleTypes.push(ptype.wtypeOrThrow)
-      tupleNames.push(name)
-    }
-    return new wtypes.WTuple({
-      name: this.alias?.fullName ?? this.name,
-      names: tupleNames,
-      types: tupleTypes,
-    })
+    return this.toWTuple(this.name)
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
