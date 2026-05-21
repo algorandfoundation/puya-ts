@@ -404,35 +404,15 @@ function getImplicitFields({
   }
   // Update or possible create
   if (oca === OnCompletionAction.UpdateApplication || !hasAppId) {
-    implicitFields.set(
-      TxnField.ApprovalProgramPages,
-      requireInstanceBuilder(applicationProxy.memberAccess('approvalProgram', sourceLocation)).resolve(),
-    )
-    implicitFields.set(
-      TxnField.ClearStateProgramPages,
-      requireInstanceBuilder(applicationProxy.memberAccess('clearStateProgram', sourceLocation)).resolve(),
-    )
+    const proxyField = (name: string) => requireInstanceBuilder(applicationProxy.memberAccess(name, sourceLocation)).resolve()
+    implicitFields.set(TxnField.ApprovalProgramPages, proxyField('approvalProgram'))
+    implicitFields.set(TxnField.ClearStateProgramPages, proxyField('clearStateProgram'))
     if (!hasAppId) {
-      implicitFields.set(
-        TxnField.GlobalNumUint,
-        requireInstanceBuilder(applicationProxy.memberAccess('globalUints', sourceLocation)).resolve(),
-      )
-      implicitFields.set(
-        TxnField.GlobalNumByteSlice,
-        requireInstanceBuilder(applicationProxy.memberAccess('globalBytes', sourceLocation)).resolve(),
-      )
-      implicitFields.set(
-        TxnField.LocalNumByteSlice,
-        requireInstanceBuilder(applicationProxy.memberAccess('localBytes', sourceLocation)).resolve(),
-      )
-      implicitFields.set(
-        TxnField.LocalNumUint,
-        requireInstanceBuilder(applicationProxy.memberAccess('localUints', sourceLocation)).resolve(),
-      )
-      implicitFields.set(
-        TxnField.ExtraProgramPages,
-        requireInstanceBuilder(applicationProxy.memberAccess('extraProgramPages', sourceLocation)).resolve(),
-      )
+      implicitFields.set(TxnField.GlobalNumUint, proxyField('globalUints'))
+      implicitFields.set(TxnField.GlobalNumByteSlice, proxyField('globalBytes'))
+      implicitFields.set(TxnField.LocalNumByteSlice, proxyField('localBytes'))
+      implicitFields.set(TxnField.LocalNumUint, proxyField('localUints'))
+      implicitFields.set(TxnField.ExtraProgramPages, proxyField('extraProgramPages'))
     }
   }
   return implicitFields
