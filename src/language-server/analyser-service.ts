@@ -20,7 +20,6 @@ import type { FileWithDiagnostics } from './diagnostics-manager'
 import { type LogEventWithSource, mapper } from './mapping'
 import { logCaughtExpression } from './util/log-exceptions'
 import { normalisedUri } from './util/uris'
-import '../util/polyfills'
 
 type AnalyseServiceOptions = {
   puyaPath: string
