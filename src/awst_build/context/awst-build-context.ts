@@ -188,35 +188,39 @@ class AwstBuildContextImpl extends AwstBuildContext {
     contractConfig.set(memberName, arc4MethodConfig)
   }
 
+  private *iterateContractHierarchy(contractType: ContractClassPType): IterableIterator<ContractClassPType> {
+    const seen = new Set<string>()
+    for (const ct of [contractType, ...contractType.allBases()]) {
+      if (seen.has(ct.fullName)) continue
+      seen.add(ct.fullName)
+      yield ct
+    }
+  }
+
+  private *iterateMethodNameToConfigMap(contractType: ContractClassPType): IterableIterator<Map<string, ARC4MethodConfig>> {
+    for (const ct of this.iterateContractHierarchy(contractType)) {
+      if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType) || ct instanceof ClusteredContractClassType) continue
+      const contractMethods = this.arc4MethodConfig.get(ct.fullName)
+      if (contractMethods) yield contractMethods
+    }
+  }
+
   getArc4Config(contractType: ContractClassPType): ARC4MethodConfig[]
   getArc4Config(contractType: ContractClassPType, memberName: string): ARC4MethodConfig | undefined
   getArc4Config(contractType: ContractClassPType, memberName?: string): ARC4MethodConfig | undefined | ARC4MethodConfig[] {
-    if (memberName) {
-      for (const ct of [contractType, ...contractType.allBases()]) {
-        if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType) || ct instanceof ClusteredContractClassType) continue
-
-        const contractMethods = this.arc4MethodConfig.get(ct.fullName)
-        if (!contractMethods) continue
-        if (contractMethods.has(memberName)) {
-          return contractMethods.get(memberName)
-        }
+    if (memberName !== undefined) {
+      for (const methods of this.iterateMethodNameToConfigMap(contractType)) {
+        if (methods.has(memberName)) return methods.get(memberName)
       }
       return undefined
-    } else {
-      return Array.from(
-        [contractType, ...contractType.allBases()]
-          .toReversed()
-          .reduce((acc, ct) => {
-            if (ct.equals(baseContractType) || ct.equals(arc4BaseContractType) || ct instanceof ClusteredContractClassType) return acc
-
-            const contractMethods = this.arc4MethodConfig.get(ct.fullName)
-            if (!contractMethods) return acc
-
-            return new Map([...acc, ...contractMethods])
-          }, new Map<string, ARC4MethodConfig>())
-          .values(),
-      )
     }
+    const result = new Map<string, ARC4MethodConfig>()
+    for (const methods of this.iterateMethodNameToConfigMap(contractType)) {
+      for (const [name, cfg] of methods) {
+        if (!result.has(name)) result.set(name, cfg)
+      }
+    }
+    return Array.from(result.values())
   }
 
   static forProgram(program: ts.Program, options: BuildAwstOptions): AwstBuildContext {
@@ -314,22 +318,16 @@ class AwstBuildContextImpl extends AwstBuildContext {
   }
 
   getStorageDeclaration(contractType: ContractClassPType, memberName: string): AppStorageDeclaration | undefined {
-    const declaration = this.storageDeclarations.get(contractType.fullName)?.get(memberName)
-    if (declaration) return declaration
-    for (const baseType of contractType.baseTypes) {
-      const baseDeclaration = this.getStorageDeclaration(baseType, memberName)
-      if (baseDeclaration) return baseDeclaration
+    for (const ct of this.iterateContractHierarchy(contractType)) {
+      const declaration = this.storageDeclarations.get(ct.fullName)?.get(memberName)
+      if (declaration) return declaration
     }
     return undefined
   }
 
   getStorageDefinitionsForContract(contractType: ContractClassPType): AppStorageDefinition[] {
     const result = new Map<string, AppStorageDefinition>()
-    const seenContracts = new Set<string>()
-    for (const ct of [contractType, ...contractType.allBases()]) {
-      if (seenContracts.has(ct.fullName)) continue
-      seenContracts.add(ct.fullName)
-
+    for (const ct of this.iterateContractHierarchy(contractType)) {
       for (const [memberName, declaration] of this.storageDeclarations.get(ct.fullName) ?? []) {
         if (result.has(memberName)) {
           logger.error(
