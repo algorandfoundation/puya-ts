@@ -303,6 +303,24 @@ abstract class StorageProxyPType extends PType {
     this.contentType = props.content
   }
 }
+
+abstract class StateProxyPType extends StorageProxyPType {
+  readonly module: string
+  readonly kind: string
+
+  protected constructor(props: { content: PType; kind: string }) {
+    super({ content: props.content, keyWType: wtypes.stateKeyWType })
+    this.module = Constants.moduleNames.algoTs.state
+    this.kind = props.kind
+  }
+
+  get name() {
+    return `${this.kind}<${this.contentType.name}>`
+  }
+  get fullName() {
+    return `${this.module}::${this.kind}<${this.contentType.fullName}>`
+  }
+}
 export const GlobalStateGeneric = new GenericPType({
   name: 'GlobalState',
   module: Constants.moduleNames.algoTs.state,
@@ -313,23 +331,33 @@ export const GlobalStateGeneric = new GenericPType({
     })
   },
 })
-export class GlobalStateType extends StorageProxyPType {
+export class GlobalStateType extends StateProxyPType {
   readonly [PType.IdSymbol] = 'GlobalStateType'
-  static readonly baseName = 'GlobalState'
-  static readonly baseFullName = `${Constants.moduleNames.algoTs.state}::${GlobalStateType.baseName}`
-  readonly module: string = Constants.moduleNames.algoTs.state
-  get name() {
-    return `${GlobalStateType.baseName}<${this.contentType.name}>`
-  }
-  get fullName() {
-    return `${GlobalStateType.baseFullName}<${this.contentType.fullName}>`
-  }
   constructor(props: { content: PType }) {
-    super({ ...props, keyWType: wtypes.stateKeyWType })
+    super({ ...props, kind: 'GlobalState' })
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitGlobalStateType(this)
+  }
+}
+abstract class StateMapProxyPType extends StorageProxyPType {
+  readonly module: string
+  readonly kind: string
+  readonly keyType: PType
+
+  protected constructor(props: { content: PType; keyType: PType; kind: string }) {
+    super({ content: props.content, keyWType: wtypes.stateKeyWType })
+    this.module = Constants.moduleNames.algoTs.state
+    this.kind = props.kind
+    this.keyType = props.keyType
+  }
+
+  get name() {
+    return `${this.kind}<${this.keyType.name}, ${this.contentType.name}>`
+  }
+  get fullName() {
+    return `${this.module}::${this.kind}<${this.keyType.name}, ${this.contentType.fullName}>`
   }
 }
 export const GlobalMapGeneric = new GenericPType({
@@ -343,19 +371,10 @@ export const GlobalMapGeneric = new GenericPType({
     })
   },
 })
-export class GlobalMapType extends StorageProxyPType {
+export class GlobalMapType extends StateMapProxyPType {
   readonly [PType.IdSymbol] = 'GlobalMapType'
-  readonly module: string = Constants.moduleNames.algoTs.state
-  get name() {
-    return `GlobalMap<${this.keyType.name}, ${this.contentType.name}>`
-  }
-  get fullName() {
-    return `${this.module}::${this.name}<${this.keyType.name}, ${this.contentType.fullName}>`
-  }
-  readonly keyType: PType
   constructor(props: { content: PType; keyType: PType }) {
-    super({ ...props, keyWType: wtypes.stateKeyWType })
-    this.keyType = props.keyType
+    super({ ...props, kind: 'GlobalMap' })
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
@@ -372,25 +391,10 @@ export const LocalStateGeneric = new GenericPType({
     })
   },
 })
-export class LocalStateType extends StorageProxyPType {
+export class LocalStateType extends StateProxyPType {
   readonly [PType.IdSymbol] = 'LocalStateType'
-  static readonly baseName = 'LocalState'
-  static readonly baseFullName = `${Constants.moduleNames.algoTs.state}::${LocalStateType.baseName}`
-  readonly module: string = Constants.moduleNames.algoTs.state
-  get name() {
-    return `${LocalStateType.baseName}<${this.contentType.name}>`
-  }
-  get fullName() {
-    return `${LocalStateType.baseFullName}<${this.contentType.fullName}>`
-  }
   constructor(props: { content: PType }) {
-    super({ ...props, keyWType: wtypes.stateKeyWType })
-  }
-  static parameterise(typeArgs: PType[]): LocalStateType {
-    codeInvariant(typeArgs.length === 1, 'LocalState type expects exactly one type parameter')
-    return new LocalStateType({
-      content: typeArgs[0],
-    })
+    super({ ...props, kind: 'LocalState' })
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
@@ -408,19 +412,10 @@ export const LocalMapGeneric = new GenericPType({
     })
   },
 })
-export class LocalMapType extends StorageProxyPType {
+export class LocalMapType extends StateMapProxyPType {
   readonly [PType.IdSymbol] = 'LocalMapType'
-  readonly module: string = Constants.moduleNames.algoTs.state
-  get name() {
-    return `LocalMap<${this.keyType.name}, ${this.contentType.name}>`
-  }
-  get fullName() {
-    return `${this.module}::${this.name}<${this.keyType.name}, ${this.contentType.fullName}>`
-  }
-  readonly keyType: PType
   constructor(props: { content: PType; keyType: PType }) {
-    super({ ...props, keyWType: wtypes.stateKeyWType })
-    this.keyType = props.keyType
+    super({ ...props, kind: 'LocalMap' })
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
@@ -472,7 +467,7 @@ export class BoxMapPType extends StorageProxyPType {
     return `BoxMap<${this.keyType.name}, ${this.contentType.name}>`
   }
   get fullName() {
-    return `${this.module}::${this.name}<${this.keyType.name}, ${this.contentType.fullName}>`
+    return `${this.module}::${this.name}`
   }
   readonly keyType: PType
   constructor(props: { content: PType; keyType: PType }) {
