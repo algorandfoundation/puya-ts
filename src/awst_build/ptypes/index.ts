@@ -598,66 +598,41 @@ export class LibObjType extends LibPType {
   }
 }
 
-export class IntrinsicFunctionGroupType extends PType {
-  readonly [PType.IdSymbol] = 'IntrinsicFunctionGroupType'
+abstract class IntrinsicOpPType extends PType {
   readonly wtype: undefined
   readonly name: string
   readonly module: string = Constants.moduleNames.algoTs.op
-  readonly singleton = true
+  abstract readonly singleton: boolean
 
   constructor({ name }: { name: string }) {
     super()
     this.name = name
   }
-
+}
+export class IntrinsicFunctionGroupType extends IntrinsicOpPType {
+  readonly [PType.IdSymbol] = 'IntrinsicFunctionGroupType'
+  readonly singleton = true
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitIntrinsicFunctionGroupType(this)
   }
 }
-export class IntrinsicFunctionGroupTypeType extends PType {
+export class IntrinsicFunctionGroupTypeType extends IntrinsicOpPType {
   readonly [PType.IdSymbol] = 'IntrinsicFunctionGroupTypeType'
-  readonly wtype: undefined
-  readonly name: string
-  readonly module: string = Constants.moduleNames.algoTs.op
   readonly singleton = false
-
-  constructor({ name }: { name: string }) {
-    super()
-    this.name = name
-  }
-
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitIntrinsicFunctionGroupTypeType(this)
   }
 }
-export class IntrinsicFunctionType extends PType {
+export class IntrinsicFunctionType extends IntrinsicOpPType {
   readonly [PType.IdSymbol] = 'IntrinsicFunctionType'
-  readonly wtype: undefined
-  readonly name: string
-  readonly module: string = Constants.moduleNames.algoTs.op
   readonly singleton = true
-
-  constructor({ name }: { name: string }) {
-    super()
-    this.name = name
-  }
-
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitIntrinsicFunctionType(this)
   }
 }
-export class IntrinsicFunctionTypeType extends PType {
+export class IntrinsicFunctionTypeType extends IntrinsicOpPType {
   readonly [PType.IdSymbol] = 'IntrinsicFunctionTypeType'
-  readonly wtype: undefined
-  readonly name: string
-  readonly module: string = Constants.moduleNames.algoTs.op
   readonly singleton = false
-
-  constructor({ name }: { name: string }) {
-    super()
-    this.name = name
-  }
-
   accept<T>(visitor: PTypeVisitor<T>): T {
     return visitor.visitIntrinsicFunctionTypeType(this)
   }
