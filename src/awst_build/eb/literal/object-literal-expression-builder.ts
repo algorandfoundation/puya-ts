@@ -2,6 +2,7 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression, LValue } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError, InternalError } from '../../../errors'
+import { invariant } from '../../../util'
 import type { ImmutableObjectPType, MutableObjectPType, PTypeField, PTypeOrClass } from '../../ptypes'
 import { isObjectType, ObjectLiteralPType } from '../../ptypes'
 import { getIndexType } from '../../ptypes/visitors/index-type-visitor'
@@ -70,6 +71,10 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
 
   singleEvaluation(): InstanceBuilder {
     if (this.isSingleEval) return this
+    invariant(
+      this.bindings.length === Object.keys(this.propertyToItemMap).length,
+      'singleEvaluation called with duplicate or spread-overridden bindings; route through resolveToPType first',
+    )
     const tuple = nodeFactory.singleEvaluation({
       source: nodeFactory.tupleExpression({
         items: this.bindings.map((item) => item.target.resolve()),
@@ -101,6 +106,10 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     throw new InternalError('Cannot resolve object literal', { sourceLocation: this.sourceLocation })
   }
   resolveLValue(): LValue {
+    invariant(
+      this.bindings.length === Object.keys(this.propertyToItemMap).length,
+      'resolveLValue called with duplicate bindings; destructuring assignment must iterate bindings via buildAssignmentValues',
+    )
     return nodeFactory.tupleExpression({
       items: this.bindings.map(({ target }) => target.resolveLValue()),
       sourceLocation: this.sourceLocation,
