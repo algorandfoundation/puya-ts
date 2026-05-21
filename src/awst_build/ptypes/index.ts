@@ -748,22 +748,30 @@ export class ArrayLiteralPType extends PType {
   }
 }
 
-export class MutableTuplePType extends PType {
-  readonly [PType.IdSymbol] = 'MutableTuplePType'
-  readonly module: string = Constants.moduleNames.tslib
-
-  get name() {
-    return `[${this.items.map((i) => i.name).join(', ')}]`
-  }
-  get fullName() {
-    return `${this.module}::[${this.items.map((i) => i.fullName).join(', ')}]`
-  }
-
+abstract class TupleBasePType extends PType {
   readonly items: PType[]
   readonly singleton = false
-  constructor(props: { items: PType[] }) {
+  readonly module: string = Constants.moduleNames.tslib
+  private readonly namePrefix: '' | 'readonly '
+
+  protected constructor(props: { items: PType[]; immutable?: boolean }) {
     super()
     this.items = props.items
+    this.namePrefix = props.immutable ? 'readonly ' : ''
+  }
+
+  get name() {
+    return `${this.namePrefix}[${this.items.map((i) => i.name).join(', ')}]`
+  }
+  get fullName() {
+    return `${this.module}::${this.namePrefix}[${this.items.map((i) => i.fullName).join(', ')}]`
+  }
+}
+
+export class MutableTuplePType extends TupleBasePType {
+  readonly [PType.IdSymbol] = 'MutableTuplePType'
+  constructor(props: { items: PType[] }) {
+    super({ ...props })
   }
 
   get wtype(): wtypes.ARC4Tuple {
@@ -777,22 +785,10 @@ export class MutableTuplePType extends PType {
     return visitor.visitMutableTuplePType(this)
   }
 }
-export class ReadonlyTuplePType extends PType {
+export class ReadonlyTuplePType extends TupleBasePType {
   readonly [PType.IdSymbol] = 'ReadonlyTuplePType'
-  readonly module: string = Constants.moduleNames.tslib
-
-  get name() {
-    return `readonly [${this.items.map((i) => i.name).join(', ')}]`
-  }
-  get fullName() {
-    return `${this.module}::readonly [${this.items.map((i) => i.fullName).join(', ')}]`
-  }
-
-  readonly items: PType[]
-  readonly singleton = false
   constructor(props: { items: PType[] }) {
-    super()
-    this.items = props.items
+    super({ ...props, immutable: true })
   }
 
   get wtype(): wtypes.WTuple {
