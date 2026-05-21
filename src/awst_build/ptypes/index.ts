@@ -809,20 +809,24 @@ export const ArrayGeneric = new GenericPType({
     return new ArrayPType({ elementType: typeArgs[0] })
   },
 })
-export class ArrayPType extends PType {
-  readonly [PType.IdSymbol] = 'ArrayPType'
+abstract class DynamicArrayBasePType extends PType {
   readonly elementType: PType
-  readonly immutable = false
+  readonly immutable: boolean
   readonly singleton = false
   readonly name: string
   readonly module: string = Constants.moduleNames.typescript.es5
-  get fullName() {
-    return `${this.module}::Array<${this.elementType.fullName}>`
-  }
-  constructor(props: { elementType: PType }) {
+  private readonly kind: 'Array' | 'ReadonlyArray'
+
+  protected constructor(props: { elementType: PType; immutable: boolean }) {
     super()
-    this.name = `Array<${props.elementType.name}>`
     this.elementType = props.elementType
+    this.immutable = props.immutable
+    this.kind = props.immutable ? 'ReadonlyArray' : 'Array'
+    this.name = `${this.kind}<${props.elementType.name}>`
+  }
+
+  get fullName() {
+    return `${this.module}::${this.kind}<${this.elementType.fullName}>`
   }
 
   get wtype() {
@@ -830,6 +834,12 @@ export class ArrayPType extends PType {
       elementType: this.elementType.wtypeOrThrow,
       immutable: this.immutable,
     })
+  }
+}
+export class ArrayPType extends DynamicArrayBasePType {
+  readonly [PType.IdSymbol] = 'ArrayPType'
+  constructor(props: { elementType: PType }) {
+    super({ ...props, immutable: false })
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
@@ -844,27 +854,10 @@ export const ReadonlyArrayGeneric = new GenericPType({
     return new ReadonlyArrayPType({ elementType: typeArgs[0] })
   },
 })
-export class ReadonlyArrayPType extends PType {
+export class ReadonlyArrayPType extends DynamicArrayBasePType {
   readonly [PType.IdSymbol] = 'ReadonlyArrayPType'
-  readonly elementType: PType
-  readonly singleton = false
-  readonly immutable = true
-  readonly name: string
-  readonly module: string = Constants.moduleNames.typescript.es5
-  get fullName() {
-    return `${this.module}::ReadonlyArray<${this.elementType.fullName}>`
-  }
   constructor(props: { elementType: PType }) {
-    super()
-    this.elementType = props.elementType
-    this.name = `ReadonlyArray<${props.elementType.name}>`
-  }
-
-  get wtype() {
-    return new wtypes.ARC4DynamicArray({
-      elementType: this.elementType.wtypeOrThrow,
-      immutable: this.immutable,
-    })
+    super({ ...props, immutable: true })
   }
 
   accept<T>(visitor: PTypeVisitor<T>): T {
