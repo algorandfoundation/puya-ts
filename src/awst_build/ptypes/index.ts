@@ -697,7 +697,6 @@ export class NamespacePType extends PType {
   readonly [PType.IdSymbol] = 'NamespacePType'
   readonly wtype: undefined
   readonly name: string
-  readonly factory: undefined
   readonly module: string
   readonly singleton = true
 
@@ -1989,16 +1988,7 @@ export class ReferenceArrayType extends PType {
   readonly sourceLocation: SourceLocation | undefined
   readonly elementType: PType
 
-  constructor({
-    elementType,
-    sourceLocation,
-    name,
-  }: {
-    elementType: PType
-    sourceLocation?: SourceLocation
-    name?: string
-    immutable?: boolean
-  }) {
+  constructor({ elementType, sourceLocation, name }: { elementType: PType; sourceLocation?: SourceLocation; name?: string }) {
     super()
     this.name = name ?? `ReferenceArray<${elementType}>`
     this.sourceLocation = sourceLocation
@@ -2009,7 +1999,6 @@ export class ReferenceArrayType extends PType {
     return new wtypes.ReferenceArray({
       itemType: this.elementType.wtypeOrThrow,
       sourceLocation: this.sourceLocation,
-      immutable: false,
     })
   }
   accept<T>(visitor: PTypeVisitor<T>): T {

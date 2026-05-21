@@ -263,10 +263,6 @@ export abstract class ClassBuilder extends NodeBuilder {
 export abstract class FunctionBuilder extends NodeBuilder {
   readonly ptype: PType | undefined = undefined
 
-  constructor(location: SourceLocation) {
-    super(location)
-  }
-
   abstract call(
     args: ReadonlyArray<NodeBuilder>,
     typeArgs: ReadonlyArray<PType>,
@@ -367,9 +363,6 @@ function requireLValue(expr: awst.Expression): awst.LValue {
         sourceLocation: expr.sourceLocation,
       })
     }
-  }
-  if (expr instanceof awst.ReinterpretCast) {
-    requireLValue(expr.expr)
   }
   if (expr instanceof awst.TupleExpression) {
     for (const item of expr.items) {
