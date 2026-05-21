@@ -4,7 +4,7 @@ import type * as awst from '../../awst/nodes'
 import type { Block } from '../../awst/nodes'
 import { Goto, ReturnStatement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { CodeError, InternalError, NotSupported } from '../../errors'
+import { CodeError, InternalError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, hasFlags, instanceOfAny, invariant } from '../../util'
 import type { Statements } from '../../visitor/syntax-names'
@@ -156,9 +156,7 @@ export abstract class FunctionVisitor
   }
 
   visitClassDeclaration(node: ts.ClassDeclaration): awst.Statement | awst.Statement[] {
-    throw new NotSupported('Nested classes', {
-      sourceLocation: this.sourceLocation(node),
-    })
+    this.throwNotSupported(node, 'Nested classes')
   }
 
   visitVariableDeclarationList(node: ts.VariableDeclarationList): awst.Statement[] {
@@ -289,14 +287,10 @@ export abstract class FunctionVisitor
     )
   }
   visitForInStatement(node: ts.ForInStatement): awst.Statement | awst.Statement[] {
-    throw new NotSupported('For in statements', {
-      sourceLocation: this.sourceLocation(node),
-    })
+    this.throwNotSupported(node, 'For in statements')
   }
   visitTryStatement(node: ts.TryStatement): awst.Statement | awst.Statement[] {
-    throw new NotSupported('Try statements', {
-      sourceLocation: this.sourceLocation(node),
-    })
+    this.throwNotSupported(node, 'Try statements')
   }
   visitEmptyStatement(node: ts.EmptyStatement): awst.Statement | awst.Statement[] {
     return nodeFactory.block({ sourceLocation: this.sourceLocation(node), comment: 'Empty statement' })
@@ -394,7 +388,7 @@ export abstract class FunctionVisitor
     })
   }
   visitWithStatement(node: ts.WithStatement): awst.Statement | awst.Statement[] {
-    throw new NotSupported('with statements', { sourceLocation: this.sourceLocation(node) })
+    this.throwNotSupported(node, 'with statements')
   }
   visitSwitchStatement(node: ts.SwitchStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
@@ -448,18 +442,14 @@ export abstract class FunctionVisitor
     return this.accept(node.statement)
   }
   visitThrowStatement(node: ts.ThrowStatement): awst.Statement | awst.Statement[] {
-    throw new NotSupported('Throw statements', {
-      sourceLocation: this.sourceLocation(node),
-    })
+    this.throwNotSupported(node, 'Throw statements')
   }
   visitDebuggerStatement(node: ts.DebuggerStatement): awst.Statement | awst.Statement[] {
     logger.warn(this.sourceLocation(node), 'Ignoring debugger statement')
     return []
   }
   visitImportDeclaration(node: ts.ImportDeclaration): awst.Statement | awst.Statement[] {
-    throw new NotSupported('Non-top-level import declarations', {
-      sourceLocation: this.sourceLocation(node),
-    })
+    this.throwNotSupported(node, 'Non-top-level import declarations')
   }
 
   visitBlock(node: ts.Block): awst.Block {
