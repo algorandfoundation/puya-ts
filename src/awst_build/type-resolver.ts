@@ -65,13 +65,12 @@ export class TypeResolver {
 
   private getUnaliasedSymbolForNode(node: ts.Node) {
     const symbol = this.checker.getSymbolAtLocation(node)
-    if (symbol) {
-      if (hasFlags(symbol.flags, ts.SymbolFlags.Alias)) {
-        return this.checker.getAliasedSymbol(symbol)
-      }
-      return symbol
+    if (!symbol) return undefined
+
+    if (hasFlags(symbol.flags, ts.SymbolFlags.Alias)) {
+      return this.checker.getAliasedSymbol(symbol)
     }
-    return undefined
+    return symbol
   }
 
   resolveTypeParameters(node: ts.CallExpression | ts.NewExpression | ts.TaggedTemplateExpression, sourceLocation: SourceLocation) {
@@ -88,7 +87,7 @@ export class TypeResolver {
   resolve(node: ts.Node, sourceLocation: SourceLocation): PType {
     const symbol = this.getUnaliasedSymbolForNode(node)
     if (symbol !== undefined && symbol.declarations?.length) {
-      const symbolName = symbol && this.getSymbolFullName(symbol, sourceLocation)
+      const symbolName = this.getSymbolFullName(symbol)
       invariant(symbolName, 'Symbol should have name as we pre-checked it has a declaration', sourceLocation)
       if (symbolName.name === '*') {
         return new NamespacePType(symbolName)
@@ -118,7 +117,7 @@ export class TypeResolver {
     if (ts.isConstructorDeclaration(node)) {
       const signature = this.checker.getSignatureFromDeclaration(node)
       invariant(signature, 'Constructor node must have call signature', sourceLocation)
-      const parentType = this.getTypeName(this.checker.getTypeAtLocation(node.parent), sourceLocation)
+      const parentType = this.getTypeName(this.checker.getTypeAtLocation(node.parent))
       invariant(parentType, 'Parent type must have name', sourceLocation)
       return this.reflectFunctionType(
         new SymbolName({
@@ -139,7 +138,7 @@ export class TypeResolver {
 
   @CacheResolvedType
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
-    const typeName = this.getTypeName(tsType, sourceLocation)
+    const typeName = this.getTypeName(tsType)
 
     if (isUnionType(tsType)) {
       const ut = UnionPType.fromTypes(tsType.types.map((t) => this.resolveType(t, sourceLocation)))
@@ -354,7 +353,7 @@ export class TypeResolver {
   }
 
   private reflectObjectType(tsType: ts.Type, sourceLocation: SourceLocation): ImmutableObjectPType | MutableObjectPType {
-    const typeAlias = tsType.aliasSymbol ? this.getSymbolFullName(tsType.aliasSymbol, sourceLocation) : undefined
+    const typeAlias = tsType.aliasSymbol ? this.getSymbolFullName(tsType.aliasSymbol) : undefined
     const properties: PTypeField[] = []
 
     let expectReadonly: boolean | undefined = undefined
@@ -420,7 +419,7 @@ export class TypeResolver {
     const declaredInNode = sig.declaration?.parent
     if (declaredInNode && ts.isClassDeclaration(declaredInNode)) {
       const declaredInType = this.checker.getTypeAtLocation(declaredInNode)
-      declaredIn = this.getTypeName(declaredInType, sourceLocation)
+      declaredIn = this.getTypeName(declaredInType)
     }
 
     const returnType = this.resolveType(sig.getReturnType(), sourceLocation)
@@ -516,9 +515,9 @@ export class TypeResolver {
     })
   }
 
-  getTypeName(type: ts.Type, sourceLocation: SourceLocation): SymbolName | undefined {
-    const typeName = type.symbol ? this.getSymbolFullName(type.symbol, sourceLocation) : undefined
-    const aliasName = type.aliasSymbol ? this.getSymbolFullName(type.aliasSymbol, sourceLocation) : undefined
+  getTypeName(type: ts.Type): SymbolName | undefined {
+    const typeName = type.symbol ? this.getSymbolFullName(type.symbol) : undefined
+    const aliasName = type.aliasSymbol ? this.getSymbolFullName(type.aliasSymbol) : undefined
 
     // If the alias was defined in algo-ts, polytype, or typescript, respect the alias
     if (
@@ -535,7 +534,7 @@ export class TypeResolver {
         if (parentDeclaration && ts.isTypeAliasDeclaration(parentDeclaration)) {
           const name = this.getUnaliasedSymbolForNode(parentDeclaration.name)
           if (name) {
-            return this.getSymbolFullName(name, sourceLocation)
+            return this.getSymbolFullName(name)
           }
         }
       }
@@ -554,7 +553,7 @@ export class TypeResolver {
     return dec?.localSymbol?.name
   }
 
-  private getSymbolFullName(symbol: ts.Symbol, sourceLocation: SourceLocation): SymbolName | undefined {
+  private getSymbolFullName(symbol: ts.Symbol): SymbolName | undefined {
     const symbolName = symbol.name === 'default' ? (this.tryGetLocalSymbolName(symbol) ?? symbol.name) : symbol.name
 
     const declaration = symbol?.declarations?.[0]

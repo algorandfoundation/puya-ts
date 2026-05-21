@@ -210,8 +210,7 @@ export class ContractProxyCallFunctionBuilder extends FunctionBuilder {
       `${this.functionType.name} is not an ABI method, or the containing contract has not been visited (possibly due to a circular reference)`,
       sourceLocation,
     )
-    const methodSelector =
-      arc4Config instanceof ARC4ABIMethodConfig ? buildArc4MethodConstant(this.functionType, arc4Config, sourceLocation) : null
+    const methodSelector = buildArc4MethodConstant(this.functionType, arc4Config, sourceLocation)
 
     return formatApplicationCallResponse({
       itxnResult: makeApplicationCall({
@@ -257,7 +256,6 @@ export function buildApplicationCallTxnFields({
   }
   // Add implicit fields
   if (applicationProxy) {
-    // Create a copy of the fields
     const implicitFields = getImplicitFields({ applicationProxy: applicationProxy, mappedFields, sourceLocation, methodConfig: arc4Config })
     // Only add fields that aren't explicitly provided
     for (const [key, expr] of implicitFields) {
@@ -286,8 +284,8 @@ export function buildApplicationCallTxnFields({
   // Build itxn and submit
   itxnGroup.push(
     nodeFactory.aBICall({
-      target: target,
-      args: args,
+      target,
+      args,
       fields: mappedFields,
       sourceLocation,
       wtype: new wtypes.WABICallInnerTransactionFields({

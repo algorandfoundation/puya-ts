@@ -94,7 +94,7 @@ export abstract class FunctionVisitor
       case ts.SyntaxKind.ArrayBindingPattern: {
         const items: InstanceBuilder[] = []
         for (const element of bindingName.elements) {
-          const sourceLocation = this.context.getSourceLocation(element)
+          const sourceLocation = this.sourceLocation(element)
 
           if (ts.isOmittedExpression(element)) {
             items.push(new OmittedExpressionBuilder(sourceLocation))
@@ -312,13 +312,14 @@ export abstract class FunctionVisitor
     const condition = this.evaluateCondition(node.expression)
 
     const ifBranch = nodeFactory.block({ sourceLocation: this.sourceLocation(node.thenStatement) }, this.accept(node.thenStatement))
-    const elseBranch =
-      node.elseStatement && nodeFactory.block({ sourceLocation: this.sourceLocation(node.elseStatement) }, this.accept(node.elseStatement))
+    const elseBranch = node.elseStatement
+      ? nodeFactory.block({ sourceLocation: this.sourceLocation(node.elseStatement) }, this.accept(node.elseStatement))
+      : null
 
     return nodeFactory.ifElse({
       condition,
       ifBranch,
-      elseBranch: elseBranch ?? null,
+      elseBranch: elseBranch,
       sourceLocation,
     })
   }

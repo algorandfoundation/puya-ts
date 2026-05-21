@@ -123,10 +123,10 @@ export namespace wtypes {
   export class ReferenceArray extends WType {
     readonly elementType: WType
     readonly sourceLocation: SourceLocation | null
-    readonly immutable = false
-    constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
+    constructor(props: { itemType: WType; sourceLocation?: SourceLocation }) {
       super({
         name: `ref_array<${props.itemType.name}>`,
+        immutable: false,
       })
       this.elementType = props.itemType
       this.sourceLocation = props.sourceLocation ?? null
@@ -162,8 +162,8 @@ export namespace wtypes {
     }
   }
   export class WInnerTransactionFields extends WType {
-    transactionType: TransactionKind | null
-    constructor({ transactionType, name }: { transactionType?: TransactionKind; name?: string }) {
+    readonly transactionType: TransactionKind | null
+    constructor({ transactionType }: { transactionType?: TransactionKind }) {
       super({
         name: transactionType === undefined ? 'inner_transaction_fields' : `inner_transaction_fields_${TransactionKind[transactionType]}`,
       })
@@ -176,7 +176,6 @@ export namespace wtypes {
     constructor({ returnType }: { returnType?: WType }) {
       super({
         transactionType: TransactionKind.appl,
-        name: 'abi_call_inner_transaction_fields',
       })
       this.resultType = returnType ?? voidWType
     }
