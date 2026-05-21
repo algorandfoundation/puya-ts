@@ -333,16 +333,17 @@ export function isReferableExpression(expr: awst.Expression): boolean {
   return false
 }
 
+const lValueNodes = [
+  awst.VarExpression,
+  awst.FieldExpression,
+  awst.IndexExpression,
+  awst.TupleExpression,
+  awst.AppStateExpression,
+  awst.AppAccountStateExpression,
+  awst.BoxValueExpression,
+]
+
 function requireLValue(expr: awst.Expression): awst.LValue {
-  const lValueNodes = [
-    awst.VarExpression,
-    awst.FieldExpression,
-    awst.IndexExpression,
-    awst.TupleExpression,
-    awst.AppStateExpression,
-    awst.AppAccountStateExpression,
-    awst.BoxValueExpression,
-  ]
   if (expr instanceof TupleItemExpression) {
     if (expr.base.wtype.immutable) {
       throw new CodeError('Expression is not a valid assignment target - object is immutable', { sourceLocation: expr.sourceLocation })
