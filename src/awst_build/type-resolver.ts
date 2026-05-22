@@ -79,7 +79,7 @@ export class TypeResolver {
       return node.typeArguments.map((t) => this.resolveTypeNode(t, sourceLocation))
     }
     const sig = this.checker.getResolvedSignature(node)
-    invariant(sig, 'CallExpression must resolve to a signature')
+    invariant(sig, 'CallExpression must resolve to a signature', sourceLocation)
     const tps = this.checker.getTypeArgumentsForResolvedSignature(sig)
     return tps?.map((t) => this.resolveType(t, sourceLocation)) ?? []
   }
@@ -273,7 +273,7 @@ export class TypeResolver {
 
       const [baseType, ...rest] = tsType.getBaseTypes()?.map((t) => this.resolveType(t, sourceLocation)) ?? []
 
-      invariant(rest.length === 0, 'Class can have at most one base type')
+      invariant(rest.length === 0, 'Class can have at most one base type', sourceLocation)
 
       // Treat sub-types of UintN type as the base type.
       if (baseType instanceof UintNType) return baseType
@@ -392,7 +392,7 @@ export class TypeResolver {
 
   private reflectConstructorType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
     const constructorSignatures = tsType.getConstructSignatures()
-    invariant(constructorSignatures.length, 'Must have at least one signature')
+    invariant(constructorSignatures.length, 'Must have at least one signature', sourceLocation)
     const typeDeclaration = tsType.getSymbol()?.declarations?.[0]
     if (typeDeclaration && ts.isClassDeclaration(typeDeclaration)) {
       const ptype = this.resolve(typeDeclaration, sourceLocation)
@@ -495,7 +495,7 @@ export class TypeResolver {
   }
 
   private resolveClusteredPrototype(tsType: ts.Type, sourceLocation: SourceLocation): PType {
-    invariant(isIntersectionType(tsType), 'Clustered prototypes must be an intersection type')
+    invariant(isIntersectionType(tsType), 'Clustered prototypes must be an intersection type', sourceLocation)
     const baseContracts: ContractClassPType[] = []
     for (const t of tsType.types.map((t) => this.resolveType(t, sourceLocation))) {
       if (t instanceof ContractClassPType) {
