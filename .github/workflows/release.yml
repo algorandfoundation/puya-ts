@@ -45,7 +45,7 @@ jobs:
   release:
     name: Release
     needs: ci
-    if: needs.ci.result == 'success'
+    if: ${{ !cancelled() && needs.ci.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Generate bot token
