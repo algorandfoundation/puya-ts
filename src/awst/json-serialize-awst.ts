@@ -3,10 +3,11 @@ import { InternalError } from '../errors'
 import { AbsolutePath } from '../util/absolute-path'
 import { uint8ArrayToBase85 } from '../util/base-85'
 import { ContractReference, LogicSigReference } from './models'
-import { IntrinsicCall, SingleEvaluation } from './nodes'
+import { IntrinsicCall, Node, SingleEvaluation } from './nodes'
 import { generateExcludedPropsObj } from './nodes-meta'
 import { SourceLocation } from './source-location'
 import { SymbolToNumber } from './util'
+import { wtypes } from './wtypes'
 
 function serializeBigInt(value: bigint): unknown {
   if (value < 0n) {
@@ -37,6 +38,9 @@ export class SnakeCaseSerializer<T> {
 }
 
 export class AwstSerializer<T> extends SnakeCaseSerializer<T> {
+  private static ID_KEY = '_$%!#ID'
+  private static REF_KEY = '_$%!#REF'
+
   constructor(
     private options?: {
       pathsRelativeTo?: AbsolutePath
@@ -45,9 +49,42 @@ export class AwstSerializer<T> extends SnakeCaseSerializer<T> {
   ) {
     super(options?.spaces ?? 0)
   }
+  #known = new Map<object, number>()
   #singleEvals = new SymbolToNumber()
 
+  public serialize(obj: T): string {
+    try {
+      return super.serialize(obj)
+    } finally {
+      this.#known.clear()
+    }
+  }
+
   protected serializerFunction(key: string, value: unknown): unknown {
+    if (!this.shouldTrackValue(value)) {
+      return this.doSerializeValue(key, value)
+    }
+
+    let id = this.#known.get(value)
+    if (id !== undefined) {
+      return {
+        [AwstSerializer.REF_KEY]: id,
+      }
+    }
+    id = this.#known.size
+    this.#known.set(value, id)
+
+    return {
+      [AwstSerializer.ID_KEY]: id,
+      ...(this.doSerializeValue(key, value) as object),
+    }
+  }
+
+  private shouldTrackValue(value: unknown): value is object {
+    return value instanceof Node || value instanceof wtypes.WType
+  }
+
+  protected doSerializeValue(key: string, value: unknown): unknown {
     if (typeof value === 'bigint') {
       return serializeBigInt(value)
     }
