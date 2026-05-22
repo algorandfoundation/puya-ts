@@ -4,7 +4,7 @@ on:
       node-version:
         required: false
         type: string
-        default: '["20.x", "22.x", "24.x"]'
+        default: '["22.x", "24.x", "26.x"]'
       python-version:
         required: false
         type: string
@@ -114,8 +114,6 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@makerxstudio'
           cache: 'npm'
           cache-dependency-path: ${{ inputs.working-directory }}/package-lock.json
 

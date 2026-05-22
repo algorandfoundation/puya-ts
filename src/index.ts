@@ -10,7 +10,6 @@ import {
   uint8ArrayToUtf8,
   utf8ToUint8Array,
 } from './util'
-import './util/polyfills'
 
 export { SourceLocation } from './awst/source-location'
 export * as ptypes from './awst_build/ptypes/for-export'

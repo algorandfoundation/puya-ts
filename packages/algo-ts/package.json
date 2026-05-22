@@ -10,6 +10,9 @@
   },
   "main": "index.js",
   "types": "src/index.ts",
+  "engines": {
+    "node": ">=22.11.0"
+  },
   "scripts": {
     "audit": "better-npm-audit audit",
     "format": "prettier --write .",
@@ -20,22 +23,19 @@
     "build:1-lint": "eslint \"src/**/*.ts\" --max-warnings 0",
     "build:2-check-types": "tsc -p tsconfig.json",
     "build:3-build": "rollup -c --configPlugin typescript",
-    "build:4-copy-pkg-json": "tstk copy-package-json -c",
+    "build:4-copy-pkg-json": "tsx scripts/copy-package-json.ts",
     "build:5-copy-readme": "shx cp ./readme.md ./dist",
     "watch": "rollup -c -w --configPlugin typescript",
     "test": "echo 'No tests'"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.27.0",
-    "@makerx/eslint-config": "4.2.0",
-    "@makerx/prettier-config": "2.0.1",
-    "@makerx/ts-toolkit": "^4.0.0-beta.24",
     "@rollup/plugin-commonjs": "28.0.3",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-node-resolve": "16.0.1",
     "@rollup/plugin-typescript": "12.1.2",
-    "@tsconfig/node20": "20.1.5",
+    "@tsconfig/node22": "22.0.5",
+    "@types/node": "^25.0.1",
     "@typescript-eslint/eslint-plugin": "8.33.0",
     "@typescript-eslint/parser": "8.33.0",
     "better-npm-audit": "3.11.0",
@@ -48,7 +48,10 @@
     "rimraf": "6.0.1",
     "rollup": "^4.59.0",
     "shx": "^0.4.0",
-    "typescript": "^5.8.3"
+    "tsx": "4.19.4",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.33.0",
+    "vitest": "3.1.4"
   },
   "overrides": {},
   "peerDependencies": {
