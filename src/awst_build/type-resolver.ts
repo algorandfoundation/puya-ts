@@ -371,7 +371,7 @@ export class TypeResolver {
       if (expectReadonly !== readonly) {
         const correction = expectReadonly
           ? 'Add a readonly modifier to this property, or remove it from all others'
-          : 'Remove the readonly modifier from this property, or add it all others'
+          : 'Remove the readonly modifier from this property, or add it to all others'
         logger.error(propLocation, `All properties of a type must share the same readonly annotation. ${correction}`)
       }
       const ptype = this.resolveType(type, propLocation)
