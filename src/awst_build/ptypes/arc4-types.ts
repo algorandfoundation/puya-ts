@@ -1,7 +1,7 @@
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { Constants } from '../../constants'
-import { codeInvariant, invariant } from '../../util'
+import { codeInvariant } from '../../util'
 import type { PTypeField } from './base'
 import { GenericPType, PType } from './base'
 import {
@@ -361,7 +361,7 @@ export class UFixedNxMType extends ARC4EncodedType {
     this.n = n
     this.m = m
 
-    this.name = `${UFixedNxMGeneric.name}<${n}, ${m}>`
+    this.name = `UFixed<${n}, ${m}>`
     this.wtype = new wtypes.ARC4UFixedNxM({ n: this.n, m: this.m })
     this.abiTypeSignature = `ufixed${n}x${m}`
   }
@@ -436,7 +436,7 @@ export const StaticArrayGeneric = new GenericPType({
   name: 'StaticArray',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
   parameterise(typeArgs: readonly PType[]): StaticArrayType {
-    codeInvariant(typeArgs.length === 2, `${this.name} type expects exactly one type parameters`)
+    codeInvariant(typeArgs.length === 2, `${this.name} type expects exactly two type parameters`)
     const [elementType, arraySize] = typeArgs
     codeInvariant(
       elementType instanceof ARC4EncodedType,
@@ -551,7 +551,7 @@ export const DynamicBytesConstructor = new LibClassType({
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
 export const DynamicBytesType = new DynamicArrayType({
-  name: `DynamicBytes`,
+  name: 'DynamicBytes',
   immutable: true,
   elementType: arc4ByteAlias,
   nativeType: bytesPType,
@@ -594,9 +594,9 @@ export const ContractProxyGeneric = new GenericPType({
   name: 'ContractProxy',
   module: Constants.moduleNames.algoTs.arc4.c2c,
   parameterise(args: readonly PType[]) {
-    invariant(args.length === 1, `${this.name} expects exactly 1 type arg`)
+    codeInvariant(args.length === 1, `${this.name} expects exactly 1 type arg`)
     const [typeArg] = args
-    invariant(typeArg instanceof ContractClassPType && typeArg.isARC4, `${this.name} generic type arg must extend arc4 Contract type`)
+    codeInvariant(typeArg instanceof ContractClassPType && typeArg.isARC4, `${this.name} generic type arg must extend arc4 Contract type`)
     return new ContractProxyType({ contractType: typeArg })
   },
 })
@@ -625,7 +625,7 @@ export const TypedApplicationCallResponseGeneric = new GenericPType({
   name: 'TypedApplicationCallResponse',
   module: Constants.moduleNames.algoTs.arc4.c2c,
   parameterise(args: readonly PType[]) {
-    invariant(args.length === 1, `${this.name} expects exactly 1 type arg`)
+    codeInvariant(args.length === 1, `${this.name} expects exactly 1 type arg`)
     const [typeArg] = args
     return new TypedApplicationCallResponseType({ returnValue: typeArg })
   },

@@ -869,7 +869,7 @@ export const FixedArrayGeneric = new GenericPType({
   name: 'FixedArray',
   module: Constants.moduleNames.algoTs.arrays,
   parameterise(typeArgs) {
-    codeInvariant(typeArgs.length === 2, `${this.name} type expects exactly one type parameters`)
+    codeInvariant(typeArgs.length === 2, `${this.name} type expects exactly two type parameters`)
     const [elementType, arraySize] = typeArgs
     codeInvariant(
       arraySize instanceof NumericLiteralPType,
@@ -1636,7 +1636,7 @@ export class IterableIteratorType extends TransientType {
     super({
       name: `IterableIterator<${itemType.name}>`,
       module: Constants.moduleNames.typescript.iterable,
-      typeMessage: '`IterableIterator` is not valid as a variable, parameter, return, or property type. ',
+      typeMessage: '`IterableIterator` is not valid as a variable, parameter, return, or property type',
       expressionMessage: 'IterableIterator expressions can only be used in for loops',
       singleton: false,
     })
@@ -1862,7 +1862,7 @@ export const compiledLogicSigType = new ImmutableObjectPType({
     name: 'CompiledLogicSig',
     module: Constants.moduleNames.algoTs.compiled,
   }),
-  description: 'Provides account for a Logic Signature. Created by calling `compile(LogicSigType)``',
+  description: 'Provides account for a Logic Signature. Created by calling `compile(LogicSigType)`',
   properties: [{ name: 'account', ptype: accountPType, description: null }],
 })
 
