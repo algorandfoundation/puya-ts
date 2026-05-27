@@ -4,7 +4,7 @@ import {
   anyGtxnType,
   applicationCallGtxnType,
   applicationCallItxnParamsType,
-  applicationItxnType,
+  applicationCallItxnType,
   assetConfigGtxnType,
   assetConfigItxnParamsType,
   assetConfigItxnType,
@@ -35,7 +35,7 @@ export function getInnerTransactionType(kind: TransactionKind): InnerTransaction
     case TransactionKind.afrz:
       return assetFreezeItxnType
     case TransactionKind.appl:
-      return applicationItxnType
+      return applicationCallItxnType
   }
 }
 export function getItxnParamsType(kind: TransactionKind): ItxnParamsPType {

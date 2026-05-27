@@ -2,14 +2,14 @@ import type ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import type { SourceLocation } from '../../awst/source-location'
 import type { PType } from '../ptypes'
-import { cloneFunctionPType } from '../ptypes'
+import { cloneFunction } from '../ptypes'
 import { instanceEb } from '../type-registry'
 import type { InstanceBuilder } from './index'
 import { FunctionBuilder, type NodeBuilder } from './index'
 import { parseFunctionArgs } from './util/arg-parsing'
 
 export class CloneFunctionBuilder extends FunctionBuilder {
-  readonly ptype = cloneFunctionPType
+  readonly ptype = cloneFunction
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {

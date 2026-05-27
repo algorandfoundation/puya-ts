@@ -2,14 +2,14 @@ import { nodeFactory } from '../../awst/node-factory'
 import type { SourceLocation } from '../../awst/source-location'
 import { wtypes } from '../../awst/wtypes'
 import { codeInvariant } from '../../util'
-import { accountPType, BytesPType, validateEncodingFunctionPType, voidPType, type PType } from '../ptypes'
+import { accountPType, BytesPType, validateEncodingFunction, voidPType, type PType } from '../ptypes'
 import { arc4AddressAlias, StaticBytesType } from '../ptypes/arc4-types'
 import { instanceEb } from '../type-registry'
 import { FunctionBuilder, type NodeBuilder } from './index'
 import { parseFunctionArgs } from './util/arg-parsing'
 
 export class ValidateEncodingFunctionBuilder extends FunctionBuilder {
-  readonly ptype = validateEncodingFunctionPType
+  readonly ptype = validateEncodingFunction
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): NodeBuilder {
     const {

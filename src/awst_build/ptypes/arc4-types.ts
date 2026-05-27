@@ -6,7 +6,7 @@ import type { PTypeField } from './base'
 import { GenericPType, PType } from './base'
 import {
   accountPType,
-  applicationItxnType,
+  applicationCallItxnType,
   ArrayPType,
   biguintPType,
   boolPType,
@@ -227,7 +227,7 @@ export const arc4StructBaseType = new ARC4StructType({
   frozen: false,
 })
 
-export const Arc4TupleGeneric = new GenericPType({
+export const ARC4TupleGeneric = new GenericPType({
   name: 'Tuple',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
   parameterise([tupleType, ...rest]: readonly PType[]) {
@@ -546,11 +546,11 @@ export class StaticBytesType extends StaticArrayType {
     })
   }
 }
-export const DynamicBytesConstructor = new LibClassType({
+export const DynamicBytesClass = new LibClassType({
   name: 'DynamicBytes',
   module: Constants.moduleNames.algoTs.arc4.encodedTypes,
 })
-export const DynamicBytesType = new DynamicArrayType({
+export const dynamicBytesType = new DynamicArrayType({
   name: 'DynamicBytes',
   immutable: true,
   elementType: arc4ByteAlias,
@@ -640,11 +640,11 @@ export class TypedApplicationCallResponseType extends ImmutableObjectPType {
   constructor({ returnValue }: { returnValue: PType }) {
     super({
       properties: returnValue.equals(voidPType)
-        ? [{ name: 'itxn', ptype: applicationItxnType, description: null }]
+        ? [{ name: 'itxn', ptype: applicationCallItxnType, description: null }]
         : [
             {
               name: 'itxn',
-              ptype: applicationItxnType,
+              ptype: applicationCallItxnType,
               description: null,
             },
             {

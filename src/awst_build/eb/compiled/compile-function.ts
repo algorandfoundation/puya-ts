@@ -9,7 +9,7 @@ import type { PType } from '../../ptypes'
 import {
   compiledContractType,
   compiledLogicSigType,
-  compileFunctionType,
+  compileFunction,
   ContractClassPType,
   isObjectType,
   LogicSigPType,
@@ -22,7 +22,7 @@ import { requireBuilderOfType, requireInstanceBuilder, requireStringConstant } f
 import { parseFunctionArgs } from '../util/arg-parsing'
 
 export class CompileFunctionBuilder extends FunctionBuilder {
-  readonly ptype = compileFunctionType
+  readonly ptype = compileFunction
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {

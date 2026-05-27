@@ -20,7 +20,7 @@ import { arc4ConfigFromType, buildArc4MethodConstant } from '../../arc4-util'
 import { AwstBuildContext } from '../../context/awst-build-context'
 import type { PType } from '../../ptypes'
 import {
-  applicationItxnType,
+  applicationCallItxnType,
   bytesPType,
   compiledContractType,
   FunctionPType,
@@ -161,7 +161,7 @@ class ContractProxyBareCreateFunctionBuilder extends FunctionBuilder {
       applicationProxy: this.proxy,
     })
 
-    return instanceEb(itxnResult, applicationItxnType)
+    return instanceEb(itxnResult, applicationCallItxnType)
   }
 }
 class ContractProxyCallBuilder extends NodeBuilder {
