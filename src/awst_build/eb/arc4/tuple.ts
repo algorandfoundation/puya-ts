@@ -8,7 +8,7 @@ import { logger } from '../../../logger'
 import { codeInvariant, invariant } from '../../../util'
 import type { PType } from '../../ptypes'
 import { numberPType, uint64PType } from '../../ptypes'
-import { ARC4EncodedType, Arc4TupleGeneric, ARC4TupleType } from '../../ptypes/arc4-types'
+import { ARC4EncodedType, ARC4TupleGeneric, ARC4TupleType } from '../../ptypes/arc4-types'
 import { instanceEb } from '../../type-registry'
 import type { InstanceBuilder, NodeBuilder } from '../index'
 import { ClassBuilder, FunctionBuilder } from '../index'
@@ -17,7 +17,7 @@ import { parseFunctionArgs } from '../util/arg-parsing'
 import { Arc4EncodedBaseExpressionBuilder } from './base'
 
 export class Arc4TupleClassBuilder extends ClassBuilder {
-  readonly ptype = Arc4TupleGeneric
+  readonly ptype = ARC4TupleGeneric
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
@@ -31,7 +31,7 @@ export class Arc4TupleClassBuilder extends ClassBuilder {
       callLocation: sourceLocation,
       argSpec: (a) => args.map(() => a.required()),
     })
-    const ptype = Arc4TupleGeneric.parameterise([tupleType])
+    const ptype = ARC4TupleGeneric.parameterise([tupleType])
 
     if (args.length === 0) {
       return new Arc4TupleExpressionBuilder(

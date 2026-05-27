@@ -771,7 +771,7 @@ abstract class TupleBasePType extends PType {
 export class MutableTuplePType extends TupleBasePType {
   readonly [PType.IdSymbol] = 'MutableTuplePType'
   constructor(props: { items: PType[] }) {
-    super({ ...props })
+    super(props)
   }
 
   get wtype(): wtypes.ARC4Tuple {
@@ -891,7 +891,7 @@ export class FixedArrayPType extends PType {
   readonly module: string = Constants.moduleNames.algoTs.arrays
   readonly arraySize: bigint
   get fullName() {
-    return `${this.module}::FixedArray<${this.elementType.fullName}>`
+    return `${this.module}::FixedArray<${this.elementType.fullName}, ${this.arraySize}>`
   }
   constructor(props: { elementType: PType; arraySize: bigint }) {
     super()
@@ -1327,7 +1327,7 @@ export const applicationPType = new ABICompatibleInstanceType({
   module: Constants.moduleNames.algoTs.reference,
   abiTypeSignature: 'application',
 })
-export const ApplicationFunctionType = new LibFunctionType({
+export const ApplicationFunction = new LibFunctionType({
   name: 'Application',
   module: Constants.moduleNames.algoTs.reference,
 })
@@ -1481,7 +1481,7 @@ export const applicationCallGtxnType = new GroupTransactionPType({
   name: 'ApplicationCallTxn',
   kind: TransactionKind.appl,
 })
-export const ApplicationTxnFunction = new TransactionFunctionType({
+export const ApplicationCallTxnFunction = new TransactionFunctionType({
   name: 'ApplicationCallTxn',
   module: Constants.moduleNames.algoTs.gtxn,
   kind: TransactionKind.appl,
@@ -1682,32 +1682,32 @@ export class GeneratorType extends UnsupportedType {
   }
 }
 
-export const paymentItxnFn = new TransactionFunctionType({
+export const paymentItxnFunction = new TransactionFunctionType({
   name: 'payment',
   module: Constants.moduleNames.algoTs.itxn,
   kind: TransactionKind.pay,
 })
-export const keyRegistrationItxnFn = new TransactionFunctionType({
+export const keyRegistrationItxnFunction = new TransactionFunctionType({
   name: 'keyRegistration',
   module: Constants.moduleNames.algoTs.itxn,
   kind: TransactionKind.keyreg,
 })
-export const assetConfigItxnFn = new TransactionFunctionType({
+export const assetConfigItxnFunction = new TransactionFunctionType({
   name: 'assetConfig',
   module: Constants.moduleNames.algoTs.itxn,
   kind: TransactionKind.acfg,
 })
-export const assetTransferItxnFn = new TransactionFunctionType({
+export const assetTransferItxnFunction = new TransactionFunctionType({
   name: 'assetTransfer',
   module: Constants.moduleNames.algoTs.itxn,
   kind: TransactionKind.axfer,
 })
-export const assetFreezeItxnFn = new TransactionFunctionType({
+export const assetFreezeItxnFunction = new TransactionFunctionType({
   name: 'assetFreeze',
   module: Constants.moduleNames.algoTs.itxn,
   kind: TransactionKind.afrz,
 })
-export const applicationCallItxnFn = new TransactionFunctionType({
+export const applicationCallItxnFunction = new TransactionFunctionType({
   name: 'applicationCall',
   module: Constants.moduleNames.algoTs.itxn,
   kind: TransactionKind.appl,
@@ -1801,7 +1801,7 @@ export const applicationCallItxnParamsType = new ItxnParamsPType({
   name: 'ApplicationCallItxnParams',
   kind: TransactionKind.appl,
 })
-export const applicationItxnType = new InnerTransactionPType({
+export const applicationCallItxnType = new InnerTransactionPType({
   name: 'ApplicationCallInnerTxn',
   kind: TransactionKind.appl,
 })
@@ -1836,7 +1836,7 @@ export const TemplateVarFunction = new LibFunctionType({
   module: Constants.moduleNames.algoTs.templateVar,
 })
 
-export const compileFunctionType = new LibFunctionType({
+export const compileFunction = new LibFunctionType({
   name: 'compile',
   module: Constants.moduleNames.algoTs.compiled,
 })
@@ -1943,12 +1943,12 @@ export const itxnComposePType = new LibObjType({
   name: 'itxnCompose',
 })
 
-export const cloneFunctionPType = new LibFunctionType({
+export const cloneFunction = new LibFunctionType({
   name: 'clone',
   module: Constants.moduleNames.algoTs.util,
 })
 
-export const validateEncodingFunctionPType = new LibFunctionType({
+export const validateEncodingFunction = new LibFunctionType({
   name: 'validateEncoding',
   module: Constants.moduleNames.algoTs.util,
 })
