@@ -1,7 +1,7 @@
 import { snakeCase } from 'change-case'
 import { InternalError } from '../errors'
 import { AbsolutePath } from '../util/absolute-path'
-import { buildBase85Encoder } from '../util/base-85'
+import { uint8ArrayToBase85 } from '../util/base-85'
 import { ContractReference, LogicSigReference } from './models'
 import { IntrinsicCall, SingleEvaluation } from './nodes'
 import { generateExcludedPropsObj } from './nodes-meta'
@@ -27,19 +27,10 @@ export class SnakeCaseSerializer<T> {
   public serialize(obj: T): string {
     return JSON.stringify(obj, (k, v) => this.serializerFunction(k, v), this.spaces)
   }
-  private b85 = buildBase85Encoder()
 
   protected serializerFunction(key: string, value: unknown): unknown {
-    if (typeof value === 'bigint') {
-      return serializeBigInt(value)
-    }
-    if (value instanceof Uint8Array) {
-      return this.b85.encode(value)
-    }
     if (value instanceof Object && value.constructor.name !== 'Date' && value.constructor.name !== 'Object') {
-      return {
-        ...Object.fromEntries(Object.entries(value).map(([key, value]) => [snakeCase(key), value])),
-      }
+      return Object.fromEntries(Object.entries(value).map(([key, value]) => [snakeCase(key), value]))
     }
     return value
   }
@@ -57,6 +48,12 @@ export class AwstSerializer<T> extends SnakeCaseSerializer<T> {
   #singleEvals = new SymbolToNumber()
 
   protected serializerFunction(key: string, value: unknown): unknown {
+    if (typeof value === 'bigint') {
+      return serializeBigInt(value)
+    }
+    if (value instanceof Uint8Array) {
+      return uint8ArrayToBase85(value)
+    }
     if (value instanceof Set) {
       return Array.from(value.keys())
     }
@@ -74,23 +71,13 @@ export class AwstSerializer<T> extends SnakeCaseSerializer<T> {
       }
       return Array.from(value.entries())
     }
-    if (value instanceof Uint8Array) {
-      return super.serializerFunction(key, value)
-    }
     if (value instanceof ContractReference || value instanceof LogicSigReference) {
       return value.toString()
     }
     if (value instanceof IntrinsicCall) {
-      // Convert bigint immediates to number so they serialize without quotes and can be disambiguated from string immediates
       return {
         _type: IntrinsicCall.name,
         ...(super.serializerFunction(key, value) as object),
-        immediates: value.immediates.map((i) => {
-          if (typeof i === 'bigint') {
-            return serializeBigInt(i)
-          }
-          return i
-        }),
       }
     }
     if (value instanceof AbsolutePath) {
