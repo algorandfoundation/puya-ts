@@ -463,7 +463,7 @@ subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.writeDynamicLocal
         let tmp%1#0: uint64 = (global CurrentApplicationID)
         let tmp%2#0: bool = (app_opted_in sender#0 tmp%1#0)
         (assert tmp%2#0) // Account must opt in to contract first
-        let localDynamicAccess#0: bytes = key#0
+        let localDynamicAccess#0: state_key = key#0
         (app_local_put sender#0 localDynamicAccess#0 value#0)
         let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (app_local_get_ex sender#0 0u localDynamicAccess#0)
         (assert maybe_exists%0#0) // check LocalState exists
@@ -480,7 +480,7 @@ subroutine tests/approvals/local-state.algo.ts::LocalStateDemo.readDynamicLocalS
         let tmp%1#0: uint64 = (global CurrentApplicationID)
         let tmp%2#0: bool = (app_opted_in sender#0 tmp%1#0)
         (assert tmp%2#0) // Account must opt in to contract first
-        let localDynamicAccess#0: bytes = key#0
+        let localDynamicAccess#0: state_key = key#0
         let (_%0#0: string, maybe_exists%0#0: bool) = (app_local_get_ex sender#0 0u localDynamicAccess#0)
         (assert maybe_exists%0#0) // Key not found
         let (maybe_value%0#0: bytes, maybe_exists%1#0: bool) = (app_local_get_ex sender#0 0u localDynamicAccess#0)

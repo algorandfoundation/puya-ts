@@ -62,8 +62,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert eq%1#2) // invalid number of bytes for string
         let result2#0: string = ((extract 6 0) awst_tmp%1#2)
         let greetItxn.LastLog#0: bytes = (itxn LastLog)
-        let tmp%13#2: bool = (== result2#0 "hello abi")
-        (assert tmp%13#2)
+        let tmp%13#3: bool = (== result2#0 "hello abi")
+        (assert tmp%13#3)
         let tmp%16#0: bool = (== greetItxn.LastLog#0 0x151f7c75000968656c6c6f20616269)
         (assert tmp%16#0)
         itxn_begin
@@ -157,8 +157,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let awst_tmp%1#1: bytes = (itxn LastLog)
         let tmp%11#3: bytes = ((extract 4 0) awst_tmp%1#1)
         let tmp%12#1: bytes = ((extract 0 4) awst_tmp%1#1)
-        let tmp%13#1: bool = (== tmp%12#1 0x151f7c75)
-        (assert tmp%13#1) // Bytes has valid prefix
+        let tmp%13#2: bool = (== tmp%12#1 0x151f7c75)
+        (assert tmp%13#2) // Bytes has valid prefix
         let aggregate%array_length%5#0: uint64 = (extract_uint16 tmp%11#3 0u) // on error: invalid array length header
         let add%1#0: uint64 = (+ aggregate%array_length%5#0 2u)
         let len%1#1: uint64 = (len tmp%11#3)
@@ -325,8 +325,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (assert eq%2#0) // invalid number of bytes for bytes
         let (value%0#1: account, check%0#1: bool) = ((app_params_get AppAddress) appId#1)
         (assert check%0#1) // application exists
-        let tmp%13#0: uint64 = (global CurrentApplicationID)
-        let (value%1#0: account, check%1#0: bool) = ((app_params_get AppAddress) tmp%13#0)
+        let tmp%13#1: uint64 = (global CurrentApplicationID)
+        let (value%1#0: account, check%1#0: bool) = ((app_params_get AppAddress) tmp%13#1)
         (assert check%1#0) // application exists
         itxn_begin
         ((itxn_field ConfigAssetName) "TEST")
@@ -380,18 +380,18 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         itxn_submit
         let tmp%7#1: bytes = (itxna Logs 0)
-        let reinterpret_bytes[32]%0#0: bytes[32] = (global CurrentApplicationAddress)
-        let tmp%8#1: bool = (== tmp%7#1 reinterpret_bytes[32]%0#0)
-        (assert tmp%8#1)
-        let tmp%9#1: bytes = (itxna Logs 1)
-        let reinterpret_bytes[32]%1#0: bytes[32] = (txn Sender)
-        let tmp%10#1: bool = (== tmp%9#1 reinterpret_bytes[32]%1#0)
-        (assert tmp%10#1)
-        let tmp%11#1: bytes = (itxna Logs 2)
+        let tmp%8#1: account = (global CurrentApplicationAddress)
+        let tmp%9#1: bool = (== tmp%7#1 tmp%8#1)
+        (assert tmp%9#1)
+        let tmp%10#1: bytes = (itxna Logs 1)
+        let tmp%11#1: account = (txn Sender)
+        let tmp%12#0: bool = (== tmp%10#1 tmp%11#1)
+        (assert tmp%12#0)
+        let tmp%13#0: bytes = (itxna Logs 2)
         let (value%0#0: bytes, check%0#0: bool) = ((asset_params_get AssetName) asset#0)
         (assert check%0#0) // asset exists
-        let tmp%12#0: bool = (== tmp%11#1 value%0#0)
-        (assert tmp%12#0)
+        let tmp%14#0: bool = (== tmp%13#0 value%0#0)
+        (assert tmp%14#0)
         exit 1u
     block@12: // after_if_else_L13
         fail

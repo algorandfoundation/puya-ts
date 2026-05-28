@@ -98,14 +98,12 @@ subroutine tests/approvals/accounts.algo.ts::AccountsContract.otherAccount[routi
 subroutine tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo(account: account, asset: uint64) -> Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1,bool1):
     block@0: // L9
         _puya_lib.util.ensure_budget(1400u, 0u)
-        let reinterpret_bytes[32]%0#0: bytes[32] = account#0
         let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
         (assert check%0#0) // account funded
         let (value%1#0: uint64, check%1#0: bool) = ((acct_params_get AcctMinBalance) account#0)
         (assert check%1#0) // account funded
         let (value%2#0: account, check%2#0: bool) = ((acct_params_get AcctAuthAddr) account#0)
         (assert check%2#0) // account funded
-        let reinterpret_bytes[32]%1#0: bytes[32] = value%2#0
         let (value%3#0: uint64, check%3#0: bool) = ((acct_params_get AcctTotalNumUint) account#0)
         (assert check%3#0) // account funded
         let (value%4#0: uint64, check%4#0: bool) = ((acct_params_get AcctTotalNumByteSlice) account#0)
@@ -127,7 +125,7 @@ subroutine tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo(acc
         let tmp%0#0: uint64 = (global CurrentApplicationID)
         let tmp%1#0: bool = (app_opted_in account#0 tmp%0#0)
         let (tmp%2#0: uint64, tmp%3#0: bool) = ((asset_holding_get AssetBalance) account#0 asset#0)
-        let tmp%4#0: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1,bool1) = bytes_encode<(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1,bool1)>(reinterpret_bytes[32]%0#0, value%0#0, value%1#0, reinterpret_bytes[32]%1#0, value%3#0, value%4#0, value%5#0, value%6#0, value%7#0, value%8#0, value%9#0, value%10#0, value%11#0, tmp%1#0, tmp%3#0)
+        let tmp%4#0: Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1,bool1) = bytes_encode<(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1,bool1)>(account#0, value%0#0, value%1#0, value%2#0, value%3#0, value%4#0, value%5#0, value%6#0, value%7#0, value%8#0, value%9#0, value%10#0, value%11#0, tmp%1#0, tmp%3#0)
         return tmp%4#0
 
 subroutine tests/approvals/accounts.algo.ts::AccountsContract.otherAccount() -> void:

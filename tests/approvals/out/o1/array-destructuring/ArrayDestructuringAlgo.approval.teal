@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1
+    intcblock 1 64
     // tests/approvals/array-destructuring.algo.ts:4
     // export class ArrayDestructuringAlgo extends Contract {
     txn NumAppArgs
@@ -67,11 +67,21 @@ testNested:
     extract 64 64
     uncover 2
     extract 0 8
-    pushint 64
+    dig 2
+    len
+    intc_1 // 64
+    <=
+    assert // overflow
+    intc_1 // 64
     bzero
     uncover 3
     dig 1
     b|
+    dig 3
+    len
+    intc_1 // 64
+    <=
+    assert // overflow
     uncover 3
     uncover 2
     b|

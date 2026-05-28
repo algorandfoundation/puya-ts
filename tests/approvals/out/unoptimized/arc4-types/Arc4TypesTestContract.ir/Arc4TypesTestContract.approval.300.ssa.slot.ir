@@ -201,7 +201,7 @@ subroutine tests/approvals/arc4-types.algo.ts::testDynamicBytes(someBytes: bytes
         goto block@3
     block@3: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#0: bytes = tmp%2#1
-        let tmp%3#1: bytes = ((replace2 0) 0x000568656c6c6f new_len_u16#0)
+        let tmp%3#1: bytes = (replace3 0x000568656c6c6f 0u new_len_u16#0)
         let result#0: bytes = tmp%3#1
         let tmp%4#1: bytes = (concat result#0 new_items_bytes#0)
         let tmp%9#0: Encoded(len+uint8[]) = tmp%4#1
@@ -240,7 +240,7 @@ subroutine tests/approvals/arc4-types.algo.ts::testStaticBytes() -> void:
         goto block@3
     block@3: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#0: bytes = tmp%2#1
-        let tmp%3#1: bytes = ((replace2 0) 0x000400000000 new_len_u16#0)
+        let tmp%3#1: bytes = (replace3 0x000400000000 0u new_len_u16#0)
         let result#0: bytes = tmp%3#1
         let tmp%4#1: bytes = (concat result#0 0xaabbccddee)
         let tmp%3#0: Encoded(len+uint8[]) = tmp%4#1
@@ -282,7 +282,7 @@ subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: Encoded(uint64)) ->
         goto block@3
     block@3: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#0: bytes = tmp%2#1
-        let tmp%3#1: bytes = ((replace2 0) array#0 new_len_u16#0)
+        let tmp%3#1: bytes = (replace3 array#0 0u new_len_u16#0)
         let result#0: bytes = tmp%3#1
         let tmp%4#1: bytes = (concat result#0 new_items_bytes#0)
         let tmp%1#0: Encoded(len+uint64[]) = tmp%4#1
@@ -311,7 +311,7 @@ subroutine tests/approvals/arc4-types.algo.ts::testArrays(n: Encoded(uint64)) ->
         goto block@7
     block@7: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#1: bytes = tmp%2#2
-        let tmp%3#2: bytes = ((replace2 0) array#1 new_len_u16#1)
+        let tmp%3#2: bytes = (replace3 array#1 0u new_len_u16#1)
         let result#1: bytes = tmp%3#2
         let tmp%4#2: bytes = (concat result#1 new_items_bytes#1)
         let tmp%3#0: Encoded(len+uint64[]) = tmp%4#2
@@ -443,21 +443,21 @@ subroutine tests/approvals/arc4-types.algo.ts::testByte() -> void:
 
 subroutine tests/approvals/arc4-types.algo.ts::testAddress() -> void:
     block@0: // L135
-        let reinterpret_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = (txn Sender)
-        let b#0: Encoded(uint8[32]) = reinterpret_Encoded(uint8[32])%0#0
-        let tmp%0#0: account = b#0
-        let tmp%1#0: account = (txn Sender)
-        let tmp%2#0: bool = (== tmp%0#0 tmp%1#0)
-        (assert tmp%2#0)
-        let tmp%3#0: bool = (!= addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ b#0)
-        (assert tmp%3#0) // Zero address should not match sender
-        let tmp%4#0: bool = (== addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ)
-        (assert tmp%4#0) // Two zero addresses should match
+        let tmp%0#0: account = (txn Sender)
+        let b#0: Encoded(uint8[32]) = tmp%0#0
+        let tmp%1#0: account = b#0
+        let tmp%2#0: account = (txn Sender)
+        let tmp%3#0: bool = (== tmp%1#0 tmp%2#0)
+        (assert tmp%3#0)
+        let tmp%4#0: bool = (!= addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ b#0)
+        (assert tmp%4#0) // Zero address should not match sender
+        let tmp%5#0: bool = (== addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ)
+        (assert tmp%5#0) // Two zero addresses should match
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 1u)
         let aggregate%encoded_element%0#0: bytes = (extract3 addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ aggregate%bytes_offset%0#0 1u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint8) = aggregate%encoded_element%0#0
-        let tmp%5#0: bool = (== array_item%0#0 0x00)
-        (assert tmp%5#0) // Zero address should start with zero byte
+        let tmp%6#0: bool = (== array_item%0#0 0x00)
+        (assert tmp%6#0) // Zero address should start with zero byte
         return 
 
 subroutine tests/approvals/arc4-types.algo.ts::testTuple() -> void:

@@ -138,7 +138,7 @@ subroutine _puya_lib.arc4.dynamic_array_pop_fixed_size(array: bytes, fixed_byte_
         let tmp%3#0: bytes = tmp%1#2
         goto block@4
     block@4: // after_inlined__puya_lib.arc4._itob16_L59
-        let tmp%4#0: bytes = ((replace2 0) result#0 tmp%3#0)
+        let tmp%4#0: bytes = (replace3 result#0 0u tmp%3#0)
         return tmp%4#0
 
 subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray[routing]() -> void:
@@ -334,7 +334,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray
         goto block@3
     block@3: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#0: bytes = tmp%2#1
-        let tmp%3#0: bytes = ((replace2 0) array#0 new_len_u16#0)
+        let tmp%3#0: bytes = (replace3 array#0 0u new_len_u16#0)
         let result#0: bytes = tmp%3#0
         let tmp%4#0: bytes = (concat result#0 new_items_bytes#0)
         let tmp%2#0: Encoded(len+uint64[]) = tmp%4#0
@@ -370,7 +370,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.readonlyArray
         goto block@7
     block@7: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#1: bytes = tmp%2#2
-        let tmp%3#1: bytes = ((replace2 0) array#1 new_len_u16#1)
+        let tmp%3#1: bytes = (replace3 array#1 0u new_len_u16#1)
         let result#1: bytes = tmp%3#1
         let tmp%4#1: bytes = (concat result#1 new_items_bytes#1)
         let tmp%6#0: Encoded(len+uint64[]) = tmp%4#1
@@ -463,7 +463,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayInObject
         goto block@3
     block@3: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#0: bytes = tmp%2#1
-        let tmp%3#1: bytes = ((replace2 0) array#0 new_len_u16#0)
+        let tmp%3#1: bytes = (replace3 array#0 0u new_len_u16#0)
         let result#0: bytes = tmp%3#1
         let tmp%4#0: bytes = (concat result#0 new_items_bytes#0)
         let tmp%1#0: Encoded(len+uint64[]) = tmp%4#0
@@ -561,7 +561,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         goto block@3
     block@3: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#0: bytes = tmp%2#1
-        let tmp%3#0: bytes = ((replace2 0) array#0 new_len_u16#0)
+        let tmp%3#0: bytes = (replace3 array#0 0u new_len_u16#0)
         let result#0: bytes = tmp%3#0
         let tmp%4#1: bytes = (concat result#0 new_items_bytes#0)
         let tmp%2#0: Encoded(len+uint64[]) = tmp%4#1
@@ -658,7 +658,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         goto block@7
     block@7: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#1: bytes = tmp%2#2
-        let tmp%3#1: bytes = ((replace2 0) array#1 new_len_u16#1)
+        let tmp%3#1: bytes = (replace3 array#1 0u new_len_u16#1)
         let result#1: bytes = tmp%3#1
         let tmp%4#2: bytes = (concat result#1 new_items_bytes#1)
         let tmp%30#0: Encoded(len+uint64[]) = tmp%4#2
@@ -878,7 +878,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         goto block@11
     block@11: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#2: bytes = tmp%2#3
-        let tmp%3#2: bytes = ((replace2 0) array#2 new_len_u16#2)
+        let tmp%3#2: bytes = (replace3 array#2 0u new_len_u16#2)
         let result#2: bytes = tmp%3#2
         let tmp%4#3: bytes = (concat result#2 new_items_bytes#2)
         let tmp%98#0: Encoded(len+uint64[]) = tmp%4#3
@@ -906,7 +906,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         goto block@15
     block@15: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#3: bytes = tmp%2#4
-        let tmp%3#3: bytes = ((replace2 0) array#3 new_len_u16#3)
+        let tmp%3#3: bytes = (replace3 array#3 0u new_len_u16#3)
         let result#3: bytes = tmp%3#3
         let tmp%4#4: bytes = (concat result#3 new_items_bytes#3)
         let tmp%100#0: Encoded(len+uint64[]) = tmp%4#4
@@ -929,7 +929,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         goto block@19
     block@19: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#4: bytes = tmp%2#5
-        let tmp%3#4: bytes = ((replace2 0) array#4 new_len_u16#4)
+        let tmp%3#4: bytes = (replace3 array#4 0u new_len_u16#4)
         let result#4: bytes = tmp%3#4
         let tmp%4#5: bytes = (concat result#4 new_items_bytes#4)
         let tmp%101#0: Encoded(len+uint64[]) = tmp%4#5
@@ -1064,7 +1064,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         goto block@23
     block@23: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#5: bytes = tmp%2#6
-        let tmp%3#5: bytes = ((replace2 0) array#5 new_len_u16#5)
+        let tmp%3#5: bytes = (replace3 array#5 0u new_len_u16#5)
         let result#5: bytes = tmp%3#5
         let tmp%4#6: bytes = (concat result#5 new_items_bytes#5)
         let tmp%139#0: Encoded(len+uint64[]) = tmp%4#6
@@ -1100,7 +1100,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         goto block@27
     block@27: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#6: bytes = tmp%2#7
-        let tmp%3#6: bytes = ((replace2 0) array#6 new_len_u16#6)
+        let tmp%3#6: bytes = (replace3 array#6 0u new_len_u16#6)
         let result#6: bytes = tmp%3#6
         let tmp%4#7: bytes = (concat result#6 new_items_bytes#6)
         let tmp%143#0: Encoded(len+uint64[]) = tmp%4#7
@@ -1173,7 +1173,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         goto block@31
     block@31: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#7: bytes = tmp%2#8
-        let tmp%3#7: bytes = ((replace2 0) array#7 new_len_u16#7)
+        let tmp%3#7: bytes = (replace3 array#7 0u new_len_u16#7)
         let result#7: bytes = tmp%3#7
         let tmp%4#8: bytes = (concat result#7 new_items_bytes#7)
         let tmp%165#0: Encoded(len+uint64[]) = tmp%4#8
@@ -1296,7 +1296,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         goto block@35
     block@35: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#8: bytes = tmp%2#9
-        let tmp%3#8: bytes = ((replace2 0) array#8 new_len_u16#8)
+        let tmp%3#8: bytes = (replace3 array#8 0u new_len_u16#8)
         let result#8: bytes = tmp%3#8
         let tmp%4#9: bytes = (concat result#8 new_items_bytes#8)
         let tmp%208#0: Encoded(len+uint64[]) = tmp%4#9
@@ -1433,7 +1433,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         goto block@39
     block@39: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#9: bytes = tmp%2#10
-        let tmp%3#9: bytes = ((replace2 0) array#9 new_len_u16#9)
+        let tmp%3#9: bytes = (replace3 array#9 0u new_len_u16#9)
         let result#9: bytes = tmp%3#9
         let tmp%4#10: bytes = (concat result#9 new_items_bytes#9)
         let tmp%252#0: Encoded(len+uint64[]) = tmp%4#10
@@ -1597,7 +1597,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         goto block@43
     block@43: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#10: bytes = tmp%2#11
-        let tmp%3#10: bytes = ((replace2 0) array#10 new_len_u16#10)
+        let tmp%3#10: bytes = (replace3 array#10 0u new_len_u16#10)
         let result#10: bytes = tmp%3#10
         let tmp%4#11: bytes = (concat result#10 new_items_bytes#10)
         let tmp%305#0: Encoded(len+uint64[]) = tmp%4#11
@@ -1705,7 +1705,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         goto block@47
     block@47: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#11: bytes = tmp%2#12
-        let tmp%3#11: bytes = ((replace2 0) array#11 new_len_u16#11)
+        let tmp%3#11: bytes = (replace3 array#11 0u new_len_u16#11)
         let result#11: bytes = tmp%3#11
         let tmp%4#12: bytes = (concat result#11 new_items_bytes#11)
         let tmp%337#0: Encoded(len+uint64[]) = tmp%4#12
@@ -1858,7 +1858,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         goto block@51
     block@51: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#12: bytes = tmp%2#13
-        let tmp%3#12: bytes = ((replace2 0) array#12 new_len_u16#12)
+        let tmp%3#12: bytes = (replace3 array#12 0u new_len_u16#12)
         let result#12: bytes = tmp%3#12
         let tmp%4#13: bytes = (concat result#12 new_items_bytes#12)
         let tmp%386#0: Encoded(len+uint64[]) = tmp%4#13
@@ -2018,7 +2018,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.doThings() ->
         goto block@55
     block@55: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#13: bytes = tmp%2#14
-        let tmp%3#13: bytes = ((replace2 0) array#13 new_len_u16#13)
+        let tmp%3#13: bytes = (replace3 array#13 0u new_len_u16#13)
         let result#13: bytes = tmp%3#13
         let tmp%4#14: bytes = (concat result#13 new_items_bytes#13)
         let tmp%440#0: Encoded(len+uint64[]) = tmp%4#14
@@ -2455,7 +2455,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop()
         goto block@3
     block@3: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#0: bytes = tmp%2#1
-        let tmp%3#1: bytes = ((replace2 0) array#0 new_len_u16#0)
+        let tmp%3#1: bytes = (replace3 array#0 0u new_len_u16#0)
         let result#0: bytes = tmp%3#1
         let tmp%4#1: bytes = (concat result#0 new_items_bytes#0)
         let tmp%1#0: Encoded(len+uint32[]) = tmp%4#1
@@ -2478,7 +2478,7 @@ subroutine tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop()
         goto block@7
     block@7: // after_inlined__puya_lib.arc4._itob16_L175
         let new_len_u16#1: bytes = tmp%2#2
-        let tmp%3#2: bytes = ((replace2 0) array#1 new_len_u16#1)
+        let tmp%3#2: bytes = (replace3 array#1 0u new_len_u16#1)
         let result#1: bytes = tmp%3#2
         let tmp%4#2: bytes = (concat result#1 new_items_bytes#1)
         let tmp%3#0: Encoded(len+uint32[]) = tmp%4#2

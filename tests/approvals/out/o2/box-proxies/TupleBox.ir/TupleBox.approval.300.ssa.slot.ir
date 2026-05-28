@@ -13,6 +13,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@4: // testBox_route_L178
         (box_create "t1" 10u)
         (box_create "t2" 20u)
+        let (value%0#0: uint64, check%0#0: bool) = (box_len "t1")
+        let tmp%0#3: bool = (== value%0#0 10u)
+        (assert tmp%0#3)
         (box_del "t1")
         (box_put "t1" 0x0005000c80000568656c6c6f0005776f726c64)
         let box%box_extract%0#1: bytes = (box_extract "t1" 5u 2u)

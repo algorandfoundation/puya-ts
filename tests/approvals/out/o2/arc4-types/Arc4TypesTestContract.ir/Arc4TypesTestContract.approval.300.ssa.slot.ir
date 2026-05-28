@@ -14,9 +14,9 @@ main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
         goto block@2
     block@7: // after_while_L20
         let b#1: Encoded(uint8[32]) = (txn Sender)
-        let tmp%1#5: account = (txn Sender)
-        let tmp%2#4: bool = (== b#1 tmp%1#5)
-        (assert tmp%2#4)
-        let tmp%3#4: bool = (!= addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ b#1)
-        (assert tmp%3#4) // Zero address should not match sender
+        let tmp%2#4: account = (txn Sender)
+        let tmp%3#4: bool = (== b#1 tmp%2#4)
+        (assert tmp%3#4)
+        let tmp%4#3: bool = (!= addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ b#1)
+        (assert tmp%4#3) // Zero address should not match sender
         return 1u

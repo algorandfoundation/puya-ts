@@ -19,8 +19,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let arg.1.0#0: biguint = ((extract 0 64) aggregate%extract%1#0)
         let arg.1.1#0: biguint = ((extract 64 64) aggregate%extract%1#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = ((extract 0 8) tmp%0#3)
+        let aggregate%value_len%0#0: uint64 = (len arg.1.0#0)
+        let aggregate%len_ok%0#0: bool = (<= aggregate%value_len%0#0 64u)
+        (assert aggregate%len_ok%0#0) // overflow
         let aggregate%bzero%0#0: bytes = (bzero 64u)
         let aggregate%arc4_encoded%0#0: bytes[64] = (b| arg.1.0#0 aggregate%bzero%0#0)
+        let aggregate%value_len%1#0: uint64 = (len arg.1.1#0)
+        let aggregate%len_ok%1#0: bool = (<= aggregate%value_len%1#0 64u)
+        (assert aggregate%len_ok%1#0) // overflow
         let aggregate%arc4_encoded%1#0: bytes[64] = (b| arg.1.1#0 aggregate%bzero%0#0)
         let aggregate%head%2#0: bytes = (concat aggregate%arc4_encoded%0#0 aggregate%arc4_encoded%1#0)
         let aggregate%head%3#0: bytes = (concat aggregate%val_as_bytes%0#0 aggregate%head%2#0)

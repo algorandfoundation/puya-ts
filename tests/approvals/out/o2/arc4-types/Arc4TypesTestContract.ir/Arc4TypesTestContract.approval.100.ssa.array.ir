@@ -189,17 +189,17 @@ main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
         let tmp%34#0: bool = (&& tmp%32#0 tmp%33#0)
         (assert tmp%34#0) // assert target is match for conditions
         let b#1: Encoded(uint8[32]) = (txn Sender)
-        let tmp%0#7: account = b#1
-        let tmp%1#5: account = (txn Sender)
-        let tmp%2#4: bool = (== tmp%0#7 tmp%1#5)
-        (assert tmp%2#4)
-        let tmp%3#4: bool = (!= addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ b#1)
-        (assert tmp%3#4) // Zero address should not match sender
+        let tmp%1#5: account = b#1
+        let tmp%2#4: account = (txn Sender)
+        let tmp%3#4: bool = (== tmp%1#5 tmp%2#4)
+        (assert tmp%3#4)
+        let tmp%4#3: bool = (!= addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ b#1)
+        (assert tmp%4#3) // Zero address should not match sender
         let aggregate%bytes_offset%13#0: uint64 = (* 0u 1u)
         let aggregate%encoded_element%13#0: bytes = (extract3 addr AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ aggregate%bytes_offset%13#0 1u) // on error: index access is out of bounds
         let array_item%0#1: Encoded(uint8) = aggregate%encoded_element%13#0
-        let tmp%5#3: bool = (== array_item%0#1 0x00)
-        (assert tmp%5#3) // Zero address should start with zero byte
+        let tmp%6#3: bool = (== array_item%0#1 0x00)
+        (assert tmp%6#3) // Zero address should start with zero byte
         let aggregate%head%17#0: bytes = (concat 0x 0x0000000000000022)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%head%17#0
         let t#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
@@ -210,8 +210,8 @@ main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
         let tmp%0#10: bytes = ((extract 2 0) 0x0000)
         let tmp%1#7: bool = (== tmp%0#10 0x)
         (assert tmp%1#7) // No args should give empty bytes
-        let tmp%6#3: bytes = ((extract 2 0) 0x000568656c6c6f)
-        let tmp%7#3: bool = (== tmp%6#3 "hello")
+        let tmp%6#4: bytes = ((extract 2 0) 0x000568656c6c6f)
+        let tmp%7#3: bool = (== tmp%6#4 "hello")
         (assert tmp%7#3)
         let aggregate%array_length%4#0: uint64 = (extract_uint16 0x000620776f726c64 0u) // on error: invalid array length header
         let tmp%8#2: uint64 = aggregate%array_length%4#0
@@ -332,8 +332,8 @@ main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
         let aggregate%len%1#0: uint64 = (len 0x000000000000000000000000000000000000000000000000ffffffffffffffff)
         let aggregate%sub%1#0: uint64 = (- aggregate%len%1#0 8u)
         let aggregate%extract_uint64%1#0: uint64 = (extract_uint64 0x000000000000000000000000000000000000000000000000ffffffffffffffff aggregate%sub%1#0)
-        let tmp%6#5: uint64 = aggregate%extract_uint64%1#0
-        let tmp%7#5: bool = (== tmp%6#5 18446744073709551615u)
+        let tmp%6#6: uint64 = aggregate%extract_uint64%1#0
+        let tmp%7#5: bool = (== tmp%6#6 18446744073709551615u)
         (assert tmp%7#5)
         let tmp%0#14: biguint = 0x2a
         let tmp%1#11: bool = (b== tmp%0#14 42b)
@@ -344,8 +344,8 @@ main tests/approvals/arc4-types.algo.ts::Arc4TypesTestContract.approvalProgram:
         let tmp%4#9: biguint = 0x00000000000000000000000000000001
         let tmp%5#8: bool = (b== tmp%4#9 1b)
         (assert tmp%5#8)
-        let tmp%6#6: biguint = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-        let tmp%7#6: bool = (b== tmp%6#6 115792089237316195423570985008687907853269984665640564039457584007913129639935b)
+        let tmp%6#7: biguint = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+        let tmp%7#6: bool = (b== tmp%6#7 115792089237316195423570985008687907853269984665640564039457584007913129639935b)
         (assert tmp%7#6)
         return 1u
 

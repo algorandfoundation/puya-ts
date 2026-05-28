@@ -98,14 +98,12 @@ subroutine tests/approvals/accounts.algo.ts::AccountsContract.otherAccount[routi
 subroutine tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo(account: account, asset: uint64) -> Encoded(uint8[32],uint64,uint64,uint8[32],uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool1,bool1):
     block@0: // L9
         _puya_lib.util.ensure_budget(1400u, 0u)
-        let reinterpret_bytes[32]%0#0: bytes[32] = account#0
         let (value%0#0: uint64, check%0#0: bool) = ((acct_params_get AcctBalance) account#0)
         (assert check%0#0) // account funded
         let (value%1#0: uint64, check%1#0: bool) = ((acct_params_get AcctMinBalance) account#0)
         (assert check%1#0) // account funded
         let (value%2#0: account, check%2#0: bool) = ((acct_params_get AcctAuthAddr) account#0)
         (assert check%2#0) // account funded
-        let reinterpret_bytes[32]%1#0: bytes[32] = value%2#0
         let (value%3#0: uint64, check%3#0: bool) = ((acct_params_get AcctTotalNumUint) account#0)
         (assert check%3#0) // account funded
         let (value%4#0: uint64, check%4#0: bool) = ((acct_params_get AcctTotalNumByteSlice) account#0)
@@ -127,7 +125,7 @@ subroutine tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo(acc
         let tmp%0#0: uint64 = (global CurrentApplicationID)
         let tmp%1#0: bool = (app_opted_in account#0 tmp%0#0)
         let (tmp%2#0: uint64, tmp%3#0: bool) = ((asset_holding_get AssetBalance) account#0 asset#0)
-        let aggregate%as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = reinterpret_bytes[32]%0#0
+        let aggregate%as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = account#0
         let aggregate%head%0#0: bytes = (concat 0x aggregate%as_Encoded(uint8[32])%0#0)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob value%0#0)
         let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
@@ -135,7 +133,7 @@ subroutine tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo(acc
         let aggregate%val_as_bytes%1#0: bytes[8] = (itob value%1#0)
         let aggregate%as_Encoded(uint64)%1#0: Encoded(uint64) = aggregate%val_as_bytes%1#0
         let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 aggregate%as_Encoded(uint64)%1#0)
-        let aggregate%as_Encoded(uint8[32])%1#0: Encoded(uint8[32]) = reinterpret_bytes[32]%1#0
+        let aggregate%as_Encoded(uint8[32])%1#0: Encoded(uint8[32]) = value%2#0
         let aggregate%head%3#0: bytes = (concat aggregate%head%2#0 aggregate%as_Encoded(uint8[32])%1#0)
         let aggregate%val_as_bytes%2#0: bytes[8] = (itob value%3#0)
         let aggregate%as_Encoded(uint64)%2#0: Encoded(uint64) = aggregate%val_as_bytes%2#0
