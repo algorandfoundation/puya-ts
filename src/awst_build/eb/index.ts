@@ -152,7 +152,7 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
     }
     return instanceEb(
       nodeFactory.singleEvaluation({
-        source: this.resolve(),
+        source: expr,
       }),
       this.ptype,
     )
