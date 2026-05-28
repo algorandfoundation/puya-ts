@@ -248,16 +248,15 @@ export namespace wtypes {
   export class ARC4Tuple extends ARC4Type {
     readonly types: WType[]
     readonly sourceLocation: SourceLocation | null
-    readonly immutable: boolean
 
     constructor({ types, sourceLocation, immutable }: { types: WType[]; sourceLocation?: SourceLocation; immutable: boolean }) {
       const typesStr = types.map((t) => t.name).join(',')
       super({
         name: `arc4.tuple<${typesStr}>`,
+        immutable,
       })
       this.sourceLocation = sourceLocation ?? null
       this.types = types
-      this.immutable = immutable
     }
   }
 
