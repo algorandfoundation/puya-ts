@@ -190,91 +190,87 @@ tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo_block@0:
     pushint 1400
     intc_0 // 0
     callsub ensure_budget
-    // tests/approvals/accounts.algo.ts:12
-    // bytes: account.bytes,
-    frame_dig -2
     // tests/approvals/accounts.algo.ts:13
     // balance: account.balance,
     frame_dig -2
     acct_params_get AcctBalance
-    cover 1
-    cover 2
     assert // account funded
     // tests/approvals/accounts.algo.ts:14
     // minBalance: account.minBalance,
     frame_dig -2
     acct_params_get AcctMinBalance
     cover 1
-    cover 3
+    cover 2
     assert // account funded
     // tests/approvals/accounts.algo.ts:15
     // authAddress: account.authAddress.bytes,
     frame_dig -2
     acct_params_get AcctAuthAddr
+    cover 1
+    cover 3
     assert // account funded
-    cover 2
     // tests/approvals/accounts.algo.ts:16
     // totalNumUint: account.totalNumUint,
     frame_dig -2
     acct_params_get AcctTotalNumUint
     cover 1
-    cover 5
+    cover 4
     assert // account funded
     // tests/approvals/accounts.algo.ts:17
     // totalNumByteSlice: account.totalNumByteSlice,
     frame_dig -2
     acct_params_get AcctTotalNumByteSlice
     cover 1
-    cover 6
+    cover 5
     assert // account funded
     // tests/approvals/accounts.algo.ts:18
     // totalExtraAppPages: account.totalExtraAppPages,
     frame_dig -2
     acct_params_get AcctTotalExtraAppPages
     cover 1
-    cover 7
+    cover 6
     assert // account funded
     // tests/approvals/accounts.algo.ts:19
     // totalAppsCreated: account.totalAppsCreated,
     frame_dig -2
     acct_params_get AcctTotalAppsCreated
     cover 1
-    cover 8
+    cover 7
     assert // account funded
     // tests/approvals/accounts.algo.ts:20
     // totalAppsOptedIn: account.totalAppsOptedIn,
     frame_dig -2
     acct_params_get AcctTotalAppsOptedIn
     cover 1
-    cover 9
+    cover 8
     assert // account funded
     // tests/approvals/accounts.algo.ts:21
     // totalAssetsCreated: account.totalAssetsCreated,
     frame_dig -2
     acct_params_get AcctTotalAssetsCreated
     cover 1
-    cover 10
+    cover 9
     assert // account funded
     // tests/approvals/accounts.algo.ts:22
     // totalAssets: account.totalAssets,
     frame_dig -2
     acct_params_get AcctTotalAssets
     cover 1
-    cover 11
+    cover 10
     assert // account funded
     // tests/approvals/accounts.algo.ts:23
     // totalBoxes: account.totalBoxes,
     frame_dig -2
     acct_params_get AcctTotalBoxes
     cover 1
-    cover 12
+    cover 11
     assert // account funded
     // tests/approvals/accounts.algo.ts:24
     // totalBoxBytes: account.totalBoxBytes,
     frame_dig -2
     acct_params_get AcctTotalBoxBytes
     cover 1
-    cover 13
+    cover 12
     assert // account funded
     // tests/approvals/accounts.algo.ts:25
     // isOptInApp: account.isOptedIn(Global.currentApplicationId),
@@ -282,14 +278,14 @@ tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo_block@0:
     frame_dig -2
     uncover 1
     app_opted_in
-    cover 13
+    cover 12
     // tests/approvals/accounts.algo.ts:26
     // isOptInAsset: account.isOptedIn(asset),
     frame_dig -2
     frame_dig -1
     asset_holding_get AssetBalance
-    cover 15
-    cover 15
+    cover 14
+    cover 14
     // tests/approvals/accounts.algo.ts:11-27
     // return {
     //   bytes: account.bytes,
@@ -308,13 +304,14 @@ tests/approvals/accounts.algo.ts::AccountsContract.getAccountInfo_block@0:
     //   isOptInApp: account.isOptedIn(Global.currentApplicationId),
     //   isOptInAsset: account.isOptedIn(asset),
     // }
+    frame_dig -2
     pushbytes 0x
     uncover 1
     concat
     uncover 1
     itob
     concat
-    uncover 2
+    uncover 1
     itob
     concat
     uncover 1

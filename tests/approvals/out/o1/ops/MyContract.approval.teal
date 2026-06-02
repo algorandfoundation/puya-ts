@@ -3,7 +3,6 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1
     bytecblock 0xa78000de
     // tests/approvals/ops.algo.ts:7
     // class MyContract extends Contract {
@@ -42,22 +41,20 @@ test:
     assert
     // tests/approvals/ops.algo.ts:19
     // assert(Txn.applicationArgs(0) === methodSelector('test()void'))
-    intc_0 // 0
-    txnas ApplicationArgs
+    txna ApplicationArgs 0
     bytec_0 // method "test()void"
     ==
     assert
     // tests/approvals/ops.algo.ts:20
     // assert(GTxn.applicationArgs(Txn.groupIndex, 0) === methodSelector(MyContract.prototype.test))
     txn GroupIndex
-    intc_0 // 0
-    gtxnsas ApplicationArgs
+    gtxnsa ApplicationArgs 0
     bytec_0 // method "test()void"
     ==
     assert
     // tests/approvals/ops.algo.ts:8
     // test() {
-    intc_1 // 1
+    pushint 1
     return
 
 
@@ -83,5 +80,5 @@ test2:
     assert
     // tests/approvals/ops.algo.ts:23
     // test2(size: uint64) {
-    intc_1 // 1
+    pushint 1
     return

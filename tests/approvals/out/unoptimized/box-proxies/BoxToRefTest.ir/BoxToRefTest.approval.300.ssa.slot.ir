@@ -43,9 +43,9 @@ subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test() -> void:
     block@0: // L238
         let materialized_values%0#0: account = (txn Sender)
         let map_prefixed_key%0#0: bytes = (concat "" materialized_values%0#0)
-        let boxForCaller#0: bytes = map_prefixed_key%0#0
+        let boxForCaller#0: box_key = map_prefixed_key%0#0
         (box_create boxForCaller#0 4u)
-        let boxRef#0: bytes = boxForCaller#0
+        let boxRef#0: box_key = boxForCaller#0
         (box_replace boxRef#0 0u 0x7b)
         let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get boxForCaller#0)
         (assert aggregate%box_get%1#0) // Box must have value

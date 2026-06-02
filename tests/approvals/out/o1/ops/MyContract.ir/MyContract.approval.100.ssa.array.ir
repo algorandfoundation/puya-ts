@@ -34,11 +34,11 @@ subroutine tests/approvals/ops.algo.ts::MyContract.test[routing]() -> void:
         let tmp%8#0: uint64 = (txn ApplicationID)
         let tmp%9#0: bool = (== tmp%7#0 tmp%8#0)
         (assert tmp%9#0)
-        let tmp%10#0: bytes = ((txnas ApplicationArgs) 0u)
+        let tmp%10#0: bytes = (txna ApplicationArgs 0)
         let tmp%11#0: bool = (== tmp%10#0 method "test()void")
         (assert tmp%11#0)
         let tmp%12#0: uint64 = (txn GroupIndex)
-        let tmp%13#0: bytes = ((gtxnsas ApplicationArgs) tmp%12#0 0u)
+        let tmp%13#0: bytes = ((gtxnsa ApplicationArgs 0) tmp%12#0)
         let tmp%14#0: bool = (== tmp%13#0 method "test()void")
         (assert tmp%14#0)
         exit 1u

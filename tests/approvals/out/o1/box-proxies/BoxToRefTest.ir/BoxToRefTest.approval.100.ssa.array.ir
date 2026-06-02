@@ -80,7 +80,7 @@ subroutine _puya_lib.arc4.dynamic_assert_index(array: bytes, index: uint64) -> v
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test[routing]() -> void:
     block@0: // L238
-        let boxForCaller#0: bytes = (txn Sender)
+        let boxForCaller#0: box_key = (txn Sender)
         (box_create boxForCaller#0 4u)
         (box_replace boxForCaller#0 0u 0x7b)
         let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get boxForCaller#0)

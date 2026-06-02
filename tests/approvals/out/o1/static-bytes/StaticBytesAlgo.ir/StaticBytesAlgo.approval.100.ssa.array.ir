@@ -335,27 +335,27 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.returnLength[ro
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test[routing]() -> void:
     block@0: // L34
-        let reinterpret_bytes[32]%0#0: bytes[32] = (txn Sender)
-        tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(reinterpret_bytes[32]%0#0)
+        let tmp%0#0: account = (txn Sender)
+        tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32(tmp%0#0)
         tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.receiveB32("abcdefghabcdefghabcdefghabcdefgh")
-        let reinterpret_bytes[32]%2#0: bytes[32] = (txn Sender)
-        let b#0: bytes[16] = ((substring 0 16) reinterpret_bytes[32]%2#0)
-        let tmp%9#0: uint64 = (len b#0)
-        let tmp%10#0: bool = (== tmp%9#0 16u)
-        (assert tmp%10#0) // Length must be 16
+        let tmp%11#0: account = (txn Sender)
+        let b#0: bytes[16] = ((substring 0 16) tmp%11#0)
+        let tmp%12#0: uint64 = (len b#0)
+        let tmp%13#0: bool = (== tmp%12#0 16u)
+        (assert tmp%13#0) // Length must be 16
         let tmp%0#1: bytes[32] = (bzero 32u)
         let padded#0: bytes[32] = (b| b#0 tmp%0#1)
-        let tmp%12#0: uint64 = (len padded#0)
-        let tmp%13#0: bool = (== tmp%12#0 32u)
-        (assert tmp%13#0)
+        let tmp%15#0: uint64 = (len padded#0)
+        let tmp%16#0: bool = (== tmp%15#0 32u)
+        (assert tmp%16#0)
         exit 1u
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray[routing]() -> void:
     block@0: // L48
         let a.0#0: bytes[32] = (txn Sender)
         let a.1#0: bytes[32] = (txn Sender)
-        let reinterpret_bytes[32]%2#0: bytes[32] = (txn Sender)
-        let aggregate%as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = reinterpret_bytes[32]%2#0
+        let tmp%2#0: account = (txn Sender)
+        let aggregate%as_Encoded(uint8[32])%0#0: Encoded(uint8[32]) = tmp%2#0
         let aggregate%head%0#0: bytes = (concat 0x aggregate%as_Encoded(uint8[32])%0#0)
         let aggregate%as_Encoded(uint8[32][])%0#0: Encoded(uint8[32][]) = aggregate%head%0#0
         let encoded_array%0#0: Encoded(uint8[32][]) = aggregate%as_Encoded(uint8[32][])%0#0
@@ -367,19 +367,19 @@ subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.testArray[routi
         let aggregate%as_Encoded(uint8[32])%2#0: Encoded(uint8[32]) = a.1#0
         let aggregate%head%2#0: bytes = (concat aggregate%head%1#0 aggregate%as_Encoded(uint8[32])%2#0)
         let aggregate%as_Encoded(uint8[32][])%1#0: Encoded(uint8[32][]) = aggregate%head%2#0
-        let tmp%0#0: Encoded(uint8[32][]) = aggregate%as_Encoded(uint8[32][])%1#0
-        let aggregate%concat%0#0: Encoded(uint8[32][]) = (concat slot_contents%0#0 tmp%0#0) // on error: max array length exceeded
-        let tmp%1#0: Encoded(uint8[32][]) = aggregate%concat%0#0
-        store(b#0, tmp%1#0)
+        let tmp%3#0: Encoded(uint8[32][]) = aggregate%as_Encoded(uint8[32][])%1#0
+        let aggregate%concat%0#0: Encoded(uint8[32][]) = (concat slot_contents%0#0 tmp%3#0) // on error: max array length exceeded
+        let tmp%4#0: Encoded(uint8[32][]) = aggregate%concat%0#0
+        store(b#0, tmp%4#0)
         let slot_contents%1#0: Encoded(uint8[32][]) = load(b#0)
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 32u)
         let aggregate%encoded_element%0#0: bytes = (extract3 slot_contents%1#0 aggregate%bytes_offset%0#0 32u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint8[32]) = aggregate%encoded_element%0#0
-        let tmp%2#0: bytes[32] = array_item%0#0
-        let bitAnd#0: bytes[32] = (b& a.0#0 tmp%2#0)
-        let reinterpret_bytes[32]%3#0: bytes[32] = (txn Sender)
-        let tmp%4#0: bool = (== bitAnd#0 reinterpret_bytes[32]%3#0)
-        (assert tmp%4#0)
+        let tmp%5#0: bytes[32] = array_item%0#0
+        let bitAnd#0: bytes[32] = (b& a.0#0 tmp%5#0)
+        let tmp%7#0: account = (txn Sender)
+        let tmp%8#0: bool = (== bitAnd#0 tmp%7#0)
+        (assert tmp%8#0)
         exit 1u
 
 subroutine tests/approvals/static-bytes.algo.ts::StaticBytesAlgo.test2[routing]() -> void:

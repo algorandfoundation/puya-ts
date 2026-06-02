@@ -808,7 +808,7 @@ tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes_block@0:
     // tests/approvals/box-proxies.algo.ts:381
     // assert(this.boxC.value.bytes.at(-1) === c.bytes.at(-1))
     box_len
-    cover 2
+    assert // Box must have value
     intc_0 // 1
     -
     // tests/approvals/box-proxies.algo.ts:343
@@ -835,7 +835,7 @@ tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes_block@0:
     // tests/approvals/box-proxies.algo.ts:382
     // assert(this.boxC.value.bytes.slice(0, -1) === c.bytes.slice(0, -1))
     box_len
-    cover 2
+    assert // Box must have value
     intc_1 // 0
     dig 1
     >=
@@ -906,7 +906,7 @@ tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes_block@0:
     // tests/approvals/box-proxies.algo.ts:383
     // assert(this.boxC.value.bytes.slice(0, 2) === c.bytes.slice(0, 2))
     box_len
-    cover 2
+    assert // Box must have value
     intc_1 // 0
     dig 1
     >=
@@ -976,7 +976,7 @@ tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes_block@0:
     // tests/approvals/box-proxies.algo.ts:387
     // assert(this.boxD.value.at(-1) === dynamicBytes.native.at(-1))
     box_len
-    cover 2
+    assert // Box must have value
     intc_0 // 1
     -
     // tests/approvals/box-proxies.algo.ts:344
@@ -1007,7 +1007,7 @@ tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes_block@0:
     // tests/approvals/box-proxies.algo.ts:388
     // assert(this.boxD.value.slice(0, -1) === dynamicBytes.native.slice(0, -1))
     box_len
-    cover 2
+    assert // Box must have value
     intc_1 // 0
     dig 1
     >=
@@ -1080,7 +1080,7 @@ tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes_block@0:
     // tests/approvals/box-proxies.algo.ts:389
     // assert(this.boxD.value.slice(0, 5) === dynamicBytes.native.slice(0, 5))
     box_len
-    cover 2
+    assert // Box must have value
     intc_1 // 0
     dig 1
     >=
@@ -1137,7 +1137,7 @@ tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes_block@0:
     // tests/approvals/box-proxies.algo.ts:390
     // assert(this.boxD.value.slice(0, Uint64(2)) === dynamicBytes.native.slice(0, Uint64(2)))
     box_len
-    cover 2
+    assert // Box must have value
     intc_1 // 0
     dig 1
     >=
@@ -1590,9 +1590,6 @@ tests/approvals/box-proxies.algo.ts::Arc4BoxContract.boxesExist_block@0:
 
 // tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sliceBox() -> void:
 tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sliceBox:
-    // tests/approvals/box-proxies.algo.ts:445
-    // sliceBox() {
-    proto 0 0
     b tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sliceBox_block@0
 
 tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sliceBox_block@0:
@@ -1608,7 +1605,7 @@ tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sliceBox_block@0:
     // assert(box0.value.slice(0, 7) === Bytes('Testing'))
     bytec 11 // "0"
     box_len
-    cover 1
+    assert // Box must have value
     intc_1 // 0
     dig 1
     >=
@@ -1661,7 +1658,7 @@ tests/approvals/box-proxies.algo.ts::Arc4BoxContract.sliceBox_block@0:
     // tests/approvals/box-proxies.algo.ts:451
     // assert(this.boxC.value.bytes.slice(2, 10) === Bytes('Hello'))
     box_len
-    cover 1
+    assert // Box must have value
     intc_3 // 2
     dig 1
     >=

@@ -11,7 +11,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%7#0: bool = (&& tmp%4#0 tmp%5#0)
         (assert tmp%7#0)
-        let boxForCaller#0: bytes = (txn Sender)
+        let boxForCaller#0: box_key = (txn Sender)
         (box_create boxForCaller#0 4u)
         (box_replace boxForCaller#0 0u 0x7b)
         let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get boxForCaller#0)

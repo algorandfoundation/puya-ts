@@ -12,7 +12,7 @@ main tests/approvals/box-proxies.algo.ts::BoxContract.approvalProgram:
     block@2: // after_if_else_L111
         return 1u
 
-subroutine tests/approvals/box-proxies.algo.ts::testBox(box: bytes, value: string) -> void:
+subroutine tests/approvals/box-proxies.algo.ts::testBox(box: box_key, value: string) -> void:
     block@0: // L19
         (box_del box#0)
         (box_put box#0 value#0)
@@ -46,8 +46,7 @@ subroutine tests/approvals/box-proxies.algo.ts::testBox(box: bytes, value: strin
         (assert and_result%0#2)
         let (value%0#0: uint64, check%0#0: bool) = (box_len box#0)
         (assert check%0#0) // Box must have value
-        let reinterpret_bool%0#0: bool = value%0#0
-        (assert reinterpret_bool%0#0)
+        (assert value%0#0)
         let tmp%3#0: bool = (box_del box#0)
         (assert tmp%3#0) // delete failed
         let tmp%4#0: bool = (box_del "A")
@@ -84,7 +83,7 @@ subroutine tests/approvals/box-proxies.algo.ts::testBox(box: bytes, value: strin
         (assert e#1)
         return 
 
-subroutine tests/approvals/box-proxies.algo.ts::testBoxMap(box: bytes, key: string, value: bytes) -> void:
+subroutine tests/approvals/box-proxies.algo.ts::testBoxMap(box: box_key, key: string, value: bytes) -> void:
     block@0: // L49
         let map_prefixed_key%0#0: bytes = (concat box#0 key#0)
         (box_del map_prefixed_key%0#0)
@@ -93,7 +92,7 @@ subroutine tests/approvals/box-proxies.algo.ts::testBoxMap(box: bytes, key: stri
         (box_del map_prefixed_key%1#0)
         (box_put map_prefixed_key%1#0 value#0)
         let map_prefixed_key%2#0: bytes = (concat "" key#0)
-        let boxMapItem#0: bytes = map_prefixed_key%2#0
+        let boxMapItem#0: box_key = map_prefixed_key%2#0
         let (_%0#0: uint64, maybe_exists%0#0: bool) = (box_len boxMapItem#0)
         (assert maybe_exists%0#0)
         let tmp%0#0: bool = (== box#0 "two")
@@ -103,8 +102,7 @@ subroutine tests/approvals/box-proxies.algo.ts::testBoxMap(box: bytes, key: stri
         let map_prefixed_key%3#0: bytes = (concat box#0 key#0)
         let (value%0#0: uint64, check%0#0: bool) = (box_len map_prefixed_key%3#0)
         (assert check%0#0) // Box must have value
-        let reinterpret_bool%0#0: bool = value%0#0
-        (assert reinterpret_bool%0#0)
+        (assert value%0#0)
         let map_prefixed_key%4#0: bytes = (concat box#0 key#0)
         let (maybe_value%0#0: bytes, maybe_exists%1#0: bool) = (box_get map_prefixed_key%4#0)
         (assert maybe_exists%1#0)
@@ -136,7 +134,7 @@ subroutine tests/approvals/box-proxies.algo.ts::testBoxMap(box: bytes, key: stri
         (assert tmp%6#0)
         return 
 
-subroutine tests/approvals/box-proxies.algo.ts::testBoxRef(box: bytes, length: uint64) -> void:
+subroutine tests/approvals/box-proxies.algo.ts::testBoxRef(box: box_key, length: uint64) -> void:
     block@0: // L74
         let tmp%0#0: bool = (== box#0 "three")
         (assert tmp%0#0)

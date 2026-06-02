@@ -132,8 +132,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceB
         (assert tmp%5#0) // expected application to be passed by value
         let tmp%6#0: bytes = ((txnas ApplicationArgs) 3u)
         let address#0: bytes = tmp%6#0
-        let reinterpret_account%0#0: account = address#0
-        let tmp%7#0: bool = (== acc#0 reinterpret_account%0#0)
+        let tmp%7#0: bool = (== acc#0 address#0)
         (assert tmp%7#0) // expected account to be passed by value
         let tmp%8#0: Encoded(uint64,uint64,uint8[32]) = bytes_encode<(uint64,uint64,uint8[32])>(asset#0, app#0, acc#0)
         return tmp%8#0

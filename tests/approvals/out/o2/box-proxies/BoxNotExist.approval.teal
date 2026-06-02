@@ -3,17 +3,15 @@
 
 // tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram() -> uint64:
 main:
-    intcblock 1 0
     bytecblock "abc"
-    intc_1 // 0
+    pushint 0
     // tests/approvals/box-proxies.algo.ts:124
     // if (Txn.applicationId.id !== 0) {
     txn ApplicationID
     bz main_after_if_else@11
     // tests/approvals/box-proxies.algo.ts:125
     // switch (Txn.applicationArgs(0).toString()) {
-    intc_1 // 0
-    txnas ApplicationArgs
+    txna ApplicationArgs 0
     dup
     bury 2
     // tests/approvals/box-proxies.algo.ts:126
@@ -63,18 +61,18 @@ main_after_if_else@7:
     bz main_after_if_else@11
     // tests/approvals/box-proxies.algo.ts:131
     // Box<boolean>({ key: 'abc' }).value = true
-    intc_0 // 1
+    pushint 1
     itob
     bytec_0 // "abc"
     swap
     box_put
     // tests/approvals/box-proxies.algo.ts:132
     // return true
-    intc_0 // 1
+    pushint 1
     return
 
 main_after_if_else@11:
     // tests/approvals/box-proxies.algo.ts:135
     // return true
-    intc_0 // 1
+    pushint 1
     return

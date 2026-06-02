@@ -55,8 +55,8 @@ subroutine tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test() -> void:
     block@0: // L16
         (app_global_put "myState" 0u)
         let awst_tmp%0#0: string = tests/approvals/single-eval.algo.ts::SingleEvalAlgo.a()
-        let reinterpret_bool%0#0: bool = (len awst_tmp%0#0)
-        goto reinterpret_bool%0#0 ? block@1 : block@2
+        let tmp%0#0: uint64 = (len awst_tmp%0#0)
+        goto tmp%0#0 ? block@1 : block@2
     block@1: // ternary_true_L18
         let ternary_result%0#0: string = awst_tmp%0#0
         goto block@3
@@ -68,10 +68,10 @@ subroutine tests/approvals/single-eval.algo.ts::SingleEvalAlgo.test() -> void:
         let result#0: string = ternary_result%0#2
         let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_global_get_ex 0u "myState")
         (assert maybe_exists%0#0) // check GlobalState exists
-        let tmp%0#0: bool = (== maybe_value%0#0 1u)
-        (assert tmp%0#0) // a() should only be called once
-        let tmp%1#0: bool = (== result#0 "a")
-        (assert tmp%1#0) // Result should be "a"
+        let tmp%1#0: bool = (== maybe_value%0#0 1u)
+        (assert tmp%1#0) // a() should only be called once
+        let tmp%2#0: bool = (== result#0 "a")
+        (assert tmp%2#0) // Result should be "a"
         return 
 
 subroutine tests/approvals/single-eval.algo.ts::SingleEvalAlgo.__algots__.defaultCreate() -> void:

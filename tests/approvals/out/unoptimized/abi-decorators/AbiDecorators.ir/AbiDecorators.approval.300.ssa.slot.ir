@@ -1,7 +1,7 @@
 main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
     block@0: // L1
-        let reinterpret_bool%0#0: bool = (txn ApplicationID)
-        goto reinterpret_bool%0#0 ? block@2 : block@1
+        let tmp%0#0: uint64 = (txn ApplicationID)
+        goto tmp%0#0 ? block@2 : block@1
     block@1: // if_body_L1
         tests/approvals/abi-decorators.algo.ts::AbiDecorators.constructor()
         goto block@2
@@ -11,8 +11,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%0#1: bytes = (txna ApplicationArgs 0)
         switch tmp%0#1 {method "allActions()void" => block@4, * => block@5}
     block@4: // allActions_route_L9
-        let tmp%1#0: uint64 = (txn ApplicationID)
-        let tmp%2#0: bool = (!= tmp%1#0 0u)
+        let tmp%1#1: uint64 = (txn ApplicationID)
+        let tmp%2#0: bool = (!= tmp%1#1 0u)
         (assert tmp%2#0)
         tests/approvals/abi-decorators.algo.ts::AbiDecorators.allActions[routing]()
         goto block@5
@@ -57,8 +57,8 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@17: // after_if_else_L4
         exit 0u
     block@18: // after_inlined_tests/approvals/abi-decorators.algo.ts::AbiDecorators.__puya_arc4_router___L1
-        let tmp%0#0: bool = undefined
-        return tmp%0#0
+        let tmp%1#0: bool = undefined
+        return tmp%1#0
 
 subroutine tests/approvals/abi-decorators.algo.ts::AbiDecorators.justNoop[routing]() -> void:
     block@0: // L5
