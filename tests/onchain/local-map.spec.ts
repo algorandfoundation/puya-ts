@@ -1,4 +1,4 @@
-import { beforeEach, describe } from 'vitest'
+import { beforeEach, describe, expect } from 'vitest'
 import { utf8ToUint8Array } from '../../src/util'
 import { createArc4TestFixture } from './util/test-fixture'
 
@@ -30,7 +30,7 @@ describe('local map', () => {
     await appClientTestLocalMap.send.call({ method: 'deleteValue', args: ['delKey'] })
   })
 
-  test('hasValue returns false for unset keys', async ({ appClientTestLocalMap, expect }) => {
+  test('hasValue returns false for unset keys', async ({ appClientTestLocalMap }) => {
     await appClientTestLocalMap.send.optIn({ method: 'optIn' })
     const result = await appClientTestLocalMap.send.call({ method: 'hasValue', args: ['nonexistent'] })
     expect(result.return).toBe(false)

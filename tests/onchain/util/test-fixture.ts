@@ -10,10 +10,10 @@ import { nullLogger } from '@algorandfoundation/algokit-utils/logging'
 import type { AlgorandFixture } from '@algorandfoundation/algokit-utils/testing'
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing'
 import { OnApplicationComplete } from '@algorandfoundation/algokit-utils/transact'
-import type { Use } from '@vitest/runner/types'
+import type { Fixtures, Use } from '@vitest/runner/types'
 import fs from 'fs'
-import type { beforeEach, ExpectStatic } from 'vitest'
-import { beforeAll, test } from 'vitest'
+import type { beforeEach } from 'vitest'
+import { beforeAll, expect, test } from 'vitest'
 import { compile, CompileOptions, processInputPaths } from '../../../src'
 import { LoggingContext, LogLevel } from '../../../src/logger'
 import type { PuyaService } from '../../../src/puya/puya-service'
@@ -28,7 +28,13 @@ const algorandTestFixture = (localnetFixture: AlgorandFixture) =>
     testAccount: AlgorandFixture['context']['testAccount']
     assetFactory: (assetCreateParams: AssetCreateParams) => Promise<bigint>
   }>({
-    localnet: async ({ expect }, use) => {
+    localnet: async (
+      // eslint-disable-next-line no-empty-pattern
+      {
+        /* Does not require any fixture */
+      },
+      use,
+    ) => {
       await use(localnetFixture)
     },
     testAccount: async ({ localnet }, use) => {
@@ -52,8 +58,8 @@ function createLazyCompiler(
 ) {
   let result: CompilationArtifacts | undefined = undefined
   return {
-    async getCompileResult(expect: ExpectStatic) {
-      if (!result) result = await compilePath(paths, expect, options, puyaService)
+    async getCompileResult() {
+      if (!result) result = await compilePath(paths, options, puyaService)
       return result
     },
   }
@@ -127,11 +133,8 @@ export function createBaseTestFixture<TContracts extends string = ''>(options: {
 
   const ctx: DeliberateAny = {}
   for (const contractName of contracts) {
-    ctx[`${contractName}Invoker`] = async (
-      { expect, localnet }: { expect: ExpectStatic; localnet: AlgorandFixture },
-      use: Use<ProgramInvoker>,
-    ) => {
-      const compiled = await lazyCompile.getCompileResult(expect)
+    ctx[`${contractName}Invoker`] = async ({ localnet }: { localnet: AlgorandFixture }, use: Use<ProgramInvoker>) => {
+      const compiled = await lazyCompile.getCompileResult()
 
       const approvalProgram = compiled.approvalBinaries[contractName]
       const clearStateProgram = compiled.clearStateBinaries[contractName]
@@ -192,7 +195,7 @@ export function createBaseTestFixture<TContracts extends string = ''>(options: {
       })
     }
   }
-  const fixture = algorandTestFixture(localnet).extend<BaseFixtureContextFor<TContracts>>(ctx)
+  const fixture = algorandTestFixture(localnet).extend(ctx as Fixtures<BaseFixtureContextFor<TContracts>>)
   newScopeAt(localnet.newScope)
   return fixture
 }
@@ -239,8 +242,8 @@ export function createArc4TestFixture<TContracts extends string = ''>(options: {
     logger: nullLogger,
   })
 
-  async function getAppSpec(expect: ExpectStatic, contractName: string) {
-    const appSpec = (await lazyCompile.getCompileResult(expect)).appSpecs.find((s) => s.name === contractName)
+  async function getAppSpec(contractName: string) {
+    const appSpec = (await lazyCompile.getCompileResult()).appSpecs.find((s) => s.name === contractName)
     if (appSpec === undefined) {
       expect.fail(`${paths} does not contain an ARC4 contract "${contractName}"`)
     } else {
@@ -262,15 +265,13 @@ export function createArc4TestFixture<TContracts extends string = ''>(options: {
 
   const ctx: DeliberateAny = {}
   for (const [contractName, config] of getContracts()) {
-    ctx[`appSpec${contractName}`] = async ({ expect }: { expect: ExpectStatic }, use: Use<Arc56Contract>) => {
-      await use(await getAppSpec(expect, contractName))
+    // eslint-disable-next-line no-empty-pattern
+    ctx[`appSpec${contractName}`] = async ({}, use: Use<Arc56Contract>) => {
+      await use(await getAppSpec(contractName))
     }
 
-    ctx[`appFactory${contractName}`] = async (
-      { expect, localnet }: { expect: ExpectStatic; localnet: AlgorandFixture },
-      use: Use<AppFactory>,
-    ) => {
-      const appSpec = await getAppSpec(expect, contractName)
+    ctx[`appFactory${contractName}`] = async ({ localnet }: { localnet: AlgorandFixture }, use: Use<AppFactory>) => {
+      const appSpec = await getAppSpec(contractName)
       await use(
         localnet.algorand.client.getAppFactory({
           defaultSender: localnet.context.testAccount.addr,
@@ -278,11 +279,8 @@ export function createArc4TestFixture<TContracts extends string = ''>(options: {
         }),
       )
     }
-    ctx[`appClient${contractName}`] = async (
-      { expect, localnet }: { expect: ExpectStatic; localnet: AlgorandFixture },
-      use: Use<AppClient>,
-    ) => {
-      const appSpec = await getAppSpec(expect, contractName)
+    ctx[`appClient${contractName}`] = async ({ localnet }: { localnet: AlgorandFixture }, use: Use<AppClient>) => {
+      const appSpec = await getAppSpec(contractName)
       const appFactory = localnet.algorand.client.getAppFactory({
         defaultSender: localnet.context.testAccount.addr,
         appSpec: appSpec!,
@@ -292,7 +290,7 @@ export function createArc4TestFixture<TContracts extends string = ''>(options: {
       await use(appClient)
     }
   }
-  const fixture = algorandTestFixture(localnet).extend<Arc4FixtureContextFor<TContracts>>(ctx)
+  const fixture = algorandTestFixture(localnet).extend(ctx as Fixtures<Arc4FixtureContextFor<TContracts>>)
   newScopeAt(localnet.newScope)
   return fixture
 }
@@ -305,7 +303,6 @@ type CompilationArtifacts = {
 
 async function compilePath(
   paths: string[],
-  expect: ExpectStatic,
   options: { outputBytecode: boolean; outputArc56: boolean },
   puyaService: PuyaService | undefined,
 ): Promise<CompilationArtifacts> {

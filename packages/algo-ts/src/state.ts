@@ -54,7 +54,7 @@ export type GlobalMap<TKey, TValue> = {
   /**
    * Get the bytes used to prefix each key
    */
-  readonly keyPrefix: bytes
+  readonly keyPrefix: bytes;
 
   /**
    * Get a GlobalState proxy for a single item in the GlobalMap
@@ -143,7 +143,7 @@ export type LocalMap<TKey, TValue> = {
   /**
    * Get the bytes used to prefix each key
    */
-  readonly keyPrefix: bytes
+  readonly keyPrefix: bytes;
 
   /**
    * Get a LocalState proxy for a single item in the LocalMap
