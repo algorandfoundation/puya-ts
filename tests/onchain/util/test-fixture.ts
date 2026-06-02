@@ -10,7 +10,7 @@ import { nullLogger } from '@algorandfoundation/algokit-utils/logging'
 import type { AlgorandFixture } from '@algorandfoundation/algokit-utils/testing'
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing'
 import { OnApplicationComplete } from '@algorandfoundation/algokit-utils/transact'
-import type { Use } from '@vitest/runner/types'
+import type { Fixtures, Use } from '@vitest/runner/types'
 import fs from 'fs'
 import type { beforeEach } from 'vitest'
 import { beforeAll, expect, test } from 'vitest'
@@ -195,7 +195,7 @@ export function createBaseTestFixture<TContracts extends string = ''>(options: {
       })
     }
   }
-  const fixture = algorandTestFixture(localnet).extend<BaseFixtureContextFor<TContracts>>(ctx)
+  const fixture = algorandTestFixture(localnet).extend(ctx as Fixtures<BaseFixtureContextFor<TContracts>>)
   newScopeAt(localnet.newScope)
   return fixture
 }
@@ -290,7 +290,7 @@ export function createArc4TestFixture<TContracts extends string = ''>(options: {
       await use(appClient)
     }
   }
-  const fixture = algorandTestFixture(localnet).extend<Arc4FixtureContextFor<TContracts>>(ctx)
+  const fixture = algorandTestFixture(localnet).extend(ctx as Fixtures<Arc4FixtureContextFor<TContracts>>)
   newScopeAt(localnet.newScope)
   return fixture
 }
