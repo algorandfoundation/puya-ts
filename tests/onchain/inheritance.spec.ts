@@ -1,4 +1,4 @@
-import { describe } from 'vitest'
+import { describe, expect } from 'vitest'
 import { bigIntToUint8Array } from '../../src/util'
 import { decodeLogs } from './util/decode-logs'
 import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
@@ -6,7 +6,7 @@ import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixtur
 describe('inheritance', () => {
   describe('non arc4', () => {
     const test = createBaseTestFixture({ paths: 'tests/approvals/inheritance-b.algo.ts', contracts: ['ConcreteSimpleContract'] })
-    test('Simple contract can be created', async ({ ConcreteSimpleContractInvoker, expect }) => {
+    test('Simple contract can be created', async ({ ConcreteSimpleContractInvoker }) => {
       const result = await ConcreteSimpleContractInvoker.send({
         args: [bigIntToUint8Array(10n), bigIntToUint8Array(2n)],
       })

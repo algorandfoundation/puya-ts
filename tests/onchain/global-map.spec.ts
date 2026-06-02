@@ -1,4 +1,4 @@
-import { describe } from 'vitest'
+import { describe, expect } from 'vitest'
 import { utf8ToUint8Array } from '../../src/util'
 import { createArc4TestFixture } from './util/test-fixture'
 
@@ -25,7 +25,7 @@ describe('global map', () => {
     await appClientTestGlobalMap.send.call({ method: 'deleteValue', args: ['delKey'] })
   })
 
-  test('hasValue returns false for unset keys', async ({ appClientTestGlobalMap, expect }) => {
+  test('hasValue returns false for unset keys', async ({ appClientTestGlobalMap }) => {
     const result = await appClientTestGlobalMap.send.call({ method: 'hasValue', args: ['nonexistent'] })
     expect(result.return).toBe(false)
   })
@@ -38,7 +38,7 @@ describe('global map', () => {
     await appClientTestGlobalMap.send.call({ method: 'testPrefixedMap', args: ['pk1', 777] })
   })
 
-  test('schema limits are enforced', async ({ appClientTestGlobalMap, expect }) => {
+  test('schema limits are enforced', async ({ appClientTestGlobalMap }) => {
     // Prior tests already used some uint slots (key1, key2, pk1 = 3 used).
     // Fill the remaining 7 slots, then verify the next write exceeds the schema.
     for (let i = 0; i < 7; i++) {

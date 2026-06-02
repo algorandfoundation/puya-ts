@@ -1,11 +1,11 @@
-import { describe } from 'vitest'
+import { describe, expect } from 'vitest'
 import { uint8ArrayToHex, utf8ToUint8Array } from '../../src/util'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('arc 28 events', () => {
   const test = createArc4TestFixture({ paths: 'tests/approvals/arc-28-events.algo.ts', contracts: { EventEmitter: {} } })
 
-  test('It works with struct types', async ({ appClientEventEmitter, expect }) => {
+  test('It works with struct types', async ({ appClientEventEmitter }) => {
     const result = await appClientEventEmitter.send.call({ method: 'emitSwapped', args: [0, 255] })
 
     expect(result.confirmation.logs?.length).toBe(13)
@@ -53,7 +53,7 @@ describe('arc 28 events', () => {
     }
   })
 
-  test('It works with dynamic bytes', async ({ appClientEventEmitter, expect }) => {
+  test('It works with dynamic bytes', async ({ appClientEventEmitter }) => {
     const result = await appClientEventEmitter.send.call({
       method: 'emitDynamicBytes',
       args: [utf8ToUint8Array('abc'), utf8ToUint8Array('def')],
