@@ -50,7 +50,6 @@ tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod_block@0:
 approvalProgram:
     proto 0 1
     pushbytes ""
-    pushbytes ""
     b approvalProgram_block@0
 
 approvalProgram_block@0:
@@ -59,8 +58,6 @@ approvalProgram_block@0:
 approvalProgram_block@1:
     // tests/approvals/arc4-hybrid.algo.ts:3
     // class Arc4HybridAlgo extends Contract {
-    intc_0 // 0
-    frame_bury 0
     txn NumAppArgs
     intc_0 // 0
     !=
@@ -80,13 +77,15 @@ approvalProgram_switch_case_next@4:
     b approvalProgram_after_if_else@6
 
 approvalProgram_after_if_else@6:
-    frame_dig 0
-    frame_bury 1
+    // tests/approvals/arc4-hybrid.algo.ts:3
+    // class Arc4HybridAlgo extends Contract {
+    intc_0 // 0
+    frame_bury 0
     b approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@7
 
 approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@7:
-    frame_dig 1
-    frame_bury 0
+    frame_dig 0
+    uncover 1
     retsub
 
 approvalProgram_someMethod_route@3:
@@ -103,7 +102,7 @@ approvalProgram_someMethod_route@3:
     callsub someMethod
     intc_1 // 1
     frame_bury 0
-    b approvalProgram_switch_case_next@4
+    b approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@7
 
 approvalProgram___algots__.defaultCreate@5:
     // tests/approvals/arc4-hybrid.algo.ts:3
@@ -119,7 +118,7 @@ approvalProgram___algots__.defaultCreate@5:
     callsub __algots__.defaultCreate
     intc_1 // 1
     frame_bury 0
-    b approvalProgram_after_if_else@6
+    b approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@7
 
 
 // tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__algots__.defaultCreate() -> void:
