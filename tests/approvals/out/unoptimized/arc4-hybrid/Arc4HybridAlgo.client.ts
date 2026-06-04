@@ -7,4 +7,14 @@ export abstract class Arc4HybridAlgo extends Contract {
   someMethod(): void {
     err('stub only')
   }
+
+  @abimethod()
+  someOtherMethod(): void {
+    err('stub only')
+  }
+
+  @abimethod({ allowActions: ['UpdateApplication'] })
+  updateApplication(): void {
+    err('stub only')
+  }
 }

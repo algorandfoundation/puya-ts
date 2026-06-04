@@ -10,31 +10,51 @@ subroutine tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_route
     block@0: // L3
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
-        goto tmp%1#0 ? block@1 : block@4
+        goto tmp%1#0 ? block@1 : block@10
     block@1: // abi_routing_L3
         let tmp%2#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%2#0 {method "someMethod()void" => block@2, * => block@3}
-    block@2: // someMethod_route_L16
+        switch tmp%2#0 {method "updateApplication()void" => block@2, * => block@3}
+    block@2: // updateApplication_route_L24
         let tmp%3#0: uint64 = (txn OnCompletion)
-        let tmp%4#0: bool = (== tmp%3#0 NoOp)
+        let tmp%4#0: bool = (== tmp%3#0 UpdateApplication)
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         let tmp%7#0: bool = (&& tmp%4#0 tmp%6#0)
         (assert tmp%7#0)
-        tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod[routing]()
+        tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.updateApplication[routing]()
         return 1u
     block@3: // switch_case_next_L3
-        goto block@5
-    block@4: // __algots__.defaultCreate_L3
         let tmp%8#0: uint64 = (txn OnCompletion)
         let tmp%9#0: bool = (== tmp%8#0 NoOp)
+        (assert tmp%9#0)
         let tmp%10#0: uint64 = (txn ApplicationID)
-        let tmp%11#0: bool = (== tmp%10#0 0u)
-        let tmp%12#0: bool = (&& tmp%9#0 tmp%11#0)
-        (assert tmp%12#0)
+        let tmp%11#0: bool = (!= tmp%10#0 0u)
+        goto tmp%11#0 ? block@4 : block@8
+    block@4: // call_NoOp_L3
+        let tmp%12#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%12#0 {method "someMethod()void" => block@5, method "someOtherMethod()void" => block@6, * => block@7}
+    block@5: // someMethod_route_L16
+        tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod[routing]()
+        return 1u
+    block@6: // someOtherMethod_route_L20
+        tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someOtherMethod[routing]()
+        return 1u
+    block@7: // switch_case_next_L3
+        goto block@9
+    block@8: // create_NoOp_L3
+        goto block@9
+    block@9: // after_if_else_L3
+        goto block@11
+    block@10: // __algots__.defaultCreate_L3
+        let tmp%13#0: uint64 = (txn OnCompletion)
+        let tmp%14#0: bool = (== tmp%13#0 NoOp)
+        let tmp%15#0: uint64 = (txn ApplicationID)
+        let tmp%16#0: bool = (== tmp%15#0 0u)
+        let tmp%17#0: bool = (&& tmp%14#0 tmp%16#0)
+        (assert tmp%17#0)
         tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__algots__.defaultCreate()
         return 1u
-    block@5: // after_if_else_L3
+    block@11: // after_if_else_L3
         return 0u
 
 subroutine tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod[routing]() -> void:
@@ -42,9 +62,29 @@ subroutine tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod[routin
         tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod()
         return 
 
+subroutine tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someOtherMethod[routing]() -> void:
+    block@0: // L20
+        tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someOtherMethod()
+        return 
+
+subroutine tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.updateApplication[routing]() -> void:
+    block@0: // L24
+        tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.updateApplication()
+        return 
+
 subroutine tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod() -> void:
     block@0: // L16
         (log "some method")
+        return 
+
+subroutine tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someOtherMethod() -> void:
+    block@0: // L20
+        (log "some other method")
+        return 
+
+subroutine tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.updateApplication() -> void:
+    block@0: // L24
+        (log "update")
         return 
 
 subroutine @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> bool:
