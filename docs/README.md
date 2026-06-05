@@ -70,7 +70,6 @@ Docs are deployed to **GitHub Pages** via the `gh-pages.yml` workflow and are **
 | Branch    | Docs behavior                              |
 |-----------|--------------------------------------------|
 | PR        | Build verified (not deployed)              |
-| `alpha`   | Build verified (not deployed)              |
 | `main`    | Build verified (not deployed)              |
 | `release` | Built and deployed to GitHub Pages         |
 
