@@ -105,13 +105,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
 
       # setup node + private repo access
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
@@ -119,13 +119,13 @@ jobs:
 
       - name: Set up Python
         if: ${{ inputs.python-version }}
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         with:
           python-version: ${{ inputs.python-version }}
 
       - name: Download artifacts
         if: ${{ inputs.download-artifact-name || inputs.download-artifact-pattern }}
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           name: ${{ inputs.download-artifact-name }}
           pattern: ${{ inputs.download-artifact-pattern }}
@@ -164,7 +164,7 @@ jobs:
         #Requires permissions.checks: write
       - name: Publish test results
         if: ${{ inputs.output-test-results && always() }}
-        uses: phoenix-actions/test-reporting@v15
+        uses: phoenix-actions/test-reporting@7317eea6e13c47348dd0bb318669485157c518d6 # v16
         with:
           name: Test results
           path: ${{ inputs.test-results-file-pattern }}
@@ -188,7 +188,7 @@ jobs:
 
       - name: Publish artifact
         if: ${{ inputs.upload-artifact-name }}
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: ${{ inputs.upload-artifact-name }}-node-${{ matrix.node-version }}
           path: ${{ inputs.upload-artifact-path }}

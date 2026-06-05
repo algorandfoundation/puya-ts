@@ -3,7 +3,6 @@ name: Publish
 on:
   push:
     branches:
-      - alpha
       - main
       - release
   workflow_dispatch:
@@ -11,12 +10,8 @@ on:
 concurrency: release
 
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
+  contents: read
   checks: write
-  id-token: write
-  pages: write
 
 jobs:
   check-puya:
@@ -24,7 +19,7 @@ jobs:
     if: github.ref_name == 'release'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with: { fetch-depth: 1 }
       - name: Ensure targeted puya is a production release
         run: |
@@ -48,29 +43,31 @@ jobs:
     needs: ci
     if: ${{ !cancelled() && needs.ci.result == 'success' }}
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
       - name: Generate bot token
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3
         id: app_token
         with:
           app-id: ${{ secrets.BOT_ID }}
           private-key: ${{ secrets.BOT_SK }}
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
           token: ${{ steps.app_token.outputs.token }}
 
       - name: Use Node.js 24.x
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 24.x
 
       - run: npm ci --ignore-scripts
 
       - name: Download package artifacts
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           pattern: '*-node-22.x'
           path: artifacts
@@ -94,25 +91,29 @@ jobs:
           npm pkg set version=$newVersion
 
       - name: Publish @algorandfoundation/algorand-typescript
-        uses: JS-DevTools/npm-publish@v4
+        uses: JS-DevTools/npm-publish@0fd2f4369c5d6bcfcde6091a7c527d810b9b5c3f # v4
         id: publish-algo-ts
         with:
           package: artifacts/algo-ts/package.json
           access: 'public'
           provenance: true
-          tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'beta' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
+          tag: ${{ github.ref_name == 'main' && 'beta' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
 
       - name: Publish @algorandfoundation/puya-ts
-        uses: JS-DevTools/npm-publish@v4
+        uses: JS-DevTools/npm-publish@0fd2f4369c5d6bcfcde6091a7c527d810b9b5c3f # v4
         id: publish-puya-ts
         with:
           package: artifacts/puya-ts/package.json
           access: 'public'
           provenance: true
-          tag: ${{ github.ref_name == 'alpha' && 'alpha' || github.ref_name == 'main' && 'beta' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
+          tag: ${{ github.ref_name == 'main' && 'beta' || github.ref_name == 'release' && 'latest' || 'pre-release' }}
 
   publish-docs:
     name: Publish docs
     needs: release
     if: github.ref_name == 'release'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     uses: algorandfoundation/algokit-shared-config/.github/workflows/publish-docs.yml@main
