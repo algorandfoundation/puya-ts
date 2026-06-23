@@ -1,19 +1,36 @@
 import type { Account, Application, Asset, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
-import { arc4, abimethod, assert, Bytes, clone, contract, Contract, GlobalMap, GlobalState, Uint64 } from '@algorandfoundation/algorand-typescript'
+import {
+  abimethod,
+  arc4,
+  assert,
+  Bytes,
+  clone,
+  contract,
+  Contract,
+  GlobalMap,
+  GlobalState,
+  Uint64,
+} from '@algorandfoundation/algorand-typescript'
 
 // example: GLOBAL_MAP_STRUCT
-type Profile = {
+// An ARC-4 struct stored as the value type of a GlobalMap.
+class Profile extends arc4.Struct<{
   name: arc4.Str
-  score: uint64
-}
-
+  score: arc4.Uint64
+}> {}
 // example: GLOBAL_MAP_STRUCT
 
 export class GlobalStorage extends Contract {
   // example: INIT_GLOBAL_STORAGE
-  // Current puya-ts uses GlobalState proxies for both initialized and empty slots.
+  // `GlobalState<T>({ initialValue })` declares a typed proxy and an initial
+  // value. The proxy exposes `.value`, `.hasValue`, and `.delete()`.
   globalIntFull = GlobalState({ initialValue: Uint64(50) })
+  // puya-ts models every global-state slot as a proxy; unlike Algorand Python
+  // there is no "simplified" plain-attribute form, so this too is a proxy with
+  // an initial value.
   globalIntSimplified = GlobalState({ initialValue: Uint64(10) })
+  // `GlobalState<T>()` declares the type but leaves the slot empty until it is
+  // written. Reads must be guarded with `.hasValue`.
   globalIntNoDefault = GlobalState<uint64>()
 
   // example: INIT_BYTES
@@ -25,6 +42,8 @@ export class GlobalStorage extends Contract {
   globalBoolSimplified = GlobalState({ initialValue: true })
   globalBoolNoDefault = GlobalState<boolean>()
 
+  // Reference types are declared without defaults; they are populated by later
+  // writes from method bodies.
   globalAsset = GlobalState<Asset>()
   globalApplication = GlobalState<Application>()
   globalAccount = GlobalState<Account>()
@@ -98,13 +117,7 @@ export class GlobalStorage extends Contract {
 
   // example: WRITE_GLOBAL_STATE_EXAMPLES
   @abimethod()
-  setGlobalStateExample(
-    valueBytes: bytes,
-    valueAsset: Asset,
-    valueApp: Application,
-    valueAccount: Account,
-    valueBool: boolean,
-  ): void {
+  setGlobalStateExample(valueBytes: bytes, valueAsset: Asset, valueApp: Application, valueAccount: Account, valueBool: boolean): void {
     this.globalBytesNoDefault.value = valueBytes
     assert(this.globalBytesNoDefault.value === valueBytes)
 
@@ -168,9 +181,18 @@ function readGlobalBytes(key: string): bytes {
   return GlobalState<bytes>({ key }).value
 }
 
+/**
+ * Demonstrates `GlobalMap`, a typed key->value collection backed by global
+ * state. Each key consumes one global-state slot, so capacity must be sized on
+ * the application via `stateTotals` at creation time, although it may be
+ * expanded throughout the app's lifecycle. The numbers here are the per-app
+ * maximums reserved for `scores` (uint) and `profiles` (bytes).
+ */
 @contract({ stateTotals: { globalUints: 16, globalBytes: 16 } })
 export class GlobalStorageMap extends Contract {
   // example: INIT_GLOBAL_MAP
+  // `GlobalMap<K, V>` stores `V` keyed by `K` in global state. `keyPrefix` is
+  // prepended to every stored key; it defaults to the attribute name when omitted.
   scores = GlobalMap<string, uint64>()
   profiles = GlobalMap<uint64, Profile>({ keyPrefix: 'profile' })
   // example: INIT_GLOBAL_MAP

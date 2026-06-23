@@ -1,7 +1,9 @@
-import type { Account, Application, Asset, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
+import type { Account, bytes, uint64 } from '@algorandfoundation/algorand-typescript'
 import {
   abimethod,
+  Application,
   assert,
+  Asset,
   Bytes,
   contract,
   Contract,
@@ -11,7 +13,6 @@ import {
   Txn,
   Uint64,
 } from '@algorandfoundation/algorand-typescript'
-import { Application as application, Asset as asset } from '@algorandfoundation/algorand-typescript'
 
 export class LocalStorage extends Contract {
   // example: INIT_LOCAL_STORAGE
@@ -28,8 +29,8 @@ export class LocalStorage extends Contract {
     this.localInt(Txn.sender).value = 10
     this.localBytes(Txn.sender).value = Bytes('Hello')
     this.localBool(Txn.sender).value = true
-    this.localAsset(Txn.sender).value = asset(10)
-    this.localApplication(Txn.sender).value = application(10)
+    this.localAsset(Txn.sender).value = Asset(10)
+    this.localApplication(Txn.sender).value = Application(10)
     this.localAccount(Txn.sender).value = Global.zeroAddress
   }
 
@@ -77,8 +78,8 @@ export class LocalStorage extends Contract {
     assert(this.localInt(forAccount).value === 10)
     assert(this.localBytes(forAccount).value === Bytes('Hello'))
     assert(this.localBool(forAccount).value)
-    assert(this.localAsset(forAccount).value === asset(10))
-    assert(this.localApplication(forAccount).value === application(10))
+    assert(this.localAsset(forAccount).value === Asset(10))
+    assert(this.localApplication(forAccount).value === Application(10))
     assert(this.localAccount(forAccount).value === Global.zeroAddress)
     return true
   }
@@ -87,8 +88,8 @@ export class LocalStorage extends Contract {
     assert((this.localInt(forAccount).hasValue ? this.localInt(forAccount).value : Uint64(0)) === 10)
     assert((this.localBytes(forAccount).hasValue ? this.localBytes(forAccount).value : Bytes('Default Value')) === Bytes('Hello'))
     assert(this.localBool(forAccount).hasValue ? this.localBool(forAccount).value : false)
-    assert((this.localAsset(forAccount).hasValue ? this.localAsset(forAccount).value : asset(0)) === asset(10))
-    assert((this.localApplication(forAccount).hasValue ? this.localApplication(forAccount).value : application(0)) === application(10))
+    assert((this.localAsset(forAccount).hasValue ? this.localAsset(forAccount).value : Asset(0)) === Asset(10))
+    assert((this.localApplication(forAccount).hasValue ? this.localApplication(forAccount).value : Application(0)) === Application(10))
     assert((this.localAccount(forAccount).hasValue ? this.localAccount(forAccount).value : Global.zeroAddress) === Global.zeroAddress)
     return true
   }
@@ -159,12 +160,14 @@ export class LocalStorage extends Contract {
   // example: DELETE_LOCAL_STATE_EXAMPLES
 
   public passProxyToSubroutine(forAccount: Account): uint64 {
-    return readLocalIntPlus1(this.localInt(forAccount).value)
+    // LocalState proxies can be passed to subroutines like any value.
+    return readLocalIntPlus1(this.localInt, forAccount)
   }
 }
 
-function readLocalIntPlus1(value: uint64): uint64 {
-  return value + 1
+// A LocalState<T> proxy can be passed to and read from a subroutine.
+function readLocalIntPlus1(state: LocalState<uint64>, account: Account): uint64 {
+  return state(account).value + 1
 }
 
 @contract({ stateTotals: { localUints: 16 } })
