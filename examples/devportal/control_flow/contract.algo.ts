@@ -52,8 +52,8 @@ export class ForLoopsExample extends Contract {
 // example: MATCH
 export class MatchStatements extends Contract {
   @abimethod()
-  getDay(date: uint64): string {
-    switch (date) {
+  getDay(day: uint64): string {
+    switch (day) {
       case 0:
         return 'Monday'
       case 1:

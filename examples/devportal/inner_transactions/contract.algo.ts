@@ -14,14 +14,20 @@ export class InnerTransactions extends Contract {
   @abimethod()
   payment(): uint64 {
     /*
-     * Sender defaults to the current application address for inner transactions.
-     * A different sender would need to be rekeyed to the app address.
+     * The inner transaction `fee` defaults to 0, so the outer transaction must cover
+     * it; it is only set explicitly here for demonstration purposes.
+     * The sender is implied to be `Global.currentApplicationAddress`.
+     *
+     * If a different sender is needed, it would have to be an account that has been
+     * rekeyed to the application address.
      */
-    const result = itxn.payment({
-      amount: 5000,
-      receiver: Txn.sender,
-      fee: 0,
-    }).submit()
+    const result = itxn
+      .payment({
+        amount: 5000,
+        receiver: Txn.sender,
+        fee: 0,
+      })
+      .submit()
     return result.amount
   }
 
@@ -30,28 +36,38 @@ export class InnerTransactions extends Contract {
   // example: ASSET_CREATE
   @abimethod()
   fungibleAssetCreate(): uint64 {
-    const itxnResult = itxn.assetConfig({
-      total: 100_000_000_000,
-      decimals: 2,
-      unitName: 'RP',
-      assetName: 'Royalty Points',
-    }).submit()
+    const itxnResult = itxn
+      .assetConfig({
+        total: 100_000_000_000,
+        decimals: 2,
+        unitName: 'RP',
+        assetName: 'Royalty Points',
+      })
+      .submit()
     return itxnResult.createdAsset.id
   }
 
   @abimethod()
   nonFungibleAssetCreate(): uint64 {
-    const itxnResult = itxn.assetConfig({
-      total: 100,
-      decimals: 2,
-      unitName: 'ML',
-      assetName: 'Mona Lisa',
-      url: 'https://link_to_ipfs/Mona_Lisa',
-      manager: Global.currentApplicationAddress,
-      reserve: Global.currentApplicationAddress,
-      freeze: Global.currentApplicationAddress,
-      clawback: Global.currentApplicationAddress,
-    }).submit()
+    /*
+     * Following the ARC3 standard, a non-fungible asset must have an on-chain total
+     * supply of exactly 1 whole unit. For fractional NFTs that means
+     * `total` must equal 10^`decimals`.
+     * Example: total=100, decimals=2 -> 100 * 0.01 = 1 whole unit
+     */
+    const itxnResult = itxn
+      .assetConfig({
+        total: 100,
+        decimals: 2,
+        unitName: 'ML',
+        assetName: 'Mona Lisa',
+        url: 'https://link_to_ipfs/Mona_Lisa',
+        manager: Global.currentApplicationAddress,
+        reserve: Global.currentApplicationAddress,
+        freeze: Global.currentApplicationAddress,
+        clawback: Global.currentApplicationAddress,
+      })
+      .submit()
     return itxnResult.createdAsset.id
   }
 
@@ -61,15 +77,20 @@ export class InnerTransactions extends Contract {
   @abimethod()
   assetOptIn(asset: Asset): void {
     /*
-     * A zero-amount transfer to self opts the app account into the asset.
-     * The asset must be available as a referenced resource for the call.
+     * A zero amount asset transfer to one's self is a special type of asset transfer
+     * that is used to opt-in to an asset.
+     *
+     * To send an asset transfer, the asset must be an available resource.
+     * Refer to the Resource Availability section for more information.
      */
-    itxn.assetTransfer({
-      assetReceiver: Global.currentApplicationAddress,
-      xferAsset: asset,
-      assetAmount: 0,
-      fee: 0,
-    }).submit()
+    itxn
+      .assetTransfer({
+        assetReceiver: Global.currentApplicationAddress,
+        xferAsset: asset,
+        assetAmount: 0,
+        fee: 0,
+      })
+      .submit()
   }
 
   // example: ASSET_OPT_IN
@@ -77,12 +98,21 @@ export class InnerTransactions extends Contract {
   // example: ASSET_TRANSFER
   @abimethod()
   assetTransfer(asset: Asset, receiver: Account, amount: uint64): void {
-    itxn.assetTransfer({
-      assetReceiver: receiver,
-      xferAsset: asset,
-      assetAmount: amount,
-      fee: 0,
-    }).submit()
+    /*
+     * For a smart contract to transfer an asset, the app account must be opted into it,
+     * and be holding a non zero amount of said asset.
+     *
+     * To send an asset transfer, the asset must be an available resource.
+     * Refer to the Resource Availability section for more information.
+     */
+    itxn
+      .assetTransfer({
+        assetReceiver: receiver,
+        xferAsset: asset,
+        assetAmount: amount,
+        fee: 0,
+      })
+      .submit()
   }
 
   // example: ASSET_TRANSFER
@@ -90,12 +120,15 @@ export class InnerTransactions extends Contract {
   // example: ASSET_FREEZE
   @abimethod()
   assetFreeze(acctToBeFrozen: Account, asset: Asset): void {
-    itxn.assetFreeze({
-      freezeAccount: acctToBeFrozen,
-      freezeAsset: asset,
-      frozen: true,
-      fee: 0,
-    }).submit()
+    // The asset must have an account with freeze authority.
+    itxn
+      .assetFreeze({
+        freezeAccount: acctToBeFrozen,
+        freezeAsset: asset,
+        frozen: true,
+        fee: 0,
+      })
+      .submit()
   }
 
   // example: ASSET_FREEZE
@@ -103,13 +136,21 @@ export class InnerTransactions extends Contract {
   // example: ASSET_REVOKE
   @abimethod()
   assetRevoke(asset: Asset, accountToBeRevoked: Account, amount: uint64): void {
-    itxn.assetTransfer({
-      assetReceiver: Global.currentApplicationAddress,
-      xferAsset: asset,
-      assetSender: accountToBeRevoked,
-      assetAmount: amount,
-      fee: 0,
-    }).submit()
+    /*
+     * To revoke an asset, the asset must be a revocable asset
+     * by having an account with clawback authority.
+     *
+     * Sender is implied to be currentApplicationAddress.
+     */
+    itxn
+      .assetTransfer({
+        assetReceiver: Global.currentApplicationAddress,
+        xferAsset: asset,
+        assetSender: accountToBeRevoked,
+        assetAmount: amount,
+        fee: 0,
+      })
+      .submit()
   }
 
   // example: ASSET_REVOKE
@@ -117,14 +158,16 @@ export class InnerTransactions extends Contract {
   // example: ASSET_CONFIG
   @abimethod()
   assetConfig(asset: Asset): void {
-    itxn.assetConfig({
-      configAsset: asset,
-      manager: Global.currentApplicationAddress,
-      reserve: Global.currentApplicationAddress,
-      freeze: Txn.sender,
-      clawback: Txn.sender,
-      fee: 0,
-    }).submit()
+    itxn
+      .assetConfig({
+        configAsset: asset,
+        manager: Global.currentApplicationAddress,
+        reserve: Global.currentApplicationAddress,
+        freeze: Txn.sender,
+        clawback: Txn.sender,
+        fee: 0,
+      })
+      .submit()
   }
 
   // example: ASSET_CONFIG
@@ -152,6 +195,9 @@ export class InnerTransactions extends Contract {
     })
 
     const [payTxn, appCallTxn] = itxn.submitGroup(paymentParams, appCallParams)
+
+    // `decodeArc4<string>(..., 'log')` decodes a typed ARC4 value off the transaction
+    // log and converts it to the native `string` type.
     const helloWorldResult = decodeArc4<string>(appCallTxn.lastLog, 'log')
     return [payTxn.amount, helloWorldResult] as const
   }
@@ -161,17 +207,21 @@ export class InnerTransactions extends Contract {
   // example: DEPLOY_APP
   @abimethod()
   deployApp(): uint64 {
+    // Deploy `HelloWorldContract` via a low-level `itxn.applicationCall`.
     const compiled = compile(HelloWorldContract)
-    const appTxn = itxn.applicationCall({
-      approvalProgram: compiled.approvalProgram,
-      clearStateProgram: compiled.clearStateProgram,
-      fee: 0,
-    }).submit()
+    const appTxn = itxn
+      .applicationCall({
+        approvalProgram: compiled.approvalProgram,
+        clearStateProgram: compiled.clearStateProgram,
+        fee: 0,
+      })
+      .submit()
     return appTxn.createdApp.id
   }
 
   @abimethod()
   arc4DeployApp(): uint64 {
+    // Deploy `HelloWorldContract` via the higher-level `compileArc4(...).bareCreate()`.
     const appTxn = compileArc4(HelloWorldContract).bareCreate()
     return appTxn.createdApp.id
   }
@@ -181,12 +231,17 @@ export class InnerTransactions extends Contract {
   // example: NOOP_APP_CALL
   @abimethod()
   noopAppCall(appId: Application): readonly [string, string] {
-    const callTxn = itxn.applicationCall({
-      appId,
-      appArgs: [methodSelector(HelloWorldContract.prototype.hello), encodeArc4('World')],
-    }).submit()
+    // Manually-constructed app call: caller must encode args and decode logs.
+    const callTxn = itxn
+      .applicationCall({
+        appId,
+        appArgs: [methodSelector(HelloWorldContract.prototype.hello), encodeArc4('World')],
+      })
+      .submit()
     const firstHelloWorldResult = decodeArc4<string>(callTxn.lastLog, 'log')
 
+    // `abiCall` infers the signature from the typed method reference and handles
+    // argument encoding and return decoding automatically.
     const { returnValue: secondHelloWorldResult } = abiCall({
       method: HelloWorldContract.prototype.hello,
       args: ['again'],

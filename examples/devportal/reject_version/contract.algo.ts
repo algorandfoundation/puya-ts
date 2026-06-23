@@ -1,76 +1,78 @@
 import type { Application, uint64 } from '@algorandfoundation/algorand-typescript'
-import {
-  abimethod,
-  assert,
-  contract,
-  Contract,
-  gtxn,
-  itxn,
-  Txn,
-} from '@algorandfoundation/algorand-typescript'
-import { decodeArc4, encodeArc4, methodSelector } from '@algorandfoundation/algorand-typescript/arc4'
+import { abimethod, arc4, assert, Contract, contract } from '@algorandfoundation/algorand-typescript'
 
-export class HelloContract extends Contract {
+/**
+ * A minimal external target for RejectVersion to call into: an ARC-4
+ * `hello(string)string` app. Not part of the rendered example snippets — it exists so
+ * the on-chain tests have a real callee whose version can be pinned against.
+ */
+export class Hello extends Contract {
   @abimethod()
   hello(name: string): string {
     return `Hello, ${name}`
   }
 }
 
+/**
+ * Demonstrates `rejectVersion`: an AVM v12 field on every application call
+ * transaction that pins the caller to a maximum acceptable callee version.
+ *
+ * The callee's app version is incremented every time its approval or clear
+ * program is updated. If `rejectVersion > 0` and the callee's current
+ * version is **>=** `rejectVersion`, the AVM rejects the call before any
+ * bytecode executes. Setting `rejectVersion = N + 1` means "I accept
+ * versions 0..N inclusive; refuse if newer".
+ *
+ * Some use cases:
+ *   - Defend against silent upgrades of an integrated dependency.
+ *   - Lock a one-time interaction to a specific audited version.
+ *   - Check (or make sure that) a contract has been properly updated.
+ */
 @contract({ avmVersion: 12 })
 export class RejectVersion extends Contract {
   // example: REJECT_VERSION_INNER_CALL
+  /**
+   * Send an inner ApplicationCall that refuses to execute if `target`
+   * has been upgraded past `maxVersion`.
+   *
+   * `rejectVersion = maxVersion + 1` means "fail unless the callee's
+   * version is <= maxVersion". This is the canonical pattern for
+   * pinning to "the version I audited", forward-compatible with whatever
+   * version number the caller has actually audited.
+   */
   @abimethod()
   callPinned(target: Application, maxVersion: uint64): string {
-    const result = itxn.applicationCall({
+    const { returnValue } = arc4.abiCall({
+      method: Hello.prototype.hello,
+      args: ['World'],
       appId: target,
-      appArgs: [methodSelector(HelloContract.prototype.hello), encodeArc4('World')],
       rejectVersion: maxVersion + 1,
       fee: 0,
-    }).submit()
-    return decodeArc4<string>(result.lastLog, 'log')
+    })
+    return returnValue
   }
-
   // example: REJECT_VERSION_INNER_CALL
 
   // example: REJECT_VERSION_CHECK_BEFORE_CALL
+  /**
+   * Check `target.version` explicitly, then call. It reads the same
+   * counter that `rejectVersion` is compared against (`target` must be
+   * an available resource; fails if the app does not exist).
+   *
+   * We use it here to enforce a `minVersion`, i.e. make sure a
+   * contract was actually updated.
+   */
   @abimethod()
-  callChecked(target: Application, maxVersion: uint64): string {
-    assert(target.version <= maxVersion, 'target upgraded past audited version')
+  callChecked(target: Application, unsafeVersion: uint64): string {
+    assert(target.version > unsafeVersion, 'target bug has not been patched yet')
 
-    const result = itxn.applicationCall({
+    const { returnValue } = arc4.abiCall({
+      method: Hello.prototype.hello,
+      args: ['World'],
       appId: target,
-      appArgs: [methodSelector(HelloContract.prototype.hello), encodeArc4('World')],
       fee: 0,
-    }).submit()
-    return decodeArc4<string>(result.lastLog, 'log')
+    })
+    return returnValue
   }
-
   // example: REJECT_VERSION_CHECK_BEFORE_CALL
-
-  // example: REJECT_VERSION_GTXN
-  @abimethod()
-  checkSiblingPin(siblingIndex: uint64, minPin: uint64): uint64 {
-    const sibling = gtxn.ApplicationCallTxn(siblingIndex)
-    assert(sibling.rejectVersion >= minPin, 'sibling app call is not pinned tightly enough')
-    return sibling.rejectVersion
-  }
-
-  // example: REJECT_VERSION_GTXN
-}
-
-@contract({ avmVersion: 12 })
-export class RejectVersionTargetV0 extends Contract {
-  @abimethod({ allowActions: 'UpdateApplication' })
-  update(): void {
-    assert(Txn.rejectVersion === 1, 'can only update if caller expects this to be currently be v0')
-  }
-}
-
-@contract({ avmVersion: 12 })
-export class RejectVersionTargetV1 extends Contract {
-  @abimethod({ allowActions: 'DeleteApplication' })
-  delete(): void {
-    assert(Txn.rejectVersion === 2, 'can only update if caller expects this to be currently be v1')
-  }
 }
