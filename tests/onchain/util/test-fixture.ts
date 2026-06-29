@@ -360,3 +360,56 @@ async function compilePath(
     }
   })
 }
+
+/**
+ * Compiles a single `LogicSig` from a puya-ts source file and returns its assembled program
+ * bytecode, ready to hand to algokit-utils' `LogicSigAccount`.
+ *
+ * Uses the same ephemeral-temp-dir compile pipeline as `compilePath` above (nothing is written
+ * into the repo). The only difference is that a logic signature emits a single `<name>.bin`
+ * program rather than the `<app>.approval.bin` / `<app>.clear.bin` pair an app emits.
+ *
+ * @param path Source file, e.g. 'examples/devportal/lsig_with_args/contract.algo.ts'
+ * @param artifactName The compiled logic sig name — the class name, or the `name` given to
+ *                     `@logicsig({ name })` (e.g. `MixedArgs` compiles to `MixedArgsLsig`).
+ * @param templateVars Values for any `TemplateVar<...>` the program reads, keyed by the bare
+ *                     template name (no `TMPL_` prefix). Bytes as Uint8Array, ints as bigint.
+ */
+export async function compileLogicSig(
+  path: string,
+  artifactName: string,
+  templateVars: Record<string, Uint8Array | bigint> = {},
+): Promise<Uint8Array> {
+  using tempDir = generateTempDir()
+  const logCtx = LoggingContext.create()
+
+  return await logCtx.run(async () => {
+    const filePaths = processInputPaths({ paths: [path], outDir: tempDir.dirPath })
+    await compile(
+      new CompileOptions({
+        filePaths,
+        logLevel: LogLevel.Error,
+        skipVersionCheck: true,
+        outputArc56: false,
+        outputBytecode: true,
+        outputSourceMap: false,
+        optimizationLevel: 1,
+        cliTemplateDefinitions: templateVars,
+      }),
+    )
+    for (const log of logCtx.logEvents) {
+      switch (log.level) {
+        case LogLevel.Error:
+        case LogLevel.Critical:
+          expect.fail(`Compilation error ${log.sourceLocation} [${log.level}]: ${log.message}`)
+      }
+    }
+
+    for (const filePath of tempDir.files()) {
+      if (filePath.endsWith(`${artifactName}.bin`)) {
+        return new Uint8Array(fs.readFileSync(filePath))
+      }
+    }
+    expect.fail(`No logic sig binary "${artifactName}.bin" was produced when compiling ${path}`)
+  })
+}
