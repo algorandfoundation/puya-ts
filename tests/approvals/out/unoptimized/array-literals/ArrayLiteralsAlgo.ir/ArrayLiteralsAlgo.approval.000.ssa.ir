@@ -399,33 +399,36 @@ subroutine _puya_lib.arc4.dynamic_assert_index(array: bytes, index: uint64) -> v
         return 
 
 subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.__puya_arc4_router__() -> bool:
-    block@0: // L9
+    block@0: // L14
         let tmp%0#0: uint64 = (txn NumAppArgs)
         let tmp%1#0: bool = (!= tmp%0#0 0u)
-        goto tmp%1#0 ? block@1 : block@8
-    block@1: // abi_routing_L9
+        goto tmp%1#0 ? block@1 : block@9
+    block@1: // abi_routing_L14
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
         (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
-        goto tmp%5#0 ? block@2 : block@6
-    block@2: // call_NoOp_L9
+        goto tmp%5#0 ? block@2 : block@7
+    block@2: // call_NoOp_L14
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
-        switch tmp%6#0 {method "test(uint64,uint64)void" => block@3, method "test2()uint64" => block@4, * => block@5}
-    block@3: // test_route_L10
+        switch tmp%6#0 {method "test(uint64,uint64)void" => block@3, method "test2()uint64" => block@4, method "test3(uint64)uint64" => block@5, * => block@6}
+    block@3: // test_route_L15
         tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test[routing]()
-        goto block@5
-    block@4: // test2_route_L22
+        goto block@6
+    block@4: // test2_route_L27
         tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test2[routing]()
-        goto block@5
-    block@5: // switch_case_next_L9
-        goto block@7
-    block@6: // create_NoOp_L9
-        goto block@7
-    block@7: // after_if_else_L9
-        goto block@9
-    block@8: // __algots__.defaultCreate_L9
+        goto block@6
+    block@5: // test3_route_L36
+        tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test3[routing]()
+        goto block@6
+    block@6: // switch_case_next_L14
+        goto block@8
+    block@7: // create_NoOp_L14
+        goto block@8
+    block@8: // after_if_else_L14
+        goto block@10
+    block@9: // __algots__.defaultCreate_L14
         let tmp%7#0: uint64 = (txn OnCompletion)
         let tmp%8#0: bool = (== tmp%7#0 NoOp)
         let tmp%9#0: uint64 = (txn ApplicationID)
@@ -434,11 +437,11 @@ subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.__puya_arc4
         (assert tmp%11#0)
         tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.__algots__.defaultCreate()
         exit 1u
-    block@9: // after_if_else_L9
+    block@10: // after_if_else_L14
         exit 0u
 
 subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test[routing]() -> void:
-    block@0: // L10
+    block@0: // L15
         let tmp%0#0: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#0)
         let eq%0#0: bool = (== len%0#0 8u)
@@ -455,27 +458,41 @@ subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test[routin
         exit 1u
 
 subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test2[routing]() -> void:
-    block@0: // L22
+    block@0: // L27
         let tmp%0#0: uint64 = tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test2()
         let tmp%1#0: Encoded(uint64) = bytes_encode<uint64>(tmp%0#0)
         let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
         (log tmp%2#0)
         exit 1u
 
+subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test3[routing]() -> void:
+    block@0: // L36
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 8u)
+        (assert eq%0#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%0#0
+        let tmp%1#0: uint64 = decode_bytes<uint64>(as_Encoded(uint64)%0#0)
+        let tmp%2#0: uint64 = tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test3(tmp%1#0)
+        let tmp%3#0: Encoded(uint64) = bytes_encode<uint64>(tmp%2#0)
+        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
+        (log tmp%4#0)
+        exit 1u
+
 subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test(a: uint64, b: uint64) -> void:
-    block@0: // L10
+    block@0: // L15
         let (inferTuple.0#0: uint64, inferTuple.1#0: uint64) = (a#0, b#0)
         let tmp%0#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(a#0, b#0)
         let explicitTuple#0: Encoded(uint64,uint64) = tmp%0#0
         let tmp%1#0: bool = (< a#0 b#0)
         goto tmp%1#0 ? block@1 : block@2
-    block@1: // ternary_true_L14
+    block@1: // ternary_true_L19
         let ternary_result%0#0: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(a#0, b#0)
         goto block@3
-    block@2: // ternary_false_L14
+    block@2: // ternary_false_L19
         let ternary_result%0#1: Encoded(uint64,uint64) = bytes_encode<(uint64,uint64)>(b#0, a#0)
         goto block@3
-    block@3: // ternary_merge_L14
+    block@3: // ternary_merge_L19
         let ternary_result%0#2: Encoded(uint64,uint64) = φ(ternary_result%0#0 <- block@1, ternary_result%0#1 <- block@2)
         let conditionalExplicitTuple#0: Encoded(uint64,uint64) = ternary_result%0#2
         let c#0: uint64 = a#0
@@ -491,7 +508,7 @@ subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test(a: uin
         return 
 
 subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test2() -> uint64:
-    block@0: // L22
+    block@0: // L27
         let encoded_array%0#0: Encoded(len+uint32[]) = bytes_encode<(len+uint32[])>()
         let tmp%0#0: Encoded((len+uint32[])) = bytes_encode<((len+uint32[]))>(encoded_array%0#0)
         let x#0: Encoded((len+uint32[])) = tmp%0#0
@@ -506,6 +523,22 @@ subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test2() -> 
         let tmp%4#0: uint64 = array_len(tuple_item%2#0)
         return tmp%4#0
 
+subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test3(a: uint64) -> uint64:
+    block@0: // L36
+        let encoded_array%0#0: Encoded(len+uint32[]) = bytes_encode<(len+uint32[])>()
+        let tmp%0#0: Encoded(uint64,(len+uint32[])) = bytes_encode<(uint64,(len+uint32[]))>(a#0, encoded_array%0#0)
+        let x#0: Encoded(uint64,(len+uint32[])) = tmp%0#0
+        let tuple_item%0#0: Encoded(len+uint32[]) = extract_value(x#0, 1)
+        let tmp%1#0: Encoded(uint32[]) = bytes_encode<uint32[]>(0x0000007b)
+        let tmp%2#0: Encoded(len+uint32[]) = array_concat(tuple_item%0#0, tmp%1#0, 1u)
+        let updated_tuple%0#0: Encoded(uint64,(len+uint32[])) = replace_value(x#0, 1, tmp%2#0)
+        let x#1: Encoded(uint64,(len+uint32[])) = updated_tuple%0#0
+        let tuple_item%1#0: Encoded(len+uint32[]) = extract_value(x#1, 1)
+        let tmp%3#0: uint64 = array_len(tuple_item%1#0)
+        let tuple_item%2#0: Encoded(len+uint32[]) = extract_value(x#1, 1)
+        let tmp%4#0: uint64 = array_len(tuple_item%2#0)
+        return tmp%4#0
+
 subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.__algots__.defaultCreate() -> void:
-    block@0: // L9
+    block@0: // L14
         return 

@@ -22,7 +22,14 @@ contract ArrayLiteralsAlgo
   
   test2(): uint64
   {
-    x: tests/approvals/array-literals.algo.ts::SomeObj = new tests/approvals/array-literals.algo.ts::SomeObj(things=new arc4.dynamic_array<arc4.uint32>())
+    x: tests/approvals/array-literals.algo.ts::SomeObj = new tests/approvals/array-literals.algo.ts::SomeObj(things=($4 = #{ things: ($5 = #{ things: ($6 = #[new arc4.dynamic_array<arc4.uint32>()]).0 }).things }).things)
+    x.things.push(...#[123]), x.things.length
+    return x.things.length
+  }
+  
+  test3(a: uint64): uint64
+  {
+    x: tests/approvals/array-literals.algo.ts::MultiPropObj = new tests/approvals/array-literals.algo.ts::MultiPropObj(count=($7 = #{ count: ($8 = #{ count: ($9 = #[a, new arc4.dynamic_array<arc4.uint32>()]).0, things: $9.1 }).count, things: $8.things }).count, things=$7.things)
     x.things.push(...#[123]), x.things.length
     return x.things.length
   }

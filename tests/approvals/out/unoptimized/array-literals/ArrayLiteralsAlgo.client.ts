@@ -16,4 +16,9 @@ export abstract class ArrayLiteralsAlgo extends Contract {
   test2(): arc4.Uint<64> {
     err('stub only')
   }
+
+  @abimethod()
+  test3(a: arc4.Uint<64>): arc4.Uint<64> {
+    err('stub only')
+  }
 }
