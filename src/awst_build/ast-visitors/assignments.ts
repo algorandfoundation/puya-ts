@@ -16,6 +16,7 @@ import {
   bigIntPType,
   biguintPType,
   InnerTransactionPType,
+  isArrayType,
   isTupleLike,
   ItxnParamsPType,
   MutableTuplePType,
@@ -201,6 +202,11 @@ function narrowSourceType(targetType: PType | undefined, sourceType: PType, sour
   }
 
   if (sourceType instanceof ArrayLiteralPType) {
+    if (sourceType.items.length === 0 && isArrayType(targetType)) {
+      // An empty array literal has no items
+      // adopt the target array type directly
+      return targetType
+    }
     return new ArrayLiteralPType({
       items: sourceType.items.map((itemType, itemIndex) =>
         narrowSourceType(getIndexType(targetType, BigInt(itemIndex), sourceLocation), itemType, sourceLocation),
