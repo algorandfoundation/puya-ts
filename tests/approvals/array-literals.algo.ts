@@ -6,6 +6,11 @@ export type SomeObj = {
   things: Uint32[]
 }
 
+export type MultiPropObj = {
+  count: uint64
+  things: Uint32[]
+}
+
 class ArrayLiteralsAlgo extends Contract {
   test(a: uint64, b: uint64) {
     const inferTuple = [a, b] as const
@@ -21,6 +26,16 @@ class ArrayLiteralsAlgo extends Contract {
 
   test2(): uint64 {
     const x: SomeObj = {
+      things: [],
+    }
+
+    x.things.push(new Uint32(123))
+    return x.things.length
+  }
+
+  test3(a: uint64): uint64 {
+    const x: MultiPropObj = {
+      count: a,
       things: [],
     }
 
