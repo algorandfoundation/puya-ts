@@ -40,23 +40,36 @@ export const intrinsicFactory = {
       opCode: 'concat',
     })
   },
-  err({ sourceLocation, comment, logError }: { sourceLocation: SourceLocation; comment: string | null; logError?: boolean }) {
+  err({
+    sourceLocation,
+    comment,
+    desc,
+    logError,
+  }: {
+    sourceLocation: SourceLocation
+    comment: string | null
+    desc?: string | null
+    logError?: boolean
+  }) {
     return nodeFactory.assertExpression({
       condition: null,
       sourceLocation,
       wtype: wtypes.voidWType,
       errorMessage: comment,
+      desc,
       logError,
     })
   },
   assert({
     sourceLocation,
     comment,
+    desc,
     condition,
     logError,
   }: {
     sourceLocation: SourceLocation
     comment: string | null
+    desc?: string | null
     condition: Expression
     logError?: boolean
   }) {
@@ -65,6 +78,7 @@ export const intrinsicFactory = {
       condition,
       wtype: wtypes.voidWType,
       errorMessage: comment,
+      desc,
       logError,
     })
   },

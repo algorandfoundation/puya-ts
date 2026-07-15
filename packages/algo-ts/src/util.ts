@@ -36,11 +36,16 @@ export function assert(condition: unknown, message?: string): asserts condition 
  * @param options.message Message appended after the code. Must not contain `:`.
  *                        Defaults to no message.
  * @param options.prefix Error prefix, either `"ERR"` or `"AER"`. Defaults to `"ERR"`.
+ * @param options.desc A plain description of the failure. When provided, it is used as the
+ *                     error message in the contract's ARC-56 source info (instead of the ARC-65
+ *                     string which is emitted by default as the ARC-56 comment).
+ *                     It does not change the logged output, and since it is not embedded
+ *                     in the compiled program it does not increase bytecode size.
  */
 export function loggedAssert(
   condition: unknown,
   code: string,
-  options?: { message?: string | undefined; prefix?: 'ERR' | 'AER' },
+  options?: { message?: string | undefined; prefix?: 'ERR' | 'AER'; desc?: string },
 ): asserts condition
 /**
  * Asserts that `condition` is truthy, logging a formatted error message before failing
@@ -60,7 +65,7 @@ export function loggedAssert(condition: unknown, code: string, message: string):
 export function loggedAssert(
   condition: unknown,
   code: string,
-  messageOrOptions?: string | { message?: string | undefined; prefix?: 'ERR' | 'AER' },
+  messageOrOptions?: string | { message?: string | undefined; prefix?: 'ERR' | 'AER'; desc?: string },
 ): asserts condition {
   throw new NoImplementation()
 }
@@ -81,8 +86,13 @@ export function loggedAssert(
  * @param options.message Message appended after the code. Must not contain `:`.
  *                        Defaults to no message.
  * @param options.prefix Error prefix, either `"ERR"` or `"AER"`. Defaults to `"ERR"`.
+ * @param options.desc A plain description of the failure. When provided, it is used as the
+ *                     error message in the contract's ARC-56 source info (instead of the ARC-65
+ *                     string which is emitted by default as the ARC-56 comment).
+ *                     It does not change the logged output, and since it is not embedded
+ *                     in the compiled program it does not increase bytecode size.
  */
-export function loggedErr(code: string, options?: { message?: string; prefix?: 'ERR' | 'AER' }): never
+export function loggedErr(code: string, options?: { message?: string; prefix?: 'ERR' | 'AER'; desc?: string }): never
 /**
  * Logs a formatted ARC-65 error message and immediately fails the transaction.
  *
@@ -98,7 +108,7 @@ export function loggedErr(code: string, options?: { message?: string; prefix?: '
  * @param message Message appended after the code. Must not contain `:`.
  */
 export function loggedErr(code: string, message: string): never
-export function loggedErr(code: string, messageOrOptions?: string | { message?: string; prefix?: 'ERR' | 'AER' }): never {
+export function loggedErr(code: string, messageOrOptions?: string | { message?: string; prefix?: 'ERR' | 'AER'; desc?: string }): never {
   throw new NoImplementation()
 }
 
