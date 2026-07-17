@@ -23,6 +23,11 @@ describe('logged errors and asserts', () => {
     { arg: 10, expectedError: 'AER:10' },
     { arg: 11, expectedError: 'AER:11:arg is 11' },
     { arg: 12, expectedError: 'ERR:12:arg is 12' },
+    // cases where a description `desc` is provided
+    { arg: 13, expectedError: 'arg must not be 13' },
+    { arg: 14, expectedError: 'arg must not be 14' },
+    { arg: 15, expectedError: 'arg must not be 15' },
+    { arg: 16, expectedError: 'arg must not be 16' },
   ]
 
   for (const { arg, expectedError } of testCases) {
