@@ -48,7 +48,7 @@ testSingleArg_for_header@2:
     bz testSingleArg_after_for@5
     // tests/approvals/urange.algo.ts:8
     // results = [...results, i]
-    dupn 2
+    dup
     itob
     bytec_1 // 0x0001
     swap
@@ -58,7 +58,7 @@ testSingleArg_for_header@2:
     swap
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    dig 4
+    uncover 3
     dup
     cover 2
     intc_0 // 0
@@ -69,19 +69,19 @@ testSingleArg_for_header@2:
     replace2 0
     swap
     concat
-    bury 3
+    swap
     // tests/approvals/urange.algo.ts:7
     // for (const i of urange(5)) {
     intc_1 // 1
     +
-    bury 1
     b testSingleArg_for_header@2
 
 testSingleArg_after_for@5:
+    pop
     // tests/approvals/urange.algo.ts:5
     // testSingleArg() {
     bytec_2 // 0x151f7c75
-    dig 2
+    swap
     concat
     log
     intc_1 // 1
@@ -106,7 +106,7 @@ testTwoArg_for_header@2:
     bz testTwoArg_after_for@5
     // tests/approvals/urange.algo.ts:15
     // results = [...results, i]
-    dupn 2
+    dup
     itob
     bytec_1 // 0x0001
     swap
@@ -116,7 +116,7 @@ testTwoArg_for_header@2:
     swap
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    dig 4
+    uncover 3
     dup
     cover 2
     intc_0 // 0
@@ -127,19 +127,19 @@ testTwoArg_for_header@2:
     replace2 0
     swap
     concat
-    bury 3
+    swap
     // tests/approvals/urange.algo.ts:14
     // for (const i of urange(2, 5)) {
     intc_1 // 1
     +
-    bury 1
     b testTwoArg_for_header@2
 
 testTwoArg_after_for@5:
+    pop
     // tests/approvals/urange.algo.ts:12
     // testTwoArg() {
     bytec_2 // 0x151f7c75
-    dig 2
+    swap
     concat
     log
     intc_1 // 1
@@ -164,7 +164,7 @@ testThreeArg_for_header@2:
     bz testThreeArg_after_for@5
     // tests/approvals/urange.algo.ts:22
     // results = [...results, i]
-    dupn 2
+    dup
     itob
     bytec_1 // 0x0001
     swap
@@ -174,7 +174,7 @@ testThreeArg_for_header@2:
     swap
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    dig 4
+    uncover 3
     dup
     cover 2
     intc_0 // 0
@@ -185,19 +185,19 @@ testThreeArg_for_header@2:
     replace2 0
     swap
     concat
-    bury 3
+    swap
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {
     pushint 3
     +
-    bury 1
     b testThreeArg_for_header@2
 
 testThreeArg_after_for@5:
+    pop
     // tests/approvals/urange.algo.ts:19
     // testThreeArg() {
     bytec_2 // 0x151f7c75
-    dig 2
+    swap
     concat
     log
     intc_1 // 1

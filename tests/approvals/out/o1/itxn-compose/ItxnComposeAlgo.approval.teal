@@ -127,7 +127,8 @@ distribute:
     intc_0 // 0
     extract_uint64
     dup
-    uncover 2
+    cover 2
+    cover 4
     dup
     pushint 8
     extract_uint64
@@ -159,10 +160,10 @@ distribute_for_header@2:
     bz distribute_after_for@5
     // tests/approvals/itxn-compose.algo.ts:33
     // const addr = addresses[i]
-    dupn 2
+    dup
     intc_3 // 32
     *
-    dig 5
+    dig 3
     swap
     intc_3 // 32
     extract3 // on error: index access is out of bounds
@@ -173,9 +174,9 @@ distribute_for_header@2:
     // })
     itxn_next
     itxn_field Receiver
-    dig 2
+    dig 1
     itxn_field Amount
-    dig 3
+    dig 4
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -183,10 +184,10 @@ distribute_for_header@2:
     // for (const i of urange(1, addresses.length)) {
     intc_1 // 1
     +
-    bury 1
     b distribute_for_header@2
 
 distribute_after_for@5:
+    popn 3
     // tests/approvals/itxn-compose.algo.ts:40-44
     // itxnCompose.next({
     //   type: TransactionType.ApplicationCall,
@@ -194,7 +195,6 @@ distribute_after_for@5:
     //   appId: verifier,
     // })
     itxn_next
-    dig 4
     itxn_field ApplicationID
     // tests/approvals/itxn-compose.algo.ts:42
     // appArgs: [methodSelector('verify()void')],
@@ -308,10 +308,8 @@ conditionalBegin_for_header@3:
 conditionalBegin_after_if_else@7:
     // tests/approvals/itxn-compose.algo.ts:58
     // for (const i of urange(count)) {
-    dup
     intc_1 // 1
     +
-    bury 1
     b conditionalBegin_for_header@3
 
 conditionalBegin_else_body@6:

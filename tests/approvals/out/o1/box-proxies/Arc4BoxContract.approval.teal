@@ -72,7 +72,7 @@ ensure_budget:
     +
 
 ensure_budget_while_top@1:
-    frame_dig 0
+    dup
     global OpcodeBudget
     >
     bz ensure_budget_after_while@6
@@ -214,7 +214,7 @@ setBoxes:
     // tests/approvals/box-proxies.algo.ts:366
     // this.boxLarge.value.e = 42
     intc 4 // 4096
-    uncover 2
+    dig 2
     box_replace // on error: index out of bounds
     // tests/approvals/box-proxies.algo.ts:347
     // boxLarge = Box<LargeStruct>({ key: 'boxLarge' })
@@ -222,7 +222,7 @@ setBoxes:
     // tests/approvals/box-proxies.algo.ts:367
     // this.boxLarge.replace(arc4.sizeOf<Bytes1024>() * 4, new arc4.Uint64(42).bytes)
     intc 4 // 4096
-    pushbytes 0x000000000000002a
+    uncover 2
     box_replace
     // tests/approvals/box-proxies.algo.ts:341
     // boxA = Box<uint64>({ key: 'boxA' })
@@ -658,7 +658,7 @@ sumManyInts_for_header@2:
     pushint 513
     <
     bz sumManyInts_after_for@5
-    dupn 2
+    dup
     intc_2 // 8
     *
     // tests/approvals/box-proxies.algo.ts:348
@@ -672,18 +672,17 @@ sumManyInts_for_header@2:
     btoi
     // tests/approvals/box-proxies.algo.ts:413
     // total = total + val
-    dig 3
+    uncover 2
     +
-    bury 3
+    swap
     intc_0 // 1
     +
-    bury 1
     b sumManyInts_for_header@2
 
 sumManyInts_after_for@5:
+    pop
     // tests/approvals/box-proxies.algo.ts:409
     // sumManyInts() {
-    dig 1
     itob
     bytec 9 // 0x151f7c75
     swap
@@ -1282,10 +1281,10 @@ sumBools_for_header@2:
     bz sumBools_after_if_else@5
     // tests/approvals/box-proxies.algo.ts:515
     // total += 1
-    dig 1
+    swap
     intc_0 // 1
     +
-    bury 2
+    swap
 
 sumBools_after_if_else@5:
     // tests/approvals/box-proxies.algo.ts:517
@@ -1294,16 +1293,14 @@ sumBools_after_if_else@5:
     dig 3
     ==
     bnz sumBools_block@10
-    dup
     intc_0 // 1
     +
-    bury 1
     b sumBools_for_header@2
 
 sumBools_block@10:
+    pop
     // tests/approvals/box-proxies.algo.ts:510
     // sumBools(stopAtTotal: uint64): uint64 {
-    dig 1
     itob
     bytec 9 // 0x151f7c75
     swap

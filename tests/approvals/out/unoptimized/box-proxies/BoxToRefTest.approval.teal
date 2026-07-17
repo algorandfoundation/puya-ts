@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1
+    intcblock 0 1 123
     b main_block@0
 
 main_block@0:
@@ -101,8 +101,19 @@ tests/approvals/box-proxies.algo.ts::BoxToRefTest.test_block@0:
     dup
     // tests/approvals/box-proxies.algo.ts:245
     // boxRef.replace(0, new arc4.Uint8(123).bytes)
+    intc_2 // 123
+    itob
+    dup
+    bitlen
+    pushint 8
+    <=
+    assert // overflow
+    pushint 7
+    intc_1 // 1
+    extract3
+    uncover 1
     intc_0 // 0
-    pushbytes 0x7b
+    uncover 2
     box_replace
     // tests/approvals/box-proxies.algo.ts:247
     // assert(boxForCaller.value[0].asUint64() === 123, 'First array item in box should be 123')
@@ -114,7 +125,7 @@ tests/approvals/box-proxies.algo.ts::BoxToRefTest.test_block@0:
     intc_1 // 1
     extract3 // on error: index access is out of bounds
     btoi
-    pushint 123
+    intc_2 // 123
     ==
     assert // First array item in box should be 123
     retsub

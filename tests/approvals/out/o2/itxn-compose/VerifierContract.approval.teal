@@ -3,7 +3,6 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    pushbytes ""
     // tests/approvals/itxn-compose.algo.ts:69
     // class VerifierContract extends Contract {
     txn NumAppArgs
@@ -24,7 +23,6 @@ main_verify_route@3:
     // tests/approvals/itxn-compose.algo.ts:71
     // for (let i: uint64 = 0; i < Txn.groupIndex; i++) {
     pushint 0
-    bury 1
 
 main_while_top@9:
     // tests/approvals/itxn-compose.algo.ts:71
@@ -35,7 +33,7 @@ main_while_top@9:
     bz main_after_while@11
     // tests/approvals/itxn-compose.algo.ts:73
     // assert(txn.type === TransactionType.Payment, 'Txn must be pay')
-    dupn 2
+    dup
     gtxns TypeEnum
     pushint 1
     ==
@@ -44,7 +42,6 @@ main_while_top@9:
     // for (let i: uint64 = 0; i < Txn.groupIndex; i++) {
     pushint 1
     +
-    bury 1
     b main_while_top@9
 
 main_after_while@11:

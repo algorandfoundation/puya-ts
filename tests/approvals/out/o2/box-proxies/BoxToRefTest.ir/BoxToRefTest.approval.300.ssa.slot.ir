@@ -15,9 +15,9 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         (box_create boxForCaller#0 4u)
         (box_replace boxForCaller#0 0u 0x7b)
         let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get boxForCaller#0)
-        let tmp%0#2: uint64 = (getbyte aggregate%box_get%0#0 0u)
-        let tmp%1#1: bool = (== tmp%0#2 123u)
-        (assert tmp%1#1) // First array item in box should be 123
+        let tmp%1#1: uint64 = (getbyte aggregate%box_get%0#0 0u)
+        let tmp%2#1: bool = (== tmp%1#1 123u)
+        (assert tmp%2#1) // First array item in box should be 123
         exit 1u
     block@4: // switch_case_next_L235
         fail

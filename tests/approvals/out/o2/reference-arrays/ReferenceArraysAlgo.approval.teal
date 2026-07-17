@@ -4,10 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 8 1 0
-    bytecblock 0x 0x068101
-    intc_2 // 0
-    bytec_0 // ""
-    dup
+    bytecblock 0x068101
     // tests/approvals/reference-arrays.algo.ts:4
     // class ReferenceArraysAlgo extends Contract {
     txn NumAppArgs
@@ -32,7 +29,6 @@ main_test_route@3:
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
-    bury 1
 
 main_while_top@13:
     pushint 2010
@@ -44,9 +40,9 @@ main_while_top@13:
     itxn_field TypeEnum
     pushint 5 // DeleteApplication
     itxn_field OnCompletion
-    bytec_1 // 0x068101
+    bytec_0 // 0x068101
     itxn_field ApprovalProgram
-    bytec_1 // 0x068101
+    bytec_0 // 0x068101
     itxn_field ClearStateProgram
     intc_2 // 0
     itxn_field Fee
@@ -56,37 +52,33 @@ main_while_top@13:
 main_after_while@18:
     // tests/approvals/reference-arrays.algo.ts:7
     // const ma = new ReferenceArray<uint64>()
-    bytec_0 // 0x
-    bury 3
+    pushbytes 0x
     // tests/approvals/reference-arrays.algo.ts:8
     // for (let i: uint64 = 0; i < length; i++) {
     intc_2 // 0
-    bury 2
 
 main_while_top@9:
     // tests/approvals/reference-arrays.algo.ts:8
     // for (let i: uint64 = 0; i < length; i++) {
-    dup2
+    dup
+    dig 3
     <
     bz main_after_while@11
-    dig 2
     // tests/approvals/reference-arrays.algo.ts:9
     // ma.push(i)
-    dig 2
     dup
     cover 2
     itob
     concat // on error: max array length exceeded
-    bury 4
+    swap
     // tests/approvals/reference-arrays.algo.ts:8
     // for (let i: uint64 = 0; i < length; i++) {
     intc_1 // 1
     +
-    bury 2
     b main_while_top@9
 
 main_after_while@11:
-    dig 2
+    pop
     // tests/approvals/reference-arrays.algo.ts:12
     // assert(ma.length === length)
     dup
@@ -95,7 +87,7 @@ main_after_while@11:
     intc_0 // 8
     /
     dup
-    dig 4
+    uncover 4
     dup
     cover 2
     ==

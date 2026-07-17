@@ -104,12 +104,13 @@ subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test() -> void:
         let boxForCaller#0: box_key = map_prefixed_key%0#0
         (box_create boxForCaller#0 4u)
         let boxRef#0: box_key = boxForCaller#0
-        (box_replace boxRef#0 0u 0x7b)
+        let tmp%0#0: Encoded(uint8) = bytes_encode<uint8>(123u)
+        (box_replace boxRef#0 0u tmp%0#0)
         let storage_value%0#0: bytes = box_read(boxForCaller#0)
         let array_item%0#0: Encoded(uint8) = extract_value(storage_value%0#0, 0u)
-        let tmp%0#0: uint64 = decode_bytes<uint64>(array_item%0#0)
-        let tmp%1#0: bool = (== tmp%0#0 123u)
-        (assert tmp%1#0) // First array item in box should be 123
+        let tmp%1#0: uint64 = decode_bytes<uint64>(array_item%0#0)
+        let tmp%2#0: bool = (== tmp%1#0 123u)
+        (assert tmp%2#0) // First array item in box should be 123
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.__algots__.defaultCreate() -> void:

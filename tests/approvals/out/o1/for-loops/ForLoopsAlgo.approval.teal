@@ -71,22 +71,20 @@ test_for_loop_while_top@2:
     bz test_for_loop_after_while@4
     // tests/approvals/for-loops.algo.ts:8
     // total += i
-    dup2
     dup
     cover 2
     +
-    bury 3
+    swap
     // tests/approvals/for-loops.algo.ts:7
     // for (let i = start; i < stop; i += step) {
-    dig 3
+    dig 2
     +
-    bury 1
     b test_for_loop_while_top@2
 
 test_for_loop_after_while@4:
+    pop
     // tests/approvals/for-loops.algo.ts:5
     // test_for_loop(start: uint64, stop: uint64, step: uint64) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -137,10 +135,11 @@ test_for_loop_break_while_top@2:
     bz test_for_loop_break_block@7
     // tests/approvals/for-loops.algo.ts:16
     // total += i
-    dup2
+    swap
+    dig 1
     +
     dup
-    bury 3
+    cover 2
     // tests/approvals/for-loops.algo.ts:17
     // if (total > 10) {
     pushint 10
@@ -148,16 +147,14 @@ test_for_loop_break_while_top@2:
     bnz test_for_loop_break_block@7
     // tests/approvals/for-loops.algo.ts:15
     // for (let i = start; i < stop; i += step) {
-    dup
-    dig 3
+    dig 2
     +
-    bury 1
     b test_for_loop_break_while_top@2
 
 test_for_loop_break_block@7:
+    pop
     // tests/approvals/for-loops.algo.ts:13
     // test_for_loop_break(start: uint64, stop: uint64, step: uint64) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -214,23 +211,22 @@ test_for_loop_continue_while_top@2:
     bz test_for_loop_continue_block@6
     // tests/approvals/for-loops.algo.ts:28
     // total += i
-    dup2
+    swap
+    dig 1
     +
-    bury 2
+    swap
 
 test_for_loop_continue_block@6:
     // tests/approvals/for-loops.algo.ts:26
     // for (let i = start; i < stop; i += step) {
-    dup
-    dig 3
+    dig 2
     +
-    bury 1
     b test_for_loop_continue_while_top@2
 
 test_for_loop_continue_after_while@7:
+    pop
     // tests/approvals/for-loops.algo.ts:24
     // test_for_loop_continue(start: uint64, stop: uint64, step: uint64) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -298,9 +294,9 @@ test_for_loop_labelled_while_top@4:
     dup
     cover 3
     +
-    dig 4
+    uncover 4
     +
-    bury 4
+    cover 3
     // tests/approvals/for-loops.algo.ts:38
     // if (i * j > stop) break outer
     *
@@ -316,9 +312,9 @@ test_for_loop_labelled_while_top@4:
     b test_for_loop_labelled_while_top@4
 
 test_for_loop_labelled_block@10:
+    pop
     // tests/approvals/for-loops.algo.ts:32
     // test_for_loop_labelled(start: uint64, stop: uint64, step: uint64) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -330,8 +326,6 @@ test_for_loop_labelled_block@10:
 test_for_loop_labelled_after_while@8:
     // tests/approvals/for-loops.algo.ts:34
     // outer: for (let i = start; i < stop; i += step) {
-    dup
-    dig 3
+    dig 2
     +
-    bury 1
     b test_for_loop_labelled_while_top@2

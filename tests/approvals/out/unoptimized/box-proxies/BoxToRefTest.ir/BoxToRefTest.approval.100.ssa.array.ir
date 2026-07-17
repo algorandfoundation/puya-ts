@@ -104,16 +104,23 @@ subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test() -> void:
         let boxForCaller#0: box_key = map_prefixed_key%0#0
         (box_create boxForCaller#0 4u)
         let boxRef#0: box_key = boxForCaller#0
-        (box_replace boxRef#0 0u 0x7b)
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob 123u)
+        let aggregate%bitlen%0#0: uint64 = (bitlen aggregate%val_as_bytes%0#0)
+        let aggregate%no_overflow%0#0: bool = (<= aggregate%bitlen%0#0 8u)
+        (assert aggregate%no_overflow%0#0) // overflow
+        let aggregate%uint8%0#0: bytes = (extract3 aggregate%val_as_bytes%0#0 7u 1u)
+        let aggregate%as_Encoded(uint8)%0#0: Encoded(uint8) = aggregate%uint8%0#0
+        let tmp%0#0: Encoded(uint8) = aggregate%as_Encoded(uint8)%0#0
+        (box_replace boxRef#0 0u tmp%0#0)
         let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get boxForCaller#0)
         (assert aggregate%box_get%1#0) // Box must have value
         let storage_value%0#0: bytes = aggregate%box_get%0#0
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 1u)
         let aggregate%encoded_element%0#0: bytes = (extract3 storage_value%0#0 aggregate%bytes_offset%0#0 1u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint8) = aggregate%encoded_element%0#0
-        let tmp%0#0: uint64 = (btoi array_item%0#0)
-        let tmp%1#0: bool = (== tmp%0#0 123u)
-        (assert tmp%1#0) // First array item in box should be 123
+        let tmp%1#0: uint64 = (btoi array_item%0#0)
+        let tmp%2#0: bool = (== tmp%1#0 123u)
+        (assert tmp%2#0) // First array item in box should be 123
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.__algots__.defaultCreate() -> void:

@@ -5,8 +5,6 @@
 main:
     intcblock 1 0 8 2 4096
     bytecblock "BOX_C" "blob" "boxLarge" "boxA" "boxD" "b" "tooManyBools" 0x00010203 0x151f7c75 "manyInts" "0" "hello" "boxRef" 0x00023432 "42" 0x068101
-    pushbytes ""
-    dupn 2
     // tests/approvals/box-proxies.algo.ts:340
     // class Arc4BoxContract extends arc4.Contract {
     txn NumAppArgs
@@ -31,7 +29,6 @@ main_sumBools_route@20:
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
-    bury 2
     // tests/approvals/box-proxies.algo.ts:511
     // ensureBudget(13_000)
     pushint 13000
@@ -40,7 +37,6 @@ main_sumBools_route@20:
     // tests/approvals/box-proxies.algo.ts:512
     // let total: uint64 = 0
     intc_1 // 0
-    bury 1
     // tests/approvals/box-proxies.algo.ts:352
     // tooManyBools = Box<FixedArray<boolean, 33_000>>({ key: 'tooManyBools' })
     bytec 6 // "tooManyBools"
@@ -50,17 +46,15 @@ main_sumBools_route@20:
     bury 1
     assert // Box must have value
     intc_1 // 0
-    bury 3
 
 main_for_header@28:
     // tests/approvals/box-proxies.algo.ts:513
     // for (const value of this.tooManyBools.value) {
-    dig 2
+    dup
     pushint 33000
     <
     bz main_block@35
-    dig 2
-    dup
+    dupn 2
     intc_2 // 8
     /
     swap
@@ -81,28 +75,26 @@ main_for_header@28:
     bz main_after_if_else@31
     // tests/approvals/box-proxies.algo.ts:515
     // total += 1
-    dup
+    swap
     intc_0 // 1
     +
-    bury 1
+    swap
 
 main_after_if_else@31:
     // tests/approvals/box-proxies.algo.ts:517
     // if (total === stopAtTotal) {
-    dup
-    dig 2
+    dig 1
+    dig 3
     ==
     bnz main_block@35
-    dig 2
     intc_0 // 1
     +
-    bury 3
     b main_for_header@28
 
 main_block@35:
+    pop
     // tests/approvals/box-proxies.algo.ts:510
     // sumBools(stopAtTotal: uint64): uint64 {
-    dup
     itob
     bytec 8 // 0x151f7c75
     swap
@@ -650,7 +642,6 @@ main_sumManyInts_route@10:
     // tests/approvals/box-proxies.algo.ts:411
     // let total = Uint64(0)
     intc_1 // 0
-    bury 1
     // tests/approvals/box-proxies.algo.ts:348
     // manyInts = Box<ManyInts>({ key: 'manyInts' })
     bytec 9 // "manyInts"
@@ -660,16 +651,14 @@ main_sumManyInts_route@10:
     bury 1
     assert // Box must have value
     intc_1 // 0
-    bury 3
 
 main_for_header@56:
     // tests/approvals/box-proxies.algo.ts:412
     // for (const val of this.manyInts.value) {
-    dig 2
+    dup
     pushint 513
     <
     bz main_after_for@58
-    dig 2
     dup
     intc_2 // 8
     *
@@ -684,18 +673,17 @@ main_for_header@56:
     btoi
     // tests/approvals/box-proxies.algo.ts:413
     // total = total + val
-    dig 2
+    uncover 2
     +
-    bury 2
+    swap
     intc_0 // 1
     +
-    bury 3
     b main_for_header@56
 
 main_after_for@58:
+    pop
     // tests/approvals/box-proxies.algo.ts:409
     // sumManyInts() {
-    dup
     itob
     bytec 8 // 0x151f7c75
     swap
@@ -865,7 +853,7 @@ main_setBoxes_route@6:
     // tests/approvals/box-proxies.algo.ts:366
     // this.boxLarge.value.e = 42
     intc 4 // 4096
-    uncover 2
+    dig 2
     box_replace // on error: index out of bounds
     // tests/approvals/box-proxies.algo.ts:347
     // boxLarge = Box<LargeStruct>({ key: 'boxLarge' })
@@ -873,7 +861,7 @@ main_setBoxes_route@6:
     // tests/approvals/box-proxies.algo.ts:367
     // this.boxLarge.replace(arc4.sizeOf<Bytes1024>() * 4, new arc4.Uint64(42).bytes)
     intc 4 // 4096
-    pushbytes 0x000000000000002a
+    uncover 2
     box_replace
     // tests/approvals/box-proxies.algo.ts:341
     // boxA = Box<uint64>({ key: 'boxA' })
@@ -1263,7 +1251,7 @@ ensure_budget:
     +
 
 ensure_budget_while_top@1:
-    frame_dig 0
+    dup
     global OpcodeBudget
     >
     bz ensure_budget_after_while@6

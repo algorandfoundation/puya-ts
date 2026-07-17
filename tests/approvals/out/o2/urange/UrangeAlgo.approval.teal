@@ -5,8 +5,6 @@
 main:
     intcblock 0 1 2 5
     bytecblock 0x0000 0x0001
-    intc_0 // 0
-    pushbytes ""
     // tests/approvals/urange.algo.ts:4
     // class UrangeAlgo extends Contract {
     txn NumAppArgs
@@ -25,11 +23,9 @@ main_testThreeArg_route@6:
     // tests/approvals/urange.algo.ts:20
     // let results: uint64[] = []
     bytec_0 // 0x0000
-    bury 2
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {
     intc_2 // 2
-    bury 1
 
 main_for_header@14:
     // tests/approvals/urange.algo.ts:21
@@ -40,7 +36,7 @@ main_for_header@14:
     bz main_after_for@26
     // tests/approvals/urange.algo.ts:22
     // results = [...results, i]
-    dupn 2
+    dup
     itob
     bytec_1 // 0x0001
     swap
@@ -50,7 +46,7 @@ main_for_header@14:
     swap
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    dig 4
+    uncover 3
     dup
     cover 2
     intc_0 // 0
@@ -61,19 +57,19 @@ main_for_header@14:
     replace2 0
     swap
     concat
-    bury 3
+    swap
     // tests/approvals/urange.algo.ts:21
     // for (const i of urange(2, 10, 3)) {
     pushint 3
     +
-    bury 1
     b main_for_header@14
 
 main_after_for@26:
+    pop
     // tests/approvals/urange.algo.ts:5
     // testSingleArg() {
     pushbytes 0x151f7c75
-    dig 2
+    swap
     concat
     log
     intc_1 // 1
@@ -83,11 +79,9 @@ main_testTwoArg_route@5:
     // tests/approvals/urange.algo.ts:13
     // let results: uint64[] = []
     bytec_0 // 0x0000
-    bury 2
     // tests/approvals/urange.algo.ts:14
     // for (const i of urange(2, 5)) {
     intc_2 // 2
-    bury 1
 
 main_for_header@19:
     // tests/approvals/urange.algo.ts:14
@@ -98,7 +92,7 @@ main_for_header@19:
     bz main_after_for@26
     // tests/approvals/urange.algo.ts:15
     // results = [...results, i]
-    dupn 2
+    dup
     itob
     bytec_1 // 0x0001
     swap
@@ -108,7 +102,7 @@ main_for_header@19:
     swap
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    dig 4
+    uncover 3
     dup
     cover 2
     intc_0 // 0
@@ -119,23 +113,20 @@ main_for_header@19:
     replace2 0
     swap
     concat
-    bury 3
+    swap
     // tests/approvals/urange.algo.ts:14
     // for (const i of urange(2, 5)) {
     intc_1 // 1
     +
-    bury 1
     b main_for_header@19
 
 main_testSingleArg_route@4:
     // tests/approvals/urange.algo.ts:6
     // let results: uint64[] = []
     bytec_0 // 0x0000
-    bury 2
     // tests/approvals/urange.algo.ts:7
     // for (const i of urange(5)) {
     intc_0 // 0
-    bury 1
 
 main_for_header@24:
     // tests/approvals/urange.algo.ts:7
@@ -146,7 +137,7 @@ main_for_header@24:
     bz main_after_for@26
     // tests/approvals/urange.algo.ts:8
     // results = [...results, i]
-    dupn 2
+    dup
     itob
     bytec_1 // 0x0001
     swap
@@ -156,7 +147,7 @@ main_for_header@24:
     swap
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
-    dig 4
+    uncover 3
     dup
     cover 2
     intc_0 // 0
@@ -167,12 +158,11 @@ main_for_header@24:
     replace2 0
     swap
     concat
-    bury 3
+    swap
     // tests/approvals/urange.algo.ts:7
     // for (const i of urange(5)) {
     intc_1 // 1
     +
-    bury 1
     b main_for_header@24
 
 main___algots__.defaultCreate@10:

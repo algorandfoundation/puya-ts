@@ -513,15 +513,16 @@ subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test2() -> 
         let tmp%0#0: Encoded((len+uint32[])) = bytes_encode<((len+uint32[]))>(encoded_array%0#0)
         let x#0: Encoded((len+uint32[])) = tmp%0#0
         let tuple_item%0#0: Encoded(len+uint32[]) = extract_value(x#0, 0)
-        let tmp%1#0: Encoded(uint32[]) = bytes_encode<uint32[]>(0x0000007b)
-        let tmp%2#0: Encoded(len+uint32[]) = array_concat(tuple_item%0#0, tmp%1#0, 1u)
-        let updated_tuple%0#0: Encoded((len+uint32[])) = replace_value(x#0, 0, tmp%2#0)
+        let tmp%1#0: Encoded(uint32) = bytes_encode<uint32>(123u)
+        let tmp%2#0: Encoded(uint32[]) = bytes_encode<uint32[]>(tmp%1#0)
+        let tmp%3#0: Encoded(len+uint32[]) = array_concat(tuple_item%0#0, tmp%2#0, 1u)
+        let updated_tuple%0#0: Encoded((len+uint32[])) = replace_value(x#0, 0, tmp%3#0)
         let x#1: Encoded((len+uint32[])) = updated_tuple%0#0
         let tuple_item%1#0: Encoded(len+uint32[]) = extract_value(x#1, 0)
-        let tmp%3#0: uint64 = array_len(tuple_item%1#0)
+        let tmp%4#0: uint64 = array_len(tuple_item%1#0)
         let tuple_item%2#0: Encoded(len+uint32[]) = extract_value(x#1, 0)
-        let tmp%4#0: uint64 = array_len(tuple_item%2#0)
-        return tmp%4#0
+        let tmp%5#0: uint64 = array_len(tuple_item%2#0)
+        return tmp%5#0
 
 subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test3(a: uint64) -> uint64:
     block@0: // L36
@@ -529,15 +530,16 @@ subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.test3(a: ui
         let tmp%0#0: Encoded(uint64,(len+uint32[])) = bytes_encode<(uint64,(len+uint32[]))>(a#0, encoded_array%0#0)
         let x#0: Encoded(uint64,(len+uint32[])) = tmp%0#0
         let tuple_item%0#0: Encoded(len+uint32[]) = extract_value(x#0, 1)
-        let tmp%1#0: Encoded(uint32[]) = bytes_encode<uint32[]>(0x0000007b)
-        let tmp%2#0: Encoded(len+uint32[]) = array_concat(tuple_item%0#0, tmp%1#0, 1u)
-        let updated_tuple%0#0: Encoded(uint64,(len+uint32[])) = replace_value(x#0, 1, tmp%2#0)
+        let tmp%1#0: Encoded(uint32) = bytes_encode<uint32>(123u)
+        let tmp%2#0: Encoded(uint32[]) = bytes_encode<uint32[]>(tmp%1#0)
+        let tmp%3#0: Encoded(len+uint32[]) = array_concat(tuple_item%0#0, tmp%2#0, 1u)
+        let updated_tuple%0#0: Encoded(uint64,(len+uint32[])) = replace_value(x#0, 1, tmp%3#0)
         let x#1: Encoded(uint64,(len+uint32[])) = updated_tuple%0#0
         let tuple_item%1#0: Encoded(len+uint32[]) = extract_value(x#1, 1)
-        let tmp%3#0: uint64 = array_len(tuple_item%1#0)
+        let tmp%4#0: uint64 = array_len(tuple_item%1#0)
         let tuple_item%2#0: Encoded(len+uint32[]) = extract_value(x#1, 1)
-        let tmp%4#0: uint64 = array_len(tuple_item%2#0)
-        return tmp%4#0
+        let tmp%5#0: uint64 = array_len(tuple_item%2#0)
+        return tmp%5#0
 
 subroutine tests/approvals/array-literals.algo.ts::ArrayLiteralsAlgo.__algots__.defaultCreate() -> void:
     block@0: // L14

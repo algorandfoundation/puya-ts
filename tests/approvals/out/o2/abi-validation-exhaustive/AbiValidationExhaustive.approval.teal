@@ -4,10 +4,6 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 1 0 2 9
-    intc_1 // 0
-    dup
-    pushbytes ""
-    dupn 4
     // tests/approvals/abi-validation-exhaustive.algo.ts:18
     // class AbiValidationExhaustive extends Contract {
     txn NumAppArgs
@@ -76,34 +72,30 @@ main_validate_c2c_route@33:
     return
 
 main_validate_native_dynamic_struct_arr3_route@32:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:131
-    // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
-    txna ApplicationArgs 1
-    bury 6
     // tests/approvals/abi-validation-exhaustive.algo.ts:133
     // validateEncoding(value)
     pushint 6
-    bury 2
+    // tests/approvals/abi-validation-exhaustive.algo.ts:131
+    // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
+    txna ApplicationArgs 1
     intc_1 // 0
-    bury 3
 
 main_for_header@43:
     // tests/approvals/abi-validation-exhaustive.algo.ts:133
     // validateEncoding(value)
-    dig 2
+    dup
     pushint 3
     <
     bz main_after_for@45
-    dig 2
     dup
     intc_2 // 2
     *
-    dig 7
+    dig 2
     dup
     uncover 2
     extract_uint16 // on error: invalid array encoding
     dup
-    dig 5
+    uncover 5
     dup
     cover 4
     ==
@@ -127,18 +119,16 @@ main_for_header@43:
     pushint 13
     +
     +
-    bury 3
+    cover 2
     intc_0 // 1
     +
-    bury 3
     b main_for_header@43
 
 main_after_for@45:
+    pop
     // tests/approvals/abi-validation-exhaustive.algo.ts:133
     // validateEncoding(value)
-    dig 5
     len
-    dig 2
     ==
     assert // invalid number of bytes for arc4.static_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeDynamicStruct, 3>
     // tests/approvals/abi-validation-exhaustive.algo.ts:131
@@ -156,35 +146,32 @@ main_validate_native_dynamic_struct_arr_route@31:
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
     dup
-    bury 7
+    cover 2
     intc_2 // 2
     *
-    bury 3
+    swap
     dup
     len
-    bury 2
+    cover 2
     extract 2 0
-    bury 7
     intc_1 // 0
-    bury 3
 
 main_for_header@48:
     // tests/approvals/abi-validation-exhaustive.algo.ts:129
     // validateEncoding(value)
-    dig 2
+    dup
     dig 5
     <
     bz main_after_for@50
-    dig 2
     dup
     intc_2 // 2
     *
-    dig 8
+    dig 2
     dup
     uncover 2
     extract_uint16 // on error: invalid array encoding
     dup
-    dig 5
+    uncover 5
     dup
     cover 4
     ==
@@ -208,19 +195,17 @@ main_for_header@48:
     pushint 13
     +
     +
-    bury 3
+    cover 2
     intc_0 // 1
     +
-    bury 3
     b main_for_header@48
 
 main_after_for@50:
+    popn 2
     // tests/approvals/abi-validation-exhaustive.algo.ts:129
     // validateEncoding(value)
-    dig 1
     intc_2 // 2
     +
-    dig 1
     ==
     assert // invalid number of bytes for arc4.dynamic_array<tests/approvals/abi-validation-exhaustive.algo.ts::NativeDynamicStruct>
     // tests/approvals/abi-validation-exhaustive.algo.ts:127
@@ -341,34 +326,30 @@ main_validate_dynamic_struct_with_a_bool_route@26:
     return
 
 main_validate_dynamic_struct_arr3_route@25:
-    // tests/approvals/abi-validation-exhaustive.algo.ts:103
-    // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
-    txna ApplicationArgs 1
-    bury 6
     // tests/approvals/abi-validation-exhaustive.algo.ts:105
     // validateEncoding(value)
     pushint 6
-    bury 2
+    // tests/approvals/abi-validation-exhaustive.algo.ts:103
+    // @arc4.abimethod({ validateEncoding: 'unsafe-disabled' })
+    txna ApplicationArgs 1
     intc_1 // 0
-    bury 3
 
 main_for_header@63:
     // tests/approvals/abi-validation-exhaustive.algo.ts:105
     // validateEncoding(value)
-    dig 2
+    dup
     pushint 3
     <
     bz main_after_for@65
-    dig 2
     dup
     intc_2 // 2
     *
-    dig 7
+    dig 2
     dup
     uncover 2
     extract_uint16 // on error: invalid array encoding
     dup
-    dig 5
+    uncover 5
     dup
     cover 4
     ==
@@ -392,18 +373,16 @@ main_for_header@63:
     pushint 13
     +
     +
-    bury 3
+    cover 2
     intc_0 // 1
     +
-    bury 3
     b main_for_header@63
 
 main_after_for@65:
+    pop
     // tests/approvals/abi-validation-exhaustive.algo.ts:105
     // validateEncoding(value)
-    dig 5
     len
-    dig 2
     ==
     assert // invalid number of bytes for arc4.static_array<ARC4DynamicStruct, 3>
     // tests/approvals/abi-validation-exhaustive.algo.ts:103
@@ -421,35 +400,32 @@ main_validate_dynamic_struct_arr_route@24:
     intc_1 // 0
     extract_uint16 // on error: invalid array length header
     dup
-    bury 6
+    cover 2
     intc_2 // 2
     *
-    bury 3
+    swap
     dup
     len
-    bury 2
+    cover 2
     extract 2 0
-    bury 7
     intc_1 // 0
-    bury 3
 
 main_for_header@68:
     // tests/approvals/abi-validation-exhaustive.algo.ts:101
     // validateEncoding(value)
-    dig 2
-    dig 4
+    dup
+    dig 5
     <
     bz main_after_for@70
-    dig 2
     dup
     intc_2 // 2
     *
-    dig 8
+    dig 2
     dup
     uncover 2
     extract_uint16 // on error: invalid array encoding
     dup
-    dig 5
+    uncover 5
     dup
     cover 4
     ==
@@ -473,19 +449,17 @@ main_for_header@68:
     pushint 13
     +
     +
-    bury 3
+    cover 2
     intc_0 // 1
     +
-    bury 3
     b main_for_header@68
 
 main_after_for@70:
+    popn 2
     // tests/approvals/abi-validation-exhaustive.algo.ts:101
     // validateEncoding(value)
-    dig 1
     intc_2 // 2
     +
-    dig 1
     ==
     assert // invalid number of bytes for arc4.dynamic_array<ARC4DynamicStruct>
     // tests/approvals/abi-validation-exhaustive.algo.ts:99
