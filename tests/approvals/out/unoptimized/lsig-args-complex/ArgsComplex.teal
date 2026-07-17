@@ -3,8 +3,8 @@
 
 // tests/approvals/lsig-args-complex.algo.ts::program() -> uint64:
 main:
-    intcblock 0 1 8 2
-    bytecblock 0x 0x00 "!" 0xff
+    intcblock 0 1 8 2 255
+    bytecblock 0x 0x00 "!" 0x01
     intc_0 // 0
     intc_0 // 0
     bytec_0 // ""
@@ -602,7 +602,7 @@ main_block@0:
     // tests/approvals/lsig-args-complex.algo.ts:83
     // const mutableArg2: biguint = arg2 + BigUint(1)
     uncover 16
-    pushbytes 0x01
+    bytec_3 // 0x01
     b+
     cover 17
     // tests/approvals/lsig-args-complex.algo.ts:84
@@ -643,7 +643,7 @@ main_block@0:
     // tests/approvals/lsig-args-complex.algo.ts:88
     // const mutableArg7 = new Uint128(arg7.asBigUint() + BigUint(1))
     uncover 10
-    pushbytes 0x01
+    bytec_3 // 0x01
     b+
     dup
     len
@@ -700,12 +700,22 @@ main_block@0:
     cover 9
     // tests/approvals/lsig-args-complex.algo.ts:93
     // arg12[0] = new Byte(0xff)
+    intc 4 // 255
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    pushint 7
+    intc_1 // 1
+    extract3
     intc_0 // 0
     intc_1 // 1
     *
-    uncover 7
+    uncover 8
     uncover 1
-    bytec_3 // 0xff
+    uncover 2
     replace3 // on error: index access is out of bounds
     cover 8
     // tests/approvals/lsig-args-complex.algo.ts:94
@@ -1012,8 +1022,18 @@ main_block@0:
     cover 1
     // tests/approvals/lsig-args-complex.algo.ts:113
     // arg20.push(new Uint8(0xff))
+    intc 4 // 255
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    pushint 7
+    intc_1 // 1
+    extract3
     bytec_0 // 0x
-    bytec_3 // 0xff
+    uncover 1
     concat
     b main_block@3
 
@@ -1133,7 +1153,16 @@ main_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@6:
     uncover 1
     intc_1 // 1
     extract3 // on error: index access is out of bounds
-    bytec_3 // 0xff
+    intc 4 // 255
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    pushint 7
+    intc_1 // 1
+    extract3
     ==
     assert
     // tests/approvals/lsig-args-complex.algo.ts:127

@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 8 2 0 1
-    bytecblock 0x 0x0000007b 0x151f7c75 0x00 0x068101
+    bytecblock 0x 0x151f7c75 0x00 0x068101
     b main_block@0
 
 main_block@0:
@@ -206,9 +206,9 @@ ensure_budget_while_body@2:
     itxn_field TypeEnum
     pushint 5 // DeleteApplication
     itxn_field OnCompletion
-    bytec 4 // 0x068101
+    bytec_3 // 0x068101
     itxn_field ApprovalProgram
-    bytec 4 // 0x068101
+    bytec_3 // 0x068101
     itxn_field ClearStateProgram
     intc_2 // 0
     intc_3 // 1
@@ -320,7 +320,7 @@ buildArray_block@0:
     // tests/approvals/native-arrays.algo.ts:30
     // buildArray(): Array<uint64> {
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildArray
-    bytec_2 // 0x151f7c75
+    bytec_1 // 0x151f7c75
     uncover 1
     concat
     log
@@ -336,7 +336,7 @@ arrayFromCtor_block@0:
     // tests/approvals/native-arrays.algo.ts:34
     // arrayFromCtor(): Array<uint64> {
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arrayFromCtor
-    bytec_2 // 0x151f7c75
+    bytec_1 // 0x151f7c75
     uncover 1
     concat
     log
@@ -352,7 +352,7 @@ buildReadonly_block@0:
     // tests/approvals/native-arrays.algo.ts:38
     // buildReadonly(): ReadonlyArray<uint64> {
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.buildReadonly
-    bytec_2 // 0x151f7c75
+    bytec_1 // 0x151f7c75
     uncover 1
     concat
     log
@@ -416,7 +416,7 @@ structs_block@0:
     ==
     assert // invalid number of bytes for tests/approvals/native-arrays.algo.ts::Vector
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.structs
-    bytec_2 // 0x151f7c75
+    bytec_1 // 0x151f7c75
     uncover 1
     concat
     log
@@ -432,7 +432,7 @@ booleans_block@0:
     // tests/approvals/native-arrays.algo.ts:179
     // booleans() {
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans
-    bytec_2 // 0x151f7c75
+    bytec_1 // 0x151f7c75
     uncover 1
     concat
     log
@@ -450,7 +450,7 @@ booleansStatic_block@0:
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleansStatic
     cover 2
     cover 1
-    bytec_3 // 0x00
+    bytec_2 // 0x00
     intc_2 // 0
     uncover 2
     setbit
@@ -463,7 +463,7 @@ booleansStatic_block@0:
     bytec_0 // 0x
     uncover 1
     concat
-    bytec_2 // 0x151f7c75
+    bytec_1 // 0x151f7c75
     uncover 1
     concat
     log
@@ -479,7 +479,7 @@ arc4Booleans_block@0:
     // tests/approvals/native-arrays.algo.ts:187
     // arc4Booleans() {
     callsub tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans
-    bytec_2 // 0x151f7c75
+    bytec_1 // 0x151f7c75
     uncover 1
     concat
     log
@@ -512,7 +512,7 @@ arc4BooleansStatic_block@0:
     bytec_0 // 0x
     uncover 1
     concat
-    bytec_2 // 0x151f7c75
+    bytec_1 // 0x151f7c75
     uncover 1
     concat
     log
@@ -4898,29 +4898,89 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop:
 tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_block@0:
     // tests/approvals/native-arrays.algo.ts:160
     // const da1 = new DynamicArray(u1, u1)
+    pushint 123
+    itob
+    dup
+    bitlen
+    pushint 32
+    <=
+    assert // overflow
+    pushint 4
+    pushint 4
+    extract3
+    pushint 123
+    itob
+    dup
+    bitlen
+    pushint 32
+    <=
+    assert // overflow
+    pushint 4
+    pushint 4
+    extract3
     intc_1 // 2
     itob
     extract 6 2
-    bytec_1 // 0x0000007b
+    uncover 2
     concat
-    bytec_1 // 0x0000007b
+    uncover 1
     concat
     // tests/approvals/native-arrays.algo.ts:161
     // const sa1 = new StaticArray(u1, u1)
+    pushint 123
+    itob
+    dup
+    bitlen
+    pushint 32
+    <=
+    assert // overflow
+    pushint 4
+    pushint 4
+    extract3
+    pushint 123
+    itob
+    dup
+    bitlen
+    pushint 32
+    <=
+    assert // overflow
+    pushint 4
+    pushint 4
+    extract3
     bytec_0 // 0x
-    bytec_1 // 0x0000007b
+    uncover 2
     concat
-    bytec_1 // 0x0000007b
+    uncover 1
     concat
     cover 1
     // tests/approvals/native-arrays.algo.ts:163
     // let a1 = [u1, u1]
+    pushint 123
+    itob
+    dup
+    bitlen
+    pushint 32
+    <=
+    assert // overflow
+    pushint 4
+    pushint 4
+    extract3
+    pushint 123
+    itob
+    dup
+    bitlen
+    pushint 32
+    <=
+    assert // overflow
+    pushint 4
+    pushint 4
+    extract3
     intc_1 // 2
     itob
     extract 6 2
-    bytec_1 // 0x0000007b
+    uncover 2
     concat
-    bytec_1 // 0x0000007b
+    uncover 1
     concat
     // tests/approvals/native-arrays.algo.ts:165
     // a1 = [...a1, ...da1, ...sa1]
@@ -4952,18 +5012,18 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_block@2:
     frame_dig 3
     itob
     extract 6 0
-    frame_bury 1
+    frame_bury 0
     b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inlined__puya_lib.arc4._itob16@3
 
 tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inlined__puya_lib.arc4._itob16@3:
-    frame_dig 1
+    frame_dig 0
     frame_dig 5
     intc_2 // 0
     uncover 2
     replace3
     frame_dig 6
     concat
-    frame_bury 0
+    frame_bury 1
     // tests/approvals/native-arrays.algo.ts:165
     // a1 = [...a1, ...da1, ...sa1]
     b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4
@@ -4971,7 +5031,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inline
 tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inlined__puya_lib.arc4.dynamic_array_concat_fixed@4:
     // tests/approvals/native-arrays.algo.ts:165
     // a1 = [...a1, ...da1, ...sa1]
-    frame_dig 0
+    frame_dig 1
     frame_bury 5
     frame_dig 4
     frame_bury 6
@@ -4992,11 +5052,11 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_block@6:
     frame_dig 3
     itob
     extract 6 0
-    frame_bury 1
+    frame_bury 0
     b tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inlined__puya_lib.arc4._itob16@7
 
 tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inlined__puya_lib.arc4._itob16@7:
-    frame_dig 1
+    frame_dig 0
     frame_dig 5
     intc_2 // 0
     uncover 2
@@ -5032,7 +5092,16 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inline
     *
     pushint 4
     extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
+    pushint 123
+    itob
+    dup
+    bitlen
+    pushint 32
+    <=
+    assert // overflow
+    pushint 4
+    pushint 4
+    extract3
     ==
     uncover 2
     &&
@@ -5049,7 +5118,16 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inline
     *
     pushint 4
     extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
+    pushint 123
+    itob
+    dup
+    bitlen
+    pushint 32
+    <=
+    assert // overflow
+    pushint 4
+    pushint 4
+    extract3
     ==
     uncover 2
     &&
@@ -5066,7 +5144,16 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inline
     *
     pushint 4
     extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
+    pushint 123
+    itob
+    dup
+    bitlen
+    pushint 32
+    <=
+    assert // overflow
+    pushint 4
+    pushint 4
+    extract3
     ==
     uncover 2
     &&
@@ -5083,7 +5170,16 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inline
     *
     pushint 4
     extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
+    pushint 123
+    itob
+    dup
+    bitlen
+    pushint 32
+    <=
+    assert // overflow
+    pushint 4
+    pushint 4
+    extract3
     ==
     uncover 2
     &&
@@ -5100,7 +5196,16 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inline
     *
     pushint 4
     extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
+    pushint 123
+    itob
+    dup
+    bitlen
+    pushint 32
+    <=
+    assert // overflow
+    pushint 4
+    pushint 4
+    extract3
     ==
     uncover 2
     &&
@@ -5116,7 +5221,16 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Interop_after_inline
     *
     pushint 4
     extract3 // on error: index access is out of bounds
-    bytec_1 // 0x0000007b
+    pushint 123
+    itob
+    dup
+    bitlen
+    pushint 32
+    <=
+    assert // overflow
+    pushint 4
+    pushint 4
+    extract3
     ==
     &&
     assert // assert target is match for conditions
@@ -5224,7 +5338,7 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.booleans_block@0:
     pushint 3
     itob
     extract 6 2
-    bytec_3 // 0x00
+    bytec_2 // 0x00
     intc_2 // 0
     intc_3 // 1
     setbit
@@ -5258,15 +5372,15 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans:
 tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4Booleans_block@0:
     // tests/approvals/native-arrays.algo.ts:188
     // return [new Bool(true), new Bool(false), new Bool(true)]
-    bytec_3 // 0x00
+    bytec_2 // 0x00
     intc_2 // 0
     intc_3 // 1
     setbit
-    bytec_3 // 0x00
+    bytec_2 // 0x00
     intc_2 // 0
     intc_2 // 0
     setbit
-    bytec_3 // 0x00
+    bytec_2 // 0x00
     intc_2 // 0
     intc_3 // 1
     setbit
@@ -5299,15 +5413,15 @@ tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansStatic:
 tests/approvals/native-arrays.algo.ts::NativeArraysAlgo.arc4BooleansStatic_block@0:
     // tests/approvals/native-arrays.algo.ts:192
     // return [new Bool(true), new Bool(false), new Bool(true)] as const
-    bytec_3 // 0x00
+    bytec_2 // 0x00
     intc_2 // 0
     intc_3 // 1
     setbit
-    bytec_3 // 0x00
+    bytec_2 // 0x00
     intc_2 // 0
     intc_2 // 0
     setbit
-    bytec_3 // 0x00
+    bytec_2 // 0x00
     intc_2 // 0
     intc_3 // 1
     setbit

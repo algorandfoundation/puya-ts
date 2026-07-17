@@ -5,8 +5,6 @@
 main:
     intcblock 1 32 0
     bytecblock 0x151f7c75
-    intc_2 // 0
-    pushbytes ""
     // tests/approvals/static-bytes.algo.ts:17
     // class StaticBytesAlgo extends Contract {
     txn NumAppArgs
@@ -31,11 +29,9 @@ main_test2_route@10:
     // tests/approvals/static-bytes.algo.ts:58
     // let result = Bytes.fromHex(EMPTY_HASH)
     pushbytes 0x0000000000000000000000000000000000000000000000000000000000000000
-    bury 2
     // tests/approvals/static-bytes.algo.ts:60
     // for (let i: uint64 = 0; i < 5; i = i + 1) {
     intc_2 // 0
-    bury 1
 
 main_while_top@24:
     // tests/approvals/static-bytes.algo.ts:60
@@ -46,23 +42,21 @@ main_while_top@24:
     bz main_after_while@26
     // tests/approvals/static-bytes.algo.ts:61
     // result = op.sha256(op.concat(result, result))
-    dig 1
+    swap
     dup
     concat
     sha256
-    bury 2
+    swap
     // tests/approvals/static-bytes.algo.ts:60
     // for (let i: uint64 = 0; i < 5; i = i + 1) {
-    dup
     intc_0 // 1
     +
-    bury 1
     b main_while_top@24
 
 main_after_while@26:
+    pop
     // tests/approvals/static-bytes.algo.ts:57
     // test2() {
-    dig 1
     dup
     len
     itob

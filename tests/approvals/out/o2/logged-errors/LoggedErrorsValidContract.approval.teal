@@ -4,7 +4,6 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 8 1
-    pushbytes ""
     // tests/approvals/logged-errors.algo.ts:4
     // class LoggedErrorsValidContract extends Contract {
     txn NumAppArgs
@@ -30,7 +29,6 @@ main_testValid_route@3:
     assert // invalid number of bytes for arc4.uint64
     btoi
     dup
-    bury 2
     // tests/approvals/logged-errors.algo.ts:6
     // loggedAssert(arg !== 1, '01')
     intc_1 // 1
@@ -163,7 +161,6 @@ main_after_if_else@28:
 main_after_if_else@30:
     // tests/approvals/logged-errors.algo.ts:27
     // if (arg === 12) {
-    dup
     pushint 12
     ==
     bz main_after_if_else@32

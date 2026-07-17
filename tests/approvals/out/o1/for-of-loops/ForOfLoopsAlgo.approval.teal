@@ -56,15 +56,15 @@ test_for_of_loop_tuple:
     intc_1 // 0
     swap
     intc_1 // 0
-    swap
+    cover 4
 
 test_for_of_loop_tuple_for_body@2:
     // tests/approvals/for-of-loops.algo.ts:12
     // total += item
-    dig 2
-    dig 1
+    dup
+    cover 2
     +
-    bury 3
+    swap
     // tests/approvals/for-of-loops.algo.ts:13
     // if (item === stopNumber) break
     intc_3 // 42
@@ -72,13 +72,12 @@ test_for_of_loop_tuple_for_body@2:
     bnz test_for_of_loop_tuple_block@9
     // tests/approvals/for-of-loops.algo.ts:11
     // for (const item of items) {
-    dup
+    dig 3
     switch test_for_of_loop_tuple_for_header_1@6 test_for_of_loop_tuple_for_header_2@7
 
 test_for_of_loop_tuple_block@9:
     // tests/approvals/for-of-loops.algo.ts:9
     // test_for_of_loop_tuple(items: readonly [uint64, uint64, uint64]) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -89,14 +88,14 @@ test_for_of_loop_tuple_block@9:
 
 test_for_of_loop_tuple_for_header_2@7:
     pushint 2
-    bury 1
-    dig 2
+    bury 4
+    dig 1
     b test_for_of_loop_tuple_for_body@2
 
 test_for_of_loop_tuple_for_header_1@6:
     intc_0 // 1
-    bury 1
-    dig 3
+    bury 4
+    dig 2
     b test_for_of_loop_tuple_for_body@2
 
 
@@ -138,25 +137,23 @@ test_for_of_loop_destructured_tuple_for_header@2:
     // tests/approvals/for-of-loops.algo.ts:21
     // total += v.asUint64()
     extract_uint64
-    dig 2
+    uncover 2
     +
     dup
-    bury 3
+    cover 2
     // tests/approvals/for-of-loops.algo.ts:22
     // if (total >= stopNumber) break
     intc_3 // 42
     >=
     bnz test_for_of_loop_destructured_tuple_block@8
-    dup
     intc_0 // 1
     +
-    bury 1
     b test_for_of_loop_destructured_tuple_for_header@2
 
 test_for_of_loop_destructured_tuple_block@8:
+    pop
     // tests/approvals/for-of-loops.algo.ts:18
     // test_for_of_loop_destructured_tuple(items: DynamicArray<Uint64>) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -212,25 +209,23 @@ test_for_of_loop_destructured_object_for_header@2:
     // tests/approvals/for-of-loops.algo.ts:30
     // total += x + y
     +
-    dig 2
+    uncover 2
     +
     dup
-    bury 3
+    cover 2
     // tests/approvals/for-of-loops.algo.ts:31
     // if (total >= stopNumber) break
     intc_3 // 42
     >=
     bnz test_for_of_loop_destructured_object_block@8
-    dup
     intc_0 // 1
     +
-    bury 1
     b test_for_of_loop_destructured_object_for_header@2
 
 test_for_of_loop_destructured_object_block@8:
+    pop
     // tests/approvals/for-of-loops.algo.ts:27
     // test_for_of_loop_destructured_object(items: Point[]) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -278,25 +273,23 @@ test_for_of_loop_arc4_dynamic_array_for_header@2:
     // tests/approvals/for-of-loops.algo.ts:39
     // total += item.asUint64()
     extract_uint64
-    dig 2
+    uncover 2
     dig 1
     +
-    bury 3
+    cover 2
     // tests/approvals/for-of-loops.algo.ts:40
     // if (item.asUint64() === stopNumber) break
     intc_3 // 42
     ==
     bnz test_for_of_loop_arc4_dynamic_array_block@8
-    dup
     intc_0 // 1
     +
-    bury 1
     b test_for_of_loop_arc4_dynamic_array_for_header@2
 
 test_for_of_loop_arc4_dynamic_array_block@8:
+    pop
     // tests/approvals/for-of-loops.algo.ts:36
     // test_for_of_loop_arc4_dynamic_array(items: DynamicArray<Uint64>) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -336,25 +329,23 @@ test_for_of_loop_arc4_static_array_for_header@2:
     dig 3
     swap
     extract_uint64
-    dig 2
+    uncover 2
     dig 1
     +
-    bury 3
+    cover 2
     // tests/approvals/for-of-loops.algo.ts:49
     // if (item.asUint64() === stopNumber) break
     intc_3 // 42
     ==
     bnz test_for_of_loop_arc4_static_array_block@8
-    dup
     intc_0 // 1
     +
-    bury 1
     b test_for_of_loop_arc4_static_array_for_header@2
 
 test_for_of_loop_arc4_static_array_block@8:
+    pop
     // tests/approvals/for-of-loops.algo.ts:45
     // test_for_of_loop_arc4_static_array(items: StaticArray<Uint64, 5>) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -402,25 +393,23 @@ test_for_of_loop_native_immutable_array_for_header@2:
     extract_uint64
     // tests/approvals/for-of-loops.algo.ts:57
     // total += item
-    dig 2
+    uncover 2
     dig 1
     +
-    bury 3
+    cover 2
     // tests/approvals/for-of-loops.algo.ts:58
     // if (item === stopNumber) break
     intc_3 // 42
     ==
     bnz test_for_of_loop_native_immutable_array_block@8
-    dup
     intc_0 // 1
     +
-    bury 1
     b test_for_of_loop_native_immutable_array_for_header@2
 
 test_for_of_loop_native_immutable_array_block@8:
+    pop
     // tests/approvals/for-of-loops.algo.ts:54
     // test_for_of_loop_native_immutable_array(items: Array<uint64>) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -462,13 +451,14 @@ test_for_of_loop_native_mutable_array:
     len
     intc_2 // 8
     /
+    swap
     intc_1 // 0
 
 test_for_of_loop_native_mutable_array_for_header@2:
     // tests/approvals/for-of-loops.algo.ts:66
     // for (const item of mutable) {
     dup
-    dig 2
+    dig 3
     <
     bz test_for_of_loop_native_mutable_array_block@8
     dig 3
@@ -478,25 +468,23 @@ test_for_of_loop_native_mutable_array_for_header@2:
     extract_uint64
     // tests/approvals/for-of-loops.algo.ts:67
     // total += item
-    dig 3
+    uncover 2
     dig 1
     +
-    bury 4
+    cover 2
     // tests/approvals/for-of-loops.algo.ts:68
     // if (item === stopNumber) break
     intc_3 // 42
     ==
     bnz test_for_of_loop_native_mutable_array_block@8
-    dup
     intc_0 // 1
     +
-    bury 1
     b test_for_of_loop_native_mutable_array_for_header@2
 
 test_for_of_loop_native_mutable_array_block@8:
+    pop
     // tests/approvals/for-of-loops.algo.ts:63
     // test_for_of_loop_native_mutable_array(items: [uint64, uint64, uint64]) {
-    dig 2
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -508,8 +496,6 @@ test_for_of_loop_native_mutable_array_block@8:
 
 // tests/approvals/for-of-loops.algo.ts::ForOfLoopsAlgo.test_iterable_props[routing]() -> void:
 test_iterable_props:
-    pushbytes ""
-    dupn 4
     // tests/approvals/for-of-loops.algo.ts:73
     // test_iterable_props(static_array: StaticArray<Uint64, 3>, fixed_array: FixedArray<uint64, 3>, dyn_array: DynamicArray<Uint64>) {
     txna ApplicationArgs 1
@@ -552,145 +538,133 @@ test_iterable_props_for_header@2:
     bz test_iterable_props_after_for@5
     // tests/approvals/for-of-loops.algo.ts:76
     // i++
-    dig 1
+    swap
     intc_0 // 1
     +
-    bury 2
+    swap
     // tests/approvals/for-of-loops.algo.ts:75
     // for (const a of static_array.keys()) {
-    dup
     intc_0 // 1
     +
-    bury 1
     b test_iterable_props_for_header@2
 
 test_iterable_props_after_for@5:
+    pop
     intc_1 // 0
-    bury 8
 
 test_iterable_props_for_header@6:
     // tests/approvals/for-of-loops.algo.ts:78
     // for (const a of static_array.entries()) {
-    dig 7
+    dup
     pushint 3
     <
     bz test_iterable_props_after_for@9
     // tests/approvals/for-of-loops.algo.ts:79
     // i++
-    dig 1
+    swap
     intc_0 // 1
     +
-    bury 2
-    dig 7
+    swap
     intc_0 // 1
     +
-    bury 8
     b test_iterable_props_for_header@6
 
 test_iterable_props_after_for@9:
+    pop
     // tests/approvals/for-of-loops.algo.ts:81
     // for (const a of fixed_array.keys()) {
     intc_1 // 0
-    bury 7
 
 test_iterable_props_for_header@10:
     // tests/approvals/for-of-loops.algo.ts:81
     // for (const a of fixed_array.keys()) {
-    dig 6
+    dup
     pushint 3
     <
     bz test_iterable_props_after_for@13
     // tests/approvals/for-of-loops.algo.ts:82
     // i++
-    dig 1
+    swap
     intc_0 // 1
     +
-    bury 2
+    swap
     // tests/approvals/for-of-loops.algo.ts:81
     // for (const a of fixed_array.keys()) {
-    dig 6
     intc_0 // 1
     +
-    bury 7
     b test_iterable_props_for_header@10
 
 test_iterable_props_after_for@13:
+    pop
     intc_1 // 0
-    bury 6
 
 test_iterable_props_for_header@14:
     // tests/approvals/for-of-loops.algo.ts:84
     // for (const a of fixed_array.entries()) {
-    dig 5
+    dup
     pushint 3
     <
     bz test_iterable_props_after_for@17
     // tests/approvals/for-of-loops.algo.ts:85
     // i++
-    dig 1
+    swap
     intc_0 // 1
     +
-    bury 2
-    dig 5
+    swap
     intc_0 // 1
     +
-    bury 6
     b test_iterable_props_for_header@14
 
 test_iterable_props_after_for@17:
+    pop
     // tests/approvals/for-of-loops.algo.ts:87
     // for (const a of dyn_array.keys()) {
     intc_1 // 0
-    bury 5
 
 test_iterable_props_for_header@18:
     // tests/approvals/for-of-loops.algo.ts:87
     // for (const a of dyn_array.keys()) {
-    dig 4
+    dup
     dig 3
     <
     bz test_iterable_props_after_for@21
     // tests/approvals/for-of-loops.algo.ts:88
     // i++
-    dig 1
+    swap
     intc_0 // 1
     +
-    bury 2
+    swap
     // tests/approvals/for-of-loops.algo.ts:87
     // for (const a of dyn_array.keys()) {
-    dig 4
     intc_0 // 1
     +
-    bury 5
     b test_iterable_props_for_header@18
 
 test_iterable_props_after_for@21:
+    pop
     intc_1 // 0
-    bury 4
 
 test_iterable_props_for_header@22:
     // tests/approvals/for-of-loops.algo.ts:90
     // for (const a of dyn_array.entries()) {
-    dig 3
+    dup
     dig 3
     <
     bz test_iterable_props_after_for@25
     // tests/approvals/for-of-loops.algo.ts:91
     // i++
-    dig 1
+    swap
     intc_0 // 1
     +
-    bury 2
-    dig 3
+    swap
     intc_0 // 1
     +
-    bury 4
     b test_iterable_props_for_header@22
 
 test_iterable_props_after_for@25:
+    pop
     // tests/approvals/for-of-loops.algo.ts:73
     // test_iterable_props(static_array: StaticArray<Uint64, 3>, fixed_array: FixedArray<uint64, 3>, dyn_array: DynamicArray<Uint64>) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap

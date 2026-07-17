@@ -596,8 +596,8 @@ main:
     uncover 18
     swap
     replace2 0
-    // tests/approvals/lsig-args-complex-no-validation.algo.ts:114
-    // arg20.push(new Uint8(0xff))
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:94
+    // arg12[0] = new Byte(0xff)
     bytec_2 // 0xff
     concat
     // tests/approvals/lsig-args-complex-no-validation.algo.ts:117
@@ -609,7 +609,7 @@ main:
     uncover 16
     len
     dup
-    cover 19
+    cover 20
     assert
     // tests/approvals/lsig-args-complex-no-validation.algo.ts:119
     // assert(mutableArg2 > BigUint(0))
@@ -658,7 +658,11 @@ main:
     // assert(arg12[0] === new Byte(0xff))
     uncover 9
     extract 0 1 // on error: index access is out of bounds
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:94
+    // arg12[0] = new Byte(0xff)
     bytec_2 // 0xff
+    // tests/approvals/lsig-args-complex-no-validation.algo.ts:127
+    // assert(arg12[0] === new Byte(0xff))
     ==
     assert
     // tests/approvals/lsig-args-complex-no-validation.algo.ts:128
@@ -783,7 +787,7 @@ main:
     bnz main_after_if_else@2
     // tests/approvals/lsig-args-complex-no-validation.algo.ts:144
     // total += mutableArg1.length
-    dig 1
+    dig 2
     +
 
 main_after_if_else@2:
@@ -792,5 +796,4 @@ main_after_if_else@2:
     assert
     // tests/approvals/lsig-args-complex-no-validation.algo.ts:147
     // return mutableArg9.native
-    dig 1
     return

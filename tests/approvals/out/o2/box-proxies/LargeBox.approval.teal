@@ -5,7 +5,6 @@
 main:
     intcblock 64 0 1
     bytecblock "large" 0x068101
-    pushbytes ""
     // tests/approvals/box-proxies.algo.ts:267
     // export class LargeBox extends Contract {
     txn NumAppArgs
@@ -53,7 +52,6 @@ main_after_while@18:
     box_create
     pop
     intc_1 // 0
-    bury 1
 
 main_for_header@9:
     // tests/approvals/box-proxies.algo.ts:275
@@ -62,7 +60,7 @@ main_for_header@9:
     pushint 200
     <
     bz main_after_for@11
-    dupn 2
+    dup
     intc_0 // 64
     *
     // tests/approvals/box-proxies.algo.ts:268
@@ -105,7 +103,6 @@ main_for_header@9:
     assert
     intc_2 // 1
     +
-    bury 1
     b main_for_header@9
 
 main_after_for@11:

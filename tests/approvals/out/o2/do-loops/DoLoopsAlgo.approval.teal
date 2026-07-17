@@ -6,7 +6,6 @@ main:
     intcblock 1 8 0
     bytecblock 0x151f7c75
     pushbytes ""
-    dupn 4
     // tests/approvals/do-loops.algo.ts:4
     // export class DoLoopsAlgo extends Contract {
     txn NumAppArgs
@@ -31,7 +30,6 @@ main_testDoContinue_route@6:
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
-    bury 2
     txna ApplicationArgs 2
     dup
     len
@@ -39,48 +37,44 @@ main_testDoContinue_route@6:
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
-    bury 3
-    // tests/approvals/do-loops.algo.ts:24
-    // let i = Uint64(0)
-    intc_2 // 0
-    bury 4
+    bury 2
     // tests/approvals/do-loops.algo.ts:25
     // let total = Uint64(0)
     intc_2 // 0
-    bury 1
+    // tests/approvals/do-loops.algo.ts:24
+    // let i = Uint64(0)
+    dup
 
 main_while_top@14:
     // tests/approvals/do-loops.algo.ts:27
     // if (i > 0 && i % mod === 0) {
-    dig 3
+    dup
     bz main_after_if_else@17
-    dig 3
-    dig 3
+    dup
+    dig 4
     %
     bnz main_after_if_else@17
     // tests/approvals/do-loops.algo.ts:28
     // total += 2
-    dup
+    swap
     pushint 2
     +
-    bury 1
+    swap
     // tests/approvals/do-loops.algo.ts:29
     // i += 1
-    dig 3
     intc_0 // 1
     +
-    bury 4
 
 main_block@18:
     // tests/approvals/do-loops.algo.ts:34
     // } while (i < stop)
+    dup
     dig 3
-    dig 2
     <
     bnz main_while_top@14
+    pop
     // tests/approvals/do-loops.algo.ts:23
     // testDoContinue(stop: uint64, mod: uint64) {
-    dup
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -92,16 +86,14 @@ main_block@18:
 main_after_if_else@17:
     // tests/approvals/do-loops.algo.ts:32
     // total += 1
-    dup
+    swap
     intc_0 // 1
     +
-    bury 1
+    swap
     // tests/approvals/do-loops.algo.ts:33
     // i += 1
-    dig 3
     intc_0 // 1
     +
-    bury 4
     b main_block@18
 
 main_testDoBreak_route@5:
@@ -114,7 +106,6 @@ main_testDoBreak_route@5:
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
-    bury 2
     txna ApplicationArgs 2
     dup
     len
@@ -122,49 +113,45 @@ main_testDoBreak_route@5:
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
-    bury 5
     // tests/approvals/do-loops.algo.ts:13
     // let total = Uint64(0)
     intc_2 // 0
-    bury 1
     // tests/approvals/do-loops.algo.ts:14
     // let i = Uint64(0)
-    intc_2 // 0
-    bury 4
+    dup
 
 main_while_top@24:
     // tests/approvals/do-loops.algo.ts:16
     // if (i > 0 && i % breakMod === 0) break
-    dig 3
+    dup
     bz main_after_if_else@27
+    dup
     dig 3
-    dig 5
     %
     bz main_block@30
 
 main_after_if_else@27:
     // tests/approvals/do-loops.algo.ts:18
     // i += 1
-    dig 3
     intc_0 // 1
     +
     dup
-    bury 5
     // tests/approvals/do-loops.algo.ts:19
     // total += i
-    dup2
+    uncover 2
+    dig 1
     +
-    bury 2
+    cover 2
     // tests/approvals/do-loops.algo.ts:20
     // } while (i < stop)
-    dig 2
+    dig 4
     <
     bnz main_while_top@24
 
 main_block@30:
+    pop
     // tests/approvals/do-loops.algo.ts:12
     // testDoBreak(stop: uint64, breakMod: uint64) {
-    dup
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -183,20 +170,16 @@ main_testDo_route@4:
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
-    bury 2
     // tests/approvals/do-loops.algo.ts:6
     // let i = Uint64(0)
     intc_2 // 0
-    bury 4
 
 main_while_top@33:
     // tests/approvals/do-loops.algo.ts:8
     // i += 1
-    dig 3
     intc_0 // 1
     +
     dup
-    bury 5
     // tests/approvals/do-loops.algo.ts:9
     // } while (i < stop)
     dig 2
@@ -204,7 +187,6 @@ main_while_top@33:
     bnz main_while_top@33
     // tests/approvals/do-loops.algo.ts:5
     // testDo(stop: uint64) {
-    dig 3
     itob
     bytec_0 // 0x151f7c75
     swap

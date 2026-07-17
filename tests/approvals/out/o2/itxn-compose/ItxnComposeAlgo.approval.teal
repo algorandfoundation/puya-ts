@@ -5,9 +5,6 @@
 main:
     intcblock 0 1 6 8
     bytecblock 0xd0a28200 0x0002686f
-    intc_0 // 0
-    pushbytes ""
-    dupn 6
     // tests/approvals/itxn-compose.algo.ts:18
     // class ItxnComposeAlgo extends Contract {
     txn NumAppArgs
@@ -32,7 +29,6 @@ main_conditionalBegin_route@5:
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
-    bury 5
     // tests/approvals/itxn-compose.algo.ts:56
     // const appId = hello.call.create({ args: ['Hi'] }).itxn.createdApp
     itxn_begin
@@ -58,27 +54,25 @@ main_conditionalBegin_route@5:
     itxn_field Fee
     itxn_submit
     gitxn 0 CreatedApplicationID
-    bury 6
     // tests/approvals/itxn-compose.algo.ts:58
     // for (const i of urange(count)) {
     intc_0 // 0
-    bury 4
 
 main_for_header@13:
     // tests/approvals/itxn-compose.algo.ts:58
     // for (const i of urange(count)) {
+    dup
     dig 3
-    dig 5
     <
     bz main_after_for@18
     // tests/approvals/itxn-compose.algo.ts:59
     // if (i === 0) {
-    dig 3
+    dup
     bnz main_else_body@16
     // tests/approvals/itxn-compose.algo.ts:60
     // itxnCompose.begin({ method: Hello.prototype.greet, appId, args: ['ho'] })
     itxn_begin
-    dig 5
+    dig 1
     itxn_field ApplicationID
     bytec_0 // method "greet(string)string"
     itxn_field ApplicationArgs
@@ -92,17 +86,15 @@ main_for_header@13:
 main_after_if_else@17:
     // tests/approvals/itxn-compose.algo.ts:58
     // for (const i of urange(count)) {
-    dig 3
     intc_1 // 1
     +
-    bury 4
     b main_for_header@13
 
 main_else_body@16:
     // tests/approvals/itxn-compose.algo.ts:62
     // itxnCompose.next({ method: Hello.prototype.greet, appId, args: ['ho'] })
     itxn_next
-    dig 5
+    dig 1
     itxn_field ApplicationID
     bytec_0 // method "greet(string)string"
     itxn_field ApplicationArgs
@@ -131,7 +123,7 @@ main_distribute_route@4:
     intc_0 // 0
     extract_uint16 // on error: invalid array length header
     dup
-    bury 9
+    cover 2
     dup
     pushint 32
     *
@@ -156,7 +148,7 @@ main_distribute_route@4:
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
-    bury 4
+    cover 3
     // tests/approvals/itxn-compose.algo.ts:20-22
     // assertMatch(funds, {
     //   receiver: Global.currentApplicationAddress,
@@ -185,7 +177,7 @@ main_distribute_route@4:
     // receiver: addresses[0].bytes,
     dig 1
     extract 2 0
-    bury 10
+    cover 2
     swap
     extract 2 32
     // tests/approvals/itxn-compose.algo.ts:27
@@ -220,13 +212,13 @@ main_distribute_route@4:
     extract_uint64
     dup
     cover 2
-    bury 5
+    cover 4
     dup
     intc_3 // 8
     extract_uint64
     dup
     cover 2
-    bury 5
+    cover 3
     dup
     pushint 16
     extract_uint16
@@ -242,22 +234,20 @@ main_distribute_route@4:
     // tests/approvals/itxn-compose.algo.ts:32
     // for (const i of urange(1, addresses.length)) {
     intc_1 // 1
-    bury 4
 
 main_for_header@21:
     // tests/approvals/itxn-compose.algo.ts:32
     // for (const i of urange(1, addresses.length)) {
-    dig 3
-    dig 7
+    dup
+    dig 6
     <
     bz main_after_for@23
     // tests/approvals/itxn-compose.algo.ts:33
     // const addr = addresses[i]
-    dig 3
     dup
     pushint 32
     *
-    dig 9
+    dig 3
     swap
     pushint 32
     extract3 // on error: index access is out of bounds
@@ -268,9 +258,9 @@ main_for_header@21:
     // })
     itxn_next
     itxn_field Receiver
-    dig 2
+    dig 1
     itxn_field Amount
-    dig 3
+    dig 4
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -278,10 +268,10 @@ main_for_header@21:
     // for (const i of urange(1, addresses.length)) {
     intc_1 // 1
     +
-    bury 4
     b main_for_header@21
 
 main_after_for@23:
+    popn 3
     // tests/approvals/itxn-compose.algo.ts:40-44
     // itxnCompose.next({
     //   type: TransactionType.ApplicationCall,
@@ -289,7 +279,6 @@ main_after_for@23:
     //   appId: verifier,
     // })
     itxn_next
-    dup
     itxn_field ApplicationID
     // tests/approvals/itxn-compose.algo.ts:42
     // appArgs: [methodSelector('verify()void')],

@@ -697,13 +697,15 @@ tests/approvals/box-proxies.algo.ts::Arc4BoxContract.setBoxes_block@0:
     pushint 1024
     pushint 4
     *
+    pushint 42
+    itob
     // tests/approvals/box-proxies.algo.ts:347
     // boxLarge = Box<LargeStruct>({ key: 'boxLarge' })
     bytec 5 // "boxLarge"
     // tests/approvals/box-proxies.algo.ts:367
     // this.boxLarge.replace(arc4.sizeOf<Bytes1024>() * 4, new arc4.Uint64(42).bytes)
-    uncover 1
-    pushbytes 0x000000000000002a
+    uncover 2
+    uncover 2
     box_replace
     // tests/approvals/box-proxies.algo.ts:342
     // boxB = Box<arc4.DynamicBytes>({ key: 'b' })
@@ -1697,14 +1699,54 @@ tests/approvals/box-proxies.algo.ts::Arc4BoxContract.arc4Box:
 tests/approvals/box-proxies.algo.ts::Arc4BoxContract.arc4Box_block@0:
     // tests/approvals/box-proxies.algo.ts:456
     // boxD.value = new arc4.StaticArray(new arc4.Uint8(0), new arc4.Uint8(1), new arc4.Uint8(2), new arc4.Uint8(3))
+    intc_1 // 0
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    pushint 7
+    intc_0 // 1
+    extract3
+    intc_0 // 1
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    pushint 7
+    intc_0 // 1
+    extract3
+    intc_3 // 2
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    pushint 7
+    intc_0 // 1
+    extract3
+    pushint 3
+    itob
+    dup
+    bitlen
+    intc_2 // 8
+    <=
+    assert // overflow
+    pushint 7
+    intc_0 // 1
+    extract3
     pushbytes 0x
-    pushbytes 0x00
+    uncover 4
     concat
-    pushbytes 0x01
+    uncover 3
     concat
-    pushbytes 0x02
+    uncover 2
     concat
-    pushbytes 0x03
+    uncover 1
     concat
     bytec 6 // "d"
     uncover 1

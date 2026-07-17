@@ -6,9 +6,8 @@ main:
     intcblock 0 6 5 3 1000
     bytecblock 0x098101 0x09361a00b08101 "1" "2" "AST2" "unit" "3" "5" "AST1" "AST3" "name" "10" "11" "12" "13" "14" "15" "16" "with args param set" "42" "3rd"
     intc_0 // 0
-    dupn 3
+    dup
     pushbytes ""
-    dupn 2
     txn ApplicationID
     bnz main_after_if_else@2
     // tests/approvals/itxn.algo.ts:21
@@ -900,7 +899,7 @@ main_test3_route@8:
 
 main_test2_route@7:
     intc_0 // 0
-    bury 5
+    bury 3
     pushbytes ""
     bury 1
     // tests/approvals/itxn.algo.ts:73
@@ -910,19 +909,17 @@ main_test2_route@7:
     // tests/approvals/itxn.algo.ts:74
     // const args = [Bytes('1'), Bytes('2')] as const
     bytec_2 // "1"
-    bury 7
-    bytec_3 // "2"
-    bury 6
     // tests/approvals/itxn.algo.ts:78
     // appArgs: args,
     pushint 2
-    bury 3
+    // tests/approvals/itxn.algo.ts:74
+    // const args = [Bytes('1'), Bytes('2')] as const
+    bytec_3 // "2"
     // tests/approvals/itxn.algo.ts:79
     // onCompletion: OnCompleteAction.NoOp,
     intc_0 // 0
-    bury 1
+    bury 4
     pushint 1
-    bury 2
     // tests/approvals/itxn.algo.ts:80
     // note: 'with args param set',
     bytec 18 // "with args param set"
@@ -932,23 +929,20 @@ main_after_if_else@26:
     // const createAppTxn = createAppParams.submit()
     itxn_begin
     itxn_field Note
-    dig 1
     bz main_next_field@28
-    dup
+    dig 3
     itxn_field OnCompletion
 
 main_next_field@28:
-    dig 6
+    uncover 2
     itxn_field ApplicationArgs
-    dig 5
     itxn_field ApplicationArgs
-    dig 2
     intc_3 // 3
     >=
     // tests/approvals/itxn.algo.ts:90
     // const createAppTxn = createAppParams.submit()
     bz main_next_field@30
-    dig 4
+    dig 2
     itxn_field ApplicationArgs
 
 main_next_field@30:
@@ -976,7 +970,7 @@ main_next_field@30:
     // const createAppTxn = createAppParams.submit()
     itxn_submit
     itxn Note
-    bury 4
+    bury 2
     // tests/approvals/itxn.algo.ts:91
     // assert(createAppTxn.appArgs(0) === Bytes('1'), 'correct args used 1')
     itxna ApplicationArgs 0
@@ -1051,7 +1045,7 @@ main_next_field@30:
     assert // correct args used 2
     // tests/approvals/itxn.algo.ts:104
     // assert(createAppTxn.note === Bytes('with args param set'))
-    dig 3
+    dig 1
     bytec 18 // "with args param set"
     ==
     assert
@@ -1065,22 +1059,18 @@ main_after_if_else@32:
 main_else_body@25:
     // tests/approvals/itxn.algo.ts:86
     // appArgs: [Bytes('3'), new Str('4'), Bytes('5')],
-    pushbytes 0x000134
     bytec 6 // "3"
-    bury 8
+    pushbytes 0x000134
     bytec 7 // "5"
-    bury 6
+    bury 5
     intc_3 // 3
-    bury 4
-    // tests/approvals/itxn.algo.ts:87
-    // note: 'no args param set',
-    pushbytes "no args param set"
     swap
     // tests/approvals/itxn.algo.ts:83
     // createAppParams = itxn.applicationCall({
     intc_0 // 0
-    bury 4
-    bury 7
+    // tests/approvals/itxn.algo.ts:87
+    // note: 'no args param set',
+    pushbytes "no args param set"
     b main_after_if_else@26
 
 main_test1_route@6:

@@ -4,7 +4,6 @@
 // tests/approvals/box-proxies.algo.ts::BoxNotExist.approvalProgram() -> uint64:
 main:
     bytecblock "abc"
-    pushint 0
     // tests/approvals/box-proxies.algo.ts:124
     // if (Txn.applicationId.id !== 0) {
     txn ApplicationID
@@ -13,7 +12,6 @@ main:
     // switch (Txn.applicationArgs(0).toString()) {
     txna ApplicationArgs 0
     dup
-    bury 2
     // tests/approvals/box-proxies.algo.ts:126
     // case 'box':
     pushbytes "box"
@@ -51,7 +49,6 @@ main_after_if_else@4:
 main_after_if_else@7:
     // tests/approvals/box-proxies.algo.ts:130
     // case 'createbox':
-    dup
     pushbytes "createbox"
     ==
     // tests/approvals/box-proxies.algo.ts:130-132

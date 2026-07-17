@@ -312,10 +312,7 @@ test1:
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.test2[routing]() -> void:
 test2:
     intc_0 // 0
-    dupn 2
-    pushbytes ""
     dup
-    intc_0 // 0
     pushbytes ""
     // tests/approvals/itxn.algo.ts:73
     // if (Txn.numAppArgs) {
@@ -324,19 +321,17 @@ test2:
     // tests/approvals/itxn.algo.ts:74
     // const args = [Bytes('1'), Bytes('2')] as const
     bytec_2 // "1"
-    bury 7
-    bytec 5 // "2"
-    bury 6
     // tests/approvals/itxn.algo.ts:78
     // appArgs: args,
     pushint 2
-    bury 4
+    // tests/approvals/itxn.algo.ts:74
+    // const args = [Bytes('1'), Bytes('2')] as const
+    bytec 5 // "2"
     // tests/approvals/itxn.algo.ts:79
     // onCompletion: OnCompleteAction.NoOp,
     intc_0 // 0
-    bury 1
+    bury 4
     pushint 1
-    bury 3
     // tests/approvals/itxn.algo.ts:80
     // note: 'with args param set',
     bytec 12 // "with args param set"
@@ -346,17 +341,14 @@ test2_after_if_else@4:
     // const createAppTxn = createAppParams.submit()
     itxn_begin
     itxn_field Note
-    dig 2
     bz test2_next_field@6
-    dup
+    dig 3
     itxn_field OnCompletion
 
 test2_next_field@6:
-    dig 6
+    uncover 2
     itxn_field ApplicationArgs
-    dig 5
     itxn_field ApplicationArgs
-    dig 3
     intc_3 // 3
     >=
     // tests/approvals/itxn.algo.ts:90
@@ -390,7 +382,7 @@ test2_next_field@8:
     // const createAppTxn = createAppParams.submit()
     itxn_submit
     itxn Note
-    bury 5
+    bury 3
     // tests/approvals/itxn.algo.ts:91
     // assert(createAppTxn.appArgs(0) === Bytes('1'), 'correct args used 1')
     itxna ApplicationArgs 0
@@ -465,7 +457,7 @@ test2_next_field@8:
     assert // correct args used 2
     // tests/approvals/itxn.algo.ts:104
     // assert(createAppTxn.note === Bytes('with args param set'))
-    dig 4
+    dig 2
     bytec 12 // "with args param set"
     ==
     assert
@@ -479,22 +471,18 @@ test2_after_if_else@12:
 test2_else_body@3:
     // tests/approvals/itxn.algo.ts:86
     // appArgs: [Bytes('3'), new Str('4'), Bytes('5')],
-    pushbytes 0x000134
     bytec 8 // "3"
-    bury 8
+    pushbytes 0x000134
     bytec 9 // "5"
-    bury 3
+    bury 4
     intc_3 // 3
-    bury 5
-    // tests/approvals/itxn.algo.ts:87
-    // note: 'no args param set',
-    pushbytes "no args param set"
     swap
     // tests/approvals/itxn.algo.ts:83
     // createAppParams = itxn.applicationCall({
     intc_0 // 0
-    bury 5
-    bury 7
+    // tests/approvals/itxn.algo.ts:87
+    // note: 'no args param set',
+    pushbytes "no args param set"
     b test2_after_if_else@4
 
 
