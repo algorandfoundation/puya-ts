@@ -95,82 +95,130 @@ main_after_assert@18:
 
 main_after_assert@20:
     // tests/approvals/logged-errors.algo.ts:12
+    // loggedAssert(arg !== 13, '13', { desc: 'arg must not be 13' })
+    dup
+    pushint 13
+    !=
+    bnz main_after_assert@22
+    pushbytes "ERR:13"
+    log
+    err // arg must not be 13
+
+main_after_assert@22:
+    // tests/approvals/logged-errors.algo.ts:13
+    // loggedAssert(arg !== 14, '14', { message: 'arg is 14', prefix: 'AER', desc: 'arg must not be 14' })
+    dup
+    pushint 14
+    !=
+    bnz main_after_assert@24
+    pushbytes "AER:14:arg is 14"
+    log
+    err // arg must not be 14
+
+main_after_assert@24:
+    // tests/approvals/logged-errors.algo.ts:14
     // if (arg === 7) {
     dup
     pushint 7
     ==
-    bz main_after_if_else@22
-    // tests/approvals/logged-errors.algo.ts:13
+    bz main_after_if_else@26
+    // tests/approvals/logged-errors.algo.ts:15
     // loggedErr('07')
     pushbytes "ERR:07"
     log
     err // ERR:07
 
-main_after_if_else@22:
-    // tests/approvals/logged-errors.algo.ts:15
+main_after_if_else@26:
+    // tests/approvals/logged-errors.algo.ts:17
     // if (arg === 8) {
     dup
     intc_0 // 8
     ==
-    bz main_after_if_else@24
-    // tests/approvals/logged-errors.algo.ts:16
+    bz main_after_if_else@28
+    // tests/approvals/logged-errors.algo.ts:18
     // loggedErr('08', {})
     pushbytes "ERR:08"
     log
     err // ERR:08
 
-main_after_if_else@24:
-    // tests/approvals/logged-errors.algo.ts:18
+main_after_if_else@28:
+    // tests/approvals/logged-errors.algo.ts:20
     // if (arg === 9) {
     dup
     pushint 9
     ==
-    bz main_after_if_else@26
-    // tests/approvals/logged-errors.algo.ts:19
+    bz main_after_if_else@30
+    // tests/approvals/logged-errors.algo.ts:21
     // loggedErr('09', { message: 'arg is 9' })
     pushbytes "ERR:09:arg is 9"
     log
     err // ERR:09:arg is 9
 
-main_after_if_else@26:
-    // tests/approvals/logged-errors.algo.ts:21
+main_after_if_else@30:
+    // tests/approvals/logged-errors.algo.ts:23
     // if (arg === 10) {
     dup
     pushint 10
     ==
-    bz main_after_if_else@28
-    // tests/approvals/logged-errors.algo.ts:22
+    bz main_after_if_else@32
+    // tests/approvals/logged-errors.algo.ts:24
     // loggedErr('10', { prefix: 'AER' })
     pushbytes "AER:10"
     log
     err // AER:10
 
-main_after_if_else@28:
-    // tests/approvals/logged-errors.algo.ts:24
+main_after_if_else@32:
+    // tests/approvals/logged-errors.algo.ts:26
     // if (arg === 11) {
     dup
     pushint 11
     ==
-    bz main_after_if_else@30
-    // tests/approvals/logged-errors.algo.ts:25
+    bz main_after_if_else@34
+    // tests/approvals/logged-errors.algo.ts:27
     // loggedErr('11', { message: 'arg is 11', prefix: 'AER' })
     pushbytes "AER:11:arg is 11"
     log
     err // AER:11:arg is 11
 
-main_after_if_else@30:
-    // tests/approvals/logged-errors.algo.ts:27
+main_after_if_else@34:
+    // tests/approvals/logged-errors.algo.ts:29
     // if (arg === 12) {
+    dup
     pushint 12
     ==
-    bz main_after_if_else@32
-    // tests/approvals/logged-errors.algo.ts:28
+    bz main_after_if_else@36
+    // tests/approvals/logged-errors.algo.ts:30
     // loggedErr('12', 'arg is 12')
     pushbytes "ERR:12:arg is 12"
     log
     err // ERR:12:arg is 12
 
-main_after_if_else@32:
+main_after_if_else@36:
+    // tests/approvals/logged-errors.algo.ts:32
+    // if (arg === 15) {
+    dup
+    pushint 15
+    ==
+    bz main_after_if_else@38
+    // tests/approvals/logged-errors.algo.ts:33
+    // loggedErr('15', { desc: 'arg must not be 15' })
+    pushbytes "ERR:15"
+    log
+    err // arg must not be 15
+
+main_after_if_else@38:
+    // tests/approvals/logged-errors.algo.ts:35
+    // if (arg === 16) {
+    pushint 16
+    ==
+    bz main_after_if_else@40
+    // tests/approvals/logged-errors.algo.ts:36
+    // loggedErr('16', { message: 'arg is 16', prefix: 'AER', desc: 'arg must not be 16' })
+    pushbytes "AER:16:arg is 16"
+    log
+    err // arg must not be 16
+
+main_after_if_else@40:
     // tests/approvals/logged-errors.algo.ts:5
     // public testValid(arg: uint64): void {
     intc_1 // 1

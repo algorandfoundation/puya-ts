@@ -18,6 +18,8 @@ contract LoggedErrorsValidContract
     logged_assert(arg != 4, comment=AER:04)
     logged_assert(arg != 5, comment=AER:05:arg is 5)
     logged_assert(arg != 6, comment=ERR:06:arg is 6)
+    logged_assert(arg != 13, comment=ERR:13, desc=arg must not be 13)
+    logged_assert(arg != 14, comment=AER:14:arg is 14, desc=arg must not be 14)
     if (arg == 7) {
       logged_err(ERR:07)
     }
@@ -35,6 +37,12 @@ contract LoggedErrorsValidContract
     }
     if (arg == 12) {
       logged_err(ERR:12:arg is 12)
+    }
+    if (arg == 15) {
+      logged_err(ERR:15, desc=arg must not be 15)
+    }
+    if (arg == 16) {
+      logged_err(AER:16:arg is 16, desc=arg must not be 16)
     }
   }
   
