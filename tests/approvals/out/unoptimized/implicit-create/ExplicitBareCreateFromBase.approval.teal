@@ -12,7 +12,7 @@ main_block@1:
     // tests/approvals/implicit-create.algo.ts:21
     // export class ExplicitBareCreateFromBase extends BaseWithBareCreate {}
     txn NumAppArgs
-    pushint 0 // 0
+    pushint 0
     !=
     bz main_create@3
     b main_abi_routing@2
@@ -32,12 +32,12 @@ main_create@3:
     pushint 0 // NoOp
     ==
     txn ApplicationID
-    pushint 0 // 0
+    pushint 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub create
-    pushint 1 // 1
+    pushint 1
     return
 
 

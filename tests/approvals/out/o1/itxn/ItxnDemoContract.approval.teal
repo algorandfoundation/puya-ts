@@ -20,7 +20,7 @@ main_after_if_else@2:
     bz main___algots__.defaultCreate@14
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x20254f91 0xf1908524 0xdf920f37 0x3d46345c 0xd4c6a8f5 // method "test1()void", method "test2()void", method "test3()void", method "test4()void", method "test5(uint64)void"
@@ -36,8 +36,6 @@ main___algots__.defaultCreate@14:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
     return
 
 
@@ -307,17 +305,14 @@ test1:
     itxn_submit
     // tests/approvals/itxn.algo.ts:23
     // public test1() {
-    pushint 1 // 1
+    pushint 1
     return
 
 
 // tests/approvals/itxn.algo.ts::ItxnDemoContract.test2[routing]() -> void:
 test2:
     intc_0 // 0
-    dupn 2
-    pushbytes ""
     dup
-    intc_0 // 0
     pushbytes ""
     // tests/approvals/itxn.algo.ts:73
     // if (Txn.numAppArgs) {
@@ -326,19 +321,17 @@ test2:
     // tests/approvals/itxn.algo.ts:74
     // const args = [Bytes('1'), Bytes('2')] as const
     bytec_2 // "1"
-    bury 7
-    bytec 5 // "2"
-    bury 6
     // tests/approvals/itxn.algo.ts:78
     // appArgs: args,
-    pushint 2 // 2
-    bury 4
+    pushint 2
+    // tests/approvals/itxn.algo.ts:74
+    // const args = [Bytes('1'), Bytes('2')] as const
+    bytec 5 // "2"
     // tests/approvals/itxn.algo.ts:79
     // onCompletion: OnCompleteAction.NoOp,
     intc_0 // 0
-    bury 1
-    pushint 1 // 1
-    bury 3
+    bury 4
+    pushint 1
     // tests/approvals/itxn.algo.ts:80
     // note: 'with args param set',
     bytec 12 // "with args param set"
@@ -348,17 +341,14 @@ test2_after_if_else@4:
     // const createAppTxn = createAppParams.submit()
     itxn_begin
     itxn_field Note
-    dig 2
     bz test2_next_field@6
-    dup
+    dig 3
     itxn_field OnCompletion
 
 test2_next_field@6:
-    dig 6
+    uncover 2
     itxn_field ApplicationArgs
-    dig 5
     itxn_field ApplicationArgs
-    dig 3
     intc_3 // 3
     >=
     // tests/approvals/itxn.algo.ts:90
@@ -392,7 +382,7 @@ test2_next_field@8:
     // const createAppTxn = createAppParams.submit()
     itxn_submit
     itxn Note
-    bury 5
+    bury 3
     // tests/approvals/itxn.algo.ts:91
     // assert(createAppTxn.appArgs(0) === Bytes('1'), 'correct args used 1')
     itxna ApplicationArgs 0
@@ -408,7 +398,7 @@ test2_next_field@8:
     // tests/approvals/itxn.algo.ts:94
     // if (Txn.numAppArgs > 1) {
     txn NumAppArgs
-    pushint 1 // 1
+    pushint 1
     >
     bz test2_after_if_else@12
     // tests/approvals/itxn.algo.ts:95-102
@@ -467,7 +457,7 @@ test2_next_field@8:
     assert // correct args used 2
     // tests/approvals/itxn.algo.ts:104
     // assert(createAppTxn.note === Bytes('with args param set'))
-    dig 4
+    dig 2
     bytec 12 // "with args param set"
     ==
     assert
@@ -475,28 +465,24 @@ test2_next_field@8:
 test2_after_if_else@12:
     // tests/approvals/itxn.algo.ts:71
     // public test2() {
-    pushint 1 // 1
+    pushint 1
     return
 
 test2_else_body@3:
     // tests/approvals/itxn.algo.ts:86
     // appArgs: [Bytes('3'), new Str('4'), Bytes('5')],
-    pushbytes 0x000134
     bytec 8 // "3"
-    bury 8
+    pushbytes 0x000134
     bytec 9 // "5"
-    bury 3
+    bury 4
     intc_3 // 3
-    bury 5
-    // tests/approvals/itxn.algo.ts:87
-    // note: 'no args param set',
-    pushbytes "no args param set"
     swap
     // tests/approvals/itxn.algo.ts:83
     // createAppParams = itxn.applicationCall({
     intc_0 // 0
-    bury 5
-    bury 7
+    // tests/approvals/itxn.algo.ts:87
+    // note: 'no args param set',
+    pushbytes "no args param set"
     b test2_after_if_else@4
 
 
@@ -1114,8 +1100,10 @@ test3:
     itxna Logs 0
     bytec 20 // "16"
     ==
+    assert
     // tests/approvals/itxn.algo.ts:108
     // public test3() {
+    pushint 1
     return
 
 
@@ -1123,7 +1111,7 @@ test3:
 test4:
     // tests/approvals/itxn.algo.ts:185
     // const lotsOfBytes = op.bzero(2044)
-    pushint 2044 // 2044
+    pushint 2044
     bzero
     // tests/approvals/itxn.algo.ts:187
     // const approval2 = Bytes.fromHex('80' + 'FC0f')
@@ -1196,7 +1184,7 @@ test4:
     // tests/approvals/itxn.algo.ts:200
     // assert(app1.numApprovalProgramPages === 2, 'approval pages = 2')
     swap
-    pushint 2 // 2
+    pushint 2
     ==
     assert // approval pages = 2
     // tests/approvals/itxn.algo.ts:201
@@ -1254,7 +1242,7 @@ test4:
     assert // expected approval page 1
     // tests/approvals/itxn.algo.ts:203
     // assert(app1.numClearStateProgramPages === 1, 'clear state pages = 1')
-    pushint 1 // 1
+    pushint 1
     ==
     assert // clear state pages = 1
     // tests/approvals/itxn.algo.ts:204
@@ -1265,7 +1253,7 @@ test4:
     assert // expected clear state page
     // tests/approvals/itxn.algo.ts:184
     // public test4() {
-    pushint 1 // 1
+    pushint 1
     return
 
 
@@ -1276,7 +1264,7 @@ test5:
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -1298,7 +1286,7 @@ test5:
     //   receiver: appId.address,
     //   amount: 1000,
     // })
-    pushint 1 // 1
+    pushint 1
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -1339,20 +1327,20 @@ test5:
     // tests/approvals/itxn.algo.ts:222
     // assertMatch(returnValue, [1, 1000, 'hello'])
     dig 1
-    pushint 4 // 4
+    pushint 4
     extract_uint64
-    pushint 1 // 1
+    pushint 1
     ==
-    pushint 1 // 1
+    pushint 1
     &&
     uncover 2
-    pushint 12 // 12
+    pushint 12
     extract_uint64
     intc 4 // 1000
     ==
     &&
     dig 1
-    pushint 16 // 16
+    pushint 16
     extract_uint16
     dig 2
     len
@@ -1366,5 +1354,5 @@ test5:
     assert // assert target is match for conditions
     // tests/approvals/itxn.algo.ts:207
     // public test5(appId: Application) {
-    pushint 1 // 1
+    pushint 1
     return

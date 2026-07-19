@@ -5,7 +5,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L18
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (! tmp%2#0)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         (assert tmp%4#0)
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
@@ -34,12 +34,12 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%2#3: bool = (== tmp%0#5 tmp%1#2)
         (assert tmp%2#3) // assert target is match for conditions
         let aggregate%array_length%1#0: uint64 = (extract_uint16 addresses#0 0u) // on error: invalid array length header
-        let reinterpret_bool%0#0: bool = aggregate%array_length%1#0
-        (assert reinterpret_bool%0#0) // must provide some accounts
-        let tmp%3#3: uint64 = ((gtxns Amount) funds#0)
+        let tmp%3#3: uint64 = aggregate%array_length%1#0
+        (assert tmp%3#3) // must provide some accounts
+        let tmp%4#2: uint64 = ((gtxns Amount) funds#0)
         let aggregate%array_length%2#0: uint64 = (extract_uint16 addresses#0 0u) // on error: invalid array length header
-        let tmp%4#2: uint64 = aggregate%array_length%2#0
-        let share#0: uint64 = (/ tmp%3#3 tmp%4#2)
+        let tmp%5#1: uint64 = aggregate%array_length%2#0
+        let share#0: uint64 = (/ tmp%4#2 tmp%5#1)
         let aggregate%total_length%0#0: uint64 = (len addresses#0)
         let aggregate%array_trimmed%0#0: bytes = (substring3 addresses#0 2u aggregate%total_length%0#0)
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 32u)
@@ -67,26 +67,26 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         itxn_begin
         let aggregate%extract%0#0: bytes = (extract3 payFields#0 0u 8u)
         let tuple_item%0#0: Encoded(uint64) = aggregate%extract%0#0
-        let values%0#0: uint64 = (btoi tuple_item%0#0)
+        let tmp%8#1: uint64 = (btoi tuple_item%0#0)
         let aggregate%extract%1#0: bytes = (extract3 payFields#0 8u 8u)
         let tuple_item%1#0: Encoded(uint64) = aggregate%extract%1#0
-        let values%1#0: uint64 = (btoi tuple_item%1#0)
+        let tmp%9#1: uint64 = (btoi tuple_item%1#0)
         let aggregate%extract_uint16%0#0: uint64 = (extract_uint16 payFields#0 16u)
         let aggregate%len%0#0: uint64 = (len payFields#0)
         let aggregate%substring3%0#0: bytes = (substring3 payFields#0 aggregate%extract_uint16%0#0 aggregate%len%0#0)
         let tuple_item%2#0: Encoded(len+uint8[]) = aggregate%substring3%0#0
-        let values%2#0: bytes = ((extract 2 0) tuple_item%2#0)
-        ((itxn_field Receiver) values%2#0)
-        ((itxn_field Amount) values%1#0)
-        ((itxn_field TypeEnum) values%0#0)
+        let tmp%10#1: bytes = ((extract 2 0) tuple_item%2#0)
+        ((itxn_field Receiver) tmp%10#1)
+        ((itxn_field Amount) tmp%9#1)
+        ((itxn_field TypeEnum) tmp%8#1)
         ((itxn_field Fee) 0u)
         let aggregate%array_length%3#0: uint64 = (extract_uint16 addresses#0 0u) // on error: invalid array length header
-        let tmp%7#1: uint64 = aggregate%array_length%3#0
+        let tmp%11#1: uint64 = aggregate%array_length%3#0
         let value_internal%0#3: uint64 = 1u
         goto block@21
     block@21: // for_header_L32
         let temp#1: uint64 = φ(value_internal%0#3 <- block@4, value_internal%0#5 <- block@22)
-        let continue_looping%0#1: bool = (< temp#1 tmp%7#1)
+        let continue_looping%0#1: bool = (< temp#1 tmp%11#1)
         goto continue_looping%0#1 ? block@22 : block@23
     block@22: // for_body_L32
         let aggregate%total_length%1#0: uint64 = (len addresses#0)
@@ -96,16 +96,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let addr#0: Encoded(uint8[32]) = aggregate%encoded_element%1#0
         itxn_next
         ((itxn_field Receiver) addr#0)
-        ((itxn_field Amount) values%1#0)
-        ((itxn_field TypeEnum) values%0#0)
+        ((itxn_field Amount) tmp%9#1)
+        ((itxn_field TypeEnum) tmp%8#1)
         ((itxn_field Fee) 0u)
         let value_internal%0#5: uint64 = (+ temp#1 1u)
         goto block@21
     block@23: // after_for_L32
         itxn_next
-        ((itxn_field ApplicationArgs) method "verify()void")
         ((itxn_field ApplicationID) verifier#0)
-        ((itxn_field TypeEnum) appl)
+        ((itxn_field ApplicationArgs) method "verify()void")
+        ((itxn_field TypeEnum) 6u)
         ((itxn_field Fee) 0u)
         itxn_next
         ((itxn_field ConfigAssetName) "abc")
@@ -113,7 +113,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         ((itxn_field Fee) 0u)
         itxn_submit
         exit 1u
-    block@5: // conditionalBegin_route_L52
+    block@5: // conditionalBegin_route_L54
         let tmp%0#2: bytes = (txna ApplicationArgs 1)
         let len%0#0: uint64 = (len tmp%0#2)
         let eq%0#0: bool = (== len%0#0 8u)
@@ -126,25 +126,25 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%encoded_value%1#0: bytes = (concat aggregate%length_uint16%1#0 "Hi")
         let aggregate%as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = aggregate%encoded_value%1#0
         let tmp%0#3: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%0#0
-        ((itxn_field ApplicationArgs) method "helloCreate(string)void")
-        ((itxn_field ApplicationArgs) tmp%0#3)
         ((itxn_field GlobalNumByteSlice) 1u)
         ((itxn_field ClearStateProgramPages) C4EBQw==)
-        ((itxn_field ApprovalProgramPages) CyAEAAECBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CAMkAvzEZFEQxGEEAk4ICBNCiggAEUYC6IDYaAI4CAFgAAQA2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMkWUlLAhJESwRLAUsFUkkiWSQITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwI0M2GgFJIlkkCEsBFRJEVwIAIihlRClQTFBJFRZXBgJMUCpMULAjQ4AEAJIlrjYaAI4BAAEANhoBSSJZJAhLARUSRFcCAChMZyNDMRklEjEYEEQjQzEZgQUSMRgQRCND)
+        ((itxn_field ApprovalProgramPages) CyAEAAIBBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CAMcAvzEZFEQxGEEAk4ICBNCiggAEUYC6IDYaAI4CAFgAAQA2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMjWUlLAhJESwRLAUsFUkkiWSMITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwJEM2GgFJIlkjCEsBFRJEVwIAIihlRClQTFBJFRZXBgJMUCpMULAkQ4AEAJIlrjYaAI4BAAEANhoBSSJZIwhLARUSRFcCAChMZyRDMRklEjEYEEMxGYEFEjEYEEM=)
         ((itxn_field OnCompletion) 0u)
+        ((itxn_field ApplicationArgs) method "helloCreate(string)void")
+        ((itxn_field ApplicationArgs) tmp%0#3)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
         let appId#0: uint64 = (gitxn 0 CreatedApplicationID)
         let value_internal%0#0: uint64 = 0u
         goto block@13
-    block@13: // for_header_L56
+    block@13: // for_header_L58
         let temp#0: uint64 = φ(value_internal%0#0 <- block@5, value_internal%0#2 <- block@17)
         let continue_looping%0#0: bool = (< temp#0 count#0)
         goto continue_looping%0#0 ? block@14 : block@18
-    block@14: // for_body_L56
+    block@14: // for_body_L58
         goto temp#0 ? block@16 : block@15
-    block@15: // if_body_L57
+    block@15: // if_body_L59
         itxn_begin
         let aggregate%length%2#0: uint64 = (len "ho")
         let aggregate%as_bytes%3#0: bytes[8] = (itob aggregate%length%2#0)
@@ -152,13 +152,13 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%encoded_value%2#0: bytes = (concat aggregate%length_uint16%2#0 "ho")
         let aggregate%as_Encoded(len+utf8[])%1#0: Encoded(len+utf8[]) = aggregate%encoded_value%2#0
         let tmp%3#1: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%1#0
+        ((itxn_field ApplicationID) appId#0)
         ((itxn_field ApplicationArgs) method "greet(string)string")
         ((itxn_field ApplicationArgs) tmp%3#1)
-        ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@17
-    block@16: // else_body_L59
+    block@16: // else_body_L61
         itxn_next
         let aggregate%length%3#0: uint64 = (len "ho")
         let aggregate%as_bytes%4#0: bytes[8] = (itob aggregate%length%3#0)
@@ -166,16 +166,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let aggregate%encoded_value%3#0: bytes = (concat aggregate%length_uint16%3#0 "ho")
         let aggregate%as_Encoded(len+utf8[])%2#0: Encoded(len+utf8[]) = aggregate%encoded_value%3#0
         let tmp%4#1: Encoded(len+utf8[]) = aggregate%as_Encoded(len+utf8[])%2#0
+        ((itxn_field ApplicationID) appId#0)
         ((itxn_field ApplicationArgs) method "greet(string)string")
         ((itxn_field ApplicationArgs) tmp%4#1)
-        ((itxn_field ApplicationID) appId#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@17
-    block@17: // after_if_else_L57
+    block@17: // after_if_else_L59
         let value_internal%0#2: uint64 = (+ temp#0 1u)
         goto block@13
-    block@18: // after_for_L56
+    block@18: // after_for_L58
         itxn_submit
         exit 1u
     block@8: // after_if_else_L18
@@ -186,5 +186,59 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (! tmp%9#0)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         exit 1u
+
+subroutine _puya_lib.arc4.dynamic_array_read_dynamic_element(array: bytes, index: uint64) -> bytes:
+    block@0: // L134
+        let array_head_and_tail#0: bytes = ((extract 2 0) array#0)
+        let array_length#0: uint64 = (extract_uint16 array#0 0u)
+        let tmp%0#1: uint64 = (* index#0 2u)
+        let item_start_offset#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%0#1)
+        let end_of_tail#0: uint64 = (len array_head_and_tail#0)
+        let next_index#0: uint64 = (+ index#0 1u)
+        let tmp%4#0: uint64 = (* next_index#0 2u)
+        let next_item_offset#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%4#0)
+        let is_before_end#0: uint64 = (- array_length#0 next_index#0)
+        let item_end_offset#0: uint64 = (select end_of_tail#0 next_item_offset#0 is_before_end#0)
+        let tmp%8#0: bytes = (substring3 array_head_and_tail#0 item_start_offset#0 item_end_offset#0)
+        return tmp%8#0
+
+subroutine _puya_lib.arc4.static_array_read_dynamic_element(array_head_and_tail: bytes, index: uint64, array_length: uint64) -> bytes:
+    block@0: // L144
+        let tmp%0#0: uint64 = (* index#0 2u)
+        let item_start_offset#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%0#0)
+        let end_of_tail#0: uint64 = (len array_head_and_tail#0)
+        let next_index#0: uint64 = (+ index#0 1u)
+        let tmp%4#0: uint64 = (* next_index#0 2u)
+        let next_item_offset#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%4#0)
+        let is_before_end#0: uint64 = (- array_length#0 next_index#0)
+        let item_end_offset#0: uint64 = (select end_of_tail#0 next_item_offset#0 is_before_end#0)
+        let tmp%8#0: bytes = (substring3 array_head_and_tail#0 item_start_offset#0 item_end_offset#0)
+        return tmp%8#0
+
+subroutine _puya_lib.arc4.dynamic_array_read_byte_length_element(array: bytes, index: uint64) -> bytes:
+    block@0: // L158
+        let array_head_and_tail#0: bytes = ((extract 2 0) array#0)
+        let tmp%1#0: uint64 = (* index#0 2u)
+        let item_start_offset#0: uint64 = (extract_uint16 array_head_and_tail#0 tmp%1#0)
+        let item_length#0: uint64 = (extract_uint16 array_head_and_tail#0 item_start_offset#0)
+        let tmp%4#0: uint64 = (+ item_length#0 2u)
+        let tmp%5#0: bytes = (extract3 array_head_and_tail#0 item_start_offset#0 tmp%4#0)
+        return tmp%5#0
+
+subroutine _puya_lib.arc4.static_array_read_byte_length_element(array: bytes, index: uint64) -> bytes:
+    block@0: // L167
+        let tmp%0#0: uint64 = (* index#0 2u)
+        let item_start_offset#0: uint64 = (extract_uint16 array#0 tmp%0#0)
+        let item_length#0: uint64 = (extract_uint16 array#0 item_start_offset#0)
+        let tmp%3#0: uint64 = (+ item_length#0 2u)
+        let tmp%4#0: bytes = (extract3 array#0 item_start_offset#0 tmp%3#0)
+        return tmp%4#0
+
+subroutine _puya_lib.arc4.dynamic_assert_index(array: bytes, index: uint64) -> void:
+    block@0: // L419
+        let length#0: uint64 = (extract_uint16 array#0 0u)
+        let tmp%1#0: bool = (< index#0 length#0)
+        (assert tmp%1#0) // index out of bounds
+        return 

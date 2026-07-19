@@ -37,7 +37,7 @@ function testDelete() {
 }
 
 class BadContract extends Contract {
-  // @expect-error Unsupported property type uint64. Only GlobalState, LocalState, and Box proxies can be stored on a contract.
+  // @expect-error Unsupported property type uint64. Only GlobalState, GlobalMap, LocalState, LocalMap, and Box proxies can be stored on a contract.
   #myState = Uint64(123)
 
   // @expect-error Static properties are not supported
@@ -66,7 +66,7 @@ function notNull(): uint64 {
   // @expect-error Union types are not valid as a variable, parameter, return, or property type. Expression type is uint64 | undefined
   const x: uint64 | undefined = 123
 
-  // @expect-error The non-null assertion operator "!" is not valid here...
+  // @expect-warning The non-null assertion operator "!" has no effect (no-op) on non-optional types
   return x!
 }
 

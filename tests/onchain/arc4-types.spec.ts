@@ -1,5 +1,5 @@
 import { algos } from '@algorandfoundation/algokit-utils'
-import { describe } from 'vitest'
+import { describe, expect } from 'vitest'
 import { bigIntToUint8Array, utf8ToUint8Array } from '../../src/util'
 import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
 
@@ -17,22 +17,22 @@ describe('arc4-struct', () => {
   test('testVectorCreationAndEquality', async ({ appClientStructDemo }) => {
     await appClientStructDemo.send.call({ method: 'testVectorCreationAndEquality' })
   })
-  test('add vectors', async ({ appClientStructDemo, expect }) => {
+  test('add vectors', async ({ appClientStructDemo }) => {
     const v1 = { x: 100, y: 100 }
     const v2 = { x: 50, y: 50 }
     const result = await appClientStructDemo.send.call({ method: 'addVectors', args: [v1, v2] })
     expect(result.return).toStrictEqual({ x: 150n, y: 150n })
   })
-  test('implicit casting and spreading', async ({ appClientStructDemo, expect }) => {
+  test('implicit casting and spreading', async ({ appClientStructDemo }) => {
     const v1 = { x: 123, y: 456 }
     await appClientStructDemo.send.call({ method: 'implicitCastingAndSpreading', args: [v1] })
   })
-  test('to native', async ({ appClientStructDemo, expect }) => {
+  test('to native', async ({ appClientStructDemo }) => {
     const v1 = { x: 100, y: 100 }
     const result = await appClientStructDemo.send.call({ method: 'toNative', args: [v1] })
     expect(result.return).toStrictEqual({ x: 100n, y: 100n })
   })
-  test('mutate vector', async ({ appClientStructDemo, expect }) => {
+  test('mutate vector', async ({ appClientStructDemo }) => {
     const v1 = { x: 100, y: 100 }
     const result = await appClientStructDemo.send.call({ method: 'mutateVector', args: [v1, 50, 50] })
     expect(result.return).toStrictEqual({ x: 50n, y: 50n })

@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@10
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x134c76a8 0x0fefd6f7 0xe7bc0f52 // method "testCallToIndex(address,uint64)void", method "testCallToValue(address,uint64)void", method "testCallToEchoResource()void"
@@ -27,8 +27,6 @@ main___algots__.defaultCreate@10:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_1 // 1
     return
 
 
@@ -39,7 +37,7 @@ testCallToIndex:
     txna ApplicationArgs 1
     dup
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 2
@@ -56,13 +54,15 @@ testCallToIndex:
     //   args: [account],
     // })
     itxn_begin
-    dig 1
+    itxn_field ApplicationID
+    dup
     itxn_field Accounts
     pushbytes 0x34359fb6 // method "testExplicitIndex(account)uint64"
     itxn_field ApplicationArgs
+    // tests/approvals/resource-encoding.algo.ts:67
+    // args: [account],
     bytec_1 // 0x01
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     // tests/approvals/resource-encoding.algo.ts:64-68
     // const { returnValue: res1 } = abiCall({
     //   method: ByIndex.prototype.testExplicitIndex,
@@ -86,7 +86,7 @@ testCallToIndex:
     len
     intc_3 // 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:70
     // assert(res1 === account.balance)
@@ -94,8 +94,10 @@ testCallToIndex:
     acct_params_get AcctBalance
     assert // account funded
     ==
+    assert
     // tests/approvals/resource-encoding.algo.ts:63
     // testCallToIndex(account: Account, appId: Application) {
+    intc_1 // 1
     return
 
 
@@ -106,7 +108,7 @@ testCallToValue:
     txna ApplicationArgs 1
     dup
     len
-    pushint 32 // 32
+    pushint 32
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
     txna ApplicationArgs 2
@@ -122,11 +124,11 @@ testCallToValue:
     //   args: [account],
     // })
     itxn_begin
+    itxn_field ApplicationID
     pushbytes 0xd7308a13 // method "testExplicitValue(address)uint64"
     itxn_field ApplicationArgs
-    dig 1
+    dup
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -144,7 +146,7 @@ testCallToValue:
     len
     intc_3 // 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/resource-encoding.algo.ts:78
     // assert(res1 === account.balance)
@@ -152,8 +154,10 @@ testCallToValue:
     acct_params_get AcctBalance
     assert // account funded
     ==
+    assert
     // tests/approvals/resource-encoding.algo.ts:72
     // testCallToValue(account: Account, appId: Application) {
+    intc_1 // 1
     return
 
 
@@ -166,7 +170,7 @@ testCallToEchoResource:
     // const compiled = compileArc4(EchoResource)
     pushbytes base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyAEAQIDCCYBBBUffHUxG0EAHTEZFEQxGESCAgR34o10BE03AnY2GgCOAgALAFkAMRkUMRgUEEQiQzYaAUkVIhJEF8AwNhoCSRUiEkQXwDI2GgNJFSISRBfAHCLAGhfAMEsDEkQjwBoXwDJLAhJEJMAaF8AcSwESRE8CFk8CFlBMUChMULAiQzYaAUkVJRJEFzYaAkkVJRJEFzYaA0kVgSASRCLAGhdLAxJEI8AaF0sCEkQkwBpLARJETwIWTwIWUExQKExQsCJD)
+    pushbytes base64(CyACAQgmAQQVH3x1MRtBAB0xGRREMRhEggIEd+KNdARNNwJ2NhoAjgIACQBXADEZFDEYFBBDNhoBSRUiEkQXwDA2GgJJFSISRBfAMjYaA0kVIhJEF8AcNhoBF8AwSwMSRDYaAhfAMksCEkQ2GgMXwBxLARJETwIWTwIWUExQKExQsCJDNhoBSRUjEkQXNhoCSRUjEkQXNhoDSRWBIBJENhoBF0sDEkQ2GgIXSwISREk2GgMSRE8CFk8CFlBMUChMULAiQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/resource-encoding.algo.ts:84
     // const appId = compiled.bareCreate().createdApp
@@ -206,7 +210,7 @@ testCallToEchoResource:
     //     unitName: 'T',
     //     assetName: 'TEST',
     //   })
-    pushint 3 // 3
+    pushint 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -228,19 +232,25 @@ testCallToEchoResource:
     itxn_begin
     // tests/approvals/resource-encoding.algo.ts:94
     // args: [asset, Global.currentApplicationId, Txn.sender],
-    global CurrentApplicationID
     txn Sender
-    itxn_field Accounts
-    dig 1
-    itxn_field Assets
-    itxn_field Applications
+    global CurrentApplicationID
     // tests/approvals/resource-encoding.algo.ts:93-96
     // const { returnValue: indexes } = compiled.call.echoResourceByIndex({
     //   args: [asset, Global.currentApplicationId, Txn.sender],
     //   appId,
     // })
+    intc_0 // 0
+    itxn_field OnCompletion
+    dig 3
+    itxn_field ApplicationID
+    dig 2
+    itxn_field Assets
+    itxn_field Applications
+    itxn_field Accounts
     pushbytes 0x77e28d74 // method "echoResourceByIndex(asset,application,account)(uint64,uint64,address)"
     itxn_field ApplicationArgs
+    // tests/approvals/resource-encoding.algo.ts:94
+    // args: [asset, Global.currentApplicationId, Txn.sender],
     pushbytes 0x00
     itxn_field ApplicationArgs
     bytec_1 // 0x01
@@ -252,10 +262,6 @@ testCallToEchoResource:
     //   args: [asset, Global.currentApplicationId, Txn.sender],
     //   appId,
     // })
-    intc_0 // 0
-    itxn_field OnCompletion
-    dig 1
-    itxn_field ApplicationID
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -270,20 +276,20 @@ testCallToEchoResource:
     ==
     assert // Bytes has valid prefix
     len
-    pushint 48 // 48
+    pushint 48
     ==
-    assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
+    assert // invalid number of bytes for arc4.tuple<asset,application,account>
     // tests/approvals/resource-encoding.algo.ts:97
     // assertMatch(indexes, [asset, Global.currentApplicationId, Txn.sender])
     dup
-    pushint 4 // 4
+    pushint 4
     extract_uint64
     dig 2
     ==
     intc_1 // 1
     &&
     dig 1
-    pushint 12 // 12
+    pushint 12
     extract_uint64
     global CurrentApplicationID
     ==
@@ -312,6 +318,10 @@ testCallToEchoResource:
     //   args: [asset, Global.currentApplicationId, Txn.sender],
     //   appId,
     // })
+    intc_0 // 0
+    itxn_field OnCompletion
+    uncover 4
+    itxn_field ApplicationID
     pushbytes 0x4d370276 // method "echoResourceByValue(uint64,uint64,address)(uint64,uint64,address)"
     itxn_field ApplicationArgs
     uncover 2
@@ -319,10 +329,6 @@ testCallToEchoResource:
     swap
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
-    intc_0 // 0
-    itxn_field OnCompletion
-    swap
-    itxn_field ApplicationID
     intc_2 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -337,20 +343,20 @@ testCallToEchoResource:
     ==
     assert // Bytes has valid prefix
     len
-    pushint 48 // 48
+    pushint 48
     ==
-    assert // invalid number of bytes for arc4.tuple<arc4.uint64,arc4.uint64,arc4.static_array<arc4.uint8, 32>>
+    assert // invalid number of bytes for arc4.tuple<asset,application,account>
     // tests/approvals/resource-encoding.algo.ts:104
     // assertMatch(resources, [asset, Global.currentApplicationId, Txn.sender])
     dup
-    pushint 4 // 4
+    pushint 4
     extract_uint64
     uncover 2
     ==
     intc_1 // 1
     &&
     dig 1
-    pushint 12 // 12
+    pushint 12
     extract_uint64
     global CurrentApplicationID
     ==

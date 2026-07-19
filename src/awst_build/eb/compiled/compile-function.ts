@@ -9,7 +9,7 @@ import type { PType } from '../../ptypes'
 import {
   compiledContractType,
   compiledLogicSigType,
-  compileFunctionType,
+  compileFunction,
   ContractClassPType,
   isObjectType,
   LogicSigPType,
@@ -22,7 +22,7 @@ import { requireBuilderOfType, requireInstanceBuilder, requireStringConstant } f
 import { parseFunctionArgs } from '../util/arg-parsing'
 
 export class CompileFunctionBuilder extends FunctionBuilder {
-  readonly ptype = compileFunctionType
+  readonly ptype = compileFunction
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
@@ -79,8 +79,8 @@ function parseTemplateVars(options: InstanceBuilder | undefined): { prefix: stri
     const templateVars = requireInstanceBuilder(options.memberAccess(optionsNames.templateVars, options.sourceLocation))
     codeInvariant(isObjectType(templateVars.ptype), `${optionsNames.templateVars} must be an object type`, templateVars.sourceLocation)
 
-    for (const [varName] of templateVars.ptype.orderedProperties()) {
-      templateVariables.set(varName, requireInstanceBuilder(templateVars.memberAccess(varName, templateVars.sourceLocation)).resolve())
+    for (const { name } of templateVars.ptype.properties) {
+      templateVariables.set(name, requireInstanceBuilder(templateVars.memberAccess(name, templateVars.sourceLocation)).resolve())
     }
   }
 

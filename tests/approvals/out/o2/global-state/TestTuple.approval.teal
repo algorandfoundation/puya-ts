@@ -20,7 +20,7 @@ main_testTuple_route@3:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     // tests/approvals/global-state.algo.ts:60
     // t1 = GlobalState<[string, uint64, boolean]>()
     pushbytes "t1"
@@ -55,13 +55,13 @@ main_testTuple_route@3:
     app_global_put
     // tests/approvals/global-state.algo.ts:66
     // t5 = GlobalState<Data>()
-    pushbytess "t5" 0x000d000000000000007b800014000568656c6c6f0005576f726c64 // "t5", 0x000d000000000000007b800014000568656c6c6f0005576f726c64
+    pushbytess "t5" 0x000d000000000000007b800014000568656c6c6f0005576f726c64
     // tests/approvals/global-state.algo.ts:91
     // this.t5.value = { a: 'hello', b: 123, c: true, d: new arc4.Str('World') }
     app_global_put
     // tests/approvals/global-state.algo.ts:68
     // testTuple() {
-    pushint 1 // 1
+    pushint 1
     return
 
 main___algots__.defaultCreate@5:
@@ -72,6 +72,4 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
     return

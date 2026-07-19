@@ -10,6 +10,7 @@ import {
   ARC4Encode,
   ArrayLength,
   ArrayReplace,
+  AssertExpression,
   AssignmentExpression,
   AssignmentStatement,
   BigUIntBinaryOperation,
@@ -45,6 +46,22 @@ import WTuple = wtypes.WTuple
 type ConcreteNodes = typeof concreteNodes
 
 const explicitNodeFactory = {
+  assertExpression(props: {
+    condition: Expression | null
+    sourceLocation: SourceLocation
+    wtype: wtypes.WType
+    errorMessage: string | null
+    desc?: string | null
+    logError?: boolean
+  }) {
+    return new AssertExpression({
+      ...props,
+      wtype: wtypes.voidWType,
+      explicit: true,
+      desc: props.desc ?? null,
+      logError: props.logError ?? false,
+    })
+  },
   voidConstant(props: { sourceLocation: SourceLocation }): VoidConstant {
     return new VoidConstant({
       ...props,
@@ -223,7 +240,11 @@ const explicitNodeFactory = {
     value: Expression
     sourceLocation: SourceLocation
   }) {
-    codeInvariant(target.wtype.equals(value.wtype), `Assignment target type ${target.wtype} must match assigned value type ${value.wtype}`)
+    codeInvariant(
+      target.wtype.equals(value.wtype),
+      `Assignment target type ${target.wtype} must match assigned value type ${value.wtype}`,
+      sourceLocation,
+    )
     return new AssignmentExpression({
       target,
       value,
@@ -240,7 +261,11 @@ const explicitNodeFactory = {
     value: Expression
     sourceLocation: SourceLocation
   }) {
-    codeInvariant(target.wtype.equals(value.wtype), `Assignment target type ${target.wtype} must match assigned value type ${value.wtype}`)
+    codeInvariant(
+      target.wtype.equals(value.wtype),
+      `Assignment target type ${target.wtype} must match assigned value type ${value.wtype}`,
+      sourceLocation,
+    )
     return new AssignmentStatement({
       target,
       value,

@@ -1,16 +1,16 @@
 import { microAlgo } from '@algorandfoundation/algokit-utils'
-import { describe } from 'vitest'
+import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('accounts', () => {
   const test = createArc4TestFixture({ paths: 'tests/approvals/accounts.algo.ts', contracts: { AccountsContract: {} } })
 
-  test('returns account data', async ({ appClientAccountsContract: appClient, expect, assetFactory, testAccount }) => {
+  test('returns account data', async ({ appClientAccountsContract: appClient, assetFactory, testAccount }) => {
     const asset = await assetFactory({ assetName: 'Asset 1', sender: testAccount.addr, total: 1n })
 
     const result = await appClient.send.call({
       method: 'getAccountInfo',
-      args: [testAccount.addr.publicKey, asset],
+      args: [testAccount.addr, asset],
       extraFee: microAlgo(2000),
     })
 

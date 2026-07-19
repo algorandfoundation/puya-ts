@@ -16,6 +16,7 @@ import {
   bigIntPType,
   biguintPType,
   InnerTransactionPType,
+  isArrayType,
   isTupleLike,
   ItxnParamsPType,
   MutableTuplePType,
@@ -50,7 +51,7 @@ export function handleAssignment(
   checkForUnclonedMutables(target, source, sourceLocation)
 
   if (isSpecialItxnType(source)) {
-    codeInvariant(isStatement, 'inner transaction results can not be used in assignment expressions')
+    codeInvariant(isStatement, 'inner transaction results can not be used in assignment expressions', sourceLocation)
     return handleItxnAssignment(context, target, source, sourceLocation)
   }
   const narrowedSourceType = narrowSourceType(target.ptype, source.ptype, sourceLocation)
@@ -103,13 +104,13 @@ function buildAssignmentValues(
       source: nodeFactory.tupleExpression({ items: sources, sourceLocation: source.sourceLocation }),
     }
   } else if (target instanceof ObjectLiteralExpressionBuilder) {
-    // // Destructured object
+    // Destructured object
     const targets: LValue[] = []
     const sources: Expression[] = []
-    for (const [propName] of target.ptype.orderedProperties()) {
+    for (const { name, target: targetBuilder } of target.bindings) {
       const values = buildAssignmentValues(
-        requireInstanceBuilder(target.memberAccess(propName, sourceLocation)),
-        requireInstanceBuilder(source.memberAccess(propName, source.sourceLocation)),
+        targetBuilder,
+        requireInstanceBuilder(source.memberAccess(name, source.sourceLocation)),
         sourceLocation,
       )
       targets.push(values.target)
@@ -201,6 +202,11 @@ function narrowSourceType(targetType: PType | undefined, sourceType: PType, sour
   }
 
   if (sourceType instanceof ArrayLiteralPType) {
+    if (sourceType.items.length === 0 && isArrayType(targetType)) {
+      // An empty array literal has no items
+      // adopt the target array type directly
+      return targetType
+    }
     return new ArrayLiteralPType({
       items: sourceType.items.map((itemType, itemIndex) =>
         narrowSourceType(getIndexType(targetType, BigInt(itemIndex), sourceLocation), itemType, sourceLocation),
@@ -209,14 +215,11 @@ function narrowSourceType(targetType: PType | undefined, sourceType: PType, sour
   }
   if (sourceType instanceof ObjectLiteralPType) {
     return new ObjectLiteralPType({
-      properties: Object.fromEntries(
-        sourceType
-          .orderedProperties()
-          .map(([prop, propType]): [string, PType] => [
-            prop,
-            narrowSourceType(getIndexType(targetType, prop, sourceLocation), propType, sourceLocation),
-          ]),
-      ),
+      properties: sourceType.properties.map(({ name, ptype, description }) => ({
+        name,
+        ptype: narrowSourceType(getIndexType(targetType, name, sourceLocation), ptype, sourceLocation),
+        description,
+      })),
     })
   }
   return sourceType
@@ -279,12 +282,8 @@ function checkForUnclonedMutables(target: InstanceBuilder, source: InstanceBuild
       checkForUnclonedMutables(item, requireInstanceBuilder(source.indexAccess(BigInt(index), source.sourceLocation)), sourceLocation)
     }
   } else if (target instanceof ObjectLiteralExpressionBuilder) {
-    for (const [propName] of target.ptype.orderedProperties()) {
-      checkForUnclonedMutables(
-        requireInstanceBuilder(target.memberAccess(propName, sourceLocation)),
-        requireInstanceBuilder(source.memberAccess(propName, source.sourceLocation)),
-        sourceLocation,
-      )
+    for (const { name, target: targetBuilder } of target.bindings) {
+      checkForUnclonedMutables(targetBuilder, requireInstanceBuilder(source.memberAccess(name, source.sourceLocation)), sourceLocation)
     }
   } else {
     source.checkForUnclonedMutables('being assigned to another variable')

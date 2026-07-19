@@ -2,7 +2,8 @@ import { nodeFactory } from '../../../awst/node-factory'
 import type { Expression, LValue } from '../../../awst/nodes'
 import type { SourceLocation } from '../../../awst/source-location'
 import { CodeError, InternalError } from '../../../errors'
-import type { ImmutableObjectPType, MutableObjectPType, PType, PTypeOrClass } from '../../ptypes'
+import { invariant } from '../../../util'
+import type { ImmutableObjectPType, MutableObjectPType, PTypeField, PTypeOrClass } from '../../ptypes'
 import { isObjectType, ObjectLiteralPType } from '../../ptypes'
 import { getIndexType } from '../../ptypes/visitors/index-type-visitor'
 import { spreadableProperties } from '../../ptypes/visitors/spreadable-properties'
@@ -13,10 +14,10 @@ import { ResolvedObjectLiteralExpressionBuilder } from '../objects/resolved-obje
 import { createObject } from '../objects/util'
 import { requestExpressionOfType, requireExpressionOfType, requireInstanceBuilder } from '../util'
 
-export type ObjectLiteralParts =
+export type ObjectLiteralPart =
   | {
       type: 'properties'
-      properties: Record<string, InstanceBuilder>
+      property: ObjectLiteralBinding
     }
   | {
       type: 'spread-object'
@@ -24,37 +25,45 @@ export type ObjectLiteralParts =
       spreadLocation: SourceLocation
     }
 
+export type ObjectLiteralBinding = { name: string; target: InstanceBuilder }
+
 export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
   readonly isConstant = false
 
-  static fromParts(sourceLocation: SourceLocation, parts: ObjectLiteralParts[]): ObjectLiteralExpressionBuilder {
-    const types: Record<string, PType> = {}
+  static fromParts(sourceLocation: SourceLocation, parts: ObjectLiteralPart[]): ObjectLiteralExpressionBuilder {
+    // `bindings` preserves every contributing entry in source order, so that destructuring with
+    // duplicate keys (e.g. `({ a: p, a: q } = obj)`) keeps both targets. `propertyToItemMap` maps
+    // each source property name to its latest binding for object-literal "last write wins" semantics
+    // (spread overrides, duplicate keys).
     const propertyToItemMap: Record<string, number> = {}
-    const items: InstanceBuilder[] = []
+    const bindings: ObjectLiteralBinding[] = []
     for (const part of parts) {
       if (part.type === 'properties') {
-        for (const [prop, propBuilder] of Object.entries(part.properties)) {
-          types[prop] = propBuilder.ptype
-          propertyToItemMap[prop] = items.length
-          items.push(propBuilder)
-        }
+        const { name, target } = part.property
+        propertyToItemMap[name] = bindings.length
+        bindings.push({ name, target })
       } else {
         const obj = part.obj.singleEvaluation()
-        for (const [prop, propType] of spreadableProperties(part.obj.ptype, part.spreadLocation)) {
-          types[prop] = propType
-          propertyToItemMap[prop] = items.length
-          items.push(requireInstanceBuilder(obj.memberAccess(prop, part.spreadLocation)))
+        for (const [name] of spreadableProperties(part.obj.ptype, part.spreadLocation)) {
+          propertyToItemMap[name] = bindings.length
+          bindings.push({ name, target: requireInstanceBuilder(obj.memberAccess(name, part.spreadLocation)) })
         }
       }
     }
-    return new ObjectLiteralExpressionBuilder(sourceLocation, new ObjectLiteralPType({ properties: types }), propertyToItemMap, items)
+
+    const types: PTypeField[] = Object.entries(propertyToItemMap).map(([name, idx]) => ({
+      name,
+      ptype: bindings[idx].target.ptype,
+      description: null,
+    }))
+    return new ObjectLiteralExpressionBuilder(sourceLocation, new ObjectLiteralPType({ properties: types }), propertyToItemMap, bindings)
   }
 
   private constructor(
     sourceLocation: SourceLocation,
     public readonly ptype: ObjectLiteralPType,
     private readonly propertyToItemMap: Record<string, number>,
-    private readonly items: InstanceBuilder[],
+    public readonly bindings: ReadonlyArray<ObjectLiteralBinding>,
     private readonly isSingleEval = false,
   ) {
     super(sourceLocation)
@@ -62,9 +71,13 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
 
   singleEvaluation(): InstanceBuilder {
     if (this.isSingleEval) return this
+    invariant(
+      this.bindings.length === Object.keys(this.propertyToItemMap).length,
+      'singleEvaluation called with duplicate or spread-overridden bindings; route through resolveToPType first',
+    )
     const tuple = nodeFactory.singleEvaluation({
       source: nodeFactory.tupleExpression({
-        items: this.items.map((item) => item.resolve()),
+        items: this.bindings.map((item) => item.target.resolve()),
         sourceLocation: this.sourceLocation,
         wtype: this.ptype.wtype,
       }),
@@ -74,16 +87,17 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
       this.sourceLocation,
       this.ptype,
       this.propertyToItemMap,
-      this.items.map((item, index) =>
-        instanceEb(
+      this.bindings.map((item, index) => ({
+        name: item.name,
+        target: instanceEb(
           nodeFactory.tupleItemExpression({
             base: tuple,
             index: BigInt(index),
-            sourceLocation: item.sourceLocation,
+            sourceLocation: item.target.sourceLocation,
           }),
-          item.ptype,
+          item.target.ptype,
         ),
-      ),
+      })),
       true,
     )
   }
@@ -92,17 +106,19 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     throw new InternalError('Cannot resolve object literal', { sourceLocation: this.sourceLocation })
   }
   resolveLValue(): LValue {
+    invariant(
+      this.bindings.length === Object.keys(this.propertyToItemMap).length,
+      'resolveLValue called with duplicate bindings; destructuring assignment must iterate bindings via buildAssignmentValues',
+    )
     return nodeFactory.tupleExpression({
-      items: this.ptype
-        .orderedProperties()
-        .map(([p, propPType]) => requireInstanceBuilder(this.memberAccess(p, this.sourceLocation)).resolveLValue()),
+      items: this.bindings.map(({ target }) => target.resolveLValue()),
       sourceLocation: this.sourceLocation,
       wtype: this.ptype.getImmutable().wtype,
     })
   }
   memberAccess(name: string, sourceLocation: SourceLocation): NodeBuilder {
     if (name in this.propertyToItemMap) {
-      return this.items[this.propertyToItemMap[name]]
+      return this.bindings[this.propertyToItemMap[name]].target
     }
     throw new CodeError(`${name} does not exist on ${this.typeDescription}`, { sourceLocation })
   }
@@ -113,7 +129,7 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
 
   private toObjectType(ptype: ImmutableObjectPType | MutableObjectPType | ObjectLiteralPType): Expression {
     let base: InstanceBuilder
-    if (this.isSingleEval || (this.ptype.hasSameStructure(ptype) && this.items.length === Object.keys(ptype.properties).length)) {
+    if (this.isSingleEval || (this.ptype.hasSameStructure(ptype) && this.bindings.length === Object.keys(ptype.properties).length)) {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       base = this
     } else {
@@ -126,7 +142,7 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
 
       const tuple = nodeFactory.singleEvaluation({
         source: nodeFactory.tupleExpression({
-          items: this.items.map((item, index) => requireExpressionOfType(item, itemToPropertyType[index] ?? item.ptype)),
+          items: this.bindings.map((item, index) => requireExpressionOfType(item.target, itemToPropertyType[index] ?? item.target.ptype)),
           sourceLocation: this.sourceLocation,
         }),
       })
@@ -136,9 +152,13 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
 
       base = new ResolvedObjectLiteralExpressionBuilder(
         nodeFactory.tupleExpression({
-          items: ptype.orderedProperties().map(([p]) => {
-            const index = this.propertyToItemMap[p]
-            return nodeFactory.tupleItemExpression({ base: tuple, index: BigInt(index), sourceLocation: this.items[index].sourceLocation })
+          items: ptype.properties.map(({ name }) => {
+            const index = this.propertyToItemMap[name]
+            return nodeFactory.tupleItemExpression({
+              base: tuple,
+              index: BigInt(index),
+              sourceLocation: this.bindings[index].target.sourceLocation,
+            })
           }),
           sourceLocation: this.sourceLocation,
           wtype: tempType.wtype,
@@ -153,9 +173,9 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
     if (ptype.equals(this.ptype)) return true
 
     if (!isObjectType(ptype)) return false
-    for (const [prop, propPType] of ptype.orderedProperties()) {
-      if (!this.hasProperty(prop)) return false
-      const propValue = requestExpressionOfType(this.memberAccess(prop, this.sourceLocation), propPType)
+    for (const { name, ptype: propPType } of ptype.properties) {
+      if (!this.hasProperty(name)) return false
+      const propValue = requestExpressionOfType(this.memberAccess(name, this.sourceLocation), propPType)
       if (propValue === undefined) return false
     }
     return true
@@ -171,9 +191,9 @@ export class ObjectLiteralExpressionBuilder extends LiteralExpressionBuilder {
   checkForUnclonedMutables(scenario: string): boolean {
     const usedIndexes = new Set(Object.values(this.propertyToItemMap))
     let contains = false
-    for (const [idx, item] of this.items.entries()) {
+    for (const [idx, item] of this.bindings.entries()) {
       if (!usedIndexes.has(idx)) continue
-      contains ||= item.checkForUnclonedMutables('being used in an object literal')
+      contains ||= item.target.checkForUnclonedMutables('being used in an object literal')
     }
     return contains
   }

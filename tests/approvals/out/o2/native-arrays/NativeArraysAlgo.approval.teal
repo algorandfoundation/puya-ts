@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@23
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x7d318589 0xb0ac9066 0x0f4c11ca 0xaaa29f70 0xe2d5e035 0x13a588c8 0xd6ecc1e6 0x787b50b2 0xeb87a064 0xbc61d6b8 0x8f544473 0x43e7ee45 0xcbe3a4f8 0x143f223b 0xd9895442 0xe213f5b6 // method "readonlyArray()void", method "arrayInObject()void", method "buildArray()uint64[]", method "arrayFromCtor()uint64[]", method "buildReadonly()uint64[]", method "doThings()void", method "fixedArray(uint64[50])void", method "arc4Interop()void", method "structs((uint64,uint64))(uint64,uint64)[]", method "booleans()bool[]", method "booleansStatic()(bool,bool,bool)", method "arc4Booleans()bool[]", method "arc4BooleansStatic()(bool,bool,bool)", method "aliasing(uint64[],uint64[])void", method "receiveMutable(uint64[])void", method "receiveReadonly(uint64[])void"
@@ -85,7 +85,7 @@ main_aliasing_route@17:
     // tests/approvals/native-arrays.algo.ts:206
     // mutable[1] += 2
     dup
-    pushint 10 // 10
+    pushint 10
     extract_uint64
     dup
     intc_3 // 2
@@ -94,7 +94,7 @@ main_aliasing_route@17:
     uncover 2
     swap
     replace2 10 // on error: index access is out of bounds
-    pushint 10 // 10
+    pushint 10
     // tests/approvals/native-arrays.algo.ts:208
     // assert(mutable[1] !== needClone2[1], 'These should not match')
     extract_uint64
@@ -127,7 +127,7 @@ main_structs_route@12:
     txna ApplicationArgs 1
     dup
     len
-    pushint 16 // 16
+    pushint 16
     ==
     assert // invalid number of bytes for tests/approvals/native-arrays.algo.ts::Vector
     dup
@@ -189,7 +189,7 @@ main_fixedArray_route@10:
     txna ApplicationArgs 1
     dup
     len
-    pushint 400 // 400
+    pushint 400
     ==
     assert // invalid number of bytes for arc4.static_array<uint64, 50>
     // tests/approvals/native-arrays.algo.ts:119
@@ -197,12 +197,14 @@ main_fixedArray_route@10:
     intc_1 // 0
     extract_uint64
     !
+    assert
     // tests/approvals/native-arrays.algo.ts:109
     // fixedArray(y: FixedArray<uint64, 50>) {
+    intc_0 // 1
     return
 
 main_while_top@29:
-    pushint 1410 // 1410
+    pushint 1410
     global OpcodeBudget
     >
     bz main_readonlyArray_route@4
@@ -244,6 +246,4 @@ main___algots__.defaultCreate@23:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return

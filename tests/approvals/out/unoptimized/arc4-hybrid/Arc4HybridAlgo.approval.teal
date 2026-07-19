@@ -34,6 +34,28 @@ someMethod_block@0:
     retsub
 
 
+// tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someOtherMethod[routing]() -> void:
+someOtherMethod:
+    b someOtherMethod_block@0
+
+someOtherMethod_block@0:
+    // tests/approvals/arc4-hybrid.algo.ts:20
+    // someOtherMethod() {
+    callsub tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someOtherMethod
+    retsub
+
+
+// tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.updateApplication[routing]() -> void:
+updateApplication:
+    b updateApplication_block@0
+
+updateApplication_block@0:
+    // tests/approvals/arc4-hybrid.algo.ts:24
+    // updateApplication() {
+    callsub tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.updateApplication
+    retsub
+
+
 // tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod() -> void:
 tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod:
     b tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod_block@0
@@ -46,10 +68,33 @@ tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someMethod_block@0:
     retsub
 
 
+// tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someOtherMethod() -> void:
+tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someOtherMethod:
+    b tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someOtherMethod_block@0
+
+tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.someOtherMethod_block@0:
+    // tests/approvals/arc4-hybrid.algo.ts:21
+    // log('some other method')
+    pushbytes "some other method"
+    log
+    retsub
+
+
+// tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.updateApplication() -> void:
+tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.updateApplication:
+    b tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.updateApplication_block@0
+
+tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.updateApplication_block@0:
+    // tests/approvals/arc4-hybrid.algo.ts:25
+    // log('update')
+    pushbytes "update"
+    log
+    retsub
+
+
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 approvalProgram:
     proto 0 1
-    pushbytes ""
     pushbytes ""
     b approvalProgram_block@0
 
@@ -59,53 +104,98 @@ approvalProgram_block@0:
 approvalProgram_block@1:
     // tests/approvals/arc4-hybrid.algo.ts:3
     // class Arc4HybridAlgo extends Contract {
-    intc_0 // 0
-    frame_bury 0
     txn NumAppArgs
     intc_0 // 0
     !=
-    bz approvalProgram___algots__.defaultCreate@5
+    bz approvalProgram___algots__.defaultCreate@11
     b approvalProgram_abi_routing@2
 
 approvalProgram_abi_routing@2:
     // tests/approvals/arc4-hybrid.algo.ts:3
     // class Arc4HybridAlgo extends Contract {
     txna ApplicationArgs 0
-    pushbytes 0xc258469e // method "someMethod()void"
+    pushbytes 0x46f76533 // method "updateApplication()void"
     uncover 1
-    match approvalProgram_someMethod_route@3
+    match approvalProgram_updateApplication_route@3
     b approvalProgram_switch_case_next@4
 
 approvalProgram_switch_case_next@4:
-    b approvalProgram_after_if_else@6
-
-approvalProgram_after_if_else@6:
-    frame_dig 0
-    frame_bury 1
-    b approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@7
-
-approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@7:
-    frame_dig 1
-    frame_bury 0
-    retsub
-
-approvalProgram_someMethod_route@3:
-    // tests/approvals/arc4-hybrid.algo.ts:16
-    // someMethod() {
+    // tests/approvals/arc4-hybrid.algo.ts:3
+    // class Arc4HybridAlgo extends Contract {
     txn OnCompletion
     intc_0 // NoOp
+    ==
+    assert
+    txn ApplicationID
+    intc_0 // 0
+    !=
+    bz approvalProgram_create_NoOp@9
+    b approvalProgram_call_NoOp@5
+
+approvalProgram_call_NoOp@5:
+    // tests/approvals/arc4-hybrid.algo.ts:3
+    // class Arc4HybridAlgo extends Contract {
+    txna ApplicationArgs 0
+    pushbytes 0xc258469e // method "someMethod()void"
+    pushbytes 0x69adf9bb // method "someOtherMethod()void"
+    uncover 2
+    match approvalProgram_someMethod_route@6 approvalProgram_someOtherMethod_route@7
+    b approvalProgram_switch_case_next@8
+
+approvalProgram_switch_case_next@8:
+    b approvalProgram_after_if_else@10
+
+approvalProgram_after_if_else@10:
+    b approvalProgram_after_if_else@12
+
+approvalProgram_after_if_else@12:
+    // tests/approvals/arc4-hybrid.algo.ts:3
+    // class Arc4HybridAlgo extends Contract {
+    intc_0 // 0
+    frame_bury 0
+    b approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@13
+
+approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@13:
+    frame_dig 0
+    uncover 1
+    retsub
+
+approvalProgram_someOtherMethod_route@7:
+    // tests/approvals/arc4-hybrid.algo.ts:20
+    // someOtherMethod() {
+    callsub someOtherMethod
+    intc_1 // 1
+    frame_bury 0
+    b approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@13
+
+approvalProgram_someMethod_route@6:
+    // tests/approvals/arc4-hybrid.algo.ts:16
+    // someMethod() {
+    callsub someMethod
+    intc_1 // 1
+    frame_bury 0
+    b approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@13
+
+approvalProgram_create_NoOp@9:
+    b approvalProgram_after_if_else@10
+
+approvalProgram_updateApplication_route@3:
+    // tests/approvals/arc4-hybrid.algo.ts:24
+    // updateApplication() {
+    txn OnCompletion
+    pushint 4 // UpdateApplication
     ==
     txn ApplicationID
     intc_0 // 0
     !=
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
-    callsub someMethod
+    assert
+    callsub updateApplication
     intc_1 // 1
     frame_bury 0
-    b approvalProgram_switch_case_next@4
+    b approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@13
 
-approvalProgram___algots__.defaultCreate@5:
+approvalProgram___algots__.defaultCreate@11:
     // tests/approvals/arc4-hybrid.algo.ts:3
     // class Arc4HybridAlgo extends Contract {
     txn OnCompletion
@@ -115,11 +205,11 @@ approvalProgram___algots__.defaultCreate@5:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     frame_bury 0
-    b approvalProgram_after_if_else@6
+    b approvalProgram_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@13
 
 
 // tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__algots__.defaultCreate() -> void:

@@ -35,7 +35,7 @@ main_switch_case_next@6:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_0 // 0
     !=
@@ -100,7 +100,7 @@ main_update_route@5:
     intc_0 // 0
     !=
     &&
-    assert // OnCompletion must be UpdateApplication && can only call when not creating
+    assert
     callsub update
     b main_switch_case_next@6
 
@@ -114,7 +114,7 @@ main_delete_route@4:
     intc_0 // 0
     !=
     &&
-    assert // OnCompletion must be DeleteApplication && can only call when not creating
+    assert
     callsub delete
     b main_switch_case_next@6
 

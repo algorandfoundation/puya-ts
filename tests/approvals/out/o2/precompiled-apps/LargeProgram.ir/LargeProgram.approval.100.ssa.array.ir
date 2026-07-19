@@ -10,14 +10,14 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%4#0: bool = (== tmp%3#0 DeleteApplication)
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%7#0: bool = (&& tmp%4#0 tmp%5#0)
-        (assert tmp%7#0) // OnCompletion must be DeleteApplication && can only call when not creating
+        (assert tmp%7#0)
         exit 1u
     block@4: // getBigBytesLength_route_L67
         let tmp%8#0: uint64 = (txn OnCompletion)
         let tmp%9#0: bool = (! tmp%8#0)
         let tmp%10#0: uint64 = (txn ApplicationID)
         let tmp%12#0: bool = (&& tmp%9#0 tmp%10#0)
-        (assert tmp%12#0) // OnCompletion must be NoOp && can only call when not creating
+        (assert tmp%12#0)
         let tmp%0#4: bytes[4096] = (bzero 4096u)
         let tmp%1#2: uint64 = (len tmp%0#4)
         let aggregate%val_as_bytes%0#0: bytes[8] = (itob tmp%1#2)
@@ -34,5 +34,5 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%15#0: uint64 = (txn ApplicationID)
         let tmp%16#0: bool = (! tmp%15#0)
         let tmp%17#0: bool = (&& tmp%14#0 tmp%16#0)
-        (assert tmp%17#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%17#0)
         exit 1u

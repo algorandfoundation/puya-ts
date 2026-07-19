@@ -16,9 +16,6 @@ import type {
 } from '../index'
 import { DefaultVisitor } from './default-visitor'
 
-export function hasProperty(ptype: PType, property: string, sourceLocation: SourceLocation) {
-  return Boolean(getIndexType(ptype, property, sourceLocation))
-}
 export function hasPropertyOfType(ptype: PType, property: string, propType: PType, sourceLocation: SourceLocation) {
   return Boolean(getIndexType(ptype, property, sourceLocation)?.equals(propType))
 }
@@ -33,7 +30,7 @@ export function getIndexType(ptype: PType, index: bigint | string, sourceLocatio
   return IndexTypeVisitor.accept(ptype, index, sourceLocation)
 }
 
-export class IndexTypeVisitor extends DefaultVisitor<PType | undefined> {
+class IndexTypeVisitor extends DefaultVisitor<PType | undefined> {
   constructor(
     private readonly index: string | bigint,
     private readonly sourceLocation: SourceLocation,
@@ -60,28 +57,40 @@ export class IndexTypeVisitor extends DefaultVisitor<PType | undefined> {
 
   visitARC4StructType(ptype: ARC4StructType): PType | undefined {
     if (typeof this.index === 'string') {
-      return ptype.fields[this.index]
+      const field = ptype.getProperty(this.index)
+      if (field !== undefined) {
+        return field.ptype
+      }
     }
     return super.visitARC4StructType(ptype)
   }
 
   visitImmutableObjectPType(ptype: ImmutableObjectPType): PType | undefined {
     if (typeof this.index === 'string') {
-      return ptype.properties[this.index]
+      const field = ptype.getProperty(this.index)
+      if (field !== undefined) {
+        return field.ptype
+      }
     }
     return super.visitImmutableObjectPType(ptype)
   }
 
   visitMutableObjectPType(ptype: MutableObjectPType): PType | undefined {
     if (typeof this.index === 'string') {
-      return ptype.properties[this.index]
+      const field = ptype.getProperty(this.index)
+      if (field !== undefined) {
+        return field.ptype
+      }
     }
     return super.visitMutableObjectPType(ptype)
   }
 
   visitObjectLiteralPType(ptype: ObjectLiteralPType): PType | undefined {
     if (typeof this.index === 'string') {
-      return ptype.properties[this.index]
+      const field = ptype.getProperty(this.index)
+      if (field !== undefined) {
+        return field.ptype
+      }
     }
     return super.visitObjectLiteralPType(ptype)
   }

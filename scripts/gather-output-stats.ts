@@ -112,5 +112,3 @@ function countOps(programPath: string): number {
       return true
     }).length
 }
-
-gatherOutputStats(pathe.join(__dirname, '../tests'))

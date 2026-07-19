@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytes 0x2a337771 // method "test(uint64)void"
@@ -66,9 +66,9 @@ main_test_route@4:
     //   appId: app,
     // })
     itxn_begin
+    itxn_field ApplicationID
     pushbytes 0x363b329e // method "methodTwo()string"
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     intc_3 // appl
     itxn_field TypeEnum
     intc_2 // 0
@@ -85,12 +85,12 @@ main_test_route@4:
     dup
     intc_2 // 0
     extract_uint16 // on error: invalid array length header
-    pushint 2 // 2
+    pushint 2
     +
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     // tests/approvals/multi-inheritance.algo.ts:72-74
     // const result = abiCall<typeof AbiCallMultiInheritance.prototype.add>({
     //   args: [1, 2],
@@ -100,7 +100,7 @@ main_test_route@4:
     // args: [1, 2],
     intc_1 // 1
     itob
-    pushint 2 // 2
+    pushint 2
     itob
     // tests/approvals/multi-inheritance.algo.ts:72-74
     // const result = abiCall<typeof AbiCallMultiInheritance.prototype.add>({
@@ -128,14 +128,16 @@ main_test_route@4:
     len
     intc_0 // 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/multi-inheritance.algo.ts:76
     // assert(result === 3)
-    pushint 3 // 3
+    pushint 3
     ==
+    assert
     // tests/approvals/multi-inheritance.algo.ts:66
     // test(app: Application) {
+    intc_1 // 1
     return
 
 main___algots__.defaultCreate@9:
@@ -146,6 +148,4 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_1 // 1
     return

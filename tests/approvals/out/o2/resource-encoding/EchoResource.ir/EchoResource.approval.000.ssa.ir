@@ -11,7 +11,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_r
     block@1: // abi_routing_L38
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
         goto tmp%5#0 ? block@2 : block@6
@@ -36,7 +36,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.__puya_arc4_r
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (== tmp%9#0 0u)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         tests/approvals/resource-encoding.algo.ts::EchoResource.__algots__.defaultCreate()
         exit 1u
     block@9: // after_if_else_L38
@@ -132,8 +132,7 @@ subroutine tests/approvals/resource-encoding.algo.ts::EchoResource.echoResourceB
         (assert tmp%5#0) // expected application to be passed by value
         let tmp%6#0: bytes = ((txnas ApplicationArgs) 3u)
         let address#0: bytes = tmp%6#0
-        let reinterpret_account%0#0: account = address#0
-        let tmp%7#0: bool = (== acc#0 reinterpret_account%0#0)
+        let tmp%7#0: bool = (== acc#0 address#0)
         (assert tmp%7#0) // expected account to be passed by value
         let tmp%8#0: Encoded(uint64,uint64,uint8[32]) = bytes_encode<(uint64,uint64,uint8[32])>(asset#0, app#0, acc#0)
         return tmp%8#0

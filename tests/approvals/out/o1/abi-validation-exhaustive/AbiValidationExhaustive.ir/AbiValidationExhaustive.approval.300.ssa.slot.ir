@@ -5,7 +5,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L18
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (! tmp%2#0)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         (assert tmp%4#0)
         let tmp%6#0: bytes = (txna ApplicationArgs 0)
@@ -108,7 +108,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (! tmp%9#0)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         exit 1u
 
 subroutine tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_uint64[routing]() -> void:
@@ -496,17 +496,17 @@ subroutine tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhau
 subroutine tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_c2c[routing]() -> void:
     block@0: // L136
         itxn_begin
-        ((itxn_field ApplicationArgs) method "create()void")
         ((itxn_field ClearStateProgramPages) C4EBQw==)
         ((itxn_field ApprovalProgramPages) CzEZFEQxGEEAH4AERc8F7zYaAI4BAAEAgAsVH3x1aW52YWxpZLCBAUOABExcYbo2GgCOAQABAIEBQw==)
         ((itxn_field OnCompletion) 0u)
+        ((itxn_field ApplicationArgs) method "create()void")
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit
         let app#0: uint64 = (gitxn 0 CreatedApplicationID)
         itxn_begin
-        ((itxn_field ApplicationArgs) method "invalidValue()uint64[3]")
         ((itxn_field ApplicationID) app#0)
+        ((itxn_field ApplicationArgs) method "invalidValue()uint64[3]")
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit

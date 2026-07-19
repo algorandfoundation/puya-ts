@@ -46,7 +46,7 @@ main_createBoxes_route@3:
     intc_0 // 0
     !=
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     callsub createBoxes
     b main_switch_case_next@4
 
@@ -60,7 +60,7 @@ main___algots__.defaultCreate@5:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -124,7 +124,7 @@ tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes_block@0:
     bytec_2 // "c"
     // tests/approvals/box-proxies.algo.ts:153
     // this.boxStaticArray.create()
-    pushint 40 // 40
+    pushint 40
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:144
@@ -134,7 +134,7 @@ tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes_block@0:
     // assert(this.boxStaticArray.length === (32 / 8) * 10)
     box_len
     assert // Box must have value
-    pushint 40 // 40
+    pushint 40
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:145
@@ -142,7 +142,7 @@ tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes_block@0:
     bytec_3 // "d"
     // tests/approvals/box-proxies.algo.ts:155
     // this.boxDynamicArray.create({ size: 2 })
-    pushint 2 // 2
+    pushint 2
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:145
@@ -152,7 +152,7 @@ tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes_block@0:
     // assert(this.boxDynamicArray.length === 2)
     box_len
     assert // Box must have value
-    pushint 2 // 2
+    pushint 2
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:146
@@ -160,7 +160,7 @@ tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes_block@0:
     pushbytes "e"
     // tests/approvals/box-proxies.algo.ts:157
     // this.boxTuple.create()
-    pushint 3 // 3
+    pushint 3
     box_create
     pop
     // tests/approvals/box-proxies.algo.ts:146
@@ -170,7 +170,7 @@ tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes_block@0:
     // assert(this.boxTuple.length === 3)
     box_len
     assert // Box must have value
-    pushint 3 // 3
+    pushint 3
     ==
     assert
     // tests/approvals/box-proxies.algo.ts:140

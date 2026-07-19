@@ -3,14 +3,13 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1
     bytecblock "oneGlobal"
     txn ApplicationID
     bnz main_after_if_else@2
     // tests/approvals/state-totals.algo.ts:5
     // oneGlobal = GlobalState({ initialValue: Uint64(1) })
     bytec_0 // "oneGlobal"
-    intc_0 // 1
+    pushint 1
     app_global_put
 
 main_after_if_else@2:
@@ -28,11 +27,11 @@ main_setState_route@5:
     // tests/approvals/state-totals.algo.ts:31
     // @abimethod({ allowActions: 'OptIn' })
     txn OnCompletion
-    intc_0 // OptIn
+    pushint 1 // OptIn
     ==
     txn ApplicationID
     &&
-    assert // OnCompletion must be OptIn && can only call when not creating
+    assert
     b setState
 
 main___algots__.defaultCreate@7:
@@ -44,8 +43,6 @@ main___algots__.defaultCreate@7:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -56,7 +53,7 @@ setState:
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -86,5 +83,5 @@ setState:
     app_local_put
     // tests/approvals/state-totals.algo.ts:31
     // @abimethod({ allowActions: 'OptIn' })
-    intc_0 // 1
+    pushint 1
     return

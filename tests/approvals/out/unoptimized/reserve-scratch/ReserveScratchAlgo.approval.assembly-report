@@ -1,0 +1,47 @@
+| PC | TEAL Bytes              | TEAL                    | Source                                          | Location                                                                                 |
+|--: | :-----------------------| :-----------------------| :-----------------------------------------------| :----------------------------------------------------------------------------------------|
+|  0 | 0b                      | #pragma version 11      |                                                 |                                                                                          |
+|    | # main                  | main:                   |                                                 | tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.approvalProgram() -> uint64: |
+|  1 | 20 04 01 00 0f 2d       |     intcblock 1 0 15 45 |                                                 |                                                                                          |
+|  7 | 26 01 05 68 65 6c 6c 6f |     bytecblock "hello"  |                                                 |                                                                                          |
+| 15 | 42 00 00                |     b main_block@0      |                                                 |                                                                                          |
+|    | # main_block@0          | main_block@0:           |                                                 |                                                                                          |
+|    |                         |                         | this.setThings()                                | tests/approvals/reserve-scratch.algo.ts:18                                               |
+| 18 | 88 00 11                |     callsub setThings   | ----------------                                | tests/approvals/reserve-scratch.algo.ts:18:4-20                                          |
+|    |                         |                         | assert(Scratch.loadUint64(0) === 1)             | tests/approvals/reserve-scratch.algo.ts:20                                               |
+| 21 | 23                      |     intc_1 // 0         |                           -                     | tests/approvals/reserve-scratch.algo.ts:20:30-31                                         |
+| 22 | 3e                      |     loads               |        ---------------------                    | tests/approvals/reserve-scratch.algo.ts:20:11-32                                         |
+| 23 | 22                      |     intc_0 // 1         |                                  -              | tests/approvals/reserve-scratch.algo.ts:20:37-38                                         |
+| 24 | 12                      |     ==                  |        ---------------------------              | tests/approvals/reserve-scratch.algo.ts:20:11-38                                         |
+| 25 | 44                      |     assert              | -----------------------------------             | tests/approvals/reserve-scratch.algo.ts:20:4-39                                          |
+|    |                         |                         | assert(Scratch.loadBytes(1) === Bytes('hello')) | tests/approvals/reserve-scratch.algo.ts:21                                               |
+| 26 | 22                      |     intc_0 // 1         |                          -                      | tests/approvals/reserve-scratch.algo.ts:21:29-30                                         |
+| 27 | 3e                      |     loads               |        --------------------                     | tests/approvals/reserve-scratch.algo.ts:21:11-31                                         |
+| 28 | 28                      |     bytec_0 // "hello"  |                                       -------   | tests/approvals/reserve-scratch.algo.ts:21:42-49                                         |
+| 29 | 12                      |     ==                  |        ---------------------------------------  | tests/approvals/reserve-scratch.algo.ts:21:11-50                                         |
+| 30 | 44                      |     assert              | ----------------------------------------------- | tests/approvals/reserve-scratch.algo.ts:21:4-51                                          |
+|    |                         |                         | assert(Scratch.loadUint64(15) === 45)           | tests/approvals/reserve-scratch.algo.ts:22                                               |
+| 31 | 24                      |     intc_2 // 15        |                           --                    | tests/approvals/reserve-scratch.algo.ts:22:30-32                                         |
+| 32 | 3e                      |     loads               |        ----------------------                   | tests/approvals/reserve-scratch.algo.ts:22:11-33                                         |
+| 33 | 25                      |     intc_3 // 45        |                                   --            | tests/approvals/reserve-scratch.algo.ts:22:38-40                                         |
+| 34 | 12                      |     ==                  |        -----------------------------            | tests/approvals/reserve-scratch.algo.ts:22:11-40                                         |
+| 35 | 44                      |     assert              | -------------------------------------           | tests/approvals/reserve-scratch.algo.ts:22:4-41                                          |
+|    |                         |                         | return true                                     | tests/approvals/reserve-scratch.algo.ts:23                                               |
+| 36 | 22                      |     intc_0 // 1         |        ----                                     | tests/approvals/reserve-scratch.algo.ts:23:11-15                                         |
+| 37 | 43                      |     return              | -----------                                     | tests/approvals/reserve-scratch.algo.ts:23:4-15                                          |
+|    | # setThings             | setThings:              |                                                 | tests/approvals/reserve-scratch.algo.ts::ReserveScratchAlgo.setThings() -> void:         |
+| 38 | 42 00 00                |     b setThings_block@0 |                                                 |                                                                                          |
+|    | # setThings_block@0     | setThings_block@0:      |                                                 |                                                                                          |
+|    |                         |                         | Scratch.store(0, 1)                             | tests/approvals/reserve-scratch.algo.ts:12                                               |
+| 41 | 23                      |     intc_1 // 0         |               -                                 | tests/approvals/reserve-scratch.algo.ts:12:18-19                                         |
+| 42 | 22                      |     intc_0 // 1         |                  -                              | tests/approvals/reserve-scratch.algo.ts:12:21-22                                         |
+| 43 | 3f                      |     stores              | -------------------                             | tests/approvals/reserve-scratch.algo.ts:12:4-23                                          |
+|    |                         |                         | Scratch.store(1, Bytes('hello'))                | tests/approvals/reserve-scratch.algo.ts:13                                               |
+| 44 | 22                      |     intc_0 // 1         |               -                                 | tests/approvals/reserve-scratch.algo.ts:13:18-19                                         |
+| 45 | 28                      |     bytec_0 // "hello"  |                        -------                  | tests/approvals/reserve-scratch.algo.ts:13:27-34                                         |
+| 46 | 3f                      |     stores              | --------------------------------                | tests/approvals/reserve-scratch.algo.ts:13:4-36                                          |
+|    |                         |                         | Scratch.store(15, 45)                           | tests/approvals/reserve-scratch.algo.ts:14                                               |
+| 47 | 24                      |     intc_2 // 15        |               --                                | tests/approvals/reserve-scratch.algo.ts:14:18-20                                         |
+| 48 | 25                      |     intc_3 // 45        |                   --                            | tests/approvals/reserve-scratch.algo.ts:14:22-24                                         |
+| 49 | 3f                      |     stores              | ---------------------                           | tests/approvals/reserve-scratch.algo.ts:14:4-25                                          |
+| 50 | 89                      |     retsub              |                                                 |                                                                                          |

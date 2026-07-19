@@ -7,9 +7,9 @@ import { CodeError, InternalError } from '../errors'
 import type { DeliberateAny } from '../typescript-helpers'
 import type { AbsolutePath } from './absolute-path'
 
+export { hexToUint8Array, uint8ArrayToHex } from './base-16'
 export { base32ToUint8Array, uint8ArrayToBase32 } from './base-32'
 export { base64ToUint8Array, uint8ArrayToBase64 } from './base-64'
-export { hexToUint8Array, uint8ArrayToHex } from './base-16'
 
 class InvariantError extends InternalError {}
 
@@ -63,19 +63,6 @@ export const enumKeyFromValue = <TValue, TEnum extends TValue>(
     return key
   }
   throw new Error(`${message} ${value}`)
-}
-
-export const convertEnum = <TEnumIn, TEnumOut, TKeys extends string>(
-  value: TEnumIn,
-  fromEnum: Record<TKeys, TEnumIn>,
-  toEnum: Record<TKeys, TEnumOut>,
-): TEnumOut => {
-  const keyOfValue = Object.entries(fromEnum).find(([, v]) => v === value)?.[0]
-  if (!keyOfValue) {
-    // missing value
-    throw new Error(`key missing: ${value}`)
-  }
-  return toEnum[keyOfValue as keyof typeof toEnum]
 }
 
 export const tryConvertEnum = <TEnumIn, TEnumOut, TKeys extends string>(
@@ -269,15 +256,4 @@ export const zipStrict = <T1, T2>(array1: T1[], array2: T2[]): [T1, T2][] => {
 
 export function isIn<TSubject, TItem extends TSubject>(subject: TSubject, items: readonly TItem[]): subject is TItem {
   return items.some((i) => i === subject)
-}
-
-export function joinUint8Arrays(...arrays: Uint8Array[]): Uint8Array {
-  const length = arrays.reduce((acc, cur) => acc + cur.length, 0)
-  const result = new Uint8Array(length)
-  let offset = 0
-  for (const a of arrays) {
-    result.set(a, offset)
-    offset += a.length
-  }
-  return result
 }

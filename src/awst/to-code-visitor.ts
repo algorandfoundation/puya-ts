@@ -71,7 +71,7 @@ export class ToCodeVisitor
 
     const prefix = expression.prefix ? `, prefix=${expression.prefix}` : ''
 
-    return `compile(${expression.contract.id}${overrides}${prefix}${templateVars}`
+    return `compile(${expression.contract.id}${overrides}${prefix}${templateVars})`
   }
   visitCompiledLogicSig(expression: nodes.CompiledLogicSig): string {
     let templateVars = Array.from(expression.templateVariables.entries())
@@ -83,7 +83,7 @@ export class ToCodeVisitor
 
     const prefix = expression.prefix ? `, prefix=${expression.prefix}` : ''
 
-    return `compile(${expression.logicSig.id}${prefix}${templateVars}`
+    return `compile(${expression.logicSig.id}${prefix}${templateVars})`
   }
   visitLoopExit(statement: nodes.LoopExit): string[] {
     return ['break']
@@ -100,10 +100,9 @@ export class ToCodeVisitor
       .join(', ')
     return `${expression.base.accept(this)}.slice(${args})`
   }
-  visitBoxPrefixedKeyExpression(expression: nodes.BoxPrefixedKeyExpression): string {
-    return `BoxMapKey(prefix=${expression.prefix.accept(this)}, key=${expression.key.accept(this)})`
+  visitMapPrefixedKeyExpression(expression: nodes.MapPrefixedKeyExpression): string {
+    return `MapKey(prefix=${expression.prefix.accept(this)}, key=${expression.key.accept(this)})`
   }
-
   visitBoxValueExpression(expression: nodes.BoxValueExpression): string {
     return `Box[${expression.key.accept(this)}].value`
   }
@@ -127,7 +126,12 @@ export class ToCodeVisitor
     return `TemplateVar[${expression.wtype}](${expression.name})`
   }
   visitMethodConstant(expression: nodes.MethodConstant): string {
-    return `Method("${expression.value}")`
+    if (expression.value instanceof nodes.MethodSignatureString) {
+      return `Method("${expression.value.value}")`
+    }
+
+    const signature = getMethodSignature(expression.value)
+    return `Method(${signature},resource_encoding="${expression.value.resourceEncoding}")`
   }
   visitAddressConstant(expression: nodes.AddressConstant): string {
     return `Address("${expression.value}")`
@@ -184,6 +188,12 @@ export class ToCodeVisitor
       .join(', ')
     return `update_inner_transaction(${expression.itxn.accept(this)}, ${fields})`
   }
+  visitStageInnerTransactions(expression: nodes.StageInnerTransactions): string {
+    const startNewGroup = expression.startNewGroup.accept(this)
+    const itxns = expression.itxns.map((itxn) => itxn.accept(this)).join(', ')
+
+    return `stage_itxns=([${itxns}], start_new_group=${startNewGroup})`
+  }
   visitCheckedMaybe(expression: nodes.CheckedMaybe): string {
     return `checked_maybe(${expression.expr.accept(this)}, comment=${expression.comment})`
   }
@@ -205,8 +215,20 @@ export class ToCodeVisitor
     const indexAccess = expression.arrayIndex ? `[${expression.arrayIndex.accept(this)}]` : ''
     return `${expression.itxn.accept(this)}.${expression.field}${indexAccess}`
   }
-  visitSetInnerTransactionFields(expression: nodes.SetInnerTransactionFields): string {
-    return `${expression.startWithBegin ? 'begin' : 'next'}_txn(${expression.itxns.map((i) => i.accept(this)).join(', ')})`
+  visitABICall(expression: nodes.ABICall): string {
+    let method: string
+    if (expression.target instanceof nodes.MethodSignatureString) {
+      method = `signature='${expression.target.value}'`
+    } else {
+      const signature = getMethodSignature(expression.target)
+      method = signature ? `signature={${signature}}` : 'signature=null'
+    }
+
+    const args = expression.args.map((a) => a.accept(this)).join(', ')
+    const fields = Array.from(expression.fields.entries())
+      .map(([name, expr]) => `${name}=${expr.accept(this)}`)
+      .join(', ')
+    return `abi_call(${method}, args=(${args}), fields={${fields}})`
   }
   visitSizeOf(expression: nodes.SizeOf): string {
     return `size_of(${expression.sizeWtype})`
@@ -376,7 +398,11 @@ export class ToCodeVisitor
     ]
   }
   visitEmit(expression: nodes.Emit): string {
-    return `emit("${expression.signature}", ${expression.value.accept(this)})`
+    return `emit("${expression.value.wtype.name}", ${expression.value.accept(this)})`
+  }
+  visitEmitFields(expression: nodes.EmitFields): string {
+    const values = expression.values.map((v) => v.accept(this)).join(', ')
+    return `emit_fields(${expression.signature}, (${values}))`
   }
 
   visitContractMethod(statement: nodes.ContractMethod): string[] {
@@ -389,12 +415,13 @@ export class ToCodeVisitor
     return ['', `logicsig ${moduleStatement.id} {`, ...indent(moduleStatement.program.body.accept(this)), '}']
   }
   visitAssertExpression(expression: nodes.AssertExpression): string {
-    return [
-      expression.condition ? 'assert(' : 'err(',
-      expression.condition?.accept(this) ?? '',
-      expression.errorMessage ? `, comment=${expression.errorMessage}` : '',
-      ')',
-    ].join('')
+    const desc = expression.desc ? `, desc=${expression.desc}` : ''
+    if (!expression.condition) {
+      const func = expression.logError ? 'logged_err(' : 'err('
+      return `${func}${expression.errorMessage ?? ''}${desc})`
+    }
+    const func = expression.logError ? 'logged_assert(' : 'assert('
+    return `${func}${expression.condition.accept(this)}${expression.errorMessage ? `, comment=${expression.errorMessage}` : ''}${desc})`
   }
 
   visitConvertArray(expression: nodes.ConvertArray): string {
@@ -460,4 +487,15 @@ export class ToCodeVisitor
 
 function indent(lines: string[], indentSize = '  '): string[] {
   return lines.map((l) => `${indentSize}${l}`)
+}
+
+function getMethodSignature(method: nodes.MethodSignature | null): string | null {
+  if (!method) {
+    return null
+  }
+  const name = method.name
+  const args = (method.argTypes ?? []).map((t) => t.name).join(',')
+  const return_ = method.returnType.name
+  const signature = `name="${name}",args=(${args}),result=${return_}`
+  return signature
 }

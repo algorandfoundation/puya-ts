@@ -108,8 +108,8 @@ export class ContractClassModel {
       }
     }
 
-    codeInvariant(approvalProgram, 'must have approval')
-    codeInvariant(clearProgram, 'must have clear')
+    codeInvariant(approvalProgram, 'must have approval', this.sourceLocation)
+    codeInvariant(clearProgram, 'must have clear', this.sourceLocation)
 
     if (!this.hasExplicitStateTotals && firstBaseWithStateTotals) {
       logger.warn(

@@ -1,0 +1,35 @@
+| PC | TEAL Bytes             | TEAL                       | Source                                      | Location                                                                                       |
+|--: | :----------------------| :--------------------------| :-------------------------------------------| :----------------------------------------------------------------------------------------------|
+|  0 | 0b                     | #pragma version 11         |                                             |                                                                                                |
+|    | # main                 | main:                      |                                             | @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64: |
+|  1 | 42 00 00               |     b main_block@0         |                                             |                                                                                                |
+|    | # main_block@0         | main_block@0:              |                                             |                                                                                                |
+|  4 | 42 00 00               |     b main_block@1         |                                             | INTERNAL:1:0-1                                                                                 |
+|    | # main_block@1         | main_block@1:              |                                             |                                                                                                |
+|    |                        |                            | class BaseWithBareCreate extends Contract { | tests/approvals/implicit-create.algo.ts:13                                                     |
+|  7 | 31 1b                  |     txn NumAppArgs         | ------------------------------------------- | tests/approvals/implicit-create.algo.ts:13:0-43                                                |
+|  9 | 81 00                  |     pushint 0              | ------------------------------------------- | tests/approvals/implicit-create.algo.ts:13:0-43                                                |
+| 11 | 13                     |     !=                     | ------------------------------------------- | tests/approvals/implicit-create.algo.ts:13:0-43                                                |
+| 12 | 41 00 07               |     bz main_create@3       | ------------------------------------------- | tests/approvals/implicit-create.algo.ts:13:0-43                                                |
+| 15 | 42 00 00               |     b main_abi_routing@2   | ------------------------------------------- | tests/approvals/implicit-create.algo.ts:13:0-43                                                |
+|    | # main_abi_routing@2   | main_abi_routing@2:        |                                             |                                                                                                |
+| 18 | 42 00 00               |     b main_after_if_else@4 |                                             |                                                                                                |
+|    | # main_after_if_else@4 | main_after_if_else@4:      |                                             |                                                                                                |
+| 21 | 00                     |     err                    | ------------------------------------------- | tests/approvals/implicit-create.algo.ts:13:0-43                                                |
+|    | # main_create@3        | main_create@3:             |                                             |                                                                                                |
+|    |                        |                            | @baremethod({ onCreate: 'require' })        | tests/approvals/implicit-create.algo.ts:14                                                     |
+| 22 | 31 19                  |     txn OnCompletion       |  -----------------------------------        | tests/approvals/implicit-create.algo.ts:14:3-38                                                |
+| 24 | 81 00                  |     pushint 0 // NoOp      |  -----------------------------------        | tests/approvals/implicit-create.algo.ts:14:3-38                                                |
+| 26 | 12                     |     ==                     |  -----------------------------------        | tests/approvals/implicit-create.algo.ts:14:3-38                                                |
+| 27 | 31 18                  |     txn ApplicationID      |  -----------------------------------        | tests/approvals/implicit-create.algo.ts:14:3-38                                                |
+| 29 | 81 00                  |     pushint 0              |  -----------------------------------        | tests/approvals/implicit-create.algo.ts:14:3-38                                                |
+| 31 | 12                     |     ==                     |  -----------------------------------        | tests/approvals/implicit-create.algo.ts:14:3-38                                                |
+| 32 | 10                     |     &&                     |  -----------------------------------        | tests/approvals/implicit-create.algo.ts:14:3-38                                                |
+| 33 | 44                     |     assert                 |  -----------------------------------        | tests/approvals/implicit-create.algo.ts:14:3-38                                                |
+| 34 | 88 00 03               |     callsub create         |  -----------------------------------        | tests/approvals/implicit-create.algo.ts:14:3-38                                                |
+| 37 | 81 01                  |     pushint 1              |  -----------------------------------        | tests/approvals/implicit-create.algo.ts:14:3-38                                                |
+| 39 | 43                     |     return                 |  -----------------------------------        | tests/approvals/implicit-create.algo.ts:14:3-38                                                |
+|    | # create               | create:                    |                                             | tests/approvals/implicit-create.algo.ts::BaseWithBareCreate.create() -> void:                  |
+| 40 | 42 00 00               |     b create_block@0       |                                             |                                                                                                |
+|    | # create_block@0       | create_block@0:            |                                             |                                                                                                |
+| 43 | 89                     |     retsub                 |                                             |                                                                                                |

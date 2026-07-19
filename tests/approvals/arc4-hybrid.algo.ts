@@ -16,4 +16,12 @@ class Arc4HybridAlgo extends Contract {
   someMethod() {
     log('some method')
   }
+
+  someOtherMethod() {
+    log('some other method')
+  }
+
+  updateApplication() {
+    log('update')
+  }
 }

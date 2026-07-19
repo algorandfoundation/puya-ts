@@ -3,7 +3,7 @@ import { logger } from '../logger'
 import { runPuya } from './run-puya'
 import type { SemVer } from './semver'
 
-export enum VersionCompareVerdict {
+enum VersionCompareVerdict {
   ExactMatch = 'ExactMatch',
   Inconclusive = 'Inconclusive',
   MajorMismatch = 'MajorMismatch',
@@ -12,7 +12,7 @@ export enum VersionCompareVerdict {
   NewerRevision = 'NewerRevision',
 }
 
-export async function comparePuyaVersion(puyaPath: string): Promise<{
+async function comparePuyaVersion(puyaPath: string): Promise<{
   target: string
   found?: string
   verdict: VersionCompareVerdict

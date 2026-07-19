@@ -14,7 +14,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         let tmp%7#0: bool = (&& tmp%4#0 tmp%6#0)
-        (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
+        (assert tmp%7#0)
         tests/approvals/box-proxies.algo.ts::BoxToRefTest.test[routing]()
         goto block@4
     block@4: // switch_case_next_L235
@@ -25,7 +25,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%10#0: uint64 = (txn ApplicationID)
         let tmp%11#0: bool = (== tmp%10#0 0u)
         let tmp%12#0: bool = (&& tmp%9#0 tmp%11#0)
-        (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%12#0)
         tests/approvals/box-proxies.algo.ts::BoxToRefTest.__algots__.defaultCreate()
         exit 1u
     block@6: // after_if_else_L235
@@ -42,20 +42,27 @@ subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test[routing]() -> 
 subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.test() -> void:
     block@0: // L238
         let materialized_values%0#0: account = (txn Sender)
-        let box_prefixed_key%0#0: bytes = (concat "" materialized_values%0#0)
-        let boxForCaller#0: bytes = box_prefixed_key%0#0
+        let map_prefixed_key%0#0: bytes = (concat "" materialized_values%0#0)
+        let boxForCaller#0: box_key = map_prefixed_key%0#0
         (box_create boxForCaller#0 4u)
-        let boxRef#0: bytes = boxForCaller#0
-        (box_replace boxRef#0 0u 0x7b)
+        let boxRef#0: box_key = boxForCaller#0
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob 123u)
+        let aggregate%bitlen%0#0: uint64 = (bitlen aggregate%val_as_bytes%0#0)
+        let aggregate%no_overflow%0#0: bool = (<= aggregate%bitlen%0#0 8u)
+        (assert aggregate%no_overflow%0#0) // overflow
+        let aggregate%uint8%0#0: bytes = (extract3 aggregate%val_as_bytes%0#0 7u 1u)
+        let aggregate%as_Encoded(uint8)%0#0: Encoded(uint8) = aggregate%uint8%0#0
+        let tmp%0#0: Encoded(uint8) = aggregate%as_Encoded(uint8)%0#0
+        (box_replace boxRef#0 0u tmp%0#0)
         let (aggregate%box_get%0#0: bytes, aggregate%box_get%1#0: bool) = (box_get boxForCaller#0)
         (assert aggregate%box_get%1#0) // Box must have value
         let storage_value%0#0: bytes = aggregate%box_get%0#0
         let aggregate%bytes_offset%0#0: uint64 = (* 0u 1u)
         let aggregate%encoded_element%0#0: bytes = (extract3 storage_value%0#0 aggregate%bytes_offset%0#0 1u) // on error: index access is out of bounds
         let array_item%0#0: Encoded(uint8) = aggregate%encoded_element%0#0
-        let tmp%0#0: uint64 = (btoi array_item%0#0)
-        let tmp%1#0: bool = (== tmp%0#0 123u)
-        (assert tmp%1#0) // First array item in box should be 123
+        let tmp%1#0: uint64 = (btoi array_item%0#0)
+        let tmp%2#0: bool = (== tmp%1#0 123u)
+        (assert tmp%2#0) // First array item in box should be 123
         return 
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxToRefTest.__algots__.defaultCreate() -> void:

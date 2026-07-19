@@ -11,6 +11,7 @@ const config: RollupOptions = {
     analyserService: 'src/language-server/analyser-service.ts',
     'bin/run-cli': 'src/bin/run-cli.ts',
     'bin/puyats-ls': 'src/bin/puyats-ls.ts',
+    'bin/puyats-clientgen': 'src/bin/puyats-clientgen.ts',
   },
   output: [
     {

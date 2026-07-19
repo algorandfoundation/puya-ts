@@ -3,8 +3,12 @@ const algoTsPackage = '@algorandfoundation/algorand-typescript'
 export const Constants = {
   algoTsPackage,
   moduleNames: {
+    tslib: 'lib.d.ts',
     typescript: {
+      decorators: 'typescript/lib/lib.decorators.d.ts',
       es5: 'typescript/lib/lib.es5.d.ts',
+      generator: 'typescript/lib/lib.es2015.generator.d.ts',
+      iterable: 'typescript/lib/lib.es2015.iterable.d.ts',
     },
     polytype: 'polytype/lib/polytype-module.d.ts',
     algoTs: {
@@ -33,6 +37,7 @@ export const Constants = {
       util: `${algoTsPackage}/util.d.ts`,
       mutableObject: `${algoTsPackage}/mutable-object.d.ts`,
     },
+    puyaTs: 'puya-ts',
   },
 
   symbolNames: {
@@ -66,9 +71,9 @@ export const Constants = {
   },
 
   supportedAvmVersions: [10n, 11n, 12n, 13n],
-  targetedPuyaVersion: '5.3.2',
+  targetedPuyaVersion: '5.9.0',
   puyaGithubRepo: 'algorandfoundation/puya',
-  minNodeVersion: '20.11.1',
+  minNodeVersion: '22.11.0',
   languageServerSource: 'puyats',
 } as const
 

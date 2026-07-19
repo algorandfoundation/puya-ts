@@ -48,7 +48,7 @@ main_delete_route@3:
     intc_0 // 0
     !=
     &&
-    assert // OnCompletion must be DeleteApplication && can only call when not creating
+    assert
     callsub delete
     b main_switch_case_next@4
 
@@ -63,7 +63,7 @@ main___algots__.defaultCreate@5:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -89,7 +89,7 @@ tests/approvals/avm12.algo.ts::ContractV1.delete_block@0:
     // tests/approvals/avm12.algo.ts:61
     // assert(Txn.rejectVersion === 2, 'can only update if caller expects this to be currently be v1')
     txn RejectVersion
-    pushint 2 // 2
+    pushint 2
     ==
     assert // can only update if caller expects this to be currently be v1
     retsub

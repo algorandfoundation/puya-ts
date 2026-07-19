@@ -8,6 +8,7 @@ import type {
   ContractClassPType,
   FixedArrayPType,
   FunctionPType,
+  GlobalMapType,
   GlobalStateType,
   GroupTransactionPType,
   ImmutableObjectPType,
@@ -23,6 +24,7 @@ import type {
   LibClassType,
   LibFunctionType,
   LibObjType,
+  LocalMapType,
   LocalStateType,
   LogicSigPType,
   MutableObjectPType,
@@ -192,7 +194,13 @@ export abstract class DefaultVisitor<T> implements PTypeVisitor<T> {
   visitGlobalStateType(ptype: GlobalStateType): T {
     return this.defaultReturn(ptype)
   }
+  visitGlobalMapType(ptype: GlobalMapType): T {
+    return this.defaultReturn(ptype)
+  }
   visitLocalStateType(ptype: LocalStateType): T {
+    return this.defaultReturn(ptype)
+  }
+  visitLocalMapType(ptype: LocalMapType): T {
     return this.defaultReturn(ptype)
   }
   visitBoxPType(ptype: BoxPType): T {

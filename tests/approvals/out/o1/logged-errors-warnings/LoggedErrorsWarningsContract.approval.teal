@@ -1,0 +1,202 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 8 1
+    bytecblock "ERR:not-alnum!" "ERR:MyCode" "AER:01" "ERR:01:I will now provide a succint description of the error. I guess it all started when I was 5..." "ERR:abcd" "ERR:01:aaaaaaaaaaaaaaaaaaaaaaaaa"
+    // tests/approvals/logged-errors-warnings.algo.ts:4
+    // export class LoggedErrorsWarningsContract extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@13
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0xbe0bc255 0x73dcfc84 0x60d426c4 0xf4855369 0x0e3b1b7e 0x22a6d067 // method "testInvalidCode(uint64)void", method "testCamelCaseCode(uint64)void", method "testAERPrefix(uint64)void", method "testLongMessage(uint64)void", method "test8ByteMessage(uint64)void", method "test32ByteMessage(uint64)void"
+    txna ApplicationArgs 0
+    match testInvalidCode testCamelCaseCode testAERPrefix testLongMessage test8ByteMessage test32ByteMessage
+    err
+
+main___algots__.defaultCreate@13:
+    // tests/approvals/logged-errors-warnings.algo.ts:4
+    // export class LoggedErrorsWarningsContract extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testInvalidCode[routing]() -> void:
+testInvalidCode:
+    // tests/approvals/logged-errors-warnings.algo.ts:5
+    // public testInvalidCode(arg: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/logged-errors-warnings.algo.ts:6
+    // loggedAssert(arg !== 1, 'not-alnum!')
+    intc_1 // 1
+    !=
+    bnz testInvalidCode_after_assert@3
+    bytec_0 // "ERR:not-alnum!"
+    log
+    err // ERR:not-alnum!
+
+testInvalidCode_after_assert@3:
+    // tests/approvals/logged-errors-warnings.algo.ts:7
+    // loggedErr('not-alnum!')
+    bytec_0 // "ERR:not-alnum!"
+    log
+    err // ERR:not-alnum!
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testCamelCaseCode[routing]() -> void:
+testCamelCaseCode:
+    // tests/approvals/logged-errors-warnings.algo.ts:10
+    // public testCamelCaseCode(arg: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/logged-errors-warnings.algo.ts:11
+    // loggedAssert(arg !== 1, 'MyCode')
+    intc_1 // 1
+    !=
+    bnz testCamelCaseCode_after_assert@3
+    bytec_1 // "ERR:MyCode"
+    log
+    err // ERR:MyCode
+
+testCamelCaseCode_after_assert@3:
+    // tests/approvals/logged-errors-warnings.algo.ts:12
+    // loggedErr('MyCode')
+    bytec_1 // "ERR:MyCode"
+    log
+    err // ERR:MyCode
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testAERPrefix[routing]() -> void:
+testAERPrefix:
+    // tests/approvals/logged-errors-warnings.algo.ts:15
+    // public testAERPrefix(arg: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/logged-errors-warnings.algo.ts:16
+    // loggedAssert(arg !== 1, '01', { prefix: 'AER' })
+    intc_1 // 1
+    !=
+    bnz testAERPrefix_after_assert@3
+    bytec_2 // "AER:01"
+    log
+    err // AER:01
+
+testAERPrefix_after_assert@3:
+    // tests/approvals/logged-errors-warnings.algo.ts:17
+    // loggedErr('01', { prefix: 'AER' })
+    bytec_2 // "AER:01"
+    log
+    err // AER:01
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.testLongMessage[routing]() -> void:
+testLongMessage:
+    // tests/approvals/logged-errors-warnings.algo.ts:20
+    // public testLongMessage(arg: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/logged-errors-warnings.algo.ts:21
+    // loggedAssert(arg !== 1, '01', {
+    intc_1 // 1
+    !=
+    // tests/approvals/logged-errors-warnings.algo.ts:21-23
+    // loggedAssert(arg !== 1, '01', {
+    //   message: 'I will now provide a succint description of the error. I guess it all started when I was 5...',
+    // })
+    bnz testLongMessage_after_assert@3
+    bytec_3 // "ERR:01:I will now provide a succint description of the error. I guess it all started when I was 5..."
+    log
+    err // ERR:01:I will now provide a succint description of the error. I guess it all started when I was 5...
+
+testLongMessage_after_assert@3:
+    // tests/approvals/logged-errors-warnings.algo.ts:24
+    // loggedErr('01', { message: 'I will now provide a succint description of the error. I guess it all started when I was 5...' })
+    bytec_3 // "ERR:01:I will now provide a succint description of the error. I guess it all started when I was 5..."
+    log
+    err // ERR:01:I will now provide a succint description of the error. I guess it all started when I was 5...
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test8ByteMessage[routing]() -> void:
+test8ByteMessage:
+    // tests/approvals/logged-errors-warnings.algo.ts:27
+    // public test8ByteMessage(arg: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/logged-errors-warnings.algo.ts:28
+    // loggedAssert(arg !== 1, 'abcd')
+    intc_1 // 1
+    !=
+    bnz test8ByteMessage_after_assert@3
+    bytec 4 // "ERR:abcd"
+    log
+    err // ERR:abcd
+
+test8ByteMessage_after_assert@3:
+    // tests/approvals/logged-errors-warnings.algo.ts:29
+    // loggedErr('abcd')
+    bytec 4 // "ERR:abcd"
+    log
+    err // ERR:abcd
+
+
+// tests/approvals/logged-errors-warnings.algo.ts::LoggedErrorsWarningsContract.test32ByteMessage[routing]() -> void:
+test32ByteMessage:
+    // tests/approvals/logged-errors-warnings.algo.ts:32
+    // public test32ByteMessage(arg: uint64): void {
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/logged-errors-warnings.algo.ts:33
+    // loggedAssert(arg !== 1, '01', { message: 'aaaaaaaaaaaaaaaaaaaaaaaaa' })
+    intc_1 // 1
+    !=
+    bnz test32ByteMessage_after_assert@3
+    bytec 5 // "ERR:01:aaaaaaaaaaaaaaaaaaaaaaaaa"
+    log
+    err // ERR:01:aaaaaaaaaaaaaaaaaaaaaaaaa
+
+test32ByteMessage_after_assert@3:
+    // tests/approvals/logged-errors-warnings.algo.ts:34
+    // loggedErr('01', { message: 'aaaaaaaaaaaaaaaaaaaaaaaaa' })
+    bytec 5 // "ERR:01:aaaaaaaaaaaaaaaaaaaaaaaaa"
+    log
+    err // ERR:01:aaaaaaaaaaaaaaaaaaaaaaaaa

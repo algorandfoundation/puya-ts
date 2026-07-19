@@ -1,4 +1,4 @@
-import { describe } from 'vitest'
+import { describe, expect } from 'vitest'
 import { invariant, uint8ArrayToBase32, uint8ArrayToBigInt, uint8ArrayToHex, uint8ArrayToUtf8 } from '../../src/util'
 import { createArc4TestFixture } from './util/test-fixture'
 
@@ -9,7 +9,7 @@ describe('asset proxy contract', () => {
       AssetProxyAlgo: {},
     },
   })
-  test('it runs', async ({ appClientAssetProxyAlgo, assetFactory, testAccount, expect }) => {
+  test('it runs', async ({ appClientAssetProxyAlgo, assetFactory, testAccount }) => {
     const mdh = new Uint8Array(32)
     const asset = await assetFactory({
       assetName: 'test-asset',

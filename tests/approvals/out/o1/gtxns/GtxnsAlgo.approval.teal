@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 0 6 4
+    intcblock 1 6 0 4
     bytecblock 0xdf920f37 "Hello test4" 0x151f7c75
     // tests/approvals/gtxns.algo.ts:16
     // export class GtxnsAlgo extends Contract {
@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@13
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0xa78000de 0xf1908524 // method "test()void", method "test2()void"
@@ -29,8 +29,6 @@ main___algots__.defaultCreate@13:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -38,25 +36,24 @@ main___algots__.defaultCreate@13:
 test:
     // tests/approvals/gtxns.algo.ts:18
     // assert(gtxn.PaymentTxn(0).amount > 0)
-    intc_1 // 0
-    gtxns TypeEnum
+    gtxn 0 TypeEnum
     intc_0 // pay
     ==
     assert // transaction type is pay
-    intc_1 // 0
-    gtxns Amount
+    gtxn 0 Amount
+    assert
     // tests/approvals/gtxns.algo.ts:17
     // test() {
+    intc_0 // 1
     return
 
 
 // tests/approvals/gtxns.algo.ts::GtxnsAlgo.test2[routing]() -> void:
 test2:
-    pushbytes ""
     // tests/approvals/gtxns.algo.ts:22
     // for (const i of urange(Global.groupSize)) {
     global GroupSize
-    intc_1 // 0
+    intc_2 // 0
 
 test2_for_header@2:
     // tests/approvals/gtxns.algo.ts:22
@@ -70,16 +67,17 @@ test2_for_header@2:
     dup
     gtxns TypeEnum
     dup
-    bury 4
+    cover 2
     // tests/approvals/gtxns.algo.ts:25
     // case TransactionType.ApplicationCall:
-    intc_2 // 6
+    intc_1 // 6
     ==
     // tests/approvals/gtxns.algo.ts:25-27
     // case TransactionType.ApplicationCall:
     //   log(txn.appId.id)
     //   break
     bz test2_after_if_else@6
+    bury 1
     // tests/approvals/gtxns.algo.ts:26
     // log(txn.appId.id)
     dup
@@ -90,16 +88,14 @@ test2_for_header@2:
 test2_block@20:
     // tests/approvals/gtxns.algo.ts:22
     // for (const i of urange(Global.groupSize)) {
-    dup
     intc_0 // 1
     +
-    bury 1
     b test2_for_header@2
 
 test2_after_if_else@6:
     // tests/approvals/gtxns.algo.ts:28
     // case TransactionType.AssetTransfer:
-    dig 2
+    dig 1
     intc_3 // 4
     ==
     // tests/approvals/gtxns.algo.ts:28-30
@@ -107,6 +103,7 @@ test2_after_if_else@6:
     //   log(txn.xferAsset.id)
     //   break
     bz test2_after_if_else@9
+    bury 1
     // tests/approvals/gtxns.algo.ts:29
     // log(txn.xferAsset.id)
     dup
@@ -120,14 +117,15 @@ test2_after_if_else@6:
 test2_after_if_else@9:
     // tests/approvals/gtxns.algo.ts:31
     // case TransactionType.AssetConfig:
-    dig 2
-    pushint 3 // 3
+    dig 1
+    pushint 3
     ==
     // tests/approvals/gtxns.algo.ts:31-33
     // case TransactionType.AssetConfig:
     //   log(txn.configAsset.id)
     //   break
     bz test2_after_if_else@12
+    bury 1
     // tests/approvals/gtxns.algo.ts:32
     // log(txn.configAsset.id)
     dup
@@ -141,7 +139,7 @@ test2_after_if_else@9:
 test2_after_if_else@12:
     // tests/approvals/gtxns.algo.ts:34
     // case TransactionType.Payment:
-    dig 2
+    dig 1
     intc_0 // 1
     ==
     // tests/approvals/gtxns.algo.ts:34-36
@@ -149,6 +147,7 @@ test2_after_if_else@12:
     //   log(txn.receiver)
     //   break
     bz test2_after_if_else@15
+    bury 1
     // tests/approvals/gtxns.algo.ts:35
     // log(txn.receiver)
     dup
@@ -161,8 +160,8 @@ test2_after_if_else@12:
 test2_after_if_else@15:
     // tests/approvals/gtxns.algo.ts:37
     // case TransactionType.KeyRegistration:
-    dig 2
-    pushint 2 // 2
+    swap
+    pushint 2
     ==
     // tests/approvals/gtxns.algo.ts:37-39
     // case TransactionType.KeyRegistration:
@@ -206,7 +205,7 @@ test3:
     // tests/approvals/gtxns.algo.ts:49
     // assert(Txn.typeEnum === TransactionType.ApplicationCall)
     txn TypeEnum
-    intc_2 // 6
+    intc_1 // 6
     ==
     assert
     // tests/approvals/gtxns.algo.ts:50
@@ -229,7 +228,7 @@ test4:
     dup
     gtxns TypeEnum
     dup
-    intc_2 // appl
+    intc_1 // appl
     ==
     assert // transaction type is appl
     // tests/approvals/gtxns.algo.ts:54
@@ -240,7 +239,7 @@ test4:
     assert // Other txn must be NoOp
     // tests/approvals/gtxns.algo.ts:55
     // assert(other.type === TransactionType.ApplicationCall)
-    intc_2 // 6
+    intc_1 // 6
     ==
     assert
     // tests/approvals/gtxns.algo.ts:56
@@ -253,8 +252,7 @@ test4:
     // tests/approvals/gtxns.algo.ts:57
     // assert(other.appArgs(0) === methodSelector(GtxnsAlgo.prototype.test3))
     dup
-    intc_1 // 0
-    gtxnsas ApplicationArgs
+    gtxnsa ApplicationArgs 0
     bytec_0 // method "test3()void"
     ==
     assert
@@ -263,8 +261,10 @@ test4:
     gtxns ApplicationID
     global CurrentApplicationID
     ==
+    assert
     // tests/approvals/gtxns.algo.ts:53
     // test4(other: gtxn.ApplicationCallTxn) {
+    intc_0 // 1
     return
 
 
@@ -378,7 +378,7 @@ reflectAllPay:
     concat
     dig 1
     len
-    pushint 244 // 244
+    pushint 244
     +
     swap
     uncover 10
@@ -437,6 +437,7 @@ test5:
     intc_0 // 1
     ==
     bz test5_else_body@3
+    pop
     // tests/approvals/gtxns.algo.ts:82
     // return 1
     intc_0 // 1
@@ -455,13 +456,12 @@ test5_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.test5@7:
 test5_else_body@3:
     // tests/approvals/gtxns.algo.ts:83
     // } else if (txn.type === TransactionType.AssetTransfer) {
-    dup
     intc_3 // 4
     ==
     bz test5_after_if_else@5
     // tests/approvals/gtxns.algo.ts:85
     // return 0
-    intc_1 // 0
+    intc_2 // 0
     // tests/approvals/gtxns.algo.ts:80
     // test5(txn: gtxn.Transaction): uint64 {
     b test5_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.test5@7
@@ -469,7 +469,7 @@ test5_else_body@3:
 test5_after_if_else@5:
     // tests/approvals/gtxns.algo.ts:87
     // return 0
-    intc_1 // 0
+    intc_2 // 0
     // tests/approvals/gtxns.algo.ts:80
     // test5(txn: gtxn.Transaction): uint64 {
     b test5_after_inlined_tests/approvals/gtxns.algo.ts::GtxnsAlgo.test5@7

@@ -10,7 +10,7 @@ main_block@0:
     b main_block@1
 
 main_block@1:
-    // tests/approvals/itxn-compose.algo.ts:67
+    // tests/approvals/itxn-compose.algo.ts:69
     // class VerifierContract extends Contract {
     txn NumAppArgs
     intc_0 // 0
@@ -19,7 +19,7 @@ main_block@1:
     b main_abi_routing@2
 
 main_abi_routing@2:
-    // tests/approvals/itxn-compose.algo.ts:67
+    // tests/approvals/itxn-compose.algo.ts:69
     // class VerifierContract extends Contract {
     txna ApplicationArgs 0
     pushbytes 0x65a9aecc // method "verify()void"
@@ -31,12 +31,12 @@ main_switch_case_next@4:
     b main_after_if_else@6
 
 main_after_if_else@6:
-    // tests/approvals/itxn-compose.algo.ts:67
+    // tests/approvals/itxn-compose.algo.ts:69
     // class VerifierContract extends Contract {
     err
 
 main_verify_route@3:
-    // tests/approvals/itxn-compose.algo.ts:68
+    // tests/approvals/itxn-compose.algo.ts:70
     // verify() {
     txn OnCompletion
     intc_0 // NoOp
@@ -45,12 +45,12 @@ main_verify_route@3:
     intc_0 // 0
     !=
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     callsub verify
     b main_switch_case_next@4
 
 main___algots__.defaultCreate@5:
-    // tests/approvals/itxn-compose.algo.ts:67
+    // tests/approvals/itxn-compose.algo.ts:69
     // class VerifierContract extends Contract {
     txn OnCompletion
     intc_0 // NoOp
@@ -59,7 +59,7 @@ main___algots__.defaultCreate@5:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -70,7 +70,7 @@ verify:
     b verify_block@0
 
 verify_block@0:
-    // tests/approvals/itxn-compose.algo.ts:68
+    // tests/approvals/itxn-compose.algo.ts:70
     // verify() {
     callsub tests/approvals/itxn-compose.algo.ts::VerifierContract.verify
     intc_1 // 1
@@ -79,19 +79,19 @@ verify_block@0:
 
 // tests/approvals/itxn-compose.algo.ts::VerifierContract.verify() -> void:
 tests/approvals/itxn-compose.algo.ts::VerifierContract.verify:
-    // tests/approvals/itxn-compose.algo.ts:68
+    // tests/approvals/itxn-compose.algo.ts:70
     // verify() {
     proto 0 0
     b tests/approvals/itxn-compose.algo.ts::VerifierContract.verify_block@0
 
 tests/approvals/itxn-compose.algo.ts::VerifierContract.verify_block@0:
-    // tests/approvals/itxn-compose.algo.ts:69
+    // tests/approvals/itxn-compose.algo.ts:71
     // for (let i: uint64 = 0; i < Txn.groupIndex; i++) {
     intc_0 // 0
     b tests/approvals/itxn-compose.algo.ts::VerifierContract.verify_while_top@1
 
 tests/approvals/itxn-compose.algo.ts::VerifierContract.verify_while_top@1:
-    // tests/approvals/itxn-compose.algo.ts:69
+    // tests/approvals/itxn-compose.algo.ts:71
     // for (let i: uint64 = 0; i < Txn.groupIndex; i++) {
     txn GroupIndex
     frame_dig 0
@@ -100,17 +100,17 @@ tests/approvals/itxn-compose.algo.ts::VerifierContract.verify_while_top@1:
     b tests/approvals/itxn-compose.algo.ts::VerifierContract.verify_while_body@2
 
 tests/approvals/itxn-compose.algo.ts::VerifierContract.verify_while_body@2:
-    // tests/approvals/itxn-compose.algo.ts:70
+    // tests/approvals/itxn-compose.algo.ts:72
     // const txn = gtxn.Transaction(i)
     frame_dig 0
     dup
-    // tests/approvals/itxn-compose.algo.ts:71
+    // tests/approvals/itxn-compose.algo.ts:73
     // assert(txn.type === TransactionType.Payment, 'Txn must be pay')
     gtxns TypeEnum
     intc_1 // 1
     ==
     assert // Txn must be pay
-    // tests/approvals/itxn-compose.algo.ts:69
+    // tests/approvals/itxn-compose.algo.ts:71
     // for (let i: uint64 = 0; i < Txn.groupIndex; i++) {
     intc_1 // 1
     +

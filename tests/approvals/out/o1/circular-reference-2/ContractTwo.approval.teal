@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@10
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     bytec_0 // method "test(uint64)void"
@@ -37,8 +37,6 @@ main___algots__.defaultCreate@10:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -52,13 +50,15 @@ test:
     intc_3 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
+    dup
     btoi
     // tests/approvals/circular-reference-2.algo.ts:9
     // abiCall<typeof ContractOne.prototype.test>({ appId })
     itxn_begin
+    itxn_field ApplicationID
     bytec_0 // method "test(uint64)void"
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_2 // 0
@@ -86,10 +86,10 @@ test3:
     //   appId,
     // })
     itxn_begin
-    bytec_1 // method "test2()byte[4]"
-    itxn_field ApplicationArgs
     dup
     itxn_field ApplicationID
+    bytec_1 // method "test2()byte[4]"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_2 // 0
@@ -99,9 +99,9 @@ test3:
     //   appId,
     // })
     itxn_next
+    itxn_field ApplicationID
     bytec_1 // method "test2()byte[4]"
     itxn_field ApplicationArgs
-    itxn_field ApplicationID
     intc_1 // appl
     itxn_field TypeEnum
     intc_2 // 0
@@ -121,7 +121,7 @@ test3:
     assert // Bytes has valid prefix
     dup
     len
-    pushint 4 // 4
+    pushint 4
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 4>
     // tests/approvals/circular-reference-2.algo.ts:27
@@ -136,7 +136,7 @@ test3:
     assert // Bytes has valid prefix
     dup
     len
-    pushint 4 // 4
+    pushint 4
     ==
     assert // invalid number of bytes for arc4.static_array<arc4.uint8, 4>
     // tests/approvals/circular-reference-2.algo.ts:29
@@ -149,6 +149,8 @@ test3:
     // assert(expected === res2)
     bytec_0 // method "test(uint64)void"
     ==
+    assert
     // tests/approvals/circular-reference-2.algo.ts:16
     // test3(appId: Application) {
+    intc_0 // 1
     return

@@ -3,18 +3,17 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1
     bytecblock 0x151f7c750008626173652d74776f
     txn ApplicationID
     bnz main_after_if_else@2
     // tests/approvals/multi-inheritance.algo.ts:11
     // stateCommon = GlobalState<uint64>({ initialValue: 123 })
     pushbytes "stateCommon"
-    pushint 123 // 123
+    pushint 123
     app_global_put
     // tests/approvals/multi-inheritance.algo.ts:30
     // stateTwo = GlobalState({ initialValue: 'Hello' })
-    pushbytess "stateTwo" "Hello" // "stateTwo", "Hello"
+    pushbytess "stateTwo" "Hello"
     app_global_put
 
 main_after_if_else@2:
@@ -24,7 +23,7 @@ main_after_if_else@2:
     bz main___algots__.defaultCreate@12
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x363b329e 0xf9f5142c 0x455c8d09 // method "methodTwo()string", method "b2CantOverride()string", method "methodCommon()string"
@@ -37,7 +36,7 @@ main_methodCommon_route@8:
     // methodCommon() {
     pushbytes 0x151f7c750006636f6d6d6f6e
     log
-    intc_0 // 1
+    pushint 1
     return
 
 main_b2CantOverride_route@7:
@@ -45,7 +44,7 @@ main_b2CantOverride_route@7:
     // b2CantOverride(): string {
     bytec_0 // 0x151f7c750008626173652d74776f
     log
-    intc_0 // 1
+    pushint 1
     return
 
 main_methodTwo_route@6:
@@ -53,7 +52,7 @@ main_methodTwo_route@6:
     // methodTwo() {
     bytec_0 // 0x151f7c750008626173652d74776f
     log
-    intc_0 // 1
+    pushint 1
     return
 
 main___algots__.defaultCreate@12:
@@ -64,6 +63,4 @@ main___algots__.defaultCreate@12:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return

@@ -8,7 +8,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L7
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
         goto tmp%5#0 ? block@3 : block@8
@@ -36,7 +36,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (== tmp%9#0 0u)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         tests/approvals/circular-reference-2.algo.ts::ContractTwo.__algots__.defaultCreate()
         exit 1u
     block@11: // after_if_else_L7
@@ -59,9 +59,6 @@ subroutine tests/approvals/circular-reference-2.algo.ts::ContractTwo.test[routin
 subroutine tests/approvals/circular-reference-2.algo.ts::ContractTwo.test2[routing]() -> void:
     block@0: // L12
         let tmp%0#0: bytes[4] = tests/approvals/circular-reference-2.algo.ts::ContractTwo.test2()
-        let aggregate%length%0#0: uint64 = (len tmp%0#0)
-        let aggregate%lengths_equal%0#0: bool = (== aggregate%length%0#0 4u)
-        (assert aggregate%lengths_equal%0#0) // invalid size
         let aggregate%as_Encoded(uint8[4])%0#0: Encoded(uint8[4]) = tmp%0#0
         let tmp%1#0: Encoded(uint8[4]) = aggregate%as_Encoded(uint8[4])%0#0
         let tmp%2#0: bytes = (concat 0x151f7c75 tmp%1#0)
@@ -82,9 +79,14 @@ subroutine tests/approvals/circular-reference-2.algo.ts::ContractTwo.test3[routi
 subroutine tests/approvals/circular-reference-2.algo.ts::ContractTwo.test(appId: uint64) -> void:
     block@0: // L8
         itxn_begin
-        let inner_txn_params%0%%param_ApplicationID_idx_0#0: uint64 = appId#0
+        let aggregate%val_as_bytes%0#0: bytes[8] = (itob appId#0)
+        let aggregate%as_Encoded(uint64)%0#0: Encoded(uint64) = aggregate%val_as_bytes%0#0
+        let tmp%0#0: Encoded(uint64) = aggregate%as_Encoded(uint64)%0#0
+        let abi_call_inner_txn_params%1%%param_ApplicationArgs_idx_1#0: Encoded(uint64) = tmp%0#0
+        let abi_call_inner_txn_params%1%%param_ApplicationID_idx_0#0: uint64 = appId#0
+        ((itxn_field ApplicationID) abi_call_inner_txn_params%1%%param_ApplicationID_idx_0#0)
         ((itxn_field ApplicationArgs) method "test(uint64)void")
-        ((itxn_field ApplicationID) inner_txn_params%0%%param_ApplicationID_idx_0#0)
+        ((itxn_field ApplicationArgs) abi_call_inner_txn_params%1%%param_ApplicationArgs_idx_1#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         goto block@1
@@ -99,15 +101,15 @@ subroutine tests/approvals/circular-reference-2.algo.ts::ContractTwo.test2() -> 
 subroutine tests/approvals/circular-reference-2.algo.ts::ContractTwo.test3(appId: uint64) -> void:
     block@0: // L16
         itxn_begin
-        let inner_txn_params%0%%param_ApplicationID_idx_0#0: uint64 = appId#0
+        let abi_call_inner_txn_params%1%%param_ApplicationID_idx_0#0: uint64 = appId#0
+        ((itxn_field ApplicationID) abi_call_inner_txn_params%1%%param_ApplicationID_idx_0#0)
         ((itxn_field ApplicationArgs) method "test2()byte[4]")
-        ((itxn_field ApplicationID) inner_txn_params%0%%param_ApplicationID_idx_0#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_next
-        let inner_txn_params%1%%param_ApplicationID_idx_0#0: uint64 = appId#0
+        let abi_call_inner_txn_params%3%%param_ApplicationID_idx_0#0: uint64 = appId#0
+        ((itxn_field ApplicationID) abi_call_inner_txn_params%3%%param_ApplicationID_idx_0#0)
         ((itxn_field ApplicationArgs) method "test2()byte[4]")
-        ((itxn_field ApplicationID) inner_txn_params%1%%param_ApplicationID_idx_0#0)
         ((itxn_field TypeEnum) appl)
         ((itxn_field Fee) 0u)
         itxn_submit

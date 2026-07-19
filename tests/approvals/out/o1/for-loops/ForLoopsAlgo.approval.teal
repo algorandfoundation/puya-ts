@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 8 1 0
+    intcblock 8 0 1
     bytecblock 0x151f7c75
     // tests/approvals/for-loops.algo.ts:4
     // class ForLoopsAlgo extends Contract {
@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0xf8654f73 0x287f4c02 0x4bd7778c 0x33675e06 // method "test_for_loop(uint64,uint64,uint64)uint64", method "test_for_loop_break(uint64,uint64,uint64)uint64", method "test_for_loop_continue(uint64,uint64,uint64)uint64", method "test_for_loop_labelled(uint64,uint64,uint64)uint64"
@@ -27,8 +27,6 @@ main___algots__.defaultCreate@11:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_1 // 1
     return
 
 
@@ -61,7 +59,7 @@ test_for_loop:
     swap
     // tests/approvals/for-loops.algo.ts:6
     // let total = Uint64(0)
-    intc_2 // 0
+    intc_1 // 0
     swap
 
 test_for_loop_while_top@2:
@@ -73,28 +71,26 @@ test_for_loop_while_top@2:
     bz test_for_loop_after_while@4
     // tests/approvals/for-loops.algo.ts:8
     // total += i
-    dup2
     dup
     cover 2
     +
-    bury 3
+    swap
     // tests/approvals/for-loops.algo.ts:7
     // for (let i = start; i < stop; i += step) {
-    dig 3
+    dig 2
     +
-    bury 1
     b test_for_loop_while_top@2
 
 test_for_loop_after_while@4:
+    pop
     // tests/approvals/for-loops.algo.ts:5
     // test_for_loop(start: uint64, stop: uint64, step: uint64) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
     concat
     log
-    intc_1 // 1
+    intc_2 // 1
     return
 
 
@@ -127,7 +123,7 @@ test_for_loop_break:
     swap
     // tests/approvals/for-loops.algo.ts:14
     // let total = Uint64(0)
-    intc_2 // 0
+    intc_1 // 0
     swap
 
 test_for_loop_break_while_top@2:
@@ -139,33 +135,32 @@ test_for_loop_break_while_top@2:
     bz test_for_loop_break_block@7
     // tests/approvals/for-loops.algo.ts:16
     // total += i
-    dup2
+    swap
+    dig 1
     +
     dup
-    bury 3
+    cover 2
     // tests/approvals/for-loops.algo.ts:17
     // if (total > 10) {
-    pushint 10 // 10
+    pushint 10
     >
     bnz test_for_loop_break_block@7
     // tests/approvals/for-loops.algo.ts:15
     // for (let i = start; i < stop; i += step) {
-    dup
-    dig 3
+    dig 2
     +
-    bury 1
     b test_for_loop_break_while_top@2
 
 test_for_loop_break_block@7:
+    pop
     // tests/approvals/for-loops.algo.ts:13
     // test_for_loop_break(start: uint64, stop: uint64, step: uint64) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
     concat
     log
-    intc_1 // 1
+    intc_2 // 1
     return
 
 
@@ -198,7 +193,7 @@ test_for_loop_continue:
     swap
     // tests/approvals/for-loops.algo.ts:25
     // let total = Uint64(0)
-    intc_2 // 0
+    intc_1 // 0
     swap
 
 test_for_loop_continue_while_top@2:
@@ -211,34 +206,33 @@ test_for_loop_continue_while_top@2:
     // tests/approvals/for-loops.algo.ts:27
     // if (i % 5 === 0) continue
     dup
-    pushint 5 // 5
+    pushint 5
     %
     bz test_for_loop_continue_block@6
     // tests/approvals/for-loops.algo.ts:28
     // total += i
-    dup2
+    swap
+    dig 1
     +
-    bury 2
+    swap
 
 test_for_loop_continue_block@6:
     // tests/approvals/for-loops.algo.ts:26
     // for (let i = start; i < stop; i += step) {
-    dup
-    dig 3
+    dig 2
     +
-    bury 1
     b test_for_loop_continue_while_top@2
 
 test_for_loop_continue_after_while@7:
+    pop
     // tests/approvals/for-loops.algo.ts:24
     // test_for_loop_continue(start: uint64, stop: uint64, step: uint64) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
     concat
     log
-    intc_1 // 1
+    intc_2 // 1
     return
 
 
@@ -273,7 +267,7 @@ test_for_loop_labelled:
     swap
     // tests/approvals/for-loops.algo.ts:33
     // let total = Uint64(0)
-    intc_2 // 0
+    intc_1 // 0
     swap
 
 test_for_loop_labelled_while_top@2:
@@ -300,9 +294,9 @@ test_for_loop_labelled_while_top@4:
     dup
     cover 3
     +
-    dig 4
+    uncover 4
     +
-    bury 4
+    cover 3
     // tests/approvals/for-loops.algo.ts:38
     // if (i * j > stop) break outer
     *
@@ -318,22 +312,20 @@ test_for_loop_labelled_while_top@4:
     b test_for_loop_labelled_while_top@4
 
 test_for_loop_labelled_block@10:
+    pop
     // tests/approvals/for-loops.algo.ts:32
     // test_for_loop_labelled(start: uint64, stop: uint64, step: uint64) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
     concat
     log
-    intc_1 // 1
+    intc_2 // 1
     return
 
 test_for_loop_labelled_after_while@8:
     // tests/approvals/for-loops.algo.ts:34
     // outer: for (let i = start; i < stop; i += step) {
-    dup
-    dig 3
+    dig 2
     +
-    bury 1
     b test_for_loop_labelled_while_top@2

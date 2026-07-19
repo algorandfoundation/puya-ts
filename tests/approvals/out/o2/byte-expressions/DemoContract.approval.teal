@@ -3,7 +3,7 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    // tests/approvals/byte-expressions.algo.ts:38
+    // tests/approvals/byte-expressions.algo.ts:39
     // class DemoContract extends Contract {
     txn NumAppArgs
     bz main___algots__.defaultCreate@5
@@ -13,26 +13,24 @@ main:
     err
 
 main_test_route@3:
-    // tests/approvals/byte-expressions.algo.ts:39
+    // tests/approvals/byte-expressions.algo.ts:40
     // public test() {
     txn OnCompletion
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     pushbytes 0x151f7c7580
     log
-    pushint 1 // 1
+    pushint 1
     return
 
 main___algots__.defaultCreate@5:
-    // tests/approvals/byte-expressions.algo.ts:38
+    // tests/approvals/byte-expressions.algo.ts:39
     // class DemoContract extends Contract {
     txn OnCompletion
     !
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
     return

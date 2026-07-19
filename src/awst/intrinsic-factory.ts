@@ -14,10 +14,14 @@ export const intrinsicFactory = {
         const concatValue = new Uint8Array(left.value.length + right.value.length)
         concatValue.set(left.value, 0)
         concatValue.set(right.value, left.value.length)
+        let encoding = awst.BytesEncoding.unknown
+        if (left.encoding === right.encoding) {
+          encoding = left.encoding
+        }
         return nodeFactory.bytesConstant({
           value: concatValue,
           wtype: left.wtype,
-          encoding: left.encoding,
+          encoding,
           sourceLocation,
         })
       } else if (left instanceof StringConstant && right instanceof StringConstant) {
@@ -36,20 +40,46 @@ export const intrinsicFactory = {
       opCode: 'concat',
     })
   },
-  err({ sourceLocation, comment }: { sourceLocation: SourceLocation; comment: string | null }) {
+  err({
+    sourceLocation,
+    comment,
+    desc,
+    logError,
+  }: {
+    sourceLocation: SourceLocation
+    comment: string | null
+    desc?: string | null
+    logError?: boolean
+  }) {
     return nodeFactory.assertExpression({
       condition: null,
       sourceLocation,
       wtype: wtypes.voidWType,
       errorMessage: comment,
+      desc,
+      logError,
     })
   },
-  assert({ sourceLocation, comment, condition }: { sourceLocation: SourceLocation; comment: string | null; condition: Expression }) {
+  assert({
+    sourceLocation,
+    comment,
+    desc,
+    condition,
+    logError,
+  }: {
+    sourceLocation: SourceLocation
+    comment: string | null
+    desc?: string | null
+    condition: Expression
+    logError?: boolean
+  }) {
     return nodeFactory.assertExpression({
       sourceLocation,
       condition,
       wtype: wtypes.voidWType,
       errorMessage: comment,
+      desc,
+      logError,
     })
   },
   bytesLen({ value, sourceLocation }: { value: awst.Expression; sourceLocation: SourceLocation }) {

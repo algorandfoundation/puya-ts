@@ -74,7 +74,7 @@ export type BitSize = UintBitSize | BigUintBitSize
 /**
  * Conditional type which returns the compat type relevant to a given UintN bit size
  */
-type CompatForArc4Int<N extends BitSize> = N extends UintBitSize ? Uint64Compat : BigUintCompat
+type CompatForArc4Int<N extends BitSize> = N extends UintBitSize ? Uint64Compat | bytes : BigUintCompat
 
 /**
  * @hidden

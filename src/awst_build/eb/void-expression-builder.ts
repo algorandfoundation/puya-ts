@@ -9,6 +9,6 @@ export class VoidExpressionBuilder extends InstanceExpressionBuilder<InstanceTyp
     super(expr, voidPType)
   }
   resolveLValue(): LValue {
-    throw new CodeError(`${this.typeDescription} is not a valid assignment target`)
+    throw new CodeError(`${this.typeDescription} is not a valid assignment target`, { sourceLocation: this.sourceLocation })
   }
 }

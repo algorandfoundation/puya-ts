@@ -2,9 +2,9 @@ import ts from 'typescript'
 import { nodeFactory } from '../../awst/node-factory'
 import { type Expression, type MethodDocumentation } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { InvalidNonNullAssertion } from '../../code-fix/invalid-non-null-assertion'
 import { LooseEqualityOperator } from '../../code-fix/loose-equality-operator'
-import { CodeError, FixableCodeError, InternalError, NotSupported } from '../../errors'
+import { NoOpNonNullAssertion } from '../../code-fix/no-op-non-null-assertion'
+import { CodeError, InternalError, NotSupported } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
 import type { Expressions } from '../../visitor/syntax-names'
@@ -29,7 +29,7 @@ import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expre
 import { BigIntLiteralExpressionBuilder } from '../eb/literal/big-int-literal-expression-builder'
 import { ConditionalExpressionBuilder } from '../eb/literal/conditional-expression-builder'
 import { NumericLiteralExpressionBuilder } from '../eb/literal/numeric-literal-expression-builder'
-import type { ObjectLiteralParts } from '../eb/literal/object-literal-expression-builder'
+import type { ObjectLiteralPart } from '../eb/literal/object-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { NamespaceBuilder } from '../eb/namespace-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
@@ -41,19 +41,17 @@ import { concatArrays } from '../eb/util/array/concat'
 import type { PType } from '../ptypes'
 import { BigIntLiteralPType, boolPType, NumericLiteralPType, TransientType } from '../ptypes'
 import { containsMutableType, isMutableType } from '../ptypes/visitors/contains-mutable-visitor'
-import { typeRegistry } from '../type-registry'
+import { instanceEb, typeRegistry } from '../type-registry'
 import { handleAssignment } from './assignments'
 import { TextVisitor } from './text-visitor'
 
+const OPTIONAL_CHAINING_MESSAGE = 'The optional chaining (?.) operator is not supported'
+
 export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   private baseAccept = <TNode extends ts.Node>(node: TNode) => accept<BaseVisitor, TNode>(this, node)
-  readonly textVisitor: TextVisitor
+  readonly textVisitor = new TextVisitor()
   get context() {
     return AwstBuildContext.current
-  }
-
-  protected constructor() {
-    this.textVisitor = new TextVisitor()
   }
 
   logNotSupported(node: ts.Node | undefined, message: string) {
@@ -112,7 +110,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     }
     const ptype = this.context.getPTypeForNode(node)
     invariant(ptype instanceof NumericLiteralPType, 'ptype should be NumericLiteralPType')
-    return new NumericLiteralExpressionBuilder(literalValue, ptype, this.sourceLocation(node))
+    return new NumericLiteralExpressionBuilder(literalValue, ptype, sourceLocation)
   }
 
   visitIdentifier(node: ts.Identifier): NodeBuilder {
@@ -150,15 +148,16 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
 
   visitObjectLiteralExpression(node: ts.ObjectLiteralExpression): NodeBuilder {
     const sourceLocation = this.sourceLocation(node)
-    const parts: Array<ObjectLiteralParts> = node.properties.flatMap((p): ObjectLiteralParts[] => {
+    const parts: Array<ObjectLiteralPart> = node.properties.flatMap((p): ObjectLiteralPart[] => {
       const propertySourceLocation = this.sourceLocation(p)
       switch (p.kind) {
         case ts.SyntaxKind.PropertyAssignment:
           return [
             {
               type: 'properties',
-              properties: {
-                [this.textVisitor.accept(p.name)]: requireInstanceBuilder(this.baseAccept(p.initializer)),
+              property: {
+                name: this.textVisitor.accept(p.name),
+                target: requireInstanceBuilder(this.baseAccept(p.initializer)),
               },
             },
           ]
@@ -168,7 +167,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
           return [
             {
               type: 'properties',
-              properties: { [this.textVisitor.accept(p.name)]: requireInstanceBuilder(this.baseAccept(p.name)) },
+              property: { name: this.textVisitor.accept(p.name), target: requireInstanceBuilder(this.baseAccept(p.name)) },
             },
           ]
         case ts.SyntaxKind.SpreadAssignment:
@@ -209,13 +208,11 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
          */
         if (isMutableType(spreadExpr.ptype) && !containsMutableType(spreadExpr.ptype)) {
           toConcat.push(CloneFunctionBuilder.clone(spreadExpr, this.sourceLocation(element)))
+        } else if (spreadExpr.checkForUnclonedMutables('being spread into an array literal')) {
+          // Add a clone if one is required so we don't get cascading errors
+          toConcat.push(CloneFunctionBuilder.clone(spreadExpr, this.sourceLocation(element)))
         } else {
-          if (spreadExpr.checkForUnclonedMutables('being spread into an array literal')) {
-            // Add a clone if one is required so we don't get cascading errors
-            toConcat.push(CloneFunctionBuilder.clone(spreadExpr, this.sourceLocation(element)))
-          } else {
-            toConcat.push(spreadExpr)
-          }
+          toConcat.push(spreadExpr)
         }
       } else {
         itemBuffer.push(requireInstanceBuilder(this.baseAccept(element)))
@@ -236,7 +233,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitPropertyAccessExpression(node: ts.PropertyAccessExpression): NodeBuilder {
-    this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
+    this.logNotSupported(node.questionDotToken, OPTIONAL_CHAINING_MESSAGE)
     const target = this.baseAccept(node.expression)
     if (target instanceof NamespaceBuilder) {
       codeInvariant(!ts.isPrivateIdentifier(node.name), 'Private identifiers are not supported here', this.sourceLocation(node.name))
@@ -247,7 +244,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitElementAccessExpression(node: ts.ElementAccessExpression): NodeBuilder {
-    this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
+    this.logNotSupported(node.questionDotToken, OPTIONAL_CHAINING_MESSAGE)
 
     const sourceLocation = this.sourceLocation(node)
     const target = this.baseAccept(node.expression)
@@ -256,7 +253,7 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   visitCallExpression(node: ts.CallExpression): NodeBuilder {
-    this.logNotSupported(node.questionDotToken, 'The optional chaining (?.) operator is not supported')
+    this.logNotSupported(node.questionDotToken, OPTIONAL_CHAINING_MESSAGE)
     const sourceLocation = this.sourceLocation(node)
     const eb = this.baseAccept(node.expression)
     const args = node.arguments
@@ -449,8 +446,18 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
         }),
       )
       return handleAssignment(this.context, left, expr, sourceLocation, isStatement)
+    } else if (binaryOpKind === ts.SyntaxKind.CommaToken) {
+      const left = requireInstanceBuilder(this.baseAccept(node.left))
+      const right = requireInstanceBuilder(this.baseAccept(node.right))
+      return instanceEb(
+        nodeFactory.commaExpression({
+          expressions: [left.resolve(), right.resolve()],
+          sourceLocation,
+        }),
+        right.ptype,
+      )
     }
-    throw new NotSupported(`Binary expression with op ${getSyntaxName(binaryOpKind)}`)
+    this.throwNotSupported(node, `Binary expression with op ${getSyntaxName(binaryOpKind)}`)
   }
 
   visitConditionalExpression(node: ts.ConditionalExpression): NodeBuilder {
@@ -549,8 +556,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
     if (target instanceof OptionalExpressionBuilder) {
       return target.base
     }
-
-    throw new FixableCodeError(new InvalidNonNullAssertion({ sourceLocation: this.sourceLocation(node) }))
+    logger.addCodeFix(new NoOpNonNullAssertion({ sourceLocation: this.sourceLocation(node) }))
+    return target
   }
 
   visitSatisfiesExpression(node: ts.SatisfiesExpression): NodeBuilder {
@@ -605,13 +612,8 @@ export abstract class BaseVisitor implements Visitor<Expressions, NodeBuilder> {
   }
 
   protected getNodeDescription(node: ts.Node): string | null {
-    const docs = ts.getJSDocCommentsAndTags(node)
-    for (const doc of docs) {
-      if (ts.isJSDoc(doc)) {
-        return ts.getTextOfJSDocComment(doc.comment) ?? null
-      }
-    }
-    return null
+    const jsdoc = ts.getJSDocCommentsAndTags(node).find(ts.isJSDoc)
+    return jsdoc ? (ts.getTextOfJSDocComment(jsdoc.comment) ?? null) : null
   }
 
   protected getMethodDocumentation(node: ts.FunctionDeclaration | ts.MethodDeclaration | ts.ConstructorDeclaration): MethodDocumentation {

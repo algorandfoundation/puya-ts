@@ -1,16 +1,13 @@
 import type ts from 'typescript'
-import type { ResourceEncoding } from '../../awst'
 import { ContractReference, OnCompletionAction } from '../../awst/models'
 import { nodeFactory } from '../../awst/node-factory'
 import type { ABIMethodArgConstantDefault, ABIMethodArgMemberDefault, ARC4MethodConfig } from '../../awst/nodes'
-import * as awst from '../../awst/nodes'
-import { ARC4ABIMethodConfig, ARC4BareMethodConfig, ARC4CreateOption } from '../../awst/nodes'
+import { ARC4ABIMethodConfig, ARC4BareMethodConfig, ARC4CreateOption, ContractMethod } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { Constants } from '../../constants'
 import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant, isIn, sameSets } from '../../util'
-import { ptypeToAbiPType } from '../arc4-util'
 import type { NodeBuilder } from '../eb'
 import { ContractSuperBuilder, ContractThisBuilder } from '../eb/contract-builder'
 import { requireExpressionOfType } from '../eb/util'
@@ -87,7 +84,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
   get result() {
     const { args, body, documentation } = this.buildFunctionAwst()
 
-    return new awst.ContractMethod({
+    return new ContractMethod({
       arc4MethodConfig: this.metaData.arc4MethodConfig,
       memberName: this._functionType.name,
       sourceLocation: this.metaData.sourceLocation,
@@ -101,7 +98,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     })
   }
 
-  public static buildContractMethod(node: ts.MethodDeclaration, contractType: ContractClassPType): () => awst.ContractMethod {
+  public static buildContractMethod(node: ts.MethodDeclaration, contractType: ContractClassPType): () => ContractMethod {
     return visitInChildContext(this, node, contractType)
   }
 
@@ -115,7 +112,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     decorator: RoutingDecoratorData | undefined
     modifiers: { isPublic: boolean; isStatic: boolean }
     methodLocation: SourceLocation
-  }): awst.ARC4MethodConfig | null {
+  }): ARC4MethodConfig | null {
     const isProgramMethod = isIn(functionType.name, [
       Constants.symbolNames.approvalProgramMethodName,
       Constants.symbolNames.clearStateProgramMethodName,
@@ -147,7 +144,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       create: ARC4CreateOption.disallow,
     }
 
-    if (decorator?.type === 'arc4.baremethod') {
+    if (decorator?.type === Constants.symbolNames.arc4BareDecoratorName) {
       this.checkBareMethodTypes(functionType, methodLocation)
       return new ARC4BareMethodConfig({
         sourceLocation: decorator.sourceLocation,
@@ -157,8 +154,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
       })
     }
 
-    if (decorator?.type === 'arc4.abimethod') {
-      this.checkABIMethodTypes(functionType, decorator.resourceEncoding ?? 'value', methodLocation)
+    if (decorator?.type === Constants.symbolNames.arc4AbiDecoratorName) {
       return new ARC4ABIMethodConfig({
         readonly: decorator.readonly ?? false,
         sourceLocation: decorator.sourceLocation,
@@ -180,8 +176,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
           ]),
         ),
       })
-    } else if (isPublic && this._contractType.isARC4) {
-      this.checkABIMethodTypes(functionType, 'value', methodLocation)
+    } else if (this._contractType.isARC4) {
       return new ARC4ABIMethodConfig({
         allowedCompletionTypes: conventionalDefaults?.allowedCompletionTypes ?? unspecifiedDefaults.allowedCompletionTypes,
         create: conventionalDefaults?.create ?? unspecifiedDefaults.create,
@@ -201,7 +196,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     decorator: RoutingDecoratorData | undefined,
     impliedByConvention: RoutingProps | undefined,
   ) {
-    if (!decorator || !impliedByConvention || decorator.type === 'arc4.readonly') return
+    if (!decorator || !impliedByConvention || decorator.type === Constants.symbolNames.readonlyDecoratorName) return
 
     if (
       decorator.allowedCompletionTypes !== undefined &&
@@ -257,21 +252,6 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     }
   }
 
-  checkABIMethodTypes(functionType: FunctionPType, resourceEncoding: ResourceEncoding, sourceLocation: SourceLocation) {
-    for (const [, paramType] of functionType.parameters) {
-      codeInvariant(
-        ptypeToAbiPType(paramType, 'in', resourceEncoding, sourceLocation),
-        'ABI method parameter types must have an ARC4 equivalent',
-        sourceLocation,
-      )
-    }
-    codeInvariant(
-      ptypeToAbiPType(functionType.returnType, 'out', resourceEncoding, sourceLocation),
-      'ABI method return type must have an ARC4 equivalent',
-      sourceLocation,
-    )
-  }
-
   checkBareMethodTypes(functionType: FunctionPType, sourceLocation: SourceLocation) {
     codeInvariant(functionType.parameters.length === 0, 'Bare methods cannot have any parameters', sourceLocation)
     codeInvariant(functionType.returnType.equals(voidPType), 'Bare method return type must be void', sourceLocation)
@@ -288,7 +268,7 @@ export class ContractMethodVisitor extends ContractMethodBaseVisitor {
     config: Arc4AbiDecoratorData['defaultArguments'][string]
     decoratorLocation: SourceLocation
   }): ABIMethodArgMemberDefault | ABIMethodArgConstantDefault {
-    const [, paramType] = this._contractType.methods[methodName].parameters.find(([p]) => p === parameterName) ?? [undefined, undefined]
+    const paramType = this._contractType.methods[methodName].parameters.find(([p]) => p === parameterName)?.[1]
     codeInvariant(
       paramType,
       `Default argument specification '${parameterName}' does not match any parameters on the target method`,

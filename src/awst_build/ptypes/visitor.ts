@@ -20,6 +20,7 @@ import type {
   FixedArrayPType,
   FunctionPType,
   GenericPType,
+  GlobalMapType,
   GlobalStateType,
   GroupTransactionPType,
   ImmutableObjectPType,
@@ -36,6 +37,7 @@ import type {
   LibClassType,
   LibFunctionType,
   LibObjType,
+  LocalMapType,
   LocalStateType,
   LogicSigPType,
   MutableObjectPType,
@@ -104,7 +106,9 @@ export interface PTypeVisitor<T> {
   visitContractClassPType(ptype: ContractClassPType): T
 
   visitGlobalStateType(ptype: GlobalStateType): T
+  visitGlobalMapType(ptype: GlobalMapType): T
   visitLocalStateType(ptype: LocalStateType): T
+  visitLocalMapType(ptype: LocalMapType): T
   visitBoxPType(ptype: BoxPType): T
   visitBoxMapPType(ptype: BoxMapPType): T
 

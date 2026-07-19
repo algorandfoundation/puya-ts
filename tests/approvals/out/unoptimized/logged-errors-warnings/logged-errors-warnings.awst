@@ -1,0 +1,53 @@
+contract LoggedErrorsWarningsContract
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testInvalidCode(arg: uint64): void
+  {
+    logged_assert(arg != 1, comment=ERR:not-alnum!)
+    logged_err(ERR:not-alnum!)
+  }
+  
+  testCamelCaseCode(arg: uint64): void
+  {
+    logged_assert(arg != 1, comment=ERR:MyCode)
+    logged_err(ERR:MyCode)
+  }
+  
+  testAERPrefix(arg: uint64): void
+  {
+    logged_assert(arg != 1, comment=AER:01)
+    logged_err(AER:01)
+  }
+  
+  testLongMessage(arg: uint64): void
+  {
+    logged_assert(arg != 1, comment=ERR:01:I will now provide a succint description of the error. I guess it all started when I was 5...)
+    logged_err(ERR:01:I will now provide a succint description of the error. I guess it all started when I was 5...)
+  }
+  
+  test8ByteMessage(arg: uint64): void
+  {
+    logged_assert(arg != 1, comment=ERR:abcd)
+    logged_err(ERR:abcd)
+  }
+  
+  test32ByteMessage(arg: uint64): void
+  {
+    logged_assert(arg != 1, comment=ERR:01:aaaaaaaaaaaaaaaaaaaaaaaaa)
+    logged_err(ERR:01:aaaaaaaaaaaaaaaaaaaaaaaaa)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

@@ -20,7 +20,7 @@ main_setLocal_route@7:
     !
     txn ApplicationID
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     b setLocal
 
 main_updateApplication_route@6:
@@ -31,8 +31,6 @@ main_updateApplication_route@6:
     ==
     txn ApplicationID
     &&
-    assert // OnCompletion must be UpdateApplication && can only call when not creating
-    intc_0 // 1
     return
 
 main_optInToApplication_route@5:
@@ -43,8 +41,6 @@ main_optInToApplication_route@5:
     ==
     txn ApplicationID
     &&
-    assert // OnCompletion must be OptIn && can only call when not creating
-    intc_0 // 1
     return
 
 main_createApplication_route@4:
@@ -53,12 +49,12 @@ main_createApplication_route@4:
     intc_0 // 1
     txn OnCompletion
     shl
-    pushint 33 // 33
+    pushint 33
     &
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be one of NoOp, DeleteApplication && can only call when creating
+    assert
     b createApplication
 
 main_noMoreThanks_route@3:
@@ -69,7 +65,7 @@ main_noMoreThanks_route@3:
     ==
     txn ApplicationID
     &&
-    assert // OnCompletion must be CloseOut && can only call when not creating
+    assert
     b closeOutOfApplication
 
 main_deleteApplication@9:
@@ -80,8 +76,6 @@ main_deleteApplication@9:
     ==
     txn ApplicationID
     &&
-    assert // OnCompletion must be DeleteApplication && can only call when not creating
-    intc_0 // 1
     return
 
 
@@ -92,7 +86,7 @@ closeOutOfApplication:
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     pushbytes 0x151f7c75

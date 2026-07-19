@@ -1,0 +1,26 @@
+// This file is auto-generated, do not modify
+/* eslint-disable */
+import type { arc4 } from '@algorandfoundation/algorand-typescript'
+import { Contract, abimethod, err } from '@algorandfoundation/algorand-typescript'
+
+export abstract class BaseTwo extends Contract {
+  @abimethod()
+  methodTwo(): arc4.Str {
+    err('stub only')
+  }
+
+  /**
+   * Because CommonBase implements this method, and MRO for polytype is depth first; this method
+   * should not be accessible from MultiBases as the MRO should be `BaseOne => CommonBase => BaseTwo => CommonBase`
+   * and since CommonBase provides an implementation, this one should not be used
+   */
+  @abimethod()
+  b2CantOverride(): arc4.Str {
+    err('stub only')
+  }
+
+  @abimethod()
+  methodCommon(): arc4.Str {
+    err('stub only')
+  }
+}

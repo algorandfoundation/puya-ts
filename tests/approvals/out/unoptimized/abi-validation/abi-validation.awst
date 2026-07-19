@@ -27,20 +27,20 @@ contract AbiValidationAlgo
   
   manualValidation(value: bytes[32]): uint64
   {
-    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.byte>, validate=true), void
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.byte,32>, validate=true), void
     return len(value)
   }
   
   manualValidationInConvert(rawBytes: bytes): uint64
   {
-    value: arc4.static_array<arc4.byte> = ARC4_FROM_BYTES(rawBytes, wtype=arc4.static_array<arc4.byte>, validate=true)
+    value: arc4.static_array<arc4.byte,32> = ARC4_FROM_BYTES(rawBytes, wtype=arc4.static_array<arc4.byte,32>, validate=true)
     return value.length
   }
   
   manualValidationAfterConvert(rawBytes: bytes): uint64
   {
-    value: arc4.static_array<arc4.byte> = ARC4_FROM_BYTES(rawBytes, wtype=arc4.static_array<arc4.byte>, validate=false)
-    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.byte>, validate=true), void
+    value: arc4.static_array<arc4.byte,32> = ARC4_FROM_BYTES(rawBytes, wtype=arc4.static_array<arc4.byte,32>, validate=false)
+    ARC4_FROM_BYTES(value, wtype=arc4.static_array<arc4.byte,32>, validate=true), void
     return value.length
   }
   

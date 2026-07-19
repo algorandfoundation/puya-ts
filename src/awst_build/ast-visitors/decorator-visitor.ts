@@ -1,4 +1,5 @@
 import ts from 'typescript'
+import { Constants } from '../../constants'
 import { logger } from '../../logger'
 import { invariant, isIn } from '../../util'
 import { accept } from '../../visitor/visitor'
@@ -67,7 +68,7 @@ export class DecoratorVisitor extends BaseVisitor {
     let readonlyDecorator: ReadonlyDecoratorData | undefined = undefined
     for (const data of DecoratorVisitor.buildDecoratorData(target)) {
       switch (data.type) {
-        case 'arc4.abimethod':
+        case Constants.symbolNames.arc4AbiDecoratorName:
           if (abiDecorator) {
             logger.error(
               data.sourceLocation,
@@ -79,7 +80,7 @@ export class DecoratorVisitor extends BaseVisitor {
             abiDecorator = data
           }
           break
-        case 'arc4.baremethod':
+        case Constants.symbolNames.arc4BareDecoratorName:
           if (bareDecorator) {
             logger.error(
               data.sourceLocation,
@@ -91,7 +92,7 @@ export class DecoratorVisitor extends BaseVisitor {
             bareDecorator = data
           }
           break
-        case 'arc4.readonly':
+        case Constants.symbolNames.readonlyDecoratorName:
           if (readonlyDecorator) {
             logger.error(data.sourceLocation, 'Only one readonly decorator is allowed per method')
           } else {

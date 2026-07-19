@@ -8,7 +8,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
     block@2: // abi_routing_L4
         let tmp%2#0: uint64 = (txn OnCompletion)
         let tmp%3#0: bool = (== tmp%2#0 NoOp)
-        (assert tmp%3#0) // OnCompletion must be NoOp
+        (assert tmp%3#0)
         let tmp%4#0: uint64 = (txn ApplicationID)
         let tmp%5#0: bool = (!= tmp%4#0 0u)
         goto tmp%5#0 ? block@3 : block@8
@@ -36,7 +36,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%9#0: uint64 = (txn ApplicationID)
         let tmp%10#0: bool = (== tmp%9#0 0u)
         let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
-        (assert tmp%11#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%11#0)
         tests/approvals/urange.algo.ts::UrangeAlgo.__algots__.defaultCreate()
         exit 1u
     block@11: // after_if_else_L4
@@ -93,16 +93,33 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testSingleArg() -> Encoded
         let encoded_array%1#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%1#0
         let total_length%0#0: uint64 = (len encoded_array%1#0)
         let extract_to_end%0#0: bytes = (substring3 encoded_array%1#0 2u total_length%0#0)
-        let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
-        let total_length%1#0: uint64 = (len concat%0#0)
-        let extract_to_end%1#0: bytes = (substring3 concat%0#0 2u total_length%1#0)
-        let len%0#0: uint64 = (len extract_to_end%1#0)
-        let div_floor%0#0: uint64 = (/ len%0#0 8u)
-        let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
-        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
-        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = replace%0#0
-        let results#2: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 encoded_array%1#0 0u) // on error: invalid array length header
+        let tmp%0#0: uint64 = aggregate%array_length%0#0
+        let array#0: bytes = results#1
+        let new_items_bytes#0: bytes = extract_to_end%0#0
+        let new_items_count#0: uint64 = tmp%0#0
+        goto block@5
+    block@5: // L175
+        let tmp%0#1: uint64 = (extract_uint16 array#0 0u)
+        let array_length#0: uint64 = tmp%0#1
+        let tmp%1#1: uint64 = (+ array_length#0 new_items_count#0)
+        let new_array_length#0: uint64 = tmp%1#1
+        let i#1: uint64 = new_array_length#0
+        goto block@6
+    block@6: // L26
+        let tmp%0#2: bytes = (itob i#1)
+        let tmp%1#2: bytes = ((extract 6 0) tmp%0#2)
+        let tmp%2#0: bytes = tmp%1#2
+        goto block@7
+    block@7: // after_inlined__puya_lib.arc4._itob16_L175
+        let new_len_u16#0: bytes = tmp%2#0
+        let tmp%3#0: bytes = (replace3 array#0 0u new_len_u16#0)
+        let result#0: bytes = tmp%3#0
+        let tmp%4#0: bytes = (concat result#0 new_items_bytes#0)
+        let tmp%1#0: Encoded(len+uint64[]) = tmp%4#0
+        goto block@8
+    block@8: // after_inlined__puya_lib.arc4.dynamic_array_concat_fixed_L7
+        let results#2: Encoded(len+uint64[]) = tmp%1#0
         goto block@3
     block@3: // for_footer_L7
         let value_internal%0#2: uint64 = (+ value_internal%0#1 1u)
@@ -137,16 +154,33 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testTwoArg() -> Encoded(le
         let encoded_array%1#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%1#0
         let total_length%0#0: uint64 = (len encoded_array%1#0)
         let extract_to_end%0#0: bytes = (substring3 encoded_array%1#0 2u total_length%0#0)
-        let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
-        let total_length%1#0: uint64 = (len concat%0#0)
-        let extract_to_end%1#0: bytes = (substring3 concat%0#0 2u total_length%1#0)
-        let len%0#0: uint64 = (len extract_to_end%1#0)
-        let div_floor%0#0: uint64 = (/ len%0#0 8u)
-        let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
-        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
-        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = replace%0#0
-        let results#2: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 encoded_array%1#0 0u) // on error: invalid array length header
+        let tmp%0#0: uint64 = aggregate%array_length%0#0
+        let array#0: bytes = results#1
+        let new_items_bytes#0: bytes = extract_to_end%0#0
+        let new_items_count#0: uint64 = tmp%0#0
+        goto block@5
+    block@5: // L175
+        let tmp%0#1: uint64 = (extract_uint16 array#0 0u)
+        let array_length#0: uint64 = tmp%0#1
+        let tmp%1#1: uint64 = (+ array_length#0 new_items_count#0)
+        let new_array_length#0: uint64 = tmp%1#1
+        let i#1: uint64 = new_array_length#0
+        goto block@6
+    block@6: // L26
+        let tmp%0#2: bytes = (itob i#1)
+        let tmp%1#2: bytes = ((extract 6 0) tmp%0#2)
+        let tmp%2#0: bytes = tmp%1#2
+        goto block@7
+    block@7: // after_inlined__puya_lib.arc4._itob16_L175
+        let new_len_u16#0: bytes = tmp%2#0
+        let tmp%3#0: bytes = (replace3 array#0 0u new_len_u16#0)
+        let result#0: bytes = tmp%3#0
+        let tmp%4#0: bytes = (concat result#0 new_items_bytes#0)
+        let tmp%1#0: Encoded(len+uint64[]) = tmp%4#0
+        goto block@8
+    block@8: // after_inlined__puya_lib.arc4.dynamic_array_concat_fixed_L14
+        let results#2: Encoded(len+uint64[]) = tmp%1#0
         goto block@3
     block@3: // for_footer_L14
         let value_internal%0#2: uint64 = (+ value_internal%0#1 1u)
@@ -181,16 +215,33 @@ subroutine tests/approvals/urange.algo.ts::UrangeAlgo.testThreeArg() -> Encoded(
         let encoded_array%1#0: Encoded(len+uint64[]) = aggregate%as_Encoded(len+uint64[])%1#0
         let total_length%0#0: uint64 = (len encoded_array%1#0)
         let extract_to_end%0#0: bytes = (substring3 encoded_array%1#0 2u total_length%0#0)
-        let concat%0#0: Encoded(len+uint64[]) = (concat results#1 extract_to_end%0#0) // on error: max array length exceeded
-        let total_length%1#0: uint64 = (len concat%0#0)
-        let extract_to_end%1#0: bytes = (substring3 concat%0#0 2u total_length%1#0)
-        let len%0#0: uint64 = (len extract_to_end%1#0)
-        let div_floor%0#0: uint64 = (/ len%0#0 8u)
-        let as_bytes%0#0: bytes[8] = (itob div_floor%0#0)
-        let as_u16_bytes%0#0: bytes = ((extract 6 2) as_bytes%0#0)
-        let replace%0#0: bytes = (replace3 concat%0#0 0u as_u16_bytes%0#0)
-        let as_Encoded(len+uint64[])%0#0: Encoded(len+uint64[]) = replace%0#0
-        let results#2: Encoded(len+uint64[]) = as_Encoded(len+uint64[])%0#0
+        let aggregate%array_length%0#0: uint64 = (extract_uint16 encoded_array%1#0 0u) // on error: invalid array length header
+        let tmp%0#0: uint64 = aggregate%array_length%0#0
+        let array#0: bytes = results#1
+        let new_items_bytes#0: bytes = extract_to_end%0#0
+        let new_items_count#0: uint64 = tmp%0#0
+        goto block@5
+    block@5: // L175
+        let tmp%0#1: uint64 = (extract_uint16 array#0 0u)
+        let array_length#0: uint64 = tmp%0#1
+        let tmp%1#1: uint64 = (+ array_length#0 new_items_count#0)
+        let new_array_length#0: uint64 = tmp%1#1
+        let i#1: uint64 = new_array_length#0
+        goto block@6
+    block@6: // L26
+        let tmp%0#2: bytes = (itob i#1)
+        let tmp%1#2: bytes = ((extract 6 0) tmp%0#2)
+        let tmp%2#0: bytes = tmp%1#2
+        goto block@7
+    block@7: // after_inlined__puya_lib.arc4._itob16_L175
+        let new_len_u16#0: bytes = tmp%2#0
+        let tmp%3#0: bytes = (replace3 array#0 0u new_len_u16#0)
+        let result#0: bytes = tmp%3#0
+        let tmp%4#0: bytes = (concat result#0 new_items_bytes#0)
+        let tmp%1#0: Encoded(len+uint64[]) = tmp%4#0
+        goto block@8
+    block@8: // after_inlined__puya_lib.arc4.dynamic_array_concat_fixed_L21
+        let results#2: Encoded(len+uint64[]) = tmp%1#0
         goto block@3
     block@3: // for_footer_L21
         let value_internal%0#2: uint64 = (+ value_internal%0#1 3u)

@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto'
 import fs from 'fs'
 import { globIterateSync } from 'glob'
 import type { WriteFileOptions } from 'node:fs'
@@ -7,29 +6,6 @@ import { gzipSync } from 'node:zlib'
 import os from 'os'
 import pathe from 'pathe'
 
-export type TempFile = {
-  writeFileSync(data: NodeJS.ArrayBufferView, options?: WriteFileOptions): void
-  writeFileSync(data: string, options?: WriteFileOptions): void
-  readonly filePath: string
-} & Disposable
-
-export function generateTempFile(options?: { ext?: string }): TempFile {
-  const { ext = 'tmp' } = options ?? {}
-  const tempDir = generateTempDir()
-  const filePath = pathe.join(tempDir.dirPath, `${randomUUID()}.${ext}`)
-
-  return {
-    get filePath() {
-      return filePath
-    },
-    writeFileSync(data: string | NodeJS.ArrayBufferView, options?: WriteFileOptions) {
-      fs.writeFileSync(filePath, data, options)
-    },
-    [Symbol.dispose]() {
-      tempDir[Symbol.dispose]()
-    },
-  }
-}
 export type TempDir = {
   readonly dirPath: string
   files(): IterableIterator<string>

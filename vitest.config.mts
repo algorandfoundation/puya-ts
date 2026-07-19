@@ -12,12 +12,13 @@ export default defineConfig({
       compilerOptions: {
         lib: ['ESNext'],
       },
+      exclude: ['tests/**/*.client.ts'],
     }),
   ],
   test: {
     setupFiles: 'test.setup.ts',
     globals: true,
     testTimeout: 30_000,
-    exclude: ['packages/**', 'node_modules/**'],
+    exclude: ['packages/**', '**/node_modules/**'],
   },
 })

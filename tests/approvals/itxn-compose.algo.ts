@@ -12,7 +12,7 @@ import {
   urange,
 } from '@algorandfoundation/algorand-typescript'
 import type { Address } from '@algorandfoundation/algorand-typescript/arc4'
-import { compileArc4 } from '@algorandfoundation/algorand-typescript/arc4'
+import { compileArc4, methodSelector } from '@algorandfoundation/algorand-typescript/arc4'
 import { Hello } from './precompiled-apps.algo'
 
 class ItxnComposeAlgo extends Contract {
@@ -37,7 +37,9 @@ class ItxnComposeAlgo extends Contract {
       })
     }
 
-    itxnCompose.next(VerifierContract.prototype.verify, {
+    itxnCompose.next({
+      type: TransactionType.ApplicationCall,
+      appArgs: [methodSelector('verify()void')],
       appId: verifier,
     })
 

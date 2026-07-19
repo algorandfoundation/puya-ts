@@ -46,7 +46,7 @@ class ContainsMutableVisitor extends DefaultVisitor<boolean> {
   }
 
   visitARC4StructType(ptype: ARC4StructType): boolean {
-    return Object.values(ptype.fields).some((t) => t.accept(this) || t.accept(this.isMutableVisitor))
+    return ptype.fields.some((t) => t.ptype.accept(this) || t.ptype.accept(this.isMutableVisitor))
   }
 
   visitARC4TupleType(ptype: ARC4TupleType): boolean {
@@ -54,11 +54,11 @@ class ContainsMutableVisitor extends DefaultVisitor<boolean> {
   }
 
   visitImmutableObjectPType(ptype: ImmutableObjectPType): boolean {
-    return Object.values(ptype.properties).some((t) => t.accept(this) || t.accept(this.isMutableVisitor))
+    return ptype.properties.some((t) => t.ptype.accept(this) || t.ptype.accept(this.isMutableVisitor))
   }
 
   visitMutableObjectPType(ptype: MutableObjectPType): boolean {
-    return Object.values(ptype.properties).some((t) => t.accept(this) || t.accept(this.isMutableVisitor))
+    return ptype.properties.some((t) => t.ptype.accept(this) || t.ptype.accept(this.isMutableVisitor))
   }
 
   visitReferenceArrayType(ptype: ReferenceArrayType): boolean {

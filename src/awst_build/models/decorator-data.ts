@@ -50,6 +50,7 @@ export type LogicSigOptionsDecoratorData = {
   avmVersion?: SupportedAvmVersion
   name?: string
   scratchSlots?: Set<bigint>
+  validateEncoding?: boolean
 }
 export type ContractOptionsDecoratorData = {
   type: typeof Constants.symbolNames.contractOptionsDecoratorName

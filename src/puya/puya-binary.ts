@@ -139,7 +139,7 @@ async function smokeTestBinary(path: string) {
     args: ['--version'],
     onOutput: (line) => (output += line),
   })
-  if (!/^puya ((\d+)\.(\d+)\.(\d+)(-.*)?)$/.test(output)) {
+  if (!/^puya ((\d+)\.(\d+)\.(\d+)(.*)?)$/.test(output)) {
     throw new InternalError(`Unexpected output from puya --version : ${output}`)
   }
 }

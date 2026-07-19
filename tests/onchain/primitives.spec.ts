@@ -1,4 +1,4 @@
-import { describe } from 'vitest'
+import { describe, expect } from 'vitest'
 import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
 
 describe('primitives', () => {
@@ -32,11 +32,11 @@ describe('primitives', () => {
   describe('strings', () => {
     const test = createArc4TestFixture({ paths: 'tests/approvals/strings.algo.ts', contracts: { StringContract: {} } })
 
-    test('can be joined', async ({ appClientStringContract, expect }) => {
+    test('can be joined', async ({ appClientStringContract }) => {
       const result = await appClientStringContract.send.call({ method: 'join', args: ['hello', 'world'] })
       expect(result.return).toBe('helloworld')
     })
-    test('can be interpolated', async ({ appClientStringContract, expect }) => {
+    test('can be interpolated', async ({ appClientStringContract }) => {
       const result = await appClientStringContract.send.call({ method: 'interpolate', args: ['hello'] })
       expect(result.return).toBe('You interpolated hello')
     })

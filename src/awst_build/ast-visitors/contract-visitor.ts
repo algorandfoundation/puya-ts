@@ -10,7 +10,9 @@ import { CodeError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, invariant } from '../../util'
 import { BoxProxyExpressionBuilder } from '../eb/storage/box'
+import { GlobalMapFunctionResultBuilder } from '../eb/storage/global-map'
 import { GlobalStateFunctionResultBuilder } from '../eb/storage/global-state'
+import { LocalMapFunctionResultBuilder } from '../eb/storage/local-map'
 import { LocalStateFunctionResultBuilder } from '../eb/storage/local-state'
 import { ContractClassModel } from '../models/contract-class-model'
 import type { ContractOptionsDecoratorData } from '../models/decorator-data'
@@ -167,7 +169,11 @@ export class ContractVisitor extends ClassDefinitionVisitor {
     const sourceLocation = this.sourceLocation(node)
     codeInvariant(!node.questionToken, 'Optional properties are not supported', sourceLocation)
     codeInvariant(!node.exclamationToken, 'Non-null assertion operators on properties are not supported', sourceLocation)
-    codeInvariant(!node.modifiers?.some((m) => m.kind === ts.SyntaxKind.StaticKeyword), 'Static properties are not supported')
+    codeInvariant(
+      !node.modifiers?.some((m) => m.kind === ts.SyntaxKind.StaticKeyword),
+      'Static properties are not supported',
+      sourceLocation,
+    )
 
     const propertyName = this.textVisitor.accept(node.name)
     codeInvariant(node.initializer, 'Properties must have an initializer', sourceLocation)
@@ -176,7 +182,13 @@ export class ContractVisitor extends ClassDefinitionVisitor {
     }
     const initializer = this.accept(node.initializer)
 
-    if (initializer instanceof GlobalStateFunctionResultBuilder) {
+    if (
+      initializer instanceof BoxProxyExpressionBuilder ||
+      initializer instanceof LocalStateFunctionResultBuilder ||
+      initializer instanceof LocalMapFunctionResultBuilder ||
+      initializer instanceof GlobalStateFunctionResultBuilder ||
+      initializer instanceof GlobalMapFunctionResultBuilder
+    ) {
       const storageDeclaration = initializer.buildStorageDeclaration(
         propertyName,
         this.sourceLocation(node.name),
@@ -184,7 +196,8 @@ export class ContractVisitor extends ClassDefinitionVisitor {
         this._contractPType,
       )
       this.context.addStorageDeclaration(storageDeclaration)
-      if (initializer.initialValue) {
+
+      if (initializer instanceof GlobalStateFunctionResultBuilder && initializer.initialValue) {
         this._propertyInitialization.push(
           nodeFactory.assignmentStatement({
             target: nodeFactory.appStateExpression({
@@ -198,19 +211,10 @@ export class ContractVisitor extends ClassDefinitionVisitor {
           }),
         )
       }
-    } else if (initializer instanceof BoxProxyExpressionBuilder || initializer instanceof LocalStateFunctionResultBuilder) {
-      this.context.addStorageDeclaration(
-        initializer.buildStorageDeclaration(
-          propertyName,
-          this.sourceLocation(node.name),
-          this.getNodeDescription(node),
-          this._contractPType,
-        ),
-      )
     } else {
       logger.error(
         initializer.sourceLocation,
-        `Unsupported property type ${initializer.typeDescription}. Only GlobalState, LocalState, and Box proxies can be stored on a contract.`,
+        `Unsupported property type ${initializer.typeDescription}. Only GlobalState, GlobalMap, LocalState, LocalMap, and Box proxies can be stored on a contract.`,
       )
     }
   }

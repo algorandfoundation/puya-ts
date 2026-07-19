@@ -50,6 +50,7 @@ import { CloneFunctionBuilder } from '../eb/clone-function-builder'
 import { CompileFunctionBuilder } from '../eb/compiled/compile-function'
 import { ContractClassBuilder, ContractOptionsDecoratorBuilder } from '../eb/contract-builder'
 import { EnsureBudgetFunctionBuilder } from '../eb/ensure-budget'
+import { LoggedAssertFunctionBuilder, LoggedErrFunctionBuilder } from '../eb/logged-error-builder'
 
 import { FreeSubroutineExpressionBuilder } from '../eb/free-subroutine-expression-builder'
 import { IntrinsicEnumBuilder } from '../eb/intrinsic-enum-builder'
@@ -69,7 +70,9 @@ import { AccountExpressionBuilder, AccountFunctionBuilder } from '../eb/referenc
 import { ApplicationExpressionBuilder, ApplicationFunctionBuilder } from '../eb/reference/application'
 import { AssetExpressionBuilder, AssetFunctionBuilder } from '../eb/reference/asset'
 import { BoxExpressionBuilder, BoxFunctionBuilder, BoxMapExpressionBuilder, BoxMapFunctionBuilder } from '../eb/storage/box'
+import { GlobalMapExpressionBuilder, GlobalMapFunctionBuilder } from '../eb/storage/global-map'
 import { GlobalStateExpressionBuilder, GlobalStateFunctionBuilder } from '../eb/storage/global-state'
+import { LocalMapExpressionBuilder, LocalMapFunctionBuilder } from '../eb/storage/local-map'
 import { LocalStateExpressionBuilder, LocalStateFunctionBuilder } from '../eb/storage/local-state'
 import { StringExpressionBuilder, StringFunctionBuilder } from '../eb/string-expression-builder'
 import { TemplateVarFunctionBuilder } from '../eb/template-var'
@@ -100,7 +103,7 @@ import {
   arc4StringType,
   ARC4StructClass,
   ARC4StructType,
-  Arc4TupleGeneric,
+  ARC4TupleGeneric,
   ARC4TupleType,
   ByteClass,
   compileArc4Function,
@@ -110,8 +113,8 @@ import {
   decodeArc4Function,
   DynamicArrayGeneric,
   DynamicArrayType,
-  DynamicBytesConstructor,
-  DynamicBytesType,
+  DynamicBytesClass,
+  dynamicBytesType,
   encodeArc4Function,
   methodSelectorFunction,
   sizeOfFunction,
@@ -135,12 +138,12 @@ import {
   accountPType,
   anyGtxnType,
   applicationCallGtxnType,
-  applicationCallItxnFn,
+  applicationCallItxnFunction,
   applicationCallItxnParamsType,
-  ApplicationFunctionType,
-  applicationItxnType,
+  applicationCallItxnType,
+  ApplicationCallTxnFunction,
+  ApplicationFunction,
   applicationPType,
-  ApplicationTxnFunction,
   arc28EmitFunction,
   arc4AbiMethodDecorator,
   arc4BareMethodDecorator,
@@ -150,19 +153,19 @@ import {
   assertFunction,
   assertMatchFunction,
   assetConfigGtxnType,
-  assetConfigItxnFn,
+  assetConfigItxnFunction,
   assetConfigItxnParamsType,
   assetConfigItxnType,
   AssetConfigTxnFunction,
   assetFreezeGtxnType,
-  assetFreezeItxnFn,
+  assetFreezeItxnFunction,
   assetFreezeItxnParamsType,
   assetFreezeItxnType,
   AssetFreezeTxnFunction,
   AssetFunction,
   assetPType,
   assetTransferGtxnType,
-  assetTransferItxnFn,
+  assetTransferItxnFunction,
   assetTransferItxnParamsType,
   assetTransferItxnType,
   AssetTransferTxnFunction,
@@ -180,8 +183,8 @@ import {
   BytesPType,
   bzeroFunction,
   ClassMethodDecoratorContext,
-  cloneFunctionPType,
-  compileFunctionType,
+  cloneFunction,
+  compileFunction,
   ContractClassPType,
   contractOptionsDecorator,
   ensureBudgetFunction,
@@ -191,6 +194,8 @@ import {
   FunctionPType,
   GeneratorGeneric,
   GeneratorType,
+  GlobalMapGeneric,
+  GlobalMapType,
   GlobalStateGeneric,
   GlobalStateType,
   ImmutableObjectPType,
@@ -203,13 +208,17 @@ import {
   IterableIteratorType,
   itxnComposePType,
   keyRegistrationGtxnType,
-  keyRegistrationItxnFn,
+  keyRegistrationItxnFunction,
   keyRegistrationItxnParamsType,
   keyRegistrationItxnType,
   KeyRegistrationTxnFunction,
+  LocalMapGeneric,
+  LocalMapType,
   LocalStateGeneric,
   LocalStateType,
   logFunction,
+  loggedAssertFunction,
+  loggedErrFunction,
   logicSigOptionsDecorator,
   LogicSigPType,
   matchFunction,
@@ -221,7 +230,7 @@ import {
   onCompleteActionType,
   opUpFeeSourceType,
   paymentGtxnType,
-  paymentItxnFn,
+  paymentItxnFunction,
   paymentItxnParamsType,
   paymentItxnType,
   PaymentTxnFunction,
@@ -247,7 +256,7 @@ import {
   Uint64Function,
   uint64PType,
   urangeFunction,
-  validateEncodingFunctionPType,
+  validateEncodingFunction,
   voidPType,
 } from './index'
 import { ALL_OP_ENUMS } from './op-ptypes'
@@ -316,15 +325,17 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: logFunction, singletonEb: LogFunctionBuilder })
   typeRegistry.register({ ptype: assertFunction, singletonEb: AssertFunctionBuilder })
   typeRegistry.register({ ptype: errFunction, singletonEb: ErrFunctionBuilder })
+  typeRegistry.register({ ptype: loggedAssertFunction, singletonEb: LoggedAssertFunctionBuilder })
+  typeRegistry.register({ ptype: loggedErrFunction, singletonEb: LoggedErrFunctionBuilder })
   typeRegistry.register({ ptype: matchFunction, singletonEb: MatchFunctionBuilder })
   typeRegistry.register({ ptype: assertMatchFunction, singletonEb: AssertMatchFunctionBuilder })
   typeRegistry.register({ ptype: ensureBudgetFunction, singletonEb: EnsureBudgetFunctionBuilder })
   typeRegistry.register({ ptype: urangeFunction, singletonEb: UrangeFunctionBuilder })
   typeRegistry.register({ ptype: TemplateVarFunction, singletonEb: TemplateVarFunctionBuilder })
-  typeRegistry.register({ ptype: compileFunctionType, singletonEb: CompileFunctionBuilder })
+  typeRegistry.register({ ptype: compileFunction, singletonEb: CompileFunctionBuilder })
   typeRegistry.register({ ptype: arc28EmitFunction, singletonEb: Arc28EmitFunctionBuilder })
-  typeRegistry.register({ ptype: cloneFunctionPType, singletonEb: CloneFunctionBuilder })
-  typeRegistry.register({ ptype: validateEncodingFunctionPType, singletonEb: ValidateEncodingFunctionBuilder })
+  typeRegistry.register({ ptype: cloneFunction, singletonEb: CloneFunctionBuilder })
+  typeRegistry.register({ ptype: validateEncodingFunction, singletonEb: ValidateEncodingFunctionBuilder })
   typeRegistry.register({ ptype: ContractClassPType, singletonEb: ContractClassBuilder })
   typeRegistry.register({ ptype: contractOptionsDecorator, singletonEb: ContractOptionsDecoratorBuilder })
   typeRegistry.register({ ptype: LogicSigPType, singletonEb: LogicSigClassBuilder })
@@ -396,10 +407,22 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
     singletonEb: GlobalStateFunctionBuilder,
   })
   typeRegistry.registerGeneric({
+    generic: GlobalMapGeneric,
+    ptype: GlobalMapType,
+    instanceEb: GlobalMapExpressionBuilder,
+    singletonEb: GlobalMapFunctionBuilder,
+  })
+  typeRegistry.registerGeneric({
     generic: LocalStateGeneric,
     ptype: LocalStateType,
     instanceEb: LocalStateExpressionBuilder,
     singletonEb: LocalStateFunctionBuilder,
+  })
+  typeRegistry.registerGeneric({
+    generic: LocalMapGeneric,
+    ptype: LocalMapType,
+    instanceEb: LocalMapExpressionBuilder,
+    singletonEb: LocalMapFunctionBuilder,
   })
   typeRegistry.registerGeneric({ generic: BoxGeneric, ptype: BoxPType, instanceEb: BoxExpressionBuilder, singletonEb: BoxFunctionBuilder })
   typeRegistry.registerGeneric({
@@ -410,7 +433,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   })
 
   // Reference types
-  typeRegistry.register({ ptype: ApplicationFunctionType, singletonEb: ApplicationFunctionBuilder })
+  typeRegistry.register({ ptype: ApplicationFunction, singletonEb: ApplicationFunctionBuilder })
   typeRegistry.register({ ptype: applicationPType, instanceEb: ApplicationExpressionBuilder })
   typeRegistry.register({ ptype: AccountFunction, singletonEb: AccountFunctionBuilder })
   typeRegistry.register({ ptype: accountPType, instanceEb: AccountExpressionBuilder })
@@ -423,11 +446,11 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: arc4BareMethodDecorator, singletonEb: Arc4BareMethodDecoratorBuilder })
   typeRegistry.register({ ptype: ByteClass, singletonEb: classBuilderForUintNAlias(ByteClass, arc4ByteAlias) })
   typeRegistry.register({ ptype: UintN8Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 8n })) })
-  typeRegistry.register({ ptype: UintN16Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 16n })) })
-  typeRegistry.register({ ptype: UintN32Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 32n })) })
-  typeRegistry.register({ ptype: UintN64Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 64n })) })
-  typeRegistry.register({ ptype: UintN128Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 128n })) })
-  typeRegistry.register({ ptype: UintN256Class, singletonEb: classBuilderForUintNAlias(UintN8Class, new UintNType({ n: 256n })) })
+  typeRegistry.register({ ptype: UintN16Class, singletonEb: classBuilderForUintNAlias(UintN16Class, new UintNType({ n: 16n })) })
+  typeRegistry.register({ ptype: UintN32Class, singletonEb: classBuilderForUintNAlias(UintN32Class, new UintNType({ n: 32n })) })
+  typeRegistry.register({ ptype: UintN64Class, singletonEb: classBuilderForUintNAlias(UintN64Class, new UintNType({ n: 64n })) })
+  typeRegistry.register({ ptype: UintN128Class, singletonEb: classBuilderForUintNAlias(UintN128Class, new UintNType({ n: 128n })) })
+  typeRegistry.register({ ptype: UintN256Class, singletonEb: classBuilderForUintNAlias(UintN256Class, new UintNType({ n: 256n })) })
   typeRegistry.registerGeneric({
     generic: UintNGeneric,
     ptype: UintNType,
@@ -445,8 +468,8 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   // More specific types need to be registered before their base types
   // This ensures the specific type is selected during type resolution
   // For example, StaticBytesExpressionBuilder should be selected over general StaticArrayExpressionBuilder for StaticBytesType
-  typeRegistry.register({ ptype: DynamicBytesConstructor, singletonEb: DynamicBytesClassBuilder })
-  typeRegistry.register({ ptype: DynamicBytesType, instanceEb: DynamicBytesExpressionBuilder })
+  typeRegistry.register({ ptype: DynamicBytesClass, singletonEb: DynamicBytesClassBuilder })
+  typeRegistry.register({ ptype: dynamicBytesType, instanceEb: DynamicBytesExpressionBuilder })
   typeRegistry.registerGeneric({
     generic: StaticBytesGeneric,
     ptype: StaticBytesType,
@@ -473,7 +496,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: arc4StringType, instanceEb: StrExpressionBuilder })
   typeRegistry.register({ ptype: ARC4StrClass, singletonEb: StrClassBuilder })
   typeRegistry.registerGeneric({
-    generic: Arc4TupleGeneric,
+    generic: ARC4TupleGeneric,
     ptype: ARC4TupleType,
     instanceEb: Arc4TupleExpressionBuilder,
     singletonEb: Arc4TupleClassBuilder,
@@ -503,17 +526,17 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: assetFreezeGtxnType, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: AssetFreezeTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
   typeRegistry.register({ ptype: applicationCallGtxnType, instanceEb: GroupTransactionExpressionBuilder })
-  typeRegistry.register({ ptype: ApplicationTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
+  typeRegistry.register({ ptype: ApplicationCallTxnFunction, singletonEb: GroupTransactionFunctionBuilder })
   typeRegistry.register({ ptype: anyGtxnType, instanceEb: GroupTransactionExpressionBuilder })
   typeRegistry.register({ ptype: TransactionFunction, singletonEb: GroupTransactionFunctionBuilder })
 
   // ITXN Types
-  typeRegistry.register({ ptype: paymentItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
-  typeRegistry.register({ ptype: keyRegistrationItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
-  typeRegistry.register({ ptype: assetConfigItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
-  typeRegistry.register({ ptype: assetTransferItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
-  typeRegistry.register({ ptype: assetFreezeItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
-  typeRegistry.register({ ptype: applicationCallItxnFn, singletonEb: ItxnParamsFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: paymentItxnFunction, singletonEb: ItxnParamsFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: keyRegistrationItxnFunction, singletonEb: ItxnParamsFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: assetConfigItxnFunction, singletonEb: ItxnParamsFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: assetTransferItxnFunction, singletonEb: ItxnParamsFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: assetFreezeItxnFunction, singletonEb: ItxnParamsFactoryFunctionBuilder })
+  typeRegistry.register({ ptype: applicationCallItxnFunction, singletonEb: ItxnParamsFactoryFunctionBuilder })
   typeRegistry.register({ ptype: submitGroupItxnFunction, singletonEb: SubmitItxnGroupFunctionBuilder })
 
   typeRegistry.register({ ptype: paymentItxnType, instanceEb: InnerTransactionExpressionBuilder })
@@ -521,7 +544,7 @@ export function registerPTypes(typeRegistry: TypeRegistry) {
   typeRegistry.register({ ptype: assetConfigItxnType, instanceEb: InnerTransactionExpressionBuilder })
   typeRegistry.register({ ptype: assetTransferItxnType, instanceEb: InnerTransactionExpressionBuilder })
   typeRegistry.register({ ptype: assetFreezeItxnType, instanceEb: InnerTransactionExpressionBuilder })
-  typeRegistry.register({ ptype: applicationItxnType, instanceEb: InnerTransactionExpressionBuilder })
+  typeRegistry.register({ ptype: applicationCallItxnType, instanceEb: InnerTransactionExpressionBuilder })
 
   typeRegistry.register({ ptype: paymentItxnParamsType, instanceEb: ItxnParamsExpressionBuilder })
   typeRegistry.register({ ptype: keyRegistrationItxnParamsType, instanceEb: ItxnParamsExpressionBuilder })

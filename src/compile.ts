@@ -1,8 +1,9 @@
 import type ts from 'typescript'
+import { writeARC4Clients } from './arc4-clientgen'
 import type { AWST } from './awst/nodes'
 import { validateAwst } from './awst/validation'
 import { buildAwst } from './awst_build'
-import type { CompilationSet } from './awst_build/models/contract-class-model'
+import { type CompilationSet } from './awst_build/models/contract-class-model'
 import { registerPTypes } from './awst_build/ptypes/register'
 import { typeRegistry } from './awst_build/type-registry'
 import { appVersion } from './cli/app-version'
@@ -22,6 +23,8 @@ export type CompileResult = {
 
 export async function compile(options: CompileOptions, puyaService?: PuyaService): Promise<CompileResult> {
   const loggerCtx = LoggingContext.current
+  if (options.treatWarningsAsErrors) loggerCtx.treatWarningsAsErrors = true
+
   registerPTypes(typeRegistry)
   logger.info(undefined, appVersion({ withAVMVersion: false }))
   const programResult = createTsProgram(options)
@@ -45,7 +48,7 @@ export async function compile(options: CompileOptions, puyaService?: PuyaService
     }
   }
   if (!options.dryRun) {
-    await puyaCompile({
+    const compileResult = await puyaCompile({
       options,
       moduleAwst,
       programDirectory: programResult.programDirectory,
@@ -53,6 +56,10 @@ export async function compile(options: CompileOptions, puyaService?: PuyaService
       sourceFiles: programResult.sourceFiles,
       puyaService,
     })
+
+    if (options.outputClient) {
+      await writeARC4Clients(compilationSet, options.filePaths, compileResult.arc56)
+    }
   }
 
   return {

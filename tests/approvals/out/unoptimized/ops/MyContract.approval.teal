@@ -25,7 +25,7 @@ main_abi_routing@2:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_0 // 0
     !=
@@ -78,7 +78,7 @@ main___algots__.defaultCreate@9:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -131,16 +131,16 @@ tests/approvals/ops.algo.ts::MyContract.test_block@0:
     // tests/approvals/ops.algo.ts:11
     // assert(b === 2 ** 64 - 1)
     dup
-    pushint 18446744073709551615 // 18446744073709551615
+    pushint 18446744073709551615
     ==
     assert
     // tests/approvals/ops.algo.ts:13
     // const c = op.shr(b, 32)
-    pushint 32 // 32
+    pushint 32
     shr
     // tests/approvals/ops.algo.ts:15
     // assert(c === 2 ** 32 - 1)
-    pushint 4294967295 // 4294967295
+    pushint 4294967295
     ==
     assert
     // tests/approvals/ops.algo.ts:17

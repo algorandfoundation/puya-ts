@@ -1,4 +1,4 @@
-import { describe } from 'vitest'
+import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('mutable-object', () => {
@@ -7,7 +7,7 @@ describe('mutable-object', () => {
   test('testVectorCreationAndEquality', async ({ appClientMutableObjectDemo }) => {
     await appClientMutableObjectDemo.send.call({ method: 'testVectorCreationAndEquality' })
   })
-  test('add vectors', async ({ appClientMutableObjectDemo, expect }) => {
+  test('add vectors', async ({ appClientMutableObjectDemo }) => {
     const v1 = { x: 100, y: 100 }
     const v2 = { x: 50, y: 50 }
     const result = await appClientMutableObjectDemo.send.call({ method: 'addVectors', args: [v1, v2] })
@@ -17,7 +17,7 @@ describe('mutable-object', () => {
     const v1 = { x: 123, y: 456 }
     await appClientMutableObjectDemo.send.call({ method: 'implicitCastingAndSpreading', args: [v1] })
   })
-  test('mutate vector', async ({ appClientMutableObjectDemo, expect }) => {
+  test('mutate vector', async ({ appClientMutableObjectDemo }) => {
     const v1 = { x: 100, y: 100 }
     const result = await appClientMutableObjectDemo.send.call({ method: 'mutateVector', args: [v1, 50, 50] })
     expect(result.return).toStrictEqual({ x: 50n, y: 50n })

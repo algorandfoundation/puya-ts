@@ -7,9 +7,9 @@ export interface AlgoFile {
   outDir: AbsolutePath
 }
 
-export type FileExistsMethod = (fileName: string) => boolean
-export type ReadFileMethod = (fileName: string) => string | undefined
-export type SourceFileProvider = { fileExists: FileExistsMethod; readFile: ReadFileMethod }
+type FileExistsMethod = (fileName: string) => boolean
+type ReadFileMethod = (fileName: string) => string | undefined
+type SourceFileProvider = { fileExists: FileExistsMethod; readFile: ReadFileMethod }
 
 export class CompileOptions {
   public readonly filePaths: AlgoFile[]
@@ -24,14 +24,17 @@ export class CompileOptions {
   public readonly outputTeal: boolean
   public readonly outputArc32: boolean
   public readonly outputArc56: boolean
+  public readonly outputClient: boolean
   public readonly outputSsaIr: boolean
   public readonly outputOptimizationIr: boolean
   public readonly outputDestructuredIr: boolean
   public readonly outputMemoryIr: boolean
   public readonly outputBytecode: boolean
   public readonly outputSourceMap: boolean
+  public readonly outputAssemblyReport: boolean
   public readonly debugLevel: number
   public readonly optimizationLevel: number
+  public readonly treatWarningsAsErrors: boolean
   public readonly targetAvmVersion: number
   public readonly cliTemplateDefinitions: Record<string, Uint8Array | bigint>
   public readonly templateVarsPrefix: string
@@ -51,15 +54,18 @@ export class CompileOptions {
     this.dryRun = options.dryRun ?? false
     this.outputTeal = options.outputTeal ?? false
     this.outputArc32 = options.outputArc32 ?? false
-    this.outputArc56 = options.outputArc56 ?? false
+    this.outputArc56 = (options.outputArc56 || options.outputClient) ?? false
+    this.outputClient = options.outputClient ?? false
     this.outputSsaIr = options.outputSsaIr ?? false
     this.outputOptimizationIr = options.outputOptimizationIr ?? false
     this.outputDestructuredIr = options.outputDestructuredIr ?? false
     this.outputMemoryIr = options.outputMemoryIr ?? false
     this.outputBytecode = options.outputBytecode ?? false
     this.outputSourceMap = options.outputSourceMap ?? false
+    this.outputAssemblyReport = options.outputAssemblyReport ?? defaultPuyaOptions.outputAssemblyReport
     this.debugLevel = options.debugLevel ?? defaultPuyaOptions.debugLevel
     this.optimizationLevel = options.optimizationLevel ?? defaultPuyaOptions.optimizationLevel
+    this.treatWarningsAsErrors = options.treatWarningsAsErrors ?? defaultPuyaOptions.treatWarningsAsErrors
     this.targetAvmVersion = options.targetAvmVersion ?? defaultPuyaOptions.targetAvmVersion
     this.cliTemplateDefinitions = options.cliTemplateDefinitions ?? defaultPuyaOptions.cliTemplateDefinitions
     this.templateVarsPrefix = options.templateVarsPrefix ?? defaultPuyaOptions.templateVarsPrefix
@@ -90,14 +96,17 @@ export const defaultPuyaOptions: PuyaPassThroughOptions = {
   outputTeal: true,
   outputArc32: true,
   outputArc56: true,
+  outputClient: false,
   outputSsaIr: false,
   outputSourceMap: true,
   outputOptimizationIr: false,
   outputDestructuredIr: false,
   outputMemoryIr: false,
   outputBytecode: false,
+  outputAssemblyReport: false,
   debugLevel: 1,
   optimizationLevel: 1,
+  treatWarningsAsErrors: false,
   targetAvmVersion: 11,
   cliTemplateDefinitions: {},
   templateVarsPrefix: 'TMPL_',
@@ -111,14 +120,17 @@ export class PuyaOptions {
   outputTeal: boolean
   outputArc32: boolean
   outputArc56: boolean
+  outputClient: boolean
   outputSsaIr: boolean
   outputOptimizationIr: boolean
   outputDestructuredIr: boolean
   outputMemoryIr: boolean
   outputBytecode: boolean
   outputSourceMap: boolean
+  outputAssemblyReport: boolean
   debugLevel: number
   optimizationLevel: number
+  treatWarningsAsErrors: boolean
   targetAvmVersion: number
   cliTemplateDefinitions: Record<string, Uint8Array | bigint>
   templateVarsPrefix: string
@@ -132,13 +144,16 @@ export class PuyaOptions {
     this.outputTeal = options.outputTeal
     this.outputArc32 = options.outputArc32
     this.outputArc56 = options.outputArc56
+    this.outputClient = options.outputClient
     this.outputSsaIr = options.outputSsaIr
     this.outputOptimizationIr = options.outputOptimizationIr
     this.outputDestructuredIr = options.outputDestructuredIr
     this.outputMemoryIr = options.outputMemoryIr
     this.outputBytecode = options.outputBytecode
+    this.outputAssemblyReport = options.outputAssemblyReport
     this.debugLevel = options.debugLevel
     this.optimizationLevel = options.optimizationLevel
+    this.treatWarningsAsErrors = options.treatWarningsAsErrors
     this.targetAvmVersion = options.targetAvmVersion
     this.cliTemplateDefinitions = options.cliTemplateDefinitions
     this.templateVarsPrefix = options.templateVarsPrefix

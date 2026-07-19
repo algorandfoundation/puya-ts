@@ -2,7 +2,7 @@ import { Constants } from '../../constants'
 import { logger } from '../../logger'
 import type { ARC4Router, AWST, ContractMethod, SubroutineCallExpression } from '../nodes'
 import { Contract, InstanceSuperMethodTarget } from '../nodes'
-import { FunctionTraverser } from './awst-traverser'
+import { FunctionTraverser } from './function-traverser'
 
 export class Arc4ApprovalCallsRouter extends FunctionTraverser {
   static validate(awst: AWST[]) {

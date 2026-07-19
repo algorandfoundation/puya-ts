@@ -25,7 +25,7 @@ main_abi_routing@2:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_0 // 0
     !=
@@ -85,7 +85,7 @@ main___algots__.defaultCreate@10:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -117,7 +117,7 @@ test_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    pushint 2 // 2
+    pushint 2
     +
     intc_3 // 11
     +
@@ -156,7 +156,7 @@ testMutable_block@0:
     extract_uint16 // on error: invalid array length header
     intc_1 // 1
     *
-    pushint 2 // 2
+    pushint 2
     +
     intc_3 // 11
     +
@@ -208,7 +208,7 @@ tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test_block@0
     substring3
     extract 2 0
     frame_dig -1
-    pushint 80 // 80
+    pushint 80
     getbit
     uncover 2
     cover 1
@@ -249,7 +249,7 @@ tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.testMutable_
     uncover 2
     substring3
     frame_dig -1
-    pushint 80 // 80
+    pushint 80
     getbit
     bytec_1 // 0x00
     intc_0 // 0
@@ -279,7 +279,7 @@ tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.init:
 tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.init_block@0:
     // tests/approvals/destructured-params.algo.ts:18
     // this.test({ a: 456, b: Bytes(''), c: false })
-    pushint 456 // 456
+    pushint 456
     itob
     bytec_0 // 0x
     uncover 1
@@ -306,7 +306,7 @@ tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.init_block@0
     callsub tests/approvals/destructured-params.algo.ts::DestructuredParamsAlgo.test
     // tests/approvals/destructured-params.algo.ts:19
     // const temp = { a: Uint64(2), b: Bytes('Hello'), c: true }
-    pushint 2 // 2
+    pushint 2
     itob
     bytec_0 // 0x
     uncover 1

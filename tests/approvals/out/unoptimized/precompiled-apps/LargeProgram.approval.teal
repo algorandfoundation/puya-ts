@@ -46,7 +46,7 @@ main_getBigBytesLength_route@4:
     intc_0 // 0
     !=
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     callsub getBigBytesLength
     b main_switch_case_next@5
 
@@ -60,7 +60,7 @@ main_delete_route@3:
     intc_0 // 0
     !=
     &&
-    assert // OnCompletion must be DeleteApplication && can only call when not creating
+    assert
     callsub delete
     b main_switch_case_next@5
 
@@ -74,7 +74,7 @@ main___algots__.defaultCreate@6:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -87,7 +87,7 @@ getBigBytes:
 getBigBytes_block@0:
     // tests/approvals/precompiled-apps.algo.ts:63
     // return op.bzero(4096)
-    pushint 4096 // 4096
+    pushint 4096
     bzero
     retsub
 

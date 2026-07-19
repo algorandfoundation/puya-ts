@@ -4,7 +4,7 @@ import type * as awst from '../../awst/nodes'
 import type { Block } from '../../awst/nodes'
 import { Goto, ReturnStatement } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
-import { CodeError, InternalError, NotSupported } from '../../errors'
+import { CodeError, InternalError } from '../../errors'
 import { logger } from '../../logger'
 import { codeInvariant, hasFlags, instanceOfAny, invariant } from '../../util'
 import type { Statements } from '../../visitor/syntax-names'
@@ -15,6 +15,7 @@ import type { InstanceBuilder } from '../eb'
 import { BuilderComparisonOp } from '../eb'
 import { CloneFunctionBuilder } from '../eb/clone-function-builder'
 import { ArrayLiteralExpressionBuilder } from '../eb/literal/array-literal-expression-builder'
+import type { ObjectLiteralPart } from '../eb/literal/object-literal-expression-builder'
 import { ObjectLiteralExpressionBuilder } from '../eb/literal/object-literal-expression-builder'
 import { OmittedExpressionBuilder } from '../eb/omitted-expression-builder'
 import { requireExpressionOfType, requireInstanceBuilder } from '../eb/util'
@@ -55,7 +56,7 @@ export abstract class FunctionVisitor
 
     const args = node.parameters.map((p) => this.accept(p))
     const assignDestructuredParams = this.evaluateParameterBindingExpressions(node.parameters, sourceLocation)
-    codeInvariant(node.body, 'Functions must have a body')
+    codeInvariant(node.body, 'Functions must have a body', sourceLocation)
     const body = assignDestructuredParams.length
       ? nodeFactory.block({ sourceLocation }, assignDestructuredParams, this.accept(node.body))
       : this.accept(node.body)
@@ -70,25 +71,30 @@ export abstract class FunctionVisitor
   visitBindingName(bindingName: ts.BindingName, sourceLocation: SourceLocation): InstanceBuilder {
     switch (bindingName.kind) {
       case ts.SyntaxKind.ObjectBindingPattern: {
-        const props = Array<[string, InstanceBuilder]>()
+        const parts: ObjectLiteralPart[] = []
         for (const element of bindingName.elements) {
           const sourceLocation = this.sourceLocation(element)
 
-          const propertyNameIdentifier = element.propertyName ?? element.name
-          invariant(ts.isIdentifier(propertyNameIdentifier), 'propertyName must be an identifier')
-
-          const propertyName = this.textVisitor.accept(propertyNameIdentifier)
+          const sourcePropertyNameIdentifier = element.propertyName ?? element.name
+          codeInvariant(ts.isIdentifier(sourcePropertyNameIdentifier), 'propertyName must be an identifier', sourceLocation)
           codeInvariant(!element.dotDotDotToken, 'Spread operator is not supported here', sourceLocation)
           codeInvariant(!element.initializer, 'Initializer on object binding pattern is not supported', sourceLocation)
 
-          props.push([propertyName, this.visitBindingName(element.name, sourceLocation)])
+          const sourcePropertyName = this.textVisitor.accept(sourcePropertyNameIdentifier)
+          parts.push({
+            type: 'properties',
+            property: {
+              name: sourcePropertyName,
+              target: this.visitBindingName(element.name, sourceLocation),
+            },
+          })
         }
-        return ObjectLiteralExpressionBuilder.fromParts(sourceLocation, [{ type: 'properties', properties: Object.fromEntries(props) }])
+        return ObjectLiteralExpressionBuilder.fromParts(sourceLocation, parts)
       }
       case ts.SyntaxKind.ArrayBindingPattern: {
         const items: InstanceBuilder[] = []
         for (const element of bindingName.elements) {
-          const sourceLocation = this.context.getSourceLocation(element)
+          const sourceLocation = this.sourceLocation(element)
 
           if (ts.isOmittedExpression(element)) {
             items.push(new OmittedExpressionBuilder(sourceLocation))
@@ -150,9 +156,7 @@ export abstract class FunctionVisitor
   }
 
   visitClassDeclaration(node: ts.ClassDeclaration): awst.Statement | awst.Statement[] {
-    throw new NotSupported('Nested classes', {
-      sourceLocation: this.sourceLocation(node),
-    })
+    this.throwNotSupported(node, 'Nested classes')
   }
 
   visitVariableDeclarationList(node: ts.VariableDeclarationList): awst.Statement[] {
@@ -163,7 +167,7 @@ export abstract class FunctionVisitor
         // Typescript will already error if a destructuring expression is used without an initializer
         if (ts.isIdentifier(d.name)) {
           const ptype = this.context.getPTypeForNode(d.name)
-          codeInvariant(ptype.wtype, `${ptype.fullName} is not a valid variable type`)
+          codeInvariant(ptype.wtype, `${ptype.fullName} is not a valid variable type`, sourceLocation)
         }
         return []
       }
@@ -283,14 +287,10 @@ export abstract class FunctionVisitor
     )
   }
   visitForInStatement(node: ts.ForInStatement): awst.Statement | awst.Statement[] {
-    throw new NotSupported('For in statements', {
-      sourceLocation: this.sourceLocation(node),
-    })
+    this.throwNotSupported(node, 'For in statements')
   }
   visitTryStatement(node: ts.TryStatement): awst.Statement | awst.Statement[] {
-    throw new NotSupported('Try statements', {
-      sourceLocation: this.sourceLocation(node),
-    })
+    this.throwNotSupported(node, 'Try statements')
   }
   visitEmptyStatement(node: ts.EmptyStatement): awst.Statement | awst.Statement[] {
     return nodeFactory.block({ sourceLocation: this.sourceLocation(node), comment: 'Empty statement' })
@@ -306,13 +306,14 @@ export abstract class FunctionVisitor
     const condition = this.evaluateCondition(node.expression)
 
     const ifBranch = nodeFactory.block({ sourceLocation: this.sourceLocation(node.thenStatement) }, this.accept(node.thenStatement))
-    const elseBranch =
-      node.elseStatement && nodeFactory.block({ sourceLocation: this.sourceLocation(node.elseStatement) }, this.accept(node.elseStatement))
+    const elseBranch = node.elseStatement
+      ? nodeFactory.block({ sourceLocation: this.sourceLocation(node.elseStatement) }, this.accept(node.elseStatement))
+      : null
 
     return nodeFactory.ifElse({
       condition,
       ifBranch,
-      elseBranch: elseBranch ?? null,
+      elseBranch: elseBranch,
       sourceLocation,
     })
   }
@@ -388,7 +389,7 @@ export abstract class FunctionVisitor
     })
   }
   visitWithStatement(node: ts.WithStatement): awst.Statement | awst.Statement[] {
-    throw new NotSupported('with statements', { sourceLocation: this.sourceLocation(node) })
+    this.throwNotSupported(node, 'with statements')
   }
   visitSwitchStatement(node: ts.SwitchStatement): awst.Statement | awst.Statement[] {
     const sourceLocation = this.sourceLocation(node)
@@ -442,16 +443,14 @@ export abstract class FunctionVisitor
     return this.accept(node.statement)
   }
   visitThrowStatement(node: ts.ThrowStatement): awst.Statement | awst.Statement[] {
-    throw new NotSupported('Throw statements', {
-      sourceLocation: this.sourceLocation(node),
-    })
+    this.throwNotSupported(node, 'Throw statements')
   }
   visitDebuggerStatement(node: ts.DebuggerStatement): awst.Statement | awst.Statement[] {
     logger.warn(this.sourceLocation(node), 'Ignoring debugger statement')
     return []
   }
   visitImportDeclaration(node: ts.ImportDeclaration): awst.Statement | awst.Statement[] {
-    throw new NotSupported('Non-top-level import declarations')
+    this.throwNotSupported(node, 'Non-top-level import declarations')
   }
 
   visitBlock(node: ts.Block): awst.Block {

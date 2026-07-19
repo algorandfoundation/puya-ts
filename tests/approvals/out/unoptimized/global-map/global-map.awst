@@ -1,0 +1,116 @@
+contract TestGlobalMap
+{
+  globals {
+    ["uintMap"]: string => uint64
+    ["bytesMap"]: string => bytes
+    ["stringMap"]: string => string
+    ["p/"]: string => uint64
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  setAndGetUint(key: string, value: uint64): void
+  {
+    GlobalState[MapKey(prefix="uintMap", key=key)]: uint64 = value
+    assert(GlobalState[MapKey(prefix="uintMap", key=key)] == value, comment=uint value should match)
+  }
+  
+  setAndGetBytes(key: string, value: bytes): void
+  {
+    GlobalState[MapKey(prefix="bytesMap", key=key)]: bytes = value
+    assert(GlobalState[MapKey(prefix="bytesMap", key=key)] == value, comment=bytes value should match)
+  }
+  
+  setAndGetString(key: string, value: string): void
+  {
+    GlobalState[MapKey(prefix="stringMap", key=key)]: string = value
+    assert(GlobalState[MapKey(prefix="stringMap", key=key)] == value, comment=string value should match)
+  }
+  
+  deleteValue(key: string): void
+  {
+    GlobalState[MapKey(prefix="uintMap", key=key)]: uint64 = 123
+    assert(STATE_EXISTS(GlobalState[MapKey(prefix="uintMap", key=key)]), comment=should have value before delete)
+    STATE_DELETE(GlobalState[MapKey(prefix="uintMap", key=key)])
+    assert(!STATE_EXISTS(GlobalState[MapKey(prefix="uintMap", key=key)]), comment=should not have value after delete)
+  }
+  
+  hasValue(key: string): bool
+  {
+    return STATE_EXISTS(GlobalState[MapKey(prefix="uintMap", key=key)])
+  }
+  
+  testKeyPrefix(): void
+  {
+    assert("uintMap" == "uintMap", comment=default key prefix should be property name)
+    assert("p/" == "p/", comment=explicit key prefix should match)
+  }
+  
+  testPrefixedMap(key: string, value: uint64): void
+  {
+    GlobalState[MapKey(prefix="p/", key=key)]: uint64 = value
+    assert(GlobalState[MapKey(prefix="p/", key=key)] == value, comment=prefixed map value should match)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract TestGlobalMapTuple
+{
+  globals {
+    ["mapOfTuples"]: string => arc4.tuple<string,uint64,bool>
+    ["mapOfObjects"]: string => Object7C2C03A9
+    ["tupleMap"]: arc4.tuple<string,uint64,bool> => uint64
+    ["objectMap"]: Object7C2C03A9 => uint64
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testMapOfTuples(a: string, b: uint64, c: bool): void
+  {
+    GlobalState[MapKey(prefix="mapOfTuples", key="k1")]: arc4.tuple<string,uint64,bool> = ARC4_ENCODE(#[($0 = #[a, b, c]).0, $0.1, $0.2], wtype=arc4.tuple<string,uint64,bool>)
+    assert(GlobalState[MapKey(prefix="mapOfTuples", key="k1")].0 == a, comment=tuple[0] should match)
+    assert(GlobalState[MapKey(prefix="mapOfTuples", key="k1")].1 == b, comment=tuple[1] should match)
+    assert(GlobalState[MapKey(prefix="mapOfTuples", key="k1")].2 == c, comment=tuple[2] should match)
+  }
+  
+  testMapOfObjects(a: string, b: uint64): void
+  {
+    GlobalState[MapKey(prefix="mapOfObjects", key="k1")]: Object7C2C03A9 = new Object7C2C03A9(a=($1 = #{ a: a, b: b }).a, b=$1.b)
+    assert(GlobalState[MapKey(prefix="mapOfObjects", key="k1")].a == a, comment=object.a should match)
+    assert(GlobalState[MapKey(prefix="mapOfObjects", key="k1")].b == b, comment=object.b should match)
+  }
+  
+  testTupleMap(a: string, b: uint64, c: bool): void
+  {
+    GlobalState[MapKey(prefix="tupleMap", key=ARC4_ENCODE(#[a, b, c], wtype=arc4.tuple<string,uint64,bool>))]: uint64 = 99
+    assert(GlobalState[MapKey(prefix="tupleMap", key=ARC4_ENCODE(#[a, b, c], wtype=arc4.tuple<string,uint64,bool>))] == 99, comment=tuple value should match)
+  }
+  
+  testObjectMap(a: string, b: uint64): void
+  {
+    GlobalState[MapKey(prefix="objectMap", key=new Object7C2C03A9(a=a, b=b))]: uint64 = 99
+    assert(GlobalState[MapKey(prefix="objectMap", key=new Object7C2C03A9(a=a, b=b))] == 99, comment=object value should match)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

@@ -1,11 +1,11 @@
 import { algo } from '@algorandfoundation/algokit-utils'
-import { describe } from 'vitest'
+import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('box-enum-contract', () => {
   const test = createArc4TestFixture({ paths: 'tests/approvals/box-enum-contract.algo.ts', contracts: { BoxContract: {} } })
 
-  test('can store and load enums', async ({ appClientBoxContract, expect }) => {
+  test('can store and load enums', async ({ appClientBoxContract }) => {
     await appClientBoxContract.fundAppAccount({ amount: algo(1) })
 
     await appClientBoxContract.send.call({ method: 'store_enums', boxReferences: ['oca', 'txn'] })

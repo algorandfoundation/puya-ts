@@ -1,0 +1,327 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/local-map.algo.ts::TestLocalMap.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.__puya_arc4_router__() -> bool:
+    block@0: // L4
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@16
+    block@1: // abi_routing_L4
+        let tmp%2#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%2#0 {method "optIn()void" => block@2, * => block@3}
+    block@2: // optIn_route_L11
+        let tmp%3#0: uint64 = (txn OnCompletion)
+        let tmp%4#0: bool = (== tmp%3#0 OptIn)
+        let tmp%5#0: uint64 = (txn ApplicationID)
+        let tmp%6#0: bool = (!= tmp%5#0 0u)
+        let tmp%7#0: bool = (&& tmp%4#0 tmp%6#0)
+        (assert tmp%7#0)
+        tests/approvals/local-map.algo.ts::TestLocalMap.optIn[routing]()
+        goto block@3
+    block@3: // switch_case_next_L4
+        let tmp%8#0: uint64 = (txn OnCompletion)
+        let tmp%9#0: bool = (== tmp%8#0 NoOp)
+        (assert tmp%9#0)
+        let tmp%10#0: uint64 = (txn ApplicationID)
+        let tmp%11#0: bool = (!= tmp%10#0 0u)
+        goto tmp%11#0 ? block@4 : block@14
+    block@4: // call_NoOp_L4
+        let tmp%12#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%12#0 {method "setAndGetUint(string,uint64)void" => block@5, method "setAndGetBytes(string,byte[])void" => block@6, method "setAndGetString(string,string)void" => block@7, method "deleteValue(string)void" => block@8, method "hasValue(string)bool" => block@9, method "testKeyPrefix()void" => block@10, method "testPrefixedMap(string,uint64)void" => block@11, method "setAndGetUintViaLocalState(string,uint64)void" => block@12, * => block@13}
+    block@5: // setAndGetUint_route_L14
+        tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetUint[routing]()
+        goto block@13
+    block@6: // setAndGetBytes_route_L19
+        tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetBytes[routing]()
+        goto block@13
+    block@7: // setAndGetString_route_L24
+        tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetString[routing]()
+        goto block@13
+    block@8: // deleteValue_route_L29
+        tests/approvals/local-map.algo.ts::TestLocalMap.deleteValue[routing]()
+        goto block@13
+    block@9: // hasValue_route_L36
+        tests/approvals/local-map.algo.ts::TestLocalMap.hasValue[routing]()
+        goto block@13
+    block@10: // testKeyPrefix_route_L40
+        tests/approvals/local-map.algo.ts::TestLocalMap.testKeyPrefix[routing]()
+        goto block@13
+    block@11: // testPrefixedMap_route_L45
+        tests/approvals/local-map.algo.ts::TestLocalMap.testPrefixedMap[routing]()
+        goto block@13
+    block@12: // setAndGetUintViaLocalState_route_L50
+        tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetUintViaLocalState[routing]()
+        goto block@13
+    block@13: // switch_case_next_L4
+        goto block@15
+    block@14: // create_NoOp_L4
+        goto block@15
+    block@15: // after_if_else_L4
+        goto block@17
+    block@16: // __algots__.defaultCreate_L4
+        let tmp%13#0: uint64 = (txn OnCompletion)
+        let tmp%14#0: bool = (== tmp%13#0 NoOp)
+        let tmp%15#0: uint64 = (txn ApplicationID)
+        let tmp%16#0: bool = (== tmp%15#0 0u)
+        let tmp%17#0: bool = (&& tmp%14#0 tmp%16#0)
+        (assert tmp%17#0)
+        tests/approvals/local-map.algo.ts::TestLocalMap.__algots__.defaultCreate()
+        exit 1u
+    block@17: // after_if_else_L4
+        exit 0u
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.optIn[routing]() -> void:
+    block@0: // L11
+        tests/approvals/local-map.algo.ts::TestLocalMap.optIn()
+        exit 1u
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetUint[routing]() -> void:
+    block@0: // L14
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
+        let tmp%1#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%2#0
+        let tmp%3#0: uint64 = decode_bytes<uint64>(as_Encoded(uint64)%0#0)
+        tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetUint(tmp%1#0, tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetBytes[routing]() -> void:
+    block@0: // L19
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
+        let tmp%1#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let length%1#0: uint64 = array_len(tmp%2#0)
+        let mul%1#0: uint64 = (* length%1#0 1u)
+        let add%1#0: uint64 = (+ mul%1#0 2u)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 add%1#0)
+        (assert eq%1#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+uint8[])%0#0: Encoded(len+uint8[]) = tmp%2#0
+        let tmp%3#0: bytes = decode_bytes<bytes>(as_Encoded(len+uint8[])%0#0)
+        tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetBytes(tmp%1#0, tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetString[routing]() -> void:
+    block@0: // L24
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
+        let tmp%1#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let length%1#0: uint64 = array_len(tmp%2#0)
+        let mul%1#0: uint64 = (* length%1#0 1u)
+        let add%1#0: uint64 = (+ mul%1#0 2u)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 add%1#0)
+        (assert eq%1#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%1#0: Encoded(len+utf8[]) = tmp%2#0
+        let tmp%3#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%1#0)
+        tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetString(tmp%1#0, tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.deleteValue[routing]() -> void:
+    block@0: // L29
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
+        let tmp%1#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
+        tests/approvals/local-map.algo.ts::TestLocalMap.deleteValue(tmp%1#0)
+        exit 1u
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.hasValue[routing]() -> void:
+    block@0: // L36
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
+        let tmp%1#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
+        let tmp%2#0: bool = tests/approvals/local-map.algo.ts::TestLocalMap.hasValue(tmp%1#0)
+        let tmp%3#0: Encoded(bool8) = bytes_encode<bool8>(tmp%2#0)
+        let tmp%4#0: bytes = (concat 0x151f7c75 tmp%3#0)
+        (log tmp%4#0)
+        exit 1u
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.testKeyPrefix[routing]() -> void:
+    block@0: // L40
+        tests/approvals/local-map.algo.ts::TestLocalMap.testKeyPrefix()
+        exit 1u
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.testPrefixedMap[routing]() -> void:
+    block@0: // L45
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
+        let tmp%1#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%2#0
+        let tmp%3#0: uint64 = decode_bytes<uint64>(as_Encoded(uint64)%0#0)
+        tests/approvals/local-map.algo.ts::TestLocalMap.testPrefixedMap(tmp%1#0, tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetUintViaLocalState[routing]() -> void:
+    block@0: // L50
+        let tmp%0#0: bytes = (txna ApplicationArgs 1)
+        let length%0#0: uint64 = array_len(tmp%0#0)
+        let mul%0#0: uint64 = (* length%0#0 1u)
+        let add%0#0: uint64 = (+ mul%0#0 2u)
+        let len%0#0: uint64 = (len tmp%0#0)
+        let eq%0#0: bool = (== len%0#0 add%0#0)
+        (assert eq%0#0) // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+        let as_Encoded(len+utf8[])%0#0: Encoded(len+utf8[]) = tmp%0#0
+        let tmp%1#0: string = decode_bytes<string>(as_Encoded(len+utf8[])%0#0)
+        let tmp%2#0: bytes = (txna ApplicationArgs 2)
+        let len%1#0: uint64 = (len tmp%2#0)
+        let eq%1#0: bool = (== len%1#0 8u)
+        (assert eq%1#0) // invalid number of bytes for arc4.uint64
+        let as_Encoded(uint64)%0#0: Encoded(uint64) = tmp%2#0
+        let tmp%3#0: uint64 = decode_bytes<uint64>(as_Encoded(uint64)%0#0)
+        tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetUintViaLocalState(tmp%1#0, tmp%3#0)
+        exit 1u
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.optIn() -> void:
+    block@0: // L11
+        return 
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetUint(key: string, value: uint64) -> void:
+    block@0: // L14
+        let map_prefixed_key%0#0: bytes = (concat "uintMap" key#0)
+        let tmp%0#0: account = (txn Sender)
+        (app_local_put tmp%0#0 map_prefixed_key%0#0 value#0)
+        let map_prefixed_key%1#0: bytes = (concat "uintMap" key#0)
+        let tmp%1#0: account = (txn Sender)
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_local_get_ex tmp%1#0 0u map_prefixed_key%1#0)
+        (assert maybe_exists%0#0) // check LocalState exists
+        let tmp%2#0: bool = (== maybe_value%0#0 value#0)
+        (assert tmp%2#0) // uint value should match
+        return 
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetBytes(key: string, value: bytes) -> void:
+    block@0: // L19
+        let map_prefixed_key%0#0: bytes = (concat "bytesMap" key#0)
+        let tmp%0#0: account = (txn Sender)
+        (app_local_put tmp%0#0 map_prefixed_key%0#0 value#0)
+        let map_prefixed_key%1#0: bytes = (concat "bytesMap" key#0)
+        let tmp%1#0: account = (txn Sender)
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (app_local_get_ex tmp%1#0 0u map_prefixed_key%1#0)
+        (assert maybe_exists%0#0) // check LocalState exists
+        let tmp%2#0: bool = (== maybe_value%0#0 value#0)
+        (assert tmp%2#0) // bytes value should match
+        return 
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetString(key: string, value: string) -> void:
+    block@0: // L24
+        let map_prefixed_key%0#0: bytes = (concat "stringMap" key#0)
+        let tmp%0#0: account = (txn Sender)
+        (app_local_put tmp%0#0 map_prefixed_key%0#0 value#0)
+        let map_prefixed_key%1#0: bytes = (concat "stringMap" key#0)
+        let tmp%1#0: account = (txn Sender)
+        let (maybe_value%0#0: bytes, maybe_exists%0#0: bool) = (app_local_get_ex tmp%1#0 0u map_prefixed_key%1#0)
+        (assert maybe_exists%0#0) // check LocalState exists
+        let tmp%2#0: bool = (== maybe_value%0#0 value#0)
+        (assert tmp%2#0) // string value should match
+        return 
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.deleteValue(key: string) -> void:
+    block@0: // L29
+        let map_prefixed_key%0#0: bytes = (concat "uintMap" key#0)
+        let tmp%0#0: account = (txn Sender)
+        (app_local_put tmp%0#0 map_prefixed_key%0#0 123u)
+        let map_prefixed_key%1#0: bytes = (concat "uintMap" key#0)
+        let tmp%1#0: account = (txn Sender)
+        let (_%0#0: uint64, maybe_exists%0#0: bool) = (app_local_get_ex tmp%1#0 0u map_prefixed_key%1#0)
+        (assert maybe_exists%0#0) // should have value before delete
+        let tmp%2#0: account = (txn Sender)
+        let map_prefixed_key%2#0: bytes = (concat "uintMap" key#0)
+        (app_local_del tmp%2#0 map_prefixed_key%2#0)
+        let map_prefixed_key%3#0: bytes = (concat "uintMap" key#0)
+        let tmp%3#0: account = (txn Sender)
+        let (_%1#0: uint64, maybe_exists%1#0: bool) = (app_local_get_ex tmp%3#0 0u map_prefixed_key%3#0)
+        let tmp%4#0: bool = (! maybe_exists%1#0)
+        (assert tmp%4#0) // should not have value after delete
+        return 
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.hasValue(key: string) -> bool:
+    block@0: // L36
+        let map_prefixed_key%0#0: bytes = (concat "uintMap" key#0)
+        let tmp%0#0: account = (txn Sender)
+        let (_%0#0: uint64, maybe_exists%0#0: bool) = (app_local_get_ex tmp%0#0 0u map_prefixed_key%0#0)
+        return maybe_exists%0#0
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.testKeyPrefix() -> void:
+    block@0: // L40
+        let tmp%0#0: bool = (== "uintMap" "uintMap")
+        (assert tmp%0#0) // default key prefix should be property name
+        let tmp%1#0: bool = (== "p/" "p/")
+        (assert tmp%1#0) // explicit key prefix should match
+        return 
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.testPrefixedMap(key: string, value: uint64) -> void:
+    block@0: // L45
+        let map_prefixed_key%0#0: bytes = (concat "p/" key#0)
+        let tmp%0#0: account = (txn Sender)
+        (app_local_put tmp%0#0 map_prefixed_key%0#0 value#0)
+        let map_prefixed_key%1#0: bytes = (concat "p/" key#0)
+        let tmp%1#0: account = (txn Sender)
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_local_get_ex tmp%1#0 0u map_prefixed_key%1#0)
+        (assert maybe_exists%0#0) // check LocalState exists
+        let tmp%2#0: bool = (== maybe_value%0#0 value#0)
+        (assert tmp%2#0) // prefixed map value should match
+        return 
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetUintViaLocalState(key: string, value: uint64) -> void:
+    block@0: // L50
+        let map_prefixed_key%0#0: bytes = (concat "uintMap" key#0)
+        let tmp%0#0: account = (txn Sender)
+        (app_local_put tmp%0#0 map_prefixed_key%0#0 value#0)
+        let map_prefixed_key%1#0: bytes = (concat "uintMap" key#0)
+        let tmp%1#0: account = (txn Sender)
+        let (maybe_value%0#0: uint64, maybe_exists%0#0: bool) = (app_local_get_ex tmp%1#0 0u map_prefixed_key%1#0)
+        (assert maybe_exists%0#0) // check LocalState exists
+        let tmp%2#0: bool = (== maybe_value%0#0 value#0)
+        (assert tmp%2#0) // uint value via LocalState should match
+        return 
+
+subroutine tests/approvals/local-map.algo.ts::TestLocalMap.__algots__.defaultCreate() -> void:
+    block@0: // L4
+        return 

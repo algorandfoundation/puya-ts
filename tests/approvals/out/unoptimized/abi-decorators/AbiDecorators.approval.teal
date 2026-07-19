@@ -34,7 +34,7 @@ main_switch_case_next@5:
     txn OnCompletion
     intc_1 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txna ApplicationArgs 0
     pushbytes 0x09b10ffd // method "readonlyAlt2()uint64"
     uncover 1
@@ -125,7 +125,7 @@ main_allActions_route@4:
     txn ApplicationID
     intc_1 // 0
     !=
-    assert // can only call when not creating
+    assert
     callsub allActions
     b main_switch_case_next@5
 
@@ -290,7 +290,7 @@ tests/approvals/abi-decorators.algo.ts::AbiDecorators.readonly:
 tests/approvals/abi-decorators.algo.ts::AbiDecorators.readonly_block@0:
     // tests/approvals/abi-decorators.algo.ts:13
     // return 5
-    pushint 5 // 5
+    pushint 5
     retsub
 
 
@@ -331,7 +331,7 @@ tests/approvals/abi-decorators.algo.ts::AbiDecorators.readonlyAlt2:
 tests/approvals/abi-decorators.algo.ts::AbiDecorators.readonlyAlt2_block@0:
     // tests/approvals/abi-decorators.algo.ts:31
     // return 2
-    pushint 2 // 2
+    pushint 2
     retsub
 
 
@@ -353,6 +353,6 @@ constructor_after_inlined_@algorandfoundation/algorand-typescript/base-contract.
     // tests/approvals/abi-decorators.algo.ts:16
     // globalValue = GlobalState({ initialValue: Uint64(123) })
     pushbytes "globalValue"
-    pushint 123 // 123
+    pushint 123
     app_global_put
     retsub

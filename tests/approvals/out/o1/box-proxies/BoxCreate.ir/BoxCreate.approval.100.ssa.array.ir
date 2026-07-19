@@ -10,7 +10,7 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%4#0: bool = (! tmp%3#0)
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%7#0: bool = (&& tmp%4#0 tmp%5#0)
-        (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
+        (assert tmp%7#0)
         tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes[routing]()
         goto block@4
     block@4: // switch_case_next_L139
@@ -21,37 +21,16 @@ main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalP
         let tmp%10#0: uint64 = (txn ApplicationID)
         let tmp%11#0: bool = (! tmp%10#0)
         let tmp%12#0: bool = (&& tmp%9#0 tmp%11#0)
-        (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%12#0)
         exit 1u
 
 subroutine tests/approvals/box-proxies.algo.ts::BoxCreate.createBoxes[routing]() -> void:
     block@0: // L148
         (box_create "a" 10u)
-        let (value%0#0: uint64, check%0#0: bool) = (box_len "a")
-        let tmp%0#0: bool = (== value%0#0 10u)
-        (assert tmp%0#0)
         (box_create "b" 8u)
-        let (value%1#0: uint64, check%1#0: bool) = (box_len "b")
-        let tmp%1#0: bool = (== value%1#0 8u)
-        (assert tmp%1#0)
         (box_create "c" 40u)
-        let (value%2#0: uint64, check%2#0: bool) = (box_len "c")
-        let tmp%2#0: bool = (== value%2#0 40u)
-        (assert tmp%2#0)
         (box_create "d" 2u)
-        let (value%3#0: uint64, check%3#0: bool) = (box_len "d")
-        let tmp%3#0: bool = (== value%3#0 2u)
-        (assert tmp%3#0)
         (box_create "e" 3u)
-        let (value%4#0: uint64, check%4#0: bool) = (box_len "e")
-        let tmp%4#0: bool = (== value%4#0 3u)
-        (assert tmp%4#0)
         (box_create "bool" 8u)
-        let (value%5#0: uint64, check%5#0: bool) = (box_len "bool")
-        let tmp%5#0: bool = (== value%5#0 8u)
-        (assert tmp%5#0)
         (box_create "arc4b" 1u)
-        let (value%6#0: uint64, check%6#0: bool) = (box_len "arc4b")
-        let tmp%6#0: bool = (== value%6#0 1u)
-        (assert tmp%6#0)
         exit 1u

@@ -46,7 +46,7 @@ main_test_route@3:
     intc_1 // 0
     !=
     &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+    assert
     callsub test
     b main_switch_case_next@4
 
@@ -60,7 +60,7 @@ main___algots__.defaultCreate@5:
     intc_1 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_0 // 1
     return
@@ -95,7 +95,7 @@ test_uint64_block@0:
     frame_bury -2
     // tests/approvals/prefix-postfix-operators.algo.ts:9
     // assert(x === 11)
-    pushint 11 // 11
+    pushint 11
     ==
     assert
     // tests/approvals/prefix-postfix-operators.algo.ts:10
@@ -123,13 +123,13 @@ test_uint64_block@0:
     frame_bury -2
     // tests/approvals/prefix-postfix-operators.algo.ts:13
     // assert(x === 6)
-    pushint 6 // 6
+    pushint 6
     ==
     assert
     // tests/approvals/prefix-postfix-operators.algo.ts:14
     // assert(y === 4)
     frame_dig -1
-    pushint 4 // 4
+    pushint 4
     ==
     assert
     // tests/approvals/prefix-postfix-operators.algo.ts:15
@@ -159,7 +159,7 @@ test_uint64_block@0:
     ~
     // tests/approvals/prefix-postfix-operators.algo.ts:19
     // assert(inverted === 2 ** 64 - 1 - y)
-    pushint 18446744073709551615 // 18446744073709551615
+    pushint 18446744073709551615
     dig 2
     -
     ==
@@ -296,7 +296,7 @@ test_bytes:
 test_bytes_block@0:
     // tests/approvals/prefix-postfix-operators.algo.ts:51
     // assert(x === bzero(4), 'x must be 4 unset bytes')
-    pushint 4 // 4
+    pushint 4
     bzero
     frame_dig -1
     ==
@@ -352,7 +352,7 @@ tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.test_block@0:
     pop
     // tests/approvals/prefix-postfix-operators.algo.ts:62
     // test_bytes(bzero(4))
-    pushint 4 // 4
+    pushint 4
     bzero
     callsub test_bytes
     // tests/approvals/prefix-postfix-operators.algo.ts:64

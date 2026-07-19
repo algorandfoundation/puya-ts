@@ -17,8 +17,8 @@ import {
   arc4AddressAlias,
   DynamicArrayGeneric,
   DynamicArrayType,
-  DynamicBytesConstructor,
-  DynamicBytesType,
+  DynamicBytesClass,
+  dynamicBytesType,
   StaticArrayGeneric,
   StaticArrayType,
   StaticBytesGeneric,
@@ -226,7 +226,7 @@ export class StaticBytesClassBuilder extends ClassBuilder {
   }
 }
 export class DynamicBytesClassBuilder extends ClassBuilder {
-  readonly ptype = DynamicBytesConstructor
+  readonly ptype = DynamicBytesClass
 
   newCall(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation): InstanceBuilder {
     const {
@@ -239,7 +239,7 @@ export class DynamicBytesClassBuilder extends ClassBuilder {
       genericTypeArgs: 0,
       argSpec: (a) => [a.optional(bytesPType, stringPType)],
     })
-    const resultPType = DynamicBytesType
+    const resultPType = dynamicBytesType
 
     if (!initialValue) {
       return instanceEb(
@@ -275,7 +275,7 @@ export class DynamicBytesClassBuilder extends ClassBuilder {
   }
 }
 
-export abstract class ArrayExpressionBuilder<
+abstract class ArrayExpressionBuilder<
   TArrayType extends DynamicArrayType | StaticArrayType,
 > extends Arc4EncodedBaseExpressionBuilder<TArrayType> {
   iterate(): Expression {

@@ -1,0 +1,381 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 2 8
+    bytecblock "mapOfTuplesk1" "mapOfObjectsk1" 0x000a 0x000b
+    // tests/approvals/local-map.algo.ts:56-57
+    // @contract({ stateTotals: { localBytes: 5, localUints: 5 } })
+    // export class TestLocalMapTuple extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@13
+    pushbytes 0x29314d95 // method "optIn()void"
+    txna ApplicationArgs 0
+    match main_optIn_route@3
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0xe8519c1a 0xd45ae06a 0x5be493ff 0x9f00d1be // method "testMapOfTuples(string,uint64,bool)void", method "testMapOfObjects(string,uint64)void", method "testTupleMap(string,uint64,bool)void", method "testObjectMap(string,uint64)void"
+    txna ApplicationArgs 0
+    match main_testMapOfTuples_route@6 main_testMapOfObjects_route@7 main_testTupleMap_route@8 main_testObjectMap_route@9
+    err
+
+main_testObjectMap_route@9:
+    // tests/approvals/local-map.algo.ts:85
+    // testObjectMap(a: string, b: uint64) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/local-map.algo.ts:86
+    // this.objectMap({ a, b }, Txn.sender).value = 99
+    dig 1
+    len
+    itob
+    extract 6 2
+    uncover 2
+    concat
+    swap
+    itob
+    bytec_2 // 0x000a
+    swap
+    concat
+    swap
+    concat
+    // tests/approvals/local-map.algo.ts:62
+    // objectMap = LocalMap<{ a: string; b: uint64 }, uint64>()
+    pushbytes "objectMap"
+    swap
+    concat
+    // tests/approvals/local-map.algo.ts:86
+    // this.objectMap({ a, b }, Txn.sender).value = 99
+    txn Sender
+    dig 1
+    pushint 99
+    app_local_put
+    // tests/approvals/local-map.algo.ts:87
+    // assert(this.objectMap({ a, b }, Txn.sender).value === 99, 'object value should match')
+    txn Sender
+    intc_0 // 0
+    uncover 2
+    app_local_get_ex
+    assert // check LocalState exists
+    pushint 99
+    ==
+    assert // object value should match
+    // tests/approvals/local-map.algo.ts:85
+    // testObjectMap(a: string, b: uint64) {
+    intc_1 // 1
+    return
+
+main_testTupleMap_route@8:
+    // tests/approvals/local-map.algo.ts:80
+    // testTupleMap(a: string, b: uint64, c: boolean) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_1 // 1
+    ==
+    assert // invalid number of bytes for arc4.bool
+    intc_0 // 0
+    getbit
+    // tests/approvals/local-map.algo.ts:81
+    // this.tupleMap([a, b, c])(Txn.sender).value = 99
+    dig 2
+    len
+    itob
+    extract 6 2
+    uncover 3
+    concat
+    uncover 2
+    itob
+    bytec_3 // 0x000b
+    swap
+    concat
+    pushbytes 0x00
+    intc_0 // 0
+    uncover 4
+    setbit
+    concat
+    swap
+    concat
+    // tests/approvals/local-map.algo.ts:61
+    // tupleMap = LocalMap<[string, uint64, boolean], uint64>()
+    pushbytes "tupleMap"
+    swap
+    concat
+    // tests/approvals/local-map.algo.ts:81
+    // this.tupleMap([a, b, c])(Txn.sender).value = 99
+    txn Sender
+    dig 1
+    pushint 99
+    app_local_put
+    // tests/approvals/local-map.algo.ts:82
+    // assert(this.tupleMap([a, b, c], Txn.sender).value === 99, 'tuple value should match')
+    txn Sender
+    intc_0 // 0
+    uncover 2
+    app_local_get_ex
+    assert // check LocalState exists
+    pushint 99
+    ==
+    assert // tuple value should match
+    // tests/approvals/local-map.algo.ts:80
+    // testTupleMap(a: string, b: uint64, c: boolean) {
+    intc_1 // 1
+    return
+
+main_testMapOfObjects_route@7:
+    // tests/approvals/local-map.algo.ts:74
+    // testMapOfObjects(a: string, b: uint64) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/local-map.algo.ts:75
+    // this.mapOfObjects('k1', Txn.sender).value = { a, b }
+    dig 1
+    len
+    itob
+    extract 6 2
+    dig 2
+    concat
+    dig 1
+    itob
+    bytec_2 // 0x000a
+    swap
+    concat
+    swap
+    concat
+    txn Sender
+    // tests/approvals/local-map.algo.ts:59
+    // mapOfObjects = LocalMap<string, { a: string; b: uint64 }>()
+    bytec_1 // "mapOfObjectsk1"
+    // tests/approvals/local-map.algo.ts:75
+    // this.mapOfObjects('k1', Txn.sender).value = { a, b }
+    uncover 2
+    app_local_put
+    // tests/approvals/local-map.algo.ts:76
+    // assert(this.mapOfObjects('k1')(Txn.sender).value.a === a, 'object.a should match')
+    txn Sender
+    intc_0 // 0
+    // tests/approvals/local-map.algo.ts:59
+    // mapOfObjects = LocalMap<string, { a: string; b: uint64 }>()
+    bytec_1 // "mapOfObjectsk1"
+    // tests/approvals/local-map.algo.ts:76
+    // assert(this.mapOfObjects('k1')(Txn.sender).value.a === a, 'object.a should match')
+    app_local_get_ex
+    assert // check LocalState exists
+    dup
+    intc_0 // 0
+    extract_uint16
+    dig 1
+    len
+    substring3
+    extract 2 0
+    uncover 2
+    ==
+    assert // object.a should match
+    // tests/approvals/local-map.algo.ts:77
+    // assert(this.mapOfObjects('k1', Txn.sender).value.b === b, 'object.b should match')
+    txn Sender
+    intc_0 // 0
+    // tests/approvals/local-map.algo.ts:59
+    // mapOfObjects = LocalMap<string, { a: string; b: uint64 }>()
+    bytec_1 // "mapOfObjectsk1"
+    // tests/approvals/local-map.algo.ts:77
+    // assert(this.mapOfObjects('k1', Txn.sender).value.b === b, 'object.b should match')
+    app_local_get_ex
+    assert // check LocalState exists
+    intc_2 // 2
+    extract_uint64
+    ==
+    assert // object.b should match
+    // tests/approvals/local-map.algo.ts:74
+    // testMapOfObjects(a: string, b: uint64) {
+    intc_1 // 1
+    return
+
+main_testMapOfTuples_route@6:
+    // tests/approvals/local-map.algo.ts:67
+    // testMapOfTuples(a: string, b: uint64, c: boolean) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 3
+    dup
+    len
+    intc_1 // 1
+    ==
+    assert // invalid number of bytes for arc4.bool
+    intc_0 // 0
+    getbit
+    // tests/approvals/local-map.algo.ts:68
+    // this.mapOfTuples('k1', Txn.sender).value = [a, b, c]
+    dig 2
+    len
+    itob
+    extract 6 2
+    dig 3
+    concat
+    dig 2
+    itob
+    bytec_3 // 0x000b
+    swap
+    concat
+    pushbytes 0x00
+    intc_0 // 0
+    dig 4
+    setbit
+    concat
+    swap
+    concat
+    txn Sender
+    // tests/approvals/local-map.algo.ts:58
+    // mapOfTuples = LocalMap<string, [string, uint64, boolean]>()
+    bytec_0 // "mapOfTuplesk1"
+    // tests/approvals/local-map.algo.ts:68
+    // this.mapOfTuples('k1', Txn.sender).value = [a, b, c]
+    uncover 2
+    app_local_put
+    // tests/approvals/local-map.algo.ts:69
+    // assert(this.mapOfTuples('k1', Txn.sender).value[0] === a, 'tuple[0] should match')
+    txn Sender
+    intc_0 // 0
+    // tests/approvals/local-map.algo.ts:58
+    // mapOfTuples = LocalMap<string, [string, uint64, boolean]>()
+    bytec_0 // "mapOfTuplesk1"
+    // tests/approvals/local-map.algo.ts:69
+    // assert(this.mapOfTuples('k1', Txn.sender).value[0] === a, 'tuple[0] should match')
+    app_local_get_ex
+    assert // check LocalState exists
+    dup
+    intc_0 // 0
+    extract_uint16
+    dig 1
+    len
+    substring3
+    extract 2 0
+    uncover 3
+    ==
+    assert // tuple[0] should match
+    // tests/approvals/local-map.algo.ts:70
+    // assert(this.mapOfTuples('k1', Txn.sender).value[1] === b, 'tuple[1] should match')
+    txn Sender
+    intc_0 // 0
+    // tests/approvals/local-map.algo.ts:58
+    // mapOfTuples = LocalMap<string, [string, uint64, boolean]>()
+    bytec_0 // "mapOfTuplesk1"
+    // tests/approvals/local-map.algo.ts:70
+    // assert(this.mapOfTuples('k1', Txn.sender).value[1] === b, 'tuple[1] should match')
+    app_local_get_ex
+    assert // check LocalState exists
+    intc_2 // 2
+    extract_uint64
+    uncover 2
+    ==
+    assert // tuple[1] should match
+    // tests/approvals/local-map.algo.ts:71
+    // assert(this.mapOfTuples('k1')(Txn.sender).value[2] === c, 'tuple[2] should match')
+    txn Sender
+    intc_0 // 0
+    // tests/approvals/local-map.algo.ts:58
+    // mapOfTuples = LocalMap<string, [string, uint64, boolean]>()
+    bytec_0 // "mapOfTuplesk1"
+    // tests/approvals/local-map.algo.ts:71
+    // assert(this.mapOfTuples('k1')(Txn.sender).value[2] === c, 'tuple[2] should match')
+    app_local_get_ex
+    assert // check LocalState exists
+    pushint 80
+    getbit
+    ==
+    assert // tuple[2] should match
+    // tests/approvals/local-map.algo.ts:67
+    // testMapOfTuples(a: string, b: uint64, c: boolean) {
+    intc_1 // 1
+    return
+
+main_optIn_route@3:
+    // tests/approvals/local-map.algo.ts:64
+    // @abimethod({ allowActions: 'OptIn' })
+    txn OnCompletion
+    intc_1 // OptIn
+    ==
+    txn ApplicationID
+    &&
+    return
+
+main___algots__.defaultCreate@13:
+    // tests/approvals/local-map.algo.ts:56-57
+    // @contract({ stateTotals: { localBytes: 5, localUints: 5 } })
+    // export class TestLocalMapTuple extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return

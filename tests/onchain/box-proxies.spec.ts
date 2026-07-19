@@ -1,27 +1,22 @@
 import { algos } from '@algorandfoundation/algokit-utils'
 import type { arc4, uint64 } from '@algorandfoundation/algorand-typescript'
-import { afterAll, describe, expect } from 'vitest'
-import { PuyaService } from '../../src/puya/puya-service'
-import { resolvePuyaPath } from '../../src/puya/resolve-puya-path'
+import { describe, expect } from 'vitest'
 import { bigIntToUint8Array, invariant, uint8ArrayToUtf8, utf8ToUint8Array } from '../../src/util'
 import { createArc4TestFixture, createBaseTestFixture } from './util/test-fixture'
 
 const APPROVE = new Uint8Array([0x09, 0x81, 0x01])
 
 describe('BoxProxies', async () => {
-  const puyaService = new PuyaService({ puyaPath: await resolvePuyaPath({}) })
-
   const test = createBaseTestFixture({
     paths: 'tests/approvals/box-proxies.algo.ts',
     contracts: ['BoxContract', 'BoxNotExist'],
-    puyaService,
   })
 
   test('BoxContract runs', async ({ BoxContractInvoker, algorand, testAccount }) => {
     const created = await BoxContractInvoker.send()
 
-    invariant(created.confirmation.applicationIndex, 'There must be an application id')
-    const appInfo = await algorand.app.getById(created.confirmation.applicationIndex)
+    invariant(created.confirmation.appId, 'There must be an application id')
+    const appInfo = await algorand.app.getById(created.confirmation.appId)
     // Fund the app account
     await algorand.send.payment({
       receiver: appInfo.appAddress,
@@ -29,7 +24,7 @@ describe('BoxProxies', async () => {
       amount: algos(1),
     })
     await BoxContractInvoker.send({
-      appId: created.confirmation.applicationIndex,
+      appId: created.confirmation.appId,
       boxReferences: ['A', 'one', 'abc', 'what?', 'twowhat?', 'three', 'what?x', 'twowhat?x'],
     })
   })
@@ -37,8 +32,8 @@ describe('BoxProxies', async () => {
   test('Box that does not exist should fail when accessed', async ({ BoxNotExistInvoker, algorand, testAccount }) => {
     const created = await BoxNotExistInvoker.send()
 
-    invariant(created.confirmation.applicationIndex, 'There must be an application id')
-    const appInfo = await algorand.app.getById(created.confirmation.applicationIndex)
+    invariant(created.confirmation.appId, 'There must be an application id')
+    const appInfo = await algorand.app.getById(created.confirmation.appId)
     // Fund the app account
     await algorand.send.payment({
       receiver: appInfo.appAddress,
@@ -49,14 +44,14 @@ describe('BoxProxies', async () => {
     // Accessing box.value when the box doesn't exist fails
     await expect(
       BoxNotExistInvoker.send({
-        appId: created.confirmation.applicationIndex,
+        appId: created.confirmation.appId,
         boxReferences: ['abc'],
         args: [utf8ToUint8Array('box')],
       }),
     ).rejects.toThrow(/assert failed/)
     await expect(
       BoxNotExistInvoker.send({
-        appId: created.confirmation.applicationIndex,
+        appId: created.confirmation.appId,
         boxReferences: ['abc'],
         args: [utf8ToUint8Array('boxmap')],
       }),
@@ -64,19 +59,19 @@ describe('BoxProxies', async () => {
 
     // Create the box
     await BoxNotExistInvoker.send({
-      appId: created.confirmation.applicationIndex,
+      appId: created.confirmation.appId,
       boxReferences: ['abc'],
       args: [utf8ToUint8Array('createbox')],
     })
 
     // Should work fine now the box exists
     await BoxNotExistInvoker.send({
-      appId: created.confirmation.applicationIndex,
+      appId: created.confirmation.appId,
       boxReferences: ['abc'],
       args: [utf8ToUint8Array('box')],
     })
     await BoxNotExistInvoker.send({
-      appId: created.confirmation.applicationIndex,
+      appId: created.confirmation.appId,
       boxReferences: ['abc'],
       args: [utf8ToUint8Array('boxmap')],
     })
@@ -92,7 +87,6 @@ describe('BoxProxies', async () => {
       CompositeKeyTest: { funding: algos(1) },
       LargeBox: { funding: algos(6) },
     },
-    puyaService,
   })
   it('creates boxes of the min size', async ({ appClientBoxCreate }) => {
     await appClientBoxCreate.send.call({ method: 'createBoxes', boxReferences: ['bool', 'arc4b', 'a', 'b', 'c', 'd', 'e'] })
@@ -321,6 +315,4 @@ describe('BoxProxies', async () => {
       .addTransaction(call.transactions[0])
       .send()
   })
-
-  afterAll(() => puyaService.shutdown())
 })

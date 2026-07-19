@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - main
-      - alpha
 
 permissions:
   contents: read
@@ -16,3 +15,7 @@ jobs:
     uses: ./.github/workflows/ci-all.yml
     with:
       run-commit-lint: true
+
+  check-docs:
+    name: Check docs
+    uses: algorandfoundation/algokit-shared-config/.github/workflows/check-docs.yml@main

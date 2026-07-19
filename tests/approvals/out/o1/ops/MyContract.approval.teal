@@ -10,7 +10,7 @@ main:
     bz main___algots__.defaultCreate@9
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     bytec_0 // method "test()void"
@@ -27,8 +27,6 @@ main___algots__.defaultCreate@9:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
     return
 
 
@@ -43,20 +41,20 @@ test:
     assert
     // tests/approvals/ops.algo.ts:19
     // assert(Txn.applicationArgs(0) === methodSelector('test()void'))
-    pushint 0 // 0
-    txnas ApplicationArgs
+    txna ApplicationArgs 0
     bytec_0 // method "test()void"
     ==
     assert
     // tests/approvals/ops.algo.ts:20
     // assert(GTxn.applicationArgs(Txn.groupIndex, 0) === methodSelector(MyContract.prototype.test))
     txn GroupIndex
-    pushint 0 // 0
-    gtxnsas ApplicationArgs
+    gtxnsa ApplicationArgs 0
     bytec_0 // method "test()void"
     ==
+    assert
     // tests/approvals/ops.algo.ts:8
     // test() {
+    pushint 1
     return
 
 
@@ -67,7 +65,7 @@ test2:
     txna ApplicationArgs 1
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -79,6 +77,8 @@ test2:
     // assert(a.length === size)
     len
     ==
+    assert
     // tests/approvals/ops.algo.ts:23
     // test2(size: uint64) {
+    pushint 1
     return

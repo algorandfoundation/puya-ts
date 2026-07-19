@@ -1,7 +1,7 @@
 contract LargeObjectsInStateAlgo
 {
   boxes {
-    ["x"]: arc4.static_array<tests/approvals/large-objects-in-state.algo.ts::Counts>
+    ["x"]: arc4.static_array<tests/approvals/large-objects-in-state.algo.ts::Counts,800>
   }
   approvalProgram(): bool
   {
@@ -21,7 +21,7 @@ contract LargeObjectsInStateAlgo
   bootstrap(pay: group_transaction_pay): void
   {
     assert(&&(gtxns<Amount>(pay) == 2982900, gtxns<Receiver>(pay) == global<CurrentApplicationAddress>()), comment=assert target is match for conditions)
-    box_create("x", size_of(arc4.static_array<tests/approvals/large-objects-in-state.algo.ts::Counts>))
+    box_create("x", size_of(arc4.static_array<tests/approvals/large-objects-in-state.algo.ts::Counts,800>))
   }
   
   increaseXCount(index: uint64, xCount: uint64): void

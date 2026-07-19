@@ -1,0 +1,12 @@
+| PC | TEAL Bytes                                      | TEAL                           | Source                | Location                                                                           |
+|--: | :-----------------------------------------------| :------------------------------| :---------------------| :----------------------------------------------------------------------------------|
+|  0 | 0b                                              | #pragma version 11             |                       |                                                                                    |
+|    | # main                                          | main:                          |                       | tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.clearStateProgram() -> uint64: |
+|  1 | 42 00 00                                        |     b main_block@0             |                       |                                                                                    |
+|    | # main_block@0                                  | main_block@0:                  |                       |                                                                                    |
+|    |                                                 |                                | log('clearing state') | tests/approvals/arc4-hybrid.algo.ts:12                                             |
+|  4 | 80 0e 63 6c 65 61 72 69 6e 67 20 73 74 61 74 65 |     pushbytes "clearing state" |     ----------------  | tests/approvals/arc4-hybrid.algo.ts:12:8-24                                        |
+| 20 | b0                                              |     log                        | --------------------- | tests/approvals/arc4-hybrid.algo.ts:12:4-25                                        |
+|    |                                                 |                                | return true           | tests/approvals/arc4-hybrid.algo.ts:13                                             |
+| 21 | 81 01                                           |     pushint 1                  |        ----           | tests/approvals/arc4-hybrid.algo.ts:13:11-15                                       |
+| 23 | 43                                              |     return                     | -----------           | tests/approvals/arc4-hybrid.algo.ts:13:4-15                                        |

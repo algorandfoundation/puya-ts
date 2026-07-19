@@ -24,7 +24,7 @@ main_abi_routing@2:
     txn OnCompletion
     intc_0 // NoOp
     ==
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     intc_0 // 0
     !=
@@ -91,7 +91,7 @@ main___algots__.defaultCreate@11:
     intc_0 // 0
     ==
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
+    assert
     callsub __algots__.defaultCreate
     intc_1 // 1
     return
@@ -199,7 +199,7 @@ structReturn_block@0:
     intc_3 // 8
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 12 // 12
+    pushint 12
     ==
     assert // invalid tail pointer at index 1 of (uint64,(len+utf8[]),((len+uint8[]),uint8))
     dig 1
@@ -212,10 +212,10 @@ structReturn_block@0:
     *
     intc_2 // 2
     +
-    pushint 12 // 12
+    pushint 12
     +
     dig 1
-    pushint 10 // 10
+    pushint 10
     extract_uint16 // on error: invalid tuple encoding
     dup
     dig 2
@@ -232,7 +232,7 @@ structReturn_block@0:
     intc_0 // 0
     extract_uint16 // on error: invalid tuple encoding
     dup
-    pushint 3 // 3
+    pushint 3
     ==
     assert // invalid tail pointer at index 0 of ((len+uint8[]),uint8)
     uncover 2
@@ -243,7 +243,7 @@ structReturn_block@0:
     *
     intc_2 // 2
     +
-    pushint 3 // 3
+    pushint 3
     +
     +
     dig 1
@@ -312,7 +312,7 @@ tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn_block@0:
     // tests/approvals/arc4-clone.algo.ts:55
     // assert(arg.shared === echo(arg.shared), "this won't error")
     frame_dig -1
-    pushint 10 // 10
+    pushint 10
     extract_uint16
     frame_dig -1
     len
@@ -321,7 +321,7 @@ tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn_block@0:
     uncover 2
     substring3
     frame_dig -1
-    pushint 10 // 10
+    pushint 10
     extract_uint16
     frame_dig -1
     len
@@ -336,7 +336,7 @@ tests/approvals/arc4-clone.algo.ts::Arc4CloneAlgo.structReturn_block@0:
     // tests/approvals/arc4-clone.algo.ts:56
     // return arg.shared
     frame_dig -1
-    pushint 10 // 10
+    pushint 10
     extract_uint16
     frame_dig -1
     len

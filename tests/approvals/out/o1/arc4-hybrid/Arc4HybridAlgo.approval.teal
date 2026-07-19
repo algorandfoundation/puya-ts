@@ -3,23 +3,33 @@
 
 // tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.approvalProgram() -> uint64:
 main:
+    intcblock 1
     // tests/approvals/arc4-hybrid.algo.ts:5
     // log('before')
     pushbytes "before"
     log
     // tests/approvals/arc4-hybrid.algo.ts:3
     // class Arc4HybridAlgo extends Contract {
-    pushint 0 // 0
     txn NumAppArgs
-    bz main___algots__.defaultCreate@5
-    pushbytes 0xc258469e // method "someMethod()void"
+    bz main___algots__.defaultCreate@9
+    pushbytes 0x46f76533 // method "updateApplication()void"
     txna ApplicationArgs 0
-    match main_someMethod_route@3
+    match main_updateApplication_route@3
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    bz main_after_if_else@8
+    pushbytess 0xc258469e 0x69adf9bb // method "someMethod()void", method "someOtherMethod()void"
+    txna ApplicationArgs 0
+    match main_someMethod_route@6 main_someOtherMethod_route@7
 
-main_switch_case_next@4:
-    dup
+main_after_if_else@8:
+    // tests/approvals/arc4-hybrid.algo.ts:3
+    // class Arc4HybridAlgo extends Contract {
+    pushint 0
 
-main_after_if_else@6:
+main_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@10:
     // tests/approvals/arc4-hybrid.algo.ts:7
     // log('after')
     pushbytes "after"
@@ -28,25 +38,45 @@ main_after_if_else@6:
     // return result
     return
 
-main_someMethod_route@3:
-    // tests/approvals/arc4-hybrid.algo.ts:16
-    // someMethod() {
-    txn OnCompletion
-    !
-    txn ApplicationID
-    &&
-    assert // OnCompletion must be NoOp && can only call when not creating
+main_someOtherMethod_route@7:
+    // tests/approvals/arc4-hybrid.algo.ts:21
+    // log('some other method')
+    pushbytes "some other method"
+    log
+    // tests/approvals/arc4-hybrid.algo.ts:20
+    // someOtherMethod() {
+    intc_0 // 1
+    b main_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@10
+
+main_someMethod_route@6:
     // tests/approvals/arc4-hybrid.algo.ts:17
     // log('some method')
     pushbytes "some method"
     log
     // tests/approvals/arc4-hybrid.algo.ts:16
     // someMethod() {
-    pushint 1 // 1
-    bury 1
-    b main_switch_case_next@4
+    intc_0 // 1
+    b main_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@10
 
-main___algots__.defaultCreate@5:
+main_updateApplication_route@3:
+    // tests/approvals/arc4-hybrid.algo.ts:24
+    // updateApplication() {
+    txn OnCompletion
+    pushint 4 // UpdateApplication
+    ==
+    txn ApplicationID
+    &&
+    assert
+    // tests/approvals/arc4-hybrid.algo.ts:25
+    // log('update')
+    pushbytes "update"
+    log
+    // tests/approvals/arc4-hybrid.algo.ts:24
+    // updateApplication() {
+    intc_0 // 1
+    b main_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@10
+
+main___algots__.defaultCreate@9:
     // tests/approvals/arc4-hybrid.algo.ts:3
     // class Arc4HybridAlgo extends Contract {
     txn OnCompletion
@@ -54,6 +84,6 @@ main___algots__.defaultCreate@5:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    pushint 1 // 1
-    b main_after_if_else@6
+    assert
+    intc_0 // 1
+    b main_after_inlined_tests/approvals/arc4-hybrid.algo.ts::Arc4HybridAlgo.__puya_arc4_router__@10

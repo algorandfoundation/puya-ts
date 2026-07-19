@@ -8,7 +8,7 @@ type WithMethod = {
 }
 
 class BadTypesAlgo extends Contract {
-  // @expect-error Unsupported property type 3. Only GlobalState, LocalState, and Box proxies can be stored on a contract.
+  // @expect-error Unsupported property type 3. Only GlobalState, GlobalMap, LocalState, LocalMap, and Box proxies can be stored on a contract.
   x = 3
 
   test(arg: WithMethod) {

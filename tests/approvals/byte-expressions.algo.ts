@@ -3,6 +3,7 @@ import { assert, BigUint, Bytes, Contract, op, Uint64 } from '@algorandfoundatio
 import { btoi, itob } from '@algorandfoundation/algorand-typescript/op'
 
 function test(a: uint64, b: biguint, c: string) {
+  assert(Bytes('\x19\x01').concat(Bytes.fromHex('cd27')) === Bytes.fromHex('1901cd27'), 'Concatenation of UTF8 + bytes works')
   assert(Bytes().length === 0, 'Empty bytes has length of 0')
   assert(Bytes(a) === op.itob(a), 'Bytes(uint64) is equivalent to itob')
   assert(Bytes(Uint64(1)) === Bytes.fromHex('0000000000000001'), 'Bytes(uint64) returns an 8 byte encoding')

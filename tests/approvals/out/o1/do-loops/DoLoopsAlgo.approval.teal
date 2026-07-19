@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@10
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x39239792 0xace2eb21 0x78e8d516 // method "testDo(uint64)uint64", method "testDoBreak(uint64,uint64)uint64", method "testDoContinue(uint64,uint64)uint64"
@@ -27,8 +27,6 @@ main___algots__.defaultCreate@10:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
@@ -107,17 +105,15 @@ testDoBreak_while_top@2:
 testDoBreak_after_if_else@6:
     // tests/approvals/do-loops.algo.ts:18
     // i += 1
-    dup
     intc_0 // 1
     +
     dup
-    bury 2
     // tests/approvals/do-loops.algo.ts:19
     // total += i
-    dig 2
+    uncover 2
     dig 1
     +
-    bury 3
+    cover 2
     // tests/approvals/do-loops.algo.ts:20
     // } while (i < stop)
     dig 4
@@ -125,9 +121,9 @@ testDoBreak_after_if_else@6:
     bnz testDoBreak_while_top@2
 
 testDoBreak_block@10:
+    pop
     // tests/approvals/do-loops.algo.ts:12
     // testDoBreak(stop: uint64, breakMod: uint64) {
-    dig 1
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -173,16 +169,14 @@ testDoContinue_while_top@2:
     bnz testDoContinue_after_if_else@6
     // tests/approvals/do-loops.algo.ts:28
     // total += 2
-    dup
-    pushint 2 // 2
+    pushint 2
     +
-    bury 1
     // tests/approvals/do-loops.algo.ts:29
     // i += 1
-    dig 1
+    swap
     intc_0 // 1
     +
-    bury 2
+    swap
 
 testDoContinue_block@7:
     // tests/approvals/do-loops.algo.ts:34
@@ -193,7 +187,6 @@ testDoContinue_block@7:
     bnz testDoContinue_while_top@2
     // tests/approvals/do-loops.algo.ts:23
     // testDoContinue(stop: uint64, mod: uint64) {
-    dup
     itob
     bytec_0 // 0x151f7c75
     swap
@@ -205,14 +198,12 @@ testDoContinue_block@7:
 testDoContinue_after_if_else@6:
     // tests/approvals/do-loops.algo.ts:32
     // total += 1
-    dup
     intc_0 // 1
     +
-    bury 1
     // tests/approvals/do-loops.algo.ts:33
     // i += 1
-    dig 1
+    swap
     intc_0 // 1
     +
-    bury 2
+    swap
     b testDoContinue_block@7

@@ -38,14 +38,11 @@ subroutine tests/approvals/prefix-postfix-operators.algo.ts::test_uint64(x: uint
         let tmp%15#0: uint64 = (- 18446744073709551615u y#2)
         let tmp%16#0: bool = (== inverted#0 tmp%15#0)
         (assert tmp%16#0)
-        let reinterpret_bool%0#0: bool = y#2
-        (assert reinterpret_bool%0#0)
-        let reinterpret_bool%1#0: bool = y#2
-        let tmp%17#0: bool = (! reinterpret_bool%1#0)
+        (assert y#2)
+        let tmp%17#0: bool = (! y#2)
         let tmp%18#0: bool = (! tmp%17#0)
         (assert tmp%18#0)
-        let reinterpret_bool%2#0: bool = y#2
-        let tmp%19#0: bool = (! reinterpret_bool%2#0)
+        let tmp%19#0: bool = (! y#2)
         return tmp%19#0
 
 subroutine tests/approvals/prefix-postfix-operators.algo.ts::test_biguint(x: biguint, y: biguint) -> bool:
@@ -78,15 +75,15 @@ subroutine tests/approvals/prefix-postfix-operators.algo.ts::test_biguint(x: big
         (assert tmp%12#0)
         let tmp%13#0: bool = (b== x#4 10b)
         (assert tmp%13#0)
-        let reinterpret_bool%0#0: bool = (bitlen y#2)
-        (assert reinterpret_bool%0#0)
-        let reinterpret_bool%1#0: bool = (bitlen y#2)
-        let tmp%14#0: bool = (! reinterpret_bool%1#0)
-        let tmp%15#0: bool = (! tmp%14#0)
-        (assert tmp%15#0)
-        let reinterpret_bool%2#0: bool = (bitlen y#2)
-        let tmp%16#0: bool = (! reinterpret_bool%2#0)
-        return tmp%16#0
+        let tmp%14#0: uint64 = (bitlen y#2)
+        (assert tmp%14#0)
+        let tmp%15#0: uint64 = (bitlen y#2)
+        let tmp%16#0: bool = (! tmp%15#0)
+        let tmp%17#0: bool = (! tmp%16#0)
+        (assert tmp%17#0)
+        let tmp%18#0: uint64 = (bitlen y#2)
+        let tmp%19#0: bool = (! tmp%18#0)
+        return tmp%19#0
 
 subroutine tests/approvals/prefix-postfix-operators.algo.ts::test_bytes(x: bytes) -> void:
     block@0: // L50
@@ -113,7 +110,7 @@ subroutine tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.__puya
         let tmp%5#0: uint64 = (txn ApplicationID)
         let tmp%6#0: bool = (!= tmp%5#0 0u)
         let tmp%7#0: bool = (&& tmp%4#0 tmp%6#0)
-        (assert tmp%7#0) // OnCompletion must be NoOp && can only call when not creating
+        (assert tmp%7#0)
         tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.test[routing]()
         goto block@3
     block@3: // switch_case_next_L57
@@ -124,7 +121,7 @@ subroutine tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.__puya
         let tmp%10#0: uint64 = (txn ApplicationID)
         let tmp%11#0: bool = (== tmp%10#0 0u)
         let tmp%12#0: bool = (&& tmp%9#0 tmp%11#0)
-        (assert tmp%12#0) // OnCompletion must be NoOp && can only call when creating
+        (assert tmp%12#0)
         tests/approvals/prefix-postfix-operators.algo.ts::DemoContract.__algots__.defaultCreate()
         exit 1u
     block@5: // after_if_else_L57

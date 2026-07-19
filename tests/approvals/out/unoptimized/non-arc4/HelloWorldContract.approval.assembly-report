@@ -1,0 +1,17 @@
+| PC | TEAL Bytes                 | TEAL                      | Source                                         | Location                                                                          |
+|--: | :--------------------------| :-------------------------| :----------------------------------------------| :---------------------------------------------------------------------------------|
+|  0 | 0b                         | #pragma version 11        |                                                |                                                                                   |
+|    | # main                     | main:                     |                                                | tests/approvals/non-arc4.algo.ts::HelloWorldContract.approvalProgram() -> uint64: |
+|  1 | 42 00 00                   |     b main_block@0        |                                                |                                                                                   |
+|    | # main_block@0             | main_block@0:             |                                                |                                                                                   |
+|    |                            |                           | const name = String(op.Txn.applicationArgs(0)) | tests/approvals/non-arc4.algo.ts:5                                                |
+|  4 | 81 00                      |     pushint 0             |                                            -   | tests/approvals/non-arc4.algo.ts:5:47-48                                          |
+|  6 | c0 1a                      |     txnas ApplicationArgs |                     -------------------------  | tests/approvals/non-arc4.algo.ts:5:24-49                                          |
+|    |                            |                           | log(`Hello, ${name}`)                          | tests/approvals/non-arc4.algo.ts:6                                                |
+|  8 | 80 07 48 65 6c 6c 6f 2c 20 |     pushbytes "Hello, "   |     ----------------                           | tests/approvals/non-arc4.algo.ts:6:8-24                                           |
+| 17 | 4f 01                      |     uncover 1             |     ----------------                           | tests/approvals/non-arc4.algo.ts:6:8-24                                           |
+| 19 | 50                         |     concat                |     ----------------                           | tests/approvals/non-arc4.algo.ts:6:8-24                                           |
+| 20 | b0                         |     log                   | ---------------------                          | tests/approvals/non-arc4.algo.ts:6:4-25                                           |
+|    |                            |                           | return true                                    | tests/approvals/non-arc4.algo.ts:7                                                |
+| 21 | 81 01                      |     pushint 1             |        ----                                    | tests/approvals/non-arc4.algo.ts:7:11-15                                          |
+| 23 | 43                         |     return                | -----------                                    | tests/approvals/non-arc4.algo.ts:7:4-15                                           |

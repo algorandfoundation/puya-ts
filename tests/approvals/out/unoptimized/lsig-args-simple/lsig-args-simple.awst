@@ -1,0 +1,20 @@
+
+logicsig tests/approvals/lsig-args-simple.algo.ts::ArgsSimple {
+  assert(arg0 == btoi(args(0)))
+  assert(arg1 == ARC4_DECODE(ARC4_FROM_BYTES(args(1), wtype=arc4.dynamic_array<arc4.byte>, validate=false)))
+  assert(arg2 == btoi(args(2)) != 0)
+  mutableArg0: uint64 = arg0
+  mutableArg1: bytes = arg1
+  mutableArg2: bool = arg2
+  if (mutableArg0 < 10) {
+    mutableArg0: uint64 = 10
+  }
+  mutableArg1: bytes = concat(mutableArg1, "suffix")
+  mutableArg2: bool = !mutableArg2
+  assert(mutableArg0 >= 10)
+  assert(len(mutableArg1) > 0)
+  if (mutableArg2) {
+    mutableArg0: uint64 = mutableArg0 + len(mutableArg1)
+  }
+  return mutableArg0
+}

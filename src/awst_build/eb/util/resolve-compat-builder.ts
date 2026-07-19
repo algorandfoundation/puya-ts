@@ -13,7 +13,7 @@ import { InstanceBuilder } from '../index'
  * @param builder
  * @param targetType
  */
-export function resolveCompatBuilder(builder: NodeBuilder, targetType: PType) {
+function resolveCompatBuilder(builder: NodeBuilder, targetType: PType) {
   codeInvariant(builder instanceof InstanceBuilder, `Cannot resolve ${builder.typeDescription} to a value`, builder.sourceLocation)
 
   if (builder.resolvableToPType(targetType)) {

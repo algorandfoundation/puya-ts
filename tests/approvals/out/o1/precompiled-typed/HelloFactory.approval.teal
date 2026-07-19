@@ -11,7 +11,7 @@ main:
     bz main___algots__.defaultCreate@13
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x2a17995c 0xe3254bc9 0xe2b7c692 0x02947ca2 0x495e0010 0x27519e7b // method "test_compile_contract()void", method "test_compile_contract_with_template()void", method "test_compile_contract_with_template_and_custom_prefix()void", method "test_compile_contract_large()void", method "test_call_contract_with_transactions()void", method "test_call_contract_with_reference_types()void"
@@ -27,8 +27,6 @@ main___algots__.defaultCreate@13:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_2 // 1
     return
 
 
@@ -39,19 +37,13 @@ test_compile_contract:
     //   args: ['hello'],
     // }).itxn.createdApp
     itxn_begin
-    pushbytes 0x009225ae // method "helloCreate(string)void"
-    itxn_field ApplicationArgs
-    // tests/approvals/precompiled-typed.algo.ts:18
-    // args: ['hello'],
-    pushbytes 0x000568656c6c6f
-    itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:15
     // const compiled = compileArc4(Hello)
     intc_2 // 1
     itxn_field GlobalNumByteSlice
     bytec_1 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyAEAAECBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CADcALTEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CADkAXwCABACSJa42GgCOAQAWADEZJRIxGBBEI0MxGYEFEjEYEEQjQzYaAUkiWSQISwEVEkRXAgAoTGcjQzYaAUkiWSQISwEVEkRXAgAiKGVEKVBMUEkVFlcGAkxQKkxQsCNDNhoBSRVLASJZSSUSREsCSwFLA1IiWYEGCEsDJFlJSwISREsESwFLBVJJIlkkCE8DCE8EEkQiKGVEKVBOBE4EUlcCAFBMVwIAUEkVFlcGAkxQKkxQsCND)
+    pushbytes base64(CyAEAAIBBCYDCGdyZWV0aW5nASAEFR98dTEYQAAEKIAAZ4ICBCQ3jTwEoOgYcjYaAI4CADUALTEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CADUAWwCABACSJa42GgCOAQASADEZJRIxGBBDMRmBBRIxGBBDNhoBSSJZIwhLARUSRFcCAChMZyRDNhoBSSJZIwhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwJEM2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMjWUlLAhJESwRLAUsFUkkiWSMITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwJEM=)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:17-19
     // const app = compiled.call.create({
@@ -59,6 +51,16 @@ test_compile_contract:
     // }).itxn.createdApp
     intc_0 // 0
     itxn_field OnCompletion
+    pushbytes 0x009225ae // method "helloCreate(string)void"
+    itxn_field ApplicationArgs
+    // tests/approvals/precompiled-typed.algo.ts:18
+    // args: ['hello'],
+    pushbytes 0x000568656c6c6f
+    itxn_field ApplicationArgs
+    // tests/approvals/precompiled-typed.algo.ts:17-19
+    // const app = compiled.call.create({
+    //   args: ['hello'],
+    // }).itxn.createdApp
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -71,6 +73,10 @@ test_compile_contract:
     //   appId: app,
     // })
     itxn_begin
+    intc_0 // 0
+    itxn_field OnCompletion
+    dup
+    itxn_field ApplicationID
     bytec_2 // method "greet(string)string"
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:22
@@ -82,10 +88,6 @@ test_compile_contract:
     //   args: ['world'],
     //   appId: app,
     // })
-    intc_0 // 0
-    itxn_field OnCompletion
-    dup
-    itxn_field ApplicationID
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -107,7 +109,7 @@ test_compile_contract:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:25
     // assert(result === 'hello world')
@@ -121,14 +123,14 @@ test_compile_contract:
     //   args: ['abi'],
     // })
     itxn_begin
+    dup
+    itxn_field ApplicationID
     bytec_2 // method "greet(string)string"
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:30
     // args: ['abi'],
     pushbytes 0x0003616269
     itxn_field ApplicationArgs
-    dup
-    itxn_field ApplicationID
     // tests/approvals/precompiled-typed.algo.ts:27-31
     // const { returnValue: result2, itxn: greetItxn } = abiCall({
     //   method: Hello.prototype.greet,
@@ -156,7 +158,7 @@ test_compile_contract:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 6 0
     itxn LastLog
     // tests/approvals/precompiled-typed.algo.ts:33
@@ -177,14 +179,14 @@ test_compile_contract:
     //   args: ['stubbed'],
     // }).returnValue
     itxn_begin
+    dup
+    itxn_field ApplicationID
     bytec_2 // method "greet(string)string"
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:39
     // args: ['stubbed'],
     pushbytes 0x000773747562626564
     itxn_field ApplicationArgs
-    dup
-    itxn_field ApplicationID
     // tests/approvals/precompiled-typed.algo.ts:36-40
     // const result3 = abiCall({
     //   method: HelloStubbed.prototype.greet,
@@ -212,7 +214,7 @@ test_compile_contract:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:41
     // assert(result3 === 'hello stubbed')
@@ -226,14 +228,14 @@ test_compile_contract:
     //   args: [{ name: 'world', termination: new arc4.Str('!') }],
     // }).returnValue
     itxn_begin
+    dup
+    itxn_field ApplicationID
     bytec 7 // method "sendGreetings((string,string))string"
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:46
     // args: [{ name: 'world', termination: new arc4.Str('!') }],
     bytec 8 // 0x0004000b0005776f726c64000121
     itxn_field ApplicationArgs
-    dup
-    itxn_field ApplicationID
     // tests/approvals/precompiled-typed.algo.ts:43-47
     // const result4 = abiCall({
     //   method: Hello.prototype.sendGreetings,
@@ -261,7 +263,7 @@ test_compile_contract:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:49
     // assert(result4 === 'hello world!')
@@ -273,11 +275,11 @@ test_compile_contract:
     //   appId: app,
     // })
     itxn_begin
-    bytec_3 // method "delete()void"
-    itxn_field ApplicationArgs
-    pushint 5 // 5
+    pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec_3 // method "delete()void"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -294,20 +296,20 @@ test_compile_contract_with_template:
     // tests/approvals/precompiled-typed.algo.ts:59
     // const helloApp = compiled.call.create().itxn.createdApp
     itxn_begin
-    bytec 9 // method "create()void"
-    itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:57
     // const compiled = compileArc4(HelloTemplate, { templateVars: { GREETING: 'hey' } })
     intc_2 // 1
     itxn_field GlobalNumByteSlice
     bytec_1 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyAEAAECBCYECGdyZWV0aW5nASAEFR98dQNoZXkxGEAAAygrZ4ICBCQ3jTwEoOgYcjYaAI4CADkALzEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CACYATACABExcYbo2GgCOAQABACNDMRklEjEYEEQjQzEZgQUSMRgQRCNDNhoBSSJZJAhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwI0M2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMkWUlLAhJESwRLAUsFUkkiWSQITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwI0M=)
+    pushbytes base64(CyAEAAECBCYECGdyZWV0aW5nASAEFR98dQNoZXkxGEAAAygrZ4ICBCQ3jTwEoOgYcjYaAI4CADcALzEZFEQxGEEAFoICBNCiggAEUYC6IDYaAI4CACIASACABExcYbo2GgCOAQABACNDMRklEjEYEEMxGYEFEjEYEEM2GgFJIlkkCEsBFRJEVwIAIihlRClQTFBJFRZXBgJMUCpMULAjQzYaAUkVSwEiWUklEkRLAksBSwNSIlmBBghLAyRZSUsCEkRLBEsBSwVSSSJZJAhPAwhPBBJEIihlRClQTgROBFJXAgBQTFcCAFBJFRZXBgJMUCpMULAjQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:59
     // const helloApp = compiled.call.create().itxn.createdApp
     intc_0 // 0
     itxn_field OnCompletion
+    bytec 9 // method "create()void"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -320,6 +322,10 @@ test_compile_contract_with_template:
     //   appId: helloApp,
     // })
     itxn_begin
+    intc_0 // 0
+    itxn_field OnCompletion
+    dup
+    itxn_field ApplicationID
     bytec_2 // method "greet(string)string"
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:62
@@ -331,10 +337,6 @@ test_compile_contract_with_template:
     //   args: ['world'],
     //   appId: helloApp,
     // })
-    intc_0 // 0
-    itxn_field OnCompletion
-    dup
-    itxn_field ApplicationID
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -356,7 +358,7 @@ test_compile_contract_with_template:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:66
     // assert(txn1.returnValue === 'hey world')
@@ -369,6 +371,10 @@ test_compile_contract_with_template:
     //   appId: helloApp,
     // })
     itxn_begin
+    intc_0 // 0
+    itxn_field OnCompletion
+    dup
+    itxn_field ApplicationID
     bytec 7 // method "sendGreetings((string,string))string"
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:70
@@ -380,10 +386,6 @@ test_compile_contract_with_template:
     //   args: [greeting],
     //   appId: helloApp,
     // })
-    intc_0 // 0
-    itxn_field OnCompletion
-    dup
-    itxn_field ApplicationID
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -405,7 +407,7 @@ test_compile_contract_with_template:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:74
     // assert(txn2.returnValue === 'hey world!')
@@ -417,11 +419,11 @@ test_compile_contract_with_template:
     //   appId: helloApp,
     // })
     itxn_begin
-    bytec_3 // method "delete()void"
-    itxn_field ApplicationArgs
-    pushint 5 // 5
+    pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec_3 // method "delete()void"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -438,20 +440,20 @@ test_compile_contract_with_template_and_custom_prefix:
     // tests/approvals/precompiled-typed.algo.ts:84
     // const helloApp = compiled.call.create().itxn.createdApp
     itxn_begin
-    bytec 9 // method "create()void"
-    itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:82
     // const compiled = compileArc4(HelloTemplateCustomPrefix, { templateVars: { GREETING: 'bonjour' }, templateVarsPrefix: 'PRFX_' })
     intc_2 // 1
     itxn_field GlobalNumByteSlice
     bytec_1 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyAEAAECBCYECGdyZWV0aW5nASAEFR98dQdib25qb3VyMRhAAAMoK2eCAgQkN408BKDoGHI2GgCOAgA5AC8xGRREMRhBABaCAgTQooIABFGAuiA2GgCOAgAmAEwAgARMXGG6NhoAjgEAAQAjQzEZJRIxGBBEI0MxGYEFEjEYEEQjQzYaAUkiWSQISwEVEkRXAgAiKGVEKVBMUEkVFlcGAkxQKkxQsCNDNhoBSRVLASJZSSUSREsCSwFLA1IiWYEGCEsDJFlJSwISREsESwFLBVJJIlkkCE8DCE8EEkQiKGVEKVBOBE4EUlcCAFBMVwIAUEkVFlcGAkxQKkxQsCND)
+    pushbytes base64(CyAEAAECBCYECGdyZWV0aW5nASAEFR98dQdib25qb3VyMRhAAAMoK2eCAgQkN408BKDoGHI2GgCOAgA3AC8xGRREMRhBABaCAgTQooIABFGAuiA2GgCOAgAiAEgAgARMXGG6NhoAjgEAAQAjQzEZJRIxGBBDMRmBBRIxGBBDNhoBSSJZJAhLARUSRFcCACIoZUQpUExQSRUWVwYCTFAqTFCwI0M2GgFJFUsBIllJJRJESwJLAUsDUiJZgQYISwMkWUlLAhJESwRLAUsFUkkiWSQITwMITwQSRCIoZUQpUE4ETgRSVwIAUExXAgBQSRUWVwYCTFAqTFCwI0M=)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:84
     // const helloApp = compiled.call.create().itxn.createdApp
     intc_0 // 0
     itxn_field OnCompletion
+    bytec 9 // method "create()void"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -464,6 +466,10 @@ test_compile_contract_with_template_and_custom_prefix:
     //   appId: helloApp,
     // })
     itxn_begin
+    intc_0 // 0
+    itxn_field OnCompletion
+    dup
+    itxn_field ApplicationID
     bytec_2 // method "greet(string)string"
     itxn_field ApplicationArgs
     // tests/approvals/precompiled-typed.algo.ts:87
@@ -475,10 +481,6 @@ test_compile_contract_with_template_and_custom_prefix:
     //   args: ['world'],
     //   appId: helloApp,
     // })
-    intc_0 // 0
-    itxn_field OnCompletion
-    dup
-    itxn_field ApplicationID
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -500,7 +502,7 @@ test_compile_contract_with_template_and_custom_prefix:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for string
     extract 6 0
     // tests/approvals/precompiled-typed.algo.ts:91
     // assert(result === 'bonjour world')
@@ -512,11 +514,11 @@ test_compile_contract_with_template_and_custom_prefix:
     //   appId: helloApp,
     // })
     itxn_begin
-    bytec_3 // method "delete()void"
-    itxn_field ApplicationArgs
-    pushint 5 // 5
+    pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec_3 // method "delete()void"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -537,7 +539,7 @@ test_compile_contract_large:
     // const compiled = compileArc4(LargeProgram)
     bytec_1 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CzEbQQAsggIEJDeNPAQCvzDPNhoAjgIACwABADEZFDEYEERCABcxGYEFEjEYEESBAUMxGRQxGBQQRIEBQ4GAIK8VFoAEFR98dUxQsIEBQw==)
+    pushbytes base64(CzEbQQApggIEJDeNPAQCvzDPNhoAjgIACwABADEZFDEYEERCABExGYEFEjEYEEMxGRQxGBQQQ4GAIK8VFoAEFR98dUxQsIEBQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:101
     // const largeApp = compiled.bareCreate().createdApp
@@ -554,12 +556,12 @@ test_compile_contract_large:
     //   appId: largeApp,
     // })
     itxn_begin
-    pushbytes 0x02bf30cf // method "getBigBytesLength()uint64"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     dup
     itxn_field ApplicationID
+    pushbytes 0x02bf30cf // method "getBigBytesLength()uint64"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -575,13 +577,13 @@ test_compile_contract_large:
     assert // Bytes has valid prefix
     dup
     len
-    pushint 8 // 8
+    pushint 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     btoi
     // tests/approvals/precompiled-typed.algo.ts:107
     // assert(result === 4096)
-    pushint 4096 // 4096
+    pushint 4096
     ==
     assert
     // tests/approvals/precompiled-typed.algo.ts:109-111
@@ -589,11 +591,11 @@ test_compile_contract_large:
     //   appId: largeApp,
     // })
     itxn_begin
-    bytec_3 // method "delete()void"
-    itxn_field ApplicationArgs
-    pushint 5 // 5
+    pushint 5
     itxn_field OnCompletion
     itxn_field ApplicationID
+    bytec_3 // method "delete()void"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -614,7 +616,7 @@ test_call_contract_with_transactions:
     // const compiled = compileArc4(ReceivesTxns)
     bytec_1 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyACAQMxG0EAPDEZFEQxGESCBASPaJLvBJzYfeME02bIaQSBtnNSNhoAjgQAAQAcAG0AhgCADBUffHUAAAAAAAAAAbAiQzEZFDEYFBBEIkOAAEkxFiIJSTgQSSMSQQAfSwE4PElFBUEADksDFoAEFR98dUxQsCJDSwE4IUL/7UmBBhJBABZLATg9SUUEQQAFSwJC/9dLATgYQv/QgQBC/8sxFiIJSTgQIxJEOBeABhUffHUAIExQsCJDMRaBAgk4EEkjEkQxFiIJOBBJIhJETCMSRCISQw==)
+    pushbytes base64(CyACAQMxG0EAPDEZFEQxGESCBASPaJLvBJzYfeME02bIaQSBtnNSNhoAjgQAAQAaAGEAegCADBUffHUAAAAAAAAAAbAiQzEZFDEYFBBDMRYiCUk4EEkjEkEAHEhJODxJQQAORQEWgAQVH3x1TFCwIkNIOCFC/+6BBhJBABJJOD1JQQAFRQFC/9xIOBhC/9ZIgQBC/9AxFiIJSTgQIxJEOBeABhUffHUAIExQsCJDMRaBAgk4EEkjEkQxFiIJOBBJIhJETCMSRCISRCJD)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:117
     // const appId = compiled.bareCreate().createdApp
@@ -650,7 +652,7 @@ test_call_contract_with_transactions:
     //   unitName: 'T',
     //   assetName: 'TEST',
     // })
-    pushint 3 // 3
+    pushint 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -660,18 +662,18 @@ test_call_contract_with_transactions:
     //   appId,
     // })
     itxn_next
-    bytec 10 // method "receivesAnyTxn(txn)uint64"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     dup
     itxn_field ApplicationID
+    bytec 10 // method "receivesAnyTxn(txn)uint64"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
     itxn_submit
-    gitxn 1 LastLog
+    itxn LastLog
     dup
     extract 4 0
     swap
@@ -680,9 +682,9 @@ test_call_contract_with_transactions:
     ==
     assert // Bytes has valid prefix
     len
-    pushint 8 // 8
+    pushint 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     // tests/approvals/precompiled-typed.algo.ts:135-138
     // compiled.call.receivesAnyTxn({
     //   appId,
@@ -710,18 +712,18 @@ test_call_contract_with_transactions:
     //   args: [appCall],
     // })
     itxn_next
-    bytec 10 // method "receivesAnyTxn(txn)uint64"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     dup
     itxn_field ApplicationID
+    bytec 10 // method "receivesAnyTxn(txn)uint64"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
     itxn_submit
-    gitxn 1 LastLog
+    itxn LastLog
     dup
     extract 4 0
     swap
@@ -730,9 +732,9 @@ test_call_contract_with_transactions:
     ==
     assert // Bytes has valid prefix
     len
-    pushint 8 // 8
+    pushint 8
     ==
-    assert // invalid number of bytes for arc4.uint64
+    assert // invalid number of bytes for uint64
     // tests/approvals/precompiled-typed.algo.ts:140-143
     // compiled.call.receivesAssetConfig({
     //   appId,
@@ -757,7 +759,7 @@ test_call_contract_with_transactions:
     //   unitName: 'T',
     //   assetName: 'TEST',
     // })
-    pushint 3 // 3
+    pushint 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -767,18 +769,18 @@ test_call_contract_with_transactions:
     //   args: [assetCreate],
     // })
     itxn_next
-    pushbytes 0xd366c869 // method "receivesAssetConfig(acfg)byte[]"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     dup
     itxn_field ApplicationID
+    pushbytes 0xd366c869 // method "receivesAssetConfig(acfg)byte[]"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
     itxn_submit
-    gitxn 1 LastLog
+    itxn LastLog
     dup
     extract 4 0
     swap
@@ -794,7 +796,7 @@ test_call_contract_with_transactions:
     swap
     len
     ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    assert // invalid number of bytes for bytes
     // tests/approvals/precompiled-typed.algo.ts:146
     // receiver: appId.address,
     dup
@@ -829,7 +831,7 @@ test_call_contract_with_transactions:
     //   unitName: 'T',
     //   assetName: 'TEST',
     // })
-    pushint 3 // 3
+    pushint 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -839,7 +841,7 @@ test_call_contract_with_transactions:
     itxn_field Sender
     // tests/approvals/precompiled-typed.algo.ts:147
     // amount: 100000,
-    pushint 100000 // 100000
+    pushint 100000
     itxn_field Amount
     itxn_field Receiver
     // tests/approvals/precompiled-typed.algo.ts:145-149
@@ -858,11 +860,11 @@ test_call_contract_with_transactions:
     //   args: [assetCreate, pay],
     // })
     itxn_next
-    pushbytes 0x81b67352 // method "receivesAssetConfigAndPay(acfg,pay)void"
-    itxn_field ApplicationArgs
     intc_0 // 0
     itxn_field OnCompletion
     itxn_field ApplicationID
+    pushbytes 0x81b67352 // method "receivesAssetConfigAndPay(acfg,pay)void"
+    itxn_field ApplicationArgs
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -883,7 +885,7 @@ test_call_contract_with_reference_types:
     // const compiled = compileArc4(ReceivesReferenceTypes)
     bytec_1 // base64(C4EBQw==)
     itxn_field ClearStateProgramPages
-    pushbytes base64(CyACAQgxG0EAGIAEZmmNGDYaAI4BAAEAMRkUMRgQREIACjEZFDEYFBBEIkM2GgFJFSMSRBc2GgJJFYEgEkQ2GgNJFSMSRBdPAnIIRLBMsHEERLAiQw==)
+    pushbytes base64(CzEbQQAYgARmaY0YNhoAjgEAAQAxGRQxGBBEQgAIMRkUMRgUEEM2GgFJFYEIEkQXNhoCSRWBIBJENhoDSRWBCBJEF08CcghEsEywcQREsIEBQw==)
     itxn_field ApprovalProgramPages
     // tests/approvals/precompiled-typed.algo.ts:160
     // const appId = compiled.bareCreate().createdApp
@@ -923,7 +925,7 @@ test_call_contract_with_reference_types:
     //     unitName: 'T',
     //     assetName: 'TEST',
     //   })
-    pushint 3 // 3
+    pushint 3
     itxn_field TypeEnum
     intc_0 // 0
     itxn_field Fee
@@ -955,6 +957,10 @@ test_call_contract_with_reference_types:
     //   args: [Global.currentApplicationId, Txn.sender, asset],
     //   appId,
     // })
+    intc_0 // 0
+    itxn_field OnCompletion
+    uncover 4
+    itxn_field ApplicationID
     pushbytes 0x66698d18 // method "receivesReferenceTypes(uint64,address,uint64)void"
     itxn_field ApplicationArgs
     uncover 2
@@ -962,10 +968,6 @@ test_call_contract_with_reference_types:
     swap
     itxn_field ApplicationArgs
     itxn_field ApplicationArgs
-    intc_0 // 0
-    itxn_field OnCompletion
-    swap
-    itxn_field ApplicationID
     intc_1 // appl
     itxn_field TypeEnum
     intc_0 // 0
@@ -990,6 +992,8 @@ test_call_contract_with_reference_types:
     asset_params_get AssetName
     assert // asset exists
     ==
+    assert
     // tests/approvals/precompiled-typed.algo.ts:157
     // test_call_contract_with_reference_types() {
+    intc_2 // 1
     return

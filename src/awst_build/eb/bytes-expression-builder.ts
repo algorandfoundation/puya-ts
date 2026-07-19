@@ -128,7 +128,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
       }
     }
 
-    let toFixedStrategy: 'assert-length' | 'unsafe-cast' = 'assert-length'
+    let toFixedStrategy: ToFixedStrategy = 'assert-length'
     if ((!initialValue && args.length) || args.length > 1) {
       const { args: parsedArgs } = parseFunctionArgs({
         args: args,
@@ -142,7 +142,7 @@ export class BytesFunctionBuilder extends FunctionBuilder {
         ],
       })
       const { strategy } = parsedArgs.at(-1) as unknown as { length: NumericLiteralExpressionBuilder; strategy?: StringExpressionBuilder }
-      toFixedStrategy = strategy === undefined ? 'assert-length' : mapStringConstant(fixedConversionStrategyMap, strategy.resolve())
+      toFixedStrategy = parseToFixedStrategy(strategy)
     }
     if (!initialValue) {
       return empty
@@ -151,11 +151,11 @@ export class BytesFunctionBuilder extends FunctionBuilder {
     if (initialValue.ptype instanceof TransientType) {
       logger.error(initialValue.sourceLocation, initialValue.ptype.expressionMessage)
       bytesBuilder = empty
-    } else if (initialValue.ptype.equals(uint64PType)) {
-      bytesBuilder = initialValue.toBytes(sourceLocation)
-    } else if (initialValue.ptype.equals(biguintPType)) {
-      bytesBuilder = initialValue.toBytes(sourceLocation)
-    } else if (initialValue.ptype.equals(stringPType)) {
+    } else if (
+      initialValue.ptype.equals(uint64PType) ||
+      initialValue.ptype.equals(biguintPType) ||
+      initialValue.ptype.equals(stringPType)
+    ) {
       bytesBuilder = initialValue.toBytes(sourceLocation)
     } else if (initialValue.ptype.equals(bytesPType)) {
       bytesBuilder = initialValue
@@ -236,7 +236,7 @@ class FromEncodingBuilder extends FunctionBuilder {
         callLocation: sourceLocation,
         argSpec: (a) => [a.passthrough(), a.obj({ length: a.required(NumericLiteralPType), strategy: a.optional(stringPType) })],
       })
-      const toFixedStrategy = strategy === undefined ? 'assert-length' : mapStringConstant(fixedConversionStrategyMap, strategy.resolve())
+      const toFixedStrategy = parseToFixedStrategy(strategy)
       if (toFixedStrategy !== 'assert-length') {
         logger.error(sourceLocation, `Invalid strategy value of '${toFixedStrategy}'. Expected 'assert-length'`)
       }
@@ -372,7 +372,7 @@ export class BytesExpressionBuilder extends InstanceExpressionBuilder<BytesPType
   }
 }
 
-export class ConcatFunctionBuilder extends FunctionBuilder {
+class ConcatFunctionBuilder extends FunctionBuilder {
   constructor(private builder: BytesExpressionBuilder) {
     super(builder.sourceLocation)
   }
@@ -405,11 +405,11 @@ export class ConcatFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export function bytesToFixed(
+function bytesToFixed(
   builder: InstanceBuilder,
   fixedType: BytesPType,
   sourceLocation: SourceLocation,
-  strategy: 'assert-length' | 'unsafe-cast' = 'assert-length',
+  strategy: ToFixedStrategy,
 ): InstanceBuilder {
   invariant(fixedType.length !== null, 'Should only be called for bytes with a fixed length', sourceLocation)
 
@@ -470,12 +470,18 @@ export function bytesToFixed(
   )
 }
 
-const fixedConversionStrategyMap: Record<string, 'assert-length' | 'unsafe-cast'> = {
+type ToFixedStrategy = 'assert-length' | 'unsafe-cast'
+
+const fixedConversionStrategyMap: Record<ToFixedStrategy, ToFixedStrategy> = {
   'assert-length': 'assert-length',
   'unsafe-cast': 'unsafe-cast',
 }
 
-export class ToFixedLengthFunctionBuilder extends FunctionBuilder {
+function parseToFixedStrategy(strategy: InstanceBuilder | undefined): ToFixedStrategy {
+  return strategy === undefined ? 'assert-length' : mapStringConstant(fixedConversionStrategyMap, strategy.resolve())
+}
+
+class ToFixedLengthFunctionBuilder extends FunctionBuilder {
   constructor(private builder: BytesExpressionBuilder) {
     super(builder.sourceLocation)
   }
@@ -497,25 +503,14 @@ export class ToFixedLengthFunctionBuilder extends FunctionBuilder {
       ],
     })
     const sizeConst = requireIntegerConstant(length)
-    const parsedStrategy = strategy === undefined ? 'assert-length' : mapStringConstant(fixedConversionStrategyMap, strategy.resolve())
+    const parsedStrategy = parseToFixedStrategy(strategy)
     const ptype = new BytesPType({ length: sizeConst.value })
 
-    if (parsedStrategy === 'assert-length') {
-      return bytesToFixed(this.builder, ptype, sourceLocation)
-    } else {
-      return instanceEb(
-        nodeFactory.reinterpretCast({
-          expr: this.builder.resolve(),
-          wtype: ptype.wtype,
-          sourceLocation,
-        }),
-        ptype,
-      )
-    }
+    return bytesToFixed(this.builder, ptype, sourceLocation, parsedStrategy)
   }
 }
 
-export class BytesInvertBuilder extends FunctionBuilder {
+class BytesInvertBuilder extends FunctionBuilder {
   constructor(private builder: BytesExpressionBuilder) {
     super(builder.sourceLocation)
   }
@@ -534,7 +529,7 @@ export class BytesInvertBuilder extends FunctionBuilder {
   }
 }
 
-export class BitwiseOpFunctionBuilder extends FunctionBuilder {
+class BitwiseOpFunctionBuilder extends FunctionBuilder {
   constructor(
     private left: BytesExpressionBuilder,
     private op: BytesBinaryOperator,
@@ -570,7 +565,7 @@ export class BitwiseOpFunctionBuilder extends FunctionBuilder {
   }
 }
 
-export class ToStringBuilder extends FunctionBuilder {
+class ToStringBuilder extends FunctionBuilder {
   constructor(private builder: BytesExpressionBuilder) {
     super(builder.sourceLocation)
   }

@@ -47,6 +47,8 @@ export async function puyaCompile({
   for (const log of response.logs) {
     deserializeAndLog(log)
   }
+
+  return response
 }
 
 function getPuyaLogLevel(logLevel: LogLevel): string {

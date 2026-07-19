@@ -30,7 +30,7 @@ import { indexAccess } from '../util/array/index-access'
 import { arrayLength } from '../util/array/length'
 import { translateNegativeIndex } from '../util/translate-negative-index'
 
-export type NativeArrayLike = FixedArrayPType | ReadonlyArrayPType | ArrayPType
+type NativeArrayLike = FixedArrayPType | ReadonlyArrayPType | ArrayPType
 
 export class NativeArrayClassBuilder extends ClassBuilder {
   readonly ptype = ArrayGeneric
@@ -57,7 +57,7 @@ export class NativeArrayClassBuilder extends ClassBuilder {
   }
 }
 
-export class NativeArrayLikeExpressionBuilder<T extends NativeArrayLike = NativeArrayLike> extends InstanceExpressionBuilder<T> {
+class NativeArrayLikeExpressionBuilder<T extends NativeArrayLike = NativeArrayLike> extends InstanceExpressionBuilder<T> {
   iterate(sourceLocation: SourceLocation): Expression {
     return this.resolve()
   }
@@ -188,7 +188,7 @@ class PushFunctionBuilder extends FunctionBuilder {
 
     const target = this.arrayBuilder.resolve()
 
-    codeInvariant(isReferableExpression(target), 'target of Array.push method must be a variable or state expression')
+    codeInvariant(isReferableExpression(target), 'target of Array.push method must be a variable or state expression', sourceLocation)
 
     return instanceEb(
       nodeFactory.commaExpression({

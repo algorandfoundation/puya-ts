@@ -7,7 +7,7 @@ import type { DeliberateAny } from '../typescript-helpers'
 import { codeInvariant, extractModuleName, hasFlags, instanceOfAny, intersectsFlags, invariant, isIn } from '../util'
 import type { AbsolutePath } from '../util/absolute-path'
 import { getNodeName } from '../visitor/syntax-names'
-import type { AppStorageType, PType } from './ptypes'
+import type { AppStorageType, PType, PTypeField } from './ptypes'
 import {
   anyGtxnType,
   anyPType,
@@ -25,10 +25,12 @@ import {
   ContractClassPType,
   esSymbol,
   FunctionPType,
+  GlobalMapType,
   GlobalStateType,
   GroupTransactionPType,
   ImmutableObjectPType,
   IntersectionPType,
+  LocalMapType,
   LocalStateType,
   logicSigBaseType,
   LogicSigPType,
@@ -50,6 +52,7 @@ import {
   unknownPType,
   voidPType,
 } from './ptypes'
+import type { ARC4StructField } from './ptypes/arc4-types'
 import { ARC4EncodedType, arc4StructBaseType, ARC4StructClass, ARC4StructType, UintNType } from './ptypes/arc4-types'
 import { SymbolName } from './symbol-name'
 import { typeRegistry } from './type-registry'
@@ -62,13 +65,12 @@ export class TypeResolver {
 
   private getUnaliasedSymbolForNode(node: ts.Node) {
     const symbol = this.checker.getSymbolAtLocation(node)
-    if (symbol) {
-      if (hasFlags(symbol.flags, ts.SymbolFlags.Alias)) {
-        return this.checker.getAliasedSymbol(symbol)
-      }
-      return symbol
+    if (!symbol) return undefined
+
+    if (hasFlags(symbol.flags, ts.SymbolFlags.Alias)) {
+      return this.checker.getAliasedSymbol(symbol)
     }
-    return undefined
+    return symbol
   }
 
   resolveTypeParameters(node: ts.CallExpression | ts.NewExpression | ts.TaggedTemplateExpression, sourceLocation: SourceLocation) {
@@ -77,7 +79,7 @@ export class TypeResolver {
       return node.typeArguments.map((t) => this.resolveTypeNode(t, sourceLocation))
     }
     const sig = this.checker.getResolvedSignature(node)
-    invariant(sig, 'CallExpression must resolve to a signature')
+    invariant(sig, 'CallExpression must resolve to a signature', sourceLocation)
     const tps = this.checker.getTypeArgumentsForResolvedSignature(sig)
     return tps?.map((t) => this.resolveType(t, sourceLocation)) ?? []
   }
@@ -85,7 +87,7 @@ export class TypeResolver {
   resolve(node: ts.Node, sourceLocation: SourceLocation): PType {
     const symbol = this.getUnaliasedSymbolForNode(node)
     if (symbol !== undefined && symbol.declarations?.length) {
-      const symbolName = symbol && this.getSymbolFullName(symbol, sourceLocation)
+      const symbolName = this.getSymbolFullName(symbol)
       invariant(symbolName, 'Symbol should have name as we pre-checked it has a declaration', sourceLocation)
       if (symbolName.name === '*') {
         return new NamespacePType(symbolName)
@@ -115,7 +117,7 @@ export class TypeResolver {
     if (ts.isConstructorDeclaration(node)) {
       const signature = this.checker.getSignatureFromDeclaration(node)
       invariant(signature, 'Constructor node must have call signature', sourceLocation)
-      const parentType = this.getTypeName(this.checker.getTypeAtLocation(node.parent), sourceLocation)
+      const parentType = this.getTypeName(this.checker.getTypeAtLocation(node.parent))
       invariant(parentType, 'Parent type must have name', sourceLocation)
       return this.reflectFunctionType(
         new SymbolName({
@@ -136,20 +138,8 @@ export class TypeResolver {
 
   @CacheResolvedType
   resolveType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
-    const typeName = this.getTypeName(tsType, sourceLocation)
+    const typeName = this.getTypeName(tsType)
 
-    intersect: if (isIntersectionType(tsType)) {
-      if (tsType.aliasSymbol) {
-        break intersect
-      }
-      // Special handling of struct and mutable object base types which are an intersection of `StructBase` or `MutableObjectBase` and the generic `T` type
-      const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
-      if (parts.some((p) => p.equals(arc4StructBaseType))) {
-        return arc4StructBaseType
-      } else {
-        return IntersectionPType.fromTypes(parts)
-      }
-    }
     if (isUnionType(tsType)) {
       const ut = UnionPType.fromTypes(tsType.types.map((t) => this.resolveType(t, sourceLocation)))
       if (ut instanceof UnionPType) {
@@ -229,36 +219,48 @@ export class TypeResolver {
       return this.resolve(tsType.node.expression, sourceLocation)
     }
 
-    invariant(typeName, 'Non builtin type must have a name', sourceLocation)
+    if (typeName) {
+      if (typeName.name === '__type' && typeName.module.startsWith(Constants.algoTsPackage)) {
+        // We are likely dealing with `typeof X` where X is a singleton exported by algo-ts
+        const declarationNode = tsType.symbol.getDeclarations()?.[0]?.parent
 
-    if (typeName.name === '__type' && typeName.module.startsWith(Constants.algoTsPackage)) {
-      // We are likely dealing with `typeof X` where X is a singleton exported by algo-ts
-      const declarationNode = tsType.symbol.getDeclarations()?.[0]?.parent
+        if (declarationNode && ts.isVariableDeclaration(declarationNode)) {
+          return this.resolve(declarationNode.name, sourceLocation)
+        }
+      }
 
-      if (declarationNode && ts.isVariableDeclaration(declarationNode)) {
-        return this.resolve(declarationNode.name, sourceLocation)
+      switch (typeName.fullName) {
+        case arc4StructBaseType.fullName:
+          return arc4StructBaseType
+        case ClusteredPrototype.fullName:
+          return this.resolveClusteredPrototype(tsType, sourceLocation)
+      }
+
+      const typeArgs = this.tryResolveGenericTypeArgs(tsType, sourceLocation)
+      if (typeArgs?.length) {
+        const gt = typeRegistry.tryResolveGenericPType(typeName, typeArgs)
+        if (gt) return gt
+      } else {
+        const it = typeRegistry.tryResolveInstancePType(typeName)
+        if (it) return it
+      }
+
+      if (typeName.module.startsWith('typescript/lib')) {
+        throw new CodeError(`${typeName.name} is not supported`, { sourceLocation })
       }
     }
 
-    switch (typeName.fullName) {
-      case arc4StructBaseType.fullName:
+    if (isIntersectionType(tsType)) {
+      // Special handling of struct and mutable object base types which are an intersection of `StructBase` or `MutableObjectBase` and the generic `T` type
+      const parts = tsType.types.map((t) => this.resolveType(t, sourceLocation))
+      if (parts.some((p) => p.equals(arc4StructBaseType))) {
         return arc4StructBaseType
-      case ClusteredPrototype.fullName:
-        return this.resolveClusteredPrototype(tsType, sourceLocation)
+      } else {
+        return IntersectionPType.fromTypes(parts)
+      }
     }
 
-    const typeArgs = this.tryResolveGenericTypeArgs(tsType, sourceLocation)
-    if (typeArgs?.length) {
-      const gt = typeRegistry.tryResolveGenericPType(typeName, typeArgs)
-      if (gt) return gt
-    } else {
-      const it = typeRegistry.tryResolveInstancePType(typeName)
-      if (it) return it
-    }
-
-    if (typeName.module.startsWith('typescript/lib')) {
-      throw new CodeError(`${typeName.name} is not supported`, { sourceLocation })
-    }
+    invariant(typeName, 'Non builtin type must have a name', sourceLocation)
 
     if (tsType.getConstructSignatures().length) {
       return this.reflectConstructorType(tsType, sourceLocation)
@@ -271,7 +273,7 @@ export class TypeResolver {
 
       const [baseType, ...rest] = tsType.getBaseTypes()?.map((t) => this.resolveType(t, sourceLocation)) ?? []
 
-      invariant(rest.length === 0, 'Class can have at most one base type')
+      invariant(rest.length === 0, 'Class can have at most one base type', sourceLocation)
 
       // Treat sub-types of UintN type as the base type.
       if (baseType instanceof UintNType) return baseType
@@ -351,8 +353,8 @@ export class TypeResolver {
   }
 
   private reflectObjectType(tsType: ts.Type, sourceLocation: SourceLocation): ImmutableObjectPType | MutableObjectPType {
-    const typeAlias = tsType.aliasSymbol ? this.getSymbolFullName(tsType.aliasSymbol, sourceLocation) : undefined
-    const properties: Record<string, PType> = {}
+    const typeAlias = tsType.aliasSymbol ? this.getSymbolFullName(tsType.aliasSymbol) : undefined
+    const properties: PTypeField[] = []
 
     let expectReadonly: boolean | undefined = undefined
     for (const prop of tsType.getProperties()) {
@@ -361,6 +363,7 @@ export class TypeResolver {
         // TODO: Check AST nodes to confirm?
         continue
       }
+      const description = (prop.valueDeclaration && tryGetDeclarationDescription(prop.valueDeclaration)) || null
       const type = this.checker.getTypeOfSymbol(prop)
       const propLocation = this.getLocationOfSymbol(prop) ?? sourceLocation
       const readonly = isReadonlyPropertySymbol(prop)
@@ -368,7 +371,7 @@ export class TypeResolver {
       if (expectReadonly !== readonly) {
         const correction = expectReadonly
           ? 'Add a readonly modifier to this property, or remove it from all others'
-          : 'Remove the readonly modifier from this property, or add it all others'
+          : 'Remove the readonly modifier from this property, or add it to all others'
         logger.error(propLocation, `All properties of a type must share the same readonly annotation. ${correction}`)
       }
       const ptype = this.resolveType(type, propLocation)
@@ -377,7 +380,7 @@ export class TypeResolver {
       } else if (ptype.singleton) {
         logger.error(propLocation, `Invalid object property type. ${ptype} is not supported`)
       } else {
-        properties[prop.name] = ptype
+        properties.push({ name: prop.name, ptype, description })
       }
     }
     if (expectReadonly) {
@@ -389,7 +392,7 @@ export class TypeResolver {
 
   private reflectConstructorType(tsType: ts.Type, sourceLocation: SourceLocation): PType {
     const constructorSignatures = tsType.getConstructSignatures()
-    invariant(constructorSignatures.length, 'Must have at least one signature')
+    invariant(constructorSignatures.length, 'Must have at least one signature', sourceLocation)
     const typeDeclaration = tsType.getSymbol()?.declarations?.[0]
     if (typeDeclaration && ts.isClassDeclaration(typeDeclaration)) {
       const ptype = this.resolve(typeDeclaration, sourceLocation)
@@ -416,7 +419,7 @@ export class TypeResolver {
     const declaredInNode = sig.declaration?.parent
     if (declaredInNode && ts.isClassDeclaration(declaredInNode)) {
       const declaredInType = this.checker.getTypeAtLocation(declaredInNode)
-      declaredIn = this.getTypeName(declaredInType, sourceLocation)
+      declaredIn = this.getTypeName(declaredInType)
     }
 
     const returnType = this.resolveType(sig.getReturnType(), sourceLocation)
@@ -441,14 +444,15 @@ export class TypeResolver {
     sourceLocation: SourceLocation,
   ): ARC4StructType {
     const ignoredProps = ['bytes', 'equals', 'native', 'copy', Constants.symbolNames.constructorMethodName]
-    const fields: Record<string, ARC4EncodedType> = {}
+    const fields: ARC4StructField[] = []
     for (const prop of tsType.getProperties()) {
       if (isIn(prop.name, ignoredProps)) continue
       const type = this.checker.getTypeOfSymbol(prop)
       const propLocation = this.getLocationOfSymbol(prop) ?? sourceLocation
       const ptype = this.resolveType(type, propLocation)
       if (ptype instanceof ARC4EncodedType) {
-        fields[prop.name] = ptype
+        const description = (prop.valueDeclaration && tryGetDeclarationDescription(prop.valueDeclaration)) || null
+        fields.push({ name: prop.name, ptype, description })
       } else {
         // Ignore
       }
@@ -474,7 +478,7 @@ export class TypeResolver {
     for (const prop of tsType.getProperties()) {
       const type = this.checker.getTypeOfSymbol(prop)
       const ptype = this.resolveType(type, this.getLocationOfSymbol(prop) ?? sourceLocation)
-      if (instanceOfAny(ptype, GlobalStateType, LocalStateType, BoxPType, BoxMapPType)) {
+      if (instanceOfAny(ptype, GlobalStateType, GlobalMapType, LocalStateType, LocalMapType, BoxPType, BoxMapPType)) {
         properties[prop.name] = ptype
       } else if (ptype instanceof FunctionPType) {
         methods[prop.name] = ptype
@@ -491,7 +495,7 @@ export class TypeResolver {
   }
 
   private resolveClusteredPrototype(tsType: ts.Type, sourceLocation: SourceLocation): PType {
-    invariant(isIntersectionType(tsType), 'Clustered prototypes must be an intersection type')
+    invariant(isIntersectionType(tsType), 'Clustered prototypes must be an intersection type', sourceLocation)
     const baseContracts: ContractClassPType[] = []
     for (const t of tsType.types.map((t) => this.resolveType(t, sourceLocation))) {
       if (t instanceof ContractClassPType) {
@@ -500,7 +504,8 @@ export class TypeResolver {
         // Ignore for now
       } else {
         throw new CodeError(
-          `Unexpected type: ${t}. Polytype can only be used to support multiple inheritance in contracts for now. All base types must extend the Contract or BaseContract class.}`,
+          `Unexpected type: ${t}. Polytype can only be used to support multiple inheritance in contracts for now. All base types must extend the Contract or BaseContract class.`,
+          { sourceLocation },
         )
       }
     }
@@ -511,9 +516,9 @@ export class TypeResolver {
     })
   }
 
-  getTypeName(type: ts.Type, sourceLocation: SourceLocation): SymbolName | undefined {
-    const typeName = type.symbol ? this.getSymbolFullName(type.symbol, sourceLocation) : undefined
-    const aliasName = type.aliasSymbol ? this.getSymbolFullName(type.aliasSymbol, sourceLocation) : undefined
+  getTypeName(type: ts.Type): SymbolName | undefined {
+    const typeName = type.symbol ? this.getSymbolFullName(type.symbol) : undefined
+    const aliasName = type.aliasSymbol ? this.getSymbolFullName(type.aliasSymbol) : undefined
 
     // If the alias was defined in algo-ts, polytype, or typescript, respect the alias
     if (
@@ -530,7 +535,7 @@ export class TypeResolver {
         if (parentDeclaration && ts.isTypeAliasDeclaration(parentDeclaration)) {
           const name = this.getUnaliasedSymbolForNode(parentDeclaration.name)
           if (name) {
-            return this.getSymbolFullName(name, sourceLocation)
+            return this.getSymbolFullName(name)
           }
         }
       }
@@ -549,7 +554,7 @@ export class TypeResolver {
     return dec?.localSymbol?.name
   }
 
-  private getSymbolFullName(symbol: ts.Symbol, sourceLocation: SourceLocation): SymbolName | undefined {
+  private getSymbolFullName(symbol: ts.Symbol): SymbolName | undefined {
     const symbolName = symbol.name === 'default' ? (this.tryGetLocalSymbolName(symbol) ?? symbol.name) : symbol.name
 
     const declaration = symbol?.declarations?.[0]
@@ -622,8 +627,11 @@ function isReadonlyPropertySymbol(prop: ts.Symbol): boolean {
 
 function tryGetTypeDescription(tsType: ts.Type): string | undefined {
   const dec = tsType.aliasSymbol?.valueDeclaration ?? tsType.symbol.valueDeclaration
-  if (!dec) return undefined
-  const docs = ts.getJSDocCommentsAndTags(dec)
+  return dec ? tryGetDeclarationDescription(dec) : undefined
+}
+
+function tryGetDeclarationDescription(tsDecl: ts.Declaration): string | undefined {
+  const docs = ts.getJSDocCommentsAndTags(tsDecl)
   for (const doc of docs) {
     if (ts.isJSDoc(doc)) {
       return ts.getTextOfJSDocComment(doc.comment)

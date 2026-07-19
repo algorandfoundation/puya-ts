@@ -1,0 +1,394 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 2 8
+    bytecblock "uintMap"
+    // tests/approvals/local-map.algo.ts:4-5
+    // @contract({ stateTotals: { localUints: 8, localBytes: 8 } })
+    // export class TestLocalMap extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@17
+    pushbytes 0x29314d95 // method "optIn()void"
+    txna ApplicationArgs 0
+    match main_optIn_route@3
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0x01124b73 0xaec441b8 0xa2d20392 0x7bc1269d 0x7d44ac96 0x3764b1ed 0xb36cbe2a 0xdece9605 // method "setAndGetUint(string,uint64)void", method "setAndGetBytes(string,byte[])void", method "setAndGetString(string,string)void", method "deleteValue(string)void", method "hasValue(string)bool", method "testKeyPrefix()void", method "testPrefixedMap(string,uint64)void", method "setAndGetUintViaLocalState(string,uint64)void"
+    txna ApplicationArgs 0
+    match setAndGetUint setAndGetBytes setAndGetString deleteValue hasValue main_testKeyPrefix_route@11 testPrefixedMap setAndGetUintViaLocalState
+    err
+
+main_testKeyPrefix_route@11:
+    // tests/approvals/local-map.algo.ts:40
+    // testKeyPrefix() {
+    intc_1 // 1
+    return
+
+main_optIn_route@3:
+    // tests/approvals/local-map.algo.ts:11
+    // @abimethod({ allowActions: 'OptIn' })
+    txn OnCompletion
+    intc_1 // OptIn
+    ==
+    txn ApplicationID
+    &&
+    return
+
+main___algots__.defaultCreate@17:
+    // tests/approvals/local-map.algo.ts:4-5
+    // @contract({ stateTotals: { localUints: 8, localBytes: 8 } })
+    // export class TestLocalMap extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetUint[routing]() -> void:
+setAndGetUint:
+    // tests/approvals/local-map.algo.ts:14
+    // setAndGetUint(key: string, value: uint64) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/local-map.algo.ts:6
+    // uintMap = LocalMap<string, uint64>()
+    bytec_0 // "uintMap"
+    uncover 2
+    concat
+    // tests/approvals/local-map.algo.ts:15
+    // this.uintMap(key, Txn.sender).value = value
+    txn Sender
+    dig 1
+    dig 3
+    app_local_put
+    // tests/approvals/local-map.algo.ts:16
+    // assert(this.uintMap(key, Txn.sender).value === value, 'uint value should match')
+    txn Sender
+    intc_0 // 0
+    uncover 2
+    app_local_get_ex
+    assert // check LocalState exists
+    ==
+    assert // uint value should match
+    // tests/approvals/local-map.algo.ts:14
+    // setAndGetUint(key: string, value: uint64) {
+    intc_1 // 1
+    return
+
+
+// tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetBytes[routing]() -> void:
+setAndGetBytes:
+    // tests/approvals/local-map.algo.ts:19
+    // setAndGetBytes(key: string, value: bytes) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // tests/approvals/local-map.algo.ts:7
+    // bytesMap = LocalMap<string, bytes>()
+    pushbytes "bytesMap"
+    uncover 2
+    concat
+    // tests/approvals/local-map.algo.ts:20
+    // this.bytesMap(key, Txn.sender).value = value
+    txn Sender
+    dig 1
+    dig 3
+    app_local_put
+    // tests/approvals/local-map.algo.ts:21
+    // assert(this.bytesMap(key, Txn.sender).value === value, 'bytes value should match')
+    txn Sender
+    intc_0 // 0
+    uncover 2
+    app_local_get_ex
+    assert // check LocalState exists
+    ==
+    assert // bytes value should match
+    // tests/approvals/local-map.algo.ts:19
+    // setAndGetBytes(key: string, value: bytes) {
+    intc_1 // 1
+    return
+
+
+// tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetString[routing]() -> void:
+setAndGetString:
+    // tests/approvals/local-map.algo.ts:24
+    // setAndGetString(key: string, value: string) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // tests/approvals/local-map.algo.ts:8
+    // stringMap = LocalMap<string, string>()
+    pushbytes "stringMap"
+    uncover 2
+    concat
+    // tests/approvals/local-map.algo.ts:25
+    // this.stringMap(key, Txn.sender).value = value
+    txn Sender
+    dig 1
+    dig 3
+    app_local_put
+    // tests/approvals/local-map.algo.ts:26
+    // assert(this.stringMap(key, Txn.sender).value === value, 'string value should match')
+    txn Sender
+    intc_0 // 0
+    uncover 2
+    app_local_get_ex
+    assert // check LocalState exists
+    ==
+    assert // string value should match
+    // tests/approvals/local-map.algo.ts:24
+    // setAndGetString(key: string, value: string) {
+    intc_1 // 1
+    return
+
+
+// tests/approvals/local-map.algo.ts::TestLocalMap.deleteValue[routing]() -> void:
+deleteValue:
+    // tests/approvals/local-map.algo.ts:29
+    // deleteValue(key: string) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // tests/approvals/local-map.algo.ts:6
+    // uintMap = LocalMap<string, uint64>()
+    bytec_0 // "uintMap"
+    swap
+    concat
+    // tests/approvals/local-map.algo.ts:30
+    // this.uintMap(key, Txn.sender).value = 123
+    txn Sender
+    dig 1
+    pushint 123
+    app_local_put
+    // tests/approvals/local-map.algo.ts:31
+    // assert(this.uintMap(key, Txn.sender).hasValue, 'should have value before delete')
+    txn Sender
+    intc_0 // 0
+    dig 2
+    app_local_get_ex
+    bury 1
+    assert // should have value before delete
+    // tests/approvals/local-map.algo.ts:32
+    // this.uintMap(key, Txn.sender).delete()
+    txn Sender
+    dig 1
+    app_local_del
+    // tests/approvals/local-map.algo.ts:33
+    // assert(!this.uintMap(key, Txn.sender).hasValue, 'should not have value after delete')
+    txn Sender
+    intc_0 // 0
+    uncover 2
+    app_local_get_ex
+    bury 1
+    !
+    assert // should not have value after delete
+    // tests/approvals/local-map.algo.ts:29
+    // deleteValue(key: string) {
+    intc_1 // 1
+    return
+
+
+// tests/approvals/local-map.algo.ts::TestLocalMap.hasValue[routing]() -> void:
+hasValue:
+    // tests/approvals/local-map.algo.ts:36
+    // hasValue(key: string): boolean {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // tests/approvals/local-map.algo.ts:6
+    // uintMap = LocalMap<string, uint64>()
+    bytec_0 // "uintMap"
+    swap
+    concat
+    // tests/approvals/local-map.algo.ts:37
+    // return this.uintMap(key, Txn.sender).hasValue
+    txn Sender
+    intc_0 // 0
+    uncover 2
+    app_local_get_ex
+    bury 1
+    // tests/approvals/local-map.algo.ts:36
+    // hasValue(key: string): boolean {
+    pushbytes 0x00
+    intc_0 // 0
+    uncover 2
+    setbit
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// tests/approvals/local-map.algo.ts::TestLocalMap.testPrefixedMap[routing]() -> void:
+testPrefixedMap:
+    // tests/approvals/local-map.algo.ts:45
+    // testPrefixedMap(key: string, value: uint64) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/local-map.algo.ts:9
+    // prefixedMap = LocalMap<string, uint64>({ keyPrefix: 'p/' })
+    pushbytes "p/"
+    uncover 2
+    concat
+    // tests/approvals/local-map.algo.ts:46
+    // this.prefixedMap(key, Txn.sender).value = value
+    txn Sender
+    dig 1
+    dig 3
+    app_local_put
+    // tests/approvals/local-map.algo.ts:47
+    // assert(this.prefixedMap(key, Txn.sender).value === value, 'prefixed map value should match')
+    txn Sender
+    intc_0 // 0
+    uncover 2
+    app_local_get_ex
+    assert // check LocalState exists
+    ==
+    assert // prefixed map value should match
+    // tests/approvals/local-map.algo.ts:45
+    // testPrefixedMap(key: string, value: uint64) {
+    intc_1 // 1
+    return
+
+
+// tests/approvals/local-map.algo.ts::TestLocalMap.setAndGetUintViaLocalState[routing]() -> void:
+setAndGetUintViaLocalState:
+    // tests/approvals/local-map.algo.ts:50
+    // setAndGetUintViaLocalState(key: string, value: uint64) {
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_2 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // tests/approvals/local-map.algo.ts:6
+    // uintMap = LocalMap<string, uint64>()
+    bytec_0 // "uintMap"
+    uncover 2
+    concat
+    // tests/approvals/local-map.algo.ts:51
+    // this.uintMap(key)(Txn.sender).value = value
+    txn Sender
+    dig 1
+    dig 3
+    app_local_put
+    // tests/approvals/local-map.algo.ts:52
+    // assert(this.uintMap(key)(Txn.sender).value === value, 'uint value via LocalState should match')
+    txn Sender
+    intc_0 // 0
+    uncover 2
+    app_local_get_ex
+    assert // check LocalState exists
+    ==
+    assert // uint value via LocalState should match
+    // tests/approvals/local-map.algo.ts:50
+    // setAndGetUintViaLocalState(key: string, value: uint64) {
+    intc_1 // 1
+    return

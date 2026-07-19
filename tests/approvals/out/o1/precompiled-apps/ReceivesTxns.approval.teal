@@ -10,7 +10,7 @@ main:
     bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0x8f6892ef 0x9cd87de3 0xd366c869 0x81b67352 // method "getOne()uint64", method "receivesAnyTxn(txn)uint64", method "receivesAssetConfig(acfg)byte[]", method "receivesAssetConfigAndPay(acfg,pay)void"
@@ -34,15 +34,11 @@ main___algots__.defaultCreate@11:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
 
 
 // tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn[routing]() -> void:
 receivesAnyTxn:
-    pushbytes ""
-    dup
     // tests/approvals/precompiled-apps.algo.ts:90
     // receivesAnyTxn(txn: gtxn.Transaction): uint64 {
     txn GroupIndex
@@ -61,14 +57,14 @@ receivesAnyTxn:
     // case TransactionType.AssetConfig:
     //   return txn.createdAsset.id || txn.configAsset.id
     bz receivesAnyTxn_after_if_else@7
+    pop
     // tests/approvals/precompiled-apps.algo.ts:93
     // return txn.createdAsset.id || txn.configAsset.id
-    dig 1
+    dup
     gtxns CreatedAssetID
     dup
-    bury 5
     bz receivesAnyTxn_ternary_false@5
-    dig 3
+    bury 1
 
 receivesAnyTxn_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@15:
     // tests/approvals/precompiled-apps.algo.ts:90
@@ -82,9 +78,9 @@ receivesAnyTxn_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesT
     return
 
 receivesAnyTxn_ternary_false@5:
+    pop
     // tests/approvals/precompiled-apps.algo.ts:93
     // return txn.createdAsset.id || txn.configAsset.id
-    dig 1
     gtxns ConfigAsset
     // tests/approvals/precompiled-apps.algo.ts:90
     // receivesAnyTxn(txn: gtxn.Transaction): uint64 {
@@ -93,8 +89,7 @@ receivesAnyTxn_ternary_false@5:
 receivesAnyTxn_after_if_else@7:
     // tests/approvals/precompiled-apps.algo.ts:94
     // case TransactionType.ApplicationCall:
-    dup
-    pushint 6 // 6
+    pushint 6
     ==
     // tests/approvals/precompiled-apps.algo.ts:94-95
     // case TransactionType.ApplicationCall:
@@ -102,29 +97,29 @@ receivesAnyTxn_after_if_else@7:
     bz receivesAnyTxn_after_if_else@13
     // tests/approvals/precompiled-apps.algo.ts:95
     // return txn.createdApp.id || txn.appId.id
-    dig 1
+    dup
     gtxns CreatedApplicationID
     dup
-    bury 4
     bz receivesAnyTxn_ternary_false@11
-    dig 2
+    bury 1
     // tests/approvals/precompiled-apps.algo.ts:90
     // receivesAnyTxn(txn: gtxn.Transaction): uint64 {
     b receivesAnyTxn_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@15
 
 receivesAnyTxn_ternary_false@11:
+    pop
     // tests/approvals/precompiled-apps.algo.ts:95
     // return txn.createdApp.id || txn.appId.id
-    dig 1
     gtxns ApplicationID
     // tests/approvals/precompiled-apps.algo.ts:90
     // receivesAnyTxn(txn: gtxn.Transaction): uint64 {
     b receivesAnyTxn_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@15
 
 receivesAnyTxn_after_if_else@13:
+    pop
     // tests/approvals/precompiled-apps.algo.ts:97
     // return 0
-    pushint 0 // 0
+    pushint 0
     // tests/approvals/precompiled-apps.algo.ts:90
     // receivesAnyTxn(txn: gtxn.Transaction): uint64 {
     b receivesAnyTxn_after_inlined_tests/approvals/precompiled-apps.algo.ts::ReceivesTxns.receivesAnyTxn@15
@@ -160,7 +155,7 @@ receivesAssetConfigAndPay:
     // tests/approvals/precompiled-apps.algo.ts:104
     // receivesAssetConfigAndPay(assetCfg: gtxn.AssetConfigTxn, payTxn: gtxn.PaymentTxn): void {
     txn GroupIndex
-    pushint 2 // 2
+    pushint 2
     -
     gtxns TypeEnum
     dup
@@ -185,6 +180,8 @@ receivesAssetConfigAndPay:
     // assert(payTxn.type === TransactionType.Payment)
     intc_0 // 1
     ==
+    assert
     // tests/approvals/precompiled-apps.algo.ts:104
     // receivesAssetConfigAndPay(assetCfg: gtxn.AssetConfigTxn, payTxn: gtxn.PaymentTxn): void {
+    intc_0 // 1
     return

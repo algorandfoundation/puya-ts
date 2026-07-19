@@ -40,7 +40,7 @@ export function applyEdits(file: string, edits: TextEdit[]) {
   return Array.from(fileIterator()).join('')
 }
 
-export class EditError extends Error {
+class EditError extends Error {
   constructor(
     message: string,
     public readonly edit: TextEdit,

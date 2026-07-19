@@ -6,9 +6,9 @@ import { logger, LoggingContext, LogLevel } from '../logger'
 import { ConsoleLogSink } from '../logger/sinks/console-log-sink'
 import { CompileOptions, defaultPuyaOptions, LocalsCoalescingStrategy } from '../options'
 
+import { AbsolutePath } from '../util/absolute-path'
 import { parseCliTemplateVar } from '../util/template-var-cli-parser'
 import { addEnumArg, convertInt } from './util'
-import { AbsolutePath } from '../util/absolute-path'
 
 export interface BuildCommandArgs {
   command: 'build'
@@ -21,14 +21,17 @@ export interface BuildCommandArgs {
   output_source_map: boolean
   output_arc32: boolean
   output_arc56: boolean
+  output_client: boolean
   output_ssa_ir: boolean
   output_optimization_ir: boolean
   output_destructured_ir: boolean
   output_memory_ir: boolean
   output_bytecode: boolean
+  output_assembly_report: boolean
   out_dir: string
   debug_level: string
   optimization_level: string
+  treat_warnings_as_errors: boolean
   target_avm_version: string
   cli_template_definitions: string[]
   validate_abi_args: boolean
@@ -89,6 +92,11 @@ export function addBuildCommand(parser: ArgumentParser) {
     help: 'Output {contract}.arc56.json ARC-56 app spec file. Only applicable to ARC4 contracts ',
     default: defaultPuyaOptions.outputArc56,
   })
+  parser.add_argument('--output-client', {
+    action: BooleanOptionalAction,
+    help: 'Output {contract}.client.ts Algorand TypeScript contract client for typed ARC-4 ABI calls. Only applicable to ARC4 contracts ',
+    default: defaultPuyaOptions.outputClient,
+  })
   parser.add_argument('--output-ssa-ir', {
     action: BooleanOptionalAction,
     help: 'Output IR (in SSA form) before optimisations',
@@ -114,6 +122,11 @@ export function addBuildCommand(parser: ArgumentParser) {
     help: 'Output AVM bytecode',
     default: defaultPuyaOptions.outputBytecode,
   })
+  parser.add_argument('--output-assembly-report', {
+    action: BooleanOptionalAction,
+    help: 'Output "human-readable" source map for advanced debugging purposes.',
+    default: defaultPuyaOptions.outputAssemblyReport,
+  })
 
   parser.add_argument('--out-dir', {
     action: 'store',
@@ -130,6 +143,11 @@ export function addBuildCommand(parser: ArgumentParser) {
     default: defaultPuyaOptions.optimizationLevel.toString(),
     choices: ['0', '1', '2'],
     help: 'Set optimization level of output TEAL / AVM bytecode, 0 = none, 1 = normal, 2 = intensive',
+  })
+  parser.add_argument('--treat-warnings-as-errors', {
+    action: BooleanOptionalAction,
+    default: defaultPuyaOptions.treatWarningsAsErrors,
+    help: 'Report and treat all warnings emitted by the compiler as errors',
   })
   parser.add_argument('--target-avm-version', {
     default: defaultPuyaOptions.targetAvmVersion.toString(),
@@ -199,14 +217,17 @@ export async function buildCommand(args: BuildCommandArgs) {
           outputTeal: args.output_teal,
           outputArc32: args.output_arc32,
           outputArc56: args.output_arc56,
+          outputClient: args.output_client,
           outputSsaIr: args.output_ssa_ir,
           outputOptimizationIr: args.output_optimization_ir,
           outputDestructuredIr: args.output_destructured_ir,
           outputMemoryIr: args.output_memory_ir,
           outputBytecode: args.output_bytecode,
           outputSourceMap: args.output_source_map,
+          outputAssemblyReport: args.output_assembly_report,
           debugLevel: convertInt(args.debug_level),
           optimizationLevel: convertInt(args.optimization_level),
+          treatWarningsAsErrors: args.treat_warnings_as_errors,
           targetAvmVersion: convertInt(args.target_avm_version),
           cliTemplateDefinitions: Object.fromEntries(args.cli_template_definitions?.map(parseCliTemplateVar) ?? []),
           templateVarsPrefix: args.template_vars_prefix,

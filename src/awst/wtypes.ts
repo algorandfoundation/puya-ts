@@ -120,25 +120,16 @@ export namespace wtypes {
     }
   }
 
-  export abstract class NativeArray extends WType {
+  export class ReferenceArray extends WType {
     readonly elementType: WType
     readonly sourceLocation: SourceLocation | null
-    protected constructor(props: { name: string; itemType: WType; sourceLocation?: SourceLocation }) {
+    constructor(props: { itemType: WType; sourceLocation?: SourceLocation }) {
       super({
-        name: props.name,
+        name: `ref_array<${props.itemType.name}>`,
+        immutable: false,
       })
       this.elementType = props.itemType
       this.sourceLocation = props.sourceLocation ?? null
-    }
-  }
-
-  export class ReferenceArray extends NativeArray {
-    readonly immutable = false
-    constructor(props: { itemType: WType; immutable: boolean; sourceLocation?: SourceLocation }) {
-      super({
-        name: `ref_array<${props.itemType.name}>`,
-        ...props,
-      })
     }
   }
 
@@ -171,12 +162,22 @@ export namespace wtypes {
     }
   }
   export class WInnerTransactionFields extends WType {
-    transactionType: TransactionKind | null
+    readonly transactionType: TransactionKind | null
     constructor({ transactionType }: { transactionType?: TransactionKind }) {
       super({
         name: transactionType === undefined ? 'inner_transaction_fields' : `inner_transaction_fields_${TransactionKind[transactionType]}`,
       })
       this.transactionType = transactionType ?? null
+    }
+  }
+
+  export class WABICallInnerTransactionFields extends WInnerTransactionFields {
+    resultType: WType
+    constructor({ returnType }: { returnType?: WType }) {
+      super({
+        transactionType: TransactionKind.appl,
+      })
+      this.resultType = returnType ?? voidWType
     }
   }
 
@@ -209,8 +210,14 @@ export namespace wtypes {
     }
   }
 
+  type WTypeField = {
+    name: string
+    wtype: WType
+    description: string | null
+  }
+
   export class ARC4Struct extends ARC4Type {
-    fields: Record<string, WType>
+    fields: WTypeField[]
     sourceLocation: SourceLocation | null
     frozen: boolean
     desc: string | null
@@ -225,12 +232,12 @@ export namespace wtypes {
       frozen: boolean
       name: string
       desc: string | null
-      fields: Record<string, WType>
+      fields: WTypeField[]
       sourceLocation?: SourceLocation
     }) {
       super({
         name,
-        immutable: frozen && Object.values(fields).every((t) => t.immutable),
+        immutable: frozen && fields.every((f) => f.wtype.immutable),
       })
       this.sourceLocation = sourceLocation ?? null
       this.fields = fields
@@ -241,16 +248,15 @@ export namespace wtypes {
   export class ARC4Tuple extends ARC4Type {
     readonly types: WType[]
     readonly sourceLocation: SourceLocation | null
-    readonly immutable: boolean
 
     constructor({ types, sourceLocation, immutable }: { types: WType[]; sourceLocation?: SourceLocation; immutable: boolean }) {
       const typesStr = types.map((t) => t.name).join(',')
       super({
         name: `arc4.tuple<${typesStr}>`,
+        immutable,
       })
       this.sourceLocation = sourceLocation ?? null
       this.types = types
-      this.immutable = immutable
     }
   }
 
@@ -305,7 +311,7 @@ export namespace wtypes {
     }) {
       super({
         elementType,
-        name: `arc4.static_array<${elementType.name}>`,
+        name: `arc4.static_array<${elementType.name},${arraySize}>`,
         arc4Alias: arc4Alias ?? null,
         immutable,
       })

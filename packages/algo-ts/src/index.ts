@@ -1,5 +1,18 @@
 export * from './primitives'
-export { log, err, assert, match, assertMatch, ensureBudget, urange, OpUpFeeSource, clone, validateEncoding } from './util'
+export {
+  log,
+  err,
+  assert,
+  match,
+  assertMatch,
+  ensureBudget,
+  urange,
+  OpUpFeeSource,
+  clone,
+  validateEncoding,
+  loggedAssert,
+  loggedErr,
+} from './util'
 export * from './reference'
 export * as op from './op'
 export { Txn, Global } from './op'

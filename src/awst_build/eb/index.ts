@@ -152,7 +152,7 @@ export abstract class InstanceBuilder<TPType extends PType = PType> extends Node
     }
     return instanceEb(
       nodeFactory.singleEvaluation({
-        source: this.resolve(),
+        source: expr,
       }),
       this.ptype,
     )
@@ -263,10 +263,6 @@ export abstract class ClassBuilder extends NodeBuilder {
 export abstract class FunctionBuilder extends NodeBuilder {
   readonly ptype: PType | undefined = undefined
 
-  constructor(location: SourceLocation) {
-    super(location)
-  }
-
   abstract call(
     args: ReadonlyArray<NodeBuilder>,
     typeArgs: ReadonlyArray<PType>,
@@ -337,16 +333,17 @@ export function isReferableExpression(expr: awst.Expression): boolean {
   return false
 }
 
-export function requireLValue(expr: awst.Expression): awst.LValue {
-  const lValueNodes = [
-    awst.VarExpression,
-    awst.FieldExpression,
-    awst.IndexExpression,
-    awst.TupleExpression,
-    awst.AppStateExpression,
-    awst.AppAccountStateExpression,
-    awst.BoxValueExpression,
-  ]
+const lValueNodes = [
+  awst.VarExpression,
+  awst.FieldExpression,
+  awst.IndexExpression,
+  awst.TupleExpression,
+  awst.AppStateExpression,
+  awst.AppAccountStateExpression,
+  awst.BoxValueExpression,
+]
+
+function requireLValue(expr: awst.Expression): awst.LValue {
   if (expr instanceof TupleItemExpression) {
     if (expr.base.wtype.immutable) {
       throw new CodeError('Expression is not a valid assignment target - object is immutable', { sourceLocation: expr.sourceLocation })
@@ -367,9 +364,6 @@ export function requireLValue(expr: awst.Expression): awst.LValue {
         sourceLocation: expr.sourceLocation,
       })
     }
-  }
-  if (expr instanceof awst.ReinterpretCast) {
-    requireLValue(expr.expr)
   }
   if (expr instanceof awst.TupleExpression) {
     for (const item of expr.items) {

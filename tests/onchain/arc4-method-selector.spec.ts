@@ -1,4 +1,4 @@
-import { describe } from 'vitest'
+import { describe, expect } from 'vitest'
 import { createArc4TestFixture } from './util/test-fixture'
 
 describe('arc4 method selector', () => {
@@ -7,13 +7,13 @@ describe('arc4 method selector', () => {
     contracts: { ContractOne: {}, ContractTwo: {} },
   })
 
-  test('It gets the correct method selector', async ({ appClientContractTwo, expect }) => {
+  test('It gets the correct method selector', async ({ appClientContractTwo }) => {
     const result = await appClientContractTwo.send.call({ method: 'test', args: [] })
 
     expect(result.return).toEqual(true)
   })
 
-  test('It gets the correct method selector when the method name is overridden in config', async ({ appClientContractOne, expect }) => {
+  test('It gets the correct method selector when the method name is overridden in config', async ({ appClientContractOne }) => {
     const result = await appClientContractOne.send.call({ method: 'test', args: [] })
 
     expect(result.return).toBe(true)

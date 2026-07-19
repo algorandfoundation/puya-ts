@@ -10,6 +10,7 @@ import { codeInvariant } from '../../util'
 import type { Arc4AbiDecoratorData } from '../models/decorator-data'
 import type { PType } from '../ptypes'
 import { arc4AbiMethodDecorator, arc4BareMethodDecorator, boolPType, ReadonlyArrayPType, readonlyDecorator, stringPType } from '../ptypes'
+import { validateEncodingMap } from './arc4/util'
 import type { InstanceBuilder } from './index'
 import { DecoratorDataBuilder, NodeBuilder } from './index'
 import { ObjectLiteralExpressionBuilder } from './literal/object-literal-expression-builder'
@@ -36,10 +37,6 @@ const resourceEncodingMap: Record<string, 'index' | 'value'> = {
   value: 'value',
 }
 
-const validateEncodingMap: Record<string, boolean> = {
-  'unsafe-disabled': false,
-  args: true,
-}
 export class Arc4BareMethodDecoratorBuilder extends NodeBuilder {
   readonly ptype = arc4BareMethodDecorator
 
@@ -93,7 +90,7 @@ export class Arc4AbiMethodDecoratorBuilder extends NodeBuilder {
       typeArgs,
       genericTypeArgs: 1,
       callLocation: sourceLocation,
-      funcName: 'arc4.abimethod',
+      funcName: Constants.symbolNames.arc4AbiDecoratorName,
       argSpec: (a) => [
         a.obj({
           allowActions: a.optional(stringPType, new ReadonlyArrayPType({ elementType: stringPType })),
@@ -151,18 +148,26 @@ function resolveDefaultArguments(
 ): Arc4AbiDecoratorData['defaultArguments'] {
   const result: Arc4AbiDecoratorData['defaultArguments'] = {}
   if (!defaultArguments) return result
-  codeInvariant(defaultArguments instanceof ObjectLiteralExpressionBuilder, `Default argument specification should be an object literal`)
-  for (const [parameterName] of defaultArguments.ptype.orderedProperties()) {
-    const paramConfig = defaultArguments.memberAccess(parameterName, sourceLocation)
-    codeInvariant(paramConfig instanceof ObjectLiteralExpressionBuilder, 'Default argument specification should be an object literal')
+  codeInvariant(
+    defaultArguments instanceof ObjectLiteralExpressionBuilder,
+    `Default argument specification should be an object literal`,
+    sourceLocation,
+  )
+  for (const { name } of defaultArguments.ptype.properties) {
+    const paramConfig = defaultArguments.memberAccess(name, sourceLocation)
+    codeInvariant(
+      paramConfig instanceof ObjectLiteralExpressionBuilder,
+      'Default argument specification should be an object literal',
+      sourceLocation,
+    )
 
     if (paramConfig.hasProperty('constant')) {
-      result[parameterName] = {
+      result[name] = {
         type: 'constant',
         value: requireInstanceBuilder(paramConfig.memberAccess('constant', sourceLocation)),
       }
     } else if (paramConfig.hasProperty('from')) {
-      result[parameterName] = {
+      result[name] = {
         type: 'member',
         name: requireStringConstant(paramConfig.memberAccess('from', sourceLocation)).value,
       }

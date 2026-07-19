@@ -5,7 +5,6 @@ import type { ContractReference, LogicSigReference, OnCompletionAction } from '.
 import type { SourceLocation } from './source-location'
 import type { TxnField } from './txn-fields'
 import type { wtypes } from './wtypes'
-
 export abstract class Node {
   constructor(props: Props<Node>) {
     this.sourceLocation = props.sourceLocation
@@ -134,10 +133,16 @@ export class AssertExpression extends Expression {
     this.condition = props.condition
     this.errorMessage = props.errorMessage
     this.wtype = props.wtype
+    this.explicit = props.explicit
+    this.logError = props.logError
+    this.desc = props.desc
   }
   readonly condition: Expression | null
   readonly errorMessage: string | null
   readonly wtype: wtypes.WType
+  readonly explicit: boolean
+  readonly logError: boolean
+  readonly desc: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitAssertExpression(this)
   }
@@ -235,6 +240,26 @@ export class TemplateVar extends Expression {
     return visitor.visitTemplateVar(this)
   }
 }
+export class MethodSignatureString extends Node {
+  constructor(props: Props<MethodSignatureString>) {
+    super(props)
+    this.value = props.value
+  }
+  readonly value: string
+}
+export class MethodSignature extends Node {
+  constructor(props: Props<MethodSignature>) {
+    super(props)
+    this.name = props.name
+    this.argTypes = props.argTypes
+    this.returnType = props.returnType
+    this.resourceEncoding = props.resourceEncoding
+  }
+  readonly name: string
+  readonly argTypes: Array<wtypes.WType>
+  readonly returnType: wtypes.WType
+  readonly resourceEncoding: 'index' | 'value'
+}
 export class MethodConstant extends Expression {
   constructor(props: Props<MethodConstant>) {
     super(props)
@@ -242,7 +267,7 @@ export class MethodConstant extends Expression {
     this.value = props.value
   }
   readonly wtype: wtypes.WType
-  readonly value: string
+  readonly value: MethodSignature | MethodSignatureString
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitMethodConstant(this)
   }
@@ -267,7 +292,7 @@ export class ARC4Encode extends Expression {
     this.errorMessage = props.errorMessage
   }
   readonly value: Expression
-  readonly wtype: wtypes.ARC4Type
+  readonly wtype: wtypes.ARC4Type | wtypes.BytesWType
   readonly errorMessage: string | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4Encode(this)
@@ -293,7 +318,7 @@ export class ARC4FromBytes extends Expression {
     this.validate = props.validate
   }
   readonly value: Expression
-  readonly wtype: wtypes.ARC4Type
+  readonly wtype: wtypes.WType
   readonly validate: boolean
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitARC4FromBytes(this)
@@ -431,6 +456,20 @@ export class UpdateInnerTransaction extends Expression {
     return visitor.visitUpdateInnerTransaction(this)
   }
 }
+export class StageInnerTransactions extends Expression {
+  constructor(props: Props<StageInnerTransactions>) {
+    super(props)
+    this.itxns = props.itxns
+    this.startNewGroup = props.startNewGroup
+    this.wtype = props.wtype
+  }
+  readonly itxns: Array<Expression>
+  readonly startNewGroup: Expression
+  readonly wtype: wtypes.WType
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitStageInnerTransactions(this)
+  }
+}
 export class GroupTransactionReference extends Expression {
   constructor(props: Props<GroupTransactionReference>) {
     super(props)
@@ -519,20 +558,6 @@ export class InnerTransactionField extends Expression {
   readonly arrayIndex: Expression | null
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitInnerTransactionField(this)
-  }
-}
-export class SetInnerTransactionFields extends Expression {
-  constructor(props: Props<SetInnerTransactionFields>) {
-    super(props)
-    this.itxns = props.itxns
-    this.startWithBegin = props.startWithBegin
-    this.wtype = props.wtype
-  }
-  readonly itxns: Array<Expression>
-  readonly startWithBegin: boolean
-  readonly wtype: wtypes.WType
-  accept<T>(visitor: ExpressionVisitor<T>): T {
-    return visitor.visitSetInnerTransactionFields(this)
   }
 }
 export class SubmitInnerTransaction extends Expression {
@@ -638,8 +663,8 @@ export class AppAccountStateExpression extends Expression {
     return visitor.visitAppAccountStateExpression(this)
   }
 }
-export class BoxPrefixedKeyExpression extends Expression {
-  constructor(props: Props<BoxPrefixedKeyExpression>) {
+export class MapPrefixedKeyExpression extends Expression {
+  constructor(props: Props<MapPrefixedKeyExpression>) {
     super(props)
     this.prefix = props.prefix
     this.key = props.key
@@ -649,7 +674,7 @@ export class BoxPrefixedKeyExpression extends Expression {
   readonly key: Expression
   readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
-    return visitor.visitBoxPrefixedKeyExpression(this)
+    return visitor.visitMapPrefixedKeyExpression(this)
   }
 }
 export class BoxValueExpression extends Expression {
@@ -870,6 +895,22 @@ export class SubroutineCallExpression extends Expression {
   readonly args: Array<CallArg>
   accept<T>(visitor: ExpressionVisitor<T>): T {
     return visitor.visitSubroutineCallExpression(this)
+  }
+}
+export class ABICall extends Expression {
+  constructor(props: Props<ABICall>) {
+    super(props)
+    this.target = props.target
+    this.args = props.args
+    this.fields = props.fields
+    this.wtype = props.wtype
+  }
+  readonly target: MethodSignature | MethodSignatureString | null
+  readonly args: Array<Expression>
+  readonly fields: Map<TxnField, Expression>
+  readonly wtype: wtypes.WABICallInnerTransactionFields
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitABICall(this)
   }
 }
 export class PuyaLibData {
@@ -1156,14 +1197,26 @@ export class BytesAugmentedAssignment extends Statement {
     return visitor.visitBytesAugmentedAssignment(this)
   }
 }
-export class Emit extends Expression {
-  constructor(props: Props<Emit>) {
+export class EmitFields extends Expression {
+  constructor(props: Props<EmitFields>) {
     super(props)
     this.signature = props.signature
-    this.value = props.value
+    this.values = props.values
     this.wtype = props.wtype
   }
   readonly signature: string
+  readonly values: Array<Expression>
+  readonly wtype: wtypes.WType
+  accept<T>(visitor: ExpressionVisitor<T>): T {
+    return visitor.visitEmitFields(this)
+  }
+}
+export class Emit extends Expression {
+  constructor(props: Props<Emit>) {
+    super(props)
+    this.value = props.value
+    this.wtype = props.wtype
+  }
   readonly value: Expression
   readonly wtype: wtypes.WType
   accept<T>(visitor: ExpressionVisitor<T>): T {
@@ -1397,6 +1450,7 @@ export class LogicSignature extends RootNode {
     this.docstring = props.docstring
     this.reservedScratchSpace = props.reservedScratchSpace
     this.avmVersion = props.avmVersion
+    this.validateEncoding = props.validateEncoding
   }
   readonly id: LogicSigReference
   readonly shortName: string
@@ -1404,6 +1458,7 @@ export class LogicSignature extends RootNode {
   readonly docstring: string | null
   readonly reservedScratchSpace: Set<bigint>
   readonly avmVersion: bigint | null
+  readonly validateEncoding: boolean | null
   accept<T>(visitor: RootNodeVisitor<T>): T {
     return visitor.visitLogicSignature(this)
   }
@@ -1524,18 +1579,18 @@ export class ARC4ABIMethodConfig {
     this.create = props.create
     this.name = props.name
     this.resourceEncoding = props.resourceEncoding
-    this.validateEncoding = props.validateEncoding
     this.readonly = props.readonly
     this.defaultArgs = props.defaultArgs
+    this.validateEncoding = props.validateEncoding
   }
   readonly sourceLocation: SourceLocation
   readonly allowedCompletionTypes: Array<OnCompletionAction>
   readonly create: ARC4CreateOption
   readonly name: string
   readonly resourceEncoding: 'index' | 'value'
-  readonly validateEncoding: boolean | null
   readonly readonly: boolean
   readonly defaultArgs: Map<string, ABIMethodArgMemberDefault | ABIMethodArgConstantDefault>
+  readonly validateEncoding: boolean | null
 }
 export type Constant = IntegerConstant | DecimalConstant | BoolConstant | BytesConstant | AddressConstant | MethodConstant
 export type LValue =
@@ -1566,6 +1621,8 @@ export const concreteNodes = {
   stringConstant: StringConstant,
   voidConstant: VoidConstant,
   templateVar: TemplateVar,
+  methodSignatureString: MethodSignatureString,
+  methodSignature: MethodSignature,
   methodConstant: MethodConstant,
   addressConstant: AddressConstant,
   aRC4Encode: ARC4Encode,
@@ -1581,6 +1638,7 @@ export const concreteNodes = {
   intrinsicCall: IntrinsicCall,
   createInnerTransaction: CreateInnerTransaction,
   updateInnerTransaction: UpdateInnerTransaction,
+  stageInnerTransactions: StageInnerTransactions,
   groupTransactionReference: GroupTransactionReference,
   checkedMaybe: CheckedMaybe,
   tupleExpression: TupleExpression,
@@ -1588,7 +1646,6 @@ export const concreteNodes = {
   namedTupleExpression: NamedTupleExpression,
   varExpression: VarExpression,
   innerTransactionField: InnerTransactionField,
-  setInnerTransactionFields: SetInnerTransactionFields,
   submitInnerTransaction: SubmitInnerTransaction,
   fieldExpression: FieldExpression,
   indexExpression: IndexExpression,
@@ -1596,7 +1653,7 @@ export const concreteNodes = {
   intersectionSliceExpression: IntersectionSliceExpression,
   appStateExpression: AppStateExpression,
   appAccountStateExpression: AppAccountStateExpression,
-  boxPrefixedKeyExpression: BoxPrefixedKeyExpression,
+  mapPrefixedKeyExpression: MapPrefixedKeyExpression,
   boxValueExpression: BoxValueExpression,
   singleEvaluation: SingleEvaluation,
   reinterpretCast: ReinterpretCast,
@@ -1614,6 +1671,7 @@ export const concreteNodes = {
   contractMethodTarget: ContractMethodTarget,
   callArg: CallArg,
   subroutineCallExpression: SubroutineCallExpression,
+  aBICall: ABICall,
   puyaLibData: PuyaLibData,
   puyaLibCall: PuyaLibCall,
   uInt64UnaryOperation: UInt64UnaryOperation,
@@ -1628,6 +1686,7 @@ export const concreteNodes = {
   uInt64AugmentedAssignment: UInt64AugmentedAssignment,
   bigUIntAugmentedAssignment: BigUIntAugmentedAssignment,
   bytesAugmentedAssignment: BytesAugmentedAssignment,
+  emitFields: EmitFields,
   emit: Emit,
   range: Range,
   enumeration: Enumeration,
@@ -1696,6 +1755,7 @@ export interface ExpressionVisitor<T> {
   visitIntrinsicCall(expression: IntrinsicCall): T
   visitCreateInnerTransaction(expression: CreateInnerTransaction): T
   visitUpdateInnerTransaction(expression: UpdateInnerTransaction): T
+  visitStageInnerTransactions(expression: StageInnerTransactions): T
   visitGroupTransactionReference(expression: GroupTransactionReference): T
   visitCheckedMaybe(expression: CheckedMaybe): T
   visitTupleExpression(expression: TupleExpression): T
@@ -1703,7 +1763,6 @@ export interface ExpressionVisitor<T> {
   visitNamedTupleExpression(expression: NamedTupleExpression): T
   visitVarExpression(expression: VarExpression): T
   visitInnerTransactionField(expression: InnerTransactionField): T
-  visitSetInnerTransactionFields(expression: SetInnerTransactionFields): T
   visitSubmitInnerTransaction(expression: SubmitInnerTransaction): T
   visitFieldExpression(expression: FieldExpression): T
   visitIndexExpression(expression: IndexExpression): T
@@ -1711,7 +1770,7 @@ export interface ExpressionVisitor<T> {
   visitIntersectionSliceExpression(expression: IntersectionSliceExpression): T
   visitAppStateExpression(expression: AppStateExpression): T
   visitAppAccountStateExpression(expression: AppAccountStateExpression): T
-  visitBoxPrefixedKeyExpression(expression: BoxPrefixedKeyExpression): T
+  visitMapPrefixedKeyExpression(expression: MapPrefixedKeyExpression): T
   visitBoxValueExpression(expression: BoxValueExpression): T
   visitSingleEvaluation(expression: SingleEvaluation): T
   visitReinterpretCast(expression: ReinterpretCast): T
@@ -1723,6 +1782,7 @@ export interface ExpressionVisitor<T> {
   visitNumericComparisonExpression(expression: NumericComparisonExpression): T
   visitBytesComparisonExpression(expression: BytesComparisonExpression): T
   visitSubroutineCallExpression(expression: SubroutineCallExpression): T
+  visitABICall(expression: ABICall): T
   visitPuyaLibCall(expression: PuyaLibCall): T
   visitUInt64UnaryOperation(expression: UInt64UnaryOperation): T
   visitUInt64PostfixUnaryOperation(expression: UInt64PostfixUnaryOperation): T
@@ -1733,6 +1793,7 @@ export interface ExpressionVisitor<T> {
   visitBytesBinaryOperation(expression: BytesBinaryOperation): T
   visitBooleanBinaryOperation(expression: BooleanBinaryOperation): T
   visitNot(expression: Not): T
+  visitEmitFields(expression: EmitFields): T
   visitEmit(expression: Emit): T
   visitRange(expression: Range): T
   visitEnumeration(expression: Enumeration): T

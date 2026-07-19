@@ -3,12 +3,12 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 1 8
+    intcblock 8 1
     txn ApplicationID
     bnz main_after_if_else@2
     // tests/approvals/inheritance-b.algo.ts:17
     // concreteState = GlobalState({ initialValue: 'testing' })
-    pushbytess "concreteState" "testing" // "concreteState", "testing"
+    pushbytess "concreteState" "testing"
     app_global_put
 
 main_after_if_else@2:
@@ -18,7 +18,7 @@ main_after_if_else@2:
     bz main___algots__.defaultCreate@11
     txn OnCompletion
     !
-    assert // OnCompletion must be NoOp
+    assert
     txn ApplicationID
     assert
     pushbytess 0xc73da9b9 0xf161dc37 // method "getVeryImportantValue()string", method "simpleAbiMethod(uint64,uint64)uint64"
@@ -32,14 +32,14 @@ main_simpleAbiMethod_route@7:
     txna ApplicationArgs 1
     dup
     len
-    intc_1 // 8
+    intc_0 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
     txna ApplicationArgs 2
     dup
     len
-    intc_1 // 8
+    intc_0 // 8
     ==
     assert // invalid number of bytes for arc4.uint64
     btoi
@@ -53,7 +53,7 @@ main_simpleAbiMethod_route@7:
     swap
     concat
     log
-    intc_0 // 1
+    intc_1 // 1
     return
 
 main_getVeryImportantValue_route@6:
@@ -61,7 +61,7 @@ main_getVeryImportantValue_route@6:
     // public getVeryImportantValue() {
     pushbytes 0x151f7c750007343268656c6c6f
     log
-    intc_0 // 1
+    intc_1 // 1
     return
 
 main___algots__.defaultCreate@11:
@@ -72,6 +72,4 @@ main___algots__.defaultCreate@11:
     txn ApplicationID
     !
     &&
-    assert // OnCompletion must be NoOp && can only call when creating
-    intc_0 // 1
     return
