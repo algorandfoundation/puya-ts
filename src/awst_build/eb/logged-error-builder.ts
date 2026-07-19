@@ -41,6 +41,7 @@ function resolveErrorMessage(code: InstanceBuilder, message: InstanceBuilder | u
 function resolveMessageAndPrefix(maybeMessageOrOptions: InstanceBuilder | undefined): {
   message: InstanceBuilder | undefined
   prefix: InstanceBuilder | undefined
+  desc: string | null
 } {
   /**
    * Tries to get a field from the optional options object.
@@ -57,13 +58,15 @@ function resolveMessageAndPrefix(maybeMessageOrOptions: InstanceBuilder | undefi
   if (maybeMessageOrOptions) {
     const message = requestBuilderOfType(maybeMessageOrOptions, stringPType)
     if (message) {
-      return { message: message, prefix: undefined }
+      return { message: message, prefix: undefined, desc: null }
     }
   }
 
   const message = get('message')
   const prefix = get('prefix')
-  return { message, prefix }
+  const descBuilder = get('desc')
+  const desc = descBuilder ? requireStringConstant(descBuilder).value : null
+  return { message, prefix, desc }
 }
 
 export class LoggedAssertFunctionBuilder extends FunctionBuilder {
@@ -79,7 +82,7 @@ export class LoggedAssertFunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required(), a.required(stringPType), a.optional()],
     })
 
-    const { message, prefix } = resolveMessageAndPrefix(maybeMessageOrOptions)
+    const { message, prefix, desc } = resolveMessageAndPrefix(maybeMessageOrOptions)
     const errorMessage = resolveErrorMessage(code, message, prefix)
 
     return new VoidExpressionBuilder(
@@ -87,6 +90,7 @@ export class LoggedAssertFunctionBuilder extends FunctionBuilder {
         sourceLocation,
         condition: condition!.boolEval(sourceLocation),
         comment: errorMessage,
+        desc,
         logError: true,
       }),
     )
@@ -106,13 +110,14 @@ export class LoggedErrFunctionBuilder extends FunctionBuilder {
       argSpec: (a) => [a.required(stringPType), a.optional()],
     })
 
-    const { message, prefix } = resolveMessageAndPrefix(maybeMessageOrOptions)
+    const { message, prefix, desc } = resolveMessageAndPrefix(maybeMessageOrOptions)
     const errorMessage = resolveErrorMessage(code, message, prefix)
 
     return new VoidExpressionBuilder(
       intrinsicFactory.err({
         sourceLocation,
         comment: errorMessage,
+        desc,
         logError: true,
       }),
     )

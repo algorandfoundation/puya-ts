@@ -415,12 +415,13 @@ export class ToCodeVisitor
     return ['', `logicsig ${moduleStatement.id} {`, ...indent(moduleStatement.program.body.accept(this)), '}']
   }
   visitAssertExpression(expression: nodes.AssertExpression): string {
+    const desc = expression.desc ? `, desc=${expression.desc}` : ''
     if (!expression.condition) {
       const func = expression.logError ? 'logged_err(' : 'err('
-      return `${func}${expression.errorMessage ?? ''})`
+      return `${func}${expression.errorMessage ?? ''}${desc})`
     }
     const func = expression.logError ? 'logged_assert(' : 'assert('
-    return `${func}${expression.condition.accept(this)}${expression.errorMessage ? `, comment=${expression.errorMessage}` : ''})`
+    return `${func}${expression.condition.accept(this)}${expression.errorMessage ? `, comment=${expression.errorMessage}` : ''}${desc})`
   }
 
   visitConvertArray(expression: nodes.ConvertArray): string {
