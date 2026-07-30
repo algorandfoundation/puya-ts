@@ -18,8 +18,8 @@ const logLevelToInt = {
   // values match puya values
   [LogLevel.Critical]: 50,
   [LogLevel.Error]: 40,
-  [LogLevel.Info]: 30,
-  [LogLevel.Warning]: 20,
+  [LogLevel.Warning]: 30,
+  [LogLevel.Info]: 20,
   [LogLevel.Debug]: 10,
 }
 export enum LogSource {
