@@ -63,6 +63,8 @@ import { Contract, contract } from '@algorandfoundation/algorand-typescript'
 class MyContract extends Contract {}
 ```
 
+The `autosalt` option is also available here, and controls off-curve program salting. It is disabled by default for contracts (see [off-curve address hardening](#off-curve-address-hardening)).
+
 ### Application Lifecycle Methods and other method options
 
 There are two approaches to handling application lifecycle events: by implementing a well-known method (convention-based), or by using decorators (decorator-based). It is also possible to use a combination of the two; however, decorators must not conflict with the implied behaviour of a well-known method.
@@ -320,3 +322,33 @@ export class AllowNoFee extends LogicSig {
   }
 }
 ```
+
+## Off-curve address hardening
+
+The address of a logic signature is derived from the SHA-512/256 hash of its compiled program. For roughly half of all programs this hash also happens to decode as a valid Ed25519 public key ("on-curve"), meaning the address could in principle also be spent from as an ordinary key-based account by anyone able to derive the corresponding private key (e.g. a future quantum-capable adversary).
+
+To protect against this, Algorand TypeScript appends a small piece of never-executed padding[^salt-bytes] to any logic signature whose program hash would otherwise be on-curve, guaranteeing the derived address does not correspond to any public key. Programs that already hash off-curve are left unchanged.
+
+[^salt-bytes]: The padding is a trailing `intcblock` "array" consisting of the `intcblock` opcode byte, a byte of `0x01` denoting the amount of elements, and then the salting byte itself, which is chosen by a greedy linear search in the 0..127 range.
+
+This behaviour can be controlled with the `autosalt` option on the `logicsig` decorator:
+
+```ts
+import { LogicSig, logicsig } from '@algorandfoundation/algorand-typescript'
+
+@logicsig({ autosalt: false })
+export class LegacySig extends LogicSig {
+  program() {
+    return true
+  }
+}
+```
+
+- `autosalt: true` is the default behaviour for logic signatures, no matter the AVM version.
+- `autosalt: false` disables the salt. Useful for keeping backwards compatibility (though the compiler will warn, since it leaves the address potentially on-curve). The resolved setting is recorded in the emitted TEAL as `#pragma autosalt`, so assembling that TEAL with the bundled assembler keeps parity with algod.
+
+:::note
+Since the salt changes the program bytes, recompiling a logic signature originally compiled without autosalt may produce a different address. Use `autosalt: false` if an existing address must be preserved.
+:::
+
+Contracts are not salted by default, since a contract's program hash is never used as a spendable address, but the same `autosalt` option is available via the [`contract` decorator](#contract-options).
