@@ -58,6 +58,9 @@ import { SymbolName } from './symbol-name'
 import { typeRegistry } from './type-registry'
 
 export class TypeResolver {
+  // used for recursive type detection
+  private readonly currentlyReflectingTypes = new WeakSet<ts.Symbol>()
+
   constructor(
     private readonly checker: ts.TypeChecker,
     private readonly programDirectory: AbsolutePath,
@@ -298,7 +301,17 @@ export class TypeResolver {
     }
     const callSignatures = this.checker.getSignaturesOfType(tsType, ts.SignatureKind.Call)
     if (callSignatures.length) {
-      return this.reflectFunctionType(typeName, callSignatures, sourceLocation)
+      // recursive type check (see comment below on `reflectObjectType`)
+      const symbol = tsType.symbol
+      if (symbol && this.currentlyReflectingTypes.has(symbol)) {
+        throw new CodeError(`type '${tsType.aliasSymbol?.name ?? tsType.symbol?.name}' is part of a cyclic reference`, { sourceLocation })
+      }
+      try {
+        if (symbol) this.currentlyReflectingTypes.add(symbol)
+        return this.reflectFunctionType(typeName, callSignatures, sourceLocation)
+      } finally {
+        if (symbol) this.currentlyReflectingTypes.delete(symbol)
+      }
     }
     if (isObjectType(tsType)) {
       return this.reflectObjectType(tsType, sourceLocation)
@@ -353,35 +366,47 @@ export class TypeResolver {
   }
 
   private reflectObjectType(tsType: ts.Type, sourceLocation: SourceLocation): ImmutableObjectPType | MutableObjectPType {
+    // A self-referential type whose expansion yields a fresh ts.Type each level sneaks past the identity
+    // check in CacheResolvedType, so we detect the cycle by declaration symbol here instead
+    const symbol = tsType.symbol
+    if (symbol && this.currentlyReflectingTypes.has(symbol)) {
+      throw new CodeError(`type '${tsType.aliasSymbol?.name ?? tsType.symbol?.name}' is part of a cyclic reference`, { sourceLocation })
+    }
+
     const typeAlias = tsType.aliasSymbol ? this.getSymbolFullName(tsType.aliasSymbol) : undefined
     const properties: PTypeField[] = []
 
     let expectReadonly: boolean | undefined = undefined
-    for (const prop of tsType.getProperties()) {
-      if (prop.name.startsWith('__@')) {
-        // Symbol property - ignore
-        // TODO: Check AST nodes to confirm?
-        continue
+    if (symbol) this.currentlyReflectingTypes.add(symbol)
+    try {
+      for (const prop of tsType.getProperties()) {
+        if (prop.name.startsWith('__@')) {
+          // Symbol property - ignore
+          // TODO: Check AST nodes to confirm?
+          continue
+        }
+        const description = (prop.valueDeclaration && tryGetDeclarationDescription(prop.valueDeclaration)) || null
+        const type = this.checker.getTypeOfSymbol(prop)
+        const propLocation = this.getLocationOfSymbol(prop) ?? sourceLocation
+        const readonly = isReadonlyPropertySymbol(prop)
+        if (expectReadonly === undefined) expectReadonly = readonly
+        if (expectReadonly !== readonly) {
+          const correction = expectReadonly
+            ? 'Add a readonly modifier to this property, or remove it from all others'
+            : 'Remove the readonly modifier from this property, or add it to all others'
+          logger.error(propLocation, `All properties of a type must share the same readonly annotation. ${correction}`)
+        }
+        const ptype = this.resolveType(type, propLocation)
+        if (ptype instanceof FunctionPType) {
+          logger.error(propLocation, `Invalid object property type. Functions are not supported`)
+        } else if (ptype.singleton) {
+          logger.error(propLocation, `Invalid object property type. ${ptype} is not supported`)
+        } else {
+          properties.push({ name: prop.name, ptype, description })
+        }
       }
-      const description = (prop.valueDeclaration && tryGetDeclarationDescription(prop.valueDeclaration)) || null
-      const type = this.checker.getTypeOfSymbol(prop)
-      const propLocation = this.getLocationOfSymbol(prop) ?? sourceLocation
-      const readonly = isReadonlyPropertySymbol(prop)
-      if (expectReadonly === undefined) expectReadonly = readonly
-      if (expectReadonly !== readonly) {
-        const correction = expectReadonly
-          ? 'Add a readonly modifier to this property, or remove it from all others'
-          : 'Remove the readonly modifier from this property, or add it to all others'
-        logger.error(propLocation, `All properties of a type must share the same readonly annotation. ${correction}`)
-      }
-      const ptype = this.resolveType(type, propLocation)
-      if (ptype instanceof FunctionPType) {
-        logger.error(propLocation, `Invalid object property type. Functions are not supported`)
-      } else if (ptype.singleton) {
-        logger.error(propLocation, `Invalid object property type. ${ptype} is not supported`)
-      } else {
-        properties.push({ name: prop.name, ptype, description })
-      }
+    } finally {
+      if (symbol) this.currentlyReflectingTypes.delete(symbol)
     }
     if (expectReadonly) {
       return new ImmutableObjectPType({ alias: typeAlias, properties, description: tryGetTypeDescription(tsType) })
@@ -642,12 +667,23 @@ function tryGetDeclarationDescription(tsDecl: ts.Declaration): string | undefine
 
 function CacheResolvedType(resolveType: (this: TypeResolver, tsType: ts.Type, sourceLocation: SourceLocation) => PType) {
   const resolvedTypes = new WeakMap<ts.Type, PType>()
+  const currentlyVisiting = new WeakSet<ts.Type>()
   return function (this: TypeResolver, tsType: ts.Type, sourceLocation: SourceLocation): PType {
     const existing = resolvedTypes.get(tsType)
     if (existing) return existing
 
-    const res = resolveType.call(this, tsType, sourceLocation)
-    resolvedTypes.set(tsType, res)
-    return res
+    if (currentlyVisiting.has(tsType)) {
+      throw new CodeError(`type '${tsType.aliasSymbol?.name ?? tsType.symbol?.name}' is part of a cyclic reference`, { sourceLocation })
+    }
+
+    try {
+      currentlyVisiting.add(tsType)
+
+      const res = resolveType.call(this, tsType, sourceLocation)
+      resolvedTypes.set(tsType, res)
+      return res
+    } finally {
+      currentlyVisiting.delete(tsType)
+    }
   }
 }
