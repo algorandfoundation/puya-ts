@@ -1,0 +1,75 @@
+
+logicsig tests/approvals/autosalt.algo.ts::DefaultSig {
+  return True
+}
+
+logicsig tests/approvals/autosalt.algo.ts::NoSaltSig {
+  return True
+}
+
+logicsig tests/approvals/autosalt.algo.ts::ForceSaltSig {
+  return True
+}
+contract DefaultContract
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  noop(): void
+  {
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract UnsaltedContract
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  noop(): void
+  {
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract SaltedContract
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  noop(): void
+  {
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

@@ -1,0 +1,34 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // tests/approvals/autosalt.algo.ts:35-36
+    // @contract({ autosalt: true })
+    // export class SaltedContract extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0xe83a87ab // method "noop()void"
+    txna ApplicationArgs 0
+    match main_noop_route@3
+    err
+
+main_noop_route@3:
+    // tests/approvals/autosalt.algo.ts:37
+    // noop() {}
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    return
+
+main___algots__.defaultCreate@5:
+    // tests/approvals/autosalt.algo.ts:35-36
+    // @contract({ autosalt: true })
+    // export class SaltedContract extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
