@@ -36,6 +36,14 @@ type LogicSigOptions = {
    */
   avmVersion?: 10 | 11 | 12 | 13
   /**
+   * Controls whether the assembler adds an off-curve salt so the logic signature address cannot
+   * decode to a valid public key.
+   *
+   * Logic signatures are salted by default on any AVM version. Set `false` to disable it. A
+   * matching `#pragma autosalt` is emitted to the TEAL output.
+   */
+  autosalt?: boolean
+  /**
    * Override the name of the logic signature when generating build artifacts.
    * Defaults to the class name
    */
