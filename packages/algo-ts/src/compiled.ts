@@ -10,13 +10,15 @@ import { Account } from './reference'
  */
 export type CompiledContract = {
   /**
-   * Approval program pages for a contract, after template variables have been replaced and compiled to AVM bytecode
+   * Approval program pages for a contract, after template variables have been replaced and compiled to AVM bytecode.
+   * Note that each element in the tuple holds up to two program pages. Trailing pages not needed are left empty.
    */
-  readonly approvalProgram: readonly [bytes, bytes]
+  readonly approvalProgram: readonly [bytes, bytes, bytes, bytes]
   /**
-   * Clear state program pages for a contract, after template variables have been replaced and compiled to AVM bytecode
+   * Clear state program pages for a contract, after template variables have been replaced and compiled to AVM bytecode.
+   * Note that each element in the tuple holds up to two program pages. Trailing pages not needed are left empty.
    */
-  readonly clearStateProgram: readonly [bytes, bytes]
+  readonly clearStateProgram: readonly [bytes, bytes, bytes, bytes]
   /**
    * By default, provides extra program pages required based on approval and clear state program size, can be overridden when calling `compile(ExampleContractType, { extraProgramPages: ... })`
    */
