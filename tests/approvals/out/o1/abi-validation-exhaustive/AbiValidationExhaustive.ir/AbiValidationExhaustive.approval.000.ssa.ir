@@ -727,7 +727,7 @@ subroutine tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhau
 
 subroutine tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhaustive.validate_c2c() -> void:
     block@0: // L136
-        let (compiled.approvalProgram.0#0: bytes, compiled.approvalProgram.1#0: bytes, compiled.clearStateProgram.0#0: bytes, compiled.clearStateProgram.1#0: bytes, compiled.extraProgramPages#0: uint64, compiled.globalUints#0: uint64, compiled.globalBytes#0: uint64, compiled.localUints#0: uint64, compiled.localBytes#0: uint64) = (compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=ApprovalProgramPages, program_page=0), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=ApprovalProgramPages, program_page=1), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=ClearStateProgramPages, program_page=0), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=ClearStateProgramPages, program_page=1), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=ExtraProgramPages, program_page=None), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=GlobalNumUint, program_page=None), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=GlobalNumByteSlice, program_page=None), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=LocalNumUint, program_page=None), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=LocalNumByteSlice, program_page=None))
+        let (compiled.approvalProgram.0#0: bytes, compiled.approvalProgram.1#0: bytes, compiled.approvalProgram.2#0: bytes, compiled.approvalProgram.3#0: bytes, compiled.clearStateProgram.0#0: bytes, compiled.clearStateProgram.1#0: bytes, compiled.clearStateProgram.2#0: bytes, compiled.clearStateProgram.3#0: bytes, compiled.extraProgramPages#0: uint64, compiled.globalUints#0: uint64, compiled.globalBytes#0: uint64, compiled.localUints#0: uint64, compiled.localBytes#0: uint64) = (compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=ApprovalProgramPages, program_page=0), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=ApprovalProgramPages, program_page=1), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=ApprovalProgramPages, program_page=2), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=ApprovalProgramPages, program_page=3), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=ClearStateProgramPages, program_page=0), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=ClearStateProgramPages, program_page=1), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=ClearStateProgramPages, program_page=2), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=ClearStateProgramPages, program_page=3), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=ExtraProgramPages, program_page=None), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=GlobalNumUint, program_page=None), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=GlobalNumByteSlice, program_page=None), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=LocalNumUint, program_page=None), compiled_contract('tests/approvals/abi-validation-exhaustive.algo.ts::InvalidContract', field=LocalNumByteSlice, program_page=None))
         itxn_begin
         let abi_call_inner_txn_params%1#0: itxn_field_set = itxn_field_set(0)
         let abi_call_inner_txn_params%1%%param_Fee_idx_0#0: uint64 = 0u
@@ -740,10 +740,14 @@ subroutine tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhau
         let abi_call_inner_txn_params%1%%OnCompletion_length#0: uint64 = 1u
         let abi_call_inner_txn_params%1%%param_ApprovalProgramPages_idx_0#0: bytes = compiled.approvalProgram.0#0
         let abi_call_inner_txn_params%1%%param_ApprovalProgramPages_idx_1#0: bytes = compiled.approvalProgram.1#0
-        let abi_call_inner_txn_params%1%%ApprovalProgramPages_length#0: uint64 = 2u
+        let abi_call_inner_txn_params%1%%param_ApprovalProgramPages_idx_2#0: bytes = compiled.approvalProgram.2#0
+        let abi_call_inner_txn_params%1%%param_ApprovalProgramPages_idx_3#0: bytes = compiled.approvalProgram.3#0
+        let abi_call_inner_txn_params%1%%ApprovalProgramPages_length#0: uint64 = 4u
         let abi_call_inner_txn_params%1%%param_ClearStateProgramPages_idx_0#0: bytes = compiled.clearStateProgram.0#0
         let abi_call_inner_txn_params%1%%param_ClearStateProgramPages_idx_1#0: bytes = compiled.clearStateProgram.1#0
-        let abi_call_inner_txn_params%1%%ClearStateProgramPages_length#0: uint64 = 2u
+        let abi_call_inner_txn_params%1%%param_ClearStateProgramPages_idx_2#0: bytes = compiled.clearStateProgram.2#0
+        let abi_call_inner_txn_params%1%%param_ClearStateProgramPages_idx_3#0: bytes = compiled.clearStateProgram.3#0
+        let abi_call_inner_txn_params%1%%ClearStateProgramPages_length#0: uint64 = 4u
         let abi_call_inner_txn_params%1%%param_GlobalNumUint_idx_0#0: uint64 = compiled.globalUints#0
         let abi_call_inner_txn_params%1%%GlobalNumUint_length#0: uint64 = 1u
         let abi_call_inner_txn_params%1%%param_GlobalNumByteSlice_idx_0#0: uint64 = compiled.globalBytes#0
@@ -802,8 +806,12 @@ subroutine tests/approvals/abi-validation-exhaustive.algo.ts::AbiValidationExhau
         ((itxn_field GlobalNumUint) abi_call_inner_txn_params%1%%param_GlobalNumUint_idx_0#0)
         ((itxn_field ClearStateProgramPages) abi_call_inner_txn_params%1%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ClearStateProgramPages) abi_call_inner_txn_params%1%%param_ClearStateProgramPages_idx_1#0)
+        ((itxn_field ClearStateProgramPages) abi_call_inner_txn_params%1%%param_ClearStateProgramPages_idx_2#0)
+        ((itxn_field ClearStateProgramPages) abi_call_inner_txn_params%1%%param_ClearStateProgramPages_idx_3#0)
         ((itxn_field ApprovalProgramPages) abi_call_inner_txn_params%1%%param_ApprovalProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) abi_call_inner_txn_params%1%%param_ApprovalProgramPages_idx_1#0)
+        ((itxn_field ApprovalProgramPages) abi_call_inner_txn_params%1%%param_ApprovalProgramPages_idx_2#0)
+        ((itxn_field ApprovalProgramPages) abi_call_inner_txn_params%1%%param_ApprovalProgramPages_idx_3#0)
         ((itxn_field OnCompletion) abi_call_inner_txn_params%1%%param_OnCompletion_idx_0#0)
         ((itxn_field ApplicationArgs) abi_call_inner_txn_params%1%%param_ApplicationArgs_idx_0#0)
         ((itxn_field TypeEnum) abi_call_inner_txn_params%1%%param_TypeEnum_idx_0#0)
