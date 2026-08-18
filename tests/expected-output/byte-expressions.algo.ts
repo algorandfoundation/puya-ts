@@ -21,8 +21,8 @@ function testUnsupported(i: uint64) {
   const x8 = Bytes({ length: i })
   // @expect-error Invalid strategy value of 'unsafe-cast'. Expected 'assert-length' for constant values
   const x9 = Bytes([1, 2, 3], { length: 3, strategy: 'unsafe-cast' })
-  // @expect-error Argument b must be bytes<1232>
-  op.falconVerify(Bytes(), Bytes().toFixed({ length: 32, strategy: 'unsafe-cast' }), op.bzero(1793))
+  // @expect-error Argument c must be bytes<1793>
+  op.falconVerify(Bytes(), Bytes(), Bytes().toFixed({ length: 32, strategy: 'unsafe-cast' }))
   // @expect-error Expression of type `number` must be explicitly converted to an algo-ts type...
   Bytes(1)
   // @expect-error Expression of type `bigint` must be explicitly converted to an algo-ts type...
