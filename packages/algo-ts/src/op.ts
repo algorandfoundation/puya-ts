@@ -46,6 +46,16 @@ export enum MimcConfigurations {
    */
   BLS12_381Mp111 = 'BLS12_381Mp111',
 }
+export enum Poseidon2Configurations {
+  /**
+   * Poseidon2 Merkle-Damgard configuration for BN254 with width = 2, full rounds = 6, partial rounds = 50
+   */
+  BN254t2 = 'BN254t2',
+  /**
+   * Poseidon2 Merkle-Damgard configuration for BLS12-381 with width = 2, full rounds = 6, partial rounds = 50
+   */
+  BLS12_381t2 = 'BLS12_381t2',
+}
 export enum VrfVerify {
   VrfAlgorand = 'VrfAlgorand',
 }
@@ -178,6 +188,96 @@ export const AcctParams = {
  */
 export function addw(a: uint64, b: uint64): readonly [uint64, uint64] {
   throw new NoImplementation()
+}
+
+/**
+ * Get or modify box state of other applications
+ */
+export const AppBox = {
+  /**
+   * create a box named B, of length C, for app A. Fail if the name B is empty or C exceeds 32,768. Returns 0 if B already existed, else 1
+   * Newly created boxes are filled with 0 bytes. `app_box_create` will fail if the referenced box already exists with a different size. Otherwise, existing boxes are unchanged by `app_box_create`.
+   * @see Native TEAL opcode: [`app_box_create`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_box_create)
+   * Min AVM version: 13
+   */
+  create(a: Application | uint64, b: bytes, c: uint64): boolean {
+    throw new NoImplementation()
+  },
+
+  /**
+   * delete box named B of app A if it exists. Return 1 if B existed, 0 otherwise
+   * @see Native TEAL opcode: [`app_box_del`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_box_del)
+   * Min AVM version: 13
+   */
+  delete(a: Application | uint64, b: bytes): boolean {
+    throw new NoImplementation()
+  },
+
+  /**
+   * read D bytes from box B of app A, starting at offset C. Fail if box B does not exist, or the byte range is outside B's size.
+   * @see Native TEAL opcode: [`app_box_extract`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_box_extract)
+   * Min AVM version: 13
+   */
+  extract(a: Application | uint64, b: bytes, c: uint64, d: uint64): bytes {
+    throw new NoImplementation()
+  },
+
+  /**
+   * X is the contents of box B of app A if B exists, else ''. Y is 1 if B exists, else 0.
+   * For boxes that exceed 4,096 bytes, consider `app_box_create`, `app_box_extract`, and `app_box_replace`
+   * @see Native TEAL opcode: [`app_box_get`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_box_get)
+   * Min AVM version: 13
+   */
+  get(a: Application | uint64, b: bytes): readonly [bytes, boolean] {
+    throw new NoImplementation()
+  },
+
+  /**
+   * X is the length of box B of app A if B exists, else 0. Y is 1 if B exists, else 0.
+   * @see Native TEAL opcode: [`app_box_len`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_box_len)
+   * Min AVM version: 13
+   */
+  length(a: Application | uint64, b: bytes): readonly [uint64, boolean] {
+    throw new NoImplementation()
+  },
+
+  /**
+   * replaces the contents of box B of app A with byte-array C. Fails if B exists and len(C) != len(box B). Creates B if it does not exist
+   * For boxes that exceed 4,096 bytes, consider `app_box_create`, `app_box_extract`, and `app_box_replace`
+   * @see Native TEAL opcode: [`app_box_put`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_box_put)
+   * Min AVM version: 13
+   */
+  put(a: Application | uint64, b: bytes, c: bytes): void {
+    throw new NoImplementation()
+  },
+
+  /**
+   * write byte-array D into box B of app A, starting at offset C. Fail if box B does not exist, or the byte range is outside B's size.
+   * @see Native TEAL opcode: [`app_box_replace`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_box_replace)
+   * Min AVM version: 13
+   */
+  replace(a: Application | uint64, b: bytes, c: uint64, d: bytes): void {
+    throw new NoImplementation()
+  },
+
+  /**
+   * change the size of box named B of app A to be of length C, adding zero bytes to end or removing bytes from the end, as needed. Fail if the name B is empty, B is not an existing box, or C exceeds 32,768.
+   * @see Native TEAL opcode: [`app_box_resize`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_box_resize)
+   * Min AVM version: 13
+   */
+  resize(a: Application | uint64, b: bytes, c: uint64): void {
+    throw new NoImplementation()
+  },
+
+  /**
+   * set box B of app A to contain its previous bytes up to index C, followed by E, followed by the original bytes of B that began at index C+D.
+   * Boxes are of constant length. If D < len(E), then len(E)-D bytes will be removed from the end. If D > len(E), zero bytes will be appended to the end to reach the box length.
+   * @see Native TEAL opcode: [`app_box_splice`](https://dev.algorand.co/reference/algorand-teal/opcodes#app_box_splice)
+   * Min AVM version: 13
+   */
+  splice(a: Application | uint64, b: bytes, c: uint64, d: uint64, e: bytes): void {
+    throw new NoImplementation()
+  },
 }
 
 /**
@@ -409,6 +509,48 @@ export const AppParams = {
   appVersion(a: Application | uint64): readonly [uint64, boolean] {
     throw new NoImplementation()
   },
+
+  /**
+   * If non-zero, this account is responsible for the app's extra pages and global state balance requirement
+   * Min AVM version: 13
+   */
+  appSizeSponsor(a: Application | uint64): readonly [Account, boolean] {
+    throw new NoImplementation()
+  },
+
+  /**
+   * This app's boxes may be read by any app
+   * Min AVM version: 13
+   */
+  appForeignBoxReads(a: Application | uint64): readonly [boolean, boolean] {
+    throw new NoImplementation()
+  },
+
+  /**
+   * This app's boxes may be read and written by any app (existing or future) with the same creator
+   * Min AVM version: 13
+   */
+  appFamilyBoxAccess(a: Application | uint64): readonly [boolean, boolean] {
+    throw new NoImplementation()
+  },
+}
+
+export const AppParamsSet = {
+  /**
+   * This app's boxes may be read by any app
+   * Min AVM version: 13
+   */
+  appForeignBoxReads(a: boolean): void {
+    throw new NoImplementation()
+  },
+
+  /**
+   * This app's boxes may be read and written by any app (existing or future) with the same creator
+   * Min AVM version: 13
+   */
+  appFamilyBoxAccess(a: boolean): void {
+    throw new NoImplementation()
+  },
 }
 
 /**
@@ -548,7 +690,7 @@ export function balance(a: Account | uint64): uint64 {
 
 /**
  * decode A which was base64-encoded using _encoding_ E. Fail if A is not base64 encoded with encoding E
- * *Warning*: Usage should be restricted to very rare use cases. In almost all cases, smart contracts should directly handle non-encoded byte-strings.	This opcode should only be used in cases where base64 is the only available option, e.g. interoperability with a third-party that only signs base64 strings.
+ * _Warning_: Usage should be restricted to very rare use cases. In almost all cases, smart contracts should directly handle non-encoded byte-strings. This opcode should only be used in cases where base64 is the only available option, e.g. interoperability with a third-party that only signs base64 strings.
  *  Decodes A using the base64 encoding E. Specify the encoding with an immediate arg either as URL and Filename Safe (`URLEncoding`) or Standard (`StdEncoding`). See [RFC 4648 sections 4 and 5](https://rfc-editor.org/rfc/rfc4648.html#section-4). It is assumed that the encoding ends with the exact number of `=` padding characters as required by the RFC. When padding occurs, any unused pad bits in the encoding must be set to zero or the decoding will fail. The special cases of `\n` and `\r` are allowed but completely ignored. An error will result when attempting to decode a string with a character that is not in the encoding alphabet or not one of `=`, `\r`, or `\n`.
  * @see Native TEAL opcode: [`base64_decode`](https://dev.algorand.co/reference/algorand-teal/opcodes#base64_decode)
  * Min AVM version: 7
@@ -604,6 +746,22 @@ export const Block = {
   },
 
   blkProposerPayout(a: uint64): uint64 {
+    throw new NoImplementation()
+  },
+
+  blkBranch512(a: uint64): bytes<64> {
+    throw new NoImplementation()
+  },
+
+  blkSha512_256TxnCommitment(a: uint64): bytes<32> {
+    throw new NoImplementation()
+  },
+
+  blkSha256TxnCommitment(a: uint64): bytes<32> {
+    throw new NoImplementation()
+  },
+
+  blkSha512TxnCommitment(a: uint64): bytes<64> {
     throw new NoImplementation()
   },
 }
@@ -937,11 +1095,12 @@ export function extractUint64(a: bytes, b: uint64): uint64 {
 }
 
 /**
- * for (data A, compressed-format signature B, pubkey C) verify the signature of data against the pubkey => {0 or 1}
+ * for (data A, deterministic FALCON-1024 compressed-format signature B, pubkey C) verify the signature of data against the pubkey => {0 or 1}
+ * Signature B is variable-length, with maximum size 1423 bytes.
  * @see Native TEAL opcode: [`falcon_verify`](https://dev.algorand.co/reference/algorand-teal/opcodes#falcon_verify)
  * Min AVM version: 12
  */
-export function falconVerify(a: bytes, b: bytes<1232> | bytes, c: bytes<1793> | bytes): boolean {
+export function falconVerify(a: bytes, b: bytes, c: bytes<1793> | bytes): boolean {
   throw new NoImplementation()
 }
 
@@ -980,7 +1139,7 @@ export function getByte(a: bytes, b: uint64): uint64 {
 export const GITxn = {
   /**
    * 32 byte address
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   sender(t: uint64): Account {
     throw new NoImplementation()
@@ -988,7 +1147,7 @@ export const GITxn = {
 
   /**
    * microalgos
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   fee(t: uint64): uint64 {
     throw new NoImplementation()
@@ -996,7 +1155,7 @@ export const GITxn = {
 
   /**
    * round number
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   firstValid(t: uint64): uint64 {
     throw new NoImplementation()
@@ -1012,7 +1171,7 @@ export const GITxn = {
 
   /**
    * round number
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   lastValid(t: uint64): uint64 {
     throw new NoImplementation()
@@ -1020,7 +1179,7 @@ export const GITxn = {
 
   /**
    * Any data up to 1024 bytes
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   note(t: uint64): bytes {
     throw new NoImplementation()
@@ -1028,7 +1187,7 @@ export const GITxn = {
 
   /**
    * 32 byte lease value
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   lease(t: uint64): bytes<32> {
     throw new NoImplementation()
@@ -1036,7 +1195,7 @@ export const GITxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   receiver(t: uint64): Account {
     throw new NoImplementation()
@@ -1044,7 +1203,7 @@ export const GITxn = {
 
   /**
    * microalgos
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   amount(t: uint64): uint64 {
     throw new NoImplementation()
@@ -1052,7 +1211,7 @@ export const GITxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   closeRemainderTo(t: uint64): Account {
     throw new NoImplementation()
@@ -1060,7 +1219,7 @@ export const GITxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   votePk(t: uint64): bytes<32> {
     throw new NoImplementation()
@@ -1068,7 +1227,7 @@ export const GITxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   selectionPk(t: uint64): bytes<32> {
     throw new NoImplementation()
@@ -1076,7 +1235,7 @@ export const GITxn = {
 
   /**
    * The first round that the participation key is valid.
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   voteFirst(t: uint64): uint64 {
     throw new NoImplementation()
@@ -1084,7 +1243,7 @@ export const GITxn = {
 
   /**
    * The last round that the participation key is valid.
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   voteLast(t: uint64): uint64 {
     throw new NoImplementation()
@@ -1092,7 +1251,7 @@ export const GITxn = {
 
   /**
    * Dilution for the 2-level participation key
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   voteKeyDilution(t: uint64): uint64 {
     throw new NoImplementation()
@@ -1100,7 +1259,7 @@ export const GITxn = {
 
   /**
    * Transaction type as bytes
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   type(t: uint64): bytes {
     throw new NoImplementation()
@@ -1108,7 +1267,7 @@ export const GITxn = {
 
   /**
    * Transaction type as integer
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   typeEnum(t: uint64): TransactionType {
     throw new NoImplementation()
@@ -1116,7 +1275,7 @@ export const GITxn = {
 
   /**
    * Asset ID
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   xferAsset(t: uint64): Asset {
     throw new NoImplementation()
@@ -1124,7 +1283,7 @@ export const GITxn = {
 
   /**
    * value in Asset's units
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   assetAmount(t: uint64): uint64 {
     throw new NoImplementation()
@@ -1132,7 +1291,7 @@ export const GITxn = {
 
   /**
    * 32 byte address. Source of assets if Sender is the Asset's Clawback address.
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   assetSender(t: uint64): Account {
     throw new NoImplementation()
@@ -1140,7 +1299,7 @@ export const GITxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   assetReceiver(t: uint64): Account {
     throw new NoImplementation()
@@ -1148,7 +1307,7 @@ export const GITxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   assetCloseTo(t: uint64): Account {
     throw new NoImplementation()
@@ -1156,7 +1315,7 @@ export const GITxn = {
 
   /**
    * Position of this transaction within an atomic transaction group. A stand-alone transaction is implicitly element 0 in a group of 1
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   groupIndex(t: uint64): uint64 {
     throw new NoImplementation()
@@ -1164,7 +1323,7 @@ export const GITxn = {
 
   /**
    * The computed ID for this transaction. 32 bytes.
-   * Min AVM version: 6
+   * Min AVM version: 1
    */
   txId(t: uint64): bytes<32> {
     throw new NoImplementation()
@@ -1740,7 +1899,7 @@ export const Global = {
 export const GTxn = {
   /**
    * 32 byte address
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   sender(a: uint64): Account {
     throw new NoImplementation()
@@ -1748,7 +1907,7 @@ export const GTxn = {
 
   /**
    * microalgos
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   fee(a: uint64): uint64 {
     throw new NoImplementation()
@@ -1756,7 +1915,7 @@ export const GTxn = {
 
   /**
    * round number
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   firstValid(a: uint64): uint64 {
     throw new NoImplementation()
@@ -1772,7 +1931,7 @@ export const GTxn = {
 
   /**
    * round number
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   lastValid(a: uint64): uint64 {
     throw new NoImplementation()
@@ -1780,7 +1939,7 @@ export const GTxn = {
 
   /**
    * Any data up to 1024 bytes
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   note(a: uint64): bytes {
     throw new NoImplementation()
@@ -1788,7 +1947,7 @@ export const GTxn = {
 
   /**
    * 32 byte lease value
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   lease(a: uint64): bytes<32> {
     throw new NoImplementation()
@@ -1796,7 +1955,7 @@ export const GTxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   receiver(a: uint64): Account {
     throw new NoImplementation()
@@ -1804,7 +1963,7 @@ export const GTxn = {
 
   /**
    * microalgos
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   amount(a: uint64): uint64 {
     throw new NoImplementation()
@@ -1812,7 +1971,7 @@ export const GTxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   closeRemainderTo(a: uint64): Account {
     throw new NoImplementation()
@@ -1820,7 +1979,7 @@ export const GTxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   votePk(a: uint64): bytes<32> {
     throw new NoImplementation()
@@ -1828,7 +1987,7 @@ export const GTxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   selectionPk(a: uint64): bytes<32> {
     throw new NoImplementation()
@@ -1836,7 +1995,7 @@ export const GTxn = {
 
   /**
    * The first round that the participation key is valid.
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   voteFirst(a: uint64): uint64 {
     throw new NoImplementation()
@@ -1844,7 +2003,7 @@ export const GTxn = {
 
   /**
    * The last round that the participation key is valid.
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   voteLast(a: uint64): uint64 {
     throw new NoImplementation()
@@ -1852,7 +2011,7 @@ export const GTxn = {
 
   /**
    * Dilution for the 2-level participation key
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   voteKeyDilution(a: uint64): uint64 {
     throw new NoImplementation()
@@ -1860,7 +2019,7 @@ export const GTxn = {
 
   /**
    * Transaction type as bytes
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   type(a: uint64): bytes {
     throw new NoImplementation()
@@ -1868,7 +2027,7 @@ export const GTxn = {
 
   /**
    * Transaction type as integer
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   typeEnum(a: uint64): TransactionType {
     throw new NoImplementation()
@@ -1876,7 +2035,7 @@ export const GTxn = {
 
   /**
    * Asset ID
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   xferAsset(a: uint64): Asset {
     throw new NoImplementation()
@@ -1884,7 +2043,7 @@ export const GTxn = {
 
   /**
    * value in Asset's units
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   assetAmount(a: uint64): uint64 {
     throw new NoImplementation()
@@ -1892,7 +2051,7 @@ export const GTxn = {
 
   /**
    * 32 byte address. Source of assets if Sender is the Asset's Clawback address.
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   assetSender(a: uint64): Account {
     throw new NoImplementation()
@@ -1900,7 +2059,7 @@ export const GTxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   assetReceiver(a: uint64): Account {
     throw new NoImplementation()
@@ -1908,7 +2067,7 @@ export const GTxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   assetCloseTo(a: uint64): Account {
     throw new NoImplementation()
@@ -1916,7 +2075,7 @@ export const GTxn = {
 
   /**
    * Position of this transaction within an atomic transaction group. A stand-alone transaction is implicitly element 0 in a group of 1
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   groupIndex(a: uint64): uint64 {
     throw new NoImplementation()
@@ -1924,7 +2083,7 @@ export const GTxn = {
 
   /**
    * The computed ID for this transaction. 32 bytes.
-   * Min AVM version: 3
+   * Min AVM version: 1
    */
   txId(a: uint64): bytes<32> {
     throw new NoImplementation()
@@ -2306,7 +2465,7 @@ export function itob(a: uint64): bytes<8> {
 export const ITxn = {
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get sender(): Account {
     throw new NoImplementation()
@@ -2314,7 +2473,7 @@ export const ITxn = {
 
   /**
    * microalgos
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get fee(): uint64 {
     throw new NoImplementation()
@@ -2322,7 +2481,7 @@ export const ITxn = {
 
   /**
    * round number
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get firstValid(): uint64 {
     throw new NoImplementation()
@@ -2338,7 +2497,7 @@ export const ITxn = {
 
   /**
    * round number
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get lastValid(): uint64 {
     throw new NoImplementation()
@@ -2346,7 +2505,7 @@ export const ITxn = {
 
   /**
    * Any data up to 1024 bytes
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get note(): bytes {
     throw new NoImplementation()
@@ -2354,7 +2513,7 @@ export const ITxn = {
 
   /**
    * 32 byte lease value
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get lease(): bytes<32> {
     throw new NoImplementation()
@@ -2362,7 +2521,7 @@ export const ITxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get receiver(): Account {
     throw new NoImplementation()
@@ -2370,7 +2529,7 @@ export const ITxn = {
 
   /**
    * microalgos
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get amount(): uint64 {
     throw new NoImplementation()
@@ -2378,7 +2537,7 @@ export const ITxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get closeRemainderTo(): Account {
     throw new NoImplementation()
@@ -2386,7 +2545,7 @@ export const ITxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get votePk(): bytes<32> {
     throw new NoImplementation()
@@ -2394,7 +2553,7 @@ export const ITxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get selectionPk(): bytes<32> {
     throw new NoImplementation()
@@ -2402,7 +2561,7 @@ export const ITxn = {
 
   /**
    * The first round that the participation key is valid.
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get voteFirst(): uint64 {
     throw new NoImplementation()
@@ -2410,7 +2569,7 @@ export const ITxn = {
 
   /**
    * The last round that the participation key is valid.
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get voteLast(): uint64 {
     throw new NoImplementation()
@@ -2418,7 +2577,7 @@ export const ITxn = {
 
   /**
    * Dilution for the 2-level participation key
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get voteKeyDilution(): uint64 {
     throw new NoImplementation()
@@ -2426,7 +2585,7 @@ export const ITxn = {
 
   /**
    * Transaction type as bytes
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get type(): bytes {
     throw new NoImplementation()
@@ -2434,7 +2593,7 @@ export const ITxn = {
 
   /**
    * Transaction type as integer
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get typeEnum(): TransactionType {
     throw new NoImplementation()
@@ -2442,7 +2601,7 @@ export const ITxn = {
 
   /**
    * Asset ID
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get xferAsset(): Asset {
     throw new NoImplementation()
@@ -2450,7 +2609,7 @@ export const ITxn = {
 
   /**
    * value in Asset's units
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get assetAmount(): uint64 {
     throw new NoImplementation()
@@ -2458,7 +2617,7 @@ export const ITxn = {
 
   /**
    * 32 byte address. Source of assets if Sender is the Asset's Clawback address.
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get assetSender(): Account {
     throw new NoImplementation()
@@ -2466,7 +2625,7 @@ export const ITxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get assetReceiver(): Account {
     throw new NoImplementation()
@@ -2474,7 +2633,7 @@ export const ITxn = {
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get assetCloseTo(): Account {
     throw new NoImplementation()
@@ -2482,7 +2641,7 @@ export const ITxn = {
 
   /**
    * Position of this transaction within an atomic transaction group. A stand-alone transaction is implicitly element 0 in a group of 1
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get groupIndex(): uint64 {
     throw new NoImplementation()
@@ -2490,7 +2649,7 @@ export const ITxn = {
 
   /**
    * The computed ID for this transaction. 32 bytes.
-   * Min AVM version: 5
+   * Min AVM version: 1
    */
   get txId(): bytes<32> {
     throw new NoImplementation()
@@ -2889,7 +3048,7 @@ export const ITxnCreate = {
 
   /**
    * Any data up to 1024 bytes
-   * Min AVM version: 5
+   * Min AVM version: 6
    */
   setNote(a: bytes): void {
     throw new NoImplementation()
@@ -2921,7 +3080,7 @@ export const ITxnCreate = {
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 6
    */
   setVotePk(a: bytes<32> | bytes): void {
     throw new NoImplementation()
@@ -2929,7 +3088,7 @@ export const ITxnCreate = {
 
   /**
    * 32 byte address
-   * Min AVM version: 5
+   * Min AVM version: 6
    */
   setSelectionPk(a: bytes<32> | bytes): void {
     throw new NoImplementation()
@@ -2937,7 +3096,7 @@ export const ITxnCreate = {
 
   /**
    * The first round that the participation key is valid.
-   * Min AVM version: 5
+   * Min AVM version: 6
    */
   setVoteFirst(a: uint64): void {
     throw new NoImplementation()
@@ -2945,7 +3104,7 @@ export const ITxnCreate = {
 
   /**
    * The last round that the participation key is valid.
-   * Min AVM version: 5
+   * Min AVM version: 6
    */
   setVoteLast(a: uint64): void {
     throw new NoImplementation()
@@ -2953,7 +3112,7 @@ export const ITxnCreate = {
 
   /**
    * Dilution for the 2-level participation key
-   * Min AVM version: 5
+   * Min AVM version: 6
    */
   setVoteKeyDilution(a: uint64): void {
     throw new NoImplementation()
@@ -3017,7 +3176,7 @@ export const ITxnCreate = {
 
   /**
    * ApplicationID from ApplicationCall transaction
-   * Min AVM version: 2
+   * Min AVM version: 6
    */
   setApplicationId(a: Application | uint64): void {
     throw new NoImplementation()
@@ -3025,7 +3184,7 @@ export const ITxnCreate = {
 
   /**
    * ApplicationCall transaction on completion action
-   * Min AVM version: 2
+   * Min AVM version: 6
    */
   setOnCompletion(a: uint64): void {
     throw new NoImplementation()
@@ -3033,7 +3192,7 @@ export const ITxnCreate = {
 
   /**
    * Arguments passed to the application in the ApplicationCall transaction
-   * Min AVM version: 2
+   * Min AVM version: 6
    */
   setApplicationArgs(a: bytes): void {
     throw new NoImplementation()
@@ -3041,7 +3200,7 @@ export const ITxnCreate = {
 
   /**
    * Accounts listed in the ApplicationCall transaction
-   * Min AVM version: 2
+   * Min AVM version: 6
    */
   setAccounts(a: Account): void {
     throw new NoImplementation()
@@ -3049,7 +3208,7 @@ export const ITxnCreate = {
 
   /**
    * Approval program
-   * Min AVM version: 2
+   * Min AVM version: 6
    */
   setApprovalProgram(a: bytes): void {
     throw new NoImplementation()
@@ -3057,7 +3216,7 @@ export const ITxnCreate = {
 
   /**
    * Clear state program
-   * Min AVM version: 2
+   * Min AVM version: 6
    */
   setClearStateProgram(a: bytes): void {
     throw new NoImplementation()
@@ -3065,7 +3224,7 @@ export const ITxnCreate = {
 
   /**
    * 32 byte Sender's new AuthAddr
-   * Min AVM version: 2
+   * Min AVM version: 6
    */
   setRekeyTo(a: Account): void {
     throw new NoImplementation()
@@ -3073,7 +3232,7 @@ export const ITxnCreate = {
 
   /**
    * Asset ID in asset config transaction
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setConfigAsset(a: Asset | uint64): void {
     throw new NoImplementation()
@@ -3081,7 +3240,7 @@ export const ITxnCreate = {
 
   /**
    * Total number of units of this asset created
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setConfigAssetTotal(a: uint64): void {
     throw new NoImplementation()
@@ -3089,7 +3248,7 @@ export const ITxnCreate = {
 
   /**
    * Number of digits to display after the decimal place when displaying the asset
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setConfigAssetDecimals(a: uint64): void {
     throw new NoImplementation()
@@ -3097,7 +3256,7 @@ export const ITxnCreate = {
 
   /**
    * Whether the asset's slots are frozen by default or not, 0 or 1
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setConfigAssetDefaultFrozen(a: boolean): void {
     throw new NoImplementation()
@@ -3105,7 +3264,7 @@ export const ITxnCreate = {
 
   /**
    * Unit name of the asset
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setConfigAssetUnitName(a: bytes): void {
     throw new NoImplementation()
@@ -3113,7 +3272,7 @@ export const ITxnCreate = {
 
   /**
    * The asset name
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setConfigAssetName(a: bytes): void {
     throw new NoImplementation()
@@ -3121,7 +3280,7 @@ export const ITxnCreate = {
 
   /**
    * URL
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setConfigAssetUrl(a: bytes): void {
     throw new NoImplementation()
@@ -3129,7 +3288,7 @@ export const ITxnCreate = {
 
   /**
    * 32 byte commitment to unspecified asset metadata
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setConfigAssetMetadataHash(a: bytes<32> | bytes): void {
     throw new NoImplementation()
@@ -3137,7 +3296,7 @@ export const ITxnCreate = {
 
   /**
    * 32 byte address
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setConfigAssetManager(a: Account): void {
     throw new NoImplementation()
@@ -3145,7 +3304,7 @@ export const ITxnCreate = {
 
   /**
    * 32 byte address
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setConfigAssetReserve(a: Account): void {
     throw new NoImplementation()
@@ -3153,7 +3312,7 @@ export const ITxnCreate = {
 
   /**
    * 32 byte address
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setConfigAssetFreeze(a: Account): void {
     throw new NoImplementation()
@@ -3161,7 +3320,7 @@ export const ITxnCreate = {
 
   /**
    * 32 byte address
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setConfigAssetClawback(a: Account): void {
     throw new NoImplementation()
@@ -3169,7 +3328,7 @@ export const ITxnCreate = {
 
   /**
    * Asset ID being frozen or un-frozen
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setFreezeAsset(a: Asset | uint64): void {
     throw new NoImplementation()
@@ -3177,7 +3336,7 @@ export const ITxnCreate = {
 
   /**
    * 32 byte address of the account whose asset slot is being frozen or un-frozen
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setFreezeAssetAccount(a: Account): void {
     throw new NoImplementation()
@@ -3185,7 +3344,7 @@ export const ITxnCreate = {
 
   /**
    * The new frozen value, 0 or 1
-   * Min AVM version: 2
+   * Min AVM version: 5
    */
   setFreezeAssetFrozen(a: boolean): void {
     throw new NoImplementation()
@@ -3193,7 +3352,7 @@ export const ITxnCreate = {
 
   /**
    * Foreign Assets listed in the ApplicationCall transaction
-   * Min AVM version: 3
+   * Min AVM version: 6
    */
   setAssets(a: uint64): void {
     throw new NoImplementation()
@@ -3201,7 +3360,7 @@ export const ITxnCreate = {
 
   /**
    * Foreign Apps listed in the ApplicationCall transaction
-   * Min AVM version: 3
+   * Min AVM version: 6
    */
   setApplications(a: uint64): void {
     throw new NoImplementation()
@@ -3209,7 +3368,7 @@ export const ITxnCreate = {
 
   /**
    * Number of global state integers in ApplicationCall
-   * Min AVM version: 3
+   * Min AVM version: 6
    */
   setGlobalNumUint(a: uint64): void {
     throw new NoImplementation()
@@ -3217,7 +3376,7 @@ export const ITxnCreate = {
 
   /**
    * Number of global state byteslices in ApplicationCall
-   * Min AVM version: 3
+   * Min AVM version: 6
    */
   setGlobalNumByteSlice(a: uint64): void {
     throw new NoImplementation()
@@ -3225,7 +3384,7 @@ export const ITxnCreate = {
 
   /**
    * Number of local state integers in ApplicationCall
-   * Min AVM version: 3
+   * Min AVM version: 6
    */
   setLocalNumUint(a: uint64): void {
     throw new NoImplementation()
@@ -3233,7 +3392,7 @@ export const ITxnCreate = {
 
   /**
    * Number of local state byteslices in ApplicationCall
-   * Min AVM version: 3
+   * Min AVM version: 6
    */
   setLocalNumByteSlice(a: uint64): void {
     throw new NoImplementation()
@@ -3241,7 +3400,7 @@ export const ITxnCreate = {
 
   /**
    * Number of additional pages for each of the application's approval and clear state programs. An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program.
-   * Min AVM version: 4
+   * Min AVM version: 6
    */
   setExtraProgramPages(a: uint64): void {
     throw new NoImplementation()
@@ -3249,7 +3408,7 @@ export const ITxnCreate = {
 
   /**
    * Marks an account nonparticipating for rewards
-   * Min AVM version: 5
+   * Min AVM version: 6
    */
   setNonparticipation(a: boolean): void {
     throw new NoImplementation()
@@ -3374,8 +3533,8 @@ export const Scratch = {
 
 /**
  * MiMC hash of scalars A, using curve and parameters specified by configuration C
- * A is a list of concatenated 32 byte big-endian unsigned integer scalars.  Fail if A's length is not a multiple of 32 or any element exceeds the curve modulus.
- * The MiMC hash function has known collisions since any input which is a multiple of the elliptic curve modulus will hash to the same value. MiMC is thus not a general purpose hash function, but meant to be used in zero knowledge applications to match a zk-circuit implementation.
+ * A is a non-empty list of concatenated 32 byte big-endian unsigned integer scalars.  Fail if A's length is not a multiple of 32 or any element is greater than or equal to the scalar field modulus.
+ * MiMC hashes field elements, not arbitrary byte strings; reducing external inputs modulo the scalar field modulus makes congruent inputs hash identically. MiMC is thus not a general purpose hash function, but meant to be used in zero knowledge applications to match a zk-circuit implementation.
  * @see Native TEAL opcode: [`mimc`](https://dev.algorand.co/reference/algorand-teal/opcodes#mimc)
  * Min AVM version: 11
  */
@@ -3413,8 +3572,18 @@ export function onlineStake(): uint64 {
 }
 
 /**
+ * Poseidon2 hash of scalars A, using curve and parameters specified by configuration C
+ * A is a non-empty list of concatenated 32 byte big-endian unsigned integer scalars. Fail if A's length is not a multiple of 32 or any element is greater than or equal to the scalar field modulus.
+ * Poseidon2 hashes field elements, not arbitrary byte strings; reducing external inputs modulo the scalar field modulus makes congruent inputs hash identically. Poseidon2 is thus not a general purpose hash function, but meant to be used in zero knowledge applications to match a zk-circuit implementation.
+ * @see Native TEAL opcode: [`poseidon2`](https://dev.algorand.co/reference/algorand-teal/opcodes#poseidon2)
+ * Min AVM version: 13
+ */
+export function poseidon2(c: Poseidon2Configurations, a: bytes): bytes<32> {
+  throw new NoImplementation()
+}
+
+/**
  * Copy of A with the bytes starting at B replaced by the bytes of C. Fails if B+len(C) exceeds len(A)
- * `replace3` can be called using `replace` with no immediates.
  * @see Native TEAL opcode: [`replace3`](https://dev.algorand.co/reference/algorand-teal/opcodes#replace3)
  * Min AVM version: 7
  */
@@ -3446,6 +3615,15 @@ export function sha256(a: bytes): bytes<32> {
  * Min AVM version: 7
  */
 export function sha3_256(a: bytes): bytes<32> {
+  throw new NoImplementation()
+}
+
+/**
+ * SHA512 of value A, yields [64]byte
+ * @see Native TEAL opcode: [`sha512`](https://dev.algorand.co/reference/algorand-teal/opcodes#sha512)
+ * Min AVM version: 13
+ */
+export function sha512(a: bytes): bytes<64> {
   throw new NoImplementation()
 }
 
@@ -3497,7 +3675,7 @@ export function substring(a: bytes, b: uint64, c: uint64): bytes {
 /**
  * sumhash512 of value A, yields [64]byte
  * @see Native TEAL opcode: [`sumhash512`](https://dev.algorand.co/reference/algorand-teal/opcodes#sumhash512)
- * Min AVM version: 13
+ * Min AVM version: 14
  */
 export function sumhash512(a: bytes): bytes<64> {
   throw new NoImplementation()
