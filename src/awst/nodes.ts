@@ -1450,6 +1450,7 @@ export class LogicSignature extends RootNode {
     this.docstring = props.docstring
     this.reservedScratchSpace = props.reservedScratchSpace
     this.avmVersion = props.avmVersion
+    this.autosalt = props.autosalt
     this.validateEncoding = props.validateEncoding
   }
   readonly id: LogicSigReference
@@ -1458,6 +1459,7 @@ export class LogicSignature extends RootNode {
   readonly docstring: string | null
   readonly reservedScratchSpace: Set<bigint>
   readonly avmVersion: bigint | null
+  readonly autosalt: boolean | null
   readonly validateEncoding: boolean | null
   accept<T>(visitor: RootNodeVisitor<T>): T {
     return visitor.visitLogicSignature(this)
@@ -1529,6 +1531,7 @@ export class Contract extends RootNode {
     this.stateTotals = props.stateTotals
     this.reservedScratchSpace = props.reservedScratchSpace
     this.avmVersion = props.avmVersion
+    this.autosalt = props.autosalt
   }
   readonly id: ContractReference
   readonly name: string
@@ -1541,6 +1544,7 @@ export class Contract extends RootNode {
   readonly stateTotals: StateTotals | null
   readonly reservedScratchSpace: Set<bigint>
   readonly avmVersion: bigint | null
+  readonly autosalt: boolean | null
   accept<T>(visitor: RootNodeVisitor<T>): T {
     return visitor.visitContract(this)
   }

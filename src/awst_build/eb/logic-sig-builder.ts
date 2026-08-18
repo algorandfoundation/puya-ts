@@ -3,10 +3,10 @@ import type { Expression, LValue } from '../../awst/nodes'
 import type { SourceLocation } from '../../awst/source-location'
 import { CodeError } from '../../errors'
 import { invariant } from '../../util'
-import { logicSigOptionsDecorator, LogicSigPType, numberPType, type PType, stringPType } from '../ptypes'
+import { boolPType, logicSigOptionsDecorator, LogicSigPType, numberPType, type PType, stringPType } from '../ptypes'
 import { validateEncodingMap } from './arc4/util'
 import { DecoratorDataBuilder, FunctionBuilder, InstanceBuilder, type NodeBuilder } from './index'
-import { mapStringConstant, requireStringConstant } from './util'
+import { mapStringConstant, requireBooleanConstant, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { requireAvmVersion } from './util/avm-version'
 import { processScratchRanges } from './util/scratch-slots'
@@ -41,7 +41,7 @@ export class LogicSigOptionsDecoratorBuilder extends FunctionBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
-      args: [{ avmVersion, name, scratchSlots, validateEncoding }],
+      args: [{ avmVersion, autosalt, name, scratchSlots, validateEncoding }],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -51,6 +51,7 @@ export class LogicSigOptionsDecoratorBuilder extends FunctionBuilder {
       argSpec: (a) => [
         a.obj({
           avmVersion: a.optional(numberPType),
+          autosalt: a.optional(boolPType),
           name: a.optional(stringPType),
           scratchSlots: a.optional(),
           validateEncoding: a.optional(stringPType),
@@ -61,6 +62,7 @@ export class LogicSigOptionsDecoratorBuilder extends FunctionBuilder {
     return new DecoratorDataBuilder(sourceLocation, {
       type: 'logicsig',
       avmVersion: avmVersion ? requireAvmVersion(avmVersion) : undefined,
+      autosalt: autosalt ? requireBooleanConstant(autosalt).value : undefined,
       name: name ? requireStringConstant(name).value : undefined,
       sourceLocation,
       scratchSlots: scratchSlots && processScratchRanges(scratchSlots),

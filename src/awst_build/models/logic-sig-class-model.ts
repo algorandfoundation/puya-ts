@@ -37,6 +37,7 @@ export class LogicSigClassModel {
       sourceLocation: this.sourceLocation,
       docstring: this.description,
       avmVersion: this.options?.avmVersion ?? null,
+      autosalt: this.options?.autosalt ?? null,
       reservedScratchSpace: this.options?.scratchSlots ?? new Set(),
       validateEncoding: this.options?.validateEncoding ?? null,
     })
