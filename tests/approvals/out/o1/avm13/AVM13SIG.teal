@@ -1,0 +1,34 @@
+#pragma version 13
+#pragma typetrack false
+#pragma autosalt true
+
+// tests/approvals/avm13.algo.ts::program() -> uint64:
+main:
+    // tests/approvals/avm13.algo.ts:17
+    // assert(op.sha512(Bytes()) !== op.sha512(Bytes('a')))
+    pushbytes 0x
+    sha512
+    pushbytes "a"
+    sha512
+    !=
+    assert
+    // tests/approvals/avm13.algo.ts:18
+    // const scalar = op.bzero(32)
+    pushint 32
+    bzero
+    // tests/approvals/avm13.algo.ts:19
+    // const bn = op.poseidon2(Poseidon2Configurations.BN254t2, scalar)
+    dup
+    poseidon2 BN254t2
+    // tests/approvals/avm13.algo.ts:20
+    // const bls = op.poseidon2(Poseidon2Configurations.BLS12_381t2, scalar)
+    swap
+    poseidon2 BLS12_381t2
+    // tests/approvals/avm13.algo.ts:21
+    // assert(bn !== bls)
+    !=
+    assert
+    // tests/approvals/avm13.algo.ts:22
+    // return bn.length
+    pushint 32
+    return
