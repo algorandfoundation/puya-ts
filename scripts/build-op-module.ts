@@ -8,7 +8,7 @@ function range(start: number, end: number) {
     .fill(0)
     .map((_, i) => start + i)
 }
-export const ENUMS_TO_EXPOSE = new Set(['EC', 'ECDSA', 'vrf_verify', 'base64', 'Mimc Configurations'])
+export const ENUMS_TO_EXPOSE = new Set(['EC', 'ECDSA', 'vrf_verify', 'base64', 'Mimc Configurations', 'Poseidon2 Configurations'])
 
 const EXCLUDED_OPCODES = new Set([
   // low level flow control
@@ -325,6 +325,21 @@ const GROUPED_OPCODES: { name: string; doc: string; ops: { [key: string]: OpName
     },
   },
   {
+    name: 'AppBox',
+    doc: 'Get or modify box state of other applications',
+    ops: {
+      app_box_create: { nameOverride: 'create' },
+      app_box_del: { nameOverride: 'delete' },
+      app_box_extract: { nameOverride: 'extract' },
+      app_box_get: { nameOverride: 'get' },
+      app_box_len: { nameOverride: 'length' },
+      app_box_put: { nameOverride: 'put' },
+      app_box_replace: { nameOverride: 'replace' },
+      app_box_resize: { nameOverride: 'resize' },
+      app_box_splice: { nameOverride: 'splice' },
+    },
+  },
+  {
     name: 'EllipticCurve',
     doc: 'Elliptic Curve functions',
     ops: {
@@ -353,6 +368,7 @@ const GROUPED_OPCODES: { name: string; doc: string; ops: { [key: string]: OpName
   },
   { name: 'AcctParams', doc: '', ops: { acct_params_get: {} } },
   { name: 'AppParams', doc: '', ops: { app_params_get: {} } },
+  { name: 'AppParamsSet', doc: '', ops: { app_params_set: {} } },
   { name: 'AssetHolding', doc: '', ops: { asset_holding_get: {} } },
   { name: 'AssetParams', doc: '', ops: { asset_params_get: {} } },
   { name: 'VoterParams', doc: '', ops: { voter_params_get: {} } },

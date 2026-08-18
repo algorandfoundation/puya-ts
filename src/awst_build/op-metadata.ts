@@ -231,6 +231,157 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
       },
     ],
   },
+  AppBox: {
+    type: 'op-grouping',
+    name: 'AppBox',
+    ops: {
+      create: {
+        type: 'op-mapping',
+        op: 'app_box_create',
+        signatures: [
+          {
+            argNames: ['a', 'b', 'c'],
+            immediateArgs: [],
+            stackArgs: [
+              { name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] },
+              { name: 'b', ptypes: [ptypes.bytesPType] },
+              { name: 'c', ptypes: [ptypes.uint64PType] },
+            ],
+            returnType: ptypes.boolPType,
+          },
+        ],
+      },
+      delete: {
+        type: 'op-mapping',
+        op: 'app_box_del',
+        signatures: [
+          {
+            argNames: ['a', 'b'],
+            immediateArgs: [],
+            stackArgs: [
+              { name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] },
+              { name: 'b', ptypes: [ptypes.bytesPType] },
+            ],
+            returnType: ptypes.boolPType,
+          },
+        ],
+      },
+      extract: {
+        type: 'op-mapping',
+        op: 'app_box_extract',
+        signatures: [
+          {
+            argNames: ['a', 'b', 'c', 'd'],
+            immediateArgs: [],
+            stackArgs: [
+              { name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] },
+              { name: 'b', ptypes: [ptypes.bytesPType] },
+              { name: 'c', ptypes: [ptypes.uint64PType] },
+              { name: 'd', ptypes: [ptypes.uint64PType] },
+            ],
+            returnType: ptypes.bytesPType,
+          },
+        ],
+      },
+      get: {
+        type: 'op-mapping',
+        op: 'app_box_get',
+        signatures: [
+          {
+            argNames: ['a', 'b'],
+            immediateArgs: [],
+            stackArgs: [
+              { name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] },
+              { name: 'b', ptypes: [ptypes.bytesPType] },
+            ],
+            returnType: new ptypes.ReadonlyTuplePType({ items: [ptypes.bytesPType, ptypes.boolPType] }),
+          },
+        ],
+      },
+      length: {
+        type: 'op-mapping',
+        op: 'app_box_len',
+        signatures: [
+          {
+            argNames: ['a', 'b'],
+            immediateArgs: [],
+            stackArgs: [
+              { name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] },
+              { name: 'b', ptypes: [ptypes.bytesPType] },
+            ],
+            returnType: new ptypes.ReadonlyTuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
+          },
+        ],
+      },
+      put: {
+        type: 'op-mapping',
+        op: 'app_box_put',
+        signatures: [
+          {
+            argNames: ['a', 'b', 'c'],
+            immediateArgs: [],
+            stackArgs: [
+              { name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] },
+              { name: 'b', ptypes: [ptypes.bytesPType] },
+              { name: 'c', ptypes: [ptypes.bytesPType] },
+            ],
+            returnType: ptypes.voidPType,
+          },
+        ],
+      },
+      replace: {
+        type: 'op-mapping',
+        op: 'app_box_replace',
+        signatures: [
+          {
+            argNames: ['a', 'b', 'c', 'd'],
+            immediateArgs: [],
+            stackArgs: [
+              { name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] },
+              { name: 'b', ptypes: [ptypes.bytesPType] },
+              { name: 'c', ptypes: [ptypes.uint64PType] },
+              { name: 'd', ptypes: [ptypes.bytesPType] },
+            ],
+            returnType: ptypes.voidPType,
+          },
+        ],
+      },
+      resize: {
+        type: 'op-mapping',
+        op: 'app_box_resize',
+        signatures: [
+          {
+            argNames: ['a', 'b', 'c'],
+            immediateArgs: [],
+            stackArgs: [
+              { name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] },
+              { name: 'b', ptypes: [ptypes.bytesPType] },
+              { name: 'c', ptypes: [ptypes.uint64PType] },
+            ],
+            returnType: ptypes.voidPType,
+          },
+        ],
+      },
+      splice: {
+        type: 'op-mapping',
+        op: 'app_box_splice',
+        signatures: [
+          {
+            argNames: ['a', 'b', 'c', 'd', 'e'],
+            immediateArgs: [],
+            stackArgs: [
+              { name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] },
+              { name: 'b', ptypes: [ptypes.bytesPType] },
+              { name: 'c', ptypes: [ptypes.uint64PType] },
+              { name: 'd', ptypes: [ptypes.uint64PType] },
+              { name: 'e', ptypes: [ptypes.bytesPType] },
+            ],
+            returnType: ptypes.voidPType,
+          },
+        ],
+      },
+    },
+  },
   AppGlobal: {
     type: 'op-grouping',
     name: 'AppGlobal',
@@ -538,6 +689,72 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             immediateArgs: ['AppVersion'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
             returnType: new ptypes.ReadonlyTuplePType({ items: [ptypes.uint64PType, ptypes.boolPType] }),
+          },
+        ],
+      },
+      appSizeSponsor: {
+        type: 'op-mapping',
+        op: 'app_params_get',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['AppSizeSponsor'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
+            returnType: new ptypes.ReadonlyTuplePType({ items: [ptypes.accountPType, ptypes.boolPType] }),
+          },
+        ],
+      },
+      appForeignBoxReads: {
+        type: 'op-mapping',
+        op: 'app_params_get',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['AppForeignBoxReads'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
+            returnType: new ptypes.ReadonlyTuplePType({ items: [ptypes.boolPType, ptypes.boolPType] }),
+          },
+        ],
+      },
+      appFamilyBoxAccess: {
+        type: 'op-mapping',
+        op: 'app_params_get',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['AppFamilyBoxAccess'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.applicationPType, ptypes.uint64PType] }],
+            returnType: new ptypes.ReadonlyTuplePType({ items: [ptypes.boolPType, ptypes.boolPType] }),
+          },
+        ],
+      },
+    },
+  },
+  AppParamsSet: {
+    type: 'op-grouping',
+    name: 'AppParamsSet',
+    ops: {
+      appForeignBoxReads: {
+        type: 'op-mapping',
+        op: 'app_params_set',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['AppForeignBoxReads'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.boolPType] }],
+            returnType: ptypes.voidPType,
+          },
+        ],
+      },
+      appFamilyBoxAccess: {
+        type: 'op-mapping',
+        op: 'app_params_set',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['AppFamilyBoxAccess'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.boolPType] }],
+            returnType: ptypes.voidPType,
           },
         ],
       },
@@ -893,6 +1110,54 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
             immediateArgs: ['BlkProposerPayout'],
             stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
             returnType: ptypes.uint64PType,
+          },
+        ],
+      },
+      blkBranch512: {
+        type: 'op-mapping',
+        op: 'block',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['BlkBranch512'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
+            returnType: new ptypes.BytesPType({ length: 64n }),
+          },
+        ],
+      },
+      blkSha512_256TxnCommitment: {
+        type: 'op-mapping',
+        op: 'block',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['BlkSha512_256TxnCommitment'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
+            returnType: new ptypes.BytesPType({ length: 32n }),
+          },
+        ],
+      },
+      blkSha256TxnCommitment: {
+        type: 'op-mapping',
+        op: 'block',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['BlkSha256TxnCommitment'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
+            returnType: new ptypes.BytesPType({ length: 32n }),
+          },
+        ],
+      },
+      blkSha512TxnCommitment: {
+        type: 'op-mapping',
+        op: 'block',
+        signatures: [
+          {
+            argNames: ['a'],
+            immediateArgs: ['BlkSha512TxnCommitment'],
+            stackArgs: [{ name: 'a', ptypes: [ptypes.uint64PType] }],
+            returnType: new ptypes.BytesPType({ length: 64n }),
           },
         ],
       },
@@ -1350,7 +1615,7 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         immediateArgs: [],
         stackArgs: [
           { name: 'a', ptypes: [ptypes.bytesPType] },
-          { name: 'b', ptypes: [new ptypes.BytesPType({ length: 1232n }), ptypes.bytesPType] },
+          { name: 'b', ptypes: [ptypes.bytesPType] },
           { name: 'c', ptypes: [new ptypes.BytesPType({ length: 1793n }), ptypes.bytesPType] },
         ],
         returnType: ptypes.boolPType,
@@ -4442,6 +4707,18 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
     op: 'online_stake',
     signatures: [{ argNames: [], immediateArgs: [], stackArgs: [], returnType: ptypes.uint64PType }],
   },
+  poseidon2: {
+    type: 'op-mapping',
+    op: 'poseidon2',
+    signatures: [
+      {
+        argNames: ['c', 'a'],
+        immediateArgs: [{ name: 'c', ptypes: [ptypes.poseidon2ConfigurationsPType] }],
+        stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
+        returnType: new ptypes.BytesPType({ length: 32n }),
+      },
+    ],
+  },
   replace: {
     type: 'op-mapping',
     op: 'replace3',
@@ -4495,6 +4772,18 @@ export const OP_METADATA: Record<string, IntrinsicOpMapping | IntrinsicOpGroupin
         immediateArgs: [],
         stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
         returnType: new ptypes.BytesPType({ length: 32n }),
+      },
+    ],
+  },
+  sha512: {
+    type: 'op-mapping',
+    op: 'sha512',
+    signatures: [
+      {
+        argNames: ['a'],
+        immediateArgs: [],
+        stackArgs: [{ name: 'a', ptypes: [ptypes.bytesPType] }],
+        returnType: new ptypes.BytesPType({ length: 64n }),
       },
     ],
   },
