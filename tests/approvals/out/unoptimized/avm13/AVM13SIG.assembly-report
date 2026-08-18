@@ -1,0 +1,29 @@
+| PC | TEAL Bytes     | TEAL                      | Source                                                                | Location                                            |
+|--: | :--------------| :-------------------------| :---------------------------------------------------------------------| :---------------------------------------------------|
+|  0 | 0d             | #pragma version 13        |                                                                       |                                                     |
+|    | # main         | main:                     |                                                                       | tests/approvals/avm13.algo.ts::program() -> uint64: |
+|  1 | 42 00          |     b main_block@0        |                                                                       |                                                     |
+|    | # main_block@0 | main_block@0:             |                                                                       |                                                     |
+|    |                |                           | assert(op.sha512(Bytes()) !== op.sha512(Bytes('a')))                  | tests/approvals/avm13.algo.ts:17                    |
+|  3 | 80 00          |     pushbytes 0x          |                  -------                                              | tests/approvals/avm13.algo.ts:17:21-28              |
+|  5 | 87             |     sha512                |        ------------------                                             | tests/approvals/avm13.algo.ts:17:11-29              |
+|  6 | 80 01 61       |     pushbytes "a"         |                                               ---                     | tests/approvals/avm13.algo.ts:17:50-53              |
+|  9 | 87             |     sha512                |                               ---------------------                   | tests/approvals/avm13.algo.ts:17:34-55              |
+| 10 | 13             |     !=                    |        --------------------------------------------                   | tests/approvals/avm13.algo.ts:17:11-55              |
+| 11 | 44             |     assert                | ----------------------------------------------------                  | tests/approvals/avm13.algo.ts:17:4-56               |
+|    |                |                           | const scalar = op.bzero(32)                                           | tests/approvals/avm13.algo.ts:18                    |
+| 12 | 81 20          |     pushint 32            |                         --                                            | tests/approvals/avm13.algo.ts:18:28-30              |
+| 14 | af             |     bzero                 |                ------------                                           | tests/approvals/avm13.algo.ts:18:19-31              |
+|    |                |                           | const bn = op.poseidon2(Poseidon2Configurations.BN254t2, scalar)      | tests/approvals/avm13.algo.ts:19                    |
+| 15 | 49             |     dup                   |            -----------------------------------------------------      | tests/approvals/avm13.algo.ts:19:15-68              |
+| 16 | e7 00          |     poseidon2 BN254t2     |            -----------------------------------------------------      | tests/approvals/avm13.algo.ts:19:15-68              |
+| 18 | 4e 01          |     cover 1               |       ----------------------------------------------------------      | tests/approvals/avm13.algo.ts:19:10-68              |
+|    |                |                           | const bls = op.poseidon2(Poseidon2Configurations.BLS12_381t2, scalar) | tests/approvals/avm13.algo.ts:20                    |
+| 20 | e7 01          |     poseidon2 BLS12_381t2 |             --------------------------------------------------------- | tests/approvals/avm13.algo.ts:20:16-73              |
+|    |                |                           | assert(bn !== bls)                                                    | tests/approvals/avm13.algo.ts:21                    |
+| 22 | 4b 01          |     dig 1                 |        ----------                                                     | tests/approvals/avm13.algo.ts:21:11-21              |
+| 24 | 13             |     !=                    |        ----------                                                     | tests/approvals/avm13.algo.ts:21:11-21              |
+| 25 | 44             |     assert                | ------------------                                                    | tests/approvals/avm13.algo.ts:21:4-22               |
+|    |                |                           | return bn.length                                                      | tests/approvals/avm13.algo.ts:22                    |
+| 26 | 15             |     len                   |        ---------                                                      | tests/approvals/avm13.algo.ts:22:11-20              |
+| 27 | 43             |     return                | ----------------                                                      | tests/approvals/avm13.algo.ts:22:4-20               |

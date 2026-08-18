@@ -1,0 +1,265 @@
+#pragma version 13
+#pragma typetrack false
+#pragma autosalt false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0 8 4
+    bytecblock "bx" 0xff
+    // tests/approvals/avm13.algo.ts:26-27
+    // @contract({ name: 'AVM13Contract', avmVersion: 13 })
+    // export class Avm13Contract extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@12
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0x52448a31 0x1a91f6dd 0x528cf98b 0x0ea68226 0xa2c3ccd3 // method "testNewOps()void", method "testPoseidon2()void", method "testAppParams()void", method "testAppBoxOps()void", method "testBlock()void"
+    txna ApplicationArgs 0
+    match testNewOps testPoseidon2 testAppParams testAppBoxOps testBlock
+    err
+
+main___algots__.defaultCreate@12:
+    // tests/approvals/avm13.algo.ts:26-27
+    // @contract({ name: 'AVM13Contract', avmVersion: 13 })
+    // export class Avm13Contract extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// tests/approvals/avm13.algo.ts::Avm13Contract.testNewOps[routing]() -> void:
+testNewOps:
+    // tests/approvals/avm13.algo.ts:29
+    // assert(op.sha512(Bytes()) !== op.sha512(Bytes('a')))
+    pushbytes 0x
+    sha512
+    pushbytes "a"
+    sha512
+    !=
+    assert
+    // tests/approvals/avm13.algo.ts:28
+    // testNewOps() {
+    intc_0 // 1
+    return
+
+
+// tests/approvals/avm13.algo.ts::Avm13Contract.testPoseidon2[routing]() -> void:
+testPoseidon2:
+    // tests/approvals/avm13.algo.ts:33
+    // const scalar = op.bzero(32)
+    pushint 32
+    bzero
+    // tests/approvals/avm13.algo.ts:34
+    // const bn = op.poseidon2(Poseidon2Configurations.BN254t2, scalar)
+    dup
+    poseidon2 BN254t2
+    // tests/approvals/avm13.algo.ts:35
+    // const bls = op.poseidon2(Poseidon2Configurations.BLS12_381t2, scalar)
+    swap
+    poseidon2 BLS12_381t2
+    // tests/approvals/avm13.algo.ts:38
+    // assert(bn !== bls)
+    !=
+    assert
+    // tests/approvals/avm13.algo.ts:32
+    // testPoseidon2() {
+    intc_0 // 1
+    return
+
+
+// tests/approvals/avm13.algo.ts::Avm13Contract.testAppParams[routing]() -> void:
+testAppParams:
+    // tests/approvals/avm13.algo.ts:42
+    // const app = Global.currentApplicationId
+    global CurrentApplicationID
+    // tests/approvals/avm13.algo.ts:44
+    // const [sponsor, sponsorExists] = op.AppParams.appSizeSponsor(app)
+    dup
+    app_params_get AppSizeSponsor
+    // tests/approvals/avm13.algo.ts:45
+    // assert(sponsorExists)
+    assert
+    // tests/approvals/avm13.algo.ts:46
+    // assert(sponsor === Global.zeroAddress)
+    global ZeroAddress
+    ==
+    assert
+    // tests/approvals/avm13.algo.ts:48
+    // const [foreignBoxReads, foreignBoxReadsExists] = op.AppParams.appForeignBoxReads(app)
+    dup
+    app_params_get AppForeignBoxReads
+    // tests/approvals/avm13.algo.ts:49
+    // assert(foreignBoxReadsExists)
+    assert
+    // tests/approvals/avm13.algo.ts:50
+    // assert(!foreignBoxReads)
+    !
+    assert
+    // tests/approvals/avm13.algo.ts:52
+    // const [familyBoxAccess, familyBoxAccessExists] = op.AppParams.appFamilyBoxAccess(app)
+    dup
+    app_params_get AppFamilyBoxAccess
+    // tests/approvals/avm13.algo.ts:53
+    // assert(familyBoxAccessExists)
+    assert
+    // tests/approvals/avm13.algo.ts:54
+    // assert(!familyBoxAccess)
+    !
+    assert
+    // tests/approvals/avm13.algo.ts:56
+    // op.AppParamsSet.appForeignBoxReads(true)
+    intc_0 // 1
+    app_params_set AppForeignBoxReads
+    // tests/approvals/avm13.algo.ts:57
+    // op.AppParamsSet.appFamilyBoxAccess(true)
+    intc_0 // 1
+    app_params_set AppFamilyBoxAccess
+    // tests/approvals/avm13.algo.ts:59
+    // const [foreignBoxReadsAfter, foreignBoxReadsAfterExists] = op.AppParams.appForeignBoxReads(app)
+    dup
+    app_params_get AppForeignBoxReads
+    // tests/approvals/avm13.algo.ts:60
+    // assert(foreignBoxReadsAfterExists)
+    assert
+    // tests/approvals/avm13.algo.ts:61
+    // assert(foreignBoxReadsAfter)
+    assert
+    // tests/approvals/avm13.algo.ts:63
+    // const [familyBoxAccessAfter, familyBoxAccessAfterExists] = op.AppParams.appFamilyBoxAccess(app)
+    app_params_get AppFamilyBoxAccess
+    // tests/approvals/avm13.algo.ts:64
+    // assert(familyBoxAccessAfterExists)
+    assert
+    // tests/approvals/avm13.algo.ts:65
+    // assert(familyBoxAccessAfter)
+    assert
+    // tests/approvals/avm13.algo.ts:41
+    // testAppParams() {
+    intc_0 // 1
+    return
+
+
+// tests/approvals/avm13.algo.ts::Avm13Contract.testAppBoxOps[routing]() -> void:
+testAppBoxOps:
+    // tests/approvals/avm13.algo.ts:69
+    // const app = Global.currentApplicationId
+    global CurrentApplicationID
+    // tests/approvals/avm13.algo.ts:72
+    // assert(op.AppBox.create(app, name, 8))
+    dup
+    bytec_0 // "bx"
+    intc_2 // 8
+    app_box_create
+    assert
+    // tests/approvals/avm13.algo.ts:73
+    // op.AppBox.put(app, name, op.bzero(8))
+    intc_2 // 8
+    bzero
+    dig 1
+    bytec_0 // "bx"
+    dig 2
+    app_box_put
+    // tests/approvals/avm13.algo.ts:75
+    // const [value, exists] = op.AppBox.get(app, name)
+    dig 1
+    bytec_0 // "bx"
+    app_box_get
+    // tests/approvals/avm13.algo.ts:76
+    // assert(exists)
+    assert
+    // tests/approvals/avm13.algo.ts:77
+    // assert(value === op.bzero(8))
+    ==
+    assert
+    // tests/approvals/avm13.algo.ts:79
+    // op.AppBox.replace(app, name, 0, Bytes.fromHex('ff'))
+    dup
+    bytec_0 // "bx"
+    intc_1 // 0
+    bytec_1 // 0xff
+    app_box_replace
+    // tests/approvals/avm13.algo.ts:80
+    // assert(op.AppBox.extract(app, name, 0, 1) === Bytes.fromHex('ff'))
+    dup
+    bytec_0 // "bx"
+    intc_1 // 0
+    intc_0 // 1
+    app_box_extract
+    bytec_1 // 0xff
+    ==
+    assert
+    // tests/approvals/avm13.algo.ts:82
+    // op.AppBox.splice(app, name, 1, 3, Bytes('abc'))
+    dup
+    bytec_0 // "bx"
+    intc_0 // 1
+    pushint 3
+    pushbytes "abc"
+    app_box_splice
+    // tests/approvals/avm13.algo.ts:83
+    // op.AppBox.resize(app, name, 4)
+    dup
+    bytec_0 // "bx"
+    intc_3 // 4
+    app_box_resize
+    // tests/approvals/avm13.algo.ts:85
+    // const [length, lengthExists] = op.AppBox.length(app, name)
+    dup
+    bytec_0 // "bx"
+    app_box_len
+    // tests/approvals/avm13.algo.ts:86
+    // assert(lengthExists)
+    assert
+    // tests/approvals/avm13.algo.ts:87
+    // assert(length === 4)
+    intc_3 // 4
+    ==
+    assert
+    // tests/approvals/avm13.algo.ts:89
+    // assert(op.AppBox.delete(app, name))
+    bytec_0 // "bx"
+    app_box_del
+    assert
+    // tests/approvals/avm13.algo.ts:68
+    // testAppBoxOps() {
+    intc_0 // 1
+    return
+
+
+// tests/approvals/avm13.algo.ts::Avm13Contract.testBlock[routing]() -> void:
+testBlock:
+    // tests/approvals/avm13.algo.ts:93
+    // const branch512 = op.Block.blkBranch512(0)
+    intc_1 // 0
+    block BlkBranch512
+    // tests/approvals/avm13.algo.ts:94
+    // const sha512_256Commitment = op.Block.blkSha512_256TxnCommitment(0)
+    intc_1 // 0
+    block BlkSha512_256TxnCommitment
+    // tests/approvals/avm13.algo.ts:95
+    // const sha256Commitment = op.Block.blkSha256TxnCommitment(0)
+    intc_1 // 0
+    block BlkSha256TxnCommitment
+    // tests/approvals/avm13.algo.ts:96
+    // const sha512Commitment = op.Block.blkSha512TxnCommitment(0)
+    intc_1 // 0
+    block BlkSha512TxnCommitment
+    // tests/approvals/avm13.algo.ts:97
+    // assert(branch512 !== sha512Commitment)
+    uncover 3
+    !=
+    assert
+    // tests/approvals/avm13.algo.ts:98
+    // assert(sha512_256Commitment !== sha256Commitment)
+    !=
+    assert
+    // tests/approvals/avm13.algo.ts:92
+    // testBlock() {
+    intc_0 // 1
+    return

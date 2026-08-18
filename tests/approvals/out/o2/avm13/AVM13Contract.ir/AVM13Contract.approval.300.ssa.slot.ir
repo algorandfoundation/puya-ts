@@ -1,0 +1,92 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#1: uint64 = (txn NumAppArgs)
+        goto tmp%0#1 ? block@2 : block@12
+    block@2: // abi_routing_L26
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (! tmp%2#0)
+        (assert tmp%3#0)
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        (assert tmp%4#0)
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "testNewOps()void" => block@4, method "testPoseidon2()void" => block@5, method "testAppParams()void" => block@6, method "testAppBoxOps()void" => block@7, method "testBlock()void" => block@8, * => block@11}
+    block@4: // testNewOps_route_L28
+        let tmp%0#2: bytes[64] = (sha512 0x)
+        let tmp%1#3: bytes[64] = (sha512 "a")
+        let tmp%2#3: bool = (!= tmp%0#2 tmp%1#3)
+        (assert tmp%2#3)
+        exit 1u
+    block@5: // testPoseidon2_route_L32
+        let scalar#0: bytes[32] = (bzero 32u)
+        let bn#0: bytes[32] = ((poseidon2 BN254t2) scalar#0)
+        let bls#0: bytes[32] = ((poseidon2 BLS12_381t2) scalar#0)
+        let tmp%7#2: bool = (!= bn#0 bls#0)
+        (assert tmp%7#2)
+        exit 1u
+    block@6: // testAppParams_route_L41
+        let app#1: uint64 = (global CurrentApplicationID)
+        let (sponsor#0: account, sponsorExists#0: bool) = ((app_params_get AppSizeSponsor) app#1)
+        (assert sponsorExists#0)
+        let tmp%1#2: account = (global ZeroAddress)
+        let tmp%2#2: bool = (== sponsor#0 tmp%1#2)
+        (assert tmp%2#2)
+        let (foreignBoxReads#0: bool, foreignBoxReadsExists#0: bool) = ((app_params_get AppForeignBoxReads) app#1)
+        (assert foreignBoxReadsExists#0)
+        let tmp%3#1: bool = (! foreignBoxReads#0)
+        (assert tmp%3#1)
+        let (familyBoxAccess#0: bool, familyBoxAccessExists#0: bool) = ((app_params_get AppFamilyBoxAccess) app#1)
+        (assert familyBoxAccessExists#0)
+        let tmp%4#3: bool = (! familyBoxAccess#0)
+        (assert tmp%4#3)
+        ((app_params_set AppForeignBoxReads) 1u)
+        ((app_params_set AppFamilyBoxAccess) 1u)
+        let (foreignBoxReadsAfter#0: bool, foreignBoxReadsAfterExists#0: bool) = ((app_params_get AppForeignBoxReads) app#1)
+        (assert foreignBoxReadsAfterExists#0)
+        (assert foreignBoxReadsAfter#0)
+        let (familyBoxAccessAfter#0: bool, familyBoxAccessAfterExists#0: bool) = ((app_params_get AppFamilyBoxAccess) app#1)
+        (assert familyBoxAccessAfterExists#0)
+        (assert familyBoxAccessAfter#0)
+        exit 1u
+    block@7: // testAppBoxOps_route_L68
+        let app#0: uint64 = (global CurrentApplicationID)
+        let tmp%1#1: bool = (app_box_create app#0 "bx" 8u)
+        (assert tmp%1#1)
+        let tmp%2#1: bytes[8] = (bzero 8u)
+        (app_box_put app#0 "bx" tmp%2#1)
+        let (value#0: bytes, exists#0: bool) = (app_box_get app#0 "bx")
+        (assert exists#0)
+        let tmp%4#2: bool = (== value#0 tmp%2#1)
+        (assert tmp%4#2)
+        (app_box_replace app#0 "bx" 0u 0xff)
+        let tmp%5#2: bytes = (app_box_extract app#0 "bx" 0u 1u)
+        let tmp%6#1: bool = (== tmp%5#2 0xff)
+        (assert tmp%6#1)
+        (app_box_splice app#0 "bx" 1u 3u "abc")
+        (app_box_resize app#0 "bx" 4u)
+        let (length#0: uint64, lengthExists#0: bool) = (app_box_len app#0 "bx")
+        (assert lengthExists#0)
+        let tmp%7#1: bool = (== length#0 4u)
+        (assert tmp%7#1)
+        let tmp%8#1: bool = (app_box_del app#0 "bx")
+        (assert tmp%8#1)
+        exit 1u
+    block@8: // testBlock_route_L92
+        let branch512#0: bytes[64] = ((block BlkBranch512) 0u)
+        let sha512_256Commitment#0: bytes[32] = ((block BlkSha512_256TxnCommitment) 0u)
+        let sha256Commitment#0: bytes[32] = ((block BlkSha256TxnCommitment) 0u)
+        let sha512Commitment#0: bytes[64] = ((block BlkSha512TxnCommitment) 0u)
+        let tmp%4#1: bool = (!= branch512#0 sha512Commitment#0)
+        (assert tmp%4#1)
+        let tmp%5#1: bool = (!= sha512_256Commitment#0 sha256Commitment#0)
+        (assert tmp%5#1)
+        exit 1u
+    block@11: // after_if_else_L26
+        fail
+    block@12: // __algots__.defaultCreate_L26
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (! tmp%7#0)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (! tmp%9#0)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0)
+        exit 1u
