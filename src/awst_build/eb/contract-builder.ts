@@ -11,6 +11,7 @@ import { AwstBuildContext } from '../context/awst-build-context'
 import type { ContractOptionsDecoratorData } from '../models/decorator-data'
 import type { PType } from '../ptypes'
 import {
+  boolPType,
   BoxMapPType,
   BoxPType,
   ClusteredContractClassType,
@@ -28,7 +29,7 @@ import { instanceEb } from '../type-registry'
 
 import { BaseContractMethodExpressionBuilder, ContractMethodExpressionBuilder } from './free-subroutine-expression-builder'
 import { DecoratorDataBuilder, FunctionBuilder, InstanceBuilder, NodeBuilder } from './index'
-import { requireLiteralNumber, requireStringConstant } from './util'
+import { requireBooleanConstant, requireLiteralNumber, requireStringConstant } from './util'
 import { parseFunctionArgs } from './util/arg-parsing'
 import { requireAvmVersion } from './util/avm-version'
 import { processScratchRanges } from './util/scratch-slots'
@@ -230,7 +231,7 @@ export class ContractOptionsDecoratorBuilder extends FunctionBuilder {
 
   call(args: ReadonlyArray<NodeBuilder>, typeArgs: ReadonlyArray<PType>, sourceLocation: SourceLocation<ts.CallExpression>): NodeBuilder {
     const {
-      args: [{ avmVersion, name, stateTotals, scratchSlots }],
+      args: [{ avmVersion, autosalt, name, stateTotals, scratchSlots }],
     } = parseFunctionArgs({
       args,
       typeArgs,
@@ -240,6 +241,7 @@ export class ContractOptionsDecoratorBuilder extends FunctionBuilder {
       argSpec: (a) => [
         a.obj({
           avmVersion: a.optional(numberPType),
+          autosalt: a.optional(boolPType),
           name: a.optional(stringPType),
           scratchSlots: a.optional(),
           stateTotals: a.optional(),
@@ -250,6 +252,7 @@ export class ContractOptionsDecoratorBuilder extends FunctionBuilder {
     return new DecoratorDataBuilder(sourceLocation, {
       type: 'contract',
       avmVersion: avmVersion && requireAvmVersion(avmVersion),
+      autosalt: autosalt && requireBooleanConstant(autosalt).value,
       name: name && requireStringConstant(name).value,
       stateTotals: stateTotals && buildStateTotals(stateTotals),
       scratchSlots: scratchSlots && processScratchRanges(scratchSlots),
