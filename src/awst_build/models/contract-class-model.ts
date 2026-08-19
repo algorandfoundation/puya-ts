@@ -144,6 +144,7 @@ export class ContractClassModel {
       reservedScratchSpace: reservedScratchSpace,
       sourceLocation: this.sourceLocation,
       avmVersion: this.options?.avmVersion ?? null,
+      autosalt: this.options?.autosalt ?? null,
     })
   }
 

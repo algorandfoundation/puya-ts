@@ -46,6 +46,14 @@ export type ContractOptions = {
   avmVersion?: 10 | 11 | 12 | 13
 
   /**
+   * Controls whether the assembler adds an off-curve salt to the program. Contracts are not
+   * salted by default, since a contract's program hash is never used as a spendable logic
+   * signature address (on AVM v13+ a matching `#pragma autosalt false` is emitted). Set `true`
+   * to force salting (on any version) or `false` to be explicit.
+   */
+  autosalt?: boolean
+
+  /**
    * Override the name of the logic signature when generating build artifacts.
    * Defaults to the class name
    */

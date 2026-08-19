@@ -1,0 +1,91 @@
+
+logicsig tests/approvals/avm13.algo.ts::Avm13Sig {
+  assert(sha512(0x) != sha512("a"))
+  scalar: bytes[32] = bzero(32)
+  bn: bytes[32] = poseidon2<BN254t2>(reinterpret_cast<bytes>(scalar))
+  bls: bytes[32] = poseidon2<BLS12_381t2>(reinterpret_cast<bytes>(scalar))
+  assert(bn != bls)
+  return len(bn)
+}
+contract AVM13Contract
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  testNewOps(): void
+  {
+    assert(sha512(0x) != sha512("a"))
+  }
+  
+  testPoseidon2(): void
+  {
+    scalar: bytes[32] = bzero(32)
+    bn: bytes[32] = poseidon2<BN254t2>(reinterpret_cast<bytes>(scalar))
+    bls: bytes[32] = poseidon2<BLS12_381t2>(reinterpret_cast<bytes>(scalar))
+    assert(len(bn) == 32)
+    assert(len(bls) == 32)
+    assert(bn != bls)
+  }
+  
+  testAppParams(): void
+  {
+    app: application = global<CurrentApplicationID>()
+    #[sponsor, sponsorExists]: readonly [account, bool] = #[($0 = app_params_get<AppSizeSponsor>(app)).0, $0.1]
+    assert(sponsorExists)
+    assert(sponsor == global<ZeroAddress>())
+    #[foreignBoxReads, foreignBoxReadsExists]: readonly [bool, bool] = #[($1 = app_params_get<AppForeignBoxReads>(app)).0, $1.1]
+    assert(foreignBoxReadsExists)
+    assert(!foreignBoxReads)
+    #[familyBoxAccess, familyBoxAccessExists]: readonly [bool, bool] = #[($2 = app_params_get<AppFamilyBoxAccess>(app)).0, $2.1]
+    assert(familyBoxAccessExists)
+    assert(!familyBoxAccess)
+    app_params_set<AppForeignBoxReads>(True)
+    app_params_set<AppFamilyBoxAccess>(True)
+    #[foreignBoxReadsAfter, foreignBoxReadsAfterExists]: readonly [bool, bool] = #[($3 = app_params_get<AppForeignBoxReads>(app)).0, $3.1]
+    assert(foreignBoxReadsAfterExists)
+    assert(foreignBoxReadsAfter)
+    #[familyBoxAccessAfter, familyBoxAccessAfterExists]: readonly [bool, bool] = #[($4 = app_params_get<AppFamilyBoxAccess>(app)).0, $4.1]
+    assert(familyBoxAccessAfterExists)
+    assert(familyBoxAccessAfter)
+  }
+  
+  testAppBoxOps(): void
+  {
+    app: application = global<CurrentApplicationID>()
+    assert(app_box_create(app, "bx", 8))
+    app_box_put(app, "bx", reinterpret_cast<bytes>(bzero(8)))
+    #[value, exists]: readonly [bytes, bool] = #[($5 = app_box_get(app, "bx")).0, $5.1]
+    assert(exists)
+    assert(value == reinterpret_cast<bytes>(bzero(8)))
+    app_box_replace(app, "bx", 0, 0xff)
+    assert(app_box_extract(app, "bx", 0, 1) == 0xff)
+    app_box_splice(app, "bx", 1, 3, "abc")
+    app_box_resize(app, "bx", 4)
+    #[length, lengthExists]: readonly [uint64, bool] = #[($6 = app_box_len(app, "bx")).0, $6.1]
+    assert(lengthExists)
+    assert(length == 4)
+    assert(app_box_del(app, "bx"))
+  }
+  
+  testBlock(): void
+  {
+    branch512: bytes[64] = block<BlkBranch512>(0)
+    sha512_256Commitment: bytes[32] = block<BlkSha512_256TxnCommitment>(0)
+    sha256Commitment: bytes[32] = block<BlkSha256TxnCommitment>(0)
+    sha512Commitment: bytes[64] = block<BlkSha512TxnCommitment>(0)
+    assert(branch512 != sha512Commitment)
+    assert(sha512_256Commitment != sha256Commitment)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

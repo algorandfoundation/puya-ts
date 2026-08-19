@@ -70,7 +70,7 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
 
 subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract() -> void:
     block@0: // L7
-        let (compiled.approvalProgram.0#0: bytes, compiled.approvalProgram.1#0: bytes, compiled.clearStateProgram.0#0: bytes, compiled.clearStateProgram.1#0: bytes, compiled.extraProgramPages#0: uint64, compiled.globalUints#0: uint64, compiled.globalBytes#0: uint64, compiled.localUints#0: uint64, compiled.localBytes#0: uint64) = (compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=ApprovalProgramPages, program_page=0), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=ApprovalProgramPages, program_page=1), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=ClearStateProgramPages, program_page=0), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=ClearStateProgramPages, program_page=1), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=ExtraProgramPages, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=GlobalNumUint, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=GlobalNumByteSlice, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=LocalNumUint, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=LocalNumByteSlice, program_page=None))
+        let (compiled.approvalProgram.0#0: bytes, compiled.approvalProgram.1#0: bytes, compiled.approvalProgram.2#0: bytes, compiled.approvalProgram.3#0: bytes, compiled.clearStateProgram.0#0: bytes, compiled.clearStateProgram.1#0: bytes, compiled.clearStateProgram.2#0: bytes, compiled.clearStateProgram.3#0: bytes, compiled.extraProgramPages#0: uint64, compiled.globalUints#0: uint64, compiled.globalBytes#0: uint64, compiled.localUints#0: uint64, compiled.localBytes#0: uint64) = (compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=ApprovalProgramPages, program_page=0), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=ApprovalProgramPages, program_page=1), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=ApprovalProgramPages, program_page=2), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=ApprovalProgramPages, program_page=3), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=ClearStateProgramPages, program_page=0), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=ClearStateProgramPages, program_page=1), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=ClearStateProgramPages, program_page=2), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=ClearStateProgramPages, program_page=3), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=ExtraProgramPages, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=GlobalNumUint, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=GlobalNumByteSlice, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=LocalNumUint, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::Hello', field=LocalNumByteSlice, program_page=None))
         itxn_begin
         let inner_txn_params%0#0: itxn_field_set = itxn_field_set(0)
         let inner_txn_params%0%%param_Fee_idx_0#0: uint64 = 0u
@@ -83,10 +83,14 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
         let inner_txn_params%0%%ApplicationArgs_length#0: uint64 = 2u
         let inner_txn_params%0%%param_ApprovalProgramPages_idx_0#0: bytes = compiled.approvalProgram.0#0
         let inner_txn_params%0%%param_ApprovalProgramPages_idx_1#0: bytes = compiled.approvalProgram.1#0
-        let inner_txn_params%0%%ApprovalProgramPages_length#0: uint64 = 2u
+        let inner_txn_params%0%%param_ApprovalProgramPages_idx_2#0: bytes = compiled.approvalProgram.2#0
+        let inner_txn_params%0%%param_ApprovalProgramPages_idx_3#0: bytes = compiled.approvalProgram.3#0
+        let inner_txn_params%0%%ApprovalProgramPages_length#0: uint64 = 4u
         let inner_txn_params%0%%param_ClearStateProgramPages_idx_0#0: bytes = compiled.clearStateProgram.0#0
         let inner_txn_params%0%%param_ClearStateProgramPages_idx_1#0: bytes = compiled.clearStateProgram.1#0
-        let inner_txn_params%0%%ClearStateProgramPages_length#0: uint64 = 2u
+        let inner_txn_params%0%%param_ClearStateProgramPages_idx_2#0: bytes = compiled.clearStateProgram.2#0
+        let inner_txn_params%0%%param_ClearStateProgramPages_idx_3#0: bytes = compiled.clearStateProgram.3#0
+        let inner_txn_params%0%%ClearStateProgramPages_length#0: uint64 = 4u
         let inner_txn_params%0%%param_GlobalNumByteSlice_idx_0#0: uint64 = compiled.globalBytes#0
         let inner_txn_params%0%%GlobalNumByteSlice_length#0: uint64 = 1u
         let inner_txn_params%0%%Sender_length#0: uint64 = 0u
@@ -138,8 +142,12 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
         ((itxn_field GlobalNumByteSlice) inner_txn_params%0%%param_GlobalNumByteSlice_idx_0#0)
         ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_1#0)
+        ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_2#0)
+        ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_3#0)
         ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_1#0)
+        ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_2#0)
+        ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_3#0)
         ((itxn_field ApplicationArgs) inner_txn_params%0%%param_ApplicationArgs_idx_0#0)
         ((itxn_field ApplicationArgs) inner_txn_params%0%%param_ApplicationArgs_idx_1#0)
         ((itxn_field TypeEnum) inner_txn_params%0%%param_TypeEnum_idx_0#0)
@@ -361,7 +369,7 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
 
 subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template() -> void:
     block@0: // L38
-        let (compiled.approvalProgram.0#0: bytes, compiled.approvalProgram.1#0: bytes, compiled.clearStateProgram.0#0: bytes, compiled.clearStateProgram.1#0: bytes, compiled.extraProgramPages#0: uint64, compiled.globalUints#0: uint64, compiled.globalBytes#0: uint64, compiled.localUints#0: uint64, compiled.localBytes#0: uint64) = (compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=ApprovalProgramPages, program_page=0, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=ApprovalProgramPages, program_page=1, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=ClearStateProgramPages, program_page=0, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=ClearStateProgramPages, program_page=1, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=ExtraProgramPages, program_page=None, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=GlobalNumUint, program_page=None, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=GlobalNumByteSlice, program_page=None, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=LocalNumUint, program_page=None, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=LocalNumByteSlice, program_page=None, TMPL_GREETING="hey"))
+        let (compiled.approvalProgram.0#0: bytes, compiled.approvalProgram.1#0: bytes, compiled.approvalProgram.2#0: bytes, compiled.approvalProgram.3#0: bytes, compiled.clearStateProgram.0#0: bytes, compiled.clearStateProgram.1#0: bytes, compiled.clearStateProgram.2#0: bytes, compiled.clearStateProgram.3#0: bytes, compiled.extraProgramPages#0: uint64, compiled.globalUints#0: uint64, compiled.globalBytes#0: uint64, compiled.localUints#0: uint64, compiled.localBytes#0: uint64) = (compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=ApprovalProgramPages, program_page=0, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=ApprovalProgramPages, program_page=1, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=ApprovalProgramPages, program_page=2, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=ApprovalProgramPages, program_page=3, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=ClearStateProgramPages, program_page=0, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=ClearStateProgramPages, program_page=1, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=ClearStateProgramPages, program_page=2, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=ClearStateProgramPages, program_page=3, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=ExtraProgramPages, program_page=None, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=GlobalNumUint, program_page=None, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=GlobalNumByteSlice, program_page=None, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=LocalNumUint, program_page=None, TMPL_GREETING="hey"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplate', field=LocalNumByteSlice, program_page=None, TMPL_GREETING="hey"))
         itxn_begin
         let inner_txn_params%0#0: itxn_field_set = itxn_field_set(0)
         let inner_txn_params%0%%param_Fee_idx_0#0: uint64 = 0u
@@ -372,10 +380,14 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
         let inner_txn_params%0%%ApplicationArgs_length#0: uint64 = 1u
         let inner_txn_params%0%%param_ApprovalProgramPages_idx_0#0: bytes = compiled.approvalProgram.0#0
         let inner_txn_params%0%%param_ApprovalProgramPages_idx_1#0: bytes = compiled.approvalProgram.1#0
-        let inner_txn_params%0%%ApprovalProgramPages_length#0: uint64 = 2u
+        let inner_txn_params%0%%param_ApprovalProgramPages_idx_2#0: bytes = compiled.approvalProgram.2#0
+        let inner_txn_params%0%%param_ApprovalProgramPages_idx_3#0: bytes = compiled.approvalProgram.3#0
+        let inner_txn_params%0%%ApprovalProgramPages_length#0: uint64 = 4u
         let inner_txn_params%0%%param_ClearStateProgramPages_idx_0#0: bytes = compiled.clearStateProgram.0#0
         let inner_txn_params%0%%param_ClearStateProgramPages_idx_1#0: bytes = compiled.clearStateProgram.1#0
-        let inner_txn_params%0%%ClearStateProgramPages_length#0: uint64 = 2u
+        let inner_txn_params%0%%param_ClearStateProgramPages_idx_2#0: bytes = compiled.clearStateProgram.2#0
+        let inner_txn_params%0%%param_ClearStateProgramPages_idx_3#0: bytes = compiled.clearStateProgram.3#0
+        let inner_txn_params%0%%ClearStateProgramPages_length#0: uint64 = 4u
         let inner_txn_params%0%%param_GlobalNumByteSlice_idx_0#0: uint64 = 1u
         let inner_txn_params%0%%GlobalNumByteSlice_length#0: uint64 = 1u
         let inner_txn_params%0%%Sender_length#0: uint64 = 0u
@@ -427,8 +439,12 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
         ((itxn_field GlobalNumByteSlice) inner_txn_params%0%%param_GlobalNumByteSlice_idx_0#0)
         ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_1#0)
+        ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_2#0)
+        ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_3#0)
         ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_1#0)
+        ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_2#0)
+        ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_3#0)
         ((itxn_field ApplicationArgs) inner_txn_params%0%%param_ApplicationArgs_idx_0#0)
         ((itxn_field TypeEnum) inner_txn_params%0%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) inner_txn_params%0%%param_Fee_idx_0#0)
@@ -649,7 +665,7 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
 
 subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_with_template_and_custom_prefix() -> void:
     block@0: // L69
-        let (compiled.approvalProgram.0#0: bytes, compiled.approvalProgram.1#0: bytes, compiled.clearStateProgram.0#0: bytes, compiled.clearStateProgram.1#0: bytes, compiled.extraProgramPages#0: uint64, compiled.globalUints#0: uint64, compiled.globalBytes#0: uint64, compiled.localUints#0: uint64, compiled.localBytes#0: uint64) = (compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=ApprovalProgramPages, program_page=0, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=ApprovalProgramPages, program_page=1, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=ClearStateProgramPages, program_page=0, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=ClearStateProgramPages, program_page=1, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=ExtraProgramPages, program_page=None, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=GlobalNumUint, program_page=None, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=GlobalNumByteSlice, program_page=None, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=LocalNumUint, program_page=None, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=LocalNumByteSlice, program_page=None, PRFX_GREETING="bonjour"))
+        let (compiled.approvalProgram.0#0: bytes, compiled.approvalProgram.1#0: bytes, compiled.approvalProgram.2#0: bytes, compiled.approvalProgram.3#0: bytes, compiled.clearStateProgram.0#0: bytes, compiled.clearStateProgram.1#0: bytes, compiled.clearStateProgram.2#0: bytes, compiled.clearStateProgram.3#0: bytes, compiled.extraProgramPages#0: uint64, compiled.globalUints#0: uint64, compiled.globalBytes#0: uint64, compiled.localUints#0: uint64, compiled.localBytes#0: uint64) = (compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=ApprovalProgramPages, program_page=0, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=ApprovalProgramPages, program_page=1, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=ApprovalProgramPages, program_page=2, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=ApprovalProgramPages, program_page=3, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=ClearStateProgramPages, program_page=0, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=ClearStateProgramPages, program_page=1, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=ClearStateProgramPages, program_page=2, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=ClearStateProgramPages, program_page=3, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=ExtraProgramPages, program_page=None, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=GlobalNumUint, program_page=None, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=GlobalNumByteSlice, program_page=None, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=LocalNumUint, program_page=None, PRFX_GREETING="bonjour"), compiled_contract('tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix', field=LocalNumByteSlice, program_page=None, PRFX_GREETING="bonjour"))
         itxn_begin
         let inner_txn_params%0#0: itxn_field_set = itxn_field_set(0)
         let inner_txn_params%0%%param_Fee_idx_0#0: uint64 = 0u
@@ -660,10 +676,14 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
         let inner_txn_params%0%%ApplicationArgs_length#0: uint64 = 1u
         let inner_txn_params%0%%param_ApprovalProgramPages_idx_0#0: bytes = compiled.approvalProgram.0#0
         let inner_txn_params%0%%param_ApprovalProgramPages_idx_1#0: bytes = compiled.approvalProgram.1#0
-        let inner_txn_params%0%%ApprovalProgramPages_length#0: uint64 = 2u
+        let inner_txn_params%0%%param_ApprovalProgramPages_idx_2#0: bytes = compiled.approvalProgram.2#0
+        let inner_txn_params%0%%param_ApprovalProgramPages_idx_3#0: bytes = compiled.approvalProgram.3#0
+        let inner_txn_params%0%%ApprovalProgramPages_length#0: uint64 = 4u
         let inner_txn_params%0%%param_ClearStateProgramPages_idx_0#0: bytes = compiled.clearStateProgram.0#0
         let inner_txn_params%0%%param_ClearStateProgramPages_idx_1#0: bytes = compiled.clearStateProgram.1#0
-        let inner_txn_params%0%%ClearStateProgramPages_length#0: uint64 = 2u
+        let inner_txn_params%0%%param_ClearStateProgramPages_idx_2#0: bytes = compiled.clearStateProgram.2#0
+        let inner_txn_params%0%%param_ClearStateProgramPages_idx_3#0: bytes = compiled.clearStateProgram.3#0
+        let inner_txn_params%0%%ClearStateProgramPages_length#0: uint64 = 4u
         let inner_txn_params%0%%param_GlobalNumByteSlice_idx_0#0: uint64 = 1u
         let inner_txn_params%0%%GlobalNumByteSlice_length#0: uint64 = 1u
         let inner_txn_params%0%%Sender_length#0: uint64 = 0u
@@ -715,8 +735,12 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
         ((itxn_field GlobalNumByteSlice) inner_txn_params%0%%param_GlobalNumByteSlice_idx_0#0)
         ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_1#0)
+        ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_2#0)
+        ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_3#0)
         ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_1#0)
+        ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_2#0)
+        ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_3#0)
         ((itxn_field ApplicationArgs) inner_txn_params%0%%param_ApplicationArgs_idx_0#0)
         ((itxn_field TypeEnum) inner_txn_params%0%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) inner_txn_params%0%%param_Fee_idx_0#0)
@@ -937,7 +961,7 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
 
 subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compile_contract_large() -> void:
     block@0: // L100
-        let (compiled.approvalProgram.0#0: bytes, compiled.approvalProgram.1#0: bytes, compiled.clearStateProgram.0#0: bytes, compiled.clearStateProgram.1#0: bytes, compiled.extraProgramPages#0: uint64, compiled.globalUints#0: uint64, compiled.globalBytes#0: uint64, compiled.localUints#0: uint64, compiled.localBytes#0: uint64) = (compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=ApprovalProgramPages, program_page=0), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=ApprovalProgramPages, program_page=1), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=ClearStateProgramPages, program_page=0), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=ClearStateProgramPages, program_page=1), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=ExtraProgramPages, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=GlobalNumUint, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=GlobalNumByteSlice, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=LocalNumUint, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=LocalNumByteSlice, program_page=None))
+        let (compiled.approvalProgram.0#0: bytes, compiled.approvalProgram.1#0: bytes, compiled.approvalProgram.2#0: bytes, compiled.approvalProgram.3#0: bytes, compiled.clearStateProgram.0#0: bytes, compiled.clearStateProgram.1#0: bytes, compiled.clearStateProgram.2#0: bytes, compiled.clearStateProgram.3#0: bytes, compiled.extraProgramPages#0: uint64, compiled.globalUints#0: uint64, compiled.globalBytes#0: uint64, compiled.localUints#0: uint64, compiled.localBytes#0: uint64) = (compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=ApprovalProgramPages, program_page=0), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=ApprovalProgramPages, program_page=1), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=ApprovalProgramPages, program_page=2), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=ApprovalProgramPages, program_page=3), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=ClearStateProgramPages, program_page=0), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=ClearStateProgramPages, program_page=1), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=ClearStateProgramPages, program_page=2), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=ClearStateProgramPages, program_page=3), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=ExtraProgramPages, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=GlobalNumUint, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=GlobalNumByteSlice, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=LocalNumUint, program_page=None), compiled_contract('tests/approvals/precompiled-apps.algo.ts::LargeProgram', field=LocalNumByteSlice, program_page=None))
         itxn_begin
         let inner_txn_params%0#0: itxn_field_set = itxn_field_set(0)
         let inner_txn_params%0%%param_Fee_idx_0#0: uint64 = 0u
@@ -946,10 +970,14 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
         let inner_txn_params%0%%TypeEnum_length#0: uint64 = 1u
         let inner_txn_params%0%%param_ApprovalProgramPages_idx_0#0: bytes = compiled.approvalProgram.0#0
         let inner_txn_params%0%%param_ApprovalProgramPages_idx_1#0: bytes = compiled.approvalProgram.1#0
-        let inner_txn_params%0%%ApprovalProgramPages_length#0: uint64 = 2u
+        let inner_txn_params%0%%param_ApprovalProgramPages_idx_2#0: bytes = compiled.approvalProgram.2#0
+        let inner_txn_params%0%%param_ApprovalProgramPages_idx_3#0: bytes = compiled.approvalProgram.3#0
+        let inner_txn_params%0%%ApprovalProgramPages_length#0: uint64 = 4u
         let inner_txn_params%0%%param_ClearStateProgramPages_idx_0#0: bytes = compiled.clearStateProgram.0#0
         let inner_txn_params%0%%param_ClearStateProgramPages_idx_1#0: bytes = compiled.clearStateProgram.1#0
-        let inner_txn_params%0%%ClearStateProgramPages_length#0: uint64 = 2u
+        let inner_txn_params%0%%param_ClearStateProgramPages_idx_2#0: bytes = compiled.clearStateProgram.2#0
+        let inner_txn_params%0%%param_ClearStateProgramPages_idx_3#0: bytes = compiled.clearStateProgram.3#0
+        let inner_txn_params%0%%ClearStateProgramPages_length#0: uint64 = 4u
         let inner_txn_params%0%%param_ExtraProgramPages_idx_0#0: uint64 = compiled.extraProgramPages#0
         let inner_txn_params%0%%ExtraProgramPages_length#0: uint64 = 1u
         let inner_txn_params%0%%param_GlobalNumByteSlice_idx_0#0: uint64 = compiled.globalBytes#0
@@ -1004,8 +1032,12 @@ subroutine tests/approvals/precompiled-factory.algo.ts::HelloFactory.test_compil
         ((itxn_field ExtraProgramPages) inner_txn_params%0%%param_ExtraProgramPages_idx_0#0)
         ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_0#0)
         ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_1#0)
+        ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_2#0)
+        ((itxn_field ClearStateProgramPages) inner_txn_params%0%%param_ClearStateProgramPages_idx_3#0)
         ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_0#0)
         ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_1#0)
+        ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_2#0)
+        ((itxn_field ApprovalProgramPages) inner_txn_params%0%%param_ApprovalProgramPages_idx_3#0)
         ((itxn_field TypeEnum) inner_txn_params%0%%param_TypeEnum_idx_0#0)
         ((itxn_field Fee) inner_txn_params%0%%param_Fee_idx_0#0)
         goto block@1

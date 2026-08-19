@@ -1,5 +1,16 @@
 const algoTsPackage = '@algorandfoundation/algorand-typescript'
 
+/** Maximum length of a bytes value on the AVM */
+const maxBytesLength = 4096
+/** Maximum size of a single application program page */
+const maxAppPageSize = 2048
+/** Maximum value of an application's ExtraProgramPages field */
+const maxExtraAppPages = 7
+/** Combined maximum size of an application's approval and clear state programs */
+const maxAppTotalProgramSize = (1 + maxExtraAppPages) * maxAppPageSize
+/** Number of AVM values (bytes) required to hold a maximally sized program */
+const maxProgramPageValues = Math.ceil(maxAppTotalProgramSize / maxBytesLength)
+
 export const Constants = {
   algoTsPackage,
   moduleNames: {
@@ -67,11 +78,16 @@ export const Constants = {
     addressLength: 32,
     encodedAddressLength: 58,
     maxTransactionGroupSize: 16,
+    maxBytesLength,
+    maxAppPageSize,
+    maxExtraAppPages,
+    maxAppTotalProgramSize,
+    maxProgramPageValues,
     zeroAddressB32: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ',
   },
 
   supportedAvmVersions: [10n, 11n, 12n, 13n],
-  targetedPuyaVersion: '5.9.0',
+  targetedPuyaVersion: '5.10.0',
   puyaGithubRepo: 'algorandfoundation/puya',
   minNodeVersion: '22.11.0',
   languageServerSource: 'puyats',

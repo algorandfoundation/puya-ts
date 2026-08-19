@@ -36,9 +36,17 @@ export const mimcConfigurationsPType = new IntrinsicEnumType({
     ['BLS12_381Mp111', 'BLS12_381Mp111'],
   ],
 })
+export const poseidon2ConfigurationsPType = new IntrinsicEnumType({
+  name: 'Poseidon2Configurations',
+  module: `${Constants.algoTsPackage}/op.d.ts`,
+  members: [
+    ['BN254t2', 'BN254t2'],
+    ['BLS12_381t2', 'BLS12_381t2'],
+  ],
+})
 export const vrfVerifyPType = new IntrinsicEnumType({
   name: 'VrfVerify',
   module: `${Constants.algoTsPackage}/op.d.ts`,
   members: [['VrfAlgorand', 'VrfAlgorand']],
 })
-export const ALL_OP_ENUMS = [base64PType, ecPType, ecdsaPType, mimcConfigurationsPType, vrfVerifyPType]
+export const ALL_OP_ENUMS = [base64PType, ecPType, ecdsaPType, mimcConfigurationsPType, poseidon2ConfigurationsPType, vrfVerifyPType]

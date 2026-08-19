@@ -1,0 +1,191 @@
+main @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram:
+    block@0: // L1
+        let tmp%0#0: bool = tests/approvals/avm13.algo.ts::Avm13Contract.__puya_arc4_router__()
+        return tmp%0#0
+
+subroutine tests/approvals/avm13.algo.ts::Avm13Contract.__puya_arc4_router__() -> bool:
+    block@0: // L26
+        let tmp%0#0: uint64 = (txn NumAppArgs)
+        let tmp%1#0: bool = (!= tmp%0#0 0u)
+        goto tmp%1#0 ? block@1 : block@11
+    block@1: // abi_routing_L26
+        let tmp%2#0: uint64 = (txn OnCompletion)
+        let tmp%3#0: bool = (== tmp%2#0 NoOp)
+        (assert tmp%3#0)
+        let tmp%4#0: uint64 = (txn ApplicationID)
+        let tmp%5#0: bool = (!= tmp%4#0 0u)
+        goto tmp%5#0 ? block@2 : block@9
+    block@2: // call_NoOp_L26
+        let tmp%6#0: bytes = (txna ApplicationArgs 0)
+        switch tmp%6#0 {method "testNewOps()void" => block@3, method "testPoseidon2()void" => block@4, method "testAppParams()void" => block@5, method "testAppBoxOps()void" => block@6, method "testBlock()void" => block@7, * => block@8}
+    block@3: // testNewOps_route_L28
+        tests/approvals/avm13.algo.ts::Avm13Contract.testNewOps[routing]()
+        goto block@8
+    block@4: // testPoseidon2_route_L32
+        tests/approvals/avm13.algo.ts::Avm13Contract.testPoseidon2[routing]()
+        goto block@8
+    block@5: // testAppParams_route_L41
+        tests/approvals/avm13.algo.ts::Avm13Contract.testAppParams[routing]()
+        goto block@8
+    block@6: // testAppBoxOps_route_L68
+        tests/approvals/avm13.algo.ts::Avm13Contract.testAppBoxOps[routing]()
+        goto block@8
+    block@7: // testBlock_route_L92
+        tests/approvals/avm13.algo.ts::Avm13Contract.testBlock[routing]()
+        goto block@8
+    block@8: // switch_case_next_L26
+        goto block@10
+    block@9: // create_NoOp_L26
+        goto block@10
+    block@10: // after_if_else_L26
+        goto block@12
+    block@11: // __algots__.defaultCreate_L26
+        let tmp%7#0: uint64 = (txn OnCompletion)
+        let tmp%8#0: bool = (== tmp%7#0 NoOp)
+        let tmp%9#0: uint64 = (txn ApplicationID)
+        let tmp%10#0: bool = (== tmp%9#0 0u)
+        let tmp%11#0: bool = (&& tmp%8#0 tmp%10#0)
+        (assert tmp%11#0)
+        tests/approvals/avm13.algo.ts::Avm13Contract.__algots__.defaultCreate()
+        exit 1u
+    block@12: // after_if_else_L26
+        exit 0u
+
+subroutine tests/approvals/avm13.algo.ts::Avm13Contract.testNewOps[routing]() -> void:
+    block@0: // L28
+        tests/approvals/avm13.algo.ts::Avm13Contract.testNewOps()
+        exit 1u
+
+subroutine tests/approvals/avm13.algo.ts::Avm13Contract.testPoseidon2[routing]() -> void:
+    block@0: // L32
+        tests/approvals/avm13.algo.ts::Avm13Contract.testPoseidon2()
+        exit 1u
+
+subroutine tests/approvals/avm13.algo.ts::Avm13Contract.testAppParams[routing]() -> void:
+    block@0: // L41
+        tests/approvals/avm13.algo.ts::Avm13Contract.testAppParams()
+        exit 1u
+
+subroutine tests/approvals/avm13.algo.ts::Avm13Contract.testAppBoxOps[routing]() -> void:
+    block@0: // L68
+        tests/approvals/avm13.algo.ts::Avm13Contract.testAppBoxOps()
+        exit 1u
+
+subroutine tests/approvals/avm13.algo.ts::Avm13Contract.testBlock[routing]() -> void:
+    block@0: // L92
+        tests/approvals/avm13.algo.ts::Avm13Contract.testBlock()
+        exit 1u
+
+subroutine tests/approvals/avm13.algo.ts::Avm13Contract.testNewOps() -> void:
+    block@0: // L28
+        let tmp%0#0: bytes[64] = (sha512 0x)
+        let tmp%1#0: bytes[64] = (sha512 "a")
+        let tmp%2#0: bool = (!= tmp%0#0 tmp%1#0)
+        (assert tmp%2#0)
+        return 
+
+subroutine tests/approvals/avm13.algo.ts::Avm13Contract.testPoseidon2() -> void:
+    block@0: // L32
+        let tmp%0#0: bytes[32] = (bzero 32u)
+        let scalar#0: bytes[32] = tmp%0#0
+        let tmp%1#0: bytes[32] = ((poseidon2 BN254t2) scalar#0)
+        let bn#0: bytes[32] = tmp%1#0
+        let tmp%2#0: bytes[32] = ((poseidon2 BLS12_381t2) scalar#0)
+        let bls#0: bytes[32] = tmp%2#0
+        let tmp%3#0: uint64 = (len bn#0)
+        let tmp%4#0: bool = (== tmp%3#0 32u)
+        (assert tmp%4#0)
+        let tmp%5#0: uint64 = (len bls#0)
+        let tmp%6#0: bool = (== tmp%5#0 32u)
+        (assert tmp%6#0)
+        let tmp%7#0: bool = (!= bn#0 bls#0)
+        (assert tmp%7#0)
+        return 
+
+subroutine tests/approvals/avm13.algo.ts::Avm13Contract.testAppParams() -> void:
+    block@0: // L41
+        let tmp%0#0: uint64 = (global CurrentApplicationID)
+        let app#0: uint64 = tmp%0#0
+        let (awst_tmp%0#0: account, awst_tmp%1#0: bool) = ((app_params_get AppSizeSponsor) app#0)
+        let sponsor#0: account = awst_tmp%0#0
+        let sponsorExists#0: bool = awst_tmp%1#0
+        (assert sponsorExists#0)
+        let tmp%1#0: account = (global ZeroAddress)
+        let tmp%2#0: bool = (== sponsor#0 tmp%1#0)
+        (assert tmp%2#0)
+        let (awst_tmp%2#0: bool, awst_tmp%3#0: bool) = ((app_params_get AppForeignBoxReads) app#0)
+        let foreignBoxReads#0: bool = awst_tmp%2#0
+        let foreignBoxReadsExists#0: bool = awst_tmp%3#0
+        (assert foreignBoxReadsExists#0)
+        let tmp%3#0: bool = (! foreignBoxReads#0)
+        (assert tmp%3#0)
+        let (awst_tmp%4#0: bool, awst_tmp%5#0: bool) = ((app_params_get AppFamilyBoxAccess) app#0)
+        let familyBoxAccess#0: bool = awst_tmp%4#0
+        let familyBoxAccessExists#0: bool = awst_tmp%5#0
+        (assert familyBoxAccessExists#0)
+        let tmp%4#0: bool = (! familyBoxAccess#0)
+        (assert tmp%4#0)
+        ((app_params_set AppForeignBoxReads) 1u)
+        ((app_params_set AppFamilyBoxAccess) 1u)
+        let (awst_tmp%6#0: bool, awst_tmp%7#0: bool) = ((app_params_get AppForeignBoxReads) app#0)
+        let foreignBoxReadsAfter#0: bool = awst_tmp%6#0
+        let foreignBoxReadsAfterExists#0: bool = awst_tmp%7#0
+        (assert foreignBoxReadsAfterExists#0)
+        (assert foreignBoxReadsAfter#0)
+        let (awst_tmp%8#0: bool, awst_tmp%9#0: bool) = ((app_params_get AppFamilyBoxAccess) app#0)
+        let familyBoxAccessAfter#0: bool = awst_tmp%8#0
+        let familyBoxAccessAfterExists#0: bool = awst_tmp%9#0
+        (assert familyBoxAccessAfterExists#0)
+        (assert familyBoxAccessAfter#0)
+        return 
+
+subroutine tests/approvals/avm13.algo.ts::Avm13Contract.testAppBoxOps() -> void:
+    block@0: // L68
+        let tmp%0#0: uint64 = (global CurrentApplicationID)
+        let app#0: uint64 = tmp%0#0
+        let tmp%1#0: bool = (app_box_create app#0 "bx" 8u)
+        (assert tmp%1#0)
+        let tmp%2#0: bytes[8] = (bzero 8u)
+        (app_box_put app#0 "bx" tmp%2#0)
+        let (awst_tmp%0#0: bytes, awst_tmp%1#0: bool) = (app_box_get app#0 "bx")
+        let value#0: bytes = awst_tmp%0#0
+        let exists#0: bool = awst_tmp%1#0
+        (assert exists#0)
+        let tmp%3#0: bytes[8] = (bzero 8u)
+        let tmp%4#0: bool = (== value#0 tmp%3#0)
+        (assert tmp%4#0)
+        (app_box_replace app#0 "bx" 0u 0xff)
+        let tmp%5#0: bytes = (app_box_extract app#0 "bx" 0u 1u)
+        let tmp%6#0: bool = (== tmp%5#0 0xff)
+        (assert tmp%6#0)
+        (app_box_splice app#0 "bx" 1u 3u "abc")
+        (app_box_resize app#0 "bx" 4u)
+        let (awst_tmp%2#0: uint64, awst_tmp%3#0: bool) = (app_box_len app#0 "bx")
+        let length#0: uint64 = awst_tmp%2#0
+        let lengthExists#0: bool = awst_tmp%3#0
+        (assert lengthExists#0)
+        let tmp%7#0: bool = (== length#0 4u)
+        (assert tmp%7#0)
+        let tmp%8#0: bool = (app_box_del app#0 "bx")
+        (assert tmp%8#0)
+        return 
+
+subroutine tests/approvals/avm13.algo.ts::Avm13Contract.testBlock() -> void:
+    block@0: // L92
+        let tmp%0#0: bytes[64] = ((block BlkBranch512) 0u)
+        let branch512#0: bytes[64] = tmp%0#0
+        let tmp%1#0: bytes[32] = ((block BlkSha512_256TxnCommitment) 0u)
+        let sha512_256Commitment#0: bytes[32] = tmp%1#0
+        let tmp%2#0: bytes[32] = ((block BlkSha256TxnCommitment) 0u)
+        let sha256Commitment#0: bytes[32] = tmp%2#0
+        let tmp%3#0: bytes[64] = ((block BlkSha512TxnCommitment) 0u)
+        let sha512Commitment#0: bytes[64] = tmp%3#0
+        let tmp%4#0: bool = (!= branch512#0 sha512Commitment#0)
+        (assert tmp%4#0)
+        let tmp%5#0: bool = (!= sha512_256Commitment#0 sha256Commitment#0)
+        (assert tmp%5#0)
+        return 
+
+subroutine tests/approvals/avm13.algo.ts::Avm13Contract.__algots__.defaultCreate() -> void:
+    block@0: // L26
+        return 

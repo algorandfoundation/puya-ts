@@ -1848,8 +1848,16 @@ export const compiledContractType = new ImmutableObjectPType({
   }),
   description: 'Provides compiled programs and state allocation values for a Contract. Created by calling `compile(ExampleContractType)`',
   properties: [
-    { name: 'approvalProgram', ptype: new ReadonlyTuplePType({ items: [bytesPType, bytesPType] }), description: null },
-    { name: 'clearStateProgram', ptype: new ReadonlyTuplePType({ items: [bytesPType, bytesPType] }), description: null },
+    {
+      name: 'approvalProgram',
+      ptype: new ReadonlyTuplePType({ items: Array(Constants.algo.maxProgramPageValues).fill(bytesPType) }),
+      description: null,
+    },
+    {
+      name: 'clearStateProgram',
+      ptype: new ReadonlyTuplePType({ items: Array(Constants.algo.maxProgramPageValues).fill(bytesPType) }),
+      description: null,
+    },
     { name: 'extraProgramPages', ptype: uint64PType, description: null },
     { name: 'globalUints', ptype: uint64PType, description: null },
     { name: 'globalBytes', ptype: uint64PType, description: null },

@@ -12,8 +12,8 @@ contract HelloFactory
   
   test_compile_contract(): void
   {
-    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::Hello)
-    helloApp: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method(name="helloCreate",args=(string),result=void,resource_encoding="value"), ARC4_ENCODE("hello", wtype=bytes)], ApprovalProgramPages=#[compiled.approvalProgram.0, compiled.approvalProgram.1], ClearStateProgramPages=#[compiled.clearStateProgram.0, compiled.clearStateProgram.1], GlobalNumByteSlice=compiled.globalBytes)).CreatedApplicationID
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes, bytes, bytes], clearStateProgram: readonly [bytes, bytes, bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::Hello)
+    helloApp: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method(name="helloCreate",args=(string),result=void,resource_encoding="value"), ARC4_ENCODE("hello", wtype=bytes)], ApprovalProgramPages=#[compiled.approvalProgram.0, compiled.approvalProgram.1, compiled.approvalProgram.2, compiled.approvalProgram.3], ClearStateProgramPages=#[compiled.clearStateProgram.0, compiled.clearStateProgram.1, compiled.clearStateProgram.2, compiled.clearStateProgram.3], GlobalNumByteSlice=compiled.globalBytes)).CreatedApplicationID
     txn: inner_transaction_appl = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method(name="greet",args=(string),result=string,resource_encoding="value"), ARC4_ENCODE("world", wtype=bytes)], ApplicationID=helloApp))
     result: string = ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($0 = txn.LastLog)), extract<0, 4>($0) == 0x151f7c75], comment=Bytes has valid prefix), wtype=string, validate=false)
     assert(result == "hello world")
@@ -22,8 +22,8 @@ contract HelloFactory
   
   test_compile_contract_with_template(): void
   {
-    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::HelloTemplate, GREETING="hey")
-    helloApp: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method("create()void")], ApprovalProgramPages=#[compiled.approvalProgram.0, compiled.approvalProgram.1], ClearStateProgramPages=#[compiled.clearStateProgram.0, compiled.clearStateProgram.1], GlobalNumByteSlice=1)).CreatedApplicationID
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes, bytes, bytes], clearStateProgram: readonly [bytes, bytes, bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::HelloTemplate, GREETING="hey")
+    helloApp: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method("create()void")], ApprovalProgramPages=#[compiled.approvalProgram.0, compiled.approvalProgram.1, compiled.approvalProgram.2, compiled.approvalProgram.3], ClearStateProgramPages=#[compiled.clearStateProgram.0, compiled.clearStateProgram.1, compiled.clearStateProgram.2, compiled.clearStateProgram.3], GlobalNumByteSlice=1)).CreatedApplicationID
     txn: inner_transaction_appl = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method("greet(string)string"), ARC4_ENCODE("world", wtype=bytes)], ApplicationID=helloApp))
     result: string = ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($1 = txn.LastLog)), extract<0, 4>($1) == 0x151f7c75], comment=Bytes has valid prefix), wtype=string, validate=false)
     assert(result == "hey world")
@@ -32,8 +32,8 @@ contract HelloFactory
   
   test_compile_contract_with_template_and_custom_prefix(): void
   {
-    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix, prefix=PRFX_, GREETING="bonjour")
-    helloApp: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method("create()void")], ApprovalProgramPages=#[compiled.approvalProgram.0, compiled.approvalProgram.1], ClearStateProgramPages=#[compiled.clearStateProgram.0, compiled.clearStateProgram.1], GlobalNumByteSlice=1)).CreatedApplicationID
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes, bytes, bytes], clearStateProgram: readonly [bytes, bytes, bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::HelloTemplateCustomPrefix, prefix=PRFX_, GREETING="bonjour")
+    helloApp: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method("create()void")], ApprovalProgramPages=#[compiled.approvalProgram.0, compiled.approvalProgram.1, compiled.approvalProgram.2, compiled.approvalProgram.3], ClearStateProgramPages=#[compiled.clearStateProgram.0, compiled.clearStateProgram.1, compiled.clearStateProgram.2, compiled.clearStateProgram.3], GlobalNumByteSlice=1)).CreatedApplicationID
     txn: inner_transaction_appl = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method("greet(string)string"), ARC4_ENCODE("world", wtype=bytes)], ApplicationID=helloApp))
     result: string = ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($2 = txn.LastLog)), extract<0, 4>($2) == 0x151f7c75], comment=Bytes has valid prefix), wtype=string, validate=false)
     assert(result == "bonjour world")
@@ -42,8 +42,8 @@ contract HelloFactory
   
   test_compile_contract_large(): void
   {
-    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes], clearStateProgram: readonly [bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::LargeProgram)
-    largeApp: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=#[compiled.approvalProgram.0, compiled.approvalProgram.1], ClearStateProgramPages=#[compiled.clearStateProgram.0, compiled.clearStateProgram.1], ExtraProgramPages=compiled.extraProgramPages, GlobalNumByteSlice=compiled.globalBytes)).CreatedApplicationID
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes, bytes, bytes], clearStateProgram: readonly [bytes, bytes, bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(tests/approvals/precompiled-apps.algo.ts::LargeProgram)
+    largeApp: application = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=#[compiled.approvalProgram.0, compiled.approvalProgram.1, compiled.approvalProgram.2, compiled.approvalProgram.3], ClearStateProgramPages=#[compiled.clearStateProgram.0, compiled.clearStateProgram.1, compiled.clearStateProgram.2, compiled.clearStateProgram.3], ExtraProgramPages=compiled.extraProgramPages, GlobalNumByteSlice=compiled.globalBytes)).CreatedApplicationID
     txn: inner_transaction_appl = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationArgs=#[Method("getBigBytesLength()uint64")], ApplicationID=largeApp))
     result: uint64 = ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($3 = txn.LastLog)), extract<0, 4>($3) == 0x151f7c75], comment=Bytes has valid prefix), wtype=uint64, validate=false)
     assert(result == 4096)
