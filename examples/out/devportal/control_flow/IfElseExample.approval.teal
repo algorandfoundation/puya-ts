@@ -1,0 +1,131 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 8 1
+    bytecblock 0x151f7c75
+    // examples/devportal/control_flow/contract.algo.ts:4
+    // export class IfElseExample extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@9
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0xef082f7b 0x94fb7ef1 // method "isRich(uint64)string", method "isEven(uint64)string"
+    txna ApplicationArgs 0
+    match isRich isEven
+    err
+
+main___algots__.defaultCreate@9:
+    // examples/devportal/control_flow/contract.algo.ts:4
+    // export class IfElseExample extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// examples/devportal/control_flow/contract.algo.ts::IfElseExample.isRich[routing]() -> void:
+isRich:
+    // examples/devportal/control_flow/contract.algo.ts:6
+    // @abimethod()
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    // examples/devportal/control_flow/contract.algo.ts:8
+    // if (accountBalance > 1000) {
+    pushint 1000
+    >
+    bz isRich_after_if_else@3
+    pop
+    // examples/devportal/control_flow/contract.algo.ts:9
+    // return 'This account is rich!'
+    pushbytes "This account is rich!"
+
+isRich_after_inlined_examples/devportal/control_flow/contract.algo.ts::IfElseExample.isRich@6:
+    // examples/devportal/control_flow/contract.algo.ts:6
+    // @abimethod()
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+isRich_after_if_else@3:
+    // examples/devportal/control_flow/contract.algo.ts:11
+    // if (accountBalance > 100) {
+    pushint 100
+    >
+    bz isRich_after_if_else@5
+    // examples/devportal/control_flow/contract.algo.ts:12
+    // return 'This account is doing well.'
+    pushbytes "This account is doing well."
+    // examples/devportal/control_flow/contract.algo.ts:6
+    // @abimethod()
+    b isRich_after_inlined_examples/devportal/control_flow/contract.algo.ts::IfElseExample.isRich@6
+
+isRich_after_if_else@5:
+    // examples/devportal/control_flow/contract.algo.ts:14
+    // return 'This account is poor :('
+    pushbytes "This account is poor :("
+    // examples/devportal/control_flow/contract.algo.ts:6
+    // @abimethod()
+    b isRich_after_inlined_examples/devportal/control_flow/contract.algo.ts::IfElseExample.isRich@6
+
+
+// examples/devportal/control_flow/contract.algo.ts::IfElseExample.isEven[routing]() -> void:
+isEven:
+    // examples/devportal/control_flow/contract.algo.ts:20
+    // @abimethod()
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_0 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/control_flow/contract.algo.ts:22
+    // return number % 2 === 0 ? 'Even' : 'Odd'
+    pushint 2
+    %
+    bnz isEven_ternary_false@3
+    pushbytes "Even"
+
+isEven_ternary_merge@4:
+    // examples/devportal/control_flow/contract.algo.ts:20
+    // @abimethod()
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+isEven_ternary_false@3:
+    // examples/devportal/control_flow/contract.algo.ts:22
+    // return number % 2 === 0 ? 'Even' : 'Odd'
+    pushbytes "Odd"
+    b isEven_ternary_merge@4

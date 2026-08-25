@@ -1,0 +1,110 @@
+subroutine itoa(i: uint64): string
+{
+  radix: uint64 = len("0123456789")
+  if (i < radix) {
+    return reinterpret_cast<string>("0123456789"[i])
+  }
+  return concat(examples/calculator/contract.algo.ts::itoa(i // radix), reinterpret_cast<string>("0123456789"[i % radix]))
+}
+contract MyContract
+{
+  approvalProgram(): bool
+  {
+    numArgs: uint64 = txn<NumAppArgs>()
+    if (numArgs == 0) {
+      a: uint64 = 0
+      b: uint64 = 0
+      action: uint64 = 0
+      log(itob(a))
+      log(itob(b))
+    } else {
+      assert(numArgs == 3, comment=Expected 3 args)
+      action: uint64 = btoi(txnas<ApplicationArgs>(0))
+      a_bytes: bytes = txnas<ApplicationArgs>(1)
+      b_bytes: bytes = txnas<ApplicationArgs>(2)
+      log(a_bytes)
+      log(b_bytes)
+      a: uint64 = btoi(a_bytes)
+      b: uint64 = btoi(b_bytes)
+    }
+    result: uint64 = examples/calculator/contract.algo.ts::MyContract.doCalc(action, a, b)
+    result_b: string = "" + examples/calculator/contract.algo.ts::itoa(a) + examples/calculator/contract.algo.ts::MyContract.op(action) + examples/calculator/contract.algo.ts::itoa(b) + " = " + examples/calculator/contract.algo.ts::itoa(result)
+    log(reinterpret_cast<bytes>(result_b))
+    return True
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  op(action: uint64): string
+  {
+    if (action == 1) {
+      #switch₁ᶜ₀:
+      return " + "
+    }
+    if (action == 2) {
+      #switch₁ᶜ₁:
+      return " - "
+    }
+    if (action == 3) {
+      #switch₁ᶜ₂:
+      return " * "
+    }
+    if (action == 4) {
+      #switch₁ᶜ₃:
+      return " / "
+    }
+    #switch₁ᶜ₄:
+    err(Unknown operation)
+  }
+  
+  doCalc(action: uint64, a: uint64, b: uint64): uint64
+  {
+    if (action == 1) {
+      #switch₁ᶜ₀:
+      return examples/calculator/contract.algo.ts::MyContract.add(a, b)
+    }
+    if (action == 2) {
+      #switch₁ᶜ₁:
+      return examples/calculator/contract.algo.ts::MyContract.sub(a, b)
+    }
+    if (action == 3) {
+      #switch₁ᶜ₂:
+      return examples/calculator/contract.algo.ts::MyContract.mul(a, b)
+    }
+    if (action == 4) {
+      #switch₁ᶜ₃:
+      return examples/calculator/contract.algo.ts::MyContract.div(a, b)
+    }
+    #switch₁ᶜ₄:
+    err(Unknown operation)
+  }
+  
+  add(a: uint64, b: uint64): uint64
+  {
+    return a + b
+  }
+  
+  sub(a: uint64, b: uint64): uint64
+  {
+    return a - b
+  }
+  
+  mul(a: uint64, b: uint64): uint64
+  {
+    return a * b
+  }
+  
+  div(a: uint64, b: uint64): uint64
+  {
+    return a // b
+  }
+  
+  BaseContract::clearStateProgram(): bool
+  {
+    return True
+  }
+  
+}

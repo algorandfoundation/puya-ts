@@ -1,0 +1,120 @@
+{
+    "name": "MyCounter",
+    "structs": {},
+    "methods": [
+        {
+            "name": "optIn",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "OptIn"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        },
+        {
+            "name": "incrementMyCounter",
+            "args": [],
+            "returns": {
+                "type": "uint64"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "NoOp"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        }
+    ],
+    "arcs": [
+        22,
+        28
+    ],
+    "desc": "A reusable counter app held in each opted-in account's local state.\nAccounts must opt in before the counter is readable or writable.",
+    "networks": {},
+    "state": {
+        "schema": {
+            "global": {
+                "ints": 0,
+                "bytes": 0
+            },
+            "local": {
+                "ints": 1,
+                "bytes": 0
+            }
+        },
+        "keys": {
+            "global": {},
+            "local": {
+                "myCounter": {
+                    "keyType": "AVMString",
+                    "valueType": "AVMUint64",
+                    "key": "bXlfY291bnRlcg=="
+                }
+            },
+            "box": {}
+        },
+        "maps": {
+            "global": {},
+            "local": {},
+            "box": {}
+        }
+    },
+    "bareActions": {
+        "create": [
+            "NoOp"
+        ],
+        "call": []
+    },
+    "sourceInfo": {
+        "approval": {
+            "sourceInfo": [
+                {
+                    "pc": [
+                        86
+                    ],
+                    "errorMessage": "Account is not opted in to the app"
+                },
+                {
+                    "pc": [
+                        92,
+                        106
+                    ],
+                    "errorMessage": "check LocalState exists"
+                }
+            ],
+            "pcOffsetMethod": "none"
+        },
+        "clear": {
+            "sourceInfo": [],
+            "pcOffsetMethod": "none"
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYXJjNC9pbmRleC5kLnRzOjpDb250cmFjdC5hcHByb3ZhbFByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBpbnRjYmxvY2sgMSAwCiAgICBieXRlY2Jsb2NrICJteV9jb3VudGVyIgogICAgLy8gZXhhbXBsZXMvZGV2cG9ydGFsL3JlZmVyZW5jZV9hY2NvdW50X2FwcC9jb250cmFjdC5hbGdvLnRzOjE5CiAgICAvLyBleHBvcnQgY2xhc3MgTXlDb3VudGVyIGV4dGVuZHMgQ29udHJhY3QgewogICAgdHhuIE51bUFwcEFyZ3MKICAgIGJ6IG1haW5fX19hbGdvdHNfXy5kZWZhdWx0Q3JlYXRlQDYKICAgIHB1c2hieXRlc3MgMHgyOTMxNGQ5NSAweGU2ZGJlZDdmIC8vIG1ldGhvZCAib3B0SW4oKXZvaWQiLCBtZXRob2QgImluY3JlbWVudE15Q291bnRlcigpdWludDY0IgogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAogICAgbWF0Y2ggbWFpbl9vcHRJbl9yb3V0ZUAzIG1haW5faW5jcmVtZW50TXlDb3VudGVyX3JvdXRlQDQKICAgIGVycgoKbWFpbl9pbmNyZW1lbnRNeUNvdW50ZXJfcm91dGVANDoKICAgIC8vIGV4YW1wbGVzL2RldnBvcnRhbC9yZWZlcmVuY2VfYWNjb3VudF9hcHAvY29udHJhY3QuYWxnby50czoyNwogICAgLy8gQGFiaW1ldGhvZCgpCiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgJiYKICAgIGFzc2VydAogICAgYiBpbmNyZW1lbnRNeUNvdW50ZXIKCm1haW5fb3B0SW5fcm91dGVAMzoKICAgIC8vIGV4YW1wbGVzL2RldnBvcnRhbC9yZWZlcmVuY2VfYWNjb3VudF9hcHAvY29udHJhY3QuYWxnby50czoyMgogICAgLy8gQGFiaW1ldGhvZCh7IGFsbG93QWN0aW9uczogJ09wdEluJyB9KQogICAgdHhuIE9uQ29tcGxldGlvbgogICAgaW50Y18wIC8vIE9wdEluCiAgICA9PQogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgICYmCiAgICBhc3NlcnQKICAgIGIgb3B0SW4KCm1haW5fX19hbGdvdHNfXy5kZWZhdWx0Q3JlYXRlQDY6CiAgICAvLyBleGFtcGxlcy9kZXZwb3J0YWwvcmVmZXJlbmNlX2FjY291bnRfYXBwL2NvbnRyYWN0LmFsZ28udHM6MTkKICAgIC8vIGV4cG9ydCBjbGFzcyBNeUNvdW50ZXIgZXh0ZW5kcyBDb250cmFjdCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgIQogICAgJiYKICAgIHJldHVybgoKCi8vIGV4YW1wbGVzL2RldnBvcnRhbC9yZWZlcmVuY2VfYWNjb3VudF9hcHAvY29udHJhY3QuYWxnby50czo6TXlDb3VudGVyLm9wdEluW3JvdXRpbmddKCkgLT4gdm9pZDoKb3B0SW46CiAgICAvLyBleGFtcGxlcy9kZXZwb3J0YWwvcmVmZXJlbmNlX2FjY291bnRfYXBwL2NvbnRyYWN0LmFsZ28udHM6MjQKICAgIC8vIHRoaXMubXlDb3VudGVyKFR4bi5zZW5kZXIpLnZhbHVlID0gVWludDY0KDApCiAgICB0eG4gU2VuZGVyCiAgICAvLyBleGFtcGxlcy9kZXZwb3J0YWwvcmVmZXJlbmNlX2FjY291bnRfYXBwL2NvbnRyYWN0LmFsZ28udHM6MjAKICAgIC8vIG15Q291bnRlciA9IExvY2FsU3RhdGU8dWludDY0Pih7IGtleTogJ215X2NvdW50ZXInIH0pCiAgICBieXRlY18wIC8vICJteV9jb3VudGVyIgogICAgLy8gZXhhbXBsZXMvZGV2cG9ydGFsL3JlZmVyZW5jZV9hY2NvdW50X2FwcC9jb250cmFjdC5hbGdvLnRzOjI0CiAgICAvLyB0aGlzLm15Q291bnRlcihUeG4uc2VuZGVyKS52YWx1ZSA9IFVpbnQ2NCgwKQogICAgaW50Y18xIC8vIDAKICAgIGFwcF9sb2NhbF9wdXQKICAgIC8vIGV4YW1wbGVzL2RldnBvcnRhbC9yZWZlcmVuY2VfYWNjb3VudF9hcHAvY29udHJhY3QuYWxnby50czoyMgogICAgLy8gQGFiaW1ldGhvZCh7IGFsbG93QWN0aW9uczogJ09wdEluJyB9KQogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKCi8vIGV4YW1wbGVzL2RldnBvcnRhbC9yZWZlcmVuY2VfYWNjb3VudF9hcHAvY29udHJhY3QuYWxnby50czo6TXlDb3VudGVyLmluY3JlbWVudE15Q291bnRlcltyb3V0aW5nXSgpIC0+IHZvaWQ6CmluY3JlbWVudE15Q291bnRlcjoKICAgIC8vIGV4YW1wbGVzL2RldnBvcnRhbC9yZWZlcmVuY2VfYWNjb3VudF9hcHAvY29udHJhY3QuYWxnby50czoyOQogICAgLy8gYXNzZXJ0KFR4bi5zZW5kZXIuaXNPcHRlZEluKEdsb2JhbC5jdXJyZW50QXBwbGljYXRpb25JZCksICdBY2NvdW50IGlzIG5vdCBvcHRlZCBpbiB0byB0aGUgYXBwJykKICAgIHR4biBTZW5kZXIKICAgIGdsb2JhbCBDdXJyZW50QXBwbGljYXRpb25JRAogICAgYXBwX29wdGVkX2luCiAgICBhc3NlcnQgLy8gQWNjb3VudCBpcyBub3Qgb3B0ZWQgaW4gdG8gdGhlIGFwcAogICAgLy8gZXhhbXBsZXMvZGV2cG9ydGFsL3JlZmVyZW5jZV9hY2NvdW50X2FwcC9jb250cmFjdC5hbGdvLnRzOjMwCiAgICAvLyB0aGlzLm15Q291bnRlcihUeG4uc2VuZGVyKS52YWx1ZSArPSAxCiAgICB0eG4gU2VuZGVyCiAgICBpbnRjXzEgLy8gMAogICAgLy8gZXhhbXBsZXMvZGV2cG9ydGFsL3JlZmVyZW5jZV9hY2NvdW50X2FwcC9jb250cmFjdC5hbGdvLnRzOjIwCiAgICAvLyBteUNvdW50ZXIgPSBMb2NhbFN0YXRlPHVpbnQ2ND4oeyBrZXk6ICdteV9jb3VudGVyJyB9KQogICAgYnl0ZWNfMCAvLyAibXlfY291bnRlciIKICAgIC8vIGV4YW1wbGVzL2RldnBvcnRhbC9yZWZlcmVuY2VfYWNjb3VudF9hcHAvY29udHJhY3QuYWxnby50czozMAogICAgLy8gdGhpcy5teUNvdW50ZXIoVHhuLnNlbmRlcikudmFsdWUgKz0gMQogICAgYXBwX2xvY2FsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIExvY2FsU3RhdGUgZXhpc3RzCiAgICBpbnRjXzAgLy8gMQogICAgKwogICAgdHhuIFNlbmRlcgogICAgLy8gZXhhbXBsZXMvZGV2cG9ydGFsL3JlZmVyZW5jZV9hY2NvdW50X2FwcC9jb250cmFjdC5hbGdvLnRzOjIwCiAgICAvLyBteUNvdW50ZXIgPSBMb2NhbFN0YXRlPHVpbnQ2ND4oeyBrZXk6ICdteV9jb3VudGVyJyB9KQogICAgYnl0ZWNfMCAvLyAibXlfY291bnRlciIKICAgIC8vIGV4YW1wbGVzL2RldnBvcnRhbC9yZWZlcmVuY2VfYWNjb3VudF9hcHAvY29udHJhY3QuYWxnby50czozMAogICAgLy8gdGhpcy5teUNvdW50ZXIoVHhuLnNlbmRlcikudmFsdWUgKz0gMQogICAgdW5jb3ZlciAyCiAgICBhcHBfbG9jYWxfcHV0CiAgICAvLyBleGFtcGxlcy9kZXZwb3J0YWwvcmVmZXJlbmNlX2FjY291bnRfYXBwL2NvbnRyYWN0LmFsZ28udHM6MzEKICAgIC8vIHJldHVybiB0aGlzLm15Q291bnRlcihUeG4uc2VuZGVyKS52YWx1ZQogICAgdHhuIFNlbmRlcgogICAgaW50Y18xIC8vIDAKICAgIC8vIGV4YW1wbGVzL2RldnBvcnRhbC9yZWZlcmVuY2VfYWNjb3VudF9hcHAvY29udHJhY3QuYWxnby50czoyMAogICAgLy8gbXlDb3VudGVyID0gTG9jYWxTdGF0ZTx1aW50NjQ+KHsga2V5OiAnbXlfY291bnRlcicgfSkKICAgIGJ5dGVjXzAgLy8gIm15X2NvdW50ZXIiCiAgICAvLyBleGFtcGxlcy9kZXZwb3J0YWwvcmVmZXJlbmNlX2FjY291bnRfYXBwL2NvbnRyYWN0LmFsZ28udHM6MzEKICAgIC8vIHJldHVybiB0aGlzLm15Q291bnRlcihUeG4uc2VuZGVyKS52YWx1ZQogICAgYXBwX2xvY2FsX2dldF9leAogICAgYXNzZXJ0IC8vIGNoZWNrIExvY2FsU3RhdGUgZXhpc3RzCiAgICAvLyBleGFtcGxlcy9kZXZwb3J0YWwvcmVmZXJlbmNlX2FjY291bnRfYXBwL2NvbnRyYWN0LmFsZ28udHM6MjcKICAgIC8vIEBhYmltZXRob2QoKQogICAgaXRvYgogICAgcHVzaGJ5dGVzIDB4MTUxZjdjNzUKICAgIHN3YXAKICAgIGNvbmNhdAogICAgbG9nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCg==",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYmFzZS1jb250cmFjdC5kLnRzOjpCYXNlQ29udHJhY3QuY2xlYXJTdGF0ZVByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBwdXNoaW50IDEKICAgIHJldHVybgo="
+    },
+    "byteCode": {
+        "approval": "CyACAQAmAQpteV9jb3VudGVyMRtBACuCAgQpMU2VBObb7X82GgCOAgALAAEAMRkUMRgQREIAGjEZIhIxGBBEQgAIMRkUMRgUEEMxACgjZiJDMQAyCGFEMQAjKGNEIggxAChPAmYxACMoY0QWgAQVH3x1TFCwIkM=",
+        "clear": "C4EBQw=="
+    },
+    "compilerInfo": {
+        "compiler": "puya",
+        "compilerVersion": {
+            "major": 5,
+            "minor": 10,
+            "patch": 1
+        }
+    },
+    "events": [],
+    "templateVariables": {}
+}

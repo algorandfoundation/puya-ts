@@ -1,0 +1,117 @@
+contract HelloWorldContract
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  hello(name: string): string
+  {
+    return "Hello, " + name
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
+contract InnerTransactions
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  payment(): uint64
+  {
+    result: inner_transaction_pay = submit_txn(create_inner_transaction(Fee=0, TypeEnum=1, Amount=5000, Receiver=txn<Sender>()))
+    return result.Amount
+  }
+  
+  fungibleAssetCreate(): uint64
+  {
+    itxnResult: inner_transaction_acfg = submit_txn(create_inner_transaction(Fee=0, TypeEnum=3, ConfigAssetTotal=100000000000, ConfigAssetDecimals=2, ConfigAssetUnitName="RP", ConfigAssetName="Royalty Points"))
+    return reinterpret_cast<uint64>(itxnResult.CreatedAssetID)
+  }
+  
+  nonFungibleAssetCreate(): uint64
+  {
+    itxnResult: inner_transaction_acfg = submit_txn(create_inner_transaction(Fee=0, TypeEnum=3, ConfigAssetTotal=100, ConfigAssetDecimals=2, ConfigAssetUnitName="ML", ConfigAssetName="Mona Lisa", ConfigAssetURL="https://link_to_ipfs/Mona_Lisa", ConfigAssetManager=global<CurrentApplicationAddress>(), ConfigAssetReserve=global<CurrentApplicationAddress>(), ConfigAssetFreeze=global<CurrentApplicationAddress>(), ConfigAssetClawback=global<CurrentApplicationAddress>()))
+    return reinterpret_cast<uint64>(itxnResult.CreatedAssetID)
+  }
+  
+  assetOptIn(asset: asset): void
+  {
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=global<CurrentApplicationAddress>(), XferAsset=asset, AssetAmount=0))
+  }
+  
+  assetTransfer(asset: asset, receiver: account, amount: uint64): void
+  {
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=receiver, XferAsset=asset, AssetAmount=amount))
+  }
+  
+  assetFreeze(acctToBeFrozen: account, asset: asset): void
+  {
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=5, FreezeAssetAccount=acctToBeFrozen, FreezeAsset=asset, FreezeAssetFrozen=True))
+  }
+  
+  assetRevoke(asset: asset, accountToBeRevoked: account, amount: uint64): void
+  {
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=4, AssetReceiver=global<CurrentApplicationAddress>(), XferAsset=asset, AssetSender=accountToBeRevoked, AssetAmount=amount))
+  }
+  
+  assetConfig(asset: asset): void
+  {
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=3, ConfigAsset=asset, ConfigAssetManager=global<CurrentApplicationAddress>(), ConfigAssetReserve=global<CurrentApplicationAddress>(), ConfigAssetFreeze=txn<Sender>(), ConfigAssetClawback=txn<Sender>()))
+  }
+  
+  assetDelete(asset: asset): void
+  {
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=3, ConfigAsset=asset))
+  }
+  
+  multiInnerTxns(appId: application): readonly [uint64, string]
+  {
+    paymentParams: inner_transaction_fields_pay = create_inner_transaction(Fee=0, TypeEnum=1, Amount=5000, Receiver=txn<Sender>())
+    appCallParams: inner_transaction_fields_appl = create_inner_transaction(Fee=0, TypeEnum=6, ApplicationID=appId, ApplicationArgs=#[Method(name="hello",args=(string),result=string,resource_encoding="value"), ARC4_ENCODE("World", wtype=bytes)])
+    #[payTxn, appCallTxn]: readonly [inner_transaction_pay, inner_transaction_appl] = submit_txn(paymentParams, appCallParams)
+    helloWorldResult: string = ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($0 = appCallTxn.LastLog)), extract<0, 4>($0) == 0x151f7c75], comment=Bytes has valid prefix), wtype=string, validate=false)
+    return #[payTxn.Amount, helloWorldResult]
+  }
+  
+  deployApp(): uint64
+  {
+    compiled: CompiledContract{ approvalProgram: readonly [bytes, bytes, bytes, bytes], clearStateProgram: readonly [bytes, bytes, bytes, bytes], extraProgramPages: uint64, globalUints: uint64, globalBytes: uint64, localUints: uint64, localBytes: uint64 } = compile(examples/devportal/inner_transactions/contract.algo.ts::HelloWorldContract)
+    appTxn: inner_transaction_appl = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApprovalProgramPages=#[compiled.approvalProgram.0, compiled.approvalProgram.1, compiled.approvalProgram.2, compiled.approvalProgram.3], ClearStateProgramPages=#[compiled.clearStateProgram.0, compiled.clearStateProgram.1, compiled.clearStateProgram.2, compiled.clearStateProgram.3]))
+    return reinterpret_cast<uint64>(appTxn.CreatedApplicationID)
+  }
+  
+  arc4DeployApp(): uint64
+  {
+    appTxn: inner_transaction_appl = submit_txn(abi_call(signature=null, args=(), fields={Fee=0, TypeEnum=appl, OnCompletion=0, ApprovalProgramPages=compile(examples/devportal/inner_transactions/contract.algo.ts::HelloWorldContract).approvalProgram, ClearStateProgramPages=compile(examples/devportal/inner_transactions/contract.algo.ts::HelloWorldContract).clearStateProgram, GlobalNumUint=compile(examples/devportal/inner_transactions/contract.algo.ts::HelloWorldContract).globalUints, GlobalNumByteSlice=compile(examples/devportal/inner_transactions/contract.algo.ts::HelloWorldContract).globalBytes, LocalNumByteSlice=compile(examples/devportal/inner_transactions/contract.algo.ts::HelloWorldContract).localBytes, LocalNumUint=compile(examples/devportal/inner_transactions/contract.algo.ts::HelloWorldContract).localUints, ExtraProgramPages=compile(examples/devportal/inner_transactions/contract.algo.ts::HelloWorldContract).extraProgramPages}))
+    return reinterpret_cast<uint64>(appTxn.CreatedApplicationID)
+  }
+  
+  noopAppCall(appId: application): readonly [string, string]
+  {
+    callTxn: inner_transaction_appl = submit_txn(create_inner_transaction(Fee=0, TypeEnum=6, ApplicationID=appId, ApplicationArgs=#[Method(name="hello",args=(string),result=string,resource_encoding="value"), ARC4_ENCODE("World", wtype=bytes)]))
+    firstHelloWorldResult: string = ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($1 = callTxn.LastLog)), extract<0, 4>($1) == 0x151f7c75], comment=Bytes has valid prefix), wtype=string, validate=false)
+    #[secondHelloWorldResult]: readonly [string] = #[($2 = #{ itxn: ($3 = submit_txn(abi_call(signature={name="hello",args=(string),result=string}, args=("again"), fields={Fee=0, TypeEnum=appl, ApplicationID=appId}))), returnValue: ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($4 = $3.LastLog)), extract<0, 4>($4) == 0x151f7c75], comment=Bytes has valid prefix), wtype=string, validate=true) }).returnValue]
+    return #[firstHelloWorldResult, secondHelloWorldResult]
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

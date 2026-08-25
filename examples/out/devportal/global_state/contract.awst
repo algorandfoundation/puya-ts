@@ -1,0 +1,213 @@
+contract GlobalStorage
+{
+  globals {
+    ["globalIntFull"]: uint64
+    ["globalIntSimplified"]: uint64
+    ["globalIntNoDefault"]: uint64
+    ["globalBytesFull"]: bytes
+    ["globalBytesSimplified"]: bytes
+    ["globalBytesNoDefault"]: bytes
+    ["globalBoolSimplified"]: bool
+    ["globalBoolNoDefault"]: bool
+    ["globalAsset"]: asset
+    ["globalApplication"]: application
+    ["globalAccount"]: account
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getGlobalState(): uint64
+  {
+    return (STATE_EXISTS(GlobalState["globalIntNoDefault"]) ? GlobalState["globalIntNoDefault"] : 0)
+  }
+  
+  maybeGlobalState(): readonly [uint64, bool]
+  {
+    exists: bool = STATE_EXISTS(GlobalState["globalIntNoDefault"])
+    value: uint64 = (exists ? GlobalState["globalIntNoDefault"] : 0)
+    return #[value, exists]
+  }
+  
+  getGlobalStateExample(): bool
+  {
+    assert(GlobalState["globalIntFull"] == 50)
+    assert(GlobalState["globalIntSimplified"] == 10)
+    assert((STATE_EXISTS(GlobalState["globalIntNoDefault"]) ? GlobalState["globalIntNoDefault"] : 0) == 0)
+    assert(GlobalState["globalBytesFull"] == "Hello")
+    return True
+  }
+  
+  maybeGlobalStateExample(): bool
+  {
+    assert(STATE_EXISTS(GlobalState["globalIntFull"]))
+    assert(GlobalState["globalIntFull"] == 50)
+    assert(STATE_EXISTS(GlobalState["globalBytesFull"]))
+    assert(GlobalState["globalBytesFull"] == "Hello")
+    assert(!STATE_EXISTS(GlobalState["globalAsset"]))
+    return True
+  }
+  
+  checkGlobalStateExample(): bool
+  {
+    assert(GlobalState["globalIntFull"] == 50)
+    assert(GlobalState["globalBytesFull"] == "Hello")
+    assert(GlobalState["globalIntSimplified"] == 10)
+    assert(GlobalState["globalBytesSimplified"] == "Hello")
+    assert(GlobalState["globalBoolSimplified"])
+    assert(!STATE_EXISTS(GlobalState["globalIntNoDefault"]))
+    assert(!STATE_EXISTS(GlobalState["globalBytesNoDefault"]))
+    assert(!STATE_EXISTS(GlobalState["globalBoolNoDefault"]))
+    return True
+  }
+  
+  setGlobalState(value: bytes): void
+  {
+    GlobalState["globalBytesFull"]: bytes = value
+  }
+  
+  setGlobalStateExample(valueBytes: bytes, valueAsset: asset, valueApp: application, valueAccount: account, valueBool: bool): void
+  {
+    GlobalState["globalBytesNoDefault"]: bytes = valueBytes
+    assert(GlobalState["globalBytesNoDefault"] == valueBytes)
+    GlobalState["globalBoolNoDefault"]: bool = valueBool
+    assert(GlobalState["globalBoolNoDefault"] == valueBool)
+    GlobalState["globalAsset"]: asset = valueAsset
+    GlobalState["globalApplication"]: application = valueApp
+    GlobalState["globalAccount"]: account = valueAccount
+    GlobalState["globalIntSimplified"]: uint64 = 99
+    assert(GlobalState["globalIntSimplified"] == 99)
+  }
+  
+  delGlobalState(): bool
+  {
+    STATE_DELETE(GlobalState["globalIntFull"])
+    assert(!STATE_EXISTS(GlobalState["globalIntFull"]))
+    return True
+  }
+  
+  delGlobalStateExample(): bool
+  {
+    STATE_DELETE(GlobalState["globalBytesNoDefault"])
+    STATE_DELETE(GlobalState["globalBoolNoDefault"])
+    STATE_DELETE(GlobalState["globalAsset"])
+    return True
+  }
+  
+  passProxyToSubroutine(): uint64
+  {
+    GlobalState["globalIntNoDefault"]: uint64 = 44
+    return examples/devportal/global_state/contract.algo.ts::getGlobalStatePlus1("globalIntNoDefault")
+  }
+  
+  dynamicKeyAccess(): readonly [uint64, bytes]
+  {
+    GlobalState["globalIntNoDefault"]: uint64 = 7
+    GlobalState["globalBytesNoDefault"]: bytes = "hi"
+    return #[examples/devportal/global_state/contract.algo.ts::readGlobalUint64("globalIntNoDefault"), examples/devportal/global_state/contract.algo.ts::readGlobalBytes("globalBytesNoDefault")]
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["globalIntFull"]: uint64 = 50
+    GlobalState["globalIntSimplified"]: uint64 = 10
+    GlobalState["globalBytesFull"]: bytes = "Hello"
+    GlobalState["globalBytesSimplified"]: bytes = "Hello"
+    GlobalState["globalBoolSimplified"]: bool = True
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}
+subroutine getGlobalStatePlus1(state: state_key): uint64
+{
+  return GlobalState[state] + 1
+}
+subroutine readGlobalUint64(key: string): uint64
+{
+  return GlobalState[reinterpret_cast<state_key>(reinterpret_cast<bytes>(key))]
+}
+subroutine readGlobalBytes(key: string): bytes
+{
+  return GlobalState[reinterpret_cast<state_key>(reinterpret_cast<bytes>(key))]
+}
+contract GlobalStorageMap
+{
+  globals {
+    ["scores"]: string => uint64
+    ["profile"]: uint64 => Profile
+  }
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  getScore(name: string): uint64
+  {
+    return GlobalState[MapKey(prefix="scores", key=name)]
+  }
+  
+  getScoreOrDefault(name: string): uint64
+  {
+    return (STATE_EXISTS(GlobalState[MapKey(prefix="scores", key=name)]) ? GlobalState[MapKey(prefix="scores", key=name)] : 0)
+  }
+  
+  maybeScore(name: string): readonly [uint64, bool]
+  {
+    exists: bool = STATE_EXISTS(GlobalState[MapKey(prefix="scores", key=name)])
+    value: uint64 = (exists ? GlobalState[MapKey(prefix="scores", key=name)] : 0)
+    return #[value, exists]
+  }
+  
+  hasProfile(userId: uint64): bool
+  {
+    return STATE_EXISTS(GlobalState[MapKey(prefix="profile", key=userId)])
+  }
+  
+  setScore(name: string, score: uint64): void
+  {
+    GlobalState[MapKey(prefix="scores", key=name)]: uint64 = score
+  }
+  
+  setProfile(userId: uint64, profile: Profile): void
+  {
+    GlobalState[MapKey(prefix="profile", key=userId)]: Profile = copy(profile)
+  }
+  
+  deleteScore(name: string): void
+  {
+    STATE_DELETE(GlobalState[MapKey(prefix="scores", key=name)])
+  }
+  
+  getSlotProxy(name: string): uint64
+  {
+    slot: state_key = MapKey(prefix="scores", key=name)
+    return GlobalState[slot]
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}

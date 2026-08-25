@@ -1,0 +1,192 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 0
+    bytecblock "counter" 0x151f7c75
+    // examples/devportal/reference_box/contract.algo.ts:21
+    // export class ReferenceBox extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@11
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0x040a235e 0x5425a145 0xe924e5e0 0xbbb5239e // method "incrementBoxCounter(pay)uint64", method "getBoxCounter()uint64", method "getBoxCounterForAccount(address)uint64", method "getBoxMbr()uint64"
+    txna ApplicationArgs 0
+    match incrementBoxCounter getBoxCounter getBoxCounterForAccount main_getBoxMbr_route@7
+    err
+
+main_getBoxMbr_route@7:
+    // examples/devportal/reference_box/contract.algo.ts:59
+    // @abimethod({ readonly: true })
+    pushbytes 0x151f7c750000000000005334
+    log
+    intc_0 // 1
+    return
+
+main___algots__.defaultCreate@11:
+    // examples/devportal/reference_box/contract.algo.ts:21
+    // export class ReferenceBox extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// examples/devportal/reference_box/contract.algo.ts::ReferenceBox.incrementBoxCounter[routing]() -> void:
+incrementBoxCounter:
+    // examples/devportal/reference_box/contract.algo.ts:29
+    // @abimethod()
+    txn GroupIndex
+    intc_0 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_0 // pay
+    ==
+    assert // transaction type is pay
+    // examples/devportal/reference_box/contract.algo.ts:22
+    // accountBoxCounter = BoxMap<Account, uint64>({ keyPrefix: 'counter' })
+    bytec_0 // "counter"
+    // examples/devportal/reference_box/contract.algo.ts:31
+    // const [counter, exists] = this.accountBoxCounter(Txn.sender).maybe()
+    txn Sender
+    // examples/devportal/reference_box/contract.algo.ts:22
+    // accountBoxCounter = BoxMap<Account, uint64>({ keyPrefix: 'counter' })
+    concat
+    // examples/devportal/reference_box/contract.algo.ts:31
+    // const [counter, exists] = this.accountBoxCounter(Txn.sender).maybe()
+    box_get
+    dup
+    uncover 2
+    btoi
+    swap
+    // examples/devportal/reference_box/contract.algo.ts:32
+    // if (!exists) {
+    bnz incrementBoxCounter_after_if_else@3
+    // examples/devportal/reference_box/contract.algo.ts:33
+    // assert(payMbr.amount >= COUNTER_BOX_MBR, 'Payment must cover the box MBR')
+    dig 2
+    dup
+    gtxns Amount
+    pushint 21300
+    >=
+    assert // Payment must cover the box MBR
+    // examples/devportal/reference_box/contract.algo.ts:34
+    // assert(payMbr.receiver === Global.currentApplicationAddress, 'Payment must be to the contract')
+    gtxns Receiver
+    global CurrentApplicationAddress
+    ==
+    assert // Payment must be to the contract
+
+incrementBoxCounter_after_if_else@3:
+    // examples/devportal/reference_box/contract.algo.ts:38
+    // const newCount: uint64 = exists ? counter + 1 : Uint64(1)
+    swap
+    bz incrementBoxCounter_ternary_false@5
+    intc_0 // 1
+    +
+
+incrementBoxCounter_ternary_merge@6:
+    // examples/devportal/reference_box/contract.algo.ts:22
+    // accountBoxCounter = BoxMap<Account, uint64>({ keyPrefix: 'counter' })
+    bytec_0 // "counter"
+    // examples/devportal/reference_box/contract.algo.ts:39
+    // this.accountBoxCounter(Txn.sender).value = newCount
+    txn Sender
+    // examples/devportal/reference_box/contract.algo.ts:22
+    // accountBoxCounter = BoxMap<Account, uint64>({ keyPrefix: 'counter' })
+    concat
+    // examples/devportal/reference_box/contract.algo.ts:39
+    // this.accountBoxCounter(Txn.sender).value = newCount
+    swap
+    itob
+    swap
+    dig 1
+    box_put
+    // examples/devportal/reference_box/contract.algo.ts:29
+    // @abimethod()
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+incrementBoxCounter_ternary_false@5:
+    pop
+    // examples/devportal/reference_box/contract.algo.ts:38
+    // const newCount: uint64 = exists ? counter + 1 : Uint64(1)
+    intc_0 // 1
+    b incrementBoxCounter_ternary_merge@6
+
+
+// examples/devportal/reference_box/contract.algo.ts::ReferenceBox.getBoxCounter[routing]() -> void:
+getBoxCounter:
+    // examples/devportal/reference_box/contract.algo.ts:22
+    // accountBoxCounter = BoxMap<Account, uint64>({ keyPrefix: 'counter' })
+    bytec_0 // "counter"
+    // examples/devportal/reference_box/contract.algo.ts:46
+    // return this.accountBoxCounter(Txn.sender).get({ default: Uint64(0) })
+    txn Sender
+    // examples/devportal/reference_box/contract.algo.ts:22
+    // accountBoxCounter = BoxMap<Account, uint64>({ keyPrefix: 'counter' })
+    concat
+    // examples/devportal/reference_box/contract.algo.ts:46
+    // return this.accountBoxCounter(Txn.sender).get({ default: Uint64(0) })
+    box_get
+    swap
+    btoi
+    intc_1 // 0
+    swap
+    uncover 2
+    select
+    // examples/devportal/reference_box/contract.algo.ts:44
+    // @abimethod({ readonly: true })
+    itob
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/reference_box/contract.algo.ts::ReferenceBox.getBoxCounterForAccount[routing]() -> void:
+getBoxCounterForAccount:
+    // examples/devportal/reference_box/contract.algo.ts:50
+    // @abimethod({ readonly: true })
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    // examples/devportal/reference_box/contract.algo.ts:22
+    // accountBoxCounter = BoxMap<Account, uint64>({ keyPrefix: 'counter' })
+    bytec_0 // "counter"
+    swap
+    concat
+    // examples/devportal/reference_box/contract.algo.ts:52
+    // return this.accountBoxCounter(account).get({ default: Uint64(0) })
+    box_get
+    swap
+    btoi
+    intc_1 // 0
+    swap
+    uncover 2
+    select
+    // examples/devportal/reference_box/contract.algo.ts:50
+    // @abimethod({ readonly: true })
+    itob
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return

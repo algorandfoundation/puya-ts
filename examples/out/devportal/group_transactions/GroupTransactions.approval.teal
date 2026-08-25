@@ -1,0 +1,388 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1 8 4 0
+    bytecblock 0x151f7c75
+    // examples/devportal/group_transactions/contract.algo.ts:20
+    // export class GroupTransactions extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@14
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0xa8c72757 0x34c19483 0x6fe9af85 0x2419b86d 0x9aa1eb7f 0xa5f42fc0 0x86c51cdc // method "expectPayment(uint64)uint64", method "expectAssetTransfer(uint64)uint64", method "optInToAsset(uint64)void", method "chainedAppCall()uint64", method "receiveFunding(pay,axfer,uint64,uint64)uint64", method "observeAppCall(appl)uint64", method "strictPosition(uint64)void"
+    txna ApplicationArgs 0
+    match expectPayment expectAssetTransfer optInToAsset chainedAppCall receiveFunding observeAppCall strictPosition
+    err
+
+main___algots__.defaultCreate@14:
+    // examples/devportal/group_transactions/contract.algo.ts:20
+    // export class GroupTransactions extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// examples/devportal/group_transactions/contract.algo.ts::GroupTransactions.expectPayment[routing]() -> void:
+expectPayment:
+    // examples/devportal/group_transactions/contract.algo.ts:22
+    // @abimethod()
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/group_transactions/contract.algo.ts:28
+    // const payTxn = gtxn.PaymentTxn(Txn.groupIndex - 1)
+    txn GroupIndex
+    intc_0 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_0 // pay
+    ==
+    assert // transaction type is pay
+    // examples/devportal/group_transactions/contract.algo.ts:29
+    // assert(payTxn.receiver === Global.currentApplicationAddress, 'payment must be to app')
+    dup
+    gtxns Receiver
+    global CurrentApplicationAddress
+    ==
+    assert // payment must be to app
+    // examples/devportal/group_transactions/contract.algo.ts:30
+    // assert(payTxn.amount === expectedAmount, 'wrong payment amount')
+    gtxns Amount
+    dup
+    uncover 2
+    ==
+    assert // wrong payment amount
+    // examples/devportal/group_transactions/contract.algo.ts:22
+    // @abimethod()
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/group_transactions/contract.algo.ts::GroupTransactions.expectAssetTransfer[routing]() -> void:
+expectAssetTransfer:
+    // examples/devportal/group_transactions/contract.algo.ts:37
+    // @abimethod()
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/group_transactions/contract.algo.ts:42
+    // const axfer = gtxn.AssetTransferTxn(Txn.groupIndex - 1)
+    txn GroupIndex
+    intc_0 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_2 // axfer
+    ==
+    assert // transaction type is axfer
+    // examples/devportal/group_transactions/contract.algo.ts:43
+    // assert(axfer.xferAsset === asset, 'wrong asset')
+    dup
+    gtxns XferAsset
+    uncover 2
+    ==
+    assert // wrong asset
+    // examples/devportal/group_transactions/contract.algo.ts:44
+    // assert(axfer.assetReceiver === Global.currentApplicationAddress, 'transfer must be to app')
+    dup
+    gtxns AssetReceiver
+    global CurrentApplicationAddress
+    ==
+    assert // transfer must be to app
+    // examples/devportal/group_transactions/contract.algo.ts:45
+    // assert(axfer.sender === Txn.sender, 'transfer must come from caller')
+    dup
+    gtxns Sender
+    txn Sender
+    ==
+    assert // transfer must come from caller
+    // examples/devportal/group_transactions/contract.algo.ts:46
+    // return axfer.assetAmount
+    gtxns AssetAmount
+    // examples/devportal/group_transactions/contract.algo.ts:37
+    // @abimethod()
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/group_transactions/contract.algo.ts::GroupTransactions.optInToAsset[routing]() -> void:
+optInToAsset:
+    // examples/devportal/group_transactions/contract.algo.ts:51
+    // @abimethod()
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/group_transactions/contract.algo.ts:56-63
+    // itxn
+    //   .assetTransfer({
+    //     xferAsset: asset,
+    //     assetReceiver: Global.currentApplicationAddress,
+    //     assetAmount: 0,
+    //     fee: 0,
+    //   })
+    //   .submit()
+    itxn_begin
+    // examples/devportal/group_transactions/contract.algo.ts:59
+    // assetReceiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // examples/devportal/group_transactions/contract.algo.ts:60
+    // assetAmount: 0,
+    intc_3 // 0
+    itxn_field AssetAmount
+    itxn_field AssetReceiver
+    itxn_field XferAsset
+    // examples/devportal/group_transactions/contract.algo.ts:56-62
+    // itxn
+    //   .assetTransfer({
+    //     xferAsset: asset,
+    //     assetReceiver: Global.currentApplicationAddress,
+    //     assetAmount: 0,
+    //     fee: 0,
+    //   })
+    intc_2 // 4
+    itxn_field TypeEnum
+    // examples/devportal/group_transactions/contract.algo.ts:61
+    // fee: 0,
+    intc_3 // 0
+    itxn_field Fee
+    // examples/devportal/group_transactions/contract.algo.ts:56-63
+    // itxn
+    //   .assetTransfer({
+    //     xferAsset: asset,
+    //     assetReceiver: Global.currentApplicationAddress,
+    //     assetAmount: 0,
+    //     fee: 0,
+    //   })
+    //   .submit()
+    itxn_submit
+    // examples/devportal/group_transactions/contract.algo.ts:51
+    // @abimethod()
+    intc_0 // 1
+    return
+
+
+// examples/devportal/group_transactions/contract.algo.ts::GroupTransactions.chainedAppCall[routing]() -> void:
+chainedAppCall:
+    // examples/devportal/group_transactions/contract.algo.ts:72
+    // const prev = gtxn.ApplicationCallTxn(Txn.groupIndex - 1)
+    txn GroupIndex
+    intc_0 // 1
+    -
+    dup
+    gtxns TypeEnum
+    pushint 6 // appl
+    ==
+    assert // transaction type is appl
+    // examples/devportal/group_transactions/contract.algo.ts:74
+    // return decodeArc4<uint64>(prev.lastLog, 'log')
+    gtxns LastLog
+    dup
+    extract 4 0
+    swap
+    extract 0 4
+    bytec_0 // 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    // examples/devportal/group_transactions/contract.algo.ts:67
+    // @abimethod()
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/group_transactions/contract.algo.ts::GroupTransactions.receiveFunding[routing]() -> void:
+receiveFunding:
+    // examples/devportal/group_transactions/contract.algo.ts:80
+    // @abimethod()
+    txn GroupIndex
+    pushint 2
+    -
+    dup
+    gtxns TypeEnum
+    intc_0 // pay
+    ==
+    assert // transaction type is pay
+    txn GroupIndex
+    intc_0 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_2 // axfer
+    ==
+    assert // transaction type is axfer
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/group_transactions/contract.algo.ts:89
+    // assert(pay.receiver === Global.currentApplicationAddress, 'payment must be to app')
+    dig 3
+    gtxns Receiver
+    global CurrentApplicationAddress
+    ==
+    assert // payment must be to app
+    // examples/devportal/group_transactions/contract.algo.ts:90
+    // assert(pay.amount === expectedAmount, 'wrong payment amount')
+    uncover 3
+    gtxns Amount
+    dup
+    uncover 2
+    ==
+    assert // wrong payment amount
+    // examples/devportal/group_transactions/contract.algo.ts:91
+    // assert(axfer.xferAsset === asset, 'wrong asset')
+    dig 2
+    gtxns XferAsset
+    uncover 2
+    ==
+    assert // wrong asset
+    // examples/devportal/group_transactions/contract.algo.ts:92
+    // assert(axfer.assetReceiver === Global.currentApplicationAddress, 'transfer must be to app')
+    dig 1
+    gtxns AssetReceiver
+    global CurrentApplicationAddress
+    ==
+    assert // transfer must be to app
+    // examples/devportal/group_transactions/contract.algo.ts:93
+    // assert(axfer.sender === Txn.sender, 'transfer must come from caller')
+    dig 1
+    gtxns Sender
+    txn Sender
+    ==
+    assert // transfer must come from caller
+    // examples/devportal/group_transactions/contract.algo.ts:94
+    // return pay.amount + axfer.assetAmount
+    swap
+    gtxns AssetAmount
+    +
+    // examples/devportal/group_transactions/contract.algo.ts:80
+    // @abimethod()
+    itob
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/group_transactions/contract.algo.ts::GroupTransactions.observeAppCall[routing]() -> void:
+observeAppCall:
+    // examples/devportal/group_transactions/contract.algo.ts:97
+    // @abimethod()
+    txn GroupIndex
+    intc_0 // 1
+    -
+    dup
+    gtxns TypeEnum
+    pushint 6 // appl
+    ==
+    assert // transaction type is appl
+    // examples/devportal/group_transactions/contract.algo.ts:103
+    // return decodeArc4<uint64>(prev.lastLog, 'log')
+    gtxns LastLog
+    dup
+    extract 4 0
+    swap
+    extract 0 4
+    bytec_0 // 0x151f7c75
+    ==
+    assert // Bytes has valid prefix
+    // examples/devportal/group_transactions/contract.algo.ts:97
+    // @abimethod()
+    bytec_0 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_0 // 1
+    return
+
+
+// examples/devportal/group_transactions/contract.algo.ts::GroupTransactions.strictPosition[routing]() -> void:
+strictPosition:
+    // examples/devportal/group_transactions/contract.algo.ts:109
+    // @abimethod()
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_1 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    // examples/devportal/group_transactions/contract.algo.ts:115
+    // assert(Global.groupSize === expectedSize, 'wrong group size')
+    global GroupSize
+    ==
+    assert // wrong group size
+    // examples/devportal/group_transactions/contract.algo.ts:117
+    // assert(Txn.groupIndex === 1, 'must be index 1')
+    txn GroupIndex
+    intc_0 // 1
+    ==
+    assert // must be index 1
+    // examples/devportal/group_transactions/contract.algo.ts:121
+    // const payTxn = gtxn.PaymentTxn(0)
+    gtxn 0 TypeEnum
+    intc_0 // pay
+    ==
+    assert // transaction type is pay
+    // examples/devportal/group_transactions/contract.algo.ts:122
+    // const axfer = gtxn.AssetTransferTxn(2)
+    gtxn 2 TypeEnum
+    intc_2 // axfer
+    ==
+    assert // transaction type is axfer
+    // examples/devportal/group_transactions/contract.algo.ts:123
+    // assert(payTxn.sender === axfer.assetReceiver, 'sender must receive axfer')
+    gtxn 0 Sender
+    gtxn 2 AssetReceiver
+    ==
+    assert // sender must receive axfer
+    // examples/devportal/group_transactions/contract.algo.ts:109
+    // @abimethod()
+    intc_0 // 1
+    return

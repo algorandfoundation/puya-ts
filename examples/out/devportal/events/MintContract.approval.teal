@@ -1,0 +1,62 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    // examples/devportal/events/contract.algo.ts:64
+    // export class MintContract extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@5
+    pushbytes 0xe5462316 // method "mintEmitByName(address,uint64)void"
+    txna ApplicationArgs 0
+    match main_mintEmitByName_route@3
+    err
+
+main_mintEmitByName_route@3:
+    // examples/devportal/events/contract.algo.ts:75
+    // @abimethod()
+    txn OnCompletion
+    !
+    txn ApplicationID
+    &&
+    assert
+    b mintEmitByName
+
+main___algots__.defaultCreate@5:
+    // examples/devportal/events/contract.algo.ts:64
+    // export class MintContract extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// examples/devportal/events/contract.algo.ts::MintContract.mintEmitByName[routing]() -> void:
+mintEmitByName:
+    // examples/devportal/events/contract.algo.ts:75
+    // @abimethod()
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    txna ApplicationArgs 2
+    dup
+    len
+    pushint 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    // examples/devportal/events/contract.algo.ts:77
+    // emit('Mint', new Address(recipient), new Uint64(amount))
+    concat
+    pushbytes 0xdf2e794e // method "Mint(address,uint64)"
+    swap
+    concat
+    log
+    // examples/devportal/events/contract.algo.ts:75
+    // @abimethod()
+    pushint 1
+    return

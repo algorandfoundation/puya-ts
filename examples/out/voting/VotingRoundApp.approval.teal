@@ -1,0 +1,1201 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 1 8 2
+    bytecblock "isBootstrapped" "voterCount" "optionCounts" "V" "voteId" "closeTime" 0x068101 "0123456789" "snapshotPublicKey" "metadataIpfsCid" "startTime" "endTime" "quorum" "nftImageUrl" "totalOptions"
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // examples/voting/contract.algo.ts:44
+    // isBootstrapped = GlobalState<boolean>({ initialValue: false })
+    bytec_0 // "isBootstrapped"
+    intc_0 // 0
+    app_global_put
+    // examples/voting/contract.algo.ts:45
+    // voterCount = GlobalState({ initialValue: Uint64(0) })
+    bytec_1 // "voterCount"
+    intc_0 // 0
+    app_global_put
+
+main_after_if_else@2:
+    // examples/voting/contract.algo.ts:43
+    // export class VotingRoundApp extends arc4.Contract {
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    bz main_create_NoOp@10
+    pushbytess 0xa4e8d164 0x9656047a 0x3bec6611 0x337ff12e // method "bootstrap(pay)void", method "close()void", method "getPreconditions(byte[64])(uint64,uint64,uint64,uint64)", method "vote(pay,byte[64],uint8[])void"
+    txna ApplicationArgs 0
+    match bootstrap close getPreconditions vote
+    err
+
+main_create_NoOp@10:
+    // examples/voting/contract.algo.ts:43
+    // export class VotingRoundApp extends arc4.Contract {
+    pushbytes 0xc3034574 // method "create(string,byte[32],string,uint64,uint64,uint8[],uint64,string)void"
+    txna ApplicationArgs 0
+    match create
+    err
+
+
+// _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
+ensure_budget:
+    proto 2 0
+    frame_dig -2
+    pushint 10
+    +
+
+ensure_budget_while_top@1:
+    dup
+    global OpcodeBudget
+    >
+    bz ensure_budget_after_while@6
+    itxn_begin
+    pushint 6 // appl
+    itxn_field TypeEnum
+    pushint 5 // DeleteApplication
+    itxn_field OnCompletion
+    bytec 6 // 0x068101
+    itxn_field ApprovalProgram
+    bytec 6 // 0x068101
+    itxn_field ClearStateProgram
+    frame_dig -1
+    switch ensure_budget_switch_case_0@3 ensure_budget_switch_case_1@4
+
+ensure_budget_switch_case_next@5:
+    itxn_submit
+    b ensure_budget_while_top@1
+
+ensure_budget_switch_case_1@4:
+    global MinTxnFee
+    itxn_field Fee
+    b ensure_budget_switch_case_next@5
+
+ensure_budget_switch_case_0@3:
+    intc_0 // 0
+    itxn_field Fee
+    b ensure_budget_switch_case_next@5
+
+ensure_budget_after_while@6:
+    retsub
+
+
+// examples/voting/contract.algo.ts::itoa(i: uint64) -> bytes:
+itoa:
+    // examples/voting/contract.algo.ts:244
+    // function itoa(i: uint64): string {
+    proto 1 1
+    // examples/voting/contract.algo.ts:247
+    // if (i < radix) {
+    frame_dig -1
+    // examples/voting/contract.algo.ts:246
+    // const radix = digits.length
+    pushint 10
+    // examples/voting/contract.algo.ts:247
+    // if (i < radix) {
+    <
+    bz itoa_after_if_else@2
+    // examples/voting/contract.algo.ts:248
+    // return digits.at(i).toString()
+    bytec 7 // "0123456789"
+    frame_dig -1
+    intc_1 // 1
+    extract3
+    retsub
+
+itoa_after_if_else@2:
+    // examples/voting/contract.algo.ts:250
+    // return `${itoa(i / radix)}${digits.at(i % radix)}`
+    frame_dig -1
+    // examples/voting/contract.algo.ts:246
+    // const radix = digits.length
+    pushint 10
+    // examples/voting/contract.algo.ts:250
+    // return `${itoa(i / radix)}${digits.at(i % radix)}`
+    /
+    callsub itoa
+    frame_dig -1
+    // examples/voting/contract.algo.ts:246
+    // const radix = digits.length
+    pushint 10
+    // examples/voting/contract.algo.ts:250
+    // return `${itoa(i / radix)}${digits.at(i % radix)}`
+    %
+    bytec 7 // "0123456789"
+    swap
+    intc_1 // 1
+    extract3
+    concat
+    retsub
+
+
+// examples/voting/contract.algo.ts::VotingRoundApp.create[routing]() -> void:
+create:
+    // examples/voting/contract.algo.ts:60
+    // @abimethod({ onCreate: 'require' })
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_3 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 2
+    dup
+    len
+    pushint 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    txna ApplicationArgs 3
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_3 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    txna ApplicationArgs 4
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 5
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 6
+    dup
+    cover 6
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    dup
+    cover 8
+    dup
+    intc_3 // 2
+    +
+    uncover 2
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    txna ApplicationArgs 7
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 8
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_3 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // examples/voting/contract.algo.ts:71
+    // assert(startTime < endTime, 'End time should be after start time')
+    dig 4
+    dig 4
+    <
+    assert // End time should be after start time
+    // examples/voting/contract.algo.ts:72
+    // assert(endTime >= Global.latestTimestamp, 'End time should be in the future')
+    dig 3
+    global LatestTimestamp
+    >=
+    assert // End time should be in the future
+    // examples/voting/contract.algo.ts:49
+    // voteId = GlobalState<string>()
+    bytec 4 // "voteId"
+    // examples/voting/contract.algo.ts:74
+    // this.voteId.value = voteId
+    uncover 8
+    app_global_put
+    // examples/voting/contract.algo.ts:50
+    // snapshotPublicKey = GlobalState<bytes<32>>()
+    bytec 8 // "snapshotPublicKey"
+    // examples/voting/contract.algo.ts:75
+    // this.snapshotPublicKey.value = snapshotPublicKey
+    uncover 7
+    app_global_put
+    // examples/voting/contract.algo.ts:51
+    // metadataIpfsCid = GlobalState<string>()
+    bytec 9 // "metadataIpfsCid"
+    // examples/voting/contract.algo.ts:76
+    // this.metadataIpfsCid.value = metadataIpfsCid
+    uncover 6
+    app_global_put
+    // examples/voting/contract.algo.ts:52
+    // startTime = GlobalState<uint64>()
+    bytec 10 // "startTime"
+    // examples/voting/contract.algo.ts:77
+    // this.startTime.value = startTime
+    uncover 5
+    app_global_put
+    // examples/voting/contract.algo.ts:54
+    // endTime = GlobalState<uint64>()
+    bytec 11 // "endTime"
+    // examples/voting/contract.algo.ts:78
+    // this.endTime.value = endTime
+    uncover 4
+    app_global_put
+    // examples/voting/contract.algo.ts:55
+    // quorum = GlobalState<uint64>()
+    bytec 12 // "quorum"
+    // examples/voting/contract.algo.ts:79
+    // this.quorum.value = quorum
+    uncover 2
+    app_global_put
+    // examples/voting/contract.algo.ts:53
+    // nftImageUrl = GlobalState<string>()
+    bytec 13 // "nftImageUrl"
+    // examples/voting/contract.algo.ts:80
+    // this.nftImageUrl.value = nftImageUrl
+    swap
+    app_global_put
+    // examples/voting/contract.algo.ts:225
+    // assertMatch(optionCounts, { length: { between: [Uint64(1), Uint64(112)] } })
+    dup
+    pushint 112
+    <=
+    &&
+    assert // assert target is match for conditions
+    // examples/voting/contract.algo.ts:227
+    // let totalOptions = Uint64(0)
+    intc_0 // 0
+    swap
+    intc_0 // 0
+
+create_for_header@2:
+    // examples/voting/contract.algo.ts:228
+    // for (const item of optionCounts) {
+    dup
+    dig 4
+    <
+    bz create_after_for@4
+    dig 1
+    extract 2 0
+    // examples/voting/contract.algo.ts:229
+    // totalOptions += item.asUint64()
+    dig 1
+    getbyte
+    uncover 3
+    +
+    cover 2
+    intc_1 // 1
+    +
+    b create_for_header@2
+
+create_after_for@4:
+    pop
+    // examples/voting/contract.algo.ts:56
+    // optionCounts = GlobalState<VoteIndexArray>()
+    bytec_2 // "optionCounts"
+    // examples/voting/contract.algo.ts:231
+    // this.optionCounts.value = clone(optionCounts)
+    swap
+    app_global_put
+    // examples/voting/contract.algo.ts:57
+    // totalOptions = GlobalState<uint64>()
+    bytec 14 // "totalOptions"
+    // examples/voting/contract.algo.ts:232
+    // this.totalOptions.value = totalOptions
+    swap
+    app_global_put
+    // examples/voting/contract.algo.ts:60
+    // @abimethod({ onCreate: 'require' })
+    intc_1 // 1
+    return
+
+
+// examples/voting/contract.algo.ts::VotingRoundApp.bootstrap[routing]() -> void:
+bootstrap:
+    // examples/voting/contract.algo.ts:84
+    // public bootstrap(fundMinBalReq: gtxn.PaymentTxn): void {
+    txn GroupIndex
+    intc_1 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_1 // pay
+    ==
+    assert // transaction type is pay
+    // examples/voting/contract.algo.ts:85
+    // assert(!this.isBootstrapped.value, 'Must not be already bootstrapped')
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:44
+    // isBootstrapped = GlobalState<boolean>({ initialValue: false })
+    bytec_0 // "isBootstrapped"
+    // examples/voting/contract.algo.ts:85
+    // assert(!this.isBootstrapped.value, 'Must not be already bootstrapped')
+    app_global_get_ex
+    assert // check GlobalState exists
+    !
+    assert // Must not be already bootstrapped
+    // examples/voting/contract.algo.ts:44
+    // isBootstrapped = GlobalState<boolean>({ initialValue: false })
+    bytec_0 // "isBootstrapped"
+    // examples/voting/contract.algo.ts:86
+    // this.isBootstrapped.value = true
+    intc_1 // 1
+    app_global_put
+    // examples/voting/contract.algo.ts:87-93
+    // assertMatch(
+    //   fundMinBalReq,
+    //   {
+    //     receiver: Global.currentApplicationAddress,
+    //   },
+    //   'Payment must be to app address',
+    // )
+    dup
+    gtxns Receiver
+    // examples/voting/contract.algo.ts:90
+    // receiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // examples/voting/contract.algo.ts:87-93
+    // assertMatch(
+    //   fundMinBalReq,
+    //   {
+    //     receiver: Global.currentApplicationAddress,
+    //   },
+    //   'Payment must be to app address',
+    // )
+    ==
+    assert // Payment must be to app address
+    // examples/voting/contract.algo.ts:94
+    // const tallyBoxSize: uint64 = this.totalOptions.value * VOTE_COUNT_BYTES
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:57
+    // totalOptions = GlobalState<uint64>()
+    bytec 14 // "totalOptions"
+    // examples/voting/contract.algo.ts:94
+    // const tallyBoxSize: uint64 = this.totalOptions.value * VOTE_COUNT_BYTES
+    app_global_get_ex
+    assert // check GlobalState exists
+    intc_2 // 8
+    *
+    // examples/voting/contract.algo.ts:97
+    // ASSET_MIN_BALANCE * 2 + 1000 + BOX_FLAT_MIN_BALANCE + BOX_BYTE_MIN_BALANCE + tallyBoxSize * BOX_BYTE_MIN_BALANCE
+    dup
+    pushint 400
+    *
+    pushint 203900
+    +
+    // examples/voting/contract.algo.ts:99
+    // log(minBalanceReq)
+    dup
+    itob
+    log
+    // examples/voting/contract.algo.ts:101-107
+    // assertMatch(
+    //   fundMinBalReq,
+    //   {
+    //     amount: minBalanceReq,
+    //   },
+    //   'Payment must be for the exact min balance requirement',
+    // )
+    uncover 2
+    gtxns Amount
+    ==
+    assert // Payment must be for the exact min balance requirement
+    // examples/voting/contract.algo.ts:47
+    // tallyBox = Box<bytes>({ key: Bytes`V` })
+    bytec_3 // "V"
+    // examples/voting/contract.algo.ts:108
+    // assert(this.tallyBox.create({ size: tallyBoxSize }))
+    swap
+    box_create
+    assert
+    // examples/voting/contract.algo.ts:84
+    // public bootstrap(fundMinBalReq: gtxn.PaymentTxn): void {
+    intc_1 // 1
+    return
+
+
+// examples/voting/contract.algo.ts::VotingRoundApp.close[routing]() -> void:
+close:
+    pushbytes ""
+    // examples/voting/contract.algo.ts:112
+    // ensureBudget(20000)
+    pushint 20000
+    intc_0 // 0
+    callsub ensure_budget
+    // examples/voting/contract.algo.ts:113
+    // assert(!this.closeTime.hasValue, 'Already closed')
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:46
+    // closeTime = GlobalState<uint64>()
+    bytec 5 // "closeTime"
+    // examples/voting/contract.algo.ts:113
+    // assert(!this.closeTime.hasValue, 'Already closed')
+    app_global_get_ex
+    bury 1
+    !
+    assert // Already closed
+    // examples/voting/contract.algo.ts:46
+    // closeTime = GlobalState<uint64>()
+    bytec 5 // "closeTime"
+    // examples/voting/contract.algo.ts:114
+    // this.closeTime.value = Global.latestTimestamp
+    global LatestTimestamp
+    app_global_put
+    // examples/voting/contract.algo.ts:119
+    // "description":"This is a voting result NFT for voting round with ID ${this.voteId.value}",
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:49
+    // voteId = GlobalState<string>()
+    bytec 4 // "voteId"
+    // examples/voting/contract.algo.ts:119
+    // "description":"This is a voting result NFT for voting round with ID ${this.voteId.value}",
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/voting/contract.algo.ts:117-125
+    // let note = `{
+    //   "standard":"arc69",
+    //   "description":"This is a voting result NFT for voting round with ID ${this.voteId.value}",
+    //   "properties":{
+    //     "metadata":"ipfs://${this.metadataIpfsCid.value}",
+    //     "id":"${this.voteId.value}",
+    //     "quorum":"${itoa(this.quorum.value)}}",
+    //     "voterCount":"${itoa(this.voterCount.value)}",
+    //     "tallies": [`
+    pushbytes "{\n      \"standard\":\"arc69\",\n      \"description\":\"This is a voting result NFT for voting round with ID "
+    dig 1
+    concat
+    pushbytes "\",\n      \"properties\":{\n        \"metadata\":\"ipfs://"
+    concat
+    // examples/voting/contract.algo.ts:121
+    // "metadata":"ipfs://${this.metadataIpfsCid.value}",
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:51
+    // metadataIpfsCid = GlobalState<string>()
+    bytec 9 // "metadataIpfsCid"
+    // examples/voting/contract.algo.ts:121
+    // "metadata":"ipfs://${this.metadataIpfsCid.value}",
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/voting/contract.algo.ts:117-125
+    // let note = `{
+    //   "standard":"arc69",
+    //   "description":"This is a voting result NFT for voting round with ID ${this.voteId.value}",
+    //   "properties":{
+    //     "metadata":"ipfs://${this.metadataIpfsCid.value}",
+    //     "id":"${this.voteId.value}",
+    //     "quorum":"${itoa(this.quorum.value)}}",
+    //     "voterCount":"${itoa(this.voterCount.value)}",
+    //     "tallies": [`
+    concat
+    pushbytes "\",\n        \"id\":\""
+    concat
+    swap
+    concat
+    pushbytes "\",\n        \"quorum\":\""
+    concat
+    // examples/voting/contract.algo.ts:123
+    // "quorum":"${itoa(this.quorum.value)}}",
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:55
+    // quorum = GlobalState<uint64>()
+    bytec 12 // "quorum"
+    // examples/voting/contract.algo.ts:123
+    // "quorum":"${itoa(this.quorum.value)}}",
+    app_global_get_ex
+    assert // check GlobalState exists
+    callsub itoa
+    // examples/voting/contract.algo.ts:117-125
+    // let note = `{
+    //   "standard":"arc69",
+    //   "description":"This is a voting result NFT for voting round with ID ${this.voteId.value}",
+    //   "properties":{
+    //     "metadata":"ipfs://${this.metadataIpfsCid.value}",
+    //     "id":"${this.voteId.value}",
+    //     "quorum":"${itoa(this.quorum.value)}}",
+    //     "voterCount":"${itoa(this.voterCount.value)}",
+    //     "tallies": [`
+    concat
+    pushbytes "}\",\n        \"voterCount\":\""
+    concat
+    // examples/voting/contract.algo.ts:124
+    // "voterCount":"${itoa(this.voterCount.value)}",
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:45
+    // voterCount = GlobalState({ initialValue: Uint64(0) })
+    bytec_1 // "voterCount"
+    // examples/voting/contract.algo.ts:124
+    // "voterCount":"${itoa(this.voterCount.value)}",
+    app_global_get_ex
+    assert // check GlobalState exists
+    callsub itoa
+    // examples/voting/contract.algo.ts:117-125
+    // let note = `{
+    //   "standard":"arc69",
+    //   "description":"This is a voting result NFT for voting round with ID ${this.voteId.value}",
+    //   "properties":{
+    //     "metadata":"ipfs://${this.metadataIpfsCid.value}",
+    //     "id":"${this.voteId.value}",
+    //     "quorum":"${itoa(this.quorum.value)}}",
+    //     "voterCount":"${itoa(this.voterCount.value)}",
+    //     "tallies": [`
+    concat
+    pushbytes "\",\n        \"tallies\": ["
+    concat
+    // examples/voting/contract.algo.ts:127
+    // let currentIndex = Uint64(0)
+    intc_0 // 0
+    swap
+    // examples/voting/contract.algo.ts:128
+    // for (const [questionIndex, questionOptions] of this.optionCounts.value.entries()) {
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:56
+    // optionCounts = GlobalState<VoteIndexArray>()
+    bytec_2 // "optionCounts"
+    // examples/voting/contract.algo.ts:128
+    // for (const [questionIndex, questionOptions] of this.optionCounts.value.entries()) {
+    app_global_get_ex
+    swap
+    dup
+    cover 2
+    cover 4
+    assert // check GlobalState exists
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    cover 2
+    intc_0 // 0
+
+close_for_header@2:
+    // examples/voting/contract.algo.ts:128
+    // for (const [questionIndex, questionOptions] of this.optionCounts.value.entries()) {
+    dup
+    dig 4
+    <
+    bz close_after_for@14
+    dig 4
+    extract 2 0
+    // examples/voting/contract.algo.ts:129
+    // if (questionIndex > 0) {
+    dig 1
+    bz close_after_if_else@5
+    // examples/voting/contract.algo.ts:130
+    // note += ','
+    uncover 2
+    pushbytes ","
+    concat
+    cover 2
+
+close_after_if_else@5:
+    // examples/voting/contract.algo.ts:132
+    // if (questionOptions.asUint64() > 0) {
+    dig 1
+    getbyte
+    dup
+    bury 7
+    bz close_after_if_else@12
+    // examples/voting/contract.algo.ts:133
+    // note += '['
+    swap
+    pushbytes "["
+    concat
+    swap
+    // examples/voting/contract.algo.ts:134
+    // for (let optionIndex = Uint64(0); optionIndex <= questionOptions.asUint64(); optionIndex++) {
+    intc_0 // 0
+    swap
+
+close_while_top@7:
+    // examples/voting/contract.algo.ts:134
+    // for (let optionIndex = Uint64(0); optionIndex <= questionOptions.asUint64(); optionIndex++) {
+    dig 1
+    dig 7
+    <=
+    bz close_after_while@11
+    // examples/voting/contract.algo.ts:135
+    // if (optionIndex > 0) {
+    dig 1
+    bz close_after_if_else@10
+    // examples/voting/contract.algo.ts:136
+    // note += ','
+    uncover 2
+    pushbytes ","
+    concat
+    cover 2
+
+close_after_if_else@10:
+    // examples/voting/contract.algo.ts:47
+    // tallyBox = Box<bytes>({ key: Bytes`V` })
+    bytec_3 // "V"
+    // examples/voting/contract.algo.ts:236
+    // return op.btoi(this.tallyBox.extract(index, VOTE_COUNT_BYTES))
+    uncover 4
+    dup
+    cover 2
+    intc_2 // 8
+    box_extract
+    btoi
+    // examples/voting/contract.algo.ts:138
+    // note += itoa(this.getVoteFromBox(currentIndex))
+    callsub itoa
+    uncover 4
+    swap
+    concat
+    cover 3
+    // examples/voting/contract.algo.ts:139
+    // currentIndex += 1
+    intc_1 // 1
+    +
+    cover 3
+    // examples/voting/contract.algo.ts:134
+    // for (let optionIndex = Uint64(0); optionIndex <= questionOptions.asUint64(); optionIndex++) {
+    swap
+    intc_1 // 1
+    +
+    swap
+    b close_while_top@7
+
+close_after_while@11:
+    bury 1
+    // examples/voting/contract.algo.ts:141
+    // note += ']'
+    swap
+    pushbytes "]"
+    concat
+    swap
+
+close_after_if_else@12:
+    intc_1 // 1
+    +
+    b close_for_header@2
+
+close_after_for@14:
+    pop
+    // examples/voting/contract.algo.ts:144
+    // note += ']}}'
+    pushbytes "]}}"
+    concat
+    // examples/voting/contract.algo.ts:146-157
+    // this.nftAsset.value = itxn
+    //   .assetConfig({
+    //     total: 1,
+    //     decimals: 0,
+    //     defaultFrozen: false,
+    //     assetName: `[VOTE RESULT] ${this.voteId.value}`,
+    //     unitName: `VOTERSLT`,
+    //     url: this.nftImageUrl.value,
+    //     note: note,
+    //     fee: Global.minTxnFee,
+    //   })
+    //   .submit().configAsset
+    itxn_begin
+    // examples/voting/contract.algo.ts:155
+    // fee: Global.minTxnFee,
+    global MinTxnFee
+    // examples/voting/contract.algo.ts:151
+    // assetName: `[VOTE RESULT] ${this.voteId.value}`,
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:49
+    // voteId = GlobalState<string>()
+    bytec 4 // "voteId"
+    // examples/voting/contract.algo.ts:151
+    // assetName: `[VOTE RESULT] ${this.voteId.value}`,
+    app_global_get_ex
+    assert // check GlobalState exists
+    pushbytes "[VOTE RESULT] "
+    swap
+    concat
+    // examples/voting/contract.algo.ts:153
+    // url: this.nftImageUrl.value,
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:53
+    // nftImageUrl = GlobalState<string>()
+    bytec 13 // "nftImageUrl"
+    // examples/voting/contract.algo.ts:153
+    // url: this.nftImageUrl.value,
+    app_global_get_ex
+    assert // check GlobalState exists
+    uncover 3
+    itxn_field Note
+    itxn_field ConfigAssetURL
+    // examples/voting/contract.algo.ts:152
+    // unitName: `VOTERSLT`,
+    pushbytes "VOTERSLT"
+    itxn_field ConfigAssetUnitName
+    itxn_field ConfigAssetName
+    // examples/voting/contract.algo.ts:150
+    // defaultFrozen: false,
+    intc_0 // 0
+    itxn_field ConfigAssetDefaultFrozen
+    // examples/voting/contract.algo.ts:149
+    // decimals: 0,
+    intc_0 // 0
+    itxn_field ConfigAssetDecimals
+    // examples/voting/contract.algo.ts:148
+    // total: 1,
+    intc_1 // 1
+    itxn_field ConfigAssetTotal
+    // examples/voting/contract.algo.ts:146-156
+    // this.nftAsset.value = itxn
+    //   .assetConfig({
+    //     total: 1,
+    //     decimals: 0,
+    //     defaultFrozen: false,
+    //     assetName: `[VOTE RESULT] ${this.voteId.value}`,
+    //     unitName: `VOTERSLT`,
+    //     url: this.nftImageUrl.value,
+    //     note: note,
+    //     fee: Global.minTxnFee,
+    //   })
+    pushint 3
+    itxn_field TypeEnum
+    itxn_field Fee
+    // examples/voting/contract.algo.ts:146-157
+    // this.nftAsset.value = itxn
+    //   .assetConfig({
+    //     total: 1,
+    //     decimals: 0,
+    //     defaultFrozen: false,
+    //     assetName: `[VOTE RESULT] ${this.voteId.value}`,
+    //     unitName: `VOTERSLT`,
+    //     url: this.nftImageUrl.value,
+    //     note: note,
+    //     fee: Global.minTxnFee,
+    //   })
+    //   .submit().configAsset
+    itxn_submit
+    // examples/voting/contract.algo.ts:58
+    // nftAsset = GlobalState<Asset>()
+    pushbytes "nftAsset"
+    // examples/voting/contract.algo.ts:146-157
+    // this.nftAsset.value = itxn
+    //   .assetConfig({
+    //     total: 1,
+    //     decimals: 0,
+    //     defaultFrozen: false,
+    //     assetName: `[VOTE RESULT] ${this.voteId.value}`,
+    //     unitName: `VOTERSLT`,
+    //     url: this.nftImageUrl.value,
+    //     note: note,
+    //     fee: Global.minTxnFee,
+    //   })
+    //   .submit().configAsset
+    itxn ConfigAsset
+    app_global_put
+    // examples/voting/contract.algo.ts:111
+    // public close() {
+    intc_1 // 1
+    return
+
+
+// examples/voting/contract.algo.ts::VotingRoundApp.getPreconditions[routing]() -> void:
+getPreconditions:
+    // examples/voting/contract.algo.ts:160
+    // @abimethod({ readonly: true })
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 64
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 64>
+    // examples/voting/contract.algo.ts:163
+    // is_allowed_to_vote: Uint64(this.allowedToVote(signature)),
+    callsub allowedToVote
+    // examples/voting/contract.algo.ts:164
+    // is_voting_open: Uint64(this.votingOpen()),
+    callsub votingOpen
+    // examples/voting/contract.algo.ts:176
+    // return this.votesByAccount(Txn.sender).exists
+    txn Sender
+    box_len
+    cover 3
+    pop
+    // examples/voting/contract.algo.ts:166
+    // current_time: Global.latestTimestamp,
+    global LatestTimestamp
+    // examples/voting/contract.algo.ts:162-167
+    // return {
+    //   is_allowed_to_vote: Uint64(this.allowedToVote(signature)),
+    //   is_voting_open: Uint64(this.votingOpen()),
+    //   has_already_voted: Uint64(this.alreadyVoted()),
+    //   current_time: Global.latestTimestamp,
+    // }
+    swap
+    itob
+    uncover 2
+    itob
+    concat
+    uncover 2
+    itob
+    concat
+    swap
+    itob
+    concat
+    // examples/voting/contract.algo.ts:160
+    // @abimethod({ readonly: true })
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// examples/voting/contract.algo.ts::VotingRoundApp.vote[routing]() -> void:
+vote:
+    // examples/voting/contract.algo.ts:179
+    // public vote(fundMinBalReq: gtxn.PaymentTxn, signature: bytes<64>, answerIds: VoteIndexArray): void {
+    txn GroupIndex
+    intc_1 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_1 // pay
+    ==
+    assert // transaction type is pay
+    txna ApplicationArgs 1
+    dup
+    len
+    pushint 64
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 64>
+    txna ApplicationArgs 2
+    dup
+    cover 3
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    dup
+    intc_3 // 2
+    +
+    uncover 2
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    // examples/voting/contract.algo.ts:180
+    // ensureBudget(7700, OpUpFeeSource.GroupCredit)
+    pushint 7700
+    intc_0 // 0
+    callsub ensure_budget
+    // examples/voting/contract.algo.ts:181
+    // assert(this.allowedToVote(signature), 'Not allowed to vote')
+    swap
+    callsub allowedToVote
+    assert // Not allowed to vote
+    // examples/voting/contract.algo.ts:182
+    // assert(this.votingOpen(), 'Voting not open')
+    callsub votingOpen
+    assert // Voting not open
+    // examples/voting/contract.algo.ts:176
+    // return this.votesByAccount(Txn.sender).exists
+    txn Sender
+    box_len
+    bury 1
+    // examples/voting/contract.algo.ts:183
+    // assert(!this.alreadyVoted(), 'Already voted')
+    !
+    assert // Already voted
+    // examples/voting/contract.algo.ts:185
+    // const questionsCount = this.optionCounts.value.length
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:56
+    // optionCounts = GlobalState<VoteIndexArray>()
+    bytec_2 // "optionCounts"
+    // examples/voting/contract.algo.ts:185
+    // const questionsCount = this.optionCounts.value.length
+    app_global_get_ex
+    assert // check GlobalState exists
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    dup
+    cover 3
+    // examples/voting/contract.algo.ts:186-192
+    // assertMatch(
+    //   answerIds,
+    //   {
+    //     length: questionsCount,
+    //   },
+    //   'Number of answers incorrect',
+    // )
+    dig 1
+    ==
+    assert // Number of answers incorrect
+    // examples/voting/contract.algo.ts:193
+    // const minBalReq: uint64 = BOX_FLAT_MIN_BALANCE + (32 + 2 + VOTE_INDEX_BYTES * answerIds.length) * BOX_BYTE_MIN_BALANCE
+    pushint 34
+    +
+    pushint 400
+    *
+    pushint 2500
+    +
+    // examples/voting/contract.algo.ts:194
+    // log(minBalReq)
+    dup
+    itob
+    log
+    // examples/voting/contract.algo.ts:195-202
+    // assertMatch(
+    //   fundMinBalReq,
+    //   {
+    //     receiver: Global.currentApplicationAddress,
+    //     amount: minBalReq,
+    //   },
+    //   'Payment must be to app and for exactly min balance',
+    // )
+    dig 1
+    gtxns Receiver
+    // examples/voting/contract.algo.ts:198
+    // receiver: Global.currentApplicationAddress,
+    global CurrentApplicationAddress
+    // examples/voting/contract.algo.ts:195-202
+    // assertMatch(
+    //   fundMinBalReq,
+    //   {
+    //     receiver: Global.currentApplicationAddress,
+    //     amount: minBalReq,
+    //   },
+    //   'Payment must be to app and for exactly min balance',
+    // )
+    ==
+    uncover 2
+    gtxns Amount
+    uncover 2
+    ==
+    &&
+    assert // Payment must be to app and for exactly min balance
+    // examples/voting/contract.algo.ts:203
+    // let cumulativeOffset = Uint64(0)
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:204
+    // for (const questionIndex of urange(questionsCount)) {
+    dup
+
+vote_for_header@2:
+    // examples/voting/contract.algo.ts:204
+    // for (const questionIndex of urange(questionsCount)) {
+    dup
+    dig 3
+    <
+    bz vote_after_for@5
+    // examples/voting/contract.algo.ts:205
+    // const answerOptionIndex = answerIds.at(questionIndex).asUint64()
+    dig 3
+    dup
+    extract 2 0
+    uncover 2
+    dup
+    cover 2
+    getbyte
+    // examples/voting/contract.algo.ts:206
+    // const optionsCount = this.optionCounts.value.at(questionIndex).asUint64()
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:56
+    // optionCounts = GlobalState<VoteIndexArray>()
+    bytec_2 // "optionCounts"
+    // examples/voting/contract.algo.ts:206
+    // const optionsCount = this.optionCounts.value.at(questionIndex).asUint64()
+    app_global_get_ex
+    assert // check GlobalState exists
+    extract 2 0
+    dig 2
+    getbyte
+    // examples/voting/contract.algo.ts:207
+    // assert(answerOptionIndex < optionsCount, 'Answer option index invalid')
+    dup2
+    <
+    assert // Answer option index invalid
+    // examples/voting/contract.algo.ts:208
+    // this.incrementVoteInBox(cumulativeOffset + answerOptionIndex)
+    uncover 4
+    dup
+    cover 2
+    uncover 3
+    +
+    // examples/voting/contract.algo.ts:47
+    // tallyBox = Box<bytes>({ key: Bytes`V` })
+    bytec_3 // "V"
+    // examples/voting/contract.algo.ts:236
+    // return op.btoi(this.tallyBox.extract(index, VOTE_COUNT_BYTES))
+    dig 1
+    intc_2 // 8
+    box_extract
+    btoi
+    // examples/voting/contract.algo.ts:241
+    // this.tallyBox.replace(index, op.itob(currentVote + 1))
+    intc_1 // 1
+    +
+    itob
+    // examples/voting/contract.algo.ts:47
+    // tallyBox = Box<bytes>({ key: Bytes`V` })
+    bytec_3 // "V"
+    // examples/voting/contract.algo.ts:241
+    // this.tallyBox.replace(index, op.itob(currentVote + 1))
+    cover 2
+    box_replace
+    // examples/voting/contract.algo.ts:209
+    // cumulativeOffset += optionsCount
+    +
+    cover 2
+    // examples/voting/contract.algo.ts:210
+    // this.votesByAccount(Txn.sender).value = clone(answerIds)
+    txn Sender
+    dup
+    box_del
+    pop
+    uncover 2
+    box_put
+    // examples/voting/contract.algo.ts:211
+    // this.voterCount.value += 1
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:45
+    // voterCount = GlobalState({ initialValue: Uint64(0) })
+    bytec_1 // "voterCount"
+    // examples/voting/contract.algo.ts:211
+    // this.voterCount.value += 1
+    app_global_get_ex
+    assert // check GlobalState exists
+    intc_1 // 1
+    +
+    // examples/voting/contract.algo.ts:45
+    // voterCount = GlobalState({ initialValue: Uint64(0) })
+    bytec_1 // "voterCount"
+    // examples/voting/contract.algo.ts:211
+    // this.voterCount.value += 1
+    swap
+    app_global_put
+    // examples/voting/contract.algo.ts:204
+    // for (const questionIndex of urange(questionsCount)) {
+    intc_1 // 1
+    +
+    b vote_for_header@2
+
+vote_after_for@5:
+    // examples/voting/contract.algo.ts:179
+    // public vote(fundMinBalReq: gtxn.PaymentTxn, signature: bytes<64>, answerIds: VoteIndexArray): void {
+    intc_1 // 1
+    return
+
+
+// examples/voting/contract.algo.ts::VotingRoundApp.allowedToVote(signature: bytes) -> uint64:
+allowedToVote:
+    // examples/voting/contract.algo.ts:170
+    // private allowedToVote(signature: bytes<64>): boolean {
+    proto 1 1
+    // examples/voting/contract.algo.ts:171
+    // ensureBudget(2000)
+    pushint 2000
+    intc_0 // 0
+    callsub ensure_budget
+    // examples/voting/contract.algo.ts:172
+    // return op.ed25519verifyBare(Txn.sender.bytes, signature, this.snapshotPublicKey.value)
+    txn Sender
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:50
+    // snapshotPublicKey = GlobalState<bytes<32>>()
+    bytec 8 // "snapshotPublicKey"
+    // examples/voting/contract.algo.ts:172
+    // return op.ed25519verifyBare(Txn.sender.bytes, signature, this.snapshotPublicKey.value)
+    app_global_get_ex
+    assert // check GlobalState exists
+    frame_dig -1
+    swap
+    ed25519verify_bare
+    retsub
+
+
+// examples/voting/contract.algo.ts::VotingRoundApp.votingOpen() -> uint64:
+votingOpen:
+    // examples/voting/contract.algo.ts:217
+    // this.isBootstrapped.value &&
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:44
+    // isBootstrapped = GlobalState<boolean>({ initialValue: false })
+    bytec_0 // "isBootstrapped"
+    // examples/voting/contract.algo.ts:217
+    // this.isBootstrapped.value &&
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/voting/contract.algo.ts:217-218
+    // this.isBootstrapped.value &&
+    // !this.closeTime.hasValue &&
+    bz votingOpen_bool_false@5
+    // examples/voting/contract.algo.ts:218
+    // !this.closeTime.hasValue &&
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:46
+    // closeTime = GlobalState<uint64>()
+    bytec 5 // "closeTime"
+    // examples/voting/contract.algo.ts:218
+    // !this.closeTime.hasValue &&
+    app_global_get_ex
+    bury 1
+    bnz votingOpen_bool_false@5
+    // examples/voting/contract.algo.ts:219
+    // this.startTime.value <= Global.latestTimestamp &&
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:52
+    // startTime = GlobalState<uint64>()
+    bytec 10 // "startTime"
+    // examples/voting/contract.algo.ts:219
+    // this.startTime.value <= Global.latestTimestamp &&
+    app_global_get_ex
+    assert // check GlobalState exists
+    global LatestTimestamp
+    <=
+    // examples/voting/contract.algo.ts:217-219
+    // this.isBootstrapped.value &&
+    // !this.closeTime.hasValue &&
+    // this.startTime.value <= Global.latestTimestamp &&
+    bz votingOpen_bool_false@5
+    // examples/voting/contract.algo.ts:220
+    // Global.latestTimestamp <= this.endTime.value
+    global LatestTimestamp
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:54
+    // endTime = GlobalState<uint64>()
+    bytec 11 // "endTime"
+    // examples/voting/contract.algo.ts:220
+    // Global.latestTimestamp <= this.endTime.value
+    app_global_get_ex
+    assert // check GlobalState exists
+    <=
+    // examples/voting/contract.algo.ts:217-220
+    // this.isBootstrapped.value &&
+    // !this.closeTime.hasValue &&
+    // this.startTime.value <= Global.latestTimestamp &&
+    // Global.latestTimestamp <= this.endTime.value
+    bz votingOpen_bool_false@5
+    intc_1 // 1
+    // examples/voting/contract.algo.ts:216-221
+    // return (
+    //   this.isBootstrapped.value &&
+    //   !this.closeTime.hasValue &&
+    //   this.startTime.value <= Global.latestTimestamp &&
+    //   Global.latestTimestamp <= this.endTime.value
+    // )
+    retsub
+
+votingOpen_bool_false@5:
+    intc_0 // 0
+    // examples/voting/contract.algo.ts:216-221
+    // return (
+    //   this.isBootstrapped.value &&
+    //   !this.closeTime.hasValue &&
+    //   this.startTime.value <= Global.latestTimestamp &&
+    //   Global.latestTimestamp <= this.endTime.value
+    // )
+    retsub

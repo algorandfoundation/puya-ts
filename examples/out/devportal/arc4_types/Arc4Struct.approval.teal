@@ -1,0 +1,458 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 0 2 1
+    bytecblock "todos" 0x151f7c75
+    txn ApplicationID
+    bnz main_after_if_else@2
+    // examples/devportal/arc4_types/contract.algo.ts:184
+    // todos = GlobalState<Todos>({ initialValue: new arc4.DynamicArray<Todo>() })
+    bytec_0 // "todos"
+    pushbytes 0x0000
+    app_global_put
+
+main_after_if_else@2:
+    // examples/devportal/arc4_types/contract.algo.ts:183
+    // export class Arc4Struct extends Contract {
+    txn NumAppArgs
+    bz main___algots__.defaultCreate@12
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    assert
+    pushbytess 0x3314c123 0x974ab768 0x1c24b8e3 // method "addTodo(string)(string,bool)[]", method "completeTodo(string)void", method "returnTodo(string)(string,bool)"
+    txna ApplicationArgs 0
+    match addTodo completeTodo returnTodo
+    err
+
+main___algots__.defaultCreate@12:
+    // examples/devportal/arc4_types/contract.algo.ts:183
+    // export class Arc4Struct extends Contract {
+    txn OnCompletion
+    !
+    txn ApplicationID
+    !
+    &&
+    return
+
+
+// _puya_lib.arc4.dynamic_array_read_dynamic_element(array: bytes, index: uint64) -> bytes:
+dynamic_array_read_dynamic_element:
+    proto 2 1
+    frame_dig -2
+    extract 2 0
+    frame_dig -2
+    intc_0 // 0
+    extract_uint16
+    frame_dig -1
+    intc_1 // 2
+    *
+    dig 2
+    swap
+    extract_uint16
+    dig 2
+    len
+    frame_dig -1
+    intc_2 // 1
+    +
+    dup
+    intc_1 // 2
+    *
+    dig 5
+    swap
+    extract_uint16
+    uncover 4
+    uncover 2
+    -
+    select
+    substring3
+    retsub
+
+
+// examples/devportal/arc4_types/contract.algo.ts::Arc4Struct.addTodo[routing]() -> void:
+addTodo:
+    // examples/devportal/arc4_types/contract.algo.ts:186
+    // @abimethod()
+    txna ApplicationArgs 1
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    // examples/devportal/arc4_types/contract.algo.ts:188
+    // const todos = clone(this.todos.value)
+    intc_0 // 0
+    // examples/devportal/arc4_types/contract.algo.ts:184
+    // todos = GlobalState<Todos>({ initialValue: new arc4.DynamicArray<Todo>() })
+    bytec_0 // "todos"
+    // examples/devportal/arc4_types/contract.algo.ts:188
+    // const todos = clone(this.todos.value)
+    app_global_get_ex
+    assert // check GlobalState exists
+    // examples/devportal/arc4_types/contract.algo.ts:189-190
+    // const todo = new Todo({ task, completed: new arc4.Bool(false) })
+    // todos.push(clone(todo))
+    pushbytes 0x0002000300
+    // examples/devportal/arc4_types/contract.algo.ts:190
+    // todos.push(clone(todo))
+    uncover 2
+    // examples/devportal/arc4_types/contract.algo.ts:189-190
+    // const todo = new Todo({ task, completed: new arc4.Bool(false) })
+    // todos.push(clone(todo))
+    concat
+    // examples/devportal/arc4_types/contract.algo.ts:190
+    // todos.push(clone(todo))
+    swap
+    dup
+    intc_0 // 0
+    extract_uint16
+    dup
+    // examples/devportal/arc4_types/contract.algo.ts:190
+    // todos.push(clone(todo))
+    intc_2 // 1
+    +
+    itob
+    extract 6 0
+    cover 2
+    swap
+    extract 2 0
+    swap
+    intc_1 // 2
+    *
+    swap
+    intc_0 // 0
+    cover 4
+
+addTodo_for_header@2:
+    dig 4
+    dig 2
+    <
+    bz addTodo_after_for@4
+    dup
+    dig 5
+    dup
+    cover 2
+    extract_uint16
+    intc_1 // 2
+    +
+    itob
+    extract 6 0
+    uncover 4
+    swap
+    concat
+    cover 3
+    intc_1 // 2
+    +
+    bury 5
+    b addTodo_for_header@2
+
+addTodo_after_for@4:
+    dup
+    len
+    cover 2
+    intc_0 // 0
+    bury 6
+
+addTodo_for_header@5:
+    dig 5
+    intc_1 // 2
+    <
+    bz addTodo_after_for@7
+    dig 4
+    dig 6
+    dup
+    cover 2
+    extract_uint16
+    dig 4
+    +
+    itob
+    extract 6 0
+    uncover 5
+    swap
+    concat
+    cover 4
+    intc_1 // 2
+    +
+    bury 6
+    b addTodo_for_header@5
+
+addTodo_after_for@7:
+    swap
+    uncover 2
+    substring3
+    concat
+    swap
+    extract 2 0
+    concat
+    // examples/devportal/arc4_types/contract.algo.ts:184
+    // todos = GlobalState<Todos>({ initialValue: new arc4.DynamicArray<Todo>() })
+    bytec_0 // "todos"
+    // examples/devportal/arc4_types/contract.algo.ts:191
+    // this.todos.value = clone(todos)
+    dig 1
+    app_global_put
+    // examples/devportal/arc4_types/contract.algo.ts:186
+    // @abimethod()
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return
+
+
+// examples/devportal/arc4_types/contract.algo.ts::Arc4Struct.completeTodo[routing]() -> void:
+completeTodo:
+    // examples/devportal/arc4_types/contract.algo.ts:195
+    // @abimethod()
+    txna ApplicationArgs 1
+    dupn 2
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    // examples/devportal/arc4_types/contract.algo.ts:197
+    // const todos = clone(this.todos.value)
+    intc_0 // 0
+    // examples/devportal/arc4_types/contract.algo.ts:184
+    // todos = GlobalState<Todos>({ initialValue: new arc4.DynamicArray<Todo>() })
+    bytec_0 // "todos"
+    // examples/devportal/arc4_types/contract.algo.ts:197
+    // const todos = clone(this.todos.value)
+    app_global_get_ex
+    swap
+    dup
+    uncover 2
+    assert // check GlobalState exists
+    // examples/devportal/arc4_types/contract.algo.ts:198
+    // for (const index of urange(todos.length)) {
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 0
+
+completeTodo_for_header@2:
+    // examples/devportal/arc4_types/contract.algo.ts:198
+    // for (const index of urange(todos.length)) {
+    dup
+    dig 2
+    <
+    bz completeTodo_after_inlined_examples/devportal/arc4_types/contract.algo.ts::Arc4Struct.completeTodo@8
+    // examples/devportal/arc4_types/contract.algo.ts:199
+    // if (todos[index].task === task) {
+    dig 2
+    dig 1
+    callsub dynamic_array_read_dynamic_element
+    dup
+    intc_0 // 0
+    extract_uint16
+    dig 1
+    len
+    substring3
+    dig 4
+    ==
+    bz completeTodo_after_if_else@5
+    // examples/devportal/arc4_types/contract.algo.ts:200
+    // todos[index].completed = new arc4.Bool(true)
+    dig 2
+    dup
+    dig 2
+    dup
+    cover 3
+    callsub dynamic_array_read_dynamic_element
+    pushint 16
+    intc_2 // 1
+    setbit
+    dig 1
+    substring 0 2
+    dup
+    cover 4
+    btoi
+    uncover 2
+    extract 2 0
+    dig 2
+    len
+    cover 5
+    dup
+    len
+    dig 4
+    intc_2 // 1
+    +
+    intc_1 // 2
+    *
+    dig 2
+    dig 1
+    extract_uint16
+    dig 4
+    dig 7
+    -
+    intc_2 // 1
+    -
+    dig 3
+    cover 2
+    select
+    uncover 6
+    intc_1 // 2
+    *
+    dig 4
+    swap
+    extract_uint16
+    dup2
+    -
+    cover 8
+    dig 4
+    intc_0 // 0
+    uncover 2
+    substring3
+    uncover 6
+    concat
+    uncover 4
+    uncover 2
+    uncover 4
+    substring3
+    concat
+    cover 2
+    swap
+    intc_1 // 2
+    *
+    cover 2
+
+completeTodo_for_header@10:
+    dup
+    dig 3
+    <
+    bz completeTodo_after_for@12
+    swap
+    dup
+    dig 2
+    extract_uint16
+    dig 6
+    +
+    dig 5
+    -
+    itob
+    extract 6 0
+    dig 2
+    swap
+    replace3
+    swap
+    intc_1 // 2
+    +
+    b completeTodo_for_header@10
+
+completeTodo_after_for@12:
+    pop
+    bury 1
+    uncover 2
+    pop
+    uncover 2
+    pop
+    concat
+    // examples/devportal/arc4_types/contract.algo.ts:184
+    // todos = GlobalState<Todos>({ initialValue: new arc4.DynamicArray<Todo>() })
+    bytec_0 // "todos"
+    // examples/devportal/arc4_types/contract.algo.ts:201
+    // this.todos.value = clone(todos)
+    swap
+    app_global_put
+
+completeTodo_after_inlined_examples/devportal/arc4_types/contract.algo.ts::Arc4Struct.completeTodo@8:
+    // examples/devportal/arc4_types/contract.algo.ts:195
+    // @abimethod()
+    intc_2 // 1
+    return
+
+completeTodo_after_if_else@5:
+    // examples/devportal/arc4_types/contract.algo.ts:198
+    // for (const index of urange(todos.length)) {
+    dup
+    intc_2 // 1
+    +
+    bury 1
+    b completeTodo_for_header@2
+
+
+// examples/devportal/arc4_types/contract.algo.ts::Arc4Struct.returnTodo[routing]() -> void:
+returnTodo:
+    // examples/devportal/arc4_types/contract.algo.ts:207
+    // @abimethod()
+    txna ApplicationArgs 1
+    dupn 2
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_1 // 2
+    +
+    swap
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    // examples/devportal/arc4_types/contract.algo.ts:209
+    // const todos = clone(this.todos.value)
+    intc_0 // 0
+    // examples/devportal/arc4_types/contract.algo.ts:184
+    // todos = GlobalState<Todos>({ initialValue: new arc4.DynamicArray<Todo>() })
+    bytec_0 // "todos"
+    // examples/devportal/arc4_types/contract.algo.ts:209
+    // const todos = clone(this.todos.value)
+    app_global_get_ex
+    swap
+    dup
+    uncover 2
+    assert // check GlobalState exists
+    // examples/devportal/arc4_types/contract.algo.ts:210
+    // for (const index of urange(todos.length)) {
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    intc_0 // 0
+
+returnTodo_for_header@2:
+    // examples/devportal/arc4_types/contract.algo.ts:210
+    // for (const index of urange(todos.length)) {
+    dupn 2
+    dig 3
+    <
+    assert // todo not found
+    // examples/devportal/arc4_types/contract.algo.ts:211
+    // if (todos[index].task === task) {
+    dig 3
+    dup
+    dig 2
+    callsub dynamic_array_read_dynamic_element
+    cover 2
+    swap
+    callsub dynamic_array_read_dynamic_element
+    dup
+    intc_0 // 0
+    extract_uint16
+    dig 1
+    len
+    substring3
+    dig 5
+    ==
+    bz returnTodo_after_if_else@5
+    // examples/devportal/arc4_types/contract.algo.ts:207
+    // @abimethod()
+    bytec_1 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_2 // 1
+    return
+
+returnTodo_after_if_else@5:
+    pop
+    // examples/devportal/arc4_types/contract.algo.ts:210
+    // for (const index of urange(todos.length)) {
+    intc_2 // 1
+    +
+    b returnTodo_for_header@2

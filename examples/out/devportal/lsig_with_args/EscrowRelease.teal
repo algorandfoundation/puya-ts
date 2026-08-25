@@ -1,0 +1,104 @@
+#pragma version 11
+#pragma typetrack false
+#pragma autosalt true
+
+// examples/devportal/lsig_with_args/contract.algo.ts::program() -> uint64:
+main:
+    bytecblock TMPL_BENEFICIARY
+    // examples/devportal/lsig_with_args/contract.algo.ts:8
+    // program(amount: uint64): boolean {
+    arg_0
+    dup
+    len
+    pushint 8
+    ==
+    assert // invalid number of bytes for uint64
+    btoi
+    // examples/devportal/lsig_with_args/contract.algo.ts:11
+    // Txn.typeEnum === TransactionType.Payment &&
+    txn TypeEnum
+    pushint 1
+    ==
+    // examples/devportal/lsig_with_args/contract.algo.ts:11-12
+    // Txn.typeEnum === TransactionType.Payment &&
+    // Txn.receiver === beneficiary.native &&
+    bz main_bool_false@7
+    // examples/devportal/lsig_with_args/contract.algo.ts:12
+    // Txn.receiver === beneficiary.native &&
+    txn Receiver
+    bytec_0 // TMPL_BENEFICIARY
+    ==
+    // examples/devportal/lsig_with_args/contract.algo.ts:11-12
+    // Txn.typeEnum === TransactionType.Payment &&
+    // Txn.receiver === beneficiary.native &&
+    bz main_bool_false@7
+    // examples/devportal/lsig_with_args/contract.algo.ts:13
+    // Txn.amount === amount &&
+    txn Amount
+    dig 1
+    ==
+    // examples/devportal/lsig_with_args/contract.algo.ts:11-13
+    // Txn.typeEnum === TransactionType.Payment &&
+    // Txn.receiver === beneficiary.native &&
+    // Txn.amount === amount &&
+    bz main_bool_false@7
+    // examples/devportal/lsig_with_args/contract.algo.ts:14
+    // Txn.fee <= Global.minTxnFee &&
+    txn Fee
+    global MinTxnFee
+    <=
+    // examples/devportal/lsig_with_args/contract.algo.ts:11-14
+    // Txn.typeEnum === TransactionType.Payment &&
+    // Txn.receiver === beneficiary.native &&
+    // Txn.amount === amount &&
+    // Txn.fee <= Global.minTxnFee &&
+    bz main_bool_false@7
+    // examples/devportal/lsig_with_args/contract.algo.ts:15
+    // Txn.rekeyTo === Global.zeroAddress &&
+    txn RekeyTo
+    global ZeroAddress
+    ==
+    // examples/devportal/lsig_with_args/contract.algo.ts:11-15
+    // Txn.typeEnum === TransactionType.Payment &&
+    // Txn.receiver === beneficiary.native &&
+    // Txn.amount === amount &&
+    // Txn.fee <= Global.minTxnFee &&
+    // Txn.rekeyTo === Global.zeroAddress &&
+    bz main_bool_false@7
+    // examples/devportal/lsig_with_args/contract.algo.ts:16
+    // Txn.closeRemainderTo === Global.zeroAddress
+    txn CloseRemainderTo
+    global ZeroAddress
+    ==
+    // examples/devportal/lsig_with_args/contract.algo.ts:11-16
+    // Txn.typeEnum === TransactionType.Payment &&
+    // Txn.receiver === beneficiary.native &&
+    // Txn.amount === amount &&
+    // Txn.fee <= Global.minTxnFee &&
+    // Txn.rekeyTo === Global.zeroAddress &&
+    // Txn.closeRemainderTo === Global.zeroAddress
+    bz main_bool_false@7
+    pushint 1
+    // examples/devportal/lsig_with_args/contract.algo.ts:10-17
+    // return (
+    //   Txn.typeEnum === TransactionType.Payment &&
+    //   Txn.receiver === beneficiary.native &&
+    //   Txn.amount === amount &&
+    //   Txn.fee <= Global.minTxnFee &&
+    //   Txn.rekeyTo === Global.zeroAddress &&
+    //   Txn.closeRemainderTo === Global.zeroAddress
+    // )
+    return
+
+main_bool_false@7:
+    pushint 0
+    // examples/devportal/lsig_with_args/contract.algo.ts:10-17
+    // return (
+    //   Txn.typeEnum === TransactionType.Payment &&
+    //   Txn.receiver === beneficiary.native &&
+    //   Txn.amount === amount &&
+    //   Txn.fee <= Global.minTxnFee &&
+    //   Txn.rekeyTo === Global.zeroAddress &&
+    //   Txn.closeRemainderTo === Global.zeroAddress
+    // )
+    return

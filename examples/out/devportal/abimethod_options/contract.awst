@@ -1,0 +1,92 @@
+contract AbiMethodOptions
+{
+  globals {
+    ["governor"]: account
+    ["feeAsset"]: asset
+    ["joinEventCount"]: uint64
+    ["leaveEventCount"]: uint64
+  }
+  locals {
+    ["joinedRound"]: uint64
+  }
+  approvalProgram(): bool
+  {
+    if (!Boolean(txn<ApplicationID>())) {
+      this.constructor()
+    }
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  create(governor: account, feeAsset: asset): void
+  {
+    GlobalState["governor"]: account = governor
+    GlobalState["feeAsset"]: asset = feeAsset
+  }
+  
+  publicGovernorGetter(): account
+  {
+    return GlobalState["governor"]
+  }
+  
+  longInternalName(): string
+  {
+    return "ping"
+  }
+  
+  getJoinEventCount(): uint64
+  {
+    return GlobalState["joinEventCount"]
+  }
+  
+  adminAction(feeAsset: asset, expectedJoinEventCount: uint64): void
+  {
+    assert(txn<Sender>() == GlobalState["governor"], comment=only governor)
+    if (feeAsset != GlobalState["feeAsset"]) {
+      return 
+    }
+    assert(expectedJoinEventCount == GlobalState["joinEventCount"], comment=stale join event count)
+  }
+  
+  eligibleBalance(asset: asset, app: application, account: account): uint64
+  {
+    assert(app_opted_in(account, app), comment=account not opted in to app)
+    assert(asset_holding_get<AssetBalance>(account, asset).1, comment=account is not opted in to the asset)
+    return checked_maybe(asset_holding_get<AssetBalance>(account, asset), comment=account opted into asset)
+  }
+  
+  join(): void
+  {
+    assert(asset_holding_get<AssetBalance>(txn<Sender>(), GlobalState["feeAsset"]).1, comment=must be opted in to fee asset)
+    if (txn<OnCompletion>() == reinterpret_cast<uint64>(1)) {
+      GlobalState["joinEventCount"]: uint64 = GlobalState["joinEventCount"] + 1
+      LocalState[txn<Sender>()]["joinedRound"]: uint64 = global<Round>()
+    }
+  }
+  
+  optOut(): void
+  {
+    GlobalState["leaveEventCount"]: uint64 = GlobalState["leaveEventCount"] + 1
+  }
+  
+  shutDown(): void
+  {
+    assert(txn<Sender>() == GlobalState["governor"], comment=only governor can delete)
+  }
+  
+  constructor(): void
+  {
+    super.constructor()
+    GlobalState["joinEventCount"]: uint64 = 0
+    GlobalState["leaveEventCount"]: uint64 = 0
+  }
+  
+  BaseContract::constructor(): void
+  {
+  }
+  
+}

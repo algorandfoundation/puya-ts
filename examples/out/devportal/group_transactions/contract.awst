@@ -1,0 +1,69 @@
+contract GroupTransactions
+{
+  approvalProgram(): bool
+  {
+    return arc4Router()
+  }
+  
+  clearProgram(): bool
+  {
+    return True
+  }
+  
+  expectPayment(expectedAmount: uint64): uint64
+  {
+    payTxn: group_transaction_pay = group_transaction(index=txn<GroupIndex>() - 1, type=group_transaction_pay)
+    assert(gtxns<Receiver>(payTxn) == global<CurrentApplicationAddress>(), comment=payment must be to app)
+    assert(gtxns<Amount>(payTxn) == expectedAmount, comment=wrong payment amount)
+    return gtxns<Amount>(payTxn)
+  }
+  
+  expectAssetTransfer(asset: asset): uint64
+  {
+    axfer: group_transaction_axfer = group_transaction(index=txn<GroupIndex>() - 1, type=group_transaction_axfer)
+    assert(gtxns<XferAsset>(axfer) == asset, comment=wrong asset)
+    assert(gtxns<AssetReceiver>(axfer) == global<CurrentApplicationAddress>(), comment=transfer must be to app)
+    assert(gtxns<Sender>(axfer) == txn<Sender>(), comment=transfer must come from caller)
+    return gtxns<AssetAmount>(axfer)
+  }
+  
+  optInToAsset(asset: asset): void
+  {
+    submit_txn(create_inner_transaction(Fee=0, TypeEnum=4, XferAsset=asset, AssetReceiver=global<CurrentApplicationAddress>(), AssetAmount=0))
+  }
+  
+  chainedAppCall(): uint64
+  {
+    prev: group_transaction_appl = group_transaction(index=txn<GroupIndex>() - 1, type=group_transaction_appl)
+    return ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($0 = gtxns<LastLog>(prev))), extract<0, 4>($0) == 0x151f7c75], comment=Bytes has valid prefix), wtype=uint64, validate=false)
+  }
+  
+  receiveFunding(pay: group_transaction_pay, axfer: group_transaction_axfer, asset: asset, expectedAmount: uint64): uint64
+  {
+    assert(gtxns<Receiver>(pay) == global<CurrentApplicationAddress>(), comment=payment must be to app)
+    assert(gtxns<Amount>(pay) == expectedAmount, comment=wrong payment amount)
+    assert(gtxns<XferAsset>(axfer) == asset, comment=wrong asset)
+    assert(gtxns<AssetReceiver>(axfer) == global<CurrentApplicationAddress>(), comment=transfer must be to app)
+    assert(gtxns<Sender>(axfer) == txn<Sender>(), comment=transfer must come from caller)
+    return gtxns<Amount>(pay) + gtxns<AssetAmount>(axfer)
+  }
+  
+  observeAppCall(prev: group_transaction_appl): uint64
+  {
+    return ARC4_FROM_BYTES(checked_maybe(#[extract<4, 0>(($1 = gtxns<LastLog>(prev))), extract<0, 4>($1) == 0x151f7c75], comment=Bytes has valid prefix), wtype=uint64, validate=false)
+  }
+  
+  strictPosition(expectedSize: uint64): void
+  {
+    assert(global<GroupSize>() == expectedSize, comment=wrong group size)
+    assert(txn<GroupIndex>() == 1, comment=must be index 1)
+    payTxn: group_transaction_pay = group_transaction(index=0, type=group_transaction_pay)
+    axfer: group_transaction_axfer = group_transaction(index=2, type=group_transaction_axfer)
+    assert(gtxns<Sender>(payTxn) == gtxns<AssetReceiver>(axfer), comment=sender must receive axfer)
+  }
+  
+  __algots__.defaultCreate(): void
+  {
+  }
+  
+}
